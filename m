@@ -1,48 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Aug 2016 23:00:08 +0200
-Subject: [Buildroot] [PATCH] libunwind: fix architecture dependencies
-In-Reply-To: <1470559598-21216-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470559598-21216-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160807230008.0123f13a@free-electrons.com>
+Date: Sun, 7 Aug 2016 23:00:23 +0200
+Subject: [Buildroot] [git commit] am33x-cm3: available only for ELF builds
+Message-ID: <20160807210033.DD1E18081F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c16e6f8d3e473f2ab77fd81e1361bf885a1c0f64
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  7 Aug 2016 10:46:38 +0200, Thomas Petazzoni wrote:
-> Due to a misplaced parenthesis, the libunwind dependency were
-> incorrect. Indeed, they were of the form:
-> 
->  default y if LIBC_TYPE && (arm dependency) || (list of other architectures)
-> 
-> Which meant that that the LIBC_TYPE dependency was not taken into
-> account for the "other architectures". This commit changes that to:
-> 
->  default y if LIBC_TYPE && ((arm dependency) || list of other architectures)
-> 
-> Without this fix, libunwind can be selected for example on
-> PowerPC/uClibc configurations, while only PowerPC/glibc should be
-> allowed. This fixes:
-> 
->   http://autobuild.buildroot.net/results/96c53ff240dcd68fcc9e3d32c4026c9886edcbe7/
-> 
-> Similarly, it also fixes cases where SuperH/uClibc was allowed, while
-> only SuperH/glibc should be allowed. This fixes:
-> 
->   http://autobuild.buildroot.net/results/95a6cca21aea9914ba8bb3f571760fc054c53ecd/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/libunwind/Config.in | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+The am33x-cm3 build system does some objcopy based binary file
+manipulation that assumes the compiler for the platform generates ELF
+file. While it's true for most ARM platforms, and especially the AM335x
+based ones, it is no longer always true since we added support for
+Cortex-M. Therefore, this package needs to depend on BR2_BINFMT_ELF.
 
-Applied to master, thanks.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  http://autobuild.buildroot.net/results/05f46ab28cbfc587e2e031bf38fb975447f8bab6/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/am33x-cm3/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/am33x-cm3/Config.in b/package/am33x-cm3/Config.in
+index 060d0ef..d33dfaa 100644
+--- a/package/am33x-cm3/Config.in
++++ b/package/am33x-cm3/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_AM33X_CM3
+ 	bool "am33x-cm3"
+ 	depends on BR2_arm # only relevant for TI am335x
++	depends on BR2_BINFMT_ELF # assumes the compiler builds ELF file
+ 	help
+ 	  Cortex-M3 binary blob for suspend-resume on am335x
+ 
