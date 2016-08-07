@@ -1,64 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Aug 2016 23:10:38 +0200
-Subject: [Buildroot] [git commit] package/bdwgc: fix pthread detection on
-	uclinux platforms
-Message-ID: <20160807214242.5961D818CC@busybox.osuosl.org>
+Date: Sun, 7 Aug 2016 23:52:55 +0200
+Subject: [Buildroot] [RFC] package/bdwgc: fix pthread detection on
+ uclinux platforms
+In-Reply-To: <1470519997-8445-1-git-send-email-romain.naour@gmail.com>
+References: <1470519997-8445-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160807235255.29f7acb7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65f15dd57bbefd6f79ed63e51a18505fbe70afe0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-bdwgc does not recognize "uclinux" as a valid OS part of the target
-tuple which is used by some arm cortex-M toolchains.
+On Sat,  6 Aug 2016 23:46:37 +0200, Romain Naour wrote:
+> bdwgc does not recognize "uclinux" as a valid OS part of the target
+> tuple which is used by some arm cortex-M toolchains.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/94f/94fbc1e5afe183e5b071d1e869b2d780025389e2
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> Warning: build tested only.
+> ---
+>  .../0004-configure-match-uclinux-pattern.patch     | 32 ++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 package/bdwgc/0004-configure-match-uclinux-pattern.patch
 
-Fixes:
-http://autobuild.buildroot.net/results/94f/94fbc1e5afe183e5b071d1e869b2d780025389e2
+Applied to master, thanks. Please submit the patch upstream. Thanks!
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0004-configure-match-uclinux-pattern.patch     | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
-
-diff --git a/package/bdwgc/0004-configure-match-uclinux-pattern.patch b/package/bdwgc/0004-configure-match-uclinux-pattern.patch
-new file mode 100644
-index 0000000..78bad1c
---- /dev/null
-+++ b/package/bdwgc/0004-configure-match-uclinux-pattern.patch
-@@ -0,0 +1,32 @@
-+From f8ecc7fb09adf34a23d324f373e667c81311fc1c Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sat, 6 Aug 2016 23:24:35 +0200
-+Subject: [PATCH] configure: match uclinux pattern
-+
-+bdwgc does not recognize "uclinux" as a valid OS part of the target
-+tuple which is used by some arm cortex-M toolchains.
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/94f/94fbc1e5afe183e5b071d1e869b2d780025389e2
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index b1ce2b2..a69d101 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -186,7 +186,7 @@ case "$THREADS" in
-+         AC_DEFINE(THREAD_LOCAL_ALLOC)
-+         AC_MSG_WARN("Explicit GC_INIT() calls may be required.");
-+         ;;
-+-     *-*-linux*)
-++     *-*-*linux*)
-+         AC_DEFINE(GC_LINUX_THREADS)
-+         AC_DEFINE(_REENTRANT)
-+         ;;
-+-- 
-+2.5.5
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
