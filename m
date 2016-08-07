@@ -1,36 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Aug 2016 22:52:15 +0200
-Subject: [Buildroot] [git commit] defconfigs/kb9202: fix headers version
-Message-ID: <20160807205309.ADD61817C8@busybox.osuosl.org>
+Date: Sun, 7 Aug 2016 22:52:20 +0200
+Subject: [Buildroot] [git commit] defconfigs/snps_axs_10*: uboot needs dtc
+Message-ID: <20160807205309.BF62A8006D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9b1d1b6f2d48b1782ac8eea588fabd1e63b92b2
+commit: https://git.buildroot.net/buildroot/commit/?id=bbdc48262e1eb9543df0ae0490cbe1035c276fda
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-    https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/150333697
+    https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/150333758
+    https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/150333759
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/kb9202_defconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ configs/snps_axs101_defconfig | 1 +
+ configs/snps_axs103_defconfig | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
-index c38adbf..0aea0eb 100644
---- a/configs/kb9202_defconfig
-+++ b/configs/kb9202_defconfig
-@@ -5,7 +5,8 @@ BR2_arm920t=y
- # Filesystem
- BR2_TARGET_ROOTFS_TAR=y
- 
--# Linux headers same as kernel, a 2.6 series (so, no option selected)
-+# Linux headers same as kernel, a 2.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
+diff --git a/configs/snps_axs101_defconfig b/configs/snps_axs101_defconfig
+index f7bcf4d..f272853 100644
+--- a/configs/snps_axs101_defconfig
++++ b/configs/snps_axs101_defconfig
+@@ -23,3 +23,4 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="axs101"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/configs/snps_axs103_defconfig b/configs/snps_axs103_defconfig
+index 840db74..75596c9 100644
+--- a/configs/snps_axs103_defconfig
++++ b/configs/snps_axs103_defconfig
+@@ -24,3 +24,4 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="axs103"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
