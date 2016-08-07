@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Aug 2016 22:54:19 +0200
-Subject: [Buildroot] [PATCH 0/3] Fix our defconfigs (branch
- yem/fix-defconfigs)
-In-Reply-To: <cover.1470602446.git.yann.morin.1998@free.fr>
-References: <cover.1470602446.git.yann.morin.1998@free.fr>
-Message-ID: <20160807225419.443e606c@free-electrons.com>
+Date: Sun, 7 Aug 2016 22:55:23 +0200
+Subject: [Buildroot] [PATCH] odroid: enable console display.
+In-Reply-To: <20160807181053.9857-1-daggs@gmx.com>
+References: <20160807181053.9857-1-daggs@gmx.com>
+Message-ID: <20160807225523.0dacc479@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  7 Aug 2016 22:44:33 +0200, Yann E. MORIN wrote:
+On Sun,  7 Aug 2016 21:10:53 +0300, Dagg Stompler wrote:
+> the below change will redirect the output to screen and not only to
+> serial.
+> 
+> Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> ---
+>  board/hardkernel/odroidc2/boot.ini | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
->       defconfigs/kb9202: fix headers version
->       defconfigs/snps_axs_10*: uboot needs dtc
->       pcakage/uclibc: fix build on thumb2-only arm cpus
-
-All three applied. If not already done, please make sure to report on
-the uclibc mailing list the thumb2 problem.
-
-BTW, now that I re-read your commit log, it's wrong: the SAMA5 are not
-at all Thumb2 only CPUs. They are regular Cortex-A5 CPUs, i.e they
-support both Thumb-2 and ARM.
-
-Best regards,
+Applied to master, after tweaking the commit log. Thanks!
 
 Thomas
 -- 
