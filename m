@@ -1,42 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Aug 2016 23:54:58 +0200
-Subject: [Buildroot] [git commit branch/next] package/mpd: bump to version
-	0.19.18
-Message-ID: <20160807215503.8A97A81D88@busybox.osuosl.org>
+Date: Sun, 7 Aug 2016 23:55:54 +0200
+Subject: [Buildroot] [PATCH] package/mpd: bump to version 0.19.18
+In-Reply-To: <20160805192545.16544-1-joerg.krause@embedded.rocks>
+References: <20160805192545.16544-1-joerg.krause@embedded.rocks>
+Message-ID: <20160807235554.06196733@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e20c99ba42ca6ac017bb6535011f84f42f647885
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri,  5 Aug 2016 21:25:45 +0200, J?rg Krause wrote:
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/mpd/mpd.hash | 2 +-
+>  package/mpd/mpd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 2395cb7..4b564bf 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  487ec8ad2b1c1c193c2a7c8975a8b8fe2e4f0335bcc2e9356b2b34a0179fb2f7  mpd-0.19.17.tar.xz
-+sha256  764c991c54980cb97e876e3f65d63410c0c561b7be996b832e058053e005ed47  mpd-0.19.18.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 6e2cf8c..e88261d 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.19
--MPD_VERSION = $(MPD_VERSION_MAJOR).17
-+MPD_VERSION = $(MPD_VERSION_MAJOR).18
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost libglib2
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
