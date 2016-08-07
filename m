@@ -1,35 +1,34 @@
-From: Vicente Bergas <vicencb@gmail.com>
-Date: Sun,  7 Aug 2016 17:18:28 +0200
-Subject: [Buildroot] [PATCH 1/1] ntp: disable debug info
-Message-ID: <20160807151828.2420-1-vicencb@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  7 Aug 2016 17:25:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-savage:
+	disable DRI support when not available
+Message-ID: <1470583546-7332-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When running ntp it randomly aborts at ntp-4.2.8p8/libntp/recvbuff.c:326
-which seems to be a debugging feature.
-This patch just disables debugging, it does not fix the root cause of
-the problem.
+Fixes
+http://autobuild.buildroot.net/results/ecd/ecdb6977d282c276cbdf1f3dd0ccfaddff1d1ac5/
 
-Signed-off-by: Vicente Bergas <vicencb@gmail.com>
-Tested-by: Vicente Bergas <vicencb@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ntp/ntp.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 7d203a5..0b6304b 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -15,6 +15,7 @@ NTP_CONF_OPTS = \
- 	--with-shared \
- 	--program-transform-name=s,,, \
- 	--disable-tickadj \
-+	--disable-debugging \
- 	--with-yielding-select=yes \
- 	--disable-local-libevent
- # 0002-ntp-syscalls-fallback.patch
+diff --git a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
+index dc5644a..95bca7e 100644
+--- a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
++++ b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
+@@ -12,4 +12,8 @@ XDRIVER_XF86_VIDEO_SAVAGE_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_SAVAGE_AUTORECONF = YES
+ XDRIVER_XF86_VIDEO_SAVAGE_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xproto
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
++XDRIVER_XF86_VIDEO_SAVAGE_CONF_OPTS = --disable-dri
++endif
++
+ $(eval $(autotools-package))
 -- 
-2.9.2
+2.8.1
