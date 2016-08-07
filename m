@@ -1,37 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Aug 2016 23:52:55 +0200
-Subject: [Buildroot] [RFC] package/bdwgc: fix pthread detection on
- uclinux platforms
-In-Reply-To: <1470519997-8445-1-git-send-email-romain.naour@gmail.com>
-References: <1470519997-8445-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160807235255.29f7acb7@free-electrons.com>
+Date: Sun, 7 Aug 2016 23:54:58 +0200
+Subject: [Buildroot] [git commit branch/next] package/mpd: bump to version
+	0.19.18
+Message-ID: <20160807215503.8A97A81D88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e20c99ba42ca6ac017bb6535011f84f42f647885
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat,  6 Aug 2016 23:46:37 +0200, Romain Naour wrote:
-> bdwgc does not recognize "uclinux" as a valid OS part of the target
-> tuple which is used by some arm cortex-M toolchains.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/94f/94fbc1e5afe183e5b071d1e869b2d780025389e2
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> Warning: build tested only.
-> ---
->  .../0004-configure-match-uclinux-pattern.patch     | 32 ++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/bdwgc/0004-configure-match-uclinux-pattern.patch
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks. Please submit the patch upstream. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 2395cb7..4b564bf 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256  487ec8ad2b1c1c193c2a7c8975a8b8fe2e4f0335bcc2e9356b2b34a0179fb2f7  mpd-0.19.17.tar.xz
++sha256  764c991c54980cb97e876e3f65d63410c0c561b7be996b832e058053e005ed47  mpd-0.19.18.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 6e2cf8c..e88261d 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).17
++MPD_VERSION = $(MPD_VERSION_MAJOR).18
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
