@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Aug 2016 22:56:00 +0200
-Subject: [Buildroot] [git commit] configs/odroidc2: enable console display
-Message-ID: <20160807205605.4F7CA81F4D@busybox.osuosl.org>
+Date: Sun, 7 Aug 2016 22:57:40 +0200
+Subject: [Buildroot] [git commit] ntp: disable debugging
+Message-ID: <20160807205759.1C69D7FFF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61b6abb2a2198d0a659d305ac3dd813a1f900aa1
+commit: https://git.buildroot.net/buildroot/commit/?id=a2ce4167e230415e0dbc1349112790b07e104e88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Redirect the console output to the screen and not only to the serial
-port.
+When running ntp it randomly aborts at ntp-4.2.8p8/libntp/recvbuff.c:326
+which seems to be a debugging feature. This patch just disables
+debugging, it does not fix the root cause of the problem.
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
+Signed-off-by: Vicente Bergas <vicencb@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/hardkernel/odroidc2/boot.ini | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ntp/ntp.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/hardkernel/odroidc2/boot.ini b/board/hardkernel/odroidc2/boot.ini
-index 4f17fec..203a42a 100644
---- a/board/hardkernel/odroidc2/boot.ini
-+++ b/board/hardkernel/odroidc2/boot.ini
-@@ -13,7 +13,7 @@ setenv m_bpp "32"
- setenv hpd "true"
- 
- # Default Console Device Setting
--setenv condev "console=ttyS0,115200n8"	# Serial Console
-+setenv condev "console=ttyS0,115200n8 console=tty0"   # on both
- 
- # Meson Timer
- # 1 - Meson Timer
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 7d203a5..0b6304b 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -15,6 +15,7 @@ NTP_CONF_OPTS = \
+ 	--with-shared \
+ 	--program-transform-name=s,,, \
+ 	--disable-tickadj \
++	--disable-debugging \
+ 	--with-yielding-select=yes \
+ 	--disable-local-libevent
+ # 0002-ntp-syscalls-fallback.patch
