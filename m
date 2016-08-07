@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Aug 2016 22:11:55 +0200
-Subject: [Buildroot] [PATCH] libunwind: fix architecture dependencies
-In-Reply-To: <1470559598-21216-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470559598-21216-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160807201155.GF5855@free.fr>
+Date: Sun, 7 Aug 2016 22:15:52 +0200
+Subject: [Buildroot] [PATCH] uclibc: proper thread default on m68k and
+ Microblaze
+In-Reply-To: <1470414941-29826-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1470414941-29826-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160807201552.GG5855@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,66 +13,72 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2016-08-07 10:46 +0200, Thomas Petazzoni spake thusly:
-> Due to a misplaced parenthesis, the libunwind dependency were
-> incorrect. Indeed, they were of the form:
+On 2016-08-05 18:35 +0200, Thomas Petazzoni spake thusly:
+> Traditionally, Buildroot has a default of enabling thread
+> support. However, with the current construct of the thread choice in the
+> uclibc package, the m68k and microblaze architecture end up with no
+> thread support as the default.
 > 
->  default y if LIBC_TYPE && (arm dependency) || (list of other architectures)
+> In order to avoid having to explicit a more complicated "default" value
+> for the choice, we take a simple approach:
 > 
-> Which meant that that the LIBC_TYPE dependency was not taken into
-> account for the "other architectures". This commit changes that to:
+>  - The "none" choice is moved at the end of the list, so that it is not
+>    selected as the default unless there is really no other thread
+>    implementation available.
 > 
->  default y if LIBC_TYPE && ((arm dependency) || list of other architectures)
+>  - We make NPTL the default thread implementation.
 > 
-> Without this fix, libunwind can be selected for example on
-> PowerPC/uClibc configurations, while only PowerPC/glibc should be
-> allowed. This fixes:
-> 
->   http://autobuild.buildroot.net/results/96c53ff240dcd68fcc9e3d32c4026c9886edcbe7/
-> 
-> Similarly, it also fixes cases where SuperH/uClibc was allowed, while
-> only SuperH/glibc should be allowed. This fixes:
-> 
->   http://autobuild.buildroot.net/results/95a6cca21aea9914ba8bb3f571760fc054c53ecd/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>  - On architectures where NPTL is not available, the NPTL option will
+>    not be available, so Kconfig will automatically fallback to
+>    linuxthreads.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+And to make things even more simple, why not move NPTL first, then LT,
+then none, and remove the default?
+
+Thus, when NPTL is avbailable, it is used; if not, LT is used; if not,
+then none is used.
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/libunwind/Config.in | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+>  package/uclibc/Config.in | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-> index a70d9e8..04ab5a5 100644
-> --- a/package/libunwind/Config.in
-> +++ b/package/libunwind/Config.in
-> @@ -10,16 +10,16 @@
->  config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
->  	bool
->  	default y if BR2_TOOLCHAIN_USES_GLIBC && \
-> -		((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-> -		(BR2_mips || BR2_mipsel || BR2_mips64 || \
-> +		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-> +		 BR2_mips || BR2_mipsel || BR2_mips64 || \
->  		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64)
->  	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
-> -		((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-> -		(BR2_i386 || BR2_mips || BR2_mipsel || \
-> +		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-> +		 BR2_i386 || BR2_mips || BR2_mipsel || \
->  		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
->  	default y if BR2_TOOLCHAIN_USES_MUSL && \
-> -		((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-> -		(BR2_i386 || BR2_x86_64)
-> +		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-> +		 BR2_i386 || BR2_x86_64)
+> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+> index 7c99195..b7714d4 100644
+> --- a/package/uclibc/Config.in
+> +++ b/package/uclibc/Config.in
+> @@ -47,15 +47,13 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
 >  
->  config BR2_PACKAGE_LIBUNWIND
->  	bool "libunwind"
+>  choice
+>  	prompt "Thread library implementation"
+> +	# Use NPTL when available. If not available, kconfig will
+> +	# automatically fall back to linuxthreads.
+>  	default BR2_PTHREADS_NATIVE
+> -	default BR2_PTHREADS if !BR2_USE_MMU
+>  	help
+>  	  Use this option to select the thread library implementation
+>  	  that should be used in your toolchain.
+>  
+> -	config BR2_PTHREADS_NONE
+> -		bool "none"
+> -
+>  	config BR2_PTHREADS
+>  		bool "linuxthreads"
+>  		select BR2_TOOLCHAIN_HAS_THREADS
+> @@ -67,6 +65,10 @@ choice
+>  		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>  		depends on BR2_USE_MMU
+>  		depends on !BR2_m68k && !BR2_microblaze
+> +
+> +	config BR2_PTHREADS_NONE
+> +		bool "none"
+> +
+>  endchoice
+>  
+>  config BR2_PTHREAD_DEBUG
 > -- 
 > 2.7.4
 > 
