@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Aug 2016 23:04:49 +0200
-Subject: [Buildroot] [PATCH] uclibc: proper thread default on m68k and
- Microblaze
-In-Reply-To: <1470414941-29826-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470414941-29826-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160807230449.7a3d62c3@free-electrons.com>
+Date: Sun, 7 Aug 2016 23:05:36 +0200
+Subject: [Buildroot] [PATCH 1/2] iproute2: fix no-thread build
+In-Reply-To: <1470416880-16148-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1470416880-16148-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160807230536.444ce384@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +12,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  5 Aug 2016 18:35:41 +0200, Thomas Petazzoni wrote:
-> Traditionally, Buildroot has a default of enabling thread
-> support. However, with the current construct of the thread choice in the
-> uclibc package, the m68k and microblaze architecture end up with no
-> thread support as the default.
+On Fri,  5 Aug 2016 19:07:59 +0200, Thomas Petazzoni wrote:
+> iproute2 believes that it needs to link with libpthread for its arpd
+> binary, because "some db implementations require thread". Therefore, our
+> iproute2.mk explicitly disables the build of arpd when thread support is
+> not available.
 > 
-> In order to avoid having to explicit a more complicated "default" value
-> for the choice, we take a simple approach:
+> However, the sed expression it uses no longer works. The Makefile used
+> to look like:
 > 
->  - The "none" choice is moved at the end of the list, so that it is not
->    selected as the default unless there is really no other thread
->    implementation available.
+> TARGETS = foo baz baz arpd foobar
 > 
->  - We make NPTL the default thread implementation.
+> so replacing " arpd " with a space was working fine. However, the
+> Makefile got changed in iproute2 to:
 > 
->  - On architectures where NPTL is not available, the NPTL option will
->    not be available, so Kconfig will automatically fallback to
->    linuxthreads.
+> ifeq (... berkeleydb available ...)
+>      TARGETS += arpd
+> endif
+> 
+> i.e, with no space at the end of the line. This made our sed expression
+> ineffective, causing build issues with no-thread configurations since
+> arpd was no longer disabled.
+> 
+> To address this, instead of sed-ing the Makefile, we overwrite the
+> berkeleydb detection of iproute2, by writing to the "Config" file, like
+> we're doing for other aspects of the package.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/03a37a2372a4c2e438a073e015c49d9e554b86b7/
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/uclibc/Config.in | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+>  package/iproute2/iproute2.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, after taking into account Yann's comment.
+Both patches applied.
 
 Thomas
 -- 
