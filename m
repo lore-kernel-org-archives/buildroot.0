@@ -1,65 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  7 Aug 2016 10:46:38 +0200
-Subject: [Buildroot] [PATCH] libunwind: fix architecture dependencies
-Message-ID: <1470559598-21216-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun,  7 Aug 2016 11:19:11 +0200
+Subject: [Buildroot] [PATCH] procps-ng: fix BR2_STATIC_LIBS=y build
+Message-ID: <1470561551-22910-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Due to a misplaced parenthesis, the libunwind dependency were
-incorrect. Indeed, they were of the form:
+The procps-ng package currently fails to build on BR2_STATIC_LIBS=y
+configurations. Indeed, by default NUMA support is enabled, and it
+requires dlopen(). As hinted by the configure script, passing
+--disable-numa allows to disable NUMA support.
 
- default y if LIBC_TYPE && (arm dependency) || (list of other architectures)
+However, once this is done, another issue pops up: dlopen() is also used
+by the SELinux support. But even when SELinux support is disabled, the
+procps-ng code incorrectly includes <dlfcn.h>. This is addressed by the
+addition of a patch.
 
-Which meant that that the LIBC_TYPE dependency was not taken into
-account for the "other architectures". This commit changes that to:
+Fixes:
 
- default y if LIBC_TYPE && ((arm dependency) || list of other architectures)
-
-Without this fix, libunwind can be selected for example on
-PowerPC/uClibc configurations, while only PowerPC/glibc should be
-allowed. This fixes:
-
-  http://autobuild.buildroot.net/results/96c53ff240dcd68fcc9e3d32c4026c9886edcbe7/
-
-Similarly, it also fixes cases where SuperH/uClibc was allowed, while
-only SuperH/glibc should be allowed. This fixes:
-
-  http://autobuild.buildroot.net/results/95a6cca21aea9914ba8bb3f571760fc054c53ecd/
+  http://autobuild.buildroot.net/results/b385bf435085728aece6323a5006ba9fa6631744/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libunwind/Config.in | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ ...put.c-include-dlfcn.h-only-when-necessary.patch | 32 ++++++++++++++++++++++
+ package/procps-ng/procps-ng.mk                     |  6 ++++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 package/procps-ng/0003-ps-output.c-include-dlfcn.h-only-when-necessary.patch
 
-diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-index a70d9e8..04ab5a5 100644
---- a/package/libunwind/Config.in
-+++ b/package/libunwind/Config.in
-@@ -10,16 +10,16 @@
- config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_TOOLCHAIN_USES_GLIBC && \
--		((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
--		(BR2_mips || BR2_mipsel || BR2_mips64 || \
-+		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-+		 BR2_mips || BR2_mipsel || BR2_mips64 || \
- 		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64)
- 	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
--		((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
--		(BR2_i386 || BR2_mips || BR2_mipsel || \
-+		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-+		 BR2_i386 || BR2_mips || BR2_mipsel || \
- 		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
- 	default y if BR2_TOOLCHAIN_USES_MUSL && \
--		((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
--		(BR2_i386 || BR2_x86_64)
-+		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-+		 BR2_i386 || BR2_x86_64)
+diff --git a/package/procps-ng/0003-ps-output.c-include-dlfcn.h-only-when-necessary.patch b/package/procps-ng/0003-ps-output.c-include-dlfcn.h-only-when-necessary.patch
+new file mode 100644
+index 0000000..dca28fa
+--- /dev/null
++++ b/package/procps-ng/0003-ps-output.c-include-dlfcn.h-only-when-necessary.patch
+@@ -0,0 +1,32 @@
++From 4fc9a348026a945aec8eddffc7613de9cb10b10c Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 7 Aug 2016 11:08:26 +0200
++Subject: [PATCH] ps/output.c: include <dlfcn.h> only when necessary
++
++dlopen() functionality is only used when SELinux support is enabled, so
++<dlfcn.h> only needs to be included when ENABLE_LIBSELINUX is
++defined. This fixes the build in configurations where <dlfcn.h> is not
++available.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ ps/output.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/ps/output.c b/ps/output.c
++index 42c04cf..f540832 100644
++--- a/ps/output.c
+++++ b/ps/output.c
++@@ -46,7 +46,9 @@
++  */
++ 
++ #include <ctype.h>
+++#if ENABLE_LIBSELINUX
++ #include <dlfcn.h>
+++#endif
++ #include <fcntl.h>
++ #include <grp.h>
++ #include <limits.h>
++-- 
++2.7.4
++
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 51a70a5..ce0f68a 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -47,4 +47,10 @@ PROCPS_NG_CONF_OPTS += \
+ 	--enable-watch8bit
+ endif
  
- config BR2_PACKAGE_LIBUNWIND
- 	bool "libunwind"
++# numa support requires libdl, so explicitly disable it when
++# BR2_STATIC_LIBS=y
++ifeq ($(BR2_STATIC_LIBS),y)
++PROCPS_NG_CONF_OPTS += --disable-numa
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.7.4
