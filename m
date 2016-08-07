@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Aug 2016 22:06:15 +0200
-Subject: [Buildroot] [PATCH 2/2] blktrace: disable on PowerPC
-In-Reply-To: <1470521474-16710-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470521474-16710-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1470521474-16710-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160807200615.GD5855@free.fr>
+Date: Sun, 7 Aug 2016 22:08:48 +0200
+Subject: [Buildroot] [PATCH] libcofi: disable for static-only builds
+In-Reply-To: <1470558003-19548-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1470558003-19548-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160807200848.GE5855@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +12,19 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2016-08-07 00:11 +0200, Thomas Petazzoni spake thusly:
-> This package has been failing to build on PowerPC since March 2016, with
-> nobody taking care of the problem, so let's disable this package on
-> PowerPC for the time being. PowerPC is the only architecture on which
-> blktrace fails to build currently.
-> 
+On 2016-08-07 10:20 +0200, Thomas Petazzoni spake thusly:
+> The libcofi package unconditionally builds a shared library, so we need
+> to make it unavailable on BR2_STATIC_LIBS=y configurations.
+
+Given that the expected use of libcofi is via LD_PRELOAD, this makes
+sense.
+
+(Technically, nothing would prevent linking with it at build time,
+though.)
+
 > Fixes:
 > 
->   http://autobuild.buildroot.net/results/5a673c692aeb957cd8beb2c2c10ce5fd882ba4b5/
+>   http://autobuild.buildroot.net/results/329c09bf123cd5b6dbcfff6251ba7a2c7cce50b8/
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
@@ -31,28 +34,28 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/blktrace/Config.in | 3 +++
->  1 file changed, 3 insertions(+)
+>  package/libcofi/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/package/blktrace/Config.in b/package/blktrace/Config.in
-> index c17de80..1b8212d 100644
-> --- a/package/blktrace/Config.in
-> +++ b/package/blktrace/Config.in
-> @@ -3,6 +3,8 @@ config BR2_PACKAGE_BLKTRACE
->  	# Uses posix_spawn()
->  	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
->  	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-> +	# issue: hidden symbol `_rest32gpr_30_x` is referenced by DSO
-> +	depends on !BR2_powerpc
->  	select BR2_PACKAGE_LIBAIO
+> diff --git a/package/libcofi/Config.in b/package/libcofi/Config.in
+> index e9914d6..df9ab71 100644
+> --- a/package/libcofi/Config.in
+> +++ b/package/libcofi/Config.in
+> @@ -1,8 +1,14 @@
+>  config BR2_PACKAGE_LIBCOFI
+>  	bool "libcofi"
+>  	depends on BR2_arm
+> +	# builds a shared library
+> +	depends on !BR2_STATIC_LIBS
 >  	help
->  	  blktrace is a block layer IO tracing mechanism which provides
-> @@ -13,4 +15,5 @@ config BR2_PACKAGE_BLKTRACE
+>  	  A replacement for memcpy and memset functionality for the
+>  	  Raspberry Pi with the intention of gaining greater performance.
 >  
->  comment "blktrace needs a glibc or musl toolchain"
->  	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-> +	depends on !BR2_powerpc
->  	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
+>  	  https://github.com/simonjhall/copies-and-fills
+> +
+> +comment "libcofi needs a toolchain w/ dynamic library"
+> +	depends on BR2_arm
+> +	depends on BR2_STATIC_LIBS
 > -- 
 > 2.7.4
 > 
