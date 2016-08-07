@@ -1,44 +1,33 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 7 Aug 2016 19:06:49 +0200
-Subject: [Buildroot] cmake Release build overwrites Os
-In-Reply-To: <20160807164032.GL22524@waldemar-brodkorb.de>
-References: <20160807164032.GL22524@waldemar-brodkorb.de>
-Message-ID: <CAHXCMM+4ZYp8hJZanWYEGWYV_Uhvm836GxHY77ui8oCNDgOtkQ@mail.gmail.com>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Sun,  7 Aug 2016 21:10:53 +0300
+Subject: [Buildroot] [PATCH] odroid: enable console display.
+Message-ID: <20160807181053.9857-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar, all,
+the below change will redirect the output to screen and not only to
+serial.
 
-On Sun, Aug 7, 2016 at 6:40 PM, Waldemar Brodkorb <wbx@openadk.org> wrote:
-> Hi,
->
-> while doing the m68k patch for assimp, I realized that following is
-> used to configure cmake based packages:
-> package/pkg-cmake.mk:           -DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release)
->
-> This means that Cmake adds -O3 to the CFLAGS/CXXFLAGS _after_ -Os
-> and so get used.
->
-> Is this the correct behaviour or do I missed something?
->
-Hum... IMHO, the current behavior is not right :-/
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+---
+ board/hardkernel/odroidc2/boot.ini | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It should be something like (not tested at all):
--DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,$$(if
-$$(BR2_OPTIMIZE_S),MinSizeRel,Release))
-
-Regards,
-
-> best regards
->  Waldemar
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/board/hardkernel/odroidc2/boot.ini b/board/hardkernel/odroidc2/boot.ini
+index 4f17fec..203a42a 100644
+--- a/board/hardkernel/odroidc2/boot.ini
++++ b/board/hardkernel/odroidc2/boot.ini
+@@ -13,7 +13,7 @@ setenv m_bpp "32"
+ setenv hpd "true"
+ 
+ # Default Console Device Setting
+-setenv condev "console=ttyS0,115200n8"	# Serial Console
++setenv condev "console=ttyS0,115200n8 console=tty0"   # on both
+ 
+ # Meson Timer
+ # 1 - Meson Timer
 -- 
-Samuel
+2.9.2
