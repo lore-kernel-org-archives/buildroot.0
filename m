@@ -1,36 +1,115 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Aug 2016 23:48:04 +0200
-Subject: [Buildroot] [PATCH] thrift: fix m68k uclinux compile
-In-Reply-To: <20160808044748.GA16620@waldemar-brodkorb.de>
-References: <20160808044748.GA16620@waldemar-brodkorb.de>
-Message-ID: <20160808234804.0a85b702@free-electrons.com>
+Date: Mon, 8 Aug 2016 23:48:13 +0200
+Subject: [Buildroot] [git commit] netplug: add two patches to fix musl build
+	issues
+Message-ID: <20160808214823.BFE047FC1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=225e1681cc000d904e5e98a3fcff974aac4e8d71
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 8 Aug 2016 06:47:48 +0200, Waldemar Brodkorb wrote:
-> The GCC manual suggest when getting:
-> relocation truncated to fit: R_68K_GOT16O foobar
-> to use -mxgot.
-> 
-> The failures happens after gnuplot compiles.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/d1e030c42f43f49575f36ecc82e9dd9018ca4f73/
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/thrift/thrift.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+This commit adds two patches to netplug that are needed for this package
+to build with musl:
 
-Applied to master, thanks.
+ - One patch to add a missing header inclusion
+ - One patch to fix a conflicting prototype on __assert_fail().
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fixes:
+
+  http://autobuild.buildroot.net/results/c2a5dfedba46cc8eb3d0c5c43f1f76fe0bb1805f/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by:  "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../netplug/0002-add-missing-time-include.patch    | 20 +++++++++
+ package/netplug/0003-remove-assert-fail.patch      | 51 ++++++++++++++++++++++
+ 2 files changed, 71 insertions(+)
+
+diff --git a/package/netplug/0002-add-missing-time-include.patch b/package/netplug/0002-add-missing-time-include.patch
+new file mode 100644
+index 0000000..f204c92
+--- /dev/null
++++ b/package/netplug/0002-add-missing-time-include.patch
+@@ -0,0 +1,20 @@
++Add missing <time.h> include
++
++netplug.h uses time_t, so it must include <time.h>. This fixes a build
++issue with the musl C library.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/netplug.h
++===================================================================
++--- a/netplug.h
+++++ b/netplug.h
++@@ -20,7 +20,7 @@
++ #ifndef __netplug_h
++ #define __netplug_h
++ 
++-
+++#include <time.h>
++ #include <asm/types.h>
++ #include <sys/socket.h>
++ #include <linux/netlink.h>
+diff --git a/package/netplug/0003-remove-assert-fail.patch b/package/netplug/0003-remove-assert-fail.patch
+new file mode 100644
+index 0000000..635c462
+--- /dev/null
++++ b/package/netplug/0003-remove-assert-fail.patch
+@@ -0,0 +1,51 @@
++Remove __assert_fail()
++
++The netplug code uses the assert() macro in various places. In glibc
++internally, assert() uses a function called __assert_fail() to print a
++message and abort. Relying on internal glibc details, netplug
++re-defines __assert_fail() in the hope that it will get called instead
++of glibc internal version.
++
++This attempt:
++
++ * Doesn't work with uClibc, which doesn't use any __assert_fail()
++   function at all. It doesn't fail to build, but it is entirely
++   useless.
++
++ * Fails to build with musl, which also defines __assert_fail(), but
++   with a different prototype.
++
++We simply remove the __assert_fail() implementation, so that the C
++library implementation of assert() just does its normal work. The only
++functionality lost is that the message is displayed on the standard
++output rather than in netplug's logs (and this was only working with
++glibc anyway).
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/lib.c
++===================================================================
++--- a/lib.c
+++++ b/lib.c
++@@ -199,21 +199,6 @@
++     return x;
++ }
++ 
++-
++-void
++-__assert_fail(const char *assertion, const char *file,
++-              unsigned int line, const char *function)
++-{
++-    do_log(LOG_CRIT, "%s:%u: %s%sAssertion `%s' failed",
++-           file, line,
++-           function ? function : "",
++-           function ? ": " : "",
++-           assertion);
++-
++-    abort();
++-}
++-
++-
++ /*
++  * Local variables:
++  * c-file-style: "stroustrup"
