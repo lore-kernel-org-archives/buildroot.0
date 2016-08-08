@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Aug 2016 19:59:34 +0200
-Subject: [Buildroot] [PATCH] netplug: add two patches to fix musl build
- issues
-In-Reply-To: <1470430356-29349-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470430356-29349-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160808175934.GA32406@free.fr>
+Date: Mon, 8 Aug 2016 20:01:43 +0200
+Subject: [Buildroot] [PATCH] owfs: disable PHP support
+In-Reply-To: <1470434333-17595-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1470434333-17595-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160808180143.GB32406@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,114 +12,56 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2016-08-05 22:52 +0200, Thomas Petazzoni spake thusly:
-> This commit adds two patches to netplug that are needed for this package
-> to build with musl:
-> 
->  - One patch to add a missing header inclusion
->  - One patch to fix a conflicting prototype on __assert_fail().
+On 2016-08-05 23:58 +0200, Thomas Petazzoni spake thusly:
+> Since we upgraded PHP to PHP 7.x, the PHP support of OWFS started
+> failing to build. Since we can hardly fix that on our own, the issue was
+> reported upstream (https://sourceforge.net/p/owfs/support-requests/32/)
+> and for now, we will disable PHP support in OWFS.
 > 
 > Fixes:
 > 
->   http://autobuild.buildroot.net/results/c2a5dfedba46cc8eb3d0c5c43f1f76fe0bb1805f/
+>   http://autobuild.buildroot.net/results/fe6843ec53fbed452d2e38a8577a235f73abb8db/
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Reviewed-by:  "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  .../netplug/0002-add-missing-time-include.patch    | 20 +++++++++
->  package/netplug/0003-remove-assert-fail.patch      | 51 ++++++++++++++++++++++
->  2 files changed, 71 insertions(+)
->  create mode 100644 package/netplug/0002-add-missing-time-include.patch
->  create mode 100644 package/netplug/0003-remove-assert-fail.patch
+>  package/owfs/owfs.mk | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/netplug/0002-add-missing-time-include.patch b/package/netplug/0002-add-missing-time-include.patch
-> new file mode 100644
-> index 0000000..f204c92
-> --- /dev/null
-> +++ b/package/netplug/0002-add-missing-time-include.patch
-> @@ -0,0 +1,20 @@
-> +Add missing <time.h> include
+> diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
+> index 0092603..83614af 100644
+> --- a/package/owfs/owfs.mk
+> +++ b/package/owfs/owfs.mk
+> @@ -17,6 +17,10 @@ OWFS_LICENSE = GPLv2+, LGPLv2 (owtcl)
+>  OWFS_LICENSE_FILES = COPYING COPYING.LIB
+>  OWFS_INSTALL_STAGING = YES
+>  
+> +# owfs PHP support is not PHP 7 compliant
+> +# https://sourceforge.net/p/owfs/support-requests/32/
+> +OWFS_CONF_OPTS += --disable-owphp --without-php
 > +
-> +netplug.h uses time_t, so it must include <time.h>. This fixes a build
-> +issue with the musl C library.
-> +
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +
-> +Index: b/netplug.h
-> +===================================================================
-> +--- a/netplug.h
-> ++++ b/netplug.h
-> +@@ -20,7 +20,7 @@
-> + #ifndef __netplug_h
-> + #define __netplug_h
-> + 
-> +-
-> ++#include <time.h>
-> + #include <asm/types.h>
-> + #include <sys/socket.h>
-> + #include <linux/netlink.h>
-> diff --git a/package/netplug/0003-remove-assert-fail.patch b/package/netplug/0003-remove-assert-fail.patch
-> new file mode 100644
-> index 0000000..635c462
-> --- /dev/null
-> +++ b/package/netplug/0003-remove-assert-fail.patch
-> @@ -0,0 +1,51 @@
-> +Remove __assert_fail()
-> +
-> +The netplug code uses the assert() macro in various places. In glibc
-> +internally, assert() uses a function called __assert_fail() to print a
-> +message and abort. Relying on internal glibc details, netplug
-> +re-defines __assert_fail() in the hope that it will get called instead
-> +of glibc internal version.
-> +
-> +This attempt:
-> +
-> + * Doesn't work with uClibc, which doesn't use any __assert_fail()
-> +   function at all. It doesn't fail to build, but it is entirely
-> +   useless.
-> +
-> + * Fails to build with musl, which also defines __assert_fail(), but
-> +   with a different prototype.
-> +
-> +We simply remove the __assert_fail() implementation, so that the C
-> +library implementation of assert() just does its normal work. The only
-> +functionality lost is that the message is displayed on the standard
-> +output rather than in netplug's logs (and this was only working with
-> +glibc anyway).
-> +
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +
-> +Index: b/lib.c
-> +===================================================================
-> +--- a/lib.c
-> ++++ b/lib.c
-> +@@ -199,21 +199,6 @@
-> +     return x;
-> + }
-> + 
-> +-
-> +-void
-> +-__assert_fail(const char *assertion, const char *file,
-> +-              unsigned int line, const char *function)
-> +-{
-> +-    do_log(LOG_CRIT, "%s:%u: %s%sAssertion `%s' failed",
-> +-           file, line,
-> +-           function ? function : "",
-> +-           function ? ": " : "",
-> +-           assertion);
-> +-
-> +-    abort();
-> +-}
-> +-
-> +-
-> + /*
-> +  * Local variables:
-> +  * c-file-style: "stroustrup"
+>  ifeq ($(BR2_PACKAGE_LIBFUSE),y)
+>  OWFS_DEPENDENCIES += libfuse
+>  OWFS_CONF_OPTS += \
+> @@ -49,13 +53,6 @@ else
+>  OWFS_CONF_OPTS += --disable-avahi
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_PHP),y)
+> -OWFS_CONF_OPTS += --enable-owphp --with-php --with-phpconfig=$(STAGING_DIR)/usr/bin/php-config
+> -OWFS_DEPENDENCIES += php host-swig
+> -else
+> -OWFS_CONF_OPTS += --disable-owphp --without-php
+> -endif
+> -
+>  # setup.py isn't python3 compliant
+>  ifeq ($(BR2_PACKAGE_PYTHON),y)
+>  OWFS_CONF_OPTS += \
 > -- 
 > 2.7.4
 > 
