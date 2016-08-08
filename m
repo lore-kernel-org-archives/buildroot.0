@@ -1,62 +1,100 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Mon, 8 Aug 2016 15:56:21 +0000
-Subject: [Buildroot] Analysis of build results for 2016-08-05
-In-Reply-To: <20160807112654.7b520594@free-electrons.com>
-References: <20160806063028.356101023A1@stock.ovh.net>
- <20160807112654.7b520594@free-electrons.com>
-Message-ID: <1470671781.31195.45.camel@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Aug 2016 18:42:09 +0200
+Subject: [Buildroot] [PATCH] glibc: add version 2.24
+In-Reply-To: <20160805185348.4c0ff1fd@free-electrons.com>
+References: <1470387567-64171-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160805185348.4c0ff1fd@free-electrons.com>
+Message-ID: <20160808164209.GA5876@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Thomas, All,
 
-On Sun, 2016-08-07 at 11:26 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Here is the usual analysis of build failures. Waldemar, Alexey, Vlad,
-> Gustavo, Frank, Gwenhael, Angelo, Fran?ois, Romain, Bernd, can you have
-> a look below? Thanks!
-> 
-> On Sat,??6 Aug 2016 08:30:28 +0200 (CEST), Thomas Petazzoni wrote:
+On 2016-08-05 18:53 +0200, Thomas Petazzoni spake thusly:
+> On Fri, 5 Aug 2016 09:59:27 +0100, Vicente Olivert Riera wrote:
+> > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> > ---
+> >  package/glibc/Config.in  | 6 ++++++
+> >  package/glibc/glibc.hash | 1 +
+> >  2 files changed, 7 insertions(+)
 > > 
-> > ?????????arc |????????????????bootutils-1.0.0 | NOK | http://autobuild.buildroot.net/results/4059a5afe3e471d4b25db493d4c5eec646a8b0e1/
-> cannot find crtbeginT.o: No such file or directory
+> > diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+> > index f86822d..a9a6cc7 100644
+> > --- a/package/glibc/Config.in
+> > +++ b/package/glibc/Config.in
+> > @@ -22,6 +22,11 @@ config BR2_GLIBC_VERSION_2_23
+> >  	# No support for pthread barriers on < v9 ISA
+> >  	depends on !BR2_sparc
+> >  
+> > +config BR2_GLIBC_VERSION_2_24
+> > +	bool "2.24"
+> > +	# No support for pthread barriers on < v9 ISA
+> > +	depends on !BR2_sparc
 > 
-> Alexey, Vlad ?
-> > 
-> > ?????????arc | host-gcc-final-arc-2016.09-... | NOK | http://autobuild.buildroot.net/results/3afc00e64274e89de2cf81e1dda8854327b89291/
-> configure: error: Link tests are not allowed after GCC_NO_EXECUTABLES.
+> One thing important I notice in the release announcement of 2.24 is:
 > 
-> Alexey, Vlad ?
+> * The minimum Linux kernel version that this version of the GNU C Library
+>   can be used with is 3.2, except on i[4567]86 and x86_64, where Linux
+>   kernel version 2.6.32 or later suffices (on architectures that already
+>   required kernel versions more recent than 3.2, those requirements remain
+>   unchanged).  Linux 3.2 or later kernel headers are required on all
+>   architectures.
 > 
+> It is not written completely clearly: they first say that on
+> x86/x86-64, 2.6.32 is sufficient, but they conclude that 3.2 is the
+> minimum version on all architectures. It would be good to clarify this
+> aspect.
 
-The failures listed above occurred due to the same issue - crtbeginT.o file was missing as the corresponding dependency wasn't added.
-The issue has already been solved internally and will be included in our next engineering build. We hope that new build happen tomorrow or
-the day after tomorrow. Anyway we will send patch patch with bumping to new arc toolchain as soon as it will come up.
+What this means, at least what I understand it means, is that:
 
+  - glibc 2.24 will not *run* on kernels more ancient than 3.2, except on
+    x86/x86_64, when it will not run on kernels older than 2.6.32.
 
-> ?????????arc |???????????????????stella-4.7.2 | NOK | http://autobuild.buildroot.net/results/1752ca6a393b43750022db3faee85cfc9d360bc4/
-> > x86_64-linux-gnu-g++: error: unrecognized command line option '-matomic'
-> > x86_64-linux-gnu-g++: error: unrecognized command line option '-matomic'
-> >?
-> > Why is the heck a x86_64-linux-gnu compiler used on an ARC
-> > configuration? There are some configure scripts issues as well:
-> >?
-> > Looking for C++ compiler... ./configure: line 110: eval: -g: invalid option
-> > eval: usage: eval [arg ...]
-> > ./configure: line 110: eval: -c: invalid option
-> > eval: usage: eval [arg ...]
+    This is a runtime dependency.
+
+  - glibc needs kernel headers 3.2 (or later) for all architectures,
+    even for x86/x86_64.
+
+    This is a built-time dependency.
+
+Note the apparent discrepancy betwen the runtime kernel and the
+build-time headers for x86/x86_64.
+
+That's because glibc has fall-back code to run on kernel older than the
+ones used for the headers (unless the --enable-kernel configure option
+is passed, of course).
+
+At least, that what I understand from that comment; but indeed, it is
+not very explicit.
+
+> Regardless of this detail, this means we will have to encode this
+> dependency somehow. Indeed, we still have people using kernels older
+> than 3.2 I believe on various platforms.
+
+On all but x86_x86_64, yes.
+
+Regards,
+Yann E. MORIN.
+
+> Best regards,
 > 
-
-I am looking at this issue now. I will report about it ASAP.
-> > 
 > Thomas
-
-Thank you for your reports.
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Best regards,
-Vlad Zakharov <vzakhar@synopsys.com>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
