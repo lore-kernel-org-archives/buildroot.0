@@ -1,74 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  8 Aug 2016 16:05:16 +0200
-Subject: [Buildroot] [PATCH] linux-zigbee: fix build on musl
-Message-ID: <1470665116-23317-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Mon, 8 Aug 2016 15:56:21 +0000
+Subject: [Buildroot] Analysis of build results for 2016-08-05
+In-Reply-To: <20160807112654.7b520594@free-electrons.com>
+References: <20160806063028.356101023A1@stock.ovh.net>
+ <20160807112654.7b520594@free-electrons.com>
+Message-ID: <1470671781.31195.45.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch to the linux-zigbee package that fixes the
-build on musl by adding a missing <time.h> include.
+Hi Thomas, all,
 
-Fixes:
+On Sun, 2016-08-07 at 11:26 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Here is the usual analysis of build failures. Waldemar, Alexey, Vlad,
+> Gustavo, Frank, Gwenhael, Angelo, Fran?ois, Romain, Bernd, can you have
+> a look below? Thanks!
+> 
+> On Sat,??6 Aug 2016 08:30:28 +0200 (CEST), Thomas Petazzoni wrote:
+> > 
+> > ?????????arc |????????????????bootutils-1.0.0 | NOK | http://autobuild.buildroot.net/results/4059a5afe3e471d4b25db493d4c5eec646a8b0e1/
+> cannot find crtbeginT.o: No such file or directory
+> 
+> Alexey, Vlad ?
+> > 
+> > ?????????arc | host-gcc-final-arc-2016.09-... | NOK | http://autobuild.buildroot.net/results/3afc00e64274e89de2cf81e1dda8854327b89291/
+> configure: error: Link tests are not allowed after GCC_NO_EXECUTABLES.
+> 
+> Alexey, Vlad ?
+> 
 
-  http://autobuild.buildroot.net/results/5d56f998b5c5ab9e06cf048e6ec95b8671989cef/
+The failures listed above occurred due to the same issue - crtbeginT.o file was missing as the corresponding dependency wasn't added.
+The issue has already been solved internally and will be included in our next engineering build. We hope that new build happen tomorrow or
+the day after tomorrow. Anyway we will send patch patch with bumping to new arc toolchain as soon as it will come up.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...d-config-parse.y-add-missing-time.h-inclu.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch
 
-diff --git a/package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch b/package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch
-new file mode 100644
-index 0000000..0ce4381
---- /dev/null
-+++ b/package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch
-@@ -0,0 +1,43 @@
-+From 8cc60d618f81f2eeaa926cd60ed9b55ee6cda6ea Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 8 Aug 2016 15:42:46 +0200
-+Subject: [PATCH] addrdb/coord-config-parse.y: add missing <time.h> include
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The %union definition uses the time_t structure. In order to use this
-+structure, the <time.h> header has to be included. Otherwise, the build
-+breaks with some C libraries, such as musl:
-+
-+In file included from coord-config-lex.l:23:0:
-+coord-config-parse.y:107:2: error: unknown type name ?time_t?
-+  time_t timestamp;
-+  ^
-+
-+This patch includes <time.h> using the '%code requires' directive of
-+Yacc.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ addrdb/coord-config-parse.y | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/addrdb/coord-config-parse.y b/addrdb/coord-config-parse.y
-+index 2e10a88..85ee058 100644
-+--- a/addrdb/coord-config-parse.y
-++++ b/addrdb/coord-config-parse.y
-+@@ -102,6 +102,10 @@
-+ 
-+ %}
-+ 
-++%code requires {
-++#include <time.h>
-++}
-++
-+ %union {
-+ 	unsigned long number;
-+ 	time_t timestamp;
-+-- 
-+2.7.4
-+
+> ?????????arc |???????????????????stella-4.7.2 | NOK | http://autobuild.buildroot.net/results/1752ca6a393b43750022db3faee85cfc9d360bc4/
+> > x86_64-linux-gnu-g++: error: unrecognized command line option '-matomic'
+> > x86_64-linux-gnu-g++: error: unrecognized command line option '-matomic'
+> >?
+> > Why is the heck a x86_64-linux-gnu compiler used on an ARC
+> > configuration? There are some configure scripts issues as well:
+> >?
+> > Looking for C++ compiler... ./configure: line 110: eval: -g: invalid option
+> > eval: usage: eval [arg ...]
+> > ./configure: line 110: eval: -c: invalid option
+> > eval: usage: eval [arg ...]
+> 
+
+I am looking at this issue now. I will report about it ASAP.
+> > 
+> Thomas
+
+Thank you for your reports.
+
 -- 
-2.7.4
+Best regards,
+Vlad Zakharov <vzakhar@synopsys.com>
