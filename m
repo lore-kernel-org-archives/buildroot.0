@@ -1,94 +1,82 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Mon, 8 Aug 2016 22:41:51 +0530
-Subject: [Buildroot] [PATCH 2/2] lftp: fix static link with readline
-In-Reply-To: <1470676311-12729-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1470676311-12729-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <1470676311-12729-2-git-send-email-rahul.bedarkar@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Aug 2016 19:42:13 +0200
+Subject: [Buildroot] [RFC 0/2] script to find package licenses
+In-Reply-To: <20160805095353.68bf1fd9@free-electrons.com>
+References: <1470320164-8241-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <20160804183335.0947f9a9@free-electrons.com>
+ <57A44379.9010208@imgtec.com>
+ <20160805095353.68bf1fd9@free-electrons.com>
+Message-ID: <20160808174213.GD5876@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When readline is static library, we need to link against ncurses,
-it is because, dependent library's symbols are not resolved when
-static library is built. Those symbols are resolved when binary tries
-to link with static library.
+Rahul, All,
 
-We can't pass linker flags for ncurses by setting LIBS environment
-variable via <PKG>_CONF_ENV because it looks like build system is not
-taking that into account and even though it would have been, order of
-linking is important.
+On 2016-08-05 09:53 +0200, Thomas Petazzoni spake thusly:
+> On Fri, 5 Aug 2016 13:12:49 +0530, Rahul Bedarkar wrote:
+> > Intention of script is to help us to verify or correct legal info that 
+> > we add in .mk file. This could be a handy tool that can be used by 
+> > anyone when we do version bump or add new package. The complex tools 
+> > that are available are generally used by upstream package providers for 
+> > Open Source Compliance which provide lot more information than just file 
+> > license. And integrating such tools in Buildroot might be difficult. But 
+> > in Buildroot where we just need license of a package, script could be 
+> > useful as a starting point.
+> 
+> I'm sorry, but I still don't see why we should merge a script that we
+> would have to maintain, while there are some existing, actively
+> developed and more powerful tools doing the same work.
+> 
+> Moreover, I believe that the cases that can be detected automatically
+> by a script (such as a clear GPL, LGPL, BSD or MIT license) are clearly
+> not the ones for which it is difficult to write the <pkg>_LICENSE
+> string.
+> 
+> The ones for which it is difficult are the ones that a script will
+> never handle as it can't recognize any pattern.
 
-We can't also pass linker flags for ncurses via --with-readline-libs
-conf options because it causes lftp_LIB_READLINE macro to take readline
-headers from host machine if available. To use --with-readline-libs
-we need to set --with-readline=yes and --with-readline-inc to include
-dir. But when --with-readline=yes, readline_prefix is computed based
-on if headers can be found in /usr/local or /usr. If readline is
-installed on host machine, then configure fails since we are using
-headers for host machine. If headers are not found in /usr/local or /usr
-then only path specified --with-readline-inc is taken into account.
-So specifying linker flags for ncurses via --with-readline-libs will
-not work in all cases.
+I concur with Thomas here. The obvious licenses we can find pretty
+easily, so those ar enot the ones we must look for.
 
-So it looks like, updating linker flags directly is only option to fix
-static link issue against readline.
+On the other hand, the ones for which we would need an automated
+solution are not easy to find automatically.
 
-Fixes:
-http://autobuild.buildroot.net/results/ae9/ae93bd1b4f6e1ed8f386830d4a51f00d9466f267/
+Hence this is a catch-22 situation.
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
----
- .../lftp/0001-fix-static-link-with-readline.patch  | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/lftp/0001-fix-static-link-with-readline.patch
+However, I think we could rely on an external siolution to find
+licenses. For example, Fossology and SPDX have both been mentionned
+already. It would be nice to see how we could interface to either to get
+a list of potential licenses for a package.
 
-diff --git a/package/lftp/0001-fix-static-link-with-readline.patch b/package/lftp/0001-fix-static-link-with-readline.patch
-new file mode 100644
-index 0000000..3392396
---- /dev/null
-+++ b/package/lftp/0001-fix-static-link-with-readline.patch
-@@ -0,0 +1,40 @@
-+fix static link with readline
-+
-+When readline is static library, we need to link against ncurses
-+because readline needs ncurses. It is because, dependent library's
-+symbols are not resolved when static library is built. Those symbols
-+are resolved program tries to link with static library.
-+
-+We can't pass linker flags for ncurses by setting LIBS environment
-+variable via <PKG>_CONF_ENV because it looks like build system is not
-+taking that into account and even though it would have been, order of
-+linking is important.
-+
-+We can't also pass linker flags for ncurses via --with-readline-libs
-+conf options because it causes lftp_LIB_READLINE macro to take readline
-+headers from host machine if available. To use --with-readline-libs
-+we need to set --with-readline=yes and --with-readline-inc to include
-+dir. But when --with-readline=yes, readline_prefix is computed based
-+on if headers can be found in /usr/local or /usr. If readline is
-+installed on host machine, then configure fails since we are using
-+headers for host machine. If headers are not found in /usr/local or /usr
-+then only path specified --with-readline-inc is taken into account.
-+So specifying linker flags for ncurses via --with-readline-libs will
-+not work in all cases.
-+
-+So it looks like, updating linker flags directly is only option to fix
-+static link issue against readline.
-+
-+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+
-+--- lftp-4.7.3/m4/lftp_lib_readline.m4.old	2016-08-08 19:49:12.217596470 +0530
-++++ lftp-4.7.3/m4/lftp_lib_readline.m4	2016-08-08 19:49:46.265596398 +0530
-+@@ -108,7 +108,7 @@ AC_DEFUN([lftp_LIB_READLINE],
-+ 	    readline_include_dir="$readline_include_dir/readline"
-+ 	fi
-+         readline_ld_flags="-L$readline_prefix/lib"
-+-        readline_lib_flags="-lreadline"
-++        readline_lib_flags="-lreadline -lncurses"
-+         run_readline_test="yes"
-+     elif test "$readline_requested" = "yes"; then
-+         if test -n "$readline_include_dir" -a -n "$readline_lib_flags"; then
+AFAICS, SPDX does not provide a mean to extract free-form licensing in
+source code; the licensing information has to be specially encoded with
+specific headers. If that is the case, then we could use the SPDX
+scripts to extract SPDX licensing information.
+
+AS for Fossology, they have a publicly-available instance, but it is
+only meant as a test-bed; it is neither supposed to be always available
+nor supposed to be reliable. One can install Fossology locally, but I
+haven't seen where one may download the database.
+
+All in all, if we were to add support for automtically extract licensing
+information from a pacakge source code, I firmly believe this should be
+done with existing tools, not ones we invent ourselves.
+
+I'll be marking those two patches are ejcted in out patchwork.
+
+However, we would *really* welcome a similar addition that would make
+use of existing infrastructures like SPDX or Fossology (or others).
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.6.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
