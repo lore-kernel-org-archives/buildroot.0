@@ -1,76 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  8 Aug 2016 15:11:04 +0200
-Subject: [Buildroot] [PATCH] libsigsegv: make the architecture dependencies
-	more robust
-Message-ID: <1470661864-15936-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon,  8 Aug 2016 16:05:16 +0200
+Subject: [Buildroot] [PATCH] linux-zigbee: fix build on musl
+Message-ID: <1470665116-23317-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While musl and glibc provide the ucontext structure definition on all
-architectures they support, it is not the case of uClibc. We have been
-excluding more and more architectures over time, but this isn't really
-nice as we continuously need to add more. Latest example: the fact that
-ucontext on ARM is only available on ARM platforms that support the ARM
-instruction set (i.e not on the Thumb-2 only Cortex-M platforms).
-
-Therefore, we introduce a BR2_PACKAGE_LIBSIGSEGV_ARCH_SUPPORTS variable,
-which:
-
- - is set to 'y' for musl and glibc
-
- - is set to 'y' for uClibc for the only architectures that are known to
-   provide ucontext (those are the ones that select ARCH_HAS_UCONTEXT in
-   uClibc.
-
-Note that we remove the comment, as it would become a way too
-complicated comment, and we usually don't add comment for such
-complicated situations (see libunwind for a similar example).
+This commit adds a patch to the linux-zigbee package that fixes the
+build on musl by adding a missing <time.h> include.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/b1e40b3ec64cd98b535d83e89e5780c46680e095/
+  http://autobuild.buildroot.net/results/5d56f998b5c5ab9e06cf048e6ec95b8671989cef/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsigsegv/Config.in | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ ...d-config-parse.y-add-missing-time.h-inclu.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch
 
-diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
-index 90c6ba3..f258dc9 100644
---- a/package/libsigsegv/Config.in
-+++ b/package/libsigsegv/Config.in
-@@ -1,15 +1,20 @@
-+config BR2_PACKAGE_LIBSIGSEGV_ARCH_SUPPORTS
-+	bool
-+	# with glibc/musl, ucontext is available for all supported
-+	# architectures
-+	default y if BR2_TOOLCHAIN_USES_GLIBC
-+	default y if BR2_TOOLCHAIN_USES_MUSL
-+	# with uclibc, ucontext is only available for a subset of the
-+	# supported architectures
-+	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
-+		(BR2_ARM_CPU_HAS_ARM || BR2_i386 || \
-+		 BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-+		 BR2_sparc || BR2_x86_64)
+diff --git a/package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch b/package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch
+new file mode 100644
+index 0000000..0ce4381
+--- /dev/null
++++ b/package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch
+@@ -0,0 +1,43 @@
++From 8cc60d618f81f2eeaa926cd60ed9b55ee6cda6ea Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 8 Aug 2016 15:42:46 +0200
++Subject: [PATCH] addrdb/coord-config-parse.y: add missing <time.h> include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
- config BR2_PACKAGE_LIBSIGSEGV
- 	bool "libsigsegv"
--	depends on !BR2_xtensa
--	depends on !BR2_arc # no ucontext_i.sym file
--	depends on !BR2_microblaze
--	depends on !BR2_m68k # unknown type name 'ucontext_t'
--	# No ucontext support in uclibc for powerpc and superh
--	depends on !((BR2_powerpc || BR2_sh) && BR2_TOOLCHAIN_USES_UCLIBC)
-+	depends on BR2_PACKAGE_LIBSIGSEGV_ARCH_SUPPORTS
- 	help
- 	  Library for handling page faults in user mode.
- 
- 	  http://www.gnu.org/software/libsigsegv/
--
--comment "libsigsegv needs a glibc toolchain"
--	depends on (BR2_powerpc || BR2_sh) && BR2_TOOLCHAIN_USES_UCLIBC
++The %union definition uses the time_t structure. In order to use this
++structure, the <time.h> header has to be included. Otherwise, the build
++breaks with some C libraries, such as musl:
++
++In file included from coord-config-lex.l:23:0:
++coord-config-parse.y:107:2: error: unknown type name ?time_t?
++  time_t timestamp;
++  ^
++
++This patch includes <time.h> using the '%code requires' directive of
++Yacc.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ addrdb/coord-config-parse.y | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/addrdb/coord-config-parse.y b/addrdb/coord-config-parse.y
++index 2e10a88..85ee058 100644
++--- a/addrdb/coord-config-parse.y
+++++ b/addrdb/coord-config-parse.y
++@@ -102,6 +102,10 @@
++ 
++ %}
++ 
+++%code requires {
+++#include <time.h>
+++}
+++
++ %union {
++ 	unsigned long number;
++ 	time_t timestamp;
++-- 
++2.7.4
++
 -- 
 2.7.4
