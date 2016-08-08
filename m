@@ -1,78 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  8 Aug 2016 14:02:56 +0200
-Subject: [Buildroot] [PATCH] dante: fix build on some PowerPC platforms
-Message-ID: <1470657776-9629-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon,  8 Aug 2016 15:11:04 +0200
+Subject: [Buildroot] [PATCH] libsigsegv: make the architecture dependencies
+	more robust
+Message-ID: <1470661864-15936-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The dante configure script has some logic to remove the -g flag from
-CFLAGS, but this logic is flawed and also removed -g in
--mfloat-gprs=double, turning it into the invalid -mfloatprs=double,
-causing a build failure.
+While musl and glibc provide the ucontext structure definition on all
+architectures they support, it is not the case of uClibc. We have been
+excluding more and more architectures over time, but this isn't really
+nice as we continuously need to add more. Latest example: the fact that
+ucontext on ARM is only available on ARM platforms that support the ARM
+instruction set (i.e not on the Thumb-2 only Cortex-M platforms).
 
-This commit adds a patch that gets rid of this -g removal logic, since
-it is in fact unnecessary.
+Therefore, we introduce a BR2_PACKAGE_LIBSIGSEGV_ARCH_SUPPORTS variable,
+which:
+
+ - is set to 'y' for musl and glibc
+
+ - is set to 'y' for uClibc for the only architectures that are known to
+   provide ucontext (those are the ones that select ARCH_HAS_UCONTEXT in
+   uClibc.
+
+Note that we remove the comment, as it would become a way too
+complicated comment, and we usually don't add comment for such
+complicated situations (see libunwind for a similar example).
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/313370bf05efe7fd87c281a97ecb6e06531a87ed/
+  http://autobuild.buildroot.net/results/b1e40b3ec64cd98b535d83e89e5780c46680e095/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0002-compiler.m4-do-not-remove-g-flag.patch    | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/dante/0002-compiler.m4-do-not-remove-g-flag.patch
+ package/libsigsegv/Config.in | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
 
-diff --git a/package/dante/0002-compiler.m4-do-not-remove-g-flag.patch b/package/dante/0002-compiler.m4-do-not-remove-g-flag.patch
-new file mode 100644
-index 0000000..0b41de6
---- /dev/null
-+++ b/package/dante/0002-compiler.m4-do-not-remove-g-flag.patch
-@@ -0,0 +1,42 @@
-+From c00e284dd2baa5ecdb0c9586044399cd7cacce3e Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 8 Aug 2016 12:31:40 +0200
-+Subject: [PATCH] compiler.m4: do not remove -g flag
+diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
+index 90c6ba3..f258dc9 100644
+--- a/package/libsigsegv/Config.in
++++ b/package/libsigsegv/Config.in
+@@ -1,15 +1,20 @@
++config BR2_PACKAGE_LIBSIGSEGV_ARCH_SUPPORTS
++	bool
++	# with glibc/musl, ucontext is available for all supported
++	# architectures
++	default y if BR2_TOOLCHAIN_USES_GLIBC
++	default y if BR2_TOOLCHAIN_USES_MUSL
++	# with uclibc, ucontext is only available for a subset of the
++	# supported architectures
++	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
++		(BR2_ARM_CPU_HAS_ARM || BR2_i386 || \
++		 BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
++		 BR2_sparc || BR2_x86_64)
 +
-+A sed expression such as 's/-g//' not only removes the -g
-+debugging-related flag, but also turns more specific flags such as
-+-mfloat-gprs=double into -mfloatprs=double, which is no longer a valid
-+flag.
-+
-+However, it turns out that removing -g is not necessary: having -g0
-+after -g negates the -g, and having -ggdb after -g is enough to produce
-+debugging information for GDB.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ compiler.m4 | 6 ------
-+ 1 file changed, 6 deletions(-)
-+
-+diff --git a/compiler.m4 b/compiler.m4
-+index 3a23406..621372c 100644
-+--- a/compiler.m4
-++++ b/compiler.m4
-+@@ -378,15 +378,9 @@ else
-+ 	gcc)
-+ 	    if test x"$aixldbug" != x; then
-+ 	        #disable debug info
-+-		if echo $CFLAGS | grep -- "-g" >/dev/null; then
-+-		    CFLAGS="`echo $CFLAGS | sed -e 's/-g//g'`"
-+-		fi
-+ 		CFLAGS="$CFLAGS${CFLAGS:+ }-g0"
-+ 	    else
-+ 		#use -ggdb also when not debugging
-+-		if echo $CFLAGS | grep -- "-g" >/dev/null; then
-+-		    CFLAGS="`echo $CFLAGS | sed -e 's/-g//g'`"
-+-		fi
-+ 		CFLAGS="$CFLAGS${CFLAGS:+ }-ggdb"
-+ 	    fi
-+ 	    ;;
-+-- 
-+2.7.4
-+
+ config BR2_PACKAGE_LIBSIGSEGV
+ 	bool "libsigsegv"
+-	depends on !BR2_xtensa
+-	depends on !BR2_arc # no ucontext_i.sym file
+-	depends on !BR2_microblaze
+-	depends on !BR2_m68k # unknown type name 'ucontext_t'
+-	# No ucontext support in uclibc for powerpc and superh
+-	depends on !((BR2_powerpc || BR2_sh) && BR2_TOOLCHAIN_USES_UCLIBC)
++	depends on BR2_PACKAGE_LIBSIGSEGV_ARCH_SUPPORTS
+ 	help
+ 	  Library for handling page faults in user mode.
+ 
+ 	  http://www.gnu.org/software/libsigsegv/
+-
+-comment "libsigsegv needs a glibc toolchain"
+-	depends on (BR2_powerpc || BR2_sh) && BR2_TOOLCHAIN_USES_UCLIBC
 -- 
 2.7.4
