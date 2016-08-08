@@ -1,44 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Aug 2016 23:46:31 +0200
-Subject: [Buildroot] [PATCH] package/uclibc: add upstream patch to fix
- Thumb2 builds
-In-Reply-To: <1470676199-28882-1-git-send-email-yann.morin.1998@free.fr>
-References: <1470676199-28882-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160808234631.713686df@free-electrons.com>
+From: Khem Raj <raj.khem@gmail.com>
+Date: Mon, 8 Aug 2016 14:47:53 -0700
+Subject: [Buildroot] cmake Release build overwrites Os
+In-Reply-To: <20160807223251.1177a2c2@free-electrons.com>
+References: <20160807164032.GL22524@waldemar-brodkorb.de>
+ <20160807223251.1177a2c2@free-electrons.com>
+Message-ID: <5832BDC6-1AE9-4956-84CD-93F0C8D462DB@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Mon,  8 Aug 2016 19:09:59 +0200, Yann E. MORIN wrote:
-> When uClibc-ng 1.0.17 was released, there was a regression when building
-> Thumb2-only for a CPU that is capable of running in arm mode (e.g. an
-> armv7a cpu).
+> On Aug 7, 2016, at 1:32 PM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 > 
-> We hastily added a patch to revert the upstream commit, as a stop-gap
-> measure, waiting for the actual fix.
+> Hello,
 > 
-> That actual fix is there, now. :-)
+> On Sun, 7 Aug 2016 18:40:32 +0200, Waldemar Brodkorb wrote:
 > 
-> Drop our revert-patch, and add the upstream patch.
+>> while doing the m68k patch for assimp, I realized that following is
+>> used to configure cmake based packages:
+>> package/pkg-cmake.mk:           -DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release)
+>> 
+>> This means that Cmake adds -O3 to the CFLAGS/CXXFLAGS _after_ -Os
+>> and so get used.
+>> 
+>> Is this the correct behaviour or do I missed something?
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  ...arm-cleanup-redundant-macros-for-syscalls.patch | 152 ---------------------
->  .../0001-arm-fix-compile-in-thumb-mode.patch       |  48 +++++++
->  2 files changed, 48 insertions(+), 152 deletions(-)
->  delete mode 100644 package/uclibc/0001-Revert-arm-cleanup-redundant-macros-for-syscalls.patch
->  create mode 100644 package/uclibc/0001-arm-fix-compile-in-thumb-mode.patch
+> There are unfortunately lots and lots of packages whose build system
+> enforce some -O<xyz> option, regardless of what Buildroot defines. I'm
+> not sure how hard we want to work against those packages.
+> 
 
-Applied to master, thanks.
+Perhaps taking a inclusive approach is best case here. Where you define a global opt level
+and let the _rogue_ packages override it. This will not make whole system follow your intended
+opt level, but it might be middle ground. In some cases, apps override the opt levels because
+other opt levels aren?t tested. So its better to not insert your own opt level and wake up
+those heinous bugs.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 204 bytes
+Desc: Message signed with OpenPGP using GPGMail
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160808/ce69140f/attachment.asc>
