@@ -1,77 +1,115 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Aug 2016 19:42:13 +0200
-Subject: [Buildroot] [RFC 0/2] script to find package licenses
-In-Reply-To: <20160805095353.68bf1fd9@free-electrons.com>
-References: <1470320164-8241-1-git-send-email-rahul.bedarkar@imgtec.com>
- <20160804183335.0947f9a9@free-electrons.com>
- <57A44379.9010208@imgtec.com>
- <20160805095353.68bf1fd9@free-electrons.com>
-Message-ID: <20160808174213.GD5876@free.fr>
+Date: Mon, 8 Aug 2016 19:45:57 +0200
+Subject: [Buildroot] [PATCH v2 2/3] gcc: configs: rename
+ BR2_EXTRA_GCC_CONFIG_OPTIONS
+In-Reply-To: <1470424841-42951-1-git-send-email-pgynther@google.com>
+References: <1470424841-42951-1-git-send-email-pgynther@google.com>
+Message-ID: <20160808174557.GE5876@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rahul, All,
+Petri, All,
 
-On 2016-08-05 09:53 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 5 Aug 2016 13:12:49 +0530, Rahul Bedarkar wrote:
-> > Intention of script is to help us to verify or correct legal info that 
-> > we add in .mk file. This could be a handy tool that can be used by 
-> > anyone when we do version bump or add new package. The complex tools 
-> > that are available are generally used by upstream package providers for 
-> > Open Source Compliance which provide lot more information than just file 
-> > license. And integrating such tools in Buildroot might be difficult. But 
-> > in Buildroot where we just need license of a package, script could be 
-> > useful as a starting point.
+On 2016-08-05 12:20 -0700, Petri Gynther spake thusly:
+> Rename BR2_EXTRA_GCC_CONFIG_OPTIONS to BR2_GCC_EXTRA_CONFIG_OPTIONS
+> to be consistent with BR2_GCC_* and BR2_BINUTILS_EXTRA_CONFIG_OPTIONS.
 > 
-> I'm sorry, but I still don't see why we should merge a script that we
-> would have to maintain, while there are some existing, actively
-> developed and more powerful tools doing the same work.
-> 
-> Moreover, I believe that the cases that can be detected automatically
-> by a script (such as a clear GPL, LGPL, BSD or MIT license) are clearly
-> not the ones for which it is difficult to write the <pkg>_LICENSE
-> string.
-> 
-> The ones for which it is difficult are the ones that a script will
-> never handle as it can't recognize any pattern.
+> Signed-off-by: Petri Gynther <pgynther@google.com>
 
-I concur with Thomas here. The obvious licenses we can find pretty
-easily, so those ar enot the ones we must look for.
+When you re-send patches, please resend the full series, not just the
+updated patches.
 
-On the other hand, the ones for which we would need an automated
-solution are not easy to find automatically.
+Re-sending only the updated patches makes it difficult to follow,
+because the un-modified patches are not in the same thread.
 
-Hence this is a catch-22 situation.
-
-However, I think we could rely on an external siolution to find
-licenses. For example, Fossology and SPDX have both been mentionned
-already. It would be nice to see how we could interface to either to get
-a list of potential licenses for a package.
-
-AFAICS, SPDX does not provide a mean to extract free-form licensing in
-source code; the licensing information has to be specially encoded with
-specific headers. If that is the case, then we could use the SPDX
-scripts to extract SPDX licensing information.
-
-AS for Fossology, they have a publicly-available instance, but it is
-only meant as a test-bed; it is neither supposed to be always available
-nor supposed to be reliable. One can install Fossology locally, but I
-haven't seen where one may download the database.
-
-All in all, if we were to add support for automtically extract licensing
-information from a pacakge source code, I firmly believe this should be
-done with existing tools, not ones we invent ourselves.
-
-I'll be marking those two patches are ejcted in out patchwork.
-
-However, we would *really* welcome a similar addition that would make
-use of existing infrastructures like SPDX or Fossology (or others).
+Can you re-send the full series with all three patches, please?
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  Config.in.legacy                       | 14 ++++++++++++++
+>  package/gcc/Config.in.host             |  3 ++-
+>  package/gcc/gcc-final/gcc-final.mk     |  2 +-
+>  package/gcc/gcc-initial/gcc-initial.mk |  2 +-
+>  4 files changed, 18 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 746b80a..4287b61 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -143,6 +143,20 @@ comment "----------------------------------------------------"
+>  endif
+>  
+>  ###############################################################################
+> +comment "Legacy options removed in master"
+> +
+> +config BR2_EXTRA_GCC_CONFIG_OPTIONS
+> +	string "gcc extra config options has been renamed"
+> +	default ""
+> +	help
+> +	  BR2_EXTRA_GCC_CONFIG_OPTIONS has been renamed to BR2_GCC_EXTRA_CONFIG_OPTIONS
+> +
+> +config BR2_EXTRA_GCC_CONFIG_OPTIONS_WRAP
+> +	bool
+> +	default y if BR2_EXTRA_GCC_CONFIG_OPTIONS != ""
+> +	select BR2_LEGACY
+> +
+> +###############################################################################
+>  comment "Legacy options removed in 2016.08"
+>  
+>  config BR2_PACKAGE_SYSTEMD_COMPAT
+> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+> index 2b54959..ec272d2 100644
+> --- a/package/gcc/Config.in.host
+> +++ b/package/gcc/Config.in.host
+> @@ -109,8 +109,9 @@ config BR2_GCC_VERSION
+>  	default "6.1.0" if BR2_GCC_VERSION_6_X
+>  	default "arc-2016.09-eng007" if BR2_GCC_VERSION_4_8_ARC
+>  
+> -config BR2_EXTRA_GCC_CONFIG_OPTIONS
+> +config BR2_GCC_EXTRA_CONFIG_OPTIONS
+>  	string "Additional gcc options"
+> +	default BR2_EXTRA_GCC_CONFIG_OPTIONS if BR2_EXTRA_GCC_CONFIG_OPTIONS != ""
+>  	default ""
+>  	help
+>  	  Any additional gcc configure options you may want to
+> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+> index 284d34c..0c0ab35 100644
+> --- a/package/gcc/gcc-final/gcc-final.mk
+> +++ b/package/gcc/gcc-final/gcc-final.mk
+> @@ -90,7 +90,7 @@ endif
+>  # End with user-provided options, so that they can override previously
+>  # defined options.
+>  HOST_GCC_FINAL_CONF_OPTS += \
+> -	$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS))
+> +	$(call qstrip,$(BR2_GCC_EXTRA_CONFIG_OPTIONS))
+>  
+>  HOST_GCC_FINAL_CONF_ENV = \
+>  	$(HOST_GCC_COMMON_CONF_ENV)
+> diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+> index 1e58d8b..0fba9fb 100644
+> --- a/package/gcc/gcc-initial/gcc-initial.mk
+> +++ b/package/gcc/gcc-initial/gcc-initial.mk
+> @@ -47,7 +47,7 @@ HOST_GCC_INITIAL_CONF_OPTS = \
+>  	--with-newlib \
+>  	--disable-largefile \
+>  	--disable-nls \
+> -	$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS))
+> +	$(call qstrip,$(BR2_GCC_EXTRA_CONFIG_OPTIONS))
+>  
+>  HOST_GCC_INITIAL_CONF_ENV = \
+>  	$(HOST_GCC_COMMON_CONF_ENV)
+> -- 
+> 2.8.0.rc3.226.g39d4020
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
