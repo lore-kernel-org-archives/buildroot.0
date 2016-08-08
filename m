@@ -1,28 +1,42 @@
-From: Chetan Kumar <shivakumar.chetan@gmail.com>
-Date: Mon, 8 Aug 2016 20:12:23 +0100
-Subject: [Buildroot] init do not start on rpi-3
-Message-ID: <CAFN-Ez6j13by9wX7qiNZhoTdaanzm75UT3MmZ7wCbE0OF+8WDg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 8 Aug 2016 22:34:07 +0200
+Subject: [Buildroot] Analysis of build results for 2016-08-05
+In-Reply-To: <1470671781.31195.45.camel@synopsys.com>
+References: <20160806063028.356101023A1@stock.ovh.net>
+ <20160807112654.7b520594@free-electrons.com>
+ <1470671781.31195.45.camel@synopsys.com>
+Message-ID: <20160808223407.4f535efd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi List,
+Hello,
 
-I downloaded the latest 2016-05 release, used defconfig_raspberrypi3
-created the image. Loaded on to my flash and booted the rpi-3. It just get
-stuck at
+On Mon, 8 Aug 2016 15:56:21 +0000, Vlad Zakharov wrote:
 
-random: nonblocking pool is initialized
+> The failures listed above occurred due to the same issue -
+> crtbeginT.o file was missing as the corresponding dependency wasn't
+> added. The issue has already been solved internally and will be
+> included in our next engineering build. We hope that new build happen
+> tomorrow or the day after tomorrow. Anyway we will send patch patch
+> with bumping to new arc toolchain as soon as it will come up.
 
-Nothing happens after that, I changed the command line with "init=/bin/sh"
-in the cmdline.txt, nothing happens.
+OK, thanks!
 
-Any clue, anyone ?
+> > > Looking for C++ compiler... ./configure: line 110: eval: -g:
+> > > invalid option eval: usage: eval [arg ...]
+> > > ./configure: line 110: eval: -c: invalid option
+> > > eval: usage: eval [arg ...]  
+> >   
+> 
+> I am looking at this issue now. I will report about it ASAP.
 
-Thanks
-C
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160808/d52a54d7/attachment.html>
+Perfect, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
