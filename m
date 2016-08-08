@@ -1,80 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  8 Aug 2016 23:43:56 +0200
-Subject: [Buildroot] [PATCH] mpv: fix build on sparc
-Message-ID: <1470692636-27918-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 8 Aug 2016 23:46:31 +0200
+Subject: [Buildroot] [PATCH] package/uclibc: add upstream patch to fix
+ Thumb2 builds
+In-Reply-To: <1470676199-28882-1-git-send-email-yann.morin.1998@free.fr>
+References: <1470676199-28882-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160808234631.713686df@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a new patch for mpv that fixes the stdatomic detection
-logic so that it realizes linking against libatomic is needed on some
-architectures. This fixes the build of mpv on SPARC. The patch has been
-submitted upstream.
+Hello,
 
-Fixes:
+On Mon,  8 Aug 2016 19:09:59 +0200, Yann E. MORIN wrote:
+> When uClibc-ng 1.0.17 was released, there was a regression when building
+> Thumb2-only for a CPU that is capable of running in arm mode (e.g. an
+> armv7a cpu).
+> 
+> We hastily added a patch to revert the upstream commit, as a stop-gap
+> measure, waiting for the actual fix.
+> 
+> That actual fix is there, now. :-)
+> 
+> Drop our revert-patch, and add the upstream patch.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  ...arm-cleanup-redundant-macros-for-syscalls.patch | 152 ---------------------
+>  .../0001-arm-fix-compile-in-thumb-mode.patch       |  48 +++++++
+>  2 files changed, 48 insertions(+), 152 deletions(-)
+>  delete mode 100644 package/uclibc/0001-Revert-arm-cleanup-redundant-macros-for-syscalls.patch
+>  create mode 100644 package/uclibc/0001-arm-fix-compile-in-thumb-mode.patch
 
-  http://autobuild.buildroot.net/results/f607eed9a48c4ca00db43f9d2652e615b4bd7c93/
+Applied to master, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../mpv/0002-wscript-improve-stdatomic-check.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/mpv/0002-wscript-improve-stdatomic-check.patch
-
-diff --git a/package/mpv/0002-wscript-improve-stdatomic-check.patch b/package/mpv/0002-wscript-improve-stdatomic-check.patch
-new file mode 100644
-index 0000000..c2a307e
---- /dev/null
-+++ b/package/mpv/0002-wscript-improve-stdatomic-check.patch
-@@ -0,0 +1,47 @@
-+From 5a635a0066b10d2ba25e0ce78cc57b2be619371c Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 8 Aug 2016 23:34:32 +0200
-+Subject: [PATCH] wscript: improve stdatomic check
-+
-+The current stdatomic check verifies the availability of the function by
-+calling atomic_load(). It also uses this test to check if linking
-+against libatomic is needed or not.
-+
-+Unfortunately, on specific architectures (namely SPARC), using
-+atomic_load() does *not* require linking against libatomic, while other
-+atomic operations do. Due to this, mpv's wscript concludes that
-+stdatomic is available, and that linking against libatomic is not
-+needed, causing the following link failure:
-+
-+[190/190] Linking build/mpv
-+audio/out/ao.c.13.o: In function `ao_query_and_reset_events':
-+/home/peko/autobuild/instance-0/output/build/mpv-0.18.1/build/../audio/out/ao.c:399: undefined reference to `__atomic_fetch_and_4'
-+
-+In order to fix this, the stdatomic check is adjusted to call
-+atomic_fetch_add() instead, which does require libatomic. Thanks to
-+this, the wscript realizes that linking against libatomic is needed, and
-+the build works fine.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+Submitted upstream: https://github.com/mpv-player/mpv/pull/3403
-+
-+ wscript | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/wscript b/wscript
-+index a18df6f..4c49caf 100644
-+--- a/wscript
-++++ b/wscript
-+@@ -154,7 +154,7 @@ main_dependencies = [
-+         'func': check_libs(['atomic'],
-+             check_statement('stdatomic.h',
-+                 'atomic_int_least64_t test = ATOMIC_VAR_INIT(123);'
-+-                'int test2 = atomic_load(&test)'))
-++                'atomic_fetch_add(&test, 1)'))
-+     }, {
-+         'name': 'atomic-builtins',
-+         'desc': 'compiler support for __atomic built-ins',
-+-- 
-+2.7.4
-+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
