@@ -1,64 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 8 Aug 2016 07:42:45 +0300
-Subject: [Buildroot] [PATCH 1/2] package/rt-tests: remove
- sched_setattr/sched_getattr API for SuperH arch
-In-Reply-To: <1470607398-8644-1-git-send-email-romain.naour@gmail.com>
-References: <1470607398-8644-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160808044245.GM3873@tarshish>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 8 Aug 2016 06:46:17 +0200
+Subject: [Buildroot] [PATCH] cairo: fix m68k uclinux compile
+Message-ID: <20160808044617.GA9742@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+The GCC manual suggest when getting:
+relocation truncated to fit: R_68K_GOT16O foobar
+to use -mxgot.
 
-On Mon, Aug 08, 2016 at 12:03:17AM +0200, Romain Naour wrote:
-> This commit remove rt-sched.o from librttest and pi_stress test program
-> only for SuperH arch which doesn't have __NR_sched_setattr and
-> __NR_sched_getattr syscalls defined.
-> 
-> Patch [1] adding these syscalls has not been merged in upstream kernel
-> (4.7).
+Fixes:
+  http://autobuild.buildroot.net/results/31a488316fe3c14729a6dd9259205f8530684cab/
+  http://autobuild.buildroot.net/results/dc6b899e3e502d65b2cf2f6d922a4f63857edf82/
 
-But these syscalls were added for 4.8-rc1 (commit 74bdaa611fa69). This 
-solution prevents sched_{set,get}attr use even for future v4.8+ kernels.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/cairo/cairo.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-baruch
-
-> Fixes:
-> http://autobuild.buildroot.net/results/67fc16366717f34df492683a14ecd23376e23110
-> 
-> [1] http://www.spinics.net/lists/linux-sh/msg41990.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/rt-tests/rt-tests.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-> index 19f1021..1433106 100644
-> --- a/package/rt-tests/rt-tests.mk
-> +++ b/package/rt-tests/rt-tests.mk
-> @@ -14,6 +14,16 @@ ifeq ($(BR2_PACKAGE_PYTHON),y)
->  RT_TESTS_DEPENDENCIES = python
->  endif
->  
-> +# Deadline scheduler syscalls are not defined on SuperH.
-> +# Remove pi_stress which depends on deadline scheduler syscalls.
-> +ifeq ($(BR2_sh),y)
-> +define RT_TESTS_REMOVE_RT_SCHED_API
-> +	$(SED) "s/rt-sched.o//" $(@D)/Makefile
-> +	$(SED) "s/pi_stress.c//" $(@D)/Makefile
-> +endef
-> +endif
-> +RT_TESTS_POST_PATCH_HOOKS += RT_TESTS_REMOVE_RT_SCHED_API
-> +
->  define RT_TESTS_BUILD_CMDS
->  	$(MAKE) -C $(@D) 			\
->  		CC="$(TARGET_CC)" 		\
-
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index b798995..d7e370a 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -12,6 +12,11 @@ CAIRO_SITE = http://cairographics.org/releases
+ CAIRO_INSTALL_STAGING = YES
+ CAIRO_AUTORECONF = YES
+ 
++# relocation truncated to fit: R_68K_GOT16O
++ifeq ($(BR2_m68k_cf),y)
++CAIRO_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+ CAIRO_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DCAIRO_NO_MUTEX=1"
+ endif
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.1.4
