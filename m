@@ -1,7 +1,7 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 8 Aug 2016 06:46:17 +0200
-Subject: [Buildroot] [PATCH] cairo: fix m68k uclinux compile
-Message-ID: <20160808044617.GA9742@waldemar-brodkorb.de>
+Date: Mon, 8 Aug 2016 06:47:04 +0200
+Subject: [Buildroot] [PATCH] gnuplot: fix m68k uclinux compile
+Message-ID: <20160808044703.GA11895@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,28 @@ relocation truncated to fit: R_68K_GOT16O foobar
 to use -mxgot.
 
 Fixes:
-  http://autobuild.buildroot.net/results/31a488316fe3c14729a6dd9259205f8530684cab/
-  http://autobuild.buildroot.net/results/dc6b899e3e502d65b2cf2f6d922a4f63857edf82/
+  http://autobuild.buildroot.net/results/d1e030c42f43f49575f36ecc82e9dd9018ca4f73/
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/cairo/cairo.mk | 5 +++++
+ package/gnuplot/gnuplot.mk | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index b798995..d7e370a 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -12,6 +12,11 @@ CAIRO_SITE = http://cairographics.org/releases
- CAIRO_INSTALL_STAGING = YES
- CAIRO_AUTORECONF = YES
+diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+index 4408ece..a9e1204 100644
+--- a/package/gnuplot/gnuplot.mk
++++ b/package/gnuplot/gnuplot.mk
+@@ -25,6 +25,11 @@ GNUPLOT_CONF_OPTS = \
+ 	--without-latex \
+ 	--without-cairo
  
 +# relocation truncated to fit: R_68K_GOT16O
 +ifeq ($(BR2_m68k_cf),y)
-+CAIRO_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
++GNUPLOT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
 +endif
 +
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
- CAIRO_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DCAIRO_NO_MUTEX=1"
- endif
+ ifeq ($(BR2_PACKAGE_GD)$(BR2_PACKAGE_LIBPNG),yy)
+ GNUPLOT_CONF_OPTS += --with-gd
+ GNUPLOT_DEPENDENCIES += gd
 -- 
 2.1.4
