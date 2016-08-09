@@ -1,64 +1,66 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue,  9 Aug 2016 15:21:43 +0200
-Subject: [Buildroot] [PATCH] gst1-imx: fix V4L2 plugin build with kernel
-	headers < 3.18
-Message-ID: <1470748903-16615-1-git-send-email-gary.bisson@boundarydevices.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Tue,  9 Aug 2016 15:24:31 +0200
+Subject: [Buildroot] [PATCH] gnuradio: backport patch to fix gr-fec
+	compilation
+Message-ID: <1470749071-20784-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fix the following build issue:
-http://autobuild.buildroot.net/results/b46/b460a770c8f4e992d29dde8fe37fc23a949937f2
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-It has been submitted to the package maintainers:
-https://github.com/Freescale/gstreamer-imx/pull/106
+Fix:
+http://autobuild.buildroot.net/results/f14/f14f4f62b5f23c652fa9411d9c569c2ab3394fb5
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- ...1-v4l2src-Add-V4L2_PIX_FMT_XRGB555X-check.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/gstreamer1/gst1-imx/0001-v4l2src-Add-V4L2_PIX_FMT_XRGB555X-check.patch
+ .../gnuradio/0003-fix_compilation_in_gcc-6.patch   | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/gnuradio/0003-fix_compilation_in_gcc-6.patch
 
-diff --git a/package/gstreamer1/gst1-imx/0001-v4l2src-Add-V4L2_PIX_FMT_XRGB555X-check.patch b/package/gstreamer1/gst1-imx/0001-v4l2src-Add-V4L2_PIX_FMT_XRGB555X-check.patch
+diff --git a/package/gnuradio/0003-fix_compilation_in_gcc-6.patch b/package/gnuradio/0003-fix_compilation_in_gcc-6.patch
 new file mode 100644
-index 0000000..67ac055
+index 0000000..e0ef855
 --- /dev/null
-+++ b/package/gstreamer1/gst1-imx/0001-v4l2src-Add-V4L2_PIX_FMT_XRGB555X-check.patch
-@@ -0,0 +1,33 @@
-+From 1ca05ebb7cb63607d14983948105dd1483ea6b65 Mon Sep 17 00:00:00 2001
-+From: Gary Bisson <gary.bisson@boundarydevices.com>
-+Date: Tue, 9 Aug 2016 10:26:15 +0200
-+Subject: [PATCH] v4l2src: Add V4L2_PIX_FMT_XRGB555X check
++++ b/package/gnuradio/0003-fix_compilation_in_gcc-6.patch
+@@ -0,0 +1,36 @@
++commit a1cf11937665392bcfa223a5095ff903eb44c69b
++Author: Jaroslav #karvada <jskarvad@redhat.com>
++Date:   Fri Feb 12 18:29:13 2016 +0100
 +
-+Since this format was added in kernel 3.18, any prior version will
-+fail to compile.
++Backport patch from
++http://gnuradio.org/redmine/projects/gnuradio/repository/revisions/a1cf11937665392bcfa223a5095ff903eb44c69b
 +
-+Issue reported by Buildroot autobuilder with 3.10 kernel headers:
-+http://autobuild.buildroot.net/results/b46/b460a770c8f4e992d29dde8fe37fc23a949937f2/
-+
-+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
++Fix compilation in gcc-6
++	    
++Signed-off-by: Jaroslav #karvada <jskarvad@redhat.com>
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 +---
-+ src/v4l2src/v4l2src.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/v4l2src/v4l2src.c b/src/v4l2src/v4l2src.c
-+index c77ae49..12b392a 100644
-+--- a/src/v4l2src/v4l2src.c
-++++ b/src/v4l2src/v4l2src.c
-+@@ -447,7 +447,9 @@ static GstCaps *gst_imx_v4l2src_caps_for_current_setup(GstImxV4l2VideoSrc *v4l2s
-+ 		case V4L2_PIX_FMT_RGB555:
-+ 			gst_fmt = GST_VIDEO_FORMAT_RGB15;
-+ 			break;
-++#ifdef V4L2_PIX_FMT_XRGB555X
-+ 		case V4L2_PIX_FMT_XRGB555X:
++diff --git a/gr-fec/include/gnuradio/fec/polar_decoder_common.h b/gr-fec/include/gnuradio/fec/polar_decoder_common.h
++index b0ecb85..a39ee4f 100644
++--- a/gr-fec/include/gnuradio/fec/polar_decoder_common.h
+++++ b/gr-fec/include/gnuradio/fec/polar_decoder_common.h
++@@ -28,6 +28,10 @@
++ #include <gnuradio/fec/generic_decoder.h>
++ #include <gnuradio/fec/polar_common.h>
++ 
+++#ifndef BOOST_CONSTEXPR_OR_CONST
+++#define BOOST_CONSTEXPR_OR_CONST const
 ++#endif
-+ 		case V4L2_PIX_FMT_RGB555X:
-+ 			gst_fmt = GST_VIDEO_FORMAT_BGR15;
-+ 			break;
-+-- 
-+2.8.1
-+
+++
++ namespace gr {
++   namespace fec {
++     namespace code {
++@@ -64,7 +68,7 @@ namespace gr {
++         bool set_frame_size(unsigned int frame_size){return false;};
++ 
++       private:
++-        static const float D_LLR_FACTOR = -2.19722458f;
+++        static BOOST_CONSTEXPR_OR_CONST float D_LLR_FACTOR = -2.19722458f;
++         unsigned int d_frozen_bit_counter;
++ 
++       protected:
 -- 
-2.8.1
+2.7.3
