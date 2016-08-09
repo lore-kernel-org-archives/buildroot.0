@@ -1,36 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Aug 2016 23:48:45 +0200
-Subject: [Buildroot] [PATCH] owfs: disable PHP support
-In-Reply-To: <1470434333-17595-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470434333-17595-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160808234845.0781fa5a@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 9 Aug 2016 06:14:44 +0200
+Subject: [Buildroot] [PATCH 0/9] Introducing service
+ supervision/management with s6
+In-Reply-To: <1470690140-18803-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1470690140-18803-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20160809041444.GQ22524@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Eric,
+Eric Le Bihan wrote,
 
-On Fri,  5 Aug 2016 23:58:53 +0200, Thomas Petazzoni wrote:
-> Since we upgraded PHP to PHP 7.x, the PHP support of OWFS started
-> failing to build. Since we can hardly fix that on our own, the issue was
-> reported upstream (https://sourceforge.net/p/owfs/support-requests/32/)
-> and for now, we will disable PHP support in OWFS.
+> Hi!
 > 
-> Fixes:
+> This series provides all the packages for programs and libraries to build an
+> embedded system with service supervision and management using s6 from
+> http://skarnet.org.
 > 
->   http://autobuild.buildroot.net/results/fe6843ec53fbed452d2e38a8577a235f73abb8db/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/owfs/owfs.mk | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
+> Note that these packages only provide the mechanism for supervising/managing
+> services using s6, not the policy. Packages to provide a policy suitable for
+> Buildroot-based embedded systems, using s6 as init (instead of SysV or
+> systemd), will be provided later. An example is available in the buildroot-s6
+> demo project [1].
 
-Applied to master, thanks.
+Is there a reason s6 series depends on glibc or musl?
+I once played with s6, but was scared about pre-configring for all
+architectures. Do you think your patch to skalibs has any chance to
+be upstreamed?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+best regards
+ Waldemar
