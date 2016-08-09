@@ -1,50 +1,63 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 9 Aug 2016 21:30:29 +0300
-Subject: [Buildroot] [PATCH 1/2] package/rt-tests: remove
- sched_setattr/sched_getattr API for SuperH arch
-In-Reply-To: <8216095c-f7c2-a862-c685-fe11e2bd2f32@gmail.com>
-References: <1470607398-8644-1-git-send-email-romain.naour@gmail.com>
- <20160808044245.GM3873@tarshish>
- <8216095c-f7c2-a862-c685-fe11e2bd2f32@gmail.com>
-Message-ID: <20160809183029.GG845@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  9 Aug 2016 21:24:06 +0200
+Subject: [Buildroot] [PATCH] package/weston: no-break space U+A0 (U8+C2A0)
+Message-ID: <1470770646-21912-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+Fixes:
+    http://autobuild.buildroot.org/results/f49/f49a9cbb7bdc5d9e05dcf0a20bd83f059e234e74/
+    http://autobuild.buildroot.org/results/1d3/1d3e7f07388ae11d70103e04d8a14c20d50fc212/
+    [...]
 
-On Tue, Aug 09, 2016 at 12:34:24PM +0200, Romain Naour wrote:
-> Le 08/08/2016 ? 06:42, Baruch Siach a ?crit :
-> > On Mon, Aug 08, 2016 at 12:03:17AM +0200, Romain Naour wrote:
-> >> This commit remove rt-sched.o from librttest and pi_stress test program
-> >> only for SuperH arch which doesn't have __NR_sched_setattr and
-> >> __NR_sched_getattr syscalls defined.
-> >>
-> >> Patch [1] adding these syscalls has not been merged in upstream kernel
-> >> (4.7).
-> > 
-> > But these syscalls were added for 4.8-rc1 (commit 74bdaa611fa69). This 
-> > solution prevents sched_{set,get}attr use even for future v4.8+ kernels.
-> 
-> Thanks for this info, I haven't checked the upcoming 4.8 kernel.
-> 
-> However, it means that pi_stress should depends on BR2_sh and
-> BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8. But this symbol doesn't exist yet in Buildroot.
-> 
-> I think this patch can be commited as is (kernel 4.8 will be released after
-> 2016.08) and the dependency on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8 can be added
-> in a follow up patch.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ ...ompositor-rdp-fix-no-break-space-U-A0-U8-.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
 
-Alternatively, you may patch src/include/rt-sched.h to add sh syscall numbers, 
-in addition to the existing i386, x86_64, and ARM ones. That would fix the 
-current build issue, and would also be future proof. Such a patch might even 
-be acceptable upstream.
-
-baruch
-
+diff --git a/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch b/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
+new file mode 100644
+index 0000000..32db32f
+--- /dev/null
++++ b/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
+@@ -0,0 +1,34 @@
++From 7ee8589dd83e52ae6af3ec5247c3403e8ded69a5 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Tue, 9 Aug 2016 20:00:29 +0200
++Subject: [PATCH] libweston/compositor-rdp: fix no-break space U+A0 (U8+C2A0)
++
++There is a UTF-8 no-break space (U+A0, U8+C2A0) in the definition of
++macro NSC_RESET in the case of  1.2.2 <= FreeRDP < 2.0.
++
++This is causing build issues (\302 is 0xC2, \240 is 0xA0):
++    http://autobuild.buildroot.net/results/f49/f49a9cbb7bdc5d9e05dcf0a20bd83f059e234e74/build-end.log
++
++Fix that by using a plain, boring space U+20.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ libweston/compositor-rdp.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libweston/compositor-rdp.c b/libweston/compositor-rdp.c
++index 11f5f05..ee81300 100644
++--- a/libweston/compositor-rdp.c
+++++ b/libweston/compositor-rdp.c
++@@ -58,7 +58,7 @@
++ #	define NSC_RESET(C, W, H) nsc_context_reset(C, W, H)
++ #	define RFX_RESET(C, W, H) rfx_context_reset(C, W, H)
++ #else
++-#	define NSC_RESET(C, W, H) do {?nsc_context_reset(C); C->width = W; C->height = H; } while(0)
+++#	define NSC_RESET(C, W, H) do { nsc_context_reset(C); C->width = W; C->height = H; } while(0)
++ #	define RFX_RESET(C, W, H) do { rfx_context_reset(C); C->width = W; C->height = H; } while(0)
++ #endif
++ #define FREERDP_CB_RET_TYPE BOOL
++-- 
++2.7.4
++
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.7.4
