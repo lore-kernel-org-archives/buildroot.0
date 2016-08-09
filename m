@@ -1,12 +1,10 @@
 From: Khem Raj <raj.khem@gmail.com>
-Date: Tue, 9 Aug 2016 13:57:11 -0700
-Subject: [Buildroot] [PATCH 1/1] package/libsidplay2: broken with gcc6
-In-Reply-To: <c7qp7dxll8.ln2@ID-313208.user.individual.net>
-References: <1470771855-12987-1-git-send-email-bernd.kuhls@t-online.de>
- <B397AE0E-28F2-4D0D-866B-3FD929EFB1DC@gmail.com>
- <20160809220419.36e61b43@free-electrons.com>
- <c7qp7dxll8.ln2@ID-313208.user.individual.net>
-Message-ID: <80638634-9A48-44DF-91B5-C4402C20830E@gmail.com>
+Date: Tue, 9 Aug 2016 14:01:02 -0700
+Subject: [Buildroot] [PATCH] linux-zigbee: new package
+In-Reply-To: <20160809224602.0cecd1a0@free-electrons.com>
+References: <1399139280-9258-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20160809224602.0cecd1a0@free-electrons.com>
+Message-ID: <181DFB1D-660A-45C8-80AE-9D768773B338@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +12,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-> On Aug 9, 2016, at 1:15 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> On Aug 9, 2016, at 1:46 PM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 > 
-> Am Tue, 09 Aug 2016 22:04:19 +0200 schrieb Thomas Petazzoni:
+> Hello,
 > 
->> Hello,
+> On Sat,  3 May 2014 19:48:00 +0200, Maxime Hadjinlian wrote:
+>> linux-zigbee is a mix of utility tools that implements a 802.15.4 stack
+>> along with a usefull library for any program that would need to use this
+>> stack.
 >> 
->> On Tue, 9 Aug 2016 12:52:29 -0700, Khem Raj wrote:
-> 
->>> This could also be fixed in code instead to statically typecast to int8_t.
+>> Note that the name is mislead, for licensing reason, this does *NOT*
+>> implement the ZigBee protocol.
 >> 
->> I would also very much prefer to see the code being fixed, rather than
->> this weird !AT_LEAST_GCC_6 dependency being added.
+>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > 
-> Hi Thomas,
+> FWIW, following a build failure on this package, I did a patch, which I
+> submitted upstream. Here is the answer I got from upstream (more
+> precisely Alexander Aring) :
 > 
-> ok, but I am unable to provide such a patch because I
-> do not know what to code to fix the C stuff ;)
+> """
+> Thanks for the patch, but this userspace software is unmaintained.
+> You should use wpan-tools [0] which used nl802154, this is available
+> since kernel 3.19.
 > 
+> It's not recommended to use the stack in earlier kernel versions.
+> We don't have a stable strategy yet (except extrem imporant fixed,
+> root exploit, etc. :-))
 
-perhaps changing https://sourceforge.net/p/sidplay2/code/HEAD/tree/trunk/libsidplay/src/xsid/xsid.cpp#l118
-to be a char array instead of uint8_t would help ?
+This is quite valuable feedback I believe. Helps you to decide
+if you want to add a new package which is unmaintained and take
+up maintaining it.
 
-> Regards, Bernd
 > 
+> - Alex
+> 
+> [0] http://wpan.cakelab.org/releases/
+> """
+> 
+> Best regards,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
@@ -49,4 +67,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 204 bytes
 Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160809/d99fee2f/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160809/3472c1c0/attachment.asc>
