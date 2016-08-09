@@ -1,64 +1,77 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 9 Aug 2016 21:33:08 +0200
-Subject: [Buildroot] [PATCH] glibc: add version 2.24
-In-Reply-To: <20160809104951.1ad736d4@free-electrons.com>
-References: <1470387567-64171-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160805185348.4c0ff1fd@free-electrons.com>
- <20160808164209.GA5876@free.fr>
- <20160809104951.1ad736d4@free-electrons.com>
-Message-ID: <20160809193308.GB5779@free.fr>
+Date: Tue, 9 Aug 2016 21:34:33 +0200
+Subject: [Buildroot] [PATCH v3] glibc: add version 2.24
+In-Reply-To: <1470732937-28889-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1470732937-28889-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160809193433.GC5779@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Vicente, All,
 
-On 2016-08-09 10:49 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 8 Aug 2016 18:42:09 +0200, Yann E. MORIN wrote:
+On 2016-08-09 09:55 +0100, Vicente Olivert Riera spake thusly:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+> Changes v2 -> v3:
+>  - Add kernel headers >= 3.2 dependency
+> Changes v1 -> v2:
+>  - Fix typo in glibc.hash: 2.23 -> 2.24 (Thanks Khem Raj)
 > 
-> > > It is not written completely clearly: they first say that on
-> > > x86/x86-64, 2.6.32 is sufficient, but they conclude that 3.2 is the
-> > > minimum version on all architectures. It would be good to clarify this
-> > > aspect.  
-> > 
-> > What this means, at least what I understand it means, is that:
-> > 
-> >   - glibc 2.24 will not *run* on kernels more ancient than 3.2, except on
-> >     x86/x86_64, when it will not run on kernels older than 2.6.32.
-> > 
-> >     This is a runtime dependency.
-> > 
-> >   - glibc needs kernel headers 3.2 (or later) for all architectures,
-> >     even for x86/x86_64.
-> > 
-> >     This is a built-time dependency.
+>  package/glibc/Config.in  | 9 +++++++++
+>  package/glibc/glibc.hash | 1 +
+>  2 files changed, 10 insertions(+)
 > 
-> OK. From Buildroot's perspective, all what matters is the build-time
-> dependency. If the 3.2 kernel headers are needed to build glibc 2.24,
-> then glibc 2.24 should depend on headers >= 3.2.
+> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+> index f86822d..643ebef 100644
+> --- a/package/glibc/Config.in
+> +++ b/package/glibc/Config.in
+> @@ -22,6 +22,14 @@ config BR2_GLIBC_VERSION_2_23
+>  	# No support for pthread barriers on < v9 ISA
+>  	depends on !BR2_sparc
+>  
+> +config BR2_GLIBC_VERSION_2_24
+> +	bool "2.24"
+> +	# No support for pthread barriers on < v9 ISA
+> +	depends on !BR2_sparc
+> +	# Linux 3.2 or later kernel headers are required on all arches.
+> +	# See: https://sourceware.org/ml/libc-alpha/2016-08/msg00212.html
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
 
-Yes. That's what Vicente did in his v3 of his patch:
-    https://patchwork.ozlabs.org/patch/657159/
+You forgot the comment:
 
-> > > Regardless of this detail, this means we will have to encode this
-> > > dependency somehow. Indeed, we still have people using kernels older
-> > > than 3.2 I believe on various platforms.  
-> > 
-> > On all but x86_x86_64, yes.
-> 
-> I don't get this. From my point of view, the x86/x86_64 "exception" is
-> of no use to us: all we are interested in is the build-time dependency.
-
-Well, I mixed it a bit in my head... What I was thinking was that we
-should still allow building a glibc-based toolchain even if the running
-kernel was older than 3.2 for x86/x86_64. But we have no way to enforce
-that: we have no _AT_LEAST_X_Y symbols for the running kernel (not that
-we want to have them).
+    comment "glibc-2.24 needs kernel headers >= 3.2"
+        depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
 
 Regards,
 Yann E. MORIN.
+
+>  endchoice
+>  
+>  endif
+> @@ -30,3 +38,4 @@ config BR2_GLIBC_VERSION_STRING
+>  	string
+>  	default "2.22" if BR2_GLIBC_VERSION_2_22
+>  	default "2.23" if BR2_GLIBC_VERSION_2_23
+> +	default "2.24" if BR2_GLIBC_VERSION_2_24
+> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+> index 052f281..befe80c 100644
+> --- a/package/glibc/glibc.hash
+> +++ b/package/glibc/glibc.hash
+> @@ -1,3 +1,4 @@
+>  # Locally calculated after checking pgp signature (glibc)
+>  sha256	eb731406903befef1d8f878a46be75ef862b9056ab0cde1626d08a7a05328948	glibc-2.22.tar.xz
+>  sha256	94efeb00e4603c8546209cefb3e1a50a5315c86fa9b078b6fad758e187ce13e9	glibc-2.23.tar.xz
+> +sha256	99d4a3e8efd144d71488e478f62587578c0f4e1fa0b4eed47ee3d4975ebeb5d3	glibc-2.24.tar.xz
+> -- 
+> 2.7.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
