@@ -1,42 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Aug 2016 15:45:32 +0200
-Subject: [Buildroot] [git commit] docs/manual: fix patch naming convention
-Message-ID: <20160809134535.C7296821A1@busybox.osuosl.org>
+Date: Tue, 9 Aug 2016 15:45:36 +0200
+Subject: [Buildroot] [PATCH] gnuradio: backport patch to fix gr-fec
+ compilation
+In-Reply-To: <1470749071-20784-1-git-send-email-gwenj@trabucayre.com>
+References: <1470749071-20784-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20160809154536.007d643a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe7babeeb0a2be4a29bfbae275e0dd8fe972c711
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Otherwise conflicts with the naming convention from previous section.
+On Tue,  9 Aug 2016 15:24:31 +0200, Gwenhael Goavec-Merou wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Fix:
+> http://autobuild.buildroot.net/results/f14/f14f4f62b5f23c652fa9411d9c569c2ab3394fb5
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> ---
+>  .../gnuradio/0003-fix_compilation_in_gcc-6.patch   | 36 ++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 package/gnuradio/0003-fix_compilation_in_gcc-6.patch
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/patch-policy.txt | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index 5a1fe4f..e1df8b0 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -73,12 +73,12 @@ details.
- * If a +series+ file exists in the package directory, then patches are
-   applied according to the +series+ file;
- +
--* Otherwise, patch files matching +<packagename>-*.patch+
--  are applied in alphabetical order.
-+* Otherwise, patch files matching +*.patch+ are applied in alphabetical
-+  order.
-   So, to ensure they are applied in the right order, it is highly
-   recommended to name the patch files like this:
--  +<packagename>-<number>-<description>.patch+, where +<number>+
--  refers to the 'apply order'.
-+  +<number>-<description>.patch+, where +<number>+ refers to the
-+  'apply order'.
- 
- . If +BR2_GLOBAL_PATCH_DIR+ is defined, the directories will be
-   enumerated in the order they are specified. The patches are applied
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
