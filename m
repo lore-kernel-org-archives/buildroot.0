@@ -1,65 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Aug 2016 15:44:42 +0200
-Subject: [Buildroot] [git commit] gnuradio: backport patch to fix gr-fec
-	compilation
-Message-ID: <20160809134446.32F4C821AB@busybox.osuosl.org>
+Date: Tue, 9 Aug 2016 15:45:32 +0200
+Subject: [Buildroot] [git commit] docs/manual: fix patch naming convention
+Message-ID: <20160809134535.C7296821A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87a49fbacea53f8ca199c90bb4bdde01d4406a95
+commit: https://git.buildroot.net/buildroot/commit/?id=fe7babeeb0a2be4a29bfbae275e0dd8fe972c711
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix:
-http://autobuild.buildroot.net/results/f14/f14f4f62b5f23c652fa9411d9c569c2ab3394fb5
+Otherwise conflicts with the naming convention from previous section.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../gnuradio/0003-fix_compilation_in_gcc-6.patch   | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ docs/manual/patch-policy.txt | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gnuradio/0003-fix_compilation_in_gcc-6.patch b/package/gnuradio/0003-fix_compilation_in_gcc-6.patch
-new file mode 100644
-index 0000000..f50af85
---- /dev/null
-+++ b/package/gnuradio/0003-fix_compilation_in_gcc-6.patch
-@@ -0,0 +1,36 @@
-+commit a1cf11937665392bcfa223a5095ff903eb44c69b
-+Author: Jaroslav #karvada <jskarvad@redhat.com>
-+Date:   Fri Feb 12 18:29:13 2016 +0100
-+
-+Backport patch from
-+http://gnuradio.org/redmine/projects/gnuradio/repository/revisions/a1cf11937665392bcfa223a5095ff903eb44c69b
-+
-+Fix compilation in gcc-6
-+	    
-+Signed-off-by: Jaroslav #karvada <jskarvad@redhat.com>
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+---
-+diff --git a/gr-fec/include/gnuradio/fec/polar_decoder_common.h b/gr-fec/include/gnuradio/fec/polar_decoder_common.h
-+index b0ecb85..a39ee4f 100644
-+--- a/gr-fec/include/gnuradio/fec/polar_decoder_common.h
-++++ b/gr-fec/include/gnuradio/fec/polar_decoder_common.h
-+@@ -28,6 +28,10 @@
-+ #include <gnuradio/fec/generic_decoder.h>
-+ #include <gnuradio/fec/polar_common.h>
-+ 
-++#ifndef BOOST_CONSTEXPR_OR_CONST
-++#define BOOST_CONSTEXPR_OR_CONST const
-++#endif
-++
-+ namespace gr {
-+   namespace fec {
-+     namespace code {
-+@@ -64,7 +68,7 @@ namespace gr {
-+         bool set_frame_size(unsigned int frame_size){return false;};
-+ 
-+       private:
-+-        static const float D_LLR_FACTOR = -2.19722458f;
-++        static BOOST_CONSTEXPR_OR_CONST float D_LLR_FACTOR = -2.19722458f;
-+         unsigned int d_frozen_bit_counter;
-+ 
-+       protected:
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+index 5a1fe4f..e1df8b0 100644
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -73,12 +73,12 @@ details.
+ * If a +series+ file exists in the package directory, then patches are
+   applied according to the +series+ file;
+ +
+-* Otherwise, patch files matching +<packagename>-*.patch+
+-  are applied in alphabetical order.
++* Otherwise, patch files matching +*.patch+ are applied in alphabetical
++  order.
+   So, to ensure they are applied in the right order, it is highly
+   recommended to name the patch files like this:
+-  +<packagename>-<number>-<description>.patch+, where +<number>+
+-  refers to the 'apply order'.
++  +<number>-<description>.patch+, where +<number>+ refers to the
++  'apply order'.
+ 
+ . If +BR2_GLOBAL_PATCH_DIR+ is defined, the directories will be
+   enumerated in the order they are specified. The patches are applied
