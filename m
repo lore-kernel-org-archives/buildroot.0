@@ -1,77 +1,71 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 9 Aug 2016 18:55:50 +0300
-Subject: [Buildroot] [PATCH 1/1] libical: Create option to use builtin
- tzdata
-In-Reply-To: <1470751327-64254-1-git-send-email-marc@khouri.ca>
-References: <1470751327-64254-1-git-send-email-marc@khouri.ca>
-Message-ID: <20160809155550.GF845@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 9 Aug 2016 19:58:58 +0200
+Subject: [Buildroot] Analysis of build results for 2016-08-08
+In-Reply-To: <20160809141535.4c9b8169@free-electrons.com>
+References: <20160809063032.89898101A55@stock.ovh.net>
+ <20160809141535.4c9b8169@free-electrons.com>
+Message-ID: <20160809175858.GA5779@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Marc,
+Thomas, All,
 
-On Tue, Aug 09, 2016 at 10:02:07AM -0400, Marc Khouri wrote:
-> libical requires time zone data (either system or internal) in order
-> to use time zone related functions. This commit adds an option to
-> build libical with its internal time zone data. If no time zone data
-> is present, segfaults occur in applications which use time zone functions.
-> 
-> Option documentation:
-> https://github.com/libical/libical/blob/v1.0.1/CMakeLists.txt#L23
-> 
-> Signed-off-by: Marc Khouri <marc@khouri.ca>
-> ---
->  package/libical/Config.in  | 12 ++++++++++++
->  package/libical/libical.mk |  4 ++++
->  2 files changed, 16 insertions(+)
-> 
-> diff --git a/package/libical/Config.in b/package/libical/Config.in
-> index 48170e9..e183ad0 100644
-> --- a/package/libical/Config.in
-> +++ b/package/libical/Config.in
-> @@ -9,6 +9,18 @@ config BR2_PACKAGE_LIBICAL
->  
->  	  http://libical.github.io/libical
->  
-> +if BR2_PACKAGE_LIBICAL
-> +
-> +config BR2_PACKAGE_LIBICAL_BUILTIN_TZDATA
-> +	bool "use built-in timezone data"
-> +	help
-> +	  Build using libical's (instead of the system's) timezone data.
-> +
-> +	  libical requires either built-in or system timezone data in order
-> +	  to support time zone functions.
-> +
-> +endif
-> +
->  comment "libical needs a toolchain w/ C++, dynamic library, wchar"
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
->  		BR2_STATIC_LIBS
-> diff --git a/package/libical/libical.mk b/package/libical/libical.mk
-> index e8cb3f8..a8bcefb 100644
-> --- a/package/libical/libical.mk
-> +++ b/package/libical/libical.mk
-> @@ -14,4 +14,8 @@ LIBICAL_LICENSE_FILES = LICENSE
->  # Gentoo/alpinelinux as well
->  LIBICAL_CONF_OPTS = -DSHARED_ONLY=true
->  
-> +ifeq ($(BR2_PACKAGE_LIBICAL_BUILTIN_TZDATA),y)
-> +LIBICAL_CONF_OPTS += -DUSE_BUILTIN_TZDATA=true
-> +endif
+On 2016-08-09 14:15 +0200, Thomas Petazzoni spake thusly:
+> >          arm | kmsxx-a706f157b86e906968080... | NOK | http://autobuild.buildroot.net/results/1f005c46b927fbeeffb11d843c2c3f18308bb5b9/
+> Lots and lots of errors. Maxime, Yann, any idea?
 
-Why not detect this automatically? Something like (untested):
+This is a static build, so it looks like it is missign a library to
+link to. I've started a build here to investigate a bit more...
 
-ifeq ($(BR2_PACKAGE_TZDATA),)
-LIBICAL_CONF_OPTS += -DUSE_BUILTIN_TZDATA=true
-endif
+> >          arm |                    systemd-231 | NOK | http://autobuild.buildroot.net/results/3bba46b91e6c2a2c5a8c7e0739ccf0b3d8efadff/
+> src/import/export-raw.c: In function 'reflink_snapshot':
+> src/import/export-raw.c:271:26: error: 'O_TMPFILE' undeclared (first use in this function)
+>          new_fd = open(d, O_TMPFILE|O_CLOEXEC|O_NOCTTY|O_RDWR, 0600);
+>                           ^
+> Yann, Maxime, you are our systemd people, could you have a look?
 
-baruch
+I already sent two "fixes" for that:
+    http://lists.busybox.net/pipermail/buildroot/2016-July/167292.html
+    http://lists.busybox.net/pipermail/buildroot/2016-July/167296.html
+
+Here it goes again:
+  - O_TMPFILE was added in kernel headers 3.11
+  - O_TMPFILE was added in glibc-2.18
+
+However, even when the kernel headers are recent enough but glibc is
+not, then O_TMPFILE is not available. One must have glibc >= 2.19;
+having kernel headers older than 3.11 does not seem to be a problem:
+    http://lists.busybox.net/pipermail/buildroot/2016-July/167793.html
+
+The toolchain is the codesourcery ARM 2014.05 which is using kernel
+headers 3.13 (OK) but a glibc-2.18 (not OK).
+
+Since we do not have symbols with the version of the C library, we can't
+have systemd hidden whn glibc is "too old".
+
+Except for that second patch of mine, above, which just hid systemd for
+this toolchain, I don;t see what we could do, baring adding AT_LEAST_X_Y
+symbols for glibc...
+
+> >        nios2 |                  weston-1.11.0 | NOK | http://autobuild.buildroot.net/results/f49a9cbb7bdc5d9e05dcf0a20bd83f059e234e74/
+> src/compositor-rdp.c:875:2: error: stray '\302' in program
+
+I've had a look at the code, and indeed there is a "non-breakable space"
+which is U8+C2A0 (U+A0) in the definition of the NSC_RESET macro on line
+61 for the RDP compositor.
+
+I'll send a patch upstream tonight.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
