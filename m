@@ -1,43 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Aug 2016 15:49:21 +0200
-Subject: [Buildroot] [PATCH] procps-ng: fix BR2_STATIC_LIBS=y build
-In-Reply-To: <1470561551-22910-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470561551-22910-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160809154921.187d5a3d@free-electrons.com>
+Date: Tue, 9 Aug 2016 15:49:52 +0200
+Subject: [Buildroot] [git commit] linux-zigbee: fix build on musl
+Message-ID: <20160809135014.AD3E981999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8457c2190a98487ed0ae64e213cacefe42aa7bb2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  7 Aug 2016 11:19:11 +0200, Thomas Petazzoni wrote:
-> The procps-ng package currently fails to build on BR2_STATIC_LIBS=y
-> configurations. Indeed, by default NUMA support is enabled, and it
-> requires dlopen(). As hinted by the configure script, passing
-> --disable-numa allows to disable NUMA support.
-> 
-> However, once this is done, another issue pops up: dlopen() is also used
-> by the SELinux support. But even when SELinux support is disabled, the
-> procps-ng code incorrectly includes <dlfcn.h>. This is addressed by the
-> addition of a patch.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/b385bf435085728aece6323a5006ba9fa6631744/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  ...put.c-include-dlfcn.h-only-when-necessary.patch | 32 ++++++++++++++++++++++
->  package/procps-ng/procps-ng.mk                     |  6 ++++
->  2 files changed, 38 insertions(+)
->  create mode 100644 package/procps-ng/0003-ps-output.c-include-dlfcn.h-only-when-necessary.patch
+This commit adds a patch to the linux-zigbee package that fixes the
+build on musl by adding a missing <time.h> include.
 
-Applied to master, thanks.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  http://autobuild.buildroot.net/results/5d56f998b5c5ab9e06cf048e6ec95b8671989cef/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...d-config-parse.y-add-missing-time.h-inclu.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+
+diff --git a/package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch b/package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch
+new file mode 100644
+index 0000000..0ce4381
+--- /dev/null
++++ b/package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch
+@@ -0,0 +1,43 @@
++From 8cc60d618f81f2eeaa926cd60ed9b55ee6cda6ea Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 8 Aug 2016 15:42:46 +0200
++Subject: [PATCH] addrdb/coord-config-parse.y: add missing <time.h> include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The %union definition uses the time_t structure. In order to use this
++structure, the <time.h> header has to be included. Otherwise, the build
++breaks with some C libraries, such as musl:
++
++In file included from coord-config-lex.l:23:0:
++coord-config-parse.y:107:2: error: unknown type name ???time_t???
++  time_t timestamp;
++  ^
++
++This patch includes <time.h> using the '%code requires' directive of
++Yacc.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ addrdb/coord-config-parse.y | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/addrdb/coord-config-parse.y b/addrdb/coord-config-parse.y
++index 2e10a88..85ee058 100644
++--- a/addrdb/coord-config-parse.y
+++++ b/addrdb/coord-config-parse.y
++@@ -102,6 +102,10 @@
++ 
++ %}
++ 
+++%code requires {
+++#include <time.h>
+++}
+++
++ %union {
++ 	unsigned long number;
++ 	time_t timestamp;
++-- 
++2.7.4
++
