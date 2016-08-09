@@ -1,83 +1,47 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 9 Aug 2016 16:07:59 +0200
-Subject: [Buildroot] Analysis of build results for 2016-08-08
-In-Reply-To: <20160809141535.4c9b8169@free-electrons.com>
-References: <20160809063032.89898101A55@stock.ovh.net>
- <20160809141535.4c9b8169@free-electrons.com>
-Message-ID: <17850212-c769-63c4-f05b-79adc47f470c@gmail.com>
+From: Ben Boeckel <mathstuf@gmail.com>
+Date: Tue, 9 Aug 2016 10:15:06 -0400
+Subject: [Buildroot] Analysis of build results for 2016-08-05
+In-Reply-To: <CAHXCMM+xOgCuMNHMSqj4tOP2jMGP7OPOLD1_x0_8HCgXb_h21g@mail.gmail.com>
+References: <20160806063028.356101023A1@stock.ovh.net>
+ <20160807112654.7b520594@free-electrons.com>
+ <CAHXCMM+xOgCuMNHMSqj4tOP2jMGP7OPOLD1_x0_8HCgXb_h21g@mail.gmail.com>
+Message-ID: <20160809141506.GA28979@megas.kitware.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, All,
+On Sun, Aug 07, 2016 at 17:48:46 +0200, Samuel Martin wrote:
+> It seems to be another error due to "-isystem
+> $(STAGING_DIR)/usr/include" passed to g++ [1].
+> 
+> AFAICS, this is done by CMake when generating the flags.make files.
+> Note that removing it from the CXX_INCLUDES variables in all generated
+> flags.make prevent from triggering this error.
+> 
+> It is not clear to me whether it is a gcc-6.x bug or a CMake one.
+> According to fedora developers, this is not a gcc-6 bug [2].
+> Ben, do you have any idea?
 
-Le 09/08/2016 ? 14:15, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Tue,  9 Aug 2016 08:30:32 +0200 (CEST), Thomas Petazzoni wrote:
-> 
+It might be that CMake is having trouble determining the paths that the
+compiler uses by default? It should exclude any such directories from
+the -I setup (though -isystem may change this behavior). CMake builds up
+this variable:
 
-[snip]
+    https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_IMPLICIT_INCLUDE_DIRECTORIES.html
 
-> 
->>          arm |                host-efl-1.17.2 | NOK | http://autobuild.buildroot.net/results/89bf12f8333d47af0cb5775c859e26f300af56cc/
-> 
-> edje_cc: Critical. Unable to open temp file "(null)" for pre-processor.
-> 
-> Romain? This looks like a transient error, but I'm not sure.
+based on the platform. It prefixes these with the value of CMAKE_SYSROOT
+to create the list of implicit directories it ignores when building up
+-I lines. Is CMAKE_SYSROOT not set properly?
 
-I already seen this issue on autobuilders but I'm not able to reproduce it
-locally...
+> Ben, I have not opened any ticket yet, nor checked if a similar one is
+> already opened. Do you need more details?
 
-> 
->> microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/c3f724afbf79434864be7901dadaf6d848edefea/
-> 
-> make[4]: *** No rule to make target `../sim/microblaze/libsim.a', needed by `gdb'.  Stop.
-> make[4]: *** Waiting for unfinished jobs....
-> 
-> Yet another case of GDB Simulator build failure :-/ Waldemar ?
+Building with VERBOSE=1 would help since it would show the actual
+command lines being used. It may also help to move over to the
+cmake-developers list to reach more CMake developers:
 
-I'm not sure the GDB Simulator for microblaze really build/work. We use the
-Xilinx fork which provide a pretty old version (7.5 or 7.6).
+    https://cmake.org/mailman/listinfo/cmake-developers
 
-> 
->>       x86_64 |                   lshw-B.02.18 | NOK | http://autobuild.buildroot.net/results/576eccb104ff23e60bfa9d15ce5bf8cab064a64f/
-> 
-> Would be fixed by https://patchwork.ozlabs.org/patch/655854/.
-
-As pointed out by Khem Raj, we should be careful with this patch. In doubt
-disable lshw for musl.
-
-> 
->>       x86_64 |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/c32851d3497b296904793c7d9af20cc8eb655a27/
-> 
-> error: assignment of read-only variable 'stdin'
-> 
-> musl-related.
-
-The issue has already been reported upstream by Brendan Heading and nothing
-happened to fix it.
-
-https://www.redhat.com/archives/linux-lvm/2016-February/msg00027.html
-
-> 
->>        nios2 |                      tftpd-5.2 | NOK | http://autobuild.buildroot.net/results/3117e3f39cd0b72a9a5d177091e9bbbd3e631363/
-> 
-> tftpd.c:(.text.startup+0x5c): warning: Unable to reach (null) (at 0x00000000) from the global pointer (at 0x00011a80) because the offset (-72320) is out of the allowed range, -32678 to 32767.
-> 
-> Romain, is this a known NIOSII toolchain issue?
-
-Humm, not sure. It remind me an old nios2 issue, maybe the gcc compiler require
-a backported patch ?
-
-[snip]
-
-Best regards,
-Romain
-
-
-> 
-> Thomas
-> 
+--Ben
