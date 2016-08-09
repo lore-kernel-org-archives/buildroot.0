@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Aug 2016 10:09:12 +0200
-Subject: [Buildroot] [PATCH 2/9] execline: new package
-In-Reply-To: <1470690140-18803-3-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1470690140-18803-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1470690140-18803-3-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20160809100912.0f7738b3@free-electrons.com>
+Date: Tue, 9 Aug 2016 10:49:51 +0200
+Subject: [Buildroot] [PATCH] glibc: add version 2.24
+In-Reply-To: <20160808164209.GA5876@free.fr>
+References: <1470387567-64171-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160805185348.4c0ff1fd@free-electrons.com>
+ <20160808164209.GA5876@free.fr>
+Message-ID: <20160809104951.1ad736d4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,81 +14,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  8 Aug 2016 23:02:13 +0200, Eric Le Bihan wrote:
-> This package provides execline, a (non-interactive) scripting language,
-> like sh, used in the s6 supervision system.
+On Mon, 8 Aug 2016 18:42:09 +0200, Yann E. MORIN wrote:
+
+> > It is not written completely clearly: they first say that on
+> > x86/x86-64, 2.6.32 is sufficient, but they conclude that 3.2 is the
+> > minimum version on all architectures. It would be good to clarify this
+> > aspect.  
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/Config.in               |  1 +
->  package/execline/Config.in      | 15 +++++++++
->  package/execline/Config.in.host |  7 +++++
+> What this means, at least what I understand it means, is that:
+> 
+>   - glibc 2.24 will not *run* on kernels more ancient than 3.2, except on
+>     x86/x86_64, when it will not run on kernels older than 2.6.32.
+> 
+>     This is a runtime dependency.
+> 
+>   - glibc needs kernel headers 3.2 (or later) for all architectures,
+>     even for x86/x86_64.
+> 
+>     This is a built-time dependency.
 
-Why do we need an option visible in menuconfig to enable this as a host
-package? Why do we need the host package at all?
+OK. From Buildroot's perspective, all what matters is the build-time
+dependency. If the 3.2 kernel headers are needed to build glibc 2.24,
+then glibc 2.24 should depend on headers >= 3.2.
 
-> diff --git a/package/execline/Config.in b/package/execline/Config.in
-> new file mode 100644
-> index 0000000..a9e0a88
-> --- /dev/null
-> +++ b/package/execline/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_EXECLINE
-> +	bool "execline"
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
-> +	select BR2_PACKAGE_SKALIBS
-> +	help
-> +	  execline is a (non-interactive) scripting language, like sh ; but its
-> +	  syntax is quite different from a traditional shell syntax.
-> +	  The execlineb program is meant to be used as an interpreter for a text
-> +	  file; the other commands are essentially useful inside an execlineb
-> +	  script.
-> +
-> +	  http://skarnet.org/software/execline/
-> +
-> +comment "execline needs an (e)glibc or musl toolchain"
+> > Regardless of this detail, this means we will have to encode this
+> > dependency somehow. Indeed, we still have people using kernels older
+> > than 3.2 I believe on various platforms.  
+> 
+> On all but x86_x86_64, yes.
 
-(e)glibc -> glibc
-
-> +EXECLINE_VERSION = v2.1.5.0
-> +EXECLINE_SITE = git://git.skarnet.org/execline.git
-
-Please use the tarball.
-
-> +EXECLINE_LICENSE = ISC
-> +EXECLINE_LICENSE_FILES = COPYING
-> +EXECLINE_INSTALL_STAGING = YES
-> +EXECLINE_DEPENDENCIES = skalibs
-> +
-> +EXECLINE_CONFIGURE_OPTS = \
-> +	--prefix=/usr \
-> +	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
-> +	--with-include=$(STAGING_DIR)/usr/include \
-> +	--with-dynlib=$(STAGING_DIR)/usr/lib \
-> +	--with-lib=$(STAGING_DIR)/usr/lib/skalibs
-> +
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +EXECLINE_CONFIGURE_OPTS +=  --enable-static --disable-shared
-> +else
-> +EXECLINE_CONFIGURE_OPTS +=  --disable-static --enable-shared --disable-allstatic
-> +endif
-
-Handle the shared+static case.
-
-> +
-> +define EXECLINE_CONFIGURE_CMDS
-> +	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(EXECLINE_CONFIGURE_OPTS))
-> +endef
-> +
-> +define EXECLINE_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)
-> +endef
-> +
-> +define EXECLINE_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) install
-
-You're using MAKE1 to build the target variant, but MAKE to build the
-host variant. Is this expected?
+I don't get this. From my point of view, the x86/x86_64 "exception" is
+of no use to us: all we are interested in is the build-time dependency.
 
 Thomas
 -- 
