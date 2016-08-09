@@ -1,11 +1,10 @@
-From: Chetan Kumar <shivakumar.chetan@gmail.com>
-Date: Tue, 9 Aug 2016 07:31:24 +0100
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Tue, 9 Aug 2016 08:40:49 +0200
 Subject: [Buildroot] init do not start on rpi-3
-In-Reply-To: <C3931D1C-6B60-42EC-B6B7-172652CCA674@gmail.com>
+In-Reply-To: <CAFN-Ez76kdXFyagpCzmTteQCeShs4dMAs9o9=bhGJV+S+LdVcw@mail.gmail.com>
 References: <CALtfCQZntOzpr5UZr9ayBcPBwXT2SDa+Z_CtNNcFCUX-H41jOw@mail.gmail.com>
  <CAFN-Ez76kdXFyagpCzmTteQCeShs4dMAs9o9=bhGJV+S+LdVcw@mail.gmail.com>
- <C3931D1C-6B60-42EC-B6B7-172652CCA674@gmail.com>
-Message-ID: <CAFN-Ez6wVHHQVNa9KSqSFfps83o2j7Yk-APJFXyFAmbCcwjVyw@mail.gmail.com>
+Message-ID: <CALtfCQZJDwztCVU+oH=E+fJG0ZtSRz+RgQzkZur2L0LhMtBrcw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +13,26 @@ To: buildroot@busybox.net
 
 Hi,
 
-No, I do not see that, this is also is default content, pasted below
-uncommented lines
+I'm not pretty sure because I'm using buildroot-2016.02, but I think you
+have to place this in the /etc/inittab:
+...
+ttyAMA0::respawn:/sbin/getty -L  ttyAMA0 0 vt100 # GENERIC_SERIAL
+tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console
+...
 
-kernel=zImage
-disable_overscan=1
-gpu_mem_256=100
-gpu_mem_512=100
-gpu_mem_1024=100
+Best regards.
 
-Thanks
-C
+[image: photo] ?scar G?mez Fuente
+Electronic Engineer & Degree in Physical Sciences
+Mobile: 659.28.97.90
+Email: oscargomezf at gmail.com
+Website: www.oscargomezf.com
+<http://facebook.com/oscargomezf>  <http://plus.google.com/oscargomezf>
+<http://us.linkedin.com/in/oscargomezf>
+<http://twitter.com/oscargomezf_com>
 
-On Tue, Aug 9, 2016 at 7:27 AM, Khem Raj <raj.khem@gmail.com> wrote:
+On 9 August 2016 at 08:23, Chetan Kumar <shivakumar.chetan@gmail.com> wrote:
 
->
-> On Aug 8, 2016, at 11:23 PM, Chetan Kumar <shivakumar.chetan@gmail.com>
-> wrote:
->
 > Hi,
 >
 > No changes, used the standard contents. For trial, I had apended
@@ -65,14 +66,6 @@ On Tue, Aug 9, 2016 at 7:27 AM, Khem Raj <raj.khem@gmail.com> wrote:
 > root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyAMA0,115200
 > ==========end cmdline.txt===============
 >
->
-> Check config.txt in boot area and see if you have
->
-> enable_uart=1
->
-> or not
->
->
 > Thanks
 > C
 >
@@ -91,13 +84,7 @@ On Tue, Aug 9, 2016 at 7:27 AM, Khem Raj <raj.khem@gmail.com> wrote:
 >>
 >>
 >>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160809/14712765/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160809/9aa59de2/attachment.html>
