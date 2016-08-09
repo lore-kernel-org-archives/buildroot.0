@@ -1,46 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Aug 2016 15:46:42 +0200
-Subject: [Buildroot] [PATCH] docs/manual: fix patch naming convention
-In-Reply-To: <1470749584-17489-1-git-send-email-gary.bisson@boundarydevices.com>
-References: <1470749584-17489-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <20160809154642.5254d717@free-electrons.com>
+Date: Tue, 9 Aug 2016 15:48:46 +0200
+Subject: [Buildroot] [git commit] procps-ng: fix BR2_STATIC_LIBS=y build
+Message-ID: <20160809134850.98F64807D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9bccca26fb9a18f1afd03dd30c63fcefe85e4d41
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  9 Aug 2016 15:33:04 +0200, Gary Bisson wrote:
-> Otherwise conflicts with the naming convention from previous section.
-> 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
-> Hi all,
-> 
-> While creating a patch for the gst1-imx package I wasn't sure what
-> was the latest naming convention. Looking at the documentation, it
-> said in section 18.1.2. that it should be:
-> <number>-<description>.patch
-> whereas section 18.2. still recommends:
-> <packagename>-<number>-<description>.patch
-> 
-> Looking at the patches it is clear section 18.2 was outdated.
+The procps-ng package currently fails to build on BR2_STATIC_LIBS=y
+configurations. Indeed, by default NUMA support is enabled, and it
+requires dlopen(). As hinted by the configure script, passing
+--disable-numa allows to disable NUMA support.
 
-Indeed.
+However, once this is done, another issue pops up: dlopen() is also used
+by the SELinux support. But even when SELinux support is disabled, the
+procps-ng code incorrectly includes <dlfcn.h>. This is addressed by the
+addition of a patch.
 
-> Also, should we insist on the fact that the series file is deprecated
-> in section 18.2.?
+Fixes:
 
-No, I think that 18.2 explains how we are applying the patches, not
-what is the recommended best practice. Since we still support reading a
-series file, I would keep that information.
+  http://autobuild.buildroot.net/results/b385bf435085728aece6323a5006ba9fa6631744/
 
-Other than that: patch applied to master. Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...put.c-include-dlfcn.h-only-when-necessary.patch | 32 ++++++++++++++++++++++
+ package/procps-ng/procps-ng.mk                     |  6 ++++
+ 2 files changed, 38 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/procps-ng/0003-ps-output.c-include-dlfcn.h-only-when-necessary.patch b/package/procps-ng/0003-ps-output.c-include-dlfcn.h-only-when-necessary.patch
+new file mode 100644
+index 0000000..dca28fa
+--- /dev/null
++++ b/package/procps-ng/0003-ps-output.c-include-dlfcn.h-only-when-necessary.patch
+@@ -0,0 +1,32 @@
++From 4fc9a348026a945aec8eddffc7613de9cb10b10c Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 7 Aug 2016 11:08:26 +0200
++Subject: [PATCH] ps/output.c: include <dlfcn.h> only when necessary
++
++dlopen() functionality is only used when SELinux support is enabled, so
++<dlfcn.h> only needs to be included when ENABLE_LIBSELINUX is
++defined. This fixes the build in configurations where <dlfcn.h> is not
++available.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ ps/output.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/ps/output.c b/ps/output.c
++index 42c04cf..f540832 100644
++--- a/ps/output.c
+++++ b/ps/output.c
++@@ -46,7 +46,9 @@
++  */
++ 
++ #include <ctype.h>
+++#if ENABLE_LIBSELINUX
++ #include <dlfcn.h>
+++#endif
++ #include <fcntl.h>
++ #include <grp.h>
++ #include <limits.h>
++-- 
++2.7.4
++
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 51a70a5..ce0f68a 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -47,4 +47,10 @@ PROCPS_NG_CONF_OPTS += \
+ 	--enable-watch8bit
+ endif
+ 
++# numa support requires libdl, so explicitly disable it when
++# BR2_STATIC_LIBS=y
++ifeq ($(BR2_STATIC_LIBS),y)
++PROCPS_NG_CONF_OPTS += --disable-numa
++endif
++
+ $(eval $(autotools-package))
