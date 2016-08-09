@@ -1,46 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  9 Aug 2016 14:44:44 +0200
-Subject: [Buildroot] [PATCH] openipmi: needs NPTL support
-Message-ID: <1470746684-6062-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue,  9 Aug 2016 15:21:43 +0200
+Subject: [Buildroot] [PATCH] gst1-imx: fix V4L2 plugin build with kernel
+	headers < 3.18
+Message-ID: <1470748903-16615-1-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openipmi uses the pthread_condattr_setclock() function, which is only
-available with the NPTL thread implementation.
+This patch fix the following build issue:
+http://autobuild.buildroot.net/results/b46/b460a770c8f4e992d29dde8fe37fc23a949937f2
 
-Fixes:
+It has been submitted to the package maintainers:
+https://github.com/Freescale/gstreamer-imx/pull/106
 
-  http://autobuild.buildroot.net/results/fc4084f8d1ff3fe98066c7cc051c2127bbe77ec5/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/openipmi/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ ...1-v4l2src-Add-V4L2_PIX_FMT_XRGB555X-check.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/gstreamer1/gst1-imx/0001-v4l2src-Add-V4L2_PIX_FMT_XRGB555X-check.patch
 
-diff --git a/package/openipmi/Config.in b/package/openipmi/Config.in
-index da88657..d8c94b3 100644
---- a/package/openipmi/Config.in
-+++ b/package/openipmi/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_OPENIPMI
- 	bool "openipmi"
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # dlopen()
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_NCURSES
- 	help
-@@ -13,6 +13,6 @@ config BR2_PACKAGE_OPENIPMI
- 
- 	  http://openipmi.sourceforge.net
- 
--comment "openipmi needs a toolchain w/ dynamic library, threads"
-+comment "openipmi needs a toolchain w/ dynamic library, NPTL"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/gstreamer1/gst1-imx/0001-v4l2src-Add-V4L2_PIX_FMT_XRGB555X-check.patch b/package/gstreamer1/gst1-imx/0001-v4l2src-Add-V4L2_PIX_FMT_XRGB555X-check.patch
+new file mode 100644
+index 0000000..67ac055
+--- /dev/null
++++ b/package/gstreamer1/gst1-imx/0001-v4l2src-Add-V4L2_PIX_FMT_XRGB555X-check.patch
+@@ -0,0 +1,33 @@
++From 1ca05ebb7cb63607d14983948105dd1483ea6b65 Mon Sep 17 00:00:00 2001
++From: Gary Bisson <gary.bisson@boundarydevices.com>
++Date: Tue, 9 Aug 2016 10:26:15 +0200
++Subject: [PATCH] v4l2src: Add V4L2_PIX_FMT_XRGB555X check
++
++Since this format was added in kernel 3.18, any prior version will
++fail to compile.
++
++Issue reported by Buildroot autobuilder with 3.10 kernel headers:
++http://autobuild.buildroot.net/results/b46/b460a770c8f4e992d29dde8fe37fc23a949937f2/
++
++Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
++---
++ src/v4l2src/v4l2src.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/v4l2src/v4l2src.c b/src/v4l2src/v4l2src.c
++index c77ae49..12b392a 100644
++--- a/src/v4l2src/v4l2src.c
+++++ b/src/v4l2src/v4l2src.c
++@@ -447,7 +447,9 @@ static GstCaps *gst_imx_v4l2src_caps_for_current_setup(GstImxV4l2VideoSrc *v4l2s
++ 		case V4L2_PIX_FMT_RGB555:
++ 			gst_fmt = GST_VIDEO_FORMAT_RGB15;
++ 			break;
+++#ifdef V4L2_PIX_FMT_XRGB555X
++ 		case V4L2_PIX_FMT_XRGB555X:
+++#endif
++ 		case V4L2_PIX_FMT_RGB555X:
++ 			gst_fmt = GST_VIDEO_FORMAT_BGR15;
++ 			break;
++-- 
++2.8.1
++
 -- 
-2.7.4
+2.8.1
