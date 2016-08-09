@@ -1,44 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Aug 2016 14:34:09 +0200
-Subject: [Buildroot] Analysis of build results for 2016-08-08
-In-Reply-To: <CAAMH-ytVJUjhBkGTFoEMwVsOiRrEnXdSjtR45Xm6-qWkGH4OBw@mail.gmail.com>
-References: <20160809063032.89898101A55@stock.ovh.net>
- <20160809141535.4c9b8169@free-electrons.com>
- <CAAMH-ytVJUjhBkGTFoEMwVsOiRrEnXdSjtR45Xm6-qWkGH4OBw@mail.gmail.com>
-Message-ID: <20160809143409.26382cc3@free-electrons.com>
+Date: Tue,  9 Aug 2016 14:44:44 +0200
+Subject: [Buildroot] [PATCH] openipmi: needs NPTL support
+Message-ID: <1470746684-6062-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+openipmi uses the pthread_condattr_setclock() function, which is only
+available with the NPTL thread implementation.
 
-On Tue, 9 Aug 2016 14:25:40 +0200, Gary Bisson wrote:
+Fixes:
 
-> Actually I see in the defconfig that the external headers are 3.10
-> which is the issue. This V4L2 format was added in 3.18.
-> http://lxr.free-electrons.com/ident?v=3.10;i=V4L2_PIX_FMT_XRGB555X
-> http://lxr.free-electrons.com/ident?v=3.18;i=V4L2_PIX_FMT_XRGB555X
-> 
-> I've submitted a patch to Carlos to fix that:
-> https://github.com/Freescale/gstreamer-imx/pull/106
+  http://autobuild.buildroot.net/results/fc4084f8d1ff3fe98066c7cc051c2127bbe77ec5/
 
-Great!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openipmi/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> I don't see any other error, there's an 'error' variable that isn't
-> used but that's a warning.
-> 
-> I would wait for the change to be merged but if you want we can add
-> that patch to the Buildroot package for now.
-
-I'd prefer to add this patch to Buildroot now. I'm trying to reduce the
-number of build issues, so any improvement can help.
-
-Thanks,
-
-Thomas
+diff --git a/package/openipmi/Config.in b/package/openipmi/Config.in
+index da88657..d8c94b3 100644
+--- a/package/openipmi/Config.in
++++ b/package/openipmi/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_OPENIPMI
+ 	bool "openipmi"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+@@ -13,6 +13,6 @@ config BR2_PACKAGE_OPENIPMI
+ 
+ 	  http://openipmi.sourceforge.net
+ 
+-comment "openipmi needs a toolchain w/ dynamic library, threads"
++comment "openipmi needs a toolchain w/ dynamic library, NPTL"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
