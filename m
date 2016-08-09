@@ -1,57 +1,33 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue,  9 Aug 2016 15:33:04 +0200
-Subject: [Buildroot] [PATCH] docs/manual: fix patch naming convention
-Message-ID: <1470749584-17489-1-git-send-email-gary.bisson@boundarydevices.com>
+From: gwenhael.goavec <gwenj@trabucayre.com>
+Date: Tue, 9 Aug 2016 15:27:23 +0200
+Subject: [Buildroot] Analysis of build results for 2016-08-05
+In-Reply-To: <20160807112654.7b520594@free-electrons.com>
+References: <20160806063028.356101023A1@stock.ovh.net>
+ <20160807112654.7b520594@free-electrons.com>
+Message-ID: <20160809152723.1658ca58@x230.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Otherwise conflicts with the naming convention from previous section.
+On Sun, 7 Aug 2016 11:26:54 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
-Hi all,
+> Hello,
+> 
+> Here is the usual analysis of build failures. Waldemar, Alexey, Vlad,
+> Gustavo, Frank, Gwenhael, Angelo, Fran?ois, Romain, Bernd, can you
+> have a look below? Thanks!
+> 
+> On Sat,  6 Aug 2016 08:30:28 +0200 (CEST), Thomas Petazzoni wrote:
+> 
+> >          arm |               gnuradio-3.7.9.1 | NOK |
+> > http://autobuild.buildroot.net/results/f14f4f62b5f23c652fa9411d9c569c2ab3394fb5/  
+> 
+> Gwenhael, can you have a look?
+> 
+Fixed by :
+http://patchwork.ozlabs.org/patch/657259/
 
-While creating a patch for the gst1-imx package I wasn't sure what
-was the latest naming convention. Looking at the documentation, it
-said in section 18.1.2. that it should be:
-<number>-<description>.patch
-whereas section 18.2. still recommends:
-<packagename>-<number>-<description>.patch
-
-Looking at the patches it is clear section 18.2 was outdated.
-
-Also, should we insist on the fact that the series file is deprecated
-in section 18.2.?
-
-Regards,
-Gary
----
- docs/manual/patch-policy.txt | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index 5a1fe4f..e1df8b0 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -73,12 +73,12 @@ details.
- * If a +series+ file exists in the package directory, then patches are
-   applied according to the +series+ file;
- +
--* Otherwise, patch files matching +<packagename>-*.patch+
--  are applied in alphabetical order.
-+* Otherwise, patch files matching +*.patch+ are applied in alphabetical
-+  order.
-   So, to ensure they are applied in the right order, it is highly
-   recommended to name the patch files like this:
--  +<packagename>-<number>-<description>.patch+, where +<number>+
--  refers to the 'apply order'.
-+  +<number>-<description>.patch+, where +<number>+ refers to the
-+  'apply order'.
- 
- . If +BR2_GLOBAL_PATCH_DIR+ is defined, the directories will be
-   enumerated in the order they are specified. The patches are applied
--- 
-2.8.1
+Gwen
