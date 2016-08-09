@@ -1,36 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Aug 2016 12:16:39 +0200
-Subject: [Buildroot] [git commit] qt: Fix missing runtime Qt3Support
-	dependency
-Message-ID: <20160809101729.520FA7FE9B@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 09 Aug 2016 10:18:54 +0000
+Subject: [Buildroot] [Bug 9156] qt: Fix missing runtime Qt3Support dependency
+In-Reply-To: <bug-9156-163@https.bugs.busybox.net/>
+References: <bug-9156-163@https.bugs.busybox.net/>
+Message-ID: <bug-9156-163-XJsTMp7Zch@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=466934bb5c35856df22ff0c56021c38ee372685c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=9156
 
-Qt3Support module has a runtime dependency on QtSql, see
-https://wiki.qt.io/Qt_Library_Cross_Dependencies. This patch fix this
-issue.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Signed-off-by: Alexander Shiyan <shc_work@mail.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 548d180..b9752d3 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -126,6 +126,7 @@ config BR2_PACKAGE_QT_CONFIG_FILE
- config BR2_PACKAGE_QT_QT3SUPPORT
- 	bool "Compatibility with Qt3"
- 	depends on BR2_PACKAGE_QT_GUI_MODULE
-+	select BR2_PACKAGE_QT_SQL_MODULE
- 	help
- 	  Turns on support for older Qt3. This will create an additional
- 	  library with proxy code and increase the space required on target.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Indeed, according to https://wiki.qt.io/Qt_Library_Cross_Dependencies,
+Qt3Support relies on QtSql. So I've applied your patch.
+
+However, according to https://wiki.qt.io/Qt_Library_Cross_Dependencies,
+Qt3Support also requires:
+
+ * QtGui: this is already handled by Buildroot
+ * QtNetwork: this is already a dependency of QtGui, so OK
+ * QtXml: this one I don't see where we take care of it. Could you double check
+this, and send a follow-up patch if needed?
+
+Also, please send your patches to the mailing list next time. Thanks!
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
