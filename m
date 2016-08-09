@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Aug 2016 22:36:48 +0200
-Subject: [Buildroot] [PATCH 2/9] execline: new package
-In-Reply-To: <20160809222251.1e58104e@itchy>
-References: <1470690140-18803-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1470690140-18803-3-git-send-email-eric.le.bihan.dev@free.fr>
- <20160809100912.0f7738b3@free-electrons.com>
- <20160809222251.1e58104e@itchy>
-Message-ID: <20160809223648.4d354fd0@free-electrons.com>
+Date: Tue, 9 Aug 2016 22:46:02 +0200
+Subject: [Buildroot] [PATCH] linux-zigbee: new package
+In-Reply-To: <1399139280-9258-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1399139280-9258-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20160809224602.0cecd1a0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,19 +12,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 9 Aug 2016 22:22:51 +0200, Eric Le Bihan wrote:
-
-> > Why do we need an option visible in menuconfig to enable this as a
-> > host package? Why do we need the host package at all?  
+On Sat,  3 May 2014 19:48:00 +0200, Maxime Hadjinlian wrote:
+> linux-zigbee is a mix of utility tools that implements a 802.15.4 stack
+> along with a usefull library for any program that would need to use this
+> stack.
 > 
-> I made the host variant of execline visible in menuconfig so the end
-> user knows it can be used to write post-build script (same goes for
-> the host variant of s6-rc). Anyway, if this is supefluous, I will remove
-> it.
+> Note that the name is mislead, for licensing reason, this does *NOT*
+> implement the ZigBee protocol.
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-I'm not sure it's very likely to have users using the execline
-scripting language. Maybe we should wait and see if some people need
-that?
+FWIW, following a build failure on this package, I did a patch, which I
+submitted upstream. Here is the answer I got from upstream (more
+precisely Alexander Aring) :
+
+"""
+Thanks for the patch, but this userspace software is unmaintained.
+You should use wpan-tools [0] which used nl802154, this is available
+since kernel 3.19.
+
+It's not recommended to use the stack in earlier kernel versions.
+We don't have a stable strategy yet (except extrem imporant fixed,
+root exploit, etc. :-))
+
+- Alex
+
+[0] http://wpan.cakelab.org/releases/
+"""
+
+Best regards,
 
 Thomas
 -- 
