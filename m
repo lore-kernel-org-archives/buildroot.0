@@ -1,28 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 09 Aug 2016 10:14:23 +0000
-Subject: [Buildroot] [Bug 9151] qt: fix build with ALSA >= 1.1.x
-In-Reply-To: <bug-9151-163@https.bugs.busybox.net/>
-References: <bug-9151-163@https.bugs.busybox.net/>
-Message-ID: <bug-9151-163-YLavHnB3rU@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 Aug 2016 12:16:39 +0200
+Subject: [Buildroot] [git commit] qt: Fix missing runtime Qt3Support
+	dependency
+Message-ID: <20160809101729.520FA7FE9B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9151
+commit: https://git.buildroot.net/buildroot/commit/?id=466934bb5c35856df22ff0c56021c38ee372685c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Qt3Support module has a runtime dependency on QtSql, see
+https://wiki.qt.io/Qt_Library_Cross_Dependencies. This patch fix this
+issue.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+Signed-off-by: Alexander Shiyan <shc_work@mail.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Thanks, patch applied. However, could you send your next patches on the mailing
-list, rather than in the bug tracker? Thanks!
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 548d180..b9752d3 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -126,6 +126,7 @@ config BR2_PACKAGE_QT_CONFIG_FILE
+ config BR2_PACKAGE_QT_QT3SUPPORT
+ 	bool "Compatibility with Qt3"
+ 	depends on BR2_PACKAGE_QT_GUI_MODULE
++	select BR2_PACKAGE_QT_SQL_MODULE
+ 	help
+ 	  Turns on support for older Qt3. This will create an additional
+ 	  library with proxy code and increase the space required on target.
