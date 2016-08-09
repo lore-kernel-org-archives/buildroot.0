@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Aug 2016 15:45:36 +0200
-Subject: [Buildroot] [PATCH] gnuradio: backport patch to fix gr-fec
- compilation
-In-Reply-To: <1470749071-20784-1-git-send-email-gwenj@trabucayre.com>
-References: <1470749071-20784-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20160809154536.007d643a@free-electrons.com>
+Date: Tue, 9 Aug 2016 15:46:42 +0200
+Subject: [Buildroot] [PATCH] docs/manual: fix patch naming convention
+In-Reply-To: <1470749584-17489-1-git-send-email-gary.bisson@boundarydevices.com>
+References: <1470749584-17489-1-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <20160809154642.5254d717@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  9 Aug 2016 15:24:31 +0200, Gwenhael Goavec-Merou wrote:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+On Tue,  9 Aug 2016 15:33:04 +0200, Gary Bisson wrote:
+> Otherwise conflicts with the naming convention from previous section.
 > 
-> Fix:
-> http://autobuild.buildroot.net/results/f14/f14f4f62b5f23c652fa9411d9c569c2ab3394fb5
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 > ---
->  .../gnuradio/0003-fix_compilation_in_gcc-6.patch   | 36 ++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 package/gnuradio/0003-fix_compilation_in_gcc-6.patch
+> Hi all,
+> 
+> While creating a patch for the gst1-imx package I wasn't sure what
+> was the latest naming convention. Looking at the documentation, it
+> said in section 18.1.2. that it should be:
+> <number>-<description>.patch
+> whereas section 18.2. still recommends:
+> <packagename>-<number>-<description>.patch
+> 
+> Looking at the patches it is clear section 18.2 was outdated.
 
-Applied to master, thanks.
+Indeed.
+
+> Also, should we insist on the fact that the series file is deprecated
+> in section 18.2.?
+
+No, I think that 18.2 explains how we are applying the patches, not
+what is the recommended best practice. Since we still support reading a
+series file, I would keep that information.
+
+Other than that: patch applied to master. Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
