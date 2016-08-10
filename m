@@ -1,50 +1,27 @@
-From: Marc Khouri <marc@khouri.ca>
-Date: Wed, 10 Aug 2016 10:30:16 -0400
-Subject: [Buildroot] [PATCH 1/1] libical: use system time zone info
-Message-ID: <1470839416-92898-1-git-send-email-marc@khouri.ca>
+From: Chetan Kumar <shivakumar.chetan@gmail.com>
+Date: Wed, 10 Aug 2016 15:55:21 +0100
+Subject: [Buildroot] raspberry-pi3 do not work on buildroot-2016.05.
+Message-ID: <CAFN-Ez753CAapach8-OT+_HKb9zSQJORQ_imQdU+Z2y0OyRcvQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libical requires time zone information in order to make use of time
-zone functions (otherwise, segfaults occur when applications call
-the time zone functions). This patch:
-1. forces the system to build time zone info
-2. ensures libical does not build its own time zone info (this is
-   the default behaviour, but the flag is added in case libical's
-   default changes in the future).
+Comrades,
 
-Signed-off-by: Marc Khouri <marc@khouri.ca>
----
- package/libical/Config.in  | 1 +
- package/libical/libical.mk | 2 ++
- 2 files changed, 3 insertions(+)
+I used raspberrypi3_defconfig on buildroot-2016.05 loaded the sdcard.img
+onto my raspberrypi-3, boots but get stuck at
+random: nonblocking pool is initialized
 
-diff --git a/package/libical/Config.in b/package/libical/Config.in
-index 48170e9..3220d5b 100644
---- a/package/libical/Config.in
-+++ b/package/libical/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBICAL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_WCHAR
-+	select BR2_TARGET_TZ_INFO
- 	help
- 	  libical is an Open Source (MPL/LGPL) implementation of the IETF's
- 	  iCalendar Calendaring and Scheduling protocols.
-diff --git a/package/libical/libical.mk b/package/libical/libical.mk
-index e8cb3f8..a511039 100644
---- a/package/libical/libical.mk
-+++ b/package/libical/libical.mk
-@@ -13,5 +13,7 @@ LIBICAL_LICENSE_FILES = LICENSE
- # building without this option is broken, it is used by
- # Gentoo/alpinelinux as well
- LIBICAL_CONF_OPTS = -DSHARED_ONLY=true
-+# never build time zone info, always use system's tzinfo
-+LIBICAL_CONF_OPTS += -DUSE_BUILTIN_TZDATA=false
- 
- $(eval $(cmake-package))
--- 
-2.8.2
+Tried same on buildroot-2016.08-rc1, it just works and get the login
+prompt.
+
+Any clue ?
+
+
+Thanks
+C
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160810/107b8812/attachment.html>
