@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Aug 2016 14:28:40 +0200
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.163
-In-Reply-To: <1470821734-25866-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1470821734-25866-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160810142840.5cb97714@free-electrons.com>
+Date: Wed, 10 Aug 2016 14:28:46 +0200
+Subject: [Buildroot] [PATCH] vala: bump to version 0.32.1
+In-Reply-To: <1470824404-14215-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1470824404-14215-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160810142846.09a0c24e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 10 Aug 2016 10:35:34 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Wed, 10 Aug 2016 07:20:04 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/lvm2/lvm2.hash | 2 +-
->  package/lvm2/lvm2.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/vala/vala.hash | 4 ++--
+>  package/vala/vala.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to next, thanks.
 
