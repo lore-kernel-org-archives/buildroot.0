@@ -1,45 +1,56 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 10 Aug 2016 08:16:47 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{14, 18}.x and 4.{1, 4,
-	6}.x series
-Message-ID: <1470827807-6125-1-git-send-email-festevam@gmail.com>
+From: Zhaozhou Meng <mengzhaozhou@gmail.com>
+Date: Wed, 10 Aug 2016 13:23:59 +0200
+Subject: [Buildroot] issue with the QT5, buildroot 2016-05
+Message-ID: <CAMWiJUuY5YGP10m6P-aHcdyuiewq+AdRU8MByGN5Kb4NLvNi3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+Hi all,
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+I use the buildroot 2016.05 version, the board nitrogen6x with cpu imx6 and
+the u-boot 2016.03 version.
+I built the QT5.6 with eglfs, opengl es2 without X11, when I run the
+examples on the board, I found that some example works perfectly, but some
+example doesn't work, like opengl/cube with the error :
+"audit: type=1701 audit(1455208187.550:2): auid=4294967295 uid=0 gid=0
+ses=429491
+Segmentation fault (core dumped)"
+The same error also happened for my own QT project compiled with buidlroot
+qmake.
+I don't know if you have the same problems,
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index ae5cc5d..771befb 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -239,15 +239,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.74"	if BR2_KERNEL_HEADERS_3_14
--	default "3.18.38"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.14.75"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.18.39"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.29"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.30"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
--	default "4.4.16"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.17"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
--	default "4.6.5"		if BR2_KERNEL_HEADERS_4_6
-+	default "4.6.6"		if BR2_KERNEL_HEADERS_4_6
- 	default "4.7"		if BR2_KERNEL_HEADERS_4_7
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
--- 
-1.9.1
+Another problem is that I tried to compile the QT5.5.1 with the buildroot
+toolchain and sysroot.
+using the configure like this:
+./configure -v -no-opengl -opengl es2 -eglfs -no-xcb -no-pch -make libs
+-make tools
+ -make examples -opensource -confirm-license -release -xplatform
+linux-arm-gnueabi-g++  -sysroot /buildroot-2016.05/output/staging -prefix
+/opt/Qt5.5.1-imx6
+
+I have modified the qmake.conf under /qtbase/mkspec/linux-arm-gnueabi-g++
+using the compiler under
+/buildroot-2016.05/output/host/usr/bin/arm-buildroot-linux-gnueabi-
+
+Then I tested the example on the board, the same error like above for the
+/opengl/cube and the example 3D doesn't work with "egl error, could not
+create egl surface 0x300b"
+
+if you have the same problems  ?
+Do you have any ideas ?
+
+Thanks,
+Zhaozhou
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160810/ca7918e8/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buidlroot-config
+Type: application/octet-stream
+Size: 93358 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160810/ca7918e8/attachment.obj>
