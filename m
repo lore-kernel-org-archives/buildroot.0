@@ -1,50 +1,45 @@
-From: Chetan Kumar <shivakumar.chetan@gmail.com>
-Date: Wed, 10 Aug 2016 16:05:38 +0100
-Subject: [Buildroot] eudev compilation fails on buildroot-2016.08-rc1
-In-Reply-To: <CAFN-Ez51T+Z-3t_15sWgPDgrvRYRyW6raiDvbC744cgVcqiJ8w@mail.gmail.com>
-References: <CAFN-Ez51T+Z-3t_15sWgPDgrvRYRyW6raiDvbC744cgVcqiJ8w@mail.gmail.com>
-Message-ID: <CAFN-Ez4f+J9cgQCRmp+nhAtfZfjwN91mRO-OB-YgBjp_X07JCA@mail.gmail.com>
+From: Chris Sparks <mr_ada@cox.net>
+Date: Wed, 10 Aug 2016 08:27:10 -0700
+Subject: [Buildroot] raspberry-pi3 do not work on buildroot-2016.05.
+In-Reply-To: <VSvX1t00r2wu2v801SvZXT>
+References: <VSvX1t00r2wu2v801SvZXT>
+Message-ID: <6fa04b57-f1c2-b96a-dfc5-fb19679b4f3d@cox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BTW,
+Same here, I'll have to try that version.  Thanks.
 
-I have used raspberrypi3_defconfig
-
-and I have
-
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-
-Thanks
-C
-
-
-
-On Wed, Aug 10, 2016 at 3:57 PM, Chetan Kumar <shivakumar.chetan@gmail.com>
-wrote:
-
-> Hi,
+chris
+> Comrades,
 >
-> I am trying to build eudev on buildroot-2016.08-rc1, it fails at below
+> I used raspberrypi3_defconfig on buildroot-2016.05 loaded the 
+> sdcard.img onto my raspberrypi-3, boots but get stuck at
+> random: nonblocking pool is initialized
 >
-> checking for gawk... (cached) mawk
-> checking for /home/buildroot-2016.08-rc1/output/host/usr/bin/arm-
-> buildroot-linux-uclibcgnueabihf-gcc option to accept ISO C99...
-> unsupported
-> configure: error: no C99 compiler found, eudev requires a C99 compiler.
-> make[1]: *** [/home//buildroot-2016.08-rc1/output/build/eudev-3.2/.stamp_configured]
-> Error 1
-> make: *** [_all] Error 2
+> Tried same on buildroot-2016.08-rc1, it just works and get the login 
+> prompt.
 >
+> Any clue ?
 >
-> Any help ?
 >
 > Thanks
 > C
 >
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+
+---
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160810/6a991012/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160810/c8859eae/attachment.html>
