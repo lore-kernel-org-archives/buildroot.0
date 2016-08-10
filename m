@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Aug 2016 22:37:08 +0200
-Subject: [Buildroot] [PATCH 2/2] mtd: integck needs MMU support
-In-Reply-To: <1470847117-14956-2-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1470847117-14956-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1470847117-14956-2-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160810223708.0ab57981@free-electrons.com>
+Date: Wed, 10 Aug 2016 22:39:05 +0200
+Subject: [Buildroot] [PATCH] lxc: version bump to 2.0.3
+In-Reply-To: <1470858192-29796-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1470858192-29796-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20160810223905.41faf40a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 10 Aug 2016 22:08:37 +0530, Rahul Bedarkar wrote:
-> After fixing build issue related to MS_DIRSYNC and MS_RELATIME, we get
-> following build error with blackfin external toolchain.
+Thanks for this patch. A few questions below.
 
-So it is really worth the effort merging PATCH 1/2 ?
+On Wed, 10 Aug 2016 14:43:12 -0500, Matt Weber wrote:
+> From: Judd Meinders <judd.meinders@rockwellcollins.com>
+> 
+> - Removed IPv6 and werror patches as changes where
+>   incorporated upsteam.
+> 
+> - AUTO_RECONF is kept for libseccomp conf opt purposes
+>   (other packages don't explicitly comment this when
+>    kconfig conditionals are used)
+
+Could you give more details here? Also, your justification to not add a
+comment on top of AUTORECONF = YES sounds bogus. If there is an
+AUTORECONF = YES, then there must be a comment on top of it that
+explains why.
 
 Thanks,
 
