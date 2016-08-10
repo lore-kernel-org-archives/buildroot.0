@@ -1,36 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Aug 2016 23:07:59 +0200
-Subject: [Buildroot] [PATCH] lxc: version bump to 2.0.3
-In-Reply-To: <CANQCQpbmvKn82AugTx+Cn9dut9L3ju5tJuZcv0DECp9D5PHmMQ@mail.gmail.com>
-References: <1470858192-29796-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20160810223905.41faf40a@free-electrons.com>
- <CANQCQpbmvKn82AugTx+Cn9dut9L3ju5tJuZcv0DECp9D5PHmMQ@mail.gmail.com>
-Message-ID: <20160810230759.4c68137b@free-electrons.com>
+Date: Wed, 10 Aug 2016 23:29:02 +0200
+Subject: [Buildroot] [PATCH 1/3] ffmpeg: disable for ARMv7-M
+Message-ID: <1470864544-31919-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+In the ffmpeg code, libavutil/arm/asm.S makes some assumption about the
+ARM architecture for which the code is built. Only ARMv4, ARMv5, ARMv6
+and ARMv7-A is supported. Due to this, object files built out of
+ARM-optimized assembly code have the wrong architecture information,
+causing a failure at link time.
 
-On Wed, 10 Aug 2016 15:48:38 -0500, Matthew Weber wrote:
+Adding ARMv7-M support would be possible, but it doesn't exist yet in
+ffmpeg, and it's pretty unlikely that ffmpeg will ever be needed on an
+ARMv7-M platform, so this commit takes the simple approach of disabling
+ffmpeg for ARMv7-M.
 
-> > Could you give more details here? Also, your justification to not add a
-> > comment on top of AUTORECONF = YES sounds bogus. If there is an
-> > AUTORECONF = YES, then there must be a comment on top of it that
-> > explains why.  
-> 
-> We debated on leaving the comment in.  How does this sound?
-> 
-> # Re-configuring to selectively use libseccomp
+Fixes:
 
-Why is autoreconfiguring needed? The configure script is not up-to-date
-with the provided configure.ac? As it is, the explanation doesn't
-really help :/
+  http://autobuild.buildroot.net/results/ca4c67b093afd6f14349fcdc87b02e0480172e8c/
 
-Thomas
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 096ff95..3a7bfd3 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -2,7 +2,9 @@ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	bool
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
+ 	# ffmpeg's configure script only supports mips64 (r1) variant
+-	default y if !BR2_nios2 && !BR2_mips_64r2 && !BR2_mips_64r6
++	# No support for ARMv7-M in the ARM assembly logic
++	default y if !BR2_nios2 && !BR2_mips_64r2 && !BR2_mips_64r6 && \
++		!BR2_ARM_CPU_ARMV7M
+ 
+ menuconfig BR2_PACKAGE_FFMPEG
+ 	bool "ffmpeg"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
