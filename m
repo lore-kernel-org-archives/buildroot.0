@@ -1,61 +1,90 @@
-From: Zhaozhou Meng <mengzhaozhou@gmail.com>
-Date: Wed, 10 Aug 2016 18:23:16 +0200
-Subject: [Buildroot] raspberry-pi3 do not work on buildroot-2016.05.
-In-Reply-To: <6fa04b57-f1c2-b96a-dfc5-fb19679b4f3d@cox.net>
-References: <6fa04b57-f1c2-b96a-dfc5-fb19679b4f3d@cox.net>
-Message-ID: <CAMWiJUu=8CggiQZp3gRC_nyV1DsXFr7JrE6SqdeMhewtZmsRXQ@mail.gmail.com>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Wed, 10 Aug 2016 22:08:36 +0530
+Subject: [Buildroot] [PATCH 1/2] mtd: fix build failure with blackfin
+	external toolchain
+Message-ID: <1470847117-14956-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+With blackfin uClibc toolchain, we see following build errors
 
-I had the same problems on my board imx6, but it just need to type the
-keyboard and the login prompt display.
+integck.c: In function 'parse_mount_options':
+integck.c:2889: error: 'MS_DIRSYNC' undeclared (first use in this function)
+integck.c:2889: error: (Each undeclared identifier is reported only once
+integck.c:2889: error: for each function it appears in.)
+integck.c:2899: error: 'MS_RELATIME' undeclared (first use in this function)
+<builtin>: recipe for target 'integck' failed
+make[2]: *** [integck] Error 1
 
+header <sys/mount.h> from this toolchain is missing definitions for
+MS_DIRSYNC and MS_RELATIME mount flags. But those are available from
+header <linux/fs.h>. Even tests/fs-tests/lib/tests.c uses these flags
+and includes both <sys/mount.h> and <linux/fs.h> headers.
 
-Regards,
-Zhaozhou
+This patch fixes above build error by including header <linux/fs.h>
 
-2016-08-10 17:27 GMT+02:00 Chris Sparks <mr_ada@cox.net>:
+Fixes:
+http://autobuild.buildroot.net/results/6a1/6a1bd73cc56cd257fa939702728802b63446473e/
 
-> Same here, I'll have to try that version.  Thanks.
->
-> chris
->
-> Comrades,
->
-> I used raspberrypi3_defconfig on buildroot-2016.05 loaded the sdcard.img
-> onto my raspberrypi-3, boots but get stuck at
-> random: nonblocking pool is initialized
->
-> Tried same on buildroot-2016.08-rc1, it just works and get the login
-> prompt.
->
-> Any clue ?
->
->
-> Thanks
-> C
->
->
-> _______________________________________________
-> buildroot mailing listbuildroot at busybox.nethttp://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
->
-> <https://www.avast.com/sig-email?utm_medium=email&utm_source=link&utm_campaign=sig-email&utm_content=emailclient&utm_term=icon> Virus-free.
-> www.avast.com
-> <https://www.avast.com/sig-email?utm_medium=email&utm_source=link&utm_campaign=sig-email&utm_content=emailclient&utm_term=link>
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160810/7d8b06f1/attachment.html>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+ ...003-fs-tests-integrity-include-linux-fs.h.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/mtd/0003-fs-tests-integrity-include-linux-fs.h.patch
+
+diff --git a/package/mtd/0003-fs-tests-integrity-include-linux-fs.h.patch b/package/mtd/0003-fs-tests-integrity-include-linux-fs.h.patch
+new file mode 100644
+index 0000000..c31d39e
+--- /dev/null
++++ b/package/mtd/0003-fs-tests-integrity-include-linux-fs.h.patch
+@@ -0,0 +1,45 @@
++From 2965384dfa330750e23a52a0edf792487db6a886 Mon Sep 17 00:00:00 2001
++From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++Date: Wed, 10 Aug 2016 21:01:58 +0530
++Subject: [PATCH 1/1] fs-tests: integrity: include <linux/fs.h>
++
++With blackfin uClibc toolchain, we see following build errors
++
++integck.c: In function 'parse_mount_options':
++integck.c:2889: error: 'MS_DIRSYNC' undeclared (first use in this function)
++integck.c:2889: error: (Each undeclared identifier is reported only once
++integck.c:2889: error: for each function it appears in.)
++integck.c:2899: error: 'MS_RELATIME' undeclared (first use in this function)
++<builtin>: recipe for target 'integck' failed
++make[2]: *** [integck] Error 1
++
++header <sys/mount.h> from this toolchain is missing definitions for
++MS_DIRSYNC and MS_RELATIME mount flags. But those are available from
++header <linux/fs.h>. Even tests/fs-tests/lib/tests.c uses these flags
++and includes both <sys/mount.h> and <linux/fs.h> headers.
++
++This patch fixes above build error by including header <linux/fs.h>
++
++This build error is found by Buildroot autobuilder
++http://autobuild.buildroot.net/results/6a1/6a1bd73cc56cd257fa939702728802b63446473e/
++
++Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++---
++ tests/fs-tests/integrity/integck.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/tests/fs-tests/integrity/integck.c b/tests/fs-tests/integrity/integck.c
++index 8badd1f..31215ff 100644
++--- a/tests/fs-tests/integrity/integck.c
+++++ b/tests/fs-tests/integrity/integck.c
++@@ -37,6 +37,7 @@
++ #include <sys/vfs.h>
++ #include <sys/mount.h>
++ #include <sys/statvfs.h>
+++#include <linux/fs.h>
++ 
++ #define PROGRAM_VERSION "1.1"
++ #define PROGRAM_NAME "integck"
++-- 
++2.6.2
++
+-- 
+2.6.2
