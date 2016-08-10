@@ -1,47 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Aug 2016 23:29:02 +0200
-Subject: [Buildroot] [PATCH 1/3] ffmpeg: disable for ARMv7-M
-Message-ID: <1470864544-31919-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Aug 2016 23:29:03 +0200
+Subject: [Buildroot] [PATCH 2/3] ffmpeg: explicitly disable NEON support
+In-Reply-To: <1470864544-31919-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1470864544-31919-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1470864544-31919-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the ffmpeg code, libavutil/arm/asm.S makes some assumption about the
-ARM architecture for which the code is built. Only ARMv4, ARMv5, ARMv6
-and ARMv7-A is supported. Due to this, object files built out of
-ARM-optimized assembly code have the wrong architecture information,
-causing a failure at link time.
+When BR2_ARM_CPU_HAS_NEON=y, we pass --enable-neon. However, when
+BR2_ARM_CPU_HAS_NEON is disabled, we don't pass anything. This generally
+works fine, but turned out to integrate NEON code in ARMv7-M
+builds (since it's ARMv7, ffmpeg assumed it should enable NEON code).
 
-Adding ARMv7-M support would be possible, but it doesn't exist yet in
-ffmpeg, and it's pretty unlikely that ffmpeg will ever be needed on an
-ARMv7-M platform, so this commit takes the simple approach of disabling
-ffmpeg for ARMv7-M.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/ca4c67b093afd6f14349fcdc87b02e0480172e8c/
+Even though ffmpeg is now disabled for ARMv7-M, it still makes sense to
+be explicit, and disable NEON support when the CPU doesn't have it.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/ffmpeg/ffmpeg.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 096ff95..3a7bfd3 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -2,7 +2,9 @@ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	bool
- 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
- 	# ffmpeg's configure script only supports mips64 (r1) variant
--	default y if !BR2_nios2 && !BR2_mips_64r2 && !BR2_mips_64r6
-+	# No support for ARMv7-M in the ARM assembly logic
-+	default y if !BR2_nios2 && !BR2_mips_64r2 && !BR2_mips_64r6 && \
-+		!BR2_ARM_CPU_ARMV7M
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index c42336f..2b4219a 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -437,6 +437,8 @@ FFMPEG_CONF_OPTS += --disable-vfp
+ endif
+ ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+ FFMPEG_CONF_OPTS += --enable-neon
++else
++FFMPEG_CONF_OPTS += --disable-neon
+ endif
  
- menuconfig BR2_PACKAGE_FFMPEG
- 	bool "ffmpeg"
+ ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
 -- 
 2.7.4
