@@ -1,57 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Aug 2016 23:29:04 +0200
-Subject: [Buildroot] [PATCH 3/3] ffmpeg: don't pass --enable-mipsfpu on
-	non-MIPS platform
-In-Reply-To: <1470864544-31919-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470864544-31919-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1470864544-31919-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Aug 2016 00:00:52 +0200
+Subject: [Buildroot] [PATCH 1/2] libaio: work-around for PowerPC issue
+Message-ID: <1470866453-16903-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current logic to pass the --{enable,disable}-mipsfpu option is:
+Both the blktrace and gadgetfs-test packages were failing to build on
+PowerPC due to the mysterious:
 
-ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
-FFMPEG_CONF_OPTS += --disable-mipsfpu
-else
-FFMPEG_CONF_OPTS += --enable-mipsfpu
-endif
+  hidden symbol `_rest32gpr_30_x' in libgcc.a(e500crtresx32gpr.o) is referenced by DSO
 
-In practice, this means that on MIPS soft-float, --disable-mipsfpu is
-passed, and that in *all* other cases, --enable-mipsfpu is passed,
-including if we are *not* targetting the MIPS architecture.
+Due to this error, we disabled blktrace on PowerPC in commit
+0d8158fc619ce849b531d07b27da4ba9748d4ea4. However, gadgetfs-test
+continued to fail with the same error. As Romain Naour pointed out, the
+problem seems in fact to come from a common dependency of blktrace and
+gadgetfs-test: libaio. As Romain investigated, the problem started
+appearing after the last bump of libaio, from version 0.3.109 to
+0.3.110.
 
-Even though this doesn't seem to cause any problem, it is a bit weird to
-see --enable-mipsfpu when you're building ffmpeg for a non-MIPS
-architecture, so we better fix this by enclosing the MIPS-related
-options in a MIPS condition.
+A quick bisect through the libaio changes between 0.3.109 and 0.3.110
+has revealed that the problematic change is one in the libaio build
+system, which now obeys to the CFLAGS provided in the environment,
+rather than overriding them. So the CFLAGS provided by Buildroot cause
+this problem. It turns out that the problematic CFLAGS is -Os, which is
+indeed known to cause issues on PowerPC in some corner cases.
+
+Even though it would probably be a better long-term solution to switch
+to -O2 by default, and mark -Os as not available on PowerPC, it is a too
+radical change so close to 2016.08. So we simply adjust the libaio
+package so that it uses -O2 instead of -Os.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/5e6cc4c432ce6c964ac285026978ad14d9eae97c/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libaio/libaio.mk | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 2b4219a..5a19617 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -441,6 +441,7 @@ else
- FFMPEG_CONF_OPTS += --disable-neon
- endif
+diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
+index 9b28f05..0854fc5 100644
+--- a/package/libaio/libaio.mk
++++ b/package/libaio/libaio.mk
+@@ -11,16 +11,24 @@ LIBAIO_INSTALL_STAGING = YES
+ LIBAIO_LICENSE = LGPLv2.1+
+ LIBAIO_LICENSE_FILES = COPYING
  
-+ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
- ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
- FFMPEG_CONF_OPTS += --disable-mipsfpu
- else
-@@ -454,6 +455,7 @@ else
- FFMPEG_CONF_OPTS += \
- 	--disable-mips32r2
- endif
-+endif # MIPS
++LIBAIO_CONFIGURE_OPTS = $(TARGET_CONFIGURE_OPTS)
++
++# On PowerPC, a weird toolchain issue causes -Os builds to produce
++# references to hidden symbols, so we're forcing -O2
++ifeq ($(BR2_powerpc),y)
++LIBAIO_CONFIGURE_OPTS += CFLAGS="$(subst -Os,-O2,$(TARGET_CFLAGS))"
++endif
++
+ define LIBAIO_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++	$(LIBAIO_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
  
- ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
- FFMPEG_CONF_OPTS += --enable-altivec
+ define LIBAIO_INSTALL_STAGING_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
++	$(LIBAIO_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+ endef
+ 
+ define LIBAIO_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++	$(LIBAIO_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.7.4
