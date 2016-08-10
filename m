@@ -1,11 +1,10 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 10 Aug 2016 19:32:57 +0000
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to
-	arc-2016.09-eng008
-In-Reply-To: <20160810212736.6a814ad9@free-electrons.com>
-References: <1470849040-9200-1-git-send-email-vzakhar@synopsys.com>
- <20160810212736.6a814ad9@free-electrons.com>
-Message-ID: <1470857474.3428.41.camel@synopsys.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 10 Aug 2016 21:36:47 +0200
+Subject: [Buildroot] Analysis of build results for 2016-08-09
+In-Reply-To: <20160810161455.142a6a19@free-electrons.com>
+References: <20160810063029.6F291102D04@stock.ovh.net>
+ <20160810161455.142a6a19@free-electrons.com>
+Message-ID: <20160810193646.GV22524@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +12,66 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Hi Thomas,
+Thomas Petazzoni wrote,
 
-On Wed, 2016-08-10 at 21:27 +0200, Thomas Petazzoni wrote:
-> Hello,
+> Hello all,
 > 
-> Thanks for this new update!
+> Please find below the usual analysis of build failures. Hiroshi,
+> Waldemar, Gustavo, Fabrice, Yann, Dagg, J?rg, Vivien, Vicente, Samuel,
+> Peter, Joris, Alistair, please have a look below, there's some fun
+> stuff for you! :-) Thanks for your help.
 > 
-> On Wed, 10 Aug 2016 20:10:40 +0300, Vlad Zakharov wrote:
-> > 
-> > As described at:
-> > 4520524ba055706236db9f00dd79f1b2e2e87fde
-> > this commit continues a series of updates of ARC tools.
-> > This time we're updating tools to arc-2016.09-eng008.
-> > 
-> > Main updates were made for gcc. It was switched to GCC 6 and to
-> > OSABI v4.
+> Thomas
 > 
-> Beware that using GCC 6 is causing to cause a number of issues related
-> to GCC 6 itself and not to ARC. We already have one GCC 6 toolchain for
-> ARM, and we have a number of build failures caused by this toolchain
-> due to the use of GCC 6.
+> >         bfin |                   cairo-1.14.6 | NOK | http://autobuild.buildroot.net/results/88b02a5dd5408318941ccbfcea0a9cbaa331500a/
+> 
+> libpixman-1.so: undefined reference to `__emutls_get_address'
+> 
+> Waldemar, can you have a look?
 
-That bump will for sure introduce new breakages while fixing some we already
-know about. But we had to make that bold movement at some point because that
-make us use almost upstream GCC with very few off-the-tree patches for ARC.
+Unfortunately this fails for the same reason as any C++ application.
+__emutls_get_address is defined in libgcc_s.so.1 and is LOCAL
+instead of GLOBAL.
+When we fix the C++ problem, we have a solution for alsa-libs and
+cairo.
+ 
+> >         m68k |                  clapack-3.2.1 | NOK | http://autobuild.buildroot.net/results/f34ad4f0cf094fa31b7dc18522e9eedfc5c2c940/
+> 
+> /tmp/cctGT3zI.s: Assembler messages:
+> /tmp/cctGT3zI.s:14834: Error: value -34500 out of range
+> /tmp/cctGT3zI.s:15075: Error: value -35250 out of range
+> /tmp/cctGT3zI.s:15528: Error: value -45542 out of range
+> /tmp/cctGT3zI.s:15529: Error: value -45566 out of range
+> /tmp/cctGT3zI.s:15539: Error: value -45886 out of range
+> 
+> Waldemar ?
 
-And indeed our goal is to find and fix as many issues as we can in that new
-toolchain. So we'll continue to monitor BR autobuilder failures on daily basis.
+Didn't we disabled clapack for m86k coldfire in 
+7b75d8c3fa7b234c948ff37c4f14467900083036 ?
+ 
+> >       xtensa |                  jack2-v1.9.10 | NOK | http://autobuild.buildroot.net/results/b593d422f394f1ed6a91faaa5ff73c769d523abb/
+> 
+> The NGREG issue. I worked on this yesterday, I have some improvements,
+> but it's not yet ready :-/
 
-As usual it would be good to rebuild BR pre-built tools for ARC out of this
-commit so we have better coverage in running build jobs.
+May be you could add Max Filippov to Cc? He is always helpful with any
+Xtensa problems.
+ 
+> >         m68k |                  libxml2-2.9.4 | NOK | http://autobuild.buildroot.net/results/8a4e26bb1c0c64759e3914eced0a36baa0967f0b/
+> 
+> Waldemar, another "relocation truncated to fit: R_68K_GOT16O" for
+> you :-)
 
--Alexey
+Patch ready.
+ 
+> >         m68k |        poco-poco-1.7.2-release | NOK | http://autobuild.buildroot.net/results/791917c1343f53e12f27b06cfd5e1d2e88078014/
+> >         m68k |        poco-poco-1.7.2-release | NOK | http://autobuild.buildroot.net/results/349d4b49d65a652551c4de20233684bb4ffa5ae3/
+> 
+> #error Target architecture was not detected as supported by Double-Conversion.
+> 
+> Probably we need to disable this package on m68k. Waldemar?
+
+I'll take a look now.
+ 
+best regards
+ Waldemar
