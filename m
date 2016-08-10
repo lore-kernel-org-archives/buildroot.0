@@ -1,50 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Aug 2016 00:01:27 +0200
-Subject: [Buildroot] [git commit] package/kmsxx: bump version for
-	portability fix with musl
-Message-ID: <20160810220157.32DC57FE57@busybox.osuosl.org>
+Date: Thu, 11 Aug 2016 00:02:03 +0200
+Subject: [Buildroot] [git commit] libxml2: fix m68k uclinux compile
+Message-ID: <20160810220208.2458A80166@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63ec0c71b54abe2d5468bd777e704412142cc2eb
+commit: https://git.buildroot.net/buildroot/commit/?id=9ed1eda5dbe2130cd938d7a3c1a8a30aa26fa9db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump the version to get two portability patches (as well as a small,
-innocuously-looking minor feature).
+The GCC manual suggest when getting:
+relocation truncated to fit: R_68K_GOT16O foobar
+to use -mxgot.
 
 Fixes:
-    http://autobuild.buildroot.net/results/682/68266cb5b26a62387dc99aef31fc9654c8fcd505/
-    [and quite a few others...]
+  http://autobuild.buildroot.net/results/8a4e26bb1c0c64759e3914eced0a36baa0967f0b/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kmsxx/kmsxx.hash | 2 +-
- package/kmsxx/kmsxx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libxml2/libxml2.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/kmsxx/kmsxx.hash b/package/kmsxx/kmsxx.hash
-index 4615a65..9e75bb9 100644
---- a/package/kmsxx/kmsxx.hash
-+++ b/package/kmsxx/kmsxx.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 62bd9e8c9686e5624ebeba27234cae956eeec7830a742563f051ee4a2fe522c7  kmsxx-a706f157b86e90696808025db01de99646d51a77.tar.gz
-+sha256  ff8bdb84a738477a8740c835e23c5bb59aac750e9e72a4afcad4ec8820ec7da2  kmsxx-bd5f6471e619a6ba2987bc7f66ef78a531f94d6c.tar.gz
-diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
-index df0ab23..730292e 100644
---- a/package/kmsxx/kmsxx.mk
-+++ b/package/kmsxx/kmsxx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index ed6f9af..2a7153a 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -11,6 +11,11 @@ LIBXML2_LICENSE = MIT
+ LIBXML2_LICENSE_FILES = COPYING
+ LIBXML2_CONFIG_SCRIPTS = xml2-config
  
--KMSXX_VERSION = a706f157b86e90696808025db01de99646d51a77
-+KMSXX_VERSION = bd5f6471e619a6ba2987bc7f66ef78a531f94d6c
- KMSXX_SITE = $(call github,tomba,kmsxx,$(KMSXX_VERSION))
- KMSXX_LICENSE = MPLv2.0
- KMSXX_LICENSE_FILES = LICENSE
++# relocation truncated to fit: R_68K_GOT16O
++ifeq ($(BR2_m68k_cf),y)
++LIBXML2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
++endif
++
+ LIBXML2_CONF_OPTS = --with-gnu-ld --without-python --without-debug
+ 
+ HOST_LIBXML2_DEPENDENCIES = host-pkgconf
