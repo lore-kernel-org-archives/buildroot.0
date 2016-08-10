@@ -1,40 +1,37 @@
-From: Masahiro Yamada <yamada.masahiro@socionext.com>
-Date: Wed, 10 Aug 2016 21:31:16 +0900
-Subject: [Buildroot] [PATCH 1/2] zynq: enable
-	BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
-In-Reply-To: <CANQCQpZwHuC+dxR=nfDbJt-=-q_eAyq8-Nkyuz0-_dw9Nb2=pg@mail.gmail.com>
-References: <1469943791-4805-1-git-send-email-yamada.masahiro@socionext.com>
- <1469943791-4805-2-git-send-email-yamada.masahiro@socionext.com>
- <CANQCQpZwHuC+dxR=nfDbJt-=-q_eAyq8-Nkyuz0-_dw9Nb2=pg@mail.gmail.com>
-Message-ID: <CAK7LNASOxdp=pXoZREUA-vnqJR1bJsbgDJpd0Np-JoN2aUGycg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Aug 2016 14:49:11 +0200
+Subject: [Buildroot] [git commit] lftp: remove unneeded config options
+Message-ID: <20160810125340.668F3817C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=e56ef31c8c73e942b2484b9f45de9cda15234130
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-2016-08-02 10:57 GMT+09:00 Matthew Weber <matthew.weber@rockwellcollins.com>:
->  All,
->
-> On Sun, Jul 31, 2016 at 12:43 AM, Masahiro Yamada
-> <yamada.masahiro@socionext.com> wrote:
->> The recent U-Boot adopts Kconfig for its configuration system.
->>
->> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
->>
->
-> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
->
+When installation prefix is specified in "--with-readline" config
+option, lftp's build systems figures out include dir and linker flags.
+So don't specify --with-readline-{inc,libs} options which are anyways
+get ignored by build system.
 
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lftp/lftp.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-Setting aside 2/2,
-1/2 (this one) is apparently a bug fix and Matt reviewed it,
-so isn't it ready for v2016.08 ?
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
+index eab7731..b46b802 100644
+--- a/package/lftp/lftp.mk
++++ b/package/lftp/lftp.mk
+@@ -16,8 +16,6 @@ LFTP_DEPENDENCIES = readline zlib host-pkgconf
+ # Help lftp finding readline and zlib
+ LFTP_CONF_OPTS = \
+ 	--with-readline=$(STAGING_DIR)/usr \
+-	--with-readline-inc=$(STAGING_DIR)/usr/include/readline \
+-	--with-readline-lib=$(STAGING_DIR)/usr/lib \
+ 	--with-zlib=$(STAGING_DIR)/usr
+ 
+ ifneq ($(BR2_STATIC_LIBS),y)
