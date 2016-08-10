@@ -1,77 +1,40 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 10 Aug 2016 21:36:47 +0200
-Subject: [Buildroot] Analysis of build results for 2016-08-09
-In-Reply-To: <20160810161455.142a6a19@free-electrons.com>
-References: <20160810063029.6F291102D04@stock.ovh.net>
- <20160810161455.142a6a19@free-electrons.com>
-Message-ID: <20160810193646.GV22524@waldemar-brodkorb.de>
+Date: Wed, 10 Aug 2016 21:37:48 +0200
+Subject: [Buildroot] [PATCH] libxml2: fix m68k uclinux compile
+Message-ID: <20160810193748.GA13089@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+The GCC manual suggest when getting:
+relocation truncated to fit: R_68K_GOT16O foobar
+to use -mxgot.
 
-> Hello all,
-> 
-> Please find below the usual analysis of build failures. Hiroshi,
-> Waldemar, Gustavo, Fabrice, Yann, Dagg, J?rg, Vivien, Vicente, Samuel,
-> Peter, Joris, Alistair, please have a look below, there's some fun
-> stuff for you! :-) Thanks for your help.
-> 
-> Thomas
-> 
-> >         bfin |                   cairo-1.14.6 | NOK | http://autobuild.buildroot.net/results/88b02a5dd5408318941ccbfcea0a9cbaa331500a/
-> 
-> libpixman-1.so: undefined reference to `__emutls_get_address'
-> 
-> Waldemar, can you have a look?
+Fixes:
+  http://autobuild.buildroot.net/results/8a4e26bb1c0c64759e3914eced0a36baa0967f0b/
 
-Unfortunately this fails for the same reason as any C++ application.
-__emutls_get_address is defined in libgcc_s.so.1 and is LOCAL
-instead of GLOBAL.
-When we fix the C++ problem, we have a solution for alsa-libs and
-cairo.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/libxml2/libxml2.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index ed6f9af..2a7153a 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -11,6 +11,11 @@ LIBXML2_LICENSE = MIT
+ LIBXML2_LICENSE_FILES = COPYING
+ LIBXML2_CONFIG_SCRIPTS = xml2-config
  
-> >         m68k |                  clapack-3.2.1 | NOK | http://autobuild.buildroot.net/results/f34ad4f0cf094fa31b7dc18522e9eedfc5c2c940/
-> 
-> /tmp/cctGT3zI.s: Assembler messages:
-> /tmp/cctGT3zI.s:14834: Error: value -34500 out of range
-> /tmp/cctGT3zI.s:15075: Error: value -35250 out of range
-> /tmp/cctGT3zI.s:15528: Error: value -45542 out of range
-> /tmp/cctGT3zI.s:15529: Error: value -45566 out of range
-> /tmp/cctGT3zI.s:15539: Error: value -45886 out of range
-> 
-> Waldemar ?
-
-Didn't we disabled clapack for m86k coldfire in 
-7b75d8c3fa7b234c948ff37c4f14467900083036 ?
++# relocation truncated to fit: R_68K_GOT16O
++ifeq ($(BR2_m68k_cf),y)
++LIBXML2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
++endif
++
+ LIBXML2_CONF_OPTS = --with-gnu-ld --without-python --without-debug
  
-> >       xtensa |                  jack2-v1.9.10 | NOK | http://autobuild.buildroot.net/results/b593d422f394f1ed6a91faaa5ff73c769d523abb/
-> 
-> The NGREG issue. I worked on this yesterday, I have some improvements,
-> but it's not yet ready :-/
-
-May be you could add Max Filippov to Cc? He is always helpful with any
-Xtensa problems.
- 
-> >         m68k |                  libxml2-2.9.4 | NOK | http://autobuild.buildroot.net/results/8a4e26bb1c0c64759e3914eced0a36baa0967f0b/
-> 
-> Waldemar, another "relocation truncated to fit: R_68K_GOT16O" for
-> you :-)
-
-Patch ready.
- 
-> >         m68k |        poco-poco-1.7.2-release | NOK | http://autobuild.buildroot.net/results/791917c1343f53e12f27b06cfd5e1d2e88078014/
-> >         m68k |        poco-poco-1.7.2-release | NOK | http://autobuild.buildroot.net/results/349d4b49d65a652551c4de20233684bb4ffa5ae3/
-> 
-> #error Target architecture was not detected as supported by Double-Conversion.
-> 
-> Probably we need to disable this package on m68k. Waldemar?
-
-I'll take a look now.
- 
-best regards
- Waldemar
+ HOST_LIBXML2_DEPENDENCIES = host-pkgconf
+-- 
+2.1.4
