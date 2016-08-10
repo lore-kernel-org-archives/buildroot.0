@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Aug 2016 14:24:49 +0200
-Subject: [Buildroot] [PATCH] flex: add security patch
-In-Reply-To: <1470795901-19469-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1470795901-19469-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160810142449.1ee45908@free-electrons.com>
+Date: Wed, 10 Aug 2016 14:27:28 +0200
+Subject: [Buildroot] [PATCH 1/2] php: rework patches as Git formatted
+ patches
+In-Reply-To: <1470736989-32265-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1470736989-32265-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160810142728.15fa761b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  9 Aug 2016 23:25:01 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2016-6354 - buffer overflow in generated code (yy_get_next_buffer).
-> 
-> Patch status: upstream backport.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Tue,  9 Aug 2016 12:03:08 +0200, Thomas Petazzoni wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/flex/0002-fix-CVE-2016-6354.patch | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->  create mode 100644 package/flex/0002-fix-CVE-2016-6354.patch
+>  ... 0001-acinclude.m4-don-t-unset-variables.patch} | 22 ++++++++++----
+>  ...atch => 0002-iconv-tweak-iconv-detection.patch} | 30 ++++++++++++++-----
+>  ... => 0003-configure-disable-the-phar-tool.patch} | 22 ++++++++++----
+>  ...k-mechanism-is-obviously-linux-so-force-.patch} | 22 ++++++++++----
+>  package/php/0005-ac-cache-strcasestr.patch         | 24 ---------------
+>  ...o-config.m4-allow-cache-answer-for-strcas.patch | 35 ++++++++++++++++++++++
+>  ....in.patch => 0006-Fix-php-fpm.service.in.patch} |  4 +--
+>  7 files changed, 109 insertions(+), 50 deletions(-)
+>  rename package/php/{0001-ditch-unset.patch => 0001-acinclude.m4-don-t-unset-variables.patch} (52%)
+>  rename package/php/{0002-no-iconv-search.patch => 0002-iconv-tweak-iconv-detection.patch} (69%)
+>  rename package/php/{0003-disable-pharcmd.patch => 0003-configure-disable-the-phar-tool.patch} (60%)
+>  rename package/php/{0004-flock-type-linux.patch => 0004-OPcache-flock-mechanism-is-obviously-linux-so-force-.patch} (66%)
+>  delete mode 100644 package/php/0005-ac-cache-strcasestr.patch
+>  create mode 100644 package/php/0005-ext-fileinfo-config.m4-allow-cache-answer-for-strcas.patch
+>  rename package/php/{0006-fix-php-fpm.service.in.patch => 0006-Fix-php-fpm.service.in.patch} (93%)
 
-Applied to master, thanks.
+I've applied both patches to master.
 
 Thomas
 -- 
