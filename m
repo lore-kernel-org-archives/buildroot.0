@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Aug 2016 14:28:11 +0200
-Subject: [Buildroot] [git commit branch/next] lvm2: bump version to 2.02.163
-Message-ID: <20160810122819.C9BC881D4C@busybox.osuosl.org>
+Date: Wed, 10 Aug 2016 14:28:15 +0200
+Subject: [Buildroot] [git commit branch/next] vala: bump to version 0.32.1
+Message-ID: <20160810122819.D74E881D4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c418fdc410bbf0a6418ccea32c544fe94945749
+commit: https://git.buildroot.net/buildroot/commit/?id=a60010930da3e6db96b1c6961eadc9f08e1d6c15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 65945a1..18bd62c 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index 9301964..4a4a41c 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
 @@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 9544bb7706488ac128d477af7294bcfd7b7e47cb0b1d604ea52c4545d6c3a5a71311945994dd1114cb1ce086d2006a35ef1d8b0fdd3082dfe5cc468cb0168057  LVM2.2.02.162.tgz
-+sha512 6316505e185673471a3434aec10f7978461688eb6c8391b02326a09bd0e83f8bedb2cbccb3c8dd2be0475bf516443ef23f09d1001bcff5b0dfd40941b3f1aefc  LVM2.2.02.163.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 8a51120..11eedbe 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://download.gnome.org/sources/vala/0.32/vala-0.32.0.sha256sum
+-sha256	07a2aa4ede040789b4b5af817a42249d703bfe8affccb7732ca2b53d00c1fb6e	vala-0.32.0.tar.xz
++# From https://download.gnome.org/sources/vala/0.32/vala-0.32.1.sha256sum
++sha256	dd0d47e548a34cfb1e4b04149acd082a86414c49057ffb79902eb9a508a161a9	vala-0.32.1.tar.xz
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index b236c54..4cdc0d7 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LVM2_VERSION = 2.02.162
-+LVM2_VERSION = 2.02.163
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+ VALA_VERSION_MAJOR = 0.32
+-VALA_VERSION = $(VALA_VERSION_MAJOR).0
++VALA_VERSION = $(VALA_VERSION_MAJOR).1
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPLv2.1+
