@@ -1,47 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Aug 2016 00:12:05 +0200
-Subject: [Buildroot] [PATCH] uboot-tools: add missing !BR2_STATIC_LIBS
-	dependency for FIT signature
-Message-ID: <1470867125-2537-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 11 Aug 2016 00:28:09 +0200
+Subject: [Buildroot] raspberry-pi3 do not work on buildroot-2016.05.
+In-Reply-To: <20160810223555.5ca9d42f@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 10 Aug 2016 22:35:55 +0200")
+References: <CAFN-Ez753CAapach8-OT+_HKb9zSQJORQ_imQdU+Z2y0OyRcvQ@mail.gmail.com>
+ <20160810223555.5ca9d42f@free-electrons.com>
+Message-ID: <871t1wz2bq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT selects BR2_PACKAGE_DTC, but forgets
-to depends on !BR2_STATIC_LIBS like BR2_PACKAGE_DTC does.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes the following kconfig warning:
+ > Hello,
+ > I'm adding in Cc Beno?t, Peter and Ubaldo. All of them have touched the
+ > Raspberry Pi 3 defconfig in Buildroot, which most likely means they
+ > have tested it.
 
-  arning: (BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT && BR2_PACKAGE_KVMTOOL && BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT) selects BR2_PACKAGE_DTC which has unmet direct dependencies (!BR2_STATIC_LIBS)
+ > Beno?t, Peter, Ubaldo, could one of you have a look at Chetan's issue
+ > below, and double check the latest raspberrypi3_defconfig is working
+ > for you?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/uboot-tools/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+Sorry, I don't have a rpi3. Interesting that it now works and didn't on
+2016.05, even though the rpi3 configuration hasn't changed during the
+2016.08 cycle.
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index 88d6225..df61fda 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -9,6 +9,7 @@ if BR2_PACKAGE_UBOOT_TOOLS
- 
- config BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
- 	bool "Flattened Image Tree (FIT) support"
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_DTC
- 	select BR2_PACKAGE_DTC_PROGRAMS
- 	help
-@@ -20,6 +21,9 @@ config BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
- 	  in a single blob. To boot this new uImage structure,
- 	  pass the address of the blob to the "bootm" command.
- 
-+comment "u-boot tools FIT support needs a toolchain w/ dynamic library"
-+	depends on !BR2_STATIC_LIBS
-+
- if BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
- 
- config BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
 -- 
-2.7.4
+Venlig hilsen,
+Peter Korsgaard 
