@@ -1,46 +1,85 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  9 Aug 2016 23:30:16 -0300
-Subject: [Buildroot] [PATCH] fontconfig: security bump to version 2.12.1
-Message-ID: <1470796216-19612-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  9 Aug 2016 23:31:04 -0300
+Subject: [Buildroot] [PATCH] libtasn1: bump to version 4.9
+Message-ID: <1470796264-19662-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2016-5384 - possible double free due to insufficiently validated
-cache files.
+Add upstream patch to fix build failure with gcc warnings on.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/fontconfig/fontconfig.hash | 4 ++--
- package/fontconfig/fontconfig.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ ...configure-don-t-add-Werror-to-build-flags.patch | 28 ++++++++++++++++++++++
+ package/libtasn1/libtasn1.hash                     |  2 +-
+ package/libtasn1/libtasn1.mk                       |  4 +++-
+ 3 files changed, 32 insertions(+), 2 deletions(-)
+ create mode 100644 package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch
 
-diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
-index e4ec1ac..ad35825 100644
---- a/package/fontconfig/fontconfig.hash
-+++ b/package/fontconfig/fontconfig.hash
+diff --git a/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch b/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch
+new file mode 100644
+index 0000000..387ba7a
+--- /dev/null
++++ b/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch
+@@ -0,0 +1,28 @@
++From dd091c8af163213e12aa92f61bc4916e0f102633 Mon Sep 17 00:00:00 2001
++From: Nikos Mavrogiannopoulos <nmav@redhat.com>
++Date: Tue, 26 Jul 2016 08:45:33 +0200
++Subject: [PATCH] configure: don't add -Werror to build flags
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Patch status: upstream
++
++ configure.ac | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 7a14e04..066f5fe 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -70,8 +70,6 @@ AC_ARG_ENABLE([gcc-warnings],
++ )
++ 
++ if test "$gl_gcc_warnings" = yes; then
++-  gl_WARN_ADD([-Werror], [WERROR_CFLAGS])
++-
++   nw="$nw -Wsystem-headers"         # Don't let system headers trigger warnings
++   nw="$nw -Wc++-compat"             # We don't care strongly about C++ compilers
++   nw="$nw -Wtraditional"            # Warns on #elif which we use often
++-- 
++2.7.3
++
+diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
+index dc65210..5b2100e 100644
+--- a/package/libtasn1/libtasn1.hash
++++ b/package/libtasn1/libtasn1.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/fontconfig/2014-March/005167.html
--sha256	b6b066c7dce3f436fdc0dfbae9d36122b38094f4f53bd8dffd45e195b0540d8d	fontconfig-2.11.1.tar.gz
-+# From https://lists.freedesktop.org/archives/fontconfig/2016-August/005794.html
-+sha256	b449a3e10c47e1d1c7a6ec6e2016cca73d3bd68fbbd4f0ae5cc6b573f7d6c7f3	fontconfig-2.12.1.tar.bz2
-diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
-index f3bf0d4..93f2a15 100644
---- a/package/fontconfig/fontconfig.mk
-+++ b/package/fontconfig/fontconfig.mk
-@@ -4,8 +4,9 @@
+ # Locally calculated after checking pgp signature
+-sha256	fa802fc94d79baa00e7397cedf29eb6827d4bd8b4dd77b577373577c93a8c513	libtasn1-4.8.tar.gz
++sha256	4f6f7a8fd691ac2b8307c8ca365bad711db607d4ad5966f6938a9d2ecd65c920	libtasn1-4.9.tar.gz
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index c51d8c0..6b7e6b3 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FONTCONFIG_VERSION = 2.11.1
-+FONTCONFIG_VERSION = 2.12.1
- FONTCONFIG_SITE = http://fontconfig.org/release
-+FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.bz2
- FONTCONFIG_INSTALL_STAGING = YES
- FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf
- HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf
+-LIBTASN1_VERSION = 4.8
++LIBTASN1_VERSION = 4.9
+ LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison
+ LIBTASN1_LICENSE = GPLv3+, LGPLv2.1+
+@@ -12,5 +12,7 @@ LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
+ LIBTASN1_INSTALL_STAGING = YES
+ # 'missing' fallback logic botched so disable it completely
+ LIBTASN1_CONF_ENV = MAKEINFO="true"
++# For 0001-configure-don-t-add-Werror-to-build-flags.patch
++LIBTASN1_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
 -- 
 2.7.3
