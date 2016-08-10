@@ -1,32 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Aug 2016 00:28:09 +0200
-Subject: [Buildroot] raspberry-pi3 do not work on buildroot-2016.05.
-In-Reply-To: <20160810223555.5ca9d42f@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 10 Aug 2016 22:35:55 +0200")
-References: <CAFN-Ez753CAapach8-OT+_HKb9zSQJORQ_imQdU+Z2y0OyRcvQ@mail.gmail.com>
- <20160810223555.5ca9d42f@free-electrons.com>
-Message-ID: <871t1wz2bq.fsf@dell.be.48ers.dk>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 10 Aug 2016 18:35:45 -0400
+Subject: [Buildroot] [PATCH 1/2] fwup: bump version to v0.8.2
+Message-ID: <1470868546-8237-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+This version brings in several bug fixes: one of which partially
+addresses Buildroot autobuilder failures for static configurations.
 
- > Hello,
- > I'm adding in Cc Beno?t, Peter and Ubaldo. All of them have touched the
- > Raspberry Pi 3 defconfig in Buildroot, which most likely means they
- > have tested it.
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ package/fwup/fwup.hash | 2 +-
+ package/fwup/fwup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Beno?t, Peter, Ubaldo, could one of you have a look at Chetan's issue
- > below, and double check the latest raspberrypi3_defconfig is working
- > for you?
-
-Sorry, I don't have a rpi3. Interesting that it now works and didn't on
-2016.05, even though the rpi3 configuration hasn't changed during the
-2016.08 cycle.
-
+diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
+index 6d9a1ea..e21eff0 100644
+--- a/package/fwup/fwup.hash
++++ b/package/fwup/fwup.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	  56d30f4ddf7929d693c022455978aebef1f6adb5896437a199bde43d5459da68	fwup-v0.8.0.tar.gz
++sha256   64c3a0ac38dc11c0c05b2588a89638cbc37f5552ac0f1c290f7ee5365f2bba49      fwup-v0.8.2.tar.gz
+diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
+index ae85716..3d3e3be 100644
+--- a/package/fwup/fwup.mk
++++ b/package/fwup/fwup.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-FWUP_VERSION = v0.8.0
++FWUP_VERSION = v0.8.2
+ FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
+ FWUP_LICENSE = Apache-2.0
+ FWUP_LICENSE_FILES = LICENSE
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.7.4
