@@ -1,34 +1,46 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  9 Aug 2016 23:26:12 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
-Message-ID: <1470795972-19542-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  9 Aug 2016 23:30:16 -0300
+Subject: [Buildroot] [PATCH] fontconfig: security bump to version 2.12.1
+Message-ID: <1470796216-19612-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+CVE-2016-5384 - possible double free due to insufficiently validated
+cache files.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/fontconfig/fontconfig.hash | 4 ++--
+ package/fontconfig/fontconfig.mk   | 3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index ae5cc5d..7325d95 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -240,10 +240,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.74"	if BR2_KERNEL_HEADERS_3_14
--	default "3.18.38"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.39"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.29"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.30"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
- 	default "4.4.16"	if BR2_KERNEL_HEADERS_4_4
+diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
+index e4ec1ac..ad35825 100644
+--- a/package/fontconfig/fontconfig.hash
++++ b/package/fontconfig/fontconfig.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/fontconfig/2014-March/005167.html
+-sha256	b6b066c7dce3f436fdc0dfbae9d36122b38094f4f53bd8dffd45e195b0540d8d	fontconfig-2.11.1.tar.gz
++# From https://lists.freedesktop.org/archives/fontconfig/2016-August/005794.html
++sha256	b449a3e10c47e1d1c7a6ec6e2016cca73d3bd68fbbd4f0ae5cc6b573f7d6c7f3	fontconfig-2.12.1.tar.bz2
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index f3bf0d4..93f2a15 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-FONTCONFIG_VERSION = 2.11.1
++FONTCONFIG_VERSION = 2.12.1
+ FONTCONFIG_SITE = http://fontconfig.org/release
++FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.bz2
+ FONTCONFIG_INSTALL_STAGING = YES
+ FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf
+ HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf
 -- 
 2.7.3
