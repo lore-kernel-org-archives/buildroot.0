@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Aug 2016 14:23:53 +0200
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
-In-Reply-To: <1470795972-19542-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1470795972-19542-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160810142353.0ad859e0@free-electrons.com>
+Date: Wed, 10 Aug 2016 14:24:20 +0200
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{14, 18}.x and 4.{1, 4,
+ 6}.x series
+In-Reply-To: <1470827807-6125-1-git-send-email-festevam@gmail.com>
+References: <1470827807-6125-1-git-send-email-festevam@gmail.com>
+Message-ID: <20160810142420.06fc93b3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  9 Aug 2016 23:26:12 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Wed, 10 Aug 2016 08:16:47 -0300, Fabio Estevam wrote:
+> From: Fabio Estevam <fabio.estevam@nxp.com>
+> 
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 > ---
->  package/linux-headers/Config.in.host | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/linux-headers/Config.in.host | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-Thanks, but I've applied Fabio Estevam version instead, which updated
-other branches as well.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
