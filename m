@@ -1,129 +1,52 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 10 Aug 2016 14:43:12 -0500
-Subject: [Buildroot] [PATCH] lxc: version bump to 2.0.3
-Message-ID: <1470858192-29796-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 10 Aug 2016 22:00:31 +0200
+Subject: [Buildroot] [PATCHv2] package/kmsxx: bump version for portability
+	fix with musl
+Message-ID: <1470859231-9807-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Judd Meinders <judd.meinders@rockwellcollins.com>
+Bump the version to get two portability patches (as well as a small,
+innocuously-looking minor feature).
 
-- Removed IPv6 and werror patches as changes where
-  incorporated upsteam.
+Fixes:
+    http://autobuild.buildroot.net/results/682/68266cb5b26a62387dc99aef31fc9654c8fcd505/
+    [and quite a few others...]
 
-- AUTO_RECONF is kept for libseccomp conf opt purposes
-  (other packages don't explicitly comment this when
-   kconfig conditionals are used)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Ripard <maxime.ripard@free-electrons.com>
 
-Signed-off-by: Judd Meinders <judd.meinders@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/lxc/0001-drop-werror.patch                 | 16 --------
- .../0002-Fix-redefinition-of-struct-in6_addr.patch | 43 ----------------------
- package/lxc/lxc.hash                               |  2 +-
- package/lxc/lxc.mk                                 |  3 +-
- 4 files changed, 2 insertions(+), 62 deletions(-)
- delete mode 100644 package/lxc/0001-drop-werror.patch
- delete mode 100644 package/lxc/0002-Fix-redefinition-of-struct-in6_addr.patch
+Changes v1 -> v2:
+  - bump version and drop patches, as they were applied upstream.
+---
+ package/kmsxx/kmsxx.hash | 2 +-
+ package/kmsxx/kmsxx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lxc/0001-drop-werror.patch b/package/lxc/0001-drop-werror.patch
-deleted file mode 100644
-index d2a8673..0000000
---- a/package/lxc/0001-drop-werror.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Don't do -Werror it breaks builds on some scenarios with trivialities.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura lxc-lxc-1.0.4/configure.ac lxc-lxc-1.0.4.orig/configure.ac
----- lxc-lxc-1.0.4.orig/configure.ac	2014-07-04 10:31:19.821029891 -0300
--+++ lxc-lxc-1.0.4/configure.ac	2014-06-13 14:07:45.000000000 -0300
--@@ -560,7 +560,7 @@
-- LXC_CHECK_TLS
-- 
-- if test "x$GCC" = "xyes"; then
---	CFLAGS="$CFLAGS -Wall -Werror"
--+	CFLAGS="$CFLAGS -Wall"
-- fi
-- 
-- # Files requiring some variable expansion
-diff --git a/package/lxc/0002-Fix-redefinition-of-struct-in6_addr.patch b/package/lxc/0002-Fix-redefinition-of-struct-in6_addr.patch
-deleted file mode 100644
-index b48ece3..0000000
---- a/package/lxc/0002-Fix-redefinition-of-struct-in6_addr.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 245bba9aadf8e7aea487b6fbd851f86c75524552 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
--Date: Thu, 19 May 2016 21:51:27 +0200
--Subject: [PATCH] Fix redefinition of struct in6_addr
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--struct in6_addr is both defined in the C library header <netinet/in.h>
--and the Linux kernel header <linux/in6.h>.
--
--lxc_user_nic.c includes both <netinet/in.h> and <linux/if_bridge.h>. The
--later one includes <linux/in6.h>.
--
--This breaks build with the musl libc:
--  error: redefinition of ?struct in6_addr?
--
--As lxc_user_nic.c does not use any references from <linux/if_bridge.h> it
--is safe to remove this header.
--
--Upstream status: Pending
--https://github.com/lxc/lxc/pull/1029
--
--Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-----
-- src/lxc/lxc_user_nic.c | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/src/lxc/lxc_user_nic.c b/src/lxc/lxc_user_nic.c
--index 87780ca..0cb38ba 100644
----- a/src/lxc/lxc_user_nic.c
--+++ b/src/lxc/lxc_user_nic.c
--@@ -41,7 +41,6 @@
-- #include <net/if.h>
-- #include <net/if_arp.h>
-- #include <netinet/in.h>
---#include <linux/if_bridge.h>
-- #include <linux/netlink.h>
-- #include <linux/rtnetlink.h>
-- #include <linux/sockios.h>
---- 
--2.8.2
--
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index 7470101..3dee7fc 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
+diff --git a/package/kmsxx/kmsxx.hash b/package/kmsxx/kmsxx.hash
+index 4615a65..c7f095f 100644
+--- a/package/kmsxx/kmsxx.hash
++++ b/package/kmsxx/kmsxx.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	9588ad1b04e114ee7370f690c65131e28098b28d2521d97c73557d11897ed0be	lxc-1.1.5.tar.gz
-+sha256 82df40a0cdd44639ee677d560be95348de48afa93a10a20e959dadb4431ee8d6 lxc-2.0.3.tar.gz
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 8190969..88da06e 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -4,12 +4,11 @@
+-sha256 62bd9e8c9686e5624ebeba27234cae956eeec7830a742563f051ee4a2fe522c7  kmsxx-a706f157b86e90696808025db01de99646d51a77.tar.gz
++sha256  01787dd3d3e14b5cfb8b6e8ab3d9623c2db54d21  kmsxx-bd5f6471e619a6ba2987bc7f66ef78a531f94d6c.tar.gz
+diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
+index df0ab23..730292e 100644
+--- a/package/kmsxx/kmsxx.mk
++++ b/package/kmsxx/kmsxx.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LXC_VERSION = 1.1.5
-+LXC_VERSION = 2.0.3
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = LGPLv2.1+
- LXC_LICENSE_FILES = COPYING
- LXC_DEPENDENCIES = libcap host-pkgconf
--# we're patching configure.ac
- LXC_AUTORECONF = YES
- LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-lua --disable-python \
+-KMSXX_VERSION = a706f157b86e90696808025db01de99646d51a77
++KMSXX_VERSION = bd5f6471e619a6ba2987bc7f66ef78a531f94d6c
+ KMSXX_SITE = $(call github,tomba,kmsxx,$(KMSXX_VERSION))
+ KMSXX_LICENSE = MPLv2.0
+ KMSXX_LICENSE_FILES = LICENSE
 -- 
-1.9.1
+2.7.4
