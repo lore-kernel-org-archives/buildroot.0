@@ -1,137 +1,116 @@
 From: Biagio Montaruli <biagio.hkr@gmail.com>
-Date: Wed, 10 Aug 2016 13:06:06 +0200
-Subject: [Buildroot] [PATCH 10/11] Update and improve default configuration
-	files for Arietta G25 (both 128MB and 256MB version)
+Date: Wed, 10 Aug 2016 13:06:07 +0200
+Subject: [Buildroot] [PATCH 11/11] Update README file for Aria G25 named
+	"readme.txt"
 In-Reply-To: <1470827167-9426-1-git-send-email-biagio.hkr@gmail.com>
 References: <1470827167-9426-1-git-send-email-biagio.hkr@gmail.com>
-Message-ID: <1470827167-9426-12-git-send-email-biagio.hkr@gmail.com>
+Message-ID: <1470827167-9426-13-git-send-email-biagio.hkr@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- Improve instructions for configuring and building Buildroot
+- Add more documentation about AT91bootstrap and Linux kernel for Aria G25
+
 Signed-off-by: Biagio Montaruli <biagio.hkr@gmail.com>
 ---
- configs/acmesystems_aria_g25_128mb_defconfig | 41 ++++++++++++++++++++++------
- configs/acmesystems_aria_g25_256mb_defconfig | 41 ++++++++++++++++++++++------
- 2 files changed, 66 insertions(+), 16 deletions(-)
+ board/acmesystems/aria-g25/readme.txt | 71 ++++++++++++++++++-----------------
+ 1 file changed, 37 insertions(+), 34 deletions(-)
 
-diff --git a/configs/acmesystems_aria_g25_128mb_defconfig b/configs/acmesystems_aria_g25_128mb_defconfig
-index c4d2cd6..4407385 100644
---- a/configs/acmesystems_aria_g25_128mb_defconfig
-+++ b/configs/acmesystems_aria_g25_128mb_defconfig
-@@ -1,20 +1,45 @@
- # Architecture
- BR2_arm=y
+diff --git a/board/acmesystems/aria-g25/readme.txt b/board/acmesystems/aria-g25/readme.txt
+index 734ccd2..ae674b7 100644
+--- a/board/acmesystems/aria-g25/readme.txt
++++ b/board/acmesystems/aria-g25/readme.txt
+@@ -1,51 +1,54 @@
+-Build instructions
+-==================
++Acme Systems Aria G25
  
--# Linux headers same as kernel, a 4.1 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+# Kernel header
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+
-+# Toolchain
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+# System configuration
-+BR2_TARGET_GENERIC_HOSTNAME="aria-g25"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Aria-G25 Buildroot !"
-+BR2_TARGET_GENERIC_ROOT_PASSWD="acmesystems"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-+BR2_ROOTFS_OVERLAY="board/acmesystems/aria-g25/rootfs-overlay"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/acmesystems/aria-g25/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/acmesystems/aria-g25/post-image.sh"
+-As a regular user configure and then build:
++Intro
++=====
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.1"
--BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.16"
-+BR2_LINUX_KERNEL_PATCH="board/acmesystems/aria-g25/patches/linux/linux-4.4.16-aria.patch"
-+BR2_LINUX_KERNEL_DEFCONFIG="acme-aria"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="acme-aria"
+-$ make acmesystems_aria_g25_128mb_defconfig (128MB RAM variant)
+-  or...
+-$ make acmesystems_aria_g25_256mb_defconfig (256MB RAM variant)
++Buildroot configuration for Aria G25.
++This default configuration, based on AT91bootstrap v3.8.5 and 
++Linux Kernel image v4.4.16, allow you to build a minimal root filesystem
++which includes the support for the serial console.
++The default configuration for Aria G25 includes the getty program that
++enables you to log in through the serial console ttyS0.
++After the boot, to log in at the getty prompt use the following credentials:
++Username: root
++Password: acmesystems
  
--# Bootloader
-+# Root filesystem configuration 
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
+-$ make
++You can find additional informations, tutorials and a very comprehensive
++documentation on http://www.acmesystems.it/aria.
 +
-+# AT91bootstrap bootloader
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/tanzilli/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="3f957cec253abc80fd10c733e5e596f46e1aef56"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/biagiom/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="acmesystems-v1.0"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-128m"
-+
-+# Required tools to create the SD image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/acmesystems_aria_g25_256mb_defconfig b/configs/acmesystems_aria_g25_256mb_defconfig
-index ba191c6..5b8cc57 100644
---- a/configs/acmesystems_aria_g25_256mb_defconfig
-+++ b/configs/acmesystems_aria_g25_256mb_defconfig
-@@ -1,20 +1,45 @@
- # Architecture
- BR2_arm=y
++Build instructions
++==================
  
--# Linux headers same as kernel, a 4.1 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+# Kernel header
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+
-+# Toolchain
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+# System configuration
-+BR2_TARGET_GENERIC_HOSTNAME="aria-g25"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Aria-G25 Buildroot !"
-+BR2_TARGET_GENERIC_ROOT_PASSWD="acmesystems"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-+BR2_ROOTFS_OVERLAY="board/acmesystems/aria-g25/rootfs-overlay"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/acmesystems/aria-g25/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/acmesystems/aria-g25/post-image.sh"
+-Writing to the MicroSD card
+-===========================
++To build an image for the Aria G25 choose the configuration
++corresponding to the Aria variant.
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.1"
--BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.16"
-+BR2_LINUX_KERNEL_PATCH="board/acmesystems/aria-g25/patches/linux/linux-4.4.16-aria.patch"
-+BR2_LINUX_KERNEL_DEFCONFIG="acme-aria"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="acme-aria"
+-Assuming your Aria G25 baseboard has a MicroSD socket, for example with
+-the Terra baseboard, you'll need a blank MicroSD (obviously) initialized
+-in a particular way to be able to boot from it.
++For 128MB RAM variant type:
  
--# Bootloader
-+# Root filesystem configuration 
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
+-Assuming the card is seen as /dev/sdb in your PC/laptop/other device
+-you'll need to run the following commands as root or via sudo.
++$ make acmesystems_aria_g25_128mb_defconfig
+ 
+-Make sure all of the card partitions are unmounted before starting.
++else for 256MB RAM variant type:
+ 
+-First we'll need to create two partitions:
++$ make acmesystems_aria_g25_256mb_defconfig
+ 
+-# sfdisk -uM /dev/sdb <<EOF
+-,32,6
+-;
+-EOF
++To customize the configuration choosed type:
+ 
+-Then we'll need to create the empty filesystems:
++$ make menuconfig
+ 
+-# mkdosfs -n SD_BOOT /dev/sdb1
+-# mkfs.ext4 -L SD_ROOT /dev/sdb2
++When you are ready to start building Buildroot type:
+ 
+-We'll populate the first partition (boot) with the relevant files:
++$ make
+ 
+-# mount /dev/sdb1 /mnt
+-# cp output/images/at91bootstrap.bin /mnt/BOOT.BIN
+-# cp output/images/zImage /mnt
+-# cp output/images/at91-ariag25.dtb /mnt
+-# umount /mnt
++How to write the microSD card
++=============================
+ 
+-And the root filesystem afterwards:
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
+ 
+-# mount /dev/sdb2 /mnt
+-# tar -C /mnt output/images/rootfs.tar
+-# umount /mnt
++Write the bootable SD card image "sdcard.img" onto an SD card with "dd" command:
+ 
+-You're done, insert the MicroSD card in the slot and enjoy.
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
 +
-+# AT91bootstrap bootloader
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/tanzilli/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="3f957cec253abc80fd10c733e5e596f46e1aef56"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/biagiom/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="acmesystems-v1.0"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-256m"
-+
-+# Required tools to create the SD image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
++Assuming your Aria G25 baseboard has a MicroSD socket, for example with
++the Terra baseboard, insert the microSD card into the baseboard slot and power it.
+ 
++To get the kernel log messages you can use a DPI cable (http://www.acmesystems.it/DPI)
 -- 
 2.7.4
