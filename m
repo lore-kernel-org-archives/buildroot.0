@@ -1,42 +1,48 @@
 From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 10 Aug 2016 18:35:45 -0400
-Subject: [Buildroot] [PATCH 1/2] fwup: bump version to v0.8.2
-Message-ID: <1470868546-8237-1-git-send-email-fhunleth@troodon-software.com>
+Date: Wed, 10 Aug 2016 18:35:46 -0400
+Subject: [Buildroot] [PATCH 2/2] fwup: link in pthreads for static builds
+In-Reply-To: <1470868546-8237-1-git-send-email-fhunleth@troodon-software.com>
+References: <1470868546-8237-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <1470868546-8237-2-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version brings in several bug fixes: one of which partially
-addresses Buildroot autobuilder failures for static configurations.
+Both libconfuse (via libintl) and libarchive have references to pthreads
+but do not specify pthreads in their pkg-config descriptions. This
+change adds pthreads to the fwup linker options so that the link step
+succeeds.
+
+Fixes autobuilder failures:
+
+http://autobuild.buildroot.net/results/ce3793c79d5dc4e296d645c75f22e121f35030d3/
+http://autobuild.buildroot.net/results/0c5ffec5438f766dade951a64ebfa1b734a3c0aa/
+http://autobuild.buildroot.net/results/802/802b6d77e1b77b7c8fcb8f3b394cdabfd406de7a/
 
 Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- package/fwup/fwup.hash | 2 +-
- package/fwup/fwup.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fwup/fwup.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
-index 6d9a1ea..e21eff0 100644
---- a/package/fwup/fwup.hash
-+++ b/package/fwup/fwup.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	  56d30f4ddf7929d693c022455978aebef1f6adb5896437a199bde43d5459da68	fwup-v0.8.0.tar.gz
-+sha256   64c3a0ac38dc11c0c05b2588a89638cbc37f5552ac0f1c290f7ee5365f2bba49      fwup-v0.8.2.tar.gz
 diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
-index ae85716..3d3e3be 100644
+index 3d3e3be..c5accc6 100644
 --- a/package/fwup/fwup.mk
 +++ b/package/fwup/fwup.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+@@ -13,5 +13,13 @@ HOST_FWUP_DEPENDENCIES = host-libconfuse host-libarchive host-libsodium
+ FWUP_AUTORECONF = YES
+ FWUP_CONF_ENV = ac_cv_path_HELP2MAN=""
  
--FWUP_VERSION = v0.8.0
-+FWUP_VERSION = v0.8.2
- FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
- FWUP_LICENSE = Apache-2.0
- FWUP_LICENSE_FILES = LICENSE
++# The following is needed to fix link errors in static configurations
++# due to libconfuse requiring pthreads via libintl and libarchive
++# using pthread_mutex_*. Neither list pthreads in their pkg-config
++# description.
++ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
++FWUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -pthread"
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.7.4
