@@ -1,40 +1,48 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 10 Aug 2016 13:49:15 +0200
-Subject: [Buildroot] issue with the QT5, buildroot 2016-05
-In-Reply-To: <CAMWiJUuY5YGP10m6P-aHcdyuiewq+AdRU8MByGN5Kb4NLvNi3Q@mail.gmail.com>
-References: <CAMWiJUuY5YGP10m6P-aHcdyuiewq+AdRU8MByGN5Kb4NLvNi3Q@mail.gmail.com>
-Message-ID: <CAAMH-ys7xLR53fBoooGp4hueEsCPu+FzYT7YUA54V8E43vX81Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Aug 2016 14:17:28 +0200
+Subject: [Buildroot] [git commit] fontconfig: security bump to version 2.12.1
+Message-ID: <20160810121736.80051821A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Zhaozhou,
+commit: https://git.buildroot.net/buildroot/commit/?id=ab5b263e80daa3caca57c3012bdee91a27ac5ada
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Aug 10, 2016 at 1:23 PM, Zhaozhou Meng <mengzhaozhou@gmail.com> wrote:
-> Hi all,
->
-> I use the buildroot 2016.05 version, the board nitrogen6x with cpu imx6 and
-> the u-boot 2016.03 version.
-> I built the QT5.6 with eglfs, opengl es2 without X11, when I run the
-> examples on the board, I found that some example works perfectly, but some
-> example doesn't work, like opengl/cube with the error :
-> "audit: type=1701 audit(1455208187.550:2): auid=4294967295 uid=0 gid=0
-> ses=429491
-> Segmentation fault (core dumped)"
+Fixes:
+CVE-2016-5384 - possible double free due to insufficiently validated
+cache files.
 
-Are the other examples that are working using the GPU 3D as well?
-Is the galcore module properly inserted?
-Are the Vivante demos running properly?
-Have you tried the Qt5Cinex demo?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fontconfig/fontconfig.hash | 4 ++--
+ package/fontconfig/fontconfig.mk   | 3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-> The same error also happened for my own QT project compiled with buidlroot
-> qmake.
-> I don't know if you have the same problems,
-
-Not that I remember but I didn't test all the examples. I usually
-install the Qt5Cinex demo which stresses the GPU pretty well.
-
-Regards,
-Gary
+diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
+index e4ec1ac..ad35825 100644
+--- a/package/fontconfig/fontconfig.hash
++++ b/package/fontconfig/fontconfig.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/fontconfig/2014-March/005167.html
+-sha256	b6b066c7dce3f436fdc0dfbae9d36122b38094f4f53bd8dffd45e195b0540d8d	fontconfig-2.11.1.tar.gz
++# From https://lists.freedesktop.org/archives/fontconfig/2016-August/005794.html
++sha256	b449a3e10c47e1d1c7a6ec6e2016cca73d3bd68fbbd4f0ae5cc6b573f7d6c7f3	fontconfig-2.12.1.tar.bz2
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index f3bf0d4..93f2a15 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-FONTCONFIG_VERSION = 2.11.1
++FONTCONFIG_VERSION = 2.12.1
+ FONTCONFIG_SITE = http://fontconfig.org/release
++FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.bz2
+ FONTCONFIG_INSTALL_STAGING = YES
+ FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf
+ HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf
