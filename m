@@ -1,127 +1,54 @@
-From: Marc Khouri <marc@khouri.ca>
-Date: Wed, 10 Aug 2016 01:57:37 +0000
-Subject: [Buildroot] [PATCH 1/1] libical: Create option to use builtin
-	tzdata
-In-Reply-To: <20160809205619.GG5779@free.fr>
-References: <1470751327-64254-1-git-send-email-marc@khouri.ca>
- <20160809205619.GG5779@free.fr>
-Message-ID: <CAAmaa8sW+4V6aQgr5X6oUP9pY_TKmQpOU7RQCMKXv4KdEysdEw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  9 Aug 2016 23:25:01 -0300
+Subject: [Buildroot] [PATCH] flex: add security patch
+Message-ID: <1470795901-19469-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Thomas, Baruch,
+Fixes:
+CVE-2016-6354 - buffer overflow in generated code (yy_get_next_buffer).
 
-Thank you for the feedback. I will submit a modified patch tomorrow.
+Patch status: upstream backport.
 
-Regards,
-Marc
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/flex/0002-fix-CVE-2016-6354.patch | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/flex/0002-fix-CVE-2016-6354.patch
 
-On Tue, Aug 9, 2016, 16:56 Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-
-> Marc, All,
->
-> On 2016-08-09 10:02 -0400, Marc Khouri spake thusly:
-> > libical requires time zone data (either system or internal) in order
-> > to use time zone related functions. This commit adds an option to
-> > build libical with its internal time zone data. If no time zone data
-> > is present, segfaults occur in applications which use time zone
-> functions.
-> >
-> > Option documentation:
-> > https://github.com/libical/libical/blob/v1.0.1/CMakeLists.txt#L23
-> >
-> > Signed-off-by: Marc Khouri <marc@khouri.ca>
-> > ---
-> >  package/libical/Config.in  | 12 ++++++++++++
-> >  package/libical/libical.mk |  4 ++++
-> >  2 files changed, 16 insertions(+)
-> >
-> > diff --git a/package/libical/Config.in b/package/libical/Config.in
-> > index 48170e9..e183ad0 100644
-> > --- a/package/libical/Config.in
-> > +++ b/package/libical/Config.in
-> > @@ -9,6 +9,18 @@ config BR2_PACKAGE_LIBICAL
-> >
-> >         http://libical.github.io/libical
-> >
-> > +if BR2_PACKAGE_LIBICAL
-> > +
-> > +config BR2_PACKAGE_LIBICAL_BUILTIN_TZDATA
-> > +     bool "use built-in timezone data"
-> > +     help
-> > +       Build using libical's (instead of the system's) timezone data.
-> > +
-> > +       libical requires either built-in or system timezone data in order
-> > +       to support time zone functions.
-> > +
-> > +endif
->
-> As already discussed in other replies, we believe it is better to rely
-> on the existing TZ info that can be used system-wide.
->
-> A ver recent commit makes this available for all types of toolchains,
-> not just glibc or uClibc.
->
-> So, your change can now easily be changed to use:
->
->     config BR2_PACKAGE_LIBICAL
->         bool "libical"
->         depends on exiting-blabla
->         select BR2_TARGET_TZ_INFO
->
-> >  comment "libical needs a toolchain w/ C++, dynamic library, wchar"
-> >       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-> >               BR2_STATIC_LIBS
-> > diff --git a/package/libical/libical.mk b/package/libical/libical.mk
-> > index e8cb3f8..a8bcefb 100644
-> > --- a/package/libical/libical.mk
-> > +++ b/package/libical/libical.mk
-> > @@ -14,4 +14,8 @@ LIBICAL_LICENSE_FILES = LICENSE
-> >  # Gentoo/alpinelinux as well
-> >  LIBICAL_CONF_OPTS = -DSHARED_ONLY=true
-> >
-> > +ifeq ($(BR2_PACKAGE_LIBICAL_BUILTIN_TZDATA),y)
-> > +LIBICAL_CONF_OPTS += -DUSE_BUILTIN_TZDATA=true
-> > +endif
->
-> And of course you can now drop this change, although I would still keep
-> it as:
->
->     LIBICAL_CONF_OPTS += -DUSE_BUILTIN_TZDATA=OFF
->
-> to be sure it does not get used.
->
-> Thanks!
->
-> Regards,
-> Yann E. MORIN.
->
-> >  $(eval $(cmake-package))
-> > --
-> > 2.8.2
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160810/45c546f9/attachment.html>
+diff --git a/package/flex/0002-fix-CVE-2016-6354.patch b/package/flex/0002-fix-CVE-2016-6354.patch
+new file mode 100644
+index 0000000..b0c780b
+--- /dev/null
++++ b/package/flex/0002-fix-CVE-2016-6354.patch
+@@ -0,0 +1,25 @@
++From a5cbe929ac3255d371e698f62dc256afe7006466 Mon Sep 17 00:00:00 2001
++From: Will Estes <westes575@gmail.com>
++Date: Sat, 27 Feb 2016 11:56:05 -0500
++Subject: [PATCH] Fixed incorrect integer type
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Status: upstream
++
++ flex.skl | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/flex.skl b/src/flex.skl
++index 36a526a..64f853d 100644
++--- a/flex.skl
+++++ b/flex.skl
++@@ -1703,7 +1703,7 @@ int yyFlexLexer::yy_get_next_buffer()
++ 
++ 	else
++ 		{
++-			yy_size_t num_to_read =
+++			int num_to_read =
++ 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
++ 
++ 		while ( num_to_read <= 0 )
+-- 
+2.7.3
