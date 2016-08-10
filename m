@@ -1,28 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Aug 2016 14:28:46 +0200
-Subject: [Buildroot] [PATCH] vala: bump to version 0.32.1
-In-Reply-To: <1470824404-14215-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1470824404-14215-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160810142846.09a0c24e@free-electrons.com>
+From: Masahiro Yamada <yamada.masahiro@socionext.com>
+Date: Wed, 10 Aug 2016 21:31:16 +0900
+Subject: [Buildroot] [PATCH 1/2] zynq: enable
+	BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+In-Reply-To: <CANQCQpZwHuC+dxR=nfDbJt-=-q_eAyq8-Nkyuz0-_dw9Nb2=pg@mail.gmail.com>
+References: <1469943791-4805-1-git-send-email-yamada.masahiro@socionext.com>
+ <1469943791-4805-2-git-send-email-yamada.masahiro@socionext.com>
+ <CANQCQpZwHuC+dxR=nfDbJt-=-q_eAyq8-Nkyuz0-_dw9Nb2=pg@mail.gmail.com>
+Message-ID: <CAK7LNASOxdp=pXoZREUA-vnqJR1bJsbgDJpd0Np-JoN2aUGycg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Wed, 10 Aug 2016 07:20:04 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/vala/vala.hash | 4 ++--
->  package/vala/vala.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+2016-08-02 10:57 GMT+09:00 Matthew Weber <matthew.weber@rockwellcollins.com>:
+>  All,
+>
+> On Sun, Jul 31, 2016 at 12:43 AM, Masahiro Yamada
+> <yamada.masahiro@socionext.com> wrote:
+>> The recent U-Boot adopts Kconfig for its configuration system.
+>>
+>> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+>>
+>
+> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+>
 
-Applied to next, thanks.
 
-Thomas
+Setting aside 2/2,
+1/2 (this one) is apparently a bug fix and Matt reviewed it,
+so isn't it ready for v2016.08 ?
+
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best Regards
+Masahiro Yamada
