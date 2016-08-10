@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Aug 2016 22:31:32 +0200
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to
-	arc-2016.09-eng008
-In-Reply-To: <1470857474.3428.41.camel@synopsys.com>
-References: <1470849040-9200-1-git-send-email-vzakhar@synopsys.com>
- <20160810212736.6a814ad9@free-electrons.com>
- <1470857474.3428.41.camel@synopsys.com>
-Message-ID: <20160810223132.29fd6aff@free-electrons.com>
+Date: Wed, 10 Aug 2016 22:35:55 +0200
+Subject: [Buildroot] raspberry-pi3 do not work on buildroot-2016.05.
+In-Reply-To: <CAFN-Ez753CAapach8-OT+_HKb9zSQJORQ_imQdU+Z2y0OyRcvQ@mail.gmail.com>
+References: <CAFN-Ez753CAapach8-OT+_HKb9zSQJORQ_imQdU+Z2y0OyRcvQ@mail.gmail.com>
+Message-ID: <20160810223555.5ca9d42f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +12,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 10 Aug 2016 19:32:57 +0000, Alexey Brodkin wrote:
+I'm adding in Cc Beno?t, Peter and Ubaldo. All of them have touched the
+Raspberry Pi 3 defconfig in Buildroot, which most likely means they
+have tested it.
 
-> > Beware that using GCC 6 is causing to cause a number of issues related
-> > to GCC 6 itself and not to ARC. We already have one GCC 6 toolchain for
-> > ARM, and we have a number of build failures caused by this toolchain
-> > due to the use of GCC 6.  
-> 
-> That bump will for sure introduce new breakages while fixing some we already
-> know about. But we had to make that bold movement at some point because that
-> make us use almost upstream GCC with very few off-the-tree patches for ARC.
+Beno?t, Peter, Ubaldo, could one of you have a look at Chetan's issue
+below, and double check the latest raspberrypi3_defconfig is working
+for you?
 
-Sure, makes sense.
-
-> And indeed our goal is to find and fix as many issues as we can in that new
-> toolchain. So we'll continue to monitor BR autobuilder failures on daily basis.
-
-So this means we'll get more help from you guys to fix GCC 6 related
-issues ? :-)
-
-> As usual it would be good to rebuild BR pre-built tools for ARC out of this
-> commit so we have better coverage in running build jobs.
-
-Sure. As soon as I merge the commit, I'll re-spin the pre-built ARC
-toolchain(s).
+Thanks!
 
 Thomas
+
+On Wed, 10 Aug 2016 15:55:21 +0100, Chetan Kumar wrote:
+> Comrades,
+> 
+> I used raspberrypi3_defconfig on buildroot-2016.05 loaded the sdcard.img
+> onto my raspberrypi-3, boots but get stuck at
+> random: nonblocking pool is initialized
+> 
+> Tried same on buildroot-2016.08-rc1, it just works and get the login
+> prompt.
+> 
+> Any clue ?
+> 
+> 
+> Thanks
+> C
+
+
+
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
