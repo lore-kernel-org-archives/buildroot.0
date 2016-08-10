@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Aug 2016 14:28:29 +0200
-Subject: [Buildroot] [PATCH] libinput: bump to version 1.4.1
-In-Reply-To: <1470792857-20577-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1470792857-20577-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160810142829.278282cd@free-electrons.com>
+Date: Wed, 10 Aug 2016 14:28:40 +0200
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.163
+In-Reply-To: <1470821734-25866-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1470821734-25866-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160810142840.5cb97714@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  9 Aug 2016 22:34:17 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Wed, 10 Aug 2016 10:35:34 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/libinput/libinput.hash | 4 ++--
->  package/libinput/libinput.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/lvm2/lvm2.hash | 2 +-
+>  package/lvm2/lvm2.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
 
