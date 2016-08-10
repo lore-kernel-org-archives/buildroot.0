@@ -1,40 +1,129 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 10 Aug 2016 21:37:48 +0200
-Subject: [Buildroot] [PATCH] libxml2: fix m68k uclinux compile
-Message-ID: <20160810193748.GA13089@waldemar-brodkorb.de>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 10 Aug 2016 14:43:12 -0500
+Subject: [Buildroot] [PATCH] lxc: version bump to 2.0.3
+Message-ID: <1470858192-29796-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The GCC manual suggest when getting:
-relocation truncated to fit: R_68K_GOT16O foobar
-to use -mxgot.
+From: Judd Meinders <judd.meinders@rockwellcollins.com>
 
-Fixes:
-  http://autobuild.buildroot.net/results/8a4e26bb1c0c64759e3914eced0a36baa0967f0b/
+- Removed IPv6 and werror patches as changes where
+  incorporated upsteam.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+- AUTO_RECONF is kept for libseccomp conf opt purposes
+  (other packages don't explicitly comment this when
+   kconfig conditionals are used)
+
+Signed-off-by: Judd Meinders <judd.meinders@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/libxml2/libxml2.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/lxc/0001-drop-werror.patch                 | 16 --------
+ .../0002-Fix-redefinition-of-struct-in6_addr.patch | 43 ----------------------
+ package/lxc/lxc.hash                               |  2 +-
+ package/lxc/lxc.mk                                 |  3 +-
+ 4 files changed, 2 insertions(+), 62 deletions(-)
+ delete mode 100644 package/lxc/0001-drop-werror.patch
+ delete mode 100644 package/lxc/0002-Fix-redefinition-of-struct-in6_addr.patch
 
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index ed6f9af..2a7153a 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -11,6 +11,11 @@ LIBXML2_LICENSE = MIT
- LIBXML2_LICENSE_FILES = COPYING
- LIBXML2_CONFIG_SCRIPTS = xml2-config
+diff --git a/package/lxc/0001-drop-werror.patch b/package/lxc/0001-drop-werror.patch
+deleted file mode 100644
+index d2a8673..0000000
+--- a/package/lxc/0001-drop-werror.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+-Don't do -Werror it breaks builds on some scenarios with trivialities.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura lxc-lxc-1.0.4/configure.ac lxc-lxc-1.0.4.orig/configure.ac
+---- lxc-lxc-1.0.4.orig/configure.ac	2014-07-04 10:31:19.821029891 -0300
+-+++ lxc-lxc-1.0.4/configure.ac	2014-06-13 14:07:45.000000000 -0300
+-@@ -560,7 +560,7 @@
+- LXC_CHECK_TLS
+- 
+- if test "x$GCC" = "xyes"; then
+--	CFLAGS="$CFLAGS -Wall -Werror"
+-+	CFLAGS="$CFLAGS -Wall"
+- fi
+- 
+- # Files requiring some variable expansion
+diff --git a/package/lxc/0002-Fix-redefinition-of-struct-in6_addr.patch b/package/lxc/0002-Fix-redefinition-of-struct-in6_addr.patch
+deleted file mode 100644
+index b48ece3..0000000
+--- a/package/lxc/0002-Fix-redefinition-of-struct-in6_addr.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 245bba9aadf8e7aea487b6fbd851f86c75524552 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Thu, 19 May 2016 21:51:27 +0200
+-Subject: [PATCH] Fix redefinition of struct in6_addr
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-struct in6_addr is both defined in the C library header <netinet/in.h>
+-and the Linux kernel header <linux/in6.h>.
+-
+-lxc_user_nic.c includes both <netinet/in.h> and <linux/if_bridge.h>. The
+-later one includes <linux/in6.h>.
+-
+-This breaks build with the musl libc:
+-  error: redefinition of ?struct in6_addr?
+-
+-As lxc_user_nic.c does not use any references from <linux/if_bridge.h> it
+-is safe to remove this header.
+-
+-Upstream status: Pending
+-https://github.com/lxc/lxc/pull/1029
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- src/lxc/lxc_user_nic.c | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/src/lxc/lxc_user_nic.c b/src/lxc/lxc_user_nic.c
+-index 87780ca..0cb38ba 100644
+---- a/src/lxc/lxc_user_nic.c
+-+++ b/src/lxc/lxc_user_nic.c
+-@@ -41,7 +41,6 @@
+- #include <net/if.h>
+- #include <net/if_arp.h>
+- #include <netinet/in.h>
+--#include <linux/if_bridge.h>
+- #include <linux/netlink.h>
+- #include <linux/rtnetlink.h>
+- #include <linux/sockios.h>
+--- 
+-2.8.2
+-
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 7470101..3dee7fc 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	9588ad1b04e114ee7370f690c65131e28098b28d2521d97c73557d11897ed0be	lxc-1.1.5.tar.gz
++sha256 82df40a0cdd44639ee677d560be95348de48afa93a10a20e959dadb4431ee8d6 lxc-2.0.3.tar.gz
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 8190969..88da06e 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,12 +4,11 @@
+ #
+ ################################################################################
  
-+# relocation truncated to fit: R_68K_GOT16O
-+ifeq ($(BR2_m68k_cf),y)
-+LIBXML2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
-+endif
-+
- LIBXML2_CONF_OPTS = --with-gnu-ld --without-python --without-debug
- 
- HOST_LIBXML2_DEPENDENCIES = host-pkgconf
+-LXC_VERSION = 1.1.5
++LXC_VERSION = 2.0.3
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPLv2.1+
+ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = libcap host-pkgconf
+-# we're patching configure.ac
+ LXC_AUTORECONF = YES
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-lua --disable-python \
 -- 
-2.1.4
+1.9.1
