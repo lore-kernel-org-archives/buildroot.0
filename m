@@ -1,40 +1,127 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  9 Aug 2016 22:34:17 -0300
-Subject: [Buildroot] [PATCH] libinput: bump to version 1.4.1
-Message-ID: <1470792857-20577-1-git-send-email-gustavo@zacarias.com.ar>
+From: Marc Khouri <marc@khouri.ca>
+Date: Wed, 10 Aug 2016 01:57:37 +0000
+Subject: [Buildroot] [PATCH 1/1] libical: Create option to use builtin
+	tzdata
+In-Reply-To: <20160809205619.GG5779@free.fr>
+References: <1470751327-64254-1-git-send-email-marc@khouri.ca>
+ <20160809205619.GG5779@free.fr>
+Message-ID: <CAAmaa8sW+4V6aQgr5X6oUP9pY_TKmQpOU7RQCMKXv4KdEysdEw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Yann, Thomas, Baruch,
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 9f628cc..a1a7ca2 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-July/030121.html
--sha256	76ef10874519d1a67b57e5c68ede06106b9fbf611a3ecf69c84886107c67b420	libinput-1.4.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030348.html
-+sha256	26e7b3ab499358caba499705680ea7e5851af2bd37dc32f2be64181610d6392a	libinput-1.4.1.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 01b6772..5ce51c2 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 1.4.0
-+LIBINPUT_VERSION = 1.4.1
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
--- 
-2.7.3
+Thank you for the feedback. I will submit a modified patch tomorrow.
+
+Regards,
+Marc
+
+On Tue, Aug 9, 2016, 16:56 Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+
+> Marc, All,
+>
+> On 2016-08-09 10:02 -0400, Marc Khouri spake thusly:
+> > libical requires time zone data (either system or internal) in order
+> > to use time zone related functions. This commit adds an option to
+> > build libical with its internal time zone data. If no time zone data
+> > is present, segfaults occur in applications which use time zone
+> functions.
+> >
+> > Option documentation:
+> > https://github.com/libical/libical/blob/v1.0.1/CMakeLists.txt#L23
+> >
+> > Signed-off-by: Marc Khouri <marc@khouri.ca>
+> > ---
+> >  package/libical/Config.in  | 12 ++++++++++++
+> >  package/libical/libical.mk |  4 ++++
+> >  2 files changed, 16 insertions(+)
+> >
+> > diff --git a/package/libical/Config.in b/package/libical/Config.in
+> > index 48170e9..e183ad0 100644
+> > --- a/package/libical/Config.in
+> > +++ b/package/libical/Config.in
+> > @@ -9,6 +9,18 @@ config BR2_PACKAGE_LIBICAL
+> >
+> >         http://libical.github.io/libical
+> >
+> > +if BR2_PACKAGE_LIBICAL
+> > +
+> > +config BR2_PACKAGE_LIBICAL_BUILTIN_TZDATA
+> > +     bool "use built-in timezone data"
+> > +     help
+> > +       Build using libical's (instead of the system's) timezone data.
+> > +
+> > +       libical requires either built-in or system timezone data in order
+> > +       to support time zone functions.
+> > +
+> > +endif
+>
+> As already discussed in other replies, we believe it is better to rely
+> on the existing TZ info that can be used system-wide.
+>
+> A ver recent commit makes this available for all types of toolchains,
+> not just glibc or uClibc.
+>
+> So, your change can now easily be changed to use:
+>
+>     config BR2_PACKAGE_LIBICAL
+>         bool "libical"
+>         depends on exiting-blabla
+>         select BR2_TARGET_TZ_INFO
+>
+> >  comment "libical needs a toolchain w/ C++, dynamic library, wchar"
+> >       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+> >               BR2_STATIC_LIBS
+> > diff --git a/package/libical/libical.mk b/package/libical/libical.mk
+> > index e8cb3f8..a8bcefb 100644
+> > --- a/package/libical/libical.mk
+> > +++ b/package/libical/libical.mk
+> > @@ -14,4 +14,8 @@ LIBICAL_LICENSE_FILES = LICENSE
+> >  # Gentoo/alpinelinux as well
+> >  LIBICAL_CONF_OPTS = -DSHARED_ONLY=true
+> >
+> > +ifeq ($(BR2_PACKAGE_LIBICAL_BUILTIN_TZDATA),y)
+> > +LIBICAL_CONF_OPTS += -DUSE_BUILTIN_TZDATA=true
+> > +endif
+>
+> And of course you can now drop this change, although I would still keep
+> it as:
+>
+>     LIBICAL_CONF_OPTS += -DUSE_BUILTIN_TZDATA=OFF
+>
+> to be sure it does not get used.
+>
+> Thanks!
+>
+> Regards,
+> Yann E. MORIN.
+>
+> >  $(eval $(cmake-package))
+> > --
+> > 2.8.2
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160810/45c546f9/attachment.html>
