@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Aug 2016 00:01:48 +0200
-Subject: [Buildroot] [PATCHv3] package/kmsxx: bump version for
- portability fix with musl
-In-Reply-To: <1470859437-11323-1-git-send-email-yann.morin.1998@free.fr>
-References: <1470859437-11323-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160811000148.3a43d941@free-electrons.com>
+Date: Thu, 11 Aug 2016 00:02:15 +0200
+Subject: [Buildroot] [PATCH] libxml2: fix m68k uclinux compile
+In-Reply-To: <20160810193748.GA13089@waldemar-brodkorb.de>
+References: <20160810193748.GA13089@waldemar-brodkorb.de>
+Message-ID: <20160811000215.0ec5a81d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 10 Aug 2016 22:03:57 +0200, Yann E. MORIN wrote:
-> Bump the version to get two portability patches (as well as a small,
-> innocuously-looking minor feature).
+On Wed, 10 Aug 2016 21:37:48 +0200, Waldemar Brodkorb wrote:
+> The GCC manual suggest when getting:
+> relocation truncated to fit: R_68K_GOT16O foobar
+> to use -mxgot.
 > 
 > Fixes:
->     http://autobuild.buildroot.net/results/682/68266cb5b26a62387dc99aef31fc9654c8fcd505/
->     [and quite a few others...]
+>   http://autobuild.buildroot.net/results/8a4e26bb1c0c64759e3914eced0a36baa0967f0b/
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Ripard <maxime.ripard@free-electrons.com>
-> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
-> Changes v2 -> v3:
->   - use the correct hash kind...
+>  package/libxml2/libxml2.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 
 Applied to master, thanks.
 
