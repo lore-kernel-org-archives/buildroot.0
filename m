@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Aug 2016 15:04:25 +0200
-Subject: [Buildroot] [PATCH 1/2] libaio: work-around for PowerPC issue
-In-Reply-To: <1470866453-16903-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470866453-16903-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160811150425.3425744b@free-electrons.com>
+Date: Thu, 11 Aug 2016 15:04:32 +0200
+Subject: [Buildroot] [PATCH] uboot-tools: add missing !BR2_STATIC_LIBS
+ dependency for FIT signature
+In-Reply-To: <1470867125-2537-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1470867125-2537-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160811150432.17922405@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 11 Aug 2016 00:00:52 +0200, Thomas Petazzoni wrote:
-> Both the blktrace and gadgetfs-test packages were failing to build on
-> PowerPC due to the mysterious:
+On Thu, 11 Aug 2016 00:12:05 +0200, Thomas Petazzoni wrote:
+> BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT selects BR2_PACKAGE_DTC, but forgets
+> to depends on !BR2_STATIC_LIBS like BR2_PACKAGE_DTC does.
 > 
->   hidden symbol `_rest32gpr_30_x' in libgcc.a(e500crtresx32gpr.o) is referenced by DSO
+> Fixes the following kconfig warning:
 > 
-> Due to this error, we disabled blktrace on PowerPC in commit
-> 0d8158fc619ce849b531d07b27da4ba9748d4ea4. However, gadgetfs-test
-> continued to fail with the same error. As Romain Naour pointed out, the
-> problem seems in fact to come from a common dependency of blktrace and
-> gadgetfs-test: libaio. As Romain investigated, the problem started
-> appearing after the last bump of libaio, from version 0.3.109 to
-> 0.3.110.
-> 
-> A quick bisect through the libaio changes between 0.3.109 and 0.3.110
-> has revealed that the problematic change is one in the libaio build
-> system, which now obeys to the CFLAGS provided in the environment,
-> rather than overriding them. So the CFLAGS provided by Buildroot cause
-> this problem. It turns out that the problematic CFLAGS is -Os, which is
-> indeed known to cause issues on PowerPC in some corner cases.
-> 
-> Even though it would probably be a better long-term solution to switch
-> to -O2 by default, and mark -Os as not available on PowerPC, it is a too
-> radical change so close to 2016.08. So we simply adjust the libaio
-> package so that it uses -O2 instead of -Os.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/5e6cc4c432ce6c964ac285026978ad14d9eae97c/
+>   arning: (BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT && BR2_PACKAGE_KVMTOOL && BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT) selects BR2_PACKAGE_DTC which has unmet direct dependencies (!BR2_STATIC_LIBS)
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/libaio/libaio.mk | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
+>  package/uboot-tools/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Both patches applied.
+Applied to master, thanks.
 
 Thomas
 -- 
