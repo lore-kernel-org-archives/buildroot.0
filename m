@@ -1,57 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Aug 2016 15:03:14 +0200
-Subject: [Buildroot] [PATCH 1/2] mtd: fix build failure with blackfin
- external toolchain
-In-Reply-To: <1470847117-14956-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1470847117-14956-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160811150314.5d49b4ac@free-electrons.com>
+Date: Thu, 11 Aug 2016 15:03:46 +0200
+Subject: [Buildroot] [git commit] ffmpeg: disable for ARMv7-M
+Message-ID: <20160811130351.C3ECC81871@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9fb11701599177c5303675193b34fe5423787dbd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 10 Aug 2016 22:08:36 +0530, Rahul Bedarkar wrote:
-> With blackfin uClibc toolchain, we see following build errors
-> 
-> integck.c: In function 'parse_mount_options':
-> integck.c:2889: error: 'MS_DIRSYNC' undeclared (first use in this function)
-> integck.c:2889: error: (Each undeclared identifier is reported only once
-> integck.c:2889: error: for each function it appears in.)
-> integck.c:2899: error: 'MS_RELATIME' undeclared (first use in this function)
-> <builtin>: recipe for target 'integck' failed
-> make[2]: *** [integck] Error 1
-> 
-> header <sys/mount.h> from this toolchain is missing definitions for
-> MS_DIRSYNC and MS_RELATIME mount flags. But those are available from
-> header <linux/fs.h>. Even tests/fs-tests/lib/tests.c uses these flags
-> and includes both <sys/mount.h> and <linux/fs.h> headers.
-> 
-> This patch fixes above build error by including header <linux/fs.h>
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/6a1/6a1bd73cc56cd257fa939702728802b63446473e/
-> 
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+In the ffmpeg code, libavutil/arm/asm.S makes some assumption about the
+ARM architecture for which the code is built. Only ARMv4, ARMv5, ARMv6
+and ARMv7-A is supported. Due to this, object files built out of
+ARM-optimized assembly code have the wrong architecture information,
+causing a failure at link time.
 
-I have for now decided to not apply this patch. Indeed, the only reason
-why it's needed is because the uClibc version used in the Blackfin
-toolchain from ADI is very very old, and therefore does not have the
-MS_DIRSYNC and MS_RELATIME definitions.
+Adding ARMv7-M support would be possible, but it doesn't exist yet in
+ffmpeg, and it's pretty unlikely that ffmpeg will ever be needed on an
+ARMv7-M platform, so this commit takes the simple approach of disabling
+ffmpeg for ARMv7-M.
 
-Since all other toolchains we use have recent enough C libraries, I
-don't really see the point of carrying this patch, as the only
-problematic case is made invisible by the BR2_USE_MMU dependency.
+Fixes:
 
-Your patch will always be around in the archives to apply in the future
-if we see other situations where such a fix would be needed.
+  http://autobuild.buildroot.net/results/ca4c67b093afd6f14349fcdc87b02e0480172e8c/
 
-Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 096ff95..3a7bfd3 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -2,7 +2,9 @@ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	bool
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
+ 	# ffmpeg's configure script only supports mips64 (r1) variant
+-	default y if !BR2_nios2 && !BR2_mips_64r2 && !BR2_mips_64r6
++	# No support for ARMv7-M in the ARM assembly logic
++	default y if !BR2_nios2 && !BR2_mips_64r2 && !BR2_mips_64r6 && \
++		!BR2_ARM_CPU_ARMV7M
+ 
+ menuconfig BR2_PACKAGE_FFMPEG
+ 	bool "ffmpeg"
