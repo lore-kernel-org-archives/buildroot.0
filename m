@@ -1,95 +1,82 @@
 From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Thu, 11 Aug 2016 13:20:31 +0300
-Subject: [Buildroot] [PATCH] stella: fix compiler search in configure script
-Message-ID: <1470910831-18439-1-git-send-email-vzakhar@synopsys.com>
+Date: Thu, 11 Aug 2016 10:43:04 +0000
+Subject: [Buildroot] Analysis of build results for 2016-08-05
+In-Reply-To: <20160808223407.4f535efd@free-electrons.com>
+References: <20160806063028.356101023A1@stock.ovh.net>
+ <20160807112654.7b520594@free-electrons.com>
+ <1470671781.31195.45.camel@synopsys.com>
+ <20160808223407.4f535efd@free-electrons.com>
+Message-ID: <1470912183.20896.30.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In configure script there are some tests that are looking for
-a suitable compiler. For this purpose script tries to compile
-and link some C++ code that is hardcoded in the body of script.
+Hi Thomas,?
 
-The problem is that only linker flags ($LDFLAGS) are passed to the
-compiler when the script is compiling test code. Therefore some
-necessary command line options can be lost and this would lead to
-errors.
+writing you about stella-4.7.2 failure for ARC as I promised.?
+Following patch fixes it:
+https://patchwork.ozlabs.org/patch/658158/
 
-This exactly happens to ARC:
-  1. -matomic option is lost as it compiler option,
-  2. test code compilation fails,
-  3. the script decides not to use arc-buildroot-linux-uclibc-g++,
-  4. scipt checks host compiler (x86_64-linux-gnu-g++ in your case),
-  5. package is being built for x86_64, not for ARC.
+Few words about this failure. The real bug wasn't evident for me for long time - I was unable to reproduce the issue on my build host.
+On your side x86_64-linux-gnu-g++ compiler was chosen by stella configure script because:
+1) check of arc-buildroot-linux-uclibc-g++ compiler failed due to bad configure script logic,
+2) for some reason script doesn't fail but try to find another compiler. This is performed with help of config.guess script. config.guess
+script is used to determine your host arch and os. The result is x86_64 and linux-gnu on your side.
+3) so, it tries x86_64-linux-gnu toolchain.
 
-About last 2 steps - I don't know why configure script should try
-to build stella for host machine. As for me an error should be
-raised and a build should be stopped. But this is up to stella
-developers.
 
-Current patch adds compiler options ($CPPLFAGS) when compiling
-test code in configure script.
+The errors like:
+> Looking for C++ compiler... ./configure: line 110: eval: -g:
+> invalid option eval: usage: eval [arg ...]?
+> ./configure: line 110: eval: -c: invalid option
+> eval: usage: eval [arg ...] ?
+appear when script is not able to find any suitable toolchains.
+For example it happened to me - I have?x86_64-redhat-linux-g++ instead of x86_64-linux-gnu-g++ on my host.
+So the script wasn't able to find suitable compiler.
 
-Fixes stella build for ARC, e. g.:
-http://autobuild.buildroot.net/results/c23/c23d655137b1c1825b1da69b18307c6a1d4b23b8//
+And what is really funny - configure script doesn't exit in such case.?
+It leaves the first possible value in $CXX variable (arc-buildroot-linux-uclibc-g++ in case of ARC).
+Because of such behavior configure dind't fail to me and correct arc-buildroot-linux-uclibc-g++ was chosen somehow (even though the script
+decided it is not suitable for build), and package was build successfully.
 
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
----
- ...figure-Add-CXXFLAGS-for-test-compilations.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/stella/0003-configure-Add-CXXFLAGS-for-test-compilations.patch
+Eventually though build the package is fixed by my patch I still keep in mind two following problems:
 
-diff --git a/package/stella/0003-configure-Add-CXXFLAGS-for-test-compilations.patch b/package/stella/0003-configure-Add-CXXFLAGS-for-test-compilations.patch
-new file mode 100644
-index 0000000..f4e89e6
---- /dev/null
-+++ b/package/stella/0003-configure-Add-CXXFLAGS-for-test-compilations.patch
-@@ -0,0 +1,44 @@
-+From 28f0c20302e5c64712899848cae3d0a48a9dc952 Mon Sep 17 00:00:00 2001
-+From: Vlad Zakharov <vzakhar@synopsys.com>
-+Date: Wed, 10 Aug 2016 18:02:59 +0300
-+Subject: [PATCH] configure: Add $CXXFLAGS for test compilations
-+
-+Why we are passing only linker flags when compiling test code?
-+Loosing compiler flags leads to errors.
-+
-+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-+---
-+ configure | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 0d90a4f..618fe78 100755
-+--- a/configure
-++++ b/configure
-+@@ -63,9 +63,9 @@ cc_check() {
-+ 	echo >> "$TMPLOG"
-+ 	cat "$TMPC" >> "$TMPLOG"
-+ 	echo >> "$TMPLOG"
-+-	echo "$CXX $TMPC $LDFLAGS -o $TMPO$EXEEXT $@" >> "$TMPLOG"
-++	echo "$CXX $TMPC $CXXFLAGS $LDFLAGS -o $TMPO$EXEEXT $@" >> "$TMPLOG"
-+ 	rm -f "$TMPO$EXEEXT"
-+-	( $CXX "$TMPC" $LDFLAGS -o "$TMPO$EXEEXT" "$@" ) >> "$TMPLOG" 2>&1
-++	( $CXX "$TMPC" $CXXFLAGS $LDFLAGS -o "$TMPO$EXEEXT" "$@" ) >> "$TMPLOG" 2>&1
-+ 	TMP="$?"
-+ 	echo >> "$TMPLOG"
-+ 	return "$TMP"
-+@@ -107,9 +107,9 @@ EOF
-+ 
-+ if test -n "$_host"; then
-+ 	# In cross-compiling mode, we cannot run the result
-+-	eval "$1 $LDFLAGS -o tmp_cxx_compiler$EXEEXT tmp_cxx_compiler.cpp 2> /dev/null" && rm -f tmp_cxx_compiler$EXEEXT tmp_cxx_compiler.cpp
-++	eval "$1 $CXXFLAGS $LDFLAGS -o tmp_cxx_compiler$EXEEXT tmp_cxx_compiler.cpp 2> /dev/null" && rm -f tmp_cxx_compiler$EXEEXT tmp_cxx_compiler.cpp
-+ else
-+-	eval "$1 $LDFLAGS -o tmp_cxx_compiler$EXEEXT tmp_cxx_compiler.cpp 2> /dev/null" && eval "./tmp_cxx_compiler 2> /dev/null" && rm -f tmp_cxx_compiler$EXEEXT tmp_cxx_compiler.cpp
-++	eval "$1 $CXXFLAGS $LDFLAGS -o tmp_cxx_compiler$EXEEXT tmp_cxx_compiler.cpp 2> /dev/null" && eval "./tmp_cxx_compiler 2> /dev/null" && rm -f tmp_cxx_compiler$EXEEXT tmp_cxx_compiler.cpp
-+ fi
-+ }
-+ 
-+-- 
-+2.5.5
-+
+1) Why should we try to build for other platform if specified toolchain is not suitable?
+2) Why configure script doesn't stop the build when it is unable to fond correct toolchain?
+
+What do you think about it?
+
+Thanks.
+
 -- 
-2.5.5
+Best regards,
+Vlad Zakharov <vzakhar@synopsys.com>
+
+On Mon, 2016-08-08 at 22:34 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 8 Aug 2016 15:56:21 +0000, Vlad Zakharov wrote:
+> 
+> > 
+> > The failures listed above occurred due to the same issue -
+> > crtbeginT.o file was missing as the corresponding dependency wasn't
+> > added. The issue has already been solved internally and will be
+> > included in our next engineering build. We hope that new build happen
+> > tomorrow or the day after tomorrow. Anyway we will send patch patch
+> > with bumping to new arc toolchain as soon as it will come up.
+> OK, thanks!
+> 
+> > 
+> > > 
+> > > > 
+> > > > Looking for C++ compiler... ./configure: line 110: eval: -g:
+> > > > invalid option eval: usage: eval [arg ...]
+> > > > ./configure: line 110: eval: -c: invalid option
+> > > > eval: usage: eval [arg ...]??
+> > > ??
+> > I am looking at this issue now. I will report about it ASAP.
+> Perfect, thanks!
+> 
+> Thomas
