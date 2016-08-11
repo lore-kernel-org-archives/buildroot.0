@@ -1,49 +1,86 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 11 Aug 2016 20:17:30 +0200
-Subject: [Buildroot] [PATCH] poco: fix m68k compile
-Message-ID: <20160811181730.GA32099@waldemar-brodkorb.de>
+Date: Thu, 11 Aug 2016 20:18:52 +0200
+Subject: [Buildroot] [PATCH] uclibc: add upstream patch for CVE-2016-4429
+Message-ID: <20160811181852.GA32127@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch from upstream to fix compile for m68k.
-
-Fixes:
-  http://autobuild.buildroot.net/results/791917c1343f53e12f27b06cfd5e1d2e88078014/
-  http://autobuild.buildroot.net/results/349d4b49d65a652551c4de20233684bb4ffa5ae3/
+Add security related bugfix to fix CVE-2016-4429 from
+GNU libc project.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/poco/0002-fix-m68k-double-conv-detect.patch | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 package/poco/0002-fix-m68k-double-conv-detect.patch
+ ...-sunrpc-Do-not-use-alloca-in-clntudp_call.patch | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/uclibc/0002-sunrpc-Do-not-use-alloca-in-clntudp_call.patch
 
-diff --git a/package/poco/0002-fix-m68k-double-conv-detect.patch b/package/poco/0002-fix-m68k-double-conv-detect.patch
+diff --git a/package/uclibc/0002-sunrpc-Do-not-use-alloca-in-clntudp_call.patch b/package/uclibc/0002-sunrpc-Do-not-use-alloca-in-clntudp_call.patch
 new file mode 100644
-index 0000000..465ee64
+index 0000000..b0c523c
 --- /dev/null
-+++ b/package/poco/0002-fix-m68k-double-conv-detect.patch
-@@ -0,0 +1,19 @@
-+Fixes compile for m68k.
++++ b/package/uclibc/0002-sunrpc-Do-not-use-alloca-in-clntudp_call.patch
+@@ -0,0 +1,59 @@
++From 9213ad631513d0e67d9d31465c9cdb3f3dde0399 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@uclibc-ng.org>
++Date: Fri, 5 Aug 2016 21:33:44 +0200
++Subject: [PATCH 2/3] sunrpc: Do not use alloca in clntudp_call
 +
-+From upstream double-conversion:
-+https://github.com/google/double-conversion/blob/master/double-conversion/utils.h#L81
++CVE-2016-4429:
++The call is technically in a loop, and under certain circumstances
++(which are quite difficult to reproduce in a test case), alloca
++can be invoked repeatedly during a single call to clntudp_call.
++As a result, the available stack space can be exhausted (even
++though individual alloca sizes are bounded implicitly by what
++can fit into a UDP packet, as a side effect of the earlier
++successful send operation).
 +
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++From GNU libc:
++https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commit;h=bc779a1a5b3035133024b21e2f339fe4219fb11c
 +
-+diff -Nur poco-poco-1.7.2-release.orig/Foundation/src/utils.h poco-poco-1.7.2-release/Foundation/src/utils.h
-+--- poco-poco-1.7.2-release.orig/Foundation/src/utils.h	2016-03-19 08:19:35.000000000 +0100
-++++ poco-poco-1.7.2-release/Foundation/src/utils.h	2016-08-11 02:55:02.827238119 +0200
-+@@ -63,6 +63,8 @@
-+     defined(__AARCH64EL__) || \
-+     defined(nios2) || defined(__nios2) || defined(__nios2__)
-+ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-++#elif defined(__mc68000__)
-++#undef DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS
-+ #elif defined(_M_IX86) || defined(__i386__) || defined(__i386)
-+ #if defined(_WIN32)
-+ // Windows uses a 64bit wide floating point stack.
++Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
++---
++ libc/inet/rpc/clnt_udp.c | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/libc/inet/rpc/clnt_udp.c b/libc/inet/rpc/clnt_udp.c
++index 4fc55b7..ce7e9e6 100644
++--- a/libc/inet/rpc/clnt_udp.c
+++++ b/libc/inet/rpc/clnt_udp.c
++@@ -368,9 +368,15 @@ send_again:
++ 	  struct sock_extended_err *e;
++ 	  struct sockaddr_in err_addr;
++ 	  struct iovec iov;
++-	  char *cbuf = (char *) alloca (outlen + 256);
+++	  char *cbuf = malloc (outlen + 256);
++ 	  int ret;
++ 
+++	  if (cbuf == NULL)
+++	    {
+++	      cu->cu_error.re_errno = errno;
+++	      return (cu->cu_error.re_status = RPC_CANTRECV);
+++	    }
+++
++ 	  iov.iov_base = cbuf + 256;
++ 	  iov.iov_len = outlen;
++ 	  msg.msg_name = (void *) &err_addr;
++@@ -395,10 +401,12 @@ send_again:
++ 		 cmsg = CMSG_NXTHDR (&msg, cmsg))
++ 	      if (cmsg->cmsg_level == SOL_IP && cmsg->cmsg_type == IP_RECVERR)
++ 		{
+++		  free (cbuf);
++ 		  e = (struct sock_extended_err *) CMSG_DATA(cmsg);
++ 		  cu->cu_error.re_errno = e->ee_errno;
++ 		  return (cu->cu_error.re_status = RPC_CANTRECV);
++ 		}
+++	  free (cbuf);
++ 	}
++ #endif
++       do
++-- 
++2.7.4 (Apple Git-66)
++
 -- 
 2.1.4
