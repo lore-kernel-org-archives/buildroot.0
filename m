@@ -1,70 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Aug 2016 15:07:06 +0200
-Subject: [Buildroot] [git commit] toolchain: Bump ARC tools to
-	arc-2016.09-eng008
-Message-ID: <20160811131907.1161482132@busybox.osuosl.org>
+Date: Thu, 11 Aug 2016 15:25:38 +0200
+Subject: [Buildroot] [PATCH] gcc: rename option for ARC gcc
+Message-ID: <1470921938-11550-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0e1381ef91ac85ad4fc9ab3db30057279ffe7c5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The ARC gcc version is now based on gcc 6.x and no longer gcc 4.8.x,
+which makes the option BR2_GCC_VERSION_4_8_ARC a bit irrelevant, as is
+the prompt of this option.
 
-As described at:
-4520524ba055706236db9f00dd79f1b2e2e87fde
-this commit continues a series of updates of ARC tools.
-This time we're updating tools to arc-2016.09-eng008.
+This commit therefore renames this option to BR2_GCC_VERSION_ARC, and
+adjust its prompt as well.
 
-Main updates were made for gcc. It was switched to GCC 6 and to
-OSABI v4.
-
-Besides this patch fixes buildroot ARC failures connected to
-"crtbeginT.o" object file missing. This issue lead to two main errors:
-
-1) "crtbeginT.o: No such file or directory", e. g. bootutils-1.0.0.
-No comments are required here I hope.
-
-2) Errors like "compiler cannot create executables", e.g.:
-  a) host-gcc-final-arc-2016.09-eng007 static build,
-  b) aespipe-2.4c.
-That was caused because the test to determine if compiler is able to
-create executables was failing due to missing "crtbeginT.o" file.
-
-We still keep GDB as it is of arc-2016.03 release because there're some
-issues we'd like to resolve before releasing it to wider audience.
-
-So again note this is next engineering builds of arc-2016.09 series
-and it might have all kinds of breakages, please don't use it for
-production builds.
-
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/Config.in.host                    |   2 +-
- .../0300-ld-makefile.patch                         |   0
- .../0301-check-ldrunpath-length.patch              |   0
- .../0500-add-sysroot-fix-from-bug-3049.patch       |   0
- .../0600-poison-system-directories.patch           |   0
- .../0700-PIE-fixes-in-for-ARC-bfd.patch            |   0
- .../0701-Fixed-init-fini-linker-options.patch      |   0
- ...x-undefined-symbols-aborting-on-PIE-cases.patch |   0
- .../0800-Fixed-issue-in-tvheadend-package.patch    |   0
- package/binutils/binutils.hash                     |   2 +-
- package/binutils/binutils.mk                       |   2 +-
- package/gcc/Config.in.host                         |   2 +-
- .../130-fix_build_with_gcc-6.patch                 | 153 ------------
- package/gcc/arc-2016.09-eng007/130-pr43538.patch   |  25 --
- .../305-libmudflap-susv3-legacy.patch              |  49 ----
- package/gcc/arc-2016.09-eng007/842-PR60155.patch   | 111 ---------
- .../850-libstdcxx-uclibc-c99.patch                 | 273 ---------------------
- .../arc-2016.09-eng007/851-PR-other-56780.patch    | 244 ------------------
- .../930-libgcc-disable-split-stack-nothreads.patch |  14 --
- .../301-missing-execinfo_h.patch                   |   6 +-
- .../gcc/arc-2016.09-eng008/860-cilk-wchar.patch    |  56 +++++
- .../940-uclinux-enable-threads.patch               |  19 ++
- package/gcc/gcc.hash                               |   2 +-
- 23 files changed, 83 insertions(+), 877 deletions(-)
+ Config.in.legacy                       |  7 +++++++
+ package/gcc/Config.in.host             | 10 +++++-----
+ package/gcc/gcc-initial/gcc-initial.mk |  2 +-
+ 3 files changed, 13 insertions(+), 6 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 746b80a..892a836 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.08"
+ 
++config BR2_GCC_VERSION_4_8_ARC
++	bool "gcc arc option renamed"
++	select BR2_LEGACY
++	help
++	  The option is select the gcc version for the ARC
++	  architecture has been renamed to BR2_GCC_VERSION_ARC.
++
+ config BR2_PACKAGE_SYSTEMD_COMPAT
+ 	bool "systemd compatibility libraries have been removed"
+ 	select BR2_LEGACY
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 8b2b00a..38902fe 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -8,7 +8,7 @@ config BR2_GCC_SUPPORTS_GRAPHITE
+ 
+ choice
+ 	prompt "GCC compiler Version"
+-	default BR2_GCC_VERSION_4_8_ARC if BR2_arc
++	default BR2_GCC_VERSION_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_4_9_X
+ 	help
+ 	  Select the version of gcc you wish to use.
+@@ -50,12 +50,12 @@ choice
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+ 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+-	config BR2_GCC_VERSION_4_8_ARC
+-		bool "gcc 4.8-arc"
++	config BR2_GCC_VERSION_ARC
++		bool "gcc arc (6.x)"
+ 		# Only supported architecture
+ 		depends on BR2_arc
+ 		select BR2_GCC_NEEDS_MPC
+-		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
+ 
+ 	config BR2_GCC_VERSION_4_9_X
+@@ -107,7 +107,7 @@ config BR2_GCC_VERSION
+ 	default "4.9.4"     if BR2_GCC_VERSION_4_9_X
+ 	default "5.4.0"     if BR2_GCC_VERSION_5_X
+ 	default "6.1.0" if BR2_GCC_VERSION_6_X
+-	default "arc-2016.09-eng008" if BR2_GCC_VERSION_4_8_ARC
++	default "arc-2016.09-eng008" if BR2_GCC_VERSION_ARC
+ 
+ config BR2_EXTRA_GCC_CONFIG_OPTIONS
+ 	string "Additional gcc options"
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index 1e58d8b..aa88a68 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -29,7 +29,7 @@ HOST_GCC_INITIAL_PRE_CONFIGURE_HOOKS += HOST_GCC_CONFIGURE_SYMLINK
+ # available (--with-newlib is passed, and therefore inhibit_libc is
+ # defined), it tries to use the C library for the libgmon
+ # library. Since it's not needed in gcc-initial, we disabled it here.
+-ifeq ($(BR2_GCC_VERSION_4_8_ARC),y)
++ifeq ($(BR2_GCC_VERSION_ARC),y)
+ define HOST_GCC_INITIAL_DISABLE_LIBGMON
+ 	$(SED) 's/crtbeginS.o libgmon.a crtg.o/crtbeginS.o crtg.o/' \
+ 		$(@D)/libgcc/config.host
+-- 
+2.7.4
