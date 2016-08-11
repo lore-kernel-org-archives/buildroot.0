@@ -1,80 +1,61 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 12 Aug 2016 00:03:22 +0200
-Subject: [Buildroot] [PATCH v1] raspberrypi3: fix serial console (add
-	enable_uart=1)
-Message-ID: <1470953002-31897-1-git-send-email-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 12 Aug 2016 00:06:28 +0200
+Subject: [Buildroot] [PATCH 2/2] fwup: link in pthreads for static builds
+In-Reply-To: <1470868546-8237-2-git-send-email-fhunleth@troodon-software.com>
+References: <1470868546-8237-1-git-send-email-fhunleth@troodon-software.com>
+ <1470868546-8237-2-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20160812000628.3fc05f4e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- enhance post-image.sh script to add 'enable_uart=1' to config.txt on request
-- add BR2_ROOTFS_POST_SCRIPT_ARGS="--add-rpi3-config-enable-uart" in raspberrypi3_defconfig
+Hello,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- board/raspberrypi/post-image.sh | 13 +++++++++++++
- board/raspberrypi/readme.txt    |  6 +++++-
- configs/raspberrypi3_defconfig  |  1 +
- 3 files changed, 19 insertions(+), 1 deletion(-)
+On Wed, 10 Aug 2016 18:35:46 -0400, Frank Hunleth wrote:
+> Both libconfuse (via libintl) and libarchive have references to pthreads
+> but do not specify pthreads in their pkg-config descriptions. This
+> change adds pthreads to the fwup linker options so that the link step
+> succeeds.
 
-diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-index 73ffd65..3dc5902 100755
---- a/board/raspberrypi/post-image.sh
-+++ b/board/raspberrypi/post-image.sh
-@@ -5,6 +5,19 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
- GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
- GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
- 
-+case "${2}" in
-+	--add-rpi3-config-enable-uart)
-+	if ! grep -qE 'enable_uart=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-+		echo "Adding 'enable_uart=1' to config.txt."
-+		cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
-+
-+# fixes rpi3 console
-+enable_uart=1
-+__EOF__
-+	fi
-+	;;
-+esac
-+
- # Mark the kernel as DT-enabled
- mkdir -p "${BINARIES_DIR}/kernel-marked"
- ${HOST_DIR}/usr/bin/mkknlimg "${BINARIES_DIR}/zImage" \
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index a170f8f..d101816 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -58,7 +58,7 @@ After building, you should obtain this tree:
-     +-- rpi-firmware/
-     |   +-- bootcode.bin
-     |   +-- cmdline.txt
--    |   +-- config.txt
-+    |   +-- config.txt              [3]
-     |   +-- fixup.dat
-     |   `-- start.elf
-     +-- sdcard.img
-@@ -69,6 +69,10 @@ After building, you should obtain this tree:
- 
- [2] This is the mkknlimg DT-marked kernel.
- 
-+[3] For Pi 3 an additional 'enable_uart=1' will be added to fix
-+    (serial) console output. Alternatives are 'dtoverlay=pi3-miniuart-bt'
-+    or 'dtoverlay=pi3-disable-bt'.
-+
- How to write the SD card
- ========================
- 
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 4eb5333..62f47da 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -34,3 +34,4 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--add-rpi3-config-enable-uart"
+I've finally taken some time to look into this, and I believe your fix
+is not the right fix, and the bug is in fact in uClibc (and I have
+already posted a mail on the uClibc mailing list about this).
+
+The fact that libintl and libarchive do *not* link with libpthread is
+intentional and actually a feature. As explained in my mail to the
+uClibc mailing list [1], the idea is that those libraries don't need
+threads, they only need to be thread-safe if threads are used by the
+application using them.
+
+So the libc part of the C library contains a stub implementation of
+those functions, while the libpthread part of the C library contains
+the real implementation.
+
+So, libintl and libarchive are only linked against libc.so. If you make
+a regular, non-threaded application, linked against libintl and/or
+libarchive, then those libraries will use the stub version of the
+pthread functions. This is correct and actually good: your application
+is not multi-threaded, so why suffer the cost of acquiring/releasing a
+mutex?
+
+If on the other hand, your application is multi-threaded, it will link
+against libpthread. In this case, the pthread_mutex_*() calls from
+libarchive or libintl will use the real implementation from libpthread,
+and those libraries will have a thread-safe behavior.
+
+The problem is that this doesn't work with static linking with uClibc.
+I believe it's a uClibc bug, but I'm not entirely sure either.
+
+So, if fwup links fine dynamically (i.e without linking against
+pthread), there should be no reason to link it with pthread for static
+linking.
+
+[1] http://mailman.uclibc-ng.org/pipermail/devel/2016-August/001132.html
+
+Thomas
 -- 
-2.8.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
