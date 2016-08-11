@@ -1,48 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Aug 2016 15:04:14 +0200
-Subject: [Buildroot] [git commit] uboot-tools: add missing !BR2_STATIC_LIBS
-	dependency for FIT signature
-Message-ID: <20160811130418.E45F681EB5@busybox.osuosl.org>
+Date: Thu, 11 Aug 2016 15:04:11 +0200
+Subject: [Buildroot] [git commit] Revert "blktrace: disable on PowerPC"
+Message-ID: <20160811130418.DA09581EB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=031130a4ed9d7e7b6d83cbb18089224008bc964d
+commit: https://git.buildroot.net/buildroot/commit/?id=254ddce7c0eac052ff0230038931eb0652012255
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT selects BR2_PACKAGE_DTC, but forgets
-to depends on !BR2_STATIC_LIBS like BR2_PACKAGE_DTC does.
-
-Fixes the following kconfig warning:
-
-  arning: (BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT && BR2_PACKAGE_KVMTOOL && BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT) selects BR2_PACKAGE_DTC which has unmet direct dependencies (!BR2_STATIC_LIBS)
+This reverts commit 0d8158fc619ce849b531d07b27da4ba9748d4ea4. Thanks to
+a fix in libaio, blktrace now builds fine on PowerPC, so there's no
+reason to disable it anymore.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uboot-tools/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/blktrace/Config.in | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index 88d6225..df61fda 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -9,6 +9,7 @@ if BR2_PACKAGE_UBOOT_TOOLS
- 
- config BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
- 	bool "Flattened Image Tree (FIT) support"
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_DTC
- 	select BR2_PACKAGE_DTC_PROGRAMS
+diff --git a/package/blktrace/Config.in b/package/blktrace/Config.in
+index 1b8212d..c17de80 100644
+--- a/package/blktrace/Config.in
++++ b/package/blktrace/Config.in
+@@ -3,8 +3,6 @@ config BR2_PACKAGE_BLKTRACE
+ 	# Uses posix_spawn()
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+-	# issue: hidden symbol `_rest32gpr_30_x` is referenced by DSO
+-	depends on !BR2_powerpc
+ 	select BR2_PACKAGE_LIBAIO
  	help
-@@ -20,6 +21,9 @@ config BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
- 	  in a single blob. To boot this new uImage structure,
- 	  pass the address of the blob to the "bootm" command.
+ 	  blktrace is a block layer IO tracing mechanism which provides
+@@ -15,5 +13,4 @@ config BR2_PACKAGE_BLKTRACE
  
-+comment "u-boot tools FIT support needs a toolchain w/ dynamic library"
-+	depends on !BR2_STATIC_LIBS
-+
- if BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
- 
- config BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
+ comment "blktrace needs a glibc or musl toolchain"
+ 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+-	depends on !BR2_powerpc
+ 	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
