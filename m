@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Aug 2016 22:49:56 +0200
-Subject: [Buildroot] [PATCH 3/8] package/aircrack-ng: drop a
-	musl-compatibility patch
+Date: Fri, 12 Aug 2016 22:49:58 +0200
+Subject: [Buildroot] [PATCH 5/8] package/bcusdk: drop a musl-compatibility
+	patch
 In-Reply-To: <cover.1471033837.git.yann.morin.1998@free.fr>
 References: <cover.1471033837.git.yann.morin.1998@free.fr>
-Message-ID: <e22b951fabfc12310bfc7df2947bb1dabe3133ab.1471033837.git.yann.morin.1998@free.fr>
+Message-ID: <fd94bb483d5538c48b7aeb03d65e3d4c8db2dcb9.1471033837.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,69 +15,73 @@ We now always have a sys/cdefs.h, so we can drop this patch.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/aircrack-ng/0004-fix-musl-build.patch | 53 ---------------------------
- 1 file changed, 53 deletions(-)
- delete mode 100644 package/aircrack-ng/0004-fix-musl-build.patch
 
-diff --git a/package/aircrack-ng/0004-fix-musl-build.patch b/package/aircrack-ng/0004-fix-musl-build.patch
+---
+Note that the patch was sent upstream, but it seems never acted upon.
+---
+ ...t-use-the-non-standard-sys-cdefs.h-header.patch | 48 ----------------------
+ ...d_set-requires-inclusion-of-sys-select.h.patch} |  0
+ 2 files changed, 48 deletions(-)
+ delete mode 100644 package/bcusdk/0001-Do-not-use-the-non-standard-sys-cdefs.h-header.patch
+ rename package/bcusdk/{0002-fd_set-requires-inclusion-of-sys-select.h.patch => 0001-fd_set-requires-inclusion-of-sys-select.h.patch} (100%)
+
+diff --git a/package/bcusdk/0001-Do-not-use-the-non-standard-sys-cdefs.h-header.patch b/package/bcusdk/0001-Do-not-use-the-non-standard-sys-cdefs.h-header.patch
 deleted file mode 100644
-index cc093d3..0000000
---- a/package/aircrack-ng/0004-fix-musl-build.patch
+index fc64386..0000000
+--- a/package/bcusdk/0001-Do-not-use-the-non-standard-sys-cdefs.h-header.patch
 +++ /dev/null
-@@ -1,53 +0,0 @@
--From da6e87670ad4639371da056f9e36201a9236dfa2 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@openwide.fr>
--Date: Wed, 29 Jul 2015 19:38:46 +0200
--Subject: [PATCH] fix musl build
+@@ -1,48 +0,0 @@
+-From c36db3f798bf576f42d81a0c51198b17d7112e8c Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sat, 8 Aug 2015 17:43:28 +0200
+-Subject: [PATCH] Do not use the non-standard <sys/cdefs.h> header
 -
--aircrack-ng doesn't build with a musl toolchain due to
--cdefs.h internal glibc header being used in internal
--ethernet.h [1].
+-<sys/cdefs.h> is glibc-specific, and should be used only internally by
+-glibc, not by external libraries/programs. It is not available in all
+-standard C libraries.
 -
--[1] http://wiki.musl-libc.org/wiki/FAQ
+-Submitted upstream: https://sourceforge.net/p/bcusdk/patches/3/
 -
--Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
-- src/include/ethernet.h | 20 +++++++++++---------
-- 1 file changed, 11 insertions(+), 9 deletions(-)
+- eibd/include/eibclient.h | 11 ++++++++---
+- 1 file changed, 8 insertions(+), 3 deletions(-)
 -
--diff --git a/src/include/ethernet.h b/src/include/ethernet.h
--index 72d5e81..e9d9236 100644
----- a/src/include/ethernet.h
--+++ b/src/include/ethernet.h
--@@ -389,18 +389,20 @@ void	ether_vlan_mtap(struct bpf_if *, struct mbuf *,
-- 
-- #else /* _KERNEL */
+-diff --git a/eibd/include/eibclient.h b/eibd/include/eibclient.h
+-index 2781878..b095a1c 100644
+---- a/eibd/include/eibclient.h
+-+++ b/eibd/include/eibclient.h
+-@@ -27,10 +27,11 @@
+- #ifndef EIBCLIENT_H
+- #define EIBCLIENT_H
 - 
 --#include <sys/cdefs.h>
---
-- /*
--  * Ethernet address conversion/parsing routines.
--  */
---__BEGIN_DECLS
---struct	ether_addr *ether_aton(const char *);
---int	ether_hostton(const char *, struct ether_addr *);
---int	ether_line(const char *, struct ether_addr *, char *);
---char 	*ether_ntoa(const struct ether_addr *);
---int	ether_ntohost(char *, const struct ether_addr *);
---__END_DECLS
--+#ifdef __cplusplus
+- #include <stdint.h>
+- 
+--__BEGIN_DECLS;
+-+#ifdef	__cplusplus
 -+extern "C" {
 -+#endif
--+	struct	ether_addr *ether_aton(const char *);
--+	int	ether_hostton(const char *, struct ether_addr *);
--+	int	ether_line(const char *, struct ether_addr *, char *);
--+	char 	*ether_ntoa(const struct ether_addr *);
--+	int	ether_ntohost(char *, const struct ether_addr *);
--+#ifdef __cplusplus
+- 
+- #include "eibloadresult.h"
+- 
+-@@ -889,5 +890,9 @@ int EIB_Cache_LastUpdates_async (EIBConnection * con, uint16_t start,
+- 				 uint16_t * end);
+- 
+- 
+--__END_DECLS
+-+
+-+#ifdef	__cplusplus
 -+}
 -+#endif
-- 
-- #endif /* !_KERNEL */
-- 
+-+
+- #endif
 --- 
--2.4.3
+-2.5.0
 -
+diff --git a/package/bcusdk/0002-fd_set-requires-inclusion-of-sys-select.h.patch b/package/bcusdk/0001-fd_set-requires-inclusion-of-sys-select.h.patch
+similarity index 100%
+rename from package/bcusdk/0002-fd_set-requires-inclusion-of-sys-select.h.patch
+rename to package/bcusdk/0001-fd_set-requires-inclusion-of-sys-select.h.patch
 -- 
 2.7.4
