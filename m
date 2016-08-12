@@ -1,69 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Aug 2016 23:39:13 +0200
-Subject: [Buildroot] [PATCH 1/8] package/netbsd-compat-headers: provide
- compatibility headers not in musl
-In-Reply-To: <B44D3B81-3715-4ED7-9034-744BF2BB1E5A@gmail.com>
-References: <cover.1471033837.git.yann.morin.1998@free.fr>
- <1d561e7440fd9f14063d006fc3dca596c9c849c7.1471033837.git.yann.morin.1998@free.fr>
- <B44D3B81-3715-4ED7-9034-744BF2BB1E5A@gmail.com>
-Message-ID: <20160812213913.GA5656@free.fr>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Fri, 12 Aug 2016 15:30:05 -0700
+Subject: [Buildroot] [PATCH 1/2] xen: Ensure host Python2 is used
+Message-ID: <1471041006-26425-1-git-send-email-alistair.francis@xilinx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Khem, All,
+To avoid Xen build issues ensure that host Python 2 is used.
 
-On 2016-08-12 14:30 -0700, Khem Raj spake thusly:
-> 
-> > On Aug 12, 2016, at 1:49 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > 
-> > musl provides neither sys/queue.h nor sys/cdefs.h. Those two headers are
-> > however quite widely used in a lot of packages (though they should at
-> > least not use cdefs,h which is only full of mostly-legacy macros, and
-> > which is mostly an internal header of glibc and was never really meant to
-> > be exposed to, and used by packages).
-> > 
-> > But we don;t live in an ideal world, so a lot of packages break when
-> > those two headers are missing.
-> > 
-> > We already took care of sys/queue.h with the netbsd-queue package. But
-> > the need for cdefs.h is getting more and more pressing.
-> > 
-> > We rename the netbsd-queue package into musl-compat-headers, and we
-> > make it install sys/queue.h (from NetBSD) and sys/cdefs.h (a minimalist
-> > one we bundle in Buildroot). We can't use the cdefs.h from NetBSD
-> > because it includes machine-dependent headers; instead we bundle a very
-> > minimalistic one, that covers only what we need.
-> 
-> see here http://git.openembedded.org/openembedded-core/tree/meta/recipes-core/bsd-headers/bsd-headers
+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+---
+ package/xen/xen.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Thanks for the pointer! :-)
-But no licensing info in that file, so we can't use it... :-/
-
-Also, we don't want to add a #warning, to avoid having to patch those
-bad packages that find it smart to add -Werror by default.
-
-> you might need some more.
-
-Right now, all the packages in Buildroot that we were patching because
-of cdefs.h only need those three macros: __BEGIN_DECLS(), __END_DECLS()
-and __P().
-
-There is no point in adding more than what we strictly require. As I
-said in the cover letter, we can add the missing macros when we see the
-issue.
-
-TRhanks for the feedback! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 759667a..e2abf25 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -8,6 +8,7 @@ XEN_VERSION = 4.6.0
+ XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
+ XEN_LICENSE = GPLv2
+ XEN_LICENSE_FILES = COPYING
++XEN_DEPENDENCIES = host-python
+ 
+ # Calculate XEN_ARCH
+ ifeq ($(ARCH),aarch64)
+@@ -17,6 +18,8 @@ XEN_ARCH = arm32
+ endif
+ 
+ XEN_CONF_OPTS = --disable-ocamltools
++
++XEN_CONF_ENV = PYTHON=$(HOST_DIR)/usr/bin/python2
+ XEN_MAKE_ENV = \
+ 	XEN_TARGET_ARCH=$(XEN_ARCH) \
+ 	CROSS_COMPILE=$(TARGET_CROSS) \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
