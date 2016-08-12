@@ -1,52 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 12 Aug 2016 18:14:31 +0300
-Subject: [Buildroot] [PATCH] spidev_test: fix musl build
-Message-ID: <0f104daf6f7285467a6909f88c7b4b38f42a0c7d.1471014871.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 12 Aug 2016 17:42:19 +0200
+Subject: [Buildroot] [PATCH] package/weston: fix patch
+Message-ID: <1471016539-23386-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-spidev.h needs _IOC_SIZEBITS. Add linux/ioctl.h for that to fix build under
-musl.
-
-The patch suggested upstream (https://patchwork.kernel.org/patch/9276909/)
-does not apply to the spidev_test.c version we currently use. A backported
-patch would break once we bump spidev_test.c. A bump+patch solution would
-break if/when upstream accepts this patch. That's why this commit uses the
-unusual sed patching to keep compatibility with current and future
-spidev_test.c versions.
+The newly iontroduced patch was created against weston's master branch,
+but was not rebased correctly on top of the release we are using, hence
+it does not apply because files have been moved since the release.
 
 Fixes:
-http://autobuild.buildroot.net/results/128/1284a36c70ff8a1412e2128266c6654b2aa5b2da/
-http://autobuild.buildroot.net/results/0ad/0adea6121b238adf0e64d455a7573b1a31c38264/
-http://autobuild.buildroot.net/results/21b/21b92651ce456f3819eef315cecd92ff70b9e98f/
+    http://autobuild.buildroot.org/results/5fb/5fbfd26d05a0ccaf4a70a100a7499cedea83ce6f/
+    http://autobuild.buildroot.org/results/769/76976fbfc2162c2c671a52eafdad82df6d25a660/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/spidev_test/spidev_test.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
-index 646372f2f5d7..52441bb3da14 100644
---- a/package/spidev_test/spidev_test.mk
-+++ b/package/spidev_test/spidev_test.mk
-@@ -16,6 +16,15 @@ SPIDEV_TEST_SITE = http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.gi
- SPIDEV_TEST_SOURCE = spidev_test.c?id=$(SPIDEV_TEST_VERSION)
- SPIDEV_TEST_LICENSE = GPLv2
+diff --git a/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch b/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
+index 32db32f..b391147 100644
+--- a/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
++++ b/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
+@@ -16,10 +16,10 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  libweston/compositor-rdp.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
  
-+# musl libc requires linux/ioctl.h for _IOC_SIZEBITS. Do a sed patch to keep
-+# compatibility with different spidev_test.c versions that we support.
-+define SPIDEV_ADD_LINUX_IOCTL
-+	$(SED) 's~^#include <sys/ioctl.h>~#include <sys/ioctl.h>\n#include <linux/ioctl.h>~' \
-+		$(@D)/spidev_test.c
-+endef
-+
-+SPIDEV_TEST_POST_PATCH_HOOKS += SPIDEV_ADD_LINUX_IOCTL
-+
- define SPIDEV_TEST_EXTRACT_CMDS
- 	cp $(BR2_DL_DIR)/$(SPIDEV_TEST_SOURCE) $(@D)/spidev_test.c
- endef
+-diff --git a/libweston/compositor-rdp.c b/libweston/compositor-rdp.c
++diff --git a/src/compositor-rdp.c b/src/compositor-rdp.c
+ index 11f5f05..ee81300 100644
+---- a/libweston/compositor-rdp.c
+-+++ b/libweston/compositor-rdp.c
++--- a/src/compositor-rdp.c
+++++ b/src/compositor-rdp.c
+ @@ -58,7 +58,7 @@
+  #	define NSC_RESET(C, W, H) nsc_context_reset(C, W, H)
+  #	define RFX_RESET(C, W, H) rfx_context_reset(C, W, H)
 -- 
-2.8.1
+2.7.4
