@@ -1,32 +1,41 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 11 Aug 2016 22:50:32 -0500
-Subject: [Buildroot] RFC: package level compile time hardening
-Message-ID: <CANQCQpZi9FpuNe4HRTyHghpBhaRRbWw2ojgJ1P2HVxeiJ+zgUA@mail.gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 11 Aug 2016 20:58:05 -0700
+Subject: [Buildroot] [PATCH 1/1] package/docker-engine: bump to v1.12.0
+Message-ID: <1470974285-19231-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Any suggestions on an approach to manage changes made to buildroot
-packages to harden the build time cflags/ldflags of a specific
-package, where by adding the additional flags, the build now requires
-specific toolchain versions and may impact ability to have a package
-compile across as many arch as it currently does.  We currently
-maintain this sort of change as a rebased patch on top of master.
-Thoughts for other options?
+Bump docker-engine to the latest stable v1.12.0 from v1.12.0-rc3.
 
-We're trying to do something similar to Ubuntu's hardening efforts and
-so far have started with toolchain configuration and compile/link time
-settings to enable key security features.
-https://wiki.ubuntu.com/HardenedUbuntu
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 1de09f8..6078fbf 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 bc256d2a348efbf236eab991254c925fa1917dd1e29cb40586f1696f4e24852e  docker-engine-v1.12.0-rc4.tar.gz
++sha256 f8139acba98248eb1fdb0b6d94efee89b876f9a50d00e263dc144fd2b0c372d4  docker-engine-v1.12.0.tar.gz
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 80b0041..3d39aac 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_ENGINE_VERSION = v1.12.0-rc4
++DOCKER_ENGINE_VERSION = v1.12.0
+ DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+2.7.3
