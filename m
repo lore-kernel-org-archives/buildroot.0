@@ -1,70 +1,52 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Fri, 12 Aug 2016 08:05:32 -0700
-Subject: [Buildroot] [PATCH 2/2] fwup: link in pthreads for static builds
-In-Reply-To: <20160812155148.1a0e2508@free-electrons.com>
-References: <1470868546-8237-1-git-send-email-fhunleth@troodon-software.com>
- <1470868546-8237-2-git-send-email-fhunleth@troodon-software.com>
- <20160812000628.3fc05f4e@free-electrons.com>
- <9D32ABC7-1620-4C8E-983B-1D82180CB888@gmail.com>
- <20160812155148.1a0e2508@free-electrons.com>
-Message-ID: <CAMKF1sq7JZnD3YGa2sPT5u4RMKDr0KcSKyOQmKiT5RRKE-SpAw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 12 Aug 2016 18:14:31 +0300
+Subject: [Buildroot] [PATCH] spidev_test: fix musl build
+Message-ID: <0f104daf6f7285467a6909f88c7b4b38f42a0c7d.1471014871.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 12, 2016 at 6:51 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu, 11 Aug 2016 21:54:24 -0700, Khem Raj wrote:
->
->> > The problem is that this doesn't work with static linking with uClibc.
->> > I believe it's a uClibc bug, but I'm not entirely sure either.
->>
->> As per elf specs.
->>
->> "A weak definition does not change the rules by which object files are
->> selected from libraries. However, if a link set contains both a weak
->> definition and a non-weak definition, the non-weak definition will always
->> be used.?
->>
->> The "link set" is the set of objects that have been loaded by the linker.
->> It does not include objects from libraries that are not required.
->>
->> So if libc.a appears first and provides the symbol it will be used
->> even if its weak. If you exchange the order where libpthread appears
->> first it will use the libpthread provided symbols. another option
->> could be to use
->>
->> -Wl,--whole-archive -lpthread -Wl,--no-whole-archive
->>
->> This would link the right strong symbols into binary irrespective of
->> link order
->>
->> but this will also include unused symbols into binary, probably not
->> optimal, and may using -Wl,--gc-sections could help in letting linker
->> remove the unused functions, maybe worth trying.
->
-> Thanks for those details, but I'm not sure to understand what is the
-> conclusion. Do you mean that it's impossible to implement this dual
-> symbol definition mechanism with static libraries? Indeed, while shared
-> libraries have the weak/non-weak mechanism that allows to be sure the
-> pthread implementation of the symbols will be used if available, with
-> static libraries, only the link order will decide if the libpthread of
-> libc implementation is used.
->
-> So, if this cannot be fixed in uClibc, how should this problem be
-> addressed?
->
+spidev.h needs _IOC_SIZEBITS. Add linux/ioctl.h for that to fix build under
+musl.
 
-may be using with above linking options in application
+The patch suggested upstream (https://patchwork.kernel.org/patch/9276909/)
+does not apply to the spidev_test.c version we currently use. A backported
+patch would break once we bump spidev_test.c. A bump+patch solution would
+break if/when upstream accepts this patch. That's why this commit uses the
+unusual sed patching to keep compatibility with current and future
+spidev_test.c versions.
 
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+Fixes:
+http://autobuild.buildroot.net/results/128/1284a36c70ff8a1412e2128266c6654b2aa5b2da/
+http://autobuild.buildroot.net/results/0ad/0adea6121b238adf0e64d455a7573b1a31c38264/
+http://autobuild.buildroot.net/results/21b/21b92651ce456f3819eef315cecd92ff70b9e98f/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/spidev_test/spidev_test.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
+index 646372f2f5d7..52441bb3da14 100644
+--- a/package/spidev_test/spidev_test.mk
++++ b/package/spidev_test/spidev_test.mk
+@@ -16,6 +16,15 @@ SPIDEV_TEST_SITE = http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.gi
+ SPIDEV_TEST_SOURCE = spidev_test.c?id=$(SPIDEV_TEST_VERSION)
+ SPIDEV_TEST_LICENSE = GPLv2
+ 
++# musl libc requires linux/ioctl.h for _IOC_SIZEBITS. Do a sed patch to keep
++# compatibility with different spidev_test.c versions that we support.
++define SPIDEV_ADD_LINUX_IOCTL
++	$(SED) 's~^#include <sys/ioctl.h>~#include <sys/ioctl.h>\n#include <linux/ioctl.h>~' \
++		$(@D)/spidev_test.c
++endef
++
++SPIDEV_TEST_POST_PATCH_HOOKS += SPIDEV_ADD_LINUX_IOCTL
++
+ define SPIDEV_TEST_EXTRACT_CMDS
+ 	cp $(BR2_DL_DIR)/$(SPIDEV_TEST_SOURCE) $(@D)/spidev_test.c
+ endef
+-- 
+2.8.1
