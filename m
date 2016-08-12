@@ -1,1104 +1,289 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Aug 2016 22:49:59 +0200
-Subject: [Buildroot] [PATCH 6/8] package/libsepol: drop a musl-compatibility
-	patch
-In-Reply-To: <cover.1471033837.git.yann.morin.1998@free.fr>
+From: Khem Raj <raj.khem@gmail.com>
+Date: Fri, 12 Aug 2016 14:30:26 -0700
+Subject: [Buildroot] [PATCH 1/8] package/netbsd-compat-headers: provide
+	compatibility headers not in musl
+In-Reply-To: <1d561e7440fd9f14063d006fc3dca596c9c849c7.1471033837.git.yann.morin.1998@free.fr>
 References: <cover.1471033837.git.yann.morin.1998@free.fr>
-Message-ID: <fb5da03c6a32c50fa599ba4b401e536b39636b43.1471033837.git.yann.morin.1998@free.fr>
+ <1d561e7440fd9f14063d006fc3dca596c9c849c7.1471033837.git.yann.morin.1998@free.fr>
+Message-ID: <B44D3B81-3715-4ED7-9034-744BF2BB1E5A@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We now always have a sys/cdefs.h, so we can drop this patch.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libsepol/0005-replace-cdefs.patch | 1074 -----------------------------
- 1 file changed, 1074 deletions(-)
- delete mode 100644 package/libsepol/0005-replace-cdefs.patch
+> On Aug 12, 2016, at 1:49 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> 
+> musl provides neither sys/queue.h nor sys/cdefs.h. Those two headers are
+> however quite widely used in a lot of packages (though they should at
+> least not use cdefs,h which is only full of mostly-legacy macros, and
+> which is mostly an internal header of glibc and was never really meant to
+> be exposed to, and used by packages).
+> 
+> But we don;t live in an ideal world, so a lot of packages break when
+> those two headers are missing.
+> 
+> We already took care of sys/queue.h with the netbsd-queue package. But
+> the need for cdefs.h is getting more and more pressing.
+> 
+> We rename the netbsd-queue package into musl-compat-headers, and we
+> make it install sys/queue.h (from NetBSD) and sys/cdefs.h (a minimalist
+> one we bundle in Buildroot). We can't use the cdefs.h from NetBSD
+> because it includes machine-dependent headers; instead we bundle a very
+> minimalistic one, that covers only what we need.
 
-diff --git a/package/libsepol/0005-replace-cdefs.patch b/package/libsepol/0005-replace-cdefs.patch
-deleted file mode 100644
-index 2f76a74..0000000
---- a/package/libsepol/0005-replace-cdefs.patch
-+++ /dev/null
-@@ -1,1074 +0,0 @@
--Remove usage of <sys/cdefs.h>.
--
--This fixes autobuild issue: http://autobuild.buildroot.org/results/cbb/cbb2bac69aa0708e587ba9fcd1efcead82e42446/build-end.log
--Libsepol uses cdefs.h which is a internal glibc header.
--This header is not intended to be used by any program and will cause
--compiling against musl (and possibly other c libraries) to fail.
--This patch fixed this issue and replaces all references of
--#include <sys/cdefs.h> and __BEGIN/END_DECLS with the appropriate #ifdefs.
--
--This patch has also been submitted upstream to the selinux github repository.
--https://github.com/SELinuxProject/selinux/issues/19
--
--Signed-off-by: Adam Duskett <Aduskett@gmail.com>
--
--
--diff --git a/include/sepol/boolean_record.h b/include/sepol/boolean_record.h
--index 9af16be..09cd01f 100644
----- a/include/sepol/boolean_record.h
--+++ b/include/sepol/boolean_record.h
--@@ -3,9 +3,10 @@
--
-- #include <stddef.h>
-- #include <sepol/handle.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- struct sepol_bool;
-- struct sepol_bool_key;
--@@ -51,5 +52,8 @@ extern int sepol_bool_clone(sepol_handle_t * handle,
--
-- extern void sepol_bool_free(sepol_bool_t * boolean);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/booleans.h b/include/sepol/booleans.h
--index 7374dde..02356d1 100644
----- a/include/sepol/booleans.h
--+++ b/include/sepol/booleans.h
--@@ -5,9 +5,10 @@
-- #include <sepol/policydb.h>
-- #include <sepol/boolean_record.h>
-- #include <sepol/handle.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /*--------------compatibility--------------*/
--
--@@ -59,5 +60,8 @@ extern int sepol_bool_iterate(sepol_handle_t * handle,
-- 			      int (*fn) (const sepol_bool_t * boolean,
-- 					 void *fn_arg), void *arg);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/context.h b/include/sepol/context.h
--index a69e8c9..b3e5497 100644
----- a/include/sepol/context.h
--+++ b/include/sepol/context.h
--@@ -4,9 +4,10 @@
-- #include <sepol/context_record.h>
-- #include <sepol/policydb.h>
-- #include <sepol/handle.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /* -- Deprecated -- */
--
--@@ -26,5 +27,8 @@ extern int sepol_mls_contains(sepol_handle_t * handle,
-- extern int sepol_mls_check(sepol_handle_t * handle,
-- 			   const sepol_policydb_t * policydb, const char *mls);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/context_record.h b/include/sepol/context_record.h
--index c07da8f..1dcbebb 100644
----- a/include/sepol/context_record.h
--+++ b/include/sepol/context_record.h
--@@ -2,9 +2,10 @@
-- #define _SEPOL_CONTEXT_RECORD_H_
--
-- #include <sepol/handle.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- struct sepol_context;
-- typedef struct sepol_context sepol_context_t;
--@@ -53,5 +54,8 @@ extern int sepol_context_from_string(sepol_handle_t * handle,
-- extern int sepol_context_to_string(sepol_handle_t * handle,
-- 				   const sepol_context_t * con, char **str_ptr);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/debug.h b/include/sepol/debug.h
--index b852c8d..972a4de 100644
----- a/include/sepol/debug.h
--+++ b/include/sepol/debug.h
--@@ -2,9 +2,10 @@
-- #define _SEPOL_DEBUG_H_
--
-- #include <sepol/handle.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /* Deprecated */
-- extern void sepol_debug(int on);
--@@ -35,5 +36,8 @@ extern void sepol_msg_set_callback(sepol_handle_t * handle,
-- 							 const char *fmt, ...),
-- 				   void *msg_callback_arg);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/errcodes.h b/include/sepol/errcodes.h
--index eba7088..0136564 100644
----- a/include/sepol/errcodes.h
--+++ b/include/sepol/errcodes.h
--@@ -4,9 +4,10 @@
-- #define __sepol_errno_h__
--
-- #include <errno.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- #define SEPOL_OK             0
--
--@@ -25,5 +26,8 @@ __BEGIN_DECLS
-- #define SEPOL_EEXIST         -EEXIST
-- #define SEPOL_ENOENT         -ENOENT
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/handle.h b/include/sepol/handle.h
--index 00ed0ed..27cbd6c 100644
----- a/include/sepol/handle.h
--+++ b/include/sepol/handle.h
--@@ -1,9 +1,9 @@
-- #ifndef _SEPOL_HANDLE_H_
-- #define _SEPOL_HANDLE_H_
--
---#include <sys/cdefs.h>
---
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- struct sepol_handle;
-- typedef struct sepol_handle sepol_handle_t;
--@@ -35,5 +35,8 @@ int sepol_get_preserve_tunables(sepol_handle_t * sh);
--  * 0 is default and discard such branch, 1 preserves them */
-- void sepol_set_preserve_tunables(sepol_handle_t * sh, int preserve_tunables);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/iface_record.h b/include/sepol/iface_record.h
--index 81d7027..098bc77 100644
----- a/include/sepol/iface_record.h
--+++ b/include/sepol/iface_record.h
--@@ -3,9 +3,10 @@
--
-- #include <sepol/handle.h>
-- #include <sepol/context_record.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- struct sepol_iface;
-- struct sepol_iface_key;
--@@ -59,5 +60,8 @@ extern int sepol_iface_clone(sepol_handle_t * handle,
--
-- extern void sepol_iface_free(sepol_iface_t * iface);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/interfaces.h b/include/sepol/interfaces.h
--index 3cb5043..7ef23ce 100644
----- a/include/sepol/interfaces.h
--+++ b/include/sepol/interfaces.h
--@@ -4,9 +4,10 @@
-- #include <sepol/policydb.h>
-- #include <sepol/iface_record.h>
-- #include <sepol/handle.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /* Return the number of interfaces */
-- extern int sepol_iface_count(sepol_handle_t * handle,
--@@ -43,5 +44,8 @@ extern int sepol_iface_iterate(sepol_handle_t * handle,
-- 			       int (*fn) (const sepol_iface_t * iface,
-- 					  void *fn_arg), void *arg);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/module.h b/include/sepol/module.h
--index ff27f96..77114a1 100644
----- a/include/sepol/module.h
--+++ b/include/sepol/module.h
--@@ -7,9 +7,11 @@
--
-- #include <sepol/handle.h>
-- #include <sepol/policydb.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- struct sepol_module_package;
-- typedef struct sepol_module_package sepol_module_package_t;
--@@ -82,5 +84,8 @@ extern int sepol_expand_module(sepol_handle_t * handle,
-- 			       sepol_policydb_t * base,
-- 			       sepol_policydb_t * out, int verbose, int check);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/module_to_cil.h b/include/sepol/module_to_cil.h
--index 18bb3bf..fe5eb5b 100644
----- a/include/sepol/module_to_cil.h
--+++ b/include/sepol/module_to_cil.h
--@@ -1,5 +1,4 @@
-- #include <stdlib.h>
---
-- #include <sepol/module.h>
-- #include <sepol/policydb/policydb.h>
--
--diff --git a/include/sepol/node_record.h b/include/sepol/node_record.h
--index e2d3e6d..3873223 100644
----- a/include/sepol/node_record.h
--+++ b/include/sepol/node_record.h
--@@ -4,9 +4,10 @@
-- #include <stddef.h>
-- #include <sepol/context_record.h>
-- #include <sepol/handle.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- struct sepol_node;
-- struct sepol_node_key;
--@@ -92,5 +93,8 @@ extern int sepol_node_clone(sepol_handle_t * handle,
--
-- extern void sepol_node_free(sepol_node_t * node);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/nodes.h b/include/sepol/nodes.h
--index 6fa534e..3cf99d2 100644
----- a/include/sepol/nodes.h
--+++ b/include/sepol/nodes.h
--@@ -4,9 +4,10 @@
-- #include <sepol/handle.h>
-- #include <sepol/policydb.h>
-- #include <sepol/node_record.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /* Return the number of nodes */
-- extern int sepol_node_count(sepol_handle_t * handle,
--@@ -40,5 +41,8 @@ extern int sepol_node_iterate(sepol_handle_t * handle,
-- 			      int (*fn) (const sepol_node_t * node,
-- 					 void *fn_arg), void *arg);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/policydb.h b/include/sepol/policydb.h
--index c3943e9..6769b91 100644
----- a/include/sepol/policydb.h
--+++ b/include/sepol/policydb.h
--@@ -5,9 +5,10 @@
-- #include <stdio.h>
--
-- #include <sepol/handle.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- struct sepol_policy_file;
-- typedef struct sepol_policy_file sepol_policy_file_t;
--@@ -144,5 +145,8 @@ extern int sepol_policydb_mls_enabled(const sepol_policydb_t * p);
--  */
-- extern int sepol_policydb_compat_net(const sepol_policydb_t * p);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/policydb/avrule_block.h b/include/sepol/policydb/avrule_block.h
--index ecd347b..57d6a8a 100644
----- a/include/sepol/policydb/avrule_block.h
--+++ b/include/sepol/policydb/avrule_block.h
--@@ -21,9 +21,11 @@
-- #define _SEPOL_AVRULE_BLOCK_H_
--
-- #include <sepol/policydb/policydb.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- extern avrule_block_t *avrule_block_create(void);
-- extern void avrule_block_destroy(avrule_block_t * x);
--@@ -37,5 +39,7 @@ extern cond_list_t *get_decl_cond_list(policydb_t * p,
-- extern int is_id_enabled(char *id, policydb_t * p, int symbol_table);
-- extern int is_perm_enabled(char *class_id, char *perm_id, policydb_t * p);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
-- #endif
--diff --git a/include/sepol/policydb/avtab.h b/include/sepol/policydb/avtab.h
--index d3ea84e..74f97f8 100644
----- a/include/sepol/policydb/avtab.h
--+++ b/include/sepol/policydb/avtab.h
--@@ -40,11 +40,13 @@
-- #ifndef _SEPOL_POLICYDB_AVTAB_H_
-- #define _SEPOL_POLICYDB_AVTAB_H_
--
---#include <sys/cdefs.h>
--+
-- #include <sys/types.h>
-- #include <stdint.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- typedef struct avtab_key {
-- 	uint16_t source_type;
--@@ -142,7 +144,9 @@ extern avtab_ptr_t avtab_search_node_next(avtab_ptr_t node, int specified);
-- /* avtab_alloc uses one bucket per 2-4 elements, so adjust to get maximum buckets */
-- #define MAX_AVTAB_SIZE (MAX_AVTAB_HASH_BUCKETS << 1)
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
-- #endif				/* _AVTAB_H_ */
--
-- /* FLASK */
--diff --git a/include/sepol/policydb/conditional.h b/include/sepol/policydb/conditional.h
--index cd2a9a9..52d6b31 100644
----- a/include/sepol/policydb/conditional.h
--+++ b/include/sepol/policydb/conditional.h
--@@ -25,9 +25,11 @@
-- #include <sepol/policydb/avtab.h>
-- #include <sepol/policydb/symtab.h>
-- #include <sepol/policydb/policydb.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- #define COND_EXPR_MAXDEPTH 10
--
--@@ -136,5 +138,7 @@ extern int cond_read_list(policydb_t * p, cond_list_t ** list, void *fp);
-- extern void cond_compute_av(avtab_t * ctab, avtab_key_t * key,
-- 			    struct sepol_av_decision *avd);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
-- #endif				/* _CONDITIONAL_H_ */
--diff --git a/include/sepol/policydb/constraint.h b/include/sepol/policydb/constraint.h
--index ae7034d..927bdc0 100644
----- a/include/sepol/policydb/constraint.h
--+++ b/include/sepol/policydb/constraint.h
--@@ -22,7 +22,9 @@
-- #include <sepol/policydb/ebitmap.h>
-- #include <sepol/policydb/flask_types.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- #define CEXPR_MAXDEPTH 5
--
--@@ -73,7 +75,10 @@ struct policydb;
-- extern int constraint_expr_init(constraint_expr_t * expr);
-- extern void constraint_expr_destroy(constraint_expr_t * expr);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif				/* _CONSTRAINT_H_ */
--
-- /* FLASK */
--diff --git a/include/sepol/policydb/context.h b/include/sepol/policydb/context.h
--index dbb7c3e..aad3647 100644
----- a/include/sepol/policydb/context.h
--+++ b/include/sepol/policydb/context.h
--@@ -22,7 +22,9 @@
-- #include <sepol/policydb/ebitmap.h>
-- #include <sepol/policydb/mls_types.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /*
--  * A security context consists of an authenticated user
--@@ -95,5 +97,8 @@ static inline int context_cmp(context_struct_t * c1, context_struct_t * c2)
-- 		(c1->type == c2->type) && mls_context_cmp(c1, c2));
-- }
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/policydb/ebitmap.h b/include/sepol/policydb/ebitmap.h
--index 7b3508d..b883597 100644
----- a/include/sepol/policydb/ebitmap.h
--+++ b/include/sepol/policydb/ebitmap.h
--@@ -19,9 +19,11 @@
--
-- #include <stdint.h>
-- #include <string.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- #define MAPTYPE uint64_t	/* portion of bitmap in each node */
-- #define MAPSIZE (sizeof(MAPTYPE) * 8)	/* number of bits in node bitmap */
--@@ -92,7 +94,9 @@ extern int ebitmap_set_bit(ebitmap_t * e, unsigned int bit, int value);
-- extern void ebitmap_destroy(ebitmap_t * e);
-- extern int ebitmap_read(ebitmap_t * e, void *fp);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
-- #endif				/* _EBITMAP_H_ */
--
-- /* FLASK */
--diff --git a/include/sepol/policydb/expand.h b/include/sepol/policydb/expand.h
--index a8de41e..59151c1 100644
----- a/include/sepol/policydb/expand.h
--+++ b/include/sepol/policydb/expand.h
--@@ -28,9 +28,11 @@
-- #include <stddef.h>
-- #include <sepol/handle.h>
-- #include <sepol/policydb/conditional.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /*
--  * Expand only the avrules for a module. It is valid for this function
--@@ -79,5 +81,8 @@ extern int expand_avtab(policydb_t * p, avtab_t * a, avtab_t * expa);
-- extern int expand_cond_av_list(policydb_t * p, cond_av_list_t * l,
-- 			       cond_av_list_t ** newl, avtab_t * expa);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/policydb/flask_types.h b/include/sepol/policydb/flask_types.h
--index 2a59565..c41bd22 100644
----- a/include/sepol/policydb/flask_types.h
--+++ b/include/sepol/policydb/flask_types.h
--@@ -13,9 +13,11 @@
--
-- #include <sys/types.h>
-- #include <stdint.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /*
--  * A security context is a set of security attributes 
--@@ -61,5 +63,8 @@ struct sepol_av_decision {
-- 	uint32_t seqno;
-- };
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/policydb/hashtab.h b/include/sepol/policydb/hashtab.h
--index 0afc59c..af72817 100644
----- a/include/sepol/policydb/hashtab.h
--+++ b/include/sepol/policydb/hashtab.h
--@@ -17,9 +17,11 @@
--
-- #include <stdint.h>
-- #include <stdio.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- typedef char *hashtab_key_t;	/* generic key type */
-- typedef void *hashtab_datum_t;	/* generic datum type */
--@@ -136,5 +138,8 @@ extern void hashtab_map_remove_on_error(hashtab_t h,
--
-- extern void hashtab_hash_eval(hashtab_t h, char *tag);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/policydb/hierarchy.h b/include/sepol/policydb/hierarchy.h
--index 88bc02e..27d140b 100644
----- a/include/sepol/policydb/hierarchy.h
--+++ b/include/sepol/policydb/hierarchy.h
--@@ -27,9 +27,11 @@
--
-- #include <sepol/policydb/avtab.h>
-- #include <sepol/policydb/policydb.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- extern int hierarchy_add_bounds(sepol_handle_t *handle, policydb_t *p);
--
--@@ -43,5 +45,8 @@ extern int bounds_check_types(sepol_handle_t *handle, policydb_t *p);
--
-- extern int hierarchy_check_constraints(sepol_handle_t * handle, policydb_t * p);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/policydb/link.h b/include/sepol/policydb/link.h
--index 7c7c9be..545331d 100644
----- a/include/sepol/policydb/link.h
--+++ b/include/sepol/policydb/link.h
--@@ -12,13 +12,18 @@
--
--
-- #include <stddef.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- extern int link_modules(sepol_handle_t * handle,
-- 			policydb_t * b, policydb_t ** mods, int len,
-- 			int verbose);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/policydb/mls_types.h b/include/sepol/policydb/mls_types.h
--index 4bf7367..52347a6 100644
----- a/include/sepol/policydb/mls_types.h
--+++ b/include/sepol/policydb/mls_types.h
--@@ -34,9 +34,11 @@
-- #include <stdlib.h>
-- #include <sepol/policydb/ebitmap.h>
-- #include <sepol/policydb/flask_types.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- typedef struct mls_level {
-- 	uint32_t sens;		/* sensitivity */
--@@ -152,5 +154,8 @@ extern void mls_semantic_range_init(mls_semantic_range_t *r);
-- extern void mls_semantic_range_destroy(mls_semantic_range_t *r);
-- extern int mls_semantic_range_cpy(mls_semantic_range_t *dst, mls_semantic_range_t *src);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/policydb/module.h b/include/sepol/policydb/module.h
--index 3fe560c..d0d2c7a 100644
----- a/include/sepol/policydb/module.h
--+++ b/include/sepol/policydb/module.h
--@@ -27,11 +27,12 @@
--
-- #include <sepol/policydb/policydb.h>
-- #include <sepol/policydb/conditional.h>
---#include <sys/cdefs.h>
--
-- #define SEPOL_MODULE_PACKAGE_MAGIC 0xf97cff8f
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- struct sepol_module_package {
-- 	sepol_policydb_t *policy;
--@@ -48,5 +49,8 @@ struct sepol_module_package {
--
-- extern int sepol_module_package_init(sepol_module_package_t * p);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/policydb/polcaps.h b/include/sepol/policydb/polcaps.h
--index 74b7c9e..53d7994 100644
----- a/include/sepol/policydb/polcaps.h
--+++ b/include/sepol/policydb/polcaps.h
--@@ -1,9 +1,9 @@
-- #ifndef _SEPOL_POLICYDB_POLCAPS_H_
-- #define _SEPOL_POLICYDB_POLCAPS_H_
--
---#include <sys/cdefs.h>
---
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /* Policy capabilities */
-- enum {
--@@ -21,5 +21,8 @@ extern int sepol_polcap_getnum(const char *name);
-- /* Convert a capability number to name. */
-- extern const char *sepol_polcap_getname(int capnum);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif /* _SEPOL_POLICYDB_POLCAPS_H_ */
--diff --git a/include/sepol/policydb/policydb.h b/include/sepol/policydb/policydb.h
--index 26cec13..0d770bf 100644
----- a/include/sepol/policydb/policydb.h
--+++ b/include/sepol/policydb/policydb.h
--@@ -61,7 +61,6 @@
-- #include <sepol/policydb/context.h>
-- #include <sepol/policydb/constraint.h>
-- #include <sepol/policydb/sidtab.h>
---#include <sys/cdefs.h>
--
-- #define ERRMSG_LEN 1024
--
--@@ -69,7 +68,9 @@
-- #define POLICYDB_ERROR       -1
-- #define POLICYDB_UNSUPPORTED -2
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /*
--  * A datum type is defined for each kind of symbol 
--@@ -768,7 +769,10 @@ extern int policydb_set_target_platform(policydb_t *p, int platform);
-- #define POLICYDB_MOD_MAGIC SELINUX_MOD_MAGIC
-- #define POLICYDB_MOD_STRING "SE Linux Module"
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif				/* _POLICYDB_H_ */
--
-- /* FLASK */
--diff --git a/include/sepol/policydb/services.h b/include/sepol/policydb/services.h
--index 8a5dc9a..29f57cf 100644
----- a/include/sepol/policydb/services.h
--+++ b/include/sepol/policydb/services.h
--@@ -15,9 +15,10 @@
-- #include <sepol/policydb/flask_types.h>
-- #include <sepol/policydb/policydb.h>
-- #include <stddef.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /* Set the policydb and sidtab structures to be used by
--    the service functions.  If not set, then these default
--@@ -230,5 +231,8 @@ extern int sepol_genfs_sid(const char *fstype,	/* IN */
-- 			   sepol_security_class_t sclass,	/* IN */
-- 			   sepol_security_id_t * sid);	/* OUT  */
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/policydb/sidtab.h b/include/sepol/policydb/sidtab.h
--index 4b93567..2df1a50 100644
----- a/include/sepol/policydb/sidtab.h
--+++ b/include/sepol/policydb/sidtab.h
--@@ -11,9 +11,10 @@
-- #define _SEPOL_POLICYDB_SIDTAB_H_
--
-- #include <sepol/policydb/context.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- typedef struct sidtab_node {
-- 	sepol_security_id_t sid;	/* security identifier */
--@@ -69,7 +70,10 @@ extern void sepol_sidtab_set(sidtab_t * dst, sidtab_t * src);
--
-- extern void sepol_sidtab_shutdown(sidtab_t * s);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif				/* _SIDTAB_H_ */
--
-- /* FLASK */
--diff --git a/include/sepol/policydb/symtab.h b/include/sepol/policydb/symtab.h
--index e0da337..68b5ad4 100644
----- a/include/sepol/policydb/symtab.h
--+++ b/include/sepol/policydb/symtab.h
--@@ -14,9 +14,10 @@
-- #define _SEPOL_POLICYDB_SYMTAB_H_
--
-- #include <sepol/policydb/hashtab.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /* The symtab_datum struct stores the common information for
--  * all symtab datums. It should the first element in every
--@@ -37,7 +38,10 @@ typedef struct {
-- extern int symtab_init(symtab_t *, unsigned int size);
-- extern void symtab_destroy(symtab_t *);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif				/* _SYMTAB_H_ */
--
-- /* FLASK */
--diff --git a/include/sepol/policydb/util.h b/include/sepol/policydb/util.h
--index fa12661..ee236a2 100644
----- a/include/sepol/policydb/util.h
--+++ b/include/sepol/policydb/util.h
--@@ -23,9 +23,9 @@
-- #ifndef __SEPOL_UTIL_H__
-- #define __SEPOL_UTIL_H__
--
---#include <sys/cdefs.h>
---
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- extern int add_i_to_a(uint32_t i, uint32_t * cnt, uint32_t ** a);
--
--@@ -40,5 +40,8 @@ char *sepol_extended_perms_to_string(avtab_extended_perms_t *xperms);
--  */
-- extern int tokenize(char *line_buf, char delim, int num_args, ...);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/port_record.h b/include/sepol/port_record.h
--index 697cea4..3bb4039 100644
----- a/include/sepol/port_record.h
--+++ b/include/sepol/port_record.h
--@@ -3,9 +3,10 @@
--
-- #include <sepol/context_record.h>
-- #include <sepol/handle.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- struct sepol_port;
-- struct sepol_port_key;
--@@ -66,5 +67,8 @@ extern int sepol_port_clone(sepol_handle_t * handle,
--
-- extern void sepol_port_free(sepol_port_t * port);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/ports.h b/include/sepol/ports.h
--index b4622ba..cda246c 100644
----- a/include/sepol/ports.h
--+++ b/include/sepol/ports.h
--@@ -4,9 +4,10 @@
-- #include <sepol/handle.h>
-- #include <sepol/policydb.h>
-- #include <sepol/port_record.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /* Return the number of ports */
-- extern int sepol_port_count(sepol_handle_t * handle,
--@@ -40,5 +41,8 @@ extern int sepol_port_iterate(sepol_handle_t * handle,
-- 			      int (*fn) (const sepol_port_t * port,
-- 					 void *fn_arg), void *arg);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/roles.h b/include/sepol/roles.h
--index 89b3af2..e750078 100644
----- a/include/sepol/roles.h
--+++ b/include/sepol/roles.h
--@@ -1,9 +1,9 @@
-- #ifndef _SEPOL_ROLES_H_
-- #define _SEPOL_ROLES_H_
--
---#include <sys/cdefs.h>
---
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- extern int sepol_role_exists(const sepol_policydb_t * policydb,
-- 			     const char *role, int *response);
--@@ -11,5 +11,8 @@ extern int sepol_role_exists(const sepol_policydb_t * policydb,
-- extern int sepol_role_list(const sepol_policydb_t * policydb,
-- 			   char ***roles, unsigned int *nroles);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/sepol.h b/include/sepol/sepol.h
--index 00a2129..513f77d 100644
----- a/include/sepol/sepol.h
--+++ b/include/sepol/sepol.h
--@@ -3,9 +3,10 @@
--
-- #include <stddef.h>
-- #include <stdio.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- #include <sepol/user_record.h>
-- #include <sepol/context_record.h>
--@@ -28,5 +29,8 @@ __BEGIN_DECLS
-- /* Set internal policydb from a file for subsequent service calls. */
-- extern int sepol_set_policydb_from_file(FILE * fp);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/user_record.h b/include/sepol/user_record.h
--index 9a39526..d17a3db 100644
----- a/include/sepol/user_record.h
--+++ b/include/sepol/user_record.h
--@@ -3,9 +3,10 @@
--
-- #include <stddef.h>
-- #include <sepol/handle.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- struct sepol_user;
-- struct sepol_user_key;
--@@ -76,5 +77,8 @@ extern int sepol_user_clone(sepol_handle_t * handle,
--
-- extern void sepol_user_free(sepol_user_t * user);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--diff --git a/include/sepol/users.h b/include/sepol/users.h
--index 0e0f76e..ad23f89 100644
----- a/include/sepol/users.h
--+++ b/include/sepol/users.h
--@@ -5,9 +5,10 @@
-- #include <sepol/user_record.h>
-- #include <sepol/handle.h>
-- #include <stddef.h>
---#include <sys/cdefs.h>
--
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
--
-- /*---------compatibility------------*/
--
--@@ -57,5 +58,8 @@ extern int sepol_user_iterate(sepol_handle_t * handle,
-- 			      int (*fn) (const sepol_user_t * user,
-- 					 void *fn_arg), void *arg);
--
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif
--- 
-2.7.4
+see here http://git.openembedded.org/openembedded-core/tree/meta/recipes-core/bsd-headers/bsd-headers
+you might need some more.
+
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> package/Config.in                                  |  2 +-
+> package/musl-compat-headers/Config.in              |  2 ++
+> package/musl-compat-headers/cdefs.h                | 40 ++++++++++++++++++++++
+> .../musl-compat-headers.hash}                      |  0
+> package/musl-compat-headers/musl-compat-headers.mk | 29 ++++++++++++++++
+> package/musl/Config.in                             |  3 +-
+> package/musl/musl.mk                               | 10 +++---
+> package/netbsd-queue/Config.in                     |  2 --
+> package/netbsd-queue/netbsd-queue.mk               | 24 -------------
+> toolchain/toolchain-external/Config.in             |  3 +-
+> toolchain/toolchain-external/toolchain-external.mk | 10 +++---
+> 11 files changed, 88 insertions(+), 37 deletions(-)
+> create mode 100644 package/musl-compat-headers/Config.in
+> create mode 100644 package/musl-compat-headers/cdefs.h
+> rename package/{netbsd-queue/netbsd-queue.hash => musl-compat-headers/musl-compat-headers.hash} (100%)
+> create mode 100644 package/musl-compat-headers/musl-compat-headers.mk
+> delete mode 100644 package/netbsd-queue/Config.in
+> delete mode 100644 package/netbsd-queue/netbsd-queue.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 645fa29..1e51a45 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1324,7 +1324,7 @@ endif
+> 	source "package/mpfr/Config.in"
+> 	source "package/msgpack/Config.in"
+> 	source "package/mtdev2tuio/Config.in"
+> -	source "package/netbsd-queue/Config.in"
+> +	source "package/musl-compat-headers/Config.in"
+> 	source "package/openblas/Config.in"
+> 	source "package/orc/Config.in"
+> 	source "package/p11-kit/Config.in"
+> diff --git a/package/musl-compat-headers/Config.in b/package/musl-compat-headers/Config.in
+> new file mode 100644
+> index 0000000..c672f9c
+> --- /dev/null
+> +++ b/package/musl-compat-headers/Config.in
+> @@ -0,0 +1,2 @@
+> +config BR2_PACKAGE_MUSL_COMPAT_HEADERS
+> +	bool
+> diff --git a/package/musl-compat-headers/cdefs.h b/package/musl-compat-headers/cdefs.h
+> new file mode 100644
+> index 0000000..0a78b8f
+> --- /dev/null
+> +++ b/package/musl-compat-headers/cdefs.h
+> @@ -0,0 +1,40 @@
+> +/* Copyright (C) 2016 Yann E. MORI <yann.morin.1998@free.fr>
+> + *
+> + * This file is in the Public Domain.
+> + *
+> + * For jurisdictions in which the Public Domain does not exist
+> + * or it is not otherwise applicable, this file is licensed CC0
+> + * (Creative Commons Zero).
+> + */
+> +
+> +/* This file contains definitions for non-standard macros defined by
+> + * glibc, but quite commonly used in packages.
+> + *
+> + * Because they are non-standard, musl does not define those macros.
+> + * It does not provide cdefs.h either.
+> + *
+> + * This file is a compatibility header written from scratch, to be
+> + * installed when the C library is musl.
+> + *
+> + * Not all macros from the glibc's cdefs.h are available, only the
+> + * most commonly used ones.
+> + *
+> + * Please refer to the glibc documentation and source code for
+> + * explanations about those macros.
+> + */
+> +
+> +#ifndef BUILDROOT_SYS_CDEFS_H
+> +#define BUILDROOT_SYS_CDEFS_H
+> +
+> +#undef __P
+> +#define __P(arg) arg
+> +
+> +#ifdef __cplusplus
+> +#define __BEGIN_DECLS extern "C" {
+> +#define __END_DECLS   }
+> +#else
+> +#define __BEGIN_DECLS
+> +#define __END_DECLS
+> +#endif
+> +
+> +#endif /* ifndef BUILDROOT_SYS_CDEFS_H */
+> diff --git a/package/netbsd-queue/netbsd-queue.hash b/package/musl-compat-headers/musl-compat-headers.hash
+> similarity index 100%
+> rename from package/netbsd-queue/netbsd-queue.hash
+> rename to package/musl-compat-headers/musl-compat-headers.hash
+> diff --git a/package/musl-compat-headers/musl-compat-headers.mk b/package/musl-compat-headers/musl-compat-headers.mk
+> new file mode 100644
+> index 0000000..0758021
+> --- /dev/null
+> +++ b/package/musl-compat-headers/musl-compat-headers.mk
+> @@ -0,0 +1,29 @@
+> +################################################################################
+> +#
+> +# musl-compat-headers
+> +#
+> +################################################################################
+> +
+> +MUSL_COMPAT_HEADERS_SITE = http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys
+> +MUSL_COMPAT_HEADERS_VERSION = 1.70
+> +MUSL_COMPAT_HEADERS_SOURCE = queue.h?rev=$(MUSL_COMPAT_HEADERS_VERSION)
+> +MUSL_COMPAT_HEADERS_LICENSE = BSD-3c, Public Domain or CC0
+> +
+> +MUSL_COMPAT_HEADERS_ADD_TOOLCHAIN_DEPENDENCY = NO
+> +
+> +# Only installs headers
+> +MUSL_COMPAT_HEADERS_INSTALL_TARGET = NO
+> +MUSL_COMPAT_HEADERS_INSTALL_STAGING = YES
+> +
+> +define MUSL_COMPAT_HEADERS_EXTRACT_CMDS
+> +	cp $(DL_DIR)/$(MUSL_COMPAT_HEADERS_SOURCE) $(@D)/queue.h
+> +endef
+> +
+> +define MUSL_COMPAT_HEADERS_INSTALL_STAGING_CMDS
+> +	$(INSTALL) -D -m 0644 $(@D)/queue.h \
+> +		$(STAGING_DIR)/usr/include/sys/queue.h
+> +	$(INSTALL) -D -m 0644 $(MUSL_COMPAT_HEADERS_PKGDIR)/cdefs.h \
+> +		$(STAGING_DIR)/usr/include/sys/cdefs.h
+> +endef
+> +
+> +$(eval $(generic-package))
+> diff --git a/package/musl/Config.in b/package/musl/Config.in
+> index c263006..18ae69d 100644
+> --- a/package/musl/Config.in
+> +++ b/package/musl/Config.in
+> @@ -3,5 +3,6 @@ config BR2_PACKAGE_MUSL
+> 	depends on BR2_TOOLCHAIN_USES_MUSL
+> 	default y
+> 	select BR2_PACKAGE_LINUX_HEADERS
+> -	select BR2_PACKAGE_NETBSD_QUEUE
+> 	select BR2_TOOLCHAIN_HAS_SSP
+> +	# Compatibility headers: cdefs.h, queue.h
+> +	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
+> diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+> index 920bbbf..f8ea377 100644
+> --- a/package/musl/musl.mk
+> +++ b/package/musl/musl.mk
+> @@ -13,10 +13,12 @@ MUSL_LICENSE_FILES = COPYRIGHT
+> # cross-compiler and the kernel headers
+> MUSL_DEPENDENCIES = host-gcc-initial linux-headers
+> 
+> -# musl does not provide a sys/queue.h implementation, so add the
+> -# netbsd-queue package that will install a sys/queue.h file in the
+> -# staging directory based on the NetBSD implementation.
+> -MUSL_DEPENDENCIES += netbsd-queue
+> +# musl does not provide an implementation for sys/queue.h or sys/cdefs.h. So,
+> +# add the netbsd-compat-headers package that will install those files, into
+> +# the staging directory:
+> +#   sys/queue.h:  header from NetBSD
+> +#   sys/cdefs.h:  minimalist header bundled in Buildroot
+> +MUSL_DEPENDENCIES += musl-compat-headers
+> 
+> # musl is part of the toolchain so disable the toolchain dependency
+> MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
+> diff --git a/package/netbsd-queue/Config.in b/package/netbsd-queue/Config.in
+> deleted file mode 100644
+> index 7837f4c..0000000
+> --- a/package/netbsd-queue/Config.in
+> +++ /dev/null
+> @@ -1,2 +0,0 @@
+> -config BR2_PACKAGE_NETBSD_QUEUE
+> -	bool
+> diff --git a/package/netbsd-queue/netbsd-queue.mk b/package/netbsd-queue/netbsd-queue.mk
+> deleted file mode 100644
+> index 5fd926b..0000000
+> --- a/package/netbsd-queue/netbsd-queue.mk
+> +++ /dev/null
+> @@ -1,24 +0,0 @@
+> -################################################################################
+> -#
+> -# netbsd-queue
+> -#
+> -################################################################################
+> -
+> -NETBSD_QUEUE_VERSION = 1.70
+> -NETBSD_QUEUE_SITE = http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys
+> -NETBSD_QUEUE_SOURCE = queue.h?rev=$(NETBSD_QUEUE_VERSION)
+> -NETBSD_QUEUE_LICENSE = BSD-3c
+> -
+> -NETBSD_QUEUE_ADD_TOOLCHAIN_DEPENDENCY = NO
+> -NETBSD_QUEUE_INSTALL_STAGING = YES
+> -
+> -define NETBSD_QUEUE_EXTRACT_CMDS
+> -	cp $(DL_DIR)/$(NETBSD_QUEUE_SOURCE) $(@D)/queue.h
+> -endef
+> -
+> -define NETBSD_QUEUE_INSTALL_STAGING_CMDS
+> -	$(INSTALL) -D -m 0644 $(@D)/queue.h \
+> -		$(STAGING_DIR)/usr/include/sys/queue.h
+> -endef
+> -
+> -$(eval $(generic-package))
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index f54fbee..63b7712 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -727,7 +727,8 @@ config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> config BR2_TOOLCHAIN_EXTERNAL_MUSL
+> 	bool
+> 	select BR2_TOOLCHAIN_USES_MUSL
+> -	select BR2_PACKAGE_NETBSD_QUEUE
+> +	# Compatibility headers: cdefs.h, queue.h
+> +	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
+> 
+> if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+> 
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index 29c1f36..967f022 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -246,11 +246,13 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
+> TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
+> endif
+> 
+> -# musl does not provide a sys/queue.h implementation, so add the
+> -# netbsd-queue package that will install a sys/queue.h file in the
+> -# staging directory based on the NetBSD implementation.
+> +# musl does not provide an implementation for sys/queue.h or sys/cdefs.h. So,
+> +# add the netbsd-compat-headers package that will install those files, into
+> +# the staging directory:
+> +#   sys/queue.h:  header from NetBSD
+> +#   sys/cdefs.h:  minimalist header bundled in Buildroot
+> ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+> -TOOLCHAIN_EXTERNAL_DEPENDENCIES += netbsd-queue
+> +TOOLCHAIN_EXTERNAL_DEPENDENCIES += musl-compat-headers
+> endif
+> 
+> # The Linaro toolchain expects the libraries in
+> --
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 204 bytes
+Desc: Message signed with OpenPGP using GPGMail
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160812/9338f8f1/attachment.asc>
