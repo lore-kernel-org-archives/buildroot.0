@@ -1,89 +1,78 @@
 From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Fri, 12 Aug 2016 23:45:01 +0530
-Subject: [Buildroot] [PATCH 1/2] mtd: fix musl build issue
-Message-ID: <1471025702-6945-1-git-send-email-rahul.bedarkar@imgtec.com>
+Date: Fri, 12 Aug 2016 23:45:02 +0530
+Subject: [Buildroot] [PATCH 2/2] wayland: fix musl build issue
+In-Reply-To: <1471025702-6945-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1471025702-6945-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <1471025702-6945-2-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With musl C library, we get following build error
+With musl C library, we see following build failure.
 
-  integck.c:37:28: fatal error: bits/stdio_lim.h: No such file or directory
-   #include <bits/stdio_lim.h>
-                              ^
-  compilation terminated.
-  make[2]: *** [integck] Error 1
+  src/scanner.c: In function 'find_enumeration':
+  src/scanner.c:811:2: error: unknown type name 'uint'
+    uint idx = 0, j;
+    ^
 
-Header <bits/stdio_lim.h> is not available in musl C library. However
-<stdio.h> has all definition that <bits/stdio_lim.h> supposed to be
-providing. Moreover <bits/stdio_lim.h> shouldn't be included directly
-instead we should be using <stdio.h>.
+uint is defined in <sys/types.h> header. It is usually included by <stdlib.h>
+but in musl stdlib.h doesn't include it.
 
-Since we already include <stdio.h> and in case of uClibc or glibc
-<bits/stdio_lim.h> gets included internally, we can safely remove it.
+In scanner.c, <expat.h> includes <stdlib.h> then it includes <sys/types.h> in
+case of other C libraries. <sys/types.h> from musl defines uint only if
+_GNU_SOURCE or _BSD_SOURCE is defined. Instead of including <sys/types.h> and
+defining either _GNU_SOURCE or _BSD_SOURCE, use unsigned int instead of uint.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/175/1754861457af520480cc34d7d2d0edff2868ff66/
+  http://autobuild.buildroot.net/results/fcf/fcf6dd3bd31f92eadbcae17338e5887a23e43ff9/
 
 Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 ---
- ...tegrity-don-t-include-header-bits-stdio_l.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch
+ .../0002-use-unsigned-int-instead-of-uint.patch    | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/wayland/0002-use-unsigned-int-instead-of-uint.patch
 
-diff --git a/package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch b/package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch
+diff --git a/package/wayland/0002-use-unsigned-int-instead-of-uint.patch b/package/wayland/0002-use-unsigned-int-instead-of-uint.patch
 new file mode 100644
-index 0000000..5c0a552
+index 0000000..0f649e2
 --- /dev/null
-+++ b/package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch
-@@ -0,0 +1,45 @@
-+From 600ab10e3b452cdffc6c82770b0bb2ff5c23ad70 Mon Sep 17 00:00:00 2001
-+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+Date: Fri, 12 Aug 2016 22:59:35 +0530
-+Subject: [PATCH 1/1] fs-tests: integrity: don't include header
-+ <bits/stdio_lim.h>
++++ b/package/wayland/0002-use-unsigned-int-instead-of-uint.patch
+@@ -0,0 +1,33 @@
++scanner: use unsigned int instead of uint
 +
-+With musl C library, we get following build error
++With musl C library, we see following build failure.
 +
-+integck.c:37:28: fatal error: bits/stdio_lim.h: No such file or directory
-+ #include <bits/stdio_lim.h>
-+                            ^
-+compilation terminated.
-+make[2]: *** [integck] Error 1
++src/scanner.c: In function 'find_enumeration':
++src/scanner.c:811:2: error: unknown type name 'uint'
++  uint idx = 0, j;
++  ^
 +
-+Header <bits/stdio_lim.h> is not available in musl C library. However
-+<stdio.h> has all definition that <bits/stdio_lim.h> supposed to be
-+providing. Moreover <bits/stdio_lim.h> shouldn't be included directly
-+instead we should be using <stdio.h>.
++uint is defined in <sys/types.h> header. It is usually included by <stdlib.h>
++but in musl stdlib.h doesn't include it.
 +
-+Since we already include <stdio.h> and in case of uClibc or glibc
-+<bits/stdio_lim.h> gets included internally, we can safely remove it.
++In scanner.c, <expat.h> includes <stdlib.h> then it includes <sys/types.h> in
++case of other C libraries. <sys/types.h> from musl defines uint only if
++_GNU_SOURCE or _BSD_SOURCE is defined. Instead of including <sys/types.h> and
++defining either _GNU_SOURCE or _BSD_SOURCE, use unsigned int instead of uint.
 +
 +This build issue is found by Buildroot autobuilder
-+http://autobuild.buildroot.net/results/175/1754861457af520480cc34d7d2d0edff2868ff66/
++http://autobuild.buildroot.net/results/fcf/fcf6dd3bd31f92eadbcae17338e5887a23e43ff9/
 +
 +Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+---
-+ tests/fs-tests/integrity/integck.c | 1 -
-+ 1 file changed, 1 deletion(-)
 +
-+diff --git a/tests/fs-tests/integrity/integck.c b/tests/fs-tests/integrity/integck.c
-+index 6ef817e..0bb9711 100644
-+--- a/tests/fs-tests/integrity/integck.c
-++++ b/tests/fs-tests/integrity/integck.c
-+@@ -34,7 +34,6 @@
-+ #ifdef INTEGCK_DEBUG
-+ #include <execinfo.h>
-+ #endif
-+-#include <bits/stdio_lim.h>
-+ #include <sys/mman.h>
-+ #include <sys/vfs.h>
-+ #include <sys/mount.h>
-+-- 
-+2.6.2
-+
++--- wayland-1.11.0/src/scanner.c.old	2016-08-12 23:19:39.944279494 +0530
+++++ wayland-1.11.0/src/scanner.c	2016-08-12 23:19:57.236279457 +0530
++@@ -808,7 +808,7 @@ find_enumeration(struct protocol *protoc
++ 	struct interface *i;
++ 	struct enumeration *e;
++ 	char *enum_name;
++-	uint idx = 0, j;
+++	unsigned int idx = 0, j;
++ 
++ 	for (j = 0; j + 1 < strlen(enum_attribute); j++) {
++ 		if (enum_attribute[j] == '.') {
 -- 
 2.6.2
