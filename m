@@ -1,9 +1,9 @@
 From: Khem Raj <raj.khem@gmail.com>
-Date: Thu, 11 Aug 2016 22:01:49 -0700
-Subject: [Buildroot] RFC: package level compile time hardening
-In-Reply-To: <CANQCQpZi9FpuNe4HRTyHghpBhaRRbWw2ojgJ1P2HVxeiJ+zgUA@mail.gmail.com>
-References: <CANQCQpZi9FpuNe4HRTyHghpBhaRRbWw2ojgJ1P2HVxeiJ+zgUA@mail.gmail.com>
-Message-ID: <854894E2-B153-4FD9-8E2D-3FC0EE9920A5@gmail.com>
+Date: Thu, 11 Aug 2016 22:26:02 -0700
+Subject: [Buildroot] eudev compilation fails on buildroot-2016.08-rc1
+In-Reply-To: <CAFN-Ez51T+Z-3t_15sWgPDgrvRYRyW6raiDvbC744cgVcqiJ8w@mail.gmail.com>
+References: <CAFN-Ez51T+Z-3t_15sWgPDgrvRYRyW6raiDvbC744cgVcqiJ8w@mail.gmail.com>
+Message-ID: <B38B0459-FF73-4DFC-9189-F46BEB90F0BC@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,37 +11,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-> On Aug 11, 2016, at 8:50 PM, Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
+> On Aug 10, 2016, at 7:57 AM, Chetan Kumar <shivakumar.chetan@gmail.com> wrote:
 > 
-> Any suggestions on an approach to manage changes made to buildroot
-> packages to harden the build time cflags/ldflags of a specific
-> package, where by adding the additional flags, the build now requires
-> specific toolchain versions and may impact ability to have a package
-> compile across as many arch as it currently does.  We currently
-> maintain this sort of change as a rebased patch on top of master.
-> Thoughts for other options?
+> Hi,
+> 
+> I am trying to build eudev on buildroot-2016.08-rc1, it fails at below
+> 
+> checking for gawk... (cached) mawk
+> checking for /home/buildroot-2016.08-rc1/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc option to accept ISO C99... unsupported
+> configure: error: no C99 compiler found, eudev requires a C99 compiler.
+> make[1]: *** [/home//buildroot-2016.08-rc1/output/build/eudev-3.2/.stamp_configured] Error 1
 
-the hardening could be maintained as a global top level kconfig
-option. which should be then used at package level to make per
-package decisions. It should be possible to select hardening in
-general, in world case it will do nothing. In best case every package
-will be compiled with PIC/PIE and other cool stuff.
+There should be a config.log file in eudev builddir which should list the failure
+why configure failed. Please share config.log
 
+> make: *** [_all] Error 2
 > 
-> We're trying to do something similar to Ubuntu's hardening efforts and
-> so far have started with toolchain configuration and compile/link time
-> settings to enable key security features.
-> https://wiki.ubuntu.com/HardenedUbuntu
 > 
-> --
-> Matthew L Weber / Pr Software Engineer
-> Airborne Information Systems / Security Systems and Software / Secure Platforms
-> MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-> www.rockwellcollins.com
+> Any help ?
 > 
-> Note: Any Export License Required Information and License Restricted
-> Third Party Intellectual Property (TPIP) content must be encrypted and
-> sent to matthew.weber at corp.rockwellcollins.com.
+> Thanks
+> C
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
@@ -53,4 +43,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 204 bytes
 Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160811/f3c521e7/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160811/9e75b1f0/attachment.asc>
