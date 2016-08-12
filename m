@@ -1,43 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Aug 2016 17:42:19 +0200
-Subject: [Buildroot] [PATCH] package/weston: fix patch
-Message-ID: <1471016539-23386-1-git-send-email-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 12 Aug 2016 18:19:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libsidplay2: Fix build with gcc6
+Message-ID: <1471018759-17834-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The newly iontroduced patch was created against weston's master branch,
-but was not rebased correctly on top of the release we are using, hence
-it does not apply because files have been moved since the release.
+Fixes
+http://autobuild.buildroot.net/results/787/787c715814b09d380ca521712f54cbcf5ae121d6/
 
-Fixes:
-    http://autobuild.buildroot.org/results/5fb/5fbfd26d05a0ccaf4a70a100a7499cedea83ce6f/
-    http://autobuild.buildroot.org/results/769/76976fbfc2162c2c671a52eafdad82df6d25a660/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/libsidplay2/0003-gcc6.patch | 44 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/libsidplay2/0003-gcc6.patch
 
-diff --git a/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch b/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
-index 32db32f..b391147 100644
---- a/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
-+++ b/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
-@@ -16,10 +16,10 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-  libweston/compositor-rdp.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
--diff --git a/libweston/compositor-rdp.c b/libweston/compositor-rdp.c
-+diff --git a/src/compositor-rdp.c b/src/compositor-rdp.c
- index 11f5f05..ee81300 100644
----- a/libweston/compositor-rdp.c
--+++ b/libweston/compositor-rdp.c
-+--- a/src/compositor-rdp.c
-++++ b/src/compositor-rdp.c
- @@ -58,7 +58,7 @@
-  #	define NSC_RESET(C, W, H) nsc_context_reset(C, W, H)
-  #	define RFX_RESET(C, W, H) rfx_context_reset(C, W, H)
+diff --git a/package/libsidplay2/0003-gcc6.patch b/package/libsidplay2/0003-gcc6.patch
+new file mode 100644
+index 0000000..53601f6
+--- /dev/null
++++ b/package/libsidplay2/0003-gcc6.patch
+@@ -0,0 +1,44 @@
++Fix build with gcc6
++
++gcc6 triggers an error during build:
++
++xsid.cpp:101:1: error: narrowing conversion of ''\200'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
++ };
++ ^
++xsid.cpp:101:1: error: narrowing conversion of ''\224'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
++xsid.cpp:101:1: error: narrowing conversion of ''\251'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
++xsid.cpp:101:1: error: narrowing conversion of ''\274'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
++xsid.cpp:101:1: error: narrowing conversion of ''\316'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
++xsid.cpp:101:1: error: narrowing conversion of ''\341'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
++xsid.cpp:101:1: error: narrowing conversion of ''\362'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
++
++To fix the problem change the array type from int8_t to char as proposed
++by Khem Raj:
++http://lists.busybox.net/pipermail/buildroot/2016-August/169540.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr sidplay-libs-2.1.1.org/libsidplay/src/xsid/xsid.cpp sidplay-libs-2.1.1/libsidplay/src/xsid/xsid.cpp
++--- sidplay-libs-2.1.1.org/libsidplay/src/xsid/xsid.cpp	2004-06-14 22:08:02.000000000 +0200
+++++ sidplay-libs-2.1.1/libsidplay/src/xsid/xsid.cpp	2016-08-12 18:10:20.000000000 +0200
++@@ -94,7 +94,7 @@
++     '\x08', '\x19', '\x2a', '\x3b', '\x4c', '\x5d', '\x6e', '\x7f'
++ };
++ */
++-const int8_t XSID::sampleConvertTable[16] =
+++const char XSID::sampleConvertTable[16] =
++ {
++     '\x80', '\x94', '\xa9', '\xbc', '\xce', '\xe1', '\xf2', '\x03',
++     '\x1b', '\x2a', '\x3b', '\x49', '\x58', '\x66', '\x73', '\x7f'
++diff -uNr sidplay-libs-2.1.1.org/libsidplay/src/xsid/xsid.h sidplay-libs-2.1.1/libsidplay/src/xsid/xsid.h
++--- sidplay-libs-2.1.1.org/libsidplay/src/xsid/xsid.h	2004-06-14 22:08:02.000000000 +0200
+++++ sidplay-libs-2.1.1/libsidplay/src/xsid/xsid.h	2016-08-12 18:11:01.000000000 +0200
++@@ -238,7 +238,7 @@
++     uint8_t             sidData0x18;
++     bool                _sidSamples;
++     int8_t              sampleOffset;
++-    static const int8_t sampleConvertTable[16];
+++    static const char sampleConvertTable[16];
++     bool                wasRunning;
++ 
++ private:
 -- 
-2.7.4
+2.8.1
