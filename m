@@ -1,64 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Aug 2016 15:51:48 +0200
-Subject: [Buildroot] [PATCH 2/2] fwup: link in pthreads for static builds
-In-Reply-To: <9D32ABC7-1620-4C8E-983B-1D82180CB888@gmail.com>
-References: <1470868546-8237-1-git-send-email-fhunleth@troodon-software.com>
- <1470868546-8237-2-git-send-email-fhunleth@troodon-software.com>
- <20160812000628.3fc05f4e@free-electrons.com>
- <9D32ABC7-1620-4C8E-983B-1D82180CB888@gmail.com>
-Message-ID: <20160812155148.1a0e2508@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 12 Aug 2016 17:12:27 +0300
+Subject: [Buildroot] [PATCH] barebox: fix ARCH value for arm64
+In-Reply-To: <CACqcpZBNHJvQQW0+im8m0g+3VvO_A2KMT1cGhvoSE3kzeBTVwA@mail.gmail.com>
+References: <1471000286-50321-1-git-send-email-poggi.raph@gmail.com>
+ <20160812123229.GL845@tarshish>
+ <CACqcpZBNHJvQQW0+im8m0g+3VvO_A2KMT1cGhvoSE3kzeBTVwA@mail.gmail.com>
+Message-ID: <20160812141226.GM845@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Rapha?l,
 
-On Thu, 11 Aug 2016 21:54:24 -0700, Khem Raj wrote:
+On Fri, Aug 12, 2016 at 02:52:25PM +0200, Rapha?l Poggi wrote:
+> 2016-08-12 14:32 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
+> > On Fri, Aug 12, 2016 at 01:11:26PM +0200, Raphael Poggi wrote:
+> >> Signed-off-by: Raphael Poggi <poggi.raph@gmail.com>
 
-> > The problem is that this doesn't work with static linking with uClibc.
-> > I believe it's a uClibc bug, but I'm not entirely sure either.  
-> 
-> As per elf specs.
-> 
-> "A weak definition does not change the rules by which object files are
-> selected from libraries. However, if a link set contains both a weak
-> definition and a non-weak definition, the non-weak definition will always
-> be used.?
-> 
-> The "link set" is the set of objects that have been loaded by the linker.
-> It does not include objects from libraries that are not required.
-> 
-> So if libc.a appears first and provides the symbol it will be used
-> even if its weak. If you exchange the order where libpthread appears
-> first it will use the libpthread provided symbols. another option
-> could be to use
-> 
-> -Wl,--whole-archive -lpthread -Wl,--no-whole-archive
-> 
-> This would link the right strong symbols into binary irrespective of
-> link order
-> 
-> but this will also include unused symbols into binary, probably not
-> optimal, and may using -Wl,--gc-sections could help in letting linker
-> remove the unused functions, maybe worth trying.
+[...]
 
-Thanks for those details, but I'm not sure to understand what is the
-conclusion. Do you mean that it's impossible to implement this dual
-symbol definition mechanism with static libraries? Indeed, while shared
-libraries have the weak/non-weak mechanism that allows to be sure the
-pthread implementation of the symbols will be used if available, with
-static libraries, only the link order will decide if the libpthread of
-libc implementation is used.
+> >> +else ifeq ($$(KERNEL_ARCH), arm64)
+> >
+> > Redundant space before "arm64".
+> 
+> Oops, will fix it.
+> 
+> > Also, this is only applicable to version v2016.08.0 that adds initial 
+> > support for aarch64
+> > (http://lists.infradead.org/pipermail/barebox/2016-August/027849.html). A user
+> > may set BR2_TARGET_BAREBOX_CUSTOM_VERSION to v2016.08.0+, so this may be
+> > applicable to Buildroot master.
+> 
+> You mean, test ($$(KERNEL_ARCH), arm64) and also the barebox version ?
 
-So, if this cannot be fixed in uClibc, how should this problem be
-addressed?
+No. This patch doesn't break older Barebox versions, AFAICS. I was only 
+wondering whether it is master stuff, or -next, since we are now post -rc1. I 
+tend to think this patch is safe for master.
 
-Thanks,
+baruch
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
