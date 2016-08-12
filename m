@@ -1,61 +1,37 @@
-From: =?UTF-8?Q?Rapha=C3=ABl_Poggi?= <poggi.raph@gmail.com>
-Date: Fri, 12 Aug 2016 14:52:25 +0200
-Subject: [Buildroot] [PATCH] barebox: fix ARCH value for arm64
-In-Reply-To: <20160812123229.GL845@tarshish>
-References: <1471000286-50321-1-git-send-email-poggi.raph@gmail.com>
- <20160812123229.GL845@tarshish>
-Message-ID: <CACqcpZBNHJvQQW0+im8m0g+3VvO_A2KMT1cGhvoSE3kzeBTVwA@mail.gmail.com>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Fri, 12 Aug 2016 19:05:16 +0530
+Subject: [Buildroot] [PATCH 1/1] util-linux: bump version to 2.28.1
+In-Reply-To: <20160811223549.50c52467@free-electrons.com>
+References: <1470938996-10477-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <20160811223549.50c52467@free-electrons.com>
+Message-ID: <57ADD094.9070102@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Thomas,
 
-2016-08-12 14:32 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
-> Hi Raphael,
+On Friday 12 August 2016 02:05 AM, Thomas Petazzoni wrote:
+> Hello,
 >
-> On Fri, Aug 12, 2016 at 01:11:26PM +0200, Raphael Poggi wrote:
->> Signed-off-by: Raphael Poggi <poggi.raph@gmail.com>
->> ---
->>  boot/barebox/barebox.mk | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
->> index 832297e..b02751d 100644
->> --- a/boot/barebox/barebox.mk
->> +++ b/boot/barebox/barebox.mk
->> @@ -61,6 +61,8 @@ else ifeq ($$(KERNEL_ARCH),x86_64)
->>  $(1)_ARCH = x86
->>  else ifeq ($$(KERNEL_ARCH),powerpc)
->>  $(1)_ARCH = ppc
->> +else ifeq ($$(KERNEL_ARCH), arm64)
->
-> Redundant space before "arm64".
+> What is the motivation for this new config option? Just that a new
+> --enable-<foo> has appeared in util-linux?
 
-Oops, will fix it.
+Yes, as per release notes new config option is added.
 
 >
-> Also, this is only applicable to version v2016.08.0 that adds initial support
-> for aarch64
-> (http://lists.infradead.org/pipermail/barebox/2016-August/027849.html). A user
-> may set BR2_TARGET_BAREBOX_CUSTOM_VERSION to v2016.08.0+, so this may be
-> applicable to Buildroot master.
-
-You mean, test ($$(KERNEL_ARCH), arm64) and also the barebox version ?
-
-Rapha?l
-
+> Also, I'm note quite sure to understand what it does, and therefore if
+> the chosen dependencies are correct. Could you give some more details?
 >
-> baruch
->
->> +$(1)_ARCH = arm
->>  else
->>  $(1)_ARCH = $$(KERNEL_ARCH)
->>  endif
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+
+It is about supporting uuidd in libuuid even if uuidd daemon is disabled.
+
+https://git.kernel.org/cgit/utils/util-linux/util-linux.git/commit/?id=3e584e8576aef83f934e8409d07758550dd019cb
+
+I'm not even sure about it's functionality but based on help that is 
+available for this config option, I've added it.
+
+Regards,
+Rahul
