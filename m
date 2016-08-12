@@ -1,35 +1,89 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 12 Aug 2016 18:45:49 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/x11r7/xserver_xorg-server:
- needs dri/dri2/dri3 for libdrm support
-References: <1470585874-15428-1-git-send-email-bernd.kuhls@t-online.de>
- <20160811000512.186a9343@free-electrons.com>
-Message-ID: <t2b18dxcgn.ln2@ID-313208.user.individual.net>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Fri, 12 Aug 2016 23:45:01 +0530
+Subject: [Buildroot] [PATCH 1/2] mtd: fix musl build issue
+Message-ID: <1471025702-6945-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 11 Aug 2016 00:05:12 +0200 schrieb Thomas Petazzoni:
+With musl C library, we get following build error
 
-> Hello,
-> 
-> On Sun,  7 Aug 2016 18:04:34 +0200, Bernd Kuhls wrote:
->> Rework dependency handling as pointed out by Thomas:
->> http://lists.busybox.net/pipermail/buildroot/2016-July/168433.html
->> 
->> Fixes
->> http://autobuild.buildroot.net/results/2d3/2d38637e7904f3e382e41745a82ee1a1cf19ba71/
->> 
->> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> 
-> Could you verify if this issue still exists? Indeed, since the bump
-> from 1.18.3 to 1.18.4 of the X.org server, we were missing one patch.
+  integck.c:37:28: fatal error: bits/stdio_lim.h: No such file or directory
+   #include <bits/stdio_lim.h>
+                              ^
+  compilation terminated.
+  make[2]: *** [integck] Error 1
 
-Hi Thomas,
+Header <bits/stdio_lim.h> is not available in musl C library. However
+<stdio.h> has all definition that <bits/stdio_lim.h> supposed to be
+providing. Moreover <bits/stdio_lim.h> shouldn't be included directly
+instead we should be using <stdio.h>.
 
-re-adding the missing patch solved the problem, I could not
-reproduce the build error anymore.
+Since we already include <stdio.h> and in case of uClibc or glibc
+<bits/stdio_lim.h> gets included internally, we can safely remove it.
 
-Regards, Bernd
+Fixes:
+
+  http://autobuild.buildroot.net/results/175/1754861457af520480cc34d7d2d0edff2868ff66/
+
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+ ...tegrity-don-t-include-header-bits-stdio_l.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch
+
+diff --git a/package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch b/package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch
+new file mode 100644
+index 0000000..5c0a552
+--- /dev/null
++++ b/package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch
+@@ -0,0 +1,45 @@
++From 600ab10e3b452cdffc6c82770b0bb2ff5c23ad70 Mon Sep 17 00:00:00 2001
++From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++Date: Fri, 12 Aug 2016 22:59:35 +0530
++Subject: [PATCH 1/1] fs-tests: integrity: don't include header
++ <bits/stdio_lim.h>
++
++With musl C library, we get following build error
++
++integck.c:37:28: fatal error: bits/stdio_lim.h: No such file or directory
++ #include <bits/stdio_lim.h>
++                            ^
++compilation terminated.
++make[2]: *** [integck] Error 1
++
++Header <bits/stdio_lim.h> is not available in musl C library. However
++<stdio.h> has all definition that <bits/stdio_lim.h> supposed to be
++providing. Moreover <bits/stdio_lim.h> shouldn't be included directly
++instead we should be using <stdio.h>.
++
++Since we already include <stdio.h> and in case of uClibc or glibc
++<bits/stdio_lim.h> gets included internally, we can safely remove it.
++
++This build issue is found by Buildroot autobuilder
++http://autobuild.buildroot.net/results/175/1754861457af520480cc34d7d2d0edff2868ff66/
++
++Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++---
++ tests/fs-tests/integrity/integck.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/tests/fs-tests/integrity/integck.c b/tests/fs-tests/integrity/integck.c
++index 6ef817e..0bb9711 100644
++--- a/tests/fs-tests/integrity/integck.c
+++++ b/tests/fs-tests/integrity/integck.c
++@@ -34,7 +34,6 @@
++ #ifdef INTEGCK_DEBUG
++ #include <execinfo.h>
++ #endif
++-#include <bits/stdio_lim.h>
++ #include <sys/mman.h>
++ #include <sys/vfs.h>
++ #include <sys/mount.h>
++-- 
++2.6.2
++
+-- 
+2.6.2
