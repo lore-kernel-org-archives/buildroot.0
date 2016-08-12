@@ -1,104 +1,61 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Fri, 12 Aug 2016 12:45:31 +0000
-Subject: [Buildroot] [PATCH] gcc: rename option for ARC gcc
-In-Reply-To: <1470921938-11550-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470921938-11550-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1471005931.26536.12.camel@synopsys.com>
+From: =?UTF-8?Q?Rapha=C3=ABl_Poggi?= <poggi.raph@gmail.com>
+Date: Fri, 12 Aug 2016 14:52:25 +0200
+Subject: [Buildroot] [PATCH] barebox: fix ARCH value for arm64
+In-Reply-To: <20160812123229.GL845@tarshish>
+References: <1471000286-50321-1-git-send-email-poggi.raph@gmail.com>
+ <20160812123229.GL845@tarshish>
+Message-ID: <CACqcpZBNHJvQQW0+im8m0g+3VvO_A2KMT1cGhvoSE3kzeBTVwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All seems to be ok.
+Hi,
 
-Thank you for this contribution.?
+2016-08-12 14:32 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
+> Hi Raphael,
+>
+> On Fri, Aug 12, 2016 at 01:11:26PM +0200, Raphael Poggi wrote:
+>> Signed-off-by: Raphael Poggi <poggi.raph@gmail.com>
+>> ---
+>>  boot/barebox/barebox.mk | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+>> index 832297e..b02751d 100644
+>> --- a/boot/barebox/barebox.mk
+>> +++ b/boot/barebox/barebox.mk
+>> @@ -61,6 +61,8 @@ else ifeq ($$(KERNEL_ARCH),x86_64)
+>>  $(1)_ARCH = x86
+>>  else ifeq ($$(KERNEL_ARCH),powerpc)
+>>  $(1)_ARCH = ppc
+>> +else ifeq ($$(KERNEL_ARCH), arm64)
+>
+> Redundant space before "arm64".
 
--- 
-Best regards,
-Vlad Zakharov <vzakhar@synopsys.com>
+Oops, will fix it.
 
-On Thu, 2016-08-11 at 15:25 +0200, Thomas Petazzoni wrote:
-> The ARC gcc version is now based on gcc 6.x and no longer gcc 4.8.x,
-> which makes the option BR2_GCC_VERSION_4_8_ARC a bit irrelevant, as is
-> the prompt of this option.
-> 
-> This commit therefore renames this option to BR2_GCC_VERSION_ARC, and
-> adjust its prompt as well.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> ?Config.in.legacy???????????????????????|??7 +++++++
-> ?package/gcc/Config.in.host?????????????| 10 +++++-----
-> ?package/gcc/gcc-initial/gcc-initial.mk |??2 +-
-> ?3 files changed, 13 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 746b80a..892a836 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -145,6 +145,13 @@ endif
-> ?###############################################################################
-> ?comment "Legacy options removed in 2016.08"
-> ?
-> +config BR2_GCC_VERSION_4_8_ARC
-> +	bool "gcc arc option renamed"
-> +	select BR2_LEGACY
-> +	help
-> +	??The option is select the gcc version for the ARC
-> +	??architecture has been renamed to BR2_GCC_VERSION_ARC.
-> +
-> ?config BR2_PACKAGE_SYSTEMD_COMPAT
-> ?	bool "systemd compatibility libraries have been removed"
-> ?	select BR2_LEGACY
-> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index 8b2b00a..38902fe 100644
-> --- a/package/gcc/Config.in.host
-> +++ b/package/gcc/Config.in.host
-> @@ -8,7 +8,7 @@ config BR2_GCC_SUPPORTS_GRAPHITE
-> ?
-> ?choice
-> ?	prompt "GCC compiler Version"
-> -	default BR2_GCC_VERSION_4_8_ARC if BR2_arc
-> +	default BR2_GCC_VERSION_ARC if BR2_arc
-> ?	default BR2_GCC_VERSION_4_9_X
-> ?	help
-> ?	??Select the version of gcc you wish to use.
-> @@ -50,12 +50,12 @@ choice
-> ?		select BR2_GCC_SUPPORTS_GRAPHITE
-> ?		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> ?
-> -	config BR2_GCC_VERSION_4_8_ARC
-> -		bool "gcc 4.8-arc"
-> +	config BR2_GCC_VERSION_ARC
-> +		bool "gcc arc (6.x)"
-> ?		# Only supported architecture
-> ?		depends on BR2_arc
-> ?		select BR2_GCC_NEEDS_MPC
-> -		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> +		select BR2_TOOLCHAIN_GCC_AT_LEAST_6
-> ?
-> ?
-> ?	config BR2_GCC_VERSION_4_9_X
-> @@ -107,7 +107,7 @@ config BR2_GCC_VERSION
-> ?	default "4.9.4"?????if BR2_GCC_VERSION_4_9_X
-> ?	default "5.4.0"?????if BR2_GCC_VERSION_5_X
-> ?	default "6.1.0" if BR2_GCC_VERSION_6_X
-> -	default "arc-2016.09-eng008" if BR2_GCC_VERSION_4_8_ARC
-> +	default "arc-2016.09-eng008" if BR2_GCC_VERSION_ARC
-> ?
-> ?config BR2_EXTRA_GCC_CONFIG_OPTIONS
-> ?	string "Additional gcc options"
-> diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-> index 1e58d8b..aa88a68 100644
-> --- a/package/gcc/gcc-initial/gcc-initial.mk
-> +++ b/package/gcc/gcc-initial/gcc-initial.mk
-> @@ -29,7 +29,7 @@ HOST_GCC_INITIAL_PRE_CONFIGURE_HOOKS += HOST_GCC_CONFIGURE_SYMLINK
-> ?# available (--with-newlib is passed, and therefore inhibit_libc is
-> ?# defined), it tries to use the C library for the libgmon
-> ?# library. Since it's not needed in gcc-initial, we disabled it here.
-> -ifeq ($(BR2_GCC_VERSION_4_8_ARC),y)
-> +ifeq ($(BR2_GCC_VERSION_ARC),y)
-> ?define HOST_GCC_INITIAL_DISABLE_LIBGMON
-> ?	$(SED) 's/crtbeginS.o libgmon.a crtg.o/crtbeginS.o crtg.o/' \
-> ?		$(@D)/libgcc/config.host
+>
+> Also, this is only applicable to version v2016.08.0 that adds initial support
+> for aarch64
+> (http://lists.infradead.org/pipermail/barebox/2016-August/027849.html). A user
+> may set BR2_TARGET_BAREBOX_CUSTOM_VERSION to v2016.08.0+, so this may be
+> applicable to Buildroot master.
+
+You mean, test ($$(KERNEL_ARCH), arm64) and also the barebox version ?
+
+Rapha?l
+
+>
+> baruch
+>
+>> +$(1)_ARCH = arm
+>>  else
+>>  $(1)_ARCH = $$(KERNEL_ARCH)
+>>  endif
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
