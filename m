@@ -1,40 +1,78 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Fri, 12 Aug 2016 15:30:05 -0700
-Subject: [Buildroot] [PATCH 1/2] xen: Ensure host Python2 is used
-Message-ID: <1471041006-26425-1-git-send-email-alistair.francis@xilinx.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Fri, 12 Aug 2016 15:33:36 -0700
+Subject: [Buildroot] Analysis of build results for 2016-08-09
+In-Reply-To: <20160811222354.754b418d@free-electrons.com>
+References: <20160810063029.6F291102D04@stock.ovh.net>
+ <20160810161455.142a6a19@free-electrons.com>
+ <74004942B5DA03468B2B76399A14BF2E8CAA963D@XSJ-PSEXMBX01.xlnx.xilinx.com>
+ <20160811200026.GA5812@free.fr> <20160811222354.754b418d@free-electrons.com>
+Message-ID: <CAKmqyKOuDtBi-U7CY=jpfNSAwGYF2SQgw61OOjRvpfZpH9kk4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To avoid Xen build issues ensure that host Python 2 is used.
+On Thu, Aug 11, 2016 at 1:23 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Thu, 11 Aug 2016 22:00:26 +0200, Yann E. MORIN wrote:
+>
+>> If Xen can be told what python to use, then that's easy (e.g.:
+>> --with-python=python2 or whatever else...)
 
-Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
----
- package/xen/xen.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Thanks for the help Yann. That was actually pretty straightforward :)
 
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 759667a..e2abf25 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -8,6 +8,7 @@ XEN_VERSION = 4.6.0
- XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
- XEN_LICENSE = GPLv2
- XEN_LICENSE_FILES = COPYING
-+XEN_DEPENDENCIES = host-python
- 
- # Calculate XEN_ARCH
- ifeq ($(ARCH),aarch64)
-@@ -17,6 +18,8 @@ XEN_ARCH = arm32
- endif
- 
- XEN_CONF_OPTS = --disable-ocamltools
-+
-+XEN_CONF_ENV = PYTHON=$(HOST_DIR)/usr/bin/python2
- XEN_MAKE_ENV = \
- 	XEN_TARGET_ARCH=$(XEN_ARCH) \
- 	CROSS_COMPILE=$(TARGET_CROSS) \
--- 
-2.7.4
+>
+> Please try to find a solution like this: environment variable,
+> configuration option, etc. If it doesn't exist, please add it.
+>
+>> However, if you can't tell Xen what python to use, then this is a bit
+>> more involved.
+>>
+>> See how it was solved for example for qt5webkit:
+>>
+>>     package/qt5webkit: needs host-python
+>>
+>>     The Qt5Webkit build system hard-codes calls to 'python', but only really
+>>     supports python2.
+>>
+>>     We fix that similarly as we did in nodejs, by adding a python->python2
+>>     symlink early in the PATH when configuring/building Qt5Webkit, and
+>>     adding host-python in the dependency list.
+>>
+>>     [--SNIP--]
+>>
+>> This is commit ac16793eaaabfced0312420759e3a66cdaa1ea8e and you can get
+>> some inspiration from it.
+>
+> I really *hate* this solution, and I will actively discourage anyone to
+> use it.
+
+Luckily I didn't have to use this, I could set Python from the environment.
+
+I sent a patch to fix this to the mailing list and a second patch to
+update the Xen version.
+
+Thanks,
+
+Alistair
+
+>
+>> Thomas, we now have a few packages that need this hack. Should we try to
+>> move those hacks into the pkg infra (obviously not for 2016.08)?
+>
+> As far as I know there are only two such packages today, so clearly not
+> enough to move those hacks to the pkg infra.
+>
+> Plus moving this to the pkg infra is making the usage of this hack
+> easier, which is exactly the opposite of what I want. The more painful
+> it can be to use this hack, the better, as it will encourage people to
+> find real solutions.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
