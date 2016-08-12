@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Aug 2016 22:50:00 +0200
-Subject: [Buildroot] [PATCH 7/8] package/linknx: drop a musl-compatibility
+Date: Fri, 12 Aug 2016 22:50:01 +0200
+Subject: [Buildroot] [PATCH 8/8] package/qlibc: drop a musl-compatibility
 	patch
 In-Reply-To: <cover.1471033837.git.yann.morin.1998@free.fr>
 References: <cover.1471033837.git.yann.morin.1998@free.fr>
-Message-ID: <00defd00b4a94479e2cc50ce12d72ddad9f8a533.1471033837.git.yann.morin.1998@free.fr>
+Message-ID: <d4d54fc8edf86a9c69e7f1593004e698a4614bbb.1471033837.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,52 +16,74 @@ We now always have a sys/cdefs.h, so we can drop this patch.
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linknx/0002-musl-cdefs.patch | 37 ------------------------------------
- 1 file changed, 37 deletions(-)
- delete mode 100644 package/linknx/0002-musl-cdefs.patch
+ ...l-build-by-removing-usage-of-internal-gli.patch | 59 ----------------------
+ 1 file changed, 59 deletions(-)
+ delete mode 100644 package/qlibc/0004-md5-fix-musl-build-by-removing-usage-of-internal-gli.patch
 
-diff --git a/package/linknx/0002-musl-cdefs.patch b/package/linknx/0002-musl-cdefs.patch
+diff --git a/package/qlibc/0004-md5-fix-musl-build-by-removing-usage-of-internal-gli.patch b/package/qlibc/0004-md5-fix-musl-build-by-removing-usage-of-internal-gli.patch
 deleted file mode 100644
-index 59e28ca..0000000
---- a/package/linknx/0002-musl-cdefs.patch
+index a48b27f..0000000
+--- a/package/qlibc/0004-md5-fix-musl-build-by-removing-usage-of-internal-gli.patch
 +++ /dev/null
-@@ -1,37 +0,0 @@
--Do not use the non-standard <sys/cdefs.h> header
+@@ -1,59 +0,0 @@
+-From fe45b18f777b1414aee908f08f56a5730a00dbb5 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sat, 21 May 2016 09:59:56 +0200
+-Subject: [PATCH 1/1] md5: fix musl build by removing usage of internal glibc
+- header sys/cdefs.h
 -
--<sys/cdefs.h> is glibc-specific, and should be used only internally by
--glibc, not by external libraries/programs. It is not available in all
--standard C libraries.
+-As suggested in musl FAQ:
+-http://wiki.musl-libc.org/wiki/FAQ#Q:_I.27m_trying_to_compile_something_against_musl_and_I_get_error_messages_about_sys.2Fcdefs.h
 -
 -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--(Patch sent upstream: https://sourceforge.net/p/linknx/patches/21/)
+-(Patch for master branch sent upstream:
+- https://github.com/wolkykim/qlibc/pull/53)
+----
+- src/internal/md5/md5.h  | 10 ++++++----
+- src/internal/md5/md5c.c |  1 -
+- 2 files changed, 6 insertions(+), 5 deletions(-)
 -
--diff -uNr linknx-0.0.1.32.org/include/eibclient.h linknx-0.0.1.32/include/eibclient.h
----- linknx-0.0.1.32.org/include/eibclient.h	2007-10-11 01:55:33.000000000 +0200
--+++ linknx-0.0.1.32/include/eibclient.h	2016-01-23 23:21:17.315006629 +0100
--@@ -27,11 +27,12 @@
-- #ifndef EIBCLIENT_H
-- #define EIBCLIENT_H
+-diff --git a/src/internal/md5/md5.h b/src/internal/md5/md5.h
+-index cbfa7ca..8e726fe 100644
+---- a/src/internal/md5/md5.h
+-+++ b/src/internal/md5/md5.h
+-@@ -35,9 +35,9 @@ typedef struct MD5Context {
+-     unsigned char buffer[64]; /* input buffer */
+- } MD5_CTX;
 - 
---#include "sys/cdefs.h"
-- #include "stdint.h"
-- #include <pthsem.h>
-- 
---__BEGIN_DECLS;
+--#include <sys/cdefs.h>
+--
+--__BEGIN_DECLS
 -+#ifdef __cplusplus
 -+extern "C" {
 -+#endif
-- 
-- #include "eibloadresult.h"
-- 
--@@ -705,5 +706,8 @@
--  */
-- int EIB_LoadImage_async (EIBConnection * con, const uint8_t * image, int len);
-- 
+- void MD5Init(MD5_CTX *);
+- void MD5Update(MD5_CTX *, const unsigned char *, unsigned int);
+- void MD5Final(unsigned char[16], MD5_CTX *);
+-@@ -45,6 +45,8 @@ char * MD5End(MD5_CTX *, char *);
+- char * MD5File(const char *, char *);
+- char * MD5FileChunk(const char *, char *, off_t, off_t);
+- char * MD5Data(const unsigned char *, unsigned int, char *);
 --__END_DECLS
 -+#ifdef __cplusplus
 -+}
 -+#endif
--+
-- #endif
+- 
+- #endif /* Q_MD5_H */
+-diff --git a/src/internal/md5/md5c.c b/src/internal/md5/md5c.c
+-index de9e47f..040bf5e 100644
+---- a/src/internal/md5/md5c.c
+-+++ b/src/internal/md5/md5c.c
+-@@ -26,7 +26,6 @@
+-  * edited for clarity and style only.
+-  */
+- 
+--#include <sys/cdefs.h>
+- #include <sys/types.h>
+- #include <string.h>
+- #include "md5.h"
+--- 
+-2.8.1
+-
 -- 
 2.7.4
