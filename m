@@ -1,87 +1,301 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Aug 2016 22:49:58 +0200
-Subject: [Buildroot] [PATCH 5/8] package/bcusdk: drop a musl-compatibility
-	patch
+Date: Fri, 12 Aug 2016 22:49:57 +0200
+Subject: [Buildroot] [PATCH 4/8] package/android-tools: drop
+	musl-compatibility cdefs patching out
 In-Reply-To: <cover.1471033837.git.yann.morin.1998@free.fr>
 References: <cover.1471033837.git.yann.morin.1998@free.fr>
-Message-ID: <fd94bb483d5538c48b7aeb03d65e3d4c8db2dcb9.1471033837.git.yann.morin.1998@free.fr>
+Message-ID: <bf528a01457458785591880406b964fcce771ca7.1471033837.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We now always have a sys/cdefs.h, so we can drop this patch.
+We now always have a sys/cdefs.h, so we no longer need to patch it out.
+
+Simplify the patch by removing any hunk removing cdefs.h or the use of
+__BEGIN_DECLS/__END_DECLS. However, it must be included when macros it
+defines are being used.
+
+Also, renumber patches to guarantee ordering.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
 ---
-Note that the patch was sent upstream, but it seems never acted upon.
----
- ...t-use-the-non-standard-sys-cdefs.h-header.patch | 48 ----------------------
- ...d_set-requires-inclusion-of-sys-select.h.patch} |  0
- 2 files changed, 48 deletions(-)
- delete mode 100644 package/bcusdk/0001-Do-not-use-the-non-standard-sys-cdefs.h-header.patch
- rename package/bcusdk/{0002-fd_set-requires-inclusion-of-sys-select.h.patch => 0001-fd_set-requires-inclusion-of-sys-select.h.patch} (100%)
+ .../0004-Fix-build-issue-with-musl.patch           | 181 +--------------------
+ ...build.patch => 0006-fix-big-endian-build.patch} |   0
+ .../0007-include-cdefs-h-when-needed.patch         |  41 +++++
+ 3 files changed, 43 insertions(+), 179 deletions(-)
+ rename package/android-tools/{0005-fix-big-endian-build.patch => 0006-fix-big-endian-build.patch} (100%)
+ create mode 100644 package/android-tools/0007-include-cdefs-h-when-needed.patch
 
-diff --git a/package/bcusdk/0001-Do-not-use-the-non-standard-sys-cdefs.h-header.patch b/package/bcusdk/0001-Do-not-use-the-non-standard-sys-cdefs.h-header.patch
-deleted file mode 100644
-index fc64386..0000000
---- a/package/bcusdk/0001-Do-not-use-the-non-standard-sys-cdefs.h-header.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From c36db3f798bf576f42d81a0c51198b17d7112e8c Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 8 Aug 2015 17:43:28 +0200
--Subject: [PATCH] Do not use the non-standard <sys/cdefs.h> header
+diff --git a/package/android-tools/0004-Fix-build-issue-with-musl.patch b/package/android-tools/0004-Fix-build-issue-with-musl.patch
+index e5ba0e6..964eb87 100644
+--- a/package/android-tools/0004-Fix-build-issue-with-musl.patch
++++ b/package/android-tools/0004-Fix-build-issue-with-musl.patch
+@@ -1,9 +1,6 @@
+ [PATCH] Fix build issue with musl
+ 
+-cdefs.h header doesn't exist in musl toolchains:
+-http://wiki.musl-libc.org/wiki/FAQ
 -
--<sys/cdefs.h> is glibc-specific, and should be used only internally by
--glibc, not by external libraries/programs. It is not available in all
--standard C libraries.
--
--Submitted upstream: https://sourceforge.net/p/bcusdk/patches/3/
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- eibd/include/eibclient.h | 11 ++++++++---
-- 1 file changed, 8 insertions(+), 3 deletions(-)
--
--diff --git a/eibd/include/eibclient.h b/eibd/include/eibclient.h
--index 2781878..b095a1c 100644
----- a/eibd/include/eibclient.h
--+++ b/eibd/include/eibclient.h
--@@ -27,10 +27,11 @@
-- #ifndef EIBCLIENT_H
-- #define EIBCLIENT_H
+-Also arpa/nameser.h doesn't use the same macro name to avoid several
++arpa/nameser.h doesn't use the same macro name to avoid several
+ inclusions.
+ 
+ Finally had an issue with framebuffer_service.c since it was missing the
+@@ -26,7 +23,7 @@ diff --git a/core/adbd/arpa_nameser.h b/core/adbd/arpa_nameser.h
+ index 438dc04..b2a28d6 100644
+ --- a/core/adbd/arpa_nameser.h
+ +++ b/core/adbd/arpa_nameser.h
+-@@ -52,11 +52,12 @@
++@@ -52,6 +52,8 @@
+  
+  #ifndef _ARPA_NAMESER_H_
+  #define _ARPA_NAMESER_H_
+@@ -35,51 +32,12 @@ index 438dc04..b2a28d6 100644
+  
+  #define BIND_4_COMPAT
+  
+- #include <sys/types.h>
+--#include <sys/cdefs.h>
+- 
+- /*
+-  * Revision information.  This is the release date in YYYYMMDD format.
+-@@ -505,7 +506,9 @@ typedef enum __ns_cert_types {
+- #define	ns_makecanon		__ns_makecanon
+- #define	ns_samename		__ns_samename
+- 
+--__BEGIN_DECLS
+-+#ifdef __cplusplus
+-+extern "C" {
+-+#endif
+- int		ns_msg_getflag(ns_msg, int);
+- uint16_t	ns_get16(const u_char *);
+- uint32_t	ns_get32(const u_char *);
+-@@ -560,7 +563,9 @@ int		ns_samedomain(const char *, const char *);
+- int		ns_subdomain(const char *, const char *);
+- int		ns_makecanon(const char *, char *, size_t);
+- int		ns_samename(const char *, const char *);
+--__END_DECLS
+-+#ifdef __cplusplus
+-+}
+-+#endif
+- 
+- #ifdef BIND_4_COMPAT
+- #include "arpa_nameser_compat.h"
+ @@ -574,4 +579,5 @@ __END_DECLS
+  #define  XLOG(...)   do {} while (0)
+  #endif
+  
+ +#endif /* !_ARPA_NAMESER_H */
+  #endif /* !_ARPA_NAMESER_H_ */
+-diff --git a/core/adbd/base64.c b/core/adbd/base64.c
+-index 7270703..73725f5 100644
+---- a/core/adbd/base64.c
+-+++ b/core/adbd/base64.c
+-@@ -42,7 +42,6 @@
+-  * IF IBM IS APPRISED OF THE POSSIBILITY OF SUCH DAMAGES.
+-  */
 - 
 --#include <sys/cdefs.h>
-- #include <stdint.h>
+- #if defined(LIBC_SCCS) && !defined(lint)
+- __RCSID("$NetBSD: base64.c,v 1.8 2002/11/11 01:15:17 thorpej Exp $");
+- #endif /* LIBC_SCCS and not lint */
+ diff --git a/core/adbd/framebuffer_service.c b/core/adbd/framebuffer_service.c
+ index 20c08d2..48e0241 100644
+ --- a/core/adbd/framebuffer_service.c
+@@ -92,140 +50,5 @@ index 20c08d2..48e0241 100644
+  #include <linux/fb.h>
+  #include <sys/ioctl.h>
+  #include <sys/mman.h>
+-diff --git a/core/adbd/qemu_pipe.h b/core/adbd/qemu_pipe.h
+-index 1a67022..572a242 100644
+---- a/core/adbd/qemu_pipe.h
+-+++ b/core/adbd/qemu_pipe.h
+-@@ -16,7 +16,6 @@
+- #ifndef ANDROID_INCLUDE_HARDWARE_QEMU_PIPE_H
+- #define ANDROID_INCLUDE_HARDWARE_QEMU_PIPE_H
 - 
---__BEGIN_DECLS;
--+#ifdef	__cplusplus
+--#include <sys/cdefs.h>
+- #include <unistd.h>
+- #include <fcntl.h>
+- #include <sys/mman.h>
+-diff --git a/core/include/cutils/android_reboot.h b/core/include/cutils/android_reboot.h
+-index 0c79be7..2ebe1cf 100644
+---- a/core/include/cutils/android_reboot.h
+-+++ b/core/include/cutils/android_reboot.h
+-@@ -17,7 +17,9 @@
+- #ifndef __CUTILS_ANDROID_REBOOT_H__
+- #define __CUTILS_ANDROID_REBOOT_H__
+- 
+--__BEGIN_DECLS
+-+#ifdef __cplusplus
 -+extern "C" {
 -+#endif
 - 
-- #include "eibloadresult.h"
+- /* Commands */
+- #define ANDROID_RB_RESTART  0xDEAD0001
+-@@ -30,6 +32,8 @@ __BEGIN_DECLS
 - 
--@@ -889,5 +890,9 @@ int EIB_Cache_LastUpdates_async (EIBConnection * con, uint16_t start,
-- 				 uint16_t * end);
-- 
+- int android_reboot(int cmd, int flags, char *arg);
 - 
 --__END_DECLS
--+
--+#ifdef	__cplusplus
+-+#ifdef __cplusplus
 -+}
 -+#endif
--+
+- 
+- #endif /* __CUTILS_ANDROID_REBOOT_H__ */
+-diff --git a/core/include/cutils/bitops.h b/core/include/cutils/bitops.h
+-index 1b3b762..a7c8cab 100644
+---- a/core/include/cutils/bitops.h
+-+++ b/core/include/cutils/bitops.h
+-@@ -17,9 +17,9 @@
+- #ifndef __CUTILS_BITOPS_H
+- #define __CUTILS_BITOPS_H
+- 
+--#include <sys/cdefs.h>
+--
+--__BEGIN_DECLS
+-+#ifdef __cplusplus
+-+extern "C" {
+-+#endif
+- 
+- static inline int popcount(unsigned int x)
+- {
+-@@ -36,6 +36,8 @@ static inline int popcountll(unsigned long long x)
+-     return __builtin_popcountll(x);
+- }
+- 
+--__END_DECLS
+-+#ifdef __cplusplus
+-+}
+-+#endif
+- 
+- #endif /* __CUTILS_BITOPS_H */
+-diff --git a/core/include/cutils/partition_utils.h b/core/include/cutils/partition_utils.h
+-index 597df92..0da9d5b 100644
+---- a/core/include/cutils/partition_utils.h
+-+++ b/core/include/cutils/partition_utils.h
+-@@ -17,11 +17,15 @@
+- #ifndef __CUTILS_PARTITION_WIPED_H__
+- #define __CUTILS_PARTITION_WIPED_H__
+- 
+--__BEGIN_DECLS
+-+#ifdef __cplusplus
+-+extern "C" {
+-+#endif
+- 
+- int partition_wiped(char *source);
+- void erase_footer(const char *dev_path, long long size);
+- 
+--__END_DECLS
+-+#ifdef __cplusplus
+-+}
+-+#endif
+- 
+- #endif /* __CUTILS_PARTITION_WIPED_H__ */
+-diff --git a/extras/ext4_utils/sha1.c b/extras/ext4_utils/sha1.c
+-index 463ec38..e2e29cf 100644
+---- a/extras/ext4_utils/sha1.c
+-+++ b/extras/ext4_utils/sha1.c
+-@@ -17,9 +17,6 @@
+- 
+- #define SHA1HANDSOFF		/* Copies data before messing with it. */
+- 
+--#ifndef USE_MINGW
+--#include <sys/cdefs.h>
+--#endif
+- #include <sys/types.h>
+- #include <assert.h>
+- #include <string.h>
+-diff --git a/extras/ext4_utils/sha1.h b/extras/ext4_utils/sha1.h
+-index 9a8f7e3..fe3217e 100644
+---- a/extras/ext4_utils/sha1.h
+-+++ b/extras/ext4_utils/sha1.h
+-@@ -17,11 +17,6 @@ typedef unsigned char u_char;
+- typedef unsigned int uint32_t;
+- typedef unsigned int u_int32_t;
+- typedef unsigned int u_int;
+--
+--#define __BEGIN_DECLS
+--#define __END_DECLS
+--#else
+--#include <sys/cdefs.h>
 - #endif
---- 
--2.5.0
+- 
+- #define SHA1_DIGEST_LENGTH		20
+-@@ -33,11 +28,15 @@ typedef struct {
+- 	u_char buffer[64];
+- } SHA1_CTX;
+- 
+--__BEGIN_DECLS
+-+#ifdef __cplusplus
+-+extern "C" {
+-+#endif
+- void	SHA1Transform(uint32_t[5], const u_char[64]);
+- void	SHA1Init(SHA1_CTX *);
+- void	SHA1Update(SHA1_CTX *, const u_char *, u_int);
+- void	SHA1Final(u_char[SHA1_DIGEST_LENGTH], SHA1_CTX *);
+--__END_DECLS
+-+#ifdef __cplusplus
+-+}
+-+#endif
+- 
+- #endif /* _SYS_SHA1_H_ */
+ -- 
+ 2.6.1
 -
-diff --git a/package/bcusdk/0002-fd_set-requires-inclusion-of-sys-select.h.patch b/package/bcusdk/0001-fd_set-requires-inclusion-of-sys-select.h.patch
+diff --git a/package/android-tools/0005-fix-big-endian-build.patch b/package/android-tools/0006-fix-big-endian-build.patch
 similarity index 100%
-rename from package/bcusdk/0002-fd_set-requires-inclusion-of-sys-select.h.patch
-rename to package/bcusdk/0001-fd_set-requires-inclusion-of-sys-select.h.patch
+rename from package/android-tools/0005-fix-big-endian-build.patch
+rename to package/android-tools/0006-fix-big-endian-build.patch
+diff --git a/package/android-tools/0007-include-cdefs-h-when-needed.patch b/package/android-tools/0007-include-cdefs-h-when-needed.patch
+new file mode 100644
+index 0000000..da4ee13
+--- /dev/null
++++ b/package/android-tools/0007-include-cdefs-h-when-needed.patch
+@@ -0,0 +1,41 @@
++Include cdefs.h wherever it is needed
++
++cdefs.h is included from within a lot of glibc headers, so it almost
++invariably and automagically gets pulled in with glibc.
++
++However, this might not be the case with other C libraries. musl does
++not provide cdefs.h so it does not include it from its own headers
++(cdefs.h must be provided separately).
++
++So we must include it when we are going to use macros it provides.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ core/adbd/services.c                  |  1 +
++ core/libcutils/android_reboot.c       |  1 +
++ 2 files changed, 2 insertions(+), 0 deletion(-)
++
++diff --git a/core/adbd/services.c b/core/adbd/services.c
++index 20c08d2..48e0241 100644
++--- a/core/adbd/services.c
+++++ b/core/adbd/services.c
++@@ -20,6 +20,7 @@
++ #include <string.h>
++ #include <errno.h>
++ #include <pwd.h>
+++#include <sys/cdefs.h>
++ 
++ #include "sysdeps.h"
++ 
++diff --git a/core/libcutils/android_reboot.c b/core/libcutils/android_reboot.c
++index 20c08d2..48e0241 100644
++--- a/core/libcutils/android_reboot.c
+++++ b/core/libcutils/android_reboot.c
++@@ -23,6 +23,7 @@
++ #include <string.h>
++ #include <linux/reboot.h>
++ #include <sys/syscall.h>
+++#include <sys/cdefs.h>
++ 
++ #include <cutils/android_reboot.h>
++ 
 -- 
 2.7.4
