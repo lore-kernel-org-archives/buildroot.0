@@ -1,61 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Aug 2016 00:06:28 +0200
-Subject: [Buildroot] [PATCH 2/2] fwup: link in pthreads for static builds
-In-Reply-To: <1470868546-8237-2-git-send-email-fhunleth@troodon-software.com>
-References: <1470868546-8237-1-git-send-email-fhunleth@troodon-software.com>
- <1470868546-8237-2-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20160812000628.3fc05f4e@free-electrons.com>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Thu, 11 Aug 2016 22:00:14 -0300
+Subject: [Buildroot] [PATCH 1/1] irssi: bump to version 0.8.19
+Message-ID: <1470963614-19423-1-git-send-email-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+---
+ package/irssi/irssi.hash | 2 +-
+ package/irssi/irssi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, 10 Aug 2016 18:35:46 -0400, Frank Hunleth wrote:
-> Both libconfuse (via libintl) and libarchive have references to pthreads
-> but do not specify pthreads in their pkg-config descriptions. This
-> change adds pthreads to the fwup linker options so that the link step
-> succeeds.
-
-I've finally taken some time to look into this, and I believe your fix
-is not the right fix, and the bug is in fact in uClibc (and I have
-already posted a mail on the uClibc mailing list about this).
-
-The fact that libintl and libarchive do *not* link with libpthread is
-intentional and actually a feature. As explained in my mail to the
-uClibc mailing list [1], the idea is that those libraries don't need
-threads, they only need to be thread-safe if threads are used by the
-application using them.
-
-So the libc part of the C library contains a stub implementation of
-those functions, while the libpthread part of the C library contains
-the real implementation.
-
-So, libintl and libarchive are only linked against libc.so. If you make
-a regular, non-threaded application, linked against libintl and/or
-libarchive, then those libraries will use the stub version of the
-pthread functions. This is correct and actually good: your application
-is not multi-threaded, so why suffer the cost of acquiring/releasing a
-mutex?
-
-If on the other hand, your application is multi-threaded, it will link
-against libpthread. In this case, the pthread_mutex_*() calls from
-libarchive or libintl will use the real implementation from libpthread,
-and those libraries will have a thread-safe behavior.
-
-The problem is that this doesn't work with static linking with uClibc.
-I believe it's a uClibc bug, but I'm not entirely sure either.
-
-So, if fwup links fine dynamically (i.e without linking against
-pthread), there should be no reason to link it with pthread for static
-linking.
-
-[1] http://mailman.uclibc-ng.org/pipermail/devel/2016-August/001132.html
-
-Thomas
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index fa49d85..f65d6c3 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	c0a177f749757c2d171ebe49ab0f0dd9cf9374dea81ab01904d0549bcb057840	irssi-0.8.18.tar.xz
++sha256	4ca0040548e814ea93eb7d602ab7d6d379afcbbdf10e84160523ce69c73ee5d3	irssi-0.8.19.tar.xz
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index 8272e44..a1e278e 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IRSSI_VERSION = 0.8.18
++IRSSI_VERSION = 0.8.19
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.1.4
