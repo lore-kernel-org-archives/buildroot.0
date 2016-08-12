@@ -1,9 +1,10 @@
 From: Khem Raj <raj.khem@gmail.com>
-Date: Thu, 11 Aug 2016 22:26:02 -0700
-Subject: [Buildroot] eudev compilation fails on buildroot-2016.08-rc1
-In-Reply-To: <CAFN-Ez51T+Z-3t_15sWgPDgrvRYRyW6raiDvbC744cgVcqiJ8w@mail.gmail.com>
-References: <CAFN-Ez51T+Z-3t_15sWgPDgrvRYRyW6raiDvbC744cgVcqiJ8w@mail.gmail.com>
-Message-ID: <B38B0459-FF73-4DFC-9189-F46BEB90F0BC@gmail.com>
+Date: Thu, 11 Aug 2016 22:30:05 -0700
+Subject: [Buildroot] [PATCH 2/3] ffmpeg: explicitly disable NEON support
+In-Reply-To: <1470864544-31919-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1470864544-31919-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1470864544-31919-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <6CC4787F-4C98-4A71-9184-73F1B2D83443@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,27 +12,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-> On Aug 10, 2016, at 7:57 AM, Chetan Kumar <shivakumar.chetan@gmail.com> wrote:
+> On Aug 10, 2016, at 2:29 PM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 > 
-> Hi,
+> When BR2_ARM_CPU_HAS_NEON=y, we pass --enable-neon. However, when
+> BR2_ARM_CPU_HAS_NEON is disabled, we don't pass anything. This generally
+> works fine, but turned out to integrate NEON code in ARMv7-M
+> builds (since it's ARMv7, ffmpeg assumed it should enable NEON code).
 > 
-> I am trying to build eudev on buildroot-2016.08-rc1, it fails at below
-> 
-> checking for gawk... (cached) mawk
-> checking for /home/buildroot-2016.08-rc1/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc option to accept ISO C99... unsupported
-> configure: error: no C99 compiler found, eudev requires a C99 compiler.
-> make[1]: *** [/home//buildroot-2016.08-rc1/output/build/eudev-3.2/.stamp_configured] Error 1
+> Even though ffmpeg is now disabled for ARMv7-M, it still makes sense to
+> be explicit, and disable NEON support when the CPU doesn't have it.
 
-There should be a config.log file in eudev builddir which should list the failure
-why configure failed. Please share config.log
+Just an aside. You can add ?enable-thumb when the default ISA
+chosen is thumb
 
-> make: *** [_all] Error 2
 > 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> package/ffmpeg/ffmpeg.mk | 2 ++
+> 1 file changed, 2 insertions(+)
 > 
-> Any help ?
+> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+> index c42336f..2b4219a 100644
+> --- a/package/ffmpeg/ffmpeg.mk
+> +++ b/package/ffmpeg/ffmpeg.mk
+> @@ -437,6 +437,8 @@ FFMPEG_CONF_OPTS += --disable-vfp
+> endif
+> ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+> FFMPEG_CONF_OPTS += --enable-neon
+> +else
+> +FFMPEG_CONF_OPTS += --disable-neon
+> endif
 > 
-> Thanks
-> C
+> ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
+> --
+> 2.7.4
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
@@ -43,4 +58,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 204 bytes
 Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160811/9e75b1f0/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160811/e67fffad/attachment.asc>
