@@ -1,78 +1,40 @@
-From: =?UTF-8?q?Manuel=20Gro=C3=9F?= <mgr@nordkrater.de>
-Date: Sat, 13 Aug 2016 13:26:29 +0200
-Subject: [Buildroot] [PATCH] websocketpp: new package
-Message-ID: <20160813112629.31883-1-mgr@nordkrater.de>
+From: Masahiro Yamada <yamada.masahiro@socionext.com>
+Date: Sat, 13 Aug 2016 21:41:24 +0900
+Subject: [Buildroot] [PATCH 1/2] zynq: enable
+	BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+In-Reply-To: <20160810145836.38fc9c79@free-electrons.com>
+References: <1469943791-4805-1-git-send-email-yamada.masahiro@socionext.com>
+ <1469943791-4805-2-git-send-email-yamada.masahiro@socionext.com>
+ <CANQCQpZwHuC+dxR=nfDbJt-=-q_eAyq8-Nkyuz0-_dw9Nb2=pg@mail.gmail.com>
+ <CAK7LNASOxdp=pXoZREUA-vnqJR1bJsbgDJpd0Np-JoN2aUGycg@mail.gmail.com>
+ <20160810145836.38fc9c79@free-electrons.com>
+Message-ID: <CAK7LNATHApQ4xe55WjdRskDROHay7sy7-mbY9WPX6LRzTNEPhg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package provides websocketpp, a header only C++ library that implements websocket client and server functionality.
----
- package/Config.in                  |  1 +
- package/websocketpp/Config.in      | 12 ++++++++++++
- package/websocketpp/websocketpp.mk | 21 +++++++++++++++++++++
- 3 files changed, 34 insertions(+)
- create mode 100644 package/websocketpp/Config.in
- create mode 100644 package/websocketpp/websocketpp.mk
+Hi Thomas,
 
-diff --git a/package/Config.in b/package/Config.in
-index 645fa29..e99850d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1242,6 +1242,7 @@ menu "Networking"
- 	source "package/sofia-sip/Config.in"
- 	source "package/thrift/Config.in"
- 	source "package/usbredir/Config.in"
-+	source "package/websocketpp/Config.in"
- 	source "package/wvstreams/Config.in"
- 	source "package/zeromq/Config.in"
- 	source "package/zmqpp/Config.in"
-diff --git a/package/websocketpp/Config.in b/package/websocketpp/Config.in
-new file mode 100644
-index 0000000..2b24b0d
---- /dev/null
-+++ b/package/websocketpp/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_WEBSOCKETPP
-+	bool "websocketpp"
-+	help
-+	  WebSocket++ is a header only C++ library that implements RFC6455 The
-+	  WebSocket Protocol. It allows integrating WebSocket client and server
-+	  functionality into C++ programs. It uses interchangeable network
-+	  transport modules including one based on raw char buffers, one based
-+	  on C++ iostreams, and one based on Asio (either via Boost or
-+	  standalone). End users can write additional transport policies to
-+	  support other networking or event libraries as needed.
-+
-+	  http://www.zaphoyd.com/websocketpp/
-diff --git a/package/websocketpp/websocketpp.mk b/package/websocketpp/websocketpp.mk
-new file mode 100644
-index 0000000..00f451f
---- /dev/null
-+++ b/package/websocketpp/websocketpp.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+## websocketpp
-+#
-+#################################################################################
-+
-+WEBSOCKETPP_VERSION = 0.7.0
-+WEBSOCKETPP_SITE = $(call github,zaphoyd,websocketpp,$(WEBSOCKETPP_VERSION))
-+WEBSOCKETPP_INSTALL_STAGING = YES
-+WEBSOCKETPP_LICENSE = BSD or MIT
-+WEBSOCKETPP_LICENSE_FILES = COPYING
-+
-+WEBSOCKETPP_VERSION_CONF_OPTS = \
-+	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS)"
-+
-+define WEBSOCKETPP_INSTALL_STAGING_CMDS
-+	cp -vR $(@D)/websocketpp $(STAGING_DIR)/usr/include/websocketpp
-+endef
-+
-+$(eval $(generic-package))
+2016-08-10 21:58 GMT+09:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Wed, 10 Aug 2016 21:31:16 +0900, Masahiro Yamada wrote:
+>
+>> Setting aside 2/2,
+>> 1/2 (this one) is apparently a bug fix and Matt reviewed it,
+>> so isn't it ready for v2016.08 ?
+>
+> I don't understand why 1/2 is a bug fix. Could you clarify?
+>
+
+"make uboot-menuconfig" does not work,
+where it should work.
+
+
+
 -- 
-2.9.2
+Best Regards
+Masahiro Yamada
