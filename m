@@ -1,12 +1,13 @@
 From: Khem Raj <raj.khem@gmail.com>
-Date: Fri, 12 Aug 2016 19:32:30 -0700
-Subject: [Buildroot] [PATCH] package/lshw: fix musl build
-In-Reply-To: <20160812224107.GB5656@free.fr>
-References: <1470327886-29273-1-git-send-email-romain.naour@gmail.com>
- <20160804183732.7319a9c8@free-electrons.com>
- <70811547-4ef0-d4cc-5074-3786f51f406e@gmail.com>
- <20160812224107.GB5656@free.fr>
-Message-ID: <BB0974CD-A82E-4939-AEC6-86ED7D054433@gmail.com>
+Date: Fri, 12 Aug 2016 19:35:59 -0700
+Subject: [Buildroot] [PATCH 1/8] package/netbsd-compat-headers: provide
+	compatibility headers not in musl
+In-Reply-To: <20160812213913.GA5656@free.fr>
+References: <cover.1471033837.git.yann.morin.1998@free.fr>
+ <1d561e7440fd9f14063d006fc3dca596c9c849c7.1471033837.git.yann.morin.1998@free.fr>
+ <B44D3B81-3715-4ED7-9034-744BF2BB1E5A@gmail.com>
+ <20160812213913.GA5656@free.fr>
+Message-ID: <60024C4E-F1DA-4CBB-AE6F-4FC66118B031@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,86 +15,76 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-> On Aug 12, 2016, at 3:41 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> On Aug 12, 2016, at 2:39 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 > 
-> Romain, Khem, All,
+> Khem, All,
 > 
-> On 2016-08-04 21:25 -0700, Khem Raj spake thusly:
->> On 8/4/16 9:37 AM, Thomas Petazzoni wrote:
->>> Hello,
+> On 2016-08-12 14:30 -0700, Khem Raj spake thusly:
+>> 
+>>> On Aug 12, 2016, at 1:49 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >>> 
->>> On Thu,  4 Aug 2016 18:24:46 +0200, Romain Naour wrote:
+>>> musl provides neither sys/queue.h nor sys/cdefs.h. Those two headers are
+>>> however quite widely used in a lot of packages (though they should at
+>>> least not use cdefs,h which is only full of mostly-legacy macros, and
+>>> which is mostly an internal header of glibc and was never really meant to
+>>> be exposed to, and used by packages).
 >>> 
->>>> +diff --git a/src/core/dasd.cc b/src/core/dasd.cc
->>>> +index 626b8a8..18d19c3 100644
->>>> +--- a/src/core/dasd.cc
->>>> ++++ b/src/core/dasd.cc
->>>> +@@ -4,6 +4,7 @@
->>>> + #include <glob.h>
->>>> + #include <string.h>
->>>> + #include <fcntl.h>
->>>> ++#include <libgen.h>
+>>> But we don;t live in an ideal world, so a lot of packages break when
+>>> those two headers are missing.
 >>> 
->>> Is this related?
->> 
->> if we want to use POSIX compliant version of basename() then we need to
->> include this yes.
-> 
-> Confirmed. ;-)
-> 
->>>> + #include <unistd.h>
->>>> + #include <inttypes.h>
->>>> + #include <sys/ioctl.h>
->>>> +@@ -42,7 +43,7 @@ bool scan_dasd(hwNode & n)
->>>> +   {
->>>> +     for(dev_num=0;dev_num<devices.gl_pathc;dev_num++)
->>>> +     {
->>>> +-      dev_name = basename(devices.gl_pathv[dev_num]);
->>>> ++      dev_name = basename(const_cast<char *>(devices.gl_pathv[dev_num]));
+>>> We already took care of sys/queue.h with the netbsd-queue package. But
+>>> the need for cdefs.h is getting more and more pressing.
 >>> 
->>> I'm not super familiar with C++ stuff, but why is this problem musl
->>> specific? The basename() function is "char *basename(char *)"
->>> regardless of the C library being used. What makes it error out with
->>> musl and not with other C libraries?
+>>> We rename the netbsd-queue package into musl-compat-headers, and we
+>>> make it install sys/queue.h (from NetBSD) and sys/cdefs.h (a minimalist
+>>> one we bundle in Buildroot). We can't use the cdefs.h from NetBSD
+>>> because it includes machine-dependent headers; instead we bundle a very
+>>> minimalistic one, that covers only what we need.
 >> 
->> glibc and uclibc implement the GNU version of basename() API which does
->> not modify the argument ( const char*) and when including string.h and
->> not libgen.h we are saying we want gnu version. musl does not implement
->> the gnu extention, it only has POSIX version. Hence you see the issue
->> just on musl.
->> 
->> So the patch makes it compile for all libcs. however, it should be
->> tested on glibc/uclibc since there were bugs in the posix implementation
->> of basename()  see
->> 
->> http://man7.org/linux/man-pages/man3/basename.3.html
->> 
->> if it cant be tested then make the posix version use only for musl
->> which I would not recommend, but its an option
+>> see here http://git.openembedded.org/openembedded-core/tree/meta/recipes-core/bsd-headers/bsd-headers
 > 
-> Note however that upstream already did a similar change in an other
-> file (src/core/pci.cc, by the end of the commit):
->    https://github.com/lyonel/lshw/commit/cd690bff1516b40fecd5ec4a7f6619e5bffc3cf0
-> 
+> Thanks for the pointer! :-)
+> But no licensing info in that file, so we can't use it... :-/
 
-Thats fine, if the use of the variable is limited in scope it may
-not have side effects of being overwritten
+Oh, that can be fixed.
 
-> Romain did open a pull request, but it has not yet been merged:
->    https://github.com/lyonel/lshw/pull/17
 > 
-> However, I believe casting is utterly wrong: c_str() returns a
-> const char* and C++98 states that that string must *not* be modified,
-> but the POSIX basename() *does* modify its argument.
-> 
-> So, I really believe that the correct fix is completely different
-> (abstracting away basename, maybe?).
+> Also, we don't want to add a #warning, to avoid having to patch those
+> bad packages that find it smart to add -Werror by default.
 
-If there are side effects maybe, otherwise casting is ok.
+yet to encounter this case in OE world yet.
+
+> 
+>> you might need some more.
+> 
+> Right now, all the packages in Buildroot that we were patching because
+> of cdefs.h only need those three macros: __BEGIN_DECLS(), __END_DECLS()
+> and __P().
+> 
+> There is no point in adding more than what we strictly require. As I
+> said in the cover letter, we can add the missing macros when we see the
+> issue.
+
+Fair enough.
+
+> 
+> TRhanks for the feedback! :-)
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+
 -------------- next part --------------
 A non-text attachment was scrubbed...
 Name: signature.asc
 Type: application/pgp-signature
 Size: 204 bytes
 Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160812/ce4f4368/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160812/6261bcbf/attachment.asc>
