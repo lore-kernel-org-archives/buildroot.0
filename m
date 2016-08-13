@@ -1,72 +1,139 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Aug 2016 19:48:31 +0200
-Subject: [Buildroot] [PATCH] package/ustr: don't run ldconfig (and
- certainly not concurrently)
-In-Reply-To: <20160813152753.GB5734@free.fr>
-References: <1471096801-9875-1-git-send-email-yann.morin.1998@free.fr>
- <28ed24c9-fb7d-e0ce-653d-993c01d1d341@mind.be>
- <20160813152753.GB5734@free.fr>
-Message-ID: <e13e20a2-6902-74f7-ea2a-95c5cdb266fe@mind.be>
+Date: Sat, 13 Aug 2016 19:52:21 +0200
+Subject: [Buildroot] [PATCH] package/fbterm: fix C++11 compliance with
+ gcc-6
+In-Reply-To: <1471100701-16324-1-git-send-email-yann.morin.1998@free.fr>
+References: <1471100701-16324-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <6737484d-23ed-07e1-3aad-d133dcacfecd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13-08-16 17:27, Yann E. MORIN wrote:
-> Arnout, All,
+On 13-08-16 17:05, Yann E. MORIN wrote:
+> gcc-6 has enabled more warnings by default, and turned some existing
+> warnings into errors.
 > 
-> On 2016-08-13 17:00 +0200, Arnout Vandecappelle spake thusly:
->>  [Back from a month in Benin with almost no Internet access - yey!]
->>
->> On 13-08-16 16:00, Yann E. MORIN wrote:
-[snip]
->>> +diff -durN ustr-1.0.4.orig/Makefile.in ustr-1.0.4/Makefile.in
->>> +--- ustr-1.0.4.orig/Makefile.in	2016-08-13 15:54:40.220043291 +0200
->>> ++++ ustr-1.0.4/Makefile.in	2016-08-13 15:55:25.600641886 +0200
->>> +@@ -427,11 +427,11 @@
->>> + 		install -m 644 -t $(DESTDIR)$(libdir) $(OPT_LIB_STATIC)
->>> + 		install -m 755 -t $(DESTDIR)$(libdir) $(OPT_LIB_SHARED)
->>> + 		-rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
->>> +-		ln -s $(OPT_LIB_SHARED) $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
->>> ++		ln -fs $(OPT_LIB_SHARED) $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
->>
->>  This is fairly useless. 'ln -f' just does stat - unlink - symlink, so almost
->> the same as 'rm -f; ln -s'. There is a timing difference, so it makes the race
->> condition somewhat more difficult to hit, but it still exists. There is no
->> race-free way to do parallel symlinks.
+> Fixes (all on arc or arm):
+>     http://autobuild.buildroot.org/results/8c4/8c4a6cf492bccf4e1b99897bd9658e21b89b31ab/
+>     http://autobuild.buildroot.org/results/875/875a9deb15d47d348bb53dafdbb7ed2f2bbd3da8/
+>     http://autobuild.buildroot.org/results/af4/af4935f0ad2054b7dc2443e2d126fe8e50996f66/
+>     [...]
 > 
-> But there should be no race now, since we no longer do ldconfig.
-> 
-> Yes, the rm -f may be supperflouous, unless the symlink was read-only [0],
-> in which case ln -f would not remove it.
-> 
-> [0] this is technically possible: fchmodat() has a AT_SYMLINK_NOFOLLOW
->     flag, implying that it should be possible to do change the mode of
->     a symlink without dereferencing it, but it is not yet implemented
->     under Linux (others systems may be able to do so).
-> 
-> Of course, this is all hypotetical so far. ;-)
-> 
-> But the reasons I wrote it that way:
->   - that's the least invasive change,
->   - that's what Thomas suggested back in May.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- You seem to have missed my point: adding the -f doesn't solve the race
-condition, it just slightly reduces the time window in which the race can hit.
-So this patch is completely pointless.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- If you remove the rm as well, then it could serve some purpose, but only to
-simplify the code, not to fix parallel build issues.
-
- Since the LDCONFIG=/bin/true is sufficient for Buildroot, I propose to send
-your patches to Debian upstream and just keep the LDCONFIG part for Buildroot.
-We really don't want to add unneeded patches to a dead package, do we?
 
  Regards,
  Arnout
 
-[snip]
+> ---
+>  package/fbterm/0003-C++11-compliance.patch | 93 ++++++++++++++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>  create mode 100644 package/fbterm/0003-C++11-compliance.patch
+> 
+> diff --git a/package/fbterm/0003-C++11-compliance.patch b/package/fbterm/0003-C++11-compliance.patch
+> new file mode 100644
+> index 0000000..3529a50
+> --- /dev/null
+> +++ b/package/fbterm/0003-C++11-compliance.patch
+> @@ -0,0 +1,93 @@
+> +lib/vterm_states: fix C++11 compliance
+> +
+> +In C++11, narrowing a type is no longer allowed in structure
+> +initialszers:
+> +
+> +    struct foo { u16 u; };
+> +    foo f[] = { {0}, {-1} };
+> +
+> +results in the gcc-6 to whine out loudly, and fail:
+> +
+> +    error: narrowing conversion of ?-1? from ?int? to ?u16 {aka short unsigned int}? inside { } [-Wnarrowing]
+> +     };
+> +     ^
+> +
+> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +
+> +diff -durN fbterm-1.7.0.orig/src/lib/vterm_states.cpp fbterm-1.7.0/src/lib/vterm_states.cpp
+> +--- fbterm-1.7.0.orig/src/lib/vterm_states.cpp	2010-10-06 06:23:08.000000000 +0200
+> ++++ fbterm-1.7.0/src/lib/vterm_states.cpp	2016-08-13 16:54:29.495451127 +0200
+> +@@ -22,6 +22,7 @@
+> + #include "vterm.h"
+> + 
+> + #define ADDSAME(len) ((len) << 8)
+> ++#define ENDSEQ  { ((u16)-1) }
+> + 
+> + const VTerm::Sequence VTerm::control_sequences[] = {
+> + 	{ 0,	0,	ESkeep },
+> +@@ -39,14 +40,14 @@
+> + 	{ 0x1B, 0,	ESesc },
+> + 	{ 0x7F, 0,	ESkeep },
+> + 	{ 0x9B, 0,	ESsquare },
+> +-	{ -1}
+> ++	ENDSEQ
+> + };
+> + 
+> + const VTerm::Sequence VTerm::escape_sequences[] = {
+> + 	{   0, 0, ESnormal },
+> + 
+> + 	// ESnormal
+> +-	{ -1 },
+> ++	ENDSEQ,
+> + 
+> + 	// ESesc
+> + 	{ '[', &VTerm::clear_param,	ESsquare },
+> +@@ -65,7 +66,7 @@
+> + 	{ '8', &VTerm::restore_cursor,	ESnormal },
+> + 	{ '>', &VTerm::keypad_numeric,	ESnormal },
+> + 	{ '=', &VTerm::keypad_application,	ESnormal },
+> +-	{ -1 },
+> ++	ENDSEQ,
+> + 
+> + 	// ESsquare
+> + 	{ '[', 0,	ESfunckey },
+> +@@ -104,7 +105,7 @@
+> + 	{ '`', &VTerm::cursor_position_col,	ESnormal },
+> + 	{ ']', &VTerm::linux_specific, ESnormal },
+> + 	{ '}', &VTerm::fbterm_specific, ESnormal },
+> +-	{ -1 },
+> ++	ENDSEQ,
+> + 
+> + 	// ESnonstd
+> + 	{ '0' | ADDSAME(9), &VTerm::set_palette,    ESkeep },
+> +@@ -112,25 +113,25 @@
+> + 	{ 'a' | ADDSAME(5), &VTerm::set_palette,    ESkeep },
+> + 	{ 'P', &VTerm::begin_set_palette, ESkeep },
+> + 	{ 'R', &VTerm::reset_palette, ESnormal },
+> +-	{ -1 },
+> ++	ENDSEQ,
+> + 
+> + 	// ESpercent
+> + 	{ '@', &VTerm::clear_utf8,	ESnormal },
+> + 	{ 'G', &VTerm::set_utf8,	ESnormal },
+> + 	{ '8', &VTerm::set_utf8,	ESnormal },
+> +-	{ -1 },
+> ++	ENDSEQ,
+> + 
+> + 	// EScharset
+> + 	{ '0', &VTerm::set_charset, ESnormal },
+> + 	{ 'B', &VTerm::set_charset, ESnormal },
+> + 	{ 'U', &VTerm::set_charset, ESnormal },
+> + 	{ 'K', &VTerm::set_charset, ESnormal },
+> +-	{ -1 },
+> ++	ENDSEQ,
+> + 
+> + 	// EShash
+> + 	{ '8', &VTerm::screen_align,	ESnormal },
+> +-	{ -1 },
+> ++	ENDSEQ,
+> + 
+> + 	// ESfunckey
+> +-	{ -1 },
+> ++	ENDSEQ,
+> + };
+> 
 
 
 -- 
