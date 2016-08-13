@@ -1,65 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Aug 2016 13:20:43 +0200
-Subject: [Buildroot] [PATCH 1/2] xen: Ensure host Python2 is used
-In-Reply-To: <1471041006-26425-1-git-send-email-alistair.francis@xilinx.com>
-References: <1471041006-26425-1-git-send-email-alistair.francis@xilinx.com>
-Message-ID: <20160813112043.GA5734@free.fr>
+From: =?UTF-8?q?Manuel=20Gro=C3=9F?= <mgr@nordkrater.de>
+Date: Sat, 13 Aug 2016 13:26:29 +0200
+Subject: [Buildroot] [PATCH] websocketpp: new package
+Message-ID: <20160813112629.31883-1-mgr@nordkrater.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alistair, All,
+This package provides websocketpp, a header only C++ library that implements websocket client and server functionality.
+---
+ package/Config.in                  |  1 +
+ package/websocketpp/Config.in      | 12 ++++++++++++
+ package/websocketpp/websocketpp.mk | 21 +++++++++++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 package/websocketpp/Config.in
+ create mode 100644 package/websocketpp/websocketpp.mk
 
-On 2016-08-12 15:30 -0700, Alistair Francis spake thusly:
-> To avoid Xen build issues ensure that host Python 2 is used.
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-
-Wee! Works:
-    python2... /home/ymorin/dev/buildroot/O/host/usr/bin/python2
-    checking for python version >= 2.3 ... yes
-
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/xen/xen.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-> index 759667a..e2abf25 100644
-> --- a/package/xen/xen.mk
-> +++ b/package/xen/xen.mk
-> @@ -8,6 +8,7 @@ XEN_VERSION = 4.6.0
->  XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
->  XEN_LICENSE = GPLv2
->  XEN_LICENSE_FILES = COPYING
-> +XEN_DEPENDENCIES = host-python
->  
->  # Calculate XEN_ARCH
->  ifeq ($(ARCH),aarch64)
-> @@ -17,6 +18,8 @@ XEN_ARCH = arm32
->  endif
->  
->  XEN_CONF_OPTS = --disable-ocamltools
-> +
-> +XEN_CONF_ENV = PYTHON=$(HOST_DIR)/usr/bin/python2
->  XEN_MAKE_ENV = \
->  	XEN_TARGET_ARCH=$(XEN_ARCH) \
->  	CROSS_COMPILE=$(TARGET_CROSS) \
-> -- 
-> 2.7.4
-> 
-
+diff --git a/package/Config.in b/package/Config.in
+index 645fa29..e99850d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1242,6 +1242,7 @@ menu "Networking"
+ 	source "package/sofia-sip/Config.in"
+ 	source "package/thrift/Config.in"
+ 	source "package/usbredir/Config.in"
++	source "package/websocketpp/Config.in"
+ 	source "package/wvstreams/Config.in"
+ 	source "package/zeromq/Config.in"
+ 	source "package/zmqpp/Config.in"
+diff --git a/package/websocketpp/Config.in b/package/websocketpp/Config.in
+new file mode 100644
+index 0000000..2b24b0d
+--- /dev/null
++++ b/package/websocketpp/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_WEBSOCKETPP
++	bool "websocketpp"
++	help
++	  WebSocket++ is a header only C++ library that implements RFC6455 The
++	  WebSocket Protocol. It allows integrating WebSocket client and server
++	  functionality into C++ programs. It uses interchangeable network
++	  transport modules including one based on raw char buffers, one based
++	  on C++ iostreams, and one based on Asio (either via Boost or
++	  standalone). End users can write additional transport policies to
++	  support other networking or event libraries as needed.
++
++	  http://www.zaphoyd.com/websocketpp/
+diff --git a/package/websocketpp/websocketpp.mk b/package/websocketpp/websocketpp.mk
+new file mode 100644
+index 0000000..00f451f
+--- /dev/null
++++ b/package/websocketpp/websocketpp.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++## websocketpp
++#
++#################################################################################
++
++WEBSOCKETPP_VERSION = 0.7.0
++WEBSOCKETPP_SITE = $(call github,zaphoyd,websocketpp,$(WEBSOCKETPP_VERSION))
++WEBSOCKETPP_INSTALL_STAGING = YES
++WEBSOCKETPP_LICENSE = BSD or MIT
++WEBSOCKETPP_LICENSE_FILES = COPYING
++
++WEBSOCKETPP_VERSION_CONF_OPTS = \
++	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++	LDFLAGS="$(TARGET_LDFLAGS)"
++
++define WEBSOCKETPP_INSTALL_STAGING_CMDS
++	cp -vR $(@D)/websocketpp $(STAGING_DIR)/usr/include/websocketpp
++endef
++
++$(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.9.2
