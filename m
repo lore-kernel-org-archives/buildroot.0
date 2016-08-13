@@ -1,46 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Aug 2016 18:57:21 +0200
-Subject: [Buildroot] [PATCH] system: sysvinit needs MMU
-Message-ID: <1471107441-15881-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sat, 13 Aug 2016 19:06:58 +0200
+Subject: [Buildroot] [PATCH 1/2] package/systemd-bootchart: needs headers >=
+	3.17
+Message-ID: <1471108019-21603-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It uses spawn() and thus fork(), so it needs an MMU.
-
-Fixes a build issue reported on IRC for a cortex-m4 build:
-    http://pastebin.com/dGCsy0sr
+It uses GRND_NONBLOCK, introduced in 3.17.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/sysvinit/Config.in | 1 +
- system/Config.in           | 1 +
- 2 files changed, 2 insertions(+)
+ package/systemd-bootchart/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/sysvinit/Config.in b/package/sysvinit/Config.in
-index ab67ed6..94f1612 100644
---- a/package/sysvinit/Config.in
-+++ b/package/sysvinit/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SYSVINIT
- 	bool "sysvinit"
-+	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INIT_SYSV
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/systemd-bootchart/Config.in b/package/systemd-bootchart/Config.in
+index 2a70b8d..8deb6b9 100644
+--- a/package/systemd-bootchart/Config.in
++++ b/package/systemd-bootchart/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SYSTEMD_BOOTCHART
+ 	bool "systemd-bootchart"
+ 	depends on BR2_INIT_SYSTEMD
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
  	help
-diff --git a/system/Config.in b/system/Config.in
-index 5855707..353421a 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -106,6 +106,7 @@ config BR2_INIT_BUSYBOX
+ 	  systemd-bootchart is a tool, usually run at system startup,
+ 	  that collects the CPU load, disk load, memory usage, as well
+@@ -19,3 +20,7 @@ config BR2_PACKAGE_SYSTEMD_BOOTCHART
+ 	  these options are enabled.
  
- config BR2_INIT_SYSV
- 	bool "systemV"
-+	depends on BR2_USE_MMU # sysvinit
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
- 	select BR2_PACKAGE_INITSCRIPTS
- 	select BR2_PACKAGE_SYSVINIT
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-bootchart.html
++
++comment "systemd-bootchart needs a toolchain w/ headers >= 3.17"
++	depends on BR2_INIT_SYSTEMD
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
 -- 
 2.7.4
