@@ -1,191 +1,141 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Aug 2016 17:27:53 +0200
-Subject: [Buildroot] [PATCH] package/ustr: don't run ldconfig (and
- certainly not concurrently)
-In-Reply-To: <28ed24c9-fb7d-e0ce-653d-993c01d1d341@mind.be>
-References: <1471096801-9875-1-git-send-email-yann.morin.1998@free.fr>
- <28ed24c9-fb7d-e0ce-653d-993c01d1d341@mind.be>
-Message-ID: <20160813152753.GB5734@free.fr>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sat, 13 Aug 2016 18:25:02 +0200
+Subject: [Buildroot] Fixing the build of Mono with musl
+In-Reply-To: <20160526204003.6668392e@free-electrons.com>
+References: <20160526204003.6668392e@free-electrons.com>
+Message-ID: <CA+TH9VnreHWjcGxrk2-ixJkROw80qu-x1KffdSWNQpeuWpUkww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Dear Thomas Petazzoni,
 
-On 2016-08-13 17:00 +0200, Arnout Vandecappelle spake thusly:
->  [Back from a month in Benin with almost no Internet access - yey!]
-> 
-> On 13-08-16 16:00, Yann E. MORIN wrote:
-> > The ustr Makefile.in (as introduced by the Debian patch we apply), is
-> > probably not parallel-safe:
-> [snip]
-> > We fix that in three ways:
-> > 
-> >   - first, no need to run ldconfig at all in Buildroot, we just pass
-> >     LDCONFIG=/bin/true ;
-> 
->  For Buildroot purposes, this is actually sufficient, no?
 
-Right. But while at it, just fix the things properly for upstream, hence
-the following patches. Except...
+2016-05-26 20:40 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-> >   - second, no need to run LDCONFIG more than once, so we patch ustr to
-> >     only run it once, once all libs have been installed;
-> > 
-> >   - third, we patch ustr to use ln -f to redo the symlink if it already
-> >     exists.
-> > 
-> > Fixes (hopefully, since I was not even able to reproduce the failure):
-> >     http://autobuild.buildroot.org/?reason=ustr-1.0.4
-> >     http://autobuild.buildroot.org/results/936/93626f55625ed7900c147bfd79ff7802366639b1/
-> >     http://autobuild.buildroot.org/results/18b/18b6ec537da9e9055f58a8649c0719dc64df1bcf/
-> >     [...]
-> > 
-> > [0] http://lists.busybox.net/pipermail/buildroot/2016-May/161923.html
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> > ---
-> >  package/ustr/0001-run-ldconfig-only-once.patch | 34 ++++++++++++++++++++++
-> >  package/ustr/0002-ln-force.patch               | 39 ++++++++++++++++++++++++++
-> >  package/ustr/ustr.mk                           |  2 ++
-> >  3 files changed, 75 insertions(+)
-> >  create mode 100644 package/ustr/0001-run-ldconfig-only-once.patch
-> >  create mode 100644 package/ustr/0002-ln-force.patch
-> > 
-> > diff --git a/package/ustr/0001-run-ldconfig-only-once.patch b/package/ustr/0001-run-ldconfig-only-once.patch
-> > new file mode 100644
-> > index 0000000..594f985
-> > --- /dev/null
-> > +++ b/package/ustr/0001-run-ldconfig-only-once.patch
-> > @@ -0,0 +1,34 @@
-> > +Makefile: run ldconfig only once
-> > +
-> > +No need to run ldconfig for each library we install; we can run it once,
-> > +when both libs are installed.
-> > +
-> > +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
->  Upstream status?
-> 
->  Upstream is git so we prefer git patches.
+> Hello Angelo,
+>
+> Today, I took a look at this build failure:
+>
+>   http://autobuild.buildroot.org/results/42d/
+> 42d9f34d04ac83a6602c387ec3754035a856bf8f/build-end.log
+>
+> Which is a problem when building Mono with the musl C library.
+>
+> According to
+> http://www.mono-project.com/docs/about-mono/releases/4.0.0/, it is
+> possible to build Mono for musl by passing --disable-boehm
+> --without-sigaltstack. So I did the following change:
+>
+> diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+> index 0b9cb46..b23495c 100644
+> --- a/package/mono/mono.mk
+> +++ b/package/mono/mono.mk
+> @@ -26,6 +26,13 @@ MONO_CONF_OPTS = --disable-gtk-doc \
+>         --disable-mcs-build \
+>         --enable-static
+>
+> +# As suggested by
+> +# http://www.mono-project.com/docs/about-mono/releases/4.0.0/ for musl
+> +# support.
+> +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+> +MONO_CONF_OPTS += --disable-boehm --without-sigaltstack
+> +endif
+> +
+>  # The libraries have been built by the host-mono build. Since they are
+>  # architecture-independent, we simply copy them to the target.
+>  define MONO_INSTALL_LIBS
+>
+> It indeed allows the build to go further, but it fails for another
+> reason at the end of the build, with the following errors:
+>
+> ./.libs/libmini-static.a(libmini_static_la-mini-runtime.o): In function
+> `mono_get_jit_tls_offset':
+> /home/thomas/projets/buildroot/output/build/mono-4.
+> 2.3.4/mono/mini/mini-runtime.c:714: undefined reference to `mono_jit_tls'
+> ./.libs/libmini-static.a(libmini_static_la-mini-runtime.o): In function
+> `mono_get_lmf_tls_offset':
+> /home/thomas/projets/buildroot/output/build/mono-4.
+> 2.3.4/mono/mini/mini-runtime.c:724: undefined reference to `mono_lmf'
+> ./.libs/libmini-static.a(libmini_static_la-mini-runtime.o): In function
+> `mono_get_lmf_addr_tls_offset':
+> /home/thomas/projets/buildroot/output/build/mono-4.
+> 2.3.4/mono/mini/mini-runtime.c:735: undefined reference to `mono_lmf_addr'
+> ./.libs/libmini-static.a(libmini_static_la-mini-runtime.o): In function
+> `mono_get_jit_tls_offset':
+> /home/thomas/projets/buildroot/output/build/mono-4.
+> 2.3.4/mono/mini/mini-runtime.c:714: undefined reference to `mono_jit_tls'
+> ./.libs/libmini-static.a(libmini_static_la-mini-runtime.o): In function
+> `mono_get_lmf_tls_offset':
+> /home/thomas/projets/buildroot/output/build/mono-4.
+> 2.3.4/mono/mini/mini-runtime.c:724: undefined reference to `mono_lmf'
+> ./.libs/libmini-static.a(libmini_static_la-mini-runtime.o): In function
+> `mono_get_lmf_addr_tls_offset':
+> /home/thomas/projets/buildroot/output/build/mono-4.
+> 2.3.4/mono/mini/mini-runtime.c:735: undefined reference to `mono_lmf_addr'
+> ../../mono/metadata/.libs/libmonoruntimesgen-static.a(
+> libmonoruntimesgen_static_la-threads.o): In function
+> `mono_thread_get_tls_offset':
+> /home/thomas/projets/buildroot/output/build/mono-4.
+> 2.3.4/mono/metadata/threads.c:263: undefined reference to
+> `tls_current_object'
+> ../../mono/metadata/.libs/libmonoruntimesgen-static.a(
+> libmonoruntimesgen_static_la-domain.o): In function
+> `mono_domain_get_tls_offset':
+> /home/thomas/projets/buildroot/output/build/mono-4.
+> 2.3.4/mono/metadata/domain.c:159: undefined reference to `tls_appdomain'
+> ../../mono/metadata/.libs/libmonoruntimesgen-static.a(
+> libmonoruntimesgen_static_la-sgen-mono.o): In function `sgen_client_init':
+> /home/thomas/projets/buildroot/output/build/mono-4.
+> 2.3.4/mono/metadata/sgen-mono.c:2770: undefined reference to
+> `sgen_thread_info'
+> ../../mono/sgen/.libs/libmonosgen-static.a(libmonosgen_static_la-sgen-alloc.o):
+> In function `sgen_init_allocator':
+> /home/thomas/projets/buildroot/output/build/mono-4.
+> 2.3.4/mono/sgen/sgen-alloc.c:552: undefined reference to `tlab_next_addr'
+> /home/thomas/projets/buildroot/output/build/mono-4.
+> 2.3.4/mono/sgen/sgen-alloc.c:553: undefined reference to `tlab_temp_end'
+> collect2: error: ld returned 1 exit status
+>
+> I checked, those variables are really defined. They are all defined
+> with a special macro MONO_FAST_TLS_DECLARE() because they are
+> thread-local variables. But for some reason, gcc gets rid of them it
+> seems.
+>
+> I have reported the issue upstream at
+> https://bugzilla.xamarin.com/show_bug.cgi?id=41340.
+>
+> Interestingly, Alpine Linux has some patches to make Mono build for
+> Musl: http://git.alpinelinux.org/cgit/aports/tree/testing/mono, but
+> they are for an older version of Mono, and I don't see how any of them
+> can solve the above problem.
+>
+> Do you have some time to investigate this issue ?
+>
 
-... upstream has been dead since 2008. :-(
+Sorry for the late reply, I'm also investigating the issue for the 4.4.2.11
+release. I'll hope to complete before 2016.08 will be released.
 
-Besides, the Makefile.in comes from the Debian patch we apply, so it is
-not upstream.
+Sincerely, Angelo
 
-So, probably useless to send upstream.
 
-I was going to send it to Debian, though...
+>
+> Thanks a lot,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
 
-[--SNIP--]
-> > diff --git a/package/ustr/0002-ln-force.patch b/package/ustr/0002-ln-force.patch
-> > new file mode 100644
-> > index 0000000..18afe4d
-> > --- /dev/null
-> > +++ b/package/ustr/0002-ln-force.patch
-> > @@ -0,0 +1,39 @@
-> > +Makefile: forcibly create library symlinks
-> > +
-> > +Aboids failures when the symlink already exists (it is re-symlinked).
-> > +
-> > +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > +
-> > +diff -durN ustr-1.0.4.orig/Makefile.in ustr-1.0.4/Makefile.in
-> > +--- ustr-1.0.4.orig/Makefile.in	2016-08-13 15:54:40.220043291 +0200
-> > ++++ ustr-1.0.4/Makefile.in	2016-08-13 15:55:25.600641886 +0200
-> > +@@ -427,11 +427,11 @@
-> > + 		install -m 644 -t $(DESTDIR)$(libdir) $(OPT_LIB_STATIC)
-> > + 		install -m 755 -t $(DESTDIR)$(libdir) $(OPT_LIB_SHARED)
-> > + 		-rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
-> > +-		ln -s $(OPT_LIB_SHARED) $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
-> > ++		ln -fs $(OPT_LIB_SHARED) $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
-> 
->  This is fairly useless. 'ln -f' just does stat - unlink - symlink, so almost
-> the same as 'rm -f; ln -s'. There is a timing difference, so it makes the race
-> condition somewhat more difficult to hit, but it still exists. There is no
-> race-free way to do parallel symlinks.
 
-But there should be no race now, since we no longer do ldconfig.
-
-Yes, the rm -f may be supperflouous, unless the symlink was read-only [0],
-in which case ln -f would not remove it.
-
-[0] this is technically possible: fchmodat() has a AT_SYMLINK_NOFOLLOW
-    flag, implying that it should be possible to do change the mode of
-    a symlink without dereferencing it, but it is not yet implemented
-    under Linux (others systems may be able to do so).
-
-Of course, this is all hypotetical so far. ;-)
-
-But the reasons I wrote it that way:
-  - that's the least invasive change,
-  - that's what Thomas suggested back in May.
-
-Regards,
-Yann E. MORIN.
-
-> > + 		-rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV)
-> > +-		ln -s $(OPT_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV)
-> > ++		ln -fs $(OPT_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV)
-> > + 		-rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV_BSO)
-> > +-		ln -s $(OPT_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV_BSO)
-> > ++		ln -fs $(OPT_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV_BSO)
-> > + 		install -pm 644 -t $(DESTDIR)$(libdir)/pkgconfig ustr.pc
-> > + 
-> > + install-dbg-lib: $(DBG_LIB_STATIC) $(DBG_LIB_SHARED) ustr-debug.pc
-> > +@@ -439,11 +439,11 @@
-> > + 		install -m 644 -t $(DESTDIR)$(libdir) $(DBG_LIB_STATIC)
-> > + 		install -m 755 -t $(DESTDIR)$(libdir) $(DBG_LIB_SHARED)
-> > + 		-rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
-> > +-		ln -s $(DBG_LIB_SHARED) $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
-> > ++		ln -fs $(DBG_LIB_SHARED) $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
-> > + 		-rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV)
-> > +-		ln -s $(DBG_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV)
-> > ++		ln -fs $(DBG_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV)
-> > + 		-rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV_BSO)
-> > +-		ln -s $(DBG_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV_BSO)
-> > ++		ln -fs $(DBG_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV_BSO)
-> > + 		install -pm 644 -t $(DESTDIR)$(libdir)/pkgconfig ustr-debug.pc
-> > + 
-> > + install-common:
-> > diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
-> > index 174f055..1d629ab 100644
-> > --- a/package/ustr/ustr.mk
-> > +++ b/package/ustr/ustr.mk
-> > @@ -23,5 +23,7 @@ USTR_INSTALL_STAGING = YES
-> >  # 'all-shared' to the default 'all' rule.
-> >  USTR_MAKE_OPTS = all all-shared
-> >  
-> > +USTR_MAKE_OPTS += LDCONFIG=/bin/true
-> 
->  Perhaps on the same line as _MAKE_OPTS above?
-> 
->  Regards,
->  Arnout
-> 
-> > +
-> >  $(eval $(autotools-package))
-> >  $(eval $(host-autotools-package))
-> > 
-> 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Profile: http://it.linkedin.com/in/compagnucciangelo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160813/b2c56961/attachment.html>
