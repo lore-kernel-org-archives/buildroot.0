@@ -1,126 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Aug 2016 17:05:01 +0200
-Subject: [Buildroot] [PATCH] package/fbterm: fix C++11 compliance with gcc-6
-Message-ID: <1471100701-16324-1-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 13 Aug 2016 17:06:37 +0200
+Subject: [Buildroot] [PATCH] gcc: rename option for ARC gcc
+In-Reply-To: <1470921938-11550-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1470921938-11550-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <e62252e4-5ab1-4b26-1f2a-bd505f158641@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc-6 has enabled more warnings by default, and turned some existing
-warnings into errors.
+On 11-08-16 15:25, Thomas Petazzoni wrote:
+> The ARC gcc version is now based on gcc 6.x and no longer gcc 4.8.x,
+> which makes the option BR2_GCC_VERSION_4_8_ARC a bit irrelevant, as is
+> the prompt of this option.
+> 
+> This commit therefore renames this option to BR2_GCC_VERSION_ARC, and
+> adjust its prompt as well.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  Config.in.legacy                       |  7 +++++++
+>  package/gcc/Config.in.host             | 10 +++++-----
+>  package/gcc/gcc-initial/gcc-initial.mk |  2 +-
+>  3 files changed, 13 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 746b80a..892a836 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -145,6 +145,13 @@ endif
+>  ###############################################################################
+>  comment "Legacy options removed in 2016.08"
+>  
+> +config BR2_GCC_VERSION_4_8_ARC
+> +	bool "gcc arc option renamed"
+> +	select BR2_LEGACY
 
-Fixes (all on arc or arm):
-    http://autobuild.buildroot.org/results/8c4/8c4a6cf492bccf4e1b99897bd9658e21b89b31ab/
-    http://autobuild.buildroot.org/results/875/875a9deb15d47d348bb53dafdbb7ed2f2bbd3da8/
-    http://autobuild.buildroot.org/results/af4/af4935f0ad2054b7dc2443e2d126fe8e50996f66/
-    [...]
+ You forgot to select BR2_GCC_VERSION_ARC.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/fbterm/0003-C++11-compliance.patch | 93 ++++++++++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
- create mode 100644 package/fbterm/0003-C++11-compliance.patch
+ Otherwise: Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/fbterm/0003-C++11-compliance.patch b/package/fbterm/0003-C++11-compliance.patch
-new file mode 100644
-index 0000000..3529a50
---- /dev/null
-+++ b/package/fbterm/0003-C++11-compliance.patch
-@@ -0,0 +1,93 @@
-+lib/vterm_states: fix C++11 compliance
-+
-+In C++11, narrowing a type is no longer allowed in structure
-+initialszers:
-+
-+    struct foo { u16 u; };
-+    foo f[] = { {0}, {-1} };
-+
-+results in the gcc-6 to whine out loudly, and fail:
-+
-+    error: narrowing conversion of ?-1? from ?int? to ?u16 {aka short unsigned int}? inside { } [-Wnarrowing]
-+     };
-+     ^
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN fbterm-1.7.0.orig/src/lib/vterm_states.cpp fbterm-1.7.0/src/lib/vterm_states.cpp
-+--- fbterm-1.7.0.orig/src/lib/vterm_states.cpp	2010-10-06 06:23:08.000000000 +0200
-++++ fbterm-1.7.0/src/lib/vterm_states.cpp	2016-08-13 16:54:29.495451127 +0200
-+@@ -22,6 +22,7 @@
-+ #include "vterm.h"
-+ 
-+ #define ADDSAME(len) ((len) << 8)
-++#define ENDSEQ  { ((u16)-1) }
-+ 
-+ const VTerm::Sequence VTerm::control_sequences[] = {
-+ 	{ 0,	0,	ESkeep },
-+@@ -39,14 +40,14 @@
-+ 	{ 0x1B, 0,	ESesc },
-+ 	{ 0x7F, 0,	ESkeep },
-+ 	{ 0x9B, 0,	ESsquare },
-+-	{ -1}
-++	ENDSEQ
-+ };
-+ 
-+ const VTerm::Sequence VTerm::escape_sequences[] = {
-+ 	{   0, 0, ESnormal },
-+ 
-+ 	// ESnormal
-+-	{ -1 },
-++	ENDSEQ,
-+ 
-+ 	// ESesc
-+ 	{ '[', &VTerm::clear_param,	ESsquare },
-+@@ -65,7 +66,7 @@
-+ 	{ '8', &VTerm::restore_cursor,	ESnormal },
-+ 	{ '>', &VTerm::keypad_numeric,	ESnormal },
-+ 	{ '=', &VTerm::keypad_application,	ESnormal },
-+-	{ -1 },
-++	ENDSEQ,
-+ 
-+ 	// ESsquare
-+ 	{ '[', 0,	ESfunckey },
-+@@ -104,7 +105,7 @@
-+ 	{ '`', &VTerm::cursor_position_col,	ESnormal },
-+ 	{ ']', &VTerm::linux_specific, ESnormal },
-+ 	{ '}', &VTerm::fbterm_specific, ESnormal },
-+-	{ -1 },
-++	ENDSEQ,
-+ 
-+ 	// ESnonstd
-+ 	{ '0' | ADDSAME(9), &VTerm::set_palette,    ESkeep },
-+@@ -112,25 +113,25 @@
-+ 	{ 'a' | ADDSAME(5), &VTerm::set_palette,    ESkeep },
-+ 	{ 'P', &VTerm::begin_set_palette, ESkeep },
-+ 	{ 'R', &VTerm::reset_palette, ESnormal },
-+-	{ -1 },
-++	ENDSEQ,
-+ 
-+ 	// ESpercent
-+ 	{ '@', &VTerm::clear_utf8,	ESnormal },
-+ 	{ 'G', &VTerm::set_utf8,	ESnormal },
-+ 	{ '8', &VTerm::set_utf8,	ESnormal },
-+-	{ -1 },
-++	ENDSEQ,
-+ 
-+ 	// EScharset
-+ 	{ '0', &VTerm::set_charset, ESnormal },
-+ 	{ 'B', &VTerm::set_charset, ESnormal },
-+ 	{ 'U', &VTerm::set_charset, ESnormal },
-+ 	{ 'K', &VTerm::set_charset, ESnormal },
-+-	{ -1 },
-++	ENDSEQ,
-+ 
-+ 	// EShash
-+ 	{ '8', &VTerm::screen_align,	ESnormal },
-+-	{ -1 },
-++	ENDSEQ,
-+ 
-+ 	// ESfunckey
-+-	{ -1 },
-++	ENDSEQ,
-+ };
+
+ Regards,
+ Arnout
+
+> +	help
+> +	  The option is select the gcc version for the ARC
+> +	  architecture has been renamed to BR2_GCC_VERSION_ARC.
+> +
+>  config BR2_PACKAGE_SYSTEMD_COMPAT
+>  	bool "systemd compatibility libraries have been removed"
+>  	select BR2_LEGACY
+
+[snip]
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
