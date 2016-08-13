@@ -1,90 +1,99 @@
 From: Khem Raj <raj.khem@gmail.com>
-Date: Fri, 12 Aug 2016 19:08:52 -0700
-Subject: [Buildroot] [PATCH 2/2] wayland: fix musl build issue
-In-Reply-To: <1471025702-6945-2-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1471025702-6945-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1471025702-6945-2-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <CAMKF1srxXGXpRaqf4FdX75bDdSpodJs9a2GFoSx-sHSarx25-A@mail.gmail.com>
+Date: Fri, 12 Aug 2016 19:32:30 -0700
+Subject: [Buildroot] [PATCH] package/lshw: fix musl build
+In-Reply-To: <20160812224107.GB5656@free.fr>
+References: <1470327886-29273-1-git-send-email-romain.naour@gmail.com>
+ <20160804183732.7319a9c8@free-electrons.com>
+ <70811547-4ef0-d4cc-5074-3786f51f406e@gmail.com>
+ <20160812224107.GB5656@free.fr>
+Message-ID: <BB0974CD-A82E-4939-AEC6-86ED7D054433@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 12, 2016 at 11:15 AM, Rahul Bedarkar
-<rahul.bedarkar@imgtec.com> wrote:
-> With musl C library, we see following build failure.
->
->   src/scanner.c: In function 'find_enumeration':
->   src/scanner.c:811:2: error: unknown type name 'uint'
->     uint idx = 0, j;
->     ^
->
-> uint is defined in <sys/types.h> header. It is usually included by <stdlib.h>
-> but in musl stdlib.h doesn't include it.
->
-> In scanner.c, <expat.h> includes <stdlib.h> then it includes <sys/types.h> in
-> case of other C libraries. <sys/types.h> from musl defines uint only if
-> _GNU_SOURCE or _BSD_SOURCE is defined. Instead of including <sys/types.h> and
-> defining either _GNU_SOURCE or _BSD_SOURCE, use unsigned int instead of uint.
->
 
-you might backport the upstreamed fix instead
-https://cgit.freedesktop.org/wayland/wayland/commit/?id=6750b47d9e0d3074d2e56aa36c476493f533d696
+> On Aug 12, 2016, at 3:41 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> 
+> Romain, Khem, All,
+> 
+> On 2016-08-04 21:25 -0700, Khem Raj spake thusly:
+>> On 8/4/16 9:37 AM, Thomas Petazzoni wrote:
+>>> Hello,
+>>> 
+>>> On Thu,  4 Aug 2016 18:24:46 +0200, Romain Naour wrote:
+>>> 
+>>>> +diff --git a/src/core/dasd.cc b/src/core/dasd.cc
+>>>> +index 626b8a8..18d19c3 100644
+>>>> +--- a/src/core/dasd.cc
+>>>> ++++ b/src/core/dasd.cc
+>>>> +@@ -4,6 +4,7 @@
+>>>> + #include <glob.h>
+>>>> + #include <string.h>
+>>>> + #include <fcntl.h>
+>>>> ++#include <libgen.h>
+>>> 
+>>> Is this related?
+>> 
+>> if we want to use POSIX compliant version of basename() then we need to
+>> include this yes.
+> 
+> Confirmed. ;-)
+> 
+>>>> + #include <unistd.h>
+>>>> + #include <inttypes.h>
+>>>> + #include <sys/ioctl.h>
+>>>> +@@ -42,7 +43,7 @@ bool scan_dasd(hwNode & n)
+>>>> +   {
+>>>> +     for(dev_num=0;dev_num<devices.gl_pathc;dev_num++)
+>>>> +     {
+>>>> +-      dev_name = basename(devices.gl_pathv[dev_num]);
+>>>> ++      dev_name = basename(const_cast<char *>(devices.gl_pathv[dev_num]));
+>>> 
+>>> I'm not super familiar with C++ stuff, but why is this problem musl
+>>> specific? The basename() function is "char *basename(char *)"
+>>> regardless of the C library being used. What makes it error out with
+>>> musl and not with other C libraries?
+>> 
+>> glibc and uclibc implement the GNU version of basename() API which does
+>> not modify the argument ( const char*) and when including string.h and
+>> not libgen.h we are saying we want gnu version. musl does not implement
+>> the gnu extention, it only has POSIX version. Hence you see the issue
+>> just on musl.
+>> 
+>> So the patch makes it compile for all libcs. however, it should be
+>> tested on glibc/uclibc since there were bugs in the posix implementation
+>> of basename()  see
+>> 
+>> http://man7.org/linux/man-pages/man3/basename.3.html
+>> 
+>> if it cant be tested then make the posix version use only for musl
+>> which I would not recommend, but its an option
+> 
+> Note however that upstream already did a similar change in an other
+> file (src/core/pci.cc, by the end of the commit):
+>    https://github.com/lyonel/lshw/commit/cd690bff1516b40fecd5ec4a7f6619e5bffc3cf0
+> 
 
-> Fixes:
->
->   http://autobuild.buildroot.net/results/fcf/fcf6dd3bd31f92eadbcae17338e5887a23e43ff9/
->
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> ---
->  .../0002-use-unsigned-int-instead-of-uint.patch    | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/wayland/0002-use-unsigned-int-instead-of-uint.patch
->
-> diff --git a/package/wayland/0002-use-unsigned-int-instead-of-uint.patch b/package/wayland/0002-use-unsigned-int-instead-of-uint.patch
-> new file mode 100644
-> index 0000000..0f649e2
-> --- /dev/null
-> +++ b/package/wayland/0002-use-unsigned-int-instead-of-uint.patch
-> @@ -0,0 +1,33 @@
-> +scanner: use unsigned int instead of uint
-> +
-> +With musl C library, we see following build failure.
-> +
-> +src/scanner.c: In function 'find_enumeration':
-> +src/scanner.c:811:2: error: unknown type name 'uint'
-> +  uint idx = 0, j;
-> +  ^
-> +
-> +uint is defined in <sys/types.h> header. It is usually included by <stdlib.h>
-> +but in musl stdlib.h doesn't include it.
-> +
-> +In scanner.c, <expat.h> includes <stdlib.h> then it includes <sys/types.h> in
-> +case of other C libraries. <sys/types.h> from musl defines uint only if
-> +_GNU_SOURCE or _BSD_SOURCE is defined. Instead of including <sys/types.h> and
-> +defining either _GNU_SOURCE or _BSD_SOURCE, use unsigned int instead of uint.
-> +
-> +This build issue is found by Buildroot autobuilder
-> +http://autobuild.buildroot.net/results/fcf/fcf6dd3bd31f92eadbcae17338e5887a23e43ff9/
-> +
-> +Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> +
-> +--- wayland-1.11.0/src/scanner.c.old   2016-08-12 23:19:39.944279494 +0530
-> ++++ wayland-1.11.0/src/scanner.c       2016-08-12 23:19:57.236279457 +0530
-> +@@ -808,7 +808,7 @@ find_enumeration(struct protocol *protoc
-> +       struct interface *i;
-> +       struct enumeration *e;
-> +       char *enum_name;
-> +-      uint idx = 0, j;
-> ++      unsigned int idx = 0, j;
-> +
-> +       for (j = 0; j + 1 < strlen(enum_attribute); j++) {
-> +               if (enum_attribute[j] == '.') {
-> --
-> 2.6.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thats fine, if the use of the variable is limited in scope it may
+not have side effects of being overwritten
+
+> Romain did open a pull request, but it has not yet been merged:
+>    https://github.com/lyonel/lshw/pull/17
+> 
+> However, I believe casting is utterly wrong: c_str() returns a
+> const char* and C++98 states that that string must *not* be modified,
+> but the POSIX basename() *does* modify its argument.
+> 
+> So, I really believe that the correct fix is completely different
+> (abstracting away basename, maybe?).
+
+If there are side effects maybe, otherwise casting is ok.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 204 bytes
+Desc: Message signed with OpenPGP using GPGMail
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160812/ce4f4368/attachment.asc>
