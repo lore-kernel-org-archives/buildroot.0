@@ -1,125 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Aug 2016 19:06:59 +0200
-Subject: [Buildroot] [PATCH 2/2] package/systemd-bootchart: don't build
-	manpages
-In-Reply-To: <1471108019-21603-1-git-send-email-yann.morin.1998@free.fr>
-References: <1471108019-21603-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1471108019-21603-2-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 13 Aug 2016 19:48:31 +0200
+Subject: [Buildroot] [PATCH] package/ustr: don't run ldconfig (and
+ certainly not concurrently)
+In-Reply-To: <20160813152753.GB5734@free.fr>
+References: <1471096801-9875-1-git-send-email-yann.morin.1998@free.fr>
+ <28ed24c9-fb7d-e0ce-653d-993c01d1d341@mind.be>
+ <20160813152753.GB5734@free.fr>
+Message-ID: <e13e20a2-6902-74f7-ea2a-95c5cdb266fe@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building the man pages requires xsltproc, which is not always available
-on the build machine, so the build fails at configure:
-    configure: error: *** xsltproc is required for man pages
+On 13-08-16 17:27, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2016-08-13 17:00 +0200, Arnout Vandecappelle spake thusly:
+>>  [Back from a month in Benin with almost no Internet access - yey!]
+>>
+>> On 13-08-16 16:00, Yann E. MORIN wrote:
+[snip]
+>>> +diff -durN ustr-1.0.4.orig/Makefile.in ustr-1.0.4/Makefile.in
+>>> +--- ustr-1.0.4.orig/Makefile.in	2016-08-13 15:54:40.220043291 +0200
+>>> ++++ ustr-1.0.4/Makefile.in	2016-08-13 15:55:25.600641886 +0200
+>>> +@@ -427,11 +427,11 @@
+>>> + 		install -m 644 -t $(DESTDIR)$(libdir) $(OPT_LIB_STATIC)
+>>> + 		install -m 755 -t $(DESTDIR)$(libdir) $(OPT_LIB_SHARED)
+>>> + 		-rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
+>>> +-		ln -s $(OPT_LIB_SHARED) $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
+>>> ++		ln -fs $(OPT_LIB_SHARED) $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
+>>
+>>  This is fairly useless. 'ln -f' just does stat - unlink - symlink, so almost
+>> the same as 'rm -f; ln -s'. There is a timing difference, so it makes the race
+>> condition somewhat more difficult to hit, but it still exists. There is no
+>> race-free way to do parallel symlinks.
+> 
+> But there should be no race now, since we no longer do ldconfig.
+> 
+> Yes, the rm -f may be supperflouous, unless the symlink was read-only [0],
+> in which case ln -f would not remove it.
+> 
+> [0] this is technically possible: fchmodat() has a AT_SYMLINK_NOFOLLOW
+>     flag, implying that it should be possible to do change the mode of
+>     a symlink without dereferencing it, but it is not yet implemented
+>     under Linux (others systems may be able to do so).
+> 
+> Of course, this is all hypotetical so far. ;-)
+> 
+> But the reasons I wrote it that way:
+>   - that's the least invasive change,
+>   - that's what Thomas suggested back in May.
 
-But then, even when xsltproc is present, it can't actually build the man
-pages, because it can't "download external entities":
-    I/O error : Attempt to load network entity http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl
-    warning: failed to load external entity "http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"
-    compilation error: file ./man/custom-man.xsl line 27 element import
+ You seem to have missed my point: adding the -f doesn't solve the race
+condition, it just slightly reduces the time window in which the race can hit.
+So this patch is completely pointless.
 
-Add a patch (sent upstream) to allow not building the man pages.
+ If you remove the rm as well, then it could serve some purpose, but only to
+simplify the code, not to fix parallel build issues.
 
-Fixes:
-    http://autobuild.buildroot.org/results/e2a/e2ae38775b6acff3c3a8ea233ec70dd68b017319/
-    http://autobuild.buildroot.org/results/66d/66d85622db9f7ff5a4e8d6eed3fd3b32959685cf/
+ Since the LDCONFIG=/bin/true is sufficient for Buildroot, I propose to send
+your patches to Debian upstream and just keep the LDCONFIG part for Buildroot.
+We really don't want to add unneeded patches to a dead package, do we?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- ...onfigure-add-option-to-not-build-manpages.patch | 59 ++++++++++++++++++++++
- package/systemd-bootchart/systemd-bootchart.mk     | 11 +++-
- 2 files changed, 69 insertions(+), 1 deletion(-)
- create mode 100644 package/systemd-bootchart/0001-configure-add-option-to-not-build-manpages.patch
+ Regards,
+ Arnout
 
-diff --git a/package/systemd-bootchart/0001-configure-add-option-to-not-build-manpages.patch b/package/systemd-bootchart/0001-configure-add-option-to-not-build-manpages.patch
-new file mode 100644
-index 0000000..ea9f8f2
---- /dev/null
-+++ b/package/systemd-bootchart/0001-configure-add-option-to-not-build-manpages.patch
-@@ -0,0 +1,59 @@
-+From 60a581253331ac38721a12495909d073eff703b7 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sat, 13 Aug 2016 18:47:17 +0200
-+Subject: [PATCH] configure: add option to not build manpages
-+
-+Man pages are not always needed, especially on embedded systems.
-+
-+Add a configure option to not build them; by default, build them.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+Patch sent upstream:
-+    https://github.com/systemd/systemd-bootchart/pull/14
-+---
-+ Makefile.am  |  5 ++++-
-+ configure.ac | 10 +++++++++-
-+ 2 files changed, 13 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index a71f8d8..e6510d5 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -74,7 +74,10 @@ EXTRA_DIST = \
-+ MANPAGES = man/bootchart.conf.5 man/systemd-bootchart.1
-+ MANPAGES_ALIAS = man/bootchart.conf.d.5
-+ 
-+-man_MANS = $(MANPAGES) $(MANPAGES_ALIAS)
-++if COND_man
-++MAYBE_MANPAGES = $(MANPAGES) $(MANPAGES_ALIAS)
-++endif
-++man_MANS = $(MAYBE_MANPAGES)
-+ 
-+ man/bootchart.conf.d.5: man/bootchart.conf.5
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index f8e62d8..90e8b03 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -167,8 +167,16 @@ AC_ARG_WITH([rootlibdir],
-+ AC_SUBST([rootprefix], [$with_rootprefix])
-+ AC_SUBST([rootlibdir], [$with_rootlibdir])
-+ 
-++AC_ARG_ENABLE([man],
-++        AS_HELP_STRING([--diable-man],[Build the man pages (default: yes)]),
-++        [build_man=$enableval],
-++        [build_man=yes])
-++
-+ AC_PATH_PROG([XSLTPROC], [xsltproc])
-+-AS_IF([test -z "$XSLTPROC"], AC_MSG_ERROR([*** xsltproc is required for man pages]))
-++AS_IF([test -z "$XSLTPROC" -a "$build_man" = "yes"],
-++                [AC_MSG_ERROR([*** xsltproc is required for man pages])])
-++
-++AM_CONDITIONAL([COND_man],[test "$build_man" = "yes"])
-+ 
-+ AC_CONFIG_FILES([
-+         Makefile
-+-- 
-+2.7.4
-+
-diff --git a/package/systemd-bootchart/systemd-bootchart.mk b/package/systemd-bootchart/systemd-bootchart.mk
-index 4fdd712..3d91b05 100644
---- a/package/systemd-bootchart/systemd-bootchart.mk
-+++ b/package/systemd-bootchart/systemd-bootchart.mk
-@@ -11,6 +11,15 @@ SYSTEMD_BOOTCHART_SOURCE = systemd-bootchart-$(SYSTEMD_BOOTCHART_VERSION).tar.xz
- SYSTEMD_BOOTCHART_SITE = https://github.com/systemd/systemd-bootchart/releases/download/v$(SYSTEMD_BOOTCHART_VERSION)
- SYSTEMD_BOOTCHART_LICENSE = LGPLv2.1+
- SYSTEMD_BOOTCHART_LICENSE_FILES = LICENSE.LGPL2.1
--SYSTEMD_BOOTCHART_DEPENDENCIES = systemd
-+SYSTEMD_BOOTCHART_DEPENDENCIES = host-intltool systemd
-+
-+# 0001-configure-add-option-to-not-build-manpages.patch
-+SYSTEMD_BOOTCHART_AUTORECONF = YES
-+SYSTEMD_BOOTCHART_CONF_OPTS = --disable-man
-+
-+define SYSTEMD_BOOTCHART_INTLTOOLIZE
-+        cd $(@D) && $(HOST_DIR)/usr/bin/intltoolize --force --automake
-+endef
-+SYSTEMD_BOOTCHART_PRE_CONFIGURE_HOOKS = SYSTEMD_BOOTCHART_INTLTOOLIZE
- 
- $(eval $(autotools-package))
+[snip]
+
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
