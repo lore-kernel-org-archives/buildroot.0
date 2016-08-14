@@ -1,88 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Aug 2016 17:21:00 +0200
-Subject: [Buildroot] [PATCH] support/apply-patches: don't bail-out on
- libtool patch while using <package>-reconfigure
-In-Reply-To: <1471129615-12376-1-git-send-email-romain.naour@gmail.com>
-References: <1471129615-12376-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160814152100.GC30771@free.fr>
+Date: Sun, 14 Aug 2016 17:32:55 +0200
+Subject: [Buildroot] [PATCH] linux: fix comment about version choice
+Message-ID: <1471188775-9849-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ linux/Config.in | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-On 2016-08-14 01:06 +0200, Romain Naour spake thusly:
-> Since 19241598147e7555dce40b6dd44b28ef22b67ed9 <package>-reconfigure target is
-> broken.
-> 
-> $ make elementary-reconfigure
-> Applying buildroot-libtool-v2.4.4.patch using patch:
-> Error: duplicate filename 'buildroot-libtool-v2.4.4.patch'
-> Conflicting files are:
->   already applied: buildroot/support/libtool/buildroot-libtool-v2.4.4.patch
->   to be applied  : buildroot/support/libtool/buildroot-libtool-v2.4.4.patch
-> 
-> When a package use AUTORECONF, the libtool patch can be applied many
-> times as the <package>-reconfigure target is called. This is not a
-> problem since autoreconf will overwrite the previously patched files.
-> 
-> Don't bail-out on libtool patch if already present in .applied_patches_list.
-
-After discussing on IRC, and according to my review, I've marked this
-patch as "Changes Requested" in patchwork.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  support/scripts/apply-patches.sh | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-> index 7ccb39d..11b218f 100755
-> --- a/support/scripts/apply-patches.sh
-> +++ b/support/scripts/apply-patches.sh
-> @@ -107,13 +107,19 @@ function apply_patch {
->      fi
->      existing="$(grep -E "/${patch}\$" ${builddir}/.applied_patches_list || true)"
->      if [ -n "${existing}" ]; then
-> -        echo "Error: duplicate filename '${patch}'"
-> -        echo "Conflicting files are:"
-> -        echo "  already applied: ${existing}"
-> -        echo "  to be applied  : ${path}/${patch}"
-> -        exit 1
-> +        # When a package use AUTORECONF, the libtool patch can be applied many
-> +        # times as the <package>-reconfigure target is called. This is not a
-> +        # problem since autoreconf will overwrite the previously patched files.
-> +        if [[ ${patch} != buildroot-libtool-v*.patch ]]; then
-> +            echo "Error: duplicate filename '${patch}'"
-> +            echo "Conflicting files are:"
-> +            echo "  already applied: ${existing}"
-> +            echo "  to be applied  : ${path}/${patch}"
-> +            exit 1
-> +        fi
-> +    else
-> +        echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
->      fi
-> -    echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
->      ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
->      if [ $? != 0 ] ; then
->          echo "Patch failed!  Please fix ${patch}!"
-> -- 
-> 2.5.5
-> 
-
+diff --git a/linux/Config.in b/linux/Config.in
+index e02d138..306d077 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -18,10 +18,9 @@ config BR2_LINUX_NEEDS_MODULES
+ # Version selection. We provide the choice between:
+ #
+ #  1. A single fairly recent stable kernel version
+-#  2. In case an internal toolchain has been built, the same kernel
+-#     version as the kernel headers
+-#  3. A custom stable version
+-#  4. A custom tarball
++#  2. A custom stable version
++#  3. A custom tarball
++#  4. A set of custom repository locations
+ #
+ choice
+ 	prompt "Kernel version"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
