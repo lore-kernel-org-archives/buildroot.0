@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Aug 2016 16:06:21 +0200
-Subject: [Buildroot] [git commit] package/weston: fix patch
-Message-ID: <20160814140632.23DD9804FF@busybox.osuosl.org>
+Date: Sun, 14 Aug 2016 16:11:46 +0200
+Subject: [Buildroot] [git commit] system: sysvinit needs MMU
+Message-ID: <20160814141248.89FB28042F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e7df8c6bbf33a26c7494f9fa352cf15db155c09
+commit: https://git.buildroot.net/buildroot/commit/?id=8a8546e5847c5281002bfc443a544f2ed8e80601
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The newly iontroduced patch was created against weston's master branch,
-but was not rebased correctly on top of the release we are using, hence
-it does not apply because files have been moved since the release.
+It uses spawn() and thus fork(), so it needs an MMU.
 
-Fixes:
-    http://autobuild.buildroot.org/results/5fb/5fbfd26d05a0ccaf4a70a100a7499cedea83ce6f/
-    http://autobuild.buildroot.org/results/769/76976fbfc2162c2c671a52eafdad82df6d25a660/
+Fixes a build issue reported on IRC for a cortex-m4 build:
+    http://pastebin.com/dGCsy0sr
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/sysvinit/Config.in | 1 +
+ system/Config.in           | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch b/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
-index 32db32f..b391147 100644
---- a/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
-+++ b/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
-@@ -16,10 +16,10 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-  libweston/compositor-rdp.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/package/sysvinit/Config.in b/package/sysvinit/Config.in
+index ab67ed6..94f1612 100644
+--- a/package/sysvinit/Config.in
++++ b/package/sysvinit/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SYSVINIT
+ 	bool "sysvinit"
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INIT_SYSV
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	help
+diff --git a/system/Config.in b/system/Config.in
+index 5855707..353421a 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -106,6 +106,7 @@ config BR2_INIT_BUSYBOX
  
--diff --git a/libweston/compositor-rdp.c b/libweston/compositor-rdp.c
-+diff --git a/src/compositor-rdp.c b/src/compositor-rdp.c
- index 11f5f05..ee81300 100644
----- a/libweston/compositor-rdp.c
--+++ b/libweston/compositor-rdp.c
-+--- a/src/compositor-rdp.c
-++++ b/src/compositor-rdp.c
- @@ -58,7 +58,7 @@
-  #	define NSC_RESET(C, W, H) nsc_context_reset(C, W, H)
-  #	define RFX_RESET(C, W, H) rfx_context_reset(C, W, H)
+ config BR2_INIT_SYSV
+ 	bool "systemV"
++	depends on BR2_USE_MMU # sysvinit
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
+ 	select BR2_PACKAGE_INITSCRIPTS
+ 	select BR2_PACKAGE_SYSVINIT
