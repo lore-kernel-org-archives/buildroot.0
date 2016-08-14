@@ -1,44 +1,88 @@
-From: Ciro Santilli <ciro.santilli@gmail.com>
-Date: Sun, 14 Aug 2016 15:52:53 +0100
-Subject: [Buildroot] How to run ltris on QEMU 64? Fails with:
- "set_video_mode: cannot allocate screen: Couldn't set console screen info"
-Message-ID: <CAFXrp_e6LiWL7+MNFj9ETc04ONkV4QSwTyRR0TwyL2vEndgUpg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Aug 2016 17:21:00 +0200
+Subject: [Buildroot] [PATCH] support/apply-patches: don't bail-out on
+ libtool patch while using <package>-reconfigure
+In-Reply-To: <1471129615-12376-1-git-send-email-romain.naour@gmail.com>
+References: <1471129615-12376-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160814152100.GC30771@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have run:
+Romain, All,
 
-    git checkout 2016.05
-    make qemu_x86_64_defconfig
-    make menuconfig
-    # Enable: ltris, C++ and wchar. BR2_PACKAGE_LTRIS=y appears on
-`.config`.
-    make
-    qemu-system-x86_64 \
-        -enable-kvm \
-        -M pc \
-        -kernel output/images/bzImage \
-        -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
-        -append root=/dev/vda \
-        -net nic,model=virtio \
-        -net user
+On 2016-08-14 01:06 +0200, Romain Naour spake thusly:
+> Since 19241598147e7555dce40b6dd44b28ef22b67ed9 <package>-reconfigure target is
+> broken.
+> 
+> $ make elementary-reconfigure
+> Applying buildroot-libtool-v2.4.4.patch using patch:
+> Error: duplicate filename 'buildroot-libtool-v2.4.4.patch'
+> Conflicting files are:
+>   already applied: buildroot/support/libtool/buildroot-libtool-v2.4.4.patch
+>   to be applied  : buildroot/support/libtool/buildroot-libtool-v2.4.4.patch
+> 
+> When a package use AUTORECONF, the libtool patch can be applied many
+> times as the <package>-reconfigure target is called. This is not a
+> problem since autoreconf will overwrite the previously patched files.
+> 
+> Don't bail-out on libtool patch if already present in .applied_patches_list.
 
-And from inside QEMU:
+After discussing on IRC, and according to my review, I've marked this
+patch as "Changes Requested" in patchwork.
 
-     ltris
+Thanks! :-)
 
-Fails with:
+Regards,
+Yann E. MORIN.
 
-    set_video_mode: cannot allocate screen: Coundn't set console screen info
-    Segmentation fault
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  support/scripts/apply-patches.sh | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
+> 
+> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+> index 7ccb39d..11b218f 100755
+> --- a/support/scripts/apply-patches.sh
+> +++ b/support/scripts/apply-patches.sh
+> @@ -107,13 +107,19 @@ function apply_patch {
+>      fi
+>      existing="$(grep -E "/${patch}\$" ${builddir}/.applied_patches_list || true)"
+>      if [ -n "${existing}" ]; then
+> -        echo "Error: duplicate filename '${patch}'"
+> -        echo "Conflicting files are:"
+> -        echo "  already applied: ${existing}"
+> -        echo "  to be applied  : ${path}/${patch}"
+> -        exit 1
+> +        # When a package use AUTORECONF, the libtool patch can be applied many
+> +        # times as the <package>-reconfigure target is called. This is not a
+> +        # problem since autoreconf will overwrite the previously patched files.
+> +        if [[ ${patch} != buildroot-libtool-v*.patch ]]; then
+> +            echo "Error: duplicate filename '${patch}'"
+> +            echo "Conflicting files are:"
+> +            echo "  already applied: ${existing}"
+> +            echo "  to be applied  : ${path}/${patch}"
+> +            exit 1
+> +        fi
+> +    else
+> +        echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
+>      fi
+> -    echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
+>      ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
+>      if [ $? != 0 ] ; then
+>          echo "Patch failed!  Please fix ${patch}!"
+> -- 
+> 2.5.5
+> 
 
-I suppose that this is maybe because I'm not running X, but startx isn't an
-available command.
-
-Tested on Ubuntu 16.04.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160814/da899c9e/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
