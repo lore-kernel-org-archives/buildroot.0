@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Aug 2016 23:21:41 +0200
-Subject: [Buildroot] [PATCH 2/8] package/rpcbind: include cdefs.h where
- needed
-In-Reply-To: <f7f60956c8c50882df893c4aff93799f398d2e8b.1471033837.git.yann.morin.1998@free.fr>
+Date: Sun, 14 Aug 2016 23:22:33 +0200
+Subject: [Buildroot] [PATCH 3/8] package/aircrack-ng: drop a
+ musl-compatibility patch
+In-Reply-To: <e22b951fabfc12310bfc7df2947bb1dabe3133ab.1471033837.git.yann.morin.1998@free.fr>
 References: <cover.1471033837.git.yann.morin.1998@free.fr>
- <f7f60956c8c50882df893c4aff93799f398d2e8b.1471033837.git.yann.morin.1998@free.fr>
-Message-ID: <5216b384-eb69-5f90-c1c2-54e145760da6@mind.be>
+ <e22b951fabfc12310bfc7df2947bb1dabe3133ab.1471033837.git.yann.morin.1998@free.fr>
+Message-ID: <e342154b-1d62-938a-bc75-cb8e1219e09a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 12-08-16 22:49, Yann E. MORIN wrote:
-> rpcbind uses a macro defined in sys/cdefs.h but does not included it
-                                                           include
-> explicitly, relying on the glibc behaviour to include it from its own
-> headers.
-> 
-> Now that we also have a sys/cdefs.h for musl (which completes the triade
-> glibc/uClibc/musl), sys/cdefs.h is always available.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/346/346c5b562c244ddb039db2f86f71d670a01ed9ce/
->     http://autobuild.buildroot.org/results/d77/d77454265c45539178c008c5d92509c441447675/
->     and numerous such autobuild failures
+> We now always have a sys/cdefs.h, so we can drop this patch.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -33,7 +22,74 @@ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
-[snip]
+
+> ---
+>  package/aircrack-ng/0004-fix-musl-build.patch | 53 ---------------------------
+>  1 file changed, 53 deletions(-)
+>  delete mode 100644 package/aircrack-ng/0004-fix-musl-build.patch
+> 
+> diff --git a/package/aircrack-ng/0004-fix-musl-build.patch b/package/aircrack-ng/0004-fix-musl-build.patch
+> deleted file mode 100644
+> index cc093d3..0000000
+> --- a/package/aircrack-ng/0004-fix-musl-build.patch
+> +++ /dev/null
+> @@ -1,53 +0,0 @@
+> -From da6e87670ad4639371da056f9e36201a9236dfa2 Mon Sep 17 00:00:00 2001
+> -From: Romain Naour <romain.naour@openwide.fr>
+> -Date: Wed, 29 Jul 2015 19:38:46 +0200
+> -Subject: [PATCH] fix musl build
+> -
+> -aircrack-ng doesn't build with a musl toolchain due to
+> -cdefs.h internal glibc header being used in internal
+> -ethernet.h [1].
+> -
+> -[1] http://wiki.musl-libc.org/wiki/FAQ
+> -
+> -Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ----
+> - src/include/ethernet.h | 20 +++++++++++---------
+> - 1 file changed, 11 insertions(+), 9 deletions(-)
+> -
+> -diff --git a/src/include/ethernet.h b/src/include/ethernet.h
+> -index 72d5e81..e9d9236 100644
+> ---- a/src/include/ethernet.h
+> -+++ b/src/include/ethernet.h
+> -@@ -389,18 +389,20 @@ void	ether_vlan_mtap(struct bpf_if *, struct mbuf *,
+> - 
+> - #else /* _KERNEL */
+> - 
+> --#include <sys/cdefs.h>
+> --
+> - /*
+> -  * Ethernet address conversion/parsing routines.
+> -  */
+> --__BEGIN_DECLS
+> --struct	ether_addr *ether_aton(const char *);
+> --int	ether_hostton(const char *, struct ether_addr *);
+> --int	ether_line(const char *, struct ether_addr *, char *);
+> --char 	*ether_ntoa(const struct ether_addr *);
+> --int	ether_ntohost(char *, const struct ether_addr *);
+> --__END_DECLS
+> -+#ifdef __cplusplus
+> -+extern "C" {
+> -+#endif
+> -+	struct	ether_addr *ether_aton(const char *);
+> -+	int	ether_hostton(const char *, struct ether_addr *);
+> -+	int	ether_line(const char *, struct ether_addr *, char *);
+> -+	char 	*ether_ntoa(const struct ether_addr *);
+> -+	int	ether_ntohost(char *, const struct ether_addr *);
+> -+#ifdef __cplusplus
+> -+}
+> -+#endif
+> - 
+> - #endif /* !_KERNEL */
+> - 
+> --- 
+> -2.4.3
+> -
+> 
+
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
