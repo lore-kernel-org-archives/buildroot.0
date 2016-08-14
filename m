@@ -1,58 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Aug 2016 23:57:19 +0200
-Subject: [Buildroot] [PATCH 4/8] package/android-tools: drop
- musl-compatibility cdefs patching out
-In-Reply-To: <0cc766e7-d59b-3e2c-bf9e-abba7f6cb94b@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 14 Aug 2016 23:59:32 +0200
+Subject: [Buildroot] [PATCH 0/8] musl: add compatibility cdefs.h header
+ (branch yem/cdefs)
+In-Reply-To: <cover.1471033837.git.yann.morin.1998@free.fr>
 References: <cover.1471033837.git.yann.morin.1998@free.fr>
- <bf528a01457458785591880406b964fcce771ca7.1471033837.git.yann.morin.1998@free.fr>
- <0cc766e7-d59b-3e2c-bf9e-abba7f6cb94b@mind.be>
-Message-ID: <20160814215719.GH30771@free.fr>
+Message-ID: <064c4381-b4b1-f875-70fd-b356c7029b1a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+On 12-08-16 22:49, Yann E. MORIN wrote:
+> Hello All!
+> 
+> This series is an ateempt at quiescing, once and for all, all the build
+> failures under musl, due to missing non-standard header cdefs.h.
+[snip]
+> Fixing all those bodies of code is nigh impossible, so instead we
+> provide a strictly-minimal sys/cdefs.h, that defines only the three
+> strictly-required macros:
+> 
+>   - __P() to declare function prototypes;
+>   - __BEGIN_DECLS and __END_DECLS to enclose C declarations.
+> 
+> When (if!) more are needed, they can be added later.
+> 
+> The basic idea was suggested by Thomas P. on IRC. Thanks! :-)
+> 
+> This then allows us to drop quite a few patches that were removing use
+> of cdefs.h. However, including sys/cdefs.h has been added to two
+> packages that were relying on other glibc headers to include it.
+>
 
-On 2016-08-14 23:34 +0200, Arnout Vandecappelle spake thusly:
-> On 12-08-16 22:49, Yann E. MORIN wrote:
-> > We now always have a sys/cdefs.h, so we no longer need to patch it out.
-> > 
-> > Simplify the patch by removing any hunk removing cdefs.h or the use of
-> > __BEGIN_DECLS/__END_DECLS. However, it must be included when macros it
-> > defines are being used.
-> > 
-> > Also, renumber patches to guarantee ordering.
-> 
->  You actually changed the ordering...
-> 
-> 0005-fix-big-endian-build.patch
-> 0005-fix-static-link-zlib.patch
-> 
-> ->
-> 
-> 0005-fix-static-link-zlib.patch
-> 0006-fix-big-endian-build.patch
-> 
-> so I guess the order doesn't matter.
+ I had some minor comments on the first patch, all others have my Reviewed-by.
+However, you missed two patches:
 
-No it does not. But if you git-log the package, you'll see that the
-static fix was introduced before the big-endian one.
+package/atftp/0002-argz.h-fix-musl-compile-add-missing-defines.patch
 
->  But anyway, after careful review of the patch-in-patch changes:
-> 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+-> This one shows that __THROW and __attribute_pure__ may be needed as well.
 
-Thanks!
+package/attr/0002-avoid-glibc-specific-decls-defines.patch
 
-Regards,
-Yann E. MORIN.
+-> Although it's probably better to keep it as is, otherwise an include cdefs.h
+would have to be added.
+
+
+ Regards,
+ Arnout
+
+[snip]
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
