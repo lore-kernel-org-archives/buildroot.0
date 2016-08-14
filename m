@@ -1,88 +1,76 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Aug 2016 00:45:35 +0200
-Subject: [Buildroot] [PATCH 1/2] support/apply-patches: use options
- rather than positional arguments
-In-Reply-To: <1933cc9d-7a02-eebc-6f7d-3f9f61770e45@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 15 Aug 2016 01:02:59 +0200
+Subject: [Buildroot] [PATCH 2/2] support/apply-patches: don't bail-out
+ on libtool patch while using <package>-reconfigure
+In-Reply-To: <1471209606-17689-2-git-send-email-romain.naour@gmail.com>
 References: <1471209606-17689-1-git-send-email-romain.naour@gmail.com>
- <1933cc9d-7a02-eebc-6f7d-3f9f61770e45@mind.be>
-Message-ID: <20160814224535.GK30771@free.fr>
+ <1471209606-17689-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <8ef7916d-17b5-a7a0-03e2-a8f324996570@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
-
-On 2016-08-15 00:35 +0200, Arnout Vandecappelle spake thusly:
-> On 14-08-16 23:20, Romain Naour wrote:
-> > In order to improve the apply-patches script in a follow up patch and
-> > ease it maintenance, use options provided by bash getopts rather than
-> > positional arguments.
-> > 
-> > Update Buildroot infra and packages but this will break existing
-> > packages from BR2_EXTERNAL using APPLY_PATCHES.
-> > 
-> > While at it, rename builddir to sourcedir since it is really the
-> > package source directory.
-> > 
-> > Ref:
-> > http://lists.busybox.net/pipermail/buildroot/2016-August/169760.html
-> > 
-> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On 14-08-16 23:20, Romain Naour wrote:
+> Since 19241598147e7555dce40b6dd44b28ef22b67ed9 <package>-reconfigure target is
+> broken.
 > 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> $ make elementary-reconfigure
+> Applying buildroot-libtool-v2.4.4.patch using patch:
+> Error: duplicate filename 'buildroot-libtool-v2.4.4.patch'
+> Conflicting files are:
+>   already applied: buildroot/support/libtool/buildroot-libtool-v2.4.4.patch
+>   to be applied  : buildroot/support/libtool/buildroot-libtool-v2.4.4.patch
 > 
->  However, I think the -d -D is a bit confusing. How about -S (sourcedir) and -P
-> (patchdir) instead?
+> When a package use AUTORECONF, the libtool patch can be applied many
+> times as the <package>-reconfigure target is called. This is not a
+> problem since autoreconf will overwrite the previously patched files.
+> 
+> Add a new option to apply-paches script to not bail-out on libtool patch if
+> already present in .applied_patches_list.
 
-The original proposal by Romain was to use:
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-    -b  build dir (which is in fact the source dir, but is currently
-        called build dir in the script)
+ However, I wonder if it really makes sense at all to use apply_patches.sh for
+the libtool patches... apply_patches.sh does the following:
 
-    -p  patch dir
+* It handles directories -> not needed here.
+* It handles compressed patches and tarballs -> not needed.
+* It handles series files -> not needed.
+* It handles errors in case of multiple patches -> not needed since it's only
+one patch.
+* It detects errors based on *.rej files -> not needed since it's only a single
+patch so patch exit code is OK.
+* It writes the patch list -> for libtool, this is quite silly because it will
+be written in the directory where ltmain.sh is found, not in the top-level
+directory, so you have these patch lists spread over the source tree.
 
-    -P patch pattern
+ So I would actually use patch directly rather than apply-patches:
 
-However, I think that -p and -P are too close to each other, so I asked
-he changed that to use options that are not too similar graphically.
+patch -i support/libtool/buildroot-libtool-vxxx.patch $${i}
 
-With your proposal, we'd get -s and -S which are again a bit too
-similar.
+ Use of apply-patches was introduced in f11fa22d0e88c5a3b04429a3110a3cbbf0c30c49
+in 2008, I don't know why John Voltz chose to use apply-patches back then...
 
-With -d, -D , -p and -s, we now have options that are not look-alike.
 
->  We could also do a little bit of refactoring, and define a global
-> APPLY_DEBIAN_PATCHES that can be used for all the debian-patched packages (it
-> can be used directly as a POST_PATCH_HOOK). If you do that first, this commit
-> becomes a lot smaller.
+ Regards,
+ Arnout
 
-Ideally, I'd prefer we fix things before adding features. Besides, we're
-targetting this change for master, since it is fixing a blocking
-regression introduced since the last release.
-
->  Also (but for a separate patch of course), the current defaults are totally
-> stupid. It would make more sense to default to *.patch for the pattern, because
-> those are the most common ones. The default sourcedir and patchdir are probably
-> best defined empty, so that it errors out in case those are forgotten.
-
-Ditto for the ptach pattern: it should not be empty, IMHO.
-
->  And another nice addition would be an option for a single patch file, we have
-> quite a few of those.
-
-Just pass the patch filename as a pattern, no?
-
-Regards,
-Yann E. MORIN.
-
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/pkg-autotools.mk         |  8 ++++----
+>  support/scripts/apply-patches.sh | 27 ++++++++++++++++++++-------
+>  2 files changed, 24 insertions(+), 11 deletions(-)
+> 
+[snip]
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
