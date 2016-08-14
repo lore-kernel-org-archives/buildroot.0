@@ -1,95 +1,89 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Aug 2016 16:26:51 +0200
-Subject: [Buildroot] [PATCH 2/2] wayland: fix musl build issue
-In-Reply-To: <1471025702-6945-2-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1471025702-6945-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1471025702-6945-2-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160814142650.GA30771@free.fr>
+Date: Sun, 14 Aug 2016 16:31:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libsidplay2: Fix build with gcc6
+In-Reply-To: <1471018759-17834-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1471018759-17834-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160814143109.GB30771@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rahul, All,
+Bernd, All,
 
-On 2016-08-12 23:45 +0530, Rahul Bedarkar spake thusly:
-> With musl C library, we see following build failure.
+On 2016-08-12 18:19 +0200, Bernd Kuhls spake thusly:
+> Fixes
+> http://autobuild.buildroot.net/results/787/787c715814b09d380ca521712f54cbcf5ae121d6/
 > 
->   src/scanner.c: In function 'find_enumeration':
->   src/scanner.c:811:2: error: unknown type name 'uint'
->     uint idx = 0, j;
->     ^
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libsidplay2/0003-gcc6.patch | 44 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 package/libsidplay2/0003-gcc6.patch
 > 
-> uint is defined in <sys/types.h> header. It is usually included by <stdlib.h>
-> but in musl stdlib.h doesn't include it.
+> diff --git a/package/libsidplay2/0003-gcc6.patch b/package/libsidplay2/0003-gcc6.patch
+> new file mode 100644
+> index 0000000..53601f6
+> --- /dev/null
+> +++ b/package/libsidplay2/0003-gcc6.patch
+> @@ -0,0 +1,44 @@
+> +Fix build with gcc6
+> +
+> +gcc6 triggers an error during build:
+> +
+> +xsid.cpp:101:1: error: narrowing conversion of ''\200'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
+> + };
+> + ^
+> +xsid.cpp:101:1: error: narrowing conversion of ''\224'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
+> +xsid.cpp:101:1: error: narrowing conversion of ''\251'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
+> +xsid.cpp:101:1: error: narrowing conversion of ''\274'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
+> +xsid.cpp:101:1: error: narrowing conversion of ''\316'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
+> +xsid.cpp:101:1: error: narrowing conversion of ''\341'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
+> +xsid.cpp:101:1: error: narrowing conversion of ''\362'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
+> +
+> +To fix the problem change the array type from int8_t to char as proposed
+> +by Khem Raj:
+> +http://lists.busybox.net/pipermail/buildroot/2016-August/169540.html
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +
+> +diff -uNr sidplay-libs-2.1.1.org/libsidplay/src/xsid/xsid.cpp sidplay-libs-2.1.1/libsidplay/src/xsid/xsid.cpp
+> +--- sidplay-libs-2.1.1.org/libsidplay/src/xsid/xsid.cpp	2004-06-14 22:08:02.000000000 +0200
+> ++++ sidplay-libs-2.1.1/libsidplay/src/xsid/xsid.cpp	2016-08-12 18:10:20.000000000 +0200
+> +@@ -94,7 +94,7 @@
+> +     '\x08', '\x19', '\x2a', '\x3b', '\x4c', '\x5d', '\x6e', '\x7f'
+> + };
+> + */
+> +-const int8_t XSID::sampleConvertTable[16] =
+> ++const char XSID::sampleConvertTable[16] =
+> + {
+> +     '\x80', '\x94', '\xa9', '\xbc', '\xce', '\xe1', '\xf2', '\x03',
+> +     '\x1b', '\x2a', '\x3b', '\x49', '\x58', '\x66', '\x73', '\x7f'
+> +diff -uNr sidplay-libs-2.1.1.org/libsidplay/src/xsid/xsid.h sidplay-libs-2.1.1/libsidplay/src/xsid/xsid.h
+> +--- sidplay-libs-2.1.1.org/libsidplay/src/xsid/xsid.h	2004-06-14 22:08:02.000000000 +0200
+> ++++ sidplay-libs-2.1.1/libsidplay/src/xsid/xsid.h	2016-08-12 18:11:01.000000000 +0200
+> +@@ -238,7 +238,7 @@
+> +     uint8_t             sidData0x18;
+> +     bool                _sidSamples;
+> +     int8_t              sampleOffset;
+> +-    static const int8_t sampleConvertTable[16];
+> ++    static const char sampleConvertTable[16];
 
-As commented by Khem, there is an upstream patch, so it's better to
-backport it.
+It would have been nice to keep the alignment of the members...
 
-Consequently, I've marked this as "Changes Requested" in our Patchwork.
+Otherwise:
 
-Care to respin, please? Thanks!
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> In scanner.c, <expat.h> includes <stdlib.h> then it includes <sys/types.h> in
-> case of other C libraries. <sys/types.h> from musl defines uint only if
-> _GNU_SOURCE or _BSD_SOURCE is defined. Instead of including <sys/types.h> and
-> defining either _GNU_SOURCE or _BSD_SOURCE, use unsigned int instead of uint.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/fcf/fcf6dd3bd31f92eadbcae17338e5887a23e43ff9/
-> 
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> ---
->  .../0002-use-unsigned-int-instead-of-uint.patch    | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/wayland/0002-use-unsigned-int-instead-of-uint.patch
-> 
-> diff --git a/package/wayland/0002-use-unsigned-int-instead-of-uint.patch b/package/wayland/0002-use-unsigned-int-instead-of-uint.patch
-> new file mode 100644
-> index 0000000..0f649e2
-> --- /dev/null
-> +++ b/package/wayland/0002-use-unsigned-int-instead-of-uint.patch
-> @@ -0,0 +1,33 @@
-> +scanner: use unsigned int instead of uint
-> +
-> +With musl C library, we see following build failure.
-> +
-> +src/scanner.c: In function 'find_enumeration':
-> +src/scanner.c:811:2: error: unknown type name 'uint'
-> +  uint idx = 0, j;
-> +  ^
-> +
-> +uint is defined in <sys/types.h> header. It is usually included by <stdlib.h>
-> +but in musl stdlib.h doesn't include it.
-> +
-> +In scanner.c, <expat.h> includes <stdlib.h> then it includes <sys/types.h> in
-> +case of other C libraries. <sys/types.h> from musl defines uint only if
-> +_GNU_SOURCE or _BSD_SOURCE is defined. Instead of including <sys/types.h> and
-> +defining either _GNU_SOURCE or _BSD_SOURCE, use unsigned int instead of uint.
-> +
-> +This build issue is found by Buildroot autobuilder
-> +http://autobuild.buildroot.net/results/fcf/fcf6dd3bd31f92eadbcae17338e5887a23e43ff9/
-> +
-> +Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> +
-> +--- wayland-1.11.0/src/scanner.c.old	2016-08-12 23:19:39.944279494 +0530
-> ++++ wayland-1.11.0/src/scanner.c	2016-08-12 23:19:57.236279457 +0530
-> +@@ -808,7 +808,7 @@ find_enumeration(struct protocol *protoc
-> + 	struct interface *i;
-> + 	struct enumeration *e;
-> + 	char *enum_name;
-> +-	uint idx = 0, j;
-> ++	unsigned int idx = 0, j;
+> +     bool                wasRunning;
 > + 
-> + 	for (j = 0; j + 1 < strlen(enum_attribute); j++) {
-> + 		if (enum_attribute[j] == '.') {
+> + private:
 > -- 
-> 2.6.2
+> 2.8.1
 > 
 > _______________________________________________
 > buildroot mailing list
