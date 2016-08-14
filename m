@@ -1,53 +1,105 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Aug 2016 16:05:51 +0200
-Subject: [Buildroot] [PATCH 2/2] package/systemd-bootchart: don't build
- manpages
-In-Reply-To: <1471108019-21603-2-git-send-email-yann.morin.1998@free.fr>
-References: <1471108019-21603-1-git-send-email-yann.morin.1998@free.fr>
- <1471108019-21603-2-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160814160551.0f3c0490@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Aug 2016 16:26:51 +0200
+Subject: [Buildroot] [PATCH 2/2] wayland: fix musl build issue
+In-Reply-To: <1471025702-6945-2-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1471025702-6945-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <1471025702-6945-2-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20160814142650.GA30771@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Rahul, All,
 
-On Sat, 13 Aug 2016 19:06:59 +0200, Yann E. MORIN wrote:
-> Building the man pages requires xsltproc, which is not always available
-> on the build machine, so the build fails at configure:
->     configure: error: *** xsltproc is required for man pages
+On 2016-08-12 23:45 +0530, Rahul Bedarkar spake thusly:
+> With musl C library, we see following build failure.
 > 
-> But then, even when xsltproc is present, it can't actually build the man
-> pages, because it can't "download external entities":
->     I/O error : Attempt to load network entity http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl
->     warning: failed to load external entity "http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"
->     compilation error: file ./man/custom-man.xsl line 27 element import
+>   src/scanner.c: In function 'find_enumeration':
+>   src/scanner.c:811:2: error: unknown type name 'uint'
+>     uint idx = 0, j;
+>     ^
 > 
-> Add a patch (sent upstream) to allow not building the man pages.
+> uint is defined in <sys/types.h> header. It is usually included by <stdlib.h>
+> but in musl stdlib.h doesn't include it.
+
+As commented by Khem, there is an upstream patch, so it's better to
+backport it.
+
+Consequently, I've marked this as "Changes Requested" in our Patchwork.
+
+Care to respin, please? Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> In scanner.c, <expat.h> includes <stdlib.h> then it includes <sys/types.h> in
+> case of other C libraries. <sys/types.h> from musl defines uint only if
+> _GNU_SOURCE or _BSD_SOURCE is defined. Instead of including <sys/types.h> and
+> defining either _GNU_SOURCE or _BSD_SOURCE, use unsigned int instead of uint.
 > 
 > Fixes:
->     http://autobuild.buildroot.org/results/e2a/e2ae38775b6acff3c3a8ea233ec70dd68b017319/
->     http://autobuild.buildroot.org/results/66d/66d85622db9f7ff5a4e8d6eed3fd3b32959685cf/
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>   http://autobuild.buildroot.net/results/fcf/fcf6dd3bd31f92eadbcae17338e5887a23e43ff9/
+> 
+> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+> ---
+>  .../0002-use-unsigned-int-instead-of-uint.patch    | 33 ++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 package/wayland/0002-use-unsigned-int-instead-of-uint.patch
+> 
+> diff --git a/package/wayland/0002-use-unsigned-int-instead-of-uint.patch b/package/wayland/0002-use-unsigned-int-instead-of-uint.patch
+> new file mode 100644
+> index 0000000..0f649e2
+> --- /dev/null
+> +++ b/package/wayland/0002-use-unsigned-int-instead-of-uint.patch
+> @@ -0,0 +1,33 @@
+> +scanner: use unsigned int instead of uint
+> +
+> +With musl C library, we see following build failure.
+> +
+> +src/scanner.c: In function 'find_enumeration':
+> +src/scanner.c:811:2: error: unknown type name 'uint'
+> +  uint idx = 0, j;
+> +  ^
+> +
+> +uint is defined in <sys/types.h> header. It is usually included by <stdlib.h>
+> +but in musl stdlib.h doesn't include it.
+> +
+> +In scanner.c, <expat.h> includes <stdlib.h> then it includes <sys/types.h> in
+> +case of other C libraries. <sys/types.h> from musl defines uint only if
+> +_GNU_SOURCE or _BSD_SOURCE is defined. Instead of including <sys/types.h> and
+> +defining either _GNU_SOURCE or _BSD_SOURCE, use unsigned int instead of uint.
+> +
+> +This build issue is found by Buildroot autobuilder
+> +http://autobuild.buildroot.net/results/fcf/fcf6dd3bd31f92eadbcae17338e5887a23e43ff9/
+> +
+> +Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+> +
+> +--- wayland-1.11.0/src/scanner.c.old	2016-08-12 23:19:39.944279494 +0530
+> ++++ wayland-1.11.0/src/scanner.c	2016-08-12 23:19:57.236279457 +0530
+> +@@ -808,7 +808,7 @@ find_enumeration(struct protocol *protoc
+> + 	struct interface *i;
+> + 	struct enumeration *e;
+> + 	char *enum_name;
+> +-	uint idx = 0, j;
+> ++	unsigned int idx = 0, j;
+> + 
+> + 	for (j = 0; j + 1 < strlen(enum_attribute); j++) {
+> + 		if (enum_attribute[j] == '.') {
+> -- 
+> 2.6.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Applied to master, thanks!
-
-I was going to suggest that instead of adding a configure option to
-decide whether to build man pages or not, you could have decided
-depending on the availability of xsltproc. Except that, as you
-explained in the commit log, xsltproc might be available, but still
-building the man pages might fail.
-
-So, I've applied. Hopefully, upstream will accept this solution.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
