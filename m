@@ -1,44 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Aug 2016 15:51:09 +0200
-Subject: [Buildroot] [PATCH] package/axel: fix link order
-Message-ID: <1471182669-4429-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 Aug 2016 16:01:19 +0200
+Subject: [Buildroot] [git commit] package/systemd-bootchart: needs headers
+	>= 3.17
+Message-ID: <20160814140232.5410181E80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libintl may use thread-related functions, so -lpthread must come after
--lintl.
+commit: https://git.buildroot.net/buildroot/commit/?id=5f56080f846f7a17dc42943e62482da5a440b166
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-    http://autobuild.buildroot.org/results/e9d/e9d89fd5b24a76a3c5ab9dc8f01f4643f7c13396/
+It uses GRND_NONBLOCK, introduced in 3.17.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/axel/axel.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/systemd-bootchart/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/axel/axel.mk b/package/axel/axel.mk
-index 6328d99..b60af0e 100644
---- a/package/axel/axel.mk
-+++ b/package/axel/axel.mk
-@@ -9,13 +9,14 @@ AXEL_SITE = http://sources.buildroot.net
- AXEL_LICENSE = GPLv2+
- AXEL_LICENSE_FILES = COPYING
+diff --git a/package/systemd-bootchart/Config.in b/package/systemd-bootchart/Config.in
+index 2a70b8d..8deb6b9 100644
+--- a/package/systemd-bootchart/Config.in
++++ b/package/systemd-bootchart/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SYSTEMD_BOOTCHART
+ 	bool "systemd-bootchart"
+ 	depends on BR2_INIT_SYSTEMD
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+ 	help
+ 	  systemd-bootchart is a tool, usually run at system startup,
+ 	  that collects the CPU load, disk load, memory usage, as well
+@@ -19,3 +20,7 @@ config BR2_PACKAGE_SYSTEMD_BOOTCHART
+ 	  these options are enabled.
  
--AXEL_LDFLAGS = -lpthread
--
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- AXEL_DEPENDENCIES += gettext
- AXEL_LDFLAGS += -lintl
- endif
- 
-+# -lintl may use symbols from -pthread
-+AXEL_LDFLAGS += -lpthread
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-bootchart.html
 +
- ifneq ($(BR2_ENABLE_LOCALE),y)
- AXEL_DISABLE_I18N = --i18n=0
- endif
--- 
-2.7.4
++comment "systemd-bootchart needs a toolchain w/ headers >= 3.17"
++	depends on BR2_INIT_SYSTEMD
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
