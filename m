@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Aug 2016 23:22:33 +0200
-Subject: [Buildroot] [PATCH 3/8] package/aircrack-ng: drop a
- musl-compatibility patch
-In-Reply-To: <e22b951fabfc12310bfc7df2947bb1dabe3133ab.1471033837.git.yann.morin.1998@free.fr>
+Date: Sun, 14 Aug 2016 23:34:08 +0200
+Subject: [Buildroot] [PATCH 4/8] package/android-tools: drop
+ musl-compatibility cdefs patching out
+In-Reply-To: <bf528a01457458785591880406b964fcce771ca7.1471033837.git.yann.morin.1998@free.fr>
 References: <cover.1471033837.git.yann.morin.1998@free.fr>
- <e22b951fabfc12310bfc7df2947bb1dabe3133ab.1471033837.git.yann.morin.1998@free.fr>
-Message-ID: <e342154b-1d62-938a-bc75-cb8e1219e09a@mind.be>
+ <bf528a01457458785591880406b964fcce771ca7.1471033837.git.yann.morin.1998@free.fr>
+Message-ID: <0cc766e7-d59b-3e2c-bf9e-abba7f6cb94b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,82 +13,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 12-08-16 22:49, Yann E. MORIN wrote:
-> We now always have a sys/cdefs.h, so we can drop this patch.
+> We now always have a sys/cdefs.h, so we no longer need to patch it out.
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Simplify the patch by removing any hunk removing cdefs.h or the use of
+> __BEGIN_DECLS/__END_DECLS. However, it must be included when macros it
+> defines are being used.
+> 
+> Also, renumber patches to guarantee ordering.
+
+ You actually changed the ordering...
+
+0005-fix-big-endian-build.patch
+0005-fix-static-link-zlib.patch
+
+->
+
+0005-fix-static-link-zlib.patch
+0006-fix-big-endian-build.patch
+
+so I guess the order doesn't matter.
+
+ But anyway, after careful review of the patch-in-patch changes:
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
  Regards,
  Arnout
 
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/aircrack-ng/0004-fix-musl-build.patch | 53 ---------------------------
->  1 file changed, 53 deletions(-)
->  delete mode 100644 package/aircrack-ng/0004-fix-musl-build.patch
-> 
-> diff --git a/package/aircrack-ng/0004-fix-musl-build.patch b/package/aircrack-ng/0004-fix-musl-build.patch
-> deleted file mode 100644
-> index cc093d3..0000000
-> --- a/package/aircrack-ng/0004-fix-musl-build.patch
-> +++ /dev/null
-> @@ -1,53 +0,0 @@
-> -From da6e87670ad4639371da056f9e36201a9236dfa2 Mon Sep 17 00:00:00 2001
-> -From: Romain Naour <romain.naour@openwide.fr>
-> -Date: Wed, 29 Jul 2015 19:38:46 +0200
-> -Subject: [PATCH] fix musl build
-> -
-> -aircrack-ng doesn't build with a musl toolchain due to
-> -cdefs.h internal glibc header being used in internal
-> -ethernet.h [1].
-> -
-> -[1] http://wiki.musl-libc.org/wiki/FAQ
-> -
-> -Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ----
-> - src/include/ethernet.h | 20 +++++++++++---------
-> - 1 file changed, 11 insertions(+), 9 deletions(-)
-> -
-> -diff --git a/src/include/ethernet.h b/src/include/ethernet.h
-> -index 72d5e81..e9d9236 100644
-> ---- a/src/include/ethernet.h
-> -+++ b/src/include/ethernet.h
-> -@@ -389,18 +389,20 @@ void	ether_vlan_mtap(struct bpf_if *, struct mbuf *,
-> - 
-> - #else /* _KERNEL */
-> - 
-> --#include <sys/cdefs.h>
-> --
-> - /*
-> -  * Ethernet address conversion/parsing routines.
-> -  */
-> --__BEGIN_DECLS
-> --struct	ether_addr *ether_aton(const char *);
-> --int	ether_hostton(const char *, struct ether_addr *);
-> --int	ether_line(const char *, struct ether_addr *, char *);
-> --char 	*ether_ntoa(const struct ether_addr *);
-> --int	ether_ntohost(char *, const struct ether_addr *);
-> --__END_DECLS
-> -+#ifdef __cplusplus
-> -+extern "C" {
-> -+#endif
-> -+	struct	ether_addr *ether_aton(const char *);
-> -+	int	ether_hostton(const char *, struct ether_addr *);
-> -+	int	ether_line(const char *, struct ether_addr *, char *);
-> -+	char 	*ether_ntoa(const struct ether_addr *);
-> -+	int	ether_ntohost(char *, const struct ether_addr *);
-> -+#ifdef __cplusplus
-> -+}
-> -+#endif
-> - 
-> - #endif /* !_KERNEL */
-> - 
-> --- 
-> -2.4.3
-> -
-> 
-
+>  .../0004-Fix-build-issue-with-musl.patch           | 181 +--------------------
+>  ...build.patch => 0006-fix-big-endian-build.patch} |   0
+>  .../0007-include-cdefs-h-when-needed.patch         |  41 +++++
+>  3 files changed, 43 insertions(+), 179 deletions(-)
+>  rename package/android-tools/{0005-fix-big-endian-build.patch => 0006-fix-big-endian-build.patch} (100%)
+>  create mode 100644 package/android-tools/0007-include-cdefs-h-when-needed.patch
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
