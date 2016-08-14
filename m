@@ -1,528 +1,225 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 14 Aug 2016 23:20:05 +0200
-Subject: [Buildroot] [PATCH 1/2] support/apply-patches: use options rather
-	than positional arguments
-Message-ID: <1471209606-17689-1-git-send-email-romain.naour@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 14 Aug 2016 23:20:10 +0200
+Subject: [Buildroot] [PATCH 1/8] package/netbsd-compat-headers: provide
+ compatibility headers not in musl
+In-Reply-To: <1d561e7440fd9f14063d006fc3dca596c9c849c7.1471033837.git.yann.morin.1998@free.fr>
+References: <cover.1471033837.git.yann.morin.1998@free.fr>
+ <1d561e7440fd9f14063d006fc3dca596c9c849c7.1471033837.git.yann.morin.1998@free.fr>
+Message-ID: <39651df8-a923-c535-43e6-72b0a7edea06@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to improve the apply-patches script in a follow up patch and
-ease it maintenance, use options provided by bash getopts rather than
-positional arguments.
+ Subject line should be musl-compat-headers, not netbsd-...
 
-Update Buildroot infra and packages but this will break existing
-packages from BR2_EXTERNAL using APPLY_PATCHES.
+On 12-08-16 22:49, Yann E. MORIN wrote:
+> musl provides neither sys/queue.h nor sys/cdefs.h. Those two headers are
+> however quite widely used in a lot of packages (though they should at
+> least not use cdefs,h which is only full of mostly-legacy macros, and
+> which is mostly an internal header of glibc and was never really meant to
+> be exposed to, and used by packages).
+> 
+> But we don;t live in an ideal world, so a lot of packages break when
+         don't
 
-While at it, rename builddir to sourcedir since it is really the
-package source directory.
+> those two headers are missing.
+> 
+> We already took care of sys/queue.h with the netbsd-queue package. But
+> the need for cdefs.h is getting more and more pressing.
+> 
+> We rename the netbsd-queue package into musl-compat-headers, and we
+> make it install sys/queue.h (from NetBSD) and sys/cdefs.h (a minimalist
+> one we bundle in Buildroot). We can't use the cdefs.h from NetBSD
+> because it includes machine-dependent headers; instead we bundle a very
+> minimalistic one, that covers only what we need.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Ref:
-http://lists.busybox.net/pipermail/buildroot/2016-August/169760.html
+ In general I prefer to use an upstream like Khem proposes. However, in this
+case, it's really a lot easier if we can add or change the header as needed by
+breaking packages. So I like the way it's done now.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- boot/at91bootstrap/at91bootstrap.mk      |   3 +-
- boot/at91bootstrap3/at91bootstrap3.mk    |   3 +-
- boot/barebox/barebox.mk                  |   4 +-
- boot/uboot/uboot.mk                      |   4 +-
- linux/linux-ext-rtai.mk                  |   6 +-
- linux/linux.mk                           |   6 +-
- package/android-tools/android-tools.mk   |   2 +-
- package/cvs/cvs.mk                       |   2 +-
- package/gcc/gcc.mk                       |   4 +-
- package/input-tools/input-tools.mk       |   2 +-
- package/linux-headers/linux-headers.mk   |   4 +-
- package/mii-diag/mii-diag.mk             |   2 +-
- package/netcat-openbsd/netcat-openbsd.mk |   2 +-
- package/pkg-autotools.mk                 |   8 +-
- package/pkg-generic.mk                   |   6 +-
- package/setserial/setserial.mk           |   2 +-
- package/sysvinit/sysvinit.mk             |   2 +-
- package/thttpd/thttpd.mk                 |   2 +-
- support/scripts/apply-patches.sh         | 138 ++++++++++++++++++++-----------
- 19 files changed, 122 insertions(+), 80 deletions(-)
+[snip]
+> diff --git a/package/musl-compat-headers/musl-compat-headers.mk b/package/musl-compat-headers/musl-compat-headers.mk
+> new file mode 100644
+> index 0000000..0758021
+> --- /dev/null
+> +++ b/package/musl-compat-headers/musl-compat-headers.mk
+> @@ -0,0 +1,29 @@
+> +################################################################################
+> +#
+> +# musl-compat-headers
+> +#
+> +################################################################################
+> +
+> +MUSL_COMPAT_HEADERS_SITE = http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys
+> +MUSL_COMPAT_HEADERS_VERSION = 1.70
+> +MUSL_COMPAT_HEADERS_SOURCE = queue.h?rev=$(MUSL_COMPAT_HEADERS_VERSION)
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index f655058..180c4b8 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -24,7 +24,8 @@ endef
- 
- ifneq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR)),)
- define AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
--	$(APPLY_PATCHES) $(@D) $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR) \*.patch
-+	$(APPLY_PATCHES) -d $(@D) \
-+		-D $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR) -p \*.patch
- endef
- 
- AT91BOOTSTRAP_POST_PATCH_HOOKS += AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index 32732f4..7fd37a6 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -26,7 +26,8 @@ AT91BOOTSTRAP3_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS) DESTDIR=$(BINARIES_DIR)
- 
- ifneq ($(AT91BOOTSTRAP3_CUSTOM_PATCH_DIR),)
- define AT91BOOTSTRAP3_APPLY_CUSTOM_PATCHES
--	$(APPLY_PATCHES) $(@D) $(AT91BOOTSTRAP3_CUSTOM_PATCH_DIR) \*.patch
-+	$(APPLY_PATCHES) -d $(@D) \
-+		-D $(AT91BOOTSTRAP3_CUSTOM_PATCH_DIR) -p \*.patch
- endef
- 
- AT91BOOTSTRAP3_POST_PATCH_HOOKS += AT91BOOTSTRAP3_APPLY_CUSTOM_PATCHES
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 832297e..b58ca19 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -43,8 +43,8 @@ $(1)_CUSTOM_EMBEDDED_ENV_PATH = $$(call qstrip,$$(BR2_TARGET_$(1)_CUSTOM_EMBEDDE
- 
- ifneq ($$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
- define $(1)_APPLY_CUSTOM_PATCHES
--	$$(APPLY_PATCHES) $$(@D) \
--		$$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \*.patch
-+	$$(APPLY_PATCHES) -d $$(@D) \
-+		-D $$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) -p \*.patch
- endef
- 
- $(1)_POST_PATCH_HOOKS += $(1)_APPLY_CUSTOM_PATCHES
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 7c3512a..f79a67b 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -121,9 +121,9 @@ UBOOT_PATCH = $(filter ftp://% http://% https://%,$(UBOOT_PATCHES))
- define UBOOT_APPLY_LOCAL_PATCHES
- 	for p in $(filter-out ftp://% http://% https://%,$(UBOOT_PATCHES)) ; do \
- 		if test -d $$p ; then \
--			$(APPLY_PATCHES) $(@D) $$p \*.patch || exit 1 ; \
-+			$(APPLY_PATCHES) -d $(@D) -D $$p -p \*.patch || exit 1 ; \
- 		else \
--			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
-+			$(APPLY_PATCHES) -d $(@D) -D `dirname -p $$p` `basename $$p` || exit 1; \
- 		fi \
- 	done
- endef
-diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
-index 0cc1232..751c9e0 100644
---- a/linux/linux-ext-rtai.mk
-+++ b/linux/linux-ext-rtai.mk
-@@ -20,9 +20,9 @@ endif
- define RTAI_PREPARE_KERNEL
- 	kver=`$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion` ; \
- 	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$${kver}-*patch ; then \
--		$(APPLY_PATCHES) $(LINUX_DIR)		 		\
--			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/ 	\
--			hal-linux-$${kver}-*patch ; \
-+		$(APPLY_PATCHES) -d $(LINUX_DIR)		 	\
-+			-D $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/ 	\
-+			-p hal-linux-$${kver}-*patch ; \
- 	else \
- 		echo "No RTAI patch for your kernel version" ; \
- 		exit 1 ; \
-diff --git a/linux/linux.mk b/linux/linux.mk
-index fb844ef..42ed735 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -185,9 +185,9 @@ endif # BR2_LINUX_KERNEL_VMLINUX
- define LINUX_APPLY_LOCAL_PATCHES
- 	for p in $(filter-out ftp://% http://% https://%,$(LINUX_PATCHES)) ; do \
- 		if test -d $$p ; then \
--			$(APPLY_PATCHES) $(@D) $$p \*.patch || exit 1 ; \
-+			$(APPLY_PATCHES) -d $(@D) -D $$p -p \*.patch || exit 1 ; \
- 		else \
--			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
-+			$(APPLY_PATCHES) -d $(@D) -D `dirname $$p` -p `basename $$p` || exit 1; \
- 		fi \
- 	done
- endef
-@@ -199,7 +199,7 @@ LINUX_POST_PATCH_HOOKS += LINUX_APPLY_LOCAL_PATCHES
- # Try a dry-run patch to see if this applies, if it does go ahead
- define LINUX_TRY_PATCH_TIMECONST
- 	@if patch -p1 --dry-run -f -s -d $(@D) <$(LINUX_PKGDIR)/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional >/dev/null ; then \
--		$(APPLY_PATCHES) $(@D) $(LINUX_PKGDIR) 0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional ; \
-+		$(APPLY_PATCHES) -d $(@D) -D $(LINUX_PKGDIR) -p 0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional ; \
- 	fi
- endef
- LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
-diff --git a/package/android-tools/android-tools.mk b/package/android-tools/android-tools.mk
-index 4510392..753ff32 100644
---- a/package/android-tools/android-tools.mk
-+++ b/package/android-tools/android-tools.mk
-@@ -24,7 +24,7 @@ ANDROID_TOOLS_POST_EXTRACT_HOOKS += ANDROID_TOOLS_DEBIAN_EXTRACT
- 
- # Apply the Debian patches before applying the Buildroot patches
- define ANDROID_TOOLS_DEBIAN_PATCH
--	$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*
-+	$(APPLY_PATCHES) -d $(@D) -D $(@D)/debian/patches -p \*
- endef
- 
- HOST_ANDROID_TOOLS_PRE_PATCH_HOOKS += ANDROID_TOOLS_DEBIAN_PATCH
-diff --git a/package/cvs/cvs.mk b/package/cvs/cvs.mk
-index 6f28b4d..a4eb06a 100644
---- a/package/cvs/cvs.mk
-+++ b/package/cvs/cvs.mk
-@@ -38,7 +38,7 @@ define CVS_DEBIAN_PATCHES
- 		 do $(SED) 's,^\+\+\+ .*cvs-$(CVS_VERSION)/,+++ cvs-$(CVS_VERSION)/,' $$i; \
- 		 done; \
- 		); \
--		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*; \
-+		$(APPLY_PATCHES) -d $(@D) -D $(@D)/debian/patches -p \*; \
- 	fi
- endef
- endif
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 032015c..7a96257 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -36,7 +36,7 @@ endef
- ifeq ($(ARCH),powerpc)
- ifneq ($(BR2_SOFT_FLOAT),)
- define HOST_GCC_APPLY_POWERPC_PATCH
--	$(APPLY_PATCHES) $(@D) package/gcc/$(GCC_VERSION) 1000-powerpc-link-with-math-lib.patch.conditional
-+	$(APPLY_PATCHES) -d $(@D) -D package/gcc/$(GCC_VERSION) -p 1000-powerpc-link-with-math-lib.patch.conditional
- endef
- endif
- endif
-@@ -50,7 +50,7 @@ define HOST_GCC_APPLY_PATCHES
- 	    $(addsuffix /gcc/$(GCC_VERSION),$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
- 	    $(addsuffix /gcc,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) ; do \
- 		if test -d $${patchdir}; then \
--			$(APPLY_PATCHES) $(@D) $${patchdir} \*.patch || exit 1; \
-+			$(APPLY_PATCHES) -d $(@D) -D $${patchdir} -p \*.patch || exit 1; \
- 		fi; \
- 	done
- 	$(HOST_GCC_APPLY_POWERPC_PATCH)
-diff --git a/package/input-tools/input-tools.mk b/package/input-tools/input-tools.mk
-index 81e913d..6c3cfab 100644
---- a/package/input-tools/input-tools.mk
-+++ b/package/input-tools/input-tools.mk
-@@ -17,7 +17,7 @@ INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_JSTEST)      += jstest
- 
- define INPUT_TOOLS_DEBIAN_PATCHES
- 	if [ -d $(@D)/debian/patches ]; then \
--		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
-+		$(APPLY_PATCHES) -d $(@D) -D $(@D)/debian/patches -p \*.patch; \
- 	fi
- endef
- 
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 0900778..98e44ed 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -62,9 +62,9 @@ LINUX_HEADERS_PATCH = $(filter ftp://% http://% https://%,$(LINUX_HEADERS_PATCHE
- define LINUX_HEADERS_APPLY_LOCAL_PATCHES
- 	for p in $(filter-out ftp://% http://% https://%,$(LINUX_HEADERS_PATCHES)) ; do \
- 		if test -d $$p ; then \
--			$(APPLY_PATCHES) $(@D) $$p \*.patch || exit 1 ; \
-+			$(APPLY_PATCHES) -d $(@D) -D $$p -p \*.patch || exit 1 ; \
- 		else \
--			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
-+			$(APPLY_PATCHES) -d $(@D) -D `dirname $$p` -p `basename $$p` || exit 1; \
- 		fi \
- 	done
- endef
-diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
-index ae8defd..51e5860 100644
---- a/package/mii-diag/mii-diag.mk
-+++ b/package/mii-diag/mii-diag.mk
-@@ -15,7 +15,7 @@ MII_DIAG_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
- 
- define MII_DIAG_DEBIAN_PATCHES
- 	if [ -d $(@D)/debian/patches ]; then \
--		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
-+		$(APPLY_PATCHES) -d $(@D) -D $(@D)/debian/patches -p \*.patch; \
- 	fi
- endef
- 
-diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
-index 5abfc7e..3a7323b 100644
---- a/package/netcat-openbsd/netcat-openbsd.mk
-+++ b/package/netcat-openbsd/netcat-openbsd.mk
-@@ -18,7 +18,7 @@ endif
- 
- define NETCAT_OPENBSD_APPLY_DEBIAN_PATCHES
- 	if [ -d $(@D)/debian/patches ]; then \
--		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches *.dpatch; \
-+		$(APPLY_PATCHES) -d $(@D) -D $(@D)/debian/patches -p *.dpatch; \
- 	fi
- endef
- 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 75e2df0..f64d435 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -65,14 +65,14 @@ define LIBTOOL_PATCH_HOOK
- 		ltmain_patchlevel=`sed -n '/^[ \t]*VERSION=/{s/^[ \t]*VERSION=//;p;q;}' $$i | \
- 		sed -e 's/\([0-9]*\.[0-9]*\.*\)\([0-9]*\).*/\2/' -e 's/\"//'`; \
- 		if test $${ltmain_version} = '1.5'; then \
--			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
-+			$(APPLY_PATCHES) -d $${i%/*} -D support/libtool -p buildroot-libtool-v1.5.patch; \
- 		elif test $${ltmain_version} = "2.2"; then\
--			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
-+			$(APPLY_PATCHES) -d $${i%/*} -D support/libtool -p buildroot-libtool-v2.2.patch; \
- 		elif test $${ltmain_version} = "2.4"; then\
- 			if test $${ltmain_patchlevel:-0} -gt 2; then\
--				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.4.patch; \
-+				$(APPLY_PATCHES) -d $${i%/*} -D support/libtool -p buildroot-libtool-v2.4.4.patch; \
- 			else \
--				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
-+				$(APPLY_PATCHES) -d $${i%/*} -D support/libtool -p buildroot-libtool-v2.4.patch; \
- 			fi \
- 		fi \
- 	done
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 68ead3d..014a901 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -165,14 +165,14 @@ $(BUILD_DIR)/%/.stamp_patched:
- 	@$(call step_start,patch)
- 	@$(call MESSAGE,"Patching")
- 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
--	$(foreach p,$($(PKG)_PATCH),$(APPLY_PATCHES) $(@D) $(DL_DIR) $(notdir $(p))$(sep))
-+	$(foreach p,$($(PKG)_PATCH),$(APPLY_PATCHES) -d $(@D) -D $(DL_DIR) -p $(notdir $(p))$(sep))
- 	$(Q)( \
- 	for D in $(PATCH_BASE_DIRS); do \
- 	  if test -d $${D}; then \
- 	    if test -d $${D}/$($(PKG)_VERSION); then \
--	      $(APPLY_PATCHES) $(@D) $${D}/$($(PKG)_VERSION) \*.patch \*.patch.$(ARCH) || exit 1; \
-+	      $(APPLY_PATCHES) -d $(@D) -D $${D}/$($(PKG)_VERSION) -p \*.patch \*.patch.$(ARCH) || exit 1; \
- 	    else \
--	      $(APPLY_PATCHES) $(@D) $${D} \*.patch \*.patch.$(ARCH) || exit 1; \
-+	      $(APPLY_PATCHES) -d $(@D) -D $${D} -p \*.patch \*.patch.$(ARCH) || exit 1; \
- 	    fi; \
- 	  fi; \
- 	done; \
-diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
-index 561fbe9..7604f29 100644
---- a/package/setserial/setserial.mk
-+++ b/package/setserial/setserial.mk
-@@ -18,7 +18,7 @@ define SETSERIAL_APPLY_DEBIAN_PATCHES
- 	if [ -d $(@D)/debian/patches ]; then \
- 		touch $(@D)/gorhack.h; \
- 		rm $(@D)/debian/patches/01_makefile.dpatch; \
--		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches *.dpatch; \
-+		$(APPLY_PATCHES) -d $(@D) -D $(@D)/debian/patches -p *.dpatch; \
- 	fi
- endef
- 
-diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-index faefd5c..635f200 100644
---- a/package/sysvinit/sysvinit.mk
-+++ b/package/sysvinit/sysvinit.mk
-@@ -25,7 +25,7 @@ endif
- 
- define SYSVINIT_DEBIAN_PATCHES
- 	if [ -d $(@D)/debian/patches ]; then \
--		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
-+		$(APPLY_PATCHES) -d $(@D) -D $(@D)/debian/patches -p \*.patch; \
- 	fi
- endef
- 
-diff --git a/package/thttpd/thttpd.mk b/package/thttpd/thttpd.mk
-index 5b4b0c4..0b5fd2f 100644
---- a/package/thttpd/thttpd.mk
-+++ b/package/thttpd/thttpd.mk
-@@ -14,7 +14,7 @@ THTTPD_LICENSE_FILES = thttpd.c
- ifneq ($(THTTPD_PATCH),)
- define THTTPD_DEBIAN_PATCHES
- 	if [ -d $(@D)/debian/patches ]; then \
--		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
-+		$(APPLY_PATCHES) -d $(@D) -D $(@D)/debian/patches -p \*.patch; \
- 	fi
- endef
- endif
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 7ccb39d..90b5806 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -5,16 +5,6 @@
- #
- # (c) 2002 Erik Andersen <andersen@codepoet.org>
- #
--# Parameters:
--# - "-s", optional. Silent operation, don't print anything if there
--# isn't any error.
--# - the build directory, optional, default value is '.'. The place where are
--# the package sources.
--# - the patch directory, optional, default '../kernel-patches'. The place
--# where are the scripts you want to apply.
--# - other parameters are the patch name patterns, optional, default value is
--# '*'. Pattern(s) describing the patch names you want to apply.
--#
- # The script will look recursively for patches from the patch directory. If a
- # file named 'series' exists then the patches mentioned in it will be applied
- # as plain patches, regardless of their file name. If no 'series' file exists,
-@@ -31,38 +21,60 @@
- # applied. The list of the patches applied is stored in '.applied_patches_list'
- # file in the build directory.
- 
-+# We want to catch any unexpected failure, and exit immediately.
- set -e
- 
--silent=
--if [ "$1" = "-s" ] ; then
--    # add option to be used by the patch tool
--    silent=-s
--    shift
--fi
-+# use a well defined sorting order
-+export LC_COLLATE=C
- 
- # Set directories from arguments, or use defaults.
--builddir=${1-.}
--patchdir=${2-../kernel-patches}
--shift 2
--patchpattern=${@-*}
-+sourcedir="."
-+patchdir="../kernel-patches"
-+patchpattern="*"
- 
--# use a well defined sorting order
--export LC_COLLATE=C
-+main() {
-+    local OPT OPTARG
-+
-+    # Parse our options; anything after '--' is for the backend
-+    while getopts :hd:D:p:s OPT; do
-+        case "${OPT}" in
-+        h)  help; exit 0;;
-+        d)  sourcedir="${OPTARG}";;
-+        D)  patchdir="${OPTARG}";;
-+        p)  patchpattern="${OPTARG}";;
-+        s)  silent="-s";; # Option to be used by the patch tool.
-+        :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
-+        \?) error "unknown option '%s'\n" "${OPTARG}";;
-+        esac
-+    done
-+
-+    if [ ! -d "${sourcedir}" ] ; then
-+        echo "Aborting.  '${sourcedir}' is not a directory."
-+        exit 1
-+    fi
-+    if [ ! -d "${patchdir}" ] ; then
-+        echo "Aborting.  '${patchdir}' is not a directory."
-+        exit 1
-+    fi
-+
-+    # Remove any rejects present BEFORE patching - Because if there are
-+    # any, even if patches are well applied, at the end it will complain
-+    # about rejects in sourcedir.
-+    find ${sourcedir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print0 | \
-+        xargs -0 -r rm -f
-+
-+    touch ${sourcedir}/.applied_patches_list
-+    scan_patchdir "$patchdir" "$patchpattern"
- 
--if [ ! -d "${builddir}" ] ; then
--    echo "Aborting.  '${builddir}' is not a directory."
--    exit 1
--fi
--if [ ! -d "${patchdir}" ] ; then
--    echo "Aborting.  '${patchdir}' is not a directory."
--    exit 1
--fi
--
--# Remove any rejects present BEFORE patching - Because if there are
--# any, even if patches are well applied, at the end it will complain
--# about rejects in builddir.
--find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print0 | \
--    xargs -0 -r rm -f
-+    # Check for rejects...
-+    if [ "`find $sourcedir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
-+        echo "Aborting.  Reject files found."
-+        exit 1
-+    fi
-+
-+    # Remove backup files
-+    find $sourcedir/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
-+}
- 
- function apply_patch {
-     path="${1%%/}"
-@@ -105,7 +117,7 @@ function apply_patch {
-         echo "Error: missing patch file ${path}/$patch"
-         exit 1
-     fi
--    existing="$(grep -E "/${patch}\$" ${builddir}/.applied_patches_list || true)"
-+    existing="$(grep -E "/${patch}\$" ${sourcedir}/.applied_patches_list || true)"
-     if [ -n "${existing}" ]; then
-         echo "Error: duplicate filename '${patch}'"
-         echo "Conflicting files are:"
-@@ -113,8 +125,8 @@ function apply_patch {
-         echo "  to be applied  : ${path}/${patch}"
-         exit 1
-     fi
--    echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
--    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
-+    echo "${path}/${patch}" >> ${sourcedir}/.applied_patches_list
-+    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${sourcedir}" -t -N $silent
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix ${patch}!"
-         exit 1
-@@ -143,7 +155,7 @@ function scan_patchdir {
-             if [ -d "${path}/$i" ] ; then
-                 scan_patchdir "${path}/$i"
-             elif echo "$i" | grep -q -E "\.tar(\..*)?$|\.tbz2?$|\.tgz$" ; then
--                unpackedarchivedir="$builddir/.patches-$(basename $i)-unpacked"
-+                unpackedarchivedir="$sourcedir/.patches-$(basename $i)-unpacked"
-                 rm -rf "$unpackedarchivedir" 2> /dev/null
-                 mkdir "$unpackedarchivedir"
-                 tar -C "$unpackedarchivedir" -xaf "${path}/$i"
-@@ -155,14 +167,42 @@ function scan_patchdir {
-     fi
- }
- 
--touch ${builddir}/.applied_patches_list
--scan_patchdir "$patchdir" "$patchpattern"
-+help() {
-+    cat <<_EOF_
-+NAME
-+    ${my_name} - apply-patches wrapper for Buildroot
-+
-+SYNOPSIS
-+    ${my_name} [OPTION]... -- [BACKEND OPTION]...
-+
-+DESCRIPTION
-+    Wrapper script to make it easy to patch source trees and have sane
-+    error handling.
-+
-+    -h This help text.
- 
--# Check for rejects...
--if [ "`find $builddir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
--    echo "Aborting.  Reject files found."
--    exit 1
--fi
-+    -d The package build directory, optional, default value is '.'.
-+        The place where are the package sources.
-+
-+    -D The patch directory, optional, default '../kernel-patches'.
-+        The place where are the scripts you want to apply.
-+
-+    -p Patch name patterns, optional, default value is '*'.
-+        Pattern(s) describing the patch names you want to apply.
-+        (*.patch, *.dpatch, *.conditional...)
-+
-+    -s silent.
-+        Optional. Silent operation, don't print anything if there isn't
-+        any error.
-+
-+  Exit status:
-+    0   if OK
-+    !0  in case of error
-+
-+ENVIRONMENT
-+
-+_EOF_
-+}
- 
--# Remove backup files
--find $builddir/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
-+my_name="${0##*/}"
-+main "${@}"
+ We may need additional files in the future (e.g. the tree.h that openembedded
+is carrying). Also, the definition of upstream here is not entirely correct,
+because that's only half the package. So I think it's nicer/cleaner to specify
+this as:
+
+MUSL_COMPAT_HEADERS_EXTRA_DOWNLOADS = \
+	http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys/queue.h?rev=1.70
+
+> +MUSL_COMPAT_HEADERS_LICENSE = BSD-3c, Public Domain or CC0
+
+ Shouldn't we specify here
+
+MUSL_COMPAT_HEADERS_LICENSE_FILES = queue.h cdefs.h
+
+?
+
+> +
+> +MUSL_COMPAT_HEADERS_ADD_TOOLCHAIN_DEPENDENCY = NO
+> +
+> +# Only installs headers
+> +MUSL_COMPAT_HEADERS_INSTALL_TARGET = NO
+> +MUSL_COMPAT_HEADERS_INSTALL_STAGING = YES
+> +
+> +define MUSL_COMPAT_HEADERS_EXTRACT_CMDS
+> +	cp $(DL_DIR)/$(MUSL_COMPAT_HEADERS_SOURCE) $(@D)/queue.h
+                     ^^^This would become
+                     $(notdir $(MUSL_COMPAT_HEADERS_EXTRA_DOWNLOADS))
+
+ BTW I think it makes sense to use install here as well.
+
+> +endef
+> +
+> +define MUSL_COMPAT_HEADERS_INSTALL_STAGING_CMDS
+> +	$(INSTALL) -D -m 0644 $(@D)/queue.h \
+> +		$(STAGING_DIR)/usr/include/sys/queue.h
+> +	$(INSTALL) -D -m 0644 $(MUSL_COMPAT_HEADERS_PKGDIR)/cdefs.h \
+> +		$(STAGING_DIR)/usr/include/sys/cdefs.h
+> +endef
+> +
+> +$(eval $(generic-package))
+> diff --git a/package/musl/Config.in b/package/musl/Config.in
+> index c263006..18ae69d 100644
+> --- a/package/musl/Config.in
+> +++ b/package/musl/Config.in
+> @@ -3,5 +3,6 @@ config BR2_PACKAGE_MUSL
+>  	depends on BR2_TOOLCHAIN_USES_MUSL
+>  	default y
+>  	select BR2_PACKAGE_LINUX_HEADERS
+> -	select BR2_PACKAGE_NETBSD_QUEUE
+>  	select BR2_TOOLCHAIN_HAS_SSP
+> +	# Compatibility headers: cdefs.h, queue.h
+> +	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
+> diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+> index 920bbbf..f8ea377 100644
+> --- a/package/musl/musl.mk
+> +++ b/package/musl/musl.mk
+> @@ -13,10 +13,12 @@ MUSL_LICENSE_FILES = COPYRIGHT
+>  # cross-compiler and the kernel headers
+>  MUSL_DEPENDENCIES = host-gcc-initial linux-headers
+>  
+> -# musl does not provide a sys/queue.h implementation, so add the
+> -# netbsd-queue package that will install a sys/queue.h file in the
+> -# staging directory based on the NetBSD implementation.
+> -MUSL_DEPENDENCIES += netbsd-queue
+> +# musl does not provide an implementation for sys/queue.h or sys/cdefs.h. So,
+> +# add the netbsd-compat-headers package that will install those files, into
+             ^^^^^^ musl
+> +# the staging directory:
+> +#   sys/queue.h:  header from NetBSD
+> +#   sys/cdefs.h:  minimalist header bundled in Buildroot
+> +MUSL_DEPENDENCIES += musl-compat-headers
+>  
+>  # musl is part of the toolchain so disable the toolchain dependency
+>  MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
+> diff --git a/package/netbsd-queue/Config.in b/package/netbsd-queue/Config.in
+> deleted file mode 100644
+> index 7837f4c..0000000
+> --- a/package/netbsd-queue/Config.in
+> +++ /dev/null
+> @@ -1,2 +0,0 @@
+> -config BR2_PACKAGE_NETBSD_QUEUE
+> -	bool
+> diff --git a/package/netbsd-queue/netbsd-queue.mk b/package/netbsd-queue/netbsd-queue.mk
+> deleted file mode 100644
+> index 5fd926b..0000000
+> --- a/package/netbsd-queue/netbsd-queue.mk
+> +++ /dev/null
+> @@ -1,24 +0,0 @@
+> -################################################################################
+> -#
+> -# netbsd-queue
+> -#
+> -################################################################################
+> -
+> -NETBSD_QUEUE_VERSION = 1.70
+> -NETBSD_QUEUE_SITE = http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/sys
+> -NETBSD_QUEUE_SOURCE = queue.h?rev=$(NETBSD_QUEUE_VERSION)
+> -NETBSD_QUEUE_LICENSE = BSD-3c
+> -
+> -NETBSD_QUEUE_ADD_TOOLCHAIN_DEPENDENCY = NO
+> -NETBSD_QUEUE_INSTALL_STAGING = YES
+> -
+> -define NETBSD_QUEUE_EXTRACT_CMDS
+> -	cp $(DL_DIR)/$(NETBSD_QUEUE_SOURCE) $(@D)/queue.h
+> -endef
+> -
+> -define NETBSD_QUEUE_INSTALL_STAGING_CMDS
+> -	$(INSTALL) -D -m 0644 $(@D)/queue.h \
+> -		$(STAGING_DIR)/usr/include/sys/queue.h
+> -endef
+> -
+> -$(eval $(generic-package))
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index f54fbee..63b7712 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -727,7 +727,8 @@ config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+>  config BR2_TOOLCHAIN_EXTERNAL_MUSL
+>  	bool
+>  	select BR2_TOOLCHAIN_USES_MUSL
+> -	select BR2_PACKAGE_NETBSD_QUEUE
+> +	# Compatibility headers: cdefs.h, queue.h
+> +	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
+>  
+>  if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+>  
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index 29c1f36..967f022 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -246,11 +246,13 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
+>  TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
+>  endif
+>  
+> -# musl does not provide a sys/queue.h implementation, so add the
+> -# netbsd-queue package that will install a sys/queue.h file in the
+> -# staging directory based on the NetBSD implementation.
+> +# musl does not provide an implementation for sys/queue.h or sys/cdefs.h. So,
+> +# add the netbsd-compat-headers package that will install those files, into
+             ^^^^^^musl
+
+
+ Regards,
+ Arnout
+
+> +# the staging directory:
+> +#   sys/queue.h:  header from NetBSD
+> +#   sys/cdefs.h:  minimalist header bundled in Buildroot
+>  ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+> -TOOLCHAIN_EXTERNAL_DEPENDENCIES += netbsd-queue
+> +TOOLCHAIN_EXTERNAL_DEPENDENCIES += musl-compat-headers
+>  endif
+>  
+>  # The Linaro toolchain expects the libraries in
+> 
+
+
 -- 
-2.5.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
