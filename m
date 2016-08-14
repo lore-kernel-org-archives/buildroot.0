@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Aug 2016 23:34:08 +0200
-Subject: [Buildroot] [PATCH 4/8] package/android-tools: drop
- musl-compatibility cdefs patching out
-In-Reply-To: <bf528a01457458785591880406b964fcce771ca7.1471033837.git.yann.morin.1998@free.fr>
+Date: Sun, 14 Aug 2016 23:41:12 +0200
+Subject: [Buildroot] [PATCH 5/8] package/bcusdk: drop a
+ musl-compatibility patch
+In-Reply-To: <fd94bb483d5538c48b7aeb03d65e3d4c8db2dcb9.1471033837.git.yann.morin.1998@free.fr>
 References: <cover.1471033837.git.yann.morin.1998@free.fr>
- <bf528a01457458785591880406b964fcce771ca7.1471033837.git.yann.morin.1998@free.fr>
-Message-ID: <0cc766e7-d59b-3e2c-bf9e-abba7f6cb94b@mind.be>
+ <fd94bb483d5538c48b7aeb03d65e3d4c8db2dcb9.1471033837.git.yann.morin.1998@free.fr>
+Message-ID: <a23774c4-0eca-0e71-298c-b4ca200d50e2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,11 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 12-08-16 22:49, Yann E. MORIN wrote:
-> We now always have a sys/cdefs.h, so we no longer need to patch it out.
-> 
-> Simplify the patch by removing any hunk removing cdefs.h or the use of
-> __BEGIN_DECLS/__END_DECLS. However, it must be included when macros it
-> defines are being used.
-> 
-> Also, renumber patches to guarantee ordering.
+> We now always have a sys/cdefs.h, so we can drop this patch.
 
- You actually changed the ordering...
-
-0005-fix-big-endian-build.patch
-0005-fix-static-link-zlib.patch
-
-->
-
-0005-fix-static-link-zlib.patch
-0006-fix-big-endian-build.patch
-
-so I guess the order doesn't matter.
-
- But anyway, after careful review of the patch-in-patch changes:
+ And renumber the remaining patch.
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 
  Regards,
  Arnout
@@ -44,13 +25,16 @@ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
 > ---
->  .../0004-Fix-build-issue-with-musl.patch           | 181 +--------------------
->  ...build.patch => 0006-fix-big-endian-build.patch} |   0
->  .../0007-include-cdefs-h-when-needed.patch         |  41 +++++
->  3 files changed, 43 insertions(+), 179 deletions(-)
->  rename package/android-tools/{0005-fix-big-endian-build.patch => 0006-fix-big-endian-build.patch} (100%)
->  create mode 100644 package/android-tools/0007-include-cdefs-h-when-needed.patch
+> Note that the patch was sent upstream, but it seems never acted upon.
+> ---
+>  ...t-use-the-non-standard-sys-cdefs.h-header.patch | 48 ----------------------
+>  ...d_set-requires-inclusion-of-sys-select.h.patch} |  0
+>  2 files changed, 48 deletions(-)
+>  delete mode 100644 package/bcusdk/0001-Do-not-use-the-non-standard-sys-cdefs.h-header.patch
+>  rename package/bcusdk/{0002-fd_set-requires-inclusion-of-sys-select.h.patch => 0001-fd_set-requires-inclusion-of-sys-select.h.patch} (100%)
+> 
 [snip]
 
 -- 
