@@ -1,55 +1,63 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Aug 2016 23:59:32 +0200
-Subject: [Buildroot] [PATCH 0/8] musl: add compatibility cdefs.h header
- (branch yem/cdefs)
-In-Reply-To: <cover.1471033837.git.yann.morin.1998@free.fr>
-References: <cover.1471033837.git.yann.morin.1998@free.fr>
-Message-ID: <064c4381-b4b1-f875-70fd-b356c7029b1a@mind.be>
+Date: Mon, 15 Aug 2016 00:09:46 +0200
+Subject: [Buildroot] [PATCH] system: sysvinit needs MMU
+In-Reply-To: <1471107441-15881-1-git-send-email-yann.morin.1998@free.fr>
+References: <1471107441-15881-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20e20bf5-1a43-374a-f2c7-646c6d63a919@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12-08-16 22:49, Yann E. MORIN wrote:
-> Hello All!
-> 
-> This series is an ateempt at quiescing, once and for all, all the build
-> failures under musl, due to missing non-standard header cdefs.h.
-[snip]
-> Fixing all those bodies of code is nigh impossible, so instead we
-> provide a strictly-minimal sys/cdefs.h, that defines only the three
-> strictly-required macros:
-> 
->   - __P() to declare function prototypes;
->   - __BEGIN_DECLS and __END_DECLS to enclose C declarations.
-> 
-> When (if!) more are needed, they can be added later.
-> 
-> The basic idea was suggested by Thomas P. on IRC. Thanks! :-)
-> 
-> This then allows us to drop quite a few patches that were removing use
-> of cdefs.h. However, including sys/cdefs.h has been added to two
-> packages that were relying on other glibc headers to include it.
->
+On 13-08-16 18:57, Yann E. MORIN wrote:
+> It uses spawn() and thus fork(), so it needs an MMU.
 
- I had some minor comments on the first patch, all others have my Reviewed-by.
-However, you missed two patches:
+ spawn() is defined by sysvinit itself, so it doesn't make much sense to mention
+that here.
 
-package/atftp/0002-argz.h-fix-musl-compile-add-missing-defines.patch
+ Otherwise:
 
--> This one shows that __THROW and __attribute_pure__ may be needed as well.
-
-package/attr/0002-avoid-glibc-specific-decls-defines.patch
-
--> Although it's probably better to keep it as is, otherwise an include cdefs.h
-would have to be added.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
  Regards,
  Arnout
 
-[snip]
+> 
+> Fixes a build issue reported on IRC for a cortex-m4 build:
+>     http://pastebin.com/dGCsy0sr
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/sysvinit/Config.in | 1 +
+>  system/Config.in           | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/package/sysvinit/Config.in b/package/sysvinit/Config.in
+> index ab67ed6..94f1612 100644
+> --- a/package/sysvinit/Config.in
+> +++ b/package/sysvinit/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_SYSVINIT
+>  	bool "sysvinit"
+> +	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_INIT_SYSV
+>  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  	help
+> diff --git a/system/Config.in b/system/Config.in
+> index 5855707..353421a 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -106,6 +106,7 @@ config BR2_INIT_BUSYBOX
+>  
+>  config BR2_INIT_SYSV
+>  	bool "systemV"
+> +	depends on BR2_USE_MMU # sysvinit
+>  	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
+>  	select BR2_PACKAGE_INITSCRIPTS
+>  	select BR2_PACKAGE_SYSVINIT
+> 
 
 
 -- 
