@@ -1,38 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Aug 2016 12:46:44 +0200
-Subject: [Buildroot] [PATCH 2/2] package/lldpd: explicit optional dependency
-In-Reply-To: <1471171604-16162-1-git-send-email-yann.morin.1998@free.fr>
-References: <1471171604-16162-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1471171604-16162-2-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 14 Aug 2016 15:28:01 +0200
+Subject: [Buildroot] [PATCH] pcakage/quota: fix static build with e2fsprogs
+Message-ID: <1471181281-8738-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-check is an optional depenency of lldpd, so we must depend on it when it
-is enabled.
+quota does not use pkg-config to find e2fsprogs libs, so it misses out
+on the fact that it may require -pthread when doing static links.
+
+Fix that by manually adding -pthread in case of the static build (of
+course, only if the toolchain has threads).
+
+Fixes:
+    http://autobuild.buildroot.org/results/733/733145e94d7c4f3b11e867c60a1e8f8e049a3ce0/
+    http://autobuild.buildroot.org/results/666/6666f7c07339830fb45a5decb8825560ee432ce5/
+    http://autobuild.buildroot.org/results/f5b/f5b1d57bd26adaf125555b97ff1eb9faf223a293/
+    [...]
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
----
- package/lldpd/lldpd.mk | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
-index 008d4bf..f3f047f 100644
---- a/package/lldpd/lldpd.mk
-+++ b/package/lldpd/lldpd.mk
-@@ -12,6 +12,10 @@ LLDPD_LICENSE_FILES = README.md
- # Touching configure.ac and Makefile.am in our patches:
- LLDPD_AUTORECONF = YES
- 
-+ifeq ($(BR2_PACKAGE_CHECK),y)
-+LLDPD_DEPENDENCIES += check
+---
+Note: quota has used pkg-config for the past two release (4.02 and
+4.03), but we're still using 4.01. Bumping is not possible yet, as
+we are post -rc1. This will have to be done after 2016.08.
+---
+ package/quota/quota.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index c30a2bd..a1e343a 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -21,6 +21,11 @@ endif
+ ifeq ($(BR2_PACKAGE_E2FSPROGS),y)
+ QUOTA_DEPENDENCIES += e2fsprogs
+ QUOTA_CONF_OPTS += --enable-ext2direct
++# quote does not use pkg-config to find e2fsprogs, so it does not know it
++# may require -pthreads in case of static build
++ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
++QUOTA_LIBS += -pthread
 +endif
-+
- # Detection of c99 support in configure fails without WCHAR. To enable
- # automatic detection of c99 support by configure, we need to enable
- # WCHAR in toolchain. But actually we do not need WCHAR at lldpd
+ else
+ QUOTA_CONF_OPTS += --disable-ext2direct
+ endif
 -- 
 2.7.4
