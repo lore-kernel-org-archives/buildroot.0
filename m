@@ -1,90 +1,75 @@
 From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Mon, 15 Aug 2016 11:45:41 +0530
-Subject: [Buildroot] [PATCH v2 1/2] mtd: fix musl build issue
-Message-ID: <1471241742-28182-1-git-send-email-rahul.bedarkar@imgtec.com>
+Date: Mon, 15 Aug 2016 11:45:42 +0530
+Subject: [Buildroot] [PATCH v2 2/2] wayland: fix musl build issue
+In-Reply-To: <1471241742-28182-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1471241742-28182-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <1471241742-28182-2-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With musl C library, we get following build error
+With musl C library, we see following build failure.
 
-  integck.c:37:28: fatal error: bits/stdio_lim.h: No such file or directory
-   #include <bits/stdio_lim.h>
-                              ^
-  compilation terminated.
-  make[2]: *** [integck] Error 1
+  src/scanner.c: In function 'find_enumeration':
+  src/scanner.c:811:2: error: unknown type name 'uint'
+    uint idx = 0, j;
+    ^
 
-Header <bits/stdio_lim.h> is not available in musl C library. However
-<stdio.h> has all definition that <bits/stdio_lim.h> supposed to be
-providing. Moreover <bits/stdio_lim.h> shouldn't be included directly
-instead we should be using <stdio.h>.
+uint is defined in <sys/types.h> header. It is usually included by <stdlib.h>
+but in musl stdlib.h doesn't include it.
 
-Since we already include <stdio.h> and in case of uClibc or glibc
-<bits/stdio_lim.h> gets included internally, we can safely remove it.
+This patch adds upstream patch where uint32_t is used instead of uint.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/175/1754861457af520480cc34d7d2d0edff2868ff66/
+  http://autobuild.buildroot.net/results/fcf/fcf6dd3bd31f92eadbcae17338e5887a23e43ff9/
 
+Cc: Khem Raj <raj.khem@gmail.com>
 Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 ---
 Changes v1 -> v2:
-  - No changes 
+  - Backport upstream patch instead of adding new patch (suggested by Khem Raj)
 ---
- ...tegrity-don-t-include-header-bits-stdio_l.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch
+ ...0002-scanner-Use-uint32_t-instead-of-uint.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/wayland/0002-scanner-Use-uint32_t-instead-of-uint.patch
 
-diff --git a/package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch b/package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch
+diff --git a/package/wayland/0002-scanner-Use-uint32_t-instead-of-uint.patch b/package/wayland/0002-scanner-Use-uint32_t-instead-of-uint.patch
 new file mode 100644
-index 0000000..5c0a552
+index 0000000..1d05f25
 --- /dev/null
-+++ b/package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch
-@@ -0,0 +1,45 @@
-+From 600ab10e3b452cdffc6c82770b0bb2ff5c23ad70 Mon Sep 17 00:00:00 2001
-+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+Date: Fri, 12 Aug 2016 22:59:35 +0530
-+Subject: [PATCH 1/1] fs-tests: integrity: don't include header
-+ <bits/stdio_lim.h>
++++ b/package/wayland/0002-scanner-Use-uint32_t-instead-of-uint.patch
+@@ -0,0 +1,31 @@
++From 6750b47d9e0d3074d2e56aa36c476493f533d696 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Fri, 15 Jul 2016 16:23:48 -0700
++Subject: [PATCH 1/1] scanner: Use uint32_t instead of uint
 +
-+With musl C library, we get following build error
++uint32_t is C99 defined stdint type
 +
-+integck.c:37:28: fatal error: bits/stdio_lim.h: No such file or directory
-+ #include <bits/stdio_lim.h>
-+                            ^
-+compilation terminated.
-+make[2]: *** [integck] Error 1
-+
-+Header <bits/stdio_lim.h> is not available in musl C library. However
-+<stdio.h> has all definition that <bits/stdio_lim.h> supposed to be
-+providing. Moreover <bits/stdio_lim.h> shouldn't be included directly
-+instead we should be using <stdio.h>.
-+
-+Since we already include <stdio.h> and in case of uClibc or glibc
-+<bits/stdio_lim.h> gets included internally, we can safely remove it.
-+
-+This build issue is found by Buildroot autobuilder
-+http://autobuild.buildroot.net/results/175/1754861457af520480cc34d7d2d0edff2868ff66/
-+
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Reviewed-by: Daniel Stone <daniels@collabora.com>
++[Rahul Bedarkar: Backported from: 6750b47d9e0d3074d2e56aa36c476493f533d696]
 +Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 +---
-+ tests/fs-tests/integrity/integck.c | 1 -
-+ 1 file changed, 1 deletion(-)
++ src/scanner.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/tests/fs-tests/integrity/integck.c b/tests/fs-tests/integrity/integck.c
-+index 6ef817e..0bb9711 100644
-+--- a/tests/fs-tests/integrity/integck.c
-++++ b/tests/fs-tests/integrity/integck.c
-+@@ -34,7 +34,6 @@
-+ #ifdef INTEGCK_DEBUG
-+ #include <execinfo.h>
-+ #endif
-+-#include <bits/stdio_lim.h>
-+ #include <sys/mman.h>
-+ #include <sys/vfs.h>
-+ #include <sys/mount.h>
++diff --git a/src/scanner.c b/src/scanner.c
++index 6e2c3a3..ebae4cc 100644
++--- a/src/scanner.c
+++++ b/src/scanner.c
++@@ -819,7 +819,7 @@ find_enumeration(struct protocol *protocol,
++ 	struct interface *i;
++ 	struct enumeration *e;
++ 	char *enum_name;
++-	uint idx = 0, j;
+++	uint32_t idx = 0, j;
++ 
++ 	for (j = 0; j + 1 < strlen(enum_attribute); j++) {
++ 		if (enum_attribute[j] == '.') {
 +-- 
 +2.6.2
 +
