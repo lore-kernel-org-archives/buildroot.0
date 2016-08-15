@@ -1,37 +1,48 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Mon, 15 Aug 2016 17:41:47 +0300
-Subject: [Buildroot] [PATCH] gmp: disable assembly for arc
-Message-ID: <1471272107-17275-1-git-send-email-vzakhar@synopsys.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 15 Aug 2016 17:03:37 +0200
+Subject: [Buildroot] [PATCH/next v5 2/6] package/ffmpeg: default to
+	--cpu=generic for MIPS architecture
+In-Reply-To: <1471273421-12076-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1471273421-12076-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1471273421-12076-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It has different inline assembly constraints that
-are not supported after update to gcc-6.
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/c91/c9143eec0834017d57d5352d6fc95b5fae38da00//
-and a lot of other failures of gmp-6.1.1 for ARC.
+This option is needed to prevent this message from configure:
 
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+WARNING: unknown CPU. Disabling all MIPS optimizations.
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gmp/gmp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v5: no changes
+v4: no changes
+v3: no changes
+v2: no changes
 
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index 485bf7c..420fd2f 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -15,7 +15,7 @@ HOST_GMP_DEPENDENCIES = host-m4
- 
- # GMP doesn't support assembly for coldfire or mips r6 ISA yet
- # Disable for ARM v7m since it has different asm constraints
--ifeq ($(BR2_m68k_cf)$(BR2_mips_32r6)$(BR2_mips_64r6)$(BR2_ARM_CPU_ARMV7M),y)
-+ifeq ($(BR2_m68k_cf)$(BR2_mips_32r6)$(BR2_mips_64r6)$(BR2_ARM_CPU_ARMV7M)$(BR2_arc),y)
- GMP_CONF_OPTS += --disable-assembly
+ package/ffmpeg/ffmpeg.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index a816cea..154a091 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -455,6 +455,11 @@ else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
+ FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
  endif
  
++# Default to --cpu=generic for MIPS architecture
++ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
++FFMPEG_CONF_OPTS += --cpu=generic
++endif
++
+ FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+ 
+ # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
 -- 
-2.5.5
+2.8.1
