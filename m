@@ -1,60 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Aug 2016 01:11:34 +0200
-Subject: [Buildroot] [PATCH] package/qt: webkit needs gst-plugins-base
-Message-ID: <1471216294-12961-1-git-send-email-yann.morin.1998@free.fr>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Mon, 15 Aug 2016 11:07:17 +0530
+Subject: [Buildroot] [PATCH 2/2] wayland: fix musl build issue
+In-Reply-To: <20160814142650.GA30771@free.fr>
+References: <1471025702-6945-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <1471025702-6945-2-git-send-email-rahul.bedarkar@imgtec.com>
+ <20160814142650.GA30771@free.fr>
+Message-ID: <57B1550D.6010203@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/84d/84d338b70c8ce3f21dd202de387326f18526aa63/
-    http://autobuild.buildroot.org/results/379/379ad4eadf5af7e1d5b977bc229d3fcaba25b4fe/
-    [...]
+Hi,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/qt/Config.in | 8 ++++++--
- package/qt/qt.mk     | 1 +
- 2 files changed, 7 insertions(+), 2 deletions(-)
+On Sunday 14 August 2016 07:56 PM, Yann E. MORIN wrote:
+> Rahul, All,
+>
+> On 2016-08-12 23:45 +0530, Rahul Bedarkar spake thusly:
+>> With musl C library, we see following build failure.
+>>
+>>    src/scanner.c: In function 'find_enumeration':
+>>    src/scanner.c:811:2: error: unknown type name 'uint'
+>>      uint idx = 0, j;
+>>      ^
+>>
+>> uint is defined in <sys/types.h> header. It is usually included by <stdlib.h>
+>> but in musl stdlib.h doesn't include it.
+>
+> As commented by Khem, there is an upstream patch, so it's better to
+> backport it.
+>
+> Consequently, I've marked this as "Changes Requested" in our Patchwork.
+>
+> Care to respin, please? Thanks!
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index b9752d3..acb30d2 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -469,14 +469,18 @@ config BR2_PACKAGE_QT_WEBKIT
- 	depends on BR2_PACKAGE_QT_NETWORK
- 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # needs pthread_getattr_np()
-+	depends on BR2_USE_WCHAR # gstreamer <- glib2
-+	select BR2_PACKAGE_GSTREAMER
-+	select BR2_PACKAGE_GST_PLUGINS_BASE
-+	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
- 	help
- 	  Build the WebKit module.
- 	  If unsure, say n.
- 
--comment "WebKit needs shared library/NPTL toolchain/script/gui/network support"
-+comment "WebKit needs shared library/NPTL/wchar toolchain/script/gui/network support"
- 	depends on !(BR2_PACKAGE_QT_SCRIPT && BR2_PACKAGE_QT_SHARED && \
- 		BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 
- config BR2_PACKAGE_QT_STL
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index c2d2e9c..09b8dc2 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -429,6 +429,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_QT_WEBKIT),y)
- QT_CONFIGURE_OPTS += -webkit
-+QT_DEPENDENCIES += gstreamer gst-plugins-base
- else
- QT_CONFIGURE_OPTS += -no-webkit
- endif
--- 
-2.7.4
+Thanks Yann, Khem,
+
+I will send v2.
+
+Regards,
+Rahul
