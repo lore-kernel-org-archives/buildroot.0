@@ -1,43 +1,92 @@
-From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-Date: Mon, 15 Aug 2016 11:07:17 +0530
-Subject: [Buildroot] [PATCH 2/2] wayland: fix musl build issue
-In-Reply-To: <20160814142650.GA30771@free.fr>
-References: <1471025702-6945-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1471025702-6945-2-git-send-email-rahul.bedarkar@imgtec.com>
- <20160814142650.GA30771@free.fr>
-Message-ID: <57B1550D.6010203@imgtec.com>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Mon, 15 Aug 2016 11:45:41 +0530
+Subject: [Buildroot] [PATCH v2 1/2] mtd: fix musl build issue
+Message-ID: <1471241742-28182-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+With musl C library, we get following build error
 
-On Sunday 14 August 2016 07:56 PM, Yann E. MORIN wrote:
-> Rahul, All,
->
-> On 2016-08-12 23:45 +0530, Rahul Bedarkar spake thusly:
->> With musl C library, we see following build failure.
->>
->>    src/scanner.c: In function 'find_enumeration':
->>    src/scanner.c:811:2: error: unknown type name 'uint'
->>      uint idx = 0, j;
->>      ^
->>
->> uint is defined in <sys/types.h> header. It is usually included by <stdlib.h>
->> but in musl stdlib.h doesn't include it.
->
-> As commented by Khem, there is an upstream patch, so it's better to
-> backport it.
->
-> Consequently, I've marked this as "Changes Requested" in our Patchwork.
->
-> Care to respin, please? Thanks!
+  integck.c:37:28: fatal error: bits/stdio_lim.h: No such file or directory
+   #include <bits/stdio_lim.h>
+                              ^
+  compilation terminated.
+  make[2]: *** [integck] Error 1
 
-Thanks Yann, Khem,
+Header <bits/stdio_lim.h> is not available in musl C library. However
+<stdio.h> has all definition that <bits/stdio_lim.h> supposed to be
+providing. Moreover <bits/stdio_lim.h> shouldn't be included directly
+instead we should be using <stdio.h>.
 
-I will send v2.
+Since we already include <stdio.h> and in case of uClibc or glibc
+<bits/stdio_lim.h> gets included internally, we can safely remove it.
 
-Regards,
-Rahul
+Fixes:
+
+  http://autobuild.buildroot.net/results/175/1754861457af520480cc34d7d2d0edff2868ff66/
+
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+Changes v1 -> v2:
+  - No changes 
+---
+ ...tegrity-don-t-include-header-bits-stdio_l.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch
+
+diff --git a/package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch b/package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch
+new file mode 100644
+index 0000000..5c0a552
+--- /dev/null
++++ b/package/mtd/0003-fs-tests-integrity-don-t-include-header-bits-stdio_l.patch
+@@ -0,0 +1,45 @@
++From 600ab10e3b452cdffc6c82770b0bb2ff5c23ad70 Mon Sep 17 00:00:00 2001
++From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++Date: Fri, 12 Aug 2016 22:59:35 +0530
++Subject: [PATCH 1/1] fs-tests: integrity: don't include header
++ <bits/stdio_lim.h>
++
++With musl C library, we get following build error
++
++integck.c:37:28: fatal error: bits/stdio_lim.h: No such file or directory
++ #include <bits/stdio_lim.h>
++                            ^
++compilation terminated.
++make[2]: *** [integck] Error 1
++
++Header <bits/stdio_lim.h> is not available in musl C library. However
++<stdio.h> has all definition that <bits/stdio_lim.h> supposed to be
++providing. Moreover <bits/stdio_lim.h> shouldn't be included directly
++instead we should be using <stdio.h>.
++
++Since we already include <stdio.h> and in case of uClibc or glibc
++<bits/stdio_lim.h> gets included internally, we can safely remove it.
++
++This build issue is found by Buildroot autobuilder
++http://autobuild.buildroot.net/results/175/1754861457af520480cc34d7d2d0edff2868ff66/
++
++Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++---
++ tests/fs-tests/integrity/integck.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/tests/fs-tests/integrity/integck.c b/tests/fs-tests/integrity/integck.c
++index 6ef817e..0bb9711 100644
++--- a/tests/fs-tests/integrity/integck.c
+++++ b/tests/fs-tests/integrity/integck.c
++@@ -34,7 +34,6 @@
++ #ifdef INTEGCK_DEBUG
++ #include <execinfo.h>
++ #endif
++-#include <bits/stdio_lim.h>
++ #include <sys/mman.h>
++ #include <sys/vfs.h>
++ #include <sys/mount.h>
++-- 
++2.6.2
++
+-- 
+2.6.2
