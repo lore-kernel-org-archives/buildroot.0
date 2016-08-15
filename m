@@ -1,31 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Aug 2016 16:03:31 +0200
-Subject: [Buildroot] [PATCH 1/2] package/systemd-bootchart: needs
- headers >= 3.17
-In-Reply-To: <1471108019-21603-1-git-send-email-yann.morin.1998@free.fr>
-References: <1471108019-21603-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160814160331.3c425beb@free-electrons.com>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Mon, 15 Aug 2016 17:41:47 +0300
+Subject: [Buildroot] [PATCH] gmp: disable assembly for arc
+Message-ID: <1471272107-17275-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+It has different inline assembly constraints that
+are not supported after update to gcc-6.
 
-On Sat, 13 Aug 2016 19:06:58 +0200, Yann E. MORIN wrote:
-> It uses GRND_NONBLOCK, introduced in 3.17.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/systemd-bootchart/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
+Fixes:
+http://autobuild.buildroot.net/results/c91/c9143eec0834017d57d5352d6fc95b5fae38da00//
+and a lot of other failures of gmp-6.1.1 for ARC.
 
-Applied to master, thanks!
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+---
+ package/gmp/gmp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index 485bf7c..420fd2f 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -15,7 +15,7 @@ HOST_GMP_DEPENDENCIES = host-m4
+ 
+ # GMP doesn't support assembly for coldfire or mips r6 ISA yet
+ # Disable for ARM v7m since it has different asm constraints
+-ifeq ($(BR2_m68k_cf)$(BR2_mips_32r6)$(BR2_mips_64r6)$(BR2_ARM_CPU_ARMV7M),y)
++ifeq ($(BR2_m68k_cf)$(BR2_mips_32r6)$(BR2_mips_64r6)$(BR2_ARM_CPU_ARMV7M)$(BR2_arc),y)
+ GMP_CONF_OPTS += --disable-assembly
+ endif
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.5
