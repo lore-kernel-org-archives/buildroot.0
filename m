@@ -1,326 +1,124 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 15 Aug 2016 17:03:41 +0200
-Subject: [Buildroot] [PATCH/next v5 6/6] package/vlc: add support for ffmpeg
-	3.0
-In-Reply-To: <1471273421-12076-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1471273421-12076-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1471273421-12076-6-git-send-email-bernd.kuhls@t-online.de>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Mon, 15 Aug 2016 11:05:34 -0400
+Subject: [Buildroot] [PATCH 1/2] package/lldpd: disable use of libbsd
+In-Reply-To: <1471171604-16162-1-git-send-email-yann.morin.1998@free.fr>
+References: <1471171604-16162-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87shu6oywx.fsf@ketchup.mtl.sfl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v5: first release
-    instead of bumping vlc to git master (no vlc 3.x release yet) we use
-    a patch from deb-multimedia.org which provides the necessary changes
-    for ffmpeg 3.x support to vlc 2.2, compile-tested using this
-    defconfig:
+Hi Yann,
 
-    BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-    BR2_TOOLCHAIN_BUILDROOT_CXX=y
-    BR2_PACKAGE_FFMPEG=y
-    BR2_PACKAGE_FFMPEG_GPL=y
-    BR2_PACKAGE_FFMPEG_POSTPROC=y
-    BR2_PACKAGE_FFMPEG_SWSCALE=y
-    BR2_PACKAGE_VLC=y
+"Yann E. MORIN" <yann.morin.1998@free.fr> writes:
 
-    This patch can be removed when vlc is bumped to 3.x.
+> libbsd installs .pc files that contain -isystem /usr/include/bsd, but
+> -isystem is not munged by pkg-config, so we end up using /usr/include/bsd
+> which are not suitable for the target. And breaks big time (see
+> failures, below).
+>
+> But using libbsd is completely optional. In fact, our lldpd.mk did not
+> even express the dependency on libbsd, so we may well have had builds
+> without libbsd.
+>
+> The functionality brought in by using libbsd is very minor, so we just
+> make lldpd not use libbsd at all. There is no --disable-libbsd or such,
+> so we just patch it out of configure.ac.
+>
+> Fixes:
+>     http://autobuild.buildroot.org/results/6b7/6b70fa379e834ec71cc260ba6af771b531ca3511/
+>     http://autobuild.buildroot.org/results/769/769074c4bb67336ae6679f2c1cd2a8220d2bec24/
+>     http://autobuild.buildroot.org/results/c8a/c8a6001f437701ecc75f6c9252935645bda8a8c8/
+>     [...]
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> ---
+>  .../0002-configure-do-not-check-for-libbsd.patch   | 62 ++++++++++++++++++++++
+>  package/lldpd/lldpd.mk                             |  2 +-
+>  2 files changed, 63 insertions(+), 1 deletion(-)
+>  create mode 100644 package/lldpd/0002-configure-do-not-check-for-libbsd.patch
+>
+> diff --git a/package/lldpd/0002-configure-do-not-check-for-libbsd.patch b/package/lldpd/0002-configure-do-not-check-for-libbsd.patch
+> new file mode 100644
+> index 0000000..b89b442
+> --- /dev/null
+> +++ b/package/lldpd/0002-configure-do-not-check-for-libbsd.patch
+> @@ -0,0 +1,62 @@
+> +From 0801a066cd4a24a858ddfa7c62c7802e0f5533a8 Mon Sep 17 00:00:00 2001
+> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +Date: Sun, 14 Aug 2016 12:15:17 +0200
+> +Subject: [PATCH] configure: do not check for libbsd
+> +
+> +libbsd causes build issues because it .pc file is borked: it contains
+> +-isystem in CFLAGS, which is not munged by pkg-config, so we end up
+> +using the headers of the build machine, causing all sorts of hard to
+> +debug trouble at build time.
+> +
+> +lldpd uses libbsd to a few helper functions, but has fallback in case
+> +libbsd is not available. The only feature that is lost when not using
+> +libbsd is that the neighbour name is no longer displayed in the
+> +/proc/self/cmdline. As the author of lldpd said on IRC: "people should
+> +survive! ;-)"
+> +
+> +So we just remove the detection of libbsd altogether.
+> +
+> +Fixes:
+> +    http://autobuild.buildroot.org/results/6b7/6b70fa379e834ec71cc260ba6af771b531ca3511/
+> +    http://autobuild.buildroot.org/results/769/769074c4bb67336ae6679f2c1cd2a8220d2bec24/
+> +    http://autobuild.buildroot.org/results/c8a/c8a6001f437701ecc75f6c9252935645bda8a8c8/
+> +    [...]
+> +
+> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +---
+> + configure.ac | 19 -------------------
+> + 1 file changed, 19 deletions(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index dd723b0..45498ce 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -165,25 +165,6 @@ AC_FUNC_MALLOC
+> + AC_FUNC_REALLOC
+> + AC_FUNC_FORK
+> + 
+> +-# Some functions can be in libbsd
+> +-PKG_CHECK_MODULES([libbsd], [libbsd-overlay], [
+> +-  _save_CFLAGS="$CFLAGS"
+> +-  _save_LIBS="$LIBS"
+> +-  CFLAGS="$CFLAGS $libbsd_CFLAGS"
+> +-  LIBS="$LIBS $libbsd_LIBS"
+> +-  AC_MSG_CHECKING([if libbsd can be linked correctly])
+> +-  AC_LINK_IFELSE([AC_LANG_SOURCE([[int main() { return 0; }]])],
+> +-    [
+> +-      AC_MSG_RESULT(yes)
+> +-      LLDP_CFLAGS="$LLDP_CFLAGS $libbsd_CFLAGS"
+> +-      LLDP_LDFLAGS="$LLDP_LDFLAGS $libbsd_LIBS"
+> +-    ],[
+> +-      AC_MSG_RESULT(no)
+> +-      CFLAGS="$_save_CFLAGS"
+> +-      LIBS="$_save_LIBS"
+> +-    ])
+> +-], [:])
+> +-
+> + # setproctitle may have an _init function
+> + AC_REPLACE_FUNCS([setproctitle])
+> + AC_CHECK_FUNCS([setproctitle_init])
+> +-- 
+> +2.7.4
+> +
 
- package/vlc/0008-ffmpeg-3.0.patch | 283 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 283 insertions(+)
- create mode 100644 package/vlc/0008-ffmpeg-3.0.patch
+Did you send this patch upstream to lldpd?
 
-diff --git a/package/vlc/0008-ffmpeg-3.0.patch b/package/vlc/0008-ffmpeg-3.0.patch
-new file mode 100644
-index 0000000..892c625
---- /dev/null
-+++ b/package/vlc/0008-ffmpeg-3.0.patch
-@@ -0,0 +1,283 @@
-+Changes for ffmpeg 3.0
-+
-+This file is a copy of debian/patches/04_ffmpeg-3.0.diff, to be found in
-+http://www.deb-multimedia.org/pool/main/v/vlc-dmo/vlc-dmo_2.2.4.orig.tar.gz
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2324,7 +2324,7 @@ AC_ARG_ENABLE(avcodec,
-+ AS_IF([test "${enable_avcodec}" != "no"], [
-+   PKG_CHECK_MODULES(AVCODEC,[libavcodec >= 53.34.0 libavutil >= 51.22.0], [
-+     PKG_CHECK_EXISTS([libavutil < 55],, [
-+-      AC_MSG_ERROR([libavutil versions 55 and later are not supported.])
-++      AC_MSG_WARN([libavutil versions 55 and later are not supported.])
-+     ])
-+     VLC_SAVE_FLAGS
-+     CPPFLAGS="${CPPFLAGS} ${AVCODEC_CFLAGS}"
-+@@ -2334,7 +2334,7 @@ AS_IF([test "${enable_avcodec}" != "no"]
-+     VLC_RESTORE_FLAGS
-+     have_avcodec="yes"
-+   ],[
-+-    AC_MSG_ERROR([${AVCODEC_PKG_ERRORS}. Pass --disable-avcodec to ignore this error.])
-++    AC_MSG_WARN([${AVCODEC_PKG_ERRORS}. Pass --disable-avcodec to ignore this error.])
-+   ])
-+ ], [
-+   have_avcodec="no"
-+@@ -2383,7 +2383,7 @@ AS_IF([test "${have_vaapi}" = "yes" -a "
-+   case "${avfork}" in
-+     ffmpeg)
-+       PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
-+-        AC_MSG_ERROR([VA API requires FFmpeg libavcodec < 57.10 or libav.])
-++        AC_MSG_WARN([VA API requires FFmpeg libavcodec < 57.10 or libav.])
-+       ])
-+       ;;
-+   esac
-+@@ -2417,7 +2417,7 @@ AS_IF([test "${enable_dxva2}" != "no"],
-+     case "${avfork}" in
-+       ffmpeg)
-+         PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
-+-          AC_MSG_ERROR([DXVA2 requires FFmpeg libavcodec < 57.10 or libav.])
-++          AC_MSG_WARN([DXVA2 requires FFmpeg libavcodec < 57.10 or libav.])
-+         ])
-+         ;;
-+     esac
-+@@ -2509,7 +2509,7 @@ AS_IF([test "${enable_avformat}" != "no"
-+       ])
-+       VLC_RESTORE_FLAGS
-+     ],[
-+-      AC_MSG_ERROR([${AVFORMAT_PKG_ERRORS}. Pass --disable-avformat to ignore this error.])
-++      AC_MSG_WARN([${AVFORMAT_PKG_ERRORS}. Pass --disable-avformat to ignore this error.])
-+   ])
-+ ])
-+ AM_CONDITIONAL([HAVE_AVFORMAT], [test "${enable_avformat}" != "no"])
-+@@ -2538,7 +2538,7 @@ then
-+       ])
-+       VLC_RESTORE_FLAGS
-+     ],[
-+-      AC_MSG_ERROR([${SWSCALE_PKG_ERRORS}. Pass --disable-swscale to ignore this error. Proper software scaling and some video chroma conversion will be missing.])
-++      AC_MSG_WARN([${SWSCALE_PKG_ERRORS}. Pass --disable-swscale to ignore this error. Proper software scaling and some video chroma conversion will be missing.])
-+   ])
-+ fi
-+ 
-+@@ -3181,7 +3181,7 @@ AS_IF([test "${have_vdpau}" = "yes" -a "
-+     libav) av_vdpau_ver="55.26.0" ;;
-+     ffmpeg) av_vdpau_ver="55.42.100"
-+       PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
-+-        AC_MSG_ERROR([VDPAU requires FFmpeg libavcodec < 57.10 or libav.])
-++        AC_MSG_WARN([VDPAU requires FFmpeg libavcodec < 57.10 or libav.])
-+       ])
-+       ;;
-+   esac
-+--- a/modules/codec/avcodec/audio.c
-++++ b/modules/codec/avcodec/audio.c
-+@@ -39,7 +39,7 @@
-+ #include <libavcodec/avcodec.h>
-+ #include <libavutil/mem.h>
-+ 
-+-#include <libavutil/audioconvert.h>
-++#include <libavutil/channel_layout.h>
-+ 
-+ #include "avcodec.h"
-+ 
-+--- a/modules/codec/avcodec/video.c
-++++ b/modules/codec/avcodec/video.c
-+@@ -108,8 +108,8 @@ static int lavc_GetFrame(struct AVCodecC
-+ static int  ffmpeg_GetFrameBuf    ( struct AVCodecContext *, AVFrame * );
-+ static void ffmpeg_ReleaseFrameBuf( struct AVCodecContext *, AVFrame * );
-+ #endif
-+-static enum PixelFormat ffmpeg_GetFormat( AVCodecContext *,
-+-                                          const enum PixelFormat * );
-++static enum AVPixelFormat ffmpeg_GetFormat( AVCodecContext *,
-++                                          const enum AVPixelFormat * );
-+ 
-+ static uint32_t ffmpeg_CodecTag( vlc_fourcc_t fcc )
-+ {
-+@@ -234,7 +234,7 @@ int InitVideoDec( decoder_t *p_dec, AVCo
-+     p_sys->p_codec = p_codec;
-+     p_sys->i_codec_id = i_codec_id;
-+     p_sys->psz_namecodec = psz_namecodec;
-+-    p_sys->p_ff_pic = avcodec_alloc_frame();
-++    p_sys->p_ff_pic = av_frame_alloc();
-+     p_sys->b_delayed_open = true;
-+     p_sys->p_va = NULL;
-+     vlc_sem_init( &p_sys->sem_mt, 0 );
-+@@ -446,7 +446,7 @@ int InitVideoDec( decoder_t *p_dec, AVCo
-+     if( ffmpeg_OpenCodec( p_dec ) < 0 )
-+     {
-+         msg_Err( p_dec, "cannot open codec (%s)", p_sys->psz_namecodec );
-+-        avcodec_free_frame( &p_sys->p_ff_pic );
-++        av_frame_free( &p_sys->p_ff_pic );
-+         vlc_sem_destroy( &p_sys->sem_mt );
-+         free( p_sys );
-+         return VLC_EGENERIC;
-+@@ -826,7 +826,7 @@ void EndVideoDec( decoder_t *p_dec )
-+     wait_mt( p_sys );
-+ 
-+     if( p_sys->p_ff_pic )
-+-        avcodec_free_frame( &p_sys->p_ff_pic );
-++        av_frame_free( &p_sys->p_ff_pic );
-+ 
-+     if( p_sys->p_va )
-+         vlc_va_Delete( p_sys->p_va );
-+@@ -1313,8 +1313,8 @@ static void ffmpeg_ReleaseFrameBuf( stru
-+ }
-+ #endif
-+ 
-+-static enum PixelFormat ffmpeg_GetFormat( AVCodecContext *p_context,
-+-                                          const enum PixelFormat *pi_fmt )
-++static enum AVPixelFormat ffmpeg_GetFormat( AVCodecContext *p_context,
-++                                          const enum AVPixelFormat *pi_fmt )
-+ {
-+     decoder_t *p_dec = p_context->opaque;
-+     decoder_sys_t *p_sys = p_dec->p_sys;
-+--- a/modules/codec/avcodec/encoder.c
-++++ b/modules/codec/avcodec/encoder.c
-+@@ -41,7 +41,7 @@
-+ #include <vlc_cpu.h>
-+ 
-+ #include <libavcodec/avcodec.h>
-+-#include <libavutil/audioconvert.h>
-++#include <libavutil/channel_layout.h>
-+ 
-+ #include "avcodec.h"
-+ #include "avcommon.h"
-+@@ -311,7 +311,7 @@ int OpenEncoder( vlc_object_t *p_this )
-+     else if( !GetFfmpegCodec( p_enc->fmt_out.i_codec, &i_cat, &i_codec_id,
-+                              &psz_namecodec ) )
-+     {
-+-        if( FindFfmpegChroma( p_enc->fmt_out.i_codec ) == PIX_FMT_NONE )
-++        if( FindFfmpegChroma( p_enc->fmt_out.i_codec ) == AV_PIX_FMT_NONE )
-+             return VLC_EGENERIC; /* handed chroma output */
-+ 
-+         i_cat      = VIDEO_ES;
-+@@ -555,7 +555,7 @@ int OpenEncoder( vlc_object_t *p_this )
-+ 
-+         if( p_codec->pix_fmts )
-+         {
-+-            const enum PixelFormat *p = p_codec->pix_fmts;
-++            const enum AVPixelFormat *p = p_codec->pix_fmts;
-+             for( ; *p != -1; p++ )
-+             {
-+                 if( *p == p_context->pix_fmt ) break;
-+@@ -1017,7 +1017,7 @@ errmsg:
-+         }
-+     }
-+ 
-+-    p_sys->frame = avcodec_alloc_frame();
-++    p_sys->frame = av_frame_alloc();
-+     if( !p_sys->frame )
-+     {
-+         goto error;
-+@@ -1048,7 +1048,7 @@ static void vlc_av_packet_Release(block_
-+ {
-+     vlc_av_packet_t *b = (void *) block;
-+ 
-+-    av_free_packet(&b->packet);
-++    av_packet_unref(&b->packet);
-+     free(b);
-+ }
-+ 
-+@@ -1088,7 +1088,7 @@ static block_t *EncodeVideo( encoder_t *
-+     AVFrame *frame = NULL;
-+     if( likely(p_pict) ) {
-+         frame = p_sys->frame;
-+-        avcodec_get_frame_defaults( frame );
-++        av_frame_unref( frame );
-+         for( i_plane = 0; i_plane < p_pict->i_planes; i_plane++ )
-+         {
-+             p_sys->frame->data[i_plane] = p_pict->p[i_plane].p_pixels;
-+@@ -1188,7 +1188,7 @@ static block_t *EncodeVideo( encoder_t *
-+             av_pkt.duration / p_sys->p_context->time_base.den, p_sys->p_context );
-+     if( unlikely(p_block == NULL) )
-+     {
-+-        av_free_packet( &av_pkt );
-++        av_packet_unref( &av_pkt );
-+         return NULL;
-+     }
-+ 
-+@@ -1329,7 +1329,7 @@ static block_t *handle_delay_buffer( enc
-+     //How much we need to copy from new packet
-+     const int leftover = leftover_samples * p_sys->p_context->channels * p_sys->i_sample_bytes;
-+ 
-+-    avcodec_get_frame_defaults( p_sys->frame );
-++    av_frame_unref( p_sys->frame );
-+     p_sys->frame->format     = p_sys->p_context->sample_fmt;
-+     p_sys->frame->nb_samples = leftover_samples + p_sys->i_samples_delay;
-+ 
-+@@ -1451,7 +1451,7 @@ static block_t *EncodeAudio( encoder_t *
-+     while( ( p_aout_buf->i_nb_samples >= p_sys->i_frame_size ) ||
-+            ( p_sys->b_variable && p_aout_buf->i_nb_samples ) )
-+     {
-+-        avcodec_get_frame_defaults( p_sys->frame );
-++        av_frame_unref( p_sys->frame );
-+         if( p_sys->b_variable )
-+             p_sys->frame->nb_samples = p_aout_buf->i_nb_samples;
-+         else
-+@@ -1514,7 +1514,7 @@ void CloseEncoder( vlc_object_t *p_this
-+     encoder_t *p_enc = (encoder_t *)p_this;
-+     encoder_sys_t *p_sys = p_enc->p_sys;
-+ 
-+-    /*FIXME: we should use avcodec_free_frame, but we don't require so new avcodec that has it*/
-++    /*FIXME: we should use av_frame_free, but we don't require so new avcodec that has it*/
-+     av_freep( &p_sys->frame );
-+ 
-+     vlc_avcodec_lock();
-+--- a/modules/demux/avformat/demux.c
-++++ b/modules/demux/avformat/demux.c
-+@@ -734,14 +734,14 @@ static int Demux( demux_t *p_demux )
-+     }
-+     if( pkt.stream_index < 0 || pkt.stream_index >= p_sys->i_tk )
-+     {
-+-        av_free_packet( &pkt );
-++        av_packet_unref( &pkt );
-+         return 1;
-+     }
-+     const AVStream *p_stream = p_sys->ic->streams[pkt.stream_index];
-+     if( p_stream->time_base.den <= 0 )
-+     {
-+         msg_Warn( p_demux, "Invalid time base for the stream %d", pkt.stream_index );
-+-        av_free_packet( &pkt );
-++        av_packet_unref( &pkt );
-+         return 1;
-+     }
-+     if( p_stream->codec->codec_id == AV_CODEC_ID_SSA )
-+@@ -749,7 +749,7 @@ static int Demux( demux_t *p_demux )
-+         p_frame = BuildSsaFrame( &pkt, p_sys->i_ssa_order++ );
-+         if( !p_frame )
-+         {
-+-            av_free_packet( &pkt );
-++            av_packet_unref( &pkt );
-+             return 1;
-+         }
-+     }
-+@@ -757,7 +757,7 @@ static int Demux( demux_t *p_demux )
-+     {
-+         if( ( p_frame = block_Alloc( pkt.size ) ) == NULL )
-+         {
-+-            av_free_packet( &pkt );
-++            av_packet_unref( &pkt );
-+             return 0;
-+         }
-+         memcpy( p_frame->p_buffer, pkt.data, pkt.size );
-+@@ -838,7 +838,7 @@ static int Demux( demux_t *p_demux )
-+     else
-+         block_Release( p_frame );
-+ 
-+-    av_free_packet( &pkt );
-++    av_packet_unref( &pkt );
-+     return 1;
-+ }
-+ 
-+--- a/modules/codec/avcodec/vaapi.c
-++++ b/modules/codec/avcodec/vaapi.c
-+@@ -595,7 +595,7 @@ static int Create( vlc_va_t *p_va, AVCod
-+         return err;
-+ 
-+     /* Only VLD supported */
-+-    p_va->pix_fmt = PIX_FMT_VAAPI_VLD;
-++    p_va->pix_fmt = AV_PIX_FMT_VAAPI_VLD;
-+     p_va->setup = Setup;
-+     p_va->get = Get;
-+     p_va->release = Release;
--- 
-2.8.1
+I've seen that Vincent pushed something already for that -isystem
+issue. No risk to conflict?
+
+https://github.com/vincentbernat/lldpd/commit/11c1b6a2ffb3f66a54a43413cb894844bcb38f14
+
+Adding Vincent in the loop.
+
+Thanks,
+
+        Vivien
