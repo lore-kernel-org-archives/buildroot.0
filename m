@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Aug 2016 13:56:26 +0200
-Subject: [Buildroot] [PATCH 1/2] core/pkg-autotools: don't use
- APPLY_PATCHES for libtool patches
-In-Reply-To: <1471259370-2914-1-git-send-email-romain.naour@gmail.com>
+Date: Mon, 15 Aug 2016 13:59:29 +0200
+Subject: [Buildroot] [PATCH 2/2] doc: add libtool issue as Know issues
+In-Reply-To: <1471259370-2914-2-git-send-email-romain.naour@gmail.com>
 References: <1471259370-2914-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160815115626.GC5822@free.fr>
+ <1471259370-2914-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160815115929.GD5822@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,51 +13,60 @@ To: buildroot@busybox.net
 
 Romain, All,
 
+In title: "Know" -> "Known".
+
 On 2016-08-15 13:09 +0200, Romain Naour spake thusly:
-> Since 19241598147e7555dce40b6dd44b28ef22b67ed9 <package>-reconfigure
-> target is broken.
-[--SNIP--]
-> So for 2016.08 use patch directly rather than apply-patches.
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2016-August/169810.html
-> 
 > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  docs/manual/known-issues.txt     | 4 ++++
+>  support/legal-info/README.header | 3 +++
+>  2 files changed, 7 insertions(+)
+> 
+> diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
+> index acfe4ff..d89507e 100644
+> --- a/docs/manual/known-issues.txt
+> +++ b/docs/manual/known-issues.txt
+> @@ -33,3 +33,7 @@
+>  * The +prboom+ package triggers a compiler failure with the SuperH 4
+>    compiler from Sourcery CodeBench, version 2012.09.
+>  
+> +* [2016.08] The libtool patches are not listed as package patches due
+> +  to a technical issue. Thereby they are not taken into account by the
+> +  legal-info infra. This will be fixed in a follow up Buildroot
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+s/(infra)/\1structure/
+
+> +  release.
+> diff --git a/support/legal-info/README.header b/support/legal-info/README.header
+> index 1f3524f..6ba8b56 100644
+> --- a/support/legal-info/README.header
+> +++ b/support/legal-info/README.header
+> @@ -20,6 +20,9 @@ This material is composed of the following items.
+>     with a file named 'series' that lists the patches in the order they were
+>     applied. Patches are under the same license as the files that they modify
+>     in the original package.
+> +   Note: Libtool patches from support/libtool/buildroot-libtool-v*..patch,
+                                                                  ---^
+Superfluous dot.
+
+> +   used by autotools based packages, have not been saved due to technical
+> +   limitations, you may need to collect it manually.
+
+*to collect them
+
+Otherwsie:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/pkg-autotools.mk | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-> index 75e2df0..d1cdb89 100644
-> --- a/package/pkg-autotools.mk
-> +++ b/package/pkg-autotools.mk
-> @@ -65,14 +65,14 @@ define LIBTOOL_PATCH_HOOK
->  		ltmain_patchlevel=`sed -n '/^[ \t]*VERSION=/{s/^[ \t]*VERSION=//;p;q;}' $$i | \
->  		sed -e 's/\([0-9]*\.[0-9]*\.*\)\([0-9]*\).*/\2/' -e 's/\"//'`; \
->  		if test $${ltmain_version} = '1.5'; then \
-> -			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
-> +			patch -i support/libtool/buildroot-libtool-v1.5.patch $${i}; \
->  		elif test $${ltmain_version} = "2.2"; then\
-> -			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
-> +			patch -i support/libtool/buildroot-libtool-v2.2.patch $${i}; \
->  		elif test $${ltmain_version} = "2.4"; then\
->  			if test $${ltmain_patchlevel:-0} -gt 2; then\
-> -				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.4.patch; \
-> +				patch -i support/libtool/buildroot-libtool-v2.4.4.patch $${i}; \
->  			else \
-> -				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
-> +				patch -i support/libtool/buildroot-libtool-v2.4.patch $${i}; \
->  			fi \
->  		fi \
->  	done
+>   * A manifest file listing the configured packages and related information.
+>   * The license text of the packages; they have been saved in the licenses/
+>     subdirectory.
 > -- 
 > 2.5.5
 > 
