@@ -1,167 +1,67 @@
-From: Petri Gynther <pgynther@google.com>
-Date: Tue, 16 Aug 2016 10:51:53 -0700
-Subject: [Buildroot] [RESEND][PATCH v2 1/3] toolchain: configs: improve
- toolchain config readability
-In-Reply-To: <1470681301-6374-1-git-send-email-pgynther@google.com>
-References: <1470681301-6374-1-git-send-email-pgynther@google.com>
-Message-ID: <CAGXr9JEEDA4k83v2-=a=HLq1B4Hqq7ycSRa3_cEyr5Hz-47n-w@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 16 Aug 2016 21:42:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/simh: new package
+In-Reply-To: <20160816142950.GH3368@tarshish>
+References: <1471297357-11637-1-git-send-email-lothar.felten@gmail.com>
+ <20160816035044.GB3368@tarshish>
+ <9ba51c53-ddb3-8a59-a3b0-9ba8e3e52f3e@gmail.com>
+ <20160816142950.GH3368@tarshish>
+Message-ID: <20160816194236.GC10734@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 8, 2016 at 11:34 AM, Petri Gynther <pgynther@google.com> wrote:
-> Add (or move) comment lines in toolchain-related Config.in files
-> to improve readability of the toolchain config section.
->
-> Source linux-headers/Config.in.host after toolchain-buildroot items.
->
-> For toolchain-buildroot case, the config file now looks like this:
-> *
-> * Toolchain
-> *
->
-> *
-> * Toolchain Buildroot Options
-> *
->
-> *
-> * Kernel Header Options
-> *
->
-> *
-> * uClibc Options
-> *
->
-> *
-> * Binutils Options
-> *
->
-> *
-> * GCC Options
-> *
->
-> *
-> * Host GDB Options
-> *
->
-> *
-> * Toolchain Generic Options
-> *
->
-> Signed-off-by: Petri Gynther <pgynther@google.com>
-> ---
->  package/gdb/Config.in.host              | 2 ++
->  package/linux-headers/Config.in.host    | 4 ++--
->  package/uclibc/Config.in                | 4 ++--
->  toolchain/toolchain-buildroot/Config.in | 5 +++--
->  toolchain/toolchain-common.in           | 2 ++
->  toolchain/toolchain-external/Config.in  | 2 ++
->  6 files changed, 13 insertions(+), 6 deletions(-)
->
-> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-> index 081073b..a36dc0f 100644
-> --- a/package/gdb/Config.in.host
-> +++ b/package/gdb/Config.in.host
-> @@ -1,3 +1,5 @@
-> +comment "Host GDB Options"
-> +
->  config BR2_PACKAGE_HOST_GDB
->         bool "Build cross gdb for the host"
->         # When the external toolchain gdbserver is used, we shouldn't
-> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> index ae5cc5d..93946ac 100644
-> --- a/package/linux-headers/Config.in.host
-> +++ b/package/linux-headers/Config.in.host
-> @@ -1,8 +1,8 @@
-> +comment "Kernel Header Options"
-> +
->  config BR2_PACKAGE_HOST_LINUX_HEADERS
->         bool
->
-> -comment "Kernel Header Options"
-> -
->  choice
->         prompt "Kernel Headers"
->         default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index 7c99195..6c16ed4 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -1,12 +1,12 @@
->  if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
->
-> +comment "uClibc Options"
-> +
->  config BR2_PACKAGE_UCLIBC
->         bool
->         default y
->         select BR2_PACKAGE_LINUX_HEADERS
->
-> -comment "uClibc Options"
-> -
->  config BR2_UCLIBC_CONFIG
->         string "uClibc configuration file to use?"
->         default "package/uclibc/uClibc-ng.config"
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 0b97bbf..e713d74 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -2,6 +2,8 @@
->
->  if BR2_TOOLCHAIN_BUILDROOT
->
-> +comment "Toolchain Buildroot Options"
-> +
->  config BR2_TOOLCHAIN_BUILDROOT_VENDOR
->         string "custom toolchain vendor name"
->         default "buildroot"
-> @@ -18,8 +20,6 @@ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
->
->           If you're not sure, just leave the default "buildroot" value.
->
-> -source "package/linux-headers/Config.in.host"
-> -
->  choice
->         prompt "C library"
->         default BR2_TOOLCHAIN_UCLIBC
-> @@ -90,6 +90,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
->         default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
->         default "musl"   if BR2_TOOLCHAIN_BUILDROOT_MUSL
->
-> +source "package/linux-headers/Config.in.host"
->  source "package/linux-headers/Config.in"
->  source "package/musl/Config.in"
->  source "package/uclibc/Config.in"
-> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-> index 03fa880..ccf259a 100644
-> --- a/toolchain/toolchain-common.in
-> +++ b/toolchain/toolchain-common.in
-> @@ -5,6 +5,8 @@
->  # so put it here instead
->  source "package/gdb/Config.in.host"
->
-> +comment "Toolchain Generic Options"
-> +
->  # https://sourceware.org/bugzilla/show_bug.cgi?id=19405
->  config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405
->         bool
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index f54fbee..bb0dde1 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -1,5 +1,7 @@
->  if BR2_TOOLCHAIN_EXTERNAL
->
-> +comment "Toolchain External Options"
-> +
->  choice
->         prompt "Toolchain"
->
-> --
-> 2.8.0.rc3.226.g39d4020ether_addr_equal_unaligned
->
+Baruch, All,
 
-Any comments on this? It is a very trivial patch, yet it makes the
-toolchain-related sections in .config file more readable.
+On 2016-08-16 17:29 +0300, Baruch Siach spake thusly:
+> As Yann marked this patch as rejected, this discussion is moot. But I'll 
+> respond below for future reference.
+> 
+> On Tue, Aug 16, 2016 at 10:31:10AM +0200, Lothar Felten wrote:
+> > On 16.08.2016 05:50, Baruch Siach wrote:
+> > > Looking into a random source file like sim_imd.c, the license seems to be 
+> > > MIT. See https://opensource.org/licenses/MIT.
+> > 
+> > Most files have a MIT-license/disclaimer, a few files reference GNU GPL
+> > (Intel-Systems/common/i8088.c), at least one file is paritally zlib/libpng
+> > license (sim_video.c, line 102), one file is "licensed under the standard
+> > SimH license" (PDP11/pdp11_kmc.c), which seems to be MIT.
+> 
+> In this case <PKG>_LICENSE should list all these licenses.
+
+Yes.
+
+> > There's a Word .doc file doc/simh.doc that states:
+> > 
+> > COPYRIGHT NOTICE: The following copyright notice applies to the SIMH source,
+> > binary, and documentation (an then: MIT license)
+> > 
+> > An older PDF version is online:
+> > http://simh.trailing-edge.com/pdf/simh_doc.pdf
+> > 
+> > Should I point to the simh.doc file?
+> 
+> I don't think so. Not sure how our legal info infra handles binary document 
+> formats.
+
+FOO_LICENSE_FILES are just copied; we don't do anything with them. So
+it's fine to list a .doc in there.
+
+> Instead you may put source files that contain respective licenses 
+> text in <PKG>_LICENSE_FILES.
+
+Only for those licenses that do not have a separate license file, or are
+not listed in that .doc file.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
