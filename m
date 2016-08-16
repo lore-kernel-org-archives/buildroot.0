@@ -1,88 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Aug 2016 08:02:28 +0200
-Subject: [Buildroot] [git commit] uclibc: add upstream patch for
-	CVE-2016-4429
-Message-ID: <20160816062549.F30FE8082A@busybox.osuosl.org>
+Date: Tue, 16 Aug 2016 07:53:41 +0200
+Subject: [Buildroot] [git commit] gmp: disable assembly for arc
+Message-ID: <20160816062549.DD706801E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efbd36a141c51cfbae83dd63f902654b247943d8
+commit: https://git.buildroot.net/buildroot/commit/?id=cdf63517de2514a99d6fd55d109018f69a55aa9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add security related bugfix to fix CVE-2016-4429 from
-GNU libc project.
+It has different inline assembly constraints that
+are not supported after update to gcc-6.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Fixes:
+http://autobuild.buildroot.net/results/c91/c9143eec0834017d57d5352d6fc95b5fae38da00//
+and a lot of other failures of gmp-6.1.1 for ARC.
+
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-sunrpc-Do-not-use-alloca-in-clntudp_call.patch | 59 ++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ package/gmp/gmp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/uclibc/0002-sunrpc-Do-not-use-alloca-in-clntudp_call.patch b/package/uclibc/0002-sunrpc-Do-not-use-alloca-in-clntudp_call.patch
-new file mode 100644
-index 0000000..b0c523c
---- /dev/null
-+++ b/package/uclibc/0002-sunrpc-Do-not-use-alloca-in-clntudp_call.patch
-@@ -0,0 +1,59 @@
-+From 9213ad631513d0e67d9d31465c9cdb3f3dde0399 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Fri, 5 Aug 2016 21:33:44 +0200
-+Subject: [PATCH 2/3] sunrpc: Do not use alloca in clntudp_call
-+
-+CVE-2016-4429:
-+The call is technically in a loop, and under certain circumstances
-+(which are quite difficult to reproduce in a test case), alloca
-+can be invoked repeatedly during a single call to clntudp_call.
-+As a result, the available stack space can be exhausted (even
-+though individual alloca sizes are bounded implicitly by what
-+can fit into a UDP packet, as a side effect of the earlier
-+successful send operation).
-+
-+From GNU libc:
-+https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commit;h=bc779a1a5b3035133024b21e2f339fe4219fb11c
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ libc/inet/rpc/clnt_udp.c | 10 +++++++++-
-+ 1 file changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/libc/inet/rpc/clnt_udp.c b/libc/inet/rpc/clnt_udp.c
-+index 4fc55b7..ce7e9e6 100644
-+--- a/libc/inet/rpc/clnt_udp.c
-++++ b/libc/inet/rpc/clnt_udp.c
-+@@ -368,9 +368,15 @@ send_again:
-+ 	  struct sock_extended_err *e;
-+ 	  struct sockaddr_in err_addr;
-+ 	  struct iovec iov;
-+-	  char *cbuf = (char *) alloca (outlen + 256);
-++	  char *cbuf = malloc (outlen + 256);
-+ 	  int ret;
-+ 
-++	  if (cbuf == NULL)
-++	    {
-++	      cu->cu_error.re_errno = errno;
-++	      return (cu->cu_error.re_status = RPC_CANTRECV);
-++	    }
-++
-+ 	  iov.iov_base = cbuf + 256;
-+ 	  iov.iov_len = outlen;
-+ 	  msg.msg_name = (void *) &err_addr;
-+@@ -395,10 +401,12 @@ send_again:
-+ 		 cmsg = CMSG_NXTHDR (&msg, cmsg))
-+ 	      if (cmsg->cmsg_level == SOL_IP && cmsg->cmsg_type == IP_RECVERR)
-+ 		{
-++		  free (cbuf);
-+ 		  e = (struct sock_extended_err *) CMSG_DATA(cmsg);
-+ 		  cu->cu_error.re_errno = e->ee_errno;
-+ 		  return (cu->cu_error.re_status = RPC_CANTRECV);
-+ 		}
-++	  free (cbuf);
-+ 	}
-+ #endif
-+       do
-+-- 
-+2.7.4 (Apple Git-66)
-+
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index 485bf7c..420fd2f 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -15,7 +15,7 @@ HOST_GMP_DEPENDENCIES = host-m4
+ 
+ # GMP doesn't support assembly for coldfire or mips r6 ISA yet
+ # Disable for ARM v7m since it has different asm constraints
+-ifeq ($(BR2_m68k_cf)$(BR2_mips_32r6)$(BR2_mips_64r6)$(BR2_ARM_CPU_ARMV7M),y)
++ifeq ($(BR2_m68k_cf)$(BR2_mips_32r6)$(BR2_mips_64r6)$(BR2_ARM_CPU_ARMV7M)$(BR2_arc),y)
+ GMP_CONF_OPTS += --disable-assembly
+ endif
+ 
