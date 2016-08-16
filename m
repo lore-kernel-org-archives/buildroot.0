@@ -1,41 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Aug 2016 23:56:46 +0200
-Subject: [Buildroot] [git commit branch/next] dbus: bump to version 1.10.10
-Message-ID: <20160816215710.14A5A7FB69@busybox.osuosl.org>
+Date: Wed, 17 Aug 2016 00:00:03 +0200
+Subject: [Buildroot] [PATCH v1] raspberrypi3: fix serial console (add
+	enable_uart=1)
+In-Reply-To: <20160815220202.486b6192@gmx.net> (Peter Seiderer's message of
+ "Mon, 15 Aug 2016 22:02:02 +0200")
+References: <1470953002-31897-1-git-send-email-ps.report@gmx.net>
+ <A86E382D-5575-4F1A-AD06-D7A6636E9BA0@gmail.com>
+ <20160815220202.486b6192@gmx.net>
+Message-ID: <87pop8tlwc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3a1d96f8903b3d8ba288a932f3427109854c674
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dbus/dbus.hash | 2 +-
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index d38b298..1b20d3f 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	baf3d22baa26d3bdd9edc587736cd5562196ce67996d65b82103bedbe1f0c014  dbus-1.10.8.tar.gz
-+sha256	9d8f1d069ab4d1a0255d7b400ea3bcef4430c42e729b1012abb2890e3f739a43  dbus-1.10.10.tar.gz
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 6064501..1388e34 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_VERSION = 1.10.8
-+DBUS_VERSION = 1.10.10
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFLv2.1 or GPLv2+ (library, tools), GPLv2+ (tools)
- DBUS_LICENSE_FILES = COPYING
+ >> This lowers the core clock speed to minimum, so if you are doing some high
+ >> definition video decode or interlace then you might want this disabled.
+ >> I would recommend keeping it disabled by default.
+
+ > Is this (maybe) a vote for my initial proposed patch ([1]) to add
+ > dtoverlay=pi3-miniuart-bt?
+
+ > The current situation for Pi 3 (no dtoerlay, no enable_uart) is no serial console
+ > and an unusable default console on HDMI (with a doubled (but unusable) login prompt)...
+
+Yes, I guess having a flakey/less-performant bluetooth connection is
+less bad than the alternatives ..
+
+-- 
+Bye, Peter Korsgaard
