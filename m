@@ -1,73 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Aug 2016 00:02:53 +0200
-Subject: [Buildroot] [git commit] package/libsidplay2: Fix build with gcc6
-Message-ID: <20160816220523.25A7F82161@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 16 Aug 2016 19:14:11 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.14.x and 4.{4, 6,
+	7}.x series
+Message-ID: <1471385652-27152-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55d1af797563bf21cb92fb23bea2032009fb6da9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes
-http://autobuild.buildroot.net/results/787/787c715814b09d380ca521712f54cbcf5ae121d6/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libsidplay2/0003-gcc6.patch | 44 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libsidplay2/0003-gcc6.patch b/package/libsidplay2/0003-gcc6.patch
-new file mode 100644
-index 0000000..53601f6
---- /dev/null
-+++ b/package/libsidplay2/0003-gcc6.patch
-@@ -0,0 +1,44 @@
-+Fix build with gcc6
-+
-+gcc6 triggers an error during build:
-+
-+xsid.cpp:101:1: error: narrowing conversion of ''\200'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
-+ };
-+ ^
-+xsid.cpp:101:1: error: narrowing conversion of ''\224'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
-+xsid.cpp:101:1: error: narrowing conversion of ''\251'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
-+xsid.cpp:101:1: error: narrowing conversion of ''\274'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
-+xsid.cpp:101:1: error: narrowing conversion of ''\316'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
-+xsid.cpp:101:1: error: narrowing conversion of ''\341'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
-+xsid.cpp:101:1: error: narrowing conversion of ''\362'' from 'char' to 'int8_t {aka signed char}' inside { } [-Wnarrowing]
-+
-+To fix the problem change the array type from int8_t to char as proposed
-+by Khem Raj:
-+http://lists.busybox.net/pipermail/buildroot/2016-August/169540.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr sidplay-libs-2.1.1.org/libsidplay/src/xsid/xsid.cpp sidplay-libs-2.1.1/libsidplay/src/xsid/xsid.cpp
-+--- sidplay-libs-2.1.1.org/libsidplay/src/xsid/xsid.cpp	2004-06-14 22:08:02.000000000 +0200
-++++ sidplay-libs-2.1.1/libsidplay/src/xsid/xsid.cpp	2016-08-12 18:10:20.000000000 +0200
-+@@ -94,7 +94,7 @@
-+     '\x08', '\x19', '\x2a', '\x3b', '\x4c', '\x5d', '\x6e', '\x7f'
-+ };
-+ */
-+-const int8_t XSID::sampleConvertTable[16] =
-++const char XSID::sampleConvertTable[16] =
-+ {
-+     '\x80', '\x94', '\xa9', '\xbc', '\xce', '\xe1', '\xf2', '\x03',
-+     '\x1b', '\x2a', '\x3b', '\x49', '\x58', '\x66', '\x73', '\x7f'
-+diff -uNr sidplay-libs-2.1.1.org/libsidplay/src/xsid/xsid.h sidplay-libs-2.1.1/libsidplay/src/xsid/xsid.h
-+--- sidplay-libs-2.1.1.org/libsidplay/src/xsid/xsid.h	2004-06-14 22:08:02.000000000 +0200
-++++ sidplay-libs-2.1.1/libsidplay/src/xsid/xsid.h	2016-08-12 18:11:01.000000000 +0200
-+@@ -238,7 +238,7 @@
-+     uint8_t             sidData0x18;
-+     bool                _sidSamples;
-+     int8_t              sampleOffset;
-+-    static const int8_t sampleConvertTable[16];
-++    static const char sampleConvertTable[16];
-+     bool                wasRunning;
-+ 
-+ private:
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 771befb..3384cb0 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -239,15 +239,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.75"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.76"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.18.39"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.30"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.17"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.18"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+-	default "4.6.6"		if BR2_KERNEL_HEADERS_4_6
+-	default "4.7"		if BR2_KERNEL_HEADERS_4_7
++	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
++	default "4.7.1"		if BR2_KERNEL_HEADERS_4_7
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+2.7.3
