@@ -1,19 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Aug 2016 12:56:55 +0200
-Subject: [Buildroot] [PATCH] barebox: bump version to 2016.08
-In-Reply-To: <1471000256-50277-1-git-send-email-poggi.raph@gmail.com> (Raphael
- Poggi's message of "Fri, 12 Aug 2016 13:10:56 +0200")
-References: <1471000256-50277-1-git-send-email-poggi.raph@gmail.com>
-Message-ID: <87d1l9vv60.fsf@dell.be.48ers.dk>
+Date: Tue, 16 Aug 2016 12:58:24 +0200
+Subject: [Buildroot] [PATCH 1/1] irssi: bump to version 0.8.19
+In-Reply-To: <1470963614-19423-1-git-send-email-rprebello@gmail.com> (Rodrigo
+ Rebello's message of "Thu, 11 Aug 2016 22:00:14 -0300")
+References: <1470963614-19423-1-git-send-email-rprebello@gmail.com>
+Message-ID: <878tvxvv3j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Raphael" == Raphael Poggi <poggi.raph@gmail.com> writes:
+>>>>> "Rodrigo" == Rodrigo Rebello <rprebello@gmail.com> writes:
 
- > Signed-off-by: Raphael Poggi <poggi.raph@gmail.com>
+ > Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 
 Committed to next, thanks.
 
