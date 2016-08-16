@@ -1,96 +1,81 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Tue, 16 Aug 2016 13:33:38 -0700
-Subject: [Buildroot] [PATCH] skeleton: /etc/network/interface.d/* support
-In-Reply-To: <CANQCQpaLNO75fjES2UoXkMf4VG4QZ91mB9HDDasabhQ7RgJOYg@mail.gmail.com>
-References: <1471360870-53982-1-git-send-email-matthew.weber@rockwellcollins.com>
- <867AC111-F9FE-4F1D-9942-410B82365A8C@gmail.com>
- <CANQCQpaLNO75fjES2UoXkMf4VG4QZ91mB9HDDasabhQ7RgJOYg@mail.gmail.com>
-Message-ID: <D88C6F90-1ED3-40EF-8D3A-C4CEB3382603@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 16 Aug 2016 22:57:58 +0200
+Subject: [Buildroot] [PATCH 2/2] tinycbor: fix issue on unnamed union
+In-Reply-To: <87inv0vjl6.fsf@dell.be.48ers.dk>
+References: <1471290845-115279-1-git-send-email-fabrice.fontaine@orange.com>
+ <1471290845-115279-2-git-send-email-fabrice.fontaine@orange.com>
+ <87fuq5xnt4.fsf@dell.be.48ers.dk>
+ <39A58E7A-0045-4782-AE36-3BB3DF6D42D7@gmail.com>
+ <87inv0vjl6.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W80+STMRFnA9S9iLUXP2TvaNmdeFeagTjsMjLj0qOxEoqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Peter,
 
-> On Aug 16, 2016, at 1:25 PM, Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
-> 
-> Khem,
-> 
-> On Tue, Aug 16, 2016 at 11:34 AM, Khem Raj <raj.khem at gmail.com <mailto:raj.khem@gmail.com>> wrote:
-> 
-> > On Aug 16, 2016, at 8:21 AM, Matt Weber <matthew.weber at rockwellcollins.com <mailto:matthew.weber@rockwellcollins.com>> wrote:
-> >
-> > Signed-off-by: Matt Weber <matthew.weber at rockwellcollins.com <mailto:matthew.weber@rockwellcollins.com>>
-> > ---
-> > package/skeleton/skeleton.mk <http://skeleton.mk/>                    | 2 ++
-> > system/device_table.txt                         | 1 +
-> > system/skeleton/etc/network/interfaces.d/.empty | 0
-> > 3 files changed, 3 insertions(+)
-> > create mode 100644 system/skeleton/etc/network/interfaces.d/.empty
-> >
-> > diff --git a/package/skeleton/skeleton.mk <http://skeleton.mk/> b/package/skeleton/skeleton.mk <http://skeleton.mk/>
-> > index 1000161..c9dce10 100644
-> > --- a/package/skeleton/skeleton.mk <http://skeleton.mk/>
-> > +++ b/package/skeleton/skeleton.mk <http://skeleton.mk/>
-> > @@ -151,6 +151,8 @@ define SKELETON_SET_NETWORK_LOCALHOST
-> >               echo ;                                               \
-> >               echo "auto lo";                                      \
-> >               echo "iface lo inet loopback";                       \
-> > +             echo ;                                               \
-> > +             echo "source interfaces.d/*";                        \
-> 
-> its portable to use . instead of source keyword
-> 
-> That doesn't seem to work in this case.  Is seems it's keying off the word source vs it being more shell like.
-> 
+After more investigation, it seems that the uclibc for the blackfin target
+is configured without __UCLIBC_HAS_GLIBC_CUSTOM_STREAMS__
+(./output/host/opt/ext-toolchain/bfin-uclinux/bfin-uclinux/runtime/usr/include/bits/uClibc_config.h).
+Without this option, fopencookie is not available in the toolchain and so
+the implementation of open_memstream function within tinycbor fails so I
+would suggest to disable tinycbor if BR2_bfin target is set.
 
-Is it run in Make context and not shell context ?
+If this solution is acceptable, I can provide a patch.
 
-> 
-> >       ) > $(TARGET_DIR)/etc/network/interfaces
-> > endef
-> >
-> > diff --git a/system/device_table.txt b/system/device_table.txt
-> > index dc1af51..69b1d46 100644
-> > --- a/system/device_table.txt
-> > +++ b/system/device_table.txt
-> > @@ -17,5 +17,6 @@
-> > /etc/network/if-pre-up.d              d       755     0       0       -       -       -       -       -
-> > /etc/network/if-down.d                        d       755     0       0       -       -       -       -       -
-> > /etc/network/if-post-down.d           d       755     0       0       -       -       -       -       -
-> > +/etc/network/interfaces.d            d       755     0       0       -       -       -       -       -
-> > # uncomment this to allow starting x as non-root
-> > #/usr/X11R6/bin/Xfbdev                        f       4755    0       0       -       -       -       -       -
-> > diff --git a/system/skeleton/etc/network/interfaces.d/.empty b/system/skeleton/etc/network/interfaces.d/.empty
-> > new file mode 100644
-> > index 0000000..e69de29
-> > --
-> > 1.9.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net <mailto:buildroot@busybox.net>
-> > http://lists.busybox.net/mailman/listinfo/buildroot <http://lists.busybox.net/mailman/listinfo/buildroot>
-> 
-> 
-> 
-> 
+Best Regards,
+
+Fabrice
+
+2016-08-16 17:07 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
+
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+>  > Dear Peter,
+>  > It seems that the link you provided is not correct as in this build,
+>  > the old tinycbor 0.3.1 is being compiled.
+>
+> Yes, naturally - There won't be any autobuilder results for 0.3.2 before
+> your patches get included in the buildroot repo.
+>
+> I was expecting your patches to fix some of our existing (E.G. using
+> 0.3.1) autobuilder issues, but that is apparently not the case?
+>
+>  > Could you provide me the correct link so I can reproduce the issue? I
+>  > suspect you encountered a totally new issue with src/open_memstream.c
+>  > which is being compiled only if open_memstream is found in the
+>  > toolchain but this file is also using fopencookie which does not seem
+>  > to be available in the toolchain. If I can reproduce the issue, I
+>  > will make a new patch to check the presence of fopencookie an send it
+>  > upstream.
+>
+> You should be able to reproduce the issue if you build the defconfig
+> from
+>
+> http://autobuild.buildroot.net/results/f4d/f4d15afb44f471878dbdee7c67cd83
+> 6bd2b79904/
+>
+> After applying your 2 tinybcr patches.
+>
+>  > Concerning your original question, tinycbor 0.3.2 includes directly
+>  > the patch from Thomas, more details can be found her:
+>  > https://github.com/01org/tinycbor/commit/31c7f81d45d115d2007b1c881cbbd3
+> a19618465c.
+>
+> Ok, so that means we can drop
+> 0001-Makefile-use-installation-logic-compatible-with-old-.patch, good.
+>
+> > The second patch removes the unnamed union, more details can be found
+> > here: https://patchwork.ozlabs.org/patch/652187/.
+>
+> Ok. It would be nice to mention that in the commit message.
+>
 > --
-> Matthew L Weber / Pr Software Engineer
-> Airborne Information Systems / Security Systems and Software / Secure Platforms
-> MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-> www.rockwellcollins.com <http://www.rockwellcollins.com/>
-> 
-> Note: Any Export License Required Information and License Restricted Third Party Intellectual Property (TPIP) content must be encrypted and sent to matthew.weber at corp.rockwellcollins.com <mailto:matthew.weber@corp.rockwellcollins.com>.
-
+> Venlig hilsen,
+> Peter Korsgaard
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160816/48d309a5/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 204 bytes
-Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160816/48d309a5/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160816/fd24aa97/attachment.html>
