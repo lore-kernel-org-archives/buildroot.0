@@ -1,83 +1,42 @@
-From: =?UTF-8?q?Manuel=20Gro=C3=9F?= <mgr@nordkrater.de>
-Date: Tue, 16 Aug 2016 07:35:02 +0200
-Subject: [Buildroot] [PATCH] websocketpp: new package
-In-Reply-To: <20160816053502.15187-1-mgr@nordkrater.de>
-References: <20160813112629.31883-1-mgr@nordkrater.de>
- <20160816053502.15187-1-mgr@nordkrater.de>
-Message-ID: <20160816053502.15187-2-mgr@nordkrater.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 Aug 2016 07:52:55 +0200
+Subject: [Buildroot] [PATCH 2/2] tinycbor: fix issue on unnamed union
+In-Reply-To: <1471290845-115279-2-git-send-email-fabrice.fontaine@orange.com>
+ (Fabrice Fontaine's message of "Mon, 15 Aug 2016 21:54:05 +0200")
+References: <1471290845-115279-1-git-send-email-fabrice.fontaine@orange.com>
+ <1471290845-115279-2-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <87fuq5xnt4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package provides websocketpp, a header only C++ library that implements websocket client and server functionality.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Manuel Gro? <mgr@nordkrater.de>
----
- package/Config.in                  |  1 +
- package/websocketpp/Config.in      | 12 ++++++++++++
- package/websocketpp/websocketpp.mk | 21 +++++++++++++++++++++
- 3 files changed, 34 insertions(+)
- create mode 100644 package/websocketpp/Config.in
- create mode 100644 package/websocketpp/websocketpp.mk
+ > Until tinycbor 0.4 is released, patch from dev branch is needed to
+ > remove the usage of unnamed union which are not supported by all
+ > targets such as blackfin
 
-diff --git a/package/Config.in b/package/Config.in
-index 645fa29..e99850d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1242,6 +1242,7 @@ menu "Networking"
- 	source "package/sofia-sip/Config.in"
- 	source "package/thrift/Config.in"
- 	source "package/usbredir/Config.in"
-+	source "package/websocketpp/Config.in"
- 	source "package/wvstreams/Config.in"
- 	source "package/zeromq/Config.in"
- 	source "package/zmqpp/Config.in"
-diff --git a/package/websocketpp/Config.in b/package/websocketpp/Config.in
-new file mode 100644
-index 0000000..2b24b0d
---- /dev/null
-+++ b/package/websocketpp/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_WEBSOCKETPP
-+	bool "websocketpp"
-+	help
-+	  WebSocket++ is a header only C++ library that implements RFC6455 The
-+	  WebSocket Protocol. It allows integrating WebSocket client and server
-+	  functionality into C++ programs. It uses interchangeable network
-+	  transport modules including one based on raw char buffers, one based
-+	  on C++ iostreams, and one based on Asio (either via Boost or
-+	  standalone). End users can write additional transport policies to
-+	  support other networking or event libraries as needed.
-+
-+	  http://www.zaphoyd.com/websocketpp/
-diff --git a/package/websocketpp/websocketpp.mk b/package/websocketpp/websocketpp.mk
-new file mode 100644
-index 0000000..00f451f
---- /dev/null
-+++ b/package/websocketpp/websocketpp.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+## websocketpp
-+#
-+#################################################################################
-+
-+WEBSOCKETPP_VERSION = 0.7.0
-+WEBSOCKETPP_SITE = $(call github,zaphoyd,websocketpp,$(WEBSOCKETPP_VERSION))
-+WEBSOCKETPP_INSTALL_STAGING = YES
-+WEBSOCKETPP_LICENSE = BSD or MIT
-+WEBSOCKETPP_LICENSE_FILES = COPYING
-+
-+WEBSOCKETPP_VERSION_CONF_OPTS = \
-+	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS)"
-+
-+define WEBSOCKETPP_INSTALL_STAGING_CMDS
-+	cp -vR $(@D)/websocketpp $(STAGING_DIR)/usr/include/websocketpp
-+endef
-+
-+$(eval $(generic-package))
+What autobuilder issues does this fix?
+
+I tried building this config after applying both patches:
+
+http://autobuild.buildroot.net/results/f4d/f4d15afb44f471878dbdee7c67cd836bd2b79904/
+
+But it now fails with:
+
+src/open_memstream.c: In function ?open_memstream?:
+src/open_memstream.c:105: error: expected ?=?, ?,?, ?;?, ?asm? or ?__attribute__? before ?vtable?
+src/open_memstream.c:105: error: ?vtable? undeclared (first use in this function)
+src/open_memstream.c:105: error: (Each undeclared identifier is reported only once
+src/open_memstream.c:105: error: for each function it appears in.)
+src/open_memstream.c:105: error: expected expression before ?{? token
+src/open_memstream.c:111: warning: implicit declaration of function ?fopencookie?
+src/open_memstream.c:111: warning: return makes pointer from integer without a cast
+Makefile:198: recipe for target 'src/open_memstream.o' failed
+
+So it isn't much of an improvement. Does it fix any other autobuilder issues?
+
 -- 
-2.9.3
+Bye, Peter Korsgaard
