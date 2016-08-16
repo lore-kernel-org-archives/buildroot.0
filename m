@@ -1,51 +1,58 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 16 Aug 2016 17:29:50 +0300
-Subject: [Buildroot] [PATCH 1/1] package/simh: new package
-In-Reply-To: <9ba51c53-ddb3-8a59-a3b0-9ba8e3e52f3e@gmail.com>
-References: <1471297357-11637-1-git-send-email-lothar.felten@gmail.com>
- <20160816035044.GB3368@tarshish>
- <9ba51c53-ddb3-8a59-a3b0-9ba8e3e52f3e@gmail.com>
-Message-ID: <20160816142950.GH3368@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 Aug 2016 17:07:01 +0200
+Subject: [Buildroot] [PATCH 2/2] tinycbor: fix issue on unnamed union
+In-Reply-To: <39A58E7A-0045-4782-AE36-3BB3DF6D42D7@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 16 Aug 2016 16:11:54 +0200")
+References: <1471290845-115279-1-git-send-email-fabrice.fontaine@orange.com>
+ <1471290845-115279-2-git-send-email-fabrice.fontaine@orange.com>
+ <87fuq5xnt4.fsf@dell.be.48ers.dk>
+ <39A58E7A-0045-4782-AE36-3BB3DF6D42D7@gmail.com>
+Message-ID: <87inv0vjl6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Lothar,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-As Yann marked this patch as rejected, this discussion is moot. But I'll 
-respond below for future reference.
+ > Dear Peter,
+ > It seems that the link you provided is not correct as in this build,
+ > the old tinycbor 0.3.1 is being compiled.
 
-On Tue, Aug 16, 2016 at 10:31:10AM +0200, Lothar Felten wrote:
-> On 16.08.2016 05:50, Baruch Siach wrote:
-> > Looking into a random source file like sim_imd.c, the license seems to be 
-> > MIT. See https://opensource.org/licenses/MIT.
-> 
-> Most files have a MIT-license/disclaimer, a few files reference GNU GPL
-> (Intel-Systems/common/i8088.c), at least one file is paritally zlib/libpng
-> license (sim_video.c, line 102), one file is "licensed under the standard
-> SimH license" (PDP11/pdp11_kmc.c), which seems to be MIT.
+Yes, naturally - There won't be any autobuilder results for 0.3.2 before
+your patches get included in the buildroot repo.
 
-In this case <PKG>_LICENSE should list all these licenses.
+I was expecting your patches to fix some of our existing (E.G. using
+0.3.1) autobuilder issues, but that is apparently not the case?
 
-> There's a Word .doc file doc/simh.doc that states:
-> 
-> COPYRIGHT NOTICE: The following copyright notice applies to the SIMH source,
-> binary, and documentation (an then: MIT license)
-> 
-> An older PDF version is online:
-> http://simh.trailing-edge.com/pdf/simh_doc.pdf
-> 
-> Should I point to the simh.doc file?
+ > Could you provide me the correct link so I can reproduce the issue? I
+ > suspect you encountered a totally new issue with src/open_memstream.c
+ > which is being compiled only if open_memstream is found in the
+ > toolchain but this file is also using fopencookie which does not seem
+ > to be available in the toolchain. If I can reproduce the issue, I
+ > will make a new patch to check the presence of fopencookie an send it
+ > upstream.
 
-I don't think so. Not sure how our legal info infra handles binary document 
-formats. Instead you may put source files that contain respective licenses 
-text in <PKG>_LICENSE_FILES.
+You should be able to reproduce the issue if you build the defconfig
+from
 
-baruch
+http://autobuild.buildroot.net/results/f4d/f4d15afb44f471878dbdee7c67cd836bd2b79904/
+
+After applying your 2 tinybcr patches.
+
+ > Concerning your original question, tinycbor 0.3.2 includes directly
+ > the patch from Thomas, more details can be found her:
+ > https://github.com/01org/tinycbor/commit/31c7f81d45d115d2007b1c881cbbd3a19618465c.
+
+Ok, so that means we can drop 
+0001-Makefile-use-installation-logic-compatible-with-old-.patch, good.
+
+> The second patch removes the unnamed union, more details can be found
+> here: https://patchwork.ozlabs.org/patch/652187/.
+
+Ok. It would be nice to mention that in the commit message.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Venlig hilsen,
+Peter Korsgaard 
