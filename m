@@ -1,43 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Aug 2016 13:05:13 +0200
-Subject: [Buildroot] [git commit branch/next] xen: Bump to version 4.7
-Message-ID: <20160816110755.91DA4801E3@busybox.osuosl.org>
+Date: Tue, 16 Aug 2016 12:58:47 +0200
+Subject: [Buildroot] [git commit branch/next] package/docker-engine: bump to
+	v1.12.0
+Message-ID: <20160816110755.6DEEB82132@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00b344cc547c39af150c0196ff1e70785465f17d
+commit: https://git.buildroot.net/buildroot/commit/?id=f892015d78eb0f2cc7ddd754beabcf41bfa6da6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump Xen up to 4.7 which is the latest release.
+Bump docker-engine to the latest stable v1.12.0 from v1.12.0-rc3.
 
-Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xen/xen.hash | 2 +-
- package/xen/xen.mk   | 2 +-
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index c124b3a..602e6c7 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 1de09f8..6078fbf 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256 6fa1c2431df55aa5950d248e6093b8c8c0f11c357a0adbd348a2186478e80909 xen-4.6.0.tar.gz
-+sha256 be5876144d49729572ae06142e0bb93f1c1f2695578141eff2931995add24623 xen-4.7.0.tar.gz
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 759667a..eb40454 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
+ # Locally calculated
+-sha256 bc256d2a348efbf236eab991254c925fa1917dd1e29cb40586f1696f4e24852e  docker-engine-v1.12.0-rc4.tar.gz
++sha256 f8139acba98248eb1fdb0b6d94efee89b876f9a50d00e263dc144fd2b0c372d4  docker-engine-v1.12.0.tar.gz
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 80b0041..3d39aac 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XEN_VERSION = 4.6.0
-+XEN_VERSION = 4.7.0
- XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
- XEN_LICENSE = GPLv2
- XEN_LICENSE_FILES = COPYING
+-DOCKER_ENGINE_VERSION = v1.12.0-rc4
++DOCKER_ENGINE_VERSION = v1.12.0
+ DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
