@@ -1,44 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Aug 2016 12:58:47 +0200
-Subject: [Buildroot] [git commit branch/next] package/docker-engine: bump to
-	v1.12.0
-Message-ID: <20160816110755.6DEEB82132@busybox.osuosl.org>
+Date: Tue, 16 Aug 2016 13:00:05 +0200
+Subject: [Buildroot] [git commit branch/next] package/runc: bump version to
+	cc29e3
+Message-ID: <20160816110755.7698482132@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f892015d78eb0f2cc7ddd754beabcf41bfa6da6b
+commit: https://git.buildroot.net/buildroot/commit/?id=6ad14a368798619d67d68a3b297333c153230ae1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump docker-engine to the latest stable v1.12.0 from v1.12.0-rc3.
+Bump runc to cc29e3dded8e27ba8f65738f40d251c885030a28
+
+This version is required by Docker Engine v1.12.0.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 1de09f8..6078fbf 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index e6ec483..c409a66 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 bc256d2a348efbf236eab991254c925fa1917dd1e29cb40586f1696f4e24852e  docker-engine-v1.12.0-rc4.tar.gz
-+sha256 f8139acba98248eb1fdb0b6d94efee89b876f9a50d00e263dc144fd2b0c372d4  docker-engine-v1.12.0.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 80b0041..3d39aac 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+ # Locally computed
+-sha256 77f9d4df1657fecc939be0261fcccccd34d5b22c02b8a49abad23fac33b4059a  runc-v1.0.0-rc1.tar.gz
++sha256 196b78c6caf1a4c6257314b393381baffa7c82bb2690ac02a7b3d6cd6cfe7776  runc-cc29e3dded8e27ba8f65738f40d251c885030a28.tar.gz
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 7ebba57..e2ab5ed 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = v1.12.0-rc4
-+DOCKER_ENGINE_VERSION = v1.12.0
- DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+-RUNC_VERSION = v1.0.0-rc1
++RUNC_VERSION = cc29e3dded8e27ba8f65738f40d251c885030a28
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
