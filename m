@@ -1,39 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 16 Aug 2016 20:07:12 -0300
-Subject: [Buildroot] [PATCH] sysstat: bump to version 11.4.0
-Message-ID: <1471388832-19389-1-git-send-email-gustavo@zacarias.com.ar>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 16 Aug 2016 20:15:21 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.14.x and 4.{4, 6,
+	7}.x series
+Message-ID: <1471389321-9771-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sysstat/sysstat.hash | 2 +-
- package/sysstat/sysstat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
-diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
-index 539bbed..3170fc9 100644
---- a/package/sysstat/sysstat.hash
-+++ b/package/sysstat/sysstat.hash
-@@ -1,2 +1,2 @@
- # From: http://sebastien.godard.pagesperso-orange.fr/download.html
--sha1	ef97b454c254a37587485f61071db1fd9374f276	sysstat-11.2.5.tar.xz
-+sha1	59769deddef02acd60db3a42d772e57bd0978efb	sysstat-11.4.0.tar.xz
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 1be3d82..de6cd9f 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSSTAT_VERSION = 11.2.5
-+SYSSTAT_VERSION = 11.4.0
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 771befb..3384cb0 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -239,15 +239,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.75"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.76"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.18.39"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.30"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.17"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.18"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+-	default "4.6.6"		if BR2_KERNEL_HEADERS_4_6
+-	default "4.7"		if BR2_KERNEL_HEADERS_4_7
++	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
++	default "4.7.1"		if BR2_KERNEL_HEADERS_4_7
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-2.7.3
+1.9.1
