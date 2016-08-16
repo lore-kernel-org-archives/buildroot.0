@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Aug 2016 13:02:57 +0200
-Subject: [Buildroot] [git commit branch/next] igd2-for-linux: bump to
-	version 1.2
-Message-ID: <20160816110755.7EF958213C@busybox.osuosl.org>
+Date: Tue, 16 Aug 2016 12:58:00 +0200
+Subject: [Buildroot] [git commit branch/next] irssi: bump to version 0.8.19
+Message-ID: <20160816110755.63B5C8213C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02fa3ceaebd995580ae2aab6848e9ff797ea3b18
+commit: https://git.buildroot.net/buildroot/commit/?id=9e44acf092543337b489833b75c50d41cdbf49ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/igd2-for-linux/igd2-for-linux.hash | 2 +-
- package/igd2-for-linux/igd2-for-linux.mk   | 2 +-
+ package/irssi/irssi.hash | 2 +-
+ package/irssi/irssi.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/igd2-for-linux/igd2-for-linux.hash b/package/igd2-for-linux/igd2-for-linux.hash
-index a46fe5f..f1c9a7b 100644
---- a/package/igd2-for-linux/igd2-for-linux.hash
-+++ b/package/igd2-for-linux/igd2-for-linux.hash
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index fa49d85..f65d6c3 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256	a8edc4c14aa104dcffa79d1f3057b8b9c5cef0f8f43901f61e306120a4efe01f	igd2-for-linux-v1.1.tar.gz
-+sha256	523545a26b0d662e9f6913bec2518df6e70f4d497935d88983d994336a1b0ea9	igd2-for-linux-v1.2.tar.gz
-diff --git a/package/igd2-for-linux/igd2-for-linux.mk b/package/igd2-for-linux/igd2-for-linux.mk
-index 8b63c04..8944c05 100644
---- a/package/igd2-for-linux/igd2-for-linux.mk
-+++ b/package/igd2-for-linux/igd2-for-linux.mk
+ # Locally calculated after checking pgp signature
+-sha256	c0a177f749757c2d171ebe49ab0f0dd9cf9374dea81ab01904d0549bcb057840	irssi-0.8.18.tar.xz
++sha256	4ca0040548e814ea93eb7d602ab7d6d379afcbbdf10e84160523ce69c73ee5d3	irssi-0.8.19.tar.xz
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index 8272e44..a1e278e 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IGD2_FOR_LINUX_VERSION = v1.1
-+IGD2_FOR_LINUX_VERSION = v1.2
- IGD2_FOR_LINUX_SITE = $(call github,ffontaine,igd2-for-linux,$(IGD2_FOR_LINUX_VERSION))
- 
- IGD2_FOR_LINUX_LICENSE = GPLv2
+-IRSSI_VERSION = 0.8.18
++IRSSI_VERSION = 0.8.19
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
