@@ -1,196 +1,56 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 16 Aug 2016 08:20:12 -0500
-Subject: [Buildroot] [PATCH v2] lxc: version bump to 2.0.3
-In-Reply-To: <CANQCQpZAjLk6DGDucUWdA2m3zc3_xMp7PFABm0vEAVGxpKXONw@mail.gmail.com>
-References: <1470935670-9376-1-git-send-email-matthew.weber@rockwellcollins.com>
- <8623D021-CE57-4D72-B22A-D757B61BE234@gmail.com>
- <CANQCQpZAjLk6DGDucUWdA2m3zc3_xMp7PFABm0vEAVGxpKXONw@mail.gmail.com>
-Message-ID: <CANQCQpY2ti_LuRGrsW4D2PwrnpDhdR-k1iZ9zZfNUUvThwVfzQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 16 Aug 2016 16:11:54 +0200
+Subject: [Buildroot] [PATCH 2/2] tinycbor: fix issue on unnamed union
+In-Reply-To: <87fuq5xnt4.fsf@dell.be.48ers.dk>
+References: <1471290845-115279-1-git-send-email-fabrice.fontaine@orange.com>
+ <1471290845-115279-2-git-send-email-fabrice.fontaine@orange.com>
+ <87fuq5xnt4.fsf@dell.be.48ers.dk>
+Message-ID: <39A58E7A-0045-4782-AE36-3BB3DF6D42D7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Khem,
+Dear Peter,
 
-On Fri, Aug 12, 2016 at 6:23 AM, Matthew Weber <matthew.weber@
-rockwellcollins.com> wrote:
+It seems that the link you provided is not correct as in this build, the old tinycbor 0.3.1 is being compiled. Could you provide me the correct link so I can reproduce the issue? I suspect you encountered a totally new issue with src/open_memstream.c which is being compiled only if open_memstream is found in the toolchain but this file is also using fopencookie which does not seem to be available in the toolchain. If I can reproduce the issue, I will make a new patch to check the presence of fopencookie an send it upstream.
 
-> Khem,
->
-> On Aug 11, 2016 11:56 PM, "Khem Raj" <raj.khem@gmail.com> wrote:
-> >
-> >
-> > > On Aug 11, 2016, at 10:14 AM, Matt Weber <
-> matthew.weber at rockwellcollins.com> wrote:
-> > >
-> > > From: Judd Meinders <judd.meinders@rockwellcollins.com>
-> > >
-> > > Removed IPv6 and werror configure.ac patch(s) as
-> > > changes where incorporated upstream.
-> >
-> > This should be tested with musl.
->
-> Will do.
->
+Concerning your original question, tinycbor 0.3.2 includes directly the patch from Thomas, more details can be found her: https://github.com/01org/tinycbor/commit/31c7f81d45d115d2007b1c881cbbd3a19618465c.
 
-Judd just finished tested against the following and it looks good.
+The second patch removes the unnamed union, more details can be found here: https://patchwork.ozlabs.org/patch/652187/.
 
-x86_64, buildroot musl toolchain, 4.1.x headers, 2.25.1 binutils, 4.9.x gcc
+Best regards,
 
+Fabrice
 
-> >
-> > >
-> > > Signed-off-by: Judd Meinders <judd.meinders@rockwellcollins.com>
-> > > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> > > ---
-> > >
-> > > v1 -> v2
-> > > [Thomas
-> > > - Removed AUTORECONF as configure.ac patch removal eliminated
-> > >   need to regenerate configure script
-> > > ---
-> > > package/lxc/0001-drop-werror.patch                 | 16 --------
-> > > .../0002-Fix-redefinition-of-struct-in6_addr.patch | 43
-> ----------------------
-> > > package/lxc/lxc.hash                               |  2 +-
-> > > package/lxc/lxc.mk                                 |  4 +-
-> > > 4 files changed, 2 insertions(+), 63 deletions(-)
-> > > delete mode 100644 package/lxc/0001-drop-werror.patch
-> > > delete mode 100644 package/lxc/0002-Fix-redefinit
-> ion-of-struct-in6_addr.patch
-> > >
-> > > diff --git a/package/lxc/0001-drop-werror.patch
-> b/package/lxc/0001-drop-werror.patch
-> > > deleted file mode 100644
-> > > index d2a8673..0000000
-> > > --- a/package/lxc/0001-drop-werror.patch
-> > > +++ /dev/null
-> > > @@ -1,16 +0,0 @@
-> > > -Don't do -Werror it breaks builds on some scenarios with trivialities.
-> > > -
-> > > -Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> > > -
-> > > -diff -Nura lxc-lxc-1.0.4/configure.ac lxc-lxc-1.0.4.orig/configure.ac
-> > > ---- lxc-lxc-1.0.4.orig/configure.ac  2014-07-04 10:31:19.821029891
-> -0300
-> > > -+++ lxc-lxc-1.0.4/configure.ac       2014-06-13 14:07:45.000000000
-> -0300
-> > > -@@ -560,7 +560,7 @@
-> > > - LXC_CHECK_TLS
-> > > -
-> > > - if test "x$GCC" = "xyes"; then
-> > > --    CFLAGS="$CFLAGS -Wall -Werror"
-> > > -+    CFLAGS="$CFLAGS -Wall"
-> > > - fi
-> > > -
-> > > - # Files requiring some variable expansion
-> > > diff --git a/package/lxc/0002-Fix-redefinition-of-struct-in6_addr.patch
-> b/package/lxc/0002-Fix-redefinition-of-struct-in6_addr.patch
-> > > deleted file mode 100644
-> > > index b48ece3..0000000
-> > > --- a/package/lxc/0002-Fix-redefinition-of-struct-in6_addr.patch
-> > > +++ /dev/null
-> > > @@ -1,43 +0,0 @@
-> > > -From 245bba9aadf8e7aea487b6fbd851f86c75524552 Mon Sep 17 00:00:00
-> 2001
-> > > -From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-> > > -Date: Thu, 19 May 2016 21:51:27 +0200
-> > > -Subject: [PATCH] Fix redefinition of struct in6_addr
-> > > -MIME-Version: 1.0
-> > > -Content-Type: text/plain; charset=UTF-8
-> > > -Content-Transfer-Encoding: 8bit
-> > > -
-> > > -struct in6_addr is both defined in the C library header <netinet/in.h>
-> > > -and the Linux kernel header <linux/in6.h>.
-> > > -
-> > > -lxc_user_nic.c includes both <netinet/in.h> and <linux/if_bridge.h>.
-> The
-> > > -later one includes <linux/in6.h>.
-> > > -
-> > > -This breaks build with the musl libc:
-> > > -  error: redefinition of ?struct in6_addr?
-> > > -
-> > > -As lxc_user_nic.c does not use any references from
-> <linux/if_bridge.h> it
-> > > -is safe to remove this header.
-> > > -
-> > > -Upstream status: Pending
-> > > -https://github.com/lxc/lxc/pull/1029
-> > > -
-> > > -Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > > ----
-> > > - src/lxc/lxc_user_nic.c | 1 -
-> > > - 1 file changed, 1 deletion(-)
-> > > -
-> > > -diff --git a/src/lxc/lxc_user_nic.c b/src/lxc/lxc_user_nic.c
-> > > -index 87780ca..0cb38ba 100644
-> > > ---- a/src/lxc/lxc_user_nic.c
-> > > -+++ b/src/lxc/lxc_user_nic.c
-> > > -@@ -41,7 +41,6 @@
-> > > - #include <net/if.h>
-> > > - #include <net/if_arp.h>
-> > > - #include <netinet/in.h>
-> > > --#include <linux/if_bridge.h>
-> > > - #include <linux/netlink.h>
-> > > - #include <linux/rtnetlink.h>
-> > > - #include <linux/sockios.h>
-> > > ---
-> > > -2.8.2
-> > > -
-> > > diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-> > > index 7470101..3dee7fc 100644
-> > > --- a/package/lxc/lxc.hash
-> > > +++ b/package/lxc/lxc.hash
-> > > @@ -1,2 +1,2 @@
-> > > # Locally calculated
-> > > -sha256       9588ad1b04e114ee7370f690c6513
-> 1e28098b28d2521d97c73557d11897ed0be        lxc-1.1.5.tar.gz
-> > > +sha256 82df40a0cdd44639ee677d560be95348de48afa93a10a20e959dadb4431ee8d6
-> lxc-2.0.3.tar.gz
-> > > diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-> > > index 8190969..b1cd385 100644
-> > > --- a/package/lxc/lxc.mk
-> > > +++ b/package/lxc/lxc.mk
-> > > @@ -4,13 +4,11 @@
-> > > #
-> > > ############################################################
-> ####################
-> > >
-> > > -LXC_VERSION = 1.1.5
-> > > +LXC_VERSION = 2.0.3
-> > > LXC_SITE = https://linuxcontainers.org/downloads/lxc
-> > > LXC_LICENSE = LGPLv2.1+
-> > > LXC_LICENSE_FILES = COPYING
-> > > LXC_DEPENDENCIES = libcap host-pkgconf
-> > > -# we're patching configure.ac
-> > > -LXC_AUTORECONF = YES
-> > > LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
-> > >       --disable-lua --disable-python \
-> > >       $(if $(BR2_PACKAGE_BASH),,--disable-bash)
-> > > --
-> > > 1.9.1
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
+Le 16 ao?t 2016 ? 07:52, Peter Korsgaard <peter@korsgaard.com> a ?crit :
 
-
-
--- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure
-Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted Third
-Party Intellectual Property (TPIP) content must be encrypted and sent to
-matthew.weber at corp.rockwellcollins.com.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160816/f6d6956d/attachment.html>
+>>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+> 
+>> Until tinycbor 0.4 is released, patch from dev branch is needed to
+>> remove the usage of unnamed union which are not supported by all
+>> targets such as blackfin
+> 
+> What autobuilder issues does this fix?
+> 
+> I tried building this config after applying both patches:
+> 
+> http://autobuild.buildroot.net/results/f4d/f4d15afb44f471878dbdee7c67cd836bd2b79904/
+> 
+> But it now fails with:
+> 
+> src/open_memstream.c: In function ?open_memstream?:
+> src/open_memstream.c:105: error: expected ?=?, ?,?, ?;?, ?asm? or ?__attribute__? before ?vtable?
+> src/open_memstream.c:105: error: ?vtable? undeclared (first use in this function)
+> src/open_memstream.c:105: error: (Each undeclared identifier is reported only once
+> src/open_memstream.c:105: error: for each function it appears in.)
+> src/open_memstream.c:105: error: expected expression before ?{? token
+> src/open_memstream.c:111: warning: implicit declaration of function ?fopencookie?
+> src/open_memstream.c:111: warning: return makes pointer from integer without a cast
+> Makefile:198: recipe for target 'src/open_memstream.o' failed
+> 
+> So it isn't much of an improvement. Does it fix any other autobuilder issues?
+> 
+> -- 
+> Bye, Peter Korsgaard
