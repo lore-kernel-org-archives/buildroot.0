@@ -1,51 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Aug 2016 07:59:50 +0200
-Subject: [Buildroot] [git commit] poco: fix m68k compile
-Message-ID: <20160816062549.E7D0D7FEA5@busybox.osuosl.org>
+Date: Tue, 16 Aug 2016 08:05:05 +0200
+Subject: [Buildroot] [git commit] barebox: fix ARCH value for arm64
+Message-ID: <20160816062550.097D9801E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c5c17a1ba5db80b7aa89386025fb6930464cc50
+commit: https://git.buildroot.net/buildroot/commit/?id=bbe71a699abc65492a677682af21aa43286af397
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch from double-conversion upstream project which is bundled
-with poco to fix compile for m68k.
+barebox 2016.08 added arm64 support using ARCH=arm.
 
-Fixes:
-  http://autobuild.buildroot.net/results/791917c1343f53e12f27b06cfd5e1d2e88078014/
-  http://autobuild.buildroot.net/results/349d4b49d65a652551c4de20233684bb4ffa5ae3/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+[Peter: extend commit message to clarify]
+Signed-off-by: Raphael Poggi <poggi.raph@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/poco/0002-fix-m68k-double-conv-detect.patch | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ boot/barebox/barebox.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/poco/0002-fix-m68k-double-conv-detect.patch b/package/poco/0002-fix-m68k-double-conv-detect.patch
-new file mode 100644
-index 0000000..3ca03fc
---- /dev/null
-+++ b/package/poco/0002-fix-m68k-double-conv-detect.patch
-@@ -0,0 +1,19 @@
-+Fixes compile for m68k.
-+
-+From upstream double-conversion commit da111796231:
-+https://github.com/google/double-conversion/blob/master/double-conversion/utils.h
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur poco-poco-1.7.2-release.orig/Foundation/src/utils.h poco-poco-1.7.2-release/Foundation/src/utils.h
-+--- poco-poco-1.7.2-release.orig/Foundation/src/utils.h	2016-03-19 08:19:35.000000000 +0100
-++++ poco-poco-1.7.2-release/Foundation/src/utils.h	2016-08-11 02:55:02.827238119 +0200
-+@@ -63,6 +63,8 @@
-+     defined(__AARCH64EL__) || \
-+     defined(nios2) || defined(__nios2) || defined(__nios2__)
-+ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-++#elif defined(__mc68000__)
-++#undef DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS
-+ #elif defined(_M_IX86) || defined(__i386__) || defined(__i386)
-+ #if defined(_WIN32)
-+ // Windows uses a 64bit wide floating point stack.
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 832297e..7a110d2 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -61,6 +61,8 @@ else ifeq ($$(KERNEL_ARCH),x86_64)
+ $(1)_ARCH = x86
+ else ifeq ($$(KERNEL_ARCH),powerpc)
+ $(1)_ARCH = ppc
++else ifeq ($$(KERNEL_ARCH),arm64)
++$(1)_ARCH = arm
+ else
+ $(1)_ARCH = $$(KERNEL_ARCH)
+ endif
