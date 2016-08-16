@@ -1,39 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Aug 2016 07:53:41 +0200
-Subject: [Buildroot] [git commit] gmp: disable assembly for arc
-Message-ID: <20160816062549.DD706801E4@busybox.osuosl.org>
+Date: Tue, 16 Aug 2016 08:11:44 +0200
+Subject: [Buildroot] [git commit] package/axel: fix link order
+Message-ID: <20160816062550.1F82C8082A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cdf63517de2514a99d6fd55d109018f69a55aa9d
+commit: https://git.buildroot.net/buildroot/commit/?id=161746ca8fde099fa2994a00f89f829f02924897
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It has different inline assembly constraints that
-are not supported after update to gcc-6.
+libintl may use thread-related functions, so -lpthread must come after
+-lintl.
 
 Fixes:
-http://autobuild.buildroot.net/results/c91/c9143eec0834017d57d5352d6fc95b5fae38da00//
-and a lot of other failures of gmp-6.1.1 for ARC.
+    http://autobuild.buildroot.org/results/e9d/e9d89fd5b24a76a3c5ab9dc8f01f4643f7c13396/
 
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+[Peter: use -lpthread in comment as suggested by Arnout]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gmp/gmp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/axel/axel.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index 485bf7c..420fd2f 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -15,7 +15,7 @@ HOST_GMP_DEPENDENCIES = host-m4
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index 6328d99..25357a3 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -9,13 +9,14 @@ AXEL_SITE = http://sources.buildroot.net
+ AXEL_LICENSE = GPLv2+
+ AXEL_LICENSE_FILES = COPYING
  
- # GMP doesn't support assembly for coldfire or mips r6 ISA yet
- # Disable for ARM v7m since it has different asm constraints
--ifeq ($(BR2_m68k_cf)$(BR2_mips_32r6)$(BR2_mips_64r6)$(BR2_ARM_CPU_ARMV7M),y)
-+ifeq ($(BR2_m68k_cf)$(BR2_mips_32r6)$(BR2_mips_64r6)$(BR2_ARM_CPU_ARMV7M)$(BR2_arc),y)
- GMP_CONF_OPTS += --disable-assembly
+-AXEL_LDFLAGS = -lpthread
+-
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ AXEL_DEPENDENCIES += gettext
+ AXEL_LDFLAGS += -lintl
  endif
  
++# -lintl may use symbols from -lpthread
++AXEL_LDFLAGS += -lpthread
++
+ ifneq ($(BR2_ENABLE_LOCALE),y)
+ AXEL_DISABLE_I18N = --i18n=0
+ endif
