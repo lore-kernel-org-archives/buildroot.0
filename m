@@ -1,48 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Aug 2016 08:11:36 +0200
-Subject: [Buildroot] [PATCH] package/axel: fix link order
-In-Reply-To: <1471182669-4429-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sun, 14 Aug 2016 15:51:09 +0200")
-References: <1471182669-4429-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87pop9w8dj.fsf@dell.be.48ers.dk>
+Date: Tue, 16 Aug 2016 08:07:56 +0200
+Subject: [Buildroot] [git commit] linux: fix comment about version choice
+Message-ID: <20160816062550.1438F7FEA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=cc3f8bc16556f5d40ef006539cca7c3ba1300c7d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > libintl may use thread-related functions, so -lpthread must come after
- > -lintl.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
- > Fixes:
- >     http://autobuild.buildroot.org/results/e9d/e9d89fd5b24a76a3c5ab9dc8f01f4643f7c13396/
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > ---
- >  package/axel/axel.mk | 5 +++--
- >  1 file changed, 3 insertions(+), 2 deletions(-)
-
- > diff --git a/package/axel/axel.mk b/package/axel/axel.mk
- > index 6328d99..b60af0e 100644
- > --- a/package/axel/axel.mk
- > +++ b/package/axel/axel.mk
- > @@ -9,13 +9,14 @@ AXEL_SITE = http://sources.buildroot.net
- >  AXEL_LICENSE = GPLv2+
- >  AXEL_LICENSE_FILES = COPYING
- 
- > -AXEL_LDFLAGS = -lpthread
- > -
- >  ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- >  AXEL_DEPENDENCIES += gettext
- >  AXEL_LDFLAGS += -lintl
- >  endif
- 
- > +# -lintl may use symbols from -pthread
- > +AXEL_LDFLAGS += -lpthread
-
-Committed after s/pthread/lpthread/ as suggested by Arnout, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index e02d138..306d077 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -18,10 +18,9 @@ config BR2_LINUX_NEEDS_MODULES
+ # Version selection. We provide the choice between:
+ #
+ #  1. A single fairly recent stable kernel version
+-#  2. In case an internal toolchain has been built, the same kernel
+-#     version as the kernel headers
+-#  3. A custom stable version
+-#  4. A custom tarball
++#  2. A custom stable version
++#  3. A custom tarball
++#  4. A set of custom repository locations
+ #
+ choice
+ 	prompt "Kernel version"
