@@ -1,32 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Aug 2016 07:55:21 +0200
-Subject: [Buildroot] [PATCH] gmp: disable assembly for arc
-In-Reply-To: <1471272107-17275-1-git-send-email-vzakhar@synopsys.com> (Vlad
- Zakharov's message of "Mon, 15 Aug 2016 17:41:47 +0300")
-References: <1471272107-17275-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <87bn0txnp2.fsf@dell.be.48ers.dk>
+Date: Tue, 16 Aug 2016 08:00:31 +0200
+Subject: [Buildroot] [PATCH v2] poco: fix m68k compile
+In-Reply-To: <20160812203957.GA2064@waldemar-brodkorb.de> (Waldemar Brodkorb's
+ message of "Fri, 12 Aug 2016 22:39:58 +0200")
+References: <20160812203957.GA2064@waldemar-brodkorb.de>
+Message-ID: <877fbhxngg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
- > It has different inline assembly constraints that
- > are not supported after update to gcc-6.
+ > Add a patch from double-conversion upstream project which is bundled
+ > with poco to fix compile for m68k.
 
  > Fixes:
- > http://autobuild.buildroot.net/results/c91/c9143eec0834017d57d5352d6fc95b5fae38da00//
- > and a lot of other failures of gmp-6.1.1 for ARC.
+ >   http://autobuild.buildroot.net/results/791917c1343f53e12f27b06cfd5e1d2e88078014/
+ >   http://autobuild.buildroot.net/results/349d4b49d65a652551c4de20233684bb4ffa5ae3/
 
- > Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > ---
+ > v1 -> v2:
+ >  - add better comment and commit id, suggested by Baruch
 
 Committed, thanks.
 
-Are you working on getting this fixed in upstream gcc/gmp for future
-releases?
-
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Bye, Peter Korsgaard
