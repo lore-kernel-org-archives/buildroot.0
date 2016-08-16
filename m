@@ -1,67 +1,95 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 16 Aug 2016 21:42:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/simh: new package
-In-Reply-To: <20160816142950.GH3368@tarshish>
-References: <1471297357-11637-1-git-send-email-lothar.felten@gmail.com>
- <20160816035044.GB3368@tarshish>
- <9ba51c53-ddb3-8a59-a3b0-9ba8e3e52f3e@gmail.com>
- <20160816142950.GH3368@tarshish>
-Message-ID: <20160816194236.GC10734@free.fr>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 16 Aug 2016 15:25:52 -0500
+Subject: [Buildroot] [PATCH] skeleton: /etc/network/interface.d/* support
+In-Reply-To: <867AC111-F9FE-4F1D-9942-410B82365A8C@gmail.com>
+References: <1471360870-53982-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <867AC111-F9FE-4F1D-9942-410B82365A8C@gmail.com>
+Message-ID: <CANQCQpaLNO75fjES2UoXkMf4VG4QZ91mB9HDDasabhQ7RgJOYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Khem,
 
-On 2016-08-16 17:29 +0300, Baruch Siach spake thusly:
-> As Yann marked this patch as rejected, this discussion is moot. But I'll 
-> respond below for future reference.
-> 
-> On Tue, Aug 16, 2016 at 10:31:10AM +0200, Lothar Felten wrote:
-> > On 16.08.2016 05:50, Baruch Siach wrote:
-> > > Looking into a random source file like sim_imd.c, the license seems to be 
-> > > MIT. See https://opensource.org/licenses/MIT.
-> > 
-> > Most files have a MIT-license/disclaimer, a few files reference GNU GPL
-> > (Intel-Systems/common/i8088.c), at least one file is paritally zlib/libpng
-> > license (sim_video.c, line 102), one file is "licensed under the standard
-> > SimH license" (PDP11/pdp11_kmc.c), which seems to be MIT.
-> 
-> In this case <PKG>_LICENSE should list all these licenses.
+On Tue, Aug 16, 2016 at 11:34 AM, Khem Raj <raj.khem@gmail.com> wrote:
 
-Yes.
+>
+> > On Aug 16, 2016, at 8:21 AM, Matt Weber <matthew.weber@
+> rockwellcollins.com> wrote:
+> >
+> > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> > ---
+> > package/skeleton/skeleton.mk                    | 2 ++
+> > system/device_table.txt                         | 1 +
+> > system/skeleton/etc/network/interfaces.d/.empty | 0
+> > 3 files changed, 3 insertions(+)
+> > create mode 100644 system/skeleton/etc/network/interfaces.d/.empty
+> >
+> > diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+> > index 1000161..c9dce10 100644
+> > --- a/package/skeleton/skeleton.mk
+> > +++ b/package/skeleton/skeleton.mk
+> > @@ -151,6 +151,8 @@ define SKELETON_SET_NETWORK_LOCALHOST
+> >               echo ;                                               \
+> >               echo "auto lo";                                      \
+> >               echo "iface lo inet loopback";                       \
+> > +             echo ;                                               \
+> > +             echo "source interfaces.d/*";                        \
+>
+> its portable to use . instead of source keyword
+>
 
-> > There's a Word .doc file doc/simh.doc that states:
-> > 
-> > COPYRIGHT NOTICE: The following copyright notice applies to the SIMH source,
-> > binary, and documentation (an then: MIT license)
-> > 
-> > An older PDF version is online:
-> > http://simh.trailing-edge.com/pdf/simh_doc.pdf
-> > 
-> > Should I point to the simh.doc file?
-> 
-> I don't think so. Not sure how our legal info infra handles binary document 
-> formats.
+That doesn't seem to work in this case.  Is seems it's keying off the word
+source vs it being more shell like.
 
-FOO_LICENSE_FILES are just copied; we don't do anything with them. So
-it's fine to list a .doc in there.
 
-> Instead you may put source files that contain respective licenses 
-> text in <PKG>_LICENSE_FILES.
+>
+> >       ) > $(TARGET_DIR)/etc/network/interfaces
+> > endef
+> >
+> > diff --git a/system/device_table.txt b/system/device_table.txt
+> > index dc1af51..69b1d46 100644
+> > --- a/system/device_table.txt
+> > +++ b/system/device_table.txt
+> > @@ -17,5 +17,6 @@
+> > /etc/network/if-pre-up.d              d       755     0       0       -
+>      -       -       -       -
+> > /etc/network/if-down.d                        d       755     0       0
+>      -       -       -       -       -
+> > /etc/network/if-post-down.d           d       755     0       0       -
+>      -       -       -       -
+> > +/etc/network/interfaces.d            d       755     0       0       -
+>      -       -       -       -
+> > # uncomment this to allow starting x as non-root
+> > #/usr/X11R6/bin/Xfbdev                        f       4755    0       0
+>      -       -       -       -       -
+> > diff --git a/system/skeleton/etc/network/interfaces.d/.empty
+> b/system/skeleton/etc/network/interfaces.d/.empty
+> > new file mode 100644
+> > index 0000000..e69de29
+> > --
+> > 1.9.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
 
-Only for those licenses that do not have a separate license file, or are
-not listed in that .doc file.
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure
+Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted Third
+Party Intellectual Property (TPIP) content must be encrypted and sent to
+matthew.weber at corp.rockwellcollins.com.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160816/571aea28/attachment.html>
