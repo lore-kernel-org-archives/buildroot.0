@@ -1,40 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Aug 2016 00:01:29 +0200
-Subject: [Buildroot] [git commit] ffmpeg: explicitly disable NEON support
-Message-ID: <20160816220523.0D48082133@busybox.osuosl.org>
+Date: Wed, 17 Aug 2016 00:01:05 +0200
+Subject: [Buildroot] [git commit] spidev_test: fix musl build
+Message-ID: <20160816220522.F322482133@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae7becfe50cca2f6000342475f52750cab53985c
+commit: https://git.buildroot.net/buildroot/commit/?id=721bcb85132ba5842f61c6204a316d1bf04b3f49
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When BR2_ARM_CPU_HAS_NEON=y, we pass --enable-neon. However, when
-BR2_ARM_CPU_HAS_NEON is disabled, we don't pass anything. This generally
-works fine, but turned out to integrate NEON code in ARMv7-M
-builds (since it's ARMv7, ffmpeg assumed it should enable NEON code).
+spidev.h needs _IOC_SIZEBITS. Add linux/ioctl.h for that to fix build under
+musl.
 
-Even though ffmpeg is now disabled for ARMv7-M, it still makes sense to
-be explicit, and disable NEON support when the CPU doesn't have it.
+The patch suggested upstream (https://patchwork.kernel.org/patch/9276909/)
+does not apply to the spidev_test.c version we currently use. A backported
+patch would break once we bump spidev_test.c. A bump+patch solution would
+break if/when upstream accepts this patch. That's why this commit uses the
+unusual sed patching to keep compatibility with current and future
+spidev_test.c versions.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fixes:
+http://autobuild.buildroot.net/results/128/1284a36c70ff8a1412e2128266c6654b2aa5b2da/
+http://autobuild.buildroot.net/results/0ad/0adea6121b238adf0e64d455a7573b1a31c38264/
+http://autobuild.buildroot.net/results/21b/21b92651ce456f3819eef315cecd92ff70b9e98f/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/ffmpeg.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/spidev_test/spidev_test.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index c42336f..2b4219a 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -437,6 +437,8 @@ FFMPEG_CONF_OPTS += --disable-vfp
- endif
- ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
- FFMPEG_CONF_OPTS += --enable-neon
-+else
-+FFMPEG_CONF_OPTS += --disable-neon
- endif
+diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
+index 646372f..52441bb 100644
+--- a/package/spidev_test/spidev_test.mk
++++ b/package/spidev_test/spidev_test.mk
+@@ -16,6 +16,15 @@ SPIDEV_TEST_SITE = http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.gi
+ SPIDEV_TEST_SOURCE = spidev_test.c?id=$(SPIDEV_TEST_VERSION)
+ SPIDEV_TEST_LICENSE = GPLv2
  
- ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
++# musl libc requires linux/ioctl.h for _IOC_SIZEBITS. Do a sed patch to keep
++# compatibility with different spidev_test.c versions that we support.
++define SPIDEV_ADD_LINUX_IOCTL
++	$(SED) 's~^#include <sys/ioctl.h>~#include <sys/ioctl.h>\n#include <linux/ioctl.h>~' \
++		$(@D)/spidev_test.c
++endef
++
++SPIDEV_TEST_POST_PATCH_HOOKS += SPIDEV_ADD_LINUX_IOCTL
++
+ define SPIDEV_TEST_EXTRACT_CMDS
+ 	cp $(BR2_DL_DIR)/$(SPIDEV_TEST_SOURCE) $(@D)/spidev_test.c
+ endef
