@@ -1,43 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 16 Aug 2016 22:28:59 -0300
-Subject: [Buildroot] [PATCH] memcached: bump to version 1.4.30
-Message-ID: <1471397339-31204-1-git-send-email-gustavo@zacarias.com.ar>
+From: Matthew Weber <matt@thewebers.ws>
+Date: Tue, 16 Aug 2016 21:27:07 -0500
+Subject: [Buildroot] Analysis of build results for 2016-08-09
+In-Reply-To: <D7AD0BF6-2CCF-405D-A7AD-3879A9EA2451@embedded.rocks>
+References: <20160810063029.6F291102D04@stock.ovh.net>
+ <20160810161455.142a6a19@free-electrons.com>
+ <D7AD0BF6-2CCF-405D-A7AD-3879A9EA2451@embedded.rocks>
+Message-ID: <CAFt09wOGVX9rhSgw_5MAvcEj07Vja5F79BkGbBf+UhfZC3GcpQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+J?rg ,
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index ab57b51..b1353b2 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,4 +1,4 @@
--# From http://www.memcached.org/files/memcached-1.4.29.tar.gz.sha1
--sha1	8994b4d0dbcc8d536f3d6cd4763489a3c51ca44b	memcached-1.4.29.tar.gz
-+# From http://www.memcached.org/files/memcached-1.4.30.tar.gz.sha1
-+sha1	bb8644a4110932e331d1539f0435bc6a0e558827	memcached-1.4.30.tar.gz
- # Calculated based on the hash above
--sha256	c61a3a7f9c82e574559797bbf4bb01ad8b79e436ca80b8e46f5b51ae39b03d0b	memcached-1.4.29.tar.gz
-+sha256	e0bea597c9082557f3357f63db08c3d5121ccc8502f300a48d4cb84d22e8be5f	memcached-1.4.30.tar.gz
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 42742ff..b40ca84 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMCACHED_VERSION = 1.4.29
-+MEMCACHED_VERSION = 1.4.30
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
--- 
-2.7.3
+On Fri, Aug 12, 2016 at 4:31 AM, J?rg Krause
+<joerg.krause@embedded.rocks> wrote:
+>
+>
+> Am 10. August 2016 16:14:55 MESZ, schrieb Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+>>Hello all,
+>>
+>>Please find below the usual analysis of build failures. Hiroshi,
+>>Waldemar, Gustavo, Fabrice, Yann, Dagg, J?rg, Vivien, Vicente, Samuel,
+>>Peter, Joris, Alistair, please have a look below, there's some fun
+>>stuff for you! :-) Thanks for your help.
+>>
+>>Thomas
+>>
+>>On Wed, 10 Aug 2016 08:30:29 +0200 (CEST), Thomas Petazzoni wrote:
+>>
+>>>       x86_64 |                 libtirpc-1.0.1 | NOK |
+>>http://autobuild.buildroot.net/results/715c3ff13844a030767a49731069183aa02cc5f2/
+>>
+>>config.status: error: cannot find input file: `rpcgen/Makefile.in'
+>>
+>>J?rg, you've done quite some work on libtirpc, could you have a look at
+>>this issue?
+>
+> I am on vacation until the end of next week. Sorry, someone else maybe?
+
+Took a look at this and it doesn't seem to be consistently repeatable
+( I have yet to see it fail).  I went back and it looks like this
+occasionally has popped up starting on 8/6 and 8/9 on the following
+architectures.
+
+mips - glibc, gcc5, linux headers 4.6
+
+x86_64 - musl, gcc4.9, linux headers 4.7
+
+I just kicked off builds again to repeat both failures.  Hopefully I
+can catch it soon!
+
+Thanks
+Matt
