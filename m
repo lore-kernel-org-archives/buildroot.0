@@ -1,49 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 17 Aug 2016 20:40:51 +0200
-Subject: [Buildroot] [PATCH
- 1/1]package/x11r7/xdriver_xf86-video-intel:bump version
-References: <1469729121-557-1-git-send-email-bernd.kuhls@t-online.de>
- <87a8h1v8em.fsf@dell.be.48ers.dk>
- <28310532-f9c6-476b-deac-521acb19b976@zacarias.com.ar>
-Message-ID: <jmne8dxv3l.ln2@ID-313208.user.individual.net>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 17 Aug 2016 21:00:47 +0200
+Subject: [Buildroot] BuildRoot cannot build powerpc64
+In-Reply-To: <20160817193721.0cc1466d@free-electrons.com>
+References: <F9C551623D2CBB4C9488801D14F864C6EE8B1000@ex-mb1.corp.adtran.com>
+ <57b3aeb6944cf_7ec33f915a8b1b9c298e6@ultri3.mail>
+ <F9C551623D2CBB4C9488801D14F864C6EE8B17ED@ex-mb1.corp.adtran.com>
+ <20160817193721.0cc1466d@free-electrons.com>
+Message-ID: <20160817190047.GG22524@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 17 Aug 2016 07:43:50 -0300 schrieb Gustavo Zacarias:
+Hi,
+Thomas Petazzoni wrote,
 
-> On 28/07/16 17:01, Peter Korsgaard wrote:
+> Hello,
 > 
->> Committed, thanks.
+> On Wed, 17 Aug 2016 15:33:30 +0000, ANDY KENNEDY wrote:
 > 
-> Hi.
-> This bump causes build failure for this simplified defconfig:
+> > Our RFS we like to have static, so that we can throw libs into
+> > the system @ runtime without breaking our stable RFS.
+> > 
+> > Based upon your e-mail, I dropped into the uclibc dependencies
+> > || BR2_powerpc64, which made it selectable.  Problem is that
+> > it wouldn?t build.  My guess is that the T-series parts haven't
+> > been added to uClibC-ng yet, which is why it isn't selectable.
+> > 
+> > Thus, the answer to my question is "it is by design".
 > 
-> BR2_x86_64=y
-> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_XSERVER_XORG_SERVER=y
-> BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL=y
-> BR2_PACKAGE_XPROTO_DRI3PROTO=y
+> The only C library that supports PowerPC64 today is glibc.
 > 
-> As in:
+> But glibc does not support static linking.
 > 
-> gen4_vertex.c: In function ?emit_span_primitive?:
-> gen4_vertex.c:2044:1: error: inlining failed in call to always_inline 
-> ?emit_span_vertex?: target specific option mismatch
->   emit_span_vertex(struct sna *sna,
+> Hence there is no solution to do a statically linked rootfs on
+> PowerPC64 today.
 
-Hi Gustavo,
+Latest musl release supports ppc64.
+I will sent a patch to allow to build it.
 
-according to https://bugs.gentoo.org/show_bug.cgi?id=582910#c4
-to problem is related to -Os, which I could reproduce here
-using your defconfig. Compiling with BR2_OPTIMIZE_2=y works so
-I sent this patch: http://patchwork.ozlabs.org/patch/660221/
-
-Regards, Bernd
+best regards
+ Waldemar
