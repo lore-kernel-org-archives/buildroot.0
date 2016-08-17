@@ -1,42 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Aug 2016 19:37:21 +0200
-Subject: [Buildroot] BuildRoot cannot build powerpc64
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C6EE8B17ED@ex-mb1.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C6EE8B1000@ex-mb1.corp.adtran.com>
- <57b3aeb6944cf_7ec33f915a8b1b9c298e6@ultri3.mail>
- <F9C551623D2CBB4C9488801D14F864C6EE8B17ED@ex-mb1.corp.adtran.com>
-Message-ID: <20160817193721.0cc1466d@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Aug 2016 20:15:01 +0200
+Subject: [Buildroot] [PATCH] stella: fix compiler search in configure
+	script
+In-Reply-To: <1470910831-18439-1-git-send-email-vzakhar@synopsys.com> (Vlad
+ Zakharov's message of "Thu, 11 Aug 2016 13:20:31 +0300")
+References: <1470910831-18439-1-git-send-email-vzakhar@synopsys.com>
+Message-ID: <87d1l7qn2y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
 
-On Wed, 17 Aug 2016 15:33:30 +0000, ANDY KENNEDY wrote:
+ > In configure script there are some tests that are looking for
+ > a suitable compiler. For this purpose script tries to compile
+ > and link some C++ code that is hardcoded in the body of script.
 
-> Our RFS we like to have static, so that we can throw libs into
-> the system @ runtime without breaking our stable RFS.
-> 
-> Based upon your e-mail, I dropped into the uclibc dependencies
-> || BR2_powerpc64, which made it selectable.  Problem is that
-> it wouldn?t build.  My guess is that the T-series parts haven't
-> been added to uClibC-ng yet, which is why it isn't selectable.
-> 
-> Thus, the answer to my question is "it is by design".
+ > The problem is that only linker flags ($LDFLAGS) are passed to the
+ > compiler when the script is compiling test code. Therefore some
+ > necessary command line options can be lost and this would lead to
+ > errors.
 
-The only C library that supports PowerPC64 today is glibc.
+ > This exactly happens to ARC:
+ >   1. -matomic option is lost as it compiler option,
+ >   2. test code compilation fails,
+ >   3. the script decides not to use arc-buildroot-linux-uclibc-g++,
+ >   4. scipt checks host compiler (x86_64-linux-gnu-g++ in your case),
+ >   5. package is being built for x86_64, not for ARC.
 
-But glibc does not support static linking.
+ > About last 2 steps - I don't know why configure script should try
+ > to build stella for host machine. As for me an error should be
+ > raised and a build should be stopped. But this is up to stella
+ > developers.
 
-Hence there is no solution to do a statically linked rootfs on
-PowerPC64 today.
+ > Current patch adds compiler options ($CPPLFAGS) when compiling
 
-Best regards,
+You are actually passing CXXFLAGS. Committed with that fixed.
 
-Thomas
+Don't forget to submit the patch upstream!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
