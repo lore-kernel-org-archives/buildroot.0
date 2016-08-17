@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Aug 2016 17:00:18 +0200
-Subject: [Buildroot] [git commit branch/next] package/docker-engine:
-	bump to v1.12.0
-In-Reply-To: <20160817164917.01972edc@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 17 Aug 2016 16:49:17 +0200")
-References: <20160816110755.6DEEB82132@busybox.osuosl.org>
- <20160817164917.01972edc@free-electrons.com>
-Message-ID: <87lgzvqw3h.fsf@dell.be.48ers.dk>
+Date: Wed, 17 Aug 2016 17:00:54 +0200
+Subject: [Buildroot] [git commit branch/next] package/runc: bump version
+	to cc29e3
+In-Reply-To: <20160817165000.3532b18f@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 17 Aug 2016 16:50:00 +0200")
+References: <20160816110755.7698482132@busybox.osuosl.org>
+ <20160817165000.3532b18f@free-electrons.com>
+Message-ID: <87h9ajqw2h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,22 +16,23 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
  > Hello,
- > On Tue, 16 Aug 2016 12:58:47 +0200, Peter Korsgaard wrote:
- >> commit: https://git.buildroot.net/buildroot/commit/?id=f892015d78eb0f2cc7ddd754beabcf41bfa6da6b
+ > On Tue, 16 Aug 2016 13:00:05 +0200, Peter Korsgaard wrote:
+ >> commit: https://git.buildroot.net/buildroot/commit/?id=6ad14a368798619d67d68a3b297333c153230ae1
  >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
  >> 
- >> Bump docker-engine to the latest stable v1.12.0 from v1.12.0-rc3.
+ >> Bump runc to cc29e3dded8e27ba8f65738f40d251c885030a28
+ >> 
+ >> This version is required by Docker Engine v1.12.0.
  >> 
  >> Signed-off-by: Christian Stewart <christian@paral.in>
  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- > I believe this should have been committed to master. Indeed, we
- > packaged the -rc4 version, waiting for the final release, and this
- > patch precisely bumps to the final release. So it should have landed in
- > master IMO.
+ > Ditto the bump of docker-engine to the final 1.12.0: I believe this
+ > commit should have been made on master, and not next (since it goes
+ > together with the docker-engine bump).
 
-OK, that wasn't really clear to me and I hessitated about what to do. We
-can add it to master as well.
+Yeah, if we add the docker-engine bump to master, this should be added
+as well.
 
 -- 
 Venlig hilsen,
