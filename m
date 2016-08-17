@@ -1,39 +1,35 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Tue, 16 Aug 2016 21:10:38 -0300
-Subject: [Buildroot] [PATCH 1/1] git: bump version to 2.9.3
-Message-ID: <1471392638-21456-1-git-send-email-rprebello@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Tue, 16 Aug 2016 21:24:22 -0300
+Subject: [Buildroot] BuildRoot cannot build powerpc64
+References: <F9C551623D2CBB4C9488801D14F864C6EE8B1000@ex-mb1.corp.adtran.com>
+Message-ID: <57b3aeb6944cf_7ec33f915a8b1b9c298e6@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
----
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Andy,
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index e7763f3..9776df1 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 e8fe60bc72c1c979feb43740b3c74fea7f8ffbe7712b71cd9734ddb9c89282a2  git-2.9.1.tar.xz
-+sha256 9f1473350c1792310b51af03a9cb5cce841f68202f835b20d46312a30232fa63  git-2.9.3.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 2f28200..d9cd95a 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.9.1
-+GIT_VERSION = 2.9.3
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
--- 
-2.1.4
+On Tue, Aug 16, 2016 at 07:43 PM, ANDY KENNEDY <ANDY.KENNEDY@adtran.com> wrote:
+
+> All,
+> 
+> I just downloaded 2016_08rc-1 and attempted to build an RFS for the
+> T-series PowerPC parts, which, I assume, are powerpc64 and e5500.  In
+> doing so, after I select powerpc64 I cannot select any library for the
+> toolchain as all of the config dependencies appear to be excluding
+> powerpc64 in the options.
+> 
+> Is this by design or oversight?
+
+With Ubuntu 16.04 I can reproduce the behavior only after selecting static libs.
+
+BR2_powerpc64=y
+BR2_powerpc_e5500=y
+BR2_STATIC_LIBS=y
+
+Maybe you can unblock your work if static build is not a strict requirement.
+
+Regards,
+Ricardo
