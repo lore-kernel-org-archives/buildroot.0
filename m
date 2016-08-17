@@ -1,42 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 17 Aug 2016 20:40:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-intel: use
-	-O2 build optimisation level
-Message-ID: <1471459209-21757-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 17 Aug 2016 20:40:51 +0200
+Subject: [Buildroot] [PATCH
+ 1/1]package/x11r7/xdriver_xf86-video-intel:bump version
+References: <1469729121-557-1-git-send-email-bernd.kuhls@t-online.de>
+ <87a8h1v8em.fsf@dell.be.48ers.dk>
+ <28310532-f9c6-476b-deac-521acb19b976@zacarias.com.ar>
+Message-ID: <jmne8dxv3l.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reported by Gustavo:
-http://lists.busybox.net/pipermail/buildroot/2016-August/169959.html
+Am Wed, 17 Aug 2016 07:43:50 -0300 schrieb Gustavo Zacarias:
 
-The fix was suggested on the Gentoo bugtracker:
-https://bugs.gentoo.org/show_bug.cgi?id=582910#c4
+> On 28/07/16 17:01, Peter Korsgaard wrote:
+> 
+>> Committed, thanks.
+> 
+> Hi.
+> This bump causes build failure for this simplified defconfig:
+> 
+> BR2_x86_64=y
+> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
+> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+> BR2_PACKAGE_XORG7=y
+> BR2_PACKAGE_XSERVER_XORG_SERVER=y
+> BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL=y
+> BR2_PACKAGE_XPROTO_DRI3PROTO=y
+> 
+> As in:
+> 
+> gen4_vertex.c: In function ?emit_span_primitive?:
+> gen4_vertex.c:2044:1: error: inlining failed in call to always_inline 
+> ?emit_span_vertex?: target specific option mismatch
+>   emit_span_vertex(struct sna *sna,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Hi Gustavo,
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 64e9269..bfe0527 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -10,9 +10,11 @@ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
- 
--# this fixes a getline-related compilation error in src/sna/kgem.c
-+# -D_GNU_SOURCE fixes a getline-related compile error in src/sna/kgem.c
-+# We force -O2 regardless of the optimization level chosen by the user,
-+# as compiling this package is known to be broken with -Os.
- XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
--	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -O2"
- 
- XDRIVER_XF86_VIDEO_INTEL_CONF_OPTS = \
- 	--disable-xvmc \
--- 
-2.8.1
+according to https://bugs.gentoo.org/show_bug.cgi?id=582910#c4
+to problem is related to -Os, which I could reproduce here
+using your defconfig. Compiling with BR2_OPTIMIZE_2=y works so
+I sent this patch: http://patchwork.ozlabs.org/patch/660221/
+
+Regards, Bernd
