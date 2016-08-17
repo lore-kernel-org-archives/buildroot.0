@@ -1,65 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Aug 2016 16:42:42 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain/wrapper: extend paranoid check to
-	-isystem
-In-Reply-To: <1471444962-32200-1-git-send-email-yann.morin.1998@free.fr>
-References: <1471444962-32200-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1471444962-32200-2-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Aug 2016 16:49:17 +0200
+Subject: [Buildroot] [git commit branch/next] package/docker-engine:
+ bump to v1.12.0
+In-Reply-To: <20160816110755.6DEEB82132@busybox.osuosl.org>
+References: <20160816110755.6DEEB82132@busybox.osuosl.org>
+Message-ID: <20160817164917.01972edc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages, like libbsd, use -isystem flags to provide so-called
-overrides to the system include files. In this particular case, this
-is used in a .pc file, then used by antoher package; pkgconf does not
-mangle this path; and eventually that other package ends up using
-/usr/include/bsd to search for headers.
+Hello,
 
-Our current toolchain wrapper is limited to looking fo -I and -L, so
-the paranoid check does not kick in.
+On Tue, 16 Aug 2016 12:58:47 +0200, Peter Korsgaard wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=f892015d78eb0f2cc7ddd754beabcf41bfa6da6b
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+> 
+> Bump docker-engine to the latest stable v1.12.0 from v1.12.0-rc3.
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Extend the paranoid check to also look for the -isystem option.
+I believe this should have been committed to master. Indeed, we
+packaged the -rc4 version, waiting for the final release, and this
+patch precisely bumps to the final release. So it should have landed in
+master IMO.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- toolchain/toolchain-wrapper.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+BTW, the patch description is wrong: it states that we're bumping from
+-rc3 to final, but it's really bumping from -rc4 to final.
 
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index b8b3cbe..8a9c3b3 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -241,17 +241,19 @@ int main(int argc, char **argv)
- 	/* Check for unsafe library and header paths */
- 	for (i = 1; i < argc; i++) {
- 
--		/* Skip options that do not start with -I and -L */
--		if (strncmp(argv[i], "-I", 2) && strncmp(argv[i], "-L", 2))
-+		/* Skip options that do not start with -I, -isystem or -L */
-+		if (   strncmp(argv[i], "-I", 2)
-+		    && strncmp(argv[i], "-L", 2)
-+		    && strcmp(argv[i], "-isystem"))
- 			continue;
- 
--		/* We handle two cases: first the case where -I/-L and
--		 * the path are separated by one space and therefore
--		 * visible as two separate options, and then the case
--		 * where they are stuck together forming one single
--		 * option.
-+		/* We handle two cases: first the case where -I/-L/-isystem
-+		 * and the path are separated by one space and therefore
-+		 * visible as two separate options, and then the case  where
-+		 * they are stuck together forming one single option.
-+		 * -isystem is necessarily in the first case.
- 		 */
--		if (argv[i][2] == '\0') {
-+		if (argv[i][2] == '\0' || argv[i][1] == 'i') {
- 			i++;
- 			if (i == argc)
- 				continue;
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
