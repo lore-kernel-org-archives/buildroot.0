@@ -1,35 +1,327 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 16 Aug 2016 21:24:22 -0300
-Subject: [Buildroot] BuildRoot cannot build powerpc64
-References: <F9C551623D2CBB4C9488801D14F864C6EE8B1000@ex-mb1.corp.adtran.com>
-Message-ID: <57b3aeb6944cf_7ec33f915a8b1b9c298e6@ultri3.mail>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 16 Aug 2016 22:05:54 -0300
+Subject: [Buildroot] [PATCH] jasper: add security patches
+Message-ID: <1471395954-27868-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Andy,
+Fixes:
+CVE-2016-2116 - Memory leak in jas_iccprof_createfrombuf causing
+memory consumption.
+CVE-2016-1577 - Double free vulnerability in jas_iccattrval_destroy.
+CVE-2016-1867 - out-of-bounds read in the jpc_pi_nextcprl() function.
+CVE-2015-5221 - Use-after-free and double-free flaws in Jasper
+JPEG-2000 library.
+CVE-2015-5203 - double free in jasper_image_stop_load()
 
-On Tue, Aug 16, 2016 at 07:43 PM, ANDY KENNEDY <ANDY.KENNEDY@adtran.com> wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/jasper/0008-fix-CVE-2016-2116.patch |  18 +++
+ package/jasper/0009-fix-CVE-2016-1577.patch |  18 +++
+ package/jasper/0010-fix-CVE-2016-1867.patch |  16 +++
+ package/jasper/0011-fix-CVE-2015-5221.patch |  23 ++++
+ package/jasper/0012-fix-CVE-2015-5203.patch | 187 ++++++++++++++++++++++++++++
+ 5 files changed, 262 insertions(+)
+ create mode 100644 package/jasper/0008-fix-CVE-2016-2116.patch
+ create mode 100644 package/jasper/0009-fix-CVE-2016-1577.patch
+ create mode 100644 package/jasper/0010-fix-CVE-2016-1867.patch
+ create mode 100644 package/jasper/0011-fix-CVE-2015-5221.patch
+ create mode 100644 package/jasper/0012-fix-CVE-2015-5203.patch
 
-> All,
-> 
-> I just downloaded 2016_08rc-1 and attempted to build an RFS for the
-> T-series PowerPC parts, which, I assume, are powerpc64 and e5500.  In
-> doing so, after I select powerpc64 I cannot select any library for the
-> toolchain as all of the config dependencies appear to be excluding
-> powerpc64 in the options.
-> 
-> Is this by design or oversight?
-
-With Ubuntu 16.04 I can reproduce the behavior only after selecting static libs.
-
-BR2_powerpc64=y
-BR2_powerpc_e5500=y
-BR2_STATIC_LIBS=y
-
-Maybe you can unblock your work if static build is not a strict requirement.
-
-Regards,
-Ricardo
+diff --git a/package/jasper/0008-fix-CVE-2016-2116.patch b/package/jasper/0008-fix-CVE-2016-2116.patch
+new file mode 100644
+index 0000000..1ceb395
+--- /dev/null
++++ b/package/jasper/0008-fix-CVE-2016-2116.patch
+@@ -0,0 +1,18 @@
++Description: Prevent jas_stream_t memory leak in jas_iccprof_createfrombuf()
++Author: Tyler Hicks <tyhicks () canonical com>
++
++From: http://seclists.org/oss-sec/2016/q1/att-507/CVE-2016-2116.patch
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++--- jasper-1.900.1-debian1.orig/src/libjasper/base/jas_icc.c
+++++ jasper-1.900.1-debian1/src/libjasper/base/jas_icc.c
++@@ -1693,6 +1693,8 @@ jas_iccprof_t *jas_iccprof_createfrombuf
++ 	jas_stream_close(in);
++ 	return prof;
++ error:
+++	if (in)
+++		jas_stream_close(in);
++ 	return 0;
++ }
++ 
+diff --git a/package/jasper/0009-fix-CVE-2016-1577.patch b/package/jasper/0009-fix-CVE-2016-1577.patch
+new file mode 100644
+index 0000000..cfe8b45
+--- /dev/null
++++ b/package/jasper/0009-fix-CVE-2016-1577.patch
+@@ -0,0 +1,18 @@
++Description: CVE-2016-1577: Prevent double-free in jas_iccattrval_destroy()
++Author: Tyler Hicks <tyhicks () canonical com>
++Bug-Ubuntu: https://launchpad.net/bugs/1547865
++
++From: http://seclists.org/oss-sec/2016/q1/att-507/CVE-2016-1577.patch
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++--- jasper-1.900.1-debian1.orig/src/libjasper/base/jas_icc.c
+++++ jasper-1.900.1-debian1/src/libjasper/base/jas_icc.c
++@@ -300,6 +300,7 @@ jas_iccprof_t *jas_iccprof_load(jas_stre
++ 				if (jas_iccprof_setattr(prof, tagtabent->tag, attrval))
++ 					goto error;
++ 				jas_iccattrval_destroy(attrval);
+++				attrval = 0;
++ 			} else {
++ #if 0
++ 				jas_eprintf("warning: skipping unknown tag type\n");
+diff --git a/package/jasper/0010-fix-CVE-2016-1867.patch b/package/jasper/0010-fix-CVE-2016-1867.patch
+new file mode 100644
+index 0000000..33f34c3
+--- /dev/null
++++ b/package/jasper/0010-fix-CVE-2016-1867.patch
+@@ -0,0 +1,16 @@
++From: http://pkgs.fedoraproject.org/cgit/rpms/jasper.git/plain/jasper-CVE-2016-1867.patch
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -urNp jasper-1.900.1.orig/src/libjasper/jpc/jpc_t2cod.c jasper-1.900.1.new/src/libjasper/jpc/jpc_t2cod.c
++--- jasper-1.900.1.orig/src/libjasper/jpc/jpc_t2cod.c	2016-08-11 14:34:31.795661973 +0200
+++++ jasper-1.900.1.new/src/libjasper/jpc/jpc_t2cod.c	2016-08-12 07:02:40.044860209 +0200
++@@ -429,7 +429,7 @@ static int jpc_pi_nextcprl(register jpc_
++ 	}
++ 
++ 	for (pi->compno = pchg->compnostart, pi->picomp =
++-	  &pi->picomps[pi->compno]; pi->compno < JAS_CAST(int, pchg->compnoend); ++pi->compno,
+++	  &pi->picomps[pi->compno]; pi->compno < JAS_CAST(int, pchg->compnoend) && pi->compno < pi->numcomps; ++pi->compno,
++ 	  ++pi->picomp) {
++ 		pirlvl = pi->picomp->pirlvls;
++ 		pi->xstep = pi->picomp->hsamp * (1 << (pirlvl->prcwidthexpn +
+diff --git a/package/jasper/0011-fix-CVE-2015-5221.patch b/package/jasper/0011-fix-CVE-2015-5221.patch
+new file mode 100644
+index 0000000..7dcbddd
+--- /dev/null
++++ b/package/jasper/0011-fix-CVE-2015-5221.patch
+@@ -0,0 +1,23 @@
++From: http://pkgs.fedoraproject.org/cgit/rpms/jasper.git/plain/jasper-CVE-2015-5221.patch
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -urNp jasper-1.900.1.orig/src/libjasper/mif/mif_cod.c jasper-1.900.1.new/src/libjasper/mif/mif_cod.c
++--- jasper-1.900.1.orig/src/libjasper/mif/mif_cod.c	2016-08-11 13:46:26.166415464 +0200
+++++ jasper-1.900.1.new/src/libjasper/mif/mif_cod.c	2016-08-11 14:17:20.507144931 +0200
++@@ -569,13 +569,13 @@ static int mif_process_cmpt(mif_hdr_t *h
++ 			break;
++ 		}
++ 	}
++-	jas_tvparser_destroy(tvp);
++ 	if (!cmpt->sampperx || !cmpt->samppery) {
++ 		goto error;
++ 	}
++ 	if (mif_hdr_addcmpt(hdr, hdr->numcmpts, cmpt)) {
++ 		goto error;
++ 	}
+++	jas_tvparser_destroy(tvp);
++ 	return 0;
++ 
++ error:
++
+diff --git a/package/jasper/0012-fix-CVE-2015-5203.patch b/package/jasper/0012-fix-CVE-2015-5203.patch
+new file mode 100644
+index 0000000..50f0613
+--- /dev/null
++++ b/package/jasper/0012-fix-CVE-2015-5203.patch
+@@ -0,0 +1,187 @@
++From: http://pkgs.fedoraproject.org/cgit/rpms/jasper.git/plain/jasper-CVE-2015-5203.patch
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -urNp jasper-1.900.1.orig/src/libjasper/base/jas_stream.c jasper-1.900.1.new/src/libjasper/base/jas_stream.c
++--- jasper-1.900.1.orig/src/libjasper/base/jas_stream.c	2016-08-11 13:35:09.160895769 +0200
+++++ jasper-1.900.1.new/src/libjasper/base/jas_stream.c	2016-08-11 13:39:33.800843489 +0200
++@@ -99,7 +99,7 @@ static int jas_strtoopenmode(const char
++ static void jas_stream_destroy(jas_stream_t *stream);
++ static jas_stream_t *jas_stream_create(void);
++ static void jas_stream_initbuf(jas_stream_t *stream, int bufmode, char *buf,
++-  int bufsize);
+++  size_t bufsize);
++ 
++ static int mem_read(jas_stream_obj_t *obj, char *buf, int cnt);
++ static int mem_write(jas_stream_obj_t *obj, char *buf, int cnt);
++@@ -168,7 +168,7 @@ static jas_stream_t *jas_stream_create()
++ 	return stream;
++ }
++ 
++-jas_stream_t *jas_stream_memopen(char *buf, int bufsize)
+++jas_stream_t *jas_stream_memopen(char *buf, size_t bufsize)
++ {
++ 	jas_stream_t *stream;
++ 	jas_stream_memobj_t *obj;
++@@ -570,7 +570,7 @@ int jas_stream_puts(jas_stream_t *stream
++ 	return 0;
++ }
++ 
++-char *jas_stream_gets(jas_stream_t *stream, char *buf, int bufsize)
+++char *jas_stream_gets(jas_stream_t *stream, char *buf, size_t bufsize)
++ {
++ 	int c;
++ 	char *bufptr;
++@@ -694,7 +694,7 @@ long jas_stream_tell(jas_stream_t *strea
++ \******************************************************************************/
++ 
++ static void jas_stream_initbuf(jas_stream_t *stream, int bufmode, char *buf,
++-  int bufsize)
+++  size_t bufsize)
++ {
++ 	/* If this function is being called, the buffer should not have been
++ 	  initialized yet. */
++@@ -987,7 +987,7 @@ static int mem_read(jas_stream_obj_t *ob
++ 	return cnt;
++ }
++ 
++-static int mem_resize(jas_stream_memobj_t *m, int bufsize)
+++static int mem_resize(jas_stream_memobj_t *m, size_t bufsize)
++ {
++ 	unsigned char *buf;
++ 
++diff -urNp jasper-1.900.1.orig/src/libjasper/include/jasper/jas_stream.h jasper-1.900.1.new/src/libjasper/include/jasper/jas_stream.h
++--- jasper-1.900.1.orig/src/libjasper/include/jasper/jas_stream.h	2007-01-19 22:43:04.000000000 +0100
+++++ jasper-1.900.1.new/src/libjasper/include/jasper/jas_stream.h	2016-08-11 13:41:27.841153595 +0200
++@@ -215,7 +215,7 @@ typedef struct {
++ 	uchar *bufstart_;
++ 
++ 	/* The buffer size. */
++-	int bufsize_;
+++	size_t bufsize_;
++ 
++ 	/* The current position in the buffer. */
++ 	uchar *ptr_;
++@@ -267,7 +267,7 @@ typedef struct {
++ 	uchar *buf_;
++ 
++ 	/* The allocated size of the buffer for holding file data. */
++-	int bufsize_;
+++	size_t bufsize_;
++ 
++ 	/* The length of the file. */
++ 	int_fast32_t len_;
++@@ -291,7 +291,7 @@ typedef struct {
++ jas_stream_t *jas_stream_fopen(const char *filename, const char *mode);
++ 
++ /* Open a memory buffer as a stream. */
++-jas_stream_t *jas_stream_memopen(char *buf, int bufsize);
+++jas_stream_t *jas_stream_memopen(char *buf, size_t bufsize);
++ 
++ /* Open a file descriptor as a stream. */
++ jas_stream_t *jas_stream_fdopen(int fd, const char *mode);
++@@ -366,7 +366,7 @@ int jas_stream_printf(jas_stream_t *stre
++ int jas_stream_puts(jas_stream_t *stream, const char *s);
++ 
++ /* Read a line of input from a stream. */
++-char *jas_stream_gets(jas_stream_t *stream, char *buf, int bufsize);
+++char *jas_stream_gets(jas_stream_t *stream, char *buf, size_t bufsize);
++ 
++ /* Look at the next character to be read from a stream without actually
++   removing it from the stream. */
++diff -urNp jasper-1.900.1.orig/src/libjasper/jpc/jpc_qmfb.c jasper-1.900.1.new/src/libjasper/jpc/jpc_qmfb.c
++--- jasper-1.900.1.orig/src/libjasper/jpc/jpc_qmfb.c	2016-08-11 13:35:09.170895681 +0200
+++++ jasper-1.900.1.new/src/libjasper/jpc/jpc_qmfb.c	2016-08-11 13:45:20.847809678 +0200
++@@ -305,7 +305,7 @@ jpc_qmfb2d_t jpc_ns_qmfb2d = {
++ void jpc_qmfb_split_row(jpc_fix_t *a, int numcols, int parity)
++ {
++ 
++-	int bufsize = JPC_CEILDIVPOW2(numcols, 1);
+++	size_t bufsize = JPC_CEILDIVPOW2(numcols, 1);
++ 	jpc_fix_t splitbuf[QMFB_SPLITBUFSIZE];
++ 	jpc_fix_t *buf = splitbuf;
++ 	register jpc_fix_t *srcptr;
++@@ -365,7 +365,7 @@ void jpc_qmfb_split_col(jpc_fix_t *a, in
++   int parity)
++ {
++ 
++-	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
+++	size_t bufsize = JPC_CEILDIVPOW2(numrows, 1);
++ 	jpc_fix_t splitbuf[QMFB_SPLITBUFSIZE];
++ 	jpc_fix_t *buf = splitbuf;
++ 	register jpc_fix_t *srcptr;
++@@ -425,7 +425,7 @@ void jpc_qmfb_split_colgrp(jpc_fix_t *a,
++   int parity)
++ {
++ 
++-	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
+++	size_t bufsize = JPC_CEILDIVPOW2(numrows, 1);
++ 	jpc_fix_t splitbuf[QMFB_SPLITBUFSIZE * JPC_QMFB_COLGRPSIZE];
++ 	jpc_fix_t *buf = splitbuf;
++ 	jpc_fix_t *srcptr;
++@@ -506,7 +506,7 @@ void jpc_qmfb_split_colres(jpc_fix_t *a,
++   int stride, int parity)
++ {
++ 
++-	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
+++	size_t bufsize = JPC_CEILDIVPOW2(numrows, 1);
++ 	jpc_fix_t splitbuf[QMFB_SPLITBUFSIZE * JPC_QMFB_COLGRPSIZE];
++ 	jpc_fix_t *buf = splitbuf;
++ 	jpc_fix_t *srcptr;
++@@ -586,7 +586,7 @@ void jpc_qmfb_split_colres(jpc_fix_t *a,
++ void jpc_qmfb_join_row(jpc_fix_t *a, int numcols, int parity)
++ {
++ 
++-	int bufsize = JPC_CEILDIVPOW2(numcols, 1);
+++	size_t bufsize = JPC_CEILDIVPOW2(numcols, 1);
++ 	jpc_fix_t joinbuf[QMFB_JOINBUFSIZE];
++ 	jpc_fix_t *buf = joinbuf;
++ 	register jpc_fix_t *srcptr;
++@@ -643,7 +643,7 @@ void jpc_qmfb_join_col(jpc_fix_t *a, int
++   int parity)
++ {
++ 
++-	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
+++	size_t bufsize = JPC_CEILDIVPOW2(numrows, 1);
++ 	jpc_fix_t joinbuf[QMFB_JOINBUFSIZE];
++ 	jpc_fix_t *buf = joinbuf;
++ 	register jpc_fix_t *srcptr;
++@@ -700,7 +700,7 @@ void jpc_qmfb_join_colgrp(jpc_fix_t *a,
++   int parity)
++ {
++ 
++-	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
+++	size_t bufsize = JPC_CEILDIVPOW2(numrows, 1);
++ 	jpc_fix_t joinbuf[QMFB_JOINBUFSIZE * JPC_QMFB_COLGRPSIZE];
++ 	jpc_fix_t *buf = joinbuf;
++ 	jpc_fix_t *srcptr;
++@@ -778,7 +778,7 @@ void jpc_qmfb_join_colres(jpc_fix_t *a,
++   int stride, int parity)
++ {
++ 
++-	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
+++	size_t bufsize = JPC_CEILDIVPOW2(numrows, 1);
++ 	jpc_fix_t joinbuf[QMFB_JOINBUFSIZE * JPC_QMFB_COLGRPSIZE];
++ 	jpc_fix_t *buf = joinbuf;
++ 	jpc_fix_t *srcptr;
++diff -urNp jasper-1.900.1.orig/src/libjasper/mif/mif_cod.c jasper-1.900.1.new/src/libjasper/mif/mif_cod.c
++--- jasper-1.900.1.orig/src/libjasper/mif/mif_cod.c	2016-08-11 13:35:09.179895601 +0200
+++++ jasper-1.900.1.new/src/libjasper/mif/mif_cod.c	2016-08-11 13:46:26.166415464 +0200
++@@ -107,7 +107,7 @@ static int mif_hdr_put(mif_hdr_t *hdr, j
++ static int mif_hdr_addcmpt(mif_hdr_t *hdr, int cmptno, mif_cmpt_t *cmpt);
++ static mif_cmpt_t *mif_cmpt_create(void);
++ static void mif_cmpt_destroy(mif_cmpt_t *cmpt);
++-static char *mif_getline(jas_stream_t *jas_stream, char *buf, int bufsize);
+++static char *mif_getline(jas_stream_t *jas_stream, char *buf, size_t bufsize);
++ static int mif_getc(jas_stream_t *in);
++ static mif_hdr_t *mif_makehdrfromimage(jas_image_t *image);
++ 
++@@ -657,7 +657,7 @@ static void mif_cmpt_destroy(mif_cmpt_t
++ * MIF parsing code.
++ \******************************************************************************/
++ 
++-static char *mif_getline(jas_stream_t *stream, char *buf, int bufsize)
+++static char *mif_getline(jas_stream_t *stream, char *buf, size_t bufsize)
++ {
++ 	int c;
++ 	char *bufptr;
+-- 
+2.7.3
