@@ -1,43 +1,32 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Wed, 17 Aug 2016 06:44:16 +0000
-Subject: [Buildroot] [PATCH] gmp: disable assembly for arc
-In-Reply-To: <87bn0txnp2.fsf@dell.be.48ers.dk>
-References: <1471272107-17275-1-git-send-email-vzakhar@synopsys.com>
- <87bn0txnp2.fsf@dell.be.48ers.dk>
-Message-ID: <1471416256.19853.54.camel@synopsys.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Aug 2016 08:47:39 +0200
+Subject: [Buildroot] [git commit] website/news.html: fix 2016.08-rc1 release
+	date
+Message-ID: <20160817065002.28B2B821FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=d2e18fd66a76be4df13b81f772976098625a5b57
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-yes, I am just working on fixing it in upstream gmp and hope fix will be send soon.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/news.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks.
-
-On Tue, 2016-08-16 at 07:55 +0200, Peter Korsgaard wrote:
-> > 
-> > > 
-> > > > 
-> > > > > 
-> > > > > > 
-> > > > > > "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
-> ?> It has different inline assembly constraints that
-> ?> are not supported after update to gcc-6.
-> 
-> ?> Fixes:
-> ?> http://autobuild.buildroot.net/results/c91/c9143eec0834017d57d5352d6fc95b5fae38da00//
-> ?> and a lot of other failures of gmp-6.1.1 for ARC.
-> 
-> ?> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-> 
-> Committed, thanks.
-> 
-> Are you working on getting this fixed in upstream gcc/gmp for future
-> releases?
-> 
--- 
-Best regards,
-Vlad Zakharov <vzakhar@synopsys.com>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 9fd276d..8c9dbc7 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -14,7 +14,7 @@
+     <div class="timeline-panel">
+       <div class="timeline-heading">
+ 	<h4 class="timeline-title">2016.08-rc1 released</h4>
+-	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 May 2016</small></p>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>6 August 2016</small></p>
+       </div>
+       <div class="timeline-body">
+ 	<p>We have a new release candidate! Lots of
