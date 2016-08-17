@@ -1,114 +1,43 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 16 Aug 2016 20:23:47 -0500
-Subject: [Buildroot] [PATCH] skeleton: /etc/network/interface.d/* support
-In-Reply-To: <D88C6F90-1ED3-40EF-8D3A-C4CEB3382603@gmail.com>
-References: <1471360870-53982-1-git-send-email-matthew.weber@rockwellcollins.com>
- <867AC111-F9FE-4F1D-9942-410B82365A8C@gmail.com>
- <CANQCQpaLNO75fjES2UoXkMf4VG4QZ91mB9HDDasabhQ7RgJOYg@mail.gmail.com>
- <D88C6F90-1ED3-40EF-8D3A-C4CEB3382603@gmail.com>
-Message-ID: <CANQCQpbLVN3XD8zn2J3DGYG+rHwCP30DGFNzfT4wgiEM_Oo6vw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 16 Aug 2016 22:28:59 -0300
+Subject: [Buildroot] [PATCH] memcached: bump to version 1.4.30
+Message-ID: <1471397339-31204-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Khem,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/memcached/memcached.hash | 6 +++---
+ package/memcached/memcached.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Aug 16, 2016 3:33 PM, "Khem Raj" <raj.khem@gmail.com> wrote:
->
->
->> On Aug 16, 2016, at 1:25 PM, Matthew Weber <
-matthew.weber@rockwellcollins.com> wrote:
->>
->> Khem,
->>
->> On Tue, Aug 16, 2016 at 11:34 AM, Khem Raj <raj.khem@gmail.com> wrote:
->>>
->>>
->>> > On Aug 16, 2016, at 8:21 AM, Matt Weber <
-matthew.weber@rockwellcollins.com> wrote:
->>> >
->>> > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
->>> > ---
->>> > package/skeleton/skeleton.mk                    | 2 ++
->>> > system/device_table.txt                         | 1 +
->>> > system/skeleton/etc/network/interfaces.d/.empty | 0
->>> > 3 files changed, 3 insertions(+)
->>> > create mode 100644 system/skeleton/etc/network/interfaces.d/.empty
->>> >
->>> > diff --git a/package/skeleton/skeleton.mk b/package/skeleton/
-skeleton.mk
->>> > index 1000161..c9dce10 100644
->>> > --- a/package/skeleton/skeleton.mk
->>> > +++ b/package/skeleton/skeleton.mk
->>> > @@ -151,6 +151,8 @@ define SKELETON_SET_NETWORK_LOCALHOST
->>> >               echo ;                                               \
->>> >               echo "auto lo";                                      \
->>> >               echo "iface lo inet loopback";                       \
->>> > +             echo ;                                               \
->>> > +             echo "source interfaces.d/*";                        \
->>>
->>> its portable to use . instead of source keyword
->>
->>
->> That doesn't seem to work in this case.  Is seems it's keying off the
-word source vs it being more shell like.
->>
->
->
-> Is it run in Make context and not shell context ?
-
-The ifupdown daemon consumes the file,  it isn't executed
-
->
->>>
->>> >       ) > $(TARGET_DIR)/etc/network/interfaces
->>> > endef
->>> >
->>> > diff --git a/system/device_table.txt b/system/device_table.txt
->>> > index dc1af51..69b1d46 100644
->>> > --- a/system/device_table.txt
->>> > +++ b/system/device_table.txt
->>> > @@ -17,5 +17,6 @@
->>> > /etc/network/if-pre-up.d              d       755     0       0
- -       -       -       -       -
->>> > /etc/network/if-down.d                        d       755     0
- 0       -       -       -       -       -
->>> > /etc/network/if-post-down.d           d       755     0       0
- -       -       -       -       -
->>> > +/etc/network/interfaces.d            d       755     0       0
- -       -       -       -       -
->>> > # uncomment this to allow starting x as non-root
->>> > #/usr/X11R6/bin/Xfbdev                        f       4755    0
- 0       -       -       -       -       -
->>> > diff --git a/system/skeleton/etc/network/interfaces.d/.empty
-b/system/skeleton/etc/network/interfaces.d/.empty
->>> > new file mode 100644
->>> > index 0000000..e69de29
->>> > --
->>> > 1.9.1
->>> >
->>> > _______________________________________________
->>> > buildroot mailing list
->>> > buildroot at busybox.net
->>> > http://lists.busybox.net/mailman/listinfo/buildroot
->>>
->>
->>
->>
->> --
->> Matthew L Weber / Pr Software Engineer
->> Airborne Information Systems / Security Systems and Software / Secure
-Platforms
->> MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
->> www.rockwellcollins.com
->>
->> Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and sent
-to matthew.weber at corp.rockwellcollins.com.
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160816/78fe30df/attachment.html>
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index ab57b51..b1353b2 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,4 +1,4 @@
+-# From http://www.memcached.org/files/memcached-1.4.29.tar.gz.sha1
+-sha1	8994b4d0dbcc8d536f3d6cd4763489a3c51ca44b	memcached-1.4.29.tar.gz
++# From http://www.memcached.org/files/memcached-1.4.30.tar.gz.sha1
++sha1	bb8644a4110932e331d1539f0435bc6a0e558827	memcached-1.4.30.tar.gz
+ # Calculated based on the hash above
+-sha256	c61a3a7f9c82e574559797bbf4bb01ad8b79e436ca80b8e46f5b51ae39b03d0b	memcached-1.4.29.tar.gz
++sha256	e0bea597c9082557f3357f63db08c3d5121ccc8502f300a48d4cb84d22e8be5f	memcached-1.4.30.tar.gz
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index 42742ff..b40ca84 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MEMCACHED_VERSION = 1.4.29
++MEMCACHED_VERSION = 1.4.30
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-- 
+2.7.3
