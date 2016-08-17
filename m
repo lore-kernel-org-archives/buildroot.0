@@ -1,100 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 17 Aug 2016 09:41:50 -0300
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Aug 2016 15:03:22 +0200
 Subject: [Buildroot] [PATCH] busybox: add upstream fixes for 1.25.0
-Message-ID: <1471437710-8127-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <1471437710-8127-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 17 Aug 2016 09:41:50 -0300")
+References: <1471437710-8127-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877fbfsg2t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patches to fix gzip (bug #9131 - incorrect compression
-levels), ip (route add bug) and ntpd (CVE-2016-6301 - NTP server denial
-of service).
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/busybox/0003-gzip.patch | 18 ++++++++++++++++++
- package/busybox/0004-ip.patch   | 18 ++++++++++++++++++
- package/busybox/0005-ntpd.patch | 20 ++++++++++++++++++++
- 3 files changed, 56 insertions(+)
- create mode 100644 package/busybox/0003-gzip.patch
- create mode 100644 package/busybox/0004-ip.patch
- create mode 100644 package/busybox/0005-ntpd.patch
+ > Add upstream patches to fix gzip (bug #9131 - incorrect compression
+ > levels), ip (route add bug) and ntpd (CVE-2016-6301 - NTP server denial
+ > of service).
 
-diff --git a/package/busybox/0003-gzip.patch b/package/busybox/0003-gzip.patch
-new file mode 100644
-index 0000000..f9b321f
---- /dev/null
-+++ b/package/busybox/0003-gzip.patch
-@@ -0,0 +1,18 @@
-+From upstream: https://busybox.net/downloads/fixes-1.25.0/
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- busybox-1.25.0/archival/gzip.c
-++++ busybox-1.25.0-gzip/archival/gzip.c
-+@@ -2220,10 +2220,7 @@ int gzip_main(int argc UNUSED_PARAM, cha
-+ 	opt >>= ENABLE_GUNZIP ? 7 : 5; /* drop cfv[dt]qn bits */
-+ 	if (opt == 0)
-+ 		opt = 1 << 6; /* default: 6 */
-+-	/* Map 1..3 to 4 */
-+-	if (opt & 0x7)
-+-		opt |= 1 << 4;
-+-	opt = ffs(opt >> 3);
-++	opt = ffs(opt >> 4); /* Maps -1..-4 to [0], -5 to [1] ... -9 to [5] */
-+ 	max_chain_length = 1 << gzip_level_config[opt].chain_shift;
-+ 	good_match	 = gzip_level_config[opt].good;
-+ 	max_lazy_match	 = gzip_level_config[opt].lazy2 * 2;
-diff --git a/package/busybox/0004-ip.patch b/package/busybox/0004-ip.patch
-new file mode 100644
-index 0000000..d392adc
---- /dev/null
-+++ b/package/busybox/0004-ip.patch
-@@ -0,0 +1,18 @@
-+From upstream: https://busybox.net/downloads/fixes-1.25.0/
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- busybox-1.25.0/networking/libiproute/iproute.c
-++++ busybox-1.25.0-ip/networking/libiproute/iproute.c
-+@@ -362,10 +362,9 @@ IF_FEATURE_IP_RULE(ARG_table,)
-+ 		req.r.rtm_scope = RT_SCOPE_NOWHERE;
-+ 
-+ 	if (cmd != RTM_DELROUTE) {
-++		req.r.rtm_scope = RT_SCOPE_UNIVERSE;
-+ 		if (RTPROT_BOOT != 0)
-+ 			req.r.rtm_protocol = RTPROT_BOOT;
-+-		if (RT_SCOPE_UNIVERSE != 0)
-+-			req.r.rtm_scope = RT_SCOPE_UNIVERSE;
-+ 		if (RTN_UNICAST != 0)
-+ 			req.r.rtm_type = RTN_UNICAST;
-+ 	}
-diff --git a/package/busybox/0005-ntpd.patch b/package/busybox/0005-ntpd.patch
-new file mode 100644
-index 0000000..f652ec6
---- /dev/null
-+++ b/package/busybox/0005-ntpd.patch
-@@ -0,0 +1,20 @@
-+From upstream: https://busybox.net/downloads/fixes-1.25.0/
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- busybox-1.25.0/networking/ntpd.c
-++++ busybox-1.25.0-ntpd/networking/ntpd.c
-+@@ -2051,6 +2051,13 @@ recv_and_process_client_pkt(void /*int f
-+ 		goto bail;
-+ 	}
-+ 
-++	/* Respond only to client and symmetric active packets */
-++	if ((msg.m_status & MODE_MASK) != MODE_CLIENT
-++	 && (msg.m_status & MODE_MASK) != MODE_SYM_ACT
-++	) {
-++		goto bail;
-++	}
-++
-+ 	query_status = msg.m_status;
-+ 	query_xmttime = msg.m_xmttime;
-+ 
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-2.7.3
+Bye, Peter Korsgaard
