@@ -1,44 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Aug 2016 08:22:11 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.14.x and 4.{4, 6,
-	7}.x series
-Message-ID: <20160817064348.E28EA802DD@busybox.osuosl.org>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Wed, 17 Aug 2016 06:44:16 +0000
+Subject: [Buildroot] [PATCH] gmp: disable assembly for arc
+In-Reply-To: <87bn0txnp2.fsf@dell.be.48ers.dk>
+References: <1471272107-17275-1-git-send-email-vzakhar@synopsys.com>
+ <87bn0txnp2.fsf@dell.be.48ers.dk>
+Message-ID: <1471416256.19853.54.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29a0a9f00ce4eb1553bfb0ffa33139c2c78bd657
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+yes, I am just working on fixing it in upstream gmp and hope fix will be send soon.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 771befb..3384cb0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -239,15 +239,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.75"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.76"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.18.39"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.30"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
--	default "4.4.17"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.18"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
--	default "4.6.6"		if BR2_KERNEL_HEADERS_4_6
--	default "4.7"		if BR2_KERNEL_HEADERS_4_7
-+	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
-+	default "4.7.1"		if BR2_KERNEL_HEADERS_4_7
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Thanks.
+
+On Tue, 2016-08-16 at 07:55 +0200, Peter Korsgaard wrote:
+> > 
+> > > 
+> > > > 
+> > > > > 
+> > > > > > 
+> > > > > > "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
+> ?> It has different inline assembly constraints that
+> ?> are not supported after update to gcc-6.
+> 
+> ?> Fixes:
+> ?> http://autobuild.buildroot.net/results/c91/c9143eec0834017d57d5352d6fc95b5fae38da00//
+> ?> and a lot of other failures of gmp-6.1.1 for ARC.
+> 
+> ?> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+> 
+> Committed, thanks.
+> 
+> Are you working on getting this fixed in upstream gcc/gmp for future
+> releases?
+> 
+-- 
+Best regards,
+Vlad Zakharov <vzakhar@synopsys.com>
