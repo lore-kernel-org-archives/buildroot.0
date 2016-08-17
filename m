@@ -1,43 +1,50 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 17 Aug 2016 23:19:36 +0200
-Subject: [Buildroot] [PATCH] pkg-cmake.mk: set CMAKE_SYSROOT variable in
-	toolchainfile.cmake
-Message-ID: <20160817211936.18458-1-s.martin49@gmail.com>
+From: Benjamin Kamath <kamath.ben@gmail.com>
+Date: Wed, 17 Aug 2016 14:25:35 -0700
+Subject: [Buildroot] [PATCH v2] support/download/git: Prioritize remote
+	archive
+Message-ID: <1471469135-19009-1-git-send-email-kamath.ben@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change enforces the CMAKE_SYSROOT value set in the toolchainfile.cmake.
+From: Benjamin Kamath <bkamath@spaceflight.com>
 
-This fix overrides the CMake heuristics used to guess it, and turns off some
-non-desirable behavior adding "-isystem ..." flags to the compiler command
-line, misleading the compiler and making the build failed due to some
-unfound standard headers.
+Attempt to do a remote archive since it shortcuts us past a few steps when
+available. Additionally. if the git server has uploadArchive.allowUnreachable
+set to true, then this method can also work on arbitrary sha1s, offering a huge
+speed advantage over a full clone.
 
-Fixes:
-  http://autobuild.buildroot.net/results/f7e/f7e92678e91a6cb15ccf32d4a7d75b39f49d6000/defconfig
-  (and others)
-
-Cc: Ben Boeckel <mathstuf@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Benjamin Kamath <bkamath@spaceflight.com>
 ---
- support/misc/toolchainfile.cmake.in | 1 +
- 1 file changed, 1 insertion(+)
+Changes v1 -> v2:
+    - Skip remote archive for repositories with submodules (suggested by Yann)
 
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index e550b8f..649b52d 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -19,6 +19,7 @@ set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@ ${CMAKE_EXE_LINKER_FLAGS}" CACHE
- set(CMAKE_INSTALL_SO_NO_EXE 0)
+ support/download/git | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/support/download/git b/support/download/git
+index 416cd1b..d060cbd 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -36,6 +36,17 @@ _git() {
+     eval ${GIT} "${@}"
+ }
  
- set(CMAKE_PROGRAM_PATH "${RELOCATED_HOST_DIR}/usr/bin")
-+set(CMAKE_SYSROOT "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
- set(CMAKE_FIND_ROOT_PATH "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
- set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
- set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
++# Try a remote archive, since it is as fast as a shallow clone and can give us
++# an archive directly. Also, if uploadArchive.allowUnreachable is set to true
++# on the remote, this will also work for arbitrary sha1s, and will offer a
++# considerable speedup over a full clone. This will not work for submodules.
++if [ ${recurse} -eq 0 ]; then
++    printf "Doing remote archive\n"
++    if _git archive --format=tar.gz --prefix=${basename}/ --remote=${repo} -o ${output} ${cset} 2>&1; then
++        exit 0
++    fi
++fi
++
+ # Try a shallow clone, since it is faster than a full clone - but that only
+ # works if the version is a ref (tag or branch). Before trying to do a shallow
+ # clone we check if ${cset} is in the list provided by git ls-remote. If not
 -- 
-2.9.3
+2.7.4
