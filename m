@@ -1,78 +1,56 @@
-From: Benjamin Kamath <kamath.ben@gmail.com>
-Date: Wed, 17 Aug 2016 14:13:28 -0700
-Subject: [Buildroot] [PATCH 1/1] support/download/git: Prioritize remote
-	archive
-In-Reply-To: <20160817210314.GG5778@free.fr>
-References: <1471461016-9660-1-git-send-email-kamath.ben@gmail.com>
- <20160817210314.GG5778@free.fr>
-Message-ID: <CAJsd3zJZ6o3dbCuRC8uZ6CE_41jqmVYbtRrkCQZhEkdmeG_t0Q@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 17 Aug 2016 23:18:42 +0200
+Subject: [Buildroot] Analysis of build results for 2016-08-05
+In-Reply-To: <20160809141506.GA28979@megas.kitware.com>
+References: <20160806063028.356101023A1@stock.ovh.net>
+ <20160807112654.7b520594@free-electrons.com>
+ <CAHXCMM+xOgCuMNHMSqj4tOP2jMGP7OPOLD1_x0_8HCgXb_h21g@mail.gmail.com>
+ <20160809141506.GA28979@megas.kitware.com>
+Message-ID: <CAHXCMMKG2e5BmaAwvLtJMC2-Q2m7kbrNKSBOfHDRYfbc_FQkGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 17, 2016 at 2:03 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Benjamin, All,
->
+Hi Ben, Thomas, all,
+
+(sorry for the delayed response :-|)
+
+On Tue, Aug 9, 2016 at 4:15 PM, Ben Boeckel <mathstuf@gmail.com> wrote:
+> On Sun, Aug 07, 2016 at 17:48:46 +0200, Samuel Martin wrote:
+>> It seems to be another error due to "-isystem
+>> $(STAGING_DIR)/usr/include" passed to g++ [1].
 >>
->> +# Try a remote archive, since it is as fast as a shallow clone and can give us
->> +# an archive directly. Also, if uploadArchive.allowUnreachable is set to true
->> +# on the remote, this will also work for arbitrary sha1s, and will offer a
->> +# considerable speedup over a full clone.
->> +printf "Doing remote archive\n"
->> +if _git archive --format=tar.gz --prefix=${basename}/ --remote=${repo} -o ${output} ${cset} 2>&1; then
->> +    exit 0
->> +fi
->
-> NAK in the state.
-Is this related to the following paragraph or a separate issue?
-
->
-> If the package needs submodules, we can't ask the remote to generate
-> the archive for us, because git-archive does not know how to include
-> submodules.
->
-> So, maybe this would work:
->
->     if [ ${recurse} -eq 0 ]; then
->         if _git blabla remote archive; then
->             exit 0
->         fi
->     fi
-Indeed, I hadn't thought about submodules. I think your suggestion
-would be sufficient. After all,
-it should fall back to the older behavior upon failure.
-
->
-> Also, as stated by Thomas, we want to generate reproducible archives, so
-> that we can check the hashes of archives. We go at great length to
-> generate such archives locally, but I don't see a guarantee that the
-> remote archive would be reproducible.
-
-I'm quite certain the archive is reproducible but this requires a bit
-more investigation
-to prove.
-
->
-> Regards,
-> Yann E. MORIN.
->
->>  # Try a shallow clone, since it is faster than a full clone - but that only
->>  # works if the version is a ref (tag or branch). Before trying to do a shallow
->>  # clone we check if ${cset} is in the list provided by git ls-remote. If not
->> --
->> 2.7.4
+>> AFAICS, this is done by CMake when generating the flags.make files.
+>> Note that removing it from the CXX_INCLUDES variables in all generated
+>> flags.make prevent from triggering this error.
 >>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+>> It is not clear to me whether it is a gcc-6.x bug or a CMake one.
+>> According to fedora developers, this is not a gcc-6 bug [2].
+>> Ben, do you have any idea?
 >
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+> It might be that CMake is having trouble determining the paths that the
+> compiler uses by default? It should exclude any such directories from
+> the -I setup (though -isystem may change this behavior). CMake builds up
+> this variable:
+>
+>     https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_IMPLICIT_INCLUDE_DIRECTORIES.html
+>
+> based on the platform. It prefixes these with the value of CMAKE_SYSROOT
+> to create the list of implicit directories it ignores when building up
+> -I lines. Is CMAKE_SYSROOT not set properly?
+
+Good catch!
+CMAKE_SYSROOT is not set in the toolchainfile. Setting it is enough to
+fix this problem.
+It seems the heuristics used by CMake is somehow confused with gcc-6.
+
+Anyway, I'll post shortly a patch with this fix.
+
+Ben, thanks a lot for your valuable insights.
+
+Regards,
+
+-- 
+Samuel
