@@ -1,54 +1,48 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 17 Aug 2016 18:01:10 +0200
-Subject: [Buildroot] [PATCH v2 3/3] docs: libtool patches are not handled by
-	legal-info infrastructure.
-In-Reply-To: <1471449670-13421-1-git-send-email-romain.naour@gmail.com>
-References: <1471449670-13421-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1471449670-13421-3-git-send-email-romain.naour@gmail.com>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Wed, 17 Aug 2016 19:19:34 +0300
+Subject: [Buildroot] [PATCH] uclibc: ARC: Support syscall ABI v4
+Message-ID: <1471450774-8666-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- docs/manual/legal-notice.txt     | 4 ++++
- support/legal-info/README.header | 4 ++++
- 2 files changed, 8 insertions(+)
+When using with GCC 6 ABIv4 is required.
+Missing this patch leads to numerous runtime errors.
 
-diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
-index a4911f7..fd1e5aa 100644
---- a/docs/manual/legal-notice.txt
-+++ b/docs/manual/legal-notice.txt
-@@ -44,6 +44,10 @@ There you will find:
-   Patches that were applied are also saved, along with a file named +series+
-   that lists the patches in the order they were applied. Patches are under the
-   same license as the files that they modify.
-+  Note: Buildroot applies additional patches to Libtool scripts of
-+  autotools-based packages. These patches can be found under +support/libtool+
-+  in the buildroot source and are not saved with the package sources due to
-+  technical limitations. You may need to collect them manually.
- * A manifest file (one for host and one for target packages) listing the
-   configured packages, their version, license and related information.
-   Some of this information might not be defined in Buildroot; such items are
-diff --git a/support/legal-info/README.header b/support/legal-info/README.header
-index 1f3524f..ee34886 100644
---- a/support/legal-info/README.header
-+++ b/support/legal-info/README.header
-@@ -20,6 +20,10 @@ This material is composed of the following items.
-    with a file named 'series' that lists the patches in the order they were
-    applied. Patches are under the same license as the files that they modify
-    in the original package.
-+   Note: Buildroot applies additional patches to Libtool scripts of
-+   autotools-based packages. These patches can be found under support/libtool
-+   in the buildroot source and are not saved with the package sources due to
-+   technical limitations. You may need to collect them manually.
-  * A manifest file listing the configured packages and related information.
-  * The license text of the packages; they have been saved in the licenses/
-    subdirectory.
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+---
+ ...ng-devel-uClibc-ARC-Support-syscall-ABI-v4.patch | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 package/uclibc/0003-uclibc-ng-devel-uClibc-ARC-Support-syscall-ABI-v4.patch
+
+diff --git a/package/uclibc/0003-uclibc-ng-devel-uClibc-ARC-Support-syscall-ABI-v4.patch b/package/uclibc/0003-uclibc-ng-devel-uClibc-ARC-Support-syscall-ABI-v4.patch
+new file mode 100644
+index 0000000..14e24d0
+--- /dev/null
++++ b/package/uclibc/0003-uclibc-ng-devel-uClibc-ARC-Support-syscall-ABI-v4.patch
+@@ -0,0 +1,21 @@
++diff --git a/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h b/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h
++index 51607240cd82..94e089d5dfa8 100755
++--- a/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h
+++++ b/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h
++@@ -41,8 +41,14 @@
++ /* The default ';' is a comment on ARC. */
++ #define __UCLIBC_ASM_LINE_SEP__ `
++ 
++-/* does your target align 64bit values in register pairs ? (32bit arches only) */
++-#if defined(__A7__)
+++/* does your target align 64bit values in register pairs ? (32bit arches only)
+++ *  - ARC700 never had any constraint on reg pairs (even if ABI v3)
+++ *  - Inital HS ABI (v3: non upstream gcc) had 64-bit data aligned in even-odd
+++ *     reg pairs (thus allowed reg holes when passing such args to calls)
+++ *  - Upstream gcc (6.x) HS ABI doesn't have that restriction
+++ */
+++
+++#if defined(__A7__) || (__GNUC__ > 4)
++ #undef __UCLIBC_SYSCALL_ALIGN_64BIT__
++ #else
++ #define __UCLIBC_SYSCALL_ALIGN_64BIT__
 -- 
 2.5.5
