@@ -1,48 +1,61 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Wed, 17 Aug 2016 19:19:34 +0300
-Subject: [Buildroot] [PATCH] uclibc: ARC: Support syscall ABI v4
-Message-ID: <1471450774-8666-1-git-send-email-vzakhar@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 17 Aug 2016 19:19:38 +0200
+Subject: [Buildroot] [PATCH v2 2/3] docs: update legal-notice.txt
+In-Reply-To: <1471449670-13421-2-git-send-email-romain.naour@gmail.com>
+References: <1471449670-13421-1-git-send-email-romain.naour@gmail.com>
+ <1471449670-13421-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160817171938.GE5778@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using with GCC 6 ABIv4 is required.
-Missing this patch leads to numerous runtime errors.
+Romain, All,
 
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
----
- ...ng-devel-uClibc-ARC-Support-syscall-ABI-v4.patch | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 package/uclibc/0003-uclibc-ng-devel-uClibc-ARC-Support-syscall-ABI-v4.patch
+On 2016-08-17 18:01 +0200, Romain Naour spake thusly:
+> Since 1273636fc686cd788b6de87be75dd0726cf8676c applied patches are also
+> saved.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
-diff --git a/package/uclibc/0003-uclibc-ng-devel-uClibc-ARC-Support-syscall-ABI-v4.patch b/package/uclibc/0003-uclibc-ng-devel-uClibc-ARC-Support-syscall-ABI-v4.patch
-new file mode 100644
-index 0000000..14e24d0
---- /dev/null
-+++ b/package/uclibc/0003-uclibc-ng-devel-uClibc-ARC-Support-syscall-ABI-v4.patch
-@@ -0,0 +1,21 @@
-+diff --git a/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h b/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h
-+index 51607240cd82..94e089d5dfa8 100755
-+--- a/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h
-++++ b/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h
-+@@ -41,8 +41,14 @@
-+ /* The default ';' is a comment on ARC. */
-+ #define __UCLIBC_ASM_LINE_SEP__ `
-+ 
-+-/* does your target align 64bit values in register pairs ? (32bit arches only) */
-+-#if defined(__A7__)
-++/* does your target align 64bit values in register pairs ? (32bit arches only)
-++ *  - ARC700 never had any constraint on reg pairs (even if ABI v3)
-++ *  - Inital HS ABI (v3: non upstream gcc) had 64-bit data aligned in even-odd
-++ *     reg pairs (thus allowed reg holes when passing such args to calls)
-++ *  - Upstream gcc (6.x) HS ABI doesn't have that restriction
-++ */
-++
-++#if defined(__A7__) || (__GNUC__ > 4)
-+ #undef __UCLIBC_SYSCALL_ALIGN_64BIT__
-+ #else
-+ #define __UCLIBC_SYSCALL_ALIGN_64BIT__
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  docs/manual/legal-notice.txt | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
+> index 0572dae..a4911f7 100644
+> --- a/docs/manual/legal-notice.txt
+> +++ b/docs/manual/legal-notice.txt
+> @@ -41,9 +41,9 @@ There you will find:
+>    +host-sources/+ subdirectories for target and host packages respectively.
+>    The source code for packages that set +<PKG>_REDISTRIBUTE = NO+ will not be
+>    saved.
+> -  Patches applied to some packages by Buildroot are distributed with the
+> -  Buildroot sources and are not duplicated in the +sources/+ and +host-sources/+
+> -  subdirectories.
+> +  Patches that were applied are also saved, along with a file named +series+
+> +  that lists the patches in the order they were applied. Patches are under the
+> +  same license as the files that they modify.
+>  * A manifest file (one for host and one for target packages) listing the
+>    configured packages, their version, license and related information.
+>    Some of this information might not be defined in Buildroot; such items are
+> -- 
+> 2.5.5
+> 
+
 -- 
-2.5.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
