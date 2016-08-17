@@ -1,26 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Aug 2016 15:03:55 +0200
-Subject: [Buildroot] [PATCH v2] m68k: flat one memory region works with
-	small kernel patch
-In-Reply-To: <20160817063754.GA8808@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Wed, 17 Aug 2016 08:37:54 +0200")
-References: <20160817063754.GA8808@waldemar-brodkorb.de>
-Message-ID: <8737m3sg1w.fsf@dell.be.48ers.dk>
+Date: Wed, 17 Aug 2016 15:04:02 +0200
+Subject: [Buildroot] [PATCH] memcached: bump to version 1.4.30
+In-Reply-To: <1471397339-31204-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 16 Aug 2016 22:28:59 -0300")
+References: <1471397339-31204-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87y43vr1h9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Greg Ungerer fixed recently a bug in the Linux kernel, which
- > allows to use one memory region again.
-
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
- > ---
- > v1 -> v2:
- >  - fix stupid logic error, spotted by Baruch
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed to next, thanks.
 
