@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Aug 2016 21:25:18 +0200
-Subject: [Buildroot] [PATCH 2/2] fwup: fix static linking issues
-In-Reply-To: <1471544678-12514-2-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1471544678-12514-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1471544678-12514-2-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160818212518.1f540c76@free-electrons.com>
+Date: Thu, 18 Aug 2016 21:27:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/simh: new package
+In-Reply-To: <20160816194236.GC10734@free.fr>
+References: <1471297357-11637-1-git-send-email-lothar.felten@gmail.com>
+ <20160816035044.GB3368@tarshish>
+ <9ba51c53-ddb3-8a59-a3b0-9ba8e3e52f3e@gmail.com>
+ <20160816142950.GH3368@tarshish> <20160816194236.GC10734@free.fr>
+Message-ID: <20160818212725.65c9b926@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +15,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 18 Aug 2016 23:54:38 +0530, Rahul Bedarkar wrote:
-> In case of static linking, we need to link against dependencies of
-> dependencies. When static libs are enabled, pkg-config seems to be
-> outputting private libs implicitly without need of --static option.
-> 
-> Instead of manually adding libs for dependencies of libconfuse and
-> libarchive, use pkg-config.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/69d/69d410e13a49b0ed34c501ba27d32df3269adb16/
-> 
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+On Tue, 16 Aug 2016 21:42:36 +0200, Yann E. MORIN wrote:
 
-We already have some patches from Frank updating fwup:
-especially https://patchwork.ozlabs.org/patch/657961/, which I believe
-fixes the same issue, by using pkg-config: see commit
-https://github.com/fhunleth/fwup/commit/d770b51ec097480db6d4ddeefd8e2ae21059b090
-in fwup upstream.
+> > I don't think so. Not sure how our legal info infra handles binary document 
+> > formats.  
+> 
+> FOO_LICENSE_FILES are just copied; we don't do anything with them. So
+> it's fine to list a .doc in there.
 
-Thanks,
+Not quite true: we generate a big .txt file with the concatenation of
+the license text of all packages, see licenses.txt and
+host-licenses.txt.
 
 Thomas
 -- 
