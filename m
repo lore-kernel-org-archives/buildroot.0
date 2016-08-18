@@ -1,29 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 18 Aug 2016 17:31:24 +0000
-Subject: [Buildroot] [Bug 9166] Missing overlays directory in VFAT image for
- raspberry pi 3
-In-Reply-To: <bug-9166-163@https.bugs.busybox.net/>
-References: <bug-9166-163@https.bugs.busybox.net/>
-Message-ID: <bug-9166-163-c6cNPhjkmW@https.bugs.busybox.net/>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Thu, 18 Aug 2016 23:54:37 +0530
+Subject: [Buildroot] [PATCH 1/2] libconfuse: add optional dependency on
+	gettext
+Message-ID: <1471544678-12514-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9166
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+ package/libconfuse/Config.in     | 1 +
+ package/libconfuse/libconfuse.mk | 4 ++++
+ 2 files changed, 5 insertions(+)
 
---- Comment #3 from diez.roggisch at ableton.com ---
-First, my apologies for violating the unknown protocol. Won't happen again.
-
-I checked, and matter of factly the patch would break buildroot if
-BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS was not selected. So it's moot
-anyway.
-
-I still would like a solution that takes care of this semi-automatically, as
-it's simply surprising for a developer IMHO. But I will argue for that once
-(and if) I find one.
-
+diff --git a/package/libconfuse/Config.in b/package/libconfuse/Config.in
+index be18cbb..7dedd83 100644
+--- a/package/libconfuse/Config.in
++++ b/package/libconfuse/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBCONFUSE
+ 	bool "libconfuse"
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  LibConfuse is a configuration file parser library written in
+ 	  C. It supports sections and (lists of) values (strings,
+diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+index fea90f1..e289798 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -14,5 +14,9 @@ HOST_LIBCONFUSE_DEPENDENCIES = host-flex
+ LIBCONFUSE_LICENSE = ISC
+ LIBCONFUSE_LICENSE_FILES = LICENSE
+ 
++ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
++LIBCONFUSE_DEPENDENCIES += gettext
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.6.2
