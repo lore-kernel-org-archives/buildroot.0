@@ -1,46 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Aug 2016 23:24:14 +0200
-Subject: [Buildroot] [PATCH 1/2] package/lldpd: disable use of libbsd
-In-Reply-To: <1471554082-24303-1-git-send-email-yann.morin.1998@free.fr>
-References: <1471554082-24303-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160818232414.4a44b95f@free-electrons.com>
+Date: Thu, 18 Aug 2016 23:25:22 +0200
+Subject: [Buildroot] [git commit] package/lldpd: explicit optional
+	dependencies
+Message-ID: <20160818212531.D39AD7FCAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4d17611eab903fc7985b895bb251616cc9b5a6f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 18 Aug 2016 23:01:21 +0200, Yann E. MORIN wrote:
-> libbsd installs at least one .pc file that contains a -isystem include
-> path (-isystem /usr.include/bsd), but -isystem is not munged by
-> pkg-config, so we end up using /usr/include/bsd which is not suitable
-> for the target. And breaks big time (see failures, below).
-> 
-> But using libbsd is completely optional. In fact, our lldpd.mk did not
-> even express the dependency on libbsd, so we may well have had builds
-> without libbsd.
-> 
-> The functionality brought in by using libbsd is very minor (just setting
-> the neighbour name in /proc/self/smdline), so we just make lldpd not use
-> libbsd at all. There is no --disable-libbsd or such, so we just patch it
-> out of configure.ac.
+check and valgrind are optional depenencies of lldpd, so we must depend
+on them when either is enabled.
 
-I don't like this fix, for two reasons:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lldpd/lldpd.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
- * The patch is not upstreamable.
-
- * It works around the problem, living a potentially problematic
-   libbsd.pc installed which can be used by other packages than lldpd.
-
-Isn't the right solution to add support in pkg-config to mungle
--isystem flags?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
+index 924f2db..cc3c3a0 100644
+--- a/package/lldpd/lldpd.mk
++++ b/package/lldpd/lldpd.mk
+@@ -12,6 +12,14 @@ LLDPD_LICENSE_FILES = README.md
+ # 0001-build-make-generation-of-atom-glue-compatible-with-o.patch
+ LLDPD_AUTORECONF = YES
+ 
++ifeq ($(BR2_PACKAGE_CHECK),y)
++LLDPD_DEPENDENCIES += check
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND),y)
++LLDPD_DEPENDENCIES += valgrind
++endif
++
+ # Detection of c99 support in configure fails without WCHAR. To enable
+ # automatic detection of c99 support by configure, we need to enable
+ # WCHAR in toolchain. But actually we do not need WCHAR at lldpd
