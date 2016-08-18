@@ -1,73 +1,84 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Thu, 18 Aug 2016 22:34:09 +0530
-Subject: [Buildroot] [PATCH 2/2] logrotate: fix up build error with gcc 6
-In-Reply-To: <1471539849-3766-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1471539849-3766-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <1471539849-3766-2-git-send-email-rahul.bedarkar@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 18 Aug 2016 19:09:25 +0200
+Subject: [Buildroot] [PATCH v2] support/download/git: Prioritize remote
+ archive
+In-Reply-To: <1471469135-19009-1-git-send-email-kamath.ben@gmail.com>
+References: <1471469135-19009-1-git-send-email-kamath.ben@gmail.com>
+Message-ID: <20160818170925.GC5930@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With gcc version 6, we see following warning.
+Benjamin, All,
 
-  config.c: In function 'strndup':
-  config.c:87:10: error: nonnull argument 's' compared to NULL [-Werror=nonnull-compare]
-          if(!s)
-            ^
-  cc1: all warnings being treated as errors
+On 2016-08-17 14:25 -0700, Benjamin Kamath spake thusly:
+> From: Benjamin Kamath <bkamath@spaceflight.com>
+> 
+> Attempt to do a remote archive since it shortcuts us past a few steps when
+> available. Additionally. if the git server has uploadArchive.allowUnreachable
+> set to true, then this method can also work on arbitrary sha1s, offering a huge
+> speed advantage over a full clone.
+> 
+> Signed-off-by: Benjamin Kamath <bkamath@spaceflight.com>
+> ---
+> Changes v1 -> v2:
+>     - Skip remote archive for repositories with submodules (suggested by Yann)
+> 
+>  support/download/git | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/support/download/git b/support/download/git
+> index 416cd1b..d060cbd 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -36,6 +36,17 @@ _git() {
+>      eval ${GIT} "${@}"
+>  }
+>  
+> +# Try a remote archive, since it is as fast as a shallow clone and can give us
+> +# an archive directly. Also, if uploadArchive.allowUnreachable is set to true
+> +# on the remote, this will also work for arbitrary sha1s, and will offer a
+> +# considerable speedup over a full clone. This will not work for submodules.
+> +if [ ${recurse} -eq 0 ]; then
+> +    printf "Doing remote archive\n"
+> +    if _git archive --format=tar.gz --prefix=${basename}/ --remote=${repo} -o ${output} ${cset} 2>&1; then
+> +        exit 0
 
-strndup is declared with nonnull attribute for first parameter. In such
-cases, gcc 6 warns when we check for nonnull explicitly. So drop the
-check for nonnull.
+I would have also done:
 
-Fixes:
+        else
+            printf "Remote archive failed, falling back to cloning\n"
 
-  http://autobuild.buildroot.net/results/6dc/6dc2eb22104076920d77425b1e608ef9b9e01c94/
+Like we do for the shallow clone.
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
----
- .../logrotate/0002-fix-up-warning-with-gcc6.patch  | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/logrotate/0002-fix-up-warning-with-gcc6.patch
+Also, why do you redirect stderr? We don't do it in the clone commands.
+We only do it to fetch the special references (gitHub PRs of Gerrit
+changes) because it does not make sense to display an spurious message
+when the reference is in fact not special.
 
-diff --git a/package/logrotate/0002-fix-up-warning-with-gcc6.patch b/package/logrotate/0002-fix-up-warning-with-gcc6.patch
-new file mode 100644
-index 0000000..4226984
---- /dev/null
-+++ b/package/logrotate/0002-fix-up-warning-with-gcc6.patch
-@@ -0,0 +1,31 @@
-+fix up warning with gcc6
-+
-+With gcc version 6, we see following warning.
-+
-+  config.c: In function 'strndup':
-+  config.c:87:10: error: nonnull argument 's' compared to NULL [-Werror=nonnull-compare]
-+          if(!s)
-+            ^
-+  cc1: all warnings being treated as errors
-+
-+strndup is declared with nonnull attribute for first parameter. In such
-+cases, gcc 6 warns when we check for nonnull explicitly. So drop the
-+check for nonnull.
-+
-+This build is found by Buildroot autobuilder.
-+http://autobuild.buildroot.net/results/6dc/6dc2eb22104076920d77425b1e608ef9b9e01c94/
-+
-+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+
-+--- logrotate-3.10.0/config.c.old	2016-08-18 22:11:53.881100685 +0530
-++++ logrotate-3.10.0/config.c	2016-08-18 22:12:58.913100548 +0530
-+@@ -84,9 +84,6 @@ char *strndup(const char *s, size_t n)
-+        size_t nAvail;
-+        char *p;
-+ 
-+-       if(!s)
-+-               return NULL;
-+-
-+        /* min() */
-+        nAvail = strlen(s) + 1;
-+        if ( (n + 1) < nAvail)
+Regards,
+Yann E. MORIN.
+
+> +    fi
+> +fi
+> +
+>  # Try a shallow clone, since it is faster than a full clone - but that only
+>  # works if the version is a ref (tag or branch). Before trying to do a shallow
+>  # clone we check if ${cset} is in the list provided by git ls-remote. If not
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.6.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
