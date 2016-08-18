@@ -1,28 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 00:00:41 +0200
-Subject: [Buildroot] [PATCH] libglib2: bump to version 2.48.2
-In-Reply-To: <1471527923-2194-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1471527923-2194-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160819000041.2dbc1cc5@free-electrons.com>
+Date: Fri, 19 Aug 2016 00:02:27 +0200
+Subject: [Buildroot] [git commit branch/next] package/elfutils: set
+	program-prefix to default ("eu-")
+Message-ID: <20160818220254.827A47FD5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2970711de7516b171b9c214be388bad49177b842
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 18 Aug 2016 10:45:23 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/libglib2/libglib2.hash | 4 ++--
->  package/libglib2/libglib2.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Elfutils program names collide with binutils' binaries. By default
+applications provided by elfutils are prefixed with "eu-", but in
+Buildroot that setting is overridden by pkg-autotools.
+The option in pkg-autotools rules was added to avoid including a target
+triple in some packages as a prefix, so restore elfutils default
+behaviour by adding a "eu-" program-prefix.
 
-Applied to next, thanks.
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas: add comment in the .mk file explaining why we have a custom
+program prefix, as suggested by Arnout.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/elfutils/elfutils.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index b999d0f..6af1223 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -14,7 +14,12 @@ ELFUTILS_DEPENDENCIES = zlib
+ 
+ # We patch configure.ac
+ ELFUTILS_AUTORECONF = YES
+-ELFUTILS_CONF_OPTS += --disable-werror
++
++# Pass a custom program prefix to avoid a naming conflict between
++# elfutils binaries and binutils binaries.
++ELFUTILS_CONF_OPTS += \
++	--disable-werror \
++	--program-prefix="eu-"
+ 
+ # elfutils gets confused when lfs mode is forced, so don't
+ ELFUTILS_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
