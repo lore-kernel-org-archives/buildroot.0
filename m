@@ -1,46 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 18 Aug 2016 13:47:50 +0200
-Subject: [Buildroot] [PATCH] arch: add missing 'string' declaration to
- BR2_LD_TARGET_EMULATION
-In-Reply-To: <87mvkaphq9.fsf@dell.be.48ers.dk>
-References: <1471505353-20289-1-git-send-email-arnout@mind.be>
- <87mvkaphq9.fsf@dell.be.48ers.dk>
-Message-ID: <fb877440-a8ef-5fa1-bfef-315b0ca388a2@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 18 Aug 2016 11:57:56 +0000
+Subject: [Buildroot] [Bug 9181] New: Compiling linux kernel fails if
+ BR2_LINUX_KERNEL_TOOL_CPUPOWER is selected
+Message-ID: <bug-9181-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=9181
 
+            Bug ID: 9181
+           Summary: Compiling linux kernel fails if
+                    BR2_LINUX_KERNEL_TOOL_CPUPOWER is selected
+           Product: buildroot
+           Version: 2016.05
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: Jorgen.Pihlflyckt at ajeco.fi
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-On 18-08-16 11:08, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
-> 
->  > Commit dc6f4c8 forgot to give a type (string) to the newly introduced
->  > BR2_LD_TARGET_EMULATION symbol.
-> 
-> Ehh, we don't have a dc6f4c8 commit. Are you referring to
-> 
-> http://patchwork.ozlabs.org/patch/606691/
-> 
-> If so, is this a sneaky way of sending your acked-by? ;)
+Compiling fails just after the linux kernel has been built, if "cpupower" is
+selected under "Linux Kernel Tools" with the following error:
 
- Oops... It looks like my master isn't clean, it still has a stack of patches I
-was about to review months ago (and my git pull does implicit rebase). And it
-seems I even forgot to apply http://patchwork.ozlabs.org/patch/606690/ which
-adds the "string" declaration to arch/Config.in...
+  CC       utils/helpers/sysfs.o
+In file included from utils/helpers/amd.c:9:0:
+./utils/helpers/helpers.h:13:21: fatal error: libintl.h: No such file or
+directory
+ #include <libintl.h>
+                     ^
+compilation terminated.
 
- So I've marked this one as rejected. Sorry for the noise...
+Enabling WCHAR support under toolchain settings, and then selecting "gettext"
+under "Target Packages" and "Development Tools" allows the compilation to get a
+little further, but it still stops with the following error:
 
- Regards,
- Arnout
+  CC       cpupower
+./utils/idle_monitor/amd_fam14h_idle.o: In function `amd_fam14h_stop':
+amd_fam14h_idle.c:(.text+0x3c3): undefined reference to `libintl_gettext'
+./utils/idle_monitor/cpupower-monitor.o: In function `print_wrong_arg_exit':
+cpupower-monitor.c:(.text+0x9): undefined reference to `libintl_gettext'
+./utils/idle_monitor/cpupower-monitor.o: In function `print_results':
 
+and so on. This has also been tested with buildroot-2015.11.1 using the default
+configuration. The kernel configuration selected was i386 (defconfig)
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+You are receiving this mail because:
+You are on the CC list for the bug.
