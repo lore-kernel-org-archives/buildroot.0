@@ -1,58 +1,49 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 18 Aug 2016 19:58:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/elfutils: set program-prefix to
- default ("eu-")
-In-Reply-To: <1471515467-21065-1-git-send-email-marcin.nowakowski@imgtec.com>
-References: <1471515467-21065-1-git-send-email-marcin.nowakowski@imgtec.com>
-Message-ID: <af0fbe66-40fb-ad62-ff49-81b46552c7dc@mind.be>
+Date: Thu, 18 Aug 2016 20:02:31 +0200
+Subject: [Buildroot] BuildRoot cannot build powerpc64
+In-Reply-To: <20160817193721.0cc1466d@free-electrons.com>
+References: <F9C551623D2CBB4C9488801D14F864C6EE8B1000@ex-mb1.corp.adtran.com>
+ <57b3aeb6944cf_7ec33f915a8b1b9c298e6@ultri3.mail>
+ <F9C551623D2CBB4C9488801D14F864C6EE8B17ED@ex-mb1.corp.adtran.com>
+ <20160817193721.0cc1466d@free-electrons.com>
+Message-ID: <532ce6e0-de27-9a2a-f062-179a4fa3248e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18-08-16 12:17, Marcin Nowakowski wrote:
-> Elfutils program names collide with binutils' binaries. By default
-> applications provided by elfutils are prefixed with "eu-", but in
-> Buildroot that setting is overridden by pkg-autotools.
-> The option in pkg-autotools rules was added to avoid including a target
-> triple in some packages as a prefix, so restore elfutils default
-> behaviour by adding a "eu-" program-prefix.
+On 17-08-16 19:37, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+> On Wed, 17 Aug 2016 15:33:30 +0000, ANDY KENNEDY wrote:
+> 
+>> Our RFS we like to have static, so that we can throw libs into
+>> the system @ runtime without breaking our stable RFS.
+>>
+>> Based upon your e-mail, I dropped into the uclibc dependencies
+>> || BR2_powerpc64, which made it selectable.  Problem is that
+>> it wouldn?t build.  My guess is that the T-series parts haven't
+>> been added to uClibC-ng yet, which is why it isn't selectable.
+>>
+>> Thus, the answer to my question is "it is by design".
+> 
+> The only C library that supports PowerPC64 today is glibc.
+> 
+> But glibc does not support static linking.
+> 
+> Hence there is no solution to do a statically linked rootfs on
+> PowerPC64 today.
 
- I didn't test, but looks sane to me.
+ Perhaps we should remove the static/shared libs options to the toolchain menu,
+and make them depend on the libc choice rather than the other way round. That
+way, we're sure that we never run into such impossible situations.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Probably for -next though.
-
- A comment in the .mk file would have been nice, but myself, I generally consult
-the log when in doubt so it's OK for me.
+ Actually also some other options are more fitting in the toolchain menu IMHO,
+like debug/optimization options and SSP.
 
  Regards,
  Arnout
-
-> ---
->  package/elfutils/elfutils.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-> index b999d0f..0aa11a6 100644
-> --- a/package/elfutils/elfutils.mk
-> +++ b/package/elfutils/elfutils.mk
-> @@ -14,7 +14,9 @@ ELFUTILS_DEPENDENCIES = zlib
->  
->  # We patch configure.ac
->  ELFUTILS_AUTORECONF = YES
-> -ELFUTILS_CONF_OPTS += --disable-werror
-> +ELFUTILS_CONF_OPTS += \
-> +	--disable-werror \
-> +	--program-prefix="eu-"
->  
->  # elfutils gets confused when lfs mode is forced, so don't
->  ELFUTILS_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
-> 
 
 
 -- 
