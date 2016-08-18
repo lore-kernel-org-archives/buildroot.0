@@ -1,46 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Aug 2016 22:33:35 +0200
-Subject: [Buildroot] [PATCH] hplip: needs dynamic library
-Message-ID: <1471552415-1818-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 18 Aug 2016 20:55:18 +0000
+Subject: [Buildroot] [Bug 9176] minnowboard : USB not mounted
+In-Reply-To: <bug-9176-163@https.bugs.busybox.net/>
+References: <bug-9176-163@https.bugs.busybox.net/>
+Message-ID: <bug-9176-163-0ggFp54VjU@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hplip needs libdl functionality, so it should depend on
-!BR2_STATIC_LIBS.
+https://bugs.busybox.net/show_bug.cgi?id=9176
 
-Fixes:
+--- Comment #4 from CB <christophebricout@yahoo.fr> ---
+Created attachment 6616
+  --> https://bugs.busybox.net/attachment.cgi?id=6616&action=edit
+Linux kernel configuration (gzip)
 
-  http://autobuild.buildroot.net/results/afc01af153b42d13845e2f2828f642e8ccea7e06/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/hplip/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/hplip/Config.in b/package/hplip/Config.in
-index 7565671..176dc6a 100644
---- a/package/hplip/Config.in
-+++ b/package/hplip/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_HPLIP
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_CUPS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	depends on !BR2_STATIC_LIBS # libdl
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_JPEG
- 	help
-@@ -15,6 +16,7 @@ config BR2_PACKAGE_HPLIP
- 
- 	  http://hplipopensource.com/
- 
--comment "hplip needs a toolchain w/ C++, threads"
-+comment "hplip needs a toolchain w/ C++, threads, dynamic library"
- 	depends on BR2_PACKAGE_CUPS
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
 -- 
-2.7.4
+You are receiving this mail because:
+You are on the CC list for the bug.
