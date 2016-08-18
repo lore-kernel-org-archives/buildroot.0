@@ -1,9 +1,9 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 18 Aug 2016 09:41:36 +0300
-Subject: [Buildroot] [PATCH] squeezelite: needs NPTL
-In-Reply-To: <20160818062704.GA28543@waldemar-brodkorb.de>
-References: <20160818062704.GA28543@waldemar-brodkorb.de>
-Message-ID: <20160818064136.lam5pibsjvz4kqc7@tarshish>
+Date: Thu, 18 Aug 2016 09:49:56 +0300
+Subject: [Buildroot] [PATCH] linux-pam: uses fork() needs MMU
+In-Reply-To: <20160818062345.GA28431@waldemar-brodkorb.de>
+References: <20160818062345.GA28431@waldemar-brodkorb.de>
+Message-ID: <20160818064956.jf7gt374yeehslfi@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,29 @@ To: buildroot@busybox.net
 
 Hi Waldemar,
 
-On Thu, Aug 18, 2016 at 08:27:04AM +0200, Waldemar Brodkorb wrote:
-> It uses PTHREAD_PRIO_INHERIT, which isn't available in Linuxthreads.
-> 
+On Thu, Aug 18, 2016 at 08:23:45AM +0200, Waldemar Brodkorb wrote:
 > Fixes:
->   http://autobuild.buildroot.net/results/455/455465c332d291929c1612d18a9e7448d9c76e73/
+>   http://autobuild.buildroot.net/results/8c9/8c9a5fe52f762b4ff4444cf41efdf0d3cf203986/
 > 
 > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/squeezelite/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/squeezelite/Config.in b/package/squeezelite/Config.in
-> index 79d2947..154daaa 100644
-> --- a/package/squeezelite/Config.in
-> +++ b/package/squeezelite/Config.in
-> @@ -1,7 +1,7 @@
->  config BR2_PACKAGE_SQUEEZELITE
->  	bool "squeezelite"
->  	depends on BR2_USE_WCHAR # flac
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # alsa-lib
 
-The 'alsa-lib' comment should be dropped, then. NPTL (or threading for that 
-matter) is a dependency of squeezelite itself.
+[...]
+
+> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+> index 429dfa7..657bcdd 100644
+> --- a/package/util-linux/Config.in
+> +++ b/package/util-linux/Config.in
+> @@ -63,6 +63,7 @@ config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
+>  	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+> +	depends on BR2_USE_MMU # linux-pam
+>  	select BR2_PACKAGE_LINUX_PAM
+>  	help
+>  	  Change login shell, real user name and information
+
+Lots of packages select BR2_PACKAGE_UTIL_LINUX. All of them (and all packages 
+that select them) now need to depend on BR2_USE_MMU.
 
 baruch
 
