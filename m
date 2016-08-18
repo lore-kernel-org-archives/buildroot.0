@@ -1,42 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 11:46:39 +0200
-Subject: [Buildroot] [git commit] gst1-plugins-ugly: bump to version 1.8.3
-Message-ID: <20160902142937.55F2B822FB@busybox.osuosl.org>
+Date: Fri, 19 Aug 2016 00:02:27 +0200
+Subject: [Buildroot] [git commit] package/elfutils: set program-prefix to
+	default ("eu-")
+Message-ID: <20160902142936.ABA83822FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=693af1610c9bc98a84c018a9da91761219eb456f
+commit: https://git.buildroot.net/buildroot/commit/?id=2970711de7516b171b9c214be388bad49177b842
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Elfutils program names collide with binutils' binaries. By default
+applications provided by elfutils are prefixed with "eu-", but in
+Buildroot that setting is overridden by pkg-autotools.
+The option in pkg-autotools rules was added to avoid including a target
+triple in some packages as a prefix, so restore elfutils default
+behaviour by adding a "eu-" program-prefix.
+
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas: add comment in the .mk file explaining why we have a custom
+program prefix, as suggested by Arnout.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/elfutils/elfutils.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-index d384d48..1c6aa7d 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-@@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.8.2.tar.xz.sha256sum
--sha256	9c5b33a2a98fc1d6d6c99a1b536b1fb2de45f53cc8bf8ab85a8b8141fed1a8ac  gst-plugins-ugly-1.8.2.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.8.3.tar.xz.sha256sum
-+sha256	6fa2599fdd072d31fbaf50c34af406e2be944a010b1f4eab67a5fe32a0310693  gst-plugins-ugly-1.8.3.tar.xz
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index 8864b04..2e9891e 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index b999d0f..6af1223 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -14,7 +14,12 @@ ELFUTILS_DEPENDENCIES = zlib
  
--GST1_PLUGINS_UGLY_VERSION = 1.8.2
-+GST1_PLUGINS_UGLY_VERSION = 1.8.3
- GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
- GST1_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
- GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+ # We patch configure.ac
+ ELFUTILS_AUTORECONF = YES
+-ELFUTILS_CONF_OPTS += --disable-werror
++
++# Pass a custom program prefix to avoid a naming conflict between
++# elfutils binaries and binutils binaries.
++ELFUTILS_CONF_OPTS += \
++	--disable-werror \
++	--program-prefix="eu-"
+ 
+ # elfutils gets confused when lfs mode is forced, so don't
+ ELFUTILS_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
