@@ -1,49 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Aug 2016 10:57:45 +0200
-Subject: [Buildroot] [git commit] gnupg: security bump to version 1.4.21
-Message-ID: <20160818090828.3DE3082239@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 18 Aug 2016 11:10:50 +0200
+Subject: [Buildroot] [PATCH v2] support/download/git: Prioritize remote
+ archive
+In-Reply-To: <CAJsd3z+5vOYFO=BAa1HQNd_=nfM1UPrmQmBxZmSgGzRy318_Ew@mail.gmail.com>
+References: <1471469135-19009-1-git-send-email-kamath.ben@gmail.com>
+ <20160817215301.GJ5778@free.fr>
+ <CAJsd3z+5vOYFO=BAa1HQNd_=nfM1UPrmQmBxZmSgGzRy318_Ew@mail.gmail.com>
+Message-ID: <20160818091050.GA5930@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4debfc914b6b94a41f8b8d53c452010032d048c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Benjamin, All,
 
-Fixes CVE-2016-6313: An attacker who obtains 580 bytes from the standard RNG
-can trivially predict the next 20 bytes of output.
+On 2016-08-17 15:17 -0700, Benjamin Kamath spake thusly:
+> On Wed, Aug 17, 2016 at 2:53 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > Benjmin, All,
+> >
+> > On 2016-08-17 14:25 -0700, Benjamin Kamath spake thusly:
+> >> From: Benjamin Kamath <bkamath@spaceflight.com>
+> >>
+> >> Attempt to do a remote archive since it shortcuts us past a few steps when
+> >> available. Additionally. if the git server has uploadArchive.allowUnreachable
+> >> set to true, then this method can also work on arbitrary sha1s, offering a huge
+> >> speed advantage over a full clone.
+> >
+> > Do you know of a publicly-accessible server that allows remote archives?
+> >
+> > I've tried with a github-hosted package, but githib won;t allow remote
+> > archives, it seems...
+> I just tried quite a few and it doesn't seem to be frequently
+> supported. gitlab-ce does seem to have it enabled by default:
+> 
+> git at gitlab.com:gitlab-org/gitlab-ce.git
 
-Add cryptographically secure sha256 hash.
+OK, it does work, as long as one uses the ssh protocol. It does not work
+via http:// or git://
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gnupg/gnupg.hash | 6 ++++--
- package/gnupg/gnupg.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+Which means we have no package in Buildroot that can use this.
 
-diff --git a/package/gnupg/gnupg.hash b/package/gnupg/gnupg.hash
-index f872d24..8968b00 100644
---- a/package/gnupg/gnupg.hash
-+++ b/package/gnupg/gnupg.hash
-@@ -1,2 +1,4 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2015q4/000382.html
--sha1	cbc9d960e3d8488c32675019a79fbfbf8680387e	gnupg-1.4.20.tar.bz2
-+# From https://lists.gnu.org/archive/html/info-gnu/2016-08/msg00008.html
-+sha1	e3bdb585026f752ae91360f45c28e76e4a15d338	gnupg-1.4.21.tar.bz2
-+# Locally computed
-+sha256	6b47a3100c857dcab3c60e6152e56a997f2c7862c1b8b2b25adf3884a1ae2276	gnupg-1.4.21.tar.bz2
-diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
-index 54f4d97..182abd6 100644
---- a/package/gnupg/gnupg.mk
-+++ b/package/gnupg/gnupg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUPG_VERSION = 1.4.20
-+GNUPG_VERSION = 1.4.21
- GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
- GNUPG_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
- GNUPG_LICENSE = GPLv3+
+Do you have a need for that for an internal package?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
