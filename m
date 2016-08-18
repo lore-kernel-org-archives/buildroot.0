@@ -1,40 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Aug 2016 23:07:22 +0200
-Subject: [Buildroot] [PATCH] linknx: deprecate the package
-Message-ID: <1471554442-4397-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 18 Aug 2016 19:58:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/elfutils: set program-prefix to
+ default ("eu-")
+In-Reply-To: <1471515467-21065-1-git-send-email-marcin.nowakowski@imgtec.com>
+References: <1471515467-21065-1-git-send-email-marcin.nowakowski@imgtec.com>
+Message-ID: <af0fbe66-40fb-ad62-ff49-81b46552c7dc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The upstream for this package is dead: the last release is from 2013,
-the project is still using a CVS repository on SourceForge, and the
-build breaks with gcc 6.x. Let's deprecate this package.
+On 18-08-16 12:17, Marcin Nowakowski wrote:
+> Elfutils program names collide with binutils' binaries. By default
+> applications provided by elfutils are prefixed with "eu-", but in
+> Buildroot that setting is overridden by pkg-autotools.
+> The option in pkg-autotools rules was added to avoid including a target
+> triple in some packages as a prefix, so restore elfutils default
+> behaviour by adding a "eu-" program-prefix.
+> 
+> Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/linknx/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ I didn't test, but looks sane to me.
 
-diff --git a/package/linknx/Config.in b/package/linknx/Config.in
-index ca55c8b..0da136b 100644
---- a/package/linknx/Config.in
-+++ b/package/linknx/Config.in
-@@ -6,6 +6,9 @@ config BR2_PACKAGE_LINKNX
- 	       if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # libpthsem
-+	# upstream is dead (CVS on SourceForge), no release since
-+	# 2013, build breaks with gcc 6.x
-+	depends on BR2_DEPRECATED_SINCE_2016_08
- 	help
- 	  Linknx is an automation platform providing high level functionalities
- 	  to EIB/KNX installation.
-@@ -15,3 +18,4 @@ config BR2_PACKAGE_LINKNX
- comment "linknx needs a toolchain w/ C++"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_DEPRECATED_SINCE_2016_08
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Probably for -next though.
+
+ A comment in the .mk file would have been nice, but myself, I generally consult
+the log when in doubt so it's OK for me.
+
+ Regards,
+ Arnout
+
+> ---
+>  package/elfutils/elfutils.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+> index b999d0f..0aa11a6 100644
+> --- a/package/elfutils/elfutils.mk
+> +++ b/package/elfutils/elfutils.mk
+> @@ -14,7 +14,9 @@ ELFUTILS_DEPENDENCIES = zlib
+>  
+>  # We patch configure.ac
+>  ELFUTILS_AUTORECONF = YES
+> -ELFUTILS_CONF_OPTS += --disable-werror
+> +ELFUTILS_CONF_OPTS += \
+> +	--disable-werror \
+> +	--program-prefix="eu-"
+>  
+>  # elfutils gets confused when lfs mode is forced, so don't
+>  ELFUTILS_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
+> 
+
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
