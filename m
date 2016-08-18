@@ -1,38 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Aug 2016 16:31:15 +0200
-Subject: [Buildroot] [PATCH 1/1] ulogd: fix build with musl
-In-Reply-To: <1471403463-15864-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1471403463-15864-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160818163115.2dc2581a@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 18 Aug 2016 15:44:52 +0000
+Subject: [Buildroot] [Bug 9166] Missing overlays directory in VFAT image for
+ raspberry pi 3
+In-Reply-To: <bug-9166-163@https.bugs.busybox.net/>
+References: <bug-9166-163@https.bugs.busybox.net/>
+Message-ID: <bug-9166-163-qy2gt2lES8@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9166
 
-On Wed, 17 Aug 2016 08:41:03 +0530, Rahul Bedarkar wrote:
-> Add upstream patches to fix build issue with musl.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/c42/c42db6f8c89df87e9b55d6c7aaf6098d64d8ffdb/
-> 
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> ---
->  ...ev-null-as-dummy-logfile-when-logging-to-.patch |  70 ++
->  ...fine-_GNU_SOURCE-to-get-members-of-tcphdr.patch |  44 ++
->  .../ulogd/0003-Use-stdint-types-everywhere.patch   | 792 +++++++++++++++++++++
->  3 files changed, 906 insertions(+)
->  create mode 100644 package/ulogd/0001-ulogd-Use-dev-null-as-dummy-logfile-when-logging-to-.patch
->  create mode 100644 package/ulogd/0002-Define-_GNU_SOURCE-to-get-members-of-tcphdr.patch
->  create mode 100644 package/ulogd/0003-Use-stdint-types-everywhere.patch
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|WORKSFORME                  |INVALID
 
-Thomas
+--- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Diez,
+
+If you found that your bug was in fact not resolved and still valid, you
+should have reopenned it rather than sending an email to an individual.
+
+So, you said:
+
+> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y does copy the overlays
+> into output/images/rpi-firmware/overlays which is all fine and dandy -
+> but does *not* include them then in the actual FAT boot image, which is
+> controlled by: buildroot/board/raspberrypi/genimage-raspberrypi3.cfg
+
+Indeed, that is not the case.
+
+The defconfig files we provide in Buildroot are "minimalist" configs,
+aimed at building the strict minimum to get a board to actually boot up
+to a shell prompt, with wired networkingv (no wireless). No more.
+
+This is because there are so many possibilities to use a board that we
+will definitely never be able to cover all use cases. At least, a minimal
+defconfig gets the board booting and ready to use in its basic setup. It
+is a known-working starting point for further customisation by the user.
+
+In your casse, edit (or copy then edit) the genimage-raspberrypi3.cfg to
+suit your needs.
+
+I'll keep this report closed, however, because I believe the behaviour
+you reported is what is intended.
+
+Feel free to comment, though. ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
