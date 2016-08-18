@@ -1,50 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Aug 2016 21:30:49 +0200
-Subject: [Buildroot] [PATCH 2/2] tinycbor: fix issue on unnamed union
-In-Reply-To: <CAPi7W80+STMRFnA9S9iLUXP2TvaNmdeFeagTjsMjLj0qOxEoqw@mail.gmail.com>
-References: <1471290845-115279-1-git-send-email-fabrice.fontaine@orange.com>
- <1471290845-115279-2-git-send-email-fabrice.fontaine@orange.com>
- <87fuq5xnt4.fsf@dell.be.48ers.dk>
- <39A58E7A-0045-4782-AE36-3BB3DF6D42D7@gmail.com>
- <87inv0vjl6.fsf@dell.be.48ers.dk>
- <CAPi7W80+STMRFnA9S9iLUXP2TvaNmdeFeagTjsMjLj0qOxEoqw@mail.gmail.com>
-Message-ID: <20160818213049.2120fe59@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 18 Aug 2016 21:53:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/simh: new package
+In-Reply-To: <20160818212725.65c9b926@free-electrons.com>
+References: <1471297357-11637-1-git-send-email-lothar.felten@gmail.com>
+ <20160816035044.GB3368@tarshish>
+ <9ba51c53-ddb3-8a59-a3b0-9ba8e3e52f3e@gmail.com>
+ <20160816142950.GH3368@tarshish> <20160816194236.GC10734@free.fr>
+ <20160818212725.65c9b926@free-electrons.com>
+Message-ID: <20160818195351.GD5930@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, Lothar, All,
 
-On Tue, 16 Aug 2016 22:57:58 +0200, Fabrice Fontaine wrote:
-> Dear Peter,
+On 2016-08-18 21:27 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 16 Aug 2016 21:42:36 +0200, Yann E. MORIN wrote:
 > 
-> After more investigation, it seems that the uclibc for the blackfin target
-> is configured without __UCLIBC_HAS_GLIBC_CUSTOM_STREAMS__
-> (./output/host/opt/ext-toolchain/bfin-uclinux/bfin-uclinux/runtime/usr/include/bits/uClibc_config.h).
-> Without this option, fopencookie is not available in the toolchain and so
-> the implementation of open_memstream function within tinycbor fails so I
-> would suggest to disable tinycbor if BR2_bfin target is set.
+> > > I don't think so. Not sure how our legal info infra handles binary document 
+> > > formats.  
+> > 
+> > FOO_LICENSE_FILES are just copied; we don't do anything with them. So
+> > it's fine to list a .doc in there.
 > 
-> If this solution is acceptable, I can provide a patch.
+> Not quite true: we generate a big .txt file with the concatenation of
+> the license text of all packages, see licenses.txt and
+> host-licenses.txt.
 
-This solution as-is is not acceptable: we now have support for Blackfin
-in the internal toolchain backend, in which case uClibc is built with
-UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y.
+Indeed, I had forgotten about that...
 
-Therefore, what you want to do is:
+Then, it that case, I think it would be better not to list the doc file
+in SIMH_LICENSE_FILES at all.
 
-	# package uses fopencookie(), not available with this toolchain
-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+Still, we'd want it to be copied, so maybe that could be done with a
+post legal-info hook, something like (untested):
 
-Could you resend a new patch series that takes into account this
-aspect, and the other comments made by Peter Korsgaard?
+    define SIMH_LEGAL_INFO_DOC_FILE
+        $(INSTALL) -m 0644 -D $(@D)/path/to/license.doc \
+            $(LICENSE_FILES_DIR_TARGET)/simh-$(SIMH_VERSION)/license.doc
+    endef
+    SIMH_POST_LEGAL_INFO_HOOKS += SIMH_LEGAL_INFO_DOC_FILE
 
-Thanks!
+Regards,
+Yann E. MORIN.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
