@@ -1,41 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Aug 2016 22:27:43 +0200
-Subject: [Buildroot] [PATCH] pkg-cmake.mk: set CMAKE_SYSROOT variable in
- toolchainfile.cmake
-In-Reply-To: <20160817211936.18458-1-s.martin49@gmail.com>
-References: <20160817211936.18458-1-s.martin49@gmail.com>
-Message-ID: <20160818222743.0b711732@free-electrons.com>
+Date: Thu, 18 Aug 2016 22:33:35 +0200
+Subject: [Buildroot] [PATCH] hplip: needs dynamic library
+Message-ID: <1471552415-1818-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+hplip needs libdl functionality, so it should depend on
+!BR2_STATIC_LIBS.
 
-On Wed, 17 Aug 2016 23:19:36 +0200, Samuel Martin wrote:
-> This change enforces the CMAKE_SYSROOT value set in the toolchainfile.cmake.
-> 
-> This fix overrides the CMake heuristics used to guess it, and turns off some
-> non-desirable behavior adding "-isystem ..." flags to the compiler command
-> line, misleading the compiler and making the build failed due to some
-> unfound standard headers.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/f7e/f7e92678e91a6cb15ccf32d4a7d75b39f49d6000/defconfig
->   (and others)
-> 
-> Cc: Ben Boeckel <mathstuf@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  support/misc/toolchainfile.cmake.in | 1 +
->  1 file changed, 1 insertion(+)
+Fixes:
 
-Applied to master, thanks.
+  http://autobuild.buildroot.net/results/afc01af153b42d13845e2f2828f642e8ccea7e06/
 
-Thomas
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/hplip/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/hplip/Config.in b/package/hplip/Config.in
+index 7565671..176dc6a 100644
+--- a/package/hplip/Config.in
++++ b/package/hplip/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_HPLIP
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_CUPS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	depends on !BR2_STATIC_LIBS # libdl
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_JPEG
+ 	help
+@@ -15,6 +16,7 @@ config BR2_PACKAGE_HPLIP
+ 
+ 	  http://hplipopensource.com/
+ 
+-comment "hplip needs a toolchain w/ C++, threads"
++comment "hplip needs a toolchain w/ C++, threads, dynamic library"
+ 	depends on BR2_PACKAGE_CUPS
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
