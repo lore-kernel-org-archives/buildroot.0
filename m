@@ -1,88 +1,100 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Thu, 18 Aug 2016 08:52:33 +0300
-Subject: [Buildroot] [PATCH v2] uclibc: ARC: Support syscall ABI v4
-Message-ID: <1471499553-6145-1-git-send-email-vzakhar@synopsys.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 18 Aug 2016 08:23:45 +0200
+Subject: [Buildroot] [PATCH] linux-pam: uses fork() needs MMU
+Message-ID: <20160818062345.GA28431@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When used with GCC 6 ABIv4 is used.
-Missing this patch leads to numerous runtime errors.
+Fixes:
+  http://autobuild.buildroot.net/results/8c9/8c9a5fe52f762b4ff4444cf41efdf0d3cf203986/
 
-The patch has already been accepted in uclibc-ng:
-http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=3e40f9669279f005f7154892539166f5081fbcb2
-
-So the patch should be removed after update to a new version of uclibc-ng.
-
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
-Changes v1-v2:
- Added commit message and signed-off-by to the attached patch.
+ package/linux-pam/Config.in  | 1 +
+ package/nodm/Config.in       | 1 +
+ package/python-pam/Config.in | 1 +
+ package/rsh-redone/Config.in | 2 ++
+ package/util-linux/Config.in | 2 ++
+ 5 files changed, 7 insertions(+)
 
- .../uclibc/0003-ARC-Support-syscall-ABI-v4.patch   | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 package/uclibc/0003-ARC-Support-syscall-ABI-v4.patch
-
-diff --git a/package/uclibc/0003-ARC-Support-syscall-ABI-v4.patch b/package/uclibc/0003-ARC-Support-syscall-ABI-v4.patch
-new file mode 100644
-index 0000000..f0a5ae7
---- /dev/null
-+++ b/package/uclibc/0003-ARC-Support-syscall-ABI-v4.patch
-@@ -0,0 +1,54 @@
-+From 3e40f9669279f005f7154892539166f5081fbcb2 Mon Sep 17 00:00:00 2001
-+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-+Date: Tue, 16 Aug 2016 15:04:27 -0700
-+Subject: [PATCH] ARC: Support syscall ABI v4
-+
-+The syscall ABI includes the gcc functional calling ABI since a syscall
-+implies userland caller and kernel callee.
-+
-+The current gcc ABI (v3) for ARCv2 ISA required 64-bit data be passed in
-+even-odd register pairs, (potentially punching reg holes when passing such
-+values as args). This was partly driven by the fact that the double-word
-+LDD/STD instructions in ARCv2 expect the register alignment and thus gcc
-+forcing this avoids extra MOV at the cost of a few unused register (which we
-+have plenty anyways).
-+
-+This however was rejected as part of upstreaming gcc port to HS. So the new
-+ABI v4 doesn't enforce the even-odd reg restriction.
-+
-+Do note that for ARCompact ISA builds v3 and v4 are practically the same in
-+terms of gcc code generation.
-+
-+This change is dormant for now (gcc 4.8.x based tools) and will only kick
-+in with switch to gcc 6.x based tools.
-+
-+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
-+---
-+ libc/sysdeps/linux/arc/bits/uClibc_arch_features.h | 10 ++++++++--
-+ 1 file changed, 8 insertions(+), 2 deletions(-)
-+
-+diff --git a/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h b/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h
-+index 5160724..94e089d 100755
-+--- a/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h
-++++ b/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h
-+@@ -41,8 +41,14 @@
-+ /* The default ';' is a comment on ARC. */
-+ #define __UCLIBC_ASM_LINE_SEP__ `
-+ 
-+-/* does your target align 64bit values in register pairs ? (32bit arches only) */
-+-#if defined(__A7__)
-++/* does your target align 64bit values in register pairs ? (32bit arches only)
-++ *  - ARC700 never had any constraint on reg pairs (even if ABI v3)
-++ *  - Inital HS ABI (v3: non upstream gcc) had 64-bit data aligned in even-odd
-++ *     reg pairs (thus allowed reg holes when passing such args to calls)
-++ *  - Upstream gcc (6.x) HS ABI doesn't have that restriction
-++ */
-++
-++#if defined(__A7__) || (__GNUC__ > 4)
-+ #undef __UCLIBC_SYSCALL_ALIGN_64BIT__
-+ #else
-+ #define __UCLIBC_SYSCALL_ALIGN_64BIT__
-+-- 
-+2.5.5
-+
+diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
+index f6cf530..7044073 100644
+--- a/package/linux-pam/Config.in
++++ b/package/linux-pam/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_LINUX_PAM
+ 	# for details.
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  A Security Framework that Provides Authentication for Applications
+ 
+diff --git a/package/nodm/Config.in b/package/nodm/Config.in
+index b8629a2..97ce8c3 100644
+--- a/package/nodm/Config.in
++++ b/package/nodm/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_NODM
+ 	depends on !BR2_STATIC_LIBS # linux-pam
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs wordexp.h
++	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_LINUX_PAM
+ 	help
+diff --git a/package/python-pam/Config.in b/package/python-pam/Config.in
+index 497bcd3..02865d0 100644
+--- a/package/python-pam/Config.in
++++ b/package/python-pam/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_PYTHON_PAM
+ 	depends on BR2_PACKAGE_PYTHON # C extension not compatible with python3
+ 	depends on BR2_ENABLE_LOCALE # linux-pam
+ 	depends on BR2_USE_WCHAR # linux-pam
++	depends on BR2_USE_MMU # linux-pam
+ 	depends on !BR2_STATIC_LIBS # linux-pam
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+diff --git a/package/rsh-redone/Config.in b/package/rsh-redone/Config.in
+index 6258369..6a8aec0 100644
+--- a/package/rsh-redone/Config.in
++++ b/package/rsh-redone/Config.in
+@@ -17,6 +17,7 @@ config BR2_PACKAGE_RSH_REDONE_RLOGIND
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
++	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 
+ comment "rlogind needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
+@@ -31,6 +32,7 @@ config BR2_PACKAGE_RSH_REDONE_RSHD
+ 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
++	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 
+ comment "rshd needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 429dfa7..657bcdd 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -63,6 +63,7 @@ config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
+ 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
++	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 	help
+ 	  Change login shell, real user name and information
+@@ -127,6 +128,7 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
+ 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
++	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 	help
+ 	  Build login utilities (last, login, su, sulogin)
 -- 
-2.5.5
+2.1.4
