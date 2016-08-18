@@ -1,79 +1,46 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Thu, 18 Aug 2016 14:19:43 -0700
-Subject: [Buildroot] BuildRoot cannot build powerpc64
-In-Reply-To: <532ce6e0-de27-9a2a-f062-179a4fa3248e@mind.be>
-References: <F9C551623D2CBB4C9488801D14F864C6EE8B1000@ex-mb1.corp.adtran.com>
- <57b3aeb6944cf_7ec33f915a8b1b9c298e6@ultri3.mail>
- <F9C551623D2CBB4C9488801D14F864C6EE8B17ED@ex-mb1.corp.adtran.com>
- <20160817193721.0cc1466d@free-electrons.com>
- <532ce6e0-de27-9a2a-f062-179a4fa3248e@mind.be>
-Message-ID: <5D3F1431-E0EF-4061-8480-2C4A260C5CF6@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 Aug 2016 23:24:14 +0200
+Subject: [Buildroot] [PATCH 1/2] package/lldpd: disable use of libbsd
+In-Reply-To: <1471554082-24303-1-git-send-email-yann.morin.1998@free.fr>
+References: <1471554082-24303-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160818232414.4a44b95f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-> On Aug 18, 2016, at 11:02 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+On Thu, 18 Aug 2016 23:01:21 +0200, Yann E. MORIN wrote:
+> libbsd installs at least one .pc file that contains a -isystem include
+> path (-isystem /usr.include/bsd), but -isystem is not munged by
+> pkg-config, so we end up using /usr/include/bsd which is not suitable
+> for the target. And breaks big time (see failures, below).
 > 
-> On 17-08-16 19:37, Thomas Petazzoni wrote:
->> Hello,
->> 
->> On Wed, 17 Aug 2016 15:33:30 +0000, ANDY KENNEDY wrote:
->> 
->>> Our RFS we like to have static, so that we can throw libs into
->>> the system @ runtime without breaking our stable RFS.
->>> 
->>> Based upon your e-mail, I dropped into the uclibc dependencies
->>> || BR2_powerpc64, which made it selectable.  Problem is that
->>> it wouldn?t build.  My guess is that the T-series parts haven't
->>> been added to uClibC-ng yet, which is why it isn't selectable.
->>> 
->>> Thus, the answer to my question is "it is by design".
->> 
->> The only C library that supports PowerPC64 today is glibc.
->> 
->> But glibc does not support static linking.
->> 
->> Hence there is no solution to do a statically linked rootfs on
->> PowerPC64 today.
+> But using libbsd is completely optional. In fact, our lldpd.mk did not
+> even express the dependency on libbsd, so we may well have had builds
+> without libbsd.
 > 
-> Perhaps we should remove the static/shared libs options to the toolchain menu,
-> and make them depend on the libc choice rather than the other way round. That
-> way, we're sure that we never run into such impossible situations.
+> The functionality brought in by using libbsd is very minor (just setting
+> the neighbour name in /proc/self/smdline), so we just make lldpd not use
+> libbsd at all. There is no --disable-libbsd or such, so we just patch it
+> out of configure.ac.
 
-static linking and dynamic linking needs to know if C library supports it
-and architecture. It  should not be a toolchain option its a runtime env option
-semantically.
+I don't like this fix, for two reasons:
 
-> 
-> Actually also some other options are more fitting in the toolchain menu IMHO,
-> like debug/optimization options and SSP.
+ * The patch is not upstreamable.
 
-Those are also not toolchain related imo they are global in nature though
+ * It works around the problem, living a potentially problematic
+   libbsd.pc installed which can be used by other packages than lldpd.
 
-> 
-> Regards,
-> Arnout
-> 
-> 
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Isn't the right solution to add support in pkg-config to mungle
+-isystem flags?
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 204 bytes
-Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160818/7aac18ca/attachment.asc>
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
