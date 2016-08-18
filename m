@@ -1,55 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 18 Aug 2016 21:53:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/simh: new package
-In-Reply-To: <20160818212725.65c9b926@free-electrons.com>
-References: <1471297357-11637-1-git-send-email-lothar.felten@gmail.com>
- <20160816035044.GB3368@tarshish>
- <9ba51c53-ddb3-8a59-a3b0-9ba8e3e52f3e@gmail.com>
- <20160816142950.GH3368@tarshish> <20160816194236.GC10734@free.fr>
- <20160818212725.65c9b926@free-electrons.com>
-Message-ID: <20160818195351.GD5930@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 18 Aug 2016 20:09:27 +0000
+Subject: [Buildroot] [Bug 9166] Missing overlays directory in VFAT image for
+ raspberry pi 3
+In-Reply-To: <bug-9166-163@https.bugs.busybox.net/>
+References: <bug-9166-163@https.bugs.busybox.net/>
+Message-ID: <bug-9166-163-xlu6tZvhAC@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Lothar, All,
+https://bugs.busybox.net/show_bug.cgi?id=9166
 
-On 2016-08-18 21:27 +0200, Thomas Petazzoni spake thusly:
-> On Tue, 16 Aug 2016 21:42:36 +0200, Yann E. MORIN wrote:
-> 
-> > > I don't think so. Not sure how our legal info infra handles binary document 
-> > > formats.  
-> > 
-> > FOO_LICENSE_FILES are just copied; we don't do anything with them. So
-> > it's fine to list a .doc in there.
-> 
-> Not quite true: we generate a big .txt file with the concatenation of
-> the license text of all packages, see licenses.txt and
-> host-licenses.txt.
+--- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Diez,
 
-Indeed, I had forgotten about that...
+> I checked, and matter of factly the patch would break buildroot if
+> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS was not selected. So
+> it's moot anyway.
 
-Then, it that case, I think it would be better not to list the doc file
-in SIMH_LICENSE_FILES at all.
+I was not suggesting that you submit a patch to Buildroot, but that you
+handle the customisation on your side. Use your own genimage.cfg file
+that suits your need.
 
-Still, we'd want it to be copied, so maybe that could be done with a
-post legal-info hook, something like (untested):
+The manual has a section on how to handle local customisations:
+    https://buildroot.org/downloads/manual/manual.html#customize
 
-    define SIMH_LEGAL_INFO_DOC_FILE
-        $(INSTALL) -m 0644 -D $(@D)/path/to/license.doc \
-            $(LICENSE_FILES_DIR_TARGET)/simh-$(SIMH_VERSION)/license.doc
-    endef
-    SIMH_POST_LEGAL_INFO_HOOKS += SIMH_LEGAL_INFO_DOC_FILE
+One would argue that overlays are very often used so they should be
+installed by our defconfigs.
+
+However, there are so many overlays, for so different things, that
+usually only one or a few would be needed in a specific case. Or even
+that overlays from anotehr place are used.
+
+So I am still not sure we want to have our defconfigs install the
+overlays.
 
 Regards,
 Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+You are receiving this mail because:
+You are on the CC list for the bug.
