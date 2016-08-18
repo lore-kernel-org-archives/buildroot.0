@@ -1,48 +1,88 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 18 Aug 2016 08:43:03 +0300
-Subject: [Buildroot] [PATCH] libgcrypt: security bump to version to version
-	1.7.3
-Message-ID: <5d03002e20fce24f208b804c7f2d68c0955e325c.1471498983.git.baruch@tkos.co.il>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Thu, 18 Aug 2016 08:52:33 +0300
+Subject: [Buildroot] [PATCH v2] uclibc: ARC: Support syscall ABI v4
+Message-ID: <1471499553-6145-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2016-6316: Bug in the mixing functions of Libgcrypt's random number
-generator. An attacker who obtains 4640 bits from the RNG can trivially
-predict the next 160 bits of output.
+When used with GCC 6 ABIv4 is used.
+Missing this patch leads to numerous runtime errors.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+The patch has already been accepted in uclibc-ng:
+http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=3e40f9669279f005f7154892539166f5081fbcb2
+
+So the patch should be removed after update to a new version of uclibc-ng.
+
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 ---
- package/libgcrypt/libgcrypt.hash | 6 +++---
- package/libgcrypt/libgcrypt.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Changes v1-v2:
+ Added commit message and signed-off-by to the attached patch.
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 63148d4a15b0..885f83172b67 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,4 +1,4 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2016q3/000392.html
--sha1 85a6a936bcab4c3c05f5efbf6ce847f23d35c0c4  libgcrypt-1.7.2.tar.bz2
-+# From https://lists.gnu.org/archive/html/info-gnu/2016-08/msg00008.html
-+sha1 5a034291e7248592605db448481478e6c963aa9c  libgcrypt-1.7.3.tar.bz2
- # Calculated based on the hash above
--sha256 3d35df906d6eab354504c05d749a9b021944cb29ff5f65c8ef9c3dd5f7b6689f  libgcrypt-1.7.2.tar.bz2
-+sha256 ddac6111077d0a1612247587be238c5294dd0ee4d76dc7ba783cc55fb0337071  libgcrypt-1.7.3.tar.bz2
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 5ee488dd8e34..31f4d6cdf375 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGCRYPT_VERSION = 1.7.2
-+LIBGCRYPT_VERSION = 1.7.3
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPLv2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+ .../uclibc/0003-ARC-Support-syscall-ABI-v4.patch   | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 package/uclibc/0003-ARC-Support-syscall-ABI-v4.patch
+
+diff --git a/package/uclibc/0003-ARC-Support-syscall-ABI-v4.patch b/package/uclibc/0003-ARC-Support-syscall-ABI-v4.patch
+new file mode 100644
+index 0000000..f0a5ae7
+--- /dev/null
++++ b/package/uclibc/0003-ARC-Support-syscall-ABI-v4.patch
+@@ -0,0 +1,54 @@
++From 3e40f9669279f005f7154892539166f5081fbcb2 Mon Sep 17 00:00:00 2001
++From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
++Date: Tue, 16 Aug 2016 15:04:27 -0700
++Subject: [PATCH] ARC: Support syscall ABI v4
++
++The syscall ABI includes the gcc functional calling ABI since a syscall
++implies userland caller and kernel callee.
++
++The current gcc ABI (v3) for ARCv2 ISA required 64-bit data be passed in
++even-odd register pairs, (potentially punching reg holes when passing such
++values as args). This was partly driven by the fact that the double-word
++LDD/STD instructions in ARCv2 expect the register alignment and thus gcc
++forcing this avoids extra MOV at the cost of a few unused register (which we
++have plenty anyways).
++
++This however was rejected as part of upstreaming gcc port to HS. So the new
++ABI v4 doesn't enforce the even-odd reg restriction.
++
++Do note that for ARCompact ISA builds v3 and v4 are practically the same in
++terms of gcc code generation.
++
++This change is dormant for now (gcc 4.8.x based tools) and will only kick
++in with switch to gcc 6.x based tools.
++
++Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
++---
++ libc/sysdeps/linux/arc/bits/uClibc_arch_features.h | 10 ++++++++--
++ 1 file changed, 8 insertions(+), 2 deletions(-)
++
++diff --git a/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h b/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h
++index 5160724..94e089d 100755
++--- a/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h
+++++ b/libc/sysdeps/linux/arc/bits/uClibc_arch_features.h
++@@ -41,8 +41,14 @@
++ /* The default ';' is a comment on ARC. */
++ #define __UCLIBC_ASM_LINE_SEP__ `
++ 
++-/* does your target align 64bit values in register pairs ? (32bit arches only) */
++-#if defined(__A7__)
+++/* does your target align 64bit values in register pairs ? (32bit arches only)
+++ *  - ARC700 never had any constraint on reg pairs (even if ABI v3)
+++ *  - Inital HS ABI (v3: non upstream gcc) had 64-bit data aligned in even-odd
+++ *     reg pairs (thus allowed reg holes when passing such args to calls)
+++ *  - Upstream gcc (6.x) HS ABI doesn't have that restriction
+++ */
+++
+++#if defined(__A7__) || (__GNUC__ > 4)
++ #undef __UCLIBC_SYSCALL_ALIGN_64BIT__
++ #else
++ #define __UCLIBC_SYSCALL_ALIGN_64BIT__
++-- 
++2.5.5
++
 -- 
-2.8.1
+2.5.5
