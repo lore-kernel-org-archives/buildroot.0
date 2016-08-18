@@ -1,94 +1,29 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 19 Aug 2016 01:39:36 +0200
-Subject: [Buildroot] [PATCH] linux: cpupower needs gettexto
-Message-ID: <1471563576-13415-1-git-send-email-yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 18 Aug 2016 23:41:31 +0000
+Subject: [Buildroot] [Bug 9181] Compiling linux kernel fails if
+ BR2_LINUX_KERNEL_TOOL_CPUPOWER is selected
+In-Reply-To: <bug-9181-163@https.bugs.busybox.net/>
+References: <bug-9181-163@https.bugs.busybox.net/>
+Message-ID: <bug-9181-163-bgDCXqM0G1@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The cpupower linux tool needs gettext, always (even without locales).
+https://bugs.busybox.net/show_bug.cgi?id=9181
 
-We need to disable NLS, otherwise it tries to compile the .po files.
-We also need to pass -lintl, otherwise it forgets to link with it
-(because, the world is glibc-only, you did not know? And glibc does not
-need we link with -lintl, so why would we? Oh, yes, we also reinvented
-our super intelligent one-off Makefile rather than use one of the
-standard buildsystems).
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Joergen,
 
-Fixes #9181:
+I sent a patch to the list:
+    https://patchwork.ozlabs.org/patch/660594/
 
-      CC       utils/helpers/sysfs.o
-    In file included from utils/helpers/amd.c:9:0: ./utils/helpers/helpers.h:13:21: fatal error: libintl.h: No such file or directory
-     #include <libintl.h>
-                         ^
+Care to test it and report, please?
 
-Without NLS=false (yes, we could depend on host-gettext):
+Regards,
+Yann E. MORIN.
 
-      MSGFMT   po/de.gmo
-    make[3]: msgfmt: Command not found
-
-Without LDFLAGS=-lintl:
-
-      CC       cpupower
-    ./utils/cpupower.o: In function `main':
-    cpupower.c:(.text.startup+0x1a4): undefined reference to `libintl_textdomain'
-    ./utils/idle_monitor/cpupower-monitor.o: In function `list_monitors':
-    cpupower-monitor.c:(.text+0x5dc): undefined reference to `libintl_gettext'
-    ./utils/cpupower-set.o: In function `cmd_set':
-    cpupower-set.c:(.text+0x38): undefined reference to `libintl_textdomain'
-    ./utils/cpupower-info.o: In function `cmd_info':
-    cpupower-info.c:(.text+0x20): undefined reference to `libintl_textdomain'
-    collect2: error: ld returned 1 exit status
-
-Reported-by: Joergen Pihlflyckt <Jorgen.Pihlflyckt@ajeco.fi>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Joergen Pihlflyckt <Jorgen.Pihlflyckt@ajeco.fi>
----
- linux/Config.tools.in        | 6 ++++++
- linux/linux-tool-cpupower.mk | 4 +++-
- 2 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/linux/Config.tools.in b/linux/Config.tools.in
-index 09bcfab..5ada98d 100644
---- a/linux/Config.tools.in
-+++ b/linux/Config.tools.in
-@@ -3,11 +3,17 @@ menu "Linux Kernel Tools"
- config BR2_LINUX_KERNEL_TOOL_CPUPOWER
- 	bool "cpupower"
- 	depends on !BR2_bfin # pciutils
-+	depends on BR2_USE_WCHAR || !BR2_NEEDS_GETTEXT # gettext
- 	select BR2_PACKAGE_PCIUTILS
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	help
- 	  cpupower is a collection of tools to examine and tune power
- 	  saving related features of your processor.
- 
-+comment "cpupower needs a toolchain w/ wchar"
-+	depends on !BR2_bfin
-+	depends on !BR2_USE_WCHAR && BR2_NEEDS_GETTEXT
-+
- config BR2_LINUX_KERNEL_TOOL_PERF
- 	bool "perf"
- 	help
-diff --git a/linux/linux-tool-cpupower.mk b/linux/linux-tool-cpupower.mk
-index 4551cda..16b2860 100644
---- a/linux/linux-tool-cpupower.mk
-+++ b/linux/linux-tool-cpupower.mk
-@@ -6,10 +6,12 @@
- 
- LINUX_TOOLS += cpupower
- 
--CPUPOWER_DEPENDENCIES = pciutils
-+CPUPOWER_DEPENDENCIES = pciutils $(if $(BR2_NEEDS_GETTEXT),gettext)
- 
- CPUPOWER_MAKE_OPTS = CROSS=$(TARGET_CROSS) \
- 	CPUFREQ_BENCH=false \
-+	NLS=false \
-+	LDFLAGS=-lintl \
- 	DEBUG=false
- 
- define CPUPOWER_BUILD_CMDS
 -- 
-2.7.4
+You are receiving this mail because:
+You are on the CC list for the bug.
