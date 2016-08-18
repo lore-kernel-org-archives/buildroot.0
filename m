@@ -1,32 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Aug 2016 23:26:16 +0200
-Subject: [Buildroot] [PATCH] nettle: add security patch
-In-Reply-To: <1471545256-21052-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1471545256-21052-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160818232616.074251a2@free-electrons.com>
+Date: Thu, 18 Aug 2016 23:30:50 +0200
+Subject: [Buildroot] [git commit] libconfuse: add optional dependency on
+	gettext
+Message-ID: <20160818213130.68218817EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0d68771e5493442443db3956b85ec0083f5facf4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 18 Aug 2016 15:34:16 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2016-6489 - RSA code is vulnerable to cache sharing related attacks.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/nettle/0002-fix-CVE-2016-6489.patch | 181 ++++++++++++++++++++++++++++
->  package/nettle/nettle.mk                    |   2 +
->  2 files changed, 183 insertions(+)
->  create mode 100644 package/nettle/0002-fix-CVE-2016-6489.patch
+When available, libconfuse will use the libintl provided by the gettext
+package.
 
-Applied to master, thanks.
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+[Thomas: make it really an optional dependency.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libconfuse/libconfuse.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+index fea90f1..2908af3 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -14,5 +14,9 @@ HOST_LIBCONFUSE_DEPENDENCIES = host-flex
+ LIBCONFUSE_LICENSE = ISC
+ LIBCONFUSE_LICENSE_FILES = LICENSE
+ 
++ifeq ($(BR2_PACKAGE_GETTEXT),y)
++LIBCONFUSE_DEPENDENCIES += gettext
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
