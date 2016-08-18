@@ -1,59 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 18 Aug 2016 15:44:52 +0000
-Subject: [Buildroot] [Bug 9166] Missing overlays directory in VFAT image for
- raspberry pi 3
-In-Reply-To: <bug-9166-163@https.bugs.busybox.net/>
-References: <bug-9166-163@https.bugs.busybox.net/>
-Message-ID: <bug-9166-163-qy2gt2lES8@https.bugs.busybox.net/>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Thu, 18 Aug 2016 22:34:08 +0530
+Subject: [Buildroot] [PATCH 1/2] logrotate: bump version to 3.10.0
+Message-ID: <1471539849-3766-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9166
+This version bump also fixes one of the build errors that we see with
+gcc6.
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+  logrotate.c: In function 'postrotateSingleLog':
+  logrotate.c:1784:5: error: this 'if' clause does not guard... [-Werror=misleading-indentation]
+       if (!state->doRotate)
+       ^~
+  logrotate.c:1787:2: note: ...this statement, but the latter is misleadingly indented as if it is guarded by the 'if'
+    if (!hasErrors && log->flags & LOG_FLAG_TMPFILENAME) {
+    ^~
+  cc1: all warnings being treated as errors
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|WORKSFORME                  |INVALID
+Fixes:
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Diez,
+  http://autobuild.buildroot.net/results/6dc/6dc2eb22104076920d77425b1e608ef9b9e01c94/
 
-If you found that your bug was in fact not resolved and still valid, you
-should have reopenned it rather than sending an email to an individual.
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+ package/logrotate/logrotate.hash | 2 +-
+ package/logrotate/logrotate.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-So, you said:
-
-> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y does copy the overlays
-> into output/images/rpi-firmware/overlays which is all fine and dandy -
-> but does *not* include them then in the actual FAT boot image, which is
-> controlled by: buildroot/board/raspberrypi/genimage-raspberrypi3.cfg
-
-Indeed, that is not the case.
-
-The defconfig files we provide in Buildroot are "minimalist" configs,
-aimed at building the strict minimum to get a board to actually boot up
-to a shell prompt, with wired networkingv (no wireless). No more.
-
-This is because there are so many possibilities to use a board that we
-will definitely never be able to cover all use cases. At least, a minimal
-defconfig gets the board booting and ready to use in its basic setup. It
-is a known-working starting point for further customisation by the user.
-
-In your casse, edit (or copy then edit) the genimage-raspberrypi3.cfg to
-suit your needs.
-
-I'll keep this report closed, however, because I believe the behaviour
-you reported is what is intended.
-
-Feel free to comment, though. ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+index 77d4dc8..ee31f8e 100644
+--- a/package/logrotate/logrotate.hash
++++ b/package/logrotate/logrotate.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 2de00c65e23fa9d7909cae6594e550b9abe9a7eb1553669ddeaca92d30f97009 logrotate-3.9.2.tar.gz
++sha256 db63b5932190cba941357c029b595a7fddf43539943aa1e0ca53a96136e4c5d9 logrotate-3.10.0.tar.gz
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index de4d837..96012c0 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LOGROTATE_VERSION = 3.9.2
++LOGROTATE_VERSION = 3.10.0
+ LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
+ LOGROTATE_LICENSE = GPLv2+
+ LOGROTATE_LICENSE_FILES = COPYING
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.6.2
