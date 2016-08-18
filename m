@@ -1,90 +1,291 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 18 Aug 2016 23:50:20 +0200
-Subject: [Buildroot] [PATCH 8/9 v2] package/qlibc: drop a musl-compatibility
-	patch
+Date: Thu, 18 Aug 2016 23:50:14 +0200
+Subject: [Buildroot] [PATCH 2/9 v2] package/rpcbind: fix musl build
 In-Reply-To: <cover.1471556612.git.yann.morin.1998@free.fr>
 References: <cover.1471556612.git.yann.morin.1998@free.fr>
-Message-ID: <5712275dcc3907c8bc240e6573bf5d1a88d32a99.1471556612.git.yann.morin.1998@free.fr>
+Message-ID: <60580a0e4712e0ab4475dddfbe183680a4dc883a.1471556612.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We now always have a sys/cdefs.h, so we can drop this patch.
+rpcbind uses the __P() macro defined in sys/cdefs.h but does not
+includes it explicitly, relying on the glibc behaviour to include it
+from its own headers.
+
+But this macro does nothing but expands as its argument. In the past,
+it did provide support for pre-ANSI compilers that did not support
+function prototypes. Those are now gone, and glibc provides this macro
+for legacy code.
+
+Patch out the use of __P() altogether.
+
+Fixes:
+    http://autobuild.buildroot.org/results/346/346c5b562c244ddb039db2f86f71d670a01ed9ce/
+    http://autobuild.buildroot.org/results/d77/d77454265c45539178c008c5d92509c441447675/
+    and numerous such autobuild failures
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...l-build-by-removing-usage-of-internal-gli.patch | 59 ----------------------
- 1 file changed, 59 deletions(-)
- delete mode 100644 package/qlibc/0004-md5-fix-musl-build-by-removing-usage-of-internal-gli.patch
 
-diff --git a/package/qlibc/0004-md5-fix-musl-build-by-removing-usage-of-internal-gli.patch b/package/qlibc/0004-md5-fix-musl-build-by-removing-usage-of-internal-gli.patch
-deleted file mode 100644
-index a48b27f..0000000
---- a/package/qlibc/0004-md5-fix-musl-build-by-removing-usage-of-internal-gli.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From fe45b18f777b1414aee908f08f56a5730a00dbb5 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sat, 21 May 2016 09:59:56 +0200
--Subject: [PATCH 1/1] md5: fix musl build by removing usage of internal glibc
-- header sys/cdefs.h
--
--As suggested in musl FAQ:
--http://wiki.musl-libc.org/wiki/FAQ#Q:_I.27m_trying_to_compile_something_against_musl_and_I_get_error_messages_about_sys.2Fcdefs.h
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--(Patch for master branch sent upstream:
-- https://github.com/wolkykim/qlibc/pull/53)
-----
-- src/internal/md5/md5.h  | 10 ++++++----
-- src/internal/md5/md5c.c |  1 -
-- 2 files changed, 6 insertions(+), 5 deletions(-)
--
--diff --git a/src/internal/md5/md5.h b/src/internal/md5/md5.h
--index cbfa7ca..8e726fe 100644
----- a/src/internal/md5/md5.h
--+++ b/src/internal/md5/md5.h
--@@ -35,9 +35,9 @@ typedef struct MD5Context {
--     unsigned char buffer[64]; /* input buffer */
-- } MD5_CTX;
-- 
---#include <sys/cdefs.h>
---
---__BEGIN_DECLS
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
-- void MD5Init(MD5_CTX *);
-- void MD5Update(MD5_CTX *, const unsigned char *, unsigned int);
-- void MD5Final(unsigned char[16], MD5_CTX *);
--@@ -45,6 +45,8 @@ char * MD5End(MD5_CTX *, char *);
-- char * MD5File(const char *, char *);
-- char * MD5FileChunk(const char *, char *, off_t, off_t);
-- char * MD5Data(const unsigned char *, unsigned int, char *);
---__END_DECLS
--+#ifdef __cplusplus
--+}
--+#endif
-- 
-- #endif /* Q_MD5_H */
--diff --git a/src/internal/md5/md5c.c b/src/internal/md5/md5c.c
--index de9e47f..040bf5e 100644
----- a/src/internal/md5/md5c.c
--+++ b/src/internal/md5/md5c.c
--@@ -26,7 +26,6 @@
--  * edited for clarity and style only.
--  */
-- 
---#include <sys/cdefs.h>
-- #include <sys/types.h>
-- #include <string.h>
-- #include "md5.h"
---- 
--2.8.1
--
+---
+Changes v1 -> v2:
+  - don't include cdefs.h, remove use of __P() as it is what upstream
+    prefers.
+---
+ .../0003-src-remove-use-of-the-__P-macro.patch     | 243 +++++++++++++++++++++
+ 1 file changed, 243 insertions(+)
+ create mode 100644 package/rpcbind/0003-src-remove-use-of-the-__P-macro.patch
+
+diff --git a/package/rpcbind/0003-src-remove-use-of-the-__P-macro.patch b/package/rpcbind/0003-src-remove-use-of-the-__P-macro.patch
+new file mode 100644
+index 0000000..72fda88
+--- /dev/null
++++ b/package/rpcbind/0003-src-remove-use-of-the-__P-macro.patch
+@@ -0,0 +1,243 @@
++From 2f7d15304e0544e4c693c86d8ab8b2f08b9e9886 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Mon, 15 Aug 2016 16:36:40 +0200
++Subject: [PATCH] src: remove use of the __P() macro
++
++The __P() macro is a legacy compatibility macro aimed making pre-ANSI
++(i.e. K&R) compilers that do not support function prototypes happy,
++while still allowing such prototypes for ANSI-compliant compilers.
++
++Since virtually all compilers have been ANSI-compliant for a few decades
++now, use of __P() is totally useless.
++
++Furthermore, __P() is defined in the non-standard sys/cdefs.h header.
++This header is present in glibc and uClibc, and both have it included
++from many of their headers. So, sys/cdefs.h is automagically included in
++most cases and its macros are available.
++
++However, the musl C library does not provide this sys/cdefs.h header.
++Thus, the build breaks on musl.
++
++For all the above reasons, get rid of __P() wherever it is used; just
++always declare real function prototypes.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Cc: Chuck Lever <chuck.lever@oracle.com>
++Cc: Steve Dickson <SteveD@redhat.com>
++---
++ src/check_bound.c  |  2 +-
++ src/pmap_svc.c     | 10 +++++-----
++ src/rpcb_svc.c     | 10 +++++-----
++ src/rpcb_svc_4.c   | 14 ++++++--------
++ src/rpcb_svc_com.c | 46 +++++++++++++++++++++++-----------------------
++ src/rpcbind.c      | 12 ++++++------
++ src/util.c         |  2 +-
++ src/warmstart.c    |  4 ++--
++ 8 files changed, 49 insertions(+), 51 deletions(-)
++
++diff --git a/src/check_bound.c b/src/check_bound.c
++index c70b845..92bfd36 100644
++--- a/src/check_bound.c
+++++ b/src/check_bound.c
++@@ -70,7 +70,7 @@ static struct fdlist *fdhead;	/* Link list of the check fd's */
++ static struct fdlist *fdtail;
++ static char *nullstring = "";
++ 
++-static bool_t check_bound __P((struct fdlist *, char *uaddr));
+++static bool_t check_bound(struct fdlist *, char *uaddr);
++ 
++ /*
++  * Returns 1 if the given address is bound for the given addr & transport
++diff --git a/src/pmap_svc.c b/src/pmap_svc.c
++index ad28b93..4c744fe 100644
++--- a/src/pmap_svc.c
+++++ b/src/pmap_svc.c
++@@ -60,11 +60,11 @@ static	char sccsid[] = "@(#)pmap_svc.c 1.23 89/04/05 Copyr 1984 Sun Micro";
++ #include "rpcbind.h"
++ #include "xlog.h"
++ #include <rpc/svc_soc.h> /* svc_getcaller routine definition */
++-static struct pmaplist *find_service_pmap __P((rpcprog_t, rpcvers_t,
++-					       rpcprot_t));
++-static bool_t pmapproc_change __P((struct svc_req *, SVCXPRT *, u_long));
++-static bool_t pmapproc_getport __P((struct svc_req *, SVCXPRT *));
++-static bool_t pmapproc_dump __P((struct svc_req *, SVCXPRT *));
+++static struct pmaplist *find_service_pmap(rpcprog_t, rpcvers_t,
+++					       rpcprot_t);
+++static bool_t pmapproc_change(struct svc_req *, SVCXPRT *, u_long);
+++static bool_t pmapproc_getport(struct svc_req *, SVCXPRT *);
+++static bool_t pmapproc_dump(struct svc_req *, SVCXPRT *);
++ 
++ /*
++  * Called for all the version 2 inquiries.
++diff --git a/src/rpcb_svc.c b/src/rpcb_svc.c
++index bd92201..709e3fb 100644
++--- a/src/rpcb_svc.c
+++++ b/src/rpcb_svc.c
++@@ -53,10 +53,10 @@
++ #include "rpcbind.h"
++ #include "xlog.h"
++ 
++-static void *rpcbproc_getaddr_3_local __P((void *, struct svc_req *, SVCXPRT *,
++-					   rpcvers_t));
++-static void *rpcbproc_dump_3_local __P((void *, struct svc_req *, SVCXPRT *,
++-					rpcvers_t));
+++static void *rpcbproc_getaddr_3_local(void *, struct svc_req *, SVCXPRT *,
+++					   rpcvers_t);
+++static void *rpcbproc_dump_3_local(void *, struct svc_req *, SVCXPRT *,
+++					rpcvers_t);
++ 
++ /*
++  * Called by svc_getreqset. There is a separate server handle for
++@@ -75,7 +75,7 @@ rpcb_service_3(struct svc_req *rqstp, SVCXPRT *transp)
++ 	} argument;
++ 	char *result;
++ 	xdrproc_t xdr_argument, xdr_result;
++-	void *(*local) __P((void *, struct svc_req *, SVCXPRT *, rpcvers_t));
+++	void *(*local)(void *, struct svc_req *, SVCXPRT *, rpcvers_t);
++ 	rpcprog_t setprog = 0;
++ 
++ 	rpcbs_procinfo(RPCBVERS_3_STAT, rqstp->rq_proc);
++diff --git a/src/rpcb_svc_4.c b/src/rpcb_svc_4.c
++index b673452..5094879 100644
++--- a/src/rpcb_svc_4.c
+++++ b/src/rpcb_svc_4.c
++@@ -54,13 +54,11 @@
++ #include "rpcbind.h"
++ #include "xlog.h"
++ 
++-static void *rpcbproc_getaddr_4_local __P((void *, struct svc_req *, SVCXPRT *,
++-				      rpcvers_t));
++-static void *rpcbproc_getversaddr_4_local __P((void *, struct svc_req *, SVCXPRT *, rpcvers_t));
++-static void *rpcbproc_getaddrlist_4_local
++-	__P((void *, struct svc_req *, SVCXPRT *, rpcvers_t));
++-static void free_rpcb_entry_list __P((rpcb_entry_list_ptr *));
++-static void *rpcbproc_dump_4_local __P((void *, struct svc_req *, SVCXPRT *, rpcvers_t));
+++static void *rpcbproc_getaddr_4_local(void *, struct svc_req *, SVCXPRT *, rpcvers_t);
+++static void *rpcbproc_getversaddr_4_local(void *, struct svc_req *, SVCXPRT *, rpcvers_t);
+++static void *rpcbproc_getaddrlist_4_local(void *, struct svc_req *, SVCXPRT *, rpcvers_t);
+++static void free_rpcb_entry_list(rpcb_entry_list_ptr *);
+++static void *rpcbproc_dump_4_local(void *, struct svc_req *, SVCXPRT *, rpcvers_t);
++ 
++ /*
++  * Called by svc_getreqset. There is a separate server handle for
++@@ -78,7 +76,7 @@ rpcb_service_4(struct svc_req *rqstp, SVCXPRT *transp)
++ 	} argument;
++ 	char *result;
++ 	xdrproc_t xdr_argument, xdr_result;
++-	void *(*local) __P((void *, struct svc_req *, SVCXPRT *, rpcvers_t));
+++	void *(*local)(void *, struct svc_req *, SVCXPRT *, rpcvers_t);
++ 	rpcprog_t setprog = 0;
++ 
++ 	rpcbs_procinfo(RPCBVERS_4_STAT, rqstp->rq_proc);
++diff --git a/src/rpcb_svc_com.c b/src/rpcb_svc_com.c
++index 148fe42..5862c26 100644
++--- a/src/rpcb_svc_com.c
+++++ b/src/rpcb_svc_com.c
++@@ -100,29 +100,29 @@ struct finfo {
++ static struct finfo     FINFO[NFORWARD];
++ 
++ 
++-static bool_t xdr_encap_parms __P((XDR *, struct encap_parms *));
++-static bool_t xdr_rmtcall_args __P((XDR *, struct r_rmtcall_args *));
++-static bool_t xdr_rmtcall_result __P((XDR *, struct r_rmtcall_args *));
++-static bool_t xdr_opaque_parms __P((XDR *, struct r_rmtcall_args *));
++-static int find_rmtcallfd_by_netid __P((char *));
++-static SVCXPRT *find_rmtcallxprt_by_fd __P((int));
++-static int forward_register __P((u_int32_t, struct netbuf *, int, char *,
++-    rpcproc_t, rpcvers_t, u_int32_t *));
++-static struct finfo *forward_find __P((u_int32_t));
++-static int free_slot_by_xid __P((u_int32_t));
++-static int free_slot_by_index __P((int));
++-static int netbufcmp __P((struct netbuf *, struct netbuf *));
++-static struct netbuf *netbufdup __P((struct netbuf *));
++-static void netbuffree __P((struct netbuf *));
++-static int check_rmtcalls __P((struct pollfd *, int));
++-static void xprt_set_caller __P((SVCXPRT *, struct finfo *));
++-static void send_svcsyserr __P((SVCXPRT *, struct finfo *));
++-static void handle_reply __P((int, SVCXPRT *));
++-static void find_versions __P((rpcprog_t, char *, rpcvers_t *, rpcvers_t *));
++-static rpcblist_ptr find_service __P((rpcprog_t, rpcvers_t, char *));
++-static char *getowner __P((SVCXPRT *, char *, size_t));
++-static int add_pmaplist __P((RPCB *));
++-static int del_pmaplist __P((RPCB *));
+++static bool_t xdr_encap_parms(XDR *, struct encap_parms *);
+++static bool_t xdr_rmtcall_args(XDR *, struct r_rmtcall_args *);
+++static bool_t xdr_rmtcall_result(XDR *, struct r_rmtcall_args *);
+++static bool_t xdr_opaque_parms(XDR *, struct r_rmtcall_args *);
+++static int find_rmtcallfd_by_netid(char *);
+++static SVCXPRT *find_rmtcallxprt_by_fd(int);
+++static int forward_register(u_int32_t, struct netbuf *, int, char *,
+++    rpcproc_t, rpcvers_t, u_int32_t *);
+++static struct finfo *forward_find(u_int32_t);
+++static int free_slot_by_xid(u_int32_t);
+++static int free_slot_by_index(int);
+++static int netbufcmp(struct netbuf *, struct netbuf *);
+++static struct netbuf *netbufdup(struct netbuf *);
+++static void netbuffree(struct netbuf *);
+++static int check_rmtcalls(struct pollfd *, int);
+++static void xprt_set_caller(SVCXPRT *, struct finfo *);
+++static void send_svcsyserr(SVCXPRT *, struct finfo *);
+++static void handle_reply(int, SVCXPRT *);
+++static void find_versions(rpcprog_t, char *, rpcvers_t *, rpcvers_t *);
+++static rpcblist_ptr find_service(rpcprog_t, rpcvers_t, char *);
+++static char *getowner(SVCXPRT *, char *, size_t);
+++static int add_pmaplist(RPCB *);
+++static int del_pmaplist(RPCB *);
++ 
++ /*
++  * Set a mapping of program, version, netid
++diff --git a/src/rpcbind.c b/src/rpcbind.c
++index c4265cd..87ccdc2 100644
++--- a/src/rpcbind.c
+++++ b/src/rpcbind.c
++@@ -136,13 +136,13 @@ char *tcp_uaddr;	/* Universal TCP address */
++ static char servname[] = "rpcbind";
++ static char superuser[] = "superuser";
++ 
++-int main __P((int, char *[]));
+++int main(int, char *[]);
++ 
++-static int init_transport __P((struct netconfig *));
++-static void rbllist_add __P((rpcprog_t, rpcvers_t, struct netconfig *,
++-			     struct netbuf *));
++-static void terminate __P((int));
++-static void parseargs __P((int, char *[]));
+++static int init_transport(struct netconfig *);
+++static void rbllist_add(rpcprog_t, rpcvers_t, struct netconfig *,
+++			     struct netbuf *);
+++static void terminate(int);
+++static void parseargs(int, char *[]);
++ 
++ int
++ main(int argc, char *argv[])
++diff --git a/src/util.c b/src/util.c
++index a6c835b..74b0284 100644
++--- a/src/util.c
+++++ b/src/util.c
++@@ -70,7 +70,7 @@ static struct sockaddr_in *local_in4;
++ static struct sockaddr_in6 *local_in6;
++ #endif
++ 
++-static int bitmaskcmp __P((void *, void *, void *, int));
+++static int bitmaskcmp(void *, void *, void *, int);
++ 
++ /*
++  * For all bits set in "mask", compare the corresponding bits in
++diff --git a/src/warmstart.c b/src/warmstart.c
++index b6eb73e..122a058 100644
++--- a/src/warmstart.c
+++++ b/src/warmstart.c
++@@ -58,8 +58,8 @@
++ #define	PMAPFILE	RPCBIND_STATEDIR "/portmap.xdr"
++ #endif
++ 
++-static bool_t write_struct __P((char *, xdrproc_t, void *));
++-static bool_t read_struct __P((char *, xdrproc_t, void *));
+++static bool_t write_struct(char *, xdrproc_t, void *);
+++static bool_t read_struct(char *, xdrproc_t, void *);
++ 
++ static bool_t
++ write_struct(char *filename, xdrproc_t structproc, void *list)
++-- 
++2.7.4
++
 -- 
 2.7.4
