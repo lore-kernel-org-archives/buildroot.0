@@ -1,33 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 18 Aug 2016 21:02:47 +0000
-Subject: [Buildroot] [Bug 9176] minnowboard : USB not mounted
-In-Reply-To: <bug-9176-163@https.bugs.busybox.net/>
-References: <bug-9176-163@https.bugs.busybox.net/>
-Message-ID: <bug-9176-163-2dtXRXXj6M@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 Aug 2016 23:07:22 +0200
+Subject: [Buildroot] [PATCH] linknx: deprecate the package
+Message-ID: <1471554442-4397-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9176
+The upstream for this package is dead: the last release is from 2013,
+the project is still using a CVS repository on SourceForge, and the
+build breaks with gcc 6.x. Let's deprecate this package.
 
---- Comment #5 from CB <christophebricout@yahoo.fr> ---
-Dear Yann and Ezequiel,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linknx/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-According to yours remarks, I made some more investigation.
-The problem is solved!
-Indeed, the default Kernel configuration for minnowboard was not handling USB.
-After uptadting the kernel configuration (see attachment), I succeeded mount
-the USB devices manually.
-
-So, I think it could interessting to updqte the default configuration in order
-to match minnowboard. Up to you.
-
-Anyway, thanks for your help
-Best regards
-Christophe
-
+diff --git a/package/linknx/Config.in b/package/linknx/Config.in
+index ca55c8b..0da136b 100644
+--- a/package/linknx/Config.in
++++ b/package/linknx/Config.in
+@@ -6,6 +6,9 @@ config BR2_PACKAGE_LINKNX
+ 	       if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # libpthsem
++	# upstream is dead (CVS on SourceForge), no release since
++	# 2013, build breaks with gcc 6.x
++	depends on BR2_DEPRECATED_SINCE_2016_08
+ 	help
+ 	  Linknx is an automation platform providing high level functionalities
+ 	  to EIB/KNX installation.
+@@ -15,3 +18,4 @@ config BR2_PACKAGE_LINKNX
+ comment "linknx needs a toolchain w/ C++"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_DEPRECATED_SINCE_2016_08
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.7.4
