@@ -1,56 +1,47 @@
-From: Jan Heylen <heyleke@gmail.com>
-Date: Thu, 18 Aug 2016 09:40:28 +0200
-Subject: [Buildroot] [PATCH] arch: add missing 'string' declaration to
-	BR2_LD_TARGET_EMULATION
-In-Reply-To: <1471505353-20289-1-git-send-email-arnout@mind.be>
-References: <1471505353-20289-1-git-send-email-arnout@mind.be>
-Message-ID: <CAGszK3hBzWJTJu7rULVVt2tiqQd5GS9Fv-BBmue0pRo90FLJMw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 18 Aug 2016 10:21:06 +0200
+Subject: [Buildroot] [PATCH] linux-pam: uses fork() needs MMU
+In-Reply-To: <20160818064956.jf7gt374yeehslfi@tarshish> (Baruch Siach's
+ message of "Thu, 18 Aug 2016 09:49:56 +0300")
+References: <20160818062345.GA28431@waldemar-brodkorb.de>
+ <20160818064956.jf7gt374yeehslfi@tarshish>
+Message-ID: <87vayypjwt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 18, 2016 at 9:29 AM, Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
-> Commit dc6f4c8 forgot to give a type (string) to the newly introduced
-> BR2_LD_TARGET_EMULATION symbol.
->
-> Possibly it was intended to be a "global" symbol like
-> BR2_GCC_TARGET_ABI where the declaration is in arch/Config.in and not
-> in the arch-specific Config.in. However, in this case, the symbol is
-> only defined/used for MIPS so there is no "global" declaration.
->
-> Without this, Kconfig gives a warning:
-> arch/Config.in.mips:87:warning: config symbol defined without type
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Jan Heylen <heyleke@gmail.com>
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-I assume so :-)
+ > Hi Waldemar,
+ > On Thu, Aug 18, 2016 at 08:23:45AM +0200, Waldemar Brodkorb wrote:
+ >> Fixes:
+ >> http://autobuild.buildroot.net/results/8c9/8c9a5fe52f762b4ff4444cf41efdf0d3cf203986/
+ >> 
+ >> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Reviewed-by: Jan Heylen <heyleke@gmail.com>
+ > [...]
 
-br,
+ >> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+ >> index 429dfa7..657bcdd 100644
+ >> --- a/package/util-linux/Config.in
+ >> +++ b/package/util-linux/Config.in
+ >> @@ -63,6 +63,7 @@ config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
+ >> depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+ >> depends on !BR2_STATIC_LIBS
+ >> depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+ >> +	depends on BR2_USE_MMU # linux-pam
+ >> select BR2_PACKAGE_LINUX_PAM
+ >> help
+ >> Change login shell, real user name and information
 
-Jan
+ > Lots of packages select BR2_PACKAGE_UTIL_LINUX. All of them (and all packages 
+ > that select them) now need to depend on BR2_USE_MMU.
 
-> ---
->  arch/Config.in.mips | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-> index 37e4bf6..ebc71de 100644
-> --- a/arch/Config.in.mips
-> +++ b/arch/Config.in.mips
-> @@ -85,6 +85,7 @@ config BR2_GCC_TARGET_ABI
->         default "64"            if BR2_MIPS_NABI64
->
->  config BR2_LD_TARGET_EMULATION
-> +       string
->         default "elf64ltsmip"           if  BR2_mips64el && BR2_MIPS_NABI64
->         default "elf64btsmip"           if  BR2_mips64   && BR2_MIPS_NABI64
->         default "elf32ltsmipn32"        if  BR2_mips64el && BR2_MIPS_NABI32
-> --
-> 2.8.1
->
+Notice that this is only for BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS /
+BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH (which nothing selects), not the
+toplevel util-linux option.
+
+-- 
+Bye, Peter Korsgaard
