@@ -1,119 +1,48 @@
-From: Cyril Bur <cyrilbur@gmail.com>
-Date: Thu, 18 Aug 2016 09:02:36 +1000
-Subject: [Buildroot] [PATCH] package/kvm-unit-tests: new package
-Message-ID: <20160817230236.8255-1-cyrilbur@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 18 Aug 2016 08:43:03 +0300
+Subject: [Buildroot] [PATCH] libgcrypt: security bump to version to version
+	1.7.3
+Message-ID: <5d03002e20fce24f208b804c7f2d68c0955e325c.1471498983.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The unit tests are tiny guest operating systems that generally execute
-only tens of lines of C and assembler test code in order to obtain its
-PASS/FAIL result. Unit tests provide KVM and virt hardware functional
-testing by targeting the features through minimal implementations of
-their use per the hardware specification. The simplicity of unit tests
-make them easy to verify they are correct, easy to maintain, and easy
-to use in timing measurements. Unit tests are also often used for
-quick and dirty bug reproducers. The reproducers may then be kept as
-regression tests. It's strongly encouraged that patches implementing
-new KVM features are submitted with accompanying unit tests.
-http://www.linux-kvm.org/page/KVM-unit-tests
+Fixes CVE-2016-6316: Bug in the mixing functions of Libgcrypt's random number
+generator. An attacker who obtains 4640 bits from the RNG can trivially
+predict the next 160 bits of output.
 
-Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/Config.in                        |  1 +
- package/kvm-unit-tests/Config.in         | 17 ++++++++++++
- package/kvm-unit-tests/kvm-unit-tests.mk | 45 ++++++++++++++++++++++++++++++++
- 3 files changed, 63 insertions(+)
- create mode 100644 package/kvm-unit-tests/Config.in
- create mode 100644 package/kvm-unit-tests/kvm-unit-tests.mk
+ package/libgcrypt/libgcrypt.hash | 6 +++---
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index e1ddcea..60f7d6e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -82,6 +82,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/kexec/Config.in"
- 	source "package/kexec-lite/Config.in"
- 	source "package/ktap/Config.in"
-+	source "package/kvm-unit-tests/Config.in"
- 	source "package/kyua/Config.in"
- 	source "package/latencytop/Config.in"
- 	source "package/lmbench/Config.in"
-diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
-new file mode 100644
-index 0000000..cf0da58
---- /dev/null
-+++ b/package/kvm-unit-tests/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_KVM_UNIT_TESTS
-+	bool "kvm-unit-tests"
-+	depends on BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64 || BR2_i386 || BR2_arm
-+	help
-+	  kvm-unit-tests is a project as old as KVM. As its name suggests,
-+	  it's purpose is to provide unit tests for KVM. The unit tests are tiny
-+	  guest operating systems that generally execute only tens of lines of C
-+	  and assembler test code in order to obtain its PASS/FAIL result. Unit
-+	  tests provide KVM and virt hardware functional testing by targeting
-+	  the features through minimal implementations of their use per the
-+	  hardware specification. The simplicity of unit tests make them easy to
-+	  verify they are correct, easy to maintain, and easy to use in timing
-+	  measurements. Unit tests are also often used for quick and dirty bug
-+	  reproducers. The reproducers may then be kept as regression tests.
-+	  It's strongly encouraged that patches implementing new KVM features
-+	  are submitted with accompanying unit tests.
-+	  http://www.linux-kvm.org/page/KVM-unit-tests
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-new file mode 100644
-index 0000000..457e656
---- /dev/null
-+++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-@@ -0,0 +1,45 @@
-+################################################################################
-+#
-+# kvm-unit-tests
-+#
-+################################################################################
-+
-+KVM_UNIT_TESTS_VERSION = 682187afcc998bc3dd25061e98b43792cc340b33
-+KVM_UNIT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/scm/virt/kvm/kvm-unit-tests.git
-+KVM_UNIT_TESTS_SITE_METHOD = git
-+KVM_UNIT_TESTS_LICENSE = LGPLv2
-+KVM_UNIT_TESTS_LICENSE_FILES = COPYRIGHT
-+KVM_UNIT_TESTS_ARCH = "$(ARCH)"
-+
-+ifeq ($(ARCH),powerpc64)
-+KVM_UNIT_TESTS_ARCH = "ppc64"
-+endif
-+ifeq ($(ARCH),powerpc64le)
-+KVM_UNIT_TESTS_ARCH = "ppc64"
-+endif
-+
-+ifeq ($(BR2_ENDIAN),"LITTLE")
-+KVM_UNIT_TESTS_ENDIAN = "little"
-+else
-+KVM_UNIT_TESTS_ENDIAN = "big"
-+endif
-+
-+KVM_UNIT_TESTS_CONF_OPTS = --arch="$(KVM_UNIT_TESTS_ARCH)" \
-+						   --cross-prefix="$(TARGET_CROSS)" \
-+						   --endian="$(KVM_UNIT_TESTS_ENDIAN)" \
-+						   --prefix="$(TARGET_DIR)"
-+
-+define KVM_UNIT_TESTS_CONFIGURE_CMDS
-+	cd $(@D) && ./configure $(KVM_UNIT_TESTS_CONF_OPTS)
-+endef
-+
-+define KVM_UNIT_TESTS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) standalone
-+endef
-+
-+define KVM_UNIT_TESTS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+endef
-+
-+# Does use configure script but not an autotools one
-+$(eval $(generic-package))
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 63148d4a15b0..885f83172b67 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2016q3/000392.html
+-sha1 85a6a936bcab4c3c05f5efbf6ce847f23d35c0c4  libgcrypt-1.7.2.tar.bz2
++# From https://lists.gnu.org/archive/html/info-gnu/2016-08/msg00008.html
++sha1 5a034291e7248592605db448481478e6c963aa9c  libgcrypt-1.7.3.tar.bz2
+ # Calculated based on the hash above
+-sha256 3d35df906d6eab354504c05d749a9b021944cb29ff5f65c8ef9c3dd5f7b6689f  libgcrypt-1.7.2.tar.bz2
++sha256 ddac6111077d0a1612247587be238c5294dd0ee4d76dc7ba783cc55fb0337071  libgcrypt-1.7.3.tar.bz2
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 5ee488dd8e34..31f4d6cdf375 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGCRYPT_VERSION = 1.7.2
++LIBGCRYPT_VERSION = 1.7.3
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPLv2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
 -- 
-2.9.3
+2.8.1
