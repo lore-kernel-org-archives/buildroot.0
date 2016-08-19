@@ -1,56 +1,59 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 19 Aug 2016 07:44:11 +0200
-Subject: [Buildroot] [PATCH] package/pppd: disable for musl toolchains
-In-Reply-To: <15985f1d-b02e-b670-4b71-5fb11c4afc44@gmail.com>
-References: <1468685298-29083-1-git-send-email-romain.naour@gmail.com>
- <20160716202434.0a3a6440@free-electrons.com>
- <15985f1d-b02e-b670-4b71-5fb11c4afc44@gmail.com>
-Message-ID: <CAGm1_kv-DzWVvMVFi9B1XzSZD0wF4eCqF1KWL8M0CetbWnLE2g@mail.gmail.com>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Fri, 19 Aug 2016 11:14:30 +0530
+Subject: [Buildroot] [PATCH 2/2] logrotate: fix up build error with gcc 6
+In-Reply-To: <20160818212125.1cb8e7ae@free-electrons.com>
+References: <1471539849-3766-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <1471539849-3766-2-git-send-email-rahul.bedarkar@imgtec.com>
+ <20160818212125.1cb8e7ae@free-electrons.com>
+Message-ID: <57B69CBE.2040305@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jul 16, 2016 at 8:33 PM, Romain Naour <romain.naour@gmail.com> wrote:
-> Hi Thomas,
+Hi Thomas,
+
+On Friday 19 August 2016 12:51 AM, Thomas Petazzoni wrote:
+> Hello,
 >
-> Le 16/07/2016 ? 20:24, Thomas Petazzoni a ?crit :
->> Hello,
->>
->> On Sat, 16 Jul 2016 18:08:18 +0200, Romain Naour wrote:
->>> For the same reason as for ipsec-tools [1], disable pppd for musl
->>> toolchains.
->>> It also include <sys/cdefs.h> which is not provided by musl [2].
->>>
->>> This fixes a compilation error with musl libc because of undeclared
->>> __P and missing sys/cdefs.h include.
->>>
->>> Propagate the dependency to network-manager and rp-pppoe
->>> packages.
->>>
->>> [1] 33499484e457018203023cdfdd5286478f2ae381
->>> [2] http://wiki.musl-libc.org/wiki/FAQ#Q:_I.27m_trying_to_compile_something_against_musl_and_I_get_error_messages_about_sys.2Fcdefs.h
->>>
->>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->>> ---
->>>  package/network-manager/Config.in | 1 +
->>>  package/pppd/Config.in            | 5 +++--
->>>  package/rp-pppoe/Config.in        | 5 +++--
->>>  3 files changed, 7 insertions(+), 4 deletions(-)
->>
->> I've added a Config.in comment in the network-manager package, and
->> applied. Thanks!
->>
->> It's a bit sad that we have to disable packages just because of silly
->> __P macros, but there are indeed tons of them in pppd :-/
+> Can this apply without the 3.10.0 bump?
+
+Yes, but this patch fixes only one build error out of two.
+
+We see following two build errors
+
+logrotate.c: In function 'postrotateSingleLog':
+logrotate.c:1784:5: error: this 'if' clause does not guard... 
+[-Werror=misleading-indentation]
+      if (!state->doRotate)
+      ^~
+logrotate.c:1787:2: note: ...this statement, but the latter is 
+misleadingly indented as if it is guarded by the 'if'
+   if (!hasErrors && log->flags & LOG_FLAG_TMPFILENAME) {
+   ^~
+config.c: In function 'strndup':
+config.c:87:10: error: nonnull argument 's' compared to NULL 
+[-Werror=nonnull-compare]
+         if(!s)
+           ^
+cc1: all warnings being treated as errors
+make[2]: *** [config.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+cc1: all warnings being treated as errors
+make[2]: *** [logrotate.o] Error 1
+
+Another build error is fixed in upstream so PATCH 1/2 does version bump. 
+Upstream commit - 
+https://github.com/logrotate/logrotate/commit/6a36c105587b07ad14fc937f3ee6e2eb402621a2
+
 >
-> Well, I'm also not really happy to disable packages in Buildroot for such reason :-/
+> Indeed PATCH 2/2 being a bug fix, it would be a candidate for the
+> "master" branch, while PATCH 1/2 being a version bump, we can only
+> commit it to the "next" branch.
 
-Some MUSL related pull-requests appeared lately: from
-https://github.com/paulusmack/ppp/pull/60 till
-https://github.com/paulusmack/ppp/pull/65
+In that case, I will spin v2 of this patch and backport upstream commit 
+to fix second build error.
 
-I hope, they can be pulled in the near future.
-
-Yegor
+Thanks,
+Rahul
