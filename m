@@ -1,60 +1,42 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Fri, 19 Aug 2016 10:54:22 -0700
-Subject: [Buildroot] [PATCH 1/1] arch/arm: Add Cortex-a53 CPU
-In-Reply-To: <20160819194931.072912e5@free-electrons.com>
-References: <1471565224-15625-1-git-send-email-flatmax@flatmax.org>
- <20160819100320.1d2609bd@free-electrons.com>
- <192101AE-C8DB-444C-8A52-68EA27264045@gmail.com>
- <20160819194931.072912e5@free-electrons.com>
-Message-ID: <5F8C494A-03CF-46AC-B85D-107643848CD1@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 19 Aug 2016 21:02:19 +0200
+Subject: [Buildroot] Analysis of build results for 2016-08-17
+In-Reply-To: <1471628924.31233.27.camel@synopsys.com>
+References: <20160818063027.302C6102F5A@stock.ovh.net>
+ <20160818231053.37c1b26b@free-electrons.com>
+ <1471628924.31233.27.camel@synopsys.com>
+Message-ID: <20160819210219.7bdf6383@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-> On Aug 19, 2016, at 10:49 AM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> 
-> Hello,
-> 
-> On Fri, 19 Aug 2016 10:47:05 -0700, Khem Raj wrote:
-> 
->>> On Fri, 19 Aug 2016 10:07:04 +1000, Matt Flax wrote:
->>>> Adds the Cortex-a53 CPU to the target architecture variant choice. This sets
->>>> the toolchain to use cortex-a53 as the target. The effect is that various
->>>> cortex-a53 tunings are enabled for the compilation of packages.
->>>> 
->>>> Signed-off-by: Matt Flax <flatmax@flatmax.org>
->>> 
->>> The A53 is an ARM64 CPU, so it should rather be added to
->>> Config.in.aarch64 (in which we don't yet have a CPU selection, but that
->>> can be added).
->>> 
->>> Or are you building a 32 bits ARM system for a Cortex-A53 ? In that
->>> case, adding it to Config.in.arm would be OK, but it's a bit annoying
->>> that we would have to duplicate many ARM CPUs between Config.in.arm and
->>> Config.in.aarch64.
->> 
->> 64bit kernel with 32bit userspace is most common usecase as of now for
->> a53 that I see. so you need some sort of multilib.
-> 
-> I think on RPi3 they use a 32 bit kernel and 32 bit userspace, which
-> probably is what Matt was targeting. But I'd like to hear from Matt's
-> use case first.
+On Fri, 19 Aug 2016 17:48:45 +0000, Vlad Zakharov wrote:
 
-rpi3 is 32bit all the way, so this patch is fine for that case.
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+> Seems like all these failures happens due to the same toolchain issue our team working at. We will send a patch when the
+> problem is solved. We hope it will happen soon =)
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 204 bytes
-Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160819/15633324/attachment.asc>
+Ok, great, thanks!
+
+> Also I send two patches that fixes another issues:
+> 1)?https://patchwork.ozlabs.org/patch/660918/
+> This patch fixes binutils failure:
+> > ? ? ? ? ?arc |????binutils-arc-2016.09-eng008 | NOK | http://autobuild.buildroot.net/results/00455b6a8324920ad843d90ce
+> > 0413451522691a8/  
+> 
+> 2)?https://patchwork.ozlabs.org/patch/660917/
+> And this one is for Qt4:
+> http://autobuild.buildroot.net/results/541/54172d55f39b2fcfa5b7fb4d4ee01566678babbc//
+
+Yes, seen them. I'll have a look shortly.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
