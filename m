@@ -1,30 +1,47 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Thu, 18 Aug 2016 22:02:11 -0300
-Subject: [Buildroot] [PATCH 1/1] manual: fix typo
-Message-ID: <1471568531-12041-1-git-send-email-rprebello@gmail.com>
+From: Matt Flax <flatmax@flatmax.org>
+Date: Fri, 19 Aug 2016 10:07:04 +1000
+Subject: [Buildroot] [PATCH 1/1] arch/arm: Add Cortex-a53 CPU
+Message-ID: <1471565224-15625-1-git-send-email-flatmax@flatmax.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
----
- docs/manual/using-buildroot-development.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Adds the Cortex-a53 CPU to the target architecture variant choice. This sets
+the toolchain to use cortex-a53 as the target. The effect is that various
+cortex-a53 tunings are enabled for the compilation of packages.
 
-diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
-index a075416..e167849 100644
---- a/docs/manual/using-buildroot-development.txt
-+++ b/docs/manual/using-buildroot-development.txt
-@@ -8,7 +8,7 @@ it, configure, compile and install the software component found inside
- this tarball. The source code is extracted in
- +output/build/<package>-<version>+, which is a temporary directory:
- whenever +make clean+ is used, this directory is entirely removed, and
--re-recreated at the next +make+ invocation. Even when a Git or
-+re-created at the next +make+ invocation. Even when a Git or
- Subversion repository is used as the input for the package source
- code, Buildroot creates a tarball out of it, and then behaves as it
- normally does with tarballs.
+Signed-off-by: Matt Flax <flatmax@flatmax.org>
+---
+ arch/Config.in.arm | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index ee612f5..72bb744 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -170,6 +170,13 @@ config BR2_cortex_a17
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++config BR2_cortex_a53
++	bool "cortex-A53"
++	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_HAS_NEON
++	select BR2_ARM_CPU_HAS_VFPV4
++	select BR2_ARM_CPU_ARMV7A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_m3
+ 	bool "cortex-M3"
+ 	select BR2_ARM_CPU_HAS_THUMB2
+@@ -458,6 +465,7 @@ config BR2_GCC_TARGET_CPU
+ 	default "cortex-a12"	if BR2_cortex_a12
+ 	default "cortex-a15"	if BR2_cortex_a15
+ 	default "cortex-a17"	if BR2_cortex_a17
++	default "cortex-a53"	if BR2_cortex_a53
+ 	default "cortex-m3"	if BR2_cortex_m3
+ 	default "cortex-m4"	if BR2_cortex_m4
+ 	default "fa526"		if BR2_fa526
 -- 
-2.1.4
+2.7.4
