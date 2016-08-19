@@ -1,37 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 23:04:44 +0200
-Subject: [Buildroot] [PATCH v2 next 2/2] logrotate: bump version to
- 3.10.0
-In-Reply-To: <1471626904-29215-2-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1471626904-29215-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1471626904-29215-2-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160819230444.5fc60704@free-electrons.com>
+Date: Fri, 19 Aug 2016 23:05:45 +0200
+Subject: [Buildroot] [git commit] binutils: disable warning flags to prevent
+	build failures
+Message-ID: <20160819210603.401BE82271@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fc61da15f46ca3eba529b71025ef9e5715b49716
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 19 Aug 2016 22:45:04 +0530, Rahul Bedarkar wrote:
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> ---
-> Changes v1 -> v2:
->   - Rebase on top of next branch. (Suggested by Thomas Petazzoni)
-> ---
->  package/logrotate/logrotate.hash | 2 +-
->  package/logrotate/logrotate.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+binutils-arc-2016.09-eng008 build fails sometimes.
 
-I've applied to next, after adding the second patch needed to fix the
-gcc 6.x build.
+This happens due to the following issue:
 
-Thanks!
+binutils configure script has CC variable that stores compiler for
+target and CC_FOR_BUILD variable that stores compiler for host.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+WARN_FLAGS are verified by the script to be compatible only with CC
+compiler but not with CC_FOR_BUILD compiler. Despite this WARN_FLAGS
+are passed to both CC and CC_FOR_BUILD compilers. This leads to
+unevident errors when cross-compiling. More information you can find
+in the binutils mailing list:
+https://sourceware.org/ml/binutils/2016-08/msg00117.html
+
+We are going to write a patch for bunutils that fixes the initial
+issue. Current patch contains temporary workaround. It should be
+deleted after real fix.
+
+Fixes:
+http://autobuild.buildroot.net/results/00455b6a8324920ad843d90ce0413451522691a8//
+
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/binutils/binutils.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index aeabf75..2936eb5 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -58,6 +58,7 @@ BINUTILS_CONF_OPTS = \
+ 	--host=$(GNU_TARGET_NAME) \
+ 	--target=$(GNU_TARGET_NAME) \
+ 	--enable-install-libiberty \
++	--enable-build-warnings=no \
+ 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+ 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+ 
