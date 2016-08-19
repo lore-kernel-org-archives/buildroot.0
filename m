@@ -1,9 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 12:24:15 +0200
-Subject: [Buildroot] [PATCH] package/connman: disable for musl toolchains
-In-Reply-To: <1471556901-28691-1-git-send-email-romain.naour@gmail.com>
-References: <1471556901-28691-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160819122415.6ff5899e@free-electrons.com>
+Date: Fri, 19 Aug 2016 12:27:41 +0200
+Subject: [Buildroot] [PATCH 2/2] logrotate: fix up build error with gcc 6
+In-Reply-To: <57B69CBE.2040305@imgtec.com>
+References: <1471539849-3766-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <1471539849-3766-2-git-send-email-rahul.bedarkar@imgtec.com>
+ <20160818212125.1cb8e7ae@free-electrons.com>
+ <57B69CBE.2040305@imgtec.com>
+Message-ID: <20160819122741.6a2890e2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,44 +15,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 18 Aug 2016 23:48:21 +0200, Romain Naour wrote:
-> Connman doesn't build with musl toolchains due to several "classic"
-> musl issues [1] (mixes userspace and kernel headers, missing header)
-> 
-> Upstream received some fixes [2] but they are not yet merged.
-> 
-> Also, gresolv.c use res_ninit() function which is not available
-> with musl. A fix from Alpinelinux is available [3] but it require
-> some invasive changes.
-> 
-> Disable connman for musl toolchains for now, and wait for upstream
-> fixes.
-> 
-> [1] http://wiki.musl-libc.org/wiki/FAQ
-> [2] https://lists.01.org/pipermail/connman/2016-August/000880.html
->     https://lists.01.org/pipermail/connman/2016-August/000881.html
->     https://lists.01.org/pipermail/connman/2016-August/000882.html
-> [3] https://github.com/openembedded/openembedded-core/commit/d08f9d7145ba14ce9fbf320719c05560be69212f
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/e88/e88b4dbd4b79fc983b8f7d33da3287966854f8ca
-> [...]
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/connman-gtk/Config.in | 6 ++++--
->  package/connman/Config.in     | 6 ++++--
->  2 files changed, 8 insertions(+), 4 deletions(-)
+On Fri, 19 Aug 2016 11:14:30 +0530, Rahul Bedarkar wrote:
 
-Applied to master, thanks. One thing that worries me a bit is one we
-will remember to re-enable it for musl once musl support has landed
-upstream. But oh well, this can probably wait until someone actually
-needs connman on musl.
+> > Indeed PATCH 2/2 being a bug fix, it would be a candidate for the
+> > "master" branch, while PATCH 1/2 being a version bump, we can only
+> > commit it to the "next" branch.  
+> 
+> In that case, I will spin v2 of this patch and backport upstream commit 
+> to fix second build error.
+
+OK, thanks. I've marked both of your patches as Changes Requested, so
+please send a series with two patches:
+
+ * One patch that adds the necessary fixes for the gcc 6.x build, which
+   can be applied on master.
+
+ * One patch that bumps the version of lograte to the latest one.
 
 Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
