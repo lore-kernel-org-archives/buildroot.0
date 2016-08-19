@@ -1,43 +1,51 @@
 From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Fri, 19 Aug 2016 19:18:43 +0300
-Subject: [Buildroot] [PATCH] qt: build using old C++ standart
-Message-ID: <1471623523-23829-1-git-send-email-vzakhar@synopsys.com>
+Date: Fri, 19 Aug 2016 19:29:21 +0300
+Subject: [Buildroot] [PATCH] binutils: disable warning flags to prevent
+	build failures
+Message-ID: <1471624161-30283-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-'std::auto_ptr' is deprecated with gcc-6 but is used in qt4 code.
-So we have to build using old C++ standart to prevent build failures.
+binutils-arc-2016.09-eng008 build fails sometimes.
 
-qt4 is not being developed no more, so unfortunately we can't update
-obsolete C++ code and have to add this workaround.
+This happens due to the following issue:
+
+binutils configure script has CC variable that stores compiler for
+target and CC_FOR_BUILD variable that stores compiler for host.
+
+WARN_FLAGS are verified by the script to be compatible only with CC
+compiler but not with CC_FOR_BUILD compiler. Despite this WARN_FLAGS
+are passed to both CC and CC_FOR_BUILD compilers. This leads to
+unevident errors when cross-compiling. More information you can find
+in the binutils mailing list:
+https://sourceware.org/ml/binutils/2016-08/msg00117.html
+
+We are going to write a patch for bunutils that fixes the initial
+issue. Current patch contains temporary workaround. It should be
+deleted after real fix.
 
 Fixes:
-http://autobuild.buildroot.net/results/541/54172d55f39b2fcfa5b7fb4d4ee01566678babbc//
-and also Qt build for ARC.
+http://autobuild.buildroot.net/results/004/00455b6a8324920ad843d90ce0413451522691a8//
 
 Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 ---
- package/qt/qt.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/binutils/binutils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 09b8dc2..41cdd1a 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -41,6 +41,11 @@ QT_CFLAGS = $(TARGET_CFLAGS)
- QT_CXXFLAGS = $(TARGET_CXXFLAGS)
- QT_LDFLAGS = $(TARGET_LDFLAGS)
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index aeabf75..2936eb5 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -58,6 +58,7 @@ BINUTILS_CONF_OPTS = \
+ 	--host=$(GNU_TARGET_NAME) \
+ 	--target=$(GNU_TARGET_NAME) \
+ 	--enable-install-libiberty \
++	--enable-build-warnings=no \
+ 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+ 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
  
-+# Qt WebKit build fails when gcc-6 is used for build.
-+# 'std::auto_ptr' is deprecated with gcc-6 
-+# So, we have to use old c++ standart to prevent build failure
-+QT_CXXFLAGS += -std=gnu++98
-+
- # Qt has some assembly function that are not present in thumb1 mode:
- # Error: selected processor does not support Thumb mode `swp r3,r7,[r4]'
- # so, we desactivate thumb mode
 -- 
 2.6.3
