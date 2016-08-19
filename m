@@ -1,45 +1,64 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Fri, 19 Aug 2016 22:45:04 +0530
-Subject: [Buildroot] [PATCH v2 next 2/2] logrotate: bump version to 3.10.0
-In-Reply-To: <1471626904-29215-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1471626904-29215-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <1471626904-29215-2-git-send-email-rahul.bedarkar@imgtec.com>
+From: Khem Raj <raj.khem@gmail.com>
+Date: Fri, 19 Aug 2016 10:21:37 -0700
+Subject: [Buildroot] [PATCH] qt: build using old C++ standart
+In-Reply-To: <1471623523-23829-1-git-send-email-vzakhar@synopsys.com>
+References: <1471623523-23829-1-git-send-email-vzakhar@synopsys.com>
+Message-ID: <0C7FB5F2-6BD7-4019-9A66-A0BB67984A18@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
----
-Changes v1 -> v2:
-  - Rebase on top of next branch. (Suggested by Thomas Petazzoni)
----
- package/logrotate/logrotate.hash | 2 +-
- package/logrotate/logrotate.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
-index 77d4dc8..ee31f8e 100644
---- a/package/logrotate/logrotate.hash
-+++ b/package/logrotate/logrotate.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 2de00c65e23fa9d7909cae6594e550b9abe9a7eb1553669ddeaca92d30f97009 logrotate-3.9.2.tar.gz
-+sha256 db63b5932190cba941357c029b595a7fddf43539943aa1e0ca53a96136e4c5d9 logrotate-3.10.0.tar.gz
-diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
-index de4d837..96012c0 100644
---- a/package/logrotate/logrotate.mk
-+++ b/package/logrotate/logrotate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LOGROTATE_VERSION = 3.9.2
-+LOGROTATE_VERSION = 3.10.0
- LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
- LOGROTATE_LICENSE = GPLv2+
- LOGROTATE_LICENSE_FILES = COPYING
--- 
-2.6.2
+> On Aug 19, 2016, at 9:18 AM, Vlad Zakharov <Vladislav.Zakharov@synopsys.com> wrote:
+> 
+> 'std::auto_ptr' is deprecated with gcc-6 but is used in qt4 code.
+> So we have to build using old C++ standart to prevent build failures.
+> 
+> qt4 is not being developed no more, so unfortunately we can't update
+> obsolete C++ code and have to add this workaround.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/541/54172d55f39b2fcfa5b7fb4d4ee01566678babbc//
+> and also Qt build for ARC.
+> 
+> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+> ---
+> package/qt/qt.mk | 5 +++++
+> 1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+> index 09b8dc2..41cdd1a 100644
+> --- a/package/qt/qt.mk
+> +++ b/package/qt/qt.mk
+> @@ -41,6 +41,11 @@ QT_CFLAGS = $(TARGET_CFLAGS)
+> QT_CXXFLAGS = $(TARGET_CXXFLAGS)
+> QT_LDFLAGS = $(TARGET_LDFLAGS)
+> 
+> +# Qt WebKit build fails when gcc-6 is used for build.
+> +# 'std::auto_ptr' is deprecated with gcc-6
+> +# So, we have to use old c++ standart to prevent build failure
+> +QT_CXXFLAGS += -std=gnu++98
+
+you might add -Wno-deprecated as well.
+
+> +
+> # Qt has some assembly function that are not present in thumb1 mode:
+> # Error: selected processor does not support Thumb mode `swp r3,r7,[r4]'
+> # so, we desactivate thumb mode
+> --
+> 2.6.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 204 bytes
+Desc: Message signed with OpenPGP using GPGMail
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160819/de25c515/attachment.asc>
