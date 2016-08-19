@@ -1,60 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 16:48:00 +0200
-Subject: [Buildroot] [PATCH 2/2] python-pyqt5: new package
-In-Reply-To: <4a764858506ee90fcb41d57d252e5864@manuel-voegele.de>
-References: <20160819134225.1490-1-develop@manuel-voegele.de>
- <20160819134225.1490-3-develop@manuel-voegele.de>
- <20160819160705.545443ac@free-electrons.com>
- <4a764858506ee90fcb41d57d252e5864@manuel-voegele.de>
-Message-ID: <20160819164800.68305618@free-electrons.com>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Fri, 19 Aug 2016 19:18:43 +0300
+Subject: [Buildroot] [PATCH] qt: build using old C++ standart
+Message-ID: <1471623523-23829-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+'std::auto_ptr' is deprecated with gcc-6 but is used in qt4 code.
+So we have to build using old C++ standart to prevent build failures.
 
-On Fri, 19 Aug 2016 16:40:05 +0200, Manuel V?gele wrote:
+qt4 is not being developed no more, so unfortunately we can't update
+obsolete C++ code and have to add this workaround.
 
-> > Since I guess PyQt5 is managed in Git upstream, I would very much
-> > prefer a Git formatted patch if possible. Of course, if Git is not used
-> > upstream, then it's fine.  
-> 
-> I didn't manage to find any official PyQt repository. But if it exists I 
-> suppose it would be a Mercurial repo since all the other Riverbank 
-> projects use Mercurial too.
+Fixes:
+http://autobuild.buildroot.net/results/541/54172d55f39b2fcfa5b7fb4d4ee01566678babbc//
+and also Qt build for ARC.
 
-OK. Then the patch format is OK as-is.
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+---
+ package/qt/qt.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> >> +# Since we can't run generate qtdetail.out by running qtdetail on 
-> >> target device
-> >> +# we must generate the configuration.
-> >> +define PYTHON_PYQT5_GENERATE_QTDETAIL
-> >> +	$(RM) -f $(1)/qtdetail.out
-> >> +	$(call PYTHON_PYQT5_QTDETAIL,$(PYTHON_PYQT5_QTDETAIL_LICENSE),$(1))
-> >> +	$(call PYTHON_PYQT5_QTDETAIL,$(PYTHON_PYQT5_QTDETAIL_TYPE),$(1))
-> >> +	$(foreach f,$(PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES),
-> >> +		$(call PYTHON_PYQT5_QTDETAIL,$(f),$(1)) \
-> >> +	)
-> >> +endef  
-> > 
-> > So this is all exactly the same as PyQt4 ?  
-> It's not all the same - I already removed some switches which aren't 
-> required in PyQt5. But I'm gonna recheck if I can remove even more.
-
-OK.
-
-> > Can you test after removing this compileall line? Indeed, we are now
-> > byte-compiling all Python modules globally. If it works, a patch
-> > removing this line for python-pyqt.mk would be good to have.  
-> 
-> I'm gonna do that.
-
-Great, thanks!
-
-Thomas
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 09b8dc2..41cdd1a 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -41,6 +41,11 @@ QT_CFLAGS = $(TARGET_CFLAGS)
+ QT_CXXFLAGS = $(TARGET_CXXFLAGS)
+ QT_LDFLAGS = $(TARGET_LDFLAGS)
+ 
++# Qt WebKit build fails when gcc-6 is used for build.
++# 'std::auto_ptr' is deprecated with gcc-6 
++# So, we have to use old c++ standart to prevent build failure
++QT_CXXFLAGS += -std=gnu++98
++
+ # Qt has some assembly function that are not present in thumb1 mode:
+ # Error: selected processor does not support Thumb mode `swp r3,r7,[r4]'
+ # so, we desactivate thumb mode
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.6.3
