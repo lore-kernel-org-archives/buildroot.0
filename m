@@ -1,111 +1,393 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 08:30:24 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-08-18
-Message-ID: <20160819063024.55AF4101904@stock.ovh.net>
+From: Matt Flax <flatmax@flatmax.org>
+Date: Fri, 19 Aug 2016 16:29:52 +1000
+Subject: [Buildroot] [PATCH 2/2] package/fftw: Enable multiple precision
+	installation
+Message-ID: <1471588192-2273-1-git-send-email-flatmax@flatmax.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2016-08-18
-===============================
+This commit enables fftw to be installed for multiple precisions on the
+same system. For example if one package requires single precision and another
+package requires double precision, then both fftw and fftwf can now be
+slected and installed at the same time. Before this commit that wasn't
+possible.
 
-        success : 228
-       failures : 47 
-       timeouts : 1  
-          TOTAL : 276
+The fftw site (http://www.fftw.org/fftw2_doc/fftw_6.html) states that to
+install multiple precisions the procedure is a full clean and rebuild for
+each desired precision. This patch achieves that by doing complete
+builds (as required) for each of the required precisions.
 
-Classification of failures by reason
-====================================
+Signed-off-by: Matt Flax <flatmax@flatmax.org>
+---
+ package/fftw/Config.in            | 61 ++++-----------------------------------
+ package/fftw/fftw.mk              |  6 +---
+ package/fftw/fftw/Config.in       | 19 ++++++++++++
+ package/fftw/{ => fftw}/fftw.hash |  0
+ package/fftw/fftw/fftw.mk         |  9 ++++++
+ package/fftw/fftwf/Config.in      | 22 ++++++++++++++
+ package/fftw/fftwf/fftwf.hash     |  2 ++
+ package/fftw/fftwf/fftwf.mk       | 23 +++++++++++++++
+ package/fftw/fftwl/Config.in      | 22 ++++++++++++++
+ package/fftw/fftwl/fftwl.hash     |  2 ++
+ package/fftw/fftwl/fftwl.mk       | 23 +++++++++++++++
+ package/fftw/fftwq/Config.in      | 21 ++++++++++++++
+ package/fftw/fftwq/fftwq.hash     |  2 ++
+ package/fftw/fftwq/fftwq.mk       | 23 +++++++++++++++
+ 14 files changed, 174 insertions(+), 61 deletions(-)
+ create mode 100644 package/fftw/fftw/Config.in
+ rename package/fftw/{ => fftw}/fftw.hash (100%)
+ create mode 100644 package/fftw/fftw/fftw.mk
+ create mode 100644 package/fftw/fftwf/Config.in
+ create mode 100644 package/fftw/fftwf/fftwf.hash
+ create mode 100644 package/fftw/fftwf/fftwf.mk
+ create mode 100644 package/fftw/fftwl/Config.in
+ create mode 100644 package/fftw/fftwl/fftwl.hash
+ create mode 100644 package/fftw/fftwl/fftwl.mk
+ create mode 100644 package/fftw/fftwq/Config.in
+ create mode 100644 package/fftw/fftwq/fftwq.hash
+ create mode 100644 package/fftw/fftwq/fftwq.mk
 
-                  connman-1.33 | 4 
-                  ffmpeg-2.8.7 | 3 
-               binutils-2.25.1 | 3 
-              lirc-tools-0.9.4 | 3 
-                alsa-lib-1.1.2 | 2 
-                   lldpd-0.9.4 | 2 
-                  rt-tests-1.0 | 2 
-                pinentry-0.9.4 | 2 
-openblas-f04af36ad0e85b64f1... | 2 
-                 jack2-v1.9.10 | 1 
-                libaio-0.3.110 | 1 
-                 mono-4.4.2.11 | 1 
-qt5webkit-b889f460280ad98c8... | 1 
-             libxmlrpc-1.25.30 | 1 
-                 liburcu-0.8.7 | 1 
-               trousers-0.3.13 | 1 
-                 mesa3d-12.0.1 | 1 
-                  libffi-3.2.1 | 1 
-kmsxx-bd5f6471e619a6ba2987b... | 1 
-                 rpcbind-0.2.3 | 1 
- make[3]: *** [all] Terminated | 1 
-                   fwup-v0.8.0 | 1 
-                 openal-1.17.2 | 1 
-               libepoxy-v1.3.1 | 1 
-          sane-backends-1.0.25 | 1 
-               tinycbor-v0.3.1 | 1 
-           igd2-for-linux-v1.1 | 1 
-              squeezelite-v1.8 | 1 
-                     vlc-2.2.4 | 1 
-             ntfs-3g-2016.2.22 | 1 
-                     php-7.0.9 | 1 
-   binutils-arc-2016.09-eng008 | 1 
-           quagga-1.0.20160315 | 1 
-               domoticz-3.4834 | 1 
-
-Detail of failures
-===================
-
-        bfin |                 alsa-lib-1.1.2 | NOK | http://autobuild.buildroot.net/results/e53f4e9676904ae78bd26bcd3fd5ce66401e9176/
-        bfin |                 alsa-lib-1.1.2 | NOK | http://autobuild.buildroot.net/results/6794a876a14a4d36c120254649944b1c813a5e7c/
-         arm |                binutils-2.25.1 | NOK | http://autobuild.buildroot.net/results/e8acfe63de74ef4fddef20128001e8111d0004ff/
-         arm |                binutils-2.25.1 | NOK | http://autobuild.buildroot.net/results/c1475707f24f1fc4398a3a43f9750606385fc365/
-        bfin |                binutils-2.25.1 | NOK | http://autobuild.buildroot.net/results/40c7cdd5ff8ea8020332b37628262e9636414b35/
-         arc |    binutils-arc-2016.09-eng008 | NOK | http://autobuild.buildroot.net/results/00455b6a8324920ad843d90ce0413451522691a8/
-        i586 |                   connman-1.33 | NOK | http://autobuild.buildroot.net/results/e88b4dbd4b79fc983b8f7d33da3287966854f8ca/
-        i586 |                   connman-1.33 | NOK | http://autobuild.buildroot.net/results/bad3202ef2138ebe9c698e24e41dc6d418a99212/
-      x86_64 |                   connman-1.33 | NOK | http://autobuild.buildroot.net/results/a678836114dd3bf247e01bc293949b2866582d2e/
-         arm |                   connman-1.33 | NOK | http://autobuild.buildroot.net/results/9f91c4c8d3dfdcf8ff763cc3956c307670efbb97/
-     powerpc |                domoticz-3.4834 | NOK | http://autobuild.buildroot.net/results/3ea8018a063c697323579c272fd9e9174f3e369c/
-         arc |                   ffmpeg-2.8.7 | NOK | http://autobuild.buildroot.net/results/77b36f25c7296393da5e7b82d81d39397d26de0b/
-         arc |                   ffmpeg-2.8.7 | NOK | http://autobuild.buildroot.net/results/5dc71d61e615d980a610cb64a785fb800fa576e4/
-         arc |                   ffmpeg-2.8.7 | NOK | http://autobuild.buildroot.net/results/4f52271f4b4b5380c80efcbed08d9ea1f5da0df5/
-     powerpc |                    fwup-v0.8.0 | NOK | http://autobuild.buildroot.net/results/620a2bda1ae981716a69f4f41749d25d2460b98a/
-         arm |            igd2-for-linux-v1.1 | NOK | http://autobuild.buildroot.net/results/66aff89ea92f5a940dfa7ed3b0bdffb938dd998c/
-         arc |                  jack2-v1.9.10 | NOK | http://autobuild.buildroot.net/results/8a8d533a0f785591fee10f1c09c9294f892ef7f7/
-         arm | kmsxx-bd5f6471e619a6ba2987b... | NOK | http://autobuild.buildroot.net/results/6e91cfb1a0a55d1e816de66353bf6a4053af05a5/
-         arm |                 libaio-0.3.110 | NOK | http://autobuild.buildroot.net/results/630b61c1d48fbd7bab3de2d1a4e2632dd8b886ca/
-     aarch64 |                libepoxy-v1.3.1 | NOK | http://autobuild.buildroot.net/results/3efe300199759fb84ad8122abc36bbcdfa10e0cd/
-        m68k |                   libffi-3.2.1 | NOK | http://autobuild.buildroot.net/results/1014a22cfdd3b18f349dde33f14acca4131dbd5b/
-         arm |                  liburcu-0.8.7 | NOK | http://autobuild.buildroot.net/results/f519a1b18f05acfd1eae4e6c9770a49b4b9e34b7/
-         arc |              libxmlrpc-1.25.30 | NOK | http://autobuild.buildroot.net/results/47787173c90a3fb43336d245ff3f9a97afa60a04/
-        sh4a |               lirc-tools-0.9.4 | NOK | http://autobuild.buildroot.net/results/2770360880c9b265c8e019141925e56c35ba22dc/
-        i686 |               lirc-tools-0.9.4 | NOK | http://autobuild.buildroot.net/results/a3127f6b391f42c951b568c4bc476b10990e8b8e/
-        sh4a |               lirc-tools-0.9.4 | NOK | http://autobuild.buildroot.net/results/fc2359b139c092be080359fc37555197ab9e2b5a/
-     aarch64 |                    lldpd-0.9.4 | NOK | http://autobuild.buildroot.net/results/279591190dd7676ff4bcbb6017a109af7b7d67e9/
-      x86_64 |                    lldpd-0.9.4 | NOK | http://autobuild.buildroot.net/results/6b92fa15853bfeca8dd1dff15fcc57bef81194cc/
-      x86_64 |  make[3]: *** [all] Terminated | TIM | http://autobuild.buildroot.net/results/bfc50447dea2d63f4a0ee69409f320bb5e5fa434/
-         arc |                  mesa3d-12.0.1 | NOK | http://autobuild.buildroot.net/results/99f006c734e59f0b47b1f34827012068d082a5e5/
-      x86_64 |                  mono-4.4.2.11 | NOK | http://autobuild.buildroot.net/results/cfe678940c0a27e592dc40577c5a7c9a17772fa2/
-      x86_64 |              ntfs-3g-2016.2.22 | NOK | http://autobuild.buildroot.net/results/7c8b7b32feecb5f4ee0ecfed4d037b1ff7ce71e2/
-         arm |                  openal-1.17.2 | NOK | http://autobuild.buildroot.net/results/7773282fdd31cc58ec6e63d561d2acbef64e926f/
-         arm | openblas-f04af36ad0e85b64f1... | NOK | http://autobuild.buildroot.net/results/43e50b480b4aea0fdec745d7875c85377c114cac/
-         arm | openblas-f04af36ad0e85b64f1... | NOK | http://autobuild.buildroot.net/results/62786f33f28c5c4eabca2e33ce4f4289c4d9c7db/
-        m68k |                      php-7.0.9 | NOK | http://autobuild.buildroot.net/results/20b1586757450d6aad8583ad7a787a7ca11acef1/
-      x86_64 |                 pinentry-0.9.4 | NOK | http://autobuild.buildroot.net/results/6be08c666f783d31f3bb1a6b591186e07cb28547/
-    mips64el |                 pinentry-0.9.4 | NOK | http://autobuild.buildroot.net/results/1d5c2b717ddb9d6c333fdb4d91dc19a0c388154c/
-      mipsel | qt5webkit-b889f460280ad98c8... | NOK | http://autobuild.buildroot.net/results/98992860d20eacfa54f03137c8cd16178129a9ab/
-    mips64el |            quagga-1.0.20160315 | NOK | http://autobuild.buildroot.net/results/01317aeaff7d127a05e0488a51e81f2d43750687/
-      x86_64 |                  rpcbind-0.2.3 | NOK | http://autobuild.buildroot.net/results/b4232c0d3f390c1ad2bcd14655dbdd1bc3c35027/
-         sh4 |                   rt-tests-1.0 | NOK | http://autobuild.buildroot.net/results/ccd175ad26367e429ecc7cfc408fea13d097e329/
-         sh4 |                   rt-tests-1.0 | NOK | http://autobuild.buildroot.net/results/a6051e2d1ecae9901d353f6bb4c9aac28ea3f93e/
-         arm |           sane-backends-1.0.25 | NOK | http://autobuild.buildroot.net/results/460f9a530c7a68e512495e0f3827ff315740b85e/
-microblazeel |               squeezelite-v1.8 | NOK | http://autobuild.buildroot.net/results/007ded7d01e3746fc28013d76d04536758a2e2e2/
-        bfin |                tinycbor-v0.3.1 | NOK | http://autobuild.buildroot.net/results/f1ed03a5e410c01910404876475b155f1672d47c/
-      x86_64 |                trousers-0.3.13 | NOK | http://autobuild.buildroot.net/results/c9b13ae8d4af9ae6a65921de142c0e8da30664e0/
-        m68k |                      vlc-2.2.4 | NOK | http://autobuild.buildroot.net/results/3122287ddea1e316a64ccf0d0dc9415bfefebb49/
-
-
+diff --git a/package/fftw/Config.in b/package/fftw/Config.in
+index ef11384..be8f6cd 100644
+--- a/package/fftw/Config.in
++++ b/package/fftw/Config.in
+@@ -1,17 +1,3 @@
+-config BR2_PACKAGE_FFTW
+-	bool "fftw"
+-	help
+-	  Library for computing Fast Fourier Transforms.
+-
+-	  This library computes Fast Fourier Transforms (FFT) in one
+-	  or more dimensions. It is extremely fast. This package
+-	  contains the shared library version of the fftw libraries in
+-	  double precision.
+-
+-	  http://www.fftw.org
+-
+-if BR2_PACKAGE_FFTW
+-
+ config BR2_PACKAGE_FFTW_USE_SSE
+ 	bool
+ 
+@@ -21,47 +7,6 @@ config BR2_PACKAGE_FFTW_USE_SSE2
+ config BR2_PACKAGE_FFTW_USE_NEON
+ 	bool
+ 
+-choice
+-	prompt "fftw precision"
+-	default BR2_PACKAGE_FFTW_PRECISION_DOUBLE
+-	help
+-	  Selects fftw precision
+-
+-config BR2_PACKAGE_FFTW_PRECISION_SINGLE
+-	bool "single"
+-	select BR2_PACKAGE_FFTW_USE_SSE if BR2_X86_CPU_HAS_SSE
+-	select BR2_PACKAGE_FFTW_USE_SSE2 if BR2_X86_CPU_HAS_SSE2
+-	select BR2_PACKAGE_FFTW_USE_NEON if BR2_ARM_CPU_HAS_NEON && !BR2_ARM_SOFT_FLOAT
+-	help
+-	  Compile fftw in single precision, i.e. use 'float' for floating
+-	  point type.
+-
+-config BR2_PACKAGE_FFTW_PRECISION_DOUBLE
+-	bool "double"
+-	select BR2_PACKAGE_FFTW_USE_SSE2 if BR2_X86_CPU_HAS_SSE2
+-	help
+-	  Compile fftw in double precision (the default), i.e. use 'double'
+-	  for floating point type.
+-
+-config BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
+-	bool "long double"
+-	# long-double precision require long-double trigonometric routines
+-	depends on !(BR2_TOOLCHAIN_BUILDROOT_UCLIBC && \
+-		(BR2_arm || BR2_mips || BR2_mipsel))
+-	help
+-	  Compile fftw in long double precision, i.e. use 'long double'
+-	  for floating point type.
+-
+-config BR2_PACKAGE_FFTW_PRECISION_QUAD
+-	bool "quad"
+-	# quad-precision needs to have a gcc with libquadmath
+-	depends on (BR2_i386 || BR2_x86_64) && BR2_USE_WCHAR
+-	help
+-	  Compile fftw in quadruple precision, i.e. use '__float128' for
+-	  floating point type.
+-
+-endchoice
+-
+ config BR2_PACKAGE_FFTW_FAST
+ 	bool "optimise for speed over accuracy"
+ 	help
+@@ -75,4 +20,8 @@ config BR2_PACKAGE_FFTW_FAST
+ 	  turn is basically using gcc's -ffast-math. See the gcc manual
+ 	  for what this means.
+ 
+-endif
++source "package/fftw/fftw/Config.in"
++source "package/fftw/fftwf/Config.in"
++source "package/fftw/fftwl/Config.in"
++source "package/fftw/fftwq/Config.in"
++
+diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+index 5bd39a8..216838a 100644
+--- a/package/fftw/fftw.mk
++++ b/package/fftw/fftw.mk
+@@ -18,10 +18,6 @@ else
+ FFTW_CONF_OPTS += --disable-fortran
+ endif
+ 
+-FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),--enable,--disable)-single
+-FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),--enable,--disable)-long-double
+-FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_QUAD),--enable,--disable)-quad-precision
+-
+ FFTW_CFLAGS = $(TARGET_CFLAGS)
+ ifeq ($(BR2_PACKAGE_FFTW_FAST),y)
+ FFTW_CFLAGS += -O3 -ffast-math
+@@ -46,4 +42,4 @@ FFTW_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
+ 
+ FFTW_CONF_OPTS += CFLAGS="$(FFTW_CFLAGS)"
+ 
+-$(eval $(autotools-package))
++include package/fftw/*/*.mk
+diff --git a/package/fftw/fftw/Config.in b/package/fftw/fftw/Config.in
+new file mode 100644
+index 0000000..51bd5eb
+--- /dev/null
++++ b/package/fftw/fftw/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_FFTW
++	bool "fftw"
++	help
++	  Library for computing Fast Fourier Transforms in double precision.
++
++	  This library computes Fast Fourier Transforms (FFT) in one
++	  or more dimensions. It is extremely fast. This package
++	  contains the shared library version of the fftw libraries in
++	  double precision.
++
++	  http://www.fftw.org
++
++config BR2_PACKAGE_FFTW_PRECISION_DOUBLE
++	bool "double"
++	select BR2_PACKAGE_FFTW_USE_SSE2 if BR2_X86_CPU_HAS_SSE2
++	help
++	  Compile fftw in double precision (the default), i.e. use 'double'
++	  for floating point type.
++
+diff --git a/package/fftw/fftw.hash b/package/fftw/fftw/fftw.hash
+similarity index 100%
+rename from package/fftw/fftw.hash
+rename to package/fftw/fftw/fftw.hash
+diff --git a/package/fftw/fftw/fftw.mk b/package/fftw/fftw/fftw.mk
+new file mode 100644
+index 0000000..66a82ec
+--- /dev/null
++++ b/package/fftw/fftw/fftw.mk
+@@ -0,0 +1,9 @@
++################################################################################
++#
++# fftw
++#
++################################################################################
++
++$(eval $(autotools-package))
++
++
+diff --git a/package/fftw/fftwf/Config.in b/package/fftw/fftwf/Config.in
+new file mode 100644
+index 0000000..7077086
+--- /dev/null
++++ b/package/fftw/fftwf/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_FFTWF
++	bool "fftwf"
++	select BR2_PACKAGE_FFTW_PRECISION_SINGLE
++	help
++	  Library for computing Fast Fourier Transforms in single precision.
++
++	  This library computes Fast Fourier Transforms (FFT) in one
++	  or more dimensions. It is extremely fast. This package
++	  contains the shared library version of the fftw libraries in
++	  double precision.
++
++	  http://www.fftw.org
++
++config BR2_PACKAGE_FFTW_PRECISION_SINGLE
++	bool "single"
++	select BR2_PACKAGE_FFTW_USE_SSE if BR2_X86_CPU_HAS_SSE
++	select BR2_PACKAGE_FFTW_USE_SSE2 if BR2_X86_CPU_HAS_SSE2
++	select BR2_PACKAGE_FFTW_USE_NEON if BR2_ARM_CPU_HAS_NEON && !BR2_ARM_SOFT_FLOAT
++	help
++	  Compile fftw in single precision, i.e. use 'float' for floating
++	  point type.
++
+diff --git a/package/fftw/fftwf/fftwf.hash b/package/fftw/fftwf/fftwf.hash
+new file mode 100644
+index 0000000..62b8f0f
+--- /dev/null
++++ b/package/fftw/fftwf/fftwf.hash
+@@ -0,0 +1,2 @@
++# From http://www.fftw.org/fftw-3.3.4.tar.gz.md5sum
++md5	2edab8c06b24feeb3b82bbb3ebf3e7b3	fftw-3.3.4.tar.gz
+diff --git a/package/fftw/fftwf/fftwf.mk b/package/fftw/fftwf/fftwf.mk
+new file mode 100644
+index 0000000..a4184b5
+--- /dev/null
++++ b/package/fftw/fftwf/fftwf.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# fftwf
++#
++################################################################################
++
++FFTWF_VERSION = $(FFTW_VERSION)
++FFTWF_SOURCE = fftw-$(FFTWF_VERSION).tar.gz
++FFTWF_SITE = $(FFTW_SITE)
++FFTWF_INSTALL_STAGING = $(FFTW_INSTALL_STAGING)
++FFTWF_LICENSE = $(FFTW_LICENSE)
++FFTWF_LICENSE_FILES = $(FFTW_LICENSE_FILES)
++
++FFTWF_CONF_ENV = $(FFTW_CONF_ENV)
++
++FFTWF_CONF_OPTS = $(FFTW_CONF_OPTS)
++FFTWF_CONF_OPTS += --enable-single
++
++FFTWF_CFLAGS = $(FFTW_CFLAGS)
++
++$(eval $(autotools-package))
++
++
+diff --git a/package/fftw/fftwl/Config.in b/package/fftw/fftwl/Config.in
+new file mode 100644
+index 0000000..466a11e
+--- /dev/null
++++ b/package/fftw/fftwl/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_FFTWL
++	bool "fftwl"
++	select BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
++	help
++	  Library for computing Fast Fourier Transforms in long double precision.
++
++	  This library computes Fast Fourier Transforms (FFT) in one
++	  or more dimensions. It is extremely fast. This package
++	  contains the shared library version of the fftw libraries in
++	  double precision.
++
++	  http://www.fftw.org
++
++config BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
++	bool "long double"
++	# long-double precision require long-double trigonometric routines
++	depends on !(BR2_TOOLCHAIN_BUILDROOT_UCLIBC && \
++		(BR2_arm || BR2_mips || BR2_mipsel))
++	help
++	  Compile fftw in long double precision, i.e. use 'long double'
++	  for floating point type.
++
+diff --git a/package/fftw/fftwl/fftwl.hash b/package/fftw/fftwl/fftwl.hash
+new file mode 100644
+index 0000000..62b8f0f
+--- /dev/null
++++ b/package/fftw/fftwl/fftwl.hash
+@@ -0,0 +1,2 @@
++# From http://www.fftw.org/fftw-3.3.4.tar.gz.md5sum
++md5	2edab8c06b24feeb3b82bbb3ebf3e7b3	fftw-3.3.4.tar.gz
+diff --git a/package/fftw/fftwl/fftwl.mk b/package/fftw/fftwl/fftwl.mk
+new file mode 100644
+index 0000000..2412590
+--- /dev/null
++++ b/package/fftw/fftwl/fftwl.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# fftwl
++#
++################################################################################
++
++FFTL_VERSION = $(FFTW_VERSION)
++FFTL_SOURCE = fftw-$(FFTWL_VERSION).tar.gz
++FFTL_SITE = $(FFTW_SITE)
++FFTL_INSTALL_STAGING = $(FFTW_INSTALL_STAGING)
++FFTL_LICENSE = $(FFTW_LICENSE)
++FFTL_LICENSE_FILES = $(FFTW_LICENSE_FILES)
++
++FFTL_CONF_ENV = $(FFTW_CONF_ENV)
++
++FFTL_CONF_OPTS = $(FFTW_CONF_OPTS)
++FFTL_CONF_OPTS += --enable-long-double
++
++FFTL_CFLAGS = $(FFTW_CFLAGS)
++
++$(eval $(autotools-package))
++
++
+diff --git a/package/fftw/fftwq/Config.in b/package/fftw/fftwq/Config.in
+new file mode 100644
+index 0000000..fc6f427
+--- /dev/null
++++ b/package/fftw/fftwq/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_FFTWQ
++	bool "fftwq"
++	select BR2_PACKAGE_FFTW_PRECISION_QUAD
++	help
++	  Library for computing Fast Fourier Transforms in quad precision.
++
++	  This library computes Fast Fourier Transforms (FFT) in one
++	  or more dimensions. It is extremely fast. This package
++	  contains the shared library version of the fftw libraries in
++	  double precision.
++
++	  http://www.fftw.org
++
++config BR2_PACKAGE_FFTW_PRECISION_QUAD
++	bool "quad"
++	# quad-precision needs to have a gcc with libquadmath
++	depends on (BR2_i386 || BR2_x86_64) && BR2_USE_WCHAR
++	help
++	  Compile fftw in quadruple precision, i.e. use '__float128' for
++	  floating point type.
++
+diff --git a/package/fftw/fftwq/fftwq.hash b/package/fftw/fftwq/fftwq.hash
+new file mode 100644
+index 0000000..62b8f0f
+--- /dev/null
++++ b/package/fftw/fftwq/fftwq.hash
+@@ -0,0 +1,2 @@
++# From http://www.fftw.org/fftw-3.3.4.tar.gz.md5sum
++md5	2edab8c06b24feeb3b82bbb3ebf3e7b3	fftw-3.3.4.tar.gz
+diff --git a/package/fftw/fftwq/fftwq.mk b/package/fftw/fftwq/fftwq.mk
+new file mode 100644
+index 0000000..6130538
+--- /dev/null
++++ b/package/fftw/fftwq/fftwq.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# fftwq
++#
++################################################################################
++
++FFTQ_VERSION = $(FFTW_VERSION)
++FFTQ_SOURCE = fftw-$(FFTWQ_VERSION).tar.gz
++FFTQ_SITE = $(FFTW_SITE)
++FFTQ_INSTALL_STAGING = $(FFTW_INSTALL_STAGING)
++FFTQ_LICENSE = $(FFTW_LICENSE)
++FFTQ_LICENSE_FILES = $(FFTW_LICENSE_FILES)
++
++FFTQ_CONF_ENV = $(FFTW_CONF_ENV)
++
++FFTQ_CONF_OPTS = $(FFTW_CONF_OPTS)
++FFTQ_CONF_OPTS += --enable-quad-precision
++
++FFTQ_CFLAGS = $(FFTW_CFLAGS)
++
++$(eval $(autotools-package))
++
++
 -- 
-http://autobuild.buildroot.net
+2.7.4
