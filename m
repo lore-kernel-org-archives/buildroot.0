@@ -1,99 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 12:22:26 +0200
-Subject: [Buildroot] [PATCHv2] package/ustr: don't run ldconfig
-In-Reply-To: <1471184013-29565-1-git-send-email-yann.morin.1998@free.fr>
-References: <1471184013-29565-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160819122226.32007e6b@free-electrons.com>
+Date: Fri, 19 Aug 2016 12:23:27 +0200
+Subject: [Buildroot] [git commit] package/connman: disable for musl
+	toolchains
+Message-ID: <20160819102337.7740D82132@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9ebcc74da68f89aab31c6d3a942e9dda8a0303ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 14 Aug 2016 16:13:33 +0200, Yann E. MORIN wrote:
-> The ustr Makefile.in (as introduced by the Debian patch we apply), is
-> probably not parallel-safe:
-> 
->   402 install: install-opt install-dbg
->   403
->   404 install-opt: install-dirs install-opt-lib install-common
->   405
->   406 install-dbg: install-dirs install-dbg-lib install-common
->   407
->   408 install-opt-lib install-dbg-lib install-common: install-dirs
->   [--SNIP--]
->   424 install-opt-lib: $(OPT_LIB_STATIC) $(OPT_LIB_SHARED) ustr.pc
->   425         @echo Installing files
->   426         install -m 644 -t $(DESTDIR)$(libdir) $(OPT_LIB_STATIC)
->   427         install -m 755 -t $(DESTDIR)$(libdir) $(OPT_LIB_SHARED)
->   428         -rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
->   429         ln -s $(OPT_LIB_SHARED) $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
->   430         -rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV)
->   431         ln -s $(OPT_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV)
->   432         -rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV_BSO)
->   433         ln -s $(OPT_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV_BSO)
->   434         $(LDCONFIG) -n $(DESTDIR)$(libdir)
->   435         install -pm 644 -t $(DESTDIR)$(libdir)/pkgconfig ustr.pc
->   436
->   437 install-dbg-lib: $(DBG_LIB_STATIC) $(DBG_LIB_SHARED) ustr-debug.pc
->   438         @echo Installing files
->   439         install -m 644 -t $(DESTDIR)$(libdir) $(DBG_LIB_STATIC)
->   440         install -m 755 -t $(DESTDIR)$(libdir) $(DBG_LIB_SHARED)
->   441         -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
->   442         ln -s $(DBG_LIB_SHARED) $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
->   443         -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV)
->   444         ln -s $(DBG_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV)
->   445         -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV_BSO)
->   446         ln -s $(DBG_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV_BSO)
->   447         $(LDCONFIG) -n $(DESTDIR)$(libdir)
->   448         install -pm 644 -t $(DESTDIR)$(libdir)/pkgconfig ustr-debug.pc
-> 
-> As Thomas already noticed [0], the two interesting rules above are not
-> dependent one on the other, so can be run in parallel. So, while one is
-> doing its rm'n'ln dance, the other can be running an ldconfig, which has
-> the side effect of creating the missing symlinks. So, we can see this
-> sequence:
-> 
->     install-opt-lib:                        install-dbg-lib:
->                                                 ldconfig
->         rm -f .../$(OPT_LIB_SHAREDEV)            \
->                                                   `-> symlink(..., .../$(OPT_LIB_SHAREDEV))
->         ln -s .../$(OPT_LIB_SHAREDEV)
-> 
-> In this case, ldconfig uses the opportunity-window between the rm and
-> the ln to create the link; so the ln does not work, as the target
-> already exist.
-> 
-> We fix that by not running ldconfig at all in Buildroot, we just pass
-> LDCONFIG=/bin/true .
-> 
-> Fixes (hopefully, since I was not even able to reproduce the failure):
->     http://autobuild.buildroot.org/?reason=ustr-1.0.4
->     http://autobuild.buildroot.org/results/936/93626f55625ed7900c147bfd79ff7802366639b1/
->     http://autobuild.buildroot.org/results/18b/18b6ec537da9e9055f58a8649c0719dc64df1bcf/
->     [...]
-> 
-> [0] http://lists.busybox.net/pipermail/buildroot/2016-May/161923.html
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> 
-> ---
-> Changes v1 -> v2:
->   - don't patch Makefile.in, it is not strictly needed for Buildroot
->     since we pass LDCONFIG=/bin/true  (Arnout)
-> ---
->  package/ustr/ustr.mk | 2 ++
->  1 file changed, 2 insertions(+)
+Connman doesn't build with musl toolchains due to several "classic"
+musl issues [1] (mixes userspace and kernel headers, missing header)
 
-Applied to master, thanks.
+Upstream received some fixes [2] but they are not yet merged.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Also, gresolv.c use res_ninit() function which is not available
+with musl. A fix from Alpinelinux is available [3] but it require
+some invasive changes.
+
+Disable connman for musl toolchains for now, and wait for upstream
+fixes.
+
+[1] http://wiki.musl-libc.org/wiki/FAQ
+[2] https://lists.01.org/pipermail/connman/2016-August/000880.html
+    https://lists.01.org/pipermail/connman/2016-August/000881.html
+    https://lists.01.org/pipermail/connman/2016-August/000882.html
+[3] https://github.com/openembedded/openembedded-core/commit/d08f9d7145ba14ce9fbf320719c05560be69212f
+
+Fixes:
+http://autobuild.buildroot.net/results/e88/e88b4dbd4b79fc983b8f7d33da3287966854f8ca
+[...]
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/connman-gtk/Config.in | 6 ++++--
+ package/connman/Config.in     | 6 ++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/package/connman-gtk/Config.in b/package/connman-gtk/Config.in
+index c7857d0..467bf7e 100644
+--- a/package/connman-gtk/Config.in
++++ b/package/connman-gtk/Config.in
+@@ -1,8 +1,9 @@
+-comment "connman-gtk needs libgtk3 and a toolchain w/ wchar, threads, resolver, dynamic library"
++comment "connman-gtk needs libgtk3 and a glibc or uClibc toolchain w/ wchar, threads, resolver, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS || !BR2_PACKAGE_LIBGTK3
++		BR2_STATIC_LIBS || !BR2_PACKAGE_LIBGTK3 || \
++		BR2_TOOLCHAIN_USES_MUSL
+ 
+ config BR2_PACKAGE_CONNMAN_GTK
+ 	bool "connman-gtk"
+@@ -11,6 +12,7 @@ config BR2_PACKAGE_CONNMAN_GTK
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on !BR2_STATIC_LIBS # connman
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # connman
++	depends on !BR2_TOOLCHAIN_USES_MUSL # connman
+ 	depends on BR2_PACKAGE_LIBGTK3
+ 	select BR2_PACKAGE_CONNMAN
+ 	select BR2_PACKAGE_LIBGLIB2
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index f723a31..6ed40be 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_CONNMAN
+ 	depends on BR2_USE_MMU # dbus, libglib2
+ 	depends on !BR2_STATIC_LIBS # needs dlopen()
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on !BR2_TOOLCHAIN_USES_MUSL # mixes userspace and kernel headers
+ 	help
+ 	  The Connection Manager (ConnMan) project provides a daemon
+ 	  for managing internet connections within embedded devices
+@@ -66,7 +67,8 @@ config BR2_PACKAGE_CONNMAN_CLIENT
+ 
+ endif # BR2_PACKAGE_CONNMAN
+ 
+-comment "connman needs a toolchain w/ wchar, threads, resolver, dynamic library"
++comment "connman needs a glibc or uClibc toolchain w/ wchar, threads, resolver, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
++		|| BR2_TOOLCHAIN_USES_MUSL
