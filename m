@@ -1,97 +1,41 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 19 Aug 2016 15:29:17 +0200
-Subject: [Buildroot] [PATCH v2] python-requests-toolbelt: new package
-In-Reply-To: <20160819124802.6793-1-develop@manuel-voegele.de>
-References: <20160819124802.6793-1-develop@manuel-voegele.de>
-Message-ID: <CAGm1_kun58h_JYD+iFr9wkZb2FZxeW6yQWzYwEq0pr_n+Q28YA@mail.gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 19 Aug 2016 15:32:22 +0200
+Subject: [Buildroot] [PATCH 1/1] arch/arm: Add Cortex-a53 CPU
+In-Reply-To: <20160819100320.1d2609bd@free-electrons.com>
+References: <1471565224-15625-1-git-send-email-flatmax@flatmax.org>
+ <20160819100320.1d2609bd@free-electrons.com>
+Message-ID: <20160819133222.GO22524@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 19, 2016 at 2:48 PM, Manuel V?gele
-<develop@manuel-voegele.de> wrote:
-> Signed-off-by: Manuel V?gele <develop@manuel-voegele.de>
-> ---
-> Changes v1 -> v2:
->   - Regenerated package using scanpypi which had the following effects
->     - select BR2_PACKAGE_PYTHON_REQUESTS instead of depends on
->     - moved the checksum comments into a single line
->     - removed build-time dependency to python-requests
->
-> Signed-off-by: Manuel V?gele <develop@manuel-voegele.de>
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Hello,
+> 
+> On Fri, 19 Aug 2016 10:07:04 +1000, Matt Flax wrote:
+> > Adds the Cortex-a53 CPU to the target architecture variant choice. This sets
+> > the toolchain to use cortex-a53 as the target. The effect is that various
+> > cortex-a53 tunings are enabled for the compilation of packages.
+> > 
+> > Signed-off-by: Matt Flax <flatmax@flatmax.org>
+> 
+> The A53 is an ARM64 CPU, so it should rather be added to
+> Config.in.aarch64 (in which we don't yet have a CPU selection, but that
+> can be added).
+> 
+> Or are you building a 32 bits ARM system for a Cortex-A53 ? In that
+> case, adding it to Config.in.arm would be OK, but it's a bit annoying
+> that we would have to duplicate many ARM CPUs between Config.in.arm and
+> Config.in.aarch64.
 
-> ---
->  package/Config.in                                          |  1 +
->  package/python-requests-toolbelt/Config.in                 |  7 +++++++
->  .../python-requests-toolbelt/python-requests-toolbelt.hash |  3 +++
->  .../python-requests-toolbelt/python-requests-toolbelt.mk   | 14 ++++++++++++++
->  4 files changed, 25 insertions(+)
->  create mode 100644 package/python-requests-toolbelt/Config.in
->  create mode 100644 package/python-requests-toolbelt/python-requests-toolbelt.hash
->  create mode 100644 package/python-requests-toolbelt/python-requests-toolbelt.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 1e51a45..be89af8 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -752,6 +752,7 @@ menu "External python modules"
->         source "package/python-pyyaml/Config.in"
->         source "package/python-pyzmq/Config.in"
->         source "package/python-requests/Config.in"
-> +       source "package/python-requests-toolbelt/Config.in"
->         source "package/python-rpi-gpio/Config.in"
->         source "package/python-rtslib-fb/Config.in"
->         source "package/python-scapy3k/Config.in"
-> diff --git a/package/python-requests-toolbelt/Config.in b/package/python-requests-toolbelt/Config.in
-> new file mode 100644
-> index 0000000..ba2b951
-> --- /dev/null
-> +++ b/package/python-requests-toolbelt/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT
-> +       bool "python-requests-toolbelt"
-> +       select BR2_PACKAGE_PYTHON_REQUESTS # runtime
-> +       help
-> +         A utility belt for advanced users of python-requests.
-> +
-> +         https://toolbelt.readthedocs.org
-> diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.hash b/package/python-requests-toolbelt/python-requests-toolbelt.hash
-> new file mode 100644
-> index 0000000..89f5ca1
-> --- /dev/null
-> +++ b/package/python-requests-toolbelt/python-requests-toolbelt.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi/requests-toolbelt/json, sha256 locally computed
-> +md5    bfe2009905f460f4764c32cfbbf4205f  requests-toolbelt-0.7.0.tar.gz
-> +sha256 33899d4a559c3f0f5e9fbc115d337c4236febdc083755a160a4132d92fc3c91a  requests-toolbelt-0.7.0.tar.gz
-> diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.mk b/package/python-requests-toolbelt/python-requests-toolbelt.mk
-> new file mode 100644
-> index 0000000..2e944c0
-> --- /dev/null
-> +++ b/package/python-requests-toolbelt/python-requests-toolbelt.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-requests-toolbelt
-> +#
-> +################################################################################
-> +
-> +PYTHON_REQUESTS_TOOLBELT_VERSION = 0.7.0
-> +PYTHON_REQUESTS_TOOLBELT_SOURCE = requests-toolbelt-$(PYTHON_REQUESTS_TOOLBELT_VERSION).tar.gz
-> +PYTHON_REQUESTS_TOOLBELT_SITE = https://pypi.python.org/packages/59/78/1d391d30ebf74079a8e4de6ab66fdca5362903ef2df64496f4697e9bb626
-> +PYTHON_REQUESTS_TOOLBELT_SETUP_TYPE = setuptools
-> +PYTHON_REQUESTS_TOOLBELT_LICENSE = Apache-2.0
-> +PYTHON_REQUESTS_TOOLBELT_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
-> --
-> 2.9.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+The new rpi3 can be compiled with optimization for cortex-a53 in ARM
+32 bit mode. The aarch64 port for rpi3 isn't complete. So this might
+be a use case. I fixed one issue in uCLibc-ng in the past to allow
+cortex-a53 optimized builds.
+
+best regards
+ Waldemar
