@@ -1,78 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 15:53:18 +0200
-Subject: [Buildroot] [git commit branch/next] python-requests-toolbelt: new
-	package
-Message-ID: <20160819135323.1D501818ED@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 19 Aug 2016 15:52:53 +0200
+Subject: [Buildroot] [PATCH] top: fix double free causing a SIGABRT storm
+	after SIGPIPE
+Message-ID: <1471614773-7275-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e73a1db4646c2d6696c529b7bdd2b59d54ff460a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On some platforms the command 'top -n1 | head' goes very often into an
+infinite loop of SIGABRT and double free()s.
 
-Signed-off-by: Manuel V??gele <develop@manuel-voegele.de>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fix by applying a patch from upstream.
+
+For a detailed explanation of the bug, see
+http://lists.busybox.net/pipermail/busybox/2016-August/084555.html
+
+Thanks to Yann for the help in finding this bug.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in                                          |  1 +
- package/python-requests-toolbelt/Config.in                 |  7 +++++++
- .../python-requests-toolbelt/python-requests-toolbelt.hash |  3 +++
- .../python-requests-toolbelt/python-requests-toolbelt.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
+ ...op-move-free-prev_hist-out-of-signal-path.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/busybox/0006-top-move-free-prev_hist-out-of-signal-path.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 645fa29..ade3e34 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -752,6 +752,7 @@ menu "External python modules"
- 	source "package/python-pyyaml/Config.in"
- 	source "package/python-pyzmq/Config.in"
- 	source "package/python-requests/Config.in"
-+	source "package/python-requests-toolbelt/Config.in"
- 	source "package/python-rpi-gpio/Config.in"
- 	source "package/python-rtslib-fb/Config.in"
- 	source "package/python-scapy3k/Config.in"
-diff --git a/package/python-requests-toolbelt/Config.in b/package/python-requests-toolbelt/Config.in
+diff --git a/package/busybox/0006-top-move-free-prev_hist-out-of-signal-path.patch b/package/busybox/0006-top-move-free-prev_hist-out-of-signal-path.patch
 new file mode 100644
-index 0000000..ba2b951
+index 0000000..f5e2942
 --- /dev/null
-+++ b/package/python-requests-toolbelt/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT
-+	bool "python-requests-toolbelt"
-+	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
-+	help
-+	  A utility belt for advanced users of python-requests.
++++ b/package/busybox/0006-top-move-free-prev_hist-out-of-signal-path.patch
+@@ -0,0 +1,48 @@
++From aedc3fe19fac368dc363050e0387d263b7e01cc6 Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Fri, 19 Aug 2016 11:07:31 +0200
++Subject: [PATCH] top: move free(prev_hist) out of signal path
 +
-+	  https://toolbelt.readthedocs.org
-diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.hash b/package/python-requests-toolbelt/python-requests-toolbelt.hash
-new file mode 100644
-index 0000000..89f5ca1
---- /dev/null
-+++ b/package/python-requests-toolbelt/python-requests-toolbelt.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/requests-toolbelt/json, sha256 locally computed
-+md5	bfe2009905f460f4764c32cfbbf4205f  requests-toolbelt-0.7.0.tar.gz
-+sha256	33899d4a559c3f0f5e9fbc115d337c4236febdc083755a160a4132d92fc3c91a  requests-toolbelt-0.7.0.tar.gz
-diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.mk b/package/python-requests-toolbelt/python-requests-toolbelt.mk
-new file mode 100644
-index 0000000..2e944c0
---- /dev/null
-+++ b/package/python-requests-toolbelt/python-requests-toolbelt.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-requests-toolbelt
-+#
-+################################################################################
++It was seen being called recursively on repeated signals,
++leading to double free
 +
-+PYTHON_REQUESTS_TOOLBELT_VERSION = 0.7.0
-+PYTHON_REQUESTS_TOOLBELT_SOURCE = requests-toolbelt-$(PYTHON_REQUESTS_TOOLBELT_VERSION).tar.gz
-+PYTHON_REQUESTS_TOOLBELT_SITE = https://pypi.python.org/packages/59/78/1d391d30ebf74079a8e4de6ab66fdca5362903ef2df64496f4697e9bb626
-+PYTHON_REQUESTS_TOOLBELT_SETUP_TYPE = setuptools
-+PYTHON_REQUESTS_TOOLBELT_LICENSE = Apache-2.0
-+PYTHON_REQUESTS_TOOLBELT_LICENSE_FILES = LICENSE
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Backported-from: https://git.busybox.net/busybox/commit/?id=aedc3fe19fac368dc363050e0387d263b7e01cc6
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 +
-+$(eval $(python-package))
++---
++ procps/top.c | 12 ++++++------
++ 1 file changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/procps/top.c b/procps/top.c
++index 73cd285..6f7f7d3 100644
++--- a/procps/top.c
+++++ b/procps/top.c
++@@ -728,12 +728,6 @@ static void reset_term(void)
++ {
++ 	if (!OPT_BATCH_MODE)
++ 		tcsetattr_stdin_TCSANOW(&initial_settings);
++-	if (ENABLE_FEATURE_CLEAN_UP) {
++-		clearmems();
++-# if ENABLE_FEATURE_TOP_CPU_USAGE_PERCENTAGE
++-		free(prev_hist);
++-# endif
++-	}
++ }
++ 
++ static void sig_catcher(int sig)
++@@ -1258,5 +1252,11 @@ int top_main(int argc UNUSED_PARAM, char **argv)
++ #if ENABLE_FEATURE_USE_TERMIOS
++ 	reset_term();
++ #endif
+++	if (ENABLE_FEATURE_CLEAN_UP) {
+++		clearmems();
+++#if ENABLE_FEATURE_TOP_CPU_USAGE_PERCENTAGE
+++		free(prev_hist);
+++#endif
+++	}
++ 	return EXIT_SUCCESS;
++ }
++-- 
++2.7.4
++
+-- 
+2.7.4
