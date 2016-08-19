@@ -1,42 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 21:02:19 +0200
-Subject: [Buildroot] Analysis of build results for 2016-08-17
-In-Reply-To: <1471628924.31233.27.camel@synopsys.com>
-References: <20160818063027.302C6102F5A@stock.ovh.net>
- <20160818231053.37c1b26b@free-electrons.com>
- <1471628924.31233.27.camel@synopsys.com>
-Message-ID: <20160819210219.7bdf6383@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 19 Aug 2016 16:35:35 -0300
+Subject: [Buildroot] Unable to choose libgtk3 when using rpi-userland
+ package
+In-Reply-To: <08E7F0B7-5937-4810-8D59-4E5B2F98D5B9@gmail.com>
+References: <trinity-13a6383e-07ec-45b6-b051-a97025e073e3-1471607022160@3capp-gmx-bs60>
+ <08E7F0B7-5937-4810-8D59-4E5B2F98D5B9@gmail.com>
+Message-ID: <47b66f9e09c23b835237d728463c4095@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 2016-08-19 14:34, Khem Raj wrote:
 
-On Fri, 19 Aug 2016 17:48:45 +0000, Vlad Zakharov wrote:
-
-> Seems like all these failures happens due to the same toolchain issue our team working at. We will send a patch when the
-> problem is solved. We hope it will happen soon =)
-
-Ok, great, thanks!
-
-> Also I send two patches that fixes another issues:
-> 1)?https://patchwork.ozlabs.org/patch/660918/
-> This patch fixes binutils failure:
-> > ? ? ? ? ?arc |????binutils-arc-2016.09-eng008 | NOK | http://autobuild.buildroot.net/results/00455b6a8324920ad843d90ce
-> > 0413451522691a8/  
+>> On Aug 19, 2016, at 4:43 AM, Michael Toldo <Michael_Toldo@gmx.net>
+>> wrote:
+>> 
+>> Hi everybody,
+>> I'm trying to set up buildroot for my Raspberry Pi so I can use it
+>> as a lightweight kiosk device. For this I want to install Midori
+>> which is based on the libgtk3. When using rpi-userland (OpenGL is
+>> included there) I cannot select the libgtk3 package. Following info
+>> is displayed: *** libgtk3 needs an OpenGL or OpenGL EGL backend
+>> provided by mesa3d ***
 > 
-> 2)?https://patchwork.ozlabs.org/patch/660917/
-> And this one is for Qt4:
-> http://autobuild.buildroot.net/results/541/54172d55f39b2fcfa5b7fb4d4ee01566678babbc//
+> Look into the build its most probably not able to deduce that userland
+> supports it because the little tests it does for deciding that are
+> failing.
 
-Yes, seen them. I'll have a look shortly.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Hi.
+The problem at the bottom is that rpi-userland doesn't provide 
+wayland-egl which is required glue for wayland/weston support.
+Right now the only declared provider of wayland-egl in buildroot is 
+mesa, which means he'd have to use vc4-drm instead of the broadcom 
+blobs.
+Yann is working on making this a virtual since other EGL providers will 
+show up.
+Currently we lack a vc4-drm sample defconfig, i have a WIP but it isn't 
+quite functional yet.
+Regards.
