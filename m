@@ -1,34 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 16:20:56 +0200
-Subject: [Buildroot] [PATCH v2 2/3] docs: update legal-notice.txt
-In-Reply-To: <1471449670-13421-2-git-send-email-romain.naour@gmail.com>
-References: <1471449670-13421-1-git-send-email-romain.naour@gmail.com>
- <1471449670-13421-2-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160819162056.07b6d18e@free-electrons.com>
+From: =?UTF-8?B?7KCV7ISx67SJ?= <devbon@naver.com>
+Date: Fri, 19 Aug 2016 23:21:58 +0900 (KST)
+Subject: [Buildroot] =?utf-8?q?How_I_can_add_a_package_of_cmus=3F?=
+Message-ID: <68562d34c69d106316a77f40dfa9a0@cweb20.nm.nhnsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+I want to add cmus(ncurse based cui music player) package to my buildroot. But, I'm a lemon. I am struggling to write. Would you help me some?  
+ 
+################################################################################
+#
+# cmus
+#
+################################################################################
 
-On Wed, 17 Aug 2016 18:01:09 +0200, Romain Naour wrote:
-> Since 1273636fc686cd788b6de87be75dd0726cf8676c applied patches are also
-> saved.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  docs/manual/legal-notice.txt | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+CMUS_VERSION = 2.7.1
+CMUS_SOURCE = v$(CMUS_VERSION).tar.gz
+CMUS_SITE = https://github.com/cmus/cmus/archive
+CMUS_DEPENDENCIES  = host-pkgconf
+CMUS_INSTALL_STAGING = YES
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+define CMUS_CONFIGURE_CMDS
+        (cd $(@D); \
+                PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
+                PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+                PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+                PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
+        ./configure \
+                prefix="$(STAGING_DIR)/usr"  \
+                         )
+endef
+
+define CMUS_BUILD_CMDS
+          $(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D) all
+endef
+
+$(eval $(generic-package))
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160819/b717079f/attachment.html>
