@@ -1,42 +1,52 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 19 Aug 2016 16:35:35 -0300
-Subject: [Buildroot] Unable to choose libgtk3 when using rpi-userland
- package
-In-Reply-To: <08E7F0B7-5937-4810-8D59-4E5B2F98D5B9@gmail.com>
-References: <trinity-13a6383e-07ec-45b6-b051-a97025e073e3-1471607022160@3capp-gmx-bs60>
- <08E7F0B7-5937-4810-8D59-4E5B2F98D5B9@gmail.com>
-Message-ID: <47b66f9e09c23b835237d728463c4095@zacarias.com.ar>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 19 Aug 2016 20:01:21 +0000
+Subject: [Buildroot] [PATCH] qt: build using old C++ standart
+In-Reply-To: <0C7FB5F2-6BD7-4019-9A66-A0BB67984A18@gmail.com>
+References: <1471623523-23829-1-git-send-email-vzakhar@synopsys.com>
+ <0C7FB5F2-6BD7-4019-9A66-A0BB67984A18@gmail.com>
+Message-ID: <1471636769.5256.21.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2016-08-19 14:34, Khem Raj wrote:
+Hi Khem,
 
->> On Aug 19, 2016, at 4:43 AM, Michael Toldo <Michael_Toldo@gmx.net>
->> wrote:
->> 
->> Hi everybody,
->> I'm trying to set up buildroot for my Raspberry Pi so I can use it
->> as a lightweight kiosk device. For this I want to install Midori
->> which is based on the libgtk3. When using rpi-userland (OpenGL is
->> included there) I cannot select the libgtk3 package. Following info
->> is displayed: *** libgtk3 needs an OpenGL or OpenGL EGL backend
->> provided by mesa3d ***
+On Fri, 2016-08-19 at 10:21 -0700, Khem Raj wrote:
+> > 
+> > On Aug 19, 2016, at 9:18 AM, Vlad Zakharov <Vladislav.Zakharov@synopsys.com> wrote:
+> > 
+> > 'std::auto_ptr' is deprecated with gcc-6 but is used in qt4 code.
+> > So we have to build using old C++ standart to prevent build failures.
+> > 
+> > qt4 is not being developed no more, so unfortunately we can't update
+> > obsolete C++ code and have to add this workaround.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/541/54172d55f39b2fcfa5b7fb4d4ee01566678babbc//
+> > and also Qt build for ARC.
+> > 
+> > Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+> > ---
+> > package/qt/qt.mk | 5 +++++
+> > 1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+> > index 09b8dc2..41cdd1a 100644
+> > --- a/package/qt/qt.mk
+> > +++ b/package/qt/qt.mk
+> > @@ -41,6 +41,11 @@ QT_CFLAGS = $(TARGET_CFLAGS)
+> > QT_CXXFLAGS = $(TARGET_CXXFLAGS)
+> > QT_LDFLAGS = $(TARGET_LDFLAGS)
+> > 
+> > +# Qt WebKit build fails when gcc-6 is used for build.
+> > +# 'std::auto_ptr' is deprecated with gcc-6
+> > +# So, we have to use old c++ standart to prevent build failure
+> > +QT_CXXFLAGS += -std=gnu++98
 > 
-> Look into the build its most probably not able to deduce that userland
-> supports it because the little tests it does for deciding that are
-> failing.
+> you might add -Wno-deprecated as well.
 
-Hi.
-The problem at the bottom is that rpi-userland doesn't provide 
-wayland-egl which is required glue for wayland/weston support.
-Right now the only declared provider of wayland-egl in buildroot is 
-mesa, which means he'd have to use vc4-drm instead of the broadcom 
-blobs.
-Yann is working on making this a virtual since other EGL providers will 
-show up.
-Currently we lack a vc4-drm sample defconfig, i have a WIP but it isn't 
-quite functional yet.
-Regards.
+Why would we need it if "-std=gnu++98" already fixes the build problem?
+
+-Alexey
