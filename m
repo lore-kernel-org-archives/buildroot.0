@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 16:07:05 +0200
-Subject: [Buildroot] [PATCH 2/2] python-pyqt5: new package
-In-Reply-To: <20160819134225.1490-3-develop@manuel-voegele.de>
-References: <20160819134225.1490-1-develop@manuel-voegele.de>
- <20160819134225.1490-3-develop@manuel-voegele.de>
-Message-ID: <20160819160705.545443ac@free-electrons.com>
+Date: Fri, 19 Aug 2016 16:20:03 +0200
+Subject: [Buildroot] [PATCH 2/2] package/fftw: Enable multiple precision
+ installation
+In-Reply-To: <1471588192-2273-1-git-send-email-flatmax@flatmax.org>
+References: <1471588192-2273-1-git-send-email-flatmax@flatmax.org>
+Message-ID: <20160819162003.5c6a9109@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,134 +13,126 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for this contribution!
+On Fri, 19 Aug 2016 16:29:52 +1000, Matt Flax wrote:
+> This commit enables fftw to be installed for multiple precisions on the
+> same system. For example if one package requires single precision and another
+> package requires double precision, then both fftw and fftwf can now be
+> slected and installed at the same time. Before this commit that wasn't
+> possible.
+> 
+> The fftw site (http://www.fftw.org/fftw2_doc/fftw_6.html) states that to
+> install multiple precisions the procedure is a full clean and rebuild for
+> each desired precision. This patch achieves that by doing complete
+> builds (as required) for each of the required precisions.
+> 
+> Signed-off-by: Matt Flax <flatmax@flatmax.org>
 
-First question: this package seems to really be an adapted copy/paste
-from python-pyqt. Have you double checked that all aspects of
-python-pyqt.mk are also needed for the Qt5 version? I'm especially
-thinking about all the qtdetail related tricks.
+Thanks for this patch. However, I read on the fftw web site that
+--enable-type-prefix should be used to have a library file and header
+file with different name depending on the precision being used.
 
-On Fri, 19 Aug 2016 15:42:25 +0200, Manuel V?gele wrote:
+I don't see where you are passing this option, so from the look of it,
+your four packages would install over each other. Or is
+--enable-type-prefix the default ?
 
-> diff --git a/package/python-pyqt5/0001-configure-skip-qtdetail.patch b/package/python-pyqt5/0001-configure-skip-qtdetail.patch
+Another concern is that one --enable-type-prefix is used, then all
+packages that use fftw will have to use the right library name and
+header name depending on the precision they want to use. Are they all
+ready for that?
+
+Could you check the different Buildroot packages in the tree that use
+FFTW, and see how they behave, and whether they need to be changed to
+accommodate your patch?
+
+There's at least alsa-lib, gnuradio, httping, imagemagick, libvips,
+liquid-dsp and pulseaudio to look at.
+
+> diff --git a/package/fftw/fftw/Config.in b/package/fftw/fftw/Config.in
 > new file mode 100644
-> index 0000000..2e7b331
+> index 0000000..51bd5eb
 > --- /dev/null
-> +++ b/package/python-pyqt5/0001-configure-skip-qtdetail.patch
-> @@ -0,0 +1,29 @@
-> +Do not run qtdetail
-> +
-> +qtdetail is a tool that generates qtdetail.out. Since this program is
-> +cross-compiled, it's not possible to run it on the host.
-> +
-> +Consequently, python-pyqt5.mk generates the qtdetail.out file before
-> +calling configure.py.
-> +
-> +Therefore, this patch makes sure that the pre-generated qtdetail.out
-> +file is kept, and that qtdetail is not executed.
-> +
-> +Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> +Signed-off-by: Sergey Kostanbaev <sergey.kostanbaev@gmail.com>
-
-Since I guess PyQt5 is managed in Git upstream, I would very much
-prefer a Git formatted patch if possible. Of course, if Git is not used
-upstream, then it's fine.
-
-> diff --git a/package/python-pyqt5/Config.in b/package/python-pyqt5/Config.in
-> new file mode 100644
-> index 0000000..6dcdd84
-> --- /dev/null
-> +++ b/package/python-pyqt5/Config.in
-> @@ -0,0 +1,23 @@
-> +comment "python-pyqt5 needs a toolchain w/ C++, threads"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +config BR2_PACKAGE_PYTHON_PYQT5
-> +	bool "python-pyqt5"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # qt
-> +	depends on BR2_USE_MMU # qt
-
-These "depends on" are the one from qt. You need to use the ones from
-"qt5", i.e:
-
-        depends on BR2_INSTALL_LIBSTDCPP # qt5
-        depends on BR2_USE_WCHAR # qt5
-        depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # qt5
-        depends on !BR2_STATIC_LIBS # qt5
-        depends on !BR2_PACKAGE_QT # qt5
-
-and obviously adjust the comment above accordingly.
-
-> +	select BR2_PACKAGE_QT5
-> +	select BR2_PACKAGE_PYTHON_SIP
+> +++ b/package/fftw/fftw/Config.in
+> @@ -0,0 +1,19 @@
+> +config BR2_PACKAGE_FFTW
+> +	bool "fftw"
 > +	help
-> +	  PyQt4 for Qt Embedded 4 bindings.
-
-Really PyQt4 ?
-
-> +	  http://www.riverbankcomputing.com/software/pyqt/
+> +	  Library for computing Fast Fourier Transforms in double precision.
 > +
-> +if BR2_PACKAGE_PYTHON_PYQT5
+> +	  This library computes Fast Fourier Transforms (FFT) in one
+> +	  or more dimensions. It is extremely fast. This package
+> +	  contains the shared library version of the fftw libraries in
+> +	  double precision.
 > +
-> +config BR2_PACKAGE_PYTHON_PYQT5_ARCH_USES_QREAL_FLOAT
-> +	bool
-> +	default y if BR2_arm || BR2_armeb
-> +	default y if BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb
-
-An empty new line here would be good.
-
-Is this thing still needed for PyQt5 ?
-
-> +endif
-
-
-> +PYTHON_PYQT5_QTDETAIL_LICENSE = Open Source
+> +	  http://www.fftw.org
 > +
-> +PYTHON_PYQT5_QTDETAIL_TYPE = shared
-> +
-> +# Turn off features that aren't available in current qt configuration
-> +
-> +PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_OPENSSL),,PyQt_SSL)
-> +PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL),,PyQt_OpenGL)
-> +
-> +# PyQt_qreal_double must be disabled on a number of architectures that
-> +# use float for qreal.
-> +ifeq ($(BR2_PACKAGE_PYTHON_PYQT5_ARCH_USES_QREAL_FLOAT),y)
-> +PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += PyQt_qreal_double
-> +endif
-> +
-> +define PYTHON_PYQT5_QTDETAIL
-> +	echo $(1) >> $(2)/qtdetail.out
-> +endef
-> +
-> +# Since we can't run generate qtdetail.out by running qtdetail on target device
-> +# we must generate the configuration.
-> +define PYTHON_PYQT5_GENERATE_QTDETAIL
-> +	$(RM) -f $(1)/qtdetail.out
-> +	$(call PYTHON_PYQT5_QTDETAIL,$(PYTHON_PYQT5_QTDETAIL_LICENSE),$(1))
-> +	$(call PYTHON_PYQT5_QTDETAIL,$(PYTHON_PYQT5_QTDETAIL_TYPE),$(1))
-> +	$(foreach f,$(PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES),
-> +		$(call PYTHON_PYQT5_QTDETAIL,$(f),$(1)) \
-> +	)
-> +endef
+> +config BR2_PACKAGE_FFTW_PRECISION_DOUBLE
+> +	bool "double"
+> +	select BR2_PACKAGE_FFTW_USE_SSE2 if BR2_X86_CPU_HAS_SSE2
+> +	help
+> +	  Compile fftw in double precision (the default), i.e. use 'double'
+> +	  for floating point type.
 
-So this is all exactly the same as PyQt4 ?
+You have those two symbols for each package, why so? They don't have
+any dependency between each other, which means that
+BR2_PACKAGE_FFTW_PRECISION_DOUBLE can be enabled without
+BR2_PACKAGE_FFTW, so BR2_PACKAGE_FFTW_PRECISION_DOUBLE can be enabled,
+but the fftw package will not be built.
 
-> +# __init__.py is needed to import PyQt5
-> +# __init__.pyc is needed if BR2_PACKAGE_PYTHON_PYC_ONLY is set
-> +define PYTHON_PYQT5_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install
-> +	touch $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT5_PYTHON_DIR)/site-packages/PyQt5/__init__.py
-> +	$(RM) -rf $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT5_PYTHON_DIR)/site-packages/PyQt5/uic/$(PYTHON_PYQT5_RM_PORT_BASE)
-> +	PYTHONPATH="$(PYTHON_PATH)" \
-> +		$(HOST_DIR)/usr/bin/python -c "import compileall; \
-> +		compileall.compile_dir('$(TARGET_DIR)/usr/lib/$(PYTHON_PYQT5_PYTHON_DIR)/site-packages/PyQt5')"
+We should have a single option for each package.
 
-Can you test after removing this compileall line? Indeed, we are now
-byte-compiling all Python modules globally. If it works, a patch
-removing this line for python-pyqt.mk would be good to have.
+> diff --git a/package/fftw/fftw.hash b/package/fftw/fftw/fftw.hash
+> similarity index 100%
+> rename from package/fftw/fftw.hash
+> rename to package/fftw/fftw/fftw.hash
+> diff --git a/package/fftw/fftw/fftw.mk b/package/fftw/fftw/fftw.mk
+> new file mode 100644
+> index 0000000..66a82ec
+> --- /dev/null
+> +++ b/package/fftw/fftw/fftw.mk
+> @@ -0,0 +1,9 @@
+> +################################################################################
+> +#
+> +# fftw
+> +#
+> +################################################################################
+
+I'd prefer to have this package be similar to the other ones, so
+package/fftw/fftw.mk be renamed to package/fftw/fftw-common.mk, and
+then here a package that looks like the other fftw* packages.
+
+> +$(eval $(autotools-package))
+> +
+> +
+
+Useless empty lines.
+
+> diff --git a/package/fftw/fftwf/Config.in b/package/fftw/fftwf/Config.in
+> new file mode 100644
+> index 0000000..7077086
+> --- /dev/null
+> +++ b/package/fftw/fftwf/Config.in
+> @@ -0,0 +1,22 @@
+> +config BR2_PACKAGE_FFTWF
+> +	bool "fftwf"
+> +	select BR2_PACKAGE_FFTW_PRECISION_SINGLE
+
+Ah, here we have this select. But do we really need two options?
+
+> diff --git a/package/fftw/fftwf/fftwf.hash b/package/fftw/fftwf/fftwf.hash
+> new file mode 100644
+> index 0000000..62b8f0f
+> --- /dev/null
+> +++ b/package/fftw/fftwf/fftwf.hash
+> @@ -0,0 +1,2 @@
+> +# From http://www.fftw.org/fftw-3.3.4.tar.gz.md5sum
+> +md5	2edab8c06b24feeb3b82bbb3ebf3e7b3	fftw-3.3.4.tar.gz
+
+For the hash file, you can use a symlink, like we're doing in
+package/gcc/gcc-{initial,final}.
+
+I must say I'm not really thrilled by the duplication of code for those
+four packages, but I unfortunately don't have a better idea to propose.
+Let's add Arnout in Cc, he sometimes have some very creative ideas :-)
 
 Thanks!
 
