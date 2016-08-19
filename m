@@ -1,102 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 11:47:59 +0200
-Subject: [Buildroot] [git commit] linux-pam: uses fork(), needs MMU
-Message-ID: <20160819094817.719B980238@busybox.osuosl.org>
+Date: Fri, 19 Aug 2016 11:48:46 +0200
+Subject: [Buildroot] [git commit] package/ustr: don't run ldconfig
+Message-ID: <20160819094859.404B77FFE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ab6c65b4e239e94e192f3a3227d7bec83e829a0
+commit: https://git.buildroot.net/buildroot/commit/?id=99067c1598c475399788a7fa1cad55d7da816594
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-  http://autobuild.buildroot.net/results/8c9a5fe52f762b4ff4444cf41efdf0d3cf203986/
+The ustr Makefile.in (as introduced by the Debian patch we apply), is
+probably not parallel-safe:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+  402 install: install-opt install-dbg
+  403
+  404 install-opt: install-dirs install-opt-lib install-common
+  405
+  406 install-dbg: install-dirs install-dbg-lib install-common
+  407
+  408 install-opt-lib install-dbg-lib install-common: install-dirs
+  [--SNIP--]
+  424 install-opt-lib: $(OPT_LIB_STATIC) $(OPT_LIB_SHARED) ustr.pc
+  425         @echo Installing files
+  426         install -m 644 -t $(DESTDIR)$(libdir) $(OPT_LIB_STATIC)
+  427         install -m 755 -t $(DESTDIR)$(libdir) $(OPT_LIB_SHARED)
+  428         -rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
+  429         ln -s $(OPT_LIB_SHARED) $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
+  430         -rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV)
+  431         ln -s $(OPT_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV)
+  432         -rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV_BSO)
+  433         ln -s $(OPT_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV_BSO)
+  434         $(LDCONFIG) -n $(DESTDIR)$(libdir)
+  435         install -pm 644 -t $(DESTDIR)$(libdir)/pkgconfig ustr.pc
+  436
+  437 install-dbg-lib: $(DBG_LIB_STATIC) $(DBG_LIB_SHARED) ustr-debug.pc
+  438         @echo Installing files
+  439         install -m 644 -t $(DESTDIR)$(libdir) $(DBG_LIB_STATIC)
+  440         install -m 755 -t $(DESTDIR)$(libdir) $(DBG_LIB_SHARED)
+  441         -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
+  442         ln -s $(DBG_LIB_SHARED) $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
+  443         -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV)
+  444         ln -s $(DBG_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV)
+  445         -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV_BSO)
+  446         ln -s $(DBG_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV_BSO)
+  447         $(LDCONFIG) -n $(DESTDIR)$(libdir)
+  448         install -pm 644 -t $(DESTDIR)$(libdir)/pkgconfig ustr-debug.pc
+
+As Thomas already noticed [0], the two interesting rules above are not
+dependent one on the other, so can be run in parallel. So, while one is
+doing its rm'n'ln dance, the other can be running an ldconfig, which has
+the side effect of creating the missing symlinks. So, we can see this
+sequence:
+
+    install-opt-lib:                        install-dbg-lib:
+                                                ldconfig
+        rm -f .../$(OPT_LIB_SHAREDEV)            \
+                                                  `-> symlink(..., .../$(OPT_LIB_SHAREDEV))
+        ln -s .../$(OPT_LIB_SHAREDEV)
+
+In this case, ldconfig uses the opportunity-window between the rm and
+the ln to create the link; so the ln does not work, as the target
+already exist.
+
+We fix that by not running ldconfig at all in Buildroot, we just pass
+LDCONFIG=/bin/true .
+
+Fixes (hopefully, since I was not even able to reproduce the failure):
+    http://autobuild.buildroot.org/?reason=ustr-1.0.4
+    http://autobuild.buildroot.org/results/936/93626f55625ed7900c147bfd79ff7802366639b1/
+    http://autobuild.buildroot.org/results/18b/18b6ec537da9e9055f58a8649c0719dc64df1bcf/
+    [...]
+
+[0] http://lists.busybox.net/pipermail/buildroot/2016-May/161923.html
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-pam/Config.in  | 1 +
- package/nodm/Config.in       | 1 +
- package/python-pam/Config.in | 1 +
- package/rsh-redone/Config.in | 2 ++
- package/util-linux/Config.in | 2 ++
- 5 files changed, 7 insertions(+)
+ package/ustr/ustr.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
-index f6cf530..7044073 100644
---- a/package/linux-pam/Config.in
-+++ b/package/linux-pam/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_LINUX_PAM
- 	# for details.
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  A Security Framework that Provides Authentication for Applications
+diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
+index 174f055..1d629ab 100644
+--- a/package/ustr/ustr.mk
++++ b/package/ustr/ustr.mk
+@@ -23,5 +23,7 @@ USTR_INSTALL_STAGING = YES
+ # 'all-shared' to the default 'all' rule.
+ USTR_MAKE_OPTS = all all-shared
  
-diff --git a/package/nodm/Config.in b/package/nodm/Config.in
-index b8629a2..97ce8c3 100644
---- a/package/nodm/Config.in
-+++ b/package/nodm/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_NODM
- 	depends on !BR2_STATIC_LIBS # linux-pam
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs wordexp.h
-+	depends on BR2_USE_MMU # linux-pam
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
-diff --git a/package/python-pam/Config.in b/package/python-pam/Config.in
-index 497bcd3..02865d0 100644
---- a/package/python-pam/Config.in
-+++ b/package/python-pam/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_PYTHON_PAM
- 	depends on BR2_PACKAGE_PYTHON # C extension not compatible with python3
- 	depends on BR2_ENABLE_LOCALE # linux-pam
- 	depends on BR2_USE_WCHAR # linux-pam
-+	depends on BR2_USE_MMU # linux-pam
- 	depends on !BR2_STATIC_LIBS # linux-pam
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
-diff --git a/package/rsh-redone/Config.in b/package/rsh-redone/Config.in
-index 6258369..6a8aec0 100644
---- a/package/rsh-redone/Config.in
-+++ b/package/rsh-redone/Config.in
-@@ -17,6 +17,7 @@ config BR2_PACKAGE_RSH_REDONE_RLOGIND
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
-+	depends on BR2_USE_MMU # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 
- comment "rlogind needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
-@@ -31,6 +32,7 @@ config BR2_PACKAGE_RSH_REDONE_RSHD
- 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
-+	depends on BR2_USE_MMU # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 
- comment "rshd needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 429dfa7..657bcdd 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -63,6 +63,7 @@ config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
- 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
-+	depends on BR2_USE_MMU # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  Change login shell, real user name and information
-@@ -127,6 +128,7 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
- 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
-+	depends on BR2_USE_MMU # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  Build login utilities (last, login, su, sulogin)
++USTR_MAKE_OPTS += LDCONFIG=/bin/true
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
