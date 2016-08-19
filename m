@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 22:08:37 +0200
-Subject: [Buildroot] Unable to choose libgtk3 when using rpi-userland
- package
-In-Reply-To: <trinity-13a6383e-07ec-45b6-b051-a97025e073e3-1471607022160@3capp-gmx-bs60>
-References: <trinity-13a6383e-07ec-45b6-b051-a97025e073e3-1471607022160@3capp-gmx-bs60>
-Message-ID: <20160819220837.184205f5@free-electrons.com>
+Date: Fri, 19 Aug 2016 22:20:30 +0200
+Subject: [Buildroot] [git commit] imx-uuc: uses fork(), needs MMU
+Message-ID: <20160819202113.699CA81911@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=52307f7b4298794e75dff39dde0557a26eae508d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 19 Aug 2016 13:43:42 +0200, Michael Toldo wrote:
+The imx-uuc source code uses fork(), so it can only be compiled and used
+on MMU-capable platforms. This commit adds the necessary Config.in
+dependencies to express this.
 
-> I'm trying to set up buildroot for my Raspberry Pi so I can use it as
-> a lightweight kiosk device. For this I want to install Midori which
-> is based on the libgtk3. When using rpi-userland (OpenGL is included
-> there) I cannot select the libgtk3 package. Following info is
-> displayed: *** libgtk3 needs an OpenGL or OpenGL EGL backend provided
-> by mesa3d ***
+Fixes:
 
-There has been some discussion on the IRC channel today about this
-question. libgtk3 requires either an OpenGL implementation, or an EGL
-implementation that provides egl-wayland.
+  http://autobuild.buildroot.net/results/41602c20d4e6a833e72b507792a28b8db74a5f53/
 
-rpi-userland provides neither OpenGL, nor an egl-wayland
-implementation, which explains why you cannot select rpi-userland.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freescale-imx/imx-uuc/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Of course, this is our current understanding of what rpi-userland
-provides, and what libgtk3 requires. If you believe this is wrong and
-you're able to make things work differently, let us know.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/freescale-imx/imx-uuc/Config.in b/package/freescale-imx/imx-uuc/Config.in
+index d181575..ed734ad 100644
+--- a/package/freescale-imx/imx-uuc/Config.in
++++ b/package/freescale-imx/imx-uuc/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_IMX_UUC
+ 	bool "imx-uuc"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_arm # Only relevant for i.MX
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_HOST_DOSFSTOOLS
+ 	help
+ 	  This package provides the Universal Adapter user-space
+@@ -16,4 +17,5 @@ config BR2_PACKAGE_IMX_UUC
+ 
+ comment "imx-uuc needs a toolchain w/ threads"
+ 	depends on BR2_arm
++	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
