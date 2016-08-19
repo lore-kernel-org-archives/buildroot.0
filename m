@@ -1,109 +1,113 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 19 Aug 2016 13:51:03 +0200
-Subject: [Buildroot] [PATCH 1/1] python-requests-toolbelt: new package
-In-Reply-To: <20160819113253.4953-1-develop@manuel-voegele.de>
-References: <20160819113253.4953-1-develop@manuel-voegele.de>
-Message-ID: <CAGm1_kvJp-wr8FPKO965z3b5E9t_8o9Juykg6G1zZNsQY_oWBA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 19 Aug 2016 14:19:34 +0200
+Subject: [Buildroot] [PATCH v2 1/3] tinycbor: bump to version 0.3.2
+Message-ID: <1471609176-3397-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Manuel,
+tinycbor 0.3.2 includes the buildroot patch that fixes the installation
+with old Makefile used by targets such as blackfin, more details can be
+found here: https://patchwork.ozlabs.org/patch/652187
 
-On Fri, Aug 19, 2016 at 1:32 PM, Manuel V?gele
-<develop@manuel-voegele.de> wrote:
-> Signed-off-by: Manuel V?gele <develop@manuel-voegele.de>
-> ---
->  package/Config.in                                         |  1 +
->  package/python-requests-toolbelt/Config.in                |  7 +++++++
->  .../python-requests-toolbelt.hash                         |  5 +++++
->  .../python-requests-toolbelt/python-requests-toolbelt.mk  | 15 +++++++++++++++
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/python-requests-toolbelt/Config.in
->  create mode 100644 package/python-requests-toolbelt/python-requests-toolbelt.hash
->  create mode 100644 package/python-requests-toolbelt/python-requests-toolbelt.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 1e51a45..be89af8 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -752,6 +752,7 @@ menu "External python modules"
->         source "package/python-pyyaml/Config.in"
->         source "package/python-pyzmq/Config.in"
->         source "package/python-requests/Config.in"
-> +       source "package/python-requests-toolbelt/Config.in"
->         source "package/python-rpi-gpio/Config.in"
->         source "package/python-rtslib-fb/Config.in"
->         source "package/python-scapy3k/Config.in"
-> diff --git a/package/python-requests-toolbelt/Config.in b/package/python-requests-toolbelt/Config.in
-> new file mode 100644
-> index 0000000..404179b
-> --- /dev/null
-> +++ b/package/python-requests-toolbelt/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT
-> +       bool "python-requests-toolbelt"
-> +       depends on BR2_PACKAGE_PYTHON_REQUESTS
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+Changes v1 -> v2 (after review of Peter Korsgaard):
+ - Update commit message
 
-use 'select' keyword instead of 'depends'
+ ...e-installation-logic-compatible-with-old-.patch | 59 ----------------------
+ package/tinycbor/tinycbor.hash                     |  2 +-
+ package/tinycbor/tinycbor.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 61 deletions(-)
+ delete mode 100644 package/tinycbor/0001-Makefile-use-installation-logic-compatible-with-old-.patch
 
-> +       help
-> +         A utility belt for advanced users of python-requests.
-> +
-> +         https://toolbelt.readthedocs.org/
-> diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.hash b/package/python-requests-toolbelt/python-requests-toolbelt.hash
-> new file mode 100644
-> index 0000000..eccfd48
-> --- /dev/null
-> +++ b/package/python-requests-toolbelt/python-requests-toolbelt.hash
-> @@ -0,0 +1,5 @@
-> +# From https://pypi.python.org/pypi/requests-toolbelt/0.7.0
-> +md5 bfe2009905f460f4764c32cfbbf4205f requests-toolbelt-0.7.0.tar.gz
-> +
-> +# Locally calculated:
-> +sha256 33899d4a559c3f0f5e9fbc115d337c4236febdc083755a160a4132d92fc3c91a requests-toolbelt-0.7.0.tar.gz
-
-please stick checksum comments to the style showed in
-https://git.busybox.net/buildroot/tree/package/python-prompt-toolkit/python-prompt-toolkit.hash.
-i.e. all comments in one line and refer to JSON object, so that by
-bumping one won't need to touch the comment.
-
-> diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.mk b/package/python-requests-toolbelt/python-requests-toolbelt.mk
-> new file mode 100644
-> index 0000000..13063d2
-> --- /dev/null
-> +++ b/package/python-requests-toolbelt/python-requests-toolbelt.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-requests-toolbelt
-> +#
-> +################################################################################
-> +
-> +PYTHON_REQUESTS_TOOLBELT_VERSION = 0.7.0
-> +PYTHON_REQUESTS_TOOLBELT_SOURCE = requests-toolbelt-$(PYTHON_REQUESTS_TOOLBELT_VERSION).tar.gz
-> +PYTHON_REQUESTS_TOOLBELT_SITE = https://files.pythonhosted.org/packages/source/r/requests-toolbelt
-> +PYTHON_REQUESTS_TOOLBELT_SETUP_TYPE = setuptools
-> +PYTHON_REQUESTS_TOOLBELT_LICENSE = Apache-2.0
-> +PYTHON_REQUESTS_TOOLBELT_LICENSE_FILES = LICENSE
-> +PYTHON_REQUESTS_TOOLBELT_DEPENDENCIES = python-requests
-
-remove this line as python-requests is runtime dependency only.
-
-Have you tried to use our scanpypi tool to add Python packages? See
-http://nightly.buildroot.org/manual.html#_infrastructure_for_python_packages,
-section "17.8.3. Generating a python-package from a PyPI repository"
-
-Yegor
-
-> +
-> +$(eval $(python-package))
-> --
-> 2.9.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/tinycbor/0001-Makefile-use-installation-logic-compatible-with-old-.patch b/package/tinycbor/0001-Makefile-use-installation-logic-compatible-with-old-.patch
+deleted file mode 100644
+index 8ab6955..0000000
+--- a/package/tinycbor/0001-Makefile-use-installation-logic-compatible-with-old-.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 1d92e2a4af056466dcbefd09750bce07cf1085ed Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sat, 30 Jul 2016 18:42:53 +0200
+-Subject: [PATCH] Makefile: use installation logic compatible with old make
+- version
+-
+-The installation logic used by the Makefile causes a problem with old
+-make versions, such as make 3.81. Indeed, the rule "$(DESTDIR)%/" gets
+-matched even for targets like "$(DESTDIR)$(libdir)/libtinycbor.a". Due
+-to this, with those old make versions, tinycbor.a is installed as a
+-directory, and the library is never copied:
+-
+-make[1]: Entering directory `/home/test/outputs/b1305500555cbb5b959e5be11dee5cf75907f0ce/output/build/tinycbor-v0.3.1'
+-install -d /home/test/outputs/b1305500555cbb5b959e5be11dee5cf75907f0ce/output/target/usr/bin/cbordump
+-install -d /home/test/outputs/b1305500555cbb5b959e5be11dee5cf75907f0ce/output/target/usr/lib/libtinycbor.a
+-install -d /home/test/outputs/b1305500555cbb5b959e5be11dee5cf75907f0ce/output/target/usr/lib/pkgconfig/tinycbor.pc
+-install -d /home/test/outputs/b1305500555cbb5b959e5be11dee5cf75907f0ce/output/target/usr/include/tinycbor/cbor.h
+-install -d /home/test/outputs/b1305500555cbb5b959e5be11dee5cf75907f0ce/output/target/usr/include/tinycbor/cborjson.h
+-make[1]: Leaving directory `/home/test/outputs/b1305500555cbb5b959e5be11dee5cf75907f0ce/output/build/tinycbor-v0.3.1'
+-
+-To address this, we create the destination directory directly within
+-the per-file make targets.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- Makefile | 14 ++++++++------
+- 1 file changed, 8 insertions(+), 6 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 0692f6b..94beaf8 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -123,15 +123,17 @@ $(PACKAGE).tar.gz: | .git
+- $(PACKAGE).zip: | .git
+- 	GIT_DIR=$(SRCDIR).git $(GIT_ARCHIVE) --format=zip -o "$(PACKAGE).zip" HEAD
+- 
+--$(DESTDIR)%/:
+--	$(INSTALL) -d $@
+--$(DESTDIR)$(libdir)/%: lib/% | $(DESTDIR)$(libdir)/
+-+$(DESTDIR)$(libdir)/%: lib/%
+-+	$(INSTALL) -d $(@D)
+- 	$(INSTALL_DATA) $< $@
+--$(DESTDIR)$(bindir)/%: bin/% | $(DESTDIR)$(bindir)/
+-+$(DESTDIR)$(bindir)/%: bin/%
+-+	$(INSTALL) -d $(@D)
+- 	$(INSTALL_PROGRAM) $< $@
+--$(DESTDIR)$(pkgconfigdir)/%: % | $(DESTDIR)$(pkgconfigdir)/
+-+$(DESTDIR)$(pkgconfigdir)/%: %
+-+	$(INSTALL) -d $(@D)
+- 	$(INSTALL_DATA) $< $@
+--$(DESTDIR)$(includedir)/tinycbor/%: src/% | $(DESTDIR)$(includedir)/tinycbor/
+-+$(DESTDIR)$(includedir)/tinycbor/%: src/%
+-+	$(INSTALL) -d $(@D)
+- 	$(INSTALL_DATA) $< $@
+- 
+- install-strip:
+--- 
+-2.7.4
+-
+diff --git a/package/tinycbor/tinycbor.hash b/package/tinycbor/tinycbor.hash
+index e60a86c..258e0e6 100644
+--- a/package/tinycbor/tinycbor.hash
++++ b/package/tinycbor/tinycbor.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	e73a617b3a51fac103df1faab9ea037e509c1491cca29c1fd4b5083d74267597	tinycbor-v0.3.1.tar.gz
++sha256	f70de1e6b7e3750abb4ceacf0059e47b47c769f113434de10293b33867ce54c2	tinycbor-v0.3.2.tar.gz
+diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
+index 0be91b7..1519680 100644
+--- a/package/tinycbor/tinycbor.mk
++++ b/package/tinycbor/tinycbor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TINYCBOR_VERSION = v0.3.1
++TINYCBOR_VERSION = v0.3.2
+ TINYCBOR_SITE = $(call github,01org,tinycbor,$(TINYCBOR_VERSION))
+ TINYCBOR_LICENSE = MIT
+ TINYCBOR_LICENSE_FILES = LICENSE
+-- 
+2.5.0
