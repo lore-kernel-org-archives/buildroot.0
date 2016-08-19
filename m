@@ -1,100 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 15:50:29 +0200
-Subject: [Buildroot] [PATCH] lirc-tools: fix build issue related to
-	clock_gettime()
-Message-ID: <1471614629-30038-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 19 Aug 2016 15:53:18 +0200
+Subject: [Buildroot] [git commit branch/next] python-requests-toolbelt: new
+	package
+Message-ID: <20160819135323.1D501818ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In some older versions of glibc, clock_gettime() is in librt, so we need
-to link with librt when clock_gettime() is used. This commit adds a
-lirc-tools patch to make sure we link with librt when needed.
+commit: https://git.buildroot.net/buildroot/commit/?id=e73a1db4646c2d6696c529b7bdd2b59d54ff460a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/2770360880c9b265c8e019141925e56c35ba22dc/
-
+Signed-off-by: Manuel V??gele <develop@manuel-voegele.de>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...onfigure-check-for-clock_gettime-in-librt.patch | 54 ++++++++++++++++++++++
- package/lirc-tools/lirc-tools.mk                   |  1 +
- 2 files changed, 55 insertions(+)
- create mode 100644 package/lirc-tools/0004-configure-check-for-clock_gettime-in-librt.patch
+ package/Config.in                                          |  1 +
+ package/python-requests-toolbelt/Config.in                 |  7 +++++++
+ .../python-requests-toolbelt/python-requests-toolbelt.hash |  3 +++
+ .../python-requests-toolbelt/python-requests-toolbelt.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
 
-diff --git a/package/lirc-tools/0004-configure-check-for-clock_gettime-in-librt.patch b/package/lirc-tools/0004-configure-check-for-clock_gettime-in-librt.patch
+diff --git a/package/Config.in b/package/Config.in
+index 645fa29..ade3e34 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -752,6 +752,7 @@ menu "External python modules"
+ 	source "package/python-pyyaml/Config.in"
+ 	source "package/python-pyzmq/Config.in"
+ 	source "package/python-requests/Config.in"
++	source "package/python-requests-toolbelt/Config.in"
+ 	source "package/python-rpi-gpio/Config.in"
+ 	source "package/python-rtslib-fb/Config.in"
+ 	source "package/python-scapy3k/Config.in"
+diff --git a/package/python-requests-toolbelt/Config.in b/package/python-requests-toolbelt/Config.in
 new file mode 100644
-index 0000000..710dfd3
+index 0000000..ba2b951
 --- /dev/null
-+++ b/package/lirc-tools/0004-configure-check-for-clock_gettime-in-librt.patch
-@@ -0,0 +1,54 @@
-+From e654ae139cec42a6f1b5684261787d0c241cfd3b Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 19 Aug 2016 15:25:48 +0200
-+Subject: [PATCH] configure: check for clock_gettime in librt
++++ b/package/python-requests-toolbelt/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_REQUESTS_TOOLBELT
++	bool "python-requests-toolbelt"
++	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
++	help
++	  A utility belt for advanced users of python-requests.
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ configure.ac        | 3 +++
-+ daemons/Makefile.am | 2 +-
-+ plugins/Makefile.am | 1 +
-+ 3 files changed, 5 insertions(+), 1 deletion(-)
++	  https://toolbelt.readthedocs.org
+diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.hash b/package/python-requests-toolbelt/python-requests-toolbelt.hash
+new file mode 100644
+index 0000000..89f5ca1
+--- /dev/null
++++ b/package/python-requests-toolbelt/python-requests-toolbelt.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/requests-toolbelt/json, sha256 locally computed
++md5	bfe2009905f460f4764c32cfbbf4205f  requests-toolbelt-0.7.0.tar.gz
++sha256	33899d4a559c3f0f5e9fbc115d337c4236febdc083755a160a4132d92fc3c91a  requests-toolbelt-0.7.0.tar.gz
+diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.mk b/package/python-requests-toolbelt/python-requests-toolbelt.mk
+new file mode 100644
+index 0000000..2e944c0
+--- /dev/null
++++ b/package/python-requests-toolbelt/python-requests-toolbelt.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-requests-toolbelt
++#
++################################################################################
 +
-+diff --git a/configure.ac b/configure.ac
-+index 73340c7..466e638 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -67,6 +67,9 @@ AC_CHECK_FUNCS(gethostname gettimeofday mkfifo select socket strdup \
-+ AC_SEARCH_LIBS([dlopen], [dl dld], [], [
-+   AC_MSG_ERROR([unable to find the dlopen() function])
-+ ])
-++# glibc < 2.17 needs librt for clock_gettime()
-++AC_CHECK_LIB(rt, clock_gettime, LIBCLOCK_GETTIME="-lrt")
-++AC_SUBST(LIBCLOCK_GETTIME)
-+ AC_CHECK_FUNCS(daemon)
-+ if test "$ac_cv_func_daemon" != yes; then
-+   daemon=""
-+diff --git a/daemons/Makefile.am b/daemons/Makefile.am
-+index 5625627..85a28f3 100644
-+--- a/daemons/Makefile.am
-++++ b/daemons/Makefile.am
-+@@ -21,7 +21,7 @@ sbin_PROGRAMS           += lircd-uinput
-+ endif
-+ 
-+ lircd_SOURCES           = lircd.cpp
-+-lircd_LDADD             = ../lib/liblirc.la
-++lircd_LDADD             = ../lib/liblirc.la @LIBCLOCK_GETTIME@
-+ 
-+ lircd_uinput_SOURCES    = lircd-uinput.cpp
-+ lircd_uinput_LDADD     = ../lib/liblirc.la
-+diff --git a/plugins/Makefile.am b/plugins/Makefile.am
-+index ddff01d..45c012a 100644
-+--- a/plugins/Makefile.am
-++++ b/plugins/Makefile.am
-+@@ -127,6 +127,7 @@ zotac_la_SOURCES            = zotac.c
-+ 
-+ plugin_LTLIBRARIES          += mplay.la
-+ mplay_la_SOURCES            = mplay.c
-++mplay_la_LIBADD             = @LIBCLOCK_GETTIME@
-+ endif
-+ 
-+ $(srcdir)/pluginlist.am:
-+-- 
-+2.7.4
++PYTHON_REQUESTS_TOOLBELT_VERSION = 0.7.0
++PYTHON_REQUESTS_TOOLBELT_SOURCE = requests-toolbelt-$(PYTHON_REQUESTS_TOOLBELT_VERSION).tar.gz
++PYTHON_REQUESTS_TOOLBELT_SITE = https://pypi.python.org/packages/59/78/1d391d30ebf74079a8e4de6ab66fdca5362903ef2df64496f4697e9bb626
++PYTHON_REQUESTS_TOOLBELT_SETUP_TYPE = setuptools
++PYTHON_REQUESTS_TOOLBELT_LICENSE = Apache-2.0
++PYTHON_REQUESTS_TOOLBELT_LICENSE_FILES = LICENSE
 +
-diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-index ca775f7..547df46 100644
---- a/package/lirc-tools/lirc-tools.mk
-+++ b/package/lirc-tools/lirc-tools.mk
-@@ -13,6 +13,7 @@ LIRC_TOOLS_DEPENDENCIES = host-libxslt host-pkgconf host-python3
- LIRC_TOOLS_INSTALL_STAGING = YES
- # 0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch
- # 0003-Don-t-build-commandir-unless-we-have-usb.h-191.patch
-+# 0004-configure-check-for-clock_gettime-in-librt.patch
- LIRC_TOOLS_AUTORECONF = YES
- 
- LIRC_TOOLS_CONF_ENV = XSLTPROC=yes
--- 
-2.7.4
++$(eval $(python-package))
