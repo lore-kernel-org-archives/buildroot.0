@@ -1,47 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 16:12:01 +0200
-Subject: [Buildroot] [PATCH/next] glibc: remove unnecessary !BR2_sparc
-	dependencies
-Message-ID: <1471702321-31840-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Aug 2016 16:14:09 +0200
+Subject: [Buildroot] [PATCH v4] glibc: add version 2.24
+In-Reply-To: <1470821328-5958-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1470821328-5958-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160820161409.5e4869fe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The BR2_TOOLCHAIN_BUILDROOT_GLIBC option is already not selectable on
-BR2_sparc, so there is no need to have an additional "depends on
-!BR2_sparc" on each of the glibc versions.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/glibc/Config.in | 6 ------
- 1 file changed, 6 deletions(-)
+On Wed, 10 Aug 2016 10:28:48 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+> Changes v3 -> v4:
+>  - Add comment when kernel headers dependency is not satisfied (Thanks Yann)
+> Changes v2 -> v3:
+>  - Add kernel headers >= 3.2 dependency (Thanks Yann)
+>  Changes v1 -> v2:
+>   - Fix typo in glibc.hash: 2.23 -> 2.24 (Thanks Khem Raj)
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index de95cb2..85aace6 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -12,20 +12,14 @@ choice
- 
- config BR2_GLIBC_VERSION_2_22
- 	bool "2.22"
--	# No support for pthread barriers on < v9 ISA
--	depends on !BR2_sparc
- 	# Too old to build with gcc >= 6.x
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 
- config BR2_GLIBC_VERSION_2_23
- 	bool "2.23"
--	# No support for pthread barriers on < v9 ISA
--	depends on !BR2_sparc
- 
- config BR2_GLIBC_VERSION_2_24
- 	bool "2.24"
--	# No support for pthread barriers on < v9 ISA
--	depends on !BR2_sparc
- 	# Linux 3.2 or later kernel headers are required on all arches.
- 	# See: https://sourceware.org/ml/libc-alpha/2016-08/msg00212.html
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+Applied to next, thanks.
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
