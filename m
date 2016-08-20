@@ -1,107 +1,40 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 20 Aug 2016 01:17:12 +0200
-Subject: [Buildroot] [PATCH] libffi: fix m68k coldfire compile
-Message-ID: <20160819231712.GA23890@waldemar-brodkorb.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 19 Aug 2016 21:56:27 -0300
+Subject: [Buildroot] [PATCH 1/6] gstreamer1: bump to version 1.8.3
+Message-ID: <1471654592-16644-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix suggested upstream:
-https://github.com/libffi/libffi/pull/273
-
-Fixes:
-  http://autobuild.buildroot.net/results/1014a22cfdd3b18f349dde33f14acca4131dbd5b/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../0004-m68k-support-ISA-A-Coldfire-CPUs.patch    |   77 ++++++++++++++++++++
- 1 file changed, 77 insertions(+)
- create mode 100644 package/libffi/0004-m68k-support-ISA-A-Coldfire-CPUs.patch
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libffi/0004-m68k-support-ISA-A-Coldfire-CPUs.patch b/package/libffi/0004-m68k-support-ISA-A-Coldfire-CPUs.patch
-new file mode 100644
-index 0000000..9308c89
---- /dev/null
-+++ b/package/libffi/0004-m68k-support-ISA-A-Coldfire-CPUs.patch
-@@ -0,0 +1,77 @@
-+From 733bb188b898385cfb5ad28cc0e3ecaf38237350 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sat, 20 Aug 2016 00:52:19 +0200
-+Subject: [PATCH] m68k: support ISA-A Coldfire CPUs
-+
-+Fix compilation for m68k/coldfire CPUs like mcf5208.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Signed-off-by: Thorsten Glaser <tg@mirbsd.de>
-+---
-+ src/m68k/sysv.S |   29 ++++++++++++++++++++++++++++-
-+ 1 file changed, 28 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/m68k/sysv.S b/src/m68k/sysv.S
-+index ec2b14f..ea40f11 100644
-+--- a/src/m68k/sysv.S
-++++ b/src/m68k/sysv.S
-+@@ -3,7 +3,7 @@
-+    sysv.S - Copyright (c) 2012 Alan Hourihane
-+ 	    Copyright (c) 1998, 2012 Andreas Schwab
-+ 	    Copyright (c) 2008 Red Hat, Inc.
-+-	    Copyright (c) 2012 Thorsten Glaser
-++	    Copyright (c) 2012, 2016 Thorsten Glaser
-+ 
-+    m68k Foreign Function Interface
-+ 
-+@@ -72,6 +72,15 @@ CALLFUNC(ffi_call_SYSV):
-+ 	pea	4(%sp)
-+ #if !defined __PIC__
-+ 	jsr	CALLFUNC(ffi_prep_args)
-++#elif defined(__uClinux__) && defined(__ID_SHARED_LIBRARY__)
-++	move.l  _current_shared_library_a5_offset_(%a5),%a0
-++	move.l  CALLFUNC(ffi_prep_args at GOT)(%a0),%a0
-++	jsr     (%a0)
-++#elif defined(__mcoldfire__) && !defined(__mcfisab__) && !defined(__mcfisac__)
-++	move.l  #_GLOBAL_OFFSET_TABLE_ at GOTPC,%a0
-++	lea     (-6,%pc,%a0),%a0
-++	move.l  CALLFUNC(ffi_prep_args at GOT)(%a0),%a0
-++	jsr     (%a0)
-+ #else
-+ 	bsr.l	CALLFUNC(ffi_prep_args at PLTPC)
-+ #endif
-+@@ -215,6 +224,15 @@ CALLFUNC(ffi_closure_SYSV):
-+ 	move.l	%a0,-(%sp)
-+ #if !defined __PIC__
-+ 	jsr	CALLFUNC(ffi_closure_SYSV_inner)
-++#elif defined(__uClinux__) && defined(__ID_SHARED_LIBRARY__)
-++	move.l  _current_shared_library_a5_offset_(%a5),%a0
-++	move.l  CALLFUNC(ffi_closure_SYSV_inner at GOT)(%a0),%a0
-++	jsr     (%a0)
-++#elif defined(__mcoldfire__) && !defined(__mcfisab__) && !defined(__mcfisac__)
-++	move.l  #_GLOBAL_OFFSET_TABLE_ at GOTPC,%a0
-++	lea     (-6,%pc,%a0),%a0
-++	move.l  CALLFUNC(ffi_closure_SYSV_inner at GOT)(%a0),%a0
-++	jsr     (%a0)
-+ #else
-+ 	bsr.l	CALLFUNC(ffi_closure_SYSV_inner at PLTPC)
-+ #endif
-+@@ -317,6 +335,15 @@ CALLFUNC(ffi_closure_struct_SYSV):
-+ 	move.l	%a0,-(%sp)
-+ #if !defined __PIC__
-+ 	jsr	CALLFUNC(ffi_closure_SYSV_inner)
-++#elif defined(__uClinux__) && defined(__ID_SHARED_LIBRARY__)
-++	move.l  _current_shared_library_a5_offset_(%a5),%a0
-++	move.l  CALLFUNC(ffi_closure_SYSV_inner at GOT)(%a0),%a0
-++	jsr     (%a0)
-++#elif defined(__mcoldfire__) && !defined(__mcfisab__) && !defined(__mcfisac__)
-++	move.l  #_GLOBAL_OFFSET_TABLE_ at GOTPC,%a0
-++	lea     (-6,%pc,%a0),%a0
-++	move.l  CALLFUNC(ffi_closure_SYSV_inner at GOT)(%a0),%a0
-++	jsr     (%a0)
-+ #else
-+ 	bsr.l	CALLFUNC(ffi_closure_SYSV_inner at PLTPC)
-+ #endif
-+-- 
-+1.7.10.4
-+
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index b32fcfe..c85518e 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.2.tar.xz.sha256sum
+-sha256	9dbebe079c2ab2004ef7f2649fa317cabea1feb4fb5605c24d40744b90918341  gstreamer-1.8.2.tar.xz
++# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.3.tar.xz.sha256sum
++sha256	66b37762d4fdcd63bce5a2bec57e055f92420e95037361609900278c0db7c53f  gstreamer-1.8.3.tar.xz
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index beea3b7..4036825 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GSTREAMER1_VERSION = 1.8.2
++GSTREAMER1_VERSION = 1.8.3
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = http://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
 -- 
-1.7.10.4
+2.7.3
