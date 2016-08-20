@@ -1,109 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 11:16:06 +0200
-Subject: [Buildroot] [git commit] babeld: fix build with the musl C library
-Message-ID: <20160820091646.9C4B2820EC@busybox.osuosl.org>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Sat, 20 Aug 2016 14:47:03 +0530
+Subject: [Buildroot] Analysis of build results for 2016-08-18
+In-Reply-To: <20160820000709.0ceef3cd@free-electrons.com>
+References: <20160819063024.55AF4101904@stock.ovh.net>
+ <20160820000709.0ceef3cd@free-electrons.com>
+Message-ID: <57B8200F.8030305@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=254da768654b90b448a795c996102e7b4ab0d062
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas, All,
 
-This commit adds a patch that removes a header inclusion causing
-redefinition issues with the musl C library.
+On Saturday 20 August 2016 03:37 AM, Thomas Petazzoni wrote:
 
-Fixes:
+>
+>>           arc |                  jack2-v1.9.10 | NOK | http://autobuild.buildroot.net/results/8a8d533a0f785591fee10f1c09c9294f892ef7f7/
+>
+> gcc 6.x issue:
+>
+> ../tests/iodelay.cpp:170:49: error: narrowing conversion of '-1' from 'int' to 'jack_nframes_t {aka unsigned int}' inside { } [-Wnarrowing]
+> ../tests/iodelay.cpp:171:50: error: narrowing conversion of '-1' from 'int' to 'jack_nframes_t {aka unsigned int}' inside { } [-Wnarrowing]
+>
+> I guess
+> https://github.com/jackaudio/jack2/commit/ff1ed2c4524095055140370c1008a2d9cccc5645
+> should fix it.
+>
 
-  http://autobuild.buildroot.net/results/7d80c66ab5d4975de7256e73592845b9f8b3a731/
+Thanks. I have sent patch to fix this issue. 
+https://patchwork.ozlabs.org/patch/661117/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...netlink.c-don-t-include-linux-if_bridge.h.patch | 78 ++++++++++++++++++++++
- 1 file changed, 78 insertions(+)
+>
+>>        x86_64 |                trousers-0.3.13 | NOK | http://autobuild.buildroot.net/results/c9b13ae8d4af9ae6a65921de142c0e8da30664e0/
+>
+> tsp_tcsi_param.c:14:28: fatal error: bits/local_lim.h: No such file or directory
+>   #include <bits/local_lim.h>
+>
+> No?, since you added this package, could you have a look?
+>
 
-diff --git a/package/babeld/0001-kernel_netlink.c-don-t-include-linux-if_bridge.h.patch b/package/babeld/0001-kernel_netlink.c-don-t-include-linux-if_bridge.h.patch
-new file mode 100644
-index 0000000..efadd20
---- /dev/null
-+++ b/package/babeld/0001-kernel_netlink.c-don-t-include-linux-if_bridge.h.patch
-@@ -0,0 +1,78 @@
-+From 723bbfd8bdb76012a3da937c7499cf3c0b111dd5 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 20 Aug 2016 11:13:56 +0200
-+Subject: [PATCH] kernel_netlink.c: don't include <linux/if_bridge.h>
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Including <linux/if_bridge.h> causes the inclusion of <linux/in6.h>,
-+which defines 'struct in6_addr', also defined in <netinet/in.h>, causing
-+a build failure with the musl C library:
-+
-+In file included from /home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/linux/if_bridge.h:18:0,
-+                 from kernel_netlink.c:42,
-+                 from kernel.c:31:
-+/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/linux/in6.h:32:8: error: redefinition of ???struct in6_addr???
-+ struct in6_addr {
-+        ^
-+In file included from kernel_netlink.c:33:0,
-+                 from kernel.c:31:
-+/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:23:8: note: originally defined here
-+ struct in6_addr {
-+        ^
-+In file included from /home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/linux/if_bridge.h:18:0,
-+                 from kernel_netlink.c:42,
-+                 from kernel.c:31:
-+/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/linux/in6.h:49:8: error: redefinition of ???struct sockaddr_in6???
-+ struct sockaddr_in6 {
-+        ^
-+In file included from kernel_netlink.c:33:0,
-+                 from kernel.c:31:
-+/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:34:8: note: originally defined here
-+ struct sockaddr_in6 {
-+        ^
-+In file included from /home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/linux/if_bridge.h:18:0,
-+                 from kernel_netlink.c:42,
-+                 from kernel.c:31:
-+/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/linux/in6.h:59:8: error: redefinition of ???struct ipv6_mreq???
-+ struct ipv6_mreq {
-+        ^
-+In file included from kernel_netlink.c:33:0,
-+                 from kernel.c:31:
-+/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:42:8: note: originally defined here
-+ struct ipv6_mreq {
-+        ^
-+
-+In order to address this, this patch removes the <linux/if_bridge.h>
-+inclusion, and instead defines BRCTL_GET_BRIDGES to the appropriate
-+value if it's not provided by the C library.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ kernel_netlink.c | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/kernel_netlink.c b/kernel_netlink.c
-+index 4eadc39..1a5b3dd 100644
-+--- a/kernel_netlink.c
-++++ b/kernel_netlink.c
-+@@ -39,10 +39,14 @@ THE SOFTWARE.
-+ #include <sys/socket.h>
-+ #include <linux/netlink.h>
-+ #include <linux/rtnetlink.h>
-+-#include <linux/if_bridge.h>
-+ #include <linux/fib_rules.h>
-+ #include <net/if_arp.h>
-+ 
-++/* From <linux/if_bridge.h> */
-++#ifndef BRCTL_GET_BRIDGES
-++#define BRCTL_GET_BRIDGES 1
-++#endif
-++
-+ #if(__GLIBC__ < 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 5)
-+ #define RTA_TABLE 15
-+ #endif
-+-- 
-+2.7.4
-+
+I have fixed similar issue for mtd package and can take a look. 
+https://git.buildroot.net/buildroot/commit/?id=850e74c3639733986ff40b96fbca7d355aee738c
+
+Thanks,
+Rahul
