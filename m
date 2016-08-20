@@ -1,40 +1,82 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 19 Aug 2016 23:14:45 -0300
-Subject: [Buildroot] [PATCH] pangomm: bump to version 2.40.1
-Message-ID: <1471659285-12393-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 20 Aug 2016 00:15:53 -0300
+Subject: [Buildroot] [PATCH] libmnl: bump to version 1.0.4
+Message-ID: <1471662953-21916-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+And drop upstream patch.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/pangomm/pangomm.hash | 4 ++--
- package/pangomm/pangomm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libmnl/0001-uclinux.patch | 26 --------------------------
+ package/libmnl/libmnl.hash        |  6 +++---
+ package/libmnl/libmnl.mk          |  3 +--
+ 3 files changed, 4 insertions(+), 31 deletions(-)
+ delete mode 100644 package/libmnl/0001-uclinux.patch
 
-diff --git a/package/pangomm/pangomm.hash b/package/pangomm/pangomm.hash
-index 4f39e51..b5d527f 100644
---- a/package/pangomm/pangomm.hash
-+++ b/package/pangomm/pangomm.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/pangomm/2.40/pangomm-2.40.0.sha256sum
--sha256	7dd0afa9dcce57cdb0aad77da9ea46823ee8515d5f3ffd895b9ede7365c3d70d	pangomm-2.40.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/pangomm/2.40/pangomm-2.40.1.sha256sum
-+sha256	9762ee2a2d5781be6797448d4dd2383ce14907159b30bc12bf6b08e7227be3af	pangomm-2.40.1.tar.xz
-diff --git a/package/pangomm/pangomm.mk b/package/pangomm/pangomm.mk
-index 2db7890..2a85e39 100644
---- a/package/pangomm/pangomm.mk
-+++ b/package/pangomm/pangomm.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libmnl/0001-uclinux.patch b/package/libmnl/0001-uclinux.patch
+deleted file mode 100644
+index e8f97c6..0000000
+--- a/package/libmnl/0001-uclinux.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From ae2acfa7d287e3ffc0bb66091059b86f62775bd5 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 10 Sep 2013 15:24:47 -0300
+-Subject: [PATCH] configure: uclinux is also linux
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index dcd3cf8..313a015 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -17,7 +17,7 @@ AC_DISABLE_STATIC
+- LT_INIT
+- CHECK_GCC_FVISIBILITY
+- case "$host" in
+--*-*-linux*) ;;
+-+*-*-linux* | *-*-uclinux*) ;;
+- *) AC_MSG_ERROR([Linux only, dude!]);;
+- esac
+- 
+--- 
+-1.8.1.5
+-
+diff --git a/package/libmnl/libmnl.hash b/package/libmnl/libmnl.hash
+index c16dfe7..98385b8 100644
+--- a/package/libmnl/libmnl.hash
++++ b/package/libmnl/libmnl.hash
+@@ -1,3 +1,3 @@
+-# From ftp://ftp.netfilter.org/pub/libmnl/libmnl-1.0.3.tar.bz2.{md5sum,sha1sum}
+-md5	7d95fc3bea3365bc03c48e484224f65f	libmnl-1.0.3.tar.bz2
+-sha1	c27e25f67c6422ebf893fc3a844af8085a1c5b63	libmnl-1.0.3.tar.bz2
++# From ftp://ftp.netfilter.org/pub/libmnl/libmnl-1.0.4.tar.bz2.{md5sum,sha1sum}
++md5	be9b4b5328c6da1bda565ac5dffadb2d	libmnl-1.0.4.tar.bz2
++sha1	2db40dea612e88c62fd321906be40ab5f8f1685a	libmnl-1.0.4.tar.bz2
+diff --git a/package/libmnl/libmnl.mk b/package/libmnl/libmnl.mk
+index b16c534..407c4f1 100644
+--- a/package/libmnl/libmnl.mk
++++ b/package/libmnl/libmnl.mk
+@@ -4,11 +4,10 @@
+ #
  ################################################################################
  
- PANGOMM_VERSION_MAJOR = 2.40
--PANGOMM_VERSION = $(PANGOMM_VERSION_MAJOR).0
-+PANGOMM_VERSION = $(PANGOMM_VERSION_MAJOR).1
- PANGOMM_SOURCE = pangomm-$(PANGOMM_VERSION).tar.xz
- PANGOMM_SITE = http://ftp.gnome.org/pub/gnome/sources/pangomm/$(PANGOMM_VERSION_MAJOR)
- PANGOMM_LICENSE = LGPLv2.1+ (library), GPLv2+ (tools)
+-LIBMNL_VERSION = 1.0.3
++LIBMNL_VERSION = 1.0.4
+ LIBMNL_SOURCE = libmnl-$(LIBMNL_VERSION).tar.bz2
+ LIBMNL_SITE = http://netfilter.org/projects/libmnl/files
+ LIBMNL_INSTALL_STAGING = YES
+-LIBMNL_AUTORECONF = YES
+ LIBMNL_LICENSE = LGPLv2.1+
+ LIBMNL_LICENSE_FILES = COPYING
+ 
 -- 
 2.7.3
