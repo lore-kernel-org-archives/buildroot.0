@@ -1,111 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 14:59:01 +0200
-Subject: [Buildroot] [git commit] pkg-download: Allow packages to pass
-	generic options to download methods
-Message-ID: <20160902142938.E3C437FB67@busybox.osuosl.org>
+Date: Sat, 20 Aug 2016 11:46:43 +0200
+Subject: [Buildroot] [git commit] pangomm: bump to version 2.40.1
+Message-ID: <20160902142938.5E87F7FEE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91b34e0abc99b7346f71bbc99283ff7ffac34799
+commit: https://git.buildroot.net/buildroot/commit/?id=5b3ea400a07a914c9a2f9f819f6052ca6dc3e53f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Introduce a new package variable $(PKG)_DL_OPTS. When this variable
-is defined, its value is passed to the downloader as options to
-the underlying command. Packages can now retrieve archives from server
-expecting logins and passwords, use referer url, proxy or specific
-options for cloning a repository.
-
-Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-download.mk | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+ package/pangomm/pangomm.hash | 4 ++--
+ package/pangomm/pangomm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 315203f..3b6561b 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -81,7 +81,8 @@ define DOWNLOAD_GIT
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
+diff --git a/package/pangomm/pangomm.hash b/package/pangomm/pangomm.hash
+index 4f39e51..b5d527f 100644
+--- a/package/pangomm/pangomm.hash
++++ b/package/pangomm/pangomm.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/pangomm/2.40/pangomm-2.40.0.sha256sum
+-sha256	7dd0afa9dcce57cdb0aad77da9ea46823ee8515d5f3ffd895b9ede7365c3d70d	pangomm-2.40.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/pangomm/2.40/pangomm-2.40.1.sha256sum
++sha256	9762ee2a2d5781be6797448d4dd2383ce14907159b30bc12bf6b08e7227be3af	pangomm-2.40.1.tar.xz
+diff --git a/package/pangomm/pangomm.mk b/package/pangomm/pangomm.mk
+index 2db7890..2a85e39 100644
+--- a/package/pangomm/pangomm.mk
++++ b/package/pangomm/pangomm.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
-@@ -97,7 +98,8 @@ define DOWNLOAD_BZR
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- define SOURCE_CHECK_BZR
-@@ -112,7 +114,8 @@ define DOWNLOAD_CVS
- 		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
- 		$($(PKG)_DL_VERSION) \
- 		$($(PKG)_RAWNAME) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- # Not all CVS servers support ls/rls, use login to see if we can connect
-@@ -127,7 +130,8 @@ define DOWNLOAD_SVN
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- define SOURCE_CHECK_SVN
-@@ -143,7 +147,8 @@ define DOWNLOAD_SCP
- 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
--		'$(call stripurischeme,$(call qstrip,$(1)))'
-+		'$(call stripurischeme,$(call qstrip,$(1)))' \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- define SOURCE_CHECK_SCP
-@@ -157,7 +162,8 @@ define DOWNLOAD_HG
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
-@@ -172,7 +178,8 @@ define DOWNLOAD_WGET
- 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
--		'$(call qstrip,$(1))'
-+		'$(call qstrip,$(1))' \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- define SOURCE_CHECK_WGET
-@@ -185,7 +192,8 @@ define DOWNLOAD_LOCALFILES
- 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
--		$(call stripurischeme,$(call qstrip,$(1)))
-+		$(call stripurischeme,$(call qstrip,$(1))) \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- define SOURCE_CHECK_LOCALFILES
+ PANGOMM_VERSION_MAJOR = 2.40
+-PANGOMM_VERSION = $(PANGOMM_VERSION_MAJOR).0
++PANGOMM_VERSION = $(PANGOMM_VERSION_MAJOR).1
+ PANGOMM_SOURCE = pangomm-$(PANGOMM_VERSION).tar.xz
+ PANGOMM_SITE = http://ftp.gnome.org/pub/gnome/sources/pangomm/$(PANGOMM_VERSION_MAJOR)
+ PANGOMM_LICENSE = LGPLv2.1+ (library), GPLv2+ (tools)
