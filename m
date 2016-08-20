@@ -1,108 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 11:45:41 +0200
-Subject: [Buildroot] [git commit] libffi: fix m68k coldfire compile
-Message-ID: <20160820094613.96FD780770@busybox.osuosl.org>
+Date: Sat, 20 Aug 2016 11:45:07 +0200
+Subject: [Buildroot] [git commit] musl: fix a regression for mips
+Message-ID: <20160820094613.8A0EA80770@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=548657513d3d935e74aed2cfbc6d56ba0804736d
+commit: https://git.buildroot.net/buildroot/commit/?id=d01c3991fb42b6d3990c08ed5bfc71aee4554984
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix suggested upstream:
-https://github.com/libffi/libffi/pull/273
-
-Fixes:
-  http://autobuild.buildroot.net/results/1014a22cfdd3b18f349dde33f14acca4131dbd5b/
+Add upstream patch to fix a regression regarding tcsetattr.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0004-m68k-support-ISA-A-Coldfire-CPUs.patch    | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ ...regression-in-tcsetattr-on-all-mips-archs.patch | 67 ++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/package/libffi/0004-m68k-support-ISA-A-Coldfire-CPUs.patch b/package/libffi/0004-m68k-support-ISA-A-Coldfire-CPUs.patch
+diff --git a/package/musl/0001-fix-regression-in-tcsetattr-on-all-mips-archs.patch b/package/musl/0001-fix-regression-in-tcsetattr-on-all-mips-archs.patch
 new file mode 100644
-index 0000000..9308c89
+index 0000000..73ccae4
 --- /dev/null
-+++ b/package/libffi/0004-m68k-support-ISA-A-Coldfire-CPUs.patch
-@@ -0,0 +1,77 @@
-+From 733bb188b898385cfb5ad28cc0e3ecaf38237350 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sat, 20 Aug 2016 00:52:19 +0200
-+Subject: [PATCH] m68k: support ISA-A Coldfire CPUs
++++ b/package/musl/0001-fix-regression-in-tcsetattr-on-all-mips-archs.patch
+@@ -0,0 +1,67 @@
++From cff5747c74c41b22f1ce1340978b1c226a8cdf32 Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Wed, 13 Jul 2016 15:04:30 -0400
++Subject: [PATCH] fix regression in tcsetattr on all mips archs
 +
-+Fix compilation for m68k/coldfire CPUs like mcf5208.
++revert commit 8c316e9e49d37ad92c2e7493e16166a2afca419f. it was wrong
++and does not match how the kernel API works.
 +
++Signed-off-by: Rich Felker <dalias@aerifal.cx>
 +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Signed-off-by: Thorsten Glaser <tg@mirbsd.de>
 +---
-+ src/m68k/sysv.S |   29 ++++++++++++++++++++++++++++-
-+ 1 file changed, 28 insertions(+), 1 deletion(-)
++ arch/mips/bits/termios.h    | 6 +++---
++ arch/mips64/bits/termios.h  | 6 +++---
++ arch/mipsn32/bits/termios.h | 6 +++---
++ 3 files changed, 9 insertions(+), 9 deletions(-)
 +
-+diff --git a/src/m68k/sysv.S b/src/m68k/sysv.S
-+index ec2b14f..ea40f11 100644
-+--- a/src/m68k/sysv.S
-++++ b/src/m68k/sysv.S
-+@@ -3,7 +3,7 @@
-+    sysv.S - Copyright (c) 2012 Alan Hourihane
-+ 	    Copyright (c) 1998, 2012 Andreas Schwab
-+ 	    Copyright (c) 2008 Red Hat, Inc.
-+-	    Copyright (c) 2012 Thorsten Glaser
-++	    Copyright (c) 2012, 2016 Thorsten Glaser
++diff --git a/arch/mips/bits/termios.h b/arch/mips/bits/termios.h
++index f559f76..6a1205d 100644
++--- a/arch/mips/bits/termios.h
+++++ b/arch/mips/bits/termios.h
++@@ -141,9 +141,9 @@ struct termios {
++ #define TCOFLUSH  1
++ #define TCIOFLUSH 2
 + 
-+    m68k Foreign Function Interface
++-#define TCSANOW 0x540e
++-#define TCSADRAIN 0x540f
++-#define TCSAFLUSH 0x5410
+++#define TCSANOW   0
+++#define TCSADRAIN 1
+++#define TCSAFLUSH 2
 + 
-+@@ -72,6 +72,15 @@ CALLFUNC(ffi_call_SYSV):
-+ 	pea	4(%sp)
-+ #if !defined __PIC__
-+ 	jsr	CALLFUNC(ffi_prep_args)
-++#elif defined(__uClinux__) && defined(__ID_SHARED_LIBRARY__)
-++	move.l  _current_shared_library_a5_offset_(%a5),%a0
-++	move.l  CALLFUNC(ffi_prep_args at GOT)(%a0),%a0
-++	jsr     (%a0)
-++#elif defined(__mcoldfire__) && !defined(__mcfisab__) && !defined(__mcfisac__)
-++	move.l  #_GLOBAL_OFFSET_TABLE_ at GOTPC,%a0
-++	lea     (-6,%pc,%a0),%a0
-++	move.l  CALLFUNC(ffi_prep_args at GOT)(%a0),%a0
-++	jsr     (%a0)
-+ #else
-+ 	bsr.l	CALLFUNC(ffi_prep_args at PLTPC)
-+ #endif
-+@@ -215,6 +224,15 @@ CALLFUNC(ffi_closure_SYSV):
-+ 	move.l	%a0,-(%sp)
-+ #if !defined __PIC__
-+ 	jsr	CALLFUNC(ffi_closure_SYSV_inner)
-++#elif defined(__uClinux__) && defined(__ID_SHARED_LIBRARY__)
-++	move.l  _current_shared_library_a5_offset_(%a5),%a0
-++	move.l  CALLFUNC(ffi_closure_SYSV_inner at GOT)(%a0),%a0
-++	jsr     (%a0)
-++#elif defined(__mcoldfire__) && !defined(__mcfisab__) && !defined(__mcfisac__)
-++	move.l  #_GLOBAL_OFFSET_TABLE_ at GOTPC,%a0
-++	lea     (-6,%pc,%a0),%a0
-++	move.l  CALLFUNC(ffi_closure_SYSV_inner at GOT)(%a0),%a0
-++	jsr     (%a0)
-+ #else
-+ 	bsr.l	CALLFUNC(ffi_closure_SYSV_inner at PLTPC)
-+ #endif
-+@@ -317,6 +335,15 @@ CALLFUNC(ffi_closure_struct_SYSV):
-+ 	move.l	%a0,-(%sp)
-+ #if !defined __PIC__
-+ 	jsr	CALLFUNC(ffi_closure_SYSV_inner)
-++#elif defined(__uClinux__) && defined(__ID_SHARED_LIBRARY__)
-++	move.l  _current_shared_library_a5_offset_(%a5),%a0
-++	move.l  CALLFUNC(ffi_closure_SYSV_inner at GOT)(%a0),%a0
-++	jsr     (%a0)
-++#elif defined(__mcoldfire__) && !defined(__mcfisab__) && !defined(__mcfisac__)
-++	move.l  #_GLOBAL_OFFSET_TABLE_ at GOTPC,%a0
-++	lea     (-6,%pc,%a0),%a0
-++	move.l  CALLFUNC(ffi_closure_SYSV_inner at GOT)(%a0),%a0
-++	jsr     (%a0)
-+ #else
-+ 	bsr.l	CALLFUNC(ffi_closure_SYSV_inner at PLTPC)
-+ #endif
-+-- 
-+1.7.10.4
-+
++ #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
++ #define EXTA    0000016
++diff --git a/arch/mips64/bits/termios.h b/arch/mips64/bits/termios.h
++index f559f76..6a1205d 100644
++--- a/arch/mips64/bits/termios.h
+++++ b/arch/mips64/bits/termios.h
++@@ -141,9 +141,9 @@ struct termios {
++ #define TCOFLUSH  1
++ #define TCIOFLUSH 2
++ 
++-#define TCSANOW 0x540e
++-#define TCSADRAIN 0x540f
++-#define TCSAFLUSH 0x5410
+++#define TCSANOW   0
+++#define TCSADRAIN 1
+++#define TCSAFLUSH 2
++ 
++ #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
++ #define EXTA    0000016
++diff --git a/arch/mipsn32/bits/termios.h b/arch/mipsn32/bits/termios.h
++index f559f76..6a1205d 100644
++--- a/arch/mipsn32/bits/termios.h
+++++ b/arch/mipsn32/bits/termios.h
++@@ -141,9 +141,9 @@ struct termios {
++ #define TCOFLUSH  1
++ #define TCIOFLUSH 2
++ 
++-#define TCSANOW 0x540e
++-#define TCSADRAIN 0x540f
++-#define TCSAFLUSH 0x5410
+++#define TCSANOW   0
+++#define TCSADRAIN 1
+++#define TCSAFLUSH 2
++ 
++ #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
++ #define EXTA    0000016
