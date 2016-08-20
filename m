@@ -1,33 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 22:37:05 +0200
-Subject: [Buildroot] [PATCH 2/2] glib-networking: specify
- ca-certificates pathspec
-In-Reply-To: <1471711731-462-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1471711731-462-1-git-send-email-gustavo@zacarias.com.ar>
- <1471711731-462-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160820223705.44931438@free-electrons.com>
+Date: Sat, 20 Aug 2016 22:38:15 +0200
+Subject: [Buildroot] [git commit branch/next] mpv: bump to version 0.19.0
+Message-ID: <20160820203827.83675820F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e834d3f65da6fa470c93bca1853daa9c85d932b8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 20 Aug 2016 13:48:51 -0300, Gustavo Zacarias wrote:
-> Otherwise the configure script will probe the distro directories for it
-> and it may not match what we use, for example fedora uses /etc/pki
-> instead of /etc/ssl.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/glib-networking/glib-networking.mk | 2 ++
->  1 file changed, 2 insertions(+)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mpv/mpv.hash | 2 +-
+ package/mpv/mpv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
+index 8a2f44b..1594cb9 100644
+--- a/package/mpv/mpv.hash
++++ b/package/mpv/mpv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	e413d57fec4ad43b9f9b848f38d13fb921313fc9a4a64bf1e906c8d0f7a46329	v0.18.1.tar.gz
++sha256	3df5811942cd1d71f48eb4720092fdafec11885bf6dd6d1d3e6413f32e5d67e2	v0.19.0.tar.gz
+ sha256	01bf2beab2106d1558800c8709bc2c8e496d3da4a2ca343fe091f22fca60c98b	waf-1.8.12
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index d2ed3f2..123dff4 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPV_VERSION = 0.18.1
++MPV_VERSION = 0.19.0
+ MPV_WAF_VERSION = 1.8.12
+ MPV_SITE = https://github.com/mpv-player/mpv/archive
+ MPV_SOURCE = v$(MPV_VERSION).tar.gz
