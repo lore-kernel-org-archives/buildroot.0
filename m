@@ -1,86 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 16:05:19 +0200
-Subject: [Buildroot] [PATCH/next] gcc: fix gcc version dependencies for the
-	PowerPC64/musl exclusion
-Message-ID: <1471701919-30534-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Aug 2016 16:07:57 +0200
+Subject: [Buildroot] [git commit branch/next] glibc: add version 2.24
+Message-ID: <20160820140947.B6D7C8211A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit
-5ab751ca44e9da6f406876ff582b3a813056b0d4 ("toolchain-buildroot: allow to
-build ppc64(le) musl toolchains"), support for building a musl toolchain
-for ppc64(le) was added. Since this support only works with gcc 6, some
-additional dependencies have been added to the older gcc versions so
-that they cannot be selected on ppc64(le)/musl.
+commit: https://git.buildroot.net/buildroot/commit/?id=6c69921eced469ade6c98a6c1c9771ebc3d67beb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Unfortunately, the expression of the dependency was wrong, and leads to
-those older gcc versions being non-selectable if you're not using
-musl. Indeed, the dependencies look like this:
-
-  depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-
-So as soon as you're not using musl, BR2_TOOLCHAIN_USES_MUSL is false,
-so the entire condition is false, and the gcc version is not available.
-
-Due to this, only gcc 6.x can be selected currently with uclibc or
-glibc, which is clearly not the intended behavior.
-
-This commit reworks those dependencies to:
-
-  depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
-
-which more clearly expresses what we want:
-
- "We don't want to (have a toolchain that uses musl and (be building
-  either for PPC64 or PPC64le))"
-
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/glibc/Config.in  | 12 ++++++++++++
+ package/glibc/glibc.hash |  1 +
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 4d02931..37728e0 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -31,7 +31,7 @@ choice
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 		# musl ppc64 unsupported
--		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-+		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index f86822d..de95cb2 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -22,6 +22,17 @@ config BR2_GLIBC_VERSION_2_23
+ 	# No support for pthread barriers on < v9 ISA
+ 	depends on !BR2_sparc
  
-@@ -49,7 +49,7 @@ choice
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 		# musl ppc64 unsupported
--		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-+		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-@@ -71,7 +71,7 @@ choice
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 		# musl ppc64 unsupported
--		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-+		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
- 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
-@@ -82,7 +82,7 @@ choice
- 		# Broken or unsupported architectures
- 		depends on !BR2_arc && !BR2_bfin
- 		# musl ppc64 unsupported
--		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-+		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
--- 
-2.7.4
++config BR2_GLIBC_VERSION_2_24
++	bool "2.24"
++	# No support for pthread barriers on < v9 ISA
++	depends on !BR2_sparc
++	# Linux 3.2 or later kernel headers are required on all arches.
++	# See: https://sourceware.org/ml/libc-alpha/2016-08/msg00212.html
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
++
++comment "glibc-2.24 needs kernel headers >= 3.2"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
++
+ endchoice
+ 
+ endif
+@@ -30,3 +41,4 @@ config BR2_GLIBC_VERSION_STRING
+ 	string
+ 	default "2.22" if BR2_GLIBC_VERSION_2_22
+ 	default "2.23" if BR2_GLIBC_VERSION_2_23
++	default "2.24" if BR2_GLIBC_VERSION_2_24
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 052f281..befe80c 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated after checking pgp signature (glibc)
+ sha256	eb731406903befef1d8f878a46be75ef862b9056ab0cde1626d08a7a05328948	glibc-2.22.tar.xz
+ sha256	94efeb00e4603c8546209cefb3e1a50a5315c86fa9b078b6fad758e187ce13e9	glibc-2.23.tar.xz
++sha256	99d4a3e8efd144d71488e478f62587578c0f4e1fa0b4eed47ee3d4975ebeb5d3	glibc-2.24.tar.xz
