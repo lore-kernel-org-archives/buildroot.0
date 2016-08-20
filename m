@@ -1,11 +1,13 @@
 From: Matt Flax <flatmax@flatmax.org>
-Date: Sat, 20 Aug 2016 13:36:41 +1000
-Subject: [Buildroot] [PATCH 2/2] package/fftw: Enable multiple precision
- installation
-In-Reply-To: <20160819162003.5c6a9109@free-electrons.com>
-References: <1471588192-2273-1-git-send-email-flatmax@flatmax.org>
- <20160819162003.5c6a9109@free-electrons.com>
-Message-ID: <1962c82d-04d8-9dd5-0826-da1f3aff3673@flatmax.org>
+Date: Sat, 20 Aug 2016 14:01:16 +1000
+Subject: [Buildroot] [PATCH 1/1] arch/arm: Add Cortex-a53 CPU
+In-Reply-To: <5F8C494A-03CF-46AC-B85D-107643848CD1@gmail.com>
+References: <1471565224-15625-1-git-send-email-flatmax@flatmax.org>
+ <20160819100320.1d2609bd@free-electrons.com>
+ <192101AE-C8DB-444C-8A52-68EA27264045@gmail.com>
+ <20160819194931.072912e5@free-electrons.com>
+ <5F8C494A-03CF-46AC-B85D-107643848CD1@gmail.com>
+Message-ID: <a24a1482-ffde-4472-3488-bf34915be03d@flatmax.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,164 +15,72 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On 20/08/16 00:20, Thomas Petazzoni wrote:
-> Hello,
->
-> On Fri, 19 Aug 2016 16:29:52 +1000, Matt Flax wrote:
->> This commit enables fftw to be installed for multiple precisions on the
->> same system. For example if one package requires single precision and another
->> package requires double precision, then both fftw and fftwf can now be
->> slected and installed at the same time. Before this commit that wasn't
->> possible.
+On 20/08/16 03:54, Khem Raj wrote:
+>> On Aug 19, 2016, at 10:49 AM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 >>
->> The fftw site (http://www.fftw.org/fftw2_doc/fftw_6.html) states that to
->> install multiple precisions the procedure is a full clean and rebuild for
->> each desired precision. This patch achieves that by doing complete
->> builds (as required) for each of the required precisions.
+>> Hello,
 >>
->> Signed-off-by: Matt Flax <flatmax@flatmax.org>
-> Thanks for this patch. However, I read on the fftw web site that
-> --enable-type-prefix should be used to have a library file and header
-> file with different name depending on the precision being used.
->
-> I don't see where you are passing this option, so from the look of it,
-> your four packages would install over each other. Or is
-> --enable-type-prefix the default ?
-There are now 4 mk files. Each builds in a separate directory (fftw, 
-fftwf, fftwl, fftwq) and installs as per the recommendations from fftw. 
-All fftw packages  inherit the version, source, site, license, env, 
-conf_opts, cflags from fftw.mk. By inheriting from one single set of 
-macros, we can bump versions very easily.
-The different precisions are added like so :
-fftwf.mk : FFTWF_CONF_OPTS += --enable-single
-fftwl.mk : FFTL_CONF_OPTS += --enable-long-double
-fftwq.mk : FFTQ_CONF_OPTS += --enable-quad-precision
+>> On Fri, 19 Aug 2016 10:47:05 -0700, Khem Raj wrote:
+>>
+>>>> On Fri, 19 Aug 2016 10:07:04 +1000, Matt Flax wrote:
+>>>>> Adds the Cortex-a53 CPU to the target architecture variant choice. This sets
+>>>>> the toolchain to use cortex-a53 as the target. The effect is that various
+>>>>> cortex-a53 tunings are enabled for the compilation of packages.
+>>>>>
+>>>>> Signed-off-by: Matt Flax <flatmax@flatmax.org>
+>>>> The A53 is an ARM64 CPU, so it should rather be added to
+>>>> Config.in.aarch64 (in which we don't yet have a CPU selection, but that
+>>>> can be added).
+>>>>
+>>>> Or are you building a 32 bits ARM system for a Cortex-A53 ? In that
+>>>> case, adding it to Config.in.arm would be OK, but it's a bit annoying
+>>>> that we would have to duplicate many ARM CPUs between Config.in.arm and
+>>>> Config.in.aarch64.
+>>> 64bit kernel with 32bit userspace is most common usecase as of now for
+>>> a53 that I see. so you need some sort of multilib.
+>> I think on RPi3 they use a 32 bit kernel and 32 bit userspace, which
+>> probably is what Matt was targeting. But I'd like to hear from Matt's
+>> use case first.
+> rpi3 is 32bit all the way, so this patch is fine for that case.
 
-Regarding dev files, the header files are all the same - in fact from 
-the fftw site, http://www.fftw.org/fftw2_doc/fftw_6.html#SEC69 it is 
-recommended that they all install ontop of each other :
-./configure; make; make install; make clean
-./configure --ebale-single; make; make install; make clean
-and so on ...
+My use case is 32 bit kernel with a 32 bit buildroot.
 
-> Another concern is that one --enable-type-prefix is used, then all
-> packages that use fftw will have to use the right library name and
-> header name depending on the precision they want to use. Are they all
-> ready for that?
->
-> Could you check the different Buildroot packages in the tree that use
-> FFTW, and see how they behave, and whether they need to be changed to
-> accommodate your patch?
->
-> There's at least alsa-lib, gnuradio, httping, imagemagick, libvips,
-> liquid-dsp and pulseaudio to look at.
+I have been working with the s5p6818 Nexcell silicon and they have A53 
+cores. These cores are more powerful then ARMv7 cortex cores ... because 
+they have a more advanced neon hardware floating point processor. Even 
+with a 32 bit kernel and os, gcc can optimise the code using the 
+"cortex-a53" tuning.
+I think (at this point in time) the neon unit can handle 64bit (double) 
+computations, even when the kernel is 32 bit. This can only be enabled 
+in gcc using the "cortex-a53" tuning. From a hardware standpoint, if it 
+is in silicon, then it will work - no matter what the software is doing 
+... I guess it just depends on the 32 bit gcc implementation of being 
+able to load and unload the various 64 bit types efficiently. Not sure 
+where to look for more information, however Aarch32 is mentioned in the 
+a53 gcc config : 
+https://github.com/gcc-mirror/gcc/blob/master/gcc/config/arm/cortex-a53.md
+They also mention special register load instructions for aarch32.
 
-Actually "type-prefixes" aren't used and no changes are made to the 
-names.  Double precision remains libfftw3.so.3, single precision remains 
-libfftw3f.so.3 .... and so on. There is one header file used by all and 
-it is constant.
 
-Literally, this patch simply allows side by side installation, as it is 
-intended to be.
+ From my experience, the Nexcell s5p6818 ARMv8 A53 cores roughly double 
+their speed in heavy floating point execution over Exynos 4412 ARMv7 
+Cortex-A9 cores. It is possible that this is because their NEON hardware 
+processors have double the vector size ?
 
-thanks
 Matt
 
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux and Kernel engineering
+>> http://free-electrons.com
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
->> diff --git a/package/fftw/fftw/Config.in b/package/fftw/fftw/Config.in
->> new file mode 100644
->> index 0000000..51bd5eb
->> --- /dev/null
->> +++ b/package/fftw/fftw/Config.in
->> @@ -0,0 +1,19 @@
->> +config BR2_PACKAGE_FFTW
->> +	bool "fftw"
->> +	help
->> +	  Library for computing Fast Fourier Transforms in double precision.
->> +
->> +	  This library computes Fast Fourier Transforms (FFT) in one
->> +	  or more dimensions. It is extremely fast. This package
->> +	  contains the shared library version of the fftw libraries in
->> +	  double precision.
->> +
->> +	  http://www.fftw.org
->> +
->> +config BR2_PACKAGE_FFTW_PRECISION_DOUBLE
->> +	bool "double"
->> +	select BR2_PACKAGE_FFTW_USE_SSE2 if BR2_X86_CPU_HAS_SSE2
->> +	help
->> +	  Compile fftw in double precision (the default), i.e. use 'double'
->> +	  for floating point type.
-> You have those two symbols for each package, why so? They don't have
-> any dependency between each other, which means that
-> BR2_PACKAGE_FFTW_PRECISION_DOUBLE can be enabled without
-> BR2_PACKAGE_FFTW, so BR2_PACKAGE_FFTW_PRECISION_DOUBLE can be enabled,
-> but the fftw package will not be built.
->
-> We should have a single option for each package.
-
-Yep - I will have to fix this and resubmit a patch.
-
->
->> diff --git a/package/fftw/fftw.hash b/package/fftw/fftw/fftw.hash
->> similarity index 100%
->> rename from package/fftw/fftw.hash
->> rename to package/fftw/fftw/fftw.hash
->> diff --git a/package/fftw/fftw/fftw.mk b/package/fftw/fftw/fftw.mk
->> new file mode 100644
->> index 0000000..66a82ec
->> --- /dev/null
->> +++ b/package/fftw/fftw/fftw.mk
->> @@ -0,0 +1,9 @@
->> +################################################################################
->> +#
->> +# fftw
->> +#
->> +################################################################################
-> I'd prefer to have this package be similar to the other ones, so
-> package/fftw/fftw.mk be renamed to package/fftw/fftw-common.mk, and
-> then here a package that looks like the other fftw* packages.
-OK. However what is the best way to do this ? I notice ibr and matchbox 
-have common directories ... so should we clutter the package directory 
-with 5 fftw related directories ?
->
->> +$(eval $(autotools-package))
->> +
->> +
-> Useless empty lines.
->
->> diff --git a/package/fftw/fftwf/Config.in b/package/fftw/fftwf/Config.in
->> new file mode 100644
->> index 0000000..7077086
->> --- /dev/null
->> +++ b/package/fftw/fftwf/Config.in
->> @@ -0,0 +1,22 @@
->> +config BR2_PACKAGE_FFTWF
->> +	bool "fftwf"
->> +	select BR2_PACKAGE_FFTW_PRECISION_SINGLE
-> Ah, here we have this select. But do we really need two options?
-Yep - I don't understand what you mean here though ?
->
->> diff --git a/package/fftw/fftwf/fftwf.hash b/package/fftw/fftwf/fftwf.hash
->> new file mode 100644
->> index 0000000..62b8f0f
->> --- /dev/null
->> +++ b/package/fftw/fftwf/fftwf.hash
->> @@ -0,0 +1,2 @@
->> +# From http://www.fftw.org/fftw-3.3.4.tar.gz.md5sum
->> +md5	2edab8c06b24feeb3b82bbb3ebf3e7b3	fftw-3.3.4.tar.gz
-> For the hash file, you can use a symlink, like we're doing in
-> package/gcc/gcc-{initial,final}.
-OK
->
-> I must say I'm not really thrilled by the duplication of code for those
-> four packages, but I unfortunately don't have a better idea to propose.
-> Let's add Arnout in Cc, he sometimes have some very creative ideas :-)
->
-> Thanks!
->
-> Thomas
-I agree, I wasn't thrilled about having different build code replication 
-in output/build, however I think that is the trade-off for simplicity !
-
-Matt
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160820/cc17038c/attachment.html>
