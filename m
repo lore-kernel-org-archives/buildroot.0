@@ -1,109 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Aug 2016 14:28:01 +0200
-Subject: [Buildroot] [git commit] toolchain-buildroot: allow to build
-	ppc64(le) musl toolchains
-Message-ID: <20160902142936.BBA28822FB@busybox.osuosl.org>
+Date: Sat, 20 Aug 2016 11:46:39 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-ugly: bump to version 1.8.3
+Message-ID: <20160902142937.55F2B822FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ab751ca44e9da6f406876ff582b3a813056b0d4
+commit: https://git.buildroot.net/buildroot/commit/?id=693af1610c9bc98a84c018a9da91761219eb456f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Latest musl release supports ppc64 architecture (both big endian and
-little endian), so this commit adds support for this.
-
-Since musl implements the ELFv2 ABI for both big-endian and
-little-endian PowerPC64, we have to force using this ABI on PowerPC64
-big endian (normally elfv1 is the default).
-
-Also, only gcc 6.x has the necessary changes to support musl on PowerPC
-64, so we restrict the gcc version selection accordingly.
-
-Tested with Qemu for big endian and little endian configurations.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-[Thomas: add comment about the ABI flag in gcc.mk, rework commit log.]
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/Config.in.host              |  8 ++++++++
- package/gcc/gcc.mk                      | 10 ++++++++++
- toolchain/toolchain-buildroot/Config.in |  2 +-
- 3 files changed, 19 insertions(+), 1 deletion(-)
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 2b54959..4d02931 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -30,6 +30,8 @@ choice
- 		depends on !BR2_x86_jaguar && !BR2_x86_steamroller
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
-+		# musl ppc64 unsupported
-+		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+index d384d48..1c6aa7d 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.8.2.tar.xz.sha256sum
+-sha256	9c5b33a2a98fc1d6d6c99a1b536b1fb2de45f53cc8bf8ab85a8b8141fed1a8ac  gst-plugins-ugly-1.8.2.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.8.3.tar.xz.sha256sum
++sha256	6fa2599fdd072d31fbaf50c34af406e2be944a010b1f4eab67a5fe32a0310693  gst-plugins-ugly-1.8.3.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index 8864b04..2e9891e 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -46,6 +48,8 @@ choice
- 		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && BR2_BINUTILS_VERSION_2_25_X)
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
-+		# musl ppc64 unsupported
-+		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-@@ -66,6 +70,8 @@ choice
- 		depends on !BR2_cortex_a17
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
-+		# musl ppc64 unsupported
-+		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
- 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
-@@ -75,6 +81,8 @@ choice
- 		bool "gcc 5.x"
- 		# Broken or unsupported architectures
- 		depends on !BR2_arc && !BR2_bfin
-+		# musl ppc64 unsupported
-+		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 032015c..39c3eeb 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -231,6 +231,16 @@ HOST_GCC_COMMON_CONF_OPTS += \
- 	--with-long-double-128
- endif
- 
-+# PowerPC64 big endian by default uses the elfv1 ABI, and PowerPC 64
-+# little endian by default uses the elfv2 ABI. However, musl has
-+# decided to use the elfv2 ABI for both, so we force the elfv2 ABI for
-+# Power64 big endian when the selected C library is musl.
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL)$(BR2_powerpc64),yy)
-+HOST_GCC_COMMON_CONF_OPTS += \
-+	--with-abi=elfv2 \
-+	--without-long-double-128
-+endif
-+
- HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
- ifeq ($(BR2_GCC_ARCH_HAS_CONFIGURABLE_DEFAULTS),)
- ifeq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 0b97bbf..78cac14 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -70,7 +70,7 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	bool "musl"
- 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
- 		BR2_microblaze || BR2_mips || BR2_mipsel || BR2_powerpc || \
--		BR2_sh || BR2_x86_64
-+		BR2_powerpc64  || BR2_powerpc64le || BR2_sh || BR2_x86_64
- 	depends on !BR2_powerpc_SPE # not supported, build breaks
- 	# Unsupported for MIPS R6
- 	depends on !BR2_mips_32r6 && !BR2_mips_64r6
+-GST1_PLUGINS_UGLY_VERSION = 1.8.2
++GST1_PLUGINS_UGLY_VERSION = 1.8.3
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+ GST1_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
