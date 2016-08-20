@@ -1,43 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 15:55:31 +0200
-Subject: [Buildroot] odroid-mali issue
-In-Reply-To: <e2a40693-21a2-a9ed-ad7a-5fcce81aa927@zacarias.com.ar>
-References: <20160819063024.55AF4101904@stock.ovh.net>
- <20160820000709.0ceef3cd@free-electrons.com>
- <e2a40693-21a2-a9ed-ad7a-5fcce81aa927@zacarias.com.ar>
-Message-ID: <20160820155531.1385b1fd@free-electrons.com>
+Date: Sat, 20 Aug 2016 16:00:36 +0200
+Subject: [Buildroot] [PATCH] pinentry: fix build issue with gcc 5.x
+Message-ID: <1471701636-30275-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Dagg,
+pinentry currently fails to build with gcc 5.x, because it uses some
+functionality from std::string that requires C++11 without passing the
+appropriate -std= value. We fix this by passing a proper -std= option
+when gcc >= 5.x. Note that this can be removed once pinentry is bumped
+to the newest version (currently 0.9.7) because they no longer use
+std::string in the Qt part.
 
-On Sat, 20 Aug 2016 10:52:22 -0300, Gustavo Zacarias wrote:
+Fixes:
 
-> >>      aarch64 |                libepoxy-v1.3.1 | NOK | http://autobuild.buildroot.net/results/3efe300199759fb84ad8122abc36bbcdfa10e0cd/  
-> >
-> > error: conflicting types for 'khronos_uint64_t'
-> >
-> > Gustavo?  
-> 
-> Hi.
-> This only happens when odroid-mali is the GL provider, i suspect they 
-> messed up something in there.
->  From a quick look they define the khronos_uint64_t typedef in several 
-> places with no checks whatsoever, and that probably shouldn't be.
-> I suspect more of odroid-mali flakyness than libepoxy since it works 
-> with other providers just fine, i'll try to dig more info about it.
+  http://autobuild.buildroot.net/results/6ea64f692acaebc4d58f3371c632b5121500f17e/
+  (and many, many similar build failures)
 
-There's an issue with the odroid-mali OpenGL provider, when used by
-libepoxy. Could you have a look at the issue, that Gustavo investigated
-here?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+One-beer-granted-to: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pinentry/pinentry.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thanks!
-
-Thomas
+diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
+index 09a7705..bcb910a 100644
+--- a/package/pinentry/pinentry.mk
++++ b/package/pinentry/pinentry.mk
+@@ -14,6 +14,13 @@ PINENTRY_DEPENDENCIES = \
+ 	host-pkgconf
+ PINENTRY_CONF_OPTS += --without-libcap       # requires PAM
+ 
++# pinentry uses some std::string functionality that needs C++11
++# support when gcc >= 5.x. This should be removed when bumping
++# pinentry, since newer versions no longer use std::string.
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),y)
++PINENTRY_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=gnu++11"
++endif
++
+ # build with X if available
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ PINENTRY_CONF_OPTS += --with-x
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
