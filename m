@@ -1,48 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 16:00:36 +0200
-Subject: [Buildroot] [PATCH] pinentry: fix build issue with gcc 5.x
-Message-ID: <1471701636-30275-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Aug 2016 16:05:19 +0200
+Subject: [Buildroot] [PATCH/next] gcc: fix gcc version dependencies for the
+	PowerPC64/musl exclusion
+Message-ID: <1471701919-30534-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pinentry currently fails to build with gcc 5.x, because it uses some
-functionality from std::string that requires C++11 without passing the
-appropriate -std= value. We fix this by passing a proper -std= option
-when gcc >= 5.x. Note that this can be removed once pinentry is bumped
-to the newest version (currently 0.9.7) because they no longer use
-std::string in the Qt part.
+In commit
+5ab751ca44e9da6f406876ff582b3a813056b0d4 ("toolchain-buildroot: allow to
+build ppc64(le) musl toolchains"), support for building a musl toolchain
+for ppc64(le) was added. Since this support only works with gcc 6, some
+additional dependencies have been added to the older gcc versions so
+that they cannot be selected on ppc64(le)/musl.
 
-Fixes:
+Unfortunately, the expression of the dependency was wrong, and leads to
+those older gcc versions being non-selectable if you're not using
+musl. Indeed, the dependencies look like this:
 
-  http://autobuild.buildroot.net/results/6ea64f692acaebc4d58f3371c632b5121500f17e/
-  (and many, many similar build failures)
+  depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
+
+So as soon as you're not using musl, BR2_TOOLCHAIN_USES_MUSL is false,
+so the entire condition is false, and the gcc version is not available.
+
+Due to this, only gcc 6.x can be selected currently with uclibc or
+glibc, which is clearly not the intended behavior.
+
+This commit reworks those dependencies to:
+
+  depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
+
+which more clearly expresses what we want:
+
+ "We don't want to (have a toolchain that uses musl and (be building
+  either for PPC64 or PPC64le))"
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-One-beer-granted-to: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pinentry/pinentry.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/gcc/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
-index 09a7705..bcb910a 100644
---- a/package/pinentry/pinentry.mk
-+++ b/package/pinentry/pinentry.mk
-@@ -14,6 +14,13 @@ PINENTRY_DEPENDENCIES = \
- 	host-pkgconf
- PINENTRY_CONF_OPTS += --without-libcap       # requires PAM
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 4d02931..37728e0 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -31,7 +31,7 @@ choice
+ 		# Unsupported for MIPS R6
+ 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		# musl ppc64 unsupported
+-		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
++		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
  
-+# pinentry uses some std::string functionality that needs C++11
-+# support when gcc >= 5.x. This should be removed when bumping
-+# pinentry, since newer versions no longer use std::string.
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),y)
-+PINENTRY_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=gnu++11"
-+endif
-+
- # build with X if available
- ifeq ($(BR2_PACKAGE_XORG7),y)
- PINENTRY_CONF_OPTS += --with-x
+@@ -49,7 +49,7 @@ choice
+ 		# Unsupported for MIPS R6
+ 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		# musl ppc64 unsupported
+-		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
++		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+ 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+@@ -71,7 +71,7 @@ choice
+ 		# Unsupported for MIPS R6
+ 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		# musl ppc64 unsupported
+-		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
++		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
+ 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+@@ -82,7 +82,7 @@ choice
+ 		# Broken or unsupported architectures
+ 		depends on !BR2_arc && !BR2_bfin
+ 		# musl ppc64 unsupported
+-		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
++		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+ 		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
 -- 
 2.7.4
