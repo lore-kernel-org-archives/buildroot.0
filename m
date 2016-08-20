@@ -1,54 +1,71 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Sat, 20 Aug 2016 13:55:23 -0700
-Subject: [Buildroot] fixdep not found
-In-Reply-To: <20160820223416.23798a74@free-electrons.com>
-References: <CAK7rcp-qDKDR-qGPVBoUfpwCj22Qs4dmjvFg_=uaZok_kHC-nQ@mail.gmail.com>
- <9DBD7782-3142-403E-9161-874B233FBAF0@gmail.com>
- <20160820223416.23798a74@free-electrons.com>
-Message-ID: <4CF9B59C-7DB4-4B90-BAFF-25655871DC54@gmail.com>
+From: Kenneth Adam Miller <kennethadammiller@gmail.com>
+Date: Sat, 20 Aug 2016 18:39:27 -0400
+Subject: [Buildroot] compiler plugins & compiling the kernel
+In-Reply-To: <20160820200119.4ec5848b@free-electrons.com>
+References: <CAK7rcp_m+9YC6gJ0xyarD217F4wyjwjg9QSdBLzVgPJ9QLrm7w@mail.gmail.com>
+ <20160820200119.4ec5848b@free-electrons.com>
+Message-ID: <CAK7rcp9SVrJ4HA3wH6U9P-Tv8EzJdBKUtZa=EVwihZTR5TCdtQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-> On Aug 20, 2016, at 1:34 PM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> 
+On Sat, Aug 20, 2016 at 2:01 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
-> 
-> On Sat, 20 Aug 2016 13:31:58 -0700, Khem Raj wrote:
-> 
->>> I'm getting an issue during >>> linux-headers 3.14.51 Configuring
->>> where it executes a make ... headers_install, and then goes to execute
->>> scripts/basic/fixdep, but cannot find it. I can see that fixdep must
->>> be compiled from fixdep.c, which I can find within the particular
->>> build directory. But it's not already compiled when buildroot
->>> generates code that would depend on it.
->>> 
->>> How do I resolve this?
->> 
->> it could be a race condition, so may be you can divide the build into two steps
->> first does make tools and then make headers
-> 
-> Hu? How could the kernel build system has race conditions? We have
-> gazillions of builds involving linux-headers running every day, and we
-> never had a single race condition issue.
+>
+> On Sat, 20 Aug 2016 13:10:07 -0400, Kenneth Adam Miller wrote:
+>
+>> I've noticed that when the kernel is built, it appears to always be
+>> built with the host compiler, and not the buildroot specified cross
+>> compiler. Why is that?
+>
+> This is not true, the kernel is built with the cross-compiler.
+> Otherwise, Buildroot would never be able to build an ARM, PowerPC or
+> MIPS kernel on a x86 or x86-64 build machine.
+>
 
-Right. Never said thats the issue, its one explanation to the issue
-and area to explore. There could be local patches which could be a factor.
+Well I'm not arguing with you, but I had at one point set up buildroot
+within a docker instance, and then started the build going when it
+stopped because of some compiler centric package on my host. I
+installed something, and then the build continued in exactly that
+sequence. Although, because my docker instance was stopped abruptly
+and since bash saves history to disk after having been exited I don't
+have that package name. The compiler packages I have are gcc, gcc-5,
+gcc-5-base:amd64, gcc-5-locales, gcc-5-plugin-dev, gcc-6-base:amd64,
+libgcc-5-dev:amd64, libgcc1:amd64
 
-> 
+>> In addition, for some pax related options, it requires gcc plugins for
+>> the version being used. That means that I would have to have plugin
+>> support for my host, correct?
+>
+> No, you would need support for plugins in the cross-compiler.
+>
+
+We have been building gr-security modded kernels for some time on a
+different machine with gcc 4.8, but I'm having this confusion; does
+the buildroot internal compiler support that? Because I'm getting an
+error in buildroot indicating that compiler plugins must be supported,
+and I'm using the buildroot internal compiler with version 5.x, it
+confused me a little bit.
+
+>> I don't believe that there is a way to
+>> enable plugin support for the buildroot toolchain or for crosstool. At
+>> least, when I looked and searched I didn't see any option that
+>> mentioned that. I just want to make sure that I have it correct in
+>> that my host compiler is being used to build the kernel.
+>
+> You're not correct. Support for plugins should be added to the
+> cross-compiler if you need plugin support to build your kernel.
+>
+
+That doesn't appear to be an option in buildroot.
+
+> Best regards,
+>
 > Thomas
 > --
 > Thomas Petazzoni, CTO, Free Electrons
 > Embedded Linux and Kernel engineering
 > http://free-electrons.com
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 204 bytes
-Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160820/b66d0ce5/attachment.asc>
