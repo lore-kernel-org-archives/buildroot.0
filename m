@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 22:34:30 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.14.x and 4.{4,
+Date: Sat, 20 Aug 2016 22:35:41 +0200
+Subject: [Buildroot] [PATCH v2] linux-headers: bump 3.14.x and 4.{4,
  7}.x series
-In-Reply-To: <1471711757-506-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1471711757-506-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160820223430.3d00108f@free-electrons.com>
+In-Reply-To: <1471722328-14280-1-git-send-email-festevam@gmail.com>
+References: <1471722328-14280-1-git-send-email-festevam@gmail.com>
+Message-ID: <20160820223541.1d4f3034@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 20 Aug 2016 13:49:16 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/linux-headers/Config.in.host | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+On Sat, 20 Aug 2016 16:45:28 -0300, Fabio Estevam wrote:
+> From: Fabio Estevam <fabio.estevam@nxp.com>
+> 
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 
-Both applied to master, thanks!
+Gustavo had already sent a similar patch a few hours earlier. It seems
+like both Gustavo and you are sending those patches as soon as new
+kernel releases are made, often duplicating this work. Maybe it would
+be worth syncing each other to avoid this duplication?
+
+But of course, I prefer to receive two patches doing the same thing
+than receiving no patch at all!
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
