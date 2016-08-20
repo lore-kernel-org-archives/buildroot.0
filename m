@@ -1,27 +1,72 @@
-From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-Date: Sat, 20 Aug 2016 15:41:39 +0530
-Subject: [Buildroot] Analysis of build results for 2016-08-18
-In-Reply-To: <20160820112200.102a666c@free-electrons.com>
-References: <20160819063024.55AF4101904@stock.ovh.net>
- <20160820000709.0ceef3cd@free-electrons.com> <57B8200F.8030305@imgtec.com>
- <20160820112200.102a666c@free-electrons.com>
-Message-ID: <57B82CDB.2000600@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Aug 2016 12:15:26 +0200
+Subject: [Buildroot] [git commit] linknx: fix build with gcc 6.x
+Message-ID: <20160820102002.921F981D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=780a88bc97294575c23c4f17513009d84c1bb4d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Saturday 20 August 2016 02:52 PM, Thomas Petazzoni wrote:
->
-> Also, did you see the MIPS related issues on the qt5webkit package I
-> pointed in my latest analysis of build issues? Since you're working for
-> imgtec, I thought you might have some MIPS knowledge :)
->
+Add a patch to fix the build of linknx with gcc 6.x.
 
-I'm not sure if I could fix it. But I will definitely try. :)
+Fixes:
 
-Regards,
-Rahul
+  http://autobuild.buildroot.net/results/32e375e3f254ac19bed54a9e9fd6c1e9048e2043/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...02-src-suncalc.cpp-fix-build-with-gcc-6.x.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+
+diff --git a/package/linknx/0002-src-suncalc.cpp-fix-build-with-gcc-6.x.patch b/package/linknx/0002-src-suncalc.cpp-fix-build-with-gcc-6.x.patch
+new file mode 100644
+index 0000000..d204a02
+--- /dev/null
++++ b/package/linknx/0002-src-suncalc.cpp-fix-build-with-gcc-6.x.patch
+@@ -0,0 +1,42 @@
++From ff52cf04c6fa8b3352544447abf429bfa6000dc8 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 20 Aug 2016 12:13:04 +0200
++Subject: [PATCH] src/suncalc.cpp: fix build with gcc 6.x
++
++src/suncalc.cpp currently includes <math.h>, but this causes a build
++failure with gcc 6.x, and <cmath> should be used instead. The build
++failure is:
++
++/home/test/autobuild/run/instance-0/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.1.1/cmath:101:37: error: '__is_integer' was not declared in this scope
++     typename __gnu_cxx::__enable_if<__is_integer<_Tp>::__value,
++                                     ^~~~~~~~~~~~
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/suncalc.cpp | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/suncalc.cpp b/src/suncalc.cpp
++index ea2366a..b553f96 100644
++--- a/src/suncalc.cpp
+++++ b/src/suncalc.cpp
++@@ -22,6 +22,8 @@
++     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++ 
+++#include <cmath>
+++
++ #include "suncalc.h"
++ #include "services.h"
++ 
++@@ -44,7 +46,6 @@ Released to the public domain by Paul Schlyter, December 1992
++ 
++ 
++ #include <stdio.h>
++-#include <math.h>
++ #include <time.h>
++ #include <stdlib.h>
++ #include <getopt.h>
++-- 
++2.7.4
++
