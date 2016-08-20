@@ -1,43 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 11:46:39 +0200
-Subject: [Buildroot] [git commit branch/next] gst1-plugins-ugly: bump to
-	version 1.8.3
-Message-ID: <20160820094657.A66E281E1A@busybox.osuosl.org>
+Date: Sat, 20 Aug 2016 11:46:45 +0200
+Subject: [Buildroot] [git commit branch/next] libmnl: bump to version 1.0.4
+Message-ID: <20160820094657.DBD4B81E1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=693af1610c9bc98a84c018a9da91761219eb456f
+commit: https://git.buildroot.net/buildroot/commit/?id=9d4b6c1e97f856a200b40ef0134c874e9944c25a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+And drop upstream patch.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libmnl/0001-uclinux.patch | 26 --------------------------
+ package/libmnl/libmnl.hash        |  6 +++---
+ package/libmnl/libmnl.mk          |  3 +--
+ 3 files changed, 4 insertions(+), 31 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-index d384d48..1c6aa7d 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-@@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.8.2.tar.xz.sha256sum
--sha256	9c5b33a2a98fc1d6d6c99a1b536b1fb2de45f53cc8bf8ab85a8b8141fed1a8ac  gst-plugins-ugly-1.8.2.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.8.3.tar.xz.sha256sum
-+sha256	6fa2599fdd072d31fbaf50c34af406e2be944a010b1f4eab67a5fe32a0310693  gst-plugins-ugly-1.8.3.tar.xz
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index 8864b04..2e9891e 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libmnl/0001-uclinux.patch b/package/libmnl/0001-uclinux.patch
+deleted file mode 100644
+index e8f97c6..0000000
+--- a/package/libmnl/0001-uclinux.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From ae2acfa7d287e3ffc0bb66091059b86f62775bd5 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 10 Sep 2013 15:24:47 -0300
+-Subject: [PATCH] configure: uclinux is also linux
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index dcd3cf8..313a015 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -17,7 +17,7 @@ AC_DISABLE_STATIC
+- LT_INIT
+- CHECK_GCC_FVISIBILITY
+- case "$host" in
+--*-*-linux*) ;;
+-+*-*-linux* | *-*-uclinux*) ;;
+- *) AC_MSG_ERROR([Linux only, dude!]);;
+- esac
+- 
+--- 
+-1.8.1.5
+-
+diff --git a/package/libmnl/libmnl.hash b/package/libmnl/libmnl.hash
+index c16dfe7..98385b8 100644
+--- a/package/libmnl/libmnl.hash
++++ b/package/libmnl/libmnl.hash
+@@ -1,3 +1,3 @@
+-# From ftp://ftp.netfilter.org/pub/libmnl/libmnl-1.0.3.tar.bz2.{md5sum,sha1sum}
+-md5	7d95fc3bea3365bc03c48e484224f65f	libmnl-1.0.3.tar.bz2
+-sha1	c27e25f67c6422ebf893fc3a844af8085a1c5b63	libmnl-1.0.3.tar.bz2
++# From ftp://ftp.netfilter.org/pub/libmnl/libmnl-1.0.4.tar.bz2.{md5sum,sha1sum}
++md5	be9b4b5328c6da1bda565ac5dffadb2d	libmnl-1.0.4.tar.bz2
++sha1	2db40dea612e88c62fd321906be40ab5f8f1685a	libmnl-1.0.4.tar.bz2
+diff --git a/package/libmnl/libmnl.mk b/package/libmnl/libmnl.mk
+index b16c534..407c4f1 100644
+--- a/package/libmnl/libmnl.mk
++++ b/package/libmnl/libmnl.mk
+@@ -4,11 +4,10 @@
  #
  ################################################################################
  
--GST1_PLUGINS_UGLY_VERSION = 1.8.2
-+GST1_PLUGINS_UGLY_VERSION = 1.8.3
- GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
- GST1_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
- GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+-LIBMNL_VERSION = 1.0.3
++LIBMNL_VERSION = 1.0.4
+ LIBMNL_SOURCE = libmnl-$(LIBMNL_VERSION).tar.bz2
+ LIBMNL_SITE = http://netfilter.org/projects/libmnl/files
+ LIBMNL_INSTALL_STAGING = YES
+-LIBMNL_AUTORECONF = YES
+ LIBMNL_LICENSE = LGPLv2.1+
+ LIBMNL_LICENSE_FILES = COPYING
+ 
