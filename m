@@ -1,51 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 22:40:17 +0200
-Subject: [Buildroot] [git commit] pinentry: fix build issue with gcc 5.x
-Message-ID: <20160820204023.227E08211F@busybox.osuosl.org>
+Date: Sat, 20 Aug 2016 22:40:04 +0200
+Subject: [Buildroot] [PATCH/next] gcc: fix gcc version dependencies for
+ the PowerPC64/musl exclusion
+In-Reply-To: <1471701919-30534-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1471701919-30534-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160820224004.1878a20a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9694305ae0b2a7dbdcc74e2c646d392ceed9876f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-pinentry currently fails to build with gcc 5.x, because it uses some
-functionality from std::string that requires C++11 without passing the
-appropriate -std= value. We fix this by passing a proper -std= option
-when gcc >= 5.x. Note that this can be removed once pinentry is bumped
-to the newest version (currently 0.9.7) because they no longer use
-std::string in the Qt part.
+On Sat, 20 Aug 2016 16:05:19 +0200, Thomas Petazzoni wrote:
+> In commit
+> 5ab751ca44e9da6f406876ff582b3a813056b0d4 ("toolchain-buildroot: allow to
+> build ppc64(le) musl toolchains"), support for building a musl toolchain
+> for ppc64(le) was added. Since this support only works with gcc 6, some
+> additional dependencies have been added to the older gcc versions so
+> that they cannot be selected on ppc64(le)/musl.
+> 
+> Unfortunately, the expression of the dependency was wrong, and leads to
+> those older gcc versions being non-selectable if you're not using
+> musl. Indeed, the dependencies look like this:
+> 
+>   depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
+> 
+> So as soon as you're not using musl, BR2_TOOLCHAIN_USES_MUSL is false,
+> so the entire condition is false, and the gcc version is not available.
+> 
+> Due to this, only gcc 6.x can be selected currently with uclibc or
+> glibc, which is clearly not the intended behavior.
+> 
+> This commit reworks those dependencies to:
+> 
+>   depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
+> 
+> which more clearly expresses what we want:
+> 
+>  "We don't want to (have a toolchain that uses musl and (be building
+>   either for PPC64 or PPC64le))"
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/gcc/Config.in.host | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-Fixes:
+Applied to next, thanks.
 
-  http://autobuild.buildroot.net/results/6ea64f692acaebc4d58f3371c632b5121500f17e/
-  (and many, many similar build failures)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-One-beer-granted-to: Yann E. MORIN <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pinentry/pinentry.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
-index 09a7705..bcb910a 100644
---- a/package/pinentry/pinentry.mk
-+++ b/package/pinentry/pinentry.mk
-@@ -14,6 +14,13 @@ PINENTRY_DEPENDENCIES = \
- 	host-pkgconf
- PINENTRY_CONF_OPTS += --without-libcap       # requires PAM
- 
-+# pinentry uses some std::string functionality that needs C++11
-+# support when gcc >= 5.x. This should be removed when bumping
-+# pinentry, since newer versions no longer use std::string.
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),y)
-+PINENTRY_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=gnu++11"
-+endif
-+
- # build with X if available
- ifeq ($(BR2_PACKAGE_XORG7),y)
- PINENTRY_CONF_OPTS += --with-x
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
