@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 19:59:51 +0200
-Subject: [Buildroot] pointer dereference to incomplete type
- vm_operations_struct
-In-Reply-To: <CAK7rcp9RQO8gfsqc6SAyFpn=kK19iRrS=ckYvnSWJuutc_SE3g@mail.gmail.com>
-References: <CAK7rcp9RQO8gfsqc6SAyFpn=kK19iRrS=ckYvnSWJuutc_SE3g@mail.gmail.com>
-Message-ID: <20160820195951.61167f14@free-electrons.com>
+Date: Sat, 20 Aug 2016 20:01:19 +0200
+Subject: [Buildroot] compiler plugins & compiling the kernel
+In-Reply-To: <CAK7rcp_m+9YC6gJ0xyarD217F4wyjwjg9QSdBLzVgPJ9QLrm7w@mail.gmail.com>
+References: <CAK7rcp_m+9YC6gJ0xyarD217F4wyjwjg9QSdBLzVgPJ9QLrm7w@mail.gmail.com>
+Message-ID: <20160820200119.4ec5848b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 20 Aug 2016 13:03:09 -0400, Kenneth Adam Miller wrote:
+On Sat, 20 Aug 2016 13:10:07 -0400, Kenneth Adam Miller wrote:
 
-> I'm trying to compile a small linux, and I'm getting an error
-> sometimes with vm_operations_struct as per the email title. Is there
-> some kernel option that I'm missing or forgetting to enable? I did a
-> make clean and was sure to delete my build and target directories. But
-> I still get that error. Is there some option that I'm missing that
-> must be set?
+> I've noticed that when the kernel is built, it appears to always be
+> built with the host compiler, and not the buildroot specified cross
+> compiler. Why is that?
 
-Please be more specific:
+This is not true, the kernel is built with the cross-compiler.
+Otherwise, Buildroot would never be able to build an ARM, PowerPC or
+MIPS kernel on a x86 or x86-64 build machine.
 
- - Which kernel version you're using.
- - Which kernel configuration you're using.
- - Which exact error message you're getting.
+> In addition, for some pax related options, it requires gcc plugins for
+> the version being used. That means that I would have to have plugin
+> support for my host, correct?
 
-However, most likely the issue you're seeing is not Buildroot related,
-but kernel related.
+No, you would need support for plugins in the cross-compiler.
+
+> I don't believe that there is a way to
+> enable plugin support for the buildroot toolchain or for crosstool. At
+> least, when I looked and searched I didn't see any option that
+> mentioned that. I just want to make sure that I have it correct in
+> that my host compiler is being used to build the kernel.
+
+You're not correct. Support for plugins should be added to the
+cross-compiler if you need plugin support to build your kernel.
 
 Best regards,
 
