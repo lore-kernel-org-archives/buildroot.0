@@ -1,110 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Aug 2016 16:15:10 +0200
-Subject: [Buildroot] [PATCH/next] gcc: fix gcc version dependencies for
- the PowerPC64/musl exclusion
-In-Reply-To: <1471701919-30534-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1471701919-30534-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160820141510.GB5784@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Aug 2016 16:18:13 +0200
+Subject: [Buildroot] [PATCH 2/2] package/fftw: Enable multiple precision
+ installation
+In-Reply-To: <1962c82d-04d8-9dd5-0826-da1f3aff3673@flatmax.org>
+References: <1471588192-2273-1-git-send-email-flatmax@flatmax.org>
+ <20160819162003.5c6a9109@free-electrons.com>
+ <1962c82d-04d8-9dd5-0826-da1f3aff3673@flatmax.org>
+Message-ID: <20160820161813.417db94f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2016-08-20 16:05 +0200, Thomas Petazzoni spake thusly:
-> In commit
-> 5ab751ca44e9da6f406876ff582b3a813056b0d4 ("toolchain-buildroot: allow to
-> build ppc64(le) musl toolchains"), support for building a musl toolchain
-> for ppc64(le) was added. Since this support only works with gcc 6, some
-> additional dependencies have been added to the older gcc versions so
-> that they cannot be selected on ppc64(le)/musl.
-> 
-> Unfortunately, the expression of the dependency was wrong, and leads to
-> those older gcc versions being non-selectable if you're not using
-> musl. Indeed, the dependencies look like this:
-> 
->   depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-> 
-> So as soon as you're not using musl, BR2_TOOLCHAIN_USES_MUSL is false,
-> so the entire condition is false, and the gcc version is not available.
-> 
-> Due to this, only gcc 6.x can be selected currently with uclibc or
-> glibc, which is clearly not the intended behavior.
-> 
-> This commit reworks those dependencies to:
-> 
->   depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
-> 
-> which more clearly expresses what we want:
-> 
->  "We don't want to (have a toolchain that uses musl and (be building
->   either for PPC64 or PPC64le))"
+On Sat, 20 Aug 2016 13:36:41 +1000, Matt Flax wrote:
 
-Alternatively, you could have done (which is exactly the same, if you
-use the De Morgan's law):
+> > I don't see where you are passing this option, so from the look of it,
+> > your four packages would install over each other. Or is
+> > --enable-type-prefix the default ?  
+> There are now 4 mk files. Each builds in a separate directory (fftw, 
+> fftwf, fftwl, fftwq) and installs as per the recommendations from fftw. 
+> All fftw packages  inherit the version, source, site, license, env, 
+> conf_opts, cflags from fftw.mk. By inheriting from one single set of 
+> macros, we can bump versions very easily.
+> The different precisions are added like so :
+> fftwf.mk : FFTWF_CONF_OPTS += --enable-single
+> fftwl.mk : FFTL_CONF_OPTS += --enable-long-double
+> fftwq.mk : FFTQ_CONF_OPTS += --enable-quad-precision
 
-    depends on !BR2_powerpc64 && !BR2_powerpc64le || !BR2_TOOLCHAIN_USES_MUSL
+I'm not talking about the Buildroot code, but what each fftw package
+will be installing. My understanding is that if you don't pass
+--enable-type-prefix, each fftw package will install exactly the same
+files, overwriting the ones written by the other fftw packages, making
+the all adventure useless.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Regarding dev files, the header files are all the same - in fact from 
+> the fftw site, http://www.fftw.org/fftw2_doc/fftw_6.html#SEC69 it is 
+> recommended that they all install ontop of each other :
+> ./configure; make; make install; make clean
+> ./configure --ebale-single; make; make install; make clean
+> and so on ...
 
-Regards,
-Yann E. MORIN.
+Read again this very same section, they tell you to do:
 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/gcc/Config.in.host | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+./configure --enable-type-prefix [ other options ]
+make
+make install
+make clean
+./configure --enable-float --enable-type-prefix [ other options ]
+make
+make install
+
+See that they are using the --enable-type-prefix option I'm referring
+to?
+
+> > Another concern is that one --enable-type-prefix is used, then all
+> > packages that use fftw will have to use the right library name and
+> > header name depending on the precision they want to use. Are they all
+> > ready for that?
+> >
+> > Could you check the different Buildroot packages in the tree that use
+> > FFTW, and see how they behave, and whether they need to be changed to
+> > accommodate your patch?
+> >
+> > There's at least alsa-lib, gnuradio, httping, imagemagick, libvips,
+> > liquid-dsp and pulseaudio to look at.  
 > 
-> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index 4d02931..37728e0 100644
-> --- a/package/gcc/Config.in.host
-> +++ b/package/gcc/Config.in.host
-> @@ -31,7 +31,7 @@ choice
->  		# Unsupported for MIPS R6
->  		depends on !BR2_mips_32r6 && !BR2_mips_64r6
->  		# musl ppc64 unsupported
-> -		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-> +		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
->  		select BR2_GCC_NEEDS_MPC
->  		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
->  
-> @@ -49,7 +49,7 @@ choice
->  		# Unsupported for MIPS R6
->  		depends on !BR2_mips_32r6 && !BR2_mips_64r6
->  		# musl ppc64 unsupported
-> -		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-> +		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
->  		select BR2_GCC_NEEDS_MPC
->  		select BR2_GCC_SUPPORTS_GRAPHITE
->  		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> @@ -71,7 +71,7 @@ choice
->  		# Unsupported for MIPS R6
->  		depends on !BR2_mips_32r6 && !BR2_mips_64r6
->  		# musl ppc64 unsupported
-> -		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-> +		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
->  		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
->  		select BR2_GCC_NEEDS_MPC
->  		select BR2_GCC_SUPPORTS_GRAPHITE
-> @@ -82,7 +82,7 @@ choice
->  		# Broken or unsupported architectures
->  		depends on !BR2_arc && !BR2_bfin
->  		# musl ppc64 unsupported
-> -		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-> +		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
->  		select BR2_GCC_NEEDS_MPC
->  		select BR2_GCC_SUPPORTS_GRAPHITE
->  		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> -- 
-> 2.7.4
-> 
+> Actually "type-prefixes" aren't used and no changes are made to the 
+> names.  Double precision remains libfftw3.so.3, single precision remains 
+> libfftw3f.so.3 .... and so on. There is one header file used by all and 
+> it is constant.
 
+See above.
+
+> Literally, this patch simply allows side by side installation, as it is 
+> intended to be.
+
+I don't see how side by side installation is possible if all four
+variants of the library install to the same libfftw3.so.3 file. Could
+you expand a bit on this?
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
