@@ -1,66 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 14:36:01 +0200
-Subject: [Buildroot] [PATCH] openblas: fix build with old binutils versions
-Message-ID: <1471696561-2591-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Aug 2016 14:41:39 +0200
+Subject: [Buildroot] [PATCH 1/1] trousers: fix build issue with musl
+In-Reply-To: <1471694164-2094-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1471694164-2094-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20160820144139.77d3e36a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Older toolchains that use binutils <= 2.23.2 are affected by binutils
-bug #14887 (https://sourceware.org/bugzilla/show_bug.cgi?id=14887),
-where:
+Hello,
 
-	someinstruction [ foo, something ]
+On Sat, 20 Aug 2016 17:26:04 +0530, Rahul Bedarkar wrote:
+> With musl C library, we get following build error when building trousers:
+> 
+>   tsp_tcsi_param.c:14:28: fatal error: bits/local_lim.h: No such file or directory
+>    #include <bits/local_lim.h>
+>                               ^
+>   compilation terminated.
+> 
+> Header <bits/local_lim.h> is not available in musl. tsp_tcsi_param.c
+> uses this for macro HOST_NAME_MAX.
+> 
+> This patch add support for checking presence of header <bits/local_lim.h>.
+> And based on that we include it or define macro HOST_NAME_MAX to 64 if
+> it is not already defined.
+> 
+> Value 64 is chosen because <bits/local_lim.h> also uses same value.
 
-is not accepted, due to the whitespace after [ and before ], causing the
-following build failures for OpenBLAS:
+This seems like the wrong approach to fix the problem. Indeed, musl
+does have a definition of HOST_NAME_MAX, except it's in <limits.h>.
 
-  ARM register expected -- `pld [ r1,#512 ]'
+uClibc and glibc also have HOST_NAME_MAX defined when <limits.h> is
+included, so the right fix is to drop completely the <bits/local_lim.h>
+inclusion, and include <limits.h> instead.
 
-Since we don't have any mechanism to add dependencies on binutils
-versions, we work around this problem by patching the code to remove the
-problematic whitespaces. As there are many many instances of this in the
-ARM assembly code of OpenBLAS, we use a sed expression to make this
-modification rather than a patch.
+I've tested the following program:
 
-Fixes:
+==
+#include <limits.h>
+#include <stdio.h>
 
-  http://autobuild.buildroot.net/results/43e50b480b4aea0fdec745d7875c85377c114cac/
+int main(void)
+{
+	printf("%d\n", HOST_NAME_MAX);
+	return 0;
+}
+==
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-Since this is a rather non-conventional way of fixing problems, I'll
-wait for some people to agree or disagree before applying this
-patch. Alternate proposals are welcome.
----
- package/openblas/openblas.mk | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+and it builds fine with glibc, uClibc and musl.
 
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index baeef05..08a2804 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
-@@ -38,6 +38,19 @@ else ifeq ($(BR2_SHARED_LIBS),y)
- OPENBLAS_MAKE_OPTS += NO_STATIC=1
- endif
- 
-+# binutils version <= 2.23.2 have a bug
-+# (https://sourceware.org/bugzilla/show_bug.cgi?id=14887) where
-+# whitespaces in ARM register specifications such as [ r1, #12 ] or [
-+# r2 ] cause the assembler to reject the code. Since there are
-+# numerous instances of such cases in the code, we use sed rather than
-+# a patch. We simply replace [ foobar ] by [foobar] to work around the
-+# problem.
-+define OPENBLAS_FIXUP_ARM_ASSEMBLY
-+	$(SED) "s%\[\s*%\[%;s%\s*\]%\]%" $(@D)/kernel/arm/*.S
-+endef
-+
-+OPENBLAS_POST_PATCH_HOOKS += OPENBLAS_FIXUP_ARM_ASSEMBLY
-+
- define OPENBLAS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(OPENBLAS_MAKE_OPTS) \
- 		-C $(@D)
+Could you rework your patch accordingly, and also submit the patch
+upstream to the trousers project?
+
+Thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
