@@ -1,42 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 22:38:15 +0200
-Subject: [Buildroot] [git commit branch/next] mpv: bump to version 0.19.0
-Message-ID: <20160820203827.83675820F5@busybox.osuosl.org>
+Date: Sat, 20 Aug 2016 22:39:19 +0200
+Subject: [Buildroot] [PATCH] mpv: bump to version 0.19.0
+In-Reply-To: <1471704131-5919-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1471704131-5919-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160820223919.146ed7c0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e834d3f65da6fa470c93bca1853daa9c85d932b8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mpv/mpv.hash | 2 +-
- package/mpv/mpv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sat, 20 Aug 2016 11:42:11 -0300, Gustavo Zacarias wrote:
+> And drop upstreamed patch.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  .../mpv/0002-wscript-improve-stdatomic-check.patch | 47 ----------------------
+>  package/mpv/mpv.hash                               |  2 +-
+>  package/mpv/mpv.mk                                 |  2 +-
+>  3 files changed, 2 insertions(+), 49 deletions(-)
+>  delete mode 100644 package/mpv/0002-wscript-improve-stdatomic-check.patch
 
-diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
-index 8a2f44b..1594cb9 100644
---- a/package/mpv/mpv.hash
-+++ b/package/mpv/mpv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	e413d57fec4ad43b9f9b848f38d13fb921313fc9a4a64bf1e906c8d0f7a46329	v0.18.1.tar.gz
-+sha256	3df5811942cd1d71f48eb4720092fdafec11885bf6dd6d1d3e6413f32e5d67e2	v0.19.0.tar.gz
- sha256	01bf2beab2106d1558800c8709bc2c8e496d3da4a2ca343fe091f22fca60c98b	waf-1.8.12
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index d2ed3f2..123dff4 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPV_VERSION = 0.18.1
-+MPV_VERSION = 0.19.0
- MPV_WAF_VERSION = 1.8.12
- MPV_SITE = https://github.com/mpv-player/mpv/archive
- MPV_SOURCE = v$(MPV_VERSION).tar.gz
+I'm glad to see that my efforts to upstream those fixes allow us to
+drop patches. That said, the patch did not exist in next, where I
+applied your patch, so the final commit is just a regular bump.
+
+Applied to next, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
