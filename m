@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 22:34:16 +0200
-Subject: [Buildroot] fixdep not found
-In-Reply-To: <9DBD7782-3142-403E-9161-874B233FBAF0@gmail.com>
-References: <CAK7rcp-qDKDR-qGPVBoUfpwCj22Qs4dmjvFg_=uaZok_kHC-nQ@mail.gmail.com>
- <9DBD7782-3142-403E-9161-874B233FBAF0@gmail.com>
-Message-ID: <20160820223416.23798a74@free-electrons.com>
+Date: Sat, 20 Aug 2016 22:34:30 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.14.x and 4.{4,
+ 7}.x series
+In-Reply-To: <1471711757-506-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1471711757-506-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160820223430.3d00108f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 20 Aug 2016 13:31:58 -0700, Khem Raj wrote:
+On Sat, 20 Aug 2016 13:49:16 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/linux-headers/Config.in.host | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-> > I'm getting an issue during >>> linux-headers 3.14.51 Configuring
-> > where it executes a make ... headers_install, and then goes to execute
-> > scripts/basic/fixdep, but cannot find it. I can see that fixdep must
-> > be compiled from fixdep.c, which I can find within the particular
-> > build directory. But it's not already compiled when buildroot
-> > generates code that would depend on it.
-> > 
-> > How do I resolve this?  
-> 
-> it could be a race condition, so may be you can divide the build into two steps
-> first does make tools and then make headers
-
-Hu? How could the kernel build system has race conditions? We have
-gazillions of builds involving linux-headers running every day, and we
-never had a single race condition issue.
+Both applied to master, thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
