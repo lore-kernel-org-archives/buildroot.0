@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 22:27:20 +0200
-Subject: [Buildroot] [PATCH] pinentry: fix build issue with gcc 5.x
-In-Reply-To: <EB15F48B-6DC4-4D66-882B-C2173F06427C@gmail.com>
-References: <1471701636-30275-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <EB15F48B-6DC4-4D66-882B-C2173F06427C@gmail.com>
-Message-ID: <20160820222720.51b932bf@free-electrons.com>
+Date: Sat, 20 Aug 2016 22:31:45 +0200
+Subject: [Buildroot] rust?
+In-Reply-To: <CAK7rcp_PjZ996EDpV6jH_Bf+MQ6d37Sc+xd67g5Fyup4J-F2Bw@mail.gmail.com>
+References: <CAK7rcp_PjZ996EDpV6jH_Bf+MQ6d37Sc+xd67g5Fyup4J-F2Bw@mail.gmail.com>
+Message-ID: <20160820223145.497a1f2d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +12,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 20 Aug 2016 13:19:02 -0700, Khem Raj wrote:
-
-> > +# pinentry uses some std::string functionality that needs C++11
-> > +# support when gcc >= 5.x. This should be removed when bumping
-> > +# pinentry, since newer versions no longer use std::string.
-> > +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),y)
-> > +PINENTRY_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=gnu++11"
-> > +endif  
+On Sat, 20 Aug 2016 14:04:46 -0400, Kenneth Adam Miller wrote:
+> So, is anybody following this:
 > 
-> Should this package be restricted to gcc5 and newer only, I assume
-> it will break with gcc 4.x too and c++11 may not be there, gcc5 atleast
-> has the support its just not default
+> 
+> https://github.com/elebihan/buildroot.git
+> 
+> ?
 
-We have lots of gcc 4.x toolchains, and we haven't had any build
-failure. I believe it builds fine with gcc 4.x.
+We don't need to follow it: Eric is a regular Buildroot contributor,
+and he has already submitted the rust support in Buildroot:
 
-The code requiring C++11 that causes the build failure with gcc 5.x is
-in libstdc++ itself. As I discussed with Yann on IRC, I don't really
-understand why some code in libstdc++ uses C++11, without gcc 5.x
-defaulting to C++11.
+  https://patchwork.ozlabs.org/patch/648613/
+  https://patchwork.ozlabs.org/patch/648614/
 
-Maybe you have a clue?
+> I'm trying to use it to compile a particular version of rust and cargo
+> with the buildroot internal cross compilers in order to add a uclibc
+> target. There doesn't seem to be much direction on how to use the
+> scripts included in order to add a particular target. In particular, I
+> had to make some modifications to even make it useful to enable uclibc
+> as a potential target. Does someone have an example invocation that
+> can be used to derive a valid buildroot target? Because I got errors
+> trying to use the python script. I think that's all that I need, is an
+> example.
 
-Thanks,
+I'm Cc'ing Eric, hopefully he can help with those questions.
 
 Thomas
 -- 
