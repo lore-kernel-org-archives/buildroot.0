@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 11:46:34 +0200
-Subject: [Buildroot] [git commit branch/next] gstreamer1: bump to version
-	1.8.3
-Message-ID: <20160820094657.66E3481E1A@busybox.osuosl.org>
+Date: Sat, 20 Aug 2016 11:46:42 +0200
+Subject: [Buildroot] [git commit branch/next] cantarell: bump to version
+	0.0.25
+Message-ID: <20160820094657.BF1EF81E1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92d00f9ea1e6e7fbb79713caf96fce525a5fe841
+commit: https://git.buildroot.net/buildroot/commit/?id=c0805f3a4e19d596b9b073fcf489a5c64ee401c9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
- package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ package/cantarell/cantarell.hash | 4 ++--
+ package/cantarell/cantarell.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
-index b32fcfe..c85518e 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.hash
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+diff --git a/package/cantarell/cantarell.hash b/package/cantarell/cantarell.hash
+index e2cc00e..330e786 100644
+--- a/package/cantarell/cantarell.hash
++++ b/package/cantarell/cantarell.hash
 @@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.2.tar.xz.sha256sum
--sha256	9dbebe079c2ab2004ef7f2649fa317cabea1feb4fb5605c24d40744b90918341  gstreamer-1.8.2.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.3.tar.xz.sha256sum
-+sha256	66b37762d4fdcd63bce5a2bec57e055f92420e95037361609900278c0db7c53f  gstreamer-1.8.3.tar.xz
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index beea3b7..4036825 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.24.sha256sum
+-sha256	9cad649ae84f7e4ca1be637c27e2fa19e1fbf00d4bf6480171ccfad405b39264	cantarell-fonts-0.0.24.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.25.sha256sum
++sha256	14a228aa0b516dfc367b434a850f955a00c57fc549cbb05348e2b150196a737f	cantarell-fonts-0.0.25.tar.xz
+diff --git a/package/cantarell/cantarell.mk b/package/cantarell/cantarell.mk
+index b4133ec..3cdf600 100644
+--- a/package/cantarell/cantarell.mk
++++ b/package/cantarell/cantarell.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GSTREAMER1_VERSION = 1.8.2
-+GSTREAMER1_VERSION = 1.8.3
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = http://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+ CANTARELL_VERSION_MAJOR = 0.0
+-CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).24
++CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).25
+ CANTARELL_SITE = http://ftp.gnome.org/pub/gnome/sources/cantarell-fonts/$(CANTARELL_VERSION_MAJOR)
+ CANTARELL_SOURCE = cantarell-fonts-$(CANTARELL_VERSION).tar.xz
+ CANTARELL_DEPENDENCIES = host-pkgconf
