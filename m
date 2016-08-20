@@ -1,96 +1,66 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Sat, 20 Aug 2016 17:26:04 +0530
-Subject: [Buildroot] [PATCH 1/1] trousers: fix build issue with musl
-Message-ID: <1471694164-2094-1-git-send-email-rahul.bedarkar@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Aug 2016 14:36:01 +0200
+Subject: [Buildroot] [PATCH] openblas: fix build with old binutils versions
+Message-ID: <1471696561-2591-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With musl C library, we get following build error when building trousers:
+Older toolchains that use binutils <= 2.23.2 are affected by binutils
+bug #14887 (https://sourceware.org/bugzilla/show_bug.cgi?id=14887),
+where:
 
-  tsp_tcsi_param.c:14:28: fatal error: bits/local_lim.h: No such file or directory
-   #include <bits/local_lim.h>
-                              ^
-  compilation terminated.
+	someinstruction [ foo, something ]
 
-Header <bits/local_lim.h> is not available in musl. tsp_tcsi_param.c
-uses this for macro HOST_NAME_MAX.
+is not accepted, due to the whitespace after [ and before ], causing the
+following build failures for OpenBLAS:
 
-This patch add support for checking presence of header <bits/local_lim.h>.
-And based on that we include it or define macro HOST_NAME_MAX to 64 if
-it is not already defined.
+  ARM register expected -- `pld [ r1,#512 ]'
 
-Value 64 is chosen because <bits/local_lim.h> also uses same value.
+Since we don't have any mechanism to add dependencies on binutils
+versions, we work around this problem by patching the code to remove the
+problematic whitespaces. As there are many many instances of this in the
+ARM assembly code of OpenBLAS, we use a sed expression to make this
+modification rather than a patch.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/c9b/c9b13ae8d4af9ae6a65921de142c0e8da30664e0/
+  http://autobuild.buildroot.net/results/43e50b480b4aea0fdec745d7875c85377c114cac/
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../trousers/0003-fix-build-issue-with-musl.patch  | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 package/trousers/0003-fix-build-issue-with-musl.patch
+Since this is a rather non-conventional way of fixing problems, I'll
+wait for some people to agree or disagree before applying this
+patch. Alternate proposals are welcome.
+---
+ package/openblas/openblas.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/trousers/0003-fix-build-issue-with-musl.patch b/package/trousers/0003-fix-build-issue-with-musl.patch
-new file mode 100644
-index 0000000..c34e6d4
---- /dev/null
-+++ b/package/trousers/0003-fix-build-issue-with-musl.patch
-@@ -0,0 +1,52 @@
-+fix build issue with musl
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index baeef05..08a2804 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -38,6 +38,19 @@ else ifeq ($(BR2_SHARED_LIBS),y)
+ OPENBLAS_MAKE_OPTS += NO_STATIC=1
+ endif
+ 
++# binutils version <= 2.23.2 have a bug
++# (https://sourceware.org/bugzilla/show_bug.cgi?id=14887) where
++# whitespaces in ARM register specifications such as [ r1, #12 ] or [
++# r2 ] cause the assembler to reject the code. Since there are
++# numerous instances of such cases in the code, we use sed rather than
++# a patch. We simply replace [ foobar ] by [foobar] to work around the
++# problem.
++define OPENBLAS_FIXUP_ARM_ASSEMBLY
++	$(SED) "s%\[\s*%\[%;s%\s*\]%\]%" $(@D)/kernel/arm/*.S
++endef
 +
-+With musl C library, we get following build error when building trousers:
++OPENBLAS_POST_PATCH_HOOKS += OPENBLAS_FIXUP_ARM_ASSEMBLY
 +
-+  tsp_tcsi_param.c:14:28: fatal error: bits/local_lim.h: No such file or directory
-+   #include <bits/local_lim.h>
-+                              ^
-+  compilation terminated.
-+
-+Header <bits/local_lim.h> is not available in musl. tsp_tcsi_param.c
-+uses this for macro HOST_NAME_MAX.
-+
-+This patch add support for checking presence of header <bits/local_lim.h>.
-+And based on that we include it or define macro HOST_NAME_MAX to 64 if
-+it is not already defined.
-+
-+Value 64 is chosen because <bits/local_lim.h> also uses same value.
-+
-+This build issue is found by Buildroot autobuilder
-+http://autobuild.buildroot.net/results/c9b/c9b13ae8d4af9ae6a65921de142c0e8da30664e0/
-+
-+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+
-+--- trousers-0.3.13/configure.in.old	2016-08-20 16:35:56.887744480 +0530
-++++ trousers-0.3.13/configure.in	2016-08-20 16:36:38.643744392 +0530
-+@@ -13,7 +13,7 @@ TSS_VER_MINOR=3
-+ AC_CANONICAL_TARGET
-+ AM_INIT_AUTOMAKE([foreign 1.6])
-+ AC_CONFIG_MACRO_DIR([m4])
-+-
-++AC_CHECK_HEADERS([bits/local_lim.h])
-+ # Debugging support
-+ AC_ARG_ENABLE([debug],
-+     [AC_HELP_STRING([--enable-debug], [turn on all trousers debugging flags [default=off]])],
-+--- trousers-0.3.13/./src/tspi/tsp_tcsi_param.c.old	2016-08-20 16:48:26.315742897 +0530
-++++ trousers-0.3.13/src/tspi/tsp_tcsi_param.c	2016-08-20 16:51:03.683742564 +0530
-+@@ -11,7 +11,15 @@
-+ #include <stdlib.h>
-+ #include <string.h>
-+ #include <stdio.h>
-++
-++#ifdef HAVE_BITS_LOCAL_LIM_H
-+ #include <bits/local_lim.h>
-++#else
-++#ifndef HOST_NAME_MAX
-++#define HOST_NAME_MAX 64
-++#endif
-++#endif
-++
-+ #include "trousers/tss.h"
-+ #include "trousers/trousers.h"
-+ #include "trousers_types.h"
+ define OPENBLAS_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(OPENBLAS_MAKE_OPTS) \
+ 		-C $(@D)
 -- 
-2.6.2
+2.7.4
