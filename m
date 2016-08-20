@@ -1,94 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 11:45:07 +0200
-Subject: [Buildroot] [git commit] musl: fix a regression for mips
-Message-ID: <20160820094613.8A0EA80770@busybox.osuosl.org>
+Date: Sat, 20 Aug 2016 11:46:37 +0200
+Subject: [Buildroot] [git commit branch/next] gst1-plugins-good: bump to
+	version 1.8.3
+Message-ID: <20160820094657.895CA81E1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d01c3991fb42b6d3990c08ed5bfc71aee4554984
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=3b58f30bb37cd96021ad23f0b666e9cc57c77d69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add upstream patch to fix a regression regarding tcsetattr.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...regression-in-tcsetattr-on-all-mips-archs.patch | 67 ++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/musl/0001-fix-regression-in-tcsetattr-on-all-mips-archs.patch b/package/musl/0001-fix-regression-in-tcsetattr-on-all-mips-archs.patch
-new file mode 100644
-index 0000000..73ccae4
---- /dev/null
-+++ b/package/musl/0001-fix-regression-in-tcsetattr-on-all-mips-archs.patch
-@@ -0,0 +1,67 @@
-+From cff5747c74c41b22f1ce1340978b1c226a8cdf32 Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Wed, 13 Jul 2016 15:04:30 -0400
-+Subject: [PATCH] fix regression in tcsetattr on all mips archs
-+
-+revert commit 8c316e9e49d37ad92c2e7493e16166a2afca419f. it was wrong
-+and does not match how the kernel API works.
-+
-+Signed-off-by: Rich Felker <dalias@aerifal.cx>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ arch/mips/bits/termios.h    | 6 +++---
-+ arch/mips64/bits/termios.h  | 6 +++---
-+ arch/mipsn32/bits/termios.h | 6 +++---
-+ 3 files changed, 9 insertions(+), 9 deletions(-)
-+
-+diff --git a/arch/mips/bits/termios.h b/arch/mips/bits/termios.h
-+index f559f76..6a1205d 100644
-+--- a/arch/mips/bits/termios.h
-++++ b/arch/mips/bits/termios.h
-+@@ -141,9 +141,9 @@ struct termios {
-+ #define TCOFLUSH  1
-+ #define TCIOFLUSH 2
-+ 
-+-#define TCSANOW 0x540e
-+-#define TCSADRAIN 0x540f
-+-#define TCSAFLUSH 0x5410
-++#define TCSANOW   0
-++#define TCSADRAIN 1
-++#define TCSAFLUSH 2
-+ 
-+ #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
-+ #define EXTA    0000016
-+diff --git a/arch/mips64/bits/termios.h b/arch/mips64/bits/termios.h
-+index f559f76..6a1205d 100644
-+--- a/arch/mips64/bits/termios.h
-++++ b/arch/mips64/bits/termios.h
-+@@ -141,9 +141,9 @@ struct termios {
-+ #define TCOFLUSH  1
-+ #define TCIOFLUSH 2
-+ 
-+-#define TCSANOW 0x540e
-+-#define TCSADRAIN 0x540f
-+-#define TCSAFLUSH 0x5410
-++#define TCSANOW   0
-++#define TCSADRAIN 1
-++#define TCSAFLUSH 2
-+ 
-+ #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
-+ #define EXTA    0000016
-+diff --git a/arch/mipsn32/bits/termios.h b/arch/mipsn32/bits/termios.h
-+index f559f76..6a1205d 100644
-+--- a/arch/mipsn32/bits/termios.h
-++++ b/arch/mipsn32/bits/termios.h
-+@@ -141,9 +141,9 @@ struct termios {
-+ #define TCOFLUSH  1
-+ #define TCIOFLUSH 2
-+ 
-+-#define TCSANOW 0x540e
-+-#define TCSADRAIN 0x540f
-+-#define TCSAFLUSH 0x5410
-++#define TCSANOW   0
-++#define TCSADRAIN 1
-++#define TCSAFLUSH 2
-+ 
-+ #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
-+ #define EXTA    0000016
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index 404ee07..2e3db3d 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.8.2.tar.xz.sha256sum
+-sha256	8d7549118a3b7a009ece6bb38a05b66709c551d32d2adfd89eded4d1d7a23944  gst-plugins-good-1.8.2.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.8.3.tar.xz.sha256sum
++sha256	a1d6579ba203a7734927c24b90bf6590d846c5a5fcec01a48201018c8ad2827a  gst-plugins-good-1.8.3.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 8d7ff29..05f2650 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_PLUGINS_GOOD_VERSION = 1.8.2
++GST1_PLUGINS_GOOD_VERSION = 1.8.3
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
