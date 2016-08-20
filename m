@@ -1,39 +1,37 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 20 Aug 2016 13:48:50 -0300
-Subject: [Buildroot] [PATCH 1/2] opus: bump to version 1.1.3
-Message-ID: <1471711731-462-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 20 Aug 2016 13:48:51 -0300
+Subject: [Buildroot] [PATCH 2/2] glib-networking: specify ca-certificates
+	pathspec
+In-Reply-To: <1471711731-462-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1471711731-462-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1471711731-462-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Otherwise the configure script will probe the distro directories for it
+and it may not match what we use, for example fedora uses /etc/pki
+instead of /etc/ssl.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/opus/opus.hash | 2 +-
- package/opus/opus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/glib-networking/glib-networking.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/opus/opus.hash b/package/opus/opus.hash
-index 1d48398..2aac69b 100644
---- a/package/opus/opus.hash
-+++ b/package/opus/opus.hash
-@@ -1,2 +1,2 @@
- # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
--sha256	0e290078e31211baa7b5886bcc8ab6bc048b9fc83882532da4a1a45e58e907fd	opus-1.1.2.tar.gz
-+sha256	58b6fe802e7e30182e95d0cde890c0ace40b6f125cffc50635f0ad2eef69b633	opus-1.1.3.tar.gz
-diff --git a/package/opus/opus.mk b/package/opus/opus.mk
-index 71fdcb3..5cd727f 100644
---- a/package/opus/opus.mk
-+++ b/package/opus/opus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPUS_VERSION = 1.1.2
-+OPUS_VERSION = 1.1.3
- OPUS_SITE = http://downloads.xiph.org/releases/opus
- OPUS_LICENSE = BSD-3c
- OPUS_LICENSE_FILES = COPYING
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index d4782e0..b6e40f8 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -14,6 +14,8 @@ GLIB_NETWORKING_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-intltool \
+ 	libglib2
++GLIB_NETWORKING_CONF_OPTS = \
++	--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt
+ GLIB_NETWORKING_LICENSE = LGPLv2+
+ GLIB_NETWORKING_LICENSE_FILES = COPYING
+ GLIB_NETWORKING_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) \
 -- 
 2.7.3
