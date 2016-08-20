@@ -1,41 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 22:33:11 +0200
-Subject: [Buildroot] [git commit] linux: bump defaut to version 4.7.2
-Message-ID: <20160820203317.780937FBE3@busybox.osuosl.org>
+Date: Sat, 20 Aug 2016 22:34:16 +0200
+Subject: [Buildroot] fixdep not found
+In-Reply-To: <9DBD7782-3142-403E-9161-874B233FBAF0@gmail.com>
+References: <CAK7rcp-qDKDR-qGPVBoUfpwCj22Qs4dmjvFg_=uaZok_kHC-nQ@mail.gmail.com>
+ <9DBD7782-3142-403E-9161-874B233FBAF0@gmail.com>
+Message-ID: <20160820223416.23798a74@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3a0e7651b9bd45693889d4c353179669a199ea2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sat, 20 Aug 2016 13:31:58 -0700, Khem Raj wrote:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 292e7d5..c7bc4d8 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.7.1)"
-+	bool "Latest version (4.7.2)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.7.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.7.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+> > I'm getting an issue during >>> linux-headers 3.14.51 Configuring
+> > where it executes a make ... headers_install, and then goes to execute
+> > scripts/basic/fixdep, but cannot find it. I can see that fixdep must
+> > be compiled from fixdep.c, which I can find within the particular
+> > build directory. But it's not already compiled when buildroot
+> > generates code that would depend on it.
+> > 
+> > How do I resolve this?  
+> 
+> it could be a race condition, so may be you can divide the build into two steps
+> first does make tools and then make headers
+
+Hu? How could the kernel build system has race conditions? We have
+gazillions of builds involving linux-headers running every day, and we
+never had a single race condition issue.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
