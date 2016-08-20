@@ -1,8 +1,7 @@
 From: Kenneth Adam Miller <kennethadammiller@gmail.com>
-Date: Sat, 20 Aug 2016 13:03:09 -0400
-Subject: [Buildroot] pointer dereference to incomplete type
-	vm_operations_struct
-Message-ID: <CAK7rcp9RQO8gfsqc6SAyFpn=kK19iRrS=ckYvnSWJuutc_SE3g@mail.gmail.com>
+Date: Sat, 20 Aug 2016 13:10:07 -0400
+Subject: [Buildroot] compiler plugins & compiling the kernel
+Message-ID: <CAK7rcp_m+9YC6gJ0xyarD217F4wyjwjg9QSdBLzVgPJ9QLrm7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,9 +10,15 @@ To: buildroot@busybox.net
 
 Hello all,
 
-I'm trying to compile a small linux, and I'm getting an error
-sometimes with vm_operations_struct as per the email title. Is there
-some kernel option that I'm missing or forgetting to enable? I did a
-make clean and was sure to delete my build and target directories. But
-I still get that error. Is there some option that I'm missing that
-must be set?
+
+I've noticed that when the kernel is built, it appears to always be
+built with the host compiler, and not the buildroot specified cross
+compiler. Why is that?
+
+In addition, for some pax related options, it requires gcc plugins for
+the version being used. That means that I would have to have plugin
+support for my host, correct? I don't believe that there is a way to
+enable plugin support for the buildroot toolchain or for crosstool. At
+least, when I looked and searched I didn't see any option that
+mentioned that. I just want to make sure that I have it correct in
+that my host compiler is being used to build the kernel.
