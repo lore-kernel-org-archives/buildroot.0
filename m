@@ -1,27 +1,39 @@
-From: Kenneth Adam Miller <kennethadammiller@gmail.com>
-Date: Sat, 20 Aug 2016 12:24:37 -0400
-Subject: [Buildroot] fixdep not found
-Message-ID: <CAK7rcp-qDKDR-qGPVBoUfpwCj22Qs4dmjvFg_=uaZok_kHC-nQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 20 Aug 2016 13:48:50 -0300
+Subject: [Buildroot] [PATCH 1/2] opus: bump to version 1.1.3
+Message-ID: <1471711731-462-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/opus/opus.hash | 2 +-
+ package/opus/opus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-I'm trying to build a linux, version 3.14.51 with the buildroot
-toolchain, gcc version 5.x and uclibc-ng. I also have Kernel headers
-set to same as kernel being built an customer kernel header series set
-to 3.14.x
-
-
-I'm getting an issue during >>> linux-headers 3.14.51 Configuring
-where it executes a make ... headers_install, and then goes to execute
-scripts/basic/fixdep, but cannot find it. I can see that fixdep must
-be compiled from fixdep.c, which I can find within the particular
-build directory. But it's not already compiled when buildroot
-generates code that would depend on it.
-
-How do I resolve this?
+diff --git a/package/opus/opus.hash b/package/opus/opus.hash
+index 1d48398..2aac69b 100644
+--- a/package/opus/opus.hash
++++ b/package/opus/opus.hash
+@@ -1,2 +1,2 @@
+ # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
+-sha256	0e290078e31211baa7b5886bcc8ab6bc048b9fc83882532da4a1a45e58e907fd	opus-1.1.2.tar.gz
++sha256	58b6fe802e7e30182e95d0cde890c0ace40b6f125cffc50635f0ad2eef69b633	opus-1.1.3.tar.gz
+diff --git a/package/opus/opus.mk b/package/opus/opus.mk
+index 71fdcb3..5cd727f 100644
+--- a/package/opus/opus.mk
++++ b/package/opus/opus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPUS_VERSION = 1.1.2
++OPUS_VERSION = 1.1.3
+ OPUS_SITE = http://downloads.xiph.org/releases/opus
+ OPUS_LICENSE = BSD-3c
+ OPUS_LICENSE_FILES = COPYING
+-- 
+2.7.3
