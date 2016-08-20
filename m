@@ -1,32 +1,27 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 20 Aug 2016 12:05:13 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.14.x series
-Message-ID: <1471705513-1057-1-git-send-email-festevam@gmail.com>
+From: Kenneth Adam Miller <kennethadammiller@gmail.com>
+Date: Sat, 20 Aug 2016 12:24:37 -0400
+Subject: [Buildroot] fixdep not found
+Message-ID: <CAK7rcp-qDKDR-qGPVBoUfpwCj22Qs4dmjvFg_=uaZok_kHC-nQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+Hello all,
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3384cb0..9b4081a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -239,7 +239,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.76"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.77"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.18.39"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--- 
-1.9.1
+I'm trying to build a linux, version 3.14.51 with the buildroot
+toolchain, gcc version 5.x and uclibc-ng. I also have Kernel headers
+set to same as kernel being built an customer kernel header series set
+to 3.14.x
+
+
+I'm getting an issue during >>> linux-headers 3.14.51 Configuring
+where it executes a make ... headers_install, and then goes to execute
+scripts/basic/fixdep, but cannot find it. I can see that fixdep must
+be compiled from fixdep.c, which I can find within the particular
+build directory. But it's not already compiled when buildroot
+generates code that would depend on it.
+
+How do I resolve this?
