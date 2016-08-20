@@ -1,34 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 11:49:05 +0200
-Subject: [Buildroot] [PATCHv4] bfin: fix issues with internal toolchain,
- re-enable C++ support
-In-Reply-To: <20160819222738.GA22524@waldemar-brodkorb.de>
-References: <1471638312-4799-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160819222738.GA22524@waldemar-brodkorb.de>
-Message-ID: <20160820114905.6a5150d6@free-electrons.com>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Sat, 20 Aug 2016 15:41:39 +0530
+Subject: [Buildroot] Analysis of build results for 2016-08-18
+In-Reply-To: <20160820112200.102a666c@free-electrons.com>
+References: <20160819063024.55AF4101904@stock.ovh.net>
+ <20160820000709.0ceef3cd@free-electrons.com> <57B8200F.8030305@imgtec.com>
+ <20160820112200.102a666c@free-electrons.com>
+Message-ID: <57B82CDB.2000600@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sat, 20 Aug 2016 00:27:38 +0200, Waldemar Brodkorb wrote:
+On Saturday 20 August 2016 02:52 PM, Thomas Petazzoni wrote:
+>
+> Also, did you see the MIPS related issues on the qt5webkit package I
+> pointed in my latest analysis of build issues? Since you're working for
+> imgtec, I thought you might have some MIPS knowledge :)
+>
 
-> > Since this commit fixes C++ support in Blackfin, it re-enables the
-> > selection of C++ support for this architecture.  
-> 
-> Tested and works great. Awesome. Wonderful.
-> Thanks for cleaning up my messy hacks :)
+I'm not sure if I could fix it. But I will definitely try. :)
 
-Thanks for your testing! I've added a formal Tested-by tag from you in
-the commit log.
-
-We still have the --disable-symvers workaround to investigate, though.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Regards,
+Rahul
