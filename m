@@ -1,72 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Aug 2016 15:38:02 +0200
-Subject: [Buildroot] [PATCH] package/ncurses: fix build on noMMU uclinux
-	targets
-Message-ID: <1471786682-18906-1-git-send-email-yann.morin.1998@free.fr>
+From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Date: Sun, 21 Aug 2016 17:00:06 +0200
+Subject: [Buildroot] [PATCH 1/1] how to install output/img on the beaglebone
+Message-ID: <1471791606-13449-1-git-send-email-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ncurses buildsystem does not recognise 'uclinux' as being a 'linux',
-so it falls back to generic checks, especially when trying to decide
-what macros to define. So it misses defining absolutely required macros
-when doing widechar, which break the bui,d.
+readme.txt could use a little more information on what to install
+and how to install it. I simply copied the content of
+board/acmesystems/arietta-g25/readme.txt.
 
-But 'uclinux' is just a 'linux' like any other in this respect.
-
-We fix both aclocal.m4 and the generated ./configure script because
-ncurses does not autoreconf correctly (see comment in 0001-*.patch).
-
-Fixes:
-    http://autobuild.buildroot.org/?reason=ncurses-5.9
-    http://autobuild.buildroot.org/results/d5c/d5c787d34acbfc0c0c7bd8cc0e15b5bc2460d88a/
-    http://autobuild.buildroot.org/results/fc4/fc4b41fb955c390913a879e0202760347ce29987/
-    [...too many to list...]
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 ---
- package/ncurses/0003-recognise-uclinux.patch | 30 ++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/ncurses/0003-recognise-uclinux.patch
+ board/beaglebone/readme.txt | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/ncurses/0003-recognise-uclinux.patch b/package/ncurses/0003-recognise-uclinux.patch
-new file mode 100644
-index 0000000..e86546c
---- /dev/null
-+++ b/package/ncurses/0003-recognise-uclinux.patch
-@@ -0,0 +1,30 @@
-+aclocal: fix detection for uclinux hosts
+diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
+index 43ebe53..664bde2 100644
+--- a/board/beaglebone/readme.txt
++++ b/board/beaglebone/readme.txt
+@@ -32,3 +32,13 @@ After building, you should get a tree like this:
+   ??? u-boot.img
+   ??? uEnv.txt
+   ??? zImage
 +
-+uclinux is just a linux like the others...
++How to write the microSD card
++=============================
 +
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
 +
-+diff -durN ncurses-5.9.orig/aclocal.m4 ncurses-5.9/aclocal.m4
-+--- ncurses-5.9.orig/aclocal.m4	2011-04-01 01:35:38.000000000 +0200
-++++ ncurses-5.9/aclocal.m4	2016-08-21 15:24:47.003620029 +0200
-+@@ -6531,7 +6531,7 @@
-+ irix[[56]].*) #(vi
-+ 	cf_xopen_source="-D_SGI_SOURCE"
-+ 	;;
-+-linux*|gnu*|mint*|k*bsd*-gnu) #(vi
-++linux*|uclinux*|gnu*|mint*|k*bsd*-gnu) #(vi
-+ 	CF_GNU_SOURCE
-+ 	;;
-+ mirbsd*) #(vi
-+diff -durN ncurses-5.9.orig/configure ncurses-5.9/configure
-+--- ncurses-5.9.orig/configure	2016-08-21 15:21:50.789285661 +0200
-++++ ncurses-5.9/configure	2016-08-21 15:24:35.187463625 +0200
-+@@ -6984,7 +6984,7 @@
-+ irix[56].*) #(vi
-+ 	cf_xopen_source="-D_SGI_SOURCE"
-+ 	;;
-+-linux*|gnu*|mint*|k*bsd*-gnu) #(vi
-++linux*|uclinux*|gnu*|mint*|k*bsd*-gnu) #(vi
-+ 
-+ echo "$as_me:6996: checking if we must define _GNU_SOURCE" >&5
-+ echo $ECHO_N "checking if we must define _GNU_SOURCE... $ECHO_C" >&6
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
 -- 
-2.7.4
+2.1.4
