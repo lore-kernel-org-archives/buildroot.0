@@ -1,42 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Aug 2016 22:23:41 +0200
-Subject: [Buildroot] [PATCH] quagga: fix static link with zlib
-In-Reply-To: <a27f85c8a78ed278549be2823c8e8ce4025f32be.1471761559.git.baruch@tkos.co.il>
-References: <a27f85c8a78ed278549be2823c8e8ce4025f32be.1471761559.git.baruch@tkos.co.il>
-Message-ID: <20160821222341.7d5264f7@free-electrons.com>
+Date: Sun, 21 Aug 2016 22:23:57 +0200
+Subject: [Buildroot] [git commit] wireshark: fix typo
+Message-ID: <20160821202400.C2E4481796@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=11109fd36a810508c13f7308c19c70223f7870f6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 21 Aug 2016 09:39:19 +0300, Baruch Siach wrote:
-> quagga links with zlib indirectly via netsnmp -> openssl -> zlib. quagga and
-> zlib both define the identically named but otherwise unrelated 'zcalloc'
-> symbol. This breaks static linking. Add a patch that renames the offending
-> symbol, thus fixing the build.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/013/01317aeaff7d127a05e0488a51e81f2d43750687/
-> http://autobuild.buildroot.net/results/e9f/e9f17bb6e048c3dd3c65fc588dc5244fbbbba6fb/
-> http://autobuild.buildroot.net/results/72b/72b5e8a3d4c1d27c61cdad5a90691117d0dcfbb9/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...memory-fix-indirect-static-link-with-zlib.patch | 108 +++++++++++++++++++++
->  1 file changed, 108 insertions(+)
->  create mode 100644 package/quagga/0003-lib-memory-fix-indirect-static-link-with-zlib.patch
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wireshark/wireshark.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for fixing this issue. I'm not sure zzcalloc is really the best
-name, but it's fine for now. Could you submit upstream? They will
-probably decide of a better name, if need be.
-
-Thanks again, applied to master!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index baed846..42a5e74 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -60,7 +60,7 @@ ifeq ($(BR2_PACKAGE_C_ARES),y)
+ WIRESHARK_CONF_OPTS += --with-c-ares=$(STAGING_DIR)/usr
+ WIRESHARK_DEPENDENCIES += c-ares
+ else
+-WIREHARK_CONF_OPTS += --without-c-ares
++WIRESHARK_CONF_OPTS += --without-c-ares
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GEOIP),y)
