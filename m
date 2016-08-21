@@ -1,30 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 21 Aug 2016 10:31:30 +0300
-Subject: [Buildroot] [PATCH] wireshark: fix typo
-Message-ID: <dc85745fa80cdd4a45de3faee34d9fb15c1f1403.1471764690.git.baruch@tkos.co.il>
+From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Date: Sun, 21 Aug 2016 12:13:56 +0200
+Subject: [Buildroot] [PATCH 1/1] added comments on how to install the system
+Message-ID: <1471774436-18803-1-git-send-email-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/wireshark/wireshark.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The sudo dd part was not that trivial to me, as I was expecting
+the usual ramdisk image or a rootfs.tar file. I think
+board/readme.txt should mention it.
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 35f013874ec9..12060e2edd2e 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -60,7 +60,7 @@ ifeq ($(BR2_PACKAGE_C_ARES),y)
- WIRESHARK_CONF_OPTS += --with-c-ares=$(STAGING_DIR)/usr
- WIRESHARK_DEPENDENCIES += c-ares
- else
--WIREHARK_CONF_OPTS += --without-c-ares
-+WIRESHARK_CONF_OPTS += --without-c-ares
- endif
- 
- ifeq ($(BR2_PACKAGE_GEOIP),y)
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ board/beaglebone/readme.txt | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
+index 43ebe53..7d73e93 100644
+--- a/board/beaglebone/readme.txt
++++ b/board/beaglebone/readme.txt
+@@ -32,3 +32,14 @@ After building, you should get a tree like this:
+   ??? u-boot.img
+   ??? uEnv.txt
+   ??? zImage
++
++Prepare SD card
++===============
++
++The first partition, /dev/sdb1 in this example, should be a bootable FAT16 partition.
++The second partition, /dev/sdb2 in this example, should be an EXT4 partition.
++
++sudo cp output/images/{MLO,u-boot.img,zImage} /dev/sdb1
++sudo cp output/images/am335x-bone.dtb /dev/sdb1 -- for the beaglebone
++sudo cp output/images/am335x-boneblack.dtb /dev/sdb1 -- for the beaglebone black
++sudo dd if=output/images/rootfs.ext4 of=/dev/sdb2
 -- 
-2.8.1
+2.1.4
