@@ -1,43 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 21 Aug 2016 18:16:58 +0300
-Subject: [Buildroot] [PATCH] package/ncurses: fix build on noMMU uclinux
- targets
-In-Reply-To: <1471786682-18906-1-git-send-email-yann.morin.1998@free.fr>
-References: <1471786682-18906-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160821151658.lg64uhf5fy3mwzq7@tarshish>
+From: Kenneth Adam Miller <kennethadammiller@gmail.com>
+Date: Sun, 21 Aug 2016 11:21:34 -0400
+Subject: [Buildroot] compiler plugins & compiling the kernel
+In-Reply-To: <CAMKF1sr4gNndhcJ80gv10kzBaEBhFKKpryKb8U_1z5ACWcWKhg@mail.gmail.com>
+References: <CAK7rcp_m+9YC6gJ0xyarD217F4wyjwjg9QSdBLzVgPJ9QLrm7w@mail.gmail.com>
+ <CAMKF1sr1ZvZZW++J4pxixtr1KXGi8qGBRFEJGoaJSc_=Yn=x3Q@mail.gmail.com>
+ <CAMKF1sqteu5nK9NGfr1M=A3nZFk2H_J5zhu3BYq0110sjz8vDQ@mail.gmail.com>
+ <CAMKF1sr4gNndhcJ80gv10kzBaEBhFKKpryKb8U_1z5ACWcWKhg@mail.gmail.com>
+Message-ID: <CAK7rcp_uvkCnsz6BYte9kxvoVArhmEJsahxzABVwDmUUX_BUZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+On Sat, Aug 20, 2016 at 11:55 PM, Khem Raj <raj.khem@gmail.com> wrote:
+> On Aug 20, 2016 10:10 AM, "Kenneth Adam Miller"
+> <kennethadammiller@gmail.com> wrote:
+>>
+>> Hello all,
+>>
+>>
+>> I've noticed that when the kernel is built, it appears to always be
+>> built with the host compiler, and not the buildroot specified cross
+>> compiler. Why is that?
+>>
+>
+> Some portions are compiled for the build host. E.g. Tools. They will always
+> use native compiler. But the kernel proper should be using cross compiler
+>
 
-On Sun, Aug 21, 2016 at 03:38:02PM +0200, Yann E. MORIN wrote:
-> The ncurses buildsystem does not recognise 'uclinux' as being a 'linux',
-> so it falls back to generic checks, especially when trying to decide
-> what macros to define. So it misses defining absolutely required macros
-> when doing widechar, which break the bui,d.
-> 
-> But 'uclinux' is just a 'linux' like any other in this respect.
-> 
-> We fix both aclocal.m4 and the generated ./configure script because
-> ncurses does not autoreconf correctly (see comment in 0001-*.patch).
-> 
-> Fixes:
->     http://autobuild.buildroot.org/?reason=ncurses-5.9
+Oh ok. Maybe that's it.
 
-The failures shown in this link might change over time, so I'm not sure it is 
-good for a commit log message.
-
->     http://autobuild.buildroot.org/results/d5c/d5c787d34acbfc0c0c7bd8cc0e15b5bc2460d88a/
->     http://autobuild.buildroot.org/results/fc4/fc4b41fb955c390913a879e0202760347ce29987/
-
-These, on the other hand, are immutable.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>> In addition, for some pax related options, it requires gcc plugins for
+>> the version being used. That means that I would have to have plugin
+>> support for my host, correct? I don't believe that there is a way to
+>> enable plugin support for the buildroot toolchain or for crosstool. At
+>> least, when I looked and searched I didn't see any option that
+>> mentioned that. I just want to make sure that I have it correct in
+>> that my host compiler is being used to build the kernel.
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
