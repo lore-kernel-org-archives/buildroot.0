@@ -1,79 +1,44 @@
-From: Guillaume William Bres <guillaume.bressaix@gmail.com>
-Date: Sun, 21 Aug 2016 19:15:41 +0200
-Subject: [Buildroot] [PATCH 1/1] how to install output/img on the
-	beaglebone
-In-Reply-To: <20160821151125.j3keohru5kirqef5@tarshish>
-References: <1471791606-13449-1-git-send-email-guillaume.bressaix@gmail.com>
- <20160821151125.j3keohru5kirqef5@tarshish>
-Message-ID: <CAJe0E3etz3VTE_04ojkwhjifuMu4wjuazRKQZusG1DbE6B5shw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 21 Aug 2016 20:18:06 +0300
+Subject: [Buildroot] [PATCH] tstools: requires dynamic library support
+Message-ID: <a130ad0abb0b921de5a8f1998ce2cde407082f09.1471799886.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
-> Have you tested that following these instructions lead to a working
-> BeagleBone
-> system?
->
-> baruch
+tstools Makefile tries to build shared libtstools.so library unconditionally.
 
+Fixes:
+http://autobuild.buildroot.net/results/208/20830bccab8508aab215c5fc8010e180cc68af51/
+http://autobuild.buildroot.net/results/988/9882f93e11dbaba8c6973bedc9d00dbb238a4c06/
+http://autobuild.buildroot.net/results/11c/11c802bcfab70a0a2593079657529c763fd82aa1/
 
-yes it works perfectly fine
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/tstools/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Guillaume William Bres-Saix
-Software engineer - NIST
-325 Broadway, Boulder, CO 80305
-<guillaume.bressaix@gmail.com>
-
-2016-08-21 17:11 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
-
-> Hi Guillaume W. Bres,
->
-> On Sun, Aug 21, 2016 at 05:00:06PM +0200, Guillaume W. Bres wrote:
-> > readme.txt could use a little more information on what to install
-> > and how to install it. I simply copied the content of
-> > board/acmesystems/arietta-g25/readme.txt.
->
-> Have you tested that following these instructions lead to a working
-> BeagleBone
-> system?
->
-> baruch
->
-> > Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> > ---
-> >  board/beaglebone/readme.txt | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
-> > index 43ebe53..664bde2 100644
-> > --- a/board/beaglebone/readme.txt
-> > +++ b/board/beaglebone/readme.txt
-> > @@ -32,3 +32,13 @@ After building, you should get a tree like this:
-> >    ??? u-boot.img
-> >    ??? uEnv.txt
-> >    ??? zImage
-> > +
-> > +How to write the microSD card
-> > +=============================
-> > +
-> > +Once the build process is finished you will have an image called
-> "sdcard.img"
-> > +in the output/images/ directory.
-> > +
-> > +Copy the bootable "sdcard.img" onto an SD card with "dd":
-> > +
-> > +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--
-> Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160821/0aa80bbd/attachment.html>
+diff --git a/package/tstools/Config.in b/package/tstools/Config.in
+index f5dd138c4d12..ca5f8fc2ca3d 100644
+--- a/package/tstools/Config.in
++++ b/package/tstools/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_TSTOOLS
+ 	bool "tstools"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  This is a set of cross-platform command line tools for working with
+ 	  MPEG data.
+@@ -14,3 +15,7 @@ config BR2_PACKAGE_TSTOOLS
+ 	  data on DVDs.
+ 
+ 	  https://github.com/kynesim/tstools/
++
++comment "tstools needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
+-- 
+2.8.1
