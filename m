@@ -1,33 +1,30 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 21 Aug 2016 09:42:37 +0300
-Subject: [Buildroot] Analysis of build results for 2016-08-18
-In-Reply-To: <20160820000709.0ceef3cd@free-electrons.com>
-References: <20160819063024.55AF4101904@stock.ovh.net>
- <20160820000709.0ceef3cd@free-electrons.com>
-Message-ID: <20160821064237.h2d5u7hei3h6qghg@tarshish>
+Date: Sun, 21 Aug 2016 10:31:30 +0300
+Subject: [Buildroot] [PATCH] wireshark: fix typo
+Message-ID: <dc85745fa80cdd4a45de3faee34d9fb15c1f1403.1471764690.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/wireshark/wireshark.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Sat, Aug 20, 2016 at 12:07:09AM +0200, Thomas Petazzoni wrote: 
-> >     mips64el |            quagga-1.0.20160315 | NOK | http://autobuild.buildroot.net/results/01317aeaff7d127a05e0488a51e81f2d43750687/
-> 
-> /home/buildroot/build/instance-1/output/host/usr/mips64el-buildroot-linux-uclibc/sysroot/usr/lib/libz.a(zutil.o): In function `zcalloc':
-> zutil.c:(.text+0x48): multiple definition of `zcalloc'
-> /home/buildroot/build/instance-1/output/build/quagga-1.0.20160315/lib/.libs/libzebra.a(memory.o):memory.c:(.text+0x1a0): first defined here
-> collect2: error: ld returned 1 exit status
-> 
-> Should not be too difficult to fix. Gustavo? Or Baruch maybe?
-
-Should be fixed by http://patchwork.ozlabs.org/patch/661213/.
-
-baruch
-
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 35f013874ec9..12060e2edd2e 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -60,7 +60,7 @@ ifeq ($(BR2_PACKAGE_C_ARES),y)
+ WIRESHARK_CONF_OPTS += --with-c-ares=$(STAGING_DIR)/usr
+ WIRESHARK_DEPENDENCIES += c-ares
+ else
+-WIREHARK_CONF_OPTS += --without-c-ares
++WIRESHARK_CONF_OPTS += --without-c-ares
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GEOIP),y)
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.8.1
