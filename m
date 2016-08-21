@@ -1,46 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Aug 2016 22:22:05 +0200
-Subject: [Buildroot] [PATCH] package/ncurses: fix build on noMMU uclinux
- targets
-In-Reply-To: <1471786682-18906-1-git-send-email-yann.morin.1998@free.fr>
-References: <1471786682-18906-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160821222205.08c87b53@free-electrons.com>
+Date: Sun, 21 Aug 2016 22:22:18 +0200
+Subject: [Buildroot] [git commit] tstools: requires dynamic library support
+Message-ID: <20160821202221.8A38E8213B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=614710f4c3a82d60a7590ec55d14459d81f3764b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 21 Aug 2016 15:38:02 +0200, Yann E. MORIN wrote:
-> The ncurses buildsystem does not recognise 'uclinux' as being a 'linux',
-> so it falls back to generic checks, especially when trying to decide
-> what macros to define. So it misses defining absolutely required macros
-> when doing widechar, which break the bui,d.
-> 
-> But 'uclinux' is just a 'linux' like any other in this respect.
-> 
-> We fix both aclocal.m4 and the generated ./configure script because
-> ncurses does not autoreconf correctly (see comment in 0001-*.patch).
-> 
-> Fixes:
->     http://autobuild.buildroot.org/?reason=ncurses-5.9
->     http://autobuild.buildroot.org/results/d5c/d5c787d34acbfc0c0c7bd8cc0e15b5bc2460d88a/
->     http://autobuild.buildroot.org/results/fc4/fc4b41fb955c390913a879e0202760347ce29987/
->     [...too many to list...]
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/ncurses/0003-recognise-uclinux.patch | 30 ++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/ncurses/0003-recognise-uclinux.patch
+tstools Makefile tries to build shared libtstools.so library unconditionally.
 
-Oh, and BTW, please submit the patch upstream. Thanks!
+Fixes:
+http://autobuild.buildroot.net/results/208/20830bccab8508aab215c5fc8010e180cc68af51/
+http://autobuild.buildroot.net/results/988/9882f93e11dbaba8c6973bedc9d00dbb238a4c06/
+http://autobuild.buildroot.net/results/11c/11c802bcfab70a0a2593079657529c763fd82aa1/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tstools/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/tstools/Config.in b/package/tstools/Config.in
+index f5dd138..ca5f8fc 100644
+--- a/package/tstools/Config.in
++++ b/package/tstools/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_TSTOOLS
+ 	bool "tstools"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  This is a set of cross-platform command line tools for working with
+ 	  MPEG data.
+@@ -14,3 +15,7 @@ config BR2_PACKAGE_TSTOOLS
+ 	  data on DVDs.
+ 
+ 	  https://github.com/kynesim/tstools/
++
++comment "tstools needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
