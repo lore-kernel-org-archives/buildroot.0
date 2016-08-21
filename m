@@ -1,50 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Aug 2016 22:21:34 +0200
-Subject: [Buildroot] [PATCH] package/ncurses: fix build on noMMU uclinux
- targets
-In-Reply-To: <1471786682-18906-1-git-send-email-yann.morin.1998@free.fr>
-References: <1471786682-18906-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160821222134.580eb016@free-electrons.com>
+Date: Sun, 21 Aug 2016 22:21:42 +0200
+Subject: [Buildroot] [git commit] wireshark: fix static build with
+	libpcap+libusb
+Message-ID: <20160821202145.DE6C581F75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=02241bf0fc9b3b83e89e19a8c907659509a3e803
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 21 Aug 2016 15:38:02 +0200, Yann E. MORIN wrote:
-> The ncurses buildsystem does not recognise 'uclinux' as being a 'linux',
-> so it falls back to generic checks, especially when trying to decide
-> what macros to define. So it misses defining absolutely required macros
-> when doing widechar, which break the bui,d.
-> 
-> But 'uclinux' is just a 'linux' like any other in this respect.
-> 
-> We fix both aclocal.m4 and the generated ./configure script because
-> ncurses does not autoreconf correctly (see comment in 0001-*.patch).
-> 
-> Fixes:
->     http://autobuild.buildroot.org/?reason=ncurses-5.9
+The wireshark autoconf acinclude.m4 source calls AC_PATH_TOOL() to find
+pcap-config only when --with-pcap is missing. Otherwise it just trusts the
+PCAP_CONFIG environment variable. Since we use --with-pcap, seeding
+ac_cv_path_PCAP_CONFIG gives nothing. Set PCAP_CONFIG instead to let the
+configure script discover the dependencies of libpcap. This fixes static build
+when libpcap links with libusb.
 
-I do agree with Baruch, this link is not really appropriate, so I
-dropped it.
+Fixes:
+http://autobuild.buildroot.net/results/ef5/ef50939b89373aad04275cbdeeff4c0e2807c0d5/
+http://autobuild.buildroot.net/results/ffc/ffc921135c16c7017cd7a23c5e0c445757509abc/
+http://autobuild.buildroot.net/results/2d8/2d8cd47cc664dff0f76a230b36c37291f3087e35/
 
->     http://autobuild.buildroot.org/results/d5c/d5c787d34acbfc0c0c7bd8cc0e15b5bc2460d88a/
->     http://autobuild.buildroot.org/results/fc4/fc4b41fb955c390913a879e0202760347ce29987/
->     [...too many to list...]
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/ncurses/0003-recognise-uclinux.patch | 30 ++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/ncurses/0003-recognise-uclinux.patch
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wireshark/wireshark.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks for the additional investigation!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 35f0138..baed846 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -11,7 +11,7 @@ WIRESHARK_LICENSE = wireshark license
+ WIRESHARK_LICENSE_FILES = COPYING
+ WIRESHARK_DEPENDENCIES = host-pkgconf libpcap libglib2
+ WIRESHARK_CONF_ENV = \
+-	ac_cv_path_PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
++	PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
+ 
+ # patch touching configure.ac
+ WIRESHARK_AUTORECONF = YES
