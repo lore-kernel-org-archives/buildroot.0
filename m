@@ -1,142 +1,33 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 21 Aug 2016 09:39:19 +0300
-Subject: [Buildroot] [PATCH] quagga: fix static link with zlib
-Message-ID: <a27f85c8a78ed278549be2823c8e8ce4025f32be.1471761559.git.baruch@tkos.co.il>
+Date: Sun, 21 Aug 2016 09:42:37 +0300
+Subject: [Buildroot] Analysis of build results for 2016-08-18
+In-Reply-To: <20160820000709.0ceef3cd@free-electrons.com>
+References: <20160819063024.55AF4101904@stock.ovh.net>
+ <20160820000709.0ceef3cd@free-electrons.com>
+Message-ID: <20160821064237.h2d5u7hei3h6qghg@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-quagga links with zlib indirectly via netsnmp -> openssl -> zlib. quagga and
-zlib both define the identically named but otherwise unrelated 'zcalloc'
-symbol. This breaks static linking. Add a patch that renames the offending
-symbol, thus fixing the build.
+Hi Thomas,
 
-Fixes:
-http://autobuild.buildroot.net/results/013/01317aeaff7d127a05e0488a51e81f2d43750687/
-http://autobuild.buildroot.net/results/e9f/e9f17bb6e048c3dd3c65fc588dc5244fbbbba6fb/
-http://autobuild.buildroot.net/results/72b/72b5e8a3d4c1d27c61cdad5a90691117d0dcfbb9/
+On Sat, Aug 20, 2016 at 12:07:09AM +0200, Thomas Petazzoni wrote: 
+> >     mips64el |            quagga-1.0.20160315 | NOK | http://autobuild.buildroot.net/results/01317aeaff7d127a05e0488a51e81f2d43750687/
+> 
+> /home/buildroot/build/instance-1/output/host/usr/mips64el-buildroot-linux-uclibc/sysroot/usr/lib/libz.a(zutil.o): In function `zcalloc':
+> zutil.c:(.text+0x48): multiple definition of `zcalloc'
+> /home/buildroot/build/instance-1/output/build/quagga-1.0.20160315/lib/.libs/libzebra.a(memory.o):memory.c:(.text+0x1a0): first defined here
+> collect2: error: ld returned 1 exit status
+> 
+> Should not be too difficult to fix. Gustavo? Or Baruch maybe?
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...memory-fix-indirect-static-link-with-zlib.patch | 108 +++++++++++++++++++++
- 1 file changed, 108 insertions(+)
- create mode 100644 package/quagga/0003-lib-memory-fix-indirect-static-link-with-zlib.patch
+Should be fixed by http://patchwork.ozlabs.org/patch/661213/.
 
-diff --git a/package/quagga/0003-lib-memory-fix-indirect-static-link-with-zlib.patch b/package/quagga/0003-lib-memory-fix-indirect-static-link-with-zlib.patch
-new file mode 100644
-index 000000000000..6990f47cda1c
---- /dev/null
-+++ b/package/quagga/0003-lib-memory-fix-indirect-static-link-with-zlib.patch
-@@ -0,0 +1,108 @@
-+From 008dd9771057dbbd7ce971c43bce2a0b05e2cf97 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Sun, 21 Aug 2016 08:56:57 +0300
-+Subject: [PATCH] lib/memory: fix indirect static link with zlib
-+
-+quagga SNMP support depends on netsnmp, that optionally depends on OpenSSL,
-+which in turn requires zlib. zlib exports the 'zcalloc' symbol, which collides
-+with a function of the same name in memory.c. This is not a problem when
-+linking dynamically, since quagga does not use zlib directly. But static
-+linking fails with the error:
-+
-+  CCLD     ospfd
-+.../output/host/usr/mips64el-buildroot-linux-uclibc/sysroot/usr/lib/libz.a(zutil.o): In function `zcalloc':
-+zutil.c:(.text+0x48): multiple definition of `zcalloc'
-+.../output/build/quagga-1.0.20160315/lib/.libs/libzebra.a(memory.o):memory.c:(.text+0x1a0): first defined here
-+
-+Rename 'zcalloc' to 'zzcalloc' to avoid symbol collision.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: posted upstream
-+https://lists.quagga.net/pipermail/quagga-dev/2016-August/016109.html
-+
-+ lib/memory.c | 14 ++++++++------
-+ lib/memory.h |  4 ++--
-+ 2 files changed, 10 insertions(+), 8 deletions(-)
-+
-+diff --git a/lib/memory.c b/lib/memory.c
-+index 269520d5a435..b1680a5e6f07 100644
-+--- a/lib/memory.c
-++++ b/lib/memory.c
-+@@ -80,9 +80,11 @@ zmalloc (int type, size_t size)
-+ 
-+ /*
-+  * Allocate memory as in zmalloc, and also clear the memory.
-++ * Add an extra 'z' prefix to function name to avoid collision when linking
-++ * statically with zlib that exports the 'zcalloc' symbol.
-+  */
-+ void *
-+-zcalloc (int type, size_t size)
-++zzcalloc (int type, size_t size)
-+ {
-+   void *memory;
-+ 
-+@@ -97,9 +99,9 @@ zcalloc (int type, size_t size)
-+ }
-+ 
-+ /* 
-+- * Given a pointer returned by zmalloc or zcalloc, free it and
-++ * Given a pointer returned by zmalloc or zzcalloc, free it and
-+  * return a pointer to a new size, basically acting like realloc().
-+- * Requires: ptr was returned by zmalloc, zcalloc, or zrealloc with the
-++ * Requires: ptr was returned by zmalloc, zzcalloc, or zrealloc with the
-+  * same type.
-+  * Effects: Returns a pointer to the new memory, or aborts.
-+  */
-+@@ -109,7 +111,7 @@ zrealloc (int type, void *ptr, size_t size)
-+   void *memory;
-+ 
-+   if (ptr == NULL)              /* is really alloc */
-+-      return zcalloc(type, size);
-++      return zzcalloc(type, size);
-+ 
-+   memory = realloc (ptr, size);
-+   if (memory == NULL)
-+@@ -122,7 +124,7 @@ zrealloc (int type, void *ptr, size_t size)
-+ 
-+ /*
-+  * Free memory allocated by z*alloc or zstrdup.
-+- * Requires: ptr was returned by zmalloc, zcalloc, or zrealloc with the
-++ * Requires: ptr was returned by zmalloc, zzcalloc, or zrealloc with the
-+  * same type.
-+  * Effects: The memory is freed and may no longer be referenced.
-+  */
-+@@ -196,7 +198,7 @@ mtype_zcalloc (const char *file, int line, int type, size_t size)
-+   mstat[type].c_calloc++;
-+   mstat[type].t_calloc++;
-+ 
-+-  memory = zcalloc (type, size);
-++  memory = zzcalloc (type, size);
-+   mtype_log ("xcalloc", memory, file, line, type);
-+ 
-+   return memory;
-+diff --git a/lib/memory.h b/lib/memory.h
-+index 23962235dbfe..501352993d21 100644
-+--- a/lib/memory.h
-++++ b/lib/memory.h
-+@@ -56,7 +56,7 @@ extern struct mlist mlists[];
-+   mtype_zstrdup (__FILE__, __LINE__, (mtype), (str))
-+ #else
-+ #define XMALLOC(mtype, size)       zmalloc ((mtype), (size))
-+-#define XCALLOC(mtype, size)       zcalloc ((mtype), (size))
-++#define XCALLOC(mtype, size)       zzcalloc ((mtype), (size))
-+ #define XREALLOC(mtype, ptr, size) zrealloc ((mtype), (ptr), (size))
-+ #define XFREE(mtype, ptr)          do { \
-+                                      zfree ((mtype), (ptr)); \
-+@@ -67,7 +67,7 @@ extern struct mlist mlists[];
-+ 
-+ /* Prototypes of memory function. */
-+ extern void *zmalloc (int type, size_t size);
-+-extern void *zcalloc (int type, size_t size);
-++extern void *zzcalloc (int type, size_t size);
-+ extern void *zrealloc (int type, void *ptr, size_t size);
-+ extern void  zfree (int type, void *ptr);
-+ extern char *zstrdup (int type, const char *str);
-+-- 
-+2.8.1
-+
+baruch
+
 -- 
-2.8.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
