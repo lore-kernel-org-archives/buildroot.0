@@ -1,42 +1,53 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 21 Aug 2016 18:06:38 +0300
-Subject: [Buildroot] [PATCH] wireshark: fix static build with libpcap+libusb
-Message-ID: <0e28bc4a3824cba288c9930f98653f60f1d0e093.1471791997.git.baruch@tkos.co.il>
+Date: Sun, 21 Aug 2016 18:11:25 +0300
+Subject: [Buildroot] [PATCH 1/1] how to install output/img on the
+ beaglebone
+In-Reply-To: <1471791606-13449-1-git-send-email-guillaume.bressaix@gmail.com>
+References: <1471791606-13449-1-git-send-email-guillaume.bressaix@gmail.com>
+Message-ID: <20160821151125.j3keohru5kirqef5@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The wireshark autoconf acinclude.m4 source calls AC_PATH_TOOL() to find
-pcap-config only when --with-pcap is missing. Otherwise it just trusts the
-PCAP_CONFIG environment variable. Since we use --with-pcap, seeding
-ac_cv_path_PCAP_CONFIG gives nothing. Set PCAP_CONFIG instead to let the
-configure script discover the dependencies of libpcap. This fixes static build
-when libpcap links with libusb.
+Hi Guillaume W. Bres,
 
-Fixes:
-http://autobuild.buildroot.net/results/ef5/ef50939b89373aad04275cbdeeff4c0e2807c0d5/
-http://autobuild.buildroot.net/results/ffc/ffc921135c16c7017cd7a23c5e0c445757509abc/
-http://autobuild.buildroot.net/results/2d8/2d8cd47cc664dff0f76a230b36c37291f3087e35/
+On Sun, Aug 21, 2016 at 05:00:06PM +0200, Guillaume W. Bres wrote:
+> readme.txt could use a little more information on what to install
+> and how to install it. I simply copied the content of
+> board/acmesystems/arietta-g25/readme.txt.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/wireshark/wireshark.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Have you tested that following these instructions lead to a working BeagleBone 
+system?
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 12060e2edd2e..42a5e74bc603 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -11,7 +11,7 @@ WIRESHARK_LICENSE = wireshark license
- WIRESHARK_LICENSE_FILES = COPYING
- WIRESHARK_DEPENDENCIES = host-pkgconf libpcap libglib2
- WIRESHARK_CONF_ENV = \
--	ac_cv_path_PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
-+	PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
- 
- # patch touching configure.ac
- WIRESHARK_AUTORECONF = YES
+baruch
+
+> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+> ---
+>  board/beaglebone/readme.txt | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
+> index 43ebe53..664bde2 100644
+> --- a/board/beaglebone/readme.txt
+> +++ b/board/beaglebone/readme.txt
+> @@ -32,3 +32,13 @@ After building, you should get a tree like this:
+>    ??? u-boot.img
+>    ??? uEnv.txt
+>    ??? zImage
+> +
+> +How to write the microSD card
+> +=============================
+> +
+> +Once the build process is finished you will have an image called "sdcard.img"
+> +in the output/images/ directory.
+> +
+> +Copy the bootable "sdcard.img" onto an SD card with "dd":
+> +
+> +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+
 -- 
-2.8.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
