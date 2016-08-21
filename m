@@ -1,32 +1,61 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 21 Aug 2016 21:01:29 +0300
-Subject: [Buildroot] [PATCH 1/1] how to install output/img on the
- beaglebone
-In-Reply-To: <CAJe0E3etz3VTE_04ojkwhjifuMu4wjuazRKQZusG1DbE6B5shw@mail.gmail.com>
-References: <1471791606-13449-1-git-send-email-guillaume.bressaix@gmail.com>
- <20160821151125.j3keohru5kirqef5@tarshish>
- <CAJe0E3etz3VTE_04ojkwhjifuMu4wjuazRKQZusG1DbE6B5shw@mail.gmail.com>
-Message-ID: <20160821180129.ztpvh5jnnztitoib@tarshish>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 21 Aug 2016 20:25:36 +0200
+Subject: [Buildroot] [PATCH] package/trace-cmd: fix build without ptrace
+Message-ID: <1471803936-10075-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Guillaume,
+Backport upstream patch.
 
-On Sun, Aug 21, 2016 at 07:15:41PM +0200, Guillaume William Bres wrote:
-> > Have you tested that following these instructions lead to a working
-> > BeagleBone
-> > system?
-> 
-> yes it works perfectly fine
+Fixes:
+http://autobuild.buildroot.net/results/78c/78ca1819cdecce81336cadca17762fde8276d13a
 
-Great. You should mention it in the commit log then.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ ...ix-trace-record.c-with-non-ptrace-compile.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/trace-cmd/0001-trace-cmd-Fix-trace-record.c-with-non-ptrace-compile.patch
 
-baruch
-
+diff --git a/package/trace-cmd/0001-trace-cmd-Fix-trace-record.c-with-non-ptrace-compile.patch b/package/trace-cmd/0001-trace-cmd-Fix-trace-record.c-with-non-ptrace-compile.patch
+new file mode 100644
+index 0000000..5f7d2ba
+--- /dev/null
++++ b/package/trace-cmd/0001-trace-cmd-Fix-trace-record.c-with-non-ptrace-compile.patch
+@@ -0,0 +1,32 @@
++From bdfcddd4f135dc1d4fefb0373d9ebb93ef5110cb Mon Sep 17 00:00:00 2001
++From: "Steven Rostedt (Red Hat)" <rostedt@goodmis.org>
++Date: Mon, 7 Dec 2015 16:41:19 -0500
++Subject: [PATCH] trace-cmd: Fix trace-record.c with non ptrace compile
++
++Fix ptrace_wait() when NO_PTRACE=1 is defined.
++
++Status: upstream
++
++Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
++[Romain backport to 2.6]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ trace-record.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/trace-record.c b/trace-record.c
++index df82883..f83ec4b 100644
++--- a/trace-record.c
+++++ b/trace-record.c
++@@ -1099,7 +1099,7 @@ static void ptrace_wait(enum trace_type type, int main_pid)
++ 		 (!WIFEXITED(status) || pid != main_pid));
++ }
++ #else
++-static inline void ptrace_wait(int main_pid) { }
+++static inline void ptrace_wait(enum trace_type type, int main_pid) { }
++ static inline void enable_ptrace(void) { }
++ static inline void ptrace_attach(int pid) { }
++ 
++-- 
++2.5.5
++
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.5.5
