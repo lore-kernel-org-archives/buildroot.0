@@ -1,61 +1,72 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 21 Aug 2016 20:25:36 +0200
-Subject: [Buildroot] [PATCH] package/trace-cmd: fix build without ptrace
-Message-ID: <1471803936-10075-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Aug 2016 22:20:57 +0200
+Subject: [Buildroot] [git commit] package/ncurses: fix build on noMMU
+	uclinux targets
+Message-ID: <20160821202106.C66C88213B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport upstream patch.
+commit: https://git.buildroot.net/buildroot/commit/?id=c215ce5021334edfd7385a5218548959438463f6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The ncurses buildsystem does not recognise 'uclinux' as being a 'linux',
+so it falls back to generic checks, especially when trying to decide
+what macros to define. So it misses defining absolutely required macros
+when doing widechar, which break the bui,d.
+
+But 'uclinux' is just a 'linux' like any other in this respect.
+
+We fix both aclocal.m4 and the generated ./configure script because
+ncurses does not autoreconf correctly (see comment in 0001-*.patch).
 
 Fixes:
-http://autobuild.buildroot.net/results/78c/78ca1819cdecce81336cadca17762fde8276d13a
+    http://autobuild.buildroot.org/results/d5c/d5c787d34acbfc0c0c7bd8cc0e15b5bc2460d88a/
+    http://autobuild.buildroot.org/results/fc4/fc4b41fb955c390913a879e0202760347ce29987/
+    [...too many to list...]
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ix-trace-record.c-with-non-ptrace-compile.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/trace-cmd/0001-trace-cmd-Fix-trace-record.c-with-non-ptrace-compile.patch
+ package/ncurses/0003-recognise-uclinux.patch | 30 ++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/trace-cmd/0001-trace-cmd-Fix-trace-record.c-with-non-ptrace-compile.patch b/package/trace-cmd/0001-trace-cmd-Fix-trace-record.c-with-non-ptrace-compile.patch
+diff --git a/package/ncurses/0003-recognise-uclinux.patch b/package/ncurses/0003-recognise-uclinux.patch
 new file mode 100644
-index 0000000..5f7d2ba
+index 0000000..e86546c
 --- /dev/null
-+++ b/package/trace-cmd/0001-trace-cmd-Fix-trace-record.c-with-non-ptrace-compile.patch
-@@ -0,0 +1,32 @@
-+From bdfcddd4f135dc1d4fefb0373d9ebb93ef5110cb Mon Sep 17 00:00:00 2001
-+From: "Steven Rostedt (Red Hat)" <rostedt@goodmis.org>
-+Date: Mon, 7 Dec 2015 16:41:19 -0500
-+Subject: [PATCH] trace-cmd: Fix trace-record.c with non ptrace compile
++++ b/package/ncurses/0003-recognise-uclinux.patch
+@@ -0,0 +1,30 @@
++aclocal: fix detection for uclinux hosts
 +
-+Fix ptrace_wait() when NO_PTRACE=1 is defined.
++uclinux is just a linux like the others...
 +
-+Status: upstream
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +
-+Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
-+[Romain backport to 2.6]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ trace-record.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/trace-record.c b/trace-record.c
-+index df82883..f83ec4b 100644
-+--- a/trace-record.c
-++++ b/trace-record.c
-+@@ -1099,7 +1099,7 @@ static void ptrace_wait(enum trace_type type, int main_pid)
-+ 		 (!WIFEXITED(status) || pid != main_pid));
-+ }
-+ #else
-+-static inline void ptrace_wait(int main_pid) { }
-++static inline void ptrace_wait(enum trace_type type, int main_pid) { }
-+ static inline void enable_ptrace(void) { }
-+ static inline void ptrace_attach(int pid) { }
++diff -durN ncurses-5.9.orig/aclocal.m4 ncurses-5.9/aclocal.m4
++--- ncurses-5.9.orig/aclocal.m4	2011-04-01 01:35:38.000000000 +0200
+++++ ncurses-5.9/aclocal.m4	2016-08-21 15:24:47.003620029 +0200
++@@ -6531,7 +6531,7 @@
++ irix[[56]].*) #(vi
++ 	cf_xopen_source="-D_SGI_SOURCE"
++ 	;;
++-linux*|gnu*|mint*|k*bsd*-gnu) #(vi
+++linux*|uclinux*|gnu*|mint*|k*bsd*-gnu) #(vi
++ 	CF_GNU_SOURCE
++ 	;;
++ mirbsd*) #(vi
++diff -durN ncurses-5.9.orig/configure ncurses-5.9/configure
++--- ncurses-5.9.orig/configure	2016-08-21 15:21:50.789285661 +0200
+++++ ncurses-5.9/configure	2016-08-21 15:24:35.187463625 +0200
++@@ -6984,7 +6984,7 @@
++ irix[56].*) #(vi
++ 	cf_xopen_source="-D_SGI_SOURCE"
++ 	;;
++-linux*|gnu*|mint*|k*bsd*-gnu) #(vi
+++linux*|uclinux*|gnu*|mint*|k*bsd*-gnu) #(vi
 + 
-+-- 
-+2.5.5
-+
--- 
-2.5.5
++ echo "$as_me:6996: checking if we must define _GNU_SOURCE" >&5
++ echo $ECHO_N "checking if we must define _GNU_SOURCE... $ECHO_C" >&6
