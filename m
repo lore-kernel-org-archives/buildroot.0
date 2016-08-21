@@ -1,37 +1,40 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 22 Aug 2016 00:20:24 +0200
-Subject: [Buildroot] [PATCH] binutils: fix bfin compile
-Message-ID: <20160821222023.GA10105@waldemar-brodkorb.de>
+Date: Mon, 22 Aug 2016 00:22:09 +0200
+Subject: [Buildroot] [PATCH] ffmpeg: fix bfin compile
+In-Reply-To: <20160820150400.4ac2b801@free-electrons.com>
+References: <20160812204110.GA2187@waldemar-brodkorb.de>
+ <20160820150400.4ac2b801@free-electrons.com>
+Message-ID: <20160821222209.GD22524@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See gcc bug for details:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77311
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/binutils/binutils.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+> Hello,
+> 
+> On Fri, 12 Aug 2016 22:41:10 +0200, Waldemar Brodkorb wrote:
+> 
+> > diff --git a/package/ffmpeg/0013-bfin-disable-optimization.patch b/package/ffmpeg/0013-bfin-disable-optimization.patch
+> > new file mode 100644
+> > index 0000000..38630d9
+> > --- /dev/null
+> > +++ b/package/ffmpeg/0013-bfin-disable-optimization.patch
+> > @@ -0,0 +1,19 @@
+> > +diff -Nur ffmpeg-2.8.7.orig/libavcodec/hevcdsp_template.c ffmpeg-2.8.7/libavcodec/hevcdsp_template.c
+> > +--- ffmpeg-2.8.7.orig/libavcodec/hevcdsp_template.c	2016-03-29 04:25:16.000000000 +0200
+> > ++++ ffmpeg-2.8.7/libavcodec/hevcdsp_template.c	2016-08-12 21:32:36.728178969 +0200
+> 
+> The patch lacks a description + SoB.
+> 
+> Also, could you please fill in a gcc PR for this issue, with a test
+> case (can be just the pre-processed hevcdsp_template.c file from
+> ffmpeg), and reference this PR in the patch description?
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 2936eb5..1defbb1 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -71,6 +71,12 @@ endif
- BINUTILS_CONF_ENV += ac_cv_prog_MAKEINFO=missing
- HOST_BINUTILS_CONF_ENV += ac_cv_prog_MAKEINFO=missing
- 
-+# gcc bug with Os/O2/O3
-+# error: unable to find a register to spill in class 'CCREGS'
-+ifeq ($(BR2_bfin),y)
-+BINUTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O1"
-+endif
-+
- # Install binutils after busybox to prefer full-blown utilities
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- BINUTILS_DEPENDENCIES += busybox
--- 
-2.1.4
+Okay, v2 sent, bug reported to gcc people.
+
+best regards
+ Waldemar
