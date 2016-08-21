@@ -1,44 +1,32 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 21 Aug 2016 20:18:06 +0300
-Subject: [Buildroot] [PATCH] tstools: requires dynamic library support
-Message-ID: <a130ad0abb0b921de5a8f1998ce2cde407082f09.1471799886.git.baruch@tkos.co.il>
+Date: Sun, 21 Aug 2016 21:01:29 +0300
+Subject: [Buildroot] [PATCH 1/1] how to install output/img on the
+ beaglebone
+In-Reply-To: <CAJe0E3etz3VTE_04ojkwhjifuMu4wjuazRKQZusG1DbE6B5shw@mail.gmail.com>
+References: <1471791606-13449-1-git-send-email-guillaume.bressaix@gmail.com>
+ <20160821151125.j3keohru5kirqef5@tarshish>
+ <CAJe0E3etz3VTE_04ojkwhjifuMu4wjuazRKQZusG1DbE6B5shw@mail.gmail.com>
+Message-ID: <20160821180129.ztpvh5jnnztitoib@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tstools Makefile tries to build shared libtstools.so library unconditionally.
+Hi Guillaume,
 
-Fixes:
-http://autobuild.buildroot.net/results/208/20830bccab8508aab215c5fc8010e180cc68af51/
-http://autobuild.buildroot.net/results/988/9882f93e11dbaba8c6973bedc9d00dbb238a4c06/
-http://autobuild.buildroot.net/results/11c/11c802bcfab70a0a2593079657529c763fd82aa1/
+On Sun, Aug 21, 2016 at 07:15:41PM +0200, Guillaume William Bres wrote:
+> > Have you tested that following these instructions lead to a working
+> > BeagleBone
+> > system?
+> 
+> yes it works perfectly fine
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/tstools/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+Great. You should mention it in the commit log then.
 
-diff --git a/package/tstools/Config.in b/package/tstools/Config.in
-index f5dd138c4d12..ca5f8fc2ca3d 100644
---- a/package/tstools/Config.in
-+++ b/package/tstools/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_TSTOOLS
- 	bool "tstools"
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  This is a set of cross-platform command line tools for working with
- 	  MPEG data.
-@@ -14,3 +15,7 @@ config BR2_PACKAGE_TSTOOLS
- 	  data on DVDs.
- 
- 	  https://github.com/kynesim/tstools/
-+
-+comment "tstools needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS
+baruch
+
 -- 
-2.8.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
