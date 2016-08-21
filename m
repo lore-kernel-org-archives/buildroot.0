@@ -1,61 +1,61 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 21 Aug 2016 23:36:49 +0200
-Subject: [Buildroot] [PATCH 2/2] package/trousers: fix musl build
-In-Reply-To: <1471815409-25953-1-git-send-email-romain.naour@gmail.com>
-References: <1471815409-25953-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1471815409-25953-2-git-send-email-romain.naour@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 22 Aug 2016 00:14:22 +0200
+Subject: [Buildroot] [PATCH v2] ffmpeg: fix bfin compile
+Message-ID: <20160821221421.GA7744@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The musl libc doesn't provide <bits/local_lim.h>, use <limits.h>
-instead.
+A gcc bug is triggered when Os/O2/O3 is used to compile the function.
+Just force O1 for the problematic function for Blackfin.
+See gcc bug report:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77311
 
 Fixes:
-http://autobuild.buildroot.net/results/f71/f71edcf08f31029ef642415b8351ed14767c8e0e
+  http://autobuild.buildroot.net/results/1118d568959006b7f973761884fd3f4b63be19b1/
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- ..._param-include-limits.h-to-fix-musl-build.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/trousers/0003-tsp_tcsi_param-include-limits.h-to-fix-musl-build.patch
+v1 -> v2:
+ - report bug to gcc project add SoB to patch, requested by Thomas Petazzoni
+---
+ .../ffmpeg/0013-bfin-disable-optimization.patch    | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/ffmpeg/0013-bfin-disable-optimization.patch
 
-diff --git a/package/trousers/0003-tsp_tcsi_param-include-limits.h-to-fix-musl-build.patch b/package/trousers/0003-tsp_tcsi_param-include-limits.h-to-fix-musl-build.patch
+diff --git a/package/ffmpeg/0013-bfin-disable-optimization.patch b/package/ffmpeg/0013-bfin-disable-optimization.patch
 new file mode 100644
-index 0000000..f88e47a
+index 0000000..1d8a4f0
 --- /dev/null
-+++ b/package/trousers/0003-tsp_tcsi_param-include-limits.h-to-fix-musl-build.patch
-@@ -0,0 +1,29 @@
-+From 66bbe0a87818a1e3c721780dc33b2d81fdf4a774 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sun, 21 Aug 2016 23:32:10 +0200
-+Subject: [PATCH] tsp_tcsi_param: include limits.h to fix musl build
++++ b/package/ffmpeg/0013-bfin-disable-optimization.patch
+@@ -0,0 +1,26 @@
++Fix bfin compile error
 +
-+The musl libc doesn't provide <bits/local_lim.h>, use <limits.h>
-+instead.
++See gcc bug report:
++https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77311
 +
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/tspi/tsp_tcsi_param.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +
-+diff --git a/src/tspi/tsp_tcsi_param.c b/src/tspi/tsp_tcsi_param.c
-+index 670f86f..8f2b4e4 100644
-+--- a/src/tspi/tsp_tcsi_param.c
-++++ b/src/tspi/tsp_tcsi_param.c
-+@@ -11,7 +11,7 @@
-+ #include <stdlib.h>
-+ #include <string.h>
-+ #include <stdio.h>
-+-#include <bits/local_lim.h>
-++#include <limits.h>
-+ #include "trousers/tss.h"
-+ #include "trousers/trousers.h"
-+ #include "trousers_types.h"
-+-- 
-+2.5.5
-+
++diff -Nur ffmpeg-2.8.7.orig/libavcodec/hevcdsp_template.c ffmpeg-2.8.7/libavcodec/hevcdsp_template.c
++--- ffmpeg-2.8.7.orig/libavcodec/hevcdsp_template.c	2016-03-29 04:25:16.000000000 +0200
+++++ ffmpeg-2.8.7/libavcodec/hevcdsp_template.c	2016-08-12 21:32:36.728178969 +0200
++@@ -1517,7 +1517,14 @@
++ #define TQ2 pix[2  * xstride + 3 * ystride]
++ #define TQ3 pix[3  * xstride + 3 * ystride]
++ 
++-static void FUNC(hevc_loop_filter_luma)(uint8_t *_pix,
+++// Blackfin gcc 6.1.x fails with
+++// unable to find a register to spill in class CCREGS
+++#if defined(__bfin__)
+++#define disable_opt __attribute__ ((optimize("O1")))
+++#else
+++#define disable_opt 
+++#endif
+++static void disable_opt FUNC(hevc_loop_filter_luma)(uint8_t *_pix,
++                                         ptrdiff_t _xstride, ptrdiff_t _ystride,
++                                         int beta, int *_tc,
++                                         uint8_t *_no_p, uint8_t *_no_q)
 -- 
-2.5.5
+2.1.4
