@@ -1,40 +1,33 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 22 Aug 2016 00:22:09 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: fix bfin compile
-In-Reply-To: <20160820150400.4ac2b801@free-electrons.com>
-References: <20160812204110.GA2187@waldemar-brodkorb.de>
- <20160820150400.4ac2b801@free-electrons.com>
-Message-ID: <20160821222209.GD22524@waldemar-brodkorb.de>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Mon, 22 Aug 2016 03:52:15 +0200
+Subject: [Buildroot] [PATCH 1/2] board/pc/readme.txt: fix output image name
+Message-ID: <20160822015216.425-1-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+The instructions listed sdcard.img as output image name but
+board/pc/genimage-*.cfg generate it named as disk.img instead.
 
-> Hello,
-> 
-> On Fri, 12 Aug 2016 22:41:10 +0200, Waldemar Brodkorb wrote:
-> 
-> > diff --git a/package/ffmpeg/0013-bfin-disable-optimization.patch b/package/ffmpeg/0013-bfin-disable-optimization.patch
-> > new file mode 100644
-> > index 0000000..38630d9
-> > --- /dev/null
-> > +++ b/package/ffmpeg/0013-bfin-disable-optimization.patch
-> > @@ -0,0 +1,19 @@
-> > +diff -Nur ffmpeg-2.8.7.orig/libavcodec/hevcdsp_template.c ffmpeg-2.8.7/libavcodec/hevcdsp_template.c
-> > +--- ffmpeg-2.8.7.orig/libavcodec/hevcdsp_template.c	2016-03-29 04:25:16.000000000 +0200
-> > ++++ ffmpeg-2.8.7/libavcodec/hevcdsp_template.c	2016-08-12 21:32:36.728178969 +0200
-> 
-> The patch lacks a description + SoB.
-> 
-> Also, could you please fill in a gcc PR for this issue, with a test
-> case (can be just the pre-processed hevcdsp_template.c file from
-> ffmpeg), and reference this PR in the patch description?
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+---
+ board/pc/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Okay, v2 sent, bug reported to gcc people.
-
-best regards
- Waldemar
+diff --git a/board/pc/readme.txt b/board/pc/readme.txt
+index 33b479d..68ca211 100644
+--- a/board/pc/readme.txt
++++ b/board/pc/readme.txt
+@@ -24,7 +24,7 @@ Bare PC sample config
+ 
+   Write the image to a pendrive:
+ 
+-  $ dd if=output/images/sdcard.img of=/dev/sdc; sync
++  $ dd if=output/images/disk.img of=/dev/sdc; sync
+ 
+   Once it's done insert it into the target PC and boot.
+ 
+-- 
+2.9.3
