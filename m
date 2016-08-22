@@ -1,60 +1,35 @@
-From: Connolly, Padraig <padraig.connolly@intel.com>
-Date: Mon, 22 Aug 2016 13:54:11 +0000
-Subject: [Buildroot] [PATCH] [RFC] platform: update galileo to 3.14
- kernel
-In-Reply-To: <1471870479.4887.212.camel@linux.intel.com>
-References: <1471868735-13766-1-git-send-email-padraig.connolly@intel.com>
- <1471870016.4887.210.camel@linux.intel.com>
- <1471870479.4887.212.camel@linux.intel.com>
-Message-ID: <E704BB48EC9FDF4FA0A7A278C2546ACFE2561D@irsmsx105.ger.corp.intel.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Aug 2016 15:59:11 +0200
+Subject: [Buildroot] [PATCH 1/1] trousers: fix build issue with musl
+In-Reply-To: <57BB03B7.2090600@imgtec.com>
+References: <1471694164-2094-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <20160820144139.77d3e36a@free-electrons.com>
+ <57BB03B7.2090600@imgtec.com>
+Message-ID: <20160822155911.648e20e5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Andy,
+Hello,
 
-I will use that in future emails thanks for the heads up.
+On Mon, 22 Aug 2016 19:22:55 +0530, Rahul Bedarkar wrote:
 
-Everything is working with the upstream kernel, I am just keeping it up to date with the current Intel Galileo BSP kernel.
-
-Yes I am currently working at Intel. If you need help with this infrastructure, I can assist with the integration process of the Galileo Board.
-
-Thanks,
-
-Padraig Connolly <padraig.connolly@intel.com>
-Intel Shannon IRE
-
-On Mon, 2016-08-22 at 15:46 +0300, Andy Shevchenko wrote:
-> On Mon, 2016-08-22 at 13:25 +0100, Padraig James Connolly wrote:
-> > 
-> > Updating kernel for Galileo board BSP from 3.8 to 3.14
-> > ?*Changed board defconfig to pull new 3.14 kernel
-> > ?*New kernel config file for 3.14 kernel
-> > ?*Changed defconfig to use new kernel config
-> > ?*Removed old 3.8 kernel config
+> Thanks for comments. Even on Trousers project mailing list someone 
+> proposed similar patch. 
+> https://sourceforge.net/p/trousers/mailman/message/35261558/
 > 
-> What is not working with the upstream kernel?
-> 
-> Btw, we are preparing some common infrastructure for Intel boards for 
-> Buildroot (*), it would be nice to re-integrate Galileo there as well.
-> 
-> (*) Will be published at some point later when we have done some 
-> testing, though seems you are working for Intel, so, we can show you 
-> this earlier.
-> 
-> > 
-> > 
-> > ?Signed-off-by: Padraig Connolly <padraig.connolly@intel.com>
-> > ---
-> > ?board/intel/galileo/linux-3.14.config | 308
-> > ++++++++++++++++++++++++++++++++++
-> > ?board/intel/galileo/linux-3.8.config??| 307 -----------------------
-> > ----------
+> Since we can't download it and it's based on upstream master branch, I 
+> will add separate patch here and I don't need to submit it upstream as 
+> it's likely to get merged.
 
-Btw, for patches like this don't forget to add -C -M to get only changes.
+Romain has been faster than you:
 
---
-Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Intel Finland Oy
+  https://patchwork.ozlabs.org/patch/661295/
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
