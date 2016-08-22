@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Aug 2016 16:32:09 +0200
-Subject: [Buildroot] [git commit] board/pc/readme.txt: fix output image name
-Message-ID: <20160822143222.2B66B8212E@busybox.osuosl.org>
+Date: Mon, 22 Aug 2016 16:33:37 +0200
+Subject: [Buildroot] [PATCH] [RFC] platform: update galileo to 3.14
+ kernel
+In-Reply-To: <1471868735-13766-1-git-send-email-padraig.connolly@intel.com>
+References: <1471868735-13766-1-git-send-email-padraig.connolly@intel.com>
+Message-ID: <20160822163337.484cb311@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4249837f422c8d560d38693c132dd7be58cbb900
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The instructions listed sdcard.img as output image name but
-board/pc/genimage-*.cfg generate it named as disk.img instead.
+On Mon, 22 Aug 2016 13:25:35 +0100, Padraig James Connolly wrote:
+> Updating kernel for Galileo board BSP from 3.8 to 3.14
+>  *Changed board defconfig to pull new 3.14 kernel
+>  *New kernel config file for 3.14 kernel
+>  *Changed defconfig to use new kernel config
+>  *Removed old 3.8 kernel config
+> 
+>  Signed-off-by: Padraig Connolly <padraig.connolly@intel.com>
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/pc/readme.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Following the comments from Andy, I've marked this patch as Rejected.
+We indeed very much prefer defconfig that use the mainline kernel when
+possible.
 
-diff --git a/board/pc/readme.txt b/board/pc/readme.txt
-index 33b479d..68ca211 100644
---- a/board/pc/readme.txt
-+++ b/board/pc/readme.txt
-@@ -24,7 +24,7 @@ Bare PC sample config
- 
-   Write the image to a pendrive:
- 
--  $ dd if=output/images/sdcard.img of=/dev/sdc; sync
-+  $ dd if=output/images/disk.img of=/dev/sdc; sync
- 
-   Once it's done insert it into the target PC and boot.
- 
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
