@@ -1,39 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Aug 2016 17:21:31 +0200
-Subject: [Buildroot] [PATCH v2] ffmpeg: fix bfin compile
-In-Reply-To: <20160821221421.GA7744@waldemar-brodkorb.de>
-References: <20160821221421.GA7744@waldemar-brodkorb.de>
-Message-ID: <20160822172131.222e06fe@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 22 Aug 2016 17:30:47 +0200
+Subject: [Buildroot] [PATCH] pcre: fix compile error for m68k coldfire
+In-Reply-To: <20160819212456.GY22524@waldemar-brodkorb.de> (Waldemar
+ Brodkorb's message of "Fri, 19 Aug 2016 23:24:56 +0200")
+References: <20160818062535.GA28475@waldemar-brodkorb.de>
+ <20160819231348.2127118e@free-electrons.com>
+ <20160819212456.GY22524@waldemar-brodkorb.de>
+Message-ID: <8737lwstw8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-On Mon, 22 Aug 2016 00:14:22 +0200, Waldemar Brodkorb wrote:
-> A gcc bug is triggered when Os/O2/O3 is used to compile the function.
-> Just force O1 for the problematic function for Blackfin.
-> See gcc bug report:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77311
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/1118d568959006b7f973761884fd3f4b63be19b1/
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> v1 -> v2:
->  - report bug to gcc project add SoB to patch, requested by Thomas Petazzoni
-> ---
->  .../ffmpeg/0013-bfin-disable-optimization.patch    | 26 ++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/ffmpeg/0013-bfin-disable-optimization.patch
+Hi,
 
-Applied to master, thanks.
+ >> 3/ Decide that we don't support BR2_BINFMT_FLAT_SEP_DATA at all on
+ >> m68k. On master, BR2_BINFMT_FLAT_ONE was not available for m68k due
+ >> to kernel issues, but they have been resolved, and
+ >> BR2_BINFMT_FLAT_ONE is now enabled on m68k in the next branch. So I
+ >> would suggest to also enable BR2_BINFMT_FLAT_ONE on m68k in master,
+ >> disallow the selection of BR2_BINFMT_FLAT_SEP_DATA. If in the
+ >> future someone is interested by -msep-data on m68k, this person can
+ >> always restart the work and see how to fix the issues.
 
-Thomas
+ > I vote for 3)
+
+Yeah, me too.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
