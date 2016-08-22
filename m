@@ -1,47 +1,56 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Mon, 22 Aug 2016 15:54:39 +0300
-Subject: [Buildroot] [PATCH] [RFC] platform: update galileo to 3.14
- kernel
-In-Reply-To: <1471870016.4887.210.camel@linux.intel.com>
-References: <1471868735-13766-1-git-send-email-padraig.connolly@intel.com>
- <1471870016.4887.210.camel@linux.intel.com>
-Message-ID: <1471870479.4887.212.camel@linux.intel.com>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Mon, 22 Aug 2016 19:22:55 +0530
+Subject: [Buildroot] [PATCH 1/1] trousers: fix build issue with musl
+In-Reply-To: <20160820144139.77d3e36a@free-electrons.com>
+References: <1471694164-2094-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <20160820144139.77d3e36a@free-electrons.com>
+Message-ID: <57BB03B7.2090600@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2016-08-22 at 15:46 +0300, Andy Shevchenko wrote:
-> On Mon, 2016-08-22 at 13:25 +0100, Padraig James Connolly wrote:
-> > 
-> > Updating kernel for Galileo board BSP from 3.8 to 3.14
-> > ?*Changed board defconfig to pull new 3.14 kernel
-> > ?*New kernel config file for 3.14 kernel
-> > ?*Changed defconfig to use new kernel config
-> > ?*Removed old 3.8 kernel config
-> 
-> What is not working with the upstream kernel?
-> 
-> Btw, we are preparing some common infrastructure for Intel boards for
-> Buildroot (*), it would be nice to re-integrate Galileo there as well.
-> 
-> (*) Will be published at some point later when we have done some
-> testing, though seems you are working for Intel, so, we can show you
-> this earlier.
-> 
-> > 
-> > 
-> > ?Signed-off-by: Padraig Connolly <padraig.connolly@intel.com>
-> > ---
-> > ?board/intel/galileo/linux-3.14.config | 308
-> > ++++++++++++++++++++++++++++++++++
-> > ?board/intel/galileo/linux-3.8.config??| 307 -----------------------
-> > ----------
+Hi Thomas,
 
-Btw, for patches like this don't forget to add -C -M to get only
-changes.
+On Saturday 20 August 2016 06:11 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+>
+> This seems like the wrong approach to fix the problem. Indeed, musl
+> does have a definition of HOST_NAME_MAX, except it's in <limits.h>.
+>
+> uClibc and glibc also have HOST_NAME_MAX defined when <limits.h> is
+> included, so the right fix is to drop completely the <bits/local_lim.h>
+> inclusion, and include <limits.h> instead.
+>
+> I've tested the following program:
+>
+> ==
+> #include <limits.h>
+> #include <stdio.h>
+>
+> int main(void)
+> {
+> 	printf("%d\n", HOST_NAME_MAX);
+> 	return 0;
+> }
+> ==
+>
+> and it builds fine with glibc, uClibc and musl.
+>
+> Could you rework your patch accordingly, and also submit the patch
+> upstream to the trousers project?
+>
 
--- 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Intel Finland Oy
+Thanks for comments. Even on Trousers project mailing list someone 
+proposed similar patch. 
+https://sourceforge.net/p/trousers/mailman/message/35261558/
+
+Since we can't download it and it's based on upstream master branch, I 
+will add separate patch here and I don't need to submit it upstream as 
+it's likely to get merged.
+
+
+Thanks,
+Rahul
