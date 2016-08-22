@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Aug 2016 16:33:37 +0200
-Subject: [Buildroot] [PATCH] [RFC] platform: update galileo to 3.14
- kernel
-In-Reply-To: <1471868735-13766-1-git-send-email-padraig.connolly@intel.com>
-References: <1471868735-13766-1-git-send-email-padraig.connolly@intel.com>
-Message-ID: <20160822163337.484cb311@free-electrons.com>
+Date: Mon, 22 Aug 2016 16:36:16 +0200
+Subject: [Buildroot] [PATCH 3/3] arch/arm: Add ARMV8 (aarch32) toolchain
+ config.
+In-Reply-To: <1471860748-5126-1-git-send-email-flatmax@flatmax.org>
+References: <1471860748-5126-1-git-send-email-flatmax@flatmax.org>
+Message-ID: <20160822163616.5fb14ccb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 22 Aug 2016 13:25:35 +0100, Padraig James Connolly wrote:
-> Updating kernel for Galileo board BSP from 3.8 to 3.14
->  *Changed board defconfig to pull new 3.14 kernel
->  *New kernel config file for 3.14 kernel
->  *Changed defconfig to use new kernel config
->  *Removed old 3.8 kernel config
-> 
->  Signed-off-by: Padraig Connolly <padraig.connolly@intel.com>
+On Mon, 22 Aug 2016 20:12:28 +1000, Matt Flax wrote:
 
-Following the comments from Andy, I've marked this patch as Rejected.
-We indeed very much prefer defconfig that use the mainline kernel when
-possible.
+> @@ -174,8 +177,7 @@ config BR2_cortex_a53
+>  	bool "cortex-A53"
+
+It seems like this patch makes the assumption the previous Cortex-A53
+patch has been applied.
+
+Could you instead send a patch series that includes both patches
+together. Don't *merge* the patches, just send them together in the
+same series. It will also be less confusing than this standalone patch
+labeled PATCH 3/3.
+
+Also, I believe we need to merge arch/Config.in.aarch64 back into
+arch/Config.in.arm in order to handle both 32 bits and 64 bits ARM
+cores in the same Config.in.arm file, like we're doing for
+Config.in.x86. Otherwise, we will end up duplicating all the ARM core
+definitions for the 64 bits capable ones.
 
 Thanks!
 
