@@ -1,65 +1,55 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Mon, 22 Aug 2016 11:03:58 +0200
-Subject: [Buildroot] systemd-timesyncd doesn't start with default config
- and skeleton
-In-Reply-To: <20160822085101.GA5779@free.fr>
-References: <e487aac1-f199-42d0-1211-4add9c5718bf@gmail.com>
- <20160822085101.GA5779@free.fr>
-Message-ID: <78aeaa18-9631-65df-dc9b-2ddb1ff16190@gmail.com>
+From: Jeroen Roovers <jer@airfi.aero>
+Date: Mon, 22 Aug 2016 11:57:00 +0200
+Subject: [Buildroot] [PATCH 1/1] added comments on how to install the
+	system
+In-Reply-To: <20160821124604.vtzsuyrz5tgnapve@tarshish>
+References: <1471774436-18803-1-git-send-email-guillaume.bressaix@gmail.com>
+ <20160821124604.vtzsuyrz5tgnapve@tarshish>
+Message-ID: <CANCHnQrg6u4czJBeQub+qFTD5PwWxry-nxgGDDEM7SE-s9jLBQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
-
-
-great, thx, i overlooked that thread. I'll dedicate some time to review
-that patchset as well, in the meantime i'll just add a a post-build script.
-
-Thanks, regards
-zgyarmati
-
-On 2016-08-22 10:51, Yann E. MORIN wrote:
-> Zoltan, All,
+On 21 August 2016 at 14:46, Baruch Siach <baruch@tkos.co.il> wrote:
 >
-> On 2016-08-22 10:41 +0200, Zoltan Gyarmati spake thusly:
->> Dear All,
->> with version 2016.08-rc2, with the default systemd configuration the
->> systemd-timesyncd start fails with the error msg:
->>
->> buildroot systemd[115]: systemd-timesyncd.service: Failed at step
->> NAMESPACE spawning /lib/systemd/systemd-timesyncd: No such file or directory
->>
->>  It seems that the problem is that in the default rootfs skeleton the
->> /var/tmp dir is a symlink to /tmp, and in
->> /usr/lib/systemd/system/systemd-timesyncd.service the PrivateTmp
->> variable is set.
->> Either removing the PrivateTmp=yes or making /var/tmp a directory on its
->> own solves the issue. What solution would be preferable to fix this?
-> The best solution is that I get to finish my skeleton-revamp series and
-> get it merged( first was submitted on the lkist, second is WIP taking
-> into account the comments that were made on the first):
->     https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/systemd-skeleton
->     https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/systemd-skeleton-2
+> Hi Guillaume W. Bres,
 >
-> Unfortunately, that won't be in 2016.08, as I haven't had time to finish
-> it properly before rc1. So it will only go in for next cycle... :-/
+> On Sun, Aug 21, 2016 at 12:13:56PM +0200, Guillaume W. Bres wrote:
+> > +The first partition, /dev/sdb1 in this example, should be a bootable FAT16 partition.
+> > +The second partition, /dev/sdb2 in this example, should be an EXT4 partition.
+
+See below.
+
 >
-> In the meantime, just use a post-build script that cleans up the mess,
-> like tweaking the unit file to not require PrivateTmp, or to remove the
-> /var/tmp symlink and make it a directory.
+> > +sudo cp output/images/{MLO,u-boot.img,zImage} /dev/sdb1
+> > +sudo cp output/images/am335x-bone.dtb /dev/sdb1 -- for the beaglebone
+> > +sudo cp output/images/am335x-boneblack.dtb /dev/sdb1 -- for the beaglebone black
 >
-> Regards,
-> Yann E. MORIN.
->
+> Have you tested these commands? They overwrite the raw /dev/sdb1 block device,
+> instead of copying files into the FAT filesystem.
+
+Indeed, that is not the way. It's more complicated than that. We would
+need to create a separate FAT16 image besides the rootfs image,
+loop-mount the former and then copy those files to the mounted image
+file.
+
+An additional useful step to describe would be to copy the rootfs to
+the FAT16 image as well, which is needed if you want to forego the
+second partition and use the rootfs as an initramfs.
 
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 473 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160822/6d1161d5/attachment.asc>
+>
+> An easier approach might be to document the use of the generated sdcard.img
+> file. sdcard.img support for BeagleBone is now in the buildroot master branch;
+> soon to be 2016.08. See board/acmesystems/arietta-g25/readme.txt as an
+> example.
+>
+> > +sudo dd if=output/images/rootfs.ext4 of=/dev/sdb2
+
+But that wouldn't describe the required FAT16 image as intended.
+
+
+Regards,
+     jer
