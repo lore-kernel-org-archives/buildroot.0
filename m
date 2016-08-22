@@ -1,26 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Aug 2016 22:46:24 +0200
-Subject: [Buildroot] [PATCH/next] glibc: remove unnecessary !BR2_sparc
-	dependencies
-In-Reply-To: <1471702321-31840-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 20 Aug 2016 16:12:01 +0200")
-References: <1471702321-31840-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87a8g4pm5b.fsf@dell.be.48ers.dk>
+Date: Mon, 22 Aug 2016 22:45:29 +0200
+Subject: [Buildroot] [git commit branch/next] glibc: remove unnecessary
+	!BR2_sparc dependencies
+Message-ID: <20160822204728.D2E5E81D8A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0b7bf72aa49b617494eb3250e97a69b61f21dff2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > The BR2_TOOLCHAIN_BUILDROOT_GLIBC option is already not selectable on
- > BR2_sparc, so there is no need to have an additional "depends on
- > !BR2_sparc" on each of the glibc versions.
+The BR2_TOOLCHAIN_BUILDROOT_GLIBC option is already not selectable on
+BR2_sparc, so there is no need to have an additional "depends on
+!BR2_sparc" on each of the glibc versions.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/glibc/Config.in | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index de95cb2..85aace6 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -12,20 +12,14 @@ choice
+ 
+ config BR2_GLIBC_VERSION_2_22
+ 	bool "2.22"
+-	# No support for pthread barriers on < v9 ISA
+-	depends on !BR2_sparc
+ 	# Too old to build with gcc >= 6.x
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
+ config BR2_GLIBC_VERSION_2_23
+ 	bool "2.23"
+-	# No support for pthread barriers on < v9 ISA
+-	depends on !BR2_sparc
+ 
+ config BR2_GLIBC_VERSION_2_24
+ 	bool "2.24"
+-	# No support for pthread barriers on < v9 ISA
+-	depends on !BR2_sparc
+ 	# Linux 3.2 or later kernel headers are required on all arches.
+ 	# See: https://sourceware.org/ml/libc-alpha/2016-08/msg00212.html
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
