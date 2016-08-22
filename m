@@ -1,38 +1,53 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 22 Aug 2016 21:49:11 +0200
-Subject: [Buildroot] Analysis of build results for 2016-08-08
-In-Reply-To: <17850212-c769-63c4-f05b-79adc47f470c@gmail.com>
-References: <20160809063032.89898101A55@stock.ovh.net>
- <20160809141535.4c9b8169@free-electrons.com>
- <17850212-c769-63c4-f05b-79adc47f470c@gmail.com>
-Message-ID: <34622bb9-7ff7-2d15-fa97-e5ed6570034b@gmail.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Mon, 22 Aug 2016 23:49:15 +0200
+Subject: [Buildroot] [PATCH v2 1/1] configs/pc_x86_64_efi_defconfig: enable
+	kernel EFI support
+Message-ID: <20160822214915.6640-1-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Julien, Thomas,
+The pc_x86_64_efi reference defconfig is targeted towards an EFI
+environment but the kernel which comes with it does not enable EFI
+support by default.
 
-Le 09/08/2016 ? 16:07, Romain Naour a ?crit :
-> Hi Thomas, All,
-> 
-> [snip]
-> 
->>>          arm |                host-efl-1.17.2 | NOK | http://autobuild.buildroot.net/results/89bf12f8333d47af0cb5775c859e26f300af56cc/
->>
->> edje_cc: Critical. Unable to open temp file "(null)" for pre-processor.
->>
->> Romain? This looks like a transient error, but I'm not sure.
-> 
-> I already seen this issue on autobuilders but I'm not able to reproduce it
-> locally...
+Booting this defconfig without kernel EFI support on a qemu virtual
+machine with EFI firmware resulted in no output to tty1 or ttyS0.
+Enabling EFI support in the kernel fixed this and seems saner for an EFI
+reference Buildroot defconfig.
 
-Julien, this issue occurs only on your autobuilder, can you verify if it
-reproducible. If yes, can you send me the usual files log (config.log, build log
-etc)
+Adding CONFIG_EFI to board/pc/linux-extras.config also affects
+pc_x86_64_bios_defconfig which doesn't require it, however it was
+observed that the extra overhead is small and so this is preferred
+rather than having a separate config file.
 
-http://autobuild.buildroot.net/?reason=host-efl-1.17.2
+This was tested with qemu 2.6.0 running with kvm enabled and firmware
+EFI v2.60 by EDK II. Also built and verified bios defconfig on the same
+setup but with BIOS firmware instead.
 
-Best regards,
-Romain
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+Changes v1 -> v2:
+  - moved CONFIG_EFI to board/pc/linux-extras.config as the overhead is
+    small and this is preferred rather than having a separate config
+    file. (Suggested by Thomas Petazzoni and Gustavo Zacarias)
+---
+ board/pc/linux-extras.config | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/board/pc/linux-extras.config b/board/pc/linux-extras.config
+index 3d8cc33..8c9c225 100644
+--- a/board/pc/linux-extras.config
++++ b/board/pc/linux-extras.config
+@@ -40,3 +40,6 @@ CONFIG_RT2800USB_RT53XX=y
+ CONFIG_RT2800USB_RT55XX=y
+ # CONFIG_RTL_CARDS is not set
+ CONFIG_RTL8XXXU=m
++
++# EFI support
++CONFIG_EFI=y
+-- 
+2.9.3
