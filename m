@@ -1,41 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 17:56:32 +0200
-Subject: [Buildroot] [git commit] libksba: bump to version 1.3.5
-Message-ID: <20160902142939.403407FB67@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 22 Aug 2016 22:45:29 +0200
+Subject: [Buildroot] [git commit] glibc: remove unnecessary !BR2_sparc
+	dependencies
+Message-ID: <20160902142938.BF9347FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a0a0b9af67f3728ee669bf85e2a0ec62a60a184
+commit: https://git.buildroot.net/buildroot/commit/?id=0b7bf72aa49b617494eb3250e97a69b61f21dff2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libksba/libksba.hash | 2 +-
- package/libksba/libksba.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The BR2_TOOLCHAIN_BUILDROOT_GLIBC option is already not selectable on
+BR2_sparc, so there is no need to have an additional "depends on
+!BR2_sparc" on each of the glibc versions.
 
-diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
-index 92abbab..f0a38f3 100644
---- a/package/libksba/libksba.hash
-+++ b/package/libksba/libksba.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	f6c2883cebec5608692d8730843d87f237c0964d923bbe7aa89c05f20558ad4f	libksba-1.3.4.tar.bz2
-+sha256	41444fd7a6ff73a79ad9728f985e71c9ba8cd3e5e53358e70d5f066d35c1a340	libksba-1.3.5.tar.bz2
-diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
-index 40a8c9b..e29b6ae 100644
---- a/package/libksba/libksba.mk
-+++ b/package/libksba/libksba.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/glibc/Config.in | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index de95cb2..85aace6 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -12,20 +12,14 @@ choice
  
--LIBKSBA_VERSION = 1.3.4
-+LIBKSBA_VERSION = 1.3.5
- LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
- LIBKSBA_SITE = ftp://ftp.gnupg.org/gcrypt/libksba
- LIBKSBA_LICENSE = LGPLv3+ or GPLv2+ (library, headers), GPLv3+ (manual, tests, build system)
+ config BR2_GLIBC_VERSION_2_22
+ 	bool "2.22"
+-	# No support for pthread barriers on < v9 ISA
+-	depends on !BR2_sparc
+ 	# Too old to build with gcc >= 6.x
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
+ config BR2_GLIBC_VERSION_2_23
+ 	bool "2.23"
+-	# No support for pthread barriers on < v9 ISA
+-	depends on !BR2_sparc
+ 
+ config BR2_GLIBC_VERSION_2_24
+ 	bool "2.24"
+-	# No support for pthread barriers on < v9 ISA
+-	depends on !BR2_sparc
+ 	# Linux 3.2 or later kernel headers are required on all arches.
+ 	# See: https://sourceware.org/ml/libc-alpha/2016-08/msg00212.html
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
