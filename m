@@ -1,33 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Aug 2016 16:44:46 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/pc_x86_64_efi_defconfig: enable
- kernel EFI support
-In-Reply-To: <014f0b85214e71fdfe5a9fec8c683273@zacarias.com.ar>
-References: <20160822015216.425-1-nunes.erico@gmail.com>
- <20160822015216.425-2-nunes.erico@gmail.com>
- <20160822163741.021a7577@free-electrons.com>
- <014f0b85214e71fdfe5a9fec8c683273@zacarias.com.ar>
-Message-ID: <20160822164446.26484ffb@free-electrons.com>
+Date: Mon, 22 Aug 2016 16:38:00 +0200
+Subject: [Buildroot] [git commit branch/next] lirc-tools: enable for musl
+Message-ID: <20160822144525.2C509820EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=516b521554c0361f888c85d78707f42b9b8cd8db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 22 Aug 2016 11:40:16 -0300, Gustavo Zacarias wrote:
+Upstream removed use of the GLOB_BRACE glob(3) GNU extension in release 0.9.4
+(commits 493857625 and 8bff82ed9c). See
+https://sourceforge.net/p/lirc/tickets/174/.
 
-> Indeed, it won't hurt a bit, the main difference between the bios and 
-> efi defconfigs is the bootloader strategy, so on the kernel side "just 
-> give it the feature".
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lirc-tools/Config.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Thanks for the feedback. Erico, could you adjust your patch accordingly?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/lirc-tools/Config.in b/package/lirc-tools/Config.in
+index 60476b7..6eaf828 100644
+--- a/package/lirc-tools/Config.in
++++ b/package/lirc-tools/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_LIRC_TOOLS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # GLOB_BRACE
+ 	# dlopen()
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+@@ -19,7 +18,7 @@ config BR2_PACKAGE_LIRC_TOOLS
+ 
+ 	  http://www.lirc.org/
+ 
+-comment "lirc-tools needs a uClibc or glibc toolchain w/ threads, dynamic library, C++"
++comment "lirc-tools needs a toolchain w/ threads, dynamic library, C++"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+-		|| !BR2_INSTALL_LIBSTDCPP || BR2_TOOLCHAIN_USES_MUSL
++		|| !BR2_INSTALL_LIBSTDCPP
