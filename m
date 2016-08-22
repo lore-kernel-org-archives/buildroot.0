@@ -1,42 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 11:46:43 +0200
-Subject: [Buildroot] [git commit] pangomm: bump to version 2.40.1
-Message-ID: <20160902142938.5E87F7FEE6@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 22 Aug 2016 23:10:09 +0200
+Subject: [Buildroot] [git commit] musl: enable mips64 support
+Message-ID: <20160902142938.CCF647FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b3ea400a07a914c9a2f9f819f6052ca6dc3e53f
+commit: https://git.buildroot.net/buildroot/commit/?id=721e1c1e9ca13f37e3d6aafb0a570fd6fb67fbea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pangomm/pangomm.hash | 4 ++--
- package/pangomm/pangomm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Add support for mips64, which is available since musl 1.1.15.
 
-diff --git a/package/pangomm/pangomm.hash b/package/pangomm/pangomm.hash
-index 4f39e51..b5d527f 100644
---- a/package/pangomm/pangomm.hash
-+++ b/package/pangomm/pangomm.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/pangomm/2.40/pangomm-2.40.0.sha256sum
--sha256	7dd0afa9dcce57cdb0aad77da9ea46823ee8515d5f3ffd895b9ede7365c3d70d	pangomm-2.40.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/pangomm/2.40/pangomm-2.40.1.sha256sum
-+sha256	9762ee2a2d5781be6797448d4dd2383ce14907159b30bc12bf6b08e7227be3af	pangomm-2.40.1.tar.xz
-diff --git a/package/pangomm/pangomm.mk b/package/pangomm/pangomm.mk
-index 2db7890..2a85e39 100644
---- a/package/pangomm/pangomm.mk
-+++ b/package/pangomm/pangomm.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+Only gcc 6.x has required support for it. Tested variations of
+little/big endian and hard/soft float.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gcc/Config.in.host              | 6 ++++++
+ toolchain/toolchain-buildroot/Config.in | 7 ++++---
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 37728e0..7262714 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -50,6 +50,8 @@ choice
+ 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		# musl ppc64 unsupported
+ 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
++		# musl mips64 unsupported
++		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+ 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+@@ -72,6 +74,8 @@ choice
+ 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		# musl ppc64 unsupported
+ 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
++		# musl mips64 unsupported
++		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
+ 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+@@ -83,6 +87,8 @@ choice
+ 		depends on !BR2_arc && !BR2_bfin
+ 		# musl ppc64 unsupported
+ 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
++		# musl mips64 unsupported
++		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+ 		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 78cac14..9fdfb42 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -68,9 +68,10 @@ comment "glibc only available with shared lib support"
  
- PANGOMM_VERSION_MAJOR = 2.40
--PANGOMM_VERSION = $(PANGOMM_VERSION_MAJOR).0
-+PANGOMM_VERSION = $(PANGOMM_VERSION_MAJOR).1
- PANGOMM_SOURCE = pangomm-$(PANGOMM_VERSION).tar.xz
- PANGOMM_SITE = http://ftp.gnome.org/pub/gnome/sources/pangomm/$(PANGOMM_VERSION_MAJOR)
- PANGOMM_LICENSE = LGPLv2.1+ (library), GPLv2+ (tools)
+ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	bool "musl"
+-	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
+-		BR2_microblaze || BR2_mips || BR2_mipsel || BR2_powerpc || \
+-		BR2_powerpc64  || BR2_powerpc64le || BR2_sh || BR2_x86_64
++	depends on BR2_aarch64	  || BR2_arm     || BR2_armeb     || BR2_i386 || \
++		   BR2_microblaze || BR2_mips    || BR2_mipsel    || BR2_mips64 || \
++		   BR2_mips64el   || BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
++		   BR2_sh         || BR2_x86_64
+ 	depends on !BR2_powerpc_SPE # not supported, build breaks
+ 	# Unsupported for MIPS R6
+ 	depends on !BR2_mips_32r6 && !BR2_mips_64r6
