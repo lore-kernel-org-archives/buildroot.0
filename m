@@ -1,38 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Aug 2016 16:46:38 +0200
-Subject: [Buildroot] [PATCH 1/2] package/trousers: needs host-pkgconf
-In-Reply-To: <1471815409-25953-1-git-send-email-romain.naour@gmail.com>
-References: <1471815409-25953-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160822164638.19e8ce13@free-electrons.com>
+Date: Mon, 22 Aug 2016 16:47:26 +0200
+Subject: [Buildroot] [git commit] board/beaglebone: add details on how to
+	use the resulting sdcard.img
+Message-ID: <20160822144738.46A918212E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1adaf87c1c4e0531694a3a6f690d0644f729bf8d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 21 Aug 2016 23:36:48 +0200, Romain Naour wrote:
-> Otherwise the build fail with this error:
-> configure.in:53: error: possibly undefined macro: AC_MSG_ERROR
->       If this token and others are legitimate, please use m4_pattern_allow.
->       See the Autoconf documentation.
-> configure.in:95: error: possibly undefined macro: AM_CONDITIONAL
-> 
-> Also, there is a PKG_CHECK_MODULES used for GTK.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/trousers/trousers.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+[Thomas: rework commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/beaglebone/readme.txt | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Both applied to master, thanks! Please don't forget to send the
-<limits.h> build fix upstream!
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
+index 43ebe53..664bde2 100644
+--- a/board/beaglebone/readme.txt
++++ b/board/beaglebone/readme.txt
+@@ -32,3 +32,13 @@ After building, you should get a tree like this:
+   ????????? u-boot.img
+   ????????? uEnv.txt
+   ????????? zImage
++
++How to write the microSD card
++=============================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
