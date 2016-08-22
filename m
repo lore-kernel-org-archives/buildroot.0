@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Aug 2016 15:59:11 +0200
-Subject: [Buildroot] [PATCH 1/1] trousers: fix build issue with musl
-In-Reply-To: <57BB03B7.2090600@imgtec.com>
-References: <1471694164-2094-1-git-send-email-rahul.bedarkar@imgtec.com>
- <20160820144139.77d3e36a@free-electrons.com>
- <57BB03B7.2090600@imgtec.com>
-Message-ID: <20160822155911.648e20e5@free-electrons.com>
+Date: Mon, 22 Aug 2016 16:32:09 +0200
+Subject: [Buildroot] [git commit] board/pc/readme.txt: fix output image name
+Message-ID: <20160822143222.2B66B8212E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4249837f422c8d560d38693c132dd7be58cbb900
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 22 Aug 2016 19:22:55 +0530, Rahul Bedarkar wrote:
+The instructions listed sdcard.img as output image name but
+board/pc/genimage-*.cfg generate it named as disk.img instead.
 
-> Thanks for comments. Even on Trousers project mailing list someone 
-> proposed similar patch. 
-> https://sourceforge.net/p/trousers/mailman/message/35261558/
-> 
-> Since we can't download it and it's based on upstream master branch, I 
-> will add separate patch here and I don't need to submit it upstream as 
-> it's likely to get merged.
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/pc/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Romain has been faster than you:
-
-  https://patchwork.ozlabs.org/patch/661295/
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/board/pc/readme.txt b/board/pc/readme.txt
+index 33b479d..68ca211 100644
+--- a/board/pc/readme.txt
++++ b/board/pc/readme.txt
+@@ -24,7 +24,7 @@ Bare PC sample config
+ 
+   Write the image to a pendrive:
+ 
+-  $ dd if=output/images/sdcard.img of=/dev/sdc; sync
++  $ dd if=output/images/disk.img of=/dev/sdc; sync
+ 
+   Once it's done insert it into the target PC and boot.
+ 
