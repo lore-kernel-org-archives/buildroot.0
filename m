@@ -1,32 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Aug 2016 16:45:40 +0200
-Subject: [Buildroot] [PATCH] lirc-tools: enable for musl
-In-Reply-To: <730163c3a1cee2a52aa6d5592c1a004c0aa5ef73.1471840773.git.baruch@tkos.co.il>
-References: <730163c3a1cee2a52aa6d5592c1a004c0aa5ef73.1471840773.git.baruch@tkos.co.il>
-Message-ID: <20160822164540.0c230a78@free-electrons.com>
+Date: Mon, 22 Aug 2016 16:46:08 +0200
+Subject: [Buildroot] [git commit] package/trousers: fix musl build
+Message-ID: <20160822144613.3A78B80409@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=996384df59114673b4f07c864f89afd1ab41d15a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 22 Aug 2016 07:39:33 +0300, Baruch Siach wrote:
-> Upstream removed use of the GLOB_BRACE glob(3) GNU extension in release 0.9.4
-> (commits 493857625 and 8bff82ed9c). See
-> https://sourceforge.net/p/lirc/tickets/174/.
-> 
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/lirc-tools/Config.in | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+The musl libc doesn't provide <bits/local_lim.h>, use <limits.h>
+instead.
 
-Applied to next, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/f71/f71edcf08f31029ef642415b8351ed14767c8e0e
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ..._param-include-limits.h-to-fix-musl-build.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/package/trousers/0003-tsp_tcsi_param-include-limits.h-to-fix-musl-build.patch b/package/trousers/0003-tsp_tcsi_param-include-limits.h-to-fix-musl-build.patch
+new file mode 100644
+index 0000000..f88e47a
+--- /dev/null
++++ b/package/trousers/0003-tsp_tcsi_param-include-limits.h-to-fix-musl-build.patch
+@@ -0,0 +1,29 @@
++From 66bbe0a87818a1e3c721780dc33b2d81fdf4a774 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 21 Aug 2016 23:32:10 +0200
++Subject: [PATCH] tsp_tcsi_param: include limits.h to fix musl build
++
++The musl libc doesn't provide <bits/local_lim.h>, use <limits.h>
++instead.
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/tspi/tsp_tcsi_param.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/tspi/tsp_tcsi_param.c b/src/tspi/tsp_tcsi_param.c
++index 670f86f..8f2b4e4 100644
++--- a/src/tspi/tsp_tcsi_param.c
+++++ b/src/tspi/tsp_tcsi_param.c
++@@ -11,7 +11,7 @@
++ #include <stdlib.h>
++ #include <string.h>
++ #include <stdio.h>
++-#include <bits/local_lim.h>
+++#include <limits.h>
++ #include "trousers/tss.h"
++ #include "trousers/trousers.h"
++ #include "trousers_types.h"
++-- 
++2.5.5
++
