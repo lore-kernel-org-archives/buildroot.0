@@ -1,28 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Aug 2016 10:34:13 +0200
-Subject: [Buildroot] [PATCH 0/9 v2] musl: add compatibility cdefs.h
-	header (branch yem/cdefs)
-In-Reply-To: <20160819114027.33ffd63a@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 19 Aug 2016 11:40:27 +0200")
-References: <cover.1471556612.git.yann.morin.1998@free.fr>
- <20160819114027.33ffd63a@free-electrons.com>
-Message-ID: <87oa4lrym2.fsf@dell.be.48ers.dk>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Mon, 22 Aug 2016 10:41:42 +0200
+Subject: [Buildroot] systemd-timesyncd doesn't start with default config and
+	skeleton
+Message-ID: <e487aac1-f199-42d0-1211-4add9c5718bf@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear All,
+with version 2016.08-rc2, with the default systemd configuration the
+systemd-timesyncd start fails with the error msg:
 
-Hi,
+buildroot systemd[115]: systemd-timesyncd.service: Failed at step
+NAMESPACE spawning /lib/systemd/systemd-timesyncd: No such file or directory
 
- > This one, I am really really not sure. It's a whole lot of additional
- > complexity just to check a very specific problem. I'm not sure we want
- > to include such an additional complexity just for the sake of making
- > upstream packages "cdefs.h clean".
+ It seems that the problem is that in the default rootfs skeleton the
+/var/tmp dir is a symlink to /tmp, and in
+/usr/lib/systemd/system/systemd-timesyncd.service the PrivateTmp
+variable is set.
+Either removing the PrivateTmp=yes or making /var/tmp a directory on its
+own solves the issue. What solution would be preferable to fix this?
 
-I agree, lets keep it KISS.
+Thanks, regards
+zgyarmati
 
--- 
-Bye, Peter Korsgaard
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 473 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160822/96d67122/attachment.asc>
