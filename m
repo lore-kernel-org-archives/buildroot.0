@@ -1,41 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 17:56:32 +0200
-Subject: [Buildroot] [git commit branch/next] libksba: bump to version 1.3.5
-Message-ID: <20160823155856.679447FFCC@busybox.osuosl.org>
+Date: Tue, 23 Aug 2016 17:55:55 +0200
+Subject: [Buildroot] [git commit branch/next] nfacct: bump to version 1.0.2
+Message-ID: <20160823155856.5B9CD81E08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a0a0b9af67f3728ee669bf85e2a0ec62a60a184
+commit: https://git.buildroot.net/buildroot/commit/?id=ae0e8950540fb668599fa243b5107637154c047b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Drop upstream patch.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libksba/libksba.hash | 2 +-
- package/libksba/libksba.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nfacct/0001-uclinux.patch | 26 --------------------------
+ package/nfacct/nfacct.hash        |  6 +++---
+ package/nfacct/nfacct.mk          |  2 +-
+ 3 files changed, 4 insertions(+), 30 deletions(-)
 
-diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
-index 92abbab..f0a38f3 100644
---- a/package/libksba/libksba.hash
-+++ b/package/libksba/libksba.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	f6c2883cebec5608692d8730843d87f237c0964d923bbe7aa89c05f20558ad4f	libksba-1.3.4.tar.bz2
-+sha256	41444fd7a6ff73a79ad9728f985e71c9ba8cd3e5e53358e70d5f066d35c1a340	libksba-1.3.5.tar.bz2
-diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
-index 40a8c9b..e29b6ae 100644
---- a/package/libksba/libksba.mk
-+++ b/package/libksba/libksba.mk
+diff --git a/package/nfacct/0001-uclinux.patch b/package/nfacct/0001-uclinux.patch
+deleted file mode 100644
+index 295a370..0000000
+--- a/package/nfacct/0001-uclinux.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From da1a0c186232d1bca9c723bd47d11a6e3807ae29 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 10 Sep 2013 16:16:48 -0300
+-Subject: [PATCH] configure: uclinux is also linux
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 9679112..9a34bdc 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -15,7 +15,7 @@ AC_PROG_INSTALL
+- AC_PROG_LN_S
+- 
+- case "$host" in
+--*-*-linux*) ;;
+-+*-*-linux* | *-*-uclinux*) ;;
+- *) AC_MSG_ERROR([Linux only, dude!]);;
+- esac
+- 
+--- 
+-1.8.1.5
+-
+diff --git a/package/nfacct/nfacct.hash b/package/nfacct/nfacct.hash
+index 48561ab..737354e 100644
+--- a/package/nfacct/nfacct.hash
++++ b/package/nfacct/nfacct.hash
+@@ -1,3 +1,3 @@
+-# From ftp://ftp.netfilter.org/pub/nfacct/nfacct-1.0.1.tar.bz2.{md5sum,sha1sum}
+-md5	992e863409d144350dbc8f0554a0f478	nfacct-1.0.1.tar.bz2
+-sha1	57c5fa68a172b30b6c5ea6cb36be685e207312ef	nfacct-1.0.1.tar.bz2
++# From ftp://ftp.netfilter.org/pub/nfacct/nfacct-1.0.2.tar.bz2.{md5sum,sha1sum}
++md5	94faafdaaed85ca9220c5692be8a408e	nfacct-1.0.2.tar.bz2
++sha1	17d6576778227ea93c62600d9b18ff4932963c6a	nfacct-1.0.2.tar.bz2
+diff --git a/package/nfacct/nfacct.mk b/package/nfacct/nfacct.mk
+index 7e42160..d19d02f 100644
+--- a/package/nfacct/nfacct.mk
++++ b/package/nfacct/nfacct.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBKSBA_VERSION = 1.3.4
-+LIBKSBA_VERSION = 1.3.5
- LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
- LIBKSBA_SITE = ftp://ftp.gnupg.org/gcrypt/libksba
- LIBKSBA_LICENSE = LGPLv3+ or GPLv2+ (library, headers), GPLv3+ (manual, tests, build system)
+-NFACCT_VERSION = 1.0.1
++NFACCT_VERSION = 1.0.2
+ NFACCT_SOURCE = nfacct-$(NFACCT_VERSION).tar.bz2
+ NFACCT_SITE = http://www.netfilter.org/projects/nfacct/files
+ NFACCT_DEPENDENCIES = host-pkgconf \
