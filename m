@@ -1,79 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 18:09:45 +0200
-Subject: [Buildroot] [git commit] package/amd-catalyst: Add command line
-	tools
-Message-ID: <20160902142939.775E37FB67@busybox.osuosl.org>
+Date: Tue, 23 Aug 2016 17:55:54 +0200
+Subject: [Buildroot] [git commit] libnetfilter_acct: bump to version 1.0.3
+Message-ID: <20160902142939.294CD7FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0c3cfc2dace594a831d84a5ca05ae96cf81260b
+commit: https://git.buildroot.net/buildroot/commit/?id=b8d446cd56dc1c8d553ac23c68316fc444de82a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The AMD Catalyst driver includes some command line tools for displaying
-specific infos about the GL stack or to test 3D, like fglxinfo or
-fgl_gears. This commit adds support to install such tools.
+Drop upstream patch.
 
-Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/amd-catalyst/Config.in       |  5 +++++
- package/amd-catalyst/amd-catalyst.mk | 20 ++++++++++++++++++++
- 2 files changed, 25 insertions(+)
+ package/libnetfilter_acct/0001-uclinux.patch     | 26 ------------------------
+ package/libnetfilter_acct/libnetfilter_acct.hash |  6 +++---
+ package/libnetfilter_acct/libnetfilter_acct.mk   |  2 +-
+ 3 files changed, 4 insertions(+), 30 deletions(-)
 
-diff --git a/package/amd-catalyst/Config.in b/package/amd-catalyst/Config.in
-index 1578324..b10ed3b 100644
---- a/package/amd-catalyst/Config.in
-+++ b/package/amd-catalyst/Config.in
-@@ -40,6 +40,11 @@ if BR2_PACKAGE_AMD_CATALYST_XORG
- config BR2_PACKAGE_PROVIDES_LIBGL
- 	default "amd-catalyst"
+diff --git a/package/libnetfilter_acct/0001-uclinux.patch b/package/libnetfilter_acct/0001-uclinux.patch
+deleted file mode 100644
+index 070f02c..0000000
+--- a/package/libnetfilter_acct/0001-uclinux.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From bfcaf00a8c972e2c10412d917f08626eb05079c7 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 10 Sep 2013 15:32:03 -0300
+-Subject: [PATCH] configure: uclinux is also linux
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index ad1bef8..24a7bb9 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -22,7 +22,7 @@ AC_DISABLE_STATIC
+- LT_INIT
+- CHECK_GCC_FVISIBILITY
+- case "$host" in
+--*-*-linux*) ;;
+-+*-*-linux* | *-*-uclinux*) ;;
+- *) AC_MSG_ERROR([Linux only, dude!]);;
+- esac
+- 
+--- 
+-1.8.1.5
+-
+diff --git a/package/libnetfilter_acct/libnetfilter_acct.hash b/package/libnetfilter_acct/libnetfilter_acct.hash
+index 852617c..7c38664 100644
+--- a/package/libnetfilter_acct/libnetfilter_acct.hash
++++ b/package/libnetfilter_acct/libnetfilter_acct.hash
+@@ -1,3 +1,3 @@
+-# From ftp://ftp.netfilter.org/pub/libnetfilter_acct/libnetfilter_acct-1.0.2.tar.bz2.{md5sum,sha1sum}
+-md5	2118d9514c079839ebd9cb3144ad2ad7	libnetfilter_acct-1.0.2.tar.bz2
+-sha1	ca0186912b5ee57088a20dd0a5b78606fd6af02e	libnetfilter_acct-1.0.2.tar.bz2
++# From ftp://ftp.netfilter.org/pub/libnetfilter_acct/libnetfilter_acct-1.0.3.tar.bz2.{md5sum,sha1sum}
++md5	814b2972b2f5c740ff87510bc109168b	libnetfilter_acct-1.0.3.tar.bz2
++sha1	4b9073e4aa989b0f000c8da1ab01b22fceed52b2	libnetfilter_acct-1.0.3.tar.bz2
+diff --git a/package/libnetfilter_acct/libnetfilter_acct.mk b/package/libnetfilter_acct/libnetfilter_acct.mk
+index 5adb6e0..3870ef8 100644
+--- a/package/libnetfilter_acct/libnetfilter_acct.mk
++++ b/package/libnetfilter_acct/libnetfilter_acct.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_AMD_CATALYST_CMDLINE_TOOLS
-+	bool "command-line configuration tools"
-+	help
-+	  Build and install the AMD command line tools.
-+
- endif
- 
- comment "amd-catalyst kernel module needs a kernel to be built"
-diff --git a/package/amd-catalyst/amd-catalyst.mk b/package/amd-catalyst/amd-catalyst.mk
-index aca7781..4c1844c 100644
---- a/package/amd-catalyst/amd-catalyst.mk
-+++ b/package/amd-catalyst/amd-catalyst.mk
-@@ -109,12 +109,32 @@ endef
- 
- endif
- 
-+ifeq ($(BR2_PACKAGE_AMD_CATALYST_CMDLINE_TOOLS), y)
-+AMD_CATALYST_CMDLINE_TOOLS_FILES = \
-+	atiode \
-+	atiodcli \
-+	fgl_glxgears \
-+	aticonfig \
-+	amd-console-helper \
-+	fglrxinfo
-+
-+define  AMD_CATALYST_INSTALL_CMDLINE_TOOLS
-+	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/sbin/atieventsd \
-+		$(TARGET_DIR)/usr/sbin
-+	$(foreach f,$(AMD_CATALYST_CMDLINE_TOOLS_FILES), \
-+		$(INSTALL) -D -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/X11R6/bin/$(f) \
-+			$(TARGET_DIR)/usr/bin/$(f)
-+	)
-+endef
-+endif
-+
- define AMD_CATALYST_INSTALL_STAGING_CMDS
- 	$(call AMD_CATALYST_INSTALL_STAGING_XORG)
- endef
- 
- define AMD_CATALYST_INSTALL_TARGET_CMDS
- 	$(call AMD_CATALYST_INSTALL_XORG)
-+	$(call AMD_CATALYST_INSTALL_CMDLINE_TOOLS)
- endef
- 
- $(eval $(generic-package))
+-LIBNETFILTER_ACCT_VERSION = 1.0.2
++LIBNETFILTER_ACCT_VERSION = 1.0.3
+ LIBNETFILTER_ACCT_SOURCE = libnetfilter_acct-$(LIBNETFILTER_ACCT_VERSION).tar.bz2
+ LIBNETFILTER_ACCT_SITE = http://www.netfilter.org/projects/libnetfilter_acct/files
+ LIBNETFILTER_ACCT_INSTALL_STAGING = YES
