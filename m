@@ -1,35 +1,54 @@
-From: =?UTF-8?q?Manuel=20V=C3=B6gele?= <develop@manuel-voegele.de>
-Date: Tue, 23 Aug 2016 12:56:49 +0200
-Subject: [Buildroot] [PATCH 1/1] python-pyqt: Removed 'compileall' directive
-	from INSTALL_TARGET_CMDS
-Message-ID: <20160823105649.1267-1-develop@manuel-voegele.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Aug 2016 13:41:38 +0200
+Subject: [Buildroot] [PATCH/next 2/4] DEVELOPERS: add initial list of
+ Buildroot developers
+In-Reply-To: <670f6e5c-e513-6b3f-ed82-4da1ddc3d141@lucaceresoli.net>
+References: <1471902678-18693-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <670f6e5c-e513-6b3f-ed82-4da1ddc3d141@lucaceresoli.net>
+Message-ID: <20160823134138.6f9818ef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since all python modules are now byte-compiled globally this is no
-longer necessary.
+Hello,
 
-Signed-off-by: Manuel V?gele <develop@manuel-voegele.de>
----
- package/python-pyqt/python-pyqt.mk | 3 ---
- 1 file changed, 3 deletions(-)
+On Tue, 23 Aug 2016 12:09:54 +0200, Luca Ceresoli wrote:
 
-diff --git a/package/python-pyqt/python-pyqt.mk b/package/python-pyqt/python-pyqt.mk
-index fa298c4..50e8351 100644
---- a/package/python-pyqt/python-pyqt.mk
-+++ b/package/python-pyqt/python-pyqt.mk
-@@ -108,9 +108,6 @@ define PYTHON_PYQT_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install
- 	touch $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/__init__.py
- 	$(RM) -rf $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/uic/$(PYTHON_PYQT_RM_PORT_BASE)
--	PYTHONPATH="$(PYTHON_PATH)" \
--		$(HOST_DIR)/usr/bin/python -c "import compileall; \
--		compileall.compile_dir('$(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4')"
- endef
- 
- $(eval $(generic-package))
+> > +N:	Luca Ceresoli <luca@lucaceresoli.net>
+> > +F:	package/agentpp/
+> > +F:	package/exim/
+> > +F:	package/ffmpeg/
+> > +F:	package/linphone/  
+> 
+> I haven't had any role on the ffmpeg and linphone packages since >4
+> years now. I think this line should be removed from under my name.
+
+ACK. For ffmpeg, it's fine, since Bernd is also listed (and he is doing
+most of the effort on ffmpeg these days.
+
+However, for linphone, it's a bit annoying because it means no-one is
+looking after this package. Should we deprecate it?
+
+In any case, I've dropped those two packages from your name.
+
+> > +F:	package/qpid-proton/
+> > +F:	package/rtl8188eu/
+> > +F:	package/stm32flash/
+> > +F:	package/unzip/  
+> 
+> Ok for these.
+> 
+> Also, as Bernd suggested, libpjsip should be added.
+
+Yes, this is done already.
+
+Thanks for the feedback!
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
