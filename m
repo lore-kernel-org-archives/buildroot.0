@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 22:15:20 +0200
+Date: Tue, 23 Aug 2016 22:16:13 +0200
 Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
  Buildroot developers
-In-Reply-To: <CAAMH-yuyJaLqSRFMH8-wXiU0ruOqHMSBZM5csKZw4p0_6MoTaQ@mail.gmail.com>
+In-Reply-To: <g9eu8dx2gc.ln2@ID-313208.user.individual.net>
 References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
  <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAMH-yuyJaLqSRFMH8-wXiU0ruOqHMSBZM5csKZw4p0_6MoTaQ@mail.gmail.com>
-Message-ID: <20160823221520.69ff8c9e@free-electrons.com>
+ <g9eu8dx2gc.ln2@ID-313208.user.individual.net>
+Message-ID: <20160823221613.171b52fc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,22 +15,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 Aug 2016 16:26:53 +0200, Gary Bisson wrote:
+On Tue, 23 Aug 2016 19:38:24 +0200, Bernd Kuhls wrote:
 
-> 2016-08-23 14:47 GMT+02:00 Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com>:
-> > <snip>
-> > +N:     Gary Bisson <gary.bisson@boundarydevices.com>
-> > +F:     configs/nitrogen*
-> > +F:     package/freescale-imx/
-> > +F:     package/libimxvpuapi/
-> > +F:     package/sshpass/  
-> 
-> Maybe you can add:
-> board/boundarydevices/
-> package/gstreamer1/gst1-imx/
+> you can add the following packages to my list:
 
-Thanks for the suggestion, I've added those.
+[...]
+
+> Or in other words:
+> F:	package/_everything_needed_for_kodi_freeswitch_mail/
+
+Thanks for the suggestions, I've added those, they will be part of v3.
+
+Of course, we will still be able to patch the DEVELOPERS file
+afterwards, what I'm proposing in my patch series is just an initial
+state.
 
 Thomas
 -- 
