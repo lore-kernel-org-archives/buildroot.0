@@ -1,74 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Aug 2016 23:10:09 +0200
-Subject: [Buildroot] [git commit] musl: enable mips64 support
-Message-ID: <20160902142938.CCF647FB67@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Aug 2016 15:00:05 +0200
+Subject: [Buildroot] [git commit] python-pyqt: Removed 'compileall'
+	directive from INSTALL_TARGET_CMDS
+Message-ID: <20160902142939.08C277FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=721e1c1e9ca13f37e3d6aafb0a570fd6fb67fbea
+commit: https://git.buildroot.net/buildroot/commit/?id=41c08629b1efcd1bf2c984ba22d56f209bb50354
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add support for mips64, which is available since musl 1.1.15.
+Since all python modules are now byte-compiled globally this is no
+longer necessary.
 
-Only gcc 6.x has required support for it. Tested variations of
-little/big endian and hard/soft float.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Manuel V??gele <develop@manuel-voegele.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/Config.in.host              | 6 ++++++
- toolchain/toolchain-buildroot/Config.in | 7 ++++---
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ package/python-pyqt/python-pyqt.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 37728e0..7262714 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -50,6 +50,8 @@ choice
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 		# musl ppc64 unsupported
- 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
-+		# musl mips64 unsupported
-+		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-@@ -72,6 +74,8 @@ choice
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 		# musl ppc64 unsupported
- 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
-+		# musl mips64 unsupported
-+		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
- 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
-@@ -83,6 +87,8 @@ choice
- 		depends on !BR2_arc && !BR2_bfin
- 		# musl ppc64 unsupported
- 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
-+		# musl mips64 unsupported
-+		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 78cac14..9fdfb42 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -68,9 +68,10 @@ comment "glibc only available with shared lib support"
+diff --git a/package/python-pyqt/python-pyqt.mk b/package/python-pyqt/python-pyqt.mk
+index fa298c4..50e8351 100644
+--- a/package/python-pyqt/python-pyqt.mk
++++ b/package/python-pyqt/python-pyqt.mk
+@@ -108,9 +108,6 @@ define PYTHON_PYQT_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install
+ 	touch $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/__init__.py
+ 	$(RM) -rf $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/uic/$(PYTHON_PYQT_RM_PORT_BASE)
+-	PYTHONPATH="$(PYTHON_PATH)" \
+-		$(HOST_DIR)/usr/bin/python -c "import compileall; \
+-		compileall.compile_dir('$(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4')"
+ endef
  
- config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	bool "musl"
--	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
--		BR2_microblaze || BR2_mips || BR2_mipsel || BR2_powerpc || \
--		BR2_powerpc64  || BR2_powerpc64le || BR2_sh || BR2_x86_64
-+	depends on BR2_aarch64	  || BR2_arm     || BR2_armeb     || BR2_i386 || \
-+		   BR2_microblaze || BR2_mips    || BR2_mipsel    || BR2_mips64 || \
-+		   BR2_mips64el   || BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
-+		   BR2_sh         || BR2_x86_64
- 	depends on !BR2_powerpc_SPE # not supported, build breaks
- 	# Unsupported for MIPS R6
- 	depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ $(eval $(generic-package))
