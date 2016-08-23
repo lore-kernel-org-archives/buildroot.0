@@ -1,31 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 00:14:44 +0200
-Subject: [Buildroot] [PATCH] gcc: bump 6.x series to 6.2.0
-In-Reply-To: <87twecmps7.fsf@dell.be.48ers.dk>
-References: <1471896123-31759-1-git-send-email-gustavo@zacarias.com.ar>
- <877fb8o688.fsf@dell.be.48ers.dk>
- <20160822235237.0ed535ed@free-electrons.com>
- <87twecmps7.fsf@dell.be.48ers.dk>
-Message-ID: <20160823001444.6543d2e0@free-electrons.com>
+From: Matt Flax <flatmax@flatmax.org>
+Date: Tue, 23 Aug 2016 10:39:09 +1000
+Subject: [Buildroot] [PATCH 3/3] arch/arm: Add ARMV8 (aarch32) toolchain
+ config.
+In-Reply-To: <20160822163616.5fb14ccb@free-electrons.com>
+References: <1471860748-5126-1-git-send-email-flatmax@flatmax.org>
+ <20160822163616.5fb14ccb@free-electrons.com>
+Message-ID: <7eb797bf-0a15-5ae9-c286-db6bf2999b84@flatmax.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+OK, will do.
 
-On Mon, 22 Aug 2016 23:56:08 +0200, Peter Korsgaard wrote:
+I understand the difficulty in getting ARMV8 setup for both aarch32 and 
+aarch64 and appreciate your openness to making that happen.
 
->  > Since it has the Blackfin patches, Gustavo's patch is against master.  
-> 
-> Yeah. Do we want it for 2016.08? It is strictly seen a bugfix release,
-> but it's a scary package to bump this close to the release.
 
-Agreed. I'd rather this see merged in next.
+Matt
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+
+On 23/08/16 00:36, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Mon, 22 Aug 2016 20:12:28 +1000, Matt Flax wrote:
+>
+>> @@ -174,8 +177,7 @@ config BR2_cortex_a53
+>>   	bool "cortex-A53"
+> It seems like this patch makes the assumption the previous Cortex-A53
+> patch has been applied.
+>
+> Could you instead send a patch series that includes both patches
+> together. Don't *merge* the patches, just send them together in the
+> same series. It will also be less confusing than this standalone patch
+> labeled PATCH 3/3.
+>
+> Also, I believe we need to merge arch/Config.in.aarch64 back into
+> arch/Config.in.arm in order to handle both 32 bits and 64 bits ARM
+> cores in the same Config.in.arm file, like we're doing for
+> Config.in.x86. Otherwise, we will end up duplicating all the ARM core
+> definitions for the 64 bits capable ones.
+>
+> Thanks!
+>
+> Thomas
