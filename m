@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 11:34:11 +0200 (CEST)
+Date: Tue, 23 Aug 2016 11:37:02 +0200 (CEST)
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-08-22
-Message-ID: <20160823093411.5E70110952D@stock.ovh.net>
+Message-ID: <20160823093702.D278F1093B5@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
