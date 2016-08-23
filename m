@@ -1,65 +1,54 @@
-From: Pascal K <pascalkrauth@gmail.com>
-Date: Tue, 23 Aug 2016 07:12:01 +0000
-Subject: [Buildroot] Using global patch dir to patch "host-*" packages from
-	buildroot
-Message-ID: <CADj18OXZwbD+eL1dR2_n6W_uovwgeV48GTJvHQ3rpTRCGQed1w@mail.gmail.com>
+From: Connolly, Padraig <padraig.connolly@intel.com>
+Date: Tue, 23 Aug 2016 08:05:15 +0000
+Subject: [Buildroot] [PATCH] [RFC] platform: update galileo to 3.14
+ kernel
+In-Reply-To: <20160822163337.484cb311@free-electrons.com>
+References: <1471868735-13766-1-git-send-email-padraig.connolly@intel.com>
+ <20160822163337.484cb311@free-electrons.com>
+Message-ID: <E704BB48EC9FDF4FA0A7A278C2546ACFE25B11@irsmsx105.ger.corp.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everyone,
+Hi Thomas,
 
-I tried to upgrade my build system from gcc 4.9 to 6. So far only a few
-patches are needed.
-All of those patches have to be in packages for the host.
+Could you elaborate on this preference please, in the previous version for the Galileo the defconfig pulled the kernel in a similar way I have done.  The future plan is once everything is approved, we will update R. Kinsella's repo with the 3.14 kernel and the defconfig will pull from there instead of mine as it did before.  I'm only using my repo as a temp for working on.
 
-So my question is how to keep those patches out of my clean checkout of
-buildroot?
+Thanks,
 
-If I set the global patch dir and put the patch e.g. for ucl-1.03 into this
-dir, the mk file I was about to patch is not found. I am not sure how to
-configure the path to point to the host-ucl-1.03.
-
-*Here the build error that occurs:*
-
->>> host-ucl 1.03 Patching
-
-Applying 0002-gcc6-build-fix.patch using patch:
-can't find file to patch at input line 3
-Perhaps you used the wrong -p or --strip option?
-The text leading up to this was:
---------------------------
-|--- a/ucl.mk
-|+++ b/ucl.mk
---------------------------
-No file to patch.  Skipping patch.
-1 out of 1 hunk ignored
-Patch failed!  Please fix 0002-gcc6-build-fix.patch!
+Padraig Connolly
 
 
-*My Patch: *
---- a/ucl.mk
-+++ b/ucl.mk
-@@ -9,4 +9,7 @@
- UCL_LICENSE = GPLv2+
- UCL_LICENSE_FILES = COPYING
+-----Original Message-----
+From: buildroot [mailto:buildroot-bounces at busybox.net] On Behalf Of Thomas Petazzoni
+Sent: Monday, August 22, 2016 3:34 PM
+To: Connolly, Padraig <padraig.connolly@intel.com>
+Cc: buildroot at busybox.net; Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [Buildroot] [PATCH] [RFC] platform: update galileo to 3.14 kernel
 
-+# Fix ACC conformance test failure for host gcc 6.xx
-+HOST_UCL_CONF_ENV += CPPFLAGS="$(HOST_CPPFLAGS) -std=c90"
-+
- $(eval $(host-autotools-package))
+Hello,
 
-*Folder with the patch:*
-../Develop/EmbeddedLinux/emblx/board/IPETRONIK/common/patches/ucl/
-*Folder to apply the patch to:*
-../Develop/EmbeddedLinux/emblx/buildroot/package/ucl/
+On Mon, 22 Aug 2016 13:25:35 +0100, Padraig James Connolly wrote:
+> Updating kernel for Galileo board BSP from 3.8 to 3.14  *Changed board 
+> defconfig to pull new 3.14 kernel  *New kernel config file for 3.14 
+> kernel  *Changed defconfig to use new kernel config  *Removed old 3.8 
+> kernel config
+> 
+>  Signed-off-by: Padraig Connolly <padraig.connolly@intel.com>
 
-Any suggestions?
+Following the comments from Andy, I've marked this patch as Rejected.
+We indeed very much prefer defconfig that use the mainline kernel when possible.
 
-Best regards,
-Pascal
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160823/9c0324dc/attachment.html>
+Thanks!
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
