@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 22:25:56 +0200
+Date: Tue, 23 Aug 2016 22:30:42 +0200
 Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
  Buildroot developers
-In-Reply-To: <1065867889.672166.1471981841582.JavaMail.zimbra@datacom.ind.br>
+In-Reply-To: <fb83b7f7-40e5-62ab-5d9e-ea04cd8d8df6@gmail.com>
 References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
  <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <1065867889.672166.1471981841582.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20160823222556.5554319d@free-electrons.com>
+ <fb83b7f7-40e5-62ab-5d9e-ea04cd8d8df6@gmail.com>
+Message-ID: <20160823223042.775ce73e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,45 +15,67 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 Aug 2016 16:50:41 -0300 (BRT), Carlos Santos wrote:
+On Tue, 23 Aug 2016 21:51:44 +0200, Romain Naour wrote:
 
-> > This is an initial list of Buildroot developers. It has been created
-> > semi-automatically by parsing the Git history, and finding the authors
-> > of commits with a title like "<foo>: new package". Some additional
-> > manual tweaking has been done (merging multiple entries corresponding to
-> > the same person, adding some more entries, etc.).  
-> ---8<---
-> > +N:	Carlos Santos <casantos@datacom.ind.br>
-> > +F:	package/gmock/
-> > +F:	package/perl-file-util/  
+> > +N:	Julien Boibessot <julien.boibessot@armadeus.com>
+> > +F:	configs/armadeus*
+> > +F:	package/libcddb/  
 > 
-> I can take care of util-linux, too.
+> I guess Julien want to take care of opentyrian :)
 
-Added, even though you haven't made any commits to util-linux yet (I
-remember we have 3 patches from you in patchwork on util-linux).
+Added.
 
-> > +N:	Giovanni Zantedeschi <giovanni.zantedeschi@datacom.ind.br>
-> > +F:	package/libpam-radius-auth/
-> > +F:	package/libpam-tacplus/  
+> > +N:	Nicolas Menegale <nicolas.menegale@openwide.fr>
+> > +F:	package/cppcms/
+> > +F:	package/glibmm/
+> > +F:	package/libxmlpp/  
 > 
-> Giovanni does not work at DATACOM anymore. Please replace by casantos at ...
+> Nicolas no longer works for Open Wide, so these packages are orphan I guess.
+> Also, I'm not sure he still on the mailing list.
 
-Done, thanks for letting me know!
+OK. I've moved glibmm to James Knight, since he is already taking care
+of the other *mm packages (cairomm, libgtk3mm, etc.), so it makes sense
+to have him look at glibmm as well.
 
-> ---8<---
-> > +N:	Stephan Hoffmann <sho@relinux.de>
-> > +F:	package/cache-calibrator/
-> > +F:	package/gtest/  
+> > +N:	Romain Naour <romain.naour@openwide.fr>  
 > 
-> I'm planing to replace gmock and gtest by "googletest" in the near future, so I could take care of gtest if Stefan does not mind. 
+> Please update my address with romain.naour at gmail.com
 
-I've added package/gtest/ for you as well. Package assignments are not
-exclusive: two developers can express their interest for the same
-package. That's why I've chosen the term "developer" and not
-"maintainer": it's not a file that really describes "ownership" of
-packages, but rather "interest".
+Done.
 
-Thanks for your feedback!
+> Here are some missing packages:
+> +F: package/elementary/
+> +F: package/expedite/
+> +F: package/xenomai/
+
+Added.
+
+> > +N:	Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  
+> [snip]
+> > +F:	package/enlightenment/
+> > +F:	package/libevas-generic-loaders/  
+> 
+> Thomas, I'd like to take these two packages on my list ;-)
+
+I've moved them to you. Note that as I said to Carlos, things are not
+mutually exclusive: several developers can list the same packages. This
+is note a file listing ownership of packages, but interest in packages.
+
+> Also some packages are not listed yet, like busybox.
+> I could be interesting to list all orphan packages.
+
+Run:
+
+./support/scripts/get-developer -c
+
+It looks at all files under version control, and lists the ones that
+are not associated to any developer. With all the latest updates, there
+are still 2945 files that are not referenced by anyone. But I'm not
+trying to make it 0 before putting this mechanism in place, it's going
+to be a gradual effort, like it has been for hashes, license
+information, etc.
+
+Best regards,
 
 Thomas
 -- 
