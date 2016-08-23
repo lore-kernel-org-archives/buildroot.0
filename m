@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 17:57:13 +0200
-Subject: [Buildroot] [PATCH 1/2] libnetfilter_acct: bump to version 1.0.3
-In-Reply-To: <1471958374-16839-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1471958374-16839-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160823175713.2e3409c6@free-electrons.com>
+Date: Tue, 23 Aug 2016 17:57:18 +0200
+Subject: [Buildroot] [PATCH] libksba: bump to version 1.3.5
+In-Reply-To: <1471959619-28285-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1471959619-28285-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160823175718.0df95671@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 Aug 2016 10:19:33 -0300, Gustavo Zacarias wrote:
-> Drop upstream patch.
-> 
+On Tue, 23 Aug 2016 10:40:19 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/libnetfilter_acct/0001-uclinux.patch     | 26 ------------------------
->  package/libnetfilter_acct/libnetfilter_acct.hash |  6 +++---
->  package/libnetfilter_acct/libnetfilter_acct.mk   |  2 +-
->  3 files changed, 4 insertions(+), 30 deletions(-)
->  delete mode 100644 package/libnetfilter_acct/0001-uclinux.patch
+>  package/libksba/libksba.hash | 2 +-
+>  package/libksba/libksba.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied to next, thanks.
+Applied to next, thanks.
 
 Thomas
 -- 
