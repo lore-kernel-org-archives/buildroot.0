@@ -1,72 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 17:59:06 +0200
-Subject: [Buildroot] [git commit] mosh: bump to version 1.2.6
-Message-ID: <20160902142939.5A5CF7FB67@busybox.osuosl.org>
+Date: Tue, 23 Aug 2016 22:01:08 +0200
+Subject: [Buildroot] [git commit] package/libgtk3: needs OpenGL-EGL/wayland
+Message-ID: <20160902142939.BC52D7FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1091f0978c6808292ad8d088e82c4cd4c118ea99
+commit: https://git.buildroot.net/buildroot/commit/?id=427fcaa52379a16483e74a40f2d6a592f5d0bdee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now supports nettle as crypto backend too.
+Currently, libgtk3 depends on either a full OpenGL stack, or on a
+OpenGL-EGL stack provided by mesa3d.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This is because, when using the wayland backend, libgtk3 needs an
+OpenGL-EGL stack tht provides the wayland extensions. So far, only
+mesa3d would provide those extensions.
+
+But now, those extensions are trickling down to other implementations,
+like the Nvidia driver or other (even non-public) implementations.
+
+Change the condition to be on the recently introduced libegl-wayland
+option.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mosh/Config.in |  2 +-
- package/mosh/mosh.hash |  4 ++--
- package/mosh/mosh.mk   | 12 ++++++++++--
- 3 files changed, 13 insertions(+), 5 deletions(-)
+ package/libgtk3/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-index b4189ee..d1fbd63 100644
---- a/package/mosh/Config.in
-+++ b/package/mosh/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_MOSH
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_NETTLE if !BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	# runtime dependency
- 	select BR2_PACKAGE_OPENSSH if !BR2_PACKAGE_DROPBEAR_CLIENT
-diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
-index ab925b5..31f59c7 100644
---- a/package/mosh/mosh.hash
-+++ b/package/mosh/mosh.hash
-@@ -1,2 +1,2 @@
--# From: http://mailman.mit.edu/pipermail/mosh-users/2015-July/000283.html
--sha256 1af809e5d747c333a852fbf7acdbf4d354dc4bbc2839e3afe5cf798190074be3 mosh-1.2.5.tar.gz
-+# From https://mailman.mit.edu/pipermail/mosh-users/2016-August/000330.html
-+sha256 7e82b7fbfcc698c70f5843bb960dadb8e7bd7ac1d4d2151c9d979372ea850e85 mosh-1.2.6.tar.gz
-diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
-index f8c45e8..2cd358b 100644
---- a/package/mosh/mosh.mk
-+++ b/package/mosh/mosh.mk
-@@ -4,12 +4,20 @@
- #
- ################################################################################
+diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
+index 39105ac..2dd6dfa 100644
+--- a/package/libgtk3/Config.in
++++ b/package/libgtk3/Config.in
+@@ -4,10 +4,10 @@ comment "libgtk3 needs a toolchain w/ wchar, threads, C++"
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
  
--MOSH_VERSION = 1.2.5
-+MOSH_VERSION = 1.2.6
- MOSH_SITE = https://mosh.mit.edu
--MOSH_DEPENDENCIES = zlib ncurses protobuf openssl host-pkgconf
-+MOSH_DEPENDENCIES = zlib ncurses protobuf host-pkgconf
- MOSH_LICENSE = GPLv3+ with exception
- MOSH_LICENSE_FILES = COPYING COPYING.iOS
+-comment "libgtk3 needs an OpenGL or OpenGL EGL backend provided by mesa3d"
++comment "libgtk3 needs an OpenGL or an OpenGL-EGL/wayland backend"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL && \
++	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND && \
+ 		!BR2_PACKAGE_HAS_LIBGL
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+MOSH_CONF_OPTS += --with-crypto-library=openssl
-+MOSH_DEPENDENCIES += openssl
-+else
-+MOSH_CONF_OPTS += --with-crypto-library=nettle
-+MOSH_DEPENDENCIES += nettle
-+endif
-+
- # help the detection of the SSP support: mosh configure.ac doesn't do
- # a link test, so it doesn't detect when the toolchain doesn't have
- # libssp.
+ config BR2_PACKAGE_LIBGTK3
+@@ -29,7 +29,7 @@ config BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL || \
++	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLANDD || \
+ 		BR2_PACKAGE_HAS_LIBGL
+ 	help
+ 	  The GTK+ version 3 graphical user interface library
+@@ -65,7 +65,7 @@ comment "Wayland GDK backend needs an OpenGL EGL backend provided by mesa3d w/ h
+ config BR2_PACKAGE_LIBGTK3_WAYLAND
+ 	bool "Wayland GDK backend"
+ 	default y
+-	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
++	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+ 	select BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
