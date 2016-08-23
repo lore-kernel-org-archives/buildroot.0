@@ -1,39 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 23 Aug 2016 17:53:23 -0300
-Subject: [Buildroot] [PATCH] openvpn: bump to version 2.3.12
-Message-ID: <1471985603-16836-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 23 Aug 2016 22:54:21 +0200
+Subject: [Buildroot] Future of linphone package,
+	was: Re: [PATCH/next 2/4] DEVELOPERS: add initial list of Buildroot
+	developers
+In-Reply-To: <20160823215041.358d2e66@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 23 Aug 2016 21:50:41 +0200")
+References: <1471902678-18693-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <670f6e5c-e513-6b3f-ed82-4da1ddc3d141@lucaceresoli.net>
+ <20160823134138.6f9818ef@free-electrons.com>
+ <f8fu8dx2gc.ln2@ID-313208.user.individual.net>
+ <20160823215041.358d2e66@free-electrons.com>
+Message-ID: <87h9abjjeq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 179198e..ce005d3 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	0f5f1ca1dc5743fa166d93dd4ec952f014b5f33bafd88f0ea34b455cae1434a7 	openvpn-2.3.11.tar.xz
-+sha256	13b963414e2430215981868c77b9795d93653ee535a2d73576f7bb2c28200abc 	openvpn-2.3.12.tar.xz
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index f3985cd..0e59fdc 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENVPN_VERSION = 2.3.11
-+OPENVPN_VERSION = 2.3.12
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf openssl
+Hi,
+
+ > Since nobody cares about linphone, what about deprecating it? This way,
+ > it will still be there for a while, but no longer visible in
+ > menuconfig. If anybody shows up and says that he is interested in
+ > linphone, then he will notice and hopefully let us know.
+
+ > What do you think?
+
+If nobody cares about it, yes - Then I think we should deprecate it.
+
 -- 
-2.7.3
+Bye, Peter Korsgaard
