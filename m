@@ -1,42 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 22:02:51 +0200
-Subject: [Buildroot] [PATCH 3/4] package/libgtk3: needs
- OpenGL-EGL/wayland
-In-Reply-To: <79d8684056813c9a4db9baf746b6772e5c604724.1471968455.git.yann.morin.1998@free.fr>
-References: <cover.1471968455.git.yann.morin.1998@free.fr>
- <79d8684056813c9a4db9baf746b6772e5c604724.1471968455.git.yann.morin.1998@free.fr>
-Message-ID: <20160823220251.0c60f6f9@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 23 Aug 2016 22:12:34 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-08-22
+In-Reply-To: <20160823093702.D278F1093B5@stock.ovh.net>
+References: <20160823093702.D278F1093B5@stock.ovh.net>
+Message-ID: <aabf8490-2a2f-8b5b-5edb-15a83ed00924@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi all,
 
-On Tue, 23 Aug 2016 18:26:34 +0200, Yann E. MORIN wrote:
-> Currently, libgtk3 depends on either a full OpenGL stack, or on a
-> OpenGL-EGL stack provided by mesa3d.
+Le 23/08/2016 ? 11:37, Thomas Petazzoni a ?crit :
+> Hello,
 > 
-> This is because, when using the wayland backend, libgtk3 needs an
-> OpenGL-EGL stack tht provides the wayland extensions. So far, only
-> mesa3d would provide those extensions.
+> Build statistics for 2016-08-22
+> ================================
 > 
-> But now, those extensions are trickling down to other implementations,
-> like the Nvidia driver or other (even non-public) implementations.
+>       successes : 158
+>        failures : 43 
+>        timeouts : 1  
+>           TOTAL : 202
 > 
-> Change the condition to be on the recently introduced libegl-wayland
-> option.
+> Classification of failures by reason
+> ====================================
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/libgtk3/Config.in | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>                  lvm2-2.02.162 | 4 
+> 
+> Detail of failures
+> ===================
+> 
+>          arm |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/3d4df873a3d4fa199e03d8aa8694eafeac474e5a
+>       x86_64 |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/407ccac95d02715ef9059b9a1282e21dc465af98
+>          arm |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/07e25821bb7538f765af1f9c9513998e86f3ec5e
+>       x86_64 |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/ea39becf5561d1fd4c9535ee1225b8ddc859bafe
 
-Applied to next, thanks.
+What do we do for lvm2 with musl ?
+Bernd proposed a fix [1] and reported the issue on the lvm2 mailing list [2].
+Several version bump has been done since then.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Romain
+
+[1] http://patchwork.ozlabs.org/patch/573519/
+[2] https://www.redhat.com/archives/linux-lvm/2016-February/msg00024.html
