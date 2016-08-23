@@ -1,79 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 17:55:54 +0200
-Subject: [Buildroot] [git commit] libnetfilter_acct: bump to version 1.0.3
-Message-ID: <20160902142939.294CD7FB67@busybox.osuosl.org>
+Date: Tue, 23 Aug 2016 19:15:09 +0200
+Subject: [Buildroot] [git commit] package/amd-catalyst: Add support AMD CCCLE
+Message-ID: <20160902142939.841AB7FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8d446cd56dc1c8d553ac23c68316fc444de82a0
+commit: https://git.buildroot.net/buildroot/commit/?id=2f196d9cdc7f1e825d012bd1e8a3fe2de7319869
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop upstream patch.
+The AMD Catalyst Linux driver includes a graphical controler center for AMD
+graphics accelerators, called Catalyst Controler Center. This commits
+adds support to install this tool by adding a separated prompt.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+[Thomas:
+ - As noticed by Yann, fixed the dependency of the comment related to
+   the Qt PNG functionality.
+ - Also add the Qt PNG dependency to the BR2_PACKAGE_AMD_CATALYST_CCCLE
+   option itself, noticed by Yann.
+ - Add an empty line, also noticed by Yann.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnetfilter_acct/0001-uclinux.patch     | 26 ------------------------
- package/libnetfilter_acct/libnetfilter_acct.hash |  6 +++---
- package/libnetfilter_acct/libnetfilter_acct.mk   |  2 +-
- 3 files changed, 4 insertions(+), 30 deletions(-)
+ package/amd-catalyst/Config.in       | 17 +++++++++++++++++
+ package/amd-catalyst/amd-catalyst.mk | 10 ++++++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/package/libnetfilter_acct/0001-uclinux.patch b/package/libnetfilter_acct/0001-uclinux.patch
-deleted file mode 100644
-index 070f02c..0000000
---- a/package/libnetfilter_acct/0001-uclinux.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From bfcaf00a8c972e2c10412d917f08626eb05079c7 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Tue, 10 Sep 2013 15:32:03 -0300
--Subject: [PATCH] configure: uclinux is also linux
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index ad1bef8..24a7bb9 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -22,7 +22,7 @@ AC_DISABLE_STATIC
-- LT_INIT
-- CHECK_GCC_FVISIBILITY
-- case "$host" in
---*-*-linux*) ;;
--+*-*-linux* | *-*-uclinux*) ;;
-- *) AC_MSG_ERROR([Linux only, dude!]);;
-- esac
-- 
---- 
--1.8.1.5
--
-diff --git a/package/libnetfilter_acct/libnetfilter_acct.hash b/package/libnetfilter_acct/libnetfilter_acct.hash
-index 852617c..7c38664 100644
---- a/package/libnetfilter_acct/libnetfilter_acct.hash
-+++ b/package/libnetfilter_acct/libnetfilter_acct.hash
-@@ -1,3 +1,3 @@
--# From ftp://ftp.netfilter.org/pub/libnetfilter_acct/libnetfilter_acct-1.0.2.tar.bz2.{md5sum,sha1sum}
--md5	2118d9514c079839ebd9cb3144ad2ad7	libnetfilter_acct-1.0.2.tar.bz2
--sha1	ca0186912b5ee57088a20dd0a5b78606fd6af02e	libnetfilter_acct-1.0.2.tar.bz2
-+# From ftp://ftp.netfilter.org/pub/libnetfilter_acct/libnetfilter_acct-1.0.3.tar.bz2.{md5sum,sha1sum}
-+md5	814b2972b2f5c740ff87510bc109168b	libnetfilter_acct-1.0.3.tar.bz2
-+sha1	4b9073e4aa989b0f000c8da1ab01b22fceed52b2	libnetfilter_acct-1.0.3.tar.bz2
-diff --git a/package/libnetfilter_acct/libnetfilter_acct.mk b/package/libnetfilter_acct/libnetfilter_acct.mk
-index 5adb6e0..3870ef8 100644
---- a/package/libnetfilter_acct/libnetfilter_acct.mk
-+++ b/package/libnetfilter_acct/libnetfilter_acct.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/amd-catalyst/Config.in b/package/amd-catalyst/Config.in
+index b10ed3b..55099ac 100644
+--- a/package/amd-catalyst/Config.in
++++ b/package/amd-catalyst/Config.in
+@@ -45,6 +45,23 @@ config BR2_PACKAGE_AMD_CATALYST_CMDLINE_TOOLS
+ 	help
+ 	  Build and install the AMD command line tools.
  
--LIBNETFILTER_ACCT_VERSION = 1.0.2
-+LIBNETFILTER_ACCT_VERSION = 1.0.3
- LIBNETFILTER_ACCT_SOURCE = libnetfilter_acct-$(LIBNETFILTER_ACCT_VERSION).tar.bz2
- LIBNETFILTER_ACCT_SITE = http://www.netfilter.org/projects/libnetfilter_acct/files
- LIBNETFILTER_ACCT_INSTALL_STAGING = YES
++comment "Catalyst Control Center needs Qt4 with X11 and PNG support"
++	depends on !BR2_PACKAGE_QT || !BR2_PACKAGE_QT_X11 \
++		|| BR2_PACKAGE_QT_NOPNG
++
++config BR2_PACKAGE_AMD_CATALYST_CCCLE
++	bool "Catalyst Control Center"
++	depends on BR2_PACKAGE_QT
++	depends on BR2_PACKAGE_QT_X11
++	depends on !BR2_PACKAGE_QT_NOPNG
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps-ng
++	select BR2_PACKAGE_PROCPS_NG # runtime
++	select BR2_PACKAGE_QT_GUI_MODULE
++	select BR2_PACKAGE_QT_ACCESSIBILITY
++	help
++	  Installs the Catalyst Control Center, a Qt graphical tool to
++	  control AMD graphics accelerators.
++
+ endif
+ 
+ comment "amd-catalyst kernel module needs a kernel to be built"
+diff --git a/package/amd-catalyst/amd-catalyst.mk b/package/amd-catalyst/amd-catalyst.mk
+index 4c1844c..07eb0fa 100644
+--- a/package/amd-catalyst/amd-catalyst.mk
++++ b/package/amd-catalyst/amd-catalyst.mk
+@@ -128,6 +128,15 @@ define  AMD_CATALYST_INSTALL_CMDLINE_TOOLS
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_AMD_CATALYST_CCCLE), y)
++define AMD_CATALYST_INSTALL_CCCLE
++	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/X11R6/bin/amdcccle \
++		$(TARGET_DIR)/usr/bin/amdcccle
++	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/sbin/amdnotifyui \
++		$(TARGET_DIR)/usr/sbin/amdnotifyui
++endef
++endif
++
+ define AMD_CATALYST_INSTALL_STAGING_CMDS
+ 	$(call AMD_CATALYST_INSTALL_STAGING_XORG)
+ endef
+@@ -135,6 +144,7 @@ endef
+ define AMD_CATALYST_INSTALL_TARGET_CMDS
+ 	$(call AMD_CATALYST_INSTALL_XORG)
+ 	$(call AMD_CATALYST_INSTALL_CMDLINE_TOOLS)
++	$(call AMD_CATALYST_INSTALL_CCCLE)
+ endef
+ 
+ $(eval $(generic-package))
