@@ -1,65 +1,56 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 23 Aug 2016 22:33:51 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-08-22
-In-Reply-To: <aabf8490-2a2f-8b5b-5edb-15a83ed00924@gmail.com>
-References: <20160823093702.D278F1093B5@stock.ovh.net>
- <aabf8490-2a2f-8b5b-5edb-15a83ed00924@gmail.com>
-Message-ID: <ac3757b1-2890-3670-22cd-6b655c878f06@gmail.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Tue, 23 Aug 2016 22:44:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: switch from libmysqlclient
+ to mysqlnd
+In-Reply-To: <20160823215210.584482c1@free-electrons.com>
+References: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
+ <20160823215210.584482c1@free-electrons.com>
+Message-ID: <dfc43750-7738-5fdd-2193-6ddf7c5627f0@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-Le 23/08/2016 ? 22:12, Romain Naour a ?crit :
-> Hi all,
-> 
-> Le 23/08/2016 ? 11:37, Thomas Petazzoni a ?crit :
->> Hello,
+On 08/23/2016 09:52 PM, Thomas Petazzoni wrote:
+> On Tue, 23 Aug 2016 18:54:48 +0200, Floris Bos wrote:
+>> The Mysql Native Driver has been the default mysql driver since
+>> PHP 5.4, but buildroot was still using libmysqlclient.
 >>
->> Build statistics for 2016-08-22
->> ================================
+>> Mysqlnd has several advantages such as improved memory management
+>> and the more favorable PHP licensing terms.
+>> (can combine it with proprietary PHP extensions like Ioncube
+>> loader, while libmysqlclient requires commercial licensing if you
+>> link to it and do not fall under their GPL/FOSS license exception)
 >>
->>       successes : 158
->>        failures : 43 
->>        timeouts : 1  
->>           TOTAL : 202
->>
->> Classification of failures by reason
->> ====================================
->>
->>                  lvm2-2.02.162 | 4 
->>
->> Detail of failures
->> ===================
->>
->>          arm |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/3d4df873a3d4fa199e03d8aa8694eafeac474e5a
->>       x86_64 |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/407ccac95d02715ef9059b9a1282e21dc465af98
->>          arm |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/07e25821bb7538f765af1f9c9513998e86f3ec5e
->>       x86_64 |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/ea39becf5561d1fd4c9535ee1225b8ddc859bafe
-> 
-> What do we do for lvm2 with musl ?
-> Bernd proposed a fix [1] and reported the issue on the lvm2 mailing list [2].
-> Several version bump has been done since then.
+>> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> I see that you are changing the *existing* options to use the native
+> driver rather than the libmysqlclient based one.
+>
+> Would there be any reason for someone to prefer the libmysqlclient
+> based one over the native driver?
+>
+> I'm simply wondering if we should change the semantic of the existing
+> options, or add new ones for the native driver. I very much prefer
+> *less* options, so if the native driver is fine and a drop-in
+> replacement for the libmysqlclient based one, I'm all for your patch,
+> just wanted to confirm.
 
-I noticed that lvm2 has been updated to the latest version 2.02.163 and it seems
-to fix the musl issue thanks to this commit [1].
-I'm not sure we can easily backport it to 2.02.162 but lvm2 is no longer an
-issue with musl :) (lvm2 needs to be runtime tested though)
+The upstream project changed the existing option as well.
+Years ago, if you specified --with-pdo-mysql (without exact path) it 
+defaulted to searching for libmysqlclient, even when mysqlnd was already 
+an alternative.
+Since the release of 5.4.0 (in 2012) it defaults to mysqlnd.
 
-Best regards,
-Romain
+Not sure if anyone still has a reason to prefer libmysqlclient, mysqlnd 
+is indeed a drop-in replacement.
+I kinda have the expectation to get the same defaults when compiling in 
+buildroot, as I would get if I compiled the upstream project manually.
 
-[1]
-https://git.fedorahosted.org/cgit/lvm2.git/commit/?id=06ce9b4e4238da58d6c2acda7878dbc51245a8fc
 
-> 
-> Best regards,
-> Romain
-> 
-> [1] http://patchwork.ozlabs.org/patch/573519/
-> [2] https://www.redhat.com/archives/linux-lvm/2016-February/msg00024.html
-> 
+
+Yours sincerely,
+
+Floris Bos
