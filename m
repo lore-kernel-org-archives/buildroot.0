@@ -1,96 +1,41 @@
-From: Matt Flax <flatmax@flatmax.org>
-Date: Tue, 23 Aug 2016 10:53:23 +1000
-Subject: [Buildroot] [PATCH 3/3] arch/arm: Add ARMV8 (aarch32) toolchain
-	config.
-In-Reply-To: <1471913603-21487-1-git-send-email-flatmax@flatmax.org>
-References: <1471913603-21487-1-git-send-email-flatmax@flatmax.org>
-Message-ID: <1471913603-21487-4-git-send-email-flatmax@flatmax.org>
+From: Jimmy <hello@86pixels.com>
+Date: Mon, 22 Aug 2016 22:11:51 -0500
+Subject: [Buildroot] Making a Bootable USB Image for x86_64
+Message-ID: <f3ab074b-d314-7542-636a-fb3eb7d11878@86pixels.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit configures the toolchain to use the ARMV8 hardware features.
-This commit also cleans up and adds to the previous cortex-a53 commit.
+Greetings all,
 
-This commit adds BR2_ARM_CPU_HAS_ARMV8 to arch/Config.in.arm and cleans up
-the BR2_cortex_a53 config to remove redundant selections relating to VFPV4 and
-ARMV7A. The commit also adds BR2_ARM_CPU_HAS_ARMV8 to BR2_ARM_EABIHF which
-allows the selection of hard float (HF) activating the toolchain for whatever
-specific ARMV8 hardware features are possible. It also adds the
-BR2_ARM_FPU_NEON_ARMV8 HF tuning (crypto-neon-fp-armv8).
+I know this has been asked a lot, but I have been sifting through the 
+archives and Google in order to find the best way to make a bootable USB 
+image of my buildroot installation for an x86 based machine. I have done 
+the following:
 
-The cortex-a53 BR2_ARCH_HAS_MMU_OPTIONAL selection ensures that uclibc successfully
-compiles without non-compliant swp assembly calls.
+1. Generated a tar image of the root filesystem via the configuration menu
+2. Selected grub2 from bootloaders with the i386-pc platform
+3. Created a 1Gb EXT2FS partition with 1mb of space preceding on the USB 
+device itself
+4. Extracted the rootfs tar to the USB device on the ext2 partition
+5. Ran the following from the main buildroot directory (as root):
+./output/host/usr/sbin/grub-bios-setup -b 
+./output/host/usr/lib/grub/i386-pc/boot.img -c ./output/images/grub.img 
+-d . /dev/sdb
 
-Signed-off-by: Matt Flax <flatmax@flatmax.org>
----
- arch/Config.in.arm | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+The command immediately exits with a "segmentation fault (Core dumped)".
+I can assert the following:
+a. grub-bios-setup exists in the directory specified.
+b. boot.img exists in the directory specified
+c. grub.img exists in the directory specified
+d. /dev/sdb exists and is the USB device
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 72bb744..c01daf6 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -31,6 +31,9 @@ config BR2_ARM_CPU_HAS_VFPV4
- 	bool
- 	select BR2_ARM_CPU_HAS_VFPV3
- 
-+config BR2_ARM_CPU_HAS_ARMV8
-+	bool
-+
- config BR2_ARM_CPU_HAS_ARM
- 	bool
- 
-@@ -174,8 +177,7 @@ config BR2_cortex_a53
- 	bool "cortex-A53"
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_HAS_NEON
--	select BR2_ARM_CPU_HAS_VFPV4
--	select BR2_ARM_CPU_ARMV7A
-+	select BR2_ARM_CPU_HAS_ARMV8
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_m3
- 	bool "cortex-M3"
-@@ -271,7 +273,7 @@ config BR2_ARM_EABI
- 
- config BR2_ARM_EABIHF
- 	bool "EABIhf"
--	depends on BR2_ARM_CPU_HAS_VFPV2
-+	depends on BR2_ARM_CPU_HAS_VFPV2 || BR2_ARM_CPU_HAS_ARMV8
- 	help
- 	  The EABIhf is an extension of EABI which supports the 'hard'
- 	  floating point model. This model uses the floating point
-@@ -292,6 +294,7 @@ endchoice
- choice
- 	prompt "Floating point strategy"
- 	depends on BR2_ARM_EABI || BR2_ARM_EABIHF
-+	default BR2_ARM_FPU_NEON_ARMV8 if BR2_ARM_CPU_HAS_ARMV8
- 	default BR2_ARM_FPU_VFPV4D16 if BR2_ARM_CPU_HAS_VFPV4
- 	default BR2_ARM_FPU_VFPV3D16 if BR2_ARM_CPU_HAS_VFPV3
- 	default BR2_ARM_FPU_VFPV2 if BR2_ARM_CPU_HAS_VFPV2
-@@ -366,6 +369,13 @@ config BR2_ARM_FPU_VFPV4
- 	  cores, including the earlier Cortex-A{8, 9}, you should
- 	  instead select VFPv3.
- 
-+config BR2_ARM_FPU_NEON_ARMV8
-+	bool "ARMV8"
-+	depends on BR2_ARM_CPU_HAS_ARMV8
-+	help
-+	  This option allows to use the ARMV8 floating point unit, as
-+	  available in some ARMv8 processors (Cortex-A53).
-+
- config BR2_ARM_FPU_VFPV4D16
- 	bool "VFPv4-D16"
- 	depends on BR2_ARM_CPU_HAS_VFPV4
-@@ -485,6 +495,7 @@ config BR2_GCC_TARGET_FPU
- 	default "vfpv4-d16" 	if BR2_ARM_FPU_VFPV4D16
- 	default "neon" 		if BR2_ARM_FPU_NEON
- 	default "neon-vfpv4" 	if BR2_ARM_FPU_NEON_VFPV4
-+	default "crypto-neon-fp-armv8" 	if BR2_ARM_FPU_NEON_ARMV8
- 
- config BR2_GCC_TARGET_FLOAT_ABI
- 	default "soft"		if BR2_ARM_SOFT_FLOAT
+Has anyone else ran into this? I'm trying to read up all I can on the 
+issue but I'm running out of options, and I have a feeling its something 
+really simple.
+
+Thank you so much!
 -- 
-2.7.4
+-- Jimmy
