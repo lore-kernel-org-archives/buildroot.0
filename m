@@ -1,72 +1,46 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 23 Aug 2016 21:51:44 +0200
-Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
- Buildroot developers
-In-Reply-To: <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <fb83b7f7-40e5-62ab-5d9e-ea04cd8d8df6@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Aug 2016 21:52:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: switch from libmysqlclient
+ to mysqlnd
+In-Reply-To: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <20160823215210.584482c1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-Le 23/08/2016 ? 14:47, Thomas Petazzoni a ?crit :
-> This is an initial list of Buildroot developers. It has been created
-> semi-automatically by parsing the Git history, and finding the authors
-> of commits with a title like "<foo>: new package". Some additional
-> manual tweaking has been done (merging multiple entries corresponding to
-> the same person, adding some more entries, etc.).
+On Tue, 23 Aug 2016 18:54:48 +0200, Floris Bos wrote:
+> The Mysql Native Driver has been the default mysql driver since
+> PHP 5.4, but buildroot was still using libmysqlclient.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
+> Mysqlnd has several advantages such as improved memory management
+> and the more favorable PHP licensing terms.
+> (can combine it with proprietary PHP extensions like Ioncube
+> loader, while libmysqlclient requires commercial licensing if you
+> link to it and do not fall under their GPL/FOSS license exception)
+> 
+> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 
-> +
-> +N:	Julien Boibessot <julien.boibessot@armadeus.com>
-> +F:	configs/armadeus*
-> +F:	package/libcddb/
+I see that you are changing the *existing* options to use the native
+driver rather than the libmysqlclient based one.
 
-I guess Julien want to take care of opentyrian :)
+Would there be any reason for someone to prefer the libmysqlclient
+based one over the native driver?
 
-> +
-> +N:	Nicolas Menegale <nicolas.menegale@openwide.fr>
-> +F:	package/cppcms/
-> +F:	package/glibmm/
-> +F:	package/libxmlpp/
+I'm simply wondering if we should change the semantic of the existing
+options, or add new ones for the native driver. I very much prefer
+*less* options, so if the native driver is fine and a drop-in
+replacement for the libmysqlclient based one, I'm all for your patch,
+just wanted to confirm.
 
-Nicolas no longer works for Open Wide, so these packages are orphan I guess.
-Also, I'm not sure he still on the mailing list.
+Thanks,
 
-> +N:	Romain Naour <romain.naour@openwide.fr>
-
-Please update my address with romain.naour at gmail.com
-
-> +F:	package/bullet/
-> +F:	package/efl/
-> +F:	package/iqvlinux/
-> +F:	package/liblinear/
-> +F:	package/mcelog/
-> +F:	package/openpowerlink/
-> +F:	package/stress-ng/
-> +F:	package/terminology/
-
-Here are some missing packages:
-+F: package/elementary/
-+F: package/expedite/
-+F: package/xenomai/
-
-> +N:	Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[snip]
-> +F:	package/enlightenment/
-> +F:	package/libevas-generic-loaders/
-
-Thomas, I'd like to take these two packages on my list ;-)
-
-Also some packages are not listed yet, like busybox.
-I could be interesting to list all orphan packages.
-
-Best regards,
-Romain
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
