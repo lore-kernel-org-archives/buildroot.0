@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 15:46:16 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2016-08-22
-In-Reply-To: <ed4e9146-e57c-3045-7642-d786e9574d83@ecagroup.com>
-References: <20160823093410.971F8109354@stock.ovh.net>
- <ed4e9146-e57c-3045-7642-d786e9574d83@ecagroup.com>
-Message-ID: <20160823154616.19c02486@free-electrons.com>
+Date: Tue, 23 Aug 2016 16:12:09 +0200
+Subject: [Buildroot] [PATCH] vlc: depends on NPTL
+In-Reply-To: <20160821221849.GA8404@waldemar-brodkorb.de>
+References: <20160821221849.GA8404@waldemar-brodkorb.de>
+Message-ID: <20160823161209.227726ec@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +12,75 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 Aug 2016 13:38:36 +0000, Julien CORJON wrote:
+On Mon, 22 Aug 2016 00:18:49 +0200, Waldemar Brodkorb wrote:
+> VLC requires NPTL.
+> 
+> Required functions and symbols (_POSIX_CLOCK_SELECTION) are only
+> available for NPTL.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/3122287ddea1e316a64ccf0d0dc9415bfefebb49/
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-> New daily-mail seems to work well!
+I don't think this is the right fix: vlc can fallback to CLOCK_REALTIME
+perfectly fine, it just has a bug in its code.
 
-It seems! :-)
+From src/posix/thread.c:
 
-> Just a comment on that one, you should probably set the mail reply-to 
-> field to buildroot at buildroot.org in case developers want to notice 
-> directly the community.
+# if (_POSIX_MONOTONIC_CLOCK > 0) && (_POSIX_CLOCK_SELECTION > 0)
+/* Compile-time POSIX monotonic clock support */
+#  define vlc_clock_id (CLOCK_MONOTONIC)
 
-Yes, could be an idea, indeed. I'll look into doing this. Thanks for
-the suggestion!
+# elif (_POSIX_MONOTONIC_CLOCK == 0) && (_POSIX_CLOCK_SELECTION > 0)
+/* Run-time POSIX monotonic clock support (see clock_setup() below) */
+static clockid_t vlc_clock_id;
+
+# else
+/* No POSIX monotonic clock support */
+#   define vlc_clock_id (CLOCK_REALTIME)
+#   warning Monotonic clock not available. Expect timing issues.
+
+# endif /* _POSIX_MONOTONIC_CLOCK */
+
+static void vlc_clock_setup_once (void)
+{
+# if (_POSIX_MONOTONIC_CLOCK == 0)
+    long val = sysconf (_SC_MONOTONIC_CLOCK);
+    assert (val != 0);
+    vlc_clock_id = (val < 0) ? CLOCK_REALTIME : CLOCK_MONOTONIC;
+# endif
+
+The problem is that the vlk_clock_setup_once() code believes
+vlc_clock_id is a variable as soon as _POSIX_MONOTONIC_CLOCK == 0.
+However, that's not true: it's a variable only if
+_POSIX_MONOTONIC_CLOCK == 0 && _POSIX_CLOCK_SELECTION > 0.
+
+So, to fix the build issue, you simply need to:
+
+-# if (_POSIX_MONOTONIC_CLOCK == 0)
++# if (_POSIX_MONOTONIC_CLOCK == 0) && (_POSIX_CLOCK_SELECTION > 0)
+
+However, once you do this, the build goes further up to the link step
+of libvlccore, where it fails with:
+
+/home/thomas/projets/buildroot/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `posix_spawnp'
+/home/thomas/projets/buildroot/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `posix_spawn_file_actions_adddup2'
+/home/thomas/projets/buildroot/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `posix_spawn_file_actions_addopen'
+
+And this is because VLC does not link with librt, which contains those
+functions in uClibc. I'm not sure how vlc builds on uClibc with other
+toolchains. I'm adding Bernd in Cc: since he is doing most of the VLC
+related modifications. Hopefully he can help here.
+
+A configure.ac check needs to be added, probably something like:
+
+  AC_CHECK_LIB(rt, clock_nanosleep, [
+    VLC_ADD_LIBS([libvlccore],[-lrt]))
+
+Could you look into this?
+
+Thanks,
 
 Thomas
 -- 
