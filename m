@@ -1,206 +1,104 @@
-From: =?UTF-8?q?Manuel=20V=C3=B6gele?= <develop@manuel-voegele.de>
-Date: Tue, 23 Aug 2016 11:26:06 +0200
-Subject: [Buildroot] [PATCH v2] python-pyqt5: new package
-In-Reply-To: <20160819134225.1490-3-develop@manuel-voegele.de>
-References: <20160819134225.1490-3-develop@manuel-voegele.de>
-Message-ID: <20160823092606.1462-1-develop@manuel-voegele.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Aug 2016 11:34:11 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-08-22
+Message-ID: <20160823093411.5E70110952D@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Manuel V?gele <develop@manuel-voegele.de>
----
-Changes v1 -> v2:
-  - Config.in
-    - Dependencies & comment now match those from qt5 (instead of qt4)
-    - Adjusted help text
-    - Removed ARCH_USES_QREAL_FLOAT setting
-  - python-pyqt5.mk
-    - Removed ARCH_USES_QREAL_FLOAT setting
-    - Added PyQt_Desktop_OpenGL compile switch
-    - Fixed a typo in a comment
-    - Removed the compileall directive in INSTALL_TARGET_CMDS
+Hello,
 
-I also rechecked if i could remove PyQt_SSL or PyQt_OpenGL (I can't)
+Build statistics for 2016-08-22
+================================
 
-Signed-off-by: Manuel V?gele <develop@manuel-voegele.de>
----
- package/Config.in                                  |  1 +
- .../0001-configure-skip-qtdetail.patch             | 29 ++++++++
- package/python-pyqt5/Config.in                     | 17 +++++
- package/python-pyqt5/python-pyqt5.hash             |  3 +
- package/python-pyqt5/python-pyqt5.mk               | 79 ++++++++++++++++++++++
- 5 files changed, 129 insertions(+)
- create mode 100644 package/python-pyqt5/0001-configure-skip-qtdetail.patch
- create mode 100644 package/python-pyqt5/Config.in
- create mode 100644 package/python-pyqt5/python-pyqt5.hash
- create mode 100644 package/python-pyqt5/python-pyqt5.mk
+      successes : 158
+       failures : 43 
+       timeouts : 1  
+          TOTAL : 202
 
-diff --git a/package/Config.in b/package/Config.in
-index 1e51a45..c4b4ed1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -734,6 +734,7 @@ menu "External python modules"
- 	source "package/python-pyparted/Config.in"
- 	source "package/python-pypcap/Config.in"
- 	source "package/python-pyqt/Config.in"
-+	source "package/python-pyqt5/Config.in"
- 	source "package/python-pyratemp/Config.in"
- 	source "package/python-pyro/Config.in"
- 	source "package/python-pyroute2/Config.in"
-diff --git a/package/python-pyqt5/0001-configure-skip-qtdetail.patch b/package/python-pyqt5/0001-configure-skip-qtdetail.patch
-new file mode 100644
-index 0000000..2e7b331
---- /dev/null
-+++ b/package/python-pyqt5/0001-configure-skip-qtdetail.patch
-@@ -0,0 +1,29 @@
-+Do not run qtdetail
-+
-+qtdetail is a tool that generates qtdetail.out. Since this program is
-+cross-compiled, it's not possible to run it on the host.
-+
-+Consequently, python-pyqt5.mk generates the qtdetail.out file before
-+calling configure.py.
-+
-+Therefore, this patch makes sure that the pre-generated qtdetail.out
-+file is kept, and that qtdetail is not executed.
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+Signed-off-by: Sergey Kostanbaev <sergey.kostanbaev@gmail.com>
-+---
-+Index: PyQt5_gpl-5.7/configure.py
-+===================================================================
-+--- PyQt5_gpl-5.7.orig/configure.py
-++++ PyQt5_gpl-5.7/configure.py
-+@@ -672,10 +672,6 @@ int main(int argc, char **argv)
-+         if cmd is None:
-+             error("Failed to determine the detail of your Qt installation. Try again using the --verbose flag to see more detail about the problem.")
-+ 
-+-        # Create the output file, first making sure it doesn't exist.
-+-        remove_file(out_file)
-+-        run_command(cmd, verbose)
-+-
-+         if not os.access(out_file, os.F_OK):
-+             error("%s failed to create %s. Make sure your Qt installation is correct." % (cmd, out_file))
-+ 
-diff --git a/package/python-pyqt5/Config.in b/package/python-pyqt5/Config.in
-new file mode 100644
-index 0000000..98c709e
---- /dev/null
-+++ b/package/python-pyqt5/Config.in
-@@ -0,0 +1,17 @@
-+comment "python-pyqt5 needs a toolchain w/ wchar, NPTL, C++, dynamic library"
-+        depends on !BR2_PACKAGE_QT
-+        depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+
-+config BR2_PACKAGE_PYTHON_PYQT5
-+	bool "python-pyqt5"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR # qt5
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # qt5
-+	depends on !BR2_STATIC_LIBS # qt5
-+	depends on !BR2_PACKAGE_QT # qt5
-+	select BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_PYTHON_SIP
-+	help
-+	  Python bindings for Qt 5
-+
-+	  http://www.riverbankcomputing.com/software/pyqt/
-diff --git a/package/python-pyqt5/python-pyqt5.hash b/package/python-pyqt5/python-pyqt5.hash
-new file mode 100644
-index 0000000..2a7d05b
---- /dev/null
-+++ b/package/python-pyqt5/python-pyqt5.hash
-@@ -0,0 +1,3 @@
-+# md5 from http://http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.7, sha256 locally computed
-+md5	e3dc21f31fd714659f0688e1eb31bacf  PyQt5_gpl-5.7.tar.gz
-+sha256	892693ba5f79989abb2061dad2d5c4e6f127e9dd3240f73f8220c7152cd35b05  PyQt5_gpl-5.7.tar.gz
-diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
-new file mode 100644
-index 0000000..e58ee5a
---- /dev/null
-+++ b/package/python-pyqt5/python-pyqt5.mk
-@@ -0,0 +1,79 @@
-+################################################################################
-+#
-+# python-pyqt5
-+#
-+################################################################################
-+
-+PYTHON_PYQT5_VERSION = 5.7
-+PYTHON_PYQT5_SOURCE = PyQt5_gpl-$(PYTHON_PYQT5_VERSION).tar.gz
-+PYTHON_PYQT5_SITE = http://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-$(PYTHON_PYQT5_VERSION)
-+PYTHON_PYQT5_LICENSE = GPLv3
-+PYTHON_PYQT5_LICENSE_FILES = LICENSE
-+
-+PYTHON_PYQT5_DEPENDENCIES = python-sip host-python-sip qt5base
-+
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+PYTHON_PYQT5_PYTHON_DIR = python$(PYTHON_VERSION_MAJOR)
-+PYTHON_PYQT5_RM_PORT_BASE = port_v3
-+else ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+PYTHON_PYQT5_PYTHON_DIR = python$(PYTHON3_VERSION_MAJOR)
-+PYTHON_PYQT5_RM_PORT_BASE = port_v2
-+endif
-+
-+PYTHON_PYQT5_QTDETAIL_LICENSE = Open Source
-+
-+PYTHON_PYQT5_QTDETAIL_TYPE = shared
-+
-+# Turn off features that aren't available in current qt configuration
-+PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_OPENSSL),,PyQt_SSL)
-+PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL),,PyQt_OpenGL)
-+PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL_DESKTOP),,PyQt_Desktop_OpenGL)
-+
-+define PYTHON_PYQT5_QTDETAIL
-+	echo $(1) >> $(2)/qtdetail.out
-+endef
-+
-+# Since we can't run generate qtdetail.out by running qtdetail on target device
-+# we must generate the configuration.
-+define PYTHON_PYQT5_GENERATE_QTDETAIL
-+	$(RM) -f $(1)/qtdetail.out
-+	$(call PYTHON_PYQT5_QTDETAIL,$(PYTHON_PYQT5_QTDETAIL_LICENSE),$(1))
-+	$(call PYTHON_PYQT5_QTDETAIL,$(PYTHON_PYQT5_QTDETAIL_TYPE),$(1))
-+	$(foreach f,$(PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES),
-+		$(call PYTHON_PYQT5_QTDETAIL,$(f),$(1)) \
-+	)
-+endef
-+
-+PYTHON_PYQT5_CONF_OPTS = \
-+	--bindir $(TARGET_DIR)/usr/bin \
-+	--destdir $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT5_PYTHON_DIR)/site-packages \
-+	--qmake $(HOST_DIR)/usr/bin/qmake \
-+	--sysroot $(STAGING_DIR)/usr \
-+	-w --confirm-license \
-+	--no-designer-plugin \
-+	--no-docstrings \
-+	--no-sip-files
-+
-+define PYTHON_PYQT5_CONFIGURE_CMDS
-+	$(call PYTHON_PYQT5_GENERATE_QTDETAIL,$(@D))
-+	(cd $(@D); \
-+		$(TARGET_MAKE_ENV) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(HOST_DIR)/usr/bin/python configure.py \
-+			$(PYTHON_PYQT5_CONF_OPTS) \
-+	)
-+endef
-+
-+define PYTHON_PYQT5_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
-+
-+# __init__.py is needed to import PyQt5
-+# __init__.pyc is needed if BR2_PACKAGE_PYTHON_PYC_ONLY is set
-+define PYTHON_PYQT5_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install
-+	touch $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT5_PYTHON_DIR)/site-packages/PyQt5/__init__.py
-+	$(RM) -rf $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT5_PYTHON_DIR)/site-packages/PyQt5/uic/$(PYTHON_PYQT5_RM_PORT_BASE)
-+endef
-+
-+$(eval $(generic-package))
+Classification of failures by reason
+====================================
+
+                  ffmpeg-2.8.7 | 6 
+                 lvm2-2.02.162 | 4 
+                 jack2-v1.9.10 | 2 
+                  lshw-B.02.18 | 2 
+                 mono-4.4.2.11 | 2 
+                     php-7.0.9 | 2 
+sconeserver-bbb384404575f8a... | 2 
+                  squid-3.5.20 | 2 
+                     vlc-2.2.4 | 2 
+               domoticz-3.4834 | 1 
+                   evemu-2.4.0 | 1 
+filemq-e59951489045825d6fc5... | 1 
+                     gpsd-3.16 | 1 
+               libepoxy-v1.3.1 | 1 
+           libfreeimage-3.17.0 | 1 
+               libglib2-2.48.1 | 1 
+                    libiio-0.7 | 1 
+                 mesa3d-12.0.1 | 1 
+                   ntp-4.2.8p8 | 1 
+                  openjpeg-2.1 | 1 
+               openswan-2.6.46 | 1 
+                 php-zmq-1.1.3 | 1 
+                poppler-0.32.0 | 1 
+                  prboom-2.5.0 | 1 
+           qt5location-5.6.1-1 | 1 
+             rabbitmq-c-v0.8.0 | 1 
+                  thrift-0.9.2 | 1 
+               tpm-tools-1.3.8 | 1 
+x264-3b70645597bea052d23980... | 1 
+
+
+Detail of failures
+===================
+
+     powerpc |                domoticz-3.4834 | NOK | http://autobuild.buildroot.net/results/538a2e4f24fd3d8f2c5666d2382e53f9fedc8c89
+        m68k |                    evemu-2.4.0 | TIM | http://autobuild.buildroot.net/results/4c60d5583d31a6a55f3e42cb7ad88920828f4f52
+         arc |                   ffmpeg-2.8.7 | NOK | http://autobuild.buildroot.net/results/ca4decb3f7f92d40a7fbae9ac052acaab0d10e7d
+         arc |                   ffmpeg-2.8.7 | NOK | http://autobuild.buildroot.net/results/875fd3ff9b84b3476fa23d0a551d14dce54f53a0
+         arc |                   ffmpeg-2.8.7 | NOK | http://autobuild.buildroot.net/results/c5b700a1a59bde8860fd75bb7d2ffeff256ce3a3
+        m68k |                   ffmpeg-2.8.7 | NOK | http://autobuild.buildroot.net/results/8d28d3e428ce9fad05e920d26e5eac7c5d4be1e6
+         arc |                   ffmpeg-2.8.7 | NOK | http://autobuild.buildroot.net/results/84dc409a6c50746cdac5f8bc5f4d91bfff534af5
+         arc |                   ffmpeg-2.8.7 | NOK | http://autobuild.buildroot.net/results/0f4e898659812940b08008de73d081d8b5964173
+        m68k | filemq-e59951489045825d6fc5... | NOK | http://autobuild.buildroot.net/results/8430ab5edf0af5485a247083797e7f0f6cef5a17
+         arm |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/1a07085c2427b6be76bfa47ec29db83d255fb469
+         arc |                  jack2-v1.9.10 | NOK | http://autobuild.buildroot.net/results/90ab9bc6085579205613e6dd2c4ba22eac48df2d
+        sh4a |                  jack2-v1.9.10 | NOK | http://autobuild.buildroot.net/results/5a593cc7a27058a680fe1a0b6a16b41e1fef22c9
+         arm |                libepoxy-v1.3.1 | NOK | http://autobuild.buildroot.net/results/876ae3dbaa397ca710c1f2e41df28d22164de2a9
+         arm |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/396b79872b9c5a90182e8b1b2f9cb6df7a28b68c
+microblazeel |                libglib2-2.48.1 | NOK | http://autobuild.buildroot.net/results/b9c1b0dace44d6ba7d28f09acddff4c9b16f92ae
+        bfin |                     libiio-0.7 | NOK | http://autobuild.buildroot.net/results/fa08b36540e8eff2f198711ce41c8cef2e8cf0ba
+         arm |                   lshw-B.02.18 | NOK | http://autobuild.buildroot.net/results/4b8abf9de3a644bde235f1c71d3b512c83fd9143
+         arm |                   lshw-B.02.18 | NOK | http://autobuild.buildroot.net/results/08681f8db5d0ba9ce0cd132eb1f448304ddee209
+         arm |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/3d4df873a3d4fa199e03d8aa8694eafeac474e5a
+      x86_64 |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/407ccac95d02715ef9059b9a1282e21dc465af98
+         arm |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/07e25821bb7538f765af1f9c9513998e86f3ec5e
+      x86_64 |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/ea39becf5561d1fd4c9535ee1225b8ddc859bafe
+         arc |                  mesa3d-12.0.1 | NOK | http://autobuild.buildroot.net/results/09e037c628ca2a27d8eb832dd070f50ec7ebb72a
+      x86_64 |                  mono-4.4.2.11 | NOK | http://autobuild.buildroot.net/results/da31257aaf7e0f1d7f837fcacdc1d1b4af11e630
+         arm |                  mono-4.4.2.11 | NOK | http://autobuild.buildroot.net/results/ed1f7e685b80a0f1313ff97a4c5c62cd5064bfa5
+         arm |                    ntp-4.2.8p8 | NOK | http://autobuild.buildroot.net/results/c353ba4ab2448b0a3e72d757b29a5b2bd48eb77d
+         arm |                   openjpeg-2.1 | NOK | http://autobuild.buildroot.net/results/049d959237e696c85e3b3c5d3d716f1f45c35016
+         arm |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/7aa5a3694b517e3825841da8d6497ea663e67090
+        bfin |                      php-7.0.9 | NOK | http://autobuild.buildroot.net/results/8c0f1a6fca6804b27279ab74e3b31a0415eb1751
+        m68k |                      php-7.0.9 | NOK | http://autobuild.buildroot.net/results/c05df2d782103cebf5fa33f2f82c59df46bca280
+        bfin |                  php-zmq-1.1.3 | NOK | http://autobuild.buildroot.net/results/0635d1bca96c9de883d83328c1359587cace767c
+        m68k |                 poppler-0.32.0 | NOK | http://autobuild.buildroot.net/results/a801670a63023da16f32a64366efe32bc805a777
+         arm |                   prboom-2.5.0 | NOK | http://autobuild.buildroot.net/results/903576fa04dddcb2a0c9376563da51813e1ff5cc
+     powerpc |            qt5location-5.6.1-1 | NOK | http://autobuild.buildroot.net/results/344444aa86c5a11bded97d3b19bf3fc26ccd711c
+         arm |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/919a6658680d933da32fd812d6eac26c74c083a2
+         arm | sconeserver-bbb384404575f8a... | NOK | http://autobuild.buildroot.net/results/5f7875a4ec4faeed94651a5f4a9962725264a14b
+     powerpc | sconeserver-bbb384404575f8a... | NOK | http://autobuild.buildroot.net/results/f1d161c53190797e97c78247e8cc8a6cfa46dcb3
+         arm |                   squid-3.5.20 | NOK | http://autobuild.buildroot.net/results/76e32ab5b29169d8b667e9f30cd0114f8f6aa3fb
+         arm |                   squid-3.5.20 | NOK | http://autobuild.buildroot.net/results/8d084d1818f915a6090f04957613175855cf671a
+      x86_64 |                   thrift-0.9.2 | NOK | http://autobuild.buildroot.net/results/969944d6973bba2915f37e16f86a4d70b891f51b
+         arm |                tpm-tools-1.3.8 | NOK | http://autobuild.buildroot.net/results/830fc20c68a0653afa5567edffc2ededc4e45cc6
+         arc |                      vlc-2.2.4 | NOK | http://autobuild.buildroot.net/results/6b1fe1eb20c9993b05d0b2ba796ca77976cb2447
+        m68k |                      vlc-2.2.4 | NOK | http://autobuild.buildroot.net/results/907b1f35b8a0b3372249bf5443af8e4ae9af290d
+         arc | x264-3b70645597bea052d23980... | NOK | http://autobuild.buildroot.net/results/51071b790866b0c7083de3a94ad2a427009096af
+
 -- 
-2.1.4
+http://autobuild.buildroot.net
