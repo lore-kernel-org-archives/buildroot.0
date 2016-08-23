@@ -1,34 +1,37 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 23 Aug 2016 07:20:29 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
-Message-ID: <1471947629-2239-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 23 Aug 2016 07:41:10 -0300
+Subject: [Buildroot] [PATCH] gcc: bump 6.x series to 6.2.0
+In-Reply-To: <20160823001444.6543d2e0@free-electrons.com>
+References: <1471896123-31759-1-git-send-email-gustavo@zacarias.com.ar>
+ <877fb8o688.fsf@dell.be.48ers.dk>
+ <20160822235237.0ed535ed@free-electrons.com>
+ <87twecmps7.fsf@dell.be.48ers.dk>
+ <20160823001444.6543d2e0@free-electrons.com>
+Message-ID: <0712471c-a4b9-c27e-56ac-c438c4fd4361@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 22/08/16 19:14, Thomas Petazzoni wrote:
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7bc7b4f..14e86ab 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -240,10 +240,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.77"	if BR2_KERNEL_HEADERS_3_14
--	default "3.18.39"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.40"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.30"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.31"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
- 	default "4.4.19"	if BR2_KERNEL_HEADERS_4_4
--- 
-2.7.3
+> Hello,
+>
+> On Mon, 22 Aug 2016 23:56:08 +0200, Peter Korsgaard wrote:
+>
+>>  > Since it has the Blackfin patches, Gustavo's patch is against master.
+>>
+>> Yeah. Do we want it for 2016.08? It is strictly seen a bugfix release,
+>> but it's a scary package to bump this close to the release.
+>
+> Agreed. I'd rather this see merged in next.
+>
+> Thomas
+
+Hi.
+It's intended for -next, i've run basic builds (arm-uclibc, arm-musl) 
+with it only.
+I don't always split my tree into -next since for sub 30 days hence it 
+was based on master with my -next stuff in it.
+Regards.
