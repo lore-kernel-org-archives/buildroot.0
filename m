@@ -1,58 +1,119 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 13:44:38 +0200
-Subject: [Buildroot] [PATCH/next 2/4] DEVELOPERS: add initial list of
- Buildroot developers
-In-Reply-To: <CAFOYHZDQpZWxo4rAAuXj6JDhOLcmRPb=19+_JWC_jKS_8vmpRQ@mail.gmail.com>
-References: <1471902678-18693-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAFOYHZDQpZWxo4rAAuXj6JDhOLcmRPb=19+_JWC_jKS_8vmpRQ@mail.gmail.com>
-Message-ID: <20160823134438.550a0616@free-electrons.com>
+From: Romain Perier <romain.perier@free-electrons.com>
+Date: Tue, 23 Aug 2016 14:19:45 +0200
+Subject: [Buildroot] [PATCH v5 2/7] pkg-download: Allow packages to pass
+	generic options to download methods
+In-Reply-To: <20160823121950.16826-1-romain.perier@free-electrons.com>
+References: <20160823121950.16826-1-romain.perier@free-electrons.com>
+Message-ID: <20160823121950.16826-3-romain.perier@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Introduce a new package variable $(PKG)_DL_OPTS. When this variable
+is defined, its value is passed to the downloader as options to
+the underlying command. Packages can now retrieve archives from server
+expecting logins and passwords, use referer url, proxy or specific
+options for cloning a repository.
 
-On Tue, 23 Aug 2016 22:47:39 +1200, Chris Packham wrote:
-> Hi Thomas,
-> 
-> 2016-08-23 9:51 GMT+12:00 Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com>:
-> > This is an initial list of Buildroot developers. It has been created
-> > semi-automatically by parsing the Git history, and finding the authors
-> > of commits with a title like "<foo>: new package". Some additional
-> > manual tweaking has been done (merging multiple entries corresponding to
-> > the same person, adding some more entries, etc.).
-> >
-> > +N:     Chris Packham <judge.packham@gmail.com>
-> > +F:     package/eventlog/
-> > +F:     package/micropython/  
-> 
-> Probably want to add package/micropython/-lib/ and package/syslog-ng/
-> unless someone else wants them.
+Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
 
-Since you are the original authors of those packages, I was wondering
-why my script that parsed the Git history didn't find those ones. It's
-because:
+Changes in v4:
+ - Add missing Reviewed-by tag
 
-	micropython-lib: new packages
+Changes in v2:
+ - Replaced $(PKG)_DL_REFERER by $(PKG)_DL_OPTS
+ - Add support for this options to all downloaders
 
-there's a final "s" here which didn't match my script regexp.
+ package/pkg-download.mk | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
-And:
-
-	syslog-ng: New package
-
-there's a capital "N" in New which my regexp also wasn't taking into
-account.
-
-I've added you as the contact developer for those two packages. Thanks
-for the feedback!
-
-Thomas
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 315203f..3b6561b 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -81,7 +81,8 @@ define DOWNLOAD_GIT
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+-		$($(PKG)_BASE_NAME)
++		$($(PKG)_BASE_NAME) \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+@@ -97,7 +98,8 @@ define DOWNLOAD_BZR
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+-		$($(PKG)_BASE_NAME)
++		$($(PKG)_BASE_NAME) \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ define SOURCE_CHECK_BZR
+@@ -112,7 +114,8 @@ define DOWNLOAD_CVS
+ 		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
+ 		$($(PKG)_DL_VERSION) \
+ 		$($(PKG)_RAWNAME) \
+-		$($(PKG)_BASE_NAME)
++		$($(PKG)_BASE_NAME) \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ # Not all CVS servers support ls/rls, use login to see if we can connect
+@@ -127,7 +130,8 @@ define DOWNLOAD_SVN
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+-		$($(PKG)_BASE_NAME)
++		$($(PKG)_BASE_NAME) \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ define SOURCE_CHECK_SVN
+@@ -143,7 +147,8 @@ define DOWNLOAD_SCP
+ 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		$(QUIET) \
+ 		-- \
+-		'$(call stripurischeme,$(call qstrip,$(1)))'
++		'$(call stripurischeme,$(call qstrip,$(1)))' \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ define SOURCE_CHECK_SCP
+@@ -157,7 +162,8 @@ define DOWNLOAD_HG
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+-		$($(PKG)_BASE_NAME)
++		$($(PKG)_BASE_NAME) \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+@@ -172,7 +178,8 @@ define DOWNLOAD_WGET
+ 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		$(QUIET) \
+ 		-- \
+-		'$(call qstrip,$(1))'
++		'$(call qstrip,$(1))' \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ define SOURCE_CHECK_WGET
+@@ -185,7 +192,8 @@ define DOWNLOAD_LOCALFILES
+ 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		$(QUIET) \
+ 		-- \
+-		$(call stripurischeme,$(call qstrip,$(1)))
++		$(call stripurischeme,$(call qstrip,$(1))) \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ define SOURCE_CHECK_LOCALFILES
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
