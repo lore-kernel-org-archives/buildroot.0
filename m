@@ -1,39 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 12:03:59 +0200
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 23 Aug 2016 12:09:54 +0200
 Subject: [Buildroot] [PATCH/next 2/4] DEVELOPERS: add initial list of
  Buildroot developers
-In-Reply-To: <h94t8dxngf.ln2@ID-313208.user.individual.net>
+In-Reply-To: <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1471902678-18693-1-git-send-email-thomas.petazzoni@free-electrons.com>
  <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <h94t8dxngf.ln2@ID-313208.user.individual.net>
-Message-ID: <20160823120359.7f4322ff@free-electrons.com>
+Message-ID: <670f6e5c-e513-6b3f-ed82-4da1ddc3d141@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Thomas,
 
-On Tue, 23 Aug 2016 07:41:37 +0200, Bernd Kuhls wrote:
-
-> Am Mon, 22 Aug 2016 23:51:16 +0200 schrieb Thomas Petazzoni:
+On 22/08/2016 23:51, Thomas Petazzoni wrote:
+> This is an initial list of Buildroot developers. It has been created
+> semi-automatically by parsing the Git history, and finding the authors
+> of commits with a title like "<foo>: new package". Some additional
+> manual tweaking has been done (merging multiple entries corresponding to
+> the same person, adding some more entries, etc.).
 > 
-> > +N:	Bernd Kuhls <bernd.kuhls@t-online.de>  
-> 
-> > +F:	package/libpjsip/  
-> 
-> While it is true that I initially created this package in preparation
-> for an Asterisk package in the meantime I lost interest in it because
-> I am using freeswitch now. All subsequent patches to this package came
-> from Luca Ceresoli, so if he agrees I suggest to move it to his entry.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Thanks for the feedback, I've fixed this locally, will be part of v2.
+[...]
 
-Best regards,
+> +N:	Luca Ceresoli <luca@lucaceresoli.net>
+> +F:	package/agentpp/
+> +F:	package/exim/
+> +F:	package/ffmpeg/
+> +F:	package/linphone/
 
-Thomas
+I haven't had any role on the ffmpeg and linphone packages since >4
+years now. I think this line should be removed from under my name.
+
+> +F:	package/qpid-proton/
+> +F:	package/rtl8188eu/
+> +F:	package/stm32flash/
+> +F:	package/unzip/
+
+Ok for these.
+
+Also, as Bernd suggested, libpjsip should be added.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Luca
