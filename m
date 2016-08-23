@@ -1,42 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 15:39:17 +0200
-Subject: [Buildroot] [git commit] package/freeswitch: bump version to 1.6.10
-Message-ID: <20160902142940.3A3F07FEE6@busybox.osuosl.org>
+Date: Tue, 23 Aug 2016 22:21:38 +0200
+Subject: [Buildroot] [git commit] package/amd-catalyst: fix circular
+	Config.in dependency
+Message-ID: <20160902142939.CADBD7FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bacff38e08a3cf7c5ead0e5de59011134e009931
+commit: https://git.buildroot.net/buildroot/commit/?id=652d674e066e9c1b8eec9057778d2c9a34f8261d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The current amd-catalyst options related to the CCCLE tool create the
+following Config.in circular dependency:
+
+package/qt/Config.in:134:error: recursive dependency detected!
+package/qt/Config.in:134:	symbol BR2_PACKAGE_QT_GUI_MODULE is selected by BR2_PACKAGE_AMD_CATALYST_CCCLE
+package/amd-catalyst/Config.in:52:	symbol BR2_PACKAGE_AMD_CATALYST_CCCLE depends on BR2_PACKAGE_QT_NOPNG
+package/qt/Config.in:277:	symbol BR2_PACKAGE_QT_NOPNG is part of choice <choice>
+package/qt/Config.in:271:	choice <choice> contains symbol <choice>
+package/qt/Config.in:271:	choice <choice> contains symbol BR2_PACKAGE_QT_GUI_MODULE
+
+But in fact, it turns out that selecting BR2_PACKAGE_QT_GUI_MODULE is
+not necessary, since we already "depends on BR2_PACKAGE_QT_X11", which
+itself selects BR2_PACKAGE_QT_GUI_MODULE. Therefore, to fix this problem
+we simply remove the "select BR2_PACKAGE_QT_GUI_MODULE" from the
+BR2_PACKAGE_AMD_CATALYST_CCCLE option.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freeswitch/freeswitch.hash | 4 ++--
- package/freeswitch/freeswitch.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/amd-catalyst/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 2041158..4a4d6da 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,2 +1,2 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.9.tar.xz.sha256
--sha256	aa5f191113be2bd44cb4f2108da3dcc37be3234c6b733896fbff97526ac66451	freeswitch-1.6.9.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.10.tar.xz.sha256
-+sha256 b7beaaac29dc0a58cc34cfd402bf1c7e8ca06975722fd8ddb2983cbed17dd6e4  freeswitch-1.6.10.tar.xz
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index e7e9ece..b65096b 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREESWITCH_VERSION = 1.6.9
-+FREESWITCH_VERSION = 1.6.10
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
- FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
- FREESWITCH_LICENSE = MPLv1.1, \
+diff --git a/package/amd-catalyst/Config.in b/package/amd-catalyst/Config.in
+index 96e7f06..85551ed 100644
+--- a/package/amd-catalyst/Config.in
++++ b/package/amd-catalyst/Config.in
+@@ -56,7 +56,6 @@ config BR2_PACKAGE_AMD_CATALYST_CCCLE
+ 	depends on !BR2_PACKAGE_QT_NOPNG
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps-ng
+ 	select BR2_PACKAGE_PROCPS_NG # runtime
+-	select BR2_PACKAGE_QT_GUI_MODULE
+ 	select BR2_PACKAGE_QT_ACCESSIBILITY
+ 	help
+ 	  Installs the Catalyst Control Center, a Qt graphical tool to
