@@ -1,38 +1,39 @@
-From: Julien CORJON <corjon.j@ecagroup.com>
-Date: Tue, 23 Aug 2016 13:38:36 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2016-08-22
-In-Reply-To: <20160823093410.971F8109354@stock.ovh.net>
-References: <20160823093410.971F8109354@stock.ovh.net>
-Message-ID: <ed4e9146-e57c-3045-7642-d786e9574d83@ecagroup.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 23 Aug 2016 10:40:19 -0300
+Subject: [Buildroot] [PATCH] libksba: bump to version 1.3.5
+Message-ID: <1471959619-28285-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libksba/libksba.hash | 2 +-
+ package/libksba/libksba.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-New daily-mail seems to work well!
-
-Just a comment on that one, you should probably set the mail reply-to 
-field to buildroot at buildroot.org in case developers want to notice 
-directly the community.
-
-Regards,
-
-Julien
-
-Le 23/08/2016 ? 11:34, Thomas Petazzoni a ?crit :
-> Hello,
->
-> This is the list of Buildroot build failures that occured on
-> 2016-08-22, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
->
-> Build failures related to your packages:
->
->      powerpc |            qt5location-5.6.1-1 | http://autobuild.buildroot.net/results/344444aa86c5a11bded97d3b19bf3fc26ccd711c
->
+diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
+index 92abbab..f0a38f3 100644
+--- a/package/libksba/libksba.hash
++++ b/package/libksba/libksba.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	f6c2883cebec5608692d8730843d87f237c0964d923bbe7aa89c05f20558ad4f	libksba-1.3.4.tar.bz2
++sha256	41444fd7a6ff73a79ad9728f985e71c9ba8cd3e5e53358e70d5f066d35c1a340	libksba-1.3.5.tar.bz2
+diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
+index 40a8c9b..e29b6ae 100644
+--- a/package/libksba/libksba.mk
++++ b/package/libksba/libksba.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBKSBA_VERSION = 1.3.4
++LIBKSBA_VERSION = 1.3.5
+ LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
+ LIBKSBA_SITE = ftp://ftp.gnupg.org/gcrypt/libksba
+ LIBKSBA_LICENSE = LGPLv3+ or GPLv2+ (library, headers), GPLv3+ (manual, tests, build system)
+-- 
+2.7.3
