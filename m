@@ -1,53 +1,84 @@
 From: Romain Perier <romain.perier@free-electrons.com>
-Date: Tue, 23 Aug 2016 14:19:46 +0200
-Subject: [Buildroot] [PATCH v5 3/7] docs/manual: Document the variable
-	$(PKG)_DL_OPTS
+Date: Tue, 23 Aug 2016 14:19:48 +0200
+Subject: [Buildroot] [PATCH v5 5/7] package/amd-catalyst: Add AMD cmdline
+	tools
 In-Reply-To: <20160823121950.16826-1-romain.perier@free-electrons.com>
 References: <20160823121950.16826-1-romain.perier@free-electrons.com>
-Message-ID: <20160823121950.16826-4-romain.perier@free-electrons.com>
+Message-ID: <20160823121950.16826-6-romain.perier@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This adds a description of the optional variable $(PKG)_DL_OPTS. When it
-is set, this option passes additional options to the downloader.
+The AMD Catalyst driver includes some cmdline tools for displaying
+specific infos about the GL stack or to test 3D, like fglxinfo
+or fgl_gears. This commit adds support to install such tools.
 
 Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 
-Changes in v4:
- - Add Reviewed-by tag
+Changes in v5:
+ - Added Reviewed-by Tag
 
-Changes in v3:
- - Improve documentation
+ package/amd-catalyst/Config.in       |  5 +++++
+ package/amd-catalyst/amd-catalyst.mk | 20 ++++++++++++++++++++
+ 2 files changed, 25 insertions(+)
 
-Changes in v2:
- - Don't include the example in the snippet of code
- - Replaced $(PKG)_DL_REFERER by $(PKG)_DL_OPTS
-
- docs/manual/adding-packages-generic.txt | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index ef895ec..51408e8 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -250,6 +250,13 @@ information is (assuming the package name is +libfoo+) :
-     +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
-     +LIBFOO_SITE=$(TOPDIR)/../src/libfoo+
+diff --git a/package/amd-catalyst/Config.in b/package/amd-catalyst/Config.in
+index 1578324..1d889f6 100644
+--- a/package/amd-catalyst/Config.in
++++ b/package/amd-catalyst/Config.in
+@@ -40,6 +40,11 @@ if BR2_PACKAGE_AMD_CATALYST_XORG
+ config BR2_PACKAGE_PROVIDES_LIBGL
+ 	default "amd-catalyst"
  
-+* +LIBFOO_DL_OPTS+ is a space-separated list of additional options to
-+  pass to the downloader. Useful for retrieving documents with
-+  server-side checking for user logins and passwords, or to use a proxy.
-+  All download methods valid for +LIBFOO_SITE_METHOD+ are supported;
-+  valid options depend on the download method (consult the man page
-+  for the respective download utilities).
++config BR2_PACKAGE_AMD_CATALYST_CMDLINE_TOOLS
++	bool "command-line configuration tools and utilities"
++	help
++	  Build the amd command line tools
 +
- * +LIBFOO_EXTRA_DOWNLOADS+ is a space-separated list of additional
-   files that Buildroot should download. If an entry contains +://+
-   then Buildroot will assume it is a complete URL and will download
+ endif
+ 
+ comment "amd-catalyst kernel module needs a kernel to be built"
+diff --git a/package/amd-catalyst/amd-catalyst.mk b/package/amd-catalyst/amd-catalyst.mk
+index 812135d..7fbe6b3 100644
+--- a/package/amd-catalyst/amd-catalyst.mk
++++ b/package/amd-catalyst/amd-catalyst.mk
+@@ -107,6 +107,25 @@ endef
+ 
+ endif
+ 
++ifeq ($(BR2_PACKAGE_AMD_CATALYST_CMDLINE_TOOLS), y)
++AMD_CATALYST_CMDLINE_TOOLS_FILES = \
++	atiode \
++	atiodcli \
++	fgl_glxgears \
++	aticonfig \
++	amd-console-helper \
++	fglrxinfo
++
++define  AMD_CATALYST_INSTALL_CMDLINE_TOOLS
++	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/sbin/atieventsd \
++		$(TARGET_DIR)/usr/sbin
++	$(foreach f,$(AMD_CATALYST_CMDLINE_TOOLS_FILES), \
++		$(INSTALL) -D -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/X11R6/bin/$(f) \
++			$(TARGET_DIR)/usr/bin/$(f)
++	)
++endef
++endif
++
+ define AMD_CATALYST_CONFIGURE_CMDS
+ 	$(call AMD_CATALYST_PREPARE_MODULE)
+ endef
+@@ -117,6 +136,7 @@ endef
+ 
+ define AMD_CATALYST_INSTALL_TARGET_CMDS
+ 	$(call AMD_CATALYST_INSTALL_XORG)
++	$(call AMD_CATALYST_INSTALL_CMDLINE_TOOLS)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.9.3
