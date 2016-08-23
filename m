@@ -1,137 +1,104 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 24 Aug 2016 00:33:56 +0200
-Subject: [Buildroot] [PATCH 2/2] package/lvm2: disable for musl toolchains
-In-Reply-To: <1471991636-29161-1-git-send-email-romain.naour@gmail.com>
-References: <1471991636-29161-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1471991636-29161-2-git-send-email-romain.naour@gmail.com>
+From: Matt Flax <flatmax@flatmax.org>
+Date: Wed, 24 Aug 2016 09:44:22 +1000
+Subject: [Buildroot] [PATCH 1/3] arch/arm: Add Cortex-a53 CPU
+In-Reply-To: <20160824000345.264d6d2a@free-electrons.com>
+References: <1471913603-21487-1-git-send-email-flatmax@flatmax.org>
+ <1471913603-21487-2-git-send-email-flatmax@flatmax.org>
+ <20160824000345.264d6d2a@free-electrons.com>
+Message-ID: <dc3618df-52c5-c209-30a4-ea351fb2c49c@flatmax.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lvm2 doesn't build with musl toolchains due to several assignment of read-only
-variable like stdin, stdout and stderr.
-Also, it use mallinfo function which is not available with musl.
 
-These issues has been reported upstream [2] but some of them remains
-even with the latest stable release 2.02.163.
+On 24/08/16 08:03, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Tue, 23 Aug 2016 10:53:21 +1000, Matt Flax wrote:
+>> Adds the Cortex-a53 CPU to the target architecture variant choice. This sets
+>> the toolchain to use cortex-a53 as the target. The effect is that various
+>> cortex-a53 tunings are enabled for the compilation of packages.
+>>
+>> Signed-off-by: Matt Flax <flatmax@flatmax.org>
+> Thanks, but as I said, I don't want to duplicate definitions of 64 bits
+> ARM cores between Config.in.arm and Config.in.aarch64. So I've pushed
+> at
+> http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=aarch64
+> a branch that does the necessary rework: it merges Config.in.aarch64
+> into Config.in.arm, does a few preparation steps, and finally adds your
+> commit on top of that. Could you have a look and let me know what you
+> think?
+Looks good. One thing though, my original Cortex-A53 patch selected 
+VFPV4 which is now incorrect,
+that should be removed ... however that wouldn't enable any HF settings ...
+Also I don't understand why we need "select BR2_ARCH_HAS_MMU_OPTIONAL" 
+but as I mentioned,
+uclibc doesn't compile cleanly without it ... seems like a deep rooted 
+problem.
 
-Fixes:
-http://autobuild.buildroot.net/results/3d4df873a3d4fa199e03d8aa8694eafeac474e5a
-[...]
 
-[1] http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
-[2] https://www.redhat.com/archives/linux-lvm/2016-February/msg00024.html
+> I haven't yet looked in detail at your PATCH 3/3 about the FPU support
+> for ARMv8. It's still a bit unclear to me what level of FPU support is
+> mandatory/optional in ARMv8, and whether we can just use
+> crypto-neon-fp-armv8 all the time, or whether we should allow using
+> fp-armv8, neon-fp-armv8 and crypto-neon-fp-armv8. Do you have some more
+> detailed information about which feature is mandatory/optional in the
+> various ARM64 cores?
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/cryptsetup/Config.in    | 6 ++++--
- package/dmraid/Config.in        | 6 ++++--
- package/docker-engine/Config.in | 1 +
- package/lvm2/Config.in          | 6 ++++--
- package/udisks/Config.in        | 5 +++--
- 5 files changed, 16 insertions(+), 8 deletions(-)
+I am not sure about the fine detail, but it seems that ARMV8 extends 
+VFPV4, perhaps there should be an extension of VFPV4 which is similar to 
+the extension of VFPV3 to VFPV4 ?
+The "- mcpu" flag is the same between aarch32 and aarch64, so that 
+simplifies the BR2_GCC_TARGET_CPU to being the same for both.
+However aarch64 and aarch32 seem to require different BR2_GCC_TARGET_FPU 
+lines. I am pretty certain that we need the aarch32 BR2_GCC_TARGET_FPU 
+line to include at least "neon" in some way.
+I have inspected the gcc definitions of the FPU setups (below) ... 
+fp-armv8 doesn't include neon and neon-fp-armv8 doesn't include the 
+crypto extensions. I guess the base state should be neon-fp-armv8 ... 
+would be good to have options to include the crypto features to speed up 
+crc32, AES, sha1 and sha2
+ From gcc :
+#define ARM_FPU(NAME, MODEL, REV, VFP_REGS, NEON, FP16, CRYPTO)
+ARM_FPU("fp-armv8",    ARM_FP_MODEL_VFP, 8, VFP_REG_D32, false, true, false)
+ARM_FPU("neon-fp-armv8",ARM_FP_MODEL_VFP, 8, VFP_REG_D32, true, true, false)
+ARM_FPU("crypto-neon-fp-armv8", ARM_FP_MODEL_VFP, 8, VFP_REG_D32, true, 
+true, true)
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index cd95956..d2bf3b4 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_CRYPTSETUP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
- 	depends on BR2_USE_MMU # lvm2
- 	depends on !BR2_STATIC_LIBS # lvm2
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2
- 	depends on BR2_USE_WCHAR # util-linux
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_LVM2
-@@ -15,6 +16,7 @@ config BR2_PACKAGE_CRYPTSETUP
- 
- 	  https://gitlab.com/cryptsetup/cryptsetup
- 
--comment "cryptsetup needs a toolchain w/ wchar, threads, dynamic library"
-+comment "cryptsetup needs a glibc or uClibc toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
-index 4a8cf61..583f3f2 100644
---- a/package/dmraid/Config.in
-+++ b/package/dmraid/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_DMRAID
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
- 	depends on BR2_USE_MMU # lvm2
- 	depends on !BR2_STATIC_LIBS # lvm2
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2
- 	select BR2_PACKAGE_LVM2
- 	help
- 	  dmraid discovers, activates, deactivates and displays properties
-@@ -11,6 +12,7 @@ config BR2_PACKAGE_DMRAID
- 	  dmraid uses the Linux device-mapper to create devices with
- 	  respective mappings for the ATARAID sets discovered.
- 
--comment "dmraid needs a toolchain w/ threads, dynamic library"
-+comment "dmraid needs a glibc or uClibc toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index a22786a..71dec69 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -40,6 +40,7 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
- 	depends on BR2_USE_MMU # lvm2
- 	depends on !BR2_STATIC_LIBS # lvm2
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2
- 	select BR2_PACKAGE_LVM2
- 	select BR2_PACKAGE_LVM2_APP_LIBRARY
- 	help
-diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
-index b3a6593..23dff70 100644
---- a/package/lvm2/Config.in
-+++ b/package/lvm2/Config.in
-@@ -3,6 +3,8 @@ config BR2_PACKAGE_LVM2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # needs fork()
- 	depends on !BR2_STATIC_LIBS # It fails to build statically
-+	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	help
- 	  This is LVM2, the rewrite of The Linux Logical Volume Manager.
- 	  LVM supports enterprise level volume management of disk and disk
-@@ -34,6 +36,6 @@ config BR2_PACKAGE_LVM2_APP_LIBRARY
- 
- endif
- 
--comment "lvm2 needs a toolchain w/ threads, dynamic library"
-+comment "lvm2 needs a glibc or uClibc toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/udisks/Config.in b/package/udisks/Config.in
-index 8b8fd28..029860f 100644
---- a/package/udisks/Config.in
-+++ b/package/udisks/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_UDISKS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-glib -> glib2
- 	depends on BR2_USE_MMU # lvm2
- 	depends on !BR2_STATIC_LIBS # lvm2
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_DBUS_GLIB
- 	depends on BR2_USE_WCHAR # dbus-glib -> glib2
-@@ -39,7 +40,7 @@ comment "udisks needs udev /dev management"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_HAS_UDEV
- 
--comment "udisks needs a toolchain w/ wchar, threads, dynamic library"
-+comment "udisks needs a glibc or uClibc toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS
-+		BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
--- 
-2.5.5
+
+> Also, it is worth reminding that there are some ARMv8-A cores that are
+> 32-bits only: the Cortex-A32 is one example. So ARMv8-A is not equal to
+> 64 bits support.
+Actually I think all ARMv8-A cores are 64bit, but can be run in aarch32 
+mode for backwards compatability. " In ARMv8-A there are some additions 
+to A32 and T32 to maintain alignment with the A64 instruction set." from 
+here :
+http://www.arm.com/products/processors/armv8-architecture.php
+
+ From our perspective the differences we need to handle between aarch32 
+and aarch64 is more significant ... but turn out to be simple ...
+
+The aarch32 requires a "-fpu" setting to specify "neon-fp-armv8" as my 
+suggested default.
+The aarch64 requires a "-mcpu"  setting to specify the cpu with feature 
+suffixes ... I note however that fp and simd are on by default when we 
+select the cpu option. Is it necessary to enable these to be turned off 
+? If not necessary and we don't desire crypto, then we don't need to 
+specify more for the cpu other then the cpu name, i.e. cortex-a53
+
+In other words, with defaults enabled for aarch64 specifying 
+BR2_GCC_TARGET_CPU is sufficient to enable some default hardware 
+speedups. For aarch32 we need both BR2_GCC_TARGET_CPU and 
+BR2_GCC_TARGET_FPU specified.
+
+Perhaps we can start like this as it is very simple and allow crypto to 
+be added later for both aarch32 and aarch64 ?
+
+thanks
+Matt
+
+> Thanks,
+>
+> Thomas
