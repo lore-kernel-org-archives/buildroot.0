@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 21:52:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: switch from libmysqlclient
- to mysqlnd
-In-Reply-To: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
-References: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20160823215210.584482c1@free-electrons.com>
+Date: Tue, 23 Aug 2016 21:58:33 +0200
+Subject: [Buildroot] [PATCH v5 4/7] package/amd-catalyst: Add AMD
+ proprietary graphic stack support
+In-Reply-To: <20160823121950.16826-5-romain.perier@free-electrons.com>
+References: <20160823121950.16826-1-romain.perier@free-electrons.com>
+ <20160823121950.16826-5-romain.perier@free-electrons.com>
+Message-ID: <20160823215833.513e4a10@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +14,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 Aug 2016 18:54:48 +0200, Floris Bos wrote:
-> The Mysql Native Driver has been the default mysql driver since
-> PHP 5.4, but buildroot was still using libmysqlclient.
+On Tue, 23 Aug 2016 14:19:47 +0200, Romain Perier wrote:
+> This commits adds support for the AMD Catalyst Linux driver 15.9
+> (15.201.1151). It includes the fglrx kernel module with various fixes
+> to make it work with at least Linux kernel 4.4 LTS, the userspace OpenGL
+> stack and the xorg driver module.
 > 
-> Mysqlnd has several advantages such as improved memory management
-> and the more favorable PHP licensing terms.
-> (can combine it with proprietary PHP extensions like Ioncube
-> loader, while libmysqlclient requires commercial licensing if you
-> link to it and do not fall under their GPL/FOSS license exception)
-> 
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+> ---
 
-I see that you are changing the *existing* options to use the native
-driver rather than the libmysqlclient based one.
+Applied to next, after taking into account the comments from Yann:
 
-Would there be any reason for someone to prefer the libmysqlclient
-based one over the native driver?
+    [Thomas:
+     - fixup whitespace issues noticed by Yann.
+     - register AMD_CATALYST_PREPARE_MODULE as a post-patch hook rather than
+       calling it during the configure step, also suggested by Yann.]
 
-I'm simply wondering if we should change the semantic of the existing
-options, or add new ones for the native driver. I very much prefer
-*less* options, so if the native driver is fine and a drop-in
-replacement for the libmysqlclient based one, I'm all for your patch,
-just wanted to confirm.
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
