@@ -1,14 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 23:59:59 +0200
-Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
- Buildroot developers
-In-Reply-To: <87y43ngnic.fsf@dell.be.48ers.dk>
-References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <87d1kzjj2w.fsf@dell.be.48ers.dk>
- <20160823234027.49044576@free-electrons.com>
- <87y43ngnic.fsf@dell.be.48ers.dk>
-Message-ID: <20160823235959.2a242a36@free-electrons.com>
+Date: Wed, 24 Aug 2016 00:03:45 +0200
+Subject: [Buildroot] [PATCH 1/3] arch/arm: Add Cortex-a53 CPU
+In-Reply-To: <1471913603-21487-2-git-send-email-flatmax@flatmax.org>
+References: <1471913603-21487-1-git-send-email-flatmax@flatmax.org>
+ <1471913603-21487-2-git-send-email-flatmax@flatmax.org>
+Message-ID: <20160824000345.264d6d2a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,26 +13,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 Aug 2016 23:54:03 +0200, Peter Korsgaard wrote:
-
-> Ahh, ok. And your script really looks for something like
+On Tue, 23 Aug 2016 10:53:21 +1000, Matt Flax wrote:
+> Adds the Cortex-a53 CPU to the target architecture variant choice. This sets
+> the toolchain to use cortex-a53 as the target. The effect is that various
+> cortex-a53 tunings are enabled for the compilation of packages.
 > 
-> '<foo>: new package' and not just the first commit for for E.G. every
-> .mk file?
+> Signed-off-by: Matt Flax <flatmax@flatmax.org>
 
-Yes, I've looked at "<foo>: new package" commits. Looking at the first
-commit if each .mk file would have been a better approach indeed. I can
-try to have a look at this alternative approach, and see if it brings
-some additional/better details.
+Thanks, but as I said, I don't want to duplicate definitions of 64 bits
+ARM cores between Config.in.arm and Config.in.aarch64. So I've pushed
+at
+http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=aarch64
+a branch that does the necessary rework: it merges Config.in.aarch64
+into Config.in.arm, does a few preparation steps, and finally adds your
+commit on top of that. Could you have a look and let me know what you
+think?
 
->  > Thanks for the feedback!  
-> 
-> You're welcome, the series looks OK to me.
+I haven't yet looked in detail at your PATCH 3/3 about the FPU support
+for ARMv8. It's still a bit unclear to me what level of FPU support is
+mandatory/optional in ARMv8, and whether we can just use
+crypto-neon-fp-armv8 all the time, or whether we should allow using
+fp-armv8, neon-fp-armv8 and crypto-neon-fp-armv8. Do you have some more
+detailed information about which feature is mandatory/optional in the
+various ARM64 cores?
 
-Thanks. I believe the Python code could definitely get some review, but
-follow-up patches are also possible to improve the implementation.
+Also, it is worth reminding that there are some ARMv8-A cores that are
+32-bits only: the Cortex-A32 is one example. So ARMv8-A is not equal to
+64 bits support.
 
-Best regards,
+Thanks,
 
 Thomas
 -- 
