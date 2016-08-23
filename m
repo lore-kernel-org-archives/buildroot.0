@@ -1,119 +1,69 @@
 From: Romain Perier <romain.perier@free-electrons.com>
-Date: Tue, 23 Aug 2016 14:19:45 +0200
-Subject: [Buildroot] [PATCH v5 2/7] pkg-download: Allow packages to pass
-	generic options to download methods
-In-Reply-To: <20160823121950.16826-1-romain.perier@free-electrons.com>
-References: <20160823121950.16826-1-romain.perier@free-electrons.com>
-Message-ID: <20160823121950.16826-3-romain.perier@free-electrons.com>
+Date: Tue, 23 Aug 2016 14:19:43 +0200
+Subject: [Buildroot] [PATCH v5 0/7] Add support for AMD Catalyst graphics
+	driver
+Message-ID: <20160823121950.16826-1-romain.perier@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce a new package variable $(PKG)_DL_OPTS. When this variable
-is defined, its value is passed to the downloader as options to
-the underlying command. Packages can now retrieve archives from server
-expecting logins and passwords, use referer url, proxy or specific
-options for cloning a repository.
+The AMD Catalyst Proprietary Linux Graphics Driver 15.9 supports GPUs
+AMD Radeon HD 5xxx and newer graphics. It requires at least glibc 2.2
+or 2.3 and is compatible up to Xorg 1.17. This serie adds the required
+changes to support this driver.
 
-Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
+The fglrx kernel module is compatible up to Linux kernel 4.4 LTS.
+All the graphical stack has been tested on a x86_64 system with an
+AMD-GT40N (w/ Radeon HD 6290 GPU).
 
-Changes in v4:
- - Add missing Reviewed-by tag
+Romain Perier (7):
+  support/download: Add support to pass options directly to downloaders
+  pkg-download: Allow packages to pass generic options to download
+    methods
+  docs/manual: Document the variable $(PKG)_DL_OPTS
+  package/amd-catalyst: Add AMD proprietary graphic stack support
+  package/amd-catalyst: Add AMD cmdline tools
+  package/amd-catalyst: Add support AMD CCCLE
+  package/amd-catalyst: Add support for OpenCL
 
-Changes in v2:
- - Replaced $(PKG)_DL_REFERER by $(PKG)_DL_OPTS
- - Add support for this options to all downloaders
+ docs/manual/adding-packages-generic.txt            |   7 +
+ package/Config.in                                  |   1 +
+ .../0001-Add-support-for-Linux-4.0.patch           |  45 ++++++
+ .../0002-Add-support-for-Linux-4.1.patch           |  31 ++++
+ .../0003-Add-support-for-Linux-4.2.patch           | 121 +++++++++++++++
+ ...0004-Use-fpregs_active-instead-of-has_fpu.patch |  33 ++++
+ ...-Use-a-local-copy-of-copy_xregs_to_kernel.patch |  79 ++++++++++
+ .../0006-Add-support-for-Linux-4.4.patch           |  78 ++++++++++
+ package/amd-catalyst/0007-remove-gpl-symbols.patch |  54 +++++++
+ package/amd-catalyst/20-fglrx.conf                 |   4 +
+ package/amd-catalyst/Config.in                     |  73 +++++++++
+ package/amd-catalyst/amd-catalyst.hash             |   2 +
+ package/amd-catalyst/amd-catalyst.mk               | 168 +++++++++++++++++++++
+ package/amd-catalyst/gl.pc                         |  12 ++
+ package/pkg-download.mk                            |  24 ++-
+ support/download/bzr                               |   4 +-
+ support/download/cp                                |   4 +-
+ support/download/cvs                               |   4 +-
+ support/download/git                               |   6 +-
+ support/download/hg                                |   4 +-
+ support/download/scp                               |   4 +-
+ support/download/svn                               |   4 +-
+ support/download/wget                              |   4 +-
+ 23 files changed, 749 insertions(+), 17 deletions(-)
+ create mode 100644 package/amd-catalyst/0001-Add-support-for-Linux-4.0.patch
+ create mode 100644 package/amd-catalyst/0002-Add-support-for-Linux-4.1.patch
+ create mode 100644 package/amd-catalyst/0003-Add-support-for-Linux-4.2.patch
+ create mode 100644 package/amd-catalyst/0004-Use-fpregs_active-instead-of-has_fpu.patch
+ create mode 100644 package/amd-catalyst/0005-Use-a-local-copy-of-copy_xregs_to_kernel.patch
+ create mode 100644 package/amd-catalyst/0006-Add-support-for-Linux-4.4.patch
+ create mode 100644 package/amd-catalyst/0007-remove-gpl-symbols.patch
+ create mode 100644 package/amd-catalyst/20-fglrx.conf
+ create mode 100644 package/amd-catalyst/Config.in
+ create mode 100644 package/amd-catalyst/amd-catalyst.hash
+ create mode 100644 package/amd-catalyst/amd-catalyst.mk
+ create mode 100644 package/amd-catalyst/gl.pc
 
- package/pkg-download.mk | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
-
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 315203f..3b6561b 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -81,7 +81,8 @@ define DOWNLOAD_GIT
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
-@@ -97,7 +98,8 @@ define DOWNLOAD_BZR
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- define SOURCE_CHECK_BZR
-@@ -112,7 +114,8 @@ define DOWNLOAD_CVS
- 		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
- 		$($(PKG)_DL_VERSION) \
- 		$($(PKG)_RAWNAME) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- # Not all CVS servers support ls/rls, use login to see if we can connect
-@@ -127,7 +130,8 @@ define DOWNLOAD_SVN
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- define SOURCE_CHECK_SVN
-@@ -143,7 +147,8 @@ define DOWNLOAD_SCP
- 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
--		'$(call stripurischeme,$(call qstrip,$(1)))'
-+		'$(call stripurischeme,$(call qstrip,$(1)))' \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- define SOURCE_CHECK_SCP
-@@ -157,7 +162,8 @@ define DOWNLOAD_HG
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
-@@ -172,7 +178,8 @@ define DOWNLOAD_WGET
- 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
--		'$(call qstrip,$(1))'
-+		'$(call qstrip,$(1))' \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- define SOURCE_CHECK_WGET
-@@ -185,7 +192,8 @@ define DOWNLOAD_LOCALFILES
- 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
--		$(call stripurischeme,$(call qstrip,$(1)))
-+		$(call stripurischeme,$(call qstrip,$(1))) \
-+		$($(PKG)_DL_OPTS)
- endef
- 
- define SOURCE_CHECK_LOCALFILES
 -- 
-2.9.3
+2.8.1
