@@ -1,77 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 16:16:59 +0200
-Subject: [Buildroot] [git commit] python-crcmod: new package
-Message-ID: <20160902142940.65B837FEE6@busybox.osuosl.org>
+Date: Tue, 23 Aug 2016 19:16:18 +0200
+Subject: [Buildroot] [git commit] package/amd-catalyst: Add support for
+	OpenCL
+Message-ID: <20160902142939.908977FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff9ca7096bff21702f8d44c4c3b0380391fa8b19
+commit: https://git.buildroot.net/buildroot/commit/?id=ceb02c00ff88624f900fa4203745d5ce535b87b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+The AMD Catalyst Linux driver includes OpenCL libraries for GPGPU
+computing. This commits adds support to install the binary blobs and ICD
+profiles.
+
+Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                        |  1 +
- package/python-crcmod/Config.in          |  8 ++++++++
- package/python-crcmod/python-crcmod.hash |  3 +++
- package/python-crcmod/python-crcmod.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
+ package/amd-catalyst/Config.in       |  6 ++++++
+ package/amd-catalyst/amd-catalyst.mk | 24 ++++++++++++++++++++++++
+ 2 files changed, 30 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3e8c515..ad26def 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -654,6 +654,7 @@ menu "External python modules"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
- 	source "package/python-crc16/Config.in"
-+	source "package/python-crcmod/Config.in"
- 	source "package/python-crossbar/Config.in"
- 	source "package/python-cryptography/Config.in"
- 	source "package/python-cssselect/Config.in"
-diff --git a/package/python-crcmod/Config.in b/package/python-crcmod/Config.in
-new file mode 100644
-index 0000000..289a3ae
---- /dev/null
-+++ b/package/python-crcmod/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_CRCMOD
-+	bool "python-crcmod"
+diff --git a/package/amd-catalyst/Config.in b/package/amd-catalyst/Config.in
+index 55099ac..96e7f06 100644
+--- a/package/amd-catalyst/Config.in
++++ b/package/amd-catalyst/Config.in
+@@ -73,4 +73,10 @@ config BR2_PACKAGE_AMD_CATALYST_MODULE
+ 	help
+ 	  Builds and install the fglrx kernel module
+ 
++config BR2_PACKAGE_AMD_CATALYST_OPENCL
++	bool "OpenCL support"
 +	help
-+	  The software in this package is a Python module for
-+	  generating objects that compute the Cyclic Redundancy
-+	  Check (CRC).
++	  Installs the OpenCL binary blobs and the ICD profile
++	  for GPGPU computing.
 +
-+	  http://crcmod.sourceforge.net/
-diff --git a/package/python-crcmod/python-crcmod.hash b/package/python-crcmod/python-crcmod.hash
-new file mode 100644
-index 0000000..7ce549c
---- /dev/null
-+++ b/package/python-crcmod/python-crcmod.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/crcmod/json, sha256 locally computed
-+md5	2d5b92117d958dcead94f9e17f54cd32  crcmod-1.7.tar.gz
-+sha256	dc7051a0db5f2bd48665a990d3ec1cc305a466a77358ca4492826f41f283601e  crcmod-1.7.tar.gz
-diff --git a/package/python-crcmod/python-crcmod.mk b/package/python-crcmod/python-crcmod.mk
-new file mode 100644
-index 0000000..1aab7f5
---- /dev/null
-+++ b/package/python-crcmod/python-crcmod.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-crcmod
-+#
-+################################################################################
+ endif # BR2_PACKAGE_AMD_CATALYST
+diff --git a/package/amd-catalyst/amd-catalyst.mk b/package/amd-catalyst/amd-catalyst.mk
+index 07eb0fa..3097353 100644
+--- a/package/amd-catalyst/amd-catalyst.mk
++++ b/package/amd-catalyst/amd-catalyst.mk
+@@ -41,6 +41,29 @@ AMD_CATALYST_POST_PATCH_HOOKS += AMD_CATALYST_PREPARE_MODULE
+ $(eval $(kernel-module))
+ endif
+ 
++ifeq ($(BR2_PACKAGE_AMD_CATALYST_OPENCL),y)
 +
-+PYTHON_CRCMOD_VERSION = 1.7
-+PYTHON_CRCMOD_SOURCE = crcmod-$(PYTHON_CRCMOD_VERSION).tar.gz
-+PYTHON_CRCMOD_SITE = https://pypi.python.org/packages/6b/b0/e595ce2a2527e169c3bcd6c33d2473c1918e0b7f6826a043ca1245dd4e5b
-+PYTHON_CRCMOD_SETUP_TYPE = distutils
-+PYTHON_CRCMOD_LICENSE = MIT
-+PYTHON_CRCMOD_LICENSE_FILES = LICENSE
++AMD_CATALYST_OCL_SUFFIX = $(if $(BR2_x86_64),64,32)
++AMD_CATALYST_OPENCL_FILES = \
++	libOpenCL.so.1 \
++	libaticalcl.so \
++	libamdocl$(AMD_CATALYST_OCL_SUFFIX).so \
++	libamdocl12cl$(AMD_CATALYST_OCL_SUFFIX).so
 +
-+$(eval $(python-package))
++define AMD_CATALYST_INSTALL_OPENCL
++	$(foreach f,$(AMD_CATALYST_OPENCL_FILES), \
++		$(INSTALL) -D -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/lib$(AMD_CATALYST_LIB_SUFFIX)/$(f) $(TARGET_DIR)/usr/lib/$(f)
++	)
++	ln -sf libOpenCL.so.1 \
++		$(TARGET_DIR)/usr/lib/libOpenCL.so
++	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/bin/clinfo \
++		$(TARGET_DIR)/usr/bin/clinfo
++	$(INSTALL) -D -m 0644 $(AMD_CATALYST_ARCH_DIR)/etc/OpenCL/vendors/amdocl$(AMD_CATALYST_OCL_SUFFIX).icd \
++		$(TARGET_DIR)/etc/OpenCL/vendors/amdocl$(AMD_CATALYST_OCL_SUFFIX).icd
++endef
++
++endif
++
+ ifeq ($(BR2_PACKAGE_AMD_CATALYST_XORG), y)
+ 
+ # GL headers are needed by any package that wants to use libgl, so they need to
+@@ -145,6 +168,7 @@ define AMD_CATALYST_INSTALL_TARGET_CMDS
+ 	$(call AMD_CATALYST_INSTALL_XORG)
+ 	$(call AMD_CATALYST_INSTALL_CMDLINE_TOOLS)
+ 	$(call AMD_CATALYST_INSTALL_CCCLE)
++	$(call AMD_CATALYST_INSTALL_OPENCL)
+ endef
+ 
+ $(eval $(generic-package))
