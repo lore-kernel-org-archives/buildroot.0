@@ -1,41 +1,45 @@
-From: Jimmy <hello@86pixels.com>
-Date: Mon, 22 Aug 2016 22:11:51 -0500
-Subject: [Buildroot] Making a Bootable USB Image for x86_64
-Message-ID: <f3ab074b-d314-7542-636a-fb3eb7d11878@86pixels.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 23 Aug 2016 07:03:47 +0300
+Subject: [Buildroot] [PATCH 1/1] added comments on how to install the
+ system
+In-Reply-To: <CANCHnQrg6u4czJBeQub+qFTD5PwWxry-nxgGDDEM7SE-s9jLBQ@mail.gmail.com>
+References: <1471774436-18803-1-git-send-email-guillaume.bressaix@gmail.com>
+ <20160821124604.vtzsuyrz5tgnapve@tarshish>
+ <CANCHnQrg6u4czJBeQub+qFTD5PwWxry-nxgGDDEM7SE-s9jLBQ@mail.gmail.com>
+Message-ID: <20160823040346.humpc4ekgyo3pi5r@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings all,
+Hi Jeroen,
 
-I know this has been asked a lot, but I have been sifting through the 
-archives and Google in order to find the best way to make a bootable USB 
-image of my buildroot installation for an x86 based machine. I have done 
-the following:
+On Mon, Aug 22, 2016 at 11:57:00AM +0200, Jeroen Roovers wrote:
+> On 21 August 2016 at 14:46, Baruch Siach <baruch@tkos.co.il> wrote:
+> > > +sudo cp output/images/{MLO,u-boot.img,zImage} /dev/sdb1
+> > > +sudo cp output/images/am335x-bone.dtb /dev/sdb1 -- for the beaglebone
+> > > +sudo cp output/images/am335x-boneblack.dtb /dev/sdb1 -- for the beaglebone black
+> >
+> > Have you tested these commands? They overwrite the raw /dev/sdb1 block device,
+> > instead of copying files into the FAT filesystem.
+> 
+> Indeed, that is not the way. It's more complicated than that. We would
+> need to create a separate FAT16 image besides the rootfs image,
+> loop-mount the former and then copy those files to the mounted image
+> file.
+> 
+> An additional useful step to describe would be to copy the rootfs to
+> the FAT16 image as well, which is needed if you want to forego the
+> second partition and use the rootfs as an initramfs.
 
-1. Generated a tar image of the root filesystem via the configuration menu
-2. Selected grub2 from bootloaders with the i386-pc platform
-3. Created a 1Gb EXT2FS partition with 1mb of space preceding on the USB 
-device itself
-4. Extracted the rootfs tar to the USB device on the ext2 partition
-5. Ran the following from the main buildroot directory (as root):
-./output/host/usr/sbin/grub-bios-setup -b 
-./output/host/usr/lib/grub/i386-pc/boot.img -c ./output/images/grub.img 
--d . /dev/sdb
+Direct sdcard.img write to SD card obviates all these details. We generally 
+want these readme.txt files to provide instructions for the shortest path to a 
+minimal working setup.
 
-The command immediately exits with a "segmentation fault (Core dumped)".
-I can assert the following:
-a. grub-bios-setup exists in the directory specified.
-b. boot.img exists in the directory specified
-c. grub.img exists in the directory specified
-d. /dev/sdb exists and is the USB device
+baruch
 
-Has anyone else ran into this? I'm trying to read up all I can on the 
-issue but I'm running out of options, and I have a feeling its something 
-really simple.
-
-Thank you so much!
 -- 
--- Jimmy
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
