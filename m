@@ -1,89 +1,111 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Aug 2016 22:39:54 +0200
-Subject: [Buildroot] [git commit] gcc: fix gcc version dependencies for the
-	PowerPC64/musl exclusion
-Message-ID: <20160902142938.A57A87FB67@busybox.osuosl.org>
+Date: Tue, 23 Aug 2016 14:59:01 +0200
+Subject: [Buildroot] [git commit] pkg-download: Allow packages to pass
+	generic options to download methods
+Message-ID: <20160902142938.E3C437FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62504125f88200e01fc633a1dd2f68ad50489b1b
+commit: https://git.buildroot.net/buildroot/commit/?id=91b34e0abc99b7346f71bbc99283ff7ffac34799
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In commit
-5ab751ca44e9da6f406876ff582b3a813056b0d4 ("toolchain-buildroot: allow to
-build ppc64(le) musl toolchains"), support for building a musl toolchain
-for ppc64(le) was added. Since this support only works with gcc 6, some
-additional dependencies have been added to the older gcc versions so
-that they cannot be selected on ppc64(le)/musl.
+Introduce a new package variable $(PKG)_DL_OPTS. When this variable
+is defined, its value is passed to the downloader as options to
+the underlying command. Packages can now retrieve archives from server
+expecting logins and passwords, use referer url, proxy or specific
+options for cloning a repository.
 
-Unfortunately, the expression of the dependency was wrong, and leads to
-those older gcc versions being non-selectable if you're not using
-musl. Indeed, the dependencies look like this:
-
-  depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-
-So as soon as you're not using musl, BR2_TOOLCHAIN_USES_MUSL is false,
-so the entire condition is false, and the gcc version is not available.
-
-Due to this, only gcc 6.x can be selected currently with uclibc or
-glibc, which is clearly not the intended behavior.
-
-This commit reworks those dependencies to:
-
-  depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
-
-which more clearly expresses what we want:
-
- "We don't want to (have a toolchain that uses musl and (be building
-  either for PPC64 or PPC64le))"
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/pkg-download.mk | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 4d02931..37728e0 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -31,7 +31,7 @@ choice
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 		# musl ppc64 unsupported
--		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-+		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 315203f..3b6561b 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -81,7 +81,8 @@ define DOWNLOAD_GIT
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+-		$($(PKG)_BASE_NAME)
++		$($(PKG)_BASE_NAME) \
++		$($(PKG)_DL_OPTS)
+ endef
  
-@@ -49,7 +49,7 @@ choice
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 		# musl ppc64 unsupported
--		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-+		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-@@ -71,7 +71,7 @@ choice
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 		# musl ppc64 unsupported
--		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-+		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
- 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
-@@ -82,7 +82,7 @@ choice
- 		# Broken or unsupported architectures
- 		depends on !BR2_arc && !BR2_bfin
- 		# musl ppc64 unsupported
--		depends on !BR2_powerpc64 && !BR2_powerpc64le && BR2_TOOLCHAIN_USES_MUSL
-+		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+@@ -97,7 +98,8 @@ define DOWNLOAD_BZR
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+-		$($(PKG)_BASE_NAME)
++		$($(PKG)_BASE_NAME) \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ define SOURCE_CHECK_BZR
+@@ -112,7 +114,8 @@ define DOWNLOAD_CVS
+ 		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
+ 		$($(PKG)_DL_VERSION) \
+ 		$($(PKG)_RAWNAME) \
+-		$($(PKG)_BASE_NAME)
++		$($(PKG)_BASE_NAME) \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ # Not all CVS servers support ls/rls, use login to see if we can connect
+@@ -127,7 +130,8 @@ define DOWNLOAD_SVN
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+-		$($(PKG)_BASE_NAME)
++		$($(PKG)_BASE_NAME) \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ define SOURCE_CHECK_SVN
+@@ -143,7 +147,8 @@ define DOWNLOAD_SCP
+ 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		$(QUIET) \
+ 		-- \
+-		'$(call stripurischeme,$(call qstrip,$(1)))'
++		'$(call stripurischeme,$(call qstrip,$(1)))' \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ define SOURCE_CHECK_SCP
+@@ -157,7 +162,8 @@ define DOWNLOAD_HG
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+-		$($(PKG)_BASE_NAME)
++		$($(PKG)_BASE_NAME) \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+@@ -172,7 +178,8 @@ define DOWNLOAD_WGET
+ 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		$(QUIET) \
+ 		-- \
+-		'$(call qstrip,$(1))'
++		'$(call qstrip,$(1))' \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ define SOURCE_CHECK_WGET
+@@ -185,7 +192,8 @@ define DOWNLOAD_LOCALFILES
+ 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		$(QUIET) \
+ 		-- \
+-		$(call stripurischeme,$(call qstrip,$(1)))
++		$(call stripurischeme,$(call qstrip,$(1))) \
++		$($(PKG)_DL_OPTS)
+ endef
+ 
+ define SOURCE_CHECK_LOCALFILES
