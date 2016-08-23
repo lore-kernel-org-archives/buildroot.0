@@ -1,85 +1,83 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Tue, 23 Aug 2016 18:54:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: switch from libmysqlclient to
-	mysqlnd
-Message-ID: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Aug 2016 19:16:18 +0200
+Subject: [Buildroot] [git commit branch/next] package/amd-catalyst: Add
+	support for OpenCL
+Message-ID: <20160823171631.6DC6E81F02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Mysql Native Driver has been the default mysql driver since
-PHP 5.4, but buildroot was still using libmysqlclient.
+commit: https://git.buildroot.net/buildroot/commit/?id=ceb02c00ff88624f900fa4203745d5ce535b87b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Mysqlnd has several advantages such as improved memory management
-and the more favorable PHP licensing terms.
-(can combine it with proprietary PHP extensions like Ioncube
-loader, while libmysqlclient requires commercial licensing if you
-link to it and do not fall under their GPL/FOSS license exception)
+The AMD Catalyst Linux driver includes OpenCL libraries for GPGPU
+computing. This commits adds support to install the binary blobs and ICD
+profiles.
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php/Config.ext | 12 ------------
- package/php/php.mk     |  6 ++----
- 2 files changed, 2 insertions(+), 16 deletions(-)
+ package/amd-catalyst/Config.in       |  6 ++++++
+ package/amd-catalyst/amd-catalyst.mk | 24 ++++++++++++++++++++++++
+ 2 files changed, 30 insertions(+)
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 82aaf41..7c3ba7e 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -113,10 +113,6 @@ endif
- 
- config BR2_PACKAGE_PHP_EXT_MYSQLI
- 	bool "Mysqli"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_MMU # mysql
--	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
--	select BR2_PACKAGE_MYSQL
+diff --git a/package/amd-catalyst/Config.in b/package/amd-catalyst/Config.in
+index 55099ac..96e7f06 100644
+--- a/package/amd-catalyst/Config.in
++++ b/package/amd-catalyst/Config.in
+@@ -73,4 +73,10 @@ config BR2_PACKAGE_AMD_CATALYST_MODULE
  	help
- 	  MySQL Improved extension support
+ 	  Builds and install the fglrx kernel module
  
-@@ -135,17 +131,9 @@ if BR2_PACKAGE_PHP_EXT_PDO
- 
- config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
- 	bool "MySQL"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_MMU # mysql
--	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
--	select BR2_PACKAGE_MYSQL
- 	help
- 	  PDO driver for MySQL
- 
--comment "MySQL drivers need a toolchain w/ C++, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--
- config BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL
- 	bool "PostgreSQL"
- 	select BR2_PACKAGE_POSTGRESQL
-diff --git a/package/php/php.mk b/package/php/php.mk
-index d7e27a1..deaf56e 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -181,8 +181,7 @@ endif
- 
- ### Native SQL extensions
- ifeq ($(BR2_PACKAGE_PHP_EXT_MYSQLI),y)
--PHP_CONF_OPTS += --with-mysqli=$(STAGING_DIR)/usr/bin/mysql_config
--PHP_DEPENDENCIES += mysql
-+PHP_CONF_OPTS += --with-mysqli
++config BR2_PACKAGE_AMD_CATALYST_OPENCL
++	bool "OpenCL support"
++	help
++	  Installs the OpenCL binary blobs and the ICD profile
++	  for GPGPU computing.
++
+ endif # BR2_PACKAGE_AMD_CATALYST
+diff --git a/package/amd-catalyst/amd-catalyst.mk b/package/amd-catalyst/amd-catalyst.mk
+index 07eb0fa..3097353 100644
+--- a/package/amd-catalyst/amd-catalyst.mk
++++ b/package/amd-catalyst/amd-catalyst.mk
+@@ -41,6 +41,29 @@ AMD_CATALYST_POST_PATCH_HOOKS += AMD_CATALYST_PREPARE_MODULE
+ $(eval $(kernel-module))
  endif
- ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
- PHP_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
-@@ -199,8 +198,7 @@ PHP_DEPENDENCIES += sqlite
- PHP_CFLAGS += -DSQLITE_OMIT_LOAD_EXTENSION
- endif
- ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),y)
--PHP_CONF_OPTS += --with-pdo-mysql=$(STAGING_DIR)/usr
--PHP_DEPENDENCIES += mysql
-+PHP_CONF_OPTS += --with-pdo-mysql
- endif
- ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL),y)
- PHP_CONF_OPTS += --with-pdo-pgsql=$(STAGING_DIR)/usr
--- 
-2.7.4
+ 
++ifeq ($(BR2_PACKAGE_AMD_CATALYST_OPENCL),y)
++
++AMD_CATALYST_OCL_SUFFIX = $(if $(BR2_x86_64),64,32)
++AMD_CATALYST_OPENCL_FILES = \
++	libOpenCL.so.1 \
++	libaticalcl.so \
++	libamdocl$(AMD_CATALYST_OCL_SUFFIX).so \
++	libamdocl12cl$(AMD_CATALYST_OCL_SUFFIX).so
++
++define AMD_CATALYST_INSTALL_OPENCL
++	$(foreach f,$(AMD_CATALYST_OPENCL_FILES), \
++		$(INSTALL) -D -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/lib$(AMD_CATALYST_LIB_SUFFIX)/$(f) $(TARGET_DIR)/usr/lib/$(f)
++	)
++	ln -sf libOpenCL.so.1 \
++		$(TARGET_DIR)/usr/lib/libOpenCL.so
++	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/bin/clinfo \
++		$(TARGET_DIR)/usr/bin/clinfo
++	$(INSTALL) -D -m 0644 $(AMD_CATALYST_ARCH_DIR)/etc/OpenCL/vendors/amdocl$(AMD_CATALYST_OCL_SUFFIX).icd \
++		$(TARGET_DIR)/etc/OpenCL/vendors/amdocl$(AMD_CATALYST_OCL_SUFFIX).icd
++endef
++
++endif
++
+ ifeq ($(BR2_PACKAGE_AMD_CATALYST_XORG), y)
+ 
+ # GL headers are needed by any package that wants to use libgl, so they need to
+@@ -145,6 +168,7 @@ define AMD_CATALYST_INSTALL_TARGET_CMDS
+ 	$(call AMD_CATALYST_INSTALL_XORG)
+ 	$(call AMD_CATALYST_INSTALL_CMDLINE_TOOLS)
+ 	$(call AMD_CATALYST_INSTALL_CCCLE)
++	$(call AMD_CATALYST_INSTALL_OPENCL)
+ endef
+ 
+ $(eval $(generic-package))
