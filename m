@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 23:36:56 +0200
-Subject: [Buildroot] [PATCH] blktrace: re-enable on uClibc
-In-Reply-To: <87r39fi3x1.fsf@dell.be.48ers.dk>
-References: <1471963200-18857-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <87r39fi3x1.fsf@dell.be.48ers.dk>
-Message-ID: <20160823233656.6663998b@free-electrons.com>
+Date: Tue, 23 Aug 2016 23:40:27 +0200
+Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
+ Buildroot developers
+In-Reply-To: <87d1kzjj2w.fsf@dell.be.48ers.dk>
+References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87d1kzjj2w.fsf@dell.be.48ers.dk>
+Message-ID: <20160823234027.49044576@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +15,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 Aug 2016 23:14:18 +0200, Peter Korsgaard wrote:
+On Tue, 23 Aug 2016 23:01:27 +0200, Peter Korsgaard wrote:
 
->  > With a small patch, blktrace can work on uClibc: we simply need to link
->  > with librt to use the posix_spawn*() functions.  
-> 
-> > @@ -10,7 +8,3 @@ config BR2_PACKAGE_BLKTRACE
->  >  	  up to user space.  
->  
->  >  	  http://git.kernel.dk/?p=blktrace.git;a=summary
->  > -
->  > -comment "blktrace needs a glibc or musl toolchain"
->  > -	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
->  > -	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)  
-> 
-> I see you created this against master and not next. I know it is a small
-> patch, but it is still a feature addition. Is there any reason this
-> should go in 2016.08?
+> I know this is just a first try (and I don't mind), but interesting that
+> your script flagged me for wpa_supplicant (and nobody else), considering
+> I have never used it in buildroot, a number of other people have added
+> new features and fixes, and my last real fix to it was in 2010.
 
-Not at all. Having the patch based on master is an oversight, it's
-definitely intended at the next branch.
+It's because of commit 6828f982b89c4f85101fb8cfd5987ae4b1992de8:
+
+commit 6828f982b89c4f85101fb8cfd5987ae4b1992de8
+Author: Peter Korsgaard <jacmet@sunsite.dk>
+Date:   Mon Mar 9 20:28:40 2009 +0000
+
+    wpa_supplicant: new package
+    
+    Patch by Gustavo Zacarias <gustavo@zacarias.com.br>
+    
+    Closes #81.
+
+The patch was indeed provided by Gustavo, but you are the author of the
+patch, and that's what my script was looking at.
+
+I'll change that and put Gustavo as the referee for the wpa_supplicant
+package.
+
+Thanks for the feedback!
 
 Thomas
 -- 
