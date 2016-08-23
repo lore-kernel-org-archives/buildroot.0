@@ -1,56 +1,39 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Tue, 23 Aug 2016 22:44:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: switch from libmysqlclient
- to mysqlnd
-In-Reply-To: <20160823215210.584482c1@free-electrons.com>
-References: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
- <20160823215210.584482c1@free-electrons.com>
-Message-ID: <dfc43750-7738-5fdd-2193-6ddf7c5627f0@je-eigen-domein.nl>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 23 Aug 2016 17:53:23 -0300
+Subject: [Buildroot] [PATCH] openvpn: bump to version 2.3.12
+Message-ID: <1471985603-16836-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 08/23/2016 09:52 PM, Thomas Petazzoni wrote:
-> On Tue, 23 Aug 2016 18:54:48 +0200, Floris Bos wrote:
->> The Mysql Native Driver has been the default mysql driver since
->> PHP 5.4, but buildroot was still using libmysqlclient.
->>
->> Mysqlnd has several advantages such as improved memory management
->> and the more favorable PHP licensing terms.
->> (can combine it with proprietary PHP extensions like Ioncube
->> loader, while libmysqlclient requires commercial licensing if you
->> link to it and do not fall under their GPL/FOSS license exception)
->>
->> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-> I see that you are changing the *existing* options to use the native
-> driver rather than the libmysqlclient based one.
->
-> Would there be any reason for someone to prefer the libmysqlclient
-> based one over the native driver?
->
-> I'm simply wondering if we should change the semantic of the existing
-> options, or add new ones for the native driver. I very much prefer
-> *less* options, so if the native driver is fine and a drop-in
-> replacement for the libmysqlclient based one, I'm all for your patch,
-> just wanted to confirm.
-
-The upstream project changed the existing option as well.
-Years ago, if you specified --with-pdo-mysql (without exact path) it 
-defaulted to searching for libmysqlclient, even when mysqlnd was already 
-an alternative.
-Since the release of 5.4.0 (in 2012) it defaults to mysqlnd.
-
-Not sure if anyone still has a reason to prefer libmysqlclient, mysqlnd 
-is indeed a drop-in replacement.
-I kinda have the expectation to get the same defaults when compiling in 
-buildroot, as I would get if I compiled the upstream project manually.
-
-
-
-Yours sincerely,
-
-Floris Bos
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 179198e..ce005d3 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	0f5f1ca1dc5743fa166d93dd4ec952f014b5f33bafd88f0ea34b455cae1434a7 	openvpn-2.3.11.tar.xz
++sha256	13b963414e2430215981868c77b9795d93653ee535a2d73576f7bb2c28200abc 	openvpn-2.3.12.tar.xz
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index f3985cd..0e59fdc 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENVPN_VERSION = 2.3.11
++OPENVPN_VERSION = 2.3.12
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf openssl
+-- 
+2.7.3
