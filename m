@@ -1,27 +1,65 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 23 Aug 2016 07:41:37 +0200
-Subject: [Buildroot] [PATCH/next 2/4] DEVELOPERS: add initial list
- of	Buildroot developers
-References: <1471902678-18693-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <h94t8dxngf.ln2@ID-313208.user.individual.net>
+From: Pascal K <pascalkrauth@gmail.com>
+Date: Tue, 23 Aug 2016 07:12:01 +0000
+Subject: [Buildroot] Using global patch dir to patch "host-*" packages from
+	buildroot
+Message-ID: <CADj18OXZwbD+eL1dR2_n6W_uovwgeV48GTJvHQ3rpTRCGQed1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello everyone,
 
-Am Mon, 22 Aug 2016 23:51:16 +0200 schrieb Thomas Petazzoni:
+I tried to upgrade my build system from gcc 4.9 to 6. So far only a few
+patches are needed.
+All of those patches have to be in packages for the host.
 
-> +N:	Bernd Kuhls <bernd.kuhls@t-online.de>
+So my question is how to keep those patches out of my clean checkout of
+buildroot?
 
-> +F:	package/libpjsip/
+If I set the global patch dir and put the patch e.g. for ucl-1.03 into this
+dir, the mk file I was about to patch is not found. I am not sure how to
+configure the path to point to the host-ucl-1.03.
 
-While it is true that I initially created this package in preparation
-for an Asterisk package in the meantime I lost interest in it because
-I am using freeswitch now. All subsequent patches to this package came
-from Luca Ceresoli, so if he agrees I suggest to move it to his entry.
+*Here the build error that occurs:*
 
-Regards, Bernd
+>>> host-ucl 1.03 Patching
+
+Applying 0002-gcc6-build-fix.patch using patch:
+can't find file to patch at input line 3
+Perhaps you used the wrong -p or --strip option?
+The text leading up to this was:
+--------------------------
+|--- a/ucl.mk
+|+++ b/ucl.mk
+--------------------------
+No file to patch.  Skipping patch.
+1 out of 1 hunk ignored
+Patch failed!  Please fix 0002-gcc6-build-fix.patch!
+
+
+*My Patch: *
+--- a/ucl.mk
++++ b/ucl.mk
+@@ -9,4 +9,7 @@
+ UCL_LICENSE = GPLv2+
+ UCL_LICENSE_FILES = COPYING
+
++# Fix ACC conformance test failure for host gcc 6.xx
++HOST_UCL_CONF_ENV += CPPFLAGS="$(HOST_CPPFLAGS) -std=c90"
++
+ $(eval $(host-autotools-package))
+
+*Folder with the patch:*
+../Develop/EmbeddedLinux/emblx/board/IPETRONIK/common/patches/ucl/
+*Folder to apply the patch to:*
+../Develop/EmbeddedLinux/emblx/buildroot/package/ucl/
+
+Any suggestions?
+
+Best regards,
+Pascal
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160823/9c0324dc/attachment.html>
