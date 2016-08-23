@@ -1,13 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 23:58:01 +0200
-Subject: [Buildroot] [PATCH 1/4] package/libegl: add option for wayland
- extensions
-In-Reply-To: <20160823214351.GE5749@free.fr>
-References: <cover.1471968455.git.yann.morin.1998@free.fr>
- <6d4c564432948310ca9502dc94c2d50a7c97f460.1471968455.git.yann.morin.1998@free.fr>
- <20160823220245.49e1b6e7@free-electrons.com>
- <20160823214351.GE5749@free.fr>
-Message-ID: <20160823235801.57c65bd0@free-electrons.com>
+Date: Tue, 23 Aug 2016 23:59:59 +0200
+Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
+ Buildroot developers
+In-Reply-To: <87y43ngnic.fsf@dell.be.48ers.dk>
+References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87d1kzjj2w.fsf@dell.be.48ers.dk>
+ <20160823234027.49044576@free-electrons.com>
+ <87y43ngnic.fsf@dell.be.48ers.dk>
+Message-ID: <20160823235959.2a242a36@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,32 +17,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 Aug 2016 23:43:51 +0200, Yann E. MORIN wrote:
+On Tue, 23 Aug 2016 23:54:03 +0200, Peter Korsgaard wrote:
 
-> > One thing that surprises me though is that weston itself doesn't use
-> > this new option, and still has:
-> > 
-> > config BR2_PACKAGE_WESTON_DRM
-> >         bool "DRM compositor"
-> >         depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
-> >         select BR2_PACKAGE_LIBDRM
-> >         select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
-> > 
-> > # Uses libgbm from mesa3d
-> > comment "DRM compositor needs an OpenGL EGL backend provided by mesa3d"
-> >         depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
-> > 
-> > So it's weird to have a new OpenGL implementation that is said to be
-> > Wayland capable, but doesn't allow to build the reference Wayland
-> > implementation.  
+> Ahh, ok. And your script really looks for something like
 > 
-> That's because not everything was converted. Yet.
+> '<foo>: new package' and not just the first commit for for E.G. every
+> .mk file?
 
-OK, this is definitely a good explanation. So I should take it that you
-expect Weston to build and work with the latest version of the NVidia
-driver?
+Yes, I've looked at "<foo>: new package" commits. Looking at the first
+commit if each .mk file would have been a better approach indeed. I can
+try to have a look at this alternative approach, and see if it brings
+some additional/better details.
 
-Thanks,
+>  > Thanks for the feedback!  
+> 
+> You're welcome, the series looks OK to me.
+
+Thanks. I believe the Python code could definitely get some review, but
+follow-up patches are also possible to improve the implementation.
+
+Best regards,
 
 Thomas
 -- 
