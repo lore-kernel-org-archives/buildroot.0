@@ -1,34 +1,27 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 23 Aug 2016 07:33:39 +0300
-Subject: [Buildroot] [PATCH/next 2/4] DEVELOPERS: add initial list of
- Buildroot developers
-In-Reply-To: <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 23 Aug 2016 07:41:37 +0200
+Subject: [Buildroot] [PATCH/next 2/4] DEVELOPERS: add initial list
+ of	Buildroot developers
 References: <1471902678-18693-1-git-send-email-thomas.petazzoni@free-electrons.com>
  <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160823043339.bvvni6bylkblj5ts@tarshish>
+Message-ID: <h94t8dxngf.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 
-On Mon, Aug 22, 2016 at 11:51:16PM +0200, Thomas Petazzoni wrote:
-> +N:	Baruch Siach <baruch@tkos.co.il>
-> +F:	package/ebtables/
-> +F:	package/openipmi/
+Am Mon, 22 Aug 2016 23:51:16 +0200 schrieb Thomas Petazzoni:
 
-I'm fine with these.
+> +N:	Bernd Kuhls <bernd.kuhls@t-online.de>
 
-> +F:	package/wireshark/
+> +F:	package/libpjsip/
 
-Gustavo has mostly taken over this package by now. So if he agrees I suggest 
-to move it to his entry.
+While it is true that I initially created this package in preparation
+for an Asterisk package in the meantime I lost interest in it because
+I am using freeswitch now. All subsequent patches to this package came
+from Luca Ceresoli, so if he agrees I suggest to move it to his entry.
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Regards, Bernd
