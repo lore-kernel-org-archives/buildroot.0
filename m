@@ -1,30 +1,35 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 23 Aug 2016 22:47:39 +1200
-Subject: [Buildroot] [PATCH/next 2/4] DEVELOPERS: add initial list of
- Buildroot developers
-In-Reply-To: <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1471902678-18693-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAFOYHZDQpZWxo4rAAuXj6JDhOLcmRPb=19+_JWC_jKS_8vmpRQ@mail.gmail.com>
+From: =?UTF-8?q?Manuel=20V=C3=B6gele?= <develop@manuel-voegele.de>
+Date: Tue, 23 Aug 2016 12:56:49 +0200
+Subject: [Buildroot] [PATCH 1/1] python-pyqt: Removed 'compileall' directive
+	from INSTALL_TARGET_CMDS
+Message-ID: <20160823105649.1267-1-develop@manuel-voegele.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Since all python modules are now byte-compiled globally this is no
+longer necessary.
 
-2016-08-23 9:51 GMT+12:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> This is an initial list of Buildroot developers. It has been created
-> semi-automatically by parsing the Git history, and finding the authors
-> of commits with a title like "<foo>: new package". Some additional
-> manual tweaking has been done (merging multiple entries corresponding to
-> the same person, adding some more entries, etc.).
->
-> +N:     Chris Packham <judge.packham@gmail.com>
-> +F:     package/eventlog/
-> +F:     package/micropython/
+Signed-off-by: Manuel V?gele <develop@manuel-voegele.de>
+---
+ package/python-pyqt/python-pyqt.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Probably want to add package/micropython/-lib/ and package/syslog-ng/
-unless someone else wants them.
+diff --git a/package/python-pyqt/python-pyqt.mk b/package/python-pyqt/python-pyqt.mk
+index fa298c4..50e8351 100644
+--- a/package/python-pyqt/python-pyqt.mk
++++ b/package/python-pyqt/python-pyqt.mk
+@@ -108,9 +108,6 @@ define PYTHON_PYQT_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install
+ 	touch $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/__init__.py
+ 	$(RM) -rf $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/uic/$(PYTHON_PYQT_RM_PORT_BASE)
+-	PYTHONPATH="$(PYTHON_PATH)" \
+-		$(HOST_DIR)/usr/bin/python -c "import compileall; \
+-		compileall.compile_dir('$(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4')"
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.1.4
