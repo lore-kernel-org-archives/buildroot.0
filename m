@@ -1,89 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 16:12:09 +0200
-Subject: [Buildroot] [PATCH] vlc: depends on NPTL
-In-Reply-To: <20160821221849.GA8404@waldemar-brodkorb.de>
-References: <20160821221849.GA8404@waldemar-brodkorb.de>
-Message-ID: <20160823161209.227726ec@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 23 Aug 2016 11:26:09 -0300
+Subject: [Buildroot] [PATCH] mosh: bump to version 1.2.6
+Message-ID: <1471962369-6089-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Now supports nettle as crypto backend too.
 
-On Mon, 22 Aug 2016 00:18:49 +0200, Waldemar Brodkorb wrote:
-> VLC requires NPTL.
-> 
-> Required functions and symbols (_POSIX_CLOCK_SELECTION) are only
-> available for NPTL.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/3122287ddea1e316a64ccf0d0dc9415bfefebb49/
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mosh/Config.in |  2 +-
+ package/mosh/mosh.hash |  4 ++--
+ package/mosh/mosh.mk   | 12 ++++++++++--
+ 3 files changed, 13 insertions(+), 5 deletions(-)
 
-I don't think this is the right fix: vlc can fallback to CLOCK_REALTIME
-perfectly fine, it just has a bug in its code.
-
-From src/posix/thread.c:
-
-# if (_POSIX_MONOTONIC_CLOCK > 0) && (_POSIX_CLOCK_SELECTION > 0)
-/* Compile-time POSIX monotonic clock support */
-#  define vlc_clock_id (CLOCK_MONOTONIC)
-
-# elif (_POSIX_MONOTONIC_CLOCK == 0) && (_POSIX_CLOCK_SELECTION > 0)
-/* Run-time POSIX monotonic clock support (see clock_setup() below) */
-static clockid_t vlc_clock_id;
-
-# else
-/* No POSIX monotonic clock support */
-#   define vlc_clock_id (CLOCK_REALTIME)
-#   warning Monotonic clock not available. Expect timing issues.
-
-# endif /* _POSIX_MONOTONIC_CLOCK */
-
-static void vlc_clock_setup_once (void)
-{
-# if (_POSIX_MONOTONIC_CLOCK == 0)
-    long val = sysconf (_SC_MONOTONIC_CLOCK);
-    assert (val != 0);
-    vlc_clock_id = (val < 0) ? CLOCK_REALTIME : CLOCK_MONOTONIC;
-# endif
-
-The problem is that the vlk_clock_setup_once() code believes
-vlc_clock_id is a variable as soon as _POSIX_MONOTONIC_CLOCK == 0.
-However, that's not true: it's a variable only if
-_POSIX_MONOTONIC_CLOCK == 0 && _POSIX_CLOCK_SELECTION > 0.
-
-So, to fix the build issue, you simply need to:
-
--# if (_POSIX_MONOTONIC_CLOCK == 0)
-+# if (_POSIX_MONOTONIC_CLOCK == 0) && (_POSIX_CLOCK_SELECTION > 0)
-
-However, once you do this, the build goes further up to the link step
-of libvlccore, where it fails with:
-
-/home/thomas/projets/buildroot/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `posix_spawnp'
-/home/thomas/projets/buildroot/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `posix_spawn_file_actions_adddup2'
-/home/thomas/projets/buildroot/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `posix_spawn_file_actions_addopen'
-
-And this is because VLC does not link with librt, which contains those
-functions in uClibc. I'm not sure how vlc builds on uClibc with other
-toolchains. I'm adding Bernd in Cc: since he is doing most of the VLC
-related modifications. Hopefully he can help here.
-
-A configure.ac check needs to be added, probably something like:
-
-  AC_CHECK_LIB(rt, clock_nanosleep, [
-    VLC_ADD_LIBS([libvlccore],[-lrt]))
-
-Could you look into this?
-
-Thanks,
-
-Thomas
+diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+index b4189ee..d1fbd63 100644
+--- a/package/mosh/Config.in
++++ b/package/mosh/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_MOSH
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_PROTOBUF
+ 	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_NETTLE if !BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+ 	# runtime dependency
+ 	select BR2_PACKAGE_OPENSSH if !BR2_PACKAGE_DROPBEAR_CLIENT
+diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
+index ab925b5..31f59c7 100644
+--- a/package/mosh/mosh.hash
++++ b/package/mosh/mosh.hash
+@@ -1,2 +1,2 @@
+-# From: http://mailman.mit.edu/pipermail/mosh-users/2015-July/000283.html
+-sha256 1af809e5d747c333a852fbf7acdbf4d354dc4bbc2839e3afe5cf798190074be3 mosh-1.2.5.tar.gz
++# From https://mailman.mit.edu/pipermail/mosh-users/2016-August/000330.html
++sha256 7e82b7fbfcc698c70f5843bb960dadb8e7bd7ac1d4d2151c9d979372ea850e85 mosh-1.2.6.tar.gz
+diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+index f8c45e8..2cd358b 100644
+--- a/package/mosh/mosh.mk
++++ b/package/mosh/mosh.mk
+@@ -4,12 +4,20 @@
+ #
+ ################################################################################
+ 
+-MOSH_VERSION = 1.2.5
++MOSH_VERSION = 1.2.6
+ MOSH_SITE = https://mosh.mit.edu
+-MOSH_DEPENDENCIES = zlib ncurses protobuf openssl host-pkgconf
++MOSH_DEPENDENCIES = zlib ncurses protobuf host-pkgconf
+ MOSH_LICENSE = GPLv3+ with exception
+ MOSH_LICENSE_FILES = COPYING COPYING.iOS
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++MOSH_CONF_OPTS += --with-crypto-library=openssl
++MOSH_DEPENDENCIES += openssl
++else
++MOSH_CONF_OPTS += --with-crypto-library=nettle
++MOSH_DEPENDENCIES += nettle
++endif
++
+ # help the detection of the SSP support: mosh configure.ac doesn't do
+ # a link test, so it doesn't detect when the toolchain doesn't have
+ # libssp.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.3
