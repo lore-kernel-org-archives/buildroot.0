@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 22:30:42 +0200
-Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
- Buildroot developers
-In-Reply-To: <fb83b7f7-40e5-62ab-5d9e-ea04cd8d8df6@gmail.com>
-References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <fb83b7f7-40e5-62ab-5d9e-ea04cd8d8df6@gmail.com>
-Message-ID: <20160823223042.775ce73e@free-electrons.com>
+Date: Tue, 23 Aug 2016 22:32:35 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-08-22
+In-Reply-To: <aabf8490-2a2f-8b5b-5edb-15a83ed00924@gmail.com>
+References: <20160823093702.D278F1093B5@stock.ovh.net>
+ <aabf8490-2a2f-8b5b-5edb-15a83ed00924@gmail.com>
+Message-ID: <20160823223235.34842da0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,67 +14,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 Aug 2016 21:51:44 +0200, Romain Naour wrote:
+On Tue, 23 Aug 2016 22:12:34 +0200, Romain Naour wrote:
 
-> > +N:	Julien Boibessot <julien.boibessot@armadeus.com>
-> > +F:	configs/armadeus*
-> > +F:	package/libcddb/  
+> >          arm |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/3d4df873a3d4fa199e03d8aa8694eafeac474e5a
+> >       x86_64 |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/407ccac95d02715ef9059b9a1282e21dc465af98
+> >          arm |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/07e25821bb7538f765af1f9c9513998e86f3ec5e
+> >       x86_64 |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/ea39becf5561d1fd4c9535ee1225b8ddc859bafe  
 > 
-> I guess Julien want to take care of opentyrian :)
-
-Added.
-
-> > +N:	Nicolas Menegale <nicolas.menegale@openwide.fr>
-> > +F:	package/cppcms/
-> > +F:	package/glibmm/
-> > +F:	package/libxmlpp/  
+> What do we do for lvm2 with musl ?
+> Bernd proposed a fix [1] and reported the issue on the lvm2 mailing list [2].
+> Several version bump has been done since then.
 > 
-> Nicolas no longer works for Open Wide, so these packages are orphan I guess.
-> Also, I'm not sure he still on the mailing list.
-
-OK. I've moved glibmm to James Knight, since he is already taking care
-of the other *mm packages (cairomm, libgtk3mm, etc.), so it makes sense
-to have him look at glibmm as well.
-
-> > +N:	Romain Naour <romain.naour@openwide.fr>  
+> Best regards,
+> Romain
 > 
-> Please update my address with romain.naour at gmail.com
+> [1] http://patchwork.ozlabs.org/patch/573519/
+> [2] https://www.redhat.com/archives/linux-lvm/2016-February/msg00024.html
 
-Done.
-
-> Here are some missing packages:
-> +F: package/elementary/
-> +F: package/expedite/
-> +F: package/xenomai/
-
-Added.
-
-> > +N:	Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  
-> [snip]
-> > +F:	package/enlightenment/
-> > +F:	package/libevas-generic-loaders/  
-> 
-> Thomas, I'd like to take these two packages on my list ;-)
-
-I've moved them to you. Note that as I said to Carlos, things are not
-mutually exclusive: several developers can list the same packages. This
-is note a file listing ownership of packages, but interest in packages.
-
-> Also some packages are not listed yet, like busybox.
-> I could be interesting to list all orphan packages.
-
-Run:
-
-./support/scripts/get-developer -c
-
-It looks at all files under version control, and lists the ones that
-are not associated to any developer. With all the latest updates, there
-are still 2945 files that are not referenced by anyone. But I'm not
-trying to make it 0 before putting this mechanism in place, it's going
-to be a gradual effort, like it has been for hashes, license
-information, etc.
-
-Best regards,
+Well, I had a look at this specifically a few days ago. Someone needs
+to take the lead and continue the upstreaming effort, in a way that
+pleases the upstream maintainer.
 
 Thomas
 -- 
