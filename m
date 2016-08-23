@@ -1,91 +1,78 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 23 Aug 2016 10:19:09 -0300
-Subject: [Buildroot] [PATCH 2/2] conntrack-tools: bump to version 1.4.4
-In-Reply-To: <1471958349-29210-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1471958349-29210-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1471958349-29210-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 23 Aug 2016 10:19:33 -0300
+Subject: [Buildroot] [PATCH 1/2] libnetfilter_acct: bump to version 1.0.3
+Message-ID: <1471958374-16839-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop usptream patch.
+Drop upstream patch.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../0001-src-fix-build-with-musl-libc.patch        | 37 ----------------------
- package/conntrack-tools/conntrack-tools.hash       |  6 ++--
- package/conntrack-tools/conntrack-tools.mk         |  2 +-
- 3 files changed, 4 insertions(+), 41 deletions(-)
- delete mode 100644 package/conntrack-tools/0001-src-fix-build-with-musl-libc.patch
+ package/libnetfilter_acct/0001-uclinux.patch     | 26 ------------------------
+ package/libnetfilter_acct/libnetfilter_acct.hash |  6 +++---
+ package/libnetfilter_acct/libnetfilter_acct.mk   |  2 +-
+ 3 files changed, 4 insertions(+), 30 deletions(-)
+ delete mode 100644 package/libnetfilter_acct/0001-uclinux.patch
 
-diff --git a/package/conntrack-tools/0001-src-fix-build-with-musl-libc.patch b/package/conntrack-tools/0001-src-fix-build-with-musl-libc.patch
+diff --git a/package/libnetfilter_acct/0001-uclinux.patch b/package/libnetfilter_acct/0001-uclinux.patch
 deleted file mode 100644
-index 5881f98..0000000
---- a/package/conntrack-tools/0001-src-fix-build-with-musl-libc.patch
+index 070f02c..0000000
+--- a/package/libnetfilter_acct/0001-uclinux.patch
 +++ /dev/null
-@@ -1,37 +0,0 @@
--From d7b20d9bbed23a7a7e40af2f5e78f37ff67e8d93 Mon Sep 17 00:00:00 2001
--From: Rodrigo Rebello <rprebello@gmail.com>
--Date: Mon, 23 Nov 2015 02:12:48 -0200
--Subject: [PATCH] src: fix build with musl libc
+@@ -1,26 +0,0 @@
+-From bfcaf00a8c972e2c10412d917f08626eb05079c7 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 10 Sep 2013 15:32:03 -0300
+-Subject: [PATCH] configure: uclinux is also linux
 -
--The GNU version of 'struct tcphdr' is not exposed by musl libc headers
--unless _GNU_SOURCE is defined. Without this definition, the build fails
--with:
--
--  rpc.c: In function 'rpc_helper_cb':
--  rpc.c:351:15: error: 'struct tcphdr' has no member named 'doff'
--     offset += th->doff * 4;
--                 ^
--
--Upstream status: sent
--http://patchwork.ozlabs.org/patch/547376/
--
--Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ----
-- src/helpers/rpc.c | 1 +
-- 1 file changed, 1 insertion(+)
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/src/helpers/rpc.c b/src/helpers/rpc.c
--index 82493c2..3a7b337 100644
----- a/src/helpers/rpc.c
--+++ b/src/helpers/rpc.c
--@@ -28,6 +28,7 @@
-- 
-- #include <rpc/rpc_msg.h>
-- #include <rpc/pmap_prot.h>
--+#define _GNU_SOURCE
-- #include <netinet/tcp.h>
-- #include <netinet/udp.h>
+-diff --git a/configure.ac b/configure.ac
+-index ad1bef8..24a7bb9 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -22,7 +22,7 @@ AC_DISABLE_STATIC
+- LT_INIT
+- CHECK_GCC_FVISIBILITY
+- case "$host" in
+--*-*-linux*) ;;
+-+*-*-linux* | *-*-uclinux*) ;;
+- *) AC_MSG_ERROR([Linux only, dude!]);;
+- esac
 - 
 --- 
--2.1.4
+-1.8.1.5
 -
-diff --git a/package/conntrack-tools/conntrack-tools.hash b/package/conntrack-tools/conntrack-tools.hash
-index 7ff1cf7..9d68177 100644
---- a/package/conntrack-tools/conntrack-tools.hash
-+++ b/package/conntrack-tools/conntrack-tools.hash
+diff --git a/package/libnetfilter_acct/libnetfilter_acct.hash b/package/libnetfilter_acct/libnetfilter_acct.hash
+index 852617c..7c38664 100644
+--- a/package/libnetfilter_acct/libnetfilter_acct.hash
++++ b/package/libnetfilter_acct/libnetfilter_acct.hash
 @@ -1,3 +1,3 @@
--# From ftp://ftp.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.3.tar.bz2.{md5sum,sha1sum}
--md5	966a5d8f846ddf5304bcd12685c0707f	conntrack-tools-1.4.3.tar.bz2
--sha1	509db30f34b283f4a74a7e638ba0ca713d3fe98c	conntrack-tools-1.4.3.tar.bz2
-+# From ftp://ftp.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.4.tar.bz2.{md5sum,sha1sum}
-+md5	acd9e0b27cf16ae3092ba900e4d7560e	conntrack-tools-1.4.4.tar.bz2
-+sha1	25b36fb6832373ef899bade3b82adf5382b9a05b	conntrack-tools-1.4.4.tar.bz2
-diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
-index 7287587..b73aa7f 100644
---- a/package/conntrack-tools/conntrack-tools.mk
-+++ b/package/conntrack-tools/conntrack-tools.mk
+-# From ftp://ftp.netfilter.org/pub/libnetfilter_acct/libnetfilter_acct-1.0.2.tar.bz2.{md5sum,sha1sum}
+-md5	2118d9514c079839ebd9cb3144ad2ad7	libnetfilter_acct-1.0.2.tar.bz2
+-sha1	ca0186912b5ee57088a20dd0a5b78606fd6af02e	libnetfilter_acct-1.0.2.tar.bz2
++# From ftp://ftp.netfilter.org/pub/libnetfilter_acct/libnetfilter_acct-1.0.3.tar.bz2.{md5sum,sha1sum}
++md5	814b2972b2f5c740ff87510bc109168b	libnetfilter_acct-1.0.3.tar.bz2
++sha1	4b9073e4aa989b0f000c8da1ab01b22fceed52b2	libnetfilter_acct-1.0.3.tar.bz2
+diff --git a/package/libnetfilter_acct/libnetfilter_acct.mk b/package/libnetfilter_acct/libnetfilter_acct.mk
+index 5adb6e0..3870ef8 100644
+--- a/package/libnetfilter_acct/libnetfilter_acct.mk
++++ b/package/libnetfilter_acct/libnetfilter_acct.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CONNTRACK_TOOLS_VERSION = 1.4.3
-+CONNTRACK_TOOLS_VERSION = 1.4.4
- CONNTRACK_TOOLS_SOURCE = conntrack-tools-$(CONNTRACK_TOOLS_VERSION).tar.bz2
- CONNTRACK_TOOLS_SITE = http://www.netfilter.org/projects/conntrack-tools/files
- CONNTRACK_TOOLS_DEPENDENCIES = host-pkgconf \
+-LIBNETFILTER_ACCT_VERSION = 1.0.2
++LIBNETFILTER_ACCT_VERSION = 1.0.3
+ LIBNETFILTER_ACCT_SOURCE = libnetfilter_acct-$(LIBNETFILTER_ACCT_VERSION).tar.bz2
+ LIBNETFILTER_ACCT_SITE = http://www.netfilter.org/projects/libnetfilter_acct/files
+ LIBNETFILTER_ACCT_INSTALL_STAGING = YES
 -- 
 2.7.3
