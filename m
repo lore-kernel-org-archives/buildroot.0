@@ -1,47 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 22:21:38 +0200
-Subject: [Buildroot] [git commit branch/next] package/amd-catalyst: fix
-	circular Config.in dependency
-Message-ID: <20160823202151.AAAFA81D87@busybox.osuosl.org>
+Date: Tue, 23 Aug 2016 22:25:56 +0200
+Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
+ Buildroot developers
+In-Reply-To: <1065867889.672166.1471981841582.JavaMail.zimbra@datacom.ind.br>
+References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1065867889.672166.1471981841582.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <20160823222556.5554319d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=652d674e066e9c1b8eec9057778d2c9a34f8261d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-The current amd-catalyst options related to the CCCLE tool create the
-following Config.in circular dependency:
+On Tue, 23 Aug 2016 16:50:41 -0300 (BRT), Carlos Santos wrote:
 
-package/qt/Config.in:134:error: recursive dependency detected!
-package/qt/Config.in:134:	symbol BR2_PACKAGE_QT_GUI_MODULE is selected by BR2_PACKAGE_AMD_CATALYST_CCCLE
-package/amd-catalyst/Config.in:52:	symbol BR2_PACKAGE_AMD_CATALYST_CCCLE depends on BR2_PACKAGE_QT_NOPNG
-package/qt/Config.in:277:	symbol BR2_PACKAGE_QT_NOPNG is part of choice <choice>
-package/qt/Config.in:271:	choice <choice> contains symbol <choice>
-package/qt/Config.in:271:	choice <choice> contains symbol BR2_PACKAGE_QT_GUI_MODULE
+> > This is an initial list of Buildroot developers. It has been created
+> > semi-automatically by parsing the Git history, and finding the authors
+> > of commits with a title like "<foo>: new package". Some additional
+> > manual tweaking has been done (merging multiple entries corresponding to
+> > the same person, adding some more entries, etc.).  
+> ---8<---
+> > +N:	Carlos Santos <casantos@datacom.ind.br>
+> > +F:	package/gmock/
+> > +F:	package/perl-file-util/  
+> 
+> I can take care of util-linux, too.
 
-But in fact, it turns out that selecting BR2_PACKAGE_QT_GUI_MODULE is
-not necessary, since we already "depends on BR2_PACKAGE_QT_X11", which
-itself selects BR2_PACKAGE_QT_GUI_MODULE. Therefore, to fix this problem
-we simply remove the "select BR2_PACKAGE_QT_GUI_MODULE" from the
-BR2_PACKAGE_AMD_CATALYST_CCCLE option.
+Added, even though you haven't made any commits to util-linux yet (I
+remember we have 3 patches from you in patchwork on util-linux).
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/amd-catalyst/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+> > +N:	Giovanni Zantedeschi <giovanni.zantedeschi@datacom.ind.br>
+> > +F:	package/libpam-radius-auth/
+> > +F:	package/libpam-tacplus/  
+> 
+> Giovanni does not work at DATACOM anymore. Please replace by casantos at ...
 
-diff --git a/package/amd-catalyst/Config.in b/package/amd-catalyst/Config.in
-index 96e7f06..85551ed 100644
---- a/package/amd-catalyst/Config.in
-+++ b/package/amd-catalyst/Config.in
-@@ -56,7 +56,6 @@ config BR2_PACKAGE_AMD_CATALYST_CCCLE
- 	depends on !BR2_PACKAGE_QT_NOPNG
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps-ng
- 	select BR2_PACKAGE_PROCPS_NG # runtime
--	select BR2_PACKAGE_QT_GUI_MODULE
- 	select BR2_PACKAGE_QT_ACCESSIBILITY
- 	help
- 	  Installs the Catalyst Control Center, a Qt graphical tool to
+Done, thanks for letting me know!
+
+> ---8<---
+> > +N:	Stephan Hoffmann <sho@relinux.de>
+> > +F:	package/cache-calibrator/
+> > +F:	package/gtest/  
+> 
+> I'm planing to replace gmock and gtest by "googletest" in the near future, so I could take care of gtest if Stefan does not mind. 
+
+I've added package/gtest/ for you as well. Package assignments are not
+exclusive: two developers can express their interest for the same
+package. That's why I've chosen the term "developer" and not
+"maintainer": it's not a file that really describes "ownership" of
+packages, but rather "interest".
+
+Thanks for your feedback!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
