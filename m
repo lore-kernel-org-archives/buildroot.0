@@ -1,43 +1,43 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 23 Aug 2016 15:01:25 +0200
-Subject: [Buildroot] [PATCH/next 2/4] DEVELOPERS: add initial list of
- Buildroot developers
-In-Reply-To: <20160823134138.6f9818ef@free-electrons.com>
-References: <1471902678-18693-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <670f6e5c-e513-6b3f-ed82-4da1ddc3d141@lucaceresoli.net>
- <20160823134138.6f9818ef@free-electrons.com>
-Message-ID: <86721e5a-67f5-2b1b-5dab-7484d6e7c9e7@lucaceresoli.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 23 Aug 2016 10:19:08 -0300
+Subject: [Buildroot] [PATCH 1/2] libnetfilter_conntrack: bump to version
+	1.0.6
+Message-ID: <1471958349-29210-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libnetfilter_conntrack/libnetfilter_conntrack.hash | 6 +++---
+ package/libnetfilter_conntrack/libnetfilter_conntrack.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 23/08/2016 13:41, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 23 Aug 2016 12:09:54 +0200, Luca Ceresoli wrote:
-> 
->>> +N:	Luca Ceresoli <luca@lucaceresoli.net>
->>> +F:	package/agentpp/
->>> +F:	package/exim/
->>> +F:	package/ffmpeg/
->>> +F:	package/linphone/  
->>
->> I haven't had any role on the ffmpeg and linphone packages since >4
->> years now. I think this line should be removed from under my name.
-> 
-> ACK. For ffmpeg, it's fine, since Bernd is also listed (and he is doing
-> most of the effort on ffmpeg these days.
-> 
-> However, for linphone, it's a bit annoying because it means no-one is
-> looking after this package. Should we deprecate it?
-
-In this case, feel free to re-add my name. I'll try to look at the
-failures, but that will be on a "best effort" basis...
-
+diff --git a/package/libnetfilter_conntrack/libnetfilter_conntrack.hash b/package/libnetfilter_conntrack/libnetfilter_conntrack.hash
+index 67d1e40..de9d1d3 100644
+--- a/package/libnetfilter_conntrack/libnetfilter_conntrack.hash
++++ b/package/libnetfilter_conntrack/libnetfilter_conntrack.hash
+@@ -1,3 +1,3 @@
+-# From ftp://ftp.netfilter.org/pub/libnetfilter_conntrack/libnetfilter_conntrack-1.0.5.tar.bz2.{md5sum,sha1sum}
+-md5	6aa1bd3c1d0723235ac897087b4cd4e5	libnetfilter_conntrack-1.0.5.tar.bz2
+-sha1	9aed8733d98af39d57fffd929c2bea70f1dcba06	libnetfilter_conntrack-1.0.5.tar.bz2
++# From ftp://ftp.netfilter.org/pub/libnetfilter_conntrack/libnetfilter_conntrack-1.0.6.tar.bz2.{md5sum,sha1sum}
++md5	7139c5f408dd9606ffecfd5dcda8175b	libnetfilter_conntrack-1.0.6.tar.bz2
++sha1	015f985a8e171889a67769ba02d070eca53bac07	libnetfilter_conntrack-1.0.6.tar.bz2
+diff --git a/package/libnetfilter_conntrack/libnetfilter_conntrack.mk b/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
+index 33f1294..ec05f6d 100644
+--- a/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
++++ b/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNETFILTER_CONNTRACK_VERSION = 1.0.5
++LIBNETFILTER_CONNTRACK_VERSION = 1.0.6
+ LIBNETFILTER_CONNTRACK_SOURCE = libnetfilter_conntrack-$(LIBNETFILTER_CONNTRACK_VERSION).tar.bz2
+ LIBNETFILTER_CONNTRACK_SITE = http://www.netfilter.org/projects/libnetfilter_conntrack/files
+ LIBNETFILTER_CONNTRACK_INSTALL_STAGING = YES
 -- 
-Luca
+2.7.3
