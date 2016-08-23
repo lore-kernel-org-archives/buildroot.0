@@ -1,47 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 22:21:38 +0200
-Subject: [Buildroot] [git commit] package/amd-catalyst: fix circular
-	Config.in dependency
-Message-ID: <20160902142939.CADBD7FB67@busybox.osuosl.org>
+Date: Tue, 23 Aug 2016 14:59:01 +0200
+Subject: [Buildroot] [git commit] docs/manual: Document the variable
+	$(PKG)_DL_OPTS
+Message-ID: <20160902142938.F1B2C7FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=652d674e066e9c1b8eec9057778d2c9a34f8261d
+commit: https://git.buildroot.net/buildroot/commit/?id=03f12377178e209f599f00b3fafb33dfa649abc7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The current amd-catalyst options related to the CCCLE tool create the
-following Config.in circular dependency:
+This adds a description of the optional variable $(PKG)_DL_OPTS. When it
+is set, this option passes additional options to the downloader.
 
-package/qt/Config.in:134:error: recursive dependency detected!
-package/qt/Config.in:134:	symbol BR2_PACKAGE_QT_GUI_MODULE is selected by BR2_PACKAGE_AMD_CATALYST_CCCLE
-package/amd-catalyst/Config.in:52:	symbol BR2_PACKAGE_AMD_CATALYST_CCCLE depends on BR2_PACKAGE_QT_NOPNG
-package/qt/Config.in:277:	symbol BR2_PACKAGE_QT_NOPNG is part of choice <choice>
-package/qt/Config.in:271:	choice <choice> contains symbol <choice>
-package/qt/Config.in:271:	choice <choice> contains symbol BR2_PACKAGE_QT_GUI_MODULE
-
-But in fact, it turns out that selecting BR2_PACKAGE_QT_GUI_MODULE is
-not necessary, since we already "depends on BR2_PACKAGE_QT_X11", which
-itself selects BR2_PACKAGE_QT_GUI_MODULE. Therefore, to fix this problem
-we simply remove the "select BR2_PACKAGE_QT_GUI_MODULE" from the
-BR2_PACKAGE_AMD_CATALYST_CCCLE option.
-
+Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/amd-catalyst/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ docs/manual/adding-packages-generic.txt | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/amd-catalyst/Config.in b/package/amd-catalyst/Config.in
-index 96e7f06..85551ed 100644
---- a/package/amd-catalyst/Config.in
-+++ b/package/amd-catalyst/Config.in
-@@ -56,7 +56,6 @@ config BR2_PACKAGE_AMD_CATALYST_CCCLE
- 	depends on !BR2_PACKAGE_QT_NOPNG
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps-ng
- 	select BR2_PACKAGE_PROCPS_NG # runtime
--	select BR2_PACKAGE_QT_GUI_MODULE
- 	select BR2_PACKAGE_QT_ACCESSIBILITY
- 	help
- 	  Installs the Catalyst Control Center, a Qt graphical tool to
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index ef895ec..51408e8 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -250,6 +250,13 @@ information is (assuming the package name is +libfoo+) :
+     +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
+     +LIBFOO_SITE=$(TOPDIR)/../src/libfoo+
+ 
++* +LIBFOO_DL_OPTS+ is a space-separated list of additional options to
++  pass to the downloader. Useful for retrieving documents with
++  server-side checking for user logins and passwords, or to use a proxy.
++  All download methods valid for +LIBFOO_SITE_METHOD+ are supported;
++  valid options depend on the download method (consult the man page
++  for the respective download utilities).
++
+ * +LIBFOO_EXTRA_DOWNLOADS+ is a space-separated list of additional
+   files that Buildroot should download. If an entry contains +://+
+   then Buildroot will assume it is a complete URL and will download
