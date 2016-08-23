@@ -1,39 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 23 Aug 2016 10:27:47 -0300
-Subject: [Buildroot] [PATCH] diffutils: bump to version 3.5
-Message-ID: <1471958867-6960-1-git-send-email-gustavo@zacarias.com.ar>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Tue, 23 Aug 2016 13:38:36 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2016-08-22
+In-Reply-To: <20160823093410.971F8109354@stock.ovh.net>
+References: <20160823093410.971F8109354@stock.ovh.net>
+Message-ID: <ed4e9146-e57c-3045-7642-d786e9574d83@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/diffutils/diffutils.hash | 2 +-
- package/diffutils/diffutils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Thomas,
 
-diff --git a/package/diffutils/diffutils.hash b/package/diffutils/diffutils.hash
-index 27eace2..7e99f1f 100644
---- a/package/diffutils/diffutils.hash
-+++ b/package/diffutils/diffutils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	a25e89a8ab65fded1731e4186be1bb25cda967834b6df973599cdcd5abdfc19c	diffutils-3.3.tar.xz
-+sha256	dad398ccd5b9faca6b0ab219a036453f62a602a56203ac659b43e889bec35533	diffutils-3.5.tar.xz
-diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
-index 191fd2e..d3e608c 100644
---- a/package/diffutils/diffutils.mk
-+++ b/package/diffutils/diffutils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DIFFUTILS_VERSION = 3.3
-+DIFFUTILS_VERSION = 3.5
- DIFFUTILS_SOURCE = diffutils-$(DIFFUTILS_VERSION).tar.xz
- DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
- DIFFUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
--- 
-2.7.3
+New daily-mail seems to work well!
+
+Just a comment on that one, you should probably set the mail reply-to 
+field to buildroot at buildroot.org in case developers want to notice 
+directly the community.
+
+Regards,
+
+Julien
+
+Le 23/08/2016 ? 11:34, Thomas Petazzoni a ?crit :
+> Hello,
+>
+> This is the list of Buildroot build failures that occured on
+> 2016-08-22, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Build failures related to your packages:
+>
+>      powerpc |            qt5location-5.6.1-1 | http://autobuild.buildroot.net/results/344444aa86c5a11bded97d3b19bf3fc26ccd711c
+>
