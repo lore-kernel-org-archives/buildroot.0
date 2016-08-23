@@ -1,81 +1,68 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 24 Aug 2016 00:05:21 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-08-22
-In-Reply-To: <ac3757b1-2890-3670-22cd-6b655c878f06@gmail.com>
-References: <20160823093702.D278F1093B5@stock.ovh.net>
- <aabf8490-2a2f-8b5b-5edb-15a83ed00924@gmail.com>
- <ac3757b1-2890-3670-22cd-6b655c878f06@gmail.com>
-Message-ID: <639f880e-4f5a-d350-cba5-d6ea40af3048@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 24 Aug 2016 00:06:12 +0200
+Subject: [Buildroot] [PATCH 1/4] package/libegl: add option for wayland
+ extensions
+In-Reply-To: <20160823235801.57c65bd0@free-electrons.com>
+References: <cover.1471968455.git.yann.morin.1998@free.fr>
+ <6d4c564432948310ca9502dc94c2d50a7c97f460.1471968455.git.yann.morin.1998@free.fr>
+ <20160823220245.49e1b6e7@free-electrons.com>
+ <20160823214351.GE5749@free.fr>
+ <20160823235801.57c65bd0@free-electrons.com>
+Message-ID: <20160823220612.GF5749@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 23/08/2016 ? 22:33, Romain Naour a ?crit :
-> Hello,
->>>
->>> Build statistics for 2016-08-22
->>> ================================
->>>
->>>       successes : 158
->>>        failures : 43 
->>>        timeouts : 1  
->>>           TOTAL : 202
->>>
->>> Classification of failures by reason
->>> ====================================
->>>
->>>                  lvm2-2.02.162 | 4 
->>>
->>> Detail of failures
->>> ===================
->>>
->>>          arm |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/3d4df873a3d4fa199e03d8aa8694eafeac474e5a
->>>       x86_64 |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/407ccac95d02715ef9059b9a1282e21dc465af98
->>>          arm |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/07e25821bb7538f765af1f9c9513998e86f3ec5e
->>>       x86_64 |                  lvm2-2.02.162 | NOK | http://autobuild.buildroot.net/results/ea39becf5561d1fd4c9535ee1225b8ddc859bafe
->>
->> What do we do for lvm2 with musl ?
->> Bernd proposed a fix [1] and reported the issue on the lvm2 mailing list [2].
->> Several version bump has been done since then.
+Thomas, All,
+
+On 2016-08-23 23:58 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 23 Aug 2016 23:43:51 +0200, Yann E. MORIN wrote:
 > 
-> I noticed that lvm2 has been updated to the latest version 2.02.163 and it seems
-> to fix the musl issue thanks to this commit [1].
-> I'm not sure we can easily backport it to 2.02.162 but lvm2 is no longer an
-> issue with musl :) (lvm2 needs to be runtime tested though)
+> > > One thing that surprises me though is that weston itself doesn't use
+> > > this new option, and still has:
+> > > 
+> > > config BR2_PACKAGE_WESTON_DRM
+> > >         bool "DRM compositor"
+> > >         depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
+> > >         select BR2_PACKAGE_LIBDRM
+> > >         select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+> > > 
+> > > # Uses libgbm from mesa3d
+> > > comment "DRM compositor needs an OpenGL EGL backend provided by mesa3d"
+> > >         depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
+> > > 
+> > > So it's weird to have a new OpenGL implementation that is said to be
+> > > Wayland capable, but doesn't allow to build the reference Wayland
+> > > implementation.  
+> > 
+> > That's because not everything was converted. Yet.
 > 
-> Best regards,
-> Romain
-> 
-> [1]
-> https://git.fedorahosted.org/cgit/lvm2.git/commit/?id=06ce9b4e4238da58d6c2acda7878dbc51245a8fc
+> OK, this is definitely a good explanation. So I should take it that you
+> expect Weston to build and work with the latest version of the NVidia
+> driver?
 
-So, things are better with 2.02.163 but only if BR2_PACKAGE_LVM2 is set (other
-lvm2 options are not set).
+Eventually. Eventually... ;-)
 
-If BR2_PACKAGE_LVM2_STANDARD_INSTALL is set, we need the small patch from Bernd
-0002-mallinfo.patch.
+To be honest, this is not my highest priority for 2016.11; I have multi
+br2-external and systemd skeleton to handle first.
 
-But if BR2_PACKAGE_LVM2_APP_LIBRARY is set the build fail with the same error
-(even with master):
+This quick egl-wayland series (which I did not expect would be applied
+so fast!) was just a little distraction along the way. ;-) But at least,
+it paves the way toward more egl-wayland providers and users.
 
-lvmcmdline.c: In function ?_check_standard_fds?:
-lvmcmdline.c:1810:14: error: assignment of read-only variable ?stdin?
-      !(stdin = fopen(_PATH_DEVNULL, "r"))) {
+As for Weston and the DRM compositor, I guess Gustavo did with what we
+had at the time... And I'm not totally up-to-speed with all the
+complexity of the graphics stack...
 
-So lets disable lvm2 for musl.
+Regards,
+Yann E. MORIN.
 
-Best regards,
-Romain
-
-> 
->>
->> Best regards,
->> Romain
->>
->> [1] http://patchwork.ozlabs.org/patch/573519/
->> [2] https://www.redhat.com/archives/linux-lvm/2016-February/msg00024.html
->>
-> 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
