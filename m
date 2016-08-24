@@ -1,51 +1,106 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Aug 2016 02:17:25 +0200
-Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
- Buildroot developers
-In-Reply-To: <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 24 Aug 2016 02:21:44 +0200
+Subject: [Buildroot] [PATCHv2/next 4/4] docs/manual: add new section
+ about the DEVELOPERS file and get-developer
+In-Reply-To: <1471956466-22338-5-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <7ada4fd0-8ca3-c59f-bbfd-1ece1f636d73@mind.be>
+ <1471956466-22338-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <189a31d9-db1e-032c-8e79-d047b0ebed18@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Thomas,
-
 On 23-08-16 14:47, Thomas Petazzoni wrote:
-> +N:	Arnout Vandecappelle <arnout@mind.be>
-> +F:	package/freescale-imx/firmware-imx/
-> +F:	package/freescale-imx/imx-lib/
-> +F:	package/gstreamer/gst-fsl-plugins/
-> +F:	package/moarvm/
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  docs/manual/developers.txt | 45 +++++++++++++++++++++++++++++++++++++++++++++
+>  docs/manual/manual.txt     |  2 ++
+>  2 files changed, 47 insertions(+)
+>  create mode 100644 docs/manual/developers.txt
+> 
+> diff --git a/docs/manual/developers.txt b/docs/manual/developers.txt
+> new file mode 100644
+> index 0000000..e4c1d88
+> --- /dev/null
+> +++ b/docs/manual/developers.txt
+> @@ -0,0 +1,45 @@
+> +// -*- mode:doc; -*-
+> +// vim: set syntax=asciidoc:
+> +
+> +== DEVELOPERS file and get-developers
+> +
+> +The main Buildroot directory contains a file named +DEVELOPERS+ that
+> +list the developers in charge of various areas of Buildroot. Thanks to
+> +this file, the +get-developer+ tool allows to:
+> +
+> +- Calculate the list of developers to whom patches should be sent, by
+> +  parsing the patches and matching the modified files with the
+> +  relevant developers. See xref:submitting-patches[] for details.
+> +
+> +- Find which developers are in charge of a given architecture or
+> +  package, so that they can be notified when a build failure occurs on
+> +  this architecture or package. This is done in interaction with
+> +  Buildroot's autobuild infrastructure.
+> +
+> +We ask developers adding new packages, new boards, or generally new
+> +functionality in Buildroot, to register themselves in the +DEVELOPERS+
+> +file. As an example, we expect a developer contributing a new package
+> +to include in his patch the appropriate modification to the
+> ++DEVELOPERS+ file.
 
- This one was an accident: I took over the patch from Francois and slightly
-amended it, but then I committed with --reset-author (I have an alias for git
-commit --amend --reset-author -C HEAD). I actually have no idea what moarvm does :-)
+ As I hinted in my reply to patch 2, I would also add this message to the end of
+the "The formatting of a patch" section in contribute.txt. Something like:
 
-> +F:	package/owfs/
-> +F:	package/python-bottle/
-> +F:	package/sqlcipher/
-> +F:	package/stress/
+If you are interested in getting notified of build failures and of further
+changes in the packages you modified, please add yourself to the DEVELOPERS
+file. This should be done in a separate patch of the series. See
+xref:DEVELOPERS[the DEVELOPERS file] for more information.
 
- All of these were really drive-by patches, I don't use any of them regularly.
-And in fact, I think that that will be the case for the majority of the packages
-that are listed now.
+(and add [[DEVELOPERS]] to the developers section).
 
- I'm afraid that maintaining the DEVELOPERS file (pruning dead e-mail addresses,
-removing people that are no longer interested in a particular package) is going
-to take more effort (i.e. more commits) than we actually gain by putting the
-developers in Cc.
-
- So for this initial version, I'd suggest keeping just the people that we know
-are active. Basically the people who have responded to this patch :-) And then
-in the contributing documentation, invite people to also update the DEVELOPERS
-file with their entry.
 
  Regards,
  Arnout
+
+
+> +
+> +The +DEVELOPERS+ file format is documented in detail inside the file
+> +itself.
+> +
+> +The +get-developer+ tool, located in +support/scripts+ allows to use
+> +the +DEVELOPERS+ file for various tasks:
+> +
+> +- When passing one or several patches as command line argument,
+> +  +get-developer+ will return the appropriate +git send-email+
+> +  command.
+> +
+> +- When using the +-a <arch>+ command line option, +get-developer+ will
+> +  return the list of developers in charge of the given architecture.
+> +
+> +- When using the +-p <package>+ command line option, +get-developer+
+> +  will return the list of developers in charge of the given package.
+> +
+> +- When using the +-c+ command line option, +get-developer+ will look
+> +  at all files under version control in the Buildroot repository, and
+> +  list the ones that are not handled by any developer. The purpose of
+> +  this option is to help completing the +DEVELOPERS+ file.
+> +
+> diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+> index 3c531e3..7630ea6 100644
+> --- a/docs/manual/manual.txt
+> +++ b/docs/manual/manual.txt
+> @@ -64,6 +64,8 @@ include::debugging-buildroot.txt[]
+>  
+>  include::contribute.txt[]
+>  
+> +include::developers.txt[]
+> +
+>  = Appendix
+>  
+>  include::appendix.txt[]
+> 
 
 
 -- 
