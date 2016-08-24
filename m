@@ -1,72 +1,54 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Aug 2016 02:58:22 +0200
-Subject: [Buildroot] How I can add a package of cmus?
-In-Reply-To: <68562d34c69d106316a77f40dfa9a0@cweb20.nm.nhnsystem.com>
-References: <68562d34c69d106316a77f40dfa9a0@cweb20.nm.nhnsystem.com>
-Message-ID: <6eaa9426-87d3-3cab-d700-e638eee782e2@mind.be>
+Date: Wed, 24 Aug 2016 03:01:00 +0200
+Subject: [Buildroot] BuildRoot cannot build powerpc64
+In-Reply-To: <20160818231850.4072ddf2@free-electrons.com>
+References: <F9C551623D2CBB4C9488801D14F864C6EE8B1000@ex-mb1.corp.adtran.com>
+ <57b3aeb6944cf_7ec33f915a8b1b9c298e6@ultri3.mail>
+ <F9C551623D2CBB4C9488801D14F864C6EE8B17ED@ex-mb1.corp.adtran.com>
+ <20160817193721.0cc1466d@free-electrons.com>
+ <532ce6e0-de27-9a2a-f062-179a4fa3248e@mind.be>
+ <20160818231850.4072ddf2@free-electrons.com>
+Message-ID: <1b65f937-d2ee-312c-964d-e6b9da957463@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19-08-16 16:21, ??? wrote:
-> I want to add cmus(ncurse based cui music player) package to my buildroot. But,
-> I'm a lemon. I am struggling to write. Would you help me some?  
+On 18-08-16 23:18, Thomas Petazzoni wrote:
+> Hello,
 > 
->  
+> On Thu, 18 Aug 2016 20:02:31 +0200, Arnout Vandecappelle wrote:
 > 
-> ################################################################################
-> #
-> # cmus
-> #
-> ################################################################################
+>>> The only C library that supports PowerPC64 today is glibc.
+>>>
+>>> But glibc does not support static linking.
+>>>
+>>> Hence there is no solution to do a statically linked rootfs on
+>>> PowerPC64 today.  
+>>
+>>  Perhaps we should remove the static/shared libs options to the toolchain menu,
+>> and make them depend on the libc choice rather than the other way round. That
+>> way, we're sure that we never run into such impossible situations.
+>>
+>>  Actually also some other options are more fitting in the toolchain menu IMHO,
+>> like debug/optimization options and SSP.
 > 
-> 
-> CMUS_VERSION = 2.7.1
-> CMUS_SOURCE = v$(CMUS_VERSION).tar.gz
-> CMUS_SITE = https://github.com/cmus/cmus/archive
-> CMUS_DEPENDENCIES  = host-pkgconf
-> CMUS_INSTALL_STAGING = YES
-> 
-> define CMUS_CONFIGURE_CMDS
->         (cd $(@D); \
->                
-> PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
->                 PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
->                 PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
->                 PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
+> I personally don't like this, and instead would like to keep separated
+> the options that affect the build of all components (SSP or not,
+> debug/optimization, shared/static) from the options that configure the
+> toolchain itself.
 
- The configure script also seems to want to cross-compile some test programs, so
-you should pass $(TARGET_CONFIGURE_OPTS) $(TARGET_CONFIGURE_ARGS). This already
-includes the PKG_CONFIG stuff so that can be removed.
+ OK, fair enough.
 
->         ./configure \
->                 prefix="$(STAGING_DIR)/usr"  \
->                          )
-> endef
-> 
-> define CMUS_BUILD_CMDS
->           $(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D) all
+ Actually, I noticed now that SSP in the build menu already depends on the
+toolchain choices. So perhaps we should move the build options below the
+toolchain, and make the static/shared libs options depend on the toolchain as well.
 
- I think you can actually pass $(TARGET_CONFIGURE_OPTS) in the environment and
-remove the CC and LD overrides.
+ That leaves us just with the awkward headers-same-as-kernel forward dependency.
 
  Regards,
  Arnout
-
-> endef
-> 
-> $(eval $(generic-package))
->  
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
 
 
 -- 
