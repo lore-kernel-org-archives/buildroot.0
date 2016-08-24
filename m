@@ -1,63 +1,50 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 24 Aug 2016 23:03:43 +0200
-Subject: [Buildroot] [PATCH] elf2flt: fix threading apps on ARM noMMU systems
-Message-ID: <20160824210342.GA7164@waldemar-brodkorb.de>
+Date: Wed, 24 Aug 2016 23:20:37 +0200
+Subject: [Buildroot] [PATCH 1/3] arch/arm: Add Cortex-a53 CPU
+In-Reply-To: <dc3618df-52c5-c209-30a4-ea351fb2c49c@flatmax.org>
+References: <1471913603-21487-1-git-send-email-flatmax@flatmax.org>
+ <1471913603-21487-2-git-send-email-flatmax@flatmax.org>
+ <20160824000345.264d6d2a@free-electrons.com>
+ <dc3618df-52c5-c209-30a4-ea351fb2c49c@flatmax.org>
+Message-ID: <20160824212037.GA2007@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See this thread, which explains the problem in detail:
-http://mailman.uclinux.org/pipermail/uclinux-dev//2016-April/052713.html
+Hi Matt,
+Matt Flax wrote,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- This should be applied to master.
----
- ...-relocation-support-for-R_ARM_TARGET-type.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/elf2flt/0001-elf2flt-fix-relocation-support-for-R_ARM_TARGET-type.patch
+> On 24/08/16 08:03, Thomas Petazzoni wrote:
+> >Hello,
+> >
+> >On Tue, 23 Aug 2016 10:53:21 +1000, Matt Flax wrote:
+> >>Adds the Cortex-a53 CPU to the target architecture variant choice. This sets
+> >>the toolchain to use cortex-a53 as the target. The effect is that various
+> >>cortex-a53 tunings are enabled for the compilation of packages.
+> >>
+> >>Signed-off-by: Matt Flax <flatmax@flatmax.org>
+> >Thanks, but as I said, I don't want to duplicate definitions of 64 bits
+> >ARM cores between Config.in.arm and Config.in.aarch64. So I've pushed
+> >at
+> >http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=aarch64
+> >a branch that does the necessary rework: it merges Config.in.aarch64
+> >into Config.in.arm, does a few preparation steps, and finally adds your
+> >commit on top of that. Could you have a look and let me know what you
+> >think?
+> Looks good. One thing though, my original Cortex-A53 patch selected VFPV4
+> which is now incorrect,
+> that should be removed ... however that wouldn't enable any HF settings ...
+> Also I don't understand why we need "select BR2_ARCH_HAS_MMU_OPTIONAL" but
+> as I mentioned,
+> uclibc doesn't compile cleanly without it ... seems like a deep rooted
+> problem.
 
-diff --git a/package/elf2flt/0001-elf2flt-fix-relocation-support-for-R_ARM_TARGET-type.patch b/package/elf2flt/0001-elf2flt-fix-relocation-support-for-R_ARM_TARGET-type.patch
-new file mode 100644
-index 0000000..b9615ab
---- /dev/null
-+++ b/package/elf2flt/0001-elf2flt-fix-relocation-support-for-R_ARM_TARGET-type.patch
-@@ -0,0 +1,34 @@
-+From dedce8765d203c1c162a57e6259375e0b457173f Mon Sep 17 00:00:00 2001
-+From: Greg Ungerer <gerg@linux-m68k.org>
-+Date: Fri, 19 Aug 2016 23:49:51 +1000
-+Subject: [PATCH] elf2flt: fix relocation support for R_ARM_TARGET types
-+
-+R_ARM_TARGET1 (and I think R_ARM_TARGET2) relocation types should be
-+treated in the same way as R_ARM_ABS32. Fix them to write out the addend
-+to the flat binary in network byte order.
-+
-+Signed-off-by: Greg Ungerer <gerg@uclinux.org>
-+Tested-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+---
-+ elf2flt.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/elf2flt.c b/elf2flt.c
-+index 5ae7dd9..3f31569 100644
-+--- a/elf2flt.c
-++++ b/elf2flt.c
-+@@ -1505,7 +1505,9 @@ DIS29_RELOCATION:
-+ 					(((*p)->howto->type != R_ARM_PC24) &&
-+ 					((*p)->howto->type != R_ARM_PLT32)))
-+ 					tmp.c[i3] = (hl >> 24) & 0xff;
-+-				if ((*p)->howto->type == R_ARM_ABS32)
-++				if (((*p)->howto->type == R_ARM_ABS32) ||
-++				    ((*p)->howto->type == R_ARM_TARGET1) ||
-++				    ((*p)->howto->type == R_ARM_TARGET2))
-+ 					*(uint32_t *)r_mem = htonl(hl);
-+ 				else
-+ 					*(uint32_t *)r_mem = tmp.l;
-+-- 
-+1.9.1
-+
--- 
-2.1.4
+Can you provide a simple .config for this failure?
+I use uClibc-ng on rpi3 with cortex-A53 optimization and fixed a
+problem some releases ago. 
+So I am wondering what kind of problem you have.
+
+best regards
+ Waldemar
