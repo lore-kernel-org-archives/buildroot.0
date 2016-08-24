@@ -1,16 +1,13 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Aug 2016 11:37:04 +0200
-Subject: [Buildroot] BuildRoot cannot build powerpc64
-In-Reply-To: <1b65f937-d2ee-312c-964d-e6b9da957463@mind.be> (Arnout
- Vandecappelle's message of "Wed, 24 Aug 2016 03:01:00 +0200")
-References: <F9C551623D2CBB4C9488801D14F864C6EE8B1000@ex-mb1.corp.adtran.com>
- <57b3aeb6944cf_7ec33f915a8b1b9c298e6@ultri3.mail>
- <F9C551623D2CBB4C9488801D14F864C6EE8B17ED@ex-mb1.corp.adtran.com>
- <20160817193721.0cc1466d@free-electrons.com>
- <532ce6e0-de27-9a2a-f062-179a4fa3248e@mind.be>
- <20160818231850.4072ddf2@free-electrons.com>
- <1b65f937-d2ee-312c-964d-e6b9da957463@mind.be>
-Message-ID: <878tvmh5j3.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Aug 2016 11:58:13 +0200
+Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
+	Buildroot developers
+In-Reply-To: <7ada4fd0-8ca3-c59f-bbfd-1ece1f636d73@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 24 Aug 2016 02:17:25 +0200")
+References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <7ada4fd0-8ca3-c59f-bbfd-1ece1f636d73@mind.be>
+Message-ID: <874m6ah4ju.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,28 +18,26 @@ To: buildroot@busybox.net
 
 Hi,
 
- >>> Actually also some other options are more fitting in the toolchain menu IMHO,
- >>> like debug/optimization options and SSP.
- >> 
- >> I personally don't like this, and instead would like to keep separated
- >> the options that affect the build of all components (SSP or not,
- >> debug/optimization, shared/static) from the options that configure the
- >> toolchain itself.
+ >> +F:	package/owfs/
+ >> +F:	package/python-bottle/
+ >> +F:	package/sqlcipher/
+ >> +F:	package/stress/
 
- >  OK, fair enough.
+ >  All of these were really drive-by patches, I don't use any of them regularly.
+ > And in fact, I think that that will be the case for the majority of the packages
+ > that are listed now.
 
- >  Actually, I noticed now that SSP in the build menu already depends on the
- > toolchain choices. So perhaps we should move the build options below the
- > toolchain, and make the static/shared libs options depend on the toolchain as well.
+ >  I'm afraid that maintaining the DEVELOPERS file (pruning dead e-mail addresses,
+ > removing people that are no longer interested in a particular package) is going
+ > to take more effort (i.e. more commits) than we actually gain by putting the
+ > developers in Cc.
 
-Yes, perhaps that is less confusing. It isn't perfect as the build
-options are more general than toolchain, but the current setup where
-people have to jump back/forth between the build options and toolchain
-menus also isn't very nice.
+ >  So for this initial version, I'd suggest keeping just the people that we know
+ > are active. Basically the people who have responded to this patch :-) And then
+ > in the contributing documentation, invite people to also update the DEVELOPERS
+ > file with their entry.
 
- >  That leaves us just with the awkward headers-same-as-kernel forward dependency.
-
-Yeah :/
+Yes, I also think we should start small and see how it goes.
 
 -- 
 Bye, Peter Korsgaard
