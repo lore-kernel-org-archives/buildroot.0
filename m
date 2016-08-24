@@ -1,37 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Aug 2016 15:10:32 +0200
-Subject: [Buildroot] [BUG] eglibc and Kodi Krypton
-In-Reply-To: <npjure$ucu$1@blaine.gmane.org>
-References: <npjure$ucu$1@blaine.gmane.org>
-Message-ID: <20160824151032.53124166@free-electrons.com>
+From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Date: Wed, 24 Aug 2016 10:32:38 -0300 (BRT)
+Subject: [Buildroot] [PATCH 2/2 v2] support/download: be more
+ conservative	about git special refs
+In-Reply-To: <de318be75bdcad45f90ddb81d86911b72951e607.1470004037.git.yann.morin.1998@free.fr>
+References: <cover.1470004037.git.yann.morin.1998@free.fr>
+ <de318be75bdcad45f90ddb81d86911b72951e607.1470004037.git.yann.morin.1998@free.fr>
+Message-ID: <1396149584.763951.1472045558046.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Yann,
 
-On Wed, 24 Aug 2016 13:02:07 +0200, Stanislav Vlasic wrote:
-
-> Kodi Krypton causes random crashes when using eglibc (2.18 or 2.19, 
-> doesnt matter - from 2016.05).
+----- Original Message -----
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> To: buildroot at buildroot.org
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Sent: Sunday, July 31, 2016 7:35:56 PM
+> Subject: [Buildroot] [PATCH 2/2 v2] support/download: be more conservative
+>	about git special refs
+> The git special refs (e.g. Github PRs, Gerrit changes...) are not
+> retrieved on non-bare clones; we need to fetch them manually.
 > 
-> GDB output:
-> (gdb) kodi.bin: pthread_mutex_lock.c:347: __pthread_mutex_lock_full: 
-> Assertion `(-(e)) != 35 || (kind != PTHREAD_MUTEX_ERRORCHECK_NP && kind 
-> != PTHREAD_MUTEX_RECURSIVE_NP)' failed.
+> However, we need not fetch any cset that is not such a special ref; it
+> only generates warning messages that are *really* confusing.
 > 
-> I rebuilt with glibc 2.23 which fixed issue. Platform is aarch64, custom 
-> 3.14 kernel (Amlogic), not sure if same happens with armel and armhf 
-> (did not test it).
+> Instead, we now check if we have the cset we need, and only when it is
+> missing do we explicitly request it.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> ---
+> support/download/git | 8 ++++++--
+> 1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/support/download/git b/support/download/git
+> index e3be2e1..1c08c17 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -66,8 +66,12 @@ pushd "${basename}" >/dev/null
+> # below, if there is an issue anyway. Since most of the cset we're gonna
+> # have to clone are not such special refs, consign the output to oblivion
+> # so as not to alarm unsuspecting users, but still trace it as a warning.
+> -if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
+> -    printf "Could not fetch special ref '%s'; assuming it is not special.\n"
+> "${cset}"
+> +#
+> +# Only try to fetch such a special ref if we do not already have the
+> +# cset we need locally.
+> +#
+> +if ! _git rev-parse -q --verify "'${cset}^{commit}'" >/dev/null; then
+> +    _git fetch origin "'${cset}:${cset}'"
 
-We no longer support eglibc in Buildroot, and therefore only support
-glibc 2.22 and 2.23 in the upcoming 2016.08 release, and 2.22/2.23/2.24
-in the next 2016.11 release.
+A question more related to 13c89c2f than to this patch, but anyway...
+13c89c2f support/download/git: do not use bare clones
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+When cset is a special ref, e.g. refs/changes/80/22580/2, this 'git fetch' works
+fine.
+But when cset is a sha1 of a special ref, since 13c89c2f the checkout fails
+AFAIK because git server using default configuration does not upload
+unreachable sha1.
+
+Maybe we could translate the sha1 to a named ref when we assume we are about to
+ask for a special ref. Something like this...
+
+if ! _git rev-parse -q --verify "'${cset}^{commit}'" >/dev/null; then
+    named_ref=$(_git ls-remote "'${repo}'" 2>&1 | grep "^${cset}" | cut -f2)
+    if [ -n "$named_ref" ]; then
+        _git fetch origin "'${named_ref}:${named_ref}'"
+    else
+        _git fetch origin "'${cset}:${cset}'"
+    fi
+fi
+
+What do you think?
+
+> fi
+> 
+> # Checkout the required changeset, so that we can update the required
+> --
+> 2.7.4
+
+Regards,
+Ricardo Martincoski
