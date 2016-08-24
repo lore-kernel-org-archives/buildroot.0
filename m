@@ -1,10 +1,10 @@
 From: Stanislav Vlasic <svlasic@gmail.com>
-Date: Wed, 24 Aug 2016 18:11:45 +0200
+Date: Wed, 24 Aug 2016 18:14:42 +0200
 Subject: [Buildroot] [BUG] eglibc and Kodi Krypton
 In-Reply-To: <20160824151032.53124166@free-electrons.com>
 References: <npjure$ucu$1@blaine.gmane.org>
  <20160824151032.53124166@free-electrons.com>
-Message-ID: <b44b4ceb-a13f-7adc-44d4-af6e695a2a07@gmail.com>
+Message-ID: <CADYw_JLONZMC8c4=+W0D37+aQN1QHdDYY0Jdja-DDzsczddTkg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -34,8 +34,8 @@ On 08/24/2016 03:10 PM, Thomas Petazzoni wrote:
 > glibc 2.22 and 2.23 in the upcoming 2016.08 release, and 2.22/2.23/2.24
 > in the next 2016.11 release.
 
-Thank you for confirmation/information. I was not following what was 
-going on with upcoming 2016.08 release. Was just a bug I ran into and 
+Thank you for confirmation/information. I was not following what was
+going on with upcoming 2016.08 release. Was just a bug I ran into and
 shared my fix :)
 
 > Thomas
