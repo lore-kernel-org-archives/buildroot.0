@@ -1,57 +1,72 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Aug 2016 02:55:47 +0200
-Subject: [Buildroot] [PATCH 1/2] package/lldpd: disable use of libbsd
-In-Reply-To: <20160818232414.4a44b95f@free-electrons.com>
-References: <1471554082-24303-1-git-send-email-yann.morin.1998@free.fr>
- <20160818232414.4a44b95f@free-electrons.com>
-Message-ID: <40a74490-3b2a-5d0a-64d5-9b37283c1cb9@mind.be>
+Date: Wed, 24 Aug 2016 02:58:22 +0200
+Subject: [Buildroot] How I can add a package of cmus?
+In-Reply-To: <68562d34c69d106316a77f40dfa9a0@cweb20.nm.nhnsystem.com>
+References: <68562d34c69d106316a77f40dfa9a0@cweb20.nm.nhnsystem.com>
+Message-ID: <6eaa9426-87d3-3cab-d700-e638eee782e2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18-08-16 23:24, Thomas Petazzoni wrote:
-> Hello,
+On 19-08-16 16:21, ??? wrote:
+> I want to add cmus(ncurse based cui music player) package to my buildroot. But,
+> I'm a lemon. I am struggling to write. Would you help me some?  
 > 
-> On Thu, 18 Aug 2016 23:01:21 +0200, Yann E. MORIN wrote:
->> libbsd installs at least one .pc file that contains a -isystem include
->> path (-isystem /usr.include/bsd), but -isystem is not munged by
->> pkg-config, so we end up using /usr/include/bsd which is not suitable
->> for the target. And breaks big time (see failures, below).
->>
->> But using libbsd is completely optional. In fact, our lldpd.mk did not
->> even express the dependency on libbsd, so we may well have had builds
->> without libbsd.
->>
->> The functionality brought in by using libbsd is very minor (just setting
->> the neighbour name in /proc/self/smdline), so we just make lldpd not use
->> libbsd at all. There is no --disable-libbsd or such, so we just patch it
->> out of configure.ac.
+>  
 > 
-> I don't like this fix, for two reasons:
+> ################################################################################
+> #
+> # cmus
+> #
+> ################################################################################
 > 
->  * The patch is not upstreamable.
 > 
->  * It works around the problem, living a potentially problematic
->    libbsd.pc installed which can be used by other packages than lldpd.
+> CMUS_VERSION = 2.7.1
+> CMUS_SOURCE = v$(CMUS_VERSION).tar.gz
+> CMUS_SITE = https://github.com/cmus/cmus/archive
+> CMUS_DEPENDENCIES  = host-pkgconf
+> CMUS_INSTALL_STAGING = YES
 > 
-> Isn't the right solution to add support in pkg-config to mungle
-> -isystem flags?
+> define CMUS_CONFIGURE_CMDS
+>         (cd $(@D); \
+>                
+> PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
+>                 PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+>                 PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+>                 PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
 
- That is the right solution. However, it's not exactly trivial to do that in
-pkg-config - they're using kind of messy parsing of the flags.
+ The configure script also seems to want to cross-compile some test programs, so
+you should pass $(TARGET_CONFIGURE_OPTS) $(TARGET_CONFIGURE_ARGS). This already
+includes the PKG_CONFIG stuff so that can be removed.
 
- So I propose to wait until the end of the week to see if kaniini [1] comes up
-with a patch we can backport, and if not, apply this one.
+>         ./configure \
+>                 prefix="$(STAGING_DIR)/usr"  \
+>                          )
+> endef
+> 
+> define CMUS_BUILD_CMDS
+>           $(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D) all
 
- My Reviewed-by stands :-)
+ I think you can actually pass $(TARGET_CONFIGURE_OPTS) in the environment and
+remove the CC and LD overrides.
 
  Regards,
  Arnout
 
-
-[1] https://github.com/pkgconf/pkgconf/issues/94
+> endef
+> 
+> $(eval $(generic-package))
+>  
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 
 -- 
