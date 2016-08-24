@@ -1,64 +1,88 @@
 From: Kenneth Adam Miller <kennethadammiller@gmail.com>
-Date: Tue, 23 Aug 2016 20:47:33 -0400
-Subject: [Buildroot] rust?
-In-Reply-To: <4da48b8a-2226-6f88-c3dc-8b90ccd7dd11@mind.be>
-References: <CAK7rcp_PjZ996EDpV6jH_Bf+MQ6d37Sc+xd67g5Fyup4J-F2Bw@mail.gmail.com>
- <20160820223145.497a1f2d@free-electrons.com>
- <CAK7rcp_0b+G66kST51=mugcCb=aZy8y-H5Q-O5p42JSFLtKZ_w@mail.gmail.com>
- <4da48b8a-2226-6f88-c3dc-8b90ccd7dd11@mind.be>
-Message-ID: <CAK7rcp9=VhUnDLOP3xa-F=_2KiE7wtGqk+74TdLKx5xs+=_GhQ@mail.gmail.com>
+Date: Tue, 23 Aug 2016 20:49:37 -0400
+Subject: [Buildroot] compiler plugins & compiling the kernel
+In-Reply-To: <84805825-f7d4-cfef-d83a-071a5a761ced@mind.be>
+References: <CAK7rcp_m+9YC6gJ0xyarD217F4wyjwjg9QSdBLzVgPJ9QLrm7w@mail.gmail.com>
+ <20160820200119.4ec5848b@free-electrons.com>
+ <CAK7rcp9SVrJ4HA3wH6U9P-Tv8EzJdBKUtZa=EVwihZTR5TCdtQ@mail.gmail.com>
+ <CAK7rcp9ZEKb7dYNv23E7NF52+u0vL67f3q1XozKK3jRy2dq=pA@mail.gmail.com>
+ <84805825-f7d4-cfef-d83a-071a5a761ced@mind.be>
+Message-ID: <CAK7rcp8PmKmK7RmttcfMUbChPv3bmGsB96FtHhvENn_nMOWk5g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 23, 2016 at 8:38 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 21-08-16 00:43, Kenneth Adam Miller wrote:
->> The issue that I'm having with building rust is that it appears that
->> the crosstool compiler linking step is adding not only uclibc, but
->> also references to libc. ldd output for a given rust cross compile
->> target with uclibc includes the following:
+On Tue, Aug 23, 2016 at 8:46 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 21-08-16 05:43, Kenneth Adam Miller wrote:
+>> On Sat, Aug 20, 2016 at 6:39 PM, Kenneth Adam Miller
+>> <kennethadammiller@gmail.com> wrote:
+>>> On Sat, Aug 20, 2016 at 2:01 PM, Thomas Petazzoni
+>>> <thomas.petazzoni@free-electrons.com> wrote:
+>>>> Hello,
+>>>>
+>>>> On Sat, 20 Aug 2016 13:10:07 -0400, Kenneth Adam Miller wrote:
+> [snip]
+>>>>> In addition, for some pax related options, it requires gcc plugins for
+>>>>> the version being used. That means that I would have to have plugin
+>>>>> support for my host, correct?
+>>>>
+>>>> No, you would need support for plugins in the cross-compiler.
+>>>>
+>>>
+>>> We have been building gr-security modded kernels for some time on a
+>>> different machine with gcc 4.8, but I'm having this confusion; does
+>>> the buildroot internal compiler support that? Because I'm getting an
+>>> error in buildroot indicating that compiler plugins must be supported,
+>>> and I'm using the buildroot internal compiler with version 5.x, it
+>>> confused me a little bit.
+>>>
 >>
+>> I found the exact output that brought about the build error.
 >>
->>     linux-vdso.so.1 =>  (0x00007ffe997ca000)
->>     libdl.so.1 => not found
->>     librt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007f6a13bfa000)
->>     libpthread.so.1 => not found
->>     libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f6a139e4000)
->>     libc.so.1 => not found
->>     ld64-uClibc.so.1 => not found
->>     libm.so.1 => not found
->>     libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0
->> (0x00007f6a137c7000)
->>     libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f6a133fe000)
->>     /lib64/ld-linux-x86-64.so.2 (0x00007f6a1420a000)
->>
->> I'm not sure if that means that my compiling rust outside of buildroot
->> is the source of the error or not. I'm pretty sure that ld64-uclibc.so
->> is the intended C implementation, but that the two libc instances
->> referenced should not even be there. Any confirmation?
+>>>>> linux-headers 3.14.51 Configuring...
+>> ...
+>> make[2]: Entering directory ... build/linux-headers-3.14.51
+>> Makefile:652 *** Your gcc installation does not support plugins. If
+>> the necessary headers for plugin support are missing, they should be
+>> installed. On Debian, apt-get install gcc-<ver>-plugin-dev. If you
+>> choose to ignore this error and...
 >
->  You seem to be building a uClibc-based toolchain, which means that you can't
-> use ldd (that's a glibc tool). My guess is that you are using your host ldd to
-> try to interpret a target ELF file. That _seems_ to work because your host and
-> target are both x86_64, but you get weird output like above.
+>  Ah, this is annoying...
+>
+>  When installing linux-headers, we don't pass the cross-compilation arguments,
+> because the cross-compiler doesn't exist yet at that point. So the installation
+> will use the host compiler instead for that check. Which is of course wrong.
+>
+>  Well, actually it's a bug in gr-security, because this check shouldn't be done
+> for install_headers (gcc isn't even called).
 >
 
-Well, I wasn't expecting the resolved locations to be correct, and in
-fact I wasn't concerned about those. I was just checking what all
-libraries were listed.
+Bummer, since gr security is no longer even being offered with a free
+version anymore for it to be maintained there would have to be a
+community consensus around what a good solution is and where
+everything can be heaped. In any case, I was able to get past it and
+get my kernel compiled. It was giving me some heartache for quite some
+time though.
 
-As it turns out, I managed to get things linked correctly using
-buildroot's internal toolchain.
-
->  To check which dynamic libraries are used by an executable, you can only use
-> 'readelf -d'. In the buildroot case, it's very easy to find which library is
-> then actually used, because all libraries are installed in target/lib or
-> target/usr/lib.
-
-Thanks for this tip.
-
+>>
+>>>>> I don't believe that there is a way to
+>>>>> enable plugin support for the buildroot toolchain or for crosstool. At
+>>>>> least, when I looked and searched I didn't see any option that
+>>>>> mentioned that. I just want to make sure that I have it correct in
+>>>>> that my host compiler is being used to build the kernel.
+>>>>
+>>>> You're not correct. Support for plugins should be added to the
+>>>> cross-compiler if you need plugin support to build your kernel.
+>>>>
+>>>
+>>> That doesn't appear to be an option in buildroot.
+>
+>  Well, we pass --enable-plugins when BR2_GCC_ENABLE_LTO is set. We don't pass
+> --disable-plugins so it really depends on the gcc defaults. But then, we don't
+> install the plugin development headers to HOST_DIR, so it will probably be
+> difficult to actually compile a plugin.
 >
 >  Regards,
 >  Arnout
