@@ -1,68 +1,126 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Wed, 24 Aug 2016 23:45:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: switch from libmysqlclient
- to mysqlnd
-In-Reply-To: <80e7a8d2-4b56-d9b1-62b6-de2d5d246efe@mind.be>
-References: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
- <65c74b5a-1a2a-f17f-5381-91b0cf7503c2@mind.be>
- <20160824190951.2d69b29f@free-electrons.com>
- <80e7a8d2-4b56-d9b1-62b6-de2d5d246efe@mind.be>
-Message-ID: <28971986-1488-706d-5f68-c7b3c79eb801@je-eigen-domein.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Aug 2016 00:14:32 +0200
+Subject: [Buildroot] [PATCH 1/3] arch/arm: Add Cortex-a53 CPU
+In-Reply-To: <dc3618df-52c5-c209-30a4-ea351fb2c49c@flatmax.org>
+References: <1471913603-21487-1-git-send-email-flatmax@flatmax.org>
+ <1471913603-21487-2-git-send-email-flatmax@flatmax.org>
+ <20160824000345.264d6d2a@free-electrons.com>
+ <dc3618df-52c5-c209-30a4-ea351fb2c49c@flatmax.org>
+Message-ID: <20160825001432.0e4b42a6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/24/2016 10:41 PM, Arnout Vandecappelle wrote:
->
-> On 24-08-16 19:09, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Wed, 24 Aug 2016 02:26:51 +0200, Arnout Vandecappelle wrote:
->>> On 23-08-16 18:54, Floris Bos wrote:
->>>> The Mysql Native Driver has been the default mysql driver since
->>>> PHP 5.4, but buildroot was still using libmysqlclient.
->>>>
->>>> Mysqlnd has several advantages such as improved memory management
->>>> and the more favorable PHP licensing terms.
->>>> (can combine it with proprietary PHP extensions like Ioncube
->>>> loader, while libmysqlclient requires commercial licensing if you
->>>> link to it and do not fall under their GPL/FOSS license exception)
->>>   I may be too tired and could be missing something, but this commit message
->>> looks like it doesn't match the actual change...
->>>
->>>   I _guess_ that the php config script will use mysqlnd when the plain
->>> --with-mysqli option is passed, and will use libmysqlclient when --with-mysqli
->>> has a parameter. If this is the case, please specify it explicitly in the commit
->>> message. If this is not the case, it should _definitely_ be explained in the
->>> commit message :-)
->> Where do you see anything in the commit message that contradicts this?
->   Not exactly contradicts. I read the commit message and expected a change like
-> changing --with-mysqli into --with-mysqlnd. But instead it just removed all the
-> dependencies on mysql, which looked weird.
+Matt,
 
-Well, could have also changed it to --with-mysqli=mysqlnd 
---with-pdo-mysql=mysqlnd
-That's another way to say that you want the mysqli and pdo_mysql PHP 
-extensions build, and that those in turn should use the mysqlnd driver 
-to talk to a Mysql server.
+Please Cc: me on your replies. There's a lot of traffic on the
+Buildroot mailing list, so if you want me to be reactive on this
+discussion, you'd better Cc: me.
 
-Maybe that would have made the change better to understand.
-However then it would like we are deviating from the PHP default by 
-explicity setting a parameter.
-Since mysqlnd is the default nowadays --with-mysqli --with-pdo-mysql is 
-sufficient.
+On Wed, 24 Aug 2016 09:44:22 +1000, Matt Flax wrote:
 
+> Looks good. One thing though, my original Cortex-A53 patch selected 
+> VFPV4 which is now incorrect,
+> that should be removed ... however that wouldn't enable any HF settings ...
 
-Should the meaning of individual configure options really be spelled out 
-in commit messages?
-What the change achieves is already in the first line "switch from 
-libmysqlclient to mysqlnd"
-And if anyone wants to know the finer details, he could look it up in 
-the upstream docs: http://php.net/manual/en/mysqlinfo.library.choosing.php
+I've added a new patch that adds a BR2_ARM_CPU_HAS_FP_ARMV8 hidden
+option, and the related FPU options. For now, I'm only supporting the
+fp-armv8 and neon-fp-armv8 cases. It seems pretty clear that the FPU
+and NEON are mandatory on all ARMv8 cores, at least to date.
 
+I haven't taken into account the crypto-neon-fp-armv8 case, since it's
+not clear whether the crypto instructions are mandatory or not on all
+cores.
 
-Yours sincerely,
+> Also I don't understand why we need "select BR2_ARCH_HAS_MMU_OPTIONAL" 
+> but as I mentioned,
+> uclibc doesn't compile cleanly without it ... seems like a deep rooted 
+> problem.
 
-Floris Bos
+If you don't select BR2_ARCH_HAS_MMU_OPTIONAL, then the BR2_USE_MMU
+option is never set to 'y', so Buildroot configures uClibc as if it was
+building for a noMMU platform.
+
+However, for ARMv8, I believe we should probably be using
+BR2_ARCH_HAS_MMU_MANDATORY instead, since I don't think running an
+ARM64 without the MMU enabled is supported.
+
+> I am not sure about the fine detail, but it seems that ARMV8 extends 
+> VFPV4, perhaps there should be an extension of VFPV4 which is similar to 
+> the extension of VFPV3 to VFPV4 ?
+
+That's what I've done with BR2_ARM_CPU_HAS_FP_ARMV8.
+
+> The "- mcpu" flag is the same between aarch32 and aarch64, so that 
+> simplifies the BR2_GCC_TARGET_CPU to being the same for both.
+
+No, it's not the same. On ARM 32 bits you have separate -mcpu and -mfpu
+options. On ARM 64 bits, you only have the -mcpu option with its
+modifier mechanism. I've handled this in my new version of the patch
+series.
+
+> However aarch64 and aarch32 seem to require different BR2_GCC_TARGET_FPU 
+> lines. I am pretty certain that we need the aarch32 BR2_GCC_TARGET_FPU 
+> line to include at least "neon" in some way.
+
+ARM64 cannot have a BR2_GCC_TARGET_FPU line, because there's no -mfpu
+option, at least according to the gcc documentation at
+https://gcc.gnu.org/onlinedocs/gcc-6.2.0/gcc/AArch64-Options.html#AArch64-Options.
+
+> > Also, it is worth reminding that there are some ARMv8-A cores that are
+> > 32-bits only: the Cortex-A32 is one example. So ARMv8-A is not equal to
+> > 64 bits support.  
+> Actually I think all ARMv8-A cores are 64bit,
+
+No: the Cortex-A32 is 32 bits only. See
+http://www.arm.com/products/processors/cortex-a/cortex-a32-processor.php.
+
+> The aarch32 requires a "-fpu" setting to specify "neon-fp-armv8" as my 
+> suggested default.
+
+I've used fp-armv8 as the default, because NEON is not always good for
+FPU operations. From the gcc documentation:
+
+   If the selected floating-point hardware includes the NEON extension
+   (e.g. -mfpu=?neon?), note that floating-point operations are not
+   generated by GCC's auto-vectorization pass unless
+   -funsafe-math-optimizations is also specified. This is because NEON
+   hardware does not fully implement the IEEE 754 standard for
+   floating-point arithmetic (in particular denormal values are treated
+   as zero), so the use of NEON instructions may lead to a loss of
+   precision.
+
+> The aarch64 requires a "-mcpu"  setting to specify the cpu with feature 
+> suffixes ... I note however that fp and simd are on by default when we 
+> select the cpu option. Is it necessary to enable these to be turned off 
+> ? If not necessary and we don't desire crypto, then we don't need to 
+> specify more for the cpu other then the cpu name, i.e. cortex-a53
+
+I've for now used:
+
++	default "cortex-a53"		if (BR2_cortex_a53 && !BR2_ARCH_IS_64)
++	default "cortex-a53+fp"		if (BR2_cortex_a53 && BR2_ARCH_IS_64 && BR2_ARM_FPU_FP_ARMV8)
++	default "cortex-a53+fp+simd" 	if (BR2_cortex_a53 && BR2_ARCH_IS_64 && BR2_ARM_FPU_NEON_FP_ARMV8)
+ 
+I.e:
+
+ -mcpu=cortex-a53 for Cortex-A53 used in ARM 32 bits mode
+
+ -mcpu=cortex-a53+fp when Cortex-A53 used in ARM 64 bits mode and BR2_ARM_FPU_FP_ARMV8 is selected
+
+ -mcpu=cortex-a53+fp+simd when Cortex-A53 used in ARM 64 bits mode and BR2_ARM_FPU_NEON_FP_ARMV8 is selected
+
+Can you have a look at my updated branch at
+http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=aarch64
+and let me know what you think? If you're starting to be happy with it,
+I can post it on the mailing list for proper review.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
