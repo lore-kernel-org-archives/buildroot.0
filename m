@@ -1,48 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Aug 2016 19:08:03 +0200
-Subject: [Buildroot] [git commit branch/next] openipmi: bump to version
-	2.0.22
-Message-ID: <20160824170809.E2E898225C@busybox.osuosl.org>
+Date: Wed, 24 Aug 2016 19:09:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: switch from libmysqlclient
+ to mysqlnd
+In-Reply-To: <65c74b5a-1a2a-f17f-5381-91b0cf7503c2@mind.be>
+References: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
+ <65c74b5a-1a2a-f17f-5381-91b0cf7503c2@mind.be>
+Message-ID: <20160824190951.2d69b29f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9cc30847badb96bc56645e8abdb14f6f2ec7304
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/openipmi/openipmi.hash | 3 ++-
- package/openipmi/openipmi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+On Wed, 24 Aug 2016 02:26:51 +0200, Arnout Vandecappelle wrote:
+> On 23-08-16 18:54, Floris Bos wrote:
+> > The Mysql Native Driver has been the default mysql driver since
+> > PHP 5.4, but buildroot was still using libmysqlclient.
+> > 
+> > Mysqlnd has several advantages such as improved memory management
+> > and the more favorable PHP licensing terms.
+> > (can combine it with proprietary PHP extensions like Ioncube
+> > loader, while libmysqlclient requires commercial licensing if you
+> > link to it and do not fall under their GPL/FOSS license exception)  
+> 
+>  I may be too tired and could be missing something, but this commit message
+> looks like it doesn't match the actual change...
+> 
+>  I _guess_ that the php config script will use mysqlnd when the plain
+> --with-mysqli option is passed, and will use libmysqlclient when --with-mysqli
+> has a parameter. If this is the case, please specify it explicitly in the commit
+> message. If this is not the case, it should _definitely_ be explained in the
+> commit message :-)
 
-diff --git a/package/openipmi/openipmi.hash b/package/openipmi/openipmi.hash
-index e6fafe4..30e3763 100644
---- a/package/openipmi/openipmi.hash
-+++ b/package/openipmi/openipmi.hash
-@@ -1,4 +1,5 @@
- # From http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
--sha1 54f63ab7fe09f6a4b0b718601fe9c61014aa220b OpenIPMI-2.0.21.tar.gz
-+sha1 826081e7ed0ad430de9b8fdb75a9eaa10c99b660 OpenIPMI-2.0.22.tar.gz
- # Locally computed
-+sha256	4988900043c35fcfa9b2bf275d6593904f6429221befb770ba6ecb5502108e55	OpenIPMI-2.0.22.tar.gz
- sha256	0eafaa502ccf752899c5089159574081067d0c4ac53ea0ace33a5087f33ea32a	0001-ui-use-standard-uint32_t.patch
-diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
-index ea46e19..9faa7c6 100644
---- a/package/openipmi/openipmi.mk
-+++ b/package/openipmi/openipmi.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--OPENIPMI_VERSION = 2.0.21
-+OPENIPMI_VERSION = 2.0.22
- OPENIPMI_SITE = http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library
--OPENIPMI_SOURCE = OpenIPMI-2.0.21.tar.gz
-+OPENIPMI_SOURCE = OpenIPMI-$(OPENIPMI_VERSION).tar.gz
- OPENIPMI_PATCH = \
- 	http://sourceforge.net/p/openipmi/patches/26/attachment/0001-ui-use-standard-uint32_t.patch
- OPENIPMI_LICENSE = LGPLv2+, GPLv2+, BSD-3c
+Where do you see anything in the commit message that contradicts this?
+
+Yes, the commit message doesn't explain at all that passing
+--with-mysqli/--with-pdo-mysql with no arguments tell PHP to use its
+native MySQL driver. But it also doesn't state the opposite.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
