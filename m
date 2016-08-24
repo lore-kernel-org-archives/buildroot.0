@@ -1,45 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 24 Aug 2016 19:55:27 +0300
-Subject: [Buildroot] [PATCH] openipmi: bump to version 2.0.22
-Message-ID: <89f69d5b9a4cbaf03d400120d2b8103fda97a77c.1472057727.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 24 Aug 2016 18:57:31 +0200
+Subject: [Buildroot] [PATCH] stella: fix compiler search in configure
+ script
+In-Reply-To: <1472057256.4369.25.camel@synopsys.com>
+References: <1470910831-18439-1-git-send-email-vzakhar@synopsys.com>
+ <87d1l7qn2y.fsf@dell.be.48ers.dk>
+ <1472057256.4369.25.camel@synopsys.com>
+Message-ID: <20160824185731.390c1857@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/openipmi/openipmi.hash | 3 ++-
- package/openipmi/openipmi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/openipmi/openipmi.hash b/package/openipmi/openipmi.hash
-index e6fafe48ab07..30e37634ef51 100644
---- a/package/openipmi/openipmi.hash
-+++ b/package/openipmi/openipmi.hash
-@@ -1,4 +1,5 @@
- # From http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
--sha1 54f63ab7fe09f6a4b0b718601fe9c61014aa220b OpenIPMI-2.0.21.tar.gz
-+sha1 826081e7ed0ad430de9b8fdb75a9eaa10c99b660 OpenIPMI-2.0.22.tar.gz
- # Locally computed
-+sha256	4988900043c35fcfa9b2bf275d6593904f6429221befb770ba6ecb5502108e55	OpenIPMI-2.0.22.tar.gz
- sha256	0eafaa502ccf752899c5089159574081067d0c4ac53ea0ace33a5087f33ea32a	0001-ui-use-standard-uint32_t.patch
-diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
-index ea46e191da8e..9faa7c685f89 100644
---- a/package/openipmi/openipmi.mk
-+++ b/package/openipmi/openipmi.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--OPENIPMI_VERSION = 2.0.21
-+OPENIPMI_VERSION = 2.0.22
- OPENIPMI_SITE = http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library
--OPENIPMI_SOURCE = OpenIPMI-2.0.21.tar.gz
-+OPENIPMI_SOURCE = OpenIPMI-$(OPENIPMI_VERSION).tar.gz
- OPENIPMI_PATCH = \
- 	http://sourceforge.net/p/openipmi/patches/26/attachment/0001-ui-use-standard-uint32_t.patch
- OPENIPMI_LICENSE = LGPLv2+, GPLv2+, BSD-3c
+On Wed, 24 Aug 2016 16:47:37 +0000, Vlad Zakharov wrote:
+
+> This patch was adopted in upstream Stella project:
+> https://sourceforge.net/p/stella/code/3315/
+> and will come up in next Stella release.
+> 
+> So it need to be reverted after update to upcoming Stella release.
+
+Thanks for the notification. I'm adding in Cc: Sergio Prado, who is the
+original contributor of the stella package.
+
+Thanks,
+
+Thomas
 -- 
-2.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
