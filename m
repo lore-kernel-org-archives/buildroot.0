@@ -1,113 +1,46 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Wed, 24 Aug 2016 09:35:27 -0400
-Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
- Buildroot developers
-In-Reply-To: <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAKmqyKOYZuW7WeHmP7iatLPJzEudzEnnxnDJYi5oWt=uDTQQkA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Aug 2016 15:47:00 +0200
+Subject: [Buildroot] [git commit branch/next] memcached: bump to version
+	1.4.31
+Message-ID: <20160824134709.6C0D9822CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2016-08-23 8:47 GMT-04:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> This is an initial list of Buildroot developers. It has been created
-> semi-automatically by parsing the Git history, and finding the authors
-> of commits with a title like "<foo>: new package". Some additional
-> manual tweaking has been done (merging multiple entries corresponding to
-> the same person, adding some more entries, etc.).
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  DEVELOPERS | 1542 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 1542 insertions(+)
->  create mode 100644 DEVELOPERS
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> new file mode 100644
-> index 0000000..3742a73
-> --- /dev/null
-> +++ b/DEVELOPERS
-> @@ -0,0 +1,1542 @@
-> +# Syntax:
-> +#
-> +# N:   Firstname Lastname <email>
-> +# F:   file pattern or directory
-> +# F:   file pattern or directory
-> +#
-> +# The "F" entries can be:
-> +#
-> +# - A directory, in which case all patches touching any file in this
-> +#   directory or its subdirectories will be CC'ed to the developer.
-> +# - A pattern, in which case the pattern will be expanded, and then
-> +#   all files/directories (and their subdirectories) will be
-> +#   considered when matching against a patch
-> +#
-> +# Notes:
-> +#
-> +# - When a developer adds an "arch/Config.in.<arch>" file to its list
-> +#   of files, he is considered a developer of this architecture. He
-> +#   will receive e-mail notifications about build failures occuring on
-> +#   this architecture. Not more than one e-mail per day is sent.
-> +# - When a developer adds a directory that contains one or several
-> +#   packages, this developer will be notified when build failures
-> +#   occur. Not more than one e-mail per day is sent.
-> +# - When a developer adds an "package/pkg-<infra>.mk" file to its list
-> +#   of files, he is considered interested by this package
-> +#   infrastructure, and will be CC'ed on all patches that add or
-> +#   modify packages that use this infrastructure.
-> +
-> +N:     Abhishek Singh <abhishek.singh@imgtec.com>
-> +F:     package/cxxtest/
-> +
-> +N:     Adam Duskett <aduskett@gmail.com>
-> +F:     package/nginx-naxsi/
-> +
-> +N:     Alex Suykov <alex.suykov@gmail.com>
-> +F:     package/vboot-utils/
-> +
-> +N:     Alexander Clouter <alex+buildroot@digriz.org.uk>
-> +F:     package/odhcp6c/
-> +
-> +N:     Alexander Dahl <post@lespocky.de>
-> +F:     package/fastd/
-> +F:     package/libuecc/
-> +F:     package/putty/
-> +
-> +N:     Alexander Lukichev <alexander.lukichev@espotel.com>
-> +F:     package/openpgm/
-> +
-> +N:     Alexander Varnin <fenixk19@mail.ru>
-> +F:     package/liblog4c-localtime/
-> +
-> +N:     Alexandre Belloni <alexandre.belloni@free-electrons.com>
-> +F:     package/tz/
-> +
-> +N:     Alistair Francis <alistair.francis@xilinx.com>
-> +F:     package/xen/
-> +
+commit: https://git.buildroot.net/buildroot/commit/?id=f04e0136d1a9fa77e0085398c77e316237dca5ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Can I please have a second email added?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/memcached/memcached.hash | 6 +++---
+ package/memcached/memcached.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Alistair Francis <alistair23@gmail.com>
-
-I need to keep my company email here, but it is much easier to do list
-work from my gmail. If not what's here now is fine.
-
-Thanks,
-
-Alistair
-
-[...]
-
-> --
-> 2.7.4
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index b1353b2..918a36b 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,4 +1,4 @@
+-# From http://www.memcached.org/files/memcached-1.4.30.tar.gz.sha1
+-sha1	bb8644a4110932e331d1539f0435bc6a0e558827	memcached-1.4.30.tar.gz
++# From http://www.memcached.org/files/memcached-1.4.31.tar.gz.sha1
++sha1	3ea34f5bc5c5aacb76cfc07f4ee5847f33526cb6	memcached-1.4.31.tar.gz
+ # Calculated based on the hash above
+-sha256	e0bea597c9082557f3357f63db08c3d5121ccc8502f300a48d4cb84d22e8be5f	memcached-1.4.30.tar.gz
++sha256	77ce5f820bafe94c33bf7bd86268d9bcdb3b76f68128d795b106db53d528707f	memcached-1.4.31.tar.gz
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index b40ca84..4099428 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MEMCACHED_VERSION = 1.4.30
++MEMCACHED_VERSION = 1.4.31
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
