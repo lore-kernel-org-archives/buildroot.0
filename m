@@ -1,87 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Aug 2016 22:40:33 +0200
-Subject: [Buildroot] Remaining kmsxx build issue
-In-Reply-To: <20160824185128.68a2fdef@free-electrons.com>
-References: <20160819063024.55AF4101904@stock.ovh.net>
- <20160820000709.0ceef3cd@free-electrons.com>
- <20160819222925.GD6096@free.fr>
- <20160824185128.68a2fdef@free-electrons.com>
-Message-ID: <20160824224033.2276f19b@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 24 Aug 2016 22:41:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: switch from libmysqlclient
+ to mysqlnd
+In-Reply-To: <20160824190951.2d69b29f@free-electrons.com>
+References: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
+ <65c74b5a-1a2a-f17f-5381-91b0cf7503c2@mind.be>
+ <20160824190951.2d69b29f@free-electrons.com>
+Message-ID: <80e7a8d2-4b56-d9b1-62b6-de2d5d246efe@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Wed, 24 Aug 2016 18:51:28 +0200, Thomas Petazzoni wrote:
 
-> > There is another type of issues for kmsxx:
-> > 
-> >     http://autobuild.buildroot.org/results/5e9/5e9963c1f11af40a6349da524fc128116a1d9e6e/build-end.log
-> > 
-> >     [ 81%] Linking CXX executable ../bin/fbtestpat
-> >     /tmp/ccvhwy4u.ltrans0.ltrans.o: In function `main':
-> >     <artificial>:(.text.startup+0xa4): undefined reference to `kms::ExtCPUFramebuffer::ExtCPUFramebuffer(unsigned int, unsigned int, kms::PixelFormat, unsigned char*, unsigned int)'
-> >     <artificial>:(.text.startup+0xd4): undefined reference to `kms::draw_test_pattern(kms::IMappedFramebuffer&)'
-> >     <artificial>:(.text.startup+0x10c): undefined reference to `kms::RGB::RGB(unsigned char, unsigned char, unsigned char)'
-> >     <artificial>:(.text.startup+0x128): undefined reference to `kms::draw_text(kms::IMappedFramebuffer&, unsigned int, unsigned int, std::string const&, kms::RGB)'
-> >     <artificial>:(.text.startup+0x188): undefined reference to `kms::ExtCPUFramebuffer::~ExtCPUFramebuffer()'
-> >     <artificial>:(.text.startup+0x2a8): undefined reference to `kms::ExtCPUFramebuffer::~ExtCPUFramebuffer()'
-> >     collect2: error: ld returned 1 exit status
-> >     make[3]: *** [bin/fbtestpat] Error 1
-> > 
-> > And I was not able to reproduce it either... :-/  
+On 24-08-16 19:09, Thomas Petazzoni wrote:
+> Hello,
 > 
-> This issue happened only once:
+> On Wed, 24 Aug 2016 02:26:51 +0200, Arnout Vandecappelle wrote:
+>> On 23-08-16 18:54, Floris Bos wrote:
+>>> The Mysql Native Driver has been the default mysql driver since
+>>> PHP 5.4, but buildroot was still using libmysqlclient.
+>>>
+>>> Mysqlnd has several advantages such as improved memory management
+>>> and the more favorable PHP licensing terms.
+>>> (can combine it with proprietary PHP extensions like Ioncube
+>>> loader, while libmysqlclient requires commercial licensing if you
+>>> link to it and do not fall under their GPL/FOSS license exception)  
+>>
+>>  I may be too tired and could be missing something, but this commit message
+>> looks like it doesn't match the actual change...
+>>
+>>  I _guess_ that the php config script will use mysqlnd when the plain
+>> --with-mysqli option is passed, and will use libmysqlclient when --with-mysqli
+>> has a parameter. If this is the case, please specify it explicitly in the commit
+>> message. If this is not the case, it should _definitely_ be explained in the
+>> commit message :-)
 > 
-> 	http://autobuild.buildroot.net/?reason=kmsxx-bd5f6471e619a6ba2987bc7f66ef78a531f94d6c
+> Where do you see anything in the commit message that contradicts this?
+
+ Not exactly contradicts. I read the commit message and expected a change like
+changing --with-mysqli into --with-mysqlnd. But instead it just removed all the
+dependencies on mysql, which looked weird.
+
+ But as I said, maybe I was just too tired :-)
+
+ Regards,
+ Arnout
+
 > 
-> I've restarted the same build on the same machine, I'll see if it
-> happens again.
+> Yes, the commit message doesn't explain at all that passing
+> --with-mysqli/--with-pdo-mysql with no arguments tell PHP to use its
+> native MySQL driver. But it also doesn't state the opposite.
+> 
+> Thomas
+> 
 
-I've been able to reproduce it on gcc20, and a reduced test case is:
-
-BR2_arm=y
-BR2_STATIC_LIBS=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2016.08-rc1-4-g07e8d1c.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_PACKAGE_KMSXX=y
-
-The exact same defconfig builds fine on my laptop.
-
-On gcc20, I'm able to fix the build by disabling LTO support in the
-kmsxx CMakeLists.txt file. I.e, I remove:
-
-if (NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
-    CHECK_CXX_COMPILER_FLAG("-flto" HAS_LTO_FLAG)
-
-    if (HAS_LTO_FLAG)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
-        set(CMAKE_AR gcc-ar)
-        set(CMAKE_RANLIB gcc-ranlib)
-    endif()
-endif()
-
-And then the build works.
-
-While I could imagine some LTO-related bug, I cannot understand why
-with the exact same toolchain/cross-compiler it builds on my laptop but
-not on gcc20.
-
-Completely weird.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
