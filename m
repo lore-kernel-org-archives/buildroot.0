@@ -1,32 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Aug 2016 00:20:59 +0200
-Subject: [Buildroot] [PATCH] mpv: bump to version 0.19.0
-In-Reply-To: <f7de6131-8362-08df-a114-349a212eed54@mind.be> (Arnout
- Vandecappelle's message of "Wed, 24 Aug 2016 03:03:00 +0200")
-References: <1471704131-5919-1-git-send-email-gustavo@zacarias.com.ar>
- <20160820223919.146ed7c0@free-electrons.com>
- <f7de6131-8362-08df-a114-349a212eed54@mind.be>
-Message-ID: <87oa4hg65w.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 25 Aug 2016 01:10:03 +0200
+Subject: [Buildroot] [PATCH 2/2] package/iputils: link with -lintl
+In-Reply-To: <20160824231003.29262-1-arnout@mind.be>
+References: <20160824231003.29262-1-arnout@mind.be>
+Message-ID: <20160824231003.29262-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+libgcrypt pulls in gpg-error which links with libintl if available.
+Since iputils doesn't use libtool, -lintl has to be passed explicitly
+for static builds.
 
-Hi,
+Fixes:
+http://autobuild.buildroot.net/results/f81/f81eabb37788aa6dcdadf4034889c84bef78b876
+http://autobuild.buildroot.net/results/f29/f296e8fba1e79f96d3d119aa4c8207ed4b80694b
+http://autobuild.buildroot.net/results/478/478a88cd892a119970cfca717ea7f5517bfc4cea
+http://autobuild.buildroot.net/results/920/920d2d1d967691779f79fa54a38fac5adc5a8ee4
 
- >  So, you have to remember to drop the patch when you merge next into master...
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/iputils/iputils.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- >  Wouldn't it be a good idea to regularly merge master into next? That would
- > reduce the likelihood of forgetting such things.
-
-It is true that merging next into master after a release can be somewhat
-painful and it is easy to miss this kind of stuff. I don't know if
-merging back and forth will work better, but I'll play a bit around with
-it and perhaps I can try merging master into next for each release
-candidate starting from the 2016.11 cycle.
-
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index d6398f7..47f3e28 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -26,6 +26,10 @@ endif
+ IPUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) USE_SYSFS=no USE_IDN=no\
+ 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ 
++ifeq ($(BR2_NEEDS_GETTEXT)$(BR2_PACKAGE_GETTEXT),yy)
++IPUTILS_MAKE_OPTS += ADDLIB='-lintl'
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ IPUTILS_MAKE_OPTS += USE_CAP=yes
+ IPUTILS_DEPENDENCIES += libcap
 -- 
-Bye, Peter Korsgaard
+2.9.3
