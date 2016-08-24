@@ -1,26 +1,43 @@
-From: Stanislav Vlasic <svlasic@gmail.com>
-Date: Wed, 24 Aug 2016 13:02:07 +0200
-Subject: [Buildroot] [BUG] eglibc and Kodi Krypton
-Message-ID: <npjure$ucu$1@blaine.gmane.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 24 Aug 2016 09:23:50 -0300
+Subject: [Buildroot] [PATCH] memcached: bump to version 1.4.31
+Message-ID: <1472041430-19890-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/memcached/memcached.hash | 6 +++---
+ package/memcached/memcached.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Kodi Krypton causes random crashes when using eglibc (2.18 or 2.19, 
-doesnt matter - from 2016.05).
-
-GDB output:
-(gdb) kodi.bin: pthread_mutex_lock.c:347: __pthread_mutex_lock_full: 
-Assertion `(-(e)) != 35 || (kind != PTHREAD_MUTEX_ERRORCHECK_NP && kind 
-!= PTHREAD_MUTEX_RECURSIVE_NP)' failed.
-
-I rebuilt with glibc 2.23 which fixed issue. Platform is aarch64, custom 
-3.14 kernel (Amlogic), not sure if same happens with armel and armhf 
-(did not test it).
-
-Regards,
-Stane1983
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index b1353b2..918a36b 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,4 +1,4 @@
+-# From http://www.memcached.org/files/memcached-1.4.30.tar.gz.sha1
+-sha1	bb8644a4110932e331d1539f0435bc6a0e558827	memcached-1.4.30.tar.gz
++# From http://www.memcached.org/files/memcached-1.4.31.tar.gz.sha1
++sha1	3ea34f5bc5c5aacb76cfc07f4ee5847f33526cb6	memcached-1.4.31.tar.gz
+ # Calculated based on the hash above
+-sha256	e0bea597c9082557f3357f63db08c3d5121ccc8502f300a48d4cb84d22e8be5f	memcached-1.4.30.tar.gz
++sha256	77ce5f820bafe94c33bf7bd86268d9bcdb3b76f68128d795b106db53d528707f	memcached-1.4.31.tar.gz
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index b40ca84..4099428 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MEMCACHED_VERSION = 1.4.30
++MEMCACHED_VERSION = 1.4.31
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-- 
+2.7.3
