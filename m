@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Aug 2016 03:09:26 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/wrapper: display options
- leading to a paranoid failure
-In-Reply-To: <1471444962-32200-1-git-send-email-yann.morin.1998@free.fr>
+Date: Wed, 24 Aug 2016 03:18:59 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain/wrapper: extend paranoid
+	check to -isystem
+In-Reply-To: <1471444962-32200-2-git-send-email-yann.morin.1998@free.fr>
 References: <1471444962-32200-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <a957ca34-e9d2-04e5-773e-5aeabbaf6a48@mind.be>
+ <1471444962-32200-2-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <4a80aa4c-4bbf-55ca-e310-2c4e1dcad3c4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,112 +13,73 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 17-08-16 16:42, Yann E. MORIN wrote:
-> Current, we only display the path that causes the paranoid failure. This
-> is sufficient, as we can fail only for -I and -L options, and it is thus
-> easy to infer from the path, which option is the culprit.
+> Some packages, like libbsd, use -isystem flags to provide so-called
+> overrides to the system include files. In this particular case, this
+> is used in a .pc file, then used by antoher package; pkgconf does not
+> mangle this path; and eventually that other package ends up using
+> /usr/include/bsd to search for headers.
 > 
-> However, we're soon to add a new test for the -isystem option, and then
-> when a failure occurs, we would not know whether it was because of -I or
-> -isystem. Being able to differentiate both can be hugely useful to
-> track down the root cause for the unsafe path.
+> Our current toolchain wrapper is limited to looking fo -I and -L, so
+> the paranoid check does not kick in.
 > 
-> Make the check_unsafe_path() function accept a variable number of
-> arguments as a NULL-terminated list, to contain the offending options.
+> Extend the paranoid check to also look for the -isystem option.
+
+ While we're at it: -idirafter, -iprefix, -iwithprefix, -iwithprefixbefore,
+-isysroot, -imultilib, -iquote.
+
+ And then there is -B, but if someone passes that, it's really broken :-) And
+--sysroot, also interesting if that is passed. But I guess these things are
+going a bit too far.
+
+
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 > ---
->  toolchain/toolchain-wrapper.c | 24 +++++++++++++++++++++---
->  1 file changed, 21 insertions(+), 3 deletions(-)
+>  toolchain/toolchain-wrapper.c | 18 ++++++++++--------
+>  1 file changed, 10 insertions(+), 8 deletions(-)
 > 
 > diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-> index 887058f..b8b3cbe 100644
+> index b8b3cbe..8a9c3b3 100644
 > --- a/toolchain/toolchain-wrapper.c
 > +++ b/toolchain/toolchain-wrapper.c
-> @@ -22,6 +22,7 @@
->  #include <unistd.h>
->  #include <stdlib.h>
->  #include <errno.h>
-> +#include <stdarg.h>
+> @@ -241,17 +241,19 @@ int main(int argc, char **argv)
+>  	/* Check for unsafe library and header paths */
+>  	for (i = 1; i < argc; i++) {
 >  
->  #ifdef BR_CCACHE
->  static char ccache_path[PATH_MAX];
-> @@ -80,8 +81,10 @@ static char *predef_args[] = {
->  #endif
->  };
->  
-> -static void check_unsafe_path(const char *path, int paranoid)
-> +static void check_unsafe_path(const char *path, int paranoid, ...)
-
- I'm not very happy with using varargs for such a simple case. How about:
-
-static void check_unsafe_path(const char *arg, const char *path,
-                              int paranoid, bool arg_includes_path)
-...
-
->  {
-> +	va_list ap;
-> +	int once;
->  	char **c;
->  	static char *unsafe_paths[] = {
->  		"/lib", "/usr/include", "/usr/lib", "/usr/local/include", "/usr/local/lib", NULL,
-> @@ -92,6 +95,21 @@ static void check_unsafe_path(const char *path, int paranoid)
->  			fprintf(stderr, "%s: %s: unsafe header/library path used in cross-compilation: '%s'\n",
->  				program_invocation_short_name,
->  				paranoid ? "ERROR" : "WARNING", path);
-
-and here:
-
- 			fprintf(stderr, "%s: %s: unsafe header/library path used in
-cross-compilation: '%s%s%s'\n",
- 				program_invocation_short_name,
- 				paranoid ? "ERROR" : "WARNING",
-				arg,
-				arg_includes_path ? "" : " ",
-				arg_includes_path ? "" : path);
-
-> +			va_start(ap, paranoid);
-> +			once=1;
-> +			while(1) {
-> +				char *s = va_arg(ap, char*);
-> +				if(!s)
-> +					break;
-> +				if(once)
-> +					fprintf(stderr, "%s: options causing the issue:",
-> +						program_invocation_short_name);
-> +				once = 0;
-> +				fprintf(stderr, " '%s'", s);
-> +			}
-> +			if(!once)
-> +				fprintf(stderr, "\n");
-> +			va_end(ap);
->  			if (paranoid)
->  				exit(1);
+> -		/* Skip options that do not start with -I and -L */
+> -		if (strncmp(argv[i], "-I", 2) && strncmp(argv[i], "-L", 2))
+> +		/* Skip options that do not start with -I, -isystem or -L */
+> +		if (   strncmp(argv[i], "-I", 2)
+> +		    && strncmp(argv[i], "-L", 2)
+> +		    && strcmp(argv[i], "-isystem"))
 >  			continue;
-> @@ -237,9 +255,9 @@ int main(int argc, char **argv)
->  			i++;
->  			if (i == argc)
->  				continue;
-> -			check_unsafe_path(argv[i], paranoid);
-> +			check_unsafe_path(argv[i], paranoid, argv[i-1], argv[i], NULL);
+>  
+> -		/* We handle two cases: first the case where -I/-L and
+> -		 * the path are separated by one space and therefore
+> -		 * visible as two separate options, and then the case
+> -		 * where they are stuck together forming one single
+> -		 * option.
+> +		/* We handle two cases: first the case where -I/-L/-isystem
+> +		 * and the path are separated by one space and therefore
+> +		 * visible as two separate options, and then the case  where
+> +		 * they are stuck together forming one single option.
+> +		 * -isystem is necessarily in the first case.
 
-			check_unsafe_path(argv[i-1], argv[i], paranoid, false);
-
->  		} else {
-> -			check_unsafe_path(argv[i] + 2, paranoid);
-> +			check_unsafe_path(argv[i] + 2, paranoid, argv[i], NULL);
-
-			check_unsafe_path(argv[i], argv[i] + 2, paranoid, true);
-
+ Unfortunately, that's not true. You can pass something like -isystemfoo and it
+will add ./foo to the search path. Ain't gcc fun... I'll leave it as an exercise
+to the reader to handle that case :-P
 
  Regards,
  Arnout
 
-
->  		}
->  	}
->  
+>  		 */
+> -		if (argv[i][2] == '\0') {
+> +		if (argv[i][2] == '\0' || argv[i][1] == 'i') {
+>  			i++;
+>  			if (i == argc)
+>  				continue;
 > 
 
 
