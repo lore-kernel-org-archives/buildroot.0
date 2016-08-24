@@ -1,44 +1,42 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 25 Aug 2016 01:10:03 +0200
-Subject: [Buildroot] [PATCH 2/2] package/iputils: link with -lintl
-In-Reply-To: <20160824231003.29262-1-arnout@mind.be>
-References: <20160824231003.29262-1-arnout@mind.be>
-Message-ID: <20160824231003.29262-2-arnout@mind.be>
+Date: Thu, 25 Aug 2016 01:10:02 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libgpg-error: optionally depends on
+	gettext
+Message-ID: <20160824231003.29262-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libgcrypt pulls in gpg-error which links with libintl if available.
-Since iputils doesn't use libtool, -lintl has to be passed explicitly
-for static builds.
-
-Fixes:
-http://autobuild.buildroot.net/results/f81/f81eabb37788aa6dcdadf4034889c84bef78b876
-http://autobuild.buildroot.net/results/f29/f296e8fba1e79f96d3d119aa4c8207ed4b80694b
-http://autobuild.buildroot.net/results/478/478a88cd892a119970cfca717ea7f5517bfc4cea
-http://autobuild.buildroot.net/results/920/920d2d1d967691779f79fa54a38fac5adc5a8ee4
+configure.ac has AM_GNU_GETTEXT()
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/iputils/iputils.mk | 4 ++++
+Discovered while investigating
+http://autobuild.buildroot.net/results/f81/f81eabb37788aa6dcdadf4034889c84bef78b876/
+
+I suspect there are many more packages like this... Perhaps it would
+make sense to consider gettext (and therefore libiconv) to be part of
+the toolchain...
+---
+ package/libgpg-error/libgpg-error.mk | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index d6398f7..47f3e28 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -26,6 +26,10 @@ endif
- IPUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) USE_SYSFS=no USE_IDN=no\
- 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index e081b36..dfe58e7 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -11,6 +11,10 @@ LIBGPG_ERROR_LICENSE_FILES = COPYING COPYING.LIB
+ LIBGPG_ERROR_INSTALL_STAGING = YES
+ LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
  
-+ifeq ($(BR2_NEEDS_GETTEXT)$(BR2_PACKAGE_GETTEXT),yy)
-+IPUTILS_MAKE_OPTS += ADDLIB='-lintl'
++ifeq ($(BR2_NEEDS_GETTEXT),y)
++LIBGPG_ERROR_DEPENDENCIES += gettext
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- IPUTILS_MAKE_OPTS += USE_CAP=yes
- IPUTILS_DEPENDENCIES += libcap
+ define LIBGPG_ERROR_FIX_CROSS_COMPILATION
+ 	cd $(@D)/src/syscfg && \
+ 	ln -s lock-obj-pub.$(call qstrip, $(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG)).h \
 -- 
 2.9.3
