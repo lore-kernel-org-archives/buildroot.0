@@ -1,43 +1,108 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Aug 2016 02:23:18 +0200
-Subject: [Buildroot] Future of linphone package,
- was: Re: [PATCH/next 2/4] DEVELOPERS: add initial list of Buildroot
- developers
-In-Reply-To: <87h9abjjeq.fsf@dell.be.48ers.dk>
-References: <1471902678-18693-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <670f6e5c-e513-6b3f-ed82-4da1ddc3d141@lucaceresoli.net>
- <20160823134138.6f9818ef@free-electrons.com>
- <f8fu8dx2gc.ln2@ID-313208.user.individual.net>
- <20160823215041.358d2e66@free-electrons.com>
- <87h9abjjeq.fsf@dell.be.48ers.dk>
-Message-ID: <408dea4c-03d3-9f30-9235-5ebcc721f58b@mind.be>
+Date: Wed, 24 Aug 2016 02:26:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: switch from libmysqlclient
+ to mysqlnd
+In-Reply-To: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <65c74b5a-1a2a-f17f-5381-91b0cf7503c2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23-08-16 22:54, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 23-08-16 18:54, Floris Bos wrote:
+> The Mysql Native Driver has been the default mysql driver since
+> PHP 5.4, but buildroot was still using libmysqlclient.
 > 
-> Hi,
-> 
->  > Since nobody cares about linphone, what about deprecating it? This way,
->  > it will still be there for a while, but no longer visible in
->  > menuconfig. If anybody shows up and says that he is interested in
->  > linphone, then he will notice and hopefully let us know.
-> 
->  > What do you think?
-> 
-> If nobody cares about it, yes - Then I think we should deprecate it.
+> Mysqlnd has several advantages such as improved memory management
+> and the more favorable PHP licensing terms.
+> (can combine it with proprietary PHP extensions like Ioncube
+> loader, while libmysqlclient requires commercial licensing if you
+> link to it and do not fall under their GPL/FOSS license exception)
 
- I say, leave it alone unless there are some annoying autobuild failures. There
-are hundreds of packages that nobody cares about, are we going to deprecate them
-all?
+ I may be too tired and could be missing something, but this commit message
+looks like it doesn't match the actual change...
+
+ I _guess_ that the php config script will use mysqlnd when the plain
+--with-mysqli option is passed, and will use libmysqlclient when --with-mysqli
+has a parameter. If this is the case, please specify it explicitly in the commit
+message. If this is not the case, it should _definitely_ be explained in the
+commit message :-)
+
+ With that, you can add my
+  Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
  Regards,
  Arnout
+
+
+> 
+> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> ---
+>  package/php/Config.ext | 12 ------------
+>  package/php/php.mk     |  6 ++----
+>  2 files changed, 2 insertions(+), 16 deletions(-)
+> 
+> diff --git a/package/php/Config.ext b/package/php/Config.ext
+> index 82aaf41..7c3ba7e 100644
+> --- a/package/php/Config.ext
+> +++ b/package/php/Config.ext
+> @@ -113,10 +113,6 @@ endif
+>  
+>  config BR2_PACKAGE_PHP_EXT_MYSQLI
+>  	bool "Mysqli"
+> -	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_USE_MMU # mysql
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
+> -	select BR2_PACKAGE_MYSQL
+>  	help
+>  	  MySQL Improved extension support
+>  
+> @@ -135,17 +131,9 @@ if BR2_PACKAGE_PHP_EXT_PDO
+>  
+>  config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
+>  	bool "MySQL"
+> -	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_USE_MMU # mysql
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
+> -	select BR2_PACKAGE_MYSQL
+>  	help
+>  	  PDO driver for MySQL
+>  
+> -comment "MySQL drivers need a toolchain w/ C++, threads"
+> -	depends on BR2_USE_MMU
+> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+> -
+>  config BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL
+>  	bool "PostgreSQL"
+>  	select BR2_PACKAGE_POSTGRESQL
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index d7e27a1..deaf56e 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -181,8 +181,7 @@ endif
+>  
+>  ### Native SQL extensions
+>  ifeq ($(BR2_PACKAGE_PHP_EXT_MYSQLI),y)
+> -PHP_CONF_OPTS += --with-mysqli=$(STAGING_DIR)/usr/bin/mysql_config
+> -PHP_DEPENDENCIES += mysql
+> +PHP_CONF_OPTS += --with-mysqli
+>  endif
+>  ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
+>  PHP_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
+> @@ -199,8 +198,7 @@ PHP_DEPENDENCIES += sqlite
+>  PHP_CFLAGS += -DSQLITE_OMIT_LOAD_EXTENSION
+>  endif
+>  ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),y)
+> -PHP_CONF_OPTS += --with-pdo-mysql=$(STAGING_DIR)/usr
+> -PHP_DEPENDENCIES += mysql
+> +PHP_CONF_OPTS += --with-pdo-mysql
+>  endif
+>  ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL),y)
+>  PHP_CONF_OPTS += --with-pdo-pgsql=$(STAGING_DIR)/usr
+> 
 
 
 -- 
