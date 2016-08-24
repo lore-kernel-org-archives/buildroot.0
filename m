@@ -1,46 +1,44 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Wed, 24 Aug 2016 17:35:06 +0200
-Subject: [Buildroot] Making a Bootable USB Image for x86_64
-In-Reply-To: <f3ab074b-d314-7542-636a-fb3eb7d11878@86pixels.com>
-References: <f3ab074b-d314-7542-636a-fb3eb7d11878@86pixels.com>
-Message-ID: <1569774.H6tdLElCHb@sagittea>
+From: Stanislav Vlasic <svlasic@gmail.com>
+Date: Wed, 24 Aug 2016 18:11:45 +0200
+Subject: [Buildroot] [BUG] eglibc and Kodi Krypton
+In-Reply-To: <20160824151032.53124166@free-electrons.com>
+References: <npjure$ucu$1@blaine.gmane.org>
+ <20160824151032.53124166@free-electrons.com>
+Message-ID: <b44b4ceb-a13f-7adc-44d4-af6e695a2a07@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jimmy,
+Hi,
 
-On Monday 22 August 2016 22:11:51 Jimmy wrote:
-> Greetings all,
-> 
-> I know this has been asked a lot, but I have been sifting through the
-> archives and Google in order to find the best way to make a bootable
-> USB image of my buildroot installation for an x86 based machine. I
-> have done the following:
-> 
-> 1. Generated a tar image of the root filesystem via the configuration
-> menu 2. Selected grub2 from bootloaders with the i386-pc platform 3.
-> Created a 1Gb EXT2FS partition with 1mb of space preceding on the USB
-> device itself
-> 4. Extracted the rootfs tar to the USB device on the ext2 partition
-> 5. Ran the following from the main buildroot directory (as root):
-> ./output/host/usr/sbin/grub-bios-setup -b
-> ./output/host/usr/lib/grub/i386-pc/boot.img -c
-> ./output/images/grub.img -d . /dev/sdb
-> 
-> The command immediately exits with a "segmentation fault (Core
-> dumped)".
-hmm... it looks like a snaky x86/x86_64 cross-compilation problem.
+On 08/24/2016 03:10 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Wed, 24 Aug 2016 13:02:07 +0200, Stanislav Vlasic wrote:
+>
+>> Kodi Krypton causes random crashes when using eglibc (2.18 or 2.19,
+>> doesnt matter - from 2016.05).
+>>
+>> GDB output:
+>> (gdb) kodi.bin: pthread_mutex_lock.c:347: __pthread_mutex_lock_full:
+>> Assertion `(-(e)) != 35 || (kind != PTHREAD_MUTEX_ERRORCHECK_NP && kind
+>> != PTHREAD_MUTEX_RECURSIVE_NP)' failed.
+>>
+>> I rebuilt with glibc 2.23 which fixed issue. Platform is aarch64, custom
+>> 3.14 kernel (Amlogic), not sure if same happens with armel and armhf
+>> (did not test it).
+>
+> We no longer support eglibc in Buildroot, and therefore only support
+> glibc 2.22 and 2.23 in the upcoming 2016.08 release, and 2.22/2.23/2.24
+> in the next 2016.11 release.
 
-Help of grub2 (boot/grub2/Config.in) package provide an alternative way 
-to create bootable disk images with grub2. It use genimage instead of 
-grub-bios-setup. Let me know if it help.
+Thank you for confirmation/information. I was not following what was 
+going on with upcoming 2016.08 release. Was just a bug I ran into and 
+shared my fix :)
 
-BR,
+> Thomas
+>
 
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Stane1983
