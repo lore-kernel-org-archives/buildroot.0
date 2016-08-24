@@ -1,35 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Aug 2016 18:52:33 +0200
-Subject: [Buildroot] [git commit branch/next] nfacct: remove autoreconf
-Message-ID: <20160824165238.B5ECF822DD@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 24 Aug 2016 19:55:27 +0300
+Subject: [Buildroot] [PATCH] openipmi: bump to version 2.0.22
+Message-ID: <89f69d5b9a4cbaf03d400120d2b8103fda97a77c.1472057727.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f02e6b1e81e826a88968780243925ec895926ca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Since commit ae0e8950540f (nfacct: bump to version 1.0.2, 2016-08-23) we no
-longer patch configure.ac.
-
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nfacct/nfacct.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/openipmi/openipmi.hash | 3 ++-
+ package/openipmi/openipmi.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/nfacct/nfacct.mk b/package/nfacct/nfacct.mk
-index d19d02f..a4e2045 100644
---- a/package/nfacct/nfacct.mk
-+++ b/package/nfacct/nfacct.mk
-@@ -9,7 +9,6 @@ NFACCT_SOURCE = nfacct-$(NFACCT_VERSION).tar.bz2
- NFACCT_SITE = http://www.netfilter.org/projects/nfacct/files
- NFACCT_DEPENDENCIES = host-pkgconf \
- 	libnetfilter_acct
--NFACCT_AUTORECONF = YES
- NFACCT_LICENSE = GPLv2
- NFACCT_LICENSE_FILES = COPYING
+diff --git a/package/openipmi/openipmi.hash b/package/openipmi/openipmi.hash
+index e6fafe48ab07..30e37634ef51 100644
+--- a/package/openipmi/openipmi.hash
++++ b/package/openipmi/openipmi.hash
+@@ -1,4 +1,5 @@
+ # From http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
+-sha1 54f63ab7fe09f6a4b0b718601fe9c61014aa220b OpenIPMI-2.0.21.tar.gz
++sha1 826081e7ed0ad430de9b8fdb75a9eaa10c99b660 OpenIPMI-2.0.22.tar.gz
+ # Locally computed
++sha256	4988900043c35fcfa9b2bf275d6593904f6429221befb770ba6ecb5502108e55	OpenIPMI-2.0.22.tar.gz
+ sha256	0eafaa502ccf752899c5089159574081067d0c4ac53ea0ace33a5087f33ea32a	0001-ui-use-standard-uint32_t.patch
+diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
+index ea46e191da8e..9faa7c685f89 100644
+--- a/package/openipmi/openipmi.mk
++++ b/package/openipmi/openipmi.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
+-OPENIPMI_VERSION = 2.0.21
++OPENIPMI_VERSION = 2.0.22
+ OPENIPMI_SITE = http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library
+-OPENIPMI_SOURCE = OpenIPMI-2.0.21.tar.gz
++OPENIPMI_SOURCE = OpenIPMI-$(OPENIPMI_VERSION).tar.gz
+ OPENIPMI_PATCH = \
+ 	http://sourceforge.net/p/openipmi/patches/26/attachment/0001-ui-use-standard-uint32_t.patch
+ OPENIPMI_LICENSE = LGPLv2+, GPLv2+, BSD-3c
+-- 
+2.9.3
