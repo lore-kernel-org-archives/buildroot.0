@@ -1,11 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Aug 2016 19:09:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: switch from libmysqlclient
- to mysqlnd
-In-Reply-To: <65c74b5a-1a2a-f17f-5381-91b0cf7503c2@mind.be>
-References: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
- <65c74b5a-1a2a-f17f-5381-91b0cf7503c2@mind.be>
-Message-ID: <20160824190951.2d69b29f@free-electrons.com>
+Date: Wed, 24 Aug 2016 19:11:14 +0200
+Subject: [Buildroot] [PATCH 1/4] package/libegl: add option for wayland
+ extensions
+In-Reply-To: <20160823220612.GF5749@free.fr>
+References: <cover.1471968455.git.yann.morin.1998@free.fr>
+ <6d4c564432948310ca9502dc94c2d50a7c97f460.1471968455.git.yann.morin.1998@free.fr>
+ <20160823220245.49e1b6e7@free-electrons.com>
+ <20160823214351.GE5749@free.fr>
+ <20160823235801.57c65bd0@free-electrons.com>
+ <20160823220612.GF5749@free.fr>
+Message-ID: <20160824191114.7e185af3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +18,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 24 Aug 2016 02:26:51 +0200, Arnout Vandecappelle wrote:
-> On 23-08-16 18:54, Floris Bos wrote:
-> > The Mysql Native Driver has been the default mysql driver since
-> > PHP 5.4, but buildroot was still using libmysqlclient.
-> > 
-> > Mysqlnd has several advantages such as improved memory management
-> > and the more favorable PHP licensing terms.
-> > (can combine it with proprietary PHP extensions like Ioncube
-> > loader, while libmysqlclient requires commercial licensing if you
-> > link to it and do not fall under their GPL/FOSS license exception)  
-> 
->  I may be too tired and could be missing something, but this commit message
-> looks like it doesn't match the actual change...
-> 
->  I _guess_ that the php config script will use mysqlnd when the plain
-> --with-mysqli option is passed, and will use libmysqlclient when --with-mysqli
-> has a parameter. If this is the case, please specify it explicitly in the commit
-> message. If this is not the case, it should _definitely_ be explained in the
-> commit message :-)
+On Wed, 24 Aug 2016 00:06:12 +0200, Yann E. MORIN wrote:
 
-Where do you see anything in the commit message that contradicts this?
+> > OK, this is definitely a good explanation. So I should take it that you
+> > expect Weston to build and work with the latest version of the NVidia
+> > driver?  
+> 
+> Eventually. Eventually... ;-)
+> 
+> To be honest, this is not my highest priority for 2016.11; I have multi
+> br2-external and systemd skeleton to handle first.
 
-Yes, the commit message doesn't explain at all that passing
---with-mysqli/--with-pdo-mysql with no arguments tell PHP to use its
-native MySQL driver. But it also doesn't state the opposite.
+Sure, makes perfect. I was certainly not asking for this to be *done*,
+but more on what is the general direction we are going to.
+
+> This quick egl-wayland series (which I did not expect would be applied
+> so fast!) was just a little distraction along the way. ;-) But at least,
+> it paves the way toward more egl-wayland providers and users.
+
+Sure. IMO it also makes the libgtk3 dependency a little bit easier to
+understand, which is also why I applied it quickly.
+
+Thanks,
 
 Thomas
 -- 
