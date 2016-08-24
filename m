@@ -1,90 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Aug 2016 16:36:56 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/wrapper: display options
- leading to a paranoid failure
-In-Reply-To: <1472048370-20408-1-git-send-email-yann.morin.1998@free.fr>
-References: <1472048370-20408-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160824163656.5d08599f@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 24 Aug 2016 17:41:37 +0300
+Subject: [Buildroot] Making a Bootable USB Image for x86_64
+In-Reply-To: <f3ab074b-d314-7542-636a-fb3eb7d11878@86pixels.com>
+References: <f3ab074b-d314-7542-636a-fb3eb7d11878@86pixels.com>
+Message-ID: <20160824144137.c3x5q44sgdazqtue@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Jimmy,
 
-On Wed, 24 Aug 2016 16:19:29 +0200, Yann E. MORIN wrote:
-> Current, we only display the path that causes the paranoid failure. This
-> is sufficient, as we can fail only for -I and -L options, and it is thus
-> easy to infer from the path, which option is the culprit.
-> 
-> However, we're soon to add a new test for the -isystem option, and then
-> when a failure occurs, we would not know whether it was because of -I or
-> -isystem. Being able to differentiate both can be hugely useful to
-> track down the root cause for the unsafe path.
-> 
-> Add two new arguments to the check_unsafe_path() function: one with the
-> current-or-previous argument, one to specify whether it has the path in
-> it or not. Print that in the error message, instead of just the path.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+On Mon, Aug 22, 2016 at 10:11:51PM -0500, Jimmy wrote:
+> I know this has been asked a lot, but I have been sifting through the
+> archives and Google in order to find the best way to make a bootable USB
+> image of my buildroot installation for an x86 based machine. 
 
-Seems like a good feature addition.
+I have no experience with grub installation on a USB device. I use extlinux 
+(http://www.syslinux.org/wiki/index.php?title=EXTLINUX) for that. You may use 
+a minimal extlinux.conf file like
 
-> -static void check_unsafe_path(const char *path, int paranoid)
-> +static void check_unsafe_path(const char *arg,
-> +			      const char *path,
-> +			      int paranoid,
-> +			      int arg_has_path)
->  {
-> +	va_list ap;
-> +	int once;
+DEFAULT linux
+LABEL linux
+KERNEL /bzImage
+APPEND root=/dev/sdb2
 
-Those variables are not needed I believe.
+You need to know your rootfs device node in advanced for this to work. 
+Otherwise you may use "root=UUID=98f012537-7a7c-2213-819e-a69ddf9abc2b" 
+instead, where the UUID comes from the 'blkid' command output.
 
->  	char **c;
->  	static char *unsafe_paths[] = {
->  		"/lib", "/usr/include", "/usr/lib", "/usr/local/include", "/usr/local/lib", NULL,
-> @@ -89,9 +94,15 @@ static void check_unsafe_path(const char *path, int paranoid)
->  
->  	for (c = unsafe_paths; *c != NULL; c++) {
->  		if (!strncmp(path, *c, strlen(*c))) {
-> -			fprintf(stderr, "%s: %s: unsafe header/library path used in cross-compilation: '%s'\n",
-> +			fprintf(stderr,
-> +				"%s: %s: "
-> +				"unsafe header/library path used in cross-compilation:"
-> +				" '%s%s%s'\n",
+Hope this helps,
+baruch
 
-I'm not a big fan of splitting the format string. What about inverting
-the if() test in order to reduce the indentation level of the error
-case?
-
-	for (c = unsafe_paths; *c != NULL; c++) {
-		if (strncmp(path, *c, strlen(*c)))
-			continue;
-		fprintf(stderr,
-			"%s: %s: unsafe header/library path used in cross-compilation: '%s%s%s'\n",
-			....
-	}
-			
->  				program_invocation_short_name,
-> -				paranoid ? "ERROR" : "WARNING", path);
-> +				paranoid ? "ERROR" : "WARNING",
-> +				arg,
-> +				arg_has_path ? "" : "' '",
-> +				arg_has_path ? "" : path);
-
-I find this arg_has_path thing a bit tricky: in some cases "arg" will
-be just the argument, in some cases it is followed by the path. But I
-couldn't find a simple and nice alternate solution, so it's probably
-good as-is.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
