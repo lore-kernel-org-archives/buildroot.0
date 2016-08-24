@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Aug 2016 16:06:53 +0200
+Date: Wed, 24 Aug 2016 16:09:53 +0200
 Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
  Buildroot developers
-In-Reply-To: <57BD40DA.3010800@imgtec.com>
+In-Reply-To: <CAKmqyKOYZuW7WeHmP7iatLPJzEudzEnnxnDJYi5oWt=uDTQQkA@mail.gmail.com>
 References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
  <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <57BD40DA.3010800@imgtec.com>
-Message-ID: <20160824160653.0ebbe70f@free-electrons.com>
+ <CAKmqyKOYZuW7WeHmP7iatLPJzEudzEnnxnDJYi5oWt=uDTQQkA@mail.gmail.com>
+Message-ID: <20160824160953.2dadd32e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 24 Aug 2016 12:08:18 +0530, Rahul Bedarkar wrote:
+On Wed, 24 Aug 2016 09:35:27 -0400, Alistair Francis wrote:
 
-> On Tuesday 23 August 2016 06:17 PM, Thomas Petazzoni wrote:
-> 
-> > +
-> > +N:	Abhishek Singh <abhishek.singh@imgtec.com>
-> > +F:	package/cxxtest/
+> > +N:     Alistair Francis <alistair.francis@xilinx.com>
+> > +F:     package/xen/
 > > +  
 > 
-> Abhishek is no longer with IMG, I can volunteer for this package.
+> Can I please have a second email added?
+> 
+> Alistair Francis <alistair23@gmail.com>
+> 
+> I need to keep my company email here, but it is much easier to do list
+> work from my gmail. If not what's here now is fine.
 
-Thanks for the notification, I've updated the DEVELOPERS file
-accordingly, it will be in my v3.
+Having two e-mail addresses is currently not supported, but it can
+probably be added without too much efforts, though I'm not sure to do
+it for this version of the patch series (and rather handle that as a
+possible future improvement). Would this be OK?
 
-Thanks!
+In fact, thinking about this, using simply a comma to separate both
+e-mail addresses might even work as-is, but I would have to test first.
 
 Thomas
 -- 
