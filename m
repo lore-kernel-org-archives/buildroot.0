@@ -1,66 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Aug 2016 22:41:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: switch from libmysqlclient
- to mysqlnd
-In-Reply-To: <20160824190951.2d69b29f@free-electrons.com>
-References: <1471971288-4564-1-git-send-email-bos@je-eigen-domein.nl>
- <65c74b5a-1a2a-f17f-5381-91b0cf7503c2@mind.be>
- <20160824190951.2d69b29f@free-electrons.com>
-Message-ID: <80e7a8d2-4b56-d9b1-62b6-de2d5d246efe@mind.be>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 24 Aug 2016 23:03:43 +0200
+Subject: [Buildroot] [PATCH] elf2flt: fix threading apps on ARM noMMU systems
+Message-ID: <20160824210342.GA7164@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+See this thread, which explains the problem in detail:
+http://mailman.uclinux.org/pipermail/uclinux-dev//2016-April/052713.html
 
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ This should be applied to master.
+---
+ ...-relocation-support-for-R_ARM_TARGET-type.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/elf2flt/0001-elf2flt-fix-relocation-support-for-R_ARM_TARGET-type.patch
 
-On 24-08-16 19:09, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 24 Aug 2016 02:26:51 +0200, Arnout Vandecappelle wrote:
->> On 23-08-16 18:54, Floris Bos wrote:
->>> The Mysql Native Driver has been the default mysql driver since
->>> PHP 5.4, but buildroot was still using libmysqlclient.
->>>
->>> Mysqlnd has several advantages such as improved memory management
->>> and the more favorable PHP licensing terms.
->>> (can combine it with proprietary PHP extensions like Ioncube
->>> loader, while libmysqlclient requires commercial licensing if you
->>> link to it and do not fall under their GPL/FOSS license exception)  
->>
->>  I may be too tired and could be missing something, but this commit message
->> looks like it doesn't match the actual change...
->>
->>  I _guess_ that the php config script will use mysqlnd when the plain
->> --with-mysqli option is passed, and will use libmysqlclient when --with-mysqli
->> has a parameter. If this is the case, please specify it explicitly in the commit
->> message. If this is not the case, it should _definitely_ be explained in the
->> commit message :-)
-> 
-> Where do you see anything in the commit message that contradicts this?
-
- Not exactly contradicts. I read the commit message and expected a change like
-changing --with-mysqli into --with-mysqlnd. But instead it just removed all the
-dependencies on mysql, which looked weird.
-
- But as I said, maybe I was just too tired :-)
-
- Regards,
- Arnout
-
-> 
-> Yes, the commit message doesn't explain at all that passing
-> --with-mysqli/--with-pdo-mysql with no arguments tell PHP to use its
-> native MySQL driver. But it also doesn't state the opposite.
-> 
-> Thomas
-> 
-
+diff --git a/package/elf2flt/0001-elf2flt-fix-relocation-support-for-R_ARM_TARGET-type.patch b/package/elf2flt/0001-elf2flt-fix-relocation-support-for-R_ARM_TARGET-type.patch
+new file mode 100644
+index 0000000..b9615ab
+--- /dev/null
++++ b/package/elf2flt/0001-elf2flt-fix-relocation-support-for-R_ARM_TARGET-type.patch
+@@ -0,0 +1,34 @@
++From dedce8765d203c1c162a57e6259375e0b457173f Mon Sep 17 00:00:00 2001
++From: Greg Ungerer <gerg@linux-m68k.org>
++Date: Fri, 19 Aug 2016 23:49:51 +1000
++Subject: [PATCH] elf2flt: fix relocation support for R_ARM_TARGET types
++
++R_ARM_TARGET1 (and I think R_ARM_TARGET2) relocation types should be
++treated in the same way as R_ARM_ABS32. Fix them to write out the addend
++to the flat binary in network byte order.
++
++Signed-off-by: Greg Ungerer <gerg@uclinux.org>
++Tested-by: Waldemar Brodkorb <wbx@openadk.org>
++
++---
++ elf2flt.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/elf2flt.c b/elf2flt.c
++index 5ae7dd9..3f31569 100644
++--- a/elf2flt.c
+++++ b/elf2flt.c
++@@ -1505,7 +1505,9 @@ DIS29_RELOCATION:
++ 					(((*p)->howto->type != R_ARM_PC24) &&
++ 					((*p)->howto->type != R_ARM_PLT32)))
++ 					tmp.c[i3] = (hl >> 24) & 0xff;
++-				if ((*p)->howto->type == R_ARM_ABS32)
+++				if (((*p)->howto->type == R_ARM_ABS32) ||
+++				    ((*p)->howto->type == R_ARM_TARGET1) ||
+++				    ((*p)->howto->type == R_ARM_TARGET2))
++ 					*(uint32_t *)r_mem = htonl(hl);
++ 				else
++ 					*(uint32_t *)r_mem = tmp.l;
++-- 
++1.9.1
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.1.4
