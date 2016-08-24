@@ -1,14 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Aug 2016 11:34:17 +0200
-Subject: [Buildroot] compiler plugins & compiling the kernel
-In-Reply-To: <84805825-f7d4-cfef-d83a-071a5a761ced@mind.be> (Arnout
- Vandecappelle's message of "Wed, 24 Aug 2016 02:46:22 +0200")
-References: <CAK7rcp_m+9YC6gJ0xyarD217F4wyjwjg9QSdBLzVgPJ9QLrm7w@mail.gmail.com>
- <20160820200119.4ec5848b@free-electrons.com>
- <CAK7rcp9SVrJ4HA3wH6U9P-Tv8EzJdBKUtZa=EVwihZTR5TCdtQ@mail.gmail.com>
- <CAK7rcp9ZEKb7dYNv23E7NF52+u0vL67f3q1XozKK3jRy2dq=pA@mail.gmail.com>
- <84805825-f7d4-cfef-d83a-071a5a761ced@mind.be>
-Message-ID: <87lgzmh5nq.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Aug 2016 11:37:04 +0200
+Subject: [Buildroot] BuildRoot cannot build powerpc64
+In-Reply-To: <1b65f937-d2ee-312c-964d-e6b9da957463@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 24 Aug 2016 03:01:00 +0200")
+References: <F9C551623D2CBB4C9488801D14F864C6EE8B1000@ex-mb1.corp.adtran.com>
+ <57b3aeb6944cf_7ec33f915a8b1b9c298e6@ultri3.mail>
+ <F9C551623D2CBB4C9488801D14F864C6EE8B17ED@ex-mb1.corp.adtran.com>
+ <20160817193721.0cc1466d@free-electrons.com>
+ <532ce6e0-de27-9a2a-f062-179a4fa3248e@mind.be>
+ <20160818231850.4072ddf2@free-electrons.com>
+ <1b65f937-d2ee-312c-964d-e6b9da957463@mind.be>
+Message-ID: <878tvmh5j3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,38 +21,28 @@ To: buildroot@busybox.net
 
 Hi,
 
- >>>>> linux-headers 3.14.51 Configuring...
- >> ...
- >> make[2]: Entering directory ... build/linux-headers-3.14.51
- >> Makefile:652 *** Your gcc installation does not support plugins. If
- >> the necessary headers for plugin support are missing, they should be
- >> installed. On Debian, apt-get install gcc-<ver>-plugin-dev. If you
- >> choose to ignore this error and...
+ >>> Actually also some other options are more fitting in the toolchain menu IMHO,
+ >>> like debug/optimization options and SSP.
+ >> 
+ >> I personally don't like this, and instead would like to keep separated
+ >> the options that affect the build of all components (SSP or not,
+ >> debug/optimization, shared/static) from the options that configure the
+ >> toolchain itself.
 
- >  Ah, this is annoying...
+ >  OK, fair enough.
 
- >  When installing linux-headers, we don't pass the cross-compilation arguments,
- > because the cross-compiler doesn't exist yet at that point. So the installation
- > will use the host compiler instead for that check. Which is of course wrong.
+ >  Actually, I noticed now that SSP in the build menu already depends on the
+ > toolchain choices. So perhaps we should move the build options below the
+ > toolchain, and make the static/shared libs options depend on the toolchain as well.
 
- >  Well, actually it's a bug in gr-security, because this check shouldn't be done
- > for install_headers (gcc isn't even called).
+Yes, perhaps that is less confusing. It isn't perfect as the build
+options are more general than toolchain, but the current setup where
+people have to jump back/forth between the build options and toolchain
+menus also isn't very nice.
 
-Yes, to me this is really a bug in gr-security, and not much we can do
-about it.
+ >  That leaves us just with the awkward headers-same-as-kernel forward dependency.
 
- >>>> You're not correct. Support for plugins should be added to the
- >>>> cross-compiler if you need plugin support to build your kernel.
- >>>> 
- >>> 
- >>> That doesn't appear to be an option in buildroot.
-
- >  Well, we pass --enable-plugins when BR2_GCC_ENABLE_LTO is set. We don't pass
- > --disable-plugins so it really depends on the gcc defaults. But then, we don't
- > install the plugin development headers to HOST_DIR, so it will probably be
- > difficult to actually compile a plugin.
-
-But patches are welcome!
+Yeah :/
 
 -- 
 Bye, Peter Korsgaard
