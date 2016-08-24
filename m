@@ -1,96 +1,1423 @@
-From: Kenneth Adam Miller <kennethadammiller@gmail.com>
-Date: Tue, 23 Aug 2016 20:49:37 -0400
-Subject: [Buildroot] compiler plugins & compiling the kernel
-In-Reply-To: <84805825-f7d4-cfef-d83a-071a5a761ced@mind.be>
-References: <CAK7rcp_m+9YC6gJ0xyarD217F4wyjwjg9QSdBLzVgPJ9QLrm7w@mail.gmail.com>
- <20160820200119.4ec5848b@free-electrons.com>
- <CAK7rcp9SVrJ4HA3wH6U9P-Tv8EzJdBKUtZa=EVwihZTR5TCdtQ@mail.gmail.com>
- <CAK7rcp9ZEKb7dYNv23E7NF52+u0vL67f3q1XozKK3jRy2dq=pA@mail.gmail.com>
- <84805825-f7d4-cfef-d83a-071a5a761ced@mind.be>
-Message-ID: <CAK7rcp8PmKmK7RmttcfMUbChPv3bmGsB96FtHhvENn_nMOWk5g@mail.gmail.com>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Tue, 23 Aug 2016 21:54:09 -0300
+Subject: [Buildroot] [PATCH/next 2/4] DEVELOPERS: add initial list of
+ Buildroot developers
+In-Reply-To: <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1471902678-18693-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CABLs7GXVRhFTkdRMgp-=GtYEbgmbkz_p6U1yH+WVwao=7-CiEw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 23, 2016 at 8:46 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 21-08-16 05:43, Kenneth Adam Miller wrote:
->> On Sat, Aug 20, 2016 at 6:39 PM, Kenneth Adam Miller
->> <kennethadammiller@gmail.com> wrote:
->>> On Sat, Aug 20, 2016 at 2:01 PM, Thomas Petazzoni
->>> <thomas.petazzoni@free-electrons.com> wrote:
->>>> Hello,
->>>>
->>>> On Sat, 20 Aug 2016 13:10:07 -0400, Kenneth Adam Miller wrote:
-> [snip]
->>>>> In addition, for some pax related options, it requires gcc plugins for
->>>>> the version being used. That means that I would have to have plugin
->>>>> support for my host, correct?
->>>>
->>>> No, you would need support for plugins in the cross-compiler.
->>>>
->>>
->>> We have been building gr-security modded kernels for some time on a
->>> different machine with gcc 4.8, but I'm having this confusion; does
->>> the buildroot internal compiler support that? Because I'm getting an
->>> error in buildroot indicating that compiler plugins must be supported,
->>> and I'm using the buildroot internal compiler with version 5.x, it
->>> confused me a little bit.
->>>
->>
->> I found the exact output that brought about the build error.
->>
->>>>> linux-headers 3.14.51 Configuring...
->> ...
->> make[2]: Entering directory ... build/linux-headers-3.14.51
->> Makefile:652 *** Your gcc installation does not support plugins. If
->> the necessary headers for plugin support are missing, they should be
->> installed. On Debian, apt-get install gcc-<ver>-plugin-dev. If you
->> choose to ignore this error and...
->
->  Ah, this is annoying...
->
->  When installing linux-headers, we don't pass the cross-compilation arguments,
-> because the cross-compiler doesn't exist yet at that point. So the installation
-> will use the host compiler instead for that check. Which is of course wrong.
->
->  Well, actually it's a bug in gr-security, because this check shouldn't be done
-> for install_headers (gcc isn't even called).
->
+Hello,
 
-Bummer, since gr security is no longer even being offered with a free
-version anymore for it to be maintained there would have to be a
-community consensus around what a good solution is and where
-everything can be heaped. In any case, I was able to get past it and
-get my kernel compiled. It was giving me some heartache for quite some
-time though.
+You can add "F: package/vnstat/" to my list as well.
 
->>
->>>>> I don't believe that there is a way to
->>>>> enable plugin support for the buildroot toolchain or for crosstool. At
->>>>> least, when I looked and searched I didn't see any option that
->>>>> mentioned that. I just want to make sure that I have it correct in
->>>>> that my host compiler is being used to build the kernel.
->>>>
->>>> You're not correct. Support for plugins should be added to the
->>>> cross-compiler if you need plugin support to build your kernel.
->>>>
->>>
->>> That doesn't appear to be an option in buildroot.
+Regards,
+Rodrigo
+
+2016-08-22 18:51 GMT-03:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> This is an initial list of Buildroot developers. It has been created
+> semi-automatically by parsing the Git history, and finding the authors
+> of commits with a title like "<foo>: new package". Some additional
+> manual tweaking has been done (merging multiple entries corresponding to
+> the same person, adding some more entries, etc.).
 >
->  Well, we pass --enable-plugins when BR2_GCC_ENABLE_LTO is set. We don't pass
-> --disable-plugins so it really depends on the gcc defaults. But then, we don't
-> install the plugin development headers to HOST_DIR, so it will probably be
-> difficult to actually compile a plugin.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  DEVELOPERS | 1375 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 1375 insertions(+)
+>  create mode 100644 DEVELOPERS
 >
->  Regards,
->  Arnout
->
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> new file mode 100644
+> index 0000000..a63c4bb
+> --- /dev/null
+> +++ b/DEVELOPERS
+> @@ -0,0 +1,1375 @@
+> +# Syntax:
+> +#
+> +# N:   Firstname Lastname <email>
+> +# F:   file pattern or directory
+> +# F:   file pattern or directory
+> +#
+> +# The "F" entries can be:
+> +#
+> +# - A directory, in which case all patches touching any file in this
+> +#   directory or its subdirectories will be CC'ed to the developer.
+> +# - A pattern, in which case the pattern will be expanded, and then
+> +#   all files/directories (and their subdirectories) will be
+> +#   considered when matching against a patch
+> +#
+> +# Notes:
+> +#
+> +# - When a developer adds an "arch/Config.in.<arch>" file to its list
+> +#   of files, he is considered a developer of this architecture. He
+> +#   will receive e-mail notifications about build failures occuring on
+> +#   this architecture. Not more than one e-mail per day is sent.
+> +# - When a developer adds a directory that contains one or several
+> +#   packages, this developer will be notified when build failures
+> +#   occur. Not more than one e-mail per day is sent.
+> +# - When a developer adds an "package/pkg-<infra>.mk" file to its list
+> +#   of files, he is considered interested by this package
+> +#   infrastructure, and will be CC'ed on all patches that add or
+> +#   modify packages that use this infrastructure.
+> +
+> +N:     Abhishek Singh <abhishek.singh@imgtec.com>
+> +F:     package/cxxtest/
+> +
+> +N:     Adam Duskett <aduskett@gmail.com>
+> +F:     package/nginx-naxsi/
+> +
+> +N:     Alex Suykov <alex.suykov@gmail.com>
+> +F:     package/vboot-utils/
+> +
+> +N:     Alexander Clouter <alex+buildroot@digriz.org.uk>
+> +F:     package/odhcp6c/
+> +
+> +N:     Alexander Dahl <post@lespocky.de>
+> +F:     package/fastd/
+> +F:     package/libuecc/
+> +F:     package/putty/
+> +
+> +N:     Alexander Lukichev <alexander.lukichev@espotel.com>
+> +F:     package/openpgm/
+> +
+> +N:     Alexandre Belloni <alexandre.belloni@free-electrons.com>
+> +F:     package/tz/
+> +
+> +N:     Alistair Francis <alistair.francis@xilinx.com>
+> +F:     package/xen/
+> +
+> +N:     Alvaro G. M <alvaro.gamez@hazent.com>
+> +F:     package/dcron/
+> +F:     package/libxmlrpc/
+> +F:     package/python-docopt/
+> +
+> +N:     Anders Darander <anders@chargestorm.se>
+> +F:     package/ktap/
+> +
+> +N:     Andr? Hentschel <nerv@dawncrow.de>
+> +F:     package/p7zip/
+> +
+> +N:     Andy Kennedy <andy.kennedy@adtran.com>
+> +F:     package/libunwind/
+> +
+> +N:     Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> +F:     package/mono/
+> +F:     package/mono-gtksharp3/
+> +F:     package/monolite/
+> +F:     package/python-can/
+> +F:     package/python-pillow/
+> +F:     package/python-pydal/
+> +F:     package/python-web2py/
+> +
+> +N:     Anthony Viallard <viallard@syscom-instruments.com>
+> +F:     package/gnuplot/
+> +
+> +N:     Antoine T?nart <antoine.tenart@free-electrons.com>
+> +F:     package/wf111/
+> +
+> +N:     ARC Maintainers <arc-buildroot@synopsys.com>
+> +F:     arch/Config.in.arc
+> +
+> +N:     Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+> +F:     package/axfsutils/
+> +F:     package/mali-t76x/
+> +
+> +N:     Arnaud Aujon <arnaud@intelibre.fr>
+> +F:     package/espeak/
+> +
+> +N:     Arnaud R?billout <rebillout@syscom.ch>
+> +F:     package/dbus-triggerd/
+> +F:     package/lftp/
+> +F:     package/tcping/
+> +
+> +N:     Arnout Vandecappelle <arnout@mind.be>
+> +F:     package/freescale-imx/firmware-imx/
+> +F:     package/freescale-imx/imx-lib/
+> +F:     package/gstreamer/gst-fsl-plugins/
+> +F:     package/moarvm/
+> +F:     package/owfs/
+> +F:     package/python-bottle/
+> +F:     package/sqlcipher/
+> +F:     package/stress/
+> +
+> +N:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> +F:     package/autoconf-archive/
+> +F:     package/doxygen/
+> +F:     package/libserialport/
+> +F:     package/libsigrok/
+> +F:     package/libsigrokdecode/
+> +F:     package/libzip/
+> +F:     package/pulseview/
+> +F:     package/sigrok-cli/
+> +
+> +N:     Baruch Siach <baruch@tkos.co.il>
+> +F:     package/ebtables/
+> +F:     package/openipmi/
+> +F:     package/wireshark/
+> +
+> +N:     Ben Boeckel <mathstuf@gmail.com>
+> +F:     package/taskd/
+> +
+> +N:     Benjamin Kamath <kamath.ben@gmail.com>
+> +F:     package/lapack/
+> +
+> +N:     Bernd Kuhls <bernd.kuhls@t-online.de>
+> +F:     package/apache/
+> +F:     package/freeswitch/
+> +F:     package/jsoncpp/
+> +F:     package/ffmpeg/
+> +F:     package/kodi*
+> +F:     package/libaacs/
+> +F:     package/libasplib/
+> +F:     package/libbdplus/
+> +F:     package/libbroadvoice/
+> +F:     package/libcodec2/
+> +F:     package/libcrossguid/
+> +F:     package/libdcadec/
+> +F:     package/libdvdcss/
+> +F:     package/libebur128/
+> +F:     package/libfreeglut/
+> +F:     package/libg7221/
+> +F:     package/libglew/
+> +F:     package/libglfw/
+> +F:     package/libglu/
+> +F:     package/libhdhomerun/
+> +F:     package/libilbc/
+> +F:     package/libldns/
+> +F:     package/libopenh264/
+> +F:     package/libpjsip/
+> +F:     package/libplatform/
+> +F:     package/libsidplay2/
+> +F:     package/libsilk/
+> +F:     package/libsoil/
+> +F:     package/libsoundtouch/
+> +F:     package/libva/
+> +F:     package/libva-intel-driver/
+> +F:     package/libyuv/
+> +F:     package/perl-crypt-openssl-random/
+> +F:     package/perl-crypt-openssl-rsa/
+> +F:     package/perl-db-file/
+> +F:     package/perl-digest-sha1/
+> +F:     package/perl-encode-detect/
+> +F:     package/perl-encode-locale/
+> +F:     package/perl-mail-dkim/
+> +F:     package/perl-mailtools/
+> +F:     package/perl-timedate/
+> +F:     package/pound/
+> +F:     package/tinyxml2/
+> +F:     package/tor/
+> +F:     package/unixodbc/
+> +F:     package/x11r7/
+> +
+> +N:     Bimal Jacob <bimal.jacob@rockwellcollins.com>
+> +F:     package/nginx-upload/
+> +
+> +N:     Bogdan Radulescu <bogdan@nimblex.net>
+> +F:     package/iftop/
+> +F:     package/ncdu/
+> +
+> +N:     Bryan Brinsko <bryan.brinsko@rockwellcollins.com>
+> +F:     package/pps-tools/
+> +
+> +N:     Carlo Caione <carlo.caione@gmail.com>
+> +F:     package/sunxi-boards/
+> +
+> +N:     Carlos Santos <casantos@datacom.ind.br>
+> +F:     package/gmock/
+> +F:     package/perl-file-util/
+> +
+> +N:     Carsten Schoenert <c.schoenert@gmail.com>
+> +F:     package/libdvbsi/
+> +F:     package/libsvg/
+> +F:     package/libsvg-cairo/
+> +
+> +N:     Chris Packham <judge.packham@gmail.com>
+> +F:     package/eventlog/
+> +F:     package/micropython/
+> +
+> +N:     Christian Stewart <christian@paral.in>
+> +F:     package/batman-adv/
+> +F:     package/docker-containerd/
+> +F:     package/docker-engine/
+> +F:     package/mosh/
+> +F:     package/rtl8821au/
+> +F:     package/runc/
+> +
+> +N:     Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+> +F:     package/drbd-utils/
+> +F:     package/iotop/
+> +F:     package/python-configshell-fb/
+> +F:     package/python-rtslib-fb/
+> +F:     package/python-urwid/
+> +F:     package/targetcli-fb/
+> +
+> +N:     Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> +F:     package/audit/
+> +F:     package/cpio/
+> +
+> +N:     Clayton Shotwell <clshotwe@rockwellcollins.com>
+> +F:     package/checkpolicy/
+> +F:     package/libcgroup/
+> +F:     package/libee/
+> +F:     package/libestr/
+> +F:     package/liblogging/
+> +F:     package/libselinux/
+> +F:     package/libsemanage/
+> +F:     package/libsepol/
+> +F:     package/sepolgen/
+> +F:     package/ustr/
+> +
+> +N:     C?dric Ch?pied <cedric.chepied@gmail.com>
+> +F:     package/znc/
+> +
+> +N:     Dagg Stompler <daggs@gmx.com>
+> +F:     package/libamcodec/
+> +F:     package/odroid-mali/
+> +F:     package/odroid-scripts/
+> +
+> +N:     Damien Lanson <damien@kal-host.com>
+> +F:     package/libvdpau/
+> +F:     package/log4cpp/
+> +
+> +N:     Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+> +F:     package/e2tools/
+> +
+> +N:     Daniel Price <daniel.price@gmail.com>
+> +F:     package/nodejs/
+> +
+> +N:     Daniel Sangue <daniel.sangue@sangue.ch>
+> +F:     package/libftdi1/
+> +
+> +N:     Danomi Manchego <danomimanchego123@gmail.com>
+> +F:     package/jq/
+> +F:     package/ljsyscall/
+> +
+> +N:     Dave Skok <blanco.ether@gmail.com>
+> +F:     package/ola/
+> +
+> +N:     David Bachelart <david.bachelart@bbright.com>
+> +F:     package/ccrypt/
+> +F:     package/dos2unix/
+> +F:     package/ipmiutil/
+> +F:     package/python-daemon/
+> +
+> +N:     David Bender <codehero@gmail.com>
+> +F:     package/benejson/
+> +F:     package/cgic/
+> +F:     package/openldap/
+> +
+> +N:     David du Colombier <0intro@gmail.com>
+> +F:     package/x264/
+> +
+> +N:     Davide Viti <zinosat@tiscali.it>
+> +F:     package/flann/
+> +F:     package/python-paho-mqtt/
+> +F:     package/qhull/
+> +F:     package/tcllib/
+> +
+> +N:     Denis Bodor <lefinnois@lefinnois.net>
+> +F:     package/libstrophe/
+> +
+> +N:     Dimitrios Siganos <dimitris@siganos.org>
+> +F:     package/wireless-regdb/
+> +
+> +N:     Dominik Faessler <faessler@was.ch>
+> +F:     package/logsurfer/
+> +F:     package/python-id3/
+> +
+> +N:     Doug Kehn <rdkehn@yahoo.com>
+> +F:     package/nss-pam-ldapd/
+> +F:     package/sp-oops-extract/
+> +F:     package/unscd/
+> +
+> +N:     Ed Swierk <eswierk@skyportsystems.com>
+> +F:     package/xxhash/
+> +
+> +N:     Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> +F:     package/adwaita-icon-theme/
+> +F:     package/eudev/
+> +F:     package/hicolor-icon-theme/
+> +F:     package/jemalloc/
+> +F:     package/ninja/
+> +
+> +N:     Eric Limpens <limpens@gmail.com>
+> +F:     package/pifmrds/
+> +F:     package/ympd/
+> +
+> +N:     Erico Nunes <nunes.erico@gmail.com>
+> +F:     package/acpica/
+> +F:     package/acpitool/
+> +F:     package/efibootmgr/
+> +F:     package/efivar/
+> +F:     package/spi-tools/
+> +F:     package/xdotool/
+> +
+> +N:     Erik Stromdahl <erik.stromdahl@gmail.com>
+> +F:     package/mxsldr/
+> +
+> +N:     Ernesto L. Williams Jr <realcontrols@gmail.com>
+> +F:     package/szip/
+> +
+> +N:     Evan Zelkowitz <evan.zelkowitz@gmail.com>
+> +F:     package/sdl_gfx/
+> +
+> +N:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> +F:     arch/Config.in.nios2
+> +F:     package/fio/
+> +F:     package/iptraf-ng/
+> +F:     package/nodm/
+> +F:     package/openbox/
+> +F:     package/supertuxkart/
+> +
+> +N:     Fabio Estevam <festevam@gmail.com>
+> +F:     configs/freescale_imx*
+> +
+> +N:     Fabio Porcedda <fabio.porcedda@gmail.com>
+> +F:     package/netsurf-buildsystem/
+> +
+> +N:     Fabrice Fontaine <fabrice.fontaine@orange.com>
+> +F:     package/domoticz/
+> +F:     package/openzwave/
+> +
+> +N:     Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +F:     package/alljoyn/
+> +F:     package/alljoyn-base/
+> +F:     package/alljoyn-tcl/
+> +F:     package/alljoyn-tcl-base/
+> +F:     package/gtksourceview/
+> +F:     package/gupnp-dlna/
+> +F:     package/gupnp-tools/
+> +F:     package/igd2-for-linux/
+> +F:     package/minissdpd/
+> +F:     package/tinycbor/
+> +F:     package/tinydtls/
+> +
+> +N:     Floris Bos <bos@je-eigen-domein.nl>
+> +F:     package/ipmitool/
+> +F:     package/odhcploc/
+> +
+> +N:     Francois Perrad <fperrad@gmail.com>
+> +F:     package/4th/
+> +F:     package/botan/
+> +F:     package/cosmo/
+> +F:     package/dado/
+> +F:     package/ficl/
+> +F:     package/gdbm/
+> +F:     package/libtomcrypt/
+> +F:     package/libtommath/
+> +F:     package/libump/
+> +F:     package/linenoise/
+> +F:     package/ljlinenoise/
+> +F:     package/lpeg/
+> +F:     package/lpty/
+> +F:     package/lrandom/
+> +F:     package/lsqlite3/
+> +F:     package/lua*
+> +F:     package/lunit/
+> +F:     package/lzlib/
+> +F:     package/perl*
+> +F:     package/qemu/
+> +F:     package/tekui/
+> +
+> +N:     Frank Hunleth <fhunleth@troodon-software.com>
+> +F:     package/am335x-pru-package/
+> +F:     package/libsodium/
+> +F:     package/python-cherrypy/
+> +F:     package/ucl/
+> +F:     package/upx/
+> +
+> +N:     Gary Bisson <gary.bisson@boundarydevices.com>
+> +F:     configs/nitrogen*
+> +F:     package/freescale-imx/
+> +F:     package/libimxvpuapi/
+> +F:     package/sshpass/
+> +
+> +N:     Geoff Levand <geoff@infradead.org>
+> +F:     package/flannel/
+> +
+> +N:     Geoffrey Ragot <geoffreyragot@gmail.com>
+> +F:     package/python-pycli/
+> +F:     package/python-pyyaml/
+> +
+> +N:     Gilles Talis <gilles.talis@gmail.com>
+> +F:     package/fdk-aac/
+> +F:     package/httping/
+> +F:     package/iozone/
+> +F:     package/ocrad/
+> +F:     package/webp/
+> +
+> +N:     Giovanni Zantedeschi <giovanni.zantedeschi@datacom.ind.br>
+> +F:     package/libpam-radius-auth/
+> +F:     package/libpam-tacplus/
+> +
+> +N:     Gregory Dymarek <gregd72002@gmail.com>
+> +F:     package/ding-libs/
+> +F:     package/gengetopt/
+> +F:     package/janus-gateway/
+> +F:     package/libnice/
+> +F:     package/libsrtp/
+> +F:     package/libwebsock/
+> +F:     package/sofia-sip/
+> +
+> +N:     Gregory Hermant <gregory.hermant@calao-systems.com>
+> +F:     package/bcusdk/
+> +F:     package/dfu-util/
+> +F:     package/libpthsem/
+> +F:     package/linknx/
+> +F:     package/snowball-hdmiservice/
+> +F:     package/ux500-firmware/
+> +
+> +N:     Guillaume Gardet <guillaume.gardet@oliseo.fr>
+> +F:     package/c-icap/
+> +F:     package/c-icap-modules/
+> +F:     package/sdl2/
+> +
+> +N:     Guillaume William Brs <guillaume.bressaix@gmail.com>
+> +F:     package/liquid-dsp/
+> +
+> +N:     Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +F:     arch/Config.in.powerpc
+> +F:     board/qemu/
+> +F:     configs/qemu_*
+> +F:     package/argp-standalone/
+> +F:     package/arptables/
+> +F:     package/audiofile/
+> +F:     package/autossh/
+> +F:     package/bitstream-vera/
+> +F:     package/blktrace/
+> +F:     package/bmon/
+> +F:     package/btrfs-progs/
+> +F:     package/c-ares/
+> +F:     package/cantarell/
+> +F:     package/check/
+> +F:     package/collectd/
+> +F:     package/comix-cursors/
+> +F:     package/connman-gtk/
+> +F:     package/conntrack-tools/
+> +F:     package/cppdb/
+> +F:     package/crda/
+> +F:     package/cryptodev-linux/
+> +F:     package/dbus-cpp/
+> +F:     package/debianutils/
+> +F:     package/dt/
+> +F:     package/exfat/
+> +F:     package/exfat-utils/
+> +F:     package/f2fs-tools/
+> +F:     package/faad2/
+> +F:     package/fping/
+> +F:     package/ftop/
+> +F:     package/gcr/
+> +F:     package/geoip/
+> +F:     package/gpsd/
+> +F:     package/granite/
+> +F:     package/graphite2/
+> +F:     package/gsettings-desktop-schemas/
+> +F:     package/hans/
+> +F:     package/haveged/
+> +F:     package/heimdal/
+> +F:     package/ifupdown/
+> +F:     package/inconsolata/
+> +F:     package/iodine/
+> +F:     package/iperf3/
+> +F:     package/ipset/
+> +F:     package/jhead/
+> +F:     package/jquery-keyboard/
+> +F:     package/kompexsqlite/
+> +F:     package/kvmtool/
+> +F:     package/lame/
+> +F:     package/lft/
+> +F:     package/libao/
+> +F:     package/libcroco/
+> +F:     package/libcue/
+> +F:     package/libcuefile/
+> +F:     package/libepoxy/
+> +F:     package/libgee/
+> +F:     package/libglib2/
+> +F:     package/libgtk2/
+> +F:     package/libgtk3/
+> +F:     package/libmcrypt/
+> +F:     package/libmemcached/
+> +F:     package/libmhash/
+> +F:     package/libmnl/
+> +F:     package/libmng/
+> +F:     package/libmpdclient/
+> +F:     package/libnetfilter_acct/
+> +F:     package/libnetfilter_conntrack/
+> +F:     package/libnetfilter_cthelper/
+> +F:     package/libnetfilter_cttimeout/
+> +F:     package/libnetfilter_log/
+> +F:     package/libnetfilter_queue/
+> +F:     package/libnfnetlink/
+> +F:     package/libnl/
+> +F:     package/liboping/
+> +F:     package/libreplaygain/
+> +F:     package/libsamplerate/
+> +F:     package/libtorrent/
+> +F:     package/libuv/
+> +F:     package/lksctp-tools/
+> +F:     package/lshw/
+> +F:     package/lz4/
+> +F:     package/lzip/
+> +F:     package/mbedtls/
+> +F:     package/mcrypt/
+> +F:     package/memcached/
+> +F:     package/minizip/
+> +F:     package/mpd/
+> +F:     package/mpv/
+> +F:     package/mtr/
+> +F:     package/musepack/
+> +F:     package/ncmpc/
+> +F:     package/net-tools/
+> +F:     package/netstat-nat/
+> +F:     package/nettle/
+> +F:     package/nfacct/
+> +F:     package/nftables/
+> +F:     package/nload/
+> +F:     package/nmap/
+> +F:     package/noip/
+> +F:     package/norm/
+> +F:     package/obsidian-cursors/
+> +F:     package/ocf-linux/
+> +F:     package/opencore-amr/
+> +F:     package/openswan/
+> +F:     package/opusfile/
+> +F:     package/p11-kit/
+> +F:     package/p910nd/
+> +F:     package/pax-utils/
+> +F:     package/procrank_linux/
+> +F:     package/php-*
+> +F:     package/pkgconf/
+> +F:     package/privoxy/
+> +F:     package/protobuf-c/
+> +F:     package/ptpd/
+> +F:     package/ptpd2/
+> +F:     package/pwgen/
+> +F:     package/ramspeed/
+> +F:     package/rng-tools/
+> +F:     package/rtorrent/
+> +F:     package/samba4/
+> +F:     package/sbc/
+> +F:     package/snmppp/
+> +F:     package/sox/
+> +F:     package/spidev_test/
+> +F:     package/start-stop-daemon/
+> +F:     package/swig/
+> +F:     package/thrift/
+> +F:     package/twolame/
+> +F:     package/ulogd/
+> +F:     package/unionfs/
+> +F:     package/unrar/
+> +F:     package/ushare/
+> +F:     package/vala/
+> +F:     package/vorbis-tools/
+> +F:     package/wavpack/
+> +F:     package/wayland-protocols/
+> +F:     package/webkitgtk/
+> +F:     package/webkitgtk24/
+> +F:     package/whois/
+> +F:     package/wpan-tools/
+> +F:     package/x11r7/xdriver_xf86-video-qxl/
+> +F:     package/xtables-addons/
+> +F:     package/zd1211-firmware/
+> +
+> +N:     Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> +F:     package/gnuradio/
+> +F:     package/gr-osmosdr/
+> +F:     package/libusbgx/
+> +F:     package/python-cheetah/
+> +F:     package/python-markdown/
+> +F:     package/python-pyqt/
+> +F:     package/python-sip/
+> +
+> +N:     Henrique Camargo <henrique@henriquecamargo.com>
+> +F:     package/json-glib/
+> +
+> +N:     Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+> +F:     package/gauche/
+> +F:     package/gmrender-resurrect/
+> +F:     package/squeezelite/
+> +
+> +N:     Ian Haylock <haylocki@yahoo.co.uk>
+> +F:     package/python-rpi-gpio/
+> +
+> +N:     James Knight <james.knight@rockwellcollins.com>
+> +F:     package/atkmm/
+> +F:     package/cairomm/
+> +F:     package/google-material-design-icons/
+> +F:     package/gtkmm3/
+> +F:     package/libpqxx/
+> +F:     package/pangomm/
+> +F:     package/yad/
+> +
+> +N:     Jan Pedersen <jp@jp-embedded.com>
+> +F:     package/zip/
+> +
+> +N:     Jan Viktorin <viktorin@rehivetech.com>
+> +F:     package/python-pexpect/
+> +F:     package/python-ptyprocess/
+> +F:     package/zynq-boot-bin/
+> +
+> +N:     Jason Pruitt <jrspruitt@gmail.com>
+> +F:     package/librtlsdr/
+> +
+> +N:     Jens Rosenboom <j.rosenboom@x-ion.de>
+> +F:     package/sl/
+> +
+> +N:     Jens Zettelmeyer <zettelmeyerj@gmail.com>
+> +F:     package/batctl/
+> +
+> +N:     Joel Stanley <joel@jms.id.au>
+> +F:     package/pdbg/
+> +
+> +N:     Johan Derycke <johanderycke@gmail.com>
+> +F:     package/python-libconfig/
+> +
+> +N:     John Stile <johns@msli.com>
+> +F:     package/dhcpcd/
+> +
+> +N:     Jonathan Ben Avraham <yba@tkos.co.il>
+> +F:     arch/Config.in.xtensa
+> +F:     package/autofs/
+> +F:     package/dawgdic/
+> +F:     package/rapidxml/
+> +F:     package/sphinxbase/
+> +
+> +N:     Jonathan Liu <net147@gmail.com>
+> +F:     package/python-meld3/
+> +F:     package/supervisor/
+> +
+> +N:     Joris Lijssens <joris.lijssens@gmail.com>
+> +F:     package/emlog/
+> +F:     package/libcoap/
+> +F:     package/libnet/
+> +F:     package/libuio/
+> +F:     package/netsniff-ng/
+> +F:     package/rabbitmq-c/
+> +
+> +N:     Juha Rantanen <juha@codercoded.com>
+> +F:     package/acsccid/
+> +
+> +N:     Julian Lunz <git@jlunz.de>
+> +F:     package/freerdp/
+> +
+> +N:     Julian Scheel <julian@jusst.de>
+> +F:     package/bitstream/
+> +F:     package/cbootimage/
+> +F:     package/cryptopp/
+> +F:     package/dvblast/
+> +F:     package/tegrarcm/
+> +
+> +N:     Julien Boibessot <julien.boibessot@armadeus.com>
+> +F:     configs/armadeus*
+> +F:     package/libcddb/
+> +
+> +N:     Julien Corjon <corjon.j@ecagroup.com>
+> +F:     package/qt5/
+> +
+> +N:     Julien Floret <julien.floret@6wind.com>
+> +F:     package/lldpd/
+> +
+> +N:     Justin Maggard <jmaggard@netgear.com>
+> +F:     package/dtach/
+> +
+> +N:     J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
+> +F:     package/libdri2/
+> +F:     package/qt-webkit-kiosk/
+> +
+> +N:     J?r?me Pouiller <jezz@sysmic.org>
+> +F:     package/apitrace/
+> +F:     package/freescale-imx/gpu-amd-bin-mx51/
+> +F:     package/freescale-imx/libz160/
+> +F:     package/lxc/
+> +F:     package/strongswan/
+> +F:     package/wmctrl/
+> +F:     package/x11r7/xdriver_xf86-video-imx/
+> +F:     package/x11r7/xdriver_xf86-video-imx-viv/
+> +
+> +N:     J?rg Krause <joerg.krause@embedded.rocks>
+> +F:     package/libshout/
+> +F:     package/libupnpp/
+> +F:     package/luv/
+> +F:     package/luvi/
+> +F:     package/mp4v2/
+> +F:     package/shairport-sync/
+> +F:     package/swupdate/
+> +F:     package/upmpdcli/
+> +F:     package/wavemon/
+> +
+> +N:     Karoly Kasza <kaszak@gmail.com>
+> +F:     package/irqbalance/
+> +F:     package/openvmtools/
+> +
+> +N:     Kelvin Cheung <keguang.zhang@gmail.com>
+> +F:     package/ramsmp/
+> +
+> +N:     Laurent Cans <laurent.cans@gmail.com>
+> +F:     package/aircrack-ng/
+> +
+> +N:     Lee Jones <lee.jones@linaro.org>
+> +F:     boot/afboot-stm32/
+> +
+> +N:     Lionel Orry <lionel.orry@gmail.com>
+> +F:     package/mongrel2/
+> +
+> +N:     Lothar Felten <lothar.felten@gmail.com>
+> +F:     package/ti-sgx-demos/
+> +F:     package/ti-sgx-km/
+> +F:     package/ti-sgx-um/
+> +
+> +N:     Luca Ceresoli <luca@lucaceresoli.net>
+> +F:     package/agentpp/
+> +F:     package/exim/
+> +F:     package/ffmpeg/
+> +F:     package/linphone/
+> +F:     package/qpid-proton/
+> +F:     package/rtl8188eu/
+> +F:     package/stm32flash/
+> +F:     package/unzip/
+> +
+> +N:     Lucas De Marchi <lucas.de.marchi@gmail.com>
+> +F:     package/fswebcam/
+> +
+> +N:     Ludovic Desroches <ludovic.desroches@atmel.com>
+> +F:     board/atmel/
+> +F:     configs/at91*
+> +F:     configs/atmel_*
+> +F:     package/fb-test-app/
+> +F:     package/python-json-schema-validator/
+> +F:     package/python-keyring/
+> +F:     package/python-simplejson/
+> +F:     package/python-versiontools/
+> +F:     package/wilc1000-firmware/
+> +
+> +N:     Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
+> +F:     package/nvme/
+> +
+> +N:     Manuel V?gele <develop@manuel-voegele.de>
+> +F:     package/python-requests-toolbelt/
+> +
+> +N:     Marcin Bis <marcin@bis.org.pl>
+> +F:     package/bluez5_utils/
+> +F:     package/cc-tool/
+> +F:     package/ecryptfs-utils/
+> +
+> +N:     Marcin Niestroj <m.niestroj@grinn-global.com>
+> +F:     package/argparse/
+> +F:     package/rs485conf/
+> +F:     package/turbolua/
+> +
+> +N:     Marek Belisko <marek.belisko@open-nandra.com>
+> +F:     package/polkit/
+> +F:     package/sg3_utils/
+> +F:     package/udisks/
+> +
+> +N:     Martin Bark <martin@barkynet.com>
+> +F:     package/ca-certificates/
+> +
+> +N:     Matt Weber <matthew.weber@rockwellcollins.com>
+> +F:     package/bc/
+> +F:     package/eigen/
+> +F:     package/fmc/
+> +F:     package/fmlib/
+> +F:     package/igmpproxy/
+> +F:     package/iputils/
+> +F:     package/omniorb/
+> +F:     package/python-ipy/
+> +F:     package/python-posix-ipc/
+> +F:     package/python-pypcap/
+> +F:     package/python-pyrex/
+> +F:     package/raptor/
+> +F:     package/setools/
+> +F:     package/simicsfs/
+> +F:     package/smcroute/
+> +F:     package/tclap/
+> +
+> +N:     Mauro Condarelli <mc5686@mclink.it>
+> +F:     package/mc/
+> +F:     package/python-autobahn/
+> +F:     package/python-cbor/
+> +F:     package/python-characteristic/
+> +F:     package/python-click/
+> +F:     package/python-crossbar/
+> +F:     package/python-lmdb/
+> +F:     package/python-mistune/
+> +F:     package/python-netaddr/
+> +F:     package/python-pyasn-modules/
+> +F:     package/python-pygments/
+> +F:     package/python-pynacl/
+> +F:     package/python-pytrie/
+> +F:     package/python-service-identity/
+> +F:     package/python-setproctitle/
+> +F:     package/python-shutilwhich/
+> +F:     package/python-treq/
+> +F:     package/python-txaio/
+> +F:     package/python-ujson/
+> +F:     package/python-wsaccel/
+> +
+> +N:     Max Filippov <jcmvbkbc@gmail.com>
+> +F:     arch/Config.in.xtensa
+> +
+> +N:     Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> +F:     package/dante/
+> +F:     package/faifa/
+> +F:     package/initscripts/
+> +F:     package/intel-microcode/
+> +F:     package/iucode-tool/
+> +F:     package/jasper/
+> +F:     package/kodi/
+> +F:     package/libass/
+> +F:     package/libbluray/
+> +F:     package/libcdio/
+> +F:     package/libcofi/
+> +F:     package/libenca/
+> +F:     package/libmodplug/
+> +F:     package/libnfs/
+> +F:     package/libplist/
+> +F:     package/libshairplay/
+> +F:     package/linux-zigbee/
+> +F:     package/netcat-openbsd/
+> +F:     package/open-plc-utils/
+> +F:     package/rpi-userland/
+> +F:     package/rtmpdump/
+> +F:     package/tinyalsa/
+> +F:     package/tinyxml/
+> +
+> +N:     Maxime Ripard <maxime.ripard@free-electrons.com>
+> +F:     package/kmsxx/
+> +
+> +N:     Michael Rommel <rommel@layer-7.net>
+> +F:     package/aiccu/
+> +F:     package/knock/
+> +F:     package/python-crc16/
+> +F:     package/python-pyzmq/
+> +
+> +N:     Michael Trimarchi <michael@amarulasolutions.com>
+> +F:     package/python-spidev/
+> +
+> +N:     Morgan Delestre <m.delestre@sinters.fr>
+> +F:     package/monkey/
+> +
+> +N:     Murat Demirten <mdemirten@yh.com.tr>
+> +F:     package/jpeg-turbo/
+> +
+> +N:     Nathan Lynch <ntl@pobox.com>
+> +F:     package/chrony/
+> +
+> +N:     Nathaniel Roach <nroach44@gmail.com>
+> +F:     package/bandwidthd/
+> +
+> +N:     Naumann Andreas <ANaumann@ultratronik.de>
+> +F:     package/evemu/
+> +F:     package/libevdev/
+> +
+> +N:     Nicolas Menegale <nicolas.menegale@openwide.fr>
+> +F:     package/cppcms/
+> +F:     package/glibmm/
+> +F:     package/libxmlpp/
+> +
+> +N:     Nicolas Serafini <nicolas.serafini@sensefly.com>
+> +F:     package/exiv2/
+> +F:     package/nvidia-tegra23/nvidia-tegra23-binaries/
+> +F:     package/nvidia-tegra23/nvidia-tegra23-codecs/
+> +
+> +N:     Nimai Mahajan <nimaim@gmail.com>
+> +F:     package/libucl/
+> +
+> +N:     Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+> +F:     package/cgroupfs-mount/
+> +
+> +N:     No? Rubinstein <noe.rubinstein@gmail.com>
+> +F:     package/tpm-tools/
+> +F:     package/trousers/
+> +
+> +N:     Olaf Rempel <razzor@kopf-tisch.de>
+> +F:     package/ctorrent/
+> +
+> +N:     Oli Vogt <oli.vogt.pub01@gmail.com>
+> +F:     package/python-django/
+> +F:     package/python-flup/
+> +
+> +N:     Olivier Schonken <olivier.schonken@gmail.com>
+> +F:     package/poppler/
+> +
+> +N:     Olivier Singla <olivier.singla@gmail.com>
+> +F:     package/shellinabox/
+> +
+> +N:     Parnell Springmeyer <parnell@digitalmentat.com>
+> +F:     package/scrypt/
+> +
+> +N:     Pascal Huerst <pascal.huerst@gmail.com>
+> +F:     package/google-breakpad/
+> +
+> +N:     Patrick Gerber <kpa_info@yahoo.fr>
+> +F:     package/yavta/
+> +
+> +N:     Patrick Ziegler <patrick.ziegler@fh-kl.de>
+> +F:     package/aespipe/
+> +F:     package/libqmi/
+> +
+> +N:     Paul Cercueil <paul.cercueil@analog.com>
+> +F:     package/libiio/
+> +
+> +N:     Paul Cercueil <paul@crapouillou.net>
+> +F:     package/lightning/
+> +
+> +N:     Pedro Aguilar <paguilar@paguilar.org>
+> +F:     package/libunistring/
+> +
+> +N:     Peter Korsgaard <peter@korsgaard.com>
+> +F:     package/flickcurl/
+> +F:     package/libfastjson/
+> +F:     package/lzop/
+> +F:     package/python-alsaaudio/
+> +F:     package/python-enum/
+> +F:     package/python-enum34/
+> +F:     package/python-ipaddr/
+> +F:     package/python-pam/
+> +F:     package/python-psutil/
+> +F:     package/triggerhappy/
+> +F:     package/wpa_supplicant/
+> +
+> +N:     Peter Seiderer <ps.report@gmx.net>
+> +F:     package/assimp/
+> +F:     package/bcm2835/
+> +F:     package/dejavu/
+> +F:     package/dillo/
+> +F:     package/edid-decode/
+> +F:     package/ghostscript-fonts/
+> +F:     package/gstreamer1/gst1-validate/
+> +F:     package/log4cplus/
+> +F:     package/postgresql/
+> +F:     package/qt5/qt53d/
+> +F:     package/qt5/qt5quickcontrols2/
+> +F:     package/qt5/qt5tools/
+> +F:     package/racehound/
+> +F:     package/wiringpi/
+> +
+> +N:     Peter Thompson <peter.macleod.thompson@gmail.com>
+> +F:     package/sdl2_gfx/
+> +F:     package/sdl2_image/
+> +F:     package/sdl2_ttf/
+> +
+> +N:     Petr Vorel <petr.vorel@gmail.com>
+> +F:     package/linux-backports/
+> +
+> +N:     Phil Eichinger <phil.eichinger@gmail.com>
+> +F:     package/psplash/
+> +F:     package/sispmctl/
+> +F:     package/zsh/
+> +
+> +N:     Philipp Claves <claves@budelmann-elektronik.com>
+> +F:     package/libassuan/
+> +F:     package/libgpgme/
+> +
+> +N:     Philippe Proulx <eeppeliteloop@gmail.com>
+> +F:     package/python-ipython/
+> +
+> +N:     Pierre Floury <pierre.floury@gmail.com>
+> +F:     package/trace-cmd/
+> +
+> +N:     Pieter De Gendt <pieter.degendt@gmail.com>
+> +F:     package/libvips/
+> +
+> +N:     Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+> +F:     package/libdvbpsi/
+> +F:     package/mraa/
+> +
+> +N:     Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+> +F:     package/gflags/
+> +F:     package/glog/
+> +F:     package/gssdp/
+> +F:     package/gupnp/
+> +F:     package/gupnp-av/
+> +
+> +N:     Rhys Williams <github@wilberforce.co.nz>
+> +F:     package/lirc-tools/
+> +
+> +N:     Richard Braun <rbraun@>
+> +F:     package/curlftpfs/
+> +
+> +N:     Richard Braun <rbraun@sceen.net>
+> +F:     package/tzdata/
+> +
+> +N:     Rico Bachmann <bachmann@tofwerk.com>
+> +F:     package/subversion/
+> +
+> +N:     Rodrigo Rebello <rprebello@gmail.com>
+> +F:     package/chocolate-doom/
+> +F:     package/irssi/
+> +
+> +N:     Romain Naour <romain.naour@openwide.fr>
+> +F:     package/bullet/
+> +F:     package/efl/
+> +F:     package/iqvlinux/
+> +F:     package/liblinear/
+> +F:     package/mcelog/
+> +F:     package/openpowerlink/
+> +F:     package/stress-ng/
+> +F:     package/terminology/
+> +
+> +N:     Ryan Barnett <ryan.barnett@rockwellcollins.com>
+> +F:     package/atftp/
+> +F:     package/miraclecast/
+> +F:     package/python-pyasn/
+> +F:     package/python-pycrypto/
+> +F:     package/python-pysnmp/
+> +F:     package/python-pysnmp-apps/
+> +F:     package/python-pysnmp-mibs/
+> +F:     package/python-tornado/
+> +
+> +N:     Ryan Wilkins <ryan@deadfrog.net>
+> +F:     package/biosdevname/
+> +
+> +N:     R?mi R?rolle <remi.rerolle@gmail.com>
+> +F:     package/libfreeimage/
+> +
+> +N:     Sagaert Johan <sagaert.johan@skynet.be>
+> +F:     package/git/
+> +F:     package/jquery-mobile/
+> +F:     package/qdecoder/
+> +F:     package/qlibc/
+> +
+> +N:     Sam Bobroff <sam.bobroff@au1.ibm.com>
+> +F:     package/librtas/
+> +
+> +N:     Samuel Martin <s.martin49@gmail.com>
+> +F:     package/armadillo/
+> +F:     package/canfestival/
+> +F:     package/clapack/
+> +F:     package/cwiid/
+> +F:     package/flite/
+> +F:     package/nginx/
+> +F:     package/openobex/
+> +F:     package/python-numpy/
+> +F:     package/scrub/
+> +F:     package/urg/
+> +F:     package/ussp-push/
+> +
+> +N:     Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
+> +F:     package/valijson/
+> +
+> +N:     Scott Fan <fancp2007@gmail.com>
+> +F:     package/libssh/
+> +F:     package/x11r7/xdriver_xf86-video-fbturbo/
+> +
+> +N:     Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+> +F:     package/atf/
+> +F:     package/cppunit/
+> +F:     package/kyua/
+> +F:     package/lutok/
+> +F:     package/yaml-cpp/
+> +
+> +N:     Sergio Prado <sergio.prado@e-labworks.com>
+> +F:     package/libgdiplus/
+> +F:     package/mongodb/
+> +F:     package/stella/
+> +F:     package/tunctl/
+> +F:     package/ubus/
+> +
+> +N:     Simon Dawson <spdawson@gmail.com>
+> +F:     boot/at91bootstrap3/
+> +F:     package/cppzmq/
+> +F:     package/czmq/
+> +F:     package/filemq/
+> +F:     package/googlefontdirectory/
+> +F:     package/jansson/
+> +F:     package/jquery-ui/
+> +F:     package/jquery-ui-themes/
+> +F:     package/json-javascript/
+> +F:     package/lcdapi/
+> +F:     package/libfreefare/
+> +F:     package/libjson/
+> +F:     package/libnfc/
+> +F:     package/libnfc/
+> +F:     package/libserial/
+> +F:     package/libsigsegv/
+> +F:     package/macchanger/
+> +F:     package/minidlna/
+> +F:     package/msgpack/
+> +F:     package/nanocom/
+> +F:     package/neard/
+> +F:     package/neardal/
+> +F:     package/owl-linux/
+> +F:     package/python-nfc/
+> +F:     package/rapidjson/
+> +F:     package/sconeserver/
+> +F:     package/sound-theme-borealis/
+> +F:     package/sound-theme-freedesktop/
+> +F:     package/vlc/
+> +F:     package/wvdial/
+> +F:     package/wvstreams/
+> +F:     package/xscreensaver/
+> +F:     package/zmqpp/
+> +F:     package/zyre/
+> +
+> +N:     Spenser Gilliland <spenser@gillilanding.com>
+> +F:     arch/Config.in.microblaze
+> +F:     package/a10disp/
+> +F:     package/glmark2/
+> +F:     package/mesa3d-demos/
+> +F:     package/sunxi-mali/
+> +F:     package/ti-gfx/
+> +
+> +N:     Stefan Fr?berg <stefan.froberg@petroprogram.com>
+> +F:     package/elfutils/
+> +
+> +N:     Stephan Hoffmann <sho@relinux.de>
+> +F:     package/mtdev/
+> +F:     package/mtdev2tuio/
+> +F:     package/qtuio/
+> +
+> +N:     Steve Calfee <stevecalfee@gmail.com>
+> +F:     package/python-pymysql/
+> +F:     package/python-pyratemp/
+> +
+> +N:     Steve James <ste@junkomatic.net>
+> +F:     package/leveldb/
+> +F:     package/libcli/
+> +
+> +N:     Steve Kenton <skenton@ou.edu>
+> +F:     package/dvdauthor/
+> +F:     package/dvdrw-tools/
+> +F:     package/memtest86/
+> +F:     package/mjpegtools/
+> +F:     package/tovid/
+> +F:     package/xorriso/
+> +
+> +N:     Steve Thomas <scjthm@live.com>
+> +F:     package/cloog/
+> +F:     package/isl/
+> +
+> +N:     Steven Noonan <steven@uplinklabs.net>
+> +F:     package/hwloc/
+> +F:     package/powertop/
+> +
+> +N:     Sven Neumann <neumann@teufel.de>
+> +F:     package/gstreamer1/gst1-libav/
+> +
+> +N:     Sven Neumann <s.neumann@raumfeld.com>
+> +F:     package/glib-networking/
+> +F:     package/libmms/
+> +F:     package/orc/
+> +
+> +N:     S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+> +F:     package/mmc-utils/
+> +F:     package/python-flask-jsonrpc/
+> +F:     package/python-flask-login/
+> +
+> +N:     Thierry Bultel <tbultel@free.fr>
+> +F:     package/mpd-mpc/
+> +
+> +N:     Thijs Vermeir <thijsvermeir@gmail.com>
+> +F:     package/ranger/
+> +F:     package/x265/
+> +
+> +N:     Thomas Claveirole <thomas.claveirole@green-communications.fr>
+> +F:     package/fcgiwrap/
+> +
+> +N:     Thomas Davis <sunsetbrew@sunsetbrew.com>
+> +F:     package/civetweb/
+> +
+> +N:     Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+> +F:     package/libpfm4/
+> +F:     package/mkpasswd/
+> +
+> +N:     Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +F:     arch/Config.in.arm
+> +F:     boot/boot-wrapper-aarch64/
+> +F:     boot/grub2/
+> +F:     boot/gummiboot/
+> +F:     package/android-tools/
+> +F:     package/b43-firmware/
+> +F:     package/b43-fwcutter/
+> +F:     package/c-periphery/
+> +F:     package/cdrkit/
+> +F:     package/cifs-utils/
+> +F:     package/cloop/
+> +F:     package/cmake/
+> +F:     package/cramfs/
+> +F:     package/dmidecode/
+> +F:     package/enlightenment/
+> +F:     package/flashrom/
+> +F:     package/gcc/gcc-final/
+> +F:     package/gcc/gcc-initial/
+> +F:     package/genext2fs/
+> +F:     package/genromfs/
+> +F:     package/getent/
+> +F:     package/gnu-efi/
+> +F:     package/heirloom-mailx/
+> +F:     package/hiawatha/
+> +F:     package/igh-ethercat/
+> +F:     package/intltool/
+> +F:     package/libcap/
+> +F:     package/libevas-generic-loaders/
+> +F:     package/libffi/
+> +F:     package/libsha1/
+> +F:     package/libtirpc/
+> +F:     package/liburcu/
+> +F:     package/libxkbcommon/
+> +F:     package/libxml-parser-perl/
+> +F:     package/localedef/
+> +F:     package/log4cxx/
+> +F:     package/lttng-babeltrace/
+> +F:     package/lttng-libust/
+> +F:     package/lttng-modules/
+> +F:     package/lttng-tools/
+> +F:     package/monit/
+> +F:     package/mpdecimal/
+> +F:     package/msmtp/
+> +F:     package/musl/
+> +F:     package/ne10/
+> +F:     package/pkg-python.mk
+> +F:     package/pkg-autotools.mk
+> +F:     package/pkg-generic.mk
+> +F:     package/polarssl/
+> +F:     package/python/
+> +F:     package/python3/
+> +F:     package/python-mad/
+> +F:     package/python-serial/
+> +F:     package/qextserialport/
+> +F:     package/rpcbind/
+> +F:     package/rt-tests/
+> +F:     package/scons/
+> +F:     package/squashfs/
+> +F:     package/wayland/
+> +F:     package/weston/
+> +F:     toolchain/
+> +
+> +N:     Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+> +F:     package/aer-inject/
+> +
+> +N:     Tom Sparks <tom_a_sparks@yahoo.com.au>
+> +F:     package/ibrcommon/
+> +F:     package/ibrdtn/
+> +F:     package/ibrdtn-tools/
+> +F:     package/ibrdtnd/
+> +
+> +N:     Tzu-Jung Lee <roylee17@gmail.com>
+> +F:     package/dropwatch/
+> +F:     package/tstools/
+> +
+> +N:     Vanya Sergeev <vsergeev@gmail.com>
+> +F:     package/lua-periphery/
+> +
+> +N:     Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> +F:     arch/Config.in.mips
+> +F:     package/gnupg2/
+> +F:     package/hidapi/
+> +F:     package/libfm/
+> +F:     package/libfm-extra/
+> +F:     package/libksba/
+> +F:     package/menu-cache/
+> +F:     package/openblas/
+> +F:     package/openmpi/
+> +F:     package/pinentry/
+> +
+> +N:     Vincent Stehl? <vincent.stehle@intel.com>
+> +F:     package/i7z/
+> +F:     package/msr-tools/
+> +
+> +N:     Vinicius Tinti <viniciustinti@gmail.com>
+> +F:     package/python-thrift/
+> +
+> +N:     Volkov Viacheslav <sv99@inbox.ru>
+> +F:     package/rfkill/
+> +F:     package/v4l2grab/
+> +F:     package/zbar/
+> +
+> +N:     Waldemar Brodkorb <wbx@openadk.org>
+> +F:     arch/Config.in.bfin
+> +F:     arch/Config.in.sparc
+> +F:     arch/Config.in.m68k
+> +
+> +N:     Waldemar Rymarkiewicz <waldemar.rymarkiewicz@tieto.com>
+> +F:     package/ccid/
+> +F:     package/pcsc-lite/
+> +
+> +N:     Will Newton <will.newton@gmail.com>
+> +F:     package/erlang/
+> +
+> +N:     Will Newton <will.newton@imgtec.com>
+> +F:     package/numactl/
+> +
+> +N:     Will Wagner <will_wagner@carallon.com>
+> +F:     package/yaffs2utils/
+> +
+> +N:     Wojciech M. Zabolotny <wzab01@gmail.com>
+> +F:     package/avrdude/
+> +F:     package/jack2/
+> +F:     package/python-msgpack/
+> +F:     package/python-pyusb/
+> +
+> +N:     Wojciech Nizi?ski <niziak@spox.org>
+> +F:     package/fwup/
+> +
+> +N:     Yann E. MORIN <yann.morin.1998@free.fr>
+> +F:     package/cegui06/
+> +F:     package/celt051/
+> +F:     package/dtc/
+> +F:     package/dtv-scan-tables/
+> +F:     package/dvb-apps/
+> +F:     package/keyutils/
+> +F:     package/libbsd/
+> +F:     package/libedit/
+> +F:     package/libinput/
+> +F:     package/libiscsi/
+> +F:     package/libseccomp/
+> +F:     package/mesa3d-headers/
+> +F:     package/mke2img/
+> +F:     package/nut/
+> +F:     package/omxplayer/
+> +F:     package/python-pyparsing/
+> +F:     package/pkg-download.mk
+> +F:     package/slirp/
+> +F:     package/snappy/
+> +F:     package/spice/
+> +F:     package/spice-protocol/
+> +F:     package/tmux/
+> +F:     package/tvheadend/
+> +F:     package/usbredir/
+> +F:     package/vde2/
+> +F:     package/w_scan/
+> +F:     support/download/
+> +
+> +N:     Yegor Yefremov <yegorslists@googlemail.com>
+> +F:     package/bootstrap/
+> +F:     package/cannelloni/
+> +F:     package/circus/
+> +F:     package/jquery-datetimepicker/
+> +F:     package/jquery-sidebar/
+> +F:     package/libmbim/
+> +F:     package/libndp/
+> +F:     package/libnftnl/
+> +F:     package/libsoc/
+> +F:     package/libsocketcan/
+> +F:     package/libubox/
+> +F:     package/libuci/
+> +F:     package/modem-manager/
+> +F:     package/python*
+> +F:     package/qt5/qt5serialbus/
+> +F:     package/x11r7/xapp_xconsole/
+> +F:     package/zlog/
+> +
+> +N:     Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+> +F:     package/crudini/
+> +F:     package/python-configobj/
+> +F:     package/python-iniparse/
+> +F:     package/qjson/
+> +F:     package/quazip/
+> +F:     package/tinc/
 > --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> 2.7.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
