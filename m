@@ -1,49 +1,56 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 24 Aug 2016 11:06:01 +0200
-Subject: [Buildroot] Future of linphone package,
- was: Re: [PATCH/next 2/4] DEVELOPERS: add initial list of Buildroot
- developers
-In-Reply-To: <87tweahar8.fsf@dell.be.48ers.dk>
-References: <1471902678-18693-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471902678-18693-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <670f6e5c-e513-6b3f-ed82-4da1ddc3d141@lucaceresoli.net>
- <20160823134138.6f9818ef@free-electrons.com>
- <f8fu8dx2gc.ln2@ID-313208.user.individual.net>
- <20160823215041.358d2e66@free-electrons.com>
- <87h9abjjeq.fsf@dell.be.48ers.dk>
- <408dea4c-03d3-9f30-9235-5ebcc721f58b@mind.be>
- <87tweahar8.fsf@dell.be.48ers.dk>
-Message-ID: <8f200388-2ebd-b0e9-6df1-d0891d597e7e@lucaceresoli.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Aug 2016 11:34:17 +0200
+Subject: [Buildroot] compiler plugins & compiling the kernel
+In-Reply-To: <84805825-f7d4-cfef-d83a-071a5a761ced@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 24 Aug 2016 02:46:22 +0200")
+References: <CAK7rcp_m+9YC6gJ0xyarD217F4wyjwjg9QSdBLzVgPJ9QLrm7w@mail.gmail.com>
+ <20160820200119.4ec5848b@free-electrons.com>
+ <CAK7rcp9SVrJ4HA3wH6U9P-Tv8EzJdBKUtZa=EVwihZTR5TCdtQ@mail.gmail.com>
+ <CAK7rcp9ZEKb7dYNv23E7NF52+u0vL67f3q1XozKK3jRy2dq=pA@mail.gmail.com>
+ <84805825-f7d4-cfef-d83a-071a5a761ced@mind.be>
+Message-ID: <87lgzmh5nq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On 24/08/2016 09:44, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
-> Hi,
-> 
->  >> > What do you think?
->  >> 
->  >> If nobody cares about it, yes - Then I think we should deprecate it.
-> 
->  >  I say, leave it alone unless there are some annoying autobuild failures. There
->  > are hundreds of packages that nobody cares about, are we going to deprecate them
->  > all?
-> 
-> Yeah, as long as it is not causing issues I'm fine with keeping it.
+Hi,
 
-Apparently nobody is interested in keeping this package up to date.
-Still it's not causing relevant build issues so at the moment, so I
-agree with Arnout: let's keep it where it is.
+ >>>>> linux-headers 3.14.51 Configuring...
+ >> ...
+ >> make[2]: Entering directory ... build/linux-headers-3.14.51
+ >> Makefile:652 *** Your gcc installation does not support plugins. If
+ >> the necessary headers for plugin support are missing, they should be
+ >> installed. On Debian, apt-get install gcc-<ver>-plugin-dev. If you
+ >> choose to ignore this error and...
 
-Thomas, you can keep linphone under my name in the DEVELOPERS file, and
-I will look at build failures. If the effort to fix them will be too
-high I'll suggest to deprecate it.
+ >  Ah, this is annoying...
+
+ >  When installing linux-headers, we don't pass the cross-compilation arguments,
+ > because the cross-compiler doesn't exist yet at that point. So the installation
+ > will use the host compiler instead for that check. Which is of course wrong.
+
+ >  Well, actually it's a bug in gr-security, because this check shouldn't be done
+ > for install_headers (gcc isn't even called).
+
+Yes, to me this is really a bug in gr-security, and not much we can do
+about it.
+
+ >>>> You're not correct. Support for plugins should be added to the
+ >>>> cross-compiler if you need plugin support to build your kernel.
+ >>>> 
+ >>> 
+ >>> That doesn't appear to be an option in buildroot.
+
+ >  Well, we pass --enable-plugins when BR2_GCC_ENABLE_LTO is set. We don't pass
+ > --disable-plugins so it really depends on the gcc defaults. But then, we don't
+ > install the plugin development headers to HOST_DIR, so it will probably be
+ > difficult to actually compile a plugin.
+
+But patches are welcome!
 
 -- 
-Luca
+Bye, Peter Korsgaard
