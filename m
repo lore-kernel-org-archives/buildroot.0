@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Aug 2016 16:22:59 +0200
-Subject: [Buildroot] [PATCHv2/next 4/4] docs/manual: add new section
- about the DEVELOPERS file and get-developer
-In-Reply-To: <189a31d9-db1e-032c-8e79-d047b0ebed18@mind.be>
-References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471956466-22338-5-git-send-email-thomas.petazzoni@free-electrons.com>
- <189a31d9-db1e-032c-8e79-d047b0ebed18@mind.be>
-Message-ID: <20160824162259.15fd9915@free-electrons.com>
+Date: Wed, 24 Aug 2016 16:36:56 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain/wrapper: display options
+ leading to a paranoid failure
+In-Reply-To: <1472048370-20408-1-git-send-email-yann.morin.1998@free.fr>
+References: <1472048370-20408-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160824163656.5d08599f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,39 +13,75 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 24 Aug 2016 02:21:44 +0200, Arnout Vandecappelle wrote:
-
->  As I hinted in my reply to patch 2, I would also add this message to the end of
-> the "The formatting of a patch" section in contribute.txt. Something like:
+On Wed, 24 Aug 2016 16:19:29 +0200, Yann E. MORIN wrote:
+> Current, we only display the path that causes the paranoid failure. This
+> is sufficient, as we can fail only for -I and -L options, and it is thus
+> easy to infer from the path, which option is the culprit.
 > 
-> If you are interested in getting notified of build failures and of further
-> changes in the packages you modified, please add yourself to the DEVELOPERS
-> file. This should be done in a separate patch of the series. See
-> xref:DEVELOPERS[the DEVELOPERS file] for more information.
+> However, we're soon to add a new test for the -isystem option, and then
+> when a failure occurs, we would not know whether it was because of -I or
+> -isystem. Being able to differentiate both can be hugely useful to
+> track down the root cause for the unsafe path.
 > 
-> (and add [[DEVELOPERS]] to the developers section).
+> Add two new arguments to the check_unsafe_path() function: one with the
+> current-or-previous argument, one to specify whether it has the path in
+> it or not. Print that in the error message, instead of just the path.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
-Thanks for the suggestion, added.
+Seems like a good feature addition.
 
-While adding this, I noted that the references like:
+> -static void check_unsafe_path(const char *path, int paranoid)
+> +static void check_unsafe_path(const char *arg,
+> +			      const char *path,
+> +			      int paranoid,
+> +			      int arg_has_path)
+>  {
+> +	va_list ap;
+> +	int once;
 
-   xref:label[some description]
+Those variables are not needed I believe.
 
-are not rendered just has "some description" in the HTML, but as:
+>  	char **c;
+>  	static char *unsafe_paths[] = {
+>  		"/lib", "/usr/include", "/usr/lib", "/usr/local/include", "/usr/local/lib", NULL,
+> @@ -89,9 +94,15 @@ static void check_unsafe_path(const char *path, int paranoid)
+>  
+>  	for (c = unsafe_paths; *c != NULL; c++) {
+>  		if (!strncmp(path, *c, strlen(*c))) {
+> -			fprintf(stderr, "%s: %s: unsafe header/library path used in cross-compilation: '%s'\n",
+> +			fprintf(stderr,
+> +				"%s: %s: "
+> +				"unsafe header/library path used in cross-compilation:"
+> +				" '%s%s%s'\n",
 
-  "some description <the title of the section pointed to>"
+I'm not a big fan of splitting the format string. What about inverting
+the if() test in order to reduce the indentation level of the error
+case?
 
-For example, for:
+	for (c = unsafe_paths; *c != NULL; c++) {
+		if (strncmp(path, *c, strlen(*c)))
+			continue;
+		fprintf(stderr,
+			"%s: %s: unsafe header/library path used in cross-compilation: '%s%s%s'\n",
+			....
+	}
+			
+>  				program_invocation_short_name,
+> -				paranoid ? "ERROR" : "WARNING", path);
+> +				paranoid ? "ERROR" : "WARNING",
+> +				arg,
+> +				arg_has_path ? "" : "' '",
+> +				arg_has_path ? "" : path);
 
-  Before reporting any issue, please check in xref:community-resources[the mailing list archive] whether someone has
+I find this arg_has_path thing a bit tricky: in some cases "arg" will
+be just the argument, in some cases it is followed by the path. But I
+couldn't find a simple and nice alternate solution, so it's probably
+good as-is.
 
-you get:
-
-  Before reporting any issue, please check in the mailing list archive Chapter 5, Community resources whether someone has
-
-which is not very pretty.
-
-Maybe someone with AsciiDoc knowledge can look into this?
+Thanks!
 
 Thomas
 -- 
