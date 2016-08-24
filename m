@@ -1,87 +1,113 @@
-From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-Date: Wed, 24 Aug 2016 10:32:38 -0300 (BRT)
-Subject: [Buildroot] [PATCH 2/2 v2] support/download: be more
- conservative	about git special refs
-In-Reply-To: <de318be75bdcad45f90ddb81d86911b72951e607.1470004037.git.yann.morin.1998@free.fr>
-References: <cover.1470004037.git.yann.morin.1998@free.fr>
- <de318be75bdcad45f90ddb81d86911b72951e607.1470004037.git.yann.morin.1998@free.fr>
-Message-ID: <1396149584.763951.1472045558046.JavaMail.zimbra@datacom.ind.br>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Wed, 24 Aug 2016 09:35:27 -0400
+Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
+ Buildroot developers
+In-Reply-To: <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAKmqyKOYZuW7WeHmP7iatLPJzEudzEnnxnDJYi5oWt=uDTQQkA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
-
------ Original Message -----
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> To: buildroot at buildroot.org
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Sent: Sunday, July 31, 2016 7:35:56 PM
-> Subject: [Buildroot] [PATCH 2/2 v2] support/download: be more conservative
->	about git special refs
-> The git special refs (e.g. Github PRs, Gerrit changes...) are not
-> retrieved on non-bare clones; we need to fetch them manually.
-> 
-> However, we need not fetch any cset that is not such a special ref; it
-> only generates warning messages that are *really* confusing.
-> 
-> Instead, we now check if we have the cset we need, and only when it is
-> missing do we explicitly request it.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+2016-08-23 8:47 GMT-04:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> This is an initial list of Buildroot developers. It has been created
+> semi-automatically by parsing the Git history, and finding the authors
+> of commits with a title like "<foo>: new package". Some additional
+> manual tweaking has been done (merging multiple entries corresponding to
+> the same person, adding some more entries, etc.).
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
-> support/download/git | 8 ++++++--
-> 1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/support/download/git b/support/download/git
-> index e3be2e1..1c08c17 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -66,8 +66,12 @@ pushd "${basename}" >/dev/null
-> # below, if there is an issue anyway. Since most of the cset we're gonna
-> # have to clone are not such special refs, consign the output to oblivion
-> # so as not to alarm unsuspecting users, but still trace it as a warning.
-> -if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
-> -    printf "Could not fetch special ref '%s'; assuming it is not special.\n"
-> "${cset}"
+>  DEVELOPERS | 1542 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 1542 insertions(+)
+>  create mode 100644 DEVELOPERS
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> new file mode 100644
+> index 0000000..3742a73
+> --- /dev/null
+> +++ b/DEVELOPERS
+> @@ -0,0 +1,1542 @@
+> +# Syntax:
 > +#
-> +# Only try to fetch such a special ref if we do not already have the
-> +# cset we need locally.
+> +# N:   Firstname Lastname <email>
+> +# F:   file pattern or directory
+> +# F:   file pattern or directory
 > +#
-> +if ! _git rev-parse -q --verify "'${cset}^{commit}'" >/dev/null; then
-> +    _git fetch origin "'${cset}:${cset}'"
+> +# The "F" entries can be:
+> +#
+> +# - A directory, in which case all patches touching any file in this
+> +#   directory or its subdirectories will be CC'ed to the developer.
+> +# - A pattern, in which case the pattern will be expanded, and then
+> +#   all files/directories (and their subdirectories) will be
+> +#   considered when matching against a patch
+> +#
+> +# Notes:
+> +#
+> +# - When a developer adds an "arch/Config.in.<arch>" file to its list
+> +#   of files, he is considered a developer of this architecture. He
+> +#   will receive e-mail notifications about build failures occuring on
+> +#   this architecture. Not more than one e-mail per day is sent.
+> +# - When a developer adds a directory that contains one or several
+> +#   packages, this developer will be notified when build failures
+> +#   occur. Not more than one e-mail per day is sent.
+> +# - When a developer adds an "package/pkg-<infra>.mk" file to its list
+> +#   of files, he is considered interested by this package
+> +#   infrastructure, and will be CC'ed on all patches that add or
+> +#   modify packages that use this infrastructure.
+> +
+> +N:     Abhishek Singh <abhishek.singh@imgtec.com>
+> +F:     package/cxxtest/
+> +
+> +N:     Adam Duskett <aduskett@gmail.com>
+> +F:     package/nginx-naxsi/
+> +
+> +N:     Alex Suykov <alex.suykov@gmail.com>
+> +F:     package/vboot-utils/
+> +
+> +N:     Alexander Clouter <alex+buildroot@digriz.org.uk>
+> +F:     package/odhcp6c/
+> +
+> +N:     Alexander Dahl <post@lespocky.de>
+> +F:     package/fastd/
+> +F:     package/libuecc/
+> +F:     package/putty/
+> +
+> +N:     Alexander Lukichev <alexander.lukichev@espotel.com>
+> +F:     package/openpgm/
+> +
+> +N:     Alexander Varnin <fenixk19@mail.ru>
+> +F:     package/liblog4c-localtime/
+> +
+> +N:     Alexandre Belloni <alexandre.belloni@free-electrons.com>
+> +F:     package/tz/
+> +
+> +N:     Alistair Francis <alistair.francis@xilinx.com>
+> +F:     package/xen/
+> +
 
-A question more related to 13c89c2f than to this patch, but anyway...
-13c89c2f support/download/git: do not use bare clones
+Can I please have a second email added?
 
-When cset is a special ref, e.g. refs/changes/80/22580/2, this 'git fetch' works
-fine.
-But when cset is a sha1 of a special ref, since 13c89c2f the checkout fails
-AFAIK because git server using default configuration does not upload
-unreachable sha1.
+Alistair Francis <alistair23@gmail.com>
 
-Maybe we could translate the sha1 to a named ref when we assume we are about to
-ask for a special ref. Something like this...
+I need to keep my company email here, but it is much easier to do list
+work from my gmail. If not what's here now is fine.
 
-if ! _git rev-parse -q --verify "'${cset}^{commit}'" >/dev/null; then
-    named_ref=$(_git ls-remote "'${repo}'" 2>&1 | grep "^${cset}" | cut -f2)
-    if [ -n "$named_ref" ]; then
-        _git fetch origin "'${named_ref}:${named_ref}'"
-    else
-        _git fetch origin "'${cset}:${cset}'"
-    fi
-fi
+Thanks,
 
-What do you think?
+Alistair
 
-> fi
-> 
-> # Checkout the required changeset, so that we can update the required
+[...]
+
 > --
 > 2.7.4
-
-Regards,
-Ricardo Martincoski
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
