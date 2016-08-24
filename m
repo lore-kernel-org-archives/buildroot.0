@@ -1,43 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 24 Aug 2016 09:23:50 -0300
-Subject: [Buildroot] [PATCH] memcached: bump to version 1.4.31
-Message-ID: <1472041430-19890-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 24 Aug 2016 14:46:36 +0200
+Subject: [Buildroot] [PATCH v5 6/7] package/amd-catalyst: Add support
+ AMD CCCLE
+In-Reply-To: <57BD4F43.1070200@free-electrons.com>
+References: <20160823121950.16826-1-romain.perier@free-electrons.com>
+ <20160823121950.16826-7-romain.perier@free-electrons.com>
+ <20160823215910.0ae50be6@free-electrons.com>
+ <57BD4F43.1070200@free-electrons.com>
+Message-ID: <20160824144636.22481efa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hello,
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index b1353b2..918a36b 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,4 +1,4 @@
--# From http://www.memcached.org/files/memcached-1.4.30.tar.gz.sha1
--sha1	bb8644a4110932e331d1539f0435bc6a0e558827	memcached-1.4.30.tar.gz
-+# From http://www.memcached.org/files/memcached-1.4.31.tar.gz.sha1
-+sha1	3ea34f5bc5c5aacb76cfc07f4ee5847f33526cb6	memcached-1.4.31.tar.gz
- # Calculated based on the hash above
--sha256	e0bea597c9082557f3357f63db08c3d5121ccc8502f300a48d4cb84d22e8be5f	memcached-1.4.30.tar.gz
-+sha256	77ce5f820bafe94c33bf7bd86268d9bcdb3b76f68128d795b106db53d528707f	memcached-1.4.31.tar.gz
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index b40ca84..4099428 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMCACHED_VERSION = 1.4.30
-+MEMCACHED_VERSION = 1.4.31
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+On Wed, 24 Aug 2016 09:39:47 +0200, Romain Perier wrote:
+
+> I have just checked, it looks good.
+
+There was actually an issue: a circular dependency in the Config.in
+options. I've fixed that up in
+https://git.buildroot.org/buildroot/commit/?h=next&id=652d674e066e9c1b8eec9057778d2c9a34f8261d.
+
+Thanks!
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
