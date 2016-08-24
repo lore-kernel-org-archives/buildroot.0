@@ -1,47 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Aug 2016 19:08:03 +0200
-Subject: [Buildroot] [git commit] openipmi: bump to version 2.0.22
-Message-ID: <20160902142940.1420F7FEE6@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Aug 2016 15:47:00 +0200
+Subject: [Buildroot] [git commit] memcached: bump to version 1.4.31
+Message-ID: <20160902142939.E3D307FEE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9cc30847badb96bc56645e8abdb14f6f2ec7304
+commit: https://git.buildroot.net/buildroot/commit/?id=f04e0136d1a9fa77e0085398c77e316237dca5ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openipmi/openipmi.hash | 3 ++-
- package/openipmi/openipmi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/memcached/memcached.hash | 6 +++---
+ package/memcached/memcached.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openipmi/openipmi.hash b/package/openipmi/openipmi.hash
-index e6fafe4..30e3763 100644
---- a/package/openipmi/openipmi.hash
-+++ b/package/openipmi/openipmi.hash
-@@ -1,4 +1,5 @@
- # From http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
--sha1 54f63ab7fe09f6a4b0b718601fe9c61014aa220b OpenIPMI-2.0.21.tar.gz
-+sha1 826081e7ed0ad430de9b8fdb75a9eaa10c99b660 OpenIPMI-2.0.22.tar.gz
- # Locally computed
-+sha256	4988900043c35fcfa9b2bf275d6593904f6429221befb770ba6ecb5502108e55	OpenIPMI-2.0.22.tar.gz
- sha256	0eafaa502ccf752899c5089159574081067d0c4ac53ea0ace33a5087f33ea32a	0001-ui-use-standard-uint32_t.patch
-diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
-index ea46e19..9faa7c6 100644
---- a/package/openipmi/openipmi.mk
-+++ b/package/openipmi/openipmi.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index b1353b2..918a36b 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,4 +1,4 @@
+-# From http://www.memcached.org/files/memcached-1.4.30.tar.gz.sha1
+-sha1	bb8644a4110932e331d1539f0435bc6a0e558827	memcached-1.4.30.tar.gz
++# From http://www.memcached.org/files/memcached-1.4.31.tar.gz.sha1
++sha1	3ea34f5bc5c5aacb76cfc07f4ee5847f33526cb6	memcached-1.4.31.tar.gz
+ # Calculated based on the hash above
+-sha256	e0bea597c9082557f3357f63db08c3d5121ccc8502f300a48d4cb84d22e8be5f	memcached-1.4.30.tar.gz
++sha256	77ce5f820bafe94c33bf7bd86268d9bcdb3b76f68128d795b106db53d528707f	memcached-1.4.31.tar.gz
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index b40ca84..4099428 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENIPMI_VERSION = 2.0.21
-+OPENIPMI_VERSION = 2.0.22
- OPENIPMI_SITE = http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library
--OPENIPMI_SOURCE = OpenIPMI-2.0.21.tar.gz
-+OPENIPMI_SOURCE = OpenIPMI-$(OPENIPMI_VERSION).tar.gz
- OPENIPMI_PATCH = \
- 	http://sourceforge.net/p/openipmi/patches/26/attachment/0001-ui-use-standard-uint32_t.patch
- OPENIPMI_LICENSE = LGPLv2+, GPLv2+, BSD-3c
+-MEMCACHED_VERSION = 1.4.30
++MEMCACHED_VERSION = 1.4.31
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
