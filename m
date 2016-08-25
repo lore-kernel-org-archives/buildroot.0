@@ -1,56 +1,102 @@
-From: Matthew Weber <matt@thewebers.ws>
-Date: Thu, 25 Aug 2016 09:50:06 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-08-24
-In-Reply-To: <20160825163553.643b5989@free-electrons.com>
-References: <20160825063045.2728F101CC4@stock.ovh.net>
- <CAFt09wM5VBzvUezTaOq1OH_2hu9RgDz_mLi5ywH2rJPrY7OnbQ@mail.gmail.com>
- <20160825163553.643b5989@free-electrons.com>
-Message-ID: <CAFt09wNZuF9TcK903SVOFL-gbqXfc4gtEOWJNkzfsQD+pPTSbw@mail.gmail.com>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Thu, 25 Aug 2016 22:31:06 +0530
+Subject: [Buildroot] [PATCH 1/1] domoticz: fix build with uClibc
+Message-ID: <1472144466-17003-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+domoticz.cpp currently assumes that on GNU/Linux systems header
+<execinfo.h> is available. But that is not true. Since it provided by
+C library and uClibc can be built without backtrace support. And in
+such cases we get following build error.
 
-On Thu, Aug 25, 2016 at 9:35 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu, 25 Aug 2016 09:18:02 -0500, Matthew Weber wrote:
->
->> > iputils-55828d1fef3fed7f07a... | 2
->>
->> So libgpg-error needs a dependency on gettext so that the libintl
->> exists when it is statically linking.  I noticed gettext has a
->> "depends on BR2_USE_WCHAR" which I'd need to pull up into libgpg-error
->> and the packages which use libgpg-error.....  Any thoughts on if
->> that's the right way to resolve this?  Wasn't sure if a WCHAR
->> limitation on libgpg-error is the right way to go as there maybe
->> packages that could use libgpg-error without libintl dependencies when
->> WCHAR isn't set....
->
-> Arnout has already sent patches for this earlier today, and we already
-> had a lengthy discussion on this topic. See:
->
->   http://lists.busybox.net/pipermail/buildroot/2016-August/170675.html
->   http://lists.busybox.net/pipermail/buildroot/2016-August/170674.html
->
+  domoticz-3.4834/main/domoticz.cpp:48:22: fatal error: execinfo.h: No such file or directory
+   #include <execinfo.h>
+                        ^
+  compilation terminated.
 
-Thanks, I will give them a test.
+This commit adds patch for detecting presence of <execinfo.h>
+and guards code accordingly.
 
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+Fixes:
 
+  http://autobuild.buildroot.net/results/393/393f839e160b51ca12ac36058718ad2f0c1b50a6/
 
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+ ...per-check-for-detecting-header-execinfo.h.patch | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
 
+diff --git a/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch b/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
+new file mode 100644
+index 0000000..2e07abe
+--- /dev/null
++++ b/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
+@@ -0,0 +1,61 @@
++From 5409696dfcbb05d6e4e67e74c97487b1987639e1 Mon Sep 17 00:00:00 2001
++From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++Date: Thu, 25 Aug 2016 17:23:38 +0530
++Subject: [PATCH 1/1] add proper check for detecting header <execinfo.h>
++
++domoticz.cpp currently assumes that on GNU/Linux systems header
++<execinfo.h> is available. But that is not true. Since it provided by
++C library and uClibc can be built without backtrace support. And in
++such cases we get following build error.
++
++  domoticz-3.4834/main/domoticz.cpp:48:22: fatal error: execinfo.h: No such file or directory
++   #include <execinfo.h>
++                        ^
++  compilation terminated.
++
++Instead of depending on __gnu_linux__, add check for detecting
++presence of <execinfo.h> and guard code for dumpstack accordingly.
++
++This build failure is detected by Buildroot autobuilder.
++http://autobuild.buildroot.net/results/393/393f839e160b51ca12ac36058718ad2f0c1b50a6/
++
++Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++---
++ CMakeLists.txt    | 7 +++++++
++ main/domoticz.cpp | 2 +-
++ 2 files changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index d3113f4..ef32f7b 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -61,6 +61,13 @@ SET(EXECUTABLE_OUTPUT_PATH "" CACHE INTERNAL
++   "Where to put the executables for Domoticz"
++   )
++ 
+++INCLUDE(CheckIncludeFiles)
+++CHECK_INCLUDE_FILES (execinfo.h HAVE_EXECINFO_H)
+++
+++IF(HAVE_EXECINFO_H)
+++  ADD_DEFINITIONS(-DHAVE_EXECINFO_H)
+++ENDIF(HAVE_EXECINFO_H)
+++
++ #set(CMAKE_EXE_LINKER_FLAGS "-static")
++ 
++ # Macro for setting up precompiled headers. Usage:
++diff --git a/main/domoticz.cpp b/main/domoticz.cpp
++index 69d2ef6..c52e5ac 100644
++--- a/main/domoticz.cpp
+++++ b/main/domoticz.cpp
++@@ -44,7 +44,7 @@
++ 	#include <string.h> 
++ #endif
++ 
++-#ifdef __gnu_linux__
+++#ifdef HAVE_EXECINFO_H
++ #include <execinfo.h>
++ static void dumpstack(void) {
++ 	// Notes :
++-- 
++2.6.2
++
 -- 
-Thanks,
-Matt
+2.6.2
