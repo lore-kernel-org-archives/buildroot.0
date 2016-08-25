@@ -1,46 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Aug 2016 19:19:46 +0200
-Subject: [Buildroot] [PATCH] core: move reproducible option to advanced
-	sub-menu
-Message-ID: <1472145586-23544-1-git-send-email-yann.morin.1998@free.fr>
+Date: Thu, 25 Aug 2016 20:45:51 +0200
+Subject: [Buildroot] [PATCH] package/uboot-tols: fix dependency of comment
+	about FIT support
+Message-ID: <1472150751-29450-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The reproducible build is only in its infancy; it is far from being
-complete.
+When commit 031130a4 added the dependency on sharedlibs for FIT support
+in uboot-tools, the dependency of the comment was added exactly as the
+dependency of the symbol.
 
-As such, move it to the "advanced" build sub-menu, where it belong for
-now...
+That means the comment is shown when FIT support is possible, and hidden
+when it is not, while we want it the other way around...
+
+Fix the dependency.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/uboot-tools/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in b/Config.in
-index 741a7ce..ed92c56 100644
---- a/Config.in
-+++ b/Config.in
-@@ -726,8 +726,6 @@ config BR2_COMPILER_PARANOID_UNSAFE_PATH
- 	  toolchain (through the toolchain wrapper and binutils patches)
- 	  and external toolchain backends (through the toolchain wrapper).
+diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
+index df61fda..f55614b 100644
+--- a/package/uboot-tools/Config.in
++++ b/package/uboot-tools/Config.in
+@@ -22,7 +22,7 @@ config BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
+ 	  pass the address of the blob to the "bootm" command.
  
--endmenu
--
- config BR2_REPRODUCIBLE
- 	bool "Make the build reproducible (experimental)"
- 	help
-@@ -741,6 +739,8 @@ config BR2_REPRODUCIBLE
+ comment "u-boot tools FIT support needs a toolchain w/ dynamic library"
+-	depends on !BR2_STATIC_LIBS
++	depends on BR2_STATIC_LIBS
  
- endmenu
+ if BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
  
-+endmenu
-+
- source "toolchain/Config.in"
- 
- source "system/Config.in"
 -- 
 2.7.4
