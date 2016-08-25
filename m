@@ -1,102 +1,46 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Thu, 25 Aug 2016 22:31:06 +0530
-Subject: [Buildroot] [PATCH 1/1] domoticz: fix build with uClibc
-Message-ID: <1472144466-17003-1-git-send-email-rahul.bedarkar@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 25 Aug 2016 19:19:46 +0200
+Subject: [Buildroot] [PATCH] core: move reproducible option to advanced
+	sub-menu
+Message-ID: <1472145586-23544-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-domoticz.cpp currently assumes that on GNU/Linux systems header
-<execinfo.h> is available. But that is not true. Since it provided by
-C library and uClibc can be built without backtrace support. And in
-such cases we get following build error.
+The reproducible build is only in its infancy; it is far from being
+complete.
 
-  domoticz-3.4834/main/domoticz.cpp:48:22: fatal error: execinfo.h: No such file or directory
-   #include <execinfo.h>
-                        ^
-  compilation terminated.
+As such, move it to the "advanced" build sub-menu, where it belong for
+now...
 
-This commit adds patch for detecting presence of <execinfo.h>
-and guards code accordingly.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/393/393f839e160b51ca12ac36058718ad2f0c1b50a6/
-
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- ...per-check-for-detecting-header-execinfo.h.patch | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
+ Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch b/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
-new file mode 100644
-index 0000000..2e07abe
---- /dev/null
-+++ b/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
-@@ -0,0 +1,61 @@
-+From 5409696dfcbb05d6e4e67e74c97487b1987639e1 Mon Sep 17 00:00:00 2001
-+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+Date: Thu, 25 Aug 2016 17:23:38 +0530
-+Subject: [PATCH 1/1] add proper check for detecting header <execinfo.h>
+diff --git a/Config.in b/Config.in
+index 741a7ce..ed92c56 100644
+--- a/Config.in
++++ b/Config.in
+@@ -726,8 +726,6 @@ config BR2_COMPILER_PARANOID_UNSAFE_PATH
+ 	  toolchain (through the toolchain wrapper and binutils patches)
+ 	  and external toolchain backends (through the toolchain wrapper).
+ 
+-endmenu
+-
+ config BR2_REPRODUCIBLE
+ 	bool "Make the build reproducible (experimental)"
+ 	help
+@@ -741,6 +739,8 @@ config BR2_REPRODUCIBLE
+ 
+ endmenu
+ 
++endmenu
 +
-+domoticz.cpp currently assumes that on GNU/Linux systems header
-+<execinfo.h> is available. But that is not true. Since it provided by
-+C library and uClibc can be built without backtrace support. And in
-+such cases we get following build error.
-+
-+  domoticz-3.4834/main/domoticz.cpp:48:22: fatal error: execinfo.h: No such file or directory
-+   #include <execinfo.h>
-+                        ^
-+  compilation terminated.
-+
-+Instead of depending on __gnu_linux__, add check for detecting
-+presence of <execinfo.h> and guard code for dumpstack accordingly.
-+
-+This build failure is detected by Buildroot autobuilder.
-+http://autobuild.buildroot.net/results/393/393f839e160b51ca12ac36058718ad2f0c1b50a6/
-+
-+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+---
-+ CMakeLists.txt    | 7 +++++++
-+ main/domoticz.cpp | 2 +-
-+ 2 files changed, 8 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index d3113f4..ef32f7b 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -61,6 +61,13 @@ SET(EXECUTABLE_OUTPUT_PATH "" CACHE INTERNAL
-+   "Where to put the executables for Domoticz"
-+   )
-+ 
-++INCLUDE(CheckIncludeFiles)
-++CHECK_INCLUDE_FILES (execinfo.h HAVE_EXECINFO_H)
-++
-++IF(HAVE_EXECINFO_H)
-++  ADD_DEFINITIONS(-DHAVE_EXECINFO_H)
-++ENDIF(HAVE_EXECINFO_H)
-++
-+ #set(CMAKE_EXE_LINKER_FLAGS "-static")
-+ 
-+ # Macro for setting up precompiled headers. Usage:
-+diff --git a/main/domoticz.cpp b/main/domoticz.cpp
-+index 69d2ef6..c52e5ac 100644
-+--- a/main/domoticz.cpp
-++++ b/main/domoticz.cpp
-+@@ -44,7 +44,7 @@
-+ 	#include <string.h> 
-+ #endif
-+ 
-+-#ifdef __gnu_linux__
-++#ifdef HAVE_EXECINFO_H
-+ #include <execinfo.h>
-+ static void dumpstack(void) {
-+ 	// Notes :
-+-- 
-+2.6.2
-+
+ source "toolchain/Config.in"
+ 
+ source "system/Config.in"
 -- 
-2.6.2
+2.7.4
