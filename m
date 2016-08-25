@@ -1,57 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 22:00:33 +0200
-Subject: [Buildroot] [git commit] package/libegl: add option for wayland
-	extensions
-Message-ID: <20160902142939.9F47D7FB67@busybox.osuosl.org>
+Date: Thu, 25 Aug 2016 15:13:05 +0200
+Subject: [Buildroot] [git commit] micropython-lib: bump version to v1.8.2
+Message-ID: <20160902142940.2D0AA7FEE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e3dfef19d8ae3804671a03b30003fa2d8115fc6
+commit: https://git.buildroot.net/buildroot/commit/?id=da22fccffb3ab6bbeb123410790bd390b3ae2a05
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Wayland requires that an OpenGL/EGL implementation provides a few
-extensions, so that wayland servers and clients can exchange buffers.
-
-Currently, only one OpenGL/EGL implementation provides those extensions:
-mesa3d.
-
-However, other implementations are catching up, especially the
-proprietary NVidia driver, which has as of late introduced those
-extensions. Other, non-public implementations may also provide those
-extensions.
-
-A lot of wayland-related packages require those extensions, and
-currently they have to depend on mesa3d to provide OpenGL/EGL, which
-precludes using those packages when a non-mesa3d provider is enabled,
-even when that providers implements the necessary extensions.
-
-Add an option to the libegl virtual package, that providers on
-OpenGL/EGL can select to state they provide those extensions.
-
-Packages that need those extensions can additionally depend on this new
-option, instead of the existing libegl package.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/opengl/libegl/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/micropython-lib/micropython-lib.hash | 2 +-
+ package/micropython-lib/micropython-lib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/opengl/libegl/Config.in b/package/opengl/libegl/Config.in
-index 8401bb2..f756fbe 100644
---- a/package/opengl/libegl/Config.in
-+++ b/package/opengl/libegl/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_HAS_LIBEGL
- 	bool
+diff --git a/package/micropython-lib/micropython-lib.hash b/package/micropython-lib/micropython-lib.hash
+index 30d0cf8..fc1595a 100644
+--- a/package/micropython-lib/micropython-lib.hash
++++ b/package/micropython-lib/micropython-lib.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 e659444fadd755c1b5dbff091aa1b23a835e7361da3a32f38774bd39a15937ad  micropython-lib-v1.0.tar.gz
++sha256 4f9250a93413c9925b912d54fe3aaee2d275c82bdb447fc07a090fc60287f5e8  micropython-lib-v1.8.2.tar.gz
+diff --git a/package/micropython-lib/micropython-lib.mk b/package/micropython-lib/micropython-lib.mk
+index 4ed2120..a0b533a 100644
+--- a/package/micropython-lib/micropython-lib.mk
++++ b/package/micropython-lib/micropython-lib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	bool
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+
- config BR2_PACKAGE_PROVIDES_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBEGL
- 	string
+-MICROPYTHON_LIB_VERSION = v1.0
++MICROPYTHON_LIB_VERSION = v1.8.2
+ MICROPYTHON_LIB_SITE = $(call github,micropython,micropython-lib,$(MICROPYTHON_LIB_VERSION))
+ MICROPYTHON_LIB_LICENSE = Python software foundation license v2 (some modules), MIT (everything else)
+ MICROPYTHON_LIB_LICENSE_FILES = LICENSE
