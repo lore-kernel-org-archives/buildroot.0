@@ -1,10 +1,10 @@
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Thu, 25 Aug 2016 17:04:42 +0300
-Subject: [Buildroot] [PATCH v1 4/9] board / intel: Add SPI peripherals for
-	Minnowboard MAX
+Date: Thu, 25 Aug 2016 17:04:43 +0300
+Subject: [Buildroot] [PATCH v1 5/9] board / intel: Add SPI peripherals for
+	Joule
 In-Reply-To: <1472133887-34746-1-git-send-email-andriy.shevchenko@linux.intel.com>
 References: <1472133887-34746-1-git-send-email-andriy.shevchenko@linux.intel.com>
-Message-ID: <1472133887-34746-5-git-send-email-andriy.shevchenko@linux.intel.com>
+Message-ID: <1472133887-34746-6-git-send-email-andriy.shevchenko@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +13,53 @@ To: buildroot@busybox.net
 
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Add two SPI peripherals which can be connected to Minnowboard MAX low speed
-connector. First is Atmel AT25 compatible SPI EEPROM and second is M25P80
-compatible SPI serial flash.
+Add two SPI peripherals which can be connected to Intel Joule breakout
+board connectors. First is Atmel AT25 compatible SPI EEPROM and second is
+spidev that userspace can use to perform raw I/O access to the SPI bus.
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- board/intel/minnowboard-max/acpi/at25.asl   | 58 +++++++++++++++++++++++++++++
- board/intel/minnowboard-max/acpi/m25p80.asl | 52 ++++++++++++++++++++++++++
- 2 files changed, 110 insertions(+)
- create mode 100644 board/intel/minnowboard-max/acpi/at25.asl
- create mode 100644 board/intel/minnowboard-max/acpi/m25p80.asl
+ board/intel/joule/acpi/at25.asl   | 56 +++++++++++++++++++++++++++++++++++++++
+ board/intel/joule/acpi/spidev.asl | 42 +++++++++++++++++++++++++++++
+ 2 files changed, 98 insertions(+)
+ create mode 100644 board/intel/joule/acpi/at25.asl
+ create mode 100644 board/intel/joule/acpi/spidev.asl
 
-diff --git a/board/intel/minnowboard-max/acpi/at25.asl b/board/intel/minnowboard-max/acpi/at25.asl
+diff --git a/board/intel/joule/acpi/at25.asl b/board/intel/joule/acpi/at25.asl
 new file mode 100644
-index 0000000..fdc169a
+index 0000000..018542e
 --- /dev/null
-+++ b/board/intel/minnowboard-max/acpi/at25.asl
-@@ -0,0 +1,58 @@
++++ b/board/intel/joule/acpi/at25.asl
+@@ -0,0 +1,56 @@
 +/*
-+ * Minnowboard MAX
++ * Intel Joule
 + *
-+ * http://wiki.minnowboard.org/MinnowBoard_MAX
-+ *
-+ * This adds Atmel AT25 compatible 1kb serial EEPROM to the SPI host
-+ * controller available on Minnowboard MAX low speed connector (JP1) pins:
++ * This adds Atmel AT25 compatible serial EEPROM to the SPI host controller
++ * available on Intel Joule breakout #1 header:
 + *
 + *   pin name		pin number
 + *   -----------------------------
-+ *   GPIO_SPI_CS	5
-+ *   GPIO_SPI_MISO	7
-+ *   GPIO_SPI_MOSI	9
-+ *   GPIO_SPI_CLK	11
++ *   SPI_1_MISO_LS	2
++ *   SPI_1_MOSI_LS	4
++ *   SPI_1_FS0_LS	6
++ *   SPI_1_CLK_LS	10
 + *
 + * In Linux you need to set CONFIG_EEPROM_AT25=y (or m) to be able to use
 + * this device.
 + */
 +DefinitionBlock ("at25.aml", "SSDT", 5, "INTEL", "AT25", 1)
 +{
-+    External (_SB_.SPI1, DeviceObj)
++    External (_SB_.PCI0.SPI2, DeviceObj)
 +
-+    Scope (\_SB.SPI1)
++    Scope (\_SB.PCI0.SPI2)
 +    {
 +        Device (EEP0) {
 +            Name (_HID, "PRP0001")
 +            Name (_DDN, "Atmel AT25 compatible EEPROM")
 +            Name (_CRS, ResourceTemplate () {
 +                SpiSerialBus (
-+                    1,                      // Chip select
++                    0,                      // Chip select
 +                    PolarityLow,            // Chip select is active low
 +                    FourWireMode,           // Full duplex
 +                    8,                      // Bits per word is 8 (byte)
@@ -69,19 +67,19 @@ index 0000000..fdc169a
 +                    1000000,                // 1 MHz
 +                    ClockPolarityLow,       // SPI mode 0
 +                    ClockPhaseFirst,        // SPI mode 0
-+                    "\\_SB.SPI1",           // SPI host controller
++                    "\\_SB.PCI0.SPI2",      // SPI host controller
 +                    0                       // Must be 0
 +                )
 +            })
 +
 +            /*
-+	     * See Documentation/devicetree/bindings/eeprom/at25.txt for
-+	     * more information about these bindings.
++             * See Documentation/devicetree/bindings/eeprom/at25.txt for
++             * more information about these bindings.
 +             */
 +            Name (_DSD, Package () {
 +                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
 +                Package () {
-+                    Package () {"compatible", "atmel,at25"},
++                    Package () {"compatible", Package () {"atmel,at25"}},
 +                    Package () {"size", 1024},
 +                    Package () {"pagesize", 32},
 +                    Package () {"address-width", 16},
@@ -90,60 +88,50 @@ index 0000000..fdc169a
 +        }
 +    }
 +}
-diff --git a/board/intel/minnowboard-max/acpi/m25p80.asl b/board/intel/minnowboard-max/acpi/m25p80.asl
+diff --git a/board/intel/joule/acpi/spidev.asl b/board/intel/joule/acpi/spidev.asl
 new file mode 100644
-index 0000000..d0676c6
+index 0000000..17acca6
 --- /dev/null
-+++ b/board/intel/minnowboard-max/acpi/m25p80.asl
-@@ -0,0 +1,52 @@
++++ b/board/intel/joule/acpi/spidev.asl
+@@ -0,0 +1,42 @@
 +/*
-+ * Minnowboard MAX
++ * Intel Joule
 + *
-+ * http://wiki.minnowboard.org/MinnowBoard_MAX
-+ *
-+ * This adds M25P80 (AT26DF, M25P, W25X) compatible serial flash to the SPI
-+ * host controller available on Minnowboard MAX low speed connector (JP1)
-+ * pins:
++ * This adds an SPI test device to the SPI host controller available on
++ * Intel Joule breakout #1 header:
 + *
 + *   pin name		pin number
 + *   -----------------------------
-+ *   GPIO_SPI_CS	5
-+ *   GPIO_SPI_MISO	7
-+ *   GPIO_SPI_MOSI	9
-+ *   GPIO_SPI_CLK	11
++ *   SPI_1_MISO_LS	2
++ *   SPI_1_MOSI_LS	4
++ *   SPI_1_FS2_LS	8
++ *   SPI_1_CLK_LS	10
 + *
-+ * In Linux you need to set CONFIG_MTD_M25P80=y (or m) to be able to use
++ * In Linux you need to set CONFIG_SPI_SPIDEV=y (or m) to be able to use
 + * this device.
 + */
-+DefinitionBlock ("m25p80.aml", "SSDT", 5, "INTEL", "M25P80", 1)
++DefinitionBlock ("spidev.aml", "SSDT", 5, "INTEL", "SPIDEV", 1)
 +{
-+    External (_SB_.SPI1, DeviceObj)
++    External (_SB_.PCI0.SPI2, DeviceObj)
 +
-+    Scope (\_SB.SPI1)
++    Scope (\_SB.PCI0.SPI2)
 +    {
-+        Device (FLS0) {
-+            Name (_HID, "PRP0001")
-+            Name (_DDN, "M25P80 compatible serial flash")
++        Device (TP0) {
++            Name (_HID, "SPT0001")
++            Name (_DDN, "SPI test device connected to CS2")
 +            Name (_CRS, ResourceTemplate () {
 +                SpiSerialBus (
-+                    1,                      // Chip select
++                    2,                      // Chip select
 +                    PolarityLow,            // Chip select is active low
 +                    FourWireMode,           // Full duplex
 +                    8,                      // Bits per word is 8 (byte)
 +                    ControllerInitiated,    // Don't care
-+                    10000000,               // 10 MHz
++                    1000000,                // 1 MHz
 +                    ClockPolarityLow,       // SPI mode 0
 +                    ClockPhaseFirst,        // SPI mode 0
-+                    "\\_SB.SPI1",           // SPI host controller
++                    "\\_SB.PCI0.SPI2",      // SPI host controller
 +                    0                       // Must be 0
 +                )
-+            })
-+
-+            Name (_DSD, Package () {
-+                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-+                Package () {
-+                    Package () {"compatible", "jedec,spi-nor"},
-+                }
 +            })
 +        }
 +    }
