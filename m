@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Aug 2016 23:43:48 +0200
-Subject: [Buildroot] [PATCH v1 3/9] board/intel/common: Add possibility
- for adding ACPI tables to the initrd
-In-Reply-To: <1472133887-34746-4-git-send-email-andriy.shevchenko@linux.intel.com>
+Date: Thu, 25 Aug 2016 23:44:49 +0200
+Subject: [Buildroot] [PATCH v1 1/9] package/acpica: Add host
+ configuration to the tool
+In-Reply-To: <1472133887-34746-2-git-send-email-andriy.shevchenko@linux.intel.com>
 References: <1472133887-34746-1-git-send-email-andriy.shevchenko@linux.intel.com>
- <1472133887-34746-4-git-send-email-andriy.shevchenko@linux.intel.com>
-Message-ID: <20160825234348.643e106e@free-electrons.com>
+ <1472133887-34746-2-git-send-email-andriy.shevchenko@linux.intel.com>
+Message-ID: <20160825234449.12ab1348@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,79 +14,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 25 Aug 2016 17:04:41 +0300, Andy Shevchenko wrote:
+On Thu, 25 Aug 2016 17:04:39 +0300, Andy Shevchenko wrote:
+> The ACPI excerpts, which would be added to an initial RAM disk image, require
+> to be compiled first. iasl tool from acpica package helps do that.
+> 
+> Enable host variant of the application to be built.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
->  in order to take advantage of these.
->  
-> +BOARD_INTEL_ACPI_TABLES
-> +	list of table names to built into the ``initrd``.
-
-Please make this a Buildroot configuration option.
-
-> +# Pick iASL.
-> +# First try from buildroot and if not there then try from the host.
-> +[ -x "$HOST_DIR/usr/bin/iasl" ] && iasl="$HOST_DIR/usr/bin/iasl" || iasl=$(which iasl)
-> +
-> +[ -x "$iasl" ] || {
-> +	echo "You need to to have iASL compiler available. You can either enable"
-> +	echo "BR2_PACKAGE_HOST_ACPICA or install it locally for your host."
-> +	echo "Typically the package is called acpica-tools in major distros".
-> +	exit 1
-> +}
-> +
-> +# The name of the folder is the name of a board
-> +board_name="${BOARD_DIR##*/}"
-> +[ "$board_name" = "common" ] && {
-> +	echo "Adding ACPI tables is always specific to a board!"
-> +	echo "You are not supposed to use common as board here!"
-> +	exit 1
-> +}
-> +
-> +# Always prefix with the board name to avoid mistakes if the initrd is used
-> +# with another board.
-> +updated_initrd_name="${board_name}-acpi-rootfs.cpio"
-> +updated_initrd="$BINARIES_DIR/$updated_initrd_name"
-> +initrd="$(readlink -enq "$BINARIES_DIR/initrd")"
-> +tmpamldir="$BINARIES_DIR/acpi-tables"
-> +
-> +# Make sure existing tables get cleared
-> +rm -fr $tmpamldir
-> +mkdir -p $tmpamldir/kernel/firmware/acpi
-> +
-> +for table in $ACPI_TABLES; do
-> +	[ -f "$ACPI_DIR/$table" ] || continue
-> +
-> +	$iasl -p $tmpamldir/kernel/firmware/acpi/$table "$ACPI_DIR/$table" > /dev/null 2>&1
-> +
-> +	echo "ACPI: Compiled ASL from $(realpath --relative-to=$PWD $ACPI_DIR/$table)"
-> +done
-> +
-> +# Exit if no tables were compiled
-> +[ -n "$(find $tmpamldir -type f)" ] || {
-> +	echo "ACPI: No tables were compiled"
-> +	exit 0
-> +}
-> +
-> +# Attach compiled tables to initrd
-> +(
-> +	cd $tmpamldir
-> +	find kernel | cpio -H newc -o > $updated_initrd 2>/dev/null
-> +	cat $initrd >> $updated_initrd
-> +	ln -sf "$updated_initrd_name" "$BINARIES_DIR/initrd"
-> +)
-> +
-> +echo "ACPI: Created initrd with updated ACPI tables in $(realpath --relative-to=$PWD $updated_initrd)"
-
-And move all of this logic into Buildroot make code. I'm not sure yet
-exactly where it fits. Maybe as an option of the host-acpica package ?
-As an option in the "System configuration" menu ? Or, maybe better,
-since those updated ACPI tables are consumed by the kernel, as a kernel
-option ?
-
-But clearly, something like that shouldn't be done in a post-image or
-post-build script.
-
-Best regards,
+This patch generally looks good, but I'm not entirely sure we need this
+package to be visible in menuconfig. This depends on the outcome of the
+discussion for PATCH 3/9.
 
 Thomas
 -- 
