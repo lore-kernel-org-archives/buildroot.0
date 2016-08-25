@@ -1,57 +1,61 @@
-From: Zygmunt Ptak <zygmuntptak@gmail.com>
-Date: Thu, 25 Aug 2016 12:39:05 +0200
-Subject: [Buildroot] Clone source code recursively
-In-Reply-To: <20160825101714.4cb710e9@free-electrons.com>
-References: <CAMkMO5mqkfSz8ky1Ry05m2Z3aT9PXsNiNSjFvNMpu87GCnx03Q@mail.gmail.com>
- <20160825101714.4cb710e9@free-electrons.com>
-Message-ID: <CAMkMO5=T9OtnDD-5Y8qu6ViAx=Cedze3WNmUus=_QiT=n+7vZw@mail.gmail.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Thu, 25 Aug 2016 23:01:03 +1200
+Subject: [Buildroot] [next PATCH 1/2] micropython: bump version to v1.8.3
+Message-ID: <20160825110104.12223-1-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+ package/micropython/micropython.hash | 2 +-
+ package/micropython/micropython.mk   | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-> What do you call "recursively"? Are you talking about also fetching
-submodules?
-Exactly.
-
-Thank you for information.
-About nightly manual, yeah I saw that from Arnout email.
-
-Regards
-Zygmunt
-
-2016-08-25 10:17 GMT+02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
-
-> Hello,
->
-> On Thu, 25 Aug 2016 01:31:41 +0200, Zygmunt Ptak wrote:
->
-> > I can't find how can I clone code recursively from git repository.
-> > Is it possible at all?
->
-> What do you call "recursively"? Are you talking about also fetching
-> submodules? If that's what you're talking about, we recently added
-> support for that:
->
->   https://git.buildroot.org/buildroot/commit/package/pkg-generic.mk?id=
-> ec3e057f79117d851c37f19316a3b9b5e2470550
->
-> You just need to add:
->
->   FOO_GIT_SUBMODULES = YES
->
-> in your package .mk file.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160825/b93eb554/attachment.html>
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+index b3a7c22..ea42bfb 100644
+--- a/package/micropython/micropython.hash
++++ b/package/micropython/micropython.hash
+@@ -1,2 +1,2 @@
+ #locally computed
+-sha256 f8ea3faffa797de1a06c16c8f57c784c665b318ca08ac17f74dcbc95322d47de  micropython-v1.6.tar.gz
++sha256 871378fcf1f1042c399896d5673da67d12e1fb36c2e706af289fc959bc8f7a57  micropython-v1.8.3.tar.gz
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 853caa2..047e340 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MICROPYTHON_VERSION = v1.6
++MICROPYTHON_VERSION = v1.8.3
+ MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
+ MICROPYTHON_LICENSE = MIT
+ MICROPYTHON_LICENSE_FILES = LICENSE
+@@ -16,14 +16,21 @@ ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
+ MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
+ endif
+ 
++# When building from a tarball we don't have some of the dependencies that are in
++# the git repository as submodules
++MICROPYTHON_MAKE_OPTS = MICROPY_PY_BTREE=0
++MICROPYTHON_MAKE_OPTS += MICROPY_PY_USSL=0
++
+ define MICROPYTHON_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/unix \
++		$(MICROPYTHON_MAKE_OPTS) \
+ 		CROSS_COMPILE=$(TARGET_CROSS) \
+ 		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS)
+ endef
+ 
+ define MICROPYTHON_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/unix \
++		$(MICROPYTHON_MAKE_OPTS) \
+ 		DESTDIR=$(TARGET_DIR) \
+ 		PREFIX=$(TARGET_DIR)/usr \
+ 		install
+-- 
+2.9.2.518.ged577c6.dirty
