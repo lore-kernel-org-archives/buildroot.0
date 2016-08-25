@@ -1,78 +1,116 @@
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Thu, 25 Aug 2016 17:04:39 +0300
-Subject: [Buildroot] [PATCH v1 1/9] package/acpica: Add host configuration
-	to the tool
+Date: Thu, 25 Aug 2016 17:04:46 +0300
+Subject: [Buildroot] [PATCH v1 8/9] board / intel: Add GPIO LEDs for Intel
+	Minnowboard
 In-Reply-To: <1472133887-34746-1-git-send-email-andriy.shevchenko@linux.intel.com>
 References: <1472133887-34746-1-git-send-email-andriy.shevchenko@linux.intel.com>
-Message-ID: <1472133887-34746-2-git-send-email-andriy.shevchenko@linux.intel.com>
+Message-ID: <1472133887-34746-9-git-send-email-andriy.shevchenko@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ACPI excerpts, which would be added to an initial RAM disk image, require
-to be compiled first. iasl tool from acpica package helps do that.
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Enable host variant of the application to be built.
+There are 2 user controllable leds on Intel Minnowboard. This adds GPIO
+LEDs device for those and sets default triggers for SD-card and system
+heartbeat.
 
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- package/Config.in.host        |  1 +
- package/acpica/Config.in.host |  9 +++++++++
- package/acpica/acpica.mk      | 15 +++++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 package/acpica/Config.in.host
+ board/intel/minnowboard/acpi/leds.asl | 82 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 82 insertions(+)
+ create mode 100644 board/intel/minnowboard/acpi/leds.asl
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 1c99e34..992e2bb 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,5 +1,6 @@
- menu "Host utilities"
- 
-+	source "package/acpica/Config.in.host"
- 	source "package/aespipe/Config.in.host"
- 	source "package/android-tools/Config.in.host"
- 	source "package/cbootimage/Config.in.host"
-diff --git a/package/acpica/Config.in.host b/package/acpica/Config.in.host
+diff --git a/board/intel/minnowboard/acpi/leds.asl b/board/intel/minnowboard/acpi/leds.asl
 new file mode 100644
-index 0000000..4e5751e
+index 0000000..0de36d5
 --- /dev/null
-+++ b/package/acpica/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_ACPICA
-+	bool "host acpica"
-+	help
-+	  The ACPI Component Architecture (ACPICA) project provides an
-+	  operating system (OS)-independent reference implementation of
-+	  the Advanced Configuration and Power Interface Specification
-+	  (ACPI).
++++ b/board/intel/minnowboard/acpi/leds.asl
+@@ -0,0 +1,82 @@
++/*
++ * Intel Minnowboard
++ *
++ * http://wiki.minnowboard.org/MinnowBoard
++ *
++ * This adds GPIO LEDs device for the 2 LEDs found on Intel Minnowboard
++ * available for users.
++ *
++ *   GPIO name           GPIO number   led
++ *   -----------------------------------------
++ *   E6XX_GPIO_SUS5      10           heartbeat
++ *   E6XX_GPIO_SUS6      11           sd-card
++ *
++ * In Linux you need to set CONFIG_LEDS_GPIO=y (or m) to be able to use
++ * this device.
++ */
++DefinitionBlock ("leds.aml", "SSDT", 5, "INTEL", "LEDS", 1)
++{
++    External (_SB_.PCI0.LPC, DeviceObj)
 +
-+	  https://www.acpica.org
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index b8459d8..40ec81b 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
-@@ -23,4 +23,19 @@ define ACPICA_INSTALL_TARGET_CMDS
- 		INSTALLFLAGS=-m755 install
- endef
- 
-+HOST_ACPICA_DEPENDENCIES = host-bison host-flex
++    Scope (\_SB.PCI0.LPC)
++    {
++        Device (LEDS)
++        {
++            Name (_HID, "PRP0001")
++            Name (_DDN, "GPIO LEDs device")
 +
-+define HOST_ACPICA_BUILD_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)				\
-+		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX CC="$(HOSTCC)"	\
-+		all
-+endef
++            Name (_CRS, ResourceTemplate () {
++                GpioIo (
++                    Exclusive,                  // Not shared
++                    PullNone,                   // No need for pulls
++                    0,                          // Debounce timeout
++                    0,                          // Drive strength
++                    IoRestrictionOutputOnly,    // Only used as output
++                    "\\_SB.PCI0.LPC",           // GPIO controller
++                    0)                          // Must be 0
++                {
++                    10,                         // E6XX_GPIO_SUS5
++                    11,                         // E6XX_GPIO_SUS6
++                }
++            })
 +
-+define HOST_ACPICA_INSTALL_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)				\
-+		HARDWARE_NAME=$(BR2_ARCH) DESTDIR="$(HOST_DIR)"		\
-+		INSTALLFLAGS=-m755 install
-+endef
++            Name (_DSD, Package () {
++                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
++                Package () {
++                    Package () {"compatible", "gpio-leds"},
++                },
++                ToUUID("dbb8e3e6-5886-4ba6-8795-1319f52a966b"),
++                Package () {
++                    Package () {"led-0", "LED0"},
++                    Package () {"led-1", "LED1"},
++                }
++            })
 +
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
++            // For more information about these bindings see:
++            // Documentation/devicetree/bindings/leds/leds-gpio.txt and
++            // Documentation/acpi/gpio-properties.txt.
++
++            Name (LED0, Package () {
++                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
++                Package () {
++                    Package () {"label", "heartbeat"},
++                    Package () {"gpios", Package () {^LEDS, 0, 0, 0}},
++                    Package () {"linux,default-state", "off"},
++                    Package () {"linux,default-trigger", "heartbeat"},
++                    Package () {"linux,retain-state-suspended", 1},
++                }
++            })
++
++            Name (LED1, Package () {
++                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
++                Package () {
++                    Package () {"label", "sd-card"},
++                    Package () {"gpios", Package () {^LEDS, 0, 1, 0}},
++                    Package () {"linux,default-state", "off"},
++                    Package () {"linux,default-trigger", "mmc0"},
++                    Package () {"linux,retain-state-suspended", 1},
++                }
++            })
++        }
++    }
++}
 -- 
 2.8.1
