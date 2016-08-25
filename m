@@ -1,13 +1,13 @@
 From: Matt Flax <flatmax@flatmax.org>
-Date: Thu, 25 Aug 2016 10:25:24 +1000
+Date: Thu, 25 Aug 2016 10:55:36 +1000
 Subject: [Buildroot] [PATCH 1/3] arch/arm: Add Cortex-a53 CPU
-In-Reply-To: <20160825001432.0e4b42a6@free-electrons.com>
+In-Reply-To: <20160824212037.GA2007@waldemar-brodkorb.de>
 References: <1471913603-21487-1-git-send-email-flatmax@flatmax.org>
  <1471913603-21487-2-git-send-email-flatmax@flatmax.org>
  <20160824000345.264d6d2a@free-electrons.com>
  <dc3618df-52c5-c209-30a4-ea351fb2c49c@flatmax.org>
- <20160825001432.0e4b42a6@free-electrons.com>
-Message-ID: <5c8eb966-40e7-9a7f-183a-d7a7235bfb45@flatmax.org>
+ <20160824212037.GA2007@waldemar-brodkorb.de>
+Message-ID: <5f1027f5-a5d4-6e58-6722-30278d77191c@flatmax.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,117 +16,571 @@ To: buildroot@busybox.net
 
 
 
-On 25/08/16 08:14, Thomas Petazzoni wrote:
-> Matt,
+On 25/08/16 07:20, Waldemar Brodkorb wrote:
+> Hi Matt,
+> Matt Flax wrote,
 >
-> Please Cc: me on your replies. There's a lot of traffic on the
-> Buildroot mailing list, so if you want me to be reactive on this
-> discussion, you'd better Cc: me.
->
-> On Wed, 24 Aug 2016 09:44:22 +1000, Matt Flax wrote:
->
->> Looks good. One thing though, my original Cortex-A53 patch selected
->> VFPV4 which is now incorrect,
+>> On 24/08/16 08:03, Thomas Petazzoni wrote:
+>>> Hello,
+>>>
+>>> On Tue, 23 Aug 2016 10:53:21 +1000, Matt Flax wrote:
+>>>> Adds the Cortex-a53 CPU to the target architecture variant choice. This sets
+>>>> the toolchain to use cortex-a53 as the target. The effect is that various
+>>>> cortex-a53 tunings are enabled for the compilation of packages.
+>>>>
+>>>> Signed-off-by: Matt Flax <flatmax@flatmax.org>
+>>> Thanks, but as I said, I don't want to duplicate definitions of 64 bits
+>>> ARM cores between Config.in.arm and Config.in.aarch64. So I've pushed
+>>> at
+>>> http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=aarch64
+>>> a branch that does the necessary rework: it merges Config.in.aarch64
+>>> into Config.in.arm, does a few preparation steps, and finally adds your
+>>> commit on top of that. Could you have a look and let me know what you
+>>> think?
+>> Looks good. One thing though, my original Cortex-A53 patch selected VFPV4
+>> which is now incorrect,
 >> that should be removed ... however that wouldn't enable any HF settings ...
-> I've added a new patch that adds a BR2_ARM_CPU_HAS_FP_ARMV8 hidden
-> option, and the related FPU options. For now, I'm only supporting the
-> fp-armv8 and neon-fp-armv8 cases. It seems pretty clear that the FPU
-> and NEON are mandatory on all ARMv8 cores, at least to date.
->
-> I haven't taken into account the crypto-neon-fp-armv8 case, since it's
-> not clear whether the crypto instructions are mandatory or not on all
-> cores.
->
->> Also I don't understand why we need "select BR2_ARCH_HAS_MMU_OPTIONAL"
->> but as I mentioned,
+>> Also I don't understand why we need "select BR2_ARCH_HAS_MMU_OPTIONAL" but
+>> as I mentioned,
 >> uclibc doesn't compile cleanly without it ... seems like a deep rooted
 >> problem.
-> If you don't select BR2_ARCH_HAS_MMU_OPTIONAL, then the BR2_USE_MMU
-> option is never set to 'y', so Buildroot configures uClibc as if it was
-> building for a noMMU platform.
->
-> However, for ARMv8, I believe we should probably be using
-> BR2_ARCH_HAS_MMU_MANDATORY instead, since I don't think running an
-> ARM64 without the MMU enabled is supported.
->
->> I am not sure about the fine detail, but it seems that ARMV8 extends
->> VFPV4, perhaps there should be an extension of VFPV4 which is similar to
->> the extension of VFPV3 to VFPV4 ?
-> That's what I've done with BR2_ARM_CPU_HAS_FP_ARMV8.
->
->> The "- mcpu" flag is the same between aarch32 and aarch64, so that
->> simplifies the BR2_GCC_TARGET_CPU to being the same for both.
-> No, it's not the same. On ARM 32 bits you have separate -mcpu and -mfpu
-> options. On ARM 64 bits, you only have the -mcpu option with its
-> modifier mechanism. I've handled this in my new version of the patch
-> series.
->
->> However aarch64 and aarch32 seem to require different BR2_GCC_TARGET_FPU
->> lines. I am pretty certain that we need the aarch32 BR2_GCC_TARGET_FPU
->> line to include at least "neon" in some way.
-> ARM64 cannot have a BR2_GCC_TARGET_FPU line, because there's no -mfpu
-> option, at least according to the gcc documentation at
-> https://gcc.gnu.org/onlinedocs/gcc-6.2.0/gcc/AArch64-Options.html#AArch64-Options.
->
->>> Also, it is worth reminding that there are some ARMv8-A cores that are
->>> 32-bits only: the Cortex-A32 is one example. So ARMv8-A is not equal to
->>> 64 bits support.
->> Actually I think all ARMv8-A cores are 64bit,
-> No: the Cortex-A32 is 32 bits only. See
-> http://www.arm.com/products/processors/cortex-a/cortex-a32-processor.php.
->
->> The aarch32 requires a "-fpu" setting to specify "neon-fp-armv8" as my
->> suggested default.
-> I've used fp-armv8 as the default, because NEON is not always good for
-> FPU operations. From the gcc documentation:
->
->     If the selected floating-point hardware includes the NEON extension
->     (e.g. -mfpu=?neon?), note that floating-point operations are not
->     generated by GCC's auto-vectorization pass unless
->     -funsafe-math-optimizations is also specified. This is because NEON
->     hardware does not fully implement the IEEE 754 standard for
->     floating-point arithmetic (in particular denormal values are treated
->     as zero), so the use of NEON instructions may lead to a loss of
->     precision.
->
->> The aarch64 requires a "-mcpu"  setting to specify the cpu with feature
->> suffixes ... I note however that fp and simd are on by default when we
->> select the cpu option. Is it necessary to enable these to be turned off
->> ? If not necessary and we don't desire crypto, then we don't need to
->> specify more for the cpu other then the cpu name, i.e. cortex-a53
-> I've for now used:
->
-> +	default "cortex-a53"		if (BR2_cortex_a53 && !BR2_ARCH_IS_64)
-> +	default "cortex-a53+fp"		if (BR2_cortex_a53 && BR2_ARCH_IS_64 && BR2_ARM_FPU_FP_ARMV8)
-> +	default "cortex-a53+fp+simd" 	if (BR2_cortex_a53 && BR2_ARCH_IS_64 && BR2_ARM_FPU_NEON_FP_ARMV8)
->   
-> I.e:
->
->   -mcpu=cortex-a53 for Cortex-A53 used in ARM 32 bits mode
->
->   -mcpu=cortex-a53+fp when Cortex-A53 used in ARM 64 bits mode and BR2_ARM_FPU_FP_ARMV8 is selected
->
->   -mcpu=cortex-a53+fp+simd when Cortex-A53 used in ARM 64 bits mode and BR2_ARM_FPU_NEON_FP_ARMV8 is selected
->
-> Can you have a look at my updated branch at
-> http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=aarch64
-> and let me know what you think? If you're starting to be happy with it,
-> I can post it on the mailing list for proper review.
+> Can you provide a simple .config for this failure?
+> I use uClibc-ng on rpi3 with cortex-A53 optimization and fixed a
+> problem some releases ago.
+> So I am wondering what kind of problem you have.
 
-I think we are almost there.
-The three selections for "-mcpu" above may be equivalent. On their 
-aarch64 gcc options page, GNU say that both fp and simd are "on by 
-default for all possible values for options -march and -mcpu. ".
-If you think it is important to disable them by default, then you may 
-need to use :
+Perhaps when MMU is removed, it is compiling code it doesn't really 
+need. This is probably a red-herring problem.
 
-default "cortex-a53" 		if (BR2_cortex_a53 && !BR2_ARCH_IS_64)
-default "cortex-a53+fp+nosimd"	if (BR2_cortex_a53 && BR2_ARCH_IS_64 && BR2_ARM_FPU_FP_ARMV8)
-default "cortex-a53+fp+simd" 	if (BR2_cortex_a53 && BR2_ARCH_IS_64 && BR2_ARM_FPU_NEON_FP_ARMV8)
+I don't want to waste your time, however if you want to investigate ...
 
-Perhaps we should start thinking about including a crypto option for 
-ARMV8 in the future ... this should speed up encryption and key 
-generation ... may have drastic performance increases when using 
-encrypted storage as root or home or otherwise.
+Please find attached a defconfig which sets up the cortex-a53 build to 
+replicate the problem.
+Please also find attached my Config.in.arm in its current state. Note 
+that the Config.in.arm has commented out "select 
+BR2_ARCH_HAS_MMU_OPTIONAL" on line 181.
+Try and build this and uclibc will complain about swp assembly calls.
+Uncomment line 181 and try to build ... will build cleanly !
 
 Matt
+
+> best regards
+>   Waldemar
+
+-------------- next part --------------
+BR2_DL_DIR="$(BASE_DIR)/../../buildroot.dl"
+
+BR2_cortex_a53=y
+BR2_ARM_FPU_NEON_ARMV8=y
+BR2_arm=y
+BR2_ARM_EABIHF=y
+#BR2_PTHREADS_NATIVE=y
+
+-------------- next part --------------
+# arm cpu features
+config BR2_ARM_CPU_HAS_NEON
+	bool
+
+# for some cores, NEON support is optional
+config BR2_ARM_CPU_MAYBE_HAS_NEON
+	bool
+
+# for some cores, VFPv2 is optional
+config BR2_ARM_CPU_MAYBE_HAS_VFPV2
+	bool
+
+config BR2_ARM_CPU_HAS_VFPV2
+	bool
+
+# for some cores, VFPv3 is optional
+config BR2_ARM_CPU_MAYBE_HAS_VFPV3
+	bool
+	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
+
+config BR2_ARM_CPU_HAS_VFPV3
+	bool
+	select BR2_ARM_CPU_HAS_VFPV2
+
+# for some cores, VFPv4 is optional
+config BR2_ARM_CPU_MAYBE_HAS_VFPV4
+	bool
+	select BR2_ARM_CPU_MAYBE_HAS_VFPV3
+
+config BR2_ARM_CPU_HAS_VFPV4
+	bool
+	select BR2_ARM_CPU_HAS_VFPV3
+
+config BR2_ARM_CPU_HAS_ARMV8
+	bool
+
+config BR2_ARM_CPU_HAS_ARM
+	bool
+
+config BR2_ARM_CPU_HAS_THUMB
+	bool
+
+config BR2_ARM_CPU_HAS_THUMB2
+	bool
+
+config BR2_ARM_CPU_ARMV4
+	bool
+
+config BR2_ARM_CPU_ARMV5
+	bool
+
+config BR2_ARM_CPU_ARMV6
+	bool
+
+config BR2_ARM_CPU_ARMV7A
+	bool
+
+config BR2_ARM_CPU_ARMV7M
+	bool
+
+choice
+	prompt "Target Architecture Variant"
+	depends on BR2_arm || BR2_armeb
+	default BR2_arm926t
+	help
+	  Specific CPU variant to use
+
+config BR2_arm920t
+	bool "arm920t"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_THUMB
+	select BR2_ARM_CPU_ARMV4
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_arm922t
+	bool "arm922t"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_THUMB
+	select BR2_ARM_CPU_ARMV4
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_arm926t
+	bool "arm926t"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
+	select BR2_ARM_CPU_HAS_THUMB
+	select BR2_ARM_CPU_ARMV5
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_arm1136j_s
+	bool "arm1136j-s"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_THUMB
+	select BR2_ARM_CPU_ARMV6
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_arm1136jf_s
+	bool "arm1136jf-s"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_VFPV2
+	select BR2_ARM_CPU_HAS_THUMB
+	select BR2_ARM_CPU_ARMV6
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_arm1176jz_s
+	bool "arm1176jz-s"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_THUMB
+	select BR2_ARM_CPU_ARMV6
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_arm1176jzf_s
+	bool "arm1176jzf-s"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_VFPV2
+	select BR2_ARM_CPU_HAS_THUMB
+	select BR2_ARM_CPU_ARMV6
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_arm11mpcore
+	bool "mpcore"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
+	select BR2_ARM_CPU_HAS_THUMB
+	select BR2_ARM_CPU_ARMV6
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_cortex_a5
+	bool "cortex-A5"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_MAYBE_HAS_NEON
+	select BR2_ARM_CPU_MAYBE_HAS_VFPV4
+	select BR2_ARM_CPU_HAS_THUMB2
+	select BR2_ARM_CPU_ARMV7A
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_cortex_a7
+	bool "cortex-A7"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_NEON
+	select BR2_ARM_CPU_HAS_VFPV4
+	select BR2_ARM_CPU_HAS_THUMB2
+	select BR2_ARM_CPU_ARMV7A
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_cortex_a8
+	bool "cortex-A8"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_NEON
+	select BR2_ARM_CPU_HAS_VFPV3
+	select BR2_ARM_CPU_HAS_THUMB2
+	select BR2_ARM_CPU_ARMV7A
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_cortex_a9
+	bool "cortex-A9"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_MAYBE_HAS_NEON
+	select BR2_ARM_CPU_MAYBE_HAS_VFPV3
+	select BR2_ARM_CPU_HAS_THUMB2
+	select BR2_ARM_CPU_ARMV7A
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_cortex_a12
+	bool "cortex-A12"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_NEON
+	select BR2_ARM_CPU_HAS_VFPV4
+	select BR2_ARM_CPU_HAS_THUMB2
+	select BR2_ARM_CPU_ARMV7A
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_cortex_a15
+	bool "cortex-A15"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_NEON
+	select BR2_ARM_CPU_HAS_VFPV4
+	select BR2_ARM_CPU_HAS_THUMB2
+	select BR2_ARM_CPU_ARMV7A
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_cortex_a17
+	bool "cortex-A17"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_NEON
+	select BR2_ARM_CPU_HAS_VFPV4
+	select BR2_ARM_CPU_HAS_THUMB2
+	select BR2_ARM_CPU_ARMV7A
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_cortex_a53
+	bool "cortex-A53"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_NEON
+	select BR2_ARM_CPU_HAS_ARMV8
+#	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_cortex_m3
+	bool "cortex-M3"
+	select BR2_ARM_CPU_HAS_THUMB2
+	select BR2_ARM_CPU_ARMV7M
+config BR2_cortex_m4
+	bool "cortex-M4"
+	select BR2_ARM_CPU_HAS_THUMB2
+	select BR2_ARM_CPU_ARMV7M
+config BR2_fa526
+	bool "fa526/626"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_ARMV4
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_pj4
+	bool "pj4"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_VFPV3
+	select BR2_ARM_CPU_ARMV7A
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_strongarm
+	bool "strongarm sa110/sa1100"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_ARMV4
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_xscale
+	bool "xscale"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_HAS_THUMB
+	select BR2_ARM_CPU_ARMV5
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+config BR2_iwmmxt
+	bool "iwmmxt"
+	select BR2_ARM_CPU_HAS_ARM
+	select BR2_ARM_CPU_ARMV5
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+endchoice
+
+config BR2_ARM_ENABLE_NEON
+	bool "Enable NEON SIMD extension support"
+	depends on BR2_ARM_CPU_MAYBE_HAS_NEON
+	select BR2_ARM_CPU_HAS_NEON
+	help
+	  For some CPU cores, the NEON SIMD extension is optional.
+	  Select this option if you are certain your particular
+	  implementation has NEON support and you want to use it.
+
+config BR2_ARM_ENABLE_VFP
+	bool "Enable VFP extension support"
+	depends on BR2_ARM_CPU_MAYBE_HAS_VFPV2
+	select BR2_ARM_CPU_HAS_VFPV4 if BR2_ARM_CPU_MAYBE_HAS_VFPV4
+	select BR2_ARM_CPU_HAS_VFPV3 if BR2_ARM_CPU_MAYBE_HAS_VFPV3
+	select BR2_ARM_CPU_HAS_VFPV2 if BR2_ARM_CPU_MAYBE_HAS_VFPV2
+	help
+	  For some CPU cores, the VFP extension is optional. Select
+	  this option if you are certain your particular
+	  implementation has VFP support and you want to use it.
+
+choice
+	prompt "Target ABI"
+	depends on BR2_arm || BR2_armeb
+	default BR2_ARM_EABIHF if BR2_ARM_CPU_HAS_VFPV2
+	default BR2_ARM_EABI
+	help
+	  Application Binary Interface to use. The Application Binary
+	  Interface describes the calling conventions (how arguments
+	  are passed to functions, how the return value is passed, how
+	  system calls are made, etc.).
+
+config BR2_ARM_EABI
+	bool "EABI"
+	help
+	  The EABI is currently the standard ARM ABI, which is used in
+	  most projects. It supports both the 'soft' floating point
+	  model (in which floating point instructions are emulated in
+	  software) and the 'softfp' floating point model (in which
+	  floating point instructions are executed using an hardware
+	  floating point unit, but floating point arguments to
+	  functions are passed in integer registers).
+
+	  The 'softfp' floating point model is link-compatible with
+	  the 'soft' floating point model, i.e you can link a library
+	  built 'soft' with some other code built 'softfp'.
+
+	  However, passing the floating point arguments in integer
+	  registers is a bit inefficient, so if your ARM processor has
+	  a floating point unit, and you don't have pre-compiled
+	  'soft' or 'softfp' code, using the EABIhf ABI will provide
+	  better floating point performances.
+
+	  If your processor does not have a floating point unit, then
+	  you must use this ABI.
+
+config BR2_ARM_EABIHF
+	bool "EABIhf"
+	depends on BR2_ARM_CPU_HAS_VFPV2 || BR2_ARM_CPU_HAS_ARMV8
+	help
+	  The EABIhf is an extension of EABI which supports the 'hard'
+	  floating point model. This model uses the floating point
+	  unit to execute floating point instructions, and passes
+	  floating point arguments in floating point registers.
+
+	  It is more efficient than EABI for floating point related
+	  workload. However, it does not allow to link against code
+	  that has been pre-built for the 'soft' or 'softfp' floating
+	  point models.
+
+	  If your processor has a floating point unit, and you don't
+	  depend on existing pre-compiled code, this option is most
+	  likely the best choice.
+
+endchoice
+
+choice
+	prompt "Floating point strategy"
+	depends on BR2_ARM_EABI || BR2_ARM_EABIHF
+	default BR2_ARM_FPU_NEON_ARMV8 if BR2_ARM_CPU_HAS_ARMV8
+	default BR2_ARM_FPU_VFPV4D16 if BR2_ARM_CPU_HAS_VFPV4
+	default BR2_ARM_FPU_VFPV3D16 if BR2_ARM_CPU_HAS_VFPV3
+	default BR2_ARM_FPU_VFPV2 if BR2_ARM_CPU_HAS_VFPV2
+	default BR2_ARM_SOFT_FLOAT if !BR2_ARM_CPU_HAS_VFPV2
+
+config BR2_ARM_SOFT_FLOAT
+	bool "Soft float"
+	depends on BR2_ARM_EABI
+	select BR2_SOFT_FLOAT
+	help
+	  This option allows to use software emulated floating
+	  point. It should be used for ARM cores that do not include a
+	  Vector Floating Point unit, such as ARMv5 cores (ARM926 for
+	  example) or certain ARMv6 cores.
+
+config BR2_ARM_FPU_VFPV2
+	bool "VFPv2"
+	depends on BR2_ARM_CPU_HAS_VFPV2
+	help
+	  This option allows to use the VFPv2 floating point unit, as
+	  available in some ARMv5 processors (ARM926EJ-S) and some
+	  ARMv6 processors (ARM1136JF-S, ARM1176JZF-S and ARM11
+	  MPCore).
+
+	  Note that this option is also safe to use for newer cores
+	  such as Cortex-A, because the VFPv3 and VFPv4 units are
+	  backward compatible with VFPv2.
+
+config BR2_ARM_FPU_VFPV3
+	bool "VFPv3"
+	depends on BR2_ARM_CPU_HAS_VFPV3
+	help
+	  This option allows to use the VFPv3 floating point unit, as
+	  available in some ARMv7 processors (Cortex-A{8, 9}). This
+	  option requires a VFPv3 unit that has 32 double-precision
+	  registers, which is not necessarily the case in all SOCs
+	  based on Cortex-A{8, 9}. If you're unsure, use VFPv3-D16
+	  instead, which is guaranteed to work on all Cortex-A{8, 9}.
+
+	  Note that this option is also safe to use for newer cores
+	  that have a VFPv4 unit, because VFPv4 is backward compatible
+	  with VFPv3. They must of course also have 32
+	  double-precision registers.
+
+config BR2_ARM_FPU_VFPV3D16
+	bool "VFPv3-D16"
+	depends on BR2_ARM_CPU_HAS_VFPV3
+	help
+	  This option allows to use the VFPv3 floating point unit, as
+	  available in some ARMv7 processors (Cortex-A{8, 9}). This
+	  option requires a VFPv3 unit that has 16 double-precision
+	  registers, which is generally the case in all SOCs based on
+	  Cortex-A{8, 9}, even though VFPv3 is technically optional on
+	  Cortex-A9. This is the safest option for those cores.
+
+	  Note that this option is also safe to use for newer cores
+	  such that have a VFPv4 unit, because the VFPv4 is backward
+	  compatible with VFPv3.
+
+config BR2_ARM_FPU_VFPV4
+	bool "VFPv4"
+	depends on BR2_ARM_CPU_HAS_VFPV4
+	help
+	  This option allows to use the VFPv4 floating point unit, as
+	  available in some ARMv7 processors (Cortex-A{5, 7, 12,
+	  15}). This option requires a VFPv4 unit that has 32
+	  double-precision registers, which is not necessarily the
+	  case in all SOCs based on Cortex-A{5, 7, 12, 15}. If you're
+	  unsure, you should probably use VFPv4-D16 instead.
+
+	  Note that if you want binary code that works on all ARMv7
+	  cores, including the earlier Cortex-A{8, 9}, you should
+	  instead select VFPv3.
+
+config BR2_ARM_FPU_NEON_ARMV8
+	bool "ARMV8"
+	depends on BR2_ARM_CPU_HAS_ARMV8
+	help
+	  This option allows to use the ARMV8 floating point unit, as
+	  available in some ARMv8 processors (Cortex-A53).
+
+config BR2_ARM_FPU_VFPV4D16
+	bool "VFPv4-D16"
+	depends on BR2_ARM_CPU_HAS_VFPV4
+	help
+	  This option allows to use the VFPv4 floating point unit, as
+	  available in some ARMv7 processors (Cortex-A{5, 7, 12,
+	  15}). This option requires a VFPv4 unit that has 16
+	  double-precision registers, which is always available on
+	  Cortex-A12 and Cortex-A15, but optional on Cortex-A5 and
+	  Cortex-A7.
+
+	  Note that if you want binary code that works on all ARMv7
+	  cores, including the earlier Cortex-A{8, 9}, you should
+	  instead select VFPv3-D16.
+
+config BR2_ARM_FPU_NEON
+	bool "NEON"
+	depends on BR2_ARM_CPU_HAS_NEON
+	help
+	  This option allows to use the NEON SIMD unit, as available
+	  in some ARMv7 processors, as a floating-point unit. It
+	  should however be noted that using NEON for floating point
+	  operations doesn't provide a complete compatibility with the
+	  IEEE 754.
+
+config BR2_ARM_FPU_NEON_VFPV4
+	bool "NEON/VFPv4"
+	depends on BR2_ARM_CPU_HAS_VFPV4
+	depends on BR2_ARM_CPU_HAS_NEON
+	help
+	  This option allows to use both the VFPv4 and the NEON SIMD
+	  units for floating point operations. Note that some ARMv7
+	  cores do not necessarily have VFPv4 and/or NEON support, for
+	  example on Cortex-A5 and Cortex-A7, support for VFPv4 and
+	  NEON is optional.
+
+endchoice
+
+choice
+	prompt "ARM instruction set"
+
+config BR2_ARM_INSTRUCTIONS_ARM
+	bool "ARM"
+	depends on BR2_ARM_CPU_HAS_ARM
+	help
+	  This option instructs the compiler to generate regular ARM
+	  instructions, that are all 32 bits wide.
+
+config BR2_ARM_INSTRUCTIONS_THUMB
+	bool "Thumb"
+	depends on BR2_ARM_CPU_HAS_THUMB
+	# Thumb-1 and VFP are not compatible
+	depends on BR2_ARM_SOFT_FLOAT
+	help
+	  This option instructions the compiler to generate Thumb
+	  instructions, which allows to mix 16 bits instructions and
+	  32 bits instructions. This generally provides a much smaller
+	  compiled binary size.
+
+comment "Thumb1 is not compatible with VFP"
+	depends on BR2_ARM_CPU_HAS_THUMB
+	depends on !BR2_ARM_SOFT_FLOAT
+
+config BR2_ARM_INSTRUCTIONS_THUMB2
+	bool "Thumb2"
+	depends on BR2_ARM_CPU_HAS_THUMB2
+	help
+	  This option instructions the compiler to generate Thumb2
+	  instructions, which allows to mix 16 bits instructions and
+	  32 bits instructions. This generally provides a much smaller
+	  compiled binary size.
+
+endchoice
+
+config BR2_ARCH
+	default "arm"	if BR2_arm
+	default "armeb"	if BR2_armeb
+
+config BR2_ENDIAN
+	default "LITTLE" if BR2_arm
+	default "BIG"	 if BR2_armeb
+
+config BR2_GCC_TARGET_CPU
+	default "arm920t"	if BR2_arm920t
+	default "arm922t"	if BR2_arm922t
+	default "arm926ej-s"	if BR2_arm926t
+	default "arm1136j-s"	if BR2_arm1136j_s
+	default "arm1136jf-s"	if BR2_arm1136jf_s
+	default "arm1176jz-s"	if BR2_arm1176jz_s
+	default "arm1176jzf-s"	if BR2_arm1176jzf_s
+	default "mpcore"	if BR2_arm11mpcore && BR2_ARM_CPU_HAS_VFPV2
+	default "mpcorenovfp"	if BR2_arm11mpcore
+	default "cortex-a5"	if BR2_cortex_a5
+	default "cortex-a7"	if BR2_cortex_a7
+	default "cortex-a8"	if BR2_cortex_a8
+	default "cortex-a9"	if BR2_cortex_a9
+	default "cortex-a12"	if BR2_cortex_a12
+	default "cortex-a15"	if BR2_cortex_a15
+	default "cortex-a17"	if BR2_cortex_a17
+	default "cortex-a53"	if BR2_cortex_a53
+	default "cortex-m3"	if BR2_cortex_m3
+	default "cortex-m4"	if BR2_cortex_m4
+	default "fa526"		if BR2_fa526
+	default "marvell-pj4"	if BR2_pj4
+	default "strongarm"	if BR2_strongarm
+	default "xscale"	if BR2_xscale
+	default "iwmmxt"	if BR2_iwmmxt
+
+config BR2_GCC_TARGET_ABI
+	default "aapcs-linux"
+
+config BR2_GCC_TARGET_FPU
+	default "vfp"		if BR2_ARM_FPU_VFPV2
+	default "vfpv3"		if BR2_ARM_FPU_VFPV3
+	default "vfpv3-d16" 	if BR2_ARM_FPU_VFPV3D16
+	default "vfpv4" 	if BR2_ARM_FPU_VFPV4
+	default "vfpv4-d16" 	if BR2_ARM_FPU_VFPV4D16
+	default "neon" 		if BR2_ARM_FPU_NEON
+	default "neon-vfpv4" 	if BR2_ARM_FPU_NEON_VFPV4
+	default "crypto-neon-fp-armv8" 	if BR2_ARM_FPU_NEON_ARMV8
+
+config BR2_GCC_TARGET_FLOAT_ABI
+	default "soft"		if BR2_ARM_SOFT_FLOAT
+	default "softfp"	if !BR2_ARM_SOFT_FLOAT && BR2_ARM_EABI
+	default "hard"		if !BR2_ARM_SOFT_FLOAT && BR2_ARM_EABIHF
+
+config BR2_GCC_TARGET_MODE
+	default "arm"		if BR2_ARM_INSTRUCTIONS_ARM
+	default "thumb"		if BR2_ARM_INSTRUCTIONS_THUMB || BR2_ARM_INSTRUCTIONS_THUMB2
