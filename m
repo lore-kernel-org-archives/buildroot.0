@@ -1,43 +1,104 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Aug 2016 23:55:35 +0200
-Subject: [Buildroot] [git commit] package/uboot-tols: fix dependency of
-	comment about FIT support
-Message-ID: <20160825215944.0CDBA822DD@busybox.osuosl.org>
+Date: Thu, 25 Aug 2016 23:58:32 +0200
+Subject: [Buildroot] [git commit] domoticz: fix build with uClibc
+Message-ID: <20160825215944.1B848822DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=791e35f222da58e815a657d07b620635b78a80e8
+commit: https://git.buildroot.net/buildroot/commit/?id=3f9c5fb096ad10d03832d9e0cd05ad4d02adf8c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When commit 031130a4 added the dependency on shared libs for FIT support
-in uboot-tools, the dependency of the comment was added exactly as the
-dependency of the symbol.
+domoticz.cpp currently assumes that on GNU/Linux systems header
+<execinfo.h> is available. But that is not true. Since it provided by
+C library and uClibc can be built without backtrace support. And in
+such cases we get following build error.
 
-That means the comment is shown when FIT support is possible, and hidden
-when it is not, while we want it the other way around...
+  domoticz-3.4834/main/domoticz.cpp:48:22: fatal error: execinfo.h: No such file or directory
+   #include <execinfo.h>
+                        ^
+  compilation terminated.
 
-Fix the dependency.
+This commit adds patch for detecting presence of <execinfo.h>
+and guards code accordingly.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fixes:
+
+  http://autobuild.buildroot.net/results/393/393f839e160b51ca12ac36058718ad2f0c1b50a6/
+
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uboot-tools/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...per-check-for-detecting-header-execinfo.h.patch | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index df61fda..f55614b 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -22,7 +22,7 @@ config BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
- 	  pass the address of the blob to the "bootm" command.
- 
- comment "u-boot tools FIT support needs a toolchain w/ dynamic library"
--	depends on !BR2_STATIC_LIBS
-+	depends on BR2_STATIC_LIBS
- 
- if BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
- 
+diff --git a/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch b/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
+new file mode 100644
+index 0000000..c4d88a4
+--- /dev/null
++++ b/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
+@@ -0,0 +1,61 @@
++From 5409696dfcbb05d6e4e67e74c97487b1987639e1 Mon Sep 17 00:00:00 2001
++From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++Date: Thu, 25 Aug 2016 17:23:38 +0530
++Subject: [PATCH 1/1] add proper check for detecting header <execinfo.h>
++
++domoticz.cpp currently assumes that on GNU/Linux systems header
++<execinfo.h> is available. But that is not true. Since it provided by
++C library and uClibc can be built without backtrace support. And in
++such cases we get following build error.
++
++  domoticz-3.4834/main/domoticz.cpp:48:22: fatal error: execinfo.h: No such file or directory
++   #include <execinfo.h>
++                        ^
++  compilation terminated.
++
++Instead of depending on __gnu_linux__, add check for detecting
++presence of <execinfo.h> and guard code for dumpstack accordingly.
++
++This build failure is detected by Buildroot autobuilder.
++http://autobuild.buildroot.net/results/393/393f839e160b51ca12ac36058718ad2f0c1b50a6/
++
++Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++---
++ CMakeLists.txt    | 7 +++++++
++ main/domoticz.cpp | 2 +-
++ 2 files changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index d3113f4..ef32f7b 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -61,6 +61,13 @@ SET(EXECUTABLE_OUTPUT_PATH "" CACHE INTERNAL
++   "Where to put the executables for Domoticz"
++   )
++ 
+++INCLUDE(CheckIncludeFiles)
+++CHECK_INCLUDE_FILES (execinfo.h HAVE_EXECINFO_H)
+++
+++IF(HAVE_EXECINFO_H)
+++  ADD_DEFINITIONS(-DHAVE_EXECINFO_H)
+++ENDIF(HAVE_EXECINFO_H)
+++
++ #set(CMAKE_EXE_LINKER_FLAGS "-static")
++ 
++ # Macro for setting up precompiled headers. Usage:
++diff --git a/main/domoticz.cpp b/main/domoticz.cpp
++index 69d2ef6..c52e5ac 100644
++--- a/main/domoticz.cpp
+++++ b/main/domoticz.cpp
++@@ -44,7 +44,7 @@
++ 	#include <string.h> 
++ #endif
++ 
++-#ifdef __gnu_linux__
+++#ifdef HAVE_EXECINFO_H
++ #include <execinfo.h>
++ static void dumpstack(void) {
++ 	// Notes :
++-- 
++2.6.2
++
