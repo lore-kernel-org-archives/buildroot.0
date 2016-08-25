@@ -1,51 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Aug 2016 23:47:15 +0200
-Subject: [Buildroot] [PATCH v1 4/9] board / intel: Add SPI peripherals
- for Minnowboard MAX
-In-Reply-To: <1472133887-34746-5-git-send-email-andriy.shevchenko@linux.intel.com>
-References: <1472133887-34746-1-git-send-email-andriy.shevchenko@linux.intel.com>
- <1472133887-34746-5-git-send-email-andriy.shevchenko@linux.intel.com>
-Message-ID: <20160825234715.1e500fc5@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 25 Aug 2016 23:47:16 +0200
+Subject: [Buildroot] [PATCH/next] system/skeleton: use uid/gid 65534 for
+	nobody/nogroup
+Message-ID: <1472161636-2504-1-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As recently discussed on lwn.net: https://lwn.net/Articles/695478/
 
-On Thu, 25 Aug 2016 17:04:42 +0300, Andy Shevchenko wrote:
-> From: Mika Westerberg <mika.westerberg@linux.intel.com>
-> 
-> Add two SPI peripherals which can be connected to Minnowboard MAX low speed
-> connector. First is Atmel AT25 compatible SPI EEPROM and second is M25P80
-> compatible SPI serial flash.
-> 
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  board/intel/minnowboard-max/acpi/at25.asl   | 58 +++++++++++++++++++++++++++++
->  board/intel/minnowboard-max/acpi/m25p80.asl | 52 ++++++++++++++++++++++++++
->  2 files changed, 110 insertions(+)
->  create mode 100644 board/intel/minnowboard-max/acpi/at25.asl
->  create mode 100644 board/intel/minnowboard-max/acpi/m25p80.asl
+The kernel has special behaviour for uid/gid 65534:
 
-Is there some upstream project for those ACPI tables? I wouldn't want
-to have them all in Buildroot, I'd very much prefer to have a Buildroot
-package download them, compile them using the acpica compiler, and
-install them in the proper place.
+1. The kernel maps UIDs > 65535 to it when some subsystem/API/fs
+   only supports 16bit UIDs, but a 32bit UID is passed to it.
 
-It's fine to have them in Buildroot as a temporary solution, as long as
-some upstream is being put in place. But if the long term idea is to
-keep those ACPI tables source code in Buildroot, then I don't think
-it's what we want to do.
+2. it's used by the kernel's user namespacing as the internal UID
+   that external UIDs are mapped to that don't have any local mapping.
 
-This of course applies to patches 4/9 to 9/9.
+3. It's used by NFS for all user IDs that cannot be mapped locally if
+   UID mapping is enabled.
 
-Best regards,
+Most distributions already map (or are in the progress of changing)
+nobody/nogroup to the 65534 uid/gid, so lets do so as well.
 
-Thomas
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ system/skeleton/etc/group  | 2 +-
+ system/skeleton/etc/passwd | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
+index c813da2..76346b3 100644
+--- a/system/skeleton/etc/group
++++ b/system/skeleton/etc/group
+@@ -22,5 +22,5 @@ plugdev:x:46:
+ staff:x:50:
+ lock:x:54:
+ netdev:x:82:
+-nogroup:x:99:
+ users:x:100:
++nogroup:x:65534:
+diff --git a/system/skeleton/etc/passwd b/system/skeleton/etc/passwd
+index 883265a..d8281d2 100644
+--- a/system/skeleton/etc/passwd
++++ b/system/skeleton/etc/passwd
+@@ -6,4 +6,4 @@ sync:x:4:100:sync:/bin:/bin/sync
+ mail:x:8:8:mail:/var/spool/mail:/bin/false
+ www-data:x:33:33:www-data:/var/www:/bin/false
+ operator:x:37:37:Operator:/var:/bin/false
+-nobody:x:99:99:nobody:/home:/bin/false
++nobody:x:65534:65534:nobody:/home:/bin/false
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.8.1
