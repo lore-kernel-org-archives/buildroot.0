@@ -1,104 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Aug 2016 23:58:32 +0200
-Subject: [Buildroot] [git commit] domoticz: fix build with uClibc
-Message-ID: <20160825215944.1B848822DD@busybox.osuosl.org>
+Date: Fri, 26 Aug 2016 00:05:53 +0200
+Subject: [Buildroot] [git commit branch/next] package/docker-engine:
+	bump to v1.12.0
+In-Reply-To: <20160817164917.01972edc@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 17 Aug 2016 16:49:17 +0200")
+References: <20160816110755.6DEEB82132@busybox.osuosl.org>
+ <20160817164917.01972edc@free-electrons.com>
+Message-ID: <874m68ec72.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f9c5fb096ad10d03832d9e0cd05ad4d02adf8c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-domoticz.cpp currently assumes that on GNU/Linux systems header
-<execinfo.h> is available. But that is not true. Since it provided by
-C library and uClibc can be built without backtrace support. And in
-such cases we get following build error.
+ > Hello,
+ > On Tue, 16 Aug 2016 12:58:47 +0200, Peter Korsgaard wrote:
+ >> commit: https://git.buildroot.net/buildroot/commit/?id=f892015d78eb0f2cc7ddd754beabcf41bfa6da6b
+ >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+ >> 
+ >> Bump docker-engine to the latest stable v1.12.0 from v1.12.0-rc3.
+ >> 
+ >> Signed-off-by: Christian Stewart <christian@paral.in>
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-  domoticz-3.4834/main/domoticz.cpp:48:22: fatal error: execinfo.h: No such file or directory
-   #include <execinfo.h>
-                        ^
-  compilation terminated.
+ > I believe this should have been committed to master. Indeed, we
+ > packaged the -rc4 version, waiting for the final release, and this
+ > patch precisely bumps to the final release. So it should have landed in
+ > master IMO.
 
-This commit adds patch for detecting presence of <execinfo.h>
-and guards code accordingly.
+ > BTW, the patch description is wrong: it states that we're bumping from
+ > -rc3 to final, but it's really bumping from -rc4 to final.
 
-Fixes:
+Ok, I'll cherry-pick this + the runc bump from next and add to master.
 
-  http://autobuild.buildroot.net/results/393/393f839e160b51ca12ac36058718ad2f0c1b50a6/
-
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...per-check-for-detecting-header-execinfo.h.patch | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
-
-diff --git a/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch b/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
-new file mode 100644
-index 0000000..c4d88a4
---- /dev/null
-+++ b/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
-@@ -0,0 +1,61 @@
-+From 5409696dfcbb05d6e4e67e74c97487b1987639e1 Mon Sep 17 00:00:00 2001
-+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+Date: Thu, 25 Aug 2016 17:23:38 +0530
-+Subject: [PATCH 1/1] add proper check for detecting header <execinfo.h>
-+
-+domoticz.cpp currently assumes that on GNU/Linux systems header
-+<execinfo.h> is available. But that is not true. Since it provided by
-+C library and uClibc can be built without backtrace support. And in
-+such cases we get following build error.
-+
-+  domoticz-3.4834/main/domoticz.cpp:48:22: fatal error: execinfo.h: No such file or directory
-+   #include <execinfo.h>
-+                        ^
-+  compilation terminated.
-+
-+Instead of depending on __gnu_linux__, add check for detecting
-+presence of <execinfo.h> and guard code for dumpstack accordingly.
-+
-+This build failure is detected by Buildroot autobuilder.
-+http://autobuild.buildroot.net/results/393/393f839e160b51ca12ac36058718ad2f0c1b50a6/
-+
-+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+---
-+ CMakeLists.txt    | 7 +++++++
-+ main/domoticz.cpp | 2 +-
-+ 2 files changed, 8 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index d3113f4..ef32f7b 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -61,6 +61,13 @@ SET(EXECUTABLE_OUTPUT_PATH "" CACHE INTERNAL
-+   "Where to put the executables for Domoticz"
-+   )
-+ 
-++INCLUDE(CheckIncludeFiles)
-++CHECK_INCLUDE_FILES (execinfo.h HAVE_EXECINFO_H)
-++
-++IF(HAVE_EXECINFO_H)
-++  ADD_DEFINITIONS(-DHAVE_EXECINFO_H)
-++ENDIF(HAVE_EXECINFO_H)
-++
-+ #set(CMAKE_EXE_LINKER_FLAGS "-static")
-+ 
-+ # Macro for setting up precompiled headers. Usage:
-+diff --git a/main/domoticz.cpp b/main/domoticz.cpp
-+index 69d2ef6..c52e5ac 100644
-+--- a/main/domoticz.cpp
-++++ b/main/domoticz.cpp
-+@@ -44,7 +44,7 @@
-+ 	#include <string.h> 
-+ #endif
-+ 
-+-#ifdef __gnu_linux__
-++#ifdef HAVE_EXECINFO_H
-+ #include <execinfo.h>
-+ static void dumpstack(void) {
-+ 	// Notes :
-+-- 
-+2.6.2
-+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
