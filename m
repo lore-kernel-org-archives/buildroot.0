@@ -1,40 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Aug 2016 00:05:53 +0200
-Subject: [Buildroot] [git commit branch/next] package/docker-engine:
-	bump to v1.12.0
-In-Reply-To: <20160817164917.01972edc@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 17 Aug 2016 16:49:17 +0200")
-References: <20160816110755.6DEEB82132@busybox.osuosl.org>
- <20160817164917.01972edc@free-electrons.com>
-Message-ID: <874m68ec72.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Aug 2016 00:04:46 +0200
+Subject: [Buildroot] [git commit] package/runc: bump version to cc29e3
+Message-ID: <20160825221945.56D67822E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=360c56f4eeb58727d4d1a332f21238405c06fe33
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > On Tue, 16 Aug 2016 12:58:47 +0200, Peter Korsgaard wrote:
- >> commit: https://git.buildroot.net/buildroot/commit/?id=f892015d78eb0f2cc7ddd754beabcf41bfa6da6b
- >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
- >> 
- >> Bump docker-engine to the latest stable v1.12.0 from v1.12.0-rc3.
- >> 
- >> Signed-off-by: Christian Stewart <christian@paral.in>
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Bump runc to cc29e3dded8e27ba8f65738f40d251c885030a28
 
- > I believe this should have been committed to master. Indeed, we
- > packaged the -rc4 version, waiting for the final release, and this
- > patch precisely bumps to the final release. So it should have landed in
- > master IMO.
+This version is required by Docker Engine v1.12.0.
 
- > BTW, the patch description is wrong: it states that we're bumping from
- > -rc3 to final, but it's really bumping from -rc4 to final.
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6ad14a368798619d67d68a3b297333c153230ae1)
+---
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Ok, I'll cherry-pick this + the runc bump from next and add to master.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index e6ec483..c409a66 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 77f9d4df1657fecc939be0261fcccccd34d5b22c02b8a49abad23fac33b4059a  runc-v1.0.0-rc1.tar.gz
++sha256 196b78c6caf1a4c6257314b393381baffa7c82bb2690ac02a7b3d6cd6cfe7776  runc-cc29e3dded8e27ba8f65738f40d251c885030a28.tar.gz
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 7ebba57..e2ab5ed 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RUNC_VERSION = v1.0.0-rc1
++RUNC_VERSION = cc29e3dded8e27ba8f65738f40d251c885030a28
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
