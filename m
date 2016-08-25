@@ -1,39 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 25 Aug 2016 10:57:11 +0200
-Subject: [Buildroot] [PATCH 2/2] package/iputils: link with -lintl
-In-Reply-To: <19ed123f-e837-e8a6-858e-639e6236f612@mind.be>
-References: <20160824231003.29262-1-arnout@mind.be>
- <20160824231003.29262-2-arnout@mind.be>
- <20160825101843.4d7740e0@free-electrons.com>
- <19ed123f-e837-e8a6-858e-639e6236f612@mind.be>
-Message-ID: <f459c419-2552-b6d3-4618-88a6fca11629@mind.be>
+From: Zygmunt Ptak <zygmuntptak@gmail.com>
+Date: Thu, 25 Aug 2016 12:39:05 +0200
+Subject: [Buildroot] Clone source code recursively
+In-Reply-To: <20160825101714.4cb710e9@free-electrons.com>
+References: <CAMkMO5mqkfSz8ky1Ry05m2Z3aT9PXsNiNSjFvNMpu87GCnx03Q@mail.gmail.com>
+ <20160825101714.4cb710e9@free-electrons.com>
+Message-ID: <CAMkMO5=T9OtnDD-5Y8qu6ViAx=Cedze3WNmUus=_QiT=n+7vZw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
+> What do you call "recursively"? Are you talking about also fetching
+submodules?
+Exactly.
 
-On 25-08-16 10:56, Arnout Vandecappelle wrote:
-> * Add -lintl to link if BR2_USE_LIBINTL. Perhaps add a make variable:
-> ifeq ($(BR2_USE_LIBINTL),y)
+Thank you for information.
+About nightly manual, yeah I saw that from Arnout email.
 
- Oh, and as per Baruch's suggestion, this could be
+Regards
+Zygmunt
 
-ifeq ($(BR2_USE_LIBINTL)$(BR2_STATIC_LIBS),yy)
+2016-08-25 10:17 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-
- Regards,
- Arnout
-
-> TARGET_LIBINTL_IF_NEEDED = -lintl
-> endif
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> Hello,
+>
+> On Thu, 25 Aug 2016 01:31:41 +0200, Zygmunt Ptak wrote:
+>
+> > I can't find how can I clone code recursively from git repository.
+> > Is it possible at all?
+>
+> What do you call "recursively"? Are you talking about also fetching
+> submodules? If that's what you're talking about, we recently added
+> support for that:
+>
+>   https://git.buildroot.org/buildroot/commit/package/pkg-generic.mk?id=
+> ec3e057f79117d851c37f19316a3b9b5e2470550
+>
+> You just need to add:
+>
+>   FOO_GIT_SUBMODULES = YES
+>
+> in your package .mk file.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160825/b93eb554/attachment.html>
