@@ -1,62 +1,41 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 25 Aug 2016 21:08:32 +0200
-Subject: [Buildroot] [PATCH v2] vlc: fix compile error with uClibc-ng
-	Linuxthreads
-Message-ID: <20160825190832.GA4674@waldemar-brodkorb.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 25 Aug 2016 21:19:27 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/freeswitch: bump version to
+	1.6.10
+Message-ID: <20160825191927.27176-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The fallback code path didn't work correctly, so fix it.
-
-Fixes:
-  http://autobuild.buildroot.net/results/3122287ddea1e316a64ccf0d0dc9415bfefebb49/
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v1 -> v2:
- - rework autobuild failure, there is fallback code for non-NPTL,
-   so fix it up. Suggested by Thomas Petazzoni 
----
- package/vlc/0008-fix-fallback-time.patch | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/vlc/0008-fix-fallback-time.patch
+ package/freeswitch/freeswitch.hash | 4 ++--
+ package/freeswitch/freeswitch.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vlc/0008-fix-fallback-time.patch b/package/vlc/0008-fix-fallback-time.patch
-new file mode 100644
-index 0000000..9692001
---- /dev/null
-+++ b/package/vlc/0008-fix-fallback-time.patch
-@@ -0,0 +1,27 @@
-+fix fallback code and add missing libraries to link command
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur vlc-2.2.4.orig/configure.ac vlc-2.2.4/configure.ac
-+--- vlc-2.2.4.orig/configure.ac	2016-05-31 18:11:07.000000000 +0200
-++++ vlc-2.2.4/configure.ac	2016-08-24 21:15:50.555256426 +0200
-+@@ -121,6 +121,7 @@
-+     ;;
-+   linux*)
-+     SYS=linux
-++    AC_CHECK_LIB([rt], [posix_spawnp], [VLC_ADD_LIBS([libvlccore],[-lpthread -lrt])], [], [-lpthread])
-+     ;;
-+   bsdi*)
-+     SYS=bsdi
-+diff -Nur vlc-2.2.4.orig/src/posix/thread.c vlc-2.2.4/src/posix/thread.c
-+--- vlc-2.2.4.orig/src/posix/thread.c	2015-02-02 20:42:32.000000000 +0100
-++++ vlc-2.2.4/src/posix/thread.c	2016-08-24 19:46:02.717783031 +0200
-+@@ -85,7 +85,7 @@
-+ 
-+ static void vlc_clock_setup_once (void)
-+ {
-+-# if (_POSIX_MONOTONIC_CLOCK == 0)
-++# if (_POSIX_MONOTONIC_CLOCK == 0) && (_POSIX_CLOCK_SELECTION > 0)
-+     long val = sysconf (_SC_MONOTONIC_CLOCK);
-+     assert (val != 0);
-+     vlc_clock_id = (val < 0) ? CLOCK_REALTIME : CLOCK_MONOTONIC;
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 2041158..4a4d6da 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -1,2 +1,2 @@
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.9.tar.xz.sha256
+-sha256	aa5f191113be2bd44cb4f2108da3dcc37be3234c6b733896fbff97526ac66451	freeswitch-1.6.9.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.10.tar.xz.sha256
++sha256 b7beaaac29dc0a58cc34cfd402bf1c7e8ca06975722fd8ddb2983cbed17dd6e4  freeswitch-1.6.10.tar.xz
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index e7e9ece..b65096b 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREESWITCH_VERSION = 1.6.9
++FREESWITCH_VERSION = 1.6.10
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
+ FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
+ FREESWITCH_LICENSE = MPLv1.1, \
 -- 
-2.1.4
+2.9.3
