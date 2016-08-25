@@ -1,138 +1,78 @@
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Thu, 25 Aug 2016 17:04:47 +0300
-Subject: [Buildroot] [PATCH v1 9/9] board / intel: Add GPIO buttons for
-	Intel Minnowboard
+Date: Thu, 25 Aug 2016 17:04:39 +0300
+Subject: [Buildroot] [PATCH v1 1/9] package/acpica: Add host configuration
+	to the tool
 In-Reply-To: <1472133887-34746-1-git-send-email-andriy.shevchenko@linux.intel.com>
 References: <1472133887-34746-1-git-send-email-andriy.shevchenko@linux.intel.com>
-Message-ID: <1472133887-34746-10-git-send-email-andriy.shevchenko@linux.intel.com>
+Message-ID: <1472133887-34746-2-git-send-email-andriy.shevchenko@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
+The ACPI excerpts, which would be added to an initial RAM disk image, require
+to be compiled first. iasl tool from acpica package helps do that.
 
-There are 4 user controllable switches (S0, S1, S2, S3) on Intel
-Minnowboard. This adds GPIO buttons device that is able to report key
-presses through input layer for those.
+Enable host variant of the application to be built.
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- board/intel/minnowboard/acpi/buttons.asl | 104 +++++++++++++++++++++++++++++++
- 1 file changed, 104 insertions(+)
- create mode 100644 board/intel/minnowboard/acpi/buttons.asl
+ package/Config.in.host        |  1 +
+ package/acpica/Config.in.host |  9 +++++++++
+ package/acpica/acpica.mk      | 15 +++++++++++++++
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/acpica/Config.in.host
 
-diff --git a/board/intel/minnowboard/acpi/buttons.asl b/board/intel/minnowboard/acpi/buttons.asl
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 1c99e34..992e2bb 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,5 +1,6 @@
+ menu "Host utilities"
+ 
++	source "package/acpica/Config.in.host"
+ 	source "package/aespipe/Config.in.host"
+ 	source "package/android-tools/Config.in.host"
+ 	source "package/cbootimage/Config.in.host"
+diff --git a/package/acpica/Config.in.host b/package/acpica/Config.in.host
 new file mode 100644
-index 0000000..2bc4220
+index 0000000..4e5751e
 --- /dev/null
-+++ b/board/intel/minnowboard/acpi/buttons.asl
-@@ -0,0 +1,104 @@
-+/*
-+ * Intel Minnowboard
-+ *
-+ * http://wiki.minnowboard.org/MinnowBoard
-+ *
-+ * This adds GPIO buttons device for the 4 switches found on Intel
-+ * Minnowboard available for users.
-+ *
-+ *   GPIO name           GPIO number  switch
-+ *   ---------------------------------------
-+ *   E6XX_GPIO_S0        0            S0
-+ *   E6XX_GPIO_S1        1            S1
-+ *   E6XX_GPIO_S2        2            S2
-+ *   E6XX_GPIO_S3        3            S3
-+ *
-+ * In Linux you need to set CONFIG_KEYBOARD_GPIO_POLLED=y (or m) to be
-+ * able to use this device.
-+ */
-+DefinitionBlock ("buttons.aml", "SSDT", 5, "INTEL", "BUTTONS", 1)
-+{
-+    External (_SB_.PCI0.LPC, DeviceObj)
++++ b/package/acpica/Config.in.host
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HOST_ACPICA
++	bool "host acpica"
++	help
++	  The ACPI Component Architecture (ACPICA) project provides an
++	  operating system (OS)-independent reference implementation of
++	  the Advanced Configuration and Power Interface Specification
++	  (ACPI).
 +
-+    Scope (\_SB.PCI0.LPC)
-+    {
-+        Device (BTNS)
-+        {
-+            Name (_HID, "PRP0001")
-+            Name (_DDN, "GPIO buttons device")
++	  https://www.acpica.org
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index b8459d8..40ec81b 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
+@@ -23,4 +23,19 @@ define ACPICA_INSTALL_TARGET_CMDS
+ 		INSTALLFLAGS=-m755 install
+ endef
+ 
++HOST_ACPICA_DEPENDENCIES = host-bison host-flex
 +
-+            Name (_CRS, ResourceTemplate () {
-+                GpioIo (
-+                    Exclusive,                  // Not shared
-+                    PullUp,                     // Pull up the line
-+                    0,                          // Debounce timeout
-+                    0,                          // Drive strength
-+                    IoRestrictionInputOnly,     // Only used as input
-+                    "\\_SB.PCI0.LPC",           // GPIO controller
-+                    0)                          // Must be 0
-+                {
-+                    0,                         // E6XX_GPIO_S0
-+                    1,                         // E6XX_GPIO_S1
-+                    2,                         // E6XX_GPIO_S2
-+                    3,                         // E6XX_GPIO_S3
-+                }
-+            })
++define HOST_ACPICA_BUILD_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)				\
++		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX CC="$(HOSTCC)"	\
++		all
++endef
 +
-+            Name (_DSD, Package () {
-+                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-+                Package () {
-+                    Package () {"compatible", "gpio-keys-polled"},
-+                    Package () {"poll-interval", 100},
-+                    Package () {"autorepeat", 1}
-+                },
-+                ToUUID("dbb8e3e6-5886-4ba6-8795-1319f52a966b"),
-+                Package () {
-+                    Package () {"button-0", "BTN0"},
-+                    Package () {"button-1", "BTN1"},
-+                    Package () {"button-2", "BTN2"},
-+                    Package () {"button-3", "BTN3"}
-+                }
-+            })
++define HOST_ACPICA_INSTALL_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)				\
++		HARDWARE_NAME=$(BR2_ARCH) DESTDIR="$(HOST_DIR)"		\
++		INSTALLFLAGS=-m755 install
++endef
 +
-+            // For more information about these bindings see:
-+            // Documentation/devicetree/bindings/input/gpio-keys-polled.txt
-+            // and Documentation/acpi/gpio-properties.txt.
-+
-+            Name (BTN0, Package () {
-+                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-+                Package () {
-+                    Package () {"linux,code", 105},
-+                    Package () {"linux,input-type", 1},
-+                    Package () {"gpios", Package () {^BTNS, 0, 0, 1}}
-+                }
-+            })
-+
-+            Name (BTN1, Package () {
-+                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-+                Package () {
-+                    Package () {"linux,code", 108},
-+                    Package () {"linux,input-type", 1},
-+                    Package () {"gpios", Package (4) {^BTNS, 0, 1, 1}}
-+                }
-+            })
-+
-+            Name (BTN2, Package () {
-+                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-+                Package () {
-+                    Package () {"linux,code", 103},
-+                    Package () {"linux,input-type", 1},
-+                    Package () {"gpios", Package () {^BTNS, 0, 2, 1}}
-+                }
-+            })
-+
-+            Name (BTN3, Package () {
-+                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-+                Package () {
-+                    Package () {"linux,code", 106},
-+                    Package () {"linux,input-type", 1},
-+                    Package () {"gpios", Package () {^BTNS, 0, 3, 1}}
-+                }
-+            })
-+        }
-+    }
-+}
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 2.8.1
