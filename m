@@ -1,52 +1,60 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 25 Aug 2016 06:51:52 +0300
-Subject: [Buildroot] [PATCH 2/2] package/iputils: link with -lintl
-In-Reply-To: <20160824231003.29262-2-arnout@mind.be>
-References: <20160824231003.29262-1-arnout@mind.be>
- <20160824231003.29262-2-arnout@mind.be>
-Message-ID: <20160825035151.7bnivzapacqugsri@tarshish>
+From: Kenneth Adam Miller <kennethadammiller@gmail.com>
+Date: Thu, 25 Aug 2016 01:15:49 -0400
+Subject: [Buildroot] compiler plugins & compiling the kernel
+In-Reply-To: <87lgzmh5nq.fsf@dell.be.48ers.dk>
+References: <CAK7rcp_m+9YC6gJ0xyarD217F4wyjwjg9QSdBLzVgPJ9QLrm7w@mail.gmail.com>
+ <20160820200119.4ec5848b@free-electrons.com>
+ <CAK7rcp9SVrJ4HA3wH6U9P-Tv8EzJdBKUtZa=EVwihZTR5TCdtQ@mail.gmail.com>
+ <CAK7rcp9ZEKb7dYNv23E7NF52+u0vL67f3q1XozKK3jRy2dq=pA@mail.gmail.com>
+ <84805825-f7d4-cfef-d83a-071a5a761ced@mind.be>
+ <87lgzmh5nq.fsf@dell.be.48ers.dk>
+Message-ID: <CAK7rcp_22Eu7=jxzC4ia0O78uFttX9HfFz5RG51sinvjPwBqZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+On Wed, Aug 24, 2016 at 5:34 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>
+> Hi,
+>
+>  >>>>> linux-headers 3.14.51 Configuring...
+>  >> ...
+>  >> make[2]: Entering directory ... build/linux-headers-3.14.51
+>  >> Makefile:652 *** Your gcc installation does not support plugins. If
+>  >> the necessary headers for plugin support are missing, they should be
+>  >> installed. On Debian, apt-get install gcc-<ver>-plugin-dev. If you
+>  >> choose to ignore this error and...
+>
+>  >  Ah, this is annoying...
+>
+>  >  When installing linux-headers, we don't pass the cross-compilation arguments,
+>  > because the cross-compiler doesn't exist yet at that point. So the installation
+>  > will use the host compiler instead for that check. Which is of course wrong.
+>
+>  >  Well, actually it's a bug in gr-security, because this check shouldn't be done
+>  > for install_headers (gcc isn't even called).
+>
+> Yes, to me this is really a bug in gr-security, and not much we can do
+> about it.
+>
+>  >>>> You're not correct. Support for plugins should be added to the
+>  >>>> cross-compiler if you need plugin support to build your kernel.
+>  >>>>
+>  >>>
+>  >>> That doesn't appear to be an option in buildroot.
+>
+>  >  Well, we pass --enable-plugins when BR2_GCC_ENABLE_LTO is set. We don't pass
+>  > --disable-plugins so it really depends on the gcc defaults. But then, we don't
+>  > install the plugin development headers to HOST_DIR, so it will probably be
+>  > difficult to actually compile a plugin.
+>
+> But patches are welcome!
 
-On Thu, Aug 25, 2016 at 01:10:03AM +0200, Arnout Vandecappelle (Essensium/Mind) wrote:
-> libgcrypt pulls in gpg-error which links with libintl if available.
-> Since iputils doesn't use libtool, -lintl has to be passed explicitly
-> for static builds.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/f81/f81eabb37788aa6dcdadf4034889c84bef78b876
-> http://autobuild.buildroot.net/results/f29/f296e8fba1e79f96d3d119aa4c8207ed4b80694b
-> http://autobuild.buildroot.net/results/478/478a88cd892a119970cfca717ea7f5517bfc4cea
-> http://autobuild.buildroot.net/results/920/920d2d1d967691779f79fa54a38fac5adc5a8ee4
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/iputils/iputils.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index d6398f7..47f3e28 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -26,6 +26,10 @@ endif
->  IPUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) USE_SYSFS=no USE_IDN=no\
->  	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
->  
-> +ifeq ($(BR2_NEEDS_GETTEXT)$(BR2_PACKAGE_GETTEXT),yy)
-> +IPUTILS_MAKE_OPTS += ADDLIB='-lintl'
-> +endif
+It's duly noted on my TODO list.
 
-I think this should be limited to BR2_STATIC_LIBS. It may not change much the 
-end result, but it makes the motivation clearer.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>
+> --
+> Bye, Peter Korsgaard
