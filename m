@@ -1,60 +1,36 @@
-From: Kenneth Adam Miller <kennethadammiller@gmail.com>
-Date: Thu, 25 Aug 2016 01:15:49 -0400
-Subject: [Buildroot] compiler plugins & compiling the kernel
-In-Reply-To: <87lgzmh5nq.fsf@dell.be.48ers.dk>
-References: <CAK7rcp_m+9YC6gJ0xyarD217F4wyjwjg9QSdBLzVgPJ9QLrm7w@mail.gmail.com>
- <20160820200119.4ec5848b@free-electrons.com>
- <CAK7rcp9SVrJ4HA3wH6U9P-Tv8EzJdBKUtZa=EVwihZTR5TCdtQ@mail.gmail.com>
- <CAK7rcp9ZEKb7dYNv23E7NF52+u0vL67f3q1XozKK3jRy2dq=pA@mail.gmail.com>
- <84805825-f7d4-cfef-d83a-071a5a761ced@mind.be>
- <87lgzmh5nq.fsf@dell.be.48ers.dk>
-Message-ID: <CAK7rcp_22Eu7=jxzC4ia0O78uFttX9HfFz5RG51sinvjPwBqZQ@mail.gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 25 Aug 2016 07:58:04 +0200
+Subject: [Buildroot] [PATCH] python-meld3: fix setup type
+Message-ID: <1472104684-3151-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 24, 2016 at 5:34 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
->
-> Hi,
->
->  >>>>> linux-headers 3.14.51 Configuring...
->  >> ...
->  >> make[2]: Entering directory ... build/linux-headers-3.14.51
->  >> Makefile:652 *** Your gcc installation does not support plugins. If
->  >> the necessary headers for plugin support are missing, they should be
->  >> installed. On Debian, apt-get install gcc-<ver>-plugin-dev. If you
->  >> choose to ignore this error and...
->
->  >  Ah, this is annoying...
->
->  >  When installing linux-headers, we don't pass the cross-compilation arguments,
->  > because the cross-compiler doesn't exist yet at that point. So the installation
->  > will use the host compiler instead for that check. Which is of course wrong.
->
->  >  Well, actually it's a bug in gr-security, because this check shouldn't be done
->  > for install_headers (gcc isn't even called).
->
-> Yes, to me this is really a bug in gr-security, and not much we can do
-> about it.
->
->  >>>> You're not correct. Support for plugins should be added to the
->  >>>> cross-compiler if you need plugin support to build your kernel.
->  >>>>
->  >>>
->  >>> That doesn't appear to be an option in buildroot.
->
->  >  Well, we pass --enable-plugins when BR2_GCC_ENABLE_LTO is set. We don't pass
->  > --disable-plugins so it really depends on the gcc defaults. But then, we don't
->  > install the plugin development headers to HOST_DIR, so it will probably be
->  > difficult to actually compile a plugin.
->
-> But patches are welcome!
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-It's duly noted on my TODO list.
+meld3 relies on setuptools instead of distutils.
 
->
-> --
-> Bye, Peter Korsgaard
+Fixes:
+http://autobuild.buildroot.net/results/f9e/f9ef01d2cb1d32cb13743e83c7fc9c0d354fc571/
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-meld3/python-meld3.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/python-meld3/python-meld3.mk b/package/python-meld3/python-meld3.mk
+index 268263d..529425c 100644
+--- a/package/python-meld3/python-meld3.mk
++++ b/package/python-meld3/python-meld3.mk
+@@ -9,6 +9,6 @@ PYTHON_MELD3_SOURCE = meld3-$(PYTHON_MELD3_VERSION).tar.gz
+ PYTHON_MELD3_SITE = https://pypi.python.org/packages/45/a0/317c6422b26c12fe0161e936fc35f36552069ba8e6f7ecbd99bbffe32a5f
+ PYTHON_MELD3_LICENSE = ZPLv2.1
+ PYTHON_MELD3_LICENSE_FILES = COPYRIGHT.txt LICENSE.txt
+-PYTHON_MELD3_SETUP_TYPE = distutils
++PYTHON_MELD3_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
+-- 
+2.8.1
