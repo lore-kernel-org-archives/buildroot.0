@@ -1,110 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 26 Aug 2016 21:30:09 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Aug 2016 21:42:08 +0200
 Subject: [Buildroot] Remaining kmsxx build issue
-In-Reply-To: <20160824224033.2276f19b@free-electrons.com>
+In-Reply-To: <fd5d1345-f377-59e8-7270-39759b8ddfac@mind.be>
 References: <20160819063024.55AF4101904@stock.ovh.net>
- <20160820000709.0ceef3cd@free-electrons.com> <20160819222925.GD6096@free.fr>
+ <20160820000709.0ceef3cd@free-electrons.com>
+ <20160819222925.GD6096@free.fr>
  <20160824185128.68a2fdef@free-electrons.com>
  <20160824224033.2276f19b@free-electrons.com>
-Message-ID: <fd5d1345-f377-59e8-7270-39759b8ddfac@mind.be>
+ <fd5d1345-f377-59e8-7270-39759b8ddfac@mind.be>
+Message-ID: <20160826214208.36fe8c70@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Fri, 26 Aug 2016 21:30:09 +0200, Arnout Vandecappelle wrote:
 
-On 24-08-16 22:40, Thomas Petazzoni wrote:
-> Hello,
+>  I also can't reproduce on my laptop, unless when I remove /usr/bin/gcc-ar :-)
 > 
-> On Wed, 24 Aug 2016 18:51:28 +0200, Thomas Petazzoni wrote:
+>  This piece of code is obviously broken. Unfortunately, I'm not sure how to fix
+> it. Replace gcc-ar with ${CMAKE_C_COMPILER}-ar ? But that doesn't work if
+> BR2_CCACHE=y... Symlink gcc-ar -> cross-gcc-ar in host/usr/bin? But that could
+> create a discrepancy between the host gcc's LTO tools and the cross-tools.
 > 
->>> There is another type of issues for kmsxx:
->>>
->>>     http://autobuild.buildroot.org/results/5e9/5e9963c1f11af40a6349da524fc128116a1d9e6e/build-end.log
->>>
->>>     [ 81%] Linking CXX executable ../bin/fbtestpat
->>>     /tmp/ccvhwy4u.ltrans0.ltrans.o: In function `main':
->>>     <artificial>:(.text.startup+0xa4): undefined reference to `kms::ExtCPUFramebuffer::ExtCPUFramebuffer(unsigned int, unsigned int, kms::PixelFormat, unsigned char*, unsigned int)'
->>>     <artificial>:(.text.startup+0xd4): undefined reference to `kms::draw_test_pattern(kms::IMappedFramebuffer&)'
->>>     <artificial>:(.text.startup+0x10c): undefined reference to `kms::RGB::RGB(unsigned char, unsigned char, unsigned char)'
->>>     <artificial>:(.text.startup+0x128): undefined reference to `kms::draw_text(kms::IMappedFramebuffer&, unsigned int, unsigned int, std::string const&, kms::RGB)'
->>>     <artificial>:(.text.startup+0x188): undefined reference to `kms::ExtCPUFramebuffer::~ExtCPUFramebuffer()'
->>>     <artificial>:(.text.startup+0x2a8): undefined reference to `kms::ExtCPUFramebuffer::~ExtCPUFramebuffer()'
->>>     collect2: error: ld returned 1 exit status
->>>     make[3]: *** [bin/fbtestpat] Error 1
->>>
->>> And I was not able to reproduce it either... :-/  
->>
->> This issue happened only once:
->>
->> 	http://autobuild.buildroot.net/?reason=kmsxx-bd5f6471e619a6ba2987bc7f66ef78a531f94d6c
->>
->> I've restarted the same build on the same machine, I'll see if it
->> happens again.
-> 
-> I've been able to reproduce it on gcc20, and a reduced test case is:
-> 
-> BR2_arm=y
-> BR2_STATIC_LIBS=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2016.08-rc1-4-g07e8d1c.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_PACKAGE_KMSXX=y
-> 
-> The exact same defconfig builds fine on my laptop.
-> 
-> On gcc20, I'm able to fix the build by disabling LTO support in the
-> kmsxx CMakeLists.txt file. I.e, I remove:
-> 
-> if (NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
->     CHECK_CXX_COMPILER_FLAG("-flto" HAS_LTO_FLAG)
-> 
->     if (HAS_LTO_FLAG)
->         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
->         set(CMAKE_AR gcc-ar)
+>  Oh, hang on, some genius moved the ccache support to the toolchain wrapper, so
+> ${CMAKE_C_COMPILER}-ar might actually work... Let me try that...
 
- I also can't reproduce on my laptop, unless when I remove /usr/bin/gcc-ar :-)
+Shouldn't instead this CMakeLists.txt allow to override the gcc-ar and
+gcc-ranlib path using variables, like CMake normally does for the C and
+C++ compilers with CMAKE_C_COMPILER and CMAKE_CXX_COMPILER ?
 
- This piece of code is obviously broken. Unfortunately, I'm not sure how to fix
-it. Replace gcc-ar with ${CMAKE_C_COMPILER}-ar ? But that doesn't work if
-BR2_CCACHE=y... Symlink gcc-ar -> cross-gcc-ar in host/usr/bin? But that could
-create a discrepancy between the host gcc's LTO tools and the cross-tools.
+Samuel ?
 
- Oh, hang on, some genius moved the ccache support to the toolchain wrapper, so
-${CMAKE_C_COMPILER}-ar might actually work... Let me try that...
-
- Regards,
- Arnout
-
-
->         set(CMAKE_RANLIB gcc-ranlib)
->     endif()
-> endif()
-> 
-> And then the build works.
-> 
-> While I could imagine some LTO-related bug, I cannot understand why
-> with the exact same toolchain/cross-compiler it builds on my laptop but
-> not on gcc20.
-> 
-> Completely weird.
-> 
-> Thomas
-> 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
