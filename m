@@ -1,41 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 14:41:44 +0200
-Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 3.1.3
-Message-ID: <20160902142940.C44938253D@busybox.osuosl.org>
+Date: Fri, 26 Aug 2016 17:26:05 +0200
+Subject: [Buildroot] [git commit] package/tvheadend: remove compat patch for
+	ffmpeg < 3.x
+Message-ID: <20160902142940.A3D648253D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3cf05758d81ccc90f3b5eae9122a5b02b431f90
+commit: https://git.buildroot.net/buildroot/commit/?id=87c436d8c5f4c5b07a000b48614698075e2eb822
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...g-revert-minimum-required-version-numbers.patch | 51 ----------------------
+ 1 file changed, 51 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index e3f4570..e7d5979 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 58d2a2b69f0f46fe8aacd45e582c62e380ba611b5baf6a4dfcf2906eb2b9bd61  ffmpeg-3.1.2.tar.xz
-+sha256 f8575c071e2a64437aeb70c8c030b385cddbe0b5cde20c9b18a6def840128822  ffmpeg-3.1.3.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 1d04101..fe6aa3d 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 3.1.2
-+FFMPEG_VERSION = 3.1.3
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+diff --git a/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch b/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
+deleted file mode 100644
+index 74136fe..0000000
+--- a/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 78a7b7365a67fa2f5394c6b4ca39de01b00416dc Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sat, 2 Apr 2016 19:05:52 +0200
+-Subject: [PATCH 1/1] ffmpeg: revert minimum required version numbers
+-
+-This commit reverts the minimum version numbers required by configure to
+-the values before
+-https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dL486
+-in order to allow compilation with older versions of ffmpeg again.
+-
+-Please note that the previous version numbers of all ffmpeg libs, with
+-the exception of libavfilter, are those of ffmpeg 2.0.7:
+-https://ffmpeg.org/olddownload.html
+-
+-Therefore I synced the minimum version number required for libavfilter to
+-3.79.101 and not to 4.0.0 as previous in tvheadend's configure script.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Patch sent upstream: https://github.com/tvheadend/tvheadend/pull/838]
+----
+- configure | 14 +++++++-------
+- 1 file changed, 7 insertions(+), 7 deletions(-)
+-
+-diff --git a/configure b/configure
+-index be3d2e2..2ffd280 100755
+---- a/configure
+-+++ b/configure
+-@@ -512,13 +512,13 @@ else
+-   if enabled_or_auto libav; then
+-     has_libav=true
+- 
+--    check_pkg libavfilter   ">=6.31.100"  || has_libav=false
+--    check_pkg libswresample ">=2.0.101"   || has_libav=false
+--    check_pkg libavresample ">=3.0.0"     || has_libav=false
+--    check_pkg libswscale    ">=4.0.100"   || has_libav=false
+--    check_pkg libavformat   ">=57.25.100" || has_libav=false
+--    check_pkg libavcodec    ">=57.24.102" || has_libav=false
+--    check_pkg libavutil     ">=55.17.103" || has_libav=false
+-+    check_pkg libavfilter   ">=3.79.101"  || has_libav=false
+-+    check_pkg libswresample ">=0.17.102"   || has_libav=false
+-+    check_pkg libavresample ">=1.1.0"     || has_libav=false
+-+    check_pkg libswscale    ">=2.3.100"   || has_libav=false
+-+    check_pkg libavformat   ">=55.12.100" || has_libav=false
+-+    check_pkg libavcodec    ">=55.18.102" || has_libav=false
+-+    check_pkg libavutil     ">=52.38.100" || has_libav=false
+- 
+-     if $has_libav; then
+-       enable libav
+--- 
+-2.8.0.rc3
+-
