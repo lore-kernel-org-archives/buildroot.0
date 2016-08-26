@@ -1,51 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 11:15:26 +0200
-Subject: [Buildroot] [PATCH v2] vlc: fix compile error with uClibc-ng
- Linuxthreads
-In-Reply-To: <20160825190832.GA4674@waldemar-brodkorb.de>
-References: <20160825190832.GA4674@waldemar-brodkorb.de>
-Message-ID: <20160826111526.10e4606b@free-electrons.com>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Fri, 26 Aug 2016 14:50:29 +0530
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2016-08-23
+In-Reply-To: <20160824172543.19BA410CCE6@stock.ovh.net>
+References: <20160824172543.19BA410CCE6@stock.ovh.net>
+Message-ID: <57C009DD.9070309@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Thu, 25 Aug 2016 21:08:32 +0200, Waldemar Brodkorb wrote:
+On Wednesday 24 August 2016 10:55 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+> This is the list of Buildroot build failures that occured on
+> 2016-08-23, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Build failures related to your packages:
+>
+>          bfin |                    glog-v0.3.4 | http://autobuild.buildroot.net/results/914cc267eba357cc0c425f07e57c6ae35b099b7e
+>
 
-> diff --git a/package/vlc/0008-fix-fallback-time.patch b/package/vlc/0008-fix-fallback-time.patch
-> new file mode 100644
-> index 0000000..9692001
-> --- /dev/null
-> +++ b/package/vlc/0008-fix-fallback-time.patch
-> @@ -0,0 +1,27 @@
-> +fix fallback code and add missing libraries to link command
-> +
-> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+We have disabled glog on blackfin external toolchain uclinux sometime 
+back [1]. But we are seeing same issue with buildroot based toolchain now.
 
-VLC is hosted in a Git repository, so a Git-formatted patch would be
-preferred.
+As elf-fdpic.h is only provided by uClibc and we support only uClibc for 
+blackfin, should we disable glog on blackfin ?
 
-> ++    AC_CHECK_LIB([rt], [posix_spawnp], [VLC_ADD_LIBS([libvlccore],[-lpthread -lrt])], [], [-lpthread])
+Regards,
+Rahul
 
-Why are you linking with -lpthread here?
-
-With uClibc, seems like linking with -lrt is sufficient:
-
-thomas at skate:~/projets/buildroot (master)$ ./output/host/usr/bin/arm-linux-gcc -o foo foo.c 
-/tmp/ccigljuI.o: In function `main':
-foo.c:(.text+0x2c): undefined reference to `posix_spawn'
-collect2: error: ld returned 1 exit status
-thomas at skate:~/projets/buildroot (master)$ ./output/host/usr/bin/arm-linux-gcc -o foo foo.c -lrt
-thomas at skate:~/projets/buildroot (master)$
-
-And it builds fine with glibc with no additional library at all
-(neither -lrt nor -lpthread).
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+[1] - 
+https://git.buildroot.net/buildroot/commit/?id=3b198722a5cfdf2ad5fd5a243aaa5f9f730b0101
