@@ -1,41 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Aug 2016 22:49:13 +0200
-Subject: [Buildroot] [git commit] alljoyn: bump to version 16.04a
-Message-ID: <20160902142941.7F8D17FA6D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Aug 2016 15:39:42 +0200
+Subject: [Buildroot] [git commit] system/skeleton: use uid/gid 65534 for
+	nobody/nogroup
+Message-ID: <20160902142940.476007FEE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d340eb39953d35048c030e1602b026f46734c9b7
+commit: https://git.buildroot.net/buildroot/commit/?id=9c67af2c524ad2b6585af2f5e43f76dacd7cc109
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+As recently discussed on lwn.net: https://lwn.net/Articles/695478/
+
+The kernel has special behaviour for uid/gid 65534:
+
+1. The kernel maps UIDs > 65535 to it when some subsystem/API/fs
+   only supports 16bit UIDs, but a 32bit UID is passed to it.
+
+2. it's used by the kernel's user namespacing as the internal UID
+   that external UIDs are mapped to that don't have any local mapping.
+
+3. It's used by NFS for all user IDs that cannot be mapped locally if
+   UID mapping is enabled.
+
+Most distributions already map (or are in the progress of changing)
+nobody/nogroup to the 65534 uid/gid, so lets do so as well.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/alljoyn/alljoyn.hash | 2 +-
- package/alljoyn/alljoyn.mk   | 2 +-
+ system/skeleton/etc/group  | 2 +-
+ system/skeleton/etc/passwd | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/alljoyn/alljoyn.hash b/package/alljoyn/alljoyn.hash
-index e18d66e..47dd0d4 100644
---- a/package/alljoyn/alljoyn.hash
-+++ b/package/alljoyn/alljoyn.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	41bd424d376d22dc2b48cc035400bd63595d19467eeb6a7ae81429f5a43ed2e2	alljoyn-16.04.00-src.tar.gz
-+sha256	fc437d96cf1213f18048240b5d12a374b31894d21830a0a6ccf562ffa13425d5	alljoyn-16.04.00a-src.tar.gz
-diff --git a/package/alljoyn/alljoyn.mk b/package/alljoyn/alljoyn.mk
-index 7126258..69d5ded 100644
---- a/package/alljoyn/alljoyn.mk
-+++ b/package/alljoyn/alljoyn.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- ALLJOYN_REV = 16.04
--ALLJOYN_VERSION = $(ALLJOYN_REV).00
-+ALLJOYN_VERSION = $(ALLJOYN_REV).00a
- ALLJOYN_SOURCE = alljoyn-$(ALLJOYN_VERSION)-src.tar.gz
- ALLJOYN_SITE = https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_REV)
- # See https://allseenalliance.org/alliance/ip-policy
+diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
+index c813da2..76346b3 100644
+--- a/system/skeleton/etc/group
++++ b/system/skeleton/etc/group
+@@ -22,5 +22,5 @@ plugdev:x:46:
+ staff:x:50:
+ lock:x:54:
+ netdev:x:82:
+-nogroup:x:99:
+ users:x:100:
++nogroup:x:65534:
+diff --git a/system/skeleton/etc/passwd b/system/skeleton/etc/passwd
+index 883265a..d8281d2 100644
+--- a/system/skeleton/etc/passwd
++++ b/system/skeleton/etc/passwd
+@@ -6,4 +6,4 @@ sync:x:4:100:sync:/bin:/bin/sync
+ mail:x:8:8:mail:/var/spool/mail:/bin/false
+ www-data:x:33:33:www-data:/var/www:/bin/false
+ operator:x:37:37:Operator:/var:/bin/false
+-nobody:x:99:99:nobody:/home:/bin/false
++nobody:x:65534:65534:nobody:/home:/bin/false
