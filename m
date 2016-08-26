@@ -1,8 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Aug 2016 11:52:19 +0200
-Subject: [Buildroot] [PATCH 1/2] board/minnowboard/post-build.sh: only tweak
+Date: Fri, 26 Aug 2016 11:52:20 +0200
+Subject: [Buildroot] [PATCH 2/2] board/raspberrypi/post-build.sh: only tweak
 	/etc/inittab if available
-Message-ID: <1472205140-739-1-git-send-email-peter@korsgaard.com>
+In-Reply-To: <1472205140-739-1-git-send-email-peter@korsgaard.com>
+References: <1472205140-739-1-git-send-email-peter@korsgaard.com>
+Message-ID: <1472205140-739-2-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,15 +17,15 @@ tweak it if present.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/minnowboard/post-build.sh | 6 ++++--
+ board/raspberrypi/post-build.sh | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/board/minnowboard/post-build.sh b/board/minnowboard/post-build.sh
-index 1406a50..45f7b52 100755
---- a/board/minnowboard/post-build.sh
-+++ b/board/minnowboard/post-build.sh
-@@ -5,6 +5,8 @@
- cp -v board/minnowboard/grub-${2}.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
+diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
+index 7eae14a..5e5eb71 100755
+--- a/board/raspberrypi/post-build.sh
++++ b/board/raspberrypi/post-build.sh
+@@ -4,6 +4,8 @@ set -u
+ set -e
  
  # Add a console on tty1
 -grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
