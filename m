@@ -1,47 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 21:47:40 +0200
-Subject: [Buildroot] [PATCH/next v5 6/6] package/vlc: add support for
- ffmpeg 3.0
-In-Reply-To: <1471273421-12076-6-git-send-email-bernd.kuhls@t-online.de>
-References: <1471273421-12076-1-git-send-email-bernd.kuhls@t-online.de>
- <1471273421-12076-6-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160826214740.2bd4dfee@free-electrons.com>
+Date: Fri, 26 Aug 2016 22:08:14 +0200
+Subject: [Buildroot] [PATCH] norm: add patch to fix musl build
+Message-ID: <1472242094-7204-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
 
-On Mon, 15 Aug 2016 17:03:41 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v5: first release
->     instead of bumping vlc to git master (no vlc 3.x release yet) we use
->     a patch from deb-multimedia.org which provides the necessary changes
->     for ffmpeg 3.x support to vlc 2.2, compile-tested using this
->     defconfig:
-> 
->     BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
->     BR2_TOOLCHAIN_BUILDROOT_CXX=y
->     BR2_PACKAGE_FFMPEG=y
->     BR2_PACKAGE_FFMPEG_GPL=y
->     BR2_PACKAGE_FFMPEG_POSTPROC=y
->     BR2_PACKAGE_FFMPEG_SWSCALE=y
->     BR2_PACKAGE_VLC=y
-> 
->     This patch can be removed when vlc is bumped to 3.x.
+  http://autobuild.buildroot.net/results/9c7130d5b5aad218c5c576761d495a3f403fdc5b/
 
-Why is this very useful explanation below the "---" and the commit log
-empty? It's a bit sad to write such a useful explanation, and lose it
-when the patch is applied.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...03-remove-kernel-headers-include-musl-fix.patch | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 package/norm/0003-remove-kernel-headers-include-musl-fix.patch
 
-So I've moved this explanation up in the commit log, and applied to
-next. Thanks!
-
-Thomas
+diff --git a/package/norm/0003-remove-kernel-headers-include-musl-fix.patch b/package/norm/0003-remove-kernel-headers-include-musl-fix.patch
+new file mode 100644
+index 0000000..7581c10
+--- /dev/null
++++ b/package/norm/0003-remove-kernel-headers-include-musl-fix.patch
+@@ -0,0 +1,55 @@
++Remove kernel header includes causing issues with musl
++
++Include the kernel headers from netfilter causes a conflict with the
++<netinet/in.h> way of defining the IPPROTO_* constants, resulting in
++the following build failure:
++
++In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/netdb.h:9:0,
++                 from /home/peko/autobuild/instance-0/output/build/norm-1.5r6/protolib/include/protoAddress.h:13,
++                 from /home/peko/autobuild/instance-0/output/build/norm-1.5r6/protolib/include/protoDetour.h:5,
++                 from ../protolib/src/linux/linuxDetour.cpp:3:
++/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected identifier before numeric constant
++   IPPROTO_IP = 0,  /* Dummy protocol for TCP  */
++   ^
++/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected '}' before numeric constant
++/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected unqualified-id before numeric constant
++In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netfilter.h:7:0,
++                 from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netfilter_ipv4.h:8,
++                 from ../protolib/src/linux/linuxDetour.cpp:10:
++/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:79:1: error: expected declaration before '}' token
++ };
++ ^
++
++Since from musl's developers perspective including kernel headers is
++seen as being unsafe, we simply duplicate the necessary netfilter
++definitions (there are just a few) instead of including some kernel
++headers.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/protolib/src/linux/linuxDetour.cpp
++===================================================================
++--- a/protolib/src/linux/linuxDetour.cpp
+++++ b/protolib/src/linux/linuxDetour.cpp
++@@ -7,15 +7,18 @@
++ #include <stdlib.h>  // for atoi(), getenv()
++ #include <stdio.h>
++ #include <unistd.h>  // for close()
++-#include <linux/netfilter_ipv4.h>  // for NF_IP_LOCAL_OUT, etc
++-#include <linux/netfilter_ipv6.h>  // for NF_IP6_LOCAL_OUT, etc
++-#include <linux/netfilter.h>  // for NF_ACCEPT, etc
++ #include <libnetfilter_queue/libnetfilter_queue.h>
++ 
++ #include <fcntl.h>  // for fcntl(), etc
++ #include <linux/if_ether.h>  // for ETH_P_IP
++ #include <net/if_arp.h>   // for ARPHRD_ETHER
++ 
+++/* From netfilter kernel headers */
+++#define NF_IP_LOCAL_OUT		3
+++
+++#define NF_DROP 		0
+++#define NF_ACCEPT 		1
+++
++ /** NOTES: 
++  *
++  * 1) This newer implementation of LinuxDetour uses netfilter_queue
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
