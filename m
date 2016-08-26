@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 15:39:29 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/freeswitch: bump version
- to 1.6.10
-In-Reply-To: <20160825191927.27176-1-bernd.kuhls@t-online.de>
-References: <20160825191927.27176-1-bernd.kuhls@t-online.de>
-Message-ID: <20160826153929.0d12edd7@free-electrons.com>
+Date: Fri, 26 Aug 2016 15:39:49 +0200
+Subject: [Buildroot] [PATCH/next] system/skeleton: use uid/gid 65534 for
+ nobody/nogroup
+In-Reply-To: <1472161636-2504-1-git-send-email-peter@korsgaard.com>
+References: <1472161636-2504-1-git-send-email-peter@korsgaard.com>
+Message-ID: <20160826153949.1c0b5b7e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 25 Aug 2016 21:19:27 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Thu, 25 Aug 2016 23:47:16 +0200, Peter Korsgaard wrote:
+> As recently discussed on lwn.net: https://lwn.net/Articles/695478/
+> 
+> The kernel has special behaviour for uid/gid 65534:
+> 
+> 1. The kernel maps UIDs > 65535 to it when some subsystem/API/fs
+>    only supports 16bit UIDs, but a 32bit UID is passed to it.
+> 
+> 2. it's used by the kernel's user namespacing as the internal UID
+>    that external UIDs are mapped to that don't have any local mapping.
+> 
+> 3. It's used by NFS for all user IDs that cannot be mapped locally if
+>    UID mapping is enabled.
+> 
+> Most distributions already map (or are in the progress of changing)
+> nobody/nogroup to the 65534 uid/gid, so lets do so as well.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/freeswitch/freeswitch.hash | 4 ++--
->  package/freeswitch/freeswitch.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  system/skeleton/etc/group  | 2 +-
+>  system/skeleton/etc/passwd | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
 
