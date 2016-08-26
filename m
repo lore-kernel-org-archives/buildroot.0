@@ -1,33 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Aug 2016 11:56:11 +0200
-Subject: [Buildroot] [git commit] iputils: fix typo in libintl comment
-Message-ID: <20160826095718.06E0E8219D@busybox.osuosl.org>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Fri, 26 Aug 2016 12:50:22 +0200
+Subject: [Buildroot] [PATCH v1 1/9] package/acpica: Add host
+ configuration to the tool
+In-Reply-To: <1472133887-34746-2-git-send-email-andriy.shevchenko@linux.intel.com>
+References: <1472133887-34746-1-git-send-email-andriy.shevchenko@linux.intel.com>
+ <1472133887-34746-2-git-send-email-andriy.shevchenko@linux.intel.com>
+Message-ID: <CAK4VdL3vQv-YkEmmreg0cgDA8QVeAj7XAEDzdAJwgg4Ox4cMCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fc926dbd11dc9239e209f6da028c4cb796e5577
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The sentence should end with a dot (.) and not a comma (,).
+On Thu, Aug 25, 2016 at 4:04 PM, Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> +define HOST_ACPICA_BUILD_CMDS
+> +       $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)                         \
+> +               HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX CC="$(HOSTCC)"    \
+> +               all
+> +endef
+> +
+> +define HOST_ACPICA_INSTALL_CMDS
+> +       $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)                         \
+> +               HARDWARE_NAME=$(BR2_ARCH) DESTDIR="$(HOST_DIR)"         \
+> +               INSTALLFLAGS=-m755 install
+> +endef
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/iputils/iputils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+HARDWARE_NAME should probably not be set to BR2_ARCH for the host
+version of the package, as it contains the target architecture. Even
+though it is a rather useless variable today (as pointed out by Thomas
+in github https://github.com/acpica/acpica/pull/152), it makes even
+less sense here.
 
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 42dab08..0a89120 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -39,7 +39,7 @@ IPUTILS_DEPENDENCIES += libgcrypt
- # When gettext is enabled (BR2_PACKAGE_GETTEXT=y), and provides libintl
- # (BR2_NEEDS_GETTEXT=y), libgpg-error will link with libintl, and libgpg-error
- # is pulled in by libgcrypt. Since iputils doesn't use libtool, we have to link
--# with libintl explicitly for static linking,
-+# with libintl explicitly for static linking.
- ifeq ($(BR2_STATIC_LIBS)$(BR2_NEEDS_GETTEXT)$(BR2_PACKAGE_GETTEXT),yyy)
- IPUTILS_MAKE_OPTS += ADDLIB='-lintl'
- endif
+Erico
