@@ -1,123 +1,64 @@
-From: noe.rubinstein at gmail.com <noe.rubinstein@gmail.com>
-Date: Fri, 26 Aug 2016 11:27:36 +0200
-Subject: [Buildroot] [PATCH] Trousers: fix build with musl
-Message-ID: <1472203656-5901-1-git-send-email-nrubinstein@aldebaran.com>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Fri, 26 Aug 2016 12:28:32 +0300
+Subject: [Buildroot] [PATCH] gcc: ARC Fix conditional move contstraint.
+Message-ID: <1472203712-27459-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: No? Rubinstein <nrubinstein@aldebaran.com>
+The patch solves one of the ARC internal compiler issues.
 
-The trousers code uses getpwent_r, which is not available in musl.
-Detect the availability of getpwent_r in the TrouSerS build system, and
-use it conditionally.
-
-This broke the build of tpm-tools because linking with libtspi.so
-failed.
-
-Fixes this build failure:
-http://autobuild.buildroot.net/results/830fc20c68a0653afa5567edffc2ededc4e45cc6
-
+Fixes:
+http://autobuild.buildroot.net/results/1c4/1c4493c6a18b7a93a0368420c8f79032f9330891//
+http://autobuild.buildroot.net/results/510/51071b790866b0c7083de3a94ad2a427009096af//
+http://autobuild.buildroot.net/results/09e/09e037c628ca2a27d8eb832dd070f50ec7ebb72a//
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 ---
+ .../950-ARC-Fix-conditional-move-contstraint.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/gcc/arc-2016.09-eng008/950-ARC-Fix-conditional-move-contstraint.patch
 
-Runtime-tested by running tpm_version in a chroot and verifying that it
-creates a "user.data" file with both the Buildroot-provided CodeSourcery
-and Musl toolchains on x86_64.
-
-Build tested with
-http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2016.08-rc1-4-g07e8d1c.tar.bz2
-
-Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
----
- ...t-getpwent_r-is-available-before-using-it.patch | 78 ++++++++++++++++++++++
- 1 file changed, 78 insertions(+)
- create mode 100644 package/trousers/0004-Check-that-getpwent_r-is-available-before-using-it.patch
-
-diff --git a/package/trousers/0004-Check-that-getpwent_r-is-available-before-using-it.patch b/package/trousers/0004-Check-that-getpwent_r-is-available-before-using-it.patch
+diff --git a/package/gcc/arc-2016.09-eng008/950-ARC-Fix-conditional-move-contstraint.patch b/package/gcc/arc-2016.09-eng008/950-ARC-Fix-conditional-move-contstraint.patch
 new file mode 100644
-index 0000000..6ed440e
+index 0000000..153af6d
 --- /dev/null
-+++ b/package/trousers/0004-Check-that-getpwent_r-is-available-before-using-it.patch
-@@ -0,0 +1,78 @@
-+From 9e42c405f30d2b52d019598436ea346ef8586f43 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?No=C3=A9=20Rubinstein?= <nrubinstein@aldebaran.com>
-+Date: Wed, 24 Aug 2016 18:55:25 +0200
-+Subject: [PATCH] Check that getpwent_r is available before using it
++++ b/package/gcc/arc-2016.09-eng008/950-ARC-Fix-conditional-move-contstraint.patch
+@@ -0,0 +1,34 @@
++From e569e9c2ce2273f5175e0928efd6e45c3e71c45f Mon Sep 17 00:00:00 2001
++From: Claudiu Zissulescu <claziss@synopsys.com>
++Date: Mon, 22 Aug 2016 19:58:25 +0200
++Subject: [PATCH] [ARC] Fix conditional move contstraint
 +
-+This fixes building trousers with musl
++Move pattern (movsi_insn) allows predicated instructions to be
++instructions which can hold all registers.  However, the conditional
++variant doesn't.  This patch fixes this problem.
++
++2016-08-22  Claudiu Zissulescu  <claziss@synopsys.com>
++
++	* config/arc/arc.md (movsi_cond_exec): Update constraint.
++
++Signed-off-by: Claudiu Zissulescu  <claziss@synopsys.com>
 +---
-+ configure.in        |  4 ++++
-+ src/tspi/ps/tspps.c | 10 +++++-----
-+ 2 files changed, 9 insertions(+), 5 deletions(-)
++ gcc/config/arc/arc.md | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/configure.in b/configure.in
-+index fd3f5f1..e3d7acf 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -145,6 +145,10 @@ else
-+ 	AC_MSG_ERROR(["gtk", "openssl" and "none" are the only supported gui options for trousers])
-+ fi
-+ 
-++# Look for getpwent_r. If it is not found, getpwent will be used instead, with
-++# an additional mutex.
-++AC_CHECK_FUNC(getpwent_r, [AC_DEFINE(HAVE_GETPWENT_R)])
-++
-+ #
-+ # The default port that the TCS daemon listens on
-+ #
-+diff --git a/src/tspi/ps/tspps.c b/src/tspi/ps/tspps.c
-+index c6f9c3d..9d00d2a 100644
-+--- a/src/tspi/ps/tspps.c
-++++ b/src/tspi/ps/tspps.c
-+@@ -45,7 +45,7 @@
-+ 
-+ static int user_ps_fd = -1;
-+ static MUTEX_DECLARE_INIT(user_ps_lock);
-+-#if (defined (__FreeBSD__) || defined (__OpenBSD__))
-++#ifndef HAVE_GETPWENT_R
-+ static MUTEX_DECLARE_INIT(user_ps_path);
-+ #endif
-+ static struct flock fl;
-+@@ -60,7 +60,7 @@ get_user_ps_path(char **file)
-+ 	TSS_RESULT result;
-+ 	char *file_name = NULL, *home_dir = NULL;
-+ 	struct passwd *pwp;
-+-#if (defined (__linux) || defined (linux) || defined(__GLIBC__))
-++#ifdef HAVE_GETPWENT_R
-+ 	struct passwd pw;
-+ #endif
-+ 	struct stat stat_buf;
-+@@ -72,7 +72,7 @@ get_user_ps_path(char **file)
-+ 		*file = strdup(file_name);
-+ 		return (*file) ? TSS_SUCCESS : TSPERR(TSS_E_OUTOFMEMORY);
-+ 	}
-+-#if (defined (__FreeBSD__) || defined (__OpenBSD__))
-++#ifndef HAVE_GETPWENT_R
-+ 	MUTEX_LOCK(user_ps_path);
-+ #endif
-+ 
-+@@ -90,7 +90,7 @@ get_user_ps_path(char **file)
-+ #else
-+ 	setpwent();
-+ 	while (1) {
-+-#if (defined (__linux) || defined (linux) || defined(__GLIBC__))
-++#ifdef HAVE_GETPWENT_R
-+ 		rc = getpwent_r(&pw, buf, PASSWD_BUFSIZE, &pwp);
-+ 		if (rc) {
-+ 			LogDebugFn("USER PS: Error getting path to home directory: getpwent_r: %s",
-+@@ -99,7 +99,7 @@ get_user_ps_path(char **file)
-+ 			return TSPERR(TSS_E_INTERNAL_ERROR);
-+ 		}
-+ 
-+-#elif (defined (__FreeBSD__) || defined (__OpenBSD__))
-++#else
-+ 		if ((pwp = getpwent()) == NULL) {
-+ 			LogDebugFn("USER PS: Error getting path to home directory: getpwent: %s",
-+                                    strerror(rc));
++diff --git a/gcc/config/arc/arc.md b/gcc/config/arc/arc.md
++index d87174a..607c6e6 100644
++--- a/gcc/config/arc/arc.md
+++++ b/gcc/config/arc/arc.md
++@@ -3603,7 +3603,7 @@
++      (match_operator 3 "proper_comparison_operator"
++        [(match_operand 2 "cc_register" "Rcc,Rcc") (const_int 0)])
++      (set (match_operand:SI 0 "dest_reg_operand" "=w,w")
++-	  (match_operand:SI 1 "nonmemory_operand" "Lc,?Cal")))]
+++	  (match_operand:SI 1 "nonmemory_operand" "LRac,?Cal")))]
++   ""
++   "mov.%d3 %0,%S1"
++   [(set_attr "type" "cmove")
 +-- 
-+2.1.4
++2.6.3
 +
 -- 
-2.1.4
+2.6.3
