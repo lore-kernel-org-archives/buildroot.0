@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Aug 2016 18:52:32 +0200
-Subject: [Buildroot] [git commit] libnetfilter_acct: remove autoreconf
-Message-ID: <20160902142939.F01DD7FEE6@busybox.osuosl.org>
+Date: Fri, 26 Aug 2016 17:16:54 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: re-enable for mips64r2 and
+	mips64r6
+Message-ID: <20160902142940.8CE758253D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15c0de8b3544f67bc61e5f9ce149b70bbf297c69
+commit: https://git.buildroot.net/buildroot/commit/?id=02f749b5b2f4532c5b2daed539b4b5634b28a260
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since commit b8d446cd56dc (libnetfilter_acct: bump to version 1.0.3,
-2016-08-23) we no longer patch configure.ac.
+ffmpeg 3 fixed support for mips64r2 and mips64r6, for details see
+http://patchwork.ozlabs.org/patch/626756/
 
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnetfilter_acct/libnetfilter_acct.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/ffmpeg/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/libnetfilter_acct/libnetfilter_acct.mk b/package/libnetfilter_acct/libnetfilter_acct.mk
-index 3870ef8..c2fa234 100644
---- a/package/libnetfilter_acct/libnetfilter_acct.mk
-+++ b/package/libnetfilter_acct/libnetfilter_acct.mk
-@@ -9,7 +9,6 @@ LIBNETFILTER_ACCT_SOURCE = libnetfilter_acct-$(LIBNETFILTER_ACCT_VERSION).tar.bz
- LIBNETFILTER_ACCT_SITE = http://www.netfilter.org/projects/libnetfilter_acct/files
- LIBNETFILTER_ACCT_INSTALL_STAGING = YES
- LIBNETFILTER_ACCT_DEPENDENCIES = host-pkgconf libmnl
--LIBNETFILTER_ACCT_AUTORECONF = YES
- LIBNETFILTER_ACCT_LICENSE = LGPLv2.1+
- LIBNETFILTER_ACCT_LICENSE_FILES = COPYING
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 096ff95..6b7a6e7 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -1,8 +1,7 @@
+ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	bool
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
+-	# ffmpeg's configure script only supports mips64 (r1) variant
+-	default y if !BR2_nios2 && !BR2_mips_64r2 && !BR2_mips_64r6
++	default y if !BR2_nios2
  
+ menuconfig BR2_PACKAGE_FFMPEG
+ 	bool "ffmpeg"
