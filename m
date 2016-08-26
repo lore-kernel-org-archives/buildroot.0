@@ -1,42 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 18:06:14 +0200
-Subject: [Buildroot] [git commit] pango: bump to version 1.40.2
-Message-ID: <20160902142941.4917A7FA6D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Aug 2016 22:53:46 +0200
+Subject: [Buildroot] [git commit] gawk: bump to version 4.1.4
+Message-ID: <20160902142940.BA60C8253D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=144498c82638f0e3da2978b2494e3a8372378e89
+commit: https://git.buildroot.net/buildroot/commit/?id=67db45a9fb5f78a175b67cac56be1eafb1c5a9e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pango/pango.hash | 4 ++--
- package/pango/pango.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gawk/gawk.hash | 2 +-
+ package/gawk/gawk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 67b67f0..036838c 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
+diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
+index 7f746d8..e2c7806 100644
+--- a/package/gawk/gawk.hash
++++ b/package/gawk/gawk.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.36/pango-1.40.1.sha256sum
--sha256	e27af54172c72b3ac6be53c9a4c67053e16c905e02addcf3a603ceb2005c1a40	pango-1.40.1.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.2.sha256sum
-+sha256	90582a02bc89318d205814fc097f2e9dd164d26da5f27c53ea42d583b34c3cd1	pango-1.40.2.tar.xz
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index bdad8c6..ba07aec 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated after checking pgp signature
+-sha256	e3cf55e91e31ea2845f8338bedd91e40671fc30e4d82ea147d220e687abda625	gawk-4.1.3.tar.xz
++sha256	53e184e2d0f90def9207860531802456322be091c7b48f23fdc79cda65adc266	gawk-4.1.4.tar.xz
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index b5b0f8d..7c6689b 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PANGO_VERSION_MAJOR = 1.40
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).1
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).2
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_AUTORECONF = YES
+-GAWK_VERSION = 4.1.3
++GAWK_VERSION = 4.1.4
+ GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
+ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
+ GAWK_DEPENDENCIES = host-gawk
