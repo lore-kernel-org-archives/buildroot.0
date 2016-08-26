@@ -1,34 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 22:00:46 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: also implements the EGL
-	wayland extensions
-Message-ID: <20160902142939.ADD057FB67@busybox.osuosl.org>
+Date: Fri, 26 Aug 2016 15:39:17 +0200
+Subject: [Buildroot] [git commit] package/freeswitch: bump version to 1.6.10
+Message-ID: <20160902142940.3A3F07FEE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aab7cab8220466fa2043f59e45051341ecd27946
+commit: https://git.buildroot.net/buildroot/commit/?id=bacff38e08a3cf7c5ead0e5de59011134e009931
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mesa3d implements the EGL extensions for wayland. State so.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/freeswitch/freeswitch.hash | 4 ++--
+ package/freeswitch/freeswitch.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 45ca69c..6f60ee1 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -150,6 +150,7 @@ comment "Additional API Support"
- config BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	bool "OpenGL EGL"
- 	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
- 	help
- 	  Use the Khronos EGL APIs. EGL is a window manager for OpenGL applications
- 	  similar to GLX, for X, and WGL, for Windows.
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 2041158..4a4d6da 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -1,2 +1,2 @@
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.9.tar.xz.sha256
+-sha256	aa5f191113be2bd44cb4f2108da3dcc37be3234c6b733896fbff97526ac66451	freeswitch-1.6.9.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.10.tar.xz.sha256
++sha256 b7beaaac29dc0a58cc34cfd402bf1c7e8ca06975722fd8ddb2983cbed17dd6e4  freeswitch-1.6.10.tar.xz
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index e7e9ece..b65096b 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREESWITCH_VERSION = 1.6.9
++FREESWITCH_VERSION = 1.6.10
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
+ FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
+ FREESWITCH_LICENSE = MPLv1.1, \
