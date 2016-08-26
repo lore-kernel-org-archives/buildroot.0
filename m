@@ -1,57 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Aug 2016 16:29:48 +0200
-Subject: [Buildroot] [git commit] package/procps-ng: Bump to version 3.3.12
-Message-ID: <20160902142941.9744A7FB67@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Aug 2016 15:59:54 +0200
+Subject: [Buildroot] [git commit] blktrace: re-enable on uClibc
+Message-ID: <20160902142940.558DD7FEE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da3bb9167cbef357e6736cfd5c0ba6bb41042e3b
+commit: https://git.buildroot.net/buildroot/commit/?id=8972c398ff8b6b3550735c9e15fd61cdc7297049
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jeroen Roovers <jer@airfi.aero>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/procps-ng/0002-use-pkgconfig-for-ncursesw-cflags.patch | 2 +-
- package/procps-ng/procps-ng.hash                               | 4 ++--
- package/procps-ng/procps-ng.mk                                 | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+With a small patch, blktrace can work on uClibc: we simply need to link
+with librt to use the posix_spawn*() functions.
 
-diff --git a/package/procps-ng/0002-use-pkgconfig-for-ncursesw-cflags.patch b/package/procps-ng/0002-use-pkgconfig-for-ncursesw-cflags.patch
-index c25da3b..1329ac4 100644
---- a/package/procps-ng/0002-use-pkgconfig-for-ncursesw-cflags.patch
-+++ b/package/procps-ng/0002-use-pkgconfig-for-ncursesw-cflags.patch
-@@ -35,7 +35,7 @@ diff -Nura procps-ng-3.3.10.orig/Makefile.am procps-ng-3.3.10/Makefile.am
- @@ -97,6 +97,7 @@
-  slabtop_LDADD = $(LDADD) @NCURSES_LIBS@
-  watch_SOURCES = watch.c lib/strutils.c lib/fileutils.c
-- watch_LDADD = $(LDADD) @WATCH_NCURSES_LIBS@
-+ watch_LDADD = @WATCH_NCURSES_LIBS@ $(CYGWINFLAGS)
- +watch_CFLAGS = @WATCH_NCURSES_CFLAGS@
-  top_top_SOURCES = \
-  	top/top.h \
-diff --git a/package/procps-ng/procps-ng.hash b/package/procps-ng/procps-ng.hash
-index c98fb14..62d6172 100644
---- a/package/procps-ng/procps-ng.hash
-+++ b/package/procps-ng/procps-ng.hash
-@@ -1,3 +1,3 @@
- # From http://sourceforge.net/projects/procps-ng/files/Production/
--md5	6cc5b94c1c5b8cbc89ad345a7b522f74	procps-ng-3.3.11.tar.xz
--sha1	1bdca65547df9ed019bd83649b0f8b8eaa017e25	procps-ng-3.3.11.tar.xz
-+md5	957e42e8b193490b2111252e4a2b443c	procps-ng-3.3.12.tar.xz
-+sha1	82c0745f150f1385ca01fe7d24f05f74e31c94c6	procps-ng-3.3.12.tar.xz
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index 51a70a5..83323b7 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+[Thomas: add reference to upstream commit.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../blktrace/0001-iowatcher-link-with-lrt.patch    | 31 ++++++++++++++++++++++
+ package/blktrace/Config.in                         |  5 ----
+ 2 files changed, 31 insertions(+), 5 deletions(-)
+
+diff --git a/package/blktrace/0001-iowatcher-link-with-lrt.patch b/package/blktrace/0001-iowatcher-link-with-lrt.patch
+new file mode 100644
+index 0000000..689a678
+--- /dev/null
++++ b/package/blktrace/0001-iowatcher-link-with-lrt.patch
+@@ -0,0 +1,31 @@
++From 80d87b99d72034441ea4fbab81f5c80c1ef3b067 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Tue, 23 Aug 2016 16:36:14 +0200
++Subject: [PATCH] iowatcher: link with -lrt
++
++Some C libraries (notably uClibc) have the posix_spawn*() functions in
++librt, so let's link iowatcher with -lrt.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Upstream-status: merged
++ (http://git.kernel.org/cgit/linux/kernel/git/axboe/blktrace.git/commit/?id=d1ab783430f5a832e973ed9a293da146c04c6702)
++---
++ iowatcher/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/iowatcher/Makefile b/iowatcher/Makefile
++index 7b5101c..502476d 100644
++--- a/iowatcher/Makefile
+++++ b/iowatcher/Makefile
++@@ -19,7 +19,7 @@ all: $(ALL)
++ 	$(CC) -o $*.o -c $(ALL_CFLAGS) $<
++ 
++ iowatcher: blkparse.o plot.o main.o tracers.o mpstat.o fio.o
++-	$(CC) $(ALL_CFLAGS) -o $@ $(filter %.o,$^) -lm
+++	$(CC) $(ALL_CFLAGS) -o $@ $(filter %.o,$^) -lm -lrt
++ 
++ depend:
++ 	@$(CC) -MM $(ALL_CFLAGS) *.c 1> .depend
++-- 
++2.7.4
++
+diff --git a/package/blktrace/Config.in b/package/blktrace/Config.in
+index 958f004..38c0947 100644
+--- a/package/blktrace/Config.in
++++ b/package/blktrace/Config.in
+@@ -1,7 +1,5 @@
+ config BR2_PACKAGE_BLKTRACE
+ 	bool "blktrace"
+-	# Uses posix_spawn()
+-	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_LIBAIO
+ 	help
+@@ -10,6 +8,3 @@ config BR2_PACKAGE_BLKTRACE
+ 	  up to user space.
  
--PROCPS_NG_VERSION = 3.3.11
-+PROCPS_NG_VERSION = 3.3.12
- PROCPS_NG_SOURCE = procps-ng-$(PROCPS_NG_VERSION).tar.xz
- PROCPS_NG_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
- PROCPS_NG_LICENSE = GPLv2+, libproc and libps LGPLv2+
+ 	  http://git.kernel.dk/?p=blktrace.git;a=summary
+-
+-comment "blktrace needs a glibc or musl toolchain"
+-	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
