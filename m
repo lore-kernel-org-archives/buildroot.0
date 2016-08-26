@@ -1,83 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 22:08:14 +0200
-Subject: [Buildroot] [PATCH] norm: add patch to fix musl build
-Message-ID: <1472242094-7204-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Aug 2016 22:44:58 +0200
+Subject: [Buildroot] [PATCH] pixman: properly enable/disable ARM
+	optimizations
+Message-ID: <1472244298-13978-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The pixman ARM optimized code assumes that ARM instructions are
+available. Unfortunately, the configure.ac checks do not detect that the
+platform is Thumb-only for Cortex-M builds, so it enables the ARM
+optimizations, leading to failures like:
+
+error: /home/test/autobuild/run/instance-3/output/host/usr/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libpixman-1.a(pixman-arm-simd-asm-scaled.o): Conflicting CPU architectures 13/1
+
+When building programs linked with pixman on Thumb-only
+architectures. This is due to the fact that some object files in
+libpixman-1.a are built for the ARM instruction set.
+
+To resolve this, we give better hints to the pixman configure script
+about which ARM optimizations to use: the ARM SIMD optimizations need at
+least a CPU that supports ARM instructions, and obviously the ARM NEON
+optimizations need NEON support.
+
 Fixes:
 
-  http://autobuild.buildroot.net/results/9c7130d5b5aad218c5c576761d495a3f403fdc5b/
+  http://autobuild.buildroot.net/results/54bee2ce382fcd067965d30f758f9d15514478d9/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...03-remove-kernel-headers-include-musl-fix.patch | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 package/norm/0003-remove-kernel-headers-include-musl-fix.patch
+ package/pixman/pixman.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/norm/0003-remove-kernel-headers-include-musl-fix.patch b/package/norm/0003-remove-kernel-headers-include-musl-fix.patch
-new file mode 100644
-index 0000000..7581c10
---- /dev/null
-+++ b/package/norm/0003-remove-kernel-headers-include-musl-fix.patch
-@@ -0,0 +1,55 @@
-+Remove kernel header includes causing issues with musl
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 38524e6..ed75efe 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -20,6 +20,18 @@ PIXMAN_AUTORECONF = YES
+ # don't build gtk based demos
+ PIXMAN_CONF_OPTS = --disable-gtk
+ 
++ifeq ($(BR2_ARM_CPU_HAS_ARM),y)
++PIXMAN_CONF_OPTS += --enable-arm-simd
++else
++PIXMAN_CONF_OPTS += --disable-arm-simd
++endif
 +
-+Include the kernel headers from netfilter causes a conflict with the
-+<netinet/in.h> way of defining the IPPROTO_* constants, resulting in
-+the following build failure:
++ifeq ($(BR2_ARM_CPU_HAS_ARM)$(BR2_ARM_CPU_HAS_NEON),yy)
++PIXMAN_CONF_OPTS += --enable-arm-neon
++else
++PIXMAN_CONF_OPTS += --disable-arm-neon
++endif
 +
-+In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/netdb.h:9:0,
-+                 from /home/peko/autobuild/instance-0/output/build/norm-1.5r6/protolib/include/protoAddress.h:13,
-+                 from /home/peko/autobuild/instance-0/output/build/norm-1.5r6/protolib/include/protoDetour.h:5,
-+                 from ../protolib/src/linux/linuxDetour.cpp:3:
-+/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected identifier before numeric constant
-+   IPPROTO_IP = 0,  /* Dummy protocol for TCP  */
-+   ^
-+/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected '}' before numeric constant
-+/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected unqualified-id before numeric constant
-+In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netfilter.h:7:0,
-+                 from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netfilter_ipv4.h:8,
-+                 from ../protolib/src/linux/linuxDetour.cpp:10:
-+/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:79:1: error: expected declaration before '}' token
-+ };
-+ ^
-+
-+Since from musl's developers perspective including kernel headers is
-+seen as being unsafe, we simply duplicate the necessary netfilter
-+definitions (there are just a few) instead of including some kernel
-+headers.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/protolib/src/linux/linuxDetour.cpp
-+===================================================================
-+--- a/protolib/src/linux/linuxDetour.cpp
-++++ b/protolib/src/linux/linuxDetour.cpp
-+@@ -7,15 +7,18 @@
-+ #include <stdlib.h>  // for atoi(), getenv()
-+ #include <stdio.h>
-+ #include <unistd.h>  // for close()
-+-#include <linux/netfilter_ipv4.h>  // for NF_IP_LOCAL_OUT, etc
-+-#include <linux/netfilter_ipv6.h>  // for NF_IP6_LOCAL_OUT, etc
-+-#include <linux/netfilter.h>  // for NF_ACCEPT, etc
-+ #include <libnetfilter_queue/libnetfilter_queue.h>
-+ 
-+ #include <fcntl.h>  // for fcntl(), etc
-+ #include <linux/if_ether.h>  // for ETH_P_IP
-+ #include <net/if_arp.h>   // for ARPHRD_ETHER
-+ 
-++/* From netfilter kernel headers */
-++#define NF_IP_LOCAL_OUT		3
-++
-++#define NF_DROP 		0
-++#define NF_ACCEPT 		1
-++
-+ /** NOTES: 
-+  *
-+  * 1) This newer implementation of LinuxDetour uses netfilter_queue
+ # disable iwmmxt support for CPU's that don't have
+ # this feature
+ ifneq ($(BR2_iwmmxt),y)
 -- 
 2.7.4
