@@ -1,52 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 22:53:23 +0200
-Subject: [Buildroot] [PATCH] gcc: ARC Fix conditional move contstraint.
-In-Reply-To: <1472203712-27459-1-git-send-email-vzakhar@synopsys.com>
-References: <1472203712-27459-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <20160826225323.1a57ae0f@free-electrons.com>
+Date: Fri, 26 Aug 2016 22:53:46 +0200
+Subject: [Buildroot] [git commit branch/next] gawk: bump to version 4.1.4
+Message-ID: <20160826205354.984948230D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vlad, Alexey, Eugeniy,
+commit: https://git.buildroot.net/buildroot/commit/?id=67db45a9fb5f78a175b67cac56be1eafb1c5a9e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 26 Aug 2016 12:28:32 +0300, Vlad Zakharov wrote:
-> The patch solves one of the ARC internal compiler issues.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/1c4/1c4493c6a18b7a93a0368420c8f79032f9330891//
-> http://autobuild.buildroot.net/results/510/51071b790866b0c7083de3a94ad2a427009096af//
-> http://autobuild.buildroot.net/results/09e/09e037c628ca2a27d8eb832dd070f50ec7ebb72a//
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gawk/gawk.hash | 2 +-
+ package/gawk/gawk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-FWIW, this last build issue is *not* fixed by this patch. This last
-build failure is on mesa3d, with:
-
-main/get.c: In function '_mesa_GetBooleani_v':
-main/get.c:2320:1: error: insn does not satisfy its constraints:
- }
- ^
-(insn 79 72 80 7 (set (reg/f:SI 147 virtual-stack-vars)
-        (reg:SI 2 r2)) main/get.c:2315 3 {*movsi_insn}
-     (nil))
-main/get.c:2320:1: internal compiler error: in extract_constrain_insn, at recog.c:2190
-Please submit a full bug report,
-with preprocessed source if appropriate.
-See <http://bugs.buildroot.net/> for instructions.
-
-And the build result
-http://autobuild.buildroot.net/results/5cc/5ccb47e2af780982d71d924ef30008f16573ad73//build-end.log
-is the *exact* same failure, but at commit
-https://git.buildroot.net/buildroot/commit/?id=2567f6f2f34a1ecfc25604bf8bf93b8bc065fc63,
-which is *after* I committed and pushed your ARC fix (and the
-configuration was using the internal toolchain backend, so the
-toolchain was built from scratch).
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
+index 7f746d8..e2c7806 100644
+--- a/package/gawk/gawk.hash
++++ b/package/gawk/gawk.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	e3cf55e91e31ea2845f8338bedd91e40671fc30e4d82ea147d220e687abda625	gawk-4.1.3.tar.xz
++sha256	53e184e2d0f90def9207860531802456322be091c7b48f23fdc79cda65adc266	gawk-4.1.4.tar.xz
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index b5b0f8d..7c6689b 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GAWK_VERSION = 4.1.3
++GAWK_VERSION = 4.1.4
+ GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
+ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
+ GAWK_DEPENDENCIES = host-gawk
