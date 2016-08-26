@@ -1,51 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 17:17:47 +0200
-Subject: [Buildroot] [git commit branch/next] package/ffmpeg: add optional
-	support for opencv
-Message-ID: <20160826194349.E66737F9A4@busybox.osuosl.org>
+Date: Fri, 26 Aug 2016 17:26:05 +0200
+Subject: [Buildroot] [git commit branch/next] package/tvheadend: remove
+	compat patch for ffmpeg < 3.x
+Message-ID: <20160826194349.F1D1681F91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9ea46425ba886e479b658dc8e7f55cc175cfad7
+commit: https://git.buildroot.net/buildroot/commit/?id=87c436d8c5f4c5b07a000b48614698075e2eb822
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-ffmpeg only needs the imgproc module of opencv:
-https://github.com/FFmpeg/FFmpeg/commit/15708f13477aaf2effdc0d7fc727507bc468335a
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ ...g-revert-minimum-required-version-numbers.patch | 51 ----------------------
+ 1 file changed, 51 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 91e7fa9..1d04101 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -48,7 +48,6 @@ FFMPEG_CONF_OPTS = \
- 	--disable-frei0r \
- 	--disable-libopencore-amrnb \
- 	--disable-libopencore-amrwb \
--	--disable-libopencv \
- 	--disable-libcdio \
- 	--disable-libdc1394 \
- 	--disable-libfaac \
-@@ -249,6 +248,15 @@ else
- FFMPEG_CONF_OPTS += --disable-vdpau
- endif
- 
-+# To avoid a circular dependency only use opencv if opencv itself does
-+# not depend on ffmpeg.
-+ifeq ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV_WITH_FFMPEG),yx)
-+FFMPEG_CONF_OPTS += --enable-libopencv
-+FFMPEG_DEPENDENCIES += opencv
-+else
-+FFMPEG_CONF_OPTS += --disable-libopencv
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPUS),y)
- FFMPEG_CONF_OPTS += --enable-libopus
- FFMPEG_DEPENDENCIES += opus
+diff --git a/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch b/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
+deleted file mode 100644
+index 74136fe..0000000
+--- a/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 78a7b7365a67fa2f5394c6b4ca39de01b00416dc Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sat, 2 Apr 2016 19:05:52 +0200
+-Subject: [PATCH 1/1] ffmpeg: revert minimum required version numbers
+-
+-This commit reverts the minimum version numbers required by configure to
+-the values before
+-https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dL486
+-in order to allow compilation with older versions of ffmpeg again.
+-
+-Please note that the previous version numbers of all ffmpeg libs, with
+-the exception of libavfilter, are those of ffmpeg 2.0.7:
+-https://ffmpeg.org/olddownload.html
+-
+-Therefore I synced the minimum version number required for libavfilter to
+-3.79.101 and not to 4.0.0 as previous in tvheadend's configure script.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Patch sent upstream: https://github.com/tvheadend/tvheadend/pull/838]
+----
+- configure | 14 +++++++-------
+- 1 file changed, 7 insertions(+), 7 deletions(-)
+-
+-diff --git a/configure b/configure
+-index be3d2e2..2ffd280 100755
+---- a/configure
+-+++ b/configure
+-@@ -512,13 +512,13 @@ else
+-   if enabled_or_auto libav; then
+-     has_libav=true
+- 
+--    check_pkg libavfilter   ">=6.31.100"  || has_libav=false
+--    check_pkg libswresample ">=2.0.101"   || has_libav=false
+--    check_pkg libavresample ">=3.0.0"     || has_libav=false
+--    check_pkg libswscale    ">=4.0.100"   || has_libav=false
+--    check_pkg libavformat   ">=57.25.100" || has_libav=false
+--    check_pkg libavcodec    ">=57.24.102" || has_libav=false
+--    check_pkg libavutil     ">=55.17.103" || has_libav=false
+-+    check_pkg libavfilter   ">=3.79.101"  || has_libav=false
+-+    check_pkg libswresample ">=0.17.102"   || has_libav=false
+-+    check_pkg libavresample ">=1.1.0"     || has_libav=false
+-+    check_pkg libswscale    ">=2.3.100"   || has_libav=false
+-+    check_pkg libavformat   ">=55.12.100" || has_libav=false
+-+    check_pkg libavcodec    ">=55.18.102" || has_libav=false
+-+    check_pkg libavutil     ">=52.38.100" || has_libav=false
+- 
+-     if $has_libav; then
+-       enable libav
+--- 
+-2.8.0.rc3
+-
