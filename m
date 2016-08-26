@@ -1,42 +1,32 @@
-From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-Date: Fri, 26 Aug 2016 14:32:47 +0530
-Subject: [Buildroot] [PATCH 1/1] domoticz: fix build with uClibc
-In-Reply-To: <20160826105648.65579c15@free-electrons.com>
-References: <1472144466-17003-1-git-send-email-rahul.bedarkar@imgtec.com>
- <878tvkecij.fsf@dell.be.48ers.dk>
- <20160826105648.65579c15@free-electrons.com>
-Message-ID: <57C005B7.9090306@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 26 Aug 2016 11:06:06 +0200
+Subject: [Buildroot] [git commit] package/uboot-tols: fix dependency of
+	comment about FIT support
+In-Reply-To: <20160826105529.65876156@free-electrons.com> (Thomas Petazzoni's
+ message of "Fri, 26 Aug 2016 10:55:29 +0200")
+References: <20160825215944.0CDBA822DD@busybox.osuosl.org>
+ <20160826105529.65876156@free-electrons.com>
+Message-ID: <87inundhmp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Friday 26 August 2016 02:26 PM, Thomas Petazzoni wrote:
-> Hello,
->
-> On Thu, 25 Aug 2016 23:59:00 +0200, Peter Korsgaard wrote:
->
->>   > Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
->>
->> Committed, thanks.
->
-> And actually I had to fix up the patch, because it was not applying
-> properly. See
-> https://git.buildroot.org/buildroot/commit/?id=397962ce1737ba0f920ffc1d3a3ea2bc08b28270
-> for all the details.
->
-> Rahul, did you actually test the patch? It didn't apply to the domoticz
-> source code extracted from the tarball, causing an immediate build
-> failure.
->
+ >> Fix the dependency.
+ >> 
+ >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ >> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Yes, I had tested patch. It was applied cleanly in my case. Not sure why 
-it hasn't failed for me.
+ > You forgot to fix the commit title, even though the typo was noticed
+ > by Fabio and acknowledged by Yann.
 
-Thanks for fix.
+Gaah, I must have been tired. I looked, but couldn't see the typo (I do
+now).
 
-Regards,
-Rahul
+-- 
+Venlig hilsen,
+Peter Korsgaard 
