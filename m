@@ -1,151 +1,322 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 18:28:43 +0200
-Subject: [Buildroot] [git commit] core: introduce an intermediate rule
-	before the configurators
-Message-ID: <20160902142940.F027A8253D@busybox.osuosl.org>
+Date: Fri, 26 Aug 2016 17:26:34 +0200
+Subject: [Buildroot] [git commit] package/vlc: add support for ffmpeg 3.0
+Message-ID: <20160902142940.AF0008253D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9429e7b698638399ecfd73aa37545594f253a074
+commit: https://git.buildroot.net/buildroot/commit/?id=c9c611f9982fc4e690a41145474fc7f13fb17b58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, all configurators depend on generating the out-of-tree
-Makefile wrapper.
+Instead of bumping vlc to git master (no vlc 3.x release yet) we use a
+patch from deb-multimedia.org which provides the necessary changes for
+ffmpeg 3.x support to vlc 2.2, compile-tested using this defconfig:
 
-In an upcoming patch, we'll need to also generate a kconfig fragment,
-so it will have to kick in before we run the configurators.
+    BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+    BR2_TOOLCHAIN_BUILDROOT_CXX=y
+    BR2_PACKAGE_FFMPEG=y
+    BR2_PACKAGE_FFMPEG_GPL=y
+    BR2_PACKAGE_FFMPEG_POSTPROC=y
+    BR2_PACKAGE_FFMPEG_SWSCALE=y
+    BR2_PACKAGE_VLC=y
 
-Introduce a new intermediate "prepare-kconfig" rule, so we can
-commonalise the dependencies of the configurators. Move the dependency
-on the Makefile wrapper to that new intermediate rule.
+This patch can be removed when vlc is bumped to 3.x.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-[Thomas: mark prepare-kconfig as a phony target.]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 37 ++++++++++++++++++++-----------------
- 1 file changed, 20 insertions(+), 17 deletions(-)
+ package/vlc/0008-ffmpeg-3.0.patch | 283 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 283 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 5ce520b..d1298d8 100644
---- a/Makefile
-+++ b/Makefile
-@@ -760,6 +760,9 @@ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- HOSTCFLAGS = $(CFLAGS_FOR_BUILD)
- export HOSTCFLAGS
- 
-+.PHONY: prepare-kconfig
-+prepare-kconfig: outputmakefile
+diff --git a/package/vlc/0008-ffmpeg-3.0.patch b/package/vlc/0008-ffmpeg-3.0.patch
+new file mode 100644
+index 0000000..892c625
+--- /dev/null
++++ b/package/vlc/0008-ffmpeg-3.0.patch
+@@ -0,0 +1,283 @@
++Changes for ffmpeg 3.0
 +
- $(BUILD_DIR)/buildroot-config/%onf:
- 	mkdir -p $(@D)/lxdialog
- 	PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)" $(MAKE) CC="$(HOSTCC_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)" \
-@@ -779,19 +782,19 @@ COMMON_CONFIG_ENV = \
- 	HOST_GCC_VERSION="$(HOSTCC_VERSION)" \
- 	SKIP_LEGACY=
- 
--xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
-+xconfig: $(BUILD_DIR)/buildroot-config/qconf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
- 
--gconfig: $(BUILD_DIR)/buildroot-config/gconf outputmakefile
-+gconfig: $(BUILD_DIR)/buildroot-config/gconf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) srctree=$(TOPDIR) $< $(CONFIG_CONFIG_IN)
- 
--menuconfig: $(BUILD_DIR)/buildroot-config/mconf outputmakefile
-+menuconfig: $(BUILD_DIR)/buildroot-config/mconf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
- 
--nconfig: $(BUILD_DIR)/buildroot-config/nconf outputmakefile
-+nconfig: $(BUILD_DIR)/buildroot-config/nconf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
- 
--config: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-+config: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
- 
- # For the config targets that automatically select options, we pass
-@@ -799,22 +802,22 @@ config: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- # no values are set for the legacy options so a subsequent oldconfig
- # will query them. Therefore, run an additional olddefconfig.
- 
--oldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-+oldconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) $< --oldconfig $(CONFIG_CONFIG_IN)
- 
--randconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-+randconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --randconfig $(CONFIG_CONFIG_IN)
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
--allyesconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-+allyesconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --allyesconfig $(CONFIG_CONFIG_IN)
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
--allnoconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-+allnoconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --allnoconfig $(CONFIG_CONFIG_IN)
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
--randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-+randpackageconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y \
- 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
-@@ -822,7 +825,7 @@ randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@rm -f $(CONFIG_DIR)/.config.nopkg
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
--allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-+allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y \
- 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
-@@ -830,7 +833,7 @@ allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@rm -f $(CONFIG_DIR)/.config.nopkg
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
--allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-+allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y \
- 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
-@@ -838,24 +841,24 @@ allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@rm -f $(CONFIG_DIR)/.config.nopkg
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
--silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-+silentoldconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	$(COMMON_CONFIG_ENV) $< --silentoldconfig $(CONFIG_CONFIG_IN)
- 
--olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-+olddefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN)
- 
--defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-+defconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
- 
- define percent_defconfig
- # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
--%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
-+%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig prepare-kconfig
- 	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
- 		$$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
- endef
- $(eval $(foreach d,$(TOPDIR) $(BR2_EXTERNAL),$(call percent_defconfig,$(d))$(sep)))
- 
--savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-+savedefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) $< \
- 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
- 		$(CONFIG_CONFIG_IN)
++This file is a copy of debian/patches/04_ffmpeg-3.0.diff, to be found in
++http://www.deb-multimedia.org/pool/main/v/vlc-dmo/vlc-dmo_2.2.4.orig.tar.gz
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2324,7 +2324,7 @@ AC_ARG_ENABLE(avcodec,
++ AS_IF([test "${enable_avcodec}" != "no"], [
++   PKG_CHECK_MODULES(AVCODEC,[libavcodec >= 53.34.0 libavutil >= 51.22.0], [
++     PKG_CHECK_EXISTS([libavutil < 55],, [
++-      AC_MSG_ERROR([libavutil versions 55 and later are not supported.])
+++      AC_MSG_WARN([libavutil versions 55 and later are not supported.])
++     ])
++     VLC_SAVE_FLAGS
++     CPPFLAGS="${CPPFLAGS} ${AVCODEC_CFLAGS}"
++@@ -2334,7 +2334,7 @@ AS_IF([test "${enable_avcodec}" != "no"]
++     VLC_RESTORE_FLAGS
++     have_avcodec="yes"
++   ],[
++-    AC_MSG_ERROR([${AVCODEC_PKG_ERRORS}. Pass --disable-avcodec to ignore this error.])
+++    AC_MSG_WARN([${AVCODEC_PKG_ERRORS}. Pass --disable-avcodec to ignore this error.])
++   ])
++ ], [
++   have_avcodec="no"
++@@ -2383,7 +2383,7 @@ AS_IF([test "${have_vaapi}" = "yes" -a "
++   case "${avfork}" in
++     ffmpeg)
++       PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
++-        AC_MSG_ERROR([VA API requires FFmpeg libavcodec < 57.10 or libav.])
+++        AC_MSG_WARN([VA API requires FFmpeg libavcodec < 57.10 or libav.])
++       ])
++       ;;
++   esac
++@@ -2417,7 +2417,7 @@ AS_IF([test "${enable_dxva2}" != "no"],
++     case "${avfork}" in
++       ffmpeg)
++         PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
++-          AC_MSG_ERROR([DXVA2 requires FFmpeg libavcodec < 57.10 or libav.])
+++          AC_MSG_WARN([DXVA2 requires FFmpeg libavcodec < 57.10 or libav.])
++         ])
++         ;;
++     esac
++@@ -2509,7 +2509,7 @@ AS_IF([test "${enable_avformat}" != "no"
++       ])
++       VLC_RESTORE_FLAGS
++     ],[
++-      AC_MSG_ERROR([${AVFORMAT_PKG_ERRORS}. Pass --disable-avformat to ignore this error.])
+++      AC_MSG_WARN([${AVFORMAT_PKG_ERRORS}. Pass --disable-avformat to ignore this error.])
++   ])
++ ])
++ AM_CONDITIONAL([HAVE_AVFORMAT], [test "${enable_avformat}" != "no"])
++@@ -2538,7 +2538,7 @@ then
++       ])
++       VLC_RESTORE_FLAGS
++     ],[
++-      AC_MSG_ERROR([${SWSCALE_PKG_ERRORS}. Pass --disable-swscale to ignore this error. Proper software scaling and some video chroma conversion will be missing.])
+++      AC_MSG_WARN([${SWSCALE_PKG_ERRORS}. Pass --disable-swscale to ignore this error. Proper software scaling and some video chroma conversion will be missing.])
++   ])
++ fi
++ 
++@@ -3181,7 +3181,7 @@ AS_IF([test "${have_vdpau}" = "yes" -a "
++     libav) av_vdpau_ver="55.26.0" ;;
++     ffmpeg) av_vdpau_ver="55.42.100"
++       PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
++-        AC_MSG_ERROR([VDPAU requires FFmpeg libavcodec < 57.10 or libav.])
+++        AC_MSG_WARN([VDPAU requires FFmpeg libavcodec < 57.10 or libav.])
++       ])
++       ;;
++   esac
++--- a/modules/codec/avcodec/audio.c
+++++ b/modules/codec/avcodec/audio.c
++@@ -39,7 +39,7 @@
++ #include <libavcodec/avcodec.h>
++ #include <libavutil/mem.h>
++ 
++-#include <libavutil/audioconvert.h>
+++#include <libavutil/channel_layout.h>
++ 
++ #include "avcodec.h"
++ 
++--- a/modules/codec/avcodec/video.c
+++++ b/modules/codec/avcodec/video.c
++@@ -108,8 +108,8 @@ static int lavc_GetFrame(struct AVCodecC
++ static int  ffmpeg_GetFrameBuf    ( struct AVCodecContext *, AVFrame * );
++ static void ffmpeg_ReleaseFrameBuf( struct AVCodecContext *, AVFrame * );
++ #endif
++-static enum PixelFormat ffmpeg_GetFormat( AVCodecContext *,
++-                                          const enum PixelFormat * );
+++static enum AVPixelFormat ffmpeg_GetFormat( AVCodecContext *,
+++                                          const enum AVPixelFormat * );
++ 
++ static uint32_t ffmpeg_CodecTag( vlc_fourcc_t fcc )
++ {
++@@ -234,7 +234,7 @@ int InitVideoDec( decoder_t *p_dec, AVCo
++     p_sys->p_codec = p_codec;
++     p_sys->i_codec_id = i_codec_id;
++     p_sys->psz_namecodec = psz_namecodec;
++-    p_sys->p_ff_pic = avcodec_alloc_frame();
+++    p_sys->p_ff_pic = av_frame_alloc();
++     p_sys->b_delayed_open = true;
++     p_sys->p_va = NULL;
++     vlc_sem_init( &p_sys->sem_mt, 0 );
++@@ -446,7 +446,7 @@ int InitVideoDec( decoder_t *p_dec, AVCo
++     if( ffmpeg_OpenCodec( p_dec ) < 0 )
++     {
++         msg_Err( p_dec, "cannot open codec (%s)", p_sys->psz_namecodec );
++-        avcodec_free_frame( &p_sys->p_ff_pic );
+++        av_frame_free( &p_sys->p_ff_pic );
++         vlc_sem_destroy( &p_sys->sem_mt );
++         free( p_sys );
++         return VLC_EGENERIC;
++@@ -826,7 +826,7 @@ void EndVideoDec( decoder_t *p_dec )
++     wait_mt( p_sys );
++ 
++     if( p_sys->p_ff_pic )
++-        avcodec_free_frame( &p_sys->p_ff_pic );
+++        av_frame_free( &p_sys->p_ff_pic );
++ 
++     if( p_sys->p_va )
++         vlc_va_Delete( p_sys->p_va );
++@@ -1313,8 +1313,8 @@ static void ffmpeg_ReleaseFrameBuf( stru
++ }
++ #endif
++ 
++-static enum PixelFormat ffmpeg_GetFormat( AVCodecContext *p_context,
++-                                          const enum PixelFormat *pi_fmt )
+++static enum AVPixelFormat ffmpeg_GetFormat( AVCodecContext *p_context,
+++                                          const enum AVPixelFormat *pi_fmt )
++ {
++     decoder_t *p_dec = p_context->opaque;
++     decoder_sys_t *p_sys = p_dec->p_sys;
++--- a/modules/codec/avcodec/encoder.c
+++++ b/modules/codec/avcodec/encoder.c
++@@ -41,7 +41,7 @@
++ #include <vlc_cpu.h>
++ 
++ #include <libavcodec/avcodec.h>
++-#include <libavutil/audioconvert.h>
+++#include <libavutil/channel_layout.h>
++ 
++ #include "avcodec.h"
++ #include "avcommon.h"
++@@ -311,7 +311,7 @@ int OpenEncoder( vlc_object_t *p_this )
++     else if( !GetFfmpegCodec( p_enc->fmt_out.i_codec, &i_cat, &i_codec_id,
++                              &psz_namecodec ) )
++     {
++-        if( FindFfmpegChroma( p_enc->fmt_out.i_codec ) == PIX_FMT_NONE )
+++        if( FindFfmpegChroma( p_enc->fmt_out.i_codec ) == AV_PIX_FMT_NONE )
++             return VLC_EGENERIC; /* handed chroma output */
++ 
++         i_cat      = VIDEO_ES;
++@@ -555,7 +555,7 @@ int OpenEncoder( vlc_object_t *p_this )
++ 
++         if( p_codec->pix_fmts )
++         {
++-            const enum PixelFormat *p = p_codec->pix_fmts;
+++            const enum AVPixelFormat *p = p_codec->pix_fmts;
++             for( ; *p != -1; p++ )
++             {
++                 if( *p == p_context->pix_fmt ) break;
++@@ -1017,7 +1017,7 @@ errmsg:
++         }
++     }
++ 
++-    p_sys->frame = avcodec_alloc_frame();
+++    p_sys->frame = av_frame_alloc();
++     if( !p_sys->frame )
++     {
++         goto error;
++@@ -1048,7 +1048,7 @@ static void vlc_av_packet_Release(block_
++ {
++     vlc_av_packet_t *b = (void *) block;
++ 
++-    av_free_packet(&b->packet);
+++    av_packet_unref(&b->packet);
++     free(b);
++ }
++ 
++@@ -1088,7 +1088,7 @@ static block_t *EncodeVideo( encoder_t *
++     AVFrame *frame = NULL;
++     if( likely(p_pict) ) {
++         frame = p_sys->frame;
++-        avcodec_get_frame_defaults( frame );
+++        av_frame_unref( frame );
++         for( i_plane = 0; i_plane < p_pict->i_planes; i_plane++ )
++         {
++             p_sys->frame->data[i_plane] = p_pict->p[i_plane].p_pixels;
++@@ -1188,7 +1188,7 @@ static block_t *EncodeVideo( encoder_t *
++             av_pkt.duration / p_sys->p_context->time_base.den, p_sys->p_context );
++     if( unlikely(p_block == NULL) )
++     {
++-        av_free_packet( &av_pkt );
+++        av_packet_unref( &av_pkt );
++         return NULL;
++     }
++ 
++@@ -1329,7 +1329,7 @@ static block_t *handle_delay_buffer( enc
++     //How much we need to copy from new packet
++     const int leftover = leftover_samples * p_sys->p_context->channels * p_sys->i_sample_bytes;
++ 
++-    avcodec_get_frame_defaults( p_sys->frame );
+++    av_frame_unref( p_sys->frame );
++     p_sys->frame->format     = p_sys->p_context->sample_fmt;
++     p_sys->frame->nb_samples = leftover_samples + p_sys->i_samples_delay;
++ 
++@@ -1451,7 +1451,7 @@ static block_t *EncodeAudio( encoder_t *
++     while( ( p_aout_buf->i_nb_samples >= p_sys->i_frame_size ) ||
++            ( p_sys->b_variable && p_aout_buf->i_nb_samples ) )
++     {
++-        avcodec_get_frame_defaults( p_sys->frame );
+++        av_frame_unref( p_sys->frame );
++         if( p_sys->b_variable )
++             p_sys->frame->nb_samples = p_aout_buf->i_nb_samples;
++         else
++@@ -1514,7 +1514,7 @@ void CloseEncoder( vlc_object_t *p_this
++     encoder_t *p_enc = (encoder_t *)p_this;
++     encoder_sys_t *p_sys = p_enc->p_sys;
++ 
++-    /*FIXME: we should use avcodec_free_frame, but we don't require so new avcodec that has it*/
+++    /*FIXME: we should use av_frame_free, but we don't require so new avcodec that has it*/
++     av_freep( &p_sys->frame );
++ 
++     vlc_avcodec_lock();
++--- a/modules/demux/avformat/demux.c
+++++ b/modules/demux/avformat/demux.c
++@@ -734,14 +734,14 @@ static int Demux( demux_t *p_demux )
++     }
++     if( pkt.stream_index < 0 || pkt.stream_index >= p_sys->i_tk )
++     {
++-        av_free_packet( &pkt );
+++        av_packet_unref( &pkt );
++         return 1;
++     }
++     const AVStream *p_stream = p_sys->ic->streams[pkt.stream_index];
++     if( p_stream->time_base.den <= 0 )
++     {
++         msg_Warn( p_demux, "Invalid time base for the stream %d", pkt.stream_index );
++-        av_free_packet( &pkt );
+++        av_packet_unref( &pkt );
++         return 1;
++     }
++     if( p_stream->codec->codec_id == AV_CODEC_ID_SSA )
++@@ -749,7 +749,7 @@ static int Demux( demux_t *p_demux )
++         p_frame = BuildSsaFrame( &pkt, p_sys->i_ssa_order++ );
++         if( !p_frame )
++         {
++-            av_free_packet( &pkt );
+++            av_packet_unref( &pkt );
++             return 1;
++         }
++     }
++@@ -757,7 +757,7 @@ static int Demux( demux_t *p_demux )
++     {
++         if( ( p_frame = block_Alloc( pkt.size ) ) == NULL )
++         {
++-            av_free_packet( &pkt );
+++            av_packet_unref( &pkt );
++             return 0;
++         }
++         memcpy( p_frame->p_buffer, pkt.data, pkt.size );
++@@ -838,7 +838,7 @@ static int Demux( demux_t *p_demux )
++     else
++         block_Release( p_frame );
++ 
++-    av_free_packet( &pkt );
+++    av_packet_unref( &pkt );
++     return 1;
++ }
++ 
++--- a/modules/codec/avcodec/vaapi.c
+++++ b/modules/codec/avcodec/vaapi.c
++@@ -595,7 +595,7 @@ static int Create( vlc_va_t *p_va, AVCod
++         return err;
++ 
++     /* Only VLD supported */
++-    p_va->pix_fmt = PIX_FMT_VAAPI_VLD;
+++    p_va->pix_fmt = AV_PIX_FMT_VAAPI_VLD;
++     p_va->setup = Setup;
++     p_va->get = Get;
++     p_va->release = Release;
