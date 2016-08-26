@@ -1,45 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 15:39:49 +0200
-Subject: [Buildroot] [PATCH/next] system/skeleton: use uid/gid 65534 for
- nobody/nogroup
-In-Reply-To: <1472161636-2504-1-git-send-email-peter@korsgaard.com>
-References: <1472161636-2504-1-git-send-email-peter@korsgaard.com>
-Message-ID: <20160826153949.1c0b5b7e@free-electrons.com>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Fri, 26 Aug 2016 09:41:19 -0400
+Subject: [Buildroot] [PATCH] board: add support for ZII VF610
+	Development Board
+In-Reply-To: <20160826110008.53f339a6@free-electrons.com>
+References: <20160825190022.8461-1-vivien.didelot@savoirfairelinux.com>
+ <20160826110008.53f339a6@free-electrons.com>
+Message-ID: <87a8fz4phc.fsf@ketchup.mtl.sfl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Thu, 25 Aug 2016 23:47:16 +0200, Peter Korsgaard wrote:
-> As recently discussed on lwn.net: https://lwn.net/Articles/695478/
-> 
-> The kernel has special behaviour for uid/gid 65534:
-> 
-> 1. The kernel maps UIDs > 65535 to it when some subsystem/API/fs
->    only supports 16bit UIDs, but a 32bit UID is passed to it.
-> 
-> 2. it's used by the kernel's user namespacing as the internal UID
->    that external UIDs are mapped to that don't have any local mapping.
-> 
-> 3. It's used by NFS for all user IDs that cannot be mapped locally if
->    UID mapping is enabled.
-> 
-> Most distributions already map (or are in the progress of changing)
-> nobody/nogroup to the 65534 uid/gid, so lets do so as well.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  system/skeleton/etc/group  | 2 +-
->  system/skeleton/etc/passwd | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Applied to next, thanks.
+> Is this board publicly available?
+>
+> Your patch looks good and perfectly matches the Buildroot way of having
+> minimal defconfigs. But if the board is not publicly available, I'm not
+> sure we want a defconfig for it in Buildroot.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+This board is quite specific and not meant to be sold to the public,
+hovewer the Device Tree is opened and already mainlined. It is used as a
+reference platform for DSA with its 3 interconnected Marvell switches.
+
+The bootloader and kernel support are available, so I saw no reason not
+to glue that all together. Given what you said, we can forget about this
+board. At least, its support is now in the wild ;-)
+
+Thanks,
+
+        Vivien
