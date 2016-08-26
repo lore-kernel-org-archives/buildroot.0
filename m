@@ -1,40 +1,46 @@
-From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-Date: Fri, 26 Aug 2016 14:50:29 +0530
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2016-08-23
-In-Reply-To: <20160824172543.19BA410CCE6@stock.ovh.net>
-References: <20160824172543.19BA410CCE6@stock.ovh.net>
-Message-ID: <57C009DD.9070309@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Aug 2016 11:26:10 +0200
+Subject: [Buildroot] [PATCH v1 4/9] board / intel: Add SPI peripherals
+ for Minnowboard MAX
+In-Reply-To: <20160826090917.GL1812@lahna.fi.intel.com>
+References: <1472133887-34746-1-git-send-email-andriy.shevchenko@linux.intel.com>
+ <1472133887-34746-5-git-send-email-andriy.shevchenko@linux.intel.com>
+ <20160825234715.1e500fc5@free-electrons.com>
+ <20160826090917.GL1812@lahna.fi.intel.com>
+Message-ID: <20160826112610.47226d76@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Wednesday 24 August 2016 10:55 PM, Thomas Petazzoni wrote:
-> Hello,
->
-> This is the list of Buildroot build failures that occured on
-> 2016-08-23, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
->
-> Build failures related to your packages:
->
->          bfin |                    glog-v0.3.4 | http://autobuild.buildroot.net/results/914cc267eba357cc0c425f07e57c6ae35b099b7e
->
+On Fri, 26 Aug 2016 12:09:17 +0300, Mika Westerberg wrote:
 
-We have disabled glog on blackfin external toolchain uclinux sometime 
-back [1]. But we are seeing same issue with buildroot based toolchain now.
+> > Is there some upstream project for those ACPI tables? I wouldn't want
+> > to have them all in Buildroot, I'd very much prefer to have a Buildroot
+> > package download them, compile them using the acpica compiler, and
+> > install them in the proper place.  
+> 
+> Currently there is no upstream project for these but we have plans to do
+> so eventually. The idea is to have only one per-device ASL template and
+> then tune that to work with the target board, but the template format is
+> not yet crystal clear.
 
-As elf-fdpic.h is only provided by uClibc and we support only uClibc for 
-blackfin, should we disable glog on blackfin ?
+So you're storing those files in both Yocto Project recipes, and intend
+to do so in Buildroot? And every other build system wanting to support
+your platforms would have to carry those files as well. Doesn't seem
+like a solution that will make it easy for you to update those files.
 
-Regards,
-Rahul
+What about having some Git repo hosted somewhere to host those files?
+We could then have a Buildroot package that fetches them and does the
+acpica compilation process.
 
-[1] - 
-https://git.buildroot.net/buildroot/commit/?id=3b198722a5cfdf2ad5fd5a243aaa5f9f730b0101
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
