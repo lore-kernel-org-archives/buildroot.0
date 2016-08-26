@@ -1,50 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 22:49:02 +0200
-Subject: [Buildroot] [PATCH] libiio: do not install systemd service file,
-	no longer available
-Message-ID: <1472244542-14604-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Aug 2016 22:53:23 +0200
+Subject: [Buildroot] [PATCH] gcc: ARC Fix conditional move contstraint.
+In-Reply-To: <1472203712-27459-1-git-send-email-vzakhar@synopsys.com>
+References: <1472203712-27459-1-git-send-email-vzakhar@synopsys.com>
+Message-ID: <20160826225323.1a57ae0f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump to libiio 0.7, the systemd service file that used to be
-in debian/iiod.service no longer exists. The entire debian/ directory
-has been removed from the upstream project:
+Vlad, Alexey, Eugeniy,
 
-  https://github.com/analogdevicesinc/libiio/commit/5d49f58982b0c15545bc70724304fbc580e6523c
+On Fri, 26 Aug 2016 12:28:32 +0300, Vlad Zakharov wrote:
+> The patch solves one of the ARC internal compiler issues.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/1c4/1c4493c6a18b7a93a0368420c8f79032f9330891//
+> http://autobuild.buildroot.net/results/510/51071b790866b0c7083de3a94ad2a427009096af//
+> http://autobuild.buildroot.net/results/09e/09e037c628ca2a27d8eb832dd070f50ec7ebb72a//
 
-Due to this, the installation of this service file fails, and causes
-build failures. To address this, we simply remove the installation of
-the systemd service file.
+FWIW, this last build issue is *not* fixed by this patch. This last
+build failure is on mesa3d, with:
 
-Fixes:
+main/get.c: In function '_mesa_GetBooleani_v':
+main/get.c:2320:1: error: insn does not satisfy its constraints:
+ }
+ ^
+(insn 79 72 80 7 (set (reg/f:SI 147 virtual-stack-vars)
+        (reg:SI 2 r2)) main/get.c:2315 3 {*movsi_insn}
+     (nil))
+main/get.c:2320:1: internal compiler error: in extract_constrain_insn, at recog.c:2190
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <http://bugs.buildroot.net/> for instructions.
 
-  http://autobuild.buildroot.net/results/ce2fc81466abd9619aa104c96234d1455de3480d/
+And the build result
+http://autobuild.buildroot.net/results/5cc/5ccb47e2af780982d71d924ef30008f16573ad73//build-end.log
+is the *exact* same failure, but at commit
+https://git.buildroot.net/buildroot/commit/?id=2567f6f2f34a1ecfc25604bf8bf93b8bc065fc63,
+which is *after* I committed and pushed your ARC fix (and the
+configuration was using the internal toolchain backend, so the
+toolchain was built from scratch).
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libiio/libiio.mk | 7 -------
- 1 file changed, 7 deletions(-)
+Best regards,
 
-diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-index 3cbfdd6..e8fb6b2 100644
---- a/package/libiio/libiio.mk
-+++ b/package/libiio/libiio.mk
-@@ -79,13 +79,6 @@ define LIBIIO_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/libiio/S99iiod \
- 		$(TARGET_DIR)/etc/init.d/S99iiod
- endef
--define LIBIIO_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	$(INSTALL) -D -m 0644 $(@D)/debian/iiod.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/iiod.service
--	ln -fs ../../../../usr/lib/systemd/system/iiod.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/iiod.service
--endef
- endif
- 
- $(eval $(cmake-package))
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
