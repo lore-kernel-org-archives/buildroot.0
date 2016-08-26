@@ -1,42 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 21:42:08 +0200
-Subject: [Buildroot] Remaining kmsxx build issue
-In-Reply-To: <fd5d1345-f377-59e8-7270-39759b8ddfac@mind.be>
-References: <20160819063024.55AF4101904@stock.ovh.net>
- <20160820000709.0ceef3cd@free-electrons.com>
- <20160819222925.GD6096@free.fr>
- <20160824185128.68a2fdef@free-electrons.com>
- <20160824224033.2276f19b@free-electrons.com>
- <fd5d1345-f377-59e8-7270-39759b8ddfac@mind.be>
-Message-ID: <20160826214208.36fe8c70@free-electrons.com>
+Date: Fri, 26 Aug 2016 17:16:19 +0200
+Subject: [Buildroot] [git commit branch/next] package/ffmpeg: default to
+	--cpu=generic for MIPS architecture
+Message-ID: <20160826194349.CD8ED7F9A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=30a87d332779f8dda1260ad7947c5482427cd447
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 26 Aug 2016 21:30:09 +0200, Arnout Vandecappelle wrote:
+This option is needed to prevent this message from configure:
 
->  I also can't reproduce on my laptop, unless when I remove /usr/bin/gcc-ar :-)
-> 
->  This piece of code is obviously broken. Unfortunately, I'm not sure how to fix
-> it. Replace gcc-ar with ${CMAKE_C_COMPILER}-ar ? But that doesn't work if
-> BR2_CCACHE=y... Symlink gcc-ar -> cross-gcc-ar in host/usr/bin? But that could
-> create a discrepancy between the host gcc's LTO tools and the cross-tools.
-> 
->  Oh, hang on, some genius moved the ccache support to the toolchain wrapper, so
-> ${CMAKE_C_COMPILER}-ar might actually work... Let me try that...
+WARNING: unknown CPU. Disabling all MIPS optimizations.
 
-Shouldn't instead this CMakeLists.txt allow to override the gcc-ar and
-gcc-ranlib path using variables, like CMake normally does for the C and
-C++ compilers with CMAKE_C_COMPILER and CMAKE_CXX_COMPILER ?
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas:
+ - group with the other --cpu conditions so that only one is passed.
+ - improve the comment.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Samuel ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index a816cea..91e7fa9 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -449,12 +449,17 @@ else
+ FFMPEG_CONF_OPTS += --disable-pic
+ endif
+ 
+-ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
++# Default to --cpu=generic for MIPS architecture, in order to avoid a
++# warning from ffmpeg's configure script.
++ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
++FFMPEG_CONF_OPTS += --cpu=generic
++else ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
+ FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
+ else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
+ FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
+ endif
+ 
++
+ FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+ 
+ # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
