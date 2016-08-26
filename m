@@ -1,43 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 15:39:17 +0200
-Subject: [Buildroot] [git commit branch/next] package/freeswitch: bump
-	version to 1.6.10
-Message-ID: <20160826140035.409568231C@busybox.osuosl.org>
+Date: Fri, 26 Aug 2016 15:39:42 +0200
+Subject: [Buildroot] [git commit branch/next] system/skeleton: use uid/gid
+	65534 for nobody/nogroup
+Message-ID: <20160826140036.02A7B80840@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bacff38e08a3cf7c5ead0e5de59011134e009931
+commit: https://git.buildroot.net/buildroot/commit/?id=9c67af2c524ad2b6585af2f5e43f76dacd7cc109
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+As recently discussed on lwn.net: https://lwn.net/Articles/695478/
+
+The kernel has special behaviour for uid/gid 65534:
+
+1. The kernel maps UIDs > 65535 to it when some subsystem/API/fs
+   only supports 16bit UIDs, but a 32bit UID is passed to it.
+
+2. it's used by the kernel's user namespacing as the internal UID
+   that external UIDs are mapped to that don't have any local mapping.
+
+3. It's used by NFS for all user IDs that cannot be mapped locally if
+   UID mapping is enabled.
+
+Most distributions already map (or are in the progress of changing)
+nobody/nogroup to the 65534 uid/gid, so lets do so as well.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freeswitch/freeswitch.hash | 4 ++--
- package/freeswitch/freeswitch.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ system/skeleton/etc/group  | 2 +-
+ system/skeleton/etc/passwd | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 2041158..4a4d6da 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,2 +1,2 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.9.tar.xz.sha256
--sha256	aa5f191113be2bd44cb4f2108da3dcc37be3234c6b733896fbff97526ac66451	freeswitch-1.6.9.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.10.tar.xz.sha256
-+sha256 b7beaaac29dc0a58cc34cfd402bf1c7e8ca06975722fd8ddb2983cbed17dd6e4  freeswitch-1.6.10.tar.xz
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index e7e9ece..b65096b 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREESWITCH_VERSION = 1.6.9
-+FREESWITCH_VERSION = 1.6.10
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
- FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
- FREESWITCH_LICENSE = MPLv1.1, \
+diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
+index c813da2..76346b3 100644
+--- a/system/skeleton/etc/group
++++ b/system/skeleton/etc/group
+@@ -22,5 +22,5 @@ plugdev:x:46:
+ staff:x:50:
+ lock:x:54:
+ netdev:x:82:
+-nogroup:x:99:
+ users:x:100:
++nogroup:x:65534:
+diff --git a/system/skeleton/etc/passwd b/system/skeleton/etc/passwd
+index 883265a..d8281d2 100644
+--- a/system/skeleton/etc/passwd
++++ b/system/skeleton/etc/passwd
+@@ -6,4 +6,4 @@ sync:x:4:100:sync:/bin:/bin/sync
+ mail:x:8:8:mail:/var/spool/mail:/bin/false
+ www-data:x:33:33:www-data:/var/www:/bin/false
+ operator:x:37:37:Operator:/var:/bin/false
+-nobody:x:99:99:nobody:/home:/bin/false
++nobody:x:65534:65534:nobody:/home:/bin/false
