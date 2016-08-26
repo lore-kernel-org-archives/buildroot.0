@@ -1,93 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 23:54:40 +0200
-Subject: [Buildroot] [PATCH] android-tools: disable on some architecture
-	with old kernel headers
-Message-ID: <1472248480-23992-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 27 Aug 2016 00:07:59 +0200
+Subject: [Buildroot] [PATCH] pixman: properly enable/disable ARM
+ optimizations
+In-Reply-To: <1472244298-13978-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1472244298-13978-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <04d09d36-c5e7-ac47-a821-84026fd98178@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The android-tools code is somewhat ugly, and defines its own u64 typedef
-becore including kernel headers. Unfortunately, there are specific cases
-where that doesn't work properly.
 
-The android-tools code defines u64 as "unsigned long long", which is now
-correct in the kernel. However, it used to be a time where u64 was
-defined as "unsigned long" on a few 64 bits architecture (at least
-PowerPC64 and MIPS64). The kernel headers have introduced a
-__SANE_USERSPACE_TYPES__ macro that userspace can define in order to get
-the "sane" definition, i.e "unsigned long long" for u64.
 
-Unfortunately, this __SANE_USERSPACE_TYPES__ mechanism only appeared in
-3.10 on PowerPC64, and in 3.16 on MIPS64.
+On 26-08-16 22:44, Thomas Petazzoni wrote:
+> The pixman ARM optimized code assumes that ARM instructions are
+> available. Unfortunately, the configure.ac checks do not detect that the
+> platform is Thumb-only for Cortex-M builds, so it enables the ARM
+> optimizations, leading to failures like:
+> 
+> error: /home/test/autobuild/run/instance-3/output/host/usr/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libpixman-1.a(pixman-arm-simd-asm-scaled.o): Conflicting CPU architectures 13/1
+> 
+> When building programs linked with pixman on Thumb-only
+> architectures. This is due to the fact that some object files in
+> libpixman-1.a are built for the ARM instruction set.
+> 
+> To resolve this, we give better hints to the pixman configure script
+> about which ARM optimizations to use: the ARM SIMD optimizations need at
+> least a CPU that supports ARM instructions, and obviously the ARM NEON
+> optimizations need NEON support.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/54bee2ce382fcd067965d30f758f9d15514478d9/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/pixman/pixman.mk | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+> index 38524e6..ed75efe 100644
+> --- a/package/pixman/pixman.mk
+> +++ b/package/pixman/pixman.mk
+> @@ -20,6 +20,18 @@ PIXMAN_AUTORECONF = YES
+>  # don't build gtk based demos
+>  PIXMAN_CONF_OPTS = --disable-gtk
+>  
+> +ifeq ($(BR2_ARM_CPU_HAS_ARM),y)
 
-Since android-tools is not using the autotools, and there's no easy way
-to test types with the C pre-processor, we simply add some more
-Config.in dependencies. They are a bit convoluted, but that's what the
-dependency really is.
+ Minor nit: the instructions used by arm-simd are actually ARMv5TE instructions.
+Fortunately, all our ARMv5 CPU options support the E extension, so we can add
+!BR2_ARM_CPU_ARMV4 to the condition. Still, it's not strictly necessary, because
+the compiler can still generate this v5E code, and the resulting ELF file is
+compatible with v4 object files, and there is a CPU check so it will only be run
+if it is really supported (I didn't actually test that, but the code is there).
+And adding that extra condition will make the code really ugly. It's just weird
+to pass --enable-arm-simd when it will not be used in the end.
 
-In our autobuilders, this issue was only showing up with an old MIPS64
-toolchain that uses 3.9 kernel headers.
+ So, up to you!
 
-Also, since the problem is limited to the "fastboot" tool, the
-dependency is only added for fastboot. Both adb and adbd build fine with
-this toolchain.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Fixes:
+ Regards,
+ Arnout
 
-  http://autobuild.buildroot.net/results/ce45c995bd6abda6487ae3a11b4f45a7b9b3f8eb/
+> +PIXMAN_CONF_OPTS += --enable-arm-simd
+> +else
+> +PIXMAN_CONF_OPTS += --disable-arm-simd
+> +endif
+> +
+> +ifeq ($(BR2_ARM_CPU_HAS_ARM)$(BR2_ARM_CPU_HAS_NEON),yy)
+> +PIXMAN_CONF_OPTS += --enable-arm-neon
+> +else
+> +PIXMAN_CONF_OPTS += --disable-arm-neon
+> +endif
+> +
+>  # disable iwmmxt support for CPU's that don't have
+>  # this feature
+>  ifneq ($(BR2_iwmmxt),y)
+> 
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/android-tools/Config.in | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
-
-diff --git a/package/android-tools/Config.in b/package/android-tools/Config.in
-index 2503a28..19772ad 100644
---- a/package/android-tools/Config.in
-+++ b/package/android-tools/Config.in
-@@ -17,6 +17,21 @@ config BR2_PACKAGE_ANDROID_TOOLS
- 
- if BR2_PACKAGE_ANDROID_TOOLS
- 
-+# We need kernel headers that support the __SANE_USERSPACE_TYPES__
-+# mechanism for 64 bits architectures, so that u64 gets defined as
-+# "unsigned long long" and not "unsigned long". We know that >= 3.16
-+# is needed for MIPS64 (kernel commit
-+# f4b3aa7cd9d32407670e67238c5ee752bb98f481) and >= 3.10 is needed for
-+# PowerPC64 (kernel commit
-+# 2c9c6ce0199a4d252e20c531cfdc9d24e39235c0). Without this, the build
-+# fails with a bad redefinition of u64 (the android-tools fastboot
-+# code defines it as "unsigned long long").
-+config BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT_GOOD_KERNEL_HEADERS
-+	bool
-+	default y if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 && (BR2_powerpc64 || BR2_powerpc64le)
-+	default y if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16 && (BR2_mips64 || BR2_mips64el)
-+	default y if !BR2_powerpc64 && !BR2_powerpc64le && !BR2_mips64 && !BR2_mips64el
-+
- config BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT
- 	bool "fastboot"
- 	select BR2_PACKAGE_LIBSELINUX
-@@ -25,6 +40,7 @@ config BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT
- 	depends on !BR2_STATIC_LIBS # libselinux
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # libselinux
- 	depends on !BR2_arc # libselinux
-+	depends on BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT_GOOD_KERNEL_HEADERS
- 	help
- 	  This option will build and install the fastboot utility for
- 	  the target, which can be used to reflash other target devices
-@@ -35,6 +51,10 @@ comment "fastboot needs a glibc toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_USES_GLIBC
- 
-+comment "fastboot needs headers >= 3.10 (PowerPC64), headers >= 3.16 (MIPS64)"
-+	depends on !BR2_arc
-+	depends on !BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT_GOOD_KERNEL_HEADERS
-+
- config BR2_PACKAGE_ANDROID_TOOLS_ADB
- 	bool "adb"
- 	depends on BR2_USE_MMU # uses fork()
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
