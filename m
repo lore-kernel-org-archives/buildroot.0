@@ -1,79 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 15:59:54 +0200
-Subject: [Buildroot] [git commit branch/next] blktrace: re-enable on uClibc
-Message-ID: <20160826140036.0177A7FA0E@busybox.osuosl.org>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Fri, 26 Aug 2016 10:00:45 -0400
+Subject: [Buildroot] [PATCH] board: add support for ZII VF610
+	Development Board
+In-Reply-To: <20160826154418.470886f2@free-electrons.com>
+References: <20160825190022.8461-1-vivien.didelot@savoirfairelinux.com>
+ <20160826110008.53f339a6@free-electrons.com> <87a8fz4phc.fsf@ketchup.mtl.sfl>
+ <20160826154418.470886f2@free-electrons.com>
+Message-ID: <874m674oky.fsf@ketchup.mtl.sfl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8972c398ff8b6b3550735c9e15fd61cdc7297049
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi Thomas,
 
-With a small patch, blktrace can work on uClibc: we simply need to link
-with librt to use the posix_spawn*() functions.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-[Thomas: add reference to upstream commit.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../blktrace/0001-iowatcher-link-with-lrt.patch    | 31 ++++++++++++++++++++++
- package/blktrace/Config.in                         |  5 ----
- 2 files changed, 31 insertions(+), 5 deletions(-)
+>> > Is this board publicly available?
+>> >
+>> > Your patch looks good and perfectly matches the Buildroot way of having
+>> > minimal defconfigs. But if the board is not publicly available, I'm not
+>> > sure we want a defconfig for it in Buildroot.  
+>> 
+>> This board is quite specific and not meant to be sold to the public,
+>> hovewer the Device Tree is opened and already mainlined. It is used as a
+>> reference platform for DSA with its 3 interconnected Marvell switches.
+>> 
+>> The bootloader and kernel support are available, so I saw no reason not
+>> to glue that all together. Given what you said, we can forget about this
+>> board. At least, its support is now in the wild ;-)
+>
+> I don't know how much we want defconfig for such platforms in
+> Buildroot, but my opinion on that is definitely not clear cut. So let's
+> see what others have to say about this.
+>
+> That being said, shall I gather from this that some products from
+> Zodiac Aerospace are using Buildroot? :-)
 
-diff --git a/package/blktrace/0001-iowatcher-link-with-lrt.patch b/package/blktrace/0001-iowatcher-link-with-lrt.patch
-new file mode 100644
-index 0000000..689a678
---- /dev/null
-+++ b/package/blktrace/0001-iowatcher-link-with-lrt.patch
-@@ -0,0 +1,31 @@
-+From 80d87b99d72034441ea4fbab81f5c80c1ef3b067 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Tue, 23 Aug 2016 16:36:14 +0200
-+Subject: [PATCH] iowatcher: link with -lrt
-+
-+Some C libraries (notably uClibc) have the posix_spawn*() functions in
-+librt, so let's link iowatcher with -lrt.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Upstream-status: merged
-+ (http://git.kernel.org/cgit/linux/kernel/git/axboe/blktrace.git/commit/?id=d1ab783430f5a832e973ed9a293da146c04c6702)
-+---
-+ iowatcher/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/iowatcher/Makefile b/iowatcher/Makefile
-+index 7b5101c..502476d 100644
-+--- a/iowatcher/Makefile
-++++ b/iowatcher/Makefile
-+@@ -19,7 +19,7 @@ all: $(ALL)
-+ 	$(CC) -o $*.o -c $(ALL_CFLAGS) $<
-+ 
-+ iowatcher: blkparse.o plot.o main.o tracers.o mpstat.o fio.o
-+-	$(CC) $(ALL_CFLAGS) -o $@ $(filter %.o,$^) -lm
-++	$(CC) $(ALL_CFLAGS) -o $@ $(filter %.o,$^) -lm -lrt
-+ 
-+ depend:
-+ 	@$(CC) -MM $(ALL_CFLAGS) *.c 1> .depend
-+-- 
-+2.7.4
-+
-diff --git a/package/blktrace/Config.in b/package/blktrace/Config.in
-index 958f004..38c0947 100644
---- a/package/blktrace/Config.in
-+++ b/package/blktrace/Config.in
-@@ -1,7 +1,5 @@
- config BR2_PACKAGE_BLKTRACE
- 	bool "blktrace"
--	# Uses posix_spawn()
--	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LIBAIO
- 	help
-@@ -10,6 +8,3 @@ config BR2_PACKAGE_BLKTRACE
- 	  up to user space.
- 
- 	  http://git.kernel.dk/?p=blktrace.git;a=summary
--
--comment "blktrace needs a glibc or musl toolchain"
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
+AFAICT, I don't think so... Today it's just me using Buildroot for my
+personal development.
+
+Thanks,
+
+        Vivien
