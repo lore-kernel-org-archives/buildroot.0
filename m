@@ -1,73 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 26 Aug 2016 07:58:25 +0200
-Subject: [Buildroot] [PATCH/next] system/skeleton: use uid/gid 65534 for
- nobody/nogroup
-In-Reply-To: <1472161636-2504-1-git-send-email-peter@korsgaard.com>
-References: <1472161636-2504-1-git-send-email-peter@korsgaard.com>
-Message-ID: <e154ef34-8ba3-e020-1a39-e402b0fc3fef@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Aug 2016 10:39:10 +0200
+Subject: [Buildroot] [PATCH v1 3/9] board/intel/common: Add possibility
+ for adding ACPI tables to the initrd
+In-Reply-To: <7d61148d-f102-bc79-e177-3ec8f6f95b8e@mind.be>
+References: <1472133887-34746-1-git-send-email-andriy.shevchenko@linux.intel.com>
+ <1472133887-34746-4-git-send-email-andriy.shevchenko@linux.intel.com>
+ <7d61148d-f102-bc79-e177-3ec8f6f95b8e@mind.be>
+Message-ID: <20160826103910.0765e210@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25-08-16 23:47, Peter Korsgaard wrote:
-> As recently discussed on lwn.net: https://lwn.net/Articles/695478/
->
-> The kernel has special behaviour for uid/gid 65534:
->
-> 1. The kernel maps UIDs > 65535 to it when some subsystem/API/fs
->    only supports 16bit UIDs, but a 32bit UID is passed to it.
->
-> 2. it's used by the kernel's user namespacing as the internal UID
->    that external UIDs are mapped to that don't have any local mapping.
->
-> 3. It's used by NFS for all user IDs that cannot be mapped locally if
->    UID mapping is enabled.
->
-> Most distributions already map (or are in the progress of changing)
-> nobody/nogroup to the 65534 uid/gid, so lets do so as well.
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (not runtime tested though)
+Hello,
 
- Regards,
- Arnout
+On Fri, 26 Aug 2016 08:13:54 +0200, Arnout Vandecappelle wrote:
 
-> ---
->  system/skeleton/etc/group  | 2 +-
->  system/skeleton/etc/passwd | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
-> index c813da2..76346b3 100644
-> --- a/system/skeleton/etc/group
-> +++ b/system/skeleton/etc/group
-> @@ -22,5 +22,5 @@ plugdev:x:46:
->  staff:x:50:
->  lock:x:54:
->  netdev:x:82:
-> -nogroup:x:99:
->  users:x:100:
-> +nogroup:x:65534:
-> diff --git a/system/skeleton/etc/passwd b/system/skeleton/etc/passwd
-> index 883265a..d8281d2 100644
-> --- a/system/skeleton/etc/passwd
-> +++ b/system/skeleton/etc/passwd
-> @@ -6,4 +6,4 @@ sync:x:4:100:sync:/bin:/bin/sync
->  mail:x:8:8:mail:/var/spool/mail:/bin/false
->  www-data:x:33:33:www-data:/var/www:/bin/false
->  operator:x:37:37:Operator:/var:/bin/false
-> -nobody:x:99:99:nobody:/home:/bin/false
-> +nobody:x:65534:65534:nobody:/home:/bin/false
+>  Note: I don't agree with Thomas that there should be buildroot config for doing
+> this. It's simple enough to do in a post-build script, which is more flexible.
 
+Depends on what gets done. And just like our linux.mk package allows to
+build DTBs, it could allow building ACPI table, which is something
+several x86 platforms might need.
 
+What I *really* dislike in the proposal is the additional magic
+environment variables, and there's specifically one to list the ACPI
+tables to build.
 
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
