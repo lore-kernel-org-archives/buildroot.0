@@ -1,61 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 22:44:58 +0200
-Subject: [Buildroot] [PATCH] pixman: properly enable/disable ARM
-	optimizations
-Message-ID: <1472244298-13978-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Aug 2016 22:49:02 +0200
+Subject: [Buildroot] [PATCH] libiio: do not install systemd service file,
+	no longer available
+Message-ID: <1472244542-14604-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The pixman ARM optimized code assumes that ARM instructions are
-available. Unfortunately, the configure.ac checks do not detect that the
-platform is Thumb-only for Cortex-M builds, so it enables the ARM
-optimizations, leading to failures like:
+Since the bump to libiio 0.7, the systemd service file that used to be
+in debian/iiod.service no longer exists. The entire debian/ directory
+has been removed from the upstream project:
 
-error: /home/test/autobuild/run/instance-3/output/host/usr/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libpixman-1.a(pixman-arm-simd-asm-scaled.o): Conflicting CPU architectures 13/1
+  https://github.com/analogdevicesinc/libiio/commit/5d49f58982b0c15545bc70724304fbc580e6523c
 
-When building programs linked with pixman on Thumb-only
-architectures. This is due to the fact that some object files in
-libpixman-1.a are built for the ARM instruction set.
-
-To resolve this, we give better hints to the pixman configure script
-about which ARM optimizations to use: the ARM SIMD optimizations need at
-least a CPU that supports ARM instructions, and obviously the ARM NEON
-optimizations need NEON support.
+Due to this, the installation of this service file fails, and causes
+build failures. To address this, we simply remove the installation of
+the systemd service file.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/54bee2ce382fcd067965d30f758f9d15514478d9/
+  http://autobuild.buildroot.net/results/ce2fc81466abd9619aa104c96234d1455de3480d/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pixman/pixman.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/libiio/libiio.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index 38524e6..ed75efe 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -20,6 +20,18 @@ PIXMAN_AUTORECONF = YES
- # don't build gtk based demos
- PIXMAN_CONF_OPTS = --disable-gtk
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+index 3cbfdd6..e8fb6b2 100644
+--- a/package/libiio/libiio.mk
++++ b/package/libiio/libiio.mk
+@@ -79,13 +79,6 @@ define LIBIIO_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/libiio/S99iiod \
+ 		$(TARGET_DIR)/etc/init.d/S99iiod
+ endef
+-define LIBIIO_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	$(INSTALL) -D -m 0644 $(@D)/debian/iiod.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/iiod.service
+-	ln -fs ../../../../usr/lib/systemd/system/iiod.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/iiod.service
+-endef
+ endif
  
-+ifeq ($(BR2_ARM_CPU_HAS_ARM),y)
-+PIXMAN_CONF_OPTS += --enable-arm-simd
-+else
-+PIXMAN_CONF_OPTS += --disable-arm-simd
-+endif
-+
-+ifeq ($(BR2_ARM_CPU_HAS_ARM)$(BR2_ARM_CPU_HAS_NEON),yy)
-+PIXMAN_CONF_OPTS += --enable-arm-neon
-+else
-+PIXMAN_CONF_OPTS += --disable-arm-neon
-+endif
-+
- # disable iwmmxt support for CPU's that don't have
- # this feature
- ifneq ($(BR2_iwmmxt),y)
+ $(eval $(cmake-package))
 -- 
 2.7.4
