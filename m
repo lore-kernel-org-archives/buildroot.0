@@ -1,57 +1,90 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 26 Aug 2016 23:29:28 +0200
-Subject: [Buildroot] Analysis of build results for 2016-08-08
-In-Reply-To: <975a1c39-2a4d-164c-411b-8357601b570f@essensium.com>
-References: <20160809063032.89898101A55@stock.ovh.net>
- <20160809141535.4c9b8169@free-electrons.com>
- <17850212-c769-63c4-f05b-79adc47f470c@gmail.com>
- <34622bb9-7ff7-2d15-fa97-e5ed6570034b@gmail.com>
- <2e0ca47d-83cf-4c2d-844b-9560b98733c3@free.fr>
- <975a1c39-2a4d-164c-411b-8357601b570f@essensium.com>
-Message-ID: <f6419083-e1e4-69f7-f8ee-4c8c9348a01b@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 26 Aug 2016 23:34:42 +0200
+Subject: [Buildroot] [PATCH] package/kmsxx: add patch to fix LTO support
+Message-ID: <20160826213442.19246-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, All,
+The LTO support in the kmsxx package uses the host gcc-ar and gcc-ranlib
+instead of the ones from the cross-toolchain. Add a patch that tries to
+find the right one based on CMAKE_C_COMPILER.
 
-Le 25/08/2016 ? 23:52, Arnout Vandecappelle a ?crit :
-> On 25-08-16 09:29, Julien Boibessot wrote:
->> Hello Romain,
->>
->> On 22/08/2016 21:49, Romain Naour wrote:
->>> Hi Julien, Thomas,
->>>
->>> Le 09/08/2016 ? 16:07, Romain Naour a ?crit :
->>>> Hi Thomas, All,
->>>>
->>>> [snip]
->>>>
->>>>>>          arm |                host-efl-1.17.2 | NOK | http://autobuild.buildroot.net/results/89bf12f8333d47af0cb5775c859e26f300af56cc/
->>>>> edje_cc: Critical. Unable to open temp file "(null)" for pre-processor.
->>>>>
->>>>> Romain? This looks like a transient error, but I'm not sure.
->>>> I already seen this issue on autobuilders but I'm not able to reproduce it
->>>> locally...
->>> Julien, this issue occurs only on your autobuilder, can you verify if it
->>> reproducible. If yes, can you send me the usual files log (config.log, build log
->>> etc)
->> yes, it's 100% reproducible.
-> 
->  Looking at the source of edje_cc, it's mkstemp() that fails. Do you have TMPDIR
-> or XDG_RUNTIME_DIR pointing to some location that is not writable or doesn't exist?
+Fixes:
+http://autobuild.buildroot.net/results/16a/16a38a4277dd1152a5955d62cb92f85447791ef3
 
-Thanks for the investigation.
-I came to the same conclusion that mkstemp() (eina_file_mkstemp) fails for some
-reason on Julien's autobuilders... without any clue.
+Possibly also fixes:
+http://autobuild.buildroot.net/results/f3c/f3c48da3a9706cd366c0e0a96c3cd0ff959f2a78
+(it fails later, possibly because an incompatible host ar)
 
-Best regards,
-Romain
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+Thomas P. proposed to instead add a variable for LTO_AR and LTO_RANLIB
+that we would override. However, this version works and is upstreamable
+and currently we don't even "know" if cross-gcc-ar exists or not.
 
-> 
-> 
->  Regards,
->  Arnout
-> 
+CMake actually has a target property INTERPROCEDURAL_OPTIMIZATION but
+it seems that this is currently only implemented for Intel ICC. Cfr.
+https://cmake.org/Bug/view.php?id=15939
+---
+ ...001-Fix-LTO-support-for-cross-compilation.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
+
+diff --git a/package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch b/package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
+new file mode 100644
+index 0000000..9b4a582
+--- /dev/null
++++ b/package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
+@@ -0,0 +1,45 @@
++From 5da1f631bc753655ac94b08a6233eecd0d451327 Mon Sep 17 00:00:00 2001
++From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
++Date: Fri, 26 Aug 2016 21:55:06 +0200
++Subject: [PATCH] Fix LTO support for cross-compilation.
++
++When cross-compiling, the ar and ranlib to be used for LTO are prefixed
++by the cross-tuple. gcc-ar and gcc-ranlib may not exist. Cfr.
++http://autobuild.buildroot.net/results/f3c/f3c48da3a9706cd366c0e0a96c3cd0ff959f2a78/
++
++Therefore, search for an appropriate lto-ar and lto-ranlib before
++enabling LTO.
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++Submitted upstream: https://github.com/tomba/kmsxx/pull/14
++---
++ CMakeLists.txt | 12 +++++++++---
++ 1 file changed, 9 insertions(+), 3 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index e5b5ea5..c61c81d 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -39,9 +39,15 @@ if (NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
++     CHECK_CXX_COMPILER_FLAG("-flto" HAS_LTO_FLAG)
++ 
++     if (HAS_LTO_FLAG)
++-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
++-        set(CMAKE_AR gcc-ar)
++-        set(CMAKE_RANLIB gcc-ranlib)
+++        find_program(LTO_AR NAMES "${CMAKE_C_COMPILER}-ar" gcc-ar)
+++        find_program(LTO_RANLIB NAMES "${CMAKE_C_COMPILER}-ranlib" /usr/bin/gcc-ranlib)
+++        if (LTO_AR AND LTO_RANLIB)
+++            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
+++            set(CMAKE_AR "${LTO_AR}")
+++            set(CMAKE_RANLIB "${LTO_RANLIB}")
+++        else()
+++            message(STATUS "gcc-ar or gcc-ranlib not found, disabling LTO")
+++        endif()
++     endif()
++ endif()
++ 
++-- 
++2.9.3
++
+-- 
+2.9.3
