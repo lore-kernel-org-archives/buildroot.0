@@ -1,32 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Aug 2016 11:06:06 +0200
-Subject: [Buildroot] [git commit] package/uboot-tols: fix dependency of
-	comment about FIT support
-In-Reply-To: <20160826105529.65876156@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 26 Aug 2016 10:55:29 +0200")
-References: <20160825215944.0CDBA822DD@busybox.osuosl.org>
- <20160826105529.65876156@free-electrons.com>
-Message-ID: <87inundhmp.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Aug 2016 11:02:20 +0200
+Subject: [Buildroot] [git commit] boa: boa.conf: run under the nogroup group
+Message-ID: <20160826090905.4F8A181D2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5f708c1cd55c2e7dbbc4cc3e78a8322817d9819c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Fix the dependency.
- >> 
- >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- >> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The default boa.conf we install specifies that boa should run under the
+nobody group, but we don't have such a group in our default skeleton (and
+boa doesn't add it), causing boa to fail to start:
 
- > You forgot to fix the commit title, even though the typo was noticed
- > by Fabio and acknowledged by Yann.
+[01/Jan/1970:00:00:10 +0000] No such group: nobody
 
-Gaah, I must have been tired. I looked, but couldn't see the typo (I do
-now).
+Instead use the nogroup group, which is presumably what was meant.
 
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/boa/boa.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/boa/boa.conf b/package/boa/boa.conf
+index f51c237..e940296 100644
+--- a/package/boa/boa.conf
++++ b/package/boa/boa.conf
+@@ -46,7 +46,7 @@ Port 80
+ # Group: The group name or GID the server should run as.
+ 
+ User nobody
+-Group nobody
++Group nogroup
+ 
+ # ServerAdmin: The email address where server problems should be sent.
+ # Note: this is not currently used, except as an environment variable
