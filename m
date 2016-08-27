@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 14:48:23 +0200
-Subject: [Buildroot] [PATCH] package/lshw: add patches for musl build
-In-Reply-To: <20160826232940.23592-1-arnout@mind.be>
-References: <20160826232940.23592-1-arnout@mind.be>
-Message-ID: <20160827144823.1eff83b5@free-electrons.com>
+Date: Sat, 27 Aug 2016 14:55:31 +0200
+Subject: [Buildroot] [PATCH] zeromq: disable for static linking
+In-Reply-To: <20160826212821.GA21305@waldemar-brodkorb.de>
+References: <20160826212821.GA21305@waldemar-brodkorb.de>
+Message-ID: <20160827145531.4c02452b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +12,40 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 27 Aug 2016 01:29:40 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Fixing one issue exposed a second one.
+On Fri, 26 Aug 2016 23:28:21 +0200, Waldemar Brodkorb wrote:
+> Fixes:
+>   http://autobuild.buildroot.net/results/3aa73620d0f1afcc82de93069c9693e1ca755bb9
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  ...02-Fix-musl-build-basename-is-in-libgen.h.patch | 78 ++++++++++++++++++++++
->  package/lshw/0003-Fix-use-of-LONG_BIT.patch        | 36 ++++++++++
->  2 files changed, 114 insertions(+)
->  create mode 100644 package/lshw/0002-Fix-musl-build-basename-is-in-libgen.h.patch
->  create mode 100644 package/lshw/0003-Fix-use-of-LONG_BIT.patch
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Applied to master, thanks.
+I disagree with this change because it seems more like a toolchain
+issue than the package really needing dynamic library support.
+
+And indeed, the following static only configuration that includes zeromq
+builds perfectly fine:
+
+BR2_arm=y
+BR2_STATIC_LIBS=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2016.08-rc1-4-g07e8d1c.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_ZEROMQ=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
