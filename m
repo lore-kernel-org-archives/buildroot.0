@@ -1,70 +1,138 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 27 Aug 2016 12:40:45 +0200
-Subject: [Buildroot] [PATCH] package/kmsxx: add patch to fix LTO support
-In-Reply-To: <C235CE6F-F057-45DA-840A-5C5B7944FCE1@gmail.com>
-References: <20160826213442.19246-1-arnout@mind.be>
- <C235CE6F-F057-45DA-840A-5C5B7944FCE1@gmail.com>
-Message-ID: <100a6de7-e6d0-5b88-950d-ddfb4d9f3589@mind.be>
+Date: Sat, 27 Aug 2016 13:46:10 +0200
+Subject: [Buildroot] Nearly duplicate builds
+In-Reply-To: <CAK7rcp8xDcHTkxyd_E0QNPGy37R0693iMUGAWnRb4_akA8a8pg@mail.gmail.com>
+References: <CAK7rcp8xDcHTkxyd_E0QNPGy37R0693iMUGAWnRb4_akA8a8pg@mail.gmail.com>
+Message-ID: <da0b7f23-509b-82b0-26cf-3d30a9e2d264@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Kenneth,
+
+ What you're asking is unfortunately not simple...
+
+On 27-08-16 09:28, Kenneth Adam Miller wrote:
+> So, we have multiple boards and multiple users. The way that buildroot
+> functions is such that, for nearly duplicate builds, the only thing
+> you can really do to eliminate redundant builds is to move the
+> toolchain to be external. In my case, it kind of makes sense to have
+> have as much as possible of the build to not be repeated
+> unnecessarily. We have an entire team working with buildroot, and
+> doing so much repeated work is a strain on both time and computer
+> resources. We have to have a huge machine in order to make so many
+> builds, for both integration testing and local development for each
+> user and board, more palatable.
+
+ One thing that may help to speed up builds is to enable BR2_CCACHE and use a
+shared ccache directory. That typically moves the bottleneck to the configure
+scripts (which can't make use of ccache and are not parallelized). It does allow
+you to run several builds in parallel on the same machine, because the load is a
+lot lower.
+
+ Another possibility is to build parts "externally". First of all, build a
+toolchain that you use as an external toolchain. Then the kernel and bootloader
+can also be built separately, published to a well-known location, and retrieved
+from there in the post-image script.
+
+ You can do something similar for application development. Typically while
+developing an application, you don't actually change anything in the rest of the
+rootfs, so you can just build your application independently using the external
+toolchain. You can then pick up a pre-built rootfs tarball from a well-known
+location, add the just-built stuff to it, and run the image generation script.
+It does mean that you don't use buildroot anymore for the image generation
+itself, but there is anyway not so much that buildroot adds there. And you can
+write the script in a way that it can be used either as a post-image script or
+externally. Any host tools that are needed by this script can be included in the
+external toolchain.
 
 
-On 27-08-16 11:03, Samuel Martin wrote:
-> Hi all,
+> My question is, would there be a way to reduce unnecessary repeated
+> work between packages and configurations? In our case, often
+> configurations are very nearly duplicate, but differ in just a few
+> userland packages and very little configuration information for the
+> kernel.
 > 
-> On August 26, 2016 11:34:42 PM GMT+02:00, "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
->> The LTO support in the kmsxx package uses the host gcc-ar and
->> gcc-ranlib
->> instead of the ones from the cross-toolchain. Add a patch that tries to
->> find the right one based on CMAKE_C_COMPILER.
-[snip]
->> +     if (HAS_LTO_FLAG)
->> +-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
->> +-        set(CMAKE_AR gcc-ar)
->> +-        set(CMAKE_RANLIB gcc-ranlib)
->> ++        find_program(LTO_AR NAMES "${CMAKE_C_COMPILER}-ar" gcc-ar)
->> ++        find_program(LTO_RANLIB NAMES "${CMAKE_C_COMPILER}-ranlib"
->> /usr/bin/gcc-ranlib)
->> ++        if (LTO_AR AND LTO_RANLIB)
->> ++            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
->> ++            set(CMAKE_AR "${LTO_AR}")
->> ++            set(CMAKE_RANLIB "${LTO_RANLIB}")
+> My thinking for how such a package or modification to buildroot would
+> work is that it would transparently facilitate managing a soft link
+> forest between the common build directory and the build directory
+> designated as the output directory for each particular target. In this
+> way, a convention would be adopted in specifying a user though the
+> tool with a simple $USER environment variable in navigating to a
+> user's build directory before executing the build. The user themselves
+> would be responsible for maintaining the list of packages that differ
+> from a shared default in both white and black listing from common
+> build. In this way, buildroot would just keep all the common packages
+> between users and boards built as it normally does, and then do
+> individual work for what is different per specific configuration.
+
+ I think what you're basically after is a per-package build artefact cache.
+There are a few problems with this at the moment.
+
+1. HOST_DIR and STAGING_DIR contain references to the absolute path of where it
+was built, so it's different for different users. HOST_DIR is also not
+relocatable at the moment, so it has to stay at the location where it used to
+reside - but your symlink tree can work around that.
+
+2. The build results are different depending on which other packages exist. E.g.
+httping will link with openssl if it was selected, so you'd need to have two
+versions of httping. To make matters worse, not all of these dependencies are
+explicitly recorded in buildroot (which is a bug, but bugs exist :-).
+
+3. There is nothing at the moment that helps you to make differences between
+configs, and I think it could be pretty difficult in general (e.g. how to deal
+with virtual packages?)
+
+
+For 1, Samuel is working on a "relocatable toolchain" series that is currently
+in its 9th iteration. Reviews would help :-)
+
+For 2, there was a "per-package staging" series by Fabio. The last iteration was
+June last year and there still was a lot of work. This would also enable
+top-level parallel builds, which offer a significant speedup, and rebuilding
+after removing TARGET_DIR.
+
+For 3, nothing exist at the moment AFAIK.
+
 > 
-> These definitions belong to the toolchainfile.cmake file IMHO, but it can be moved there in a follow-up patch.
+> The thing about this though, is that this functionality isn't present
+> to my knowledge, and even if it was, it wouldn't fully answer the
+> problem I don't believe. Overlays help with this a bit as well, but
+> that I know of they also aren't going to solve all the problems of
+> multiple configuration per project. 
 
- Well, even if it is in toolchainfile.cmake, this patch is needed because the
-CMakeLists.txt will just blindly override the defaults.
+ If it is just about adding/removing packages, an option would be to make one
+super-config that contains everything and run that continuously on your build
+server, and let each individual project/configuration remove the things that
+they don't need from this tarball, combine it with an externally built kernel
+and bootloader, and run a post-image script. In other words, you'd use buildroot
+only to create the super-config.
 
- But at the moment, we don't have global LTO support. We can build an internal
-toolchain with LTO support, but it's up to individual packages to enable/use it.
-Which makes sense, because LTO is still a bit experimental and possibly breaks
-things.
 
- So we could add a global LTO_AR and LTO_RANLIB to our toolchainfile.cmake, but
-since no package would make use of it, it wouldn't make a whole lot of sense.
+> I could be wrong about each of
+> those presumptions in regards to my needs, so if I am, someone please
+> explain it to me. I do think the ability to have a generated overlay
+> per buildroot package would be pretty cool. For us, the final image
+> creation cost being separate from the actual build cost would be
+> fantastic in being able to clean our builds per package (not currently
+> a feature), and also be great since the individual overlays themselves
+> could be soft linked. and thereby versioned.
+> 
+> Does anybody know of such a configuration differencing and versioning
+> tool? Would there be a way to use buildroot's features to calculate
+> the package differences between two defconfigs, and thereby make an
+> action with respect to overlay or build isolation with them per user
+> command?
+
+ I actually think that that aspect is much less important. If you can use cached
+staging and target trees for packages, it isn't necessary to calculate the
+differences between configs: you just take the results from the cache if
+available, and build them if not available.
 
  Regards,
  Arnout
-
-
-> 
-> Regards,
-> 
->> ++        else()
->> ++            message(STATUS "gcc-ar or gcc-ranlib not found, disabling
->> LTO")
->> ++        endif()
->> +     endif()
->> + endif()
->> + 
->> +-- 
->> +2.9.3
->> +
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
