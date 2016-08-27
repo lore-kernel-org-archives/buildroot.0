@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 14:44:47 +0200
-Subject: [Buildroot] [PATCH] pixman: properly enable/disable ARM
- optimizations
-In-Reply-To: <1472244298-13978-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1472244298-13978-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160827144447.7fd4775e@free-electrons.com>
+Date: Sat, 27 Aug 2016 14:45:25 +0200
+Subject: [Buildroot] [PATCH] norm: add patch to fix musl build
+In-Reply-To: <1472242094-7204-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1472242094-7204-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160827144525.340fa731@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 26 Aug 2016 22:44:58 +0200, Thomas Petazzoni wrote:
-> The pixman ARM optimized code assumes that ARM instructions are
-> available. Unfortunately, the configure.ac checks do not detect that the
-> platform is Thumb-only for Cortex-M builds, so it enables the ARM
-> optimizations, leading to failures like:
-> 
-> error: /home/test/autobuild/run/instance-3/output/host/usr/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libpixman-1.a(pixman-arm-simd-asm-scaled.o): Conflicting CPU architectures 13/1
-> 
-> When building programs linked with pixman on Thumb-only
-> architectures. This is due to the fact that some object files in
-> libpixman-1.a are built for the ARM instruction set.
-> 
-> To resolve this, we give better hints to the pixman configure script
-> about which ARM optimizations to use: the ARM SIMD optimizations need at
-> least a CPU that supports ARM instructions, and obviously the ARM NEON
-> optimizations need NEON support.
-> 
+On Fri, 26 Aug 2016 22:08:14 +0200, Thomas Petazzoni wrote:
 > Fixes:
 > 
->   http://autobuild.buildroot.net/results/54bee2ce382fcd067965d30f758f9d15514478d9/
+>   http://autobuild.buildroot.net/results/9c7130d5b5aad218c5c576761d495a3f403fdc5b/
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/pixman/pixman.mk | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  ...03-remove-kernel-headers-include-musl-fix.patch | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 package/norm/0003-remove-kernel-headers-include-musl-fix.patch
 
-Applied to master, after adding a comment above the --enable-arm-simd
-option, as suggested by Arnout.
+Applied to master, thanks.
 
 Thomas
 -- 
