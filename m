@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 23:18:43 +0200
-Subject: [Buildroot] [PATCH v2] bfin: change default to bf532,
- internal toolchain !bf6xx
-In-Reply-To: <20160706223014.GA12952@waldemar-brodkorb.de>
-References: <20160706223014.GA12952@waldemar-brodkorb.de>
-Message-ID: <20160827231843.3a3abe79@free-electrons.com>
+Date: Sat, 27 Aug 2016 23:32:27 +0200
+Subject: [Buildroot] [PATCH] package/systemd: importd broken on Sourcery
+ CodeBench ARM 2014.05
+In-Reply-To: <20160711171630.GD3734@free.fr>
+References: <1468187781-7497-1-git-send-email-yann.morin.1998@free.fr>
+ <20160711110225.19dfaa5f@free-electrons.com>
+ <20160711171630.GD3734@free.fr>
+Message-ID: <20160827233227.27f54621@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +15,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 7 Jul 2016 00:30:15 +0200, Waldemar Brodkorb wrote:
-> The default Blackfin processor in Buildroot isn't supported by
-> gcc 6.1.0, so use bf532 as default. Disable any bf6xx processors
-> for internal toolchain users.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> v1 -> v2:
->   - revert logic, disable internal toolchain for bf6xx suggested
->     by Thomas Petazzoni
-> ---
->  arch/Config.in.bfin | 2 +-
->  toolchain/Config.in | 4 ++++
->  2 files changed, 5 insertions(+), 1 deletion(-)
+On Mon, 11 Jul 2016 19:16:30 +0200, Yann E. MORIN wrote:
 
-Applied to master, thanks.
+> > So is the problem a kernel headers problem, or a glibc version problem ?  
+> 
+> Both. O_TMPFILE was introduced in Linux 3.11, so we need at least those
+> headers. Also, glibc-2.18 did not provide it in fcntl.h; it only
+> appeared in glibc-2.19.
+
+I'm still not sure to understand why both are needed.
+
+In any case, this fix is not correct, since the issue appears with
+other toolchains as well:
+
+ http://autobuild.buildroot.net/results/e6f/e6f8189029487155a784b4e664178adfd92f8884/build-end.log
+
+ This one is an ARM toolchain, that uses 3.12 kernel headers, so most
+ likely it's a glibc version issue.
+
+ http://autobuild.buildroot.net/results/339/33912eebb5f4ee3f73be078ba2035f48d76a6a46/build-end.log
+
+ This one is a PowerPC toolchain.
+
+I see two possibilities only:
+
+ * Introduce some glibc version dependency config knobs.
+
+ * Add a workaround in the systemd code to define O_TMPFILE to the
+   proper value when not provided by the C library.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
