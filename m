@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 14:42:06 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/unixodbc: bump version to
- 2.3.4
-In-Reply-To: <20160827073511.29612-1-bernd.kuhls@t-online.de>
-References: <20160827073511.29612-1-bernd.kuhls@t-online.de>
-Message-ID: <20160827144206.7619da20@free-electrons.com>
+Date: Sat, 27 Aug 2016 14:42:09 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/ffmpeg: bump version to
+ 3.1.3
+In-Reply-To: <20160827060141.16932-1-bernd.kuhls@t-online.de>
+References: <20160827060141.16932-1-bernd.kuhls@t-online.de>
+Message-ID: <20160827144209.3fa62cf6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 27 Aug 2016 09:35:11 +0200, Bernd Kuhls wrote:
+On Sat, 27 Aug 2016 08:01:41 +0200, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/unixodbc/unixodbc.hash | 6 ++++--
->  package/unixodbc/unixodbc.mk   | 2 +-
->  2 files changed, 5 insertions(+), 3 deletions(-)
+>  package/ffmpeg/ffmpeg.hash | 2 +-
+>  package/ffmpeg/ffmpeg.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
 
