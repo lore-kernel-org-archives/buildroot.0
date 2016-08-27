@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 21:37:59 +0200
-Subject: [Buildroot] [PATCH] package/protobuf: uses fork(),
- not available on no-MMU platforms
-In-Reply-To: <1472320896.3953.4.camel@embedded.rocks>
-References: <20160827001703.18155-1-joerg.krause@embedded.rocks>
- <20160827151211.3984639c@free-electrons.com>
- <1472320896.3953.4.camel@embedded.rocks>
-Message-ID: <20160827213759.35bc3d69@free-electrons.com>
+Date: Sat, 27 Aug 2016 21:39:38 +0200
+Subject: [Buildroot] [PATCH 04/16 v3] core: introduce an intermediate
+ rule before the configurators
+In-Reply-To: <22c8e4df35485da3ab9dd836465e4892305c7073.1468750623.git.yann.morin.1998@free.fr>
+References: <cover.1468750623.git.yann.morin.1998@free.fr>
+ <22c8e4df35485da3ab9dd836465e4892305c7073.1468750623.git.yann.morin.1998@free.fr>
+Message-ID: <20160827213938.13e89622@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,17 +14,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 27 Aug 2016 20:01:36 +0200, J?rg Krause wrote:
+On Sun, 17 Jul 2016 12:34:24 +0200, Yann E. MORIN wrote:
+> Currently, all configurators depend on generating the out-of-tree
+> Makefile wrapper.
+> 
+> In an upcoming patch, we'll need to also generate a kconfig fragment,
+> so it will have to kick in before we run the configurators.
+> 
+> Introduce a new intermediate "prepare-kconfig" rule, so we can
+> commonalise the dependencies of the configurators. Move the dependency
+> on the Makefile wrapper to that new intermediate rule.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> ---
+>  Makefile | 36 +++++++++++++++++++-----------------
+>  1 file changed, 19 insertions(+), 17 deletions(-)
 
-> Many thanks for improving the commit! However, there a some packages
-> which have an architecture dependency where the no-MMU dependency is
-> not added to the architecture dependency, e.g. gauche. Should those
-> packages be revised, too?
+Applied to next, after marking the new prepare-kconfig target as PHONY.
 
-Yes, I'd say so.
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
