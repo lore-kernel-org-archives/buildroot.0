@@ -1,133 +1,171 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Aug 2016 01:03:04 +0200
-Subject: [Buildroot] [PATCHv2] Revert "Added local directory as source of
-	kernel code"
-Message-ID: <1472338984-3588-1-git-send-email-yann.morin.1998@free.fr>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun, 28 Aug 2016 01:13:37 +0200
+Subject: [Buildroot] [PATCH] package/libshout: add patches to fix static
+	linking
+Message-ID: <20160827231337.29284-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 73da2ff6f718f2889e3c5024d899f8d58f502863.
+This series includes two patches to fix static linking with libshout.
 
-The reason for adding support for a local location was to be able to do
-development on the Linux kernel source tree on a local directory rather
-than have to clone it for every build.
+The first patch fixes two typos resulting in an uninterpretable
+library propagation and is mainly needed for the follow-up patch.
 
-We already have a mechanism for that, it's called override-srcdir. It's
-been available since September 2011, more than a year before this patch
-was committed.
+The second patch adds the field 'Libs.private' to the pkg-config file so
+when static linking with libshout the needed libraries are correctly
+propagated.
 
-Otherwise, we're going to be adding support for local sources in other
-packages. First was U-Boot as submitted by Adam. But what next? We can't
-have such support for all packages, especially since override-srcdir
-does the job.
+Note that autoreconf is enabled as the first patch touches configure.ac.
 
-Besides, using a local source tree makes the build non-reproducible, so
-we don't really want to have this in a .config (or defconfig).
+Fixes:
+http://autobuild.buildroot.net/results/b82/b82408fccbf816575125dcc1a1de7260f66f62e8/
+http://autobuild.buildroot.net/results/360/3605750023267e4cd35d98451bd283f9e70a6106/
+http://autobuild.buildroot.net/results/03b/03b98b313dd6ed2909607cdc0c4f6fb87be3ccfe/
+http://autobuild.buildroot.net/results/70b/70ba47e04d1fc0d2379bf1ac7aab4c52d6193001/
 
-We only handle the boolean option in legacy, as there is nothing we can
-do with the directory path.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Rafal Fabich <rafal.fabich@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Adam Duskett <aduskett@gmail.com>
-
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
-Changes v1 -> v2:
-  - add legacy handling  (Thomas)
-  - don't change the local tarball version handling in linux.mk
-    (Thomas)
+ .../0001-Fix-THEORA-SPEEX-_LDFLAGS-typo.patch      | 45 ++++++++++++++++
+ ...Add-Libs.private-field-to-pkg-config-file.patch | 61 ++++++++++++++++++++++
+ package/libshout/libshout.mk                       |  3 ++
+ 3 files changed, 109 insertions(+)
+ create mode 100644 package/libshout/0001-Fix-THEORA-SPEEX-_LDFLAGS-typo.patch
+ create mode 100644 package/libshout/0002-Add-Libs.private-field-to-pkg-config-file.patch
 
----
-Rafal, if your use-case was just to use a local tree for development
-purposes, please see to using the override-srcdir mechanism instead.
-If you had another use-case that requires using a local source tree,
-could you explain it, please? Thanks!
----
- Config.in.legacy | 12 ++++++++++++
- linux/Config.in  | 13 -------------
- linux/linux.mk   |  3 ---
- 3 files changed, 12 insertions(+), 16 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 746b80a..dafaf40 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -143,6 +143,18 @@ comment "----------------------------------------------------"
- endif
- 
- ###############################################################################
-+comment "Legacy options removed in 2016.11"
+diff --git a/package/libshout/0001-Fix-THEORA-SPEEX-_LDFLAGS-typo.patch b/package/libshout/0001-Fix-THEORA-SPEEX-_LDFLAGS-typo.patch
+new file mode 100644
+index 0000000..4d173c5
+--- /dev/null
++++ b/package/libshout/0001-Fix-THEORA-SPEEX-_LDFLAGS-typo.patch
+@@ -0,0 +1,45 @@
++From d96a3cafeebeb80b4796bacbe0e6da0bbd3ee48e Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Sun, 28 Aug 2016 00:39:55 +0200
++Subject: [PATCH 1/2] Fix {THEORA,SPEEX}_LDFLAGS typo
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+config BR2_LINUX_KERNEL_CUSTOM_LOCAL
-+	bool "Linux kernel local directory option removed"
-+	help
-+	  The option to select a local ditrectory as the source of the Linux
-+	  kernel has been removed. It hurts reproducibility of builds.
++Needed to properly link against libshout, otherwise the build fails with:
 +
-+	  In case you were using this option during development of your
-+	  Linux kernel use the override mechanism instead.
++  error: LDFLAGS: No such file or directory
 +
-+###############################################################################
- comment "Legacy options removed in 2016.08"
++Upstream status: pending
++https://github.com/xiph/Icecast-libshout/pull/4
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ configure.ac | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 87a7f55..85f18ad 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -134,7 +134,7 @@ PKG_CHECK_MODULES(THEORA, theora, [
++   ])
++ fi
++ XIPH_VAR_APPEND([XIPH_CPPFLAGS],[$THEORA_CFLAGS])
++-XIPH_VAR_PREPEND([XIPH_LIBS],[$THEORA LDFLAGS $THEORA_LIBS])
+++XIPH_VAR_PREPEND([XIPH_LIBS],[$THEORA_LDFLAGS $THEORA_LIBS])
++ AM_CONDITIONAL([HAVE_THEORA], [test -n "$THEORA_LIBS"])
++ if test -n "$THEORA_LIBS"
++ then
++@@ -153,7 +153,7 @@ PKG_CHECK_MODULES(SPEEX, speex, [
++   ])
++ fi
++ XIPH_VAR_APPEND([XIPH_CPPFLAGS],[$SPEEX_CFLAGS])
++-XIPH_VAR_PREPEND([XIPH_LIBS],[$SPEEX LDFLAGS $SPEEX_LIBS])
+++XIPH_VAR_PREPEND([XIPH_LIBS],[$SPEEX_LDFLAGS $SPEEX_LIBS])
++ AM_CONDITIONAL([HAVE_SPEEX], [test -n "$SPEEX_LIBS"])
++ if test -n "$SPEEX_LIBS"
++ then
++-- 
++2.9.3
++
+diff --git a/package/libshout/0002-Add-Libs.private-field-to-pkg-config-file.patch b/package/libshout/0002-Add-Libs.private-field-to-pkg-config-file.patch
+new file mode 100644
+index 0000000..2c198c1
+--- /dev/null
++++ b/package/libshout/0002-Add-Libs.private-field-to-pkg-config-file.patch
+@@ -0,0 +1,61 @@
++From be6dc10c525ec3d51659ee9ace1a4228d91d05ea Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Sun, 28 Aug 2016 00:08:19 +0200
++Subject: [PATCH 2/2] Add 'Libs.private' field to pkg-config file
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Static linking userspace programs such as mpd against libshout
++currently doesn't work out of the box, because libshout is linked
++against libssl, but this isn't expressed in libshouts pkg-config
++file:
++
++In order to support static linking, shout.pc should include a 'Libs.private'
++field listing all the libraries that libshout requires.
++
++/usr/lib/libshout.a(tls.o): In function `tls_check_cert':
++tls.c:(.text+0x10): undefined reference to `SSL_get_peer_certificate'
++tls.c:(.text+0x24): undefined reference to `SSL_get_verify_result'
++tls.c:(.text+0x4c): undefined reference to `X509_get_subject_name'
++tls.c:(.text+0x60): undefined reference to `X509_NAME_get_text_by_NID'
++tls.c:(.text+0x118): undefined reference to `X509_NAME_get_entry'
++tls.c:(.text+0x11c): undefined reference to `X509_NAME_ENTRY_get_data'
++tls.c:(.text+0x120): undefined reference to `ASN1_STRING_length'
++tls.c:(.text+0x148): undefined reference to `X509_free'
++tls.c:(.text+0x178): undefined reference to `X509_NAME_get_index_by_NID'
++
++The Libs.private field is specifically designed for such usage:
++
++From pkg-config documentation:
++
++  Libs.private:
++
++     This line should list any private libraries in use. Private
++     libraries are libraries which are not exposed through your
++     library, but are needed in the case of static linking.
++
++Therefore, this patch adds a reference to vorbis and speex in the Libs.private
++field of libshouts pkg-config file.
++
++Upstream status: pending
++https://github.com/xiph/Icecast-libshout/pull/5
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ shout.pc.in | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/shout.pc.in b/shout.pc.in
++index 867a0be..4827295 100644
++--- a/shout.pc.in
+++++ b/shout.pc.in
++@@ -12,4 +12,5 @@ Description: Audio streaming library for icecast encoders
++ Version: @VERSION@
++ Requires.private: @SHOUT_REQUIRES@
++ Libs: -L${libdir} -lshout
+++Libs.private: @VORBIS_LIBS@ @XIPH_LIBS@
++ Cflags: -I${includedir} @PTHREAD_CPPFLAGS@ @SHOUT_CFLAGS@
++-- 
++2.9.3
++
+diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
+index 029c134..9f54463 100644
+--- a/package/libshout/libshout.mk
++++ b/package/libshout/libshout.mk
+@@ -11,6 +11,9 @@ LIBSHOUT_LICENSE_FILES = COPYING
+ LIBSHOUT_INSTALL_STAGING = YES
+ LIBSHOUT_DEPENDENCIES = host-pkgconf libogg libvorbis
  
- config BR2_PACKAGE_SYSTEMD_COMPAT
-diff --git a/linux/Config.in b/linux/Config.in
-index c7bc4d8..43d63c0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -68,12 +68,6 @@ config BR2_LINUX_KERNEL_CUSTOM_SVN
- 	  This option allows Buildroot to get the Linux kernel source
- 	  code from a Subversion repository.
- 
--config BR2_LINUX_KERNEL_CUSTOM_LOCAL
--	bool "Local directory"
--	help
--	  This option allows Buildroot to get the Linux kernel source
--	  code from a local directory.
--
- endchoice
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
-@@ -101,12 +95,6 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
- 
- endif
- 
--config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
--	string "Path to the local directory"
--	depends on BR2_LINUX_KERNEL_CUSTOM_LOCAL
--	help
--	  Path to the local directory with the Linux kernel source code.
--
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "4.7.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-@@ -115,7 +103,6 @@ config BR2_LINUX_KERNEL_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	default BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION \
- 		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
--	default "custom" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
- 
- #
- # Patch selection
-diff --git a/linux/linux.mk b/linux/linux.mk
-index fb844ef..6e41a92 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -21,9 +21,6 @@ LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
- LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
- LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
- BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
--else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
--LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
--LINUX_SITE_METHOD = local
- else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_SITE_METHOD = git
++# patching congigure.ac
++LIBSHOUT_AUTORECONF = YES
++
+ ifeq ($(BR2_PACKAGE_LIBTHEORA),y)
+ LIBSHOUT_CONF_OPTS += --enable-theora
+ LIBSHOUT_DEPENDENCIES += libtheora
 -- 
-2.7.4
+2.9.3
