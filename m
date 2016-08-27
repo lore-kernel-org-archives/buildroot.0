@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Aug 2016 00:07:05 +0200
-Subject: [Buildroot] [PATCH 05/16 v3] core: move rule to create basic
- directories
-In-Reply-To: <20160827214126.05cf6760@free-electrons.com>
+Date: Sun, 28 Aug 2016 00:14:49 +0200
+Subject: [Buildroot] [PATCH 08/16 v3] core: do not hard-code inclusion
+ of br2-external in Kconfig
+In-Reply-To: <20160827220010.7063cd40@free-electrons.com>
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <35c825b427c5e89497aafde9b787986eeeac1ad7.1468750623.git.yann.morin.1998@free.fr>
- <20160827214126.05cf6760@free-electrons.com>
-Message-ID: <20160827220705.GK5755@free.fr>
+ <326c5c4a0a2b9cb4d4cb430791ce5aaf21185e95.1468750623.git.yann.morin.1998@free.fr>
+ <20160827220010.7063cd40@free-electrons.com>
+Message-ID: <20160827221448.GL5755@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,48 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2016-08-27 21:41 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 17 Jul 2016 12:34:25 +0200, Yann E. MORIN wrote:
-> > Some of those directories will be needed even during configuration, like
-> > BUILD_DIR, where we'll store the generated kconfig snippet.
-> > 
-> > So, move the rule to create them outside the HAVE_CONFIG block.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Peter Korsgaard <jacmet@uclibc.org>
+On 2016-08-27 22:00 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 17 Jul 2016 12:34:28 +0200, Yann E. MORIN wrote:
+> >  .PHONY: $(BUILD_DIR)/.br2-external.in
+> >  $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
+> > -	@touch $@
+> > +	$(Q)( \
+> > +		printf "#\n# Automatically generated file; DO NOT EDIT.\n#\n\n"; \
+> > +		printf 'menu "User-provided options"\n'; \
+> > +		printf '\tdepends on BR2_EXTERNAL != "support/dummy-external"\n\n'; \
+> > +		printf 'source "%s/Config.in"\n\n' $$(cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd); \
+> > +		printf 'endmenu # User-provided options\n'; \
+> > +	) >$@
 > 
-> I've applied this patch to next, after fixing the typo in the commit
-> log noticed by Romain Naour. One question below, though.
-
-Thanks! :-)
-
-> > +################################################################################
-> > +#
-> > +# staging and target directories do NOT list these as
-> > +# dependencies anywhere else
-> > +#
-> > +################################################################################
+> Shouldn't the logic that generates the .br2-external.in be moved to a
+> shell script?
 > 
-> Do you understand what this comment means? It seems to date back from
-> the "major rework" commit 08782ae7d8812933ad3f932132955ea1c0fb1e52 in
-> 2002, and I don't really understand the meaning of this comment.
+> I'm generally in favor of having most of the logic in make, but here,
+> it is really ugly. Did you try having this in a shell script?
 
-Neither do I... And as a once-colleague-of-mine said:
+Well, for the above, it's OK to move to a shell script, indeed.
 
-    When you don't know, don't touch!
+But once we have multiple br2-external trees, we need, for each of them:
+  - the path to the br2-external tree,
+  - the name of that tree.
+
+So, if offloading this to a script, we'd need to either:
+
+  - construct a list of tuples of {name,path} to the script, maybe
+    something like:
+
+        MY_NAME:/path/to/my-name-ext/ FOO:/path/to/foo-ext/ ...
+or
+  - rescann and re-extract the names from each br2-external tree.
+
+Not very nice in either cases... :-/
+
+> Also, what about using readlink or realpath to convert the path to an
+> absolute path?
+
+You meant the "cd blabla && pwd" trick?
+
+I kept it because that's the way it is done today...
 
 Regards,
 Yann E. MORIN.
