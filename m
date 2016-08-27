@@ -1,41 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Aug 2016 16:47:20 +0200
-Subject: [Buildroot] [PATCH 04/16 v3] core: introduce an intermediate
- rule before the configurators
-In-Reply-To: <66b17c41-1687-d92c-abdd-510dd6f8323b@gmail.com>
+Date: Sat, 27 Aug 2016 17:01:34 +0200
+Subject: [Buildroot] [PATCH 06/16 v3] core: introduce a generated
+ kconfig snippet
+In-Reply-To: <20160827161601.2fd0e8f5@free-electrons.com>
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <22c8e4df35485da3ab9dd836465e4892305c7073.1468750623.git.yann.morin.1998@free.fr>
- <66b17c41-1687-d92c-abdd-510dd6f8323b@gmail.com>
-Message-ID: <20160827144720.GE5755@free.fr>
+ <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
+ <20160827161601.2fd0e8f5@free-electrons.com>
+Message-ID: <20160827150134.GF5755@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Thomas, All,
 
-On 2016-08-06 17:13 +0200, Romain Naour spake thusly:
-> Le 17/07/2016 ? 12:34, Yann E. MORIN a ?crit :
-> > Currently, all configurators depend on generating the out-of-tree
-> > Makefile wrapper.
-> > 
-> > In an upcoming patch, we'll need to also generate a kconfig fragment,
-> > so it will have to kick in before we run the configurators.
-> > 
-> > Introduce a new intermediate "prepare-kconfig" rule, so we can
-> > commonalise the dependencies of the configurators. Move the dependency
-> > on the Makefile wrapper to that new intermediate rule.
+On 2016-08-27 16:16 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 17 Jul 2016 12:34:26 +0200, Yann E. MORIN wrote:
 > 
-> I think we need to add prepare-kconfig to PHONY target list (for consistency as
-> you said on IRC ;-))
+> > +.PHONY: $(BUILD_DIR)/.br2-external.in
+> 
+> Why is a real file that exists on the filesystem a phony target?
 
-Yes, indeed, it should be made .PHONY ...
+Because we want to regenerate it every time we run, in case the user
+passes a new set of BR2_EXTERNAL.
 
-> With that fixed:
-> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+With only this patch, of course that does not bring anything, as we
+simply touch that file. It becones usefull in followup patches.
 
-Thanks!
+> > +# Ensure the kconfig snippet is generated (for MANUAL_GEN_LISTS, below):
+> > +MANUAL_DEPENDENCIES += prepare-kconfig
+> 
+> It's a bit crazy the complexity that we have just to allow our manual
+> to have the list of all packages in Buildroot. I'm not even sure this
+> section of the manual is that useful, to be honest. But oh well, that's
+> supported today, so we have to continue support it.
+
+Well, I am prersonally not very impressed with the list of packags in
+the manual either...
+
+That being said, some users find it interesting and, as you said, we
+already have it and the code is already there...
 
 Regards,
 Yann E. MORIN.
