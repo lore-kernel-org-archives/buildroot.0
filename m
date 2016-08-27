@@ -1,52 +1,77 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 27 Aug 2016 16:02:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x264: disable CLI tool if no MMU
-Message-ID: <20160827140238.28617-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Aug 2016 16:09:18 +0200
+Subject: [Buildroot] [PATCHv2] pckages/sconeserver: fix build with gcc-6
+In-Reply-To: <CAFt09wOQ9fOLGkdbM-Jtuw9G_tizsO8103x317ADp2Rf+YU7wQ@mail.gmail.com>
+References: <1472111153-14215-1-git-send-email-yann.morin.1998@free.fr>
+ <20160825102650.0acafa05@free-electrons.com>
+ <CAFt09wOQ9fOLGkdbM-Jtuw9G_tizsO8103x317ADp2Rf+YU7wQ@mail.gmail.com>
+Message-ID: <20160827140918.GA5755@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/837/837fd5a63d59b5c65818ec005a565cb7741a1cdd/
+Matthew, All,
 
-Inspired by
-https://git.buildroot.net/buildroot/commit/?id=80b9dfceafb1d635dbb2c7f948b8b27e190e3e65
+On 2016-08-27 07:38 -0500, Matthew Weber spake thusly:
+> On Thu, Aug 25, 2016 at 3:26 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Hello,
+> >
+> > On Thu, 25 Aug 2016 09:45:53 +0200, Yann E. MORIN wrote:
+> >> We simply bump the version rather than backport the patch, as there has
+> >> been only very few, minor commits in-between.
+> >>
+> >> Fixes:
+> >>     http://autobuild.buildroot.org/results/fa7/fa7881c6ffb821a2aff139f95ba53c96d6e2b942/
+> >>     http://autobuild.buildroot.org/results/749/749fbd6cc505f6f3c0cccfeb63be6deddab8fba5/
+> >>
+> >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >>
+> <snip>
+> 
+> 
+> Looks like the new revision has a failed build.
+> http://autobuild.buildroot.org/results/e92/e929799366e6f574c7b08d8635b18623afd3e3e1//
+> 
+> ModuleLoader.cpp:29:19: fatal error: dlfcn.h: No such file or directory
+>  #include <dlfcn.h>
+>                    ^
+> I didn't have a chance to check if the conf opts for disable-load
+> works on this package yet but that might fix it (assuming it can be
+> statically built).
 
-The build error can still be reproduced with a current blackfin
-toolchain using this defconfig:
+This code hasn't changed in sconeserver since 2013, so we would have
+seen similar failures previously...
 
-BR2_bfin=y
-BR2_bf512=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-bfin-full-2016.08-rc2-4-g0bca8d9.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_7=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_PACKAGE_X264=y
-BR2_PACKAGE_X264_CLI=y
+> When I first rebuilt, I tried just doing a "make clean sconeserver"
+> and got this error.
+> 
+> configure.in:118: error: possibly undefined macro: AC_MSG_FAILURE
+>       If this token and others are legitimate, please use m4_pattern_allow.
+>       See the Autoconf documentation.
+> configure.in:120: error: possibly undefined macro: AC_MSG_WARN
+> autoreconf: /home/mlweber/buildroot/output/host/usr/bin/autoconf
+> failed with exit status: 1
+> package/pkg-generic.mk:191: recipe for target
+> '/home/mlweber/buildroot/output/build/sconeserver-d659468cd164e6a6cc12932cc6780566b04f8328/.stamp_configured'
+> failed
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x264/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+This autoreconf issue also occurs when reverting the bump...
 
-diff --git a/package/x264/Config.in b/package/x264/Config.in
-index 7bf2319..e0c308a 100644
---- a/package/x264/Config.in
-+++ b/package/x264/Config.in
-@@ -13,6 +13,7 @@ if BR2_PACKAGE_X264
- 
- config BR2_PACKAGE_X264_CLI
- 	bool "CLI"
-+	depends on BR2_USE_MMU # madvise()
- 	help
- 	  Command-line tool to encode video streams into the
- 	  H.264/MPEG-4 AVC compression format.
+I'll be investigating, but sconeserver is not something I'm really
+interested in (was just trying to fix autobuild failures...)
+
+Adding Simon in the loop, since he added that package. ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
