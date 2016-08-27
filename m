@@ -1,124 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Aug 2016 17:51:07 +0200
-Subject: [Buildroot] [PATCH 12/16 v3] core: handle .br-external in a
- make rule
-In-Reply-To: <20160725211335.GA5958@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 27 Aug 2016 19:10:56 +0200
+Subject: [Buildroot] [PATCH 02/16 v3] core: commonalise the bundled and
+ br2-external %_defconfig rules
+In-Reply-To: <20160827141650.GB5755@free.fr>
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <0994022779466155b22c6e815e737d21c447a528.1468750623.git.yann.morin.1998@free.fr>
- <0bcafdc5-0462-c502-5390-f27ec227af79@gmail.com>
- <20160725211335.GA5958@free.fr>
-Message-ID: <20160827155106.GH5755@free.fr>
+ <e302f10d06b7406978bbc888b903cb917cb0e754.1468750623.git.yann.morin.1998@free.fr>
+ <20160827161249.26d4c72e@free-electrons.com> <20160827141650.GB5755@free.fr>
+Message-ID: <d7a4f3c1-c3ad-03fb-a056-806070536d75@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
 
-On 2016-07-25 23:13 +0200, Yann E. MORIN spake thusly:
-> On 2016-07-24 22:05 +0200, Romain Naour spake thusly:
-> > Le 17/07/2016 ? 12:34, Yann E. MORIN a ?crit :
-> > > Currently, we treat the case where we have no br2-external tree
-> > > (BR2_EXTERNAL is empty) differently from the case where we do have
-> > > one (BR2_EXTERNAL is not empty).
-> > > 
-> > > There is now no reason to treat those two cases differently:
-> > > 
-> > >   - the kconfig snippet is always generated appropriately (i.e. it would
-> > >     include the br2-external tree if set, or include nothing otherwise);
-> > > 
-> > >   - we no longer have a dummy br-external tree either.
-> > > 
-> > > As such, generate the .br-external cache file in both cases.
-> > > 
-> > > This will make it much easier to handle when we introduce support for
-> > > multiple br2-external trees.
-> > > 
-> > > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > > Cc: Peter Korsgaard <jacmet@uclibc.org>
-> > > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> > > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > > ---
-> > >  Makefile | 13 ++++++-------
-> > >  1 file changed, 6 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/Makefile b/Makefile
-> > > index 72b55cb..67334e5 100644
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -146,23 +146,17 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
-> > >  # On subsequent invocations of make, it is read in. It can still be overridden
-> > >  # on the command line, therefore the file is re-created every time make is run.
-> > >  #
-> > > -# When BR2_EXTERNAL is set to an empty value (e.g. explicitly in command
-> > > -# line), the .br-external file is removed.
-> > > -#
-> > >  # If the br2-external tree defines its ID, then export the path in the
-> > >  # BR2_EXTERNAL_$(ID) variable.
-> > >  
-> > >  BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
-> > >  -include $(BR2_EXTERNAL_FILE)
-> > > -ifeq ($(BR2_EXTERNAL),)
-> > > -  $(shell rm -f $(BR2_EXTERNAL_FILE))
-> > > -else
-> > > +ifneq ($(BR2_EXTERNAL),)
-> > >    _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
-> > >    ifeq ($(_BR2_EXTERNAL),)
-> > >      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relative to $(TOPDIR))
-> > >    endif
-> > >    override BR2_EXTERNAL := $(_BR2_EXTERNAL)
-> > > -  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
-> > >    ifneq ($(wildcard $(BR2_EXTERNAL)/external.id),)
-> > >      BR2_EXTERNAL_ID := $(shell cat $(BR2_EXTERNAL)/external.id 2>/dev/null)
-> > >      ifeq ($(BR2_EXTERNAL_ID),)
-> > > @@ -173,6 +167,11 @@ else
-> > >    BR2_EXTERNAL_MK = $(BR2_EXTERNAL)/external.mk
-> > >  endif
-> > >  
-> > > +# This needs to be *after* we compute BR_EXTERNAL, above.
-> > > +.PHONY: $(BR2_EXTERNAL_FILE)
-> > > +$(BR2_EXTERNAL_FILE):
-> > > +	@echo BR2_EXTERNAL ?= $(BR_EXTERNAL) >$@
-> > 
-> > s/BR_EXTERNAL/BR2_EXTERNAL/
+
+On 27-08-16 16:16, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> Right, but it should be: s/BR2_EXTERNAL/_BR2_EXTERNAL/  (i.e. with a
-> leading underscore) as we want to store the full path, which is
-> constructed with the first line in the ifdef block.
-
-No, it should really be BR2_EXTERNAL as you noticed.
-
-Regards,
-Yann E. MORIN.
-
-> > It's probably a rebase issue since it's fixed in the following patch ;-)
+> On 2016-08-27 16:12 +0200, Thomas Petazzoni spake thusly:
+>> On Sun, 17 Jul 2016 12:34:22 +0200, Yann E. MORIN wrote:
+>>
+>>> +define percent_defconfig
+>>> +%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
+>>> +	# Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
+>>
+>> This comment in here was a bit annoying, because it appears on stdout
+>> when you run "make <foo>_defconfig". So I've moved it outside of the
+>> target definition instead, in order to preserve the existing behavior
+>> in terms of what appears on stdout when loading a defconfig.
 > 
-> Probably, probably... ;-)
+> Well, that's how I did it first, but Arnout contended that the comment
+> should be moved like I did (or at least that's what I understood from
+> his review).
+
+ With "inside the define" I meant exactly what Thomas did: inside the define
+(not inside the rule).
+
+ Regards,
+ Arnout
+
 > 
-> Thanks for spotting.
+> I'm happy you moved it. ;-)
+> 
+> Thanks!
 > 
 > Regards,
 > Yann E. MORIN.
 > 
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
