@@ -1,47 +1,61 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sat, 27 Aug 2016 01:43:42 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2016-08-23
-In-Reply-To: <20160824172543.36D1D10CEEE@stock.ovh.net>
-References: <20160824172543.36D1D10CEEE@stock.ovh.net>
-Message-ID: <1472255022.3670.11.camel@embedded.rocks>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sat, 27 Aug 2016 02:17:03 +0200
+Subject: [Buildroot] [PATCH] package/protobuf: uses fork(),
+	not available on no-MMU platforms
+Message-ID: <20160827001703.18155-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Propagate the dependency to the packages mosh and ola.
 
-On Mi, 2016-08-24 at 19:25 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> This is the list of Buildroot build failures that occured on
-> 2016-08-23, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches
-> to
-> fix them. Thanks!
-> 
-> Build failures related to your packages:
-> 
-> ??????mipsel |????????????????????luvi-v2.7.5 | http://autobuild.buil
-> droot.net/results/8e001112b1678f9fb1c198c84184cd6f5fc3d004
-> 
+Fixes:
+http://autobuild.buildroot.net/results/2c1/2c151e84d7854a810465dc16869023e0ada2d586/
 
-Incompatible object files:
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/mosh/Config.in     | 1 +
+ package/ola/Config.in      | 1 +
+ package/protobuf/Config.in | 1 +
+ 3 files changed, 3 insertions(+)
 
-file luvi-v2.7.5/jitted_tmp/src/lua/init.lua_luvi_generated.o: ELF 32-
-bit LSB relocatable, MIPS, MIPS32 version 1 (SYSV), not stripped
-
-luvi-v2.7.5/CMakeFiles/luvi.dir/src/main.c.o: ELF 32-bit LSB
-relocatable, MIPS, MIPS32 rel6 version 1 (SYSV), not stripped
-
-I'm not sure if LuaJIT is able to output object files for MIPS32R6, so
-I asked on the LuaJIT mailing list [1]. If not, we have to exclude the
-MIPS32R6 architecture from LuaJIT arch support, right?
-
-[1]?http://www.freelists.org/post/luajit/Support-for-MIPS32r6
-
-Best regards
-J?rg Krause
+diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+index b4189ee..e9f68ce 100644
+--- a/package/mosh/Config.in
++++ b/package/mosh/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_MOSH
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
++	depends on BR2_USE_MMU # protobuf
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_PROTOBUF
+diff --git a/package/ola/Config.in b/package/ola/Config.in
+index 7b56f5c..9fbf22b 100644
+--- a/package/ola/Config.in
++++ b/package/ola/Config.in
+@@ -9,6 +9,7 @@ menuconfig BR2_PACKAGE_OLA
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
++	depends on BR2_USE_MMU # protobuf
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
+index 3215a07..4a8d1ef 100644
+--- a/package/protobuf/Config.in
++++ b/package/protobuf/Config.in
+@@ -33,6 +33,7 @@ config BR2_PACKAGE_PROTOBUF
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Protocol buffers are Google's language-neutral, platform-neutral,
+-- 
+2.9.3
