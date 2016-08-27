@@ -1,47 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 21:41:26 +0200
-Subject: [Buildroot] [PATCH 05/16 v3] core: move rule to create basic
- directories
-In-Reply-To: <35c825b427c5e89497aafde9b787986eeeac1ad7.1468750623.git.yann.morin.1998@free.fr>
-References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <35c825b427c5e89497aafde9b787986eeeac1ad7.1468750623.git.yann.morin.1998@free.fr>
-Message-ID: <20160827214126.05cf6760@free-electrons.com>
+Date: Sat, 27 Aug 2016 21:39:59 +0200
+Subject: [Buildroot] [git commit branch/next] core: move rule to create
+	basic directories
+Message-ID: <20160827194135.48CA07FABC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b1e079b68b794b428e756adf75485a8b1ceade13
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 17 Jul 2016 12:34:25 +0200, Yann E. MORIN wrote:
-> Some of those directories will be needed even during configuration, like
-> BUILD_DIR, where we'll store the generated kconfig snippet.
-> 
-> So, move the rule to create them outside the HAVE_CONFIG block.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
+Some of those directories will be needed even during configuration, like
+BUILD_DIR, where we'll store the generated kconfig snippet.
 
-I've applied this patch to next, after fixing the typo in the commit
-log noticed by Romain Naour. One question below, though.
+So, move the rule to create them outside the BR2_HAVE_DOT_CONFIG block.
 
-> +################################################################################
-> +#
-> +# staging and target directories do NOT list these as
-> +# dependencies anywhere else
-> +#
-> +################################################################################
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+[Thomas: fixup commit log, as noticed by Romain Naour.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-Do you understand what this comment means? It seems to date back from
-the "major rework" commit 08782ae7d8812933ad3f932132955ea1c0fb1e52 in
-2002, and I don't really understand the meaning of this comment.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/Makefile b/Makefile
+index d1298d8..c9865a6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -200,6 +200,15 @@ LEGAL_LICENSES_TXT_HOST = $(LEGAL_INFO_DIR)/host-licenses.txt
+ LEGAL_WARNINGS = $(LEGAL_INFO_DIR)/.warnings
+ LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
+ 
++################################################################################
++#
++# staging and target directories do NOT list these as
++# dependencies anywhere else
++#
++################################################################################
++$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
++	@mkdir -p $@
++
+ BR2_CONFIG = $(CONFIG_DIR)/.config
+ 
+ # Pull in the user's configuration file
+@@ -496,15 +505,6 @@ world: target-post-image
+ 	legal-info legal-info-prepare legal-info-clean printvars help \
+ 	list-defconfigs target-finalize target-post-image source-check
+ 
+-################################################################################
+-#
+-# staging and target directories do NOT list these as
+-# dependencies anywhere else
+-#
+-################################################################################
+-$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
+-	@mkdir -p $@
+-
+ # Populating the staging with the base directories is handled by the skeleton package
+ $(STAGING_DIR):
+ 	@mkdir -p $(STAGING_DIR)
