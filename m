@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 09:25:37 +0200
-Subject: [Buildroot] [PATCH] libraw: fix build with gcc 6.x
-In-Reply-To: <3cb051ae-2a23-7a0a-edf0-8f901157f7f0@mind.be>
-References: <1472246236-31129-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <3cb051ae-2a23-7a0a-edf0-8f901157f7f0@mind.be>
-Message-ID: <20160827092537.10f48a8d@free-electrons.com>
+Date: Sat, 27 Aug 2016 09:27:16 +0200
+Subject: [Buildroot] [PATCH] pixman: properly enable/disable ARM
+ optimizations
+In-Reply-To: <04d09d36-c5e7-ac47-a821-84026fd98178@mind.be>
+References: <1472244298-13978-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <04d09d36-c5e7-ac47-a821-84026fd98178@mind.be>
+Message-ID: <20160827092716.5a1edb11@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +14,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 27 Aug 2016 00:26:31 +0200, Arnout Vandecappelle wrote:
+On Sat, 27 Aug 2016 00:07:59 +0200, Arnout Vandecappelle wrote:
 
->  Hm, turns out that what you put here indeed doesn't fix it completely:
+> > +ifeq ($(BR2_ARM_CPU_HAS_ARM),y)  
 > 
-> internal/dcraw_common.cpp: In member function ?void LibRaw::kodak_radc_load_raw()?:
-> internal/dcraw_common.cpp:2491:3: error: narrowing conversion of ?-2? from ?int?
-> to ?char? inside { } [-Wnarrowing]
+>  Minor nit: the instructions used by arm-simd are actually ARMv5TE instructions.
+> Fortunately, all our ARMv5 CPU options support the E extension, so we can add
+> !BR2_ARM_CPU_ARMV4 to the condition. Still, it's not strictly necessary, because
+> the compiler can still generate this v5E code, and the resulting ELF file is
+> compatible with v4 object files, and there is a CPU check so it will only be run
+> if it is really supported (I didn't actually test that, but the code is there).
+> And adding that extra condition will make the code really ugly. It's just weird
+> to pass --enable-arm-simd when it will not be used in the end.
 
-Weird, I definitely built the package with a gcc 6.x toolchain, and it
-was building fine. Maybe the failure only occurred with some additional
-optional dependencies enabled?
+I should have added such an explanation. I indeed realized that the
+SIMD code would not work with the oldest ARM cores, but pixman is
+handling that properly. The only case where pixman's logic fall short
+is on CPUs that do not support ARM instructions at all.
 
->  I was waiting for upstream to fix that one as well (Debian runs into it too, on
-> the 0.17 branch, so it ought to be fixed quickly).
-> 
->  And indeed, Debian has fixed it already... I'll send a patch.
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Your solution is also shorter/simpler, indeed.
-
-Thanks,
+I'll grab a part of your explanation to extend the commit log when
+applying the patch. Thanks for the review!
 
 Thomas
 -- 
