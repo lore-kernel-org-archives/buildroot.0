@@ -1,73 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 15:33:16 +0200
-Subject: [Buildroot] [PATCH] Trousers: fix build with musl
-In-Reply-To: <1472203656-5901-1-git-send-email-nrubinstein@aldebaran.com>
-References: <1472203656-5901-1-git-send-email-nrubinstein@aldebaran.com>
-Message-ID: <20160827153316.5c967eb7@free-electrons.com>
+Date: Sat, 27 Aug 2016 15:45:43 +0200
+Subject: [Buildroot] [git commit] jack2: fix build issue with glibc
+Message-ID: <20160827134553.C5A5A81EB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=06ae84405d8c0e7308b780aab532a8be64a08457
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this patch! I've applied to master, but I have some comments
-nonetheless.
+With glibc 2.16, we get following build error when building jack2:
 
-"Trousers" should have been "trousers" in the commit title.
+  [193/247] cxx: tests/iodelay.cpp -> build/tests/iodelay.cpp.4.o
+  ../tests/iodelay.cpp:171:43: error: 'UINT32_MAX' was not declared in this scope
+  ../tests/iodelay.cpp:171:55: error: 'UINT32_MAX' was not declared in this scope
+  ../tests/iodelay.cpp:172:44: error: 'UINT32_MAX' was not declared in this scope
+  ../tests/iodelay.cpp:172:56: error: 'UINT32_MAX' was not declared in this scope
 
-On Fri, 26 Aug 2016 11:27:36 +0200, noe.rubinstein at gmail.com wrote:
-> From: No? Rubinstein <nrubinstein@aldebaran.com>
-> 
-> The trousers code uses getpwent_r, which is not available in musl.
-> Detect the availability of getpwent_r in the TrouSerS build system, and
-> use it conditionally.
-> 
-> This broke the build of tpm-tools because linking with libtspi.so
-> failed.
-> 
-> Fixes this build failure:
-> http://autobuild.buildroot.net/results/830fc20c68a0653afa5567edffc2ededc4e45cc6
-> 
-> ---
+In glibc 2.17 or older version, Header <stdint.h> defines these macros
+for C++ only if explicitly requested by defining __STDC_LIMIT_MACROS.
 
-You shouldn't have added this "---" sign here... or at least you should
-have put your SoB line *before* it.
+We can't use <cstdint> since it requires C++11 standard.
 
-> Runtime-tested by running tpm_version in a chroot and verifying that it
-> creates a "user.data" file with both the Buildroot-provided CodeSourcery
-> and Musl toolchains on x86_64.
-> 
-> Build tested with
-> http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2016.08-rc1-4-g07e8d1c.tar.bz2
-> 
-> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
-> ---
->  ...t-getpwent_r-is-available-before-using-it.patch | 78 ++++++++++++++++++++++
->  1 file changed, 78 insertions(+)
->  create mode 100644 package/trousers/0004-Check-that-getpwent_r-is-available-before-using-it.patch
-> 
-> diff --git a/package/trousers/0004-Check-that-getpwent_r-is-available-before-using-it.patch b/package/trousers/0004-Check-that-getpwent_r-is-available-before-using-it.patch
-> new file mode 100644
-> index 0000000..6ed440e
-> --- /dev/null
-> +++ b/package/trousers/0004-Check-that-getpwent_r-is-available-before-using-it.patch
-> @@ -0,0 +1,78 @@
-> +From 9e42c405f30d2b52d019598436ea346ef8586f43 Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?No=C3=A9=20Rubinstein?= <nrubinstein@aldebaran.com>
-> +Date: Wed, 24 Aug 2016 18:55:25 +0200
-> +Subject: [PATCH] Check that getpwent_r is available before using it
-> +
-> +This fixes building trousers with musl
+Fixes:
 
-And you should have added your SoB line here as well.
+  http://autobuild.buildroot.net/results/369ce208ffea43dad75ba0a13469159b341e3bf5/
 
-I've fixed up those issues and applied. Please submit the patch
-upstream. Thanks!
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0003-tests-define-__STDC_LIMIT_MACROS.patch    | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/jack2/0003-tests-define-__STDC_LIMIT_MACROS.patch b/package/jack2/0003-tests-define-__STDC_LIMIT_MACROS.patch
+new file mode 100644
+index 0000000..e4990b5
+--- /dev/null
++++ b/package/jack2/0003-tests-define-__STDC_LIMIT_MACROS.patch
+@@ -0,0 +1,41 @@
++From c971aaab74ca6e7d4ac3a06bd26e7309dfc5da45 Mon Sep 17 00:00:00 2001
++From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++Date: Mon, 22 Aug 2016 19:04:47 +0530
++Subject: [PATCH] tests: define __STDC_LIMIT_MACROS
++
++With glibc 2.16, we get following build error when building jack2:
++
++  [193/247] cxx: tests/iodelay.cpp -> build/tests/iodelay.cpp.4.o
++  ../tests/iodelay.cpp:171:43: error: 'UINT32_MAX' was not declared in this scope
++  ../tests/iodelay.cpp:171:55: error: 'UINT32_MAX' was not declared in this scope
++  ../tests/iodelay.cpp:172:44: error: 'UINT32_MAX' was not declared in this scope
++  ../tests/iodelay.cpp:172:56: error: 'UINT32_MAX' was not declared in this scope
++
++In glibc 2.17 or older version, Header <stdint.h> defines these macros
++for C++ only if explicitly requested by defining __STDC_LIMIT_MACROS.
++
++We can't use <cstdint> since it requires C++11 standard.
++
++This build issue found by Buildroot autobuilder.
++http://autobuild.buildroot.net/results/369/369ce208ffea43dad75ba0a13469159b341e3bf5/
++
++Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++---
++ tests/iodelay.cpp | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/tests/iodelay.cpp b/tests/iodelay.cpp
++index 1ef470f..f5c5836 100644
++--- a/tests/iodelay.cpp
+++++ b/tests/iodelay.cpp
++@@ -20,6 +20,7 @@
++ 
++ #include <stdlib.h>
++ #include <stdio.h>
+++#define __STDC_LIMIT_MACROS
++ #include <stdint.h>
++ #include <math.h>
++ #include <unistd.h>
++-- 
++2.6.2
++
