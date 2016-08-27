@@ -1,70 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Aug 2016 16:42:46 +0200
-Subject: [Buildroot] [PATCH 03/16 v3] doc/asciidoc: add possibility to
- define document dependencies
-In-Reply-To: <20160827161415.5767677b@free-electrons.com>
+Date: Sat, 27 Aug 2016 16:47:20 +0200
+Subject: [Buildroot] [PATCH 04/16 v3] core: introduce an intermediate
+ rule before the configurators
+In-Reply-To: <66b17c41-1687-d92c-abdd-510dd6f8323b@gmail.com>
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <8b101d01b6a1c1aaadde0649c82fba5db2c511f1.1468750623.git.yann.morin.1998@free.fr>
- <20160827161415.5767677b@free-electrons.com>
-Message-ID: <20160827144246.GD5755@free.fr>
+ <22c8e4df35485da3ab9dd836465e4892305c7073.1468750623.git.yann.morin.1998@free.fr>
+ <66b17c41-1687-d92c-abdd-510dd6f8323b@gmail.com>
+Message-ID: <20160827144720.GE5755@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Romain, All,
 
-On 2016-08-27 16:14 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 17 Jul 2016 12:34:23 +0200, Yann E. MORIN wrote:
+On 2016-08-06 17:13 +0200, Romain Naour spake thusly:
+> Le 17/07/2016 ? 12:34, Yann E. MORIN a ?crit :
+> > Currently, all configurators depend on generating the out-of-tree
+> > Makefile wrapper.
+> > 
+> > In an upcoming patch, we'll need to also generate a kconfig fragment,
+> > so it will have to kick in before we run the configurators.
+> > 
+> > Introduce a new intermediate "prepare-kconfig" rule, so we can
+> > commonalise the dependencies of the configurators. Move the dependency
+> > on the Makefile wrapper to that new intermediate rule.
 > 
-> > diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
-> > index 6e21786..0c10fd1 100644
-> > --- a/docs/manual/adding-packages-asciidoc.txt
-> > +++ b/docs/manual/adding-packages-asciidoc.txt
-> > @@ -63,6 +63,9 @@ information is (assuming the document name is +foo+) :
-> >    to one or more directories containing so-called resources (like CSS or
-> >    images). By default, empty.
-> >  
-> > +* +FOO_DEPENDENCIES+, optional, the list of packages (most probably,
-> > +  host-packages) that must be built before building this document.
-> > +
-> >  There are also additional hooks (see xref:hooks[] for general information
-> >  on hooks), that a document may set to define extra actions to be done at
-> >  various steps:
-> > diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-> > index 6ab5ad2..ede6ed1 100644
-> > --- a/package/doc-asciidoc.mk
-> > +++ b/package/doc-asciidoc.mk
-> > @@ -140,7 +140,7 @@ endef
-> >  ################################################################################
-> >  define ASCIIDOC
-> >  # Single line, because splitting a foreach is not easy...
-> > -$(1)-check-dependencies: asciidoc-check-dependencies
-> > +$(1)-check-dependencies: asciidoc-check-dependencies $$($(2)_DEPENDENCIES)
-> 
-> My concern is that $(2)_DEPENDENCIES has nothing to do with *checking*
-> dependencies, so it's a bit weird to see this added to a target called
-> <something>-check-dependencies.
+> I think we need to add prepare-kconfig to PHONY target list (for consistency as
+> you said on IRC ;-))
 
-Indeed, that's not the best solution.
+Yes, indeed, it should be made .PHONY ...
 
-It ensures oredering, for sure, and it ensures it is done only once for
-the document, even if multiple formats are rquested.
+> With that fixed:
+> Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
-> Could you refresh me on how this $(1)-check-dependencies target is
-> used? I had a quick look at the code around and couldn't remember, and
-> wanted to look at some other patches in your series.
-
-The $(1)-check-depednencies rule is defined outside of the ASCIIDOC_INNER
-macro, in the ASCIIDOC macro, so that we do not redefine it for every
-formats.
-
-The dependency on $(1)-check-dependencies is however set in the
-INNER_MACRO, as a dependency of the output file $(1).$(6) .
-
-I can see at making that cleaner, but we'll probably have to define
-another rule for that. Let's see what I can come up with...
+Thanks!
 
 Regards,
 Yann E. MORIN.
