@@ -1,322 +1,307 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 17:26:34 +0200
-Subject: [Buildroot] [git commit] package/vlc: add support for ffmpeg 3.0
-Message-ID: <20160902142940.AF0008253D@busybox.osuosl.org>
+Date: Sat, 27 Aug 2016 16:03:35 +0200
+Subject: [Buildroot] [git commit] core: move pkg-utils.mk to support/
+Message-ID: <20160902142940.D8B678253D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9c611f9982fc4e690a41145474fc7f13fb17b58
+commit: https://git.buildroot.net/buildroot/commit/?id=242e0087e544325cc11bd37f1125aa8b2516d8a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead of bumping vlc to git master (no vlc 3.x release yet) we use a
-patch from deb-multimedia.org which provides the necessary changes for
-ffmpeg 3.x support to vlc 2.2, compile-tested using this defconfig:
+pkg-utils.mk contains various definitions that are used in the package
+infrastructures and packages themselves.
 
-    BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-    BR2_TOOLCHAIN_BUILDROOT_CXX=y
-    BR2_PACKAGE_FFMPEG=y
-    BR2_PACKAGE_FFMPEG_GPL=y
-    BR2_PACKAGE_FFMPEG_POSTPROC=y
-    BR2_PACKAGE_FFMPEG_SWSCALE=y
-    BR2_PACKAGE_VLC=y
+However, those definitions can be useful in other parts of Buildroot,
+and are already used in a few places that are not related to the package
+infrastructure. Also, $(sep) will be needed early in the Makefile when
+we eventually support multiple br2-external trees.
 
-This patch can be removed when vlc is bumped to 3.x.
+Since this file only contains definitions, we can include it anytime.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+So, consider that file to no longer be specific to the package infras:
+  - move it to support and rename it,
+  - move a few similar definitions from the main Makefile to that file.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vlc/0008-ffmpeg-3.0.patch | 283 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 283 insertions(+)
+ Makefile                                      |  10 +--
+ package/pkg-utils.mk                          |  96 -----------------------
+ package/pkg-utils.mk => support/misc/utils.mk | 106 ++++----------------------
+ 3 files changed, 16 insertions(+), 196 deletions(-)
 
-diff --git a/package/vlc/0008-ffmpeg-3.0.patch b/package/vlc/0008-ffmpeg-3.0.patch
-new file mode 100644
-index 0000000..892c625
---- /dev/null
-+++ b/package/vlc/0008-ffmpeg-3.0.patch
-@@ -0,0 +1,283 @@
-+Changes for ffmpeg 3.0
+diff --git a/Makefile b/Makefile
+index 6a1c9e1..9275c4d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -106,14 +106,8 @@ else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+ BR_BUILDING = y
+ endif
+ 
+-# Strip quotes and then whitespaces
+-qstrip = $(strip $(subst ",,$(1)))
+-#"))
+-
+-# Variables for use in Make constructs
+-comma := ,
+-empty :=
+-space := $(empty) $(empty)
++# Include some helper macros and variables
++include support/misc/utils.mk
+ 
+ ifneq ("$(origin O)", "command line")
+ O := output
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index c61b3b6..28db481 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -5,43 +5,6 @@
+ #
+ ################################################################################
+ 
+-# Case conversion macros. This is inspired by the 'up' macro from gmsl
+-# (http://gmsl.sf.net). It is optimised very heavily because these macros
+-# are used a lot. It is about 5 times faster than forking a shell and tr.
+-#
+-# The caseconvert-helper creates a definition of the case conversion macro.
+-# After expansion by the outer $(eval ), the UPPERCASE macro is defined as:
+-# $(strip $(eval __tmp := $(1))  $(eval __tmp := $(subst a,A,$(__tmp))) ... )
+-# In other words, every letter is substituted one by one.
+-#
+-# The caseconvert-helper allows us to create this definition out of the
+-# [FROM] and [TO] lists, so we don't need to write down every substition
+-# manually. The uses of $ and $$ quoting are chosen in order to do as
+-# much expansion as possible up-front.
+-#
+-# Note that it would be possible to conceive a slightly more optimal
+-# implementation that avoids the use of __tmp, but that would be even
+-# more unreadable and is not worth the effort.
+-
+-[FROM] := a b c d e f g h i j k l m n o p q r s t u v w x y z - .
+-[TO]   := A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _ _
+-
+-define caseconvert-helper
+-$(1) = $$(strip \
+-	$$(eval __tmp := $$(1))\
+-	$(foreach c, $(2),\
+-		$$(eval __tmp := $$(subst $(word 1,$(subst :, ,$c)),$(word 2,$(subst :, ,$c)),$$(__tmp))))\
+-	$$(__tmp))
+-endef
+-
+-$(eval $(call caseconvert-helper,UPPERCASE,$(join $(addsuffix :,$([FROM])),$([TO]))))
+-$(eval $(call caseconvert-helper,LOWERCASE,$(join $(addsuffix :,$([TO])),$([FROM]))))
+-
+-# Sanitize macro cleans up generic strings so it can be used as a filename
+-# and in rules. Particularly useful for VCS version strings, that can contain
+-# slashes, colons (OK in filenames but not in rules), and spaces.
+-sanitize = $(subst $(space),_,$(subst :,_,$(subst /,_,$(strip $(1)))))
+-
+ #
+ # Manipulation of .config files based on the Kconfig
+ # infrastructure. Used by the BusyBox package, the Linux kernel
+@@ -82,65 +45,6 @@ INFLATE.tar  = cat
+ # suitable-extractor(filename): returns extractor based on suffix
+ suitable-extractor = $(INFLATE$(suffix $(1)))
+ 
+-# MESSAGE Macro -- display a message in bold type
+-MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
+-TERM_BOLD := $(shell tput smso 2>/dev/null)
+-TERM_RESET := $(shell tput rmso 2>/dev/null)
+-
+-# Utility functions for 'find'
+-# findfileclauses(filelist) => -name 'X' -o -name 'Y'
+-findfileclauses = $(call notfirstword,$(patsubst %,-o -name '%',$(1)))
+-# finddirclauses(base, dirlist) => -path 'base/dirX' -o -path 'base/dirY'
+-finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
+-
+-# Miscellaneous utility functions
+-# notfirstword(wordlist): returns all but the first word in wordlist
+-notfirstword = $(wordlist 2,$(words $(1)),$(1))
+-
+-# Needed for the foreach loops to loop over the list of hooks, so that
+-# each hook call is properly separated by a newline.
+-define sep
+-
+-
+-endef
+-
+-PERCENT = %
+-QUOTE = '
+-# ' # Meh... syntax-highlighting
+-
+-# This macro properly escapes a command string, then prints it with printf:
+-#
+-#   - first, backslash '\' are self-escaped, so that they do not escape
+-#     the following char and so that printf properly outputs a backslash;
+-#
+-#   - next, single quotes are escaped by closing an existing one, adding
+-#     an escaped one, and re-openning a new one (see below for the reason);
+-#
+-#   - then '%' signs are self-escaped so that the printf does not interpret
+-#     them as a format specifier, in case the variable contains an actual
+-#     printf with a format;
+-#
+-#   - finally, $(sep) is replaced with the literal '\n' so that make does
+-#     not break on the so-expanded variable, but so that the printf does
+-#     correctly output an LF.
+-#
+-# Note: this must be escaped in this order to avoid over-escaping the
+-# previously escaped elements.
+-#
+-# Once everything has been escaped, it is passed between single quotes
+-# (that's why the single-quotes are escaped they way they are, above,
+-# and why the dollar sign is not escaped) to printf(1). A trailing
+-# newline is apended, too.
+-#
+-# Note: leading or trailing spaces are *not* stripped.
+-#
+-define PRINTF
+-	printf '$(subst $(sep),\n,\
+-			$(subst $(PERCENT),$(PERCENT)$(PERCENT),\
+-				$(subst $(QUOTE),$(QUOTE)\$(QUOTE)$(QUOTE),\
+-					$(subst \,\\,$(1)))))\n'
+-endef
+-
+ # check-deprecated-variable -- throw an error on deprecated variables
+ # example:
+ #   $(eval $(call check-deprecated-variable,FOO_MAKE_OPT,FOO_MAKE_OPTS))
+diff --git a/package/pkg-utils.mk b/support/misc/utils.mk
+similarity index 57%
+copy from package/pkg-utils.mk
+copy to support/misc/utils.mk
+index c61b3b6..990a3d1 100644
+--- a/package/pkg-utils.mk
++++ b/support/misc/utils.mk
+@@ -1,10 +1,19 @@
+ ################################################################################
+ #
+-# This file contains various utility functions used by the package
+-# infrastructure, or by the packages themselves.
++# This file contains various utility macros and variables used about
++# everywhere in make constructs.
+ #
+ ################################################################################
+ 
++# Strip quotes and then whitespaces
++qstrip = $(strip $(subst ",,$(1)))
++#"))
 +
-+This file is a copy of debian/patches/04_ffmpeg-3.0.diff, to be found in
-+http://www.deb-multimedia.org/pool/main/v/vlc-dmo/vlc-dmo_2.2.4.orig.tar.gz
++# Variables for use in Make constructs
++comma := ,
++empty :=
++space := $(empty) $(empty)
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2324,7 +2324,7 @@ AC_ARG_ENABLE(avcodec,
-+ AS_IF([test "${enable_avcodec}" != "no"], [
-+   PKG_CHECK_MODULES(AVCODEC,[libavcodec >= 53.34.0 libavutil >= 51.22.0], [
-+     PKG_CHECK_EXISTS([libavutil < 55],, [
-+-      AC_MSG_ERROR([libavutil versions 55 and later are not supported.])
-++      AC_MSG_WARN([libavutil versions 55 and later are not supported.])
-+     ])
-+     VLC_SAVE_FLAGS
-+     CPPFLAGS="${CPPFLAGS} ${AVCODEC_CFLAGS}"
-+@@ -2334,7 +2334,7 @@ AS_IF([test "${enable_avcodec}" != "no"]
-+     VLC_RESTORE_FLAGS
-+     have_avcodec="yes"
-+   ],[
-+-    AC_MSG_ERROR([${AVCODEC_PKG_ERRORS}. Pass --disable-avcodec to ignore this error.])
-++    AC_MSG_WARN([${AVCODEC_PKG_ERRORS}. Pass --disable-avcodec to ignore this error.])
-+   ])
-+ ], [
-+   have_avcodec="no"
-+@@ -2383,7 +2383,7 @@ AS_IF([test "${have_vaapi}" = "yes" -a "
-+   case "${avfork}" in
-+     ffmpeg)
-+       PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
-+-        AC_MSG_ERROR([VA API requires FFmpeg libavcodec < 57.10 or libav.])
-++        AC_MSG_WARN([VA API requires FFmpeg libavcodec < 57.10 or libav.])
-+       ])
-+       ;;
-+   esac
-+@@ -2417,7 +2417,7 @@ AS_IF([test "${enable_dxva2}" != "no"],
-+     case "${avfork}" in
-+       ffmpeg)
-+         PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
-+-          AC_MSG_ERROR([DXVA2 requires FFmpeg libavcodec < 57.10 or libav.])
-++          AC_MSG_WARN([DXVA2 requires FFmpeg libavcodec < 57.10 or libav.])
-+         ])
-+         ;;
-+     esac
-+@@ -2509,7 +2509,7 @@ AS_IF([test "${enable_avformat}" != "no"
-+       ])
-+       VLC_RESTORE_FLAGS
-+     ],[
-+-      AC_MSG_ERROR([${AVFORMAT_PKG_ERRORS}. Pass --disable-avformat to ignore this error.])
-++      AC_MSG_WARN([${AVFORMAT_PKG_ERRORS}. Pass --disable-avformat to ignore this error.])
-+   ])
-+ ])
-+ AM_CONDITIONAL([HAVE_AVFORMAT], [test "${enable_avformat}" != "no"])
-+@@ -2538,7 +2538,7 @@ then
-+       ])
-+       VLC_RESTORE_FLAGS
-+     ],[
-+-      AC_MSG_ERROR([${SWSCALE_PKG_ERRORS}. Pass --disable-swscale to ignore this error. Proper software scaling and some video chroma conversion will be missing.])
-++      AC_MSG_WARN([${SWSCALE_PKG_ERRORS}. Pass --disable-swscale to ignore this error. Proper software scaling and some video chroma conversion will be missing.])
-+   ])
-+ fi
-+ 
-+@@ -3181,7 +3181,7 @@ AS_IF([test "${have_vdpau}" = "yes" -a "
-+     libav) av_vdpau_ver="55.26.0" ;;
-+     ffmpeg) av_vdpau_ver="55.42.100"
-+       PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
-+-        AC_MSG_ERROR([VDPAU requires FFmpeg libavcodec < 57.10 or libav.])
-++        AC_MSG_WARN([VDPAU requires FFmpeg libavcodec < 57.10 or libav.])
-+       ])
-+       ;;
-+   esac
-+--- a/modules/codec/avcodec/audio.c
-++++ b/modules/codec/avcodec/audio.c
-+@@ -39,7 +39,7 @@
-+ #include <libavcodec/avcodec.h>
-+ #include <libavutil/mem.h>
-+ 
-+-#include <libavutil/audioconvert.h>
-++#include <libavutil/channel_layout.h>
-+ 
-+ #include "avcodec.h"
-+ 
-+--- a/modules/codec/avcodec/video.c
-++++ b/modules/codec/avcodec/video.c
-+@@ -108,8 +108,8 @@ static int lavc_GetFrame(struct AVCodecC
-+ static int  ffmpeg_GetFrameBuf    ( struct AVCodecContext *, AVFrame * );
-+ static void ffmpeg_ReleaseFrameBuf( struct AVCodecContext *, AVFrame * );
-+ #endif
-+-static enum PixelFormat ffmpeg_GetFormat( AVCodecContext *,
-+-                                          const enum PixelFormat * );
-++static enum AVPixelFormat ffmpeg_GetFormat( AVCodecContext *,
-++                                          const enum AVPixelFormat * );
-+ 
-+ static uint32_t ffmpeg_CodecTag( vlc_fourcc_t fcc )
-+ {
-+@@ -234,7 +234,7 @@ int InitVideoDec( decoder_t *p_dec, AVCo
-+     p_sys->p_codec = p_codec;
-+     p_sys->i_codec_id = i_codec_id;
-+     p_sys->psz_namecodec = psz_namecodec;
-+-    p_sys->p_ff_pic = avcodec_alloc_frame();
-++    p_sys->p_ff_pic = av_frame_alloc();
-+     p_sys->b_delayed_open = true;
-+     p_sys->p_va = NULL;
-+     vlc_sem_init( &p_sys->sem_mt, 0 );
-+@@ -446,7 +446,7 @@ int InitVideoDec( decoder_t *p_dec, AVCo
-+     if( ffmpeg_OpenCodec( p_dec ) < 0 )
-+     {
-+         msg_Err( p_dec, "cannot open codec (%s)", p_sys->psz_namecodec );
-+-        avcodec_free_frame( &p_sys->p_ff_pic );
-++        av_frame_free( &p_sys->p_ff_pic );
-+         vlc_sem_destroy( &p_sys->sem_mt );
-+         free( p_sys );
-+         return VLC_EGENERIC;
-+@@ -826,7 +826,7 @@ void EndVideoDec( decoder_t *p_dec )
-+     wait_mt( p_sys );
-+ 
-+     if( p_sys->p_ff_pic )
-+-        avcodec_free_frame( &p_sys->p_ff_pic );
-++        av_frame_free( &p_sys->p_ff_pic );
-+ 
-+     if( p_sys->p_va )
-+         vlc_va_Delete( p_sys->p_va );
-+@@ -1313,8 +1313,8 @@ static void ffmpeg_ReleaseFrameBuf( stru
-+ }
-+ #endif
-+ 
-+-static enum PixelFormat ffmpeg_GetFormat( AVCodecContext *p_context,
-+-                                          const enum PixelFormat *pi_fmt )
-++static enum AVPixelFormat ffmpeg_GetFormat( AVCodecContext *p_context,
-++                                          const enum AVPixelFormat *pi_fmt )
-+ {
-+     decoder_t *p_dec = p_context->opaque;
-+     decoder_sys_t *p_sys = p_dec->p_sys;
-+--- a/modules/codec/avcodec/encoder.c
-++++ b/modules/codec/avcodec/encoder.c
-+@@ -41,7 +41,7 @@
-+ #include <vlc_cpu.h>
-+ 
-+ #include <libavcodec/avcodec.h>
-+-#include <libavutil/audioconvert.h>
-++#include <libavutil/channel_layout.h>
-+ 
-+ #include "avcodec.h"
-+ #include "avcommon.h"
-+@@ -311,7 +311,7 @@ int OpenEncoder( vlc_object_t *p_this )
-+     else if( !GetFfmpegCodec( p_enc->fmt_out.i_codec, &i_cat, &i_codec_id,
-+                              &psz_namecodec ) )
-+     {
-+-        if( FindFfmpegChroma( p_enc->fmt_out.i_codec ) == PIX_FMT_NONE )
-++        if( FindFfmpegChroma( p_enc->fmt_out.i_codec ) == AV_PIX_FMT_NONE )
-+             return VLC_EGENERIC; /* handed chroma output */
-+ 
-+         i_cat      = VIDEO_ES;
-+@@ -555,7 +555,7 @@ int OpenEncoder( vlc_object_t *p_this )
-+ 
-+         if( p_codec->pix_fmts )
-+         {
-+-            const enum PixelFormat *p = p_codec->pix_fmts;
-++            const enum AVPixelFormat *p = p_codec->pix_fmts;
-+             for( ; *p != -1; p++ )
-+             {
-+                 if( *p == p_context->pix_fmt ) break;
-+@@ -1017,7 +1017,7 @@ errmsg:
-+         }
-+     }
-+ 
-+-    p_sys->frame = avcodec_alloc_frame();
-++    p_sys->frame = av_frame_alloc();
-+     if( !p_sys->frame )
-+     {
-+         goto error;
-+@@ -1048,7 +1048,7 @@ static void vlc_av_packet_Release(block_
-+ {
-+     vlc_av_packet_t *b = (void *) block;
-+ 
-+-    av_free_packet(&b->packet);
-++    av_packet_unref(&b->packet);
-+     free(b);
-+ }
-+ 
-+@@ -1088,7 +1088,7 @@ static block_t *EncodeVideo( encoder_t *
-+     AVFrame *frame = NULL;
-+     if( likely(p_pict) ) {
-+         frame = p_sys->frame;
-+-        avcodec_get_frame_defaults( frame );
-++        av_frame_unref( frame );
-+         for( i_plane = 0; i_plane < p_pict->i_planes; i_plane++ )
-+         {
-+             p_sys->frame->data[i_plane] = p_pict->p[i_plane].p_pixels;
-+@@ -1188,7 +1188,7 @@ static block_t *EncodeVideo( encoder_t *
-+             av_pkt.duration / p_sys->p_context->time_base.den, p_sys->p_context );
-+     if( unlikely(p_block == NULL) )
-+     {
-+-        av_free_packet( &av_pkt );
-++        av_packet_unref( &av_pkt );
-+         return NULL;
-+     }
-+ 
-+@@ -1329,7 +1329,7 @@ static block_t *handle_delay_buffer( enc
-+     //How much we need to copy from new packet
-+     const int leftover = leftover_samples * p_sys->p_context->channels * p_sys->i_sample_bytes;
-+ 
-+-    avcodec_get_frame_defaults( p_sys->frame );
-++    av_frame_unref( p_sys->frame );
-+     p_sys->frame->format     = p_sys->p_context->sample_fmt;
-+     p_sys->frame->nb_samples = leftover_samples + p_sys->i_samples_delay;
-+ 
-+@@ -1451,7 +1451,7 @@ static block_t *EncodeAudio( encoder_t *
-+     while( ( p_aout_buf->i_nb_samples >= p_sys->i_frame_size ) ||
-+            ( p_sys->b_variable && p_aout_buf->i_nb_samples ) )
-+     {
-+-        avcodec_get_frame_defaults( p_sys->frame );
-++        av_frame_unref( p_sys->frame );
-+         if( p_sys->b_variable )
-+             p_sys->frame->nb_samples = p_aout_buf->i_nb_samples;
-+         else
-+@@ -1514,7 +1514,7 @@ void CloseEncoder( vlc_object_t *p_this
-+     encoder_t *p_enc = (encoder_t *)p_this;
-+     encoder_sys_t *p_sys = p_enc->p_sys;
-+ 
-+-    /*FIXME: we should use avcodec_free_frame, but we don't require so new avcodec that has it*/
-++    /*FIXME: we should use av_frame_free, but we don't require so new avcodec that has it*/
-+     av_freep( &p_sys->frame );
-+ 
-+     vlc_avcodec_lock();
-+--- a/modules/demux/avformat/demux.c
-++++ b/modules/demux/avformat/demux.c
-+@@ -734,14 +734,14 @@ static int Demux( demux_t *p_demux )
-+     }
-+     if( pkt.stream_index < 0 || pkt.stream_index >= p_sys->i_tk )
-+     {
-+-        av_free_packet( &pkt );
-++        av_packet_unref( &pkt );
-+         return 1;
-+     }
-+     const AVStream *p_stream = p_sys->ic->streams[pkt.stream_index];
-+     if( p_stream->time_base.den <= 0 )
-+     {
-+         msg_Warn( p_demux, "Invalid time base for the stream %d", pkt.stream_index );
-+-        av_free_packet( &pkt );
-++        av_packet_unref( &pkt );
-+         return 1;
-+     }
-+     if( p_stream->codec->codec_id == AV_CODEC_ID_SSA )
-+@@ -749,7 +749,7 @@ static int Demux( demux_t *p_demux )
-+         p_frame = BuildSsaFrame( &pkt, p_sys->i_ssa_order++ );
-+         if( !p_frame )
-+         {
-+-            av_free_packet( &pkt );
-++            av_packet_unref( &pkt );
-+             return 1;
-+         }
-+     }
-+@@ -757,7 +757,7 @@ static int Demux( demux_t *p_demux )
-+     {
-+         if( ( p_frame = block_Alloc( pkt.size ) ) == NULL )
-+         {
-+-            av_free_packet( &pkt );
-++            av_packet_unref( &pkt );
-+             return 0;
-+         }
-+         memcpy( p_frame->p_buffer, pkt.data, pkt.size );
-+@@ -838,7 +838,7 @@ static int Demux( demux_t *p_demux )
-+     else
-+         block_Release( p_frame );
-+ 
-+-    av_free_packet( &pkt );
-++    av_packet_unref( &pkt );
-+     return 1;
-+ }
-+ 
-+--- a/modules/codec/avcodec/vaapi.c
-++++ b/modules/codec/avcodec/vaapi.c
-+@@ -595,7 +595,7 @@ static int Create( vlc_va_t *p_va, AVCod
-+         return err;
-+ 
-+     /* Only VLD supported */
-+-    p_va->pix_fmt = PIX_FMT_VAAPI_VLD;
-++    p_va->pix_fmt = AV_PIX_FMT_VAAPI_VLD;
-+     p_va->setup = Setup;
-+     p_va->get = Get;
-+     p_va->release = Release;
+ # Case conversion macros. This is inspired by the 'up' macro from gmsl
+ # (http://gmsl.sf.net). It is optimised very heavily because these macros
+ # are used a lot. It is about 5 times faster than forking a shell and tr.
+@@ -42,46 +51,6 @@ $(eval $(call caseconvert-helper,LOWERCASE,$(join $(addsuffix :,$([TO])),$([FROM
+ # slashes, colons (OK in filenames but not in rules), and spaces.
+ sanitize = $(subst $(space),_,$(subst :,_,$(subst /,_,$(strip $(1)))))
+ 
+-#
+-# Manipulation of .config files based on the Kconfig
+-# infrastructure. Used by the BusyBox package, the Linux kernel
+-# package, and more.
+-#
+-
+-define KCONFIG_ENABLE_OPT # (option, file)
+-	$(SED) "/\\<$(1)\\>/d" $(2)
+-	echo '$(1)=y' >> $(2)
+-endef
+-
+-define KCONFIG_SET_OPT # (option, value, file)
+-	$(SED) "/\\<$(1)\\>/d" $(3)
+-	echo '$(1)=$(2)' >> $(3)
+-endef
+-
+-define KCONFIG_DISABLE_OPT # (option, file)
+-	$(SED) "/\\<$(1)\\>/d" $(2)
+-	echo '# $(1) is not set' >> $(2)
+-endef
+-
+-# Helper functions to determine the name of a package and its
+-# directory from its makefile directory, using the $(MAKEFILE_LIST)
+-# variable provided by make. This is used by the *-package macros to
+-# automagically find where the package is located.
+-pkgdir = $(dir $(lastword $(MAKEFILE_LIST)))
+-pkgname = $(lastword $(subst /, ,$(pkgdir)))
+-
+-# Define extractors for different archive suffixes
+-INFLATE.bz2  = $(BZCAT)
+-INFLATE.gz   = $(ZCAT)
+-INFLATE.lzma = $(XZCAT)
+-INFLATE.tbz  = $(BZCAT)
+-INFLATE.tbz2 = $(BZCAT)
+-INFLATE.tgz  = $(ZCAT)
+-INFLATE.xz   = $(XZCAT)
+-INFLATE.tar  = cat
+-# suitable-extractor(filename): returns extractor based on suffix
+-suitable-extractor = $(INFLATE$(suffix $(1)))
+-
+ # MESSAGE Macro -- display a message in bold type
+ MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
+ TERM_BOLD := $(shell tput smso 2>/dev/null)
+@@ -136,54 +105,7 @@ QUOTE = '
+ #
+ define PRINTF
+ 	printf '$(subst $(sep),\n,\
+-			$(subst $(PERCENT),$(PERCENT)$(PERCENT),\
+-				$(subst $(QUOTE),$(QUOTE)\$(QUOTE)$(QUOTE),\
+-					$(subst \,\\,$(1)))))\n'
+-endef
+-
+-# check-deprecated-variable -- throw an error on deprecated variables
+-# example:
+-#   $(eval $(call check-deprecated-variable,FOO_MAKE_OPT,FOO_MAKE_OPTS))
+-define check-deprecated-variable # (deprecated var, new var)
+-ifneq ($$(origin $(1)),undefined)
+-$$(error Package error: use $(2) instead of $(1). Please fix your .mk file)
+-endif
+-endef
+-
+-#
+-# legal-info helper functions
+-#
+-LEGAL_INFO_SEPARATOR = "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+-
+-define legal-warning # text
+-	echo "WARNING: $(1)" >>$(LEGAL_WARNINGS)
+-endef
+-
+-define legal-warning-pkg # pkg, text
+-	echo "WARNING: $(1): $(2)" >>$(LEGAL_WARNINGS)
+-endef
+-
+-define legal-warning-nosource # pkg, {local|override}
+-	$(call legal-warning-pkg,$(1),sources not saved ($(2) packages not handled))
+-endef
+-
+-define legal-manifest # pkg, version, license, license-files, source, url, {HOST|TARGET}
+-	echo '"$(1)","$(2)","$(3)","$(4)","$(5)","$(6)"' >>$(LEGAL_MANIFEST_CSV_$(7))
+-endef
+-
+-define legal-license-header # pkg, license-file, {HOST|TARGET}
+-	printf "$(LEGAL_INFO_SEPARATOR)\n\t$(1):\
+-		$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n\n" >>$(LEGAL_LICENSES_TXT_$(3))
+-endef
+-
+-define legal-license-nofiles # pkg, {HOST|TARGET}
+-	$(call legal-license-header,$(1),unknown license file(s),$(2))
+-endef
+-
+-define legal-license-file # pkg, filename, file-fullpath, {HOST|TARGET}
+-	$(call legal-license-header,$(1),$(2) file,$(4)) && \
+-	cat $(3) >>$(LEGAL_LICENSES_TXT_$(4)) && \
+-	echo >>$(LEGAL_LICENSES_TXT_$(4)) && \
+-	mkdir -p $(LICENSE_FILES_DIR_$(4))/$(1)/$(dir $(2)) && \
+-	cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2)
++		$(subst $(PERCENT),$(PERCENT)$(PERCENT),\
++			$(subst $(QUOTE),$(QUOTE)\$(QUOTE)$(QUOTE),\
++				$(subst \,\\,$(1)))))\n'
+ endef
