@@ -1,63 +1,133 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Aug 2016 00:54:29 +0200
-Subject: [Buildroot] [PATCH RFC] Revert "Added local directory as source
- of kernel code"
-In-Reply-To: <20160827222353.02bc0df2@free-electrons.com>
-References: <1467066844-28355-1-git-send-email-yann.morin.1998@free.fr>
- <20160827222353.02bc0df2@free-electrons.com>
-Message-ID: <20160827225429.GP5755@free.fr>
+Date: Sun, 28 Aug 2016 01:03:04 +0200
+Subject: [Buildroot] [PATCHv2] Revert "Added local directory as source of
+	kernel code"
+Message-ID: <1472338984-3588-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+This reverts commit 73da2ff6f718f2889e3c5024d899f8d58f502863.
 
-On 2016-08-27 22:23 +0200, Thomas Petazzoni spake thusly:
-> Peter, Yann,
-> 
-> Peter: do you have an opinion on this patch. If not, I think I'm going
-> to apply it, so please raise your opinion if you disagree.
-> 
-> Yann: a few questions below.
-> 
-> On Tue, 28 Jun 2016 00:34:04 +0200, Yann E. MORIN wrote:
-> > -config BR2_LINUX_KERNEL_CUSTOM_LOCAL
-> > -	bool "Local directory"
-> > -	help
-> > -	  This option allows Buildroot to get the Linux kernel source
-> > -	  code from a local directory.
-> 
-> What about Config.in.legacy handling?
+The reason for adding support for a local location was to be able to do
+development on the Linux kernel source tree on a local directory rather
+than have to clone it for every build.
 
-Bummer...
+We already have a mechanism for that, it's called override-srcdir. It's
+been available since September 2011, more than a year before this patch
+was committed.
 
-> >  # Compute LINUX_SOURCE and LINUX_SITE from the configuration
-> > -ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
-> > +ifeq ($(LINUX_VERSION),custom)
-> 
-> Why are you doing this change?
+Otherwise, we're going to be adding support for local sources in other
+packages. First was U-Boot as submitted by Adam. But what next? We can't
+have such support for all packages, especially since override-srcdir
+does the job.
 
-Before, both local tarball and local directory could set LINUX_VERSION
-to "custom". Now only the local tarball can. So I switched.
+Besides, using a local source tree makes the build non-reproducible, so
+we don't really want to have this in a .config (or defconfig).
 
-In restrospect, this change is not nice: all other cases deal with the
-option from the choice, so we should indeed keep it for local tarball
-too. Besides, LINUX_VERSION is derived from the local tarball option, so
-better to use the "mother" option than the derived one.
+We only handle the boolean option in legacy, as there is nothing we can
+do with the directory path.
 
-I'll fix that and take care of legacy, then respin.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Rafal Fabich <rafal.fabich@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Adam Duskett <aduskett@gmail.com>
 
-Thanks! :-)
+---
+Changes v1 -> v2:
+  - add legacy handling  (Thomas)
+  - don't change the local tarball version handling in linux.mk
+    (Thomas)
 
-Regards,
-Yann E. MORIN.
+---
+Rafal, if your use-case was just to use a local tree for development
+purposes, please see to using the override-srcdir mechanism instead.
+If you had another use-case that requires using a local source tree,
+could you explain it, please? Thanks!
+---
+ Config.in.legacy | 12 ++++++++++++
+ linux/Config.in  | 13 -------------
+ linux/linux.mk   |  3 ---
+ 3 files changed, 12 insertions(+), 16 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 746b80a..dafaf40 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -143,6 +143,18 @@ comment "----------------------------------------------------"
+ endif
+ 
+ ###############################################################################
++comment "Legacy options removed in 2016.11"
++
++config BR2_LINUX_KERNEL_CUSTOM_LOCAL
++	bool "Linux kernel local directory option removed"
++	help
++	  The option to select a local ditrectory as the source of the Linux
++	  kernel has been removed. It hurts reproducibility of builds.
++
++	  In case you were using this option during development of your
++	  Linux kernel use the override mechanism instead.
++
++###############################################################################
+ comment "Legacy options removed in 2016.08"
+ 
+ config BR2_PACKAGE_SYSTEMD_COMPAT
+diff --git a/linux/Config.in b/linux/Config.in
+index c7bc4d8..43d63c0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -68,12 +68,6 @@ config BR2_LINUX_KERNEL_CUSTOM_SVN
+ 	  This option allows Buildroot to get the Linux kernel source
+ 	  code from a Subversion repository.
+ 
+-config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+-	bool "Local directory"
+-	help
+-	  This option allows Buildroot to get the Linux kernel source
+-	  code from a local directory.
+-
+ endchoice
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+@@ -101,12 +95,6 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
+ 
+ endif
+ 
+-config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+-	string "Path to the local directory"
+-	depends on BR2_LINUX_KERNEL_CUSTOM_LOCAL
+-	help
+-	  Path to the local directory with the Linux kernel source code.
+-
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "4.7.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+@@ -115,7 +103,6 @@ config BR2_LINUX_KERNEL_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 	default BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION \
+ 		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
+-	default "custom" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
+ 
+ #
+ # Patch selection
+diff --git a/linux/linux.mk b/linux/linux.mk
+index fb844ef..6e41a92 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -21,9 +21,6 @@ LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
+ LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
+ LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
+ BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
+-else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
+-LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
+-LINUX_SITE_METHOD = local
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_SITE_METHOD = git
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
