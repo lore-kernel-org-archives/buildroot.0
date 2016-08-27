@@ -1,63 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 16:08:52 +0200
-Subject: [Buildroot] [git commit] core: commonalise the bundled and
-	br2-external %_defconfig rules
-Message-ID: <20160902142940.E432D8253D@busybox.osuosl.org>
+Date: Sat, 27 Aug 2016 21:39:59 +0200
+Subject: [Buildroot] [git commit] core: move rule to create basic directories
+Message-ID: <20160902142941.071738253D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=666edc7aa0c8c44bacdc020b4dc3cbd10c5929f0
+commit: https://git.buildroot.net/buildroot/commit/?id=b1e079b68b794b428e756adf75485a8b1ceade13
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The code for both cases is exactly the same, and only differs in the
-location where defconfig files are looked for.
+Some of those directories will be needed even during configuration, like
+BUILD_DIR, where we'll store the generated kconfig snippet.
 
-We use an intermediate macro to generate the corresponding rules,
-because directly generating the rules is ugly and needs lots of escaping
-and double-dollar-ing for the $(eval ...) and $(foreach ...) calls to
-play nicely together.
-
-Furthermore, that will be tremendously useful when we support multiple
-br2-external trees.
+So, move the rule to create them outside the BR2_HAVE_DOT_CONFIG block.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
-[Thomas: move comment outside of the make target, so that it isn't
-displayed on stdout when loading a defconfig.]
+[Thomas: fixup commit log, as noticed by Romain Naour.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ Makefile | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 9275c4d..5ce520b 100644
+index d1298d8..c9865a6 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -847,14 +847,13 @@ olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
+@@ -200,6 +200,15 @@ LEGAL_LICENSES_TXT_HOST = $(LEGAL_INFO_DIR)/host-licenses.txt
+ LEGAL_WARNINGS = $(LEGAL_INFO_DIR)/.warnings
+ LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
  
-+define percent_defconfig
- # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
--%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
--	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/configs/$@ \
--		$< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
++################################################################################
++#
++# staging and target directories do NOT list these as
++# dependencies anywhere else
++#
++################################################################################
++$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
++	@mkdir -p $@
++
+ BR2_CONFIG = $(CONFIG_DIR)/.config
+ 
+ # Pull in the user's configuration file
+@@ -496,15 +505,6 @@ world: target-post-image
+ 	legal-info legal-info-prepare legal-info-clean printvars help \
+ 	list-defconfigs target-finalize target-post-image source-check
+ 
+-################################################################################
+-#
+-# staging and target directories do NOT list these as
+-# dependencies anywhere else
+-#
+-################################################################################
+-$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
+-	@mkdir -p $@
 -
--%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
--	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
--		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
-+%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
-+	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
-+		$$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
-+endef
-+$(eval $(foreach d,$(TOPDIR) $(BR2_EXTERNAL),$(call percent_defconfig,$(d))$(sep)))
- 
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< \
+ # Populating the staging with the base directories is handled by the skeleton package
+ $(STAGING_DIR):
+ 	@mkdir -p $(STAGING_DIR)
