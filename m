@@ -1,83 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 14:45:51 +0200
-Subject: [Buildroot] [git commit] package/kmsxx: add patch to fix LTO support
-Message-ID: <20160827124555.AE40E8182C@busybox.osuosl.org>
+Date: Sat, 27 Aug 2016 14:46:00 +0200
+Subject: [Buildroot] [PATCH v2] package/kmsxx: add patch to fix LTO
+ support
+In-Reply-To: <20160827102613.16952-1-arnout@mind.be>
+References: <20160827102613.16952-1-arnout@mind.be>
+Message-ID: <20160827144600.4bfbb05f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40f5d4a176a6f6c05806003e6b9d4d0bfd69732a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The LTO support in the kmsxx package uses the host gcc-ar and gcc-ranlib
-instead of the ones from the cross-toolchain. Add a patch that tries to
-find the right one based on CMAKE_C_COMPILER.
+On Sat, 27 Aug 2016 12:26:13 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> The LTO support in the kmsxx package uses the host gcc-ar and gcc-ranlib
+> instead of the ones from the cross-toolchain. Add a patch that tries to
+> find the right one based on CMAKE_C_COMPILER.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/16a/16a38a4277dd1152a5955d62cb92f85447791ef3
+> 
+> Possibly also fixes:
+> http://autobuild.buildroot.net/results/f3c/f3c48da3a9706cd366c0e0a96c3cd0ff959f2a78
+> (it fails later, possibly because an incompatible host ar)
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> v2: Use 'gcc-ranlib' instead of '/usr/bin/gcc-ranlib' (Thomas)
+> ---
+>  ...001-Fix-LTO-support-for-cross-compilation.patch | 45 ++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
 
-Fixes:
-http://autobuild.buildroot.net/results/16a/16a38a4277dd1152a5955d62cb92f85447791ef3
+Applied to master, thanks.
 
-Possibly also fixes:
-http://autobuild.buildroot.net/results/f3c/f3c48da3a9706cd366c0e0a96c3cd0ff959f2a78
-(it fails later, possibly because an incompatible host ar)
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...001-Fix-LTO-support-for-cross-compilation.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
-
-diff --git a/package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch b/package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
-new file mode 100644
-index 0000000..280583a
---- /dev/null
-+++ b/package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
-@@ -0,0 +1,45 @@
-+From 5da1f631bc753655ac94b08a6233eecd0d451327 Mon Sep 17 00:00:00 2001
-+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-+Date: Fri, 26 Aug 2016 21:55:06 +0200
-+Subject: [PATCH] Fix LTO support for cross-compilation.
-+
-+When cross-compiling, the ar and ranlib to be used for LTO are prefixed
-+by the cross-tuple. gcc-ar and gcc-ranlib may not exist. Cfr.
-+http://autobuild.buildroot.net/results/f3c/f3c48da3a9706cd366c0e0a96c3cd0ff959f2a78/
-+
-+Therefore, search for an appropriate lto-ar and lto-ranlib before
-+enabling LTO.
-+
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+Submitted upstream: https://github.com/tomba/kmsxx/pull/14
-+---
-+ CMakeLists.txt | 12 +++++++++---
-+ 1 file changed, 9 insertions(+), 3 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index e5b5ea5..c61c81d 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -39,9 +39,15 @@ if (NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
-+     CHECK_CXX_COMPILER_FLAG("-flto" HAS_LTO_FLAG)
-+ 
-+     if (HAS_LTO_FLAG)
-+-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
-+-        set(CMAKE_AR gcc-ar)
-+-        set(CMAKE_RANLIB gcc-ranlib)
-++        find_program(LTO_AR NAMES "${CMAKE_C_COMPILER}-ar" gcc-ar)
-++        find_program(LTO_RANLIB NAMES "${CMAKE_C_COMPILER}-ranlib" gcc-ranlib)
-++        if (LTO_AR AND LTO_RANLIB)
-++            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
-++            set(CMAKE_AR "${LTO_AR}")
-++            set(CMAKE_RANLIB "${LTO_RANLIB}")
-++        else()
-++            message(STATUS "gcc-ar or gcc-ranlib not found, disabling LTO")
-++        endif()
-+     endif()
-+ endif()
-+ 
-+-- 
-+2.9.3
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
