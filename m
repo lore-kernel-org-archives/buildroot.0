@@ -1,12 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Aug 2016 00:22:35 +0200
-Subject: [Buildroot] [PATCH 12/16 v3] core: handle .br-external in a
- make rule
-In-Reply-To: <20160827221613.2c753c17@free-electrons.com>
-References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <0994022779466155b22c6e815e737d21c447a528.1468750623.git.yann.morin.1998@free.fr>
- <20160827221613.2c753c17@free-electrons.com>
-Message-ID: <20160827222235.GO5755@free.fr>
+Date: Sun, 28 Aug 2016 00:54:29 +0200
+Subject: [Buildroot] [PATCH RFC] Revert "Added local directory as source
+ of kernel code"
+In-Reply-To: <20160827222353.02bc0df2@free-electrons.com>
+References: <1467066844-28355-1-git-send-email-yann.morin.1998@free.fr>
+ <20160827222353.02bc0df2@free-electrons.com>
+Message-ID: <20160827225429.GP5755@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,44 +14,42 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2016-08-27 22:16 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 17 Jul 2016 12:34:32 +0200, Yann E. MORIN wrote:
+On 2016-08-27 22:23 +0200, Thomas Petazzoni spake thusly:
+> Peter, Yann,
 > 
-> >  BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
-> >  -include $(BR2_EXTERNAL_FILE)
-
-Here ^^^^
-
-> > -ifeq ($(BR2_EXTERNAL),)
-> > -  $(shell rm -f $(BR2_EXTERNAL_FILE))
-> > -else
-> > +ifneq ($(BR2_EXTERNAL),)
-> >    _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
-> >    ifeq ($(_BR2_EXTERNAL),)
-> >      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relative to $(TOPDIR))
-> >    endif
-> >    override BR2_EXTERNAL := $(_BR2_EXTERNAL)
-> > -  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
-> >    ifneq ($(wildcard $(BR2_EXTERNAL)/external.id),)
-> >      BR2_EXTERNAL_ID := $(shell cat $(BR2_EXTERNAL)/external.id 2>/dev/null)
-> >      ifeq ($(BR2_EXTERNAL_ID),)
-> > @@ -173,6 +167,11 @@ else
-> >    BR2_EXTERNAL_MK = $(BR2_EXTERNAL)/external.mk
-> >  endif
-> >  
-> > +# This needs to be *after* we compute BR_EXTERNAL, above.
-> > +.PHONY: $(BR2_EXTERNAL_FILE)
-> > +$(BR2_EXTERNAL_FILE):
-> > +	@echo BR2_EXTERNAL ?= $(BR_EXTERNAL) >$@
-> > +
+> Peter: do you have an opinion on this patch. If not, I think I'm going
+> to apply it, so please raise your opinion if you disagree.
 > 
-> I'm probably missing something, but where is this make target being
-> "triggered" ?
+> Yann: a few questions below.
+> 
+> On Tue, 28 Jun 2016 00:34:04 +0200, Yann E. MORIN wrote:
+> > -config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+> > -	bool "Local directory"
+> > -	help
+> > -	  This option allows Buildroot to get the Linux kernel source
+> > -	  code from a local directory.
+> 
+> What about Config.in.legacy handling?
 
-When make encounters a -include directive, and the file to be included
-is the target of a rule, then make will trigger the rule before including
-the file, even if the rule is defined after the inclusion (make parses
-makefiles in multiple passes).
+Bummer...
+
+> >  # Compute LINUX_SOURCE and LINUX_SITE from the configuration
+> > -ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
+> > +ifeq ($(LINUX_VERSION),custom)
+> 
+> Why are you doing this change?
+
+Before, both local tarball and local directory could set LINUX_VERSION
+to "custom". Now only the local tarball can. So I switched.
+
+In restrospect, this change is not nice: all other cases deal with the
+option from the choice, so we should indeed keep it for local tarball
+too. Besides, LINUX_VERSION is derived from the local tarball option, so
+better to use the "mother" option than the derived one.
+
+I'll fix that and take care of legacy, then respin.
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
