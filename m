@@ -1,58 +1,88 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 27 Aug 2016 19:10:56 +0200
-Subject: [Buildroot] [PATCH 02/16 v3] core: commonalise the bundled and
- br2-external %_defconfig rules
-In-Reply-To: <20160827141650.GB5755@free.fr>
-References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <e302f10d06b7406978bbc888b903cb917cb0e754.1468750623.git.yann.morin.1998@free.fr>
- <20160827161249.26d4c72e@free-electrons.com> <20160827141650.GB5755@free.fr>
-Message-ID: <d7a4f3c1-c3ad-03fb-a056-806070536d75@mind.be>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sat, 27 Aug 2016 20:01:36 +0200
+Subject: [Buildroot] [PATCH] package/protobuf: uses fork(),
+ not available on no-MMU platforms
+In-Reply-To: <20160827151211.3984639c@free-electrons.com>
+References: <20160827001703.18155-1-joerg.krause@embedded.rocks>
+ <20160827151211.3984639c@free-electrons.com>
+Message-ID: <1472320896.3953.4.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 27-08-16 16:16, Yann E. MORIN wrote:
-> Thomas, All,
+On Sa, 2016-08-27 at 15:12 +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> On 2016-08-27 16:12 +0200, Thomas Petazzoni spake thusly:
->> On Sun, 17 Jul 2016 12:34:22 +0200, Yann E. MORIN wrote:
->>
->>> +define percent_defconfig
->>> +%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
->>> +	# Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
->>
->> This comment in here was a bit annoying, because it appears on stdout
->> when you run "make <foo>_defconfig". So I've moved it outside of the
->> target definition instead, in order to preserve the existing behavior
->> in terms of what appears on stdout when loading a defconfig.
+> On Sat, 27 Aug 2016 02:17:03 +0200, J?rg Krause wrote:
+> > 
+> > Propagate the dependency to the packages mosh and ola.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/2c1/2c151e84d7854a810465dc16
+> > 869023e0ada2d586/
+> > 
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > 
-> Well, that's how I did it first, but Arnout contended that the comment
-> should be moved like I did (or at least that's what I understood from
-> his review).
+> At first, I was a bit surprised as to why we're seeing this only now,
+> so I investigated a bit, and came to the following conclusion, which
+> I
+> added to the commit log:
+> 
+> """
+> ????This was not noticed until now because:
+> ????
+> ?????1/ The older Blackfin toolchain doesn't have libatomic, so it
+> didn't
+> ????????provide the atomic operations that protobuf needs, so
+> protobuf was
+> ????????never built.
+> ????
+> ?????2/ The ARM Cortex-M toolchain is static-only, and protobuf
+> requires
+> ????????dynamic library support.
+> ????
+> ????So it's only with the new Blackfin toolchain, which is based on
+> gcc
+> ????6.x (and therefore provides libatomic) and is FDPIC-based (and
+> therefore
+> ????has dynamic library support) that this problem appeared.
+> 
+> """
+> 
+> 
+> > 
+> > diff --git a/package/protobuf/Config.in
+> > b/package/protobuf/Config.in
+> > index 3215a07..4a8d1ef 100644
+> > --- a/package/protobuf/Config.in
+> > +++ b/package/protobuf/Config.in
+> > @@ -33,6 +33,7 @@ config BR2_PACKAGE_PROTOBUF
+> > ?	depends on BR2_INSTALL_LIBSTDCPP
+> > ?	depends on BR2_TOOLCHAIN_HAS_THREADS
+> > ?	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+> > +	depends on BR2_USE_MMU # fork()
+> > ?	depends on !BR2_STATIC_LIBS
+> > ?	help
+> > ?	??Protocol buffers are Google's language-neutral,
+> > platform-neutral,
+> 
+> When you add a new dependency, you must also propagate it to the
+> Config.in comment so that those comments don't appear on no-MMU
+> platforms.
+> 
+> *However*, in this specific case, there was already a
+> BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS, to which it makes a lot of sense
+> to
+> add the BR2_USE_MMU dependency: it's an architecture dependency, and
+> by
+> doing so, it's automatically propagated to the existing comments and
+> reverse dependencies.
 
- With "inside the define" I meant exactly what Thomas did: inside the define
-(not inside the rule).
+Many thanks for improving the commit! However, there a some packages
+which have an architecture dependency where the no-MMU dependency is
+not added to the architecture dependency, e.g. gauche. Should those
+packages be revised, too?
 
- Regards,
- Arnout
-
-> 
-> I'm happy you moved it. ;-)
-> 
-> Thanks!
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+J?rg
