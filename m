@@ -1,72 +1,148 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 14:46:18 +0200
-Subject: [Buildroot] [git commit] vlc: fix compile error with uClibc-ng
-	Linuxthreads
-Message-ID: <20160827124714.50BE6820E1@busybox.osuosl.org>
+Date: Sat, 27 Aug 2016 14:48:05 +0200
+Subject: [Buildroot] [git commit] package/lshw: add patches for musl build
+Message-ID: <20160827124813.68EB181D55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3af7772d07aa5baa00b61709442a09e9ca5de7b
+commit: https://git.buildroot.net/buildroot/commit/?id=b129553068bbec8a6915fbda15bed154114da03b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The fallback code path didn't work correctly, so fix it.
+Fixing one issue exposed a second one.
 
-Fixes:
-  http://autobuild.buildroot.net/results/3122287ddea1e316a64ccf0d0dc9415bfefebb49/
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ck-code-and-add-required-realtime-library.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ ...02-Fix-musl-build-basename-is-in-libgen.h.patch | 78 ++++++++++++++++++++++
+ package/lshw/0003-Fix-use-of-LONG_BIT.patch        | 36 ++++++++++
+ 2 files changed, 114 insertions(+)
 
-diff --git a/package/vlc/0008-fix-fallback-code-and-add-required-realtime-library.patch b/package/vlc/0008-fix-fallback-code-and-add-required-realtime-library.patch
+diff --git a/package/lshw/0002-Fix-musl-build-basename-is-in-libgen.h.patch b/package/lshw/0002-Fix-musl-build-basename-is-in-libgen.h.patch
 new file mode 100644
-index 0000000..43f197a
+index 0000000..d80c62a
 --- /dev/null
-+++ b/package/vlc/0008-fix-fallback-code-and-add-required-realtime-library.patch
-@@ -0,0 +1,40 @@
-+From 381bcb7cb03bb602351a323daf3b69b2d4f45e77 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Fri, 26 Aug 2016 15:11:25 +0200
-+Subject: [PATCH] fix fallback code and add required realtime library to link
-+ command
++++ b/package/lshw/0002-Fix-musl-build-basename-is-in-libgen.h.patch
+@@ -0,0 +1,78 @@
++From 016bdb133a44bdf42c268ff72ee7aa04af19cfd3 Mon Sep 17 00:00:00 2001
++From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
++Date: Sat, 27 Aug 2016 01:11:56 +0200
++Subject: [PATCH] Fix musl build: basename() is in libgen.h.
 +
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Also, its argument is not const, so add const_cast. This is risky
++because in fact basename() will modify the argument if it ends with /
++but that's not the case here.
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 +---
-+ configure.ac       | 1 +
-+ src/posix/thread.c | 2 +-
-+ 2 files changed, 2 insertions(+), 1 deletion(-)
++ src/core/dasd.cc  | 1 +
++ src/core/sysfs.cc | 9 +++++----
++ 2 files changed, 6 insertions(+), 4 deletions(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index cb1de25..018c11c 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -121,6 +121,7 @@ case "${host_os}" in
-+     ;;
-+   linux*)
-+     SYS=linux
-++    AC_CHECK_LIB([rt], [posix_spawnp], [VLC_ADD_LIBS([libvlccore],[-lrt])], [], [])
-+     ;;
-+   bsdi*)
-+     SYS=bsdi
-+diff --git a/src/posix/thread.c b/src/posix/thread.c
-+index 07fa71e..8b8595f 100644
-+--- a/src/posix/thread.c
-++++ b/src/posix/thread.c
-+@@ -85,7 +85,7 @@ static clockid_t vlc_clock_id;
++diff --git a/src/core/dasd.cc b/src/core/dasd.cc
++index 626b8a8..6276101 100644
++--- a/src/core/dasd.cc
+++++ b/src/core/dasd.cc
++@@ -9,6 +9,7 @@
++ #include <sys/ioctl.h>
++ #include <linux/fs.h>
++ #include <map>
+++#include <libgen.h>
 + 
-+ static void vlc_clock_setup_once (void)
++ using namespace std;
++ 
++diff --git a/src/core/sysfs.cc b/src/core/sysfs.cc
++index acc9d00..bdd69e3 100644
++--- a/src/core/sysfs.cc
+++++ b/src/core/sysfs.cc
++@@ -16,6 +16,7 @@
++ #include <sys/stat.h>
++ #include <sys/types.h>
++ #include <sys/mount.h>
+++#include <libgen.h>
++ 
++ __ID("@(#) $Id$");
++ 
++@@ -99,7 +100,7 @@ static string sysfs_getbustype(const string & path)
++   {
++     devname =
++       string(fs.path + "/bus/") + string(namelist[i]->d_name) +
++-      "/devices/" + basename(path.c_str());
+++      "/devices/" + basename(const_cast<char*>(path.c_str()));
++ 
++     if (samefile(devname, path))
++       return string(namelist[i]->d_name);
++@@ -139,7 +140,7 @@ static string sysfstobusinfo(const string & path)
++ 
++   if (bustype == "virtio")
++   {
++-    string name = basename(path.c_str());
+++    string name = basename(const_cast<char*>(path.c_str()));
++     if (name.compare(0, 6, "virtio") == 0)
++       return "virtio@" + name.substr(6);
++     else
++@@ -207,7 +208,7 @@ string entry::driver() const
++   string driverlink = This->devpath + "/driver";
++   if (!exists(driverlink))
++     return "";
++-  return basename(readlink(driverlink).c_str());
+++  return basename(const_cast<char*>(readlink(driverlink).c_str()));
++ }
++ 
++ 
++@@ -288,7 +289,7 @@ string entry::name_in_class(const string & classname) const
++ 
++ string entry::name() const
 + {
-+-# if (_POSIX_MONOTONIC_CLOCK == 0)
-++# if (_POSIX_MONOTONIC_CLOCK == 0) && (_POSIX_CLOCK_SELECTION > 0)
-+     long val = sysconf (_SC_MONOTONIC_CLOCK);
-+     assert (val != 0);
-+     vlc_clock_id = (val < 0) ? CLOCK_REALTIME : CLOCK_MONOTONIC;
++-  return basename(This->devpath.c_str());
+++  return basename(const_cast<char*>(This->devpath.c_str()));
++ }
++ 
++ 
 +-- 
-+2.1.4
++2.9.3
++
+diff --git a/package/lshw/0003-Fix-use-of-LONG_BIT.patch b/package/lshw/0003-Fix-use-of-LONG_BIT.patch
+new file mode 100644
+index 0000000..7d8d739
+--- /dev/null
++++ b/package/lshw/0003-Fix-use-of-LONG_BIT.patch
+@@ -0,0 +1,36 @@
++From 50284ac4400ac3d7562f4765726492caee8ff547 Mon Sep 17 00:00:00 2001
++From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
++Date: Sat, 27 Aug 2016 01:15:13 +0200
++Subject: [PATCH] Fix use of LONG_BIT
++
++LONG_BIT is not a sysconf value, it is either 32 or 64. Using it as
++a sysconf value will give weird results.
++
++Originally it was sysconf(_SC_LONG_BIT) (before it was "fixed" by the
++gentoo guys). But this is useless: it will always return a value
++equal to LONG_BIT: it's either compiled 32-bit or 64-bit so a runtime
++lookup doesn't make sense. For this reason, musl has removed the
++definition of _SC_LONG_BIT.
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++ src/core/abi.cc | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/src/core/abi.cc b/src/core/abi.cc
++index 76e5082..a13daaa 100644
++--- a/src/core/abi.cc
+++++ b/src/core/abi.cc
++@@ -19,8 +19,7 @@ __ID("@(#) $Id: mem.cc 1352 2006-05-27 23:54:13Z ezix $");
++ 
++ bool scan_abi(hwNode & system)
++ {
++-  // are we compiled as 32- or 64-bit process ?
++-  system.setWidth(sysconf(LONG_BIT));
+++  system.setWidth(LONG_BIT);
++ 
++   pushd(PROC_SYS);
++ 
++-- 
++2.9.3
 +
