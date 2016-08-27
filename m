@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 14:45:25 +0200
-Subject: [Buildroot] [PATCH] norm: add patch to fix musl build
-In-Reply-To: <1472242094-7204-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1472242094-7204-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160827144525.340fa731@free-electrons.com>
+Date: Sat, 27 Aug 2016 14:45:33 +0200
+Subject: [Buildroot] [PATCH] package/libraw: fix gcc-6 build
+In-Reply-To: <20160826222626.17919-1-arnout@mind.be>
+References: <20160826222626.17919-1-arnout@mind.be>
+Message-ID: <20160827144533.16d145bc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 26 Aug 2016 22:08:14 +0200, Thomas Petazzoni wrote:
-> Fixes:
+On Sat, 27 Aug 2016 00:26:26 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> Grab the patch from Debian.
 > 
->   http://autobuild.buildroot.net/results/9c7130d5b5aad218c5c576761d495a3f403fdc5b/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  ...03-remove-kernel-headers-include-musl-fix.patch | 55 ++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 package/norm/0003-remove-kernel-headers-include-musl-fix.patch
+>  package/libraw/libraw.hash | 1 +
+>  package/libraw/libraw.mk   | 3 +++
+>  2 files changed, 4 insertions(+)
 
 Applied to master, thanks.
 
