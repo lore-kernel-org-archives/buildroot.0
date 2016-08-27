@@ -1,64 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 21:39:59 +0200
-Subject: [Buildroot] [git commit] core: move rule to create basic directories
-Message-ID: <20160902142941.071738253D@busybox.osuosl.org>
+Date: Sat, 27 Aug 2016 21:57:12 +0200
+Subject: [Buildroot] [git commit] doc/asciidoc: add possibility to define
+	document dependencies
+Message-ID: <20160902142941.1F89D82541@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1e079b68b794b428e756adf75485a8b1ceade13
+commit: https://git.buildroot.net/buildroot/commit/?id=3c695928f593d2f7eff3d8ac60fcd9ac21a26c57
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some of those directories will be needed even during configuration, like
-BUILD_DIR, where we'll store the generated kconfig snippet.
+Currently, a document can not have dependencies, except for the purely
+internal ones (like checking asciidoc version, and presence of dblatex).
 
-So, move the rule to create them outside the BR2_HAVE_DOT_CONFIG block.
+For our own manual, this will come in handy when we introduce a
+generated kconfig snippet, so we can actually make the manual depend on
+that snippet being generated first.
+
+For external documents, it can be used to depend on host-packages if
+need be (e.g. a custom host packages that generates specific media files
+included in the manual).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
-[Thomas: fixup commit log, as noticed by Romain Naour.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ docs/manual/adding-packages-asciidoc.txt | 3 +++
+ package/doc-asciidoc.mk                  | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index d1298d8..c9865a6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -200,6 +200,15 @@ LEGAL_LICENSES_TXT_HOST = $(LEGAL_INFO_DIR)/host-licenses.txt
- LEGAL_WARNINGS = $(LEGAL_INFO_DIR)/.warnings
- LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
+diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
+index 6e21786..0c10fd1 100644
+--- a/docs/manual/adding-packages-asciidoc.txt
++++ b/docs/manual/adding-packages-asciidoc.txt
+@@ -63,6 +63,9 @@ information is (assuming the document name is +foo+) :
+   to one or more directories containing so-called resources (like CSS or
+   images). By default, empty.
  
-+################################################################################
-+#
-+# staging and target directories do NOT list these as
-+# dependencies anywhere else
-+#
-+################################################################################
-+$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
-+	@mkdir -p $@
++* +FOO_DEPENDENCIES+, optional, the list of packages (most probably,
++  host-packages) that must be built before building this document.
 +
- BR2_CONFIG = $(CONFIG_DIR)/.config
+ There are also additional hooks (see xref:hooks[] for general information
+ on hooks), that a document may set to define extra actions to be done at
+ various steps:
+diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
+index 4f765b8..cb6e616 100644
+--- a/package/doc-asciidoc.mk
++++ b/package/doc-asciidoc.mk
+@@ -141,7 +141,7 @@ endef
+ ################################################################################
+ define ASCIIDOC
+ # Single line, because splitting a foreach is not easy...
+-$(1)-check-dependencies: asciidoc-check-dependencies
++$(1)-check-dependencies: asciidoc-check-dependencies $$($(2)_DEPENDENCIES)
+ 	$$(Q)$$(foreach hook,$$($(2)_CHECK_DEPENDENCIES_HOOKS),$$(call $$(hook))$$(sep))
  
- # Pull in the user's configuration file
-@@ -496,15 +505,6 @@ world: target-post-image
- 	legal-info legal-info-prepare legal-info-clean printvars help \
- 	list-defconfigs target-finalize target-post-image source-check
- 
--################################################################################
--#
--# staging and target directories do NOT list these as
--# dependencies anywhere else
--#
--################################################################################
--$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
--	@mkdir -p $@
--
- # Populating the staging with the base directories is handled by the skeleton package
- $(STAGING_DIR):
- 	@mkdir -p $(STAGING_DIR)
+ # Single line, because splitting a foreach is not easy...
