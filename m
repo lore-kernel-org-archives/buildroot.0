@@ -1,57 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 09:59:26 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2016-08-23
-In-Reply-To: <1472255022.3670.11.camel@embedded.rocks>
-References: <20160824172543.36D1D10CEEE@stock.ovh.net>
- <1472255022.3670.11.camel@embedded.rocks>
-Message-ID: <20160827095926.4449791d@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 27 Aug 2016 11:03:39 +0200
+Subject: [Buildroot] [PATCH] package/kmsxx: add patch to fix LTO support
+In-Reply-To: <20160826213442.19246-1-arnout@mind.be>
+References: <20160826213442.19246-1-arnout@mind.be>
+Message-ID: <C235CE6F-F057-45DA-840A-5C5B7944FCE1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi all,
 
-Vicente, there's a question for you below :-)
+On August 26, 2016 11:34:42 PM GMT+02:00, "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+>The LTO support in the kmsxx package uses the host gcc-ar and
+>gcc-ranlib
+>instead of the ones from the cross-toolchain. Add a patch that tries to
+>find the right one based on CMAKE_C_COMPILER.
+>
+>Fixes:
+>http://autobuild.buildroot.net/results/16a/16a38a4277dd1152a5955d62cb92f85447791ef3
+>
+>Possibly also fixes:
+>http://autobuild.buildroot.net/results/f3c/f3c48da3a9706cd366c0e0a96c3cd0ff959f2a78
+>(it fails later, possibly because an incompatible host ar)
+>
+>Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>Cc: Samuel Martin <s.martin49@gmail.com>
+>Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>---
+>Thomas P. proposed to instead add a variable for LTO_AR and LTO_RANLIB
+>that we would override. However, this version works and is upstreamable
+>and currently we don't even "know" if cross-gcc-ar exists or not.
+>
+>CMake actually has a target property INTERPROCEDURAL_OPTIMIZATION but
+>it seems that this is currently only implemented for Intel ICC. Cfr.
+>https://cmake.org/Bug/view.php?id=15939
+>---
+>...001-Fix-LTO-support-for-cross-compilation.patch | 45
+>++++++++++++++++++++++
+> 1 file changed, 45 insertions(+)
+>create mode 100644
+>package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
+>
+>diff --git
+>a/package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
+>b/package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
+>new file mode 100644
+>index 0000000..9b4a582
+>--- /dev/null
+>+++ b/package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
+>@@ -0,0 +1,45 @@
+>+From 5da1f631bc753655ac94b08a6233eecd0d451327 Mon Sep 17 00:00:00 2001
+>+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+>+Date: Fri, 26 Aug 2016 21:55:06 +0200
+>+Subject: [PATCH] Fix LTO support for cross-compilation.
+>+
+>+When cross-compiling, the ar and ranlib to be used for LTO are
+>prefixed
+>+by the cross-tuple. gcc-ar and gcc-ranlib may not exist. Cfr.
+>+http://autobuild.buildroot.net/results/f3c/f3c48da3a9706cd366c0e0a96c3cd0ff959f2a78/
+>+
+>+Therefore, search for an appropriate lto-ar and lto-ranlib before
+>+enabling LTO.
+>+
+>+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>+---
+>+Submitted upstream: https://github.com/tomba/kmsxx/pull/14
+>+---
+>+ CMakeLists.txt | 12 +++++++++---
+>+ 1 file changed, 9 insertions(+), 3 deletions(-)
+>+
+>+diff --git a/CMakeLists.txt b/CMakeLists.txt
+>+index e5b5ea5..c61c81d 100644
+>+--- a/CMakeLists.txt
+>++++ b/CMakeLists.txt
+>+@@ -39,9 +39,15 @@ if (NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
+>+     CHECK_CXX_COMPILER_FLAG("-flto" HAS_LTO_FLAG)
+>+ 
+>+     if (HAS_LTO_FLAG)
+>+-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
+>+-        set(CMAKE_AR gcc-ar)
+>+-        set(CMAKE_RANLIB gcc-ranlib)
+>++        find_program(LTO_AR NAMES "${CMAKE_C_COMPILER}-ar" gcc-ar)
+>++        find_program(LTO_RANLIB NAMES "${CMAKE_C_COMPILER}-ranlib"
+>/usr/bin/gcc-ranlib)
+>++        if (LTO_AR AND LTO_RANLIB)
+>++            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
+>++            set(CMAKE_AR "${LTO_AR}")
+>++            set(CMAKE_RANLIB "${LTO_RANLIB}")
 
-Thanks!
+These definitions belong to the toolchainfile.cmake file IMHO, but it can be moved there in a follow-up patch.
 
-On Sat, 27 Aug 2016 01:43:42 +0200, J?rg Krause wrote:
+Regards,
 
-> On Mi, 2016-08-24 at 19:25 +0200, Thomas Petazzoni wrote:
-> > Hello,
-> > 
-> > This is the list of Buildroot build failures that occured on
-> > 2016-08-23, and for which you are a registered architecture developer
-> > or package developer. Please help us improving the quality of
-> > Buildroot by investigating those build failures and sending patches
-> > to
-> > fix them. Thanks!
-> > 
-> > Build failures related to your packages:
-> > 
-> > ??????mipsel |????????????????????luvi-v2.7.5 | http://autobuild.buil
-> > droot.net/results/8e001112b1678f9fb1c198c84184cd6f5fc3d004
-> >   
-> 
-> Incompatible object files:
-> 
-> file luvi-v2.7.5/jitted_tmp/src/lua/init.lua_luvi_generated.o: ELF 32-
-> bit LSB relocatable, MIPS, MIPS32 version 1 (SYSV), not stripped
-> 
-> luvi-v2.7.5/CMakeFiles/luvi.dir/src/main.c.o: ELF 32-bit LSB
-> relocatable, MIPS, MIPS32 rel6 version 1 (SYSV), not stripped
-> 
-> I'm not sure if LuaJIT is able to output object files for MIPS32R6, so
-> I asked on the LuaJIT mailing list [1]. If not, we have to exclude the
-> MIPS32R6 architecture from LuaJIT arch support, right?
-> 
-> [1]?http://www.freelists.org/post/luajit/Support-for-MIPS32r6
+>++        else()
+>++            message(STATUS "gcc-ar or gcc-ranlib not found, disabling
+>LTO")
+>++        endif()
+>+     endif()
+>+ endif()
+>+ 
+>+-- 
+>+2.9.3
+>+
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Samuel
