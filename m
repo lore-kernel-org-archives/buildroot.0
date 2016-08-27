@@ -1,83 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 14:45:08 +0200
-Subject: [Buildroot] [git commit] norm: add patch to fix musl build
-Message-ID: <20160827124538.99A2681F91@busybox.osuosl.org>
+Date: Sat, 27 Aug 2016 14:45:21 +0200
+Subject: [Buildroot] [git commit] package/libraw: fix gcc-6 build
+Message-ID: <20160827124538.AA0BA7F994@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e74d4fc4932df4ea42381acb44d616241275b79a
+commit: https://git.buildroot.net/buildroot/commit/?id=97fe953bf61116a2c7898344938c3cd18189e6fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+Grab the patch from Debian.
 
-  http://autobuild.buildroot.net/results/9c7130d5b5aad218c5c576761d495a3f403fdc5b/
-
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...03-remove-kernel-headers-include-musl-fix.patch | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ package/libraw/libraw.hash | 1 +
+ package/libraw/libraw.mk   | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/norm/0003-remove-kernel-headers-include-musl-fix.patch b/package/norm/0003-remove-kernel-headers-include-musl-fix.patch
-new file mode 100644
-index 0000000..7581c10
---- /dev/null
-+++ b/package/norm/0003-remove-kernel-headers-include-musl-fix.patch
-@@ -0,0 +1,55 @@
-+Remove kernel header includes causing issues with musl
+diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
+index e23ca9c..2979425 100644
+--- a/package/libraw/libraw.hash
++++ b/package/libraw/libraw.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256	e599651a4cc37e00cfc2d2b56be87c3a4e4dae2c360b680fe9ab3f93d07cdea1	LibRaw-0.17.1.tar.gz
++sha256	3c09bc4d70268e78798696c5ea3a8cc65fe4e161811d5321fc3ef2ca012d8fd1	0001-Fix_gcc6_narrowing_conversion.patch?id=d890937aaca6359df45a66b35e547c94ca564823
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index 7fc4709..d76a180 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
+@@ -7,6 +7,9 @@
+ LIBRAW_VERSION = 0.17.1
+ LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
+ LIBRAW_SITE = http://www.libraw.org/data
++LIBRAW_PATCH = \
++	https://anonscm.debian.org/cgit/pkg-phototools/libraw.git/plain/debian/patches/0001-Fix_gcc6_narrowing_conversion.patch?id=d890937aaca6359df45a66b35e547c94ca564823
 +
-+Include the kernel headers from netfilter causes a conflict with the
-+<netinet/in.h> way of defining the IPPROTO_* constants, resulting in
-+the following build failure:
-+
-+In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/netdb.h:9:0,
-+                 from /home/peko/autobuild/instance-0/output/build/norm-1.5r6/protolib/include/protoAddress.h:13,
-+                 from /home/peko/autobuild/instance-0/output/build/norm-1.5r6/protolib/include/protoDetour.h:5,
-+                 from ../protolib/src/linux/linuxDetour.cpp:3:
-+/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected identifier before numeric constant
-+   IPPROTO_IP = 0,  /* Dummy protocol for TCP  */
-+   ^
-+/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected '}' before numeric constant
-+/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected unqualified-id before numeric constant
-+In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netfilter.h:7:0,
-+                 from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netfilter_ipv4.h:8,
-+                 from ../protolib/src/linux/linuxDetour.cpp:10:
-+/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:79:1: error: expected declaration before '}' token
-+ };
-+ ^
-+
-+Since from musl's developers perspective including kernel headers is
-+seen as being unsafe, we simply duplicate the necessary netfilter
-+definitions (there are just a few) instead of including some kernel
-+headers.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/protolib/src/linux/linuxDetour.cpp
-+===================================================================
-+--- a/protolib/src/linux/linuxDetour.cpp
-++++ b/protolib/src/linux/linuxDetour.cpp
-+@@ -7,15 +7,18 @@
-+ #include <stdlib.h>  // for atoi(), getenv()
-+ #include <stdio.h>
-+ #include <unistd.h>  // for close()
-+-#include <linux/netfilter_ipv4.h>  // for NF_IP_LOCAL_OUT, etc
-+-#include <linux/netfilter_ipv6.h>  // for NF_IP6_LOCAL_OUT, etc
-+-#include <linux/netfilter.h>  // for NF_ACCEPT, etc
-+ #include <libnetfilter_queue/libnetfilter_queue.h>
-+ 
-+ #include <fcntl.h>  // for fcntl(), etc
-+ #include <linux/if_ether.h>  // for ETH_P_IP
-+ #include <net/if_arp.h>   // for ARPHRD_ETHER
-+ 
-++/* From netfilter kernel headers */
-++#define NF_IP_LOCAL_OUT		3
-++
-++#define NF_DROP 		0
-++#define NF_ACCEPT 		1
-++
-+ /** NOTES: 
-+  *
-+  * 1) This newer implementation of LinuxDetour uses netfilter_queue
+ LIBRAW_INSTALL_STAGING = YES
+ # we patch configure.ac
+ LIBRAW_AUTORECONF = YES
