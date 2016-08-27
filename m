@@ -1,42 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 14:41:44 +0200
-Subject: [Buildroot] [git commit branch/next] package/ffmpeg: bump version
-	to 3.1.3
-Message-ID: <20160827124154.7BA677F92F@busybox.osuosl.org>
+Date: Sat, 27 Aug 2016 14:41:45 +0200
+Subject: [Buildroot] [git commit branch/next] package/unixodbc: bump version
+	to 2.3.4
+Message-ID: <20160827124154.84E877FD50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3cf05758d81ccc90f3b5eae9122a5b02b431f90
+commit: https://git.buildroot.net/buildroot/commit/?id=2b141fcebd03a170fe05681dbb92524f7ea11f0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/unixodbc/unixodbc.hash | 6 ++++--
+ package/unixodbc/unixodbc.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index e3f4570..e7d5979 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 58d2a2b69f0f46fe8aacd45e582c62e380ba611b5baf6a4dfcf2906eb2b9bd61  ffmpeg-3.1.2.tar.xz
-+sha256 f8575c071e2a64437aeb70c8c030b385cddbe0b5cde20c9b18a6def840128822  ffmpeg-3.1.3.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 1d04101..fe6aa3d 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
+diff --git a/package/unixodbc/unixodbc.hash b/package/unixodbc/unixodbc.hash
+index a5c2d11..e99169c 100644
+--- a/package/unixodbc/unixodbc.hash
++++ b/package/unixodbc/unixodbc.hash
+@@ -1,2 +1,4 @@
+-# From ftp://ftp.unixodbc.org/pub/unixODBC/unixODBC-2.3.2.tar.gz.md5
+-md5	5e4528851eda5d3d4aed249b669bd05b	unixODBC-2.3.2.tar.gz
++# From ftp://ftp.unixodbc.org/pub/unixODBC/unixODBC-2.3.4.tar.gz.md5
++md5 bd25d261ca1808c947cb687e2034be81  unixODBC-2.3.4.tar.gz
++# Locally computed
++sha256 2e1509a96bb18d248bf08ead0d74804957304ff7c6f8b2e5965309c632421e39  unixODBC-2.3.4.tar.gz
+diff --git a/package/unixodbc/unixodbc.mk b/package/unixodbc/unixodbc.mk
+index 067c1ca..f66daab 100644
+--- a/package/unixodbc/unixodbc.mk
++++ b/package/unixodbc/unixodbc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 3.1.2
-+FFMPEG_VERSION = 3.1.3
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+-UNIXODBC_VERSION = 2.3.2
++UNIXODBC_VERSION = 2.3.4
+ UNIXODBC_SOURCE = unixODBC-$(UNIXODBC_VERSION).tar.gz
+ UNIXODBC_SITE = ftp://ftp.unixodbc.org/pub/unixODBC
+ UNIXODBC_INSTALL_STAGING = YES
