@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 09:22:07 +0200
-Subject: [Buildroot] [PATCH] package/kmsxx: add patch to fix LTO support
-In-Reply-To: <20160826213442.19246-1-arnout@mind.be>
-References: <20160826213442.19246-1-arnout@mind.be>
-Message-ID: <20160827092207.17b2bf79@free-electrons.com>
+Date: Sat, 27 Aug 2016 09:25:37 +0200
+Subject: [Buildroot] [PATCH] libraw: fix build with gcc 6.x
+In-Reply-To: <3cb051ae-2a23-7a0a-edf0-8f901157f7f0@mind.be>
+References: <1472246236-31129-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <3cb051ae-2a23-7a0a-edf0-8f901157f7f0@mind.be>
+Message-ID: <20160827092537.10f48a8d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 26 Aug 2016 23:34:42 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> The LTO support in the kmsxx package uses the host gcc-ar and gcc-ranlib
-> instead of the ones from the cross-toolchain. Add a patch that tries to
-> find the right one based on CMAKE_C_COMPILER.
+On Sat, 27 Aug 2016 00:26:31 +0200, Arnout Vandecappelle wrote:
 
-Thanks for this patch! One quick question though.
+>  Hm, turns out that what you put here indeed doesn't fix it completely:
+> 
+> internal/dcraw_common.cpp: In member function ?void LibRaw::kodak_radc_load_raw()?:
+> internal/dcraw_common.cpp:2491:3: error: narrowing conversion of ?-2? from ?int?
+> to ?char? inside { } [-Wnarrowing]
 
-> +     if (HAS_LTO_FLAG)
-> +-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
-> +-        set(CMAKE_AR gcc-ar)
-> +-        set(CMAKE_RANLIB gcc-ranlib)
-> ++        find_program(LTO_AR NAMES "${CMAKE_C_COMPILER}-ar" gcc-ar)
-> ++        find_program(LTO_RANLIB NAMES "${CMAKE_C_COMPILER}-ranlib" /usr/bin/gcc-ranlib)
+Weird, I definitely built the package with a gcc 6.x toolchain, and it
+was building fine. Maybe the failure only occurred with some additional
+optional dependencies enabled?
 
-Why is the last attempted value for AR "gcc-ar", and for RANLIB it's
-"/usr/bin/gcc-ranlib" ? I.e while just the program name in one case,
-and a full path in the other case.
+>  I was waiting for upstream to fix that one as well (Debian runs into it too, on
+> the 0.17 branch, so it ought to be fixed quickly).
+> 
+>  And indeed, Debian has fixed it already... I'll send a patch.
+
+Your solution is also shorter/simpler, indeed.
 
 Thanks,
 
