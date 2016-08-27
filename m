@@ -1,73 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 27 Aug 2016 03:59:46 +0000
-Subject: [Buildroot] [Bug 9196] raspberry pi 3 default build seem broken
-In-Reply-To: <bug-9196-163@https.bugs.busybox.net/>
-References: <bug-9196-163@https.bugs.busybox.net/>
-Message-ID: <bug-9196-163-X2SnkmL89h@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 27 Aug 2016 08:01:41 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/ffmpeg: bump version to 3.1.3
+Message-ID: <20160827060141.16932-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9196
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- Comment #4 from Mikhail <mikhail_tchernychev@yahoo.com> ---
-Here is better report (I think)
-
-This is what I did (latest version)
-
-git pull 
-
-make clean
-
-make xconfig raspberrypi3_defconfig
-
-For some reason, it does not show RPi scripts
-So I exit (saving) and do it again:
-
-make xconfig
-
-Now RPi scripts in place.
-
-make
-
-OK. write to SD card.
-
-Use RPi3 with display and keyboard attached.
-
-Boots fine.
-
-Welcome to Buildroot
-
-buildroot login:
-
-type: root
-
-Password:
-
-Just press enter.
-
-Shows again:
-
-Password:
-
-press enter
-
-Login timeout after 60 seconds.
-
-No way it let me log in.
-
-I attached latest . config 
-
-I hope it helps
-
-I am going to make changes in config to use systemd and submit
-another comment.
-
-Best Regards
-Mikhail
-
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index e3f4570..e7d5979 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 58d2a2b69f0f46fe8aacd45e582c62e380ba611b5baf6a4dfcf2906eb2b9bd61  ffmpeg-3.1.2.tar.xz
++sha256 f8575c071e2a64437aeb70c8c030b385cddbe0b5cde20c9b18a6def840128822  ffmpeg-3.1.3.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 1d04101..fe6aa3d 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 3.1.2
++FFMPEG_VERSION = 3.1.3
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.9.3
