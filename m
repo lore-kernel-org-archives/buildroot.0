@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 16:14:15 +0200
-Subject: [Buildroot] [PATCH 03/16 v3] doc/asciidoc: add possibility to
- define document dependencies
-In-Reply-To: <8b101d01b6a1c1aaadde0649c82fba5db2c511f1.1468750623.git.yann.morin.1998@free.fr>
+Date: Sat, 27 Aug 2016 16:14:52 +0200
+Subject: [Buildroot] [PATCH 05/16 v3] core: move rule to create basic
+ directories
+In-Reply-To: <11c12539-f62e-0e2b-c6e3-b6bb2e9a1c12@gmail.com>
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <8b101d01b6a1c1aaadde0649c82fba5db2c511f1.1468750623.git.yann.morin.1998@free.fr>
-Message-ID: <20160827161415.5767677b@free-electrons.com>
+ <35c825b427c5e89497aafde9b787986eeeac1ad7.1468750623.git.yann.morin.1998@free.fr>
+ <11c12539-f62e-0e2b-c6e3-b6bb2e9a1c12@gmail.com>
+Message-ID: <20160827161452.6bb81433@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,40 +15,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 17 Jul 2016 12:34:23 +0200, Yann E. MORIN wrote:
+On Sat, 6 Aug 2016 17:16:20 +0200, Romain Naour wrote:
+> Hi Yann,
+> 
+> Le 17/07/2016 ? 12:34, Yann E. MORIN a ?crit :
+> > Some of those directories will be needed even during configuration, like
+> > BUILD_DIR, where we'll store the generated kconfig snippet.
+> > 
+> > So, move the rule to create them outside the HAVE_CONFIG block.  
+> 
+> You mean BR2_HAVE_DOT_CONFIG here, right ?
 
-> diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
-> index 6e21786..0c10fd1 100644
-> --- a/docs/manual/adding-packages-asciidoc.txt
-> +++ b/docs/manual/adding-packages-asciidoc.txt
-> @@ -63,6 +63,9 @@ information is (assuming the document name is +foo+) :
->    to one or more directories containing so-called resources (like CSS or
->    images). By default, empty.
->  
-> +* +FOO_DEPENDENCIES+, optional, the list of packages (most probably,
-> +  host-packages) that must be built before building this document.
-> +
->  There are also additional hooks (see xref:hooks[] for general information
->  on hooks), that a document may set to define extra actions to be done at
->  various steps:
-> diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-> index 6ab5ad2..ede6ed1 100644
-> --- a/package/doc-asciidoc.mk
-> +++ b/package/doc-asciidoc.mk
-> @@ -140,7 +140,7 @@ endef
->  ################################################################################
->  define ASCIIDOC
->  # Single line, because splitting a foreach is not easy...
-> -$(1)-check-dependencies: asciidoc-check-dependencies
-> +$(1)-check-dependencies: asciidoc-check-dependencies $$($(2)_DEPENDENCIES)
-
-My concern is that $(2)_DEPENDENCIES has nothing to do with *checking*
-dependencies, so it's a bit weird to see this added to a target called
-<something>-check-dependencies.
-
-Could you refresh me on how this $(1)-check-dependencies target is
-used? I had a quick look at the code around and couldn't remember, and
-wanted to look at some other patches in your series.
+Yann, could you reply to this comment? I think Romain is right, but I
+just want to be sure before fixing up myself when applying.
 
 Thanks,
 
