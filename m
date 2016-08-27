@@ -1,37 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 17:16:54 +0200
-Subject: [Buildroot] [git commit] package/ffmpeg: re-enable for mips64r2 and
-	mips64r6
-Message-ID: <20160902142940.8CE758253D@busybox.osuosl.org>
+Date: Sat, 27 Aug 2016 21:57:24 +0200
+Subject: [Buildroot] [git commit] docs/manual: prepare-kconfig can be used
+	as a dependency of documents
+Message-ID: <20160902142941.299397FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02f749b5b2f4532c5b2daed539b4b5634b28a260
+commit: https://git.buildroot.net/buildroot/commit/?id=fba75c8f9e56e0e17221ab0d827b55f16fc3d78e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ffmpeg 3 fixed support for mips64r2 and mips64r6, for details see
-http://patchwork.ozlabs.org/patch/626756/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ docs/manual/adding-packages-asciidoc.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 096ff95..6b7a6e7 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	bool
- 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
--	# ffmpeg's configure script only supports mips64 (r1) variant
--	default y if !BR2_nios2 && !BR2_mips_64r2 && !BR2_mips_64r6
-+	default y if !BR2_nios2
+diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
+index 0c10fd1..a278d44 100644
+--- a/docs/manual/adding-packages-asciidoc.txt
++++ b/docs/manual/adding-packages-asciidoc.txt
+@@ -65,6 +65,8 @@ information is (assuming the document name is +foo+) :
  
- menuconfig BR2_PACKAGE_FFMPEG
- 	bool "ffmpeg"
+ * +FOO_DEPENDENCIES+, optional, the list of packages (most probably,
+   host-packages) that must be built before building this document.
++  If a hook of your document needs to access the _Kconfig_ structure,
++  you may add +prepare-kconfig+ to the list of dependencies.
+ 
+ There are also additional hooks (see xref:hooks[] for general information
+ on hooks), that a document may set to define extra actions to be done at
