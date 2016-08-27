@@ -1,78 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 14:37:48 +0200
-Subject: [Buildroot] [PATCH] libamcodec: fix build with musl
-Message-ID: <1472301468-30919-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Matthew Weber <matt@thewebers.ws>
+Date: Sat, 27 Aug 2016 07:38:13 -0500
+Subject: [Buildroot] [PATCHv2] pckages/sconeserver: fix build with gcc-6
+In-Reply-To: <20160825102650.0acafa05@free-electrons.com>
+References: <1472111153-14215-1-git-send-email-yann.morin.1998@free.fr>
+ <20160825102650.0acafa05@free-electrons.com>
+Message-ID: <CAFt09wOQ9fOLGkdbM-Jtuw9G_tizsO8103x317ADp2Rf+YU7wQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch to the libamcodec in order to fix the build
-with musl, which was failing due to missing <stdint.h> includes.
+Yann,
 
-Fixes:
+On Thu, Aug 25, 2016 at 3:26 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Thu, 25 Aug 2016 09:45:53 +0200, Yann E. MORIN wrote:
+>> We simply bump the version rather than backport the patch, as there has
+>> been only very few, minor commits in-between.
+>>
+>> Fixes:
+>>     http://autobuild.buildroot.org/results/fa7/fa7881c6ffb821a2aff139f95ba53c96d6e2b942/
+>>     http://autobuild.buildroot.org/results/749/749fbd6cc505f6f3c0cccfeb63be6deddab8fba5/
+>>
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>
+<snip>
 
-  http://autobuild.buildroot.net/results/1f3b0d483603fb69765c15c7189ff975b72d09c3/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-Include-stdint.h-where-needed.patch       | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/libamcodec/0001-Include-stdint.h-where-needed.patch
+Looks like the new revision has a failed build.
+http://autobuild.buildroot.org/results/e92/e929799366e6f574c7b08d8635b18623afd3e3e1//
 
-diff --git a/package/libamcodec/0001-Include-stdint.h-where-needed.patch b/package/libamcodec/0001-Include-stdint.h-where-needed.patch
-new file mode 100644
-index 0000000..6d588f6
---- /dev/null
-+++ b/package/libamcodec/0001-Include-stdint.h-where-needed.patch
-@@ -0,0 +1,47 @@
-+From ff6d4326f839321c079d60ae9301c6202942f675 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 27 Aug 2016 14:31:04 +0200
-+Subject: [PATCH] Include <stdint.h> where needed
-+
-+The {u,}int{8,16,32}_t types are defined in <stdint.h>, so it should be
-+included when such types are used.
-+
-+Not including <stdint.h> might work by accident with some C libraries
-+due to it being included by other headers, but it for example causes
-+build failures with the musl C library.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Upstream-status: https://github.com/mdrjr/c2_aml_libs/pull/1
-+---
-+ amadec/audio-dec.h               | 1 +
-+ amavutils/include/Amvideoutils.h | 2 ++
-+ 2 files changed, 3 insertions(+)
-+
-+diff --git a/amadec/audio-dec.h b/amadec/audio-dec.h
-+index 4325fe4..ac0f36b 100644
-+--- a/amadec/audio-dec.h
-++++ b/amadec/audio-dec.h
-+@@ -12,6 +12,7 @@
-+ #define AUDIO_DEC_H
-+ 
-+ #include<pthread.h>
-++#include <stdint.h>
-+ 
-+ #include <audio-out.h>
-+ #include <audiodsp.h>
-+diff --git a/amavutils/include/Amvideoutils.h b/amavutils/include/Amvideoutils.h
-+index 6f978e4..94f10a6 100644
-+--- a/amavutils/include/Amvideoutils.h
-++++ b/amavutils/include/Amvideoutils.h
-+@@ -5,6 +5,8 @@
-+ extern "C" {
-+ #endif
-+ 
-++#include <stdint.h>
-++
-+ #define HDMI_HDCP_PASS           (1)
-+ #define HDMI_HDCP_FAILED      (0)
-+ #define HDMI_NOCONNECT        (-1)
-+-- 
-+2.7.4
-+
+ModuleLoader.cpp:29:19: fatal error: dlfcn.h: No such file or directory
+ #include <dlfcn.h>
+                   ^
+I didn't have a chance to check if the conf opts for disable-load
+works on this package yet but that might fix it (assuming it can be
+statically built).
+
+When I first rebuilt, I tried just doing a "make clean sconeserver"
+and got this error.
+
+configure.in:118: error: possibly undefined macro: AC_MSG_FAILURE
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+configure.in:120: error: possibly undefined macro: AC_MSG_WARN
+autoreconf: /home/mlweber/buildroot/output/host/usr/bin/autoconf
+failed with exit status: 1
+package/pkg-generic.mk:191: recipe for target
+'/home/mlweber/buildroot/output/build/sconeserver-d659468cd164e6a6cc12932cc6780566b04f8328/.stamp_configured'
+failed
+
+I haven't had a chance to look into why but thought I'd get it out there.
+
 -- 
-2.7.4
+Thanks,
+Matt
