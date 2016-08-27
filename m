@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 14:46:00 +0200
-Subject: [Buildroot] [PATCH v2] package/kmsxx: add patch to fix LTO
- support
-In-Reply-To: <20160827102613.16952-1-arnout@mind.be>
-References: <20160827102613.16952-1-arnout@mind.be>
-Message-ID: <20160827144600.4bfbb05f@free-electrons.com>
+Date: Sat, 27 Aug 2016 14:47:06 +0200
+Subject: [Buildroot] [PATCH v3] vlc: fix compile error with uClibc-ng
+ Linuxthreads
+In-Reply-To: <20160826212727.GA21169@waldemar-brodkorb.de>
+References: <20160826212727.GA21169@waldemar-brodkorb.de>
+Message-ID: <20160827144706.6df2379a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 27 Aug 2016 12:26:13 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> The LTO support in the kmsxx package uses the host gcc-ar and gcc-ranlib
-> instead of the ones from the cross-toolchain. Add a patch that tries to
-> find the right one based on CMAKE_C_COMPILER.
+On Fri, 26 Aug 2016 23:27:27 +0200, Waldemar Brodkorb wrote:
+> The fallback code path didn't work correctly, so fix it.
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/16a/16a38a4277dd1152a5955d62cb92f85447791ef3
+>   http://autobuild.buildroot.net/results/3122287ddea1e316a64ccf0d0dc9415bfefebb49/
 > 
-> Possibly also fixes:
-> http://autobuild.buildroot.net/results/f3c/f3c48da3a9706cd366c0e0a96c3cd0ff959f2a78
-> (it fails later, possibly because an incompatible host ar)
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
-> v2: Use 'gcc-ranlib' instead of '/usr/bin/gcc-ranlib' (Thomas)
+> v2 -> v3:
+>  - use git format patch, requested by Thomas Petazzoni
+>  - remove unneeded -lpthread, requested by Thomas Petazzoni
+> v1 -> v2:
+>  - rework autobuild failure, there is fallback code for non-NPTL,
+>    so fix it up. Suggested by Thomas Petazzoni
 > ---
->  ...001-Fix-LTO-support-for-cross-compilation.patch | 45 ++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
+>  ...ck-code-and-add-required-realtime-library.patch | 40 ++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 package/vlc/0008-fix-fallback-code-and-add-required-realtime-library.patch
 
-Applied to master, thanks.
+I've applied to master. But in fact, the change in VLC should have made
+using two separate patches, as they are not directly related.
+
+Could you please split them in two patches, and submit them upstream?
+Once it gets accepted upstream, we can backport the final version.
+
+Thanks a lot!
 
 Thomas
 -- 
