@@ -1,44 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 09:27:16 +0200
-Subject: [Buildroot] [PATCH] pixman: properly enable/disable ARM
- optimizations
-In-Reply-To: <04d09d36-c5e7-ac47-a821-84026fd98178@mind.be>
-References: <1472244298-13978-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <04d09d36-c5e7-ac47-a821-84026fd98178@mind.be>
-Message-ID: <20160827092716.5a1edb11@free-electrons.com>
+From: Kenneth Adam Miller <kennethadammiller@gmail.com>
+Date: Sat, 27 Aug 2016 03:28:04 -0400
+Subject: [Buildroot] Nearly duplicate builds
+Message-ID: <CAK7rcp8xDcHTkxyd_E0QNPGy37R0693iMUGAWnRb4_akA8a8pg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+So, we have multiple boards and multiple users. The way that buildroot
+functions is such that, for nearly duplicate builds, the only thing
+you can really do to eliminate redundant builds is to move the
+toolchain to be external. In my case, it kind of makes sense to have
+have as much as possible of the build to not be repeated
+unnecessarily. We have an entire team working with buildroot, and
+doing so much repeated work is a strain on both time and computer
+resources. We have to have a huge machine in order to make so many
+builds, for both integration testing and local development for each
+user and board, more palatable.
 
-On Sat, 27 Aug 2016 00:07:59 +0200, Arnout Vandecappelle wrote:
+My question is, would there be a way to reduce unnecessary repeated
+work between packages and configurations? In our case, often
+configurations are very nearly duplicate, but differ in just a few
+userland packages and very little configuration information for the
+kernel.
 
-> > +ifeq ($(BR2_ARM_CPU_HAS_ARM),y)  
-> 
->  Minor nit: the instructions used by arm-simd are actually ARMv5TE instructions.
-> Fortunately, all our ARMv5 CPU options support the E extension, so we can add
-> !BR2_ARM_CPU_ARMV4 to the condition. Still, it's not strictly necessary, because
-> the compiler can still generate this v5E code, and the resulting ELF file is
-> compatible with v4 object files, and there is a CPU check so it will only be run
-> if it is really supported (I didn't actually test that, but the code is there).
-> And adding that extra condition will make the code really ugly. It's just weird
-> to pass --enable-arm-simd when it will not be used in the end.
+My thinking for how such a package or modification to buildroot would
+work is that it would transparently facilitate managing a soft link
+forest between the common build directory and the build directory
+designated as the output directory for each particular target. In this
+way, a convention would be adopted in specifying a user though the
+tool with a simple $USER environment variable in navigating to a
+user's build directory before executing the build. The user themselves
+would be responsible for maintaining the list of packages that differ
+from a shared default in both white and black listing from common
+build. In this way, buildroot would just keep all the common packages
+between users and boards built as it normally does, and then do
+individual work for what is different per specific configuration.
 
-I should have added such an explanation. I indeed realized that the
-SIMD code would not work with the oldest ARM cores, but pixman is
-handling that properly. The only case where pixman's logic fall short
-is on CPUs that do not support ARM instructions at all.
+The thing about this though, is that this functionality isn't present
+to my knowledge, and even if it was, it wouldn't fully answer the
+problem I don't believe. Overlays help with this a bit as well, but
+that I know of they also aren't going to solve all the problems of
+multiple configuration per project. I could be wrong about each of
+those presumptions in regards to my needs, so if I am, someone please
+explain it to me. I do think the ability to have a generated overlay
+per buildroot package would be pretty cool. For us, the final image
+creation cost being separate from the actual build cost would be
+fantastic in being able to clean our builds per package (not currently
+a feature), and also be great since the individual overlays themselves
+could be soft linked. and thereby versioned.
 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-I'll grab a part of your explanation to extend the commit log when
-applying the patch. Thanks for the review!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Does anybody know of such a configuration differencing and versioning
+tool? Would there be a way to use buildroot's features to calculate
+the package differences between two defconfigs, and thereby make an
+action with respect to overlay or build isolation with them per user
+command?
