@@ -1,32 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 14:45:33 +0200
-Subject: [Buildroot] [PATCH] package/libraw: fix gcc-6 build
-In-Reply-To: <20160826222626.17919-1-arnout@mind.be>
-References: <20160826222626.17919-1-arnout@mind.be>
-Message-ID: <20160827144533.16d145bc@free-electrons.com>
+Date: Sat, 27 Aug 2016 14:45:08 +0200
+Subject: [Buildroot] [git commit] norm: add patch to fix musl build
+Message-ID: <20160827124538.99A2681F91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e74d4fc4932df4ea42381acb44d616241275b79a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 27 Aug 2016 00:26:26 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Grab the patch from Debian.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/libraw/libraw.hash | 1 +
->  package/libraw/libraw.mk   | 3 +++
->  2 files changed, 4 insertions(+)
+Fixes:
 
-Applied to master, thanks.
+  http://autobuild.buildroot.net/results/9c7130d5b5aad218c5c576761d495a3f403fdc5b/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...03-remove-kernel-headers-include-musl-fix.patch | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+
+diff --git a/package/norm/0003-remove-kernel-headers-include-musl-fix.patch b/package/norm/0003-remove-kernel-headers-include-musl-fix.patch
+new file mode 100644
+index 0000000..7581c10
+--- /dev/null
++++ b/package/norm/0003-remove-kernel-headers-include-musl-fix.patch
+@@ -0,0 +1,55 @@
++Remove kernel header includes causing issues with musl
++
++Include the kernel headers from netfilter causes a conflict with the
++<netinet/in.h> way of defining the IPPROTO_* constants, resulting in
++the following build failure:
++
++In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/netdb.h:9:0,
++                 from /home/peko/autobuild/instance-0/output/build/norm-1.5r6/protolib/include/protoAddress.h:13,
++                 from /home/peko/autobuild/instance-0/output/build/norm-1.5r6/protolib/include/protoDetour.h:5,
++                 from ../protolib/src/linux/linuxDetour.cpp:3:
++/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected identifier before numeric constant
++   IPPROTO_IP = 0,  /* Dummy protocol for TCP  */
++   ^
++/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected '}' before numeric constant
++/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected unqualified-id before numeric constant
++In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netfilter.h:7:0,
++                 from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netfilter_ipv4.h:8,
++                 from ../protolib/src/linux/linuxDetour.cpp:10:
++/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:79:1: error: expected declaration before '}' token
++ };
++ ^
++
++Since from musl's developers perspective including kernel headers is
++seen as being unsafe, we simply duplicate the necessary netfilter
++definitions (there are just a few) instead of including some kernel
++headers.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/protolib/src/linux/linuxDetour.cpp
++===================================================================
++--- a/protolib/src/linux/linuxDetour.cpp
+++++ b/protolib/src/linux/linuxDetour.cpp
++@@ -7,15 +7,18 @@
++ #include <stdlib.h>  // for atoi(), getenv()
++ #include <stdio.h>
++ #include <unistd.h>  // for close()
++-#include <linux/netfilter_ipv4.h>  // for NF_IP_LOCAL_OUT, etc
++-#include <linux/netfilter_ipv6.h>  // for NF_IP6_LOCAL_OUT, etc
++-#include <linux/netfilter.h>  // for NF_ACCEPT, etc
++ #include <libnetfilter_queue/libnetfilter_queue.h>
++ 
++ #include <fcntl.h>  // for fcntl(), etc
++ #include <linux/if_ether.h>  // for ETH_P_IP
++ #include <net/if_arp.h>   // for ARPHRD_ETHER
++ 
+++/* From netfilter kernel headers */
+++#define NF_IP_LOCAL_OUT		3
+++
+++#define NF_DROP 		0
+++#define NF_ACCEPT 		1
+++
++ /** NOTES: 
++  *
++  * 1) This newer implementation of LinuxDetour uses netfilter_queue
