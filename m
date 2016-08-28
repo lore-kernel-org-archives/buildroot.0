@@ -1,83 +1,33 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Aug 2016 20:06:03 +0200
-Subject: [Buildroot] [PATCHv2] pckages/sconeserver: fix build with gcc-6
-In-Reply-To: <CAFt09wOQ9fOLGkdbM-Jtuw9G_tizsO8103x317ADp2Rf+YU7wQ@mail.gmail.com>
-References: <1472111153-14215-1-git-send-email-yann.morin.1998@free.fr>
- <20160825102650.0acafa05@free-electrons.com>
- <CAFt09wOQ9fOLGkdbM-Jtuw9G_tizsO8103x317ADp2Rf+YU7wQ@mail.gmail.com>
-Message-ID: <20160828180603.GD5758@free.fr>
+Date: Sun, 28 Aug 2016 20:19:53 +0200
+Subject: [Buildroot] [PATCH 1/2] package/sconeserver: needs host-pkgconf
+Message-ID: <1472408394-20573-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matt, All,
+sconeserver uses pkg-config macros, so it needs host-pkgconf.
 
-On 2016-08-27 07:38 -0500, Matthew Weber spake thusly:
-> On Thu, Aug 25, 2016 at 3:26 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Hello,
-> >
-> > On Thu, 25 Aug 2016 09:45:53 +0200, Yann E. MORIN wrote:
-> >> We simply bump the version rather than backport the patch, as there has
-> >> been only very few, minor commits in-between.
-> >>
-> >> Fixes:
-> >>     http://autobuild.buildroot.org/results/fa7/fa7881c6ffb821a2aff139f95ba53c96d6e2b942/
-> >>     http://autobuild.buildroot.org/results/749/749fbd6cc505f6f3c0cccfeb63be6deddab8fba5/
-> >>
-> >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >>
-> <snip>
-> 
-> Looks like the new revision has a failed build.
-> http://autobuild.buildroot.org/results/e92/e929799366e6f574c7b08d8635b18623afd3e3e1//
-> 
-> ModuleLoader.cpp:29:19: fatal error: dlfcn.h: No such file or directory
->  #include <dlfcn.h>
->                    ^
-> I didn't have a chance to check if the conf opts for disable-load
-> works on this package yet but that might fix it (assuming it can be
-> statically built).
-> 
-> When I first rebuilt, I tried just doing a "make clean sconeserver"
-> and got this error.
-> 
-> configure.in:118: error: possibly undefined macro: AC_MSG_FAILURE
->       If this token and others are legitimate, please use m4_pattern_allow.
->       See the Autoconf documentation.
-> configure.in:120: error: possibly undefined macro: AC_MSG_WARN
-> autoreconf: /home/mlweber/buildroot/output/host/usr/bin/autoconf
-> failed with exit status: 1
-> package/pkg-generic.mk:191: recipe for target
-> '/home/mlweber/buildroot/output/build/sconeserver-d659468cd164e6a6cc12932cc6780566b04f8328/.stamp_configured'
-> failed
-> 
-> I haven't had a chance to look into why but thought I'd get it out there.
+Reported-by: Matthew Weber <matt@thewebers.ws>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/sconeserver/sconeserver.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-OK, so I finally had the time to give it a shot:
-
-  - the autoreconf issue is because it uses pkg-config macros, and it
-    was missing a dependency on host-pkgconf,
-
-  - the build issue is because a pure static uClibc build does not
-    install dlfcn.h and can't do dynamic loading with dlopen().
-
-Both issues already existed with the previous version, we just did not
-notice them...
-
-So: thanks for noticing this time! ;-)
-
-I'll send the patches in a moment.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index e02c1a6..42901c6 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -10,7 +10,7 @@ SCONESERVER_LICENSE = GPLv2+
+ SCONESERVER_LICENSE_FILES = COPYING
+ # fetching from Git, we need to generate the configure script
+ SCONESERVER_AUTORECONF = YES
+-SCONESERVER_DEPENDENCIES += pcre
++SCONESERVER_DEPENDENCIES = host-pkgconf pcre
+ # disable markdown module because its git submodule cmark
+ # https://github.com/sconemad/sconeserver/tree/master/markdown
+ # has no cross-compile support provided by the sconeserver build system
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
