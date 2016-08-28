@@ -1,47 +1,53 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 Aug 2016 12:21:21 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/libarchive: fix static linking
-	against libpthread
-Message-ID: <20160828102121.13601-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 Aug 2016 12:48:25 +0200
+Subject: [Buildroot] [PATCH 10/16 v3] core: introduce per br2-external ID
+In-Reply-To: <20160827215951.GJ5755@free.fr>
+References: <cover.1468750623.git.yann.morin.1998@free.fr>
+ <a161d4b17c131b471418e4fa979aa73129ad102c.1468750623.git.yann.morin.1998@free.fr>
+ <4bce70e5-7e9a-ef8b-6dc8-dbe2356df194@mind.be>
+ <20160827215951.GJ5755@free.fr>
+Message-ID: <20160828124825.0c68a5ff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/e94/e943ee5abc06b1812d7b34976e3a807859958935/
+Hello,
 
-This commit also fixes fwup:
-http://autobuild.buildroot.net/results/36b/36b0c6b68209ddd1b0f2db8449392af36876411f/
+On Sat, 27 Aug 2016 23:59:51 +0200, Yann E. MORIN wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: Changed LIBARCHIVE_CONF_ENV from using LDFLAGS to using LIBS, this
-    way -lpthread is included in libarchive.pc fixing linking problems
-    in other packages using libarchive
-    This patch follows the advice from Khem Raj:
-    http://lists.busybox.net/pipermail/buildroot/2016-August/169712.html
+> > > +			printf 'config BR2_EXTERNAL_%s\n' $(BR2_EXTERNAL_ID); \
+> > > +			printf '\tstring\n\tdefault "%s"\n\n' $(BR2_EXTERNAL_$(BR2_EXTERNAL_ID)); \  
+> > 
+> >  Why is this config still needed? It was there before because that's the only
+> > way to use it in the 'source' statement, but now that we generate the external
+> > Config.in, I don't think it's needed anymore. Which also removes the need for
+> > the unquoting.  
+> 
+> Hmmm.. As far as I can see, it is still needed, because the Config.in
+> files in the br2-external tree may want to include other Config.in
+> files, no?
+> 
+> Like for example (with the variable renamed as per above):
+> 
+>     .../ext-tree/Config.in
+>         source "$BR2_EXTERNAL_DIR_FOO/package/pkg-1/Config.in"
+>         source "$BR2_EXTERNAL_DIR_FOO/package/pkg-2/Config.in"
+> 
+> So it is stil needed to have the path to each br2-external paths from
+> Kconfig.
+> 
+> Unless I missed something?
 
- package/libarchive/libarchive.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+No, I think you're right. I don't see how we can do without this config
+variable, which is needed to communicate the BR2_EXTERNAL locations
+from the make logic down to the Kconfig logic, in order to allow
+Config.in files to include other Config.in files located in
+BR2_EXTERNAL.
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index bcf92f9..d007f49 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -110,6 +110,12 @@ else
- LIBARCHIVE_CONF_OPTS += --without-lzma
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-+# libarchive uses pthreads if available, but forgets to link with it
-+# breaking static builds
-+LIBARCHIVE_CONF_ENV = LIBS="-lpthread"
-+endif
-+
- # The only user of host-libarchive needs zlib support
- HOST_LIBARCHIVE_DEPENDENCIES = host-zlib
- HOST_LIBARCHIVE_CONF_OPTS = \
+Thomas
 -- 
-2.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
