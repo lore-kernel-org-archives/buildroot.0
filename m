@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Aug 2016 15:50:46 +0200
-Subject: [Buildroot] [PATCH] webkitgtk: security bump to version 2.12.4
-In-Reply-To: <1472389899-29460-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1472389899-29460-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160828155046.1ab89924@free-electrons.com>
+Date: Sun, 28 Aug 2016 15:50:57 +0200
+Subject: [Buildroot] [git commit branch/next] wine: Bump to version 1.8.4
+Message-ID: <20160828135103.33B8C8213B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6fc7a761480b888fa05015b28045377af2afa7c6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 28 Aug 2016 10:11:39 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2016-4590 - mishandles about: URLs, which allows remote attackers to
-> bypass the Same Origin Policy via a crafted web site.
-> 
-> CVE-2016-4591 - mishandles the location variable, which allows remote
-> attackers to access the local filesystem via unspecified vectors.
-> 
-> CVE-2016-4622 - allows remote attackers to execute arbitrary code or
-> cause a denial of service (memory corruption) via a crafted web site, a
-> different vulnerability than CVE-2016-4589, CVE-2016-4623, and
-> CVE-2016-4624.
-> 
-> CVE-2016-4624 - allows remote attackers to execute arbitrary code or
-> cause a denial of service (memory corruption) via a crafted web site, a
-> different vulnerability than CVE-2016-4589, CVE-2016-4622, and
-> CVE-2016-4623.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/webkitgtk/webkitgtk.hash | 6 +++---
->  package/webkitgtk/webkitgtk.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Bumping to stable version 1.8.4
 
-Applied to master, thanks.
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wine/wine.hash | 2 +-
+ package/wine/wine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index 3f856ba..d58ac02 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 d7cecdf7aab93bfe950e6f83ec526681b8770788c7b2a802bfe50ff97fc17a6c wine-1.8.3.tar.bz2
++sha256 515d10439777a4816fe5b0a0fc9a4ce498a2ecfd23eba0c25dc00f3d6c805079 wine-1.8.4.tar.bz2
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 632eed3..aceea35 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WINE_VERSION = 1.8.3
++WINE_VERSION = 1.8.4
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
+ WINE_SITE = https://dl.winehq.org/wine/source/1.8
+ WINE_LICENSE = LGPLv2.1+
