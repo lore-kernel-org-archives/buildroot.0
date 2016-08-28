@@ -1,60 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 28 Aug 2016 10:11:39 -0300
-Subject: [Buildroot] [PATCH] webkitgtk: security bump to version 2.12.4
-Message-ID: <1472389899-29460-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 Aug 2016 15:48:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libxmlrpc: Fix build with gcc6
+In-Reply-To: <20160828111559.16653-1-bernd.kuhls@t-online.de>
+References: <20160828111559.16653-1-bernd.kuhls@t-online.de>
+Message-ID: <20160828154822.14854bd8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2016-4590 - mishandles about: URLs, which allows remote attackers to
-bypass the Same Origin Policy via a crafted web site.
+Hello,
 
-CVE-2016-4591 - mishandles the location variable, which allows remote
-attackers to access the local filesystem via unspecified vectors.
+On Sun, 28 Aug 2016 13:15:59 +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/c45/c45530f34bf2074bd204c485615124df928f246c/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libxmlrpc/0006-narrowing.patch | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>  create mode 100644 package/libxmlrpc/0006-narrowing.patch
 
-CVE-2016-4622 - allows remote attackers to execute arbitrary code or
-cause a denial of service (memory corruption) via a crafted web site, a
-different vulnerability than CVE-2016-4589, CVE-2016-4623, and
-CVE-2016-4624.
+Applied to master, thanks.
 
-CVE-2016-4624 - allows remote attackers to execute arbitrary code or
-cause a denial of service (memory corruption) via a crafted web site, a
-different vulnerability than CVE-2016-4589, CVE-2016-4622, and
-CVE-2016-4623.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/webkitgtk/webkitgtk.hash | 6 +++---
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index faccb3f..f74677e 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From http://www.webkitgtk.org/releases/webkitgtk-2.12.3.tar.xz.sha1
--sha1	d6a0d598c09d2d56ba0862f8d9206e89d75317cb	webkitgtk-2.12.3.tar.xz
-+# From http://www.webkitgtk.org/releases/webkitgtk-2.12.4.tar.xz.sha1
-+sha1	ebfe6015d81129b6a13a9596d065c54e9c1b93f6	webkitgtk-2.12.4.tar.xz
- # Calculated based on the hash above
--sha256	173cbb9a2eca23eee52e99965483ab25aa9c0569ef5b57041fc0c129cc26c307	webkitgtk-2.12.3.tar.xz
-+sha256	424d3177599abbc1eb1a1ad7928dd280a62006e992f2fada2e059375a9609a77	webkitgtk-2.12.4.tar.xz
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 2479872..f5c4334 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.12.3
-+WEBKITGTK_VERSION = 2.12.4
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
