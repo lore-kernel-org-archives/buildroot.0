@@ -1,59 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Aug 2016 18:47:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openswan: not available on musl
-In-Reply-To: <20160731230102.070d5413@free-electrons.com>
-References: <1469958682-6087-1-git-send-email-bernd.kuhls@t-online.de>
- <1469969267.9042.2.camel@embedded.rocks>
- <20160731160517.GJ3620@tarshish>
- <20160731230102.070d5413@free-electrons.com>
-Message-ID: <20160828164701.GC5758@free.fr>
+Date: Sun, 28 Aug 2016 20:06:03 +0200
+Subject: [Buildroot] [PATCHv2] pckages/sconeserver: fix build with gcc-6
+In-Reply-To: <CAFt09wOQ9fOLGkdbM-Jtuw9G_tizsO8103x317ADp2Rf+YU7wQ@mail.gmail.com>
+References: <1472111153-14215-1-git-send-email-yann.morin.1998@free.fr>
+ <20160825102650.0acafa05@free-electrons.com>
+ <CAFt09wOQ9fOLGkdbM-Jtuw9G_tizsO8103x317ADp2Rf+YU7wQ@mail.gmail.com>
+Message-ID: <20160828180603.GD5758@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Bernd, Baruch, All,
+Matt, All,
 
-On 2016-07-31 23:01 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 31 Jul 2016 19:05:17 +0300, Baruch Siach wrote:
+On 2016-08-27 07:38 -0500, Matthew Weber spake thusly:
+> On Thu, Aug 25, 2016 at 3:26 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Hello,
+> >
+> > On Thu, 25 Aug 2016 09:45:53 +0200, Yann E. MORIN wrote:
+> >> We simply bump the version rather than backport the patch, as there has
+> >> been only very few, minor commits in-between.
+> >>
+> >> Fixes:
+> >>     http://autobuild.buildroot.org/results/fa7/fa7881c6ffb821a2aff139f95ba53c96d6e2b942/
+> >>     http://autobuild.buildroot.org/results/749/749fbd6cc505f6f3c0cccfeb63be6deddab8fba5/
+> >>
+> >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >>
+> <snip>
 > 
-> > netbsd-queue is a header only package, so it adds nothing to packages that 
-> > don't use it. libglob adds libglob.so that is only useful for few packages. We 
-> > can do something similar to way we handle gettext by adding
-> > 
-> >   select BR2_PACKAGE_LIBGLOB if BR2_TOOLCHAIN_USES_MUSL
-> > 
-> > for each such package.
+> Looks like the new revision has a failed build.
+> http://autobuild.buildroot.org/results/e92/e929799366e6f574c7b08d8635b18623afd3e3e1//
 > 
-> Agreed.
+> ModuleLoader.cpp:29:19: fatal error: dlfcn.h: No such file or directory
+>  #include <dlfcn.h>
+>                    ^
+> I didn't have a chance to check if the conf opts for disable-load
+> works on this package yet but that might fix it (assuming it can be
+> statically built).
+> 
+> When I first rebuilt, I tried just doing a "make clean sconeserver"
+> and got this error.
+> 
+> configure.in:118: error: possibly undefined macro: AC_MSG_FAILURE
+>       If this token and others are legitimate, please use m4_pattern_allow.
+>       See the Autoconf documentation.
+> configure.in:120: error: possibly undefined macro: AC_MSG_WARN
+> autoreconf: /home/mlweber/buildroot/output/host/usr/bin/autoconf
+> failed with exit status: 1
+> package/pkg-generic.mk:191: recipe for target
+> '/home/mlweber/buildroot/output/build/sconeserver-d659468cd164e6a6cc12932cc6780566b04f8328/.stamp_configured'
+> failed
+> 
+> I haven't had a chance to look into why but thought I'd get it out there.
 
-In the meantime, the release is approaching, and libglob is not yet in
-the tree.
+OK, so I finally had the time to give it a shot:
 
-So I think we should just hide openswan for musl, at least until after
-the release.
+  - the autoreconf issue is because it uses pkg-config macros, and it
+    was missing a dependency on host-pkgconf,
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  - the build issue is because a pure static uClibc build does not
+    install dlfcn.h and can't do dynamic loading with dlopen().
+
+Both issues already existed with the previous version, we just did not
+notice them...
+
+So: thanks for noticing this time! ;-)
+
+I'll send the patches in a moment.
 
 Regards,
 Yann E. MORIN.
-
-> BTW, the other day I was wondering if we shouldn't add another dummy
-> package for musl that adds the <sys/cdefs.h> header. It's supposedly an
-> internal glibc header but *lots* of packages use the __BEGIN_DECLS /
-> __END_DECLS definitions, and it's really annoying to fix them all, for
-> not a huge benefit.
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
