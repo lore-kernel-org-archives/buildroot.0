@@ -1,47 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 00:09:41 +0200
-Subject: [Buildroot] [PATCH 2/2] package/sconeserver: needs shared libs
-	or non uClibc toolchain
-In-Reply-To: <1472408394-20573-2-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sun, 28 Aug 2016 20:19:54 +0200")
-References: <1472408394-20573-1-git-send-email-yann.morin.1998@free.fr>
- <1472408394-20573-2-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87wpj07dga.fsf@dell.be.48ers.dk>
+Date: Mon, 29 Aug 2016 00:04:03 +0200
+Subject: [Buildroot] [git commit] package/sconeserver: unconditionally needs
+	host-pkgconf
+Message-ID: <20160828220959.BD2E0805B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=822247827c8ce228540ec5c3027bd01fd0b91480
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > sconeserver wants to use dlopen(), unconditionally: it does not try to
- > detect it, and it can't work without it (the code is not conditional).
+sconeserver uses pkg-config macros and uses autoreconf, so it
+unconditionally needs host-pkgconf.
 
- > So, when the toolchain uses uClibc, and that uClibc has been configured
- > with only static support, the dlopen() functions are not available at
- > all, and the corresponding headers are not present:
+[Peter: drop host-pkgconf from sub options, update description]
+Reported-by: Matthew Weber <matt@thewebers.ws>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sconeserver/sconeserver.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- >     ModuleLoader.cpp:29:19: fatal error: dlfcn.h: No such file or directory
- >      #include <dlfcn.h>
- >                        ^
-
- > However, we can't know if uClibc has shared support or is static-only,
- > especially for external toolchains.
-
- > The only way is to forbid the combination {uClibc,static}. So we may
- > indeed forbid working combinations, for example if the external
- > toolchain is uClibc-based and has support for shared libs...
-
-Ehh, this I don't get. Why not simply depend on !BR2_STATIC_LIBS like we
-do for other users of dlfcn.h?
-
-If BR2_STATIC_LIBS is enabled then there won't be any .so files in the
-target rootfs, so even if the C library has dlopen support it won't
-work.
-
-If an external (uClibc-based) toolchain has no shared library support
-then it can only be used in BR2_STATIC_LIBS configurations.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index e02c1a6..793ca6f 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -10,7 +10,7 @@ SCONESERVER_LICENSE = GPLv2+
+ SCONESERVER_LICENSE_FILES = COPYING
+ # fetching from Git, we need to generate the configure script
+ SCONESERVER_AUTORECONF = YES
+-SCONESERVER_DEPENDENCIES += pcre
++SCONESERVER_DEPENDENCIES = host-pkgconf pcre
+ # disable markdown module because its git submodule cmark
+ # https://github.com/sconemad/sconeserver/tree/master/markdown
+ # has no cross-compile support provided by the sconeserver build system
+@@ -46,7 +46,7 @@ SCONESERVER_CONF_OPTS += --without-sconesite
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE),y)
+-SCONESERVER_DEPENDENCIES += imagemagick host-pkgconf
++SCONESERVER_DEPENDENCIES += imagemagick
+ SCONESERVER_CONF_OPTS += \
+ 	--with-sconesite-image \
+ 	--with-Magick++-config="$(STAGING_DIR)/usr/bin/Magick++-config"
+@@ -79,7 +79,7 @@ SCONESERVER_CONF_OPTS += --without-rss
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SCONESERVER_LOCATION),y)
+-SCONESERVER_DEPENDENCIES += host-pkgconf gpsd
++SCONESERVER_DEPENDENCIES += gpsd
+ SCONESERVER_CONF_OPTS += --with-location
+ else
+ SCONESERVER_CONF_OPTS += --without-location
