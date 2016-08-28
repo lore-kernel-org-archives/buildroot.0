@@ -1,78 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Aug 2016 15:52:14 +0200
-Subject: [Buildroot] [git commit] libamcodec: fix build with musl
-Message-ID: <20160828135224.5EEEE8212B@busybox.osuosl.org>
+Date: Sun, 28 Aug 2016 15:52:13 +0200
+Subject: [Buildroot] [git commit] libiio: do not install systemd service
+	file, no longer available
+Message-ID: <20160828135224.4F9648212B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=471b1b0ef6e41a5c769e8efb3af073277042c3d6
+commit: https://git.buildroot.net/buildroot/commit/?id=83ca53ba30ba7ba291f12ea69447de7209aa2258
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a patch to the libamcodec in order to fix the build
-with musl, which was failing due to missing <stdint.h> includes.
+Since the bump to libiio 0.7, the systemd service file that used to be
+in debian/iiod.service no longer exists. The entire debian/ directory
+has been removed from the upstream project:
+
+  https://github.com/analogdevicesinc/libiio/commit/5d49f58982b0c15545bc70724304fbc580e6523c
+
+Due to this, the installation of this service file fails, and causes
+build failures. To address this, we simply remove the installation of
+the systemd service file.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/1f3b0d483603fb69765c15c7189ff975b72d09c3/
+  http://autobuild.buildroot.net/results/ce2fc81466abd9619aa104c96234d1455de3480d/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Include-stdint.h-where-needed.patch       | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ package/libiio/libiio.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/libamcodec/0001-Include-stdint.h-where-needed.patch b/package/libamcodec/0001-Include-stdint.h-where-needed.patch
-new file mode 100644
-index 0000000..6d588f6
---- /dev/null
-+++ b/package/libamcodec/0001-Include-stdint.h-where-needed.patch
-@@ -0,0 +1,47 @@
-+From ff6d4326f839321c079d60ae9301c6202942f675 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 27 Aug 2016 14:31:04 +0200
-+Subject: [PATCH] Include <stdint.h> where needed
-+
-+The {u,}int{8,16,32}_t types are defined in <stdint.h>, so it should be
-+included when such types are used.
-+
-+Not including <stdint.h> might work by accident with some C libraries
-+due to it being included by other headers, but it for example causes
-+build failures with the musl C library.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Upstream-status: https://github.com/mdrjr/c2_aml_libs/pull/1
-+---
-+ amadec/audio-dec.h               | 1 +
-+ amavutils/include/Amvideoutils.h | 2 ++
-+ 2 files changed, 3 insertions(+)
-+
-+diff --git a/amadec/audio-dec.h b/amadec/audio-dec.h
-+index 4325fe4..ac0f36b 100644
-+--- a/amadec/audio-dec.h
-++++ b/amadec/audio-dec.h
-+@@ -12,6 +12,7 @@
-+ #define AUDIO_DEC_H
-+ 
-+ #include<pthread.h>
-++#include <stdint.h>
-+ 
-+ #include <audio-out.h>
-+ #include <audiodsp.h>
-+diff --git a/amavutils/include/Amvideoutils.h b/amavutils/include/Amvideoutils.h
-+index 6f978e4..94f10a6 100644
-+--- a/amavutils/include/Amvideoutils.h
-++++ b/amavutils/include/Amvideoutils.h
-+@@ -5,6 +5,8 @@
-+ extern "C" {
-+ #endif
-+ 
-++#include <stdint.h>
-++
-+ #define HDMI_HDCP_PASS           (1)
-+ #define HDMI_HDCP_FAILED      (0)
-+ #define HDMI_NOCONNECT        (-1)
-+-- 
-+2.7.4
-+
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+index 3cbfdd6..e8fb6b2 100644
+--- a/package/libiio/libiio.mk
++++ b/package/libiio/libiio.mk
+@@ -79,13 +79,6 @@ define LIBIIO_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/libiio/S99iiod \
+ 		$(TARGET_DIR)/etc/init.d/S99iiod
+ endef
+-define LIBIIO_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	$(INSTALL) -D -m 0644 $(@D)/debian/iiod.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/iiod.service
+-	ln -fs ../../../../usr/lib/systemd/system/iiod.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/iiod.service
+-endef
+ endif
+ 
+ $(eval $(cmake-package))
