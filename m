@@ -1,51 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Aug 2016 15:52:13 +0200
-Subject: [Buildroot] [git commit] libiio: do not install systemd service
-	file, no longer available
-Message-ID: <20160828135224.4F9648212B@busybox.osuosl.org>
+Date: Sun, 28 Aug 2016 15:52:43 +0200
+Subject: [Buildroot] [PATCH] libamcodec: fix build with musl
+In-Reply-To: <1472301468-30919-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1472301468-30919-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160828155243.35a1d9e2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83ca53ba30ba7ba291f12ea69447de7209aa2258
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Since the bump to libiio 0.7, the systemd service file that used to be
-in debian/iiod.service no longer exists. The entire debian/ directory
-has been removed from the upstream project:
+On Sat, 27 Aug 2016 14:37:48 +0200, Thomas Petazzoni wrote:
+> This commit adds a patch to the libamcodec in order to fix the build
+> with musl, which was failing due to missing <stdint.h> includes.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/1f3b0d483603fb69765c15c7189ff975b72d09c3/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  .../0001-Include-stdint.h-where-needed.patch       | 47 ++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 package/libamcodec/0001-Include-stdint.h-where-needed.patch
 
-  https://github.com/analogdevicesinc/libiio/commit/5d49f58982b0c15545bc70724304fbc580e6523c
+Applied to master, thanks.
 
-Due to this, the installation of this service file fails, and causes
-build failures. To address this, we simply remove the installation of
-the systemd service file.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/ce2fc81466abd9619aa104c96234d1455de3480d/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libiio/libiio.mk | 7 -------
- 1 file changed, 7 deletions(-)
-
-diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-index 3cbfdd6..e8fb6b2 100644
---- a/package/libiio/libiio.mk
-+++ b/package/libiio/libiio.mk
-@@ -79,13 +79,6 @@ define LIBIIO_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/libiio/S99iiod \
- 		$(TARGET_DIR)/etc/init.d/S99iiod
- endef
--define LIBIIO_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	$(INSTALL) -D -m 0644 $(@D)/debian/iiod.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/iiod.service
--	ln -fs ../../../../usr/lib/systemd/system/iiod.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/iiod.service
--endef
- endif
- 
- $(eval $(cmake-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
