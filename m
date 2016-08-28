@@ -1,33 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Aug 2016 20:19:53 +0200
-Subject: [Buildroot] [PATCH 1/2] package/sconeserver: needs host-pkgconf
-Message-ID: <1472408394-20573-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 28 Aug 2016 20:19:54 +0200
+Subject: [Buildroot] [PATCH 2/2] package/sconeserver: needs shared libs or
+	non uClibc toolchain
+In-Reply-To: <1472408394-20573-1-git-send-email-yann.morin.1998@free.fr>
+References: <1472408394-20573-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1472408394-20573-2-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sconeserver uses pkg-config macros, so it needs host-pkgconf.
+sconeserver wants to use dlopen(), unconditionally: it does not try to
+detect it, and it can't work without it (the code is not conditional).
+
+So, when the toolchain uses uClibc, and that uClibc has been configured
+with only static support, the dlopen() functions are not available at
+all, and the corresponding headers are not present:
+
+    ModuleLoader.cpp:29:19: fatal error: dlfcn.h: No such file or directory
+     #include <dlfcn.h>
+                       ^
+
+However, we can't know if uClibc has shared support or is static-only,
+especially for external toolchains.
+
+The only way is to forbid the combination {uClibc,static}. So we may
+indeed forbid working combinations, for example if the external
+toolchain is uClibc-based and has support for shared libs...
+
+Fixes:
+    http://autobuild.buildroot.org/results/e92/e929799366e6f574c7b08d8635b18623afd3e3e1/
 
 Reported-by: Matthew Weber <matt@thewebers.ws>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/sconeserver/sconeserver.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/sconeserver/Config.in | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-index e02c1a6..42901c6 100644
---- a/package/sconeserver/sconeserver.mk
-+++ b/package/sconeserver/sconeserver.mk
-@@ -10,7 +10,7 @@ SCONESERVER_LICENSE = GPLv2+
- SCONESERVER_LICENSE_FILES = COPYING
- # fetching from Git, we need to generate the configure script
- SCONESERVER_AUTORECONF = YES
--SCONESERVER_DEPENDENCIES += pcre
-+SCONESERVER_DEPENDENCIES = host-pkgconf pcre
- # disable markdown module because its git submodule cmark
- # https://github.com/sconemad/sconeserver/tree/master/markdown
- # has no cross-compile support provided by the sconeserver build system
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index 4083aa7..5059570 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -2,6 +2,7 @@ menuconfig BR2_PACKAGE_SCONESERVER
+ 	bool "sconeserver"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC || !BR2_STATIC_LIBS # dlopen()
+ 	select BR2_PACKAGE_PCRE
+ 	help
+ 	  Sconeserver is a modular, object-orientated and extremely versatile
+@@ -103,4 +104,9 @@ comment "ui module requires X.org"
+ endif # BR2_PACKAGE_SCONESERVER
+ 
+ comment "sconeserver needs a toolchain w/ C++, NPTL"
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC || !BR2_STATIC_LIBS
++
++comment "sconeserver needs a toolchain with dynamic library, C++, NPTL"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_TOOLCHAIN_USES_UCLIBC && BR2_STATIC_LIBS
 -- 
 2.7.4
