@@ -1,48 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Aug 2016 23:48:05 +0200
-Subject: [Buildroot] [PATCH RFC] Revert "Added local directory as source
- of kernel code"
-In-Reply-To: <87twe4aav2.fsf@dell.be.48ers.dk>
-References: <1467066844-28355-1-git-send-email-yann.morin.1998@free.fr>
- <20160827222353.02bc0df2@free-electrons.com>
- <87twe4aav2.fsf@dell.be.48ers.dk>
-Message-ID: <20160828214805.GE5758@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 28 Aug 2016 23:55:20 +0200
+Subject: [Buildroot] [PATCHv2] Revert "Added local directory as source
+	of kernel code"
+In-Reply-To: <1472338984-3588-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 28 Aug 2016 01:03:04 +0200")
+References: <1472338984-3588-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87eg588son.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On 2016-08-28 22:37 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
->  > Peter, Yann,
->  > Peter: do you have an opinion on this patch. If not, I think I'm going
->  > to apply it, so please raise your opinion if you disagree.
-> 
-> There probably are users of the option somewhere, so removing it will be
-> a bit annoying for them
+ > This reverts commit 73da2ff6f718f2889e3c5024d899f8d58f502863.
+ > The reason for adding support for a local location was to be able to do
+ > development on the Linux kernel source tree on a local directory rather
+ > than have to clone it for every build.
 
-There are *always* users of any option we deprecate or remove.
+ > We already have a mechanism for that, it's called override-srcdir. It's
+ > been available since September 2011, more than a year before this patch
+ > was committed.
 
-All we can do is make it easy for them to upgrade. Override-srcdir has
-been available for ages now (5 years in September), so it's not as if
-it were something new or complex to use.
+ > Otherwise, we're going to be adding support for local sources in other
+ > packages. First was U-Boot as submitted by Adam. But what next? We can't
+ > have such support for all packages, especially since override-srcdir
+ > does the job.
 
-> - But changing to override srcdir should be
-> fairly simple so I'm fine with it (for next).
+ > Besides, using a local source tree makes the build non-reproducible, so
+ > we don't really want to have this in a .config (or defconfig).
 
-Yes, obviously that's for next now.
+ > We only handle the boolean option in legacy, as there is nothing we can
+ > do with the directory path.
 
-Regards,
-Yann E. MORIN.
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Rafal Fabich <rafal.fabich@gmail.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Adam Duskett <aduskett@gmail.com>
+
+ > ---
+ > Changes v1 -> v2:
+ >   - add legacy handling  (Thomas)
+ >   - don't change the local tarball version handling in linux.mk
+ >     (Thomas)
+
+ > ---
+ > Rafal, if your use-case was just to use a local tree for development
+ > purposes, please see to using the override-srcdir mechanism instead.
+ > If you had another use-case that requires using a local source tree,
+ > could you explain it, please? Thanks!
+ > ---
+ >  Config.in.legacy | 12 ++++++++++++
+ >  linux/Config.in  | 13 -------------
+ >  linux/linux.mk   |  3 ---
+ >  3 files changed, 12 insertions(+), 16 deletions(-)
+
+ > diff --git a/Config.in.legacy b/Config.in.legacy
+ > index 746b80a..dafaf40 100644
+ > --- a/Config.in.legacy
+ > +++ b/Config.in.legacy
+ > @@ -143,6 +143,18 @@ comment "----------------------------------------------------"
+ >  endif
+ 
+ >  ###############################################################################
+ > +comment "Legacy options removed in 2016.11"
+ > +
+ > +config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+ > +	bool "Linux kernel local directory option removed"
+ > +	help
+ > +	  The option to select a local ditrectory as the source of the Linux
+
+s/ditrectory/directory/
+
+Committed to next with that fixed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Venlig hilsen,
+Peter Korsgaard 
