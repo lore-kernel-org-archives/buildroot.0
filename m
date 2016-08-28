@@ -1,36 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Aug 2016 12:49:33 +0200
-Subject: [Buildroot] [PATCH 12/16 v3] core: handle .br-external in a
- make rule
-In-Reply-To: <20160827222235.GO5755@free.fr>
-References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <0994022779466155b22c6e815e737d21c447a528.1468750623.git.yann.morin.1998@free.fr>
- <20160827221613.2c753c17@free-electrons.com>
- <20160827222235.GO5755@free.fr>
-Message-ID: <20160828124933.799d0713@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 28 Aug 2016 13:15:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libxmlrpc: Fix build with gcc6
+Message-ID: <20160828111559.16653-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes
+http://autobuild.buildroot.net/results/c45/c45530f34bf2074bd204c485615124df928f246c/
 
-On Sun, 28 Aug 2016 00:22:35 +0200, Yann E. MORIN wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libxmlrpc/0006-narrowing.patch | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 package/libxmlrpc/0006-narrowing.patch
 
-> > I'm probably missing something, but where is this make target being
-> > "triggered" ?  
-> 
-> When make encounters a -include directive, and the file to be included
-> is the target of a rule, then make will trigger the rule before including
-> the file, even if the rule is defined after the inclusion (make parses
-> makefiles in multiple passes).
-
-Ah, OK. Didn't know that arguments of the include directive where
-handled as make targets. Make sense, thanks!
-
-Thomas
+diff --git a/package/libxmlrpc/0006-narrowing.patch b/package/libxmlrpc/0006-narrowing.patch
+new file mode 100644
+index 0000000..43a5ca5
+--- /dev/null
++++ b/package/libxmlrpc/0006-narrowing.patch
+@@ -0,0 +1,20 @@
++Fix build with gcc6
++
++Downloaded from
++https://build.opensuse.org/package/view_file/devel:libraries:c_c++/xmlrpc-c/narrowing.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++Index: xmlrpc-c-1.33.18/src/cpp/base64.cpp
++===================================================================
++--- xmlrpc-c-1.33.18.orig/src/cpp/base64.cpp
+++++ xmlrpc-c-1.33.18/src/cpp/base64.cpp
++@@ -14,7 +14,7 @@ using namespace xmlrpc_c;
++ 
++ namespace {
++ 
++-char const table_a2b_base64[] = {
+++signed char const table_a2b_base64[] = {
++     -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
++     -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
++     -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,62, -1,-1,-1,63,
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
