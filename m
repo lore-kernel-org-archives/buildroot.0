@@ -1,41 +1,60 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Sun, 28 Aug 2016 14:41:03 +0200
-Subject: [Buildroot] [PATCH] wine: Bump to version 1.8.4
-Message-ID: <1472388063-7485-1-git-send-email-nerv@dawncrow.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 28 Aug 2016 10:11:39 -0300
+Subject: [Buildroot] [PATCH] webkitgtk: security bump to version 2.12.4
+Message-ID: <1472389899-29460-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumping to stable version 1.8.4
+Fixes:
+CVE-2016-4590 - mishandles about: URLs, which allows remote attackers to
+bypass the Same Origin Policy via a crafted web site.
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+CVE-2016-4591 - mishandles the location variable, which allows remote
+attackers to access the local filesystem via unspecified vectors.
+
+CVE-2016-4622 - allows remote attackers to execute arbitrary code or
+cause a denial of service (memory corruption) via a crafted web site, a
+different vulnerability than CVE-2016-4589, CVE-2016-4623, and
+CVE-2016-4624.
+
+CVE-2016-4624 - allows remote attackers to execute arbitrary code or
+cause a denial of service (memory corruption) via a crafted web site, a
+different vulnerability than CVE-2016-4589, CVE-2016-4622, and
+CVE-2016-4623.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/wine/wine.hash | 2 +-
- package/wine/wine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 6 +++---
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index 3f856ba..d58ac02 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 d7cecdf7aab93bfe950e6f83ec526681b8770788c7b2a802bfe50ff97fc17a6c wine-1.8.3.tar.bz2
-+sha256 515d10439777a4816fe5b0a0fc9a4ce498a2ecfd23eba0c25dc00f3d6c805079 wine-1.8.4.tar.bz2
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 632eed3..aceea35 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index faccb3f..f74677e 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From http://www.webkitgtk.org/releases/webkitgtk-2.12.3.tar.xz.sha1
+-sha1	d6a0d598c09d2d56ba0862f8d9206e89d75317cb	webkitgtk-2.12.3.tar.xz
++# From http://www.webkitgtk.org/releases/webkitgtk-2.12.4.tar.xz.sha1
++sha1	ebfe6015d81129b6a13a9596d065c54e9c1b93f6	webkitgtk-2.12.4.tar.xz
+ # Calculated based on the hash above
+-sha256	173cbb9a2eca23eee52e99965483ab25aa9c0569ef5b57041fc0c129cc26c307	webkitgtk-2.12.3.tar.xz
++sha256	424d3177599abbc1eb1a1ad7928dd280a62006e992f2fada2e059375a9609a77	webkitgtk-2.12.4.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 2479872..f5c4334 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WINE_VERSION = 1.8.3
-+WINE_VERSION = 1.8.4
- WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
- WINE_SITE = https://dl.winehq.org/wine/source/1.8
- WINE_LICENSE = LGPLv2.1+
+-WEBKITGTK_VERSION = 2.12.3
++WEBKITGTK_VERSION = 2.12.4
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 -- 
-2.7.4
+2.7.3
