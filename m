@@ -1,42 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Aug 2016 14:59:01 +0200
-Subject: [Buildroot] [git commit] docs/manual: Document the variable
-	$(PKG)_DL_OPTS
-Message-ID: <20160902142938.F1B2C7FB67@busybox.osuosl.org>
+Date: Sun, 28 Aug 2016 15:50:57 +0200
+Subject: [Buildroot] [git commit] wine: Bump to version 1.8.4
+Message-ID: <20160902142941.35D4E7FA6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03f12377178e209f599f00b3fafb33dfa649abc7
+commit: https://git.buildroot.net/buildroot/commit/?id=6fc7a761480b888fa05015b28045377af2afa7c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This adds a description of the optional variable $(PKG)_DL_OPTS. When it
-is set, this option passes additional options to the downloader.
+Bumping to stable version 1.8.4
 
-Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-generic.txt | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/wine/wine.hash | 2 +-
+ package/wine/wine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index ef895ec..51408e8 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -250,6 +250,13 @@ information is (assuming the package name is +libfoo+) :
-     +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
-     +LIBFOO_SITE=$(TOPDIR)/../src/libfoo+
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index 3f856ba..d58ac02 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 d7cecdf7aab93bfe950e6f83ec526681b8770788c7b2a802bfe50ff97fc17a6c wine-1.8.3.tar.bz2
++sha256 515d10439777a4816fe5b0a0fc9a4ce498a2ecfd23eba0c25dc00f3d6c805079 wine-1.8.4.tar.bz2
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 632eed3..aceea35 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+* +LIBFOO_DL_OPTS+ is a space-separated list of additional options to
-+  pass to the downloader. Useful for retrieving documents with
-+  server-side checking for user logins and passwords, or to use a proxy.
-+  All download methods valid for +LIBFOO_SITE_METHOD+ are supported;
-+  valid options depend on the download method (consult the man page
-+  for the respective download utilities).
-+
- * +LIBFOO_EXTRA_DOWNLOADS+ is a space-separated list of additional
-   files that Buildroot should download. If an entry contains +://+
-   then Buildroot will assume it is a complete URL and will download
+-WINE_VERSION = 1.8.3
++WINE_VERSION = 1.8.4
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
+ WINE_SITE = https://dl.winehq.org/wine/source/1.8
+ WINE_LICENSE = LGPLv2.1+
