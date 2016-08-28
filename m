@@ -1,48 +1,81 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Sun, 28 Aug 2016 16:10:46 +0200
-Subject: [Buildroot] [PATCH] openal: Explicitly enable/disable NEON
- support to avoid trouble with precompiled toolchains
-In-Reply-To: <20160828155006.0abb2572@free-electrons.com>
-References: <1472387820-6783-1-git-send-email-nerv@dawncrow.de>
- <20160828155006.0abb2572@free-electrons.com>
-Message-ID: <ed871b54-3861-1b9e-e557-eb46e0887acc@dawncrow.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 28 Aug 2016 16:36:47 +0200
+Subject: [Buildroot] [PATCH] package/systemd: importd broken on Sourcery
+ CodeBench ARM 2014.05
+In-Reply-To: <20160828092904.2a7d4e0e@free-electrons.com>
+References: <1468187781-7497-1-git-send-email-yann.morin.1998@free.fr>
+ <20160711110225.19dfaa5f@free-electrons.com>
+ <20160711171630.GD3734@free.fr>
+ <20160827233227.27f54621@free-electrons.com>
+ <20160827214849.GI5755@free.fr>
+ <20160828092904.2a7d4e0e@free-electrons.com>
+Message-ID: <20160828143647.GB5758@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 28.08.2016 um 15:50 schrieb Thomas Petazzoni:
-> Hello,
-> 
-> Why do you think the problem is with "precompiled" toolchains only?
+Thomas, All,
 
-Because the bug is about mismatch between target settings made in the buildroot config and the toolchain default target settings.
-
+On 2016-08-28 09:29 +0200, Thomas Petazzoni spake thusly:
+> > >  * Add a workaround in the systemd code to define O_TMPFILE to the
+> > >    proper value when not provided by the C library.  
+> > 
+> > At the same time, I'm not really happy with patching systemd...
+> > 
+> > O_TMPFILE is not the same value on all archs: generic, alpha, parisc and
+> > sparc.
 > 
-> On Sun, 28 Aug 2016 14:37:00 +0200, Andr? Hentschel wrote:
->> Fixes:
->> http://autobuild.buildroot.net/results/d7ccef77a355ccc23f26d012e8441af931469ae4
->> http://autobuild.buildroot.net/results/b5777a0ed33f6bb7a5fc0486ea21ecef58615dac
->> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
->> ---
->>  package/openal/openal.mk | 7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/package/openal/openal.mk b/package/openal/openal.mk
->> index 2916aa6..8205f9e 100644
->> --- a/package/openal/openal.mk
->> +++ b/package/openal/openal.mk
->> @@ -50,4 +50,11 @@ ifeq ($(BR2_STATIC_LIBS),y)
->>  OPENAL_CONF_OPTS += -DLIBTYPE=STATIC
->>  endif
->>  
->> +# Explicitly enable/disable NEON support to avoid trouble with precompiled toolchains
->> +ifeq ($(BR2_ARM_FPU_NEON)$(BR2_ARM_FPU_NEON_VFPV4),y)
+> I must say I still don't understand the overlap of the kernel headers
+> and glibc here. 
 > 
-> I believe you should use BR2_ARM_CPU_HAS_NEON instead.
+> In the kernel, we have:
+> 
+> include/uapi/asm-generic/fcntl.h:#define __O_TMPFILE    020000000
+> 
+> In glibc, we have:
+> 
+> sysdeps/unix/sysv/linux/bits/fcntl-linux.h:# define __O_TMPFILE   (020000000 | __O_DIRECTORY)
+> 
+> Which is not even the same value.
 
-Thought so too, looked into it, failed. It really depends on the FPU setting.
-I know there's no other package doing this kind of check...
-Other options are to always disable neon or to extend the checking in openal cmake script with a patch.
-(I won't be able to patch it as my cmake skills are very low)
+Ah, I got the answer to that one! :-)
+
+O_TMPFILE is defined as such to be sure to break at runtime on old
+kernels that do not have O_TMPFILE, becasue open() silently ignores
+unknown flags. So, a userland app may request O_TMPFILE but silently not
+get it:
+
+    https://lwn.net/Articles/558940/
+
+> I'd still say that patching systemd is the easiest solution, and we
+> will be able to remove this patch once we get rid of those too old
+> toolchains (which we will have to do at some point, when they become
+> too annoying / irrelevant).
+
+Fact is, upstream has a missing.h header that defines O_TMPFILE if not
+already defined.
+
+But they do it only for __i386__ and __x86_64__:
+
+    https://github.com/systemd/systemd/blob/master/src/basic/missing.h#L540
+
+So the fix will be two-fold:
+
+  - use missing.h from importd, 
+
+  - enhance missing.h to also define O_TMPFILE for other archs.
+
+I'll be doing that shortly (first already done).
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
