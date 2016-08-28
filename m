@@ -1,64 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Aug 2016 00:07:34 +0200
-Subject: [Buildroot] [PATCH] package/libfreeimage: fix C++11 compliance with
-	gcc-6
-Message-ID: <1472422054-6058-1-git-send-email-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Aug 2016 00:09:41 +0200
+Subject: [Buildroot] [PATCH 2/2] package/sconeserver: needs shared libs
+	or non uClibc toolchain
+In-Reply-To: <1472408394-20573-2-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 28 Aug 2016 20:19:54 +0200")
+References: <1472408394-20573-1-git-send-email-yann.morin.1998@free.fr>
+ <1472408394-20573-2-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87wpj07dga.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Like in cbe01f6, 38249d5, 97fe953, fix C++11 compliance regarding
-narrowing types.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fixes:
-    http://autobuild.buildroot.org/results/081/0811531872f69f9febbdc482dfbdd7fb5c35d1c8/
-    http://autobuild.buildroot.org/results/90c/90c9cb4ffe705b8c91f4fb602e33e2ba9bcdee77/
-    and a few others...
+ > sconeserver wants to use dlopen(), unconditionally: it does not try to
+ > detect it, and it can't work without it (the code is not conditional).
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/libfreeimage/0004-fix-gcc-6.patch | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/libfreeimage/0004-fix-gcc-6.patch
+ > So, when the toolchain uses uClibc, and that uClibc has been configured
+ > with only static support, the dlopen() functions are not available at
+ > all, and the corresponding headers are not present:
 
-diff --git a/package/libfreeimage/0004-fix-gcc-6.patch b/package/libfreeimage/0004-fix-gcc-6.patch
-new file mode 100644
-index 0000000..53702d1
---- /dev/null
-+++ b/package/libfreeimage/0004-fix-gcc-6.patch
-@@ -0,0 +1,31 @@
-+libraw/dc_raw: fix gcc-6 failures
-+
-+With gcc-6, it is no longer allowed to narrow the type of constants in
-+a constant array declaration.
-+
-+Fixes:
-+    http://autobuild.buildroot.org/results/081/0811531872f69f9febbdc482dfbdd7fb5c35d1c8/build-end.log
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN a/Source/LibRawLite/internal/dcraw_common.cpp b/Source/LibRawLite/internal/dcraw_common.cpp
-+--- a/Source/LibRawLite/internal/dcraw_common.cpp
-++++ b/Source/LibRawLite/internal/dcraw_common.cpp
-+@@ -2479,7 +2479,7 @@
-+ 
-+ void CLASS kodak_radc_load_raw()
-+ {
-+-  static const char src[] = {
-++  static const int src[] = {
-+     1,1, 2,3, 3,4, 4,2, 5,7, 6,5, 7,6, 7,8,
-+     1,0, 2,1, 3,3, 4,4, 5,2, 6,7, 7,6, 8,5, 8,8,
-+     2,1, 2,3, 3,0, 3,2, 3,4, 4,6, 5,5, 6,7, 6,8,
-+@@ -4519,7 +4519,7 @@
-+  */
-+ void CLASS vng_interpolate()
-+ {
-+-  static const signed char *cp, terms[] = {
-++  static const int *cp, terms[] = {
-+     -2,-2,+0,-1,0,0x01, -2,-2,+0,+0,1,0x01, -2,-1,-1,+0,0,0x01,
-+     -2,-1,+0,-1,0,0x02, -2,-1,+0,+0,0,0x03, -2,-1,+0,+1,1,0x01,
-+     -2,+0,+0,-1,0,0x06, -2,+0,+0,+0,1,0x02, -2,+0,+0,+1,0,0x03,
+ >     ModuleLoader.cpp:29:19: fatal error: dlfcn.h: No such file or directory
+ >      #include <dlfcn.h>
+ >                        ^
+
+ > However, we can't know if uClibc has shared support or is static-only,
+ > especially for external toolchains.
+
+ > The only way is to forbid the combination {uClibc,static}. So we may
+ > indeed forbid working combinations, for example if the external
+ > toolchain is uClibc-based and has support for shared libs...
+
+Ehh, this I don't get. Why not simply depend on !BR2_STATIC_LIBS like we
+do for other users of dlfcn.h?
+
+If BR2_STATIC_LIBS is enabled then there won't be any .so files in the
+target rootfs, so even if the C library has dlopen support it won't
+work.
+
+If an external (uClibc-based) toolchain has no shared library support
+then it can only be used in BR2_STATIC_LIBS configurations.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
