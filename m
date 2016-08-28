@@ -1,12 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Aug 2016 12:48:25 +0200
-Subject: [Buildroot] [PATCH 10/16 v3] core: introduce per br2-external ID
-In-Reply-To: <20160827215951.GJ5755@free.fr>
+Date: Sun, 28 Aug 2016 12:49:33 +0200
+Subject: [Buildroot] [PATCH 12/16 v3] core: handle .br-external in a
+ make rule
+In-Reply-To: <20160827222235.GO5755@free.fr>
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <a161d4b17c131b471418e4fa979aa73129ad102c.1468750623.git.yann.morin.1998@free.fr>
- <4bce70e5-7e9a-ef8b-6dc8-dbe2356df194@mind.be>
- <20160827215951.GJ5755@free.fr>
-Message-ID: <20160828124825.0c68a5ff@free-electrons.com>
+ <0994022779466155b22c6e815e737d21c447a528.1468750623.git.yann.morin.1998@free.fr>
+ <20160827221613.2c753c17@free-electrons.com>
+ <20160827222235.GO5755@free.fr>
+Message-ID: <20160828124933.799d0713@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +16,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 27 Aug 2016 23:59:51 +0200, Yann E. MORIN wrote:
+On Sun, 28 Aug 2016 00:22:35 +0200, Yann E. MORIN wrote:
 
-> > > +			printf 'config BR2_EXTERNAL_%s\n' $(BR2_EXTERNAL_ID); \
-> > > +			printf '\tstring\n\tdefault "%s"\n\n' $(BR2_EXTERNAL_$(BR2_EXTERNAL_ID)); \  
-> > 
-> >  Why is this config still needed? It was there before because that's the only
-> > way to use it in the 'source' statement, but now that we generate the external
-> > Config.in, I don't think it's needed anymore. Which also removes the need for
-> > the unquoting.  
+> > I'm probably missing something, but where is this make target being
+> > "triggered" ?  
 > 
-> Hmmm.. As far as I can see, it is still needed, because the Config.in
-> files in the br2-external tree may want to include other Config.in
-> files, no?
-> 
-> Like for example (with the variable renamed as per above):
-> 
->     .../ext-tree/Config.in
->         source "$BR2_EXTERNAL_DIR_FOO/package/pkg-1/Config.in"
->         source "$BR2_EXTERNAL_DIR_FOO/package/pkg-2/Config.in"
-> 
-> So it is stil needed to have the path to each br2-external paths from
-> Kconfig.
-> 
-> Unless I missed something?
+> When make encounters a -include directive, and the file to be included
+> is the target of a rule, then make will trigger the rule before including
+> the file, even if the rule is defined after the inclusion (make parses
+> makefiles in multiple passes).
 
-No, I think you're right. I don't see how we can do without this config
-variable, which is needed to communicate the BR2_EXTERNAL locations
-from the make logic down to the Kconfig logic, in order to allow
-Config.in files to include other Config.in files located in
-BR2_EXTERNAL.
+Ah, OK. Didn't know that arguments of the include directive where
+handled as make targets. Make sense, thanks!
 
 Thomas
 -- 
