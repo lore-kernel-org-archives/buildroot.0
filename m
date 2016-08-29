@@ -1,42 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 17:23:41 +0200
-Subject: [Buildroot] [git commit] tinydtls: fix issue on u_intXX_t being
-	undefined when building with musl
-Message-ID: <20160829152356.2B24880108@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 29 Aug 2016 12:27:11 -0300
+Subject: [Buildroot] [PATCH] pango: bump to version 1.40.2
+Message-ID: <1472484431-2631-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07552de23b95b48412be89ca5c162d8855872206
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-  http://autobuild.buildroot.net/results/928be69f90476e6b04be3a1afd3b74112bcac0a0
-
-As mentioned in sha2/README, by default, tinydtls uses u_intXX_t data types
-for 8 bit, 32 bit, and 64 bit unsigned integer type definitions.  To use
-uintXX_t data types as defined by recent ANSI C standards and as included in
-the inttypes.h header file, SHA2_USE_INTTYPES_H has to be define at compile
-time.
-
-[Peter: reword/simplify]
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/tinydtls/tinydtls.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/pango/pango.hash | 4 ++--
+ package/pango/pango.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tinydtls/tinydtls.mk b/package/tinydtls/tinydtls.mk
-index 90796b1..fe25001 100644
---- a/package/tinydtls/tinydtls.mk
-+++ b/package/tinydtls/tinydtls.mk
-@@ -11,5 +11,7 @@ TINYDTLS_LICENSE = MIT
- TINYDTLS_LICENSE_FILES = tinydtls.h
- TINYDTLS_INSTALL_STAGING = YES
- TINYDTLS_STRIP_COMPONENTS = 2
-+# use inttypes.h data types instead of u_intXX_t for musl compatibility
-+TINYDTLS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DSHA2_USE_INTTYPES_H"
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 67b67f0..036838c 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.36/pango-1.40.1.sha256sum
+-sha256	e27af54172c72b3ac6be53c9a4c67053e16c905e02addcf3a603ceb2005c1a40	pango-1.40.1.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.2.sha256sum
++sha256	90582a02bc89318d205814fc097f2e9dd164d26da5f27c53ea42d583b34c3cd1	pango-1.40.2.tar.xz
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index bdad8c6..ba07aec 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- $(eval $(autotools-package))
+ PANGO_VERSION_MAJOR = 1.40
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).1
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).2
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_AUTORECONF = YES
+-- 
+2.7.3
