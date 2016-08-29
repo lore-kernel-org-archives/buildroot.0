@@ -1,11 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 30 Aug 2016 00:40:59 +0200
-Subject: [Buildroot] [PATCH/next 2/2] gcc: remove BR2_GCC_ENABLE_TLS
- option
-In-Reply-To: <1472507657-9983-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1472507657-9983-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1472507657-9983-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <68f877ee-c37e-c7b8-d83e-0c2d7c5b8e15@mind.be>
+Date: Tue, 30 Aug 2016 00:46:37 +0200
+Subject: [Buildroot] [PATCH 06/16 v3] core: introduce a generated
+ kconfig snippet
+In-Reply-To: <20160829221610.GC5829@free.fr>
+References: <cover.1468750623.git.yann.morin.1998@free.fr>
+ <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
+ <20160827161601.2fd0e8f5@free-electrons.com>
+ <87poosaa9d.fsf@dell.be.48ers.dk> <20160829221610.GC5829@free.fr>
+Message-ID: <b560c751-1ce1-f45a-5ab7-2e06ba169530@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,119 +16,53 @@ To: buildroot@busybox.net
 
 
 
-On 29-08-16 23:54, Thomas Petazzoni wrote:
-> The current BR2_GCC_ENABLE_TLS can cause users to make incorrect
-> choices, and is not very useful. This options allows to decide whether
-> we pass --enable-tls or --disable-tls to gcc, to enable or disable
-> support for Thread Local Storage.
+On 30-08-16 00:16, Yann E. MORIN wrote:
+> Peter, Thomas, All,
 > 
-> Its behavior is:
+> On 2016-08-28 22:50 +0200, Peter Korsgaard spake thusly:
+>>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>  > On Sun, 17 Jul 2016 12:34:26 +0200, Yann E. MORIN wrote:
+>>  >> +# Ensure the kconfig snippet is generated (for MANUAL_GEN_LISTS, below):
+>>  >> +MANUAL_DEPENDENCIES += prepare-kconfig
+>>
+>>  > It's a bit crazy the complexity that we have just to allow our manual
+>>  > to have the list of all packages in Buildroot. I'm not even sure this
+>>  > section of the manual is that useful, to be honest. But oh well, that's
+>>  > supported today, so we have to continue support it.
+>>
+>> Why do we _HAVE_ to continue to support it?
+>>
+>> If we don't find the complexity worth the added value (I personally
+>> don't, I think we could just ask people to look under package/ for the
+>> list of packages), then we should just remove it.
 > 
->  - The option is default to "y" but only exists if we're using
->    uClibc/NPTL or glibc.
+> I'm not entirely against removing the list of out packages from our
+> manual.
 > 
->  - When we're using uClibc, the option can be disabled.
+> Yet, for some users of br2-external trees, they may still want to have
+> the list of their packages in their manuals, build with the asciidoc
+> infrastructure.
 > 
-> So, in practice, this means that currently:
-> 
->  - TLS support is always on for glibc
-> 
->  - TLS support is on by default for uClibc/NPTL, but can be disabled in
->    the configuration. This is in fact bad and causes the build failure
->    reported in bug #7424 (this bug is still reproducible on master)
-> 
->  - TLS support is always disabled for uClibc/no-thread and
->    uClibc/linuxthreads.
-> 
->  - TLS support is always disabled for musl. This does not cause any
->    build failure, but musl can use TLS support, and therefore be more
->    efficient. According to
->    http://www.openwall.com/lists/musl/2012/10/04/1, "Note that if you've
->    been building gcc with --disable-tls, __thread was already working
->    but gets emulated (very poorly; it's slow and will abort() if it runs
->    out of memory) through libgcc.".
-> 
-> So, this commit completely removes the BR2_GCC_ENABLE_TLS and instead
-> makes the right choice inside gcc.mk directly:
-> 
->  - TLS support enabled for glibc, musl and uClibc/NPTL
-> 
->  - TLS support in other cases, i.e uClibc/no-thread and
->    uClibc/linuxthreads.
-> 
-> We have intentionally *not* added the option to
-> Config.in.legacy. Indeed, the new behavior is *exactly* the same as the
-> older behavior, with the exception of:
-> 
->  - People can no longer disable TLS support in uClibc/NPTL, which was
->    anyway causing a build failure and therefore was not used.
-> 
->  - TLS support is now enabled on musl, but people using musl already had
->    BR2_GCC_ENABLE_TLS not set, so they wouldn't get the legacy warning.
-> 
-> Fixes bug #7424.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> It is entirely imaginable that such users of br2-external have packages
+> annotated with some documentation for those packages, and want to
+> include that doc in their manual, so need to generate that list from
+> Kconfig.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ I'm not really enthousiastic about keeping complexity in our Makefiles for
+imaginary users that may want to have such and such feature :-P
 
- but one small nit:
+ I'm very enthousiastic when people contribute some feature that I'm never going
+to use myself - but in that case, we know that there is at least one user (the
+contributor). But here, we really have added a feature with no known users. At
+the time, it didn't add (much) complexity, but more and more it's starting to
+weigh down I think.
 
-> ---
->  package/gcc/Config.in.host | 8 --------
->  package/gcc/gcc.mk         | 4 +++-
->  2 files changed, 3 insertions(+), 9 deletions(-)
-> 
-> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index 37728e0..8ed946b 100644
-> --- a/package/gcc/Config.in.host
-> +++ b/package/gcc/Config.in.host
-> @@ -148,14 +148,6 @@ config BR2_TOOLCHAIN_BUILDROOT_FORTRAN
->  	  Fortran language and you want Fortran libraries to be
->  	  installed on your target system.
->  
-> -config BR2_GCC_ENABLE_TLS
-> -	bool "Enable compiler tls support" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
-> -	default y
-> -	depends on BR2_PTHREADS_NATIVE || BR2_TOOLCHAIN_BUILDROOT_GLIBC
-> -	help
-> -	  Enable the compiler to generate code for accessing
-> -	  thread local storage variables
-> -
->  config BR2_GCC_ENABLE_LTO
->  	bool "Enable compiler link-time-optimization support"
->  	select BR2_BINUTILS_ENABLE_LTO
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index 39c3eeb..3d5e3fa 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -133,7 +133,9 @@ ifeq ($(BR2_sparc)$(BR2_sparc64),y)
->  HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
->  endif
->  
-> -ifeq ($(BR2_GCC_ENABLE_TLS),y)
-> +# On glibc, musl and uClibc/NPTL, enable TLS support. Otherwise (i.e
-> +# just uClibc/no-thread and uClibc/linux-threads), disable it.
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_GLIBC)$(BR2_TOOLCHAIN_BUILDROOT_MUSL)$(BR2_PTHREADS_NATIVE),y)
->  HOST_GCC_COMMON_CONF_OPTS += --enable-tls
->  else
->  HOST_GCC_COMMON_CONF_OPTS += --disable-tls
+ For sure, the asciidoc support is even more difficult to understand and
+maintain than the normal package infras.
 
- I think it's slightly easier to understand if the condition is reverted.
-
-# TLS support is not available on uClibc/no-thread and uClibc/linux-threads
-ifeq($(BR2_TOOLCHAIN_BUILDROOT_UCLIBC)$(BR2_PTHREADS)$(BR2_PTHREADS_NONE),yy)
-HOST_GCC_COMMON_CONF_OPTS += --disable-tls
-else
-HOST_GCC_COMMON_CONF_OPTS += --enable-tls
-endif
-
-but it doesn't make a big difference either way.
 
  Regards,
  Arnout
-
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
