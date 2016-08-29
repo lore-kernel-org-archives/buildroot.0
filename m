@@ -1,89 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 12:14:12 +0200
-Subject: [Buildroot] [PATCH] package/libfreeimage: fix C++11 compliance
-	with gcc-6
-In-Reply-To: <1472422054-6058-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Mon, 29 Aug 2016 00:07:34 +0200")
-References: <1472422054-6058-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87a8fv7uh7.fsf@dell.be.48ers.dk>
+From: Connolly, Padraig <padraig.connolly@intel.com>
+Date: Mon, 29 Aug 2016 10:20:18 +0000
+Subject: [Buildroot] [PATCH] [RFC] platform: update galileo to 3.14
+ kernel
+In-Reply-To: <20160823112531.13f75bab@free-electrons.com>
+References: <1471868735-13766-1-git-send-email-padraig.connolly@intel.com>
+ <20160822163337.484cb311@free-electrons.com>
+ <E704BB48EC9FDF4FA0A7A278C2546ACFE25B11@irsmsx105.ger.corp.intel.com>
+ <20160823112531.13f75bab@free-electrons.com>
+Message-ID: <E704BB48EC9FDF4FA0A7A278C2546ACFE27080@irsmsx105.ger.corp.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hi Thomas,
 
- > Like in cbe01f6, 38249d5, 97fe953, fix C++11 compliance regarding
- > narrowing types.
+Currently there is support for the Quark X1000 SoC itself in the upstream Linux Kernel 
+but support for the Galileo Gen 1/2 is not fully upstream, there is a Galileo platform driver that is not upstream.
+There is also some fixes that affect the USB behavior that are not upstream either.
 
- > Fixes:
- >     http://autobuild.buildroot.org/results/081/0811531872f69f9febbdc482dfbdd7fb5c35d1c8/
- >     http://autobuild.buildroot.org/results/90c/90c9cb4ffe705b8c91f4fb602e33e2ba9bcdee77/
- >     and a few others...
+This means anything supported by the platform driver will not work with the upstream kernel, 
+for example GPIO, I2C, and SPI.  USB device support is also less reliable without the fix.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > ---
- >  package/libfreeimage/0004-fix-gcc-6.patch | 31 +++++++++++++++++++++++++++++++
- >  1 file changed, 31 insertions(+)
- >  create mode 100644 package/libfreeimage/0004-fix-gcc-6.patch
+You can find the platform driver in our GitHub repo here : 
+https://github.com/padraigconnolly/Linux-x1000/tree/master/drivers/platform/x86/intel-quark
 
- > diff --git a/package/libfreeimage/0004-fix-gcc-6.patch b/package/libfreeimage/0004-fix-gcc-6.patch
- > new file mode 100644
- > index 0000000..53702d1
- > --- /dev/null
- > +++ b/package/libfreeimage/0004-fix-gcc-6.patch
- > @@ -0,0 +1,31 @@
- > +libraw/dc_raw: fix gcc-6 failures
- > +
- > +With gcc-6, it is no longer allowed to narrow the type of constants in
- > +a constant array declaration.
- > +
- > +Fixes:
- > +    http://autobuild.buildroot.org/results/081/0811531872f69f9febbdc482dfbdd7fb5c35d1c8/build-end.log
- > +
- > +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > +
- > +diff -durN a/Source/LibRawLite/internal/dcraw_common.cpp b/Source/LibRawLite/internal/dcraw_common.cpp
- > +--- a/Source/LibRawLite/internal/dcraw_common.cpp
- > ++++ b/Source/LibRawLite/internal/dcraw_common.cpp
- > +@@ -2479,7 +2479,7 @@
- > + 
- > + void CLASS kodak_radc_load_raw()
- > + {
- > +-  static const char src[] = {
- > ++  static const int src[] = {
- > +     1,1, 2,3, 3,4, 4,2, 5,7, 6,5, 7,6, 7,8,
- > +     1,0, 2,1, 3,3, 4,4, 5,2, 6,7, 7,6, 8,5, 8,8,
- > +     2,1, 2,3, 3,0, 3,2, 3,4, 4,6, 5,5, 6,7, 6,8,
 
-Why not signed char? There doesn't seem to any numbers outside the
-signed char range and I see the code assumes elements are 1 byte big:
+Thanks,
+Padraig Connolly
 
-  for (s=i=0; i < sizeof src; i+=2)
+-----Original Message-----
 
-So I've changed it to signed char.
+Hello,
 
-> +@@ -4519,7 +4519,7 @@
- > +  */
- > + void CLASS vng_interpolate()
- > + {
- > +-  static const signed char *cp, terms[] = {
- > ++  static const int *cp, terms[] = {
- > +     -2,-2,+0,-1,0,0x01, -2,-2,+0,+0,1,0x01, -2,-1,-1,+0,0,0x01,
- > +     -2,-1,+0,-1,0,0x02, -2,-1,+0,+0,0,0x03, -2,-1,+0,+1,1,0x01,
- > +     -2,+0,+0,-1,0,0x06, -2,+0,+0,+0,1,0x02, -2,+0,+0,+1,0,0x03,
+On Tue, 23 Aug 2016 08:05:15 +0000, Connolly, Padraig wrote:
 
-According to the error message this was a real functional bug, and not
-just something to fix for gcc 6 compliance:
+> Could you elaborate on this preference please, in the previous version 
+> for the Galileo the defconfig pulled the kernel in a similar way I 
+> have done.  The future plan is once everything is approved, we will 
+> update R. Kinsella's repo with the 3.14 kernel and the defconfig will 
+> pull from there instead of mine as it did before.  I'm only using my 
+> repo as a temp for working on.
 
-Source/LibRawLite/./internal/dcraw_common.cpp:4545:3: error: narrowing conversion of '136' from 'int' to 'signed char' inside { } [-Wnarrowing]
-Source/LibRawLite/./internal/dcraw_common.cpp:4545:3: error: narrowing conversion of '128' from 'int' to 'signed char' inside { } [-Wnarrowing]
-Source/LibRawLite/./internal/dcraw_common.cpp:4545:3: error: narrowing conversion of '136' from 'int' to 'signed char' inside { } [-Wnarrowing]
+It's pretty simple:
 
-So please submit the (fixed) patch upstream, thanks.
+ - If a platform has reasonable support in the mainline Linux kernel,
+   then we prefer if our defconfigs use the mainline Linux kernel. By
+   "reasonable" support, I mean support with sufficient features for
+   the platform to actually be useful.
 
-Committed, thanks.
+ - If a platform doesn't have reasonable support in the mainline Linux
+   kernel, then we accept defconfigs that use other Linux kernel trees
+   (from vendors, or community maintained, etc.).
 
--- 
-Bye, Peter Korsgaard
+Best regards,
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
