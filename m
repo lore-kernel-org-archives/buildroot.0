@@ -1,89 +1,105 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 29 Aug 2016 22:17:54 +0200
-Subject: [Buildroot] [PATCH] package/libaio: disable for static only build
-Message-ID: <1472501874-6666-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Aug 2016 22:18:37 +0200
+Subject: [Buildroot] [PATCH] libaio: allow building on static-only
+	configurations
+Message-ID: <1472501917-28520-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The build system try to build a shared library unconditionally.
-
--static [...] -fPIC [...] -Wl,-soname=libaio.so.1
+This commit adds a simple patch to the libaio build system that allows
+it to be used on static-only configurations. It is probably easier to
+fix this than to propagate the !BR2_STATIC_LIBS dependency.
 
 Fixes:
-http://autobuild.buildroot.net/results/8c8/8c86402bd14a0af1b82e6e07c06531a856dd37c6
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+  http://autobuild.buildroot.net/results/8c86402bd14a0af1b82e6e07c06531a856dd37c6/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/blktrace/Config.in      | 6 ++++--
- package/gadgetfs-test/Config.in | 1 +
- package/libaio/Config.in        | 5 +++++
- package/xen/Config.in           | 2 +-
- 4 files changed, 11 insertions(+), 3 deletions(-)
+ ...e-add-ENABLE_SHARED-boolean-to-allow-stat.patch | 56 ++++++++++++++++++++++
+ package/libaio/libaio.mk                           |  4 ++
+ 2 files changed, 60 insertions(+)
+ create mode 100644 package/libaio/0002-src-Makefile-add-ENABLE_SHARED-boolean-to-allow-stat.patch
 
-diff --git a/package/blktrace/Config.in b/package/blktrace/Config.in
-index c17de80..f98ec88 100644
---- a/package/blktrace/Config.in
-+++ b/package/blktrace/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_BLKTRACE
- 	# Uses posix_spawn()
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS # libaio
- 	select BR2_PACKAGE_LIBAIO
- 	help
- 	  blktrace is a block layer IO tracing mechanism which provides
-@@ -11,6 +12,7 @@ config BR2_PACKAGE_BLKTRACE
- 
- 	  http://git.kernel.dk/?p=blktrace.git;a=summary
- 
--comment "blktrace needs a glibc or musl toolchain"
-+comment "blktrace needs a glibc or musl toolchain w/ dynamic library"
- 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
-+		BR2_STATIC_LIBS
-diff --git a/package/gadgetfs-test/Config.in b/package/gadgetfs-test/Config.in
-index 9a60306..5bb94c2 100644
---- a/package/gadgetfs-test/Config.in
-+++ b/package/gadgetfs-test/Config.in
-@@ -9,6 +9,7 @@ if BR2_PACKAGE_GADGETFS_TEST
- config BR2_PACKAGE_GADGETFS_TEST_USE_AIO
- 	bool "use asynchronous i/o"
- 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS # libaio
- 	select BR2_PACKAGE_LIBAIO
- 	help
- 	  Select this to have gadgetfs-test do asynchronous I/O using
-diff --git a/package/libaio/Config.in b/package/libaio/Config.in
-index 3031c89..24b8264 100644
---- a/package/libaio/Config.in
-+++ b/package/libaio/Config.in
-@@ -7,5 +7,10 @@ config BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
- config BR2_PACKAGE_LIBAIO
- 	bool "libaio"
- 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  Library for doing asynchronous I/O
+diff --git a/package/libaio/0002-src-Makefile-add-ENABLE_SHARED-boolean-to-allow-stat.patch b/package/libaio/0002-src-Makefile-add-ENABLE_SHARED-boolean-to-allow-stat.patch
+new file mode 100644
+index 0000000..50703c3
+--- /dev/null
++++ b/package/libaio/0002-src-Makefile-add-ENABLE_SHARED-boolean-to-allow-stat.patch
+@@ -0,0 +1,56 @@
++From 14dee5707716629b1bc8d06b93cdfe9ea1a3b813 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 29 Aug 2016 22:14:26 +0200
++Subject: [PATCH] src/Makefile: add ENABLE_SHARED boolean to allow static-only
++ build
 +
-+comment "libaio needs a toolchain w/ dynamic library"
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/xen/Config.in b/package/xen/Config.in
-index 7254a07..a427d56 100644
---- a/package/xen/Config.in
-+++ b/package/xen/Config.in
-@@ -19,7 +19,7 @@ config BR2_PACKAGE_XEN_HYPERVISOR
++Currently, the libaio builds sytem builds a shared library
++unconditionally. In some environments, this is not possible or
++desirable. This commit adds a new Makefile variable, ENABLE_SHARED,
++which defaults to "1" (i.e shared library enabled) and that allows to
++override this behavior, and therefore to disable the build and
++installation of the shared library.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/Makefile | 9 ++++++++-
++ 1 file changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/src/Makefile b/src/Makefile
++index eadb336..cfab240 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -8,12 +8,17 @@ SO_CFLAGS=-shared $(CFLAGS)
++ L_CFLAGS=$(CFLAGS)
++ LINK_FLAGS=
++ LINK_FLAGS+=$(LDFLAGS)
+++ENABLE_SHARED ?= 1
++ 
++ soname=libaio.so.1
++ minor=0
++ micro=1
++ libname=$(soname).$(minor).$(micro)
++-all_targets += libaio.a $(libname)
+++all_targets += libaio.a
+++
+++ifeq ($(ENABLE_SHARED),1)
+++all_targets += $(libname)
+++endif
++ 
++ all: $(all_targets)
++ 
++@@ -55,9 +60,11 @@ $(libname): $(libaio_sobjs) libaio.map
++ install: $(all_targets)
++ 	install -D -m 644 libaio.h $(includedir)/libaio.h
++ 	install -D -m 644 libaio.a $(libdir)/libaio.a
+++ifeq ($(ENABLE_SHARED),1)
++ 	install -D -m 755 $(libname) $(libdir)/$(libname)
++ 	ln -sf $(libname) $(libdir)/$(soname)
++ 	ln -sf $(libname) $(libdir)/libaio.so
+++endif
++ 
++ $(libaio_objs): libaio.h
++ 
++-- 
++2.7.4
++
+diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
+index 0854fc5..5ebe1b7 100644
+--- a/package/libaio/libaio.mk
++++ b/package/libaio/libaio.mk
+@@ -13,6 +13,10 @@ LIBAIO_LICENSE_FILES = COPYING
  
- config BR2_PACKAGE_XEN_TOOLS
- 	bool "Xen tools"
--	depends on !BR2_STATIC_LIBS # dtc (libfdt)
-+	depends on !BR2_STATIC_LIBS # dtc (libfdt), libaio
- 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_WCHAR # libglib2, util-linux
+ LIBAIO_CONFIGURE_OPTS = $(TARGET_CONFIGURE_OPTS)
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBAIO_CONFIGURE_OPTS += ENABLE_SHARED=0
++endif
++
+ # On PowerPC, a weird toolchain issue causes -Os builds to produce
+ # references to hidden symbols, so we're forcing -O2
+ ifeq ($(BR2_powerpc),y)
 -- 
-2.5.5
+2.7.4
