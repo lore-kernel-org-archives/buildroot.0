@@ -1,12 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Aug 2016 09:16:38 +0200
-Subject: [Buildroot] [PATCH RFC] Revert "Added local directory as source
- of kernel code"
-In-Reply-To: <20160828214805.GE5758@free.fr>
-References: <1467066844-28355-1-git-send-email-yann.morin.1998@free.fr>
- <20160827222353.02bc0df2@free-electrons.com>
- <87twe4aav2.fsf@dell.be.48ers.dk> <20160828214805.GE5758@free.fr>
-Message-ID: <20160829091638.1236158a@free-electrons.com>
+Date: Mon, 29 Aug 2016 09:19:38 +0200
+Subject: [Buildroot] [PATCH 06/16 v3] core: introduce a generated
+	kconfig snippet
+In-Reply-To: <87poosaa9d.fsf@dell.be.48ers.dk>
+References: <cover.1468750623.git.yann.morin.1998@free.fr>
+ <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
+ <20160827161601.2fd0e8f5@free-electrons.com>
+ <87poosaa9d.fsf@dell.be.48ers.dk>
+Message-ID: <20160829091938.11ed7ff7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,22 +16,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 28 Aug 2016 23:48:05 +0200, Yann E. MORIN wrote:
+On Sun, 28 Aug 2016 22:50:22 +0200, Peter Korsgaard wrote:
 
-> There are *always* users of any option we deprecate or remove.
+>  > It's a bit crazy the complexity that we have just to allow our manual
+>  > to have the list of all packages in Buildroot. I'm not even sure this
+>  > section of the manual is that useful, to be honest. But oh well, that's
+>  > supported today, so we have to continue support it.  
 > 
-> All we can do is make it easy for them to upgrade. Override-srcdir has
-> been available for ages now (5 years in September), so it's not as if
-> it were something new or complex to use.
+> Why do we _HAVE_ to continue to support it?
+> 
+> If we don't find the complexity worth the added value (I personally
+> don't, I think we could just ask people to look under package/ for the
+> list of packages), then we should just remove it.
 
-The only major difference being that "override source dir" is meant to
-be a "local" override, i.e something that developers do on their own
-machine, for their own development. While the existing
-BR2_LINUX_KERNEL_CUSTOM_LOCAL is really about having it as part of the
-Buildroot configuration.
+I wouldn't mind if we were to remove this. I think the original intent
+was to give some "exposure" as to what is available in Buildroot, so
+that people just skimming through our documentation can see the wide
+variety of packages we have.
 
-But nothing prevents people from having a version-controlled local.mk,
-which makes it not-local anymore.
+The other thing that I find quite complex for no super benefit is the
+whole "doc-asciidoc" infrastructure, but that's another story.
 
 Thomas
 -- 
