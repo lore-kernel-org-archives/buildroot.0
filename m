@@ -1,14 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Aug 2016 13:19:59 +0200
-Subject: [Buildroot] [PATCH] [RFC] platform: update galileo to 3.14
- kernel
-In-Reply-To: <E704BB48EC9FDF4FA0A7A278C2546ACFE27080@irsmsx105.ger.corp.intel.com>
-References: <1471868735-13766-1-git-send-email-padraig.connolly@intel.com>
- <20160822163337.484cb311@free-electrons.com>
- <E704BB48EC9FDF4FA0A7A278C2546ACFE25B11@irsmsx105.ger.corp.intel.com>
- <20160823112531.13f75bab@free-electrons.com>
- <E704BB48EC9FDF4FA0A7A278C2546ACFE27080@irsmsx105.ger.corp.intel.com>
-Message-ID: <20160829131959.09cf41e3@free-electrons.com>
+Date: Mon, 29 Aug 2016 13:22:08 +0200
+Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
+ Buildroot developers
+In-Reply-To: <6cfc163d-8a6a-20a3-8eae-b2cb7ee65746@free.fr>
+References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <6cfc163d-8a6a-20a3-8eae-b2cb7ee65746@free.fr>
+Message-ID: <20160829132208.647a1878@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,22 +15,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 29 Aug 2016 10:20:18 +0000, Connolly, Padraig wrote:
+On Mon, 29 Aug 2016 12:19:54 +0200, Julien Boibessot wrote:
 
-> Currently there is support for the Quark X1000 SoC itself in the upstream Linux Kernel 
-> but support for the Galileo Gen 1/2 is not fully upstream, there is a Galileo platform driver that is not upstream.
-> There is also some fixes that affect the USB behavior that are not upstream either.
+> > +N:	Julien Boibessot <julien.boibessot@armadeus.com>
+> > +F:	configs/armadeus*
+> > +F:	package/libcddb/  
 > 
-> This means anything supported by the platform driver will not work with the upstream kernel, 
-> for example GPIO, I2C, and SPI.  USB device support is also less reliable without the fix.
-> 
-> You can find the platform driver in our GitHub repo here : 
-> https://github.com/padraigconnolly/Linux-x1000/tree/master/drivers/platform/x86/intel-quark
+> + board/armadeus/*
 
-Then, it's fine to use a non-upstream kernel for this platform. Just
-update the existing galileo_defconfig.
+This last "*" is not needed. Directories are by default handled
+recursively. Patterns are only needed if you want to match several
+directories, like package/python-* for example.
 
-Best regards,
+> + package/gpm
+> + package/lbreakout2
+> + package/libmodbus
+> + package/ltris
+> + package/opentyrian
+> + package/pygame
+> + package/smstools3
+
+All added, thanks!
 
 Thomas
 -- 
