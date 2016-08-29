@@ -1,45 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 17:57:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openswan: not available on musl
-In-Reply-To: <20160828164701.GC5758@free.fr> (Yann E. MORIN's message of "Sun, 
- 28 Aug 2016 18:47:01 +0200")
-References: <1469958682-6087-1-git-send-email-bernd.kuhls@t-online.de>
- <1469969267.9042.2.camel@embedded.rocks>
- <20160731160517.GJ3620@tarshish>
- <20160731230102.070d5413@free-electrons.com>
- <20160828164701.GC5758@free.fr>
-Message-ID: <87twe34lfv.fsf@dell.be.48ers.dk>
+Date: Mon, 29 Aug 2016 17:58:45 +0200
+Subject: [Buildroot] [PATCH] tftpd: disallow on nios with pre-6.x
+	toolchains
+In-Reply-To: <1472465062-9875-1-git-send-email-peter@korsgaard.com> (Peter
+ Korsgaard's message of "Mon, 29 Aug 2016 12:04:22 +0200")
+References: <1472465062-9875-1-git-send-email-peter@korsgaard.com>
+Message-ID: <87poor4le2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Thomas, Bernd, Baruch, All,
- > On 2016-07-31 23:01 +0200, Thomas Petazzoni spake thusly:
- >> On Sun, 31 Jul 2016 19:05:17 +0300, Baruch Siach wrote:
- >> 
- >> > netbsd-queue is a header only package, so it adds nothing to packages that 
- >> > don't use it. libglob adds libglob.so that is only useful for few packages. We 
- >> > can do something similar to way we handle gettext by adding
- >> > 
- >> >   select BR2_PACKAGE_LIBGLOB if BR2_TOOLCHAIN_USES_MUSL
- >> > 
- >> > for each such package.
- >> 
- >> Agreed.
+ > Fixes:
+ > http://autobuild.buildroot.org/results/349/349bc8668614b0f2c970ff33f25216e708ecdb46/
+ > http://autobuild.buildroot.org/results/264/26486e88211d01ee49ad786e9a27a67b849ad1ab/
 
- > In the meantime, the release is approaching, and libglob is not yet in
- > the tree.
+ > Older toolchains contain an issue with the linker script causing failures when linking tftpd:
 
- > So I think we should just hide openswan for musl, at least until after
- > the release.
+ > tftpd.c:(.text.startup+0x5c): warning: Unable to reach (null) (at 0x00000000)
+ > from the global pointer (at 0x00011a80) because the offset (-72320) is out of
+ > the allowed range, -32678 to 32767.
 
- > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > This is a known issue which has been fixed from 6.x, so disallow on older
+ > toolchains:
 
-Agreed - Committed, thanks.
+ > https://www.altera.com/support/support-resources/knowledge-base/solutions/rd02132012_291.html
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+
+Committed, thanks.
 
 -- 
-Bye, Peter Korsgaard
+Venlig hilsen,
+Peter Korsgaard 
