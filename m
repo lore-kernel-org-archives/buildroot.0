@@ -1,40 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 29 Aug 2016 13:59:11 -0300
-Subject: [Buildroot] [PATCH] ccache: bump to version 3.3
-Message-ID: <1472489951-2822-1-git-send-email-gustavo@zacarias.com.ar>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Mon, 29 Aug 2016 10:54:11 -0700
+Subject: [Buildroot] Nearly duplicate builds
+In-Reply-To: <da0b7f23-509b-82b0-26cf-3d30a9e2d264@mind.be>
+References: <CAK7rcp8xDcHTkxyd_E0QNPGy37R0693iMUGAWnRb4_akA8a8pg@mail.gmail.com>
+ <da0b7f23-509b-82b0-26cf-3d30a9e2d264@mind.be>
+Message-ID: <CAJJ6jxu3mrBgg82c1p2neOno9CtkmimzjrE2G=9BL=RRbfpcDg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ccache/ccache.hash | 4 ++--
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+HI Arnout,
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 7e616ce..03b8c26 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,2 +1,2 @@
--# Verified key https://samba.org/ftp/ccache/ccache-3.2.5.tar.xz.asc - sha256 computed locally
--sha256	117011534b199dbe290b08acae1591c81525536a1e140da22e0fbc04c20bab85	ccache-3.2.5.tar.xz
-+# Verified key https://samba.org/ftp/ccache/ccache-3.3.tar.xz.asc - sha256 computed locally
-+sha256	d88e6f5f62f9ce5eeee673972a5731f76e22a5c708cfbc264ecd25a93fffba07	ccache-3.3.tar.xz
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index c4f0310..06deb65 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CCACHE_VERSION = 3.2.5
-+CCACHE_VERSION = 3.3
- CCACHE_SITE = https://samba.org/ftp/ccache
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPLv3+, others
--- 
-2.7.3
+On Sat, Aug 27, 2016 at 4:46 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>  Hi Kenneth,
+>
+>  What you're asking is unfortunately not simple...
+>
+snip
+> externally. Any host tools that are needed by this script can be included in the
+> external toolchain.
+>
+
+Please explain this line?
+
+It seems to me with an external toolchain, the biggest overhead after
+a make clean is the host tools (especially if you build the linux
+kernel separately too). If you need python or some other big package
+building the host stuff is a major time sink. It would be wonderful if
+the host tools could also be external to the build like the toolchain.
+I did not know they could be part of the external toolchain?
+
+Thanks, Steve
