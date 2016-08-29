@@ -1,66 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 12:25:35 +0200
-Subject: [Buildroot] [git commit] package/libfreeimage: fix C++11 compliance
-	with gcc-6
-Message-ID: <20160829102616.1F57E8223A@busybox.osuosl.org>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Mon, 29 Aug 2016 12:15:46 +0100
+Subject: [Buildroot] [PATCH] [RFC] platform: update galileo to 3.14
+	kernel
+In-Reply-To: <E704BB48EC9FDF4FA0A7A278C2546ACFE27080@irsmsx105.ger.corp.intel.com>
+References: <1471868735-13766-1-git-send-email-padraig.connolly@intel.com>
+ <20160822163337.484cb311@free-electrons.com>
+ <E704BB48EC9FDF4FA0A7A278C2546ACFE25B11@irsmsx105.ger.corp.intel.com>
+ <20160823112531.13f75bab@free-electrons.com>
+ <E704BB48EC9FDF4FA0A7A278C2546ACFE27080@irsmsx105.ger.corp.intel.com>
+Message-ID: <da8ae242-e6ca-0f44-d52a-f845464003f5@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70dbe298f42449b8fa19f35ec41c07e360d51c68
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Like in cbe01f6, 38249d5, 97fe953, fix C++11 compliance regarding
-narrowing types.
+Specifically the use of the platform driver was a result of broken ACPI 
+support on the Galileo platforms. The DSDT table doesn't accurately 
+describe the platform devices on these platforms, breaking the GPIO etc.
 
-Fixes:
-    http://autobuild.buildroot.org/results/081/0811531872f69f9febbdc482dfbdd7fb5c35d1c8/
-    http://autobuild.buildroot.org/results/90c/90c9cb4ffe705b8c91f4fb602e33e2ba9bcdee77/
-    and a few others...
+Once the platform was in the wild with the DSDT broken table, the only 
+way to be sure that any given platform would work correctly was to use 
+the platform driver.
 
-[Peter: use signed char for src[], fix dos/unix new lines]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libfreeimage/0004-fix-gcc-6.patch | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+This coupled with the USB fixes which are also un-upstreamable are the 
+reason for the patched out-of-tree kernel.
 
-diff --git a/package/libfreeimage/0004-fix-gcc-6.patch b/package/libfreeimage/0004-fix-gcc-6.patch
-new file mode 100644
-index 0000000..0f10dec
---- /dev/null
-+++ b/package/libfreeimage/0004-fix-gcc-6.patch
-@@ -0,0 +1,31 @@
-+libraw/dc_raw: fix gcc-6 failures
-+
-+With gcc-6, it is no longer allowed to narrow the type of constants in
-+a constant array declaration.
-+
-+Fixes:
-+    http://autobuild.buildroot.org/results/081/0811531872f69f9febbdc482dfbdd7fb5c35d1c8/build-end.log
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN a/Source/LibRawLite/internal/dcraw_common.cpp b/Source/LibRawLite/internal/dcraw_common.cpp
-+--- a/Source/LibRawLite/internal/dcraw_common.cpp
-++++ b/Source/LibRawLite/internal/dcraw_common.cpp
-+@@ -2479,7 +2479,7 @@
-+ 
-+ void CLASS kodak_radc_load_raw()
-+ {
-+-  static const char src[] = {
-++  static const signed char src[] = {
-+     1,1, 2,3, 3,4, 4,2, 5,7, 6,5, 7,6, 7,8,
-+     1,0, 2,1, 3,3, 4,4, 5,2, 6,7, 7,6, 8,5, 8,8,
-+     2,1, 2,3, 3,0, 3,2, 3,4, 4,6, 5,5, 6,7, 6,8,
-+@@ -4519,7 +4519,7 @@
-+  */
-+ void CLASS vng_interpolate()
-+ {
-+-  static const signed char *cp, terms[] = {
-++  static const int *cp, terms[] = {
-+     -2,-2,+0,-1,0,0x01, -2,-2,+0,+0,1,0x01, -2,-1,-1,+0,0,0x01,
-+     -2,-1,+0,-1,0,0x02, -2,-1,+0,+0,0,0x03, -2,-1,+0,+1,1,0x01,
-+     -2,+0,+0,-1,0,0x06, -2,+0,+0,+0,1,0x02, -2,+0,+0,+1,0,0x03,
+Ray K
+
+On 29/08/2016 11:20, Connolly, Padraig wrote:
+> Hi Thomas,
+>
+> Currently there is support for the Quark X1000 SoC itself in the upstream Linux Kernel
+> but support for the Galileo Gen 1/2 is not fully upstream, there is a Galileo platform driver that is not upstream.
+> There is also some fixes that affect the USB behavior that are not upstream either.
+>
+> This means anything supported by the platform driver will not work with the upstream kernel,
+> for example GPIO, I2C, and SPI.  USB device support is also less reliable without the fix.
+>
+> You can find the platform driver in our GitHub repo here :
+> https://github.com/padraigconnolly/Linux-x1000/tree/master/drivers/platform/x86/intel-quark
+>
+>
+> Thanks,
+> Padraig Connolly
+>
+> -----Original Message-----
+>
+> Hello,
+>
+> On Tue, 23 Aug 2016 08:05:15 +0000, Connolly, Padraig wrote:
+>
+>> Could you elaborate on this preference please, in the previous version
+>> for the Galileo the defconfig pulled the kernel in a similar way I
+>> have done.  The future plan is once everything is approved, we will
+>> update R. Kinsella's repo with the 3.14 kernel and the defconfig will
+>> pull from there instead of mine as it did before.  I'm only using my
+>> repo as a temp for working on.
+>
+> It's pretty simple:
+>
+>  - If a platform has reasonable support in the mainline Linux kernel,
+>    then we prefer if our defconfigs use the mainline Linux kernel. By
+>    "reasonable" support, I mean support with sufficient features for
+>    the platform to actually be useful.
+>
+>  - If a platform doesn't have reasonable support in the mainline Linux
+>    kernel, then we accept defconfigs that use other Linux kernel trees
+>    (from vendors, or community maintained, etc.).
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
