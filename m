@@ -1,129 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Aug 2016 17:53:59 +0200
-Subject: [Buildroot] [PATCH 2/2 v3] toolchain/wrapper: extend paranoid check
-	to -isystem
-In-Reply-To: <cover.1472485693.git.yann.morin.1998@free.fr>
-References: <cover.1472485693.git.yann.morin.1998@free.fr>
-Message-ID: <110620526667c2676631a91f4d223e093896bda9.1472485693.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Aug 2016 17:57:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openswan: not available on musl
+In-Reply-To: <20160828164701.GC5758@free.fr> (Yann E. MORIN's message of "Sun, 
+ 28 Aug 2016 18:47:01 +0200")
+References: <1469958682-6087-1-git-send-email-bernd.kuhls@t-online.de>
+ <1469969267.9042.2.camel@embedded.rocks>
+ <20160731160517.GJ3620@tarshish>
+ <20160731230102.070d5413@free-electrons.com>
+ <20160828164701.GC5758@free.fr>
+Message-ID: <87twe34lfv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages, like libbsd, use -isystem flags to provide so-called
-overrides to the system include files. In this particular case, this
-is used in a .pc file, then used by antoher package; pkgconf does not
-mangle this path; and eventually that other package ends up using
-/usr/include/bsd to search for headers.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Our current toolchain wrapper is limited to looking for -I and -L, so
-the paranoid check does not kick in.
+ > Thomas, Bernd, Baruch, All,
+ > On 2016-07-31 23:01 +0200, Thomas Petazzoni spake thusly:
+ >> On Sun, 31 Jul 2016 19:05:17 +0300, Baruch Siach wrote:
+ >> 
+ >> > netbsd-queue is a header only package, so it adds nothing to packages that 
+ >> > don't use it. libglob adds libglob.so that is only useful for few packages. We 
+ >> > can do something similar to way we handle gettext by adding
+ >> > 
+ >> >   select BR2_PACKAGE_LIBGLOB if BR2_TOOLCHAIN_USES_MUSL
+ >> > 
+ >> > for each such package.
+ >> 
+ >> Agreed.
 
-Furthermore, as noticed by Arnout, there might be a bunch of other
-so-unsafe options: -isysroot, -imultilib, -iquote, -idirafter, -iprefix,
--iwithprefix, -iwithprefixbefore; even -B and --sysroot are unsafe.
+ > In the meantime, the release is approaching, and libglob is not yet in
+ > the tree.
 
-Extend the paranoid check to be able to check any arbitrary number of
-potentially unsafe options:
+ > So I think we should just hide openswan for musl, at least until after
+ > the release.
 
-  - add a list of options to check for, each with their length,
-  - iterate over this list until we find a matching unsafe option.
+ > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Compared to previously, the list of options include -I and -L (which we
-already had) extended with -idirafter, -iquote and -isystem, but leaving
-all the others noticed by Arnout away, until we have a reason for
-handling them.
+Agreed - Committed, thanks.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-
----
-Changes v2 -> v3:
-  - also cover -idirafter and -iquote  (Arnout)
-  - slightly document what an unsafe option is
-
-Changes v1 -> v2:
-  - don't suppose that -isystem is separated from its path  (Arnout)
-  - use and iterate over a list of options rather than using a
-    succession of strncmp() in the code, which makes it easier to
-    check more unsafe options
----
- toolchain/toolchain-wrapper.c | 53 +++++++++++++++++++++++++++++--------------
- 1 file changed, 36 insertions(+), 17 deletions(-)
-
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index 6259dac..d8b35a5 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -80,6 +80,26 @@ static char *predef_args[] = {
- #endif
- };
- 
-+struct unsafe_opt_s {
-+	const char *arg;
-+	size_t     len;
-+};
-+
-+/* Unsafe options are options that specify a potentialy unsafe path,
-+ * that will be checked by check_unsafe_path(), below.
-+ *
-+ * sizeof() on a string literal includes the terminating \0.
-+ */
-+#define UNSAFE_OPT(o) { #o, sizeof(#o)-1 }
-+static const struct unsafe_opt_s unsafe_opts[] = {
-+	UNSAFE_OPT(-I),
-+	UNSAFE_OPT(-idirafter).
-+	UNSAFE_OPT(-iquote),
-+	UNSAFE_OPT(-isystem),
-+	UNSAFE_OPT(-L),
-+	{ NULL, 0 },
-+};
-+
- /* Check if path is unsafe for cross-compilation. Unsafe paths are those
-  * pointing to the standard native include or library paths.
-  *
-@@ -239,24 +259,23 @@ int main(int argc, char **argv)
- 
- 	/* Check for unsafe library and header paths */
- 	for (i = 1; i < argc; i++) {
--
--		/* Skip options that do not start with -I and -L */
--		if (strncmp(argv[i], "-I", 2) && strncmp(argv[i], "-L", 2))
--			continue;
--
--		/* We handle two cases: first the case where -I/-L and
--		 * the path are separated by one space and therefore
--		 * visible as two separate options, and then the case
--		 * where they are stuck together forming one single
--		 * option.
--		 */
--		if (argv[i][2] == '\0') {
--			i++;
--			if (i == argc)
-+		const struct unsafe_opt_s *opt;
-+		for (opt=unsafe_opts; opt->arg; opt++ ) {
-+			/* Skip any non-unsafe option. */
-+			if (strncmp(argv[i], opt->arg, opt->len))
- 				continue;
--			check_unsafe_path(argv[i-1], argv[i], paranoid, 0);
--		} else {
--			check_unsafe_path(argv[i], argv[i] + 2, paranoid, 1);
-+
-+			/* Handle both cases:
-+			 *  - path is a separate argument,
-+			 *  - path is concatenated with option.
-+			 */
-+			if (argv[i][opt->len] == '\0') {
-+				i++;
-+				if (i == argc)
-+					break;
-+				check_unsafe_path(argv[i-1], argv[i], paranoid, 0);
-+			} else
-+				check_unsafe_path(argv[i], argv[i] + opt->len, paranoid, 1);
- 		}
- 	}
- 
 -- 
-2.7.4
+Bye, Peter Korsgaard
