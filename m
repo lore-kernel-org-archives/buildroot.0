@@ -1,104 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 23:29:37 +0200
-Subject: [Buildroot] [git commit] zynq: enable
-	BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
-Message-ID: <20160829213209.A9E5D819D3@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 29 Aug 2016 23:31:44 +0200
+Subject: [Buildroot] Nearly duplicate builds
+In-Reply-To: <CAJJ6jxu3mrBgg82c1p2neOno9CtkmimzjrE2G=9BL=RRbfpcDg@mail.gmail.com>
+References: <CAK7rcp8xDcHTkxyd_E0QNPGy37R0693iMUGAWnRb4_akA8a8pg@mail.gmail.com>
+ <da0b7f23-509b-82b0-26cf-3d30a9e2d264@mind.be>
+ <CAJJ6jxu3mrBgg82c1p2neOno9CtkmimzjrE2G=9BL=RRbfpcDg@mail.gmail.com>
+Message-ID: <f71bd0e0-98b0-249a-0572-5a426e89a622@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df5793e309e7faf2968cb25604fd6394a2460639
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The recent U-Boot adopts Kconfig for its configuration system.
 
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/zynq/readme.txt           | 4 ++--
- configs/zynq_microzed_defconfig | 3 ++-
- configs/zynq_zc706_defconfig    | 5 +++--
- configs/zynq_zed_defconfig      | 3 ++-
- 4 files changed, 9 insertions(+), 6 deletions(-)
+On 29-08-16 19:54, Steve Calfee wrote:
+> HI Arnout,
+> 
+> On Sat, Aug 27, 2016 at 4:46 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>  Hi Kenneth,
+>>
+>>  What you're asking is unfortunately not simple...
+>>
+> snip
+>> externally. Any host tools that are needed by this script can be included in the
+>> external toolchain.
+>>
+> 
+> Please explain this line?
+> 
+> It seems to me with an external toolchain, the biggest overhead after
+> a make clean is the host tools (especially if you build the linux
+> kernel separately too). If you need python or some other big package
+> building the host stuff is a major time sink. It would be wonderful if
+> the host tools could also be external to the build like the toolchain.
+> I did not know they could be part of the external toolchain?
 
-diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
-index 73f8bf3..51e28b6 100644
---- a/board/zynq/readme.txt
-+++ b/board/zynq/readme.txt
-@@ -11,11 +11,11 @@ board even if it is not listed above.  Major Zynq-based boards are supported by
- U-Boot, and their Device Trees are merged in Linux Kernel.  If your board is the
- case, booting the kernel is a piece of cake.  All you need to do is to change:
-  - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
-- - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARDNAME)
-+ - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_KCONFIG)
- 
- Steps to create a working system for a Zynq board:
- 
--1) Configuration (do one of the followings)
-+1) Configuration (do one of the following)
-     make zynq_zc706_defconfig     (ZC706)
-     make zynq_zed_defconfig       (Zedboard)
-     make zynq_microzed_defconfig  (MicroZed)
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index fa25857..5efc0d4 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -16,10 +16,11 @@ BR2_TARGET_ROOTFS_CPIO=y
- BR2_TARGET_ROOTFS_CPIO_GZIP=y
- BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="zynq_microzed"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2016.2"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_microzed"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index 4ac2fe8..578f042 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -1,7 +1,7 @@
- BR2_arm=y
- BR2_cortex_a9=y
--BR2_ARM_ENABLE_VFP=y
- BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
- BR2_LINUX_KERNEL=y
-@@ -17,10 +17,11 @@ BR2_TARGET_ROOTFS_CPIO=y
- BR2_TARGET_ROOTFS_CPIO_GZIP=y
- BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="zynq_zc706"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2016.2"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zc706"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
-diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
-index 84859bb..7ce3365 100644
---- a/configs/zynq_zed_defconfig
-+++ b/configs/zynq_zed_defconfig
-@@ -16,10 +16,11 @@ BR2_TARGET_ROOTFS_CPIO=y
- BR2_TARGET_ROOTFS_CPIO_GZIP=y
- BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="zynq_zed"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2016.2"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zed"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
+ You can build anything as part of the external toolchain. However, buildroot
+doesn't recognize whatever you have built as something that is already
+available. In other words, if something depends on the things that you added to
+the external toolchain, it will just get built again instead of using the
+version from the external toolchain.
+
+ For the host tools that you use in a post-build or post-image script, however,
+that doesn't matter, because it's not considered a dependency by buildroot.
+
+ In the proposal I made, the post-image script would be used outside of
+buildroot, so you have to make sure that any host tools you want to use are
+either available on the system, or are part of the external toolchain. The
+latter is IMHO simpler and easier to control.
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
