@@ -1,43 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Aug 2016 12:02:16 +0200
-Subject: [Buildroot] [PATCH 06/16 v3] core: introduce a generated
-	kconfig snippet
-In-Reply-To: <87fupo6mkq.fsf@dell.be.48ers.dk>
-References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
- <20160827161601.2fd0e8f5@free-electrons.com>
- <87poosaa9d.fsf@dell.be.48ers.dk>
- <20160829091938.11ed7ff7@free-electrons.com>
- <87fupo6mkq.fsf@dell.be.48ers.dk>
-Message-ID: <20160829120216.465dcc99@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Aug 2016 12:04:22 +0200
+Subject: [Buildroot] [PATCH] tftpd: disallow on nios with pre-6.x toolchains
+Message-ID: <1472465062-9875-1-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+http://autobuild.buildroot.org/results/349/349bc8668614b0f2c970ff33f25216e708ecdb46/
+http://autobuild.buildroot.org/results/264/26486e88211d01ee49ad786e9a27a67b849ad1ab/
 
-On Mon, 29 Aug 2016 09:50:13 +0200, Peter Korsgaard wrote:
+Older toolchains contain an issue with the linker script causing failures when linking tftpd:
 
-> Yes, but the list is really long and overwhelming. As it stands, the
-> list of packages takes up more than half the size of the manual. I think
-> just asking people to browse packages/ (or make menuconfig) is more
-> sane.
+tftpd.c:(.text.startup+0x5c): warning: Unable to reach (null) (at 0x00000000)
+from the global pointer (at 0x00011a80) because the offset (-72320) is out of
+the allowed range, -32678 to 32767.
 
-Right.
+This is a known issue which has been fixed from 6.x, so disallow on older
+toolchains:
 
->  > The other thing that I find quite complex for no super benefit is the
->  > whole "doc-asciidoc" infrastructure, but that's another story.  
-> 
-> Yeah, having this infrastructure just for the manual is maybe a bit
-> overkill.
+https://www.altera.com/support/support-resources/knowledge-base/solutions/rd02132012_291.html
 
-I agree, though some people wanted to build several manuals, if I
-remember correctly.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tftpd/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thomas
+diff --git a/package/tftpd/Config.in b/package/tftpd/Config.in
+index 6517bd5..ea5cb30 100644
+--- a/package/tftpd/Config.in
++++ b/package/tftpd/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_TFTPD
+ 	bool "tftpd"
++	# linker issue with pre-6.x toolchains
++	depends on !(BR2_nios2 && !BR2_TOOLCHAIN_GCC_AT_LEAST_6)
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	help
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.8.1
