@@ -1,44 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 09:03:53 +0200
-Subject: [Buildroot] [PATCH 2/2] package/sconeserver: needs shared libs
-	or non uClibc toolchain
-In-Reply-To: <20160828221524.GF5758@free.fr> (Yann E. MORIN's message of "Mon, 
- 29 Aug 2016 00:15:24 +0200")
-References: <1472408394-20573-1-git-send-email-yann.morin.1998@free.fr>
- <1472408394-20573-2-git-send-email-yann.morin.1998@free.fr>
- <87wpj07dga.fsf@dell.be.48ers.dk> <20160828221524.GF5758@free.fr>
-Message-ID: <87k2f06opy.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Aug 2016 09:16:38 +0200
+Subject: [Buildroot] [PATCH RFC] Revert "Added local directory as source
+ of kernel code"
+In-Reply-To: <20160828214805.GE5758@free.fr>
+References: <1467066844-28355-1-git-send-email-yann.morin.1998@free.fr>
+ <20160827222353.02bc0df2@free-electrons.com>
+ <87twe4aav2.fsf@dell.be.48ers.dk> <20160828214805.GE5758@free.fr>
+Message-ID: <20160829091638.1236158a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello,
 
- >> Ehh, this I don't get. Why not simply depend on !BR2_STATIC_LIBS like we
- >> do for other users of dlfcn.h?
- >> 
- >> If BR2_STATIC_LIBS is enabled then there won't be any .so files in the
- >> target rootfs, so even if the C library has dlopen support it won't
- >> work.
+On Sun, 28 Aug 2016 23:48:05 +0200, Yann E. MORIN wrote:
 
- > Not necessarily true.
+> There are *always* users of any option we deprecate or remove.
+> 
+> All we can do is make it easy for them to upgrade. Override-srcdir has
+> been available for ages now (5 years in September), so it's not as if
+> it were something new or complex to use.
 
- > One can use dlopen() to load "addons" even from a staticaly linked
- > executable.
+The only major difference being that "override source dir" is meant to
+be a "local" override, i.e something that developers do on their own
+machine, for their own development. While the existing
+BR2_LINUX_KERNEL_CUSTOM_LOCAL is really about having it as part of the
+Buildroot configuration.
 
-Generally speaking, yes - But not in Buildroot. We have a single global
-BR2_STATIC_LIBS setting, so it is all or nothing.
+But nothing prevents people from having a version-controlled local.mk,
+which makes it not-local anymore.
 
- > However, I don't care about sconeserver; I was just looking at build
- > failures and trying to make it the least broken as possible.
-
- > If you're fine with making it depend on non static-only and drop the
- > uclibc condition, that's fine with me. ;-)
-
-Ok, I'll adjust the patch and commit message and apply, thanks.
-
+Thomas
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
