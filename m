@@ -1,43 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Aug 2016 11:39:26 +0200
-Subject: [Buildroot] [PATCH] package/neon: properly enable expat
-Message-ID: <1472463566-10906-1-git-send-email-yann.morin.1998@free.fr>
+From: Paul Cercueil <paul.cercueil@analog.com>
+Date: Mon, 29 Aug 2016 11:25:23 +0200
+Subject: [Buildroot] [PATCH] libiio: Disable IIOD on Blackfin
+Message-ID: <1472462723-18842-1-git-send-email-paul.cercueil@analog.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we forcibly tell neon's configure where to look for libexpat.
-This means that neon does not search for it, and consequently forgets to
-add -lexpat as its Libs.Private in its .pc file. As thus, a static link
-against neon forgets to pull in -lexpat (it works for a dynamic link
-because libneon has a NEEDED on libexpat).
-
-The reason for specifying the explicit path in this case is lost to
-history; neon's configure can correctly find libexpat nowadays.
+IIOD uses accept4, which is not yet available on Blackfin.
 
 Fixes:
-    http://autobuild.buildroot.org/results/884/884746351fc47f4ad19fb3fda7c5e0ee85fcff15/
-    http://autobuild.buildroot.org/results/0c5/0c584522c26640e29980150a87a5b5d8c02e5f8b/
+ http://autobuild.buildroot.net/results/b75/b7552c9325ffcc7f1cb6e114b82648f3280fded6/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
 ---
- package/neon/neon.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libiio/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index 0cff1a2..13d8084 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -28,7 +28,7 @@ NEON_CONF_OPTS += --without-ssl
- endif
+diff --git a/package/libiio/Config.in b/package/libiio/Config.in
+index 69269e0..6f35715 100644
+--- a/package/libiio/Config.in
++++ b/package/libiio/Config.in
+@@ -53,6 +53,7 @@ config BR2_PACKAGE_LIBIIO_IIOD
+ 	bool "IIO Daemon"
+ 	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_bfin
+ 	default y
+ 	help
+ 	  Install the IIO Daemon.
+@@ -60,6 +61,9 @@ config BR2_PACKAGE_LIBIIO_IIOD
+ comment "IIO Daemon needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
  
- ifeq ($(BR2_PACKAGE_NEON_EXPAT),y)
--NEON_CONF_OPTS += --with-expat=$(STAGING_DIR)/usr/lib/libexpat.la
-+NEON_CONF_OPTS += --with-expat=yes
- NEON_DEPENDENCIES += expat
- else
- NEON_CONF_OPTS += --with-expat=no
++comment "IIO Daemon is not yet available on Blackfin"
++	depends on BR2_bfin
++
+ config BR2_PACKAGE_LIBIIO_TESTS
+ 	bool "Install test programs"
+ 	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
 -- 
-2.7.4
+2.8.1
