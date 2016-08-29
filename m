@@ -1,44 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Aug 2016 13:22:08 +0200
-Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
- Buildroot developers
-In-Reply-To: <6cfc163d-8a6a-20a3-8eae-b2cb7ee65746@free.fr>
-References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <6cfc163d-8a6a-20a3-8eae-b2cb7ee65746@free.fr>
-Message-ID: <20160829132208.647a1878@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Aug 2016 13:28:57 +0200
+Subject: [Buildroot] [PATCH] package/neon: properly enable expat
+In-Reply-To: <1472463566-10906-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Mon, 29 Aug 2016 11:39:26 +0200")
+References: <1472463566-10906-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <8760qj7r0m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Mon, 29 Aug 2016 12:19:54 +0200, Julien Boibessot wrote:
+ > Currently, we forcibly tell neon's configure where to look for libexpat.
+ > This means that neon does not search for it, and consequently forgets to
+ > add -lexpat as its Libs.Private in its .pc file. As thus, a static link
+ > against neon forgets to pull in -lexpat (it works for a dynamic link
+ > because libneon has a NEEDED on libexpat).
 
-> > +N:	Julien Boibessot <julien.boibessot@armadeus.com>
-> > +F:	configs/armadeus*
-> > +F:	package/libcddb/  
-> 
-> + board/armadeus/*
+ > The reason for specifying the explicit path in this case is lost to
+ > history; neon's configure can correctly find libexpat nowadays.
 
-This last "*" is not needed. Directories are by default handled
-recursively. Patterns are only needed if you want to match several
-directories, like package/python-* for example.
+ > Fixes:
+ >     http://autobuild.buildroot.org/results/884/884746351fc47f4ad19fb3fda7c5e0ee85fcff15/
+ >     http://autobuild.buildroot.org/results/0c5/0c584522c26640e29980150a87a5b5d8c02e5f8b/
 
-> + package/gpm
-> + package/lbreakout2
-> + package/libmodbus
-> + package/ltris
-> + package/opentyrian
-> + package/pygame
-> + package/smstools3
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-All added, thanks!
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
