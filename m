@@ -1,37 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 21:57:24 +0200
-Subject: [Buildroot] [git commit] docs/manual: prepare-kconfig can be used
-	as a dependency of documents
-Message-ID: <20160902142941.299397FB67@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Aug 2016 18:06:14 +0200
+Subject: [Buildroot] [git commit] pango: bump to version 1.40.2
+Message-ID: <20160902142941.4917A7FA6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fba75c8f9e56e0e17221ab0d827b55f16fc3d78e
+commit: https://git.buildroot.net/buildroot/commit/?id=144498c82638f0e3da2978b2494e3a8372378e89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-asciidoc.txt | 2 ++
- 1 file changed, 2 insertions(+)
+ package/pango/pango.hash | 4 ++--
+ package/pango/pango.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
-index 0c10fd1..a278d44 100644
---- a/docs/manual/adding-packages-asciidoc.txt
-+++ b/docs/manual/adding-packages-asciidoc.txt
-@@ -65,6 +65,8 @@ information is (assuming the document name is +foo+) :
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 67b67f0..036838c 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.36/pango-1.40.1.sha256sum
+-sha256	e27af54172c72b3ac6be53c9a4c67053e16c905e02addcf3a603ceb2005c1a40	pango-1.40.1.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.2.sha256sum
++sha256	90582a02bc89318d205814fc097f2e9dd164d26da5f27c53ea42d583b34c3cd1	pango-1.40.2.tar.xz
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index bdad8c6..ba07aec 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- * +FOO_DEPENDENCIES+, optional, the list of packages (most probably,
-   host-packages) that must be built before building this document.
-+  If a hook of your document needs to access the _Kconfig_ structure,
-+  you may add +prepare-kconfig+ to the list of dependencies.
- 
- There are also additional hooks (see xref:hooks[] for general information
- on hooks), that a document may set to define extra actions to be done at
+ PANGO_VERSION_MAJOR = 1.40
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).1
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).2
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_AUTORECONF = YES
