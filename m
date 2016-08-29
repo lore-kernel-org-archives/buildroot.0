@@ -1,62 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 17:55:00 +0200
-Subject: [Buildroot] [git commit] package/openswan: not available on musl
-Message-ID: <20160829155904.8020C81979@busybox.osuosl.org>
+Date: Mon, 29 Aug 2016 17:54:07 +0200
+Subject: [Buildroot] [git commit] libiio: Disable IIOD on Blackfin
+Message-ID: <20160829155904.75EC780269@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b63c8d36f46e601fd83fc0b9bdd4cc440fa059ab
+commit: https://git.buildroot.net/buildroot/commit/?id=53996bee433f09a91b12aa53b2be0f7d22c0acbe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-After fixing the usual sys/cdefs.h and _P stuff the build still fails
-because Openswan makes use of GLOB_ functions
+IIOD uses accept4, which is not yet available on Blackfin.
 
-/home/bernd/buildroot/br4/output/build/openswan-2.6.48/lib/libipsecconf/parser.l:200:29: error: ???GLOB_BRACE??? undeclared (first use in this function)
-      globresult = glob(try, GLOB_BRACE, NULL, &globbuf);
-                             ^
-/home/bernd/buildroot/br4/output/build/openswan-2.6.48/lib/libipsecconf/parser.l:200:29: note: each undeclared identifier is reported only once for each function it appears in
-/home/bernd/buildroot/br4/output/build/openswan-2.6.48/lib/libipsecconf/parser.l:207:41: error: ???GLOB_NOMAGIC??? undeclared (first use in this function)
-       globresult = glob(try, GLOB_BRACE|GLOB_NOMAGIC, NULL, &globbuf);
+Fixes:
+ http://autobuild.buildroot.net/results/b75/b7552c9325ffcc7f1cb6e114b82648f3280fded6/
 
-https://github.com/xelerance/Openswan/blob/master/lib/libipsecconf/parser.l#L200
-https://github.com/xelerance/Openswan/blob/master/lib/libipsecconf/parser.l#L207
-[...]
-                                         ^
-which musl does not support:
-http://www.openwall.com/lists/musl/2013/09/16/1
-
-Fixes
-http://autobuild.buildroot.net/results/70d/70da34c1528b51e92e9e60788f83733d70b33353/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Peter: hide other toolchain comment on bfin]
+Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openswan/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/libiio/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/openswan/Config.in b/package/openswan/Config.in
-index 0370143..ba5d53d 100644
---- a/package/openswan/Config.in
-+++ b/package/openswan/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENSWAN
- 	bool "openswan"
- 	depends on BR2_USE_MMU # iproute2
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # iproute2
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # GLOB_BRACE
- 	select BR2_PACKAGE_GMP
- 	select BR2_PACKAGE_IPROUTE2
+diff --git a/package/libiio/Config.in b/package/libiio/Config.in
+index 69269e0..2e7a76d 100644
+--- a/package/libiio/Config.in
++++ b/package/libiio/Config.in
+@@ -53,12 +53,17 @@ config BR2_PACKAGE_LIBIIO_IIOD
+ 	bool "IIO Daemon"
+ 	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_bfin
+ 	default y
  	help
-@@ -9,6 +10,7 @@ config BR2_PACKAGE_OPENSWAN
+ 	  Install the IIO Daemon.
  
- 	  http://www.openswan.org
+ comment "IIO Daemon needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_bfin
++
++comment "IIO Daemon is not yet available on Blackfin"
++	depends on BR2_bfin
  
--comment "openswan needs a toolchain w/ headers >= 3.0"
-+comment "openswan needs a uClibc or glibc toolchain toolchain w/ headers >= 3.0"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || \
-+		BR2_TOOLCHAIN_USES_MUSL
+ config BR2_PACKAGE_LIBIIO_TESTS
+ 	bool "Install test programs"
