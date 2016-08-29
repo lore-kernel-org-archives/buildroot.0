@@ -1,65 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 29 Aug 2016 17:53:56 +0200
-Subject: [Buildroot] [PATCH 0/2 v3] toolchain/wrapper: add more paranoid
-	checks (branch yem/wrapper)
-Message-ID: <cover.1472485693.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH] libiio: Disable IIOD on Blackfin
+In-Reply-To: <1472462723-18842-1-git-send-email-paul.cercueil@analog.com>
+ (Paul Cercueil's message of "Mon, 29 Aug 2016 11:25:23 +0200")
+References: <1472462723-18842-1-git-send-email-paul.cercueil@analog.com>
+Message-ID: <87fupn606j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+>>>>> "Paul" == Paul Cercueil <paul.cercueil@analog.com> writes:
 
-This short series introduces more paranoid checks for unsafe paths, and
-reports offending options.
+ > IIOD uses accept4, which is not yet available on Blackfin.
+ > Fixes:
+ >  http://autobuild.buildroot.net/results/b75/b7552c9325ffcc7f1cb6e114b82648f3280fded6/
 
+ > Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+ > ---
+ >  package/libiio/Config.in | 4 ++++
+ >  1 file changed, 4 insertions(+)
 
-Changes v2 -> v3:
-  - also handle -idirafter and -iqupte  (Arnout)
-  - simplify the code doing the checks  (Thomas)
-  - drop stray variables  (Thomas)
-  - comment the tricky code  (Thomas)
-  - document what unsafe options are; document the checking function
+ > diff --git a/package/libiio/Config.in b/package/libiio/Config.in
+ > index 69269e0..6f35715 100644
+ > --- a/package/libiio/Config.in
+ > +++ b/package/libiio/Config.in
+ > @@ -53,6 +53,7 @@ config BR2_PACKAGE_LIBIIO_IIOD
+ >  	bool "IIO Daemon"
+ >  	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
+ >  	depends on BR2_TOOLCHAIN_HAS_THREADS
+ > +	depends on !BR2_bfin
+ >  	default y
+ >  	help
+ >  	  Install the IIO Daemon.
+ > @@ -60,6 +61,9 @@ config BR2_PACKAGE_LIBIIO_IIOD
+ >  comment "IIO Daemon needs a toolchain w/ threads"
+ >  	depends on !BR2_TOOLCHAIN_HAS_THREADS
 
-Changes v1 -> v2:
-  - don't use a variadic function, use explicit args  (Arnout)
-  - -isystem is not always separated from its path  (Arnout)
-  - simpler error reporting  (Arnout)
-  - add a list of unsafe options and iterate over it; makes it easier to
-    handle even more unsafe options
+This comment no longer makes sense for bfin, so I added a 'depends on
+!BR2_bfin'.
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 07552de23b95b48412be89ca5c162d8855872206
-
-  tinydtls: fix issue on u_intXX_t being undefined when building with musl (2016-08-29 17:23:41 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 110620526667c2676631a91f4d223e093896bda9
-
-  toolchain/wrapper: extend paranoid check to -isystem (2016-08-29 17:42:13 +0200)
+I verified that the system call indeed isn't wired up and committed with
+that fix, thanks.
 
 
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      toolchain/wrapper: display options leading to a paranoid failure
-      toolchain/wrapper: extend paranoid check to -isystem
+ > +comment "IIO Daemon is not yet available on Blackfin"
+ > +	depends on BR2_bfin
+ > +
+ >  config BR2_PACKAGE_LIBIIO_TESTS
+ >  	bool "Install test programs"
+ >  	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
+ > -- 
+ > 2.8.1
 
- toolchain/toolchain-wrapper.c | 86 ++++++++++++++++++++++++++++++-------------
- 1 file changed, 61 insertions(+), 25 deletions(-)
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
