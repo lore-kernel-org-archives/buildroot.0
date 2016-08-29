@@ -1,44 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 12:04:22 +0200
-Subject: [Buildroot] [PATCH] tftpd: disallow on nios with pre-6.x toolchains
-Message-ID: <1472465062-9875-1-git-send-email-peter@korsgaard.com>
+Date: Mon, 29 Aug 2016 12:14:12 +0200
+Subject: [Buildroot] [PATCH] package/libfreeimage: fix C++11 compliance
+	with gcc-6
+In-Reply-To: <1472422054-6058-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Mon, 29 Aug 2016 00:07:34 +0200")
+References: <1472422054-6058-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87a8fv7uh7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.org/results/349/349bc8668614b0f2c970ff33f25216e708ecdb46/
-http://autobuild.buildroot.org/results/264/26486e88211d01ee49ad786e9a27a67b849ad1ab/
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Older toolchains contain an issue with the linker script causing failures when linking tftpd:
+ > Like in cbe01f6, 38249d5, 97fe953, fix C++11 compliance regarding
+ > narrowing types.
 
-tftpd.c:(.text.startup+0x5c): warning: Unable to reach (null) (at 0x00000000)
-from the global pointer (at 0x00011a80) because the offset (-72320) is out of
-the allowed range, -32678 to 32767.
+ > Fixes:
+ >     http://autobuild.buildroot.org/results/081/0811531872f69f9febbdc482dfbdd7fb5c35d1c8/
+ >     http://autobuild.buildroot.org/results/90c/90c9cb4ffe705b8c91f4fb602e33e2ba9bcdee77/
+ >     and a few others...
 
-This is a known issue which has been fixed from 6.x, so disallow on older
-toolchains:
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > ---
+ >  package/libfreeimage/0004-fix-gcc-6.patch | 31 +++++++++++++++++++++++++++++++
+ >  1 file changed, 31 insertions(+)
+ >  create mode 100644 package/libfreeimage/0004-fix-gcc-6.patch
 
-https://www.altera.com/support/support-resources/knowledge-base/solutions/rd02132012_291.html
+ > diff --git a/package/libfreeimage/0004-fix-gcc-6.patch b/package/libfreeimage/0004-fix-gcc-6.patch
+ > new file mode 100644
+ > index 0000000..53702d1
+ > --- /dev/null
+ > +++ b/package/libfreeimage/0004-fix-gcc-6.patch
+ > @@ -0,0 +1,31 @@
+ > +libraw/dc_raw: fix gcc-6 failures
+ > +
+ > +With gcc-6, it is no longer allowed to narrow the type of constants in
+ > +a constant array declaration.
+ > +
+ > +Fixes:
+ > +    http://autobuild.buildroot.org/results/081/0811531872f69f9febbdc482dfbdd7fb5c35d1c8/build-end.log
+ > +
+ > +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > +
+ > +diff -durN a/Source/LibRawLite/internal/dcraw_common.cpp b/Source/LibRawLite/internal/dcraw_common.cpp
+ > +--- a/Source/LibRawLite/internal/dcraw_common.cpp
+ > ++++ b/Source/LibRawLite/internal/dcraw_common.cpp
+ > +@@ -2479,7 +2479,7 @@
+ > + 
+ > + void CLASS kodak_radc_load_raw()
+ > + {
+ > +-  static const char src[] = {
+ > ++  static const int src[] = {
+ > +     1,1, 2,3, 3,4, 4,2, 5,7, 6,5, 7,6, 7,8,
+ > +     1,0, 2,1, 3,3, 4,4, 5,2, 6,7, 7,6, 8,5, 8,8,
+ > +     2,1, 2,3, 3,0, 3,2, 3,4, 4,6, 5,5, 6,7, 6,8,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tftpd/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+Why not signed char? There doesn't seem to any numbers outside the
+signed char range and I see the code assumes elements are 1 byte big:
 
-diff --git a/package/tftpd/Config.in b/package/tftpd/Config.in
-index 6517bd5..ea5cb30 100644
---- a/package/tftpd/Config.in
-+++ b/package/tftpd/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_TFTPD
- 	bool "tftpd"
-+	# linker issue with pre-6.x toolchains
-+	depends on !(BR2_nios2 && !BR2_TOOLCHAIN_GCC_AT_LEAST_6)
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	help
+  for (s=i=0; i < sizeof src; i+=2)
+
+So I've changed it to signed char.
+
+> +@@ -4519,7 +4519,7 @@
+ > +  */
+ > + void CLASS vng_interpolate()
+ > + {
+ > +-  static const signed char *cp, terms[] = {
+ > ++  static const int *cp, terms[] = {
+ > +     -2,-2,+0,-1,0,0x01, -2,-2,+0,+0,1,0x01, -2,-1,-1,+0,0,0x01,
+ > +     -2,-1,+0,-1,0,0x02, -2,-1,+0,+0,0,0x03, -2,-1,+0,+1,1,0x01,
+ > +     -2,+0,+0,-1,0,0x06, -2,+0,+0,+0,1,0x02, -2,+0,+0,+1,0,0x03,
+
+According to the error message this was a real functional bug, and not
+just something to fix for gcc 6 compliance:
+
+Source/LibRawLite/./internal/dcraw_common.cpp:4545:3: error: narrowing conversion of '136' from 'int' to 'signed char' inside { } [-Wnarrowing]
+Source/LibRawLite/./internal/dcraw_common.cpp:4545:3: error: narrowing conversion of '128' from 'int' to 'signed char' inside { } [-Wnarrowing]
+Source/LibRawLite/./internal/dcraw_common.cpp:4545:3: error: narrowing conversion of '136' from 'int' to 'signed char' inside { } [-Wnarrowing]
+
+So please submit the (fixed) patch upstream, thanks.
+
+Committed, thanks.
+
 -- 
-2.8.1
+Bye, Peter Korsgaard
