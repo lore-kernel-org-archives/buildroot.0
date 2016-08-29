@@ -1,46 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 17:58:32 +0200
-Subject: [Buildroot] [git commit] tftpd: disallow on nios with pre-6.x
-	toolchains
-Message-ID: <20160829155904.8A2F380269@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Aug 2016 18:04:07 +0200
+Subject: [Buildroot] [git commit] libiio: Disable IIOD on Blackfin
+In-Reply-To: <20160829155904.75EC780269@busybox.osuosl.org>
+References: <20160829155904.75EC780269@busybox.osuosl.org>
+Message-ID: <20160829180407.2e54e0e2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=877928afb6540982a84cfce0663dfe82a74c6689
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-http://autobuild.buildroot.org/results/349/349bc8668614b0f2c970ff33f25216e708ecdb46/
-http://autobuild.buildroot.org/results/264/26486e88211d01ee49ad786e9a27a67b849ad1ab/
+On Mon, 29 Aug 2016 17:54:07 +0200, Peter Korsgaard wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=53996bee433f09a91b12aa53b2be0f7d22c0acbe
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> IIOD uses accept4, which is not yet available on Blackfin.
+> 
+> Fixes:
+>  http://autobuild.buildroot.net/results/b75/b7552c9325ffcc7f1cb6e114b82648f3280fded6/
+> 
+> [Peter: hide other toolchain comment on bfin]
+> Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Older toolchains contain an issue with the linker script causing failures when linking tftpd:
+Most likely this is wrong. The failure happens with the old Blackfin
+toolchain from ADI. Was it tested to also happen with the new Blackfin
+toolchain, that uses recent kernel headers and recent uClibc-ng ?
 
-tftpd.c:(.text.startup+0x5c): warning: Unable to reach (null) (at 0x00000000)
-from the global pointer (at 0x00011a80) because the offset (-72320) is out of
-the allowed range, -32678 to 32767.
-
-This is a known issue which has been fixed from 6.x, so disallow on older
-toolchains:
-
-https://www.altera.com/support/support-resources/knowledge-base/solutions/rd02132012_291.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tftpd/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/tftpd/Config.in b/package/tftpd/Config.in
-index 6517bd5..ea5cb30 100644
---- a/package/tftpd/Config.in
-+++ b/package/tftpd/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_TFTPD
- 	bool "tftpd"
-+	# linker issue with pre-6.x toolchains
-+	depends on !(BR2_nios2 && !BR2_TOOLCHAIN_GCC_AT_LEAST_6)
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	help
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
