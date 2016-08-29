@@ -1,39 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 17:58:45 +0200
-Subject: [Buildroot] [PATCH] tftpd: disallow on nios with pre-6.x
-	toolchains
-In-Reply-To: <1472465062-9875-1-git-send-email-peter@korsgaard.com> (Peter
- Korsgaard's message of "Mon, 29 Aug 2016 12:04:22 +0200")
-References: <1472465062-9875-1-git-send-email-peter@korsgaard.com>
-Message-ID: <87poor4le2.fsf@dell.be.48ers.dk>
+Date: Mon, 29 Aug 2016 17:55:00 +0200
+Subject: [Buildroot] [git commit] package/openswan: not available on musl
+Message-ID: <20160829155904.8020C81979@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b63c8d36f46e601fd83fc0b9bdd4cc440fa059ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > http://autobuild.buildroot.org/results/349/349bc8668614b0f2c970ff33f25216e708ecdb46/
- > http://autobuild.buildroot.org/results/264/26486e88211d01ee49ad786e9a27a67b849ad1ab/
+After fixing the usual sys/cdefs.h and _P stuff the build still fails
+because Openswan makes use of GLOB_ functions
 
- > Older toolchains contain an issue with the linker script causing failures when linking tftpd:
+/home/bernd/buildroot/br4/output/build/openswan-2.6.48/lib/libipsecconf/parser.l:200:29: error: ???GLOB_BRACE??? undeclared (first use in this function)
+      globresult = glob(try, GLOB_BRACE, NULL, &globbuf);
+                             ^
+/home/bernd/buildroot/br4/output/build/openswan-2.6.48/lib/libipsecconf/parser.l:200:29: note: each undeclared identifier is reported only once for each function it appears in
+/home/bernd/buildroot/br4/output/build/openswan-2.6.48/lib/libipsecconf/parser.l:207:41: error: ???GLOB_NOMAGIC??? undeclared (first use in this function)
+       globresult = glob(try, GLOB_BRACE|GLOB_NOMAGIC, NULL, &globbuf);
 
- > tftpd.c:(.text.startup+0x5c): warning: Unable to reach (null) (at 0x00000000)
- > from the global pointer (at 0x00011a80) because the offset (-72320) is out of
- > the allowed range, -32678 to 32767.
+https://github.com/xelerance/Openswan/blob/master/lib/libipsecconf/parser.l#L200
+https://github.com/xelerance/Openswan/blob/master/lib/libipsecconf/parser.l#L207
+[...]
+                                         ^
+which musl does not support:
+http://www.openwall.com/lists/musl/2013/09/16/1
 
- > This is a known issue which has been fixed from 6.x, so disallow on older
- > toolchains:
+Fixes
+http://autobuild.buildroot.net/results/70d/70da34c1528b51e92e9e60788f83733d70b33353/
 
- > https://www.altera.com/support/support-resources/knowledge-base/solutions/rd02132012_291.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openswan/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-
-Committed, thanks.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/openswan/Config.in b/package/openswan/Config.in
+index 0370143..ba5d53d 100644
+--- a/package/openswan/Config.in
++++ b/package/openswan/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENSWAN
+ 	bool "openswan"
+ 	depends on BR2_USE_MMU # iproute2
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # iproute2
++	depends on !BR2_TOOLCHAIN_USES_MUSL # GLOB_BRACE
+ 	select BR2_PACKAGE_GMP
+ 	select BR2_PACKAGE_IPROUTE2
+ 	help
+@@ -9,6 +10,7 @@ config BR2_PACKAGE_OPENSWAN
+ 
+ 	  http://www.openswan.org
+ 
+-comment "openswan needs a toolchain w/ headers >= 3.0"
++comment "openswan needs a uClibc or glibc toolchain toolchain w/ headers >= 3.0"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || \
++		BR2_TOOLCHAIN_USES_MUSL
