@@ -1,74 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 13:30:26 +0200
-Subject: [Buildroot] [git commit] libserialport: Fix detection of OS when
-	compiling for ucLinux
-Message-ID: <20160829125501.95BDB80AC7@busybox.osuosl.org>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Mon, 29 Aug 2016 14:14:53 +0100
+Subject: [Buildroot] [PATCH] [RFC] platform: update galileo to 3.14
+	kernel
+In-Reply-To: <1472474898.4887.366.camel@linux.intel.com>
+References: <1471868735-13766-1-git-send-email-padraig.connolly@intel.com>
+ <20160822163337.484cb311@free-electrons.com>
+ <E704BB48EC9FDF4FA0A7A278C2546ACFE25B11@irsmsx105.ger.corp.intel.com>
+ <20160823112531.13f75bab@free-electrons.com>
+ <E704BB48EC9FDF4FA0A7A278C2546ACFE27080@irsmsx105.ger.corp.intel.com>
+ <1472474898.4887.366.camel@linux.intel.com>
+Message-ID: <bfd7fef5-f76a-723e-433c-955f28a991d8@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53dd41dded4d2feb5251254895b7baf49e7b7e75
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When compiling with a toolchain targetted at ucLinux, libserialport's
-configure.ac would fail at detecting the target operating system.
-As a result, the Linux-specific files were not compiled in that
-particular case.
+Hi Andy,
 
-While this commit does not fix any autobuider failure for this package,
-it fixes autobuilder failures for other packages, for instance:
+>
+> What is the "Galileo platform driver"?
 
-http://autobuild.buildroot.net/results/69e/69e43bc171e554cf10f2ad526cebf5e0e524538a/
+It is an out-of-tree driver for the Galileo platform.
 
-Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libserialport/0001-uclinux-detection.patch | 26 ++++++++++++++++++++++
- package/libserialport/libserialport.mk             |  1 +
- 2 files changed, 27 insertions(+)
+> I'm pretty sure everything listed
+> above is working in upstream and you are actually talking about
+> _external_ (to Quark SoC) pinctrl driver which is indeed absent as any
+> means of pinmuxing run-time in upstream.
 
-diff --git a/package/libserialport/0001-uclinux-detection.patch b/package/libserialport/0001-uclinux-detection.patch
-new file mode 100644
-index 0000000..7d7199c
---- /dev/null
-+++ b/package/libserialport/0001-uclinux-detection.patch
-@@ -0,0 +1,26 @@
-+From faab9aa5879fab93556b7a3a6f24070eeb3cbf15 Mon Sep 17 00:00:00 2001
-+From: Paul Cercueil <paul.cercueil@analog.com>
-+Date: Mon, 29 Aug 2016 11:11:01 +0200
-+Subject: [PATCH] Fix Linux files not compiled in with a toolchain for ucLinux
-+
-+Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index f6b66e8..de6f5b9 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -74,7 +74,7 @@ AC_DEFINE_UNQUOTED([SP_LIB_VERSION_REVISION], [$SP_LIB_VERSION_REVISION], [.])
-+ AC_DEFINE_UNQUOTED([SP_LIB_VERSION_AGE], [$SP_LIB_VERSION_AGE], [.])
-+ AC_DEFINE_UNQUOTED([SP_LIB_VERSION_STRING], ["$SP_LIB_VERSION"], [.])
-+ 
-+-AM_CONDITIONAL([LINUX], [test -z "${host_os##linux*}"])
-++AM_CONDITIONAL([LINUX], [test -z "${host_os##linux*}" || test -z "${host_os##uclinux*}"])
-+ AM_CONDITIONAL([WIN32], [test -z "${host_os##mingw*}" || test -z "${host_os##cygwin*}"])
-+ AM_CONDITIONAL([MACOSX], [test -z "${host_os##darwin*}"])
-+ AM_CONDITIONAL([FREEBSD], [test -z "${host_os##freebsd*}"])
-+-- 
-+2.8.1
-+
-diff --git a/package/libserialport/libserialport.mk b/package/libserialport/libserialport.mk
-index d8c3a3d..86ae17f 100644
---- a/package/libserialport/libserialport.mk
-+++ b/package/libserialport/libserialport.mk
-@@ -10,5 +10,6 @@ LIBSERIALPORT_LICENSE = LGPLv3+
- LIBSERIALPORT_LICENSE_FILES = COPYING
- LIBSERIALPORT_INSTALL_STAGING = YES
- LIBSERIALPORT_DEPENDENCIES = host-pkgconf
-+LIBSERIALPORT_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+The Galileo platform driver reserves some of the pin's for muxing, loads 
+the GPIO expander, I2C and SPI drivers. As you point out later in your 
+email much the same as can be achieved with ACPI override.
+
+>
+> I have no idea if it goes to category "reasonable support", though mention issue is applied to all similar boards (UP, Edison/Arduino, ...).
+
+I am afraid I don't understand.
+
+>
+> Comments below are not exactly related to Buildroot.
+>
+>>  USB device support is also less reliable without the fix.
+>
+> Is the fix going to be upstreamed?
+
+No - from memory there was really no acceptable way to fix this issue 
+upstream - it was pretty nasty.
+
+>>
+>> Once the platform was in the wild with the DSDT broken table, the
+>> only
+>> way to be sure that any given platform would work correctly was to
+>> use
+>> the platform driver.
+>
+> Nope. There are two mechanisms now to override and upgrade the ACPI
+> table(s). Somewhere (Ostro?) I saw a direction to a right way.
+>
+
+Yup - I am familiar with this, I know the guys who did the work. Using 
+the ACPI override is another way to go - I haven't validated that Kernel 
+and I don't know if it includes the USB fixes ( and others ).
+
+We have however gone to the effort of validating the Kernel referred to 
+in Padraig's patch.
+
+Thanks,
+
+Ray K
