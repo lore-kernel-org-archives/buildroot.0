@@ -1,88 +1,66 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Mon, 29 Aug 2016 12:19:54 +0200
-Subject: [Buildroot] [PATCHv2/next 2/4] DEVELOPERS: add initial list of
- Buildroot developers
-In-Reply-To: <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1471956466-22338-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1471956466-22338-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <6cfc163d-8a6a-20a3-8eae-b2cb7ee65746@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Aug 2016 12:25:35 +0200
+Subject: [Buildroot] [git commit] package/libfreeimage: fix C++11 compliance
+	with gcc-6
+Message-ID: <20160829102616.1F57E8223A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=70dbe298f42449b8fa19f35ec41c07e360d51c68
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 23/08/2016 14:47, Thomas Petazzoni wrote:
-> This is an initial list of Buildroot developers. It has been created
-> semi-automatically by parsing the Git history, and finding the authors
-> of commits with a title like "<foo>: new package". Some additional
-> manual tweaking has been done (merging multiple entries corresponding to
-> the same person, adding some more entries, etc.).
+Like in cbe01f6, 38249d5, 97fe953, fix C++11 compliance regarding
+narrowing types.
 
-Nice initiative !
+Fixes:
+    http://autobuild.buildroot.org/results/081/0811531872f69f9febbdc482dfbdd7fb5c35d1c8/
+    http://autobuild.buildroot.org/results/90c/90c9cb4ffe705b8c91f4fb602e33e2ba9bcdee77/
+    and a few others...
 
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  DEVELOPERS | 1542 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 1542 insertions(+)
->  create mode 100644 DEVELOPERS
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> new file mode 100644
-> index 0000000..3742a73
-> --- /dev/null
-> +++ b/DEVELOPERS
-> @@ -0,0 +1,1542 @@
-> +# Syntax:
-> +#
-> +# N:	Firstname Lastname <email>
-> +# F:	file pattern or directory
-> +# F:	file pattern or directory
-> +#
-> +# The "F" entries can be:
-> +#
-> +# - A directory, in which case all patches touching any file in this
-> +#   directory or its subdirectories will be CC'ed to the developer.
-> +# - A pattern, in which case the pattern will be expanded, and then
-> +#   all files/directories (and their subdirectories) will be
-> +#   considered when matching against a patch
-> +#
-> +# Notes:
-> +#
-> +# - When a developer adds an "arch/Config.in.<arch>" file to its list
-> +#   of files, he is considered a developer of this architecture. He
-> +#   will receive e-mail notifications about build failures occuring on
-> +#   this architecture. Not more than one e-mail per day is sent.
-> +# - When a developer adds a directory that contains one or several
-> +#   packages, this developer will be notified when build failures
-> +#   occur. Not more than one e-mail per day is sent.
-> +# - When a developer adds an "package/pkg-<infra>.mk" file to its list
-> +#   of files, he is considered interested by this package
-> +#   infrastructure, and will be CC'ed on all patches that add or
-> +#   modify packages that use this infrastructure.
-> +
+[Peter: use signed char for src[], fix dos/unix new lines]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libfreeimage/0004-fix-gcc-6.patch | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-> [....]
-> +
-> +N:	Julien Boibessot <julien.boibessot@armadeus.com>
-> +F:	configs/armadeus*
-> +F:	package/libcddb/
-
-+ board/armadeus/*
-+ package/gpm
-+ package/lbreakout2
-+ package/libmodbus
-+ package/ltris
-+ package/opentyrian
-+ package/pygame
-+ package/smstools3
-
-[...]
-
-Thanks !
-
-Regards,
-Julien
+diff --git a/package/libfreeimage/0004-fix-gcc-6.patch b/package/libfreeimage/0004-fix-gcc-6.patch
+new file mode 100644
+index 0000000..0f10dec
+--- /dev/null
++++ b/package/libfreeimage/0004-fix-gcc-6.patch
+@@ -0,0 +1,31 @@
++libraw/dc_raw: fix gcc-6 failures
++
++With gcc-6, it is no longer allowed to narrow the type of constants in
++a constant array declaration.
++
++Fixes:
++    http://autobuild.buildroot.org/results/081/0811531872f69f9febbdc482dfbdd7fb5c35d1c8/build-end.log
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN a/Source/LibRawLite/internal/dcraw_common.cpp b/Source/LibRawLite/internal/dcraw_common.cpp
++--- a/Source/LibRawLite/internal/dcraw_common.cpp
+++++ b/Source/LibRawLite/internal/dcraw_common.cpp
++@@ -2479,7 +2479,7 @@
++ 
++ void CLASS kodak_radc_load_raw()
++ {
++-  static const char src[] = {
+++  static const signed char src[] = {
++     1,1, 2,3, 3,4, 4,2, 5,7, 6,5, 7,6, 7,8,
++     1,0, 2,1, 3,3, 4,4, 5,2, 6,7, 7,6, 8,5, 8,8,
++     2,1, 2,3, 3,0, 3,2, 3,4, 4,6, 5,5, 6,7, 6,8,
++@@ -4519,7 +4519,7 @@
++  */
++ void CLASS vng_interpolate()
++ {
++-  static const signed char *cp, terms[] = {
+++  static const int *cp, terms[] = {
++     -2,-2,+0,-1,0,0x01, -2,-2,+0,+0,1,0x01, -2,-1,-1,+0,0,0x01,
++     -2,-1,+0,-1,0,0x02, -2,-1,+0,+0,0,0x03, -2,-1,+0,+1,1,0x01,
++     -2,+0,+0,-1,0,0x06, -2,+0,+0,+0,1,0x02, -2,+0,+0,+1,0,0x03,
