@@ -1,64 +1,111 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Aug 2016 17:53:56 +0200
-Subject: [Buildroot] [PATCH] libiio: Disable IIOD on Blackfin
-In-Reply-To: <1472462723-18842-1-git-send-email-paul.cercueil@analog.com>
- (Paul Cercueil's message of "Mon, 29 Aug 2016 11:25:23 +0200")
-References: <1472462723-18842-1-git-send-email-paul.cercueil@analog.com>
-Message-ID: <87fupn606j.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 29 Aug 2016 17:53:58 +0200
+Subject: [Buildroot] [PATCH 1/2 v3] toolchain/wrapper: display options
+	leading to a paranoid failure
+In-Reply-To: <cover.1472485693.git.yann.morin.1998@free.fr>
+References: <cover.1472485693.git.yann.morin.1998@free.fr>
+Message-ID: <bc84e6b73e8ed3767bfeb120b614dff3818770e7.1472485693.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paul" == Paul Cercueil <paul.cercueil@analog.com> writes:
+Current, we only display the path that causes the paranoid failure. This
+is sufficient, as we can fail only for -I and -L options, and it is thus
+easy to infer from the path, which option is the culprit.
 
- > IIOD uses accept4, which is not yet available on Blackfin.
- > Fixes:
- >  http://autobuild.buildroot.net/results/b75/b7552c9325ffcc7f1cb6e114b82648f3280fded6/
+However, we're soon to add a new test for the -isystem option, and then
+when a failure occurs, we would not know whether it was because of -I or
+-isystem. Being able to differentiate both can be hugely useful to
+track down the root cause for the unsafe path.
 
- > Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
- > ---
- >  package/libiio/Config.in | 4 ++++
- >  1 file changed, 4 insertions(+)
+Add two new arguments to the check_unsafe_path() function: one with the
+current-or-previous argument, one to specify whether it has the path in
+it or not. Print that in the error message, instead of just the path.
 
- > diff --git a/package/libiio/Config.in b/package/libiio/Config.in
- > index 69269e0..6f35715 100644
- > --- a/package/libiio/Config.in
- > +++ b/package/libiio/Config.in
- > @@ -53,6 +53,7 @@ config BR2_PACKAGE_LIBIIO_IIOD
- >  	bool "IIO Daemon"
- >  	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
- >  	depends on BR2_TOOLCHAIN_HAS_THREADS
- > +	depends on !BR2_bfin
- >  	default y
- >  	help
- >  	  Install the IIO Daemon.
- > @@ -60,6 +61,9 @@ config BR2_PACKAGE_LIBIIO_IIOD
- >  comment "IIO Daemon needs a toolchain w/ threads"
- >  	depends on !BR2_TOOLCHAIN_HAS_THREADS
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-This comment no longer makes sense for bfin, so I added a 'depends on
-!BR2_bfin'.
+---
+---
+Changes v2 -> v3:
+  - invert test to gain one indentation level  (Thomas)
+  - remove stray variables from v1  (Thomas)
+  - add doc to the function  (Thomas)
+  - add a comment about the "' '" trick  (Thomas)
 
-I verified that the system call indeed isn't wired up and committed with
-that fix, thanks.
+Changes v1 -> v2;
+  - don't use a variadic function; use explicit argumetns  (Arnout)
+  - print it on a single line  (Arnout)
+---
+ toolchain/toolchain-wrapper.c | 37 +++++++++++++++++++++++++++----------
+ 1 file changed, 27 insertions(+), 10 deletions(-)
 
-
- > +comment "IIO Daemon is not yet available on Blackfin"
- > +	depends on BR2_bfin
- > +
- >  config BR2_PACKAGE_LIBIIO_TESTS
- >  	bool "Install test programs"
- >  	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
- > -- 
- > 2.8.1
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
-
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 887058f..6259dac 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -80,7 +80,21 @@ static char *predef_args[] = {
+ #endif
+ };
+ 
+-static void check_unsafe_path(const char *path, int paranoid)
++/* Check if path is unsafe for cross-compilation. Unsafe paths are those
++ * pointing to the standard native include or library paths.
++ *
++ * We print the arguments leading to the failure. For some options, gcc
++ * accepts the path to be concatenated to the argument (e.g. -I/foo/bar)
++ * or separated (e.g. -I /foo/bar). In the first case, we need only print
++ * the argument as it already contains the path (arg_has_path), while in
++ * the second case we need to print both (!arg_has_path).
++ *
++ * If paranoid, exit in error instead of just printing a warning.
++ */
++static void check_unsafe_path(const char *arg,
++			      const char *path,
++			      int paranoid,
++			      int arg_has_path)
+ {
+ 	char **c;
+ 	static char *unsafe_paths[] = {
+@@ -88,14 +102,17 @@ static void check_unsafe_path(const char *path, int paranoid)
+ 	};
+ 
+ 	for (c = unsafe_paths; *c != NULL; c++) {
+-		if (!strncmp(path, *c, strlen(*c))) {
+-			fprintf(stderr, "%s: %s: unsafe header/library path used in cross-compilation: '%s'\n",
+-				program_invocation_short_name,
+-				paranoid ? "ERROR" : "WARNING", path);
+-			if (paranoid)
+-				exit(1);
++		if (strncmp(path, *c, strlen(*c)))
+ 			continue;
+-		}
++		fprintf(stderr,
++			"%s: %s: unsafe header/library path used in cross-compilation: '%s%s%s'\n",
++			program_invocation_short_name,
++			paranoid ? "ERROR" : "WARNING",
++			arg,
++			arg_has_path ? "" : "' '", /* close single-quote, space, open single-quote */
++			arg_has_path ? "" : path); /* so that arg and path are properly quoted. */
++		if (paranoid)
++			exit(1);
+ 	}
+ }
+ 
+@@ -237,9 +254,9 @@ int main(int argc, char **argv)
+ 			i++;
+ 			if (i == argc)
+ 				continue;
+-			check_unsafe_path(argv[i], paranoid);
++			check_unsafe_path(argv[i-1], argv[i], paranoid, 0);
+ 		} else {
+-			check_unsafe_path(argv[i] + 2, paranoid);
++			check_unsafe_path(argv[i], argv[i] + 2, paranoid, 1);
+ 		}
+ 	}
+ 
 -- 
-Bye, Peter Korsgaard
+2.7.4
