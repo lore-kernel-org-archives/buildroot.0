@@ -1,68 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 30 Aug 2016 00:25:33 +0200
-Subject: [Buildroot] [PATCH 06/16 v3] core: introduce a generated
- kconfig snippet
-In-Reply-To: <cdf82b88-bcca-6fa7-a763-43f250bd6d25@mind.be>
-References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
- <20160827161601.2fd0e8f5@free-electrons.com>
- <87poosaa9d.fsf@dell.be.48ers.dk>
- <20160829091938.11ed7ff7@free-electrons.com>
- <87fupo6mkq.fsf@dell.be.48ers.dk>
- <20160829120216.465dcc99@free-electrons.com>
- <cdf82b88-bcca-6fa7-a763-43f250bd6d25@mind.be>
-Message-ID: <20160829222533.GD5829@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 30 Aug 2016 00:38:33 +0200
+Subject: [Buildroot] [PATCH/next 1/2] valgrind: let the valgrind
+ configure script detect TLS availability
+In-Reply-To: <1472507657-9983-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1472507657-9983-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <4b2745e2-7705-7cae-eb20-0b827c0112cf@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
 
-On 2016-08-30 00:14 +0200, Arnout Vandecappelle spake thusly:
-> On 29-08-16 12:02, Thomas Petazzoni wrote:
-> > Hello,
-> > 
-> > On Mon, 29 Aug 2016 09:50:13 +0200, Peter Korsgaard wrote:
-> > 
-> >> Yes, but the list is really long and overwhelming. As it stands, the
-> >> list of packages takes up more than half the size of the manual. I think
-> >> just asking people to browse packages/ (or make menuconfig) is more
-> >> sane.
-> > Right.
->  We could replace it with a reference to http://autobuild.buildroot.net/stats/
 
-I'm OK with that.
-
-> >>  > The other thing that I find quite complex for no super benefit is the
-> >>  > whole "doc-asciidoc" infrastructure, but that's another story.  
-> >>
-> >> Yeah, having this infrastructure just for the manual is maybe a bit
-> >> overkill.
+On 29-08-16 23:54, Thomas Petazzoni wrote:
+> Back in 2005, in commit
+> a2c326396a43ecbc8d02c3d815d4010a7ba2e004 ("update valgrind to the latest
+> and greatest"), an explicit --disable-tls option was added. More
+> recently, in commit 31a3f4bd54e12b8d6de286ab8fb6d9651990e2f5 ("valgrind:
+> enable tls support") changed this to be conditional on
+> BR2_GCC_ENABLE_TLS.
 > 
->  I introduced it back in the day to reduce the size of manual.mk a little. Back
-> then I still believed that all code duplication is evil. Now I think that the
-> manual generation logic would be a lot easier to understand if it was all
-> unrolled...
+> However, the configure script of valgrind is perfectly capable of
+> detecting TLS support, even in a cross-compilation case: it tries to
+> compile a program that uses __thread and sees if it works.
 > 
-> > I agree, though some people wanted to build several manuals, if I
-> > remember correctly.
+> Since we're about to modify how BR2_GCC_ENABLE_TLS is handled, we'd
+> better remove its usage from packages, and valgrind is the only package
+> using this config option.
 > 
->  I never saw the use of that, TBH. But I guess it's out there now so we should
-> keep it?
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-I've seen it. And I use it as well:
-    http://ymorin.is-a-geek.org/git/buildroot.config/
-    http://ymorin.is-a-geek.org/download/tmp/br.config/manual/
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Regards,
-Yann E. MORIN.
+
+ Regards,
+ Arnout
+
+> ---
+>  package/valgrind/valgrind.mk | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+> index 46ba13e..b97d446 100644
+> --- a/package/valgrind/valgrind.mk
+> +++ b/package/valgrind/valgrind.mk
+> @@ -15,12 +15,6 @@ VALGRIND_INSTALL_STAGING = YES
+>  # patch 0004-Fixes-for-musl-libc.patch touching configure.ac
+>  VALGRIND_AUTORECONF = YES
+>  
+> -ifeq ($(BR2_GCC_ENABLE_TLS),y)
+> -VALGRIND_CONF_OPTS += --enable-tls
+> -else
+> -VALGRIND_CONF_OPTS += --disable-tls
+> -endif
+> -
+>  # When Valgrind detects a 32-bit MIPS architecture, it forcibly adds
+>  # -march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture,
+>  # it forcibly adds -march=mips64. This causes Valgrind to be built
+> 
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
