@@ -1,61 +1,61 @@
 From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Tue, 30 Aug 2016 15:40:38 +0000
-Subject: [Buildroot] [PATCH] gmp: disable assembly for arc
-In-Reply-To: <1471416256.19853.54.camel@synopsys.com>
-References: <1471272107-17275-1-git-send-email-vzakhar@synopsys.com>
- <87bn0txnp2.fsf@dell.be.48ers.dk> <1471416256.19853.54.camel@synopsys.com>
-Message-ID: <1472571638.10978.4.camel@synopsys.com>
+Date: Tue, 30 Aug 2016 17:44:18 +0000
+Subject: [Buildroot] [PATCH] gcc: ARC Fix conditional move contstraint.
+In-Reply-To: <20160826225323.1a57ae0f@free-electrons.com>
+References: <1472203712-27459-1-git-send-email-vzakhar@synopsys.com>
+ <20160826225323.1a57ae0f@free-electrons.com>
+Message-ID: <1472579057.10978.8.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Thomas,
 
-The patch that solves the issue in gmp was adopted in upstream gmp:
-https://gmplib.org/repo/gmp/rev/58879634af3c
-and will come up in next gmp release.
+Looks like I tried to build it in a slightly different conditions.?
+I reproduced that bug and hope our team will be able to fix the issue soon.
 
-So current patch should be reverted after update to upcoming gmp release.
+Thank you for your remarks.
 
 -- 
 Best regards,
 Vlad Zakharov <vzakhar@synopsys.com>
 
-
-On Wed, 2016-08-17 at 09:44 +0300, Vlad Zakharov wrote:
-
-> Hi Peter,
+On Fri, 2016-08-26 at 22:53 +0200, Thomas Petazzoni wrote:
+> Vlad, Alexey, Eugeniy,
 > 
-> yes, I am just working on fixing it in upstream gmp and hope fix will be send soon.
+> On Fri, 26 Aug 2016 12:28:32 +0300, Vlad Zakharov wrote:
+> > 
+> > The patch solves one of the ARC internal compiler issues.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/1c4/1c4493c6a18b7a93a0368420c8f79032f9330891//
+> > http://autobuild.buildroot.net/results/510/51071b790866b0c7083de3a94ad2a427009096af//
+> > http://autobuild.buildroot.net/results/09e/09e037c628ca2a27d8eb832dd070f50ec7ebb72a//
+> FWIW, this last build issue is *not* fixed by this patch. This last
+> build failure is on mesa3d, with:
 > 
-> Thanks.
+> main/get.c: In function '_mesa_GetBooleani_v':
+> main/get.c:2320:1: error: insn does not satisfy its constraints:
+> ?}
+> ?^
+> (insn 79 72 80 7 (set (reg/f:SI 147 virtual-stack-vars)
+> ????????(reg:SI 2 r2)) main/get.c:2315 3 {*movsi_insn}
+> ?????(nil))
+> main/get.c:2320:1: internal compiler error: in extract_constrain_insn, at recog.c:2190
+> Please submit a full bug report,
+> with preprocessed source if appropriate.
+> See <http://bugs.buildroot.net/> for instructions.
 > 
-> On Tue, 2016-08-16 at 07:55 +0200, Peter Korsgaard wrote:
-> > 
-> > > 
-> > > 
-> > > > 
-> > > > 
-> > > > > 
-> > > > > 
-> > > > > > 
-> > > > > > 
-> > > > > > > 
-> > > > > > > 
-> > > > > > > "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
-> > ?> It has different inline assembly constraints that
-> > ?> are not supported after update to gcc-6.
-> > 
-> > ?> Fixes:
-> > ?> http://autobuild.buildroot.net/results/c91/c9143eec0834017d57d5352d6fc95b5fae38da00//
-> > ?> and a lot of other failures of gmp-6.1.1 for ARC.
-> > 
-> > ?> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-> > 
-> > Committed, thanks.
-> > 
-> > Are you working on getting this fixed in upstream gcc/gmp for future
-> > releases?
-> > 
+> And the build result
+> http://autobuild.buildroot.net/results/5cc/5ccb47e2af780982d71d924ef30008f16573ad73//build-end.log
+> is the *exact* same failure, but at commit
+> https://git.buildroot.net/buildroot/commit/?id=2567f6f2f34a1ecfc25604bf8bf93b8bc065fc63,
+> which is *after* I committed and pushed your ARC fix (and the
+> configuration was using the internal toolchain backend, so the
+> toolchain was built from scratch).
+> 
+> Best regards,
+> 
+> Thomas
