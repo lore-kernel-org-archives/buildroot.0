@@ -1,40 +1,61 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 30 Aug 2016 12:23:25 -0300
-Subject: [Buildroot] [PATCH] libinput: bump to version 1.4.2
-Message-ID: <1472570605-12273-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Tue, 30 Aug 2016 15:40:38 +0000
+Subject: [Buildroot] [PATCH] gmp: disable assembly for arc
+In-Reply-To: <1471416256.19853.54.camel@synopsys.com>
+References: <1471272107-17275-1-git-send-email-vzakhar@synopsys.com>
+ <87bn0txnp2.fsf@dell.be.48ers.dk> <1471416256.19853.54.camel@synopsys.com>
+Message-ID: <1472571638.10978.4.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Peter,
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index a1a7ca2..0cdcc38 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030348.html
--sha256	26e7b3ab499358caba499705680ea7e5851af2bd37dc32f2be64181610d6392a	libinput-1.4.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030857.html
-+sha256	8c38826a785594811bef6a9daadbfa2e172e3f070f8863393d6fb7ca4c68e451	libinput-1.4.2.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 5ce51c2..eb74e34 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 1.4.1
-+LIBINPUT_VERSION = 1.4.2
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+The patch that solves the issue in gmp was adopted in upstream gmp:
+https://gmplib.org/repo/gmp/rev/58879634af3c
+and will come up in next gmp release.
+
+So current patch should be reverted after update to upcoming gmp release.
+
 -- 
-2.7.3
+Best regards,
+Vlad Zakharov <vzakhar@synopsys.com>
+
+
+On Wed, 2016-08-17 at 09:44 +0300, Vlad Zakharov wrote:
+
+> Hi Peter,
+> 
+> yes, I am just working on fixing it in upstream gmp and hope fix will be send soon.
+> 
+> Thanks.
+> 
+> On Tue, 2016-08-16 at 07:55 +0200, Peter Korsgaard wrote:
+> > 
+> > > 
+> > > 
+> > > > 
+> > > > 
+> > > > > 
+> > > > > 
+> > > > > > 
+> > > > > > 
+> > > > > > > 
+> > > > > > > 
+> > > > > > > "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
+> > ?> It has different inline assembly constraints that
+> > ?> are not supported after update to gcc-6.
+> > 
+> > ?> Fixes:
+> > ?> http://autobuild.buildroot.net/results/c91/c9143eec0834017d57d5352d6fc95b5fae38da00//
+> > ?> and a lot of other failures of gmp-6.1.1 for ARC.
+> > 
+> > ?> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+> > 
+> > Committed, thanks.
+> > 
+> > Are you working on getting this fixed in upstream gcc/gmp for future
+> > releases?
+> > 
