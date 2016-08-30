@@ -1,44 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Aug 2016 11:40:32 +0200
-Subject: [Buildroot] [PATCH 06/16 v3] core: introduce a generated
-	kconfig snippet
-In-Reply-To: <20160830090018.GA5815@free.fr> (Yann E. MORIN's message of "Tue, 
- 30 Aug 2016 11:00:18 +0200")
-References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
- <20160827161601.2fd0e8f5@free-electrons.com>
- <87poosaa9d.fsf@dell.be.48ers.dk> <20160829221610.GC5829@free.fr>
- <b560c751-1ce1-f45a-5ab7-2e06ba169530@mind.be>
- <20160830090018.GA5815@free.fr>
-Message-ID: <87bn0a388f.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 30 Aug 2016 11:42:29 +0200
+Subject: [Buildroot] [PATCH 1/1] alljoyn: bump to version 16.04a
+Message-ID: <1472550149-10979-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+ package/alljoyn/alljoyn.hash | 2 +-
+ package/alljoyn/alljoyn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Hi,
-
->> For sure, the asciidoc support is even more difficult to understand and
- >> maintain than the normal package infras.
-
- > And I seem to have a good track-record at looking at it:
-
- >     $ git log --follow --pretty=%an package/doc-asciidoc.mk |sort |uniq -c  |sort -k1nr,2
- >          22 Yann E. MORIN
- >           8 Samuel Martin
- >           7 Thomas De Schampheleire
- >           2 Thomas Petazzoni
- >           1 Atul Singh
- >           1 J?r?me Pouiller
-
- > So, please, please. let's keep this asciidoc infra in place.
-
-Yes, as long as it doesn't cause any problems I don't see any reason to
-get rid of it.
-
+diff --git a/package/alljoyn/alljoyn.hash b/package/alljoyn/alljoyn.hash
+index e18d66e..47dd0d4 100644
+--- a/package/alljoyn/alljoyn.hash
++++ b/package/alljoyn/alljoyn.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	41bd424d376d22dc2b48cc035400bd63595d19467eeb6a7ae81429f5a43ed2e2	alljoyn-16.04.00-src.tar.gz
++sha256	fc437d96cf1213f18048240b5d12a374b31894d21830a0a6ccf562ffa13425d5	alljoyn-16.04.00a-src.tar.gz
+diff --git a/package/alljoyn/alljoyn.mk b/package/alljoyn/alljoyn.mk
+index 7126258..69d5ded 100644
+--- a/package/alljoyn/alljoyn.mk
++++ b/package/alljoyn/alljoyn.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ ALLJOYN_REV = 16.04
+-ALLJOYN_VERSION = $(ALLJOYN_REV).00
++ALLJOYN_VERSION = $(ALLJOYN_REV).00a
+ ALLJOYN_SOURCE = alljoyn-$(ALLJOYN_VERSION)-src.tar.gz
+ ALLJOYN_SITE = https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_REV)
+ # See https://allseenalliance.org/alliance/ip-policy
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.7.4
