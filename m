@@ -1,39 +1,64 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 30 Aug 2016 11:46:10 +0200
-Subject: [Buildroot] [PATCH 1/1] alljoyn-tcl: bump to version 16.04a
-Message-ID: <1472550370-14562-1-git-send-email-fabrice.fontaine@orange.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 30 Aug 2016 11:48:10 +0200
+Subject: [Buildroot] [PATCHv2] package/systemd: fix build with old
+ toolchains
+In-Reply-To: <20160830093511.ykvjhugty2xhg4rf@tarshish>
+References: <1472549377-22268-1-git-send-email-yann.morin.1998@free.fr>
+ <20160830093511.ykvjhugty2xhg4rf@tarshish>
+Message-ID: <20160830094810.GC5815@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
----
- package/alljoyn-tcl/alljoyn-tcl.hash | 2 +-
- package/alljoyn-tcl/alljoyn-tcl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Baruch, All,
 
-diff --git a/package/alljoyn-tcl/alljoyn-tcl.hash b/package/alljoyn-tcl/alljoyn-tcl.hash
-index a1cdf16..208d676 100644
---- a/package/alljoyn-tcl/alljoyn-tcl.hash
-+++ b/package/alljoyn-tcl/alljoyn-tcl.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	ce6a05a67ff405ba6274e85fe750d98f40cbe7ab2c968218c7741a10bd86e21a	ajtcl-16.04.00-src.tar.gz
-+sha256	da13614a9db79067937b744a87328fed84d99ba62e3de19b0ddc4a83e4b2447e	ajtcl-16.04.00a-src.tar.gz
-diff --git a/package/alljoyn-tcl/alljoyn-tcl.mk b/package/alljoyn-tcl/alljoyn-tcl.mk
-index a5c7e4e..cabdf89 100644
---- a/package/alljoyn-tcl/alljoyn-tcl.mk
-+++ b/package/alljoyn-tcl/alljoyn-tcl.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- ALLJOYN_TCL_REV = 16.04
--ALLJOYN_TCL_VERSION = $(ALLJOYN_TCL_REV).00
-+ALLJOYN_TCL_VERSION = $(ALLJOYN_TCL_REV).00a
- ALLJOYN_TCL_SOURCE = ajtcl-$(ALLJOYN_TCL_VERSION)-src.tar.gz
- ALLJOYN_TCL_SITE = \
- 	https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_TCL_REV)
+On 2016-08-30 12:35 +0300, Baruch Siach spake thusly:
+> Hi Yann,
+> 
+> On Tue, Aug 30, 2016 at 11:29:37AM +0200, Yann E. MORIN wrote:
+> > Toolchains using glibc-2.18 or older do not define O_TMPFILE, which
+> > causes build failures on some archs.
+> > 
+> > systemd has a definition for O_TMPFILE if it is missing, but only
+> > defines it for i386 or x86_64. Furthermore, the header defining it is
+> > not included everywhere O_TMPFILE is used.
+> > 
+> > Fix that with three patches backported from upstream:
+> >   - include the needed header where it is needed (he!),
+> >   - define O_TMPFILE for all archs, according to linux-4.8rc3,
+> >   - no longer guard against undefined O_TMPFILE in fileio.
+> 
+> This last patch is not a pure build fix, but more of a feature enhancement. 
+> Don't know if it fits in master.
+
+Well, it's indeed not a _pure_ bug fix, but given that O_TMPFILE is now
+always defined, the guards are no longer needed at all: they will never
+be guarding anything now.
+
+Besides, using O_TMPFILE is way better than not using it; it makes the
+thing a little bit more secure.
+
+> Also, your patches are missing sign-off.
+
+Damn. Upstream is not using SoB lines (Lennart asked me to remove them
+[0] and I fiorgot to re-add them when adding them in Buildroot; the
+previosu iteration did have my SoB lines).
+
+> An autobuild reference in the commit log would also be nice.
+
+Damn, I also forgot that... :-/
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
