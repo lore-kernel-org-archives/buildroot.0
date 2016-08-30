@@ -1,21 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Aug 2016 22:49:23 +0200
-Subject: [Buildroot] [PATCH 1/1] alljoyn-tcl: bump to version 16.04a
-In-Reply-To: <1472550370-14562-1-git-send-email-fabrice.fontaine@orange.com>
- (Fabrice Fontaine's message of "Tue, 30 Aug 2016 11:46:10 +0200")
-References: <1472550370-14562-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <87lgze0yp8.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Aug 2016 22:49:41 +0200
+Subject: [Buildroot] [PATCH/next] mosquitto: bump to version 1.4.10
+In-Reply-To: <1472558234-20683-1-git-send-email-peter@korsgaard.com> (Peter
+ Korsgaard's message of "Tue, 30 Aug 2016 13:57:14 +0200")
+References: <1472558234-20683-1-git-send-email-peter@korsgaard.com>
+Message-ID: <87h9a20yoq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Committed to next, thanks.
+Committed, thanks.
 
 -- 
-Bye, Peter Korsgaard
+Venlig hilsen,
+Peter Korsgaard 
