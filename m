@@ -1,123 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Aug 2016 23:55:30 +0200
-Subject: [Buildroot] [git commit] Revert "Added local directory as source of
-	kernel code"
-Message-ID: <20160902142941.3FA3C7FA6D@busybox.osuosl.org>
+Date: Tue, 30 Aug 2016 22:49:13 +0200
+Subject: [Buildroot] [git commit] alljoyn: bump to version 16.04a
+Message-ID: <20160902142941.7F8D17FA6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e782cd5b1bc231dda527d5d0a04e6a338669b92c
+commit: https://git.buildroot.net/buildroot/commit/?id=d340eb39953d35048c030e1602b026f46734c9b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 73da2ff6f718f2889e3c5024d899f8d58f502863.
-
-The reason for adding support for a local location was to be able to do
-development on the Linux kernel source tree on a local directory rather
-than have to clone it for every build.
-
-We already have a mechanism for that, it's called override-srcdir. It's
-been available since September 2011, more than a year before this patch
-was committed.
-
-Otherwise, we're going to be adding support for local sources in other
-packages. First was U-Boot as submitted by Adam. But what next? We can't
-have such support for all packages, especially since override-srcdir
-does the job.
-
-Besides, using a local source tree makes the build non-reproducible, so
-we don't really want to have this in a .config (or defconfig).
-
-We only handle the boolean option in legacy, as there is nothing we can
-do with the directory path.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Rafal Fabich <rafal.fabich@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy | 12 ++++++++++++
- linux/Config.in  | 13 -------------
- linux/linux.mk   |  3 ---
- 3 files changed, 12 insertions(+), 16 deletions(-)
+ package/alljoyn/alljoyn.hash | 2 +-
+ package/alljoyn/alljoyn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 746b80a..59e3f84 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -143,6 +143,18 @@ comment "----------------------------------------------------"
- endif
+diff --git a/package/alljoyn/alljoyn.hash b/package/alljoyn/alljoyn.hash
+index e18d66e..47dd0d4 100644
+--- a/package/alljoyn/alljoyn.hash
++++ b/package/alljoyn/alljoyn.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	41bd424d376d22dc2b48cc035400bd63595d19467eeb6a7ae81429f5a43ed2e2	alljoyn-16.04.00-src.tar.gz
++sha256	fc437d96cf1213f18048240b5d12a374b31894d21830a0a6ccf562ffa13425d5	alljoyn-16.04.00a-src.tar.gz
+diff --git a/package/alljoyn/alljoyn.mk b/package/alljoyn/alljoyn.mk
+index 7126258..69d5ded 100644
+--- a/package/alljoyn/alljoyn.mk
++++ b/package/alljoyn/alljoyn.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- ###############################################################################
-+comment "Legacy options removed in 2016.11"
-+
-+config BR2_LINUX_KERNEL_CUSTOM_LOCAL
-+	bool "Linux kernel local directory option removed"
-+	help
-+	  The option to select a local directory as the source of the Linux
-+	  kernel has been removed. It hurts reproducibility of builds.
-+
-+	  In case you were using this option during development of your
-+	  Linux kernel, use the override mechanism instead.
-+
-+###############################################################################
- comment "Legacy options removed in 2016.08"
- 
- config BR2_PACKAGE_SYSTEMD_COMPAT
-diff --git a/linux/Config.in b/linux/Config.in
-index e02d138..ebcafcc 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -69,12 +69,6 @@ config BR2_LINUX_KERNEL_CUSTOM_SVN
- 	  This option allows Buildroot to get the Linux kernel source
- 	  code from a Subversion repository.
- 
--config BR2_LINUX_KERNEL_CUSTOM_LOCAL
--	bool "Local directory"
--	help
--	  This option allows Buildroot to get the Linux kernel source
--	  code from a local directory.
--
- endchoice
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
-@@ -102,12 +96,6 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
- 
- endif
- 
--config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
--	string "Path to the local directory"
--	depends on BR2_LINUX_KERNEL_CUSTOM_LOCAL
--	help
--	  Path to the local directory with the Linux kernel source code.
--
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "4.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-@@ -116,7 +104,6 @@ config BR2_LINUX_KERNEL_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	default BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION \
- 		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
--	default "custom" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
- 
- #
- # Patch selection
-diff --git a/linux/linux.mk b/linux/linux.mk
-index fb844ef..6e41a92 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -21,9 +21,6 @@ LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
- LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
- LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
- BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
--else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
--LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
--LINUX_SITE_METHOD = local
- else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_SITE_METHOD = git
+ ALLJOYN_REV = 16.04
+-ALLJOYN_VERSION = $(ALLJOYN_REV).00
++ALLJOYN_VERSION = $(ALLJOYN_REV).00a
+ ALLJOYN_SOURCE = alljoyn-$(ALLJOYN_VERSION)-src.tar.gz
+ ALLJOYN_SITE = https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_REV)
+ # See https://allseenalliance.org/alliance/ip-policy
