@@ -1,42 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Aug 2016 08:37:11 +0200
-Subject: [Buildroot] [git commit branch/next] gvfs: bump to version 1.28.3
-Message-ID: <20160830063733.9EE908226F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 Aug 2016 09:07:58 +0200
+Subject: [Buildroot] [PATCH/next 2/2] gcc: remove BR2_GCC_ENABLE_TLS
+ option
+In-Reply-To: <68f877ee-c37e-c7b8-d83e-0c2d7c5b8e15@mind.be>
+References: <1472507657-9983-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1472507657-9983-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <68f877ee-c37e-c7b8-d83e-0c2d7c5b8e15@mind.be>
+Message-ID: <20160830090758.04879c3e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e1a10746303a61dac219939be870231b2621f9c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gvfs/gvfs.hash | 4 ++--
- package/gvfs/gvfs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Tue, 30 Aug 2016 00:40:59 +0200, Arnout Vandecappelle wrote:
 
-diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
-index 1fec32c..440671f 100644
---- a/package/gvfs/gvfs.hash
-+++ b/package/gvfs/gvfs.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.28/gvfs-1.28.2.sha256sum
--sha256	bc6af45cff7e7e8d33c3a4be1d27e479f10f80105a6f2d1fae75c5c0d40636d9	gvfs-1.28.2.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.28/gvfs-1.28.3.sha256sum
-+sha256	458c4cb68570f6ef4a9e152995c62d0057c3e0a07ed64d84c7200cdd22f0bd17	gvfs-1.28.3.tar.xz
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index 8e88573..e2947fd 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GVFS_VERSION_MAJOR = 1.28
--GVFS_VERSION = $(GVFS_VERSION_MAJOR).2
-+GVFS_VERSION = $(GVFS_VERSION_MAJOR).3
- GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
- GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
+> > -ifeq ($(BR2_GCC_ENABLE_TLS),y)
+> > +# On glibc, musl and uClibc/NPTL, enable TLS support. Otherwise (i.e
+> > +# just uClibc/no-thread and uClibc/linux-threads), disable it.
+> > +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_GLIBC)$(BR2_TOOLCHAIN_BUILDROOT_MUSL)$(BR2_PTHREADS_NATIVE),y)
+> >  HOST_GCC_COMMON_CONF_OPTS += --enable-tls
+> >  else
+> >  HOST_GCC_COMMON_CONF_OPTS += --disable-tls  
+> 
+>  I think it's slightly easier to understand if the condition is reverted.
+> 
+> # TLS support is not available on uClibc/no-thread and uClibc/linux-threads
+> ifeq($(BR2_TOOLCHAIN_BUILDROOT_UCLIBC)$(BR2_PTHREADS)$(BR2_PTHREADS_NONE),yy)
+> HOST_GCC_COMMON_CONF_OPTS += --disable-tls
+> else
+> HOST_GCC_COMMON_CONF_OPTS += --enable-tls
+> endif
+> 
+> but it doesn't make a big difference either way.
+
+Yes, I hesitated between both solutions, yours has the advantage of
+being shorter, and enabling TLS all the time *except* in some cases. I
+should probably change to use your proposal. I'll send a v2.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
