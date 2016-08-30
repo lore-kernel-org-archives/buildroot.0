@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Aug 2016 22:49:13 +0200
-Subject: [Buildroot] [git commit branch/next] alljoyn: bump to version 16.04a
-Message-ID: <20160830205026.69F0281A0E@busybox.osuosl.org>
+Date: Tue, 30 Aug 2016 22:49:00 +0200
+Subject: [Buildroot] [git commit branch/next] mosquitto: bump to version
+	1.4.10
+Message-ID: <20160830205026.62299800D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d340eb39953d35048c030e1602b026f46734c9b7
+commit: https://git.buildroot.net/buildroot/commit/?id=3c4aa539f5f8498269b68091663e0155d8a0838a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/alljoyn/alljoyn.hash | 2 +-
- package/alljoyn/alljoyn.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mosquitto/mosquitto.hash | 4 ++--
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/alljoyn/alljoyn.hash b/package/alljoyn/alljoyn.hash
-index e18d66e..47dd0d4 100644
---- a/package/alljoyn/alljoyn.hash
-+++ b/package/alljoyn/alljoyn.hash
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 68dac00..b0b860f 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256	41bd424d376d22dc2b48cc035400bd63595d19467eeb6a7ae81429f5a43ed2e2	alljoyn-16.04.00-src.tar.gz
-+sha256	fc437d96cf1213f18048240b5d12a374b31894d21830a0a6ccf562ffa13425d5	alljoyn-16.04.00a-src.tar.gz
-diff --git a/package/alljoyn/alljoyn.mk b/package/alljoyn/alljoyn.mk
-index 7126258..69d5ded 100644
---- a/package/alljoyn/alljoyn.mk
-+++ b/package/alljoyn/alljoyn.mk
-@@ -5,7 +5,7 @@
+-# From https://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.9.tar.gz
+-sha512  5994159d9a8da248a877f3032f36ca9a865d9b4efaafac329620864049992a77d414e02252cbbfef89ea2c37dc761b1885a89e19fc8e82b2a42d38f31e761d4d  mosquitto-1.4.9.tar.gz
++# From https://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.10.tar.gz
++sha512  fe5d6d7196a137a496ba6881c77d852396baefb4f0b83ccd9a22175fc05b09e48a09ea249e30ec7db966e11de134ebcc4e2e9b1fd40b31dc59fb0fa2f60b75a1  mosquitto-1.4.10.tar.gz
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index f2ede6c..96607f3 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- ALLJOYN_REV = 16.04
--ALLJOYN_VERSION = $(ALLJOYN_REV).00
-+ALLJOYN_VERSION = $(ALLJOYN_REV).00a
- ALLJOYN_SOURCE = alljoyn-$(ALLJOYN_VERSION)-src.tar.gz
- ALLJOYN_SITE = https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_REV)
- # See https://allseenalliance.org/alliance/ip-policy
+-MOSQUITTO_VERSION = 1.4.9
++MOSQUITTO_VERSION = 1.4.10
+ MOSQUITTO_SITE = http://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
