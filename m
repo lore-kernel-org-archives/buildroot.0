@@ -1,87 +1,156 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 30 Aug 2016 11:00:18 +0200
-Subject: [Buildroot] [PATCH 06/16 v3] core: introduce a generated
- kconfig snippet
-In-Reply-To: <b560c751-1ce1-f45a-5ab7-2e06ba169530@mind.be>
-References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
- <20160827161601.2fd0e8f5@free-electrons.com>
- <87poosaa9d.fsf@dell.be.48ers.dk> <20160829221610.GC5829@free.fr>
- <b560c751-1ce1-f45a-5ab7-2e06ba169530@mind.be>
-Message-ID: <20160830090018.GA5815@free.fr>
+Date: Tue, 30 Aug 2016 11:17:42 +0200
+Subject: [Buildroot] [PATCH] package/systemd: fix build with old
+	toolchains
+In-Reply-To: <1472400772-13647-1-git-send-email-yann.morin.1998@free.fr>
+References: <1472400772-13647-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160830091742.GB5815@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Peter, Thomas, All,
 
-On 2016-08-30 00:46 +0200, Arnout Vandecappelle spake thusly:
-> On 30-08-16 00:16, Yann E. MORIN wrote:
-> > Peter, Thomas, All,
-> > 
-> > On 2016-08-28 22:50 +0200, Peter Korsgaard spake thusly:
-> >>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> >>  > On Sun, 17 Jul 2016 12:34:26 +0200, Yann E. MORIN wrote:
-> >>  >> +# Ensure the kconfig snippet is generated (for MANUAL_GEN_LISTS, below):
-> >>  >> +MANUAL_DEPENDENCIES += prepare-kconfig
-> >>
-> >>  > It's a bit crazy the complexity that we have just to allow our manual
-> >>  > to have the list of all packages in Buildroot. I'm not even sure this
-> >>  > section of the manual is that useful, to be honest. But oh well, that's
-> >>  > supported today, so we have to continue support it.
-> >>
-> >> Why do we _HAVE_ to continue to support it?
-> >>
-> >> If we don't find the complexity worth the added value (I personally
-> >> don't, I think we could just ask people to look under package/ for the
-> >> list of packages), then we should just remove it.
-> > 
-> > I'm not entirely against removing the list of out packages from our
-> > manual.
-> > 
-> > Yet, for some users of br2-external trees, they may still want to have
-> > the list of their packages in their manuals, build with the asciidoc
-> > infrastructure.
-> > 
-> > It is entirely imaginable that such users of br2-external have packages
-> > annotated with some documentation for those packages, and want to
-> > include that doc in their manual, so need to generate that list from
-> > Kconfig.
+On 2016-08-28 18:12 +0200, Yann E. MORIN spake thusly:
+> Toolchains using glibc-218 or older do not define O_TMPFILE, which
+> causes build failures on some archs.
 > 
->  I'm not really enthousiastic about keeping complexity in our Makefiles for
-> imaginary users that may want to have such and such feature :-P
+> systemd has a definition for O_TMPFILE if it is missing, but only
+> defines it for i386 or x86_64. Furthermore, the header defining it is
+> not included everywhere O_TMPFILE is used.
 > 
->  I'm very enthousiastic when people contribute some feature that I'm never going
-> to use myself - but in that case, we know that there is at least one user (the
-> contributor). But here, we really have added a feature with no known users.
-
-Have you read what I wrote: I *am* using it.
-
-    http://lists.busybox.net/pipermail/buildroot/2016-August/171055.html
-
-> At
-> the time, it didn't add (much) complexity, but more and more it's starting to
-> weigh down I think.
+> Fix that with two patches:
+>   - include the needed header where it is needed (he!),
+>   - define O_TMPFILE for all archs, according to linux-4.8rc3.
 > 
->  For sure, the asciidoc support is even more difficult to understand and
-> maintain than the normal package infras.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> ---
+> Status: patches sent upstream:
+>     https://github.com/systemd/systemd/pull/4052
 
-And I seem to have a good track-record at looking at it:
+Upstream has accepted the patches, in a slightly different form.
 
-    $ git log --follow --pretty=%an package/doc-asciidoc.mk |sort |uniq -c  |sort -k1nr,2
-         22 Yann E. MORIN
-          8 Samuel Martin
-          7 Thomas De Schampheleire
-          2 Thomas Petazzoni
-          1 Atul Singh
-          1 J?r?me Pouiller
-
-So, please, please. let's keep this asciidoc infra in place.
+I'll update this change with the upstreamed patches, and respin shortly.
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  ...-export-raw-needs-missing.h-for-O_TMPFILE.patch | 28 ++++++++++
+>  ...h-add-missing-definitions-for-__O_TMPFILE.patch | 63 ++++++++++++++++++++++
+>  2 files changed, 91 insertions(+)
+>  create mode 100644 package/systemd/0004-importd-export-raw-needs-missing.h-for-O_TMPFILE.patch
+>  create mode 100644 package/systemd/0005-missing.h-add-missing-definitions-for-__O_TMPFILE.patch
+> 
+> diff --git a/package/systemd/0004-importd-export-raw-needs-missing.h-for-O_TMPFILE.patch b/package/systemd/0004-importd-export-raw-needs-missing.h-for-O_TMPFILE.patch
+> new file mode 100644
+> index 0000000..2ebdf3f
+> --- /dev/null
+> +++ b/package/systemd/0004-importd-export-raw-needs-missing.h-for-O_TMPFILE.patch
+> @@ -0,0 +1,28 @@
+> +From d3d268037e65c51e674f297018b92d51b2f3ec25 Mon Sep 17 00:00:00 2001
+> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +Date: Sun, 28 Aug 2016 16:26:04 +0200
+> +Subject: [PATCH 4/5] importd/export-raw: needs missing.h for O_TMPFILE
+> +
+> +O_TMPFILE may be missing from the system headers, so use our fallback
+> +definition.
+> +
+> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +---
+> + src/import/export-raw.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/src/import/export-raw.c b/src/import/export-raw.c
+> +index db06e11..2ec06b0 100644
+> +--- a/src/import/export-raw.c
+> ++++ b/src/import/export-raw.c
+> +@@ -25,6 +25,7 @@
+> + #include <libgen.h>
+> + #undef basename
+> + 
+> ++#include "missing.h"
+> + #include "sd-daemon.h"
+> + 
+> + #include "alloc-util.h"
+> +-- 
+> +2.7.4
+> +
+> diff --git a/package/systemd/0005-missing.h-add-missing-definitions-for-__O_TMPFILE.patch b/package/systemd/0005-missing.h-add-missing-definitions-for-__O_TMPFILE.patch
+> new file mode 100644
+> index 0000000..8a283d3
+> --- /dev/null
+> +++ b/package/systemd/0005-missing.h-add-missing-definitions-for-__O_TMPFILE.patch
+> @@ -0,0 +1,63 @@
+> +From d34c5bdb4635edd23dbbc761033063da4d7d55e3 Mon Sep 17 00:00:00 2001
+> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +Date: Sun, 28 Aug 2016 17:26:42 +0200
+> +Subject: [PATCH 5/5] missing.h: add missing definitions for __O_TMPFILE
+> +
+> +Currently, a missing __O_TMPFILE was only defined for i386 and x86_64,
+> +leaving any other architectures with an "old" toolchain fail miserably
+> +at build time:
+> +    src/import/export-raw.c: In function 'reflink_snapshot':
+> +    src/import/export-raw.c:271:26: error: 'O_TMPFILE' undeclared (first use in this function)
+> +             new_fd = open(d, O_TMPFILE|O_CLOEXEC|O_NOCTTY|O_RDWR, 0600);
+> +                              ^
+> +
+> +__O_TMPFILE (and O_TMPFILE) are available since glibc 2.19. However, a
+> +lot of existing toolchains are still using glibc-2.18, and some even
+> +before that, and it is not really possible to update those toolchains.
+> +
+> +Instead of defining it only for i386 and x86_64, define __O_TMPFILE
+> +with the specific values for those archs where it is different from the
+> +generic value. Use the values as found in the Linux kernel (v4.8-rc3,
+> +current as of time of commit).
+> +
+> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +
+> +---
+> +Note: tested on ARM (build+run), with glibc-2.18 and linux headers 3.12.
+> +Untested on other archs, though (I have no board to test this).
+> +---
+> + src/basic/missing.h | 16 ++++++++++++----
+> + 1 file changed, 12 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/src/basic/missing.h b/src/basic/missing.h
+> +index f8e0966..057d3fe 100644
+> +--- a/src/basic/missing.h
+> ++++ b/src/basic/missing.h
+> +@@ -537,12 +537,20 @@ struct btrfs_ioctl_quota_ctl_args {
+> + #  define DRM_IOCTL_DROP_MASTER _IO('d', 0x1f)
+> + #endif
+> + 
+> +-#if defined(__i386__) || defined(__x86_64__)
+> +-
+> +-/* The precise definition of __O_TMPFILE is arch specific, so let's
+> +- * just define this on x86 where we know the value. */
+> ++/* The precise definition of __O_TMPFILE is arch specific; use the
+> ++ * values defined by the kernel:
+> ++ * - alpha, parisc, sparc: all have a specific value;
+> ++ * - others: they use the "generic" value.
+> ++ */
+> + 
+> + #ifndef __O_TMPFILE
+> ++#if defined(__alpha__)
+> ++#define __O_TMPFILE     0100000000
+> ++#elif defined(__parisc__) || defined(__hppa__)
+> ++#define __O_TMPFILE     0400000000
+> ++#elif defined(__sparc__) || defined(__sparc64__)
+> ++#define __O_TMPFILE     0x2000000
+> ++#else
+> + #define __O_TMPFILE     020000000
+> + #endif
+> + 
+> +-- 
+> +2.7.4
+> +
+> -- 
+> 2.7.4
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
