@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Aug 2016 22:49:29 +0200
-Subject: [Buildroot] [git commit branch/next] alljoyn-tcl: bump to version
-	16.04a
-Message-ID: <20160830205026.75684822DD@busybox.osuosl.org>
+Date: Tue, 30 Aug 2016 22:48:50 +0200
+Subject: [Buildroot] [git commit branch/next] libinput: bump to version 1.4.2
+Message-ID: <20160830205026.4C5CC8226F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af6865a4faf35b3abde368ed4d47f0f0cdc8ca2c
+commit: https://git.buildroot.net/buildroot/commit/?id=27de4c1d366f0bf288c89b950a947409533e4f1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/alljoyn-tcl/alljoyn-tcl.hash | 2 +-
- package/alljoyn-tcl/alljoyn-tcl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/alljoyn-tcl/alljoyn-tcl.hash b/package/alljoyn-tcl/alljoyn-tcl.hash
-index a1cdf16..208d676 100644
---- a/package/alljoyn-tcl/alljoyn-tcl.hash
-+++ b/package/alljoyn-tcl/alljoyn-tcl.hash
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index a1a7ca2..0cdcc38 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256	ce6a05a67ff405ba6274e85fe750d98f40cbe7ab2c968218c7741a10bd86e21a	ajtcl-16.04.00-src.tar.gz
-+sha256	da13614a9db79067937b744a87328fed84d99ba62e3de19b0ddc4a83e4b2447e	ajtcl-16.04.00a-src.tar.gz
-diff --git a/package/alljoyn-tcl/alljoyn-tcl.mk b/package/alljoyn-tcl/alljoyn-tcl.mk
-index a5c7e4e..cabdf89 100644
---- a/package/alljoyn-tcl/alljoyn-tcl.mk
-+++ b/package/alljoyn-tcl/alljoyn-tcl.mk
-@@ -5,7 +5,7 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030348.html
+-sha256	26e7b3ab499358caba499705680ea7e5851af2bd37dc32f2be64181610d6392a	libinput-1.4.1.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030857.html
++sha256	8c38826a785594811bef6a9daadbfa2e172e3f070f8863393d6fb7ca4c68e451	libinput-1.4.2.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 5ce51c2..eb74e34 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- ALLJOYN_TCL_REV = 16.04
--ALLJOYN_TCL_VERSION = $(ALLJOYN_TCL_REV).00
-+ALLJOYN_TCL_VERSION = $(ALLJOYN_TCL_REV).00a
- ALLJOYN_TCL_SOURCE = ajtcl-$(ALLJOYN_TCL_VERSION)-src.tar.gz
- ALLJOYN_TCL_SITE = \
- 	https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_TCL_REV)
+-LIBINPUT_VERSION = 1.4.1
++LIBINPUT_VERSION = 1.4.2
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
