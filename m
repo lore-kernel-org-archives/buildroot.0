@@ -1,49 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Aug 2016 09:07:58 +0200
-Subject: [Buildroot] [PATCH/next 2/2] gcc: remove BR2_GCC_ENABLE_TLS
- option
-In-Reply-To: <68f877ee-c37e-c7b8-d83e-0c2d7c5b8e15@mind.be>
-References: <1472507657-9983-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1472507657-9983-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <68f877ee-c37e-c7b8-d83e-0c2d7c5b8e15@mind.be>
-Message-ID: <20160830090758.04879c3e@free-electrons.com>
+From: Manuel =?UTF-8?B?R3Jvw58=?= <mgr@nordkrater.de>
+Date: Tue, 30 Aug 2016 10:15:45 +0200
+Subject: [Buildroot] Question regarding support/kconfig
+Message-ID: <20160830101545.19fee5f8@jenova>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello everyone,
 
-On Tue, 30 Aug 2016 00:40:59 +0200, Arnout Vandecappelle wrote:
+I am failing to find some documentation or explanatory commit-message
+on this topic, so I hope I'll gain some insight here.
+If there is any existing documentation on this, I'll happily accept
+pointers :)
 
-> > -ifeq ($(BR2_GCC_ENABLE_TLS),y)
-> > +# On glibc, musl and uClibc/NPTL, enable TLS support. Otherwise (i.e
-> > +# just uClibc/no-thread and uClibc/linux-threads), disable it.
-> > +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_GLIBC)$(BR2_TOOLCHAIN_BUILDROOT_MUSL)$(BR2_PTHREADS_NATIVE),y)
-> >  HOST_GCC_COMMON_CONF_OPTS += --enable-tls
-> >  else
-> >  HOST_GCC_COMMON_CONF_OPTS += --disable-tls  
-> 
->  I think it's slightly easier to understand if the condition is reverted.
-> 
-> # TLS support is not available on uClibc/no-thread and uClibc/linux-threads
-> ifeq($(BR2_TOOLCHAIN_BUILDROOT_UCLIBC)$(BR2_PTHREADS)$(BR2_PTHREADS_NONE),yy)
-> HOST_GCC_COMMON_CONF_OPTS += --disable-tls
-> else
-> HOST_GCC_COMMON_CONF_OPTS += --enable-tls
-> endif
-> 
-> but it doesn't make a big difference either way.
+I want to use the support/kconfig/merge_config.sh script outside
+buildroot to merge buildroot config fragments. To do so, I need the
+script to recognise options beginning with 'BR2_' instead of 'CONFIG_'.
+I noticed a patch for the script lying around
+(patches/01-kconfig-kernel-to-buildroot.patch), which contains exactly
+those modifications.
 
-Yes, I hesitated between both solutions, yours has the advantage of
-being shorter, and enabling TLS all the time *except* in some cases. I
-should probably change to use your proposal. I'll send a v2.
-
-Thanks,
-
-Thomas
+Now to my question(s):
+Am I supposed to apply these patches outside buildroot, or is there
+another, proper way to patch the script? Am I breaking anything by
+patching the script?
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Gr??e/Regards
+Manuel Gro?
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 801 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160830/c69527e5/attachment.asc>
