@@ -1,44 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Aug 2016 16:30:16 +0200
-Subject: [Buildroot] [git commit] gupnp: bump to version 0.99.0
-Message-ID: <20160902142941.AD6637FB67@busybox.osuosl.org>
+Date: Tue, 30 Aug 2016 08:37:11 +0200
+Subject: [Buildroot] [git commit] gvfs: bump to version 1.28.3
+Message-ID: <20160902142941.5DB767FA6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df3df495c4ed0e3611cd845c769dd5edb97a7eba
+commit: https://git.buildroot.net/buildroot/commit/?id=3e1a10746303a61dac219939be870231b2621f9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gupnp/gupnp.hash | 4 ++--
- package/gupnp/gupnp.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gvfs/gvfs.hash | 4 ++--
+ package/gvfs/gvfs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
-index e0082ac..6bdc0c0 100644
---- a/package/gupnp/gupnp.hash
-+++ b/package/gupnp/gupnp.hash
+diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
+index 1fec32c..440671f 100644
+--- a/package/gvfs/gvfs.hash
++++ b/package/gvfs/gvfs.hash
 @@ -1,2 +1,2 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/0.20/gupnp-0.20.18.sha256sum:
--sha256	c5e0e11061f8d0ff9c8dccc196f39c45a49c0153c9a72abf6290ab34d1cbb021	gupnp-0.20.18.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/0.99/gupnp-0.99.0.sha256sum:
-+sha256	695c745ae7ecef9482bd91821d84bb98764cbcca0d0f71acb6d46ac1be23a1be	gupnp-0.99.0.tar.xz
-diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-index f7c32b5..fe80838 100644
---- a/package/gupnp/gupnp.mk
-+++ b/package/gupnp/gupnp.mk
-@@ -4,8 +4,8 @@
- #
+-# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.28/gvfs-1.28.2.sha256sum
+-sha256	bc6af45cff7e7e8d33c3a4be1d27e479f10f80105a6f2d1fae75c5c0d40636d9	gvfs-1.28.2.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.28/gvfs-1.28.3.sha256sum
++sha256	458c4cb68570f6ef4a9e152995c62d0057c3e0a07ed64d84c7200cdd22f0bd17	gvfs-1.28.3.tar.xz
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index 8e88573..e2947fd 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GUPNP_VERSION_MAJOR = 0.20
--GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).18
-+GUPNP_VERSION_MAJOR = 0.99
-+GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).0
- GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
- GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
- GUPNP_LICENSE = LGPLv2+
+ GVFS_VERSION_MAJOR = 1.28
+-GVFS_VERSION = $(GVFS_VERSION_MAJOR).2
++GVFS_VERSION = $(GVFS_VERSION_MAJOR).3
+ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
+ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
+ GVFS_INSTALL_STAGING = YES
