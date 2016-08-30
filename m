@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Aug 2016 22:48:50 +0200
-Subject: [Buildroot] [git commit branch/next] libinput: bump to version 1.4.2
-Message-ID: <20160830205026.4C5CC8226F@busybox.osuosl.org>
+Date: Tue, 30 Aug 2016 22:49:13 +0200
+Subject: [Buildroot] [git commit branch/next] alljoyn: bump to version 16.04a
+Message-ID: <20160830205026.69F0281A0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27de4c1d366f0bf288c89b950a947409533e4f1c
+commit: https://git.buildroot.net/buildroot/commit/?id=d340eb39953d35048c030e1602b026f46734c9b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/alljoyn/alljoyn.hash | 2 +-
+ package/alljoyn/alljoyn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index a1a7ca2..0cdcc38 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
+diff --git a/package/alljoyn/alljoyn.hash b/package/alljoyn/alljoyn.hash
+index e18d66e..47dd0d4 100644
+--- a/package/alljoyn/alljoyn.hash
++++ b/package/alljoyn/alljoyn.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030348.html
--sha256	26e7b3ab499358caba499705680ea7e5851af2bd37dc32f2be64181610d6392a	libinput-1.4.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030857.html
-+sha256	8c38826a785594811bef6a9daadbfa2e172e3f070f8863393d6fb7ca4c68e451	libinput-1.4.2.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 5ce51c2..eb74e34 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally computed:
+-sha256	41bd424d376d22dc2b48cc035400bd63595d19467eeb6a7ae81429f5a43ed2e2	alljoyn-16.04.00-src.tar.gz
++sha256	fc437d96cf1213f18048240b5d12a374b31894d21830a0a6ccf562ffa13425d5	alljoyn-16.04.00a-src.tar.gz
+diff --git a/package/alljoyn/alljoyn.mk b/package/alljoyn/alljoyn.mk
+index 7126258..69d5ded 100644
+--- a/package/alljoyn/alljoyn.mk
++++ b/package/alljoyn/alljoyn.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBINPUT_VERSION = 1.4.1
-+LIBINPUT_VERSION = 1.4.2
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+ ALLJOYN_REV = 16.04
+-ALLJOYN_VERSION = $(ALLJOYN_REV).00
++ALLJOYN_VERSION = $(ALLJOYN_REV).00a
+ ALLJOYN_SOURCE = alljoyn-$(ALLJOYN_VERSION)-src.tar.gz
+ ALLJOYN_SITE = https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_REV)
+ # See https://allseenalliance.org/alliance/ip-policy
