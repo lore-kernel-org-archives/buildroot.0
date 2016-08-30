@@ -1,42 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Aug 2016 22:49:00 +0200
-Subject: [Buildroot] [git commit branch/next] mosquitto: bump to version
-	1.4.10
-Message-ID: <20160830205026.62299800D5@busybox.osuosl.org>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 30 Aug 2016 16:21:59 -0500
+Subject: [Buildroot] [PATCH] audit: add powerpc64 arch support
+Message-ID: <1472592119-51029-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c4aa539f5f8498269b68091663e0155d8a0838a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+From: Judd Meinders <judd.meinders@rockwellcollins.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Judd Meinders <judd.meinders@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/audit/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 68dac00..b0b860f 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,2 +1,2 @@
--# From https://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.9.tar.gz
--sha512  5994159d9a8da248a877f3032f36ca9a865d9b4efaafac329620864049992a77d414e02252cbbfef89ea2c37dc761b1885a89e19fc8e82b2a42d38f31e761d4d  mosquitto-1.4.9.tar.gz
-+# From https://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.10.tar.gz
-+sha512  fe5d6d7196a137a496ba6881c77d852396baefb4f0b83ccd9a22175fc05b09e48a09ea249e30ec7db966e11de134ebcc4e2e9b1fd40b31dc59fb0fa2f60b75a1  mosquitto-1.4.10.tar.gz
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index f2ede6c..96607f3 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/audit/Config.in b/package/audit/Config.in
+index df5a5cc..7550f3a 100644
+--- a/package/audit/Config.in
++++ b/package/audit/Config.in
+@@ -2,7 +2,8 @@
+ config BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_aarch64 || BR2_arm || BR2_armeb || \
+-		BR2_i386 || BR2_powerpc || BR2_x86_64
++		BR2_i386 || BR2_powerpc || BR2_powerpc64 || \
++		BR2_x86_64
  
--MOSQUITTO_VERSION = 1.4.9
-+MOSQUITTO_VERSION = 1.4.10
- MOSQUITTO_SITE = http://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+ config BR2_PACKAGE_AUDIT
+ 	bool "audit"
+-- 
+1.9.1
