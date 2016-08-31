@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Aug 2016 22:49:29 +0200
-Subject: [Buildroot] [git commit] alljoyn-tcl: bump to version 16.04a
-Message-ID: <20160902142941.89E6D7FB67@busybox.osuosl.org>
+Date: Wed, 31 Aug 2016 16:29:58 +0200
+Subject: [Buildroot] [git commit] gssdp: bump to version 0.99.0
+Message-ID: <20160902142941.A3DF57FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af6865a4faf35b3abde368ed4d47f0f0cdc8ca2c
+commit: https://git.buildroot.net/buildroot/commit/?id=b82b8b23b2f1c30fd63e07c7daf1ab7d4c083c70
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/alljoyn-tcl/alljoyn-tcl.hash | 2 +-
- package/alljoyn-tcl/alljoyn-tcl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gssdp/gssdp.hash | 4 ++--
+ package/gssdp/gssdp.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/alljoyn-tcl/alljoyn-tcl.hash b/package/alljoyn-tcl/alljoyn-tcl.hash
-index a1cdf16..208d676 100644
---- a/package/alljoyn-tcl/alljoyn-tcl.hash
-+++ b/package/alljoyn-tcl/alljoyn-tcl.hash
+diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
+index 485c03f..3738988 100644
+--- a/package/gssdp/gssdp.hash
++++ b/package/gssdp/gssdp.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256	ce6a05a67ff405ba6274e85fe750d98f40cbe7ab2c968218c7741a10bd86e21a	ajtcl-16.04.00-src.tar.gz
-+sha256	da13614a9db79067937b744a87328fed84d99ba62e3de19b0ddc4a83e4b2447e	ajtcl-16.04.00a-src.tar.gz
-diff --git a/package/alljoyn-tcl/alljoyn-tcl.mk b/package/alljoyn-tcl/alljoyn-tcl.mk
-index a5c7e4e..cabdf89 100644
---- a/package/alljoyn-tcl/alljoyn-tcl.mk
-+++ b/package/alljoyn-tcl/alljoyn-tcl.mk
-@@ -5,7 +5,7 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/0.14/gssdp-0.14.16.sha256sum:
+-sha256	54520bfb230b9c8c938eba88d87df44e04749682c95fb8aa381d13441345c5b2	gssdp-0.14.16.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/0.99/gssdp-0.99.0.sha256sum:
++sha256	29330adea7314fde44b769e01b2ffa1d2d34e8955b0f82f20bfb425d8421bc60	gssdp-0.99.0.tar.xz
+diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+index 59f633f..6a61789 100644
+--- a/package/gssdp/gssdp.mk
++++ b/package/gssdp/gssdp.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- ALLJOYN_TCL_REV = 16.04
--ALLJOYN_TCL_VERSION = $(ALLJOYN_TCL_REV).00
-+ALLJOYN_TCL_VERSION = $(ALLJOYN_TCL_REV).00a
- ALLJOYN_TCL_SOURCE = ajtcl-$(ALLJOYN_TCL_VERSION)-src.tar.gz
- ALLJOYN_TCL_SITE = \
- 	https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_TCL_REV)
+-GSSDP_VERSION_MAJOR = 0.14
+-GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).16
++GSSDP_VERSION_MAJOR = 0.99
++GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).0
+ GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
+ GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
+ GSSDP_LICENSE = LGPLv2+
