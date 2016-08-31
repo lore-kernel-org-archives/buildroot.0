@@ -1,22 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 31 Aug 2016 20:45:24 +0000
-Subject: [Buildroot] [Bug 8341] Getting EGL Error: Could not create the egl
- surface: error = 0x300b on RPI-2b board.
-In-Reply-To: <bug-8341-163@https.bugs.busybox.net/>
-References: <bug-8341-163@https.bugs.busybox.net/>
-Message-ID: <bug-8341-163-mxeOO3qXL4@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 31 Aug 2016 22:50:56 +0200
+Subject: [Buildroot] Is there an equivalent of yocto's devshell?
+In-Reply-To: <5637116E3E13BE46B0D936BF364783C1F6A7E7@MAIA.sede.videotec.com>
+ (Ottavio Campana's message of "Wed, 31 Aug 2016 16:12:37 +0000")
+References: <5637116E3E13BE46B0D936BF364783C1F6A7E7@MAIA.sede.videotec.com>
+Message-ID: <87a8fszmq7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8341
+>>>>> "Ottavio" == Ottavio Campana <o.campana@videotec.com> writes:
 
---- Comment #7 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Yann, could you please have a look? This issue is open since almost a year now
-:-/
+ > Hello,
+ > I'm quite new to buildroot, and I am trying to check how I can use it
+ > in one project. I am very familiar with yocto, so I am trying to
+ > re-learn how to do things with buildroot.
+
+ > Particularly, I am not able to find if buildroot offers a feature
+ > similar to the devshell of yocto. The devshell is a shell with all the
+ > environment variables already set, so that it is possibile to invoke
+ > commands such as make in the same way that the build process does. By
+ > working in the devshell, a developer can work already in the correct
+ > environment for cross-compiling, which can save a lot of time.
+
+ > Does something similar to the devshell exist in buildroot?
+
+I have never used this 'devshell', but I take it that it is something
+that adds the cross compiler to the path and possibly sets up some
+environment variables like CC/CXX/CROSS_COMPILE/ARCH to point to the
+cross compiler?
+
+If so, we don't have anything quite like that, but writing a little
+shell script for your project adding output/host/usr/bin to your path
+and exporting those environment variables shouldn't take many minutes.
+
+Or does it do something more special than that?
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
