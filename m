@@ -1,47 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2016 21:46:18 +0200
-Subject: [Buildroot] [PATCH/next v2 1/2] valgrind: let the valgrind
- configure script detect TLS availability
-In-Reply-To: <1472592808-18270-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1472592808-18270-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160831214618.3ea0ef87@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 31 Aug 2016 19:47:17 +0000
+Subject: [Buildroot] [Bug 7424] undefined reference to
+	`__builtin_thread_pointer'
+In-Reply-To: <bug-7424-163@https.bugs.busybox.net/>
+References: <bug-7424-163@https.bugs.busybox.net/>
+Message-ID: <bug-7424-163-6fev1tf68p@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=7424
 
-On Tue, 30 Aug 2016 23:33:27 +0200, Thomas Petazzoni wrote:
-> Back in 2005, in commit
-> a2c326396a43ecbc8d02c3d815d4010a7ba2e004 ("update valgrind to the latest
-> and greatest"), an explicit --disable-tls option was added. More
-> recently, in commit 31a3f4bd54e12b8d6de286ab8fb6d9651990e2f5 ("valgrind:
-> enable tls support") changed this to be conditional on
-> BR2_GCC_ENABLE_TLS.
-> 
-> However, the configure script of valgrind is perfectly capable of
-> detecting TLS support, even in a cross-compilation case: it tries to
-> compile a program that uses __thread and sees if it works.
-> 
-> Since we're about to modify how BR2_GCC_ENABLE_TLS is handled, we'd
-> better remove its usage from packages, and valgrind is the only package
-> using this config option.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> Changes since v1:
->  - Added Arnout Reviewed-by.
-> ---
->  package/valgrind/valgrind.mk | 6 ------
->  1 file changed, 6 deletions(-)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-I've applied both patches to next.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-Thomas
+--- Comment #16 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?h=next&id=1bd02bc230e1b3b22ca3eb23fb3dcb91b878283a,
+which simply removes the option to enable/disable TLS support. Now TLS support
+is automatically enabled or disable in gcc depending on the selected C library
+and its configuration.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
