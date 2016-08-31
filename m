@@ -1,30 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2016 21:27:47 +0200
-Subject: [Buildroot] build 2015.11 - sbin/init: error while loading
- shared libraries: libtirpc.so.1
-In-Reply-To: <CALD51P81wh8mSgypNtVqZ+EpEtVdTAxsM27tO_njwjtJDap7nw@mail.gmail.com>
-References: <CALD51P81wh8mSgypNtVqZ+EpEtVdTAxsM27tO_njwjtJDap7nw@mail.gmail.com>
-Message-ID: <20160831212747.38bcef52@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 31 Aug 2016 19:32:49 +0000
+Subject: [Buildroot] [Bug 7520] CodeSourcery toolchain ARM: C++11
+ std::exception_ptr is not available for Cortex-A9 if thumb2 is not
+ selected.
+In-Reply-To: <bug-7520-163@https.bugs.busybox.net/>
+References: <bug-7520-163@https.bugs.busybox.net/>
+Message-ID: <bug-7520-163-HJAbYXvPrs@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=7520
 
-On Wed, 31 Aug 2016 00:40:49 -0500, Lijun QIN wrote:
-> I got Marvell's  buildroot-2015.11-16.06.0 which is  buildroot-2015.11 +
-> Mavell packages
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Can you reproduce this problem with the official Buildroot? Providing
-support for a Buildroot version we don't have access to is a bit
-difficult.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |WONTFIX
+             Status|NEW                         |RESOLVED
 
-Best regards,
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+I'm proposing to call this a toolchain bug.
 
-Thomas
+Indeed, the Linaro ARM toolchain is also compiled for Thumb-2, but using it for
+an ARM configuration works just fine, including your example code.
+
+The toolchain used for your example is based on gcc 4.8, and I'm not sure the
+C++11 support was fully mature in gcc 4.8.
+
+In order to fix your problem, we would have to disable the toolchain for
+ARMv7-ARM, ARMv6-ARM, and possibly other useful configurations. So I'd prefer
+to keep things as they are, and consider this a toolchain bug.
+
+Of course, if you don't agree, feel free to re-open this bug. Thanks!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
