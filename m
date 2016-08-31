@@ -1,51 +1,90 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 30 Sep 2016 23:54:14 +0200
-Subject: [Buildroot] [PATCH] docs/manual: no warranty on output of
-	legal-info
-In-Reply-To: <1475270257-27153-1-git-send-email-yann.morin.1998@free.fr>
-References: <1475270257-27153-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <dd6684d4-d5b5-a672-4174-94cd2048cd3f@lucaceresoli.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 01 Sep 2016 00:26:14 +0200
+Subject: [Buildroot] [PATCH v2] package/libshout: add patches to fix
+	static linking
+In-Reply-To: <20160831202607.24374-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Wed, 31 Aug 2016 22:26:07 +0200")
+References: <20160831202607.24374-1-joerg.krause@embedded.rocks>
+Message-ID: <871t14y3qx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-On 30/09/2016 23:17, Yann E. MORIN wrote:
-> Explicitly state that there is no warranty about the accuracy of the
-> content of the output of 'make legal-info'.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  docs/manual/legal-notice.txt | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
-> index 7c19bc3..ac291c8 100644
-> --- a/docs/manual/legal-notice.txt
-> +++ b/docs/manual/legal-notice.txt
-> @@ -73,6 +73,16 @@ distribution is required).
->  When you run +make legal-info+, Buildroot produces warnings in the +README+
->  file to inform you of relevant material that could not be saved.
->  
-> +Finally, keep in mind that the output of +make legal-info+ is based on
-> +declarative statements in each of the packages recipes. The Buildroot
-> +developpers try to do their best at keeping those declarative statements
-> +as accurate as possible, to the best of their knowledge. However, it is
-> +very well possible that those declarative statements may not all be fully
-> +accurate nor exhaustive.
+ > This series includes two patches to fix static linking with libshout.
+ > The first patch fixes two typos resulting in an uninterpretable library
+ > propagation and is mainly needed for the follow-up patch.
 
-I think this sentence should rather be: "However, it is very well
-possible that those declarative statements are not fully accurate nor
-exhaustive."
+ > The second patch makes sure that `@SHOUT_REQUIRES@` and therefore
+ > `Requires.private` includes ssl as `Requires.private` defines a list of private
+ > packages required by this package but not exposed to applications.
 
-But Since Arnout didn't suggest this change, it is very well possible
-that I may be wrong. :)
+ > Note that autoreconf is enabled as the first patch touches configure.ac.
 
-With that fixed
- Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/b82/b82408fccbf816575125dcc1a1de7260f66f62e8/
+ > http://autobuild.buildroot.net/results/360/3605750023267e4cd35d98451bd283f9e70a6106/
+ > http://autobuild.buildroot.net/results/03b/03b98b313dd6ed2909607cdc0c4f6fb87be3ccfe/
+ > http://autobuild.buildroot.net/results/70b/70ba47e04d1fc0d2379bf1ac7aab4c52d6193001/
+
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ > ---
+ > v2:
+ >  * Replace patch #2 to make sure `Requires.private` contains ssl if needed
+ >    (suggested by Thomas)
+
+ > +Since OpenSSL installs its own .pc files, make sure that @SHOUT_REQUIRES@
+ > +contains `ssl`.
+ > +
+ > +Upstream status: pending
+ > +https://github.com/xiph/Icecast-libshout/pull/5
+ > +
+ > +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ > +---
+ > + configure.ac | 4 ++++
+ > + 1 file changed, 4 insertions(+)
+ > +
+ > +diff --git a/configure.ac b/configure.ac
+ > +index 85f18ad..2b9c505 100644
+ > +--- a/configure.ac
+ > ++++ b/configure.ac
+ > +@@ -197,6 +197,10 @@ XIPH_PATH_OPENSSL([
+ > +     ])
+ > + AC_SUBST([SHOUT_TLS])
+ > + AM_CONDITIONAL([HAVE_TLS], [test -n "$OPENSSL_LIBS"])
+ > ++if test "$SHOUT_TLS" = "1"
+ > ++then
+ > ++  SHOUT_REQUIRES="$SHOUT_REQUIRES, ssl"
+
+Did you test this?
+
+The libssl .pc file is called libssl.pc, not ssl.pc, so this doesn't
+work.
+
+> diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
+ > index 029c134..9f54463 100644
+ > --- a/package/libshout/libshout.mk
+ > +++ b/package/libshout/libshout.mk
+ > @@ -11,6 +11,9 @@ LIBSHOUT_LICENSE_FILES = COPYING
+ >  LIBSHOUT_INSTALL_STAGING = YES
+ >  LIBSHOUT_DEPENDENCIES = host-pkgconf libogg libvorbis
+ 
+ > +# patching congigure.ac
+
+typo.
+
+What is odd about this fix / autobuilder issues is:
+
+- libshout has no (optional) dependency on openssl
+- mpd has no (optional) dependency on libshout
+
+So that's pretty bad. I've pushed 2 commits to fix this.
+
+Committed after fixing the above, thanks.
 
 -- 
-Luca
+Bye, Peter Korsgaard
