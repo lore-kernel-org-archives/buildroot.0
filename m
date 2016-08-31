@@ -1,87 +1,109 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 1 Sep 2016 01:13:53 +0200
-Subject: [Buildroot] [PATCH] openal: Explicitly enable/disable NEON
- support to avoid trouble with precompiled toolchains
-In-Reply-To: <ed871b54-3861-1b9e-e557-eb46e0887acc@dawncrow.de>
-References: <1472387820-6783-1-git-send-email-nerv@dawncrow.de>
- <20160828155006.0abb2572@free-electrons.com>
- <ed871b54-3861-1b9e-e557-eb46e0887acc@dawncrow.de>
-Message-ID: <840ddd5c-14cd-0d69-e9d2-5cc3b6e9ceef@mind.be>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 01 Sep 2016 01:59:03 +0200
+Subject: [Buildroot] [PATCH v2] package/libshout: add patches to fix
+	static linking
+In-Reply-To: <871t14y3qx.fsf@dell.be.48ers.dk>
+References: <20160831202607.24374-1-joerg.krause@embedded.rocks>
+ <871t14y3qx.fsf@dell.be.48ers.dk>
+Message-ID: <1472687943.30005.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 28-08-16 16:10, Andr? Hentschel wrote:
-> Am 28.08.2016 um 15:50 schrieb Thomas Petazzoni:
->> Hello,
->>
->> Why do you think the problem is with "precompiled" toolchains only?
+On Do, 2016-09-01 at 00:26 +0200, Peter Korsgaard wrote:
+> > 
+> > > 
+> > > > 
+> > > > > 
+> > > > > > 
+> > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 > 
-> Because the bug is about mismatch between target settings made in the buildroot config and the toolchain default target settings.
-
- I also believe that the same problem would occur with an internal build, but
-couldn't be bothered to test it :-)
-
+> ?> This series includes two patches to fix static linking with
+> libshout.
+> ?> The first patch fixes two typos resulting in an uninterpretable
+> library
+> ?> propagation and is mainly needed for the follow-up patch.
 > 
->>
->> On Sun, 28 Aug 2016 14:37:00 +0200, Andr? Hentschel wrote:
->>> Fixes:
->>> http://autobuild.buildroot.net/results/d7ccef77a355ccc23f26d012e8441af931469ae4
->>> http://autobuild.buildroot.net/results/b5777a0ed33f6bb7a5fc0486ea21ecef58615dac
->>> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
->>> ---
->>>  package/openal/openal.mk | 7 +++++++
->>>  1 file changed, 7 insertions(+)
->>>
->>> diff --git a/package/openal/openal.mk b/package/openal/openal.mk
->>> index 2916aa6..8205f9e 100644
->>> --- a/package/openal/openal.mk
->>> +++ b/package/openal/openal.mk
->>> @@ -50,4 +50,11 @@ ifeq ($(BR2_STATIC_LIBS),y)
->>>  OPENAL_CONF_OPTS += -DLIBTYPE=STATIC
->>>  endif
->>>  
->>> +# Explicitly enable/disable NEON support to avoid trouble with precompiled toolchains
->>> +ifeq ($(BR2_ARM_FPU_NEON)$(BR2_ARM_FPU_NEON_VFPV4),y)
->>
->> I believe you should use BR2_ARM_CPU_HAS_NEON instead.
+> ?> The second patch makes sure that `@SHOUT_REQUIRES@` and therefore
+> ?> `Requires.private` includes ssl as `Requires.private` defines a
+> list of private
+> ?> packages required by this package but not exposed to applications.
 > 
-> Thought so too, looked into it, failed. It really depends on the FPU setting.
-> I know there's no other package doing this kind of check...
-> Other options are to always disable neon or to extend the checking in openal cmake script with a patch.
-> (I won't be able to patch it as my cmake skills are very low)
+> ?> Note that autoreconf is enabled as the first patch touches
+> configure.ac.
+> 
+> ?> Fixes:
+> ?> http://autobuild.buildroot.net/results/b82/b82408fccbf816575125dcc
+> 1a1de7260f66f62e8/
+> ?> http://autobuild.buildroot.net/results/360/3605750023267e4cd35d984
+> 51bd283f9e70a6106/
+> ?> http://autobuild.buildroot.net/results/03b/03b98b313dd6ed2909607cd
+> c0c4f6fb87be3ccfe/
+> ?> http://autobuild.buildroot.net/results/70b/70ba47e04d1fc0d2379bf1a
+> c7aab4c52d6193001/
+> 
+> ?> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ?> ---
+> ?> v2:
+> ?>??* Replace patch #2 to make sure `Requires.private` contains ssl
+> if needed
+> ?>????(suggested by Thomas)
+> 
+> ?> +Since OpenSSL installs its own .pc files, make sure that
+> @SHOUT_REQUIRES@
+> ?> +contains `ssl`.
+> ?> +
+> ?> +Upstream status: pending
+> ?> +https://github.com/xiph/Icecast-libshout/pull/5
+> ?> +
+> ?> +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ?> +---
+> ?> + configure.ac | 4 ++++
+> ?> + 1 file changed, 4 insertions(+)
+> ?> +
+> ?> +diff --git a/configure.ac b/configure.ac
+> ?> +index 85f18ad..2b9c505 100644
+> ?> +--- a/configure.ac
+> ?> ++++ b/configure.ac
+> ?> +@@ -197,6 +197,10 @@ XIPH_PATH_OPENSSL([
+> ?> +?????])
+> ?> + AC_SUBST([SHOUT_TLS])
+> ?> + AM_CONDITIONAL([HAVE_TLS], [test -n "$OPENSSL_LIBS"])
+> ?> ++if test "$SHOUT_TLS" = "1"
+> ?> ++then
+> ?> ++??SHOUT_REQUIRES="$SHOUT_REQUIRES, ssl"
+> 
+> Did you test this?
+> 
+> The libssl .pc file is called libssl.pc, not ssl.pc, so this doesn't
+> work.
 
- The checking in the cmake script is fairly basic: it just checks for the
-presence of the arm_neon.h header with the intrinsics. That header will always
-be there (except for Linaro toolchains, which are as usual broken: the header is
-in /usr/lib/include, which isn't in the search path).
+Sorry for that! You're right! I did tested for compilation, which ends
+without errors, however, mpd does not find libshout and therefore does
+not link with it. Thanks for catching this!
 
- The error is that we build everything with e.g. -mfpu=vfpv3, while the neon
-intrinsics are marked always_inline so they will be inlined in the vfpv3
-function. That is not possible (you need to save registers to switch between VFP
-and NEON, so you can't mix the two in the same function). So, any FPU selection
-that is not NEON will trigger the issue.
-
- However, a better solution would be to pass -mfpu=neon or -mfpu=neon-vfpv4 to
-the compilation of the files that use neon intrinsics. But that's more for
-upstream to fix.
-
- So, I'd give it my
- Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-but the comment has to be improved.
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> > 
+> > diff --git a/package/libshout/libshout.mk
+> > b/package/libshout/libshout.mk
+> ?> index 029c134..9f54463 100644
+> ?> --- a/package/libshout/libshout.mk
+> ?> +++ b/package/libshout/libshout.mk
+> ?> @@ -11,6 +11,9 @@ LIBSHOUT_LICENSE_FILES = COPYING
+> ?>??LIBSHOUT_INSTALL_STAGING = YES
+> ?>??LIBSHOUT_DEPENDENCIES = host-pkgconf libogg libvorbis
+> ?
+> ?> +# patching congigure.ac
+> 
+> typo.
+> 
+> What is odd about this fix / autobuilder issues is:
+> 
+> - libshout has no (optional) dependency on openssl
+> - mpd has no (optional) dependency on libshout
+> 
+> So that's pretty bad. I've pushed 2 commits to fix this.
+> 
+> Committed after fixing the above, thanks.
+> 
