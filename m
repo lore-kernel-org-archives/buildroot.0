@@ -1,90 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Sep 2016 00:26:14 +0200
-Subject: [Buildroot] [PATCH v2] package/libshout: add patches to fix
-	static linking
-In-Reply-To: <20160831202607.24374-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Wed, 31 Aug 2016 22:26:07 +0200")
-References: <20160831202607.24374-1-joerg.krause@embedded.rocks>
-Message-ID: <871t14y3qx.fsf@dell.be.48ers.dk>
+Date: Thu, 1 Sep 2016 00:18:27 +0200
+Subject: [Buildroot] [git commit] libshout: add optional openssl support
+Message-ID: <20160831224016.C4F10800EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1442ff3c19e6e82e97fc0da325405c19ec777d97
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This series includes two patches to fix static linking with libshout.
- > The first patch fixes two typos resulting in an uninterpretable library
- > propagation and is mainly needed for the follow-up patch.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libshout/libshout.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- > The second patch makes sure that `@SHOUT_REQUIRES@` and therefore
- > `Requires.private` includes ssl as `Requires.private` defines a list of private
- > packages required by this package but not exposed to applications.
-
- > Note that autoreconf is enabled as the first patch touches configure.ac.
-
- > Fixes:
- > http://autobuild.buildroot.net/results/b82/b82408fccbf816575125dcc1a1de7260f66f62e8/
- > http://autobuild.buildroot.net/results/360/3605750023267e4cd35d98451bd283f9e70a6106/
- > http://autobuild.buildroot.net/results/03b/03b98b313dd6ed2909607cdc0c4f6fb87be3ccfe/
- > http://autobuild.buildroot.net/results/70b/70ba47e04d1fc0d2379bf1ac7aab4c52d6193001/
-
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
- > ---
- > v2:
- >  * Replace patch #2 to make sure `Requires.private` contains ssl if needed
- >    (suggested by Thomas)
-
- > +Since OpenSSL installs its own .pc files, make sure that @SHOUT_REQUIRES@
- > +contains `ssl`.
- > +
- > +Upstream status: pending
- > +https://github.com/xiph/Icecast-libshout/pull/5
- > +
- > +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
- > +---
- > + configure.ac | 4 ++++
- > + 1 file changed, 4 insertions(+)
- > +
- > +diff --git a/configure.ac b/configure.ac
- > +index 85f18ad..2b9c505 100644
- > +--- a/configure.ac
- > ++++ b/configure.ac
- > +@@ -197,6 +197,10 @@ XIPH_PATH_OPENSSL([
- > +     ])
- > + AC_SUBST([SHOUT_TLS])
- > + AM_CONDITIONAL([HAVE_TLS], [test -n "$OPENSSL_LIBS"])
- > ++if test "$SHOUT_TLS" = "1"
- > ++then
- > ++  SHOUT_REQUIRES="$SHOUT_REQUIRES, ssl"
-
-Did you test this?
-
-The libssl .pc file is called libssl.pc, not ssl.pc, so this doesn't
-work.
-
-> diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
- > index 029c134..9f54463 100644
- > --- a/package/libshout/libshout.mk
- > +++ b/package/libshout/libshout.mk
- > @@ -11,6 +11,9 @@ LIBSHOUT_LICENSE_FILES = COPYING
- >  LIBSHOUT_INSTALL_STAGING = YES
- >  LIBSHOUT_DEPENDENCIES = host-pkgconf libogg libvorbis
+diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
+index 7c07909..bf85595 100644
+--- a/package/libshout/libshout.mk
++++ b/package/libshout/libshout.mk
+@@ -28,4 +28,11 @@ else
+ LIBSHOUT_CONF_OPTS += --disable-speex
+ endif
  
- > +# patching congigure.ac
-
-typo.
-
-What is odd about this fix / autobuilder issues is:
-
-- libshout has no (optional) dependency on openssl
-- mpd has no (optional) dependency on libshout
-
-So that's pretty bad. I've pushed 2 commits to fix this.
-
-Committed after fixing the above, thanks.
-
--- 
-Bye, Peter Korsgaard
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBSHOUT_CONF_OPTS += --with-openssl
++LIBSHOUT_DEPENDENCIES += openssl
++else
++LIBSHOUT_CONF_OPTS += --without-openssl
++endif
++
+ $(eval $(autotools-package))
