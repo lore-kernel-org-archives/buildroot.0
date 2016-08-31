@@ -1,47 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 31 Aug 2016 11:26:43 +0200
-Subject: [Buildroot] [PATCH 00/16 v3] br2-external: support multiple
- trees at once (branch yem/multi-br2-external-ID-7)
-In-Reply-To: <20160831091443.691ffd1c@free-electrons.com>
-References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <eda2b290-992f-7a26-424b-f522b7a805ae@mind.be>
- <874m611n1e.fsf@dell.be.48ers.dk>
- <20160831091443.691ffd1c@free-electrons.com>
-Message-ID: <20160831092643.GA5549@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 31 Aug 2016 11:31:17 +0200
+Subject: [Buildroot] [PATCH 1/1] gssdp: bump to version 0.99.0
+Message-ID: <1472635877-5906-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Arnout,All,
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+ package/gssdp/gssdp.hash | 4 ++--
+ package/gssdp/gssdp.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2016-08-31 09:14 +0200, Thomas Petazzoni spake thusly:
-> On Wed, 31 Aug 2016 08:15:57 +0200, Peter Korsgaard wrote:
-> 
-> >  >  Supporting the old single-external without name in parallel with the new named
-> >  > approach takes a significant amount of code - I estimate about 40 lines, out of
-> >  > 285 lines affected by this patch set...  
-> > 
-> >  >  So, I repeat: I think the backward compatibility should be dropped here.  
-> > 
-> > That also sounds sensible to me.
-> 
-> I originally insisted to keep the backward compatibility, but Arnout's
-> argumentation convinced me that it is not really necessary. And if it
-> can help reduce the implementation complexity, I'm all for it.
-> 
-> So: I'm fine with dropping backward compatibility on this.
-
-OK, I'll drop.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
+index 485c03f..3738988 100644
+--- a/package/gssdp/gssdp.hash
++++ b/package/gssdp/gssdp.hash
+@@ -1,2 +1,2 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/0.14/gssdp-0.14.16.sha256sum:
+-sha256	54520bfb230b9c8c938eba88d87df44e04749682c95fb8aa381d13441345c5b2	gssdp-0.14.16.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/0.99/gssdp-0.99.0.sha256sum:
++sha256	29330adea7314fde44b769e01b2ffa1d2d34e8955b0f82f20bfb425d8421bc60	gssdp-0.99.0.tar.xz
+diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+index 59f633f..6a61789 100644
+--- a/package/gssdp/gssdp.mk
++++ b/package/gssdp/gssdp.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GSSDP_VERSION_MAJOR = 0.14
+-GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).16
++GSSDP_VERSION_MAJOR = 0.99
++GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).0
+ GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
+ GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
+ GSSDP_LICENSE = LGPLv2+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
