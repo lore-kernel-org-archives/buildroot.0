@@ -1,30 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Aug 2016 22:59:23 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 31 Aug 2016 23:03:04 +0200
 Subject: [Buildroot] [git commit branch/next] gcc: remove
 	BR2_GCC_ENABLE_TLS option
-In-Reply-To: <20160831194551.2BE4280131@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Wed, 31 Aug 2016 21:45:36 +0200")
+In-Reply-To: <874m60zmc4.fsf@dell.be.48ers.dk>
 References: <20160831194551.2BE4280131@busybox.osuosl.org>
-Message-ID: <874m60zmc4.fsf@dell.be.48ers.dk>
+ <874m60zmc4.fsf@dell.be.48ers.dk>
+Message-ID: <20160831230304.15a7002b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
-Hi,
+On Wed, 31 Aug 2016 22:59:23 +0200, Peter Korsgaard wrote:
 
- > So, this commit completely removes the BR2_GCC_ENABLE_TLS and instead
- > makes the right choice inside gcc.mk directly:
+>  > So, this commit completely removes the BR2_GCC_ENABLE_TLS and instead
+>  > makes the right choice inside gcc.mk directly:  
+> 
+>  >  - TLS support enabled for glibc, musl and uClibc/NPTL  
+> 
+>  >  - TLS support in other cases, i.e uClibc/no-thread and
+>  >    uClibc/linuxthreads.  
+> 
+> Ups, looks like 2nd variant should have been 'No TLS support'.
 
- >  - TLS support enabled for glibc, musl and uClibc/NPTL
+Glurp, yes, or "TLS support disabled" :-/
 
- >  - TLS support in other cases, i.e uClibc/no-thread and
- >    uClibc/linuxthreads.
-
-Ups, looks like 2nd variant should have been 'No TLS support'.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
