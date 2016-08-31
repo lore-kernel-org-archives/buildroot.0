@@ -1,29 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Aug 2016 09:32:40 +0200
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to
-	arc-2016.09-eng010
-In-Reply-To: <463012DA-8781-4E12-8D38-9C3BB7D95FF1@synopsys.com> (Vlad
- Zakharov's message of "Wed, 31 Aug 2016 07:26:31 +0000")
-References: <1472579520-27726-1-git-send-email-vzakhar@synopsys.com>
- <878tvd1nii.fsf@dell.be.48ers.dk>
- <20160831091043.7e180877@free-electrons.com>
- <463012DA-8781-4E12-8D38-9C3BB7D95FF1@synopsys.com>
-Message-ID: <87zintz947.fsf@dell.be.48ers.dk>
+Date: Wed, 31 Aug 2016 10:01:59 +0200
+Subject: [Buildroot] build 2015.11 - sbin/init: error while loading
+	shared libraries: libtirpc.so.1
+In-Reply-To: <CALD51P81wh8mSgypNtVqZ+EpEtVdTAxsM27tO_njwjtJDap7nw@mail.gmail.com>
+ (Lijun QIN's message of "Wed, 31 Aug 2016 00:40:49 -0500")
+References: <CALD51P81wh8mSgypNtVqZ+EpEtVdTAxsM27tO_njwjtJDap7nw@mail.gmail.com>
+Message-ID: <87vayhz7rc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
+>>>>> "Lijun" == Lijun QIN <lijun.qin2008@gmail.com> writes:
 
- > Hi Thomas, you are right.
- > In fact eng010 contains some patches that have been already added to
- > buildroot and doesn't contain any fundamental changes, so let's use
- > eng010 for 2016.08.
+Hi,
 
-Ok - Committed, thanks.
+ > I got Marvell's  buildroot-2015.11-16.06.0 which is  buildroot-2015.11 +
+ > Mavell packages
+
+No idea what those marvell changes are about.
+
+ > Compiler: gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+ > Kernel: 3.10.70
+ > CPU: Marvell A38x
+ > When I boot up rootfs,  I got the following errors:
+
+ > VFS: Mounted root (ext3 filesystem) on device 8:1.
+ > devtmpfs: mounted
+ > Freeing unused kernel memory: 248K (c08b1000 - c08ef000)
+ > /sbin/init: error while loading shared libraries: libtirpc.so.1: cannot
+ > open shared object file: No such file or directory
+ > Kernel panic - not syncing: Attempted to kill init! exitcode=0x00007f00
+
+ > I checked the libtirpc.so, it is in  /usr/lib and I also copy  ibtirpc.so*
+
+The error message was about libtirpc.so.1 (notice the .1!) and you
+mentioned you looked for libtirpc.so (without .1). Can you verify that
+you have usr/lib/libtirpc.so.1?
+
+What is the output of:
+arm-linux-gnueabihf-readelf -d target/sbin/init | grep NEEDED
+
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Bye, Peter Korsgaard
