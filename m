@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 31 Aug 2016 18:24:56 +0200
-Subject: [Buildroot] [PATCH 6/6] gtest: retrieve package from github
-Message-ID: <1472660696-21640-1-git-send-email-fabrice.fontaine@orange.com>
+Date: Wed, 31 Aug 2016 18:29:54 +0200
+Subject: [Buildroot] [PATCH v2,1/1] gtest: retrieve package from github
+Message-ID: <1472660994-23034-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,6 +15,9 @@ a redirection to https://github.com/google/googletest.
 
 Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 ---
+Changes v1 -> v2:
+ - Fix patch number (6/6 to 1/1)
+
  package/gtest/gtest.hash | 4 ++--
  package/gtest/gtest.mk   | 9 ++-------
  2 files changed, 4 insertions(+), 9 deletions(-)
