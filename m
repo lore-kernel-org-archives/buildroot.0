@@ -1,41 +1,111 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Aug 2016 22:53:46 +0200
-Subject: [Buildroot] [git commit] gawk: bump to version 4.1.4
-Message-ID: <20160902142940.BA60C8253D@busybox.osuosl.org>
+Date: Wed, 31 Aug 2016 21:45:36 +0200
+Subject: [Buildroot] [git commit] gcc: remove BR2_GCC_ENABLE_TLS option
+Message-ID: <20160902142941.BFEF37FEE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67db45a9fb5f78a175b67cac56be1eafb1c5a9e9
+commit: https://git.buildroot.net/buildroot/commit/?id=1bd02bc230e1b3b22ca3eb23fb3dcb91b878283a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gawk/gawk.hash | 2 +-
- package/gawk/gawk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The current BR2_GCC_ENABLE_TLS can cause users to make incorrect
+choices, and is not very useful. This options allows to decide whether
+we pass --enable-tls or --disable-tls to gcc, to enable or disable
+support for Thread Local Storage.
 
-diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
-index 7f746d8..e2c7806 100644
---- a/package/gawk/gawk.hash
-+++ b/package/gawk/gawk.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	e3cf55e91e31ea2845f8338bedd91e40671fc30e4d82ea147d220e687abda625	gawk-4.1.3.tar.xz
-+sha256	53e184e2d0f90def9207860531802456322be091c7b48f23fdc79cda65adc266	gawk-4.1.4.tar.xz
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index b5b0f8d..7c6689b 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Its behavior is:
+
+ - The option is default to "y" but only exists if we're using
+   uClibc/NPTL or glibc.
+
+ - When we're using uClibc, the option can be disabled.
+
+So, in practice, this means that currently:
+
+ - TLS support is always on for glibc
+
+ - TLS support is on by default for uClibc/NPTL, but can be disabled in
+   the configuration. This is in fact bad and causes the build failure
+   reported in bug #7424 (this bug is still reproducible on master)
+
+ - TLS support is always disabled for uClibc/no-thread and
+   uClibc/linuxthreads.
+
+ - TLS support is always disabled for musl. This does not cause any
+   build failure, but musl can use TLS support, and therefore be more
+   efficient. According to
+   http://www.openwall.com/lists/musl/2012/10/04/1, "Note that if you've
+   been building gcc with --disable-tls, __thread was already working
+   but gets emulated (very poorly; it's slow and will abort() if it runs
+   out of memory) through libgcc.".
+
+So, this commit completely removes the BR2_GCC_ENABLE_TLS and instead
+makes the right choice inside gcc.mk directly:
+
+ - TLS support enabled for glibc, musl and uClibc/NPTL
+
+ - TLS support in other cases, i.e uClibc/no-thread and
+   uClibc/linuxthreads.
+
+We have intentionally *not* added the option to
+Config.in.legacy. Indeed, the new behavior is *exactly* the same as the
+older behavior, with the exception of:
+
+ - People can no longer disable TLS support in uClibc/NPTL, which was
+   anyway causing a build failure and therefore was not used.
+
+ - TLS support is now enabled on musl, but people using musl already had
+   BR2_GCC_ENABLE_TLS not set, so they wouldn't get the legacy warning.
+
+Fixes bug #7424.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/gcc/Config.in.host | 8 --------
+ package/gcc/gcc.mk         | 9 ++++++---
+ 2 files changed, 6 insertions(+), 11 deletions(-)
+
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 7262714..aa0a698 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -154,14 +154,6 @@ config BR2_TOOLCHAIN_BUILDROOT_FORTRAN
+ 	  Fortran language and you want Fortran libraries to be
+ 	  installed on your target system.
  
--GAWK_VERSION = 4.1.3
-+GAWK_VERSION = 4.1.4
- GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
- GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
- GAWK_DEPENDENCIES = host-gawk
+-config BR2_GCC_ENABLE_TLS
+-	bool "Enable compiler tls support" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+-	default y
+-	depends on BR2_PTHREADS_NATIVE || BR2_TOOLCHAIN_BUILDROOT_GLIBC
+-	help
+-	  Enable the compiler to generate code for accessing
+-	  thread local storage variables
+-
+ config BR2_GCC_ENABLE_LTO
+ 	bool "Enable compiler link-time-optimization support"
+ 	select BR2_BINUTILS_ENABLE_LTO
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 39c3eeb..82050b4 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -133,10 +133,13 @@ ifeq ($(BR2_sparc)$(BR2_sparc64),y)
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
+ endif
+ 
+-ifeq ($(BR2_GCC_ENABLE_TLS),y)
+-HOST_GCC_COMMON_CONF_OPTS += --enable-tls
+-else
++# TLS support is not needed on uClibc/no-thread and
++# uClibc/linux-threads, otherwise, for all other situations (glibc,
++# musl and uClibc/NPTL), we need it.
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_UCLIBC)$(BR2_PTHREADS)$(BR2_PTHREADS_NONE),yy)
+ HOST_GCC_COMMON_CONF_OPTS += --disable-tls
++else
++HOST_GCC_COMMON_CONF_OPTS += --enable-tls
+ endif
+ 
+ ifeq ($(BR2_GCC_ENABLE_LTO),y)
