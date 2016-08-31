@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2016 09:11:52 +0200
-Subject: [Buildroot] [PATCH/next v2 2/2] gcc: remove BR2_GCC_ENABLE_TLS
-	option
-In-Reply-To: <53993701-c8a4-09d9-5d0f-6510a8f0812b@mind.be>
-References: <1472592808-18270-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1472592808-18270-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <53993701-c8a4-09d9-5d0f-6510a8f0812b@mind.be>
-Message-ID: <20160831091152.531b06f7@free-electrons.com>
+Date: Wed, 31 Aug 2016 09:14:43 +0200
+Subject: [Buildroot] [PATCH 00/16 v3] br2-external: support multiple
+ trees at once (branch yem/multi-br2-external-ID-7)
+In-Reply-To: <874m611n1e.fsf@dell.be.48ers.dk>
+References: <cover.1468750623.git.yann.morin.1998@free.fr>
+ <eda2b290-992f-7a26-424b-f522b7a805ae@mind.be>
+ <874m611n1e.fsf@dell.be.48ers.dk>
+Message-ID: <20160831091443.691ffd1c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +15,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 31 Aug 2016 00:58:36 +0200, Arnout Vandecappelle wrote:
+On Wed, 31 Aug 2016 08:15:57 +0200, Peter Korsgaard wrote:
 
-> > +# TLS support is not needed on uClibc/no-thread and  
+>  >  Supporting the old single-external without name in parallel with the new named
+>  > approach takes a significant amount of code - I estimate about 40 lines, out of
+>  > 285 lines affected by this patch set...  
 > 
->  I thought it was not even available for nothread or linuxthreads?
+>  >  So, I repeat: I think the backward compatibility should be dropped here.  
+> 
+> That also sounds sensible to me.
 
-Well: TLS support is provided by the compiler and used by the C
-library. At least that's how I see it. Since here we are in gcc.mk, we
-are talking from the point of the view of the compiler, hence the "TLS
-support is not needed for <this C library> variant".
+I originally insisted to keep the backward compatibility, but Arnout's
+argumentation convinced me that it is not really necessary. And if it
+can help reduce the implementation complexity, I'm all for it.
+
+So: I'm fine with dropping backward compatibility on this.
 
 Thomas
 -- 
