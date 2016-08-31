@@ -1,19 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Aug 2016 16:32:41 +0200
-Subject: [Buildroot] [PATCH] package/procps-ng: Bump to version 3.3.12
-In-Reply-To: <1472631485-13904-1-git-send-email-jer@airfi.aero> (Jeroen
- Roovers's message of "Wed, 31 Aug 2016 10:18:05 +0200")
-References: <1472631485-13904-1-git-send-email-jer@airfi.aero>
-Message-ID: <87mvjtypo6.fsf@dell.be.48ers.dk>
+Date: Wed, 31 Aug 2016 16:32:45 +0200
+Subject: [Buildroot] [PATCH 1/1] gssdp: bump to version 0.99.0
+In-Reply-To: <1472635877-5906-1-git-send-email-fabrice.fontaine@orange.com>
+ (Fabrice Fontaine's message of "Wed, 31 Aug 2016 11:31:17 +0200")
+References: <1472635877-5906-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <87inuhypo2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jeroen" == Jeroen Roovers <jer@airfi.aero> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Jeroen Roovers <jer@airfi.aero>
+ > Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 
 Committed to next, thanks.
 
