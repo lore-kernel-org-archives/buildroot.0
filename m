@@ -1,44 +1,21 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Aug 2016 16:30:16 +0200
-Subject: [Buildroot] [git commit branch/next] gupnp: bump to version 0.99.0
-Message-ID: <20160831143309.9314082258@busybox.osuosl.org>
+From: Ottavio Campana <o.campana@videotec.com>
+Date: Wed, 31 Aug 2016 16:12:37 +0000
+Subject: [Buildroot] Is there an equivalent of yocto's devshell?
+Message-ID: <5637116E3E13BE46B0D936BF364783C1F6A7E7@MAIA.sede.videotec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df3df495c4ed0e3611cd845c769dd5edb97a7eba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gupnp/gupnp.hash | 4 ++--
- package/gupnp/gupnp.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+I'm quite new to buildroot, and I am trying to check how I can use it in one project. I am very familiar with yocto, so I am trying to re-learn how to do things with buildroot.
 
-diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
-index e0082ac..6bdc0c0 100644
---- a/package/gupnp/gupnp.hash
-+++ b/package/gupnp/gupnp.hash
-@@ -1,2 +1,2 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/0.20/gupnp-0.20.18.sha256sum:
--sha256	c5e0e11061f8d0ff9c8dccc196f39c45a49c0153c9a72abf6290ab34d1cbb021	gupnp-0.20.18.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/0.99/gupnp-0.99.0.sha256sum:
-+sha256	695c745ae7ecef9482bd91821d84bb98764cbcca0d0f71acb6d46ac1be23a1be	gupnp-0.99.0.tar.xz
-diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-index f7c32b5..fe80838 100644
---- a/package/gupnp/gupnp.mk
-+++ b/package/gupnp/gupnp.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--GUPNP_VERSION_MAJOR = 0.20
--GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).18
-+GUPNP_VERSION_MAJOR = 0.99
-+GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).0
- GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
- GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
- GUPNP_LICENSE = LGPLv2+
+Particularly, I am not able to find if buildroot offers a feature similar to the devshell of yocto. The devshell is a shell with all the environment variables already set, so that it is possibile to invoke commands such as make in the same way that the build process does. By working in the devshell, a developer can work already in the correct environment for cross-compiling, which can save a lot of time.
+
+Does something similar to the devshell exist in buildroot?
+
+Thank you
+
+Ottavio
