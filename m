@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2016 09:10:43 +0200
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to
-	arc-2016.09-eng010
-In-Reply-To: <878tvd1nii.fsf@dell.be.48ers.dk>
-References: <1472579520-27726-1-git-send-email-vzakhar@synopsys.com>
- <878tvd1nii.fsf@dell.be.48ers.dk>
-Message-ID: <20160831091043.7e180877@free-electrons.com>
+Date: Wed, 31 Aug 2016 09:11:52 +0200
+Subject: [Buildroot] [PATCH/next v2 2/2] gcc: remove BR2_GCC_ENABLE_TLS
+	option
+In-Reply-To: <53993701-c8a4-09d9-5d0f-6510a8f0812b@mind.be>
+References: <1472592808-18270-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1472592808-18270-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <53993701-c8a4-09d9-5d0f-6510a8f0812b@mind.be>
+Message-ID: <20160831091152.531b06f7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,37 +15,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 31 Aug 2016 08:05:41 +0200, Peter Korsgaard wrote:
+On Wed, 31 Aug 2016 00:58:36 +0200, Arnout Vandecappelle wrote:
 
->  > As described at:
->  > 4520524ba055706236db9f00dd79f1b2e2e87fde
->  > this commit continues a series of updates of ARC tools.
->  > This time we're updating tools to arc-2016.09-eng010.  
+> > +# TLS support is not needed on uClibc/no-thread and  
 > 
->  > This engenering build contains different fixes done to TLS and
->  > PIE features. Appropriate custom patches are removed as they have
->  > been added to eng010.  
-> 
->  > We still keep GDB as it is of arc-2016.03 release because there're some
->  > issues we'd like to resolve before releasing it to wider audience.  
-> 
->  > So again note this is next engineering builds of arc-2016.09 series
->  > and it might have all kinds of breakages, please don't use it for
->  > production builds.  
-> 
-> So what do we do for 2016.08 that we are just about to release?
-> 
-> Should I add it or should I wait until after the release?
+>  I thought it was not even available for nothread or linuxthreads?
 
-I'm hesitating. You're going to release tonight, which doesn't leave a
-lot of time to test this. However, it's only affecting ARC, and we have
-an ARC internal toolchain configuration in the autobuilders, which will
-immediately start testing this.
-
-In any case, we will have an "engineering" version of the ARC toolchain
-in the release, so whether is 009 or 010 doesn't matter much IMO.
-
-So I'd say, let's commit :)
+Well: TLS support is provided by the compiler and used by the C
+library. At least that's how I see it. Since here we are in gcc.mk, we
+are talking from the point of the view of the compiler, hence the "TLS
+support is not needed for <this C library> variant".
 
 Thomas
 -- 
