@@ -1,44 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Aug 2016 14:41:45 +0200
-Subject: [Buildroot] [git commit] package/unixodbc: bump version to 2.3.4
-Message-ID: <20160902142940.CDD8E8253D@busybox.osuosl.org>
+Date: Wed, 31 Aug 2016 21:45:33 +0200
+Subject: [Buildroot] [git commit] valgrind: let the valgrind configure
+	script detect TLS availability
+Message-ID: <20160902142941.B6B7E7FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b141fcebd03a170fe05681dbb92524f7ea11f0d
+commit: https://git.buildroot.net/buildroot/commit/?id=511a161b87424fbe06747b233242d1f3ff915bf2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/unixodbc/unixodbc.hash | 6 ++++--
- package/unixodbc/unixodbc.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+Back in 2005, in commit
+a2c326396a43ecbc8d02c3d815d4010a7ba2e004 ("update valgrind to the latest
+and greatest"), an explicit --disable-tls option was added. More
+recently, in commit 31a3f4bd54e12b8d6de286ab8fb6d9651990e2f5 ("valgrind:
+enable tls support") changed this to be conditional on
+BR2_GCC_ENABLE_TLS.
 
-diff --git a/package/unixodbc/unixodbc.hash b/package/unixodbc/unixodbc.hash
-index a5c2d11..e99169c 100644
---- a/package/unixodbc/unixodbc.hash
-+++ b/package/unixodbc/unixodbc.hash
-@@ -1,2 +1,4 @@
--# From ftp://ftp.unixodbc.org/pub/unixODBC/unixODBC-2.3.2.tar.gz.md5
--md5	5e4528851eda5d3d4aed249b669bd05b	unixODBC-2.3.2.tar.gz
-+# From ftp://ftp.unixodbc.org/pub/unixODBC/unixODBC-2.3.4.tar.gz.md5
-+md5 bd25d261ca1808c947cb687e2034be81  unixODBC-2.3.4.tar.gz
-+# Locally computed
-+sha256 2e1509a96bb18d248bf08ead0d74804957304ff7c6f8b2e5965309c632421e39  unixODBC-2.3.4.tar.gz
-diff --git a/package/unixodbc/unixodbc.mk b/package/unixodbc/unixodbc.mk
-index 067c1ca..f66daab 100644
---- a/package/unixodbc/unixodbc.mk
-+++ b/package/unixodbc/unixodbc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+However, the configure script of valgrind is perfectly capable of
+detecting TLS support, even in a cross-compilation case: it tries to
+compile a program that uses __thread and sees if it works.
+
+Since we're about to modify how BR2_GCC_ENABLE_TLS is handled, we'd
+better remove its usage from packages, and valgrind is the only package
+using this config option.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/valgrind/valgrind.mk | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index 46ba13e..b97d446 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -15,12 +15,6 @@ VALGRIND_INSTALL_STAGING = YES
+ # patch 0004-Fixes-for-musl-libc.patch touching configure.ac
+ VALGRIND_AUTORECONF = YES
  
--UNIXODBC_VERSION = 2.3.2
-+UNIXODBC_VERSION = 2.3.4
- UNIXODBC_SOURCE = unixODBC-$(UNIXODBC_VERSION).tar.gz
- UNIXODBC_SITE = ftp://ftp.unixodbc.org/pub/unixODBC
- UNIXODBC_INSTALL_STAGING = YES
+-ifeq ($(BR2_GCC_ENABLE_TLS),y)
+-VALGRIND_CONF_OPTS += --enable-tls
+-else
+-VALGRIND_CONF_OPTS += --disable-tls
+-endif
+-
+ # When Valgrind detects a 32-bit MIPS architecture, it forcibly adds
+ # -march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture,
+ # it forcibly adds -march=mips64. This causes Valgrind to be built
