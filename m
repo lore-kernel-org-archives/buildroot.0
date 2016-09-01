@@ -1,28 +1,28 @@
-From: Petr Kulhavy <brain@jikos.cz>
-Date: Thu,  1 Sep 2016 16:51:32 +0200
-Subject: [Buildroot] boot/uboot: allow multiple target selection
-Message-ID: <1472741494-7043-1-git-send-email-brain@jikos.cz>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 01 Sep 2016 15:11:16 +0000
+Subject: [Buildroot] [Bug 8206] mplayer uses host xorg development files
+In-Reply-To: <bug-8206-163@https.bugs.busybox.net/>
+References: <bug-8206-163@https.bugs.busybox.net/>
+Message-ID: <bug-8206-163-4ZT406ZC4M@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=8206
 
-Hi,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-I'm sending two improvements to boot/uboot.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|REOPENED                    |RESOLVED
+         Resolution|---                         |FIXED
 
-The first patch is a minor fix to make sure the SPL target is always build by
-the make process.
+--- Comment #8 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Patch applied in
+https://git.buildroot.org/buildroot/commit/?id=6ae3ce9585dcbdfd381111aa9d885bc5b46020d4.
 
-The other patch changes the current "choice" type of selection of the U-boot
-target format to a multi-selection. This might be useful for generating
-multiple uboot image formats at once. E.g. one for serial load (which typically
-contains some RBL formatting) and one to be stored on a filesystem or in the
-flash. So far this was not possible to do.
-
-Any comments are welcome.
-
-Thanks
-Petr
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
