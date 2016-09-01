@@ -1,27 +1,34 @@
 From: yoda zhong <yodazhong@gmail.com>
-Date: Thu, 1 Sep 2016 16:17:30 -0700
-Subject: [Buildroot] How to build image with added files
-In-Reply-To: <fcd9e72c-ef64-0b05-283c-2e545b1d0ab3@mind.be>
-References: <57c85f5a.8c4f620a.45d24.2e4a@mx.google.com>
- <fcd9e72c-ef64-0b05-283c-2e545b1d0ab3@mind.be>
-Message-ID: <57c8b708.c846620a.9b898.6b89@mx.google.com>
+Date: Thu, 1 Sep 2016 16:24:02 -0700
+Subject: [Buildroot] How to flash eMMC
+In-Reply-To: <4a970631-0624-6b05-b34e-d2c44793e546@mind.be>
+References: <57c76b8c.4906420a.27f90.5cd2@mx.google.com>
+ <5cfb61d3-bf1a-8156-0365-132d9af802d5@mind.be>
+ <57c86208.4362620a.1e3be.303d@mx.google.com>
+ <4a970631-0624-6b05-b34e-d2c44793e546@mind.be>
+Message-ID: <57c8b890.0890420a.6be3f.e401@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you for your answer.
+Sorry for confusing you.
 
-I?ll lookup that overlay feature. Thanks.
+I meant followings.
 
-For the second part, I need to describe my situation in detail.
-Usually I make image and copy them to microSD card which has rootfs and boot partitions.
-I use ?make? command to do this.
-And in some cases, I modified some files under output/target. But my modification is nulled
-when I do ?make? command. For example, I add a script file in output/target, but it disappeared.
-I modified output/target/etc/network/interfaces, but added lines disappeared too.
-So I thought there?s another way to do this and asked this to here.
+When I used other OS for beaglebone, I flashed eMMC with the way mentioned in 
+http://elinux.org/Beagleboard:BeagleBoneBlack_Debian#Flashing_eMMC
+But I failed to do this on Buildroot.
+
+I use microSD which has two partitions, rootfs and boot and boot from microSD.
+This works fine. So I want to flash the contents of microSD into embedded eMMC of
+Beaglebone black. So I asked this to get some advice.
+
+It looks like that I need to copy boot and rootfs partitions into eMMC, but I don?t know
+which dev I use for this.
+
+I wish I?m clear at this time.
 
 Regards,
 Jehun
@@ -29,4 +36,4 @@ Jehun
 ?? ??: Arnout Vandecappelle
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160901/833698a2/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160901/2d4ae1f4/attachment.html>
