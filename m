@@ -1,49 +1,34 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Thu,  1 Sep 2016 16:44:29 -0300
-Subject: [Buildroot] [PATCH] supertuxkart: Constrain to x86 architecture
-Message-ID: <20160901194429.11761-1-ezequiel@vanguardiasur.com.ar>
+From: Adrian May <adrian.alexander.may@gmail.com>
+Date: Thu, 1 Sep 2016 21:52:44 +0100
+Subject: [Buildroot] Dial pppoe with buildroot on raspberry pi
+Message-ID: <CAD-UbzFukjpnigepni-+arRi5h-KMo4d237=pryPvbZnoZ310g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Our build system has detected that angelscript can't be
-cross-compiled properly. This has been also reported to
-supertuxkart [1], and although the developers were open
-to take patches fixing STK embedded angelscript, it was
-pointed out that non-x86 architectures were not officially
-supported and of little interest [2].
+Hi All,
 
-Hence, let's constrain the package selection to x86.
+I'm trying to make a wireless AP/router out of a rasberry pi using
+buildroot.
 
-[1] https://github.com/supertuxkart/stk-code/issues/2569
-[2] https://github.com/supertuxkart/stk-code/pull/2195
+I got the wifi working on the pi with hostapd and dnsmasq.
 
-Fixes: http://autobuild.buildroot.net/results/655/655f046b3bb5f7a4ea492328b608e409d6769689/
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
----
- package/supertuxkart/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+My Ubuntu box can successfully dial over my BT Openreach FTTC modem using
+pppoeconf.
 
-diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
-index a1f7074eb78f..9a8eabe2b611 100644
---- a/package/supertuxkart/Config.in
-+++ b/package/supertuxkart/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SUPERTUXKART
- 	bool "supertuxkart"
-+	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP # openal
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
-@@ -25,6 +26,7 @@ config BR2_PACKAGE_SUPERTUXKART
- 	  http://supertuxkart.sourceforge.net/Main_Page
- 
- comment "supertuxkart needs an OpenGL backend, a uClibc or glibc toolchain w/ NPTL, C++"
-+	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_XORG7
--- 
-2.9.3
+My problem is figuring out how to make buildroot dial over that modem. I
+don't know where to begin. I enabled everything in menuconfig and
+linux-menuconfig that sounded vaguely related to ppp, but there's no
+equivalent of pppoeconf and the config files that showed up don't look a
+bit like those on the ubuntu box. There are some noises about rp-pppoe and
+a kernel module but they don't really fit together.
+
+What's the proper procedure for a basic pppoe dial?
+
+TIA,
+Adrian.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160901/bac3f09f/attachment.html>
