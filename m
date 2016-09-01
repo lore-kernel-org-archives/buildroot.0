@@ -1,163 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Sep 2016 11:30:19 +0200
-Subject: [Buildroot] [git commit] Update for 2016.08
-Message-ID: <20160901093047.9FF0B822CE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 1 Sep 2016 11:39:41 +0200
+Subject: [Buildroot] Is there an equivalent of yocto's devshell?
+In-Reply-To: <8b51ea03-6172-ce10-9a80-7caf43952de1@flatmax.org>
+References: <5637116E3E13BE46B0D936BF364783C1F6A7E7@MAIA.sede.videotec.com>
+ <87a8fszmq7.fsf@dell.be.48ers.dk>
+ <5637116E3E13BE46B0D936BF364783C1F6B168@MAIA.sede.videotec.com>
+ <8b51ea03-6172-ce10-9a80-7caf43952de1@flatmax.org>
+Message-ID: <20160901113941.36166d9e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78e991462868e8f86d20754cf05a79f2b6be395c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    | 14 ++++++++++++++
- Makefile                   |  2 +-
- docs/website/download.html | 22 +++++++++++-----------
- docs/website/news.html     | 18 ++++++++++++++++++
- support/misc/Vagrantfile   |  2 +-
- 5 files changed, 45 insertions(+), 13 deletions(-)
+On Thu, 1 Sep 2016 17:51:31 +1000, Matt Flax wrote:
 
-diff --git a/CHANGES b/CHANGES
-index eac349a..97749ca 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,17 @@
-+2016.08, Released Septermber 1st, 2016
-+
-+	Minor fixes.
-+
-+	Toolchain: ARC tools updated to arc-2016.09-eng010.
-+
-+	Updated/fixed packages: libshout, luajit, mpd, mplayer
-+
-+	Issues resolved (http://bugs.buildroot.org):
-+
-+	#7520: CodeSourcery toolchain ARM: C++11 std::exception_ptr..
-+	#8341: Getting EGL Error: Could not create the egl surface:..
-+	#9121: gst1-imx for i.MX6 compile failed, cannot find PXP, ..
-+
- 2016.08-rc3, Released August 29th, 2016
- 
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index 02b65cc..283147c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -46,7 +46,7 @@ else # umask
- all:
- 
- # Set and export the version string
--export BR2_VERSION := 2016.08-rc3
-+export BR2_VERSION := 2016.08
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 80a979b..6380d9a 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,40 +8,40 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2016.05</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2016.08</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2016.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2016.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2016.05.tar.gz">buildroot-2016.05.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2016.05.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2016.08.tar.gz">buildroot-2016.08.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2016.08.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2016.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2016.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2016.05.tar.bz2">buildroot-2016.05.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2016.05.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2016.08.tar.bz2">buildroot-2016.08.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2016.08.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--
-+<!--
-       <h3 style="text-align: center;">Latest release candidate: <b>2016.08-rc3</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
-@@ -75,7 +75,7 @@
- 	  <p><a href="/downloads/buildroot-2016.08-rc3.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--
-+-->
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index d74a2a8..0fefb05 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,24 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2016.08 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>1 September 2016</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The stable 2016.08 release is out - Thanks to everyone
-+	  contributing and testing the release candidates. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2016.08">CHANGES</a>
-+	  file for more details
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2016.08.tar.bz2">2016.08 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index d42a394..cf269fe 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2016.05'
-+RELEASE='2016.08'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+> Is it necessary to have a devshell ? Could you simply run 'make package' 
+> instead and work live in the output/build/package directory ?
+> You can rerun various parts of the make process by deleting the .stamp_* 
+> files in the package directory.
+> 
+> Conceptually if you build the package you are working on natively on 
+> your desktop, you should be able to do all the library inclusion and 
+> linking locally ... once happy, you can simply invoke buildroot to cross 
+> compile for you ... I would imagine that that would be a much faster way 
+> top develop ...
+
+Fully agreed. I am not sure I understand the usefulness of devshell. It
+is just easier and more efficient to use the build system directly.
+
+However, if you're actively working on the source of a package, do
+*NOT* make your changes in outptu/build/<package>-<version>/. This
+directory is a temporary location. Instead, use the OVERRIDE_SRCDIR
+mechanism, which allows you to tell Buildroot to take the source code
+for a given package from a given directory. See
+http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf
+slides 261 and following.
+
+My feeling is that things like devshell are created because using Yocto
+during development is too painful. Buildroot simply doesn't need
+something like devshell because using the build system during active
+development is perfectly fine. Of course, if you disagree and have some
+concrete examples, we'll be happy to look into this.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
