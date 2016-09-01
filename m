@@ -1,31 +1,33 @@
-From: Ottavio Campana <o.campana@videotec.com>
-Date: Thu, 1 Sep 2016 12:18:58 +0000
-Subject: [Buildroot] Is there an equivalent of yocto's devshell?
-In-Reply-To: <20160901113941.36166d9e@free-electrons.com>
-References: <5637116E3E13BE46B0D936BF364783C1F6A7E7@MAIA.sede.videotec.com>
- <87a8fszmq7.fsf@dell.be.48ers.dk>
- <5637116E3E13BE46B0D936BF364783C1F6B168@MAIA.sede.videotec.com>
- <8b51ea03-6172-ce10-9a80-7caf43952de1@flatmax.org>,
- <20160901113941.36166d9e@free-electrons.com>
-Message-ID: <5637116E3E13BE46B0D936BF364783C1F6B4F0@MAIA.sede.videotec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 1 Sep 2016 14:22:25 +0200
+Subject: [Buildroot] [git commit] docs/website/news.html: add 2016.08
+	announcement link
+Message-ID: <20160901122341.D8F4D80199@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> My feeling is that things like devshell are created because using Yocto
-> during development is too painful. Buildroot simply doesn't need
-> something like devshell because using the build system during active
-> development is perfectly fine. Of course, if you disagree and have some
-> concrete examples, we'll be happy to look into this.
+commit: https://git.buildroot.net/buildroot/commit/?id=a895c27e5f611c527aed73ee43a7a3cb0d4f053f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas, you are 100%.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/news.html | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-The usual situation is you develop a portable program, but then you need to specialize some part that is platform-specify and you need to work on the sources with the cross compiler.
-
-I think I'll echo the environment and then reproduce it when I'll work on the sources.
-
-Thank you
-
-Ottavio
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 0fefb05..84040c6 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -20,7 +20,8 @@
+ 	<p>The stable 2016.08 release is out - Thanks to everyone
+ 	  contributing and testing the release candidates. See the
+ 	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2016.08">CHANGES</a>
+-	  file for more details
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2016-September/171172.html">announcement<a>
+ 	  and go to the <a href="/downloads/">downloads page</a> to pick up the
+ 	  <a href="/downloads/buildroot-2016.08.tar.bz2">2016.08 release</a>.</p>
+       </div>
