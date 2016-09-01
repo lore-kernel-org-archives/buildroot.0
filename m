@@ -1,47 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Sep 2016 20:57:46 +0200
-Subject: [Buildroot] [PATCH 06/16 v3] core: introduce a generated
-	kconfig snippet
-In-Reply-To: <20160901175221.GA5841@free.fr> (Yann E. MORIN's message of "Thu, 
- 1 Sep 2016 19:52:21 +0200")
-References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
- <20160827161601.2fd0e8f5@free-electrons.com>
- <87poosaa9d.fsf@dell.be.48ers.dk> <20160901175221.GA5841@free.fr>
-Message-ID: <87k2evwiqd.fsf@dell.be.48ers.dk>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Thu,  1 Sep 2016 16:32:58 -0300
+Subject: [Buildroot] [PATCH] board/minnowboard-max: Add kernel options to
+	support USB disks
+Message-ID: <20160901193258.10754-1-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+As reported by bug #9176 the current v4.6 kernel config
+(used by Minnowboard MAX and Turbot) does not support
+USB disks. Since this is a pretty essential functionality,
+it's desirable to have it, so let's add the required options.
 
-Hi,
+Kernel config linux-v3.8.config (currently used by the first
+generation Minnowboard) doesn't need this change.
 
- >> Why do we _HAVE_ to continue to support it?
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+---
+ board/minnowboard/linux-4.6.config | 3 +++
+ 1 file changed, 3 insertions(+)
 
- > I was going to prepare a patchset to remove the list of packages from
- > the manual, when I stumbled on *one* reason parts of it is interesting
- > to have in the manual: the list of virtual packages, their symboles and
- > their providers.
-
- > I think this is worth having in the manual, if at least for packagers of
- > new packages that would need or provide such a virtual package.
-
-Perhaps.
-
- > However, I think the normal and deperacted packages should be removed,
- > and our script made much simpler (if at all possible).
-
- > So, what's the idea:
- >   - remove all packages (easy)
- >   - keep as-is  (even easier)
- >   - only keep virtual packages (not easy at all)
-
-Personally I would go for 1, but if 3 is doable without too much work /
-complexity (and you feel up for it), then that is also OK with me.
-
+diff --git a/board/minnowboard/linux-4.6.config b/board/minnowboard/linux-4.6.config
+index 3bc1ffdf08b4..fba48a163c3c 100644
+--- a/board/minnowboard/linux-4.6.config
++++ b/board/minnowboard/linux-4.6.config
+@@ -14,6 +14,7 @@ CONFIG_NET=y
+ CONFIG_PACKET=y
+ CONFIG_UNIX=y
+ CONFIG_INET=y
++CONFIG_BLK_DEV_SD=y
+ CONFIG_CHR_DEV_SG=y
+ CONFIG_ATA=y
+ CONFIG_SATA_AHCI=y
+@@ -45,7 +46,9 @@ CONFIG_SND_HDA_CODEC_HDMI=y
+ # CONFIG_SND_SPI is not set
+ # CONFIG_SND_USB is not set
+ CONFIG_USB=y
++CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+ CONFIG_USB_XHCI_HCD=y
++CONFIG_USB_STORAGE=y
+ CONFIG_NOP_USB_XCEIV=y
+ CONFIG_MMC=y
+ CONFIG_MMC_SDHCI=y
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.9.3
