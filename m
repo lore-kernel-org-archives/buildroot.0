@@ -1,53 +1,163 @@
-From: Matt Flax <flatmax@flatmax.org>
-Date: Thu, 1 Sep 2016 17:51:31 +1000
-Subject: [Buildroot] Is there an equivalent of yocto's devshell?
-In-Reply-To: <5637116E3E13BE46B0D936BF364783C1F6B168@MAIA.sede.videotec.com>
-References: <5637116E3E13BE46B0D936BF364783C1F6A7E7@MAIA.sede.videotec.com>
- <87a8fszmq7.fsf@dell.be.48ers.dk>
- <5637116E3E13BE46B0D936BF364783C1F6B168@MAIA.sede.videotec.com>
-Message-ID: <8b51ea03-6172-ce10-9a80-7caf43952de1@flatmax.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 1 Sep 2016 11:30:19 +0200
+Subject: [Buildroot] [git commit] Update for 2016.08
+Message-ID: <20160901093047.9FF0B822CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=78e991462868e8f86d20754cf05a79f2b6be395c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                    | 14 ++++++++++++++
+ Makefile                   |  2 +-
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 18 ++++++++++++++++++
+ support/misc/Vagrantfile   |  2 +-
+ 5 files changed, 45 insertions(+), 13 deletions(-)
 
-On 01/09/16 17:20, Ottavio Campana wrote:
->>> Particularly, I am not able to find if buildroot offers a feature
->>> similar to the devshell of yocto. The devshell is a shell with all the
->>> environment variables already set, so that it is possibile to invoke
->>> commands such as make in the same way that the build process does. By
->>> working in the devshell, a developer can work already in the correct
->>> environment for cross-compiling, which can save a lot of time.
->>> Does something similar to the devshell exist in buildroot?
->> I have never used this 'devshell', but I take it that it is something
->> that adds the cross compiler to the path and possibly sets up some
->> environment variables like CC/CXX/CROSS_COMPILE/ARCH to point to the
->> cross compiler?
->>
->> If so, we don't have anything quite like that, but writing a little
->> shell script for your project adding output/host/usr/bin to your path
->> and exporting those environment variables shouldn't take many minutes.
->>
->> Or does it do something more special than that?
-> Well, le'ts say that it configures the not only the cross compiler but it also sets all the variables for pointing to the staging environment for finding includes and linking to libraries. Compiling a self contained program is trivial, but when you need to include different libraries things start to be more difficult.
->
-> I can write the script, but can you tell my where I can find all the variables that are set by buildroot before compiling a package?
->
-You can find that information out by echoing env at some point in the 
-package build process.
-
-Is it necessary to have a devshell ? Could you simply run 'make package' 
-instead and work live in the output/build/package directory ?
-You can rerun various parts of the make process by deleting the .stamp_* 
-files in the package directory.
-
-Conceptually if you build the package you are working on natively on 
-your desktop, you should be able to do all the library inclusion and 
-linking locally ... once happy, you can simply invoke buildroot to cross 
-compile for you ... I would imagine that that would be a much faster way 
-top develop ...
-
-Matt
+diff --git a/CHANGES b/CHANGES
+index eac349a..97749ca 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,17 @@
++2016.08, Released Septermber 1st, 2016
++
++	Minor fixes.
++
++	Toolchain: ARC tools updated to arc-2016.09-eng010.
++
++	Updated/fixed packages: libshout, luajit, mpd, mplayer
++
++	Issues resolved (http://bugs.buildroot.org):
++
++	#7520: CodeSourcery toolchain ARM: C++11 std::exception_ptr..
++	#8341: Getting EGL Error: Could not create the egl surface:..
++	#9121: gst1-imx for i.MX6 compile failed, cannot find PXP, ..
++
+ 2016.08-rc3, Released August 29th, 2016
+ 
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 02b65cc..283147c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -46,7 +46,7 @@ else # umask
+ all:
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2016.08-rc3
++export BR2_VERSION := 2016.08
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 80a979b..6380d9a 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,40 +8,40 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
+ 
+-      <h3 style="text-align: center;">Latest stable release: <b>2016.05</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2016.08</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2016.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2016.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2016.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2016.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2016.05.tar.gz">buildroot-2016.05.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2016.05.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2016.08.tar.gz">buildroot-2016.08.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2016.08.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2016.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2016.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2016.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2016.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2016.05.tar.bz2">buildroot-2016.05.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2016.05.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2016.08.tar.bz2">buildroot-2016.08.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2016.08.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++<!--
+       <h3 style="text-align: center;">Latest release candidate: <b>2016.08-rc3</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+@@ -75,7 +75,7 @@
+ 	  <p><a href="/downloads/buildroot-2016.08-rc3.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++-->
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index d74a2a8..0fefb05 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,24 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2016.08 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>1 September 2016</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The stable 2016.08 release is out - Thanks to everyone
++	  contributing and testing the release candidates. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2016.08">CHANGES</a>
++	  file for more details
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2016.08.tar.bz2">2016.08 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index d42a394..cf269fe 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2016.05'
++RELEASE='2016.08'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
