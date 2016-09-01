@@ -1,14 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 1 Sep 2016 23:30:47 +0200
-Subject: [Buildroot] [PATCH 06/16 v3] core: introduce a generated
- kconfig snippet
-In-Reply-To: <87k2evwiqd.fsf@dell.be.48ers.dk>
+Date: Thu, 1 Sep 2016 23:43:56 +0200
+Subject: [Buildroot] [PATCH 00/16 v3] br2-external: support multiple
+ trees at once (branch yem/multi-br2-external-ID-7)
+In-Reply-To: <20160831092643.GA5549@free.fr>
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
- <20160827161601.2fd0e8f5@free-electrons.com>
- <87poosaa9d.fsf@dell.be.48ers.dk> <20160901175221.GA5841@free.fr>
- <87k2evwiqd.fsf@dell.be.48ers.dk>
-Message-ID: <7188ad8d-469c-f4f8-9411-46761b05bddf@mind.be>
+ <eda2b290-992f-7a26-424b-f522b7a805ae@mind.be>
+ <874m611n1e.fsf@dell.be.48ers.dk>
+ <20160831091443.691ffd1c@free-electrons.com> <20160831092643.GA5549@free.fr>
+Message-ID: <e47d26b6-26a6-ac0a-8334-b9a0785084f4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,50 +16,47 @@ To: buildroot@busybox.net
 
 
 
-On 01-09-16 20:57, Peter Korsgaard wrote:
->>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On 31-08-16 11:26, Yann E. MORIN wrote:
+> Thomas, Arnout,All,
 > 
-> Hi,
+> On 2016-08-31 09:14 +0200, Thomas Petazzoni spake thusly:
+>> On Wed, 31 Aug 2016 08:15:57 +0200, Peter Korsgaard wrote:
+>>
+>>>  >  Supporting the old single-external without name in parallel with the new named
+>>>  > approach takes a significant amount of code - I estimate about 40 lines, out of
+>>>  > 285 lines affected by this patch set...  
+>>>
+>>>  >  So, I repeat: I think the backward compatibility should be dropped here.  
+>>>
+>>> That also sounds sensible to me.
+>>
+>> I originally insisted to keep the backward compatibility, but Arnout's
+>> argumentation convinced me that it is not really necessary. And if it
+>> can help reduce the implementation complexity, I'm all for it.
+>>
+>> So: I'm fine with dropping backward compatibility on this.
 > 
->  >> Why do we _HAVE_ to continue to support it?
-> 
->  > I was going to prepare a patchset to remove the list of packages from
->  > the manual, when I stumbled on *one* reason parts of it is interesting
->  > to have in the manual: the list of virtual packages, their symboles and
->  > their providers.
-> 
->  > I think this is worth having in the manual, if at least for packagers of
->  > new packages that would need or provide such a virtual package.
-> 
-> Perhaps.
+> OK, I'll drop.
 
- If it's just for a list of virtual packages, isn't sorting
-http://autobuild.buildroot.org/stats/ by package type easier?
+ One remark though: we should really document such backward compatibility
+issues. I don't think we're currently doing that well.
 
-> 
->  > However, I think the normal and deperacted packages should be removed,
->  > and our script made much simpler (if at all possible).
-> 
->  > So, what's the idea:
->  >   - remove all packages (easy)
->  >   - keep as-is  (even easier)
->  >   - only keep virtual packages (not easy at all)
-> 
-> Personally I would go for 1, but if 3 is doable without too much work /
-> complexity (and you feel up for it), then that is also OK with me.
+ Where should this be done?
 
- Well, option 2 is not the end of the world either. The reason we consider it
-now is that some complexity (1 line!) has to be added in the manual.mk to
-continue supporting it. It is starting to violate the KISS principle, but not
-overly so.
+- In CHANGES? At the moment, however, the CHANGES file is not really inviting to
+look for that kind of thing. Especially because users will often upgrade in
+jumps of 4 or more releases - that makes up 900 lines of CHANGES text...
 
- It's not like the BR2_EXTERNAL backward compatibility stuff which was *really*
-complicating things.
+- In the manual? There isn't really an appropriate place for it at the moment.
+And how long do we keep it there?
 
+- In some new location? Where?
+
+
+ My personal preference would be in the manual, and keep it for a couple of years.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
