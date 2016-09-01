@@ -1,50 +1,66 @@
-From: yoda zhong <yodazhong@gmail.com>
-Date: Thu, 1 Sep 2016 10:14:51 -0700
-Subject: [Buildroot] How to flash eMMC
-In-Reply-To: <5cfb61d3-bf1a-8156-0365-132d9af802d5@mind.be>
-References: <57c76b8c.4906420a.27f90.5cd2@mx.google.com>
- <5cfb61d3-bf1a-8156-0365-132d9af802d5@mind.be>
-Message-ID: <57c86208.4362620a.1e3be.303d@mx.google.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 1 Sep 2016 19:52:21 +0200
+Subject: [Buildroot] [PATCH 06/16 v3] core: introduce a generated
+	kconfig snippet
+In-Reply-To: <87poosaa9d.fsf@dell.be.48ers.dk>
+References: <cover.1468750623.git.yann.morin.1998@free.fr>
+ <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
+ <20160827161601.2fd0e8f5@free-electrons.com>
+ <87poosaa9d.fsf@dell.be.48ers.dk>
+Message-ID: <20160901175221.GA5841@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you for your opinion.
+Peter, Thomas, All,
 
-Following is the related kernel log. But I?m not sure where I should copy 
-boot/* and rootfs/* of microSD to.
+On 2016-08-28 22:50 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> 
+>  > Hello,
+>  > On Sun, 17 Jul 2016 12:34:26 +0200, Yann E. MORIN wrote:
+> 
+>  >> +.PHONY: $(BUILD_DIR)/.br2-external.in
+> 
+>  > Why is a real file that exists on the filesystem a phony target?
+> 
+>  >> +# Ensure the kconfig snippet is generated (for MANUAL_GEN_LISTS, below):
+>  >> +MANUAL_DEPENDENCIES += prepare-kconfig
+> 
+>  > It's a bit crazy the complexity that we have just to allow our manual
+>  > to have the list of all packages in Buildroot. I'm not even sure this
+>  > section of the manual is that useful, to be honest. But oh well, that's
+>  > supported today, so we have to continue support it.
+> 
+> Why do we _HAVE_ to continue to support it?
 
-[    1.735984] mmc0: host does not support reading read-only switch, assuming write-enable
-[    1.751294] mmc0: new high speed SDHC card at address aaaa
-[    1.762798] mmcblk0: mmc0:aaaa SS08G 7.40 GiB 
-[    1.774493] mmc1: new high speed MMC card at address 0001
-[    1.783724]  mmcblk0: p1 p2
-[    1.806009] mmcblk1: mmc1:0001 MMC04G 3.60 GiB 
-[    1.812103] mmcblk1boot0: mmc1:0001 MMC04G partition 1 2.00 MiB
-[    1.828636] mmcblk1boot1: mmc1:0001 MMC04G partition 2 2.00 MiB
-[    1.876569]  mmcblk1: p1
-[    1.921456] EXT4-fs (mmcblk0p2): mounted filesystem with ordered data mode. Opts: (null)
-[    1.930280] VFS: Mounted root (ext4 filesystem) on device 179:2.
-[    1.950790] devtmpfs: mounted
-[    1.956266] Freeing unused kernel memory: 1024K (c0c00000 - c0d00000)
-[    2.113623] EXT4-fs (mmcblk0p2): re-mounted. Opts: data=ordered
+I was going to prepare a patchset to remove the list of packages from
+the manual, when I stumbled on *one* reason parts of it is interesting
+to have in the manual: the list of virtual packages, their symboles and
+their providers.
 
-Following is the related dev list.
+I think this is worth having in the manual, if at least for packagers of
+new packages that would need or provide such a virtual package.
 
-mmcblk0
-mmcblk0p1
-mmcblk0p2
-mmcblk1
-mmcblk1boot0
-mmcblk1boot1
-mmcblk1p1
+However, I think the normal and deperacted packages should be removed,
+and our script made much simpler (if at all possible).
 
-Best,
-Jehun
+So, what's the idea:
+  - remove all packages (easy)
+  - keep as-is  (even easier)
+  - only keep virtual packages (not easy at all)
 
-?? ??: Arnout Vandecappelle
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160901/20914805/attachment.html>
+Insights? ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
