@@ -1,11 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 1 Sep 2016 22:58:46 +0200
-Subject: [Buildroot] gsoap and code generation
-In-Reply-To: <5637116E3E13BE46B0D936BF364783C1F6B84B@MAIA.sede.videotec.com>
-References: <5637116E3E13BE46B0D936BF364783C1F6B573@MAIA.sede.videotec.com>
- <20160901153710.2bb43fc7@free-electrons.com>
- <5637116E3E13BE46B0D936BF364783C1F6B84B@MAIA.sede.videotec.com>
-Message-ID: <8b0fa497-0df1-ebca-bd80-98a0ee945ddc@mind.be>
+Date: Thu, 1 Sep 2016 23:06:01 +0200
+Subject: [Buildroot] How to build image with added files
+In-Reply-To: <57c85f5a.8c4f620a.45d24.2e4a@mx.google.com>
+References: <57c85f5a.8c4f620a.45d24.2e4a@mx.google.com>
+Message-ID: <fcd9e72c-ef64-0b05-283c-2e545b1d0ab3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +12,39 @@ To: buildroot@busybox.net
 
 
 
-On 01-09-16 18:23, Ottavio Campana wrote:
-[snip]
->>> How can I write a script that compiles a tool for the host and the
->>> libraries for the target?
->>
->> You need two variants of the same package: a host variant and a target
->> variant, i.e host-gsoap (host variant) and gsoap (target variant).
->>
->> The former installs the host utilities needed to generate code at build
->> time while on the host, and the latter installs the libraries
->> cross-compiled for the target.
+On 01-09-16 19:03, yoda zhong wrote:
+> Hi,
 > 
-> The fact that I create two files, let's say gsoap.mk and host-gsoap.mk , already
-> lets buildroot know what to compile with the native compiler and what to build
-> with the cross-compiler?
+>  
+> 
+> I tried to build image with ?make? after modifying /etc/network/interfaces.
+> 
+> But that is automatically made by buildroot. So I failed.
+> 
+> How could I make image with modified interfaces file?
 
-https://buildroot.org/downloads/manual/manual.html#generic-package-reference
+ Use the filesystem-overlay feature.
+
+https://buildroot.org/downloads/manual/manual.html#rootfs-custom
+
+> 
+>  
+> 
+> In addition, I tried to make image after adding one script on output/target.
+
+ We don't have an 'image' target. I guess you just meant 'make'?
+
+> 
+> But this also doesn?t work. Is there any restriction on adding or modifying on
+> output/target?
+
+ Nothing ever gets removed from output/target, except for the cleanups done by
+the finalize step (static libraries, documentation). So any script you added
+there should stay. Except if you did a 'make clean', that removes the entire
+output directory.
 
  Regards,
  Arnout
-
-> 
-> Thank you
-> 
-> Ottavio
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
