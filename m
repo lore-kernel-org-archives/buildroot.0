@@ -1,48 +1,49 @@
 From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Thu,  1 Sep 2016 16:32:58 -0300
-Subject: [Buildroot] [PATCH] board/minnowboard-max: Add kernel options to
-	support USB disks
-Message-ID: <20160901193258.10754-1-ezequiel@vanguardiasur.com.ar>
+Date: Thu,  1 Sep 2016 16:44:29 -0300
+Subject: [Buildroot] [PATCH] supertuxkart: Constrain to x86 architecture
+Message-ID: <20160901194429.11761-1-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported by bug #9176 the current v4.6 kernel config
-(used by Minnowboard MAX and Turbot) does not support
-USB disks. Since this is a pretty essential functionality,
-it's desirable to have it, so let's add the required options.
+Our build system has detected that angelscript can't be
+cross-compiled properly. This has been also reported to
+supertuxkart [1], and although the developers were open
+to take patches fixing STK embedded angelscript, it was
+pointed out that non-x86 architectures were not officially
+supported and of little interest [2].
 
-Kernel config linux-v3.8.config (currently used by the first
-generation Minnowboard) doesn't need this change.
+Hence, let's constrain the package selection to x86.
 
+[1] https://github.com/supertuxkart/stk-code/issues/2569
+[2] https://github.com/supertuxkart/stk-code/pull/2195
+
+Fixes: http://autobuild.buildroot.net/results/655/655f046b3bb5f7a4ea492328b608e409d6769689/
 Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- board/minnowboard/linux-4.6.config | 3 +++
- 1 file changed, 3 insertions(+)
+ package/supertuxkart/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/board/minnowboard/linux-4.6.config b/board/minnowboard/linux-4.6.config
-index 3bc1ffdf08b4..fba48a163c3c 100644
---- a/board/minnowboard/linux-4.6.config
-+++ b/board/minnowboard/linux-4.6.config
-@@ -14,6 +14,7 @@ CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
- CONFIG_INET=y
-+CONFIG_BLK_DEV_SD=y
- CONFIG_CHR_DEV_SG=y
- CONFIG_ATA=y
- CONFIG_SATA_AHCI=y
-@@ -45,7 +46,9 @@ CONFIG_SND_HDA_CODEC_HDMI=y
- # CONFIG_SND_SPI is not set
- # CONFIG_SND_USB is not set
- CONFIG_USB=y
-+CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
- CONFIG_USB_XHCI_HCD=y
-+CONFIG_USB_STORAGE=y
- CONFIG_NOP_USB_XCEIV=y
- CONFIG_MMC=y
- CONFIG_MMC_SDHCI=y
+diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
+index a1f7074eb78f..9a8eabe2b611 100644
+--- a/package/supertuxkart/Config.in
++++ b/package/supertuxkart/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SUPERTUXKART
+ 	bool "supertuxkart"
++	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INSTALL_LIBSTDCPP # openal
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
+@@ -25,6 +26,7 @@ config BR2_PACKAGE_SUPERTUXKART
+ 	  http://supertuxkart.sourceforge.net/Main_Page
+ 
+ comment "supertuxkart needs an OpenGL backend, a uClibc or glibc toolchain w/ NPTL, C++"
++	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_XORG7
 -- 
 2.9.3
