@@ -1,59 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 2 Sep 2016 00:04:04 +0200
-Subject: [Buildroot] [PATCH 00/16 v3] br2-external: support multiple
- trees at once (branch yem/multi-br2-external-ID-7)
-In-Reply-To: <20160901214647.GB5841@free.fr>
-References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <eda2b290-992f-7a26-424b-f522b7a805ae@mind.be>
- <874m611n1e.fsf@dell.be.48ers.dk>
- <20160831091443.691ffd1c@free-electrons.com> <20160831092643.GA5549@free.fr>
- <e47d26b6-26a6-ac0a-8334-b9a0785084f4@mind.be>
- <20160901214647.GB5841@free.fr>
-Message-ID: <d9c36f6f-bdd9-1083-332b-17cb6fcb6787@mind.be>
+From: yoda zhong <yodazhong@gmail.com>
+Date: Thu, 1 Sep 2016 16:17:30 -0700
+Subject: [Buildroot] How to build image with added files
+In-Reply-To: <fcd9e72c-ef64-0b05-283c-2e545b1d0ab3@mind.be>
+References: <57c85f5a.8c4f620a.45d24.2e4a@mx.google.com>
+ <fcd9e72c-ef64-0b05-283c-2e545b1d0ab3@mind.be>
+Message-ID: <57c8b708.c846620a.9b898.6b89@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thank you for your answer.
 
+I?ll lookup that overlay feature. Thanks.
 
-On 01-09-16 23:46, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2016-09-01 23:43 +0200, Arnout Vandecappelle spake thusly:
-[snip]
->>  One remark though: we should really document such backward compatibility
->> issues. I don't think we're currently doing that well.
->>
->>  Where should this be done?
->>
->> - In CHANGES? At the moment, however, the CHANGES file is not really inviting to
->> look for that kind of thing. Especially because users will often upgrade in
->> jumps of 4 or more releases - that makes up 900 lines of CHANGES text...
->>
->> - In the manual? There isn't really an appropriate place for it at the moment.
->> And how long do we keep it there?
->>
->> - In some new location? Where?
->>
->>  My personal preference would be in the manual, and keep it for a couple of years.
-> 
-> And since we can detect this situation, we can point the user to the
-> manual and/or emit the brief suggestion you previously posted.
+For the second part, I need to describe my situation in detail.
+Usually I make image and copy them to microSD card which has rootfs and boot partitions.
+I use ?make? command to do this.
+And in some cases, I modified some files under output/target. But my modification is nulled
+when I do ?make? command. For example, I add a script file in output/target, but it disappeared.
+I modified output/target/etc/network/interfaces, but added lines disappeared too.
+So I thought there?s another way to do this and asked this to here.
 
- Right, that's true. In that case, having it documented in the manual or
-somewhere else isn't really needed - documenting it where it hits you right in
-the face is sufficient :-)
+Regards,
+Jehun
 
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+?? ??: Arnout Vandecappelle
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160901/833698a2/attachment.html>
