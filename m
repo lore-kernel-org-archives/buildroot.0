@@ -1,72 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Sep 2016 23:46:47 +0200
-Subject: [Buildroot] [PATCH 00/16 v3] br2-external: support multiple
- trees at once (branch yem/multi-br2-external-ID-7)
-In-Reply-To: <e47d26b6-26a6-ac0a-8334-b9a0785084f4@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 01 Sep 2016 23:51:01 +0200
+Subject: [Buildroot] [PATCH 06/16 v3] core: introduce a generated
+	kconfig snippet
+In-Reply-To: <7188ad8d-469c-f4f8-9411-46761b05bddf@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 1 Sep 2016 23:30:47 +0200")
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <eda2b290-992f-7a26-424b-f522b7a805ae@mind.be>
- <874m611n1e.fsf@dell.be.48ers.dk>
- <20160831091443.691ffd1c@free-electrons.com>
- <20160831092643.GA5549@free.fr>
- <e47d26b6-26a6-ac0a-8334-b9a0785084f4@mind.be>
-Message-ID: <20160901214647.GB5841@free.fr>
+ <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
+ <20160827161601.2fd0e8f5@free-electrons.com>
+ <87poosaa9d.fsf@dell.be.48ers.dk> <20160901175221.GA5841@free.fr>
+ <87k2evwiqd.fsf@dell.be.48ers.dk>
+ <7188ad8d-469c-f4f8-9411-46761b05bddf@mind.be>
+Message-ID: <87fupjwapm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On 2016-09-01 23:43 +0200, Arnout Vandecappelle spake thusly:
-> On 31-08-16 11:26, Yann E. MORIN wrote:
-> > Thomas, Arnout,All,
-> > 
-> > On 2016-08-31 09:14 +0200, Thomas Petazzoni spake thusly:
-> >> On Wed, 31 Aug 2016 08:15:57 +0200, Peter Korsgaard wrote:
-> >>
-> >>>  >  Supporting the old single-external without name in parallel with the new named
-> >>>  > approach takes a significant amount of code - I estimate about 40 lines, out of
-> >>>  > 285 lines affected by this patch set...  
-> >>>
-> >>>  >  So, I repeat: I think the backward compatibility should be dropped here.  
-> >>>
-> >>> That also sounds sensible to me.
-> >>
-> >> I originally insisted to keep the backward compatibility, but Arnout's
-> >> argumentation convinced me that it is not really necessary. And if it
-> >> can help reduce the implementation complexity, I'm all for it.
-> >>
-> >> So: I'm fine with dropping backward compatibility on this.
-> > 
-> > OK, I'll drop.
-> 
->  One remark though: we should really document such backward compatibility
-> issues. I don't think we're currently doing that well.
-> 
->  Where should this be done?
-> 
-> - In CHANGES? At the moment, however, the CHANGES file is not really inviting to
-> look for that kind of thing. Especially because users will often upgrade in
-> jumps of 4 or more releases - that makes up 900 lines of CHANGES text...
-> 
-> - In the manual? There isn't really an appropriate place for it at the moment.
-> And how long do we keep it there?
-> 
-> - In some new location? Where?
-> 
->  My personal preference would be in the manual, and keep it for a couple of years.
+Hi,
 
-And since we can detect this situation, we can point the user to the
-manual and/or emit the brief suggestion you previously posted.
+ >> > So, what's the idea:
+ >> >   - remove all packages (easy)
+ >> >   - keep as-is  (even easier)
+ >> >   - only keep virtual packages (not easy at all)
+ >> 
+ >> Personally I would go for 1, but if 3 is doable without too much work /
+ >> complexity (and you feel up for it), then that is also OK with me.
 
-Regards,
-Yann E. MORIN.
+ >  Well, option 2 is not the end of the world either. The reason we consider it
+ > now is that some complexity (1 line!) has to be added in the manual.mk to
+ > continue supporting it. It is starting to violate the KISS principle, but not
+ > overly so.
+
+That and the fact that more than half the user manual content is this
+list of packages, even though it doesn't have much value.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Venlig hilsen,
+Peter Korsgaard 
