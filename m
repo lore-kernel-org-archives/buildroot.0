@@ -1,44 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 02 Sep 2016 14:29:36 -0000
-Subject: [Buildroot] [git commit] sqlite: bump version to 3.14.0
-Message-ID: <20160902142935.5B7BA81D34@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.163
+Message-ID: <20160902142935.8D297822FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=067b268fe0423b17f4eff90940707ea45b52daaa
+commit: https://git.buildroot.net/buildroot/commit/?id=6c418fdc410bbf0a6418ccea32c544fe94945749
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index ce03e1e..b4db80d 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1 f6f76e310389e3f510b23826f805850449ae8653  sqlite-autoconf-3130000.tar.gz
-+sha1 f0ed10b416c467062c76b899f08c773c713fb8fd  sqlite-autoconf-3140000.tar.gz
- # Calculated based on the hash above
--sha256 e2797026b3310c9d08bd472f6d430058c6dd139ff9d4e30289884ccd9744086b  sqlite-autoconf-3130000.tar.gz
-+sha256 742db0ebbd9cc91ed6a41857f50aa9795fc859c994a256125135cd07f6cdfd76  sqlite-autoconf-3140000.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 0dadd76..9703f82 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 65945a1..18bd62c 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 9544bb7706488ac128d477af7294bcfd7b7e47cb0b1d604ea52c4545d6c3a5a71311945994dd1114cb1ce086d2006a35ef1d8b0fdd3082dfe5cc468cb0168057  LVM2.2.02.162.tgz
++sha512 6316505e185673471a3434aec10f7978461688eb6c8391b02326a09bd0e83f8bedb2cbccb3c8dd2be0475bf516443ef23f09d1001bcff5b0dfd40941b3f1aefc  LVM2.2.02.163.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 8a51120..11eedbe 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3130000
-+SQLITE_VERSION = 3140000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2016
- SQLITE_LICENSE = Public domain
+-LVM2_VERSION = 2.02.162
++LVM2_VERSION = 2.02.163
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
