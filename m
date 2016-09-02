@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Sep 2016 14:36:19 +0200
-Subject: [Buildroot] [PATCH] supertuxkart: Constrain to x86 architecture
-In-Reply-To: <20160901194429.11761-1-ezequiel@vanguardiasur.com.ar>
-References: <20160901194429.11761-1-ezequiel@vanguardiasur.com.ar>
-Message-ID: <20160902143619.3d2d0774@free-electrons.com>
+Date: Fri, 2 Sep 2016 14:39:53 +0200
+Subject: [Buildroot] Remove all kernel modules from a buildroot build
+In-Reply-To: <57C920D7.5070104@yahoo.de>
+References: <57C920D7.5070104@yahoo.de>
+Message-ID: <20160902143953.1bf369ea@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  1 Sep 2016 16:44:29 -0300, Ezequiel Garcia wrote:
-> Our build system has detected that angelscript can't be
-> cross-compiled properly. This has been also reported to
-> supertuxkart [1], and although the developers were open
-> to take patches fixing STK embedded angelscript, it was
-> pointed out that non-x86 architectures were not officially
-> supported and of little interest [2].
+On Fri, 2 Sep 2016 08:48:55 +0200, Mythbu2 wrote:
 
-If it's indeed that angelscript doesn't cross-compile properly, then,
-it also needs to be limited to x86/x86_64 as the host compiler, no?
+> Is there a way of configuring buildroot to omit all this modules and 
+> save the space and therefore reduce the image size?
 
-I.e: what happens if I'm using Buildroot on a PowerPC or ARM machine?
+Yes: customize your kernel configuration and remove all the kernel
+modules that you don't need.
+
+For the Raspberry Pi, we're using the "bcmrpi" defconfig that comes
+from the Linux kernel tree hosted on Github at
+https://github.com/raspberrypi/linux.git. If this configuration doesn't
+suit you, you simply have to customize it.
+
+See
+https://buildroot.org/downloads/manual/manual.html#_configuration_of_other_components
+for some details.
 
 Best regards,
 
