@@ -1,41 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 02 Sep 2016 14:29:37 -0000
-Subject: [Buildroot] [git commit] sysstat: bump to version 11.4.0
-Message-ID: <20160902142936.78AB3822FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libtasn1: bump to version 4.9
+Message-ID: <20160902142935.ADFA0822FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27ccabcadb3f421686ac78e4fa3295e7c2a734c3
+commit: https://git.buildroot.net/buildroot/commit/?id=1e5ec4683a120d6b062acf3e4edb2c4210837a62
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sysstat/sysstat.hash | 2 +-
- package/sysstat/sysstat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Add upstream patch to fix build failure with gcc warnings on.
 
-diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
-index 539bbed..3170fc9 100644
---- a/package/sysstat/sysstat.hash
-+++ b/package/sysstat/sysstat.hash
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...configure-don-t-add-Werror-to-build-flags.patch | 28 ++++++++++++++++++++++
+ package/libtasn1/libtasn1.hash                     |  2 +-
+ package/libtasn1/libtasn1.mk                       |  4 +++-
+ 3 files changed, 32 insertions(+), 2 deletions(-)
+
+diff --git a/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch b/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch
+new file mode 100644
+index 0000000..387ba7a
+--- /dev/null
++++ b/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch
+@@ -0,0 +1,28 @@
++From dd091c8af163213e12aa92f61bc4916e0f102633 Mon Sep 17 00:00:00 2001
++From: Nikos Mavrogiannopoulos <nmav@redhat.com>
++Date: Tue, 26 Jul 2016 08:45:33 +0200
++Subject: [PATCH] configure: don't add -Werror to build flags
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Patch status: upstream
++
++ configure.ac | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 7a14e04..066f5fe 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -70,8 +70,6 @@ AC_ARG_ENABLE([gcc-warnings],
++ )
++ 
++ if test "$gl_gcc_warnings" = yes; then
++-  gl_WARN_ADD([-Werror], [WERROR_CFLAGS])
++-
++   nw="$nw -Wsystem-headers"         # Don't let system headers trigger warnings
++   nw="$nw -Wc++-compat"             # We don't care strongly about C++ compilers
++   nw="$nw -Wtraditional"            # Warns on #elif which we use often
++-- 
++2.7.3
++
+diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
+index dc65210..5b2100e 100644
+--- a/package/libtasn1/libtasn1.hash
++++ b/package/libtasn1/libtasn1.hash
 @@ -1,2 +1,2 @@
- # From: http://sebastien.godard.pagesperso-orange.fr/download.html
--sha1	ef97b454c254a37587485f61071db1fd9374f276	sysstat-11.2.5.tar.xz
-+sha1	59769deddef02acd60db3a42d772e57bd0978efb	sysstat-11.4.0.tar.xz
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 1be3d82..de6cd9f 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
+ # Locally calculated after checking pgp signature
+-sha256	fa802fc94d79baa00e7397cedf29eb6827d4bd8b4dd77b577373577c93a8c513	libtasn1-4.8.tar.gz
++sha256	4f6f7a8fd691ac2b8307c8ca365bad711db607d4ad5966f6938a9d2ecd65c920	libtasn1-4.9.tar.gz
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index c51d8c0..6b7e6b3 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSSTAT_VERSION = 11.2.5
-+SYSSTAT_VERSION = 11.4.0
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
+-LIBTASN1_VERSION = 4.8
++LIBTASN1_VERSION = 4.9
+ LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison
+ LIBTASN1_LICENSE = GPLv3+, LGPLv2.1+
+@@ -12,5 +12,7 @@ LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
+ LIBTASN1_INSTALL_STAGING = YES
+ # 'missing' fallback logic botched so disable it completely
+ LIBTASN1_CONF_ENV = MAKEINFO="true"
++# For 0001-configure-don-t-add-Werror-to-build-flags.patch
++LIBTASN1_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
