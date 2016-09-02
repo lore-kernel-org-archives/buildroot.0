@@ -1,34 +1,74 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri,  2 Sep 2016 22:31:35 +0200
-Subject: [Buildroot] [PATCH 9/9] package/enlightenment: set eldbus-codegen
-	path
-In-Reply-To: <1472848295-13734-1-git-send-email-romain.naour@gmail.com>
-References: <1472848295-13734-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1472848295-13734-9-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Sep 2016 22:51:05 +0200
+Subject: [Buildroot] [git commit] mpv: remove stray patch
+Message-ID: <20160902205120.51AF97FA97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Otherwise the one from the host may be used.
+commit: https://git.buildroot.net/buildroot/commit/?id=e4cbaffe2b818dab3ebef3bbb08fb5ca5637d8b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+It's remaining from the master-next merge and no longer applies.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/enlightenment/enlightenment.mk | 1 +
- 1 file changed, 1 insertion(+)
+ .../mpv/0002-wscript-improve-stdatomic-check.patch | 47 ----------------------
+ 1 file changed, 47 deletions(-)
 
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index a86fb86..d77421f 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -19,6 +19,7 @@ ENLIGHTENMENT_DEPENDENCIES = \
- ENLIGHTENMENT_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
-+	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
- 	--disable-pam \
- 	--disable-rpath
- 
--- 
-2.5.5
+diff --git a/package/mpv/0002-wscript-improve-stdatomic-check.patch b/package/mpv/0002-wscript-improve-stdatomic-check.patch
+deleted file mode 100644
+index c2a307e..0000000
+--- a/package/mpv/0002-wscript-improve-stdatomic-check.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 5a635a0066b10d2ba25e0ce78cc57b2be619371c Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 8 Aug 2016 23:34:32 +0200
+-Subject: [PATCH] wscript: improve stdatomic check
+-
+-The current stdatomic check verifies the availability of the function by
+-calling atomic_load(). It also uses this test to check if linking
+-against libatomic is needed or not.
+-
+-Unfortunately, on specific architectures (namely SPARC), using
+-atomic_load() does *not* require linking against libatomic, while other
+-atomic operations do. Due to this, mpv's wscript concludes that
+-stdatomic is available, and that linking against libatomic is not
+-needed, causing the following link failure:
+-
+-[190/190] Linking build/mpv
+-audio/out/ao.c.13.o: In function `ao_query_and_reset_events':
+-/home/peko/autobuild/instance-0/output/build/mpv-0.18.1/build/../audio/out/ao.c:399: undefined reference to `__atomic_fetch_and_4'
+-
+-In order to fix this, the stdatomic check is adjusted to call
+-atomic_fetch_add() instead, which does require libatomic. Thanks to
+-this, the wscript realizes that linking against libatomic is needed, and
+-the build works fine.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+-Submitted upstream: https://github.com/mpv-player/mpv/pull/3403
+-
+- wscript | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/wscript b/wscript
+-index a18df6f..4c49caf 100644
+---- a/wscript
+-+++ b/wscript
+-@@ -154,7 +154,7 @@ main_dependencies = [
+-         'func': check_libs(['atomic'],
+-             check_statement('stdatomic.h',
+-                 'atomic_int_least64_t test = ATOMIC_VAR_INIT(123);'
+--                'int test2 = atomic_load(&test)'))
+-+                'atomic_fetch_add(&test, 1)'))
+-     }, {
+-         'name': 'atomic-builtins',
+-         'desc': 'compiler support for __atomic built-ins',
+--- 
+-2.7.4
+-
