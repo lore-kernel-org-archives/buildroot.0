@@ -1,41 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 02 Sep 2016 14:29:37 -0000
-Subject: [Buildroot] [git commit] irssi: bump to version 0.8.19
-Message-ID: <20160902142935.C87EB822FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-engine: bump to v1.12.0
+Message-ID: <20160902142935.D692F822FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e44acf092543337b489833b75c50d41cdbf49ad
+commit: https://git.buildroot.net/buildroot/commit/?id=f892015d78eb0f2cc7ddd754beabcf41bfa6da6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Bump docker-engine to the latest stable v1.12.0 from v1.12.0-rc3.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/irssi/irssi.hash | 2 +-
- package/irssi/irssi.mk   | 2 +-
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index fa49d85..f65d6c3 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 1de09f8..6078fbf 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	c0a177f749757c2d171ebe49ab0f0dd9cf9374dea81ab01904d0549bcb057840	irssi-0.8.18.tar.xz
-+sha256	4ca0040548e814ea93eb7d602ab7d6d379afcbbdf10e84160523ce69c73ee5d3	irssi-0.8.19.tar.xz
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index 8272e44..a1e278e 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
+ # Locally calculated
+-sha256 bc256d2a348efbf236eab991254c925fa1917dd1e29cb40586f1696f4e24852e  docker-engine-v1.12.0-rc4.tar.gz
++sha256 f8139acba98248eb1fdb0b6d94efee89b876f9a50d00e263dc144fd2b0c372d4  docker-engine-v1.12.0.tar.gz
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 80b0041..3d39aac 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IRSSI_VERSION = 0.8.18
-+IRSSI_VERSION = 0.8.19
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
+-DOCKER_ENGINE_VERSION = v1.12.0-rc4
++DOCKER_ENGINE_VERSION = v1.12.0
+ DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
