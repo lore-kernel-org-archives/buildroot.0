@@ -1,42 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 02 Sep 2016 14:29:37 -0000
-Subject: [Buildroot] [git commit] libinput: bump to version 1.4.1
-Message-ID: <20160902142935.7CF3D822FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] openzwave: bump to version 1.5
+Message-ID: <20160902142936.0ED7682539@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfc66f2585b3823da11ac65d9ca6d37d3a1f53a4
+commit: https://git.buildroot.net/buildroot/commit/?id=f5cfefffda6a5aab7efc83bc295672d558401e54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/openzwave/openzwave.hash | 2 +-
+ package/openzwave/openzwave.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 9f628cc..a1a7ca2 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
+diff --git a/package/openzwave/openzwave.hash b/package/openzwave/openzwave.hash
+index bab940e..cd1231f 100644
+--- a/package/openzwave/openzwave.hash
++++ b/package/openzwave/openzwave.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-July/030121.html
--sha256	76ef10874519d1a67b57e5c68ede06106b9fbf611a3ecf69c84886107c67b420	libinput-1.4.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030348.html
-+sha256	26e7b3ab499358caba499705680ea7e5851af2bd37dc32f2be64181610d6392a	libinput-1.4.1.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 01b6772..5ce51c2 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+ # Locally computed:
+-sha256	ca122365f6237dc245be0129eb460e78126976b9c7bd06487795d3acfc9f2a5f	openzwave-v1.4.tar.gz
++sha256	abfb4c7e7728e86ba374c2e0ef7de912594eb24a8c44935457352df844530238	openzwave-V1.5.tar.gz
+diff --git a/package/openzwave/openzwave.mk b/package/openzwave/openzwave.mk
+index c8892a9..2723086 100644
+--- a/package/openzwave/openzwave.mk
++++ b/package/openzwave/openzwave.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.4.0
-+LIBINPUT_VERSION = 1.4.1
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-OPENZWAVE_VERSION = v1.4
++OPENZWAVE_VERSION = V1.5
+ OPENZWAVE_SITE = $(call github,OpenZWave,open-zwave,$(OPENZWAVE_VERSION))
+ OPENZWAVE_LICENSE = LGPLv3+, GPLv3 (examples), Apache-2.0 (sh2ju.sh)
+ OPENZWAVE_LICENSE_FILES = license/license.txt license/lgpl.txt \
