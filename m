@@ -1,39 +1,49 @@
-From: yoda zhong <yodazhong@gmail.com>
-Date: Thu, 1 Sep 2016 16:24:02 -0700
-Subject: [Buildroot] How to flash eMMC
-In-Reply-To: <4a970631-0624-6b05-b34e-d2c44793e546@mind.be>
-References: <57c76b8c.4906420a.27f90.5cd2@mx.google.com>
- <5cfb61d3-bf1a-8156-0365-132d9af802d5@mind.be>
- <57c86208.4362620a.1e3be.303d@mx.google.com>
- <4a970631-0624-6b05-b34e-d2c44793e546@mind.be>
-Message-ID: <57c8b890.0890420a.6be3f.e401@mx.google.com>
+From: Matt Flax <flatmax@flatmax.org>
+Date: Fri, 2 Sep 2016 11:51:08 +1000
+Subject: [Buildroot] Is there an equivalent of yocto's devshell?
+In-Reply-To: <5637116E3E13BE46B0D936BF364783C1F6B4F0@MAIA.sede.videotec.com>
+References: <5637116E3E13BE46B0D936BF364783C1F6A7E7@MAIA.sede.videotec.com>
+ <87a8fszmq7.fsf@dell.be.48ers.dk>
+ <5637116E3E13BE46B0D936BF364783C1F6B168@MAIA.sede.videotec.com>
+ <8b51ea03-6172-ce10-9a80-7caf43952de1@flatmax.org>
+ <20160901113941.36166d9e@free-electrons.com>
+ <5637116E3E13BE46B0D936BF364783C1F6B4F0@MAIA.sede.videotec.com>
+Message-ID: <deef8031-a2b3-d7be-8e37-d24b25125f22@flatmax.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry for confusing you.
 
-I meant followings.
 
-When I used other OS for beaglebone, I flashed eMMC with the way mentioned in 
-http://elinux.org/Beagleboard:BeagleBoneBlack_Debian#Flashing_eMMC
-But I failed to do this on Buildroot.
+On 01/09/16 22:18, Ottavio Campana wrote:
+>> My feeling is that things like devshell are created because using Yocto
+>> during development is too painful. Buildroot simply doesn't need
+>> something like devshell because using the build system during active
+>> development is perfectly fine. Of course, if you disagree and have some
+>> concrete examples, we'll be happy to look into this.
+> Thomas, you are 100%.
+>
+> The usual situation is you develop a portable program, but then you need to specialize some part that is platform-specify and you need to work on the sources with the cross compiler.
+>
+>
+Further on this topic...
+If you need to work on sources w.r.t. specific cross compile setups, 
+there are a few ways to do that effectively/efficiently when using 
+buildroot.
 
-I use microSD which has two partitions, rootfs and boot and boot from microSD.
-This works fine. So I want to flash the contents of microSD into embedded eMMC of
-Beaglebone black. So I asked this to get some advice.
+One way for example is to use quilt ... e.g. when editing an old linux 
+mach/plat device file, have an external buildroot directory with a 
+patches/linux directory.
+You can then "make linux" then "cd output/build/linux" and "ln -s" your 
+external patches/linux folder to the quilt expected patches directory. 
+You can then use quilt as expected, and whenever "quilt refresh" is run, 
+the external patches get updated.
 
-It looks like that I need to copy boot and rootfs partitions into eMMC, but I don?t know
-which dev I use for this.
+In this manner, you use standard buildroot and quilt to manage patches 
+for cross-compiled packages ... once you are happy, you can then either 
+use the patches as per the standard process with buildroot or apply them 
+against your original sources.
 
-I wish I?m clear at this time.
-
-Regards,
-Jehun
-
-?? ??: Arnout Vandecappelle
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160901/2d4ae1f4/attachment.html>
+Matt
