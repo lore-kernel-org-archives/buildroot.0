@@ -1,201 +1,34 @@
-From: Petr Kulhavy <brain@jikos.cz>
-Date: Fri,  2 Sep 2016 14:26:26 +0200
-Subject: [Buildroot] [PATCH v2] boot/uboot: allow to build multiple Uboot
-	images
-Message-ID: <1472819186-30700-1-git-send-email-brain@jikos.cz>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Sep 2016 14:36:19 +0200
+Subject: [Buildroot] [PATCH] supertuxkart: Constrain to x86 architecture
+In-Reply-To: <20160901194429.11761-1-ezequiel@vanguardiasur.com.ar>
+References: <20160901194429.11761-1-ezequiel@vanguardiasur.com.ar>
+Message-ID: <20160902143619.3d2d0774@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sometimes it is desired to build multiple U-boot images. E.g. one to save into
-flash memory and one for serial load. So far this was not possible.
+Hello,
 
-This change allows to select any combination of the target formats. They are
-all copied to the image folder.
+On Thu,  1 Sep 2016 16:44:29 -0300, Ezequiel Garcia wrote:
+> Our build system has detected that angelscript can't be
+> cross-compiled properly. This has been also reported to
+> supertuxkart [1], and although the developers were open
+> to take patches fixing STK embedded angelscript, it was
+> pointed out that non-x86 architectures were not officially
+> supported and of little interest [2].
 
-Signed-off-by: Petr Kulhavy <brain@jikos.cz>
----
- boot/uboot/Config.in | 19 +++++-----
- boot/uboot/uboot.mk  | 98 +++++++++++++++++++++++++++++++++-------------------
- 2 files changed, 73 insertions(+), 44 deletions(-)
+If it's indeed that angelscript doesn't cross-compile properly, then,
+it also needs to be limited to x86/x86_64 as the host compiler, no?
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index b024b66..d40a4e7 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -137,9 +137,7 @@ config BR2_TARGET_UBOOT_NEEDS_DTC
- 	  Select this option if your U-Boot board configuration
- 	  requires the Device Tree compiler to be available.
- 
--choice
--	prompt "U-Boot binary format"
--	default BR2_TARGET_UBOOT_FORMAT_BIN
-+menu "U-Boot binary format"
- 
- config BR2_TARGET_UBOOT_FORMAT_AIS
- 	bool "u-boot.ais"
-@@ -150,6 +148,7 @@ config BR2_TARGET_UBOOT_FORMAT_AIS
- 
- config BR2_TARGET_UBOOT_FORMAT_BIN
- 	bool "u-boot.bin"
-+	default y
- 
- config BR2_TARGET_UBOOT_FORMAT_DTB_IMG
- 	bool "u-boot-dtb.img"
-@@ -252,19 +251,21 @@ config BR2_TARGET_UBOOT_FORMAT_CUSTOM
- 	help
- 	  On some platforms, the standard U-Boot binary is not called
- 	  u-boot.bin, but u-boot<something>.bin. If this is your case,
--	  you should select this option and specify the correct name
-+	  you should select this option and specify the correct name(s)
- 	  in BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME.
- 
--endchoice
--
- config BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME
--	string "U-Boot binary format: custom name"
-+	string "U-Boot binary format: custom names"
- 	depends on BR2_TARGET_UBOOT_FORMAT_CUSTOM
- 	help
--	  Specify the correct name of the output binary created by
--	  U-Boot, if it is not one of the default names. For example:
-+	  In case the U-Boot binary for the target platform is not among
-+	  the default names, one or more custom names can be listed here.
-+	  Use space to separate multiple names.
-+	  Example:
- 	  u-boot_magic.bin
- 
-+endmenu
-+
- config BR2_TARGET_UBOOT_OMAP_IFT
- 	depends on BR2_TARGET_UBOOT_FORMAT_BIN
- 	depends on BR2_arm || BR2_armeb
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index a62f7be..bb613c2 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -37,47 +37,73 @@ endif
- endif
- 
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
--UBOOT_BIN = u-boot
-+UBOOT_BIN += u-boot
- # To make elf usable for debuging on ARC use special target
- ifeq ($(BR2_arc),y)
--UBOOT_MAKE_TARGET = mdbtrick
-+UBOOT_MAKE_TARGET += mdbtrick
- endif
--else ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
--UBOOT_BIN = u-boot.kwb
--UBOOT_MAKE_TARGET = $(UBOOT_BIN)
--else ifeq ($(BR2_TARGET_UBOOT_FORMAT_AIS),y)
--UBOOT_BIN = u-boot.ais
--UBOOT_MAKE_TARGET = $(UBOOT_BIN)
--else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
--UBOOT_BIN = u-boot.ldr
--else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
--UBOOT_BIN = u-boot-nand.bin
--else ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_IMG),y)
--UBOOT_BIN = u-boot-dtb.img
--UBOOT_MAKE_TARGET = all $(UBOOT_BIN)
--else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
--UBOOT_BIN = u-boot.img
--else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
--UBOOT_BIN = u-boot.imx
--else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SB),y)
--UBOOT_BIN = u-boot.sb
--UBOOT_MAKE_TARGET = $(UBOOT_BIN)
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
-+UBOOT_BIN += u-boot.kwb
-+UBOOT_MAKE_TARGET += u-boot.kwb
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_AIS),y)
-+UBOOT_BIN += u-boot.ais
-+UBOOT_MAKE_TARGET += u-boot.ais
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
-+UBOOT_BIN += u-boot.ldr
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
-+UBOOT_BIN += u-boot-nand.bin
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_IMG),y)
-+UBOOT_BIN += u-boot-dtb.img
-+UBOOT_MAKE_TARGET += all u-boot-dtb.img
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
-+UBOOT_BIN += u-boot.img
-+UBOOT_MAKE_TARGET += u-boot.img
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
-+UBOOT_BIN += u-boot.imx
-+UBOOT_MAKE_TARGET += u-boot.imx
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_SB),y)
-+UBOOT_BIN += u-boot.sb
-+UBOOT_MAKE_TARGET += u-boot.sb
- # mxsimage needs OpenSSL
- UBOOT_DEPENDENCIES += host-elftosb host-openssl
--else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SD),y)
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_SD),y)
- # BootStream (.sb) is generated by U-Boot, we convert it to SD format
--UBOOT_BIN = u-boot.sd
--UBOOT_MAKE_TARGET = u-boot.sb
-+UBOOT_BIN += u-boot.sd
-+UBOOT_MAKE_TARGET += u-boot.sb
- UBOOT_DEPENDENCIES += host-elftosb host-openssl
--else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND),y)
--UBOOT_BIN = u-boot.nand
--UBOOT_MAKE_TARGET = u-boot.sb
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND),y)
-+UBOOT_BIN += u-boot.nand
-+UBOOT_MAKE_TARGET += u-boot.sb
- UBOOT_DEPENDENCIES += host-elftosb host-openssl
--else ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM),y)
--UBOOT_BIN = $(call qstrip,$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME))
--else
--UBOOT_BIN = u-boot.bin
--UBOOT_BIN_IFT = $(UBOOT_BIN).ift
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM),y)
-+UBOOT_BIN += $(call qstrip,$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME))
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_OMAP_IFT),y)
-+UBOOT_BIN += u-boot.bin
-+UBOOT_BIN_IFT = u-boot.bin.ift
- endif
- 
- # The kernel calls AArch64 'arm64', but U-Boot calls it just 'arm', so
-@@ -166,9 +192,11 @@ define UBOOT_BUILD_OMAP_IFT
- endef
- 
- define UBOOT_INSTALL_IMAGES_CMDS
--	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
-+	$(foreach f,$(UBOOT_BIN), \
-+			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
-+	)
- 	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
--		cp -dpf $(@D)/$(UBOOT_MAKE_TARGET) $(BINARIES_DIR))
-+		cp -dpf $(@D)/u-boot.sb $(BINARIES_DIR))
- 	$(if $(BR2_TARGET_UBOOT_SPL),
- 		$(foreach f,$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)), \
- 			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
+I.e: what happens if I'm using Buildroot on a PowerPC or ARM machine?
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
