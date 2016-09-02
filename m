@@ -1,87 +1,133 @@
-From: Abhilash Tuse <Abhilash.Tuse@imgtec.com>
-Date: Fri, 2 Sep 2016 18:23:41 +0530
-Subject: [Buildroot] [PATCH] gst1-rtsp-server: new package
-Message-ID: <1472820821-5130-1-git-send-email-Abhilash.Tuse@imgtec.com>
+From: Pieter De Gendt <pieter.degendt@gmail.com>
+Date: Fri,  2 Sep 2016 15:42:55 +0200
+Subject: [Buildroot] [PATCH 1/2] websocketpp: new package
+Message-ID: <20160902134256.4515-1-pieter.degendt@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Piotr Nakraszewicz <piotr.nakraszewicz@imgtec.com>
-
-Based on patch by Phil Edworthy:
-http://lists.busybox.net/pipermail/buildroot/2010-June/035777.html
-
-Reviewed-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Reviewed-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
-Signed-off-by: Piotr Nakraszewicz <piotr.nakraszewicz@imgtec.com>
-Signed-off-by: Abhilash Tuse <Abhilash.Tuse@imgtec.com>
+Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
 ---
- package/gstreamer1/Config.in                              |  1 +
- package/gstreamer1/gst1-rtsp-server/Config.in             |  9 +++++++++
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash |  2 ++
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 15 +++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/gstreamer1/gst1-rtsp-server/Config.in
- create mode 100644 package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
- create mode 100644 package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+ package/Config.in                                  |  1 +
+ .../websocketpp/0001-Fix-cmake-cross-compile.patch | 42 ++++++++++++++++++++++
+ package/websocketpp/Config.in                      | 14 ++++++++
+ package/websocketpp/websocketpp.hash               |  1 +
+ package/websocketpp/websocketpp.mk                 | 15 ++++++++
+ 5 files changed, 73 insertions(+)
+ create mode 100644 package/websocketpp/0001-Fix-cmake-cross-compile.patch
+ create mode 100644 package/websocketpp/Config.in
+ create mode 100644 package/websocketpp/websocketpp.hash
+ create mode 100644 package/websocketpp/websocketpp.mk
 
-diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
-index ea35ecc..23862bd 100644
---- a/package/gstreamer1/Config.in
-+++ b/package/gstreamer1/Config.in
-@@ -8,6 +8,7 @@ source "package/gstreamer1/gst1-plugins-bad/Config.in"
- source "package/gstreamer1/gst1-plugins-ugly/Config.in"
- source "package/gstreamer1/gst1-imx/Config.in"
- source "package/gstreamer1/gst1-libav/Config.in"
-+source "package/gstreamer1/gst1-rtsp-server/Config.in"
- source "package/gstreamer1/gst1-validate/Config.in"
- source "package/gstreamer1/gst-omx/Config.in"
- endif
-diff --git a/package/gstreamer1/gst1-rtsp-server/Config.in b/package/gstreamer1/gst1-rtsp-server/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index 1e51a45..3fe55b4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1242,6 +1242,7 @@ menu "Networking"
+ 	source "package/sofia-sip/Config.in"
+ 	source "package/thrift/Config.in"
+ 	source "package/usbredir/Config.in"
++	source "package/websocketpp/Config.in"
+ 	source "package/wvstreams/Config.in"
+ 	source "package/zeromq/Config.in"
+ 	source "package/zmqpp/Config.in"
+diff --git a/package/websocketpp/0001-Fix-cmake-cross-compile.patch b/package/websocketpp/0001-Fix-cmake-cross-compile.patch
 new file mode 100644
-index 0000000..5201a8d
+index 0000000..cbaa9e9
 --- /dev/null
-+++ b/package/gstreamer1/gst1-rtsp-server/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_GST1_RTSP_SERVER
-+	bool "gst1-rtsp-server"
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD
-+	help
-+	  RTSP server library based on GStreamer.
++++ b/package/websocketpp/0001-Fix-cmake-cross-compile.patch
+@@ -0,0 +1,42 @@
++From 1be867f214cf86d48be13603511dafe75afe8d8e Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Fri, 2 Sep 2016 14:44:55 +0200
++Subject: [PATCH] cmake: install correct .cmake files
 +
-+	  http://gstreamer.freedesktop.org/
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
++Currently, we install a .cmake file (so that other packages can find us)
++that sets the include path to /usr/include.
++
++This does not work in cross-compilation, as it points to the build
++machine headers, so is not correct for cross-compilation, for two
++reasons:
++  - websocketpp might not be installed on the build machine,
++  - it might be installed as a different version.
++
++Thus, we need to let cmake find the correct include path.
++
++We do so by searching the include directory that contains a specific
++file of our own; we choose websocketpp/version.h as the file to look
++for.
++
++This then properly sets the include path, which is even often uneeded
++as it will be the standard search path (either /usr/include for native
++builds, or .../sysroot/usr/include for cross builds).
++
++Thanks to Samuel for hinting me at find_path(). :-)
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Cc: Samuel Martin <s.martin49@gmail.com>
++---
++ websocketpp-config.cmake.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/websocketpp-config.cmake.in b/websocketpp-config.cmake.in
++index 6afe569..4c4ed5f 100644
++--- a/websocketpp-config.cmake.in
+++++ b/websocketpp-config.cmake.in
++@@ -4,4 +4,4 @@
++ #  WEBSOCKETPP_INCLUDE_DIR - include directories
++ 
++ set(WEBSOCKETPP_FOUND TRUE)
++-set(WEBSOCKETPP_INCLUDE_DIR "@INSTALL_INCLUDE_DIR@")
+++find_path(WEBSOCKETPP_INCLUDE_DIR "websocketpp/version.hpp")
+diff --git a/package/websocketpp/Config.in b/package/websocketpp/Config.in
 new file mode 100644
-index 0000000..a30afbc
+index 0000000..97df9fd
 --- /dev/null
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-@@ -0,0 +1,2 @@
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.8.3.tar.xz.sha256sum
-+sha256 010f06800c1c957851d1352e5ec7a8ba3ce6a857fec1b8afc7d1a9e5f53288bf  gst-rtsp-server-1.8.3.tar.xz
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
++++ b/package/websocketpp/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_WEBSOCKETPP
++	bool "websocketpp"
++	select BR2_PACKAGE_ZLIB
++	depends on BR2_PACKAGE_BOOST
++	depends on BR2_PACKAGE_BOOST_SYSTEM
++	depends on BR2_PACKAGE_BOOST_RANDOM
++	help
++	  WebSocket++ is a header only C++ library that implements
++	  RFC6455 The WebSocket Protocol. It allows integrating
++	  WebSocket client and server functionality into C++ programs.
++	  It uses interchangeable network transport modules including
++	  one based on C++ iostreams and one based on Boost Asio.
++
++	  http://www.zaphoyd.com/websocketpp
+diff --git a/package/websocketpp/websocketpp.hash b/package/websocketpp/websocketpp.hash
 new file mode 100644
-index 0000000..8e3b55a
+index 0000000..49496ca
 --- /dev/null
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
++++ b/package/websocketpp/websocketpp.hash
+@@ -0,0 +1 @@
++sha256  07b3364ad30cda022d91759d4b83ff902e1ebadb796969e58b59caa535a03923    websocketpp-0.7.0.tar.gz
+diff --git a/package/websocketpp/websocketpp.mk b/package/websocketpp/websocketpp.mk
+new file mode 100644
+index 0000000..e4f729b
+--- /dev/null
++++ b/package/websocketpp/websocketpp.mk
 @@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# gst1-rtsp-server
++# websocketpp
 +#
 +################################################################################
 +
-+GST1_RTSP_SERVER_VERSION = 1.8.3
-+GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
-+GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
-+GST1_RTSP_SERVER_LICENSE = LGPLv2+
-+GST1_RTSP_SERVER_LICENSE_FILES = COPYING COPYING.LIB
-+GST1_RTSP_SERVER_INSTALL_STAGING = YES
-+GST1_RTSP_SERVER_DEPENDENCIES = gstreamer1 gst1-plugins-base gst1-plugins-bad gst1-plugins-good
++WEBSOCKETPP_VERSION = 0.7.0
++WEBSOCKETPP_SITE = $(call github,zaphoyd,websocketpp,$(WEBSOCKETPP_VERSION))
++WEBSOCKETPP_LICENSE = BSD
++WEBSOCKETPP_LICENSE_FILES = COPYING
++WEBSOCKETPP_DEPENDENCIES = zlib
++WEBSOCKETPP_INSTALL_STAGING = YES
++WEBSOCKETPP_DEPENDENCIES = host-pkgconf boost
 +
-+$(eval $(autotools-package))
++$(eval $(cmake-package))
 -- 
-2.6.2
+2.9.3
