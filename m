@@ -1,225 +1,158 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 2 Sep 2016 09:13:09 +0200
+From: Petr Kulhavy <brain@jikos.cz>
+Date: Fri, 2 Sep 2016 12:53:01 +0200
 Subject: [Buildroot] [PATCH 2/2] boot/uboot: allow to build multiple
  Uboot images
-In-Reply-To: <1472741494-7043-3-git-send-email-brain@jikos.cz>
+In-Reply-To: <119af87d-057f-12fd-8622-f030d3bda886@mind.be>
 References: <1472741494-7043-1-git-send-email-brain@jikos.cz>
  <1472741494-7043-3-git-send-email-brain@jikos.cz>
-Message-ID: <119af87d-057f-12fd-8622-f030d3bda886@mind.be>
+ <119af87d-057f-12fd-8622-f030d3bda886@mind.be>
+Message-ID: <55176e40-50e5-92d9-143d-59f9831a0dbe@jikos.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout,
 
 
-On 01-09-16 16:51, Petr Kulhavy wrote:
-> Sometimes it is desired to build multiple U-boot images. E.g. one to save into
-> flash memory and one for serial load. This was not possible.
+On 02/09/16 09:13, Arnout Vandecappelle wrote:
+>
+> On 01-09-16 16:51, Petr Kulhavy wrote:
+>> Sometimes it is desired to build multiple U-boot images. E.g. one to save into
+>> flash memory and one for serial load. This was not possible.
+>   So this would be u-boot.bin and u-boot.img, right? I guess actually the only
+> sane combination would be u-boot.bin together with something else. Oh,
+> u-boot.elf might be useful as well.
+>
+>   But anyway, this way is much simpler than if we decide which combinations are sane.
+This could be also u-boot.ais and u-boot.bin for TI, u-boot.img and 
+u-boot.imx for iMX, etc.
+So it's better to leave it completely open as you say.
+>> This change allows to select any combination of the target formats. They are
+>> all copied to the image folder.
+>>
+>> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
+>> ---
+>>   boot/uboot/Config.in |  9 +++--
+>>   boot/uboot/uboot.mk  | 98 +++++++++++++++++++++++++++++++++-------------------
+>>   2 files changed, 67 insertions(+), 40 deletions(-)
+>>
+>> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+>> index b024b66..23af845 100644
+>> --- a/boot/uboot/Config.in
+>> +++ b/boot/uboot/Config.in
+>> @@ -137,9 +137,7 @@ config BR2_TARGET_UBOOT_NEEDS_DTC
+>>   	  Select this option if your U-Boot board configuration
+>>   	  requires the Device Tree compiler to be available.
+>>   
+>> -choice
+>> -	prompt "U-Boot binary format"
+>> -	default BR2_TARGET_UBOOT_FORMAT_BIN
+>> +menu "U-Boot binary format"
+>>   
+>>   config BR2_TARGET_UBOOT_FORMAT_AIS
+>>   	bool "u-boot.ais"
+>> @@ -150,6 +148,7 @@ config BR2_TARGET_UBOOT_FORMAT_AIS
+>>   
+>>   config BR2_TARGET_UBOOT_FORMAT_BIN
+>>   	bool "u-boot.bin"
+>> +	default true
+>   default y, not true.
+Thanks, will correct that.
+>>   
+>>   config BR2_TARGET_UBOOT_FORMAT_DTB_IMG
+>>   	bool "u-boot-dtb.img"
+>> @@ -255,8 +254,6 @@ config BR2_TARGET_UBOOT_FORMAT_CUSTOM
+>>   	  you should select this option and specify the correct name
+>>   	  in BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME.
+>>   
+>> -endchoice
+>> -
+>>   config BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME
+>>   	string "U-Boot binary format: custom name"
+>>   	depends on BR2_TARGET_UBOOT_FORMAT_CUSTOM
+>   Please update the help text here to say that it can be a space-separate list of
+> custom names. Also change the prompt name -> names.
+OK.
+>
+>> @@ -265,6 +262,8 @@ config BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME
+>>   	  U-Boot, if it is not one of the default names. For example:
+>>   	  u-boot_magic.bin
+>>   
+>> +endmenu
+>> +
+>>   config BR2_TARGET_UBOOT_OMAP_IFT
+>>   	depends on BR2_TARGET_UBOOT_FORMAT_BIN
+>>   	depends on BR2_arm || BR2_armeb
+>> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+>> index a62f7be..255ae01 100644
+>> --- a/boot/uboot/uboot.mk
+>> +++ b/boot/uboot/uboot.mk
+>> @@ -37,47 +37,73 @@ endif
+>>   endif
+>>   
+>>   ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
+>> -UBOOT_BIN = u-boot
+>> +UBOOT_BIN += u-boot
+>>   # To make elf usable for debuging on ARC use special target
+>>   ifeq ($(BR2_arc),y)
+>> -UBOOT_MAKE_TARGET = mdbtrick
+>> +UBOOT_MAKE_TARGET += mdbtrick
+>>   endif
+>> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
+>> -UBOOT_BIN = u-boot.kwb
+>> -UBOOT_MAKE_TARGET = $(UBOOT_BIN)
+>> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_AIS),y)
+>> -UBOOT_BIN = u-boot.ais
+>> -UBOOT_MAKE_TARGET = $(UBOOT_BIN)
+>> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
+>> -UBOOT_BIN = u-boot.ldr
+>> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
+>> -UBOOT_BIN = u-boot-nand.bin
+>> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_IMG),y)
+>> -UBOOT_BIN = u-boot-dtb.img
+>> -UBOOT_MAKE_TARGET = all $(UBOOT_BIN)
+>> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
+>> -UBOOT_BIN = u-boot.img
+>> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
+>> -UBOOT_BIN = u-boot.imx
+>> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SB),y)
+>> -UBOOT_BIN = u-boot.sb
+>> -UBOOT_MAKE_TARGET = $(UBOOT_BIN)
+>> +endif
+>> +
+>> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
+>> +UBOOT_BIN += u-boot.kwb
+>> +UBOOT_MAKE_TARGET += u-boot.kwb
+>> +endif
+>> +
+>> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_AIS),y)
+>> +UBOOT_BIN += u-boot.ais
+>> +UBOOT_MAKE_TARGET += u-boot.ais
+>> +endif
+>> +
+>> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
+>> +UBOOT_BIN += u-boot.ldr
+>> +endif
+>> +
+>> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
+>> +UBOOT_BIN += u-boot-nand.bin
+>> +endif
 
- So this would be u-boot.bin and u-boot.img, right? I guess actually the only
-sane combination would be u-boot.bin together with something else. Oh,
-u-boot.elf might be useful as well.
+Here I'm actually wondering why the UBOOT_MAKE_TARGET was not set.
+I just transformed the kind of "switch" into independent ifs.
+Shouldn't the UBOOT_MAKE_TARGET be set for all types?
+>>   # The kernel calls AArch64 'arm64', but U-Boot calls it just 'arm', so
+>> @@ -166,9 +192,11 @@ define UBOOT_BUILD_OMAP_IFT
+>>   endef
+>>   
+>>   define UBOOT_INSTALL_IMAGES_CMDS
+>> -	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
+>> +	$(foreach f,$(call qstrip,$(UBOOT_BIN)), \
+>   qstrip shouldn't be needed here... All the assignments are unquoted, and custom
+> name is already qstripped. Did you have a reason to add it?
+Ah, OK. There was no other reason behind. I will remove qstrip then.
 
- But anyway, this way is much simpler than if we decide which combinations are sane.
-
-> 
-> This change allows to select any combination of the target formats. They are
-> all copied to the image folder.
-> 
-> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
-> ---
->  boot/uboot/Config.in |  9 +++--
->  boot/uboot/uboot.mk  | 98 +++++++++++++++++++++++++++++++++-------------------
->  2 files changed, 67 insertions(+), 40 deletions(-)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index b024b66..23af845 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -137,9 +137,7 @@ config BR2_TARGET_UBOOT_NEEDS_DTC
->  	  Select this option if your U-Boot board configuration
->  	  requires the Device Tree compiler to be available.
->  
-> -choice
-> -	prompt "U-Boot binary format"
-> -	default BR2_TARGET_UBOOT_FORMAT_BIN
-> +menu "U-Boot binary format"
->  
->  config BR2_TARGET_UBOOT_FORMAT_AIS
->  	bool "u-boot.ais"
-> @@ -150,6 +148,7 @@ config BR2_TARGET_UBOOT_FORMAT_AIS
->  
->  config BR2_TARGET_UBOOT_FORMAT_BIN
->  	bool "u-boot.bin"
-> +	default true
-
- default y, not true.
-
->  
->  config BR2_TARGET_UBOOT_FORMAT_DTB_IMG
->  	bool "u-boot-dtb.img"
-> @@ -255,8 +254,6 @@ config BR2_TARGET_UBOOT_FORMAT_CUSTOM
->  	  you should select this option and specify the correct name
->  	  in BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME.
->  
-> -endchoice
-> -
->  config BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME
->  	string "U-Boot binary format: custom name"
->  	depends on BR2_TARGET_UBOOT_FORMAT_CUSTOM
-
- Please update the help text here to say that it can be a space-separate list of
-custom names. Also change the prompt name -> names.
-
-> @@ -265,6 +262,8 @@ config BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME
->  	  U-Boot, if it is not one of the default names. For example:
->  	  u-boot_magic.bin
->  
-> +endmenu
-> +
->  config BR2_TARGET_UBOOT_OMAP_IFT
->  	depends on BR2_TARGET_UBOOT_FORMAT_BIN
->  	depends on BR2_arm || BR2_armeb
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index a62f7be..255ae01 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -37,47 +37,73 @@ endif
->  endif
->  
->  ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
-> -UBOOT_BIN = u-boot
-> +UBOOT_BIN += u-boot
->  # To make elf usable for debuging on ARC use special target
->  ifeq ($(BR2_arc),y)
-> -UBOOT_MAKE_TARGET = mdbtrick
-> +UBOOT_MAKE_TARGET += mdbtrick
->  endif
-> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
-> -UBOOT_BIN = u-boot.kwb
-> -UBOOT_MAKE_TARGET = $(UBOOT_BIN)
-> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_AIS),y)
-> -UBOOT_BIN = u-boot.ais
-> -UBOOT_MAKE_TARGET = $(UBOOT_BIN)
-> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
-> -UBOOT_BIN = u-boot.ldr
-> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
-> -UBOOT_BIN = u-boot-nand.bin
-> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_IMG),y)
-> -UBOOT_BIN = u-boot-dtb.img
-> -UBOOT_MAKE_TARGET = all $(UBOOT_BIN)
-> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
-> -UBOOT_BIN = u-boot.img
-> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
-> -UBOOT_BIN = u-boot.imx
-> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SB),y)
-> -UBOOT_BIN = u-boot.sb
-> -UBOOT_MAKE_TARGET = $(UBOOT_BIN)
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
-> +UBOOT_BIN += u-boot.kwb
-> +UBOOT_MAKE_TARGET += u-boot.kwb
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_AIS),y)
-> +UBOOT_BIN += u-boot.ais
-> +UBOOT_MAKE_TARGET += u-boot.ais
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
-> +UBOOT_BIN += u-boot.ldr
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
-> +UBOOT_BIN += u-boot-nand.bin
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_IMG),y)
-> +UBOOT_BIN += u-boot-dtb.img
-> +UBOOT_MAKE_TARGET += all u-boot-dtb.img
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
-> +UBOOT_BIN += u-boot.img
-> +UBOOT_MAKE_TARGET += u-boot.img
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
-> +UBOOT_BIN += u-boot.imx
-> +UBOOT_MAKE_TARGET += u-boot.imx
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_SB),y)
-> +UBOOT_BIN += u-boot.sb
-> +UBOOT_MAKE_TARGET += u-boot.sb
->  # mxsimage needs OpenSSL
->  UBOOT_DEPENDENCIES += host-elftosb host-openssl
-> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SD),y)
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_SD),y)
->  # BootStream (.sb) is generated by U-Boot, we convert it to SD format
-> -UBOOT_BIN = u-boot.sd
-> -UBOOT_MAKE_TARGET = u-boot.sb
-> +UBOOT_BIN += u-boot.sd
-> +UBOOT_MAKE_TARGET += u-boot.sb
->  UBOOT_DEPENDENCIES += host-elftosb host-openssl
-> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND),y)
-> -UBOOT_BIN = u-boot.nand
-> -UBOOT_MAKE_TARGET = u-boot.sb
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND),y)
-> +UBOOT_BIN += u-boot.nand
-> +UBOOT_MAKE_TARGET += u-boot.sb
->  UBOOT_DEPENDENCIES += host-elftosb host-openssl
-> -else ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM),y)
-> -UBOOT_BIN = $(call qstrip,$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME))
-> -else
-> -UBOOT_BIN = u-boot.bin
-> -UBOOT_BIN_IFT = $(UBOOT_BIN).ift
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM),y)
-> +UBOOT_BIN += $(call qstrip,$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME))
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_UBOOT_OMAP_IFT),y)
-> +UBOOT_BIN += u-boot.bin
-> +UBOOT_BIN_IFT = u-boot.bin.ift
->  endif
->  
->  # The kernel calls AArch64 'arm64', but U-Boot calls it just 'arm', so
-> @@ -166,9 +192,11 @@ define UBOOT_BUILD_OMAP_IFT
->  endef
->  
->  define UBOOT_INSTALL_IMAGES_CMDS
-> -	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
-> +	$(foreach f,$(call qstrip,$(UBOOT_BIN)), \
-
- qstrip shouldn't be needed here... All the assignments are unquoted, and custom
-name is already qstripped. Did you have a reason to add it?
-
- Regards,
- Arnout
-
-> +			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
-> +	)
->  	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
-> -		cp -dpf $(@D)/$(UBOOT_MAKE_TARGET) $(BINARIES_DIR))
-> +		cp -dpf $(@D)/u-boot.sb $(BINARIES_DIR))
->  	$(if $(BR2_TARGET_UBOOT_SPL),
->  		$(foreach f,$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)), \
->  			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Regards
+Petr
