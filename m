@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 02 Sep 2016 14:29:37 -0000
-Subject: [Buildroot] [git commit] dbus: bump to version 1.10.10
-Message-ID: <20160902142936.3DE22822FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] igd2-for-linux: bump to version 1.2
+Message-ID: <20160902142936.0078D822FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3a1d96f8903b3d8ba288a932f3427109854c674
+commit: https://git.buildroot.net/buildroot/commit/?id=02fa3ceaebd995580ae2aab6848e9ff797ea3b18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus/dbus.hash | 2 +-
- package/dbus/dbus.mk   | 2 +-
+ package/igd2-for-linux/igd2-for-linux.hash | 2 +-
+ package/igd2-for-linux/igd2-for-linux.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index d38b298..1b20d3f 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
+diff --git a/package/igd2-for-linux/igd2-for-linux.hash b/package/igd2-for-linux/igd2-for-linux.hash
+index a46fe5f..f1c9a7b 100644
+--- a/package/igd2-for-linux/igd2-for-linux.hash
++++ b/package/igd2-for-linux/igd2-for-linux.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	baf3d22baa26d3bdd9edc587736cd5562196ce67996d65b82103bedbe1f0c014  dbus-1.10.8.tar.gz
-+sha256	9d8f1d069ab4d1a0255d7b400ea3bcef4430c42e729b1012abb2890e3f739a43  dbus-1.10.10.tar.gz
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 6064501..1388e34 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
+ # Locally computed:
+-sha256	a8edc4c14aa104dcffa79d1f3057b8b9c5cef0f8f43901f61e306120a4efe01f	igd2-for-linux-v1.1.tar.gz
++sha256	523545a26b0d662e9f6913bec2518df6e70f4d497935d88983d994336a1b0ea9	igd2-for-linux-v1.2.tar.gz
+diff --git a/package/igd2-for-linux/igd2-for-linux.mk b/package/igd2-for-linux/igd2-for-linux.mk
+index 8b63c04..8944c05 100644
+--- a/package/igd2-for-linux/igd2-for-linux.mk
++++ b/package/igd2-for-linux/igd2-for-linux.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DBUS_VERSION = 1.10.8
-+DBUS_VERSION = 1.10.10
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFLv2.1 or GPLv2+ (library, tools), GPLv2+ (tools)
- DBUS_LICENSE_FILES = COPYING
+-IGD2_FOR_LINUX_VERSION = v1.1
++IGD2_FOR_LINUX_VERSION = v1.2
+ IGD2_FOR_LINUX_SITE = $(call github,ffontaine,igd2-for-linux,$(IGD2_FOR_LINUX_VERSION))
+ 
+ IGD2_FOR_LINUX_LICENSE = GPLv2
