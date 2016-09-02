@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 02 Sep 2016 14:29:37 -0000
-Subject: [Buildroot] [git commit] vala: bump to version 0.32.1
-Message-ID: <20160902142935.9D9F2822FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libinput: bump to version 1.4.1
+Message-ID: <20160902142935.7CF3D822FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a60010930da3e6db96b1c6961eadc9f08e1d6c15
+commit: https://git.buildroot.net/buildroot/commit/?id=bfc66f2585b3823da11ac65d9ca6d37d3a1f53a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vala/vala.hash | 4 ++--
- package/vala/vala.mk   | 2 +-
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index 9301964..4a4a41c 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 9f628cc..a1a7ca2 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
 @@ -1,2 +1,2 @@
--# From https://download.gnome.org/sources/vala/0.32/vala-0.32.0.sha256sum
--sha256	07a2aa4ede040789b4b5af817a42249d703bfe8affccb7732ca2b53d00c1fb6e	vala-0.32.0.tar.xz
-+# From https://download.gnome.org/sources/vala/0.32/vala-0.32.1.sha256sum
-+sha256	dd0d47e548a34cfb1e4b04149acd082a86414c49057ffb79902eb9a508a161a9	vala-0.32.1.tar.xz
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index b236c54..4cdc0d7 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -5,7 +5,7 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2016-July/030121.html
+-sha256	76ef10874519d1a67b57e5c68ede06106b9fbf611a3ecf69c84886107c67b420	libinput-1.4.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030348.html
++sha256	26e7b3ab499358caba499705680ea7e5851af2bd37dc32f2be64181610d6392a	libinput-1.4.1.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 01b6772..5ce51c2 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- VALA_VERSION_MAJOR = 0.32
--VALA_VERSION = $(VALA_VERSION_MAJOR).0
-+VALA_VERSION = $(VALA_VERSION_MAJOR).1
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPLv2.1+
+-LIBINPUT_VERSION = 1.4.0
++LIBINPUT_VERSION = 1.4.1
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
