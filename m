@@ -1,55 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Sep 2016 14:29:40 -0000
-Subject: [Buildroot] [git commit] barebox: bump version to 2016.08
-Message-ID: <20160902142935.BBECB822FB@busybox.osuosl.org>
+Date: Fri, 02 Sep 2016 14:29:38 -0000
+Subject: [Buildroot] [git commit] m68k: flat one memory region works with
+	small kernel patch
+Message-ID: <20160902142936.4A574822FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6525c6d2283771061c269956486c1fd1ee5a7320
+commit: https://git.buildroot.net/buildroot/commit/?id=4ec5542679264bc06a0356ef92f06ad7a0abe06d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Raphael Poggi <poggi.raph@gmail.com>
+Greg Ungerer fixed recently a bug in the Linux kernel, which
+allows to use one memory region again.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ arch/Config.in                                     |  1 -
+ .../patches/linux/m68knommu-fix-signal.patch       | 45 ++++++++++++++++++++++
+ configs/qemu_m68k_mcf5208_defconfig                |  2 +
+ 3 files changed, 47 insertions(+), 1 deletion(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index fd5cb8c..1548b0d 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/arch/Config.in b/arch/Config.in
+index b980e05..8000dca 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -331,7 +331,6 @@ choice
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2016.06.0"
-+	bool "2016.08.0"
+ config BR2_BINFMT_FLAT_ONE
+ 	bool "One memory region"
+-	depends on !BR2_m68k
+ 	help
+ 	  All segments are linked into one memory region.
  
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
+diff --git a/board/qemu/m68k-mcf5208/patches/linux/m68knommu-fix-signal.patch b/board/qemu/m68k-mcf5208/patches/linux/m68knommu-fix-signal.patch
+new file mode 100644
+index 0000000..b56994b
+--- /dev/null
++++ b/board/qemu/m68k-mcf5208/patches/linux/m68knommu-fix-signal.patch
+@@ -0,0 +1,45 @@
++m68knommu: fix user a5 register being overwritten
++
++On no-MMU systems the application a5 register can be overwitten with the
++address of the process data segment when processing application signals.
++For flat format applications compiled with full absolute relocation this
++effectively corrupts the a5 register on signal processing - and this very
++quickly leads to process crash and often takes out the whole system with
++a panic as well.
++
++This has no effect on flat format applications compiled with the more
++common PIC methods (such as -msep-data). These format applications reserve
++a5 for the pointer to the data segment anyway - so it doesn't change it.
++
++A long time ago the a5 register was used in the code packed into the user
++stack to enable signal return processing. And so it had to be restored on
++end of signal cleanup processing back to the original a5 user value. This
++was historically done by saving away a5 in the sigcontext structure. At
++some point (a long time back it seems) the a5 restore process was changed
++and it was hard coded to put the user data segment address directly into a5.
++Which is ok for the common PIC compiled application case, but breaks the
++full relocation application code.
++
++We no longer use this type of signal handling mechanism and so we don't
++need to do anything special to save and restore a5 at all now. So remove the
++code that hard codes a5 to the address of the user data segment.
++
++Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
++---
++ arch/m68k/kernel/signal.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/arch/m68k/kernel/signal.c b/arch/m68k/kernel/signal.c
++index 2dcee3a..9202f82 100644
++--- a/arch/m68k/kernel/signal.c
+++++ b/arch/m68k/kernel/signal.c
++@@ -213,7 +213,6 @@ static inline int frame_extra_sizes(int f)
++ 
++ static inline void adjustformat(struct pt_regs *regs)
++ {
++-	((struct switch_stack *)regs - 1)->a5 = current->mm->start_data;
++ 	/*
++ 	 * set format byte to make stack appear modulo 4, which it will
++ 	 * be when doing the rte
++-- 
++1.9.1
+diff --git a/configs/qemu_m68k_mcf5208_defconfig b/configs/qemu_m68k_mcf5208_defconfig
+index f911467..659ae3d 100644
+--- a/configs/qemu_m68k_mcf5208_defconfig
++++ b/configs/qemu_m68k_mcf5208_defconfig
+@@ -9,6 +9,8 @@ BR2_SYSTEM_DHCP="eth0"
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ # BR2_TARGET_ROOTFS_TAR is not set
  
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2016.06.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2016.08.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 9db68eb..adcd4e0 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# http://www.barebox.org/download/barebox-2016.06.0.tar.bz2.md5
--md5 7dac834e637db66e624bf058e9310212 barebox-2016.06.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2016.08.0.tar.bz2.md5
-+md5 66b8f79d337fa4a7bb8744b1a7867474 barebox-2016.08.0.tar.bz2
++BR2_GLOBAL_PATCH_DIR="board/qemu/m68k-mcf5208/patches"
++
+ # Linux headers same as kernel, a 4.7 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
  
- # Locally calculated
--sha256 a214167c55bf691f686397379e8b9557a1d597e56b7c1bf9607b478a1c4c597e barebox-2016.06.0.tar.bz2
-+sha256 610d3422137f0e6e9a72f51caad17d1b2c46314ee03b2ae35799a1c5425478ab barebox-2016.08.0.tar.bz2
