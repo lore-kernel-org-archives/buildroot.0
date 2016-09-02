@@ -1,45 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 02 Sep 2016 14:29:37 -0000
-Subject: [Buildroot] [git commit] package/runc: bump version to cc29e3
-Message-ID: <20160902142935.E579C822FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] vala: bump to version 0.32.1
+Message-ID: <20160902142935.9D9F2822FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ad14a368798619d67d68a3b297333c153230ae1
+commit: https://git.buildroot.net/buildroot/commit/?id=a60010930da3e6db96b1c6961eadc9f08e1d6c15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump runc to cc29e3dded8e27ba8f65738f40d251c885030a28
-
-This version is required by Docker Engine v1.12.0.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index e6ec483..c409a66 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index 9301964..4a4a41c 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256 77f9d4df1657fecc939be0261fcccccd34d5b22c02b8a49abad23fac33b4059a  runc-v1.0.0-rc1.tar.gz
-+sha256 196b78c6caf1a4c6257314b393381baffa7c82bb2690ac02a7b3d6cd6cfe7776  runc-cc29e3dded8e27ba8f65738f40d251c885030a28.tar.gz
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 7ebba57..e2ab5ed 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://download.gnome.org/sources/vala/0.32/vala-0.32.0.sha256sum
+-sha256	07a2aa4ede040789b4b5af817a42249d703bfe8affccb7732ca2b53d00c1fb6e	vala-0.32.0.tar.xz
++# From https://download.gnome.org/sources/vala/0.32/vala-0.32.1.sha256sum
++sha256	dd0d47e548a34cfb1e4b04149acd082a86414c49057ffb79902eb9a508a161a9	vala-0.32.1.tar.xz
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index b236c54..4cdc0d7 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--RUNC_VERSION = v1.0.0-rc1
-+RUNC_VERSION = cc29e3dded8e27ba8f65738f40d251c885030a28
- RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
+ VALA_VERSION_MAJOR = 0.32
+-VALA_VERSION = $(VALA_VERSION_MAJOR).0
++VALA_VERSION = $(VALA_VERSION_MAJOR).1
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPLv2.1+
