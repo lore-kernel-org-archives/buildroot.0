@@ -1,195 +1,160 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Fri,  2 Sep 2016 22:31:31 +0200
-Subject: [Buildroot] [PATCH 5/9] package/elementary: remove package
+Date: Fri,  2 Sep 2016 22:31:32 +0200
+Subject: [Buildroot] [PATCH 6/9] package/libevas-generic-loaders: remove
+	package
 In-Reply-To: <1472848295-13734-1-git-send-email-romain.naour@gmail.com>
 References: <1472848295-13734-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1472848295-13734-5-git-send-email-romain.naour@gmail.com>
+Message-ID: <1472848295-13734-6-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-elementary package is now used anymore, remove it.
+libevas-generic-loaders package is now used anymore, remove it.
 Add a legacy entry.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- Config.in.legacy                                   |  7 ++++
+ Config.in.legacy                                   |  8 +++++
  package/Config.in                                  |  1 -
- ...emove-.eo.h-files-from-includesub_HEADERS.patch | 45 --------------------
- package/elementary/Config.in                       | 15 -------
- package/elementary/elementary.hash                 |  2 -
- package/elementary/elementary.mk                   | 48 ----------------------
- 6 files changed, 7 insertions(+), 111 deletions(-)
- delete mode 100644 package/elementary/0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch
- delete mode 100644 package/elementary/Config.in
- delete mode 100644 package/elementary/elementary.hash
- delete mode 100644 package/elementary/elementary.mk
+ package/libevas-generic-loaders/Config.in          | 41 ----------------------
+ .../libevas-generic-loaders.hash                   |  2 --
+ .../libevas-generic-loaders.mk                     | 38 --------------------
+ 5 files changed, 8 insertions(+), 82 deletions(-)
+ delete mode 100644 package/libevas-generic-loaders/Config.in
+ delete mode 100644 package/libevas-generic-loaders/libevas-generic-loaders.hash
+ delete mode 100644 package/libevas-generic-loaders/libevas-generic-loaders.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 59e3f84..03ac4f8 100644
+index 03ac4f8..d9555f9 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -157,6 +157,13 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+@@ -157,6 +157,14 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL
  ###############################################################################
  comment "Legacy options removed in 2016.08"
  
-+config BR2_PACKAGE_ELEMENTARY
-+	bool "elementary package removed"
++config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
++	bool "libevas-generic-loaders package removed"
 +	select BR2_LEGACY
 +	select BR2_PACKAGE_EFL
 +	help
-+	  With EFL 1.18, elementary is now provided by the efl package.
++	  With EFL 1.18, libevas-generic-loaders is now provided by the efl
++	  package.
 +
- config BR2_PACKAGE_SYSTEMD_COMPAT
- 	bool "systemd compatibility libraries have been removed"
+ config BR2_PACKAGE_ELEMENTARY
+ 	bool "elementary package removed"
  	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index 6da9d7b..a577ad2 100644
+index a577ad2..4a8186d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -245,7 +245,6 @@ comment "Graphic libraries"
- 	source "package/directfb/Config.in"
- 	source "package/directfb-examples/Config.in"
- 	source "package/efl/Config.in"
--	source "package/elementary/Config.in"
- 	source "package/fbdump/Config.in"
- 	source "package/fbgrab/Config.in"
- 	source "package/fbset/Config.in"
-diff --git a/package/elementary/0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch b/package/elementary/0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch
+@@ -958,7 +958,6 @@ menu "Graphics"
+ 	source "package/libdri2/Config.in"
+ 	source "package/libdrm/Config.in"
+ 	source "package/libepoxy/Config.in"
+-	source "package/libevas-generic-loaders/Config.in"
+ 	source "package/libexif/Config.in"
+ 	source "package/libfm/Config.in"
+ 	source "package/libfm-extra/Config.in"
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
 deleted file mode 100644
-index 75a36a2..0000000
---- a/package/elementary/0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch
+index c171d47..0000000
+--- a/package/libevas-generic-loaders/Config.in
 +++ /dev/null
-@@ -1,45 +0,0 @@
--From 2f6a65718a0992d0624836ce4b1416a7420782d2 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Mon, 25 Jul 2016 22:52:41 +0200
--Subject: [PATCH] lib: remove *.eo.h files from includesub_HEADERS
--
--Otherwise *.eo.h files will be installed twice, so it can break a
--parallel install on fast machines, whereby two make jobs may run
--concurrently, trying to install the same files.
--
--/usr/bin/install -c -m 644 elm_sys_notify.eo.h
--/usr/bin/install -c -m 644 elm_sys_notify.eo.h
--usr/bin/install: cannot create regular file 'elm_sys_notify.eo.h': File exists
--
--Fixes:
--http://autobuild.buildroot.net/results/7e9/7e9caffe442dcf40ee41da56fd3f55ffedf3a291
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- src/lib/Makefile.am | 3 ---
-- 1 file changed, 3 deletions(-)
--
--diff --git a/src/lib/Makefile.am b/src/lib/Makefile.am
--index 40fb597..9df9424 100644
----- a/src/lib/Makefile.am
--+++ b/src/lib/Makefile.am
--@@ -351,8 +351,6 @@ elm_systray_eo.h \
-- elm_systray_common.h \
-- elm_systray_watcher.h \
-- elm_sys_notify.h \
---elm_sys_notify.eo.h \
---elm_sys_notify_dbus.eo.h \
-- elm_table.h \
-- elm_table_eo.h \
-- elm_table_legacy.h \
--@@ -381,7 +379,6 @@ elm_win_common.h \
-- elm_win_eo.h \
-- elm_win_legacy.h \
-- elm_win_standard.h \
---elm_win_standard.eo.h \
-- elm_helper.h
-- includesubdir = $(includedir)/elementary- at VMAJ@/
-- 
---- 
--2.5.5
--
-diff --git a/package/elementary/Config.in b/package/elementary/Config.in
-deleted file mode 100644
-index f356784..0000000
---- a/package/elementary/Config.in
-+++ /dev/null
-@@ -1,15 +0,0 @@
--config BR2_PACKAGE_ELEMENTARY
--	bool "elementary"
+@@ -1,41 +0,0 @@
+-config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+-	bool "libevas generic loaders"
 -	depends on BR2_PACKAGE_EFL
--	depends on BR2_TOOLCHAIN_HAS_THREADS # elm_store.c
--	depends on !BR2_STATIC_LIBS
+-	select BR2_PACKAGE_ZLIB
 -	help
--	  Elementary is a widget toolkit and EFL wrapper and convenience
--	  library to make it easy to build applications and tools with UIs
--	  with less code.
+-	  These are additional "generic" loaders for Evas that are
+-	  stand-alone executables that evas may run from its generic
+-	  loader module.
 -
--	  https://enlightenment.org
+-	  https://www.enlightenment.org/
 -
--comment "elementary needs a toolchain w/ threads, dynamic library"
--	depends on BR2_PACKAGE_EFL
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/elementary/elementary.hash b/package/elementary/elementary.hash
+-if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+-
+-config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW
+-	bool "libraw loader"
+-	depends on BR2_INSTALL_LIBSTDCPP # libraw
+-	select BR2_PACKAGE_LIBRAW
+-	help
+-	  This option enables the Evas generic Libraw loader
+-
+-comment "libraw loader needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
+-
+-config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+-	bool "SVG loader"
+-	depends on BR2_USE_MMU # librsvg -> glib2
+-	depends on BR2_USE_WCHAR # librsvg -> glib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # librsvg -> glib2
+-	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
+-	select BR2_PACKAGE_LIBRSVG
+-	select BR2_PACKAGE_CAIRO
+-	help
+-	  This option enables the Evas generic SVG loader
+-
+-comment "SVG loader needs a toolchain w/ wchar, threads, C++"
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+-
+-endif
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.hash b/package/libevas-generic-loaders/libevas-generic-loaders.hash
 deleted file mode 100644
-index f173752..0000000
---- a/package/elementary/elementary.hash
+index ee2ae9b..0000000
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.hash
 +++ /dev/null
 @@ -1,2 +0,0 @@
--# From https://download.enlightenment.org/rel/libs/elementary/elementary-1.17.1.tar.xz.sha256
--sha256	85e116a453a8ac23da878670534c6292832756d2f3a33603278486f309963d91	elementary-1.17.1.tar.xz
-diff --git a/package/elementary/elementary.mk b/package/elementary/elementary.mk
+-# From https://download.enlightenment.org/rel/libs/evas_generic_loaders/evas_generic_loaders-1.17.0.tar.xz.sha256
+-sha256	c2f5193a9326532d3ab3ff76f547b9d17b33ae7221ce4d6e0aefb905ba0dd87a	evas_generic_loaders-1.17.0.tar.xz
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
 deleted file mode 100644
-index e686647..0000000
---- a/package/elementary/elementary.mk
+index abc436b..0000000
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
 +++ /dev/null
-@@ -1,48 +0,0 @@
+@@ -1,38 +0,0 @@
 -################################################################################
 -#
--# elementary
+-# libevas-generic-loaders
 -#
 -################################################################################
 -
--ELEMENTARY_VERSION = 1.17.1
--ELEMENTARY_SOURCE = elementary-$(ELEMENTARY_VERSION).tar.xz
--ELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
--ELEMENTARY_LICENSE = LGPLv2.1
--ELEMENTARY_LICENSE_FILES = COPYING
+-LIBEVAS_GENERIC_LOADERS_VERSION = 1.17.0
+-LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.xz
+-LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/rel/libs/evas_generic_loaders
+-LIBEVAS_GENERIC_LOADERS_LICENSE = GPLv2
+-LIBEVAS_GENERIC_LOADERS_LICENSE_FILES = COPYING
 -
--# 0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch
--ELEMENTARY_AUTORECONF = YES
--ELEMENTARY_GETTEXTIZE = YES
+-LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
 -
--ELEMENTARY_INSTALL_STAGING = YES
+-LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = host-pkgconf efl zlib
 -
--ELEMENTARY_DEPENDENCIES = host-pkgconf host-efl host-elementary efl
+-# poppler >= 0.32 is not supported by the current version of
+-# libevas-generic-loaders.
+-LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
+-	--disable-poppler \
+-	--disable-spectre \
+-	--disable-gstreamer
 -
--ELEMENTARY_CONF_OPTS = \
--	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
--	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
--	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
--	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
--	--with-elementary-codegen=$(HOST_DIR)/usr/bin/elementary_codegen \
--	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
--	--with-doxygen=no \
--	--disable-elementary-test
+-ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW),y)
+-LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += libraw
+-LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-libraw
+-else
+-LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-libraw
+-endif
 -
--# We need a host package in order to provide elm_prefs_cc and
--# elementary_codegen.
--HOST_ELEMENTARY_DEPENDENCIES = host-pkgconf host-efl
--HOST_ELEMENTARY_CONF_OPTS = \
--	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
--	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
--	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
--	--with-doxygen=no \
--	--disable-elementary-test
--
--# Use Eolian C++ parser only if enabled in the efl stack.
--ifeq ($(BR2_PACKAGE_EFL_EOLIAN_CPP),y)
--ELEMENTARY_CONF_OPTS += --with-eolian-cxx=$(HOST_DIR)/usr/bin/eolian_cxx
--HOST_ELEMENTARY_CONF_OPTS += --with-eolian-cxx=$(HOST_DIR)/usr/bin/eolian_cxx
+-ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
+-LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
+-LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-svg
+-else
+-LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-svg
 -endif
 -
 -$(eval $(autotools-package))
--$(eval $(host-autotools-package))
 -- 
 2.5.5
