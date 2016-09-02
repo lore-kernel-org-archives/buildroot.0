@@ -1,37 +1,41 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Fri, 2 Sep 2016 11:21:29 -0300
-Subject: [Buildroot] [PATCH] supertuxkart: Constrain to x86 architecture
-In-Reply-To: <20160902143619.3d2d0774@free-electrons.com>
-References: <20160901194429.11761-1-ezequiel@vanguardiasur.com.ar>
- <20160902143619.3d2d0774@free-electrons.com>
-Message-ID: <CAAEAJfBQdOj6ee46_r3qqu6=3_km_RfBM6t1nfwE9MnAop_2Wg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 02 Sep 2016 14:29:36 -0000
+Subject: [Buildroot] [git commit] diffutils: bump version to 3.4
+Message-ID: <20160902142935.4D52281D34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2 September 2016 at 09:36, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu,  1 Sep 2016 16:44:29 -0300, Ezequiel Garcia wrote:
->> Our build system has detected that angelscript can't be
->> cross-compiled properly. This has been also reported to
->> supertuxkart [1], and although the developers were open
->> to take patches fixing STK embedded angelscript, it was
->> pointed out that non-x86 architectures were not officially
->> supported and of little interest [2].
->
-> If it's indeed that angelscript doesn't cross-compile properly, then,
-> it also needs to be limited to x86/x86_64 as the host compiler, no?
->
-> I.e: what happens if I'm using Buildroot on a PowerPC or ARM machine?
->
+commit: https://git.buildroot.net/buildroot/commit/?id=05e8d6af1bac8093825fcb388eab07f1e0752f83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Totally right. I just sent a v2.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/diffutils/diffutils.hash | 2 +-
+ package/diffutils/diffutils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
--- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+diff --git a/package/diffutils/diffutils.hash b/package/diffutils/diffutils.hash
+index 27eace2..2094e97 100644
+--- a/package/diffutils/diffutils.hash
++++ b/package/diffutils/diffutils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	a25e89a8ab65fded1731e4186be1bb25cda967834b6df973599cdcd5abdfc19c	diffutils-3.3.tar.xz
++sha256 db53c025f2ac3d217bcf753dad6dee7b410b33d0948495ff015aaf8b91189ce2  diffutils-3.4.tar.xz
+diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+index 191fd2e..9370f66 100644
+--- a/package/diffutils/diffutils.mk
++++ b/package/diffutils/diffutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DIFFUTILS_VERSION = 3.3
++DIFFUTILS_VERSION = 3.4
+ DIFFUTILS_SOURCE = diffutils-$(DIFFUTILS_VERSION).tar.xz
+ DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
+ DIFFUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
