@@ -1,124 +1,53 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 3 Sep 2016 20:00:54 +0200
-Subject: [Buildroot] [PATCH 2/2] cpprestsdk: new package
-In-Reply-To: <20160902134256.4515-2-pieter.degendt@gmail.com>
-References: <20160902134256.4515-1-pieter.degendt@gmail.com>
- <20160902134256.4515-2-pieter.degendt@gmail.com>
-Message-ID: <41682d37-1a9a-9762-af58-5107bb210b08@gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Sat, 3 Sep 2016 15:10:20 -0300 (BRT)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results
+	for	2016-09-02
+In-Reply-To: <2181287.8UlWShMbI3@sagittea>
+References: <20160903063033.788551028C6@stock.ovh.net>
+ <2181287.8UlWShMbI3@sagittea>
+Message-ID: <760420464.3255032.1472926220380.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 02/09/2016 ? 15:42, Pieter De Gendt a ?crit :
-> Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
-> ---
->  package/Config.in                  |  1 +
->  package/cpprestsdk/Config.in       | 27 +++++++++++++++++++++++++++
->  package/cpprestsdk/cpprestsdk.hash |  1 +
->  package/cpprestsdk/cpprestsdk.mk   | 25 +++++++++++++++++++++++++
->  4 files changed, 54 insertions(+)
->  create mode 100644 package/cpprestsdk/Config.in
->  create mode 100644 package/cpprestsdk/cpprestsdk.hash
->  create mode 100644 package/cpprestsdk/cpprestsdk.mk
+> From: "J?r?me Pouiller" <jezz@sysmic.org>
+> To: buildroot at busybox.net
+> Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, "Alexey Brodkin" <Alexey.Brodkin@synopsys.com>
+> Sent: Saturday, September 3, 2016 1:03:13 PM
+> Subject: Re: [Buildroot] [autobuild.buildroot.net] Build results for	2016-09-02
+
+> On Saturday 03 September 2016 08:30:33 Thomas Petazzoni wrote:
+> [...]
+>> mips64el |              util-linux-2.28.1 | NOK |
+>> http://autobuild.buildroot.net/results/e45931629ee3f5dc45de6940a2c0983435f77e00
+>>      sh4 |              util-linux-2.28.1 | NOK |
+>> http://autobuild.buildroot.net/results/b3649dedd048515844675cd48b84bab74eb897f8
+>>   x86_64 |              util-linux-2.28.1 | NOK |
+>> http://autobuild.buildroot.net/results/26b3a4de1fb8b366727299ff5de7d59b3e521c23
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index 3fe55b4..f0f8401 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1156,6 +1156,7 @@ menu "Networking"
->  	source "package/c-ares/Config.in"
->  	source "package/canfestival/Config.in"
->  	source "package/cgic/Config.in"
-> +    source "package/cpprestsdk/Config.in"
-
-indent issue
-
->  	source "package/cppzmq/Config.in"
->  	source "package/czmq/Config.in"
->  	source "package/filemq/Config.in"
-> diff --git a/package/cpprestsdk/Config.in b/package/cpprestsdk/Config.in
-> new file mode 100644
-> index 0000000..7b95d31
-> --- /dev/null
-> +++ b/package/cpprestsdk/Config.in
-> @@ -0,0 +1,27 @@
-> +config BR2_PACKAGE_CPPRESTSDK
-> +        bool "cpprestsdk"
-> +        depends on BR2_INSTALL_LIBSTDCPP
-> +        depends on BR2_USE_WCHAR
-> +        depends on BR2_TOOLCHAIN_HAS_THREADS
-> +        select BR2_PACKAGE_BOOST
-> +        select BR2_PACKAGE_BOOST_CHRONO
-> +        select BR2_PACKAGE_BOOST_FILESYSTEM
-> +        select BR2_PACKAGE_BOOST_RANDOM
-> +        select BR2_PACKAGE_BOOST_REGEX
-> +        select BR2_PACKAGE_BOOST_SYSTEM
-> +        select BR2_PACKAGE_BOOST_THREAD
-> +        select BR2_PACKAGE_OPENSSL
-> +        select BR2_PACKAGE_PKGCONF
-> +        select BR2_PACKAGE_ZLIB
-> +        help
-> +          The C++ REST SDK is a Microsoft project for 
-> +          cloud-based client-server communication in 
-> +          native code using a modern asynchronous C++ API 
-> +          design. This project aims to help C++ developers 
-> +          connect to and interact with services.
-> +          
-> +          https://github.com/Microsoft/cpprestsdk
-> +
-> +comment "clogics needs a toolchain w/ C++, wchar, threads"
-> +        depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-> +
-> diff --git a/package/cpprestsdk/cpprestsdk.hash b/package/cpprestsdk/cpprestsdk.hash
-> new file mode 100644
-> index 0000000..200f05a
-> --- /dev/null
-> +++ b/package/cpprestsdk/cpprestsdk.hash
-> @@ -0,0 +1 @@
-> +sha256  3d1c38aa7ef34b3d3e9a6e84d3866554fe48c3d9d9977896d18a7cfb80d5a4ea    cpprestsdk-v2.8.0.tar.gz
-> diff --git a/package/cpprestsdk/cpprestsdk.mk b/package/cpprestsdk/cpprestsdk.mk
-> new file mode 100644
-> index 0000000..d7509f8
-> --- /dev/null
-> +++ b/package/cpprestsdk/cpprestsdk.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
-> +#
-> +## cpprestsdk
-> +#
-> +#################################################################################
-> +
-> +CPPRESTSDK_VERSION = v2.8.0
-> +CPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,$(CPPRESTSDK_VERSION))
-> +CPPRESTSDK_INSTALL_STAGING = YES
-> +
-> +CPPRESTSDK_DEPENDENCIES = boost openssl zlib
-> +
-> +ifeq ($(BR2_PACKAGE_WEBSOCKETPP),y)
-> +	CPPRESTSDK_DEPENDENCIES += websocketpp
-
-no need to indent
-
-Add CPPRESTSDK_CONF_OPTS = -DCPPREST_EXCLUDE_WEBSOCKETS=OFF
-
-> +else
-> +	CPPRESTSDK_CONF_OPTS = -DCPPREST_EXCLUDE_WEBSOCKETS=ON
-> +endif
-
-cpprestsdk doesn't build with musl due to missing xlocale.h.
-Care to take a look ?
-
-Best regards,
-Romain
-
-> +
-> +
-> +CPPRESTSDK_SUBDIR = Release
-> +
-> +CPPRESTSDK_CONF_OPTS += -DBUILD_SAMPLES=OFF
-> +
-> +$(eval $(cmake-package))
-> +
+> wget do not accept certificate from cdn.kernel.org. It seems to be
+> related to :
+>   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=409938
 > 
+> wget >= 1.13-1 is necessary to fix problem. I see three solutions:
+>  1. Revert de76cb7da734dde2204a7ea9ff60e24cbe857ddb ("Use CDN
+>     kernel.org mirror")
+
+This can slow down the downloading of many source files.
+
+>  2. Use http instead if https
+
+I suspect that this would require passing "--no-hsts" to wget (did not test with an old version to confirm).
+
+>  3. Check wget version in dependencies.sh
+
+What would be the approach, in thes case, compiling wget as a host tool?
+
+> Any opinion?
+
+I'd vote for option 3, since wget 1.13.1 is already five years old. I'd ask the developer to migrate to a more up-to-date OS installation rather than spending a lot of effort to circumvent the problem in Buildroot.
+
+Carlos Santos (Casantos)
+DATACOM, P&D
