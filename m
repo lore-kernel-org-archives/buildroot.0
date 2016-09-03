@@ -1,63 +1,40 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Sat,  3 Sep 2016 17:24:49 +0200
-Subject: [Buildroot] [PATCH] lxc: revive "drop-werror" patch
-Message-ID: <1472916289-3927-1-git-send-email-jezz@sysmic.org>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Sat, 03 Sep 2016 18:03:13 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2016-09-02
+In-Reply-To: <20160903063033.788551028C6@stock.ovh.net>
+References: <20160903063033.788551028C6@stock.ovh.net>
+Message-ID: <2181287.8UlWShMbI3@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit 5050a94ae9f448641e05ce29c931671ffdc62784 dropped patch that
-remove '-Werror' from CFLAGS. However, it seems this patch is still
-necessary:
+On Saturday 03 September 2016 08:30:33 Thomas Petazzoni wrote:
+[...]
+> mips64el |              util-linux-2.28.1 | NOK |
+> http://autobuild.buildroot.net/results/e45931629ee3f5dc45de6940a2c0983435f77e00 
+>      sh4 |              util-linux-2.28.1 | NOK |
+> http://autobuild.buildroot.net/results/b3649dedd048515844675cd48b84bab74eb897f8 
+>   x86_64 |              util-linux-2.28.1 | NOK |
+> http://autobuild.buildroot.net/results/26b3a4de1fb8b366727299ff5de7d59b3e521c23
 
-  http://autobuild.buildroot.net/results/b1cbca6d0396863654b1d09ccc3163c5f6124ab8
-  http://autobuild.buildroot.net/results/fcf2834ad74b95548d25dad2274704ea401f9665
-  http://autobuild.buildroot.net/results/048be2fc702c9dba9ca4439ff687d71b30c10551
-  http://autobuild.buildroot.net/results/939246c9a4f433dfd0dc414988f5957441b8e9b4
+wget do not accept certificate from cdn.kernel.org. It seems to be
+related to :
+   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=409938
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/lxc/0001-drop-werror.patch | 16 ++++++++++++++++
- package/lxc/lxc.mk                 |  2 ++
- 2 files changed, 18 insertions(+)
- create mode 100644 package/lxc/0001-drop-werror.patch
+wget >= 1.13-1 is necessary to fix problem. I see three solutions:
+  1. Revert de76cb7da734dde2204a7ea9ff60e24cbe857ddb ("Use CDN
+     kernel.org mirror")
+  2. Use http instead if https
+  3. Check wget version in dependencies.sh
 
-diff --git a/package/lxc/0001-drop-werror.patch b/package/lxc/0001-drop-werror.patch
-new file mode 100644
-index 0000000..d2a8673
---- /dev/null
-+++ b/package/lxc/0001-drop-werror.patch
-@@ -0,0 +1,16 @@
-+Don't do -Werror it breaks builds on some scenarios with trivialities.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura lxc-lxc-1.0.4/configure.ac lxc-lxc-1.0.4.orig/configure.ac
-+--- lxc-lxc-1.0.4.orig/configure.ac	2014-07-04 10:31:19.821029891 -0300
-++++ lxc-lxc-1.0.4/configure.ac	2014-06-13 14:07:45.000000000 -0300
-+@@ -560,7 +560,7 @@
-+ LXC_CHECK_TLS
-+ 
-+ if test "x$GCC" = "xyes"; then
-+-	CFLAGS="$CFLAGS -Wall -Werror"
-++	CFLAGS="$CFLAGS -Wall"
-+ fi
-+ 
-+ # Files requiring some variable expansion
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index b1cd385..a3e24b4 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -9,6 +9,8 @@ LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = LGPLv2.1+
- LXC_LICENSE_FILES = COPYING
- LXC_DEPENDENCIES = libcap host-pkgconf
-+# we're patching configure.ac
-+LXC_AUTORECONF = YES
- LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-lua --disable-python \
- 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+Any opinion?
+
+BR,
+
 -- 
-1.9.1
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
