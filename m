@@ -1,62 +1,110 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  3 Sep 2016 18:24:06 +0200
-Subject: [Buildroot] [PATCH] package/dosfstools: Fix undefined PATH_MAX
-	under musl
-Message-ID: <1472919846-30643-1-git-send-email-romain.naour@gmail.com>
+Date: Sat, 3 Sep 2016 18:53:39 +0200
+Subject: [Buildroot] [PATCH] websocketpp: new package
+In-Reply-To: <20160816053502.15187-2-mgr@nordkrater.de>
+References: <20160813112629.31883-1-mgr@nordkrater.de>
+ <20160816053502.15187-1-mgr@nordkrater.de>
+ <20160816053502.15187-2-mgr@nordkrater.de>
+Message-ID: <3456c09e-f4ef-203b-57c0-5c8256115325@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dosfstools doesn't build with musl only if BR2_PACKAGE_HAS_UDEV is set
-due to a missing include for PATH_MAX (limits.h).
+Hi Manuel,
 
-Fixes:
-http://autobuild.buildroot.net/results/346/346feda6a4a83850dbb62919eb33482302053490
+Le 16/08/2016 ? 07:35, Manuel Gro? a ?crit :
+> This package provides websocketpp, a header only C++ library that implements websocket client and server functionality.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- ..._info.c-Fix-undefined-PATH_MAX-under-musl.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/dosfstools/0002-src-device_info.c-Fix-undefined-PATH_MAX-under-musl.patch
+Thanks for this contribution!
 
-diff --git a/package/dosfstools/0002-src-device_info.c-Fix-undefined-PATH_MAX-under-musl.patch b/package/dosfstools/0002-src-device_info.c-Fix-undefined-PATH_MAX-under-musl.patch
-new file mode 100644
-index 0000000..9740304
---- /dev/null
-+++ b/package/dosfstools/0002-src-device_info.c-Fix-undefined-PATH_MAX-under-musl.patch
-@@ -0,0 +1,31 @@
-+From 06ce096dabd8a29c72dc0bc5110d2c4867baa490 Mon Sep 17 00:00:00 2001
-+From: Alessio Sergi <al3hex@gmail.com>
-+Date: Fri, 6 May 2016 18:18:18 +0200
-+Subject: [PATCH] src/device_info.c: Fix undefined PATH_MAX under musl
-+
-+In musl libc, PATH_MAX is defined in <limits.h>.
-+
-+Status: pending
-+https://github.com/dosfstools/dosfstools/pull/27
-+
-+[Romain: add patch status]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/device_info.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/device_info.c b/src/device_info.c
-+index f5d11ac..cd57388 100644
-+--- a/src/device_info.c
-++++ b/src/device_info.c
-+@@ -17,6 +17,7 @@
-+ */
-+ 
-+ 
-++#include <limits.h>
-+ #include <stdint.h>
-+ #include <stdbool.h>
-+ #include <sys/types.h>
-+-- 
-+2.5.5
-+
--- 
-2.5.5
+There is another patch submitted by Pieter De Gendt for websocketpp:
+http://patchwork.ozlabs.org/patch/665214/
+It would be great if you can review and test it.
+
+> 
+> Signed-off-by: Manuel Gro? <mgr@nordkrater.de>
+> ---
+>  package/Config.in                  |  1 +
+>  package/websocketpp/Config.in      | 12 ++++++++++++
+>  package/websocketpp/websocketpp.mk | 21 +++++++++++++++++++++
+>  3 files changed, 34 insertions(+)
+>  create mode 100644 package/websocketpp/Config.in
+>  create mode 100644 package/websocketpp/websocketpp.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 645fa29..e99850d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1242,6 +1242,7 @@ menu "Networking"
+>  	source "package/sofia-sip/Config.in"
+>  	source "package/thrift/Config.in"
+>  	source "package/usbredir/Config.in"
+> +	source "package/websocketpp/Config.in"
+>  	source "package/wvstreams/Config.in"
+>  	source "package/zeromq/Config.in"
+>  	source "package/zmqpp/Config.in"
+> diff --git a/package/websocketpp/Config.in b/package/websocketpp/Config.in
+> new file mode 100644
+> index 0000000..2b24b0d
+> --- /dev/null
+> +++ b/package/websocketpp/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_WEBSOCKETPP
+> +	bool "websocketpp"
+
+No dependency at all ?
+It seems at least boost package is needed.
+
+> +	help
+> +	  WebSocket++ is a header only C++ library that implements RFC6455 The
+> +	  WebSocket Protocol. It allows integrating WebSocket client and server
+> +	  functionality into C++ programs. It uses interchangeable network
+> +	  transport modules including one based on raw char buffers, one based
+> +	  on C++ iostreams, and one based on Asio (either via Boost or
+> +	  standalone). End users can write additional transport policies to
+> +	  support other networking or event libraries as needed.
+> +
+> +	  http://www.zaphoyd.com/websocketpp/
+> diff --git a/package/websocketpp/websocketpp.mk b/package/websocketpp/websocketpp.mk
+> new file mode 100644
+> index 0000000..00f451f
+> --- /dev/null
+> +++ b/package/websocketpp/websocketpp.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +## websocketpp
+> +#
+> +#################################################################################
+> +
+> +WEBSOCKETPP_VERSION = 0.7.0
+> +WEBSOCKETPP_SITE = $(call github,zaphoyd,websocketpp,$(WEBSOCKETPP_VERSION))
+> +WEBSOCKETPP_INSTALL_STAGING = YES
+> +WEBSOCKETPP_LICENSE = BSD or MIT
+> +WEBSOCKETPP_LICENSE_FILES = COPYING
+> +
+> +WEBSOCKETPP_VERSION_CONF_OPTS = \
+               ^^^^^^^
+Typo here, so this variable is not used during the build.
+
+> +	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+> +	LDFLAGS="$(TARGET_LDFLAGS)"
+> +
+> +define WEBSOCKETPP_INSTALL_STAGING_CMDS
+> +	cp -vR $(@D)/websocketpp $(STAGING_DIR)/usr/include/websocketpp
+> +endef
+> +
+> +$(eval $(generic-package))
+
+websocketpp has a CMake build system, so it's recommended to use it.
+
+Since we have another patch for websocketpp, I'll mark it "Superseded" in the
+patchwork.
+
+Best regards,
+Romain
+
+
+> 
