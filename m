@@ -1,55 +1,80 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Sat, 3 Sep 2016 17:05:49 +0200
-Subject: [Buildroot] Analysis of build results for 2016-08-08
-In-Reply-To: <81bcbe49-664c-6d7d-f12c-e4b66c53a91a@mind.be>
-References: <20160809063032.89898101A55@stock.ovh.net>
- <20160809141535.4c9b8169@free-electrons.com>
- <17850212-c769-63c4-f05b-79adc47f470c@gmail.com>
- <34622bb9-7ff7-2d15-fa97-e5ed6570034b@gmail.com>
- <2e0ca47d-83cf-4c2d-844b-9560b98733c3@free.fr>
- <81bcbe49-664c-6d7d-f12c-e4b66c53a91a@mind.be>
-Message-ID: <09e2a649-7606-8726-520f-c33934424413@free.fr>
+From: Petr Kulhavy <brain@jikos.cz>
+Date: Sat, 3 Sep 2016 17:11:21 +0200
+Subject: [Buildroot] [PATCH 1/2] boot/uboot: add missing SPL build
+ dependency
+In-Reply-To: <9e8b258d-39e7-1cd4-7530-e295ee7e09b6@mind.be>
+References: <1472741494-7043-1-git-send-email-brain@jikos.cz>
+ <1472741494-7043-2-git-send-email-brain@jikos.cz>
+ <9e8b258d-39e7-1cd4-7530-e295ee7e09b6@mind.be>
+Message-ID: <706220f2-ed95-8a00-8a40-2c818636ac63@jikos.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 02/09/16 09:13, Arnout Vandecappelle wrote:
+>
+> On 01-09-16 16:51, Petr Kulhavy wrote:
+>> If SPL installation is selected make does not always build the SPL binary.
+>   Please give a concrete example of this so people can verify.
 
-Arnout,
+Hi Arnout
 
-On 26/08/2016 00:37, Arnout Vandecappelle wrote:
-> On 25-08-16 09:29, Julien Boibessot wrote:
->> Hello Romain,
+It doesn't work with the iMX "SPL" target.
+
+Regards
+Petr
+
+>
+>> Add the SPL binary explicitly to the build command.
 >>
->> On 22/08/2016 21:49, Romain Naour wrote:
->>> Hi Julien, Thomas,
->>>
->>> Le 09/08/2016 ? 16:07, Romain Naour a ?crit :
->>>> Hi Thomas, All,
->>>>
->>>> [snip]
->>>>
->>>>>>          arm |                host-efl-1.17.2 | NOK | http://autobuild.buildroot.net/results/89bf12f8333d47af0cb5775c859e26f300af56cc/
->>>>> edje_cc: Critical. Unable to open temp file "(null)" for pre-processor.
->>>>>
->>>>> Romain? This looks like a transient error, but I'm not sure.
->>>> I already seen this issue on autobuilders but I'm not able to reproduce it
->>>> locally...
->>> Julien, this issue occurs only on your autobuilder, can you verify if it
->>> reproducible. If yes, can you send me the usual files log (config.log, build log
->>> etc)
->> yes, it's 100% reproducible.
->  Looking at the source of edje_cc, it's mkstemp() that fails. Do you have TMPDIR
-> or XDG_RUNTIME_DIR pointing to some location that is not writable or doesn't exist?
-
-XDG_RUNTIME_DIR is indeed pointing to a directory that is not writable
-for user launching the build.
-export XDG_RUNTIME_DIR=/tmp fixes the host-efl build.
-Where should I set this envt variable ?
-
-(Build is launched through ssh+su on my build server)
-
-Regards,
-Julien
+>> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
+>> ---
+>>   boot/uboot/uboot.mk | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+>> index 7c3512a..a62f7be 100644
+>> --- a/boot/uboot/uboot.mk
+>> +++ b/boot/uboot/uboot.mk
+>> @@ -149,7 +149,7 @@ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+>>   define UBOOT_BUILD_CMDS
+>>   	$(TARGET_CONFIGURE_OPTS) 	\
+>>   		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
+>> -		$(UBOOT_MAKE_TARGET)
+>> +		$(UBOOT_MAKE_TARGET) $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
+>   Unfortunately, this doesn't work for OMAP3. For OMAP3, the file to be copied is
+> "MLO", but it is not a target of the top-level Makefile. Instead, it is built
+> while recursing in the spl subdirectory.
+>
+>   A workaround is to use two separate make invocations: the first one for the
+> normal build, the second one to build any additional SPL images. Since MLO
+> already exists during the second invocation, make won't complain anymore.
+>
+>   Note BTW that the current situation is already broken for OMAP3 when using a
+> recent U-Boot. We only call the 'u-boot.img' target, and this _doesn't_ build
+> MLO. We should also 'make all'. I guess we don't do 'make all' to avoid doing
+> redundant work when SPL isn't required, but it's kind of useless :-)
+>
+>   You can test with this defconfig:
+>
+> BR2_arm=y
+> BR2_cortex_a8=y
+> BR2_ARM_EABI=y
+> BR2_ARM_FPU_VFPV3=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TARGET_UBOOT=y
+> BR2_TARGET_UBOOT_BOARDNAME="omap3_evm"
+> BR2_TARGET_UBOOT_FORMAT_IMG=y
+> BR2_TARGET_UBOOT_SPL=y
+> BR2_TARGET_UBOOT_SPL_NAME="MLO"
+>
+>
+>   Regards,
+>   Arnout
+>
+>>   	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
+>>   		$(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
+>>   	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
+>>
