@@ -1,59 +1,58 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Sat,  3 Sep 2016 21:15:35 +1200
-Subject: [Buildroot] [RFC PATCH] micropython: fix build failures
-Message-ID: <20160903091535.7833-1-judge.packham@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 3 Sep 2016 13:07:39 +0200
+Subject: [Buildroot] [PATCH 7/9] package/expedite: bump to lastest commit
+In-Reply-To: <1472848295-13734-7-git-send-email-romain.naour@gmail.com>
+References: <1472848295-13734-1-git-send-email-romain.naour@gmail.com>
+ <1472848295-13734-7-git-send-email-romain.naour@gmail.com>
+Message-ID: <c7ea43cd-69e3-204e-5aae-6fc66145065e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Hi all,
 
-  http://autobuild.buildroot.net/results/061c66987e9c33a6641c8183f5e0badae516fc1d
-  http://autobuild.buildroot.net/results/62e5b5c6d9dca0f41fb4e7d462ebfbb02f8d29da
-  http://autobuild.buildroot.net/results/a6437a49659a7b2983269e758dba9fa5a29240d7
+Le 02/09/2016 ? 22:31, Romain Naour a ?crit :
+> expedite from 1.15 branch doesn't build anymore with efl 1.18 due to
+> API changes. Since there is no new release or 1.18 scpecific branch,
+> use the latest commit.
+> 
+> Add a hash file.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  package/expedite/expedite.hash | 2 ++
+>  package/expedite/expedite.mk   | 3 +--
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+>  create mode 100644 package/expedite/expedite.hash
+> 
+> diff --git a/package/expedite/expedite.hash b/package/expedite/expedite.hash
+> new file mode 100644
+> index 0000000..0438dcf
+> --- /dev/null
+> +++ b/package/expedite/expedite.hash
+> @@ -0,0 +1,2 @@
+> +# locally computed
+> +sha256 a8690a714c16d6b67e7fd6d70973e9805c3569a9131900b1feaf183220496831  dl/expedite-ffa005ea3de26b4219f32c285cb1665bb1366163.tar.gz
+                                                                            ^^^
+Sorry, copy-past error :-/
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
-I'll look at getting this fix upstream so consider this patch temporary.
+Best regards,
+Romain
 
- ....c-provide-mp_raw_code_load_file-for-any-.patch | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/micropython/0002-py-emitglue.c-provide-mp_raw_code_load_file-for-any-.patch
-
-diff --git a/package/micropython/0002-py-emitglue.c-provide-mp_raw_code_load_file-for-any-.patch b/package/micropython/0002-py-emitglue.c-provide-mp_raw_code_load_file-for-any-.patch
-new file mode 100644
-index 0000000..8465ce9
---- /dev/null
-+++ b/package/micropython/0002-py-emitglue.c-provide-mp_raw_code_load_file-for-any-.patch
-@@ -0,0 +1,27 @@
-+From 4177e71862a2817d2555abd8d0bc9a8a361dad8a Mon Sep 17 00:00:00 2001
-+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-+Date: Sat, 3 Sep 2016 20:44:12 +1200
-+Subject: [PATCH] py/emitglue.c: provide mp_raw_code_load_file for any unix
-+ architecture
-+
-+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-+---
-+ py/emitglue.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/py/emitglue.c b/py/emitglue.c
-+index 1b9992b..2e79d5f 100644
-+--- a/py/emitglue.c
-++++ b/py/emitglue.c
-+@@ -381,7 +381,7 @@ mp_raw_code_t *mp_raw_code_load_mem(const byte *buf, size_t len) {
-+ // here we define mp_raw_code_load_file depending on the port
-+ // TODO abstract this away properly
-+ 
-+-#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__) || (defined(__arm__) && (defined(__unix__)))
-++#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__) || defined(__unix__)
-+ // unix file reader
-+ 
-+ #include <sys/stat.h>
-+-- 
-+2.9.2.518.ged577c6.dirty
-+
--- 
-2.9.2.518.ged577c6.dirty
+> diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
+> index 8754dc0..0b2901d 100644
+> --- a/package/expedite/expedite.mk
+> +++ b/package/expedite/expedite.mk
+> @@ -4,8 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -# efl-1.15 branch
+> -EXPEDITE_VERSION = 3ce8b3f1451700f9a2da60c2e717c644220e2449
+> +EXPEDITE_VERSION = ffa005ea3de26b4219f32c285cb1665bb1366163
+>  EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
+>  EXPEDITE_SITE_METHOD = git
+>  EXPEDITE_LICENSE = BSD-2c
+> 
