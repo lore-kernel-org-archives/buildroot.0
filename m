@@ -1,63 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 Sep 2016 20:53:56 +0200
-Subject: [Buildroot] [git commit] package/dosfstools: Fix undefined PATH_MAX
-	under musl
-Message-ID: <20160903185455.6C4C181DF8@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Sat, 03 Sep 2016 20:59:08 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2016-09-02
+In-Reply-To: <20160903203613.2a7f0a32@free-electrons.com>
+References: <20160903063033.788551028C6@stock.ovh.net>
+ <2181287.8UlWShMbI3@sagittea> <20160903203613.2a7f0a32@free-electrons.com>
+Message-ID: <1496256.AqCB2eOqyL@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e195d63ba7c6404f31b15414ffbb92dbfb338a8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Saturday 03 September 2016 20:36:13 Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sat, 03 Sep 2016 18:03:13 +0200, J?r?me Pouiller wrote:
+> > wget >= 1.13-1 is necessary to fix problem. I see three solutions:
+> >   1. Revert de76cb7da734dde2204a7ea9ff60e24cbe857ddb ("Use CDN
+> >   
+> >      kernel.org mirror")
+> >   
+> >   2. Use http instead if https
+> >   3. Check wget version in dependencies.sh
+> 
+> 4. The problem is already solved, because the util-linux-2.28.1.tar.xz
+> tarball is now on http://sources.buildroot.net/, and Buildroot
+> automatically falls back to this address. Therefore, the build
+> failure will no longer occur.
 
-Dosfstools doesn't build with musl only if BR2_PACKAGE_HAS_UDEV is set
-due to a missing include for PATH_MAX (limits.h).
+It means this error will occurs each time a package using KERNEL_MIRROR 
+will be upgraded? Do autobuilder owners could update their wget version?
 
-Fixes:
-http://autobuild.buildroot.net/results/346/346feda6a4a83850dbb62919eb33482302053490
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ..._info.c-Fix-undefined-PATH_MAX-under-musl.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+> However, we could discuss whether it really makes sense to use
+> https:// as the main download location when all downloads anyway fall
+> back to downloading from sources.buildroot.net over http://.
 
-diff --git a/package/dosfstools/0002-src-device_info.c-Fix-undefined-PATH_MAX-under-musl.patch b/package/dosfstools/0002-src-device_info.c-Fix-undefined-PATH_MAX-under-musl.patch
-new file mode 100644
-index 0000000..9740304
---- /dev/null
-+++ b/package/dosfstools/0002-src-device_info.c-Fix-undefined-PATH_MAX-under-musl.patch
-@@ -0,0 +1,31 @@
-+From 06ce096dabd8a29c72dc0bc5110d2c4867baa490 Mon Sep 17 00:00:00 2001
-+From: Alessio Sergi <al3hex@gmail.com>
-+Date: Fri, 6 May 2016 18:18:18 +0200
-+Subject: [PATCH] src/device_info.c: Fix undefined PATH_MAX under musl
-+
-+In musl libc, PATH_MAX is defined in <limits.h>.
-+
-+Status: pending
-+https://github.com/dosfstools/dosfstools/pull/27
-+
-+[Romain: add patch status]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/device_info.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/device_info.c b/src/device_info.c
-+index f5d11ac..cd57388 100644
-+--- a/src/device_info.c
-++++ b/src/device_info.c
-+@@ -17,6 +17,7 @@
-+ */
-+ 
-+ 
-++#include <limits.h>
-+ #include <stdint.h>
-+ #include <stdbool.h>
-+ #include <sys/types.h>
-+-- 
-+2.5.5
-+
+sources.buildroot.net should provide an https access?
+
+BR,
+
+-- 
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
