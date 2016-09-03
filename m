@@ -1,58 +1,55 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 3 Sep 2016 13:07:39 +0200
-Subject: [Buildroot] [PATCH 7/9] package/expedite: bump to lastest commit
-In-Reply-To: <1472848295-13734-7-git-send-email-romain.naour@gmail.com>
-References: <1472848295-13734-1-git-send-email-romain.naour@gmail.com>
- <1472848295-13734-7-git-send-email-romain.naour@gmail.com>
-Message-ID: <c7ea43cd-69e3-204e-5aae-6fc66145065e@gmail.com>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Sat, 3 Sep 2016 17:05:49 +0200
+Subject: [Buildroot] Analysis of build results for 2016-08-08
+In-Reply-To: <81bcbe49-664c-6d7d-f12c-e4b66c53a91a@mind.be>
+References: <20160809063032.89898101A55@stock.ovh.net>
+ <20160809141535.4c9b8169@free-electrons.com>
+ <17850212-c769-63c4-f05b-79adc47f470c@gmail.com>
+ <34622bb9-7ff7-2d15-fa97-e5ed6570034b@gmail.com>
+ <2e0ca47d-83cf-4c2d-844b-9560b98733c3@free.fr>
+ <81bcbe49-664c-6d7d-f12c-e4b66c53a91a@mind.be>
+Message-ID: <09e2a649-7606-8726-520f-c33934424413@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hello,
 
-Le 02/09/2016 ? 22:31, Romain Naour a ?crit :
-> expedite from 1.15 branch doesn't build anymore with efl 1.18 due to
-> API changes. Since there is no new release or 1.18 scpecific branch,
-> use the latest commit.
-> 
-> Add a hash file.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/expedite/expedite.hash | 2 ++
->  package/expedite/expedite.mk   | 3 +--
->  2 files changed, 3 insertions(+), 2 deletions(-)
->  create mode 100644 package/expedite/expedite.hash
-> 
-> diff --git a/package/expedite/expedite.hash b/package/expedite/expedite.hash
-> new file mode 100644
-> index 0000000..0438dcf
-> --- /dev/null
-> +++ b/package/expedite/expedite.hash
-> @@ -0,0 +1,2 @@
-> +# locally computed
-> +sha256 a8690a714c16d6b67e7fd6d70973e9805c3569a9131900b1feaf183220496831  dl/expedite-ffa005ea3de26b4219f32c285cb1665bb1366163.tar.gz
-                                                                            ^^^
-Sorry, copy-past error :-/
+Arnout,
 
-Best regards,
-Romain
+On 26/08/2016 00:37, Arnout Vandecappelle wrote:
+> On 25-08-16 09:29, Julien Boibessot wrote:
+>> Hello Romain,
+>>
+>> On 22/08/2016 21:49, Romain Naour wrote:
+>>> Hi Julien, Thomas,
+>>>
+>>> Le 09/08/2016 ? 16:07, Romain Naour a ?crit :
+>>>> Hi Thomas, All,
+>>>>
+>>>> [snip]
+>>>>
+>>>>>>          arm |                host-efl-1.17.2 | NOK | http://autobuild.buildroot.net/results/89bf12f8333d47af0cb5775c859e26f300af56cc/
+>>>>> edje_cc: Critical. Unable to open temp file "(null)" for pre-processor.
+>>>>>
+>>>>> Romain? This looks like a transient error, but I'm not sure.
+>>>> I already seen this issue on autobuilders but I'm not able to reproduce it
+>>>> locally...
+>>> Julien, this issue occurs only on your autobuilder, can you verify if it
+>>> reproducible. If yes, can you send me the usual files log (config.log, build log
+>>> etc)
+>> yes, it's 100% reproducible.
+>  Looking at the source of edje_cc, it's mkstemp() that fails. Do you have TMPDIR
+> or XDG_RUNTIME_DIR pointing to some location that is not writable or doesn't exist?
 
-> diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
-> index 8754dc0..0b2901d 100644
-> --- a/package/expedite/expedite.mk
-> +++ b/package/expedite/expedite.mk
-> @@ -4,8 +4,7 @@
->  #
->  ################################################################################
->  
-> -# efl-1.15 branch
-> -EXPEDITE_VERSION = 3ce8b3f1451700f9a2da60c2e717c644220e2449
-> +EXPEDITE_VERSION = ffa005ea3de26b4219f32c285cb1665bb1366163
->  EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
->  EXPEDITE_SITE_METHOD = git
->  EXPEDITE_LICENSE = BSD-2c
-> 
+XDG_RUNTIME_DIR is indeed pointing to a directory that is not writable
+for user launching the build.
+export XDG_RUNTIME_DIR=/tmp fixes the host-efl build.
+Where should I set this envt variable ?
+
+(Build is launched through ssh+su on my build server)
+
+Regards,
+Julien
