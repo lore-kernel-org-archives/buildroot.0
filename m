@@ -1,80 +1,63 @@
-From: Petr Kulhavy <brain@jikos.cz>
-Date: Sat, 3 Sep 2016 17:11:21 +0200
-Subject: [Buildroot] [PATCH 1/2] boot/uboot: add missing SPL build
- dependency
-In-Reply-To: <9e8b258d-39e7-1cd4-7530-e295ee7e09b6@mind.be>
-References: <1472741494-7043-1-git-send-email-brain@jikos.cz>
- <1472741494-7043-2-git-send-email-brain@jikos.cz>
- <9e8b258d-39e7-1cd4-7530-e295ee7e09b6@mind.be>
-Message-ID: <706220f2-ed95-8a00-8a40-2c818636ac63@jikos.cz>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Sat,  3 Sep 2016 17:24:49 +0200
+Subject: [Buildroot] [PATCH] lxc: revive "drop-werror" patch
+Message-ID: <1472916289-3927-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/09/16 09:13, Arnout Vandecappelle wrote:
->
-> On 01-09-16 16:51, Petr Kulhavy wrote:
->> If SPL installation is selected make does not always build the SPL binary.
->   Please give a concrete example of this so people can verify.
+commit 5050a94ae9f448641e05ce29c931671ffdc62784 dropped patch that
+remove '-Werror' from CFLAGS. However, it seems this patch is still
+necessary:
 
-Hi Arnout
+  http://autobuild.buildroot.net/results/b1cbca6d0396863654b1d09ccc3163c5f6124ab8
+  http://autobuild.buildroot.net/results/fcf2834ad74b95548d25dad2274704ea401f9665
+  http://autobuild.buildroot.net/results/048be2fc702c9dba9ca4439ff687d71b30c10551
+  http://autobuild.buildroot.net/results/939246c9a4f433dfd0dc414988f5957441b8e9b4
 
-It doesn't work with the iMX "SPL" target.
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/lxc/0001-drop-werror.patch | 16 ++++++++++++++++
+ package/lxc/lxc.mk                 |  2 ++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 package/lxc/0001-drop-werror.patch
 
-Regards
-Petr
-
->
->> Add the SPL binary explicitly to the build command.
->>
->> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
->> ---
->>   boot/uboot/uboot.mk | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
->> index 7c3512a..a62f7be 100644
->> --- a/boot/uboot/uboot.mk
->> +++ b/boot/uboot/uboot.mk
->> @@ -149,7 +149,7 @@ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
->>   define UBOOT_BUILD_CMDS
->>   	$(TARGET_CONFIGURE_OPTS) 	\
->>   		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
->> -		$(UBOOT_MAKE_TARGET)
->> +		$(UBOOT_MAKE_TARGET) $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
->   Unfortunately, this doesn't work for OMAP3. For OMAP3, the file to be copied is
-> "MLO", but it is not a target of the top-level Makefile. Instead, it is built
-> while recursing in the spl subdirectory.
->
->   A workaround is to use two separate make invocations: the first one for the
-> normal build, the second one to build any additional SPL images. Since MLO
-> already exists during the second invocation, make won't complain anymore.
->
->   Note BTW that the current situation is already broken for OMAP3 when using a
-> recent U-Boot. We only call the 'u-boot.img' target, and this _doesn't_ build
-> MLO. We should also 'make all'. I guess we don't do 'make all' to avoid doing
-> redundant work when SPL isn't required, but it's kind of useless :-)
->
->   You can test with this defconfig:
->
-> BR2_arm=y
-> BR2_cortex_a8=y
-> BR2_ARM_EABI=y
-> BR2_ARM_FPU_VFPV3=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TARGET_UBOOT=y
-> BR2_TARGET_UBOOT_BOARDNAME="omap3_evm"
-> BR2_TARGET_UBOOT_FORMAT_IMG=y
-> BR2_TARGET_UBOOT_SPL=y
-> BR2_TARGET_UBOOT_SPL_NAME="MLO"
->
->
->   Regards,
->   Arnout
->
->>   	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
->>   		$(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
->>   	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
->>
+diff --git a/package/lxc/0001-drop-werror.patch b/package/lxc/0001-drop-werror.patch
+new file mode 100644
+index 0000000..d2a8673
+--- /dev/null
++++ b/package/lxc/0001-drop-werror.patch
+@@ -0,0 +1,16 @@
++Don't do -Werror it breaks builds on some scenarios with trivialities.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura lxc-lxc-1.0.4/configure.ac lxc-lxc-1.0.4.orig/configure.ac
++--- lxc-lxc-1.0.4.orig/configure.ac	2014-07-04 10:31:19.821029891 -0300
+++++ lxc-lxc-1.0.4/configure.ac	2014-06-13 14:07:45.000000000 -0300
++@@ -560,7 +560,7 @@
++ LXC_CHECK_TLS
++ 
++ if test "x$GCC" = "xyes"; then
++-	CFLAGS="$CFLAGS -Wall -Werror"
+++	CFLAGS="$CFLAGS -Wall"
++ fi
++ 
++ # Files requiring some variable expansion
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index b1cd385..a3e24b4 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -9,6 +9,8 @@ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPLv2.1+
+ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = libcap host-pkgconf
++# we're patching configure.ac
++LXC_AUTORECONF = YES
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-lua --disable-python \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+-- 
+1.9.1
