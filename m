@@ -1,100 +1,65 @@
-From: Theo Debrouwere <theo.debrouwere@skynet.be>
-Date: Sun,  4 Sep 2016 23:08:46 +0200
-Subject: [Buildroot] [PATCH]     add new library: libpugixml
-Message-ID: <20160904210846.1332-1-theo.debrouwere@skynet.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 4 Sep 2016 23:14:44 +0200
+Subject: [Buildroot] [PATCH 00/16 v3] br2-external: support multiple
+ trees at once (branch yem/multi-br2-external-ID-7)
+In-Reply-To: <877farwlpn.fsf@dell.be.48ers.dk>
+References: <cover.1468750623.git.yann.morin.1998@free.fr>
+ <eda2b290-992f-7a26-424b-f522b7a805ae@mind.be>
+ <874m611n1e.fsf@dell.be.48ers.dk>
+ <20160831091443.691ffd1c@free-electrons.com>
+ <20160831092643.GA5549@free.fr>
+ <e47d26b6-26a6-ac0a-8334-b9a0785084f4@mind.be>
+ <877farwlpn.fsf@dell.be.48ers.dk>
+Message-ID: <20160904211444.GB6522@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Theo Debrouwere <t.debrouwere@televic.com>
+Peter, All,
 
-    pugixml is a light-weight C++ XML processing library. It features:
-    * DOM-like interface with rich traversal/modification capabilities
-    * Extremely fast non-validating XML parser which constructs the DOM tree from an XML file/buffer
-    * XPath 1.0 implementation for complex data-driven tree queries
-    * Full Unicode support with Unicode interface variants and automatic encoding conversions
+On 2016-09-04 20:42 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>  >  One remark though: we should really document such backward compatibility
+>  > issues. I don't think we're currently doing that well.
+> 
+>  >  Where should this be done?
+> 
+>  > - In CHANGES? At the moment, however, the CHANGES file is not really inviting to
+>  > look for that kind of thing. Especially because users will often upgrade in
+>  > jumps of 4 or more releases - that makes up 900 lines of CHANGES text...
+> 
+> Do you still think this is an issue? It is natually still big, but I do
+> find that readability has improved quite a bit since I removed the
+> Updated/fixed packages list for -rc1. I currently still add it for later
+> rc's, but we could drop that as well if people prefer.
+> 
+>  > - In the manual? There isn't really an appropriate place for it at the moment.
+>  > And how long do we keep it there?
+> 
+>  > - In some new location? Where?
+> 
+>  >  My personal preference would be in the manual, and keep it for a couple of years.
+> 
+> I think we should add it to CHANGES, and add a short notice in the
+> manual that earlier BR versions used a different br2-external setup.
 
-    Homepage: http://pugixml.org/
-    Repository: https://github.com/zeux/pugixml
+Already done, and will be part of the next iteration:
+    https://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/multi-br2-external-10&id=1eb85fca3b3363057a5e6662fd5af7c529593af4
 
-Signed-off-by: Theo Debrouwere <t.debrouwere@televic.com>
----
- package/Config.in                  |  1 +
- package/libpugixml/Config.in       | 15 +++++++++++++++
- package/libpugixml/libpugixml.hash |  2 ++
- package/libpugixml/libpugixml.mk   | 19 +++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/libpugixml/Config.in
- create mode 100644 package/libpugixml/libpugixml.hash
- create mode 100644 package/libpugixml/libpugixml.mk
+This adds three things:
+  - an appendix on how to convert, with Arnout's suggestion,
+  - an xref in the br2-external section to point to that appendix,
+  - a pointer to that appendix in the error message.
 
-diff --git a/package/Config.in b/package/Config.in
-index 1e51a45..d0198ce 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1092,6 +1092,7 @@ menu "JSON/XML"
- 	source "package/libxslt/Config.in"
- 	source "package/libyaml/Config.in"
- 	source "package/mxml/Config.in"
-+	source "package/libpugixml/Config.in"
- 	source "package/rapidjson/Config.in"
- 	source "package/rapidxml/Config.in"
- 	source "package/raptor/Config.in"
-diff --git a/package/libpugixml/Config.in b/package/libpugixml/Config.in
-new file mode 100644
-index 0000000..17c6eec
---- /dev/null
-+++ b/package/libpugixml/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_LIBPUGIXML
-+	bool "libpugixml"
-+	help
-+	  Light-weight, simple and fast XML parser for C++ with XPath support
-+
-+	  Features:
-+	  * DOM-like interface with rich traversal/modification capabilities
-+	  * Extremely fast non-validating XML parser which constructs the DOM tree
-+	    from an XML file/buffer
-+	  * XPath 1.0 implementation for complex data-driven tree queries
-+	  * Full Unicode support with Unicode interface variants and automatic
-+	    encoding conversions
-+
-+	  http://pugixml.org/
-+	  https://github.com/zeux/pugixml
-diff --git a/package/libpugixml/libpugixml.hash b/package/libpugixml/libpugixml.hash
-new file mode 100644
-index 0000000..9007f7c
---- /dev/null
-+++ b/package/libpugixml/libpugixml.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  fbe10d46f61d769f7d92a296102e4e2bd3ee16130f11c5b10a1aae590ea1f5ca  pugixml-1.7.tar.gz
-diff --git a/package/libpugixml/libpugixml.mk b/package/libpugixml/libpugixml.mk
-new file mode 100644
-index 0000000..3c9987e
---- /dev/null
-+++ b/package/libpugixml/libpugixml.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# libpugixml
-+#
-+################################################################################
-+
-+LIBPUGIXML_VERSION = 1.7
-+LIBPUGIXML_SOURCE = pugixml-$(LIBPUGIXML_VERSION).tar.gz
-+LIBPUGIXML_SITE = http://github.com/zeux/pugixml/releases/download/v$(LIBPUGIXML_VERSION)
-+LIBPUGIXML_LICENSE = MIT
-+LIBPUGIXML_LICENSE_FILES = docs/manual.html
-+LIBPUGIXML_INSTALL_STAGING = YES
-+
-+LIBPUGIXML_SUBDIR = scripts
-+
-+# build libpugixml as a shared library
-+LIBPUGIXML_CONF_OPTS = -DBUILD_SHARED_LIBS=ON
-+
-+$(eval $(cmake-package))
+Regards,
+Yann E. MORIN.
+
 -- 
-2.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
