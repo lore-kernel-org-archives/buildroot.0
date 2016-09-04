@@ -1,55 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Sep 2016 15:39:32 +0200
-Subject: [Buildroot] [git commit] package/jpeg: properly declare providers
-Message-ID: <20160904133955.8FBA782103@busybox.osuosl.org>
+Date: Sun, 4 Sep 2016 15:46:46 +0200
+Subject: [Buildroot] [git commit] libwebsockets: bump to version 2.0.2
+Message-ID: <20160904134652.B19A781FC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35524d3733a5570794b1460bd545ad33bf6b49ef
+commit: https://git.buildroot.net/buildroot/commit/?id=4b480c4ea7a522156013b93dc09a1a7c034c8245
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libjpeg and jpeg-turo are providers of the jpeg virtual package, so they
-must declare themselves as such.
-
-We do not have any problem, because the dependency is computed from the
-Kconfig-defined option BR2_PACKAGE_PROVIDES_JPEG, and we do not check
-the Makefile-defined <FOO>_PROVIDES variable.
-
-For the sake of correctness, make both libjpeg and jpeg-turo declare
-themselves as providers for the jpeg virtual package.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/jpeg-turbo/jpeg-turbo.mk | 2 ++
- package/libjpeg/libjpeg.mk       | 1 +
- 2 files changed, 3 insertions(+)
+ package/libwebsockets/libwebsockets.hash | 2 +-
+ package/libwebsockets/libwebsockets.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 047e925..454b648 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -10,6 +10,8 @@ JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_
- JPEG_TURBO_LICENSE = jpeg-license (BSD-3c-like)
- JPEG_TURBO_LICENSE_FILES = README README-turbo.txt
- JPEG_TURBO_INSTALL_STAGING = YES
-+JPEG_TURBO_PROVIDES = jpeg
-+
- JPEG_TURBO_CONF_OPTS = --with-jpeg8
+diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+index c931a0d..dc44da5 100644
+--- a/package/libwebsockets/libwebsockets.hash
++++ b/package/libwebsockets/libwebsockets.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  e91f59fb6238462b4ffdfef2482239558b8a02198c9c6076eb3f86eb1c4e935d  libwebsockets-v1.7.5.tar.gz
++sha256  43865604debd06686ac4d8d0783976c4e10dd519ccd5c94e1b53878ec6178a59  libwebsockets-v2.0.2.tar.gz
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 5bb7ae4..a9b4a25 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_X86_CPU_HAS_MMX)$(BR2_ARM_CPU_HAS_NEON),y)
-diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
-index 14aba61..b8f4bac 100644
---- a/package/libjpeg/libjpeg.mk
-+++ b/package/libjpeg/libjpeg.mk
-@@ -10,6 +10,7 @@ LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
- LIBJPEG_LICENSE = jpeg-license (BSD-3c-like)
- LIBJPEG_LICENSE_FILES = README
- LIBJPEG_INSTALL_STAGING = YES
-+LIBJPEG_PROVIDES = jpeg
- 
- define LIBJPEG_REMOVE_USELESS_TOOLS
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,cjpeg djpeg jpegtran rdjpgcom wrjpgcom)
+-LIBWEBSOCKETS_VERSION = v1.7.5
++LIBWEBSOCKETS_VERSION = v2.0.2
+ LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,$(LIBWEBSOCKETS_VERSION))
+ LIBWEBSOCKETS_LICENSE = LGPLv2.1 with exceptions
+ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
