@@ -1,41 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Sep 2016 15:46:46 +0200
-Subject: [Buildroot] [git commit] libwebsockets: bump to version 2.0.2
-Message-ID: <20160904134652.B19A781FC7@busybox.osuosl.org>
+Date: Sun, 4 Sep 2016 15:47:31 +0200
+Subject: [Buildroot] [PATCH 0/4 v2] manual: remove lists of packages
+ (branch yem/manual-no-package-list)
+In-Reply-To: <cover.1472943074.git.yann.morin.1998@free.fr>
+References: <cover.1472943074.git.yann.morin.1998@free.fr>
+Message-ID: <20160904154731.03e7b18f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b480c4ea7a522156013b93dc09a1a7c034c8245
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libwebsockets/libwebsockets.hash | 2 +-
- package/libwebsockets/libwebsockets.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun,  4 Sep 2016 00:58:40 +0200, Yann E. MORIN wrote:
 
-diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
-index c931a0d..dc44da5 100644
---- a/package/libwebsockets/libwebsockets.hash
-+++ b/package/libwebsockets/libwebsockets.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  e91f59fb6238462b4ffdfef2482239558b8a02198c9c6076eb3f86eb1c4e935d  libwebsockets-v1.7.5.tar.gz
-+sha256  43865604debd06686ac4d8d0783976c4e10dd519ccd5c94e1b53878ec6178a59  libwebsockets-v2.0.2.tar.gz
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index 5bb7ae4..a9b4a25 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBWEBSOCKETS_VERSION = v1.7.5
-+LIBWEBSOCKETS_VERSION = v2.0.2
- LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,$(LIBWEBSOCKETS_VERSION))
- LIBWEBSOCKETS_LICENSE = LGPLv2.1 with exceptions
- LIBWEBSOCKETS_LICENSE_FILES = LICENSE
+>       package/cryptodev: properly declare providers
+>       package/openssl: depend on the virtual cryptodev package
+>       package/jpeg: properly declare providers
+
+Those three patches applied to master. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
