@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Sep 2016 15:47:31 +0200
-Subject: [Buildroot] [PATCH 0/4 v2] manual: remove lists of packages
- (branch yem/manual-no-package-list)
-In-Reply-To: <cover.1472943074.git.yann.morin.1998@free.fr>
-References: <cover.1472943074.git.yann.morin.1998@free.fr>
-Message-ID: <20160904154731.03e7b18f@free-electrons.com>
+Date: Sun, 4 Sep 2016 15:47:36 +0200
+Subject: [Buildroot] [PATCH 1/1] libwebsockets: bump to version 2.0.2
+In-Reply-To: <1472948516-2385-1-git-send-email-danomimanchego123@gmail.com>
+References: <1472948516-2385-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20160904154736.3d976543@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  4 Sep 2016 00:58:40 +0200, Yann E. MORIN wrote:
+On Sat,  3 Sep 2016 20:21:56 -0400, Danomi Manchego wrote:
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> ---
+>  package/libwebsockets/libwebsockets.hash | 2 +-
+>  package/libwebsockets/libwebsockets.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
->       package/cryptodev: properly declare providers
->       package/openssl: depend on the virtual cryptodev package
->       package/jpeg: properly declare providers
-
-Those three patches applied to master. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
