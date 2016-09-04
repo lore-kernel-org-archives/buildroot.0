@@ -1,36 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Sep 2016 15:20:39 +0200
-Subject: [Buildroot] [PATCH 4/4 v2] manual: get rid of the lists of
- packages
-In-Reply-To: <206a0e9bf7a1e99fa176fe1345d245881f14b858.1472943074.git.yann.morin.1998@free.fr>
-References: <cover.1472943074.git.yann.morin.1998@free.fr>
- <206a0e9bf7a1e99fa176fe1345d245881f14b858.1472943074.git.yann.morin.1998@free.fr>
-Message-ID: <20160904152039.1c00e023@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 4 Sep 2016 15:23:49 +0200
+Subject: [Buildroot] [PATCH] package/binutils: Disable -Os for Thumb-2
+ only platforms
+In-Reply-To: <20160904144314.2dd0f130@free-electrons.com>
+References: <1472978990-14884-1-git-send-email-romain.naour@gmail.com>
+ <20160904144314.2dd0f130@free-electrons.com>
+Message-ID: <0b74b399-c948-c01f-9c34-3b6be4d969b7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sun,  4 Sep 2016 00:58:43 +0200, Yann E. MORIN wrote:
+Le 04/09/2016 ? 14:43, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> On Sun,  4 Sep 2016 10:49:50 +0200, Romain Naour wrote:
+> 
+>> +# Workaround a build issue with -Os on Thumb-2 only platforms
+>> +# (such as Cortex-M). (Binutils 2.25.1 and 2.26.1)
+>> +ifeq ($(BR2_ARM_CPU_HAS_ARM)$(BR2_OPTIMIZE_S),yy)
+> 
+> Unless I'm missing something, I don't see how the code is matching the
+> comment above. Your comment is "with Thumb-2 only platforms, there is
+> an issue with the -Os optimization level" while your condition is "with
+> ARM-capable platforms, there is an issue with the -Os optimization
+> level".
+> 
+> Are you sure what want is not:
+> 
+> ifeq ($(BR2_ARM_CPU_HAS_ARM):$(BR2_OPTIMIZE_S),:y)
+> ....
+> endif
 
-> Those list take more than half of the manual. They do not serve much
-> purpose except to show off. The only one that is interesting is the list
-> of virtual packages, the associated symbols and their providers.
+You're right, this is what I wanted to do. :-/
 
-I would like to challenge the fact that the list of virtual packages is
-more useful than the rest of the list.
+> 
+> Also, I'm a bit surprised this happens only on Thumb-2 only platforms,
+> and not on all ARM platforms, when Thumb-2 is chosen. But I'm far from
+> understanding all the fine details of relocations.
 
-virtual packages are purely internal things, you only need to know
-about virtual packages when you're adding new packages in Buildroot.
-And when you're adding new packages in Buildroot, you have far enough
-experience to do a "git grep virtual-package" and find which ones are
-available.
+Neither do I.
+I tried with an ARM toolchain with BR2_ARM_INSTRUCTIONS_THUMB2 set and with the
+same build options (static only and Os) but Binutils build fine.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+I'll send a v2 shortly.
+
+Best regards,
+Romain
+
+> 
+> Thanks,
+> 
+> Thomas
+> 
