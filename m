@@ -1,17 +1,21 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  5 Sep 2016 22:37:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/amd-catalyst: fix legal-info
-Message-ID: <20160905203755.20519-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Sep 2016 22:39:21 +0200
+Subject: [Buildroot] [git commit] package/amd-catalyst: fix legal-info
+Message-ID: <20160905203925.284658218D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=1d0ff54c1464444c39c310ef9108794ac4547bb4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixes
 http://autobuild.buildroot.net/results/4f1/4f1e9b4bf43add4712e82d4a58e633abb2a7d2b8/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/amd-catalyst/amd-catalyst.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -29,5 +33,3 @@ index 3097353..5636f81 100644
  AMD_CATALYST_INSTALL_STAGING = YES
  AMD_CATALYST_SUFFIX = $(if $(BR2_x86_64),_64)
  AMD_CATALYST_ARCH_DIR = $(@D)/arch/x86$(AMD_CATALYST_SUFFIX)
--- 
-2.9.3
