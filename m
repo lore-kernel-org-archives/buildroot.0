@@ -1,48 +1,45 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 05 Sep 2016 10:20:03 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-09-02
-In-Reply-To: <87vayau5yt.fsf@dell.be.48ers.dk>
-References: <20160903063033.788551028C6@stock.ovh.net>
- <20160903232302.40ff0733@free-electrons.com>
- <87vayau5yt.fsf@dell.be.48ers.dk>
-Message-ID: <2417272.QXHhLvSnBg@sagittea>
+From: Jeff Gray <jeff.gray@sato-global.com>
+Date: Mon, 5 Sep 2016 18:39:25 +1000
+Subject: [Buildroot] Error with OVERRIDE_SRCDIR in 2016.08
+Message-ID: <CAHb0ztmgZ9sMB0OxF5D7DYmZaU4vekUDcyxp96Ws+w84ZM_R+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 05 September 2016 10:05:30 Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-
-electrons.com> writes:
-> Hi,
-> 
->  >> > However, we could discuss whether it really makes sense to use
->  >> > https:// as the main download location when all downloads anyway
->  >> > fall
->  >> > back to downloading from sources.buildroot.net over http://.
-[...]
-> - Do nothing. The issue is not so big, and presumably will get smaller
-> over time as older distributions get updated.
-> 
-> - Change HTTPS URLs to HTTP where possible. Notice that these days a
->   number of websites use HSTS headers to enforce HTTPS. I'm not sure
->   when HSTS support got added to wget though (not clear from
-> changelog)
-> 
-> - Pass --no-check-certificate in BR2_WGET to disable the check,
-> working around the issues.
-> 
-> What do you say?
+I'm having a problem after upgrading from 2016.05 to 2016.08. I have a
+number of local applications that I install from BR2_EXTERNAL. This used to
+work fine in 2016.05, but now I get messages like this when making
+buildroot (showing one example and using the macro for clarity):
+$(BR2_EXTERNAL)/package/svp/gpio/gpio.mk:18: *** GPIO_SITE cannot be empty
+when GPIO_SOURCE is not.  Stop.
 
-wget exit with error code '5' if it detect an SSL verification failure. 
-Buildroot may detect it and display a message explaining how to work 
-around the problem (something like "Try with BR2_WGET='wget --no-check-
-certificate'").
+I have placed the package files at $(BR2_EXTERNAL)/package/svp/gpio/ and
+the source files at $(BR2_EXTERNAL)/src/gpio
 
+My gpio.mk file is:
+--------------
+GPIO_VERSION = 1.0
+GPIO_OVERRIDE_SRCDIR = $(BR2_EXTERNAL)/src/gpio/
+define GPIO_BUILD_CMDS
+$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" -C $(@D)
+endef
+define GPIO_INSTALL_TARGET_CMDS
+$(INSTALL) -m 0755 -D $(@D)/gpio $(TARGET_DIR)/usr/bin/gpio
+endef
+$(eval $(generic-package))
+---------------
 
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+I have a $(BR2_EXTERNAL)/Config.in that contains lines like this:
+source "$BR2_EXTERNAL/package/svp/gpio/Config.in"
+... and a $(BR2_EXTERNAL)/external.mk that contains this:
+include $(sort $(wildcard $(BR2_EXTERNAL)/package/svp/*/*.mk))
+
+Can anyone think of a cause for the error message? Has the way this sort of
+project is configured changed? I looked through the manual and couldn't see
+anything. I checked that the output/.br-external is the same for both
+versions.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160905/9550d759/attachment.html>
