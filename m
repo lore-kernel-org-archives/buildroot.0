@@ -1,57 +1,38 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 05 Sep 2016 22:20:25 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: opencv2 support is
- broken if BR2_ARM_ENABLE_VFP is enabled
-References: <20160905145120.8613-1-bernd.kuhls@t-online.de>
- <20160905220540.633a3cd4@free-electrons.com>
-Message-ID: <9l01adxnus.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Sep 2016 22:36:37 +0200
+Subject: [Buildroot] Thanks OpenWide/Smile for the sponsoring!
+Message-ID: <20160905223637.6220a957@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 05 Sep 2016 22:05:40 +0200 schrieb Thomas Petazzoni:
+Hello all,
 
-> Hello,
-> 
-> On Mon,  5 Sep 2016 16:51:19 +0200, Bernd Kuhls wrote:
->> Fixes
->> http://autobuild.buildroot.net/results/c32/
-c32a21240a9933796ee850349a62ff3c2314f25c/
->> http://autobuild.buildroot.net/
-results/22a/22a9769d83d2a398bb6b264d342b2077c41c9cc5/
->> 
->> Signed-off-by: Bernd Kuhls
->> <bernd.kuhls@t-online.de>
->> ---
->>  package/ffmpeg/ffmpeg.mk | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->> 
->> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk index
->> a90d437..74f783c 100644 --- a/package/ffmpeg/ffmpeg.mk +++
->> b/package/ffmpeg/ffmpeg.mk @@ -250,7 +250,8 @@ endif
->>  
->>  # To avoid a circular dependency only use opencv if opencv itself does
->>  # not depend on ffmpeg.
->> -ifeq
->> ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x
-$(BR2_PACKAGE_OPENCV_WITH_FFMPEG),yx)
->> +# opencv2 is broken if BR2_ARM_ENABLE_VFP is enabled +ifeq
->> ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV_WITH_FFMPEG)x
-$(BR2_ARM_ENABLE_VFP),yxx)
-> 
-> I'm not really happy with this fix. When you're using OpenCV/FFmpeg on
-> ARM, you definitely want to be able to use the VFP. So I'd prefer to see
-> the problem fixed rather than having this combination disabled.
-> 
-> Thomas
+I would like to publicly thank OpenWide/Smile [1] for its sponsoring of
+the last Buildroot Summer Camp that took place in Toulouse early July.
 
-Hi Thomas,
+Smile covered all the food expenses for the entire 5 days event, during
+which 6 Buildroot developers met and were able to achieve an incredible
+amount of work. See [2] for more details about the report. In addition
+to this, Smile also sponsored the participation of Romain Naour.
 
-my coding skill are insufficient to fix the problem so I marked my patch 
-as rejected. I tried to compare the ARM_ROUND_DBL function in both 
-opencv2 and opencv3 but the structure of the includes has changed so I 
-was unable to spot the fix which provides working vfp support in opencv3.
+In addition to the numerous companies contributing to Buildroot, it is
+also great to see some companies financially sponsoring the project.
 
-Regards, Bernd
+And of course, sponsors for our upcoming Buildroot Developer Days in
+Berlin (early October) are more than welcome!
+
+Thanks again to Smile for this sponsoring!
+
+Best regards,
+
+Thomas
+
+[1] https://openwide.fr/
+[2] http://lists.busybox.net/pipermail/buildroot/2016-July/167050.html
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
