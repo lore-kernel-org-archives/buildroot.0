@@ -1,123 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Sep 2016 00:15:58 +0200
-Subject: [Buildroot] [PATCH] add new library: libpugixml
-In-Reply-To: <20160904210846.1332-1-theo.debrouwere@skynet.be>
-References: <20160904210846.1332-1-theo.debrouwere@skynet.be>
-Message-ID: <8eba02bb-9792-ef45-424b-01c7f7cd7c23@mind.be>
+Date: Tue, 6 Sep 2016 00:22:54 +0200
+Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: opencv2 support is
+ broken if BR2_ARM_ENABLE_VFP is enabled
+In-Reply-To: <20160905220540.633a3cd4@free-electrons.com>
+References: <20160905145120.8613-1-bernd.kuhls@t-online.de>
+ <20160905220540.633a3cd4@free-electrons.com>
+Message-ID: <8f363a01-6a59-623b-4f81-0108feefa367@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Theo,
 
- In addition to what the other two have commented...
 
-On 04-09-16 23:08, Theo Debrouwere wrote:
-> From: Theo Debrouwere <t.debrouwere@televic.com>
+On 05-09-16 22:05, Thomas Petazzoni wrote:
+> Hello,
 > 
->     pugixml is a light-weight C++ XML processing library. It features:
-
- Since upstream calls it pugixml (without lib- prefix), the buildroot package
-should be named the same.
-
->     * DOM-like interface with rich traversal/modification capabilities
->     * Extremely fast non-validating XML parser which constructs the DOM tree from an XML file/buffer
->     * XPath 1.0 implementation for complex data-driven tree queries
->     * Full Unicode support with Unicode interface variants and automatic encoding conversions
+> On Mon,  5 Sep 2016 16:51:19 +0200, Bernd Kuhls wrote:
+>> Fixes
+>> http://autobuild.buildroot.net/results/c32/c32a21240a9933796ee850349a62ff3c2314f25c/
+>> http://autobuild.buildroot.net/results/22a/22a9769d83d2a398bb6b264d342b2077c41c9cc5/
+>>
+>> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>> ---
+>>  package/ffmpeg/ffmpeg.mk | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+>> index a90d437..74f783c 100644
+>> --- a/package/ffmpeg/ffmpeg.mk
+>> +++ b/package/ffmpeg/ffmpeg.mk
+>> @@ -250,7 +250,8 @@ endif
+>>  
+>>  # To avoid a circular dependency only use opencv if opencv itself does
+>>  # not depend on ffmpeg.
+>> -ifeq ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV_WITH_FFMPEG),yx)
+>> +# opencv2 is broken if BR2_ARM_ENABLE_VFP is enabled
+>> +ifeq ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV_WITH_FFMPEG)x$(BR2_ARM_ENABLE_VFP),yxx)
 > 
->     Homepage: http://pugixml.org/
->     Repository: https://github.com/zeux/pugixml
-> 
-> Signed-off-by: Theo Debrouwere <t.debrouwere@televic.com>
-> ---
->  package/Config.in                  |  1 +
->  package/libpugixml/Config.in       | 15 +++++++++++++++
->  package/libpugixml/libpugixml.hash |  2 ++
->  package/libpugixml/libpugixml.mk   | 19 +++++++++++++++++++
->  4 files changed, 37 insertions(+)
->  create mode 100644 package/libpugixml/Config.in
->  create mode 100644 package/libpugixml/libpugixml.hash
->  create mode 100644 package/libpugixml/libpugixml.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 1e51a45..d0198ce 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1092,6 +1092,7 @@ menu "JSON/XML"
->  	source "package/libxslt/Config.in"
->  	source "package/libyaml/Config.in"
->  	source "package/mxml/Config.in"
-> +	source "package/libpugixml/Config.in"
+> I'm not really happy with this fix. When you're using OpenCV/FFmpeg on
+> ARM, you definitely want to be able to use the VFP. So I'd prefer to
+> see the problem fixed rather than having this combination disabled.
 
- ... and then it's in the right place here :-)
-
->  	source "package/rapidjson/Config.in"
->  	source "package/rapidxml/Config.in"
->  	source "package/raptor/Config.in"
-> diff --git a/package/libpugixml/Config.in b/package/libpugixml/Config.in
-> new file mode 100644
-> index 0000000..17c6eec
-> --- /dev/null
-> +++ b/package/libpugixml/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_LIBPUGIXML
-> +	bool "libpugixml"
-> +	help
-> +	  Light-weight, simple and fast XML parser for C++ with XPath support
-> +
-> +	  Features:
-> +	  * DOM-like interface with rich traversal/modification capabilities
-> +	  * Extremely fast non-validating XML parser which constructs the DOM tree
-> +	    from an XML file/buffer
-> +	  * XPath 1.0 implementation for complex data-driven tree queries
-> +	  * Full Unicode support with Unicode interface variants and automatic
-> +	    encoding conversions
-> +
-> +	  http://pugixml.org/
-> +	  https://github.com/zeux/pugixml
-> diff --git a/package/libpugixml/libpugixml.hash b/package/libpugixml/libpugixml.hash
-> new file mode 100644
-> index 0000000..9007f7c
-> --- /dev/null
-> +++ b/package/libpugixml/libpugixml.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256  fbe10d46f61d769f7d92a296102e4e2bd3ee16130f11c5b10a1aae590ea1f5ca  pugixml-1.7.tar.gz
-> diff --git a/package/libpugixml/libpugixml.mk b/package/libpugixml/libpugixml.mk
-> new file mode 100644
-> index 0000000..3c9987e
-> --- /dev/null
-> +++ b/package/libpugixml/libpugixml.mk
-> @@ -0,0 +1,19 @@
-> +################################################################################
-> +#
-> +# libpugixml
-> +#
-> +################################################################################
-> +
-> +LIBPUGIXML_VERSION = 1.7
-> +LIBPUGIXML_SOURCE = pugixml-$(LIBPUGIXML_VERSION).tar.gz
-
- If the package is called pugixml, this line isn't needed.
-
+ Well, since there is now the possibility to use opencv3 instead, which has
+fixed the issue, I think this isn't much of a problem, no?
 
  Regards,
  Arnout
 
-
-> +LIBPUGIXML_SITE = http://github.com/zeux/pugixml/releases/download/v$(LIBPUGIXML_VERSION)
-> +LIBPUGIXML_LICENSE = MIT
-> +LIBPUGIXML_LICENSE_FILES = docs/manual.html
-> +LIBPUGIXML_INSTALL_STAGING = YES
-> +
-> +LIBPUGIXML_SUBDIR = scripts
-> +
-> +# build libpugixml as a shared library
-> +LIBPUGIXML_CONF_OPTS = -DBUILD_SHARED_LIBS=ON
-> +
-> +$(eval $(cmake-package))
+> 
+> Thomas
 > 
 
 -- 
