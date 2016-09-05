@@ -1,41 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Sep 2016 21:07:41 +0200
-Subject: [Buildroot] [git commit] mutt: bump version to 1.7.0
-Message-ID: <20160905190813.474DB7F8D4@busybox.osuosl.org>
+Date: Mon, 5 Sep 2016 21:07:39 +0200
+Subject: [Buildroot] [git commit] privoxy: bump version to 3.0.26
+Message-ID: <20160905190813.355867F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c478dfaeeb61748f1ccab0b3e7991b8fa5967d9
+commit: https://git.buildroot.net/buildroot/commit/?id=f243fc5c2e9d36f7b60ab45f1575f9b2ff341923
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/privoxy/privoxy.hash | 6 +++---
+ package/privoxy/privoxy.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index baee620..ae7de58 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 98b26cecc6b1713082fc880344fa345c20bd7ded6459abe18c84429c7cf8ed20  mutt-1.6.1.tar.gz
-+sha256 1d3e987433d8c92ef88a604f4dcefdb35a86ce73f3eff0157e2e491e5b55b345  mutt-1.7.0.tar.gz
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index e6ea6e4..989a1b6 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
+diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
+index aea8f2d..72226b1 100644
+--- a/package/privoxy/privoxy.hash
++++ b/package/privoxy/privoxy.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.24%20%28stable%29/
+-md5	44a47d1a5000db8cccd61ace0e25e7f7	privoxy-3.0.24-stable-src.tar.gz
+-sha1	343c547a9e795ff029a78310963e0c04448975ee	privoxy-3.0.24-stable-src.tar.gz
++# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.26%20%28stable%29/
++md5 8a1c842112ccea68c19b7ceb4a0e999f  privoxy-3.0.26-stable-src.tar.gz
++sha1 b646624006225979f83453ba542e448667f45998  privoxy-3.0.26-stable-src.tar.gz
+diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
+index 4b5a1a6..267ddc2 100644
+--- a/package/privoxy/privoxy.mk
++++ b/package/privoxy/privoxy.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MUTT_VERSION = 1.6.1
-+MUTT_VERSION = 1.7.0
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPLv2+
- MUTT_LICENSE_FILES = GPL
+-PRIVOXY_VERSION = 3.0.24
++PRIVOXY_VERSION = 3.0.26
+ PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
+ PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
+ # configure not shipped
