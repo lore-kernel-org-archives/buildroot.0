@@ -1,25 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 05 Sep 2016 17:16:05 +0200
-Subject: [Buildroot] [PATH RFC] glmark2: check mesa3d opengl when adding
-	drm
-References: <1461930052-21032-1-git-send-email-mylene.josserand@free-electrons.com>
- <1461930052-21032-2-git-send-email-mylene.josserand@free-electrons.com>
-Message-ID: <lqe0adx19n.ln2@ID-313208.user.individual.net>
+Date: Mon,  5 Sep 2016 17:37:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: bump version to 12.0.2
+Message-ID: <20160905153739.30453-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 29 Apr 2016 13:40:52 +0200 schrieb Myl?ne Josserand:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/mesa3d.hash | 4 ++--
+ package/mesa3d/mesa3d.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> When using Vivante OpenGL, the mesa3d is not enabling gbm which is
-> needed by glmark3 with flavor "drm".
-
-Hi,
-
-there are other reasons why mesa3d does not provide gbm.
-I think this patch is still valid because it fixes
-http://autobuild.buildroot.net/results/cb7/cb765a1dbcbe6956a44974c3af35cf17420a6bf4/
-
-Regards, Bernd
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index fa01128..65c59a5 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2016-July/000227.html
+-sha256	bab24fb79f78c876073527f515ed871fc9c81d816f66c8a0b051d8d653896389	mesa-12.0.1.tar.xz
++# From https://cgit.freedesktop.org/mesa/mesa/plain/docs/relnotes/12.0.2.html
++sha256 d957a5cc371dcd7ff2aa0d87492f263aece46f79352f4520039b58b1f32552cb  mesa-12.0.2.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 19dec49..12ceee8 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 12.0.1
++MESA3D_VERSION = 12.0.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.9.3
