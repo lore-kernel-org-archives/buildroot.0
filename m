@@ -1,34 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  5 Sep 2016 14:18:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: glamor
-	depends on libgl
-Message-ID: <20160905121831.12790-1-bernd.kuhls@t-online.de>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 5 Sep 2016 14:40:08 +0100
+Subject: [Buildroot] [PATCH 2/6] privoxy: bump version to 3.0.26
+In-Reply-To: <1473082812-690-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1473082812-690-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1473082812-690-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/1f6/1f6131c25738577afd8e097d126e8166cbcfcdd8/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/privoxy/privoxy.hash | 6 +++---
+ package/privoxy/privoxy.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 85d7e98..51c3efc 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -214,7 +214,7 @@ endif
- ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto
- XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
--ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yy)
- XSERVER_XORG_SERVER_DEPENDENCIES += libepoxy
- XSERVER_XORG_SERVER_CONF_OPTS += --enable-glamor
- endif
+diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
+index aea8f2d..72226b1 100644
+--- a/package/privoxy/privoxy.hash
++++ b/package/privoxy/privoxy.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.24%20%28stable%29/
+-md5	44a47d1a5000db8cccd61ace0e25e7f7	privoxy-3.0.24-stable-src.tar.gz
+-sha1	343c547a9e795ff029a78310963e0c04448975ee	privoxy-3.0.24-stable-src.tar.gz
++# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.26%20%28stable%29/
++md5 8a1c842112ccea68c19b7ceb4a0e999f  privoxy-3.0.26-stable-src.tar.gz
++sha1 b646624006225979f83453ba542e448667f45998  privoxy-3.0.26-stable-src.tar.gz
+diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
+index 4b5a1a6..267ddc2 100644
+--- a/package/privoxy/privoxy.mk
++++ b/package/privoxy/privoxy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PRIVOXY_VERSION = 3.0.24
++PRIVOXY_VERSION = 3.0.26
+ PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
+ PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
+ # configure not shipped
 -- 
-2.9.3
+2.7.3
