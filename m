@@ -1,51 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Sep 2016 17:42:25 +0200
-Subject: [Buildroot] [git commit] package/binutils: Disable -Os for ARM
-	cortex-M cpus
-Message-ID: <20160905190813.1C2948042D@busybox.osuosl.org>
+Date: Mon, 5 Sep 2016 21:07:42 +0200
+Subject: [Buildroot] [git commit] git: bump version to 2.10.0
+Message-ID: <20160905190813.4FB477F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49f574237983ae2e69e4a4c43df7be98902a63be
+commit: https://git.buildroot.net/buildroot/commit/?id=d1cb59adac9dd6723fc85e43eccce7fce29c12e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
-ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
-2 bad relocscollect2: error: ld returned 1 exit status
-
-Binutils build fine with -O1, -O2 or -O3.
-
-Reported upstream:
-https://sourceware.org/bugzilla/show_bug.cgi?id=20552
-
-Fixes:
-http://autobuild.buildroot.net/results/e72/e727e6e9cf361acc786acec192a88f5f5444a2f6
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/binutils.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index ff90a16..97daeff 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -77,6 +77,13 @@ ifeq ($(BR2_bfin),y)
- BINUTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O1"
- endif
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 9776df1..e2cf300 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 9f1473350c1792310b51af03a9cb5cce841f68202f835b20d46312a30232fa63  git-2.9.3.tar.xz
++sha256 c73364ac00ae85ffc6cfb12ca2700bb0edf30f63262be97be4039be594ff29e7  git-2.10.0.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index d9cd95a..3730b77 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Workaround a build issue with -Os for ARM Cortex-M cpus.
-+# (Binutils 2.25.1 and 2.26.1)
-+# https://sourceware.org/bugzilla/show_bug.cgi?id=20552
-+ifeq ($(BR2_ARM_CPU_ARMV7M)$(BR2_OPTIMIZE_S),yy)
-+BINUTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O2"
-+endif
-+
- # Install binutils after busybox to prefer full-blown utilities
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- BINUTILS_DEPENDENCIES += busybox
+-GIT_VERSION = 2.9.3
++GIT_VERSION = 2.10.0
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
