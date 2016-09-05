@@ -1,28 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 5 Sep 2016 16:47:09 +0300
-Subject: [Buildroot] [PATCH 6/6] e2fsprogs: bump version to 1.43.2
-In-Reply-To: <1473082812-690-6-git-send-email-Vincent.Riera@imgtec.com>
-References: <1473082812-690-1-git-send-email-Vincent.Riera@imgtec.com>
- <1473082812-690-6-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160905134709.zhnxsqxlloocqvjc@tarshish>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  5 Sep 2016 16:51:19 +0200
+Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: opencv2 support is broken
+	if BR2_ARM_ENABLE_VFP is enabled
+Message-ID: <20160905145120.8613-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincente,
+Fixes
+http://autobuild.buildroot.net/results/c32/c32a21240a9933796ee850349a62ff3c2314f25c/
+http://autobuild.buildroot.net/results/22a/22a9769d83d2a398bb6b264d342b2077c41c9cc5/
 
-On Mon, Sep 05, 2016 at 02:40:12PM +0100, Vicente Olivert Riera wrote:
-> Upstream patches removed.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Is autoreconf still needed? It was introduced with cd48a7e572a (e2fsprogs: fix 
-build failure with old glibc versions) for the librt patch that this patch 
-removes.
-
-baruch
-
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index a90d437..74f783c 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -250,7 +250,8 @@ endif
+ 
+ # To avoid a circular dependency only use opencv if opencv itself does
+ # not depend on ffmpeg.
+-ifeq ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV_WITH_FFMPEG),yx)
++# opencv2 is broken if BR2_ARM_ENABLE_VFP is enabled
++ifeq ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV_WITH_FFMPEG)x$(BR2_ARM_ENABLE_VFP),yxx)
+ FFMPEG_CONF_OPTS += --enable-libopencv
+ FFMPEG_DEPENDENCIES += opencv
+ else
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.9.3
