@@ -1,48 +1,80 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 05 Sep 2016 13:05:41 +0200
-Subject: [Buildroot] [PATCH] lxc: revive "drop-werror" patch
-In-Reply-To: <20160903205335.4b1376ca@free-electrons.com>
-References: <1472916289-3927-1-git-send-email-jezz@sysmic.org>
- <20160903205335.4b1376ca@free-electrons.com>
-Message-ID: <1524184.lBqcmrBiar@sagittea>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  5 Sep 2016 13:56:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi: Fix compilation of
+	kodi-pvr-vbox with gcc6
+Message-ID: <20160905115634.15627-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Fixes a compile error not yet caught by autobuilders:
 
-On Saturday 03 September 2016 20:53:35 Thomas Petazzoni wrote:
-> On Sat,  3 Sep 2016 17:24:49 +0200, J?r?me Pouiller wrote:
-> > commit 5050a94ae9f448641e05ce29c931671ffdc62784 dropped patch that
-> > remove '-Werror' from CFLAGS. However, it seems this patch is still
-> > necessary:
-> >   http://autobuild.buildroot.net/results/b1cbca6d0396863654b1d09ccc3
-> >   163c5f6124ab8
-> >   http://autobuild.buildroot.net/results/fcf2834ad74b95548d25dad227
-> >   4704ea401f9665
-> >   http://autobuild.buildroot.net/results/048be2fc702c9dba9ca4439ff6
-> >   87d71b30c10551
-> >   http://autobuild.buildroot.net/results/939246c9a4f433dfd0dc414988
-> >   f5957441b8e9b4> 
-> > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> > ---
-> > 
-> >  package/lxc/0001-drop-werror.patch | 16 ++++++++++++++++
-> >  package/lxc/lxc.mk                 |  2 ++
-> >  2 files changed, 18 insertions(+)
-> >  create mode 100644 package/lxc/0001-drop-werror.patch
-> 
-> Applied to master, thanks. However, could you submit upstream that can
-> be accepted? For example, something that adds a --disable-werror
-> option.
+In file included from /home/bernd/buildroot/br2/output/build/kodi-pvr-vbox-15e864d160da5a051e18aef06f3a53e49808be02/src/client.cpp:24:0:
+/home/bernd/buildroot/br2/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include/kodi/xbmc_pvr_dll.h:423:63: error: 'SEEK_SET' was not declared in this scope
+   long long SeekLiveStream(long long iPosition, int iWhence = SEEK_SET);
+                                                               ^~~~~~~~
+/home/bernd/buildroot/br2/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include/kodi/xbmc_pvr_dll.h:510:67: error: 'SEEK_SET' was not declared in this scope
+   long long SeekRecordedStream(long long iPosition, int iWhence = SEEK_SET);
+                                                                   ^~~~~~~~
+CMakeFiles/pvr.vbox.dir/build.make:62: recipe for target 'CMakeFiles/pvr.vbox.dir/src/client.cpp.o' failed
 
-Unfortunately, it was rejected: https://github.com/lxc/lxc/pull/1168. I 
-have never been a good advocate.
+using this defconfig
 
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_BINUTILS_VERSION_2_26_X=y
+BR2_GCC_VERSION_6_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_INIT_NONE=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_KODI_PVR_VBOX=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_XORG7=y
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...bmc_pvr_types.h-Fix-compilation-with-gcc6.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/kodi/0011-xbmc_pvr_types.h-Fix-compilation-with-gcc6.patch
+
+diff --git a/package/kodi/0011-xbmc_pvr_types.h-Fix-compilation-with-gcc6.patch b/package/kodi/0011-xbmc_pvr_types.h-Fix-compilation-with-gcc6.patch
+new file mode 100644
+index 0000000..a3a9d50
+--- /dev/null
++++ b/package/kodi/0011-xbmc_pvr_types.h-Fix-compilation-with-gcc6.patch
+@@ -0,0 +1,30 @@
++From a17e8d39cf01e26955574acd236b4ef5b54b8c3b Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Mon, 5 Sep 2016 12:34:20 +0200
++Subject: [PATCH 2/2] xbmc_pvr_types.h: Fix compilation with gcc6
++
++Backport of upstream commit from master branch:
++https://github.com/xbmc/xbmc/commit/c8a346109926fa03bf6882c0b6e3885af0e0f8ed
++
++This patch can be removed when Kodi is bumped to 17.0-Krypton.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ xbmc/addons/include/xbmc_pvr_types.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/xbmc/addons/include/xbmc_pvr_types.h b/xbmc/addons/include/xbmc_pvr_types.h
++index c5ab20b..e518de1 100644
++--- a/xbmc/addons/include/xbmc_pvr_types.h
+++++ b/xbmc/addons/include/xbmc_pvr_types.h
++@@ -34,6 +34,7 @@
++ #endif
++ #include <string.h>
++ #include <stdint.h>
+++#include <stdio.h>
++ 
++ #include "xbmc_addon_types.h"
++ #include "xbmc_epg_types.h"
++-- 
++2.9.3
++
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+2.9.3
