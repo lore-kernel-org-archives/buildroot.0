@@ -1,36 +1,25 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 5 Sep 2016 15:53:58 +0100
-Subject: [Buildroot] [PATCH 6/6] e2fsprogs: bump version to 1.43.2
-In-Reply-To: <20160905134709.zhnxsqxlloocqvjc@tarshish>
-References: <1473082812-690-1-git-send-email-Vincent.Riera@imgtec.com>
- <1473082812-690-6-git-send-email-Vincent.Riera@imgtec.com>
- <20160905134709.zhnxsqxlloocqvjc@tarshish>
-Message-ID: <3f512f01-398f-33f2-c7b3-4e6d4fcfc922@imgtec.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 05 Sep 2016 17:16:05 +0200
+Subject: [Buildroot] [PATH RFC] glmark2: check mesa3d opengl when adding
+	drm
+References: <1461930052-21032-1-git-send-email-mylene.josserand@free-electrons.com>
+ <1461930052-21032-2-git-send-email-mylene.josserand@free-electrons.com>
+Message-ID: <lqe0adx19n.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Baruch,
+Am Fri, 29 Apr 2016 13:40:52 +0200 schrieb Myl?ne Josserand:
 
-thanks for spotting my mistake. I've sent a v2 for that patch:
+> When using Vivante OpenGL, the mesa3d is not enabling gbm which is
+> needed by glmark3 with flavor "drm".
 
-http://patchwork.ozlabs.org/patch/665875/
+Hi,
 
-Regards,
+there are other reasons why mesa3d does not provide gbm.
+I think this patch is still valid because it fixes
+http://autobuild.buildroot.net/results/cb7/cb765a1dbcbe6956a44974c3af35cf17420a6bf4/
 
-Vincent.
-
-On 05/09/16 14:47, Baruch Siach wrote:
-> Hi Vincente,
-> 
-> On Mon, Sep 05, 2016 at 02:40:12PM +0100, Vicente Olivert Riera wrote:
->> Upstream patches removed.
-> 
-> Is autoreconf still needed? It was introduced with cd48a7e572a (e2fsprogs: fix 
-> build failure with old glibc versions) for the librt patch that this patch 
-> removes.
-> 
-> baruch
-> 
+Regards, Bernd
