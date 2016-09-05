@@ -1,54 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Sep 2016 22:17:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi: Fix compilation of
- kodi-pvr-vbox with gcc6
-In-Reply-To: <20160905115634.15627-1-bernd.kuhls@t-online.de>
-References: <20160905115634.15627-1-bernd.kuhls@t-online.de>
-Message-ID: <20160905221739.009a2a25@free-electrons.com>
+Date: Mon, 5 Sep 2016 22:17:47 +0200
+Subject: [Buildroot] [git commit] package/libva: bump version to 1.7.2
+Message-ID: <20160905201853.ABFC7821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=56fd53734731e13339edc2b82bdd63160f3f135d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  5 Sep 2016 13:56:34 +0200, Bernd Kuhls wrote:
-> Fixes a compile error not yet caught by autobuilders:
-> 
-> In file included from /home/bernd/buildroot/br2/output/build/kodi-pvr-vbox-15e864d160da5a051e18aef06f3a53e49808be02/src/client.cpp:24:0:
-> /home/bernd/buildroot/br2/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include/kodi/xbmc_pvr_dll.h:423:63: error: 'SEEK_SET' was not declared in this scope
->    long long SeekLiveStream(long long iPosition, int iWhence = SEEK_SET);
->                                                                ^~~~~~~~
-> /home/bernd/buildroot/br2/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include/kodi/xbmc_pvr_dll.h:510:67: error: 'SEEK_SET' was not declared in this scope
->    long long SeekRecordedStream(long long iPosition, int iWhence = SEEK_SET);
->                                                                    ^~~~~~~~
-> CMakeFiles/pvr.vbox.dir/build.make:62: recipe for target 'CMakeFiles/pvr.vbox.dir/src/client.cpp.o' failed
-> 
-> using this defconfig
-> 
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_BINUTILS_VERSION_2_26_X=y
-> BR2_GCC_VERSION_6_X=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_INIT_NONE=y
-> BR2_PACKAGE_KODI=y
-> BR2_PACKAGE_KODI_PVR_VBOX=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-> BR2_PACKAGE_XORG7=y
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...bmc_pvr_types.h-Fix-compilation-with-gcc6.patch | 30 ++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/kodi/0011-xbmc_pvr_types.h-Fix-compilation-with-gcc6.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libva/libva.hash | 4 ++--
+ package/libva/libva.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 8e8d348..c2e5ea4 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/libva/2016-June/004034.html
+-sha1	6405ce9adcad2bc31122d766f2a99250657f9f8a	libva-1.7.1.tar.bz2
++# From https://lists.freedesktop.org/archives/libva/2016-September/004379.html
++sha1 a89680d34236fdc63adeec25cf431c005644b8c6  libva-1.7.2.tar.bz2
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index b6a7ca5..df1758e 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBVA_VERSION = 1.7.1
++LIBVA_VERSION = 1.7.2
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
+ LIBVA_LICENSE = MIT
