@@ -1,62 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Sep 2016 22:10:16 +0200
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to
- arc-2016.09-eng011
-In-Reply-To: <1473097297-14777-1-git-send-email-vzakhar@synopsys.com>
-References: <1473097297-14777-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <20160905221016.70cbb083@free-electrons.com>
+Date: Mon, 5 Sep 2016 22:10:45 +0200
+Subject: [Buildroot] [git commit] micropython: replace local fix with
+	upstream one
+Message-ID: <20160905201048.77CC481D44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0a0a45f038706c74769640d05302fe1da3af4411
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  5 Sep 2016 20:41:37 +0300, Vlad Zakharov wrote:
-> As described at:
-> 4520524ba055706236db9f00dd79f1b2e2e87fde
-> this commit continues a series of updates of ARC tools.
-> This time we're updating tools to arc-2016.09-eng011.
-> 
-> This engenering build contains the following updates:
-> 1. rebase binutils on top of the latest upstream master
-> 2. update GCC to version 6.2
-> 
-> We still keep GDB as it is of arc-2016.03 release because there're some
-> issues we'd like to resolve before releasing it to wider audience.
-> 
-> So again note this is next engineering builds of arc-2016.09 series
-> and it might have all kinds of breakages, please don't use it for
-> production builds.
-> 
-> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-> ---
->  package/binutils/Config.in.host                                         | 2 +-
->  .../{arc-2016.09-eng010 => arc-2016.09-eng011}/0300-ld-makefile.patch   | 0
->  .../0301-check-ldrunpath-length.patch                                   | 0
->  .../0500-add-sysroot-fix-from-bug-3049.patch                            | 0
->  .../0600-poison-system-directories.patch                                | 0
->  package/binutils/binutils.hash                                          | 2 +-
->  package/binutils/binutils.mk                                            | 2 +-
->  package/gcc/Config.in.host                                              | 2 +-
->  .../301-missing-execinfo_h.patch                                        | 0
->  .../gcc/{arc-2016.09-eng010 => arc-2016.09-eng011}/860-cilk-wchar.patch | 0
->  .../940-uclinux-enable-threads.patch                                    | 0
->  package/gcc/gcc.hash                                                    | 2 +-
->  12 files changed, 5 insertions(+), 5 deletions(-)
->  rename package/binutils/{arc-2016.09-eng010 => arc-2016.09-eng011}/0300-ld-makefile.patch (100%)
->  rename package/binutils/{arc-2016.09-eng010 => arc-2016.09-eng011}/0301-check-ldrunpath-length.patch (100%)
->  rename package/binutils/{arc-2016.09-eng010 => arc-2016.09-eng011}/0500-add-sysroot-fix-from-bug-3049.patch (100%)
->  rename package/binutils/{arc-2016.09-eng010 => arc-2016.09-eng011}/0600-poison-system-directories.patch (100%)
->  rename package/gcc/{arc-2016.09-eng010 => arc-2016.09-eng011}/301-missing-execinfo_h.patch (100%)
->  rename package/gcc/{arc-2016.09-eng010 => arc-2016.09-eng011}/860-cilk-wchar.patch (100%)
->  rename package/gcc/{arc-2016.09-eng010 => arc-2016.09-eng011}/940-uclinux-enable-threads.patch (100%)
+The fix from commit 26248571b625 ("micropython: fix build failures") was
+applied upstream. This replaces the local buildroot fix with the patch
+that was accepted upstream.
 
-Applied to master, thanks.
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ....c-provide-mp_raw_code_load_file-for-any-.patch | 27 ----------------------
+ package/micropython/micropython.hash               |  1 +
+ package/micropython/micropython.mk                 |  1 +
+ 3 files changed, 2 insertions(+), 27 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/micropython/0002-py-emitglue.c-provide-mp_raw_code_load_file-for-any-.patch b/package/micropython/0002-py-emitglue.c-provide-mp_raw_code_load_file-for-any-.patch
+deleted file mode 100644
+index 8465ce9..0000000
+--- a/package/micropython/0002-py-emitglue.c-provide-mp_raw_code_load_file-for-any-.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 4177e71862a2817d2555abd8d0bc9a8a361dad8a Mon Sep 17 00:00:00 2001
+-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+-Date: Sat, 3 Sep 2016 20:44:12 +1200
+-Subject: [PATCH] py/emitglue.c: provide mp_raw_code_load_file for any unix
+- architecture
+-
+-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+----
+- py/emitglue.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/py/emitglue.c b/py/emitglue.c
+-index 1b9992b..2e79d5f 100644
+---- a/py/emitglue.c
+-+++ b/py/emitglue.c
+-@@ -381,7 +381,7 @@ mp_raw_code_t *mp_raw_code_load_mem(const byte *buf, size_t len) {
+- // here we define mp_raw_code_load_file depending on the port
+- // TODO abstract this away properly
+- 
+--#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__) || (defined(__arm__) && (defined(__unix__)))
+-+#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__) || defined(__unix__)
+- // unix file reader
+- 
+- #include <sys/stat.h>
+--- 
+-2.9.2.518.ged577c6.dirty
+-
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+index ea42bfb..a8ad2ba 100644
+--- a/package/micropython/micropython.hash
++++ b/package/micropython/micropython.hash
+@@ -1,2 +1,3 @@
+ #locally computed
+ sha256 871378fcf1f1042c399896d5673da67d12e1fb36c2e706af289fc959bc8f7a57  micropython-v1.8.3.tar.gz
++sha256 ff3194ebecda99023d7c1bb94d32b31b9491e95a79958a25ffd05213c5553acc  8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 047e340..590956e 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -9,6 +9,7 @@ MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
+ MICROPYTHON_LICENSE = MIT
+ MICROPYTHON_LICENSE_FILES = LICENSE
+ MICROPYTHON_DEPENDENCIES = host-pkgconf libffi
++MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch
+ 
+ # Use fallback implementation for exception handling on architectures that don't
+ # have explicit support.
