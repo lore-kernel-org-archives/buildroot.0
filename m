@@ -1,59 +1,48 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Mon, 5 Sep 2016 16:15:47 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-09-04
-In-Reply-To: <20160905063032.D7B78102B17@stock.ovh.net>
-References: <20160905063032.D7B78102B17@stock.ovh.net>
-Message-ID: <CAAEAJfCmiL6T=P=s_2UwVAk4BxxjJCaxqqdDsjnN3UD_809MGQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Sep 2016 21:48:18 +0200
+Subject: [Buildroot] [PATCH v2] package/binutils: Disable -Os for ARM
+ cortex-M cpus
+In-Reply-To: <1472998440-7543-1-git-send-email-romain.naour@gmail.com>
+References: <1472998440-7543-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160905214818.5a7fd3fd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello,
 
-On 5 September 2016 at 03:30, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-[..]
->          arm |                   fio-fio-2.13 | NOK | http://autobuild.buildroot.net/results/6b318983a1a318d30acb9c25f17065fbc4a0302a
+On Sun,  4 Sep 2016 16:14:00 +0200, Romain Naour wrote:
+> ERROR: reloc type R_ARM_THM_MOVW_ABS_NC unsupported in this context
+> ERROR: reloc type R_ARM_THM_MOVT_ABS unsupported in this context
+> 2 bad relocscollect2: error: ld returned 1 exit status
+> 
+> Binutils build fine with -O1, -O2 or -O3.
+> 
+> Reported upstream:
+> https://sourceware.org/bugzilla/show_bug.cgi?id=20552
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/e72/e727e6e9cf361acc786acec192a88f5f5444a2f6
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> v2: fix condition (ThomasP)
+>     report the issue upstream (ThomasP)
+>     use O2 instead of O1 (Baruch)
+> ---
+>  package/binutils/binutils.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-Tried to tackle this one, but it seems the problem is with the
-external toolchain. Let me post the error here to make the
-discussion easier:
+Applied to master, thanks. Of course, once we get the feedback from
+Nicholas Walton, we might re-adjust this fix.
 
-In file included from
-/home/test/autobuild/run/instance-0/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/endian.h:60:0,
-                 from
-/home/test/autobuild/run/instance-0/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/waitstatus.h:64,
-                 from
-/home/test/autobuild/run/instance-0/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/stdlib.h:42,
-                 from t/../flist.h:4,
-                 from t/btrace2fio.c:9:
-/home/test/autobuild/run/instance-0/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/byteswap.h:
-In function 'main':
-/home/test/autobuild/run/instance-0/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/byteswap.h:46:10:
-fatal error: You must enable NEON instructions (e.g.
--mfloat-abi=softfp -mfpu=neon) to use these intrinsics.
-   return __builtin_bswap32 (__bsx);
-          ^~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [t/btrace2fio.o] Error 1
+Thanks,
 
-AFAICS, the code doesn't directly use NEON intrinsics,
-so it's not fio's fault. After some digging, I found
-a gcc upstream report [1]. Quoting:
-
-""
-Note that `NEON` isn't enabled and there's no direct use
-of NEON instructions/intrinsics in the code so the NEON
-instructions must have been added by the optimizer.
-Seemingly subtle change can make the error disappear.
-""
-
-Which is exaclty what I'm seeing here. The issue is fixed in gcc v6.2.
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71056
+Thomas
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
