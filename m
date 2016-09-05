@@ -1,38 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Sep 2016 22:36:37 +0200
-Subject: [Buildroot] Thanks OpenWide/Smile for the sponsoring!
-Message-ID: <20160905223637.6220a957@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  5 Sep 2016 22:37:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/amd-catalyst: fix legal-info
+Message-ID: <20160905203755.20519-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Fixes
+http://autobuild.buildroot.net/results/4f1/4f1e9b4bf43add4712e82d4a58e633abb2a7d2b8/
 
-I would like to publicly thank OpenWide/Smile [1] for its sponsoring of
-the last Buildroot Summer Camp that took place in Toulouse early July.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/amd-catalyst/amd-catalyst.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Smile covered all the food expenses for the entire 5 days event, during
-which 6 Buildroot developers met and were able to achieve an incredible
-amount of work. See [2] for more details about the report. In addition
-to this, Smile also sponsored the participation of Romain Naour.
-
-In addition to the numerous companies contributing to Buildroot, it is
-also great to see some companies financially sponsoring the project.
-
-And of course, sponsors for our upcoming Buildroot Developer Days in
-Berlin (early October) are more than welcome!
-
-Thanks again to Smile for this sponsoring!
-
-Best regards,
-
-Thomas
-
-[1] https://openwide.fr/
-[2] http://lists.busybox.net/pipermail/buildroot/2016-July/167050.html
+diff --git a/package/amd-catalyst/amd-catalyst.mk b/package/amd-catalyst/amd-catalyst.mk
+index 3097353..5636f81 100644
+--- a/package/amd-catalyst/amd-catalyst.mk
++++ b/package/amd-catalyst/amd-catalyst.mk
+@@ -10,7 +10,7 @@ AMD_CATALYST_SITE = http://www2.ati.com/drivers/linux
+ AMD_CATALYST_DL_OPTS = --referer='http://support.amd.com'
+ AMD_CATALYST_SOURCE = amd-catalyst-$(AMD_CATALYST_VERSION)-linux-installer-$(AMD_CATALYST_VERBOSE_VER)-x86.x86_64.zip
+ AMD_CATALYST_LICENSE = AMD Software License
+-AMD_CATALYST_LICENSE_FILES = LICENSE.txt
++AMD_CATALYST_LICENSE_FILES = LICENSE.TXT
+ AMD_CATALYST_INSTALL_STAGING = YES
+ AMD_CATALYST_SUFFIX = $(if $(BR2_x86_64),_64)
+ AMD_CATALYST_ARCH_DIR = $(@D)/arch/x86$(AMD_CATALYST_SUFFIX)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
