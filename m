@@ -1,77 +1,101 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon,  5 Sep 2016 21:16:15 +1200
-Subject: [Buildroot] [PATCH] micropython: replace local fix with upstream one
-Message-ID: <20160905091615.9075-1-judge.packham@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 5 Sep 2016 11:30:47 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-09-02
+In-Reply-To: <87vayau5yt.fsf@dell.be.48ers.dk>
+References: <20160903063033.788551028C6@stock.ovh.net>
+ <2181287.8UlWShMbI3@sagittea>
+ <20160903203613.2a7f0a32@free-electrons.com>
+ <1496256.AqCB2eOqyL@sagittea>
+ <20160903232302.40ff0733@free-electrons.com>
+ <87vayau5yt.fsf@dell.be.48ers.dk>
+Message-ID: <20160905093047.GB5553@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The fix from commit 26248571b625 ("micropython: fix build failures") was
-applied upstream. This replaces the local buildroot fix with the patch
-that was accepted upstream.
+Peter, All,
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
- ....c-provide-mp_raw_code_load_file-for-any-.patch | 27 ----------------------
- package/micropython/micropython.hash               |  1 +
- package/micropython/micropython.mk                 |  1 +
- 3 files changed, 2 insertions(+), 27 deletions(-)
- delete mode 100644 package/micropython/0002-py-emitglue.c-provide-mp_raw_code_load_file-for-any-.patch
+On 2016-09-05 10:05 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>  >> > However, we could discuss whether it really makes sense to use
+>  >> > https:// as the main download location when all downloads anyway fall
+>  >> > back to downloading from sources.buildroot.net over http://.  
+>  >> 
+>  >> sources.buildroot.net should provide an https access?
+> 
+>  > I am not a security expert, I am not sure if this is really useful. I
+>  > don't think there's anything secret in those communications, and the
+>  > integrity of the downloaded tarballs is verified using hashes.
+> 
+>  > Maybe the solution to the whole problem is to use http:// when
+>  > available over https:// ? Though admittedly more and more sites tend to
+>  > redirect http to https and force people to use secure connections
+>  > (which is a good thing).
+> 
+>  > I'm open to suggestions from others on this.
+> 
+> Well, the problems we typically run into are:
+> 
+> - Websites using TLS with SNI (to not 'waste' an IP address per site),
+>   which isn't supported by old wget versions
+> 
+> - Websites signed with new certificates not known by older distributions
+> 
+> - Misconfigured websites or website using self signed certificates
+> 
+> The reason we have preferred https was to ensure data integrity
+> (E.G. make sure we get the correct tarball), not for privacy.
 
-diff --git a/package/micropython/0002-py-emitglue.c-provide-mp_raw_code_load_file-for-any-.patch b/package/micropython/0002-py-emitglue.c-provide-mp_raw_code_load_file-for-any-.patch
-deleted file mode 100644
-index 8465ce9..0000000
---- a/package/micropython/0002-py-emitglue.c-provide-mp_raw_code_load_file-for-any-.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 4177e71862a2817d2555abd8d0bc9a8a361dad8a Mon Sep 17 00:00:00 2001
--From: Chris Packham <chris.packham@alliedtelesis.co.nz>
--Date: Sat, 3 Sep 2016 20:44:12 +1200
--Subject: [PATCH] py/emitglue.c: provide mp_raw_code_load_file for any unix
-- architecture
--
--Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-----
-- py/emitglue.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/py/emitglue.c b/py/emitglue.c
--index 1b9992b..2e79d5f 100644
----- a/py/emitglue.c
--+++ b/py/emitglue.c
--@@ -381,7 +381,7 @@ mp_raw_code_t *mp_raw_code_load_mem(const byte *buf, size_t len) {
-- // here we define mp_raw_code_load_file depending on the port
-- // TODO abstract this away properly
-- 
---#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__) || (defined(__arm__) && (defined(__unix__)))
--+#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__) || defined(__unix__)
-- // unix file reader
-- 
-- #include <sys/stat.h>
---- 
--2.9.2.518.ged577c6.dirty
--
-diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
-index ea42bfb..a8ad2ba 100644
---- a/package/micropython/micropython.hash
-+++ b/package/micropython/micropython.hash
-@@ -1,2 +1,3 @@
- #locally computed
- sha256 871378fcf1f1042c399896d5673da67d12e1fb36c2e706af289fc959bc8f7a57  micropython-v1.8.3.tar.gz
-+sha256 ff3194ebecda99023d7c1bb94d32b31b9491e95a79958a25ffd05213c5553acc  8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index 047e340..590956e 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -9,6 +9,7 @@ MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
- MICROPYTHON_LICENSE = MIT
- MICROPYTHON_LICENSE_FILES = LICENSE
- MICROPYTHON_DEPENDENCIES = host-pkgconf libffi
-+MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch
- 
- # Use fallback implementation for exception handling on architectures that don't
- # have explicit support.
+Not sure. If you download the tarball for the tor package, you are
+most probably flagged as an interesting target by Eve (or any other
+three-letter agency ;-] ).
+
+> With the
+> download hashes this doesn't really matter much, as corruption will be
+> discovered by the hashes.
+
+Hashes are not only about integrity. They are about authenticity as
+well: be sure that upstream did not update the archive with another
+re-release.
+
+> I think our options are:
+> 
+> - Do nothing. The issue is not so big, and presumably will get smaller
+>   over time as older distributions get updated.
+
+That means we basically don't care about such old distributions anymore,
+and that we should upgrade our autobuilders (or at least locally install
+a wget that does accepts newer https stuff). That's fine with me.
+
+> - Change HTTPS URLs to HTTP where possible. Notice that these days a
+>   number of websites use HSTS headers to enforce HTTPS. I'm not sure
+>   when HSTS support got added to wget though (not clear from changelog)
+
+I would favour we stick to https where upstream provides it.
+
+> - Pass --no-check-certificate in BR2_WGET to disable the check, working
+>   around the issues.
+
+Maybe a note in the manual and (as J?r?me suggested) catch such a failure
+in our wget wrapper? (but I wouldn't like we do the latter).
+
+But I would argue against the suggestion to use --no-check-certificate,
+and rather suggest to install a newer wget.
+
+My suggestion would be we do (both):
+  - add the note in the manual,
+  - update the affected autobuilders (or at least install a newer wget).
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.9.2.518.ged577c6.dirty
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
