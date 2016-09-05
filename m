@@ -1,59 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  5 Sep 2016 23:00:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/opencv3: use
-	BR2_TOOLCHAIN_HAS_LIBATOMIC
-Message-ID: <20160905210056.24393-1-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  5 Sep 2016 18:16:52 -0300
+Subject: [Buildroot] [PATCH] libgtk3: fix typo
+Message-ID: <1473110212-14012-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It uses __atomic_fetch_add_4 so libatomic must be pulled in if
-necessary. Fixes
-http://autobuild.buildroot.net/results/652/6521223b426c3cb4dfefab27bc6021900db6910e/
+It's wayland, not waylandd, hence gtk3+ with the wayland backend went
+completely poof.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/opencv3/Config.in  | 2 ++
- package/opencv3/opencv3.mk | 5 +++++
- 2 files changed, 7 insertions(+)
+ package/libgtk3/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-index 2f4aa7a..4c00bf1 100644
---- a/package/opencv3/Config.in
-+++ b/package/opencv3/Config.in
-@@ -1,6 +1,7 @@
- menuconfig BR2_PACKAGE_OPENCV3
- 	bool "opencv3"
- 	select BR2_PACKAGE_ZLIB
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
-@@ -335,6 +336,7 @@ config BR2_PACKAGE_OPENCV3_INSTALL_DATA
- endif # BR2_PACKAGE_OPENCV3
- 
- comment "opencv3 needs a toolchain w/ C++, NPTL, wchar, dynamic library"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 91cdfe6..2529de9 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -10,6 +10,11 @@ OPENCV3_INSTALL_STAGING = YES
- OPENCV3_LICENSE = BSD-3c
- OPENCV3_LICENSE_FILES = LICENSE
- 
-+# Uses __atomic_fetch_add_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+OPENCV3_CONF_OPTS += -DCMAKE_CXX_FLAGS="-latomic"
-+endif
-+
- # OpenCV component options
- OPENCV3_CONF_OPTS += \
- 	-DBUILD_DOCS=OFF \
+diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
+index 2dd6dfa..738f865 100644
+--- a/package/libgtk3/Config.in
++++ b/package/libgtk3/Config.in
+@@ -29,7 +29,7 @@ config BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLANDD || \
++	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+ 		BR2_PACKAGE_HAS_LIBGL
+ 	help
+ 	  The GTK+ version 3 graphical user interface library
 -- 
-2.9.3
+2.7.3
