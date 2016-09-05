@@ -1,62 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Sep 2016 00:22:54 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: opencv2 support is
- broken if BR2_ARM_ENABLE_VFP is enabled
-In-Reply-To: <20160905220540.633a3cd4@free-electrons.com>
-References: <20160905145120.8613-1-bernd.kuhls@t-online.de>
- <20160905220540.633a3cd4@free-electrons.com>
-Message-ID: <8f363a01-6a59-623b-4f81-0108feefa367@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  5 Sep 2016 19:29:46 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
+Message-ID: <1473114586-10546-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-On 05-09-16 22:05, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon,  5 Sep 2016 16:51:19 +0200, Bernd Kuhls wrote:
->> Fixes
->> http://autobuild.buildroot.net/results/c32/c32a21240a9933796ee850349a62ff3c2314f25c/
->> http://autobuild.buildroot.net/results/22a/22a9769d83d2a398bb6b264d342b2077c41c9cc5/
->>
->> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->> ---
->>  package/ffmpeg/ffmpeg.mk | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
->> index a90d437..74f783c 100644
->> --- a/package/ffmpeg/ffmpeg.mk
->> +++ b/package/ffmpeg/ffmpeg.mk
->> @@ -250,7 +250,8 @@ endif
->>  
->>  # To avoid a circular dependency only use opencv if opencv itself does
->>  # not depend on ffmpeg.
->> -ifeq ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV_WITH_FFMPEG),yx)
->> +# opencv2 is broken if BR2_ARM_ENABLE_VFP is enabled
->> +ifeq ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV_WITH_FFMPEG)x$(BR2_ARM_ENABLE_VFP),yxx)
-> 
-> I'm not really happy with this fix. When you're using OpenCV/FFmpeg on
-> ARM, you definitely want to be able to use the VFP. So I'd prefer to
-> see the problem fixed rather than having this combination disabled.
-
- Well, since there is now the possibility to use opencv3 instead, which has
-fixed the issue, I think this isn't much of a problem, no?
-
- Regards,
- Arnout
-
-> 
-> Thomas
-> 
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f3a99e5..7f7382c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -240,10 +240,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.103"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.77"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.18.40"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.41"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.31"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.32"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+ 	default "4.4.19"	if BR2_KERNEL_HEADERS_4_4
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.3
