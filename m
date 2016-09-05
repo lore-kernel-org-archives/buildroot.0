@@ -1,70 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 05 Sep 2016 10:05:30 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-09-02
-In-Reply-To: <20160903232302.40ff0733@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 3 Sep 2016 23:23:02 +0200")
-References: <20160903063033.788551028C6@stock.ovh.net>
- <2181287.8UlWShMbI3@sagittea>
- <20160903203613.2a7f0a32@free-electrons.com>
- <1496256.AqCB2eOqyL@sagittea>
- <20160903232302.40ff0733@free-electrons.com>
-Message-ID: <87vayau5yt.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 5 Sep 2016 10:14:28 +0200
+Subject: [Buildroot] Analysis of build results for 2016-08-08
+In-Reply-To: <09e2a649-7606-8726-520f-c33934424413@free.fr>
+References: <20160809063032.89898101A55@stock.ovh.net>
+ <20160809141535.4c9b8169@free-electrons.com>
+ <17850212-c769-63c4-f05b-79adc47f470c@gmail.com>
+ <34622bb9-7ff7-2d15-fa97-e5ed6570034b@gmail.com>
+ <2e0ca47d-83cf-4c2d-844b-9560b98733c3@free.fr>
+ <81bcbe49-664c-6d7d-f12c-e4b66c53a91a@mind.be>
+ <09e2a649-7606-8726-520f-c33934424413@free.fr>
+Message-ID: <24787add-75fb-ff38-fc57-3bbf6626322d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
 
- >> > However, we could discuss whether it really makes sense to use
- >> > https:// as the main download location when all downloads anyway fall
- >> > back to downloading from sources.buildroot.net over http://.  
- >> 
- >> sources.buildroot.net should provide an https access?
+On 03-09-16 17:05, Julien Boibessot wrote:
+> Hello,
+> 
+> Arnout,
+> 
+> On 26/08/2016 00:37, Arnout Vandecappelle wrote:
+[snip]
+>>  Looking at the source of edje_cc, it's mkstemp() that fails. Do you have TMPDIR
+>> or XDG_RUNTIME_DIR pointing to some location that is not writable or doesn't exist?
+> 
+> XDG_RUNTIME_DIR is indeed pointing to a directory that is not writable
+> for user launching the build.
+> export XDG_RUNTIME_DIR=/tmp fixes the host-efl build.
+> Where should I set this envt variable ?
+> 
+> (Build is launched through ssh+su on my build server)
 
- > I am not a security expert, I am not sure if this is really useful. I
- > don't think there's anything secret in those communications, and the
- > integrity of the downloaded tarballs is verified using hashes.
+ I guess you should unset XDG_RUNTIME_DIR somewhere in that script :-) Or maybe
+buildroot-test should do that? AFAICS it currently doesn't do any environment
+cleanups, but maybe it should?
 
- > Maybe the solution to the whole problem is to use http:// when
- > available over https:// ? Though admittedly more and more sites tend to
- > redirect http to https and force people to use secure connections
- > (which is a good thing).
+ Regards,
+ Arnout
 
- > I'm open to suggestions from others on this.
-
-Well, the problems we typically run into are:
-
-- Websites using TLS with SNI (to not 'waste' an IP address per site),
-  which isn't supported by old wget versions
-
-- Websites signed with new certificates not known by older distributions
-
-- Misconfigured websites or website using self signed certificates
-
-The reason we have preferred https was to ensure data integrity
-(E.G. make sure we get the correct tarball), not for privacy. With the
-download hashes this doesn't really matter much, as corruption will be
-discovered by the hashes.
-
-I think our options are:
-
-- Do nothing. The issue is not so big, and presumably will get smaller
-  over time as older distributions get updated.
-
-- Change HTTPS URLs to HTTP where possible. Notice that these days a
-  number of websites use HSTS headers to enforce HTTPS. I'm not sure
-  when HSTS support got added to wget though (not clear from changelog)
-
-- Pass --no-check-certificate in BR2_WGET to disable the check, working
-  around the issues.
-
-What do you say?
+> 
+> Regards,
+> Julien
+> 
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
