@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Sep 2016 23:36:11 +0200
-Subject: [Buildroot] [PATCH] libgtk3: fix typo
-In-Reply-To: <1473110212-14012-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1473110212-14012-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160905233611.1248c5cc@free-electrons.com>
+Date: Mon, 5 Sep 2016 23:39:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencv3: use
+ BR2_TOOLCHAIN_HAS_LIBATOMIC
+In-Reply-To: <20160905210056.24393-1-bernd.kuhls@t-online.de>
+References: <20160905210056.24393-1-bernd.kuhls@t-online.de>
+Message-ID: <20160905233917.329b142f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  5 Sep 2016 18:16:52 -0300, Gustavo Zacarias wrote:
-> It's wayland, not waylandd, hence gtk3+ with the wayland backend went
-> completely poof.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/libgtk3/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon,  5 Sep 2016 23:00:56 +0200, Bernd Kuhls wrote:
 
-Applied to master, thanks.
+> +# Uses __atomic_fetch_add_4
+> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> +OPENCV3_CONF_OPTS += -DCMAKE_CXX_FLAGS="-latomic"
+> +endif
+
+Isn't this overriding the flags already passed? Shouldn't it be:
+
+	-DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -latomic"
+
+or something like that?
+
+Samuel?
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
