@@ -1,43 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Sep 2016 22:17:54 +0200
-Subject: [Buildroot] [git commit] package/libva-intel-driver: bump version
-	to 1.7.2
-Message-ID: <20160905201853.B6AA1821A2@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 05 Sep 2016 22:20:25 +0200
+Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: opencv2 support is
+ broken if BR2_ARM_ENABLE_VFP is enabled
+References: <20160905145120.8613-1-bernd.kuhls@t-online.de>
+ <20160905220540.633a3cd4@free-electrons.com>
+Message-ID: <9l01adxnus.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c6635e9d6a9b0f1d361f1363c4b647adcae6da2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am Mon, 05 Sep 2016 22:05:40 +0200 schrieb Thomas Petazzoni:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libva-intel-driver/libva-intel-driver.hash | 4 ++--
- package/libva-intel-driver/libva-intel-driver.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Hello,
+> 
+> On Mon,  5 Sep 2016 16:51:19 +0200, Bernd Kuhls wrote:
+>> Fixes
+>> http://autobuild.buildroot.net/results/c32/
+c32a21240a9933796ee850349a62ff3c2314f25c/
+>> http://autobuild.buildroot.net/
+results/22a/22a9769d83d2a398bb6b264d342b2077c41c9cc5/
+>> 
+>> Signed-off-by: Bernd Kuhls
+>> <bernd.kuhls@t-online.de>
+>> ---
+>>  package/ffmpeg/ffmpeg.mk | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk index
+>> a90d437..74f783c 100644 --- a/package/ffmpeg/ffmpeg.mk +++
+>> b/package/ffmpeg/ffmpeg.mk @@ -250,7 +250,8 @@ endif
+>>  
+>>  # To avoid a circular dependency only use opencv if opencv itself does
+>>  # not depend on ffmpeg.
+>> -ifeq
+>> ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x
+$(BR2_PACKAGE_OPENCV_WITH_FFMPEG),yx)
+>> +# opencv2 is broken if BR2_ARM_ENABLE_VFP is enabled +ifeq
+>> ($(BR2_PACKAGE_OPENCV_LIB_IMGPROC)x$(BR2_PACKAGE_OPENCV_WITH_FFMPEG)x
+$(BR2_ARM_ENABLE_VFP),yxx)
+> 
+> I'm not really happy with this fix. When you're using OpenCV/FFmpeg on
+> ARM, you definitely want to be able to use the VFP. So I'd prefer to see
+> the problem fixed rather than having this combination disabled.
+> 
+> Thomas
 
-diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
-index a480c2c..24c2170 100644
---- a/package/libva-intel-driver/libva-intel-driver.hash
-+++ b/package/libva-intel-driver/libva-intel-driver.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/libva/2016-June/004035.html
--sha1	eb3660197ce4781af4db4d97b0d7965900e7b06e	libva-intel-driver-1.7.1.tar.bz2
-+# From https://lists.freedesktop.org/archives/libva/2016-September/004380.html
-+sha1 9373afadd6ec0d6d983cf5bb2001d91c22b39719  libva-intel-driver-1.7.2.tar.bz2
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-index dadd67b..c388de1 100644
---- a/package/libva-intel-driver/libva-intel-driver.mk
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVA_INTEL_DRIVER_VERSION = 1.7.1
-+LIBVA_INTEL_DRIVER_VERSION = 1.7.2
- LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
- LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
- LIBVA_INTEL_DRIVER_LICENSE = MIT
+Hi Thomas,
+
+my coding skill are insufficient to fix the problem so I marked my patch 
+as rejected. I tried to compare the ARM_ROUND_DBL function in both 
+opencv2 and opencv3 but the structure of the includes has changed so I 
+was unable to spot the fix which provides working vfp support in opencv3.
+
+Regards, Bernd
