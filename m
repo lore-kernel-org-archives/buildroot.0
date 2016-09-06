@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  5 Sep 2016 23:39:39 -0300
-Subject: [Buildroot] [PATCH] e2fsprogs: bump to version 1.43.3
-Message-ID: <1473129579-2059-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  5 Sep 2016 23:39:57 -0300
+Subject: [Buildroot] [PATCH] webkitgtk: bump to version 2.12.5
+Message-ID: <1473129597-2105-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/e2fsprogs/e2fsprogs.hash | 4 ++--
- package/e2fsprogs/e2fsprogs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 6 +++---
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index 57287f4..5fd9f3d 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,2 +1,2 @@
--# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.2/sha256sums.asc
--sha256 ddba23e44e06cbe32c7b1026bc92f9487b9cb08c89e961d007cb2a5e87c4ef5e  e2fsprogs-1.43.2.tar.xz
-+# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.3/sha256sums.asc
-+sha256 744ca4e9a8e6c943601b2744d1ae658e5f37d35b5ea5b1dea86985320bd87f37  e2fsprogs-1.43.3.tar.xz
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 3f3b1c0..022ba52 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index f74677e..f01c7f0 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From http://www.webkitgtk.org/releases/webkitgtk-2.12.4.tar.xz.sha1
+-sha1	ebfe6015d81129b6a13a9596d065c54e9c1b93f6	webkitgtk-2.12.4.tar.xz
++# From http://www.webkitgtk.org/releases/webkitgtk-2.12.5.tar.xz.sha1
++sha1	2d73fd5b47c68c73aea8b3d7b88acc8e62bdb99c	webkitgtk-2.12.5.tar.xz
+ # Calculated based on the hash above
+-sha256	424d3177599abbc1eb1a1ad7928dd280a62006e992f2fada2e059375a9609a77	webkitgtk-2.12.4.tar.xz
++sha256	6b147854b864a5f115fadb97b2b6200b2f696db015216a34e7298d11c88b1c40	webkitgtk-2.12.5.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index f5c4334..7843373 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--E2FSPROGS_VERSION = 1.43.2
-+E2FSPROGS_VERSION = 1.43.3
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
+-WEBKITGTK_VERSION = 2.12.4
++WEBKITGTK_VERSION = 2.12.5
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 -- 
 2.7.3
