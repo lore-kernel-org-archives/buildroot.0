@@ -1,113 +1,40 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 6 Sep 2016 19:58:06 +0200
-Subject: [Buildroot] [PATCH v1] qt5base: remove libudev dependency from
- kms
-In-Reply-To: <20160820231525.GC5784@free.fr>
-References: <1471720194-22686-1-git-send-email-ps.report@gmx.net>
- <20160820231525.GC5784@free.fr>
-Message-ID: <20160906195806.2e7e363a@gmx.net>
+From: Nicholas Walton <nicholas.walton@gmail.com>
+Date: Tue, 06 Sep 2016 18:53:28 +0000
+Subject: [Buildroot] [PATCH] package/binutils: Disable -Os for Thumb-2
+ only platforms
+In-Reply-To: <CAKXOQBx=jhz+8464896oWub0JzFuvRvGFfgwTwF6KkcjVVXkzQ@mail.gmail.com>
+References: <1472978990-14884-1-git-send-email-romain.naour@gmail.com>
+ <20160904144314.2dd0f130@free-electrons.com>
+ <CAKXOQBx=jhz+8464896oWub0JzFuvRvGFfgwTwF6KkcjVVXkzQ@mail.gmail.com>
+Message-ID: <CAKXOQBz6bodbdaeygsxnD9H++c8sRNB4GDq-QW2A3hOdfqEG3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Please disregard my previous message:
 
-On Sun, 21 Aug 2016 01:15:25 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Sun, Sep 4, 2016 at 10:52 AM Nicholas Walton <nicholas.walton@gmail.com>
+wrote:
 
-> Peter, All,
-> 
-> On 2016-08-20 21:09 +0200, Peter Seiderer spake thusly:
-> > Use upstream patch [1]
-> 
-> I'd say be carefull when backporting patches from upstream, especially
-> since upstream has changed the license after the Qt-5.6 release.
-> 
-> Backporting a patch in this case would risk propagating the new license.
-> 
+> I found a bug report about a similar error in a different package, and I
+> saw it on a non-Thumb-2 platform (ARM9).
+>
 
-Thanks for license change hint, will double check in future...
+The error I was remembering was bad code generation causing a segfault
+(which I saw in libfb.so). Restricting xserver_xorg-server to -O2
+(5500211e201f84b6e2ce0dd5ff3013fb92628860)
+fixed it. I suspect the root cause was related to *Bug 63346*
+<https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63346> -
+"xserver_xorg-server-1.15.1
+crash on RaspberryPi . . . gcc-4.9", and/or* Bug 69614*
+<https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69614> - "[4.9/5 Regression]
+wrong code with -Os -fno-expensive . . . @ armv7a". Bug 69614 is fixed in
+6.0 and the patch was backported to 5, but not to 4.9.
 
-Hope it is no problem here because the same patch (despite my original
-source link from 5.7 branch) is although available from the 5.6
-branch ([3])...
-
-Regards,
-Peter
-
-[3] https://code.qt.io/cgit/qt/qtbase.git/commit/config.tests/qpa/kms/kms.pro?h=5.6&id=72492735b7b7770808fcc9fe067e8f03fab827fc
-
-
-> However, this is acceptable in this case, because this only touches the
-> .pro file, which is part of the buildsystem.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > Fixes [2]:
-> > 
-> >   KMS auto-detection... ()
-> >   Project ERROR: libudev development package not found
-> >   KMS disabled.
-> >    KMS support cannot be enabled due to functionality tests!
-> >    Turn on verbose messaging (-v) to ./configure to see the final report.
-> >    If you believe this message is in error you may use the continue
-> >    switch (-continue) to ./configure to continue.
-> > 
-> > [1] https://code.qt.io/cgit/qt/qtbase.git/patch/?id=72492735b7b7770808fcc9fe067e8f03fab827fc
-> > [2] http://autobuild.buildroot.net/results/063/063859ad460552dd7c101115500b7845045a134f
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  ...07-Remove-libudev-dependency-from-kms.pro.patch | 33 ++++++++++++++++++++++
-> >  1 file changed, 33 insertions(+)
-> >  create mode 100644 package/qt5/qt5base/0007-Remove-libudev-dependency-from-kms.pro.patch
-> > 
-> > diff --git a/package/qt5/qt5base/0007-Remove-libudev-dependency-from-kms.pro.patch b/package/qt5/qt5base/0007-Remove-libudev-dependency-from-kms.pro.patch
-> > new file mode 100644
-> > index 0000000..7ecbcd0
-> > --- /dev/null
-> > +++ b/package/qt5/qt5base/0007-Remove-libudev-dependency-from-kms.pro.patch
-> > @@ -0,0 +1,33 @@
-> > +From 0f1b4bb65abe0e36e9e4b9813e45192223509de8 Mon Sep 17 00:00:00 2001
-> > +From: Ralf Nolden <nolden@kde.org>
-> > +Date: Tue, 17 May 2016 12:57:17 +0200
-> > +Subject: [PATCH] Remove libudev dependency from kms.pro
-> > +
-> > +To compile the kms qpa plugin, only libdrm is needed.
-> > +Remove the libudev dependency for the compile check to enable
-> > +building of the qpa plugin on platforms where libudev is not present
-> > +such as BSD systems (but where KMS works)
-> > +
-> > +Change-Id: Icd0be70a8949578a6158d523428706890a9674eb
-> > +Reviewed-by: Laszlo Agocs <laszlo.agocs@theqtcompany.com>
-> > +Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@theqtcompany.com>
-> > +
-> > +Upstream: https://code.qt.io/cgit/qt/qtbase.git/patch/?id=72492735b7b7770808fcc9fe067e8f03fab827fc
-> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > +---
-> > + config.tests/qpa/kms/kms.pro | 2 +-
-> > + 1 file changed, 1 insertion(+), 1 deletion(-)
-> > +
-> > +diff --git a/config.tests/qpa/kms/kms.pro b/config.tests/qpa/kms/kms.pro
-> > +index 1fb7367..5147bc8 100644
-> > +--- a/config.tests/qpa/kms/kms.pro
-> > ++++ b/config.tests/qpa/kms/kms.pro
-> > +@@ -1,4 +1,4 @@
-> > + SOURCES = kms.cpp
-> > + CONFIG += link_pkgconfig
-> > +-PKGCONFIG += libdrm libudev
-> > ++PKGCONFIG += libdrm
-> > + CONFIG -= qt
-> > +-- 
-> > +2.8.1
-> > +
-> > -- 
-> > 2.8.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Apologies,
+Nicholas Walton
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160906/cbfe59a1/attachment.html>
