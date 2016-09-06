@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Sep 2016 21:51:24 +0200
-Subject: [Buildroot] [PATCH 1/9] package/efl: bump to 1.18.0
-In-Reply-To: <1472848295-13734-1-git-send-email-romain.naour@gmail.com>
+Date: Tue, 6 Sep 2016 21:51:30 +0200
+Subject: [Buildroot] [PATCH 2/9] package/enlightenment: remove
+ elementary dependency
+In-Reply-To: <1472848295-13734-2-git-send-email-romain.naour@gmail.com>
 References: <1472848295-13734-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160906215124.23088053@free-electrons.com>
+ <1472848295-13734-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160906215130.2a65664b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +14,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  2 Sep 2016 22:31:27 +0200, Romain Naour wrote:
-> Elementary, evas-generic-loaders and emotion-generic-loaders are now
-> part of efl 1.18 package [1].
-> 
-> Merge the elementery and evas-generic-loaders package to the efl one.
-> 
-> Rename librsvg option (srvg/libsrvg)
-> 
-> [1] https://phab.enlightenment.org/w/efl_and_elementary_1_18/
+On Fri,  2 Sep 2016 22:31:28 +0200, Romain Naour wrote:
+> elementary is now provided by efl package, so remove elementary package
+> dependency.
 > 
 > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  package/efl/Config.in | 14 ++++++++++++++
->  package/efl/efl.hash  |  4 ++--
->  package/efl/efl.mk    | 35 ++++++++++++++++++++++++++++++++++-
->  3 files changed, 50 insertions(+), 3 deletions(-)
+>  package/enlightenment/Config.in        | 1 -
+>  package/enlightenment/enlightenment.mk | 1 -
+>  2 files changed, 2 deletions(-)
 
 Applied to master, thanks.
 
