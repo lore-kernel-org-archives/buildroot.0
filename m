@@ -1,22 +1,42 @@
-From: Jeff Gray <jeff.gray@sato-global.com>
-Date: Tue, 6 Sep 2016 13:37:50 +1000
-Subject: [Buildroot] Error with OVERRIDE_SRCDIR in 2016.08
-In-Reply-To: <20160905094832.GD5553@free.fr>
-References: <CAHb0ztmgZ9sMB0OxF5D7DYmZaU4vekUDcyxp96Ws+w84ZM_R+Q@mail.gmail.com>
- <20160905093714.GC5553@free.fr> <20160905094832.GD5553@free.fr>
-Message-ID: <CAHb0ztmYmJ6CELYpcJLrS67sfzg3e2MhZk_+Wh__cvCu=4qEDQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  6 Sep 2016 00:45:57 -0300
+Subject: [Buildroot] [PATCH] ncmpc: bump to version 0.25
+Message-ID: <1473133557-9202-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you, that works well. I like the SITE_METHOD as that also means I
-don't have -custom on the output directory names.
+The download has a .sig file so use it.
 
-I did not know about your first idea of using _SOURCE=<empty> and could not
-find it in the manual. It might be worth adding a comment about this in the
-manual or making it clearer if it is already there.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160906/76279ef3/attachment-0001.html>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ncmpc/ncmpc.hash | 4 ++--
+ package/ncmpc/ncmpc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/ncmpc/ncmpc.hash b/package/ncmpc/ncmpc.hash
+index 1acc64d..e7646b2 100644
+--- a/package/ncmpc/ncmpc.hash
++++ b/package/ncmpc/ncmpc.hash
+@@ -1,2 +1,2 @@
+-# Calculated locally
+-sha256 0e6f76b2b11449cfa479d2830ac681f4e3bff54a95a9134b069dd5a173b4c3e9 ncmpc-0.24.tar.xz
++# Locally calculated after checking pgp signature
++sha256 6e328acb71d06ae9e6c5fced99bc28ae78bcab1a73130b42ce9ab08a814ecea4 ncmpc-0.25.tar.xz
+diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
+index 050b6b8..b5fa7cd 100644
+--- a/package/ncmpc/ncmpc.mk
++++ b/package/ncmpc/ncmpc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NCMPC_VERSION_MAJOR = 0
+-NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).24
++NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).25
+ NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
+ NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
+ NCMPC_DEPENDENCIES = host-pkgconf libglib2 libmpdclient ncurses
+-- 
+2.7.3
