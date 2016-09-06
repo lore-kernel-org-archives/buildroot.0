@@ -1,11 +1,11 @@
 From: Julien CORJON <corjon.j@ecagroup.com>
-Date: Tue, 6 Sep 2016 10:21:05 +0000
-Subject: [Buildroot] [PATCH 2/9 v4] core: get rid of our dummy
- br2-external tree
-In-Reply-To: <ecefa302f03904fbc18a7138ed37e905c1316411.1473109655.git.yann.morin.1998@free.fr>
+Date: Tue, 6 Sep 2016 10:21:17 +0000
+Subject: [Buildroot] [PATCH 6/9 v4] docs/manual: document the
+ br2-external NAME
+In-Reply-To: <5b0e806ca88df47f4e5221cf4bbe7a60ed79c867.1473109655.git.yann.morin.1998@free.fr>
 References: <cover.1473109655.git.yann.morin.1998@free.fr>
- <ecefa302f03904fbc18a7138ed37e905c1316411.1473109655.git.yann.morin.1998@free.fr>
-Message-ID: <e20f1363-7c24-6995-81bf-1b7ad163406b@ecagroup.com>
+ <5b0e806ca88df47f4e5221cf4bbe7a60ed79c867.1473109655.git.yann.morin.1998@free.fr>
+Message-ID: <b5a5d20b-25b3-7a83-0f7b-1b9d00ca616a@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,144 +14,363 @@ To: buildroot@busybox.net
 
 Dear Yann,
 
-I've just done a static read of your series and my comments are just 
-superficial as I'm not a kconfig/Makefile expert...
-
-I will test all theses before any review/test tag but I do not have 
-enough time yet to do this in the few next days.
-
-At the end, this series look pretty good and I will use it as soon as it 
-will be released!
-
 Le 05/09/2016 ? 23:49, Yann E. MORIN a ?crit :
-> Now that we generate a kconfig snippet, we can conditionally include the
-> BR2_EXTERNAL's Config.in only when BR2_EXTERNAL is supplied by the user,
-> which means our empty/dummy Config.in is no longer useful to us.
+> Update the manual with the new external.desc mandatory file.
 >
-> As for external.mk, we can also include it only when BR2_EXTERNAL is
-> supplied by the user, which means our empty/dummy external.mk is no
-> longer of any use to us.
+> Take the opportunity to add a section listing all mandatory files,
+> Config.in, external.mk and the new external.desc, instead of just
+> hinting about them in the external package recipes section.
 >
-> Ditch both of those files, and:
->
->   - only generate actual content in the Kconfig snippet when we actually
->     do have a BR2_EXTERNAL provided by the user (i.e. BR2_EXTERNAL is not
->     empty);
->
->   - add a variable that contains the path to the external.mk provided by
->     the user, or empty if none, and include the path set in that variable
->     (make can 'include' nothing without any problem! ;-) )
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Romain Naour <romain.naour@openwide.fr>
-> ---
->  Makefile                           | 11 ++++-------
->  support/dummy-external/Config.in   |  0
->  support/dummy-external/external.mk |  0
->  support/scripts/br2-external       | 15 +++++++++++----
->  4 files changed, 15 insertions(+), 11 deletions(-)
->  delete mode 100644 support/dummy-external/Config.in
->  delete mode 100644 support/dummy-external/external.mk
->
-> diff --git a/Makefile b/Makefile
-> index 513a989..8d5ce8a 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -147,16 +147,11 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
->  # on the command line, therefore the file is re-created every time make is run.
->  #
->  # When BR2_EXTERNAL is set to an empty value (e.g. explicitly in command
-> -# line), the .br-external file is removed and we point to
-> -# support/dummy-external. This makes sure we can unconditionally include the
-> -# Config.in and external.mk from the BR2_EXTERNAL directory. In this case,
-> -# override is necessary so the user can clear BR2_EXTERNAL from the command
-> -# line, but the dummy path is still used internally.
-> +# line), the .br-external file is removed.
->
->  BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
->  -include $(BR2_EXTERNAL_FILE)
->  ifeq ($(BR2_EXTERNAL),)
-> -  override BR2_EXTERNAL = support/dummy-external
->    $(shell rm -f $(BR2_EXTERNAL_FILE))
->  else
->    _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
-> @@ -165,6 +160,7 @@ else
->    endif
->    override BR2_EXTERNAL := $(_BR2_EXTERNAL)
->    $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
-> +  BR2_EXTERNAL_MK = $(BR2_EXTERNAL)/external.mk
->  endif
->
->  # To make sure that the environment variable overrides the .config option,
-> @@ -461,7 +457,8 @@ include boot/common.mk
->  include linux/linux.mk
->  include fs/common.mk
->
-> -include $(BR2_EXTERNAL)/external.mk
-> +# Nothing to include if no BR2_EXTERNAL tree in use
-> +include $(BR2_EXTERNAL_MK)
->
->  # Now we are sure we have all the packages scanned and defined. We now
->  # check for each package in the list of enabled packages, that all its
-> diff --git a/support/dummy-external/Config.in b/support/dummy-external/Config.in
-> deleted file mode 100644
-> index e69de29..0000000
-> diff --git a/support/dummy-external/external.mk b/support/dummy-external/external.mk
-> deleted file mode 100644
-> index e69de29..0000000
-> diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-> index c15c21c..91f854a 100755
-> --- a/support/scripts/br2-external
-> +++ b/support/scripts/br2-external
-> @@ -19,9 +19,6 @@ main() {
->      # Forget options; keep only positional args
->      shift $((OPTIND-1))
->
-> -    if [ ${#} -ne 1 ]; then
-> -        error "need exactly one br2-external tree to be specified\n"
-> -    fi
+> Change the examples to use the NAME-suffixed variable instead of the
+> raw BR2_EXTERNAL variable. Even though it is still possible to write
+> a br2-external tree that has no NAME (ie.e. won't be multi-aware), we
+> only document it with an NAME.
 
-I don't understand why do you remove this check in this commit rather 
-than in patch "7 - core: add support for multiple br2-external trees"?
+Is it really possible to have an br2-external tree that has no NAME from 
+here? Or, as you said in the series resume it's not possible anymore?
 
 Regards,
 
 Julien Corjon
 
->      br2_ext="${1}"
 >
->      if [ -z "${ofile}" ]; then
-> @@ -38,6 +35,11 @@ main() {
->  do_validate() {
->      local br2_ext="${1}"
+> Change all references to BR2_EXTERNAL elsewhere in the manual to now
+> use the 'br2-external tree' terminology.
 >
-> +    # No br2-external tree is valid
-> +    if [ -z "${br2_ext}" ]; then
-> +        return
-> +    fi
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  docs/manual/adding-packages-asciidoc.txt      |   6 +-
+>  docs/manual/adding-packages-perl.txt          |   2 +-
+>  docs/manual/adding-packages-python.txt        |   2 +-
+>  docs/manual/customize-directory-structure.txt |  13 +--
+>  docs/manual/customize-outside-br.txt          | 134 ++++++++++++++++----------
+>  docs/manual/customize-packages.txt            |  25 +----
+>  6 files changed, 102 insertions(+), 80 deletions(-)
+>
+> diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
+> index a278d44..d870c51 100644
+> --- a/docs/manual/adding-packages-asciidoc.txt
+> +++ b/docs/manual/adding-packages-asciidoc.txt
+> @@ -19,9 +19,9 @@ Although Buildroot only contains one document written in AsciiDoc, there
+>  is, as for packages, an infrastructure for rendering documents using the
+>  AsciiDoc syntax.
+>
+> -Also as for packages, the AsciiDoc infrastructure is available from
+> -xref:outside-br-custom[BR2_EXTERNAL]. This allows documentation for a
+> -BR2_EXTERNAL tree to match the Buildroot documentation, as it will be
+> +Also as for packages, the AsciiDoc infrastructure is available from a
+> +xref:outside-br-custom[br2-external tree]. This allows documentation for
+> +a br2-external tree to match the Buildroot documentation, as it will be
+>  rendered to the same formats and use the same layout and theme.
+>
+>  ==== +asciidoc-document+ tutorial
+> diff --git a/docs/manual/adding-packages-perl.txt b/docs/manual/adding-packages-perl.txt
+> index 63fafe6..4f5a6a4 100644
+> --- a/docs/manual/adding-packages-perl.txt
+> +++ b/docs/manual/adding-packages-perl.txt
+> @@ -47,7 +47,7 @@ built.
+>  Most of these data can be retrieved from https://metacpan.org/.
+>  So, this file and the Config.in can be generated by running
+>  the script +supports/scripts/scancpan Foo-Bar+ in the Buildroot directory
+> -(or in the +BR2_EXTERNAL+ directory).
+> +(or in a br2-external tree).
+>  This script creates a Config.in file and foo-bar.mk file for the
+>  requested package, and also recursively for all dependencies specified by
+>  CPAN. You should still manually edit the result. In particular, the
+> diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
+> index 94ac809..abcd4ca 100644
+> --- a/docs/manual/adding-packages-python.txt
+> +++ b/docs/manual/adding-packages-python.txt
+> @@ -195,7 +195,7 @@ license and license files are guessed and must be checked. You also
+>  need to manually add the package to the +package/Config.in+ file.
+>
+>  If your Buildroot package is not in the official Buildroot tree but in
+> -a +BR2_EXTERNAL+ tree, use the -o flag as follows:
+> +a br2-external tree, use the -o flag as follows:
+>
+>  -----------------------
+>  ./support/script/scanpypi foo bar -o other_package_dir
+> diff --git a/docs/manual/customize-directory-structure.txt b/docs/manual/customize-directory-structure.txt
+> index 0be3f77..b177319 100644
+> --- a/docs/manual/customize-directory-structure.txt
+> +++ b/docs/manual/customize-directory-structure.txt
+> @@ -13,7 +13,8 @@ section.
+>
+>  Orthogonal to this directory structure, you can choose _where_ you place
+>  this structure itself: either inside the Buildroot tree, or outside of
+> -it using +BR2_EXTERNAL+. Both options are valid, the choice is up to you.
+> +it using a br2-external tree. Both options are valid, the choice is up
+> +to you.
+>
+>  -----
+>  +-- board/
+> @@ -38,8 +39,8 @@ it using +BR2_EXTERNAL+. Both options are valid, the choice is up to you.
+>  |
+>  +-- package/
+>  |   +-- <company>/
+> -|       +-- Config.in (if not using BR2_EXTERNAL)
+> -|       +-- <company>.mk (if not using BR2_EXTERNAL)
+> +|       +-- Config.in (if not using a br2-external tree)
+> +|       +-- <company>.mk (if not using a br2-external tree)
+>  |       +-- package1/
+>  |       |    +-- Config.in
+>  |       |    +-- package1.mk
+> @@ -47,14 +48,14 @@ it using +BR2_EXTERNAL+. Both options are valid, the choice is up to you.
+>  |           +-- Config.in
+>  |           +-- package2.mk
+>  |
+> -+-- Config.in (if using BR2_EXTERNAL)
+> -+-- external.mk (if using BR2_EXTERNAL)
+> ++-- Config.in (if using a br2-external tree)
+> ++-- external.mk (if using a br2-external tree)
+>  ------
+>
+>  Details on the files shown above are given further in this chapter.
+>
+>  Note: if you choose to place this structure outside of the Buildroot
+> -tree using +BR2_EXTERNAL+, the <company> and possibly <boardname>
+> +tree but in a br2-external tree, the <company> and possibly <boardname>
+>  components may be superfluous and can be left out.
+>
+>  ==== Implementing layered customizations
+> diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+> index 9ad177d..f2a83a6 100644
+> --- a/docs/manual/customize-outside-br.txt
+> +++ b/docs/manual/customize-outside-br.txt
+> @@ -11,25 +11,27 @@ place project-specific customizations in two locations:
+>     branches in a version control system so that upgrading to a newer
+>     Buildroot release is easy.
+>
+> - * outside of the Buildroot tree, using the +BR2_EXTERNAL+ mechanism.
+> + * outside of the Buildroot tree, using the _br2-external_ mechanism.
+>     This mechanism allows to keep package recipes, board support and
+>     configuration files outside of the Buildroot tree, while still
+> -   having them nicely integrated in the build logic. This section
+> -   explains how to use +BR2_EXTERNAL+.
+> +   having them nicely integrated in the build logic. We call this
+> +   location a _br2-external tree_. This section explains how to use
+> +   the br2-external mechanism and what to provide in a br2-external
+> +   tree.
+>
+> -+BR2_EXTERNAL+ is an environment variable that can be used to point to
+> -a directory that contains Buildroot customizations. It can be passed
+> -to any Buildroot +make+ invocation. It is automatically saved in the
+> -hidden +.br-external+ file in the output directory. Thanks to this,
+> -there is no need to pass +BR2_EXTERNAL+ at every +make+ invocation. It
+> -can however be changed at any time by passing a new value, and can be
+> -removed by passing an empty value.
+> +One can tell Buildroot to use a br2-external tree by setting the
+> ++BR2_EXTERNAL+ make variable set to the path of the br2-external tree
+> +to use. It can be passed to any Buildroot +make+ invocation. It is
+> +automatically saved in the hidden +.br-external.mk+ file in the output
+> +directory. Thanks to this, there is no need to pass +BR2_EXTERNAL+ at
+> +every +make+ invocation. It can however be changed at any time by
+> +passing a new value, and can be removed by passing an empty value.
+>
+>  .Note
+> -The +BR2_EXTERNAL+ path can be either an absolute or a relative path,
+> -but if it's passed as a relative path, it is important to note that it
+> -is interpreted relative to the main Buildroot source directory, *not*
+> -to the Buildroot output directory.
+> +The path to a br2-external tree can be either absolute or relative.
+> +If it is passed as a relative path, it is important to note that it is
+> +interpreted relative to the main Buildroot source directory, *not* to
+> +the Buildroot output directory.
+>
+>  Some examples:
+>
+> @@ -37,73 +39,107 @@ Some examples:
+>  buildroot/ $ make BR2_EXTERNAL=/path/to/foobar menuconfig
+>  -----
+>
+> -From now on, external definitions from the +/path/to/foobar+
+> -directory will be used:
+> +From now on, definitions from the +/path/to/foobar+ br2-external tree
+> +will be used:
+>
+>  -----
+>  buildroot/ $ make
+>  buildroot/ $ make legal-info
+>  -----
+>
+> -We can switch to another external definitions directory at any time:
+> +We can switch to another br2-external tree at any time:
+>
+>  -----
+>  buildroot/ $ make BR2_EXTERNAL=/where/we/have/barfoo xconfig
+>  -----
+>
+> -Or disable the usage of external definitions:
+> +Or disable the usage of any br2-external tree:
+>
+>  -----
+>  buildroot/ $ make BR2_EXTERNAL= xconfig
+>  -----
+>
+> -+BR2_EXTERNAL+ allows three different things:
+> +A br2-external tree must contain at least those three files:
+>
+> - * One can store all the board-specific configuration files there,
+> -   such as the kernel configuration, the root filesystem overlay, or
+> -   any other configuration file for which Buildroot allows to set its
+> -   location. The +BR2_EXTERNAL+ value is available within the
+> -   Buildroot configuration using +$(BR2_EXTERNAL)+. As an example, one
+> -   could set the +BR2_ROOTFS_OVERLAY+ Buildroot option to
+> -   +$(BR2_EXTERNAL)/board/<boardname>/overlay/+ (to specify a root
+> -   filesystem overlay), or the +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
+> -   Buildroot option to
+> -   +$(BR2_EXTERNAL)/board/<boardname>/kernel.config+ (to specify the
+> -   location of the kernel configuration file).
+> ++external.desc+::
+> +   That file shall contain the _name_ for the br2-external tree. That name
+> +   must only use ASCII characters in the set +[A-Za-z0-9_]+; any other
+> +   character is forbidden. The format for this file is a single line with
+> +   the keyword 'name:', followed by one or more spaces, followed by the
+> +   name.
+> ++
+> +Buildroot sets +BR2_EXTERNAL_$(NAME)_PATH+ to the absolute path of the
+> +   br2-external tree, so that you can use it to refer to your br2-external
+> +   tree. This variable is available both in Kconfig, so you can use it
+> +   to source your Kconfig files (see below) and in the Makefile, so that
+> +   you can use it to include other Makefiles (see below) or refer to other
+> +   files (like data files) from your br2-external tree.
+> ++
+> +Example of an +external.desc+ file that declares the name +FOO+:
+> ++
+> +----
+> +$ cat external.desc
+> +name: FOO
+> +----
+> ++
+> +Examples of names and the corresponding +BR2_EXTERNAL_$(NAME)_PATH+
+> +variables:
+> ++
+> +  * +FOO+ -> +BR2_EXTERNAL_FOO_PATH+
+> +  * +BAR_42+ -> +BR2_EXTERNAL_BAR_42_PATH+
+> ++
+> +In the following examples, it is assumed the name to be set to +BAR_42+.
 > +
->      if [ ! -d "${br2_ext}" ]; then
->          error "'%s': no such file or directory\n" "${br2_ext}"
->      fi
-> @@ -49,12 +51,17 @@ do_validate() {
->  do_kconfig() {
->      printf '#\n# Automatically generated file; DO NOT EDIT.\n#\n'
->      printf '\n'
+> ++Config.in+::
+> ++external.mk+::
+> +   Those files (which may each be empty) can be used to define package
+> +   recipes, like for packages bundled in Buildroot itself, or other
+> +   custom configuration options.
+>
+> - * One can store package recipes (i.e. +Config.in+ and
+> -   +<packagename>.mk+), or even custom configuration options and make
+> -   logic. Buildroot automatically includes +$(BR2_EXTERNAL)/Config.in+ to
+> -   make it appear in the top-level configuration menu, and includes
+> -   +$(BR2_EXTERNAL)/external.mk+ with the rest of the makefile logic.
+> +Using a br2-external tree then allows three different things:
 > +
-> +    if [ -z "${BR2_EXT}" ]; then
-> +        printf '# No br2-external tree defined.\n'
-> +        return
-> +    fi
+> + * One can store all the board-specific configuration files there, such
+> +   as the kernel configuration, the root filesystem overlay, or any other
+> +   configuration file for which Buildroot allows to set the location (by
+> +   using the +BR2_EXTERNAL_$(NAME)_PATH+ variable). For example, you
+> +   could set the paths to a global patch directory, to a rootfs overlay
+> +   and to the kernel configuration file as follows (e.g. by running
+> +   `make menuconfig` and filling in these options):
+>  +
+> -.Note
+> -Providing +Config.in+ and +external.mk+ is mandatory, but they can be
+> -   empty.
+> +----
+> +BR2_GLOBAL_PATCH_DIR=$(BR2_EXTERNAL_BAR_42_PATH)/patches/
+> +BR2_ROOTFS_OVERLAY=$(BR2_EXTERNAL_BAR_42_PATH)/board/<boardname>/overlay/
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=$(BR2_EXTERNAL_BAR_42_FOO)/board/<boardname>/kernel.config
+> +----
 > +
->      printf 'config BR2_EXTERNAL\n'
->      printf '\tstring\n'
->      printf '\tdefault "%s"\n' "${BR2_EXT}"
->      printf '\n'
->      printf 'menu "User-provided options"\n'
-> -    printf '\tdepends on BR2_EXTERNAL != "support/dummy-external"\n'
->      printf '\n'
->      printf 'source "%s/Config.in"\n' "${BR2_EXT}"
->      printf '\n'
+> + * One can store package recipes (i.e. +Config.in+ and +<packagename>.mk+),
+> +   or even custom configuration options and make logic. Buildroot
+> +   automatically includes +Config.in+ to make it appear in the top-level
+> +   configuration menu, and includes +external.mk+ with the rest of the
+> +   makefile logic.
+>  +
+> -The main usage of this is to store package recipes. The recommended
+> -   way to do this is to write a +$(BR2_EXTERNAL)/Config.in+ file that
+> -   looks like:
+> +The main usage of this is to store package recipes. The recommended way
+> +   to do this is to write a +Config.in+ file that looks like:
+>  +
+>  ------
+> -source "$BR2_EXTERNAL/package/package1/Config.in"
+> -source "$BR2_EXTERNAL/package/package2/Config.in"
+> +source "$BR2_EXTERNAL_BAR_42_PATH/package/package1/Config.in"
+> +source "$BR2_EXTERNAL_BAR_42_PATH/package/package2/Config.in"
+>  ------
+>  +
+> -Then, have a +$(BR2_EXTERNAL)/external.mk+ file that looks like:
+> +Then, have an +external.mk+ file that looks like:
+>  +
+>  ------
+> -include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
+> +include $(sort $(wildcard $(BR2_EXTERNAL_BAR_42_PATH)/package/*/*.mk))
+>  ------
+>  +
+> -And then in +$(BR2_EXTERNAL)/package/package1+ and
+> -   +$(BR2_EXTERNAL)/package/package2+ create normal Buildroot
+> -   package recipes, as explained in xref:adding-packages[].
+> +And then in +$(BR2_EXTERNAL_FOO_42_PATH)/package/package1+ and
+> +   +$(BR2_EXTERNAL_FOO_42_PATH)/package/package2+ create normal
+> +   Buildroot package recipes, as explained in xref:adding-packages[].
+>     If you prefer, you can also group the packages in subdirectories
+>     called <boardname> and adapt the above paths accordingly.
+>
+>   * One can store Buildroot defconfigs in the +configs+ subdirectory of
+> -   +$(BR2_EXTERNAL)+. Buildroot will automatically show them in the
+> +   the br2-external tree. Buildroot will automatically show them in the
+>     output of +make list-defconfigs+ and allow them to be loaded with the
+>     normal +make <name>_defconfig+ command. They will be visible under the
+>     +User-provided configs+' label in the 'make list-defconfigs' output.
+> diff --git a/docs/manual/customize-packages.txt b/docs/manual/customize-packages.txt
+> index 9a5e8c5..b57280e 100644
+> --- a/docs/manual/customize-packages.txt
+> +++ b/docs/manual/customize-packages.txt
+> @@ -14,8 +14,9 @@ packages in a project-specific directory.
+>
+>  As shown in xref:customize-dir-structure[], the recommended location for
+>  project-specific packages is +package/<company>/+. If you are using the
+> -+BR2_EXTERNAL+ feature (see xref:outside-br-custom[]) the recommended
+> -location is +$(BR2_EXTERNAL)/package/+.
+> +br2-external tree feature (see xref:outside-br-custom[]) the recommended
+> +location is to put them in a sub-directory named +package/+ in your
+> +br2-external tree.
+>
+>  However, Buildroot will not be aware of the packages in this location,
+>  unless we perform some additional steps. As explained in
+> @@ -37,14 +38,6 @@ have only one extra directory level below +package/<company>/+):
+>  include $(sort $(wildcard package/<company>/*/*.mk))
+>  -----
+>
+> -If you are using +BR2_EXTERNAL+, create a file
+> -+$(BR2_EXTERNAL)/external.mk+ with following contents (again assuming only
+> -one extra level):
+> -
+> ------
+> -include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
+> ------
+> -
+>  For the +Config.in+ files, create a file +package/<company>/Config.in+
+>  that includes the +Config.in+ files of all your packages. An exhaustive
+>  list has to be provided since wildcards are not supported in the source command of kconfig.
+> @@ -59,13 +52,5 @@ Include this new file +package/<company>/Config.in+ from
+>  +package/Config.in+, preferably in a company-specific menu to make
+>  merges with future Buildroot versions easier.
+>
+> -If you are using +BR2_EXTERNAL+, create a file
+> -+$(BR2_EXTERNAL)/Config.in+ with similar contents:
+> -
+> ------
+> -source "$BR2_EXTERNAL/package/package1/Config.in"
+> -source "$BR2_EXTERNAL/package/package2/Config.in"
+> ------
+> -
+> -You do not have to add an include for this +$(BR2_EXTERNAL)/Config.in+
+> -file as it is included automatically.
+> +If using a br2-external tree, refer to xref:outside-br-custom[] for how
+> +to fill in those files.
 >
