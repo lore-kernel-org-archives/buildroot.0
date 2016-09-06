@@ -1,51 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Sep 2016 23:19:21 +0200
-Subject: [Buildroot] [git commit] package/python-pillow: bump to version
-	3.3.1
-Message-ID: <20160906212739.3B5A78081A@busybox.osuosl.org>
+Date: Tue, 6 Sep 2016 23:21:50 +0200
+Subject: [Buildroot] [git commit] package/php: switch from libmysqlclient to
+	mysqlnd
+Message-ID: <20160906212739.436DD8047C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86dc25e2b6b19967363a04f38894154c69f4f245
+commit: https://git.buildroot.net/buildroot/commit/?id=ea1e9e03442a5b375aa2214ba92e48ebba89070a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps python pillow to version 3.3.1
+The Mysql Native Driver has been the default mysql driver since
+PHP 5.4, but buildroot was still using libmysqlclient.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Mysqlnd has several advantages such as improved memory management
+and the more favorable PHP licensing terms.
+(can combine it with proprietary PHP extensions like Ioncube
+loader, while libmysqlclient requires commercial licensing if you
+link to it and do not fall under their GPL/FOSS license exception)
+
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pillow/python-pillow.hash | 6 +++---
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/php/Config.ext | 12 ------------
+ package/php/php.mk     |  6 ++----
+ 2 files changed, 2 insertions(+), 16 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index bf7828d..fa6834e 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,4 +1,4 @@
--# https://pypi.python.org/pypi?:action=show_md5&digest=b5a15b03bf402fe254636c015fcf04da
--md5 b5a15b03bf402fe254636c015fcf04da  Pillow-3.3.0.tar.gz
-+https://pypi.python.org/pypi?:action=show_md5&digest=3bc85204223b52e96ed05c9441507eed
-+md5 3bc85204223b52e96ed05c9441507eed  Pillow-3.3.1.tar.gz
- # sha256 locally computed
--sha256 031e7c9c885a4f343d1ad366c7fd2340449dc70318acb4a28d6411994f0accd1  Pillow-3.3.0.tar.gz
-+sha256 3491ca65d9fdba4db094ab3f8e17170425e7dd670e507921a665a1975d1b3df1  Pillow-3.3.1.tar.gz
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 619c55b..9116e12 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 82aaf41..7c3ba7e 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -113,10 +113,6 @@ endif
  
--PYTHON_PILLOW_VERSION = 3.3.0
-+PYTHON_PILLOW_VERSION = 3.3.1
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_SITE = https://pypi.python.org/packages/e0/27/f61098a12f14690689924de93ffdd101463083a80bf8ff3e0c218addf05b
-+PYTHON_PILLOW_SITE = https://pypi.python.org/packages/7b/32/e6978aed8fba6398c00eec25f12798fb57647a6cef4f85db1567e3d086ef
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_SETUP_TYPE = setuptools
+ config BR2_PACKAGE_PHP_EXT_MYSQLI
+ 	bool "Mysqli"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_MMU # mysql
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
+-	select BR2_PACKAGE_MYSQL
+ 	help
+ 	  MySQL Improved extension support
+ 
+@@ -135,17 +131,9 @@ if BR2_PACKAGE_PHP_EXT_PDO
+ 
+ config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
+ 	bool "MySQL"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_MMU # mysql
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
+-	select BR2_PACKAGE_MYSQL
+ 	help
+ 	  PDO driver for MySQL
+ 
+-comment "MySQL drivers need a toolchain w/ C++, threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+-
+ config BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL
+ 	bool "PostgreSQL"
+ 	select BR2_PACKAGE_POSTGRESQL
+diff --git a/package/php/php.mk b/package/php/php.mk
+index d7e27a1..deaf56e 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -181,8 +181,7 @@ endif
+ 
+ ### Native SQL extensions
+ ifeq ($(BR2_PACKAGE_PHP_EXT_MYSQLI),y)
+-PHP_CONF_OPTS += --with-mysqli=$(STAGING_DIR)/usr/bin/mysql_config
+-PHP_DEPENDENCIES += mysql
++PHP_CONF_OPTS += --with-mysqli
+ endif
+ ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
+ PHP_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
+@@ -199,8 +198,7 @@ PHP_DEPENDENCIES += sqlite
+ PHP_CFLAGS += -DSQLITE_OMIT_LOAD_EXTENSION
+ endif
+ ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),y)
+-PHP_CONF_OPTS += --with-pdo-mysql=$(STAGING_DIR)/usr
+-PHP_DEPENDENCIES += mysql
++PHP_CONF_OPTS += --with-pdo-mysql
+ endif
+ ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL),y)
+ PHP_CONF_OPTS += --with-pdo-pgsql=$(STAGING_DIR)/usr
