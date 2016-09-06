@@ -1,35 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Sep 2016 22:55:35 +0200
-Subject: [Buildroot] [PATCH] platform: update galileo to 3.14 kernel
-In-Reply-To: <1473175415-31470-1-git-send-email-padraig.connolly@intel.com>
-References: <1473175415-31470-1-git-send-email-padraig.connolly@intel.com>
-Message-ID: <20160906225535.1b467d4f@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 6 Sep 2016 22:58:35 +0200
+Subject: [Buildroot] [PATCH 6/9 v4] docs/manual: document the
+ br2-external NAME
+In-Reply-To: <b5a5d20b-25b3-7a83-0f7b-1b9d00ca616a@ecagroup.com>
+References: <cover.1473109655.git.yann.morin.1998@free.fr>
+ <5b0e806ca88df47f4e5221cf4bbe7a60ed79c867.1473109655.git.yann.morin.1998@free.fr>
+ <b5a5d20b-25b3-7a83-0f7b-1b9d00ca616a@ecagroup.com>
+Message-ID: <20160906205835.GB12105@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Julien, All,
 
-On Tue,  6 Sep 2016 16:23:35 +0100, Padraig James Connolly wrote:
-> Updating kernel for Galileo board BSP from 3.8 to 3.14
->  *Changed board defconfig to pull new 3.14 kernel
->  *New kernel config file for 3.14 kernel
->  *Changed defconfig to use new kernel config
->  *Removed old 3.8 kernel config
+On 2016-09-06 10:21 +0000, Julien CORJON spake thusly:
+> Le 05/09/2016 ? 23:49, Yann E. MORIN a ?crit :
+> > Update the manual with the new external.desc mandatory file.
+> >
+> > Take the opportunity to add a section listing all mandatory files,
+> > Config.in, external.mk and the new external.desc, instead of just
+> > hinting about them in the external package recipes section.
+> >
+> > Change the examples to use the NAME-suffixed variable instead of the
+> > raw BR2_EXTERNAL variable. Even though it is still possible to write
+> > a br2-external tree that has no NAME (ie.e. won't be multi-aware), we
+> > only document it with an NAME.
 > 
-> Signed-off-by: Padraig Connolly <padraig.connolly@intel.com>
-> ---
->  .../{linux-3.8.config => linux-3.14.config}        | 97 +++++++++++-----------
->  configs/galileo_defconfig                          | 10 +--
->  2 files changed, 54 insertions(+), 53 deletions(-)
->  rename board/intel/galileo/{linux-3.8.config => linux-3.14.config} (86%)
+> Is it really possible to have an br2-external tree that has no NAME from 
+> here? Or, as you said in the series resume it's not possible anymore?
 
-Applied to master, thanks.
+Damn, I somehow did something (aborted rebase somewhere?) becasue I was
+sure I did ammend that commit log...
 
-Thomas
+No, it's no longer possible.
+
+I'll fix the commit log (for good this time, I hope!).
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
