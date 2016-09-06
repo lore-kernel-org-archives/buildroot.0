@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  6 Sep 2016 00:45:57 -0300
-Subject: [Buildroot] [PATCH] ncmpc: bump to version 0.25
-Message-ID: <1473133557-9202-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  6 Sep 2016 00:46:39 -0300
+Subject: [Buildroot] [PATCH] mpd-mpc: bump to version 0.28
+Message-ID: <1473133599-9254-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,31 @@ The download has a .sig file so use it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ncmpc/ncmpc.hash | 4 ++--
- package/ncmpc/ncmpc.mk   | 2 +-
+ package/mpd-mpc/mpd-mpc.hash | 4 ++--
+ package/mpd-mpc/mpd-mpc.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ncmpc/ncmpc.hash b/package/ncmpc/ncmpc.hash
-index 1acc64d..e7646b2 100644
---- a/package/ncmpc/ncmpc.hash
-+++ b/package/ncmpc/ncmpc.hash
+diff --git a/package/mpd-mpc/mpd-mpc.hash b/package/mpd-mpc/mpd-mpc.hash
+index b400386..8336893 100644
+--- a/package/mpd-mpc/mpd-mpc.hash
++++ b/package/mpd-mpc/mpd-mpc.hash
 @@ -1,2 +1,2 @@
--# Calculated locally
--sha256 0e6f76b2b11449cfa479d2830ac681f4e3bff54a95a9134b069dd5a173b4c3e9 ncmpc-0.24.tar.xz
+-# Locally computed
+-sha256	45a2be0a6dea65ed43f631294c24e74b83c8ee66d1ba6ab47d0744ddb1e62064	mpc-0.27.tar.xz
 +# Locally calculated after checking pgp signature
-+sha256 6e328acb71d06ae9e6c5fced99bc28ae78bcab1a73130b42ce9ab08a814ecea4 ncmpc-0.25.tar.xz
-diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
-index 050b6b8..b5fa7cd 100644
---- a/package/ncmpc/ncmpc.mk
-+++ b/package/ncmpc/ncmpc.mk
++sha256	a4337d06c85dc81a638821d30fce8a137a58d13d510be34a11c1cce95cabc547	mpc-0.28.tar.xz
+diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
+index f5e9599..d9aa1f8 100644
+--- a/package/mpd-mpc/mpd-mpc.mk
++++ b/package/mpd-mpc/mpd-mpc.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- NCMPC_VERSION_MAJOR = 0
--NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).24
-+NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).25
- NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
- NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
- NCMPC_DEPENDENCIES = host-pkgconf libglib2 libmpdclient ncurses
+ MPD_MPC_VERSION_MAJOR = 0
+-MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).27
++MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).28
+ MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
+ MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
+ MPD_MPC_LICENSE = GPLv2+
 -- 
 2.7.3
