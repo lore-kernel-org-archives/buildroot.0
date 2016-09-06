@@ -1,118 +1,115 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  6 Sep 2016 09:51:07 +0200
-Subject: [Buildroot] [PATCH 1/1] domoticz: bump to version 87286ee (beta)
-Message-ID: <1473148267-18593-1-git-send-email-fabrice.fontaine@orange.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Tue,  6 Sep 2016 11:38:54 +0200
+Subject: [Buildroot] [PATCH] lxc: use uptream patch to handle
+	--disable-werror
+Message-ID: <1473154734-10464-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version includes the patch on execinfo
-(commit 775da272719b52bca37b44a40e935a1eb9d10466) so remove
-the 0001-add-proper-check-for-detecting-header-execinfo.h.patch file
+This new patch does change behavior, but it was accepted by upstream and
+could be removed on next version bump.
 
-This version also fixes arc and musl build (ambiguous call to abs and
-missing linux/ioctl header):
-  http://autobuild.buildroot.net/results/b5406ca587592a3bac446d1f1df93d3eb45b96a9 fixed by commit 331cd7d6eef6f9f2658b91e662644d88c31eaf64
-  http://autobuild.buildroot.net/results/62ec0d348153dff0efd4c1975a9198c17f01f1fa fixed by commit 6ea21db228124565466bf16b0400d40a5eaad30d
-
-Due to DOS line endings, it is easier to reference this beta release
-than converting git patches.
-The stable release should be released in the first week of October.
-
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- ...per-check-for-detecting-header-execinfo.h.patch | 58 ----------------------
- package/domoticz/domoticz.hash                     |  2 +-
- package/domoticz/domoticz.mk                       |  2 +-
- 3 files changed, 2 insertions(+), 60 deletions(-)
- delete mode 100644 package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
+ .../lxc/0001-configure-add-disable-werror.patch    | 49 ++++++++++++++++++++++
+ package/lxc/0001-drop-werror.patch                 | 16 -------
+ package/lxc/lxc.mk                                 |  2 +-
+ 3 files changed, 50 insertions(+), 17 deletions(-)
+ create mode 100644 package/lxc/0001-configure-add-disable-werror.patch
+ delete mode 100644 package/lxc/0001-drop-werror.patch
 
-diff --git a/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch b/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
+diff --git a/package/lxc/0001-configure-add-disable-werror.patch b/package/lxc/0001-configure-add-disable-werror.patch
+new file mode 100644
+index 0000000..7bd9729
+--- /dev/null
++++ b/package/lxc/0001-configure-add-disable-werror.patch
+@@ -0,0 +1,49 @@
++From e9f34eb4e25fc18411121c4e55557530ddc1f49c Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
++Date: Sun, 4 Sep 2016 09:35:44 +0200
++Subject: [PATCH] configure: add --disable-werror
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++-Werror may break builds on some scenarios with trivialities
++(especially during developments).
++
++Upstream status: accepted (https://github.com/lxc/lxc/pull/1168)
++
++Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
++---
++ configure.ac | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 39e313a..0103579 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -152,6 +152,11 @@ if test "x$with_systemdsystemunitdir" != "xno"; then
++   AC_SUBST([SYSTEMD_UNIT_DIR], [$with_systemdsystemunitdir])
++ fi
++ 
+++AC_ARG_ENABLE([werror],
+++	[AC_HELP_STRING([--disable-werror],
+++	[do not treat warnings as errors])],
+++	[], [enable_werror=yes])
+++
++ # Allow enabling deprecated executables
++ AC_ARG_ENABLE([deprecated],
++ 	[AC_HELP_STRING([--enable-deprecated],
++@@ -630,7 +635,10 @@ AC_PROG_SED
++ LXC_CHECK_TLS
++ 
++ if test "x$GCC" = "xyes"; then
++-	CFLAGS="$CFLAGS -Wall -Werror"
+++	CFLAGS="$CFLAGS -Wall"
+++	if test "x$enable_werror" = "xyes"; then
+++		CFLAGS="$CFLAGS -Werror"
+++	fi
++ fi
++ 
++ # Files requiring some variable expansion
++-- 
++2.8.1
++
+diff --git a/package/lxc/0001-drop-werror.patch b/package/lxc/0001-drop-werror.patch
 deleted file mode 100644
-index 55bbb7d..0000000
---- a/package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
+index d2a8673..0000000
+--- a/package/lxc/0001-drop-werror.patch
 +++ /dev/null
-@@ -1,58 +0,0 @@
--From f0da50118f7bd01ed7fa97e75b790a8232d8d4dc Mon Sep 17 00:00:00 2001
--From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
--Date: Thu, 25 Aug 2016 17:23:38 +0530
--Subject: [PATCH] add proper check for detecting header <execinfo.h>
+@@ -1,16 +0,0 @@
+-Don't do -Werror it breaks builds on some scenarios with trivialities.
 -
--domoticz.cpp currently assumes that on GNU/Linux systems header
--<execinfo.h> is available. But that is not true. Since it provided by
--C library and uClibc can be built without backtrace support. And in
--such cases we get following build error.
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
--  domoticz-3.4834/main/domoticz.cpp:48:22: fatal error: execinfo.h: No such file or directory
--   #include <execinfo.h>
--                        ^
--  compilation terminated.
--
--Instead of depending on __gnu_linux__, add check for detecting
--presence of <execinfo.h> and guard code for dumpstack accordingly.
--
--This build failure is detected by Buildroot autobuilder.
--http://autobuild.buildroot.net/results/393/393f839e160b51ca12ac36058718ad2f0c1b50a6/
--
--Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-----
-- CMakeLists.txt    | 7 +++++++
-- main/domoticz.cpp | 2 +-
-- 2 files changed, 8 insertions(+), 1 deletion(-)
--
--Index: b/CMakeLists.txt
--===================================================================
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -61,6 +61,13 @@
--   "Where to put the executables for Domoticz"
--   )
+-diff -Nura lxc-lxc-1.0.4/configure.ac lxc-lxc-1.0.4.orig/configure.ac
+---- lxc-lxc-1.0.4.orig/configure.ac	2014-07-04 10:31:19.821029891 -0300
+-+++ lxc-lxc-1.0.4/configure.ac	2014-06-13 14:07:45.000000000 -0300
+-@@ -560,7 +560,7 @@
+- LXC_CHECK_TLS
 - 
--+INCLUDE(CheckIncludeFiles)
--+CHECK_INCLUDE_FILES (execinfo.h HAVE_EXECINFO_H)
--+
--+IF(HAVE_EXECINFO_H)
--+  ADD_DEFINITIONS(-DHAVE_EXECINFO_H)
--+ENDIF(HAVE_EXECINFO_H)
--+
-- #set(CMAKE_EXE_LINKER_FLAGS "-static")
+- if test "x$GCC" = "xyes"; then
+--	CFLAGS="$CFLAGS -Wall -Werror"
+-+	CFLAGS="$CFLAGS -Wall"
+- fi
 - 
-- # Macro for setting up precompiled headers. Usage:
--Index: b/main/domoticz.cpp
--===================================================================
----- a/main/domoticz.cpp
--+++ b/main/domoticz.cpp
--@@ -44,7 +44,7 @@
-- 	#include <string.h> 
-- #endif
-- 
---#ifdef __gnu_linux__
--+#ifdef HAVE_EXECINFO_H
-- #include <execinfo.h>
-- static void dumpstack(void) {
-- 	// Notes :
-diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
-index 9180a9b..b56bb95 100644
---- a/package/domoticz/domoticz.hash
-+++ b/package/domoticz/domoticz.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	02b4cdde8e376258aeae3d5621edf8bb6b3563c34282e50194db343fcec9c0f5	domoticz-3.4834.tar.gz
-+sha256	f5eaa8db192c314374deb8d58471f3a338da1397be635ebaa4b1a5f664450b05	domoticz-87286ee76ad15420c52689f1e4eeeab56fb04d40.tar.gz
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index adcf061..aceae2d 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+- # Files requiring some variable expansion
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index a3e24b4..9e21fc0 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -12,7 +12,7 @@ LXC_DEPENDENCIES = libcap host-pkgconf
+ # we're patching configure.ac
+ LXC_AUTORECONF = YES
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+-	--disable-lua --disable-python \
++	--disable-lua --disable-python --disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
  
--DOMOTICZ_VERSION = 3.4834
-+DOMOTICZ_VERSION = 87286ee76ad15420c52689f1e4eeeab56fb04d40
- DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
- DOMOTICZ_LICENSE = GPLv3
- DOMOTICZ_LICENSE_FILES = License.txt
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
 -- 
-2.7.4
+1.9.1
