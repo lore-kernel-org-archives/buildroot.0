@@ -1,115 +1,66 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue,  6 Sep 2016 11:38:54 +0200
-Subject: [Buildroot] [PATCH] lxc: use uptream patch to handle
-	--disable-werror
-Message-ID: <1473154734-10464-1-git-send-email-jezz@sysmic.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  6 Sep 2016 12:29:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencv: Fix compiling VFP assembler
+	code
+Message-ID: <20160906102909.17812-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new patch does change behavior, but it was accepted by upstream and
-could be removed on next version bump.
+Fixes build errors in ffmpeg
+http://autobuild.buildroot.net/results/c32/c32a21240a9933796ee850349a62ff3c2314f25c/
+http://autobuild.buildroot.net/results/22a/22a9769d83d2a398bb6b264d342b2077c41c9cc5/
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../lxc/0001-configure-add-disable-werror.patch    | 49 ++++++++++++++++++++++
- package/lxc/0001-drop-werror.patch                 | 16 -------
- package/lxc/lxc.mk                                 |  2 +-
- 3 files changed, 50 insertions(+), 17 deletions(-)
- create mode 100644 package/lxc/0001-configure-add-disable-werror.patch
- delete mode 100644 package/lxc/0001-drop-werror.patch
+ ...ypes_c.h-Fix-compiling-VFP-assembler-code.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/opencv/0003-types_c.h-Fix-compiling-VFP-assembler-code.patch
 
-diff --git a/package/lxc/0001-configure-add-disable-werror.patch b/package/lxc/0001-configure-add-disable-werror.patch
+diff --git a/package/opencv/0003-types_c.h-Fix-compiling-VFP-assembler-code.patch b/package/opencv/0003-types_c.h-Fix-compiling-VFP-assembler-code.patch
 new file mode 100644
-index 0000000..7bd9729
+index 0000000..85a23a0
 --- /dev/null
-+++ b/package/lxc/0001-configure-add-disable-werror.patch
-@@ -0,0 +1,49 @@
-+From e9f34eb4e25fc18411121c4e55557530ddc1f49c Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-+Date: Sun, 4 Sep 2016 09:35:44 +0200
-+Subject: [PATCH] configure: add --disable-werror
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/opencv/0003-types_c.h-Fix-compiling-VFP-assembler-code.patch
+@@ -0,0 +1,37 @@
++From 18c868c47307b786d1bea729dccaad7f8d696cb7 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Tue, 6 Sep 2016 11:49:00 +0200
++Subject: [PATCH 1/1] types_c.h: Fix compiling VFP assembler code
 +
-+-Werror may break builds on some scenarios with trivialities
-+(especially during developments).
++Replace asm by __asm__ according to
++https://gcc.gnu.org/onlinedocs/gcc/Alternate-Keywords.html#Alternate-Keywords
++as suggested by Arnout Vandecappelle:
++http://lists.busybox.net/pipermail/buildroot/2016-September/171491.html
 +
-+Upstream status: accepted (https://github.com/lxc/lxc/pull/1168)
++to fix build errors in ffmpeg with opencv2 support detected by
++buildroot autobuilders:
++http://autobuild.buildroot.net/results/c32/c32a21240a9933796ee850349a62ff3c2314f25c/build-end.log
 +
-+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
++Patch sent upstream: https://github.com/opencv/opencv/pull/7242
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ configure.ac | 10 +++++++++-
-+ 1 file changed, 9 insertions(+), 1 deletion(-)
++ modules/core/include/opencv2/core/types_c.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 39e313a..0103579 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -152,6 +152,11 @@ if test "x$with_systemdsystemunitdir" != "xno"; then
-+   AC_SUBST([SYSTEMD_UNIT_DIR], [$with_systemdsystemunitdir])
-+ fi
-+ 
-++AC_ARG_ENABLE([werror],
-++	[AC_HELP_STRING([--disable-werror],
-++	[do not treat warnings as errors])],
-++	[], [enable_werror=yes])
-++
-+ # Allow enabling deprecated executables
-+ AC_ARG_ENABLE([deprecated],
-+ 	[AC_HELP_STRING([--enable-deprecated],
-+@@ -630,7 +635,10 @@ AC_PROG_SED
-+ LXC_CHECK_TLS
-+ 
-+ if test "x$GCC" = "xyes"; then
-+-	CFLAGS="$CFLAGS -Wall -Werror"
-++	CFLAGS="$CFLAGS -Wall"
-++	if test "x$enable_werror" = "xyes"; then
-++		CFLAGS="$CFLAGS -Werror"
-++	fi
-+ fi
-+ 
-+ # Files requiring some variable expansion
++diff --git a/modules/core/include/opencv2/core/types_c.h b/modules/core/include/opencv2/core/types_c.h
++index c21cd2c..771715d 100644
++--- a/modules/core/include/opencv2/core/types_c.h
+++++ b/modules/core/include/opencv2/core/types_c.h
++@@ -318,7 +318,7 @@ enum {
++     int res; \
++     float temp; \
++     (void)temp; \
++-    asm(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value)); \
+++    __asm__(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value)); \
++     return res;
++ // 2. version for double
++ #ifdef __clang__
 +-- 
-+2.8.1
++2.9.3
 +
-diff --git a/package/lxc/0001-drop-werror.patch b/package/lxc/0001-drop-werror.patch
-deleted file mode 100644
-index d2a8673..0000000
---- a/package/lxc/0001-drop-werror.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Don't do -Werror it breaks builds on some scenarios with trivialities.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura lxc-lxc-1.0.4/configure.ac lxc-lxc-1.0.4.orig/configure.ac
----- lxc-lxc-1.0.4.orig/configure.ac	2014-07-04 10:31:19.821029891 -0300
--+++ lxc-lxc-1.0.4/configure.ac	2014-06-13 14:07:45.000000000 -0300
--@@ -560,7 +560,7 @@
-- LXC_CHECK_TLS
-- 
-- if test "x$GCC" = "xyes"; then
---	CFLAGS="$CFLAGS -Wall -Werror"
--+	CFLAGS="$CFLAGS -Wall"
-- fi
-- 
-- # Files requiring some variable expansion
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index a3e24b4..9e21fc0 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -12,7 +12,7 @@ LXC_DEPENDENCIES = libcap host-pkgconf
- # we're patching configure.ac
- LXC_AUTORECONF = YES
- LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
--	--disable-lua --disable-python \
-+	--disable-lua --disable-python --disable-werror \
- 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
- 
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
 -- 
-1.9.1
+2.9.3
