@@ -1,38 +1,95 @@
-From: Theo Debrouwere <theo.debrouwere@skynet.be>
-Date: Tue, 6 Sep 2016 14:07:39 +0200
-Subject: [Buildroot] [PATCH]     add new library: libpugixml
-In-Reply-To: <20160905233027.404898ba@free-electrons.com>
-References: <20160904210846.1332-1-theo.debrouwere@skynet.be>
- <20160905233027.404898ba@free-electrons.com>
-Message-ID: <20160906120739.hf6sacfuyopg5sud@skynet.be>
+From: Andrew Webster <Awebster@arcx.com>
+Date: Tue, 6 Sep 2016 13:44:39 +0000
+Subject: [Buildroot] Problem with qt5webkit on ARM?
+In-Reply-To: <FD3EC9758442224FA81FA20FD6F1AE8C64833190@mx01.dti.lan>
+References: <FD3EC9758442224FA81FA20FD6F1AE8C64833190@mx01.dti.lan>
+Message-ID: <5f00e04287d740f592f0d1a76d89eec6@WEBMAIL.arcx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Allan,
 
-Thanks for the pointers.
-I'm cleaning up the patches & I'll resubmit them.
 
-One question though:
+We use qt5webkit on a i.MX6.  This problem does not sound familiar to me, but at the moment we run on X and use a slightly different version than stock BR.
 
-> The readme.txt is good enough as a license file.
-> 
-> > +LIBPUGIXML_INSTALL_STAGING = YES
-> > +
-> > +LIBPUGIXML_SUBDIR = scripts
-> 
-> Hum, why?
 
-Is this about the SUBDIR option?
+As you probably know, qtwebkit has been removed from Qt so the available version is based on an old webkit. However, there is an effort to modernize and revive qtwebkit at https://github.com/annulen/webkit<https://github.com/annulen/webkit.> that you may want to take a look at. This version uses cmake instead of qmake so the webkitgtk BR makefile is a better starting point than the existing qt5webkit makefile. I plan to submit a patch to BR to add this new package once there is a stable release available.
 
-The CMakeLists.txt file is in a subfolder called scripts,
-so, it seems that I need this? Is there another option/setting?
 
-Or should I add a comment about it?
+Andrew
 
-I'm not sure what you are asking?
+________________________________
+From: buildroot <buildroot-bounces@busybox.net> on behalf of Allan Chandler <allan.chandler@dti.com.au>
+Sent: Monday, September 5, 2016 10:39 PM
+To: buildroot at busybox.net
+Subject: [Buildroot] Problem with qt5webkit on ARM?
 
-Theo
+We are trying to get the qt5webkit (5.5.0 from BR 2015.11) package running on an iMX6 device and we're getting asserts from the code.
+
+Originally, I thought it may be our application (a cut-down browser) but it appears the browser in the qt5webkit-examples package has exactly the same issue.
+
+It manifests itself with the output (the last section is the important one):
+=====
+QEglFSVivIntegration will set environment variable FB_MULTI_BUFFER=2 to enable double buffering and vsync.
+If this is not desired, you can override this via: export QT_EGLFS_IMX6_NO_FB_MULTI_BUFFER=1
+
+Unable to query physical screen size, defaulting to 100 dpi.
+To override, set QT_QPA_EGLFS_PHYSICAL_WIDTH and QT_QPA_EGLFS_PHYSICAL_HEIGHT (in millimeters).
+
+ASSERTION FAILED: isPointerTypeAlignmentOkay(reinterpret_cast<TypePtr>(ptr))
+../WTF/wtf/StdLibExtras.h(102) : TypePtr reinterpret_cast_ptr(const void*) [with TypePtr = const unsigned int*]
+Segmentation fault (core dumped)
+=====
+
+The line doing the assert check is in the following code:
+=====
+template<typename TypePtr>
+TypePtr reinterpret_cast_ptr(const void* ptr)
+{
+    ASSERT(isPointerTypeAlignmentOkay(reinterpret_cast<TypePtr>(ptr)));
+    return reinterpret_cast<TypePtr>(ptr);
+}
+=====
+
+Now I think I understand WHY this is being done. From (admittedly faded) memory, early ARM chips would fault with an unaligned access and even later ones that don't fault, still run slower.
+
+What I DON'T understand is why standard code with the BR distribution is failing. The assert is clearly within a section that's only compiled for ARM/MIPS under GCC/CLANG so it's very specific to those platforms. And it's appears not to be an issue with my code (a risky assertion given how hard I normally ridicule those who also assert this) since the webkit example browser also asserts.
+
+For now, I have added a local patch:
+=====
+diff --git a/Source/WTF/wtf/StdLibExtras.h b/Source/WTF/wtf/StdLibExtras.h
+--- a/Source/WTF/wtf/StdLibExtras.h 2000-01-01 00:00:00.000000000 +0000
++++ b/Source/WTF/wtf/StdLibExtras.h 2000-01-01 00:00:00.000000000 +0000
+@@ -86,5 +86,5 @@
+template<typename Type>
+bool isPointerTypeAlignmentOkay(Type* ptr)
+{
+-    return !(reinterpret_cast<intptr_t>(ptr) % __alignof__(Type));
++    return true;
+}
+=====
+to get around this issue but I'm wondering if anyone else has run into this, or whether there are others out there running qt5webkit on ARM systems.
+
+Regards,
+Al.
+
+
+Allan Chandler | Software Engineer
+
+DTI Group Ltd | Transit Security & Surveillance
+
+31 Affleck Road, Perth Airport, WA 6105, AU
+
+P | F | allan.chandler at dti.com.au
+
+
+
+Visit our website www.dti.com.au<http://www.dti.com.au/>
+
+The information contained in this email is confidential. If you receive this email in error, please inform DTI Group Ltd via the above contact details. If you are not the intended recipient, you may not use or disclose the information contained in this email or attachments.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160906/20a67a6b/attachment.html>
