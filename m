@@ -1,43 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Sep 2016 22:40:00 +0200
-Subject: [Buildroot] [PATCH 1/1] domoticz: bump to version 87286ee (beta)
-In-Reply-To: <1473148267-18593-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1473148267-18593-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20160906224000.305fa34b@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 6 Sep 2016 22:40:58 +0200
+Subject: [Buildroot] [PATCH 6/6] gtest: retrieve package from github
+In-Reply-To: <2126371293.3550600.1473170292030.JavaMail.zimbra@datacom.ind.br>
+References: <1472660696-21640-1-git-send-email-fabrice.fontaine@orange.com>
+ <2126371293.3550600.1473170292030.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <96c748a7-e46e-fce4-f4f1-9271928e3468@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue,  6 Sep 2016 09:51:07 +0200, Fabrice Fontaine wrote:
-> This version includes the patch on execinfo
-> (commit 775da272719b52bca37b44a40e935a1eb9d10466) so remove
-> the 0001-add-proper-check-for-detecting-header-execinfo.h.patch file
-> 
-> This version also fixes arc and musl build (ambiguous call to abs and
-> missing linux/ioctl header):
->   http://autobuild.buildroot.net/results/b5406ca587592a3bac446d1f1df93d3eb45b96a9 fixed by commit 331cd7d6eef6f9f2658b91e662644d88c31eaf64
->   http://autobuild.buildroot.net/results/62ec0d348153dff0efd4c1975a9198c17f01f1fa fixed by commit 6ea21db228124565466bf16b0400d40a5eaad30d
-> 
-> Due to DOS line endings, it is easier to reference this beta release
-> than converting git patches.
-> The stable release should be released in the first week of October.
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> ---
->  ...per-check-for-detecting-header-execinfo.h.patch | 58 ----------------------
->  package/domoticz/domoticz.hash                     |  2 +-
->  package/domoticz/domoticz.mk                       |  2 +-
->  3 files changed, 2 insertions(+), 60 deletions(-)
->  delete mode 100644 package/domoticz/0001-add-proper-check-for-detecting-header-execinfo.h.patch
 
-Applied to master, thanks.
+On 06-09-16 15:58, Carlos Santos wrote:
+>> From: "Fabrice Fontaine" <fontaine.fabrice@gmail.com>
+>> To: buildroot at buildroot.org
+>> Cc: "Fabrice Fontaine" <fabrice.fontaine@orange.com>
+>> Sent: Wednesday, August 31, 2016 1:24:56 PM
+>> Subject: [Buildroot] [PATCH 6/6] gtest: retrieve package from github
+> 
+>> https://googletest.googlecode.com/files is no more available, so update
+>> gtest.mk and gtest.hash to retrieve googletest source code as a tar.gz
+>> (and not a zip) from github as https://googletest.googlecode.com is now
+>> a redirection to https://github.com/google/googletest.
+>>
+>> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+[snip]
+> GMock needs to be fixed too. I attempted to do this before (http://patchwork.ozlabs.org/patch/586130/) but it was refused, unfortunately.
 
-Thomas
+ Quoting Yann from that patchwork entry:
+> As I understand it, gtest and gmock are being phased out as separate
+> packages, and are to be replaced with the googletest package.
+> 
+> So why don't we directly add "googletest" and get rid of gtest and
+> gmock, rather than fix them to eventually get rid of them?
+
+ In that contet, I think it's a sane idea to have this commit as a first step,
+and do the bump to v1.8.0 (which implies merging gtest and gmock) in a second step.
+
+ Fabrice, care to work on that? If you do, here are some tips:
+
+- GMOCK should become a suboption of GTEST: BR2_PACKAGE_GTEST_GMOCK.
+- A legacy entry should be added for it.
+- gmock now has a usable cmake and builds gtest implicitly.
+- host-gmock is tricky - but perhaps it's no longer needed.
+
+
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
