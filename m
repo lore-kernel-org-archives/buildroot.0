@@ -1,42 +1,41 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  6 Sep 2016 00:46:39 -0300
-Subject: [Buildroot] [PATCH] mpd-mpc: bump to version 0.28
-Message-ID: <1473133599-9254-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  6 Sep 2016 00:46:53 -0300
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.19.19
+Message-ID: <1473133613-9299-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The download has a .sig file so use it.
+It fixes runtime issues with ffmpeg 3.1.x
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/mpd-mpc/mpd-mpc.hash | 4 ++--
- package/mpd-mpc/mpd-mpc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd-mpc/mpd-mpc.hash b/package/mpd-mpc/mpd-mpc.hash
-index b400386..8336893 100644
---- a/package/mpd-mpc/mpd-mpc.hash
-+++ b/package/mpd-mpc/mpd-mpc.hash
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 4b564bf..8f620e7 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
 @@ -1,2 +1,2 @@
--# Locally computed
--sha256	45a2be0a6dea65ed43f631294c24e74b83c8ee66d1ba6ab47d0744ddb1e62064	mpc-0.27.tar.xz
-+# Locally calculated after checking pgp signature
-+sha256	a4337d06c85dc81a638821d30fce8a137a58d13d510be34a11c1cce95cabc547	mpc-0.28.tar.xz
-diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
-index f5e9599..d9aa1f8 100644
---- a/package/mpd-mpc/mpd-mpc.mk
-+++ b/package/mpd-mpc/mpd-mpc.mk
+ # Locally calculated after checking pgp signature
+-sha256  764c991c54980cb97e876e3f65d63410c0c561b7be996b832e058053e005ed47  mpd-0.19.18.tar.xz
++sha256  bc856cda4136403446d53d11576f86990b61d1fe4668f6008e9eae47450d4e1d  mpd-0.19.19.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index de168c1..0bf8ece 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- MPD_MPC_VERSION_MAJOR = 0
--MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).27
-+MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).28
- MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
- MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
- MPD_MPC_LICENSE = GPLv2+
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).18
++MPD_VERSION = $(MPD_VERSION_MAJOR).19
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
 -- 
 2.7.3
