@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Sep 2016 21:53:59 +0200
-Subject: [Buildroot] [PATCH 9/9] package/enlightenment: set
- eldbus-codegen path
-In-Reply-To: <1472848295-13734-9-git-send-email-romain.naour@gmail.com>
-References: <1472848295-13734-1-git-send-email-romain.naour@gmail.com>
- <1472848295-13734-9-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160906215359.7c316dd2@free-electrons.com>
+Date: Tue, 6 Sep 2016 21:54:24 +0200
+Subject: [Buildroot] [git commit] audit: add powerpc64 arch support
+Message-ID: <20160906195430.9500C81E64@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c6c83d17beda67efffef52f8558f7367f3b32000
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  2 Sep 2016 22:31:35 +0200, Romain Naour wrote:
-> Otherwise the one from the host may be used.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/enlightenment/enlightenment.mk | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Judd Meinders <judd.meinders@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/audit/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/audit/Config.in b/package/audit/Config.in
+index df5a5cc..7550f3a 100644
+--- a/package/audit/Config.in
++++ b/package/audit/Config.in
+@@ -2,7 +2,8 @@
+ config BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_aarch64 || BR2_arm || BR2_armeb || \
+-		BR2_i386 || BR2_powerpc || BR2_x86_64
++		BR2_i386 || BR2_powerpc || BR2_powerpc64 || \
++		BR2_x86_64
+ 
+ config BR2_PACKAGE_AUDIT
+ 	bool "audit"
