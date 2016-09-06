@@ -1,33 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Sep 2016 21:36:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/opencv3: use
- BR2_TOOLCHAIN_HAS_LIBATOMIC
-In-Reply-To: <20160905210056.24393-1-bernd.kuhls@t-online.de>
-References: <20160905210056.24393-1-bernd.kuhls@t-online.de>
-Message-ID: <20160906213619.6ce99dd8@free-electrons.com>
+Date: Tue, 6 Sep 2016 21:37:16 +0200
+Subject: [Buildroot] [git commit] package/opencv: Fix compiling VFP
+	assembler code
+Message-ID: <20160906193727.CD0AC820F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=35387e190c1fdf6ea28055468fec05ea7ea03e4e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  5 Sep 2016 23:00:56 +0200, Bernd Kuhls wrote:
-> It uses __atomic_fetch_add_4 so libatomic must be pulled in if
-> necessary. Fixes
-> http://autobuild.buildroot.net/results/652/6521223b426c3cb4dfefab27bc6021900db6910e/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/opencv3/Config.in  | 2 ++
->  package/opencv3/opencv3.mk | 5 +++++
->  2 files changed, 7 insertions(+)
+Fixes build errors in ffmpeg
+http://autobuild.buildroot.net/results/c32/c32a21240a9933796ee850349a62ff3c2314f25c/
+http://autobuild.buildroot.net/results/22a/22a9769d83d2a398bb6b264d342b2077c41c9cc5/
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ypes_c.h-Fix-compiling-VFP-assembler-code.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/opencv/0003-types_c.h-Fix-compiling-VFP-assembler-code.patch b/package/opencv/0003-types_c.h-Fix-compiling-VFP-assembler-code.patch
+new file mode 100644
+index 0000000..85a23a0
+--- /dev/null
++++ b/package/opencv/0003-types_c.h-Fix-compiling-VFP-assembler-code.patch
+@@ -0,0 +1,37 @@
++From 18c868c47307b786d1bea729dccaad7f8d696cb7 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Tue, 6 Sep 2016 11:49:00 +0200
++Subject: [PATCH 1/1] types_c.h: Fix compiling VFP assembler code
++
++Replace asm by __asm__ according to
++https://gcc.gnu.org/onlinedocs/gcc/Alternate-Keywords.html#Alternate-Keywords
++as suggested by Arnout Vandecappelle:
++http://lists.busybox.net/pipermail/buildroot/2016-September/171491.html
++
++to fix build errors in ffmpeg with opencv2 support detected by
++buildroot autobuilders:
++http://autobuild.buildroot.net/results/c32/c32a21240a9933796ee850349a62ff3c2314f25c/build-end.log
++
++Patch sent upstream: https://github.com/opencv/opencv/pull/7242
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ modules/core/include/opencv2/core/types_c.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/modules/core/include/opencv2/core/types_c.h b/modules/core/include/opencv2/core/types_c.h
++index c21cd2c..771715d 100644
++--- a/modules/core/include/opencv2/core/types_c.h
+++++ b/modules/core/include/opencv2/core/types_c.h
++@@ -318,7 +318,7 @@ enum {
++     int res; \
++     float temp; \
++     (void)temp; \
++-    asm(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value)); \
+++    __asm__(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value)); \
++     return res;
++ // 2. version for double
++ #ifdef __clang__
++-- 
++2.9.3
++
