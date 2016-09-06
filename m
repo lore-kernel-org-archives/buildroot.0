@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Sep 2016 21:29:41 +0200
-Subject: [Buildroot] [PATCH] e2fsprogs: bump to version 1.43.3
-In-Reply-To: <1473129579-2059-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 5 Sep 2016 23:39:39 -0300")
-References: <1473129579-2059-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87inu8ddy2.fsf@dell.be.48ers.dk>
+Date: Tue, 06 Sep 2016 21:30:48 +0200
+Subject: [Buildroot] [PATCH] webkitgtk: bump to version 2.12.5
+In-Reply-To: <1473129597-2105-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 5 Sep 2016 23:39:57 -0300")
+References: <1473129597-2105-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87eg4wddw7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
