@@ -1,24 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 6 Sep 2016 16:46:56 -0300
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.7.2
-In-Reply-To: <20160906212736.520d86e9@free-electrons.com>
-References: <1473170340-9594-1-git-send-email-gustavo@zacarias.com.ar>
- <20160906212736.520d86e9@free-electrons.com>
-Message-ID: <226b2e83-446d-a697-b508-395413be0715@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 Sep 2016 21:41:37 +0200
+Subject: [Buildroot] [git commit] package/enlightenment: remove
+	libevas-generic-loaders dependency
+Message-ID: <20160906195112.0E3AE8226D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/09/16 16:27, Thomas Petazzoni wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e29907ade90bb65aaef1650d030de3f20548393d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Applied to master, thanks. I was surprised you did not remove
-> AUTORECONF = YES since we were patching configure.ac. But in fact,
-> AUTORECONF = YES was not passed. Not sure how btrfs-progs was
-> building... most likely one of its dependency has AUTORECONF = YES, so
-> autoconf was guaranteed to be around.
+libevas-generic-loaders is now provided by efl package, so remove
+libevas-generic-loaders package dependency.
 
-Hi.
-I've noticed the same though it didn't merit a commit note :)
-Regards.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/enlightenment/Config.in        | 3 +--
+ package/enlightenment/enlightenment.mk | 1 -
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+index 5509e63..b5d889b 100644
+--- a/package/enlightenment/Config.in
++++ b/package/enlightenment/Config.in
+@@ -15,8 +15,7 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	select BR2_PACKAGE_EFL_X_XLIB
+ 	select BR2_PACKAGE_EFL_JPEG # needed at runtime by enlightenment_start
+ 	select BR2_PACKAGE_EFL_PNG # needed at runtime by enlightenment_start
+-	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+-	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
++	select BR2_PACKAGE_EFL_SVG
+ 	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+ 	help
+ 	  Enlightenment, also known simply as E, is a stacking window
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index b172383..34c4f21 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -14,7 +14,6 @@ ENLIGHTENMENT_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-efl \
+ 	efl \
+-	libevas-generic-loaders \
+ 	xcb-util-keysyms
+ 
+ ENLIGHTENMENT_CONF_OPTS = \
