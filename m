@@ -1,49 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Sep 2016 21:49:27 +0200
-Subject: [Buildroot] [git commit] package/expedite: bump to lastest commit
-Message-ID: <20160906195112.2D9CB80583@busybox.osuosl.org>
+Date: Tue, 6 Sep 2016 21:41:59 +0200
+Subject: [Buildroot] [git commit] package/terminology: remove elementary
+	dependency
+Message-ID: <20160906195112.0A92F82267@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ae11c0ffd4605516769cdeaab9fce1a0b400a02
+commit: https://git.buildroot.net/buildroot/commit/?id=e50e1b72aa19b035da026a7999a09e5eaa1c112e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-expedite from 1.15 branch doesn't build anymore with efl 1.18 due to
-API changes. Since there is no new release or 1.18 scpecific branch,
-use the latest commit.
-
-Add a hash file.
+elementary is now provided by efl package, so remove elementary package
+dependency.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-[Thomas: fix hash file.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/expedite/expedite.hash | 2 ++
- package/expedite/expedite.mk   | 3 +--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/terminology/Config.in      | 1 -
+ package/terminology/terminology.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/expedite/expedite.hash b/package/expedite/expedite.hash
-new file mode 100644
-index 0000000..85c4444
---- /dev/null
-+++ b/package/expedite/expedite.hash
-@@ -0,0 +1,2 @@
-+# locally computed
-+sha256 a8690a714c16d6b67e7fd6d70973e9805c3569a9131900b1feaf183220496831  expedite-ffa005ea3de26b4219f32c285cb1665bb1366163.tar.gz
-diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
-index 8754dc0..0b2901d 100644
---- a/package/expedite/expedite.mk
-+++ b/package/expedite/expedite.mk
-@@ -4,8 +4,7 @@
- #
- ################################################################################
+diff --git a/package/terminology/Config.in b/package/terminology/Config.in
+index c574af7..f367ce5 100644
+--- a/package/terminology/Config.in
++++ b/package/terminology/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_TERMINOLOGY
+ 	bool "terminology"
+ 	depends on BR2_PACKAGE_EFL
+-	select BR2_PACKAGE_ELEMENTARY
+ 	help
+ 	  Terminology is an EFL terminal emulator with some extra
+ 	  bells and whistles.
+diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
+index d6c41d7..86b51c5 100644
+--- a/package/terminology/terminology.mk
++++ b/package/terminology/terminology.mk
+@@ -10,7 +10,7 @@ TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
+ TERMINOLOGY_LICENSE = BSD-2c
+ TERMINOLOGY_LICENSE_FILES = COPYING
  
--# efl-1.15 branch
--EXPEDITE_VERSION = 3ce8b3f1451700f9a2da60c2e717c644220e2449
-+EXPEDITE_VERSION = ffa005ea3de26b4219f32c285cb1665bb1366163
- EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
- EXPEDITE_SITE_METHOD = git
- EXPEDITE_LICENSE = BSD-2c
+-TERMINOLOGY_DEPENDENCIES = efl elementary host-pkgconf
++TERMINOLOGY_DEPENDENCIES = efl host-pkgconf
+ TERMINOLOGY_CONF_OPTS = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc
+ 
+ $(eval $(autotools-package))
