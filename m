@@ -1,48 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Sep 2016 21:41:24 +0200
-Subject: [Buildroot] [git commit] package/enlightenment: remove elementary
-	dependency
-Message-ID: <20160906195111.E3E3F80583@busybox.osuosl.org>
+Date: Tue, 6 Sep 2016 21:50:44 +0200
+Subject: [Buildroot] [git commit] package/enlightenment: set eldbus-codegen
+	path
+Message-ID: <20160906195112.43A5A82263@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1169f584f0d3aaad8baae36fc8593a6b4af35820
+commit: https://git.buildroot.net/buildroot/commit/?id=d0bbbe5c9ed8564965101b5980b04ec8ba2e5432
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-elementary is now provided by efl package, so remove elementary package
-dependency.
+Otherwise the one from the host may be used.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/enlightenment/Config.in        | 1 -
- package/enlightenment/enlightenment.mk | 1 -
- 2 files changed, 2 deletions(-)
+ package/enlightenment/enlightenment.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-index 05ee6fc..5509e63 100644
---- a/package/enlightenment/Config.in
-+++ b/package/enlightenment/Config.in
-@@ -15,7 +15,6 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 	select BR2_PACKAGE_EFL_X_XLIB
- 	select BR2_PACKAGE_EFL_JPEG # needed at runtime by enlightenment_start
- 	select BR2_PACKAGE_EFL_PNG # needed at runtime by enlightenment_start
--	select BR2_PACKAGE_ELEMENTARY
- 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
- 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
- 	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
 diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 2440cec..b172383 100644
+index a86fb86..d77421f 100644
 --- a/package/enlightenment/enlightenment.mk
 +++ b/package/enlightenment/enlightenment.mk
-@@ -14,7 +14,6 @@ ENLIGHTENMENT_DEPENDENCIES = \
- 	host-pkgconf \
- 	host-efl \
- 	efl \
--	elementary \
- 	libevas-generic-loaders \
- 	xcb-util-keysyms
+@@ -19,6 +19,7 @@ ENLIGHTENMENT_DEPENDENCIES = \
+ ENLIGHTENMENT_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+ 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
++	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
+ 	--disable-pam \
+ 	--disable-rpath
  
