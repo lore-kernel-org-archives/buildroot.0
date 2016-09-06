@@ -1,90 +1,192 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Sep 2016 21:50:33 +0200
-Subject: [Buildroot] [git commit] package/enlightenment: bump to v0.21.2
-Message-ID: <20160906195112.3801282263@busybox.osuosl.org>
+Date: Tue, 6 Sep 2016 21:42:59 +0200
+Subject: [Buildroot] [git commit] package/elementary: remove package
+Message-ID: <20160906195112.12DF380583@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbd0aee306bc0757ff54b7887406c86b8c0fd23c
+commit: https://git.buildroot.net/buildroot/commit/?id=c22b7580237a0b9106fad18770a464c353a954a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove upstream patch.
+elementary package is not used anymore, remove it.
+Add a legacy entry.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Thomas: move the legacy entry at the right place.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...uid.h-only-when-Wayland-support-is-enable.patch | 39 ----------------------
- package/enlightenment/enlightenment.hash           |  4 +--
- package/enlightenment/enlightenment.mk             |  2 +-
- 3 files changed, 3 insertions(+), 42 deletions(-)
+ Config.in.legacy                                   |  7 ++++
+ package/Config.in                                  |  1 -
+ ...emove-.eo.h-files-from-includesub_HEADERS.patch | 45 --------------------
+ package/elementary/Config.in                       | 15 -------
+ package/elementary/elementary.hash                 |  2 -
+ package/elementary/elementary.mk                   | 48 ----------------------
+ 6 files changed, 7 insertions(+), 111 deletions(-)
 
-diff --git a/package/enlightenment/0001-E-include-uuid.h-only-when-Wayland-support-is-enable.patch b/package/enlightenment/0001-E-include-uuid.h-only-when-Wayland-support-is-enable.patch
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 59e3f84..c76aeb1 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.11"
+ 
++config BR2_PACKAGE_ELEMENTARY
++	bool "elementary package removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EFL
++	help
++	  With EFL 1.18, elementary is now provided by the efl package.
++
+ config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+ 	bool "Linux kernel local directory option removed"
+ 	help
+diff --git a/package/Config.in b/package/Config.in
+index 6a770a3..2acc739 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -241,7 +241,6 @@ comment "Graphic libraries"
+ 	source "package/directfb/Config.in"
+ 	source "package/directfb-examples/Config.in"
+ 	source "package/efl/Config.in"
+-	source "package/elementary/Config.in"
+ 	source "package/fbdump/Config.in"
+ 	source "package/fbgrab/Config.in"
+ 	source "package/fbset/Config.in"
+diff --git a/package/elementary/0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch b/package/elementary/0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch
 deleted file mode 100644
-index 3f33fa3..0000000
---- a/package/enlightenment/0001-E-include-uuid.h-only-when-Wayland-support-is-enable.patch
+index 75a36a2..0000000
+--- a/package/elementary/0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch
 +++ /dev/null
-@@ -1,39 +0,0 @@
--From 368c4c7cc5722b2edfe98fb3a8999f8f01bc9b56 Mon Sep 17 00:00:00 2001
+@@ -1,45 +0,0 @@
+-From 2f6a65718a0992d0624836ce4b1416a7420782d2 Mon Sep 17 00:00:00 2001
 -From: Romain Naour <romain.naour@gmail.com>
--Date: Fri, 5 Aug 2016 21:14:46 +0200
--Subject: [PATCH] E: include uuid.h only when Wayland support is enabled.
+-Date: Mon, 25 Jul 2016 22:52:41 +0200
+-Subject: [PATCH] lib: remove *.eo.h files from includesub_HEADERS
 -
--libuuid is checked only when Wayland support is enabled and
--uuid_t uuid is guarded by HAVE_WAYLAND.
+-Otherwise *.eo.h files will be installed twice, so it can break a
+-parallel install on fast machines, whereby two make jobs may run
+-concurrently, trying to install the same files.
 -
--So move include uuid.h below a HAVE_WAYLAND.
+-/usr/bin/install -c -m 644 elm_sys_notify.eo.h
+-/usr/bin/install -c -m 644 elm_sys_notify.eo.h
+-usr/bin/install: cannot create regular file 'elm_sys_notify.eo.h': File exists
+-
+-Fixes:
+-http://autobuild.buildroot.net/results/7e9/7e9caffe442dcf40ee41da56fd3f55ffedf3a291
 -
 -Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ----
-- src/bin/e_pixmap.c | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
+- src/lib/Makefile.am | 3 ---
+- 1 file changed, 3 deletions(-)
 -
--diff --git a/src/bin/e_pixmap.c b/src/bin/e_pixmap.c
--index 2bd94a7..0b01473 100644
----- a/src/bin/e_pixmap.c
--+++ b/src/bin/e_pixmap.c
--@@ -2,6 +2,7 @@
-- 
-- #ifdef HAVE_WAYLAND
-- # include "e_comp_wl.h"
--+# include <uuid.h>
-- # ifndef EGL_TEXTURE_FORMAT
-- #  define EGL_TEXTURE_FORMAT		0x3080
-- # endif
--@@ -13,8 +14,6 @@
-- # include "e_comp_x.h"
-- #endif
-- 
---#include <uuid.h>
---
-- static Eina_Hash *pixmaps[2] = {NULL};
-- static Eina_Hash *aliases[2] = {NULL};
+-diff --git a/src/lib/Makefile.am b/src/lib/Makefile.am
+-index 40fb597..9df9424 100644
+---- a/src/lib/Makefile.am
+-+++ b/src/lib/Makefile.am
+-@@ -351,8 +351,6 @@ elm_systray_eo.h \
+- elm_systray_common.h \
+- elm_systray_watcher.h \
+- elm_sys_notify.h \
+--elm_sys_notify.eo.h \
+--elm_sys_notify_dbus.eo.h \
+- elm_table.h \
+- elm_table_eo.h \
+- elm_table_legacy.h \
+-@@ -381,7 +379,6 @@ elm_win_common.h \
+- elm_win_eo.h \
+- elm_win_legacy.h \
+- elm_win_standard.h \
+--elm_win_standard.eo.h \
+- elm_helper.h
+- includesubdir = $(includedir)/elementary- at VMAJ@/
 - 
 --- 
 -2.5.5
 -
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-index ecfe537..8abbd96 100644
---- a/package/enlightenment/enlightenment.hash
-+++ b/package/enlightenment/enlightenment.hash
-@@ -1,2 +1,2 @@
--# From https://www.enlightenment.org/news/e-0.20.10-release
--sha256	59fd447d120d91d18958a31a5827f97842cc472f2e22f132b2c7d4d208944baf 	enlightenment-0.20.10.tar.xz
-+# From https://www.enlightenment.org/news/e-0.21.2-release
-+sha256	a877645dc70aee71141013888863b69a1029f575f685e285b570db7c736f253a 	enlightenment-0.21.2.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 34c4f21..a86fb86 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ENLIGHTENMENT_VERSION = 0.20.10
-+ENLIGHTENMENT_VERSION = 0.21.2
- ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
- ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2c
+diff --git a/package/elementary/Config.in b/package/elementary/Config.in
+deleted file mode 100644
+index f356784..0000000
+--- a/package/elementary/Config.in
++++ /dev/null
+@@ -1,15 +0,0 @@
+-config BR2_PACKAGE_ELEMENTARY
+-	bool "elementary"
+-	depends on BR2_PACKAGE_EFL
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # elm_store.c
+-	depends on !BR2_STATIC_LIBS
+-	help
+-	  Elementary is a widget toolkit and EFL wrapper and convenience
+-	  library to make it easy to build applications and tools with UIs
+-	  with less code.
+-
+-	  https://enlightenment.org
+-
+-comment "elementary needs a toolchain w/ threads, dynamic library"
+-	depends on BR2_PACKAGE_EFL
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/elementary/elementary.hash b/package/elementary/elementary.hash
+deleted file mode 100644
+index f173752..0000000
+--- a/package/elementary/elementary.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# From https://download.enlightenment.org/rel/libs/elementary/elementary-1.17.1.tar.xz.sha256
+-sha256	85e116a453a8ac23da878670534c6292832756d2f3a33603278486f309963d91	elementary-1.17.1.tar.xz
+diff --git a/package/elementary/elementary.mk b/package/elementary/elementary.mk
+deleted file mode 100644
+index e686647..0000000
+--- a/package/elementary/elementary.mk
++++ /dev/null
+@@ -1,48 +0,0 @@
+-################################################################################
+-#
+-# elementary
+-#
+-################################################################################
+-
+-ELEMENTARY_VERSION = 1.17.1
+-ELEMENTARY_SOURCE = elementary-$(ELEMENTARY_VERSION).tar.xz
+-ELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
+-ELEMENTARY_LICENSE = LGPLv2.1
+-ELEMENTARY_LICENSE_FILES = COPYING
+-
+-# 0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch
+-ELEMENTARY_AUTORECONF = YES
+-ELEMENTARY_GETTEXTIZE = YES
+-
+-ELEMENTARY_INSTALL_STAGING = YES
+-
+-ELEMENTARY_DEPENDENCIES = host-pkgconf host-efl host-elementary efl
+-
+-ELEMENTARY_CONF_OPTS = \
+-	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+-	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
+-	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+-	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
+-	--with-elementary-codegen=$(HOST_DIR)/usr/bin/elementary_codegen \
+-	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
+-	--with-doxygen=no \
+-	--disable-elementary-test
+-
+-# We need a host package in order to provide elm_prefs_cc and
+-# elementary_codegen.
+-HOST_ELEMENTARY_DEPENDENCIES = host-pkgconf host-efl
+-HOST_ELEMENTARY_CONF_OPTS = \
+-	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+-	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
+-	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+-	--with-doxygen=no \
+-	--disable-elementary-test
+-
+-# Use Eolian C++ parser only if enabled in the efl stack.
+-ifeq ($(BR2_PACKAGE_EFL_EOLIAN_CPP),y)
+-ELEMENTARY_CONF_OPTS += --with-eolian-cxx=$(HOST_DIR)/usr/bin/eolian_cxx
+-HOST_ELEMENTARY_CONF_OPTS += --with-eolian-cxx=$(HOST_DIR)/usr/bin/eolian_cxx
+-endif
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
