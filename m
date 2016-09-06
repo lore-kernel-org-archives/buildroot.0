@@ -1,42 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Tue, 6 Sep 2016 21:30:55 +0200
-Subject: [Buildroot] [git commit] mpv: bump to version 0.20.0
-Message-ID: <20160906193115.9E0AE8222A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] webkitgtk: bump to version 2.12.5
+Message-ID: <20160906193115.D6E668222A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b06c1851137a61cb27a8c898a32a447febf6cec
+commit: https://git.buildroot.net/buildroot/commit/?id=2bc1cc7cc182c61a430083b9132c6638caaf5632
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpv/mpv.hash | 2 +-
- package/mpv/mpv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 6 +++---
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
-index 1594cb9..eea0db0 100644
---- a/package/mpv/mpv.hash
-+++ b/package/mpv/mpv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	3df5811942cd1d71f48eb4720092fdafec11885bf6dd6d1d3e6413f32e5d67e2	v0.19.0.tar.gz
-+sha256	fe6ec9d2ded5ce84b963f54b812d579d04f944f4a737f3ae639c4d5d9e842b56	v0.20.0.tar.gz
- sha256	01bf2beab2106d1558800c8709bc2c8e496d3da4a2ca343fe091f22fca60c98b	waf-1.8.12
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 123dff4..4f04fdf 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index f74677e..f01c7f0 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From http://www.webkitgtk.org/releases/webkitgtk-2.12.4.tar.xz.sha1
+-sha1	ebfe6015d81129b6a13a9596d065c54e9c1b93f6	webkitgtk-2.12.4.tar.xz
++# From http://www.webkitgtk.org/releases/webkitgtk-2.12.5.tar.xz.sha1
++sha1	2d73fd5b47c68c73aea8b3d7b88acc8e62bdb99c	webkitgtk-2.12.5.tar.xz
+ # Calculated based on the hash above
+-sha256	424d3177599abbc1eb1a1ad7928dd280a62006e992f2fada2e059375a9609a77	webkitgtk-2.12.4.tar.xz
++sha256	6b147854b864a5f115fadb97b2b6200b2f696db015216a34e7298d11c88b1c40	webkitgtk-2.12.5.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index f5c4334..7843373 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPV_VERSION = 0.19.0
-+MPV_VERSION = 0.20.0
- MPV_WAF_VERSION = 1.8.12
- MPV_SITE = https://github.com/mpv-player/mpv/archive
- MPV_SOURCE = v$(MPV_VERSION).tar.gz
+-WEBKITGTK_VERSION = 2.12.4
++WEBKITGTK_VERSION = 2.12.5
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
