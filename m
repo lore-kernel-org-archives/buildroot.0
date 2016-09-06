@@ -1,40 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Sep 2016 21:30:55 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{12,
-	18}.x and 4.1.x series
-Message-ID: <20160906193115.848538222A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 Sep 2016 21:32:34 +0200
+Subject: [Buildroot] [PATCH RESEND v2] configs: Add support for warp7
+ board
+In-Reply-To: <1472850510-31135-1-git-send-email-festevam@gmail.com>
+References: <1472850510-31135-1-git-send-email-festevam@gmail.com>
+Message-ID: <20160906213234.71b8b1ef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81c8bd86e3e7be9521a22dc879c5266998659c5a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Fri,  2 Sep 2016 18:08:30 -0300, Fabio Estevam wrote:
+> From: Fabio Estevam <fabio.estevam@nxp.com>
+> 
+> Add support for warp7, which is a board based on NXP i.MX7S processor.
+> 
+> More information about warp7 can be found at:
+> https://www.element14.com/community/docs/DOC-79058
+> 
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index f3a99e5..939a20a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -238,12 +238,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.81"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.103"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.63"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.77"	if BR2_KERNEL_HEADERS_3_14
--	default "3.18.40"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.41"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.31"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.32"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
- 	default "4.4.19"	if BR2_KERNEL_HEADERS_4_4
+This looks good, except on one aspect (for which I'd like a
+confirmation before applying).
+
+
+> +Create a bootable SD card
+> +=========================
+
+So here you say that you explain how to create a bootable SD card...
+
+> +
+> +In the U-Boot prompt lauch:
+> +
+> +=> ums 0 mmc 0  
+> +
+> +This will mount the eMMC content in the host PC as a mass storage device.
+> +
+> +To determine the device associated to the eMMC card have a look in the
+> +/proc/partitions file:
+> +
+> +  cat /proc/partitions
+> +
+> +Buildroot prepares a bootable "sdcard.img" image in the output/images/
+> +directory, ready to be dumped on the eMMC card. Launch the following
+> +command:
+> +
+> +sudo dd if=output/images/sdcard.img of=/dev/<your-sd-device>
+
+... but in fact you explain how to flash the internal eMMC.
+
+I am missing something?
+
+> +*** WARNING! This will destroy all the card content. Use with care! ***
+
+You are again talking about "card".
+
+Just for my understanding: with this mechanism, you rely on U-Boot to
+provide a mass-storage access to the internal eMMC. So if you reflash a
+non-working U-Boot, you are not able to reflash the system again. Is
+this correct? Is there a recovery process available (booting over SD
+card? something else?).
+
+If the image file produced by Buildroot is to be flashed on the eMMC, I
+think naming it sdcard.img is a bit confusing. Maybe emmc.img is a
+better name?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
