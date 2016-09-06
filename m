@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Sep 2016 21:55:52 +0200
-Subject: [Buildroot] [PATCH 1/2] gst1-libav: bump to version 1.8.3
-In-Reply-To: <1473117184-18905-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1473117184-18905-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160906215552.53c6d2ed@free-electrons.com>
+Date: Tue, 6 Sep 2016 22:04:59 +0200
+Subject: [Buildroot] [PATCH v2 2/2] buildroot-test: failure reason regex
+ update
+In-Reply-To: <1459468972-31420-2-git-send-email-matt@thewebers.ws>
+References: <1459468972-31420-1-git-send-email-matt@thewebers.ws>
+ <1459468972-31420-2-git-send-email-matt@thewebers.ws>
+Message-ID: <20160906220459.4ed92fe7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +14,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  5 Sep 2016 20:13:03 -0300, Gustavo Zacarias wrote:
-> Now that we moved to ffmpeg 3.x the build and runtime (when patched) problems
-> have gone away.
+On Thu, 31 Mar 2016 19:02:52 -0500, Matt Weber wrote:
+> - Sub-make required one additional line tailed
+> - Both autobuild-run  regex to truncate end log
+>   and import which sets the failure reason on
+>   the report are updated
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Matt Weber <matt@thewebers.ws>
+> 
+> --
+> Changes for v2:
+> - Added back in : as previous test masked
+>   that is was ok to leave in (Suggested by Thomas)
 > ---
->  package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
->  package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
+>  scripts/autobuild-run | 4 ++--
+>  web/import.inc.php    | 2 +-
 >  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Both patches applied to master, thanks!
+Applied to buildroot-test, and deployed on autobuild.b.o. Of course,
+it's up to the people using autobuild-run to update it on their side.
+
+Thanks!
 
 Thomas
 -- 
