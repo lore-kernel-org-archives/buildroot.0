@@ -1,40 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 6 Sep 2016 12:29:22 +0200
-Subject: [Buildroot] [PATCH 0/9 v4] br2-external: support multiple trees
- at once (branch yem/multi-br2-external-10)
-In-Reply-To: <cover.1473109655.git.yann.morin.1998@free.fr>
-References: <cover.1473109655.git.yann.morin.1998@free.fr>
-Message-ID: <20160906102922.GA5609@free.fr>
+From: Theo Debrouwere <theo.debrouwere@skynet.be>
+Date: Tue, 6 Sep 2016 14:07:39 +0200
+Subject: [Buildroot] [PATCH]     add new library: libpugixml
+In-Reply-To: <20160905233027.404898ba@free-electrons.com>
+References: <20160904210846.1332-1-theo.debrouwere@skynet.be>
+ <20160905233027.404898ba@free-electrons.com>
+Message-ID: <20160906120739.hf6sacfuyopg5sud@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+Hi,
 
-On 2016-09-05 23:49 +0200, Yann E. MORIN spake thusly:
-> This rather complex series introduces support for using multiple
-> br2-external trees at once.
-[--SNIP--]
-> This series is an attempt at making it possible to use such setups.
-[--SNIP--]
+Thanks for the pointers.
+I'm cleaning up the patches & I'll resubmit them.
 
-I've made a few br2-external trees available for testing this series:
-    http://ymorin.is-a-geek.org/git/br2-external-tests/
+One question though:
 
-There's a README that explains the purpose of each tree in that repo.
+> The readme.txt is good enough as a license file.
+> 
+> > +LIBPUGIXML_INSTALL_STAGING = YES
+> > +
+> > +LIBPUGIXML_SUBDIR = scripts
+> 
+> Hum, why?
 
-I tried to cover all basic cases, but there are probably caveats and
-stuff that is not covered.
+Is this about the SUBDIR option?
 
-Regards,
-Yann E. MORIN.
+The CMakeLists.txt file is in a subfolder called scripts,
+so, it seems that I need this? Is there another option/setting?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Or should I add a comment about it?
+
+I'm not sure what you are asking?
+
+Theo
