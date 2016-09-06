@@ -1,52 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 6 Sep 2016 22:58:35 +0200
-Subject: [Buildroot] [PATCH 6/9 v4] docs/manual: document the
- br2-external NAME
-In-Reply-To: <b5a5d20b-25b3-7a83-0f7b-1b9d00ca616a@ecagroup.com>
-References: <cover.1473109655.git.yann.morin.1998@free.fr>
- <5b0e806ca88df47f4e5221cf4bbe7a60ed79c867.1473109655.git.yann.morin.1998@free.fr>
- <b5a5d20b-25b3-7a83-0f7b-1b9d00ca616a@ecagroup.com>
-Message-ID: <20160906205835.GB12105@free.fr>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue,  6 Sep 2016 23:01:23 +0200
+Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 3.3.1
+Message-ID: <1473195683-25414-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, All,
+This patch bumps python pillow to version 3.3.1
 
-On 2016-09-06 10:21 +0000, Julien CORJON spake thusly:
-> Le 05/09/2016 ? 23:49, Yann E. MORIN a ?crit :
-> > Update the manual with the new external.desc mandatory file.
-> >
-> > Take the opportunity to add a section listing all mandatory files,
-> > Config.in, external.mk and the new external.desc, instead of just
-> > hinting about them in the external package recipes section.
-> >
-> > Change the examples to use the NAME-suffixed variable instead of the
-> > raw BR2_EXTERNAL variable. Even though it is still possible to write
-> > a br2-external tree that has no NAME (ie.e. won't be multi-aware), we
-> > only document it with an NAME.
-> 
-> Is it really possible to have an br2-external tree that has no NAME from 
-> here? Or, as you said in the series resume it's not possible anymore?
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/python-pillow/python-pillow.hash | 6 +++---
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Damn, I somehow did something (aborted rebase somewhere?) becasue I was
-sure I did ammend that commit log...
-
-No, it's no longer possible.
-
-I'll fix the commit log (for good this time, I hope!).
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index bf7828d..fa6834e 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,4 +1,4 @@
+-# https://pypi.python.org/pypi?:action=show_md5&digest=b5a15b03bf402fe254636c015fcf04da
+-md5 b5a15b03bf402fe254636c015fcf04da  Pillow-3.3.0.tar.gz
++https://pypi.python.org/pypi?:action=show_md5&digest=3bc85204223b52e96ed05c9441507eed
++md5 3bc85204223b52e96ed05c9441507eed  Pillow-3.3.1.tar.gz
+ # sha256 locally computed
+-sha256 031e7c9c885a4f343d1ad366c7fd2340449dc70318acb4a28d6411994f0accd1  Pillow-3.3.0.tar.gz
++sha256 3491ca65d9fdba4db094ab3f8e17170425e7dd670e507921a665a1975d1b3df1  Pillow-3.3.1.tar.gz
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 0346ae8..d6ca5c8 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PILLOW_VERSION = 3.3.0
++PYTHON_PILLOW_VERSION = 3.3.1
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+-PYTHON_PILLOW_SITE = https://pypi.python.org/packages/e0/27/f61098a12f14690689924de93ffdd101463083a80bf8ff3e0c218addf05b
++PYTHON_PILLOW_SITE = https://pypi.python.org/packages/7b/32/e6978aed8fba6398c00eec25f12798fb57647a6cef4f85db1567e3d086ef
+ PYTHON_PILLOW_LICENSE = PIL Software License
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
+ PYTHON_PILLOW_SETUP_TYPE = setuptools
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
