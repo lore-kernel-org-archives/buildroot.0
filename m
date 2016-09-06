@@ -1,40 +1,22 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  5 Sep 2016 23:59:11 -0300
-Subject: [Buildroot] [PATCH] mpv: bump to version 0.20.0
-Message-ID: <1473130751-2280-1-git-send-email-gustavo@zacarias.com.ar>
+From: Jeff Gray <jeff.gray@sato-global.com>
+Date: Tue, 6 Sep 2016 13:37:50 +1000
+Subject: [Buildroot] Error with OVERRIDE_SRCDIR in 2016.08
+In-Reply-To: <20160905094832.GD5553@free.fr>
+References: <CAHb0ztmgZ9sMB0OxF5D7DYmZaU4vekUDcyxp96Ws+w84ZM_R+Q@mail.gmail.com>
+ <20160905093714.GC5553@free.fr> <20160905094832.GD5553@free.fr>
+Message-ID: <CAHb0ztmYmJ6CELYpcJLrS67sfzg3e2MhZk_+Wh__cvCu=4qEDQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mpv/mpv.hash | 2 +-
- package/mpv/mpv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thank you, that works well. I like the SITE_METHOD as that also means I
+don't have -custom on the output directory names.
 
-diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
-index 1594cb9..eea0db0 100644
---- a/package/mpv/mpv.hash
-+++ b/package/mpv/mpv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	3df5811942cd1d71f48eb4720092fdafec11885bf6dd6d1d3e6413f32e5d67e2	v0.19.0.tar.gz
-+sha256	fe6ec9d2ded5ce84b963f54b812d579d04f944f4a737f3ae639c4d5d9e842b56	v0.20.0.tar.gz
- sha256	01bf2beab2106d1558800c8709bc2c8e496d3da4a2ca343fe091f22fca60c98b	waf-1.8.12
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 123dff4..4f04fdf 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPV_VERSION = 0.19.0
-+MPV_VERSION = 0.20.0
- MPV_WAF_VERSION = 1.8.12
- MPV_SITE = https://github.com/mpv-player/mpv/archive
- MPV_SOURCE = v$(MPV_VERSION).tar.gz
--- 
-2.7.3
+I did not know about your first idea of using _SOURCE=<empty> and could not
+find it in the manual. It might be worth adding a comment about this in the
+manual or making it clearer if it is already there.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160906/76279ef3/attachment-0001.html>
