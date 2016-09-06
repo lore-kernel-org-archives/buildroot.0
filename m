@@ -1,43 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  5 Sep 2016 23:39:57 -0300
-Subject: [Buildroot] [PATCH] webkitgtk: bump to version 2.12.5
-Message-ID: <1473129597-2105-1-git-send-email-gustavo@zacarias.com.ar>
+From: Allan Chandler <allan.chandler@dti.com.au>
+Date: Tue, 6 Sep 2016 02:52:04 +0000
+Subject: [Buildroot] QtWebEngine
+Message-ID: <FD3EC9758442224FA81FA20FD6F1AE8C648331BC@mx01.dti.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/webkitgtk/webkitgtk.hash | 6 +++---
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Are there any plans in place to get QtWebEngine running in BR?
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index f74677e..f01c7f0 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From http://www.webkitgtk.org/releases/webkitgtk-2.12.4.tar.xz.sha1
--sha1	ebfe6015d81129b6a13a9596d065c54e9c1b93f6	webkitgtk-2.12.4.tar.xz
-+# From http://www.webkitgtk.org/releases/webkitgtk-2.12.5.tar.xz.sha1
-+sha1	2d73fd5b47c68c73aea8b3d7b88acc8e62bdb99c	webkitgtk-2.12.5.tar.xz
- # Calculated based on the hash above
--sha256	424d3177599abbc1eb1a1ad7928dd280a62006e992f2fada2e059375a9609a77	webkitgtk-2.12.4.tar.xz
-+sha256	6b147854b864a5f115fadb97b2b6200b2f696db015216a34e7298d11c88b1c40	webkitgtk-2.12.5.tar.xz
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index f5c4334..7843373 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.12.4
-+WEBKITGTK_VERSION = 2.12.5
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
--- 
-2.7.3
+I've seen some patches that were put forward sometime last year but there appears to have been no recent activity on that front.
+
+Or will QtWebKit be the web rendering engine of choice (in BR, obviously, not Qt) for the foreseeable future?
+
+Regards,
+Al.
+
+
+Allan Chandler | Software Engineer
+
+DTI Group Ltd | Transit Security & Surveillance
+
+31 Affleck Road, Perth Airport, WA 6105, AU
+
+P | F | allan.chandler at dti.com.au
+
+
+
+Visit our website www.dti.com.au<http://www.dti.com.au>
+
+The information contained in this email is confidential. If you receive this email in error, please inform DTI Group Ltd via the above contact details. If you are not the intended recipient, you may not use or disclose the information contained in this email or attachments.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160906/9e35e2c5/attachment.html>
