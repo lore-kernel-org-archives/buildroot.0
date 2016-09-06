@@ -1,100 +1,38 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 6 Sep 2016 19:28:31 +0200
-Subject: [Buildroot] [Buildroot} [PATCH] Remove qt5base explicitlib patch
-In-Reply-To: <CAAcXeukkVNMK3E21M_aZMEc2m5nCmC75e1co2acWdmN=7QtUCg@mail.gmail.com>
-References: <CAAcXeukkVNMK3E21M_aZMEc2m5nCmC75e1co2acWdmN=7QtUCg@mail.gmail.com>
-Message-ID: <20160906192831.67fde478@gmx.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  6 Sep 2016 14:29:02 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{12,
+	18}.x and 4.1.x series
+Message-ID: <1473182942-15235-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Danijel,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On Tue, 6 Sep 2016 16:25:22 +0200, Danijel Tudek <danijel.tudek@bylapis.com> wrote:
-
-> After pulling the latest master, Qt5base can't be built anymore because the
-> patch 0007-build-with-explicitlib-after-all.patch seems to be applied
-> upstream (it stops with "already applied" error).
-> 
-> Simply removing this patch from the package solves the problem.
-> 
-
-I think something went wrong with your update to latest master because
-the patch 'package/qt5/qt5base/0007-build-with-explicitlib-after-all.patch'
-was already removed as part of the version bump to 5.6.1-1, see commit
-'qt5: bump version to 5.6.1-1' ([1])...
-
-Regards,
-Peter
-
-[1] https://git.busybox.net/buildroot/commit/?id=9a55b996651fdfbc40e202cb4dd725dce624ca91
-
-> diff --git
-> a/package/qt5/qt5base/0007-build-with-explicitlib-after-all.patch
-> b/package/qt5/qt5base/0007-build-with-explicitlib-after-all.patch
-> deleted file mode 100644
-> index a878ba6..0000000
-> --- a/package/qt5/qt5base/0007-build-with-explicitlib-after-all.patch
-> +++ /dev/null
-> @@ -1,51 +0,0 @@
-> -From 523c7e3fd55c853dd424d57f28e225d57439cf89 Mon Sep 17 00:00:00 2001
-> -From: Oswald Buddenhagen <oswald.buddenhagen@theqtcompany.com>
-> -Date: Thu, 3 Mar 2016 14:12:16 +0100
-> -Subject: [PATCH] build with explicitlib after all
-> -
-> -unlike speculated in 2fe363514, this is not a workaround at all: it
-> -causes that libraries' public link interfaces (LIBS) are exported in the
-> -first place. unlike with staticlib, this does not export LIBS_PRIVATE,
-> -so it wouldn't even be a particularly effective workaround for rpath
-> -brokenness anyway.
-> -
-> -the problem was pretty well hidden by the qt module system, which at the
-> -level of libraries is pretty redundant with the .prl file handling,
-> -which shows just how stupid the whole "design" is.
-> -
-> -unlike before, we now enable explicitlib for all libraries, not just qt
-> -modules - we enable create_prl for all of them as well, after all.
-> -
-> -an immediate effect of this change is that it fixes linking on RaspPI:
-> -the qtcore headers make the user code require linking libatomic, so we
-> -must add it to our public link interface.
-> -
-> -Task-number: QTBUG-51621
-> -Change-Id: I5742c88694db8e8a9b79d17222dc6df2b38e5ab2
-> -Reviewed-by: Joerg Bornemann <joerg.bornemann@theqtcompany.com>
-> -Reviewed-by: Allan Sandfeld Jensen <allan.jensen@theqtcompany.com>
-> -
-> -Upstream:
-> https://codereview.qt-project.org/gitweb?p=qt%2Fqtbase.git;a=commit;h=523c7e3fd55c853dd424d57f28e225d57439cf89
-> -Signed-off: Peter Seiderer <ps.report@gmx.net>
-> ----
-> - mkspecs/features/qt_build_config.prf | 4 ++++
-> - 1 file changed, 4 insertions(+)
-> -
-> -diff --git a/mkspecs/features/qt_build_config.prf
-> b/mkspecs/features/qt_build_config.prf
-> -index 518fd93..b3081b9 100644
-> ---- a/mkspecs/features/qt_build_config.prf
-> -+++ b/mkspecs/features/qt_build_config.prf
-> -@@ -72,6 +72,10 @@ CONFIG += \
-> -     # However, testcases should be still built with exceptions.
-> -     exceptions_off testcase_exceptions
-> -
-> -+# Under Windows, this is neither necessary (transitive deps are
-> automatically
-> -+# resolved), nor functional (.res files end up in .prl files and break
-> things).
-> -+unix: CONFIG += explicitlib
-> -+
-> -
-> - defineTest(qtBuildPart) {
-> -     bp = $$eval($$upper($$section(_QMAKE_CONF_, /, -2, -2))_BUILD_PARTS)
-> ---
-> -2.7.4
-> -
-> 
-> 
-> Regards,
-> Danijel Tudek
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f3a99e5..939a20a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -238,12 +238,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.81"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.103"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.63"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.77"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.18.40"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.41"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.31"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.32"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+ 	default "4.4.19"	if BR2_KERNEL_HEADERS_4_4
+-- 
+2.7.3
