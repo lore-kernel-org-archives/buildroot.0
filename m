@@ -1,39 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 6 Sep 2016 23:06:06 +0200
-Subject: [Buildroot] [PATCH 9/9 v4] docs/manual: add appendix to convert
- old br2-external trees
-In-Reply-To: <aad17bc5-083e-b94d-fd2a-2a40019fdea4@ecagroup.com>
-References: <cover.1473109655.git.yann.morin.1998@free.fr>
- <1eb85fca3b3363057a5e6662fd5af7c529593af4.1473109655.git.yann.morin.1998@free.fr>
- <aad17bc5-083e-b94d-fd2a-2a40019fdea4@ecagroup.com>
-Message-ID: <20160906210606.GC12105@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 Sep 2016 22:55:53 +0200
+Subject: [Buildroot] [git commit] gtest: retrieve package from github
+Message-ID: <20160906211731.4A63881F74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=0cd962b3bcb842985369cb276e6cba0f8b15289c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-09-06 10:21 +0000, Julien CORJON spake thusly:
-> I think the idea of this patch (document how to convert old br2-external 
-> tree) should be moved between patches 6 & 7 or merged in patch "6 - 
-> docs/manual: document the br2-external NAME"
+https://googletest.googlecode.com/files is no more available, so update
+gtest.mk and gtest.hash to retrieve googletest source code as a tar.gz
+(and not a zip) from github as https://googletest.googlecode.com is now
+a redirection to https://github.com/google/googletest.
 
-Rahhh... You really want me to die in a rebase-hell? ;-)
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gtest/gtest.hash | 4 ++--
+ package/gtest/gtest.mk   | 9 ++-------
+ 2 files changed, 4 insertions(+), 9 deletions(-)
 
-Will do (that hell will probably not be very hot anyway; piece of cake
-when compared to the temps we had the past few weeks here! ;-] ).
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gtest/gtest.hash b/package/gtest/gtest.hash
+index 8ff79cb..79e31e4 100644
+--- a/package/gtest/gtest.hash
++++ b/package/gtest/gtest.hash
+@@ -1,2 +1,2 @@
+-# From http://code.google.com/p/googletest/downloads/detail?name=gtest-1.7.0.zip&can=2&q=
+-sha1	f85f6d2481e2c6c4a18539e391aa4ea8ab0394af	gtest-1.7.0.zip
++# Locally computed:
++sha256	f73a6546fdf9fce9ff93a5015e0333a8af3062a152a9ad6bcb772c96687016cc	gtest-release-1.7.0.tar.gz
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+index 11aa7e9..eb30905 100644
+--- a/package/gtest/gtest.mk
++++ b/package/gtest/gtest.mk
+@@ -5,9 +5,8 @@
+ ################################################################################
+ 
+ # Make sure this remains the same version as the gmock one
+-GTEST_VERSION = 1.7.0
+-GTEST_SOURCE = gtest-$(GTEST_VERSION).zip
+-GTEST_SITE = http://googletest.googlecode.com/files
++GTEST_VERSION = release-1.7.0
++GTEST_SITE = $(call github,google,googletest,$(GTEST_VERSION))
+ GTEST_INSTALL_STAGING = YES
+ GTEST_INSTALL_TARGET = NO
+ GTEST_LICENSE = BSD-3c
+@@ -22,10 +21,6 @@ GTEST_LICENSE_FILES = LICENSE
+ # the gtest sources.
+ GTEST_CONF_OPTS = -DBUILD_SHARED_LIBS=OFF
+ 
+-define GTEST_EXTRACT_CMDS
+-	$(UNZIP) $(DL_DIR)/$(GTEST_SOURCE) -d $(BUILD_DIR)
+-endef
+-
+ define GTEST_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/libgtest.a $(STAGING_DIR)/usr/lib/libgtest.a
+ 	$(INSTALL) -D -m 0755 $(@D)/libgtest_main.a $(STAGING_DIR)/usr/lib/libgtest_main.a
