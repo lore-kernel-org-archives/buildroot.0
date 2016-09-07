@@ -1,61 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 7 Sep 2016 19:16:07 +0200
-Subject: [Buildroot] [PATCH] package/php: explicitly disable phpdbg.
-In-Reply-To: <1473263026-14588-2-git-send-email-theo.debrouwere@skynet.be>
-References: <1473263026-14588-1-git-send-email-theo.debrouwere@skynet.be>
- <1473263026-14588-2-git-send-email-theo.debrouwere@skynet.be>
-Message-ID: <20160907171607.GA4759@free.fr>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Wed,  7 Sep 2016 22:42:37 +0200
+Subject: [Buildroot] [PATCH 1/1] acpica: bump version to 20160831
+Message-ID: <20160907204237.8263-1-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Theo, All,
+New version has been build- and run-tested on x86_64 and aarch64.
 
-On 2016-09-07 17:43 +0200, Theo Debrouwere spake thusly:
-> When building php, the package will also build/install phpdbg.
-> This patch explicitly disables this behaviour.
-> 
-> Signed-off-by: Theo Debrouwere <tdebrouwere@televic.com>
-> ---
->  package/php/php.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index d7e27a1..a63a8df 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -19,7 +19,9 @@ PHP_CONF_OPTS = \
->  	--disable-all \
->  	--without-pear \
->  	--with-config-file-path=/etc \
-> +	--enable-phpdbg=no \
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+---
+ package/acpica/acpica.hash | 2 +-
+ package/acpica/acpica.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-To disable options, we use the --disable variant.
-
-Otherwise, looks good. Thanks!
-
-Regards,
-Yann E. MORIN.
-
->  	--disable-rpath
-> +
->  PHP_CONF_ENV = \
->  	ac_cv_func_strcasestr=yes \
->  	EXTRA_LIBS="$(PHP_EXTRA_LIBS)"
-> -- 
-> 2.8.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+index 8d5257f..ca6dd92 100644
+--- a/package/acpica/acpica.hash
++++ b/package/acpica/acpica.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256 4ac73a5887b643dcca483f0241cbb808a53326846928edad9a2f86cffcde5850 acpica-unix2-20160527.tar.gz
++sha256 fea808449aac29442c22419ad9e3eaa6b1a35f02e0db2b2f8802dc3af69e4965 acpica-unix2-20160831.tar.gz
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index b8459d8..a42eb72 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ACPICA_VERSION = 20160527
++ACPICA_VERSION = 20160831
+ ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
+ ACPICA_SITE = https://acpica.org/sites/acpica/files
+ ACPICA_LICENSE = BSD-3c or GPLv2
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.9.3
