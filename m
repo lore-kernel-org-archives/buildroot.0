@@ -1,39 +1,61 @@
-From: yoda zhong <yodazhong@gmail.com>
-Date: Wed, 7 Sep 2016 09:42:01 -0700
-Subject: [Buildroot] How to flash to internal eMMC
-Message-ID: <57d0435a.259b420a.73d7d.e182@mx.google.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 7 Sep 2016 19:16:07 +0200
+Subject: [Buildroot] [PATCH] package/php: explicitly disable phpdbg.
+In-Reply-To: <1473263026-14588-2-git-send-email-theo.debrouwere@skynet.be>
+References: <1473263026-14588-1-git-send-email-theo.debrouwere@skynet.be>
+ <1473263026-14588-2-git-send-email-theo.debrouwere@skynet.be>
+Message-ID: <20160907171607.GA4759@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Theo, All,
 
-Sorry for this additional message for flashing.
-But I failed all method that I found by googling and advices from someone.
+On 2016-09-07 17:43 +0200, Theo Debrouwere spake thusly:
+> When building php, the package will also build/install phpdbg.
+> This patch explicitly disables this behaviour.
+> 
+> Signed-off-by: Theo Debrouwere <tdebrouwere@televic.com>
+> ---
+>  package/php/php.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index d7e27a1..a63a8df 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -19,7 +19,9 @@ PHP_CONF_OPTS = \
+>  	--disable-all \
+>  	--without-pear \
+>  	--with-config-file-path=/etc \
+> +	--enable-phpdbg=no \
 
-In a nutshell, I want to make my beaglebone black run by itself without microSD.
-So I want to flash microSD into internal 4GB eMMC. FYI, microSD was made by following
-http://free-electrons.com/doc/training/buildroot/buildroot-labs.pdf 
+To disable options, we use the --disable variant.
 
-Someone advised to use dd command. So I checked the partitions for eMMC and microSD,
-and dded. But I failed to boot up without microSD.
+Otherwise, looks good. Thanks!
 
-Someone advised to boot up by keeping pressing boot button, but there?s no lit leds and failed
-to boot without microSD.
+Regards,
+Yann E. MORIN.
 
-I tried all things on http://stackoverflow.com/questions/31725206/unable-to-flash-emmc-from-sd-card-beaglebone-black
-But I failed.
+>  	--disable-rpath
+> +
+>  PHP_CONF_ENV = \
+>  	ac_cv_func_strcasestr=yes \
+>  	EXTRA_LIBS="$(PHP_EXTRA_LIBS)"
+> -- 
+> 2.8.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-In fact, I tried this also http://elinux.org/Beagleboard:BeagleBoneBlack_Debian#Flashing_eMMC
-But I failed. It seems like this method can?t be applicable to buildroot.
-
-What am I missing?
-
-Best,
-Jehun
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160907/4ab72e50/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
