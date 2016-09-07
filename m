@@ -1,44 +1,42 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Wed,  7 Sep 2016 08:48:57 -0700
-Subject: [Buildroot] [PATCH 1/1] php: add --enable-mysqlnd to configure
-	options when using mysql extensions
-Message-ID: <20160907154857.3147-1-bluemrp9@gmail.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Wed, 07 Sep 2016 17:51:10 +0200
+Subject: [Buildroot] Problem with qt5webkit on ARM?
+In-Reply-To: <FD3EC9758442224FA81FA20FD6F1AE8C64833190@mx01.dti.lan>
+References: <FD3EC9758442224FA81FA20FD6F1AE8C64833190@mx01.dti.lan>
+Message-ID: <1589997.cMmLFOyjqE@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without this configure option, mysqli was failing to build with my
-config after commit ea1e9e03442a5b375aa2214ba92e48ebba89070a.  The build
-did not fail, however, I was unable to use mysqli in my application.
+Hello Allan,
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
----
- package/php/php.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Tuesday 06 September 2016 02:39:21 Allan Chandler wrote:
+> We are trying to get the qt5webkit (5.5.0 from BR 2015.11) package
+> running on an iMX6 device and we're getting asserts from the code.
+> 
+> Originally, I thought it may be our application (a cut-down browser)
+> but it appears the browser in the qt5webkit-examples package has
+> exactly the same issue.
+> 
+> It manifests itself with the output (the last section is the important
+> one): =====
+> QEglFSVivIntegration will set environment variable FB_MULTI_BUFFER=2
+> to enable double buffering and vsync. If this is not desired, you can
+> override this via: export QT_EGLFS_IMX6_NO_FB_MULTI_BUFFER=1
+> 
+> Unable to query physical screen size, defaulting to 100 dpi.
+> To override, set QT_QPA_EGLFS_PHYSICAL_WIDTH and
+> QT_QPA_EGLFS_PHYSICAL_HEIGHT (in millimeters).
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index deaf56e..766f3df 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -181,7 +181,7 @@ endif
- 
- ### Native SQL extensions
- ifeq ($(BR2_PACKAGE_PHP_EXT_MYSQLI),y)
--PHP_CONF_OPTS += --with-mysqli
-+PHP_CONF_OPTS += --enable-mysqlnd --with-mysqli=mysqlnd
- endif
- ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
- PHP_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
-@@ -198,7 +198,7 @@ PHP_DEPENDENCIES += sqlite
- PHP_CFLAGS += -DSQLITE_OMIT_LOAD_EXTENSION
- endif
- ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),y)
--PHP_CONF_OPTS += --with-pdo-mysql
-+PHP_CONF_OPTS += --enable-mysqlnd --with-pdo-mysql=mysqlnd
- endif
- ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL),y)
- PHP_CONF_OPTS += --with-pdo-pgsql=$(STAGING_DIR)/usr
+I have not tested Qt + EGLFS + iMX6 since a while, but I remember that I 
+have felt it was not stable enough to be used on real projects. Maybe 
+things are better now. However, I suggest to try Xorg backend, if it is 
+possible.
+
+BR,
+
 -- 
-2.9.3
+J?r?me Pouiller, Sysmic
+Expert Linux Embarqu?
