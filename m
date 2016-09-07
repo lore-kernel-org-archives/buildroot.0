@@ -1,88 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 7 Sep 2016 16:54:47 +0100
-Subject: [Buildroot] [PATCH] util-linux: bump version to 2.28.2
-Message-ID: <1473263687-48196-1-git-send-email-Vincent.Riera@imgtec.com>
+From: yoda zhong <yodazhong@gmail.com>
+Date: Wed, 7 Sep 2016 09:42:01 -0700
+Subject: [Buildroot] How to flash to internal eMMC
+Message-ID: <57d0435a.259b420a.73d7d.e182@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
---enable-findfs and --enable-lsblk configure options don't exist
-anymore. Now, findfs and lsblk are always built by default unless you
-pass --disable-all-programs to the configure script.
+Hello,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/util-linux/Config.in       | 10 ----------
- package/util-linux/util-linux.hash |  2 +-
- package/util-linux/util-linux.mk   |  4 +---
- 3 files changed, 2 insertions(+), 14 deletions(-)
+Sorry for this additional message for flashing.
+But I failed all method that I found by googling and advices from someone.
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 657bcdd..b2307f4 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -93,11 +93,6 @@ config BR2_PACKAGE_UTIL_LINUX_FDFORMAT
- 	help
- 	  Low-level format a floppy disk
- 
--config BR2_PACKAGE_UTIL_LINUX_FINDFS
--	bool "findfs"
--	help
--	  Find a filesystem by label or UUID
--
- config BR2_PACKAGE_UTIL_LINUX_FSCK
- 	bool "fsck"
- 	help
-@@ -142,11 +137,6 @@ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
- 	help
- 	  Set up and control loop devices
- 
--config BR2_PACKAGE_UTIL_LINUX_LSBLK
--	bool "lsblk"
--	help
--	  List block devices.
--
- config BR2_PACKAGE_UTIL_LINUX_MESG
- 	bool "mesg"
- 	help
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index 17094f4..340ee94 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/util-linux/v2.28/sha256sums.asc
--sha256	3ece4ea4a34ef786b68f5c415e848390424232abd1ee00f7ee5bddc30657b60f	util-linux-2.28.1.tar.xz
-+sha256 b89d37146f20bede93a42c847bce881a17e6dbd8066ff2db2bee733fa409f0cd  util-linux-2.28.2.tar.xz
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 3c8496a..aa6f994 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- UTIL_LINUX_VERSION_MAJOR = 2.28
--UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
-+UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
- 
-@@ -71,7 +71,6 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FDFORMAT),--enable-fdformat,--disable-fdformat) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_FINDFS),--enable-findfs,--disable-findfs) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_HWCLOCK),--enable-hwclock,--disable-hwclock) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
-@@ -83,7 +82,6 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LSBLK),--enable-lsblk,--disable-lsblk) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MINIX),--enable-minix,--disable-minix) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MORE),--enable-more,--disable-more) \
--- 
-2.7.3
+In a nutshell, I want to make my beaglebone black run by itself without microSD.
+So I want to flash microSD into internal 4GB eMMC. FYI, microSD was made by following
+http://free-electrons.com/doc/training/buildroot/buildroot-labs.pdf 
+
+Someone advised to use dd command. So I checked the partitions for eMMC and microSD,
+and dded. But I failed to boot up without microSD.
+
+Someone advised to boot up by keeping pressing boot button, but there?s no lit leds and failed
+to boot without microSD.
+
+I tried all things on http://stackoverflow.com/questions/31725206/unable-to-flash-emmc-from-sd-card-beaglebone-black
+But I failed.
+
+In fact, I tried this also http://elinux.org/Beagleboard:BeagleBoneBlack_Debian#Flashing_eMMC
+But I failed. It seems like this method can?t be applicable to buildroot.
+
+What am I missing?
+
+Best,
+Jehun
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160907/4ab72e50/attachment.html>
