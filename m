@@ -1,41 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Sep 2016 12:00:00 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.7.3
-Message-ID: <20160907100558.C269F8026B@busybox.osuosl.org>
+Date: Wed, 07 Sep 2016 12:18:26 +0200
+Subject: [Buildroot] [PATCH] libcurl: bump version to 7.50.2
+In-Reply-To: <1473239768-26001-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 7 Sep 2016 10:16:08 +0100")
+References: <1473239768-26001-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87twds813h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e855d8b8fab5511f7c61ecd97ae22299d3e7c58
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 43d63c0..4b701a4 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.7.2)"
-+	bool "Latest version (4.7.3)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -97,7 +97,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.7.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.7.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
