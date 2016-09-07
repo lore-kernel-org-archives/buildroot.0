@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 07 Sep 2016 10:29:36 +0200
-Subject: [Buildroot] [PATCH] package/binutils: add binutils 2.27
-In-Reply-To: <1473124310-1699-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 5 Sep 2016 22:11:50 -0300")
-References: <1473124310-1699-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87shtc9kpb.fsf@dell.be.48ers.dk>
+Date: Wed, 07 Sep 2016 10:33:21 +0200
+Subject: [Buildroot] [PATCH] gcc: bump 6.x series to 6.2.0
+In-Reply-To: <1473124330-1745-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 5 Sep 2016 22:12:10 -0300")
+References: <1473124330-1745-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87oa409kj2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > And drop upstream patches.
+ > Adjust some patches to avoid patching the ChangeLog which isn't quite
+ > the same.
+
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
-
-Perhaps we should now deprecate 2.24?
 
 -- 
 Bye, Peter Korsgaard
