@@ -1,30 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Sep 2016 22:46:14 +0200
-Subject: [Buildroot] [git commit] pugixml: add toolchain comment
-Message-ID: <20160907204651.9BFFF8225B@busybox.osuosl.org>
+Date: Wed, 07 Sep 2016 23:00:58 +0200
+Subject: [Buildroot] [PATCH 1/2] package/stress-ng: fix install commande
+In-Reply-To: <1473279684-5337-1-git-send-email-romain.naour@gmail.com> (Romain
+ Naour's message of "Wed, 7 Sep 2016 22:21:23 +0200")
+References: <1473279684-5337-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <878tv38lx1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ada5d835011b335ad2cb3c4f6d50e185cc0973cd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Reported-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pugixml/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ > Don't use make install otherwise stress-ng will be rebuild without
+ > required link libraries if any. Furthermore, using INSTALL allow to
+ > set the file permission correcly on the target.
 
-diff --git a/package/pugixml/Config.in b/package/pugixml/Config.in
-index 5310b10..d67e695 100644
---- a/package/pugixml/Config.in
-+++ b/package/pugixml/Config.in
-@@ -14,3 +14,6 @@ config BR2_PACKAGE_PUGIXML
+ > Fixes:
+ > http://autobuild.buildroot.net/results/bba/bba4d0b635ab6849f969b8a0363ebe9f5fafd82e
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > ---
+ >  package/stress-ng/stress-ng.mk | 5 ++++-
+ >  1 file changed, 4 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+ > index 6015a1e..e12895a 100644
+ > --- a/package/stress-ng/stress-ng.mk
+ > +++ b/package/stress-ng/stress-ng.mk
+ > @@ -15,8 +15,11 @@ define STRESS_NG_BUILD_CMDS
+ >  	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ >  endef
  
- 	  http://pugixml.org/
- 	  https://github.com/zeux/pugixml
-+
-+comment "pugixml needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+ > +# Don't use make install otherwise stress-ng will be rebuild without
+ > +# required link libraries if any. Furthermore, using INSTALL allow to
+ > +# set the file permission correcly on the target.
+ >  define STRESS_NG_INSTALL_TARGET_CMDS
+ > -	$(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+ > +	$(INSTALL) -m 0755 -D $(@D)/stress-ng $(TARGET_DIR)/usr/bin/stress-ng
+ >  endef
+
+It is a bit funky that this happens, but I guess it is because of the
+touch stress-ng.c in the rule for stress-vecmath.o. I'm not sure why
+they do that.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
