@@ -1,43 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Sep 2016 23:01:39 +0200
-Subject: [Buildroot] [git commit] package/stress-ng: fix install commande
-Message-ID: <20160907210229.5E81C81F4D@busybox.osuosl.org>
+Date: Wed, 7 Sep 2016 23:01:46 +0200
+Subject: [Buildroot] [git commit] package/stress-ng: bump to 0.06.15
+Message-ID: <20160907210229.893FD8042E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5609fe65aa7a3b85f1226f57439abd07a2869fae
+commit: https://git.buildroot.net/buildroot/commit/?id=ac184e85ea32eda750a7651c429e9bff7493cc49
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Don't use make install otherwise stress-ng will be rebuild without
-required link libraries if any. Furthermore, using INSTALL allow to
-set the file permission correcly on the target.
-
-Fixes:
-http://autobuild.buildroot.net/results/bba/bba4d0b635ab6849f969b8a0363ebe9f5fafd82e
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/stress-ng/stress-ng.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/stress-ng/stress-ng.hash | 2 +-
+ package/stress-ng/stress-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
+index d09edc0..e735439 100644
+--- a/package/stress-ng/stress-ng.hash
++++ b/package/stress-ng/stress-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	7af9759a37902ebf401f92fedeada0b82bcd1e3f4e9e10130177344f143470eb	stress-ng-0.06.02.tar.gz
++sha256	0e1d7733b35f594f7461dedbf836bd4966d0611da4cd4e85cde4804d2a425e6d	stress-ng-0.06.15.tar.gz
 diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 6015a1e..e12895a 100644
+index e12895a..b4d4699 100644
 --- a/package/stress-ng/stress-ng.mk
 +++ b/package/stress-ng/stress-ng.mk
-@@ -15,8 +15,11 @@ define STRESS_NG_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Don't use make install otherwise stress-ng will be rebuild without
-+# required link libraries if any. Furthermore, using INSTALL allow to
-+# set the file permission correcly on the target.
- define STRESS_NG_INSTALL_TARGET_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
-+	$(INSTALL) -m 0755 -D $(@D)/stress-ng $(TARGET_DIR)/usr/bin/stress-ng
- endef
- 
- $(eval $(generic-package))
+-STRESS_NG_VERSION = 0.06.02
++STRESS_NG_VERSION = 0.06.15
+ STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
+ STRESS_NG_LICENSE = GPLv2+
+ STRESS_NG_LICENSE_FILES = COPYING
