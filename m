@@ -1,35 +1,39 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Wed, 7 Sep 2016 21:13:06 +1200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2016-09-05
-In-Reply-To: <20160906063035.18941102741@stock.ovh.net>
-References: <20160906063035.18941102741@stock.ovh.net>
-Message-ID: <CAFOYHZD8bOuN_2ie0t3O8XJA1zBJck4=YiyCSEVp=iNpPc43dg@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 7 Sep 2016 10:16:08 +0100
+Subject: [Buildroot] [PATCH] libcurl: bump version to 7.50.2
+Message-ID: <1473239768-26001-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 6, 2016 at 6:30 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> This is the list of Buildroot build failures that occured on
-> 2016-09-05, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
->
-> Build failures related to your packages:
->
->      sparc64 |             micropython-v1.8.3 | http://autobuild.buildroot.net/results/2b6fc56b98474e66febb673a14a860bd16746172
->
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/libcurl/libcurl.hash | 2 +-
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I took a look at this. I can't reproduce it locally but I suspect it
-might be due to the python version on the autobuilder do we have any
-way of figuring that out? The py/makeqstrdefs.py states that "This
-script works with Python 2.6, 2.7, 3.3 and 3.4." so I'm guessing
-anything earlier than 2.6 Is not expected to work.
-
-If this is the problem do we have any way of enforcing this dependency?
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index ff0026d..c2b4ecc 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 3c12c5f54ccaa1d40abc65d672107dcc75d3e1fcb38c267484334280096e5156  curl-7.50.1.tar.bz2
++sha256 0c72105df4e9575d68bcf43aea1751056c1d29b1040df6194a49c5ac08f8e233  curl-7.50.2.tar.bz2
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 4a018b8..00a61d2 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.50.1
++LIBCURL_VERSION = 7.50.2
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = http://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+-- 
+2.7.3
