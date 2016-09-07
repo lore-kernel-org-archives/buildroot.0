@@ -1,65 +1,60 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed,  7 Sep 2016 23:08:43 +0200
-Subject: [Buildroot] [PATCH 4/4] package/efl: add Evas GL DRM Engine support
-In-Reply-To: <1473282523-12796-1-git-send-email-romain.naour@gmail.com>
-References: <1473282523-12796-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1473282523-12796-4-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 7 Sep 2016 23:55:14 +0200
+Subject: [Buildroot] [PATCH 1/1] php: add --enable-mysqlnd to configure
+ options when using mysql extensions
+In-Reply-To: <20160907154857.3147-1-bluemrp9@gmail.com>
+References: <20160907154857.3147-1-bluemrp9@gmail.com>
+Message-ID: <20160907235514.1779aeb6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This support is required for Enlightenment wayland support [1].
+Floris,
 
-As stated in configure, Evas GL DRM Engine needs OpenGL ES with EGL and
-wayland (wayland-client >= 1.8.0)
+Could you have a look at the below patch?
 
-[1] https://www.enlightenment.org/about-wayland
+Thanks!
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/efl/Config.in | 10 ++++++++++
- package/efl/efl.mk    |  6 ++++++
- 2 files changed, 16 insertions(+)
+Thomas
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 6171b29..c6c26d8 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -208,6 +208,16 @@ comment "Evas DRM Engine needs mesa3d w/ EGL support, threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	depends on BR2_PACKAGE_EFL_ELPUT
- 
-+config BR2_PACKAGE_EFL_GL_DRM
-+	bool "Evas GL DRM Engine"
-+	depends on BR2_PACKAGE_EFL_DRM
-+	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
-+	help
-+	  This option enable building support for the Evas DRM Engine.
-+
-+comment "Evas GL DRM Engine needs Evas DRM Engine, OpenGL ES w/ EGL"
-+	depends on BR2_PACKAGE_EFL_DRM && !BR2_PACKAGE_EFL_OPENGLES
-+
- comment "libevas loaders"
- 
- config BR2_PACKAGE_EFL_PNG
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 413cf58..e7d6f52 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -205,6 +205,12 @@ EFL_CONF_OPTS += --enable-drm
- EFL_DEPENDENCIES += libdrm libegl mesa3d
- endif
- 
-+ifeq ($(BR2_PACKAGE_EFL_GL_DRM),y)
-+EFL_CONF_OPTS += --enable-gl-drm
-+else
-+EFL_CONF_OPTS += --disable-gl-drm
-+endif
-+
- EFL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBXKBCOMMON),libxkbcommon)
- 
- # Loaders that need external dependencies needs to be --enable-XXX=yes
+On Wed,  7 Sep 2016 08:48:57 -0700, Ryan Coe wrote:
+> Without this configure option, mysqli was failing to build with my
+> config after commit ea1e9e03442a5b375aa2214ba92e48ebba89070a.  The build
+> did not fail, however, I was unable to use mysqli in my application.
+> 
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+> ---
+>  package/php/php.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index deaf56e..766f3df 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -181,7 +181,7 @@ endif
+>  
+>  ### Native SQL extensions
+>  ifeq ($(BR2_PACKAGE_PHP_EXT_MYSQLI),y)
+> -PHP_CONF_OPTS += --with-mysqli
+> +PHP_CONF_OPTS += --enable-mysqlnd --with-mysqli=mysqlnd
+>  endif
+>  ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
+>  PHP_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
+> @@ -198,7 +198,7 @@ PHP_DEPENDENCIES += sqlite
+>  PHP_CFLAGS += -DSQLITE_OMIT_LOAD_EXTENSION
+>  endif
+>  ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),y)
+> -PHP_CONF_OPTS += --with-pdo-mysql
+> +PHP_CONF_OPTS += --enable-mysqlnd --with-pdo-mysql=mysqlnd
+>  endif
+>  ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL),y)
+>  PHP_CONF_OPTS += --with-pdo-pgsql=$(STAGING_DIR)/usr
+
+
+
 -- 
-2.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
