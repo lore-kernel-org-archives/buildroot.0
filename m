@@ -1,43 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Sep 2016 21:48:44 +0200
-Subject: [Buildroot] [git commit] acpica: bump version to 20160831
-Message-ID: <20160907194911.771A482268@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed,  7 Sep 2016 22:21:23 +0200
+Subject: [Buildroot] [PATCH 1/2] package/stress-ng: fix install commande
+Message-ID: <1473279684-5337-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=565fdbd6641ab2883cb9d6a1a9f8de82a71839b2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Don't use make install otherwise stress-ng will be rebuild without
+required link libraries if any. Furthermore, using INSTALL allow to
+set the file permission correcly on the target.
 
-New version has been build- and run-tested on x86_64 and aarch64.
+Fixes:
+http://autobuild.buildroot.net/results/bba/bba4d0b635ab6849f969b8a0363ebe9f5fafd82e
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/acpica/acpica.hash | 2 +-
- package/acpica/acpica.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/stress-ng/stress-ng.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index 8d5257f..ca6dd92 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 4ac73a5887b643dcca483f0241cbb808a53326846928edad9a2f86cffcde5850 acpica-unix2-20160527.tar.gz
-+sha256 fea808449aac29442c22419ad9e3eaa6b1a35f02e0db2b2f8802dc3af69e4965 acpica-unix2-20160831.tar.gz
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index b8459d8..a42eb72 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index 6015a1e..e12895a 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -15,8 +15,11 @@ define STRESS_NG_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
  
--ACPICA_VERSION = 20160527
-+ACPICA_VERSION = 20160831
- ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
- ACPICA_SITE = https://acpica.org/sites/acpica/files
- ACPICA_LICENSE = BSD-3c or GPLv2
++# Don't use make install otherwise stress-ng will be rebuild without
++# required link libraries if any. Furthermore, using INSTALL allow to
++# set the file permission correcly on the target.
+ define STRESS_NG_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
++	$(INSTALL) -m 0755 -D $(@D)/stress-ng $(TARGET_DIR)/usr/bin/stress-ng
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.5.5
