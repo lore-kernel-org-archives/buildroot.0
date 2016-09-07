@@ -1,60 +1,109 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 7 Sep 2016 10:59:46 +0200
-Subject: [Buildroot] [PATCH v2 2/2] buildroot-test: failure reason regex
- update
-In-Reply-To: <20160907091713.12df6aa6@free-electrons.com>
-References: <1459468972-31420-1-git-send-email-matt@thewebers.ws>
- <1459468972-31420-2-git-send-email-matt@thewebers.ws>
- <20160906220459.4ed92fe7@free-electrons.com>
- <20160907091713.12df6aa6@free-electrons.com>
-Message-ID: <20160907085946.GA5600@free.fr>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Wed,  7 Sep 2016 11:02:03 +0200
+Subject: [Buildroot] [PATCH] libpng: bump to version 1.6.25
+Message-ID: <1473238923-16549-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
-On 2016-09-07 09:17 +0200, Thomas Petazzoni spake thusly:
-> On Tue, 6 Sep 2016 22:04:59 +0200, Thomas Petazzoni wrote:
-> > Hello,
-> > 
-> > On Thu, 31 Mar 2016 19:02:52 -0500, Matt Weber wrote:
-> > > - Sub-make required one additional line tailed
-> > > - Both autobuild-run  regex to truncate end log
-> > >   and import which sets the failure reason on
-> > >   the report are updated
-> > > 
-> > > Signed-off-by: Matt Weber <matt@thewebers.ws>
-> > > 
-> > > --
-> > > Changes for v2:
-> > > - Added back in : as previous test masked
-> > >   that is was ok to leave in (Suggested by Thomas)
-> > > ---
-> > >  scripts/autobuild-run | 4 ++--
-> > >  web/import.inc.php    | 2 +-
-> > >  2 files changed, 3 insertions(+), 3 deletions(-)  
-> > 
-> > Applied to buildroot-test, and deployed on autobuild.b.o. Of course,
-> > it's up to the people using autobuild-run to update it on their side.
-> 
-> And I just reverted this commit, as it broke the autobuilders. For a
-> large number of builds, the failure reason was no longer identified
-> properly, and the script was concluding that the failure reason was
-> "all" or "all-recursive" or "lib", i.e the name of a make target, and
-> not the name of the package.
+1.6.23 tarballs have moved so, while we are at modifying libpng.mk, bump to 1.6.25.
 
-OK, updated and restarted. ;-)
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+---
+ package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch        | 5 ++++-
+ ...2-Don-t-append-prefix-to-symbol-names-in-version-script.patch | 9 ++++++---
+ package/libpng/libpng.hash                                       | 5 ++---
+ package/libpng/libpng.mk                                         | 2 +-
+ 4 files changed, 13 insertions(+), 8 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch b/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch
+index 30c3623..d232e4d 100644
+--- a/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch
++++ b/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch
+@@ -7,6 +7,9 @@ Disable the new pngfix and png-fix-itxt tools: they take up space, fail
+ to build on some oddball toolchain configurations and aren't
+ expected/needed in a non-interactive embedded system.
+ 
++[Julien: update for 1.6.25]
++Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
++
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ ---
+  Makefile.am | 2 +-
+@@ -32,7 +35,7 @@ index a66f6aa..4e67782 100644
+ +++ b/Makefile.in
+ @@ -104,7 +104,7 @@ check_PROGRAMS = pngtest$(EXEEXT) pngunknown$(EXEEXT) \
+  	pngstest$(EXEEXT) pngvalid$(EXEEXT) pngimage$(EXEEXT) \
+- 	$(am__EXEEXT_1)
++ 	pngcp$(EXEEXT) $(am__EXEEXT_1)
+  @HAVE_CLOCK_GETTIME_TRUE at am__append_1 = timepng
+ -bin_PROGRAMS = pngfix$(EXEEXT) png-fix-itxt$(EXEEXT)
+ +bin_PROGRAMS =
+diff --git a/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch b/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
+index 0754e21..2a9bfd1 100644
+--- a/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
++++ b/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
+@@ -12,6 +12,9 @@ Original patch by: Sonic Zhang <sonic.zhang@analog.com>
+ [Gustavo: update for 1.6.22]
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
++[Julien: update for 1.6.25]
++Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
++
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ ---
+  Makefile.am | 2 +-
+@@ -22,7 +25,7 @@ diff --git a/Makefile.am b/Makefile.am
+ index 3430dca..db6a7a2 100644
+ --- a/Makefile.am
+ +++ b/Makefile.am
+-@@ -236,7 +236,7 @@ contrib/tools/pngfix.o: pnglibconf.h
++@@ -245,7 +245,7 @@ contrib/tools/pngfix.o: pnglibconf.h
+  # interfering with the symbol file format.
+  SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0'\
+  		-DPNGLIB_VERSION='@PNGLIB_VERSION@'\
+@@ -35,13 +38,13 @@ diff --git a/Makefile.in b/Makefile.in
+ index 4e67782..5f468d9 100644
+ --- a/Makefile.in
+ +++ b/Makefile.in
+-@@ -754,7 +754,7 @@ SUFFIXES = .chk .out
++@@ -766,7 +766,7 @@ SUFFIXES = .chk .out
+  # interfering with the symbol file format.
+  SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0' \
+  	-DPNGLIB_VERSION='@PNGLIB_VERSION@' \
+ -	-DSYMBOL_PREFIX='$(SYMBOL_PREFIX)' -DPNG_NO_USE_READ_MACROS \
+ +	-DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS \
+- 	-DPNG_BUILDING_SYMBOL_TABLE $(am__append_6)
++ 	-DPNG_BUILDING_SYMBOL_TABLE $(am__append_7)
+  
+  # EXT_LIST is a list of the possibly library directory extensions, this exists
+ -- 
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index 04e8e40..b179aea 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,3 +1,2 @@
+-# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.23/
+-md5	9b320a05ed4db1f3f0865c8a951fd9aa	libpng-1.6.23.tar.xz
+-sha1	4857fb8dbd5ca7ddacc40c183e340b9ffa34a097	libpng-1.6.23.tar.xz
++# Locally computed:
++sha256 09fe8d8341e8bfcfb3263100d9ac7ea2155b28dd8535f179111c1672ac8d8811  libpng-1.6.25.tar.xz
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 0dfc535..c577cd5 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPNG_VERSION = 1.6.23
++LIBPNG_VERSION = 1.6.25
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.4
