@@ -1,57 +1,49 @@
-From: Danijel Tudek <danijel.tudek@bylapis.com>
-Date: Wed, 7 Sep 2016 15:30:13 +0200
-Subject: [Buildroot] [Buildroot} [PATCH] Remove qt5base explicitlib patch
-In-Reply-To: <20160906213541.39feefc1@free-electrons.com>
-References: <CAAcXeukkVNMK3E21M_aZMEc2m5nCmC75e1co2acWdmN=7QtUCg@mail.gmail.com>
- <20160906192831.67fde478@gmx.net> <20160906213541.39feefc1@free-electrons.com>
-Message-ID: <CAAcXeu=5vR7Aft4dd25GiNCKQ7JoSCJk-7-9xC+Qruo6EHFdfw@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed, 7 Sep 2016 11:24:15 -0300 (BRT)
+Subject: [Buildroot] [PATCH v2,1/1] gtest: retrieve package from github
+In-Reply-To: <20160906231857.60082e09@free-electrons.com>
+References: <1472660994-23034-1-git-send-email-fabrice.fontaine@orange.com>
+ <20160906231857.60082e09@free-electrons.com>
+Message-ID: <1114700254.3685952.1473258255325.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-You're right. My tree wasn't merged with upstream for a long time and there
-were some local changes in Qt5 packages, so I must have missed it while
-resolving conflicts. Time to switch to BR2_EXTERNAL, I guess...
-
-On Tue, Sep 6, 2016 at 9:35 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: "Fabrice Fontaine" <fontaine.fabrice@gmail.com>
+> Cc: "Fabrice Fontaine" <fabrice.fontaine@orange.com>, buildroot at buildroot.org
+> Sent: Tuesday, September 6, 2016 6:18:57 PM
+> Subject: Re: [Buildroot] [PATCH v2,1/1] gtest: retrieve package from github
 
 > Hello,
->
-> On Tue, 6 Sep 2016 19:28:31 +0200, Peter Seiderer wrote:
->
-> > I think something went wrong with your update to latest master because
-> > the patch 'package/qt5/qt5base/0007-build-with-explicitlib-after-
-> all.patch'
-> > was already removed as part of the version bump to 5.6.1-1, see commit
-> > 'qt5: bump version to 5.6.1-1' ([1])...
->
-> I confirm: qt5base patches apply just fine here:
->
-> >>> qt5base 5.6.1-1 Extracting
-> xzcat /home/thomas/dl/qtbase-opensource-src-5.6.1-1.tar.xz | tar
-> --strip-components=1 -C /home/thomas/projets/buildroot/output/build/qt5base-5.6.1-1
->  -xf -
-> >>> qt5base 5.6.1-1 Patching
->
-> Applying 0006-eglfs-rasp-pi-header-inclusion.patch using patch:
-> patching file config.tests/qpa/eglfs-brcm/eglfs-brcm.pro
-> patching file src/plugins/platforms/eglfs/eglfs-plugin.pro
-> Hunk #1 succeeded at 1 with fuzz 1 (offset -5 lines).
->
-> Applying 0007-Remove-libudev-dependency-from-kms.pro.patch using patch:
-> patching file config.tests/qpa/kms/kms.pro
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160907/deeda721/attachment.html>
+> 
+> On Wed, 31 Aug 2016 18:29:54 +0200, Fabrice Fontaine wrote:
+>> https://googletest.googlecode.com/files is no more available, so update
+>> gtest.mk and gtest.hash to retrieve googletest source code as a tar.gz
+>> (and not a zip) from github as https://googletest.googlecode.com is now
+>> a redirection to https://github.com/google/googletest.
+>> 
+>> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+>> ---
+>> Changes v1 -> v2:
+>>  - Fix patch number (6/6 to 1/1)
+> 
+> Applied to master, thanks. I've tried to do the same for the gmock
+> package (the 1.7.0 release is available from
+> https://github.com/google/googlemock/releases. However, since it's
+> fetched from Github, it doesn't have the configure script
+> pre-generated, and GMOCK_AUTORECONF = YES doesn't work.
+> 
+> I guess moving to using the CMake based build system would make more
+> sense, but that's a bigger task.
+> 
+> Patches welcome :)
+
+A patch was sent a long time ago, but was rejected[1]. I will update it and resubmit for review.
+
+1. http://patchwork.ozlabs.org/patch/586130/
+
+Carlos Santos (Casantos)
+DATACOM, P&D
