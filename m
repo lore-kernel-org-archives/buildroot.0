@@ -1,60 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  8 Sep 2016 20:46:58 +0200
-Subject: [Buildroot] [PATCH] package/qemu: fix build of host variant
-Message-ID: <1473360418-28933-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Sep 2016 21:20:33 +0200
+Subject: [Buildroot] [PATCH] gmock: download from github and convert to
+ a cmake-package
+In-Reply-To: <1473353883-10762-1-git-send-email-casantos@datacom.ind.br>
+References: <983781693.3690991.1473290568772.JavaMail.zimbra@datacom.ind.br>
+ <1473353883-10762-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20160908212033.1d1c6947@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Qemu buildsystem expects that the cpp it is passed can be called
-like it were cc: it passes it the '-c' option, which is not allowed by
-cpp, but is allowed for cc.
+Hello,
 
-Fix that by overriding CPP when calling configure.
+On Thu,  8 Sep 2016 13:58:03 -0300, Carlos Santos wrote:
 
-Note: the target variant of Qemu does not build the affected parts (the
-PC-BIOS images). This is another problem that should be fixed separately.
+> +--- ./CMakeLists.txt.orig	2013-09-18 21:32:04.000000000 -0300
+> ++++ ./CMakeLists.txt	2016-09-08 11:10:51.519780433 -0300
+> +@@ -15,7 +15,7 @@
+> + if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/gtest/CMakeLists.txt")
+> +   set(gtest_dir gtest)
+> + else()
+> +-  set(gtest_dir ../gtest)
+> ++  set(gtest_dir ../gtest-${GTEST_VERSION})
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/qemu/qemu.mk | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+So you make the assumption that you have the following code
+organization:
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 42dd9c2..9815f76 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -110,16 +110,19 @@ HOST_QEMU_OPTS += --enable-vde
- HOST_QEMU_DEPENDENCIES += host-vde2
- endif
- 
-+# Override CPP, as it expects to be able to call it like it'd
-+# call the compiler.
- define HOST_QEMU_CONFIGURE_CMDS
--	cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
--		--target-list="$(HOST_QEMU_TARGETS)"    \
--		--prefix="$(HOST_DIR)/usr"              \
--		--interp-prefix=$(STAGING_DIR)          \
--		--cc="$(HOSTCC)"                        \
--		--host-cc="$(HOSTCC)"                   \
--		--python=$(HOST_DIR)/usr/bin/python2    \
--		--extra-cflags="$(HOST_CFLAGS)"         \
--		--extra-ldflags="$(HOST_LDFLAGS)"       \
-+	cd $(@D); $(HOST_CONFIGURE_OPTS) CPP="$(HOSTCC) -E" \
-+		./configure \
-+		--target-list="$(HOST_QEMU_TARGETS)" \
-+		--prefix="$(HOST_DIR)/usr" \
-+		--interp-prefix=$(STAGING_DIR) \
-+		--cc="$(HOSTCC)" \
-+		--host-cc="$(HOSTCC)" \
-+		--python=$(HOST_DIR)/usr/bin/python2 \
-+		--extra-cflags="$(HOST_CFLAGS)" \
-+		--extra-ldflags="$(HOST_LDFLAGS)" \
- 		$(HOST_QEMU_OPTS)
- endef
- 
+  output/build/gmock-1.7.0
+  output/build/gtest-1.7.0
+
+i.e, during its build process, gmock needs to access the gtest source
+code?
+
+Why is it the case? As far as I'm aware, it's not currently the case
+with the existing packaging.
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
