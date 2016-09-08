@@ -1,48 +1,62 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 08 Sep 2016 13:30:35 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libssh: fix dependency on
-	libgcrypt
-References: <cover.1473326919.git.yann.morin.1998@free.fr>
- <201c0948734eafacde0c6d0aa47f0399745f1259.1473326919.git.yann.morin.1998@free.fr>
-Message-ID: <rnu7adx19n.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Sep 2016 13:42:57 +0200
+Subject: [Buildroot] [PATCH] package/mono: fix undefined reference to tls
+In-Reply-To: <1473324667-31678-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1473324667-31678-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20160908134257.55ca818c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 08 Sep 2016 11:35:06 +0200 schrieb Yann E. MORIN:
+Hello,
 
-> This in itself is already incorrect, but that can cause further issues,
-> as some packages (e.g. Kodi) will select (indirectly) openssl, and has
-> an option to select libssh; enabling that option causes unmet direct
-> dependencies of libssh:
+Thanks for investigating this issue!
+
+On Thu,  8 Sep 2016 10:51:07 +0200, Angelo Compagnucci wrote:
+> This commit fixes the nasty undefined reference to tls bug experienced with musl.
 > 
->     warning: (BR2_PACKAGE_KODI_LIBSSH) selects BR2_PACKAGE_LIBSSH which
->     has unmet direct dependencies (BR2_USE_MMU && !BR2_STATIC_LIBS &&
->     BR2_TOOLCHAIN_HAS_THREADS && BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
->     && !BR2_PACKAGE_OPENSSL)
+> Fixes:
+> http://autobuild.buildroot.net/results/048f04488cb8c7f4c32b828aa5214ebc22ba0153
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+>  package/mono/mono.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Fix this dependency.
+> diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+> index 3d0b9bc..de4f16b 100644
+> --- a/package/mono/mono.mk
+> +++ b/package/mono/mono.mk
+> @@ -26,6 +26,10 @@ MONO_CONF_OPTS = --disable-gtk-doc \
+>  	--disable-mcs-build \
+>  	--enable-static
+>  
+> +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+> +MONO_CONF_OPTS += --with-tls=pthread
+> +endif
 
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-(tested make menuconfig)
+Hum, that's interesting. Do you have more details about what this
+--with-tls option is doing?
 
-This defconfig
+Is --with-tls related to Thread Local Storage provided by the compiler ?
 
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_KODI=y
-BR2_PACKAGE_KODI_LIBSSH=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-BR2_PACKAGE_XORG7=y
+Indeed, TLS support in gcc was disabled for musl toolchains until
+recently (i.e until commit
+https://git.buildroot.org/buildroot/commit/package/gcc?id=1bd02bc230e1b3b22ca3eb23fb3dcb91b878283a).
 
-showed the error message quoted without this patch.
-With the patch the bug I reported[1] is fixed and I can remove
-the bunch of gpg-revert patches from my kodi17 branch[2], thanks!
+Since the toolchain that was causing the build failure was built
+*prior* to this commit, maybe this commit fixes the issue, as it would
+make musl toolchains have TLS support enabled in gcc.
 
-Regards, Bernd
+Could you test this using the internal toolchain backend, and see if
+without your fix the problem isn't already fixed? If that's the case,
+I'll simply rebuild the pre-built toolchains.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2016-July/167041.html
-[2] https://github.com/bkuhls/buildroot/tree/kodi17
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
