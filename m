@@ -1,24 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 08 Sep 2016 19:48:33 +0200
-Subject: [Buildroot] [PATCH] package/fbterm: fix download site
-In-Reply-To: <1473338623-14693-1-git-send-email-julien.boibessot@free.fr>
- (julien boibessot's message of "Thu, 8 Sep 2016 14:43:43 +0200")
-References: <1473338623-14693-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <87inu6705q.fsf@dell.be.48ers.dk>
+Date: Thu, 8 Sep 2016 19:48:29 +0200
+Subject: [Buildroot] [git commit] package/fbterm: fix download site
+Message-ID: <20160908174926.F0BD4817F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4e9292f6e4f27633453f1cc302cb4e4eebe0b387
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
- > fbterm-1.7.0.tar.gz is no more accessible from http://fbterm.googlecode.com/files
+fbterm-1.7.0.tar.gz is no more accessible from http://fbterm.googlecode.com/files
 
- > Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/fbterm/fbterm.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/fbterm/fbterm.mk b/package/fbterm/fbterm.mk
+index 7a424a5..be3cbe2 100644
+--- a/package/fbterm/fbterm.mk
++++ b/package/fbterm/fbterm.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ FBTERM_VERSION = 1.7.0
+-FBTERM_SITE = http://fbterm.googlecode.com/files
++FBTERM_SITE = https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/fbterm
+ FBTERM_LICENSE = GPLv2+
+ FBTERM_LICENSE_FILES = COPYING
+ FBTERM_DEPENDENCIES = fontconfig liberation
