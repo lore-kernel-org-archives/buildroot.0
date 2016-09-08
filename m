@@ -1,19 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 08 Sep 2016 19:47:10 +0200
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.4.15
-In-Reply-To: <1473338429-24903-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 8 Sep 2016 09:40:29 -0300")
-References: <1473338429-24903-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mvji7081.fsf@dell.be.48ers.dk>
+Date: Thu, 08 Sep 2016 19:48:33 +0200
+Subject: [Buildroot] [PATCH] package/fbterm: fix download site
+In-Reply-To: <1473338623-14693-1-git-send-email-julien.boibessot@free.fr>
+ (julien boibessot's message of "Thu, 8 Sep 2016 14:43:43 +0200")
+References: <1473338623-14693-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <87inu6705q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+ > fbterm-1.7.0.tar.gz is no more accessible from http://fbterm.googlecode.com/files
+
+ > Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
 Committed, thanks.
 
