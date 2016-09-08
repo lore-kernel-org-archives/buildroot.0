@@ -1,54 +1,62 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 8 Sep 2016 17:11:48 -0300 (BRT)
-Subject: [Buildroot] [PATCH] gmock: download from github and convert to
- a cmake-package
-In-Reply-To: <20160908212033.1d1c6947@free-electrons.com>
-References: <983781693.3690991.1473290568772.JavaMail.zimbra@datacom.ind.br>
- <1473353883-10762-1-git-send-email-casantos@datacom.ind.br>
- <20160908212033.1d1c6947@free-electrons.com>
-Message-ID: <893091325.3899936.1473365508575.JavaMail.zimbra@datacom.ind.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Sep 2016 22:13:18 +0200
+Subject: [Buildroot] [git commit] package/qemu: fix build of host variant
+Message-ID: <20160908201329.0C7B782167@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: buildroot at buildroot.org, "fabrice fontaine" <fabrice.fontaine@orange.com>, "fontaine fabrice"
-> <fontaine.fabrice@gmail.com>
-> Sent: Thursday, September 8, 2016 4:20:33 PM
-> Subject: Re: [Buildroot] [PATCH] gmock: download from github and convert to a cmake-package
+commit: https://git.buildroot.net/buildroot/commit/?id=524b6b85595274ca13bd7d01adb61ce2dddd786c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hello,
-> 
-> On Thu,  8 Sep 2016 13:58:03 -0300, Carlos Santos wrote:
-> 
->> +--- ./CMakeLists.txt.orig	2013-09-18 21:32:04.000000000 -0300
->> ++++ ./CMakeLists.txt	2016-09-08 11:10:51.519780433 -0300
->> +@@ -15,7 +15,7 @@
->> + if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/gtest/CMakeLists.txt")
->> +   set(gtest_dir gtest)
->> + else()
->> +-  set(gtest_dir ../gtest)
->> ++  set(gtest_dir ../gtest-${GTEST_VERSION})
-> 
-> So you make the assumption that you have the following code
-> organization:
-> 
->  output/build/gmock-1.7.0
->  output/build/gtest-1.7.0
-> 
-> i.e, during its build process, gmock needs to access the gtest source
-> code?
+The Qemu buildsystem expects that the cpp it is passed can be called
+like it were cc: it passes it the '-c' option, which is not allowed by
+cpp, but is allowed for cc.
 
-Right.
+Fix that by overriding CPP when calling configure.
 
-> Why is it the case? As far as I'm aware, it's not currently the case
-> with the existing packaging.
+Note: the target variant of Qemu does not build the affected parts (the
+PC-BIOS images). This is another problem that should be fixed separately.
 
-Because the old gmock distribution (gmock-1.7.0.zip) contained the gtest
-code, while the new one (gmock-release-1.7.0.tar.gz) does not.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qemu/qemu.mk | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
-Carlos Santos (Casantos)
-DATACOM, P&D
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 42dd9c2..9815f76 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -110,16 +110,19 @@ HOST_QEMU_OPTS += --enable-vde
+ HOST_QEMU_DEPENDENCIES += host-vde2
+ endif
+ 
++# Override CPP, as it expects to be able to call it like it'd
++# call the compiler.
+ define HOST_QEMU_CONFIGURE_CMDS
+-	cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
+-		--target-list="$(HOST_QEMU_TARGETS)"    \
+-		--prefix="$(HOST_DIR)/usr"              \
+-		--interp-prefix=$(STAGING_DIR)          \
+-		--cc="$(HOSTCC)"                        \
+-		--host-cc="$(HOSTCC)"                   \
+-		--python=$(HOST_DIR)/usr/bin/python2    \
+-		--extra-cflags="$(HOST_CFLAGS)"         \
+-		--extra-ldflags="$(HOST_LDFLAGS)"       \
++	cd $(@D); $(HOST_CONFIGURE_OPTS) CPP="$(HOSTCC) -E" \
++		./configure \
++		--target-list="$(HOST_QEMU_TARGETS)" \
++		--prefix="$(HOST_DIR)/usr" \
++		--interp-prefix=$(STAGING_DIR) \
++		--cc="$(HOSTCC)" \
++		--host-cc="$(HOSTCC)" \
++		--python=$(HOST_DIR)/usr/bin/python2 \
++		--extra-cflags="$(HOST_CFLAGS)" \
++		--extra-ldflags="$(HOST_LDFLAGS)" \
+ 		$(HOST_QEMU_OPTS)
+ endef
+ 
