@@ -1,37 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  8 Sep 2016 15:39:02 -0300
-Subject: [Buildroot] [PATCH 6/6] Config.in: remove
-	BR2_DEPRECATED_SINCE_2015_08
-In-Reply-To: <1473359942-15810-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1473359942-15810-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1473359942-15810-6-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu,  8 Sep 2016 20:46:58 +0200
+Subject: [Buildroot] [PATCH] package/qemu: fix build of host variant
+Message-ID: <1473360418-28933-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's now unused.
+The Qemu buildsystem expects that the cpp it is passed can be called
+like it were cc: it passes it the '-c' option, which is not allowed by
+cpp, but is allowed for cc.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fix that by overriding CPP when calling configure.
+
+Note: the target variant of Qemu does not build the affected parts (the
+PC-BIOS images). This is another problem that should be fixed separately.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/qemu/qemu.mk | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index bea3323..e614c8f 100644
---- a/Config.in
-+++ b/Config.in
-@@ -369,10 +369,6 @@ config BR2_DEPRECATED
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 42dd9c2..9815f76 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -110,16 +110,19 @@ HOST_QEMU_OPTS += --enable-vde
+ HOST_QEMU_DEPENDENCIES += host-vde2
+ endif
  
- if BR2_DEPRECATED
++# Override CPP, as it expects to be able to call it like it'd
++# call the compiler.
+ define HOST_QEMU_CONFIGURE_CMDS
+-	cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
+-		--target-list="$(HOST_QEMU_TARGETS)"    \
+-		--prefix="$(HOST_DIR)/usr"              \
+-		--interp-prefix=$(STAGING_DIR)          \
+-		--cc="$(HOSTCC)"                        \
+-		--host-cc="$(HOSTCC)"                   \
+-		--python=$(HOST_DIR)/usr/bin/python2    \
+-		--extra-cflags="$(HOST_CFLAGS)"         \
+-		--extra-ldflags="$(HOST_LDFLAGS)"       \
++	cd $(@D); $(HOST_CONFIGURE_OPTS) CPP="$(HOSTCC) -E" \
++		./configure \
++		--target-list="$(HOST_QEMU_TARGETS)" \
++		--prefix="$(HOST_DIR)/usr" \
++		--interp-prefix=$(STAGING_DIR) \
++		--cc="$(HOSTCC)" \
++		--host-cc="$(HOSTCC)" \
++		--python=$(HOST_DIR)/usr/bin/python2 \
++		--extra-cflags="$(HOST_CFLAGS)" \
++		--extra-ldflags="$(HOST_LDFLAGS)" \
+ 		$(HOST_QEMU_OPTS)
+ endef
  
--config BR2_DEPRECATED_SINCE_2015_08
--	bool
--	default y
--
- config BR2_DEPRECATED_SINCE_2015_11
- 	bool
- 	default y
 -- 
-2.7.3
+2.7.4
