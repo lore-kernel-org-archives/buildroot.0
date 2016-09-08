@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Sep 2016 22:17:43 +0200
-Subject: [Buildroot] [PATCH 1/6] arch: remove support for sh64
-In-Reply-To: <1473359942-15810-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 8 Sep 2016 22:18:53 +0200
+Subject: [Buildroot] [PATCH 5/6] linux-headers: remove deprecated
+ versions
+In-Reply-To: <1473359942-15810-5-git-send-email-gustavo@zacarias.com.ar>
 References: <1473359942-15810-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160908221743.6f3ab80d@free-electrons.com>
+ <1473359942-15810-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160908221853.398542f6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +14,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  8 Sep 2016 15:38:57 -0300, Gustavo Zacarias wrote:
-> It's been deprecated for quite some time now.
+On Thu,  8 Sep 2016 15:39:01 -0300, Gustavo Zacarias wrote:
+> Linux headers 3.19.x and 4.0.x have been deprecated for a while now, so
+> it's time to remove them.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  .defconfig                              |  1 -
->  arch/Config.in                          | 12 +-----------
->  arch/Config.in.sh                       |  3 +--
->  linux/Config.in                         |  6 +++---
->  package/fdk-aac/Config.in               |  4 ++--
->  package/gauche/Config.in                |  2 +-
->  package/gdb/Config.in                   |  4 ++--
->  package/libunwind/Config.in             |  2 +-
->  package/ruby/ruby.mk                    |  2 +-
->  toolchain/toolchain-buildroot/Config.in |  4 ++--
->  10 files changed, 14 insertions(+), 26 deletions(-)
+>  Config.in.legacy                     | 20 ++++++++++++++++++++
+>  package/linux-headers/Config.in.host | 10 ----------
+>  2 files changed, 20 insertions(+), 10 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 60d414b..b796904 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -145,6 +145,26 @@ endif
+>  ###############################################################################
+>  comment "Legacy options removed in 2016.11"
+>  
+> +config BR2_KERNEL_HEADERS_4_0
+> +	bool "kernel headers version 4.0.x are no longer supported"
+> +	select BR2_KERNEL_HEADERS_4_1
 
-I've applied patches 1, 2, 3, 4 and 6. I've left PATCH 5/6 on the side
-for now, I'll reply to it to explain why.
+Wouldn't it be safer to select in this case the immediately older
+kernel header version that's still available?
 
-Thanks!
+Imagine the user is running a 4.0 kernel, and therefore has chosen 4.0
+kernel headers. With your change, the toolchain will now be rebuilt
+with 4.1 kernel headers... while the user is running a 4.0 kernel. Not
+good.
+
+Default to an older version seems safer to me.
+
+What do you think?
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
