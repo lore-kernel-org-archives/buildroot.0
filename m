@@ -1,41 +1,45 @@
 From: Chris Packham <judge.packham@gmail.com>
-Date: Thu,  8 Sep 2016 22:01:18 +1200
-Subject: [Buildroot] [PATCH 2/2] syslog-ng: Bump version to 3.7.3
-In-Reply-To: <20160908100118.5723-1-judge.packham@gmail.com>
-References: <20160908100118.5723-1-judge.packham@gmail.com>
-Message-ID: <20160908100118.5723-2-judge.packham@gmail.com>
+Date: Thu, 8 Sep 2016 22:07:41 +1200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2016-09-05
+In-Reply-To: <87vay67mmy.fsf@dell.be.48ers.dk>
+References: <20160906063035.18941102741@stock.ovh.net>
+ <CAFOYHZD8bOuN_2ie0t3O8XJA1zBJck4=YiyCSEVp=iNpPc43dg@mail.gmail.com>
+ <20160907112850.17240a82@free-electrons.com>
+ <CAFOYHZA8sdf7ZFA-CKKSngLUrbKAj16xsswJ64r+JGgCUKjz9g@mail.gmail.com>
+ <87vay67mmy.fsf@dell.be.48ers.dk>
+Message-ID: <CAFOYHZD-eeu5RN2Zh=ABAL16YgV1gB8Ok8qMnqvws611KOib7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
- package/syslog-ng/syslog-ng.hash | 2 +-
- package/syslog-ng/syslog-ng.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu, Sep 8, 2016 at 9:43 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
+>
+> Hi,
+>
+>  >> The line QSTRING_BLACK_LIST = {'NULL', 'number_of', } is defining a
+>  >> set. It works in Python 2.7, but not in Python 2.6. I guess replacing
+>  >> with:
+>  >>
+>  >> QSTRING_BLACK_LIST = set(['NULL', 'number_of'])
+>  >>
+>  >> should work fine (tested with 2.6, 2.7 and 3.5)
+>
+>  > So before I go down that path. Are we saying python >2.6 is required
+>  > for buildroot? Or at least that is the expectation for the
+>  > auto-builders.
+>
+> Yes - From docs/manual/prerequisite.txt:
+>
+> === Mandatory packages
+>
+> * Build tools:
+> ..
+> ** +python+ (version 2.6 or any later)
+>
 
-diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-index 0213d2d..f1dcf52 100644
---- a/package/syslog-ng/syslog-ng.hash
-+++ b/package/syslog-ng/syslog-ng.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 b1b3ccc0ce7f0d8bf15b23e59f2f4f5ded70eed410dfd27105219bc8856388a5  syslog-ng-3.7.2.tar.gz
-+sha256 49201dcfd59c8992936aa16c694f5e6593d505b44895f6c66b7d7f7895ce2c62  syslog-ng-3.7.3.tar.gz
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 7e4d407..b4fc24b 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSLOG_NG_VERSION = 3.7.2
-+SYSLOG_NG_VERSION = 3.7.3
- SYSLOG_NG_SOURCE = syslog-ng-$(SYSLOG_NG_VERSION).tar.gz
- SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
- SYSLOG_NG_LICENSE = LGPLv2.1+ (syslog-ng core), GPLv2+ (modules)
--- 
-2.9.2.518.ged577c6.dirty
+OK. I've submitted a version of Thomas' patch upstream
+https://github.com/micropython/micropython/pull/2404.
