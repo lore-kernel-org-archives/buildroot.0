@@ -1,34 +1,52 @@
-From: Theo Debrouwere <theo.debrouwere@skynet.be>
-Date: Thu,  8 Sep 2016 09:53:09 +0200
-Subject: [Buildroot] [PATCH] package/php: explicitly disable phpdbg.
-In-Reply-To: <20160907171607.GA4759@free.fr>
-References: <20160907171607.GA4759@free.fr>
-Message-ID: <1473321189-18197-1-git-send-email-theo.debrouwere@skynet.be>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Thu, 8 Sep 2016 20:07:43 +1200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2016-09-05
+In-Reply-To: <20160907112850.17240a82@free-electrons.com>
+References: <20160906063035.18941102741@stock.ovh.net>
+ <CAFOYHZD8bOuN_2ie0t3O8XJA1zBJck4=YiyCSEVp=iNpPc43dg@mail.gmail.com>
+ <20160907112850.17240a82@free-electrons.com>
+Message-ID: <CAFOYHZA8sdf7ZFA-CKKSngLUrbKAj16xsswJ64r+JGgCUKjz9g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building php, the package will also build/install phpdbg.
-This patch explicitly disables this behaviour.
+On Wed, Sep 7, 2016 at 9:28 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Wed, 7 Sep 2016 21:13:06 +1200, Chris Packham wrote:
+>
+>> >      sparc64 |             micropython-v1.8.3 | http://autobuild.buildroot.net/results/2b6fc56b98474e66febb673a14a860bd16746172
+>> >
+>>
+>> I took a look at this. I can't reproduce it locally but I suspect it
+>> might be due to the python version on the autobuilder do we have any
+>> way of figuring that out? The py/makeqstrdefs.py states that "This
+>> script works with Python 2.6, 2.7, 3.3 and 3.4." so I'm guessing
+>> anything earlier than 2.6 Is not expected to work.
+>>
+>> If this is the problem do we have any way of enforcing this dependency?
+>
+> This failure occurred on my autobuilder instance, which has:
+>
+> $ python --version
+> Python 2.6.6
+>
+> So apparently, the script is not completely Python 2.6 compliant like
+> they pretend it to be.
+>
+> The line QSTRING_BLACK_LIST = {'NULL', 'number_of', } is defining a
+> set. It works in Python 2.7, but not in Python 2.6. I guess replacing
+> with:
+>
+> QSTRING_BLACK_LIST = set(['NULL', 'number_of'])
+>
+> should work fine (tested with 2.6, 2.7 and 3.5)
+>
 
-Signed-off-by: Theo Debrouwere <t.debrouwere@televic.com>
----
- package/php/php.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/php/php.mk b/package/php/php.mk
-index d7e27a1..5d676e4 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -19,6 +19,7 @@ PHP_CONF_OPTS = \
- 	--disable-all \
- 	--without-pear \
- 	--with-config-file-path=/etc \
-+	--disable-phpdbg \
- 	--disable-rpath
- PHP_CONF_ENV = \
- 	ac_cv_func_strcasestr=yes \
--- 
-2.8.1
+So before I go down that path. Are we saying python >2.6 is required
+for buildroot? Or at least that is the expectation for the
+auto-builders.
