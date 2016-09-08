@@ -1,53 +1,36 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 8 Sep 2016 22:45:00 +0200
-Subject: [Buildroot] [PATCH] binutils: fix makeinfo related issue
-In-Reply-To: <1473364162-23847-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1473364162-23847-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <c3c573e4-adf3-90e9-cb7c-df3cf0d0ac08@gmail.com>
+From: Charles Hardin <ckhardin@exablox.com>
+Date: Thu, 8 Sep 2016 13:54:00 -0700
+Subject: [Buildroot] [FYI] jemalloc and valgrind
+Message-ID: <D7C5A212-77BA-44BA-9FDE-35F0CA5FAA86@exablox.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+So, we hit an oddity on a ?debug? build which turned out to be that if we have
+valgrind installed - jemalloc would race and if it got build before valgrind then
+it would not detect it.
 
-Le 08/09/2016 ? 21:49, Thomas Petazzoni a ?crit :
-> The latest version of binutils, 2.27, added in commit
-> b700157db40410907d6a07582eacbb5030fd919e, fails to build on systems
-> that don't have makeinfo installed. This commit therefore applies the
-> same fixup as the one used for binutils 2.26, which consists in
-> touching all the .info files, so that they don't get rebuilt.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/binutils/binutils.mk | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-> index 71ea2b0..ad3a0d8 100644
-> --- a/package/binutils/binutils.mk
-> +++ b/package/binutils/binutils.mk
-> @@ -33,10 +33,10 @@ BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
->  HOST_BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
->  endif
->  
-> -# The .info files in the 2.26 tarball have an incorrect timestamp, so
-> -# binutils tries to re-generate them. In order to avoid the dependency
-> -# on host-texinfo, we simply update the timestamps.
-> -ifeq ($(BR2_BINUTILS_VERSION_2_26_X),y)
-> +# The .info files in the >= 2.26 tarball have an incorrect timestamp,
-> +# so binutils tries to re-generate them. In order to avoid the
-> +# dependency on host-texinfo, we simply update the timestamps.
-> +ifeq ($(BR2_BINUTILS_VERSION_2_26_X)$(BR2_BINUTILS_VERSION_2_27_X),y)
+I?ll try to make this a format patch later - but this is off another tree and so simple
+that if someone wants to add it - I would suggest you do.
 
-Binutils 2.28 will likely have the same issue, why not inverse the condition ?
-ifneq ($(BR2_BINUTILS_VERSION_2_24_X)$(BR2_BINUTILS_VERSION_2_25_X),)
+diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
+index 7086dfa..71d6200 100644
+--- a/package/jemalloc/jemalloc.mk
++++ b/package/jemalloc/jemalloc.mk
+@@ -11,5 +11,10 @@ JEMALLOC_LICENSE = BSD-2c
+ JEMALLOC_LICENSE_FILES = COPYING
+ JEMALLOC_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_PACKAGE_VALGRIND),y)
++JEMALLOC_DEPENDENCIES += valgrind
++JEMALLOC_CONF_OPTS += --enable-valgrind
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 
-Best regards,
-Romain
-
->  define BINUTILS_FIXUP_INFO_TIMESTAMPS
->  	find $(@D) -name '*.info' -exec touch {} \;
->  endef
-> 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160908/a9a11d15/attachment.html>
