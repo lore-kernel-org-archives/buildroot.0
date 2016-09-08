@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Sep 2016 22:18:53 +0200
-Subject: [Buildroot] [PATCH 5/6] linux-headers: remove deprecated
- versions
-In-Reply-To: <1473359942-15810-5-git-send-email-gustavo@zacarias.com.ar>
-References: <1473359942-15810-1-git-send-email-gustavo@zacarias.com.ar>
- <1473359942-15810-5-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160908221853.398542f6@free-electrons.com>
+Date: Thu, 8 Sep 2016 22:21:24 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mysql: add MYSQL_SOCKET variable
+In-Reply-To: <1ac57a8d-e8b7-4a0a-8b6c-3951e584b54a@je-eigen-domein.nl>
+References: <1473345222-10563-1-git-send-email-bos@je-eigen-domein.nl>
+ <20160908144421.GA5740@free.fr>
+ <1ac57a8d-e8b7-4a0a-8b6c-3951e584b54a@je-eigen-domein.nl>
+Message-ID: <20160908222124.086a8b68@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +14,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  8 Sep 2016 15:39:01 -0300, Gustavo Zacarias wrote:
-> Linux headers 3.19.x and 4.0.x have been deprecated for a while now, so
-> it's time to remove them.
+On Thu, 8 Sep 2016 17:27:24 +0200, Floris Bos wrote:
+
+> > If that is the default of mysql, is there a way to force it during
+> > configure? I'm a bit uneasy to rely on magic values, in case a future
+> > version changes this default location...  
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  Config.in.legacy                     | 20 ++++++++++++++++++++
->  package/linux-headers/Config.in.host | 10 ----------
->  2 files changed, 20 insertions(+), 10 deletions(-)
+> Yes, could force it to use that value with a --with-unix-socket-path= 
+> configure option or in the server configuration file.
+
+That would be a good idea.
+
 > 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 60d414b..b796904 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -145,6 +145,26 @@ endif
->  ###############################################################################
->  comment "Legacy options removed in 2016.11"
->  
-> +config BR2_KERNEL_HEADERS_4_0
-> +	bool "kernel headers version 4.0.x are no longer supported"
-> +	select BR2_KERNEL_HEADERS_4_1
+> 
+> Do note that while /tmp is the upstream default for all MySQL versions, 
+> it is naturally not the safest location for multi-user systems.
+> If an unprivileged user gains access to the system sooner than MySQL is 
+> up & running, he could create his own /tmp/mysql.sock and intercept 
+> authentication details and queries of clients connecting.
+> So normal Linux distributions would override the default to a different 
+> location, e.g. under /var/run
 
-Wouldn't it be safer to select in this case the immediately older
-kernel header version that's still available?
-
-Imagine the user is running a 4.0 kernel, and therefore has chosen 4.0
-kernel headers. With your change, the toolchain will now be rebuilt
-with 4.1 kernel headers... while the user is running a 4.0 kernel. Not
-good.
-
-Default to an older version seems safer to me.
-
-What do you think?
+So why not use --with-unix-socket-path=/var/run/mysql.sock ?
 
 Thanks,
 
