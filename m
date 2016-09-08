@@ -1,52 +1,36 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Thu, 8 Sep 2016 20:07:43 +1200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2016-09-05
-In-Reply-To: <20160907112850.17240a82@free-electrons.com>
-References: <20160906063035.18941102741@stock.ovh.net>
- <CAFOYHZD8bOuN_2ie0t3O8XJA1zBJck4=YiyCSEVp=iNpPc43dg@mail.gmail.com>
- <20160907112850.17240a82@free-electrons.com>
-Message-ID: <CAFOYHZA8sdf7ZFA-CKKSngLUrbKAj16xsswJ64r+JGgCUKjz9g@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu,  8 Sep 2016 10:51:07 +0200
+Subject: [Buildroot] [PATCH] package/mono: fix undefined reference to tls
+Message-ID: <1473324667-31678-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 7, 2016 at 9:28 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Wed, 7 Sep 2016 21:13:06 +1200, Chris Packham wrote:
->
->> >      sparc64 |             micropython-v1.8.3 | http://autobuild.buildroot.net/results/2b6fc56b98474e66febb673a14a860bd16746172
->> >
->>
->> I took a look at this. I can't reproduce it locally but I suspect it
->> might be due to the python version on the autobuilder do we have any
->> way of figuring that out? The py/makeqstrdefs.py states that "This
->> script works with Python 2.6, 2.7, 3.3 and 3.4." so I'm guessing
->> anything earlier than 2.6 Is not expected to work.
->>
->> If this is the problem do we have any way of enforcing this dependency?
->
-> This failure occurred on my autobuilder instance, which has:
->
-> $ python --version
-> Python 2.6.6
->
-> So apparently, the script is not completely Python 2.6 compliant like
-> they pretend it to be.
->
-> The line QSTRING_BLACK_LIST = {'NULL', 'number_of', } is defining a
-> set. It works in Python 2.7, but not in Python 2.6. I guess replacing
-> with:
->
-> QSTRING_BLACK_LIST = set(['NULL', 'number_of'])
->
-> should work fine (tested with 2.6, 2.7 and 3.5)
->
+This commit fixes the nasty undefined reference to tls bug experienced with musl.
 
-So before I go down that path. Are we saying python >2.6 is required
-for buildroot? Or at least that is the expectation for the
-auto-builders.
+Fixes:
+http://autobuild.buildroot.net/results/048f04488cb8c7f4c32b828aa5214ebc22ba0153
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/mono/mono.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index 3d0b9bc..de4f16b 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -26,6 +26,10 @@ MONO_CONF_OPTS = --disable-gtk-doc \
+ 	--disable-mcs-build \
+ 	--enable-static
+ 
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++MONO_CONF_OPTS += --with-tls=pthread
++endif
++
+ # The libraries have been built by the host-mono build. Since they are
+ # architecture-independent, we simply copy them to the target.
+ define MONO_INSTALL_LIBS
+-- 
+1.9.1
