@@ -1,49 +1,53 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 8 Sep 2016 17:34:01 -0300 (BRT)
-Subject: [Buildroot] [PATCH] gmock: download from github and convert to
- a cmake-package
-In-Reply-To: <20160908221432.405ce5e1@free-electrons.com>
-References: <983781693.3690991.1473290568772.JavaMail.zimbra@datacom.ind.br>
- <1473353883-10762-1-git-send-email-casantos@datacom.ind.br>
- <20160908212033.1d1c6947@free-electrons.com>
- <893091325.3899936.1473365508575.JavaMail.zimbra@datacom.ind.br>
- <20160908221432.405ce5e1@free-electrons.com>
-Message-ID: <139799423.3904364.1473366841281.JavaMail.zimbra@datacom.ind.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Sep 2016 22:36:09 +0200
+Subject: [Buildroot] [git commit] leveldb: fix static build
+Message-ID: <20160908203621.70D6C81D35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: "fabrice fontaine" <fabrice.fontaine@orange.com>, "fontaine fabrice" <fontaine.fabrice@gmail.com>,
-> buildroot at buildroot.org
-> Sent: Thursday, September 8, 2016 5:14:32 PM
-> Subject: Re: [Buildroot] [PATCH] gmock: download from github and convert to a cmake-package
+commit: https://git.buildroot.net/buildroot/commit/?id=e14ae6f9e4058a136e153bb89669c1fc329a6376
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hello,
-> 
-> On Thu, 8 Sep 2016 17:11:48 -0300 (BRT), Carlos Santos wrote:
-> 
->> > Why is it the case? As far as I'm aware, it's not currently the case
->> > with the existing packaging.
->> 
->> Because the old gmock distribution (gmock-1.7.0.zip) contained the gtest
->> code, while the new one (gmock-release-1.7.0.tar.gz) does not.
-> 
-> If the old gmock distribution contained the gtest code, why do we have
-> two separate packages for gmock and gtest ?
+Since version 1.19 Makefile variable names changed. Update the build command
+accordingly.
 
-In the beginning there was gtest, only. We (DATACOM) added gmock last
-year, due to the need to support more than a hundred packages in which
-we use it to run unit tests.
+While at it, remove variables that Makefile doesn't use anymore. This change
+means that the static library is always build, even when BR2_SHARED_LIBS=y,
+since the static library name is hard coded in leveldb Makefile.
 
-> In any case, I guess this is a transitional solution, since the final
-> goal is to have a single package, right ?
+Fixes:
+http://autobuild.buildroot.net/results/00c/00c8c5a1d6001eaebfe2a9f848dd292c91bf6a79/
 
-Yes, I think that starting in gtest v. 1.8.0 it will be possible to get
-rid of the separated packages.
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/leveldb/leveldb.mk | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-Carlos Santos (Casantos)
-DATACOM, P&D
+diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
+index 2ce3e4a..ca2ed70 100644
+--- a/package/leveldb/leveldb.mk
++++ b/package/leveldb/leveldb.mk
+@@ -11,17 +11,9 @@ LEVELDB_LICENSE_FILES = LICENSE
+ LEVELDB_INSTALL_STAGING = YES
+ LEVELDB_DEPENDENCIES = snappy
+ 
+-# We will pass optimisation level via CFLAGS so remove leveldb default
+-LEVELDB_MAKE_ARGS += OPTIM=
+-
+-# Disable the static library for shared only build
+-ifeq ($(BR2_SHARED_LIBS),y)
+-LEVELDB_MAKE_ARGS += LIBRARY=
+-endif
+-
+ # Disable the shared library for static only build
+ ifeq ($(BR2_STATIC_LIBS),y)
+-LEVELDB_MAKE_ARGS += SHARED=
++LEVELDB_MAKE_ARGS += SHARED_LIBS= SHARED_PROGRAMS=
+ endif
+ 
+ define LEVELDB_BUILD_CMDS
