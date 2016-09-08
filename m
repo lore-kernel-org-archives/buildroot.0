@@ -1,86 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Sep 2016 23:30:19 +0200
-Subject: [Buildroot] [PATCH] gst1-rtsp-server: new package
-In-Reply-To: <1472820821-5130-1-git-send-email-Abhilash.Tuse@imgtec.com>
-References: <1472820821-5130-1-git-send-email-Abhilash.Tuse@imgtec.com>
-Message-ID: <20160908233019.4d3c3890@free-electrons.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Fri,  9 Sep 2016 01:31:58 +0200
+Subject: [Buildroot] [PATCH v2] package/mysql: add MYSQL_SOCKET variable
+Message-ID: <1473377518-29712-1-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add MYSQL_SOCKET variable with default socket location for other
+packages to use.
 
-On Fri, 2 Sep 2016 18:23:41 +0530, Abhilash Tuse wrote:
-> From: Piotr Nakraszewicz <piotr.nakraszewicz@imgtec.com>
-> 
-> Based on patch by Phil Edworthy:
-> http://lists.busybox.net/pipermail/buildroot/2010-June/035777.html
-> 
-> Reviewed-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> Reviewed-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
-> Signed-off-by: Piotr Nakraszewicz <piotr.nakraszewicz@imgtec.com>
-> Signed-off-by: Abhilash Tuse <Abhilash.Tuse@imgtec.com>
+v2: move socket to /run/mysql/mysql.sock
+chmod 755 /run/mysql to allow users access to it
+---
+ package/mysql/S97mysqld      | 2 +-
+ package/mysql/mysql.mk       | 4 ++++
+ package/mysql/mysqld.service | 2 ++
+ 3 files changed, 7 insertions(+), 1 deletion(-)
 
-Thanks for your patch! I have two comments, see below.
-
-
-> diff --git a/package/gstreamer1/gst1-rtsp-server/Config.in b/package/gstreamer1/gst1-rtsp-server/Config.in
-> new file mode 100644
-> index 0000000..5201a8d
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-rtsp-server/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_GST1_RTSP_SERVER
-> +	bool "gst1-rtsp-server"
-> +	select BR2_PACKAGE_GST1_PLUGINS_BASE
-> +	select BR2_PACKAGE_GST1_PLUGINS_BAD
-> +	select BR2_PACKAGE_GST1_PLUGINS_GOOD
-
-Are you sure all of these are mandatory? From a quick look at the
-configure.ac script, they don't seem to be mandatory, but rather be
-optional dependencies. Have you tested a build with just
-gstreamer1+gst1-rtsp-server ? If it works, then they are indeed
-optional dependencies, in which case you want to remove those "select"
-here, and instead in the .mk file do:
-
-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
-GST1_RTSP_DEPENDENCIES += gst1-plugins-base
-endif
-
-> +++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# gst1-rtsp-server
-> +#
-> +################################################################################
-> +
-> +GST1_RTSP_SERVER_VERSION = 1.8.3
-> +GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
-> +GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
-> +GST1_RTSP_SERVER_LICENSE = LGPLv2+
-> +GST1_RTSP_SERVER_LICENSE_FILES = COPYING COPYING.LIB
-> +GST1_RTSP_SERVER_INSTALL_STAGING = YES
-> +GST1_RTSP_SERVER_DEPENDENCIES = gstreamer1 gst1-plugins-base gst1-plugins-bad gst1-plugins-good
-
-In addition, libcgroup is an optional dependency of gst1-rtsp-server,
-so:
-
-ifeq ($(BR2_PACKAGE_LIBCGROUP),y)
-GST1_RTSP_SERVER_DEPENDENCIES += libcgroup
-endif
-
-would be nice to have.
-
-Could you look into these and send an updated patch? The rest of the
-patch looks good.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/mysql/S97mysqld b/package/mysql/S97mysqld
+index 1d87e68..5a660e9 100644
+--- a/package/mysql/S97mysqld
++++ b/package/mysql/S97mysqld
+@@ -9,7 +9,7 @@ case "$1" in
+ 
+ 		# mysqld runs as user mysql, but /run is only writable by root
+ 		# so create a subdirectory for mysql.
+-		install -d -o mysql -g root -m 0700 /run/mysql
++		install -d -o mysql -g root -m 0755 /run/mysql
+ 
+ 		# We don't use start-stop-daemon because mysqld has
+ 		# its own wrapper script.
+diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+index 534bd97..7af4711 100644
+--- a/package/mysql/mysql.mk
++++ b/package/mysql/mysql.mk
+@@ -14,6 +14,9 @@ MYSQL_AUTORECONF = YES
+ MYSQL_LICENSE = GPLv2
+ MYSQL_LICENSE_FILES = README COPYING
+ 
++# Unix socket. This variable can also be consulted by other buildroot packages
++MYSQL_SOCKET = /run/mysql/mysql.sock
++
+ MYSQL_CONF_ENV = \
+ 	ac_cv_sys_restartable_syscalls=yes \
+ 	ac_cv_path_PS=/bin/ps \
+@@ -31,6 +34,7 @@ MYSQL_CONF_OPTS = \
+ 	--without-readline \
+ 	--with-low-memory \
+ 	--enable-thread-safe-client \
++	--with-unix-socket-path=$(MYSQL_SOCKET) \
+ 	--disable-mysql-maintainer-mode
+ 
+ # host-mysql only installs what is needed to build mysql, i.e. the
+diff --git a/package/mysql/mysqld.service b/package/mysql/mysqld.service
+index 2ded9c2..af1815d 100644
+--- a/package/mysql/mysqld.service
++++ b/package/mysql/mysqld.service
+@@ -5,6 +5,8 @@ Description=MySQL database server
+ ExecStartPre=/bin/sh -c 'test -d /var/mysql/mysql || mysql_install_db --user=mysql --ldata=/var/mysql'
+ ExecStart=/usr/bin/mysqld_safe
+ Restart=always
++RuntimeDirectory=mysql
++RuntimeDirectoryMode=0755
+ 
+ [Install]
+ WantedBy=multi-user.target
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
