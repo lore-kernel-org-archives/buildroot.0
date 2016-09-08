@@ -1,36 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 Sep 2016 20:29:16 +0200
-Subject: [Buildroot] [git commit] Config.in: Add BR2_DEPRECATED_SINCE_2016_11
-Message-ID: <20160908183012.991487FC73@busybox.osuosl.org>
+Date: Thu, 08 Sep 2016 20:36:11 +0200
+Subject: [Buildroot] [PATCH] freetype: bump to version 2.7
+In-Reply-To: <1473359187-15233-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 8 Sep 2016 15:26:27 -0300")
+References: <1473359187-15233-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87h99q5jdw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac1f324a1a90b1d7afdf139162f561b0f3835c46
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-In preparation for new deprecated features/symbols.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+Committed, thanks.
 
-diff --git a/Config.in b/Config.in
-index 3f53f25..fdc1ad0 100644
---- a/Config.in
-+++ b/Config.in
-@@ -393,6 +393,10 @@ config BR2_DEPRECATED_SINCE_2016_08
- 	bool
- 	default y
- 
-+config BR2_DEPRECATED_SINCE_2016_11
-+	bool
-+	default y
-+
- endif
- 
- config BR2_ENABLE_DEBUG
+-- 
+Bye, Peter Korsgaard
