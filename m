@@ -1,36 +1,72 @@
 From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Fri,  9 Sep 2016 18:10:18 +0200
-Subject: [Buildroot] [PATCH] systemd: let getty instead of serial-getty
-	handle /dev/console
-Message-ID: <1473437418-27792-1-git-send-email-bos@je-eigen-domein.nl>
+Date: Fri,  9 Sep 2016 18:10:47 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/mysql: add MYSQL_SOCKET variable
+Message-ID: <1473437448-27903-1-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The serial-getty unit depends on dev-%i.device which does not
-seem to be created for /dev/console
-Workaround this by letting normal getty unit handle things
-if BR2_TARGET_GENERIC_GETTY_PORT is set to 'console'
+Add MYSQL_SOCKET variable with MySQL socket location
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+v3: fix systemd missing user
+v2: move socket to /run/mysql/mysql.sock
+chmod 755 /run/mysql to allow users access to it
 ---
- package/systemd/systemd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mysql/S97mysqld      | 2 +-
+ package/mysql/mysql.mk       | 4 ++++
+ package/mysql/mysqld.service | 3 +++
+ 3 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index fb07819..975bfb6 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -357,7 +357,7 @@ ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
- # systemd needs getty.service for VTs and serial-getty.service for serial ttys
- # also patch the file to use the correct baud-rate, the default baudrate is 115200 so look for that
- define SYSTEMD_INSTALL_SERVICE_TTY
--	if echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q 'tty[0-9]*$$'; \
-+	if echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q 'console|tty[0-9]*$$'; \
- 	then \
- 		SERVICE="getty"; \
- 	else \
+diff --git a/package/mysql/S97mysqld b/package/mysql/S97mysqld
+index 1d87e68..5a660e9 100644
+--- a/package/mysql/S97mysqld
++++ b/package/mysql/S97mysqld
+@@ -9,7 +9,7 @@ case "$1" in
+ 
+ 		# mysqld runs as user mysql, but /run is only writable by root
+ 		# so create a subdirectory for mysql.
+-		install -d -o mysql -g root -m 0700 /run/mysql
++		install -d -o mysql -g root -m 0755 /run/mysql
+ 
+ 		# We don't use start-stop-daemon because mysqld has
+ 		# its own wrapper script.
+diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+index 534bd97..7af4711 100644
+--- a/package/mysql/mysql.mk
++++ b/package/mysql/mysql.mk
+@@ -14,6 +14,9 @@ MYSQL_AUTORECONF = YES
+ MYSQL_LICENSE = GPLv2
+ MYSQL_LICENSE_FILES = README COPYING
+ 
++# Unix socket. This variable can also be consulted by other buildroot packages
++MYSQL_SOCKET = /run/mysql/mysql.sock
++
+ MYSQL_CONF_ENV = \
+ 	ac_cv_sys_restartable_syscalls=yes \
+ 	ac_cv_path_PS=/bin/ps \
+@@ -31,6 +34,7 @@ MYSQL_CONF_OPTS = \
+ 	--without-readline \
+ 	--with-low-memory \
+ 	--enable-thread-safe-client \
++	--with-unix-socket-path=$(MYSQL_SOCKET) \
+ 	--disable-mysql-maintainer-mode
+ 
+ # host-mysql only installs what is needed to build mysql, i.e. the
+diff --git a/package/mysql/mysqld.service b/package/mysql/mysqld.service
+index 2ded9c2..c9e5e42 100644
+--- a/package/mysql/mysqld.service
++++ b/package/mysql/mysqld.service
+@@ -5,6 +5,9 @@ Description=MySQL database server
+ ExecStartPre=/bin/sh -c 'test -d /var/mysql/mysql || mysql_install_db --user=mysql --ldata=/var/mysql'
+ ExecStart=/usr/bin/mysqld_safe
+ Restart=always
++User=mysql
++RuntimeDirectory=mysql
++RuntimeDirectoryMode=0755
+ 
+ [Install]
+ WantedBy=multi-user.target
 -- 
 2.7.4
