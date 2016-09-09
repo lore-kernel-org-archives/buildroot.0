@@ -1,44 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Sep 2016 17:12:38 +0200
-Subject: [Buildroot] [PATCH] gst1-rtsp-server: new package
-In-Reply-To: <20160909152623.6d8cf9a6@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 9 Sep 2016 15:26:23 +0200")
-References: <1472820821-5130-1-git-send-email-Abhilash.Tuse@imgtec.com>
- <20160908233019.4d3c3890@free-electrons.com>
- <e45482ba-2f3c-18e9-8486-72223e201386@imgtec.com>
- <20160909152623.6d8cf9a6@free-electrons.com>
-Message-ID: <87k2el3y55.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  9 Sep 2016 12:20:54 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: remove deprecated versions
+Message-ID: <1473434455-16004-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Linux headers 3.19.x and 4.0.x have been deprecated for a while now, so
+it's time to remove them.
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ Config.in.legacy                     | 20 ++++++++++++++++++++
+ package/linux-headers/Config.in.host | 10 ----------
+ 2 files changed, 20 insertions(+), 10 deletions(-)
 
- > Hum, ok. So it's like *some* plugins are absolutely mandatory for
- > gst1-rtsp-server to work properly?
-
-Yes, I don't think rtsp-server is usable without rtpbin.
-
- > If that's the case, then selecting those plugins as you did is good, as
- > we prefer when things work "out of the box" rather than having to
- > figure out the runtime dependencies by trial on error.
-
- > However, you just selected the main "base", "good" and "bad" plugin
- > packages, but in fact all the plugins in those packages have
- > sub-options. So you can build gst1-plugins-base without any plugin
- > selected I believe, for example. So if some plugins are absolutely
- > mandatory for gst1-rtsp-server to work, those plugins should be
- > selected.
-
- > For example, I guess the rtpbin element is provided by the
- > gst1-plugins-good rtp plugin, so you should select
- > BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTP.
-
-Agreed.
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 60d414b..d7b996c 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,26 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.11"
+ 
++config BR2_KERNEL_HEADERS_4_0
++	bool "kernel headers version 4.0.x are no longer supported"
++	select BR2_KERNEL_HEADERS_3_18
++	select BR2_LEGACY
++	help
++	  Version 4.0.x of the Linux kernel headers have been deprecated
++	  for more than four buildroot releases and are now removed.
++	  As an alternative, version 3.18.x of the headers have been
++	  automatically selected in your configuration.
++
++config BR2_KERNEL_HEADERS_3_19
++	bool "kernel headers version 3.19.x are no longer supported"
++	select BR2_KERNEL_HEADERS_3_18
++	select BR2_LEGACY
++	help
++	  Version 3.19.x of the Linux kernel headers have been deprecated
++	  for more than four buildroot releases and are now removed.
++	  As an alternative, version 3.18.x of the headers have been
++	  automatically selected in your configuration.
++
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	bool "libevas-generic-loaders package removed"
+ 	select BR2_LEGACY
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 9d8f030..7fea748 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -56,16 +56,6 @@ choice
+ 		depends on !BR2_nios2
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+ 
+-	config BR2_KERNEL_HEADERS_3_19
+-		bool "Linux 3.19.x kernel headers"
+-		depends on BR2_DEPRECATED_SINCE_2015_08
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
+-
+-	config BR2_KERNEL_HEADERS_4_0
+-		bool "Linux 4.0.x kernel headers"
+-		depends on BR2_DEPRECATED_SINCE_2015_08
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+-
+ 	config BR2_KERNEL_HEADERS_4_1
+ 		bool "Linux 4.1.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
 -- 
-Bye, Peter Korsgaard
+2.7.3
