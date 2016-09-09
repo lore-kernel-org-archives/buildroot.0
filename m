@@ -1,43 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 9 Sep 2016 11:38:13 -0300
-Subject: [Buildroot] [PATCH 5/6] linux-headers: remove deprecated
-	versions
-In-Reply-To: <20160908221853.398542f6@free-electrons.com>
-References: <1473359942-15810-1-git-send-email-gustavo@zacarias.com.ar>
- <1473359942-15810-5-git-send-email-gustavo@zacarias.com.ar>
- <20160908221853.398542f6@free-electrons.com>
-Message-ID: <d6dc4465-1d7a-659b-aa32-f53d1821a98a@zacarias.com.ar>
+From: Scott Timothy E <ScottTimothy@JohnDeere.com>
+Date: Fri, 9 Sep 2016 14:03:28 +0000
+Subject: [Buildroot] Microblaze C++ Shared Library issues
+Message-ID: <1B269EB6E2E5384098655E41D61BCE1B4683D118@EDXMB53.jdnet.deere.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/09/16 17:18, Thomas Petazzoni wrote:
+Are there any known issues with using C++ shared libraries for a Microblaze target?  I've got a system up and running and quite a few things are working for me out of the box.  However, when I try to run a C++ app on the target, I get an immediate segmentation fault.  If I take that same app and compile it statically (via "-static"), it runs just fine - but of course has an inflated size.  The source for the app is about as bare bones as you can get:
 
->> +config BR2_KERNEL_HEADERS_4_0
->> +	bool "kernel headers version 4.0.x are no longer supported"
->> +	select BR2_KERNEL_HEADERS_4_1
->
-> Wouldn't it be safer to select in this case the immediately older
-> kernel header version that's still available?
->
-> Imagine the user is running a 4.0 kernel, and therefore has chosen 4.0
-> kernel headers. With your change, the toolchain will now be rebuilt
-> with 4.1 kernel headers... while the user is running a 4.0 kernel. Not
-> good.
->
-> Default to an older version seems safer to me.
->
-> What do you think?
->
-> Thanks,
->
-> Thomas
+int main(void){}
 
-Hi.
-Indded, however it's been like this for ages and i was continuing the 
-(likely wrong) tradition.
-I can respin and send a follow-up patch that addresses the older 
-retirements as well.
-Regards.
+As a sanity check, I tried including the "gperf" package in the build which also utilizes C++.  Same seg fault failure.  On the flip side, compiling and executing things like SDL tests which use (non-C++) shared libraries work as expected.  Things seem to be specific to C++.
+
+I've tried changing from uclibc to glibc to see if that makes a difference.  No difference in behavior.  I've also confirmed the behavior by pulling in the build image to the PetaLinux tools 'qemu' implementation and it behaves the same.  So it doesn't appear to be specific to the target.
+
+I tried including the "gdb" package for additional debugging, but that doesn't successfully compile for the Microblaze target unfortunately.
+
+FWIW, I'm working with a relatively recent version of Buildroot - I last pulled it towards the beginning of July... so I'm not too out of date.
+
+My next step is to use an external toolchain (crosstool-ng) to see if that makes a difference.
+
+Any tips or troubleshooting hints would be appreciated!
+
+Thanks,
+--tim
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160909/f90d75df/attachment.html>
