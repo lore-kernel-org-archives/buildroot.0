@@ -1,43 +1,115 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 9 Sep 2016 20:25:44 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2016-09-08
-In-Reply-To: <20160909063029.5604A101E05@stock.ovh.net>
-References: <20160909063029.5604A101E05@stock.ovh.net>
-Message-ID: <38cf65e0-d8f5-f400-1610-5765441b1c9e@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 9 Sep 2016 22:58:05 +0200
+Subject: [Buildroot] [PATCH 1/2 v2] package/libssh: fix dependency on
+	libgcrypt
+In-Reply-To: <35cb1a1a8f3d459ffdd0a66b14db4ee4f92b329c.1473369033.git.yann.morin.1998@free.fr>
+References: <cover.1473369033.git.yann.morin.1998@free.fr>
+ <35cb1a1a8f3d459ffdd0a66b14db4ee4f92b329c.1473369033.git.yann.morin.1998@free.fr>
+Message-ID: <dc3ef2bd-18a6-ac59-e290-9fd108889b56@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
 
-Le 09/09/2016 ? 08:30, Thomas Petazzoni a ?crit :
-> Hello,
+
+On 08-09-16 23:11, Yann E. MORIN wrote:
+> Since 2f89476 (package/libgpg-error: bump to version 1.23), libssh has
+> inherited the dependency from libgcrypt (propagated from libgpg-error).
 > 
-> This is the list of Buildroot build failures that occured on
-> 2016-09-08, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
+> However, since libssh can use either openssl or libgcrypt as a backend,
+> the dependency should be relaxed when openssl is available.
 > 
-> Build failures related to your packages:
+> But the test is broken and inverted: it will make libssh unavailable as
+> soon as openssl is enabled.
 > 
->          arm |                     efl-1.18.0 | http://autobuild.buildroot.net/results/7d3b5297c80114e37e91c9b44222b207bc8d100c
+> This in itself is already incorrect, but that can cause further issues,
+> as some packages (e.g. Kodi) will select (indirectly) openssl, and has
+> an option to select libssh; enabling that option causes unmet direct
+> dependencies of libssh:
+> 
+>     warning: (BR2_PACKAGE_KODI_LIBSSH) selects BR2_PACKAGE_LIBSSH which
+>     has unmet direct dependencies (BR2_USE_MMU && !BR2_STATIC_LIBS &&
+>     BR2_TOOLCHAIN_HAS_THREADS && BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+>     && !BR2_PACKAGE_OPENSSL)
+> 
+> Fix this dependency byt doing what other similar packages do: select
+                        ^
 
-BR2_PACKAGE_WAYLAND is enabled in this configuration but the new Wayland support
-in 1.18.0 requires some more dependencies [1] like libdrm which will be added by
-[2]. Also, the wayland support should be reworked to be handled by something like:
+> openssl if the other crypto backend (here libgcrypt) is not enabled.
 
-config BR2_PACKAGE_EFL_WAYLAND
-	bool "Wayland"
-	depends on BR2_PACKAGE_EFL_OPENGLES
-	select BR2_PACKAGE_EFL_DRM
-	select BR2_PACKAGE_EFL_GL_DRM
-	select BR2_PACKAGE_WAYLAND
+ Well, there are still some that prefer a different crypto backend: mosh prefers
+nettle over openssl, shairport-sync prefers polarssl. But those packages don't
+depend on anything so no problem.
 
-So the Wayland support should be completely disabled for now.
 
-[1] https://www.enlightenment.org/about-wayland
-[2] http://patchwork.ozlabs.org/patch/667161.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+> This also allows us to drop the propagated dependency on the arch
+> condition.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Cc: J?rg Krause <joerg.krause@embedded.rocks>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Cc: Romain Naour <romain.naour@openwide.fr>
+> 
+> ---
+> Changes v1 -> v2:
+>   - invert the selection to use openssl as a fallback  (Thomas)
+>   - drop the arch dependency  (Thomas)
+> ---
+>  package/libssh/Config.in | 3 +--
+>  package/libssh/libssh.mk | 4 ++--
+>  2 files changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/libssh/Config.in b/package/libssh/Config.in
+> index 6029f45..3dbfa7d 100644
+> --- a/package/libssh/Config.in
+> +++ b/package/libssh/Config.in
+> @@ -4,8 +4,7 @@ config BR2_PACKAGE_LIBSSH
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	# Either OpenSSL or libgcrypt are mandatory
+> -	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS && !BR2_PACKAGE_OPENSSL # libgcrypt
+> -	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBGCRYPT
+>  	help
+>  	  libssh is a multiplatform C library implementing the SSHv2
+>  	  and SSHv1 protocol on client and server side. With libssh,
+> diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+> index 29bbf4e..429e3c1 100644
+> --- a/package/libssh/libssh.mk
+> +++ b/package/libssh/libssh.mk
+> @@ -23,14 +23,14 @@ else
+>  LIBSSH_CONF_OPTS += -DWITH_ZLIB=OFF
+>  endif
+>  
+> +# Dependency is either on libgcrypt or openssl, guaranteed in Config.in.
+> +# Favour libgcrypt.
+>  ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+>  LIBSSH_CONF_OPTS += -DWITH_GCRYPT=ON
+>  LIBSSH_DEPENDENCIES += libgcrypt
+>  else
+>  LIBSSH_CONF_OPTS += -DWITH_GCRYPT=OFF
+> -ifeq ($(BR2_PACKAGE_OPENSSL),y)
+>  LIBSSH_DEPENDENCIES += openssl
+>  endif
+> -endif
+>  
+>  $(eval $(cmake-package))
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
