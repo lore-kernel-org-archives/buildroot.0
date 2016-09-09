@@ -1,10 +1,9 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Fri,  9 Sep 2016 14:18:16 -0300
-Subject: [Buildroot] [PATCH 3/4] linux-headers: bump default to version
-	4.8-rc5
+Date: Fri,  9 Sep 2016 14:18:17 -0300
+Subject: [Buildroot] [PATCH 4/4] imx6ulpico: Use kernel 4.8-rc5
 In-Reply-To: <1473441497-29986-1-git-send-email-festevam@gmail.com>
 References: <1473441497-29986-1-git-send-email-festevam@gmail.com>
-Message-ID: <1473441497-29986-3-git-send-email-festevam@gmail.com>
+Message-ID: <1473441497-29986-4-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,51 +12,46 @@ To: buildroot@busybox.net
 
 From: Fabio Estevam <fabio.estevam@nxp.com>
 
+With kernel 4.8-rc5 we no longer need to use the "CONFIG_SMP=n" workaround
+as the issue has been fixed upstream by commit 059e232089e4
+("irqchip/gic: Allow self-SGIs for SMP on UP configurations")
+
 Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 ---
- package/linux-headers/Config.in.host | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ board/technexion/imx6ulpico/linux.fragment | 1 -
+ configs/imx6ulpico_defconfig               | 6 +++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 9d8f030..cf03119 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ comment "Kernel Header Options"
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_4_7
-+	default BR2_KERNEL_HEADERS_4_8
- 	help
- 	  Select the kernel version to get headers from.
+diff --git a/board/technexion/imx6ulpico/linux.fragment b/board/technexion/imx6ulpico/linux.fragment
+index 88e323e..892d0cb 100644
+--- a/board/technexion/imx6ulpico/linux.fragment
++++ b/board/technexion/imx6ulpico/linux.fragment
+@@ -1,2 +1 @@
+ CONFIG_CFG80211_WEXT=y
+-CONFIG_SMP=n
+diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
+index 8406226..02507c9 100644
+--- a/configs/imx6ulpico_defconfig
++++ b/configs/imx6ulpico_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
  
-@@ -96,6 +96,10 @@ choice
- 		bool "Linux 4.7.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+-# Linux headers same as kernel, a 4.7 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
++# Linux headers same as kernel, a 4.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
  
-+	config BR2_KERNEL_HEADERS_4_8
-+		bool "Linux 4.8-rc kernel headers"
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
- endchoice
-@@ -116,6 +120,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8
-+	bool "4.8.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7
- 	bool "4.7.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-@@ -250,4 +258,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
- 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
- 	default "4.7.3"		if BR2_KERNEL_HEADERS_4_7
-+	default "4.8-rc5"	if BR2_KERNEL_HEADERS_4_8
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc5"
+@@ -17,7 +17,7 @@ BR2_GLOBAL_PATCH_DIR="board/technexion/imx6ulpico/patches"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8-rc5"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/technexion/imx6ulpico/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 -- 
 2.7.4
