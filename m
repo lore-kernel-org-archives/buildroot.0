@@ -1,57 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Sep 2016 15:26:23 +0200
-Subject: [Buildroot] [PATCH] gst1-rtsp-server: new package
-In-Reply-To: <e45482ba-2f3c-18e9-8486-72223e201386@imgtec.com>
-References: <1472820821-5130-1-git-send-email-Abhilash.Tuse@imgtec.com>
- <20160908233019.4d3c3890@free-electrons.com>
- <e45482ba-2f3c-18e9-8486-72223e201386@imgtec.com>
-Message-ID: <20160909152623.6d8cf9a6@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  9 Sep 2016 11:36:30 -0300
+Subject: [Buildroot] [PATCH] squid: bump to version 3.5.21
+Message-ID: <1473431790-15424-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/squid/squid.hash | 6 +++---
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Fri, 9 Sep 2016 17:52:48 +0530, Abhilash Tuse wrote:
-
-> > Are you sure all of these are mandatory? From a quick look at the
-> > configure.ac script, they don't seem to be mandatory, but rather be
-> > optional dependencies.  
-> The reason why we added this was because internally gst1-rtsp-server 
-> tries to create some of the elements of base and good plug-ins.
-> 
-> Below is test example that I tried(with just gstreamer1+gst1-rtsp-server):
-> 
-> # test-launch "( audiotestsrc ! audioconvert ! rtpL16pay name=pay0 )"
-> stream ready at rtsp://127.0.0.1:8554/test
-> 
-> ** (test-launch:11): WARNING **: failed to create element 'rtpbin', 
-> check your installation
-
-Hum, ok. So it's like *some* plugins are absolutely mandatory for
-gst1-rtsp-server to work properly?
-
-If that's the case, then selecting those plugins as you did is good, as
-we prefer when things work "out of the box" rather than having to
-figure out the runtime dependencies by trial on error.
-
-However, you just selected the main "base", "good" and "bad" plugin
-packages, but in fact all the plugins in those packages have
-sub-options. So you can build gst1-plugins-base without any plugin
-selected I believe, for example. So if some plugins are absolutely
-mandatory for gst1-rtsp-server to work, those plugins should be
-selected.
-
-For example, I guess the rtpbin element is provided by the
-gst1-plugins-good rtp plugin, so you should select
-BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTP.
-
-Thanks,
-
-Thomas
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index b25a0e0..30eed50 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.20.tar.xz.asc
+-md5 48fb18679a30606de98882528beab3a7  squid-3.5.20.tar.xz
+-sha1 2bb6d3568e7167c9b99fea092a97287d0e430863  squid-3.5.20.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.21.tar.xz.asc
++md5 e6745a6e4ac0b48b7283861f64a40ae5  squid-3.5.21.tar.xz
++sha1 38c4f801a17e27ea530fef88c6ee24b42f08529c  squid-3.5.21.tar.xz
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 7179b33..702b220 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).20
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).21
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.3
