@@ -1,32 +1,38 @@
-From: Scott Timothy E <ScottTimothy@JohnDeere.com>
-Date: Fri, 9 Sep 2016 14:03:28 +0000
-Subject: [Buildroot] Microblaze C++ Shared Library issues
-Message-ID: <1B269EB6E2E5384098655E41D61BCE1B4683D118@EDXMB53.jdnet.deere.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 9 Sep 2016 16:43:14 +0200
+Subject: [Buildroot] [PATCH] binutils: fix makeinfo related issue
+In-Reply-To: <c3c573e4-adf3-90e9-cb7c-df3cf0d0ac08@gmail.com>
+References: <1473364162-23847-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <c3c573e4-adf3-90e9-cb7c-df3cf0d0ac08@gmail.com>
+Message-ID: <20160909164314.17435856@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Are there any known issues with using C++ shared libraries for a Microblaze target?  I've got a system up and running and quite a few things are working for me out of the box.  However, when I try to run a C++ app on the target, I get an immediate segmentation fault.  If I take that same app and compile it statically (via "-static"), it runs just fine - but of course has an inflated size.  The source for the app is about as bare bones as you can get:
+Hello,
 
-int main(void){}
+On Thu, 8 Sep 2016 22:45:00 +0200, Romain Naour wrote:
 
-As a sanity check, I tried including the "gperf" package in the build which also utilizes C++.  Same seg fault failure.  On the flip side, compiling and executing things like SDL tests which use (non-C++) shared libraries work as expected.  Things seem to be specific to C++.
+> > -# The .info files in the 2.26 tarball have an incorrect timestamp, so
+> > -# binutils tries to re-generate them. In order to avoid the dependency
+> > -# on host-texinfo, we simply update the timestamps.
+> > -ifeq ($(BR2_BINUTILS_VERSION_2_26_X),y)
+> > +# The .info files in the >= 2.26 tarball have an incorrect timestamp,
+> > +# so binutils tries to re-generate them. In order to avoid the
+> > +# dependency on host-texinfo, we simply update the timestamps.
+> > +ifeq ($(BR2_BINUTILS_VERSION_2_26_X)$(BR2_BINUTILS_VERSION_2_27_X),y)  
+> 
+> Binutils 2.28 will likely have the same issue, why not inverse the condition ?
+> ifneq ($(BR2_BINUTILS_VERSION_2_24_X)$(BR2_BINUTILS_VERSION_2_25_X),)
 
-I've tried changing from uclibc to glibc to see if that makes a difference.  No difference in behavior.  I've also confirmed the behavior by pulling in the build image to the PetaLinux tools 'qemu' implementation and it behaves the same.  So it doesn't appear to be specific to the target.
+Right, but maybe I could dream that someone will report the bug to the
+binutils maintainers, and that the problem will be fixed in binutils
+2.28 ? :-)
 
-I tried including the "gdb" package for additional debugging, but that doesn't successfully compile for the Microblaze target unfortunately.
-
-FWIW, I'm working with a relatively recent version of Buildroot - I last pulled it towards the beginning of July... so I'm not too out of date.
-
-My next step is to use an external toolchain (crosstool-ng) to see if that makes a difference.
-
-Any tips or troubleshooting hints would be appreciated!
-
-Thanks,
---tim
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160909/f90d75df/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
