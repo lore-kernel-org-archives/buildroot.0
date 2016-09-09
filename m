@@ -1,57 +1,43 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri,  9 Sep 2016 14:18:17 -0300
-Subject: [Buildroot] [PATCH 4/4] imx6ulpico: Use kernel 4.8-rc5
-In-Reply-To: <1473441497-29986-1-git-send-email-festevam@gmail.com>
-References: <1473441497-29986-1-git-send-email-festevam@gmail.com>
-Message-ID: <1473441497-29986-4-git-send-email-festevam@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 9 Sep 2016 20:25:44 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2016-09-08
+In-Reply-To: <20160909063029.5604A101E05@stock.ovh.net>
+References: <20160909063029.5604A101E05@stock.ovh.net>
+Message-ID: <38cf65e0-d8f5-f400-1610-5765441b1c9e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+Hi Thomas,
 
-With kernel 4.8-rc5 we no longer need to use the "CONFIG_SMP=n" workaround
-as the issue has been fixed upstream by commit 059e232089e4
-("irqchip/gic: Allow self-SGIs for SMP on UP configurations")
+Le 09/09/2016 ? 08:30, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> This is the list of Buildroot build failures that occured on
+> 2016-09-08, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+> 
+> Build failures related to your packages:
+> 
+>          arm |                     efl-1.18.0 | http://autobuild.buildroot.net/results/7d3b5297c80114e37e91c9b44222b207bc8d100c
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- board/technexion/imx6ulpico/linux.fragment | 1 -
- configs/imx6ulpico_defconfig               | 6 +++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+BR2_PACKAGE_WAYLAND is enabled in this configuration but the new Wayland support
+in 1.18.0 requires some more dependencies [1] like libdrm which will be added by
+[2]. Also, the wayland support should be reworked to be handled by something like:
 
-diff --git a/board/technexion/imx6ulpico/linux.fragment b/board/technexion/imx6ulpico/linux.fragment
-index 88e323e..892d0cb 100644
---- a/board/technexion/imx6ulpico/linux.fragment
-+++ b/board/technexion/imx6ulpico/linux.fragment
-@@ -1,2 +1 @@
- CONFIG_CFG80211_WEXT=y
--CONFIG_SMP=n
-diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
-index 8406226..02507c9 100644
---- a/configs/imx6ulpico_defconfig
-+++ b/configs/imx6ulpico_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a7=y
- 
--# Linux headers same as kernel, a 4.7 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+# Linux headers same as kernel, a 4.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc5"
-@@ -17,7 +17,7 @@ BR2_GLOBAL_PATCH_DIR="board/technexion/imx6ulpico/patches"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8-rc5"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/technexion/imx6ulpico/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--- 
-2.7.4
+config BR2_PACKAGE_EFL_WAYLAND
+	bool "Wayland"
+	depends on BR2_PACKAGE_EFL_OPENGLES
+	select BR2_PACKAGE_EFL_DRM
+	select BR2_PACKAGE_EFL_GL_DRM
+	select BR2_PACKAGE_WAYLAND
+
+So the Wayland support should be completely disabled for now.
+
+[1] https://www.enlightenment.org/about-wayland
+[2] http://patchwork.ozlabs.org/patch/667161.
