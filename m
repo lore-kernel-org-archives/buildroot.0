@@ -1,34 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Sep 2016 09:26:57 +0200
-Subject: [Buildroot] [PATCH] package/mono: fix undefined reference to tls
-In-Reply-To: <CA+TH9Vm4Q=XVaNBMk77MTx4bSscrm4DxEVk3ek2_dbVX64tg=A@mail.gmail.com>
-References: <1473324667-31678-1-git-send-email-angelo.compagnucci@gmail.com>
- <20160908134257.55ca818c@free-electrons.com>
- <CA+TH9Vm4Q=XVaNBMk77MTx4bSscrm4DxEVk3ek2_dbVX64tg=A@mail.gmail.com>
-Message-ID: <20160909092657.133b1e06@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 9 Sep 2016 09:47:48 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2016-09-08
+In-Reply-To: <20160909063028.EEABF101E05@stock.ovh.net>
+References: <20160909063028.EEABF101E05@stock.ovh.net>
+Message-ID: <20160909074747.GC5740@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+All,
 
-On Fri, 9 Sep 2016 07:29:11 +0200, Angelo Compagnucci wrote:
+On 2016-09-09 08:30 +0200, Thomas Petazzoni spake thusly:
+> Build failures related to your packages:
+>      sparc64 |                      nut-2.7.2 | http://autobuild.buildroot.net/results/58d9782f65fedd1ef527a130ff7a5553edab1dd3
 
-> I tested both the pre-compiled musl external toolchain and a musl internal
-> toolchain I compiled and I can confirm that it's working without this patch.
-> So, probably simply rebuilding the autobuild toolchain should solve the
-> problem.
+Not reproducible, probably a parallel build issue.
+Investigating a fix/workaround...
 
-Excellent, thanks! I'll kick a rebuild of the different Buildroot
-toolchains soon, especially since we have move to a newer binutils
-version, and have more recent version of gcc available as well.
+Regards,
+Yann E. MORIN.
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
