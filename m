@@ -1,45 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Sep 2016 17:01:29 +0200
-Subject: [Buildroot] [git commit] smcroute: bump to version 2.1.1
-Message-ID: <20160909150500.BFC7F80156@busybox.osuosl.org>
+Date: Fri, 09 Sep 2016 17:12:38 +0200
+Subject: [Buildroot] [PATCH] gst1-rtsp-server: new package
+In-Reply-To: <20160909152623.6d8cf9a6@free-electrons.com> (Thomas Petazzoni's
+ message of "Fri, 9 Sep 2016 15:26:23 +0200")
+References: <1472820821-5130-1-git-send-email-Abhilash.Tuse@imgtec.com>
+ <20160908233019.4d3c3890@free-electrons.com>
+ <e45482ba-2f3c-18e9-8486-72223e201386@imgtec.com>
+ <20160909152623.6d8cf9a6@free-electrons.com>
+Message-ID: <87k2el3y55.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=663be5dbb7659334e9c9615ef3d91fedd66e67ec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Julien Floret <julien.floret@6wind.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/smcroute/smcroute.hash | 6 +++---
- package/smcroute/smcroute.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi,
 
-diff --git a/package/smcroute/smcroute.hash b/package/smcroute/smcroute.hash
-index b24228f..e1483ec 100644
---- a/package/smcroute/smcroute.hash
-+++ b/package/smcroute/smcroute.hash
-@@ -1,4 +1,4 @@
- # Locally generated
--sha256  66fd32dc66b5d32670918205a94c4f2ac8c56741486326922e4d1a92f628db48  smcroute-2.0.0.tar.xz
--# From https://github.com/troglobit/smcroute/releases/download/2.0.0/smcroute-2.0.0.tar.xz.md5
--md5     cbf478e52ab9ae411adca41b9d22f68a  smcroute-2.0.0.tar.xz
-+sha256  cf344922b4298b94e53fa2db8f2b064bece60f75926966f330437dfcbd76d425  smcroute-2.1.1.tar.xz
-+# From https://github.com/troglobit/smcroute/releases/download/2.1.1/smcroute-2.1.1.tar.xz.md5
-+md5     cd9256577fe06beaf8da2eba1a02f953  smcroute-2.1.1.tar.xz
-diff --git a/package/smcroute/smcroute.mk b/package/smcroute/smcroute.mk
-index 77e7e63..a3d4bc4 100755
---- a/package/smcroute/smcroute.mk
-+++ b/package/smcroute/smcroute.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SMCROUTE_VERSION = 2.0.0
-+SMCROUTE_VERSION = 2.1.1
- SMCROUTE_SOURCE = smcroute-$(SMCROUTE_VERSION).tar.xz
- SMCROUTE_SITE = https://github.com/troglobit/smcroute/releases/download/$(SMCROUTE_VERSION)
- SMCROUTE_LICENSE = GPLv2+
+ > Hum, ok. So it's like *some* plugins are absolutely mandatory for
+ > gst1-rtsp-server to work properly?
+
+Yes, I don't think rtsp-server is usable without rtpbin.
+
+ > If that's the case, then selecting those plugins as you did is good, as
+ > we prefer when things work "out of the box" rather than having to
+ > figure out the runtime dependencies by trial on error.
+
+ > However, you just selected the main "base", "good" and "bad" plugin
+ > packages, but in fact all the plugins in those packages have
+ > sub-options. So you can build gst1-plugins-base without any plugin
+ > selected I believe, for example. So if some plugins are absolutely
+ > mandatory for gst1-rtsp-server to work, those plugins should be
+ > selected.
+
+ > For example, I guess the rtpbin element is provided by the
+ > gst1-plugins-good rtp plugin, so you should select
+ > BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTP.
+
+Agreed.
+
+-- 
+Bye, Peter Korsgaard
