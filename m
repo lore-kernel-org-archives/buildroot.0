@@ -1,91 +1,162 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 9 Sep 2016 23:06:26 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] package/libssh2: fix dependency on
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 9 Sep 2016 23:11:44 +0200
+Subject: [Buildroot] [PATCH 1/2 v2] package/libssh: fix dependency on
 	libgcrypt
-In-Reply-To: <d43755749a1facb634718891552836557cb9d480.1473369033.git.yann.morin.1998@free.fr>
+In-Reply-To: <dc3ef2bd-18a6-ac59-e290-9fd108889b56@mind.be>
 References: <cover.1473369033.git.yann.morin.1998@free.fr>
- <d43755749a1facb634718891552836557cb9d480.1473369033.git.yann.morin.1998@free.fr>
-Message-ID: <dcfef5a3-cabd-4c14-fcc6-c6c5cf1e7714@mind.be>
+ <35cb1a1a8f3d459ffdd0a66b14db4ee4f92b329c.1473369033.git.yann.morin.1998@free.fr>
+ <dc3ef2bd-18a6-ac59-e290-9fd108889b56@mind.be>
+Message-ID: <20160909211144.GG5740@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Arnout, All,
 
+On 2016-09-09 22:58 +0200, Arnout Vandecappelle spake thusly:
+> On 08-09-16 23:11, Yann E. MORIN wrote:
+> > Since 2f89476 (package/libgpg-error: bump to version 1.23), libssh has
+> > inherited the dependency from libgcrypt (propagated from libgpg-error).
+> > 
+> > However, since libssh can use either openssl or libgcrypt as a backend,
+> > the dependency should be relaxed when openssl is available.
+> > 
+> > But the test is broken and inverted: it will make libssh unavailable as
+> > soon as openssl is enabled.
+> > 
+> > This in itself is already incorrect, but that can cause further issues,
+> > as some packages (e.g. Kodi) will select (indirectly) openssl, and has
+> > an option to select libssh; enabling that option causes unmet direct
+> > dependencies of libssh:
+> > 
+> >     warning: (BR2_PACKAGE_KODI_LIBSSH) selects BR2_PACKAGE_LIBSSH which
+> >     has unmet direct dependencies (BR2_USE_MMU && !BR2_STATIC_LIBS &&
+> >     BR2_TOOLCHAIN_HAS_THREADS && BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+> >     && !BR2_PACKAGE_OPENSSL)
+> > 
+> > Fix this dependency byt doing what other similar packages do: select
+>                         ^
+> 
+> > openssl if the other crypto backend (here libgcrypt) is not enabled.
+> 
+>  Well, there are still some that prefer a different crypto backend: mosh prefers
+> nettle over openssl, shairport-sync prefers polarssl. But those packages don't
+> depend on anything so no problem.
 
-On 08-09-16 23:11, Yann E. MORIN wrote:
-> Since 2f89476 (package/libgpg-error: bump to version 1.23), libssh2 has
-> inherited the dependency from libgcrypt (propagated from libgpg-error).
-> 
-> However, since libssh2 can use either openssl or libgcrypt as a backend,
-> the dependency should be relaxed when openssl is available.
-> 
-> But the test is broken and inverted: it will make libssh unavailable as
-> soon as openssl is enabled.
-> 
-> Fix this dependency byt doing what other similar packages do: select
-> openssl if the other crypto backend (here libgcrypt) is not enabled.
-> This also allows us to drop the propagated dependency on the arch
-> condition.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Cc: J?rg Krause <joerg.krause@embedded.rocks>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Cc: Romain Naour <romain.naour@openwide.fr>
+Depending is not a problem; it's the select that is a problem.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+What we must be very careful is to always do the select-if in the same
+order for all packages.
 
- Regards,
- Arnout
+For example, the following is wrong:
 
+    config BR2_PKG_FOO
+        select BR2_PKG_OPENSSL if !BR2_PKG_NETTLE
+
+    config BR2_PKG_BAR
+        select BR2_PKG_NETTLE if !BR2_PKG_OPENSSL
+
+This would cause quite some issue for Kconfig...
+
+And I don't know how I did my previous check, but we have quite a few
+different ordering:
+
+    $ git grep -E 'select (.*BR2_PACKAGE_(OPENSSL|NETTLE|GNUTLS|LIBGCRYPT|LIBNSS)){2,}'
+    package/flickcurl/Config.in:select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_GNUTLS || BR2_PACKAGE_LIBNSS)
+    package/gstreamer1/gst1-plugins-bad/Config.in:select BR2_PACKAGE_NETTLE if !(BR2_PACKAGE_LIBGCRYPT || BR2_PACKAGE_OPENSSL)
+    package/lftp/Config.in:select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
+    package/libssh/Config.in:select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
+    package/libssh2/Config.in:select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
+    package/mosh/Config.in:select BR2_PACKAGE_NETTLE if !BR2_PACKAGE_OPENSSL
+    package/x11r7/xserver_xorg-server/Config.in:select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
+
+We should fix that, I think...
+
+My proposal is that, unless a "better" backend is selected, we always
+fallback to openssl, in Kconfig at least.
+
+Then in the .mk, we can order the if-blocks to start with the prefered
+backend, in case more than one are enabled.
+
+Regards,
+Yann E. MORIN.
+
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
-> ---
-> Changes v1 -> v2:
->   - invert the selection to use openssl as a fallback  (Thomas)
->   - drop the arch dependency  (Thomas)
-> ---
->  package/libssh2/Config.in  | 3 +--
->  package/libssh2/libssh2.mk | 4 ++--
->  2 files changed, 3 insertions(+), 4 deletions(-)
+>  Regards,
+>  Arnout
 > 
-> diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
-> index 0deb3bb..2944624 100644
-> --- a/package/libssh2/Config.in
-> +++ b/package/libssh2/Config.in
-> @@ -1,7 +1,6 @@
->  config BR2_PACKAGE_LIBSSH2
->  	bool "libssh2"
-> -	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS && !BR2_PACKAGE_OPENSSL # libgcrypt
-> -	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBGCRYPT
->  	help
->  	  libssh2 is a client-side C library implementing the SSH2
->  	  protocol as defined by Internet Drafts: SECSH-TRANS(22),
-> diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-> index 221fac4..847c2f1 100644
-> --- a/package/libssh2/libssh2.mk
-> +++ b/package/libssh2/libssh2.mk
-> @@ -11,8 +11,8 @@ LIBSSH2_LICENSE_FILES = COPYING
->  LIBSSH2_INSTALL_STAGING = YES
->  LIBSSH2_CONF_OPTS = --disable-examples-build
->  
-> -# libssh2 must use either libgcrypt or OpenSSL
-> -# Only select openssl if libgcrypt is not selected
-> +# Dependency is either on libgcrypt or openssl, guaranteed in Config.in.
-> +# Favour libgcrypt.
->  ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
->  LIBSSH2_DEPENDENCIES += libgcrypt
->  LIBSSH2_CONF_OPTS += --with-libgcrypt \
+> > This also allows us to drop the propagated dependency on the arch
+> > condition.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> > Cc: J?rg Krause <joerg.krause@embedded.rocks>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> > Cc: Romain Naour <romain.naour@openwide.fr>
+> > 
+> > ---
+> > Changes v1 -> v2:
+> >   - invert the selection to use openssl as a fallback  (Thomas)
+> >   - drop the arch dependency  (Thomas)
+> > ---
+> >  package/libssh/Config.in | 3 +--
+> >  package/libssh/libssh.mk | 4 ++--
+> >  2 files changed, 3 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/package/libssh/Config.in b/package/libssh/Config.in
+> > index 6029f45..3dbfa7d 100644
+> > --- a/package/libssh/Config.in
+> > +++ b/package/libssh/Config.in
+> > @@ -4,8 +4,7 @@ config BR2_PACKAGE_LIBSSH
+> >  	depends on !BR2_STATIC_LIBS
+> >  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> >  	# Either OpenSSL or libgcrypt are mandatory
+> > -	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS && !BR2_PACKAGE_OPENSSL # libgcrypt
+> > -	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
+> > +	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBGCRYPT
+> >  	help
+> >  	  libssh is a multiplatform C library implementing the SSHv2
+> >  	  and SSHv1 protocol on client and server side. With libssh,
+> > diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+> > index 29bbf4e..429e3c1 100644
+> > --- a/package/libssh/libssh.mk
+> > +++ b/package/libssh/libssh.mk
+> > @@ -23,14 +23,14 @@ else
+> >  LIBSSH_CONF_OPTS += -DWITH_ZLIB=OFF
+> >  endif
+> >  
+> > +# Dependency is either on libgcrypt or openssl, guaranteed in Config.in.
+> > +# Favour libgcrypt.
+> >  ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+> >  LIBSSH_CONF_OPTS += -DWITH_GCRYPT=ON
+> >  LIBSSH_DEPENDENCIES += libgcrypt
+> >  else
+> >  LIBSSH_CONF_OPTS += -DWITH_GCRYPT=OFF
+> > -ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> >  LIBSSH_DEPENDENCIES += openssl
+> >  endif
+> > -endif
+> >  
+> >  $(eval $(cmake-package))
+> > 
 > 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
