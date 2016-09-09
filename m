@@ -1,39 +1,51 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri,  9 Sep 2016 13:07:21 +0200
-Subject: [Buildroot] [PATCH] luarocks: bump to version 2.4.0
-Message-ID: <1473419241-31739-1-git-send-email-francois.perrad@gadz.org>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Fri, 9 Sep 2016 13:29:05 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mysql: add MYSQL_SOCKET variable
+In-Reply-To: <20160908222124.086a8b68@free-electrons.com>
+References: <1473345222-10563-1-git-send-email-bos@je-eigen-domein.nl>
+ <20160908144421.GA5740@free.fr>
+ <1ac57a8d-e8b7-4a0a-8b6c-3951e584b54a@je-eigen-domein.nl>
+ <20160908222124.086a8b68@free-electrons.com>
+Message-ID: <0cd0c895-b2f4-3526-7b80-c53b217beef4@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 09/08/2016 10:21 PM, Thomas Petazzoni wrote:
+> On Thu, 8 Sep 2016 17:27:24 +0200, Floris Bos wrote:
+>
+>>> If that is the default of mysql, is there a way to force it during
+>>> configure? I'm a bit uneasy to rely on magic values, in case a future
+>>> version changes this default location...
+>> Yes, could force it to use that value with a --with-unix-socket-path=
+>> configure option or in the server configuration file.
+> That would be a good idea.
+>
+>>
+>> Do note that while /tmp is the upstream default for all MySQL versions,
+>> it is naturally not the safest location for multi-user systems.
+>> If an unprivileged user gains access to the system sooner than MySQL is
+>> up & running, he could create his own /tmp/mysql.sock and intercept
+>> authentication details and queries of clients connecting.
+>> So normal Linux distributions would override the default to a different
+>> location, e.g. under /var/run
+> So why not use --with-unix-socket-path=/var/run/mysql.sock ?
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index 4d9840a..2750745 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	68e38feeb66052e29ad1935a71b875194ed8b9c67c2223af5f4d4e3e2464ed97  luarocks-2.3.0.tar.gz
-+sha256	44381c9128d036247d428531291d1ff9405ae1daa238581d3c15f96d899497c3  luarocks-2.4.0.tar.gz
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index eddd435..4a5ae03 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAROCKS_VERSION = 2.3.0
-+LUAROCKS_VERSION = 2.4.0
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
--- 
-2.7.4
+Ok, submitted a v2.
+Still needs the second PHP part as well.
+
+
+However someone else would need to check and test the systemd change, as 
+I am never having much luck getting systemd to just work with buildroot.
+"Timed out waiting for device dev-console.device" this time and no login 
+prompt.
+"Dependency failed for Serial Getty on console"
+And no easy way to login by SSH either, given "*** automatic network 
+configuration via DHCP is not compatible with networkd ***"
+
+
+Yours sincerely,
+
+Floris Bos
