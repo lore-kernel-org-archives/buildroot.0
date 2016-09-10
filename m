@@ -1,38 +1,47 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Sat, 10 Sep 2016 14:09:37 +0200
-Subject: [Buildroot] [PATCH v2] openal: Explicitly enable/disable NEON
- support
-In-Reply-To: <20160906222510.17123fa6@free-electrons.com>
-References: <1472754894-6903-1-git-send-email-nerv@dawncrow.de>
- <20160906222510.17123fa6@free-electrons.com>
-Message-ID: <9791f7f9-3928-8f8f-b68b-1d1c65639d27@dawncrow.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 10 Sep 2016 13:19:25 +0000
+Subject: [Buildroot] [Bug 7892] systemd-journald is broken
+In-Reply-To: <bug-7892-163@https.bugs.busybox.net/>
+References: <bug-7892-163@https.bugs.busybox.net/>
+Message-ID: <bug-7892-163-y22A0VWiXN@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 06.09.2016 um 22:25 schrieb Thomas Petazzoni:
-> Hello,
-> 
-> On Thu,  1 Sep 2016 20:34:54 +0200, Andr? Hentschel wrote:
->> Fixes:
->> http://autobuild.buildroot.net/results/d7ccef77a355ccc23f26d012e8441af931469ae4
->> http://autobuild.buildroot.net/results/b5777a0ed33f6bb7a5fc0486ea21ecef58615dac
->>
->> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> 
-> What about instead:
-> 
->   https://github.com/kcat/openal-soft/pull/64
-> 
-> to fix this issue (I tested, it fixes the build failure).
-> 
-> Thomas
-> 
+https://bugs.busybox.net/show_bug.cgi?id=7892
 
-Sorry was on a business trip.
-As it is upstream meanwhile (together with a runtime neon check suggested by you) I'm fine with a patch added to the openal package.
-It's your work, so be free to do so.
-Or do you know about plans of an upcoming openal bugfix release? That'd be easier I guess
+--- Comment #18 from Floris Bos <bos@je-eigen-domein.nl> ---
+(In reply to Maxime Hadjinlian from comment #15)
+>maybe I need to find some SAMA5 board somewhere, 
+>maybe theres' something special about this board, but as is, I really can't reproduce
+
+
+Minimal steps to reproduce if you do have a Pi 3 laying around:
+
+make raspberrypi3_defconfig
+make menuconfig
+"toolchain" -> "c library" -> "glibc"
+"system configuration" -> "init system" -> "systemd"
+"system configuration" -> "getty" -> "TTY port" -> tty1 (the default value
+"console" is currently broken with systemd)
+"filesystem images" -> enable "initial RAM file system linked into linux
+kernel"
+make
+
+Copy output/images/zImage output/images/*.dtb output/images/rpi-firmware/* to a
+FAT formatted SD card, stick it in the Pi, and boot it
+Type "journalctl" and notice that it claims that "No journal files were found."
+
+I would argue that a configuration as simple as this should just work
+out-of-the-box, without post-build anything.
+
+
+In this example config buildroot produces the initramfs. But it also happens if
+you have a normal file system, but there is another initramfs that mounts the
+root filesystem rw, and passes control over to you with switch_root.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
