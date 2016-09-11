@@ -1,38 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Sep 2016 15:58:11 +0200
-Subject: [Buildroot] [PATCH 2/4] toolchain: add 4.8.x choice for headers
-In-Reply-To: <1473441497-29986-2-git-send-email-festevam@gmail.com>
-References: <1473441497-29986-1-git-send-email-festevam@gmail.com>
- <1473441497-29986-2-git-send-email-festevam@gmail.com>
-Message-ID: <20160911155811.06f1d70a@free-electrons.com>
+Date: Sun, 11 Sep 2016 16:00:46 +0200
+Subject: [Buildroot] [git commit] linux-headers: remove deprecated versions
+Message-ID: <20160911140109.D08D582112@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3c590a3ec53ad690ae4d88f33cd8767fb9ee1037
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  9 Sep 2016 14:18:15 -0300, Fabio Estevam wrote:
-> From: Fabio Estevam <fabio.estevam@nxp.com>
-> 
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-> ---
->  toolchain/toolchain-common.in          | 5 +++++
->  toolchain/toolchain-external/Config.in | 4 ++++
->  2 files changed, 9 insertions(+)
+Linux headers 3.19.x and 4.0.x have been deprecated for a while now, so
+it's time to remove them.
 
-This lacks the update to package/linux-headers/Config.in.host. I know
-it's in PATCH 3/4, but PATCH 3/4 is not correct as it uses the kernel
-headers from a release candidate as the default kernel headers, which
-we never do.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in.legacy                     | 20 ++++++++++++++++++++
+ package/linux-headers/Config.in.host | 10 ----------
+ 2 files changed, 20 insertions(+), 10 deletions(-)
 
-However, we could merge the support for 4.8 kernel headers for those
-who point to a custom kernel version, but for this, this patch should
-gain some of the changes to package/linux-headers/Config.in.
-
-Thoms
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 60d414b..d7b996c 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,26 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.11"
+ 
++config BR2_KERNEL_HEADERS_4_0
++	bool "kernel headers version 4.0.x are no longer supported"
++	select BR2_KERNEL_HEADERS_3_18
++	select BR2_LEGACY
++	help
++	  Version 4.0.x of the Linux kernel headers have been deprecated
++	  for more than four buildroot releases and are now removed.
++	  As an alternative, version 3.18.x of the headers have been
++	  automatically selected in your configuration.
++
++config BR2_KERNEL_HEADERS_3_19
++	bool "kernel headers version 3.19.x are no longer supported"
++	select BR2_KERNEL_HEADERS_3_18
++	select BR2_LEGACY
++	help
++	  Version 3.19.x of the Linux kernel headers have been deprecated
++	  for more than four buildroot releases and are now removed.
++	  As an alternative, version 3.18.x of the headers have been
++	  automatically selected in your configuration.
++
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	bool "libevas-generic-loaders package removed"
+ 	select BR2_LEGACY
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 9d8f030..7fea748 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -56,16 +56,6 @@ choice
+ 		depends on !BR2_nios2
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+ 
+-	config BR2_KERNEL_HEADERS_3_19
+-		bool "Linux 3.19.x kernel headers"
+-		depends on BR2_DEPRECATED_SINCE_2015_08
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
+-
+-	config BR2_KERNEL_HEADERS_4_0
+-		bool "Linux 4.0.x kernel headers"
+-		depends on BR2_DEPRECATED_SINCE_2015_08
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+-
+ 	config BR2_KERNEL_HEADERS_4_1
+ 		bool "Linux 4.1.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
