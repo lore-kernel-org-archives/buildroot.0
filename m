@@ -1,40 +1,43 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun, 11 Sep 2016 09:12:40 +0200
-Subject: [Buildroot] [PATCH] package/libupnpp: bump to version 0.15.0
-Message-ID: <20160911071240.2705-1-joerg.krause@embedded.rocks>
+Date: Sun, 11 Sep 2016 09:21:39 +0200
+Subject: [Buildroot] [PATCH] package/upmpdcli: bump to version 1.2.2
+Message-ID: <20160911072139.3781-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Upstream did not provide a hash file, so calculate the hash was calculated
+manually.
+
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/libupnpp/libupnpp.hash | 4 ++--
- package/libupnpp/libupnpp.mk   | 2 +-
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
-index 685ccf4..4edc3b9 100644
---- a/package/libupnpp/libupnpp.hash
-+++ b/package/libupnpp/libupnpp.hash
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index 27a75cc..7e23adc 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
 @@ -1,2 +1,2 @@
--# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.14.1.tar.gz.sha256
--sha256  ffb33379f3734419de683b0adca5228e802c64d3960681c15f3a8de7d7e315d1  libupnpp-0.14.1.tar.gz
-+# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.15.0.tar.gz.sha256
-+sha256  5578389c1928a84cd8ec05c127321b44e2bfafaf3b02ebb8b1d10c10ae2b0aeb  libupnpp-0.15.0.tar.gz
-diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
-index 1525f81..7d21a88 100644
---- a/package/libupnpp/libupnpp.mk
-+++ b/package/libupnpp/libupnpp.mk
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.1.3.tar.gz.sha256
+-sha256  2df3e6593f18c097b6247fb8da919b94701bf083b219056b006d68e6dcef75b5  upmpdcli-1.1.3.tar.gz
++# Manually calculated:
++sha256  6a3ad211707d7eca287f7f64688ff2e569d50bc463aa2145b01c98252fe30955  upmpdcli-1.2.2.tar.gz
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 1a7c790..a7b98c9 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUPNPP_VERSION = 0.14.1
-+LIBUPNPP_VERSION = 0.15.0
- LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- LIBUPNPP_LICENSE = GPLv2+
- LIBUPNPP_LICENSE_FILES = COPYING
+-UPMPDCLI_VERSION = 1.1.3
++UPMPDCLI_VERSION = 1.2.2
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPLv2+
+ UPMPDCLI_LICENSE_FILES = COPYING
 -- 
 2.9.3
