@@ -1,36 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Sep 2016 15:36:01 +0200
-Subject: [Buildroot] [git commit] linux-firmware: bump version
-Message-ID: <20160911133605.24F4381913@busybox.osuosl.org>
+Date: Sun, 11 Sep 2016 15:36:27 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-firmware: add bluetooth firmware
+ for intel chips
+In-Reply-To: <1473508305-8603-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1473508305-8603-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160911153627.2f6e8a06@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f158f117d358e9d27c9bb6e7c5a350894b648060
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Bump to the latest (as of this writing) linux-firmware git version.
-This adds support for newer iwlwifi firmware versions that are required
-for newer kernel series.
+On Sat, 10 Sep 2016 08:51:44 -0300, Gustavo Zacarias wrote:
+> It probably makes no sense to try split them up by model since there
+> aren't that big.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/linux-firmware/Config.in         | 10 ++++++++++
+>  package/linux-firmware/linux-firmware.mk |  6 ++++++
+>  2 files changed, 16 insertions(+)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/linux-firmware/linux-firmware.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Both patches applied, thanks!
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 5c80c1e..8c983e4 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LINUX_FIRMWARE_VERSION = b0668886def608d352cd0263a7ef04e64e25574a
-+LINUX_FIRMWARE_VERSION = c883a6b6186bb2415761d287cbac773062911212
- LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
