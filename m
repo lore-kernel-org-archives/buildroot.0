@@ -1,90 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 12 Sep 2016 00:26:08 +0200
-Subject: [Buildroot] [PATCH v4,4/4] php: add apache support
-In-Reply-To: <1473632768-53238-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1473632768-53238-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <1473632768-53238-4-git-send-email-fabrice.fontaine@orange.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 11 Sep 2016 19:31:42 -0300
+Subject: [Buildroot] [PATCH v2] wandboard: Make explicit that a ext4 rootfs
+	is used
+Message-ID: <1473633102-7920-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Continue work started by Bernd Kuhls in
-https://patchwork.ozlabs.org/patch/437544/
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Make explicit that a ext4 rootfs is used.
+
+As explained by Thomas Petazzoni:
+
+"the ext4 filesystem is already used.
+Indeed, the ext4 image is a symlink to the ext2 image, and the ext2
+image is in fact an ext4 image:
+
+-rw-r--r-- 1 thomas thomas 3763200 sept. 11 21:54 rootfs.ext2
+lrwxrwxrwx 1 thomas thomas      11 sept. 11 21:54 rootfs.ext4 -> rootfs.ext2"
+
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 ---
-Changes v3 -> v4 (after review of Yann Morin):
- - Do not select apache but depends on it
- - Move pthread detection fix in a separate patch
- - Remove unneeded configuration options such as --with-config-file-path
- - Do not allow php to update apache configuration file by removing -a
-   argument from apxs call
+Change sinces v1:
+- Fix Subject and commit log to explain that ext4 was already used
+and that this patch only make it more evident. (Thomas)
 
-Changes v2 -> v3 (after review of Thomas Petazzoni):
- - Remove unneeded php-04-apache.patch
- - Fix pthread detection if Apache MPM is event or worker
- - Update pthread detection mechanism (--enable-pthreads does not exist
-   anymore)
- - Remove unneeded --oldincludedir
- - Fix php module path
+ board/wandboard/genimage.cfg | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- package/php/Config.in |  7 +++++++
- package/php/php.mk    | 22 ++++++++++++++++++++++
- 2 files changed, 29 insertions(+)
-
-diff --git a/package/php/Config.in b/package/php/Config.in
-index c90ad4f..e195fd4 100644
---- a/package/php/Config.in
-+++ b/package/php/Config.in
-@@ -14,6 +14,13 @@ if BR2_PACKAGE_PHP
- config BR2_PACKAGE_PHP_HAS_SAPI
- 	bool
+diff --git a/board/wandboard/genimage.cfg b/board/wandboard/genimage.cfg
+index 32c7c16..b23a91b 100644
+--- a/board/wandboard/genimage.cfg
++++ b/board/wandboard/genimage.cfg
+@@ -2,7 +2,7 @@
+ #
+ # The SD card must have at least 1 MB free at the beginning.
+ # U-Boot and its environment are dumped as is.
+-# A single root filesystem partition is required (Ext2 in this case).
++# A single root filesystem partition is required (Ext4 in this case).
+ #
+ # For details about the layout, see:
+ # http://wiki.wandboard.org/index.php/Boot-process
+@@ -25,7 +25,7 @@ image sdcard.img {
  
-+config BR2_PACKAGE_PHP_SAPI_APACHE
-+	bool "Apache"
-+	depends on BR2_PACKAGE_APACHE
-+	select BR2_PACKAGE_PHP_HAS_SAPI
-+	help
-+	  Apache module
-+
- config BR2_PACKAGE_PHP_SAPI_CGI
- 	bool "CGI"
- 	# CGI uses fork()
-diff --git a/package/php/php.mk b/package/php/php.mk
-index c4ff249..7abd012 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -95,6 +95,28 @@ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_CLI),,--disable-cli)
- PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_CGI),,--disable-cgi)
- PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_FPM),--enable-fpm,--disable-fpm)
- 
-+ifeq ($(BR2_PACKAGE_PHP_SAPI_APACHE),y)
-+PHP_DEPENDENCIES += apache
-+PHP_CONF_OPTS += --with-apxs2=$(STAGING_DIR)/usr/bin/apxs
-+
-+# Enable thread safety option if Apache MPM is event or worker
-+ifeq ($(BR2_PACKAGE_APACHE_MPM_EVENT)$(BR2_PACKAGE_APACHE_MPM_WORKER),y)
-+PHP_CONF_OPTS += --enable-maintainer-zts
-+endif
-+
-+# php uses apxs from staging directory to install libphp dynamic library and
-+# update /etc/apache2/httpd.conf through the -a option, here is the full
-+# command line: "apxs -S LIBEXECDIR='$(INSTALL_ROOT)/usr/modules'
-+# -S SYSCONFDIR='$(INSTALL_ROOT)/etc/apache2' -i -a -n php7
-+# This does not work as apxs sets the full path of the library and not the
-+# relative one so remove -a option from apxs call
-+define PHP_REMOVE_APXS_UPDATE_CONF
-+	$(SED) 's/-i -a -n php/-i -n php/' $(@D)/configure
-+endef
-+
-+PHP_PRE_CONFIGURE_HOOKS += PHP_REMOVE_APXS_UPDATE_CONF
-+endif
-+
- ### Extensions
- PHP_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
+   partition rootfs {
+     partition-type = 0x83
+-    image = "rootfs.ext2"
++    image = "rootfs.ext4"
+     size = 512M
+   }
+ }
 -- 
-2.5.0
+2.7.4
