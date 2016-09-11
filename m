@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Sep 2016 21:59:19 +0200
-Subject: [Buildroot] [PATCH] gtest: fix URL in package description
-In-Reply-To: <1473369217-15546-1-git-send-email-casantos@datacom.ind.br>
-References: <20160906211731.4A63881F74@busybox.osuosl.org>
- <1473369217-15546-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20160911215919.667ece8f@free-electrons.com>
+Date: Sun, 11 Sep 2016 22:00:01 +0200
+Subject: [Buildroot] [PATCH] systemd: let getty instead of serial-getty
+ handle /dev/console
+In-Reply-To: <1473437418-27792-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1473437418-27792-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <20160911220001.64dcf118@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  8 Sep 2016 18:13:37 -0300, Carlos Santos wrote:
-> http://code.google.com/p/googletest redirects to
-> https://github.com/google/googletest, now.
+On Fri,  9 Sep 2016 18:10:18 +0200, Floris Bos wrote:
+> The serial-getty unit depends on dev-%i.device which does not
+> seem to be created for /dev/console
+> Workaround this by letting normal getty unit handle things
+> if BR2_TARGET_GENERIC_GETTY_PORT is set to 'console'
 > 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  package/gtest/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 
-Applied to master, thanks.
+Yann, Maxime, could you please review this patch?
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
