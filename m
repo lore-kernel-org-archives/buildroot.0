@@ -1,65 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 11 Sep 2016 15:55:46 +0200
-Subject: [Buildroot] [PATCHv2] core: distclean is a noconfig target
-Message-ID: <1473602146-2675-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 11 Sep 2016 15:58:11 +0200
+Subject: [Buildroot] [PATCH 2/4] toolchain: add 4.8.x choice for headers
+In-Reply-To: <1473441497-29986-2-git-send-email-festevam@gmail.com>
+References: <1473441497-29986-1-git-send-email-festevam@gmail.com>
+ <1473441497-29986-2-git-send-email-festevam@gmail.com>
+Message-ID: <20160911155811.06f1d70a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the .config contains invalid configuration *(e.g. two providers for
-a same virtual package), it is not possible to run "make distclean"
-because the .config file is sourced and packages interpreted in this
-case.
+Hello,
 
-Add distclean to the noconfig list, so that we can run it in all cases.
+On Fri,  9 Sep 2016 14:18:15 -0300, Fabio Estevam wrote:
+> From: Fabio Estevam <fabio.estevam@nxp.com>
+> 
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+> ---
+>  toolchain/toolchain-common.in          | 5 +++++
+>  toolchain/toolchain-external/Config.in | 4 ++++
+>  2 files changed, 9 insertions(+)
 
-However, this meand that DL_DIR is no longer set, and thus the default
-download location never removed. We fix that by always removing the
-download location, so that if it is the one configured we still remove
-it (no change) and if it is not the one configured, we remove an
-non-existing location and leave the user's location intact (no change
-either).
+This lacks the update to package/linux-headers/Config.in.host. I know
+it's in PATCH 3/4, but PATCH 3/4 is not correct as it uses the kernel
+headers from a release candidate as the default kernel headers, which
+we never do.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+However, we could merge the support for 4.8 kernel headers for those
+who point to a custom kernel version, but for this, this patch should
+gain some of the changes to package/linux-headers/Config.in.
 
----
-Changes v1 -> v2:
-  - don't forget to remove the default download location  (Thomas)
-  - typoes  (Thomas)
----
- Makefile | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index dfef021..92feff3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -86,7 +86,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
- noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
- 	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
--	print-version olddefconfig
-+	print-version olddefconfig distclean
- 
- # Some global targets do not trigger a build, but are used to collect
- # metadata, or do various checks. When such targets are triggered,
-@@ -905,13 +905,10 @@ clean:
- 		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
- 
- distclean: clean
--ifeq ($(DL_DIR),$(TOPDIR)/dl)
--	rm -rf $(DL_DIR)
--endif
- ifeq ($(O),output)
- 	rm -rf $(O)
- endif
--	rm -rf $(BR2_CONFIG) $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/..config.tmp \
-+	rm -rf $(TOPDIR)/dl $(BR2_CONFIG) $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/..config.tmp \
- 		$(CONFIG_DIR)/.auto.deps $(BR2_EXTERNAL_FILE)
- 
- help:
+Thoms
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
