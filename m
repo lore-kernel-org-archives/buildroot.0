@@ -1,78 +1,114 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 11 Sep 2016 20:11:50 +0200
-Subject: [Buildroot] [PATCH RFC] pkg-kconfig: support alternative
- .config location
-In-Reply-To: <20160911200726.7dac0633@itchy>
-References: <1473613650-8245-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20160911173403.GN5740@free.fr> <20160911200726.7dac0633@itchy>
-Message-ID: <20160911181150.GO5740@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 11 Sep 2016 21:29:09 +0200
+Subject: [Buildroot] [Bug 9226] New: Firefly boot fails with: "failed to
+ find part:boot"
+In-Reply-To: <bug-9226-163@https.bugs.busybox.net/>
+References: <bug-9226-163@https.bugs.busybox.net/>
+Message-ID: <20160911212909.21c54943@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-?ric, All,
+Hello,
 
-On 2016-09-11 20:07 +0200, Eric Le Bihan spake thusly:
-> Le Sun, 11 Sep 2016 19:34:03 +0200,
-> "Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
+Ezequiel, you are the last person who updated the firefly defconfig, so
+I assume you have access to the board. Could you have a look at the bug
+report below?
+
+Thanks!
+
+Thomas
+
+On Sun, 11 Sep 2016 15:19:57 +0000, bugzilla at busybox.net wrote:
+> https://bugs.busybox.net/show_bug.cgi?id=9226
 > 
-> > On 2016-09-11 19:07 +0200, Eric Le Bihan spake thusly:
-> > > Kconfig clones, such as openconf used by xvisor [1], do not look
-> > > for .config at the root of the build directory, but in a
-> > > subdirectory (e.g. build/openconf).
-> > > 
-> > > This patch introduces a new Makefile variable named
-> > > $(2)_KCONFIG_BUILD_FILE, which defaults to $$($(2)_DIR)/.config and
-> > > can be overridden in the package Makefile.
-> > > 
-> > > This allows the use of the kconfig-package infrastructure with
-> > > packages relying on such clones.
-> > > 
-> > > [1] https://github.com/xvisor/xvisor/tree/master/tools/openconf
-> > > 
-> > > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> > > ---
-> > >  package/pkg-kconfig.mk | 14 ++++++++------
-> > >  1 file changed, 8 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> > > index b0f5178..82561de 100644
-> > > --- a/package/pkg-kconfig.mk
-> > > +++ b/package/pkg-kconfig.mk
-> > > @@ -36,6 +36,7 @@ $(2)_KCONFIG_EDITORS ?= menuconfig
-> > >  $(2)_KCONFIG_OPTS ?=
-> > >  $(2)_KCONFIG_FIXUP_CMDS ?=
-> > >  $(2)_KCONFIG_FRAGMENT_FILES ?=
-> > > +$(2)_KCONFIG_BUILD_FILE ?= $$($(2)_DIR)/.config  
-> > 
-> > I think it would be better to name the variable
-> > $(2)_KCONFIG_DOTCONFIG_FILE or maybe just $(2)_KCONFIG_DOTCONFIG.
+>             Bug ID: 9226
+>            Summary: Firefly boot fails with: "failed to find part:boot"
+>            Product: buildroot
+>            Version: 2016.05
+>           Hardware: All
+>                 OS: Linux
+>             Status: NEW
+>           Severity: normal
+>           Priority: P5
+>          Component: Other
+>           Assignee: unassigned at buildroot.uclibc.org
+>           Reporter: ciro.santilli at gmail.com
+>                 CC: buildroot at uclibc.org
+>   Target Milestone: ---
 > 
-> OK.
-
-Before changing the variable name, please a bit ofr others to comment.
-
-> > Otherwise, the rest of the patch is a mere search-and-replace, so
-> > looks pretty OK.
-> > 
-> > However, I don't see the point in having that in Buildroot without an
-> > actuall package that uses that. Do you plan in sending such a package
-> > (like xvisor)?
+> Tested on 2016.05 and master @ a26aa9686ad457d208df3b85a39c9befa04caaa3
 > 
-> Yes, I will send a patch to add a xvisor package shortly.
+> Followed instructions under board/firefly/firefly-rk3288/readme.txt
+> 
+> Then from a TTL I see:
+> 
+>         arm pll = 600000000HZ
+>         periph pll = 300000000HZ
+>         ddr pll = 200000000HZ
+>         codec pll = 594000000HZ
+>     Board:  Rockchip platform Board
+>     DRAM:  Found dram banks:1
+>     Adding bank:0000000000000000(0000000080000000)
+>     128 MiB
+>     SDCard Update.
+>     storage init OK!
+>     Using default environment
+> 
+>     GetParam
+>     W: Invalid Parameter's tag (0x7BD32A6C)!
+>     Invalid parameter
+>     W: Invalid Parameter's tag (0xF07F8F7D)!
+>     Invalid parameter
+>     W: Invalid Parameter's tag (0xAE8ED94E)!
+>     Invalid parameter
+>     W: Invalid Parameter's tag (0x5EFFD968)!
+>     Invalid parameter
+>     W: Invalid Parameter's tag (0xEDDF0B28)!
+>     Invalid parameter
+>     W: Invalid Parameter's tag (0xE89DA830)!
+>     Invalid parameter
+>     W: Invalid Parameter's tag (0x00000802)!
+>     Invalid parameter
+>     W: Invalid Parameter's tag (0x00000000)!
+>     Invalid parameter
+>     failed to find part:boot
+>     failed to prepare fdt from boot!
+>     failed to find part:resource
+>     failed to prepare fdt from resource!
+>     no adc node
+>     can't find dts node for led
+>     can't find dts node for ricoh619
+>     can't find dts node for act8846
+>     can't find dts node for rk808
+>     can't find dts node for rk818
+>     Can't find dts node for fuel guage cw201x
+>     SecureBootEn = 0, SecureBootLock = 0
+> 
+>     #Boot ver: 0000-00-00#0.00
+>     empty serial no.
+>     unknown reboot type 1
+>     no fuel gauge found
+>     no fuel gauge found
+>     read logo_on switch from dts [0]
+>     no fuel gauge found
+>     failed to find part:recovery
+>     'recovery' does not seem to be a partition nor an address
+>     Unable to boot:recovery
+>     try to start backup
+>     failed to find part:backup
+>     'backup' does not seem to be a partition nor an address
+>     Unable to boot:backup
+>     try to start rockusb
+> 
+> but get no shell.
+> 
 
-Great! Can you make that a series: this patch followed by the xvisor one?
-
-Regards,
-Yann E. MORIN.
 
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
