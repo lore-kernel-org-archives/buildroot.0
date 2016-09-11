@@ -1,80 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 11 Sep 2016 22:52:44 +0200
-Subject: [Buildroot] [PATCH 0/4] Fix a few unmet dependencies (branch
- yem/unmet-deps)
-In-Reply-To: <20160911135412.GM5740@free.fr>
-References: <cover.1473597259.git.yann.morin.1998@free.fr>
- <20160911154921.32548505@free-electrons.com> <20160911135412.GM5740@free.fr>
-Message-ID: <26d0e9fe-1bbd-2e50-f703-8bdfb7b8aa62@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 11 Sep 2016 22:54:49 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/mysql: add MYSQL_SOCKET
+ variable
+In-Reply-To: <f0638391-c360-8479-b23e-20d62d3cc156@je-eigen-domein.nl>
+References: <1473437448-27903-1-git-send-email-bos@je-eigen-domein.nl>
+ <20160911213223.711de86f@free-electrons.com>
+ <f0638391-c360-8479-b23e-20d62d3cc156@je-eigen-domein.nl>
+Message-ID: <20160911225449.647cc382@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Sun, 11 Sep 2016 22:25:08 +0200, Floris Bos wrote:
+> On 09/11/2016 09:32 PM, Thomas Petazzoni wrote:
+> > Hello,
+> >
+> > On Fri,  9 Sep 2016 18:10:47 +0200, Floris Bos wrote:  
+> >> Add MYSQL_SOCKET variable with MySQL socket location
+> >>
+> >> v3: fix systemd missing user
+> >> v2: move socket to /run/mysql/mysql.sock
+> >> chmod 755 /run/mysql to allow users access to it  
+> > This patch lacks your Signed-off-by line.
+> >
+> > Also, this patch defines the MYSQL_SOCKET variable, which in PATCH 2/2
+> > gets used in the PHP package. Sharing variables between packages
+> > doesn't work in all situations, so we usually refrain from doing so.
+> > Maybe we should document in the manual which cases work and which cases
+> > don't work. Cc'ing Arnout, who knows quite a bit about this topic :)  
+> 
+> Ah, didn't know.
+> Thought that always all package .mk files were included, and that 
+> variable expansion was deferred until actual use when created with the = 
+> operator (as opposed to := )
+> 
+> Anyway, if you prefer to do without variable, and have the value 
+> hardcoded at both places, that's fine with me as well.
 
-On 11-09-16 15:54, Yann E. MORIN wrote:
-> Thomas, All,
-> 
-> On 2016-09-11 15:49 +0200, Thomas Petazzoni spake thusly:
->> On Sun, 11 Sep 2016 14:38:52 +0200, Yann E. MORIN wrote:
->>> However, there is one such unmet direct dependency I was not able to
->>> understand (with this series already applied):
->>>
->>>     $ make KCONFIG_SEED=0x9F309288 randconfig
->>>     warning: (BR2_PACKAGE_OPENCV_WITH_GSTREAMER && BR2_PACKAGE_OPENCV3_WITH_GSTREAMER)
->>>     selects BR2_PACKAGE_GST_PLUGINS_BASE which has unmet direct dependencies
->>>     (BR2_PACKAGE_GSTREAMER)
->>>     warning: (BR2_PACKAGE_FREERDP_GSTREAMER && BR2_PACKAGE_QT_WEBKIT &&
->>>     BR2_PACKAGE_OPENCV_WITH_GSTREAMER && BR2_PACKAGE_OPENCV3_WITH_GSTREAMER) selects
->>>     BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP which has unmet direct dependencies
->>>     (BR2_PACKAGE_GSTREAMER && BR2_PACKAGE_GST_PLUGINS_BASE)
->>>
->>> As far as I can see, the dependencies of gstreamer and gst-plugins-base
->>> *are* properly propagated to the offending packages. I think I'm gonna
->>> loose my sanity on that one... :-/ If any one feels adventurous...
->>
->> Do you have some sample .config that exhibits those problems?
-> 
-> As explained above, just run:
-> 
->     make KCONFIG_SEED=0x9F309288 randconfig
-> 
-> But it may no longer work, since the set of options has changed now. You
-> can reproduce it with:
-> 
->     $ git checkout f4918b3a
->     $ make KCONFIG_SEED=0x9F309288 randconfig
-> 
-> (f4918b3a is master before you applied the last few patches changing the
-> set of options).
-> 
->> I had a
->> quick look, and it indeed seems weird. opencv is select both gstreamer
->> and gst-plugins-base, so I don't see why the dependency of
->> gst-plugins-base on gstreamer is a problem.
-> 
-> Neither do I.
-> 
-> And if you run "make olddefconfig" there is no error anymore... :-/
+Just discussed this with Yann, and this particular usage is OK, so
+patches are good.
 
- I guess it must be a weird side-effect of the randconfig. The
-BR2_PACKAGE_OPENCV_WITH_GSTREAMER && BR2_PACKAGE_OPENCV3_WITH_GSTREAMER
-bit is very wrong (opencv3 depends on !opencv).
+Can you resend with:
 
- Regards,
- Arnout
+ 1. Your Signed-off-by line added.
 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+ 2. The changelog below the "---" sign (which itself should be after
+    the Signed-off-by line). See
+    https://patchwork.ozlabs.org/patch/668485/ for a good example.
 
+Thanks!
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
