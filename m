@@ -1,114 +1,234 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 11 Sep 2016 17:58:26 +0200
-Subject: [Buildroot] [PATCH 2/2 v7] core/pkg-cmake: ensure no package needs
-	a cmake newer than we do
+Date: Sun, 11 Sep 2016 17:58:25 +0200
+Subject: [Buildroot] [PATCH 1/2 v7] core: don't build host-cmake if it is
+	available on the build host
 In-Reply-To: <cover.1473609425.git.yann.morin.1998@free.fr>
 References: <cover.1473609425.git.yann.morin.1998@free.fr>
-Message-ID: <48c654db68d1067703a4d46b7ba838e898539263.1473609425.git.yann.morin.1998@free.fr>
+Message-ID: <976b98e17ad6ffd7e4db1d99fef8908c17a15916.1473609425.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the existing host cmake is deemed usable, we now skip building our
-own variant.
+From: Luca Ceresoli <luca@lucaceresoli.net>
 
-However, in the following conditions, the build would fail:
+Currently all cmake packages depend on host-cmake. Unfortunately
+host-cmake takes a long time to configure and build: almost 7 minutes
+on a dual-core i5 with SSD. The time does not change even with ccache
+enabled.
 
-  - host cmake: 3.2
-  - Buildroot requirement: 3.1
-  - package requirement: 3.4
-  - cmake package in Buildroot: 3.5
+Indeed, building host-cmake is avoidable if it is already installed on
+the build host: CMake is supposed to be quite portable, and the only
+patch in Buildroot for the CMake package seems to only affect
+target-cmake.
 
-This is because Buildroot would consider that cmake-3.2 is usable (and
-it technically is for Buildroot, which requires 3.0), but the package
-will fail at configure time.
+Thus we automatically skip building host-cmake and use the one on the
+system if:
+ - cmake is available on the system and
+ - it is recent enough.
 
-To catch this situation and fix Buildroot, we add a post-patch hook that
-checks that, amongst all cmake versions required by the package, the
-version required by Buildroot is at least equal or higher.
+First, we leverage the existing infrastructure in
+support/dependencies/dependencies.mk to find out whether there's a
+suitable cmake executable on the system. Its path can be passed in the
+BR2_CMAKE environment variable, otherwise it defaults to "cmake". If
+it is enabled, found and suitable then we set BR2_CMAKE_HOST_DEPENDENCY
+to empty; otherwise we set BR2_CMAKE_HOST_DEPENDENCY to 'host-cmake' and
+override BR2_CMAKE with "$(HOST_DIR)/usr/bin/cmake" to revert to using
+our own cmake (the old behaviour).
 
-We do use a post-patch hook rather than the more expected pre-configure
-hook, to avoid having to build all the package dependencies just to
-check the cmake version.
+Then in pkg-cmake.mk we replace the hard-coded dependency on host-cmake
+to using the BR2_CMAKE_HOST_DEPENDENCY variable, and we use $(BR2_CMAKE)
+instead of $(HOST_DIR)/usr/bin/cmake.
 
-Exclude the cmake (target variant) from that check, since it requires
-cmake >= 3.4. However, that requirement is only for the tests, and we're
-not building them; all the other parts of the build have no requirement
-besides a cmake >= 2.8). Bumping the version Buildroot requires to 3.4
-would almost always defeat the purpose of this change, as a lot of
-not-so-old distributions are still using cmake < 3.4; only very recent
-ones released since the end of 2015 would stand a chance of having such
-a cmake version. So we just exclude cmake from that check.
+Unlike what we do for host-tar and host-xzcat, for host-cmake we do
+not add host-cmake to DEPENDENCIES_HOST_PREREQ. If we did, host-cmake
+would be a dependency for _any_ package when it's not installed on the
+host, even when no cmake package is selected.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Cmake versions older than 3.0 are affected by the bug described and
+fixed in Buildroot in ef2c1970e4bf ("cmake: add patch to fix Qt mkspecs
+detection"). The bug was fixed in upstream CMake in version 3.0 [0].
+
+Amongst all the cmake packages currently in Buildroot, the currently
+highest version mentioned in cmake_minimum_required() is 3.1 (grantlee
+and opencv3).
+
+Thus we use 3.1 as the lowest required cmake for now, until a package is
+bumped, or a new package added, with a higher required version.
+
+[0] https://cmake.org/gitweb?p=cmake.git;h=e8b8b37ef6fef094940d3384df5a1d421b9fa568
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Davide Viti <zinosat@tiscali.it>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
+[yann.morin.1998 at free.fr:
+  - simplify logic in check-host-cmake.mk;
+  - set and use BR2_CMAKE_HOST_DEPENDENCY, drop USE_SYSTEM_CMAKE;
+  - bump to cmake 3.1 for grantlee and opencv;
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
 ---
- package/pkg-cmake.mk | 40 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+Results (by Luca, before Yann's changes):
+
+On my build server, this patch reduced the build time for a batch of
+16 Buildroot configurations (all building cmake-based packages) from
+2h44m to 1h54m. Woah, it's a 30% saving!
+
+Tested on:
+ - Ubuntu 14.04 without CMake, with official CMake (2.8), PPA CMake
+   (3.2)
+ - Ubuntu 15.10 without CMake, with official CMake (3.2)
+ - Ubuntu 16.04 without CMake, with official CMake (3.5)
+
+Results (by Yann):
+
+On my machine, this gains about 5min 30s per build, which is far from
+negligible.
+
+Tested, by artificially bumping/lowering the minimum required version,
+on:
+ - Ubuntu 16.04 without CMake, with official CMake (3.5)
+
+---
+Changes v6 -> v7:
+  - drop the post-patch hook, moved to a follow-up patch  (Arnout)
+  - eye-candy in script  (Arnout)
+
+Changes v5 -> v6:
+  - rename variables in the version check in pkg-cmake  (Luca)
+  - fix commit log  (Luca)
+
+Changes v4 -> v5:
+ - adopted by Yann;
+ - drop USE_SYSTEM_CMAKE in favour of BR2_CMAKE_HOST_DEPENDENCY which
+   directly contains 'host-cmake' if it is needed;
+ - unconditionally add $(BR2_CMAKE_HOST_DEPENDENCY) to dependencies: it
+   is empty if host-cmake is not needed;
+ - check our minimum version is enough in a post-patch hook.
+
+Changes v3 -> v4:
+ - rename USE_SYSTEM_HOST_CMAKE -> USE_SYSTEM_CMAKE (Arnout)
+ - ditch BR2_TRY_SYSTEM_CMAKE and use system-cmake unconditionally
+   if it is found and >= 3.0 (Arnout)
+ - rename BR2_HOST_CMAKE -> BR2_CMAKE since it can be either a
+   host-cmake (built by Buildroot) or a system-cmake
+
+Changes v2 -> v3:
+ - make this feature optional via the BR2_TRY_SYSTEM_CMAKE kconfig
+   variable
+ - rename the CMAKE variable to BR2_HOST_CMAKE, so it's coherent
+   with the naming of other variables overridable by the
+   environment, e.g. BR2_DL_DIR
+ - invert the logic of the variable triggering the host-cmake
+   dependency: USE_SYSTEM_CMAKE instead of BUILD_HOST_CMAKE;
+   needed to implement BR2_TRY_SYSTEM_CMAKE
+
+Changes v1 -> v2:
+ - Require cmake >= 3.0. Fixes qjson failure (Luca, Samuel, Thomas)
+ - In check-host-cmake.sh only search $1, not "cmake" (Arnout)
+ - typo: host-ccache -> host-cmake (Arnout)
+---
+ package/pkg-cmake.mk                     |  6 +++---
+ support/dependencies/check-host-cmake.mk | 18 ++++++++++++++++++
+ support/dependencies/check-host-cmake.sh | 28 ++++++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+), 3 deletions(-)
+ create mode 100644 support/dependencies/check-host-cmake.mk
+ create mode 100755 support/dependencies/check-host-cmake.sh
 
 diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index aca9e61..e77945d 100644
+index 4c6dc62..aca9e61 100644
 --- a/package/pkg-cmake.mk
 +++ b/package/pkg-cmake.mk
-@@ -35,6 +35,39 @@ ifneq ($(QUIET),)
- CMAKE_QUIET = -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_INSTALL_MESSAGE=NEVER
- endif
+@@ -85,7 +85,7 @@ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
+-	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
++	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+ 		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release) \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+@@ -110,7 +110,7 @@ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
+-	$$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
++	$$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
+ 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
+ 		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
+@@ -146,7 +146,7 @@ endif
+ # primitives to find {C,LD}FLAGS, add it to the dependency list.
+ $(2)_DEPENDENCIES += host-pkgconf
  
-+#
-+# Check the package does not require a cmake version more recent than we do.
-+#
-+# Some packages may use a variable to set the minimum required version. In
-+# this case, there is not much we can do, so we just accept it; the configure
-+# would fail later anyway in this case.
-+#
-+# We sort all the minimum versions required by the package (there may be more
-+# than one, if the package has cmake "sub-modules"), to which we add our own
-+# version. We then sort everything to get the highest version first, and expect
-+# our version to win.
-+#
-+# If not, then it means the package has a higher requirement than we do.
-+#
-+define CMAKE_CHECK_MIN_VERSION
-+	$(Q)v=$$( \
-+		{ grep -hr -i 'cmake_minimum_required.*version' $(@D); \
-+		  echo $(BR2_CMAKE_VERSION_MIN); \
-+		} \
-+		|tr '[:upper:]' '[:lower:]' \
-+		|sed -r -e '/.*\(version ([[:digit:]]+\.[[:digit:]]+).+/!d; s//\1/' \
-+		|sort -t. -k 1,1nr -k2,2nr \
-+		|head -n 1 \
-+		); \
-+	if [ "$${v}" != "$(BR2_CMAKE_VERSION_MIN)" ]; then \
-+		printf "*** Error: package %s needs cmake version >= %s\n" $($(PKG)_NAME) $${v}; \
-+		printf "***        Buildroot's minimum version BR2_CMAKE_VERSION_MIN\n"; \
-+		printf "***        should be set to at least that version, but is\n" \
-+		printf "***        currently set to %s."; $(BR2_CMAKE_VERSION_MIN); \
-+		exit 1; \
-+	fi
-+endef
-+
- ################################################################################
- # inner-cmake-package -- defines how the configuration, compilation and
- # installation of a CMake package should be done, implements a few hooks to
-@@ -71,6 +104,13 @@ else
- $(2)_BUILDDIR			= $$($(2)_SRCDIR)/buildroot-build
- endif
+-$(2)_DEPENDENCIES += host-cmake
++$(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
  
-+# Special exception for cmake, which requires cmake up to 3.4, but
-+# only to run its tests; all other equirements are on at most 3.0.
-+# Just skip the version check for cmake, and only for cmake.
-+ifneq ($(1),cmake)
-+$(2)_POST_PATCH_HOOKS += CMAKE_CHECK_MIN_VERSION
-+endif
-+
  #
- # Configure step. Only define it if not already defined by the package
- # .mk file. And take care of the differences between host and target
+ # Build step. Only define it if not already defined by the package .mk
+diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+new file mode 100644
+index 0000000..8002278
+--- /dev/null
++++ b/support/dependencies/check-host-cmake.mk
+@@ -0,0 +1,18 @@
++# Versions before 3.0 are affected by the bug described in
++# https://git.busybox.net/buildroot/commit/?id=ef2c1970e4bff3be3992014070392b0e6bc28bd2
++# and fixed in upstream CMake in version 3.0:
++# https://cmake.org/gitweb?p=cmake.git;h=e8b8b37ef6fef094940d3384df5a1d421b9fa568
++#
++# Set this to either 3.0 or higher, depending on the highest minimum
++# version required by any of the packages bundled in Buildroot. If a
++# package is bumped or a new one added, and it requires a higher
++# version, our cmake infra will catch it and whine.
++#
++BR2_CMAKE_VERSION_MIN = 3.1
++
++BR2_CMAKE ?= cmake
++ifeq ($(call suitable-host-package,cmake,\
++	$(BR2_CMAKE) $(BR2_CMAKE_VERSION_MIN)),)
++BR2_CMAKE = $(HOST_DIR)/usr/bin/cmake
++BR2_CMAKE_HOST_DEPENDENCY = host-cmake
++endif
+diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+new file mode 100755
+index 0000000..ec918c7
+--- /dev/null
++++ b/support/dependencies/check-host-cmake.sh
+@@ -0,0 +1,28 @@
++#!/bin/sh
++
++candidate="${1}"
++version_min="${2}"
++
++major_min="${version_min%.*}"
++minor_min="${version_min#*.}"
++
++cmake=`which ${candidate}`
++if [ ! -x "${cmake}" ]; then
++    # echo nothing: no suitable cmake found
++    exit 1
++fi
++
++version="$(${cmake} --version | head -n1 | cut -d' ' -f3)"
++major="${version%.*}"
++minor="${version#*.}"
++
++if [ ${major} -gt ${major_min} ]; then
++    echo "${cmake}"
++else
++    if [ ${major} -eq ${major_min} -a ${minor} -ge ${minor_min} ]; then
++        echo "${cmake}"
++    else
++        # echo nothing: no suitable cmake found
++        exit 1
++    fi
++fi
 -- 
 2.7.4
