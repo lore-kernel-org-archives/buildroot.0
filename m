@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Sep 2016 21:52:07 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: remove deprecated
- versions
-In-Reply-To: <1473434455-16004-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1473434455-16004-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160911215207.25554064@free-electrons.com>
+Date: Sun, 11 Sep 2016 21:57:04 +0200
+Subject: [Buildroot] [PATCH 1/4] wandboard: Use ext4 rootfs type
+In-Reply-To: <1473622926-5476-1-git-send-email-festevam@gmail.com>
+References: <1473622926-5476-1-git-send-email-festevam@gmail.com>
+Message-ID: <20160911215704.6b0cfe00@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +12,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  9 Sep 2016 12:20:54 -0300, Gustavo Zacarias wrote:
-> Linux headers 3.19.x and 4.0.x have been deprecated for a while now, so
-> it's time to remove them.
+On Sun, 11 Sep 2016 16:42:03 -0300, Fabio Estevam wrote:
+> From: Fabio Estevam <fabio.estevam@nxp.com>
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  Config.in.legacy                     | 20 ++++++++++++++++++++
->  package/linux-headers/Config.in.host | 10 ----------
->  2 files changed, 20 insertions(+), 10 deletions(-)
+> Use ext4 rootfs type instead of ext2, as it is more reliable.
+> 
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 
-Both applied to master, thanks!
+This commit log is incorrect: the ext4 filesystem is already used.
+Indeed, the ext4 image is a symlink to the ext2 image, and the ext2
+image is in fact an ext4 image:
+
+-rw-r--r-- 1 thomas thomas 3763200 sept. 11 21:54 rootfs.ext2
+lrwxrwxrwx 1 thomas thomas      11 sept. 11 21:54 rootfs.ext4 -> rootfs.ext2
+
+So, using the .ext4 image is probably a good idea, but the commit log
+should reflect that.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
