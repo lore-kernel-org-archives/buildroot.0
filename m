@@ -1,12 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 11 Sep 2016 22:37:13 +0200
-Subject: [Buildroot] [PATCHv6] core: don't build host-cmake if it is
- available on the build host
-In-Reply-To: <20160911133523.GK5740@free.fr>
-References: <1473201140-28745-1-git-send-email-yann.morin.1998@free.fr>
- <5d7b90ec-5dcf-f61b-166d-7dddc2436c79@mind.be>
- <20160911133523.GK5740@free.fr>
-Message-ID: <4b06c3ed-a67c-0de7-b8a1-a5d08894c379@mind.be>
+Date: Sun, 11 Sep 2016 22:44:00 +0200
+Subject: [Buildroot] [PATCH] core: distclean is a noconfig target
+In-Reply-To: <20160911134627.GL5740@free.fr>
+References: <1473598598-5546-1-git-send-email-yann.morin.1998@free.fr>
+ <20160911153404.06d0d424@free-electrons.com> <20160911134627.GL5740@free.fr>
+Message-ID: <d0ae3cba-3e56-fe7b-1234-01961a81a7d7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,61 +13,56 @@ To: buildroot@busybox.net
 
 
 
-On 11-09-16 15:35, Yann E. MORIN wrote:
-> Arnout, All,
+On 11-09-16 15:46, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> On 2016-09-10 00:26 +0200, Arnout Vandecappelle spake thusly:
->> On 07-09-16 00:32, Yann E. MORIN wrote:
-[snip]
->>> +		|sort -t. -k 1,1nr -k2,2nr \
+> On 2016-09-11 15:34 +0200, Thomas Petazzoni spake thusly:
+>> On Sun, 11 Sep 2016 14:56:38 +0200, Yann E. MORIN wrote:
+>>> @@ -86,7 +86,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
+>>>  noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+>>>  	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
+>>>  	randpackageconfig allyespackageconfig allnopackageconfig \
+>>> -	print-version olddefconfig
+>>> +	print-version olddefconfig distclean
 >>
->>  Since you're anyway doing the version sort here already, you could just add
->> $(BR2_CMAKE_MIN_VERSION_MAJOR).$(BR2_CMAKE_MIN_VERSION_MINOR) into the mix and
->> verify that the first line is equal to
->> $(BR2_CMAKE_MIN_VERSION_MAJOR).$(BR2_CMAKE_MIN_VERSION_MINOR)
-> 
-> orry, I'm not sure I understand what you meant. Something like:
-> 
->     (echo 3.1; grep blabla) |blabla
-> 
-> and then check that we get 3.1, right?
+>> The distclean target uses the DL_DIR variable, which is derived from
+>> BR2_DL_DIR, which can come from either the environment... or the
+>> configuration file. So, the BR2_DL_DIR from the configuration will be
+>> ignored. I'm not sure what the consequence is, but it's worth thinking
+>> about this.
 
- Yep.
+ With the small caveat that a BR2_DL_DIR specified in the environment *will*
+override the one of the .config, and that one will still be used even if .config
+is not read. I think, because there is still some twisted logic in pkg-download
+that I didn't analyze.
 
 > 
->> We already use that trick for checking the make version, for instance.
+> Well, if either is set on not the default, then it is currently not
+> removed.
 > 
-> I've looked at support/dependencies/dependencies.sh and we're not using
-> that "trick" to check the make version;
+> With this change, however, it is no longer removed, indeed.
 > 
->    85 MAKE_MAJOR=$(echo $MAKE_VERSION | sed -e "s/\..*//g")
->    86 MAKE_MINOR=$(echo $MAKE_VERSION | sed -e "s/^$MAKE_MAJOR\.//g" -e "s/\..*//g" -e "s/[a-zA-Z].*//g")
->    87 if [ $MAKE_MAJOR -lt 3 ] || [ $MAKE_MAJOR -eq 3 -a $MAKE_MINOR -lt 81 ] ; then
->    88 ?   echo
->    89 ?   echo "You have make '$MAKE_VERSION' installed.  GNU make >=3.81 is required"
->    90 ?   exit 1;
->    91 fi;
+> But, why are we even having this removal conditional? We can just
+> unconditionally remove $(TOPDIR)/dl and be done with that, no?
 
- Ha, so we check for the make version twice then...
-
-Top-level Makefile, line 51-59:
-# Save running make version since it's clobbered by the make package
-RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-
-# Check for minimal make version (note: this check will break at make 10.x)
-MIN_MAKE_VERSION = 3.81
-ifneq ($(firstword $(sort $(RUNNING_MAKE_VERSION)
-$(MIN_MAKE_VERSION))),$(MIN_MAKE_VERSION))
-$(error You have make '$(RUNNING_MAKE_VERSION)' installed. GNU make >=
-$(MIN_MAKE_VERSION) is required)
-endif
-
+ Seems OK to me.
 
  Regards,
  Arnout
 
-[snip]
-
+> 
+>> Also, what is the rationale for having just "distclean" and not "clean"
+>> in noconfig_targets ? The fact that "distclean" remove the
+>> configuration, and as such "helps" in solving configuration issues ?
+> 
+> Exactly.
+> 
+> Otherwise one has to manually remove the .config file, which is not
+> very nice...
+> 
+> Regards,
+> Yann E. MORIN.
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
