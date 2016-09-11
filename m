@@ -1,64 +1,92 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Sep 2016 00:22:57 +0200
-Subject: [Buildroot] [PATCH] package/php-ssh2: fix kconfig circular deps
- after libssh2 fix
-In-Reply-To: <1473630559-11339-1-git-send-email-yann.morin.1998@free.fr>
-References: <1473630559-11339-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <a8d9fd1b-7d59-5952-2f26-22b9e24e5646@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 12 Sep 2016 00:26:05 +0200
+Subject: [Buildroot] [PATCH v2,1/4] apache: add customization of MPM
+Message-ID: <1473632768-53238-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+MPM can be selected between event, prefork or worker
+Set worker as the default one as it was before even if event MPM is
+better on system supporting thread safe polling
 
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+Changes v1 -> v2 (after review of Yann Morin):
+ - Do not use unneeded variables in Config.in and apache.mk
 
-On 11-09-16 23:49, Yann E. MORIN wrote:
-> After we simplified the libssh2 dependencies, the new dependencies were
-> not propagated to the php-ssh2 package, causing circular dependencies:
-> 
->     package/openssl/Config.in:1:error: recursive dependency detected!
->     package/openssl/Config.in:1:    symbol BR2_PACKAGE_OPENSSL is selected by BR2_PACKAGE_LIBSSH2
->     package/libssh2/Config.in:1:    symbol BR2_PACKAGE_LIBSSH2 is selected by BR2_PACKAGE_PHP_SSH2
->     package/php-ssh2/Config.in:1:   symbol BR2_PACKAGE_PHP_SSH2 depends on BR2_PACKAGE_OPENSSL
-> 
-> Just drop the now-useless dependency inherited from libssh2: libssh2 now
-> has no dependency.
-> 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+ package/apache/Config.in | 28 ++++++++++++++++++++++++++++
+ package/apache/apache.mk | 10 +++++++++-
+ 2 files changed, 37 insertions(+), 1 deletion(-)
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Thanks for the speedy fix!
-
- Regards,
- Arnout
-
-> ---
->  package/php-ssh2/Config.in | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/package/php-ssh2/Config.in b/package/php-ssh2/Config.in
-> index c795dd5..b457900 100644
-> --- a/package/php-ssh2/Config.in
-> +++ b/package/php-ssh2/Config.in
-> @@ -1,8 +1,6 @@
->  config BR2_PACKAGE_PHP_SSH2
->  	bool "php-ssh2"
->  	depends on BR2_PACKAGE_PHP
-> -	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS \
-> -		&& !BR2_PACKAGE_OPENSSL # libssh2, libgcrypt
->  	select BR2_PACKAGE_LIBSSH2
->  	help
->  	  PHP bindings for the libssh2 library.
-> 
-
+diff --git a/package/apache/Config.in b/package/apache/Config.in
+index 0814a17..511876d 100644
+--- a/package/apache/Config.in
++++ b/package/apache/Config.in
+@@ -14,6 +14,34 @@ config BR2_PACKAGE_APACHE
+ 
+ 	  http://httpd.apache.org
+ 
++if BR2_PACKAGE_APACHE
++
++choice
++	prompt "Multi-Processing Module (MPM)"
++	default BR2_PACKAGE_APACHE_MPM_WORKER
++	help
++	  Select the Multi-Processing Module (MPM).
++
++config BR2_PACKAGE_APACHE_MPM_EVENT
++	bool "event"
++	help
++	  A variant of the worker MPM with the goal of consuming threads
++	  only for connections with active processing
++
++config BR2_PACKAGE_APACHE_MPM_PREFORK
++	bool "prefork"
++	help
++	  Implements a non-threaded, pre-forking web server
++
++config BR2_PACKAGE_APACHE_MPM_WORKER
++	bool "worker"
++	help
++	  Implements a hybrid multi-threaded multi-process web server
++
++endchoice
++
++endif
++
+ comment "apache needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index e78545a..488ad56 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -20,6 +20,14 @@ APACHE_CONF_ENV= \
+ 	ap_cv_void_ptr_lt_long=no \
+ 	PCRE_CONFIG=$(STAGING_DIR)/usr/bin/pcre-config
+ 
++ifeq ($(BR2_PACKAGE_APACHE_MPM_EVENT),y)
++APACHE_MPM = event
++else ifeq ($(BR2_PACKAGE_APACHE_MPM_PREFORK),y)
++APACHE_MPM = prefork
++else
++APACHE_MPM = worker
++endif
++
+ APACHE_CONF_OPTS = \
+ 	--sysconfdir=/etc/apache2 \
+ 	--with-apr=$(STAGING_DIR)/usr \
+@@ -31,7 +39,7 @@ APACHE_CONF_OPTS = \
+ 	--enable-mime-magic \
+ 	--without-suexec-bin \
+ 	--enable-mods-shared=all \
+-	--with-mpm=worker \
++	--with-mpm=$(APACHE_MPM) \
+ 	--disable-lua \
+ 	--disable-luajit
+ 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.5.0
