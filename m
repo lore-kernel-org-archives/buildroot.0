@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Sep 2016 01:21:50 +0200
-Subject: [Buildroot] [PATCH 3/4] php: fix pthread detection
-In-Reply-To: <1473632768-53238-3-git-send-email-fabrice.fontaine@orange.com>
+Date: Mon, 12 Sep 2016 01:30:38 +0200
+Subject: [Buildroot] [PATCH v4,4/4] php: add apache support
+In-Reply-To: <1473632768-53238-4-git-send-email-fabrice.fontaine@orange.com>
 References: <1473632768-53238-1-git-send-email-fabrice.fontaine@orange.com>
- <1473632768-53238-3-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <27c90840-3293-b11f-1774-dc918e126527@mind.be>
+ <1473632768-53238-4-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <f2e1cea4-eda0-7c44-c5a6-a2d27499dfe3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,72 +14,89 @@ To: buildroot@busybox.net
 
 
 On 12-09-16 00:26, Fabrice Fontaine wrote:
-> Following suggestion of Yann Morin, move fix on pthread detection in a
-> detected patch and add more comment on issue: without this fix, thread
-> safety option (--enable-maintainer-zts) will not work
-
- This commit message makes no sense. I guess you wanted to say that in this v2,
-you split off the pthread detection into a separate patch. But that should be in
-a non-commit comment (see below).
-
- Better use the comment you added below as the commit message.
-
+> Continue work started by Bernd Kuhls in
+> https://patchwork.ozlabs.org/patch/437544/
 > 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-
- You can add below your Sob
-
----
-v2: move to a separate patch (Yann Morin)
-
 > ---
->  package/php/php.mk | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+> Changes v3 -> v4 (after review of Yann Morin):
+>  - Do not select apache but depends on it
+>  - Move pthread detection fix in a separate patch
+>  - Remove unneeded configuration options such as --with-config-file-path
+>  - Do not allow php to update apache configuration file by removing -a
+>    argument from apxs call
 > 
+> Changes v2 -> v3 (after review of Thomas Petazzoni):
+>  - Remove unneeded php-04-apache.patch
+>  - Fix pthread detection if Apache MPM is event or worker
+>  - Update pthread detection mechanism (--enable-pthreads does not exist
+>    anymore)
+>  - Remove unneeded --oldincludedir
+>  - Fix php module path
+> 
+>  package/php/Config.in |  7 +++++++
+>  package/php/php.mk    | 22 ++++++++++++++++++++++
+>  2 files changed, 29 insertions(+)
+> 
+> diff --git a/package/php/Config.in b/package/php/Config.in
+> index c90ad4f..e195fd4 100644
+> --- a/package/php/Config.in
+> +++ b/package/php/Config.in
+> @@ -14,6 +14,13 @@ if BR2_PACKAGE_PHP
+>  config BR2_PACKAGE_PHP_HAS_SAPI
+>  	bool
+>  
+> +config BR2_PACKAGE_PHP_SAPI_APACHE
+> +	bool "Apache"
+> +	depends on BR2_PACKAGE_APACHE
+> +	select BR2_PACKAGE_PHP_HAS_SAPI
+> +	help
+> +	  Apache module
+> +
+>  config BR2_PACKAGE_PHP_SAPI_CGI
+>  	bool "CGI"
+>  	# CGI uses fork()
 > diff --git a/package/php/php.mk b/package/php/php.mk
-> index 97e3396..c4ff249 100644
+> index c4ff249..7abd012 100644
 > --- a/package/php/php.mk
 > +++ b/package/php/php.mk
-> @@ -47,6 +47,20 @@ define PHP_BUILDCONF
->  endef
->  PHP_PRE_CONFIGURE_HOOKS += PHP_BUILDCONF
+> @@ -95,6 +95,28 @@ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_CLI),,--disable-cli)
+>  PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_CGI),,--disable-cgi)
+>  PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_FPM),--enable-fpm,--disable-fpm)
 >  
-> +# PHP assumes pthreads are not working when cross-compiling, indeed configure
-> +# sets pthreads_working to no if cross_compiling is set to yes (line 5888)
-> +# If pthreads_working is set to no, thread safety option
-> +# (--enable-maintainer-zts) will not be available
-> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> +PHP_CONF_ENV += ac_cv_pthreads_lib=pthread
+> +ifeq ($(BR2_PACKAGE_PHP_SAPI_APACHE),y)
+> +PHP_DEPENDENCIES += apache
+> +PHP_CONF_OPTS += --with-apxs2=$(STAGING_DIR)/usr/bin/apxs
 > +
-> +define PHP_FIX_THREADS_DETECTION
-> +	$(SED) 's/pthreads_working\=no/pthreads_working\=yes/' $(@D)/configure
-> +endef
+> +# Enable thread safety option if Apache MPM is event or worker
+> +ifeq ($(BR2_PACKAGE_APACHE_MPM_EVENT)$(BR2_PACKAGE_APACHE_MPM_WORKER),y)
+> +PHP_CONF_OPTS += --enable-maintainer-zts
+> +endif
+> +
+> +# php uses apxs from staging directory to install libphp dynamic library and
+> +# update /etc/apache2/httpd.conf through the -a option, here is the full
+> +# command line: "apxs -S LIBEXECDIR='$(INSTALL_ROOT)/usr/modules'
+> +# -S SYSCONFDIR='$(INSTALL_ROOT)/etc/apache2' -i -a -n php7
+> +# This does not work as apxs sets the full path of the library and not the
+> +# relative one so remove -a option from apxs call
 
- I'd prefer an upstreamable patch that fixes the issue. The problem is that the
-configure script violates a rule of AC_CACHE_VAL: "The commands-to-set-it must
-have no side effects except for setting the variable cache-id, see below". But
-they also set pthreads_working, which is wrong. It completely defeats the
-purpose of the cache.
-
- So what should be done is to remove the pthreads_working assignments from the
-AC_CACHE_CHECK functions, and replace them with:
-
-if [ "x$ac_cv_pthreads_cflags" != "x" -o "x$ac_cv_pthreads_lib" != "x" ]; then
-	pthreads_working=yes
-fi
-
+ Isn't the proper solution to add apxs to APACHE_CONFIG_SCRIPTS? Or is the
+staging dir encoded in a way that our sed script doesn't find it?
 
  Regards,
  Arnout
 
-
+> +define PHP_REMOVE_APXS_UPDATE_CONF
+> +	$(SED) 's/-i -a -n php/-i -n php/' $(@D)/configure
+> +endef
 > +
-> +PHP_PRE_CONFIGURE_HOOKS += PHP_FIX_THREADS_DETECTION
+> +PHP_PRE_CONFIGURE_HOOKS += PHP_REMOVE_APXS_UPDATE_CONF
 > +endif
 > +
->  ifeq ($(BR2_ENDIAN),"BIG")
->  PHP_CONF_ENV += ac_cv_c_bigendian_php=yes
->  else
+>  ### Extensions
+>  PHP_CONF_OPTS += \
+>  	$(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
 > 
 
 -- 
