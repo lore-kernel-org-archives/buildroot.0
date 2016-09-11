@@ -1,36 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Sep 2016 23:29:55 +0200
-Subject: [Buildroot] [PATCH] board/minnowboard-max: Add kernel options
- to support USB disks
-In-Reply-To: <20160901193258.10754-1-ezequiel@vanguardiasur.com.ar>
-References: <20160901193258.10754-1-ezequiel@vanguardiasur.com.ar>
-Message-ID: <20160911232955.5c48f20e@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 11 Sep 2016 21:30:29 +0000
+Subject: [Buildroot] [Bug 9176] minnowboard : USB not mounted
+In-Reply-To: <bug-9176-163@https.bugs.busybox.net/>
+References: <bug-9176-163@https.bugs.busybox.net/>
+Message-ID: <bug-9176-163-0msI8Df3Ic@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9176
 
-On Thu,  1 Sep 2016 16:32:58 -0300, Ezequiel Garcia wrote:
-> As reported by bug #9176 the current v4.6 kernel config
-> (used by Minnowboard MAX and Turbot) does not support
-> USB disks. Since this is a pretty essential functionality,
-> it's desirable to have it, so let's add the required options.
-> 
-> Kernel config linux-v3.8.config (currently used by the first
-> generation Minnowboard) doesn't need this change.
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> ---
->  board/minnowboard/linux-4.6.config | 3 +++
->  1 file changed, 3 insertions(+)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|REOPENED                    |RESOLVED
 
-Thomas
+--- Comment #12 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=91ccf292c65ed3de21c0f26ca623860c96b137ad.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
