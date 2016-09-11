@@ -1,235 +1,72 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 11 Sep 2016 14:09:37 +0200
-Subject: [Buildroot] [PATCH v2] gtest/gmock: bump to version 1.8.0
-In-Reply-To: <1473290219-27701-1-git-send-email-casantos@datacom.ind.br>
-References: <1473286853-23560-1-git-send-email-casantos@datacom.ind.br>
- <1473290219-27701-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <34bbf827-4564-e812-5677-91bc63c95dde@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 11 Sep 2016 14:38:52 +0200
+Subject: [Buildroot] [PATCH 0/4] Fix a few unmet dependencies (branch
+	yem/unmet-deps)
+Message-ID: <cover.1473597259.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Big patch, so lots of comments on this one...
+Hello All!
+
+This series fixes a few unmet direct dependencies, like so:
+
+    warning: (BR2_INIT_SYSTEMD) selects BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+    which has unmet direct dependencies (BR2_ROOTFS_SKELETON_DEFAULT)
+
+However, there is one such unmet direct dependency I was not able to
+understand (with this series already applied):
+
+    $ make KCONFIG_SEED=0x9F309288 randconfig
+    warning: (BR2_PACKAGE_OPENCV_WITH_GSTREAMER && BR2_PACKAGE_OPENCV3_WITH_GSTREAMER)
+    selects BR2_PACKAGE_GST_PLUGINS_BASE which has unmet direct dependencies
+    (BR2_PACKAGE_GSTREAMER)
+    warning: (BR2_PACKAGE_FREERDP_GSTREAMER && BR2_PACKAGE_QT_WEBKIT &&
+    BR2_PACKAGE_OPENCV_WITH_GSTREAMER && BR2_PACKAGE_OPENCV3_WITH_GSTREAMER) selects
+    BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP which has unmet direct dependencies
+    (BR2_PACKAGE_GSTREAMER && BR2_PACKAGE_GST_PLUGINS_BASE)
+
+As far as I can see, the dependencies of gstreamer and gst-plugins-base
+*are* properly propagated to the offending packages. I think I'm gonna
+loose my sanity on that one... :-/ If any one feels adventurous...
+
+Regards,
+Yann E. MORIN.
 
 
-On 08-09-16 01:16, Carlos Santos wrote:
-> From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> Version 1.8.0 now includes gmock so merge gmock package inside gtest.
-> 
-> In this merge:
->  - Add gmock as a suboption of gtest (BR2_PACKAGE_GTEST_GMOCK)
->    following advice from Arnout Vandecappelle
->  - Make gmock a virtual package that selects BR2_PACKAGE_GTEST and
->    BR2_PACKAGE_GTEST_GMOCK, to provide backward compatibility
+The following changes since commit f4918b3a7424bedb0eddf56c713298a78c1160d2
 
- I don't think this is a good idea.
-
-* It means we have to keep on supporting the BR2_PACKAGE_GMOCK option for some
-time. Let's say two years down the line we decide to remove it, it means we have
-to move it to legacy at that time. So long term, we gain exactly nothing.
-* The legacy approach works perfectly. The Config.in.legacy entry will make sure
-that the package remains selected. If an external package depends on gmock,
-you'll get an immediate build termination because make doesn't know how to build
-gmock. Since the user has just removed gmock from the legacy menu, it should be
-quite obvious what needs to be done.
-* This is abusing the virtual package infra for something it wasn't meant for.
-We want to avoid adding bad examples to buildroot.
+  package/x11r7/xserver_xorg-server: glamor depends on libgl (2016-09-08 23:11:05 +0200)
 
 
->  - Use cmake to install libraries and headers and add missing files
->    (gtest.pc, gtest-config, gmock.pc) in
->    GTEST_POST_INSTALL_STAGING_HOOKS instead of redefining
->    GTEST_INSTALL_STAGING_CMDS
->  - Remove patch on Python as gmock/gtest now supports python 3.0
->    (commit 456fc2b5c4e9ebf05a5987dfe1ff0ac9ffeb53cc)
->  - Add the correct license in HOST_GTEST_LICENSE as all python code in
->    googlemock/scripts/generator is licensed under Apache-2.0 and not
->    BSD-3c
->  - Fix URL of gtest project in Config.in
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> 
-> ---
-> Changes v1 -> v2
->   - Add mirtual package for host-gmock, as pointed-out by Arnout
->     Vandecappelle.
+are available in the git repository at:
 
- Well, no, I never mentioned virtual-package, I said to add a legacy entry.
+  git://git.buildroot.org/~ymorin/git/buildroot.git
 
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  package/gmock/0001-force-use-python2.patch | 20 ----------
->  package/gmock/Config.in                    | 26 +++++--------
->  package/gmock/gmock.hash                   |  2 -
->  package/gmock/gmock.mk                     | 60 +-----------------------------
->  package/gtest/Config.in                    | 28 +++++++++++++-
->  package/{gmock => gtest}/gmock.pc          |  2 +-
->  package/gtest/gtest.hash                   |  2 +-
->  package/gtest/gtest.mk                     | 52 +++++++++++++++++++++-----
->  package/gtest/gtest.pc                     |  2 +-
->  9 files changed, 84 insertions(+), 110 deletions(-)
->  delete mode 100644 package/gmock/0001-force-use-python2.patch
->  delete mode 100644 package/gmock/gmock.hash
->  rename package/{gmock => gtest}/gmock.pc (93%)
-[snip]
-> diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
-> index eb30905..249971e 100644
-> --- a/package/gtest/gtest.mk
-> +++ b/package/gtest/gtest.mk
-> @@ -4,13 +4,27 @@
->  #
->  ################################################################################
->  
-> -# Make sure this remains the same version as the gmock one
-> -GTEST_VERSION = release-1.7.0
-> +GTEST_VERSION = release-1.8.0
->  GTEST_SITE = $(call github,google,googletest,$(GTEST_VERSION))
->  GTEST_INSTALL_STAGING = YES
->  GTEST_INSTALL_TARGET = NO
->  GTEST_LICENSE = BSD-3c
-> -GTEST_LICENSE_FILES = LICENSE
-> +GTEST_LICENSE_FILES = googletest/LICENSE
-> +
-> +ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
-> +GTEST_LICENSE_FILES += googlemock/LICENSE
+for you to fetch changes up to ff633ea671d650a4be16ff4468579043a5c6e523
 
- It has the same content, so it doesn't make sense adding it. Since it's now a
-single package, a single license file is definitely enough.
-
-> +GTEST_DEPENDENCIES = host-gtest
-> +
-> +HOST_GTEST_LICENSE = Apache-2.0
-
- This is so weird that it deserves a separate comment.
-
-# HOST_GTEST is just the generator script, which has a different license
-# than the rest of gtest. Also, the generator script is not installed on
-# target so its license doesn't need to be mentioned for the target package.
-
-> +HOST_GTEST_LICENSE_FILES = googlemock/scripts/generator/LICENSE
-> +HOST_GTEST_DEPENDENCIES = host-python
-
- Is the host-python dependency still needed? If python-2.6 doesn't work, yes it
-is, but then there should be a comment. But the README file says "Python 2.3.5
-or later"...
-
- All this HOST_GTEST stuff should be defined unconditionally.
-
-> +else
-> +# By default, gtest also builds gmock
-> +GTEST_SUBDIR = googletest
-
- Actually, the top-level CMakeLists has the options BUILD_GTEST and BUILD_GMOCK
-(the latter implies the former in a rather complicated way). It's better to use
-those rather than messing with SUBDIR.
-
-> +endif
-> +
-> +HOST_GTEST_GMOCK_PYTHONPATH = \
-> +        $(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
->  
->  # While it is possible to build gtest as shared library, using this gtest shared
->  # library requires to set some special configure option in the project using
-> @@ -21,11 +35,7 @@ GTEST_LICENSE_FILES = LICENSE
->  # the gtest sources.
->  GTEST_CONF_OPTS = -DBUILD_SHARED_LIBS=OFF
->  
-> -define GTEST_INSTALL_STAGING_CMDS
-> -	$(INSTALL) -D -m 0755 $(@D)/libgtest.a $(STAGING_DIR)/usr/lib/libgtest.a
-> -	$(INSTALL) -D -m 0755 $(@D)/libgtest_main.a $(STAGING_DIR)/usr/lib/libgtest_main.a
-> -	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gtest/
-> -	cp -rp $(@D)/include/gtest/* $(STAGING_DIR)/usr/include/gtest/
-> +define GTEST_INSTALL_MISSING_FILES
->  	$(INSTALL) -D -m 0644 package/gtest/gtest.pc \
->  		$(STAGING_DIR)/usr/lib/pkgconfig/gtest.pc
->  	# Generate the gtest-config script manually, since the CMake
-> @@ -39,9 +49,33 @@ define GTEST_INSTALL_STAGING_CMDS
->  		s%@bindir@%$(STAGING_DIR)/usr/bin%;\
->  		s%@PTHREAD_CFLAGS@%%;\
->  		s%@PTHREAD_LIBS@%-lpthread%;' \
-> -		$(@D)/scripts/gtest-config.in \
-> +		$(@D)/googletest/scripts/gtest-config.in \
->  		> $(STAGING_DIR)/usr/bin/gtest-config
->  	chmod +x $(STAGING_DIR)/usr/bin/gtest-config
->  endef
->  
-> +GTEST_POST_INSTALL_STAGING_HOOKS += GTEST_INSTALL_MISSING_FILES
-> +
-> +ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
-> +define GTEST_GMOCK_INSTALL_MISSING_FILE
-> +	$(INSTALL) -D -m 0755 package/gtest/gmock.pc \
-> +		$(STAGING_DIR)/usr/lib/pkgconfig/gmock.pc
-> +endef
-> +
-> +GTEST_POST_INSTALL_STAGING_HOOKS += GTEST_GMOCK_INSTALL_MISSING_FILE
-> +
-> +define HOST_GTEST_INSTALL_CMDS
-
- This shouldn't be inside the GTEST_GMOCK condition.
-
-> +	$(INSTALL) -D -m 0755 $(@D)/googlemock/scripts/generator/gmock_gen.py \
-> +		$(HOST_DIR)/usr/bin/gmock_gen.py
-> +	ln -sf gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen
-> +	cp -rp $(@D)/googlemock/scripts/generator/cpp \
-> +		$(HOST_GTEST_GMOCK_PYTHONPATH)
-
- This is just copied from the current implementation, so OK. However, now I look
-like it, this seems a really twisted way of installing this script. The normal
-approach would be
-
-	mkdir -p $(HOST_DIR)/usr/lib/gmock
-	cp -r $(@D)/googlemock/scripts/generator/* $(HOST_DIR)/usr/lib/gmock
-	ln -sf ../lib/gmock/gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen
-
- I.e. install the script itself together with the libraries it imports, and
-symlink to it from $PATH. This way, the script will find the libraries by itself
-(it extends sys.path with $0).
-
- That way, the script is also usable with the system's python. So, unless you
-make this change, the host-python dependency really _is_ needed, otherwise the
-gmock_gen imports won't be found when executing the script.
-
-> +endef
-> +endif
-> +
->  $(eval $(cmake-package))
-> +ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
-
- This should _definitely_ not be in the GTEST_GMOCK condition. We never let the
-package definition itself depend on the config options.
+  system: fix unmet dependencies (2016-09-11 14:33:46 +0200)
 
 
- Regards,
- Arnout
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      linux/ext: fix Xenomai unmet dependencies
+      package/docker-engine: fix unmet dependencies
+      package/weston: fix unmet dependencies
+      system: fix unmet dependencies
 
-> +# The host package does not build anything, just installs gmock_gen stuff, so
-> +# it does not need to be a host-cmake-package.
-> +$(eval $(host-generic-package))
-> +endif
-> diff --git a/package/gtest/gtest.pc b/package/gtest/gtest.pc
-> index b7a8aa4..594e79d 100644
-> --- a/package/gtest/gtest.pc
-> +++ b/package/gtest/gtest.pc
-> @@ -5,7 +5,7 @@ includedir=${prefix}/include
->  
->  Name: gtest
->  Description: Google C++ Testing Framework
-> -Version: 1.7.0
-> +Version: 1.8.0
->  Libs: -L${libdir} -lgtest
->  Libs.private: -lpthread
->  Cflags: -I${includedir}
-> 
+ linux/Config.ext.in             | 18 ++++++++++--------
+ package/docker-engine/Config.in |  1 +
+ package/weston/Config.in        |  9 +++++----
+ system/Config.in                |  2 +-
+ 4 files changed, 17 insertions(+), 13 deletions(-)
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
