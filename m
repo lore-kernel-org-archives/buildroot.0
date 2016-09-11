@@ -1,61 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Sep 2016 15:45:08 +0200
-Subject: [Buildroot] [git commit] package/weston: fix unmet dependencies
-Message-ID: <20160911134931.58E2282037@busybox.osuosl.org>
+Date: Sun, 11 Sep 2016 15:49:21 +0200
+Subject: [Buildroot] [PATCH 0/4] Fix a few unmet dependencies (branch
+ yem/unmet-deps)
+In-Reply-To: <cover.1473597259.git.yann.morin.1998@free.fr>
+References: <cover.1473597259.git.yann.morin.1998@free.fr>
+Message-ID: <20160911154921.32548505@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=251b9142631bc9d574352e0bb9b595f9dc8fb6a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Properly propagate dependencies from freerdp to fix the following unmet
-dependencies:
+On Sun, 11 Sep 2016 14:38:52 +0200, Yann E. MORIN wrote:
 
-    warning: (BR2_PACKAGE_WESTON_RDP) selects BR2_PACKAGE_FREERDP which has
-    unmet direct dependencies (BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR &&
-    !BR2_STATIC_LIBS && BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_MMU &&
-    BR2_TOOLCHAIN_HAS_SYNC_4)
+> However, there is one such unmet direct dependency I was not able to
+> understand (with this series already applied):
+> 
+>     $ make KCONFIG_SEED=0x9F309288 randconfig
+>     warning: (BR2_PACKAGE_OPENCV_WITH_GSTREAMER && BR2_PACKAGE_OPENCV3_WITH_GSTREAMER)
+>     selects BR2_PACKAGE_GST_PLUGINS_BASE which has unmet direct dependencies
+>     (BR2_PACKAGE_GSTREAMER)
+>     warning: (BR2_PACKAGE_FREERDP_GSTREAMER && BR2_PACKAGE_QT_WEBKIT &&
+>     BR2_PACKAGE_OPENCV_WITH_GSTREAMER && BR2_PACKAGE_OPENCV3_WITH_GSTREAMER) selects
+>     BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP which has unmet direct dependencies
+>     (BR2_PACKAGE_GSTREAMER && BR2_PACKAGE_GST_PLUGINS_BASE)
+> 
+> As far as I can see, the dependencies of gstreamer and gst-plugins-base
+> *are* properly propagated to the offending packages. I think I'm gonna
+> loose my sanity on that one... :-/ If any one feels adventurous...
 
-Reorder deps to have architectures deps first.
+Do you have some sample .config that exhibits those problems? I had a
+quick look, and it indeed seems weird. opencv is select both gstreamer
+and gst-plugins-base, so I don't see why the dependency of
+gst-plugins-base on gstreamer is a problem.
 
-Remove "broken" dependency from comment; add missing ones.
+>       linux/ext: fix Xenomai unmet dependencies
+>       package/docker-engine: fix unmet dependencies
+>       package/weston: fix unmet dependencies
+>       system: fix unmet dependencies
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/weston/Config.in | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+All applied, thanks!
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index c1eb7da..6baa24b 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -53,9 +53,10 @@ config BR2_PACKAGE_WESTON_FBDEV
- # FreeRDP needs threads and !static, already the case for weston
- config BR2_PACKAGE_WESTON_RDP
- 	bool "RDP compositor"
--	depends on BR2_USE_WCHAR # freerdp
- 	depends on BR2_USE_MMU # freerdp, libglib2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on BR2_USE_WCHAR # freerdp
-+	depends on BR2_INSTALL_LIBSTDCPP # freerdp
- 	select BR2_PACKAGE_FREERDP
- 	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- 	help
-@@ -71,10 +72,10 @@ config BR2_PACKAGE_WESTON_RDP
- 	  so you may want to change them in a post-build script or a rootfs
- 	  overlay.
- 
--comment "RDP compositor needs a toolchain w/ wchar"
--	depends on BROKEN # needs FreeRDP master
-+comment "RDP compositor needs a toolchain w/ wchar, C++"
-+	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_USE_WCHAR
-+	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
- 
- # rpi-userland is an EGL/GLES provider, so we can't select it
- config BR2_PACKAGE_WESTON_RPI
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
