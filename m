@@ -1,13 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Sep 2016 00:15:10 +0200
-Subject: [Buildroot] [PATCH] pugixml: new package
-In-Reply-To: <20160911215627.fuqvlcqo4rh67uc3@skynet.be>
-References: <20160904210846.1332-1-theo.debrouwere@skynet.be>
- <1473262627-14429-1-git-send-email-theo.debrouwere@skynet.be>
- <1473262627-14429-2-git-send-email-theo.debrouwere@skynet.be>
- <20160911230830.0bc783a5@free-electrons.com>
- <20160911215627.fuqvlcqo4rh67uc3@skynet.be>
-Message-ID: <2c1fa8e0-f670-3b5d-a5b8-748034f23cdb@mind.be>
+Date: Mon, 12 Sep 2016 00:22:57 +0200
+Subject: [Buildroot] [PATCH] package/php-ssh2: fix kconfig circular deps
+ after libssh2 fix
+In-Reply-To: <1473630559-11339-1-git-send-email-yann.morin.1998@free.fr>
+References: <1473630559-11339-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <a8d9fd1b-7d59-5952-2f26-22b9e24e5646@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,49 +13,46 @@ To: buildroot@busybox.net
 
 
 
-On 11-09-16 23:56, Theo Debrouwere wrote:
-> Hello,
+On 11-09-16 23:49, Yann E. MORIN wrote:
+> After we simplified the libssh2 dependencies, the new dependencies were
+> not propagated to the php-ssh2 package, causing circular dependencies:
 > 
->> This new package is causing a number of build failures. See:
->>
->>   http://autobuild.buildroot.net/?reason=pugixml-1.7
->>
->> Could you have a look?
+>     package/openssl/Config.in:1:error: recursive dependency detected!
+>     package/openssl/Config.in:1:    symbol BR2_PACKAGE_OPENSSL is selected by BR2_PACKAGE_LIBSSH2
+>     package/libssh2/Config.in:1:    symbol BR2_PACKAGE_LIBSSH2 is selected by BR2_PACKAGE_PHP_SSH2
+>     package/php-ssh2/Config.in:1:   symbol BR2_PACKAGE_PHP_SSH2 depends on BR2_PACKAGE_OPENSSL
 > 
+> Just drop the now-useless dependency inherited from libssh2: libssh2 now
+> has no dependency.
 > 
-> The bfin issues seems to be caused by a fault in the CMakelist.txt file.
-> Which seems to have been solved in the upstream git repo.
-> I will test the fix & verify that it solves the issue.
-> 
-> If it does, I'll provide the fix as a patch on 1.7, unless you/someone
-> else prefers bumping to an unreleased git commit.
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
- No, better cherry-pick the patch. If the upstream patch can be applied as-is,
-we prefer pointing PUGIXML_PATCH to the upstream commit (and adding it to the
-hash file) rather than saving a copy in buildroot.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> 
-> 
-> The arc issue: the compiler complains about an internal error.
-> I'm not sure if this is a pugimxl issue, but I'll reproduce it
-> tomorrow. (currently building bfin)
-
- Compiler errors on ARC are handled pretty quickly by the ARC team. Just to be
-sure, I'm adding Vlad in Cc.
-
+ Thanks for the speedy fix!
 
  Regards,
  Arnout
 
+> ---
+>  package/php-ssh2/Config.in | 2 --
+>  1 file changed, 2 deletions(-)
 > 
-> 
-> 
-> Theo
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/package/php-ssh2/Config.in b/package/php-ssh2/Config.in
+> index c795dd5..b457900 100644
+> --- a/package/php-ssh2/Config.in
+> +++ b/package/php-ssh2/Config.in
+> @@ -1,8 +1,6 @@
+>  config BR2_PACKAGE_PHP_SSH2
+>  	bool "php-ssh2"
+>  	depends on BR2_PACKAGE_PHP
+> -	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS \
+> -		&& !BR2_PACKAGE_OPENSSL # libssh2, libgcrypt
+>  	select BR2_PACKAGE_LIBSSH2
+>  	help
+>  	  PHP bindings for the libssh2 library.
 > 
 
 -- 
