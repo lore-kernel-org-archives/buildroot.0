@@ -1,38 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Sep 2016 23:28:29 +0200
-Subject: [Buildroot] [git commit] imx6sololiteevk: use zImage
-Message-ID: <20160911212946.57E4381F75@busybox.osuosl.org>
+Date: Sun, 11 Sep 2016 23:29:55 +0200
+Subject: [Buildroot] [PATCH] board/minnowboard-max: Add kernel options
+ to support USB disks
+In-Reply-To: <20160901193258.10754-1-ezequiel@vanguardiasur.com.ar>
+References: <20160901193258.10754-1-ezequiel@vanguardiasur.com.ar>
+Message-ID: <20160911232955.5c48f20e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66ce1cde74b895cb8c63a0cf21b300409d5cb877
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-U-Boot, with the default environment, is looking for a zImage.
+On Thu,  1 Sep 2016 16:32:58 -0300, Ezequiel Garcia wrote:
+> As reported by bug #9176 the current v4.6 kernel config
+> (used by Minnowboard MAX and Turbot) does not support
+> USB disks. Since this is a pretty essential functionality,
+> it's desirable to have it, so let's add the required options.
+> 
+> Kernel config linux-v3.8.config (currently used by the first
+> generation Minnowboard) doesn't need this change.
+> 
+> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> ---
+>  board/minnowboard/linux-4.6.config | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Signed-off-by: Georges Savoundararadj <savoundg@gmail.com>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/freescale_imx6sololiteevk_defconfig | 2 --
- 1 file changed, 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
-index 3827751..fa83f0c 100644
---- a/configs/freescale_imx6sololiteevk_defconfig
-+++ b/configs/freescale_imx6sololiteevk_defconfig
-@@ -14,8 +14,6 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-evk"
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
