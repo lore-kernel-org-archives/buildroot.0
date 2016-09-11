@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Sep 2016 21:29:09 +0200
-Subject: [Buildroot] [Bug 9226] New: Firefly boot fails with: "failed to
- find part:boot"
-In-Reply-To: <bug-9226-163@https.bugs.busybox.net/>
-References: <bug-9226-163@https.bugs.busybox.net/>
-Message-ID: <20160911212909.21c54943@free-electrons.com>
+Date: Sun, 11 Sep 2016 21:32:23 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/mysql: add MYSQL_SOCKET
+ variable
+In-Reply-To: <1473437448-27903-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1473437448-27903-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <20160911213223.711de86f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,101 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-Ezequiel, you are the last person who updated the firefly defconfig, so
-I assume you have access to the board. Could you have a look at the bug
-report below?
+On Fri,  9 Sep 2016 18:10:47 +0200, Floris Bos wrote:
+> Add MYSQL_SOCKET variable with MySQL socket location
+> 
+> v3: fix systemd missing user
+> v2: move socket to /run/mysql/mysql.sock
+> chmod 755 /run/mysql to allow users access to it
 
-Thanks!
+This patch lacks your Signed-off-by line.
+
+Also, this patch defines the MYSQL_SOCKET variable, which in PATCH 2/2
+gets used in the PHP package. Sharing variables between packages
+doesn't work in all situations, so we usually refrain from doing so.
+Maybe we should document in the manual which cases work and which cases
+don't work. Cc'ing Arnout, who knows quite a bit about this topic :)
+
+Thanks,
 
 Thomas
-
-On Sun, 11 Sep 2016 15:19:57 +0000, bugzilla at busybox.net wrote:
-> https://bugs.busybox.net/show_bug.cgi?id=9226
-> 
->             Bug ID: 9226
->            Summary: Firefly boot fails with: "failed to find part:boot"
->            Product: buildroot
->            Version: 2016.05
->           Hardware: All
->                 OS: Linux
->             Status: NEW
->           Severity: normal
->           Priority: P5
->          Component: Other
->           Assignee: unassigned at buildroot.uclibc.org
->           Reporter: ciro.santilli at gmail.com
->                 CC: buildroot at uclibc.org
->   Target Milestone: ---
-> 
-> Tested on 2016.05 and master @ a26aa9686ad457d208df3b85a39c9befa04caaa3
-> 
-> Followed instructions under board/firefly/firefly-rk3288/readme.txt
-> 
-> Then from a TTL I see:
-> 
->         arm pll = 600000000HZ
->         periph pll = 300000000HZ
->         ddr pll = 200000000HZ
->         codec pll = 594000000HZ
->     Board:  Rockchip platform Board
->     DRAM:  Found dram banks:1
->     Adding bank:0000000000000000(0000000080000000)
->     128 MiB
->     SDCard Update.
->     storage init OK!
->     Using default environment
-> 
->     GetParam
->     W: Invalid Parameter's tag (0x7BD32A6C)!
->     Invalid parameter
->     W: Invalid Parameter's tag (0xF07F8F7D)!
->     Invalid parameter
->     W: Invalid Parameter's tag (0xAE8ED94E)!
->     Invalid parameter
->     W: Invalid Parameter's tag (0x5EFFD968)!
->     Invalid parameter
->     W: Invalid Parameter's tag (0xEDDF0B28)!
->     Invalid parameter
->     W: Invalid Parameter's tag (0xE89DA830)!
->     Invalid parameter
->     W: Invalid Parameter's tag (0x00000802)!
->     Invalid parameter
->     W: Invalid Parameter's tag (0x00000000)!
->     Invalid parameter
->     failed to find part:boot
->     failed to prepare fdt from boot!
->     failed to find part:resource
->     failed to prepare fdt from resource!
->     no adc node
->     can't find dts node for led
->     can't find dts node for ricoh619
->     can't find dts node for act8846
->     can't find dts node for rk808
->     can't find dts node for rk818
->     Can't find dts node for fuel guage cw201x
->     SecureBootEn = 0, SecureBootLock = 0
-> 
->     #Boot ver: 0000-00-00#0.00
->     empty serial no.
->     unknown reboot type 1
->     no fuel gauge found
->     no fuel gauge found
->     read logo_on switch from dts [0]
->     no fuel gauge found
->     failed to find part:recovery
->     'recovery' does not seem to be a partition nor an address
->     Unable to boot:recovery
->     try to start backup
->     failed to find part:backup
->     'backup' does not seem to be a partition nor an address
->     Unable to boot:backup
->     try to start rockusb
-> 
-> but get no shell.
-> 
-
-
-
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
