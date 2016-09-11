@@ -1,56 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Sep 2016 23:15:39 +0200
-Subject: [Buildroot] [PATCH v5 1/1] package/rpm: switch to version
- 4.12.0.1
-In-Reply-To: <44f2d9ff-605a-f414-21df-e9d3eace0164@mind.be>
-References: <20160909163708.31980-1-james.knight@rockwellcollins.com>
- <20160911155431.6204c127@free-electrons.com>
- <44f2d9ff-605a-f414-21df-e9d3eace0164@mind.be>
-Message-ID: <20160911231539.29e123e3@free-electrons.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Mon, 12 Sep 2016 09:19:03 +1200
+Subject: [Buildroot] [PATCH] micropython: add upstream patch to fix build
+	failures
+Message-ID: <20160911211903.21933-1-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This allows micropython to build with a host python version of 2.6.
 
-On Sun, 11 Sep 2016 23:10:29 +0200, Arnout Vandecappelle wrote:
+Fixes:
+  http://autobuild.buildroot.net/results/212cee82cc9db81cf1524925d106e01fc1e62ce5
+  http://autobuild.buildroot.net/results/4f72a602702f4eac1fe8c4a385ebfeb6e1c50df2
 
->  v4 of the patch (about a year old) still had
-> 
-> The provided "bump" (suggested by Baruch Siach) switches from the rpm5
-> implementation to rpm.org's more active stream.
-> 
->  It would be good to keep this information, and even add a link to [0]
-> 
-> [0] http://lists.buildroot.org/pipermail/buildroot/2015-August/137580.html
-> 
->  I just checked on openhub, and indeed, rpm.org seems to get about 10 times more
-> commits than rpm5.org.
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+I wasn't sure whether to use MICROPYTHON_PATCH += or the line continuation that
+I ended up using. I couldn't find an example of either case. Murphy's law
+dictates that I've probably chosen wrong so I'd be happy to resubmit with the
+other style.
 
-Thanks for the additional info.
+ package/micropython/micropython.hash | 1 +
+ package/micropython/micropython.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-> > RPM seems like a weird project, it's widely used, but it's very hard to
-> > understand what is the real upstream for it. This fact was even  
-> 
->  It looks pretty obvious to me: rpm5.org is a fork of rpm.org.
-> 
-> > discussed on LWN recently: https://lwn.net/Articles/196523/.  
-> 
->  Er, Thomas, you're by far not old enough to be allowed to call a 10 year old
-> article "recent" :-)
-
-Gah. The one I read recently is
-https://blog.fuzzing-project.org/52-Multiple-vulnerabilities-in-RPM-and-a-rant.html,
-which was referenced by LWN in https://lwn.net/Articles/698453/.
-Indeed, the other one is 10 year old. Interestingly
-https://lwn.net/Articles/698453/ also points to the 10 year old
-article saying that not much has improved in the RPM maintenance over a
-10 year period.
-
-Thomas
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+index a8ad2ba..28c008d 100644
+--- a/package/micropython/micropython.hash
++++ b/package/micropython/micropython.hash
+@@ -1,3 +1,4 @@
+ #locally computed
+ sha256 871378fcf1f1042c399896d5673da67d12e1fb36c2e706af289fc959bc8f7a57  micropython-v1.8.3.tar.gz
+ sha256 ff3194ebecda99023d7c1bb94d32b31b9491e95a79958a25ffd05213c5553acc  8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch
++sha256 ac19af8587211d7229074fefa1a3a3c0fe807babc7cf9ce53606f05958699448  a50b26e4b00ed094aa1ac74eac2fc2d8eb9ea1ed.patch
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 590956e..2f47ad8 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -9,7 +9,8 @@ MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
+ MICROPYTHON_LICENSE = MIT
+ MICROPYTHON_LICENSE_FILES = LICENSE
+ MICROPYTHON_DEPENDENCIES = host-pkgconf libffi
+-MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch
++MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch \
++	https://github.com/micropython/micropython/commit/a50b26e4b00ed094aa1ac74eac2fc2d8eb9ea1ed.patch
+ 
+ # Use fallback implementation for exception handling on architectures that don't
+ # have explicit support.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.2.518.ged577c6.dirty
