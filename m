@@ -1,181 +1,85 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Sep 2016 00:55:29 +0200
-Subject: [Buildroot] [PATCH 2/4] php: rework selection of interfaces
-In-Reply-To: <1473632768-53238-2-git-send-email-fabrice.fontaine@orange.com>
+Date: Mon, 12 Sep 2016 01:21:50 +0200
+Subject: [Buildroot] [PATCH 3/4] php: fix pthread detection
+In-Reply-To: <1473632768-53238-3-git-send-email-fabrice.fontaine@orange.com>
 References: <1473632768-53238-1-git-send-email-fabrice.fontaine@orange.com>
- <1473632768-53238-2-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <765efa55-2d51-62a0-f115-c5b4e34c9d7a@mind.be>
+ <1473632768-53238-3-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <27c90840-3293-b11f-1774-dc918e126527@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Fabrice,
+
 
 On 12-09-16 00:26, Fabrice Fontaine wrote:
-> Following suggestion of Yann Morin, rework selection of php interfaces:
-> use booleans instead of choice to be able to select multiple interfaces
-> as they are not exclusive
+> Following suggestion of Yann Morin, move fix on pthread detection in a
+> detected patch and add more comment on issue: without this fix, thread
+> safety option (--enable-maintainer-zts) will not work
 
- Maybe add something like:
+ This commit message makes no sense. I guess you wanted to say that in this v2,
+you split off the pthread detection into a separate patch. But that should be in
+a non-commit comment (see below).
 
-The choice was introduced in commit fcdc9f891 to make sure at least one
-SAPI option was selected. Here, we use an auxiliary symbol
-BR2_PACKAGE_PHP_HAS_SAPI and CGI will be selected if this symbol is not set.
+ Better use the comment you added below as the commit message.
 
 > 
 > Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+
+ You can add below your Sob
+
+---
+v2: move to a separate patch (Yann Morin)
+
 > ---
->  package/php/Config.in | 40 +++++-----------------------------------
->  package/php/php.mk    |  8 ++++----
->  2 files changed, 9 insertions(+), 39 deletions(-)
+>  package/php/php.mk | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
-> diff --git a/package/php/Config.in b/package/php/Config.in
-> index eee8d26..c90ad4f 100644
-> --- a/package/php/Config.in
-> +++ b/package/php/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PHP
->  	bool "php"
-> +	select BR2_PACKAGE_PHP_SAPI_CGI if !BR2_PACKAGE_PHP_HAS_SAPI
->  	help
->  	  PHP  is a widely-used general-purpose scripting
->  	  language that is especially suited for Web development
-> @@ -9,61 +10,30 @@ config BR2_PACKAGE_PHP
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index 97e3396..c4ff249 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -47,6 +47,20 @@ define PHP_BUILDCONF
+>  endef
+>  PHP_PRE_CONFIGURE_HOOKS += PHP_BUILDCONF
 >  
->  if BR2_PACKAGE_PHP
->  
-> -config BR2_PACKAGE_PHP_CLI
-> +# Helper to make sure at least one interface is selected.
-> +config BR2_PACKAGE_PHP_HAS_SAPI
+> +# PHP assumes pthreads are not working when cross-compiling, indeed configure
+> +# sets pthreads_working to no if cross_compiling is set to yes (line 5888)
+> +# If pthreads_working is set to no, thread safety option
+> +# (--enable-maintainer-zts) will not be available
+> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> +PHP_CONF_ENV += ac_cv_pthreads_lib=pthread
+> +
+> +define PHP_FIX_THREADS_DETECTION
+> +	$(SED) 's/pthreads_working\=no/pthreads_working\=yes/' $(@D)/configure
+> +endef
 
- The name is not ideal, because it's actually _HAS_SAPI_EXCEPT_CGI. But that's
-impossible to understand, so perhaps extend the comment with
-# All SAPI options except CGI will select this symbol.
+ I'd prefer an upstreamable patch that fixes the issue. The problem is that the
+configure script violates a rule of AC_CACHE_VAL: "The commands-to-set-it must
+have no side effects except for setting the variable cache-id, see below". But
+they also set pthreads_working, which is wrong. It completely defeats the
+purpose of the cache.
 
->  	bool
->  
-> -config BR2_PACKAGE_PHP_CGI
-> -	bool
-> -
-> -config BR2_PACKAGE_PHP_FPM
-> -	bool
-> -
-> -choice
-> -	prompt "Interface"
+ So what should be done is to remove the pthreads_working assignments from the
+AC_CACHE_CHECK functions, and replace them with:
 
- You should keep this as a comment, or alternatively change the prompts below to
-include "Interface". Now it is just
-
-     [*] php
-     -*-   CGI
-     [ ]   CLI
-     [ ]   FPM
-           Extensions  --->
-
-which is not descriptive enough IMHO.
-
-> -	default BR2_PACKAGE_PHP_SAPI_CGI
-> -	help
-> -	  Select the PHP interface(s).
-> -
->  config BR2_PACKAGE_PHP_SAPI_CGI
->  	bool "CGI"
->  	# CGI uses fork()
->  	depends on BR2_USE_MMU
-> -	select BR2_PACKAGE_PHP_CGI
->  	help
->  	  Common Gateway Interface
->  
->  config BR2_PACKAGE_PHP_SAPI_CLI
->  	bool "CLI"
-> -	select BR2_PACKAGE_PHP_CLI
-> +	select BR2_PACKAGE_PHP_HAS_SAPI
->  	help
->  	  Command Line Interface
->  
->  config BR2_PACKAGE_PHP_SAPI_FPM
->  	bool "FPM"
->  	depends on BR2_USE_MMU
-> -	select BR2_PACKAGE_PHP_FPM
-> +	select BR2_PACKAGE_PHP_HAS_SAPI
->  	help
->  	  PHP-FPM (FastCGI Process Manager)
-
- Isn't FPM mutually exclusive with CGI?
-
- If yes, it could be tricky to code that in Config.in without a dependency cycle
-due to HAS_SAPI...
-
->  
-> -config BR2_PACKAGE_PHP_SAPI_CLI_CGI
-> -	bool "CGI and CLI"
-> -	# CGI uses fork()
-> -	depends on BR2_USE_MMU
-> -	select BR2_PACKAGE_PHP_CLI
-> -	select BR2_PACKAGE_PHP_CGI
-
- Any user-settable config symbol that is removed should move to
-Config.in.legacy. Something like this:
-
-config BR2_PACKAGE_PHP_SAPI_CLI_CGI
-	bool "PHP CGI and CLI option is split up"
-	select BR2_PACKAGE_PHP_SAPI_CLI
-	select BR2_PACKAGE_PHP_SAPI_CGI
-	help
-	  The PHP Interface options have been split up into a
-	  separate option for each interface.
-
-> -	help
-> -	  Command line and Common gateway interfaces
-> -
-> -config BR2_PACKAGE_PHP_SAPI_CLI_FPM
-
- Similar for this one.
+if [ "x$ac_cv_pthreads_cflags" != "x" -o "x$ac_cv_pthreads_lib" != "x" ]; then
+	pthreads_working=yes
+fi
 
 
  Regards,
  Arnout
 
-> -	bool "FPM and CLI"
-> -	depends on BR2_USE_MMU
-> -	select BR2_PACKAGE_PHP_CLI
-> -	select BR2_PACKAGE_PHP_FPM
-> -	help
-> -	  Command line and PHP-FPM (FastCGI Process Manager)
-> -
-> -endchoice
-> -
->  source "package/php/Config.ext"
->  
->  endif
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index 7df10be..97e3396 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -77,9 +77,9 @@ else
->  PHP_CONF_ENV += ac_cv_func_dlopen=no ac_cv_lib_dl_dlopen=no
->  endif
->  
-> -PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_CLI),,--disable-cli)
-> -PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_CGI),,--disable-cgi)
-> -PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_FPM),--enable-fpm,--disable-fpm)
-> +PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_CLI),,--disable-cli)
-> +PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_CGI),,--disable-cgi)
-> +PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_FPM),--enable-fpm,--disable-fpm)
->  
->  ### Extensions
->  PHP_CONF_OPTS += \
-> @@ -280,7 +280,7 @@ PHP_CONF_OPTS += \
->  PHP_DEPENDENCIES += jpeg libpng freetype
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_PHP_FPM),y)
-> +ifeq ($(BR2_PACKAGE_PHP_SAPI_FPM),y)
->  define PHP_INSTALL_INIT_SYSV
->  	$(INSTALL) -D -m 0755 $(@D)/sapi/fpm/init.d.php-fpm \
->  		$(TARGET_DIR)/etc/init.d/S49php-fpm
+
+> +
+> +PHP_PRE_CONFIGURE_HOOKS += PHP_FIX_THREADS_DETECTION
+> +endif
+> +
+>  ifeq ($(BR2_ENDIAN),"BIG")
+>  PHP_CONF_ENV += ac_cv_c_bigendian_php=yes
+>  else
 > 
 
 -- 
