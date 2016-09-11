@@ -1,44 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Sep 2016 15:34:04 +0200
-Subject: [Buildroot] [PATCH] core: distclean is a noconfig target
-In-Reply-To: <1473598598-5546-1-git-send-email-yann.morin.1998@free.fr>
-References: <1473598598-5546-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160911153404.06d0d424@free-electrons.com>
+Date: Sun, 11 Sep 2016 15:34:59 +0200
+Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 1.2.2
+Message-ID: <20160911133515.C546D81696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=57d0a568da4dd3e49c06af79a24ecaafaf14cbe4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 11 Sep 2016 14:56:38 +0200, Yann E. MORIN wrote:
-> When the .config contains invalid configuration *(e.g. two providers for
-> a same virtual pacakge), it is not possible to run "make distclean"
+Upstream did not provide a hash file, so the hash was calculated
+manually.
 
-pacakge -> package
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> @@ -86,7 +86,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
->  noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
->  	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
->  	randpackageconfig allyespackageconfig allnopackageconfig \
-> -	print-version olddefconfig
-> +	print-version olddefconfig distclean
-
-The distclean target uses the DL_DIR variable, which is derived from
-BR2_DL_DIR, which can come from either the environment... or the
-configuration file. So, the BR2_DL_DIR from the configuration will be
-ignored. I'm not sure what the consequence is, but it's worth thinking
-about this.
-
-Also, what is the rationale for having just "distclean" and not "clean"
-in noconfig_targets ? The fact that "distclean" remove the
-configuration, and as such "helps" in solving configuration issues ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index 27a75cc..7e23adc 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,2 +1,2 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.1.3.tar.gz.sha256
+-sha256  2df3e6593f18c097b6247fb8da919b94701bf083b219056b006d68e6dcef75b5  upmpdcli-1.1.3.tar.gz
++# Manually calculated:
++sha256  6a3ad211707d7eca287f7f64688ff2e569d50bc463aa2145b01c98252fe30955  upmpdcli-1.2.2.tar.gz
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 1a7c790..a7b98c9 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UPMPDCLI_VERSION = 1.1.3
++UPMPDCLI_VERSION = 1.2.2
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPLv2+
+ UPMPDCLI_LICENSE_FILES = COPYING
