@@ -1,15 +1,16 @@
-From: Theo Debrouwere <theo.debrouwere@skynet.be>
-Date: Mon, 12 Sep 2016 10:14:43 +0200
-Subject: [Buildroot] [PATCH] package/pugixml: Fix CMakelists.txt
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Sep 2016 11:18:41 +0200
+Subject: [Buildroot] [git commit] package/pugixml: Fix CMakelists.txt
 	cxx_long_long_type bug.
-In-Reply-To: <20160912091925.36c6f94d@free-electrons.com>
-References: <20160912091925.36c6f94d@free-electrons.com>
-Message-ID: <1473668083-362-1-git-send-email-theo.debrouwere@skynet.be>
+Message-ID: <20160912092408.B193181E40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=d28aa481b3cea9cca4c7d259618235d63f62fd59
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 CMakelist.txt tries to enable the cxx_long_long_type option,
 even if the feature isn't available. (Which causes some builds to fail)
@@ -20,10 +21,10 @@ The patch was backported from:
 https://github.com/zeux/pugixml/commit/4dbb5646196a4a3cc94097f1473ef11d1d44df11
 
 Signed-off-by: Theo Debrouwere <t.debrouwere@televic.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  .../0001-check-cxx_long_long_type-existence.patch  | 33 ++++++++++++++++++++++
  1 file changed, 33 insertions(+)
- create mode 100644 package/pugixml/0001-check-cxx_long_long_type-existence.patch
 
 diff --git a/package/pugixml/0001-check-cxx_long_long_type-existence.patch b/package/pugixml/0001-check-cxx_long_long_type-existence.patch
 new file mode 100644
@@ -64,5 +65,3 @@ index 0000000..a53c84a
 +-- 
 +2.9.3
 +
--- 
-2.8.1
