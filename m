@@ -1,94 +1,81 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Mon, 12 Sep 2016 18:22:41 -0400
-Subject: [Buildroot] [PATCH v5 1/1] package/rpm: switch to version
-	4.12.0.1
-In-Reply-To: <b35ba70e-9552-577c-0bea-4a50e6b5fe4a@mind.be>
-References: <20160909163708.31980-1-james.knight@rockwellcollins.com>
- <b35ba70e-9552-577c-0bea-4a50e6b5fe4a@mind.be>
-Message-ID: <CALe+oY-xM=Jqk17OH199Ow6wGcF193M3iKgbuYs6s7CPyKAFBw@mail.gmail.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Mon, 12 Sep 2016 15:54:11 -0700
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2016-09-11
+In-Reply-To: <20160912215430.GC15314@free.fr>
+References: <20160912063028.65AFB103B93@stock.ovh.net>
+ <CAKmqyKOAaZYPwd3GwvBsz7CwiF93-m=5rh=z6vv9o4RTsHod0A@mail.gmail.com>
+ <20160912234452.38288933@free-electrons.com> <20160912215430.GC15314@free.fr>
+Message-ID: <CAKmqyKMu2pkBcZnjOiOOZ3J5FKdZ1h7zYo7QnwqfCYyoKGrMfg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+On Mon, Sep 12, 2016 at 2:54 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Thomas, All,
+>
+> On 2016-09-12 23:44 +0200, Thomas Petazzoni spake thusly:
+>> On Mon, 12 Sep 2016 14:39:43 -0700, Alistair Francis wrote:
+>> > >      aarch64 |                      xen-4.7.0 | NOK | http://autobuild.buildroot.net/results/9e733b8afb51add44fcf675fb25c05fe52773de7
+>> > >          arm |                      xen-4.7.0 | NOK | http://autobuild.buildroot.net/results/fc39051eb0c466493a69bd9a320e6046a66db51e
+>> > >          arm |                      xen-4.7.0 | NOK | http://autobuild.buildroot.net/results/65096ed770f89da2c928f504d84fc811619037d5
+>> > >          arm |                      xen-4.7.0 | NOK | http://autobuild.buildroot.net/results/051d916bb12f1a0a0bfc5e2362e7a9b1488717f1
+>> > >          arm |                      xen-4.7.0 | NOK | http://autobuild.buildroot.net/results/bcd784b22c0335c04960e1a5601e1925134f5edf
+>> > >          arm |                      xen-4.7.0 | NOK | http://autobuild.buildroot.net/results/563f086f127b2a59edbe2adcfd730378d1a5d5f0
+>> >
+>> > Xen 4.7 has started failing and it looks to be related to a lack of
+>> > gettext. I can't see any recent changes that should have broken this.
+>> >
+>> > Does anyone have any idea what has changed with gettext?
+>>
+>> I don't see anything gettext related in there. What I see is:
+>>
+>> /usr/bin/gcc -Wp,-MD,tools/kconfig/.zconf.tab.o.d -Wall -Werror -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strict-aliasing -Wdeclaration-after-statement     -DCURSES_LOC="<ncurses.h>" -DLOCALE -DKBUILD_NO_NLS -Itools/kconfig -c -o tools/kconfig/zconf.tab.o tools/kconfig/zconf.tab.c
+>> In file included from tools/kconfig/zconf.tab.c:2576:0:
+>> tools/kconfig/confdata.c: In function 'conf_set_all_new_symbols':
+>> tools/kconfig/confdata.c:1167:2: error: ISO C90 forbids mixed declarations and code [-Werror=declaration-after-statement]
+>> cc1: all warnings being treated as errors
+>>
+>> I.e, the built-in kconfig copy of the Xen sources doesn't build with
+>> the host compiler on this machine. All issues appear on gcc20, where
+>> the host compiler is gcc 4.7.
+>>
+>> I guess the easiest fix here is to remove -Werror from the compile
+>> command line. Can you look at how to do this inside the Xen source code?
 
-On Mon, Sep 12, 2016 at 5:33 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  It's weird that you get this patch from Thomas while he isn't mentioned in the
-> commit message. I thought it was because we had rpm4 before, but it turns out
-> our initial commit for rpm was already rpm5. So it would be interesting to
-> mention in the commit message where this comes from.
-
-I can reference the old request where Thomas provided these patches. [1]
+Apparently there are two issues here.
 
 >
->  More importantly, however: you should add your own Sob.
-
-Good to know, thanks!
-
->  Oh, and there's an active upstream at
-> https://github.com/rpm-software-management/rpm
-> Could you submit it there (if still relevant)?
-
-I'll investigate this. I won't be able to try this until next month or
-so, so I hope having these patches for now will suffice/causes no
-complaints.
-
->> +     depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
+> There's also http://autobuild.buildroot.net/results/bcd/bcd784b22c0335c04960e1a5601e1925134f5edf
+> which has seemingly gettext-related issues:
 >
->  Could you mention in the commit message what fails on musl? Makes fixing it
-> later easier.
-
-I tried to put that information in the actual package portion:
-
-    depends on !BR2_TOOLCHAIN_USES_MUSL # __fxstat64, _D_EXACT_NAMELEN
-
-Does that suffice? Or is it better to put it in the comment section?
-Or is a longer comment desire? Either way, I'll clean that up.
-
->>       depends on BR2_TOOLCHAIN_HAS_THREADS # beecrypt
+>     /usr/bin/gcc -Wp,-MD,tools/kconfig/.zconf.tab.o.d -Wall -Werror -Wstrict-prototypes -O2 -fomit-frame-pointer -fno-strict-aliasing -Wdeclaration-after-statement     -DCURSES_LOC="<ncurses.h>" -DNCURSES_WIDECHAR=1 -DLOCALE -DKBUILD_NO_NLS -Itools/kconfig -c -o tools/kconfig/zconf.tab.o tools/kconfig/zconf.tab.c
+>     tools/kconfig/conf.c: In function 'check_stdin':
+>     tools/kconfig/conf.c:77:3: error: format not a string literal and no format arguments [-Werror=format-security]
+>        printf(_("aborted!\n\n"));
+>        ^
 >
->  or libnss
-
-Noted.
-
->> +RPM_CONF_OPTS += \
+> But again this is not because of gettext, but because of -Werror=format-security
+> which warns when the format string is not a constant.
 >
->  Why += ?
+> But again, removing -Werror would do the trick.
 
-A mistake, will fix.
+Is that an acceptable solution? Just rip it out of the config/Makefile.
 
->> +     --disable-largefile \
+Thanks,
+
+Alistair
+
 >
->  Why disable? Probably needs a comment in commit message or in .mk file.
-
-Actually, I cannot recall. I'll investigate and add an appropriate
-correction or comment.
-
->> +     --enable-python=no \
+> Regards,
+> Yann E. MORIN.
 >
->  Doesn't --without-python or --disable-python work?
-
-Most likely does; will cleanup.
-
->> +ifeq ($(BR2_PACKAGE_BEECRYPT),y)
->
->  Small nit: since Config.in selects beecrypt if !libnss, it makes more sense to
-> make it similar here, i.e. ifeq ($(BR2_PACKAGE_LIBNSS),y).
-
-Sure; I'll clean that up.
-
->> +RPM_CONF_ENV += \
->> +     ac_cv_prog_cc_c99='-std=gnu99' \
->
->  Doesn't configure detect this? Add a comment why not.
-
-It doesn't. Doesn't excuse the fact that I didn't add a comment why;
-I'll address this as well.
-
----
-
-Thanks for all the comments.
-
-[1]: https://patchwork.ozlabs.org/patch/528733/
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
