@@ -1,81 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Sep 2016 22:57:53 +0200
-Subject: [Buildroot] [git commit] linux-headers: allow specifying 4.8 as
-	kernel header version
-Message-ID: <20160912210013.3FAA08212A@busybox.osuosl.org>
+Date: Mon, 12 Sep 2016 23:00:24 +0200
+Subject: [Buildroot] [git commit] mx6ulpico: Use kernel 4.8-rc5
+Message-ID: <20160912210028.35BFD8185F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3ac2bc616803b40efad1e620ffe09eb7f7d1565
+commit: https://git.buildroot.net/buildroot/commit/?id=0f0183121d933cc38f78d1ded6c3a59907cc917c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even though 4.8 is not released yet, some people may want to build a
-system using the 4.8-rc kernel, and point to the kernel sources as the
-kernel headers to use for the toolchain.
-
-In order to make this possible, this commit adds support for specifying
-4.8 as the kernel headers version, in both the internal and external
-toolchain logic.
+With kernel 4.8-rc5 we no longer need to use the "CONFIG_SMP=n" workaround
+as the reboot issue has been fixed upstream by commit 059e232089e4
+("irqchip/gic: Allow self-SGIs for SMP on UP configurations")
 
 Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-[Thomas: remove support for 4.8 headers selection, and rework commit log.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host   | 4 ++++
- toolchain/toolchain-common.in          | 5 +++++
- toolchain/toolchain-external/Config.in | 4 ++++
- 3 files changed, 13 insertions(+)
+ board/technexion/imx6ulpico/linux.fragment | 1 -
+ configs/imx6ulpico_defconfig               | 6 +++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7fea748..cbfaa26 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -106,6 +106,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
+diff --git a/board/technexion/imx6ulpico/linux.fragment b/board/technexion/imx6ulpico/linux.fragment
+index 88e323e..892d0cb 100644
+--- a/board/technexion/imx6ulpico/linux.fragment
++++ b/board/technexion/imx6ulpico/linux.fragment
+@@ -1,2 +1 @@
+ CONFIG_CFG80211_WEXT=y
+-CONFIG_SMP=n
+diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
+index 1b47ecc..f984bf4 100644
+--- a/configs/imx6ulpico_defconfig
++++ b/configs/imx6ulpico_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
  
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8
-+	bool "4.8.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7
- 	bool "4.7.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 03fa880..b682e4d 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -222,10 +222,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
+-# Linux headers same as kernel, a 4.7 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
++# Linux headers same as kernel, a 4.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
  
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "4.8"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
- 	default "4.7"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
- 	default "4.6"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
- 	default "4.5"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 63b7712..c3822ed 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -794,6 +794,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_8
-+	bool "4.8.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_7
- 	bool "4.7.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc5"
+@@ -17,7 +17,7 @@ BR2_GLOBAL_PATCH_DIR="board/technexion/imx6ulpico/patches"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8-rc5"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/technexion/imx6ulpico/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
