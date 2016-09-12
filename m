@@ -1,92 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Sep 2016 23:13:44 +0200
-Subject: [Buildroot] [git commit] apache: add customization of MPM
-Message-ID: <20160912211405.645038172C@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 12 Sep 2016 23:14:50 +0200
+Subject: [Buildroot] [PATCH v3 0/4] Add a get-developers script and
+ database
+In-Reply-To: <1473713695-2611-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1473713695-2611-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160912211450.GB15314@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc5584fc90b491610aecec22102a772d0805ddf4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-MPM can be selected between event, prefork or worker
-Set worker as the default one as it was before even if event MPM is
-better on system supporting thread safe polling
+On 2016-09-12 22:54 +0200, Thomas Petazzoni spake thusly:
+> This is the third version of the patch series adding a get-developers
+> script and the corresponding DEVELOPERS database.
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/apache/Config.in | 28 ++++++++++++++++++++++++++++
- package/apache/apache.mk | 10 +++++++++-
- 2 files changed, 37 insertions(+), 1 deletion(-)
+All I want to say is, just commit that already! ;-)
 
-diff --git a/package/apache/Config.in b/package/apache/Config.in
-index 0814a17..511876d 100644
---- a/package/apache/Config.in
-+++ b/package/apache/Config.in
-@@ -14,6 +14,34 @@ config BR2_PACKAGE_APACHE
- 
- 	  http://httpd.apache.org
- 
-+if BR2_PACKAGE_APACHE
-+
-+choice
-+	prompt "Multi-Processing Module (MPM)"
-+	default BR2_PACKAGE_APACHE_MPM_WORKER
-+	help
-+	  Select the Multi-Processing Module (MPM).
-+
-+config BR2_PACKAGE_APACHE_MPM_EVENT
-+	bool "event"
-+	help
-+	  A variant of the worker MPM with the goal of consuming threads
-+	  only for connections with active processing
-+
-+config BR2_PACKAGE_APACHE_MPM_PREFORK
-+	bool "prefork"
-+	help
-+	  Implements a non-threaded, pre-forking web server
-+
-+config BR2_PACKAGE_APACHE_MPM_WORKER
-+	bool "worker"
-+	help
-+	  Implements a hybrid multi-threaded multi-process web server
-+
-+endchoice
-+
-+endif
-+
- comment "apache needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index e78545a..e54b736 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -20,6 +20,14 @@ APACHE_CONF_ENV= \
- 	ap_cv_void_ptr_lt_long=no \
- 	PCRE_CONFIG=$(STAGING_DIR)/usr/bin/pcre-config
- 
-+ifeq ($(BR2_PACKAGE_APACHE_MPM_EVENT),y)
-+APACHE_MPM = event
-+else ifeq ($(BR2_PACKAGE_APACHE_MPM_PREFORK),y)
-+APACHE_MPM = prefork
-+else ifeq ($(BR2_PACKAGE_APACHE_MPM_WORKER),y)
-+APACHE_MPM = worker
-+endif
-+
- APACHE_CONF_OPTS = \
- 	--sysconfdir=/etc/apache2 \
- 	--with-apr=$(STAGING_DIR)/usr \
-@@ -31,7 +39,7 @@ APACHE_CONF_OPTS = \
- 	--enable-mime-magic \
- 	--without-suexec-bin \
- 	--enable-mods-shared=all \
--	--with-mpm=worker \
-+	--with-mpm=$(APACHE_MPM) \
- 	--disable-lua \
- 	--disable-luajit
- 
+Seriously, this thing is working: we've been receiving notifications for
+some time now.
+
+It will not be easy for you to maintain the developpers file locally, so
+if we want people to register as developpers, we need to have that in
+the tree.
+
+Any remaining nit can be fixed afterward.
+
+Regards,
+Yann E. MORIN.
+
+> Since v2, the DEVELOPERS database has seen numerous updates, following
+> the feedback from several Buildroot developers.
+> 
+> Thanks,
+> 
+> Thomas
+> 
+> Thomas Petazzoni (4):
+>   support/scripts/get-developers: add new script
+>   DEVELOPERS: add initial list of Buildroot developers
+>   docs/manual: update contribute.txt to cover get-developers
+>   docs/manual: add new section about the DEVELOPERS file and
+>     get-developer
+> 
+>  DEVELOPERS                         | 1581 ++++++++++++++++++++++++++++++++++++
+>  docs/manual/contribute.txt         |   18 +-
+>  docs/manual/developers.txt         |   46 ++
+>  docs/manual/manual.txt             |    2 +
+>  support/scripts/get-developers     |   83 ++
+>  support/scripts/getdeveloperlib.py |  201 +++++
+>  6 files changed, 1929 insertions(+), 2 deletions(-)
+>  create mode 100644 DEVELOPERS
+>  create mode 100644 docs/manual/developers.txt
+>  create mode 100755 support/scripts/get-developers
+>  create mode 100644 support/scripts/getdeveloperlib.py
+> 
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
