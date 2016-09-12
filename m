@@ -1,41 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Sep 2016 09:48:30 +0200
-Subject: [Buildroot] [PATCH] package/php-ssh2: fix kconfig circular deps
- after libssh2 fix
-In-Reply-To: <1473630559-11339-1-git-send-email-yann.morin.1998@free.fr>
-References: <1473630559-11339-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160912094830.0b4aeec9@free-electrons.com>
+From: Theo Debrouwere <theo.debrouwere@skynet.be>
+Date: Mon, 12 Sep 2016 10:14:43 +0200
+Subject: [Buildroot] [PATCH] package/pugixml: Fix CMakelists.txt
+	cxx_long_long_type bug.
+In-Reply-To: <20160912091925.36c6f94d@free-electrons.com>
+References: <20160912091925.36c6f94d@free-electrons.com>
+Message-ID: <1473668083-362-1-git-send-email-theo.debrouwere@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+CMakelist.txt tries to enable the cxx_long_long_type option,
+even if the feature isn't available. (Which causes some builds to fail)
 
-On Sun, 11 Sep 2016 23:49:19 +0200, Yann E. MORIN wrote:
-> After we simplified the libssh2 dependencies, the new dependencies were
-> not propagated to the php-ssh2 package, causing circular dependencies:
-> 
->     package/openssl/Config.in:1:error: recursive dependency detected!
->     package/openssl/Config.in:1:    symbol BR2_PACKAGE_OPENSSL is selected by BR2_PACKAGE_LIBSSH2
->     package/libssh2/Config.in:1:    symbol BR2_PACKAGE_LIBSSH2 is selected by BR2_PACKAGE_PHP_SSH2
->     package/php-ssh2/Config.in:1:   symbol BR2_PACKAGE_PHP_SSH2 depends on BR2_PACKAGE_OPENSSL
-> 
-> Just drop the now-useless dependency inherited from libssh2: libssh2 now
-> has no dependency.
-> 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  package/php-ssh2/Config.in | 2 --
->  1 file changed, 2 deletions(-)
+The included patch checks if the option is present before applying it.
 
-Applied to master, thanks.
+The patch was backported from:
+https://github.com/zeux/pugixml/commit/4dbb5646196a4a3cc94097f1473ef11d1d44df11
 
-Thomas
+Signed-off-by: Theo Debrouwere <t.debrouwere@televic.com>
+---
+ .../0001-check-cxx_long_long_type-existence.patch  | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/pugixml/0001-check-cxx_long_long_type-existence.patch
+
+diff --git a/package/pugixml/0001-check-cxx_long_long_type-existence.patch b/package/pugixml/0001-check-cxx_long_long_type-existence.patch
+new file mode 100644
+index 0000000..a53c84a
+--- /dev/null
++++ b/package/pugixml/0001-check-cxx_long_long_type-existence.patch
+@@ -0,0 +1,33 @@
++From 6cfd9c14ced26c8220f7f7ea99610cbdbfb9eba7 Mon Sep 17 00:00:00 2001
++From: Theo Debrouwere <theo.debrouwere@skynet.be>
++Date: Mon, 12 Sep 2016 09:38:56 +0200
++Subject: [PATCH] Bugfix: check if cxx_long_long_type is present before
++ applying it.
++
++Check if cxx_long_long_type is present in the list of compiler features
++before adding it as a target_compile_feature.
++
++Patch was backported from
++https://github.com/zeux/pugixml/commit/4dbb5646196a4a3cc94097f1473ef11d1d44df11
++
++Signed-off-by: Theo Debrouwere <theo.debrouwere@skynet.be>
++---
++ scripts/CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
++index 40a7ab0..6403753 100644
++--- a/scripts/CMakeLists.txt
+++++ b/scripts/CMakeLists.txt
++@@ -26,7 +26,7 @@ else()
++ endif()
++ 
++ # Enable C++11 long long for compilers that are capable of it
++-if(NOT ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} STRLESS 3.1)
+++if(NOT ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} STRLESS 3.1 AND ";${CMAKE_CXX_COMPILE_FEATURES};" MATCHES ";cxx_long_long_type;")
++ 	target_compile_features(pugixml PUBLIC cxx_long_long_type)
++ endif()
++ 
++-- 
++2.9.3
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
