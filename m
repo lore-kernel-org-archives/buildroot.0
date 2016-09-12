@@ -1,36 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Sep 2016 16:29:35 +0200
-Subject: [Buildroot] [Bug 9226] New: Firefly boot fails with: "failed to
- find part:boot"
-In-Reply-To: <CAAEAJfAJwySrEaXHmKc2djy8ygEHR0rveTjkqycB1EwpWZxVBw@mail.gmail.com>
-References: <bug-9226-163@https.bugs.busybox.net/>
- <20160911212909.21c54943@free-electrons.com>
- <CAAEAJfAJwySrEaXHmKc2djy8ygEHR0rveTjkqycB1EwpWZxVBw@mail.gmail.com>
-Message-ID: <20160912162935.2c8ef5e5@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 12 Sep 2016 15:34:35 +0100
+Subject: [Buildroot] [PATCH] vim: bump version to v8.0.0001
+Message-ID: <1473690875-22401-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, 12 Sep 2016 11:13:12 -0300, Ezequiel Garcia wrote:
-
-> > Ezequiel, you are the last person who updated the firefly defconfig, so
-> > I assume you have access to the board. Could you have a look at the bug
-> > report below?
-> 
-> Unfortunately, our customer asked the board back and we didn't
-> have the chance to get ourselves a new one.
-
-OK, thanks for the feedback. I marked the bug as WONTFIX since nobody
-will be able to fix this without access to the HW.
-
-Best regards,
-
-Thomas
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index bb2d013..bc4a08e 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 7c90f16e1d1547a864f4419cd7d066ca4ce822de285b2a718f9274e5241fe2fd vim-v7.4.1902.tar.gz
++sha256 9b4790dafc886537096a6e1953ee0424b8c308881b97151a7bfba1f9fd14e3f9  vim-v8.0.0001.tar.gz
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index c2f6cac..d55e905 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = v7.4.1902
++VIM_VERSION = v8.0.0001
+ VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
+ # Win over busybox vi since vim is more feature-rich
+ VIM_DEPENDENCIES = \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.3
