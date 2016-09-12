@@ -1,38 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Sep 2016 11:34:33 +0200
-Subject: [Buildroot] [PATCH] package/pugixml: Fix CMakelists.txt
- cxx_long_long_type bug.
-In-Reply-To: <1473668083-362-1-git-send-email-theo.debrouwere@skynet.be>
-References: <20160912091925.36c6f94d@free-electrons.com>
- <1473668083-362-1-git-send-email-theo.debrouwere@skynet.be>
-Message-ID: <20160912113433.17bdd15a@free-electrons.com>
+Date: Mon, 12 Sep 2016 11:35:04 +0200
+Subject: [Buildroot] [git commit] micropython: add upstream patch to fix
+	build failures
+Message-ID: <20160912093507.70BB0802DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=94a9102d24de1ccb8253aa65a9af02b1b4eca824
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 12 Sep 2016 10:14:43 +0200, Theo Debrouwere wrote:
-> CMakelist.txt tries to enable the cxx_long_long_type option,
-> even if the feature isn't available. (Which causes some builds to fail)
-> 
-> The included patch checks if the option is present before applying it.
-> 
-> The patch was backported from:
-> https://github.com/zeux/pugixml/commit/4dbb5646196a4a3cc94097f1473ef11d1d44df11
-> 
-> Signed-off-by: Theo Debrouwere <t.debrouwere@televic.com>
-> ---
->  .../0001-check-cxx_long_long_type-existence.patch  | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/pugixml/0001-check-cxx_long_long_type-existence.patch
+This allows micropython to build with a host python version of 2.6.
 
-Applied to master, thanks.
+Fixes:
+  http://autobuild.buildroot.net/results/212cee82cc9db81cf1524925d106e01fc1e62ce5
+  http://autobuild.buildroot.net/results/4f72a602702f4eac1fe8c4a385ebfeb6e1c50df2
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/micropython/micropython.hash | 1 +
+ package/micropython/micropython.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+index a8ad2ba..28c008d 100644
+--- a/package/micropython/micropython.hash
++++ b/package/micropython/micropython.hash
+@@ -1,3 +1,4 @@
+ #locally computed
+ sha256 871378fcf1f1042c399896d5673da67d12e1fb36c2e706af289fc959bc8f7a57  micropython-v1.8.3.tar.gz
+ sha256 ff3194ebecda99023d7c1bb94d32b31b9491e95a79958a25ffd05213c5553acc  8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch
++sha256 ac19af8587211d7229074fefa1a3a3c0fe807babc7cf9ce53606f05958699448  a50b26e4b00ed094aa1ac74eac2fc2d8eb9ea1ed.patch
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 590956e..2f47ad8 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -9,7 +9,8 @@ MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
+ MICROPYTHON_LICENSE = MIT
+ MICROPYTHON_LICENSE_FILES = LICENSE
+ MICROPYTHON_DEPENDENCIES = host-pkgconf libffi
+-MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch
++MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch \
++	https://github.com/micropython/micropython/commit/a50b26e4b00ed094aa1ac74eac2fc2d8eb9ea1ed.patch
+ 
+ # Use fallback implementation for exception handling on architectures that don't
+ # have explicit support.
