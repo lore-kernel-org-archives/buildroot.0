@@ -1,60 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Sep 2016 22:02:52 +0200
-Subject: [Buildroot] [PATCH v5 1/1] package/rpm: switch to version
- 4.12.0.1
-In-Reply-To: <CALe+oY-r_4eY1CLEXezkU0vrCAj8wFAA=NTycpoBS7C9ELLxpw@mail.gmail.com>
-References: <20160909163708.31980-1-james.knight@rockwellcollins.com>
- <20160911155431.6204c127@free-electrons.com>
- <44f2d9ff-605a-f414-21df-e9d3eace0164@mind.be>
- <20160911231539.29e123e3@free-electrons.com>
- <CALe+oY-r_4eY1CLEXezkU0vrCAj8wFAA=NTycpoBS7C9ELLxpw@mail.gmail.com>
-Message-ID: <a5aca982-4a81-7f33-4c46-a331cf8a6675@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Sep 2016 23:26:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ghostscript: new package
+In-Reply-To: <20160906203620.4685-1-bernd.kuhls@t-online.de>
+References: <20160906203620.4685-1-bernd.kuhls@t-online.de>
+Message-ID: <20160912232623.1fc706be@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Tue,  6 Sep 2016 22:36:20 +0200, Bernd Kuhls wrote:
 
-On 12-09-16 18:06, James Knight wrote:
-> On Sun, Sep 11, 2016 at 9:54 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Could you give some details on why the rpm.org version is better than
->> the rpm5.org version?
-> 
-> I'll resubmit with a more proper commit message.
-> 
-> On Sun, Sep 11, 2016 at 5:10 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>  It would be good to keep this information, and even add a link to [0]
->>
->> [0] http://lists.buildroot.org/pipermail/buildroot/2015-August/137580.html
-> 
-> Will do.
-> 
-> On Sun, Sep 11, 2016 at 5:10 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>  Actually, there is a 4.13 release now, so James, perhaps you should use that one?
-> 
-> Unless it's somewhere else, rpm.org's claim of release 4.13 was never
-> completed [1]. The only 4.13 release made was a release candidate [2]
-> (although I believe the Fedora team uses the RC; will probably
-> additional distribution patches).
+>  package/ghostscript/objarch.h-aarch64         |  40 ++++++++++
+>  package/ghostscript/objarch.h-arm             |  40 ++++++++++
+>  package/ghostscript/objarch.h-armeb           |  40 ++++++++++
+>  package/ghostscript/objarch.h-i686            |  41 +++++++++++
+>  package/ghostscript/objarch.h-microblaze      |  40 ++++++++++
+>  package/ghostscript/objarch.h-microblazeel    |  40 ++++++++++
+>  package/ghostscript/objarch.h-mips            |  40 ++++++++++
+>  package/ghostscript/objarch.h-mips64          |  40 ++++++++++
+>  package/ghostscript/objarch.h-mips64el        |  40 ++++++++++
+>  package/ghostscript/objarch.h-mipsel          |  40 ++++++++++
+>  package/ghostscript/objarch.h-nios2           |  40 ++++++++++
+>  package/ghostscript/objarch.h-powerpc         |  40 ++++++++++
+>  package/ghostscript/objarch.h-powerpc64       |  40 ++++++++++
+>  package/ghostscript/objarch.h-x86_64          |  40 ++++++++++
 
- I'm sorry, I just saw [1], didn't notice that the directory was empty.
+Since this mess of pre-defined per-architecture header files is really
+nasty, could you instead try to package the latest git version of
+ghostscript ?
 
+Indeed, since early July, the Git repository includes numerous
+cross-compilation fixes, and especially
+http://git.ghostscript.com/?p=user/chrisl/ghostpdl.git;a=commitdiff;h=0a44ce497dbf6064981d88953df63bfdfce0a984
+which generates the arch.h header using regular configure.ac tests.
 
- Regards,
- Arnout
+This should hopefully greatly simplify the whole problem.
 
-> [1]: http://rpm.org/releases/rpm-4.13.x/
-> [2]: http://rpm.org/releases/testing/
-> [3]: http://pkgs.fedoraproject.org/cgit/rpms/rpm.git/tree/
-> 
+The libtiff directory problem has also been fixed by
+http://git.ghostscript.com/?p=user/chrisl/ghostpdl.git;a=commitdiff;h=3d3982f844fed6d6cb092055980900289fb6a402.
 
+But it's not clear which of these have landed in the main Ghostscript
+Git repository at http://git.ghostscript.com/?p=ghostpdl.git;a=summary,
+unfortunately.
+
+Could you have a look into this?
+
+Thanks,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
