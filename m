@@ -1,33 +1,32 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 12 Sep 2016 17:45:22 -0300
-Subject: [Buildroot] [PATCH 2/2] uboot-tools: bump to version 2016.09
-In-Reply-To: <20160912224213.10c50412@free-electrons.com>
-References: <1473699821-8393-1-git-send-email-festevam@gmail.com>
- <1473699821-8393-2-git-send-email-festevam@gmail.com>
- <20160912224213.10c50412@free-electrons.com>
-Message-ID: <CAOMZO5A-_kRWcDP9H57D4t-B=dGzHHVf1V1SbhV=LWtGUsfoKg@mail.gmail.com>
+Date: Mon, 12 Sep 2016 17:50:46 -0300
+Subject: [Buildroot] [PATCH 1/3] imx6ulpico: Bump to U-Boot 2016.09
+Message-ID: <1473713448-32466-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
-On Mon, Sep 12, 2016 at 5:42 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon, 12 Sep 2016 14:03:41 -0300, Fabio Estevam wrote:
->> From: Fabio Estevam <fabio.estevam@nxp.com>
->>
->> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
->> ---
->>  .../uboot-tools/0002-tools-only-in-no-dot-config-targets.patch | 10 ++++++----
->
-> It would be nice if one day, someone upstreamed this patch, in this
-> form or another.
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ configs/imx6ulpico_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, agreed. Let me give it a try.
-
-Thanks
+diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
+index 02507c9..f984bf4 100644
+--- a/configs/imx6ulpico_defconfig
++++ b/configs/imx6ulpico_defconfig
+@@ -36,7 +36,7 @@ BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="pico-imx6ul"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # required tools to create the eMMC image
+-- 
+2.7.4
