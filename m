@@ -1,42 +1,39 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 12 Sep 2016 18:30:17 -0300
-Subject: [Buildroot] [PATCH] configs/wandboard: Remove
-	BR2_LINUX_KERNEL_CUSTOM_GIT
-Message-ID: <1473715817-1727-1-git-send-email-festevam@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Sep 2016 23:30:36 +0200
+Subject: [Buildroot] [PATCH v3 0/4] Add a get-developers script and
+ database
+In-Reply-To: <20160912211450.GB15314@free.fr>
+References: <1473713695-2611-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20160912211450.GB15314@free.fr>
+Message-ID: <20160912233036.0168f9d6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+Hello,
 
-Now that we use a mainline kernel for wandboard, we no longer
-need to select BR2_LINUX_KERNEL_CUSTOM_GIT, so remove it.
+On Mon, 12 Sep 2016 23:14:50 +0200, Yann E. MORIN wrote:
 
-This fixes the following warning:
+> On 2016-09-12 22:54 +0200, Thomas Petazzoni spake thusly:
+> > This is the third version of the patch series adding a get-developers
+> > script and the corresponding DEVELOPERS database.  
+> 
+> All I want to say is, just commit that already! ;-)
+> 
+> Seriously, this thing is working: we've been receiving notifications for
+> some time now.
+> 
+> It will not be easy for you to maintain the developpers file locally, so
+> if we want people to register as developpers, we need to have that in
+> the tree.
 
-make wandboard_defconfig
-/configs/wandboard_defconfig:19:warning: override: BR2_LINUX_KERNEL_CUSTOM_VERSION changes choice state
-#
-# configuration written to /home/fabio/buildroot/.config
+Exactly my current issue: we're adding new packages, but since the
+DEVELOPERS file is not in the tree, it doesn't get updated accordingly.
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- configs/wandboard_defconfig | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
-index 18d30d9..4149ecf 100644
---- a/configs/wandboard_defconfig
-+++ b/configs/wandboard_defconfig
-@@ -15,7 +15,6 @@ BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7.3"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
