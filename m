@@ -1,67 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Sep 2016 11:18:41 +0200
-Subject: [Buildroot] [git commit] package/pugixml: Fix CMakelists.txt
-	cxx_long_long_type bug.
-Message-ID: <20160912092408.B193181E40@busybox.osuosl.org>
+Date: Mon, 12 Sep 2016 11:34:33 +0200
+Subject: [Buildroot] [PATCH] package/pugixml: Fix CMakelists.txt
+ cxx_long_long_type bug.
+In-Reply-To: <1473668083-362-1-git-send-email-theo.debrouwere@skynet.be>
+References: <20160912091925.36c6f94d@free-electrons.com>
+ <1473668083-362-1-git-send-email-theo.debrouwere@skynet.be>
+Message-ID: <20160912113433.17bdd15a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d28aa481b3cea9cca4c7d259618235d63f62fd59
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-CMakelist.txt tries to enable the cxx_long_long_type option,
-even if the feature isn't available. (Which causes some builds to fail)
+On Mon, 12 Sep 2016 10:14:43 +0200, Theo Debrouwere wrote:
+> CMakelist.txt tries to enable the cxx_long_long_type option,
+> even if the feature isn't available. (Which causes some builds to fail)
+> 
+> The included patch checks if the option is present before applying it.
+> 
+> The patch was backported from:
+> https://github.com/zeux/pugixml/commit/4dbb5646196a4a3cc94097f1473ef11d1d44df11
+> 
+> Signed-off-by: Theo Debrouwere <t.debrouwere@televic.com>
+> ---
+>  .../0001-check-cxx_long_long_type-existence.patch  | 33 ++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 package/pugixml/0001-check-cxx_long_long_type-existence.patch
 
-The included patch checks if the option is present before applying it.
+Applied to master, thanks.
 
-The patch was backported from:
-https://github.com/zeux/pugixml/commit/4dbb5646196a4a3cc94097f1473ef11d1d44df11
-
-Signed-off-by: Theo Debrouwere <t.debrouwere@televic.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-check-cxx_long_long_type-existence.patch  | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
-
-diff --git a/package/pugixml/0001-check-cxx_long_long_type-existence.patch b/package/pugixml/0001-check-cxx_long_long_type-existence.patch
-new file mode 100644
-index 0000000..a53c84a
---- /dev/null
-+++ b/package/pugixml/0001-check-cxx_long_long_type-existence.patch
-@@ -0,0 +1,33 @@
-+From 6cfd9c14ced26c8220f7f7ea99610cbdbfb9eba7 Mon Sep 17 00:00:00 2001
-+From: Theo Debrouwere <theo.debrouwere@skynet.be>
-+Date: Mon, 12 Sep 2016 09:38:56 +0200
-+Subject: [PATCH] Bugfix: check if cxx_long_long_type is present before
-+ applying it.
-+
-+Check if cxx_long_long_type is present in the list of compiler features
-+before adding it as a target_compile_feature.
-+
-+Patch was backported from
-+https://github.com/zeux/pugixml/commit/4dbb5646196a4a3cc94097f1473ef11d1d44df11
-+
-+Signed-off-by: Theo Debrouwere <theo.debrouwere@skynet.be>
-+---
-+ scripts/CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
-+index 40a7ab0..6403753 100644
-+--- a/scripts/CMakeLists.txt
-++++ b/scripts/CMakeLists.txt
-+@@ -26,7 +26,7 @@ else()
-+ endif()
-+ 
-+ # Enable C++11 long long for compilers that are capable of it
-+-if(NOT ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} STRLESS 3.1)
-++if(NOT ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} STRLESS 3.1 AND ";${CMAKE_CXX_COMPILE_FEATURES};" MATCHES ";cxx_long_long_type;")
-+ 	target_compile_features(pugixml PUBLIC cxx_long_long_type)
-+ endif()
-+ 
-+-- 
-+2.9.3
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
