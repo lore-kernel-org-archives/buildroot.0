@@ -1,50 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Sep 2016 22:40:15 +0200
-Subject: [Buildroot] [git commit] boot/uboot: bump to version 2016.09
-Message-ID: <20160912204049.525E381898@busybox.osuosl.org>
+Date: Mon, 12 Sep 2016 22:40:45 +0200
+Subject: [Buildroot] [git commit] package/urg: fix build
+Message-ID: <20160912204049.7384481898@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f111de1fbbc5d81c9c5981bd359b5d81c974d9b
+commit: https://git.buildroot.net/buildroot/commit/?id=57e61a91531bf8ea696b5613bd8d846cc645a1d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Update select-h patch to also fix the C++ serial driver.
+
+Fixes:
+  http://autobuild.buildroot.net/results/cd7/cd76699188d2ee99b5f2d32b6a797de0d832a192/
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/uboot/Config.in  | 4 ++--
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/urg/0001-select-h.patch | 27 ++++++++++++++++++++++-----
+ 1 file changed, 22 insertions(+), 5 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index b024b66..45d0586 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -38,7 +38,7 @@ choice
- 	  Select the specific U-Boot version you want to use
- 
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2016.07"
-+	bool "2016.09"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -86,7 +86,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2016.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2016.09"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index cf27e90..6870d68 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  974fb7225c0af6a721307631f66b81e20dbda82a4d7cc32aba2a625727231253  u-boot-2016.07.tar.bz2
-+sha256  994e7b9e0e350d9f91f5892d5e5bff00d3714a4962f520f78a64a461ef950ba9  u-boot-2016.09.tar.bz2
+diff --git a/package/urg/0001-select-h.patch b/package/urg/0001-select-h.patch
+index 09d1530..8de0a5b 100644
+--- a/package/urg/0001-select-h.patch
++++ b/package/urg/0001-select-h.patch
+@@ -1,11 +1,28 @@
+---- urg-0.8.18/src/c/connection/serial_ctrl_lin.c	2010-11-22 01:48:01.000000000 +0000
+-+++ urg-0.8.18.mod/src/c/connection/serial_ctrl_lin.c	2013-05-21 20:56:35.822025969 +0100
+-@@ -17,7 +17,7 @@
+- #include <fcntl.h>
++Serial driver: add missing header to C and C++ serial driver
++
++Fixes:
++  http://autobuild.buildroot.net/results/cd7/cd76699188d2ee99b5f2d32b6a797de0d832a192/
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++
++--- a/src/c/connection/serial_ctrl_lin.c	2016-09-11 15:49:42.599807053 +0200
+++++ b/src/c/connection/serial_ctrl_lin.c	2016-09-11 15:50:07.850700420 +0200
++@@ -18,6 +18,7 @@
+  #include <errno.h>
+  #include <string.h>
+--
++ 
+ +#include <sys/select.h>
+  //#include <ctype.h>
+  
+  enum {
++--- a/src/cpp/connection/SerialDevice_lin.cpp	2016-09-11 15:38:23.335547059 +0200
+++++ b/src/cpp/connection/SerialDevice_lin.cpp	2016-09-11 15:38:38.472741418 +0200
++@@ -13,7 +13,7 @@
++ #include <cerrno>
++ #include <cstring>
++ #include <cstdio>
++-
+++#include <sys/select.h>
++ 
++ class RawSerialDevice
++ {
