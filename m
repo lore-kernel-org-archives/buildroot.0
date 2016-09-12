@@ -1,72 +1,92 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 12 Sep 2016 23:09:35 +0200
-Subject: [Buildroot] [PATCH v3 3/4] docs/manual: update contribute.txt
- to cover get-developers
-In-Reply-To: <1473713695-2611-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1473713695-2611-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1473713695-2611-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160912210935.GA15314@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Sep 2016 23:13:44 +0200
+Subject: [Buildroot] [git commit] apache: add customization of MPM
+Message-ID: <20160912211405.645038172C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=bc5584fc90b491610aecec22102a772d0805ddf4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-09-12 22:54 +0200, Thomas Petazzoni spake thusly:
-> This commit updates the contribute.txt part of the manual to tell
-> people to use get-developers to get the appropriate "git send-email"
-> command when sending patches.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  docs/manual/contribute.txt | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> index 1b1f4de..2973ef7 100644
-> --- a/docs/manual/contribute.txt
-> +++ b/docs/manual/contribute.txt
-> @@ -283,10 +283,18 @@ automatically adding the +Signed-off-by+ line.
->  Once patch files are generated, you can review/edit the commit message
->  before submitting them, using your favorite text editor.
->  
-> -Lastly, send/submit your patch set to the Buildroot mailing list:
-> +Buildroot provides a handy tool to know to whom your patches should be
-> +sent, called +get-developers+. This tool reads your patches and
-> +outputs the appropriate +git send-email+ command to use:
->  
->  ---------------------
-> -$ git send-email --to buildroot at buildroot.org outgoing/*
-> +$ ./support/scripts/get-developers outgoing/*
-> +---------------------
-> +
-> +Use the output of +get-developers+ to send your patches:
-> +
-> +---------------------
-> +$ git send-email --to buildroot at buildroot.org --to bob --to alice outgoing/*
+MPM can be selected between event, prefork or worker
+Set worker as the default one as it was before even if event MPM is
+better on system supporting thread safe polling
 
-Minor tweak: I'd prefer we use carbon-copy:   --cc alice --cc bob
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/apache/Config.in | 28 ++++++++++++++++++++++++++++
+ package/apache/apache.mk | 10 +++++++++-
+ 2 files changed, 37 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
->  ---------------------
->  
->  Note that +git+ should be configured to use your mail account.
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/apache/Config.in b/package/apache/Config.in
+index 0814a17..511876d 100644
+--- a/package/apache/Config.in
++++ b/package/apache/Config.in
+@@ -14,6 +14,34 @@ config BR2_PACKAGE_APACHE
+ 
+ 	  http://httpd.apache.org
+ 
++if BR2_PACKAGE_APACHE
++
++choice
++	prompt "Multi-Processing Module (MPM)"
++	default BR2_PACKAGE_APACHE_MPM_WORKER
++	help
++	  Select the Multi-Processing Module (MPM).
++
++config BR2_PACKAGE_APACHE_MPM_EVENT
++	bool "event"
++	help
++	  A variant of the worker MPM with the goal of consuming threads
++	  only for connections with active processing
++
++config BR2_PACKAGE_APACHE_MPM_PREFORK
++	bool "prefork"
++	help
++	  Implements a non-threaded, pre-forking web server
++
++config BR2_PACKAGE_APACHE_MPM_WORKER
++	bool "worker"
++	help
++	  Implements a hybrid multi-threaded multi-process web server
++
++endchoice
++
++endif
++
+ comment "apache needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index e78545a..e54b736 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -20,6 +20,14 @@ APACHE_CONF_ENV= \
+ 	ap_cv_void_ptr_lt_long=no \
+ 	PCRE_CONFIG=$(STAGING_DIR)/usr/bin/pcre-config
+ 
++ifeq ($(BR2_PACKAGE_APACHE_MPM_EVENT),y)
++APACHE_MPM = event
++else ifeq ($(BR2_PACKAGE_APACHE_MPM_PREFORK),y)
++APACHE_MPM = prefork
++else ifeq ($(BR2_PACKAGE_APACHE_MPM_WORKER),y)
++APACHE_MPM = worker
++endif
++
+ APACHE_CONF_OPTS = \
+ 	--sysconfdir=/etc/apache2 \
+ 	--with-apr=$(STAGING_DIR)/usr \
+@@ -31,7 +39,7 @@ APACHE_CONF_OPTS = \
+ 	--enable-mime-magic \
+ 	--without-suexec-bin \
+ 	--enable-mods-shared=all \
+-	--with-mpm=worker \
++	--with-mpm=$(APACHE_MPM) \
+ 	--disable-lua \
+ 	--disable-luajit
+ 
