@@ -1,49 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Sep 2016 22:54:54 +0200
-Subject: [Buildroot] [PATCH v3 3/4] docs/manual: update contribute.txt to
-	cover get-developers
+Date: Mon, 12 Sep 2016 22:54:55 +0200
+Subject: [Buildroot] [PATCH v3 4/4] docs/manual: add new section about the
+	DEVELOPERS file and get-developer
 In-Reply-To: <1473713695-2611-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1473713695-2611-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1473713695-2611-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1473713695-2611-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit updates the contribute.txt part of the manual to tell
-people to use get-developers to get the appropriate "git send-email"
-command when sending patches.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/contribute.txt | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ docs/manual/contribute.txt |  6 ++++++
+ docs/manual/developers.txt | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+ docs/manual/manual.txt     |  2 ++
+ 3 files changed, 54 insertions(+)
+ create mode 100644 docs/manual/developers.txt
 
 diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 1b1f4de..2973ef7 100644
+index 2973ef7..a8f9db7 100644
 --- a/docs/manual/contribute.txt
 +++ b/docs/manual/contribute.txt
-@@ -283,10 +283,18 @@ automatically adding the +Signed-off-by+ line.
- Once patch files are generated, you can review/edit the commit message
- before submitting them, using your favorite text editor.
+@@ -258,6 +258,12 @@ removed, preferably with the upstream commit ID. Also any other
+ required changes should be explained explicitly, like configure
+ options that no longer exist or are no longer needed.
  
--Lastly, send/submit your patch set to the Buildroot mailing list:
-+Buildroot provides a handy tool to know to whom your patches should be
-+sent, called +get-developers+. This tool reads your patches and
-+outputs the appropriate +git send-email+ command to use:
- 
- ---------------------
--$ git send-email --to buildroot at buildroot.org outgoing/*
-+$ ./support/scripts/get-developers outgoing/*
-+---------------------
++If you are interested in getting notified of build failures and of
++further changes in the packages you added or modified, please add
++yourself to the DEVELOPERS file. This should be done in a separate
++patch of the series. See xref:DEVELOPERS[the DEVELOPERS file] for more
++information.
 +
-+Use the output of +get-developers+ to send your patches:
-+
-+---------------------
-+$ git send-email --to buildroot at buildroot.org --to bob --to alice outgoing/*
- ---------------------
+ ==== Preparing a patch series
  
- Note that +git+ should be configured to use your mail account.
+ Starting from the changes committed in your local git view, _rebase_
+diff --git a/docs/manual/developers.txt b/docs/manual/developers.txt
+new file mode 100644
+index 0000000..2fbbff3
+--- /dev/null
++++ b/docs/manual/developers.txt
+@@ -0,0 +1,46 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
++
++[[DEVELOPERS]]
++== DEVELOPERS file and get-developers
++
++The main Buildroot directory contains a file named +DEVELOPERS+ that
++list the developers in charge of various areas of Buildroot. Thanks to
++this file, the +get-developer+ tool allows to:
++
++- Calculate the list of developers to whom patches should be sent, by
++  parsing the patches and matching the modified files with the
++  relevant developers. See xref:submitting-patches[] for details.
++
++- Find which developers are in charge of a given architecture or
++  package, so that they can be notified when a build failure occurs on
++  this architecture or package. This is done in interaction with
++  Buildroot's autobuild infrastructure.
++
++We ask developers adding new packages, new boards, or generally new
++functionality in Buildroot, to register themselves in the +DEVELOPERS+
++file. As an example, we expect a developer contributing a new package
++to include in his patch the appropriate modification to the
+++DEVELOPERS+ file.
++
++The +DEVELOPERS+ file format is documented in detail inside the file
++itself.
++
++The +get-developer+ tool, located in +support/scripts+ allows to use
++the +DEVELOPERS+ file for various tasks:
++
++- When passing one or several patches as command line argument,
++  +get-developer+ will return the appropriate +git send-email+
++  command.
++
++- When using the +-a <arch>+ command line option, +get-developer+ will
++  return the list of developers in charge of the given architecture.
++
++- When using the +-p <package>+ command line option, +get-developer+
++  will return the list of developers in charge of the given package.
++
++- When using the +-c+ command line option, +get-developer+ will look
++  at all files under version control in the Buildroot repository, and
++  list the ones that are not handled by any developer. The purpose of
++  this option is to help completing the +DEVELOPERS+ file.
++
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index 3c531e3..7630ea6 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -64,6 +64,8 @@ include::debugging-buildroot.txt[]
+ 
+ include::contribute.txt[]
+ 
++include::developers.txt[]
++
+ = Appendix
+ 
+ include::appendix.txt[]
 -- 
 2.7.4
