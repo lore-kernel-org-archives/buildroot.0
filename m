@@ -1,39 +1,32 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 12 Sep 2016 15:34:35 +0100
-Subject: [Buildroot] [PATCH] vim: bump version to v8.0.0001
-Message-ID: <1473690875-22401-1-git-send-email-Vincent.Riera@imgtec.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 12 Sep 2016 14:40:18 +0000
+Subject: [Buildroot] [Bug 9216] log4cpp package build fails to build within
+	install
+In-Reply-To: <bug-9216-163@https.bugs.busybox.net/>
+References: <bug-9216-163@https.bugs.busybox.net/>
+Message-ID: <bug-9216-163-Z2Xafz34bJ@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=9216
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index bb2d013..bc4a08e 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 7c90f16e1d1547a864f4419cd7d066ca4ce822de285b2a718f9274e5241fe2fd vim-v7.4.1902.tar.gz
-+sha256 9b4790dafc886537096a6e1953ee0424b8c308881b97151a7bfba1f9fd14e3f9  vim-v8.0.0001.tar.gz
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index c2f6cac..d55e905 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VIM_VERSION = v7.4.1902
-+VIM_VERSION = v8.0.0001
- VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
- # Win over busybox vi since vim is more feature-rich
- VIM_DEPENDENCIES = \
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |WORKSFORME
+             Status|NEW                         |RESOLVED
+
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+This problem has already been fixed in commit
+https://git.buildroot.org/buildroot/commit/package/log4cpp?id=bf20a49d4c2f064015b4d437a7cd98c6dd8ce4ff,
+which is part of Buildroot since 2016.08. This commit disables the build of the
+documentation, since Buildroot generally doesn't build the documentation of its
+packages.
+
 -- 
-2.7.3
+You are receiving this mail because:
+You are on the CC list for the bug.
