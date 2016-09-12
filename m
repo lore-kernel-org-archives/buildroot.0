@@ -1,8 +1,7 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 12 Sep 2016 13:15:54 -0300
-Subject: [Buildroot] [PATCH v2 1/2] linux-headers: Allow building a 4.8-rc
-	kernel
-Message-ID: <1473696955-24297-1-git-send-email-festevam@gmail.com>
+Date: Mon, 12 Sep 2016 14:03:40 -0300
+Subject: [Buildroot] [PATCH 1/2] boot/uboot: bump to version 2016.09
+Message-ID: <1473699821-8393-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,79 +10,41 @@ To: buildroot@busybox.net
 
 From: Fabio Estevam <fabio.estevam@nxp.com>
 
-It is useful to be able to build the latest rc kernel, so
-add support for it.
-
 Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 ---
-Changes since v1:
-- Do not make 4.8-rc the default kernel (Thomas)
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- package/linux-headers/Config.in.host   | 8 ++++++++
- toolchain/toolchain-common.in          | 5 +++++
- toolchain/toolchain-external/Config.in | 4 ++++
- 3 files changed, 17 insertions(+)
-
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7fea748..8601eff 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -86,6 +86,10 @@ choice
- 		bool "Linux 4.7.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index b024b66..45d0586 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -38,7 +38,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
  
-+	config BR2_KERNEL_HEADERS_4_8
-+		bool "Linux 4.8-rc kernel headers"
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
- endchoice
-@@ -106,6 +110,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2016.07"
++	bool "2016.09"
  
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8
-+	bool "4.8.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7
- 	bool "4.7.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 03fa880..b682e4d 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -222,10 +222,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -86,7 +86,7 @@ endif
  
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ config BR2_TARGET_UBOOT_VERSION
  	string
-+	default "4.8"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
- 	default "4.7"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
- 	default "4.6"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
- 	default "4.5"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 63b7712..c3822ed 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -794,6 +794,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_8
-+	bool "4.8.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_7
- 	bool "4.7.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+-	default "2016.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2016.09"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index cf27e90..6870d68 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  974fb7225c0af6a721307631f66b81e20dbda82a4d7cc32aba2a625727231253  u-boot-2016.07.tar.bz2
++sha256  994e7b9e0e350d9f91f5892d5e5bff00d3714a4962f520f78a64a461ef950ba9  u-boot-2016.09.tar.bz2
 -- 
 2.7.4
