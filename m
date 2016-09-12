@@ -1,34 +1,59 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 12 Sep 2016 15:07:44 +0000
-Subject: [Buildroot] [Bug 8901] gcc failes to build if fortran is enabled
-In-Reply-To: <bug-8901-163@https.bugs.busybox.net/>
-References: <bug-8901-163@https.bugs.busybox.net/>
-Message-ID: <bug-8901-163-yXObjjcLBK@https.bugs.busybox.net/>
+Date: Mon, 12 Sep 2016 15:44:05 +0000
+Subject: [Buildroot] [Bug 8916] LDFLAGS pass to openssh
+In-Reply-To: <bug-8916-163@https.bugs.busybox.net/>
+References: <bug-8916-163@https.bugs.busybox.net/>
+Message-ID: <bug-8916-163-Sye9wX88UF@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8901
+https://bugs.busybox.net/show_bug.cgi?id=8916
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-         Resolution|---                         |WORKSFORME
              Status|NEW                         |RESOLVED
+         Resolution|---                         |WORKSFORME
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-The original patches from Samuel indeed did not fix the build issue on ARM
-indeed. But in fact the patches from Samuel have not been committed upstream
-as-is, but were improved to take into account the fact that libquadmath only
-exists on i386 and x86_64. libquadmath is only copied if
-BR2_TOOLCHAIN_HAS_LIBQUADMATH and BR2_TOOLCHAIN_HAS_LIBQUADMATH is only "y" on
-i386 and x86_64.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+It works just fine here, and there is absolutely no need to pass custom LDFLAGS
+for this to work. The default dynamic linker path is set by the cross-compiler
+and is correct.
 
-I just tested qemu_arm_versatile_defconfig + Fortran supported enabled, and it
-builds fine.
+I've just tested the following Buildroot defconfig:
+
+BR2_x86_64=y
+BR2_x86_core2=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_OPENSSH=y
+
+ssh has the correct dynamic linker path:
+
+ readelf -a output/target/usr/bin/ssh | grep -i interpreter
+      [Requesting program interpreter: /lib64/ld-linux-x86-64.so.2]
+
+and when I extract the rootfs.tar and chroot into it:
+
+$ sudo chroot rootfs /bin/sh
+/ # ssh -l
+Couldn't open /dev/null: No such file or directory
+/ # mount -t devtmpfs none /dev
+/ # ssh -l
+option requires an argument -- l
+usage: ssh [-1246AaCfGgKkMNnqsTtVvXxYy] [-b bind_address] [-c cipher_spec]
+           [-D [bind_address:]port] [-E log_file] [-e escape_char]
+           [-F configfile] [-I pkcs11] [-i identity_file]
+           [-J [user@]host[:port]] [-L address] [-l login_name] [-m mac_spec]
+           [-O ctl_cmd] [-o option] [-p port] [-Q query_option] [-R address]
+           [-S ctl_path] [-W host:port] [-w local_tun[:remote_tun]]
+           [user@]hostname [command]
+
+So I think you have something in your environment that causes the
+cross-compiler to encode a wrong path to the dynamic linker.
 
 -- 
 You are receiving this mail because:
