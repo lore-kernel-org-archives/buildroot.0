@@ -1,32 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Sep 2016 22:39:55 +0200
-Subject: [Buildroot] [PATCH 3/3] package/nginx-naxsi: add missing pcre
- dependency
-In-Reply-To: <20160912192324.23682-3-s.martin49@gmail.com>
-References: <20160912192324.23682-1-s.martin49@gmail.com>
- <20160912192324.23682-3-s.martin49@gmail.com>
-Message-ID: <20160912223955.142682b0@free-electrons.com>
+Date: Mon, 12 Sep 2016 22:40:15 +0200
+Subject: [Buildroot] [git commit] boot/uboot: bump to version 2016.09
+Message-ID: <20160912204049.525E381898@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7f111de1fbbc5d81c9c5981bd359b5d81c974d9b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 12 Sep 2016 21:23:24 +0200, Samuel Martin wrote:
-> Fixes:
->   http://autobuild.buildroot.net/results/9c7/9c7bad6831b09251af81e2bbfc595a241df87c70/
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/nginx-naxsi/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index b024b66..45d0586 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -38,7 +38,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2016.07"
++	bool "2016.09"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -86,7 +86,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2016.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2016.09"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index cf27e90..6870d68 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  974fb7225c0af6a721307631f66b81e20dbda82a4d7cc32aba2a625727231253  u-boot-2016.07.tar.bz2
++sha256  994e7b9e0e350d9f91f5892d5e5bff00d3714a4962f520f78a64a461ef950ba9  u-boot-2016.09.tar.bz2
