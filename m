@@ -1,117 +1,197 @@
 From: Erico Nunes <nunes.erico@gmail.com>
-Date: Tue, 13 Sep 2016 06:15:45 +0200
-Subject: [Buildroot] [PATCH 2/5] grub2-tools: new package
+Date: Tue, 13 Sep 2016 06:15:47 +0200
+Subject: [Buildroot] [PATCH 4/5] grub2: enable support for arm and aarch64
+	targets
 In-Reply-To: <20160913041548.10290-1-nunes.erico@gmail.com>
 References: <20160913041548.10290-1-nunes.erico@gmail.com>
-Message-ID: <20160913041548.10290-3-nunes.erico@gmail.com>
+Message-ID: <20160913041548.10290-5-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Support tools to interact with GNU GRUB Multiboot boot loader.
+This commit enables the arm-uboot, arm-efi and aarch64-efi Grub 2
+platforms in Buildroot.
 
-In the context of Buildroot, some useful target tools provided by
-grub2-tools are grub2-editenv, grub2-reboot, which provide means to
-manage the Grub 2 environment, boot order, and others.
+As a uboot platform, Grub 2 image gets built as a u-boot image (i.e.
+u-boot mkimage) and is loaded from u-boot through a regular "bootm". The
+only requirement from u-boot side in order to allow this is that u-boot
+is built with CONFIG_API enabled. CONFIG_API seems to not be enabled by
+default in most in-tree configurations, however, it seems to be
+available for quite some time now. So it might be possible to use this
+even on older u-boot versions. This is available only for arm (32-bit).
 
-This package is also meant as a preparation step to be turned into a
-host-package later and help decouple the target and host portions of the
-actual Grub 2 boot loader package.
+As an efi platform, Grub 2 gets built as an EFI executable. This allows
+EFI firmware to find and load it similarly as it can be done for x86_64.
+Also, since u-boot v2016.05, u-boot is able to load and boot an EFI
+executable, so the Grub 2 efi platform can also be used from u-boot in
+recent versions. This has been enabled (mostly) by default for ARM
+u-boot.
+efi platform is available for both arm and aarch64.
+
+These targets have been tested in the following environments:
+
+arm-uboot: qemu arm vexpress and BeagleBone
+arm-efi: BeagleBone
+aarch64-efi: qemu aarch64 virt and Odroid-C2
 
 Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 ---
- package/Config.in                    |  1 +
- package/grub2-tools/Config.in        |  6 +++++
- package/grub2-tools/grub2-tools.hash |  2 ++
- package/grub2-tools/grub2-tools.mk   | 44 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 53 insertions(+)
- create mode 100644 package/grub2-tools/Config.in
- create mode 100644 package/grub2-tools/grub2-tools.hash
- create mode 100644 package/grub2-tools/grub2-tools.mk
+ boot/grub2/Config.in | 48 +++++++++++++++++++++++++++++++++++++++---------
+ boot/grub2/grub2.mk  | 23 ++++++++++++++++++++++-
+ 2 files changed, 61 insertions(+), 10 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 332f05d..e8f90df 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -379,6 +379,7 @@ endmenu
- 	source "package/gpm/Config.in"
- 	source "package/gpsd/Config.in"
- 	source "package/gptfdisk/Config.in"
-+	source "package/grub2-tools/Config.in"
- 	source "package/gvfs/Config.in"
- 	source "package/hdparm/Config.in"
- 	source "package/hwdata/Config.in"
-diff --git a/package/grub2-tools/Config.in b/package/grub2-tools/Config.in
-new file mode 100644
-index 0000000..9cc9e9c
---- /dev/null
-+++ b/package/grub2-tools/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_GRUB2_TOOLS
-+	bool "grub2-tools"
+diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
+index 7dc5cae..527ff37 100644
+--- a/boot/grub2/Config.in
++++ b/boot/grub2/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_TARGET_GRUB2
+ 	bool "grub2"
+-	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_aarch64
+ 	help
+ 	  GNU GRUB is a Multiboot boot loader. It was derived from
+ 	  GRUB, the GRand Unified Bootloader, which was originally
+@@ -66,8 +66,8 @@ config BR2_TARGET_GRUB2
+ 
+ 	  qemu-system-{i386,x86-64} -hda disk.img
+ 
+-	  Notes on using Grub2 for EFI-based platforms
+-	  ============================================
++	  Notes on using Grub2 for i386/x86-64 EFI-based platforms
++	  ========================================================
+ 
+ 	  1. Create a disk image
+ 	     dd if=/dev/zero of=disk.img bs=1M count=32
+@@ -96,8 +96,8 @@ config BR2_TARGET_GRUB2
+ 	     sudo losetup -d /dev/loop0
+ 	  7. Your disk.img is ready!
+ 
+-	  To test your EFI image in Qemu
+-	  ------------------------------
++	  To test your i386/x86-64 EFI image in Qemu
++	  ------------------------------------------
+ 
+ 	  1. Download the EFI BIOS for Qemu
+ 	     Version IA32 or X64 depending on the chosen Grub2
+@@ -119,12 +119,14 @@ choice
+ 
+ config BR2_TARGET_GRUB2_I386_PC
+ 	bool "i386-pc"
++	depends on BR2_i386 || BR2_x86_64
+ 	help
+ 	  Select this option if the platform you're targetting is a
+ 	  x86 or x86-64 legacy BIOS based platform.
+ 
+ config BR2_TARGET_GRUB2_I386_EFI
+ 	bool "i386-efi"
++	depends on BR2_i386 || BR2_x86_64
+ 	help
+ 	  Select this option if the platform you're targetting has a
+ 	  32 bits EFI BIOS. Note that some x86-64 platforms use a 32
+@@ -132,14 +134,38 @@ config BR2_TARGET_GRUB2_I386_EFI
+ 
+ config BR2_TARGET_GRUB2_X86_64_EFI
+ 	bool "x86-64-efi"
+-	depends on BR2_ARCH_IS_64
++	depends on BR2_x86_64
+ 	help
+ 	  Select this option if the platform you're targetting has a
+ 	  64 bits EFI BIOS.
+ 
++config BR2_TARGET_GRUB2_ARM_UBOOT
++	bool "arm-uboot"
++	depends on BR2_arm
 +	help
-+	  Support tools to interact with GNU GRUB Multiboot boot loader.
++	  Select this option if the platform you're targetting is an
++	  ARM u-boot platform, and you want to boot Grub 2 as an u-boot
++	  compatible image.
 +
-+	  http://www.gnu.org/software/grub/
-diff --git a/package/grub2-tools/grub2-tools.hash b/package/grub2-tools/grub2-tools.hash
-new file mode 100644
-index 0000000..051a9ab
---- /dev/null
-+++ b/package/grub2-tools/grub2-tools.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 680f584995cf318adb1ff8c40caef30d0ec7c03e16e88ba60bf5aa5b5a6e26ed grub2-4e0f8f66e321cf1051c0e01f6fbcc6fc35a807b6.tar.gz
-diff --git a/package/grub2-tools/grub2-tools.mk b/package/grub2-tools/grub2-tools.mk
-new file mode 100644
-index 0000000..8ed23f3
---- /dev/null
-+++ b/package/grub2-tools/grub2-tools.mk
-@@ -0,0 +1,44 @@
-+################################################################################
-+#
-+# grub2-tools
-+#
-+################################################################################
++config BR2_TARGET_GRUB2_ARM_EFI
++	bool "arm-efi"
++	depends on BR2_arm
++	help
++	  Select this option if the platform you're targetting is an
++	  ARM platform and you want to boot Grub 2 as an EFI
++	  application.
 +
-+GRUB2_TOOLS_VERSION = 4e0f8f66e321cf1051c0e01f6fbcc6fc35a807b6
-+GRUB2_TOOLS_SITE = git://git.savannah.gnu.org/grub.git
-+GRUB2_TOOLS_SITE_METHOD = git
-+GRUB2_TOOLS_LICENSE = GPLv3+
-+GRUB2_TOOLS_LICENSE_FILES = COPYING
-+GRUB2_TOOLS_DEPENDENCIES = host-bison host-flex
-+HOST_GRUB2_TOOLS_DEPENDENCIES = host-bison host-flex
++config BR2_TARGET_GRUB2_ARM64_EFI
++	bool "arm64-efi"
++	depends on BR2_aarch64
++	help
++	  Select this option if the platform you're targetting is an
++	  Aarch64 platform and you want to boot Grub 2 as an EFI
++	  application.
 +
-+HOST_GRUB2_TOOLS_CONF_ENV = \
-+	CPP="$(HOSTCC) -E"
-+
-+GRUB2_TOOLS_CONF_ENV = \
-+	CPP="$(TARGET_CC) -E" \
-+	TARGET_CC="$(TARGET_CC)" \
-+	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-+	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
-+	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
-+	TARGET_NM="$(TARGET_NM)" \
-+	TARGET_OBJCOPY="$(TARGET_OBJCOPY)" \
-+	TARGET_STRIP="$(TARGET_CROSS)strip"
-+
-+GRUB2_TOOLS_CONF_OPTS = \
-+	--disable-grub-mkfont \
-+	--enable-efiemu=no \
-+	ac_cv_lib_lzma_lzma_code=no \
-+	--enable-device-mapper=no \
-+	--enable-libzfs=no \
-+	--disable-werror
-+
-+HOST_GRUB2_TOOLS_CONF_OPTS = $(GRUB2_TOOLS_CONF_OPTS)
-+
-+define GRUB2_TOOLS_RUN_AUTOGEN
-+	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-+endef
-+GRUB2_TOOLS_PRE_CONFIGURE_HOOKS += GRUB2_TOOLS_RUN_AUTOGEN
-+HOST_GRUB2_TOOLS_PRE_CONFIGURE_HOOKS += GRUB2_TOOLS_RUN_AUTOGEN
-+
-+$(eval $(autotools-package))
+ endchoice
+ 
+-if BR2_TARGET_GRUB2_I386_PC
++if BR2_TARGET_GRUB2_I386_PC || BR2_TARGET_GRUB2_ARM_UBOOT
+ 
+ config BR2_TARGET_GRUB2_BOOT_PARTITION
+ 	string "boot partition"
+@@ -150,13 +176,17 @@ config BR2_TARGET_GRUB2_BOOT_PARTITION
+ 	  first disk if using a legacy partition table, or 'hd0,gpt1'
+ 	  if using GPT partition table.
+ 
+-endif # BR2_TARGET_GRUB2_I386_PC
++endif # BR2_TARGET_GRUB2_I386_PC || BR2_TARGET_GRUB2_ARM_UBOOT
+ 
+ config BR2_TARGET_GRUB2_BUILTIN_MODULES
+ 	string "builtin modules"
+ 	default "boot linux ext2 fat squash4 part_msdos part_gpt normal biosdisk" if BR2_TARGET_GRUB2_I386_PC
+ 	default "boot linux ext2 fat squash4 part_msdos part_gpt normal efi_gop" \
+-		if BR2_TARGET_GRUB2_I386_EFI || BR2_TARGET_GRUB2_X86_64_EFI
++		if BR2_TARGET_GRUB2_I386_EFI || \
++		BR2_TARGET_GRUB2_X86_64_EFI || \
++		BR2_TARGET_GRUB2_ARM_EFI || \\
++		BR2_TARGET_GRUB2_ARM64_EFI
++	default "linux ext2 fat part_msdos normal" if BR2_TARGET_GRUB2_ARM_UBOOT
+ 
+ config BR2_TARGET_GRUB2_BUILTIN_CONFIG
+ 	string "builtin config"
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 8a063f1..910967e 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -38,6 +38,27 @@ GRUB2_PREFIX = /EFI/BOOT
+ GRUB2_TUPLE = x86_64-efi
+ GRUB2_TARGET = x86_64
+ GRUB2_PLATFORM = efi
++else ifeq ($(BR2_TARGET_GRUB2_ARM_UBOOT),y)
++GRUB2_IMAGE = $(BINARIES_DIR)/boot-part/grub.img
++GRUB2_CFG = $(BINARIES_DIR)/boot-part/grub.cfg
++GRUB2_PREFIX = ($(GRUB2_BOOT_PARTITION))
++GRUB2_TUPLE = arm-uboot
++GRUB2_TARGET = arm
++GRUB2_PLATFORM = uboot
++else ifeq ($(BR2_TARGET_GRUB2_ARM_EFI),y)
++GRUB2_IMAGE = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootarm.efi
++GRUB2_CFG = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
++GRUB2_PREFIX = /EFI/BOOT
++GRUB2_TUPLE = arm-efi
++GRUB2_TARGET = arm
++GRUB2_PLATFORM = efi
++else ifeq ($(BR2_TARGET_GRUB2_ARM64_EFI),y)
++GRUB2_IMAGE = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootaa64.efi
++GRUB2_CFG = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
++GRUB2_PREFIX = /EFI/BOOT
++GRUB2_TUPLE = arm64-efi
++GRUB2_TARGET = aarch64
++GRUB2_PLATFORM = efi
+ endif
+ 
+ # Grub2 is kind of special: it considers CC, LD and so on to be the
+@@ -83,7 +104,7 @@ endif
+ define GRUB2_INSTALL_IMAGES_CMDS
+ 	mkdir -p $(dir $(GRUB2_IMAGE))
+ 	$(HOST_DIR)/usr/bin/grub-mkimage \
+-		-d $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE) \
++		-d $(@D)/grub-core/ \
+ 		-O $(GRUB2_TUPLE) \
+ 		-o $(GRUB2_IMAGE) \
+ 		-p "$(GRUB2_PREFIX)" \
 -- 
 2.9.3
