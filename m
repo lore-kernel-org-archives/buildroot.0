@@ -1,38 +1,147 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Wed, 14 Sep 2016 00:03:51 +0200
-Subject: [Buildroot] [PATCH v3 2/2] package/php: set MySQL socket path
-In-Reply-To: <1473804231-9767-1-git-send-email-bos@je-eigen-domein.nl>
-References: <1473804231-9767-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <1473804231-9767-2-git-send-email-bos@je-eigen-domein.nl>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 14 Sep 2016 00:32:33 +0200
+Subject: [Buildroot] [PATCH V2 1/2] pkg-kconfig: support alternative
+ .config location
+In-Reply-To: <1473795934-27033-2-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1473795934-27033-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1473795934-27033-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20160913223233.GC6175@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set the PHP default MySQL socket path to match what the
-mysql package is using.
+?ric, All,
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
----
- package/php/php.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+On 2016-09-13 21:45 +0200, Eric Le Bihan spake thusly:
+> Kconfig clones, such as openconf used by xvisor [1], do not look for
+> .config at the root of the build directory, but in a subdirectory (e.g.
+> build/openconf).
+> 
+> This patch introduces a new Makefile variable named
+> $(2)_KCONFIG_DOTCONFIG, which contains the path to .config relative to
+> the source directory of the package. It defaults to .config and can be
+> overridden in the package Makefile.
+> 
+> It also creates the full directory hierarchy where the .config file is
+> stored, in case it does not exist (e.g. in xvisor).
+> 
+> This allows the use of the kconfig-package infrastructure with packages
+> relying on such clones.
+> 
+> [1] https://github.com/xvisor/xvisor/tree/master/tools/openconf
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  package/pkg-kconfig.mk | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> index b0f5178..ad5bbfc 100644
+> --- a/package/pkg-kconfig.mk
+> +++ b/package/pkg-kconfig.mk
+> @@ -36,6 +36,7 @@ $(2)_KCONFIG_EDITORS ?= menuconfig
+>  $(2)_KCONFIG_OPTS ?=
+>  $(2)_KCONFIG_FIXUP_CMDS ?=
+>  $(2)_KCONFIG_FRAGMENT_FILES ?=
+> +$(2)_KCONFIG_DOTCONFIG ?= .config
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 7df10be..1ea47f2 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -211,6 +211,11 @@ PHP_DEPENDENCIES += unixodbc
- endif
- endif
- 
-+ifneq ($(BR2_PACKAGE_PHP_EXT_MYSQLI)$(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),)
-+# Set default MySQL unix socket to what the MySQL server is using by default
-+PHP_CONF_OPTS += --with-mysql-sock=$(MYSQL_SOCKET)
-+endif
-+
- define PHP_DISABLE_PCRE_JIT
- 	$(SED) '/^#define SUPPORT_JIT/d' $(@D)/ext/pcre/pcrelib/config.h
- endef
+By the way, explanations in the manual for this new variable would be
+nice. Well, it would even be mandatory. ;-) Make it another patch (we
+usually add the documentation in a separate, following patch).
+
+Maybe something like:
+
+    *FOO_KCONFIG_DOTCONFIG* is the path (with filename) of the +.config+
+    file, relative to the package source tree. The default, +.config+,
+    should be well suited for all packages that use the standard kconfig
+    infrastructure as inherited from the Linux kernel; some packages use
+    a derivative of kconfig that use a different location.
+
+Otherwise:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+But see a small comment, below...
+
+>  # The config file as well as the fragments could be in-tree, so before
+>  # depending on them the package should be extracted (and patched) first.
+> @@ -91,9 +92,10 @@ endef
+>  # fragments are merged together to .config, after the package has been patched.
+>  # Since the file could be a defconfig file it needs to be expanded to a
+>  # full .config first.
+> -$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+> +$$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+>  	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+>  		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
+> +		mkdir -p $$(@D); \
+>  		cp $$($(2)_KCONFIG_FILE) $$(@))
+
+I knw the 'cp' was already there, and that you added the 'mkdir'.
+However, when we need to copy a file for which it may be necessary to
+create the parent directory, usinf "install" ( $(INSTALL) in Buildroot)
+can do both at the same time:
+
+    $(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@)
+
+(but don't forget the closing parenthesis, to close the '$(if'.)
+
+Regards,
+Yann E. MORIN.
+
+>  	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
+>  		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
+> @@ -102,7 +104,7 @@ $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+>  # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
+>  # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
+>  # it explicitly. It doesn't hurt to always have it though.
+> -$$($(2)_DIR)/.config: | $(1)-patch
+> +$$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): | $(1)-patch
+>  
+>  # In order to get a usable, consistent configuration, some fixup may be needed.
+>  # The exact rules are specified by the package .mk file.
+> @@ -112,7 +114,7 @@ define $(2)_FIXUP_DOT_CONFIG
+>  	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>  endef
+>  
+> -$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
+> +$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG)
+>  	$$($(2)_FIXUP_DOT_CONFIG)
+>  
+>  # Before running configure, the configuration file should be present and fixed
+> @@ -202,8 +204,8 @@ $(1)-update-config: $(1)-check-configuration-done
+>  		echo "Unable to perform $(1)-update-config when fragment files are set"; exit 1)
+>  	@$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+>  		echo "Unable to perform $(1)-update-config when using a defconfig rule"; exit 1)
+> -	cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+> -	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+> +	cp -f $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)_KCONFIG_FILE)
+> +	touch --reference $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)_KCONFIG_FILE)
+>  
+>  # Note: make sure the timestamp of the stored configuration is not newer than
+>  # the .config to avoid a useless rebuild. Note that, contrary to
+> @@ -215,7 +217,7 @@ $(1)-update-defconfig: $(1)-savedefconfig
+>  	@$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+>  		echo "Unable to perform $(1)-update-defconfig when using a defconfig rule"; exit 1)
+>  	cp -f $$($(2)_DIR)/defconfig $$($(2)_KCONFIG_FILE)
+> -	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+> +	touch --reference $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)_KCONFIG_FILE)
+>  
+>  endif # package enabled
+>  
+> -- 
+> 2.4.11
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
