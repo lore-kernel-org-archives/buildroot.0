@@ -1,150 +1,70 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 13 Sep 2016 08:56:37 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2016-09-05
-In-Reply-To: <20160911133437.GI6777@waldemar-brodkorb.de>
-References: <7d9ec97a-00bf-a29b-7119-6a5304eb70d4@gmail.com>
- <9a18dc1c-25bd-0925-1a78-dc7a5612d465@gmail.com>
- <20160911133437.GI6777@waldemar-brodkorb.de>
-Message-ID: <CANLo3JiyFZWqmjnxP09D_=j_DcmXL9Bo+cN+6p=GJ7m3ZMbaEg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 13 Sep 2016 09:20:38 +0200
+Subject: [Buildroot] [PATCH 2/2] configs/orangepipc: Use Linux 4.7.3
+In-Reply-To: <1473751238-12409-1-git-send-email-peter@korsgaard.com>
+References: <1473751238-12409-1-git-send-email-peter@korsgaard.com>
+Message-ID: <1473751238-12409-2-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+There's now an sun8i-h3-orangepi-pc dts, so we can use that and drop the
+hack in the post-image script.
 
-Le 11 sept. 2016 15:34, "Waldemar Brodkorb" <wbx@openadk.org> a ?crit :
->
-> Hi ROmain,
-> Romain Naour wrote,
->
-> > Hi Waldemar,
-> >
-> > I'm not sure you get this email, I had a "Delivery Status Notification
-(Failure)"
->
-> I have the mail.
->
-> > Hi Waldemar,
-> >
-> > Le 10/09/2016 ? 15:56, Waldemar Brodkorb a ?crit :
-> > > Hi Romain,
-> > > Romain Naour wrote,
-> > >
-> > >> Hi Thomas, Waldemar,
-> > >>
-> > >> Le 06/09/2016 ? 08:30, Thomas Petazzoni a ?crit :
-> > >>> Hello,
-> > >>>
-> > >>> This is the list of Buildroot build failures that occured on
-> > >>> 2016-09-05, and for which you are a registered architecture
-developer
-> > >>> or package developer. Please help us improving the quality of
-> > >>> Buildroot by investigating those build failures and sending patches
-to
-> > >>> fix them. Thanks!
-> > >>>
-> > >>> Build failures related to your packages:
-> > >>>
-> > >>>         bfin |                  xenomai-2.6.4 |
-http://autobuild.buildroot.net/results/fcae0611ac87204ab68d6828276b635d1a31a178
-> > >>>
-> > >>
-> > >> I think it's an issue between uClibc-ng and Xenomai on Blackfin due
-to
-> > >> pthread_atfork(), shm_open() and shm_unlink() local definition in
-Xenomai.
-> > >>
-> > >> Error:
-> > >> bind.c:(.text+0x20): multiple definition of `pthread_atfork'
-> > >> .libs/libxenomai_la-assert_context.o:assert_context.c:(.text+0x54):
-first
-> > >> defined here
-> > >>
-> > >> sem_heap.c:(.text+0xc): multiple definition of `shm_open'
-> > >> .libs/libxenomai_la-bind.o:bind.c:(.text+0x2c): first defined here
-> > >>
-> > >> sem_heap.c:(.text+0x24): multiple definition of `shm_unlink'
-> > >> .libs/libxenomai_la-bind.o:bind.c:(.text+0x44): first defined here
-> > >>
-> > >> It's because the Xenomai definition use declare these function as
-"inline" and
-> > >> not uClibc-ng
-> > >>
-> > >> Xenomai [1]:
-> > >> /* uClibc does not provide pthread_atfork() for this arch; provide it
-> > >>    here. Note: let the compiler decides whether it wants to actually
-> > >>    inline this routine, i.e. do not force always_inline. */
-> > >> inline __attribute__((weak)) int pthread_atfork(void
-(*prepare)(void),
-> > >>                                            void (*parent)(void),
-> > >>                                            void (*child)(void))
-> > >>
-> > >> uClibc-ng:
-> > >> extern int pthread_atfork (void (*__prepare) (void),
-> > >>                       void (*__parent) (void),
-> > >>                       void (*__child) (void)) __THROW;
-> > >>
-> > >> I guess those "inline" should be removed?
-> > >> Weldemar what do you think?
-> > >
-> > > I am in the middle of reworking libpthread/librt support in
-> > > uClibc-ng and found some problems in the way pthread_atfork is
-> > > declared.
-> > > I think the problems exist because of some backward compat support
-> > > in Gnu libc, see here for a nice summary:
-> > >
-http://ryanarn.blogspot.de/2011/07/curious-case-of-pthreadatfork-on.html
-> >
-> > Is the same issue for shm_open() and shm_unlink() ?
->
-> Unsure, what is the thingie about shm_open().
-> I was just curious seeing pthread_atfork() problems while hacking on
-> the function :)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/orangepi/orangepipc/post-image.sh | 8 --------
+ configs/orangepipc_defconfig            | 6 +++---
+ 2 files changed, 3 insertions(+), 11 deletions(-)
 
-Ok, some investigation are needed but it seems the same issue... remove
-inline to fix the build...
-
->
-> > >
-> > > I think uClibc-ng should simply provide a usable pthread_atfork.
-> > > pthread_atfork is internally used by librt right now.
-> >
-> > Actually, it seems a bit weird to speak about pthread_atfork() for
-Blackfin
-> > which doesn't have a MMU so fork() is not available.
-> > I think that is why Xenomai try to define it on Blackfin, it doesn't
-expect
-> > pthread_atfork() to be provided by the libc.
-> >
-> > >
-> > > I hope I get some patch out for review in the next days.
-> >
-> > ok great :)
-> >
-> > >
-> > > I think uClibc-ng for NPTL and Linuxthreads should provide a usable
-> > > pthread_atfork(). So Xenomai does not need to provide their own.
-> >
-> > So even on Blackfin ?
->
-> You are right, I should stop smoking bad things ;)
-> What should we do for noMMU targets? Provide a dummy or just do not
-> export any pthread_atfork() function?
-
-I'm far to be an expert on no-MMU platform but yes, it seems we not need to
-export pthread_atfork function.
-
-I'm not sure if we also need to do the same for shm_* functions...
-
-Best regards,
-Romain
-
->
-> best regards
->  Waldemar
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160913/b70bc04f/attachment.html>
+diff --git a/board/orangepi/orangepipc/post-image.sh b/board/orangepi/orangepipc/post-image.sh
+index dbe1516..359b4c9 100755
+--- a/board/orangepi/orangepipc/post-image.sh
++++ b/board/orangepi/orangepipc/post-image.sh
+@@ -6,17 +6,9 @@ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+ 
+ rm -rf "${GENIMAGE_TMP}"
+ 
+-# As we now use the Linux v4.5-RC1 kernel no orangepi-pc dtb exists yet.
+-# However the orangepi-plus dtb has not much content, only mmc0 and uart
+-# which are equal to the pc version of the board, so we use it here.
+-mv ${BINARIES_DIR}/sun8i-h3-orangepi-plus.dtb ${BINARIES_DIR}/sun8i-h3-orangepi-pc.dtb
+-
+-
+ genimage                               \
+ 	--rootpath "${TARGET_DIR}"     \
+ 	--tmppath "${GENIMAGE_TMP}"    \
+ 	--inputpath "${BINARIES_DIR}"  \
+ 	--outputpath "${BINARIES_DIR}" \
+ 	--config "${GENIMAGE_CFG}"
+-
+-exit $?
+diff --git a/configs/orangepipc_defconfig b/configs/orangepipc_defconfig
+index 2e127d0..1bea541 100644
+--- a/configs/orangepipc_defconfig
++++ b/configs/orangepipc_defconfig
+@@ -1,17 +1,17 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepipc/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepipc/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-plus"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-pc"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+-- 
+2.8.1
