@@ -1,38 +1,34 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 13 Sep 2016 12:02:16 -0300
-Subject: [Buildroot] [PATCH 2/2] uboot-tools: bump to version 2016.09
-In-Reply-To: <20160912224213.10c50412@free-electrons.com>
-References: <1473699821-8393-1-git-send-email-festevam@gmail.com>
- <1473699821-8393-2-git-send-email-festevam@gmail.com>
- <20160912224213.10c50412@free-electrons.com>
-Message-ID: <CAOMZO5Bp_dctdOw_WrYOjNRh6dAaTb-0Lqu1YSRJUitwy5+o8g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 13 Sep 2016 17:33:01 +0200
+Subject: [Buildroot] [git commit] configs/orangepipc: Use u-boot 2016.09
+Message-ID: <20160913153316.DE774821A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
+commit: https://git.buildroot.net/buildroot/commit/?id=8bee59bb8fbb1a8dcaac4f2b386b5013ac08f19d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Sep 12, 2016 at 5:42 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon, 12 Sep 2016 14:03:41 -0300, Fabio Estevam wrote:
->> From: Fabio Estevam <fabio.estevam@nxp.com>
->>
->> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
->> ---
->>  .../uboot-tools/0002-tools-only-in-no-dot-config-targets.patch | 10 ++++++----
->
-> It would be nice if one day, someone upstreamed this patch, in this
-> form or another.
+Among others, this adds support for the ethernet interface.
 
-Would like to understand from you if you have ever made an attempt to
-upstream uboot-tools/0002-tools-only-in-no-dot-config-targets.patch.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/orangepipc_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Is this something that you could submit to the U-Boot list to get some feedback?
-
-Thanks,
-
-Fabio Estevam
+diff --git a/configs/orangepipc_defconfig b/configs/orangepipc_defconfig
+index 3683ad4..2e127d0 100644
+--- a/configs/orangepipc_defconfig
++++ b/configs/orangepipc_defconfig
+@@ -18,7 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
