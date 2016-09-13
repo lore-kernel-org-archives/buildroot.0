@@ -1,80 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Sep 2016 00:57:15 +0200
-Subject: [Buildroot] [PATCH 1/2] xen: Disable -Werror when building
-In-Reply-To: <1473799504-20372-1-git-send-email-alistair.francis@xilinx.com>
-References: <1473799504-20372-1-git-send-email-alistair.francis@xilinx.com>
-Message-ID: <55fa8ac2-b998-7729-3d0b-e10f500a870d@mind.be>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Tue, 13 Sep 2016 18:59:04 -0400
+Subject: [Buildroot] [PATCH] infra/pkg-kconfig: Be sure to reconfigure
+	the package on foo-reconfigure
+In-Reply-To: <1473806117-3858-1-git-send-email-yann.morin.1998@free.fr>
+References: <1473806117-3858-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <8737l3be4n.fsf@ketchup.mtl.sfl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
+"Yann E. MORIN" <yann.morin.1998@free.fr> writes:
 
-On 13-09-16 22:45, Alistair Francis wrote:
-> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-> ---
->  ...1-Remove-hardcoded-strict-Werror-checking.patch | 26 ++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch
-> 
-> diff --git a/package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch b/package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch
-> new file mode 100644
-> index 0000000..ca772dd
-> --- /dev/null
-> +++ b/package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch
-> @@ -0,0 +1,26 @@
-> +From 234847440a5d3cf95540ea79f7a08d50cccfef73 Mon Sep 17 00:00:00 2001
-> +From: Alistair Francis <alistair.francis@xilinx.com>
-> +Date: Tue, 13 Sep 2016 10:48:31 -0700
-> +Subject: [PATCH] Remove hardcoded strict -Werror checking
-> +
-> +Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-> +---
-> + Config.mk | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/Config.mk b/Config.mk
-> +index bd991c6..e7ac662 100644
-> +--- a/Config.mk
-> ++++ b/Config.mk
-> +@@ -36,7 +36,7 @@ CONFIG_$(XEN_OS) := y
-> + SHELL     ?= /bin/sh
-> + 
-> + # Tools to run on system hosting the build
-> +-HOSTCFLAGS  = -Wall -Werror -Wstrict-prototypes -O2 -fomit-frame-pointer
-> ++HOSTCFLAGS  = -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer
+> Currently, calling foo-reconfigure for a kconfig-based package will not
+> re-trigger the configuration (kconfig-wise) step for the package.
+>
+> This can be problematic when using an override-srcdir suring development
+> and the content of the veride-srcdir changes (e.g. on a rebase, a merge,
+> or during a bisect).
+>
+> This is because the configuration (kconfig-wise) of the package is not
+> done in the _CONFIGURE_CMDS block, but as a separate action that is not
+> part of any step [0].
+>
+> So, be sure to remove the stamp file .stamp_kconfig_fixup_done during
+> the foo-clean-for-reconfigure rule, so that the configuration is applied
+> again with the new source tree.
+>
+> We use another rule, foo-clean-kconfig-for-reconfigure, because we do
+> not want to override the default foo-clean-for-reconfigure rule, and we
+> have no way to add conditional commands to it.
+>
+> [0] The reasons it was not done are not entirely clear in my head, but
+> IIRC that was not working at the time we tried with Thomas DS.
+>
+> Reported-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- I had a quick look, and there are actually roughly 60 instances of this -Werror
-spread out over various Makefiles... (It's an autotools package but it looks
-like it's not using automake.) Although we probably don't use some of them
-(components that don't get build, Makefiles meant for different targets, etc.),
-I doubt that removing this one instance is going to be sufficient. But a patch
-that changes those 60 instances doesn't sound very attractive either...
+Without this patch, make linux-rebuild or make linux-reconfigure will
+prompt new kernel symbols, which is painful when rebasing/bisecting.
 
- Although, I must admit, the two errors encountered by the autobuilders come
-from kconfig which is clearly not -Werror-clean. Perhaps their own code really
-_is_ -Werror-clean. So we could start with this patch at least.
+With this patch, make linux-rebuild will still prompt new symbols, but
+make linux-reconfigure will not, which is intuitive.
 
- Better still, work with upstream to find a solution.
+Tested-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 
- Regards,
- Arnout
+Thanks,
 
-
-> + HOSTCFLAGS += -fno-strict-aliasing
-> + 
-> + DISTDIR     ?= $(XEN_ROOT)/dist
-> +-- 
-> +2.7.4
-> +
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+        Vivien
