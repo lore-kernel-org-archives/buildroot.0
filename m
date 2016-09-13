@@ -1,83 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 13 Sep 2016 23:34:57 +0200
-Subject: [Buildroot] [PATCH 1/2 v8] core: don't build host-cmake if it
- is available on the build host
-In-Reply-To: <73437706-39d8-50af-7a08-df3ec45deaa1@lucaceresoli.net>
-References: <cover.1473717489.git.yann.morin.1998@free.fr>
- <3ce0d5355eee13e5667c5ef3233514e2308044d8.1473717489.git.yann.morin.1998@free.fr>
- <73437706-39d8-50af-7a08-df3ec45deaa1@lucaceresoli.net>
-Message-ID: <20160913213457.GB6175@free.fr>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Wed, 14 Sep 2016 00:03:50 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/mysql: add MYSQL_SOCKET variable
+Message-ID: <1473804231-9767-1-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+Add MYSQL_SOCKET variable with MySQL socket location
 
-On 2016-09-13 23:05 +0200, Luca Ceresoli spake thusly:
-> On 12/09/2016 23:59, Yann E. MORIN wrote:
-> > From: Luca Ceresoli <luca@lucaceresoli.net>
-> > Currently all cmake packages depend on host-cmake. Unfortunately
-> > host-cmake takes a long time to configure and build: almost 7 minutes
-> > on a dual-core i5 with SSD. The time does not change even with ccache
-> > enabled.
-[--SNIP--]
-> > diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
-> > new file mode 100755
-> > index 0000000..9b63b06
-> > --- /dev/null
-> > +++ b/support/dependencies/check-host-cmake.sh
-> > @@ -0,0 +1,39 @@
-> > +#!/bin/sh
-> > +
-> > +candidate="${1}"
-> > +version_min="${2}"
-> > +
-> > +major_min="${version_min%.*}"
-> > +minor_min="${version_min#*.}"
-> > +
-> > +cmake=`which ${candidate}`
-> > +if [ ! -x "${cmake}" ]; then
-> > +    # echo nothing: no suitable cmake found
-> > +    exit 1
-> > +fi
-> > +
-> > +# Extract version X.Y from versions in the form X.Y or X.Y.Z
-> > +# with X, Y and Z numbers with one or more digits each, e.g.
-> > +#   3.2     -> 3.2
-> > +#   3.2.3   -> 3.2
-> > +#   3.2.42  -> 3.2
-> > +#   3.10    -> 3.10
-> > +#   3.10.4  -> 3.10
-> > +#   3.10.42 -> 3.10
-> > +version="$(${cmake} --version \
-> > +           |sed -r -e '/.* ([[:digit:]]+\.[[:digit:]]+).*$/!d;' \
-> > +                   -e 's//\1/'
-> > +          )"
-> > +major="${version%.*}"
-> > +minor="${version#*.}"
-> 
-> You removed the 'head -n1' in the pipe.
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 
-Indeed, but look at the sed script (which is not that complicated): all
-lines that do not match the pattern are ignored.
+---
+Changes v2 -> v3:
+- fix systemd unit file missing User
 
-        |sed -r -e '/.* ([[:digit:]]+\.[[:digit:]]+).*$/!d;' \
-                                               Here ----^
+Changes v1 -> v2:
+- move socket to /run/mysql/mysql.sock
+  chmod 755 /run/mysql to allow users access to it
+---
+ package/mysql/S97mysqld      | 2 +-
+ package/mysql/mysql.mk       | 4 ++++
+ package/mysql/mysqld.service | 3 +++
+ 3 files changed, 8 insertions(+), 1 deletion(-)
 
-"!d" means "if no match, delete line".
-
-Then the next expression is only aplied on matching lines, and "\1"
-refers to the ()-match, which is the version string.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/mysql/S97mysqld b/package/mysql/S97mysqld
+index 1d87e68..5a660e9 100644
+--- a/package/mysql/S97mysqld
++++ b/package/mysql/S97mysqld
+@@ -9,7 +9,7 @@ case "$1" in
+ 
+ 		# mysqld runs as user mysql, but /run is only writable by root
+ 		# so create a subdirectory for mysql.
+-		install -d -o mysql -g root -m 0700 /run/mysql
++		install -d -o mysql -g root -m 0755 /run/mysql
+ 
+ 		# We don't use start-stop-daemon because mysqld has
+ 		# its own wrapper script.
+diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+index 534bd97..7af4711 100644
+--- a/package/mysql/mysql.mk
++++ b/package/mysql/mysql.mk
+@@ -14,6 +14,9 @@ MYSQL_AUTORECONF = YES
+ MYSQL_LICENSE = GPLv2
+ MYSQL_LICENSE_FILES = README COPYING
+ 
++# Unix socket. This variable can also be consulted by other buildroot packages
++MYSQL_SOCKET = /run/mysql/mysql.sock
++
+ MYSQL_CONF_ENV = \
+ 	ac_cv_sys_restartable_syscalls=yes \
+ 	ac_cv_path_PS=/bin/ps \
+@@ -31,6 +34,7 @@ MYSQL_CONF_OPTS = \
+ 	--without-readline \
+ 	--with-low-memory \
+ 	--enable-thread-safe-client \
++	--with-unix-socket-path=$(MYSQL_SOCKET) \
+ 	--disable-mysql-maintainer-mode
+ 
+ # host-mysql only installs what is needed to build mysql, i.e. the
+diff --git a/package/mysql/mysqld.service b/package/mysql/mysqld.service
+index 2ded9c2..c9e5e42 100644
+--- a/package/mysql/mysqld.service
++++ b/package/mysql/mysqld.service
+@@ -5,6 +5,9 @@ Description=MySQL database server
+ ExecStartPre=/bin/sh -c 'test -d /var/mysql/mysql || mysql_install_db --user=mysql --ldata=/var/mysql'
+ ExecStart=/usr/bin/mysqld_safe
+ Restart=always
++User=mysql
++RuntimeDirectory=mysql
++RuntimeDirectoryMode=0755
+ 
+ [Install]
+ WantedBy=multi-user.target
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
