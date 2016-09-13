@@ -1,122 +1,151 @@
 From: Erico Nunes <nunes.erico@gmail.com>
-Date: Tue, 13 Sep 2016 06:15:43 +0200
-Subject: [Buildroot] [PATCH 0/5] grub2: add support for arm and aarch64
-Message-ID: <20160913041548.10290-1-nunes.erico@gmail.com>
+Date: Tue, 13 Sep 2016 06:15:44 +0200
+Subject: [Buildroot] [PATCH 1/5] grub2: bump up version
+In-Reply-To: <20160913041548.10290-1-nunes.erico@gmail.com>
+References: <20160913041548.10290-1-nunes.erico@gmail.com>
+Message-ID: <20160913041548.10290-2-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series enables Grub 2 to be built for arm and aarch64.
+Grub 2 version 2.00 which exists in Buildroot dates back from 2012 and
+does not support new interesting features such as ARM support.
 
-The patch series itself is not very complex, the most significant effort
-put into this series was in testing that it actually works.
-Unfortunately, not a lot of documentation or examples are available on
-the subject, so some experimentation was required and testing was done
-in a few different environments to ensure that enabling these in
-Buildroot make sense at this moment.
-Initial encouragement that this might be possible with Buildroot targets
-came from [1].
+Despite it being the last official non-beta release, it makes sense to
+bump Grub 2 to current master HEAD as the project has not been providing
+regular releases since then.
+Other distributions such as Fedora have also been shipping variations of
+the newer "beta" releases.
 
-Grub 2 for arm/aarch64 can be used either in a uboot platform or efi
-platform.
+Patch boot/grub2/0001-remove-gets.patch doesn't seem to be required
+anymore as grub-core/gnulib/stdio.in.h has changed significantly since
+"053cfcd Import new gnulib." and has another treatment for gets.
+Patch
+boot/grub2/0002-grub-core-gettext-gettext.c-main_context-secondary_c.patch
+was a backport which is present after the bump and therefore is also no
+longer necessary.
 
-As a uboot platform, Grub 2 image gets built as a u-boot image (i.e.
-u-boot mkimage) and is loaded from u-boot through a regular "bootm". The
-only requirement from u-boot side in order to allow this is that u-boot
-is built with CONFIG_API enabled. CONFIG_API seems to not be enabled by
-default in most in-tree configurations, however, it seems to be
-available for quite some time now. So it might be possible to use this
-even on older u-boot versions. This is available only for arm (32-bit).
-
-As an efi platform, Grub 2 gets built as an EFI executable. This allows
-EFI firmware to find and load it similarly as it can be done for x86_64.
-It is possible to run aarch64 EFI firmware in qemu [2] and load Grub 2
-to test it this way (I have actually used the aarch64 firmware
-distributed with edk2-aarch64 from Fedora).
-Also, there is a very cool recent u-boot feature which allows u-boot to
-load and boot an EFI executable - bootefi [3] - so the Grub 2 efi
-platform can also be used from u-boot in recent versions. This has been
-released only in u-boot v2016.05 and is enabled (mostly) by default for
-ARM u-boot.
-efi platform is available for both arm and aarch64.
-
-After enabling support for these Grub 2 platform in Buildroot, I have
-tested them (and found to work) in the following environments:
-
-arm-uboot:
-- qemu arm vexpress, loaded through u-boot bootm as in [1], no patches
-necessary.
-- BeagleBone, loaded through u-boot bootm (worked after a small patch I
-crafted for Grub 2 which I hope to sort out with upstream, possibly
-platform specific).
-
-arm-efi:
-- BeagleBone, with u-boot v2016.05, loaded through u-boot bootefi as in
-[3], no patches necessary.
-
-aarch64-efi:
-- qemu aarch64 virt, using EDK II firmware for aarch64, Grub 2 loaded
-through usual UEFI path, no patches necessary.
-- Odroid-C2, aarch64, using a patched together u-boot v2016.05 (since
-upstream support for this board is not totally done yet), loaded through
-u-boot bootefi as in [3].
-
-I have also verified that pc_x86_64_bios_defconfig and
-pc_x86_64_efi_defconfig build and boot correctly with Grub 2 without
-modifications after applying this patch series.
-
-
-During development, I split the grub2 package into (host-)grub2-tools
-and grub2. I was having trouble in trying to make the existing grub2
-package work for arm, getting some weird relocation errors when trying
-to execute it on the target, despite it working as expected while
-following [1] with recent grub2 and u-boot versions. I tracked it down
-as much as to be something related to the use of $(HOST_CONFIGURE_OPTS)
-in GRUB2_CONF_ENV, but didn't find the exact cause.
-By spliting the packages into a host and target version, I didn't see
-any of those errors anymore, it also made the grub2 recipe clearer (less
-confusion about mixed host/target build variables) and we also get the
-added benefit of enabling grub2-tools to be built for the target.
-So I'm also proposing this change as part of the series.
-
-
-I'm sure this can still be improved, so feedback on the series is very
-welcome. For example I'm not sure on what to do with the grub2
-documentation on boot/grub2/Config.in; it could start growing very big
-for a Config.in documentation if I add more fully detailed instructions
-for ARM.
-We also now have defconfig examples which include grub2 for x86_64,
-maybe the best would be to provide a defconfig instead of extending that
-documentation (and possibly also removing all that from Config.in)?
-
-[1] https://www.hellion.org.uk/blog/posts/grub-on-uboot-on-qemu/
-[2] https://sourceforge.net/projects/edk2/files/ARM/
-[3] https://www.youtube.com/watch?v=bNL1pd-rwCU
-
-Erico Nunes (5):
-  grub2: bump up version
-  grub2-tools: new package
-  grub2: use grub2-tools as a host package
-  grub2: enable support for arm and aarch64 targets
-  grub2: introduce BR2_TARGET_GRUB2_CFG
-
- boot/grub2/0001-remove-gets.patch                  | 21 -------
- ...ettext-gettext.c-main_context-secondary_c.patch | 39 -------------
- boot/grub2/Config.in                               | 55 +++++++++++++++---
- boot/grub2/grub2.hash                              |  4 +-
- boot/grub2/grub2.mk                                | 67 ++++++++++++++--------
- package/Config.in                                  |  1 +
- package/grub2-tools/Config.in                      |  6 ++
- package/grub2-tools/grub2-tools.hash               |  2 +
- package/grub2-tools/grub2-tools.mk                 | 45 +++++++++++++++
- 9 files changed, 144 insertions(+), 96 deletions(-)
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+---
+ boot/grub2/0001-remove-gets.patch                  | 21 ------------
+ ...ettext-gettext.c-main_context-secondary_c.patch | 39 ----------------------
+ boot/grub2/grub2.hash                              |  4 +--
+ boot/grub2/grub2.mk                                | 11 ++++--
+ 4 files changed, 10 insertions(+), 65 deletions(-)
  delete mode 100644 boot/grub2/0001-remove-gets.patch
  delete mode 100644 boot/grub2/0002-grub-core-gettext-gettext.c-main_context-secondary_c.patch
- create mode 100644 package/grub2-tools/Config.in
- create mode 100644 package/grub2-tools/grub2-tools.hash
- create mode 100644 package/grub2-tools/grub2-tools.mk
 
+diff --git a/boot/grub2/0001-remove-gets.patch b/boot/grub2/0001-remove-gets.patch
+deleted file mode 100644
+index 0da71b3..0000000
+--- a/boot/grub2/0001-remove-gets.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-ISO C11 removes the specification of gets() from the C language, eglibc 2.16+ removed it
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Upstream-Status: Pending
+-Index: grub-1.99/grub-core/gnulib/stdio.in.h
+-===================================================================
+---- grub-1.99.orig/grub-core/gnulib/stdio.in.h	2010-12-01 06:45:43.000000000 -0800
+-+++ grub-1.99/grub-core/gnulib/stdio.in.h	2012-07-04 12:25:02.057099107 -0700
+-@@ -140,8 +140,10 @@
+- /* It is very rare that the developer ever has full control of stdin,
+-    so any use of gets warrants an unconditional warning.  Assume it is
+-    always declared, since it is required by C89.  */
+-+#if defined gets
+- #undef gets
+- _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+-+#endif
+- 
+- #if @GNULIB_FOPEN@
+- # if @REPLACE_FOPEN@
+diff --git a/boot/grub2/0002-grub-core-gettext-gettext.c-main_context-secondary_c.patch b/boot/grub2/0002-grub-core-gettext-gettext.c-main_context-secondary_c.patch
+deleted file mode 100644
+index 94be092..0000000
+--- a/boot/grub2/0002-grub-core-gettext-gettext.c-main_context-secondary_c.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From f30c692c1f9ef0e93bee2b408a24baa017f1ca9d Mon Sep 17 00:00:00 2001
+-From: Vladimir Serbinenko <phcoder@gmail.com>
+-Date: Thu, 7 Nov 2013 01:01:47 +0100
+-Subject: [PATCH] 	* grub-core/gettext/gettext.c (main_context),
+- (secondary_context): 	Define after defining type and not before.
+-
+-[Thomas: backport from upstream commit
+-f30c692c1f9ef0e93bee2b408a24baa017f1ca9d, and remove ChangeLog
+-modifications to avoid conflicts.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- grub-core/gettext/gettext.c | 4 ++--
+- 2 files changed, 7 insertions(+), 2 deletions(-)
+-
+-diff --git a/grub-core/gettext/gettext.c b/grub-core/gettext/gettext.c
+-index df73570..4880cef 100644
+---- a/grub-core/gettext/gettext.c
+-+++ b/grub-core/gettext/gettext.c
+-@@ -34,8 +34,6 @@ GRUB_MOD_LICENSE ("GPLv3+");
+-    http://www.gnu.org/software/autoconf/manual/gettext/MO-Files.html .
+- */
+- 
+--static struct grub_gettext_context main_context, secondary_context;
+--
+- static const char *(*grub_gettext_original) (const char *s);
+- 
+- struct grub_gettext_msg
+-@@ -69,6 +67,8 @@ struct grub_gettext_context
+-   struct grub_gettext_msg *grub_gettext_msg_list;
+- };
+- 
+-+static struct grub_gettext_context main_context, secondary_context;
+-+
+- #define MO_MAGIC_NUMBER 		0x950412de
+- 
+- static grub_err_t
+--- 
+-2.7.4
+-
+diff --git a/boot/grub2/grub2.hash b/boot/grub2/grub2.hash
+index 8883905..051a9ab 100644
+--- a/boot/grub2/grub2.hash
++++ b/boot/grub2/grub2.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking pgp signature
+-sha256	784ec38e7edc32239ad75b8e66df04dc8bfb26d88681bc9f627133a6eb85c458	grub-2.00.tar.xz
++# Locally computed:
++sha256 680f584995cf318adb1ff8c40caef30d0ec7c03e16e88ba60bf5aa5b5a6e26ed grub2-4e0f8f66e321cf1051c0e01f6fbcc6fc35a807b6.tar.gz
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index dc4e51e..ecdf421 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-GRUB2_VERSION = 2.00
+-GRUB2_SITE = $(BR2_GNU_MIRROR)/grub
+-GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
++GRUB2_VERSION = 4e0f8f66e321cf1051c0e01f6fbcc6fc35a807b6
++GRUB2_SITE = git://git.savannah.gnu.org/grub.git
++GRUB2_SITE_METHOD = git
+ GRUB2_LICENSE = GPLv3+
+ GRUB2_LICENSE_FILES = COPYING
+ GRUB2_DEPENDENCIES = host-bison host-flex
+@@ -70,6 +70,11 @@ GRUB2_CONF_OPTS = \
+ 	--enable-libzfs=no \
+ 	--disable-werror
+ 
++define GRUB2_RUN_AUTOGEN
++	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
++endef
++GRUB2_PRE_CONFIGURE_HOOKS += GRUB2_RUN_AUTOGEN
++
+ # We don't want all the native tools and Grub2 modules to be installed
+ # in the target. So we in fact install everything into the host
+ # directory, and the image generation process (below) will use the
 -- 
 2.9.3
