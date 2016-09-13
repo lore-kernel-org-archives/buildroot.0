@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Sep 2016 01:19:12 +0200
-Subject: [Buildroot] [PATCH 1/2] xen: Disable -Werror when building
-In-Reply-To: <55fa8ac2-b998-7729-3d0b-e10f500a870d@mind.be>
+Date: Wed, 14 Sep 2016 01:23:32 +0200
+Subject: [Buildroot] [PATCH 2/2] xen: Remove TARGET_CONFIGURE_OPTS from
+ make
+In-Reply-To: <1473799504-20372-2-git-send-email-alistair.francis@xilinx.com>
 References: <1473799504-20372-1-git-send-email-alistair.francis@xilinx.com>
- <55fa8ac2-b998-7729-3d0b-e10f500a870d@mind.be>
-Message-ID: <bb139a26-62f8-b3b9-d52f-78238b11457c@mind.be>
+ <1473799504-20372-2-git-send-email-alistair.francis@xilinx.com>
+Message-ID: <dd89e679-681d-a3e6-b37e-1beea8744937@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,90 +14,42 @@ To: buildroot@busybox.net
 
 
 
-On 14-09-16 00:57, Arnout Vandecappelle wrote:
+On 13-09-16 22:45, Alistair Francis wrote:
+> The TARGET_CONFIGURE_OPTS variable resulted in a double definition
+> error:
+> <command-line>:0:0: error: "__OBJECT_FILE__" redefined [-Werror]
 > 
-> 
-> On 13-09-16 22:45, Alistair Francis wrote:
->> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+> Remove the options to avoid the error.
 
- I forgot to mention before: the commit message should refer to the autobuilder
-failures.
+ This doesn't look right. TARGET_CONFIGURE_OPTS definitely doesn't contain
+-D__OBJECT_FILE__ (or you have some very weird stuff in BR2_TARGET_OPTIMIZATION).
 
->> ---
->>  ...1-Remove-hardcoded-strict-Werror-checking.patch | 26 ++++++++++++++++++++++
->>  1 file changed, 26 insertions(+)
->>  create mode 100644 package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch
->>
->> diff --git a/package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch b/package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch
->> new file mode 100644
->> index 0000000..ca772dd
->> --- /dev/null
->> +++ b/package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch
->> @@ -0,0 +1,26 @@
->> +From 234847440a5d3cf95540ea79f7a08d50cccfef73 Mon Sep 17 00:00:00 2001
->> +From: Alistair Francis <alistair.francis@xilinx.com>
->> +Date: Tue, 13 Sep 2016 10:48:31 -0700
->> +Subject: [PATCH] Remove hardcoded strict -Werror checking
->> +
->> +Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
->> +---
->> + Config.mk | 2 +-
->> + 1 file changed, 1 insertion(+), 1 deletion(-)
->> +
->> +diff --git a/Config.mk b/Config.mk
->> +index bd991c6..e7ac662 100644
->> +--- a/Config.mk
->> ++++ b/Config.mk
->> +@@ -36,7 +36,7 @@ CONFIG_$(XEN_OS) := y
->> + SHELL     ?= /bin/sh
->> + 
->> + # Tools to run on system hosting the build
->> +-HOSTCFLAGS  = -Wall -Werror -Wstrict-prototypes -O2 -fomit-frame-pointer
->> ++HOSTCFLAGS  = -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer
-> 
->  I had a quick look, and there are actually roughly 60 instances of this -Werror
-> spread out over various Makefiles... (It's an autotools package but it looks
-> like it's not using automake.) Although we probably don't use some of them
-> (components that don't get build, Makefiles meant for different targets, etc.),
-> I doubt that removing this one instance is going to be sufficient. But a patch
-> that changes those 60 instances doesn't sound very attractive either...
-> 
->  Although, I must admit, the two errors encountered by the autobuilders come
-> from kconfig which is clearly not -Werror-clean. Perhaps their own code really
-> _is_ -Werror-clean. So we could start with this patch at least.
-
- Now I replied to the other thread, I realized that the problem really is the
-combination of -Werror with -Wall. And a quick checks shows only three relevant
-occurrences of -Wall (but I may have missed something): two in Config.mk and one
-in tools/Rules.mk.
-
- So, I propose to accept this patch:
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-and look into removing the -Wall if needed for other build failures.
-
-> 
->  Better still, work with upstream to find a solution.
-
- That's still true of course :-)
-
+ How did you get this error? Can you print the full command line (by setting
+BR2_DEBUG_WRAPPER=1 in the environment) to find out how it gets defined twice?
 
  Regards,
  Arnout
 
 > 
->  Regards,
->  Arnout
+> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+> ---
+>  package/xen/xen.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> 
->> + HOSTCFLAGS += -fno-strict-aliasing
->> + 
->> + DISTDIR     ?= $(XEN_ROOT)/dist
->> +-- 
->> +2.7.4
->> +
->>
+> diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+> index e2c797f..8400a77 100644
+> --- a/package/xen/xen.mk
+> +++ b/package/xen/xen.mk
+> @@ -22,8 +22,7 @@ XEN_CONF_OPTS = --disable-ocamltools
+>  XEN_CONF_ENV = PYTHON=$(HOST_DIR)/usr/bin/python2
+>  XEN_MAKE_ENV = \
+>  	XEN_TARGET_ARCH=$(XEN_ARCH) \
+> -	CROSS_COMPILE=$(TARGET_CROSS) \
+> -	$(TARGET_CONFIGURE_OPTS)
+> +	CROSS_COMPILE=$(TARGET_CROSS)
+>  
+>  ifeq ($(BR2_PACKAGE_XEN_HYPERVISOR),y)
+>  XEN_MAKE_OPTS += dist-xen
 > 
 
 -- 
