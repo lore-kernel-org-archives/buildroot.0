@@ -1,61 +1,106 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 14 Sep 2016 00:35:17 +0200
-Subject: [Buildroot] [PATCH] infra/pkg-kconfig: Be sure to reconfigure the
-	package on foo-reconfigure
-Message-ID: <1473806117-3858-1-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 14 Sep 2016 00:45:20 +0200
+Subject: [Buildroot] [PATCH 1/2 v8] core: don't build host-cmake if it
+ is available on the build host
+In-Reply-To: <20160913213457.GB6175@free.fr>
+References: <cover.1473717489.git.yann.morin.1998@free.fr>
+ <3ce0d5355eee13e5667c5ef3233514e2308044d8.1473717489.git.yann.morin.1998@free.fr>
+ <73437706-39d8-50af-7a08-df3ec45deaa1@lucaceresoli.net>
+ <20160913213457.GB6175@free.fr>
+Message-ID: <968743de-1d56-53cd-c707-3ac7f923dcb7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, calling foo-reconfigure for a kconfig-based package will not
-re-trigger the configuration (kconfig-wise) step for the package.
 
-This can be problematic when using an override-srcdir suring development
-and the content of the veride-srcdir changes (e.g. on a rebase, a merge,
-or during a bisect).
 
-This is because the configuration (kconfig-wise) of the package is not
-done in the _CONFIGURE_CMDS block, but as a separate action that is not
-part of any step [0].
+On 13-09-16 23:34, Yann E. MORIN wrote:
+> Luca, All,
+> 
+> On 2016-09-13 23:05 +0200, Luca Ceresoli spake thusly:
+>> On 12/09/2016 23:59, Yann E. MORIN wrote:
+>>> From: Luca Ceresoli <luca@lucaceresoli.net>
+>>> Currently all cmake packages depend on host-cmake. Unfortunately
+>>> host-cmake takes a long time to configure and build: almost 7 minutes
+>>> on a dual-core i5 with SSD. The time does not change even with ccache
+>>> enabled.
+> [--SNIP--]
+>>> diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+>>> new file mode 100755
+>>> index 0000000..9b63b06
+>>> --- /dev/null
+>>> +++ b/support/dependencies/check-host-cmake.sh
+>>> @@ -0,0 +1,39 @@
+>>> +#!/bin/sh
+>>> +
+>>> +candidate="${1}"
+>>> +version_min="${2}"
+>>> +
+>>> +major_min="${version_min%.*}"
+>>> +minor_min="${version_min#*.}"
+>>> +
+>>> +cmake=`which ${candidate}`
+>>> +if [ ! -x "${cmake}" ]; then
+>>> +    # echo nothing: no suitable cmake found
+>>> +    exit 1
+>>> +fi
+>>> +
+>>> +# Extract version X.Y from versions in the form X.Y or X.Y.Z
+>>> +# with X, Y and Z numbers with one or more digits each, e.g.
+>>> +#   3.2     -> 3.2
+>>> +#   3.2.3   -> 3.2
+>>> +#   3.2.42  -> 3.2
+>>> +#   3.10    -> 3.10
+>>> +#   3.10.4  -> 3.10
+>>> +#   3.10.42 -> 3.10
+>>> +version="$(${cmake} --version \
+>>> +           |sed -r -e '/.* ([[:digit:]]+\.[[:digit:]]+).*$/!d;' \
+>>> +                   -e 's//\1/'
+>>> +          )"
+>>> +major="${version%.*}"
+>>> +minor="${version#*.}"
+>>
+>> You removed the 'head -n1' in the pipe.
+> 
+> Indeed, but look at the sed script (which is not that complicated): all
+> lines that do not match the pattern are ignored.
+> 
+>         |sed -r -e '/.* ([[:digit:]]+\.[[:digit:]]+).*$/!d;' \
+>                                                Here ----^
+> 
+> "!d" means "if no match, delete line".
+> 
+> Then the next expression is only aplied on matching lines, and "\1"
+> refers to the ()-match, which is the version string.
 
-So, be sure to remove the stamp file .stamp_kconfig_fixup_done during
-the foo-clean-for-reconfigure rule, so that the configuration is applied
-again with the new source tree.
+ You snipped away Luca's example: if there are two lines that contain something
+that looks like a version number, then you get two versions out of this script.
+So repeating Luca's example:
 
-We use another rule, foo-clean-kconfig-for-reconfigure, because we do
-not want to override the default foo-clean-for-reconfigure rule, and we
-have no way to add conditional commands to it.
+  cmake version 3.5.1
 
-[0] The reasons it was not done are not entirely clear in my head, but
-IIRC that was not working at the time we tried with Thomas DS.
+  Linked against libfoobar 7.6.5
 
-Reported-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-kconfig.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+will give you
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index b0f5178..ce9bf33 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -118,6 +118,12 @@ $$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
- # Before running configure, the configuration file should be present and fixed
- $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
- 
-+# Force olddefconfig again on -reconfigure
-+$(1)-clean-for-reconfigure: $(1)-clean-kconfig-for-reconfigure
-+
-+$(1)-clean-kconfig-for-reconfigure:
-+	rm -f $$($(2)_DIR)/.stamp_kconfig_fixup_done
-+
- # Only enable the foo-*config targets when the package is actually enabled.
- # Note: the variable $(2)_KCONFIG_VAR is not related to the kconfig
- # infrastructure, but defined by pkg-generic.mk. The generic infrastructure is
+version="3.5
+7.6"
+
+
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
