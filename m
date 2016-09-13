@@ -1,58 +1,30 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 13 Sep 2016 19:52:03 +0200
-Subject: [Buildroot] [PATCH 3/3] package/nginx-naxsi: add missing pcre
-	dependency
-In-Reply-To: <c4abd31c-7224-7d6f-a3b0-cb1ce295caa9@mind.be>
-References: <20160912192324.23682-1-s.martin49@gmail.com>
- <20160912192324.23682-3-s.martin49@gmail.com>
- <ce6702df-b7fe-dc20-87cd-366bec948482@mind.be>
- <CAHXCMM+RX=zVG8zqjjW6m9BfuZ_HQwdakcCtBCXEMPJ6qY+-Ww@mail.gmail.com>
- <c4abd31c-7224-7d6f-a3b0-cb1ce295caa9@mind.be>
-Message-ID: <CAHXCMM+Oph-xL14FSwaYELpbi5b+DJA0u-f5ghFcEiGv24MOow@mail.gmail.com>
+Date: Tue, 13 Sep 2016 20:01:02 +0200
+Subject: [Buildroot] [PATCH] package/nginx-naxsi: add pcre dependency to .mk
+Message-ID: <20160913180102.4825-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 13, 2016 at 7:30 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 13-09-16 09:57, Samuel Martin wrote:
->> On Tue, Sep 13, 2016 at 8:40 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>>
->>>
->>> On 12-09-16 21:23, Samuel Martin wrote:
->>>> Fixes:
->>>>   http://autobuild.buildroot.net/results/9c7/9c7bad6831b09251af81e2bbfc595a241df87c70/
->>>>
->>>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->>>> ---
->>>>  package/nginx-naxsi/Config.in | 1 +
->>>>  1 file changed, 1 insertion(+)
->>>>
->>>> diff --git a/package/nginx-naxsi/Config.in b/package/nginx-naxsi/Config.in
->>>> index 2f7c2da..6c175eb 100644
->>>> --- a/package/nginx-naxsi/Config.in
->>>> +++ b/package/nginx-naxsi/Config.in
->>>> @@ -1,5 +1,6 @@
->>>>  config BR2_PACKAGE_NGINX_NAXSI
->>>>       bool "nginx-naxsi"
->>>> +     select BR2_PACKAGE_PCRE
->>>>       help
->>>>         NAXSI means Nginx Anti XSS & SQL Injection.
->>>
->>>  I may be missing something, but shouldn't there be a _DEPENDENCIES += in .mk?
->>
->> Nope, this is not needed.
->> naxsi is a nginx' module, built by nginx.mk, which already has an
->> automatic dependency on pcre when selected.
->
->  I don't think we should rely on transitive dependencies. naxsi.h #include's
-> pcre.h, so there should be an explicit dependency in the .mk file.
+This change completes the commit 218dfdd9038af882a02fe64f13a533c8ce75ddc1.
 
-Fair enough, I'll post the follow-up shortly.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/nginx-naxsi/nginx-naxsi.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-
+diff --git a/package/nginx-naxsi/nginx-naxsi.mk b/package/nginx-naxsi/nginx-naxsi.mk
+index 0e1f714..ad7749e 100644
+--- a/package/nginx-naxsi/nginx-naxsi.mk
++++ b/package/nginx-naxsi/nginx-naxsi.mk
+@@ -8,5 +8,6 @@ NGINX_NAXSI_VERSION = 0.54
+ NGINX_NAXSI_SITE = $(call github,nbs-system,naxsi,$(NGINX_NAXSI_VERSION))
+ NGINX_NAXSI_LICENSE = GPLv2+ with OpenSSL exception
+ NGINX_NAXSI_LICENSE_FILES = naxsi_src/naxsi_json.c
++NGINX_NAXSI_DEPENDENCIES = pcre
+ 
+ $(eval $(generic-package))
 -- 
-Samuel
+2.9.3
