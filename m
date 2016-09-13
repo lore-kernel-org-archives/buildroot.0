@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Sep 2016 08:29:45 +0200
-Subject: [Buildroot] [PATCH v5 1/1] package/rpm: switch to version
- 4.12.0.1
-In-Reply-To: <CALe+oY-xM=Jqk17OH199Ow6wGcF193M3iKgbuYs6s7CPyKAFBw@mail.gmail.com>
-References: <20160909163708.31980-1-james.knight@rockwellcollins.com>
- <b35ba70e-9552-577c-0bea-4a50e6b5fe4a@mind.be>
- <CALe+oY-xM=Jqk17OH199Ow6wGcF193M3iKgbuYs6s7CPyKAFBw@mail.gmail.com>
-Message-ID: <7c8c343e-a63a-50c8-4fc6-6b81265f6bc3@mind.be>
+Date: Tue, 13 Sep 2016 08:40:23 +0200
+Subject: [Buildroot] [PATCH 3/3] package/nginx-naxsi: add missing pcre
+ dependency
+In-Reply-To: <20160912192324.23682-3-s.martin49@gmail.com>
+References: <20160912192324.23682-1-s.martin49@gmail.com>
+ <20160912192324.23682-3-s.martin49@gmail.com>
+Message-ID: <ce6702df-b7fe-dc20-87cd-366bec948482@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +14,31 @@ To: buildroot@busybox.net
 
 
 
-On 13-09-16 00:22, James Knight wrote:
-> Arnout,
+On 12-09-16 21:23, Samuel Martin wrote:
+> Fixes:
+>   http://autobuild.buildroot.net/results/9c7/9c7bad6831b09251af81e2bbfc595a241df87c70/
 > 
-> On Mon, Sep 12, 2016 at 5:33 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-[snip]
->> >  Oh, and there's an active upstream at
->> > https://github.com/rpm-software-management/rpm
->> > Could you submit it there (if still relevant)?
-> I'll investigate this. I won't be able to try this until next month or
-> so, so I hope having these patches for now will suffice/causes no
-> complaints.
-
- No worries.
-
->>> >> +     depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
->> >
->> >  Could you mention in the commit message what fails on musl? Makes fixing it
->> > later easier.
-> I tried to put that information in the actual package portion:
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/nginx-naxsi/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 > 
->     depends on !BR2_TOOLCHAIN_USES_MUSL # __fxstat64, _D_EXACT_NAMELEN
-> 
-> Does that suffice? Or is it better to put it in the comment section?
-> Or is a longer comment desire? Either way, I'll clean that up.
+> diff --git a/package/nginx-naxsi/Config.in b/package/nginx-naxsi/Config.in
+> index 2f7c2da..6c175eb 100644
+> --- a/package/nginx-naxsi/Config.in
+> +++ b/package/nginx-naxsi/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_NGINX_NAXSI
+>  	bool "nginx-naxsi"
+> +	select BR2_PACKAGE_PCRE
+>  	help
+>  	  NAXSI means Nginx Anti XSS & SQL Injection.
 
- Yep, that's good enough for me.
+ I may be missing something, but shouldn't there be a _DEPENDENCIES += in .mk?
+
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
