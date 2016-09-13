@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Sep 2016 01:23:32 +0200
-Subject: [Buildroot] [PATCH 2/2] xen: Remove TARGET_CONFIGURE_OPTS from
- make
-In-Reply-To: <1473799504-20372-2-git-send-email-alistair.francis@xilinx.com>
-References: <1473799504-20372-1-git-send-email-alistair.francis@xilinx.com>
- <1473799504-20372-2-git-send-email-alistair.francis@xilinx.com>
-Message-ID: <dd89e679-681d-a3e6-b37e-1beea8744937@mind.be>
+Date: Wed, 14 Sep 2016 01:29:41 +0200
+Subject: [Buildroot] [PATCH] infra/pkg-kconfig: Be sure to reconfigure
+ the package on foo-reconfigure
+In-Reply-To: <1473806117-3858-1-git-send-email-yann.morin.1998@free.fr>
+References: <1473806117-3858-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <edce5ca8-c251-4761-49b4-5665e94ef306@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +13,65 @@ To: buildroot@busybox.net
 
 
 
-On 13-09-16 22:45, Alistair Francis wrote:
-> The TARGET_CONFIGURE_OPTS variable resulted in a double definition
-> error:
-> <command-line>:0:0: error: "__OBJECT_FILE__" redefined [-Werror]
+On 14-09-16 00:35, Yann E. MORIN wrote:
+> Currently, calling foo-reconfigure for a kconfig-based package will not
+> re-trigger the configuration (kconfig-wise) step for the package.
 > 
-> Remove the options to avoid the error.
+> This can be problematic when using an override-srcdir suring development
+> and the content of the veride-srcdir changes (e.g. on a rebase, a merge,
+> or during a bisect).
+> 
+> This is because the configuration (kconfig-wise) of the package is not
+> done in the _CONFIGURE_CMDS block, but as a separate action that is not
+> part of any step [0].
+> 
+> So, be sure to remove the stamp file .stamp_kconfig_fixup_done during
+> the foo-clean-for-reconfigure rule, so that the configuration is applied
+> again with the new source tree.
+> 
+> We use another rule, foo-clean-kconfig-for-reconfigure, because we do
+> not want to override the default foo-clean-for-reconfigure rule, and we
+> have no way to add conditional commands to it.
 
- This doesn't look right. TARGET_CONFIGURE_OPTS definitely doesn't contain
--D__OBJECT_FILE__ (or you have some very weird stuff in BR2_TARGET_OPTIMIZATION).
+ Well, it could just be added to the -clean-for-reconfigure in the generic
+infra, but keeping it in pkg-kconfig like this is probably better.
 
- How did you get this error? Can you print the full command line (by setting
-BR2_DEBUG_WRAPPER=1 in the environment) to find out how it gets defined twice?
+> 
+> [0] The reasons it was not done are not entirely clear in my head, but
+> IIRC that was not working at the time we tried with Thomas DS.
+> 
+> Reported-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
 > ---
->  package/xen/xen.mk | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  package/pkg-kconfig.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-> index e2c797f..8400a77 100644
-> --- a/package/xen/xen.mk
-> +++ b/package/xen/xen.mk
-> @@ -22,8 +22,7 @@ XEN_CONF_OPTS = --disable-ocamltools
->  XEN_CONF_ENV = PYTHON=$(HOST_DIR)/usr/bin/python2
->  XEN_MAKE_ENV = \
->  	XEN_TARGET_ARCH=$(XEN_ARCH) \
-> -	CROSS_COMPILE=$(TARGET_CROSS) \
-> -	$(TARGET_CONFIGURE_OPTS)
-> +	CROSS_COMPILE=$(TARGET_CROSS)
+> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> index b0f5178..ce9bf33 100644
+> --- a/package/pkg-kconfig.mk
+> +++ b/package/pkg-kconfig.mk
+> @@ -118,6 +118,12 @@ $$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
+>  # Before running configure, the configuration file should be present and fixed
+>  $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
 >  
->  ifeq ($(BR2_PACKAGE_XEN_HYPERVISOR),y)
->  XEN_MAKE_OPTS += dist-xen
+> +# Force olddefconfig again on -reconfigure
+> +$(1)-clean-for-reconfigure: $(1)-clean-kconfig-for-reconfigure
+> +
+> +$(1)-clean-kconfig-for-reconfigure:
+> +	rm -f $$($(2)_DIR)/.stamp_kconfig_fixup_done
+> +
+>  # Only enable the foo-*config targets when the package is actually enabled.
+>  # Note: the variable $(2)_KCONFIG_VAR is not related to the kconfig
+>  # infrastructure, but defined by pkg-generic.mk. The generic infrastructure is
 > 
 
 -- 
