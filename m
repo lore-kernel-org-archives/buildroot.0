@@ -1,14 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Sep 2016 01:15:34 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-09-11
-In-Reply-To: <20160913162316.GA6175@free.fr>
-References: <20160912063028.65AFB103B93@stock.ovh.net>
- <CAKmqyKOAaZYPwd3GwvBsz7CwiF93-m=5rh=z6vv9o4RTsHod0A@mail.gmail.com>
- <20160912234452.38288933@free-electrons.com> <20160912215430.GC15314@free.fr>
- <CAKmqyKMu2pkBcZnjOiOOZ3J5FKdZ1h7zYo7QnwqfCYyoKGrMfg@mail.gmail.com>
- <20160913162316.GA6175@free.fr>
-Message-ID: <20a87dd8-2582-51ac-b136-80a6e95ce1ca@mind.be>
+Date: Wed, 14 Sep 2016 01:19:12 +0200
+Subject: [Buildroot] [PATCH 1/2] xen: Disable -Werror when building
+In-Reply-To: <55fa8ac2-b998-7729-3d0b-e10f500a870d@mind.be>
+References: <1473799504-20372-1-git-send-email-alistair.francis@xilinx.com>
+ <55fa8ac2-b998-7729-3d0b-e10f500a870d@mind.be>
+Message-ID: <bb139a26-62f8-b3b9-d52f-78238b11457c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,72 +13,91 @@ To: buildroot@busybox.net
 
 
 
-On 13-09-16 18:23, Yann E. MORIN wrote:
-> Usign -Werror during development is actualy a *good* thing, but not so
-> much for releases.
+On 14-09-16 00:57, Arnout Vandecappelle wrote:
 > 
-> Consider this hypotetical situation today:
 > 
->   - your machine uses gcc-6, the greatest and latest version, which
->     knows of a certain set of warnings;
-> 
->   - on your machine, there is no warning in your code, so you slap
->     -Werror on the build flags;
-> 
->   - you do a realease of your code, say version 1.0;
-> 
->   - days, weeks, months or even years  later, gcc-7 gets released; that
->     version knows of, and detects more warnings;
-> 
->   - someone gets version 1.0 of your code (maybe it was the last release
->     you did and the project was complete?);
-> 
->   - that someone has gcc-7 on his machine;
-> 
->   - your code now does not compile anymore, because those new warnings
->     are treated as errors.
-> 
-> But those new warnigns are *new*, i.e. your previous compiler did not
-> know of them, so they can't make your code any worse than it was with
-> the previous compiler. Ergo, there is no point in failing on those new
-> warnings *for a release*.
+> On 13-09-16 22:45, Alistair Francis wrote:
+>> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
 
- One could claim that if you make sure you write standard-compliant code, you
-will never get any warning so if a new warning comes out from a new compiler it
-indicates a bug. With -Werror, this bug will be detected at build time,
-typically by someone who at least knows what compilation is, and is therefore
-more likely to file a good bug report. Without -Werror, the bug will (maybe) be
-detected only at runtime and debugging it is much more difficult.
+ I forgot to mention before: the commit message should refer to the autobuilder
+failures.
 
- However, reality is different.
-* Most of the warnings emitted by a compiler don't translate into real bugs.
-* Compilers give warnings for things that are perfectly standard-compliant. The
--Wunsafe-formatting in one of the build failures in this thread is a good example.
-* Compilers give warnings for coding style issues, e.g. -Wparentheses
-* Some warnings are based on code analysis, and that analysis can make wrong
-conclusions, and the analysis changes from version to version. E.g.
--Wmaybe-uninitialized.
+>> ---
+>>  ...1-Remove-hardcoded-strict-Werror-checking.patch | 26 ++++++++++++++++++++++
+>>  1 file changed, 26 insertions(+)
+>>  create mode 100644 package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch
+>>
+>> diff --git a/package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch b/package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch
+>> new file mode 100644
+>> index 0000000..ca772dd
+>> --- /dev/null
+>> +++ b/package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch
+>> @@ -0,0 +1,26 @@
+>> +From 234847440a5d3cf95540ea79f7a08d50cccfef73 Mon Sep 17 00:00:00 2001
+>> +From: Alistair Francis <alistair.francis@xilinx.com>
+>> +Date: Tue, 13 Sep 2016 10:48:31 -0700
+>> +Subject: [PATCH] Remove hardcoded strict -Werror checking
+>> +
+>> +Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+>> +---
+>> + Config.mk | 2 +-
+>> + 1 file changed, 1 insertion(+), 1 deletion(-)
+>> +
+>> +diff --git a/Config.mk b/Config.mk
+>> +index bd991c6..e7ac662 100644
+>> +--- a/Config.mk
+>> ++++ b/Config.mk
+>> +@@ -36,7 +36,7 @@ CONFIG_$(XEN_OS) := y
+>> + SHELL     ?= /bin/sh
+>> + 
+>> + # Tools to run on system hosting the build
+>> +-HOSTCFLAGS  = -Wall -Werror -Wstrict-prototypes -O2 -fomit-frame-pointer
+>> ++HOSTCFLAGS  = -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer
+> 
+>  I had a quick look, and there are actually roughly 60 instances of this -Werror
+> spread out over various Makefiles... (It's an autotools package but it looks
+> like it's not using automake.) Although we probably don't use some of them
+> (components that don't get build, Makefiles meant for different targets, etc.),
+> I doubt that removing this one instance is going to be sufficient. But a patch
+> that changes those 60 instances doesn't sound very attractive either...
+> 
+>  Although, I must admit, the two errors encountered by the autobuilders come
+> from kconfig which is clearly not -Werror-clean. Perhaps their own code really
+> _is_ -Werror-clean. So we could start with this patch at least.
+
+ Now I replied to the other thread, I realized that the problem really is the
+combination of -Werror with -Wall. And a quick checks shows only three relevant
+occurrences of -Wall (but I may have missed something): two in Config.mk and one
+in tools/Rules.mk.
+
+ So, I propose to accept this patch:
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+and look into removing the -Wall if needed for other build failures.
 
 > 
-> (Slight moderation on the above: a new optimisation technique may break
-> because of new undefined behaviour or corner case or whatever, true; but
-> that is irrelevant: this optimisation technique was not even known to
-> your previous compiler either. Ergo, it should not be applied either.)
-> 
-> In conclusion: -Werror in development is good; -Werror in release is bad.
+>  Better still, work with upstream to find a solution.
 
- Well, actually -Werror is only bad when combined with -Wall. Without -Wall, the
-warnings are limited to things which are really, unequivocally wrong, so safe
-across compiler versions.
+ That's still true of course :-)
 
-
- All of the above deserves a FAQ entry.
 
  Regards,
  Arnout
 
 > 
-> So yes, provide a patch to get rid of -Werror.
+>  Regards,
+>  Arnout
+> 
+> 
+>> + HOSTCFLAGS += -fno-strict-aliasing
+>> + 
+>> + DISTDIR     ?= $(XEN_ROOT)/dist
+>> +-- 
+>> +2.7.4
+>> +
+>>
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
