@@ -1,13 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Sep 2016 00:45:20 +0200
-Subject: [Buildroot] [PATCH 1/2 v8] core: don't build host-cmake if it
- is available on the build host
-In-Reply-To: <20160913213457.GB6175@free.fr>
-References: <cover.1473717489.git.yann.morin.1998@free.fr>
- <3ce0d5355eee13e5667c5ef3233514e2308044d8.1473717489.git.yann.morin.1998@free.fr>
- <73437706-39d8-50af-7a08-df3ec45deaa1@lucaceresoli.net>
- <20160913213457.GB6175@free.fr>
-Message-ID: <968743de-1d56-53cd-c707-3ac7f923dcb7@mind.be>
+Date: Wed, 14 Sep 2016 00:57:15 +0200
+Subject: [Buildroot] [PATCH 1/2] xen: Disable -Werror when building
+In-Reply-To: <1473799504-20372-1-git-send-email-alistair.francis@xilinx.com>
+References: <1473799504-20372-1-git-send-email-alistair.francis@xilinx.com>
+Message-ID: <55fa8ac2-b998-7729-3d0b-e10f500a870d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,85 +12,63 @@ To: buildroot@busybox.net
 
 
 
-On 13-09-16 23:34, Yann E. MORIN wrote:
-> Luca, All,
+On 13-09-16 22:45, Alistair Francis wrote:
+> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+> ---
+>  ...1-Remove-hardcoded-strict-Werror-checking.patch | 26 ++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>  create mode 100644 package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch
 > 
-> On 2016-09-13 23:05 +0200, Luca Ceresoli spake thusly:
->> On 12/09/2016 23:59, Yann E. MORIN wrote:
->>> From: Luca Ceresoli <luca@lucaceresoli.net>
->>> Currently all cmake packages depend on host-cmake. Unfortunately
->>> host-cmake takes a long time to configure and build: almost 7 minutes
->>> on a dual-core i5 with SSD. The time does not change even with ccache
->>> enabled.
-> [--SNIP--]
->>> diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
->>> new file mode 100755
->>> index 0000000..9b63b06
->>> --- /dev/null
->>> +++ b/support/dependencies/check-host-cmake.sh
->>> @@ -0,0 +1,39 @@
->>> +#!/bin/sh
->>> +
->>> +candidate="${1}"
->>> +version_min="${2}"
->>> +
->>> +major_min="${version_min%.*}"
->>> +minor_min="${version_min#*.}"
->>> +
->>> +cmake=`which ${candidate}`
->>> +if [ ! -x "${cmake}" ]; then
->>> +    # echo nothing: no suitable cmake found
->>> +    exit 1
->>> +fi
->>> +
->>> +# Extract version X.Y from versions in the form X.Y or X.Y.Z
->>> +# with X, Y and Z numbers with one or more digits each, e.g.
->>> +#   3.2     -> 3.2
->>> +#   3.2.3   -> 3.2
->>> +#   3.2.42  -> 3.2
->>> +#   3.10    -> 3.10
->>> +#   3.10.4  -> 3.10
->>> +#   3.10.42 -> 3.10
->>> +version="$(${cmake} --version \
->>> +           |sed -r -e '/.* ([[:digit:]]+\.[[:digit:]]+).*$/!d;' \
->>> +                   -e 's//\1/'
->>> +          )"
->>> +major="${version%.*}"
->>> +minor="${version#*.}"
->>
->> You removed the 'head -n1' in the pipe.
-> 
-> Indeed, but look at the sed script (which is not that complicated): all
-> lines that do not match the pattern are ignored.
-> 
->         |sed -r -e '/.* ([[:digit:]]+\.[[:digit:]]+).*$/!d;' \
->                                                Here ----^
-> 
-> "!d" means "if no match, delete line".
-> 
-> Then the next expression is only aplied on matching lines, and "\1"
-> refers to the ()-match, which is the version string.
+> diff --git a/package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch b/package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch
+> new file mode 100644
+> index 0000000..ca772dd
+> --- /dev/null
+> +++ b/package/xen/0001-Remove-hardcoded-strict-Werror-checking.patch
+> @@ -0,0 +1,26 @@
+> +From 234847440a5d3cf95540ea79f7a08d50cccfef73 Mon Sep 17 00:00:00 2001
+> +From: Alistair Francis <alistair.francis@xilinx.com>
+> +Date: Tue, 13 Sep 2016 10:48:31 -0700
+> +Subject: [PATCH] Remove hardcoded strict -Werror checking
+> +
+> +Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+> +---
+> + Config.mk | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/Config.mk b/Config.mk
+> +index bd991c6..e7ac662 100644
+> +--- a/Config.mk
+> ++++ b/Config.mk
+> +@@ -36,7 +36,7 @@ CONFIG_$(XEN_OS) := y
+> + SHELL     ?= /bin/sh
+> + 
+> + # Tools to run on system hosting the build
+> +-HOSTCFLAGS  = -Wall -Werror -Wstrict-prototypes -O2 -fomit-frame-pointer
+> ++HOSTCFLAGS  = -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer
 
- You snipped away Luca's example: if there are two lines that contain something
-that looks like a version number, then you get two versions out of this script.
-So repeating Luca's example:
+ I had a quick look, and there are actually roughly 60 instances of this -Werror
+spread out over various Makefiles... (It's an autotools package but it looks
+like it's not using automake.) Although we probably don't use some of them
+(components that don't get build, Makefiles meant for different targets, etc.),
+I doubt that removing this one instance is going to be sufficient. But a patch
+that changes those 60 instances doesn't sound very attractive either...
 
-  cmake version 3.5.1
+ Although, I must admit, the two errors encountered by the autobuilders come
+from kconfig which is clearly not -Werror-clean. Perhaps their own code really
+_is_ -Werror-clean. So we could start with this patch at least.
 
-  Linked against libfoobar 7.6.5
-
-will give you
-
-version="3.5
-7.6"
-
+ Better still, work with upstream to find a solution.
 
  Regards,
  Arnout
 
-> 
-> Regards,
-> Yann E. MORIN.
+
+> + HOSTCFLAGS += -fno-strict-aliasing
+> + 
+> + DISTDIR     ?= $(XEN_ROOT)/dist
+> +-- 
+> +2.7.4
+> +
 > 
 
 -- 
