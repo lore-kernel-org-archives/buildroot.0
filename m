@@ -1,56 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Sep 2016 08:38:43 +0200
-Subject: [Buildroot] [PATCH 2/3] package/urg: fix build with gcc-6
-In-Reply-To: <CAHXCMMKDKtqUpHSgmOyRAGMNkSVm4Y4zO1bWz0uj2DDPPA68nQ@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 13 Sep 2016 09:57:00 +0200
+Subject: [Buildroot] [PATCH 3/3] package/nginx-naxsi: add missing pcre
+	dependency
+In-Reply-To: <ce6702df-b7fe-dc20-87cd-366bec948482@mind.be>
 References: <20160912192324.23682-1-s.martin49@gmail.com>
- <20160912192324.23682-2-s.martin49@gmail.com>
- <20160912224143.06cec550@free-electrons.com>
- <CAHXCMMKDKtqUpHSgmOyRAGMNkSVm4Y4zO1bWz0uj2DDPPA68nQ@mail.gmail.com>
-Message-ID: <610fba50-9291-5384-cfc9-5d41744f897e@mind.be>
+ <20160912192324.23682-3-s.martin49@gmail.com>
+ <ce6702df-b7fe-dc20-87cd-366bec948482@mind.be>
+Message-ID: <CAHXCMM+RX=zVG8zqjjW6m9BfuZ_HQwdakcCtBCXEMPJ6qY+-Ww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 13-09-16 06:19, Samuel Martin wrote:
-> Hi all,
-> 
-> On Mon, Sep 12, 2016 at 10:41 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
+On Tue, Sep 13, 2016 at 8:40 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 12-09-16 21:23, Samuel Martin wrote:
+>> Fixes:
+>>   http://autobuild.buildroot.net/results/9c7/9c7bad6831b09251af81e2bbfc595a241df87c70/
 >>
->> On Mon, 12 Sep 2016 21:23:23 +0200, Samuel Martin wrote:
->>> Add patch fixing/adding explicit cast on negative value in char[], which
->>> is required with gcc-6 (see "Narrowing conversions" paragraph in [1])
->>>
->>> Fixes:
->>>   http://autobuild.buildroot.net/results/d0c/d0cd11163753db69a14c02e941dbda40e5f98bba/
->>>
->>> [1] https://gcc.gnu.org/gcc-6/porting_to.html
->>>
->>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> ---
+>>  package/nginx-naxsi/Config.in | 1 +
+>>  1 file changed, 1 insertion(+)
 >>
->> I don't see this patch in patchwork. Did you remove it from patchwork
->> somehow ? Or was patchwork confused by something in your patch ?
-> 
-> Nope, I did not do anything in patchwork, it should appear...
+>> diff --git a/package/nginx-naxsi/Config.in b/package/nginx-naxsi/Config.in
+>> index 2f7c2da..6c175eb 100644
+>> --- a/package/nginx-naxsi/Config.in
+>> +++ b/package/nginx-naxsi/Config.in
+>> @@ -1,5 +1,6 @@
+>>  config BR2_PACKAGE_NGINX_NAXSI
+>>       bool "nginx-naxsi"
+>> +     select BR2_PACKAGE_PCRE
+>>       help
+>>         NAXSI means Nginx Anti XSS & SQL Injection.
+>
+>  I may be missing something, but shouldn't there be a _DEPENDENCIES += in .mk?
 
- I expect that patchwork gets confused by the weird non-Unicode characters in
-the patch and barfs. I remember seeing some patches on the patchwork mailing
-list that should improve that, but they're probably not applied to the ozlabs
-instance.
+Nope, this is not needed.
+naxsi is a nginx' module, built by nginx.mk, which already has an
+automatic dependency on pcre when selected.
 
- Regards,
- Arnout
-
+Regards,
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Samuel
