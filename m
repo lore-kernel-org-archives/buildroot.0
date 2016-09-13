@@ -1,83 +1,64 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Tue, 13 Sep 2016 19:08:43 +0200
-Subject: [Buildroot] [PATCH] board: add support for liteBoard
-In-Reply-To: <20160913173753.03f99f51@free-electrons.com>
-References: <20160913112747.3886-1-m.niestroj@grinn-global.com>
- <20160913173753.03f99f51@free-electrons.com>
-Message-ID: <cc4a8663-d5cf-6669-32c6-bd242f09e48a@grinn-global.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 13 Sep 2016 19:30:19 +0200
+Subject: [Buildroot] [PATCH 3/3] package/nginx-naxsi: add missing pcre
+ dependency
+In-Reply-To: <CAHXCMM+RX=zVG8zqjjW6m9BfuZ_HQwdakcCtBCXEMPJ6qY+-Ww@mail.gmail.com>
+References: <20160912192324.23682-1-s.martin49@gmail.com>
+ <20160912192324.23682-3-s.martin49@gmail.com>
+ <ce6702df-b7fe-dc20-87cd-366bec948482@mind.be>
+ <CAHXCMM+RX=zVG8zqjjW6m9BfuZ_HQwdakcCtBCXEMPJ6qY+-Ww@mail.gmail.com>
+Message-ID: <c4abd31c-7224-7d6f-a3b0-cb1ce295caa9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-On 13.09.2016 17:37, Thomas Petazzoni wrote:
-> Hello,
->
-> On Tue, 13 Sep 2016 13:27:47 +0200, Marcin Niestroj wrote:
->> Board support package includes:
+
+On 13-09-16 09:57, Samuel Martin wrote:
+> On Tue, Sep 13, 2016 at 8:40 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
 >>
->>  * Buildroot defconfig
->>  * Mainline Linux kernel v4.7.3 with board support patches
->>  * Mainline U-Boot v2016.09 with board support patch
->>  * genimage config to create sdcard image
->>  * Board readme.txt
 >>
->> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
->
-> This generally looks very good. I've seen on the LAKML that you have
-> submitted upstream the support of this platform to the Linux kernel, I
-> assume you've done the same for the U-Boot part. We generally don't
-> like carrying the entire support for a new board in Buildroot in the
-> form of patches, but if those patches are clean and on their way
-> upstream (which is the case here, then it's fine).
+>> On 12-09-16 21:23, Samuel Martin wrote:
+>>> Fixes:
+>>>   http://autobuild.buildroot.net/results/9c7/9c7bad6831b09251af81e2bbfc595a241df87c70/
+>>>
+>>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>>> ---
+>>>  package/nginx-naxsi/Config.in | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/package/nginx-naxsi/Config.in b/package/nginx-naxsi/Config.in
+>>> index 2f7c2da..6c175eb 100644
+>>> --- a/package/nginx-naxsi/Config.in
+>>> +++ b/package/nginx-naxsi/Config.in
+>>> @@ -1,5 +1,6 @@
+>>>  config BR2_PACKAGE_NGINX_NAXSI
+>>>       bool "nginx-naxsi"
+>>> +     select BR2_PACKAGE_PCRE
+>>>       help
+>>>         NAXSI means Nginx Anti XSS & SQL Injection.
+>>
+>>  I may be missing something, but shouldn't there be a _DEPENDENCIES += in .mk?
+> 
+> Nope, this is not needed.
+> naxsi is a nginx' module, built by nginx.mk, which already has an
+> automatic dependency on pcre when selected.
 
-I've not posted U-Boot patch yet, but will do so in near future. For now
-I wait for response on mainling list about separate liteSOM and
-liteBoard support in U-Boot. Anyway, there should be not much
-difference between this patch and the one I will post to mainline
-U-Boot.
+ I don't think we should rely on transitive dependencies. naxsi.h #include's
+pcre.h, so there should be an explicit dependency in the .mk file.
 
->
->
->> +++ b/board/grinn/liteboard/genimage.cfg
->> @@ -0,0 +1,48 @@
->> +# Minimal microSD card image for Grinn's liteBoard
->> +#
->> +# We mimic the .sdcard Freescale's image format for i.MX6UL:
->> +# * the microSD card must have 1 kB free space at the beginning,
->> +# * SPL is dumped as is,
->> +# * U-Boot is dumped at 69K offset, as configured in SPL
->> +# * a FAT partition at offset 8 MB is containing zImage and dtbs,
->> +# * a single root filesystem partition is required (Ext4 in this case).
->> +#
->
-> Can you instead use the generic freescale genimage.cfg and post-image
-> script ? See board/freescale/common/.
->
-> It's not exactly identical to your genimage file as it's using a single
-> U-Boot image called u-boot.imx instead of the split SPL / u-boot.img
-> that you're using. But since your platform is i.MX6 based, I suppose
-> the u-boot.imx should also work (Cc'ing Fabio on this).
+ Whenever you don't have that, the 'select' in Config.in should carry a comment
+explaining why not (usually 'runtime dependency').
 
-I've added SPL on purpose. We will have boards with 256 and 512 MB RAM.
-So right now we check in SPL how much RAM we have and configure memory
-subsystem accordingly. I believe we cannot configure it in full U-Boot.
-
-In single U-Boot image there are hardcoded values that are copied to
-processor's registers (DDR configuration is among them) from the "IMX"
-U-Boot image just before running it.
-
-Also, in mainline U-Boot there is support for imx6ul EVK with separate
-SPL by default.
-
->
-> The rest if perfectly fine.
->
-> Thomas
->
+ Regards,
+ Arnout
 
 -- 
-Marcin Niestroj
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
