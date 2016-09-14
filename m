@@ -1,31 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Sep 2016 22:21:55 +0200
-Subject: [Buildroot] Stripping kernel modules for ARC
-In-Reply-To: <0d77ca65-297c-4454-c4ab-7931b7346134@synopsys.com> (Vineet
- Gupta's message of "Wed, 14 Sep 2016 13:18:16 -0700")
-References: <1473852437.3766.15.camel@synopsys.com>
- <d1ed5472-3500-45fc-eb0f-bdd2d6afb441@synopsys.com>
- <87mvjafe5t.fsf@dell.be.48ers.dk>
- <0d77ca65-297c-4454-c4ab-7931b7346134@synopsys.com>
-Message-ID: <87intyfd0c.fsf@dell.be.48ers.dk>
+Date: Wed, 14 Sep 2016 23:29:16 +0200
+Subject: [Buildroot] [PATCH] configs: Add support for Solidrun's MX6
+	Cubox/Hummingboard
+In-Reply-To: <1473857347-17215-1-git-send-email-fabio.estevam@nxp.com> (Fabio
+ Estevam's message of "Wed, 14 Sep 2016 09:49:07 -0300")
+References: <1473857347-17215-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <87eg4mf9w3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vineet" == Vineet Gupta <vgupta@synopsys.com> writes:
+>>>>> "Fabio" == Fabio Estevam <fabio.estevam@nxp.com> writes:
 
-Hi,
+ > Add support for Solidrun's MX6 Cubox/Hummingboard.
+ > For more information about these boards, please check:
 
- >> Ok, what kind of time frame are we looking at? Within the 2016.11 cycle
- >> or longer?
+ > https://www.solid-run.com/freescale-imx6-family/hummingboard/
+ > https://www.solid-run.com/freescale-imx6-family/cubox-i/
 
- > What kernel will this BR release be. My changes will go into 4.9.
+ > U-Boot is capable of detecting the version of the board in run-time
+ > and loads the correct dtb.
 
-Ok. Whatever is latest stable by the time 2016.11-rc1 gets released -
-E.G. presumably 4.8.
+ > Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+
+Committed, thanks.
+
+ > +++ b/configs/mx6cubox_defconfig
+ > @@ -0,0 +1,28 @@
+ > +BR2_arm=y
+ > +BR2_cortex_a9=y
+ > +# Linux headers same as kernel, a 4.7 series
+
+Not specific to this defconfig, but I see we don't enable NEON/VFP
+support for any of our i.MX6 defconfigs, even though the A9 cores used
+afaik have both.
+
+Is that something you would care to fix?
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Bye, Peter Korsgaard
