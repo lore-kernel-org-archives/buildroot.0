@@ -1,29 +1,23 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Wed, 14 Sep 2016 10:00:26 -0300
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 14 Sep 2016 16:46:14 +0200
 Subject: [Buildroot] [PATCH] wandboard: Remove unneeded return code
-Message-ID: <1473858026-17765-1-git-send-email-fabio.estevam@nxp.com>
+In-Reply-To: <1473858026-17765-1-git-send-email-fabio.estevam@nxp.com> (Fabio
+ Estevam's message of "Wed, 14 Sep 2016 10:00:26 -0300")
+References: <1473858026-17765-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <87lgyuh749.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no need to handle this return code, so just remove it.
+>>>>> "Fabio" == Fabio Estevam <fabio.estevam@nxp.com> writes:
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- board/wandboard/post-image.sh | 2 --
- 1 file changed, 2 deletions(-)
+ > There is no need to handle this return code, so just remove it.
 
-diff --git a/board/wandboard/post-image.sh b/board/wandboard/post-image.sh
-index 11f58db..18e76aa 100755
---- a/board/wandboard/post-image.sh
-+++ b/board/wandboard/post-image.sh
-@@ -13,5 +13,3 @@ genimage \
-   --outputpath "${BINARIES_DIR}" \
-   --config "${GENIMAGE_CFG}"
- 
--RET=${?}
--exit ${RET}
+ > Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+
+Committed, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
