@@ -1,13 +1,14 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 14 Sep 2016 20:32:05 +0200
+Date: Wed, 14 Sep 2016 20:38:16 +0200
 Subject: [Buildroot] [PATCH] infra/pkg-kconfig: Be sure to reconfigure
  the package on foo-reconfigure
-In-Reply-To: <CAAXf6LX0FwkjE8xHqjwn1TOS7cOdbVwjBRLOS7tLnKJcgBtDuQ@mail.gmail.com>
+In-Reply-To: <20160914183205.GB5531@free.fr>
 References: <1473806117-3858-1-git-send-email-yann.morin.1998@free.fr>
  <CAAXf6LUrhOVJJG-1_pf4vzKMh1=7WG0xop9XY6m9fva-FepHzA@mail.gmail.com>
  <20160914110143.2f25e8a9@free-electrons.com>
  <CAAXf6LX0FwkjE8xHqjwn1TOS7cOdbVwjBRLOS7tLnKJcgBtDuQ@mail.gmail.com>
-Message-ID: <20160914183205.GB5531@free.fr>
+ <20160914183205.GB5531@free.fr>
+Message-ID: <20160914183816.GC5531@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,62 +17,36 @@ To: buildroot@busybox.net
 
 Thomas?, All,
 
-On 2016-09-14 19:42 +0200, Thomas De Schampheleire spake thusly:
-> On Wed, Sep 14, 2016 at 11:01 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > On Wed, 14 Sep 2016 09:27:25 +0200, Thomas De Schampheleire wrote:
-> >
-> >> > This can be problematic when using an override-srcdir suring development
-> >> > and the content of the veride-srcdir changes (e.g. on a rebase, a merge,
-> >> > or during a bisect).
-> >> >
-> >> > This is because the configuration (kconfig-wise) of the package is not
-> >> > done in the _CONFIGURE_CMDS block, but as a separate action that is not
-> >> > part of any step [0].
-> >> >
-> >> > So, be sure to remove the stamp file .stamp_kconfig_fixup_done during
-> >> > the foo-clean-for-reconfigure rule, so that the configuration is applied
-> >> > again with the new source tree.
-> >> >
-> >> > We use another rule, foo-clean-kconfig-for-reconfigure, because we do
-> >> > not want to override the default foo-clean-for-reconfigure rule, and we
-> >> > have no way to add conditional commands to it.
-> >> >
-> >> > [0] The reasons it was not done are not entirely clear in my head, but
-> >> > IIRC that was not working at the time we tried with Thomas DS.
-> >>
-> >> This period is very blurry for me :-)
-> >>
-> >> I can't recall having focused on the reconfigure step for the kconfig
-> >> infrastructure, I think I was looking primarily at configure, combined
-> >> with cleans and various other combinations. So it is very well
-> >> possible that this has always been broken until now.
-> >
-> > Well, the question is not so much about "reconfigure", but about
-> > the configure step itself. Why isn't the configure step done inside
-> > <pkg>_CONFIGURE_CMDS ? If it had been done inside the
-> > <pkg>_CONFIGURE_CMDS, then those "hacks" to make reconfigure work
-> > would not be needed.
-> >
-> > I'm pretty sure that there's a solid reason for not doing the .config
-> > preparation inside <pkg>_CONFIGURE_CMDS, but it'd be great to remember
-> > why and document it somewhere :)
+On 2016-09-14 20:32 +0200, Yann E. MORIN spake thusly:
+> On 2016-09-14 19:42 +0200, Thomas De Schampheleire spake thusly:
+> > On Wed, Sep 14, 2016 at 11:01 AM, Thomas Petazzoni
+> > <thomas.petazzoni@free-electrons.com> wrote:
+> > > Well, the question is not so much about "reconfigure", but about
+> > > the configure step itself. Why isn't the configure step done inside
+> > > <pkg>_CONFIGURE_CMDS ? If it had been done inside the
+> > > <pkg>_CONFIGURE_CMDS, then those "hacks" to make reconfigure work
+> > > would not be needed.
+> > >
+> > > I'm pretty sure that there's a solid reason for not doing the .config
+> > > preparation inside <pkg>_CONFIGURE_CMDS, but it'd be great to remember
+> > > why and document it somewhere :)
+> > 
+> > I think the answer to this question is simple: one of the goals was to allow:
+> > 
+> > 'make clean linux-menuconfig'
+> > 
+> > without this step first building all dependencies of linux (which is
+> > quite a lot).
+> > If the kconfig configuration would be part of CONFIGURE_CMDS, then
+> > we'd end up in that situation.
 > 
-> I think the answer to this question is simple: one of the goals was to allow:
+> Yes, that was the basis for our thinking at the time.
 > 
-> 'make clean linux-menuconfig'
-> 
-> without this step first building all dependencies of linux (which is
-> quite a lot).
-> If the kconfig configuration would be part of CONFIGURE_CMDS, then
-> we'd end up in that situation.
+> Yet, maybe we could just move the call to the $(2)_REGEN_DOT_CONFIG
 
-Yes, that was the basis for our thinking at the time.
+I meant: $(2)_FIXUP_DOT_CONFIG
 
-Yet, maybe we could just move the call to the $(2)_REGEN_DOT_CONFIG
-macro into the CONFIGURE_CMDS (or in a pre-configure hook).
-
-I'll try to test that tonight...
+> macro into the CONFIGURE_CMDS (or in a pre-configure hook).
 
 Regards,
 Yann E. MORIN.
