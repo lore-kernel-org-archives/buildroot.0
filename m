@@ -1,111 +1,61 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 14 Sep 2016 11:34:28 +0200
-Subject: [Buildroot] [PATCH] package/libupnpp: add patch to get pkg-config
-	file
-Message-ID: <20160914093428.19378-1-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Sep 2016 11:46:05 +0200
+Subject: [Buildroot] [git commit] Revert "package/urg: fix build"
+Message-ID: <20160914094629.5642482261@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apply a patch from upstream to install a pkg-config file for libupnpp.
+commit: https://git.buildroot.net/buildroot/commit/?id=b8c0c2ef3dea429f6b2c7d728f7c858312f171d5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a note to the .mk file that autoreconf is necessary for this patch, too.
+This reverts commit 57e61a91531bf8ea696b5613bd8d846cc645a1d5.
 
-Fetch from:
-https://github.com/medoc92/libupnpp/commit/9f03bb0e7b47e2843edea6f25ed9eabbfb6412df
+The patch doesn't apply, and makes the urg package fail in all
+situations.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libupnpp/0002-Add-pkg-config-file.patch | 63 +++++++++++++++++++++++++
- package/libupnpp/libupnpp.mk                    |  4 +-
- 2 files changed, 66 insertions(+), 1 deletion(-)
- create mode 100644 package/libupnpp/0002-Add-pkg-config-file.patch
+ package/urg/0001-select-h.patch | 27 +++++----------------------
+ 1 file changed, 5 insertions(+), 22 deletions(-)
 
-diff --git a/package/libupnpp/0002-Add-pkg-config-file.patch b/package/libupnpp/0002-Add-pkg-config-file.patch
-new file mode 100644
-index 0000000..377b5e0
---- /dev/null
-+++ b/package/libupnpp/0002-Add-pkg-config-file.patch
-@@ -0,0 +1,63 @@
-+From 22ec8e3a2b54a4e1fd1340a592f49829d6cde735 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Sun, 11 Sep 2016 22:26:33 +0200
-+Subject: [PATCH] Add pkg-config file
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Add a pkg-config file.
-+
-+Fetched from:
-+https://github.com/medoc92/libupnpp/commit/9f03bb0e7b47e2843edea6f25ed9eabbfb6412df
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ Makefile.am    |  3 +++
-+ configure.ac   |  1 +
-+ libupnpp.pc.in | 12 ++++++++++++
-+ 3 files changed, 16 insertions(+)
-+ create mode 100644 libupnpp.pc.in
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 2d20b9b..39559e9 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -112,3 +112,6 @@ nobase_include_HEADERS = \
-+ libupnpp_la_LDFLAGS = -version-info $(VERSION_INFO)
-+ 
-+ libupnpp_la_LIBADD = $(LIBUPNPP_LIBS)
-++
-++pkgconfigdir = $(libdir)/pkgconfig
-++pkgconfig_DATA = libupnpp.pc
-+diff --git a/configure.ac b/configure.ac
-+index 9ff2058..89525b3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -90,4 +90,5 @@ AC_SUBST(LIBUPNPP_LIBS)
-+ AC_SUBST(VERSION_INFO)
-+ 
-+ AC_CONFIG_FILES([Makefile])
-++AC_CONFIG_FILES([libupnpp.pc])
-+ AC_OUTPUT
-+diff --git a/libupnpp.pc.in b/libupnpp.pc.in
-+new file mode 100644
-+index 0000000..90f4b2b
-+--- /dev/null
-++++ b/libupnpp.pc.in
-+@@ -0,0 +1,12 @@
-++prefix=@prefix@
-++exec_prefix=@exec_prefix@
-++libdir=@libdir@
-++includedir=@includedir@
-++
-++Name: @PACKAGE_NAME@
-++Description: C++ wrapper for libupnp
-++Version: @PACKAGE_VERSION@
-++Requires: libcurl libupnp
-++Libs: -L${libdir} -lupnpp
-++Libs.private: -lexpat -lpthread -lrt
-++Cflags: -I${includedir}
-+-- 
-+2.9.3
-+
-diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
-index ab1ce8b..d712c21 100644
---- a/package/libupnpp/libupnpp.mk
-+++ b/package/libupnpp/libupnpp.mk
-@@ -10,7 +10,9 @@ LIBUPNPP_LICENSE = GPLv2+
- LIBUPNPP_LICENSE_FILES = COPYING
- LIBUPNPP_INSTALL_STAGING = YES
- LIBUPNPP_DEPENDENCIES = expat libcurl libupnp
--# touching configure.ac in 0001-Check-for-std-future.patch
-+# touching configure.ac in:
-+#   0001-Check-for-std-future.patch
-+#   0002-Add-pkg-config-file.patch
- LIBUPNPP_AUTORECONF = YES
- 
- # configure script fails to link against the dependencies of libupnp
--- 
-2.9.3
+diff --git a/package/urg/0001-select-h.patch b/package/urg/0001-select-h.patch
+index 8de0a5b..09d1530 100644
+--- a/package/urg/0001-select-h.patch
++++ b/package/urg/0001-select-h.patch
+@@ -1,28 +1,11 @@
+-Serial driver: add missing header to C and C++ serial driver
+-
+-Fixes:
+-  http://autobuild.buildroot.net/results/cd7/cd76699188d2ee99b5f2d32b6a797de0d832a192/
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+-
+---- a/src/c/connection/serial_ctrl_lin.c	2016-09-11 15:49:42.599807053 +0200
+-+++ b/src/c/connection/serial_ctrl_lin.c	2016-09-11 15:50:07.850700420 +0200
+-@@ -18,6 +18,7 @@
++--- urg-0.8.18/src/c/connection/serial_ctrl_lin.c	2010-11-22 01:48:01.000000000 +0000
+++++ urg-0.8.18.mod/src/c/connection/serial_ctrl_lin.c	2013-05-21 20:56:35.822025969 +0100
++@@ -17,7 +17,7 @@
++ #include <fcntl.h>
+  #include <errno.h>
+  #include <string.h>
+- 
++-
+ +#include <sys/select.h>
+  //#include <ctype.h>
+  
+  enum {
+---- a/src/cpp/connection/SerialDevice_lin.cpp	2016-09-11 15:38:23.335547059 +0200
+-+++ b/src/cpp/connection/SerialDevice_lin.cpp	2016-09-11 15:38:38.472741418 +0200
+-@@ -13,7 +13,7 @@
+- #include <cerrno>
+- #include <cstring>
+- #include <cstdio>
+--
+-+#include <sys/select.h>
+- 
+- class RawSerialDevice
+- {
