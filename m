@@ -1,73 +1,53 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Wed, 14 Sep 2016 14:09:28 +0200
-Subject: [Buildroot] [PATCH] linux-tools: add gpio
-Message-ID: <20160914120928.27087-1-m.niestroj@grinn-global.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Wed, 14 Sep 2016 14:46:55 +0200
+Subject: [Buildroot] [PATCH 7/7] package/upmpdcli: use pkg-config for
+ libupnpp
+In-Reply-To: <20160914140504.1e07e618@free-electrons.com>
+References: <20160914114146.3796-1-joerg.krause@embedded.rocks>
+ <20160914114146.3796-8-joerg.krause@embedded.rocks>
+ <20160914140504.1e07e618@free-electrons.com>
+Message-ID: <1473857215.19492.3.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- linux/Config.tools.in    |  9 +++++++++
- linux/linux-tool-gpio.mk | 28 ++++++++++++++++++++++++++++
- 2 files changed, 37 insertions(+)
- create mode 100644 linux/linux-tool-gpio.mk
+On Wed, 2016-09-14 at 14:05 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 14 Sep 2016 13:41:46 +0200, J?rg Krause wrote:
+> > 
+> > Use the provided pkg-config file of libupnpp to get the correct
+> > LIBS.
+> > 
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> > ---
+> > ?package/upmpdcli/upmpdcli.mk | 4 +---
+> > ?1 file changed, 1 insertion(+), 3 deletions(-)
+> > 
+> > diff --git a/package/upmpdcli/upmpdcli.mk
+> > b/package/upmpdcli/upmpdcli.mk
+> > index 3f521cf..208aa8f 100644
+> > --- a/package/upmpdcli/upmpdcli.mk
+> > +++ b/package/upmpdcli/upmpdcli.mk
+> > @@ -17,12 +17,10 @@ UPMPDCLI_AUTORECONF = YES
+> > ?ifeq ($(BR2_STATIC_LIBS),y)
+> > ?# Upmpdcli forgets to take the dependencies of libupnpp into
+> > ?# consideration, breaking static linking, so help it.
+> > -# Libupnpp unfortunately doesn't provide a .pc file, so manually
+> > -# handle the dependencies here.
+> > ?# The build system doesn't expand LIBS from the configure step, so
+> > ?# manually pass it to make.
+> > ?UPMPDCLI_MAKE_OPTS = \
+> > -	LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs expat libcurl
+> > libupnp`"
+> > +	LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libupnpp`"
+> > ?endif
+> 
+> Thanks to your patches, upmpdcli now uses pkg-config, so why do we
+> still need to pass this custom LIBS value ?
 
-diff --git a/linux/Config.tools.in b/linux/Config.tools.in
-index 5ada98d..303c967 100644
---- a/linux/Config.tools.in
-+++ b/linux/Config.tools.in
-@@ -14,6 +14,15 @@ comment "cpupower needs a toolchain w/ wchar"
- 	depends on !BR2_bfin
- 	depends on !BR2_USE_WCHAR && BR2_NEEDS_GETTEXT
- 
-+config BR2_LINUX_KERNEL_TOOL_GPIO
-+	bool "gpio"
-+	help
-+	  gpio is a collection of tools to get information about,
-+	  control and monitor gpios present on system.
-+
-+	  These tools use new gpio ABI which will deprecate sysfs gpio
-+	  interface in the future.
-+
- config BR2_LINUX_KERNEL_TOOL_PERF
- 	bool "perf"
- 	help
-diff --git a/linux/linux-tool-gpio.mk b/linux/linux-tool-gpio.mk
-new file mode 100644
-index 0000000..bd38e67
---- /dev/null
-+++ b/linux/linux-tool-gpio.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# gpio
-+#
-+################################################################################
-+
-+LINUX_TOOLS += gpio
-+
-+GPIO_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS)
-+
-+define GPIO_BUILD_CMDS
-+	$(Q)if ! grep install $(@D)/tools/gpio/Makefile >/dev/null 2>&1 ; then \
-+		echo "Your kernel version is too old and does not have the gpio tools." ; \
-+		echo "At least kernel 4.8 must be used." ; \
-+		exit 1 ; \
-+	fi
-+
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
-+		$(GPIO_MAKE_OPTS) \
-+		gpio
-+endef
-+
-+define GPIO_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
-+		$(GPIO_MAKE_OPTS) \
-+		DESTDIR=$(TARGET_DIR) \
-+		gpio_install
-+endef
--- 
-2.9.3
+Right, this is not needed anymore. Thanks!
+
+J?rg
