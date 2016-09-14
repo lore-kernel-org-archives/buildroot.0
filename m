@@ -1,175 +1,155 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Sep 2016 22:58:31 +0200
-Subject: [Buildroot] [git commit] configs: Add support for Solidrun's MX6
-	Cubox/Hummingboard
-Message-ID: <20160914213009.06EEF81F75@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Wed, 14 Sep 2016 23:30:51 +0200
+Subject: [Buildroot] Unsafe header/library path issue with
+ <pkg>_OVERRIDE_SRCDIR
+In-Reply-To: <e6dd0208-3c72-762b-799c-cc8b9ecfb79f@mind.be>
+References: <1473798580.17229.35.camel@embedded.rocks>
+ <e6dd0208-3c72-762b-799c-cc8b9ecfb79f@mind.be>
+Message-ID: <1473888651.1807.14.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2d98f374434b7510c73cc9e90d9a045230e659e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Add support for Solidrun's MX6 Cubox/Hummingboard.
+On Mi, 2016-09-14 at 02:13 +0200, Arnout Vandecappelle wrote:
+> 
+> On 13-09-16 22:29, J?rg Krause wrote:
+> > 
+> > Hi,
+> > 
+> > I have an issue when using an autotools package cloned with git.
+> > The
+> > clone is added to <pkg>_OVERRIDE_SRCDIR, e.g.
+> > 
+> > LIBUPNPP_OVERRIDE_SRCDIR=/home/me/override/libupnpp
+> > 
+> > As this git clone has no configure file autoreconf needs to be run
+> > first. This is currently not supported by the autotools
+> > infrastructure.
+> > So I have to choices:
+> > 
+> > 1) Add <pkg>_AUTORECONF=YES
+> > 2) Add <pkg>_PRE_CONFIGURE_HOOKS which runs the packages autogen.sh
+> 
+> ?Or the third choice: run autogen manually (once) in your override
+> source dir.
+> This way the libtool patch will still be applied and your worries are
+> over. And
+> it completely avoids the need to patch buildroot just because you
+> have an
+> override sourcedir.
 
-For more information about these boards, please check:
+Yes, that would propably be the best option. However, Buildroot does
+not apply the libtool patch for the override source directory build -
+there is no "Patching libtool" message printed and the install process
+aborts with the unsafe header/library error.
 
-https://www.solid-run.com/freescale-imx6-family/hummingboard/
-https://www.solid-run.com/freescale-imx6-family/cubox-i/
+> > 
+> > 
+> > The first option works fine and is for sure the prefered way.
+> > 
+> > However, If I choose for curiosity the second option, I run into
+> > unsafe
+> > header/library issue for the package libupnpp when doing a "libtool
+> > install" step:
+> > 
+> > ```
+> > make DESTDIR=/home/buildroot/output/host/usr/x86_64-buildroot-
+> > linux-
+> > musl/sysroot install -C /home/buildroot/output/build/libupnpp/
+> > ?/bin/sh ./libtool???--mode=install /usr/bin/install
+> > -c???libupnpp.la
+> > '/home/buildroot/output/host/usr/x86_64-buildroot-linux-
+> > musl/sysroot/usr/lib'
+> > 
+> > libtool: warning: relinking 'libupnpp.la'
+> > libtool: install: [..]
+> > 
+> > x86_64-linux-musl-g++: ERROR: unsafe header/library path used in
+> > cross-
+> > compilation: '/usr/lib'
+> > libtool:???error: error: relink 'libupnpp.la' with the above
+> > command
+> > before installing it
+> > make[2]: *** [Makefile:562: install-libLTLIBRARIES] Error 1
+> > ```
+> > 
+> > I suppose the first option is working as Buildroot patches libtool,
+> > whereas for the second option the host libtool is executed, right?
+> > I've
+> > read some post on different mailing lists remarking that libtool
+> > has
+> > some issues with cross-compiling.
+> 
+> ?Yes, that seems like a good assumption.
+> 
+> > 
+> > 
+> > Is it possible for Buildroot to detect if autoreconf has to be run
+> > for
+> > override sources?
+> 
+> ?Yes: use _AUTORECONF = YES. That will make sure that libtool is
+> patched after
+> autoreconf has run, and it will also add the required dependencies to
+> the package.
 
-U-Boot is capable of detecting the version of the board in run-time
-and loads the correct dtb.
+Sorry, but I meant without setting AUTORECONF. I would prefer not to
+alter the .mk file for each override package.
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/solidrun/mx6cubox/boot.scr.txt  |  7 +++++++
- board/solidrun/mx6cubox/genimage.cfg  | 29 +++++++++++++++++++++++++++++
- board/solidrun/mx6cubox/post-build.sh |  8 ++++++++
- board/solidrun/mx6cubox/post-image.sh | 14 ++++++++++++++
- board/solidrun/mx6cubox/readme.txt    | 18 ++++++++++++++++++
- configs/mx6cubox_defconfig            | 28 ++++++++++++++++++++++++++++
- 6 files changed, 104 insertions(+)
+> > 
+> > 
+> > Or is it problem of the package and it can fixed by adding some
+> > crucial
+> > autoconf/libtool flags? As I did not cited the complete build log,
+> > the
+> > steps to reproduce the issue are described below...
+> 
+> ?libtool must be patched. If you insist on not using the AUTORECONF
+> macro, then
+> you should redo everything that is done by the AUTORECONF macro in
+> your custom
+> hooks. _PRE_CONFIGURE_HOOKS += LIBTOOL_PATCH_HOOK is enough. But also
+> don't
+> forget to do the gettextize before the autoreconf if necessary, and
+> to add
+> automake etc. to the dependencies.
 
-diff --git a/board/solidrun/mx6cubox/boot.scr.txt b/board/solidrun/mx6cubox/boot.scr.txt
-new file mode 100644
-index 0000000..7a8aa4b
---- /dev/null
-+++ b/board/solidrun/mx6cubox/boot.scr.txt
-@@ -0,0 +1,7 @@
-+setenv finduuid "part uuid mmc 0:1 uuid"
-+run finduuid
-+run findfdt
-+setenv bootargs "console=ttymxc0,115200 root=PARTUUID=${uuid} rootwait rootfstype=ext4"
-+load mmc 0:1 ${fdt_addr} boot/${fdtfile}
-+load mmc 0:1 ${loadaddr} boot/zImage
-+bootz ${loadaddr} - ${fdt_addr}
-diff --git a/board/solidrun/mx6cubox/genimage.cfg b/board/solidrun/mx6cubox/genimage.cfg
-new file mode 100644
-index 0000000..490986a
---- /dev/null
-+++ b/board/solidrun/mx6cubox/genimage.cfg
-@@ -0,0 +1,29 @@
-+# Minimal SD card image for the MX6 Cubox/Hummingboard
-+#
-+# U-Boot SPL and u-boot.img are flashed in the first 1MB raw partition.
-+# A single root filesystem partition is used (Ext4 in this case).
-+#
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition spl {
-+		in-partition-table = "no"
-+		image = "SPL"
-+		offset = 1K
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "u-boot.img"
-+		offset = 69K
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		offset = 1M
-+		size = 512M
-+	}
-+}
-diff --git a/board/solidrun/mx6cubox/post-build.sh b/board/solidrun/mx6cubox/post-build.sh
-new file mode 100755
-index 0000000..07c480e
---- /dev/null
-+++ b/board/solidrun/mx6cubox/post-build.sh
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+
-+$HOST_DIR/usr/bin/mkimage -A arm -O linux -T script -C none  \
-+-n "boot script" -d $BOARD_DIR/boot.scr.txt $BOARD_DIR/boot.scr
-+
-+install -m 0644 -D $BOARD_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-diff --git a/board/solidrun/mx6cubox/post-image.sh b/board/solidrun/mx6cubox/post-image.sh
-new file mode 100755
-index 0000000..b4ac460
---- /dev/null
-+++ b/board/solidrun/mx6cubox/post-image.sh
-@@ -0,0 +1,14 @@
-+#!/usr/bin/env bash
-+
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage \
-+  --rootpath "${TARGET_DIR}" \
-+  --tmppath "${GENIMAGE_TMP}" \
-+  --inputpath "${BINARIES_DIR}" \
-+  --outputpath "${BINARIES_DIR}" \
-+  --config "${GENIMAGE_CFG}"
-diff --git a/board/solidrun/mx6cubox/readme.txt b/board/solidrun/mx6cubox/readme.txt
-new file mode 100644
-index 0000000..630ab6c
---- /dev/null
-+++ b/board/solidrun/mx6cubox/readme.txt
-@@ -0,0 +1,18 @@
-+Solidrun's MX6 Cubox/Hummingboard
-+
-+https://www.solid-run.com/freescale-imx6-family/hummingboard/
-+
-+https://www.solid-run.com/freescale-imx6-family/cubox-i/
-+
-+To build a minimal support for these boards:
-+
-+    $ make mx6cubox_defconfig
-+    $ make
-+
-+Buildroot prepares a bootable "sdcard.img" image in the output/images/
-+directory, ready to be dumped on an SD card:
-+
-+dd if=output/images/sdcard.img of=/dev/<your-microsd-device>
-+
-+For details about the medium image layout, see the definition in
-+board/solidrun/mx6cubox/genimage.cfg.
-diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
-new file mode 100644
-index 0000000..e27a2bb
---- /dev/null
-+++ b/configs/mx6cubox_defconfig
-@@ -0,0 +1,28 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+# Linux headers same as kernel, a 4.7 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/solidrun/mx6cubox/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx6cuboxi"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09"
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="SPL"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7.3"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-cubox-i imx6dl-cubox-i imx6q-hummingboard imx6dl-hummingboard"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+# required tools to create the SD card image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+I see! This seems to much burden for a package developer. So using some
+mechanisms which takes care of all the necessary hooks is fine.
+
+> 
+> > 
+> > 
+> > Otherwise, I would suggest to add a note to the manual that in case
+> > for
+> > autotools packages clone from a repository, a <pkg>_AUTORECONF=YES
+> > has
+> > to be added the <pkg>.mk file manually.
+> 
+> ?I'm not sure what you're asking: adding a note to the manual to say
+> that
+> _AUTORECONF = YES must be added when configure is missing? Something
+> like:
+> 
+> (current):
+> * +LIBFOO_AUTORECONF+, tells whether the package should
+> ? be autoreconfigured or not (i.e. if the configure script and
+> ? Makefile.in files should be re-generated by re-running autoconf,
+> ? automake, libtool, etc.). Valid values are +YES+ and
+> ? +NO+. By default, the value is +NO+
+> (add to it):
+> ? Set this variable to YES when the configure script is missing (e.g.
+> ? the source is fetched from a repository rather than a release
+> tarball),
+> ? or when configure.ac or Makefile.am is patched.
+> 
+> ?Or did you have a different place in mind?
+
+Looks good to me, many thanks! Do you like to add it to the manual?
+
+Best regards
+J?rg Krause
