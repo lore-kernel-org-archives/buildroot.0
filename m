@@ -1,81 +1,150 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Sep 2016 02:03:35 +0200
-Subject: [Buildroot] [PATCH v4,4/4] php: add apache support
-In-Reply-To: <CAPi7W83YyYFDXDr_QAHtaijwJmvAZ+d0eFrSqj73Acqq_P+Vzg@mail.gmail.com>
-References: <1473632768-53238-1-git-send-email-fabrice.fontaine@orange.com>
- <1473632768-53238-4-git-send-email-fabrice.fontaine@orange.com>
- <f2e1cea4-eda0-7c44-c5a6-a2d27499dfe3@mind.be>
- <CAPi7W83YyYFDXDr_QAHtaijwJmvAZ+d0eFrSqj73Acqq_P+Vzg@mail.gmail.com>
-Message-ID: <ce71e936-a4e9-0f4a-8930-284d75684c72@mind.be>
+Date: Wed, 14 Sep 2016 02:13:32 +0200
+Subject: [Buildroot] Ensafe header/library path issue with
+ <pkg>_OVERRIDE_SRCDIR
+In-Reply-To: <1473798580.17229.35.camel@embedded.rocks>
+References: <1473798580.17229.35.camel@embedded.rocks>
+Message-ID: <e6dd0208-3c72-762b-799c-cc8b9ecfb79f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[Please don't top-post, but answer inline.]
 
-On 13-09-16 23:13, Fabrice Fontaine wrote:
-> Dear Arnout,
-> 
-> You're right that the issue is linked to apxs however adding apxs to
-> APACHE_CONFIG_SCRIPTS does not solve the issue.
-> 
-> I'll try to explain the problem. At the moment, the configuration file of apxs,
-> config_vars.mk <http://config_vars.mk>, is patched in
-> APACHE_FIX_STAGING_APACHE_CONFIG to add STAGING_DIR as a prefix so apxs adds the
-> correct LoadModule directive in output/staging/etc/apache2/httpd.conf through
-> the following command:
-> 
-> output/staging/usr/bin/apxs -S
-> LIBEXECDIR='/home/fabrice/buildroot-qemu/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/modules'
-> -S
-> SYSCONFDIR='/home/fabrice/buildroot-qemu/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/etc/apache2'
-> -i -a -n php7 output/build/php-7.0.9/libs/libphp7.so
-> 
-> However, the same apxs in staging directory is also used to update the
-> output/target/etc/apache2/httpd.conf through the following command:
-> output/staging/usr/bin/apxs -S
-> LIBEXECDIR='/home/fabrice/buildroot-qemu/output/staging/usr/modules' -S
-> SYSCONFDIR='/home/fabrice/buildroot-qemu/output/staging/etc/apache2' -i -a -n
-> php7 output/build/php-7.0.9/libs/libphp7.so
 
- I guess here you meant target instead of staging...
+On 13-09-16 22:29, J?rg Krause wrote:
+> Hi,
+> 
+> I have an issue when using an autotools package cloned with git. The
+> clone is added to <pkg>_OVERRIDE_SRCDIR, e.g.
+> 
+> LIBUPNPP_OVERRIDE_SRCDIR=/home/me/override/libupnpp
+> 
+> As this git clone has no configure file autoreconf needs to be run
+> first. This is currently not supported by the autotools infrastructure.
+> So I have to choices:
+> 
+> 1) Add <pkg>_AUTORECONF=YES
+> 2) Add <pkg>_PRE_CONFIGURE_HOOKS which runs the packages autogen.sh
+
+ Or the third choice: run autogen manually (once) in your override source dir.
+This way the libtool patch will still be applied and your worries are over. And
+it completely avoids the need to patch buildroot just because you have an
+override sourcedir.
 
 > 
-> In this case, the prefix is wrong and apxs adds a wrong path in the LoadModule
-> directive.
+> The first option works fine and is for sure the prefered way.
+> 
+> However, If I choose for curiosity the second option, I run into unsafe
+> header/library issue for the package libupnpp when doing a "libtool
+> install" step:
+> 
+> ```
+> make DESTDIR=/home/buildroot/output/host/usr/x86_64-buildroot-linux-
+> musl/sysroot install -C /home/buildroot/output/build/libupnpp/
+>  /bin/sh ./libtool   --mode=install /usr/bin/install -c   libupnpp.la
+> '/home/buildroot/output/host/usr/x86_64-buildroot-linux-
+> musl/sysroot/usr/lib'
+> 
+> libtool: warning: relinking 'libupnpp.la'
+> libtool: install: [..]
+> 
+> x86_64-linux-musl-g++: ERROR: unsafe header/library path used in cross-
+> compilation: '/usr/lib'
+> libtool:   error: error: relink 'libupnpp.la' with the above command
+> before installing it
+> make[2]: *** [Makefile:562: install-libLTLIBRARIES] Error 1
+> ```
+> 
+> I suppose the first option is working as Buildroot patches libtool,
+> whereas for the second option the host libtool is executed, right? I've
+> read some post on different mailing lists remarking that libtool has
+> some issues with cross-compiling.
 
- So that's the crux of the matter. apxs is smart enough to subsitute away prefix:
+ Yes, that seems like a good assumption.
 
-        my $dir = $CFG_LIBEXECDIR;
-        $dir =~ s|^$CFG_PREFIX/?||;
+> 
+> Is it possible for Buildroot to detect if autoreconf has to be run for
+> override sources?
 
-However, for the target install, LIBEXECDIR is overridden to the target
-directory, but PREFIX remains as staging directory.
+ Yes: use _AUTORECONF = YES. That will make sure that libtool is patched after
+autoreconf has run, and it will also add the required dependencies to the package.
 
- I've done a quick test, and passing an additional -S PREFIX $(TARGET_DIR)/usr
-for the target install seems to fix it. Now, is there a way to push this option
-down to the target install (only)?
+> 
+> Or is it problem of the package and it can fixed by adding some crucial
+> autoconf/libtool flags? As I did not cited the complete build log, the
+> steps to reproduce the issue are described below...
+
+ libtool must be patched. If you insist on not using the AUTORECONF macro, then
+you should redo everything that is done by the AUTORECONF macro in your custom
+hooks. _PRE_CONFIGURE_HOOKS += LIBTOOL_PATCH_HOOK is enough. But also don't
+forget to do the gettextize before the autoreconf if necessary, and to add
+automake etc. to the dependencies.
 
 
-> We could fix the issue by updating APACHE_FIX_STAGING_APACHE_CONFIG to use the
-> TARGET_DIR instead of the STAGING_DIR. However, Yann's point of view was that
-> php package should not update apache configuration file. So, I will let you
-> decide what should be done.
+> 
+> Otherwise, I would suggest to add a note to the manual that in case for
+> autotools packages clone from a repository, a <pkg>_AUTORECONF=YES has
+> to be added the <pkg>.mk file manually.
 
- IMHO, Yann was wrong in that. It's very normal that package a that depends on
-package b will update some file that was originally generated by package b.
+ I'm not sure what you're asking: adding a note to the manual to say that
+_AUTORECONF = YES must be added when configure is missing? Something like:
 
- That said, it is very convenient to use an approach like e.g. Debian, where
-each module has its own conf file, and can be enabled by linking to the conf
-file from /etc/apache2/mods-enabled. But that means we have to make a httpd.conf
-which is very different from upstream's.
+(current):
+* +LIBFOO_AUTORECONF+, tells whether the package should
+  be autoreconfigured or not (i.e. if the configure script and
+  Makefile.in files should be re-generated by re-running autoconf,
+  automake, libtool, etc.). Valid values are +YES+ and
+  +NO+. By default, the value is +NO+
+(add to it):
+  Set this variable to YES when the configure script is missing (e.g.
+  the source is fetched from a repository rather than a release tarball),
+  or when configure.ac or Makefile.am is patched.
+
+ Or did you have a different place in mind?
 
  Regards,
  Arnout
 
-[snip]
+> 
+> ---
+> 
+> Steps to reproduce this issue:
+> 
+> 1) In the override directory:
+>    git clone https://github.com/medoc92/libupnpp.git
+> 
+> 2) Add the libupnpp override path to the local.mk in the Buildroot dir.
+> 
+> 3) Minimal defconfig:
+> BR2_x86_64=y
+> BR2_x86_corei7=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_LIBUPNPP=y
+> 
+> 4) Add to libupnpp.mk:
+> define LIBUPNPP_RUN_AUTOGEN
+> 	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+> endef
+> LIBUPNPP_PRE_CONFIGURE_HOOKS += LIBUPNPP_RUN_AUTOGEN
+> 
+> ---
+> 
+> Best regards
+> J?rg Krause
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
