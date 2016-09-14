@@ -1,155 +1,23 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Wed, 14 Sep 2016 23:30:51 +0200
-Subject: [Buildroot] Unsafe header/library path issue with
- <pkg>_OVERRIDE_SRCDIR
-In-Reply-To: <e6dd0208-3c72-762b-799c-cc8b9ecfb79f@mind.be>
-References: <1473798580.17229.35.camel@embedded.rocks>
- <e6dd0208-3c72-762b-799c-cc8b9ecfb79f@mind.be>
-Message-ID: <1473888651.1807.14.camel@embedded.rocks>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 14 Sep 2016 18:41:28 -0300
+Subject: [Buildroot] [PATCH] configs: Add support for Solidrun's MX6
+	Cubox/Hummingboard
+In-Reply-To: <87eg4mf9w3.fsf@dell.be.48ers.dk>
+References: <1473857347-17215-1-git-send-email-fabio.estevam@nxp.com>
+ <87eg4mf9w3.fsf@dell.be.48ers.dk>
+Message-ID: <CAOMZO5Ar=VqDXWF8fgx7K4g1faPsc-7T8KXY1=b0KS1Q6hEKJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Wed, Sep 14, 2016 at 6:29 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-On Mi, 2016-09-14 at 02:13 +0200, Arnout Vandecappelle wrote:
-> 
-> On 13-09-16 22:29, J?rg Krause wrote:
-> > 
-> > Hi,
-> > 
-> > I have an issue when using an autotools package cloned with git.
-> > The
-> > clone is added to <pkg>_OVERRIDE_SRCDIR, e.g.
-> > 
-> > LIBUPNPP_OVERRIDE_SRCDIR=/home/me/override/libupnpp
-> > 
-> > As this git clone has no configure file autoreconf needs to be run
-> > first. This is currently not supported by the autotools
-> > infrastructure.
-> > So I have to choices:
-> > 
-> > 1) Add <pkg>_AUTORECONF=YES
-> > 2) Add <pkg>_PRE_CONFIGURE_HOOKS which runs the packages autogen.sh
-> 
-> ?Or the third choice: run autogen manually (once) in your override
-> source dir.
-> This way the libtool patch will still be applied and your worries are
-> over. And
-> it completely avoids the need to patch buildroot just because you
-> have an
-> override sourcedir.
+> Not specific to this defconfig, but I see we don't enable NEON/VFP
+> support for any of our i.MX6 defconfigs, even though the A9 cores used
+> afaik have both.
+>
+> Is that something you would care to fix?
 
-Yes, that would propably be the best option. However, Buildroot does
-not apply the libtool patch for the override source directory build -
-there is no "Patching libtool" message printed and the install process
-aborts with the unsafe header/library error.
-
-> > 
-> > 
-> > The first option works fine and is for sure the prefered way.
-> > 
-> > However, If I choose for curiosity the second option, I run into
-> > unsafe
-> > header/library issue for the package libupnpp when doing a "libtool
-> > install" step:
-> > 
-> > ```
-> > make DESTDIR=/home/buildroot/output/host/usr/x86_64-buildroot-
-> > linux-
-> > musl/sysroot install -C /home/buildroot/output/build/libupnpp/
-> > ?/bin/sh ./libtool???--mode=install /usr/bin/install
-> > -c???libupnpp.la
-> > '/home/buildroot/output/host/usr/x86_64-buildroot-linux-
-> > musl/sysroot/usr/lib'
-> > 
-> > libtool: warning: relinking 'libupnpp.la'
-> > libtool: install: [..]
-> > 
-> > x86_64-linux-musl-g++: ERROR: unsafe header/library path used in
-> > cross-
-> > compilation: '/usr/lib'
-> > libtool:???error: error: relink 'libupnpp.la' with the above
-> > command
-> > before installing it
-> > make[2]: *** [Makefile:562: install-libLTLIBRARIES] Error 1
-> > ```
-> > 
-> > I suppose the first option is working as Buildroot patches libtool,
-> > whereas for the second option the host libtool is executed, right?
-> > I've
-> > read some post on different mailing lists remarking that libtool
-> > has
-> > some issues with cross-compiling.
-> 
-> ?Yes, that seems like a good assumption.
-> 
-> > 
-> > 
-> > Is it possible for Buildroot to detect if autoreconf has to be run
-> > for
-> > override sources?
-> 
-> ?Yes: use _AUTORECONF = YES. That will make sure that libtool is
-> patched after
-> autoreconf has run, and it will also add the required dependencies to
-> the package.
-
-Sorry, but I meant without setting AUTORECONF. I would prefer not to
-alter the .mk file for each override package.
-
-> > 
-> > 
-> > Or is it problem of the package and it can fixed by adding some
-> > crucial
-> > autoconf/libtool flags? As I did not cited the complete build log,
-> > the
-> > steps to reproduce the issue are described below...
-> 
-> ?libtool must be patched. If you insist on not using the AUTORECONF
-> macro, then
-> you should redo everything that is done by the AUTORECONF macro in
-> your custom
-> hooks. _PRE_CONFIGURE_HOOKS += LIBTOOL_PATCH_HOOK is enough. But also
-> don't
-> forget to do the gettextize before the autoreconf if necessary, and
-> to add
-> automake etc. to the dependencies.
-
-I see! This seems to much burden for a package developer. So using some
-mechanisms which takes care of all the necessary hooks is fine.
-
-> 
-> > 
-> > 
-> > Otherwise, I would suggest to add a note to the manual that in case
-> > for
-> > autotools packages clone from a repository, a <pkg>_AUTORECONF=YES
-> > has
-> > to be added the <pkg>.mk file manually.
-> 
-> ?I'm not sure what you're asking: adding a note to the manual to say
-> that
-> _AUTORECONF = YES must be added when configure is missing? Something
-> like:
-> 
-> (current):
-> * +LIBFOO_AUTORECONF+, tells whether the package should
-> ? be autoreconfigured or not (i.e. if the configure script and
-> ? Makefile.in files should be re-generated by re-running autoconf,
-> ? automake, libtool, etc.). Valid values are +YES+ and
-> ? +NO+. By default, the value is +NO+
-> (add to it):
-> ? Set this variable to YES when the configure script is missing (e.g.
-> ? the source is fetched from a repository rather than a release
-> tarball),
-> ? or when configure.ac or Makefile.am is patched.
-> 
-> ?Or did you have a different place in mind?
-
-Looks good to me, many thanks! Do you like to add it to the manual?
-
-Best regards
-J?rg Krause
+Yes, will enable these options on the mx6 defconfig, thanks.
