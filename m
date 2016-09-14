@@ -1,157 +1,111 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 14 Sep 2016 13:41:43 +0200
-Subject: [Buildroot] [PATCH 4/7] package/upmpdcli: add patch to fix jsoncpp
-	detection
+Date: Wed, 14 Sep 2016 13:41:44 +0200
+Subject: [Buildroot] [PATCH 5/7] package/upmpdcli: add patch to fix unsafe
+	header path
 In-Reply-To: <20160914114146.3796-1-joerg.krause@embedded.rocks>
 References: <20160914114146.3796-1-joerg.krause@embedded.rocks>
-Message-ID: <20160914114146.3796-5-joerg.krause@embedded.rocks>
+Message-ID: <20160914114146.3796-6-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Although jsoncpp is present, the build system of upmpdcli does not detect it.
+Building upmpdcli aborts because of an unsafe header inclusion of
+`/usr/include/libupnpp`. Using `{prefix}` to get the header path is
+wrong for cross-compilation.
 
-The default installation path for the header files of jsoncpp is
-{prefix}/json, but some systems (Debian) prefers to install the headers
-in {prefix}/jsoncpp/json.
+Instead of hard-coding the flags for libupnpp use pkg-config to get the
+correct ones.
 
-The build system only checks for the header files in
-{prefix}/jsoncpp/json, so jsoncpp is not found.
+Note that this add the host-pkgconfig dependency unconditionally.
 
-This patch from upstream handles both cases now when checking for the jsoncpp
-library.
-
-The patch is squashed of two commits from upstream:
-1/ aba96db0cfe8a2e5c825f4448c0ad184e21b50e1
-2/ ce144f19a8c2e8c1e0ec3fe53699e874e5eb43fe
-
-Fixes:
-http://autobuild.buildroot.net/results/5bc6c558fccea0e1e1936894ce372f2b7b8ecac2
-http://autobuild.buildroot.net/results/9c2d3892f17c240c44f7255d821d66acbed361f0
-http://autobuild.buildroot.net/results/4d22729535ca4e6acbb48a25145611bb49c10149
-http://autobuild.buildroot.net/results/fda321774c3eb225f966dd9f83def5329b703a03
-http://autobuild.buildroot.net/results/f5eb306b0032e830f7f72ce80e318aa11774a5d1
-
-.. and many more!
+Upstream-status: https://github.com/medoc92/upmpdcli/pull/49
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/upmpdcli/0001-fix-jsoncpp-detection.patch | 90 +++++++++++++++++++++++
- package/upmpdcli/upmpdcli.mk                      |  3 +
- 2 files changed, 93 insertions(+)
- create mode 100644 package/upmpdcli/0001-fix-jsoncpp-detection.patch
+ ...x-unsafe-header-path-when-cross-compiling.patch | 48 ++++++++++++++++++++++
+ package/upmpdcli/upmpdcli.mk                       |  4 +-
+ 2 files changed, 50 insertions(+), 2 deletions(-)
+ create mode 100644 package/upmpdcli/0002-Fix-unsafe-header-path-when-cross-compiling.patch
 
-diff --git a/package/upmpdcli/0001-fix-jsoncpp-detection.patch b/package/upmpdcli/0001-fix-jsoncpp-detection.patch
+diff --git a/package/upmpdcli/0002-Fix-unsafe-header-path-when-cross-compiling.patch b/package/upmpdcli/0002-Fix-unsafe-header-path-when-cross-compiling.patch
 new file mode 100644
-index 0000000..69a9a0e
+index 0000000..44d9814
 --- /dev/null
-+++ b/package/upmpdcli/0001-fix-jsoncpp-detection.patch
-@@ -0,0 +1,90 @@
-+From 25762953c019ca0c5a047a5fa28f1fe6c78c731a Mon Sep 17 00:00:00 2001
-+From: Jean-Francois Dockes <jf@dockes.org>
-+Date: Sun, 11 Sep 2016 13:43:28 +0200
-+Subject: [PATCH] fix jsoncpp detection
++++ b/package/upmpdcli/0002-Fix-unsafe-header-path-when-cross-compiling.patch
+@@ -0,0 +1,48 @@
++From 0cf81723bf5de00723ec149bcfa4f2050a4c3a04 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Wed, 14 Sep 2016 11:43:21 +0200
++Subject: [PATCH] Fix unsafe header path when cross-compiling
 +MIME-Version: 1.0
 +Content-Type: text/plain; charset=UTF-8
 +Content-Transfer-Encoding: 8bit
 +
-+The default installation path for the header files is {prefix}/json, but some
-+system prefers to install the headers in {prefix}/jsoncpp/json.
++Building upmpdcli aborts because of an unsafe header inclusion of
++`/usr/include/libupnpp`. Using `{prefix}` to get the header path is wrong for
++cross-compilation. Instead of hard-coding the flags for libupnpp use pkg-config
++to get the correct ones.
 +
-+This patch from upstream handles both cases now when checking for the jsoncpp
-+library.
-+
-+The patch is squashed of two commits from upstream:
-+1/ aba96db0cfe8a2e5c825f4448c0ad184e21b50e1
-+2/ ce144f19a8c2e8c1e0ec3fe53699e874e5eb43fe
++Upstream-status: https://github.com/medoc92/upmpdcli/pull/49
 +
 +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 +---
-+ configure.ac                               | 8 +++++++-
-+ src/config.h.in                            | 6 ++++++
-+ src/mediaserver/cdplugins/plgwithslave.cxx | 5 +++++
-+ 3 files changed, 18 insertions(+), 1 deletion(-)
++ Makefile.am  | 2 +-
++ configure.ac | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
++diff --git a/Makefile.am b/Makefile.am
++index d0c10a4..5c83aa1 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -1,5 +1,5 @@
++ AM_CPPFLAGS = -DDEBUG -g -Wall \
++-            -I${prefix}/include/libupnpp \
+++            $(upnpp_CFLAGS) \
++             -I$(top_srcdir)/src \
++             -DDATADIR=\"${pkgdatadir}\" -DCONFIGDIR=\"${sysconfdir}\"
++ 
 +diff --git a/configure.ac b/configure.ac
-+index f191ad7..108dcce 100644
++index 108dcce..1c3985e 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -43,9 +43,15 @@ SCCTL_LIBS=$LIBS
-+ AC_CHECK_LIB([microhttpd], [MHD_queue_response], [], [])
++@@ -35,7 +35,7 @@ dnl AC_CHECK_LIB([upnp], [UpnpInit], [], AC_MSG_ERROR([libupnp not found]))
++ dnl AC_CHECK_LIB([curl], [curl_easy_init], [],AC_MSG_ERROR([libcurl not found]))
++ dnl AC_CHECK_LIB([expat], [XML_ParserCreate], [],AC_MSG_ERROR([libexpat not found]))
 + 
-+ AC_LANG_PUSH([C++])
-++
-++AC_CHECK_HEADERS(json/json.h jsoncpp/json/json.h)
-+ LIBS="$LIBS -ljsoncpp"
-+ AC_LINK_IFELSE([AC_LANG_PROGRAM(
-+-    [#include <jsoncpp/json/json.h>], [Json::Features dummy])],
-++    [[#ifdef HAVE_JSONCPP_JSON_JSON_H
-++    #include <jsoncpp/json/json.h>
-++    #else
-++    #include <json/json.h>
-++    #endif]], [Json::Features dummy])],
-+     [HAVE_JSONCPP=1],
-+     [AC_MSG_ERROR([libjsoncpp not found.])])
-+ AC_LANG_POP
-+diff --git a/src/config.h.in b/src/config.h.in
-+index 1350308..0a33e15 100644
-+--- a/src/config.h.in
-++++ b/src/config.h.in
-+@@ -3,6 +3,12 @@
-+ /* Define to 1 if you have the <inttypes.h> header file. */
-+ #undef HAVE_INTTYPES_H
-+ 
-++/* Define to 1 if you have the <jsoncpp/json/json.h> header file. */
-++#undef HAVE_JSONCPP_JSON_JSON_H
-++
-++/* Define to 1 if you have the <json/json.h> header file. */
-++#undef HAVE_JSON_JSON_H
-++
-+ /* Define to 1 if you have the `microhttpd' library (-lmicrohttpd). */
-+ #undef HAVE_LIBMICROHTTPD
-+ 
-+diff --git a/src/mediaserver/cdplugins/plgwithslave.cxx b/src/mediaserver/cdplugins/plgwithslave.cxx
-+index 04f0544..545805c 100644
-+--- a/src/mediaserver/cdplugins/plgwithslave.cxx
-++++ b/src/mediaserver/cdplugins/plgwithslave.cxx
-+@@ -14,6 +14,7 @@
-+  *   Free Software Foundation, Inc.,
-+  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-+  */
-++#include "config.h"
-+ 
-+ #include "plgwithslave.hxx"
-+ 
-+@@ -25,7 +26,11 @@
-+ #include <string.h>
-+ #include <upnp/upnp.h>
-+ #include <microhttpd.h>
-++#ifdef HAVE_JSONCPP_JSON_JSON_H
-+ #include <jsoncpp/json/json.h>
-++#else
-++#include <json/json.h>
-++#endif
-+ 
-+ #include "cmdtalk.h"
-+ #include "pathut.h"
++-AC_CHECK_LIB([upnpp], [getsyshwaddr], [], [AC_MSG_ERROR([libupnpp])])
+++PKG_CHECK_MODULES([upnpp], [libupnpp], [], [AC_MSG_ERROR([libupnpp])])
++ AC_CHECK_LIB([mpdclient], [mpd_connection_new], [],
++                           AC_MSG_ERROR([libmpdclient not found]))
++ SCCTL_LIBS=$LIBS
 +-- 
 +2.9.3
 +
 diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 85b78fe..b70f413 100644
+index b70f413..3f521cf 100644
 --- a/package/upmpdcli/upmpdcli.mk
 +++ b/package/upmpdcli/upmpdcli.mk
-@@ -9,6 +9,9 @@ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+@@ -8,9 +8,10 @@ UPMPDCLI_VERSION = 1.2.2
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
  UPMPDCLI_LICENSE = GPLv2+
  UPMPDCLI_LICENSE_FILES = COPYING
- UPMPDCLI_DEPENDENCIES = libmpdclient libupnpp libmicrohttpd jsoncpp
-+# touching configure.ac in
-+#   0001-fix-jsoncpp-detection.patch
-+UPMPDCLI_AUTORECONF = YES
+-UPMPDCLI_DEPENDENCIES = libmpdclient libupnpp libmicrohttpd jsoncpp
++UPMPDCLI_DEPENDENCIES = host-pkgconf libmpdclient libupnpp libmicrohttpd jsoncpp
+ # touching configure.ac in
+ #   0001-fix-jsoncpp-detection.patch
++#   0002-Fix-unsafe-header-path-when-cross-compiling
+ UPMPDCLI_AUTORECONF = YES
  
  ifeq ($(BR2_STATIC_LIBS),y)
- # Upmpdcli forgets to take the dependencies of libupnpp into
+@@ -20,7 +21,6 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ # handle the dependencies here.
+ # The build system doesn't expand LIBS from the configure step, so
+ # manually pass it to make.
+-UPMPDCLI_DEPENDENCIES += host-pkgconf
+ UPMPDCLI_MAKE_OPTS = \
+ 	LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs expat libcurl libupnp`"
+ endif
 -- 
 2.9.3
