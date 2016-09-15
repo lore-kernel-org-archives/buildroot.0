@@ -1,31 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 15 Sep 2016 13:24:35 +0300
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.7.x series to
-	4.7.4
-In-Reply-To: <87sht1eb9w.fsf@dell.be.48ers.dk>
-References: <1473929684-34787-1-git-send-email-Vincent.Riera@imgtec.com>
- <87sht1eb9w.fsf@dell.be.48ers.dk>
-Message-ID: <20160915102435.rwdsgvkstqcxkj5k@tarshish>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Thu, 15 Sep 2016 15:57:02 +0530
+Subject: [Buildroot] [PATCH 1/7] util-linux: add optional dependency on
+	readline
+Message-ID: <1473935228-14014-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+fdisk and sfdisk tools can be built with readline support. This patch
+adds optional dependency on readline if it is already selected.
 
-On Thu, Sep 15, 2016 at 11:56:59AM +0200, Peter Korsgaard wrote:
-> >>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
-> 
->  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> 
-> Committed, thanks.
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+ package/util-linux/util-linux.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-It is not in git as of b171466c445d (Thomas' brown paper bag fix).
-
-baruch
-
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index aa6f994..7b16ca4 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -146,6 +146,13 @@ else
+ UTIL_LINUX_CONF_OPTS += --without-python
+ endif
+ 
++ifeq ($(BR2_PACKAGE_READLINE),y)
++UTIL_LINUX_CONF_OPTS += --with-readline
++UTIL_LINUX_DEPENDENCIES += readline
++else
++UTIL_LINUX_CONF_OPTS += --without-readline
++endif
++
+ # Install PAM configuration files
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),y)
+ define UTIL_LINUX_INSTALL_PAMFILES
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.6.2
