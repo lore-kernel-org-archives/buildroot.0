@@ -1,40 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 14 Sep 2016 21:46:56 -0300
-Subject: [Buildroot] [PATCH] libinput: bump to version 1.5.0
-Message-ID: <1473900416-14726-1-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 15 Sep 2016 06:37:50 +0200
+Subject: [Buildroot] [PATCH 1/3] package/urg: fix build
+In-Reply-To: <20160914114728.6e78c7c7@free-electrons.com>
+References: <20160912192324.23682-1-s.martin49@gmail.com>
+ <20160912224113.215c82c2@free-electrons.com>
+ <20160914114728.6e78c7c7@free-electrons.com>
+Message-ID: <CAHXCMM+he2Kh8n7tANS5P=391ReZouzHbNYX2keGY+vGEbFvkw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Thomas,
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 0cdcc38..10c5e9d 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030857.html
--sha256	8c38826a785594811bef6a9daadbfa2e172e3f070f8863393d6fb7ca4c68e451	libinput-1.4.2.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-September/031054.html
-+sha256	5a96559385ecfaa30f9e72ea89eb8ebbc97caf68e458f451f4ed62315311081c	libinput-1.5.0.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index eb74e34..2005c47 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 1.4.2
-+LIBINPUT_VERSION = 1.5.0
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+On Wed, Sep 14, 2016 at 11:47 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Mon, 12 Sep 2016 22:41:13 +0200, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> On Mon, 12 Sep 2016 21:23:22 +0200, Samuel Martin wrote:
+>> > Update select-h patch to also fix the C++ serial driver.
+>> >
+>> > Fixes:
+>> >   http://autobuild.buildroot.net/results/cd7/cd76699188d2ee99b5f2d32b6a797de0d832a192/
+>> >
+>> > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> > ---
+>> >  package/urg/0001-select-h.patch | 27 ++++++++++++++++++++++-----
+>> >  1 file changed, 22 insertions(+), 5 deletions(-)
+>>
+>> Applied to master, thanks.
+>
+> I've reverted, as the patch didn't apply, and caused all urg builds to
+> fail:
+>
+>    http://autobuild.buildroot.net/results/a84/a84b63347716b62782e3b562049326f9285c785b/build-end.log
+>
+
+Indeed :(
+You did right. I was not available yesterday to watch over the a.b.o. failures.
+I'll redo the the fix properly and post it shortly.
+
+Regards,
+
+
 -- 
-2.7.3
+Samuel
