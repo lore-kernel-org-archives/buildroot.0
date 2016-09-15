@@ -1,33 +1,40 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Thu, 15 Sep 2016 18:27:48 +0200
-Subject: [Buildroot] [PATCH] openal: Disable build also for examples and
-	tests
-Message-ID: <1473956868-9619-1-git-send-email-nerv@dawncrow.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 15 Sep 2016 18:35:42 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: fix potential entire
+ root filesystem removal
+In-Reply-To: <87k2edeay4.fsf@dell.be.48ers.dk>
+References: <1473929908-25697-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87k2edeay4.fsf@dell.be.48ers.dk>
+Message-ID: <fc0a0de7-398a-8b83-cf76-c4c0b031e01a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/openal/openal.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openal/openal.mk b/package/openal/openal.mk
-index 356f2c1..6384104 100644
---- a/package/openal/openal.mk
-+++ b/package/openal/openal.mk
-@@ -16,8 +16,8 @@ OPENAL_LICENSE = LGPLv2+
- OPENAL_LICENSE_FILES = COPYING
- OPENAL_INSTALL_STAGING = YES
- 
--# We don't need the utilities, Distros don't ship them either
--OPENAL_CONF_OPTS += -DALSOFT_UTILS=OFF
-+# We don't need examples, tests and utilities, Distros don't ship them either
-+OPENAL_CONF_OPTS += -DALSOFT_UTILS=OFF -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF
- 
- ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),y)
- OPENAL_CONF_OPTS += -DEXTRA_LIBS=atomic
+
+On 15-09-16 12:04, Peter Korsgaard wrote:
+> I'll put out a 2016.08.1 release with this Saturday or Sunday. Anything
+> else that should be included in this bugfix release?
+
+ There are still a whole bunch of autobuilder fixes that came in after the
+release, but probably most of these are due to -next things.
+
+ Things like
+4e9292f package/fbterm: fix download site
+3ca860a glibc: fix MIPS and SPARC builds for glibc < 2.24 with recent binutils
+could be useful as well.
+
+ But nothing is really screaming that it should be included.
+
+ Regards,
+ Arnout
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout@mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
