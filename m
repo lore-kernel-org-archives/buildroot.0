@@ -1,146 +1,38 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 15 Sep 2016 08:40:01 +0200
-Subject: [Buildroot] [PATCH v2 6/6] package/upmpdcli: add patch to fix
-	include path of log
-In-Reply-To: <20160915064001.8684-1-joerg.krause@embedded.rocks>
-References: <20160915064001.8684-1-joerg.krause@embedded.rocks>
-Message-ID: <20160915064001.8684-7-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 Sep 2016 08:47:53 +0200
+Subject: [Buildroot] Stripping kernel modules for ARC
+In-Reply-To: <CAE2F3rCBwysRFrMf4CD6uLevvfw0TNaZGyptOj6MLDQvGPPwFg@mail.gmail.com>
+References: <1473852437.3766.15.camel@synopsys.com>
+ <CAE2F3rCBwysRFrMf4CD6uLevvfw0TNaZGyptOj6MLDQvGPPwFg@mail.gmail.com>
+Message-ID: <20160915084753.4717445f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The "log.{h,hxx}" header files are included from libupnpp.
+Hello,
 
-As we are using the pkg-config file of libupnpp to get the header
-include path,
-instead of the hardcoded `{prefix}/include/libupnpp` these files are not
-found.
+On Wed, 14 Sep 2016 14:29:35 -0700, Daniel Mentz wrote:
 
-Upstream-status: https://github.com/medoc92/upmpdcli/issues/46
+> I believe there might be a third option where we pass INSTALL_MOD_STRIP=1
+> to the kernel Makefile when running "make modules_install". It would then
+> require a change in the Linux kernel Makefile to run a different
+> strip/objcopy command for ARC. This would contain the details of stripping
+> .ko files to the Linux kernel build system. Otherwise, we'll have this
+> cross-dependency between the kernel and buildroot. As soon as the kernel
+> switches to .eh_frame, buildroot would have to change again.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- ...including-header-file-log.h-from-libupnpp.patch | 110 +++++++++++++++++++++
- 1 file changed, 110 insertions(+)
- create mode 100644 package/upmpdcli/0003-Fix-including-header-file-log.h-from-libupnpp.patch
+Exactly my thinking. I discovered INSTALL_MOD_STRIP only recently, and
+I believe we should use it for the kernel instead of having our own
+logic. This would remove the need for special logic in Buildroot to
+strip kernel modules, and would leave it to the kernel build system to
+know how modules should be stripped in an architecture-specific way.
 
-diff --git a/package/upmpdcli/0003-Fix-including-header-file-log.h-from-libupnpp.patch b/package/upmpdcli/0003-Fix-including-header-file-log.h-from-libupnpp.patch
-new file mode 100644
-index 0000000..29e6492
---- /dev/null
-+++ b/package/upmpdcli/0003-Fix-including-header-file-log.h-from-libupnpp.patch
-@@ -0,0 +1,110 @@
-+From 366e726821abce305ef2887effea443a24043511 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Wed, 14 Sep 2016 11:46:22 +0200
-+Subject: [PATCH] Fix including header file log.h from libupnpp
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The "log.{h,hxx}" header files are included from libupnpp.
-+
-+As we are using the pkg-config file of libupnpp to get the header include path,
-+instead of the hardcoded `{prefix}/include/libupnpp` these files are not found.
-+
-+Upstream-status: https://github.com/medoc92/upmpdcli/issues/46
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ src/conftree.cpp                           | 2 +-
-+ src/execmd.cpp                             | 4 ++--
-+ src/mediaserver/cdplugins/cmdtalk.cpp      | 2 +-
-+ src/mediaserver/cdplugins/plgwithslave.cxx | 2 +-
-+ src/netcon.cpp                             | 4 ++--
-+ 5 files changed, 7 insertions(+), 7 deletions(-)
-+
-+diff --git a/src/conftree.cpp b/src/conftree.cpp
-+index 12eb4b5..8a79812 100644
-+--- a/src/conftree.cpp
-++++ b/src/conftree.cpp
-+@@ -42,7 +42,7 @@
-+ 
-+ #include "pathut.h"
-+ #include "smallut.h"
-+-#include "log.h"
-++#include "libupnpp/log.h"
-+ 
-+ using namespace std;
-+ 
-+diff --git a/src/execmd.cpp b/src/execmd.cpp
-+index 0db9032..9bf2971 100644
-+--- a/src/execmd.cpp
-++++ b/src/execmd.cpp
-+@@ -53,7 +53,7 @@
-+ #include "netcon.h"
-+ #include "closefrom.h"
-+ #include "smallut.h"
-+-#include "log.h"
-++#include "libupnpp/log.h"
-+ 
-+ using namespace std;
-+ 
-+@@ -1135,7 +1135,7 @@ void ReExec::reexec()
-+ #include <sstream>
-+ #include <vector>
-+ 
-+-#include "log.h"
-++#include "libupnpp/log.h"
-+ 
-+ #include "execmd.h"
-+ #ifdef BUILDING_RECOLL
-+diff --git a/src/mediaserver/cdplugins/cmdtalk.cpp b/src/mediaserver/cdplugins/cmdtalk.cpp
-+index eddd68f..e19f7ea 100644
-+--- a/src/mediaserver/cdplugins/cmdtalk.cpp
-++++ b/src/mediaserver/cdplugins/cmdtalk.cpp
-+@@ -24,7 +24,7 @@
-+ 
-+ #include "smallut.h"
-+ #include "execmd.h"
-+-#include "log.h"
-++#include "libupnpp/log.h"
-+ 
-+ using namespace std;
-+ 
-+diff --git a/src/mediaserver/cdplugins/plgwithslave.cxx b/src/mediaserver/cdplugins/plgwithslave.cxx
-+index 545805c..1ad44ef 100644
-+--- a/src/mediaserver/cdplugins/plgwithslave.cxx
-++++ b/src/mediaserver/cdplugins/plgwithslave.cxx
-+@@ -35,7 +35,7 @@
-+ #include "cmdtalk.h"
-+ #include "pathut.h"
-+ #include "smallut.h"
-+-#include "log.hxx"
-++#include "libupnpp/log.hxx"
-+ #include "main.hxx"
-+ #include "conftree.h"
-+ 
-+diff --git a/src/netcon.cpp b/src/netcon.cpp
-+index 5674cf3..193d1cd 100644
-+--- a/src/netcon.cpp
-++++ b/src/netcon.cpp
-+@@ -47,7 +47,7 @@
-+ 
-+ #include <map>
-+ 
-+-#include "log.h"
-++#include "libupnpp/log.h"
-+ 
-+ using namespace std;
-+ 
-+@@ -1031,7 +1031,7 @@ NetconServLis::checkperms(void *cl, int)
-+ #include <signal.h>
-+ #include <string.h>
-+ 
-+-#include "log.h"
-++#include "libupnpp/log.h"
-+ 
-+ #include "netcon.h"
-+ 
-+-- 
-+2.9.3
-+
+Best regards,
+
+Thomas
 -- 
-2.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
