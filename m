@@ -1,30 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Sep 2016 12:50:38 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.7.x series to 4.7.4
-Message-ID: <20160915105050.2313F82167@busybox.osuosl.org>
+Date: Thu, 15 Sep 2016 12:50:47 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.7.x series to
+	4.7.4
+In-Reply-To: <20160915102435.rwdsgvkstqcxkj5k@tarshish> (Baruch Siach's
+ message of "Thu, 15 Sep 2016 13:24:35 +0300")
+References: <1473929684-34787-1-git-send-email-Vincent.Riera@imgtec.com>
+ <87sht1eb9w.fsf@dell.be.48ers.dk>
+ <20160915102435.rwdsgvkstqcxkj5k@tarshish>
+Message-ID: <87fup1e8s8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=114cec2bba5320889a0b9afbc26de78a10d33612
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Hi Peter,
+ > On Thu, Sep 15, 2016 at 11:56:59AM +0200, Peter Korsgaard wrote:
+ >> >>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+ >> 
+ >> > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ >> 
+ >> Committed, thanks.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index cbfaa26..b686467 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -243,5 +243,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.4.19"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
- 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
--	default "4.7.3"		if BR2_KERNEL_HEADERS_4_7
-+	default "4.7.4"		if BR2_KERNEL_HEADERS_4_7
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ > It is not in git as of b171466c445d (Thomas' brown paper bag fix).
+
+You're right - I fat fingered it. I've pushed it now.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
