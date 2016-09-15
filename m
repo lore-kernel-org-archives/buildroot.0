@@ -1,60 +1,40 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Wed, 14 Sep 2016 21:46:29 -0300
-Subject: [Buildroot] [PATCH] breakpad: enable for uClibc
-Message-ID: <1473900389-14633-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 14 Sep 2016 21:46:43 -0300
+Subject: [Buildroot] [PATCH] ccache: bump to version 3.3.1
+Message-ID: <1473900403-14681-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-
-There's nothing holding it off for uClibc-based toolchains so enable it.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- Config.in                         | 3 ++-
- package/google-breakpad/Config.in | 8 +++++---
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/ccache/ccache.hash | 4 ++--
+ package/ccache/ccache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index e614c8f..f3b6649 100644
---- a/Config.in
-+++ b/Config.in
-@@ -553,7 +553,8 @@ config BR2_GOOGLE_BREAKPAD_ENABLE
- 	bool "Enable google-breakpad support"
- 	select BR2_PACKAGE_GOOGLE_BREAKPAD
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_USE_WCHAR
-+	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
- 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	help
- 	  This option will enable the use of google breakpad, a library
-diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
-index 7b8eeb1..06895af 100644
---- a/package/google-breakpad/Config.in
-+++ b/package/google-breakpad/Config.in
-@@ -6,7 +6,8 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- config BR2_PACKAGE_GOOGLE_BREAKPAD
- 	bool "google-breakpad"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_USE_WCHAR
-+	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
- 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	help
- 	  Google-Breakpad is a library and tool suite that allows you
-@@ -29,6 +30,7 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index 03b8c26..81e0550 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,2 +1,2 @@
+-# Verified key https://samba.org/ftp/ccache/ccache-3.3.tar.xz.asc - sha256 computed locally
+-sha256	d88e6f5f62f9ce5eeee673972a5731f76e22a5c708cfbc264ecd25a93fffba07	ccache-3.3.tar.xz
++# Verified key https://samba.org/ftp/ccache/ccache-3.3.1.tar.xz.asc - sha256 computed locally
++sha256	c6d87a49cc6d7639636d289ed9a5f560bc2acf7ab698fe8ee14e9c9f15ba41c6	ccache-3.3.1.tar.xz
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 06deb65..a93aabd 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://code.google.com/p/google-breakpad/
- 
--comment "google-breakpad requires a glibc toolchain w/ C++ enabled"
-+comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, C++ enabled"
- 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
+-CCACHE_VERSION = 3.3
++CCACHE_VERSION = 3.3.1
+ CCACHE_SITE = https://samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPLv3+, others
 -- 
 2.7.3
