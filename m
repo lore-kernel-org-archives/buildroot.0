@@ -1,40 +1,43 @@
-From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Date: Thu, 15 Sep 2016 16:04:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/autoconf-archive: bump to version
-	2016.03.20
-Message-ID: <20160915140441.4682-1-thomas.claveirole@green-communications.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 15 Sep 2016 12:16:38 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{2, 14}.x and 4.4.x series
+Message-ID: <1473952598-18326-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/autoconf-archive/autoconf-archive.hash | 2 +-
- package/autoconf-archive/autoconf-archive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
-index 5576566..6982a4d 100644
---- a/package/autoconf-archive/autoconf-archive.hash
-+++ b/package/autoconf-archive/autoconf-archive.hash
-@@ -1,2 +1,2 @@
- # Computed locally
--sha256 7c0467a5dbd2340153bca5a477bd92fbc951d9ee3cbed92f16f6bf08ac0c350a  autoconf-archive-2015.09.25.tar.xz
-+sha256 88fb2efff640eddd28a52ae550ff5561bca3bd2bba09e1d7b0580e719875e437  autoconf-archive-2016.03.20.tar.xz
-diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
-index 98acba3..86956eb 100644
---- a/package/autoconf-archive/autoconf-archive.mk
-+++ b/package/autoconf-archive/autoconf-archive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index b686467..09e187b 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -229,18 +229,18 @@ endchoice
  
--AUTOCONF_ARCHIVE_VERSION = 2015.09.25
-+AUTOCONF_ARCHIVE_VERSION = 2016.03.20
- AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
- AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
- AUTOCONF_ARCHIVE_LICENSE = GPLv3+ with exception
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.81"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.82"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.103"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.63"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.77"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.18.41"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.32"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.19"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.21"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+ 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
+ 	default "4.7.4"		if BR2_KERNEL_HEADERS_4_7
 -- 
-2.9.3
+2.7.3
