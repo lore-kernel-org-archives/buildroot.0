@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Sep 2016 11:56:02 +0200
-Subject: [Buildroot] [git commit] libinput: bump to version 1.5.0
-Message-ID: <20160915095728.8906980339@busybox.osuosl.org>
+Date: Thu, 15 Sep 2016 11:55:54 +0200
+Subject: [Buildroot] [git commit] ccache: bump to version 3.3.1
+Message-ID: <20160915095728.7D2D982249@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9714c6d2eff0991ebe84436d79b769a09b47ae81
+commit: https://git.buildroot.net/buildroot/commit/?id=b644b9c35b7933d59cc52f993cce5391b3d04376
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
+ package/ccache/ccache.hash | 4 ++--
+ package/ccache/ccache.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 0cdcc38..10c5e9d 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index 03b8c26..81e0550 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-August/030857.html
--sha256	8c38826a785594811bef6a9daadbfa2e172e3f070f8863393d6fb7ca4c68e451	libinput-1.4.2.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-September/031054.html
-+sha256	5a96559385ecfaa30f9e72ea89eb8ebbc97caf68e458f451f4ed62315311081c	libinput-1.5.0.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index eb74e34..2005c47 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+-# Verified key https://samba.org/ftp/ccache/ccache-3.3.tar.xz.asc - sha256 computed locally
+-sha256	d88e6f5f62f9ce5eeee673972a5731f76e22a5c708cfbc264ecd25a93fffba07	ccache-3.3.tar.xz
++# Verified key https://samba.org/ftp/ccache/ccache-3.3.1.tar.xz.asc - sha256 computed locally
++sha256	c6d87a49cc6d7639636d289ed9a5f560bc2acf7ab698fe8ee14e9c9f15ba41c6	ccache-3.3.1.tar.xz
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 06deb65..a93aabd 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.4.2
-+LIBINPUT_VERSION = 1.5.0
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-CCACHE_VERSION = 3.3
++CCACHE_VERSION = 3.3.1
+ CCACHE_SITE = https://samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPLv3+, others
