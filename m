@@ -1,87 +1,90 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 15 Sep 2016 23:25:31 +0200
-Subject: [Buildroot] Unsafe header/library path issue with
- <pkg>_OVERRIDE_SRCDIR
-In-Reply-To: <1473888651.1807.14.camel@embedded.rocks>
-References: <1473798580.17229.35.camel@embedded.rocks>
- <e6dd0208-3c72-762b-799c-cc8b9ecfb79f@mind.be>
- <1473888651.1807.14.camel@embedded.rocks>
-Message-ID: <3464c58b-d2e4-2b36-f8f5-ee94ff3cbb1e@mind.be>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Thu, 15 Sep 2016 23:29:42 +0200
+Subject: [Buildroot] [PATCH 1/5] grub2: bump up version
+In-Reply-To: <c4d34da0-6dc8-3eec-a2aa-08cf5b05bf42@mind.be>
+References: <20160913041548.10290-1-nunes.erico@gmail.com>
+ <20160913041548.10290-2-nunes.erico@gmail.com>
+ <c4d34da0-6dc8-3eec-a2aa-08cf5b05bf42@mind.be>
+Message-ID: <CAK4VdL3qyfs+o66W8ekmPOWO7bpxEXg-d2_V0wqYn9pa9NxL6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout,
 
+thanks for the review!
 
-On 14-09-16 23:30, J?rg Krause wrote:
-> Hi,
-> 
-> On Mi, 2016-09-14 at 02:13 +0200, Arnout Vandecappelle wrote:
+On Wed, Sep 14, 2016 at 2:25 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 13-09-16 06:15, Erico Nunes wrote:
+>> Grub 2 version 2.00 which exists in Buildroot dates back from 2012 and
+>> does not support new interesting features such as ARM support.
 >>
->> On 13-09-16 22:29, J?rg Krause wrote:
->>>
->>> Hi,
->>>
->>> I have an issue when using an autotools package cloned with git.
->>> The
->>> clone is added to <pkg>_OVERRIDE_SRCDIR, e.g.
->>>
->>> LIBUPNPP_OVERRIDE_SRCDIR=/home/me/override/libupnpp
->>>
->>> As this git clone has no configure file autoreconf needs to be run
->>> first. This is currently not supported by the autotools
->>> infrastructure.
->>> So I have to choices:
->>>
->>> 1) Add <pkg>_AUTORECONF=YES
->>> 2) Add <pkg>_PRE_CONFIGURE_HOOKS which runs the packages autogen.sh
+>> Despite it being the last official non-beta release, it makes sense to
+>> bump Grub 2 to current master HEAD as the project has not been providing
+>> regular releases since then.
+>> Other distributions such as Fedora have also been shipping variations of
+>> the newer "beta" releases.
+> [snip]
+>> diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+>> index dc4e51e..ecdf421 100644
+>> --- a/boot/grub2/grub2.mk
+>> +++ b/boot/grub2/grub2.mk
+>> @@ -4,9 +4,9 @@
+>>  #
+>>  ################################################################################
 >>
->>  Or the third choice: run autogen manually (once) in your override
->> source dir.
->> This way the libtool patch will still be applied and your worries are
->> over. And
->> it completely avoids the need to patch buildroot just because you
->> have an
->> override sourcedir.
-> 
-> Yes, that would propably be the best option. However, Buildroot does
-> not apply the libtool patch for the override source directory build -
-> there is no "Patching libtool" message printed and the install process
-> aborts with the unsafe header/library error.
+>> -GRUB2_VERSION = 2.00
+>> -GRUB2_SITE = $(BR2_GNU_MIRROR)/grub
+>> -GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
+>> +GRUB2_VERSION = 4e0f8f66e321cf1051c0e01f6fbcc6fc35a807b6
+>> +GRUB2_SITE = git://git.savannah.gnu.org/grub.git
+>
+>  It's not so nice that we have to download via git, no http protocol, we have to
+> autoregen, we can't check the signature...
+>
+>  Isn't it better to use grub-2.02~beta3.tar.xz which is just half a year old?
 
- Ah, that's right, the libtool patch is a post-patch hook.
+My initial intention was to use grub-2.02~beta3 tar, however I was
+unsure about that too and had a brief chat with Yann and Thomas on IRC
+about it before working on this. The conclusion was that it would be
+better to juse use HEAD instead of that as it had a few extra bugfix
+patches that we would probably want anyway. I guess beta3 would also
+be compatible with the rest of the changes here, so it is just the
+tradeoff of having no hash check, having to clone git, having to
+autogen.sh, against losing some bugfixes. I think additional opinions
+on this would be appreciated.
 
- Perhaps it would be better to always make it a pre-configure hook.
-
-[snip]
->>> Is it possible for Buildroot to detect if autoreconf has to be run
->>> for
->>> override sources?
+>> +GRUB2_SITE_METHOD = git
+>>  GRUB2_LICENSE = GPLv3+
+>>  GRUB2_LICENSE_FILES = COPYING
+>>  GRUB2_DEPENDENCIES = host-bison host-flex
+>> @@ -70,6 +70,11 @@ GRUB2_CONF_OPTS = \
+>>       --enable-libzfs=no \
+>>       --disable-werror
 >>
->>  Yes: use _AUTORECONF = YES. That will make sure that libtool is
->> patched after
->> autoreconf has run, and it will also add the required dependencies to
->> the package.
-> 
-> Sorry, but I meant without setting AUTORECONF. I would prefer not to
-> alter the .mk file for each override package.
+>> +define GRUB2_RUN_AUTOGEN
+>> +     cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+>> +endef
+>> +GRUB2_PRE_CONFIGURE_HOOKS += GRUB2_RUN_AUTOGEN
+>
+>  Isn't there a possibility to use GRUB2_AUTORECONF = YES?
+>
+>  If not, you must:
+>
+> * Explain in a comment why not.
+> * Add host-automake host-autoconf to GRUB2_DEPENDENCIES
+> * Normally also host-libtool and normally you have to run LIBTOOL_PATCH_HOOK,
+> but grub2 doesn't use libtool.
 
- Er, your alternative was to add a PRE_CONFIGURE_HOOK, so you still need to
-change the package, no?
+AUTORECONF=YES is not enough for this, it doesn't call autogen.sh. We
+have other a few other packages in Buildroot which have the same hook.
+I have checked now and it seems that all of them do have some comment
+for that, so looks like indeed I should also add it. I missed those
+extra dependencies, so I think they should probably be added as well.
+But this will depend on the outcome of the previous item (about using
+git or beta3 tarball), so there also exists a chance this may just
+disappear.
 
-
- Regards,
- Arnout
-
-[snip]
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Erico
