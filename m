@@ -1,38 +1,71 @@
 From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Thu, 15 Sep 2016 15:57:06 +0530
-Subject: [Buildroot] [PATCH 5/7] audit: update legal info
-In-Reply-To: <1473935228-14014-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1473935228-14014-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <1473935228-14014-5-git-send-email-rahul.bedarkar@imgtec.com>
+Date: Thu, 15 Sep 2016 16:03:53 +0530
+Subject: [Buildroot] [PATCH 6/7] libcap-ng: bump version to 0.7.8
+Message-ID: <1473935634-14150-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Programs are released under GPLv2+. README file says libraries
-libaudit.* and libauparse.* are released under LGPL but there are two
-files auparse/strsplit.c and lib/strsplit.c which are released under
-GPLv2+ which makes both libraries GPL. Until we review situation with
-upstream, we don't add license for libraries.
+Drop upstream patch
 
 Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 ---
- package/audit/audit.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcap-ng/0001-add-missing-include.patch | 22 ----------------------
+ package/libcap-ng/libcap-ng.hash                 |  2 +-
+ package/libcap-ng/libcap-ng.mk                   |  2 +-
+ 3 files changed, 2 insertions(+), 24 deletions(-)
+ delete mode 100644 package/libcap-ng/0001-add-missing-include.patch
 
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 7137208..1a203ce 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/libcap-ng/0001-add-missing-include.patch b/package/libcap-ng/0001-add-missing-include.patch
+deleted file mode 100644
+index c30c40d..0000000
+--- a/package/libcap-ng/0001-add-missing-include.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Add missing include <sys/types.h>
+-
+-This include is needed to get the pid_t definition, at least with the
+-musl C library.
+-
+-Patch inspired from Alpine Linux patch
+-http://git.alpinelinux.org/cgit/aports/tree/main/libcap-ng/fix-includes.patch.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/utils/proc-llist.h
+-===================================================================
+---- a/utils/proc-llist.h
+-+++ b/utils/proc-llist.h
+-@@ -26,6 +26,7 @@
+- 
+- #include "config.h"
+- 
+-+#include <sys/types.h>
+- 
+- /* This is the node of the linked list. Any data elements that are per
+-  *  record goes here. */
+diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
+index ecea6e8..b433b75 100644
+--- a/package/libcap-ng/libcap-ng.hash
++++ b/package/libcap-ng/libcap-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	615549ce39b333f6b78baee0c0b4ef18bc726c6bf1cca123dfd89dd963f6d06b  libcap-ng-0.7.7.tar.gz
++sha256 c21af997445cd4107a55d386f955c5ea6f6e96ead693e9151277c0ab5f97d05f libcap-ng-0.7.8.tar.gz
+diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+index d78f5dc..34e0f2c 100644
+--- a/package/libcap-ng/libcap-ng.mk
++++ b/package/libcap-ng/libcap-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- AUDIT_VERSION = 2.6.7
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
--AUDIT_LICENSE = GPLv2
-+AUDIT_LICENSE = GPLv2+ (programs)
- AUDIT_LICENSE_FILES = COPYING
- 
- AUDIT_INSTALL_STAGING = YES
+-LIBCAP_NG_VERSION = 0.7.7
++LIBCAP_NG_VERSION = 0.7.8
+ LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
+ LIBCAP_NG_LICENSE = GPLv2+ LGPLv2.1+
+ LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
 -- 
 2.6.2
