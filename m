@@ -1,9 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 15 Sep 2016 23:21:58 +0200
-Subject: [Buildroot] RTAI math module compilation
-In-Reply-To: <CAEqQue108OTCsmAejX1sR6q8HL2zCj7jXtaB927b=kHo=UQTrA@mail.gmail.com>
-References: <CAEqQue108OTCsmAejX1sR6q8HL2zCj7jXtaB927b=kHo=UQTrA@mail.gmail.com>
-Message-ID: <78c4ab72-52be-571c-e81a-a0f78c1e2e7f@mind.be>
+Date: Thu, 15 Sep 2016 23:25:31 +0200
+Subject: [Buildroot] Unsafe header/library path issue with
+ <pkg>_OVERRIDE_SRCDIR
+In-Reply-To: <1473888651.1807.14.camel@embedded.rocks>
+References: <1473798580.17229.35.camel@embedded.rocks>
+ <e6dd0208-3c72-762b-799c-cc8b9ecfb79f@mind.be>
+ <1473888651.1807.14.camel@embedded.rocks>
+Message-ID: <3464c58b-d2e4-2b36-f8f5-ee94ff3cbb1e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +15,68 @@ To: buildroot@busybox.net
 
 
 
-On 15-09-16 18:50, servo gmrt wrote:
+On 14-09-16 23:30, J?rg Krause wrote:
 > Hi,
 > 
-> Anybody compiled rtai in buildroot-2016.02 version ?
-
- Unfortunately RTAI is a kernel extension so it doesn't get tested by the
-autobuilders...
-
-
-> Other than "rtai_math.ko" all the modules compiles without error. When I include
-> math module for compilation, I am getting the following error,
+> On Mi, 2016-09-14 at 02:13 +0200, Arnout Vandecappelle wrote:
+>>
+>> On 13-09-16 22:29, J?rg Krause wrote:
+>>>
+>>> Hi,
+>>>
+>>> I have an issue when using an autotools package cloned with git.
+>>> The
+>>> clone is added to <pkg>_OVERRIDE_SRCDIR, e.g.
+>>>
+>>> LIBUPNPP_OVERRIDE_SRCDIR=/home/me/override/libupnpp
+>>>
+>>> As this git clone has no configure file autoreconf needs to be run
+>>> first. This is currently not supported by the autotools
+>>> infrastructure.
+>>> So I have to choices:
+>>>
+>>> 1) Add <pkg>_AUTORECONF=YES
+>>> 2) Add <pkg>_PRE_CONFIGURE_HOOKS which runs the packages autogen.sh
+>>
+>>  Or the third choice: run autogen manually (once) in your override
+>> source dir.
+>> This way the libtool patch will still be applied and your worries are
+>> over. And
+>> it completely avoids the need to patch buildroot just because you
+>> have an
+>> override sourcedir.
 > 
-> The part of the make error log I attached with that.
-> 
-> Help me to resolve the issue.
-> 
-> 
-> In file included from /usr/include/features.h:365:0,
->                  from ../rtai-4.0.1/base/include/rtai_math.h:37,
->                  from ../rtai-4.0.1/base/math/libm.c:24:
-> /usr/include/sys/cdefs.h:236:0: warning: "__attribute_const__" redefined
-  ^^^^^
- It is using headers from the host, which is very wrong.
+> Yes, that would propably be the best option. However, Buildroot does
+> not apply the libtool patch for the override source directory build -
+> there is no "Patching libtool" message printed and the install process
+> aborts with the unsafe header/library error.
 
+ Ah, that's right, the libtool patch is a post-patch hook.
 
- Perhaps we should remove RTAI. The most recent patch for x86 is 3.8, and the
-most recent patch for ppc is 2.6.29... Oh, and there is a new version 5.0-test2
-released in May that goes up to 4.1 for x86 (and drops ppc).
+ Perhaps it would be better to always make it a pre-configure hook.
+
+[snip]
+>>> Is it possible for Buildroot to detect if autoreconf has to be run
+>>> for
+>>> override sources?
+>>
+>>  Yes: use _AUTORECONF = YES. That will make sure that libtool is
+>> patched after
+>> autoreconf has run, and it will also add the required dependencies to
+>> the package.
+> 
+> Sorry, but I meant without setting AUTORECONF. I would prefer not to
+> alter the .mk file for each override package.
+
+ Er, your alternative was to add a PRE_CONFIGURE_HOOK, so you still need to
+change the package, no?
 
 
  Regards,
  Arnout
+
+[snip]
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
