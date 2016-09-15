@@ -1,148 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Sep 2016 10:58:28 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix potential entire root
-	filesystem removal
-Message-ID: <1473929908-25697-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Sylvain LG <forum@sylvainlegourr.com>
+Date: Thu, 15 Sep 2016 11:33:12 +0200
+Subject: [Buildroot] systemd-timesyncd issue
+Message-ID: <CAK9TtU2U4EsPGL2G48uLDDmuzDDXXnPMJy6iOE1=jCpJu0EjFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit a0aa7e0e1750f6ace2879ea8adb1425a41431b79 and reworks
-the code to fix a major and potentially catastrophic bug when the
-following conditions are met:
+Hi,
 
- - The user has selected a "known toolchain profile", such as a Linaro
-   toolchain, a Sourcery CodeBench toolchain etc. People using "custom
-   toolchain profile" are not affected.
+I've got a problem with systemd-timesyncd.
 
- - The user has enabled BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED=y to
-   indicate that the toolchain is already locally available (as
-   opposed to having Buildroot download and extract the toolchain)
+The service is active:
 
- - The user has left BR2_TOOLCHAIN_EXTERNAL_PATH empty, because his
-   toolchain is directly available through the PATH environment
-   variable. When BR2_TOOLCHAIN_EXTERNAL_PATH is non-empty, Buildroot
-   will do something silly (remove the toolchain contents), but that
-   are limited to the toolchain itself.
+# systemctl status systemd-timesyncd
+> *?* systemd-timesyncd.service - Network Time Synchronization
+>    Loaded: loaded (/usr/lib/systemd/system/systemd-timesyncd.service;
+> enabled; vendor preset: enabled)
+>    Active: *active (running)* since Thu 2016-02-11 16:28:04 UTC; 1h 4min
+> ago
+>      Docs: man:systemd-timesyncd.service(8)
+>  Main PID: 257 (systemd-timesyn)
+>    Status: "Idle."
+>     Tasks: 2 (limit: 512)
+>    CGroup: /system.slice/systemd-timesyncd.service
+>            ??257 /lib/systemd/systemd-timesyncd
 
-When such conditions are met, Buildroot will run "rm -rf /*" due to
-TOOLCHAIN_EXTERNAL_INSTALL_DIR being empty.
 
-This bug does not exist in 2016.05, and appeared in 2016.08 due to
-commit a0aa7e0e1750f6ace2879ea8adb1425a41431b79.
+Here comes its configuration file:
 
-Commit a0aa7e0e1750f6ace2879ea8adb1425a41431b79 removed the assignment
-of TOOLCHAIN_EXTERNAL_SOURCE and TOOLCHAIN_EXTERNAL_SITE to empty, as
-part of a global cleanup to remove such assignments that supposedly
-had become unneeded following a fix of the package infrastructure
-(75630eba22b20d6140a5b58a6d1e35598fb3c0d3: core: do not attempt
-downloads with no _VERSION set).
+> # more /etc/systemd/timesyncd.conf
+> #  This file is part of systemd.
+> #
+> #  systemd is free software; you can redistribute it and/or modify it
+> #  under the terms of the GNU Lesser General Public License as published by
+> #  the Free Software Foundation; either version 2.1 of the License, or
+> #  (at your option) any later version.
+> #
+> # Entries in this file show the compile time defaults.
+> # You can change settings by editing this file.
+> # Defaults can be restored by simply deleting this file.
+> #
+> # See timesyncd.conf(5) for details.
+> [Time]
+> NTP=time1.google.com time2.google.com time3.google.com time4.google.com
+> FallbackNTP=time1.google.com time2.google.com time3.google.com
+> time4.google.com
 
-However, this causes TOOLCHAIN_EXTERNAL_SOURCE to be non-empty even
-for BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED=y configuration, with the
-following consequences:
 
- - Buildroot downloads the toolchain tarball (while we're saying the
-   toolchain is already available). Not dramatic, but clearly buggy.
+But synchronisation doesn't work (I tried with several different ntp
+servers).
 
- - Buildroot registers a post-extract hook that moves the toolchain
-   from its extract directory (output/build/toolchain-external-.../ to
-   its final location in host/opt/ext-toolchain/). Before doing this,
-   it removes everything in TOOLCHAIN_EXTERNAL_INSTALL_DIR (which
-   should normally be host/opt/ext-toolchain/).
+Command timedatectl returns:
 
-Another mistake that caused the bug is commit
-b731dc7bfb9c8ce7be502711f0b44ccab5515f1d ("toolchain-external: make
-extraction idempotent"), which introduce the dangerous call "rm -rf
-$(var)/*", which can be catastrophic if by mistake $(var) is
-empty. Instead, this commit should have just used rm -rf $(var) to
-remove the directory instead: it would have failed without consequences
-if $(var) is empty, and the directory was anyway already re-created
-right after with a mkdir.
+> # timedatectl
+>       Local time: Thu 2016-02-11 17:35:43 UTC
+>   Universal time: Thu 2016-02-11 17:35:43 UTC
+>         RTC time: Sat 2000-01-01 01:09:29
+>        Time zone: Etc/UTC (UTC, +0000)
+>  Network time on: yes
+> NTP synchronized: no
+>  RTC in local TZ: no
 
-To address this problem, we:
 
- - Revert commit a0aa7e0e1750f6ace2879ea8adb1425a41431b79, so that
-   _SOURCE and _SITE are empty in the pre-installed toolchain case.
+It should be : NTP enabled: yes
 
- - Rework the code to ensure that similar problems will no happen in the
-   future, by:
+How can I fix this issue?
 
-   - Registering the TOOLCHAIN_EXTERNAL_MOVE hook only when
-     BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y, since moving the toolchain is
-     only needed when Buildroot downloaded the toolchain.
+Thanks,
 
-   - Introduce a variable TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR which
-     is the path in which Buildroot installs external toolchains when it
-     is in charge of downloading/extracting them. Then, the
-     TOOLCHAIN_EXTERNAL_MOVE hook is changed to use this variable, which
-     is guaranteed to be non-empty.
 
-   - Replace the removal of the directory contents $(var)/* by removing
-     the directory itself $(var). The directory was anyway already
-     re-created if needed afterwards. Thanks to doing this, if $(var)
-     ever becomes empty, we will do "rm -rf" which will fail and abort
-     the build, and not the catastrophic "rm -rf /*".
-
-Reported-by: Mason <slash.tmp@free.fr>
-Cc: Mason <slash.tmp@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-external/toolchain-external.mk | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
-
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 8de3247..ad258b8 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -138,8 +138,10 @@ TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
- 
- 
- TOOLCHAIN_EXTERNAL_PREFIX = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
-+TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR = $(HOST_DIR)/opt/ext-toolchain
-+
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
--TOOLCHAIN_EXTERNAL_INSTALL_DIR = $(HOST_DIR)/opt/ext-toolchain
-+TOOLCHAIN_EXTERNAL_INSTALL_DIR = $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
- else
- TOOLCHAIN_EXTERNAL_INSTALL_DIR = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
- endif
-@@ -454,21 +456,29 @@ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL ?= \
- 	$(subst -i686-pc-linux-gnu.tar.bz2,.src.tar.bz2,$(subst -i686-pc-linux-gnu-i386-linux.tar.bz2,-i686-pc-linux-gnu.src.tar.bz2,$(TOOLCHAIN_EXTERNAL_SOURCE)))
- endif
- 
-+# In fact, we don't need to download the toolchain, since it is already
-+# available on the system, so force the site and source to be empty so
-+# that nothing will be downloaded/extracted.
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED),y)
-+TOOLCHAIN_EXTERNAL_SITE =
-+TOOLCHAIN_EXTERNAL_SOURCE =
-+endif
-+
- TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
- TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
- 
- # Normal handling of downloaded toolchain tarball extraction.
--ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
- TOOLCHAIN_EXTERNAL_EXCLUDES = usr/lib/locale/*
- 
- # As a regular package, the toolchain gets extracted in $(@D), but
- # since it's actually a fairly special package, we need it to be moved
--# into TOOLCHAIN_EXTERNAL_INSTALL_DIR.
-+# into TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR.
- define TOOLCHAIN_EXTERNAL_MOVE
--	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/*
--	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
--	mv $(@D)/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
-+	rm -rf $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
-+	mkdir -p $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
-+	mv $(@D)/* $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)/
- endef
- TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += \
- 	TOOLCHAIN_EXTERNAL_MOVE
--- 
-2.7.4
+Sylvain
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160915/e8149c80/attachment.html>
