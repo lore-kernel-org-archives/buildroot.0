@@ -1,64 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 15 Sep 2016 22:58:27 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix potential entire
- root filesystem removal
-In-Reply-To: <87y42tc4fl.fsf@dell.be.48ers.dk>
-References: <1473929908-25697-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <87k2edeay4.fsf@dell.be.48ers.dk>
- <fc0a0de7-398a-8b83-cf76-c4c0b031e01a@mind.be>
- <87y42tc4fl.fsf@dell.be.48ers.dk>
-Message-ID: <a4cc525b-c26a-fb0d-23c5-c72482377e95@mind.be>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Thu, 15 Sep 2016 23:09:32 +0200
+Subject: [Buildroot] [1/1,RFC] mysql: replace mysql with mariadb 10.0
+Message-ID: <afcad3cc-5a25-a410-ef18-b6a18ed45406@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> >/This patch represents my attempt to replace the aging mysql 5.1 that is />/currently shipped with Buildroot. I am replacing mysql altogether with 
+> mariadb />/version 10.0. I have been able to test this with both an arm and a 
+> x86_64 />/build. I have not tested it with systemd. This patch is based on the 
+> work done />/by Sylvain Raybaud. /
+> Would it be better to just add MariaDB rather than replace MySQL,
+> there's reasons to use one over the other.
 
 
-On 15-09-16 22:07, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
->  > On 15-09-16 12:04, Peter Korsgaard wrote:
->  >> I'll put out a 2016.08.1 release with this Saturday or Sunday. Anything
->  >> else that should be included in this bugfix release?
-> 
->  >  There are still a whole bunch of autobuilder fixes that came in after the
->  > release, but probably most of these are due to -next things.
-> 
->  >  Things like
->  > 4e9292f package/fbterm: fix download site
-> 
-> This is not really critical as we have a copy on sources.b.o, but OK, it
-> is also not a "dangerous" change.
-> 
->  > 3ca860a glibc: fix MIPS and SPARC builds for glibc < 2.24 with recent binutils
->  > could be useful as well.
-> 
-> Isn't that just for fixing builds against binutils 2.27 (which isn't in 2016.08)?
+While a virtual package may be helpful if in the future someone would 
+like to add another MySQL implementation.
+I do have concerns about the existing mysql package, given that:
 
- Ah, yes, missed that bit.
+- the MySQL branch used has been EOL since 2013
+- there has been an number of CVE issues since: 
+https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=oracle+mysql
+(and cve-2016-6662 not yet in the list)
+- it listens to all interfaces by default
+
+How responsible is it to keep packages in such state around, when there 
+do are alternatives?
 
 
- TBH, I don't think it's worthwhile to include any other patch in 2016.08.1, not
-even the fbterm one. It's just more effort than it's worth.
+Yours sincerely,
 
+Floris Bos
 
->  >  But nothing is really screaming that it should be included.
-> 
-> Ok. We should probably figure out if we need to revert the CMAKE_SYSROOT
-> addition (e8c3755676) and include that if needed.
-
- Er, why would we need to revert it? Did I miss something?
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160915/5ca5ee8f/attachment.html>
