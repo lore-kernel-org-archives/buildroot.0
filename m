@@ -1,62 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 15 Sep 2016 23:17:51 +0200
-Subject: [Buildroot] [1/1,RFC] mysql: replace mysql with mariadb 10.0
-In-Reply-To: <afcad3cc-5a25-a410-ef18-b6a18ed45406@je-eigen-domein.nl>
-References: <afcad3cc-5a25-a410-ef18-b6a18ed45406@je-eigen-domein.nl>
-Message-ID: <0775fdeb-5056-73cd-4cf8-7d4edeb6d8a7@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 15 Sep 2016 23:21:06 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: fix potential entire
+	root filesystem removal
+In-Reply-To: <a4cc525b-c26a-fb0d-23c5-c72482377e95@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 15 Sep 2016 22:58:27 +0200")
+References: <1473929908-25697-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87k2edeay4.fsf@dell.be.48ers.dk>
+ <fc0a0de7-398a-8b83-cf76-c4c0b031e01a@mind.be>
+ <87y42tc4fl.fsf@dell.be.48ers.dk>
+ <a4cc525b-c26a-fb0d-23c5-c72482377e95@mind.be>
+Message-ID: <87lgysdflp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+
+Hi,
+
+ >  TBH, I don't think it's worthwhile to include any other patch in 2016.08.1, not
+ > even the fbterm one. It's just more effort than it's worth.
+
+Yeah, agreed.
 
 
-On 15-09-16 23:09, Floris Bos wrote:
->> >/This patch represents my attempt to replace the aging mysql 5.1 that is />/currently shipped with Buildroot. I am replacing mysql altogether with mariadb />/version 10.0. I have been able to test this with both an arm and a x86_64 />/build. I have not tested it with systemd. This patch is based on the work done />/by Sylvain Raybaud. /
->> Would it be better to just add MariaDB rather than replace MySQL,
->> there's reasons to use one over the other.
-> 
-> 
-> While a virtual package may be helpful if in the future someone would like to
-> add another MySQL implementation.
-> I do have concerns about the existing mysql package, given that:
-> 
-> - the MySQL branch used has been EOL since 2013
-> - there has been an number of CVE issues since:
-> https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=oracle+mysql
-> (and cve-2016-6662 not yet in the list)
-> - it listens to all interfaces by default
-> 
-> How responsible is it to keep packages in such state around, when there do are
-> alternatives?
+ >> >  But nothing is really screaming that it should be included.
+ >> 
+ >> Ok. We should probably figure out if we need to revert the CMAKE_SYSROOT
+ >> addition (e8c3755676) and include that if needed.
 
- True. But it should be relatively easy to bump the existing mysql package. If
-it is completely replaced by mariadb, it won't be so easy anymore.
+ >  Er, why would we need to revert it? Did I miss something?
 
- We could mark mysql as deprecated pending the bump. That could motivate people
-to step up and fix it.
+I thought it had been discussed on the list, but apparently not. We got
+a report on IRC (I unfortunately don't have logs) that builds of custom
+packages using cmake were failing with 2016.08. It is apparently caused
+by CMAKE_SYSROOT transforming -I$STAGING_DIR/usr/include into --sysroot
+$STAGING_DIR -I /usr/include. In 2016.08 we now default
+BR2_COMPILER_PARANOID_UNSAFE_PATH to y, so it complains about it.
 
- Regards,
- Arnout
+I don't quite understand how come this doesn't trigger on the
+autobuilders and I haven't had time to investigate, but I got a 2nd
+report off list with the same problem, so it sounds real.
 
-
-> Yours sincerely,
-> 
-> Floris Bos
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Samuel, any ideas?
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Venlig hilsen,
+Peter Korsgaard 
