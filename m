@@ -1,14 +1,19 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 15 Sep 2016 12:16:38 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{2, 14}.x and 4.4.x series
-Message-ID: <1473952598-18326-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 15 Sep 2016 17:48:18 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{2,
+	14}.x and 4.4.x series
+Message-ID: <20160915154830.BCB8D81D7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=783c215c829a9ce4db4992d1f1434dc689f4b3e3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/linux-headers/Config.in.host | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
@@ -39,5 +44,3 @@ index b686467..09e187b 100644
  	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
  	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
  	default "4.7.4"		if BR2_KERNEL_HEADERS_4_7
--- 
-2.7.3
