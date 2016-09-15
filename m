@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 15 Sep 2016 18:19:01 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix potential entire
- root filesystem removal
-In-Reply-To: <1473929908-25697-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1473929908-25697-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <aee7cccd-eb3a-d376-99b0-a9ba3cb950b2@mind.be>
+Date: Thu, 15 Sep 2016 18:20:55 +0200
+Subject: [Buildroot] [PATCH 5/7] audit: update legal info
+In-Reply-To: <1473935228-14014-5-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1473935228-14014-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <1473935228-14014-5-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <81ff2e66-d946-34aa-c82d-a7bacb305c07@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,58 +12,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On 15-09-16 10:58, Thomas Petazzoni wrote:
-> This reverts commit a0aa7e0e1750f6ace2879ea8adb1425a41431b79 and reworks
-> the code to fix a major and potentially catastrophic bug when the
-> following conditions are met:
-[snip]
-> Another mistake that caused the bug is commit
-> b731dc7bfb9c8ce7be502711f0b44ccab5515f1d ("toolchain-external: make
-> extraction idempotent"), which introduce the dangerous call "rm -rf
-> $(var)/*", which can be catastrophic if by mistake $(var) is
-> empty. Instead, this commit should have just used rm -rf $(var) to
-> remove the directory instead: it would have failed without consequences
-> if $(var) is empty, and the directory was anyway already re-created
-> right after with a mkdir.
 
- I'm sure I had a reason to add the /*, but I can't remember and the commit
-message isn't helpful. The only difference (except for keeping the directory)
-that I can think of is that .stamp files are kept, but (a) they should be
-removed and (b) there aren't any stamp files in that directory...
+On 15-09-16 12:27, Rahul Bedarkar wrote:
+> Programs are released under GPLv2+. README file says libraries
+> libaudit.* and libauparse.* are released under LGPL but there are two
+> files auparse/strsplit.c and lib/strsplit.c which are released under
+> GPLv2+ which makes both libraries GPL. Until we review situation with
+> upstream, we don't add license for libraries.
 
-[snip]
->  # Normal handling of downloaded toolchain tarball extraction.
-> -ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
+ In that case, I'd prefer to add "unclear (libraries)".
 
- You've just made these two equivalent again. But it's better like that.
-
->  TOOLCHAIN_EXTERNAL_EXCLUDES = usr/lib/locale/*
-
- I thought: hey, this can't be right, TOOLCHAIN_EXTERNAL_EXCLUDES should still
-be set for non-downloaded toolchains that do have a source. But since those
-don't exist, it doesn't matter.
-
- I'd give it my Rev-by tag but too late now :-)
 
  Regards,
  Arnout
 
+> 
+> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+> ---
+>  package/audit/audit.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+> index 7137208..1a203ce 100644
+> --- a/package/audit/audit.mk
+> +++ b/package/audit/audit.mk
+> @@ -6,7 +6,7 @@
 >  
->  # As a regular package, the toolchain gets extracted in $(@D), but
->  # since it's actually a fairly special package, we need it to be moved
-> -# into TOOLCHAIN_EXTERNAL_INSTALL_DIR.
-> +# into TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR.
->  define TOOLCHAIN_EXTERNAL_MOVE
-> -	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/*
-> -	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
-> -	mv $(@D)/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
-> +	rm -rf $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
-> +	mkdir -p $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
-> +	mv $(@D)/* $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)/
->  endef
->  TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += \
->  	TOOLCHAIN_EXTERNAL_MOVE
+>  AUDIT_VERSION = 2.6.7
+>  AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+> -AUDIT_LICENSE = GPLv2
+> +AUDIT_LICENSE = GPLv2+ (programs)
+>  AUDIT_LICENSE_FILES = COPYING
+>  
+>  AUDIT_INSTALL_STAGING = YES
 > 
 
 -- 
