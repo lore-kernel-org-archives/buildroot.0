@@ -1,51 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Sep 2016 23:21:06 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix potential entire
-	root filesystem removal
-In-Reply-To: <a4cc525b-c26a-fb0d-23c5-c72482377e95@mind.be> (Arnout
- Vandecappelle's message of "Thu, 15 Sep 2016 22:58:27 +0200")
-References: <1473929908-25697-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <87k2edeay4.fsf@dell.be.48ers.dk>
- <fc0a0de7-398a-8b83-cf76-c4c0b031e01a@mind.be>
- <87y42tc4fl.fsf@dell.be.48ers.dk>
- <a4cc525b-c26a-fb0d-23c5-c72482377e95@mind.be>
-Message-ID: <87lgysdflp.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 15 Sep 2016 23:21:58 +0200
+Subject: [Buildroot] RTAI math module compilation
+In-Reply-To: <CAEqQue108OTCsmAejX1sR6q8HL2zCj7jXtaB927b=kHo=UQTrA@mail.gmail.com>
+References: <CAEqQue108OTCsmAejX1sR6q8HL2zCj7jXtaB927b=kHo=UQTrA@mail.gmail.com>
+Message-ID: <78c4ab72-52be-571c-e81a-a0f78c1e2e7f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-
-Hi,
-
- >  TBH, I don't think it's worthwhile to include any other patch in 2016.08.1, not
- > even the fbterm one. It's just more effort than it's worth.
-
-Yeah, agreed.
 
 
- >> >  But nothing is really screaming that it should be included.
- >> 
- >> Ok. We should probably figure out if we need to revert the CMAKE_SYSROOT
- >> addition (e8c3755676) and include that if needed.
+On 15-09-16 18:50, servo gmrt wrote:
+> Hi,
+> 
+> Anybody compiled rtai in buildroot-2016.02 version ?
 
- >  Er, why would we need to revert it? Did I miss something?
+ Unfortunately RTAI is a kernel extension so it doesn't get tested by the
+autobuilders...
 
-I thought it had been discussed on the list, but apparently not. We got
-a report on IRC (I unfortunately don't have logs) that builds of custom
-packages using cmake were failing with 2016.08. It is apparently caused
-by CMAKE_SYSROOT transforming -I$STAGING_DIR/usr/include into --sysroot
-$STAGING_DIR -I /usr/include. In 2016.08 we now default
-BR2_COMPILER_PARANOID_UNSAFE_PATH to y, so it complains about it.
 
-I don't quite understand how come this doesn't trigger on the
-autobuilders and I haven't had time to investigate, but I got a 2nd
-report off list with the same problem, so it sounds real.
+> Other than "rtai_math.ko" all the modules compiles without error. When I include
+> math module for compilation, I am getting the following error,
+> 
+> The part of the make error log I attached with that.
+> 
+> Help me to resolve the issue.
+> 
+> 
+> In file included from /usr/include/features.h:365:0,
+>                  from ../rtai-4.0.1/base/include/rtai_math.h:37,
+>                  from ../rtai-4.0.1/base/math/libm.c:24:
+> /usr/include/sys/cdefs.h:236:0: warning: "__attribute_const__" redefined
+  ^^^^^
+ It is using headers from the host, which is very wrong.
 
-Samuel, any ideas?
+
+ Perhaps we should remove RTAI. The most recent patch for x86 is 3.8, and the
+most recent patch for ppc is 2.6.29... Oh, and there is a new version 5.0-test2
+released in May that goes up to 4.1 for x86 (and drops ppc).
+
+
+ Regards,
+ Arnout
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
