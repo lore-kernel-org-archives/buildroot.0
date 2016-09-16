@@ -1,44 +1,40 @@
 From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Sat, 17 Sep 2016 00:28:46 +0530
-Subject: [Buildroot] [PATCH 1/2] blktrace: add dependency on NPTL
-Message-ID: <1474052327-16663-1-git-send-email-rahul.bedarkar@imgtec.com>
+Date: Sat, 17 Sep 2016 00:28:47 +0530
+Subject: [Buildroot] [PATCH 2/2] blktrace: needs MMU support
+In-Reply-To: <1474052327-16663-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1474052327-16663-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <1474052327-16663-2-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-blkiomon.c assumes that clock_nanosleep() is always available. But it
-is only available with NPTL. Since it unconditionally uses it, we add
-dependency on NPTL.
-
-Fixes:
-  http://autobuild.buildroot.net/results/c87/c87cd4a7b0bed938506bcf7e88d4cda60e28e6e5/
+iowatcher/main.c uses system() which uses fork().
 
 Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 ---
- package/blktrace/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/blktrace/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/blktrace/Config.in b/package/blktrace/Config.in
-index 38c0947..684157c 100644
+index 684157c..dedfa03 100644
 --- a/package/blktrace/Config.in
 +++ b/package/blktrace/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_BLKTRACE
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_BLKTRACE
  	bool "blktrace"
  	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
++	depends on BR2_USE_MMU # system()
  	select BR2_PACKAGE_LIBAIO
  	help
  	  blktrace is a block layer IO tracing mechanism which provides
-@@ -8,3 +9,7 @@ config BR2_PACKAGE_BLKTRACE
- 	  up to user space.
- 
+@@ -11,5 +12,6 @@ config BR2_PACKAGE_BLKTRACE
  	  http://git.kernel.dk/?p=blktrace.git;a=summary
-+
-+comment "blktrace needs a toolchain w/ NPTL"
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 
+ comment "blktrace needs a toolchain w/ NPTL"
++	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 -- 
 2.6.2
