@@ -1,39 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Sep 2016 18:44:54 +0200
-Subject: [Buildroot] [git commit] audit: update legal info
-Message-ID: <20160916164525.89E027FE2D@busybox.osuosl.org>
+Date: Fri, 16 Sep 2016 18:45:55 +0200
+Subject: [Buildroot] [PATCH 5/7] audit: update legal info
+In-Reply-To: <1473935228-14014-5-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1473935228-14014-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <1473935228-14014-5-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20160916184555.60b850b4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1011f89a18b3cebc198e328b87f91707a8755af
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Programs are released under GPLv2+. README file says libraries
-libaudit.* and libauparse.* are released under LGPL but there are two
-files auparse/strsplit.c and lib/strsplit.c which are released under
-GPLv2+ which makes both libraries GPL. Until we review situation with
-upstream, we simply mention "unclear (libraries)".
+On Thu, 15 Sep 2016 15:57:06 +0530, Rahul Bedarkar wrote:
+> Programs are released under GPLv2+. README file says libraries
+> libaudit.* and libauparse.* are released under LGPL but there are two
+> files auparse/strsplit.c and lib/strsplit.c which are released under
+> GPLv2+ which makes both libraries GPL. Until we review situation with
+> upstream, we don't add license for libraries.
+> 
+> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+> ---
+>  package/audit/audit.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-[Thomas: add "unclear (libraries)" as suggested by Arnout.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/audit/audit.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, after taking into account Arnout's suggestion of
+adding "unclear (libraries)" to the license information.
 
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 7137208..0e5bd27 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -6,7 +6,7 @@
- 
- AUDIT_VERSION = 2.6.7
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
--AUDIT_LICENSE = GPLv2
-+AUDIT_LICENSE = GPLv2+ (programs), unclear (libraries)
- AUDIT_LICENSE_FILES = COPYING
- 
- AUDIT_INSTALL_STAGING = YES
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
