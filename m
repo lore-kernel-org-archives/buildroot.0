@@ -1,32 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Sep 2016 18:46:19 +0200
-Subject: [Buildroot] [PATCH 6/7] libcap-ng: bump version to 0.7.8
-In-Reply-To: <1473935634-14150-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1473935634-14150-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160916184619.64bc7e9c@free-electrons.com>
+Date: Fri, 16 Sep 2016 18:46:08 +0200
+Subject: [Buildroot] [git commit] libcap-ng: annotate licenses with
+	components
+Message-ID: <20160916164630.BC1A881D5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9b0dc3515a7f15656f532e3e7df9acb347c8f4bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 15 Sep 2016 16:03:53 +0530, Rahul Bedarkar wrote:
-> Drop upstream patch
-> 
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> ---
->  package/libcap-ng/0001-add-missing-include.patch | 22 ----------------------
->  package/libcap-ng/libcap-ng.hash                 |  2 +-
->  package/libcap-ng/libcap-ng.mk                   |  2 +-
->  3 files changed, 2 insertions(+), 24 deletions(-)
->  delete mode 100644 package/libcap-ng/0001-add-missing-include.patch
+libcap-ng.so library is released under LGPLv2.1+ and programs testcap,
+filecap, netcap and pscap are released under GPLv2+.
 
-Applied to master, thanks.
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libcap-ng/libcap-ng.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+index 34e0f2c..19cc27d 100644
+--- a/package/libcap-ng/libcap-ng.mk
++++ b/package/libcap-ng/libcap-ng.mk
+@@ -6,7 +6,7 @@
+ 
+ LIBCAP_NG_VERSION = 0.7.8
+ LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
+-LIBCAP_NG_LICENSE = GPLv2+ LGPLv2.1+
++LIBCAP_NG_LICENSE = GPLv2+ (programs), LGPLv2.1+ (library)
+ LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
+ LIBCAP_NG_INSTALL_STAGING = YES
+ 
