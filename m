@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Sep 2016 18:45:55 +0200
-Subject: [Buildroot] [PATCH 5/7] audit: update legal info
-In-Reply-To: <1473935228-14014-5-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1473935228-14014-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1473935228-14014-5-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160916184555.60b850b4@free-electrons.com>
+Date: Fri, 16 Sep 2016 18:46:19 +0200
+Subject: [Buildroot] [PATCH 6/7] libcap-ng: bump version to 0.7.8
+In-Reply-To: <1473935634-14150-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1473935634-14150-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20160916184619.64bc7e9c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 15 Sep 2016 15:57:06 +0530, Rahul Bedarkar wrote:
-> Programs are released under GPLv2+. README file says libraries
-> libaudit.* and libauparse.* are released under LGPL but there are two
-> files auparse/strsplit.c and lib/strsplit.c which are released under
-> GPLv2+ which makes both libraries GPL. Until we review situation with
-> upstream, we don't add license for libraries.
+On Thu, 15 Sep 2016 16:03:53 +0530, Rahul Bedarkar wrote:
+> Drop upstream patch
 > 
 > Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 > ---
->  package/audit/audit.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/libcap-ng/0001-add-missing-include.patch | 22 ----------------------
+>  package/libcap-ng/libcap-ng.hash                 |  2 +-
+>  package/libcap-ng/libcap-ng.mk                   |  2 +-
+>  3 files changed, 2 insertions(+), 24 deletions(-)
+>  delete mode 100644 package/libcap-ng/0001-add-missing-include.patch
 
-Applied to master, after taking into account Arnout's suggestion of
-adding "unclear (libraries)" to the license information.
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
