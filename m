@@ -1,13 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Sep 2016 19:05:44 +0200
-Subject: [Buildroot] [PATCH] infra/pkg-kconfig: Be sure to reconfigure
- the package on foo-reconfigure
-In-Reply-To: <CAAXf6LX0FwkjE8xHqjwn1TOS7cOdbVwjBRLOS7tLnKJcgBtDuQ@mail.gmail.com>
-References: <1473806117-3858-1-git-send-email-yann.morin.1998@free.fr>
- <CAAXf6LUrhOVJJG-1_pf4vzKMh1=7WG0xop9XY6m9fva-FepHzA@mail.gmail.com>
- <20160914110143.2f25e8a9@free-electrons.com>
- <CAAXf6LX0FwkjE8xHqjwn1TOS7cOdbVwjBRLOS7tLnKJcgBtDuQ@mail.gmail.com>
-Message-ID: <20160916190544.540efd8a@free-electrons.com>
+Date: Fri, 16 Sep 2016 19:08:33 +0200
+Subject: [Buildroot] [PATCH 3/3] python3: Compile host-python3 statically
+In-Reply-To: <1474032631-21311-1-git-send-email-fpa@sbtaqua.com>
+References: <1474032631-21311-1-git-send-email-fpa@sbtaqua.com>
+Message-ID: <20160916190833.7c776697@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,20 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 14 Sep 2016 19:42:30 +0200, Thomas De Schampheleire wrote:
+Please wrap the text in your commit messages to a reasonable line width
+(72 characters).
 
-> I think the answer to this question is simple: one of the goals was to allow:
-> 
-> 'make clean linux-menuconfig'
-> 
-> without this step first building all dependencies of linux (which is
-> quite a lot).
-> If the kconfig configuration would be part of CONFIGURE_CMDS, then
-> we'd end up in that situation.
+On Fri, 16 Sep 2016 15:30:31 +0200, Frederik Aalund wrote:
+> The previous behaviour was to compile host-python3 with `--enable-shared` as is done for the target python installation. The problem is that if the host *already* has a python installation, then host-python3 will be called with the system `libpython3.5.so`. So even though the $(HOST_DIR) python executable is called, the system .so is used.
 
-Gaah, yes, indeed, makes sense. Can we write this somewhere?
+This should not be the case. All host binaries we build are built with
+-Wl,-rpath,$(HOST_DIR)/usr/lib, which means that they should look up
+libraries in $(HOST_DIR)/usr/lib *before* looking at /usr/lib.
 
-Thanks,
+Can you double check what "readelf -a output/host/usr/bin/python" says
+about this? readelf should show you this rpath encoded into the Python
+binary. If that's not the case, then this is the problem.
+
+Best regards,
 
 Thomas
 -- 
