@@ -1,168 +1,66 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 16 Sep 2016 15:10:38 +0200
-Subject: [Buildroot] [PATCH] gst1-imx: add menuconfig to select each plugin
-	individually
-Message-ID: <20160916131038.23240-1-gary.bisson@boundarydevices.com>
+From: Frederik Aalund <fpa@sbtaqua.com>
+Date: Fri, 16 Sep 2016 15:18:21 +0200
+Subject: [Buildroot] [PATCH 2/2] python3: Using PYTHON3_PYC_ONLY created an
+	incomplete python installation
+Message-ID: <1474031901-20941-1-git-send-email-fpa@sbtaqua.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also making each plugin dependencies clearer with comments.
+The PYTHON3_PYC_ONLY option did the following:
+    * Compile `*.py` into `__pycache__/*.pyc` files
+    * Delete `*.py` files
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+I've changed it to do the following:
+    * Compile `*.py` into `*.pyc` files
+    * Delete `*.py` files
+
+The problem with the old behaviour is that python does *not* look into the `__pycache__` directory if the `*.py` file is missing. Python will, however, find a `*.pyc` file where the `*.py` file was supposed to be. This is by design (PEP 3147).
+
+The change of behaviour in this patch is accomplished by passing `legacy=True` to `compileall`. I've adopted `compileall`'s command line interface for `pycompile` and used `-b` to denote `legacy=True`.
+
+Signed-off-by: Frederik Aalund <fpa@sbtaqua.com>
 ---
- package/gstreamer1/gst1-imx/Config.in   | 89 ++++++++++++++++++++++++++++-----
- package/gstreamer1/gst1-imx/gst1-imx.mk | 32 ++++++++++++
- 2 files changed, 108 insertions(+), 13 deletions(-)
+ package/python3/python3.mk   | 4 +++-
+ support/scripts/pycompile.py | 5 ++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index efd5086..9f792d1 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -1,4 +1,8 @@
--config BR2_PACKAGE_GST1_IMX
-+comment "gst1-imx needs a toolchain w/ dynamic library"
-+	depends on BR2_arm
-+	depends on BR2_STATIC_LIBS
-+
-+menuconfig BR2_PACKAGE_GST1_IMX
- 	bool "gst1-imx"
- 	depends on BR2_arm # Only relevant for i.MX
- 	depends on !BR2_STATIC_LIBS
-@@ -7,18 +11,77 @@ config BR2_PACKAGE_GST1_IMX
- 	  This is a set of GStreamer 1.0 plugins for plugins for Freescale's
- 	  i.MX platforms, which make use of the i.MX multimedia capabilities.
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 34e1297..1b63f95 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -213,7 +213,8 @@ define PYTHON3_CREATE_PYC_FILES
+ 	PYTHONPATH="$(PYTHON3_PATH)" \
+ 	$(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
+ 		support/scripts/pycompile.py \
+-		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
++		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
++		$(PYTHON3_PYCOMPILE_ARGS)
+ endef
  
--	  This software supports only the i.MX6 SoC family.
-+	  https://github.com/Freescale/gstreamer-imx
- 
--	  The IPU and PXP plugins are built when an imx-specific kernel is
--	  enabled.
--	  The V4L2 plugin is built when BR2_PACKAGE_GST1_PLUGINS_BAD is enabled.
--	  The VPU plugin is built when BR2_PACKAGE_LIBIMXVPUAPI is enabled.
--	  The EGL plugin is built when BR2_PACKAGE_IMX_GPU_VIV is enabled.
--	  The G2D plugin is built when BR2_PACKAGE_IMX_GPU_VIV_G2D is enabled.
--	  The MP3 plugin is built when BR2_PACKAGE_IMX_CODEC is enabled.
-+if BR2_PACKAGE_GST1_IMX
- 
--	  https://github.com/Freescale/gstreamer-imx
-+config BR2_PACKAGE_GST1_IMX_EGLVISINK
-+	bool "imxeglvivsink"
-+	depends on BR2_PACKAGE_IMX_GPU_VIV
-+	help
-+	  Elements leveraging the 3D GPU
- 
--comment "gst1-imx needs a toolchain w/ dynamic library"
--	depends on BR2_arm
--	depends on BR2_STATIC_LIBS
-+comment "imxeglvivsink needs the Vivante 3D libraries"
-+	depends on !BR2_PACKAGE_IMX_GPU_VIV
-+
-+config BR2_PACKAGE_GST1_IMX_G2D
-+	bool "imxg2d"
-+	depends on BR2_PACKAGE_IMX_GPU_VIV_G2D
-+	help
-+	  Elements leveraging the 2D GPU
-+
-+comment "imxg2d needs the Vivante 2D libraries"
-+	depends on !BR2_PACKAGE_IMX_GPU_VIV_G2D
-+
-+config BR2_PACKAGE_GST1_IMX_IPU
-+	bool "imxipu"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Elements leveraging the IPU
-+
-+comment "imxipu needs an imx-specific Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_GST1_IMX_MP3ENCODER
-+	bool "mp3encoder"
-+	depends on BR2_PACKAGE_IMX_CODEC
-+	help
-+	  Elements for MP3 encoding
-+
-+comment "mp3encoder needs the i.MX codec binaries"
-+	depends on !BR2_PACKAGE_IMX_CODEC
-+
-+config BR2_PACKAGE_GST1_IMX_PXP
-+	bool "imxpxp"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Elements leveraging the PXP
-+
-+comment "imxpxp needs an imx-specific Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_GST1_IMX_UNIAUDIODEC
-+	bool "uniaudiodec"
-+	depends on BR2_PACKAGE_IMX_CODEC
-+	help
-+	  Elements for audio decoding
-+
-+comment "uniaudiodec needs the i.MX codec binaries"
-+	depends on !BR2_PACKAGE_IMX_CODEC
-+
-+config BR2_PACKAGE_GST1_IMX_VPU
-+	bool "imxvpu"
-+	depends on BR2_PACKAGE_LIBIMXVPUAPI
-+	help
-+	  Elements leveraging the VPU
-+
-+comment "imxvpu needs the VPU imxvpuapi library"
-+	depends on !BR2_PACKAGE_LIBIMXVPUAPI
-+
-+config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC
-+	bool "imxv4l2videosrc"
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD
-+	help
-+	  Elements for V4L2 capture
-+
-+endif
-diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
-index 3c6b1b6..330ddc4 100644
---- a/package/gstreamer1/gst1-imx/gst1-imx.mk
-+++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
-@@ -26,6 +26,38 @@ GST1_IMX_DEPENDENCIES += linux
- GST1_IMX_CONF_OPTS += --kernel-headers="$(LINUX_DIR)/include"
+ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PY_PYC),y)
+@@ -226,6 +227,7 @@ define PYTHON3_REMOVE_PY_FILES
+ 		xargs -0 --no-run-if-empty rm -f
+ endef
+ PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
++PYTHON3_PYCOMPILE_ARGS += -b
  endif
  
-+ifneq ($(BR2_PACKAGE_GST1_IMX_EGLVISINK),y)
-+GST1_IMX_CONF_OPTS += --disable-eglvivsink
-+endif
+ # Normally, *.pyc files should not have been compiled, but just in
+diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+index fde711a..f9dee7f 100644
+--- a/support/scripts/pycompile.py
++++ b/support/scripts/pycompile.py
+@@ -21,4 +21,7 @@ class ReportProblem:
+ 
+ report_problem = ReportProblem()
+ 
+-compileall.compile_dir(sys.argv[1], quiet=report_problem)
++# Pass along the legacy parameter
++legacy = '-b' in sys.argv
 +
-+ifneq ($(BR2_PACKAGE_GST1_IMX_G2D),y)
-+GST1_IMX_CONF_OPTS += --disable-g2d
-+endif
-+
-+ifneq ($(BR2_PACKAGE_GST1_IMX_IPU),y)
-+GST1_IMX_CONF_OPTS += --disable-ipu
-+endif
-+
-+ifneq ($(BR2_PACKAGE_GST1_IMX_MP3ENCODER),y)
-+GST1_IMX_CONF_OPTS += --disable-mp3encoder
-+endif
-+
-+ifneq ($(BR2_PACKAGE_GST1_IMX_PXP),y)
-+GST1_IMX_CONF_OPTS += --disable-pxp
-+endif
-+
-+ifneq ($(BR2_PACKAGE_GST1_IMX_UNIAUDIODEC),y)
-+GST1_IMX_CONF_OPTS += --disable-uniaudiodec
-+endif
-+
-+ifneq ($(BR2_PACKAGE_GST1_IMX_VPU),y)
-+GST1_IMX_CONF_OPTS += --disable-vpu
-+endif
-+
-+ifneq ($(BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC),y)
-+GST1_IMX_CONF_OPTS += --disable-v4l2src
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD),y)
- GST1_IMX_DEPENDENCIES += gst1-plugins-bad
- endif
++compileall.compile_dir(sys.argv[1], legacy=legacy, quiet=report_problem)
 -- 
-2.9.3
+2.5.0
