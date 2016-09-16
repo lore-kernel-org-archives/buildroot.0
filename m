@@ -1,37 +1,69 @@
-From: Frederik Aalund <fpa@sbtaqua.com>
-Date: Fri, 16 Sep 2016 15:30:31 +0200
-Subject: [Buildroot] [PATCH 3/3] python3: Compile host-python3 statically
-Message-ID: <1474032631-21311-1-git-send-email-fpa@sbtaqua.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 16 Sep 2016 16:03:14 +0200
+Subject: [Buildroot] [PATCH] linux: Allow kernel strip modules itself
+In-Reply-To: <1474023024-9105-1-git-send-email-abrodkin@synopsys.com>
+References: <1474023024-9105-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20160916160314.2d4b0513@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The previous behaviour was to compile host-python3 with `--enable-shared` as is done for the target python installation. The problem is that if the host *already* has a python installation, then host-python3 will be called with the system `libpython3.5.so`. So even though the $(HOST_DIR) python executable is called, the system .so is used.
+Hello,
 
-On my system, I have python 3.5.1. I was trying to python 3.5.2 for buildroot. I noticed druing the build that the host-python thought it was 3.5.1 (as on the system). This was caused by the above. In combination with the `PYTHON3_PYC_ONLY`, this caused all the *.pyc files to be compiled for 3.5.1 even though it should have been 3.5.2.
+Thanks for proposing a patch for this!
 
-I've changed the `python3.mk` file so that host-python3 is built statically. This way, such errors will not occur.
+On Fri, 16 Sep 2016 13:50:24 +0300, Alexey Brodkin wrote:
 
-Alternatively, one could make sure to always call host-python3 with an `LD_LIBRARY_PATH` which points to the `$(HOST_DIR)`. However, this requires a much more invasive change than simply compiling python statically.
+>  Makefile            | 3 ---
+>  linux/linux.mk      | 6 +++++-
+>  package/Makefile.in | 2 --
+>  3 files changed, 5 insertions(+), 6 deletions(-)
 
-Signed-off-by: Frederik Aalund <fpa@sbtaqua.com>
----
- package/python3/python3.mk | 1 +
- 1 file changed, 1 insertion(+)
+We also need to change package/pkg-kernel-module.mk, which is used by
+packages containing external kernel modules.
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 1b63f95..093f570 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -25,6 +25,7 @@ PYTHON3_LIBTOOL_PATCH = NO
- # third-party Python modules.
- 
- HOST_PYTHON3_CONF_OPTS += 	\
-+	--disable-shared    \
- 	--without-ensurepip	\
- 	--without-cxx-main 	\
- 	--disable-sqlite3	\
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 6e41a92..82c6d38 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -384,12 +384,16 @@ define LINUX_INSTALL_IMAGES_CMDS
+>  	$(call LINUX_INSTALL_DTB,$(BINARIES_DIR))
+>  endef
+>  
+> +ifeq ($(BR2_STRIP_strip),y)
+> +LINUX_MOD_STRIP_FLAGS := INSTALL_MOD_STRIP=1
+
+Replace := by =.
+
+Also, since INSTALL_MOD_PATH is part of LINUX_MAKE_FLAGS, I would
+suggest to do the same for INSTALL_MOD_STRIP, i.e:
+
+ifeq ($(BR2_STRIP_strip),y)
+LINUX_MAKE_FLAGS += INSTALL_MOD_STRIP=1
+endif
+
+This also automagically solves the pkg-kernel-module.mk case, which
+uses $(LINUX_MAKE_FLAGS).
+
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index afd5d3a..1eb5ef7 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -207,12 +207,10 @@ STRIP_STRIP_UNNEEDED := --strip-unneeded
+>  STRIP_STRIP_ALL := --strip-all
+>  TARGET_STRIP = $(TARGET_CROSS)strip
+>  STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
+> -KSTRIPCMD = $(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
+
+Following this removal, the STRIP_STRIP_UNNEEDED variable is no longer
+used, so its definition a few lines above can be removed.
+
+Thanks!
+
+Thomas
 -- 
-2.5.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
