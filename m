@@ -1,10 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Sep 2016 19:05:17 +0200
+Date: Fri, 16 Sep 2016 19:05:44 +0200
 Subject: [Buildroot] [PATCH] infra/pkg-kconfig: Be sure to reconfigure
  the package on foo-reconfigure
-In-Reply-To: <1473806117-3858-1-git-send-email-yann.morin.1998@free.fr>
+In-Reply-To: <CAAXf6LX0FwkjE8xHqjwn1TOS7cOdbVwjBRLOS7tLnKJcgBtDuQ@mail.gmail.com>
 References: <1473806117-3858-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160916190517.01d3dd5a@free-electrons.com>
+ <CAAXf6LUrhOVJJG-1_pf4vzKMh1=7WG0xop9XY6m9fva-FepHzA@mail.gmail.com>
+ <20160914110143.2f25e8a9@free-electrons.com>
+ <CAAXf6LX0FwkjE8xHqjwn1TOS7cOdbVwjBRLOS7tLnKJcgBtDuQ@mail.gmail.com>
+Message-ID: <20160916190544.540efd8a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +16,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 14 Sep 2016 00:35:17 +0200, Yann E. MORIN wrote:
+On Wed, 14 Sep 2016 19:42:30 +0200, Thomas De Schampheleire wrote:
 
-> +# Force olddefconfig again on -reconfigure
-> +$(1)-clean-for-reconfigure: $(1)-clean-kconfig-for-reconfigure
-> +
-> +$(1)-clean-kconfig-for-reconfigure:
-> +	rm -f $$($(2)_DIR)/.stamp_kconfig_fixup_done
+> I think the answer to this question is simple: one of the goals was to allow:
+> 
+> 'make clean linux-menuconfig'
+> 
+> without this step first building all dependencies of linux (which is
+> quite a lot).
+> If the kconfig configuration would be part of CONFIGURE_CMDS, then
+> we'd end up in that situation.
 
-I was about to apply this, but in fact, I'm not sure I agree.
-
-<foo>-reconfigure is supposed to re-do the configuration step entirely.
-For example, with an autotools package, if I change the value of
-<pkg>_CONF_OPTS and then do make <foo>-reconfigure, the configuration
-is done again, with the new <pkg>_CONF_OPTS.
-
-Here, what you're doing is that you're only re-doing the "fixup" of
-the .config, but you're not re-loading the configuration from the
-original defconfig or full config file. This means that if the user
-changes the defconfig and does "make linux-reconfigure", it won't
-reload the defconfig.
-
-Unless my analysis is wrong, I think the patch should be changed to
-re-do the configuration step entirely.
+Gaah, yes, indeed, makes sense. Can we write this somewhere?
 
 Thanks,
 
