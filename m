@@ -1,59 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Sep 2016 18:55:59 +0200
-Subject: [Buildroot] [PATCH 1/1] libfastjson: Was referencing
- non-existing files
-In-Reply-To: <1474018609-2610-1-git-send-email-fpa@sbtaqua.com>
-References: <1474018609-2610-1-git-send-email-fpa@sbtaqua.com>
-Message-ID: <20160916185559.23a41621@free-electrons.com>
+Date: Fri, 16 Sep 2016 19:00:18 +0200
+Subject: [Buildroot] [git commit] package/urg: fix build caused by missing
+	header inclusion
+Message-ID: <20160916170048.363E88211A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c8301c4fe3aaed3c7df33ac1e8d7bf8dc0cf6c54
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 16 Sep 2016 11:36:49 +0200, Frederik Aalund wrote:
+Update select-h patch to also fix the C++ serial driver.
 
-> -LIBFASTJSON_VERSION = v0.99.2
-> +LIBFASTJSON_VERSION = 0.99.2
->  LIBFASTJSON_SITE = $(call github,rsyslog,libfastjson,$(LIBFASTJSON_VERSION))
-> +LIBFASTJSON_SOURCE = v$(LIBFASTJSON_VERSION).tar.gz
+Fixes:
+  http://autobuild.buildroot.net/results/cd7/cd76699188d2ee99b5f2d32b6a797de0d832a192/
 
-This is not correct: the version is really v0.99.2, as this is the name
-of the Git tag.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/urg/0001-select-h.patch | 38 +++++++++++++++++++++++++++++++++-----
+ 1 file changed, 33 insertions(+), 5 deletions(-)
 
-Moreover, I'm not sure what you're fixing here. It downloads perfectly
-fine here without your patch:
-
->>> libfastjson v0.99.2 Downloading
---2016-09-16 18:53:29--  https://github.com/rsyslog/libfastjson/archive/v0.99.2/libfastjson-v0.99.2.tar.gz
-Resolving github.com (github.com)... 192.30.253.113
-Connecting to github.com (github.com)|192.30.253.113|:443... connected.
-HTTP request sent, awaiting response... 302 Found
-Location: https://codeload.github.com/rsyslog/libfastjson/tar.gz/v0.99.2 [following]
---2016-09-16 18:53:36--  https://codeload.github.com/rsyslog/libfastjson/tar.gz/v0.99.2
-Resolving codeload.github.com (codeload.github.com)... 192.30.253.121
-Connecting to codeload.github.com (codeload.github.com)|192.30.253.121|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: unspecified [application/x-gzip]
-Saving to: ?/home/thomas/projets/buildroot/output/build/.libfastjson-v0.99.2.tar.gz.PKe11m/output?
-
-     0K .......... .......... .......... .......... .......... 80,8K
-    50K .......... .......... .......... .....                  118K=0,9s
-
-2016-09-16 18:53:38 (92,9 KB/s) - ?/home/thomas/projets/buildroot/output/build/.libfastjson-v0.99.2.tar.gz.PKe11m/output? saved [87526]
-
-libfastjson-v0.99.2.tar.gz: OK (sha256: fcdca0c4702362de3db3f02c8da05f985b54a9eccd618af41730409b75d10a8f)
-
-Could you be more specific in the issue you were facing, such as
-posting a build log of what happens during the download without your
-patch applied?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/urg/0001-select-h.patch b/package/urg/0001-select-h.patch
+index 09d1530..1d09bb5 100644
+--- a/package/urg/0001-select-h.patch
++++ b/package/urg/0001-select-h.patch
+@@ -1,11 +1,39 @@
+---- urg-0.8.18/src/c/connection/serial_ctrl_lin.c	2010-11-22 01:48:01.000000000 +0000
+-+++ urg-0.8.18.mod/src/c/connection/serial_ctrl_lin.c	2013-05-21 20:56:35.822025969 +0100
+-@@ -17,7 +17,7 @@
+- #include <fcntl.h>
++From 08c7ebec7c58fbc9c1cc0542863b34119c75c91f Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Thu, 15 Sep 2016 06:19:57 +0200
++Subject: [PATCH] Serial driver: add missing header to C and C++ serial driver
++
++Fixes:
++  http://autobuild.buildroot.net/results/cd7/cd76699188d2ee99b5f2d32b6a797de0d832a192/
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ src/c/connection/serial_ctrl_lin.c      | 1 +
++ src/cpp/connection/SerialDevice_lin.cpp | 1 +
++ 2 files changed, 2 insertions(+)
++
++Index: b/src/c/connection/serial_ctrl_lin.c
++===================================================================
++--- a/src/c/connection/serial_ctrl_lin.c
+++++ b/src/c/connection/serial_ctrl_lin.c
++@@ -18,6 +18,7 @@
+  #include <errno.h>
+  #include <string.h>
+--
++ 
+ +#include <sys/select.h>
+  //#include <ctype.h>
+  
+  enum {
++Index: b/src/cpp/connection/SerialDevice_lin.cpp
++===================================================================
++--- a/src/cpp/connection/SerialDevice_lin.cpp
+++++ b/src/cpp/connection/SerialDevice_lin.cpp
++@@ -13,7 +13,7 @@
++ #include <cerrno>
++ #include <cstring>
++ #include <cstdio>
++-
+++#include <sys/select.h>
++ 
++ class RawSerialDevice
++ {
