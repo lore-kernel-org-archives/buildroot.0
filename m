@@ -1,48 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Sep 2016 11:04:21 +0200
-Subject: [Buildroot] [PATCH] linux-firmware: bump version
-In-Reply-To: <02eb48ef-5659-9364-a55c-6f9c17ca0a82@je-eigen-domein.nl> (Floris
- Bos's message of "Fri, 16 Sep 2016 20:11:17 +0200")
-References: <1473962213-21519-1-git-send-email-gustavo@zacarias.com.ar>
- <87poo4dilz.fsf@dell.be.48ers.dk>
- <08db6ee07552d254f79b9719c41ac790@zacarias.com.ar>
- <02eb48ef-5659-9364-a55c-6f9c17ca0a82@je-eigen-domein.nl>
-Message-ID: <87intuc2y2.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Sep 2016 11:21:12 +0200
+Subject: [Buildroot] [PATCH] php: bump 7.0.11
+In-Reply-To: <CANqewP2HZviH=vUGPu4JDrOKgpTjXx9BuVbO23PiM5u27+t5OA@mail.gmail.com>
+References: <CANqewP0UNjM_Ya=awwHEC+H3+h8UH=DLFv9YoTihOw_sK4Ld9g@mail.gmail.com>
+ <20160916184113.6fd787c1@free-electrons.com>
+ <CANqewP2HZviH=vUGPu4JDrOKgpTjXx9BuVbO23PiM5u27+t5OA@mail.gmail.com>
+Message-ID: <20160917112112.53a0e5cf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Floris" == Floris Bos <bos@je-eigen-domein.nl> writes:
+Hello,
 
- > On 09/16/2016 07:54 PM, Gustavo Zacarias wrote:
- >> On 2016-09-15 17:16, Peter Korsgaard wrote:
- >> 
- >>> Committed, thanks.
- >>> 
- >>> Will you send a patch to add BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX to
- >>> the rpi3 defconfig?
- >> 
- >> Hi.
- >> Well, without some $WiFi package (hostapd, wpa_supplicant,
- >> wireless-tools) just copying the firmware serves no purpose, though
- >> it can be done for completeness.
- >> That being said, i lack a rpi3.
+On Sat, 17 Sep 2016 07:36:54 +0000, Tatsuyuki Ishi wrote:
+> Thank you, the following is the updated patch.
 
- > And unless that changed recently, just the .bin the patch added
- > wouldn't be sufficient for Pi 3.
- > Also need:
- > https://github.com/RPi-Distro/firmware-nonfree/blob/master/brcm80211/brcm/brcmfmac43430-sdio.txt
+Thanks. But this patch also cannot be applied, for two reasons:
 
-Hmm, perhaps. Do you have a rpi 3 to test on? The linux-firmware commit
-doesn't mention anything about it:
+ - The changelog part of the message such as "Thank you, the
+   following..." should not be part of the commit log, but instead
+   should be below the "---" so that it does not get integrated in the
+   Git history when the patch is applied.
 
-http://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/commit/?id=c4c07a8d1128d50a5c2885ceea1abbebaa82f820
+ - Since you haven't used git send-email, your patch is line-wrapped
+   (i.e long lines are wrapped), so it cannot be applied.
 
-But the kernel does reference the .txt file as well:
+Could you rework your patch to take into account those comments?
 
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c:BRCMF_FW_NVRAM_DEF(43430, "brcmfmac43430-sdio.bin", "brcmfmac43430-sdio.txt");
+Thanks!
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
