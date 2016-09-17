@@ -1,44 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Sep 2016 12:11:12 +0200
-Subject: [Buildroot] [PATCH] package/nginx-naxsi: add pcre dependency to
-	.mk
-In-Reply-To: <CAHXCMML5P6B3XJkwRz8bZx41SOubeZRAfAp1-SCk4pRjpmE7AA@mail.gmail.com>
- (Samuel Martin's message of "Tue, 13 Sep 2016 21:33:02 +0200")
-References: <20160913180102.4825-1-s.martin49@gmail.com>
- <20160913212249.0e79d44f@free-electrons.com>
- <CAHXCMML5P6B3XJkwRz8bZx41SOubeZRAfAp1-SCk4pRjpmE7AA@mail.gmail.com>
-Message-ID: <87lgyqala7.fsf@dell.be.48ers.dk>
+Date: Sat, 17 Sep 2016 12:09:31 +0200
+Subject: [Buildroot] [git commit] nginx-naxsi: clarify pcre dependency
+Message-ID: <20160917101140.93D6881E64@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b715991c2382a75d50f1472a4a556954d64eb382
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+It is not directly obvious why we select pcre but not add it to the .mk
+file, so add a comment to clarify.
 
- >> Is this really necessary? nginx-naxsi is not a real package, it just
- >> allows to download the source code of nginx-naxsi before nginx gets
- >> built.
- >> 
- >> And nginx.mk already has pcre in NGINX_DEPENDENCIES when pcre is
- >> enabled, so I believe the select added in
- >> 218dfdd9038af882a02fe64f13a533c8ce75ddc1 is sufficient.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nginx-naxsi/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- > I agree, hence the first patch...
-
- >> 
- >> If not, could you explain why?
-
- > ... but Arnout does not seem to share this opinion [1].
-
- > So, I'm tempted to said "maintainer call" on this.
-
- > [1] http://lists.busybox.net/pipermail/buildroot/2016-September/172113.html
-
-I instead added a comment above the select to clarify and marked this
-patch as superseeded in patchwork.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nginx-naxsi/Config.in b/package/nginx-naxsi/Config.in
+index 6c175eb..5ae5497 100644
+--- a/package/nginx-naxsi/Config.in
++++ b/package/nginx-naxsi/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NGINX_NAXSI
+ 	bool "nginx-naxsi"
++	# uses pcre, so nginx needs to be built with pcre support
+ 	select BR2_PACKAGE_PCRE
+ 	help
+ 	  NAXSI means Nginx Anti XSS & SQL Injection.
