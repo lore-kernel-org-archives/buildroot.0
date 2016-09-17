@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2016 15:35:27 +0200
-Subject: [Buildroot] [PATCH V2 2/2] xvisor: new package
-In-Reply-To: <1473795934-27033-3-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1473795934-27033-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1473795934-27033-3-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20160917153527.417148df@free-electrons.com>
+Date: Sat, 17 Sep 2016 15:50:30 +0200
+Subject: [Buildroot] [1/1,RFC] mysql: replace mysql with mariadb 10.0
+In-Reply-To: <0775fdeb-5056-73cd-4cf8-7d4edeb6d8a7@mind.be>
+References: <afcad3cc-5a25-a410-ef18-b6a18ed45406@je-eigen-domein.nl>
+ <0775fdeb-5056-73cd-4cf8-7d4edeb6d8a7@mind.be>
+Message-ID: <20160917155030.3eb602eb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 13 Sep 2016 21:45:34 +0200, Eric Le Bihan wrote:
-> This new package provides Xvisor, an open-source type-1 hypervisor,
-> which aims at providing a monolithic, light-weight, portable, and
-> flexible virtualization solution.
+On Thu, 15 Sep 2016 23:17:51 +0200, Arnout Vandecappelle wrote:
+
+> > How responsible is it to keep packages in such state around, when there do are
+> > alternatives?  
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>  True. But it should be relatively easy to bump the existing mysql package. If
+> it is completely replaced by mariadb, it won't be so easy anymore.
+> 
+>  We could mark mysql as deprecated pending the bump. That could motivate people
+> to step up and fix it.
 
-I've applied, after doing a few changes, see below.
-
-> diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
-> new file mode 100644
-> index 0000000..0e7b995
-> --- /dev/null
-> +++ b/package/xvisor/xvisor.mk
-> @@ -0,0 +1,72 @@
-> +################################################################################
-> +#
-> +# xvisor
-> +#
-> +################################################################################
-> +
-> +XVISOR_VERSION = 0.2.8
-> +XVISOR_SITE = http://www.xhypervisor.org/tarball
-> +XVISOR_LICENSE = GPLv2
-
-Licensing is GPLv2+, all files that I checked say "GPLv2 or later".
-
-
-> +define XVISOR_CREATE_UBOOT_IMAGE
-> +	$(HOST_DIR)/usr/bin/mkimage -A $(BR2_ARCH) -O linux -T kernel -C none \
-
-I've used $(MKIMAGE) instead of $(HOST_DIR)/usr/bin/mkimage, and
-$(MKIMAGE_ARCH) instead of $(BR2_ARCH).
-
-Applied with those changes.
-
-Thanks,
+As Floris said, our mysql package is deprecated, so I'm all for
+replacing it with an up-to-date mariadb package. If later on, someone
+else really needs MySQL, we can re-add it, and add the necessary
+virtual package to allow selecting between mysql and mariadb. But until
+there's a decent mysql package available, I believe replacing it
+completely with an up-to-date mariadb package is better.
 
 Thomas
 -- 
