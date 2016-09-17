@@ -1,47 +1,44 @@
-From: Manuel =?UTF-8?B?R3Jvw58=?= <mgr@nordkrater.de>
-Date: Sat, 17 Sep 2016 21:52:59 +0200
-Subject: [Buildroot] [PATCH] websocketpp: new package
-In-Reply-To: <3456c09e-f4ef-203b-57c0-5c8256115325@gmail.com>
-References: <20160813112629.31883-1-mgr@nordkrater.de>
- <20160816053502.15187-1-mgr@nordkrater.de>
- <20160816053502.15187-2-mgr@nordkrater.de>
- <3456c09e-f4ef-203b-57c0-5c8256115325@gmail.com>
-Message-ID: <20160917215259.71ec2cc0@jenova>
+From: Mathieu Audat <mathieu.audat@savoirfairelinux.com>
+Date: Sat, 17 Sep 2016 16:23:22 -0400
+Subject: [Buildroot] [PATCH v2 0/2] configs: Add ts4900 basic board support
+Message-ID: <1474143804-19181-1-git-send-email-mathieu.audat@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+This serie of patches add the support for the TS-4900 SoM manufactured by
+Technologic Systems based on an i.MX6 SoC from Freescale.
 
-On Sat, 3 Sep 2016 18:53:39 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+Changes in v2:
+ - add a paragraph in the readme about the pre-flashed bootloader
+ - clean defconfig
+ - improve help text in ts4900-fpga package
+ - add a locally calculated sha256 for ts4900-fpga.bin
+ - ts4900-fpga version is now 0930 instead of 0326
+ - copy bitstream during target stage instead of image stage
 
-> Le 16/08/2016 ? 07:35, Manuel Gro? a ?crit :
-> > This package provides websocketpp, a header only C++ library that
-> > implements websocket client and server functionality.  
-> 
-> Thanks for this contribution!
-> 
-> There is another patch submitted by Pieter De Gendt for websocketpp:
-> http://patchwork.ozlabs.org/patch/665214/
-> It would be great if you can review and test it.
+Mathieu Audat (2):
+  ts4900-fpga: add ts4900-fpga package
+  configs: add defconfig for TS-4900
 
-I had a look and also read the subsequent conversation on this list.
-The proposed changes already exceed my insight into the package.
-I just need it for a proprietary package I use, and for that I can
-include it as simple as in my patch.
+ board/technologic/ts4900/genimage.cfg  | 10 +++++++
+ board/technologic/ts4900/post-image.sh | 20 ++++++++++++++
+ board/technologic/ts4900/readme.txt    | 50 ++++++++++++++++++++++++++++++++++
+ configs/ts4900_defconfig               | 19 +++++++++++++
+ package/Config.in                      |  1 +
+ package/ts4900-fpga/Config.in          | 11 ++++++++
+ package/ts4900-fpga/ts4900-fpga.hash   |  5 ++++
+ package/ts4900-fpga/ts4900-fpga.mk     | 21 ++++++++++++++
+ 8 files changed, 137 insertions(+)
+ create mode 100644 board/technologic/ts4900/genimage.cfg
+ create mode 100755 board/technologic/ts4900/post-image.sh
+ create mode 100644 board/technologic/ts4900/readme.txt
+ create mode 100644 configs/ts4900_defconfig
+ create mode 100644 package/ts4900-fpga/Config.in
+ create mode 100644 package/ts4900-fpga/ts4900-fpga.hash
+ create mode 100644 package/ts4900-fpga/ts4900-fpga.mk
 
-I'll follow the changes to that patch, but I'm afraid I won't be very
-helpful.
 -- 
-Gr??e/Regards
-Manuel Gro?
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 801 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160917/0a0cf1a3/attachment-0001.asc>
+1.9.1
