@@ -1,57 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2016 14:20:44 +0200
-Subject: [Buildroot] [git commit] package/{mesa3d,
-	mesa3d-headers}: bump version to 12.0.3
-Message-ID: <20160917122059.5920881971@busybox.osuosl.org>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Sat, 17 Sep 2016 14:25:12 +0200
+Subject: [Buildroot] [PATCH] linux-firmware: bump version
+In-Reply-To: <87h99eafj5.fsf@dell.be.48ers.dk>
+References: <1473962213-21519-1-git-send-email-gustavo@zacarias.com.ar>
+ <87poo4dilz.fsf@dell.be.48ers.dk>
+ <08db6ee07552d254f79b9719c41ac790@zacarias.com.ar>
+ <02eb48ef-5659-9364-a55c-6f9c17ca0a82@je-eigen-domein.nl>
+ <87intuc2y2.fsf@dell.be.48ers.dk>
+ <88a0238b-6ec3-d1d4-a8c7-6084ece071eb@je-eigen-domein.nl>
+ <87h99eafj5.fsf@dell.be.48ers.dk>
+Message-ID: <f7dd3afa-eac2-170f-020a-cc415662cea1@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85a8766a7b32b704f9e109fa6cac45715059d140
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/17/2016 02:15 PM, Peter Korsgaard wrote:
+>>>>>> "Floris" == Floris Bos <bos@je-eigen-domein.nl> writes:
+> Hi,
+>
+>   >> Hmm, perhaps. Do you have a rpi 3 to test on? The linux-firmware commit
+>   >> doesn't mention anything about it:
+>   >>
+>   >> http://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/commit/?id=c4c07a8d1128d50a5c2885ceea1abbebaa82f820
+>
+>   > ==
+>   > [    6.785594] usbcore: registered new interface driver brcmfmac
+>   > [    6.786851] brcmfmac_sdio mmc1:0001:1: Direct firmware load for
+>   > brcm/brcmfmac43430-sdio.txt failed with error -2
+>   > [    7.789831] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
+>   > clkctl 0x50
+>   > [    8.802492] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
+>   > clkctl 0x50
+>   > ==
+>
+>   > Again, maybe they changed things very recently in a newer kernel
+>   > branch or something.
+>   > But it simply does not work with the standard rpi one unless you also
+>   > have the .txt
+>
+> Ok, thanks. Does it work with the .bin file from linux-firmware and the
+> .txt file from RPi-Distro?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 4 ++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Yes, that combination does work.
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 4b6842e..3080afe 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 12.0.2
-+MESA3D_HEADERS_VERSION = 12.0.3
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 65c59a5..09923fd 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,2 @@
--# From https://cgit.freedesktop.org/mesa/mesa/plain/docs/relnotes/12.0.2.html
--sha256 d957a5cc371dcd7ff2aa0d87492f263aece46f79352f4520039b58b1f32552cb  mesa-12.0.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2016-September/000236.html
-+sha256 1dc86dd9b51272eee1fad3df65e18cda2e556ef1bc0b6e07cd750b9757f493b1  mesa-12.0.3.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 12ceee8..fbc0aff 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 12.0.2
-+MESA3D_VERSION = 12.0.3
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+
+Yours sincerely,
+
+Floris Bos
