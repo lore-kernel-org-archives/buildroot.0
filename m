@@ -1,70 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2016 14:10:52 +0200
-Subject: [Buildroot] [PATCH] darkhttpd: new package
-In-Reply-To: <1474111899-5705-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1474111899-5705-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20160917141052.61d23a72@free-electrons.com>
+Date: Sat, 17 Sep 2016 14:05:41 +0200
+Subject: [Buildroot] [git commit] php: bump to 7.0.11
+Message-ID: <20160917121312.2DB5C8074E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=82cc7ecf9f4626eb5458bc476cd3f0a1ae312e94
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 17 Sep 2016 13:31:39 +0200, Eric Le Bihan wrote:
-> This new package provides darkhttpd, a simple, fast HTTP 1.1 web server
-> for static content.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for this patch. A few comments/questions below.
-
-> diff --git a/package/darkhttpd/Config.in b/package/darkhttpd/Config.in
-> new file mode 100644
-> index 0000000..bd12588
-> --- /dev/null
-> +++ b/package/darkhttpd/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_DARKHTTPD
-> +	bool "darkhttpd"
-
-Did you validate the architecture/toolchain dependencies? MMU, C++,
-wchar, etc. ?
-
-> +	  Note: when Busybox or SysV init system is used, darkhttpd logs to
-> +	  /var/log/darkhttpd.log, which may grow beyond the file system limits.
-> +	  Please consider using a log rotating system such as logrotate or
-> +	  change the path to the log file using the configuration file.
-
-Is it really worth having such a comment here? I believe this applies
-to many (all?) daemons.
-
-> +# Allow a few customizations from a config file
-> +test -r /etc/default/darkhttpd && . /etc/default/darkhttpd
-> +
-> +DARKHTTPD_PROG=/usr/sbin/darkhttpd
-> +DARKHTTPD_PIDFILE=/var/run/darkhttpd.pid
-> +DARKHTTPD_FLAGS="$DARKHTTPD_FLAGS --chroot --uid nobody --gid www-data"
-> +DARKHTTPD_ARGS="${DARKHTTPD_ROOT:-/var/www} --log /var/log/darkhttpd.log $DARKHTTPD_FLAGS"
-
-I don't understand why you have this construction of _ARGS in several
-steps. What about:
-
-DARKHTTPD_ARGS="${DARKHTTPD_ROOT:-/var/www} --log /var/log/darkhttpd.log $DARKHTTPD_ARGS --chroot --uid nobody --gid www-data"
-
-instead (assuming the variable in the /etc/default file is
-DARKHTTP_ARGS instead of DARKHTTP_FLAGS, the former being much more
-common than the latter IMO).
-
-> +DARKHTTPD_MAKE_OPTS = CC="$(TARGET_CC)"
-
-Can you use $(TARGET_CONFIGURE_OPTS) instead ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 6e146f8..0092095 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-sha256 970c322ba3e472cb0264b8ba9d4d92e87918da5d0cca53c4aba2a70545b8626d  php-7.0.9.tar.xz
++sha256 d4cccea8da1d27c11b89386f8b8e95692ad3356610d571253d00ca67d524c735  php-7.0.11.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 7df10be..083b451 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.0.9
++PHP_VERSION = 7.0.11
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
