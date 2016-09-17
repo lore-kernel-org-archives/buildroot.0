@@ -1,68 +1,47 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 17 Sep 2016 21:44:02 +0200
-Subject: [Buildroot] [PATCH 3/4] package/efl: enable libdrm support
-In-Reply-To: <20160917191151.5e0f0f42@free-electrons.com>
-References: <1473282523-12796-1-git-send-email-romain.naour@gmail.com>
- <1473282523-12796-3-git-send-email-romain.naour@gmail.com>
- <20160917191151.5e0f0f42@free-electrons.com>
-Message-ID: <51a34943-1a28-12ec-538f-d6f58ef932ec@gmail.com>
+From: Manuel =?UTF-8?B?R3Jvw58=?= <mgr@nordkrater.de>
+Date: Sat, 17 Sep 2016 21:52:59 +0200
+Subject: [Buildroot] [PATCH] websocketpp: new package
+In-Reply-To: <3456c09e-f4ef-203b-57c0-5c8256115325@gmail.com>
+References: <20160813112629.31883-1-mgr@nordkrater.de>
+ <20160816053502.15187-1-mgr@nordkrater.de>
+ <20160816053502.15187-2-mgr@nordkrater.de>
+ <3456c09e-f4ef-203b-57c0-5c8256115325@gmail.com>
+Message-ID: <20160917215259.71ec2cc0@jenova>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Romain,
 
-Thanks for improving the two previous patches!
+On Sat, 3 Sep 2016 18:53:39 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-Le 17/09/2016 ? 19:11, Thomas Petazzoni a ?crit :
-> Hello,
+> Le 16/08/2016 ? 07:35, Manuel Gro? a ?crit :
+> > This package provides websocketpp, a header only C++ library that
+> > implements websocket client and server functionality.  
 > 
-> On Wed,  7 Sep 2016 23:08:42 +0200, Romain Naour wrote:
->> This support is required for Enlightenment wayland support [1] which
->> will be added in a follow up patch.
->>
->> As stated in configure.ac, libdrm support needs libdrm, elput,
->> libxkbcommon and libgbm.
->>
->> libgbm is only provided by mesa3d package when OpenGL EGL support is
->> enabled, so add a direct dependency on mesa3d.
+> Thanks for this contribution!
 > 
-> So, on which platform have you tested that?
+> There is another patch submitted by Pieter De Gendt for websocketpp:
+> http://patchwork.ozlabs.org/patch/665214/
+> It would be great if you can review and test it.
 
-Initially, I worked only with Qemu only but I set up an x86_64 atom target to
-test on real hardware.
+I had a look and also read the subsequent conversation on this list.
+The proposed changes already exceed my insight into the package.
+I just need it for a proprietary package I use, and for that I can
+include it as simple as in my patch.
 
-> 
-> I'm still a bit uneasy with this libgbm stuff provided only by mesa3d.
-> Does this means that other OpenGL ES implementations are not suitable?
-
-On the efl download page [1] they say "opengl (mesa or vendor supplied desktop
-OpenGL or OpenGL-ES2)", so mesa3d seems the only suitable implementation
-available in Buildroot.
-
-[1] https://www.enlightenment.org/download
-
-> 
->> Rework the libxkbcommon dependency since it's now required for
->> ecore-wayland and libdrm support.
-> 
-> And elput (see earlier patch).
-> 
->> +config BR2_PACKAGE_EFL_DRM
->> +	bool "Evas DRM Engine"
->> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
->> +	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
->> +	depends on BR2_PACKAGE_EFL_ELPUT
-> 
-> Why do you have a "depends on" for this rather than a "select" ?
-
-Yes, "select" should be used here.
-
-Best regards,
-Romain
-
-> 
-> Thomas
-> 
+I'll follow the changes to that patch, but I'm afraid I won't be very
+helpful.
+-- 
+Gr??e/Regards
+Manuel Gro?
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 801 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160917/0a0cf1a3/attachment-0001.asc>
