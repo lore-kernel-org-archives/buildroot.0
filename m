@@ -1,33 +1,53 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 17 Sep 2016 13:58:36 +0200
-Subject: [Buildroot] [RFC: PATCH 0/3] DHCP configuration via networkd
-Message-ID: <1474113519-24713-1-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Sat, 17 Sep 2016 13:58:37 +0200
+Subject: [Buildroot] [RFC: PATCH 1/3] systemd: configure DHCP via networkd
+In-Reply-To: <1474113519-24713-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1474113519-24713-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1474113519-24713-2-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This small series removes the current limitation of not allowing the user to
-have a network interface configured automatically via DHCP when
-systemd-networkd is used.
+If systemd-networkd is enabled and $BR2_SYSTEM_DHCP is set, then create
+a .network file to configure the selected network interface via DHCP.
 
-To do so, the systemd package is updated to generate a .network file for the
-configured interface.
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/systemd/systemd.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Also add an option to enable or disable predictable network interface names
-when udev is used. It is disabled by default, so the end user gets the same
-interface names across busybox/systemd configurations.
-
-Eric Le Bihan (3):
-  systemd: configure DHCP via networkd
-  system: allow auto net configuration with networkd
-  system: enable predictable net interface names
-
- package/skeleton/skeleton.mk | 11 +++++++++++
- package/systemd/systemd.mk   | 13 +++++++++++++
- system/Config.in             | 20 ++++++++++++++------
- 3 files changed, 38 insertions(+), 6 deletions(-)
-
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index fb07819..5062750 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -275,6 +275,18 @@ define SYSTEMD_INSTALL_RESOLVCONF_HOOK
+ 	ln -sf ../run/systemd/resolve/resolv.conf \
+ 		$(TARGET_DIR)/etc/resolv.conf
+ endef
++SYSTEMD_NETWORK_DHCP_IFACE = $(call qstrip,$(BR2_SYSTEM_DHCP))
++ifneq ($(SYSTEMD_NETWORK_DHCP_IFACE),)
++define SYSTEMD_INSTALL_NETWORK_CONFS
++	( \
++		echo "[Match]"; \
++		echo "Name=$(SYSTEMD_NETWORK_DHCP_IFACE)"; \
++		echo; \
++		echo "[Network]"; \
++		echo "DHCP=ipv4"; \
++	) > $(TARGET_DIR)/etc/systemd/network/dhcp.network
++endef
++endif
+ else
+ SYSTEMD_CONF_OPTS += --disable-networkd
+ define SYSTEMD_INSTALL_SERVICE_NETWORK
+@@ -377,6 +389,7 @@ define SYSTEMD_INSTALL_INIT_SYSTEMD
+ 	$(SYSTEMD_INSTALL_SERVICE_TTY)
+ 	$(SYSTEMD_INSTALL_SERVICE_NETWORK)
+ 	$(SYSTEMD_INSTALL_SERVICE_TIMESYNC)
++	$(SYSTEMD_INSTALL_NETWORK_CONFS)
+ endef
+ 
+ $(eval $(autotools-package))
 -- 
 2.4.11
