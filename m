@@ -1,40 +1,101 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 17 Sep 2016 23:55:09 +0200
-Subject: [Buildroot] [PATCH] package/efl: bump to 1.18.1
-Message-ID: <1474149309-16578-1-git-send-email-romain.naour@gmail.com>
+Date: Sat, 17 Sep 2016 23:56:57 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/efl: enable libdrm support
+Message-ID: <1474149418-16756-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This support is required for Enlightenment wayland support [1] which
+will be added in a follow up patch.
+
+As stated in configure.ac, libdrm support needs libdrm, elput,
+libxkbcommon and libgbm.
+
+libgbm is only provided by mesa3d package when OpenGL EGL support is
+enabled, so add a direct dependency on mesa3d.
+
+Rework the libxkbcommon dependency since it's now required for
+ecore-wayland, elput and libdrm support.
+
+[1] https://www.enlightenment.org/about-wayland
+
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/efl/efl.hash | 4 ++--
- package/efl/efl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+libgdm can be found as a standalone library on github [2] but it seems
+not very active. I prefer to rely on Mesa3d version.
+[2] https://github.com/robclark/libgbm
 
-diff --git a/package/efl/efl.hash b/package/efl/efl.hash
-index 81727a2..37354fb 100644
---- a/package/efl/efl.hash
-+++ b/package/efl/efl.hash
-@@ -1,2 +1,2 @@
--# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.0.tar.xz.sha256
--sha256	06a0bbf5c28f96731b115b0adfa11374d07beb983ae4612ed25b34f4ab5cbf9e	efl-1.18.0.tar.xz
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.1.tar.xz.sha256
-+sha256	0c6bd150d8e838f849effd462d91d86255e3aaade47a6077d0aa80d2b8e9d222	efl-1.18.1.tar.xz
+v2: use "select" BR2_PACKAGE_EFL_ELPUT instead of "depends on" (ThomasP)
+    fix commit log after 373c24cd1bb98a8b826b92034f7cb39780719625 (ThomasP)
+---
+ package/efl/Config.in | 13 +++++++++++++
+ package/efl/efl.mk    | 13 +++++++++++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
+
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index f963ade..9f9fcf0 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -193,6 +193,19 @@ config BR2_PACKAGE_EFL_ELPUT
+ 	  ecore_drm, etc) to handle interfacing with libinput without
+ 	  having to duplicate the code in each subsystem.
+ 
++config BR2_PACKAGE_EFL_DRM
++	bool "Evas DRM Engine"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
++	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
++	select BR2_PACKAGE_EFL_ELPUT
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBXKBCOMMON
++	help
++	  This option enable building support for the Evas DRM Engine.
++
++comment "Evas DRM Engine needs mesa3d w/ EGL support, threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL
++
+ comment "libevas loaders"
+ 
+ config BR2_PACKAGE_EFL_PNG
 diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 8038739..949da2d 100644
+index 949da2d..8ba478a 100644
 --- a/package/efl/efl.mk
 +++ b/package/efl/efl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -146,7 +146,7 @@ EFL_CONF_OPTS += --with-crypto=none
+ endif # BR2_PACKAGE_OPENSSL
  
--EFL_VERSION = 1.18.0
-+EFL_VERSION = 1.18.1
- EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
- EFL_SITE = http://download.enlightenment.org/rel/libs/efl
- EFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+-EFL_DEPENDENCIES += wayland libxkbcommon
++EFL_DEPENDENCIES += wayland
+ EFL_CONF_OPTS += --enable-wayland
+ else
+ EFL_CONF_OPTS += --disable-wayland
+@@ -154,7 +154,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_EFL_ELPUT),y)
+ EFL_CONF_OPTS += --enable-elput
+-EFL_DEPENDENCIES += libinput libxkbcommon
++EFL_DEPENDENCIES += libinput
+ else
+ EFL_CONF_OPTS += --disable-elput
+ endif
+@@ -198,6 +198,15 @@ else ifeq ($(BR2_PACKAGE_EFL_OPENGL_NONE),y)
+ EFL_CONF_OPTS += --with-opengl=none
+ endif
+ 
++ifeq ($(BR2_PACKAGE_EFL_DRM),y)
++EFL_CONF_OPTS += --enable-drm
++EFL_DEPENDENCIES += libdrm libegl mesa3d
++else
++EFL_CONF_OPTS += --disable-drm
++endif
++
++EFL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBXKBCOMMON),libxkbcommon)
++
+ # Loaders that need external dependencies needs to be --enable-XXX=yes
+ # otherwise the default is '=static'.
+ # All other loaders are statically built-in
 -- 
 2.5.5
