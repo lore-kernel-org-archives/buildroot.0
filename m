@@ -1,38 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2016 11:21:12 +0200
-Subject: [Buildroot] [PATCH] php: bump 7.0.11
-In-Reply-To: <CANqewP2HZviH=vUGPu4JDrOKgpTjXx9BuVbO23PiM5u27+t5OA@mail.gmail.com>
-References: <CANqewP0UNjM_Ya=awwHEC+H3+h8UH=DLFv9YoTihOw_sK4Ld9g@mail.gmail.com>
- <20160916184113.6fd787c1@free-electrons.com>
- <CANqewP2HZviH=vUGPu4JDrOKgpTjXx9BuVbO23PiM5u27+t5OA@mail.gmail.com>
-Message-ID: <20160917112112.53a0e5cf@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 17 Sep 2016 12:11:12 +0200
+Subject: [Buildroot] [PATCH] package/nginx-naxsi: add pcre dependency to
+	.mk
+In-Reply-To: <CAHXCMML5P6B3XJkwRz8bZx41SOubeZRAfAp1-SCk4pRjpmE7AA@mail.gmail.com>
+ (Samuel Martin's message of "Tue, 13 Sep 2016 21:33:02 +0200")
+References: <20160913180102.4825-1-s.martin49@gmail.com>
+ <20160913212249.0e79d44f@free-electrons.com>
+ <CAHXCMML5P6B3XJkwRz8bZx41SOubeZRAfAp1-SCk4pRjpmE7AA@mail.gmail.com>
+Message-ID: <87lgyqala7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-On Sat, 17 Sep 2016 07:36:54 +0000, Tatsuyuki Ishi wrote:
-> Thank you, the following is the updated patch.
+Hi,
 
-Thanks. But this patch also cannot be applied, for two reasons:
+ >> Is this really necessary? nginx-naxsi is not a real package, it just
+ >> allows to download the source code of nginx-naxsi before nginx gets
+ >> built.
+ >> 
+ >> And nginx.mk already has pcre in NGINX_DEPENDENCIES when pcre is
+ >> enabled, so I believe the select added in
+ >> 218dfdd9038af882a02fe64f13a533c8ce75ddc1 is sufficient.
 
- - The changelog part of the message such as "Thank you, the
-   following..." should not be part of the commit log, but instead
-   should be below the "---" so that it does not get integrated in the
-   Git history when the patch is applied.
+ > I agree, hence the first patch...
 
- - Since you haven't used git send-email, your patch is line-wrapped
-   (i.e long lines are wrapped), so it cannot be applied.
+ >> 
+ >> If not, could you explain why?
 
-Could you rework your patch to take into account those comments?
+ > ... but Arnout does not seem to share this opinion [1].
 
-Thanks!
+ > So, I'm tempted to said "maintainer call" on this.
 
-Thomas
+ > [1] http://lists.busybox.net/pipermail/buildroot/2016-September/172113.html
+
+I instead added a comment above the select to clarify and marked this
+patch as superseeded in patchwork.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
