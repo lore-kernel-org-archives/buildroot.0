@@ -1,137 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2016 13:35:31 +0200
-Subject: [Buildroot] [git commit] package/upmpdcli: add patch to use
-	pkg-config for libupnpp
-Message-ID: <20160917114306.6F898817D4@busybox.osuosl.org>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Sat, 17 Sep 2016 13:47:25 +0200
+Subject: [Buildroot] [PATCH] openal: Disable build also for examples and
+ tests
+In-Reply-To: <1473956868-9619-1-git-send-email-nerv@dawncrow.de>
+References: <1473956868-9619-1-git-send-email-nerv@dawncrow.de>
+Message-ID: <32fb4a64-4487-7f3d-e4ac-8878af33b924@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56d878a92727ee8883975e1fead4e4d2206ff62f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Building upmpdcli aborts because of an unsafe header inclusion of
-`/usr/include/libupnpp`. Using `{prefix}` to get the header path is
-wrong for cross-compilation.
-
-Instead of hard-coding the flags for libupnpp use pkg-config to get the
-correct ones.
-
-Note that this patch adds the host-pkgconfig dependency unconditionally and
-removes the necessity to pass the libupnpp manually to LIBS for a static
-build.
-
-Upstream-status: https://github.com/medoc92/upmpdcli/pull/49
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0002-use-pkg-config-for-libupnpp.patch         | 66 ++++++++++++++++++++++
- package/upmpdcli/upmpdcli.mk                       | 17 +-----
- 2 files changed, 69 insertions(+), 14 deletions(-)
-
-diff --git a/package/upmpdcli/0002-use-pkg-config-for-libupnpp.patch b/package/upmpdcli/0002-use-pkg-config-for-libupnpp.patch
-new file mode 100644
-index 0000000..daef415
---- /dev/null
-+++ b/package/upmpdcli/0002-use-pkg-config-for-libupnpp.patch
-@@ -0,0 +1,66 @@
-+From 16bcaaee1c28b972e0cc6a542f511af44306ce6c Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Wed, 14 Sep 2016 11:43:21 +0200
-+Subject: [PATCH] Use pkg-config for libupnpp
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Use pkg-config for libupnpp to fix build issues when cross-compiling and
-+building upmpdcli statically.
-+
-+Building upmpdcli aborts because of an unsafe header inclusion of
-+`/usr/include/libupnpp`. Using `{prefix}` to get the header path is wrong for
-+cross-compilation. Instead of hard-coding the flags for libupnpp use pkg-config
-+to get the correct ones.
-+
-+Upstream-status: https://github.com/medoc92/upmpdcli/pull/49
-+
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ Makefile.am  | 2 +-
-+ configure.ac | 8 ++++----
-+ 2 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index d0c10a4..5c83aa1 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,5 +1,5 @@
-+ AM_CPPFLAGS = -DDEBUG -g -Wall \
-+-            -I${prefix}/include/libupnpp \
-++            $(upnpp_CFLAGS) \
-+             -I$(top_srcdir)/src \
-+             -DDATADIR=\"${pkgdatadir}\" -DCONFIGDIR=\"${sysconfdir}\"
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index 108dcce..a165b5d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -35,10 +35,10 @@ dnl AC_CHECK_LIB([upnp], [UpnpInit], [], AC_MSG_ERROR([libupnp not found]))
-+ dnl AC_CHECK_LIB([curl], [curl_easy_init], [],AC_MSG_ERROR([libcurl not found]))
-+ dnl AC_CHECK_LIB([expat], [XML_ParserCreate], [],AC_MSG_ERROR([libexpat not found]))
-+ 
-+-AC_CHECK_LIB([upnpp], [getsyshwaddr], [], [AC_MSG_ERROR([libupnpp])])
-++PKG_CHECK_MODULES([upnpp], [libupnpp], [], [AC_MSG_ERROR([libupnpp])])
-+ AC_CHECK_LIB([mpdclient], [mpd_connection_new], [],
-+                           AC_MSG_ERROR([libmpdclient not found]))
-+-SCCTL_LIBS=$LIBS
-++SCCTL_LIBS="$LIBS $upnpp_LIBS"
-+ 
-+ AC_CHECK_LIB([microhttpd], [MHD_queue_response], [], [])
-+ 
-+@@ -56,8 +56,8 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM(
-+     [AC_MSG_ERROR([libjsoncpp not found.])])
-+ AC_LANG_POP
-+ 
-+-UPMPDCLI_LIBS=$LIBS
-+-echo "UPMPDCLI_LIBS=$LIBS"
-++UPMPDCLI_LIBS="$LIBS $upnpp_LIBS"
-++echo "UPMPDCLI_LIBS=$UPMPDCLI_LIBS"
-+ 
-+ LIBS=""
-+ 
-+-- 
-+2.9.3
-+
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index b70f413..3beda1b 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -8,23 +8,12 @@ UPMPDCLI_VERSION = 1.2.2
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = GPLv2+
- UPMPDCLI_LICENSE_FILES = COPYING
--UPMPDCLI_DEPENDENCIES = libmpdclient libupnpp libmicrohttpd jsoncpp
--# touching configure.ac in
-+UPMPDCLI_DEPENDENCIES = host-pkgconf libmpdclient libupnpp libmicrohttpd jsoncpp
-+# touching configure.ac and Makefile.am in
- #   0001-fix-jsoncpp-detection.patch
-+#   0002-use-pkg-config-for-libupnpp.patch
- UPMPDCLI_AUTORECONF = YES
- 
--ifeq ($(BR2_STATIC_LIBS),y)
--# Upmpdcli forgets to take the dependencies of libupnpp into
--# consideration, breaking static linking, so help it.
--# Libupnpp unfortunately doesn't provide a .pc file, so manually
--# handle the dependencies here.
--# The build system doesn't expand LIBS from the configure step, so
--# manually pass it to make.
--UPMPDCLI_DEPENDENCIES += host-pkgconf
--UPMPDCLI_MAKE_OPTS = \
--	LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs expat libcurl libupnp`"
--endif
--
- # Upmpdcli only runs if user upmpdcli exists
- define UPMPDCLI_USERS
- 	upmpdcli -1 upmpdcli -1 * - - - Upmpdcli MPD UPnP Renderer Front-End
+Am 15.09.2016 um 18:27 schrieb Andr? Hentschel:
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> ---
+>  package/openal/openal.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+> index 356f2c1..6384104 100644
+> --- a/package/openal/openal.mk
+> +++ b/package/openal/openal.mk
+> @@ -16,8 +16,8 @@ OPENAL_LICENSE = LGPLv2+
+>  OPENAL_LICENSE_FILES = COPYING
+>  OPENAL_INSTALL_STAGING = YES
+>  
+> -# We don't need the utilities, Distros don't ship them either
+> -OPENAL_CONF_OPTS += -DALSOFT_UTILS=OFF
+> +# We don't need examples, tests and utilities, Distros don't ship them either
+> +OPENAL_CONF_OPTS += -DALSOFT_UTILS=OFF -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF
+>  
+>  ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),y)
+>  OPENAL_CONF_OPTS += -DEXTRA_LIBS=atomic
+> 
+Note, this is for http://autobuild.buildroot.net/results/a11eab534b8642077705d891329c1fd40d394419
