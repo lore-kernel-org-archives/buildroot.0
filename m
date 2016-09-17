@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2016 14:05:02 +0200
-Subject: [Buildroot] [PATCH v2 1/6] package/libupnpp: add patch to get
- pkg-config file
-In-Reply-To: <20160915064001.8684-2-joerg.krause@embedded.rocks>
-References: <20160915064001.8684-1-joerg.krause@embedded.rocks>
- <20160915064001.8684-2-joerg.krause@embedded.rocks>
-Message-ID: <20160917140502.175fc4bb@free-electrons.com>
+Date: Sat, 17 Sep 2016 14:10:52 +0200
+Subject: [Buildroot] [PATCH] darkhttpd: new package
+In-Reply-To: <1474111899-5705-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1474111899-5705-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20160917141052.61d23a72@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,29 +12,59 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 15 Sep 2016 08:39:56 +0200, J?rg Krause wrote:
-> Apply a patch from upstream to install a pkg-config file for libupnpp.
+On Sat, 17 Sep 2016 13:31:39 +0200, Eric Le Bihan wrote:
+> This new package provides darkhttpd, a simple, fast HTTP 1.1 web server
+> for static content.
 > 
-> Fetch from:
-> https://github.com/medoc92/libupnpp/commit/9f03bb0e7b47e2843edea6f25ed9eabbfb6412df
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/libupnpp/0002-Add-pkg-config-file.patch | 63 +++++++++++++++++++++++++
->  package/libupnpp/libupnpp.mk                    |  4 +-
->  2 files changed, 66 insertions(+), 1 deletion(-)
->  create mode 100644 package/libupnpp/0002-Add-pkg-config-file.patch
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-Entire patch series applied, thanks!
+Thanks for this patch. A few comments/questions below.
 
-Hopefully all those patches are going to end up in their respective
-upstream projects, so that we can at some point remove them from
-Buildroot.
+> diff --git a/package/darkhttpd/Config.in b/package/darkhttpd/Config.in
+> new file mode 100644
+> index 0000000..bd12588
+> --- /dev/null
+> +++ b/package/darkhttpd/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_DARKHTTPD
+> +	bool "darkhttpd"
+
+Did you validate the architecture/toolchain dependencies? MMU, C++,
+wchar, etc. ?
+
+> +	  Note: when Busybox or SysV init system is used, darkhttpd logs to
+> +	  /var/log/darkhttpd.log, which may grow beyond the file system limits.
+> +	  Please consider using a log rotating system such as logrotate or
+> +	  change the path to the log file using the configuration file.
+
+Is it really worth having such a comment here? I believe this applies
+to many (all?) daemons.
+
+> +# Allow a few customizations from a config file
+> +test -r /etc/default/darkhttpd && . /etc/default/darkhttpd
+> +
+> +DARKHTTPD_PROG=/usr/sbin/darkhttpd
+> +DARKHTTPD_PIDFILE=/var/run/darkhttpd.pid
+> +DARKHTTPD_FLAGS="$DARKHTTPD_FLAGS --chroot --uid nobody --gid www-data"
+> +DARKHTTPD_ARGS="${DARKHTTPD_ROOT:-/var/www} --log /var/log/darkhttpd.log $DARKHTTPD_FLAGS"
+
+I don't understand why you have this construction of _ARGS in several
+steps. What about:
+
+DARKHTTPD_ARGS="${DARKHTTPD_ROOT:-/var/www} --log /var/log/darkhttpd.log $DARKHTTPD_ARGS --chroot --uid nobody --gid www-data"
+
+instead (assuming the variable in the /etc/default file is
+DARKHTTP_ARGS instead of DARKHTTP_FLAGS, the former being much more
+common than the latter IMO).
+
+> +DARKHTTPD_MAKE_OPTS = CC="$(TARGET_CC)"
+
+Can you use $(TARGET_CONFIGURE_OPTS) instead ?
 
 Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
