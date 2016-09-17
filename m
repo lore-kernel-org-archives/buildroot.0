@@ -1,51 +1,48 @@
-From: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
-Date: Sat, 17 Sep 2016 07:36:54 +0000
-Subject: [Buildroot] [PATCH] php: bump 7.0.11
-In-Reply-To: <20160916184113.6fd787c1@free-electrons.com>
-References: <CANqewP0UNjM_Ya=awwHEC+H3+h8UH=DLFv9YoTihOw_sK4Ld9g@mail.gmail.com>
- <20160916184113.6fd787c1@free-electrons.com>
-Message-ID: <CANqewP2HZviH=vUGPu4JDrOKgpTjXx9BuVbO23PiM5u27+t5OA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 17 Sep 2016 11:04:21 +0200
+Subject: [Buildroot] [PATCH] linux-firmware: bump version
+In-Reply-To: <02eb48ef-5659-9364-a55c-6f9c17ca0a82@je-eigen-domein.nl> (Floris
+ Bos's message of "Fri, 16 Sep 2016 20:11:17 +0200")
+References: <1473962213-21519-1-git-send-email-gustavo@zacarias.com.ar>
+ <87poo4dilz.fsf@dell.be.48ers.dk>
+ <08db6ee07552d254f79b9719c41ac790@zacarias.com.ar>
+ <02eb48ef-5659-9364-a55c-6f9c17ca0a82@je-eigen-domein.nl>
+Message-ID: <87intuc2y2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you, the following is the updated patch.
+>>>>> "Floris" == Floris Bos <bos@je-eigen-domein.nl> writes:
 
-From: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
+ > On 09/16/2016 07:54 PM, Gustavo Zacarias wrote:
+ >> On 2016-09-15 17:16, Peter Korsgaard wrote:
+ >> 
+ >>> Committed, thanks.
+ >>> 
+ >>> Will you send a patch to add BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX to
+ >>> the rpi3 defconfig?
+ >> 
+ >> Hi.
+ >> Well, without some $WiFi package (hostapd, wpa_supplicant,
+ >> wireless-tools) just copying the firmware serves no purpose, though
+ >> it can be done for completeness.
+ >> That being said, i lack a rpi3.
 
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > And unless that changed recently, just the .bin the patch added
+ > wouldn't be sufficient for Pi 3.
+ > Also need:
+ > https://github.com/RPi-Distro/firmware-nonfree/blob/master/brcm80211/brcm/brcmfmac43430-sdio.txt
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 6e146f8..0092095 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256 970c322ba3e472cb0264b8ba9d4d92e87918da5d0cca53c4aba2a70545b8626d
-php-7.0.9.tar.xz
-+sha256 d4cccea8da1d27c11b89386f8b8e95692ad3356610d571253d00ca67d524c735
-php-7.0.11.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 7df10be..083b451 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ###########################################################
-#####################
+Hmm, perhaps. Do you have a rpi 3 to test on? The linux-firmware commit
+doesn't mention anything about it:
 
--PHP_VERSION = 7.0.9
-+PHP_VERSION = 7.0.11
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
---
-2.9.3
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160917/864f35fa/attachment.html>
+http://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/commit/?id=c4c07a8d1128d50a5c2885ceea1abbebaa82f820
+
+But the kernel does reference the .txt file as well:
+
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c:BRCMF_FW_NVRAM_DEF(43430, "brcmfmac43430-sdio.bin", "brcmfmac43430-sdio.txt");
+
+-- 
+Bye, Peter Korsgaard
