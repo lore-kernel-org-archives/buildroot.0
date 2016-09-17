@@ -1,80 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2016 14:42:33 +0200
-Subject: [Buildroot] [PATCH] infra/pkg-kconfig: Be sure to reconfigure
- the package on foo-reconfigure
-In-Reply-To: <20160916190244.GC3650@free.fr>
-References: <1473806117-3858-1-git-send-email-yann.morin.1998@free.fr>
- <20160916190517.01d3dd5a@free-electrons.com>
- <20160916190244.GC3650@free.fr>
-Message-ID: <20160917144233.116fbc8a@free-electrons.com>
+Date: Sat, 17 Sep 2016 14:38:41 +0200
+Subject: [Buildroot] [git commit] infra/pkg-kconfig: Be sure to reconfigure
+	the package on foo-reconfigure
+Message-ID: <20160917124247.858C8802BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4b81badbcc0b25678ac6627548160702731cf393
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 16 Sep 2016 21:02:44 +0200, Yann E. MORIN wrote:
+Currently, calling foo-reconfigure for a kconfig-based package will not
+re-trigger the configuration (kconfig-wise) step for the package.
 
-> The reason is that .stamp_kconfig_fixup_done depends on the .config file.
-> 
-> In turn, the .config file depends on the base (def)config and fragments.
-> 
-> So, touching any of the base (def)config or fragments will trigger a
-> full reconfiguration, even without this patch. You can try this:
-> 
->     $ make defconfig; make menuconfig  # Enable a pre-built toolchain
->     $ make busybox-build
->     $ touch touch package/busybox/busybox.config
->     $ make V=1 busybox-build
-> 
-> You'll notice that, in the second busybox-build, the very first command
-> to be run, right after the removal of .stmap files, is to copy the base
-> busybox config file, followed by a call to the merge-config script:
-> 
->     [...]
->     rm -f /home/ymorin/dev/buildroot/outoput/build/busybox-1.25.0/.stamp_kconfig_fixup_done
->     rm -f /home/ymorin/dev/buildroot/outoput/build/busybox-1.25.0/.stamp_configured
->     cp package/busybox/busybox.config /home/ymorin/dev/buildroot/outoput/build/busybox-1.25.0/.config
->     support/kconfig/merge_config.sh -m -O /home/ymorin/dev/buildroot/outoput/build/busybox-1.25.0 /home/ymorin/dev/buildroot/outoput/build/busybox-1.25.0/.config
->     Using /home/ymorin/dev/buildroot/outoput/build/busybox-1.25.0/.config as base
->     [...]
-> 
-> Now, with this patch applied, you'll notice this behaviour is kept, and
-> also occurs for the busybox-reconfigure action.
-> 
-> So, I'd like to argue that this patch fixes the reported issue and covers
-> the use-case you pointed to.
+This can be problematic when using an override-srcdir suring development
+and the content of the veride-srcdir changes (e.g. on a rebase, a merge,
+or during a bisect).
 
-That was not the use-case I pointed to, what I pointed to what the
-following use-case:
+This is because the configuration (kconfig-wise) of the package is not
+done in the _CONFIGURE_CMDS block, but as a separate action that is not
+part of any step [0].
 
- 1. Create a Buildroot configuration, with Linux enabled, using the
-    omap2plus_defconfig
+So, be sure to remove the stamp file .stamp_kconfig_fixup_done during
+the foo-clean-for-reconfigure rule, so that the configuration is applied
+again with the new source tree.
 
- 2. Build your system.
+We use another rule, foo-clean-kconfig-for-reconfigure, because we do
+not want to override the default foo-clean-for-reconfigure rule, and we
+have no way to add conditional commands to it.
 
- 3. Go in menuconfig, and change the Linux defconfig to
-    mvebu_v7_defconfig.
+[0] The reasons it was not done are not entirely clear in my head, but
+IIRC that was not working at the time we tried with Thomas DS.
 
- 4. Run "make linux-reconfigure"
+Reported-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-kconfig.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-I would expect the newly defined Linux configuration to be taken into
-account, but it's not, it only re-does the fixups and doesn't reload
-the configuration from mvebu_v7_defconfig.
-
-Now, we can discuss whether this is the behavior that we want or not.
-But at least,  that's the behavior I was referring to, and which your
-patch doesn't address.
-
-*But*, I'll apply your patch nonetheless because it fixes other issues,
-and doesn't change the behavior I'm describing.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index b0f5178..ce9bf33 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -118,6 +118,12 @@ $$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
+ # Before running configure, the configuration file should be present and fixed
+ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ 
++# Force olddefconfig again on -reconfigure
++$(1)-clean-for-reconfigure: $(1)-clean-kconfig-for-reconfigure
++
++$(1)-clean-kconfig-for-reconfigure:
++	rm -f $$($(2)_DIR)/.stamp_kconfig_fixup_done
++
+ # Only enable the foo-*config targets when the package is actually enabled.
+ # Note: the variable $(2)_KCONFIG_VAR is not related to the kconfig
+ # infrastructure, but defined by pkg-generic.mk. The generic infrastructure is
