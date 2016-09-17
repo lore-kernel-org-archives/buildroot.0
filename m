@@ -1,9 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2016 16:21:18 +0200
-Subject: [Buildroot] [PATCHv2] core: distclean is a noconfig target
-In-Reply-To: <1473602146-2675-1-git-send-email-yann.morin.1998@free.fr>
-References: <1473602146-2675-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160917162118.6b04b97d@free-electrons.com>
+Date: Sat, 17 Sep 2016 16:24:05 +0200
+Subject: [Buildroot] [PATCH 4/5] grub2: enable support for arm and
+ aarch64 targets
+In-Reply-To: <b3a9aff2-aadf-7ef0-6587-b329fed22510@mind.be>
+References: <20160913041548.10290-1-nunes.erico@gmail.com>
+ <20160913041548.10290-5-nunes.erico@gmail.com>
+ <b3a9aff2-aadf-7ef0-6587-b329fed22510@mind.be>
+Message-ID: <20160917162405.13cc40dd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +15,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 11 Sep 2016 15:55:46 +0200, Yann E. MORIN wrote:
-> When the .config contains invalid configuration *(e.g. two providers for
-> a same virtual package), it is not possible to run "make distclean"
-> because the .config file is sourced and packages interpreted in this
-> case.
-> 
-> Add distclean to the noconfig list, so that we can run it in all cases.
-> 
-> However, this meand that DL_DIR is no longer set, and thus the default
-> download location never removed. We fix that by always removing the
-> download location, so that if it is the one configured we still remove
-> it (no change) and if it is not the one configured, we remove an
-> non-existing location and leave the user's location intact (no change
-> either).
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - don't forget to remove the default download location  (Thomas)
->   - typoes  (Thomas)
-> ---
->  Makefile | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+On Wed, 14 Sep 2016 02:39:11 +0200, Arnout Vandecappelle wrote:
 
-Applied to master, thanks.
+> >  	  1. Download the EFI BIOS for Qemu
+> >  	     Version IA32 or X64 depending on the chosen Grub2  
+> 
+>  You hinted at this in your cover letter: it would be better to move all this
+> documentation to e.g. boot/grub2/readme.txt and refer to it from the help text.
+> This would be a separate preparatory patch. Then you can also easily add all the
+> documentation for the ARM targets to that file.
+
+Just wanted to say that I agree with the idea of a readme.txt in the
+package directory. For quite some time we have been in a need of a
+place to store some documentation/informations/details about different
+packages, and we currently don't have a good place for that. The
+manual? There's no chapter for it, and it puts the information a bit
+"far" from the package itself. In the Config.in help text? Works fine
+for short text, but not really suitable for longer explanations.
+
+So, +1 for readme.txt in package directories, of course when there's
+something useful to say about the package.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
