@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2016 16:24:05 +0200
-Subject: [Buildroot] [PATCH 4/5] grub2: enable support for arm and
- aarch64 targets
-In-Reply-To: <b3a9aff2-aadf-7ef0-6587-b329fed22510@mind.be>
+Date: Sat, 17 Sep 2016 16:27:42 +0200
+Subject: [Buildroot] [PATCH 0/5] grub2: add support for arm and aarch64
+In-Reply-To: <20160913041548.10290-1-nunes.erico@gmail.com>
 References: <20160913041548.10290-1-nunes.erico@gmail.com>
- <20160913041548.10290-5-nunes.erico@gmail.com>
- <b3a9aff2-aadf-7ef0-6587-b329fed22510@mind.be>
-Message-ID: <20160917162405.13cc40dd@free-electrons.com>
+Message-ID: <20160917162742.42f0ff27@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +12,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 14 Sep 2016 02:39:11 +0200, Arnout Vandecappelle wrote:
+On Tue, 13 Sep 2016 06:15:43 +0200, Erico Nunes wrote:
 
-> >  	  1. Download the EFI BIOS for Qemu
-> >  	     Version IA32 or X64 depending on the chosen Grub2  
-> 
->  You hinted at this in your cover letter: it would be better to move all this
-> documentation to e.g. boot/grub2/readme.txt and refer to it from the help text.
-> This would be a separate preparatory patch. Then you can also easily add all the
-> documentation for the ARM targets to that file.
+> Erico Nunes (5):
+>   grub2: bump up version
+>   grub2-tools: new package
+>   grub2: use grub2-tools as a host package
+>   grub2: enable support for arm and aarch64 targets
+>   grub2: introduce BR2_TARGET_GRUB2_CFG
 
-Just wanted to say that I agree with the idea of a readme.txt in the
-package directory. For quite some time we have been in a need of a
-place to store some documentation/informations/details about different
-packages, and we currently don't have a good place for that. The
-manual? There's no chapter for it, and it puts the information a bit
-"far" from the package itself. In the Config.in help text? Works fine
-for short text, but not really suitable for longer explanations.
+Thanks for this work. Following all the comments received, I've marked
+the patch series as Changes Requested in patchwork. Could you resend an
+updated patch series that takes into account the comments?
 
-So, +1 for readme.txt in package directories, of course when there's
-something useful to say about the package.
+Also, if you can post somewhere (in the new readme.txt file? or at
+least in the commit log) how to test grub2 on ARM/AArch64, it would be
+good.
+
+Thanks a lot!
 
 Thomas
 -- 
