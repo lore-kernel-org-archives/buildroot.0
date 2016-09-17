@@ -1,92 +1,40 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 17 Sep 2016 22:30:36 +0200
-Subject: [Buildroot] [PATCH 4/4] package/efl: add Evas GL DRM Engine
- support
-In-Reply-To: <20160917191442.7ea32f90@free-electrons.com>
-References: <1473282523-12796-1-git-send-email-romain.naour@gmail.com>
- <1473282523-12796-4-git-send-email-romain.naour@gmail.com>
- <20160917191442.7ea32f90@free-electrons.com>
-Message-ID: <7ef61cae-b591-5901-c124-81b4e4171d03@gmail.com>
+Date: Sat, 17 Sep 2016 23:55:09 +0200
+Subject: [Buildroot] [PATCH] package/efl: bump to 1.18.1
+Message-ID: <1474149309-16578-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/efl/efl.hash | 4 ++--
+ package/efl/efl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Le 17/09/2016 ? 19:14, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Wed,  7 Sep 2016 23:08:43 +0200, Romain Naour wrote:
-> 
->> diff --git a/package/efl/Config.in b/package/efl/Config.in
->> index 6171b29..c6c26d8 100644
->> --- a/package/efl/Config.in
->> +++ b/package/efl/Config.in
->> @@ -208,6 +208,16 @@ comment "Evas DRM Engine needs mesa3d w/ EGL support, threads"
->>  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL
->>  	depends on BR2_PACKAGE_EFL_ELPUT
->>  
->> +config BR2_PACKAGE_EFL_GL_DRM
-> 
-> Is it useful to have it as a separate option from BR2_PACKAGE_EFL_DRM ?
-
-You mean enable evas gl-drm engine only when all dependencies are available
-without using a separate option? Yes why not.
-
-> In which case can BR2_PACKAGE_EFL_DRM without BR2_PACKAGE_EFL_GL_DRM be
-> useful ?
-
-I don't know. The evas gl-drm (opengl based DRM) engine can be enabled
-separately from ecore drm for some reason, so I tried to reproduce this
-possibility on the packaging.
-Anyway my goal is the test EFL/E with Wayland and --enable-gl-drm and
---enable-drm are required together for this [1].
-
-[1] https://phab.enlightenment.org/w/wayland/
-
-> 
->> +	bool "Evas GL DRM Engine"
->> +	depends on BR2_PACKAGE_EFL_DRM
->> +	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
-> 
-> So perhaps "BR2_PAKCAGE_EFL_GLES_DRM" is a better name? "GL" usually
-> refers to "full OpenGL", as opposed to OpenGL ES.
-
-Ok, I'll fix this.
-
-> 
->> +	help
->> +	  This option enable building support for the Evas DRM Engine.
-> 
-> This help text is wrong, as it is just a copy/paste of the one of
-> BR2_PACKAGE_EFL_DRM.
-
-Indeed, sorry...
-The help text should precise that this support the Evas DRM based on OpenGL ES.
-
-[2]
-https://git.enlightenment.org/core/efl.git/commit/?id=f5b81093978fbbe411f9fb509617b6f4081f8da8
-
-> 
->> +
->> +comment "Evas GL DRM Engine needs Evas DRM Engine, OpenGL ES w/ EGL"
->> +	depends on BR2_PACKAGE_EFL_DRM && !BR2_PACKAGE_EFL_OPENGLES
-> 
-> I find all those DRM/OpenGLES options in the efl package very
-> confusing. Are all those options needed? What are the use cases for the
-> different possible cases?
-
-Well, the packaging is confusing because theses options are already confusing at
-configure.ac level. Do we want a fine grained options choices for theses or a
-"global" OpenGLES + DRM options?
-
-Best regards,
-Romain
-
-> 
-> Thanks,
-> 
-> Thomas
-> 
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index 81727a2..37354fb 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,2 +1,2 @@
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.0.tar.xz.sha256
+-sha256	06a0bbf5c28f96731b115b0adfa11374d07beb983ae4612ed25b34f4ab5cbf9e	efl-1.18.0.tar.xz
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.1.tar.xz.sha256
++sha256	0c6bd150d8e838f849effd462d91d86255e3aaade47a6077d0aa80d2b8e9d222	efl-1.18.1.tar.xz
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 8038739..949da2d 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EFL_VERSION = 1.18.0
++EFL_VERSION = 1.18.1
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
+-- 
+2.5.5
