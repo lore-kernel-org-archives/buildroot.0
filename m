@@ -1,30 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2016 15:51:03 +0200
-Subject: [Buildroot] [PATCH 0/1] [RFC] replace mysql with mariadb 10.0
-In-Reply-To: <87lgyuw1d3.fsf@linux.vnet.ibm.com>
-References: <20160912220551.17934-1-bluemrp9@gmail.com>
- <87lgyuw1d3.fsf@linux.vnet.ibm.com>
-Message-ID: <20160917155103.625727e2@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 17 Sep 2016 13:59:47 +0000
+Subject: [Buildroot] [Bug 9226] Firefly boot fails with: "failed to find
+	part:boot"
+In-Reply-To: <bug-9226-163@https.bugs.busybox.net/>
+References: <bug-9226-163@https.bugs.busybox.net/>
+Message-ID: <bug-9226-163-0M067if1R8@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9226
 
-On Thu, 15 Sep 2016 08:41:28 +1000, Stewart Smith wrote:
+--- Comment #2 from Ciro Santilli <ciro.santilli@gmail.com> ---
+I have managed to boot from TTL as follows:
 
-> Would it be better to just add MariaDB rather than replace MySQL,
-> there's reasons to use one over the other.
+- enter recovery mode (hold recovery and restart board by resetting)
+- download upgrade tool, and official Ubuntu image, and run:
 
-In order to help in the debate, could you summarize some of those
-reasons ?
+     sudo ./Linux_Upgrade_Tool_v1.2/upgrade_tool uf
+Firefly-RK3288_Ubuntu14.04_201607222032.img
 
-Thanks,
+   This burns the image to the eMMC.
 
-Thomas
+-  that image works. From inside of it, clear eMMC to ensure that it will not
+be used instead of the SD: sudo dd if=/dev/zero of=/dev/mmblk0
+
+-  try again
+
+However I can't get HDMI / VGA output to my screen, only TTL access.
+
+I also tried to insert the cable after boot, but it did not help.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
