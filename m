@@ -1,46 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2016 12:35:17 +0200
-Subject: [Buildroot] [git commit] blktrace: add dependency on NPTL
-Message-ID: <20160917103535.E152A81E7A@busybox.osuosl.org>
+Date: Sat, 17 Sep 2016 12:36:18 +0200
+Subject: [Buildroot] [git commit] configs: nitrogen*: enable VFP and NEON
+	support
+Message-ID: <20160917103624.E860E81E1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08b9e24eaa4e43cf2e808bb79cb4c44f27fc7f59
+commit: https://git.buildroot.net/buildroot/commit/?id=341bc36d22f82ef3dcf4ec25d34aeb362c372b59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-blkiomon.c assumes that clock_nanosleep() is always available. But it
-is only available with NPTL. Since it unconditionally uses it, we add
-dependency on NPTL.
-
-Fixes:
-  http://autobuild.buildroot.net/results/c87/c87cd4a7b0bed938506bcf7e88d4cda60e28e6e5/
-
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/blktrace/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ configs/nitrogen6sx_defconfig | 3 +++
+ configs/nitrogen6x_defconfig  | 3 +++
+ configs/nitrogen7_defconfig   | 1 +
+ 3 files changed, 7 insertions(+)
 
-diff --git a/package/blktrace/Config.in b/package/blktrace/Config.in
-index 38c0947..684157c 100644
---- a/package/blktrace/Config.in
-+++ b/package/blktrace/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_BLKTRACE
- 	bool "blktrace"
- 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
- 	select BR2_PACKAGE_LIBAIO
- 	help
- 	  blktrace is a block layer IO tracing mechanism which provides
-@@ -8,3 +9,7 @@ config BR2_PACKAGE_BLKTRACE
- 	  up to user space.
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index bd92f55..b317525 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -1,6 +1,9 @@
+ # architecture
+ BR2_arm=y
+ BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++BR2_ARM_FPU_VFPV3=y
  
- 	  http://git.kernel.dk/?p=blktrace.git;a=summary
-+
-+comment "blktrace needs a toolchain w/ NPTL"
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ # system
+ BR2_TARGET_GENERIC_GETTY=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 85acabe..dc033dc 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -1,6 +1,9 @@
+ # architecture
+ BR2_arm=y
+ BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++BR2_ARM_FPU_VFPV3=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY=y
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index a8f3b45..adce0fb 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -1,6 +1,7 @@
+ # architecture
+ BR2_arm=y
+ BR2_cortex_a7=y
++BR2_ARM_FPU_NEON_VFPV4=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY=y
