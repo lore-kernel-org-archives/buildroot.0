@@ -1,165 +1,533 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2016 08:30:29 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-09-16
-Message-ID: <20160917063029.DD238102C9F@stock.ovh.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 17 Sep 2016 09:27:03 +0200
+Subject: [Buildroot] [PATCH 1/1] motion: new package
+In-Reply-To: <711f8bf2-a031-7282-5d31-d707e5e775e6@mind.be>
+References: <1474051945-36626-1-git-send-email-fabrice.fontaine@orange.com>
+ <711f8bf2-a031-7282-5d31-d707e5e775e6@mind.be>
+Message-ID: <CAPi7W83YJ7Vi8a0LhM_5wHfK0QBHZPLF5_5RqmEFFLqvWBNOJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+2016-09-17 0:52 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
 
-Build statistics for 2016-09-16
-================================
+>
+>
+> On 16-09-16 20:52, Fabrice Fontaine wrote:
+> > Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> [snip]
+> > diff --git a/package/motion/0001-Fix-jpeg-turbo-detection.patch
+> b/package/motion/0001-Fix-jpeg-turbo-detection.patch
+> > new file mode 100644
+> > index 0000000..e02418b
+> > --- /dev/null
+> > +++ b/package/motion/0001-Fix-jpeg-turbo-detection.patch
+> > @@ -0,0 +1,28 @@
+> > +From 6bc90c0cba58ab6ca869e2463eead78031237c14 Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> > +Date: Thu, 15 Sep 2016 14:39:54 +0200
+> > +Subject: [PATCH 1/1] Fix jpeg-turbo detection
+>
+>  Please generate the patches with -N so there is no 1/1. It tends to be
+> incorrect when patches are added/removed.
+>
+> > +
+> > +Do not only check for static libjpeg.a but also for dynamic libjpeg.so
+> > +
+> > +Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> > +---
+> > + configure.ac | 2 +-
+> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +diff --git a/configure.ac b/configure.ac
+> > +index 140f4f4..f069ccc 100644
+> > +--- a/configure.ac
+> > ++++ b/configure.ac
+> > +@@ -273,7 +273,7 @@ if test "${JPEG_TURBO}" = "no"; then
+> > +     AC_MSG_RESULT(skipping)
+> > + else
+> > +     AC_MSG_CHECKING(for libjpeg-turbo in -> [${JPEG_TURBO}] <-)
+> > +-    if test -f ${JPEG_TURBO}/lib/libjpeg.a ; then
+> > ++    if test -f ${JPEG_TURBO}/lib/libjpeg.a -o
+> ${JPEG_TURBO}/lib/libjpeg.so; then
+> > +         AC_MSG_RESULT(found)
+> > +         JPEG_TURBO_OK="found"
+>
+>  Maybe, if you're anyway patching configure.ac, you can just replace it
+> with the
+> much more appropriate AC_TRY_LINK?
+>
+>  But I see your patch was already accepted upstream, so just download the
+> upstream patch.
+>
+> > +     else
+> > +--
+> > +2.7.4
+> > +
+> > diff --git a/package/motion/0002-Fix-detection-of-sqlite3-when-cross-compiling.patch
+> b/package/motion/0002-Fix-detection-of-sqlite3-when-cross-compiling.patch
+> > new file mode 100644
+> > index 0000000..2d5c761
+> > --- /dev/null
+> > +++ b/package/motion/0002-Fix-detection-of-sqlite3-when-
+> cross-compiling.patch
+> > @@ -0,0 +1,49 @@
+> > +From 13838aa67f4531536d2db99318d87e3d3ffef8e7 Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> > +Date: Thu, 15 Sep 2016 14:44:25 +0200
+> > +Subject: [PATCH 2/2] Fix detection of sqlite3 when cross-compiling
+> > +
+> > +Replace usage of AC_CHECK_FILE by test -f to check the existence of
+> > +sqlite3.c as AC_CHECK_FILE does not work when cross-compiling
+> > +
+> > +Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> > +---
+> > + configure.ac | 10 +++-------
+> > + 1 file changed, 3 insertions(+), 7 deletions(-)
+> > +
+> > +diff --git a/configure.ac b/configure.ac
+> > +index f069ccc..0f18f08 100644
+> > +--- a/configure.ac
+> > ++++ b/configure.ac
+> > +@@ -460,16 +460,13 @@ else
+> > +
+> > +     # first we check to see if the sqlite3 amalgamation (sqlite3.c),
+> is in with our source
+> > +     # this is the prefered way to use sqlite
+> > +-    AC_CHECK_FILE([sqlite3.c],
+>
+>  What kind of crazy stuff is this, they check if the file exists in their
+> own
+> source directory?
+>
+>  However, is there any way to use the buildroot sqlite instead of the
+> bundled one?
+>
+>  Otherwise, please check if ac_cv_file_sqlite3_c isn't used anywhere.
+>
+> > +-        [
+> > ++    if test -f sqlite3.c; then
+> > +         SQLITE3_SUPPORT="yes"
+> > +         VIDEO="$VIDEO sqlite3.o"
+> > +         TEMP_LIBS="$TEMP_LIBS -ldl"
+> > +         AC_DEFINE([HAVE_SQLITE3],1,[Define to 1 if you have SQLITE3])
+> > +         AC_DEFINE([HAVE_SQLITE3_EMBEDDED],1,[Define to 1 if you have
+> SQLITE3 embedded support])
+> > +-        ]
+> > +-        ,
+> > +-        [
+> > ++    else
+> > +         # if sqlite3.c is not found then we look for the shared library
+> > +         AC_CHECK_LIB(sqlite3, sqlite3_open,
+>
+>  Wow, so actually, _without_ this patch, the buildroot sqlite will be
+> used, and
+> _with_ this patch, the bundled one will be used... Hm, please drop this
+> patch
+> then :-)
+>
+> Actually, there is no bundled sqlite3.c with the motion source code. So,
+without this patch, we can not enable sqlite as AC_CHECK_FILE will fail and
+terminate the configure script. So, I think the patch should be kept.
 
-      successes : 218
-       failures : 86 
-       timeouts : 3  
-          TOTAL : 307
+> > +             [
+> > +@@ -478,8 +475,7 @@ else
+> > +             AC_DEFINE([HAVE_SQLITE3],1,[Define to 1 if you have
+> SQLITE3 shared library support])
+> > +             ]
+> > +         )
+> > +-        ]
+> > +-    )
+> > ++    fi
+> > +
+> > +     CFLAGS=$saved_CFLAGS
+> > +     LIBS=$saved_LIBS
+> > +--
+> > +2.7.4
+> > +
+> > diff --git a/package/motion/0003-Fix-LIBS-when-jpeg-turbo-is-enabled.patch
+> b/package/motion/0003-Fix-LIBS-when-jpeg-turbo-is-enabled.patch
+> > new file mode 100644
+> > index 0000000..7164b94
+> > --- /dev/null
+> > +++ b/package/motion/0003-Fix-LIBS-when-jpeg-turbo-is-enabled.patch
+> > @@ -0,0 +1,29 @@
+> > +From 0dd05d26d352f86c30c311bdeb1c2bd123b83ef8 Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> > +Date: Thu, 15 Sep 2016 23:21:48 +0200
+> > +Subject: [PATCH 3/3] Fix LIBS when jpeg-turbo is enabled
+> > +
+> > +When jpeg-turbo was enabled, LIBS was uncorrectly set: -lpthread, -lm,
+> > +... was lost
+> > +
+> > +Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> > +---
+> > + configure.ac | 2 +-
+> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +diff --git a/configure.ac b/configure.ac
+> > +index 0f18f08..ff45eba 100644
+> > +--- a/configure.ac
+> > ++++ b/configure.ac
+> > +@@ -290,7 +290,7 @@ if test "${JPEG_TURBO_OK}" = "found"; then
+> > +     CFLAGS="$CFLAGS -I${JPEG_TURBO}/include"
+> > +     LIBS="$LIBS -L${JPEG_TURBO}/lib -ljpeg"
+> > +     AC_CHECK_LIB(jpeg, jpeg_start_compress,
+> > +-        [ TEMP_LIBS="$LIBS"
+> > ++        [ TEMP_LIBS="$TEMP_LIBS -L${JPEG_TURBO}/lib -ljpeg"
+> > +           TEMP_CFLAGS="${CFLAGS}"
+>
+>  Shouldn't the same thing be done for CFLAGS?
+>
+Right, thanks
 
-Classification of failures by reason
-====================================
+>
+>  This configure script is really, utterly broken...Like, AC_CHECK_LIB just
+> does
+> the right thing, no need to do anything else, but no, lets just break the
+> whole
+> autoconf concept by inventing our own stuff with TEMP_LIBS which is used
+> inconsistently...
+>
+> > +           TEMP_LDFLAGS="$TEMP_LDFLAGS $LDFLAGS"
+> > +           JPEG_SUPPORT="yes"],,)
+> > +--
+> > +2.5.0
+> > +
+> > diff --git a/package/motion/0004-Change-without-sdl-to-with-sdl-DIR.patch
+> b/package/motion/0004-Change-without-sdl-to-with-sdl-DIR.patch
+> > new file mode 100644
+> > index 0000000..67cdb74
+> > --- /dev/null
+> > +++ b/package/motion/0004-Change-without-sdl-to-with-sdl-DIR.patch
+> > @@ -0,0 +1,60 @@
+> > +From 30572b8e4e85b560ba991bc192992969544f5ea3 Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> > +Date: Fri, 16 Sep 2016 20:08:20 +0200
+> > +Subject: [PATCH 4/4] Change --without-sdl to --with-sdl=[DIR]
+> > +
+> > +With this modification, the user will be able to specify the path to
+> > +sdl-config which can be outside his path (for example on embedded
+> > +buildsystem such as buildroot)
+> > +
+> > +Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> > +---
+> > + configure.ac | 25 ++++++++++++-------------
+> > + 1 file changed, 12 insertions(+), 13 deletions(-)
+> > +
+> > +diff --git a/configure.ac b/configure.ac
+> > +index ff45eba..7f4a88c 100644
+> > +--- a/configure.ac
+> > ++++ b/configure.ac
+> > +@@ -224,26 +224,25 @@ fi
+> > + #
+> > + SDL_SUPPORT="no"
+> > + AC_ARG_WITH(sdl,
+> > +-[  --without-sdl           Compile without sdl support to get stream
+> in SDL window.
+> > ++[  --with-sdl[=DIR]   Specify the prefix for the install path for
+> > ++                      sdl-config to get stream in SDL window
+> (optional).
+> > + ],
+> > +-[],
+> > ++[SDL_SUPPORT="$withval"],
+> > + [])
+> > + AC_MSG_CHECKING(for sdl)
+> > +-if test "x$withval" = "xno"; then
+> > ++if test "${SDL_SUPORT}" = "xno"; then
+> > +     AC_MSG_RESULT(skipped)
+> > + else
+> > +-    CONFIG_SDL='sdl-config'
+> > ++    CONFIG_SDL=${SDL_SUPPORT}/'sdl-config'
+>
+>  This is not really correct, the withval should point to the install
+> prefix of
+> the package, so $(STAGING_DIR)/usr, and the bin/sdl-config should be
+> appended to it.
+>
+>  But better than this entire change, add:
+>
+> AC_PATH_PROG(CONFIG_SDL, sdl-config, no, [$PATH])
+>
+OK, thanks I will do it.
 
-                upmpdcli-1.2.2 | 22
-                blktrace-1.1.0 | 5 
-                    mpv-0.20.0 | 3 
-                    ola-0.10.0 | 3 
-                 openssh-7.3p1 | 3 
-             util-linux-2.28.2 | 3 
-                     xen-4.7.0 | 3 
-         docker-engine-v1.12.0 | 2 
-filemq-e59951489045825d6fc5... | 2 
-                   glog-v0.3.4 | 2 
-       host-erlang-rebar-2.6.4 | 2 
-                libxslt-1.1.29 | 2 
-                 lvm2-2.02.165 | 2 
-                    qemu-2.7.0 | 2 
-                      qt-4.8.7 | 2 
-                    quota-4.01 | 2 
-                collectd-5.5.2 | 1 
-                    cups-2.1.4 | 1 
-           dmraid-1.0.0.rc16-3 | 1 
-              e2fsprogs-1.43.3 | 1 
-                ipmiutil-2.9.9 | 1 
-          janus-gateway-v0.1.0 | 1 
-                 liburcu-0.8.7 | 1 
-           libvncserver-0.9.10 | 1 
-make[1]: *** [libavfilter/a... | 1 
-                 mono-4.4.2.11 | 1 
-                    mpfr-3.1.4 | 1 
-                 mplayer-1.3.0 | 1 
-                  openjpeg-2.1 | 1 
-                    parted-3.1 | 1 
-                privoxy-3.0.26 | 1 
-              ptpd2-ptpd-2.3.1 | 1 
-                    putty-0.67 | 1 
-python-libconfig-b271c3d9da... | 1 
-           python-psutil-4.3.0 | 1 
-           qt5location-5.6.1-1 | 1 
-                   slang-2.3.0 | 1 
-                socat-2.0.0-b9 | 1 
-                  squid-3.5.21 | 1 
-            supertuxkart-0.9.2 | 1 
-                   systemd-231 | 1 
-         systemd-bootchart-230 | 1 
-      trace-cmd-trace-cmd-v2.6 | 1 
-                xfsprogs-4.7.0 | 1 
-zyre-1d949e4bf79b694ea883c3... | 1 
+>
+> > +     if test -z "`($CONFIG_SDL --version) 2>/dev/null`" ;then
+> > +             AC_MSG_RESULT(no)
+> > +-            if test "$withval" = "yes"; then
+> > +-                    echo ""
+> > +-                    echo "*****************************
+> ***********************"
+> > +-                    echo "* sdl-config could not be found. Please
+> install it *"
+> > +-                    echo "* and remove the --with-sdl configure
+> argument.    *"
+> > +-                    echo "* libSDL can be found at
+> http://www.libsdl.org     *"
+> > +-                    echo "*****************************
+> ***********************"
+> > +-                    echo ""
+> > +-            fi
+> > ++            echo ""
+> > ++            echo "*****************************
+> ***********************"
+> > ++            echo "* sdl-config could not be found. Please install it *"
+> > ++            echo "* and remove the --with-sdl configure argument.    *"
+> > ++            echo "* libSDL can be found at http://www.libsdl.org
+>  *"
+> > ++            echo "*****************************
+> ***********************"
+> > ++            echo ""
+> > +     else
+> > +             AC_MSG_RESULT(yes)
+> > +             SDL_SUPPORT="yes"
+> > +--
+> > +2.5.0
+> > +
+> > diff --git a/package/motion/Config.in b/package/motion/Config.in
+> > new file mode 100644
+> > index 0000000..90f428e
+> > --- /dev/null
+> > +++ b/package/motion/Config.in
+> > @@ -0,0 +1,15 @@
+> > +config BR2_PACKAGE_MOTION
+> > +     bool "motion"
+> > +     depends on BR2_USE_MMU # fork()
+> > +     depends on BR2_TOOLCHAIN_HAS_THREADS
+> > +     select BR2_PACKAGE_JPEG
+>
+>  The configure script hints that it requires jpeg-turbo. Does it really
+> work
+> with libjpeg?
+>
+>  However, from my understanding of configure.ac, it looks like it should
+> work
+> with either, and they're not mandatory. So JPEG shouldn't be selected.
+>
+You're right for configure but compilation fails if jpeg is missing as
+jpeglib.h is included in 4 source files (netcam.h, picture.c, ...). I can
+add a comment in motion.mk if needed.
 
+>
+> > +     help
+> > +       Motion is a program that monitors the video signal from
+> > +       cameras. It is able to detect if a significant part of
+> > +       the picture has changed; in other words, it can detect motion.
+>
+>  I think it's useful to mention that libv4l has to be selected to be able
+> to use
+> a local camera.
+>
+> > +
+> > +       https://motion-project.github.io
+> > +
+> > +comment "motion needs a toolchain w/ threads"
+> > +     depends on BR2_USE_MMU
+> > +     depends on !BR2_TOOLCHAIN_HAS_THREADS
+> > diff --git a/package/motion/S99motion b/package/motion/S99motion
+> > new file mode 100644
+> > index 0000000..36bfc23
+> > --- /dev/null
+> > +++ b/package/motion/S99motion
+> > @@ -0,0 +1,37 @@
+> > +#!/bin/sh
+> > +
+> > +NAME=motion
+> > +PIDFILE=/var/run/$NAME.pid
+> > +DAEMON=/usr/bin/$NAME
+> > +
+> > +start() {
+> > +     printf "Starting $NAME: "
+> > +     start-stop-daemon -S -q -m -b -p $PIDFILE --exec $DAEMON
+> > +     [ $? = 0 ] && echo "OK" || echo "FAIL"
+> > +}
+> > +stop() {
+> > +     printf "Stopping $NAME: "
+> > +     start-stop-daemon -K -q -p $PIDFILE
+> > +     [ $? = 0 ] && echo "OK" || echo "FAIL"
+> > +}
+> > +restart() {
+> > +     stop
+> > +     start
+> > +}
+> > +
+> > +case "$1" in
+> > +  start)
+> > +     start
+> > +     ;;
+> > +  stop)
+> > +     stop
+> > +     ;;
+> > +  restart|reload)
+> > +     restart
+> > +     ;;
+> > +  *)
+> > +     echo "Usage: $0 {start|stop|restart|reload}"
+> > +     exit 1
+> > +esac
+> > +
+> > +exit $?
+> > diff --git a/package/motion/motion.hash b/package/motion/motion.hash
+> > new file mode 100644
+> > index 0000000..6414d82
+> > --- /dev/null
+> > +++ b/package/motion/motion.hash
+> > @@ -0,0 +1,2 @@
+> > +# Locally computed:
+> > +sha256       0d1702c7958fd03b99bf4fdcb45d8e
+> 604864e5867034f825f2fc543e8be64549        motion-release-3.4.1.tar.gz
+> > diff --git a/package/motion/motion.mk b/package/motion/motion.mk
+> > new file mode 100644
+> > index 0000000..95c4298
+> > --- /dev/null
+> > +++ b/package/motion/motion.mk
+> > @@ -0,0 +1,74 @@
+> > +###########################################################
+> #####################
+> > +#
+> > +# motion
+> > +#
+> > +###########################################################
+> #####################
+> > +
+> > +MOTION_VERSION = release-3.4.1
+> > +MOTION_SITE = $(call github,Motion-Project,motion,$(MOTION_VERSION))
+> > +MOTION_LICENSE = GPLv2
+> > +MOTION_LICENSE_FILES = COPYING
+> > +MOTION_DEPENDENCIES = host-pkgconf jpeg
+> > +MOTION_AUTORECONF = YES
+> > +
+> > +ifeq ($(BR2_PACKAGE_JPEG_TURBO),y)
+> > +MOTION_CONF_OPTS += --with-jpeg-turbo=$(STAGING_DIR)/usr
+> > +endif
+>
+>  OK, so the way I see it, the useless configure script first checks for
+> jpeg-turbo, and then goes on to check for jpeg which for all intents and
+> purposes looks exactly, the same.
+>
+>  So I propose to pass --without-jpeg-turbo and just rely on the libjpeg
+> detection. Does that work?
 
-Detail of failures
-===================
+It works, so OK.
 
-        m68k |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/478a9abccbf8056cdf41146f6c01ec2426170467
-         arm |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/49013194a9e8da5260643eba39d72baa5bae86d7
-        m68k |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/b2d63ba3d4113f9755cd395b3fd83bc3589b0072
-         arm |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/c97fc56f2e54b5dfbcd2956c97963a6da6cd90dd
-        m68k |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/e7808bacd9c80702da2bfc044d5a4475d4487f6e
-      x86_64 |                 collectd-5.5.2 | NOK | http://autobuild.buildroot.net/results/88e2dcabe3639fa75ff8df31b64b7cf1db7312f4
-        i586 |                     cups-2.1.4 | NOK | http://autobuild.buildroot.net/results/fa76d79dd7aeeb183ac71977580e4571f52c62ca
-         arc |            dmraid-1.0.0.rc16-3 | NOK | http://autobuild.buildroot.net/results/1ecf0db627fcb1e914e16df8bcd1f8bc9c8f3063
-      x86_64 |          docker-engine-v1.12.0 | NOK | http://autobuild.buildroot.net/results/f7cb36e444275f0209e7eb8c3bddce016d35960b
-      x86_64 |          docker-engine-v1.12.0 | NOK | http://autobuild.buildroot.net/results/903f7261bb3b6419f375db23c3b7e58e519a6ece
-        i686 |               e2fsprogs-1.43.3 | NOK | http://autobuild.buildroot.net/results/76815dec90bc45bc2e7a55f8cad85f3d93e55616
-     aarch64 | filemq-e59951489045825d6fc5... | NOK | http://autobuild.buildroot.net/results/13dba54ea605c938b74e6aec6109578c8d05a12a
-       sparc | filemq-e59951489045825d6fc5... | NOK | http://autobuild.buildroot.net/results/f77377803bad2a27358a59854ab1a4f87f05b819
-        bfin |                    glog-v0.3.4 | NOK | http://autobuild.buildroot.net/results/9d7ff2d8a93c8c3877516c1f848703415d147a86
-        bfin |                    glog-v0.3.4 | NOK | http://autobuild.buildroot.net/results/ec2b1405c6ed5ddaf54f9d73b104216e78150164
-        i586 |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/8562756695661796c5416160dddbd9085553de5d
-         arm |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/2d6e1d0d543e2900cd2fd833c31251df978a7038
-        i586 |                 ipmiutil-2.9.9 | NOK | http://autobuild.buildroot.net/results/b01ecd51dcaa276cf7f0681a3192314b0ed904bc
-       sparc |           janus-gateway-v0.1.0 | NOK | http://autobuild.buildroot.net/results/f907767a4ca5cdf02bf2b86c2c8f0fe7d190baf0
-         arm |                  liburcu-0.8.7 | NOK | http://autobuild.buildroot.net/results/ccf1a5b0c0cfe4c11d19857716372d4213cfba6a
-         arc |            libvncserver-0.9.10 | NOK | http://autobuild.buildroot.net/results/018364f94ebf43d9c679c87758c8bce799667cfe
-        bfin |                 libxslt-1.1.29 | NOK | http://autobuild.buildroot.net/results/f95c6a51b333053326044f50f6eeacb5302fc32d
-        bfin |                 libxslt-1.1.29 | NOK | http://autobuild.buildroot.net/results/3b92ee185c887ed2e3f628e557586b73188bbe80
-         arm |                  lvm2-2.02.165 | NOK | http://autobuild.buildroot.net/results/87ec004440bf5bcb4bb621d31076c6159fa9f3d7
-         arm |                  lvm2-2.02.165 | NOK | http://autobuild.buildroot.net/results/07b1772834bb20c2ca89f686f019f581adc42e77
-microblazeel | make[1]: *** [libavfilter/a... | TIM | http://autobuild.buildroot.net/results/03a74f5896511c04190155abff0a6f5d3eedd6cf
-         arm |                  mono-4.4.2.11 | NOK | http://autobuild.buildroot.net/results/e766a6423b9371359b98ad2ffb568f0e37b9d255
-         arc |                     mpfr-3.1.4 | NOK | http://autobuild.buildroot.net/results/308173bee6807f03ec882f565a889e83e541609f
-         arm |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/e2e06f95ea25e30c07591be3a31d834e6698292e
-         arm |                     mpv-0.20.0 | NOK | http://autobuild.buildroot.net/results/c3ca5237911f50889b4d99084240ec6b8ac031ac
-        m68k |                     mpv-0.20.0 | NOK | http://autobuild.buildroot.net/results/b4bd67f61bc23a89f3b4b2da1ec2b28905da53d4
-         arm |                     mpv-0.20.0 | NOK | http://autobuild.buildroot.net/results/8bba84ad8459344ad5403fdcb6f0bf0be8f72f1a
-         arc |                     ola-0.10.0 | NOK | http://autobuild.buildroot.net/results/89b136e6dced6ca9842a1f23141b0cb999f783da
-         arc |                     ola-0.10.0 | NOK | http://autobuild.buildroot.net/results/d5b8fe66ff8d9ea91e87ef6fbe8274f5e24aa7b0
-         arm |                     ola-0.10.0 | NOK | http://autobuild.buildroot.net/results/89922e61c583cf1d11bd0bafdd5586c35d8f6e15
-         arm |                   openjpeg-2.1 | NOK | http://autobuild.buildroot.net/results/883857226c771df236791ca8fb3aae073564dd7c
-        i586 |                  openssh-7.3p1 | NOK | http://autobuild.buildroot.net/results/3facf7ee7a93d9815faf64a17ca6cbc3c5b6cc89
-        i586 |                  openssh-7.3p1 | NOK | http://autobuild.buildroot.net/results/a407c5e03f417c68064e2c60c57f277ff468eed7
-        i586 |                  openssh-7.3p1 | NOK | http://autobuild.buildroot.net/results/383cca71505e553e0ec95c5b9bb7b228608af69b
-      xtensa |                     parted-3.1 | NOK | http://autobuild.buildroot.net/results/544c9b9272e93383cbe921772e071b90aec674bb
-         arm |                 privoxy-3.0.26 | NOK | http://autobuild.buildroot.net/results/5e515ae7fd5ec6a9aa61392b479003bc095f0ca7
-        bfin |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/a2fbee3a41ca1df57bf301405974e7a2e57aba78
-         arm |                     putty-0.67 | NOK | http://autobuild.buildroot.net/results/38274faf013c73ca06a491595da19bba187aed6b
-      x86_64 | python-libconfig-b271c3d9da... | NOK | http://autobuild.buildroot.net/results/0194bc058d5b02f45df277b061f7118ce0bab023
-      x86_64 |            python-psutil-4.3.0 | NOK | http://autobuild.buildroot.net/results/5197e1cf7ea3f90b58abecb28285b9ac695ae5cc
-         arm |                     qemu-2.7.0 | NOK | http://autobuild.buildroot.net/results/57a84247d0564cf796928b01fb668991eec352d8
-         arm |                     qemu-2.7.0 | NOK | http://autobuild.buildroot.net/results/5513bf4881c7a051ae7262072c3aa0a57b79a3f5
-         arc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/1f0c9f37c24bd35e8a7b460309b35a13f666f4cc
-         arc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/f3fd442b51e25026a9b8a414f39e55fa8fc8365e
-     powerpc |            qt5location-5.6.1-1 | NOK | http://autobuild.buildroot.net/results/4e9b90c5dd98352e8301f96407d8e9c9b73433f6
-        i586 |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/c06cae67d6ea7c32b13a0d6c99031548be9b8315
-      x86_64 |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/9083fcb0ee4971ce85720ff7e267866eb20c16d4
-     powerpc |                    slang-2.3.0 | NOK | http://autobuild.buildroot.net/results/40bd46cd1cad5dcfbbfc48136a2214b9997d65d4
-         arm |                 socat-2.0.0-b9 | NOK | http://autobuild.buildroot.net/results/bbcbd5db831737f81483618a2f51da14137c0411
-      mipsel |                   squid-3.5.21 | NOK | http://autobuild.buildroot.net/results/e97d1756cf838c4eef4da34e24ae2725202e95e1
-      x86_64 |             supertuxkart-0.9.2 | NOK | http://autobuild.buildroot.net/results/c0a4994f5d4fff6a0b1ac683a27b79abc70101d8
-         arm |                    systemd-231 | NOK | http://autobuild.buildroot.net/results/b0067e72ffcbbe1db9ef49ab297cece951345aeb
-      mipsel |          systemd-bootchart-230 | NOK | http://autobuild.buildroot.net/results/ddb1254eecd93ae964fd6828b618748e0d1b60b5
-     sparc64 |       trace-cmd-trace-cmd-v2.6 | NOK | http://autobuild.buildroot.net/results/c8353d63816c3de86d4822ad5a629cd5354fd9e5
-      x86_64 |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/9c0dacb004e1a3d0249f98cec20822bf53f21200
-    mips64el |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/b5f9a6c1701122f67ace3bc87a6ea1c3863cdf46
-      mipsel |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/9a50a9ff6676a023cdd0f57dd85f175a96838b02
-      x86_64 |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/5bd1034d1c70a1d2d00767cb73b122701d9c3a4c
-         arm |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/86e59cfdf4f6c473fe82b0dc3a5a14cb851305cb
-        i686 |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/99965486d2c27fca8cf2afd43316ae62e44afed1
-        i686 |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/a794cac18c9eda872ac7b796cf2034c501dae206
-      x86_64 |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/772ed58954362394b9375f27926474257da76f36
-    mips64el |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/279400046771f0c0d3a5e8f5b8dd547857a15017
-    mips64el |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/d99c9d4a7d9ad7396c5052a3f6d9a369a3614634
-      x86_64 |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/0f10ee6c1c359d7a8f1fea5064dcf97b14606297
-      x86_64 |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/4f28f41040fe685fc4485a87b77b96d046817abc
-      mipsel |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/2efa77d8376e9ce90c8eed2987bbce9caa9c5efd
-     powerpc |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/38f87ab7fcd138c2719e5c61d4bd1597256740a3
-     powerpc |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/5eb6be9650de2d53fcd39693ff565d8e56ce46a4
-      xtensa |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/bdda55d31d1560bfb0d46dd548dede45600eb14d
-      x86_64 |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/a635b68a531df6d3fd50c042270b44cea70b37ea
-      xtensa |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/ca0dddb4d9e9290a449ccc736501e907139e4608
-    mips64el |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/202427d925a8e8bce234bf32640a42b79c84e69f
-     powerpc |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/59eb97c31a2f14f8f5be9ba0c4bb106187941adf
-      mipsel |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/cfee15bfdd55da8dcaa30fc65288d07722024475
-     sparc64 |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/5501e22ce652bb66f19bd6135b65c39d5e9b4311
-         arm |              util-linux-2.28.2 | NOK | http://autobuild.buildroot.net/results/b6d8aa62769f4838ede615ba65a0a3d4aa6c5e65
-         arm |              util-linux-2.28.2 | NOK | http://autobuild.buildroot.net/results/031cbcf372f93439696f9e4127d1c6e47302234d
-         arm |              util-linux-2.28.2 | NOK | http://autobuild.buildroot.net/results/7f907d967828311d9a68297602ae3c754df6b6a0
-         arm |                      xen-4.7.0 | NOK | http://autobuild.buildroot.net/results/5ab0b61812cd60c67b3547748aeac7803fa3c574
-     aarch64 |                      xen-4.7.0 | NOK | http://autobuild.buildroot.net/results/751a3e5d8f18a7c48d7d47ee524de97f51d9119a
-         arm |                      xen-4.7.0 | NOK | http://autobuild.buildroot.net/results/d69c5cc9d5f4d0b74476431de035d4cc3adc2d92
-      x86_64 |                 xfsprogs-4.7.0 | NOK | http://autobuild.buildroot.net/results/3c03f6b646627d5c0a6dd145d96d243d583d15c6
-    mips64el | zyre-1d949e4bf79b694ea883c3... | NOK | http://autobuild.buildroot.net/results/61d4c8fe4ac350bf6ed36e4ddfb5c4d014547c27
+> Also allows you to drop patches 1 and 3...
+>
+Concerning patch 3, see comment above.
 
--- 
-http://autobuild.buildroot.net
+>
+>  Oh, and since jpeg is optional, it should have
+>
+> ifeq ($(BR2_PACKAGE_HAS_JPEG),y)
+> MOTION_DEPENDENCIES += jpeg
+> endif
+>
+As stated above, compilation fails without jpeg.
+
+> > +
+> > +ifeq ($(BR2_PACKAGE_FFMPEG_SWSCALE),y)
+> > +MOTION_DEPENDENCIES += ffmpeg
+> > +else
+> > +MOTION_CONF_OPTS += --without-ffmpeg
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_MYSQL),y)
+> > +MOTION_DEPENDENCIES += mysql
+> > +MOTION_CONF_OPTS += --with-mysql-include=$(
+> STAGING_DIR)/usr/include/mysql
+> > +MOTION_CONF_OPTS += --with-mysql-lib=$(STAGING_DIR)/usr/lib
+>
+>  I was going to say, doesn't it work without these options, but OMG what a
+> horrible configure script...
+>
+> > +else
+> > +MOTION_CONF_OPTS += --without-mysql
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
+> > +MOTION_DEPENDENCIES += postgresql
+> > +MOTION_CONF_OPTS += --with-pgsql-include=$(STAGING_DIR)/usr/include
+> > +MOTION_CONF_OPTS += --with-pgsql-lib=$(STAGING_DIR)/usr/lib
+> > +else
+> > +MOTION_CONF_OPTS += --without-postgresql
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_SDL),y)
+> > +MOTION_DEPENDENCIES += sdl
+> > +MOTION_CONF_OPTS += --with-sdl=$(STAGING_DIR)/usr/bin
+> > +else
+> > +MOTION_CONF_OPTS += --without-sdl
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_SQLITE),y)
+> > +MOTION_DEPENDENCIES += sqlite
+> > +else
+> > +MOTION_CONF_OPTS += --without-sqlite3
+> > +endif
+> > +
+> > +# Do not use default install target as it installs many unneeded files
+> and
+> > +# directories: docs, examples and init scripts
+>
+>  Good call :-)
+>
+> > +define MOTION_INSTALL_TARGET_CMDS
+> > +     $(INSTALL) -D -m 0644 $(@D)/motion-dist.conf \
+> > +             $(TARGET_DIR)/etc/motion.conf
+> > +     $(INSTALL) -D -m 0755 $(@D)/motion $(TARGET_DIR)/usr/bin/motion
+> > +endef
+> > +
+> > +define MOTION_INSTALL_INIT_SYSV
+> > +     $(INSTALL) -D -m 0755 package/motion/S99motion \
+> > +             $(TARGET_DIR)/etc/init.d/S99motion
+> > +endef
+> > +
+> > +define MOTION_INSTALL_INIT_SYSTEMD
+> > +     $(INSTALL) -D -m 644 package/motion/motion.service \
+> > +             $(TARGET_DIR)/usr/lib/systemd/system/motion.service
+> > +     mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> > +     ln -sf ../../../../usr/lib/systemd/system/motion.service \
+> > +             $(TARGET_DIR)/etc/systemd/system/multi-user.target.
+> wants/motion.service
+> > +endef
+> > +
+> > +$(eval $(autotools-package))
+> > diff --git a/package/motion/motion.service b/package/motion/motion.
+> service
+> > new file mode 100644
+> > index 0000000..7b9a457
+> > --- /dev/null
+> > +++ b/package/motion/motion.service
+> > @@ -0,0 +1,10 @@
+> > +[Unit]
+> > +Description=Motion camera monitoring system
+> > +After=network.target
+> > +
+> > +[Service]
+> > +ExecStart=/usr/bin/motion -b
+>
+>  I think systemd prefers to start without -b so it can monitor the daemon.
+>
+> Thanks for your review, I will take into account all your comments.
+
+>  Regards,
+>  Arnout
+>
+> > +Restart=always
+> > +
+> > +[Install]
+> > +WantedBy=multi-user.target
+> >
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160917/5ddcf807/attachment-0001.html>
