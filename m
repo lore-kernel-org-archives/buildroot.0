@@ -1,39 +1,42 @@
-From: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
-Date: Sat, 17 Sep 2016 20:59:24 +0900
-Subject: [Buildroot] [PATCH] php: bump to 7.0.11
-Message-ID: <20160917115924.6405-1-ishitatsuyuki@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Sep 2016 14:05:02 +0200
+Subject: [Buildroot] [PATCH v2 1/6] package/libupnpp: add patch to get
+ pkg-config file
+In-Reply-To: <20160915064001.8684-2-joerg.krause@embedded.rocks>
+References: <20160915064001.8684-1-joerg.krause@embedded.rocks>
+ <20160915064001.8684-2-joerg.krause@embedded.rocks>
+Message-ID: <20160917140502.175fc4bb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 6e146f8..0092095 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256 970c322ba3e472cb0264b8ba9d4d92e87918da5d0cca53c4aba2a70545b8626d  php-7.0.9.tar.xz
-+sha256 d4cccea8da1d27c11b89386f8b8e95692ad3356610d571253d00ca67d524c735  php-7.0.11.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 7df10be..083b451 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.0.9
-+PHP_VERSION = 7.0.11
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+On Thu, 15 Sep 2016 08:39:56 +0200, J?rg Krause wrote:
+> Apply a patch from upstream to install a pkg-config file for libupnpp.
+> 
+> Fetch from:
+> https://github.com/medoc92/libupnpp/commit/9f03bb0e7b47e2843edea6f25ed9eabbfb6412df
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/libupnpp/0002-Add-pkg-config-file.patch | 63 +++++++++++++++++++++++++
+>  package/libupnpp/libupnpp.mk                    |  4 +-
+>  2 files changed, 66 insertions(+), 1 deletion(-)
+>  create mode 100644 package/libupnpp/0002-Add-pkg-config-file.patch
+
+Entire patch series applied, thanks!
+
+Hopefully all those patches are going to end up in their respective
+upstream projects, so that we can at some point remove them from
+Buildroot.
+
+Thanks!
+
+Thomas
 -- 
-2.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
