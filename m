@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Sep 2016 19:23:43 +0200
-Subject: [Buildroot] [PATCH v2] raspberrypi3: fix serial console (load
- pi3-miniuart-bt overlay)
-In-Reply-To: <1462220744-6368-1-git-send-email-ps.report@gmx.net>
-References: <1462220744-6368-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20160918192343.1cb566fe@free-electrons.com>
+Date: Sun, 18 Sep 2016 19:30:45 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI am335x-evm
+In-Reply-To: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
+References: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
+Message-ID: <20160918193045.15a33be3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +12,76 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  2 May 2016 22:25:44 +0200, Peter Seiderer wrote:
-> - enable BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS in raspberrypi3_defconfig
-> - add copy of rpi-firmware/overlays directory to boot partition in genimage-raspberrypi3.cfg
-> - enhance post-image.sh script to add 'dtoverlay=pi3-miniuart-bt' on request
-> - add BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay" in raspberrypi3_defconfig
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 --> v2:
->   - use pi3-miniuart-bt instead of pi3-disable-bt
->   - fix post-image.sh to add overlay lines only once
->   - add overlay description (and alternative solution) to readme.txt
-> ---
->  board/raspberrypi/genimage-raspberrypi3.cfg |  1 +
->  board/raspberrypi/post-image.sh             | 13 +++++++++++++
->  board/raspberrypi/readme.txt                |  8 +++++++-
->  configs/raspberrypi3_defconfig              |  3 ++-
->  4 files changed, 23 insertions(+), 2 deletions(-)
+On Mon, 15 Aug 2016 13:51:22 +0200, Lothar Felten wrote:
+> This patch adds a target config for the ti am335x-evm based on the AM335x CPU.
+> It also supports the beaglebone and beagleboneblack.
 
-What I understood from the discussions on your new patch "raspberrypi3:
-fix serial console (add enable_uart=1", this older proposal is actually
-what is preferred. It is a bit more complicated than just passing
-enable_uart=1, but it allows to have the UART *and* run the CPU as its
-normal frequency.
+How can it support also the BeagleBone and BeagleBoneBlack when the
+U-Boot is configured with:
 
-So, I've applied this patch, and marked the newer one (enable_uart=1)
-as rejected.
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
 
-It would be good if you could rebuild the raspberrypi3_defconfig, and
-check that it works for you. While you're at it, it would be useful if
-you could look at the bug report
-https://bugs.busybox.net/show_bug.cgi?id=9196 and see if you can
-reproduce the issue and/or help solve the problem.
+I.e, isn't U-Boot consequently only working on the arm335x_evm
+platform? Or is the am335x_evm U-Boot configuration also usable for
+BeagleBone/BeagleBoneBlack?
 
-Thanks a lot for your contribution!
+It seems that it's the case thanks to:
+
+CONFIG_OF_LIST="am335x-evm am335x-bone am335x-boneblack am335x-evmsk am335x-bonegreen am335x-icev2"
+
+in the U-Boot configuration. Can you confirm?
+
+If that's the case, then is the name of the defconfig really properly
+chosen? Should we remove beaglebone_defconfig in favor of a common
+defconfig for all am335x configurations?
+
+I'd say, either we name the defconfig am335x_evm_defconfig, and it
+should support only this board, or we name it am335x_defconfig and it
+supports multiple boards and replaces other AM335x defconfigs we
+already have.
+
+> Uboot SD card patch:
+> Early AM335x-evm boards can only use 1 bit communication to the SD card, on
+> newer board revisions this might be fixed.
+> Forcing 1 bit communication slows down the communication but will work
+> regardless if the SD card is attached via 1 or 4 bits.
+> If the board has a working 4 bit SD card interface, this patch can be removed,
+> this will speed up the access.
+
+Do you still have those early AM335x EVM boards? Are they widespread?
+I'm wondering if it really makes sense to have this patch.
+
+> +How to build it
+> +===============
+> +
+> +Select the default configuration for the am335x-evm target:
+> +$ make am335x-evm_defconfig
+
+The defconfig name should be using _ as separator, not -.
+
+> diff --git a/configs/am335x-evm_defconfig b/configs/am335x-evm_defconfig
+> new file mode 100644
+> index 0000000..c834b17
+> --- /dev/null
+> +++ b/configs/am335x-evm_defconfig
+> @@ -0,0 +1,25 @@
+> +BR2_arm=y
+> +BR2_cortex_a8=y
+> +BR2_GLOBAL_PATCH_DIR="board/ti/am335x-evm/patches"
+> +BR2_KERNEL_HEADERS_4_1=y
+
+Use "same headers as the kernel sources" option please.
+
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
+
+Does this really work for the BeagleBone, which uses ttyO2 if I
+remember correctly? Maybe another reason to have a defconfig that
+supports just the am335x_evm.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
