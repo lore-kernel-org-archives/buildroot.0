@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Sep 2016 19:30:45 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI am335x-evm
-In-Reply-To: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
-References: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
-Message-ID: <20160918193045.15a33be3@free-electrons.com>
+Date: Sun, 18 Sep 2016 19:34:33 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI
+ am335x-evm_sgx-qt5
+In-Reply-To: <1471284800-17046-1-git-send-email-lothar.felten@gmail.com>
+References: <1471284800-17046-1-git-send-email-lothar.felten@gmail.com>
+Message-ID: <20160918193433.67e76b34@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,71 +13,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 15 Aug 2016 13:51:22 +0200, Lothar Felten wrote:
-> This patch adds a target config for the ti am335x-evm based on the AM335x CPU.
-> It also supports the beaglebone and beagleboneblack.
+On Mon, 15 Aug 2016 20:13:20 +0200, Lothar Felten wrote:
+> Add a target configuration for the ti am335x-evm that supports the SGX530
+> graphics acceleration and builds the qt5 demos with the eglfs backend.
+> The imagination technologies demos and fbv are also included.
+> The linux kernel is based on the omap2plus defconfig, a config fragment
+> adds the required settings for SGX accelerator support.
+> 
+> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 
-How can it support also the BeagleBone and BeagleBoneBlack when the
-U-Boot is configured with:
+This looks good, but I have the same comments as the
+am335x_evm_defconfig: i.e does it really supports multiple boards.
 
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
+Also, I believe it would be useful to reference this defconfig in the
+readme.txt file added in the previous patch.
 
-I.e, isn't U-Boot consequently only working on the arm335x_evm
-platform? Or is the am335x_evm U-Boot configuration also usable for
-BeagleBone/BeagleBoneBlack?
+Both patches should be sent in a series, since this patch depends on
+the first one.
 
-It seems that it's the case thanks to:
+>  board/ti/am335x-evm/linux-4.1-sgx.fragment | 12 ++++++++++
 
-CONFIG_OF_LIST="am335x-evm am335x-bone am335x-boneblack am335x-evmsk am335x-bonegreen am335x-icev2"
+Great idea to use a config fragment here.
 
-in the U-Boot configuration. Can you confirm?
+>  configs/am335x-evm_sgx-qt5_defconfig       | 38 ++++++++++++++++++++++++++++++
 
-If that's the case, then is the name of the defconfig really properly
-chosen? Should we remove beaglebone_defconfig in favor of a common
-defconfig for all am335x configurations?
+Please this am335x_evm_sqx_qt5_deconfig
 
-I'd say, either we name the defconfig am335x_evm_defconfig, and it
-should support only this board, or we name it am335x_defconfig and it
-supports multiple boards and replaces other AM335x defconfigs we
-already have.
-
-> Uboot SD card patch:
-> Early AM335x-evm boards can only use 1 bit communication to the SD card, on
-> newer board revisions this might be fixed.
-> Forcing 1 bit communication slows down the communication but will work
-> regardless if the SD card is attached via 1 or 4 bits.
-> If the board has a working 4 bit SD card interface, this patch can be removed,
-> this will speed up the access.
-
-Do you still have those early AM335x EVM boards? Are they widespread?
-I'm wondering if it really makes sense to have this patch.
-
-> +How to build it
-> +===============
-> +
-> +Select the default configuration for the am335x-evm target:
-> +$ make am335x-evm_defconfig
-
-The defconfig name should be using _ as separator, not -.
-
-> diff --git a/configs/am335x-evm_defconfig b/configs/am335x-evm_defconfig
+> diff --git a/configs/am335x-evm_sgx-qt5_defconfig b/configs/am335x-evm_sgx-qt5_defconfig
 > new file mode 100644
-> index 0000000..c834b17
+> index 0000000..2c76ab0
 > --- /dev/null
-> +++ b/configs/am335x-evm_defconfig
-> @@ -0,0 +1,25 @@
+> +++ b/configs/am335x-evm_sgx-qt5_defconfig
+> @@ -0,0 +1,38 @@
 > +BR2_arm=y
 > +BR2_cortex_a8=y
 > +BR2_GLOBAL_PATCH_DIR="board/ti/am335x-evm/patches"
 > +BR2_KERNEL_HEADERS_4_1=y
 
-Use "same headers as the kernel sources" option please.
-
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
-
-Does this really work for the BeagleBone, which uses ttyO2 if I
-remember correctly? Maybe another reason to have a defconfig that
-supports just the am335x_evm.
+Please use the "headers from the kernel source" option.
 
 Thanks!
 
