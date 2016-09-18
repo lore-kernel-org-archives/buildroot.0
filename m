@@ -1,57 +1,52 @@
-From: stefan.nickl at gmail.com <stefan.nickl@gmail.com>
-Date: Sun, 18 Sep 2016 10:00:41 +0200
-Subject: [Buildroot] [PATCH] linux-firmware: Add switch for marvell usb8801
-Message-ID: <1474185641-22843-1-git-send-email-Stefan.Nickl@gmail.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Sun, 18 Sep 2016 22:11:41 +1200
+Subject: [Buildroot] [PATCH] util-linux: add -lcurses to LDFLAGS when static
+	linking
+Message-ID: <20160918101141.20574-1-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: snickl <snickl>
+When linking statically with -lreadline we also need to specify
+-lcurses.
 
-Hi,
-    
-unfortunately my ppp/musl endeavors were forestalled by some Makefile
-weirdness. In the meantime, here is adding an option for the Marvell
-8801 WIFI USB firmware.
+Fixes:
+  http://autobuild.buildroot.net/results/70e0a273e699c73c6b2ab2a19c8f7ebb1ddee6cde
+  http://autobuild.buildroot.net/results/6a7faf8adbffd9437c0117b9f0e89684c24dad23
 
-Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
-
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
 ---
+I think this should address the following build failures although I've only
+confirmed the two quoted above.
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index f56f31d..b9f7c85 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -161,6 +161,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8797
- 	help
- 	  Firmware files for the Marvell Wifi-Ex 8797 module on USB.
+  http://autobuild.buildroot.net/results/0c79588166e1900c18161e1d67a38e6ee2461112
+  http://autobuild.buildroot.net/results/66fcd3dc6909bd00d6cb97e7b713e1e2e91c2697
+  http://autobuild.buildroot.net/results/d31ea8d374fa4b14b8d8d55e537801c7fc1e5992
+  http://autobuild.buildroot.net/results/9d4d9b74fb021fcbbc2a63ccc8cbe170ded7ae24
+  http://autobuild.buildroot.net/results/e4f9e0549ddfca65d746cd7ac681cd463e86f6b7
+  http://autobuild.buildroot.net/results/5f6b19e5fbb138b81092004ab8da057b84817025
+
+I'm not sure that this is the "right" fix but it seems to do the trick. I also
+tried using LIBS instead of LDFLAGS which got the configure step to pass but
+didn't propagate to the final link.
+
+ package/util-linux/util-linux.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 82230bc..d32e30d 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -148,6 +148,8 @@ endif
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8801
-+	bool "Marvell Wifi-Ex 8801 USB"
-+	help
-+	  Firmware files for the Marvell Wifi-Ex 8801 module on USB.
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887
- 	bool "Marvell Wifi-Ex 8887 SDIO"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 1401848..3bbd7c0 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -141,6 +141,12 @@ LINUX_FIRMWARE_FILES += mrvl/usb8797_uapsta.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
- endif
- 
-+# usb8801
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8801),y)
-+LINUX_FIRMWARE_FILES += mrvl/usb8801_uapsta.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
- # sd8887
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887),y)
- LINUX_FIRMWARE_FILES += mrvl/sd8887_uapsta.bin
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ UTIL_LINUX_CONF_OPTS += --with-readline
++UTIL_LINUX_CONF_ENV += $(if $(BR2_STATIC_LIBS),ac_cv_lib_readline_readline=yes)
++UTIL_LINUX_CONF_ENV += $(if $(BR2_STATIC_LIBS),LDFLAGS="-lcurses")
+ UTIL_LINUX_DEPENDENCIES += readline
+ else
+ UTIL_LINUX_CONF_OPTS += --without-readline
 -- 
-2.7.4
+2.9.2.518.ged577c6.dirty
