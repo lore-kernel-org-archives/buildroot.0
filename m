@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Sep 2016 20:02:07 +0200
-Subject: [Buildroot] [PATCH 02/11] Add Linux Kernel stable 4.4.16 patch
- file for Arietta G25
-In-Reply-To: <1470827167-9426-4-git-send-email-biagio.hkr@gmail.com>
+Date: Sun, 18 Sep 2016 20:04:36 +0200
+Subject: [Buildroot] [PATCH 03/11] Add post-build.sh script for Arietta
+ G25
+In-Reply-To: <1470827167-9426-5-git-send-email-biagio.hkr@gmail.com>
 References: <1470827167-9426-1-git-send-email-biagio.hkr@gmail.com>
- <1470827167-9426-4-git-send-email-biagio.hkr@gmail.com>
-Message-ID: <20160918200207.75421760@free-electrons.com>
+ <1470827167-9426-5-git-send-email-biagio.hkr@gmail.com>
+Message-ID: <20160918200436.0b5baedb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 10 Aug 2016 13:05:58 +0200, Biagio Montaruli wrote:
-> Signed-off-by: Biagio Montaruli <biagio.hkr@gmail.com>
-> ---
->  .../patches/linux/linux-4.4.16-arietta.patch       | 409 +++++++++++++++++++++
->  1 file changed, 409 insertions(+)
->  create mode 100644 board/acmesystems/arietta-g25/patches/linux/linux-4.4.16-arietta.patch
+On Wed, 10 Aug 2016 13:05:59 +0200, Biagio Montaruli wrote:
 
-Is there a good motivation to use the 4.4 kernel that requires some
-patches to support the Arietta, as opposed to using the mainline kernel
-which has support for this platform built-in?
+> +if [ -e ${BINARIES_DIR}/at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.8.5.bin ]; then 
+> +	if [ -e ${BINARIES_DIR}/boot.bin ]; then
+> +		mkdir ${BINARIES_DIR}/arietta-at91bootstrap
+> +		mv ${BINARIES_DIR}/*.bin ${BINARIES_DIR}/arietta-at91bootstrap
+> +		cp -v ${BINARIES_DIR}/arietta-at91bootstrap/at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.8.5.bin ${BINARIES_DIR}/boot.bin
+> +	else
+> +		mv ${BINARIES_DIR}/at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.8.5.bin ${BINARIES_DIR}/boot.bin
+> +	fi
+> +else
+> +	echo "Cannot find the AT91bootstrap image for Arietta-G25"
+> +fi
+> +
 
-Also, if you really insist in using the 4.4 kernel, in PATCH 05/11,
-you're making the defconfig point to your own Github repository for the
-kernel. Why don't you include the necessary patches in your Github
-repository, then?
+Seeing this, I believe the original logic in the genimage.cfg file was
+much better:
 
+-		file boot.bin {
+-			image = "at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.7.bin"
+-		};
 
-> +diff --git a/arch/arm/configs/acme-arietta_defconfig b/arch/arm/configs/acme-arietta_defconfig
-> +new file mode 100644
-> +index 0000000..b014260
-> +--- /dev/null
-> ++++ b/arch/arm/configs/acme-arietta_defconfig
+If you really want to have the proper filename in $(BINARIES_DIR), then
+do something as simple as:
 
-Do we really need an entirely new defconfig? What about using the
-at91_dt_defconfig available in the kernel?
+mv ${BINARIES_DIR}/at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.8.5.bin ${BINARIES_DIR}/boot.bin
+
+The rest of the post-build script seems useless.
 
 Thanks,
 
