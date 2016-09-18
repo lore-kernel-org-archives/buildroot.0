@@ -1,70 +1,60 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 17 Sep 2016 23:56:58 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/efl: add Evas GL DRM Engine
-	support
-In-Reply-To: <1474149418-16756-1-git-send-email-romain.naour@gmail.com>
-References: <1474149418-16756-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1474149418-16756-2-git-send-email-romain.naour@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 18 Sep 2016 01:58:23 +0000
+Subject: [Buildroot] [Bug 9256] New: [Config file] New device: Odroid-U2/U3
+Message-ID: <bug-9256-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This support is required for Enlightenment wayland support [1].
+https://bugs.busybox.net/show_bug.cgi?id=9256
 
-As stated in configure, Evas GL DRM Engine needs OpenGL ES with EGL and
-wayland (wayland-client >= 1.8.0)
+            Bug ID: 9256
+           Summary: [Config file] New device: Odroid-U2/U3
+           Product: buildroot
+           Version: 2016.08
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: qlb1234 at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-[1] https://www.enlightenment.org/about-wayland
+Hi. Here's a config file for Hardkernel's Odroid-U2 and Odroid-U3. They're
+software compatible.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-v2: rename the option to BR2_PAKCAGE_EFL_GLES_DRM (ThomasP)
-    fix the help text (ThomasP)
----
- package/efl/Config.in | 11 +++++++++++
- package/efl/efl.mk    |  6 ++++++
- 2 files changed, 17 insertions(+)
+Name suggestion: odroidu2_defconfig
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 9f9fcf0..b6feac1 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -206,6 +206,17 @@ config BR2_PACKAGE_EFL_DRM
- comment "Evas DRM Engine needs mesa3d w/ EGL support, threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL
- 
-+config BR2_PAKCAGE_EFL_GLES_DRM
-+	bool "Evas GLES DRM Engine"
-+	depends on BR2_PACKAGE_EFL_DRM
-+	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
-+	help
-+	  This option enable building support for the Evas DRM OpenGL ES
-+	  based engine.
-+
-+comment "Evas GL DRM Engine needs Evas DRM Engine, OpenGL ES w/ EGL"
-+	depends on BR2_PACKAGE_EFL_DRM && !BR2_PACKAGE_EFL_OPENGLES
-+
- comment "libevas loaders"
- 
- config BR2_PACKAGE_EFL_PNG
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 8ba478a..a04166e 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -205,6 +205,12 @@ else
- EFL_CONF_OPTS += --disable-drm
- endif
- 
-+ifeq ($(BR2_PAKCAGE_EFL_GLES_DRM),y)
-+EFL_CONF_OPTS += --enable-gl-drm
-+else
-+EFL_CONF_OPTS += --disable-gl-drm
-+endif
-+
- EFL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBXKBCOMMON),libxkbcommon)
- 
- # Loaders that need external dependencies needs to be --enable-XXX=yes
+# Target
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_ENABLE_NEON=y
+BR2_ARM_ENABLE_VFP=y
+BR2_ARM_FPU_VFPV3=y
+
+# Toolchain
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_BINUTILS_VERSION_2_26_X=y
+BR2_GCC_VERSION_6_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+
+# Kernel
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_DEFCONFIG="exynos"
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos4412-odroidu3"
+
+# Bootloader
+BR2_TARGET_UBOOT=y
+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="odroid"
+BR2_TARGET_UBOOT_NEEDS_DTC=y
+
 -- 
-2.5.5
+You are receiving this mail because:
+You are on the CC list for the bug.
