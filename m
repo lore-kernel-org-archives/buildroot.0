@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Sep 2016 20:04:36 +0200
-Subject: [Buildroot] [PATCH 03/11] Add post-build.sh script for Arietta
- G25
-In-Reply-To: <1470827167-9426-5-git-send-email-biagio.hkr@gmail.com>
+Date: Sun, 18 Sep 2016 20:05:45 +0200
+Subject: [Buildroot] [PATCH 04/11] Add root filesystem overlay files and
+ directories for Arietta G25
+In-Reply-To: <1470827167-9426-6-git-send-email-biagio.hkr@gmail.com>
 References: <1470827167-9426-1-git-send-email-biagio.hkr@gmail.com>
- <1470827167-9426-5-git-send-email-biagio.hkr@gmail.com>
-Message-ID: <20160918200436.0b5baedb@free-electrons.com>
+ <1470827167-9426-6-git-send-email-biagio.hkr@gmail.com>
+Message-ID: <20160918200545.5b5359d9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +14,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 10 Aug 2016 13:05:59 +0200, Biagio Montaruli wrote:
-
-> +if [ -e ${BINARIES_DIR}/at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.8.5.bin ]; then 
-> +	if [ -e ${BINARIES_DIR}/boot.bin ]; then
-> +		mkdir ${BINARIES_DIR}/arietta-at91bootstrap
-> +		mv ${BINARIES_DIR}/*.bin ${BINARIES_DIR}/arietta-at91bootstrap
-> +		cp -v ${BINARIES_DIR}/arietta-at91bootstrap/at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.8.5.bin ${BINARIES_DIR}/boot.bin
-> +	else
-> +		mv ${BINARIES_DIR}/at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.8.5.bin ${BINARIES_DIR}/boot.bin
-> +	fi
-> +else
-> +	echo "Cannot find the AT91bootstrap image for Arietta-G25"
-> +fi
+On Wed, 10 Aug 2016 13:06:00 +0200, Biagio Montaruli wrote:
+> Signed-off-by: Biagio Montaruli <biagio.hkr@gmail.com>
+> ---
+>  .../arietta-g25/rootfs-overlay/etc/network/interfaces          | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>  create mode 100644 board/acmesystems/arietta-g25/rootfs-overlay/etc/network/interfaces
+> 
+> diff --git a/board/acmesystems/arietta-g25/rootfs-overlay/etc/network/interfaces b/board/acmesystems/arietta-g25/rootfs-overlay/etc/network/interfaces
+> new file mode 100644
+> index 0000000..2483c5a
+> --- /dev/null
+> +++ b/board/acmesystems/arietta-g25/rootfs-overlay/etc/network/interfaces
+> @@ -0,0 +1,10 @@
+> +auto lo
+> +iface lo inet loopback
 > +
+> +auto usb0
+> +iface usb0 inet static
+> +  address 192.168.10.10
+> +  netmask 255.255.255.0
+> +  gateway 192.168.10.20
 
-Seeing this, I believe the original logic in the genimage.cfg file was
-much better:
+We clearly don't want an overlay that enables a network interface
+with some random static IP address. That's really local configuration
+that has nothing to do in a Buildroot defconfig IMO.
 
--		file boot.bin {
--			image = "at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.7.bin"
--		};
-
-If you really want to have the proper filename in $(BINARIES_DIR), then
-do something as simple as:
-
-mv ${BINARIES_DIR}/at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.8.5.bin ${BINARIES_DIR}/boot.bin
-
-The rest of the post-build script seems useless.
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
