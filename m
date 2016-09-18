@@ -1,41 +1,57 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 18 Sep 2016 10:29:58 +0300
-Subject: [Buildroot] [PATCH] sam-ba: correct license
-Message-ID: <3f965e7ede7391104b6d53c8871777eba9f402b1.1474183798.git.baruch@tkos.co.il>
+From: stefan.nickl at gmail.com <stefan.nickl@gmail.com>
+Date: Sun, 18 Sep 2016 10:00:41 +0200
+Subject: [Buildroot] [PATCH] linux-firmware: Add switch for marvell usb8801
+Message-ID: <1474185641-22843-1-git-send-email-Stefan.Nickl@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The sam-ba binary is distributed under a proprietary license. TCL and some
-applets code is under a BSD-2c like license, while some other applets are
-under BSD-4c.
+From: snickl <snickl>
 
-Also correct license files.
+Hi,
+    
+unfortunately my ppp/musl endeavors were forestalled by some Makefile
+weirdness. In the meantime, here is adding an option for the Marvell
+8801 WIFI USB firmware.
 
-Cc: Ludovic Desroches <ludovic.desroches@atmel.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+
 ---
- package/sam-ba/sam-ba.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
-index aede615a3f94..7fc65c01a9b3 100644
---- a/package/sam-ba/sam-ba.mk
-+++ b/package/sam-ba/sam-ba.mk
-@@ -7,8 +7,10 @@
- SAM_BA_SITE = http://www.atmel.com/dyn/resources/prod_documents
- SAM_BA_VERSION = 2.16
- SAM_BA_SOURCE = sam-ba_$(SAM_BA_VERSION)_linux.zip
--SAM_BA_LICENSE = BSD-like (partly binary-only)
--SAM_BA_LICENSE_FILES = doc/readme.txt
-+SAM_BA_LICENSE = SAM-BA license (sam-ba executable), \
-+		BSD-2c like, BSD-4c (TCL and applets code)
-+SAM_BA_LICENSE_FILES = doc/license.txt tcl_lib/boards.tcl \
-+		applets/sam4c/libraries/libchip_sam4c/include/sam4c/sam4c32e-1.h
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index f56f31d..b9f7c85 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -161,6 +161,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8797
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8797 module on USB.
  
- define HOST_SAM_BA_EXTRACT_CMDS
- 	$(UNZIP) -d $(BUILD_DIR) $(DL_DIR)/$(SAM_BA_SOURCE)
++config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8801
++	bool "Marvell Wifi-Ex 8801 USB"
++	help
++	  Firmware files for the Marvell Wifi-Ex 8801 module on USB.
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887
+ 	bool "Marvell Wifi-Ex 8887 SDIO"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 1401848..3bbd7c0 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -141,6 +141,12 @@ LINUX_FIRMWARE_FILES += mrvl/usb8797_uapsta.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
+ endif
+ 
++# usb8801
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_USB8801),y)
++LINUX_FIRMWARE_FILES += mrvl/usb8801_uapsta.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
++endif
++
+ # sd8887
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8887),y)
+ LINUX_FIRMWARE_FILES += mrvl/sd8887_uapsta.bin
 -- 
-2.9.3
+2.7.4
