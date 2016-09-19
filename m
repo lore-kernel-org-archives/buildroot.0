@@ -1,45 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2016 19:32:59 +0200
-Subject: [Buildroot] [git commit] manual: get rid of the lists of packages
-Message-ID: <20160919174039.36AF580819@busybox.osuosl.org>
+Date: Mon, 19 Sep 2016 19:47:29 +0200
+Subject: [Buildroot] [PATCH 4/4 v2] manual: get rid of the lists of
+ packages
+In-Reply-To: <206a0e9bf7a1e99fa176fe1345d245881f14b858.1472943074.git.yann.morin.1998@free.fr>
+References: <cover.1472943074.git.yann.morin.1998@free.fr>
+ <206a0e9bf7a1e99fa176fe1345d245881f14b858.1472943074.git.yann.morin.1998@free.fr>
+Message-ID: <20160919194729.607d2c8d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4db4277ffbd1fae478ba748c626eddc7c220e67
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-We currently have four lists of packages in the manual:
-  - the non-virtual target packages,
-  - the virtual target packages,
-  - the host packages,
-  - the deprecated features.
+On Sun,  4 Sep 2016 00:58:43 +0200, Yann E. MORIN wrote:
+> We currently have four lists of packages in the manual:
+>   - the non-virtual target packages,
+>   - the virtual target packages,
+>   - the host packages,
+>   - the deprecated features.
+> 
+> Those list take more than half of the manual. They do not serve much
+> purpose except to show off. The only one that is interesting is the list
+> of virtual packages, the associated symbols and their providers.
+> 
+> After the recent discussion on the list [0], remove them, except the
+> list of virtual packages.
+> 
+> Replace our biggish and complex generating script (and its companion
+> library kconfiglib) with a much simpler script.
+> 
+> The drawback is that, when it is a sub-option of a provider that does
+> provide the feature, we loose that information in the new list. We
+> believe this is an acceptable drawback.
+> 
+> [0] http://lists.busybox.net/pipermail/buildroot/2016-September/171199.html
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  docs/manual/appendix.txt            |   32 +-
+>  docs/manual/manual.mk               |   21 +-
+>  support/scripts/gen-manual-lists    |   62 +
+>  support/scripts/gen-manual-lists.py |  513 -----
+>  support/scripts/kconfiglib.py       | 3541 -----------------------------------
+>  support/scripts/readme.kconfiglib   |   30 -
+>  6 files changed, 67 insertions(+), 4132 deletions(-)
+>  create mode 100755 support/scripts/gen-manual-lists
+>  delete mode 100644 support/scripts/gen-manual-lists.py
+>  delete mode 100644 support/scripts/kconfiglib.py
+>  delete mode 100644 support/scripts/readme.kconfiglib
 
-Those list take more than half of the manual. They do not serve much
-purpose except to show off.
+Nobody really gave any opinion. I had some quick discussion with Peter
+in private on IRC, and he seemed to be in favor of completely dropping
+the list of packages from the manual.
 
-After the recent discussion on the list [0], remove them all.
+So: patch applied. Thanks a lot!
 
-We can now get rid of our biggish and complex generating script (and its
-companion library kconfiglib).
-
-[0] http://lists.busybox.net/pipermail/buildroot/2016-September/171199.html
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/adding-packages-virtual.txt |    6 -
- docs/manual/appendix.txt                |   37 -
- docs/manual/manual.mk                   |   24 -
- support/scripts/gen-manual-lists.py     |  513 -----
- support/scripts/kconfiglib.py           | 3541 -------------------------------
- support/scripts/readme.kconfiglib       |   30 -
- 6 files changed, 4151 deletions(-)
-
-Patch is too large, so refusing to show it
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
