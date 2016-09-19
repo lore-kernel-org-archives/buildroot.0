@@ -1,68 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2016 19:47:29 +0200
-Subject: [Buildroot] [PATCH 4/4 v2] manual: get rid of the lists of
- packages
-In-Reply-To: <206a0e9bf7a1e99fa176fe1345d245881f14b858.1472943074.git.yann.morin.1998@free.fr>
-References: <cover.1472943074.git.yann.morin.1998@free.fr>
- <206a0e9bf7a1e99fa176fe1345d245881f14b858.1472943074.git.yann.morin.1998@free.fr>
-Message-ID: <20160919194729.607d2c8d@free-electrons.com>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Mon, 19 Sep 2016 11:41:11 -0700
+Subject: [Buildroot] [PATCH 2/2] xen: Remove TARGET_CONFIGURE_OPTS from
+	make
+In-Reply-To: <20160917160947.1b29638d@free-electrons.com>
+References: <1473799504-20372-1-git-send-email-alistair.francis@xilinx.com>
+ <1473799504-20372-2-git-send-email-alistair.francis@xilinx.com>
+ <dd89e679-681d-a3e6-b37e-1beea8744937@mind.be>
+ <20160917160947.1b29638d@free-electrons.com>
+Message-ID: <CAKmqyKPckN9A7xRgMg3di8oQzbNy2hxgBjMn00MmV0hC3YH6qg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sat, Sep 17, 2016 at 7:09 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Wed, 14 Sep 2016 01:23:32 +0200, Arnout Vandecappelle wrote:
+>> On 13-09-16 22:45, Alistair Francis wrote:
+>> > The TARGET_CONFIGURE_OPTS variable resulted in a double definition
+>> > error:
+>> > <command-line>:0:0: error: "__OBJECT_FILE__" redefined [-Werror]
+>> >
+>> > Remove the options to avoid the error.
+>>
+>>  This doesn't look right. TARGET_CONFIGURE_OPTS definitely doesn't
+>> contain -D__OBJECT_FILE__ (or you have some very weird stuff in
+>> BR2_TARGET_OPTIMIZATION).
+>
+> It doesn't look right, but it's actually what happens. When we pass our
+> TARGET_CONFIGURE_OPTS, what happens is:
+>
+> /home/thomas/projets/buildroot/output/host/usr/bin/aarch64-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -O2 -fomit-frame-pointer -DBUILD_ID -fno-strict-aliasing -std=gnu99 -Wall -Wstrict-prototypes -Wdeclaration-after-statement -Wno-unused-but-set-variable -Wno-unused-local-typedefs -O2 -fomit-frame-pointer -DBUILD_ID -fno-strict-aliasing -std=gnu99 -Wall -Wstrict-prototypes -Wdeclaration-after-statement -Wno-unused-but-set-variable -Wno-unused-local-typedefs -O2 -fomit-frame-pointer -DBUILD_ID -fno-strict-aliasing -std=gnu99 -Wall -Wstrict-prototypes -Wdeclaration-after-statement -Wno-unused-but-set-variable
+> -Wno-unused-local-typedefs -DNDEBUG -nostdinc -fno-builtin -fno-common -Werror -Wredundant-decls -Wno-pointer-arith -pipe -g -D__XEN__ -include /home/thomas/projets/buildroot/output/build/xen-4.7.0/xen/include/xen/config.h '-D__OBJECT_FILE__="/home/thomas/projets/buildroot/output/build/xen-4.7.0/xen/xen"' -Wa,--strip-local-absolute -MMD -MF /home/thomas/projets/buildroot/output/build/xen-4.7.0/xen/.xen.d -mcpu=generic -mgeneral-regs-only -I/home/thomas/projets/buildroot/output/build/xen-4.7.0/xen/include -fno-stack-protector -fno-exceptions -Wnested-externs -DGCC_HAS_VISIBILITY_ATTRIBUTE -O2 -fomit-frame-pointer -DBUILD_ID -fno-strict-aliasing -std=gnu99 -Wall
+> -Wstrict-prototypes -Wdeclaration-after-statement -Wno-unused-but-set-variable -Wno-unused-local-typedefs -O2 -fomit-frame-pointer -DBUILD_ID -fno-strict-aliasing -std=gnu99 -Wall -Wstrict-prototypes -Wdeclaration-after-statement -Wno-unused-but-set-variable -Wno-unused-local-typedefs -DNDEBUG -nostdinc -fno-builtin -fno-common -Werror -Wredundant-decls -Wno-pointer-arith -pipe -g -D__XEN__ -include /home/thomas/projets/buildroot/output/build/xen-4.7.0/xen/include/xen/config.h '-D__OBJECT_FILE__="asm-offsets.s"' -Wa,--strip-local-absolute -MMD -MF ./.asm-offsets.s.d -mcpu=generic -mgeneral-regs-only -I/home/thomas/projets/buildroot/output/build/xen-4.7.0/xen/include -fno-stack-protector -fno-exceptions -Wnested-externs -DGCC_HAS_VISIBILITY_ATTRIBUTE -S -o asm-offsets.s arm64/asm-offsets.c
+> <command-line>:0:0: error: "__OBJECT_FILE__" redefined [-Werror]
+> <command-line>:0:0: note: this is the location of the previous definition
+> cc1: all warnings being treated as errors
+> Makefile:103: recipe for target 'asm-offsets.s' failed
+> make[5]: *** [asm-offsets.s] Error 1
+>
+> So _OBJECT_FILE_ is really defined twice, once incorrectly, and the
+> second time correctly.
+>
+> When we stop passing $(TARGET_CONFIGURE_OPTS), the same compilation
+> step looks like this:
+>
+> /home/thomas/projets/buildroot/output/host/usr/bin/aarch64-linux-gnu-gcc -O2 -fomit-frame-pointer -DBUILD_ID -fno-strict-aliasing -std=gnu99 -Wall -Wstrict-prototypes -Wdeclaration-after-statement -Wno-unused-but-set-variable -Wno-unused-local-typedefs -DNDEBUG -nostdinc -fno-builtin -fno-common -Werror -Wredundant-decls -Wno-pointer-arith -pipe -g -D__XEN__ -include /home/thomas/projets/buildroot/output/build/xen-4.7.0/xen/include/xen/config.h '-D__OBJECT_FILE__="asm-offsets.s"' -Wa,--strip-local-absolute -MMD -MF ./.asm-offsets.s.d -mcpu=generic -mgeneral-regs-only -I/home/thomas/projets/buildroot/output/build/xen-4.7.0/xen/include -fno-stack-protector -fno-exceptions -Wnested-externs -DGCC_HAS_VISIBILITY_ATTRIBUTE -S -o asm-offsets.s arm64/asm-offsets.c
+>
+> And the build succeeds.
+>
+> So apparently, the fact that we are passing our own CFLAGS confuses the
+> Xen build system, which then adds its own CFLAGS twice for some reason.
 
-On Sun,  4 Sep 2016 00:58:43 +0200, Yann E. MORIN wrote:
-> We currently have four lists of packages in the manual:
->   - the non-virtual target packages,
->   - the virtual target packages,
->   - the host packages,
->   - the deprecated features.
-> 
-> Those list take more than half of the manual. They do not serve much
-> purpose except to show off. The only one that is interesting is the list
-> of virtual packages, the associated symbols and their providers.
-> 
-> After the recent discussion on the list [0], remove them, except the
-> list of virtual packages.
-> 
-> Replace our biggish and complex generating script (and its companion
-> library kconfiglib) with a much simpler script.
-> 
-> The drawback is that, when it is a sub-option of a provider that does
-> provide the feature, we loose that information in the new list. We
-> believe this is an acceptable drawback.
-> 
-> [0] http://lists.busybox.net/pipermail/buildroot/2016-September/171199.html
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> ---
->  docs/manual/appendix.txt            |   32 +-
->  docs/manual/manual.mk               |   21 +-
->  support/scripts/gen-manual-lists    |   62 +
->  support/scripts/gen-manual-lists.py |  513 -----
->  support/scripts/kconfiglib.py       | 3541 -----------------------------------
->  support/scripts/readme.kconfiglib   |   30 -
->  6 files changed, 67 insertions(+), 4132 deletions(-)
->  create mode 100755 support/scripts/gen-manual-lists
->  delete mode 100644 support/scripts/gen-manual-lists.py
->  delete mode 100644 support/scripts/kconfiglib.py
->  delete mode 100644 support/scripts/readme.kconfiglib
+That is exactly what I see as well.
 
-Nobody really gave any opinion. I had some quick discussion with Peter
-in private on IRC, and he seemed to be in favor of completely dropping
-the list of packages from the manual.
+It was surprising to me as well, but the only way I could figure out
+how to fix this build issue was to remove the flags.
 
-So: patch applied. Thanks a lot!
+Is this an acceptable solution, or do I need to look at the Xen build
+system and patch that to not add the duplicate options?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks,
+
+Alistair
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
