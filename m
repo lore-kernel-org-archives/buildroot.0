@@ -1,40 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Sep 2016 23:51:27 +0200
-Subject: [Buildroot] Hint on switching between targets
-In-Reply-To: <ab1512c2-916c-4724-ecdf-2c0770fa1acd@dawncrow.de>
- (=?utf-8?Q?=22Andr=C3=A9?=
- Hentschel"'s message of "Mon, 19 Sep 2016 23:22:23 +0200")
-References: <CAOMZO5BRPzX=cOpPJyH2ZmyxNhB6wu_EBFBm_DpcRz+Hd7MtKw@mail.gmail.com>
- <87h99b630z.fsf@dell.be.48ers.dk>
- <CAOMZO5BMOLDEq-xnwLBvX80biZ+-HJKVE1-U6xGx8CWXS-hBGg@mail.gmail.com>
- <ab1512c2-916c-4724-ecdf-2c0770fa1acd@dawncrow.de>
-Message-ID: <87mvj34kyo.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 19 Sep 2016 23:57:45 +0200
+Subject: [Buildroot] [PATCH v2] raspberrypi3: fix serial console (load
+ pi3-miniuart-bt overlay)
+In-Reply-To: <20160918192343.1cb566fe@free-electrons.com>
+References: <1462220744-6368-1-git-send-email-ps.report@gmx.net>
+ <20160918192343.1cb566fe@free-electrons.com>
+Message-ID: <20160919235745.17dc849c@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andr?" == Andr? Hentschel <nerv@dawncrow.de> writes:
+Hello Thomas,
 
-Hi,
+On Sun, 18 Sep 2016 19:23:43 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
- >>> If you just want to keep your warp7 output around while you build for
- >>> wandboard you can use out-of-tree builds - E.G.
- >>> 
- >>> make O=output-wandboard wandboard_defconfig
- >>> cd output-wandboard && make
- >> 
- >> That helps, thanks.
+> Hello,
+> 
+> On Mon,  2 May 2016 22:25:44 +0200, Peter Seiderer wrote:
+> > - enable BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS in raspberrypi3_defconfig
+> > - add copy of rpi-firmware/overlays directory to boot partition in genimage-raspberrypi3.cfg
+> > - enhance post-image.sh script to add 'dtoverlay=pi3-miniuart-bt' on request
+> > - add BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay" in raspberrypi3_defconfig
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Changes v1 --> v2:
+> >   - use pi3-miniuart-bt instead of pi3-disable-bt
+> >   - fix post-image.sh to add overlay lines only once
+> >   - add overlay description (and alternative solution) to readme.txt
+> > ---
+> >  board/raspberrypi/genimage-raspberrypi3.cfg |  1 +
+> >  board/raspberrypi/post-image.sh             | 13 +++++++++++++
+> >  board/raspberrypi/readme.txt                |  8 +++++++-
+> >  configs/raspberrypi3_defconfig              |  3 ++-
+> >  4 files changed, 23 insertions(+), 2 deletions(-)
+> 
+> What I understood from the discussions on your new patch "raspberrypi3:
+> fix serial console (add enable_uart=1", this older proposal is actually
+> what is preferred. It is a bit more complicated than just passing
+> enable_uart=1, but it allows to have the UART *and* run the CPU as its
+> normal frequency.
+> 
+> So, I've applied this patch, and marked the newer one (enable_uart=1)
+> as rejected.
+> 
+> It would be good if you could rebuild the raspberrypi3_defconfig, and
+> check that it works for you. While you're at it, it would be useful if
 
- > Isn't it easier to just do:
+Still works as expected for me, tested with buildroot git d4db4277ffbd1fae478ba748c626eddc7c220e67,
+login via serial and login via hdmi/usb-keyboard possible...
 
- > mv output output-warp7
- > make wandboard_defconfig
+> you could look at the bug report
+> https://bugs.busybox.net/show_bug.cgi?id=9196 and see if you can
+> reproduce the issue and/or help solve the problem.
 
-Well, yes - But then you cannot continue working on your warp7 build (as
-the paths have changed). With out-of-tree builds you can swap between
-your configurations without problems.
+Will check the systemd case tomorrow...
 
--- 
-Bye, Peter Korsgaard
+Regards,
+Peter
+
+> 
+> Thanks a lot for your contribution!
+> 
+> Thomas
