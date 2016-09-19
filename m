@@ -1,105 +1,139 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 19 Sep 2016 17:12:05 +0300
-Subject: [Buildroot] [PATCH v2] linux: Allow kernel strip modules itself
-Message-ID: <1474294325-6340-1-git-send-email-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Sep 2016 14:14:37 +0200
+Subject: [Buildroot] [git commit] package/kvm-unit-tests: new package
+Message-ID: <20160919141841.104C581F75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We used to do a special handling of Linux kernel modules
-when stripping target binaries because there's some special
-precious data in modules that we must keep for them to properly
-operate. This is for example true for stack unwinding data etc.
+commit: https://git.buildroot.net/buildroot/commit/?id=ddcb1e4e92a426b935aa169466658d2041b9ebcf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It turned out there're cases when our existing
-"strip --strip-unneeded" doesn't work well. For example this removes
-.debug_frame section used by Linux on ARC for stack unwinding, refer to
-[1] and [2] for more details.
+The unit tests are tiny guest operating systems that generally execute
+only tens of lines of C and assembler test code in order to obtain its
+PASS/FAIL result. Unit tests provide KVM and virt hardware functional
+testing by targeting the features through minimal implementations of
+their use per the hardware specification. The simplicity of unit tests
+make them easy to verify they are correct, easy to maintain, and easy
+to use in timing measurements. Unit tests are also often used for
+quick and dirty bug reproducers. The reproducers may then be kept as
+regression tests. It's strongly encouraged that patches implementing
+new KVM features are submitted with accompanying unit tests.
 
-Now Linux kernel may strip modules as a part of "modules_install" target
-if INSTALL_MOD_STRIP=1 is passed in command line. And so we'll do
-allowing kernel decide how to strip modules in the best way.
-
-Still note as of today Linux kernel strips modules uniformly for all
-arches with "strip" command, so this commit alone doesn't solve mentioned
-problem but it opens a possibility to add later a patch to the kernel
-which will strip modules for ARC differently - and that's our plan for
-mainline kernel.
-
-[1] https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/issues/86
-[2] http://lists.busybox.net/pipermail/buildroot/2016-September/172161.html
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Vineet Gupta <vgupta@synopsys.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Daniel Mentz <danielmentz@google.com>
+Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
+[Thomas:
+ - order architecture dependencies in Config.in alphabetically.
+ - rewrap Config.in help text, lines were too long
+ - add an empty line between the package description and the upstream
+   project URL in the Config.in help text
+ - don't make KVM_UNIT_TESTS_ARCH default to $(ARCH). This was not
+   correct for i386 for example. Instead, just handle the few
+   architectures that the package supports.
+ - remove useless double quotes in variable definitions.
+ - remove --prefix="$(TARGET_DIR)" from CONF_OPTS. It was installing
+   everything in /share/ and not /usr/share/, and setting the prefix to
+   TARGET_DIR at configure time is not good. Instead, pass DESTDIR at
+   installation time.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
+ package/Config.in                        |  1 +
+ package/kvm-unit-tests/Config.in         | 21 ++++++++++++++
+ package/kvm-unit-tests/kvm-unit-tests.mk | 49 ++++++++++++++++++++++++++++++++
+ 3 files changed, 71 insertions(+)
 
-Changes v1 -> v2:
- As suggested by Thomas:
-  * Use existing LINUX_MAKE_FLAGS variable so strip flag gets propagated
-    automatically in all users of LINUX_MAKE_FLAGS such as:
-     - LINUX_INSTALL_TARGET_CMDS
-     - $(2)_KERNEL_MODULES_INSTALL
-  * Minor clean-up
-
- Makefile            | 3 ---
- linux/linux.mk      | 4 ++++
- package/Makefile.in | 3 ---
- 3 files changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index dfef021..0a44fa7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -631,9 +631,6 @@ endif
- 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
- 	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
- 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
--	if test -d $(TARGET_DIR)/lib/modules; then \
--		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' -print0 | \
--		xargs -0 -r $(KSTRIPCMD); fi
- 
- # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
- # besides the one in which crash occurred; or SIGTRAP kills my program when
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 6e41a92..5cbb5e5 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -384,6 +384,10 @@ define LINUX_INSTALL_IMAGES_CMDS
- 	$(call LINUX_INSTALL_DTB,$(BINARIES_DIR))
- endef
- 
-+ifeq ($(BR2_STRIP_strip),y)
-+LINUX_MAKE_FLAGS += INSTALL_MOD_STRIP=1
+diff --git a/package/Config.in b/package/Config.in
+index e30ce22..78573f0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -82,6 +82,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/kexec/Config.in"
+ 	source "package/kexec-lite/Config.in"
+ 	source "package/ktap/Config.in"
++	source "package/kvm-unit-tests/Config.in"
+ 	source "package/kyua/Config.in"
+ 	source "package/latencytop/Config.in"
+ 	source "package/lmbench/Config.in"
+diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
+new file mode 100644
+index 0000000..f771896
+--- /dev/null
++++ b/package/kvm-unit-tests/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_KVM_UNIT_TESTS
++	bool "kvm-unit-tests"
++	depends on BR2_arm || BR2_i386 || BR2_powerpc64 || \
++		BR2_powerpc64le || BR2_x86_64
++	help
++	  kvm-unit-tests is a project as old as KVM. As its name
++	  suggests, it's purpose is to provide unit tests for KVM. The
++	  unit tests are tiny guest operating systems that generally
++	  execute only tens of lines of C and assembler test code in
++	  order to obtain its PASS/FAIL result. Unit tests provide KVM
++	  and virt hardware functional testing by targeting the
++	  features through minimal implementations of their use per
++	  the hardware specification. The simplicity of unit tests
++	  make them easy to verify they are correct, easy to maintain,
++	  and easy to use in timing measurements. Unit tests are also
++	  often used for quick and dirty bug reproducers. The
++	  reproducers may then be kept as regression tests.  It's
++	  strongly encouraged that patches implementing new KVM
++	  features are submitted with accompanying unit tests.
++
++	  http://www.linux-kvm.org/page/KVM-unit-tests
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+new file mode 100644
+index 0000000..989d398
+--- /dev/null
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -0,0 +1,49 @@
++################################################################################
++#
++# kvm-unit-tests
++#
++################################################################################
++
++KVM_UNIT_TESTS_VERSION = 682187afcc998bc3dd25061e98b43792cc340b33
++KVM_UNIT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/scm/virt/kvm/kvm-unit-tests.git
++KVM_UNIT_TESTS_SITE_METHOD = git
++KVM_UNIT_TESTS_LICENSE = LGPLv2
++KVM_UNIT_TESTS_LICENSE_FILES = COPYRIGHT
++
++ifeq ($(BR2_arm),y)
++KVM_UNIT_TESTS_ARCH = arm
++else ifeq ($(BR2_i386),y)
++KVM_UNIT_TESTS_ARCH = i386
++else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
++KVM_UNIT_TESTS_ARCH = ppc64
++else ifeq ($(BR2_x86_64),y)
++KVM_UNIT_TESTS_ARCH = x86_84
 +endif
 +
- define LINUX_INSTALL_TARGET_CMDS
- 	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
- 	# Install modules and remove symbolic links pointing to build
-diff --git a/package/Makefile.in b/package/Makefile.in
-index afd5d3a..83c9a89 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -203,16 +203,13 @@ TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
- 
- ifeq ($(BR2_STRIP_strip),y)
- STRIP_STRIP_DEBUG := --strip-debug
--STRIP_STRIP_UNNEEDED := --strip-unneeded
- STRIP_STRIP_ALL := --strip-all
- TARGET_STRIP = $(TARGET_CROSS)strip
- STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
--KSTRIPCMD = $(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
- endif
- ifeq ($(BR2_STRIP_none),y)
- TARGET_STRIP = true
- STRIPCMD = $(TARGET_STRIP)
--KSTRIPCMD = $(TARGET_STRIP)
- endif
- INSTALL := $(shell which install || type -p install)
- FLEX := $(shell which flex || type -p flex)
--- 
-2.7.4
++ifeq ($(BR2_ENDIAN),"LITTLE")
++KVM_UNIT_TESTS_ENDIAN = little
++else
++KVM_UNIT_TESTS_ENDIAN = big
++endif
++
++KVM_UNIT_TESTS_CONF_OPTS =\
++	--arch="$(KERNEL_ARCH)" \
++	--cross-prefix="$(TARGET_CROSS)" \
++	--endian="$(KVM_UNIT_TESTS_ENDIAN)"
++
++define KVM_UNIT_TESTS_CONFIGURE_CMDS
++	cd $(@D) && ./configure $(KVM_UNIT_TESTS_CONF_OPTS)
++endef
++
++define KVM_UNIT_TESTS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) standalone
++endef
++
++define KVM_UNIT_TESTS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		DESTDIR=$(TARGET_DIR)/usr/share/kvm-unit-tests/ \
++		install
++endef
++
++# Does use configure script but not an autotools one
++$(eval $(generic-package))
