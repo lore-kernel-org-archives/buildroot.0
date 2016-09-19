@@ -1,44 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Sep 2016 22:35:56 +0200
-Subject: [Buildroot] Hint on switching between targets
-In-Reply-To: <CAOMZO5BRPzX=cOpPJyH2ZmyxNhB6wu_EBFBm_DpcRz+Hd7MtKw@mail.gmail.com>
- (Fabio Estevam's message of "Fri, 9 Sep 2016 20:14:46 -0300")
-References: <CAOMZO5BRPzX=cOpPJyH2ZmyxNhB6wu_EBFBm_DpcRz+Hd7MtKw@mail.gmail.com>
-Message-ID: <87h99b630z.fsf@dell.be.48ers.dk>
+Date: Mon, 19 Sep 2016 22:42:14 +0200
+Subject: [Buildroot] [PATCH 4/4 v2] manual: get rid of the lists of
+	packages
+In-Reply-To: <20160919194729.607d2c8d@free-electrons.com> (Thomas Petazzoni's
+ message of "Mon, 19 Sep 2016 19:47:29 +0200")
+References: <cover.1472943074.git.yann.morin.1998@free.fr>
+ <206a0e9bf7a1e99fa176fe1345d245881f14b858.1472943074.git.yann.morin.1998@free.fr>
+ <20160919194729.607d2c8d@free-electrons.com>
+Message-ID: <874m5b62qh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Hi,
- > My last Buildroot build was for warp7 target . Now I want to build for
- > wandboard, so I do
+Hi,
+ >> ---
+ >> docs/manual/appendix.txt            |   32 +-
+ >> docs/manual/manual.mk               |   21 +-
+ >> support/scripts/gen-manual-lists    |   62 +
+ >> support/scripts/gen-manual-lists.py |  513 -----
+ >> support/scripts/kconfiglib.py       | 3541 -----------------------------------
+ >> support/scripts/readme.kconfiglib   |   30 -
+ >> 6 files changed, 67 insertions(+), 4132 deletions(-)
+ >> create mode 100755 support/scripts/gen-manual-lists
+ >> delete mode 100644 support/scripts/gen-manual-lists.py
+ >> delete mode 100644 support/scripts/kconfiglib.py
+ >> delete mode 100644 support/scripts/readme.kconfiglib
 
- > make wandboard_defconfig
- > make
+ > Nobody really gave any opinion. I had some quick discussion with Peter
+ > in private on IRC, and he seemed to be in favor of completely dropping
+ > the list of packages from the manual.
 
- > ,but I get errors like
+ > So: patch applied. Thanks a lot!
 
-[snip]
-
- > I know I can do "make clean" and start from scratch, but I would like
- > to know if there is a minimal folder or something I can erase so that
- > the new build succeeds.
-
-Do you mean that you would like to keep some of the already built
-components when changing configuration? That isn't generally supported.
-If you know what you are doing and the two configurations are
-sufficiently similar (same arch/toolchain config) then it will work, but
-Buildroot will not warn you if you do something that doesn't make sense.
-
-If you just want to keep your warp7 output around while you build for
-wandboard you can use out-of-tree builds - E.G.
-
-make O=output-wandboard wandboard_defconfig
-cd output-wandboard && make
+Yes, indeed - Sorry, I didn't apply the patch yet, I got caught up in
+real life stuff (tm).
 
 -- 
 Bye, Peter Korsgaard
