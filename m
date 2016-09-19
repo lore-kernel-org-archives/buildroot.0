@@ -1,43 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Sep 2016 22:42:14 +0200
-Subject: [Buildroot] [PATCH 4/4 v2] manual: get rid of the lists of
-	packages
-In-Reply-To: <20160919194729.607d2c8d@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 19 Sep 2016 19:47:29 +0200")
-References: <cover.1472943074.git.yann.morin.1998@free.fr>
- <206a0e9bf7a1e99fa176fe1345d245881f14b858.1472943074.git.yann.morin.1998@free.fr>
- <20160919194729.607d2c8d@free-electrons.com>
-Message-ID: <874m5b62qh.fsf@dell.be.48ers.dk>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 19 Sep 2016 18:01:16 -0300
+Subject: [Buildroot] Hint on switching between targets
+In-Reply-To: <87h99b630z.fsf@dell.be.48ers.dk>
+References: <CAOMZO5BRPzX=cOpPJyH2ZmyxNhB6wu_EBFBm_DpcRz+Hd7MtKw@mail.gmail.com>
+ <87h99b630z.fsf@dell.be.48ers.dk>
+Message-ID: <CAOMZO5BMOLDEq-xnwLBvX80biZ+-HJKVE1-U6xGx8CWXS-hBGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Mon, Sep 19, 2016 at 5:35 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Hi,
- >> ---
- >> docs/manual/appendix.txt            |   32 +-
- >> docs/manual/manual.mk               |   21 +-
- >> support/scripts/gen-manual-lists    |   62 +
- >> support/scripts/gen-manual-lists.py |  513 -----
- >> support/scripts/kconfiglib.py       | 3541 -----------------------------------
- >> support/scripts/readme.kconfiglib   |   30 -
- >> 6 files changed, 67 insertions(+), 4132 deletions(-)
- >> create mode 100755 support/scripts/gen-manual-lists
- >> delete mode 100644 support/scripts/gen-manual-lists.py
- >> delete mode 100644 support/scripts/kconfiglib.py
- >> delete mode 100644 support/scripts/readme.kconfiglib
+> Do you mean that you would like to keep some of the already built
+> components when changing configuration? That isn't generally supported.
 
- > Nobody really gave any opinion. I had some quick discussion with Peter
- > in private on IRC, and he seemed to be in favor of completely dropping
- > the list of packages from the manual.
+Yes, that's correct.
 
- > So: patch applied. Thanks a lot!
+> If you know what you are doing and the two configurations are
+> sufficiently similar (same arch/toolchain config) then it will work, but
+> Buildroot will not warn you if you do something that doesn't make sense.
+>
+> If you just want to keep your warp7 output around while you build for
+> wandboard you can use out-of-tree builds - E.G.
+>
+> make O=output-wandboard wandboard_defconfig
+> cd output-wandboard && make
 
-Yes, indeed - Sorry, I didn't apply the patch yet, I got caught up in
-real life stuff (tm).
-
--- 
-Bye, Peter Korsgaard
+That helps, thanks.
