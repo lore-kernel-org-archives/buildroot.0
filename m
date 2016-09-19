@@ -1,57 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2016 16:48:43 +0200
-Subject: [Buildroot] [PATCH] package/kvm-unit-tests: new package
-In-Reply-To: <20160817230236.8255-1-cyrilbur@gmail.com>
-References: <20160817230236.8255-1-cyrilbur@gmail.com>
-Message-ID: <20160919164843.3896425f@free-electrons.com>
+Date: Mon, 19 Sep 2016 16:50:46 +0200
+Subject: [Buildroot] [git commit] google-breakpad: needs thread support
+Message-ID: <20160919145135.BEC568212A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0bb3983c9b612e861f43bc9f6470fc7c5b9adbbc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 18 Aug 2016 09:02:36 +1000, Cyril Bur wrote:
-> The unit tests are tiny guest operating systems that generally execute
-> only tens of lines of C and assembler test code in order to obtain its
-> PASS/FAIL result. Unit tests provide KVM and virt hardware functional
-> testing by targeting the features through minimal implementations of
-> their use per the hardware specification. The simplicity of unit tests
-> make them easy to verify they are correct, easy to maintain, and easy
-> to use in timing measurements. Unit tests are also often used for
-> quick and dirty bug reproducers. The reproducers may then be kept as
-> regression tests. It's strongly encouraged that patches implementing
-> new KVM features are submitted with accompanying unit tests.
-> http://www.linux-kvm.org/page/KVM-unit-tests
-> 
-> Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
-> ---
->  package/Config.in                        |  1 +
->  package/kvm-unit-tests/Config.in         | 17 ++++++++++++
->  package/kvm-unit-tests/kvm-unit-tests.mk | 45 ++++++++++++++++++++++++++++++++
->  3 files changed, 63 insertions(+)
->  create mode 100644 package/kvm-unit-tests/Config.in
->  create mode 100644 package/kvm-unit-tests/kvm-unit-tests.mk
+When google-breakpad was enabled in uClibc configurations, the
+dependency on threads was forgotten.
 
-Applied to master with the following changes:
+Fixes:
 
-    [Thomas:
-     - order architecture dependencies in Config.in alphabetically.
-     - rewrap Config.in help text, lines were too long
-     - add an empty line between the package description and the upstream
-       project URL in the Config.in help text
-     - don't make KVM_UNIT_TESTS_ARCH default to $(ARCH). This was not
-       correct for i386 for example. Instead, just handle the few
-       architectures that the package supports.
-     - remove useless double quotes in variable definitions.
-     - remove --prefix="$(TARGET_DIR)" from CONF_OPTS. It was installing
-       everything in /share/ and not /usr/share/, and setting the prefix to
-       TARGET_DIR at configure time is not good. Instead, pass DESTDIR at
-       installation time.]
+  http://autobuild.buildroot.net/results/6e6bc845314100f2deb8ed06d2a6373ccf715ffe/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in                         | 1 +
+ package/google-breakpad/Config.in | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/Config.in b/Config.in
+index dcd15e8..8d37c93 100644
+--- a/Config.in
++++ b/Config.in
+@@ -554,6 +554,7 @@ config BR2_GOOGLE_BREAKPAD_ENABLE
+ 	select BR2_PACKAGE_GOOGLE_BREAKPAD
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
+ 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	help
+diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
+index fdaab7a..c800974 100644
+--- a/package/google-breakpad/Config.in
++++ b/package/google-breakpad/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
+ 	bool "google-breakpad"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
+ 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	help
+@@ -30,7 +31,8 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
+ 
+ 	  http://code.google.com/p/google-breakpad/
+ 
+-comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, C++ enabled"
++comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, thread, C++ enabled"
+ 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
