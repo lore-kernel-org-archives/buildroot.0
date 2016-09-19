@@ -1,67 +1,75 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 19 Sep 2016 23:57:45 +0200
-Subject: [Buildroot] [PATCH v2] raspberrypi3: fix serial console (load
- pi3-miniuart-bt overlay)
-In-Reply-To: <20160918192343.1cb566fe@free-electrons.com>
-References: <1462220744-6368-1-git-send-email-ps.report@gmx.net>
- <20160918192343.1cb566fe@free-electrons.com>
-Message-ID: <20160919235745.17dc849c@gmx.net>
+From: Cyril Bur <cyrilbur@gmail.com>
+Date: Tue, 20 Sep 2016 09:12:25 +1000
+Subject: [Buildroot] [PATCH] package/kvm-unit-tests: new package
+In-Reply-To: <20160919164843.3896425f@free-electrons.com>
+References: <20160817230236.8255-1-cyrilbur@gmail.com>
+ <20160919164843.3896425f@free-electrons.com>
+Message-ID: <1474326745.4451.3.camel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-
-On Sun, 18 Sep 2016 19:23:43 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-
+On Mon, 2016-09-19 at 16:48 +0200, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Mon,  2 May 2016 22:25:44 +0200, Peter Seiderer wrote:
-> > - enable BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS in raspberrypi3_defconfig
-> > - add copy of rpi-firmware/overlays directory to boot partition in genimage-raspberrypi3.cfg
-> > - enhance post-image.sh script to add 'dtoverlay=pi3-miniuart-bt' on request
-> > - add BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay" in raspberrypi3_defconfig
+> On Thu, 18 Aug 2016 09:02:36 +1000, Cyril Bur wrote:
 > > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > The unit tests are tiny guest operating systems that generally
+> > execute
+> > only tens of lines of C and assembler test code in order to obtain
+> > its
+> > PASS/FAIL result. Unit tests provide KVM and virt hardware
+> > functional
+> > testing by targeting the features through minimal implementations
+> > of
+> > their use per the hardware specification. The simplicity of unit
+> > tests
+> > make them easy to verify they are correct, easy to maintain, and
+> > easy
+> > to use in timing measurements. Unit tests are also often used for
+> > quick and dirty bug reproducers. The reproducers may then be kept
+> > as
+> > regression tests. It's strongly encouraged that patches
+> > implementing
+> > new KVM features are submitted with accompanying unit tests.
+> > http://www.linux-kvm.org/page/KVM-unit-tests
+> > 
+> > Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
 > > ---
-> > Changes v1 --> v2:
-> >   - use pi3-miniuart-bt instead of pi3-disable-bt
-> >   - fix post-image.sh to add overlay lines only once
-> >   - add overlay description (and alternative solution) to readme.txt
-> > ---
-> >  board/raspberrypi/genimage-raspberrypi3.cfg |  1 +
-> >  board/raspberrypi/post-image.sh             | 13 +++++++++++++
-> >  board/raspberrypi/readme.txt                |  8 +++++++-
-> >  configs/raspberrypi3_defconfig              |  3 ++-
-> >  4 files changed, 23 insertions(+), 2 deletions(-)
+> > ?package/Config.in????????????????????????|??1 +
+> > ?package/kvm-unit-tests/Config.in?????????| 17 ++++++++++++
+> > ?package/kvm-unit-tests/kvm-unit-tests.mk | 45
+> > ++++++++++++++++++++++++++++++++
+> > ?3 files changed, 63 insertions(+)
+> > ?create mode 100644 package/kvm-unit-tests/Config.in
+> > ?create mode 100644 package/kvm-unit-tests/kvm-unit-tests.mk
 > 
-> What I understood from the discussions on your new patch "raspberrypi3:
-> fix serial console (add enable_uart=1", this older proposal is actually
-> what is preferred. It is a bit more complicated than just passing
-> enable_uart=1, but it allows to have the UART *and* run the CPU as its
-> normal frequency.
+> Applied to master with the following changes:
 > 
-> So, I've applied this patch, and marked the newer one (enable_uart=1)
-> as rejected.
+> ????[Thomas:
+> ?????- order architecture dependencies in Config.in alphabetically.
+> ?????- rewrap Config.in help text, lines were too long
+> ?????- add an empty line between the package description and the
+> upstream
+> ???????project URL in the Config.in help text
+> ?????- don't make KVM_UNIT_TESTS_ARCH default to $(ARCH). This was
+> not
+> ???????correct for i386 for example. Instead, just handle the few
+> ???????architectures that the package supports.
+> ?????- remove useless double quotes in variable definitions.
+> ?????- remove --prefix="$(TARGET_DIR)" from CONF_OPTS. It was
+> installing
+> ???????everything in /share/ and not /usr/share/, and setting the
+> prefix to
+> ???????TARGET_DIR at configure time is not good. Instead, pass
+> DESTDIR at
+> ???????installation time.]
 > 
-> It would be good if you could rebuild the raspberrypi3_defconfig, and
-> check that it works for you. While you're at it, it would be useful if
 
-Still works as expected for me, tested with buildroot git d4db4277ffbd1fae478ba748c626eddc7c220e67,
-login via serial and login via hdmi/usb-keyboard possible...
+Thanks for the fixups.
 
-> you could look at the bug report
-> https://bugs.busybox.net/show_bug.cgi?id=9196 and see if you can
-> reproduce the issue and/or help solve the problem.
+Cyril
 
-Will check the systemd case tomorrow...
-
-Regards,
-Peter
-
-> 
-> Thanks a lot for your contribution!
-> 
 > Thomas
