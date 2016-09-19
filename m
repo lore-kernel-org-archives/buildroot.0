@@ -1,44 +1,105 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 19 Sep 2016 15:06:31 +0200
-Subject: [Buildroot] (fwd) RFC PATCH [wbx@uclibc-ng.org]
-Message-ID: <20160919130631.GH7322@waldemar-brodkorb.de>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 19 Sep 2016 17:12:05 +0300
+Subject: [Buildroot] [PATCH v2] linux: Allow kernel strip modules itself
+Message-ID: <1474294325-6340-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Forwarded message from Waldemar Brodkorb <wbx@uclibc-ng.org> -----
+We used to do a special handling of Linux kernel modules
+when stripping target binaries because there's some special
+precious data in modules that we must keep for them to properly
+operate. This is for example true for stack unwinding data etc.
 
-Date: Mon, 19 Sep 2016 14:41:49 +0200
-From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-To: devel at uclibc-ng.org
-Cc: Max Filippov <jcmvbkbc@gmail.com>, Alexey Brodkin <Alexey.Brodkin@synopsys.com>, Vineet Gupta <Vineet.Gupta1@synopsys.com>, Vincent Ren-Wei Chen <vincentc@andestech.com>,
-	Che-Wei Chuang <cnoize@andestech.com>, buildroot at buildroot.org
-Subject: RFC PATCH
+It turned out there're cases when our existing
+"strip --strip-unneeded" doesn't work well. For example this removes
+.debug_frame section used by Linux on ARC for stack unwinding, refer to
+[1] and [2] for more details.
 
-Hi,
+Now Linux kernel may strip modules as a part of "modules_install" target
+if INSTALL_MOD_STRIP=1 is passed in command line. And so we'll do
+allowing kernel decide how to strip modules in the best way.
 
-I would like to suggest following patch to have a single libc
-library. This would solve a lot of problems in buildroot and other
-buildsystems.
+Still note as of today Linux kernel strips modules uniformly for all
+arches with "strip" command, so this commit alone doesn't solve mentioned
+problem but it opens a possibility to add later a patch to the kernel
+which will strip modules for ARC differently - and that's our plan for
+mainline kernel.
 
-I would love to make a release at the end of this month.
+[1] https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/issues/86
+[2] http://lists.busybox.net/pipermail/buildroot/2016-September/172161.html
 
-What do you think about it?
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Vineet Gupta <vgupta@synopsys.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Daniel Mentz <danielmentz@google.com>
+---
 
-For buildroot people, here is a patch for testing:
-http://debug.openadk.org/buildroot/0001-experimental-uClibc-ng-patches.patch
+Changes v1 -> v2:
+ As suggested by Thomas:
+  * Use existing LINUX_MAKE_FLAGS variable so strip flag gets propagated
+    automatically in all users of LINUX_MAKE_FLAGS such as:
+     - LINUX_INSTALL_TARGET_CMDS
+     - $(2)_KERNEL_MODULES_INSTALL
+  * Minor clean-up
 
-This will solve a lot of old autobuild failures, f.e. the libarchive
-static stuff.
+ Makefile            | 3 ---
+ linux/linux.mk      | 4 ++++
+ package/Makefile.in | 3 ---
+ 3 files changed, 4 insertions(+), 6 deletions(-)
 
-I worked for many hours on this, so don't be too harsh with your
-feedback ;)
-
-Thanks in advance!
- Waldemar
-
-P.s.: I know it is a big patch, but I see no good chances to split
-it in pieces.
+diff --git a/Makefile b/Makefile
+index dfef021..0a44fa7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -631,9 +631,6 @@ endif
+ 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
+ 	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
+ 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
+-	if test -d $(TARGET_DIR)/lib/modules; then \
+-		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' -print0 | \
+-		xargs -0 -r $(KSTRIPCMD); fi
+ 
+ # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
+ # besides the one in which crash occurred; or SIGTRAP kills my program when
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 6e41a92..5cbb5e5 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -384,6 +384,10 @@ define LINUX_INSTALL_IMAGES_CMDS
+ 	$(call LINUX_INSTALL_DTB,$(BINARIES_DIR))
+ endef
+ 
++ifeq ($(BR2_STRIP_strip),y)
++LINUX_MAKE_FLAGS += INSTALL_MOD_STRIP=1
++endif
++
+ define LINUX_INSTALL_TARGET_CMDS
+ 	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
+ 	# Install modules and remove symbolic links pointing to build
+diff --git a/package/Makefile.in b/package/Makefile.in
+index afd5d3a..83c9a89 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -203,16 +203,13 @@ TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+ 
+ ifeq ($(BR2_STRIP_strip),y)
+ STRIP_STRIP_DEBUG := --strip-debug
+-STRIP_STRIP_UNNEEDED := --strip-unneeded
+ STRIP_STRIP_ALL := --strip-all
+ TARGET_STRIP = $(TARGET_CROSS)strip
+ STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
+-KSTRIPCMD = $(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
+ endif
+ ifeq ($(BR2_STRIP_none),y)
+ TARGET_STRIP = true
+ STRIPCMD = $(TARGET_STRIP)
+-KSTRIPCMD = $(TARGET_STRIP)
+ endif
+ INSTALL := $(shell which install || type -p install)
+ FLEX := $(shell which flex || type -p flex)
+-- 
+2.7.4
