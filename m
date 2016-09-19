@@ -1,76 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2016 19:17:12 +0200
-Subject: [Buildroot] [git commit] util-linux: add -lcurses to LIBS when
-	static linking
-Message-ID: <20160919172617.223CE8188E@busybox.osuosl.org>
+Date: Mon, 19 Sep 2016 19:28:14 +0200
+Subject: [Buildroot] [git commit] sam-ba: correct license
+Message-ID: <20160919172828.BD979817E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eddb1bde5f7ec8a6b5650b43dcbc85d5aa1f917d
+commit: https://git.buildroot.net/buildroot/commit/?id=a81d1cda3f77ce4f6a5b423815e3b7488ba681be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When linking statically with -lreadline we also need to specify
--lcurses. We were already passing LIBS=-intl to fix gettext related
-issues, so we refactor how LIBS is passed so that several values can be
-passed.
+The sam-ba binary is distributed under a proprietary license. TCL and some
+applets code is under a BSD-2c like license, while some other applets are
+under BSD-4c.
 
-It is worth mentioning that:
+Also correct license files.
 
- 1. Passing LIBS= at configure time is not sufficient, because the
-    configure script does LIBS="" at its end. So in order for the LIBS
-    value to also be effective during the build, it needs to be passed
-    in MAKE_OPTS as well.
-
- 2. LIBS=-lintl was only passed at build time (it was not needed for any
-    of the configure tests). However, LIBS=-lncurses is needed both at
-    configure time (for configure tests) and at build time. Therefore,
-    the new variable UTIL_LINUX_LIBS gets passed as the LIBS value at
-    both configure time and build time.
-
-Fixes:
-  http://autobuild.buildroot.net/results/70e0a273e699c73c6b2ab2a19c8f7ebb1ddee6cde
-  http://autobuild.buildroot.net/results/6a7faf8adbffd9437c0117b9f0e89684c24dad23
-
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Cc: Ludovic Desroches <ludovic.desroches@atmel.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/util-linux/util-linux.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/sam-ba/sam-ba.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 82230bc..82a726e 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -49,13 +49,20 @@ endif
+diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+index aede615..7fc65c0 100644
+--- a/package/sam-ba/sam-ba.mk
++++ b/package/sam-ba/sam-ba.mk
+@@ -7,8 +7,10 @@
+ SAM_BA_SITE = http://www.atmel.com/dyn/resources/prod_documents
+ SAM_BA_VERSION = 2.16
+ SAM_BA_SOURCE = sam-ba_$(SAM_BA_VERSION)_linux.zip
+-SAM_BA_LICENSE = BSD-like (partly binary-only)
+-SAM_BA_LICENSE_FILES = doc/readme.txt
++SAM_BA_LICENSE = SAM-BA license (sam-ba executable), \
++		BSD-2c like, BSD-4c (TCL and applets code)
++SAM_BA_LICENSE_FILES = doc/license.txt tcl_lib/boards.tcl \
++		applets/sam4c/libraries/libchip_sam4c/include/sam4c/sam4c32e-1.h
  
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- UTIL_LINUX_DEPENDENCIES += gettext
--UTIL_LINUX_MAKE_OPTS += LIBS=-lintl
-+UTIL_LINUX_LIBS += -lintl
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
- UTIL_LINUX_DEPENDENCIES += libcap-ng
- endif
- 
-+# Unfortunately, the util-linux does LIBS="" at the end of its
-+# configure script. So we have to pass the proper LIBS value when
-+# calling the configure script to make configure tests pass properly,
-+# and then pass it again at build time.
-+UTIL_LINUX_CONF_ENV += LIBS="$(UTIL_LINUX_LIBS)"
-+UTIL_LINUX_MAKE_OPTS += LIBS="$(UTIL_LINUX_LIBS)"
-+
- # Used by cramfs utils
- UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
- 
-@@ -148,6 +155,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_READLINE),y)
- UTIL_LINUX_CONF_OPTS += --with-readline
-+UTIL_LINUX_LIBS += $(if $(BR2_STATIC_LIBS),-lcurses)
- UTIL_LINUX_DEPENDENCIES += readline
- else
- UTIL_LINUX_CONF_OPTS += --without-readline
+ define HOST_SAM_BA_EXTRACT_CMDS
+ 	$(UNZIP) -d $(BUILD_DIR) $(DL_DIR)/$(SAM_BA_SOURCE)
