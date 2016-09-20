@@ -1,77 +1,72 @@
-From: Frederik Peter Aalund <fpa@sbtaqua.com>
-Date: Tue, 20 Sep 2016 13:57:18 +0000
-Subject: [Buildroot] [PATCH 3/3] python3: Compile host-python3 statically
-In-Reply-To: <20160916190833.7c776697@free-electrons.com>
-References: <1474032631-21311-1-git-send-email-fpa@sbtaqua.com>
- <20160916190833.7c776697@free-electrons.com>
-Message-ID: <CAA=pTTSgNWY-orBD0ff1Y6U-p+ujXRyg+mtNvyb_UOivSqMqww@mail.gmail.com>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Tue, 20 Sep 2016 19:30:14 +0530
+Subject: [Buildroot] [PATCH] ushare: fix build with NLS support
+Message-ID: <1474380014-20249-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+Add patch to fix build errors when NLS support is enabled.
 
-Thanks again for reviewing. It appears that the host-python3 executable
-doesn't have an rpath entry. This would indeed explain the weird behaviour.
+Fixes:
 
-I looked at the build log and found that "-Wl,-rpath" is indeed correctly
-passed on:
--Wl,-rpath,/projects/RedPitaya/OS/buildroot/buildroot/output/host/usr/lib
+  http://autobuild.buildroot.net/results/19d/19d67dd43e5a313c77e4be97ecb9811ffa52f797/
 
-This is reflected in the resulting Makefile:
-CONFIGURE_LDFLAGS=
- -L/projects/RedPitaya/OS/buildroot/buildroot/output/host/lib
--L/projects/RedPitaya/OS/buildroot/buildroot/output/host/usr/lib
--Wl,-rpath,/projects/RedPitaya/OS/buildroot/buildroot/output/host/usr/lib
--Wl,--enable-new-dtags
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+ ...e-config-h-before-checking-for-CONFIG-NLS.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/ushare/0003-ushare-c-include-config-h-before-checking-for-CONFIG-NLS.patch
 
-So I don't know how it can be that the rpath is not set in the final
-binary. Do you also see this problem?
-
-Thanks again.
-
-*Frederik Aalund*
-Chief Information Officer, Co-owner
-
-SBT Aqua
-Copenhagen, Denmark
-Mobile: +45 30340086
-fpa at sbtaqua.com
-sbtaqua.com
-
-On Fri, 16 Sep 2016 at 19:08 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Hello,
->
-> Please wrap the text in your commit messages to a reasonable line width
-> (72 characters).
->
-> On Fri, 16 Sep 2016 15:30:31 +0200, Frederik Aalund wrote:
-> > The previous behaviour was to compile host-python3 with
-> `--enable-shared` as is done for the target python installation. The
-> problem is that if the host *already* has a python installation, then
-> host-python3 will be called with the system `libpython3.5.so`. So even
-> though the $(HOST_DIR) python executable is called, the system .so is used.
->
-> This should not be the case. All host binaries we build are built with
-> -Wl,-rpath,$(HOST_DIR)/usr/lib, which means that they should look up
-> libraries in $(HOST_DIR)/usr/lib *before* looking at /usr/lib.
->
-> Can you double check what "readelf -a output/host/usr/bin/python" says
-> about this? readelf should show you this rpath encoded into the Python
-> binary. If that's not the case, then this is the problem.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160920/9859dd75/attachment.html>
+diff --git a/package/ushare/0003-ushare-c-include-config-h-before-checking-for-CONFIG-NLS.patch b/package/ushare/0003-ushare-c-include-config-h-before-checking-for-CONFIG-NLS.patch
+new file mode 100644
+index 0000000..e97c3de
+--- /dev/null
++++ b/package/ushare/0003-ushare-c-include-config-h-before-checking-for-CONFIG-NLS.patch
+@@ -0,0 +1,42 @@
++ushare.c: include config.h before checking for CONFIG_NLS
++
++When NLS support is enabled, we get following build errors:
++
++  ushare.c: In function 'setup_i18n':
++  ushare.c:745:3: warning: implicit declaration of function 'setlocale' [-Wimplicit-function-declaration]
++     setlocale (LC_ALL, "");
++     ^
++  ushare.c:745:14: error: 'LC_ALL' undeclared (first use in this function)
++     setlocale (LC_ALL, "");
++                ^
++  ushare.c:745:14: note: each undeclared identifier is reported only once for each function it appears in
++  make[2]: *** [ushare.o] Error 1
++
++When NLS support is enabled, configure script creates macro in config.h.
++We check for CONFIG_NLS before including config.h which results in above
++build errors as locale.h doesn't get included.
++
++This patch fixes above build error by including config.h before we check for
++CONFIG_NLS.
++
++This build error is detected by Buildroot autobuilder
++http://autobuild.buildroot.net/results/19d/19d67dd43e5a313c77e4be97ecb9811ffa52f797/
++
++Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++
++--- ushare-1.1a/src/ushare.c.old	2016-09-20 19:04:00.915239326 +0530
+++++ ushare-1.1a/src/ushare.c	2016-09-20 19:04:24.707239276 +0530
++@@ -56,11 +56,12 @@
++ #include <upnp/upnp.h>
++ #include <upnp/upnptools.h>
++ 
+++#include "config.h"
+++
++ #if (defined(HAVE_SETLOCALE) && defined(CONFIG_NLS))
++ # include <locale.h>
++ #endif
++ 
++-#include "config.h"
++ #include "ushare.h"
++ #include "services.h"
++ #include "http.h"
+-- 
+2.6.2
