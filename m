@@ -1,39 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Sep 2016 21:23:29 +0200
-Subject: [Buildroot] [PATCH] gcc: rename option for ARC gcc
-In-Reply-To: <1470921938-11550-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470921938-11550-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160920212329.46f33940@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 20 Sep 2016 17:27:43 -0300
+Subject: [Buildroot] [PATCH 1/2] util-linux: enable libmount for host variant
+Message-ID: <1474403264-16066-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+It's a necessary dependency to build the new host-libglib2.
+libblkd is an indirect dependency for libmount.
 
-On Thu, 11 Aug 2016 15:25:38 +0200, Thomas Petazzoni wrote:
-> The ARC gcc version is now based on gcc 6.x and no longer gcc 4.8.x,
-> which makes the option BR2_GCC_VERSION_4_8_ARC a bit irrelevant, as is
-> the prompt of this option.
-> 
-> This commit therefore renames this option to BR2_GCC_VERSION_ARC, and
-> adjust its prompt as well.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  Config.in.legacy                       |  7 +++++++
->  package/gcc/Config.in.host             | 10 +++++-----
->  package/gcc/gcc-initial/gcc-initial.mk |  2 +-
->  3 files changed, 13 insertions(+), 6 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/util-linux/util-linux.mk | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-I've applied to master, after taking into account the comments made by
-Arnout and Baruch.
-
-Thanks,
-
-Thomas
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 82a726e..f648155 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -117,13 +117,14 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_ZRAMCTL),--enable-zramctl,--disable-zramctl)
+ 
+-# In the host version of util-linux, we so far only require libuuid,
+-# and none of the util-linux utilities, so we disable all of them, unless
+-# BR2_PACKAGE_HOST_UTIL_LINUX is set
++# In the host version of util-linux, we only require libuuid and
++# libmount (plus libblkid as an indirect dependency of libmount).
++# So disable all of the programs, unless BR2_PACKAGE_HOST_UTIL_LINUX is set
+ 
+ HOST_UTIL_LINUX_CONF_OPTS += \
++	--enable-libblkid \
++	--enable-libmount \
+ 	--enable-libuuid \
+-	--disable-libblkid --disable-libmount \
+ 	--without-ncurses
+ 
+ ifeq ($(BR2_PACKAGE_HOST_UTIL_LINUX),y)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
