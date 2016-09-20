@@ -1,53 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Sep 2016 16:33:45 +0200
-Subject: [Buildroot] [PATCH 1/1] libfastjson: Was referencing
-	non-existing files
-In-Reply-To: <CAA=pTTRC8oK_GkwHYca3+ky2nRvyvGKS=RyOK1qogYmYGjptPA@mail.gmail.com>
- (Frederik Peter Aalund's message of "Tue, 20 Sep 2016 13:36:32 +0000")
-References: <1474018609-2610-1-git-send-email-fpa@sbtaqua.com>
- <20160916185559.23a41621@free-electrons.com>
- <CAA=pTTRC8oK_GkwHYca3+ky2nRvyvGKS=RyOK1qogYmYGjptPA@mail.gmail.com>
-Message-ID: <87y42m1vzq.fsf@dell.be.48ers.dk>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 20 Sep 2016 11:47:45 -0300
+Subject: [Buildroot] [PATCH] configs/warp7: Add Wifi support
+In-Reply-To: <87bmzi3fxc.fsf@dell.be.48ers.dk>
+References: <1474314302-19064-1-git-send-email-festevam@gmail.com>
+ <87bmzi3fxc.fsf@dell.be.48ers.dk>
+Message-ID: <CAOMZO5BAxCYYwKeDubLaJXYXPRff0PytvusajmtF_v+NLOc9Ug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Frederik" == Frederik Peter Aalund <fpa@sbtaqua.com> writes:
+On Tue, Sep 20, 2016 at 9:37 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
 
- > Hi Thomas
- > Thanks for reviewing! Strange that it builds without problems at your end.
- > Here is what I see from the build log (without the patch):
+> We recently had a discussion about this .txt file in the context of
+> rpi3. How specific to warp7 is this file? Is there some documentation
 
- > I see that your package URL:
- > --2016-09-16 18:53:29--
- > https://github.com/rsyslog/libfastjson/archive/v0.99.2/libfastjson-v0.99.2.tar.gz
+I just used the txt file provided in the NXP BSP.
 
- > is different from mine:
- >  --2016-09-20 15:22:21--
- > https://github.com/rsyslog/libfastjson/archive/v0.99.2.tar.gz
+> somewhere explaining what all these settings do?
 
- > I don't know how that can be. At some point, I had an external package for
- > libfastjson (before it was integrated into buildroot). However, I have
- > deleted said external package and purged both buildroot/dl and
- > buildroot/output/build.
+Unfortunately I don't see any explanation about it.
 
-<pkgname>-<version>.tar.gz is the default name of the tarball, so it
-sounds like you have a LIBFASTJSON_SOURCE = .. somewhere - Please double
-check. Notice that buildroot automatically includes */*.mk, so it will
-get read even though you have dropped the Config.in file.
+>> @@ -0,0 +1,42 @@
+>  > +# 2.4 GHz, 20 MHz BW mode
+>  > +manfid=0x2d0
+>  > +prodid=0x0726
+>  > +vendid=0x14e4
+>  > +devid=0x43e2
+>  > +boardtype=0x0726
+>  > +boardrev=0x1202
+>  > +boardnum=22
+>  > +macaddr=00:90:4c:c5:12:38
+>
+> Does this mean that all warp7 boards will use the same macaddr? This
 
- > *Frederik Aalund*
- > Chief Information Officer, Co-owner
+No, the real MAC address I see is different from the one in the .txt file:
 
- > SBT Aqua
- > Copenhagen, Denmark
- > Mobile: +45 30340086
- > fpa at sbtaqua.com
- > sbtaqua.com
-
-Nice, so you are using Buildroot on the sensors?
-
--- 
-Bye, Peter Korsgaard
+wlan0     Link encap:Ethernet  HWaddr 00:AE:FA:8D:95:E5
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
