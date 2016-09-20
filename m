@@ -1,54 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Sep 2016 19:19:31 +0200
-Subject: [Buildroot] [PATCH 3/3 v3] aufs-util: new package
-In-Reply-To: <e5d42509736f56a587767b61bf0f9ceb8efd41e4.1468759218.git.yann.morin.1998@free.fr>
-References: <cover.1468759218.git.yann.morin.1998@free.fr>
- <e5d42509736f56a587767b61bf0f9ceb8efd41e4.1468759218.git.yann.morin.1998@free.fr>
-Message-ID: <20160920191931.50c54f93@free-electrons.com>
+Date: Tue, 20 Sep 2016 19:25:42 +0200
+Subject: [Buildroot] [PATCH] gcc: switch to gcc 5.x as the default
+Message-ID: <1474392342-22755-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+gcc 4.9.4 was the last release of the 4.9.x branch, and the gcc
+developes will now only be maintaining gcc 5.x and 6.x:
 
-On Sun, 17 Jul 2016 14:50:39 +0200, Yann E. MORIN wrote:
-> From: Christian Stewart <christian@paral.in>
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> [Atul:
->  - Updated the default to empty.
->  - Updated the license to GPLv2.
->  - Used patches instead of SED commands.
->  - CC and LD are replaced by TARGET_CC and TARGET_LD.
-> ]
-> Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-> [yann.morin.1998 at free.fr:
->   - drop the headers_install command
->   - instead, instruct the kernel to install them
->   - add patches 0002..0004
->   - properly build the host tools
->   - don't depend on the aufs extension, for kernel already patched
->   - fix comment
-> ]
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+  https://gcc.gnu.org/ml/gcc-announce/2016/msg00002.html
 
-Applied with those changes:
+Therefore, it is time to use gcc 5.x as the default version in
+Buildroot. We have been having toolchains in the autobuilders with gcc
+5.x for a while, so the vast majority of the problems should have
+already been solved.
 
-    [Thomas:
-     - Remove the patch 0004-no-override-readdir64.patch, since it no longer
-       applies to the latest version of aufs-util. Instead, add a post-patch
-       hook that tweaks the Makefile to remove the problematic rdu64.o from
-       the build process.
-     - Use directly the kernel headers from the kernel source tree, rather
-       than having to install them. This only requires a minor trick to
-       define "__user" to empty.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-
-Thomas
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 134b16c..7484e7f 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -9,7 +9,7 @@ config BR2_GCC_SUPPORTS_GRAPHITE
+ choice
+ 	prompt "GCC compiler Version"
+ 	default BR2_GCC_VERSION_4_8_ARC if BR2_arc
+-	default BR2_GCC_VERSION_4_9_X
++	default BR2_GCC_VERSION_5_X
+ 	help
+ 	  Select the version of gcc you wish to use.
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
