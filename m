@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Sep 2016 20:03:10 +0200
-Subject: [Buildroot] [PATCH v3 2/3] package/mesa3d: provides libgl not
- only with DRI drivers
-In-Reply-To: <1468772875-5090-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Tue, 20 Sep 2016 20:03:20 +0200
+Subject: [Buildroot] [PATCH v3 3/3] package/mesa3d: add support for
+ Intel Vulkan driver
+In-Reply-To: <1468772875-5090-3-git-send-email-bernd.kuhls@t-online.de>
 References: <1468772875-5090-1-git-send-email-bernd.kuhls@t-online.de>
- <1468772875-5090-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160920200310.0953e686@free-electrons.com>
+ <1468772875-5090-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160920200320.0063036c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,34 +14,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 17 Jul 2016 18:27:54 +0200, Bernd Kuhls wrote:
-> This patch is a follow-up for
-> https://github.com/buildroot/buildroot/commit/999d4a263118ab8581190d3e3c8bdc471896628f
+On Sun, 17 Jul 2016 18:27:55 +0200, Bernd Kuhls wrote:
+> The Vulkan intel driver depends on the i965 dri driver:
+> https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=12.0#n1653
 > 
-> libGL.so and support files are not only available with DRI drivers but
-> also with Gallium drivers, in fact mesa3d can be built without any
-> driver enabled - unless X.org is disabled it will provide libGL.so.
+> and a sha1 implementation:
+> https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=12.0#n1656
 > 
-> Tested using this defconfig:
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_KODI=y
-> BR2_PACKAGE_KODI_VISUALISATION_WAVEFORHUE=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_XORG7=y
+> The Vulkan driver needs linux/memfd.h
+> https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_allocator.c?h=12.0#n30
+> which is not available in kernel headers older than 3.18:
+> https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/log/include/uapi/linux/memfd.h?id=refs/tags/v3.18.36
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/d97/d97a80e6de066a7dea08b284eab24fc44b11d661/
+> The Vulkan driver makes use of ifunc
+> https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_entrypoints_gen.py?h=12.0#n287
+> which is not available on uClibc:
+> https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config.gcc;h=82cc9a9959b5ab57c0b8779e054b80cdb95f169b;hb=gcc-6-branch#l1485
+> https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=e6cdd6b1755033e8f416efaa4334d1294c0a43c6
 > 
-> kodi-visualisation-waveforhue detects OpenGL installed by mesa3d but the
-> kodi package itself does not select libglew before because mesa3d was
-> not listed as a provider for libgl in the buildroot build system.
+> The Vulkan driver makes use of static_assert
+> https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_private.h?h=12.0#n153
+> 
+> Compiling the Vulkan driver with uClibc and musl fails, therefore this
+> driver is glibc-only.
+> 
+> Although the configure script does not check for dri3 support if the
+> Intel Vulkan driver is enabled it needs it nonetheless:
+> https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_wsi_x11.c?h=12.0#n682
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> v3: fixed X.org comment typo (Yann)
->     moved before the Vulkan driver patch and rebased (Yann)
-> v2: never released
+> v3: no changes
+> v2: added dependency on BR2_PACKAGE_XORG7 (Thomas)
+>     optionally select libsha1
 
 Applied to master, thanks.
 
