@@ -1,70 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Sep 2016 20:07:00 +0200
-Subject: [Buildroot] [PATCH 1/2] build: add support for as-needed linking
-In-Reply-To: <1468767958-19572-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1468767958-19572-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <20160920200700.1096bb21@free-electrons.com>
+Date: Tue, 20 Sep 2016 20:07:52 +0200
+Subject: [Buildroot] [git commit] glib-networking: bump to version 2.50.0
+Message-ID: <20160920181525.6EECB8183B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8cbf5557f84bfd2395fba26891e45cc9b36adf8a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 17 Jul 2016 12:05:57 -0300, gustavo.zacarias at free-electrons.com
-wrote:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> 
-> This option tells the linker to only link to the libraries containing
-> symbols that are actually used.
-> 
-> It requires libtool patches to fully clean the needed chain, these are
-> used by major distributions such as Debian and Gentoo.
-> https://wiki.debian.org/ToolChain/DSOLinking
-> https://wiki.gentoo.org/wiki/Project:Quality_Assurance/As-needed
-> 
-> Introduce a BR2_AS_NEEDED global enable option (default=no, marked as
-> experimental) that generally disables the libtool patching and avoids
-> the extra LDFLAGS (-Wl,--as-needed).
-> 
-> Also add a per-package PACKAGE_AS_NEEDED (default=yes) option to work
-> around problematic packages that might not behave too well with
-> as-needed linking.
-> 
-> For the libtool patching use a guess (automatic) method since
-> version-matching doesn't work accurately with some packages that ship
-> patched/modified ltmain.sh scripts, normally based on 2.4. In some of
-> these cases the as-needed-v2.2.6.patch works, and in other cases the
-> as-needed-v2.4.2.patch is necessary and the exact condition can't be
-> found in a deterministic way. If for some reason none of the patches
-> applies to a particular package this will only affect said package and
-> shouldn't have any consequence even if passing -Wl,--as-needed LDFLAGS.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glib-networking/glib-networking.hash | 4 ++--
+ package/glib-networking/glib-networking.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Just like Yann, I don't understand the usefulness of --as-needed
-support. If a library A is not using symbols from a library B it is
-linked against, why is library A linked against library B in the first
-place ?
-
-The way you present it makes me understand that --as-needed is a
-workaround for broken package build systems, which end up producing
-binaries (programs or libraries) incorrect linked to too many
-libraries, that are in fact not all needed.
-
-In addition to this, it is not really clear what are the benefits of
-having less NEEDED entries (i.e practical number of performance
-improvements). Since the complexity is quite huge for something that 1/
-looks like a workaround and 2/ isn't associated to concrete performance
-improvements, I don't think we want to merge this at this point.
-
-Of course, feel free to come back with some more details on why
---as-needed is useful (why it's not a workaround, and prove it's really
-useful in practice).
-
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
+index a495af1..bbcecb7 100644
+--- a/package/glib-networking/glib-networking.hash
++++ b/package/glib-networking/glib-networking.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.48/glib-networking-2.48.2.sha256sum
+-sha256	925c0c49d6b2b8b5695f2e33cd952d1dbb7d18d3f2f796413577719315bb3a84	glib-networking-2.48.2.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.50/glib-networking-2.50.0.sha256sum
++sha256	3f1a442f3c2a734946983532ce59ed49120319fdb10c938447c373d5e5286bee	glib-networking-2.50.0.tar.xz
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index b6e40f8..d3077e9 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GLIB_NETWORKING_VERSION_MAJOR = 2.48
+-GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).2
++GLIB_NETWORKING_VERSION_MAJOR = 2.50
++GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).0
+ GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
+ GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
+ GLIB_NETWORKING_INSTALL_STAGING = YES
