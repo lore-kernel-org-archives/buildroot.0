@@ -1,50 +1,48 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 20 Sep 2016 11:43:53 +0200
-Subject: [Buildroot] [PATCH 3/3] python-cffi: bump to version 1.8.3
-In-Reply-To: <1474364633-8917-1-git-send-email-yegorslists@googlemail.com>
-References: <1474364633-8917-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1474364633-8917-3-git-send-email-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Sep 2016 12:09:11 +0200
+Subject: [Buildroot] Improved patches for Arietta G25 and Aria G25 boards
+In-Reply-To: <CA+TH9VnFhhz5mG9POQ4JdamrqEkFia1e=SU=vr1b5_QDD7r8Wg@mail.gmail.com>
+References: <1474356875-27902-1-git-send-email-biagio.hkr@gmail.com>
+ <CA+TH9VnFhhz5mG9POQ4JdamrqEkFia1e=SU=vr1b5_QDD7r8Wg@mail.gmail.com>
+Message-ID: <20160920120911.695c6a20@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-cffi/python-cffi.hash | 7 +++----
- package/python-cffi/python-cffi.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+On Tue, 20 Sep 2016 09:54:25 +0200, Angelo Compagnucci wrote:
 
-diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
-index 125c93e..39065bc 100644
---- a/package/python-cffi/python-cffi.hash
-+++ b/package/python-cffi/python-cffi.hash
-@@ -1,4 +1,3 @@
--# From https://pypi.python.org/pypi?:action=show_md5&digest=2fae9160991afefb20ff0fbde3b14faf
--md5  2fae9160991afefb20ff0fbde3b14faf  cffi-1.6.0.tar.gz
--# Calculated based on the hash above
--sha256	 a7f75c4ef2362c0a0e54657add0a6c509fecbfa3b3807bc0925f5cb1c9f927db  cffi-1.6.0.tar.gz
-+# md5 from https://pypi.python.org/pypi/cffi/json, sha256 locally computed
-+md5  c8e877fe0426a99d0cf5872cf2f95b27  cffi-1.8.3.tar.gz
-+sha256	 c321bd46faa7847261b89c0469569530cad5a41976bb6dba8202c0159f476568  cffi-1.8.3.tar.gz
-diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
-index 3c2d534..d348695 100644
---- a/package/python-cffi/python-cffi.mk
-+++ b/package/python-cffi/python-cffi.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CFFI_VERSION = 1.6.0
-+PYTHON_CFFI_VERSION = 1.8.3
- PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
--PYTHON_CFFI_SITE = https://pypi.python.org/packages/b6/98/11feff87072e2e640fb8320712b781eccdef05d588618915236b32289d5a
-+PYTHON_CFFI_SITE = https://pypi.python.org/packages/0a/f3/686af8873b70028fccf67b15c78fd4e4667a3da995007afc71e786d61b0a
- PYTHON_CFFI_SETUP_TYPE = setuptools
- PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
- PYTHON_CFFI_LICENSE = MIT
+> a) Probably you have not grasped the details of image generation, these
+> lines:
+> 
+> file boot.bin {
+>     image = "at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.7.bin"
+> }
+> 
+> renames the the image file
+> at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.7.bin to boot.bin just at
+> the moment of building the sdcard image, so I can't see why we need another
+> script.
+
+I agree.
+
+> b) I think you have to send your patches to the Tanzilli's github with a
+> pull request, I really prefer to have all the Acmesystems related patches
+> into his repo.
+
+I don't understand what you mean here. There are no kernel or
+bootloader patches added by Biagio patches.
+
+Or maybe you're suggesting that the Buildroot patches themselves should
+be sent to Tanzilli's Github?
+
+Best regards,
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
