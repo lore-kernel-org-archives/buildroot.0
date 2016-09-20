@@ -1,44 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 20 Sep 2016 12:01:36 -0300
-Subject: [Buildroot] [PATCH 7/7] vala: bump to version 0.34.0
-In-Reply-To: <1474383696-4045-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1474383696-4045-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1474383696-4045-7-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Sep 2016 17:05:08 +0200
+Subject: [Buildroot] [PATCH] configs/warp7: Add Wifi support
+In-Reply-To: <CAOMZO5BAxCYYwKeDubLaJXYXPRff0PytvusajmtF_v+NLOc9Ug@mail.gmail.com>
+ (Fabio Estevam's message of "Tue, 20 Sep 2016 11:47:45 -0300")
+References: <1474314302-19064-1-git-send-email-festevam@gmail.com>
+ <87bmzi3fxc.fsf@dell.be.48ers.dk>
+ <CAOMZO5BAxCYYwKeDubLaJXYXPRff0PytvusajmtF_v+NLOc9Ug@mail.gmail.com>
+Message-ID: <87twda1ujf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/vala/vala.hash | 4 ++--
- package/vala/vala.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index 4a4a41c..b8d47a6 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
-@@ -1,2 +1,2 @@
--# From https://download.gnome.org/sources/vala/0.32/vala-0.32.1.sha256sum
--sha256	dd0d47e548a34cfb1e4b04149acd082a86414c49057ffb79902eb9a508a161a9	vala-0.32.1.tar.xz
-+# From https://download.gnome.org/sources/vala/0.34/vala-0.34.0.sha256sum
-+sha256	5d59e1ad4c59debc83687b593345a3cf9ef2e9020354145e59a188de4348f455	vala-0.34.0.tar.xz
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 4cdc0d7..2a4d257 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--VALA_VERSION_MAJOR = 0.32
--VALA_VERSION = $(VALA_VERSION_MAJOR).1
-+VALA_VERSION_MAJOR = 0.34
-+VALA_VERSION = $(VALA_VERSION_MAJOR).0
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPLv2.1+
+ > On Tue, Sep 20, 2016 at 9:37 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> We recently had a discussion about this .txt file in the context of
+ >> rpi3. How specific to warp7 is this file? Is there some documentation
+
+ > I just used the txt file provided in the NXP BSP.
+
+OK.
+
+ >> somewhere explaining what all these settings do?
+
+ > Unfortunately I don't see any explanation about it.
+
+:/
+
+ >>> @@ -0,0 +1,42 @@
+ >> > +# 2.4 GHz, 20 MHz BW mode
+ >> > +manfid=0x2d0
+ >> > +prodid=0x0726
+ >> > +vendid=0x14e4
+ >> > +devid=0x43e2
+ >> > +boardtype=0x0726
+ >> > +boardrev=0x1202
+ >> > +boardnum=22
+ >> > +macaddr=00:90:4c:c5:12:38
+ >> 
+ >> Does this mean that all warp7 boards will use the same macaddr? This
+
+ > No, the real MAC address I see is different from the one in the .txt file:
+
+Ahh, good. I wonder why it is then listed (twice even) in the .txt file.
+
 -- 
-2.7.3
+Venlig hilsen,
+Peter Korsgaard 
