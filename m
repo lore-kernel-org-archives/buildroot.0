@@ -1,36 +1,89 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 20 Sep 2016 21:44:15 +0000
-Subject: [Buildroot] [Bug 9196] raspberry pi 3 default build seem broken
-In-Reply-To: <bug-9196-163@https.bugs.busybox.net/>
-References: <bug-9196-163@https.bugs.busybox.net/>
-Message-ID: <bug-9196-163-v3qLyhUc9v@https.bugs.busybox.net/>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed, 21 Sep 2016 00:43:55 +0200
+Subject: [Buildroot] [PATCH] gst1-imx: add menuconfig to select each
+ plugin individually
+In-Reply-To: <20160920210425.1ca82f17@free-electrons.com>
+References: <20160916131038.23240-1-gary.bisson@boundarydevices.com>
+ <20160920210425.1ca82f17@free-electrons.com>
+Message-ID: <20160920224355.l76a3kggupuiugok@t450s.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9196
+Hi Thomas, all,
 
---- Comment #7 from Floris Bos <bos@je-eigen-domein.nl> ---
->With raspberrypi3_defconfig with change to glibc/systemd serial login works out of 
->the box.
+On Tue, Sep 20, 2016 at 09:04:25PM +0200, Thomas Petazzoni wrote:
+> Hello Gary,
+> 
+> On Fri, 16 Sep 2016 15:10:38 +0200, Gary Bisson wrote:
+> > Also making each plugin dependencies clearer with comments.
+> > 
+> > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> > ---
+> >  package/gstreamer1/gst1-imx/Config.in   | 89 ++++++++++++++++++++++++++++-----
+> >  package/gstreamer1/gst1-imx/gst1-imx.mk | 32 ++++++++++++
+> >  2 files changed, 108 insertions(+), 13 deletions(-)
+> 
+> Thanks for the patch. I have a few questions/comments, see below.
+> 
+> 
+> > +config BR2_PACKAGE_GST1_IMX_EGLVISINK
+> > +	bool "imxeglvivsink"
+> > +	depends on BR2_PACKAGE_IMX_GPU_VIV
+> > +	help
+> > +	  Elements leveraging the 3D GPU
+> 
+> Instead of doing "depends on" everywhere, can we use "select" in the
+> cases where the dependencies of the package to select are not too
+> crazy ?
 
-That could be thanks to systemd's behavior of auto-magically spawning getty's
-on serial consoles though.
+Well in most cases it isn't possible, here are some details:
+- BR2_PACKAGE_IMX_GPU_VIV and BR2_PACKAGE_IMX_GPU_VIV_G2D depends on
+  BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q which isn't selectable.
+- We can't select BR2_LINUX_KERNEL since it needs to be a i.MX kernel.
+- BR2_PACKAGE_LIBIMXVPUAPI depends on the i.MX SoC being used which
+  cannot be selectable (MX5 or MX6)
 
-https://www.freedesktop.org/software/systemd/man/systemd-getty-generator.html
+I guess I can select IMX_CODEC though, I'll add that to the V2.
 
-Rather than the symlink buildroot created working correctly.
+> > +ifneq ($(BR2_PACKAGE_GST1_IMX_EGLVISINK),y)
+> > +GST1_IMX_CONF_OPTS += --disable-eglvivsink
+> > +endif
+> 
+> For all those options, please use the standard Buildroot way of
+> expressing dependencies:
+> 
+> ifeq ($(BR2_PACKAGE_FOO),y)
+> BAZ_CONF_OPTS += --enable-foo
+> BAZ_DEPENDENCIES += foo
+> else
+> BAZ_CONF_OPTS += --disable-foo
+> endif
+> 
+> i.e:
+> 
+>  1/ Add an explicit --enable-<foo> for each option
 
+This was on purpose since the package only look for --disable-foo
+options. All the plugins are enabled by default, see patch in package:
+https://github.com/Freescale/gstreamer-imx/commit/989ab048
 
->For hdmi/usb-keyboard (tty1) login the following link was necessary (as advised in 
->[2]):
->
->ln -sf /usr/lib/systemd/system/getty at .service  >/etc/systemd/system/getty.target.wants/getty at tty1.service
+I can still do:
+ifeq ($(BR2_PACKAGE_FOO),y)
+else
+BAZ_CONF_OPTS += --disable-foo
+endif
 
-Alternative fix: https://patchwork.ozlabs.org/patch/668134/
+But my opinion is that --enable-foo is misleading.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+>  2/ Group the --enable/--disable passing with the addition of the
+>     dependency
+
+Ok.
+
+Thanks for your feedback.
+
+Regards,
+Gary
