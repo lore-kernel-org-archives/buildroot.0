@@ -1,51 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Sep 2016 17:05:08 +0200
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Tue, 20 Sep 2016 17:38:13 +0200
 Subject: [Buildroot] [PATCH] configs/warp7: Add Wifi support
-In-Reply-To: <CAOMZO5BAxCYYwKeDubLaJXYXPRff0PytvusajmtF_v+NLOc9Ug@mail.gmail.com>
- (Fabio Estevam's message of "Tue, 20 Sep 2016 11:47:45 -0300")
+In-Reply-To: <87bmzi3fxc.fsf@dell.be.48ers.dk>
 References: <1474314302-19064-1-git-send-email-festevam@gmail.com>
  <87bmzi3fxc.fsf@dell.be.48ers.dk>
- <CAOMZO5BAxCYYwKeDubLaJXYXPRff0PytvusajmtF_v+NLOc9Ug@mail.gmail.com>
-Message-ID: <87twda1ujf.fsf@dell.be.48ers.dk>
+Message-ID: <bdc51173-3273-f768-ace1-d508cea17f00@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+On 09/20/2016 02:37 PM, Peter Korsgaard wrote:
+> > +++ 
+> b/board/warp7/rootfs_overlay/lib/firmware/brcm/brcmfmac43430-sdio.txt
+> We recently had a discussion about this .txt file in the context of
+> rpi3. How specific to warp7 is this file? Is there some documentation
+> somewhere explaining what all these settings do?
 
- > On Tue, Sep 20, 2016 at 9:37 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
- >> We recently had a discussion about this .txt file in the context of
- >> rpi3. How specific to warp7 is this file? Is there some documentation
+Noticed the file used by some of the Allwinner boards contains:
 
- > I just used the txt file provided in the NXP BSP.
+https://build.opensuse.org/package/view_file/hardware/bcm43xx-firmware/brcmfmac43362-sdio-cubietruck.txt
 
-OK.
+==
+# Board Revision is P307, same nvram file can be used for P304, P305, 
+P306 and P307 as the tssi pa params used are same
+#Please force the automatic RX PER data to the respective board 
+directory if not using P307 board, for e.g. for P305 boards force the 
+data into the following directory 
+/projects/BCM43362/a1_labdata/boardtests/results/sdg_rev0305
+==
 
- >> somewhere explaining what all these settings do?
+So apparently some values involve low-level hardware tuning, and it's 
+possible you need a different file if the PCB layout of the board you 
+are using is changed at some point.
 
- > Unfortunately I don't see any explanation about it.
+This makes it kinda difficult to have a common rootfs for more than one 
+board.
+Would be nice if they moved those values to device tree.
 
-:/
 
- >>> @@ -0,0 +1,42 @@
- >> > +# 2.4 GHz, 20 MHz BW mode
- >> > +manfid=0x2d0
- >> > +prodid=0x0726
- >> > +vendid=0x14e4
- >> > +devid=0x43e2
- >> > +boardtype=0x0726
- >> > +boardrev=0x1202
- >> > +boardnum=22
- >> > +macaddr=00:90:4c:c5:12:38
- >> 
- >> Does this mean that all warp7 boards will use the same macaddr? This
 
- > No, the real MAC address I see is different from the one in the .txt file:
+Yours sincerely,
 
-Ahh, good. I wonder why it is then listed (twice even) in the .txt file.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Floris Bos
