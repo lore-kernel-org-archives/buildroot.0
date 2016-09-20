@@ -1,72 +1,53 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Tue, 20 Sep 2016 19:30:14 +0530
-Subject: [Buildroot] [PATCH] ushare: fix build with NLS support
-Message-ID: <1474380014-20249-1-git-send-email-rahul.bedarkar@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Sep 2016 16:33:45 +0200
+Subject: [Buildroot] [PATCH 1/1] libfastjson: Was referencing
+	non-existing files
+In-Reply-To: <CAA=pTTRC8oK_GkwHYca3+ky2nRvyvGKS=RyOK1qogYmYGjptPA@mail.gmail.com>
+ (Frederik Peter Aalund's message of "Tue, 20 Sep 2016 13:36:32 +0000")
+References: <1474018609-2610-1-git-send-email-fpa@sbtaqua.com>
+ <20160916185559.23a41621@free-electrons.com>
+ <CAA=pTTRC8oK_GkwHYca3+ky2nRvyvGKS=RyOK1qogYmYGjptPA@mail.gmail.com>
+Message-ID: <87y42m1vzq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to fix build errors when NLS support is enabled.
+>>>>> "Frederik" == Frederik Peter Aalund <fpa@sbtaqua.com> writes:
 
-Fixes:
+ > Hi Thomas
+ > Thanks for reviewing! Strange that it builds without problems at your end.
+ > Here is what I see from the build log (without the patch):
 
-  http://autobuild.buildroot.net/results/19d/19d67dd43e5a313c77e4be97ecb9811ffa52f797/
+ > I see that your package URL:
+ > --2016-09-16 18:53:29--
+ > https://github.com/rsyslog/libfastjson/archive/v0.99.2/libfastjson-v0.99.2.tar.gz
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
----
- ...e-config-h-before-checking-for-CONFIG-NLS.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/ushare/0003-ushare-c-include-config-h-before-checking-for-CONFIG-NLS.patch
+ > is different from mine:
+ >  --2016-09-20 15:22:21--
+ > https://github.com/rsyslog/libfastjson/archive/v0.99.2.tar.gz
 
-diff --git a/package/ushare/0003-ushare-c-include-config-h-before-checking-for-CONFIG-NLS.patch b/package/ushare/0003-ushare-c-include-config-h-before-checking-for-CONFIG-NLS.patch
-new file mode 100644
-index 0000000..e97c3de
---- /dev/null
-+++ b/package/ushare/0003-ushare-c-include-config-h-before-checking-for-CONFIG-NLS.patch
-@@ -0,0 +1,42 @@
-+ushare.c: include config.h before checking for CONFIG_NLS
-+
-+When NLS support is enabled, we get following build errors:
-+
-+  ushare.c: In function 'setup_i18n':
-+  ushare.c:745:3: warning: implicit declaration of function 'setlocale' [-Wimplicit-function-declaration]
-+     setlocale (LC_ALL, "");
-+     ^
-+  ushare.c:745:14: error: 'LC_ALL' undeclared (first use in this function)
-+     setlocale (LC_ALL, "");
-+                ^
-+  ushare.c:745:14: note: each undeclared identifier is reported only once for each function it appears in
-+  make[2]: *** [ushare.o] Error 1
-+
-+When NLS support is enabled, configure script creates macro in config.h.
-+We check for CONFIG_NLS before including config.h which results in above
-+build errors as locale.h doesn't get included.
-+
-+This patch fixes above build error by including config.h before we check for
-+CONFIG_NLS.
-+
-+This build error is detected by Buildroot autobuilder
-+http://autobuild.buildroot.net/results/19d/19d67dd43e5a313c77e4be97ecb9811ffa52f797/
-+
-+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+
-+--- ushare-1.1a/src/ushare.c.old	2016-09-20 19:04:00.915239326 +0530
-++++ ushare-1.1a/src/ushare.c	2016-09-20 19:04:24.707239276 +0530
-+@@ -56,11 +56,12 @@
-+ #include <upnp/upnp.h>
-+ #include <upnp/upnptools.h>
-+ 
-++#include "config.h"
-++
-+ #if (defined(HAVE_SETLOCALE) && defined(CONFIG_NLS))
-+ # include <locale.h>
-+ #endif
-+ 
-+-#include "config.h"
-+ #include "ushare.h"
-+ #include "services.h"
-+ #include "http.h"
+ > I don't know how that can be. At some point, I had an external package for
+ > libfastjson (before it was integrated into buildroot). However, I have
+ > deleted said external package and purged both buildroot/dl and
+ > buildroot/output/build.
+
+<pkgname>-<version>.tar.gz is the default name of the tarball, so it
+sounds like you have a LIBFASTJSON_SOURCE = .. somewhere - Please double
+check. Notice that buildroot automatically includes */*.mk, so it will
+get read even though you have dropped the Config.in file.
+
+ > *Frederik Aalund*
+ > Chief Information Officer, Co-owner
+
+ > SBT Aqua
+ > Copenhagen, Denmark
+ > Mobile: +45 30340086
+ > fpa at sbtaqua.com
+ > sbtaqua.com
+
+Nice, so you are using Buildroot on the sensors?
+
 -- 
-2.6.2
+Bye, Peter Korsgaard
