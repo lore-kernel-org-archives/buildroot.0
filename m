@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Sep 2016 20:03:20 +0200
-Subject: [Buildroot] [PATCH v3 3/3] package/mesa3d: add support for
- Intel Vulkan driver
-In-Reply-To: <1468772875-5090-3-git-send-email-bernd.kuhls@t-online.de>
-References: <1468772875-5090-1-git-send-email-bernd.kuhls@t-online.de>
- <1468772875-5090-3-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160920200320.0063036c@free-electrons.com>
+Date: Tue, 20 Sep 2016 20:07:00 +0200
+Subject: [Buildroot] [PATCH 1/2] build: add support for as-needed linking
+In-Reply-To: <1468767958-19572-1-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1468767958-19572-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <20160920200700.1096bb21@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,44 +12,59 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 17 Jul 2016 18:27:55 +0200, Bernd Kuhls wrote:
-> The Vulkan intel driver depends on the i965 dri driver:
-> https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=12.0#n1653
+On Sun, 17 Jul 2016 12:05:57 -0300, gustavo.zacarias at free-electrons.com
+wrote:
+> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > 
-> and a sha1 implementation:
-> https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=12.0#n1656
+> This option tells the linker to only link to the libraries containing
+> symbols that are actually used.
 > 
-> The Vulkan driver needs linux/memfd.h
-> https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_allocator.c?h=12.0#n30
-> which is not available in kernel headers older than 3.18:
-> https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/log/include/uapi/linux/memfd.h?id=refs/tags/v3.18.36
+> It requires libtool patches to fully clean the needed chain, these are
+> used by major distributions such as Debian and Gentoo.
+> https://wiki.debian.org/ToolChain/DSOLinking
+> https://wiki.gentoo.org/wiki/Project:Quality_Assurance/As-needed
 > 
-> The Vulkan driver makes use of ifunc
-> https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_entrypoints_gen.py?h=12.0#n287
-> which is not available on uClibc:
-> https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config.gcc;h=82cc9a9959b5ab57c0b8779e054b80cdb95f169b;hb=gcc-6-branch#l1485
-> https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=e6cdd6b1755033e8f416efaa4334d1294c0a43c6
+> Introduce a BR2_AS_NEEDED global enable option (default=no, marked as
+> experimental) that generally disables the libtool patching and avoids
+> the extra LDFLAGS (-Wl,--as-needed).
 > 
-> The Vulkan driver makes use of static_assert
-> https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_private.h?h=12.0#n153
+> Also add a per-package PACKAGE_AS_NEEDED (default=yes) option to work
+> around problematic packages that might not behave too well with
+> as-needed linking.
 > 
-> Compiling the Vulkan driver with uClibc and musl fails, therefore this
-> driver is glibc-only.
-> 
-> Although the configure script does not check for dri3 support if the
-> Intel Vulkan driver is enabled it needs it nonetheless:
-> https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_wsi_x11.c?h=12.0#n682
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v3: no changes
-> v2: added dependency on BR2_PACKAGE_XORG7 (Thomas)
->     optionally select libsha1
+> For the libtool patching use a guess (automatic) method since
+> version-matching doesn't work accurately with some packages that ship
+> patched/modified ltmain.sh scripts, normally based on 2.4. In some of
+> these cases the as-needed-v2.2.6.patch works, and in other cases the
+> as-needed-v2.4.2.patch is necessary and the exact condition can't be
+> found in a deterministic way. If for some reason none of the patches
+> applies to a particular package this will only affect said package and
+> shouldn't have any consequence even if passing -Wl,--as-needed LDFLAGS.
 
-Applied to master, thanks.
+Just like Yann, I don't understand the usefulness of --as-needed
+support. If a library A is not using symbols from a library B it is
+linked against, why is library A linked against library B in the first
+place ?
+
+The way you present it makes me understand that --as-needed is a
+workaround for broken package build systems, which end up producing
+binaries (programs or libraries) incorrect linked to too many
+libraries, that are in fact not all needed.
+
+In addition to this, it is not really clear what are the benefits of
+having less NEEDED entries (i.e practical number of performance
+improvements). Since the complexity is quite huge for something that 1/
+looks like a workaround and 2/ isn't associated to concrete performance
+improvements, I don't think we want to merge this at this point.
+
+Of course, feel free to come back with some more details on why
+--as-needed is useful (why it's not a workaround, and prove it's really
+useful in practice).
+
+Thanks a lot,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
