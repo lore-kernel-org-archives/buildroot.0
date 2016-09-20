@@ -1,69 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Sep 2016 20:07:50 +0200
-Subject: [Buildroot] [git commit] libglib2: bump to version 2.50.0
-Message-ID: <20160920181525.62F408183B@busybox.osuosl.org>
+Date: Tue, 20 Sep 2016 20:16:00 +0200
+Subject: [Buildroot] [PATCH] ushare: fix build with NLS support
+In-Reply-To: <1474380014-20249-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1474380014-20249-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20160920201600.31d99edd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c7c010f9fae01399070844991252d3f5b9aae5f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-It now requires util-linux libmount so add the dependency/select.
+On Tue, 20 Sep 2016 19:30:14 +0530, Rahul Bedarkar wrote:
+> Add patch to fix build errors when NLS support is enabled.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/19d/19d67dd43e5a313c77e4be97ecb9811ffa52f797/
+> 
+> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+> ---
+>  ...e-config-h-before-checking-for-CONFIG-NLS.patch | 42 ++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/ushare/0003-ushare-c-include-config-h-before-checking-for-CONFIG-NLS.patch
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libglib2/Config.in     | 2 ++
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 6 +++---
- 3 files changed, 7 insertions(+), 5 deletions(-)
+Applied to master, thanks. Please submit the patch to the upstream
+ushare project. Thanks!
 
-diff --git a/package/libglib2/Config.in b/package/libglib2/Config.in
-index 84ee816..80c7d67 100644
---- a/package/libglib2/Config.in
-+++ b/package/libglib2/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBFFI
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_PCRE_UCP
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	select BR2_PACKAGE_ZLIB
- 	depends on BR2_USE_WCHAR # gettext
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 35728e2..3bc4021 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,2 +1,2 @@
--# https://download.gnome.org/sources/glib/2.48/glib-2.48.2.sha256sum
--sha256  f25e751589cb1a58826eac24fbd4186cda4518af772806b666a3f91f66e6d3f4  glib-2.48.2.tar.xz
-+# https://download.gnome.org/sources/glib/2.50/glib-2.50.0.sha256sum
-+sha256  830b551fa626bda06e12729205b3c5bb0d82b924a8cf64d948945878f01b7d70  glib-2.50.0.tar.xz
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 6b1a387..5bc6ed5 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBGLIB2_VERSION_MAJOR = 2.48
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
-+LIBGLIB2_VERSION_MAJOR = 2.50
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPLv2+
-@@ -102,7 +102,7 @@ HOST_LIBGLIB2_CONF_OPTS = \
- 
- LIBGLIB2_DEPENDENCIES = \
- 	host-pkgconf host-libglib2 host-gettext \
--	libffi pcre zlib $(if $(BR2_NEEDS_GETTEXT),gettext)
-+	libffi pcre util-linux zlib $(if $(BR2_NEEDS_GETTEXT),gettext)
- 
- HOST_LIBGLIB2_DEPENDENCIES = \
- 	host-gettext host-libffi host-pcre host-pkgconf host-zlib
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
