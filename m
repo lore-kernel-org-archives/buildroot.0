@@ -1,101 +1,130 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Tue, 20 Sep 2016 23:03:34 +0530
-Subject: [Buildroot] [PATCH] uclibc: add upstream patch to fix glog build on
-	bfin
-Message-ID: <1474392814-20316-1-git-send-email-rahul.bedarkar@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Sep 2016 20:01:15 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: add support for Intel
+	Vulkan driver
+Message-ID: <20160920180219.BAE407FA71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glog has been failing on bfin because of issue in uclibc which is now
-fixed in upstream.
+commit: https://git.buildroot.net/buildroot/commit/?id=42cdaaf945df203364cbb5be5f856636f9764260
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-  http://autobuild.buildroot.net/results/a10/a10ed48e6eb8411a3d8372f57c05fd11130da0e0/
+The Vulkan intel driver depends on the i965 dri driver:
+https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=12.0#n1653
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+and a sha1 implementation:
+https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=12.0#n1656
+
+The Vulkan driver needs linux/memfd.h
+https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_allocator.c?h=12.0#n30
+which is not available in kernel headers older than 3.18:
+https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/log/include/uapi/linux/memfd.h?id=refs/tags/v3.18.36
+
+The Vulkan driver makes use of ifunc
+https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_entrypoints_gen.py?h=12.0#n287
+which is not available on uClibc:
+https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config.gcc;h=82cc9a9959b5ab57c0b8779e054b80cdb95f169b;hb=gcc-6-branch#l1485
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=e6cdd6b1755033e8f416efaa4334d1294c0a43c6
+
+The Vulkan driver makes use of static_assert
+https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_private.h?h=12.0#n153
+
+Compiling the Vulkan driver with uClibc and musl fails, therefore this
+driver is glibc-only.
+
+Although the configure script does not check for dri3 support if the
+Intel Vulkan driver is enabled it needs it nonetheless:
+https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_wsi_x11.c?h=12.0#n682
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-dsbt-.h-avoid-void-pointer-s-subtraction.patch | 70 ++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 package/uclibc/0004-elf-fdpic-dsbt-.h-avoid-void-pointer-s-subtraction.patch
+ package/mesa3d/Config.in | 29 ++++++++++++++++++++++++++++-
+ package/mesa3d/mesa3d.mk | 10 ++++++++++
+ 2 files changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/package/uclibc/0004-elf-fdpic-dsbt-.h-avoid-void-pointer-s-subtraction.patch b/package/uclibc/0004-elf-fdpic-dsbt-.h-avoid-void-pointer-s-subtraction.patch
-new file mode 100644
-index 0000000..8c1c882
---- /dev/null
-+++ b/package/uclibc/0004-elf-fdpic-dsbt-.h-avoid-void-pointer-s-subtraction.patch
-@@ -0,0 +1,70 @@
-+From 2c242092372e9f7f62b881e81e8e798475e0cbb3 Mon Sep 17 00:00:00 2001
-+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+Date: Sun, 18 Sep 2016 13:15:38 +0530
-+Subject: [PATCH] elf-{fdpic, dsbt}.h: avoid void pointer's subtraction
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 738ca7a..bbab953 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -22,7 +22,7 @@ menuconfig BR2_PACKAGE_MESA3D
+ 
+ if BR2_PACKAGE_MESA3D
+ 
+-# inform the .mk file of gallium or dri driver selection
++# inform the .mk file of gallium, dri or vulkan driver selection
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_MESA3D_DRIVER
+ 	bool
+@@ -33,6 +33,10 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO if BR2_PACKAGE_XPROTO_DRI3PROTO
+ 	bool
+ 
++config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
++	bool
++	select BR2_PACKAGE_MESA3D_DRIVER
 +
-+elf-fdpic.h or elf-dsbt.h is included by link.h. When C++ program
-+includes <link.h>, we get following build failure.
+ config BR2_PACKAGE_MESA3D_DRIVER
+ 	bool
+ 
+@@ -132,6 +136,29 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+ 	help
+ 	  Legacy Radeon driver for R100 series GPUs.
+ 
++comment "Vulkan drivers"
 +
-+../usr/include/bits/elf-fdpic.h: In function 'void* __reloc_pointer(void*, const elf32_fdpic_loadmap*)':
-+../usr/include/bits/elf-fdpic.h:95: error: invalid use of 'void'
++config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
++	bool "Vulkan Intel driver"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # memfd.h
++	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
++	depends on BR2_PACKAGE_XORG7 # xproto_dri3proto
++	# We need a SHA1 implementation. If either openssl or
++	# libgcrypt are already part of the build, we'll use one of
++	# them, otherwise, use the small libsha1 library.
++	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
++	select BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
++	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
++	select BR2_PACKAGE_XPROTO_DRI3PROTO
++	help
++	  Vulkan driver for Intel hardware from Ivy Bridge onward.
 +
-+void pointer addition and subtraction is not allowed in C++ as it has
-+undetermined size, however in C with language extension it is possible
-+because sizeof void is treated as one byte.
++comment "intel vulkan depends on X.org and needs a glibc toolchain w/ headers >= 3.18"
++	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 || \
++		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_PACKAGE_XORG7
 +
-+Instead of performing subtraction on void pointers, typecast it to char*
-+first.
+ comment "Off-screen Rendering"
+ 
+ config BR2_PACKAGE_MESA3D_OSMESA
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index a5380a7..1aa82d8 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -86,6 +86,8 @@ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I915)   += i915
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965)   += i965
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU) += nouveau
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON) += radeon
++# Vulkan Drivers
++MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER),)
+ MESA3D_CONF_OPTS += \
+@@ -115,6 +117,14 @@ MESA3D_CONF_OPTS += \
+ 	--with-dri-drivers=$(subst $(space),$(comma),$(MESA3D_DRI_DRIVERS-y))
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
++MESA3D_CONF_OPTS += \
++	--without-vulkan-drivers
++else
++MESA3D_CONF_OPTS += \
++	--with-vulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
++endif
 +
-+This build failure is detected by Buildroot autobuilder.
-+http://autobuild.buildroot.net/results/a10/a10ed48e6eb8411a3d8372f57c05fd11130da0e0/
-+
-+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+---
-+ libc/sysdeps/linux/bfin/bits/elf-fdpic.h | 2 +-
-+ libc/sysdeps/linux/c6x/bits/elf-dsbt.h   | 2 +-
-+ libc/sysdeps/linux/frv/bits/elf-fdpic.h  | 2 +-
-+ 3 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/libc/sysdeps/linux/bfin/bits/elf-fdpic.h b/libc/sysdeps/linux/bfin/bits/elf-fdpic.h
-+index dddf82c..9fcf93f 100644
-+--- a/libc/sysdeps/linux/bfin/bits/elf-fdpic.h
-++++ b/libc/sysdeps/linux/bfin/bits/elf-fdpic.h
-+@@ -91,7 +91,7 @@ __reloc_pointer (void *p,
-+       /* This should be computed as part of the pointer comparison
-+ 	 above, but we want to use the carry in the comparison, so we
-+ 	 can't convert it to an integer type beforehand.  */
-+-      unsigned long offset = p - (void*)map->segs[c].p_vaddr;
-++      unsigned long offset = (char*)p - (char*)map->segs[c].p_vaddr;
-+       /* We only check for one-past-the-end for the last segment,
-+ 	 assumed to be the data segment, because other cases are
-+ 	 ambiguous in the absence of padding between segments, and
-+diff --git a/libc/sysdeps/linux/c6x/bits/elf-dsbt.h b/libc/sysdeps/linux/c6x/bits/elf-dsbt.h
-+index a4e3e7d..0e82ec7 100644
-+--- a/libc/sysdeps/linux/c6x/bits/elf-dsbt.h
-++++ b/libc/sysdeps/linux/c6x/bits/elf-dsbt.h
-+@@ -94,7 +94,7 @@ __reloc_pointer (void *p,
-+ 
-+   for (c = 0; c < map->nsegs; c++)
-+     {
-+-      unsigned long offset = p - (void*)map->segs[c].p_vaddr;
-++      unsigned long offset = (char*)p - (char*)map->segs[c].p_vaddr;
-+       /* We only check for one-past-the-end for the second segment,
-+ 	 assumed to be the data segment, because other cases are
-+ 	 ambiguous in the absence of padding between segments, and
-+diff --git a/libc/sysdeps/linux/frv/bits/elf-fdpic.h b/libc/sysdeps/linux/frv/bits/elf-fdpic.h
-+index dddf82c..9fcf93f 100644
-+--- a/libc/sysdeps/linux/frv/bits/elf-fdpic.h
-++++ b/libc/sysdeps/linux/frv/bits/elf-fdpic.h
-+@@ -91,7 +91,7 @@ __reloc_pointer (void *p,
-+       /* This should be computed as part of the pointer comparison
-+ 	 above, but we want to use the carry in the comparison, so we
-+ 	 can't convert it to an integer type beforehand.  */
-+-      unsigned long offset = p - (void*)map->segs[c].p_vaddr;
-++      unsigned long offset = (char*)p - (char*)map->segs[c].p_vaddr;
-+       /* We only check for one-past-the-end for the last segment,
-+ 	 assumed to be the data segment, because other cases are
-+ 	 ambiguous in the absence of padding between segments, and
-+-- 
-+2.6.2
-+
--- 
-2.6.2
+ # APIs
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
