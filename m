@@ -1,63 +1,146 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Sep 2016 15:04:12 +0200
-Subject: [Buildroot] [PATCH 2/2] python-psutil: fix build against musl C
-	library
-In-Reply-To: <20160920143837.5bed86bd@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 20 Sep 2016 14:38:37 +0200")
-References: <20160920074127.22328-1-peter@korsgaard.com>
- <20160920074127.22328-2-peter@korsgaard.com>
- <20160920121433.3912ca4a@free-electrons.com>
- <8760pq50es.fsf@dell.be.48ers.dk>
- <20160920133053.3cb8e9bc@free-electrons.com>
- <87shsu3i2z.fsf@dell.be.48ers.dk>
- <20160920143837.5bed86bd@free-electrons.com>
-Message-ID: <8737ku3epf.fsf@dell.be.48ers.dk>
+From: Frederik Peter Aalund <fpa@sbtaqua.com>
+Date: Tue, 20 Sep 2016 13:36:32 +0000
+Subject: [Buildroot] [PATCH 1/1] libfastjson: Was referencing
+	non-existing files
+In-Reply-To: <20160916185559.23a41621@free-electrons.com>
+References: <1474018609-2610-1-git-send-email-fpa@sbtaqua.com>
+ <20160916185559.23a41621@free-electrons.com>
+Message-ID: <CAA=pTTRC8oK_GkwHYca3+ky2nRvyvGKS=RyOK1qogYmYGjptPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Thomas
 
-Hi,
+Thanks for reviewing! Strange that it builds without problems at your end.
+Here is what I see from the build log (without the patch):
 
- >> I don't see the point of that reasoning - The whole idea of the Linux
- >> uapi headers is to provide headers for the kernel API.
+--2016-09-20 15:22:21--
+https://github.com/rsyslog/libfastjson/archive/v0.99.2.tar.gz
+Resolving github.com (github.com)... 192.30.253.113
+Connecting to github.com (github.com)|192.30.253.113|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://codeload.github.com/rsyslog/libfastjson/tar.gz/v0.99.2
+[following]
+--2016-09-20 15:22:22--
+https://codeload.github.com/rsyslog/libfastjson/tar.gz/v0.99.2
+Resolving codeload.github.com (codeload.github.com)... 192.30.253.121
+Connecting to codeload.github.com (codeload.github.com)|192.30.253.121|:443...
+connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [application/x-gzip]
+Saving to:
+?/projects/RedPitaya/OS/buildroot/buildroot/output/build/.v0.99.2.tar.gz.eTu6lt/output?
 
- > Correct. I've already discussed this with the musl developers, and they
- > say that the "kernel headers are not clean to be used in userspace".
+/projects/RedPitaya/OS/bui     [  <=>                                   ]
+ 85.47K   424KB/s   in 0.2s
 
- > Of course, everyone else but the musl people are using the uapi headers
- > in userspace, but apparently, there are some things in there that do
- > not please the musl people.
+2016-09-20 15:22:23 (424 KB/s) -
+?/projects/RedPitaya/OS/buildroot/buildroot/output/build/.v0.99.2.tar.gz.eTu6lt/output?
+saved [87526]
 
- > Maybe Rich can explain more precisely the issue. So far I've only been
- > able to get "kernel headers are not clean enough", but not concrete
- > example of the problem.
+ERROR: No hash found for v0.99.2.tar.gz
+--2016-09-20 15:22:23--  http://sources.buildroot.net/v0.99.2.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
+Connecting to sources.buildroot.net (sources.buildroot.net)|176.9.16.109|:80...
+connected.
+HTTP request sent, awaiting response... 404 Not Found
+2016-09-20 15:22:23 ERROR 404: Not Found.
 
-Rich, can you explain please?
+package/pkg-generic.mk:113: recipe for target
+'/projects/RedPitaya/OS/buildroot/buildroot/output/build/libfastjson-v0.99.2/.stamp_downloaded'
+failed
+make[1]: ***
+[/projects/RedPitaya/OS/buildroot/buildroot/output/build/libfastjson-v0.99.2/.stamp_downloaded]
+Error 1
+Makefile:41: recipe for target '_all' failed
+make: *** [_all] Error 2
 
- >> I'm not particulary interested in musl support for
- >> python-psutil. Alternatively we can just mark it as
- >> !BR2_TOOLCHAIN_USES_MUSL.
- >> 
- >> What do you suggest?
 
- > I don't care about python-psutil to be available with musl, so your
- > proposal is fine to me. Overall, I find the policy of musl developers
- > to be very annoying as:
 
- >  1/ It breaks many many many packages.
+I see that your package URL:
+--2016-09-16 18:53:29--
+https://github.com/rsyslog/libfastjson/archive/v0.99.2/libfastjson-v0.99.2.tar.gz
 
- >  2/ The only proposed solution is to duplicate code, which is not nice
- >     at all, and is difficult to get accepted by upstream project,
- >     living us with zillions of musl-related patches that we cannot
- >     upstream.
+is different from mine:
+ --2016-09-20 15:22:21--
+https://github.com/rsyslog/libfastjson/archive/v0.99.2.tar.gz
 
-Agreed. I've send a patch to mark it (and its reverse dependencies) as
-unavailable on musl.
+I don't know how that can be. At some point, I had an external package for
+libfastjson (before it was integrated into buildroot). However, I have
+deleted said external package and purged both buildroot/dl and
+buildroot/output/build.
 
--- 
-Venlig hilsen,
-Peter Korsgaard 
+*Frederik Aalund*
+Chief Information Officer, Co-owner
+
+SBT Aqua
+Copenhagen, Denmark
+Mobile: +45 30340086
+fpa at sbtaqua.com
+sbtaqua.com
+
+On Fri, 16 Sep 2016 at 18:56 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Hello,
+>
+> On Fri, 16 Sep 2016 11:36:49 +0200, Frederik Aalund wrote:
+>
+> > -LIBFASTJSON_VERSION = v0.99.2
+> > +LIBFASTJSON_VERSION = 0.99.2
+> >  LIBFASTJSON_SITE = $(call
+> github,rsyslog,libfastjson,$(LIBFASTJSON_VERSION))
+> > +LIBFASTJSON_SOURCE = v$(LIBFASTJSON_VERSION).tar.gz
+>
+> This is not correct: the version is really v0.99.2, as this is the name
+> of the Git tag.
+>
+> Moreover, I'm not sure what you're fixing here. It downloads perfectly
+> fine here without your patch:
+>
+> >>> libfastjson v0.99.2 Downloading
+> --2016-09-16 18:53:29--
+> https://github.com/rsyslog/libfastjson/archive/v0.99.2/libfastjson-v0.99.2.tar.gz
+> Resolving github.com (github.com)... 192.30.253.113
+> Connecting to github.com (github.com)|192.30.253.113|:443... connected.
+> HTTP request sent, awaiting response... 302 Found
+> Location: https://codeload.github.com/rsyslog/libfastjson/tar.gz/v0.99.2
+> [following]
+> --2016-09-16 18:53:36--
+> https://codeload.github.com/rsyslog/libfastjson/tar.gz/v0.99.2
+> Resolving codeload.github.com (codeload.github.com)... 192.30.253.121
+> Connecting to codeload.github.com (codeload.github.com)|192.30.253.121|:443...
+> connected.
+> HTTP request sent, awaiting response... 200 OK
+> Length: unspecified [application/x-gzip]
+> Saving to:
+> ?/home/thomas/projets/buildroot/output/build/.libfastjson-v0.99.2.tar.gz.PKe11m/output?
+>
+>      0K .......... .......... .......... .......... .......... 80,8K
+>     50K .......... .......... .......... .....                  118K=0,9s
+>
+> 2016-09-16 18:53:38 (92,9 KB/s) -
+> ?/home/thomas/projets/buildroot/output/build/.libfastjson-v0.99.2.tar.gz.PKe11m/output?
+> saved [87526]
+>
+> libfastjson-v0.99.2.tar.gz: OK (sha256:
+> fcdca0c4702362de3db3f02c8da05f985b54a9eccd618af41730409b75d10a8f)
+>
+> Could you be more specific in the issue you were facing, such as
+> posting a build log of what happens during the download without your
+> patch applied?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160920/bd17982c/attachment.html>
