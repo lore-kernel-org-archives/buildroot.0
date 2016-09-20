@@ -1,54 +1,105 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Sep 2016 14:28:34 +0200
-Subject: [Buildroot] [git commit] supertuxkart: Constrain to x86 architecture
-Message-ID: <20160920123859.8DB26820FA@busybox.osuosl.org>
+Date: Tue, 20 Sep 2016 15:01:13 +0200
+Subject: [Buildroot] [PATCH] python-psutil: not available on musl
+Message-ID: <20160920130113.21450-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb0863636041cebbcd1dfa24a94886503dd19b36
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+http://autobuild.buildroot.net/results/365/365c2f0b32ae3cb1d6d4d8f0145500dfadd05c59/
+http://autobuild.buildroot.org/results/140/140d0ec9d94f75453c4c82e18803c8d7bffcf6be/
 
-Our build system has detected that angelscript can't be
-cross-compiled properly. This has been also reported to
-supertuxkart [1], and although the developers were open
-to take patches fixing STK embedded angelscript, it was
-pointed out that non-x86 architectures were not officially
-supported and of little interest [2].
+And many more.
 
-Hence, let's constrain the package selection and the host
-architecture to x86.
+The sysinfo structure definition in linux/sysinfo.h (which gets indirectly
+included from linux/kernel.h) conflicts with the definition in sys/sysinfo.h
+when building against the musl C library, leading to build failures:
 
-[1] https://github.com/supertuxkart/stk-code/issues/2569
-[2] https://github.com/supertuxkart/stk-code/pull/2195
+arm-linux-gcc -Wno-unused-result -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes \
+ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -DPSUTIL_VERSION=430 \
+  -c psutil/_psutil_linux.c -o build/temp.linux-x86_64-3.5/psutil/_psutil_linux.o
+In file included from /home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/kernel.h:4:0,
+                 from /home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/ethtool.h:16,
+                 from psutil/_psutil_linux.c:35:
+/home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/sysinfo.h:7:8: error: redefinition of 'struct sysinfo'
+ struct sysinfo {
+        ^
+In file included from psutil/_psutil_linux.c:21:0:
+/home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
 
-Fixes: http://autobuild.buildroot.net/results/655/655f046b3bb5f7a4ea492328b608e409d6769689/
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+The suggested solution by the musl developers is to duplicate the needed
+structures and defines inline instead of including the kernel headers, which
+is unlikely to be acceptable upstream - So instead mark python-psutil (and
+its reverse dependencies) as unavailable on musl.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/supertuxkart/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/circus/Config.in          | 5 +++--
+ package/python-crossbar/Config.in | 5 +++--
+ package/python-psutil/Config.in   | 5 +++++
+ 3 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
-index a1f7074..4919b50 100644
---- a/package/supertuxkart/Config.in
-+++ b/package/supertuxkart/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_SUPERTUXKART
- 	bool "supertuxkart"
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP # openal
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
-@@ -25,6 +27,8 @@ config BR2_PACKAGE_SUPERTUXKART
- 	  http://supertuxkart.sourceforge.net/Main_Page
+diff --git a/package/circus/Config.in b/package/circus/Config.in
+index e696f25..3df41f5 100644
+--- a/package/circus/Config.in
++++ b/package/circus/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_CIRCUS
+ 	depends on BR2_USE_WCHAR # pyzmq -> zeromq
+ 	depends on BR2_INSTALL_LIBSTDCPP # pyzmq -> zeromq
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # pyzmq -> zeromq
++	depends on !BR2_TOOLCHAIN_USES_MUSL # python-psutil
+ 	select BR2_PACKAGE_PYTHON_IOWAIT # runtime
+ 	select BR2_PACKAGE_PYTHON_PSUTIL # runtime
+ 	select BR2_PACKAGE_PYTHON_PYZMQ # runtime
+@@ -15,7 +16,7 @@ config BR2_PACKAGE_CIRCUS
  
- comment "supertuxkart needs an OpenGL backend, a uClibc or glibc toolchain w/ NPTL, C++"
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_XORG7
+ 	  https://circus.readthedocs.org/en/latest/
+ 
+-comment "circus needs Python and a toolchain w/ C++, wchar, threads"
++comment "circus needs Python and a uClibc or glibc toolchain w/ C++, wchar, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL \
+ 		!(BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
+diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+index be83325..7ef1aad 100644
+--- a/package/python-crossbar/Config.in
++++ b/package/python-crossbar/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	bool "python-crossbar"
++	depends on !BR2_TOOLCHAIN_USES_MUSL # python-psutil
+ 	# All the following dependencies are runtime dependencies
+ 	select BR2_PACKAGE_PYTHON_AUTOBAHN
+ 	select BR2_PACKAGE_PYTHON_CBOR
+@@ -39,5 +40,5 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 
+ 	  https://pypi.python.org/pypi/crossbar
+ 
+-comment "python-crossbar needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "python-crossbar needs a uClibc or glibc toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_TOOLCHAIN_USES_MUSL
+diff --git a/package/python-psutil/Config.in b/package/python-psutil/Config.in
+index c64eeee..0b1333c 100644
+--- a/package/python-psutil/Config.in
++++ b/package/python-psutil/Config.in
+@@ -1,8 +1,13 @@
+ config BR2_PACKAGE_PYTHON_PSUTIL
+ 	bool "python-psutil"
++	# sys/sysinfo.h conflict with kernel headers
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  psutil is a cross-platform library for retrieving
+ 	  information on running processes and system utilization
+ 	  (CPU, memory, disks, network) in Python.
+ 
+ 	  https://pypi.python.org/pypi/psutil
++
++comment "python-psutil needs a uClibc or glibc toolchain"
++	depends BR2_TOOLCHAIN_USES_MUSL
+-- 
+2.9.3
