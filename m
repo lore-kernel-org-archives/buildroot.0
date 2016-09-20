@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Sep 2016 19:18:53 +0200
-Subject: [Buildroot] [PATCH 2/3 v3] linux: add an option to install
- runtime headers
-In-Reply-To: <1de54574a4445ff63b1db831f2ca904b731d93e2.1468759218.git.yann.morin.1998@free.fr>
+Date: Tue, 20 Sep 2016 19:19:31 +0200
+Subject: [Buildroot] [PATCH 3/3 v3] aufs-util: new package
+In-Reply-To: <e5d42509736f56a587767b61bf0f9ceb8efd41e4.1468759218.git.yann.morin.1998@free.fr>
 References: <cover.1468759218.git.yann.morin.1998@free.fr>
- <1de54574a4445ff63b1db831f2ca904b731d93e2.1468759218.git.yann.morin.1998@free.fr>
-Message-ID: <20160920191853.1f7e0f6b@free-electrons.com>
+ <e5d42509736f56a587767b61bf0f9ceb8efd41e4.1468759218.git.yann.morin.1998@free.fr>
+Message-ID: <20160920191931.50c54f93@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,34 +13,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 17 Jul 2016 14:50:38 +0200, Yann E. MORIN wrote:
-> When the Linux kernel is patched with new externsions (e.g. aufs), it
-> exposes new userland headers that were not necessarily available in the
-> headers used to build the toolchain. Those headers will expose new
-> features, like new filesystems internals.
+On Sun, 17 Jul 2016 14:50:39 +0200, Yann E. MORIN wrote:
+> From: Christian Stewart <christian@paral.in>
 > 
-> Add an option for such packages to request the kernel installs its
-> headers.
-> 
-> We do install those headers in a non-standard location, so that:
-> 
->   - they do not override those provided by the toolchain;
-> 
->   - they do not get inadvertently used.
-> 
-> Packages that really need those headers will have to add the correct -I
-> path to their CPPFLAGS.
-> 
-> Note: this is not documented on-purpose, as we expect the set of
-> packages that need that to be very limited. In which case, we'll
-> notice they need those headers, and we can instruct the submitter
-> to use these option and variable.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> [Atul:
+>  - Updated the default to empty.
+>  - Updated the license to GPLv2.
+>  - Used patches instead of SED commands.
+>  - CC and LD are replaced by TARGET_CC and TARGET_LD.
+> ]
+> Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
+> [yann.morin.1998 at free.fr:
+>   - drop the headers_install command
+>   - instead, instruct the kernel to install them
+>   - add patches 0002..0004
+>   - properly build the host tools
+>   - don't depend on the aufs extension, for kernel already patched
+>   - fix comment
+> ]
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-I have not applied this patch. Instead, I've tuned a bit the aufs-util
-package so that we can directly use the headers from
-$(LINUX_DIR)/include/uapi.
+Applied with those changes:
+
+    [Thomas:
+     - Remove the patch 0004-no-override-readdir64.patch, since it no longer
+       applies to the latest version of aufs-util. Instead, add a post-patch
+       hook that tweaks the Makefile to remove the problematic rdu64.o from
+       the build process.
+     - Use directly the kernel headers from the kernel source tree, rather
+       than having to install them. This only requires a minor trick to
+       define "__user" to empty.]
 
 Thanks,
 
