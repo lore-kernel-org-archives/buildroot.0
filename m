@@ -1,41 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 20 Sep 2016 17:27:44 -0300
-Subject: [Buildroot] [PATCH 2/2] libglib2: add host-util-linux for host
-	variant
-In-Reply-To: <1474403264-16066-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1474403264-16066-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1474403264-16066-2-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 20 Sep 2016 20:47:44 +0000
+Subject: [Buildroot] [Bug 9196] raspberry pi 3 default build seem broken
+In-Reply-To: <bug-9196-163@https.bugs.busybox.net/>
+References: <bug-9196-163@https.bugs.busybox.net/>
+Message-ID: <bug-9196-163-pXLXgVb1sw@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's required now, fixes:
-http://autobuild.buildroot.net/results/e81/e81f98561867d370115a019284682c0611796978/
+https://bugs.busybox.net/show_bug.cgi?id=9196
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libglib2/libglib2.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+--- Comment #6 from Peter Seiderer <ps.report@gmx.net> ---
+Tested with buildroot git d4db4277ffbd1fae478ba748c626eddc7c220e67 (including
+[1]).
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 5bc6ed5..f199a4a 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -105,7 +105,12 @@ LIBGLIB2_DEPENDENCIES = \
- 	libffi pcre util-linux zlib $(if $(BR2_NEEDS_GETTEXT),gettext)
- 
- HOST_LIBGLIB2_DEPENDENCIES = \
--	host-gettext host-libffi host-pcre host-pkgconf host-zlib
-+	host-gettext \
-+	host-libffi \
-+	host-pcre \
-+	host-pkgconf \
-+	host-util-linux \
-+	host-zlib
- 
- LIBGLIB2_CONF_OPTS = \
- 	--with-pcre=system
+With bare raspberrypi3_defconfig login via serial and login via
+hdmi/usb-keyboard
+is possible.
+
+With raspberrypi3_defconfig with change to glibc/systemd serial login works out
+of the box.
+
+For hdmi/usb-keyboard (tty1) login the following link was necessary (as advised
+in [2]):
+
+ln -sf /usr/lib/systemd/system/getty at .service
+/etc/systemd/system/getty.target.wants/getty at tty1.service
+
+Additional he file /etc/systemd/system/getty at .service.d/nodisallocate.conf to
+avoid clearing the console.
+
+[1]
+https://git.buildroot.net/buildroot/commit/?id=1e03cc2290f98fc7434254d2abd9afd504de8360
+
+[2] https://wiki.archlinux.org/index.php/Systemd_FAQ
+
 -- 
-2.7.3
+You are receiving this mail because:
+You are on the CC list for the bug.
