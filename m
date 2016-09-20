@@ -1,105 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Sep 2016 15:01:13 +0200
-Subject: [Buildroot] [PATCH] python-psutil: not available on musl
-Message-ID: <20160920130113.21450-1-peter@korsgaard.com>
+Date: Tue, 20 Sep 2016 15:04:12 +0200
+Subject: [Buildroot] [PATCH 2/2] python-psutil: fix build against musl C
+	library
+In-Reply-To: <20160920143837.5bed86bd@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 20 Sep 2016 14:38:37 +0200")
+References: <20160920074127.22328-1-peter@korsgaard.com>
+ <20160920074127.22328-2-peter@korsgaard.com>
+ <20160920121433.3912ca4a@free-electrons.com>
+ <8760pq50es.fsf@dell.be.48ers.dk>
+ <20160920133053.3cb8e9bc@free-electrons.com>
+ <87shsu3i2z.fsf@dell.be.48ers.dk>
+ <20160920143837.5bed86bd@free-electrons.com>
+Message-ID: <8737ku3epf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/365/365c2f0b32ae3cb1d6d4d8f0145500dfadd05c59/
-http://autobuild.buildroot.org/results/140/140d0ec9d94f75453c4c82e18803c8d7bffcf6be/
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-And many more.
+Hi,
 
-The sysinfo structure definition in linux/sysinfo.h (which gets indirectly
-included from linux/kernel.h) conflicts with the definition in sys/sysinfo.h
-when building against the musl C library, leading to build failures:
+ >> I don't see the point of that reasoning - The whole idea of the Linux
+ >> uapi headers is to provide headers for the kernel API.
 
-arm-linux-gcc -Wno-unused-result -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes \
- -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -DPSUTIL_VERSION=430 \
-  -c psutil/_psutil_linux.c -o build/temp.linux-x86_64-3.5/psutil/_psutil_linux.o
-In file included from /home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/kernel.h:4:0,
-                 from /home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/ethtool.h:16,
-                 from psutil/_psutil_linux.c:35:
-/home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/sysinfo.h:7:8: error: redefinition of 'struct sysinfo'
- struct sysinfo {
-        ^
-In file included from psutil/_psutil_linux.c:21:0:
-/home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
+ > Correct. I've already discussed this with the musl developers, and they
+ > say that the "kernel headers are not clean to be used in userspace".
 
-The suggested solution by the musl developers is to duplicate the needed
-structures and defines inline instead of including the kernel headers, which
-is unlikely to be acceptable upstream - So instead mark python-psutil (and
-its reverse dependencies) as unavailable on musl.
+ > Of course, everyone else but the musl people are using the uapi headers
+ > in userspace, but apparently, there are some things in there that do
+ > not please the musl people.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/circus/Config.in          | 5 +++--
- package/python-crossbar/Config.in | 5 +++--
- package/python-psutil/Config.in   | 5 +++++
- 3 files changed, 11 insertions(+), 4 deletions(-)
+ > Maybe Rich can explain more precisely the issue. So far I've only been
+ > able to get "kernel headers are not clean enough", but not concrete
+ > example of the problem.
 
-diff --git a/package/circus/Config.in b/package/circus/Config.in
-index e696f25..3df41f5 100644
---- a/package/circus/Config.in
-+++ b/package/circus/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_CIRCUS
- 	depends on BR2_USE_WCHAR # pyzmq -> zeromq
- 	depends on BR2_INSTALL_LIBSTDCPP # pyzmq -> zeromq
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pyzmq -> zeromq
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # python-psutil
- 	select BR2_PACKAGE_PYTHON_IOWAIT # runtime
- 	select BR2_PACKAGE_PYTHON_PSUTIL # runtime
- 	select BR2_PACKAGE_PYTHON_PYZMQ # runtime
-@@ -15,7 +16,7 @@ config BR2_PACKAGE_CIRCUS
- 
- 	  https://circus.readthedocs.org/en/latest/
- 
--comment "circus needs Python and a toolchain w/ C++, wchar, threads"
-+comment "circus needs Python and a uClibc or glibc toolchain w/ C++, wchar, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL \
- 		!(BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
-diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
-index be83325..7ef1aad 100644
---- a/package/python-crossbar/Config.in
-+++ b/package/python-crossbar/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_CROSSBAR
- 	bool "python-crossbar"
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # python-psutil
- 	# All the following dependencies are runtime dependencies
- 	select BR2_PACKAGE_PYTHON_AUTOBAHN
- 	select BR2_PACKAGE_PYTHON_CBOR
-@@ -39,5 +40,5 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
- 
- 	  https://pypi.python.org/pypi/crossbar
- 
--comment "python-crossbar needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "python-crossbar needs a uClibc or glibc toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/python-psutil/Config.in b/package/python-psutil/Config.in
-index c64eeee..0b1333c 100644
---- a/package/python-psutil/Config.in
-+++ b/package/python-psutil/Config.in
-@@ -1,8 +1,13 @@
- config BR2_PACKAGE_PYTHON_PSUTIL
- 	bool "python-psutil"
-+	# sys/sysinfo.h conflict with kernel headers
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	help
- 	  psutil is a cross-platform library for retrieving
- 	  information on running processes and system utilization
- 	  (CPU, memory, disks, network) in Python.
- 
- 	  https://pypi.python.org/pypi/psutil
-+
-+comment "python-psutil needs a uClibc or glibc toolchain"
-+	depends BR2_TOOLCHAIN_USES_MUSL
+Rich, can you explain please?
+
+ >> I'm not particulary interested in musl support for
+ >> python-psutil. Alternatively we can just mark it as
+ >> !BR2_TOOLCHAIN_USES_MUSL.
+ >> 
+ >> What do you suggest?
+
+ > I don't care about python-psutil to be available with musl, so your
+ > proposal is fine to me. Overall, I find the policy of musl developers
+ > to be very annoying as:
+
+ >  1/ It breaks many many many packages.
+
+ >  2/ The only proposed solution is to duplicate code, which is not nice
+ >     at all, and is difficult to get accepted by upstream project,
+ >     living us with zillions of musl-related patches that we cannot
+ >     upstream.
+
+Agreed. I've send a patch to mark it (and its reverse dependencies) as
+unavailable on musl.
+
 -- 
-2.9.3
+Venlig hilsen,
+Peter Korsgaard 
