@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 20 Sep 2016 11:43:51 +0200
-Subject: [Buildroot] [PATCH 1/3] python-lxml: bump to version 3.6.4
-Message-ID: <1474364633-8917-1-git-send-email-yegorslists@googlemail.com>
+Date: Tue, 20 Sep 2016 11:43:52 +0200
+Subject: [Buildroot] [PATCH 2/3] python-netifaces: bump to version 0.10.5
+In-Reply-To: <1474364633-8917-1-git-send-email-yegorslists@googlemail.com>
+References: <1474364633-8917-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1474364633-8917-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +14,36 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-lxml/python-lxml.hash | 2 +-
- package/python-lxml/python-lxml.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-netifaces/python-netifaces.hash | 6 +++---
+ package/python-netifaces/python-netifaces.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index 4cace8e..656c01f 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  9c74ca28a7f0c30dca8872281b3c47705e21217c8bc63912d95c9e2a7cac6bdf  lxml-3.6.0.tgz
-+sha256  61d5d3e00b5821e6cda099b3b4ccfea4527bf7c595e0fb3a7a760490cedd6172  lxml-3.6.4.tgz
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index 039fadd..b117ec8 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-netifaces/python-netifaces.hash b/package/python-netifaces/python-netifaces.hash
+index aebfdf6..6f3e358 100644
+--- a/package/python-netifaces/python-netifaces.hash
++++ b/package/python-netifaces/python-netifaces.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=36da76e2cfadd24cc7510c2c0012eb1e, sha256 locally computed
+-md5     36da76e2cfadd24cc7510c2c0012eb1e                                  netifaces-0.10.4.tar.gz
+-sha256  9656a169cb83da34d732b0eb72b39373d48774aee009a3d1272b7ea2ce109cde  netifaces-0.10.4.tar.gz
++# md5 from https://pypi.python.org/pypi/netifaces/json, sha256 locally computed
++md5     5b4d1f1310ed279e6df27ef3a9b71519                                  netifaces-0.10.5.tar.gz
++sha256  59d8ad52dd3116fcb6635e175751b250dc783fb011adba539558bd764e5d628b  netifaces-0.10.5.tar.gz
+diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
+index 2c51ce0..3e01c24 100644
+--- a/package/python-netifaces/python-netifaces.mk
++++ b/package/python-netifaces/python-netifaces.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LXML_VERSION = 3.6.0
-+PYTHON_LXML_VERSION = 3.6.4
- PYTHON_LXML_SITE = http://lxml.de/files
- PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
- 
+-PYTHON_NETIFACES_VERSION = 0.10.4
++PYTHON_NETIFACES_VERSION = 0.10.5
+ PYTHON_NETIFACES_SOURCE = netifaces-$(PYTHON_NETIFACES_VERSION).tar.gz
+-PYTHON_NETIFACES_SITE = https://pypi.python.org/packages/source/n/netifaces
++PYTHON_NETIFACES_SITE = https://pypi.python.org/packages/a7/4c/8e0771a59fd6e55aac993a7cc1b6a0db993f299514c464ae6a1ecf83b31d
+ PYTHON_NETIFACES_LICENSE = MIT
+ PYTHON_NETIFACES_LICENSE_FILES = README.rst
+ PYTHON_NETIFACES_SETUP_TYPE = setuptools
 -- 
 2.1.4
