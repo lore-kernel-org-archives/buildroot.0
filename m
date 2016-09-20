@@ -1,35 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Sep 2016 14:11:30 +0200
-Subject: [Buildroot] Improved patches for Arietta G25 and Aria G25 boards
-In-Reply-To: <CA+TH9VkNNZKq--XNUO6u9Yh2=L9J+E7jZjrS7x8GY=nu+=UHKA@mail.gmail.com>
-References: <1474356875-27902-1-git-send-email-biagio.hkr@gmail.com>
- <CA+TH9VnFhhz5mG9POQ4JdamrqEkFia1e=SU=vr1b5_QDD7r8Wg@mail.gmail.com>
- <20160920120911.695c6a20@free-electrons.com>
- <CA+TH9VkNNZKq--XNUO6u9Yh2=L9J+E7jZjrS7x8GY=nu+=UHKA@mail.gmail.com>
-Message-ID: <20160920141130.4d56279b@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Sep 2016 14:31:09 +0200
+Subject: [Buildroot] [PATCH v2] supertuxkart: Constrain to x86
+	architecture
+In-Reply-To: <20160902142103.1661-1-ezequiel@vanguardiasur.com.ar> (Ezequiel
+ Garcia's message of "Fri, 2 Sep 2016 11:21:03 -0300")
+References: <20160902142103.1661-1-ezequiel@vanguardiasur.com.ar>
+Message-ID: <87fuou3g8i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
 
-On Tue, 20 Sep 2016 12:15:15 +0200, Angelo Compagnucci wrote:
+ > Our build system has detected that angelscript can't be
+ > cross-compiled properly. This has been also reported to
+ > supertuxkart [1], and although the developers were open
+ > to take patches fixing STK embedded angelscript, it was
+ > pointed out that non-x86 architectures were not officially
+ > supported and of little interest [2].
 
-> Biagio changed the repository for at91bootstrap to his own fork. I would
-> really prefer to have all related Acmesystems patches into the Tanzilli's
-> repo cause he is the maintainer for his own products patches.
+ > Hence, let's constrain the package selection and the host
+ > architecture to x86.
 
-Ah, yes, indeed. Please use the "reference" Github repository.
+ > [1] https://github.com/supertuxkart/stk-code/issues/2569
+ > [2] https://github.com/supertuxkart/stk-code/pull/2195
 
-Biagio, why did you change to your own Github repository for
-at91bootstrap ?
+ > Fixes: http://autobuild.buildroot.net/results/655/655f046b3bb5f7a4ea492328b608e409d6769689/
+ > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+ > ---
+ > Changes from v1:
 
-Thanks,
+ >   * As pointed out by Thomas, we also need to limit
+ >     the host architecture, as angelscript doesn't seem
+ >     to build elsewhere.
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
