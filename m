@@ -1,11 +1,10 @@
 From: Frederik Peter Aalund <fpa@sbtaqua.com>
-Date: Tue, 20 Sep 2016 13:36:32 +0000
-Subject: [Buildroot] [PATCH 1/1] libfastjson: Was referencing
-	non-existing files
-In-Reply-To: <20160916185559.23a41621@free-electrons.com>
-References: <1474018609-2610-1-git-send-email-fpa@sbtaqua.com>
- <20160916185559.23a41621@free-electrons.com>
-Message-ID: <CAA=pTTRC8oK_GkwHYca3+ky2nRvyvGKS=RyOK1qogYmYGjptPA@mail.gmail.com>
+Date: Tue, 20 Sep 2016 13:57:18 +0000
+Subject: [Buildroot] [PATCH 3/3] python3: Compile host-python3 statically
+In-Reply-To: <20160916190833.7c776697@free-electrons.com>
+References: <1474032631-21311-1-git-send-email-fpa@sbtaqua.com>
+ <20160916190833.7c776697@free-electrons.com>
+Message-ID: <CAA=pTTSgNWY-orBD0ff1Y6U-p+ujXRyg+mtNvyb_UOivSqMqww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,64 +13,24 @@ To: buildroot@busybox.net
 
 Hi Thomas
 
-Thanks for reviewing! Strange that it builds without problems at your end.
-Here is what I see from the build log (without the patch):
+Thanks again for reviewing. It appears that the host-python3 executable
+doesn't have an rpath entry. This would indeed explain the weird behaviour.
 
---2016-09-20 15:22:21--
-https://github.com/rsyslog/libfastjson/archive/v0.99.2.tar.gz
-Resolving github.com (github.com)... 192.30.253.113
-Connecting to github.com (github.com)|192.30.253.113|:443... connected.
-HTTP request sent, awaiting response... 302 Found
-Location: https://codeload.github.com/rsyslog/libfastjson/tar.gz/v0.99.2
-[following]
---2016-09-20 15:22:22--
-https://codeload.github.com/rsyslog/libfastjson/tar.gz/v0.99.2
-Resolving codeload.github.com (codeload.github.com)... 192.30.253.121
-Connecting to codeload.github.com (codeload.github.com)|192.30.253.121|:443...
-connected.
-HTTP request sent, awaiting response... 200 OK
-Length: unspecified [application/x-gzip]
-Saving to:
-?/projects/RedPitaya/OS/buildroot/buildroot/output/build/.v0.99.2.tar.gz.eTu6lt/output?
+I looked at the build log and found that "-Wl,-rpath" is indeed correctly
+passed on:
+-Wl,-rpath,/projects/RedPitaya/OS/buildroot/buildroot/output/host/usr/lib
 
-/projects/RedPitaya/OS/bui     [  <=>                                   ]
- 85.47K   424KB/s   in 0.2s
+This is reflected in the resulting Makefile:
+CONFIGURE_LDFLAGS=
+ -L/projects/RedPitaya/OS/buildroot/buildroot/output/host/lib
+-L/projects/RedPitaya/OS/buildroot/buildroot/output/host/usr/lib
+-Wl,-rpath,/projects/RedPitaya/OS/buildroot/buildroot/output/host/usr/lib
+-Wl,--enable-new-dtags
 
-2016-09-20 15:22:23 (424 KB/s) -
-?/projects/RedPitaya/OS/buildroot/buildroot/output/build/.v0.99.2.tar.gz.eTu6lt/output?
-saved [87526]
+So I don't know how it can be that the rpath is not set in the final
+binary. Do you also see this problem?
 
-ERROR: No hash found for v0.99.2.tar.gz
---2016-09-20 15:22:23--  http://sources.buildroot.net/v0.99.2.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
-Connecting to sources.buildroot.net (sources.buildroot.net)|176.9.16.109|:80...
-connected.
-HTTP request sent, awaiting response... 404 Not Found
-2016-09-20 15:22:23 ERROR 404: Not Found.
-
-package/pkg-generic.mk:113: recipe for target
-'/projects/RedPitaya/OS/buildroot/buildroot/output/build/libfastjson-v0.99.2/.stamp_downloaded'
-failed
-make[1]: ***
-[/projects/RedPitaya/OS/buildroot/buildroot/output/build/libfastjson-v0.99.2/.stamp_downloaded]
-Error 1
-Makefile:41: recipe for target '_all' failed
-make: *** [_all] Error 2
-
-
-
-I see that your package URL:
---2016-09-16 18:53:29--
-https://github.com/rsyslog/libfastjson/archive/v0.99.2/libfastjson-v0.99.2.tar.gz
-
-is different from mine:
- --2016-09-20 15:22:21--
-https://github.com/rsyslog/libfastjson/archive/v0.99.2.tar.gz
-
-I don't know how that can be. At some point, I had an external package for
-libfastjson (before it was integrated into buildroot). However, I have
-deleted said external package and purged both buildroot/dl and
-buildroot/output/build.
+Thanks again.
 
 *Frederik Aalund*
 Chief Information Officer, Co-owner
@@ -82,58 +41,30 @@ Mobile: +45 30340086
 fpa at sbtaqua.com
 sbtaqua.com
 
-On Fri, 16 Sep 2016 at 18:56 Thomas Petazzoni <
+On Fri, 16 Sep 2016 at 19:08 Thomas Petazzoni <
 thomas.petazzoni@free-electrons.com> wrote:
 
 > Hello,
 >
-> On Fri, 16 Sep 2016 11:36:49 +0200, Frederik Aalund wrote:
+> Please wrap the text in your commit messages to a reasonable line width
+> (72 characters).
 >
-> > -LIBFASTJSON_VERSION = v0.99.2
-> > +LIBFASTJSON_VERSION = 0.99.2
-> >  LIBFASTJSON_SITE = $(call
-> github,rsyslog,libfastjson,$(LIBFASTJSON_VERSION))
-> > +LIBFASTJSON_SOURCE = v$(LIBFASTJSON_VERSION).tar.gz
+> On Fri, 16 Sep 2016 15:30:31 +0200, Frederik Aalund wrote:
+> > The previous behaviour was to compile host-python3 with
+> `--enable-shared` as is done for the target python installation. The
+> problem is that if the host *already* has a python installation, then
+> host-python3 will be called with the system `libpython3.5.so`. So even
+> though the $(HOST_DIR) python executable is called, the system .so is used.
 >
-> This is not correct: the version is really v0.99.2, as this is the name
-> of the Git tag.
+> This should not be the case. All host binaries we build are built with
+> -Wl,-rpath,$(HOST_DIR)/usr/lib, which means that they should look up
+> libraries in $(HOST_DIR)/usr/lib *before* looking at /usr/lib.
 >
-> Moreover, I'm not sure what you're fixing here. It downloads perfectly
-> fine here without your patch:
+> Can you double check what "readelf -a output/host/usr/bin/python" says
+> about this? readelf should show you this rpath encoded into the Python
+> binary. If that's not the case, then this is the problem.
 >
-> >>> libfastjson v0.99.2 Downloading
-> --2016-09-16 18:53:29--
-> https://github.com/rsyslog/libfastjson/archive/v0.99.2/libfastjson-v0.99.2.tar.gz
-> Resolving github.com (github.com)... 192.30.253.113
-> Connecting to github.com (github.com)|192.30.253.113|:443... connected.
-> HTTP request sent, awaiting response... 302 Found
-> Location: https://codeload.github.com/rsyslog/libfastjson/tar.gz/v0.99.2
-> [following]
-> --2016-09-16 18:53:36--
-> https://codeload.github.com/rsyslog/libfastjson/tar.gz/v0.99.2
-> Resolving codeload.github.com (codeload.github.com)... 192.30.253.121
-> Connecting to codeload.github.com (codeload.github.com)|192.30.253.121|:443...
-> connected.
-> HTTP request sent, awaiting response... 200 OK
-> Length: unspecified [application/x-gzip]
-> Saving to:
-> ?/home/thomas/projets/buildroot/output/build/.libfastjson-v0.99.2.tar.gz.PKe11m/output?
->
->      0K .......... .......... .......... .......... .......... 80,8K
->     50K .......... .......... .......... .....                  118K=0,9s
->
-> 2016-09-16 18:53:38 (92,9 KB/s) -
-> ?/home/thomas/projets/buildroot/output/build/.libfastjson-v0.99.2.tar.gz.PKe11m/output?
-> saved [87526]
->
-> libfastjson-v0.99.2.tar.gz: OK (sha256:
-> fcdca0c4702362de3db3f02c8da05f985b54a9eccd618af41730409b75d10a8f)
->
-> Could you be more specific in the issue you were facing, such as
-> posting a build log of what happens during the download without your
-> patch applied?
->
-> Thanks!
+> Best regards,
 >
 > Thomas
 > --
@@ -143,4 +74,4 @@ thomas.petazzoni@free-electrons.com> wrote:
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160920/bd17982c/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160920/9859dd75/attachment.html>
