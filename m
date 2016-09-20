@@ -1,63 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Sep 2016 14:38:37 +0200
-Subject: [Buildroot] [PATCH 2/2] python-psutil: fix build against musl C
-	library
-In-Reply-To: <87shsu3i2z.fsf@dell.be.48ers.dk>
-References: <20160920074127.22328-1-peter@korsgaard.com>
- <20160920074127.22328-2-peter@korsgaard.com>
- <20160920121433.3912ca4a@free-electrons.com>
- <8760pq50es.fsf@dell.be.48ers.dk>
- <20160920133053.3cb8e9bc@free-electrons.com>
- <87shsu3i2z.fsf@dell.be.48ers.dk>
-Message-ID: <20160920143837.5bed86bd@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Sep 2016 14:31:23 +0200
+Subject: [Buildroot] [git commit] python-psutil: bump to version 4.3.1
+Message-ID: <20160920123859.9B0A4820FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d8a19c5e4969a5d6485d3704cc72310989109150
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adding Rich from musl in Cc.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Tue, 20 Sep 2016 13:51:16 +0200, Peter Korsgaard wrote:
-
->  > The answer of the musl developers would be: don't include
->  > <linux/ethtool.h> in the first place.  
-> 
-> I don't see the point of that reasoning - The whole idea of the Linux
-> uapi headers is to provide headers for the kernel API.
-
-Correct. I've already discussed this with the musl developers, and they
-say that the "kernel headers are not clean to be used in userspace".
-
-Of course, everyone else but the musl people are using the uapi headers
-in userspace, but apparently, there are some things in there that do
-not please the musl people.
-
-Maybe Rich can explain more precisely the issue. So far I've only been
-able to get "kernel headers are not clean enough", but not concrete
-example of the problem.
-
-> I'm not particulary interested in musl support for
-> python-psutil. Alternatively we can just mark it as
-> !BR2_TOOLCHAIN_USES_MUSL.
-> 
-> What do you suggest?
-
-I don't care about python-psutil to be available with musl, so your
-proposal is fine to me. Overall, I find the policy of musl developers
-to be very annoying as:
-
- 1/ It breaks many many many packages.
-
- 2/ The only proposed solution is to duplicate code, which is not nice
-    at all, and is difficult to get accepted by upstream project,
-    living us with zillions of musl-related patches that we cannot
-    upstream.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index 007b7c5..ead2d9c 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/psutil/json, sha256 locally computed
+-md5	ca97cf5f09c07b075a12a68b9d44a67d  psutil-4.3.0.tar.gz
+-sha256  86197ae5978f216d33bfff4383d5cc0b80f079d09cf45a2a406d1abb5d0299f0  psutil-4.3.0.tar.gz
++md5	199a366dba829c88bddaf5b41d19ddc0  psutil-4.3.1.tar.gz
++sha256  38f74182fb9e15cafd0cdf0821098a95cc17301807aed25634a18b66537ba51b  psutil-4.3.1.tar.gz
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 85882ad..1032318 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PSUTIL_VERSION = 4.3.0
++PYTHON_PSUTIL_VERSION = 4.3.1
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/22/a8/6ab3f0b3b74a36104785808ec874d24203c6a511ffd2732dd215cf32d689
++PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/78/cc/f267a1371f229bf16db6a4e604428c3b032b823b83155bd33cef45e49a53
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3c
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
