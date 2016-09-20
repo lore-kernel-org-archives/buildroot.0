@@ -1,73 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Sep 2016 20:07:49 +0200
-Subject: [Buildroot] [git commit] ushare: fix build with NLS support
-Message-ID: <20160920181525.54DFF8183B@busybox.osuosl.org>
+Date: Tue, 20 Sep 2016 20:07:57 +0200
+Subject: [Buildroot] [git commit] gdk-pixbuf: bump to version 2.36.0
+Message-ID: <20160920181525.982BC8183B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32ff9de23e9c6deabee572eee845642671e53a65
+commit: https://git.buildroot.net/buildroot/commit/?id=05a155972d82568381346989b17b71de1de0aafc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add patch to fix build errors when NLS support is enabled.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/19d/19d67dd43e5a313c77e4be97ecb9811ffa52f797/
-
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...e-config-h-before-checking-for-CONFIG-NLS.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ package/gdk-pixbuf/gdk-pixbuf.hash | 4 ++--
+ package/gdk-pixbuf/gdk-pixbuf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ushare/0003-ushare-c-include-config-h-before-checking-for-CONFIG-NLS.patch b/package/ushare/0003-ushare-c-include-config-h-before-checking-for-CONFIG-NLS.patch
-new file mode 100644
-index 0000000..e97c3de
---- /dev/null
-+++ b/package/ushare/0003-ushare-c-include-config-h-before-checking-for-CONFIG-NLS.patch
-@@ -0,0 +1,42 @@
-+ushare.c: include config.h before checking for CONFIG_NLS
-+
-+When NLS support is enabled, we get following build errors:
-+
-+  ushare.c: In function 'setup_i18n':
-+  ushare.c:745:3: warning: implicit declaration of function 'setlocale' [-Wimplicit-function-declaration]
-+     setlocale (LC_ALL, "");
-+     ^
-+  ushare.c:745:14: error: 'LC_ALL' undeclared (first use in this function)
-+     setlocale (LC_ALL, "");
-+                ^
-+  ushare.c:745:14: note: each undeclared identifier is reported only once for each function it appears in
-+  make[2]: *** [ushare.o] Error 1
-+
-+When NLS support is enabled, configure script creates macro in config.h.
-+We check for CONFIG_NLS before including config.h which results in above
-+build errors as locale.h doesn't get included.
-+
-+This patch fixes above build error by including config.h before we check for
-+CONFIG_NLS.
-+
-+This build error is detected by Buildroot autobuilder
-+http://autobuild.buildroot.net/results/19d/19d67dd43e5a313c77e4be97ecb9811ffa52f797/
-+
-+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+
-+--- ushare-1.1a/src/ushare.c.old	2016-09-20 19:04:00.915239326 +0530
-++++ ushare-1.1a/src/ushare.c	2016-09-20 19:04:24.707239276 +0530
-+@@ -56,11 +56,12 @@
-+ #include <upnp/upnp.h>
-+ #include <upnp/upnptools.h>
-+ 
-++#include "config.h"
-++
-+ #if (defined(HAVE_SETLOCALE) && defined(CONFIG_NLS))
-+ # include <locale.h>
-+ #endif
-+ 
-+-#include "config.h"
-+ #include "ushare.h"
-+ #include "services.h"
-+ #include "http.h"
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
+index e73170c..e5a8958 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.hash
++++ b/package/gdk-pixbuf/gdk-pixbuf.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.34/gdk-pixbuf-2.34.0.sha256sum
+-sha256	d55e5b383ee219bd0e23bf6ed4427d56a7db5379729a6e3e0a0e0eba9a8d8879	gdk-pixbuf-2.34.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.0.sha256sum
++sha256	85ab52ce9f2c26327141b3dcf21cca3da6a3f8de84b95fa1e727d8871a23245c	gdk-pixbuf-2.36.0.tar.xz
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 36eed60..6d1a84d 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GDK_PIXBUF_VERSION_MAJOR = 2.34
++GDK_PIXBUF_VERSION_MAJOR = 2.36
+ GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).0
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
