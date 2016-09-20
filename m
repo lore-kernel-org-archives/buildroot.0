@@ -1,41 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Sep 2016 12:06:13 +0200
-Subject: [Buildroot] [git commit] python-lxml: bump to version 3.6.4
-Message-ID: <20160920102825.3BDC4807B4@busybox.osuosl.org>
+Date: Tue, 20 Sep 2016 12:30:03 +0200
+Subject: [Buildroot] [PATCH 2/2] python-psutil: fix build against musl C
+	library
+In-Reply-To: <20160920121433.3912ca4a@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 20 Sep 2016 12:14:33 +0200")
+References: <20160920074127.22328-1-peter@korsgaard.com>
+ <20160920074127.22328-2-peter@korsgaard.com>
+ <20160920121433.3912ca4a@free-electrons.com>
+Message-ID: <8760pq50es.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e742002d0c3205e4cebb28760f27abda53cf0ad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-lxml/python-lxml.hash | 2 +-
- package/python-lxml/python-lxml.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Hello,
+ > On Tue, 20 Sep 2016 09:41:27 +0200, Peter Korsgaard wrote:
 
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index 4cace8e..656c01f 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  9c74ca28a7f0c30dca8872281b3c47705e21217c8bc63912d95c9e2a7cac6bdf  lxml-3.6.0.tgz
-+sha256  61d5d3e00b5821e6cda099b3b4ccfea4527bf7c595e0fb3a7a760490cedd6172  lxml-3.6.4.tgz
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index 039fadd..b117ec8 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_LXML_VERSION = 3.6.0
-+PYTHON_LXML_VERSION = 3.6.4
- PYTHON_LXML_SITE = http://lxml.de/files
- PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
- 
+ >> We NEED both sys/sysinfo.h and the kernel headers (E.G. for ethtool), so
+ >> hack around it by ensuring the content of linux/sysinfo.h doesn't get
+ >> expanded when building against musl.
+ >> 
+ >> We cannot do it unconditionally as glibc/uClibc rely on the linux/sysinfo.h
+ >> definition. Musl provides no detection define, so instead detect that we
+ >> are NOT on glibc/uClibc.
+
+ > This is not really the solution recommended by the musl developers.
+ > Instead, the musl developers would suggest to *not* include
+ > <linux/sysinfo.h> at all, and instead duplicate the relevant
+ > definitions in the userspace program.
+
+Yes, I know it is a hack (as mentioned in the description). The problem
+is that the code DOESN'T include linux/sysinfo.h, but it gets indirectly
+included from linux/ethtool.h -> linux/kernel.h -> linux/sysinfo.h.
+
+Do you have any suggestion how to fix this in a cleaner way?
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
