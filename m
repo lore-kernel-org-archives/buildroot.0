@@ -1,44 +1,120 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Sep 2016 09:41:26 +0200
-Subject: [Buildroot] [PATCH 1/2] python-psutil: bump to version 4.3.1
-Message-ID: <20160920074127.22328-1-peter@korsgaard.com>
+Date: Tue, 20 Sep 2016 09:41:27 +0200
+Subject: [Buildroot] [PATCH 2/2] python-psutil: fix build against musl C
+	library
+In-Reply-To: <20160920074127.22328-1-peter@korsgaard.com>
+References: <20160920074127.22328-1-peter@korsgaard.com>
+Message-ID: <20160920074127.22328-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+http://autobuild.buildroot.net/results/365/365c2f0b32ae3cb1d6d4d8f0145500dfadd05c59/
+http://autobuild.buildroot.org/results/140/140d0ec9d94f75453c4c82e18803c8d7bffcf6be/
+
+And many more.
+
+The sysinfo structure definition in linux/sysinfo.h (which gets indirectly
+included from linux/kernel.h) conflicts with the definition in sys/sysinfo.h
+when building against the musl C library, leading to build failures:
+
+arm-linux-gcc -Wno-unused-result -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes \
+ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -DPSUTIL_VERSION=430 \
+  -c psutil/_psutil_linux.c -o build/temp.linux-x86_64-3.5/psutil/_psutil_linux.o
+In file included from /home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/kernel.h:4:0,
+                 from /home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/ethtool.h:16,
+                 from psutil/_psutil_linux.c:35:
+/home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/sysinfo.h:7:8: error: redefinition of 'struct sysinfo'
+ struct sysinfo {
+        ^
+In file included from psutil/_psutil_linux.c:21:0:
+/home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
+
+We NEED both sys/sysinfo.h and the kernel headers (E.G. for ethtool), so
+hack around it by ensuring the content of linux/sysinfo.h doesn't get
+expanded when building against musl.
+
+We cannot do it unconditionally as glibc/uClibc rely on the linux/sysinfo.h
+definition. Musl provides no detection define, so instead detect that we
+are NOT on glibc/uClibc.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-psutil/python-psutil.hash | 4 ++--
- package/python-psutil/python-psutil.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-fix-build-against-musl-C-library.patch    | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 package/python-psutil/0001-fix-build-against-musl-C-library.patch
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index 007b7c5..ead2d9c 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/psutil/json, sha256 locally computed
--md5	ca97cf5f09c07b075a12a68b9d44a67d  psutil-4.3.0.tar.gz
--sha256  86197ae5978f216d33bfff4383d5cc0b80f079d09cf45a2a406d1abb5d0299f0  psutil-4.3.0.tar.gz
-+md5	199a366dba829c88bddaf5b41d19ddc0  psutil-4.3.1.tar.gz
-+sha256  38f74182fb9e15cafd0cdf0821098a95cc17301807aed25634a18b66537ba51b  psutil-4.3.1.tar.gz
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index 85882ad..1032318 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PSUTIL_VERSION = 4.3.0
-+PYTHON_PSUTIL_VERSION = 4.3.1
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
--PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/22/a8/6ab3f0b3b74a36104785808ec874d24203c6a511ffd2732dd215cf32d689
-+PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/78/cc/f267a1371f229bf16db6a4e604428c3b032b823b83155bd33cef45e49a53
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_PSUTIL_LICENSE = BSD-3c
- PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+diff --git a/package/python-psutil/0001-fix-build-against-musl-C-library.patch b/package/python-psutil/0001-fix-build-against-musl-C-library.patch
+new file mode 100644
+index 0000000..0ef994d
+--- /dev/null
++++ b/package/python-psutil/0001-fix-build-against-musl-C-library.patch
+@@ -0,0 +1,63 @@
++From d08ba65306c7f9ac9c0590cfe313d3ce0f8873be Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Mon, 19 Sep 2016 23:41:54 +0200
++Subject: [PATCH] fix build against musl C library
++
++The sysinfo structure definition in linux/sysinfo.h (which gets indirectly
++included from linux/kernel.h) conflicts with the definition in sys/sysinfo.h
++when building against the musl C library, leading to build failures:
++
++http://autobuild.buildroot.net/results/365/365c2f0b32ae3cb1d6d4d8f0145500dfadd05c59/build-end.log
++
++arm-linux-gcc -Wno-unused-result -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes \
++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -DPSUTIL_VERSION=430 \
++  -c psutil/_psutil_linux.c -o build/temp.linux-x86_64-3.5/psutil/_psutil_linux.o
++In file included from /home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/kernel.h:4:0,
++                 from /home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/ethtool.h:16,
++                 from psutil/_psutil_linux.c:35:
++/home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/sysinfo.h:7:8: error: redefinition of 'struct sysinfo'
++ struct sysinfo {
++        ^
++In file included from psutil/_psutil_linux.c:21:0:
++/home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
++
++We NEED both sys/sysinfo.h and the kernel headers (E.G. for ethtool), so
++hack around it by ensuring the content of linux/sysinfo.h doesn't get
++expanded when building against musl.
++
++We cannot do it unconditionally as glibc/uClibc rely on the linux/sysinfo.h
++definition. Musl provides no detection define, so instead detect that we
++are NOT on glibc/uClibc.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ psutil/_psutil_linux.c | 13 +++++++++++++
++ 1 file changed, 13 insertions(+)
++
++diff --git a/psutil/_psutil_linux.c b/psutil/_psutil_linux.c
++index 19fd14b..fa7617a 100644
++--- a/psutil/_psutil_linux.c
+++++ b/psutil/_psutil_linux.c
++@@ -16,6 +16,19 @@
++ #include <features.h>
++ #include <utmp.h>
++ #include <sched.h>
+++
+++#ifndef __GLIBC__
+++/*
+++ * linux/sysinfo.h (which gets indirectly included by other kernel headers)
+++ * conflicts with sys/sysinfo.h on musl, so make sure it doesn't get expanded.
+++ * We cannot do this unconditionally as E.G. glibc/uClibc rely on the
+++ * linux/sysinfo.h definition.
+++ * Musl provides no detection define, so instead detect that we are
+++ * NOT on glibc/uClibc.
+++ */
+++#define _LINUX_SYSINFO_H
+++#endif
+++
++ #include <linux/version.h>
++ #include <sys/syscall.h>
++ #include <sys/sysinfo.h>
++-- 
++2.9.3
++
 -- 
 2.9.3
