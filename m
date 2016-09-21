@@ -1,253 +1,89 @@
-From: Biagio Montaruli <biagio.hkr@gmail.com>
-Date: Wed, 21 Sep 2016 10:50:26 +0200
-Subject: [Buildroot] [PATCH 2/2] New Buildroot v2016.08 configuration for
-	Acmesystems Arietta G25
-In-Reply-To: <1474447826-4960-1-git-send-email-biagio.hkr@gmail.com>
-References: <1474447826-4960-1-git-send-email-biagio.hkr@gmail.com>
-Message-ID: <1474447826-4960-2-git-send-email-biagio.hkr@gmail.com>
+From: Frederik Peter Aalund <fpa@sbtaqua.com>
+Date: Wed, 21 Sep 2016 08:44:23 +0000
+Subject: [Buildroot] [PATCH 1/1] libfastjson: Was referencing
+	non-existing files
+In-Reply-To: <87y42m1vzq.fsf@dell.be.48ers.dk>
+References: <1474018609-2610-1-git-send-email-fpa@sbtaqua.com>
+ <20160916185559.23a41621@free-electrons.com>
+ <CAA=pTTRC8oK_GkwHYca3+ky2nRvyvGKS=RyOK1qogYmYGjptPA@mail.gmail.com>
+ <87y42m1vzq.fsf@dell.be.48ers.dk>
+Message-ID: <CAA=pTTRQKB0S0uz7xqHwUz4pw5__+e5Ws-xV_OjnpFL+Gyfy5g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update default configuration files for both 128MB and 256MB version :
-  > Add support for the default kernel version,
-  > Add support for AT91bootstrap v3.8.6
+Hi Peter
 
-- Update 'post-image.sh' script and 'genimage.cfg' in order to build
-  sdcard.img for Arietta G25
+> <pkgname>-<version>.tar.gz is the default name of the tarball, so it
+> sounds like you have a LIBFASTJSON_SOURCE = .. somewhere - Please double
+> check.
 
-- Update documentation and notes about how to build sdcard.img
-  for Arietta G25 in the readme.txt file
+That must have been the culprit. Even though I deleted the external
+libfastjson.mk file,
+the value of LIBFASTJSON_SOURCE must still have been cached somewhere. There
+were no errors after i purged the entire buildroot folder. Thanks for
+investigating.
 
-Signed-off-by: Biagio Montaruli <biagio.hkr@gmail.com>
----
- board/acmesystems/arietta-g25/genimage.cfg      | 12 ++++----
- board/acmesystems/arietta-g25/post-image.sh     |  2 +-
- board/acmesystems/arietta-g25/readme.txt        | 31 +++++++++++++--------
- configs/acmesystems_arietta_g25_128mb_defconfig | 37 ++++++++++++++-----------
- configs/acmesystems_arietta_g25_256mb_defconfig | 37 ++++++++++++++-----------
- 5 files changed, 68 insertions(+), 51 deletions(-)
+> Nice, so you are using Buildroot on the sensors?
 
-diff --git a/board/acmesystems/arietta-g25/genimage.cfg b/board/acmesystems/arietta-g25/genimage.cfg
-index 1080b0e..420f1b6 100644
---- a/board/acmesystems/arietta-g25/genimage.cfg
-+++ b/board/acmesystems/arietta-g25/genimage.cfg
-@@ -1,18 +1,18 @@
- # Minimal SD card image for the Acmesystems Arietta G25
--#
-+
- image boot.vfat {
- 	vfat {
- 		file zImage {
- 			image = "zImage"
- 		}
--
-+		
- 		file acme-arietta.dtb {
--			image = "at91-ariag25.dtb"
-+			image = "at91-ariettag25.dtb"
- 		}
--
-+		
- 		file boot.bin {
--			image = "at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.7.bin"
--		}
-+			image = "at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.8.6.bin"
-+		} 
- 	}
- 	size = 16M
- }
-diff --git a/board/acmesystems/arietta-g25/post-image.sh b/board/acmesystems/arietta-g25/post-image.sh
-index c82b189..4192826 100755
---- a/board/acmesystems/arietta-g25/post-image.sh
-+++ b/board/acmesystems/arietta-g25/post-image.sh
-@@ -6,7 +6,7 @@ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
- 
- rm -rf "${GENIMAGE_TMP}"
- 
--genimage                               \
-+genimage 						   \
- 	--rootpath "${TARGET_DIR}"     \
- 	--tmppath "${GENIMAGE_TMP}"    \
- 	--inputpath "${BINARIES_DIR}"  \
-diff --git a/board/acmesystems/arietta-g25/readme.txt b/board/acmesystems/arietta-g25/readme.txt
-index 485e275..c712c8f 100644
---- a/board/acmesystems/arietta-g25/readme.txt
-+++ b/board/acmesystems/arietta-g25/readme.txt
-@@ -1,11 +1,16 @@
--Acmesystems Arietta G25
-+Acme Systems Arietta G25
- 
- Intro
- =====
- 
--This default configuration will allow you to start experimenting with the
--buildroot environment for the Arietta G25. With the current configuration
--it will bring-up the board, and allow access through the serial console.
-+Buildroot configuration for Arietta G25.
-+This default configuration allows you to build a minimal root filesystem
-+which includes the support for the serial console.
-+The default configuration for Arietta G25 includes the getty program that
-+enables you to log in through the serial console ttyS0.
-+After the boot, to log in at the getty prompt use the following credentials:
-+Username: root
-+Password: acmesystems
- 
- You can find additional informations, tutorials and a very comprehensive
- documentation on http://www.acmesystems.it/arietta.
-@@ -13,8 +18,8 @@ documentation on http://www.acmesystems.it/arietta.
- Build instructions
- ==================
- 
--To build an image for the arietta g25 choose the configuration
--corresponding to the arietta variant.
-+To build an image for the Arietta G25 choose the configuration
-+corresponding to the Arietta variant.
- 
- For 128MB RAM variant type:
- 
-@@ -24,7 +29,11 @@ else for 256MB RAM variant type:
- 
- $ make acmesystems_arietta_g25_256mb_defconfig
- 
--then:
-+To customize the configuration choosed type:
-+
-+$ make menuconfig
-+
-+When you are ready to start building Buildroot type:
- 
- $ make
- 
-@@ -34,12 +43,10 @@ How to write the microSD card
- Once the build process is finished you will have an image called "sdcard.img"
- in the output/images/ directory.
- 
--Copy the bootable "sdcard.img" onto an SD card with "dd":
-+Write the bootable SD card image "sdcard.img" onto an SD card with "dd" command:
- 
-   $ sudo dd if=output/images/sdcard.img of=/dev/sdX
- 
--Insert the microSD card into the arietta slot and power it.
-+Insert the microSD card into the Arietta slot and power it.
- 
--The image just built is fairly basic and the only output
--you will get is on serial console, please consider to use a DPI
--cable (http://www.acmesystems.it/DPI)
-+To get the kernel log messages you can use a DPI cable (http://www.acmesystems.it/DPI)
-diff --git a/configs/acmesystems_arietta_g25_128mb_defconfig b/configs/acmesystems_arietta_g25_128mb_defconfig
-index e5ddf13..0e392bc 100644
---- a/configs/acmesystems_arietta_g25_128mb_defconfig
-+++ b/configs/acmesystems_arietta_g25_128mb_defconfig
-@@ -1,30 +1,35 @@
- # Architecture
- BR2_arm=y
- 
--# Toolchain
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+# Kernel header
-+BR2_KERNEL_HEADERS_4_7=y
- 
--# Kernel
-+# System configuration
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Arietta-G25 Buildroot"
-+BR2_TARGET_GENERIC_ROOT_PASSWD="acmesystems"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/acmesystems/arietta-g25/post-image.sh"
-+
-+# Kernel configuration
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.1"
- BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
--BR2_LINUX_KERNEL_XZ=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariettag25"
-+
-+# Root filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
- 
--# Bootloader
-+# AT91bootstrap bootloader
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/tanzilli/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="cedbde4b36695b715f469f4872f47e5cc8115000"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.6"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="arietta-128m"
- 
--# Image
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/acmesystems/arietta-g25/post-image.sh"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--# BR2_TARGET_ROOTFS_TAR is not set
--BR2_PACKAGE_HOST_GENIMAGE=y
-+# Tools to build sdcard.img
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/acmesystems_arietta_g25_256mb_defconfig b/configs/acmesystems_arietta_g25_256mb_defconfig
-index cf6f67b..0529847 100644
---- a/configs/acmesystems_arietta_g25_256mb_defconfig
-+++ b/configs/acmesystems_arietta_g25_256mb_defconfig
-@@ -1,30 +1,35 @@
- # Architecture
- BR2_arm=y
- 
--# Toolchain
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+# Kernel header
-+BR2_KERNEL_HEADERS_4_7=y
- 
--# Kernel
-+# System configuration
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Arietta-G25 Buildroot"
-+BR2_TARGET_GENERIC_ROOT_PASSWD="acmesystems"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/acmesystems/arietta-g25/post-image.sh"
-+
-+# Kernel configuration
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.1"
- BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
--BR2_LINUX_KERNEL_XZ=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariettag25"
-+
-+# Root filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
- 
--# Bootloader
-+# AT91bootstrap bootloader
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/tanzilli/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="cedbde4b36695b715f469f4872f47e5cc8115000"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.6"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="arietta-256m"
- 
--# Image
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/acmesystems/arietta-g25/post-image.sh"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--# BR2_TARGET_ROOTFS_TAR is not set
--BR2_PACKAGE_HOST_GENIMAGE=y
-+# Tools to build sdcard.img
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
--- 
-2.7.4
+Yes, and I'm really liking it so far. `make legal-info` in particular is
+very handy when aggregating programs in a distribution.
+
+*Frederik Aalund*
+
+Chief Information Officer, Co-owner
+
+SBT Aqua
+Copenhagen, Denmark
+Mobile: +45 30340086
+fpa at sbtaqua.com
+sbtaqua.com
+
+On Tue, 20 Sep 2016 at 16:33 Peter Korsgaard <peter@korsgaard.com> wrote:
+
+> >>>>> "Frederik" == Frederik Peter Aalund <fpa@sbtaqua.com> writes:
+>
+>  > Hi Thomas
+>  > Thanks for reviewing! Strange that it builds without problems at your
+> end.
+>  > Here is what I see from the build log (without the patch):
+>
+>  > I see that your package URL:
+>  > --2016-09-16 18:53:29--
+>  >
+> https://github.com/rsyslog/libfastjson/archive/v0.99.2/libfastjson-v0.99.2.tar.gz
+>
+>  > is different from mine:
+>  >  --2016-09-20 15:22:21--
+>  > https://github.com/rsyslog/libfastjson/archive/v0.99.2.tar.gz
+>
+>  > I don't know how that can be. At some point, I had an external package
+> for
+>  > libfastjson (before it was integrated into buildroot). However, I have
+>  > deleted said external package and purged both buildroot/dl and
+>  > buildroot/output/build.
+>
+> <pkgname>-<version>.tar.gz is the default name of the tarball, so it
+> sounds like you have a LIBFASTJSON_SOURCE = .. somewhere - Please double
+> check. Notice that buildroot automatically includes */*.mk, so it will
+> get read even though you have dropped the Config.in file.
+>
+>  > *Frederik Aalund*
+>  > Chief Information Officer, Co-owner
+>
+>  > SBT Aqua
+>  > Copenhagen, Denmark
+>  > Mobile: +45 30340086
+>  > fpa at sbtaqua.com
+>  > sbtaqua.com
+>
+> Nice, so you are using Buildroot on the sensors?
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160921/206d2221/attachment.html>
