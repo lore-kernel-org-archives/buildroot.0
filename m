@@ -1,38 +1,35 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 21 Sep 2016 22:25:38 +0200
-Subject: [Buildroot] [PATCH 3/3] DEVELOPERS: add entries for recently
- added/modified code
-In-Reply-To: <1474453163-16548-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1474453163-16548-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1474453163-16548-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160921222538.77858431@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 21 Sep 2016 22:32:11 +0200
+Subject: [Buildroot] [PATCH] package/libxslt: fix bfin compile
+In-Reply-To: <20160921202107.32301-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Wed, 21 Sep 2016 22:21:07 +0200")
+References: <20160921202107.32301-1-joerg.krause@embedded.rocks>
+Message-ID: <87intpro38.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-On Wed, 21 Sep 2016 12:19:23 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-[...]
->  
->  N:	Peter Seiderer <ps.report@gmx.net>
-> +F:	board/raspberrypi/
-> +F:	configs/raspberrypi3_defconfig
->  F:	package/assimp/
->  F:	package/bcm2835/
->  F:	package/dejavu/
-> @@ -1105,6 +1132,7 @@ F:	package/dillo/
->  F:	package/edid-decode/
->  F:	package/ghostscript-fonts/
->  F:	package/gstreamer1/gst1-validate/
-> +F:	package/libevdev/
->  F:	package/log4cplus/
->  F:	package/postgresql/
->  F:	package/qt5/qt53d/
+ > A GCC bug is triggered when the compiler is run with an optimization level
+ > '-Os/-O2/-O3' for the Blackfin architecture:
 
-Acked-by: Peter Seiderer <ps.report@gmx.net>
+ > ```
+ > error: unable to find a register to spill in class 'CCREGS'
+ > ```
 
-Regards,
-Peter
+ > Workaround this bug by forcing an optimization level of '-O1' when building
+ > libxslt for the Blackfin architecture.
+
+ > See GCC bug report:
+ > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77311
+
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+
+Committed after adding references to the autobuilder failures, thanks.
+
+-- 
+Bye, Peter Korsgaard
