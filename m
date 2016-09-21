@@ -1,58 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Sep 2016 09:40:08 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI am335x-evm
-In-Reply-To: <20160918193045.15a33be3@free-electrons.com> (Thomas Petazzoni's
- message of "Sun, 18 Sep 2016 19:30:45 +0200")
-References: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
- <20160918193045.15a33be3@free-electrons.com>
-Message-ID: <87fuotya3r.fsf@dell.be.48ers.dk>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed, 21 Sep 2016 10:32:58 +0200
+Subject: [Buildroot] [PATCH] gst1-imx: add menuconfig to select each
+ plugin individually
+In-Reply-To: <20160921060213.2f292837@free-electrons.com>
+References: <20160916131038.23240-1-gary.bisson@boundarydevices.com>
+ <20160920210425.1ca82f17@free-electrons.com>
+ <20160920224355.l76a3kggupuiugok@t450s.lan>
+ <20160921060213.2f292837@free-electrons.com>
+Message-ID: <20160921083258.4ngcz3pphrgjyp46@t450s.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Thomas, all,
 
- > Hello,
- > On Mon, 15 Aug 2016 13:51:22 +0200, Lothar Felten wrote:
- >> This patch adds a target config for the ti am335x-evm based on the AM335x CPU.
- >> It also supports the beaglebone and beagleboneblack.
+On Wed, Sep 21, 2016 at 06:02:13AM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 21 Sep 2016 00:43:55 +0200, Gary Bisson wrote:
+> 
+> > Well in most cases it isn't possible, here are some details:
+> > - BR2_PACKAGE_IMX_GPU_VIV and BR2_PACKAGE_IMX_GPU_VIV_G2D depends on
+> >   BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q which isn't selectable.
+> > - We can't select BR2_LINUX_KERNEL since it needs to be a i.MX kernel.
+> > - BR2_PACKAGE_LIBIMXVPUAPI depends on the i.MX SoC being used which
+> >   cannot be selectable (MX5 or MX6)
+> 
+> OK, indeed many of the sub-options cannot "select" their dependencies.
+> 
+> > I guess I can select IMX_CODEC though, I'll add that to the V2.
+> 
+> OK. Another possibility is to say that all sub-options should use
+> "depends on", for consistency. I don't have a strong feeling about this
+> either way.
 
- > How can it support also the BeagleBone and BeagleBoneBlack when the
- > U-Boot is configured with:
+I'm ok with a few select, it sounds more user-friendly than depends-only
+but I don't have a strong opinion on it either.
 
- > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
+> > >  1/ Add an explicit --enable-<foo> for each option  
+> > 
+> > This was on purpose since the package only look for --disable-foo
+> > options. All the plugins are enabled by default, see patch in package:
+> > https://github.com/Freescale/gstreamer-imx/commit/989ab048
+> > 
+> > I can still do:
+> > ifeq ($(BR2_PACKAGE_FOO),y)
+> 
+> Here add the dependency addition.
+> 
+> > else
+> > BAZ_CONF_OPTS += --disable-foo
+> > endif
+> > 
+> > But my opinion is that --enable-foo is misleading.
+> 
+> Why? There are two options here:
+> 
+>  1/ --enable-<foo> doesn't exist and would cause a failure if passed.
+>     In this case indeed, don't pass it. And add a quick comment above,
+>     like "# There's no --enable-<foo> option".
 
- > I.e, isn't U-Boot consequently only working on the arm335x_evm
- > platform? Or is the am335x_evm U-Boot configuration also usable for
- > BeagleBone/BeagleBoneBlack?
+No, as pointed above in the package repo, the --enable-foo doesn't exist
+and is discarded. It doesn't introduce any error, but it is just that we
+are passing arguments that we know are discarded, is it really
+necessary? I might go with the comment although there's no failure if
+the option is passed, what do you think?
 
-I believe so, yes. It afaik detects the board variant based on the
-content of an i2c eeprom.
-
- > It seems that it's the case thanks to:
-
- > CONFIG_OF_LIST="am335x-evm am335x-bone am335x-boneblack am335x-evmsk am335x-bonegreen am335x-icev2"
-
- > in the U-Boot configuration. Can you confirm?
-
- > If that's the case, then is the name of the defconfig really properly
- > chosen? Should we remove beaglebone_defconfig in favor of a common
- > defconfig for all am335x configurations?
-
- > I'd say, either we name the defconfig am335x_evm_defconfig, and it
- > should support only this board, or we name it am335x_defconfig and it
- > supports multiple boards and replaces other AM335x defconfigs we
- > already have.
-
-Well, it is only for the ti/circuitco boards, not any other boards with
-a am335x.
-
-I still think naming the defconfig beaglebone_defconfig makes it easier
-to find for newcomers, even though it could also be used on the TI
-evm. People are also much more likely to have one of the beaglebone
-variants than the evm.
-
--- 
-Bye, Peter Korsgaard
+Regards,
+Gary
