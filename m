@@ -1,25 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Sep 2016 23:28:18 +0200
-Subject: [Buildroot] [PATCH] package/jsoncpp: bump to version 1.7.5
-In-Reply-To: <20160921203351.5434-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Wed, 21 Sep 2016 22:33:51 +0200")
-References: <20160921203351.5434-1-joerg.krause@embedded.rocks>
-Message-ID: <871t0drlhp.fsf@dell.be.48ers.dk>
+Date: Wed, 21 Sep 2016 23:33:00 +0200
+Subject: [Buildroot] [PATCH] genimage: bump to version 9
+In-Reply-To: <20160921210010.13278-1-vivien.didelot@savoirfairelinux.com>
+ (Vivien Didelot's message of "Wed, 21 Sep 2016 17:00:10 -0400")
+References: <20160921210010.13278-1-vivien.didelot@savoirfairelinux.com>
+Message-ID: <87wpi5q6pf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+>>>>> "Vivien" == Vivien Didelot <vivien.didelot@savoirfairelinux.com> writes:
 
- > Remove patch applied upstream in commit
- > d4a49cf511a9ef5ee52af83f8aed4437eaa160e1.
+ > Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+There is now a COPYING file, so I updated GENIMAGE_LICENSE_FILES and
+committed, thanks:
 
-Committed, thanks.
+https://git.platon.pengutronix.de/cgit/genimage/commit/?id=8028a9b1f80190a987c53ab72b685c0b8e19ec56
 
 -- 
 Bye, Peter Korsgaard
