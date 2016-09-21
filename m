@@ -1,92 +1,104 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 21 Sep 2016 15:42:44 +0200
-Subject: [Buildroot] [PATCH 1/2] python-docutils: new package
-In-Reply-To: <20160921134044.29040-1-yegorslists@googlemail.com>
-References: <20160921134044.29040-1-yegorslists@googlemail.com>
-Message-ID: <CAGm1_ktCuZM2+MPZM4v80csUVkshLsF7kx0iR2dpuOau4W7AiQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Sep 2016 15:55:23 +0200
+Subject: [Buildroot] [git commit] shapelib: new package
+Message-ID: <20160921135559.5860881E7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 21, 2016 at 3:40 PM,  <yegorslists@googlemail.com> wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
->
-> Host variant is needed for building python-daemon package.
->
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/Config.in                            |  1 +
->  package/python-docutils/Config.in            |  9 +++++++++
->  package/python-docutils/python-docutils.hash |  3 +++
->  package/python-docutils/python-docutils.mk   | 15 +++++++++++++++
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/python-docutils/Config.in
->  create mode 100644 package/python-docutils/python-docutils.hash
->  create mode 100644 package/python-docutils/python-docutils.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index a9f6bc7..4e78faa 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -669,6 +669,7 @@ menu "External python modules"
->         source "package/python-dicttoxml/Config.in"
->         source "package/python-django/Config.in"
->         source "package/python-docopt/Config.in"
-> +       source "package/python-docutils/Config.in"
->         source "package/python-dominate/Config.in"
->         source "package/python-dpkt/Config.in"
->         source "package/python-ecdsa/Config.in"
-> diff --git a/package/python-docutils/Config.in b/package/python-docutils/Config.in
-> new file mode 100644
-> index 0000000..e7bf7e6
-> --- /dev/null
-> +++ b/package/python-docutils/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_DOCUTILS
-> +       bool "python-docutils"
-> +       help
-> +         Docutils is a modular system for processing documentation
-> +         into useful formats, such as HTML, XML, and LaTeX. For input
-> +         Docutils supports reStructuredText, an easy-to-read,
-> +         what-you-see-is-what-you-get plaintext markup syntax.
-> +
-> +         http://docutils.sourceforge.net/
-> diff --git a/package/python-docutils/python-docutils.hash b/package/python-docutils/python-docutils.hash
-> new file mode 100644
-> index 0000000..9d45058
-> --- /dev/null
-> +++ b/package/python-docutils/python-docutils.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi/docutils/json, sha256 locally computed
-> +md5     4622263b62c5c771c03502afa3157768 docutils-0.12.tar.gz
-> +sha256  c7db717810ab6965f66c8cf0398a98c9d8df982da39b4cd7f162911eb89596fa  docutils-0.12.tar.gz
-> diff --git a/package/python-docutils/python-docutils.mk b/package/python-docutils/python-docutils.mk
-> new file mode 100644
-> index 0000000..3bbed00
-> --- /dev/null
-> +++ b/package/python-docutils/python-docutils.mk
-> @@ -0,0 +1,15 @@
-> +#############################################################
-> +#
-> +# python-docutils
-> +#
-> +#############################################################
-> +
-> +PYTHON_DOCUTILS_VERSION = 0.12
-> +PYTHON_DOCUTILS_SOURCE = docutils-$(PYTHON_DOCUTILS_VERSION).tar.gz
-> +PYTHON_DOCUTILS_SITE = https://pypi.python.org/packages/37/38/ceda70135b9144d84884ae2fc5886c6baac4edea39550f28bcd144c1234d
-> +PYTHON_DOCUTILS_LICENSE = BSD-2c
+commit: https://git.buildroot.net/buildroot/commit/?id=2655d676f0151f6cfd36c42435cf84926c209e24
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-COPYING.txt is rather complicated mentioning a lot of files with
-different licences. So I'm not sure how to handle this properly.
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+[Thomas:
+ - adjust the license: it's MIT or LGPLv2, add web/license.html to the
+   license files
+ - rewrap Config.in help text
+ - add entry to the DEVELOPERS file.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/shapelib/Config.in     |  9 +++++++++
+ package/shapelib/shapelib.hash |  2 ++
+ package/shapelib/shapelib.mk   | 25 +++++++++++++++++++++++++
+ 5 files changed, 38 insertions(+)
 
-> +PYTHON_DOCUTILS_LICENSE_FILES = COPYING.txt
-> +PYTHON_DOCUTILS_SETUP_TYPE = distutils
-> +
-> +$(eval $(python-package))
-> +$(eval $(host-python-package))
-> --
-> 2.9.3
->
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 605af96..8205a82 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1578,4 +1578,5 @@ F:	package/python-configobj/
+ F:	package/python-iniparse/
+ F:	package/qjson/
+ F:	package/quazip/
++F:	package/shapelib/
+ F:	package/tinc/
+diff --git a/package/Config.in b/package/Config.in
+index a9f6bc7..dd220e8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1338,6 +1338,7 @@ endif
+ 	source "package/protobuf-c/Config.in"
+ 	source "package/qhull/Config.in"
+ 	source "package/qlibc/Config.in"
++	source "package/shapelib/Config.in"
+ 	source "package/sphinxbase/Config.in"
+ 	source "package/startup-notification/Config.in"
+ 	source "package/tinycbor/Config.in"
+diff --git a/package/shapelib/Config.in b/package/shapelib/Config.in
+new file mode 100644
+index 0000000..aa2297b
+--- /dev/null
++++ b/package/shapelib/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_SHAPELIB
++	bool "shapelib"
++	help
++	  The Shapefile C Library provides the ability to write simple
++	  C programs for reading, writing and updating (to a limited
++	  extent) ESRI Shapefiles, and the associated attribute file
++	  (.dbf).
++
++	  http://shapelib.maptools.org/
+diff --git a/package/shapelib/shapelib.hash b/package/shapelib/shapelib.hash
+new file mode 100644
+index 0000000..f3f812e
+--- /dev/null
++++ b/package/shapelib/shapelib.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 23d474016158ab5077db2f599527631706ba5c0dc7c4178a6a1d685bb014f68f  shapelib-1.3.0.tar.gz
+diff --git a/package/shapelib/shapelib.mk b/package/shapelib/shapelib.mk
+new file mode 100644
+index 0000000..1e9c16f
+--- /dev/null
++++ b/package/shapelib/shapelib.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# shapelib
++#
++################################################################################
++
++SHAPELIB_VERSION = 1.3.0
++SHAPELIB_SITE = http://download.osgeo.org/shapelib
++SHAPELIB_LICENSE = MIT or LGPLv2
++SHAPELIB_LICENSE_FILES = web/license.html LICENSE.LGPL
++SHAPELIB_INSTALL_STAGING = YES
++
++define SHAPELIB_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define SHAPELIB_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) PREFIX=$(STAGING_DIR)/usr/ lib_install
++endef
++
++define SHAPELIB_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) PREFIX=$(TARGET_DIR)/usr/ bin_install
++endef
++
++$(eval $(generic-package))
