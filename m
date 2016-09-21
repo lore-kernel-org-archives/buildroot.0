@@ -1,32 +1,44 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 21 Sep 2016 21:53:29 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: update my entry list
-Message-ID: <20160921195329.22343-1-s.martin49@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 21 Sep 2016 22:05:45 +0200
+Subject: [Buildroot] [PATCH] systemd: let getty instead of serial-getty
+ handle /dev/console
+In-Reply-To: <87intpzqge.fsf@dell.be.48ers.dk>
+References: <1473437418-27792-1-git-send-email-bos@je-eigen-domein.nl>
+ <20160911210951.GP5740@free.fr> <87intpzqge.fsf@dell.be.48ers.dk>
+Message-ID: <20160921220545.238279e6@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
+Hello *,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8205a82..a78bd14 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1228,7 +1228,10 @@ F:	package/clapack/
- F:	package/cwiid/
- F:	package/flite/
- F:	package/nginx/
-+F:	package/opencv/
-+F:	package/opencv3/
- F:	package/openobex/
-+F:	package/pkg-cmake.mk
- F:	package/python-numpy/
- F:	package/scrub/
- F:	package/urg/
--- 
-2.10.0
+On Wed, 21 Sep 2016 09:01:37 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  > Floris, All,
+>  > On 2016-09-09 18:10 +0200, Floris Bos spake thusly:
+>  >> The serial-getty unit depends on dev-%i.device which does not
+>  >> seem to be created for /dev/console
+>  >> Workaround this by letting normal getty unit handle things
+>  >> if BR2_TARGET_GENERIC_GETTY_PORT is set to 'console'
+>  >> 
+>  >> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> 
+>  > I haven't tested that, but I think this is OK just on principle.
+> 
+>  > I just wonder if that behaves correctly when console is a serial line or
+>  > anything else (e.g. a VT on HDMI, or through a debug channel...)
+> 
+> Yeah, me too. Does anybody know what the difference exactly is between
+> getty/serial-getty, and when one should be used over the other?
+> 
+
+Tested for the rpi3/glibc/systemd case and failed: I get a doubled
+(and unusable) ' Welcome to Buildroot/buildroot login:' on serial and
+no login on hdmi...
+
+Regards,
+Peter
