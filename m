@@ -1,25 +1,42 @@
-From: Abhilash Tuse <abhilash.tuse@imgtec.com>
-Date: Wed, 21 Sep 2016 16:24:27 +0530
-Subject: [Buildroot] [PATCH 3/3] DEVELOPERS: add entries for recently
- added/modified code
-In-Reply-To: <1474453163-16548-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1474453163-16548-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1474453163-16548-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <029b0d8f-b60a-9443-a0a2-cc1f77ce9737@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Sep 2016 12:55:53 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI am335x-evm
+In-Reply-To: <877fa5y1y2.fsf@dell.be.48ers.dk>
+References: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
+ <20160918193045.15a33be3@free-electrons.com>
+ <87fuotya3r.fsf@dell.be.48ers.dk>
+ <20160921105303.1832ad5e@free-electrons.com>
+ <87bmzhy6ci.fsf@dell.be.48ers.dk>
+ <20160921121803.487035d8@free-electrons.com>
+ <877fa5y1y2.fsf@dell.be.48ers.dk>
+Message-ID: <20160921125553.4b53e06e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Wednesday 21 September 2016 03:49 PM, Thomas Petazzoni wrote:
->
-> +N:	Piotr Nakraszewicz <piotr.nakraszewicz@imgtec.com>
-> +F:	package/gstreamer1/gst1-rtsp-server/
+On Wed, 21 Sep 2016 12:36:21 +0200, Peter Korsgaard wrote:
 
-Piotr is no longer working with IMG. I can volunteer for this package.
+> I would just call it beaglebone, and mention in the readme what boards
+> it works on.
+> 
+> Newcomers are much more likely to have one of the beaglebone boards than
+> an evm, so naming it like that imho makes sense.
 
-Thanks,
-Abhilash
+OK. So in the end, we're just asking Lothar to update the existing
+beaglebone_defconfig configuration to:
+
+ 1/ Use more recent versions of the different components
+
+ 2/ Support other AM335X boards in addition to the Beaglebone
+
+Is that what you're thinking about?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
