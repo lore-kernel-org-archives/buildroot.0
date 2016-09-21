@@ -1,46 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Sep 2016 05:53:00 +0200
-Subject: [Buildroot] [git commit] util-linux: enable libmount for host
+Date: Wed, 21 Sep 2016 05:53:07 +0200
+Subject: [Buildroot] [git commit] libglib2: add host-util-linux for host
 	variant
-Message-ID: <20160921035328.E58AC81EF5@busybox.osuosl.org>
+Message-ID: <20160921035328.ED1357F984@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c83114ffecf311f8e523255320365a1eb0850db
+commit: https://git.buildroot.net/buildroot/commit/?id=71c5a81c96873c056cb2c54580e3ba2db528ca8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's a necessary dependency to build the new host-libglib2.
-libblkd is an indirect dependency for libmount.
+It's required now, fixes:
+http://autobuild.buildroot.net/results/e81/e81f98561867d370115a019284682c0611796978/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/util-linux/util-linux.mk | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ package/libglib2/libglib2.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 82a726e..f648155 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -117,13 +117,14 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_ZRAMCTL),--enable-zramctl,--disable-zramctl)
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 5bc6ed5..f199a4a 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -105,7 +105,12 @@ LIBGLIB2_DEPENDENCIES = \
+ 	libffi pcre util-linux zlib $(if $(BR2_NEEDS_GETTEXT),gettext)
  
--# In the host version of util-linux, we so far only require libuuid,
--# and none of the util-linux utilities, so we disable all of them, unless
--# BR2_PACKAGE_HOST_UTIL_LINUX is set
-+# In the host version of util-linux, we only require libuuid and
-+# libmount (plus libblkid as an indirect dependency of libmount).
-+# So disable all of the programs, unless BR2_PACKAGE_HOST_UTIL_LINUX is set
+ HOST_LIBGLIB2_DEPENDENCIES = \
+-	host-gettext host-libffi host-pcre host-pkgconf host-zlib
++	host-gettext \
++	host-libffi \
++	host-pcre \
++	host-pkgconf \
++	host-util-linux \
++	host-zlib
  
- HOST_UTIL_LINUX_CONF_OPTS += \
-+	--enable-libblkid \
-+	--enable-libmount \
- 	--enable-libuuid \
--	--disable-libblkid --disable-libmount \
- 	--without-ncurses
- 
- ifeq ($(BR2_PACKAGE_HOST_UTIL_LINUX),y)
+ LIBGLIB2_CONF_OPTS = \
+ 	--with-pcre=system
