@@ -1,32 +1,42 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Wed, 21 Sep 2016 22:43:11 +0530
-Subject: [Buildroot] [PATCH] trinity: needs MMU support
-Message-ID: <1474477991-17171-1-git-send-email-rahul.bedarkar@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Sep 2016 20:04:30 +0200
+Subject: [Buildroot] [PATCH 1/1] shapelib: new package
+In-Reply-To: <20160921164753.j56sstaxx7jy4j66@tarshish>
+References: <1469969150-3029-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <20160921155729.1c4332b7@free-electrons.com>
+ <20160921164753.j56sstaxx7jy4j66@tarshish>
+Message-ID: <20160921200430.74f46a81@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.net/results/2fc/2fca707deb6fda2da83ab817f8e594f76415d997/
+Hello,
 
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
----
- package/trinity/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+On Wed, 21 Sep 2016 19:47:53 +0300, Baruch Siach wrote:
 
-diff --git a/package/trinity/Config.in b/package/trinity/Config.in
-index 5c4c7c8..2495e5d 100644
---- a/package/trinity/Config.in
-+++ b/package/trinity/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TRINITY
- 	bool "trinity"
-+	depends on BR2_USE_MMU # fork()
- 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
- 		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
- 		BR2_powerpc64le || BR2_sparc || BR2_x86_64
+> On Wed, Sep 21, 2016 at 03:57:29PM +0200, Thomas Petazzoni wrote:
+> > Thanks, I've applied your patch, after doing the following changes:
+> > 
+> >     [Thomas:
+> >      - adjust the license: it's MIT or LGPLv2, add web/license.html to the
+> >        license files
+> >      - rewrap Config.in help text
+> >      - add entry to the DEVELOPERS file.]  
+> 
+> A DEVELOPERS file update on every new package makes cherry-picking harder. For 
+> that reason, I think, Peter stopped updating the CHANGES file in every patch.
+
+Right. What should we do then? Update the DEVELOPERS file in a separate
+patch? But then we're going to have zillions of patches whose sole
+purpose of to update the DEVELOPERS file. But of course, that's better
+for cherry-picking.
+
+Opinions?
+
+Thomas
 -- 
-2.6.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
