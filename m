@@ -1,49 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Sep 2016 01:17:23 +0200
-Subject: [Buildroot] [PATCH 1/2] build: add support for as-needed linking
-In-Reply-To: <578C249C.9040700@free-electrons.com> (Gustavo Zacarias's message
- of "Sun, 17 Jul 2016 21:36:44 -0300")
-References: <1468767958-19572-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <20160717210154.GU3614@free.fr> <578C249C.9040700@free-electrons.com>
-Message-ID: <87zin2yxdo.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Sep 2016 05:53:00 +0200
+Subject: [Buildroot] [git commit] util-linux: enable libmount for host
+	variant
+Message-ID: <20160921035328.E58AC81EF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo.zacarias@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2c83114ffecf311f8e523255320365a1eb0850db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+It's a necessary dependency to build the new host-libglib2.
+libblkd is an indirect dependency for libmount.
 
- >> So, what would that bring to us?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/util-linux/util-linux.mk | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
- > Yes, that's what lazy binding does... but it's still based on
- > DT_NEEDED entries, hence instead of scanning 10 libraries at required
- > time in my example it will only need to scan 8 to resolve required
- > symbols.
- > For more complex applications that use many nested libraries the
- > savings can be bigger.
- > Example diff between non-as-needed gst-launch-1.0 and as-needed version:
-
- > libgstreamer-1.0.so.0
- > libgobject-2.0.so.0
- > -libgmodule-2.0.so.0
- > libglib-2.0.so.0
- > -librt.so.1
- > -libdl.so.2
- > libgcc_s.so.1
- > libpthread.so.0
- > libc.so.6
-
-So what is E.G. the time differences when running
-
-time gst-launch-1.0 fakesrc num-buffers=1 ! fakesink
-
-on a "normal" machine with/without these patches?
-
-(Notice that gstreamer searches plugins and creates cache file first
-time it is run).
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 82a726e..f648155 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -117,13 +117,14 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_ZRAMCTL),--enable-zramctl,--disable-zramctl)
+ 
+-# In the host version of util-linux, we so far only require libuuid,
+-# and none of the util-linux utilities, so we disable all of them, unless
+-# BR2_PACKAGE_HOST_UTIL_LINUX is set
++# In the host version of util-linux, we only require libuuid and
++# libmount (plus libblkid as an indirect dependency of libmount).
++# So disable all of the programs, unless BR2_PACKAGE_HOST_UTIL_LINUX is set
+ 
+ HOST_UTIL_LINUX_CONF_OPTS += \
++	--enable-libblkid \
++	--enable-libmount \
+ 	--enable-libuuid \
+-	--disable-libblkid --disable-libmount \
+ 	--without-ncurses
+ 
+ ifeq ($(BR2_PACKAGE_HOST_UTIL_LINUX),y)
