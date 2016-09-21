@@ -1,49 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Sep 2016 11:00:42 +0200
-Subject: [Buildroot] [PATCH 1/1] libfastjson: Was referencing
-	non-existing files
-In-Reply-To: <CAA=pTTRQKB0S0uz7xqHwUz4pw5__+e5Ws-xV_OjnpFL+Gyfy5g@mail.gmail.com>
-References: <1474018609-2610-1-git-send-email-fpa@sbtaqua.com>
- <20160916185559.23a41621@free-electrons.com>
- <CAA=pTTRC8oK_GkwHYca3+ky2nRvyvGKS=RyOK1qogYmYGjptPA@mail.gmail.com>
- <87y42m1vzq.fsf@dell.be.48ers.dk>
- <CAA=pTTRQKB0S0uz7xqHwUz4pw5__+e5Ws-xV_OjnpFL+Gyfy5g@mail.gmail.com>
-Message-ID: <20160921110042.538663cc@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 21 Sep 2016 11:01:17 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI am335x-evm
+In-Reply-To: <20160921105303.1832ad5e@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 21 Sep 2016 10:53:03 +0200")
+References: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
+ <20160918193045.15a33be3@free-electrons.com>
+ <87fuotya3r.fsf@dell.be.48ers.dk>
+ <20160921105303.1832ad5e@free-electrons.com>
+Message-ID: <87bmzhy6ci.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, 21 Sep 2016 08:44:23 +0000, Frederik Peter Aalund wrote:
+Hi,
 
-> > <pkgname>-<version>.tar.gz is the default name of the tarball, so it
-> > sounds like you have a LIBFASTJSON_SOURCE = .. somewhere - Please double
-> > check.  
-> 
-> That must have been the culprit. Even though I deleted the external
-> libfastjson.mk file,
-> the value of LIBFASTJSON_SOURCE must still have been cached somewhere. There
-> were no errors after i purged the entire buildroot folder. Thanks for
-> investigating.
+ >> I still think naming the defconfig beaglebone_defconfig makes it easier
+ >> to find for newcomers, even though it could also be used on the TI
+ >> evm. People are also much more likely to have one of the beaglebone
+ >> variants than the evm.
 
-There is no cache anywhere in Buildroot for such variables. So it must
-have been *defined* somewhere explicitly, due to a modification you had
-done.
+ > So maybe it's easier to have separate beaglebone_defconfig (for just
+ > the beaglebone) and am335x_evm_defconfig (for just the EVM), without
+ > trying to have a defconfig that handles multiple boards.
 
-> > Nice, so you are using Buildroot on the sensors?  
-> 
-> Yes, and I'm really liking it so far. `make legal-info` in particular is
-> very handy when aggregating programs in a distribution.
+ > What do you think?
 
-Glad to hear this is a useful functionality!
+If they are not identical, then yes. Are these minor differences
+critical enough that it makes sense to maintain two defconfigs?
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
