@@ -1,12 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Sep 2016 14:07:58 +0200
-Subject: [Buildroot] [PATCH 3/3] DEVELOPERS: add entries for recently
- added/modified code
-In-Reply-To: <029b0d8f-b60a-9443-a0a2-cc1f77ce9737@imgtec.com>
-References: <1474453163-16548-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1474453163-16548-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <029b0d8f-b60a-9443-a0a2-cc1f77ce9737@imgtec.com>
-Message-ID: <20160921140758.28daff5a@free-electrons.com>
+Date: Wed, 21 Sep 2016 14:09:12 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI am335x-evm
+In-Reply-To: <877fa5y1y2.fsf@dell.be.48ers.dk>
+References: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
+ <20160918193045.15a33be3@free-electrons.com>
+ <87fuotya3r.fsf@dell.be.48ers.dk>
+ <20160921105303.1832ad5e@free-electrons.com>
+ <87bmzhy6ci.fsf@dell.be.48ers.dk>
+ <20160921121803.487035d8@free-electrons.com>
+ <877fa5y1y2.fsf@dell.be.48ers.dk>
+Message-ID: <20160921140912.29c4584e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +18,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 21 Sep 2016 16:24:27 +0530, Abhilash Tuse wrote:
+On Wed, 21 Sep 2016 12:36:21 +0200, Peter Korsgaard wrote:
 
-> On Wednesday 21 September 2016 03:49 PM, Thomas Petazzoni wrote:
-> >
-> > +N:	Piotr Nakraszewicz <piotr.nakraszewicz@imgtec.com>
-> > +F:	package/gstreamer1/gst1-rtsp-server/  
+>  > How would you name this common configuration then?  
 > 
-> Piotr is no longer working with IMG. I can volunteer for this package.
+> I would just call it beaglebone, and mention in the readme what boards
+> it works on.
+> 
+> Newcomers are much more likely to have one of the beaglebone boards than
+> an evm, so naming it like that imho makes sense.
 
-OK, thanks, I'll adjust the patch accordingly.
+OK, fine with me.
 
 Thomas
 -- 
