@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Sep 2016 20:52:31 +0200
-Subject: [Buildroot] [PATCH 2/2] python-daemon: add missing dependencies
-In-Reply-To: <20160921134044.29040-2-yegorslists@googlemail.com>
-References: <20160921134044.29040-1-yegorslists@googlemail.com>
- <20160921134044.29040-2-yegorslists@googlemail.com>
-Message-ID: <20160921205231.08b73e4c@free-electrons.com>
+Date: Wed, 21 Sep 2016 20:52:40 +0200
+Subject: [Buildroot] [PATCH 1/3] DEVELOPERS: fix removed packages or
+ inexisting packages
+In-Reply-To: <1474453163-16548-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1474453163-16548-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160921205240.3c70af2c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 21 Sep 2016 15:40:44 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On Wed, 21 Sep 2016 12:19:21 +0200, Thomas Petazzoni wrote:
+> elementary, libevas-generic-loaders and smtools3 no longer exist.
 > 
-> python-daemon package mentions python-docutils in both setup_requires
-> and instal_requires fields. So add related dependencies.
+> pygame doesn't exist, it's named python-pygame.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/0c3/0c3866038f7c40888e5e440f7a720fc614a6b1ba/
-> http://autobuild.buildroot.net/results/5d8/5d817bddeff5bb49ed31c6a1d111974c358ef96c/
-> and many more.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/python-daemon/Config.in        | 1 +
->  package/python-daemon/python-daemon.mk | 1 +
->  2 files changed, 2 insertions(+)
+>  DEVELOPERS | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 
 Applied to master, thanks.
 
