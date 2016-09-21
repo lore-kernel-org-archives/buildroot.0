@@ -1,37 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Sep 2016 11:01:17 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI am335x-evm
-In-Reply-To: <20160921105303.1832ad5e@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 21 Sep 2016 10:53:03 +0200")
-References: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
- <20160918193045.15a33be3@free-electrons.com>
- <87fuotya3r.fsf@dell.be.48ers.dk>
- <20160921105303.1832ad5e@free-electrons.com>
-Message-ID: <87bmzhy6ci.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Sep 2016 11:03:20 +0200
+Subject: [Buildroot] [PATCH] gst1-imx: add menuconfig to select each
+ plugin individually
+In-Reply-To: <20160921083258.4ngcz3pphrgjyp46@t450s.lan>
+References: <20160916131038.23240-1-gary.bisson@boundarydevices.com>
+ <20160920210425.1ca82f17@free-electrons.com>
+ <20160920224355.l76a3kggupuiugok@t450s.lan>
+ <20160921060213.2f292837@free-electrons.com>
+ <20160921083258.4ngcz3pphrgjyp46@t450s.lan>
+Message-ID: <20160921110320.1d539eca@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
-Hi,
+On Wed, 21 Sep 2016 10:32:58 +0200, Gary Bisson wrote:
 
- >> I still think naming the defconfig beaglebone_defconfig makes it easier
- >> to find for newcomers, even though it could also be used on the TI
- >> evm. People are also much more likely to have one of the beaglebone
- >> variants than the evm.
+> No, as pointed above in the package repo, the --enable-foo doesn't exist
+> and is discarded. It doesn't introduce any error, but it is just that we
+> are passing arguments that we know are discarded, is it really
+> necessary? I might go with the comment although there's no failure if
+> the option is passed, what do you think?
 
- > So maybe it's easier to have separate beaglebone_defconfig (for just
- > the beaglebone) and am335x_evm_defconfig (for just the EVM), without
- > trying to have a defconfig that handles multiple boards.
+OK, in this case, not passing --enable and having a comment sounds good.
 
- > What do you think?
+Thanks!
 
-If they are not identical, then yes. Are these minor differences
-critical enough that it makes sense to maintain two defconfigs?
-
+Thomas
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
