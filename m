@@ -1,26 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Sep 2016 17:09:19 +0200
-Subject: [Buildroot] [PATCH] docs/manual: fix packages having a
-	subdirectory
-In-Reply-To: <1474461247-18243-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 21 Sep 2016 14:34:07 +0200")
-References: <1474461247-18243-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87d1jxthls.fsf@dell.be.48ers.dk>
+Date: Wed, 21 Sep 2016 17:09:52 +0200
+Subject: [Buildroot] [PATCH] python-psutil: not available on musl
+In-Reply-To: <20160920130113.21450-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 20 Sep 2016 15:01:13 +0200")
+References: <20160920130113.21450-1-peter@korsgaard.com>
+Message-ID: <878tulthkv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > efl and matchbox no longer have a subdirectory containing multiple
- > packages, so they are no longer good examples of that. Mention qt5 and
- > gstreamer instead.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/365/365c2f0b32ae3cb1d6d4d8f0145500dfadd05c59/
+ > http://autobuild.buildroot.org/results/140/140d0ec9d94f75453c4c82e18803c8d7bffcf6be/
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > And many more.
 
 Committed, thanks.
 
 -- 
-Bye, Peter Korsgaard
+Venlig hilsen,
+Peter Korsgaard 
