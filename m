@@ -1,11 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Sep 2016 10:53:03 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI am335x-evm
-In-Reply-To: <87fuotya3r.fsf@dell.be.48ers.dk>
-References: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
- <20160918193045.15a33be3@free-electrons.com>
- <87fuotya3r.fsf@dell.be.48ers.dk>
-Message-ID: <20160921105303.1832ad5e@free-electrons.com>
+Date: Wed, 21 Sep 2016 11:00:42 +0200
+Subject: [Buildroot] [PATCH 1/1] libfastjson: Was referencing
+	non-existing files
+In-Reply-To: <CAA=pTTRQKB0S0uz7xqHwUz4pw5__+e5Ws-xV_OjnpFL+Gyfy5g@mail.gmail.com>
+References: <1474018609-2610-1-git-send-email-fpa@sbtaqua.com>
+ <20160916185559.23a41621@free-electrons.com>
+ <CAA=pTTRC8oK_GkwHYca3+ky2nRvyvGKS=RyOK1qogYmYGjptPA@mail.gmail.com>
+ <87y42m1vzq.fsf@dell.be.48ers.dk>
+ <CAA=pTTRQKB0S0uz7xqHwUz4pw5__+e5Ws-xV_OjnpFL+Gyfy5g@mail.gmail.com>
+Message-ID: <20160921110042.538663cc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,47 +17,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 21 Sep 2016 09:40:08 +0200, Peter Korsgaard wrote:
+On Wed, 21 Sep 2016 08:44:23 +0000, Frederik Peter Aalund wrote:
 
->  > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"  
+> > <pkgname>-<version>.tar.gz is the default name of the tarball, so it
+> > sounds like you have a LIBFASTJSON_SOURCE = .. somewhere - Please double
+> > check.  
 > 
->  > I.e, isn't U-Boot consequently only working on the arm335x_evm
->  > platform? Or is the am335x_evm U-Boot configuration also usable for
->  > BeagleBone/BeagleBoneBlack?  
-> 
-> I believe so, yes. It afaik detects the board variant based on the
-> content of an i2c eeprom.
+> That must have been the culprit. Even though I deleted the external
+> libfastjson.mk file,
+> the value of LIBFASTJSON_SOURCE must still have been cached somewhere. There
+> were no errors after i purged the entire buildroot folder. Thanks for
+> investigating.
 
-Hum, OK.
+There is no cache anywhere in Buildroot for such variables. So it must
+have been *defined* somewhere explicitly, due to a modification you had
+done.
 
->  > It seems that it's the case thanks to:  
+> > Nice, so you are using Buildroot on the sensors?  
 > 
->  > CONFIG_OF_LIST="am335x-evm am335x-bone am335x-boneblack am335x-evmsk am335x-bonegreen am335x-icev2"  
-> 
->  > in the U-Boot configuration. Can you confirm?  
-> 
->  > If that's the case, then is the name of the defconfig really properly
->  > chosen? Should we remove beaglebone_defconfig in favor of a common
->  > defconfig for all am335x configurations?  
-> 
->  > I'd say, either we name the defconfig am335x_evm_defconfig, and it
->  > should support only this board, or we name it am335x_defconfig and it
->  > supports multiple boards and replaces other AM335x defconfigs we
->  > already have.  
-> 
-> Well, it is only for the ti/circuitco boards, not any other boards with
-> a am335x.
-> 
-> I still think naming the defconfig beaglebone_defconfig makes it easier
-> to find for newcomers, even though it could also be used on the TI
-> evm. People are also much more likely to have one of the beaglebone
-> variants than the evm.
+> Yes, and I'm really liking it so far. `make legal-info` in particular is
+> very handy when aggregating programs in a distribution.
 
-So maybe it's easier to have separate beaglebone_defconfig (for just
-the beaglebone) and am335x_evm_defconfig (for just the EVM), without
-trying to have a defconfig that handles multiple boards.
+Glad to hear this is a useful functionality!
 
-What do you think?
+Best regards,
 
 Thomas
 -- 
