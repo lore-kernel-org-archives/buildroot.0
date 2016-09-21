@@ -1,42 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Sep 2016 20:04:30 +0200
-Subject: [Buildroot] [PATCH 1/1] shapelib: new package
-In-Reply-To: <20160921164753.j56sstaxx7jy4j66@tarshish>
-References: <1469969150-3029-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <20160921155729.1c4332b7@free-electrons.com>
- <20160921164753.j56sstaxx7jy4j66@tarshish>
-Message-ID: <20160921200430.74f46a81@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 21 Sep 2016 20:18:37 +0200
+Subject: [Buildroot] [PATCH 1/2] package/circus: fix Config.in missing
+	operator in comment condition
+Message-ID: <20160921181838.4921-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/circus/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed, 21 Sep 2016 19:47:53 +0300, Baruch Siach wrote:
-
-> On Wed, Sep 21, 2016 at 03:57:29PM +0200, Thomas Petazzoni wrote:
-> > Thanks, I've applied your patch, after doing the following changes:
-> > 
-> >     [Thomas:
-> >      - adjust the license: it's MIT or LGPLv2, add web/license.html to the
-> >        license files
-> >      - rewrap Config.in help text
-> >      - add entry to the DEVELOPERS file.]  
-> 
-> A DEVELOPERS file update on every new package makes cherry-picking harder. For 
-> that reason, I think, Peter stopped updating the CHANGES file in every patch.
-
-Right. What should we do then? Update the DEVELOPERS file in a separate
-patch? But then we're going to have zillions of patches whose sole
-purpose of to update the DEVELOPERS file. But of course, that's better
-for cherry-picking.
-
-Opinions?
-
-Thomas
+diff --git a/package/circus/Config.in b/package/circus/Config.in
+index 3df41f5..94c59a4 100644
+--- a/package/circus/Config.in
++++ b/package/circus/Config.in
+@@ -18,5 +18,5 @@ config BR2_PACKAGE_CIRCUS
+ 
+ comment "circus needs Python and a uClibc or glibc toolchain w/ C++, wchar, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL \
++		!BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL || \
+ 		!(BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.10.0
