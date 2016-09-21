@@ -1,33 +1,32 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 21 Sep 2016 19:47:53 +0300
-Subject: [Buildroot] [PATCH 1/1] shapelib: new package
-In-Reply-To: <20160921155729.1c4332b7@free-electrons.com>
-References: <1469969150-3029-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <20160921155729.1c4332b7@free-electrons.com>
-Message-ID: <20160921164753.j56sstaxx7jy4j66@tarshish>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Wed, 21 Sep 2016 22:43:11 +0530
+Subject: [Buildroot] [PATCH] trinity: needs MMU support
+Message-ID: <1474477991-17171-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes:
+  http://autobuild.buildroot.net/results/2fc/2fca707deb6fda2da83ab817f8e594f76415d997/
 
-On Wed, Sep 21, 2016 at 03:57:29PM +0200, Thomas Petazzoni wrote:
-> Thanks, I've applied your patch, after doing the following changes:
-> 
->     [Thomas:
->      - adjust the license: it's MIT or LGPLv2, add web/license.html to the
->        license files
->      - rewrap Config.in help text
->      - add entry to the DEVELOPERS file.]
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+ package/trinity/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-A DEVELOPERS file update on every new package makes cherry-picking harder. For 
-that reason, I think, Peter stopped updating the CHANGES file in every patch.
-
-baruch
-
+diff --git a/package/trinity/Config.in b/package/trinity/Config.in
+index 5c4c7c8..2495e5d 100644
+--- a/package/trinity/Config.in
++++ b/package/trinity/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_TRINITY
+ 	bool "trinity"
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
+ 		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
+ 		BR2_powerpc64le || BR2_sparc || BR2_x86_64
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.6.2
