@@ -1,15 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Sep 2016 14:09:12 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI am335x-evm
-In-Reply-To: <877fa5y1y2.fsf@dell.be.48ers.dk>
-References: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
- <20160918193045.15a33be3@free-electrons.com>
- <87fuotya3r.fsf@dell.be.48ers.dk>
- <20160921105303.1832ad5e@free-electrons.com>
- <87bmzhy6ci.fsf@dell.be.48ers.dk>
- <20160921121803.487035d8@free-electrons.com>
- <877fa5y1y2.fsf@dell.be.48ers.dk>
-Message-ID: <20160921140912.29c4584e@free-electrons.com>
+Date: Wed, 21 Sep 2016 14:11:48 +0200
+Subject: [Buildroot] [PATCH 1/7] libglib2: bump to version 2.50.0
+In-Reply-To: <1474383696-4045-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1474383696-4045-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160921141148.3aedf147@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,17 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 21 Sep 2016 12:36:21 +0200, Peter Korsgaard wrote:
-
->  > How would you name this common configuration then?  
+On Tue, 20 Sep 2016 12:01:30 -0300, Gustavo Zacarias wrote:
+> It now requires util-linux libmount so add the dependency/select.
 > 
-> I would just call it beaglebone, and mention in the readme what boards
-> it works on.
-> 
-> Newcomers are much more likely to have one of the beaglebone boards than
-> an evm, so naming it like that imho makes sense.
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-OK, fine with me.
+With this new version, the crc32 symbol gets defined twice in static
+linking scenarios. See
+http://autobuild.buildroot.net/results/c26/c2602f2e9db665d5a1d7cea8f3256099ce34a527/build-end.log
 
 Thomas
 -- 
