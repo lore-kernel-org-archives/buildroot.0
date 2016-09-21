@@ -1,35 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Sep 2016 22:32:11 +0200
-Subject: [Buildroot] [PATCH] package/libxslt: fix bfin compile
-In-Reply-To: <20160921202107.32301-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Wed, 21 Sep 2016 22:21:07 +0200")
-References: <20160921202107.32301-1-joerg.krause@embedded.rocks>
-Message-ID: <87intpro38.fsf@dell.be.48ers.dk>
+Date: Wed, 21 Sep 2016 22:24:38 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: update my entry list
+Message-ID: <20160921203234.91EA981730@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b67c5075c4eab859d11e72553fa19b299d77fa17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > A GCC bug is triggered when the compiler is run with an optimization level
- > '-Os/-O2/-O3' for the Blackfin architecture:
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
- > ```
- > error: unable to find a register to spill in class 'CCREGS'
- > ```
-
- > Workaround this bug by forcing an optimization level of '-O1' when building
- > libxslt for the Blackfin architecture.
-
- > See GCC bug report:
- > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77311
-
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-
-Committed after adding references to the autobuilder failures, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 52ed83f..9a4a336 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1225,7 +1225,10 @@ F:	package/clapack/
+ F:	package/cwiid/
+ F:	package/flite/
+ F:	package/nginx/
++F:	package/opencv/
++F:	package/opencv3/
+ F:	package/openobex/
++F:	package/pkg-cmake.mk
+ F:	package/python-numpy/
+ F:	package/scrub/
+ F:	package/urg/
