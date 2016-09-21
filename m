@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Sep 2016 20:29:37 +0200
-Subject: [Buildroot] [PATCH] trinity: needs MMU support
-In-Reply-To: <1474477991-17171-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1474477991-17171-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160921202937.050f414e@free-electrons.com>
+Date: Wed, 21 Sep 2016 20:30:26 +0200
+Subject: [Buildroot] [PATCH 1/2] package/circus: fix Config.in missing
+ operator in comment condition
+In-Reply-To: <20160921181838.4921-1-s.martin49@gmail.com>
+References: <20160921181838.4921-1-s.martin49@gmail.com>
+Message-ID: <20160921203026.1aefb80c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 21 Sep 2016 22:43:11 +0530, Rahul Bedarkar wrote:
-> Fixes:
->   http://autobuild.buildroot.net/results/2fc/2fca707deb6fda2da83ab817f8e594f76415d997/
-> 
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+On Wed, 21 Sep 2016 20:18:37 +0200, Samuel Martin wrote:
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > ---
->  package/trinity/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  package/circus/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
+Thanks, but similar patches have been sent 2 hours earlier by Rahul, so
+I've applied Rahul patches.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
