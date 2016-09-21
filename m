@@ -1,50 +1,75 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 21 Sep 2016 17:52:57 +0200
-Subject: [Buildroot] [PATCH 3/3] DEVELOPERS: add entries for recently
- added/modified code
-In-Reply-To: <1474453163-16548-3-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 21 Sep 2016 18:13:42 +0200
+Subject: [Buildroot] [PATCH 2/3] DEVELOPERS: merge Fabrice Fontaine
+ entries
+In-Reply-To: <1474453163-16548-2-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1474453163-16548-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1474453163-16548-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <bc4daec5-5f78-65eb-5a54-d2c8b80362c1@lucaceresoli.net>
+ <1474453163-16548-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160921161342.GA3405@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Thomas, All,
 
-On 21/09/2016 12:19, Thomas Petazzoni wrote:
-> This commit updates the DEVELOPERS files with packages or defconfigs
-> recently added, plus additional entries for developers who have modified
-> packages they are usually taking care of.
-> 
-> Cc: Christian Stewart <christian@paral.in>
-> Cc: Cyril Bur <cyrilbur@gmail.com>
-> Cc: Danomi Manchego <danomimanchego123@gmail.com>
-> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> Cc: Fabio Estevam <festevam@gmail.com>
+On 2016-09-21 12:19 +0200, Thomas Petazzoni spake thusly:
+> There were two entries for Fabrice Fontaine, merge them.
+
+Fabrice will confirm, but I think he contributes both professionally
+and personally, hence the two identities.
+
+So, I'm not ture you should merge both...
+
+Regards,
+Yann E. MORIN.
+
 > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Manuel V?gele <develop@manuel-voegele.de>
-> Cc: Mathieu Audat <mathieu.audat@savoirfairelinux.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Piotr Nakraszewicz <piotr.nakraszewicz@imgtec.com>
-> Cc: Romain Perier <romain.perier@free-electrons.com>
-> Cc: Theo Debrouwere <t.debrouwere@televic.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
-[...]
-> @@ -875,6 +890,7 @@ F:	package/exim/
->  F:	package/libpjsip/
->  F:	package/qpid-proton/
->  F:	package/rtl8188eu/
-> +F:	package/snmppp/
-
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+>  DEVELOPERS | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 43d011a..a16af60 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -430,20 +430,18 @@ F:	configs/freescale_imx*
+>  N:	Fabio Porcedda <fabio.porcedda@gmail.com>
+>  F:	package/netsurf-buildsystem/
+>  
+> -N:	Fabrice Fontaine <fabrice.fontaine@orange.com>
+> -F:	package/domoticz/
+> -F:	package/openzwave/
+> -
+>  N:	Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>  F:	package/alljoyn/
+>  F:	package/alljoyn-base/
+>  F:	package/alljoyn-tcl/
+>  F:	package/alljoyn-tcl-base/
+> +F:	package/domoticz/
+>  F:	package/gtksourceview/
+>  F:	package/gupnp-dlna/
+>  F:	package/gupnp-tools/
+>  F:	package/igd2-for-linux/
+>  F:	package/minissdpd/
+> +F:	package/openzwave/
+>  F:	package/tinycbor/
+>  F:	package/tinydtls/
+>  
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Luca
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
