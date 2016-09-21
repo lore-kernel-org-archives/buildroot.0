@@ -1,57 +1,87 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Sep 2016 22:29:07 +0200
-Subject: [Buildroot] [git commit] package/libxslt: fix bfin compile
-Message-ID: <20160921203234.A4F6481730@busybox.osuosl.org>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 21 Sep 2016 22:33:51 +0200
+Subject: [Buildroot] [PATCH] package/jsoncpp: bump to version 1.7.5
+Message-ID: <20160921203351.5434-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d0ade55428a47a52656eec965dd7b8a81894073
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Remove patch applied upstream in commit
+d4a49cf511a9ef5ee52af83f8aed4437eaa160e1.
 
-Fixes:
-http://autobuild.buildroot.org/results/df4/df4bf247c92847024dff88ce58a5f47343f06258/
-http://autobuild.buildroot.org/results/b33/b33f34dc23f7429928d7d0b1478e71d8e7fffed2/
-http://autobuild.buildroot.org/results/cad/cad02570ec039511b9495e82d98439e9f0724b37/
-
-And many more.
-
-A GCC bug is triggered when the compiler is run with an optimization level
-'-Os/-O2/-O3' for the Blackfin architecture:
-
-```
-error: unable to find a register to spill in class 'CCREGS'
-```
-
-Workaround this bug by forcing an optimization level of '-O1' when building
-libxslt for the Blackfin architecture.
-
-See GCC bug report:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77311
-
-[Peter: add reference to autobuilders failures]
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/libxslt/libxslt.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ ...txt-Treat-conversion-warning-as-error-onl.patch | 37 ----------------------
+ package/jsoncpp/jsoncpp.hash                       |  2 +-
+ package/jsoncpp/jsoncpp.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 39 deletions(-)
+ delete mode 100644 package/jsoncpp/0001-CMakeLists.txt-Treat-conversion-warning-as-error-onl.patch
 
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 868ba6a..d89dde8 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -19,6 +19,12 @@ LIBXSLT_CONF_OPTS = \
- LIBXSLT_CONFIG_SCRIPTS = xslt-config
- LIBXSLT_DEPENDENCIES = libxml2
+diff --git a/package/jsoncpp/0001-CMakeLists.txt-Treat-conversion-warning-as-error-onl.patch b/package/jsoncpp/0001-CMakeLists.txt-Treat-conversion-warning-as-error-onl.patch
+deleted file mode 100644
+index 3e009b9..0000000
+--- a/package/jsoncpp/0001-CMakeLists.txt-Treat-conversion-warning-as-error-onl.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 98a7f56ed41071240274063b2d4e39e4e1c9589f Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Mon, 25 Apr 2016 19:41:28 +0200
+-Subject: [PATCH 1/1] CMakeLists.txt: Treat conversion warning as error only
+- with JSONCPP_WITH_WARNING_AS_ERROR=On
+-
+-Fixes errors when building with buildroot:
+-http://autobuild.buildroot.net/?reason=jsoncpp-1.7.2
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-(Patch sent upstream:
+- https://github.com/open-source-parsers/jsoncpp/pull/466)
+----
+- CMakeLists.txt | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 7787850..637fc34 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -107,11 +107,11 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wconversion -Wshadow -Werror=conversion -Werror=sign-compare")
+- elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+-   # using GCC
+--  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wconversion -Wshadow -Wextra -Werror=conversion")
+-+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wconversion -Wshadow -Wextra")
+-   # not yet ready for -Wsign-conversion
+- 
+-   if (JSONCPP_WITH_STRICT_ISO AND NOT JSONCPP_WITH_WARNING_AS_ERROR)
+--    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+-+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=conversion -pedantic")
+-   endif ()
+- endif()
+- 
+--- 
+-2.8.0.rc3
+-
+diff --git a/package/jsoncpp/jsoncpp.hash b/package/jsoncpp/jsoncpp.hash
+index 5b4bbcf..e1768ed 100644
+--- a/package/jsoncpp/jsoncpp.hash
++++ b/package/jsoncpp/jsoncpp.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	2179a7df19c1c6dc87e02c65b847efc914625a9b87df3e443d9610fc70c0f557	jsoncpp-1.7.2.tar.gz
++sha256	4338c6cab8af8dee6cdfd54e6218bd0533785f552c6162bb083f8dd28bf8fbbe	jsoncpp-1.7.5.tar.gz
+diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+index 34da14c..83ce0a7 100644
+--- a/package/jsoncpp/jsoncpp.mk
++++ b/package/jsoncpp/jsoncpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# GCC bug with Os/O2/O3, PR77311
-+# error: unable to find a register to spill in class 'CCREGS'
-+ifeq ($(BR2_bfin),y)
-+LIBXSLT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O1"
-+endif
-+
- # If we have enabled libgcrypt then use it, else disable crypto support.
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- LIBXSLT_DEPENDENCIES += libgcrypt
+-JSONCPP_VERSION = 1.7.2
++JSONCPP_VERSION = 1.7.5
+ JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
+ JSONCPP_LICENSE = Public Domain or MIT
+ JSONCPP_LICENSE_FILES = LICENSE
+-- 
+2.10.0
