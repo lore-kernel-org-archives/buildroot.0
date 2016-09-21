@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Sep 2016 09:04:11 +0200
-Subject: [Buildroot] [PATCH v3 2/4] DEVELOPERS: add initial list of
-	Buildroot developers
-In-Reply-To: <1473713695-2611-3-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 12 Sep 2016 22:54:53 +0200")
+Date: Wed, 21 Sep 2016 09:07:11 +0200
+Subject: [Buildroot] [PATCH v3 3/4] docs/manual: update contribute.txt
+	to cover get-developers
+In-Reply-To: <1473713695-2611-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 12 Sep 2016 22:54:54 +0200")
 References: <1473713695-2611-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1473713695-2611-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87a8f1zqc4.fsf@dell.be.48ers.dk>
+ <1473713695-2611-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8760ppzq74.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,15 +15,13 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > This is an initial list of Buildroot developers. It has been created
- > semi-automatically by parsing the Git history, and finding the authors
- > of commits with a title like "<foo>: new package". Some additional
- > manual tweaking has been done (merging multiple entries corresponding to
- > the same person, adding some more entries, etc.).
+ > This commit updates the contribute.txt part of the manual to tell
+ > people to use get-developers to get the appropriate "git send-email"
+ > command when sending patches.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Committed, thanks.
+Committed after changing --to to --cc as suggested by Yann/Arnout, thanks.
 
 -- 
 Bye, Peter Korsgaard
