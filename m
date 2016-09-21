@@ -1,41 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Sep 2016 05:53:07 +0200
-Subject: [Buildroot] [git commit] libglib2: add host-util-linux for host
-	variant
-Message-ID: <20160921035328.ED1357F984@busybox.osuosl.org>
+Date: Wed, 21 Sep 2016 05:53:49 +0200
+Subject: [Buildroot] [PATCH 1/2] util-linux: enable libmount for host
+ variant
+In-Reply-To: <1474403264-16066-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1474403264-16066-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160921055349.0e2f3c2f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71c5a81c96873c056cb2c54580e3ba2db528ca8a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-It's required now, fixes:
-http://autobuild.buildroot.net/results/e81/e81f98561867d370115a019284682c0611796978/
+On Tue, 20 Sep 2016 17:27:43 -0300, Gustavo Zacarias wrote:
+> It's a necessary dependency to build the new host-libglib2.
+> libblkd is an indirect dependency for libmount.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/util-linux/util-linux.mk | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libglib2/libglib2.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Both patches applied to master, thanks.
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 5bc6ed5..f199a4a 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -105,7 +105,12 @@ LIBGLIB2_DEPENDENCIES = \
- 	libffi pcre util-linux zlib $(if $(BR2_NEEDS_GETTEXT),gettext)
- 
- HOST_LIBGLIB2_DEPENDENCIES = \
--	host-gettext host-libffi host-pcre host-pkgconf host-zlib
-+	host-gettext \
-+	host-libffi \
-+	host-pcre \
-+	host-pkgconf \
-+	host-util-linux \
-+	host-zlib
- 
- LIBGLIB2_CONF_OPTS = \
- 	--with-pcre=system
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
