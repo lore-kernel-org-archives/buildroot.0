@@ -1,80 +1,39 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Thu, 22 Sep 2016 00:29:14 +0530
-Subject: [Buildroot] [RFC PATCH] scripts/get-developers: correct type of
-	patches argument
-Message-ID: <1474484355-18864-1-git-send-email-rahul.bedarkar@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Sep 2016 21:07:22 +0200
+Subject: [Buildroot] Update of pre-built Buildroot toolchains
+Message-ID: <20160921210722.1b078ab1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Current type for 'patches' argument is str. It supposed to only
-contain names of files.
+Hello,
 
-If we specify FileType as type, then we don't need to open file ourself
-and it allows script to read patch from standard input as well.
+I have just deployed a new set of pre-build Buildroot toolchains in the
+autobuilders. The toolchains have all been rebuilt as of commit
+589cbc61b0913891fd00019365e52b9e50ff7250. Major changes are:
 
-e.g.
-$ git show -1 | ./support/scripts/get-developers -
+ * Almost all toolchains have been switched to the default of gcc 5.x.
+   There are still a few toolchains that intentionally use different
+   gcc version: some using gcc 6.x, some using gcc 4.8.x.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
----
- support/scripts/get-developers     |  4 ++--
- support/scripts/getdeveloperlib.py | 25 ++++++++++++-------------
- 2 files changed, 14 insertions(+), 15 deletions(-)
+ * The ARC toolchain has been updated with the latest version of the
+   ARC toolchain components.
 
-diff --git a/support/scripts/get-developers b/support/scripts/get-developers
-index f73512f..77a4ab0 100755
---- a/support/scripts/get-developers
-+++ b/support/scripts/get-developers
-@@ -5,8 +5,8 @@ import getdeveloperlib
- 
- def parse_args():
-     parser = argparse.ArgumentParser()
--    parser.add_argument('patches', metavar='P', type=str, nargs='*',
--                        help='list of patches')
-+    parser.add_argument('patches', metavar='P', type=argparse.FileType('r'), nargs='*',
-+                        help='list of patches (use - to read patches from stdin)')
-     parser.add_argument('-a', dest='architecture', action='store',
-                         help='find developers in charge of this architecture')
-     parser.add_argument('-p', dest='package', action='store',
-diff --git a/support/scripts/getdeveloperlib.py b/support/scripts/getdeveloperlib.py
-index 7b39041..6519107 100644
---- a/support/scripts/getdeveloperlib.py
-+++ b/support/scripts/getdeveloperlib.py
-@@ -16,19 +16,18 @@ def analyze_patch(patch):
-     removed by the patch."""
-     files = set()
-     infras = set()
--    with open(patch, "r") as f:
--        for line in f:
--            # If the patch is adding a package, find which infra it is
--            m = FIND_INFRA_IN_PATCH.match(line)
--            if m:
--                infras.add(m.group(2))
--            if not line.startswith("+++ "):
--                continue
--            line.strip()
--            fname = line[line.find("/") + 1 : ].strip()
--            if fname == "dev/null":
--                continue
--            files.add(fname)
-+    for line in patch:
-+        # If the patch is adding a package, find which infra it is
-+        m = FIND_INFRA_IN_PATCH.match(line)
-+        if m:
-+            infras.add(m.group(2))
-+        if not line.startswith("+++ "):
-+            continue
-+        line.strip()
-+        fname = line[line.find("/") + 1 : ].strip()
-+        if fname == "dev/null":
-+            continue
-+        files.add(fname)
-     return (files, infras)
- 
- FIND_INFRA_IN_MK = re.compile("^\$\(eval \$\((host-)?([^-]*)-package\)\)$")
+ * The Blackfin toolchain has the latest uClibc fix.
+
+ * The musl toolchains now have TLS enabled thanks to the rework of the
+   TLS handling.
+
+ * The bleeding edge toolchain (br-arm-cortex-a9-glibc) has been updated
+   to use binutils 2.27 and glibc 2.24. It continues to use gcc 6.x, of
+   course.
+
+Best regards,
+
+Thomas
 -- 
-2.6.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
