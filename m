@@ -1,36 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Sep 2016 09:01:37 +0200
-Subject: [Buildroot] [PATCH] systemd: let getty instead of serial-getty
-	handle /dev/console
-In-Reply-To: <20160911210951.GP5740@free.fr> (Yann E. MORIN's message of "Sun, 
- 11 Sep 2016 23:09:51 +0200")
-References: <1473437418-27792-1-git-send-email-bos@je-eigen-domein.nl>
- <20160911210951.GP5740@free.fr>
-Message-ID: <87intpzqge.fsf@dell.be.48ers.dk>
+Date: Wed, 21 Sep 2016 09:03:11 +0200
+Subject: [Buildroot] [PATCH v3 1/4] support/scripts/get-developers: add
+	new script
+In-Reply-To: <1473713695-2611-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 12 Sep 2016 22:54:52 +0200")
+References: <1473713695-2611-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1473713695-2611-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87eg4dzqds.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Floris, All,
- > On 2016-09-09 18:10 +0200, Floris Bos spake thusly:
- >> The serial-getty unit depends on dev-%i.device which does not
- >> seem to be created for /dev/console
- >> Workaround this by letting normal getty unit handle things
- >> if BR2_TARGET_GENERIC_GETTY_PORT is set to 'console'
- >> 
- >> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+ > This script, and its companion library, is more-or-less Buildroot's
+ > equivalent to the kernel get_maintainer.pl script: it allows to get the
+ > list of developers to whom a set of patches should be sent to.
 
- > I haven't tested that, but I think this is OK just on principle.
+ > To do so, it first relies on a text file, named DEVELOPERS, at the root
+ > of the Buildroot source tree (added in a followup commit) to list the
+ > developers and the files they are interested in. The DEVELOPERS file's
+ > format is simple:
 
- > I just wonder if that behaves correctly when console is a serial line or
- > anything else (e.g. a VT on HDMI, or through a debug channel...)
+ > N:     Firstname Lastname <email>
+ > F:     path/to/file
+ > F:     path/to/another/file
 
-Yeah, me too. Does anybody know what the difference exactly is between
-getty/serial-getty, and when one should be used over the other?
+ > This allows to associate developers with the files they are looking
+ > after, be they related to a package, a defconfig, a filesystem image, a
+ > package infrastructure, the documentation, or anything else.
+
+ > When a directory is given, the tool assumes that the developer handles
+ > all files and subdirectories in this directory. For example
+ > "package/qt5/" can be used for the developers looking after all the Qt5
+ > packages.
+
+ > Conventional shell patterns can be used, so "package/python-*" can be
+ > used for the developers who want to look after all packages matching
+ > "python-*".
+
+ > A few files are recognized specially:
+
+ >  - .mk files are parsed, and if they contain $(eval
+ >    $(<something>-package)), the developer is assumed to be looking after
+ >    the corresponding package. This way, autobuilder failures for this
+ >    package can be reported directly to this developer.
+
+ >  - arch/Config.in.<arch> files are recognized as "the developer is
+ >    looking after the <arch> architecture". In this case, get-developer
+ >    parses the arch/Config.in.<arch> to get the list of possible BR2_ARCH
+ >    values. This way, autobuilder failures for this package can be
+ >    reported directly to this developer.
+
+ >  - pkg/pkg-<infra>.mk are recognized as "the developer is looking after
+ >    the <infra> package infrastructure. In this case, any patch that adds
+ >    or touches a .mk file that uses this infrastructure will be sent to
+ >    this developer.
+
+Committed, thanks. Care to send a followup patch fixing the issues
+Arnout pointed out?
 
 -- 
 Bye, Peter Korsgaard
