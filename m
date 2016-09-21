@@ -1,49 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Sep 2016 20:52:01 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: fix removed packages or
-	inexisting packages
-Message-ID: <20160921185208.A05248184E@busybox.osuosl.org>
+Date: Wed, 21 Sep 2016 20:52:31 +0200
+Subject: [Buildroot] [PATCH 2/2] python-daemon: add missing dependencies
+In-Reply-To: <20160921134044.29040-2-yegorslists@googlemail.com>
+References: <20160921134044.29040-1-yegorslists@googlemail.com>
+ <20160921134044.29040-2-yegorslists@googlemail.com>
+Message-ID: <20160921205231.08b73e4c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=528ca1e6bff9734bc216dda590ab1e470d7d693d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-elementary, libevas-generic-loaders and smtools3 no longer exist.
+On Wed, 21 Sep 2016 15:40:44 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> python-daemon package mentions python-docutils in both setup_requires
+> and instal_requires fields. So add related dependencies.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/0c3/0c3866038f7c40888e5e440f7a720fc614a6b1ba/
+> http://autobuild.buildroot.net/results/5d8/5d817bddeff5bb49ed31c6a1d111974c358ef96c/
+> and many more.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/python-daemon/Config.in        | 1 +
+>  package/python-daemon/python-daemon.mk | 1 +
+>  2 files changed, 2 insertions(+)
 
-pygame doesn't exist, it's named python-pygame.
+Applied to master, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8205a82..52ed83f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -812,8 +812,7 @@ F:	package/libcddb/
- F:	package/libmodbus/
- F:	package/ltris/
- F:	package/opentyrian/
--F:	package/pygame/
--F:	package/smtools3/
-+F:	package/python-pygame/
- 
- N:	Julien Corjon <corjon.j@ecagroup.com>
- F:	package/qt5/
-@@ -1182,11 +1181,9 @@ F:	package/vnstat/
- N:	Romain Naour <romain.naour@gmail.com>
- F:	package/bullet/
- F:	package/efl/
--F:	package/elementary/
- F:	package/enlightenment/
- F:	package/expedite/
- F:	package/iqvlinux/
--F:	package/libevas-generic-loaders/
- F:	package/liblinear/
- F:	package/mcelog/
- F:	package/openpowerlink/
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
