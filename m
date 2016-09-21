@@ -1,28 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Sep 2016 14:11:48 +0200
-Subject: [Buildroot] [PATCH 1/7] libglib2: bump to version 2.50.0
-In-Reply-To: <1474383696-4045-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1474383696-4045-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160921141148.3aedf147@free-electrons.com>
+Date: Wed, 21 Sep 2016 14:34:07 +0200
+Subject: [Buildroot] [PATCH] docs/manual: fix packages having a subdirectory
+Message-ID: <1474461247-18243-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+efl and matchbox no longer have a subdirectory containing multiple
+packages, so they are no longer good examples of that. Mention qt5 and
+gstreamer instead.
 
-On Tue, 20 Sep 2016 12:01:30 -0300, Gustavo Zacarias wrote:
-> It now requires util-linux libmount so add the dependency/select.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/adding-packages-directory.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-With this new version, the crc32 symbol gets defined twice in static
-linking scenarios. See
-http://autobuild.buildroot.net/results/c26/c2602f2e9db665d5a1d7cea8f3256099ce34a527/build-end.log
-
-Thomas
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index dc66f00..a74761c 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -7,7 +7,7 @@ First of all, create a directory under the +package+ directory for
+ your software, for example +libfoo+.
+ 
+ Some packages have been grouped by topic in a sub-directory:
+-+x11r7+, +efl+ and +matchbox+. If your package fits in
+++x11r7+, +qt5+ and +gstreamer+. If your package fits in
+ one of these categories, then create your package directory in these.
+ New subdirectories are discouraged, however.
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
