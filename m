@@ -1,41 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Sep 2016 15:57:29 +0200
-Subject: [Buildroot] [PATCH 1/1] shapelib: new package
-In-Reply-To: <1469969150-3029-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1469969150-3029-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <20160921155729.1c4332b7@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 21 Sep 2016 17:09:19 +0200
+Subject: [Buildroot] [PATCH] docs/manual: fix packages having a
+	subdirectory
+In-Reply-To: <1474461247-18243-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 21 Sep 2016 14:34:07 +0200")
+References: <1474461247-18243-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87d1jxthls.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, 31 Jul 2016 14:45:50 +0200, Zoltan Gyarmati wrote:
-> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> ---
->  package/Config.in              |  1 +
->  package/shapelib/Config.in     |  8 ++++++++
->  package/shapelib/shapelib.hash |  3 +++
->  package/shapelib/shapelib.mk   | 25 +++++++++++++++++++++++++
->  4 files changed, 37 insertions(+)
->  create mode 100644 package/shapelib/Config.in
->  create mode 100644 package/shapelib/shapelib.hash
->  create mode 100644 package/shapelib/shapelib.mk
+ > efl and matchbox no longer have a subdirectory containing multiple
+ > packages, so they are no longer good examples of that. Mention qt5 and
+ > gstreamer instead.
 
-Thanks, I've applied your patch, after doing the following changes:
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-    [Thomas:
-     - adjust the license: it's MIT or LGPLv2, add web/license.html to the
-       license files
-     - rewrap Config.in help text
-     - add entry to the DEVELOPERS file.]
+Committed, thanks.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
