@@ -1,86 +1,100 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 22 Sep 2016 10:07:25 +0200
-Subject: [Buildroot] [PATCH] python-simpleaudio: new package
-Message-ID: <1474531645-14889-1-git-send-email-yegorslists@googlemail.com>
+From: Rahul Jain <Rahul.Jain@imgtec.com>
+Date: Thu, 22 Sep 2016 14:55:18 +0530
+Subject: [Buildroot] [PATCH v2 1/2] ustream-ssl: new package
+Message-ID: <1474536319-12268-1-git-send-email-Rahul.Jain@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+ustream-ssl has support for polarssl and cyassl
+but since polarssl is made obsolete by mbedtls and cyassl
+is not present in buildroot, we have not added support for it.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
 ---
- package/Config.in                                  |  1 +
- package/python-simpleaudio/Config.in               | 13 +++++++++++++
- package/python-simpleaudio/python-simpleaudio.hash |  3 +++
- package/python-simpleaudio/python-simpleaudio.mk   | 15 +++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/python-simpleaudio/Config.in
- create mode 100644 package/python-simpleaudio/python-simpleaudio.hash
- create mode 100644 package/python-simpleaudio/python-simpleaudio.mk
+ Changes v1 -> v2:
+   - No changes
 
+ DEVELOPERS                         |  3 +++
+ package/Config.in                  |  1 +
+ package/ustream-ssl/Config.in      | 12 ++++++++++++
+ package/ustream-ssl/ustream-ssl.mk | 20 ++++++++++++++++++++
+ 4 files changed, 36 insertions(+)
+ create mode 100644 package/ustream-ssl/Config.in
+ create mode 100644 package/ustream-ssl/ustream-ssl.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 605af96..d85d3db 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1158,6 +1158,9 @@ F:	package/gssdp/
+ F:	package/gupnp/
+ F:	package/gupnp-av/
+ 
++N:	Rahul Jain <rahul.jain@imgtec.com>
++F:	package/ustream-ssl
++
+ N:	Renaud Aubin <root@renaud.io>
+ F:	package/libhttpparser/
+ 
 diff --git a/package/Config.in b/package/Config.in
-index 9ca6c15..fe3ac2c 100644
+index a9f6bc7..3421fd1 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -769,6 +769,7 @@ menu "External python modules"
- 	source "package/python-setproctitle/Config.in"
- 	source "package/python-setuptools/Config.in"
- 	source "package/python-shutilwhich/Config.in"
-+	source "package/python-simpleaudio/Config.in"
- 	source "package/python-simplejson/Config.in"
- 	source "package/python-singledispatch/Config.in"
- 	source "package/python-sip/Config.in"
-diff --git a/package/python-simpleaudio/Config.in b/package/python-simpleaudio/Config.in
+@@ -898,6 +898,7 @@ menu "Crypto"
+ 	source "package/polarssl/Config.in"
+ 	source "package/tinydtls/Config.in"
+ 	source "package/trousers/Config.in"
++	source "package/ustream-ssl/Config.in"
+ endmenu
+ 
+ menu "Database"
+diff --git a/package/ustream-ssl/Config.in b/package/ustream-ssl/Config.in
 new file mode 100644
-index 0000000..a3e07f9
+index 0000000..540e436
 --- /dev/null
-+++ b/package/python-simpleaudio/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_SIMPLEAUDIO
-+	bool "python-simpleaudio"
-+	depends on BR2_PACKAGE_PYTHON3
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
-+	select BR2_PACKAGE_ALSA_LIB
++++ b/package/ustream-ssl/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_USTREAM_SSL
++	bool "ustream-ssl"
++	depends on !BR2_STATIC_LIBS #libubox
++	select BR2_PACKAGE_LIBUBOX
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
 +	help
-+	  The simplaudio package provides cross-platform, dependency-free
-+	  audio playback capability for Python 3 on OSX, Windows, and Linux.
++	  ustream SSL wrapper
 +
-+	  https://github.com/hamiltron/py-simple-audio
++	  https://git.openwrt.org/?p=project/ustream-ssl.git;a=summary
 +
-+comment "python-simpleaudio needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/python-simpleaudio/python-simpleaudio.hash b/package/python-simpleaudio/python-simpleaudio.hash
++comment "ustream-ssl needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/ustream-ssl/ustream-ssl.mk b/package/ustream-ssl/ustream-ssl.mk
 new file mode 100644
-index 0000000..7e3a7fb
+index 0000000..d8f8aed
 --- /dev/null
-+++ b/package/python-simpleaudio/python-simpleaudio.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/simpleaudio/json, sha256 locally computed
-+md5     8c1c82fdf7ebba1a79b1243651e451d7 simpleaudio-1.0.1.tar.gz
-+sha256  6cc84d50d8192c074505c719722138ae6ea987fd8eee7fd930237cb308962604  simpleaudio-1.0.1.tar.gz
-diff --git a/package/python-simpleaudio/python-simpleaudio.mk b/package/python-simpleaudio/python-simpleaudio.mk
-new file mode 100644
-index 0000000..b9562ee
---- /dev/null
-+++ b/package/python-simpleaudio/python-simpleaudio.mk
-@@ -0,0 +1,15 @@
-+#############################################################
++++ b/package/ustream-ssl/ustream-ssl.mk
+@@ -0,0 +1,20 @@
++################################################################################
 +#
-+# python-simpleaudio
++# ustream-ssl
 +#
-+#############################################################
++################################################################################
 +
-+PYTHON_SIMPLEAUDIO_VERSION = 1.0.1
-+PYTHON_SIMPLEAUDIO_SOURCE = simpleaudio-$(PYTHON_SIMPLEAUDIO_VERSION).tar.gz
-+PYTHON_SIMPLEAUDIO_SITE = https://pypi.python.org/packages/12/f6/327c1af94062a6a6a5ff06dcf9dc689ed81aa07ae757cca3438c3c9e50fe
-+PYTHON_SIMPLEAUDIO_LICENSE = MIT
-+PYTHON_SIMPLEAUDIO_LICENSE_FILES = LICENSE.txt
-+PYTHON_SIMPLEAUDIO_SETUP_TYPE = setuptools
-+PYTHON_SIMPLEAUDIO_DEPENDENCIES = alsa-lib
++USTREAM_SSL_VERSION = ec80adaa1b47f28d426fa19c692011ce60b992d6
++USTREAM_SSL_SITE = git://git.openwrt.org/project/ustream-ssl.git
++USTREAM_SSL_LICENSE = ISC
++USTREAM_SSL_INSTALL_STAGING = YES
++USTREAM_SSL_DEPENDENCIES = libubox
 +
-+$(eval $(python-package))
++ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++USTREAM_SSL_DEPENDENCIES += mbedtls
++USTREAM_SSL_CONF_OPTS += -DMBEDTLS=ON
++else
++USTREAM_SSL_DEPENDENCIES += openssl
++endif
++
++$(eval $(cmake-package))
 -- 
-2.1.4
+2.6.2
