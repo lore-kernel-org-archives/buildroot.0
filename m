@@ -1,105 +1,75 @@
 From: Lothar Felten <lothar.felten@gmail.com>
-Date: Fri, 23 Sep 2016 00:20:49 +0200
-Subject: [Buildroot] [PATCH 2/2] configs: new defconfig for beaglebone_qt5
-In-Reply-To: <1474582849-10730-1-git-send-email-lothar.felten@gmail.com>
-References: <1474582849-10730-1-git-send-email-lothar.felten@gmail.com>
-Message-ID: <1474582849-10730-2-git-send-email-lothar.felten@gmail.com>
+Date: Fri, 23 Sep 2016 00:21:42 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI am335x-evm
+In-Reply-To: <20160921140912.29c4584e@free-electrons.com>
+References: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
+ <20160918193045.15a33be3@free-electrons.com>
+ <87fuotya3r.fsf@dell.be.48ers.dk>
+ <20160921105303.1832ad5e@free-electrons.com>
+ <87bmzhy6ci.fsf@dell.be.48ers.dk>
+ <20160921121803.487035d8@free-electrons.com>
+ <877fa5y1y2.fsf@dell.be.48ers.dk>
+ <20160921140912.29c4584e@free-electrons.com>
+Message-ID: <f297e95d-443c-06e1-3430-4ab4a752e964@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a target configuration for the beaglebone that supports the SGX530
-graphics acceleration and builds the qt5 demos with the eglfs backend.
-The imagination technologies demos and fbv are also included.
-The linux kernel is based on the omap2plus defconfig, a config fragment
-adds the required settings for SGX accelerator support.
+Hello,
 
-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
----
- board/beaglebone/linux-4.1-sgx.fragment | 12 ++++++++++
- board/beaglebone/readme.txt             |  2 +-
- configs/beaglebone_qt5_defconfig        | 39 +++++++++++++++++++++++++++++++++
- 3 files changed, 52 insertions(+), 1 deletion(-)
- create mode 100644 board/beaglebone/linux-4.1-sgx.fragment
- create mode 100644 configs/beaglebone_qt5_defconfig
+On 21.09.2016 14:09, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Wed, 21 Sep 2016 12:36:21 +0200, Peter Korsgaard wrote:
+>
+>>  > How would you name this common configuration then?
+>>
+>> I would just call it beaglebone, and mention in the readme what boards
+>> it works on.
+>>
+>> Newcomers are much more likely to have one of the beaglebone boards than
+>> an evm, so naming it like that imho makes sense.
+>
+> OK, fine with me.
+>
+> Thomas
+>
 
-diff --git a/board/beaglebone/linux-4.1-sgx.fragment b/board/beaglebone/linux-4.1-sgx.fragment
-new file mode 100644
-index 0000000..c0d2e7b
---- /dev/null
-+++ b/board/beaglebone/linux-4.1-sgx.fragment
-@@ -0,0 +1,12 @@
-+CONFIG_PREEMPT=y
-+CONFIG_PREEMPT_COUNT=y
-+CONFIG_OMAP2_DSS_INIT=y
-+CONFIG_OMAP_DSS_BASE=y
-+CONFIG_OMAP2_DSS=y
-+CONFIG_OMAP2_DSS_DPI=y
-+CONFIG_DRM_OMAP=y
-+CONFIG_DRM_OMAP_NUM_CRTCS=2
-+CONFIG_DRM_OMAP_WB_M2M=y
-+CONFIG_DRM_TILCDC=y
-+CONFIG_DRM_I2C_NXP_TDA998X=y
-+CONFIG_DRM=y
-diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
-index d8ff91e..d50c2bb 100644
---- a/board/beaglebone/readme.txt
-+++ b/board/beaglebone/readme.txt
-@@ -8,7 +8,7 @@ This configuration will build a complete image for the beaglebone and the
- TI AM335x-EVM, the board type is identified by the on-board EEPROM.
- The configuration is based on the ti-processor-sdk-02.00.00.00.
- Device tree blobs for beaglebone variants and the evm-sk are built too.
--
-+For Qt5 support support use the beaglebone_qt5_defconfig
- 
- How to build it
- ===============
-diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
-new file mode 100644
-index 0000000..f554bb0
---- /dev/null
-+++ b/configs/beaglebone_qt5_defconfig
-@@ -0,0 +1,39 @@
-+BR2_arm=y
-+BR2_cortex_a8=y
-+BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="52c4aa7cdb93d61f8008f380135beaf7b8fa6593"
-+BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/beaglebone/linux-4.1-sgx.fragment"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-evmsk"
-+BR2_PACKAGE_FBV=y
-+BR2_PACKAGE_QT5=y
-+BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-+BR2_PACKAGE_QT5BASE_EXAMPLES=y
-+BR2_PACKAGE_QT5BASE_EGLFS=y
-+BR2_PACKAGE_QT5QUICKCONTROLS=y
-+BR2_PACKAGE_TI_SGX_DEMOS=y
-+BR2_PACKAGE_TI_SGX_KM=y
-+BR2_PACKAGE_TI_SGX_UM=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="MLO"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
--- 
-1.9.1
+I changed the patches, they now update the current beaglebone, the 
+defconfigs will be: beaglebone_defconfig and beaglebone_qt_defconfig.
+The readme.txt lists the supported targets.
+
+>> Uboot SD card patch:
+>> Early AM335x-evm boards can only use 1 bit communication to the SD card, on
+>> newer board revisions this might be fixed.
+>> Forcing 1 bit communication slows down the communication but will work
+>> regardless if the SD card is attached via 1 or 4 bits.
+>> If the board has a working 4 bit SD card interface, this patch can be removed,
+>> this will speed up the access.
+>
+> Do you still have those early AM335x EVM boards? Are they widespread?
+> I'm wondering if it really makes sense to have this patch.
+
+I've only use two EVMs and they both have the issue, I'm not sure that 
+it ever got fixed. Any board will run in 1 bit mode, but some evms won't 
+run in 4 bit mode, so I think that's a safe choice. Anyway, it applies 
+to the uboot only.
+
+>> +BR2_KERNEL_HEADERS_4_1=y
+>
+> Use "same headers as the kernel sources" option please.
+
+ok
+
+>> +BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
+>
+> Does this really work for the BeagleBone, which uses ttyO2 if I
+> remember correctly? Maybe another reason to have a defconfig that
+> supports just the am335x_evm.
+
+The beaglebone (ttyO0 on USB) beagleboneblack (ttyO0 on pinheader) and 
+the evm (sub d 9 pin) all use ttyO0
+
+Lothar
