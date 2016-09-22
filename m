@@ -1,63 +1,48 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 22 Sep 2016 19:16:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openssl: security bump to version
-	1.0.2i
-Message-ID: <20160922171654.23121-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 22 Sep 2016 19:49:41 +0200
+Subject: [Buildroot] [PATCH 1/2 v3] linux/tools: make it a real,
+	separate package
+In-Reply-To: <874m58ouba.fsf@dell.be.48ers.dk>
+References: <cover.1473171931.git.yann.morin.1998@free.fr>
+ <7af6b231b19828564aae1a098568e96e15843a62.1473171931.git.yann.morin.1998@free.fr>
+ <874m58ouba.fsf@dell.be.48ers.dk>
+Message-ID: <20160922194941.7bc0f7da@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://www.openssl.org/news/secadv/20160922.txt
+Hello,
 
-Fixes
-SSL_peek() hang on empty record (CVE-2016-6305)
-SWEET32 Mitigation (CVE-2016-2183)
-OOB write in MDC2_Update() (CVE-2016-6303)
-Malformed SHA512 ticket DoS (CVE-2016-6302)
-OOB write in BN_bn2dec() (CVE-2016-2182)
-OOB read in TS_OBJ_print_bio() (CVE-2016-2180)
-Pointer arithmetic undefined behaviour (CVE-2016-2177)
-Constant time flag not preserved in DSA signing (CVE-2016-2178)
-DTLS buffered message DoS (CVE-2016-2179)
-DTLS replay protection DoS (CVE-2016-2181)
-Certificate message OOB reads (CVE-2016-6306)
-Excessive allocation of memory in tls_get_message_header()
-  (CVE-2016-6307)
-Excessive allocation of memory in dtls1_preprocess_fragment()
-  (CVE-2016-6308)
+On Thu, 22 Sep 2016 16:58:17 +0200, Peter Korsgaard wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/openssl/openssl.hash | 4 ++--
- package/openssl/openssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> In this case there isn't actually a real circular dependency, as the
+> only dependency between openssl and cryptodev-linux is the cryptodev.h
+> header, right?
+> 
+> So another solution could have been to split the cryptodev-linux package
+> in two, like we do for mesa3d and mesa3d-headers.
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index edbce8e..50a0cc7 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.0.2h.tar.gz.sha256
--sha256	1d4007e53aad94a5b2002fe045ee7bb0b3d98f1a47f8b2bc851dcd1c74332919	openssl-1.0.2h.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2i.tar.gz.sha256
-+sha256	9287487d11c9545b6efb287cdb70535d4e9b284dd10d51441d9b9963d000de6f	openssl-1.0.2i.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index efe2b49..055ed79 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSL_VERSION = 1.0.2h
-+OPENSSL_VERSION = 1.0.2i
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+Yes, possibly this could have been done. However, mesa3d/mesa3d-headers
+is not about a split really. mesa3d-headers is only here to provide the
+OpenGL headers when they are not provided by the selected OpenGL
+implementation. So you never use mesa3d+mesa3d-headers, for example.
+
+> The cryptodev-linux package would build the kernel module (and depend
+> on linux), whereas the cryptodev-linux-headers package would only
+> install cryptodev.h (and not have a compile time dependency on linux).
+
+Correct. But there was really no reason for those "Linux tools" to be
+built as part of the linux package, so I think Yann's approach is just
+fine.
+
+BTW, Yann sent his initial series on July 8th, so 2.5 months ago, so
+you should have proposed alternate solutions by then :-) Why do you
+wait for me to apply the patches to start the discussion ? :-)
+
+Thomas
 -- 
-2.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
