@@ -1,65 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Sep 2016 21:09:33 +0200
-Subject: [Buildroot] [git commit] package/openssl: security bump to version
-	1.0.2i
-Message-ID: <20160922191226.7DD4081EFB@busybox.osuosl.org>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Thu, 22 Sep 2016 21:25:59 +0200
+Subject: [Buildroot] [PATCH] systemd: let getty instead of serial-getty
+ handle /dev/console
+In-Reply-To: <20160922205012.13722beb@gmx.net>
+References: <1473437418-27792-1-git-send-email-bos@je-eigen-domein.nl>
+ <20160911210951.GP5740@free.fr> <87intpzqge.fsf@dell.be.48ers.dk>
+ <20160921220545.238279e6@gmx.net>
+ <68b49446-0228-174d-ad47-9209d23ae90a@je-eigen-domein.nl>
+ <20160922205012.13722beb@gmx.net>
+Message-ID: <46b6edf4-6e2e-7200-133c-0321299f5805@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba16a7a93edb46db409e51992c265ca7e14c13ff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/22/2016 08:50 PM, Peter Seiderer wrote:
+> Hello Floris,
+>
+> On Wed, 21 Sep 2016 23:47:02 +0200, Floris Bos <bos@je-eigen-domein.nl> wrote:
+>
+>> On 09/21/2016 10:05 PM, Peter Seiderer wrote:
+>>> Hello *,
+>>>
+>>> On Wed, 21 Sep 2016 09:01:37 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>
+>>>>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>    > Floris, All,
+>>>>    > On 2016-09-09 18:10 +0200, Floris Bos spake thusly:
+>>>>    >> The serial-getty unit depends on dev-%i.device which does not
+>>>>    >> seem to be created for /dev/console
+>>>>    >> Workaround this by letting normal getty unit handle things
+>>>>    >> if BR2_TARGET_GENERIC_GETTY_PORT is set to 'console'
+>>>>    >>
+>>>>    >> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+>>>>
+>>>>    > I haven't tested that, but I think this is OK just on principle.
+>>>>
+>>>>    > I just wonder if that behaves correctly when console is a serial line or
+>>>>    > anything else (e.g. a VT on HDMI, or through a debug channel...)
+>>>>
+>>>> Yeah, me too. Does anybody know what the difference exactly is between
+>>>> getty/serial-getty, and when one should be used over the other?
+>>>>
+>>> Tested for the rpi3/glibc/systemd case and failed: I get a doubled
+>>> (and unusable) ' Welcome to Buildroot/buildroot login:' on serial and
+>>> no login on hdmi...
+>> Empty cmdline.txt will give hdmi.
+>>
+>> Recall you need "console=serial0,115200 console=tty1" with tty1 last in
+>> cmdline.txt if you want them simultaneous.
+> Changed cmdline.txt to:
+>
+> 	root=/dev/mmcblk0p2 rootwait console=ttyAMA0,115200 console=tty1
+>
+> Which gives me two (functional) logins on serial and hdmi.
+>
+> But I think changing package/rpi-firmware/cmdline.txt unconditional will
+> break the other Init systems, see commit log from last patch touching
+> cmdline.txt ([1):
+>
+>    ...change BR2_TARGET_GENERIC_GETTY_PORT to "console", so it starts a
+>    getty on the last console= passed to the kernel, ttyAMA0...
 
-https://www.openssl.org/news/secadv/20160922.txt
+Will withdraw my patch then, and wait for someone else to come up with a 
+better solution.
 
-Fixes
-SSL_peek() hang on empty record (CVE-2016-6305)
-SWEET32 Mitigation (CVE-2016-2183)
-OOB write in MDC2_Update() (CVE-2016-6303)
-Malformed SHA512 ticket DoS (CVE-2016-6302)
-OOB write in BN_bn2dec() (CVE-2016-2182)
-OOB read in TS_OBJ_print_bio() (CVE-2016-2180)
-Pointer arithmetic undefined behaviour (CVE-2016-2177)
-Constant time flag not preserved in DSA signing (CVE-2016-2178)
-DTLS buffered message DoS (CVE-2016-2179)
-DTLS replay protection DoS (CVE-2016-2181)
-Certificate message OOB reads (CVE-2016-6306)
-Excessive allocation of memory in tls_get_message_header()
-  (CVE-2016-6307)
-Excessive allocation of memory in dtls1_preprocess_fragment()
-  (CVE-2016-6308)
+I think the one-size-fits all cmdline.txt that listens to both on HDMI 
+and serial console by default makes things too complicated anyway.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openssl/openssl.hash | 4 ++--
- package/openssl/openssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index edbce8e..50a0cc7 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.0.2h.tar.gz.sha256
--sha256	1d4007e53aad94a5b2002fe045ee7bb0b3d98f1a47f8b2bc851dcd1c74332919	openssl-1.0.2h.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2i.tar.gz.sha256
-+sha256	9287487d11c9545b6efb287cdb70535d4e9b284dd10d51441d9b9963d000de6f	openssl-1.0.2i.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index efe2b49..055ed79 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSL_VERSION = 1.0.2h
-+OPENSSL_VERSION = 1.0.2i
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+Yours sincerely,
+
+Floris Bos
