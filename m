@@ -1,57 +1,44 @@
-From: Cyril Bur <cyrilbur@gmail.com>
-Date: Thu, 22 Sep 2016 10:01:50 +1000
-Subject: [Buildroot] [PATCH] package/kvm-unit-tests: new package
-In-Reply-To: <20160921092449.32147532@free-electrons.com>
-References: <20160817230236.8255-1-cyrilbur@gmail.com>
- <20160921092449.32147532@free-electrons.com>
-Message-ID: <1474502510.2194.0.camel@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 22 Sep 2016 06:41:42 +0300
+Subject: [Buildroot] [PATCH 1/1] shapelib: new package
+In-Reply-To: <8760pprm82.fsf@dell.be.48ers.dk>
+References: <1469969150-3029-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <20160921155729.1c4332b7@free-electrons.com>
+ <20160921164753.j56sstaxx7jy4j66@tarshish>
+ <20160921200430.74f46a81@free-electrons.com>
+ <8760pprm82.fsf@dell.be.48ers.dk>
+Message-ID: <20160922034142.itfvvgp56mdxcslu@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2016-09-21 at 09:24 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 18 Aug 2016 09:02:36 +1000, Cyril Bur wrote:
-> > 
-> > The unit tests are tiny guest operating systems that generally
-> > execute
-> > only tens of lines of C and assembler test code in order to obtain
-> > its
-> > PASS/FAIL result. Unit tests provide KVM and virt hardware
-> > functional
-> > testing by targeting the features through minimal implementations
-> > of
-> > their use per the hardware specification. The simplicity of unit
-> > tests
-> > make them easy to verify they are correct, easy to maintain, and
-> > easy
-> > to use in timing measurements. Unit tests are also often used for
-> > quick and dirty bug reproducers. The reproducers may then be kept
-> > as
-> > regression tests. It's strongly encouraged that patches
-> > implementing
-> > new KVM features are submitted with accompanying unit tests.
-> > http://www.linux-kvm.org/page/KVM-unit-tests
-> > 
-> > Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
-> 
-> This package is causing a good number of build failures. See:
-> 
-> ?????????arm | kvm-unit-tests-682187afcc99... | NOK | http://autobuil
-> d.buildroot.net/results/a81d40f1453ee027c7e2a9da01f482e1d09b464d
-> ????????i686 | kvm-unit-tests-682187afcc99... | NOK | http://autobuil
-> d.buildroot.net/results/20efe1e310fe71a587774bbe8490d6357acc8edd
-> ??????x86_64 | kvm-unit-tests-682187afcc99... | NOK | http://autobuil
-> d.buildroot.net/results/07deb6183ed23447de5182ee20df6c9c49e5ca49
-> 
-> Could you have a look and provide patches to address these?
-> 
+Hi Peter,
 
-Sure i'll see what appears to be happening.
-
-> Thanks,
+On Wed, Sep 21, 2016 at 11:12:29PM +0200, Peter Korsgaard wrote:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>  > On Wed, 21 Sep 2016 19:47:53 +0300, Baruch Siach wrote:
+>  >> A DEVELOPERS file update on every new package makes cherry-picking 
+>  >> harder. For that reason, I think, Peter stopped updating the CHANGES 
+>  >> file in every patch.
 > 
-> Thomas
+>  > Right. What should we do then? Update the DEVELOPERS file in a separate
+>  > patch? But then we're going to have zillions of patches whose sole
+>  > purpose of to update the DEVELOPERS file. But of course, that's better
+>  > for cherry-picking.
+> 
+> Either that or I update DEVELOPERS when I also update CHANGES, but not
+> everyone might want to get listed / might want to get listed without
+> being the author of the commit adding the package.
+
+A DEVELOPERS entry is probably most useful when the package is first added, as 
+it starts showing up in the autobuilder. Delaying the DEVELOPERS update 
+reduces its usefulness.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
