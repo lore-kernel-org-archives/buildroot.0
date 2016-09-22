@@ -1,38 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Sep 2016 07:16:06 +0200
-Subject: [Buildroot] [PATCH 1/1] shapelib: new package
-In-Reply-To: <20160922034142.itfvvgp56mdxcslu@tarshish> (Baruch Siach's
- message of "Thu, 22 Sep 2016 06:41:42 +0300")
-References: <1469969150-3029-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <20160921155729.1c4332b7@free-electrons.com>
- <20160921164753.j56sstaxx7jy4j66@tarshish>
- <20160921200430.74f46a81@free-electrons.com>
- <8760pprm82.fsf@dell.be.48ers.dk>
- <20160922034142.itfvvgp56mdxcslu@tarshish>
-Message-ID: <87bmzgqzu1.fsf@dell.be.48ers.dk>
+Date: Thu, 22 Sep 2016 07:18:18 +0200
+Subject: [Buildroot] [PATCH] package/kvm-unit-tests: new package
+In-Reply-To: <1474502510.2194.0.camel@gmail.com> (Cyril Bur's message of "Thu, 
+ 22 Sep 2016 10:01:50 +1000")
+References: <20160817230236.8255-1-cyrilbur@gmail.com>
+ <20160921092449.32147532@free-electrons.com>
+ <1474502510.2194.0.camel@gmail.com>
+Message-ID: <877fa4qzqd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Cyril" == Cyril Bur <cyrilbur@gmail.com> writes:
 
 Hi,
 
- >> Either that or I update DEVELOPERS when I also update CHANGES, but not
- >> everyone might want to get listed / might want to get listed without
- >> being the author of the commit adding the package.
+ >> This package is causing a good number of build failures. See:
+ >> 
+ >> ?????????arm | kvm-unit-tests-682187afcc99... | NOK | http://autobuil
+ >> d.buildroot.net/results/a81d40f1453ee027c7e2a9da01f482e1d09b464d
+ >> ????????i686 | kvm-unit-tests-682187afcc99... | NOK | http://autobuil
+ >> d.buildroot.net/results/20efe1e310fe71a587774bbe8490d6357acc8edd
+ >> ??????x86_64 | kvm-unit-tests-682187afcc99... | NOK | http://autobuil
+ >> d.buildroot.net/results/07deb6183ed23447de5182ee20df6c9c49e5ca49
+ >> 
+ >> Could you have a look and provide patches to address these?
+ >> 
 
- > A DEVELOPERS entry is probably most useful when the package is first added, as 
- > it starts showing up in the autobuilder. Delaying the DEVELOPERS update 
- > reduces its usefulness.
+ > Sure i'll see what appears to be happening.
 
-Correct. I don't think the additional trivial commits to adjust
-DEVELOPERS are really an issue, so lets just ask people to send a 2nd
-patch to update the file whenever new packages (or families of packages)
-are added.
+Some of the issues are that it expects the x86-64 toolchain to support
+-m32 for bootstrap code (which our cross compilers normally don't), so
+we need the same workaround as we do for syslinux and grub to build
+those with the host compiler.
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Bye, Peter Korsgaard
