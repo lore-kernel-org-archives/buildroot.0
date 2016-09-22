@@ -1,47 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Sep 2016 13:45:28 +0200
-Subject: [Buildroot] [PATCH 1/3] Patches for Aria G25 board based on
- Buildroot 2016.08
-In-Reply-To: <1474537834-6002-1-git-send-email-biagio.hkr@gmail.com>
-References: <1474537834-6002-1-git-send-email-biagio.hkr@gmail.com>
-Message-ID: <20160922134528.439d6d3a@free-electrons.com>
+From: Biagio Montaruli <biagio.hkr@gmail.com>
+Date: Thu, 22 Sep 2016 14:12:35 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/at91bootstrap3: bump to version 3.8.6
+Message-ID: <1474546355-26477-1-git-send-email-biagio.hkr@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Biagio Montaruli <biagio.hkr@gmail.com>
+---
+ boot/at91bootstrap3/Config.in           | 4 ++--
+ boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Thu, 22 Sep 2016 11:50:32 +0200, Biagio Montaruli wrote:
-> - configs/acmesystems_aria_g25_128mb_defconfig,
->   configs/acmesystems_aria_g25_256mb_defconfig :
->   update default configuration files for both 128MB and 256MB version
-> 
-> - board/acmesystems/aria-g25/genimage.cfg
->   board/acmesystems/aria-g25/post-image.sh :
->   add support for genimage in order to build sdcard.img
-> 
-> - board/acmesystems/aria-g25/readme.txt : update documentation
->   for Aria G25 and add notes about how to build sdcard.img
-> 
-> Signed-off-by: Biagio Montaruli <biagio.hkr@gmail.com>
-
-Applied after fixing the commit title and rewrapping the text in the
-readme.txt file.
-
-Do you want to be notified for future changes, or build problems
-related to this configuration? If so, can you please send a patch
-modifying the DEVELOPERS file, like this:
-
-N:	Your name <youremail>
-F:	board/acmesystems/<name of the board>
-F:	configs/<name of the defconfig>
-
-Thanks!
-
-Thomas
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index b8ebe80..237deb9 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -15,7 +15,7 @@ choice
+ 	prompt "AT91 Bootstrap 3 version"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+-	bool "3.8"
++	bool "3.8.6"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	bool "Custom Git repository"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
+ 	string
+-	default "v3.8" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
++	default "v3.8.6" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
+ 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 
+diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
+index eee6482..e904a46 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.hash
++++ b/boot/at91bootstrap3/at91bootstrap3.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	ae7bb3f8e631f5216f05fd4650b37f2e76d88d0b893bd680f4f398f33b8f3470  at91bootstrap3-v3.8.tar.gz
++sha256	a2e9ec6f42ee3b5a805fe215257b63070b6c498d57c568c46fcb18fd1b38ea7e  at91bootstrap3-v3.8.6.tar.gz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
