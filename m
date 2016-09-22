@@ -1,48 +1,36 @@
-From: Biagio Montaruli <biagio.hkr@gmail.com>
-Date: Thu, 22 Sep 2016 14:14:17 +0200
-Subject: [Buildroot] [PATCH 3/3] Patches to update at91bootstrap3
- package to 3.8.6 version
-In-Reply-To: <20160922122521.436eb0b5@free-electrons.com>
-References: <1474537834-6002-1-git-send-email-biagio.hkr@gmail.com>
- <1474537834-6002-3-git-send-email-biagio.hkr@gmail.com>
- <20160922122521.436eb0b5@free-electrons.com>
-Message-ID: <CAJkBjxF_hbvA3NSft-s6szk68TsapGjgY-mWLwDXUnKqwLfMZg@mail.gmail.com>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Thu, 22 Sep 2016 18:43:29 +0530
+Subject: [Buildroot] Update of pre-built Buildroot toolchains
+In-Reply-To: <20160921210722.1b078ab1@free-electrons.com>
+References: <20160921210722.1b078ab1@free-electrons.com>
+Message-ID: <57E3D8F9.4020109@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I have send the new patch for at91bootstrap3 package to Buildroot mailing
-list.
-Thanks for your help.
+Hi Thomas,
 
-2016-09-22 12:25 GMT+02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
-
+On Thursday 22 September 2016 12:37 AM, Thomas Petazzoni wrote:
 > Hello,
 >
-> On Thu, 22 Sep 2016 11:50:34 +0200, Biagio Montaruli wrote:
+> I have just deployed a new set of pre-build Buildroot toolchains in the
+> autobuilders. The toolchains have all been rebuilt as of commit
+> 589cbc61b0913891fd00019365e52b9e50ff7250. Major changes are:
 >
-> > -sha256       ae7bb3f8e631f5216f05fd4650b37f
-> 2e76d88d0b893bd680f4f398f33b8f3470  at91bootstrap3-v3.8.tar.gz
-> > +sha256       a2e9ec6f42ee3b5a805fe215257b63
-> 070b6c498d57c568c46fcb18fd1b38ea7e  at91bootstrap-3.8.6.tar.gz
+>   * Almost all toolchains have been switched to the default of gcc 5.x.
+>     There are still a few toolchains that intentionally use different
+>     gcc version: some using gcc 6.x, some using gcc 4.8.x.
 >
-> Filename should be:
+>   * The ARC toolchain has been updated with the latest version of the
+>     ARC toolchain components.
 >
->         at91bootstrap3-v3.8.6.tar.gz
->
-> since we're not yet checking hashes for Git-fetched packages you didn't
-> see the difference.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160922/7f686651/attachment.html>
+>   * The Blackfin toolchain has the latest uClibc fix.
+
+It looks like bfin config on autobuilder is not updated to use new 
+pre-build toolchain.
+
+Regards,
+
+Rahul
