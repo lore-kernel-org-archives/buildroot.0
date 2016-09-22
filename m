@@ -1,48 +1,41 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 22 Sep 2016 23:47:06 +0200
-Subject: [Buildroot] [PATCH v1] Raspberry PI update
-Message-ID: <1474580832-22406-1-git-send-email-ps.report@gmx.net>
+Date: Thu, 22 Sep 2016 23:47:11 +0200
+Subject: [Buildroot] [PATCH v1] rpi-firmware: bump version
+In-Reply-To: <1474580832-22406-1-git-send-email-ps.report@gmx.net>
+References: <1474580832-22406-1-git-send-email-ps.report@gmx.net>
+Message-ID: <1474580832-22406-6-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update rpi-firmware/rpi-userland and all raspberrypiX_defconfigs to
-kernel version 4.4.21.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Tested raspberrypi3_defconfig on Raspberry Pi 3 Model B v1.2 hardware.
-
-Peter Seiderer (6):
-  raspberrypi0_defconfig: bump to kernel version 4.4.21
-  raspberrypi_defconfig: bump to kernel version 4.4.21
-  raspberrypi2_defconfig: bump to kernel version 4.4.21
-  raspberrypi3_defconfig: bump to kernel version 4.4.21
-  rpi-firmware: bump version
-  rpi-userland: bump version
-
- configs/raspberrypi0_defconfig                     |   2 +-
- configs/raspberrypi2_defconfig                     |   2 +-
- configs/raspberrypi3_defconfig                     |   2 +-
- configs/raspberrypi_defconfig                      |   2 +-
- package/rpi-firmware/rpi-firmware.hash             |   2 +-
- package/rpi-firmware/rpi-firmware.mk               |   2 +-
- ...es-for-the-OpenGLESv2-EGL-and-bcm_host-li.patch |  17 +-
- ...emove-faulty-assert-to-make-weston-happy-.patch |  35 +++++
- .../0003-Disable-Werror-everywhere.patch           | 171 +++++++++++++++++++++
- ...emove-faulty-assert-to-make-weston-happy-.patch |  33 ----
- ...pplications-disable-missing-applications.patch} |  18 ++-
- package/rpi-userland/0004-no-Werror.patch          | 138 -----------------
- ...-dtmerge-add-missing-include-for-va_list.patch} |   0
- package/rpi-userland/rpi-userland.hash             |   2 +-
- package/rpi-userland/rpi-userland.mk               |   2 +-
- 15 files changed, 236 insertions(+), 192 deletions(-)
- create mode 100644 package/rpi-userland/0002-interface-remove-faulty-assert-to-make-weston-happy-.patch
- create mode 100644 package/rpi-userland/0003-Disable-Werror-everywhere.patch
- delete mode 100644 package/rpi-userland/0003-interface-remove-faulty-assert-to-make-weston-happy-.patch
- rename package/rpi-userland/{0005-disable-missing-all-apps.patch => 0004-host-applications-disable-missing-applications.patch} (61%)
- delete mode 100644 package/rpi-userland/0004-no-Werror.patch
- rename package/rpi-userland/{0006-dtmerge-add-missing-include-for-va_list.patch => 0005-dtmerge-add-missing-include-for-va_list.patch} (100%)
-
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index e2e31c9..6dd2163 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 b2ce949db3745354383ac0d66107cbbb8902ccbf5fc027be8824519c44d5a302 rpi-firmware-70143fe9d371cd6486a80d6765e93b5574212b64.tar.gz
++sha256 f7b649ac837a4a9c12a8f96962da310ca4efd6658621d89286b421b8784a4980 rpi-firmware-ad8608c08b122b2c228dba0ff5070d6e9519faf5.tar.gz
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 0587802..bf5c9dd 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = 70143fe9d371cd6486a80d6765e93b5574212b64
++RPI_FIRMWARE_VERSION = ad8608c08b122b2c228dba0ff5070d6e9519faf5
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
 2.8.1
