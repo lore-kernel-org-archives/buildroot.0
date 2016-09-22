@@ -1,14 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Sep 2016 07:19:24 +0200
-Subject: [Buildroot] [PATCH 1/1] shapelib: new package
-In-Reply-To: <20160922034142.itfvvgp56mdxcslu@tarshish>
-References: <1469969150-3029-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <20160921155729.1c4332b7@free-electrons.com>
- <20160921164753.j56sstaxx7jy4j66@tarshish>
- <20160921200430.74f46a81@free-electrons.com>
- <8760pprm82.fsf@dell.be.48ers.dk>
- <20160922034142.itfvvgp56mdxcslu@tarshish>
-Message-ID: <20160922071924.7a92d39b@free-electrons.com>
+Date: Thu, 22 Sep 2016 07:21:57 +0200
+Subject: [Buildroot] [PATCH v2 2/2] configs: add defconfig for TS-4900
+In-Reply-To: <017033a8-afa4-5b74-3d69-99b2bcefbbb9@mind.be>
+References: <1474143804-19181-1-git-send-email-mathieu.audat@savoirfairelinux.com>
+ <1474143804-19181-3-git-send-email-mathieu.audat@savoirfairelinux.com>
+ <20160918171032.2ee45abd@free-electrons.com>
+ <017033a8-afa4-5b74-3d69-99b2bcefbbb9@mind.be>
+Message-ID: <20160922072157.547f1747@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,22 +15,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 22 Sep 2016 06:41:42 +0300, Baruch Siach wrote:
+On Wed, 21 Sep 2016 22:35:35 +0200, Arnout Vandecappelle wrote:
 
-> > Either that or I update DEVELOPERS when I also update CHANGES, but not
-> > everyone might want to get listed / might want to get listed without
-> > being the author of the commit adding the package.  
+>  As discussed in v1 of this patch, the problem is that this is a defconfig for a
+> module. Several hardware revisions of this module exist with different DDR
+> chips, which require a different U-Boot config. So we'd need several buildroot
+> defconfigs for the different module revisions. And it's not easy to distinguish
+> between them.
 > 
-> A DEVELOPERS entry is probably most useful when the package is first added, as 
-> it starts showing up in the autobuilder. Delaying the DEVELOPERS update 
-> reduces its usefulness.
+>  In addition, recovery through USB requires a specific baseboard that sets the
+> boot mode pins in a way that you actually boot from USB. Not everybody necessary
+> has this baseboard.
+> 
+>  For these reasons, I agreed with Mathieu that it was OK to skip the bootloader.
 
-Exactly my thought: I want the DEVELOPERS file to be updated at the
-same time as a package is added, so that as soon there are autobuilder
-failures, they are directly reported to the person who contributed the
-package. That's one of the big points for having this DEVELOPERS file.
-
-Best regards,
+OK, fine with me. Thanks for the explanation!
 
 Thomas
 -- 
