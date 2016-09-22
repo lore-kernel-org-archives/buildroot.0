@@ -1,38 +1,46 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Thu, 22 Sep 2016 11:28:30 +0200
-Subject: [Buildroot] [RFC v2] mysql: replace mysql with mariadb 10.1
-In-Reply-To: <20160922073305.68559e82@free-electrons.com>
-References: <20160919034340.4233-1-bluemrp9@gmail.com>
- <20160919034340.4233-2-bluemrp9@gmail.com>
- <20160919074259.144cb649@free-electrons.com>
- <0fedb398-c688-9a22-a97c-c2f2da965f49@mind.be>
- <20160922073305.68559e82@free-electrons.com>
-Message-ID: <98971763-e542-061d-0d85-6d9155648423@je-eigen-domein.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 22 Sep 2016 11:34:38 +0200
+Subject: [Buildroot] [PATCH] package/kvm-unit-tests: new package
+In-Reply-To: <877fa4qzqd.fsf@dell.be.48ers.dk>
+References: <20160817230236.8255-1-cyrilbur@gmail.com>
+ <20160921092449.32147532@free-electrons.com>
+ <1474502510.2194.0.camel@gmail.com>
+ <877fa4qzqd.fsf@dell.be.48ers.dk>
+Message-ID: <20160922113438.452fefd0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-On 09/22/2016 07:33 AM, Thomas Petazzoni wrote:
->
-> Isn't part of the original idea of MariaDB to avoid the GPL-licensed
-> client library so that proprietary applications can link with the
-> client library without having to purchase a MySQL license?
+On Thu, 22 Sep 2016 07:18:18 +0200, Peter Korsgaard wrote:
 
-The server distribution still uses the old GPL one for now.
+>  >> This package is causing a good number of build failures. See:
+>  >> 
+>  >> ?????????arm | kvm-unit-tests-682187afcc99... | NOK | http://autobuil
+>  >> d.buildroot.net/results/a81d40f1453ee027c7e2a9da01f482e1d09b464d
+>  >> ????????i686 | kvm-unit-tests-682187afcc99... | NOK | http://autobuil
+>  >> d.buildroot.net/results/20efe1e310fe71a587774bbe8490d6357acc8edd
+>  >> ??????x86_64 | kvm-unit-tests-682187afcc99... | NOK | http://autobuil
+>  >> d.buildroot.net/results/07deb6183ed23447de5182ee20df6c9c49e5ca49
+>  >> 
+>  >> Could you have a look and provide patches to address these?
+>  >>   
+> 
+>  > Sure i'll see what appears to be happening.  
+> 
+> Some of the issues are that it expects the x86-64 toolchain to support
+> -m32 for bootstrap code (which our cross compilers normally don't), so
+> we need the same workaround as we do for syslinux and grub to build
+> those with the host compiler.
 
-There is a separate download called MariaDB connector/C that is a LGPL 
-libmysqlclient replacement.
-However that one wasn't really source code compatible with existing 
-programs last time I tried to compile a couple buildroot packages 
-against it.
+I guess this explains the build failure on x86-64, but not the ones on
+arm and i686.
 
-Upstream bug: https://jira.mariadb.org/projects/CONC/issues/CONC-200
-
-
-Yours sincerely,
-
-Floris Bos
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
