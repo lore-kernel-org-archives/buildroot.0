@@ -1,75 +1,60 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Thu, 22 Sep 2016 21:25:59 +0200
-Subject: [Buildroot] [PATCH] systemd: let getty instead of serial-getty
- handle /dev/console
-In-Reply-To: <20160922205012.13722beb@gmx.net>
-References: <1473437418-27792-1-git-send-email-bos@je-eigen-domein.nl>
- <20160911210951.GP5740@free.fr> <87intpzqge.fsf@dell.be.48ers.dk>
- <20160921220545.238279e6@gmx.net>
- <68b49446-0228-174d-ad47-9209d23ae90a@je-eigen-domein.nl>
- <20160922205012.13722beb@gmx.net>
-Message-ID: <46b6edf4-6e2e-7200-133c-0321299f5805@je-eigen-domein.nl>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 22 Sep 2016 22:48:20 +0300
+Subject: [Buildroot] [PATCH] qt5: Disable pkg-config usage for cross-building
+Message-ID: <1474573700-22730-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/22/2016 08:50 PM, Peter Seiderer wrote:
-> Hello Floris,
->
-> On Wed, 21 Sep 2016 23:47:02 +0200, Floris Bos <bos@je-eigen-domein.nl> wrote:
->
->> On 09/21/2016 10:05 PM, Peter Seiderer wrote:
->>> Hello *,
->>>
->>> On Wed, 21 Sep 2016 09:01:37 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>
->>>>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->>>>    > Floris, All,
->>>>    > On 2016-09-09 18:10 +0200, Floris Bos spake thusly:
->>>>    >> The serial-getty unit depends on dev-%i.device which does not
->>>>    >> seem to be created for /dev/console
->>>>    >> Workaround this by letting normal getty unit handle things
->>>>    >> if BR2_TARGET_GENERIC_GETTY_PORT is set to 'console'
->>>>    >>
->>>>    >> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
->>>>
->>>>    > I haven't tested that, but I think this is OK just on principle.
->>>>
->>>>    > I just wonder if that behaves correctly when console is a serial line or
->>>>    > anything else (e.g. a VT on HDMI, or through a debug channel...)
->>>>
->>>> Yeah, me too. Does anybody know what the difference exactly is between
->>>> getty/serial-getty, and when one should be used over the other?
->>>>
->>> Tested for the rpi3/glibc/systemd case and failed: I get a doubled
->>> (and unusable) ' Welcome to Buildroot/buildroot login:' on serial and
->>> no login on hdmi...
->> Empty cmdline.txt will give hdmi.
->>
->> Recall you need "console=serial0,115200 console=tty1" with tty1 last in
->> cmdline.txt if you want them simultaneous.
-> Changed cmdline.txt to:
->
-> 	root=/dev/mmcblk0p2 rootwait console=ttyAMA0,115200 console=tty1
->
-> Which gives me two (functional) logins on serial and hdmi.
->
-> But I think changing package/rpi-firmware/cmdline.txt unconditional will
-> break the other Init systems, see commit log from last patch touching
-> cmdline.txt ([1):
->
->    ...change BR2_TARGET_GENERIC_GETTY_PORT to "console", so it starts a
->    getty on the last console= passed to the kernel, ttyAMA0...
+Some Qt sub-projects use pkg-config to recover compiler and linker
+flags. Among other things include paths will be pulled in CFLAGS.
 
-Will withdraw my patch then, and wait for someone else to come up with a 
-better solution.
+What's interesting Qt tries to play smart and convert include
+paths from simple "-I" to "-isystem" if they match ones returned by [1]
+---------------------------->8---------------------------
+XXX/output/host/usr/bin/yyy-buildroot-linux-g++
+--sysroot=XXX/output/host/usr/yyy-buildroot-linux/sysroot
+-pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-Os  -xc++ -E -v - < /dev/null
+---------------------------->8---------------------------
 
-I think the one-size-fits all cmdline.txt that listens to both on HDMI 
-and serial console by default makes things too complicated anyway.
+Most probably that [2] was done to mute tons of warnings generated for
+"system" headers. But commit message gives no hint here :(
 
+So Qt's subprojects [and 3-rd party apps written on Qt] may end-up
+having "-system ZZZ" in their Makefile. That's all right until an
+application wants to use an STL header that includes for example
+"stdlib.h" with gcc 6.x, see what happens then [3].
 
-Yours sincerely,
+That fixes building of Qt5Webkit on ARM with gcc 6.x, see [4].
 
-Floris Bos
+[1] http://code.qt.io/cgit/qt/qtbase.git/tree/configure?h=5.6.1#n3660
+[2] http://code.qt.io/cgit/qt/qtbase.git/commit?id=0b144bc76a368ecc6c5c1121a1b51e888a0621ac
+[3] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70129
+[4] http://lists.busybox.net/pipermail/buildroot/2016-September/172666.html
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/qt5/qt5base/qt5base.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index bf541b0..2c52e2c 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -26,6 +26,7 @@ QT5BASE_CONFIGURE_OPTS += \
+ 	-system-zlib \
+ 	-system-pcre \
+ 	-no-pch \
++	-no-pkg-config \
+ 	-shared
+ 
+ # Uses libgbm from mesa3d
+-- 
+2.7.4
