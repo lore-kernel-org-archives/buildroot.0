@@ -1,79 +1,86 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 22 Sep 2016 07:45:21 +0000
-Subject: [Buildroot] Qt5WebKit anf gcc 6.x
-In-Reply-To: <20160921210949.7ce47d0c@free-electrons.com>
-References: <1474471693.4311.28.camel@synopsys.com>
- <20160921210949.7ce47d0c@free-electrons.com>
-Message-ID: <1474485737.5453.7.camel@synopsys.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 22 Sep 2016 10:07:25 +0200
+Subject: [Buildroot] [PATCH] python-simpleaudio: new package
+Message-ID: <1474531645-14889-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Wed, 2016-09-21 at 21:09 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 21 Sep 2016 15:28:21 +0000, Alexey Brodkin wrote:
-> 
-> > 
-> > In its turn "-isystem XXX/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include"
-> > appears in ICU's check Makefile because
-> > --------------------->8-------------------??
-> > ./pkg-config_wrapper.sh --cflags icu-i18n
-> > -IXXX/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include
-> > --------------------->8-------------------??
-> > and that include path matches with one entry from?QMAKE_DEFAULT_INCDIRS.
-> > In that case qmake makes an assumption that it's a system path and adds "-isystem".
-> 
-> Are you sure about this? I don't see this happening anywhere in the
-> qmake source code. I do see some isystem related code around
-> QMAKE_CFLAGS_ISYSTEM and INCLUDEPATH.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                                  |  1 +
+ package/python-simpleaudio/Config.in               | 13 +++++++++++++
+ package/python-simpleaudio/python-simpleaudio.hash |  3 +++
+ package/python-simpleaudio/python-simpleaudio.mk   | 15 +++++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/python-simpleaudio/Config.in
+ create mode 100644 package/python-simpleaudio/python-simpleaudio.hash
+ create mode 100644 package/python-simpleaudio/python-simpleaudio.mk
 
-Take a look here:?https://github.com/qt/qtbase/blob/dev/qmake/generators/unix/unixmake2.cpp#L179
-That's what I mean:
---------------------->8-------------------
-? ? t << "####### Compiler, tools and options\n\n";
-????t << "CC????????????= " << var("QMAKE_CC") << endl;
-????t << "CXX???????????= " << var("QMAKE_CXX") << endl;
-????t << "DEFINES???????= "
-??????<< varGlue("PRL_EXPORT_DEFINES","-D"," -D"," ")
-??????<< varGlue("DEFINES","-D"," -D","") << endl;
-????t << "CFLAGS????????= " << var("QMAKE_CFLAGS") << " $(DEFINES)\n";
-????t << "CXXFLAGS??????= " << var("QMAKE_CXXFLAGS") << " $(DEFINES)\n";
-????t << "INCPATH???????=";
-????{
-????????QString isystem = var("QMAKE_CFLAGS_ISYSTEM");
-????????const ProStringList &incs = project->values("INCLUDEPATH");
-????????for(int i = 0; i < incs.size(); ++i) {
-????????????const ProString &inc = incs.at(i);
-????????????if (inc.isEmpty())
-????????????????continue;
-
-????????????if (!isystem.isEmpty() && isSystemInclude(inc.toQString()))
-????????????????t << ' ' << isystem << ' ';
-????????????else
-????????????????t << " -I";
-????????????t << escapeFilePath(inc);
-????????}
-????}
---------------------->8-------------------
-
-For G++ "QMAKE_CFLAGS_ISYSTEM = -isystem", see?https://github.com/qt/qtbase/blob/dev/mkspecs/common/gcc-base.conf#L47
-
-That's how include path gets prefixed with either normal "-I" if path has no matches in
-QMAKE_DEFAULT_INCDIRS otherwise "-isystem " prefix is used.
-
-> In any case, I believe this is where the problem is: I don't see why
-> Qt5 should mess up with the addition of -isystem flags.
-
-Agree, but see what Qt people say in similar bug reports:
-https://bugreports.qt.io/browse/QTBUG-53367
-https://bugreports.qt.io/browse/QTBUG-53375
-
-And BTW that commit added all this mess:
-http://code.qt.io/cgit/qt/qtbase.git/commit?id=0b144bc76a368ecc6c5c1121a1b51e888a0621ac
-
--Alexey
+diff --git a/package/Config.in b/package/Config.in
+index 9ca6c15..fe3ac2c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -769,6 +769,7 @@ menu "External python modules"
+ 	source "package/python-setproctitle/Config.in"
+ 	source "package/python-setuptools/Config.in"
+ 	source "package/python-shutilwhich/Config.in"
++	source "package/python-simpleaudio/Config.in"
+ 	source "package/python-simplejson/Config.in"
+ 	source "package/python-singledispatch/Config.in"
+ 	source "package/python-sip/Config.in"
+diff --git a/package/python-simpleaudio/Config.in b/package/python-simpleaudio/Config.in
+new file mode 100644
+index 0000000..a3e07f9
+--- /dev/null
++++ b/package/python-simpleaudio/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_PYTHON_SIMPLEAUDIO
++	bool "python-simpleaudio"
++	depends on BR2_PACKAGE_PYTHON3
++	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
++	select BR2_PACKAGE_ALSA_LIB
++	help
++	  The simplaudio package provides cross-platform, dependency-free
++	  audio playback capability for Python 3 on OSX, Windows, and Linux.
++
++	  https://github.com/hamiltron/py-simple-audio
++
++comment "python-simpleaudio needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/python-simpleaudio/python-simpleaudio.hash b/package/python-simpleaudio/python-simpleaudio.hash
+new file mode 100644
+index 0000000..7e3a7fb
+--- /dev/null
++++ b/package/python-simpleaudio/python-simpleaudio.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/simpleaudio/json, sha256 locally computed
++md5     8c1c82fdf7ebba1a79b1243651e451d7 simpleaudio-1.0.1.tar.gz
++sha256  6cc84d50d8192c074505c719722138ae6ea987fd8eee7fd930237cb308962604  simpleaudio-1.0.1.tar.gz
+diff --git a/package/python-simpleaudio/python-simpleaudio.mk b/package/python-simpleaudio/python-simpleaudio.mk
+new file mode 100644
+index 0000000..b9562ee
+--- /dev/null
++++ b/package/python-simpleaudio/python-simpleaudio.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# python-simpleaudio
++#
++#############################################################
++
++PYTHON_SIMPLEAUDIO_VERSION = 1.0.1
++PYTHON_SIMPLEAUDIO_SOURCE = simpleaudio-$(PYTHON_SIMPLEAUDIO_VERSION).tar.gz
++PYTHON_SIMPLEAUDIO_SITE = https://pypi.python.org/packages/12/f6/327c1af94062a6a6a5ff06dcf9dc689ed81aa07ae757cca3438c3c9e50fe
++PYTHON_SIMPLEAUDIO_LICENSE = MIT
++PYTHON_SIMPLEAUDIO_LICENSE_FILES = LICENSE.txt
++PYTHON_SIMPLEAUDIO_SETUP_TYPE = setuptools
++PYTHON_SIMPLEAUDIO_DEPENDENCIES = alsa-lib
++
++$(eval $(python-package))
+-- 
+2.1.4
