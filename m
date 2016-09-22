@@ -1,29 +1,32 @@
-From: Lothar Felten <lothar.felten@gmail.com>
-Date: Fri, 23 Sep 2016 00:55:51 +0200
-Subject: [Buildroot] uboot: building MLO fails
-Message-ID: <e564e1a1-d285-c57b-46a1-00d6375d01f9@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 22 Sep 2016 23:19:42 +0000
+Subject: [Buildroot] [Bug 9296] Buildroot Fails on applying patches
+In-Reply-To: <bug-9296-163@https.bugs.busybox.net/>
+References: <bug-9296-163@https.bugs.busybox.net/>
+Message-ID: <bug-9296-163-hQJYeqBQEh@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9296
 
-with the current uboot.mk the MLO isn't generated anymore.
+Arnout Vandecappelle <arnout@mind.be> changed:
 
-I modified my defconfig (beaglebone_defconfig) to:
-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
-BR2_TARGET_UBOOT_SPL=y
-BR2_TARGET_UBOOT_SPL_NAME="MLO"
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |INVALID
 
-In uboot.mk $(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME) is added to 
-UBOOT_BINS but not to UBOOT_MAKE_TARGET, why?
+--- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
+> make -C buildroot/ BR2_TOOLCHAIN_EXTERNAL_PATH=$(pwd)/toolchain ARCH=ARM all
 
-If I add:
-UBOOT_MAKE_TARGET += $(call qstrip,$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME))
-the MLO ist built and installed, but I'm not sure if that would break 
-qmx6_defconfig, orangepipc_defconfig or toradex_apalis_imx6_defconfig.
+Passing ARCH=ARM breaks the build. Why do you do this?
 
-Lothar
+Also passing BR2_TOOLCHAIN_EXTERNAL_PATH on the command line is not a great
+idea, it should be set in the .config.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
