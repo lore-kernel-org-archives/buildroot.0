@@ -1,63 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 22 Sep 2016 18:33:59 +0200
-Subject: [Buildroot] [PATCH 1/2 v3] linux/tools: make it a real,
- separate package
-In-Reply-To: <20160922125141.0a1de244@free-electrons.com>
-References: <cover.1473171931.git.yann.morin.1998@free.fr>
- <7af6b231b19828564aae1a098568e96e15843a62.1473171931.git.yann.morin.1998@free.fr>
- <20160922125141.0a1de244@free-electrons.com>
-Message-ID: <20160922163359.GA3179@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 22 Sep 2016 19:16:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openssl: security bump to version
+	1.0.2i
+Message-ID: <20160922171654.23121-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+https://www.openssl.org/news/secadv/20160922.txt
 
-On 2016-09-22 12:51 +0200, Thomas Petazzoni spake thusly:
-> On Tue,  6 Sep 2016 16:29:14 +0200, Yann E. MORIN wrote:
-> > +# Include all our tools definitions.
-> > +#
-> > +# Note: our package infrastructure uses the full-path of the last-scanned
-> > +# Makefile to determine what package we're currently defining, using the
-> > +# last directory component in the path. As such, including other Makefile,
-> > +# like below, before we call one of the *-package macro is usally not
-> > +# working.
-> > +# However, since the files we include here are in the same directory as
-> > +# the current Makefile, we are OK. But this is a hard requirement: files
-> > +# included here *must* be in the same directory!
-> > +include $(sort $(wildcard linux/linux-tools/linux-ext-*.mk))
-> 
-> This include path is wrong, so I've changed it to:
-> 
-> include $(sort $(wildcard package/linux-tools/linux-tool-*.mk))
-> 
-> and in fact, I fixed it in the original commit, and then realized I
-> messed up, so I had to fix it again in a follow-up commit.
+Fixes
+SSL_peek() hang on empty record (CVE-2016-6305)
+SWEET32 Mitigation (CVE-2016-2183)
+OOB write in MDC2_Update() (CVE-2016-6303)
+Malformed SHA512 ticket DoS (CVE-2016-6302)
+OOB write in BN_bn2dec() (CVE-2016-2182)
+OOB read in TS_OBJ_print_bio() (CVE-2016-2180)
+Pointer arithmetic undefined behaviour (CVE-2016-2177)
+Constant time flag not preserved in DSA signing (CVE-2016-2178)
+DTLS buffered message DoS (CVE-2016-2179)
+DTLS replay protection DoS (CVE-2016-2181)
+Certificate message OOB reads (CVE-2016-6306)
+Excessive allocation of memory in tls_get_message_header()
+  (CVE-2016-6307)
+Excessive allocation of memory in dtls1_preprocess_fragment()
+  (CVE-2016-6308)
 
-And I've just sent a patch to completely remove that include directive
-altogether: tools would register twice, wihch is not nice (built twice,
-installed twice...)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/openssl/openssl.hash | 4 ++--
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I did not catch this during my tests, because that problem was hidden:
-  - the $(wildcard) would return nothing,
-  - $(sort) would happily have nothing to sort and would return nothing,
-  - include would be happy to have nothing to include,
-  - but each individual .mk files would already be included from top-level
-    Makefile, in the correct order,
-  - so I did not see the path was wrong and did not see the tools were
-    registered twice.
-
-Sorry for the mess... :-/
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index edbce8e..50a0cc7 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.0.2h.tar.gz.sha256
+-sha256	1d4007e53aad94a5b2002fe045ee7bb0b3d98f1a47f8b2bc851dcd1c74332919	openssl-1.0.2h.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2i.tar.gz.sha256
++sha256	9287487d11c9545b6efb287cdb70535d4e9b284dd10d51441d9b9963d000de6f	openssl-1.0.2i.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index efe2b49..055ed79 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSL_VERSION = 1.0.2h
++OPENSSL_VERSION = 1.0.2i
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.9.3
