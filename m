@@ -1,48 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Sep 2016 20:27:32 +0200
-Subject: [Buildroot] [git commit] package/ola: bump to version 0.10.2
-Message-ID: <20160922183034.67A1781EFB@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 22 Sep 2016 20:50:12 +0200
+Subject: [Buildroot] [PATCH] systemd: let getty instead of serial-getty
+ handle /dev/console
+In-Reply-To: <68b49446-0228-174d-ad47-9209d23ae90a@je-eigen-domein.nl>
+References: <1473437418-27792-1-git-send-email-bos@je-eigen-domein.nl>
+ <20160911210951.GP5740@free.fr> <87intpzqge.fsf@dell.be.48ers.dk>
+ <20160921220545.238279e6@gmx.net>
+ <68b49446-0228-174d-ad47-9209d23ae90a@je-eigen-domein.nl>
+Message-ID: <20160922205012.13722beb@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efb29dc3f38645eb105a3c00bc0856b20f5fdbc6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Floris,
 
-Remove fetching upstream which was needed to fix musl build issue.
+On Wed, 21 Sep 2016 23:47:02 +0200, Floris Bos <bos@je-eigen-domein.nl> wrote:
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ola/ola.hash | 3 +--
- package/ola/ola.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+> On 09/21/2016 10:05 PM, Peter Seiderer wrote:
+> > Hello *,
+> >
+> > On Wed, 21 Sep 2016 09:01:37 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+> >
+> >>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> >>   > Floris, All,
+> >>   > On 2016-09-09 18:10 +0200, Floris Bos spake thusly:
+> >>   >> The serial-getty unit depends on dev-%i.device which does not
+> >>   >> seem to be created for /dev/console
+> >>   >> Workaround this by letting normal getty unit handle things
+> >>   >> if BR2_TARGET_GENERIC_GETTY_PORT is set to 'console'
+> >>   >>
+> >>   >> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> >>
+> >>   > I haven't tested that, but I think this is OK just on principle.
+> >>
+> >>   > I just wonder if that behaves correctly when console is a serial line or
+> >>   > anything else (e.g. a VT on HDMI, or through a debug channel...)
+> >>
+> >> Yeah, me too. Does anybody know what the difference exactly is between
+> >> getty/serial-getty, and when one should be used over the other?
+> >>
+> > Tested for the rpi3/glibc/systemd case and failed: I get a doubled
+> > (and unusable) ' Welcome to Buildroot/buildroot login:' on serial and
+> > no login on hdmi...
+> 
+> Empty cmdline.txt will give hdmi.
+> 
+> Recall you need "console=serial0,115200 console=tty1" with tty1 last in 
+> cmdline.txt if you want them simultaneous.
 
-diff --git a/package/ola/ola.hash b/package/ola/ola.hash
-index 628b525..a791e9c 100644
---- a/package/ola/ola.hash
-+++ b/package/ola/ola.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256 74baba18c5b62aba15e27e6b7882c6eac22043c8e7b297e4d2f6eb05dd1a33b0 ola-0.10.0.tar.gz
--sha256 32a8a7a00c7db7647710c84ed02611f2eba99669f2de4da7aceae9d4444f53a3 34999c70dcbe2d38bf13d57c9cfbdc63f0899b9a.patch
-+sha256  986e61874bc80db3b23cf201af2dafa39e3412cc50cddf1cd449c869110bfd27  ola-0.10.2.tar.gz
-diff --git a/package/ola/ola.mk b/package/ola/ola.mk
-index a983459..6f62a17 100644
---- a/package/ola/ola.mk
-+++ b/package/ola/ola.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--OLA_VERSION = 0.10.0
--OLA_SITE = $(call github,OpenLightingProject,ola,$(OLA_VERSION))
--OLA_PATCH = https://github.com/OpenLightingProject/ola/commit/34999c70dcbe2d38bf13d57c9cfbdc63f0899b9a.patch
-+OLA_VERSION = 0.10.2
-+OLA_SOURCE = ola-$(OLA_VERSION).tar.gz
-+OLA_SITE = https://github.com/OpenLightingProject/ola/releases/download/$(OLA_VERSION)
- OLA_LICENSE = LGPLv2.1+ (libola, libolacommon, Python bindings), GPLv2+ (libolaserver, olad, Python examples and tests)
- OLA_LICENSE_FILES = LICENCE GPL LGPL
- OLA_INSTALL_STAGING = YES
+Changed cmdline.txt to:
+
+	root=/dev/mmcblk0p2 rootwait console=ttyAMA0,115200 console=tty1
+
+Which gives me two (functional) logins on serial and hdmi.
+
+But I think changing package/rpi-firmware/cmdline.txt unconditional will
+break the other Init systems, see commit log from last patch touching
+cmdline.txt ([1):
+
+  ...change BR2_TARGET_GENERIC_GETTY_PORT to "console", so it starts a
+  getty on the last console= passed to the kernel, ttyAMA0...
+
+Regards,
+Peter
+
+
+[1] https://git.buildroot.net/buildroot/commit/?id=20878a1017e2bf7eb8c5f870dc6d2641493cb0f9
+
+
+> So that tty1 becomes /dev/console and serial is handled by systemd's 
+> automatic getty generator.
+> 
+> Perhaps there is an issue if you have the order swapped, and both 
+> systemd's automatic stuff and the manual symlink try to display a getty 
+> on serial.
+> Not sure how to disable systemd's automatic behavior.
+> 
+> 
+> 
+> Yours sincerely,
+> 
+> Floris Bos
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
