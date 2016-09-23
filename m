@@ -1,113 +1,151 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 23 Sep 2016 22:51:19 +0200
-Subject: [Buildroot] [PATCH] package/coreutils: add -i/-p option to uname
-In-Reply-To: <1474620889-5777-1-git-send-email-marcin.nowakowski@imgtec.com>
-References: <1474620889-5777-1-git-send-email-marcin.nowakowski@imgtec.com>
-Message-ID: <ba5a3feb-c508-cd8f-e62f-bf3890fca801@mind.be>
+Date: Fri, 23 Sep 2016 23:08:41 +0200
+Subject: [Buildroot] [PATCH] u-boot: Fix building for ARC700
+In-Reply-To: <1474632473-30670-1-git-send-email-abrodkin@synopsys.com>
+References: <1474632473-30670-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <a5362018-4e02-1b65-d71b-99c81bbecb33@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Marcin,
-
- Think you for your contribution.
 
 
-On 23-09-16 10:54, Marcin Nowakowski wrote:
-> This patch adds -i/-p options to uname app using a patch from Fedora
-> tree. These options are described as non-portable, but the same patch
-> (with various smaller or larger variations) is applied to the most
-> popular linux distros (Fedora, Debian, Ubuntu), so some linux tools
-> expect these to work.
+On 23-09-16 14:07, Alexey Brodkin wrote:
+> With newer ARC toolchain obsolete -marcXXX were finally deperecated
+                                                          deprecated
 
- In buildroot, we follow upstream as tightly as possible. We don't include
-feature patches, because we want to reduce the number as patches as much as
-possible, to ease the maintenance burden. For feature patches the only way to go
-is to convince upstream to take them.
+> and so compiler throws errors now about unknown option.
+> 
+> Solution is as simple as switching to more generic -mcu-XXX
+                                                     -mcpu=arcXXX
 
- This looks like a feature patch to me. It does not fix a build problem, it does
-not fix an execution problem of this package. If there is some other package
-that really needs this, then that other package can be patches instead.
+> options. Which we do. Unfortunately that change in upstream U-Boot [1]
+> happened right after v2016.09 was released an so we need to have that fix
+> for v2016.07 which is mentioned in axs10x defconfigs and for the latest
+> U-Boot release v2016.09 (which is selected by default if no defconfig is
+> used).
 
- In addition, the same would have to be done for the busybox version of uname.
+ It's unfortunate that the deprecation period was so short, and that U-Boot
+didn't fix it sooner.
 
- For these reasons, I have marked your patch as rejected in our patch tracking
-system. It will not be applied.
+ I really don't like adding patches to U-Boot, because you never know what
+version will be used. In this case, however, it's just for ARC configs which is
+pretty controlled, and in the likely case that someone has a custom U-Boot fork,
+they can easily apply the patch themselves. So
 
- If you have reasons why this patch is required after all, please tell us.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
  Regards,
  Arnout
 
+> Once we deprecate either U-Boot version in U-Boot corresponding patch
+> should be removed essentially.
 > 
-> Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+> [1] http://git.denx.de/?p=u-boot.git;a=commit;h=7c8d81605302e7d7fdd3e7d8eb69302bddc64a2c
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  .../0002-uname-processortype-from-fedora.patch     | 53 ++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 package/coreutils/0002-uname-processortype-from-fedora.patch
+>  ...-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch | 39 ++++++++++++++++++++++
+>  ...-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch | 39 ++++++++++++++++++++++
+>  2 files changed, 78 insertions(+)
+>  create mode 100644 boot/uboot/2016.07/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
+>  create mode 100644 boot/uboot/2016.09/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
 > 
-> diff --git a/package/coreutils/0002-uname-processortype-from-fedora.patch b/package/coreutils/0002-uname-processortype-from-fedora.patch
+> diff --git a/boot/uboot/2016.07/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch b/boot/uboot/2016.07/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
 > new file mode 100644
-> index 0000000..bf8a309
+> index 0000000..eded9a3
 > --- /dev/null
-> +++ b/package/coreutils/0002-uname-processortype-from-fedora.patch
-> @@ -0,0 +1,53 @@
-> +From 99cafffe1000517f9af550210c84fed4c4ceb49d Mon Sep 17 00:00:00 2001
-> +From: Ondrej Vasik <ovasik@fedoraproject.org>
-> +Date: Sat, 19 Dec 2009 08:42:03 +0000
-> +Subject: bring back uname -p/-i functionality
+> +++ b/boot/uboot/2016.07/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
+> @@ -0,0 +1,39 @@
+> +From 7c8d81605302e7d7fdd3e7d8eb69302bddc64a2c Mon Sep 17 00:00:00 2001
+> +From: Alexey Brodkin <abrodkin@synopsys.com>
+> +Date: Fri, 16 Sep 2016 12:12:26 +0300
+> +Subject: [PATCH] arc: Use -mcpu=XXX instead of obsolete -marcXXX
 > +
-> +diff -urNp coreutils-8.2-orig/src/uname.c coreutils-8.2/src/uname.c
-> +--- coreutils-8.2-orig/src/uname.c	2009-09-23 10:25:44.000000000 +0200
-> ++++ coreutils-8.2/src/uname.c	2009-12-19 09:09:11.663607110 +0100
-> +@@ -299,13 +299,19 @@ main (int argc, char **argv)
+> +With newer ARC tools old way of CPU specification gets obsolete,
+> +so we're switching to newer and more common way of setting "-mcpu".
+> +
+> +Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> +---
+> + arch/arc/config.mk | 6 +++---
+> + 1 file changed, 3 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/arch/arc/config.mk b/arch/arc/config.mk
+> +index 7c974f0..13676bd 100644
+> +--- a/arch/arc/config.mk
+> ++++ b/arch/arc/config.mk
+> +@@ -31,15 +31,15 @@ CONFIG_MMU = 1
+> + endif
 > + 
-> +   if (toprint & PRINT_PROCESSOR)
-> +     {
-> +-      char const *element = unknown;
-> ++      char *element = unknown;
-> + #if HAVE_SYSINFO && defined SI_ARCHITECTURE
-> +       {
-> +         static char processor[257];
-> +         if (0 <= sysinfo (SI_ARCHITECTURE, processor, sizeof processor))
-> +           element = processor;
-> +       }
-> ++#else
-> ++      {
-> ++	static struct utsname u;
-> ++	uname(&u);
-> ++	element = u.machine;
-> ++      }
-> + #endif
-> + #ifdef UNAME_PROCESSOR
-> +       if (element == unknown)
-> +@@ -343,7 +349,7 @@ main (int argc, char **argv)
+> + ifdef CONFIG_CPU_ARC750D
+> +-PLATFORM_CPPFLAGS += -marc700
+> ++PLATFORM_CPPFLAGS += -mcpu=arc700
+> + endif
 > + 
-> +   if (toprint & PRINT_HARDWARE_PLATFORM)
-> +     {
-> +-      char const *element = unknown;
-> ++      char *element = unknown;
-> + #if HAVE_SYSINFO && defined SI_PLATFORM
-> +       {
-> +         static char hardware_platform[257];
-> +@@ -351,6 +357,14 @@ main (int argc, char **argv)
-> +                           hardware_platform, sizeof hardware_platform))
-> +           element = hardware_platform;
-> +       }
-> ++#else
-> ++      {
-> ++	static struct utsname u;
-> ++	uname(&u);
-> ++	element = u.machine;
-> ++	if(strlen(element)==4 && element[0]=='i' && element[2]=='8' && element[3]=='6')
-> ++		element[1]='3';
-> ++      }
-> + #endif
-> + #ifdef UNAME_HARDWARE_PLATFORM
-> +       if (element == unknown)
+> + ifdef CONFIG_CPU_ARC770D
+> +-PLATFORM_CPPFLAGS += -marc700 -mlock -mswape
+> ++PLATFORM_CPPFLAGS += -mcpu=arc700 -mlock -mswape
+> + endif
+> + 
+> + ifdef CONFIG_CPU_ARCEM6
+> +-PLATFORM_CPPFLAGS += -marcem
+> ++PLATFORM_CPPFLAGS += -mcpu=arcem
+> + endif
+> + 
+> + ifdef CONFIG_CPU_ARCHS34
+> +-- 
+> +2.7.4
+> +
+> diff --git a/boot/uboot/2016.09/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch b/boot/uboot/2016.09/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
+> new file mode 100644
+> index 0000000..eded9a3
+> --- /dev/null
+> +++ b/boot/uboot/2016.09/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
+> @@ -0,0 +1,39 @@
+> +From 7c8d81605302e7d7fdd3e7d8eb69302bddc64a2c Mon Sep 17 00:00:00 2001
+> +From: Alexey Brodkin <abrodkin@synopsys.com>
+> +Date: Fri, 16 Sep 2016 12:12:26 +0300
+> +Subject: [PATCH] arc: Use -mcpu=XXX instead of obsolete -marcXXX
+> +
+> +With newer ARC tools old way of CPU specification gets obsolete,
+> +so we're switching to newer and more common way of setting "-mcpu".
+> +
+> +Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> +---
+> + arch/arc/config.mk | 6 +++---
+> + 1 file changed, 3 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/arch/arc/config.mk b/arch/arc/config.mk
+> +index 7c974f0..13676bd 100644
+> +--- a/arch/arc/config.mk
+> ++++ b/arch/arc/config.mk
+> +@@ -31,15 +31,15 @@ CONFIG_MMU = 1
+> + endif
+> + 
+> + ifdef CONFIG_CPU_ARC750D
+> +-PLATFORM_CPPFLAGS += -marc700
+> ++PLATFORM_CPPFLAGS += -mcpu=arc700
+> + endif
+> + 
+> + ifdef CONFIG_CPU_ARC770D
+> +-PLATFORM_CPPFLAGS += -marc700 -mlock -mswape
+> ++PLATFORM_CPPFLAGS += -mcpu=arc700 -mlock -mswape
+> + endif
+> + 
+> + ifdef CONFIG_CPU_ARCEM6
+> +-PLATFORM_CPPFLAGS += -marcem
+> ++PLATFORM_CPPFLAGS += -mcpu=arcem
+> + endif
+> + 
+> + ifdef CONFIG_CPU_ARCHS34
+> +-- 
+> +2.7.4
+> +
 > 
 
 -- 
