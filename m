@@ -1,82 +1,106 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 23 Sep 2016 17:58:49 +0300
-Subject: [Buildroot] [PATCH] qt5: Disable passing of -isystem flag in
-	CXXFLAGS
-Message-ID: <1474642729-40702-1-git-send-email-abrodkin@synopsys.com>
+From: Frederik Peter Aalund <fpa@sbtaqua.com>
+Date: Fri, 23 Sep 2016 16:10:41 +0000
+Subject: [Buildroot] [PATCH 3/3] python3: Compile host-python3 statically
+In-Reply-To: <CAA=pTTSgNWY-orBD0ff1Y6U-p+ujXRyg+mtNvyb_UOivSqMqww@mail.gmail.com>
+References: <1474032631-21311-1-git-send-email-fpa@sbtaqua.com>
+ <20160916190833.7c776697@free-electrons.com>
+ <CAA=pTTSgNWY-orBD0ff1Y6U-p+ujXRyg+mtNvyb_UOivSqMqww@mail.gmail.com>
+Message-ID: <CAA=pTTTiF11gkQzUN6n9yX+aNUZaZiRicKZa2ieF=W92yvLeFg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some Qt5 sub-projects as well as 3rd-party apps written on Qt
-are failing to compile with gcc 6.x like that:
----------------------------->8-------------------------
-In file included from XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/bits/stl_algo.h:59:0,
-                 from XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/algorithm:62,
-                 from XXX/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/qglobal.h:88,
-                 from XXX/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/qpair.h:37,
-                 from qmediametadata.h:37,
-                 from qmediametadata.cpp:28:
-XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
- #include_next <stdlib.h>
-                         ^
-compilation terminated.
----------------------------->8-------------------------
+I noticed that while the host-python executable doesn't have an rpath
+value, it does have a runpath value:
 
-That happens because qmake trying to play smart passes some
-include paths in Makefile with "-isystem" prefix.
-Which in some cases lead to build failure well described in [1].
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library:
+[libpython3.5m.so.1.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000001d (RUNPATH)            Library runpath:
+[/projects/RedPitaya/OS/buildroot/buildroot/output/host/usr/lib]
+ 0x000000000000000c (INIT)               0x4008c0
 
-A little bit more details below on what really happens:
+Turns out that I had LD_LIBRARY_PATH defined which overrides runpath
+(though not rpath). After undefining LD_LIBRARY_PATH, everything worked.
+Sorry for the confusion.
 
-1. In "configure" script Qt determines default include paths of the
-   toolchain and stores them in DEFAULT_INCDIRS variable, see [2].
+*Frederik Aalund*
+Chief Information Officer, Co-owner
 
-2. On qmake execution when it creates Makefile out of .pro-file
-   it parses headers in INCLUDEPATH variable and if a path matches
-   one in DEFAULT_INCDIRS then in CXXFLAGS that path is written
-   with $QMAKE_CFLAGS_ISYSTEM prefix, otherwise non-matching include
-   path ends up in CXXFLAGS with normal "-I" prefix.
+SBT Aqua
+Copenhagen, Denmark
+Mobile: +45 30340086
+fpa at sbtaqua.com
+sbtaqua.com
 
-3. By default for gcc "QMAKE_CFLAGS_ISYSTEM = -isystem", see [3].
+On Tue, 20 Sep 2016 at 15:57 Frederik Peter Aalund <fpa@sbtaqua.com> wrote:
 
-4. gcc fails to find stdlib.h, again refer to J?rg's explanation in [1].
-
-What we do here we force set QMAKE_CFLAGS_ISYSTEM to "" and so qmake
-won't use "-isystem" any longer instead expected "-I" will be used for
-all headers, see [4].
-
-That fixes building of Qt5Webkit on ARM with gcc 6.x and a number of
-autobuilder failures for ARC (the an arch that uses gcc 6 by default) like:
-http://autobuild.buildroot.net/results/56a/56a6700774af692e7f5a99b452b15e4e8592310f
-http://autobuild.buildroot.net/results/697/697412b29bf031bf8f246cc3af97ebcbf6bf6d1b
-
-[1] https://git.buildroot.net/buildroot/commit/?id=e79272fa7ff3d66c18de3514b912cd9d68d121a4
-[2] http://code.qt.io/cgit/qt/qtbase.git/tree/configure?h=5.6.1#n3660
-[3] http://code.qt.io/cgit/qt/qtbase.git/tree/mkspecs/common/gcc-base.conf?h=5.6.1#n47
-[4] http://code.qt.io/cgit/qt/qtbase.git/tree/qmake/generators/unix/unixmake2.cpp?&h=5.6.1#n193
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/qt5/qt5base/qmake.conf | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/qt5/qt5base/qmake.conf b/package/qt5/qt5base/qmake.conf
-index 2152d3c..49cf898 100644
---- a/package/qt5/qt5base/qmake.conf
-+++ b/package/qt5/qt5base/qmake.conf
-@@ -19,6 +19,7 @@ QMAKE_CXXFLAGS_RELEASE += -O3
- CONFIG                 += nostrip
- 
- QMAKE_LIBS             += -lrt -lpthread -ldl
-+QMAKE_CFLAGS_ISYSTEM   =
- 
- include(../common/linux_device_post.conf)
- load(qt_config)
--- 
-2.6.3
+> Hi Thomas
+>
+> Thanks again for reviewing. It appears that the host-python3 executable
+> doesn't have an rpath entry. This would indeed explain the weird behaviour.
+>
+> I looked at the build log and found that "-Wl,-rpath" is indeed correctly
+> passed on:
+> -Wl,-rpath,/projects/RedPitaya/OS/buildroot/buildroot/output/host/usr/lib
+>
+> This is reflected in the resulting Makefile:
+> CONFIGURE_LDFLAGS=
+>  -L/projects/RedPitaya/OS/buildroot/buildroot/output/host/lib
+> -L/projects/RedPitaya/OS/buildroot/buildroot/output/host/usr/lib
+> -Wl,-rpath,/projects/RedPitaya/OS/buildroot/buildroot/output/host/usr/lib
+> -Wl,--enable-new-dtags
+>
+> So I don't know how it can be that the rpath is not set in the final
+> binary. Do you also see this problem?
+>
+> Thanks again.
+>
+> *Frederik Aalund*
+> Chief Information Officer, Co-owner
+>
+> SBT Aqua
+> Copenhagen, Denmark
+> Mobile: +45 30340086
+> fpa at sbtaqua.com
+> sbtaqua.com
+>
+> On Fri, 16 Sep 2016 at 19:08 Thomas Petazzoni <
+> thomas.petazzoni at free-electrons.com> wrote:
+>
+>> Hello,
+>>
+>> Please wrap the text in your commit messages to a reasonable line width
+>> (72 characters).
+>>
+>> On Fri, 16 Sep 2016 15:30:31 +0200, Frederik Aalund wrote:
+>> > The previous behaviour was to compile host-python3 with
+>> `--enable-shared` as is done for the target python installation. The
+>> problem is that if the host *already* has a python installation, then
+>> host-python3 will be called with the system `libpython3.5.so`. So even
+>> though the $(HOST_DIR) python executable is called, the system .so is used.
+>>
+>> This should not be the case. All host binaries we build are built with
+>> -Wl,-rpath,$(HOST_DIR)/usr/lib, which means that they should look up
+>> libraries in $(HOST_DIR)/usr/lib *before* looking at /usr/lib.
+>>
+>> Can you double check what "readelf -a output/host/usr/bin/python" says
+>> about this? readelf should show you this rpath encoded into the Python
+>> binary. If that's not the case, then this is the problem.
+>>
+>> Best regards,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux and Kernel engineering
+>> http://free-electrons.com
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160923/9ad57756/attachment.html>
