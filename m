@@ -1,53 +1,38 @@
-From: Cyril Bur <cyrilbur@gmail.com>
-Date: Fri, 23 Sep 2016 16:14:37 +1000
-Subject: [Buildroot] [PATCH] package/kvm-unit-tests: new package
-In-Reply-To: <20160923081216.6f580f50@free-electrons.com>
-References: <20160817230236.8255-1-cyrilbur@gmail.com>
- <20160921092449.32147532@free-electrons.com>
- <1474502510.2194.0.camel@gmail.com> <877fa4qzqd.fsf@dell.be.48ers.dk>
- <1474610816.2482.14.camel@gmail.com>
- <20160923081216.6f580f50@free-electrons.com>
-Message-ID: <1474611277.2482.15.camel@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 23 Sep 2016 08:19:21 +0200
+Subject: [Buildroot] [PATCH] qt5: Disable pkg-config usage for
+ cross-building
+In-Reply-To: <1474611155.2562.6.camel@synopsys.com>
+References: <1474573700-22730-1-git-send-email-abrodkin@synopsys.com>
+ <20160922205817.GC3179@free.fr>
+ <20160923075722.3dbee0a8@free-electrons.com>
+ <1474611155.2562.6.camel@synopsys.com>
+Message-ID: <20160923081921.189fd5e4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2016-09-23 at 08:12 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 23 Sep 2016 16:06:56 +1000, Cyril Bur wrote:
-> 
-> > 
-> > So the i686 problem is actually fixed upstream so I've sent a patch
-> > to
-> > bump the version.
-> > 
-> > I tried select BR2_HOSTARCH_NEEDS_IA32_COMPILER for x86_64 but
-> > didn't
-> > seem to solve the problem. I know almost nothing about x86 asm so
-> > I'm
-> > at a bit of a loss, it looks like gcc is generating instructions
-> > from C
-> > that should be 16bit but then later it realises it messed up?
-> > 
-> > Still chasing but having BR2_HOSTARCH_NEEDS_IA32_COMPILER=y didn't
-> > solve.
-> 
-> No, you need this *and* use the host compiler when building
-> kvm-unit-tests on x86_64. By using the host compiler, you use a
-> compiler that can generate 32 bits code.
-> 
-> See syslinux and grub, like Peter suggested.
-> 
+Hello,
 
-Yeah I had a look, sorry, I must have missed that part. Will do.
+On Fri, 23 Sep 2016 06:12:44 +0000, Alexey Brodkin wrote:
 
-Thanks,
-
-Cyril
-
-> Thanks!
+> > Alexey, have you tried the other approaches I outlined in the thread
+> > where the initial discussion took place?  
 > 
-> Thomas
+> Well I don't like removal of pkg-config usage either but...
+> Another approach with setting?QMAKE_CFLAGS_ISYSTEM to "" may work as well
+> (even thought I haven't tried it yet) but that will mean people using
+> buildroot-built toolchain for building their Qt5 apps will see those
+> compiler warnings about "wrong" stuff in system headers. In the end that's why
+> this "-isystem" was introduced in the first place.
+
+Which warning will they see? I don't quite get why they would see a
+warning, and still fail to understand why qmake uses -isystem.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
