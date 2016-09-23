@@ -1,39 +1,101 @@
-From: Cyril Bur <cyrilbur@gmail.com>
-Date: Fri, 23 Sep 2016 15:47:17 +1000
-Subject: [Buildroot] [PATCH] package/kvm-unit-tests: bump version
-Message-ID: <20160923054717.23785-1-cyrilbur@gmail.com>
+From: =?UTF-8?Q?Fabi=C3=A1n_Inostroza?= <soulsonceonfire@gmail.com>
+Date: Fri, 23 Sep 2016 04:01:23 -0300
+Subject: [Buildroot] Error building python packages that uses setuptools
+In-Reply-To: <CAGm1_ktPCc04+w0Z2y_c4uWvUodx3+t7+pSH3S0H5Uo0KALsZw@mail.gmail.com>
+References: <1474609104846-145834.post@n4.nabble.com>
+ <CAGm1_ktPCc04+w0Z2y_c4uWvUodx3+t7+pSH3S0H5Uo0KALsZw@mail.gmail.com>
+Message-ID: <CAN0YATNWhj5NmSQa_gSUNqQhgrNh0sGq_MR-ABn0d25MyH=HWA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Most importantly this version includes a change to kvm-unit-tests which
-means it will stop looking attempting to include host headers. This
-change should fix build breakage on i386.
+It was a version cloned about 2 hours ago (commit id ba16a7a...), just to
+try pulled the new commits with no results
+Yes, while trying to fix the build I  ran 'make clean' several times.
 
-"ERROR: unsafe header/library path used in cross-compilation: '-I'
-'/lib/modules/3.13.0-042stab111.12/build/include'"
+PD: I'm running Debian testing
 
-The new version also includes more powerpc tests.
+El viernes, 23 de septiembre de 2016, Yegor Yefremov <
+yegorslists@googlemail.com> escribi?:
 
-Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
----
- package/kvm-unit-tests/kvm-unit-tests.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-index 989d398..7fd03ad 100644
---- a/package/kvm-unit-tests/kvm-unit-tests.mk
-+++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KVM_UNIT_TESTS_VERSION = 682187afcc998bc3dd25061e98b43792cc340b33
-+KVM_UNIT_TESTS_VERSION = 0b04ed0610035792514fd8499eb4dacc185520d9
- KVM_UNIT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/scm/virt/kvm/kvm-unit-tests.git
- KVM_UNIT_TESTS_SITE_METHOD = git
- KVM_UNIT_TESTS_LICENSE = LGPLv2
--- 
-2.10.0
+> Hi,
+>
+> On Fri, Sep 23, 2016 at 7:38 AM, totoxa <soulsonceonfire@gmail.com
+> <javascript:;>> wrote:
+> > Hi,
+> >
+> > I'm trying to build python-serial and python-pymysql, both of them use
+> > setuptools to install.
+> > After running make the build fails with the following error:
+> >
+> >>>> python-pymysql 0.7.2 Installing to target
+> > (cd /home/dev/buildroot/output/build/python-pymysql-0.7.2//;
+> > PATH="/home/dev/buildroot/output/host/bin:/home/dev/
+> buildroot/output/host/sbin:/home/dev/buildroot/output/
+> host/usr/bin:/home/dev/buildroot/output/host/usr/
+> sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
+> > PYTHONPATH="/home/dev/buildroot/output/target/usr/
+> lib/python2.7/sysconfigdata/:/home/dev/buildroot/output/
+> target/usr/lib/python2.7/site-packages/"
+> > _python_sysroot=/home/dev/buildroot/output/host/usr/arm-
+> buildroot-linux-gnueabi/sysroot
+> > _python_prefix=/usr _python_exec_prefix=/usr
+> > /home/dev/buildroot/output/host/usr/bin/python setup.py install
+> --no-compile
+> > --prefix=/home/dev/buildroot/output/target/usr
+> --executable=/usr/bin/python
+> > --single-version-externally-managed --root=/ )
+> > usage: setup.py [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
+> >    or: setup.py --help [cmd1 cmd2 ...]
+> >    or: setup.py --help-commands
+> >    or: setup.py cmd --help
+> >
+> > error: option --executable not recognized
+> > package/pkg-generic.mk:282: fallo en las instrucciones para el objetivo
+> > '/home/dev/buildroot/output/build/python-pymysql-0.7.2/.
+> stamp_target_installed'
+> > make: ***
+> > [/home/dev/buildroot/output/build/python-pymysql-0.7.2/.
+> stamp_target_installed]
+> > Error 1
+> >
+> >
+> > I searched for the files related to setuptools installation and none of
+> the
+> > path containing those files are passed as arguments
+> > to the packages failing to build.
+> > I think that either the host-python-setup installation went wrong or that
+> > the arguments used for the built are wrong.
+> > I'm no expert in buildroot, so I ask for help.
+> >
+> > $ find output/ -name 'install_scripts.*'
+> > output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/
+> python2.7/distutils/command/install_scripts.py
+> > output/host/usr/lib/python2.7/distutils/command/install_scripts.py
+> > output/host/usr/lib/python2.7/distutils/command/install_scripts.pyc
+> > output/build/host-python-2.7.12/Lib/distutils/command/install_scripts.py
+> > output/build/host-python-2.7.12/Lib/distutils/command/
+> install_scripts.pyc
+> > *output/build/host-python-setuptools-18.7.1/setuptools/
+> command/install_scripts.py
+> > output/build/host-python-setuptools-18.7.1/setuptools/
+> command/install_scripts.pyc
+> > output/build/host-python-setuptools-18.7.1/build/lib/
+> setuptools/command/install_scripts.py*
+> > output/build/python-2.7.12/Lib/distutils/command/install_scripts.py
+> > output/build/python-2.7.12/Lib/distutils/command/install_scripts.pyc
+> > output/target/usr/lib/python2.7/distutils/command/install_scripts.py
+>
+> Have you already tried:
+>
+> make clean && make
+>
+> What BR version are you using?
+>
+> Yegor
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160923/c639aea5/attachment.html>
