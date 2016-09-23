@@ -1,32 +1,63 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 22 Sep 2016 23:19:42 +0000
-Subject: [Buildroot] [Bug 9296] Buildroot Fails on applying patches
-In-Reply-To: <bug-9296-163@https.bugs.busybox.net/>
-References: <bug-9296-163@https.bugs.busybox.net/>
-Message-ID: <bug-9296-163-hQJYeqBQEh@https.bugs.busybox.net/>
+From: totoxa <soulsonceonfire@gmail.com>
+Date: Thu, 22 Sep 2016 22:38:24 -0700 (PDT)
+Subject: [Buildroot] Error building python packages that uses setuptools
+Message-ID: <1474609104846-145834.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9296
+Hi,
 
-Arnout Vandecappelle <arnout@mind.be> changed:
+I'm trying to build python-serial and python-pymysql, both of them use
+setuptools to install.
+After running make the build fails with the following error:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |INVALID
+>>> python-pymysql 0.7.2 Installing to target
+(cd /home/dev/buildroot/output/build/python-pymysql-0.7.2//;
+PATH="/home/dev/buildroot/output/host/bin:/home/dev/buildroot/output/host/sbin:/home/dev/buildroot/output/host/usr/bin:/home/dev/buildroot/output/host/usr/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
+PYTHONPATH="/home/dev/buildroot/output/target/usr/lib/python2.7/sysconfigdata/:/home/dev/buildroot/output/target/usr/lib/python2.7/site-packages/"
+_python_sysroot=/home/dev/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot
+_python_prefix=/usr _python_exec_prefix=/usr 
+/home/dev/buildroot/output/host/usr/bin/python setup.py install --no-compile
+--prefix=/home/dev/buildroot/output/target/usr --executable=/usr/bin/python
+--single-version-externally-managed --root=/ )
+usage: setup.py [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
+   or: setup.py --help [cmd1 cmd2 ...]
+   or: setup.py --help-commands
+   or: setup.py cmd --help
 
---- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
-> make -C buildroot/ BR2_TOOLCHAIN_EXTERNAL_PATH=$(pwd)/toolchain ARCH=ARM all
+error: option --executable not recognized
+package/pkg-generic.mk:282: fallo en las instrucciones para el objetivo
+'/home/dev/buildroot/output/build/python-pymysql-0.7.2/.stamp_target_installed'
+make: ***
+[/home/dev/buildroot/output/build/python-pymysql-0.7.2/.stamp_target_installed]
+Error 1
 
-Passing ARCH=ARM breaks the build. Why do you do this?
 
-Also passing BR2_TOOLCHAIN_EXTERNAL_PATH on the command line is not a great
-idea, it should be set in the .config.
+I searched for the files related to setuptools installation and none of the
+path containing those files are passed as arguments
+to the packages failing to build.
+I think that either the host-python-setup installation went wrong or that
+the arguments used for the built are wrong.
+I'm no expert in buildroot, so I ask for help.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+$ find output/ -name 'install_scripts.*'
+output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/python2.7/distutils/command/install_scripts.py
+output/host/usr/lib/python2.7/distutils/command/install_scripts.py
+output/host/usr/lib/python2.7/distutils/command/install_scripts.pyc
+output/build/host-python-2.7.12/Lib/distutils/command/install_scripts.py
+output/build/host-python-2.7.12/Lib/distutils/command/install_scripts.pyc
+*output/build/host-python-setuptools-18.7.1/setuptools/command/install_scripts.py
+output/build/host-python-setuptools-18.7.1/setuptools/command/install_scripts.pyc
+output/build/host-python-setuptools-18.7.1/build/lib/setuptools/command/install_scripts.py*
+output/build/python-2.7.12/Lib/distutils/command/install_scripts.py
+output/build/python-2.7.12/Lib/distutils/command/install_scripts.pyc
+output/target/usr/lib/python2.7/distutils/command/install_scripts.py
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Error-building-python-packages-that-uses-setuptools-tp145834.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
