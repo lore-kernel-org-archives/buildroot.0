@@ -1,97 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 23 Sep 2016 08:31:50 +0200
-Subject: [Buildroot] [PATCH v2] mksh: add new package MirOS Korn Shell
-In-Reply-To: <20160922181253.GA13373@waldemar-brodkorb.de>
-References: <20160922181253.GA13373@waldemar-brodkorb.de>
-Message-ID: <20160923083150.7e801611@free-electrons.com>
+Date: Fri, 23 Sep 2016 08:32:51 +0200
+Subject: [Buildroot] [git commit] python-simpleaudio: new package
+Message-ID: <20160923063327.51F1B822CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2d56825c6f3aea128104f813b05d8567f89112fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 22 Sep 2016 20:12:54 +0200, Waldemar Brodkorb wrote:
-> The MirOS Korn Shell is a quite complete posix shell implementation,
-> is rather small and supports vi mode properly.
-> 
-> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                  |  1 +
+ package/python-simpleaudio/Config.in               | 13 +++++++++++++
+ package/python-simpleaudio/python-simpleaudio.hash |  3 +++
+ package/python-simpleaudio/python-simpleaudio.mk   | 15 +++++++++++++++
+ 4 files changed, 32 insertions(+)
 
-I was about to apply this, but there's an issue with the licensing. So
-while I'm at it, I'm also giving other comments.
-
-The title should be just:
-
-	mksh: new package
-
-
-> --- /dev/null
-> +++ b/package/mksh/Config.in
-> @@ -0,0 +1,22 @@
-> +config BR2_PACKAGE_MKSH
-> +	bool "mksh"
-> +	depends on BR2_USE_MMU # fork()
-> +	help
-> +	  The MirBSD Korn Shell,
-> +
-> +	  mksh is a successor of pdksh but not affiliated with the pdksh
-> +	  developers or contributors. mksh is not affiliated with the
-> +	  AT&T Korn Shell, its past or present owners, other than that
-> +	  both attempt to implement the Korn Shell programming language.
-> +
-> +	  mksh targets users who desire a compact, fast, reliable,
-> +	  secure shell not cut off modern extensions; a shell with
-> +	  Unicode support; an actively developed, current, and portable
-> +	  product; one with developers that listen to their users? requests
-> +	  and implement them if they actually make sense.
-> +
-> +	  mksh aims to replace pdksh in all but very rare use cases
-> +	  (such as support for checking the Unix mbox) and in all operating
-> +	  environments (thus including patches from pdksh on e.g. Debian).
-
-Those lines are too long. Please wrap the help text to a length of 72
-characters per line.
-
-> +MKSH_VERSION = R53a
-> +MKSH_SOURCE = mksh-$(MKSH_VERSION).tgz
-> +MKSH_SITE = https://www.mirbsd.org/MirOS/dist/mir/mksh
-> +MKSH_LICENSE = MirOS, BSD-3c, ISC
-> +MKSH_LICENSE_FILES = COPYING
-
-There is no COPYING file in the source code, so this will cause build
-failure.
-
-Where is the information about the licensing coming from? What is this
-"MirOS" license?
-
-The man page references https://www.mirbsd.org/TaC-mksh.txt as
-containing the legalese. Maybe this needs to also be downloaded, and
-used as a license file. At least they clarify what this "MirOS" license
-is.
-> +define MKSH_CONFIGURE_CMDS
-> +	cd $(@D) && $(TARGET_MAKE_ENV) \
-> +		CPPFLAGS="-DMKSH_S_NOVI=0 $(TARGET_CPPFLAGS)" \
-> +		CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-> +		LD="$(TARGET_LD)" LDFLAGS="$(TARGET_LDFLAGS)" LDLIBS="$(TARGET_LDLIBS)" \
-
-TARGET_LDLIBS does not exist. Have you considered using $(TARGET_CONFIGURE_OPTS) here?
-
-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
-		CPPFLAGS="-DMKSH_S_NOVI=0 $(TARGET_CPPFLAGS)" \
-		TARGET_OS=Linux \
-		sh ./Build.sh -M
-
-> diff --git a/system/Config.in b/system/Config.in
-> index 77c665b..d3b2889 100644
-
-The changes in this file could possibly go to a separate patch.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 9ca6c15..fe3ac2c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -769,6 +769,7 @@ menu "External python modules"
+ 	source "package/python-setproctitle/Config.in"
+ 	source "package/python-setuptools/Config.in"
+ 	source "package/python-shutilwhich/Config.in"
++	source "package/python-simpleaudio/Config.in"
+ 	source "package/python-simplejson/Config.in"
+ 	source "package/python-singledispatch/Config.in"
+ 	source "package/python-sip/Config.in"
+diff --git a/package/python-simpleaudio/Config.in b/package/python-simpleaudio/Config.in
+new file mode 100644
+index 0000000..a3e07f9
+--- /dev/null
++++ b/package/python-simpleaudio/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_PYTHON_SIMPLEAUDIO
++	bool "python-simpleaudio"
++	depends on BR2_PACKAGE_PYTHON3
++	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
++	select BR2_PACKAGE_ALSA_LIB
++	help
++	  The simplaudio package provides cross-platform, dependency-free
++	  audio playback capability for Python 3 on OSX, Windows, and Linux.
++
++	  https://github.com/hamiltron/py-simple-audio
++
++comment "python-simpleaudio needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/python-simpleaudio/python-simpleaudio.hash b/package/python-simpleaudio/python-simpleaudio.hash
+new file mode 100644
+index 0000000..7e3a7fb
+--- /dev/null
++++ b/package/python-simpleaudio/python-simpleaudio.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/simpleaudio/json, sha256 locally computed
++md5     8c1c82fdf7ebba1a79b1243651e451d7 simpleaudio-1.0.1.tar.gz
++sha256  6cc84d50d8192c074505c719722138ae6ea987fd8eee7fd930237cb308962604  simpleaudio-1.0.1.tar.gz
+diff --git a/package/python-simpleaudio/python-simpleaudio.mk b/package/python-simpleaudio/python-simpleaudio.mk
+new file mode 100644
+index 0000000..b9562ee
+--- /dev/null
++++ b/package/python-simpleaudio/python-simpleaudio.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# python-simpleaudio
++#
++#############################################################
++
++PYTHON_SIMPLEAUDIO_VERSION = 1.0.1
++PYTHON_SIMPLEAUDIO_SOURCE = simpleaudio-$(PYTHON_SIMPLEAUDIO_VERSION).tar.gz
++PYTHON_SIMPLEAUDIO_SITE = https://pypi.python.org/packages/12/f6/327c1af94062a6a6a5ff06dcf9dc689ed81aa07ae757cca3438c3c9e50fe
++PYTHON_SIMPLEAUDIO_LICENSE = MIT
++PYTHON_SIMPLEAUDIO_LICENSE_FILES = LICENSE.txt
++PYTHON_SIMPLEAUDIO_SETUP_TYPE = setuptools
++PYTHON_SIMPLEAUDIO_DEPENDENCIES = alsa-lib
++
++$(eval $(python-package))
