@@ -1,61 +1,48 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 23 Sep 2016 15:40:47 +0200
-Subject: [Buildroot] [PATCH] gst1-imx: add menuconfig to select each
- plugin individually
-In-Reply-To: <20160923151306.1fd4e4c7@free-electrons.com>
-References: <20160916131038.23240-1-gary.bisson@boundarydevices.com>
- <20160920210425.1ca82f17@free-electrons.com>
- <20160920224355.l76a3kggupuiugok@t450s.lan>
- <1af982ba-faf7-9cd7-73ae-c32e45286f34@mind.be>
- <20160923125835.mr63ylhk25qb3gt2@t450s.lan>
- <20160923151306.1fd4e4c7@free-electrons.com>
-Message-ID: <20160923134047.l2jl6c2kwmyrbgj7@t450s.lan>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Fri, 23 Sep 2016 16:06:44 +0200
+Subject: [Buildroot] [PATCH] i2c-tools: install devt headers to staging dir
+Message-ID: <1474639604-23866-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
-On Fri, Sep 23, 2016 at 03:13:06PM +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 23 Sep 2016 14:58:35 +0200, Gary Bisson wrote:
-> 
-> > What about we stick with the depends for now?
-> 
-> It's fine for me.
-> 
-> > My V2 will take care of the dependencies inside the 'ifeq' statements in
-> > gst1-imx.mk. BTW, doing it as suggested kind of makes the code redundant
-> > since several plugins might have the same dependency, like:
-> > 
-> > ifeq ($(BR2_PACKAGE_GST1_IMX_MP3ENCODER),y)
-> > # There's no --enable-mp3encoder option
-> > GST1_IMX_DEPENDENCIES += imx-codec
-> > else
-> > GST1_IMX_CONF_OPTS += --disable-mp3encoder
-> > endif
-> > 
-> > ifeq ($(BR2_PACKAGE_GST1_IMX_UNIAUDIODEC),y)
-> > # There's no --enable-uniaudiodec option
-> > GST1_IMX_DEPENDENCIES += imx-codec
-> > else
-> > GST1_IMX_CONF_OPTS += --disable-uniaudiodec
-> > endif
-> > 
-> > Is that ok? I know it doesn't bring any issue, just look a little
-> > redundant.
-> 
-> If only a single dependency is needed for those codecs, is it really
-> necessary to have different options to enable/disable them? How much
-> space do they take each?
+On debian (and maybe other distribs), there is a package named libi2c-dev
+that install a useful header from i2c-tools (for the one wanting to write
+I2C applications). See https://packages.debian.org/fr/wheezy/libi2c-dev.
+Do the same in Buildroot. Note that "install" target in i2c-tools Makefile
+would do the job, but BR installs i2c-tools's stuff manualy.
 
-They actually end up in the same libgstimxaudio.so file. But the problem
-of redundancy remains for the other plugins as well:
-- Both eglvivsink and g2d depend on imx-gpu-viv
-- Both PXP and IPU depend on the kernel headers
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+---
+ package/i2c-tools/i2c-tools.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Regards,
-Gary
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index e16b940..5e095f3 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -8,6 +8,7 @@ I2C_TOOLS_VERSION = v3.1.2
+ I2C_TOOLS_SITE = git://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git
+ I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
+ I2C_TOOLS_LICENSE_FILES = COPYING
++I2C_TOOLS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ I2C_TOOLS_DEPENDENCIES += python
+@@ -50,6 +51,10 @@ define I2C_TOOLS_BUILD_CMDS
+ 	$(I2C_TOOLS_BUILD_PYSMBUS)
+ endef
+ 
++define I2C_TOOLS_INSTALL_STAGING_CMDS
++	$(INSTALL) -m 644 -D $(@D)/include/linux/i2c-dev.h $(STAGING_DIR)/usr/include/linux
++endef
++
+ define I2C_TOOLS_INSTALL_TARGET_CMDS
+ 	for i in i2cdump i2cget i2cset i2cdetect; \
+ 	do \
+-- 
+2.1.4
