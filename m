@@ -1,17 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 23 Sep 2016 07:47:10 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI am335x-evm
-In-Reply-To: <f297e95d-443c-06e1-3430-4ab4a752e964@gmail.com>
-References: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
- <20160918193045.15a33be3@free-electrons.com>
- <87fuotya3r.fsf@dell.be.48ers.dk>
- <20160921105303.1832ad5e@free-electrons.com>
- <87bmzhy6ci.fsf@dell.be.48ers.dk>
- <20160921121803.487035d8@free-electrons.com>
- <877fa5y1y2.fsf@dell.be.48ers.dk>
- <20160921140912.29c4584e@free-electrons.com>
- <f297e95d-443c-06e1-3430-4ab4a752e964@gmail.com>
-Message-ID: <20160923074710.4c8b372b@free-electrons.com>
+Date: Fri, 23 Sep 2016 07:55:24 +0200
+Subject: [Buildroot] uboot: building MLO fails
+In-Reply-To: <e564e1a1-d285-c57b-46a1-00d6375d01f9@gmail.com>
+References: <e564e1a1-d285-c57b-46a1-00d6375d01f9@gmail.com>
+Message-ID: <20160923075524.10122519@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,37 +12,46 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 23 Sep 2016 00:21:42 +0200, Lothar Felten wrote:
+On Fri, 23 Sep 2016 00:55:51 +0200, Lothar Felten wrote:
 
-> I changed the patches, they now update the current beaglebone, the 
-> defconfigs will be: beaglebone_defconfig and beaglebone_qt_defconfig.
-> The readme.txt lists the supported targets.
-
-Sounds good.
-
-> > Do you still have those early AM335x EVM boards? Are they widespread?
-> > I'm wondering if it really makes sense to have this patch.  
+> with the current uboot.mk the MLO isn't generated anymore.
 > 
-> I've only use two EVMs and they both have the issue, I'm not sure that 
-> it ever got fixed. Any board will run in 1 bit mode, but some evms won't 
-> run in 4 bit mode, so I think that's a safe choice. Anyway, it applies 
-> to the uboot only.
+> I modified my defconfig (beaglebone_defconfig) to:
+> BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
 
-OK, let's keep this then. What worries me is that the kind of patch
-that has never any chance of being removed from Buildroot. I would have
-preferred a solution that could potentially be accepted upstream.
+This looks wrong. The image format is u-boot.img.
 
-> > Does this really work for the BeagleBone, which uses ttyO2 if I
-> > remember correctly? Maybe another reason to have a defconfig that
-> > supports just the am335x_evm.  
+> BR2_TARGET_UBOOT_SPL=y
+> BR2_TARGET_UBOOT_SPL_NAME="MLO"
 > 
-> The beaglebone (ttyO0 on USB) beagleboneblack (ttyO0 on pinheader) and 
-> the evm (sub d 9 pin) all use ttyO0
+> In uboot.mk $(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME) is added to 
+> UBOOT_BINS but not to UBOOT_MAKE_TARGET, why?
 
-OK, my bad. I was probably confusing with the beagleboard where I think
-it was the third serial port (ttyO2). So everything is fine.
+However, indeed, MLO is no longer built. This is a fallout from
+https://git.buildroot.org/buildroot/commit/boot/uboot?id=fad58cefa4a392b52eafe46a773f8cbfb8aadb43.
 
-Thanks a lot!
+I really think we should do, in order to build both the default images
+for the selected platforms *and* the additional make targets if any.
+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 7379a4d..81c5169 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -179,7 +179,7 @@ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+ define UBOOT_BUILD_CMDS
+        $(TARGET_CONFIGURE_OPTS)        \
+                $(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)             \
+-               $(UBOOT_MAKE_TARGET)
++               all $(UBOOT_MAKE_TARGET)
+        $(if $(BR2_TARGET_UBOOT_FORMAT_SD),
+                $(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
+        $(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
+
+I tested with this patch, and it generates and installs MLO and
+u-boot.img properly.
+
+Best regards,
 
 Thomas
 -- 
