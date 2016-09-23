@@ -1,49 +1,39 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 23 Sep 2016 07:28:11 +0000
-Subject: [Buildroot] [PATCH] qt5: Disable pkg-config usage for
- cross-building
-In-Reply-To: <20160923081921.189fd5e4@free-electrons.com>
-References: <1474573700-22730-1-git-send-email-abrodkin@synopsys.com>
- <20160922205817.GC3179@free.fr>
- <20160923075722.3dbee0a8@free-electrons.com>
- <1474611155.2562.6.camel@synopsys.com>
- <20160923081921.189fd5e4@free-electrons.com>
-Message-ID: <1474615682.2562.11.camel@synopsys.com>
+From: Biagio Montaruli <biagio.hkr@gmail.com>
+Date: Fri, 23 Sep 2016 10:00:37 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/at91bootstrap3: bump to version
+	3.8.6
+In-Reply-To: <20160923080702.79365a15@free-electrons.com>
+References: <1474546355-26477-1-git-send-email-biagio.hkr@gmail.com>
+ <20160923080702.79365a15@free-electrons.com>
+Message-ID: <CAJkBjxFweXGKnRec6UxbsL_fsUgirWyh8_Zb95-B5LkbksXs2Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+You're welcome !
 
-On Fri, 2016-09-23 at 08:19 +0200, Thomas Petazzoni wrote:
+2016-09-23 8:07 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
 > Hello,
-> 
-> On Fri, 23 Sep 2016 06:12:44 +0000, Alexey Brodkin wrote:
-> 
-> > 
-> > > 
-> > > Alexey, have you tried the other approaches I outlined in the thread
-> > > where the initial discussion took place???
-> > 
-> > Well I don't like removal of pkg-config usage either but...
-> > Another approach with setting?QMAKE_CFLAGS_ISYSTEM to "" may work as well
-> > (even thought I haven't tried it yet) but that will mean people using
-> > buildroot-built toolchain for building their Qt5 apps will see those
-> > compiler warnings about "wrong" stuff in system headers. In the end that's why
-> > this "-isystem" was introduced in the first place.
-> 
-> Which warning will they see? I don't quite get why they would see a
-> warning,
-
-I don't have an example handy but maybe this sheds some light on that
-https://gcc.gnu.org/onlinedocs/cpp/System-Headers.h
-tml?
-
-> and still fail to understand why qmake uses -isystem.
-
-Again I would assume that's to mute warnings that have nothing to
-do with Qt itself or user's code.
-
--Alexey
+>
+> On Thu, 22 Sep 2016 14:12:35 +0200, Biagio Montaruli wrote:
+> > Signed-off-by: Biagio Montaruli <biagio.hkr@gmail.com>
+> > ---
+> >  boot/at91bootstrap3/Config.in           | 4 ++--
+> >  boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> Applied to master, thanks.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160923/3db7cff1/attachment.html>
