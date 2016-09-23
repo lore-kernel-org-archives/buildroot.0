@@ -1,111 +1,127 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 23 Sep 2016 12:52:30 +0200
-Subject: [Buildroot] [PATCH 2/3] DEVELOPERS: merge Fabrice Fontaine
-	entries
-In-Reply-To: <20160921161342.GA3405@free.fr>
-References: <1474453163-16548-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1474453163-16548-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160921161342.GA3405@free.fr>
-Message-ID: <CAPi7W81k3X6rV4XG9OV1hBbHGM3Jc5JUcF0_4i3Jeisjy6j4XA@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 23 Sep 2016 15:07:53 +0300
+Subject: [Buildroot] [PATCH] u-boot: Fix building for ARC700
+Message-ID: <1474632473-30670-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+With newer ARC toolchain obsolete -marcXXX were finally deperecated
+and so compiler throws errors now about unknown option.
 
-Yann is right, I'm contributing both personally and professionally.
+Solution is as simple as switching to more generic -mcu-XXX
+options. Which we do. Unfortunately that change in upstream U-Boot [1]
+happened right after v2016.09 was released an so we need to have that fix
+for v2016.07 which is mentioned in axs10x defconfigs and for the latest
+U-Boot release v2016.09 (which is selected by default if no defconfig is
+used).
 
-At the beginning, my professional contributions (domoticz and openzwave)
-were sent through my Orange email account.
-However, as most of the Orange SMTP servers are blocked by
-zen.spamhaus.rbldns, I had to use my personal gmail account even for
-professional contributions such as alljoyn as it was impossible to send a
-patch serie.
+Once we deprecate either U-Boot version in U-Boot corresponding patch
+should be removed essentially.
 
-That's why, except the first two packages, all my patches were sent through
-my personal gmail account.
+[1] http://git.denx.de/?p=u-boot.git;a=commit;h=7c8d81605302e7d7fdd3e7d8eb69302bddc64a2c
 
-I have no strong opinion concerning the merging of my two identities in the
-DEVELOPERS file. If the email is just used to reach me, both will work.
-Concerning the difference between my personal and professional
-contributions, I can still use the signed-off-by header if it's ok for you.
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch | 39 ++++++++++++++++++++++
+ ...-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch | 39 ++++++++++++++++++++++
+ 2 files changed, 78 insertions(+)
+ create mode 100644 boot/uboot/2016.07/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
+ create mode 100644 boot/uboot/2016.09/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
 
-Best Regards,
-
-Fabrice
-
-Le 21 sept. 2016 18:13, "Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
-
-> Thomas, All,
->
-> On 2016-09-21 12:19 +0200, Thomas Petazzoni spake thusly:
-> > There were two entries for Fabrice Fontaine, merge them.
->
-> Fabrice will confirm, but I think he contributes both professionally
-> and personally, hence the two identities.
->
-> So, I'm not ture you should merge both...
->
-> Regards,
-> Yann E. MORIN.
->
-> > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > ---
-> >  DEVELOPERS | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 43d011a..a16af60 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -430,20 +430,18 @@ F:      configs/freescale_imx*
-> >  N:   Fabio Porcedda <fabio.porcedda@gmail.com>
-> >  F:   package/netsurf-buildsystem/
-> >
-> > -N:   Fabrice Fontaine <fabrice.fontaine@orange.com>
-> > -F:   package/domoticz/
-> > -F:   package/openzwave/
-> > -
-> >  N:   Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >  F:   package/alljoyn/
-> >  F:   package/alljoyn-base/
-> >  F:   package/alljoyn-tcl/
-> >  F:   package/alljoyn-tcl-base/
-> > +F:   package/domoticz/
-> >  F:   package/gtksourceview/
-> >  F:   package/gupnp-dlna/
-> >  F:   package/gupnp-tools/
-> >  F:   package/igd2-for-linux/
-> >  F:   package/minissdpd/
-> > +F:   package/openzwave/
-> >  F:   package/tinycbor/
-> >  F:   package/tinydtls/
-> >
-> > --
-> > 2.7.4
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.-
-> -------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
-> '------------------------------^-------^------------------^-
-> -------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160923/b79183bf/attachment.html>
+diff --git a/boot/uboot/2016.07/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch b/boot/uboot/2016.07/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
+new file mode 100644
+index 0000000..eded9a3
+--- /dev/null
++++ b/boot/uboot/2016.07/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
+@@ -0,0 +1,39 @@
++From 7c8d81605302e7d7fdd3e7d8eb69302bddc64a2c Mon Sep 17 00:00:00 2001
++From: Alexey Brodkin <abrodkin@synopsys.com>
++Date: Fri, 16 Sep 2016 12:12:26 +0300
++Subject: [PATCH] arc: Use -mcpu=XXX instead of obsolete -marcXXX
++
++With newer ARC tools old way of CPU specification gets obsolete,
++so we're switching to newer and more common way of setting "-mcpu".
++
++Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
++---
++ arch/arc/config.mk | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/arch/arc/config.mk b/arch/arc/config.mk
++index 7c974f0..13676bd 100644
++--- a/arch/arc/config.mk
+++++ b/arch/arc/config.mk
++@@ -31,15 +31,15 @@ CONFIG_MMU = 1
++ endif
++ 
++ ifdef CONFIG_CPU_ARC750D
++-PLATFORM_CPPFLAGS += -marc700
+++PLATFORM_CPPFLAGS += -mcpu=arc700
++ endif
++ 
++ ifdef CONFIG_CPU_ARC770D
++-PLATFORM_CPPFLAGS += -marc700 -mlock -mswape
+++PLATFORM_CPPFLAGS += -mcpu=arc700 -mlock -mswape
++ endif
++ 
++ ifdef CONFIG_CPU_ARCEM6
++-PLATFORM_CPPFLAGS += -marcem
+++PLATFORM_CPPFLAGS += -mcpu=arcem
++ endif
++ 
++ ifdef CONFIG_CPU_ARCHS34
++-- 
++2.7.4
++
+diff --git a/boot/uboot/2016.09/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch b/boot/uboot/2016.09/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
+new file mode 100644
+index 0000000..eded9a3
+--- /dev/null
++++ b/boot/uboot/2016.09/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
+@@ -0,0 +1,39 @@
++From 7c8d81605302e7d7fdd3e7d8eb69302bddc64a2c Mon Sep 17 00:00:00 2001
++From: Alexey Brodkin <abrodkin@synopsys.com>
++Date: Fri, 16 Sep 2016 12:12:26 +0300
++Subject: [PATCH] arc: Use -mcpu=XXX instead of obsolete -marcXXX
++
++With newer ARC tools old way of CPU specification gets obsolete,
++so we're switching to newer and more common way of setting "-mcpu".
++
++Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
++---
++ arch/arc/config.mk | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/arch/arc/config.mk b/arch/arc/config.mk
++index 7c974f0..13676bd 100644
++--- a/arch/arc/config.mk
+++++ b/arch/arc/config.mk
++@@ -31,15 +31,15 @@ CONFIG_MMU = 1
++ endif
++ 
++ ifdef CONFIG_CPU_ARC750D
++-PLATFORM_CPPFLAGS += -marc700
+++PLATFORM_CPPFLAGS += -mcpu=arc700
++ endif
++ 
++ ifdef CONFIG_CPU_ARC770D
++-PLATFORM_CPPFLAGS += -marc700 -mlock -mswape
+++PLATFORM_CPPFLAGS += -mcpu=arc700 -mlock -mswape
++ endif
++ 
++ ifdef CONFIG_CPU_ARCEM6
++-PLATFORM_CPPFLAGS += -marcem
+++PLATFORM_CPPFLAGS += -mcpu=arcem
++ endif
++ 
++ ifdef CONFIG_CPU_ARCHS34
++-- 
++2.7.4
++
+-- 
+2.6.3
