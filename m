@@ -1,44 +1,82 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 23 Sep 2016 14:41:00 +0000
-Subject: [Buildroot] [Bug 9301] New: U-boot fails to build with default
- zynq_zed_defconfig configuration
-Message-ID: <bug-9301-163@https.bugs.busybox.net/>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 23 Sep 2016 17:58:49 +0300
+Subject: [Buildroot] [PATCH] qt5: Disable passing of -isystem flag in
+	CXXFLAGS
+Message-ID: <1474642729-40702-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9301
+Some Qt5 sub-projects as well as 3rd-party apps written on Qt
+are failing to compile with gcc 6.x like that:
+---------------------------->8-------------------------
+In file included from XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/bits/stl_algo.h:59:0,
+                 from XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/algorithm:62,
+                 from XXX/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/qglobal.h:88,
+                 from XXX/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/qpair.h:37,
+                 from qmediametadata.h:37,
+                 from qmediametadata.cpp:28:
+XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
+ #include_next <stdlib.h>
+                         ^
+compilation terminated.
+---------------------------->8-------------------------
 
-            Bug ID: 9301
-           Summary: U-boot fails to build with default zynq_zed_defconfig
-                    configuration
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: matt.kraai at abbott.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+That happens because qmake trying to play smart passes some
+include paths in Makefile with "-isystem" prefix.
+Which in some cases lead to build failure well described in [1].
 
-When I run `make zynq_zed_defconfig && make all` on master, the build
-eventually fails with the following messages:
+A little bit more details below on what really happens:
 
-> cp -dpf .../buildroot/output/build/uboot-xilinx-v2016.2/spl/boot.bin .../buildroot/output/images/
-> cp: cannot stat '.../buildroot/output/build/uboot-xilinx-v2016.2/spl/boot.bin': No such file or directory
+1. In "configure" script Qt determines default include paths of the
+   toolchain and stores them in DEFAULT_INCDIRS variable, see [2].
 
-Commit fad58cefa4a392b52eafe46a773f8cbfb8aadb43 introduced this error.  Before
-that commit, no make targets were specified when make was invoked to build
-uboot.  This caused make to build the all target, which caused it to build
-spl/boot.bin.  After that commit, the u-boot.img target was specified.  As a
-result of this change, make only built u-boot.img and not spl/boot.bin.
+2. On qmake execution when it creates Makefile out of .pro-file
+   it parses headers in INCLUDEPATH variable and if a path matches
+   one in DEFAULT_INCDIRS then in CXXFLAGS that path is written
+   with $QMAKE_CFLAGS_ISYSTEM prefix, otherwise non-matching include
+   path ends up in CXXFLAGS with normal "-I" prefix.
 
+3. By default for gcc "QMAKE_CFLAGS_ISYSTEM = -isystem", see [3].
+
+4. gcc fails to find stdlib.h, again refer to J?rg's explanation in [1].
+
+What we do here we force set QMAKE_CFLAGS_ISYSTEM to "" and so qmake
+won't use "-isystem" any longer instead expected "-I" will be used for
+all headers, see [4].
+
+That fixes building of Qt5Webkit on ARM with gcc 6.x and a number of
+autobuilder failures for ARC (the an arch that uses gcc 6 by default) like:
+http://autobuild.buildroot.net/results/56a/56a6700774af692e7f5a99b452b15e4e8592310f
+http://autobuild.buildroot.net/results/697/697412b29bf031bf8f246cc3af97ebcbf6bf6d1b
+
+[1] https://git.buildroot.net/buildroot/commit/?id=e79272fa7ff3d66c18de3514b912cd9d68d121a4
+[2] http://code.qt.io/cgit/qt/qtbase.git/tree/configure?h=5.6.1#n3660
+[3] http://code.qt.io/cgit/qt/qtbase.git/tree/mkspecs/common/gcc-base.conf?h=5.6.1#n47
+[4] http://code.qt.io/cgit/qt/qtbase.git/tree/qmake/generators/unix/unixmake2.cpp?&h=5.6.1#n193
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/qt5/qt5base/qmake.conf | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qt5/qt5base/qmake.conf b/package/qt5/qt5base/qmake.conf
+index 2152d3c..49cf898 100644
+--- a/package/qt5/qt5base/qmake.conf
++++ b/package/qt5/qt5base/qmake.conf
+@@ -19,6 +19,7 @@ QMAKE_CXXFLAGS_RELEASE += -O3
+ CONFIG                 += nostrip
+ 
+ QMAKE_LIBS             += -lrt -lpthread -ldl
++QMAKE_CFLAGS_ISYSTEM   =
+ 
+ include(../common/linux_device_post.conf)
+ load(qt_config)
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.6.3
