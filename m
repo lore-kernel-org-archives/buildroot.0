@@ -1,170 +1,125 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 23 Sep 2016 23:42:27 +0200
-Subject: [Buildroot] [PATCH] package/wvstreams: add patch to fix build with
-	C99 compilers
-Message-ID: <20160923214227.12888-1-joerg.krause@embedded.rocks>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 24 Sep 2016 00:11:29 +0200
+Subject: [Buildroot] [PATCH] qt5: Disable passing of -isystem flag in
+ CXXFLAGS
+In-Reply-To: <1474642729-40702-1-git-send-email-abrodkin@synopsys.com>
+References: <1474642729-40702-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <81ddd556-d7fd-2378-d8da-2f2d73091fa3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-wvstreams uses a bundled version of argp. Compiling argp fails for all
-compilers not using the C89 standard by default:
+ Hi Alexey,
 
-"""
-In file included from argp-fmtstream.c:35:0:
-argp-namefrob.h:62:32: error: redefinition of ?argp_fmtstream_write?
- #define __argp_fmtstream_write argp_fmtstream_write
-                                ^
-argp-fmtstream.c:395:1: note: in expansion of macro
-?__argp_fmtstream_write?
- __argp_fmtstream_write (argp_fmtstream_t __fs,
- ^
-In file included from argp-fmtstream.c:34:0:
-argp-fmtstream.h:209:32: note: previous definition of
-?argp_fmtstream_write? was here
- #define __argp_fmtstream_write argp_fmtstream_write
-                                ^
-argp-fmtstream.h:223:1: note: in expansion of macro
-?__argp_fmtstream_write?
- __argp_fmtstream_write (argp_fmtstream_t __fs,
- ^
-"""
+ Excellent commit log!
 
-The issue is that C99 changed inline semantics. This patch takes these
-changes into account and allows to build the bundled argp and therefore
-wvstreams with non-C89-compilers.
+On 23-09-16 16:58, Alexey Brodkin wrote:
+> Some Qt5 sub-projects as well as 3rd-party apps written on Qt
+> are failing to compile with gcc 6.x like that:
+> ---------------------------->8-------------------------
+> In file included from XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/bits/stl_algo.h:59:0,
+>                  from XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/algorithm:62,
+>                  from XXX/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/qglobal.h:88,
+>                  from XXX/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/qpair.h:37,
+>                  from qmediametadata.h:37,
+>                  from qmediametadata.cpp:28:
+> XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
+>  #include_next <stdlib.h>
+>                          ^
+> compilation terminated.
+> ---------------------------->8-------------------------
+> 
+> That happens because qmake trying to play smart passes some
+> include paths in Makefile with "-isystem" prefix.
+> Which in some cases lead to build failure well described in [1].
+> 
+> A little bit more details below on what really happens:
+> 
+> 1. In "configure" script Qt determines default include paths of the
+>    toolchain and stores them in DEFAULT_INCDIRS variable, see [2].
+> 
+> 2. On qmake execution when it creates Makefile out of .pro-file
+>    it parses headers in INCLUDEPATH variable and if a path matches
+>    one in DEFAULT_INCDIRS then in CXXFLAGS that path is written
+>    with $QMAKE_CFLAGS_ISYSTEM prefix, otherwise non-matching include
+>    path ends up in CXXFLAGS with normal "-I" prefix.
+> 
+> 3. By default for gcc "QMAKE_CFLAGS_ISYSTEM = -isystem", see [3].
+> 
+> 4. gcc fails to find stdlib.h, again refer to J?rg's explanation in [1].
 
-Note, that wvstreams is not maintained anymore. Last activity was on
-Github was 2011, the current version 1.6.1 dates from 2009.
+ There is one difference here, however: In J?rg's explanation, it's about
+headers which really aren't system headers (protobuf). But in this case, the
+headers really are system headers.
 
-Fetch-from: http://review.gluster.org/6034
+> 
+> What we do here we force set QMAKE_CFLAGS_ISYSTEM to "" and so qmake
+> won't use "-isystem" any longer instead expected "-I" will be used for
+> all headers, see [4].
 
-Fixes:
-http://autobuild.buildroot.net/results/f01/f0166f030875ecaf0d757790de6361339071831e/
-http://autobuild.buildroot.net/results/32b/32b4eba8c7cbe8a3b1cde2d67f1af3f913fcc292/
-http://autobuild.buildroot.net/results/38f/38fefa126596c6e267ffaf0f2dd9c5e3dcf09aff/
-http://autobuild.buildroot.net/results/ea2/ea223c8a4f817541f55aa36c47b159a316031bff/
-.. and many more.
+ Another option would be to set it to -idirafter, which puts the directory at
+the end of the default search path and I think it also still treats it as a
+system directory. But that would possibly lead to even worse side effects, so
+maybe not such a good idea.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- .../0006-fix-build-with-C99-compilers.patch        | 105 +++++++++++++++++++++
- 1 file changed, 105 insertions(+)
- create mode 100644 package/wvstreams/0006-fix-build-with-C99-compilers.patch
+ I still don't understand how the -I$(STAGING_DIR)/usr/include gets added, by
+the way. Isn't pkg-config supposed to suppress those, because they already are
+in the default search path? For instance, on my system I have a xf86dgaproto.pc
+which contains Cflags: -I${includedir}, but pkg-config --cflags xf86dgaproto
+gives empty.
 
-diff --git a/package/wvstreams/0006-fix-build-with-C99-compilers.patch b/package/wvstreams/0006-fix-build-with-C99-compilers.patch
-new file mode 100644
-index 0000000..2bd34a0
---- /dev/null
-+++ b/package/wvstreams/0006-fix-build-with-C99-compilers.patch
-@@ -0,0 +1,105 @@
-+From b2dfa011a3fdcb7d22764d143517d0fbd1c2a201 Mon Sep 17 00:00:00 2001
-+From: Emmanuel Dreyfus <manu@netbsd.org>
-+Date: Wed, 22 Jan 2014 14:47:23 +0100
-+Subject: [PATCH] Fix build with C99 compilers
-+
-+wvstreams uses a bundled version of argp. Compiling argp fails for all compilers
-+not using the C89 standard by default:
-+
-+"""
-+In file included from argp-fmtstream.c:35:0:
-+argp-namefrob.h:62:32: error: redefinition of ?argp_fmtstream_write?
-+ #define __argp_fmtstream_write argp_fmtstream_write
-+                                ^
-+argp-fmtstream.c:395:1: note: in expansion of macro ?__argp_fmtstream_write?
-+ __argp_fmtstream_write (argp_fmtstream_t __fs,
-+ ^
-+In file included from argp-fmtstream.c:34:0:
-+argp-fmtstream.h:209:32: note: previous definition of ?argp_fmtstream_write? was here
-+ #define __argp_fmtstream_write argp_fmtstream_write
-+                                ^
-+argp-fmtstream.h:223:1: note: in expansion of macro ?__argp_fmtstream_write?
-+ __argp_fmtstream_write (argp_fmtstream_t __fs,
-+ ^
-+"""
-+
-+The issue is that C99 changed inline semantics. This patch allows to build
-+argp with non-C89-compilers.
-+
-+Fetch-from: http://review.gluster.org/6034
-+
-+Signed-off-by: Emmanuel Dreyfus <manu@netbsd.org>
-+Reviewed-by: Harshavardhana <harsha@harshavardhana.net>
-+Tested-by: Gluster Build System <jenkins@build.gluster.com>
-+
-+[Adapt paths for wvstreams. Add commit message.]
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+
-+diff --git a/argp/argp-fmtstream.c b/argp/argp-fmtstream.c
-+index 7f79285..494b6b3 100644
-+--- a/argp/argp-fmtstream.c
-++++ b/argp/argp-fmtstream.c
-+@@ -389,6 +389,7 @@
-+ weak_alias (__argp_fmtstream_printf, argp_fmtstream_printf)
-+ #endif
-+ 
-++#if __STDC_VERSION__ - 199900L < 1
-+ /* Duplicate the inline definitions in argp-fmtstream.h, for compilers
-+  * that don't do inlining. */
-+ size_t
-+@@ -471,5 +472,6 @@
-+     __argp_fmtstream_update (__fs);
-+   return __fs->point_col >= 0 ? __fs->point_col : 0;
-+ }
-++#endif /* __STDC_VERSION__ - 199900L < 1 */
-+ 
-+ #endif /* !ARGP_FMTSTREAM_USE_LINEWRAP */
-+diff --git a/argp/argp-fmtstream.h b/argp/argp-fmtstream.h
-+index e797b11..828f435 100644
-+--- a/argp/argp-fmtstream.h
-++++ b/argp/argp-fmtstream.h
-+@@ -153,6 +153,7 @@
-+ 				      __const char *__fmt, ...)
-+      PRINTF_STYLE(2,3);
-+ 
-++#if __STDC_VERSION__ - 199900L < 1
-+ extern int __argp_fmtstream_putc (argp_fmtstream_t __fs, int __ch);
-+ extern int argp_fmtstream_putc (argp_fmtstream_t __fs, int __ch);
-+ 
-+@@ -163,6 +164,7 @@
-+ 				      __const char *__str, size_t __len);
-+ extern size_t argp_fmtstream_write (argp_fmtstream_t __fs,
-+ 				    __const char *__str, size_t __len);
-++#endif /* __STDC_VERSION__ - 199900L < 1 */
-+ 
 
-+ /* Access macros for various bits of state.  */
-+ #define argp_fmtstream_lmargin(__fs) ((__fs)->lmargin)
-+@@ -172,6 +174,7 @@
-+ #define __argp_fmtstream_rmargin argp_fmtstream_rmargin
-+ #define __argp_fmtstream_wmargin argp_fmtstream_wmargin
-+ 
-++#if __STDC_VERSION__ - 199900L < 1
-+ /* Set __FS's left margin to LMARGIN and return the old value.  */
-+ extern size_t argp_fmtstream_set_lmargin (argp_fmtstream_t __fs,
-+ 					  size_t __lmargin);
-+@@ -193,6 +196,7 @@
-+ /* Return the column number of the current output point in __FS.  */
-+ extern size_t argp_fmtstream_point (argp_fmtstream_t __fs);
-+ extern size_t __argp_fmtstream_point (argp_fmtstream_t __fs);
-++#endif /* __STDC_VERSION__ - 199900L < 1 */
-+ 
-+ /* Internal routines.  */
-+ extern void _argp_fmtstream_update (argp_fmtstream_t __fs);
-+@@ -216,7 +220,11 @@
-+ #endif
-+ 
-+ #ifndef ARGP_FS_EI
-++#if defined(__GNUC__) && !defined(__GNUC_STDC_INLINE__)
-+ #define ARGP_FS_EI extern inline
-++#else
-++#define ARGP_FS_EI inline
-++#endif
-+ #endif
-+ 
-+ ARGP_FS_EI size_t
+ But in the end it will probably come down to this patch anyway, so
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+However, I propose to wait another week or so to see if someone else comes up
+with a better idea.
+
+
+ Regards,
+ Arnout
+
+> 
+> That fixes building of Qt5Webkit on ARM with gcc 6.x and a number of
+> autobuilder failures for ARC (the an arch that uses gcc 6 by default) like:
+> http://autobuild.buildroot.net/results/56a/56a6700774af692e7f5a99b452b15e4e8592310f
+> http://autobuild.buildroot.net/results/697/697412b29bf031bf8f246cc3af97ebcbf6bf6d1b
+> 
+> [1] https://git.buildroot.net/buildroot/commit/?id=e79272fa7ff3d66c18de3514b912cd9d68d121a4
+> [2] http://code.qt.io/cgit/qt/qtbase.git/tree/configure?h=5.6.1#n3660
+> [3] http://code.qt.io/cgit/qt/qtbase.git/tree/mkspecs/common/gcc-base.conf?h=5.6.1#n47
+> [4] http://code.qt.io/cgit/qt/qtbase.git/tree/qmake/generators/unix/unixmake2.cpp?&h=5.6.1#n193
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/qt5/qt5base/qmake.conf | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/qt5/qt5base/qmake.conf b/package/qt5/qt5base/qmake.conf
+> index 2152d3c..49cf898 100644
+> --- a/package/qt5/qt5base/qmake.conf
+> +++ b/package/qt5/qt5base/qmake.conf
+> @@ -19,6 +19,7 @@ QMAKE_CXXFLAGS_RELEASE += -O3
+>  CONFIG                 += nostrip
+>  
+>  QMAKE_LIBS             += -lrt -lpthread -ldl
+> +QMAKE_CFLAGS_ISYSTEM   =
+>  
+>  include(../common/linux_device_post.conf)
+>  load(qt_config)
+> 
+
 -- 
-2.10.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
