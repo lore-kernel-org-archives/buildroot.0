@@ -1,67 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Sep 2016 08:50:00 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI am335x-evm
-In-Reply-To: <f297e95d-443c-06e1-3430-4ab4a752e964@gmail.com> (Lothar Felten's
- message of "Fri, 23 Sep 2016 00:21:42 +0200")
-References: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
- <20160918193045.15a33be3@free-electrons.com>
- <87fuotya3r.fsf@dell.be.48ers.dk>
- <20160921105303.1832ad5e@free-electrons.com>
- <87bmzhy6ci.fsf@dell.be.48ers.dk>
- <20160921121803.487035d8@free-electrons.com>
- <877fa5y1y2.fsf@dell.be.48ers.dk>
- <20160921140912.29c4584e@free-electrons.com>
- <f297e95d-443c-06e1-3430-4ab4a752e964@gmail.com>
-Message-ID: <87eg4bnm93.fsf@dell.be.48ers.dk>
+From: Cyril Bur <cyrilbur@gmail.com>
+Date: Fri, 23 Sep 2016 15:47:17 +1000
+Subject: [Buildroot] [PATCH] package/kvm-unit-tests: bump version
+Message-ID: <20160923054717.23785-1-cyrilbur@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Lothar" == Lothar Felten <lothar.felten@gmail.com> writes:
+Most importantly this version includes a change to kvm-unit-tests which
+means it will stop looking attempting to include host headers. This
+change should fix build breakage on i386.
 
-Hi,
+"ERROR: unsafe header/library path used in cross-compilation: '-I'
+'/lib/modules/3.13.0-042stab111.12/build/include'"
 
- > I changed the patches, they now update the current beaglebone, the
- > defconfigs will be: beaglebone_defconfig and beaglebone_qt_defconfig.
- > The readme.txt lists the supported targets.
+The new version also includes more powerpc tests.
 
-Ok, great!
+Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
+---
+ package/kvm-unit-tests/kvm-unit-tests.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- >>> Uboot SD card patch:
- >>> Early AM335x-evm boards can only use 1 bit communication to the SD card, on
- >>> newer board revisions this might be fixed.
- >>> Forcing 1 bit communication slows down the communication but will work
- >>> regardless if the SD card is attached via 1 or 4 bits.
- >>> If the board has a working 4 bit SD card interface, this patch can be removed,
- >>> this will speed up the access.
- >> 
- >> Do you still have those early AM335x EVM boards? Are they widespread?
- >> I'm wondering if it really makes sense to have this patch.
-
- > I've only use two EVMs and they both have the issue, I'm not sure that
- > it ever got fixed. Any board will run in 1 bit mode, but some evms
- > won't run in 4 bit mode, so I think that's a safe choice. Anyway, it
- > applies to the uboot only.
-
-What is the upstream status of this? Have you discussed it on the u-boot
-list? Right now, this is a hack that isn't suitable for upstream, but
-how about tweaking omap_hsmmc host_cap if we are running on the evm?
-
-As it stands, the beaglebone boards are also forced into 1bit mode even
-though they don't have the problem.
-
-
- >> Does this really work for the BeagleBone, which uses ttyO2 if I
- >> remember correctly? Maybe another reason to have a defconfig that
- >> supports just the am335x_evm.
-
- > The beaglebone (ttyO0 on USB) beagleboneblack (ttyO0 on pinheader) and
- > the evm (sub d 9 pin) all use ttyO0
-
-Ok, great!
-
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index 989d398..7fd03ad 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KVM_UNIT_TESTS_VERSION = 682187afcc998bc3dd25061e98b43792cc340b33
++KVM_UNIT_TESTS_VERSION = 0b04ed0610035792514fd8499eb4dacc185520d9
+ KVM_UNIT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/scm/virt/kvm/kvm-unit-tests.git
+ KVM_UNIT_TESTS_SITE_METHOD = git
+ KVM_UNIT_TESTS_LICENSE = LGPLv2
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.10.0
