@@ -1,122 +1,170 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 23 Sep 2016 23:27:26 +0200
-Subject: [Buildroot] [PATCH] linux-tools: add gpio
-In-Reply-To: <20160914120928.27087-1-m.niestroj@grinn-global.com>
-References: <20160914120928.27087-1-m.niestroj@grinn-global.com>
-Message-ID: <20160923212726.GA4221@free.fr>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 23 Sep 2016 23:42:27 +0200
+Subject: [Buildroot] [PATCH] package/wvstreams: add patch to fix build with
+	C99 compilers
+Message-ID: <20160923214227.12888-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marcin, All,
+wvstreams uses a bundled version of argp. Compiling argp fails for all
+compilers not using the C89 standard by default:
 
-On 2016-09-14 14:09 +0200, Marcin Niestroj spake thusly:
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+"""
+In file included from argp-fmtstream.c:35:0:
+argp-namefrob.h:62:32: error: redefinition of ?argp_fmtstream_write?
+ #define __argp_fmtstream_write argp_fmtstream_write
+                                ^
+argp-fmtstream.c:395:1: note: in expansion of macro
+?__argp_fmtstream_write?
+ __argp_fmtstream_write (argp_fmtstream_t __fs,
+ ^
+In file included from argp-fmtstream.c:34:0:
+argp-fmtstream.h:209:32: note: previous definition of
+?argp_fmtstream_write? was here
+ #define __argp_fmtstream_write argp_fmtstream_write
+                                ^
+argp-fmtstream.h:223:1: note: in expansion of macro
+?__argp_fmtstream_write?
+ __argp_fmtstream_write (argp_fmtstream_t __fs,
+ ^
+"""
 
-Since you siubmitted this patch, the linux-tools infra has seen some
-overhaul. linux-tools is now a package on its own:
+The issue is that C99 changed inline semantics. This patch takes these
+changes into account and allows to build the bundled argp and therefore
+wvstreams with non-C89-compilers.
 
-    http://nightly.buildroot.org/#linux-kernel-specific-infra
+Note, that wvstreams is not maintained anymore. Last activity was on
+Github was 2011, the current version 1.6.1 dates from 2009.
 
-It basically follows the same logic as the previous infra, so porting it
-over should be minimal work. Could you please adapt and respin, please?
+Fetch-from: http://review.gluster.org/6034
 
-In the meantime, here's my review below...
+Fixes:
+http://autobuild.buildroot.net/results/f01/f0166f030875ecaf0d757790de6361339071831e/
+http://autobuild.buildroot.net/results/32b/32b4eba8c7cbe8a3b1cde2d67f1af3f913fcc292/
+http://autobuild.buildroot.net/results/38f/38fefa126596c6e267ffaf0f2dd9c5e3dcf09aff/
+http://autobuild.buildroot.net/results/ea2/ea223c8a4f817541f55aa36c47b159a316031bff/
+.. and many more.
 
-> ---
->  linux/Config.tools.in    |  9 +++++++++
->  linux/linux-tool-gpio.mk | 28 ++++++++++++++++++++++++++++
->  2 files changed, 37 insertions(+)
->  create mode 100644 linux/linux-tool-gpio.mk
-> 
-> diff --git a/linux/Config.tools.in b/linux/Config.tools.in
-> index 5ada98d..303c967 100644
-> --- a/linux/Config.tools.in
-> +++ b/linux/Config.tools.in
-> @@ -14,6 +14,15 @@ comment "cpupower needs a toolchain w/ wchar"
->  	depends on !BR2_bfin
->  	depends on !BR2_USE_WCHAR && BR2_NEEDS_GETTEXT
->  
-> +config BR2_LINUX_KERNEL_TOOL_GPIO
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ .../0006-fix-build-with-C99-compilers.patch        | 105 +++++++++++++++++++++
+ 1 file changed, 105 insertions(+)
+ create mode 100644 package/wvstreams/0006-fix-build-with-C99-compilers.patch
 
-This would now have to be BR2_PACKAGE_LINUX_TOOLS_GPIO.
+diff --git a/package/wvstreams/0006-fix-build-with-C99-compilers.patch b/package/wvstreams/0006-fix-build-with-C99-compilers.patch
+new file mode 100644
+index 0000000..2bd34a0
+--- /dev/null
++++ b/package/wvstreams/0006-fix-build-with-C99-compilers.patch
+@@ -0,0 +1,105 @@
++From b2dfa011a3fdcb7d22764d143517d0fbd1c2a201 Mon Sep 17 00:00:00 2001
++From: Emmanuel Dreyfus <manu@netbsd.org>
++Date: Wed, 22 Jan 2014 14:47:23 +0100
++Subject: [PATCH] Fix build with C99 compilers
++
++wvstreams uses a bundled version of argp. Compiling argp fails for all compilers
++not using the C89 standard by default:
++
++"""
++In file included from argp-fmtstream.c:35:0:
++argp-namefrob.h:62:32: error: redefinition of ?argp_fmtstream_write?
++ #define __argp_fmtstream_write argp_fmtstream_write
++                                ^
++argp-fmtstream.c:395:1: note: in expansion of macro ?__argp_fmtstream_write?
++ __argp_fmtstream_write (argp_fmtstream_t __fs,
++ ^
++In file included from argp-fmtstream.c:34:0:
++argp-fmtstream.h:209:32: note: previous definition of ?argp_fmtstream_write? was here
++ #define __argp_fmtstream_write argp_fmtstream_write
++                                ^
++argp-fmtstream.h:223:1: note: in expansion of macro ?__argp_fmtstream_write?
++ __argp_fmtstream_write (argp_fmtstream_t __fs,
++ ^
++"""
++
++The issue is that C99 changed inline semantics. This patch allows to build
++argp with non-C89-compilers.
++
++Fetch-from: http://review.gluster.org/6034
++
++Signed-off-by: Emmanuel Dreyfus <manu@netbsd.org>
++Reviewed-by: Harshavardhana <harsha@harshavardhana.net>
++Tested-by: Gluster Build System <jenkins@build.gluster.com>
++
++[Adapt paths for wvstreams. Add commit message.]
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++
++diff --git a/argp/argp-fmtstream.c b/argp/argp-fmtstream.c
++index 7f79285..494b6b3 100644
++--- a/argp/argp-fmtstream.c
+++++ b/argp/argp-fmtstream.c
++@@ -389,6 +389,7 @@
++ weak_alias (__argp_fmtstream_printf, argp_fmtstream_printf)
++ #endif
++ 
+++#if __STDC_VERSION__ - 199900L < 1
++ /* Duplicate the inline definitions in argp-fmtstream.h, for compilers
++  * that don't do inlining. */
++ size_t
++@@ -471,5 +472,6 @@
++     __argp_fmtstream_update (__fs);
++   return __fs->point_col >= 0 ? __fs->point_col : 0;
++ }
+++#endif /* __STDC_VERSION__ - 199900L < 1 */
++ 
++ #endif /* !ARGP_FMTSTREAM_USE_LINEWRAP */
++diff --git a/argp/argp-fmtstream.h b/argp/argp-fmtstream.h
++index e797b11..828f435 100644
++--- a/argp/argp-fmtstream.h
+++++ b/argp/argp-fmtstream.h
++@@ -153,6 +153,7 @@
++ 				      __const char *__fmt, ...)
++      PRINTF_STYLE(2,3);
++ 
+++#if __STDC_VERSION__ - 199900L < 1
++ extern int __argp_fmtstream_putc (argp_fmtstream_t __fs, int __ch);
++ extern int argp_fmtstream_putc (argp_fmtstream_t __fs, int __ch);
++ 
++@@ -163,6 +164,7 @@
++ 				      __const char *__str, size_t __len);
++ extern size_t argp_fmtstream_write (argp_fmtstream_t __fs,
++ 				    __const char *__str, size_t __len);
+++#endif /* __STDC_VERSION__ - 199900L < 1 */
++ 
 
-> +	bool "gpio"
-> +	help
-> +	  gpio is a collection of tools to get information about,
-> +	  control and monitor gpios present on system.
-> +
-> +	  These tools use new gpio ABI which will deprecate sysfs gpio
-> +	  interface in the future.
-> +
->  config BR2_LINUX_KERNEL_TOOL_PERF
->  	bool "perf"
->  	help
-> diff --git a/linux/linux-tool-gpio.mk b/linux/linux-tool-gpio.mk
-> new file mode 100644
-> index 0000000..bd38e67
-> --- /dev/null
-> +++ b/linux/linux-tool-gpio.mk
-> @@ -0,0 +1,28 @@
-> +################################################################################
-> +#
-> +# gpio
-> +#
-> +################################################################################
-> +
-> +LINUX_TOOLS += gpio
-> +
-> +GPIO_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS)
-> +
-> +define GPIO_BUILD_CMDS
-> +	$(Q)if ! grep install $(@D)/tools/gpio/Makefile >/dev/null 2>&1 ; then \
-> +		echo "Your kernel version is too old and does not have the gpio tools." ; \
-> +		echo "At least kernel 4.8 must be used." ; \
-> +		exit 1 ; \
-> +	fi
-> +
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
-
-And now you'd have to use $(LINUX_DIR) instead of $(@D).
-
-> +		$(GPIO_MAKE_OPTS) \
-> +		gpio
-> +endef
-> +
-> +define GPIO_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
-
-Ditto, $(LINUX_DIR).
-
-Otherwise, after conversion to the new linux-tools pckage, it would look
-good.
-
-Care to adapt and respin, please? In the meantime, I've marked your
-patch as "changes requested" in our patchwork.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
-> +		$(GPIO_MAKE_OPTS) \
-> +		DESTDIR=$(TARGET_DIR) \
-> +		gpio_install
-> +endef
-> -- 
-> 2.9.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
++ /* Access macros for various bits of state.  */
++ #define argp_fmtstream_lmargin(__fs) ((__fs)->lmargin)
++@@ -172,6 +174,7 @@
++ #define __argp_fmtstream_rmargin argp_fmtstream_rmargin
++ #define __argp_fmtstream_wmargin argp_fmtstream_wmargin
++ 
+++#if __STDC_VERSION__ - 199900L < 1
++ /* Set __FS's left margin to LMARGIN and return the old value.  */
++ extern size_t argp_fmtstream_set_lmargin (argp_fmtstream_t __fs,
++ 					  size_t __lmargin);
++@@ -193,6 +196,7 @@
++ /* Return the column number of the current output point in __FS.  */
++ extern size_t argp_fmtstream_point (argp_fmtstream_t __fs);
++ extern size_t __argp_fmtstream_point (argp_fmtstream_t __fs);
+++#endif /* __STDC_VERSION__ - 199900L < 1 */
++ 
++ /* Internal routines.  */
++ extern void _argp_fmtstream_update (argp_fmtstream_t __fs);
++@@ -216,7 +220,11 @@
++ #endif
++ 
++ #ifndef ARGP_FS_EI
+++#if defined(__GNUC__) && !defined(__GNUC_STDC_INLINE__)
++ #define ARGP_FS_EI extern inline
+++#else
+++#define ARGP_FS_EI inline
+++#endif
++ #endif
++ 
++ ARGP_FS_EI size_t
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.10.0
