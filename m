@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 23 Sep 2016 07:55:24 +0200
-Subject: [Buildroot] uboot: building MLO fails
-In-Reply-To: <e564e1a1-d285-c57b-46a1-00d6375d01f9@gmail.com>
-References: <e564e1a1-d285-c57b-46a1-00d6375d01f9@gmail.com>
-Message-ID: <20160923075524.10122519@free-electrons.com>
+Date: Fri, 23 Sep 2016 07:57:22 +0200
+Subject: [Buildroot] [PATCH] qt5: Disable pkg-config usage for
+ cross-building
+In-Reply-To: <20160922205817.GC3179@free.fr>
+References: <1474573700-22730-1-git-send-email-abrodkin@synopsys.com>
+ <20160922205817.GC3179@free.fr>
+Message-ID: <20160923075722.3dbee0a8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +14,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 23 Sep 2016 00:55:51 +0200, Lothar Felten wrote:
+On Thu, 22 Sep 2016 22:58:17 +0200, Yann E. MORIN wrote:
 
-> with the current uboot.mk the MLO isn't generated anymore.
+> I have not paid much attention to the previous discussion on the topic.
 > 
-> I modified my defconfig (beaglebone_defconfig) to:
-> BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
-
-This looks wrong. The image format is u-boot.img.
-
-> BR2_TARGET_UBOOT_SPL=y
-> BR2_TARGET_UBOOT_SPL_NAME="MLO"
+> However, I think disabling use of pkg-config is wrong. That is qmake
+> that is at fault here because, from what I understood from the previous
+> discussion, it emits -isystem where it should not.
 > 
-> In uboot.mk $(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME) is added to 
-> UBOOT_BINS but not to UBOOT_MAKE_TARGET, why?
+> So qmake needs to be fixed to not emit -isystem in those conditions.
+> 
+> Removing the use of pkg-config is just papering over the real problem.
+> 
+> Usually, using pkg-config solves more issues than not using it.
+> 
+> So, I am not very happy with this patch, to say the least... :-(
 
-However, indeed, MLO is no longer built. This is a fallout from
-https://git.buildroot.org/buildroot/commit/boot/uboot?id=fad58cefa4a392b52eafe46a773f8cbfb8aadb43.
+I entirely agree with Yann. Disabling pkg-config is clearly not the
+solution we want to use.
 
-I really think we should do, in order to build both the default images
-for the selected platforms *and* the additional make targets if any.
+Alexey, have you tried the other approaches I outlined in the thread
+where the initial discussion took place?
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 7379a4d..81c5169 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -179,7 +179,7 @@ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
- define UBOOT_BUILD_CMDS
-        $(TARGET_CONFIGURE_OPTS)        \
-                $(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)             \
--               $(UBOOT_MAKE_TARGET)
-+               all $(UBOOT_MAKE_TARGET)
-        $(if $(BR2_TARGET_UBOOT_FORMAT_SD),
-                $(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
-        $(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
-
-I tested with this patch, and it generates and installs MLO and
-u-boot.img properly.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
