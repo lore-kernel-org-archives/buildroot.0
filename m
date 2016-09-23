@@ -1,50 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 23 Sep 2016 23:14:18 +0200
-Subject: [Buildroot] [PATCH 3/3] python3: Compile host-python3 statically
-In-Reply-To: <CAA=pTTTiF11gkQzUN6n9yX+aNUZaZiRicKZa2ieF=W92yvLeFg@mail.gmail.com>
-References: <1474032631-21311-1-git-send-email-fpa@sbtaqua.com>
- <20160916190833.7c776697@free-electrons.com>
- <CAA=pTTSgNWY-orBD0ff1Y6U-p+ujXRyg+mtNvyb_UOivSqMqww@mail.gmail.com>
- <CAA=pTTTiF11gkQzUN6n9yX+aNUZaZiRicKZa2ieF=W92yvLeFg@mail.gmail.com>
-Message-ID: <20160923231418.0c2c0c3c@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 23 Sep 2016 23:18:07 +0200
+Subject: [Buildroot] [PATCH] i2c-tools: install devt headers to staging
+ dir
+In-Reply-To: <1474639604-23866-1-git-send-email-julien.boibessot@free.fr>
+References: <1474639604-23866-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <0b8205ef-ee98-a652-455c-f4717b294939@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Fri, 23 Sep 2016 16:10:41 +0000, Frederik Peter Aalund wrote:
-> I noticed that while the host-python executable doesn't have an rpath
-> value, it does have a runpath value:
+
+On 23-09-16 16:06, julien.boibessot at free.fr wrote:
+> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 > 
->   Tag        Type                         Name/Value
->  0x0000000000000001 (NEEDED)             Shared library:
-> [libpython3.5m.so.1.0]
->  0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
->  0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
->  0x000000000000001d (RUNPATH)            Library runpath:
-> [/projects/RedPitaya/OS/buildroot/buildroot/output/host/usr/lib]
->  0x000000000000000c (INIT)               0x4008c0
+> On debian (and maybe other distribs), there is a package named libi2c-dev
+> that install a useful header from i2c-tools (for the one wanting to write
+> I2C applications). See https://packages.debian.org/fr/wheezy/libi2c-dev.
+> Do the same in Buildroot. Note that "install" target in i2c-tools Makefile
+> would do the job, but BR installs i2c-tools's stuff manualy.
 
-Interesting. We are passing -Wl,-rpath, so it should be a rpath. Not
-sure why it gets turned into a runpath :/
+ Have you considered commit 41711cfdeda6f5fd9b2531f538f3643854d7d3ea?
 
-> Turns out that I had LD_LIBRARY_PATH defined which overrides runpath
-> (though not rpath). After undefining LD_LIBRARY_PATH, everything worked.
+    Revert "i2c-tools: Add i2c-dev.h to staging directory for userspace i2c
+drivers."
 
-Ah, yes, indeed. But as said above, we're supposed to have a rpath in
-all binaries installed in output/host/usr/bin, so having a runpath here
-is not expected.
+    This reverts commit ff673f9a22b1467878f1a117f2c6198e9683d5c7, as the
+    modified i2c-dev.h from i2c-tools has some definitions that conflict
+    with the i2c.h from the kernel headers. This means that a userspace
+    program or library that includes both will fail to build, as is the
+    case with libsoc.
 
-However, it at least explains why you were seeing the problem, while
-many other people were using host-python3 without any problem.
+If the issue has been fixed now, please mention it in the commit log.
 
-Thanks!
 
-Thomas
+ Also, I would prefer to use the install target. The manual install was there
+from the very first commit in 2008, I don't think it's still relevant. Peter?
+Anyway, for staging the install target can definitely be used.
+
+
+ Regards,
+ Arnout
+
+
+> 
+> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> ---
+>  package/i2c-tools/i2c-tools.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+> index e16b940..5e095f3 100644
+> --- a/package/i2c-tools/i2c-tools.mk
+> +++ b/package/i2c-tools/i2c-tools.mk
+> @@ -8,6 +8,7 @@ I2C_TOOLS_VERSION = v3.1.2
+>  I2C_TOOLS_SITE = git://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git
+>  I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
+>  I2C_TOOLS_LICENSE_FILES = COPYING
+> +I2C_TOOLS_INSTALL_STAGING = YES
+>  
+>  ifeq ($(BR2_PACKAGE_PYTHON),y)
+>  I2C_TOOLS_DEPENDENCIES += python
+> @@ -50,6 +51,10 @@ define I2C_TOOLS_BUILD_CMDS
+>  	$(I2C_TOOLS_BUILD_PYSMBUS)
+>  endef
+>  
+> +define I2C_TOOLS_INSTALL_STAGING_CMDS
+> +	$(INSTALL) -m 644 -D $(@D)/include/linux/i2c-dev.h $(STAGING_DIR)/usr/include/linux
+> +endef
+> +
+>  define I2C_TOOLS_INSTALL_TARGET_CMDS
+>  	for i in i2cdump i2cget i2cset i2cdetect; \
+>  	do \
+> 
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
