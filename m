@@ -1,74 +1,187 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 23 Sep 2016 22:07:39 +0200
-Subject: [Buildroot] uboot: building MLO fails
-In-Reply-To: <20160923075524.10122519@free-electrons.com>
-References: <e564e1a1-d285-c57b-46a1-00d6375d01f9@gmail.com>
- <20160923075524.10122519@free-electrons.com>
-Message-ID: <73fc076d-db0f-bf04-5249-a6f89aec9a5c@mind.be>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 23 Sep 2016 22:13:49 +0200
+Subject: [Buildroot] [PATCH] package/upmpdcli: add patch to fix error not
+	detecting jsoncpp
+Message-ID: <20160923201349.9167-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+http://autobuild.buildroot.net/results/205463c9ea8651911972c2835e28ded1912c811a
+http://autobuild.buildroot.net/results/5e9279ee60c11a3dacacf6d78f87f8d1b92968f5
+http://autobuild.buildroot.net/results/97043f8defd5a59ae39b4c7f095a10d15c7fe632
+http://autobuild.buildroot.net/results/e775126d5939093289b1a833dd6323ac293322ed
+.. and many more.
 
+libmpdclient, libmicrohttpd and jsoncpp provide a .pc file. Use
+pkg-config for detecting the libraries and for providing the necessary
+details for compiling and linking.
 
-On 23-09-16 07:55, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 23 Sep 2016 00:55:51 +0200, Lothar Felten wrote:
-> 
->> with the current uboot.mk the MLO isn't generated anymore.
->>
->> I modified my defconfig (beaglebone_defconfig) to:
->> BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
->> BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
-> 
-> This looks wrong. The image format is u-boot.img.
-> 
->> BR2_TARGET_UBOOT_SPL=y
->> BR2_TARGET_UBOOT_SPL_NAME="MLO"
->>
->> In uboot.mk $(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME) is added to 
->> UBOOT_BINS but not to UBOOT_MAKE_TARGET, why?
-> 
-> However, indeed, MLO is no longer built. This is a fallout from
-> https://git.buildroot.org/buildroot/commit/boot/uboot?id=fad58cefa4a392b52eafe46a773f8cbfb8aadb43.
-> 
-> I really think we should do, in order to build both the default images
-> for the selected platforms *and* the additional make targets if any.
-> 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 7379a4d..81c5169 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -179,7 +179,7 @@ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
->  define UBOOT_BUILD_CMDS
->         $(TARGET_CONFIGURE_OPTS)        \
->                 $(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)             \
-> -               $(UBOOT_MAKE_TARGET)
-> +               all $(UBOOT_MAKE_TARGET)
->         $(if $(BR2_TARGET_UBOOT_FORMAT_SD),
->                 $(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
->         $(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
-> 
-> I tested with this patch, and it generates and installs MLO and
-> u-boot.img properly.
+The current build system of upmpdcli does not use PKG_CHECK_MODULES, but
+AC_LINK_IFELSE to detect jsoncpp. After bumping jsoncpp version from
+1.7.2 to 1.7.5 the detection fails, because the test program does not
+compile anymore:
 
- In a discussion about u-boot targets a while ago I came to the same conclusion.
-And I suggested two specific targets that should be verified, but I don't
-remember which ones :-)
+"""
+In file included from
+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/autolink.h:9:0,
+                 from
+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:9,
+                 from test.c:1:
+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:155:9:
+error: 'int64_t' does not name a type
+ typedef int64_t Int64;
+         ^
+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:156:9:
+error: 'uint64_t' does not name a type
+ typedef uint64_t UInt64;
+         ^
+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:158:9:
+error: 'Int64' does not name a type
+ typedef Int64 LargestInt;
+         ^
+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:159:9:
+error: 'UInt64' does not name a type
+ typedef UInt64 LargestUInt;
+         ^
+In file included from
+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:10:0,
+                 from test.c:1:
+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/value.h:184:11:
+error: 'UInt64' in namespace 'Json' does not name a type
+   typedef Json::UInt64 UInt64;
 
- And actually, with this change, some (all?) of the _MAKE_TARGETS assignments
-can probably be removed as well.
+[..]
+"""
 
- Regards,
- Arnout
+Instead of fixing the test program use PKG_CHECK_MODULES to check for
+jsoncpp. While we're on it, add it for libmpdclient and libmicrohttpd,
+too.
 
+Note, that we are touching configure.ac and Makefile.am. However, the
+AUTORECONF flag is already set to YES by the hands of other patches.
+
+Upstream-status: https://github.com/medoc92/upmpdcli/pull/52
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ ...ig-for-jsoncpp-libmpdclient-libmicrohttpd.patch | 105 +++++++++++++++++++++
+ 1 file changed, 105 insertions(+)
+ create mode 100644 package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch
+
+diff --git a/package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch b/package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch
+new file mode 100644
+index 0000000..9761068
+--- /dev/null
++++ b/package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch
+@@ -0,0 +1,105 @@
++From 5091e1afd9d0a69bdf10d12d4a66f7147e8185a3 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Fri, 23 Sep 2016 21:37:36 +0200
++Subject: [PATCH] Use pkg-config for jsoncpp, libmpdclient and libmicrohttpd
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++libmpdclient, libmicrohttpd and jsoncpp provide a .pc file. Use
++pkg-config for detecting the libraries and for providing the necessary
++details for compiling and linking.
++
++The current build system of upmpdcli does not use PKG_CHECK_MODULES, but
++AC_LINK_IFELSE to detect jsoncpp. After bumping jsoncpp version from 1.7.2 to
++1.7.5 the detection fails, because the test program does not compile:
++
++'''
++In file included from /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/autolink.h:9:0,
++                 from /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:9,
++                 from test.c:1:
++/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:155:9: error: 'int64_t' does not name a type
++ typedef int64_t Int64;
++         ^
++/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:156:9: error: 'uint64_t' does not name a type
++ typedef uint64_t UInt64;
++         ^
++/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:158:9: error: 'Int64' does not name a type
++ typedef Int64 LargestInt;
++         ^
++/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:159:9: error: 'UInt64' does not name a type
++ typedef UInt64 LargestUInt;
++         ^
++In file included from /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:10:0,
++                 from test.c:1:
++/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/value.h:184:11: error: 'UInt64' in namespace 'Json' does not name a type
++   typedef Json::UInt64 UInt64;
++
++[..]
++'''
++
++Instead of fixing the test program use PKG_CHECK_MODULES to check for
++jsoncpp. While we're on it, add it for libmpdclient and libmicrohttpd, too.
++
++Upstream-status: https://github.com/medoc92/upmpdcli/pull/52
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ Makefile.am  |  3 ++-
++ configure.ac | 24 +++++++-----------------
++ 2 files changed, 9 insertions(+), 18 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 5c83aa1..6f6e018 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -1,5 +1,6 @@
++ AM_CPPFLAGS = -DDEBUG -g -Wall \
++-            $(upnpp_CFLAGS) \
+++            $(upnpp_CFLAGS)  $(libmpdclient_CFLAGS) $(libmicrohttpd_CFLAGS) \
+++            $($jsoncpp_CFLAGS) \
++             -I$(top_srcdir)/src \
++             -DDATADIR=\"${pkgdatadir}\" -DCONFIGDIR=\"${sysconfdir}\"
++ 
++diff --git a/configure.ac b/configure.ac
++index a165b5d..0ef0f3b 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -36,27 +36,17 @@ dnl AC_CHECK_LIB([curl], [curl_easy_init], [],AC_MSG_ERROR([libcurl not found]))
++ dnl AC_CHECK_LIB([expat], [XML_ParserCreate], [],AC_MSG_ERROR([libexpat not found]))
++ 
++ PKG_CHECK_MODULES([upnpp], [libupnpp], [], [AC_MSG_ERROR([libupnpp])])
++-AC_CHECK_LIB([mpdclient], [mpd_connection_new], [],
++-                          AC_MSG_ERROR([libmpdclient not found]))
++-SCCTL_LIBS="$LIBS $upnpp_LIBS"
+++PKG_CHECK_MODULES([libmpdclient], [libmpdclient], [],
+++	[AC_MSG_ERROR([libmpdclient not found])])
+++SCCTL_LIBS="$LIBS $upnpp_LIBS $libmpdclient_LIBS"
++ 
++-AC_CHECK_LIB([microhttpd], [MHD_queue_response], [], [])
++-
++-AC_LANG_PUSH([C++])
+++PKG_CHECK_MODULES([libmicrohttpd], [libmicrohttpd], [],
+++	[AC_MSG_ERROR([libmicrohttpd not found])])
++ 
++ AC_CHECK_HEADERS(json/json.h jsoncpp/json/json.h)
++-LIBS="$LIBS -ljsoncpp"
++-AC_LINK_IFELSE([AC_LANG_PROGRAM(
++-    [[#ifdef HAVE_JSONCPP_JSON_JSON_H
++-    #include <jsoncpp/json/json.h>
++-    #else
++-    #include <json/json.h>
++-    #endif]], [Json::Features dummy])],
++-    [HAVE_JSONCPP=1],
++-    [AC_MSG_ERROR([libjsoncpp not found.])])
++-AC_LANG_POP
+++PKG_CHECK_MODULES([jsoncpp], [jsoncpp], [], [AC_MSG_ERROR([jsoncpp not found])])
++ 
++-UPMPDCLI_LIBS="$LIBS $upnpp_LIBS"
+++UPMPDCLI_LIBS="$LIBS $upnpp_LIBS $libmpdclient_LIBS $libmicrohttpd_LIBS $jsoncpp_LIBS"
++ echo "UPMPDCLI_LIBS=$UPMPDCLI_LIBS"
++ 
++ LIBS=""
++-- 
++2.10.0
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.10.0
