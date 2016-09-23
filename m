@@ -1,85 +1,122 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 23 Sep 2016 23:18:07 +0200
-Subject: [Buildroot] [PATCH] i2c-tools: install devt headers to staging
- dir
-In-Reply-To: <1474639604-23866-1-git-send-email-julien.boibessot@free.fr>
-References: <1474639604-23866-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <0b8205ef-ee98-a652-455c-f4717b294939@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 23 Sep 2016 23:27:26 +0200
+Subject: [Buildroot] [PATCH] linux-tools: add gpio
+In-Reply-To: <20160914120928.27087-1-m.niestroj@grinn-global.com>
+References: <20160914120928.27087-1-m.niestroj@grinn-global.com>
+Message-ID: <20160923212726.GA4221@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Marcin, All,
 
+On 2016-09-14 14:09 +0200, Marcin Niestroj spake thusly:
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 
-On 23-09-16 16:06, julien.boibessot at free.fr wrote:
-> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> 
-> On debian (and maybe other distribs), there is a package named libi2c-dev
-> that install a useful header from i2c-tools (for the one wanting to write
-> I2C applications). See https://packages.debian.org/fr/wheezy/libi2c-dev.
-> Do the same in Buildroot. Note that "install" target in i2c-tools Makefile
-> would do the job, but BR installs i2c-tools's stuff manualy.
+Since you siubmitted this patch, the linux-tools infra has seen some
+overhaul. linux-tools is now a package on its own:
 
- Have you considered commit 41711cfdeda6f5fd9b2531f538f3643854d7d3ea?
+    http://nightly.buildroot.org/#linux-kernel-specific-infra
 
-    Revert "i2c-tools: Add i2c-dev.h to staging directory for userspace i2c
-drivers."
+It basically follows the same logic as the previous infra, so porting it
+over should be minimal work. Could you please adapt and respin, please?
 
-    This reverts commit ff673f9a22b1467878f1a117f2c6198e9683d5c7, as the
-    modified i2c-dev.h from i2c-tools has some definitions that conflict
-    with the i2c.h from the kernel headers. This means that a userspace
-    program or library that includes both will fail to build, as is the
-    case with libsoc.
+In the meantime, here's my review below...
 
-If the issue has been fixed now, please mention it in the commit log.
-
-
- Also, I would prefer to use the install target. The manual install was there
-from the very first commit in 2008, I don't think it's still relevant. Peter?
-Anyway, for staging the install target can definitely be used.
-
-
- Regards,
- Arnout
-
-
-> 
-> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 > ---
->  package/i2c-tools/i2c-tools.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+>  linux/Config.tools.in    |  9 +++++++++
+>  linux/linux-tool-gpio.mk | 28 ++++++++++++++++++++++++++++
+>  2 files changed, 37 insertions(+)
+>  create mode 100644 linux/linux-tool-gpio.mk
 > 
-> diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-> index e16b940..5e095f3 100644
-> --- a/package/i2c-tools/i2c-tools.mk
-> +++ b/package/i2c-tools/i2c-tools.mk
-> @@ -8,6 +8,7 @@ I2C_TOOLS_VERSION = v3.1.2
->  I2C_TOOLS_SITE = git://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git
->  I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
->  I2C_TOOLS_LICENSE_FILES = COPYING
-> +I2C_TOOLS_INSTALL_STAGING = YES
+> diff --git a/linux/Config.tools.in b/linux/Config.tools.in
+> index 5ada98d..303c967 100644
+> --- a/linux/Config.tools.in
+> +++ b/linux/Config.tools.in
+> @@ -14,6 +14,15 @@ comment "cpupower needs a toolchain w/ wchar"
+>  	depends on !BR2_bfin
+>  	depends on !BR2_USE_WCHAR && BR2_NEEDS_GETTEXT
 >  
->  ifeq ($(BR2_PACKAGE_PYTHON),y)
->  I2C_TOOLS_DEPENDENCIES += python
-> @@ -50,6 +51,10 @@ define I2C_TOOLS_BUILD_CMDS
->  	$(I2C_TOOLS_BUILD_PYSMBUS)
->  endef
->  
-> +define I2C_TOOLS_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -m 644 -D $(@D)/include/linux/i2c-dev.h $(STAGING_DIR)/usr/include/linux
+> +config BR2_LINUX_KERNEL_TOOL_GPIO
+
+This would now have to be BR2_PACKAGE_LINUX_TOOLS_GPIO.
+
+> +	bool "gpio"
+> +	help
+> +	  gpio is a collection of tools to get information about,
+> +	  control and monitor gpios present on system.
+> +
+> +	  These tools use new gpio ABI which will deprecate sysfs gpio
+> +	  interface in the future.
+> +
+>  config BR2_LINUX_KERNEL_TOOL_PERF
+>  	bool "perf"
+>  	help
+> diff --git a/linux/linux-tool-gpio.mk b/linux/linux-tool-gpio.mk
+> new file mode 100644
+> index 0000000..bd38e67
+> --- /dev/null
+> +++ b/linux/linux-tool-gpio.mk
+> @@ -0,0 +1,28 @@
+> +################################################################################
+> +#
+> +# gpio
+> +#
+> +################################################################################
+> +
+> +LINUX_TOOLS += gpio
+> +
+> +GPIO_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS)
+> +
+> +define GPIO_BUILD_CMDS
+> +	$(Q)if ! grep install $(@D)/tools/gpio/Makefile >/dev/null 2>&1 ; then \
+> +		echo "Your kernel version is too old and does not have the gpio tools." ; \
+> +		echo "At least kernel 4.8 must be used." ; \
+> +		exit 1 ; \
+> +	fi
+> +
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
+
+And now you'd have to use $(LINUX_DIR) instead of $(@D).
+
+> +		$(GPIO_MAKE_OPTS) \
+> +		gpio
 > +endef
 > +
->  define I2C_TOOLS_INSTALL_TARGET_CMDS
->  	for i in i2cdump i2cget i2cset i2cdetect; \
->  	do \
+> +define GPIO_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
+
+Ditto, $(LINUX_DIR).
+
+Otherwise, after conversion to the new linux-tools pckage, it would look
+good.
+
+Care to adapt and respin, please? In the meantime, I've marked your
+patch as "changes requested" in our patchwork.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+> +		$(GPIO_MAKE_OPTS) \
+> +		DESTDIR=$(TARGET_DIR) \
+> +		gpio_install
+> +endef
+> -- 
+> 2.9.3
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
