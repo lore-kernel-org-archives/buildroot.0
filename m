@@ -1,63 +1,59 @@
-From: totoxa <soulsonceonfire@gmail.com>
-Date: Thu, 22 Sep 2016 22:38:24 -0700 (PDT)
-Subject: [Buildroot] Error building python packages that uses setuptools
-Message-ID: <1474609104846-145834.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 23 Sep 2016 07:47:10 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: new defconfig for TI am335x-evm
+In-Reply-To: <f297e95d-443c-06e1-3430-4ab4a752e964@gmail.com>
+References: <1471261882-5640-1-git-send-email-lothar.felten@gmail.com>
+ <20160918193045.15a33be3@free-electrons.com>
+ <87fuotya3r.fsf@dell.be.48ers.dk>
+ <20160921105303.1832ad5e@free-electrons.com>
+ <87bmzhy6ci.fsf@dell.be.48ers.dk>
+ <20160921121803.487035d8@free-electrons.com>
+ <877fa5y1y2.fsf@dell.be.48ers.dk>
+ <20160921140912.29c4584e@free-electrons.com>
+ <f297e95d-443c-06e1-3430-4ab4a752e964@gmail.com>
+Message-ID: <20160923074710.4c8b372b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-I'm trying to build python-serial and python-pymysql, both of them use
-setuptools to install.
-After running make the build fails with the following error:
+On Fri, 23 Sep 2016 00:21:42 +0200, Lothar Felten wrote:
 
->>> python-pymysql 0.7.2 Installing to target
-(cd /home/dev/buildroot/output/build/python-pymysql-0.7.2//;
-PATH="/home/dev/buildroot/output/host/bin:/home/dev/buildroot/output/host/sbin:/home/dev/buildroot/output/host/usr/bin:/home/dev/buildroot/output/host/usr/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
-PYTHONPATH="/home/dev/buildroot/output/target/usr/lib/python2.7/sysconfigdata/:/home/dev/buildroot/output/target/usr/lib/python2.7/site-packages/"
-_python_sysroot=/home/dev/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot
-_python_prefix=/usr _python_exec_prefix=/usr 
-/home/dev/buildroot/output/host/usr/bin/python setup.py install --no-compile
---prefix=/home/dev/buildroot/output/target/usr --executable=/usr/bin/python
---single-version-externally-managed --root=/ )
-usage: setup.py [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
-   or: setup.py --help [cmd1 cmd2 ...]
-   or: setup.py --help-commands
-   or: setup.py cmd --help
+> I changed the patches, they now update the current beaglebone, the 
+> defconfigs will be: beaglebone_defconfig and beaglebone_qt_defconfig.
+> The readme.txt lists the supported targets.
 
-error: option --executable not recognized
-package/pkg-generic.mk:282: fallo en las instrucciones para el objetivo
-'/home/dev/buildroot/output/build/python-pymysql-0.7.2/.stamp_target_installed'
-make: ***
-[/home/dev/buildroot/output/build/python-pymysql-0.7.2/.stamp_target_installed]
-Error 1
+Sounds good.
 
+> > Do you still have those early AM335x EVM boards? Are they widespread?
+> > I'm wondering if it really makes sense to have this patch.  
+> 
+> I've only use two EVMs and they both have the issue, I'm not sure that 
+> it ever got fixed. Any board will run in 1 bit mode, but some evms won't 
+> run in 4 bit mode, so I think that's a safe choice. Anyway, it applies 
+> to the uboot only.
 
-I searched for the files related to setuptools installation and none of the
-path containing those files are passed as arguments
-to the packages failing to build.
-I think that either the host-python-setup installation went wrong or that
-the arguments used for the built are wrong.
-I'm no expert in buildroot, so I ask for help.
+OK, let's keep this then. What worries me is that the kind of patch
+that has never any chance of being removed from Buildroot. I would have
+preferred a solution that could potentially be accepted upstream.
 
-$ find output/ -name 'install_scripts.*'
-output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/python2.7/distutils/command/install_scripts.py
-output/host/usr/lib/python2.7/distutils/command/install_scripts.py
-output/host/usr/lib/python2.7/distutils/command/install_scripts.pyc
-output/build/host-python-2.7.12/Lib/distutils/command/install_scripts.py
-output/build/host-python-2.7.12/Lib/distutils/command/install_scripts.pyc
-*output/build/host-python-setuptools-18.7.1/setuptools/command/install_scripts.py
-output/build/host-python-setuptools-18.7.1/setuptools/command/install_scripts.pyc
-output/build/host-python-setuptools-18.7.1/build/lib/setuptools/command/install_scripts.py*
-output/build/python-2.7.12/Lib/distutils/command/install_scripts.py
-output/build/python-2.7.12/Lib/distutils/command/install_scripts.pyc
-output/target/usr/lib/python2.7/distutils/command/install_scripts.py
+> > Does this really work for the BeagleBone, which uses ttyO2 if I
+> > remember correctly? Maybe another reason to have a defconfig that
+> > supports just the am335x_evm.  
+> 
+> The beaglebone (ttyO0 on USB) beagleboneblack (ttyO0 on pinheader) and 
+> the evm (sub d 9 pin) all use ttyO0
 
+OK, my bad. I was probably confusing with the beagleboard where I think
+it was the third serial port (ttyO2). So everything is fine.
 
+Thanks a lot!
 
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Error-building-python-packages-that-uses-setuptools-tp145834.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
