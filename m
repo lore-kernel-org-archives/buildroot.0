@@ -1,187 +1,119 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 23 Sep 2016 22:13:49 +0200
-Subject: [Buildroot] [PATCH] package/upmpdcli: add patch to fix error not
-	detecting jsoncpp
-Message-ID: <20160923201349.9167-1-joerg.krause@embedded.rocks>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 23 Sep 2016 22:51:19 +0200
+Subject: [Buildroot] [PATCH] package/coreutils: add -i/-p option to uname
+In-Reply-To: <1474620889-5777-1-git-send-email-marcin.nowakowski@imgtec.com>
+References: <1474620889-5777-1-git-send-email-marcin.nowakowski@imgtec.com>
+Message-ID: <ba5a3feb-c508-cd8f-e62f-bf3890fca801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/205463c9ea8651911972c2835e28ded1912c811a
-http://autobuild.buildroot.net/results/5e9279ee60c11a3dacacf6d78f87f8d1b92968f5
-http://autobuild.buildroot.net/results/97043f8defd5a59ae39b4c7f095a10d15c7fe632
-http://autobuild.buildroot.net/results/e775126d5939093289b1a833dd6323ac293322ed
-.. and many more.
+ Hi Marcin,
 
-libmpdclient, libmicrohttpd and jsoncpp provide a .pc file. Use
-pkg-config for detecting the libraries and for providing the necessary
-details for compiling and linking.
+ Think you for your contribution.
 
-The current build system of upmpdcli does not use PKG_CHECK_MODULES, but
-AC_LINK_IFELSE to detect jsoncpp. After bumping jsoncpp version from
-1.7.2 to 1.7.5 the detection fails, because the test program does not
-compile anymore:
 
-"""
-In file included from
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/autolink.h:9:0,
-                 from
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:9,
-                 from test.c:1:
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:155:9:
-error: 'int64_t' does not name a type
- typedef int64_t Int64;
-         ^
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:156:9:
-error: 'uint64_t' does not name a type
- typedef uint64_t UInt64;
-         ^
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:158:9:
-error: 'Int64' does not name a type
- typedef Int64 LargestInt;
-         ^
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:159:9:
-error: 'UInt64' does not name a type
- typedef UInt64 LargestUInt;
-         ^
-In file included from
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:10:0,
-                 from test.c:1:
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/value.h:184:11:
-error: 'UInt64' in namespace 'Json' does not name a type
-   typedef Json::UInt64 UInt64;
+On 23-09-16 10:54, Marcin Nowakowski wrote:
+> This patch adds -i/-p options to uname app using a patch from Fedora
+> tree. These options are described as non-portable, but the same patch
+> (with various smaller or larger variations) is applied to the most
+> popular linux distros (Fedora, Debian, Ubuntu), so some linux tools
+> expect these to work.
 
-[..]
-"""
+ In buildroot, we follow upstream as tightly as possible. We don't include
+feature patches, because we want to reduce the number as patches as much as
+possible, to ease the maintenance burden. For feature patches the only way to go
+is to convince upstream to take them.
 
-Instead of fixing the test program use PKG_CHECK_MODULES to check for
-jsoncpp. While we're on it, add it for libmpdclient and libmicrohttpd,
-too.
+ This looks like a feature patch to me. It does not fix a build problem, it does
+not fix an execution problem of this package. If there is some other package
+that really needs this, then that other package can be patches instead.
 
-Note, that we are touching configure.ac and Makefile.am. However, the
-AUTORECONF flag is already set to YES by the hands of other patches.
+ In addition, the same would have to be done for the busybox version of uname.
 
-Upstream-status: https://github.com/medoc92/upmpdcli/pull/52
+ For these reasons, I have marked your patch as rejected in our patch tracking
+system. It will not be applied.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- ...ig-for-jsoncpp-libmpdclient-libmicrohttpd.patch | 105 +++++++++++++++++++++
- 1 file changed, 105 insertions(+)
- create mode 100644 package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch
+ If you have reasons why this patch is required after all, please tell us.
 
-diff --git a/package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch b/package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch
-new file mode 100644
-index 0000000..9761068
---- /dev/null
-+++ b/package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch
-@@ -0,0 +1,105 @@
-+From 5091e1afd9d0a69bdf10d12d4a66f7147e8185a3 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Fri, 23 Sep 2016 21:37:36 +0200
-+Subject: [PATCH] Use pkg-config for jsoncpp, libmpdclient and libmicrohttpd
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+libmpdclient, libmicrohttpd and jsoncpp provide a .pc file. Use
-+pkg-config for detecting the libraries and for providing the necessary
-+details for compiling and linking.
-+
-+The current build system of upmpdcli does not use PKG_CHECK_MODULES, but
-+AC_LINK_IFELSE to detect jsoncpp. After bumping jsoncpp version from 1.7.2 to
-+1.7.5 the detection fails, because the test program does not compile:
-+
-+'''
-+In file included from /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/autolink.h:9:0,
-+                 from /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:9,
-+                 from test.c:1:
-+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:155:9: error: 'int64_t' does not name a type
-+ typedef int64_t Int64;
-+         ^
-+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:156:9: error: 'uint64_t' does not name a type
-+ typedef uint64_t UInt64;
-+         ^
-+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:158:9: error: 'Int64' does not name a type
-+ typedef Int64 LargestInt;
-+         ^
-+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:159:9: error: 'UInt64' does not name a type
-+ typedef UInt64 LargestUInt;
-+         ^
-+In file included from /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:10:0,
-+                 from test.c:1:
-+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/value.h:184:11: error: 'UInt64' in namespace 'Json' does not name a type
-+   typedef Json::UInt64 UInt64;
-+
-+[..]
-+'''
-+
-+Instead of fixing the test program use PKG_CHECK_MODULES to check for
-+jsoncpp. While we're on it, add it for libmpdclient and libmicrohttpd, too.
-+
-+Upstream-status: https://github.com/medoc92/upmpdcli/pull/52
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ Makefile.am  |  3 ++-
-+ configure.ac | 24 +++++++-----------------
-+ 2 files changed, 9 insertions(+), 18 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 5c83aa1..6f6e018 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,5 +1,6 @@
-+ AM_CPPFLAGS = -DDEBUG -g -Wall \
-+-            $(upnpp_CFLAGS) \
-++            $(upnpp_CFLAGS)  $(libmpdclient_CFLAGS) $(libmicrohttpd_CFLAGS) \
-++            $($jsoncpp_CFLAGS) \
-+             -I$(top_srcdir)/src \
-+             -DDATADIR=\"${pkgdatadir}\" -DCONFIGDIR=\"${sysconfdir}\"
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index a165b5d..0ef0f3b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -36,27 +36,17 @@ dnl AC_CHECK_LIB([curl], [curl_easy_init], [],AC_MSG_ERROR([libcurl not found]))
-+ dnl AC_CHECK_LIB([expat], [XML_ParserCreate], [],AC_MSG_ERROR([libexpat not found]))
-+ 
-+ PKG_CHECK_MODULES([upnpp], [libupnpp], [], [AC_MSG_ERROR([libupnpp])])
-+-AC_CHECK_LIB([mpdclient], [mpd_connection_new], [],
-+-                          AC_MSG_ERROR([libmpdclient not found]))
-+-SCCTL_LIBS="$LIBS $upnpp_LIBS"
-++PKG_CHECK_MODULES([libmpdclient], [libmpdclient], [],
-++	[AC_MSG_ERROR([libmpdclient not found])])
-++SCCTL_LIBS="$LIBS $upnpp_LIBS $libmpdclient_LIBS"
-+ 
-+-AC_CHECK_LIB([microhttpd], [MHD_queue_response], [], [])
-+-
-+-AC_LANG_PUSH([C++])
-++PKG_CHECK_MODULES([libmicrohttpd], [libmicrohttpd], [],
-++	[AC_MSG_ERROR([libmicrohttpd not found])])
-+ 
-+ AC_CHECK_HEADERS(json/json.h jsoncpp/json/json.h)
-+-LIBS="$LIBS -ljsoncpp"
-+-AC_LINK_IFELSE([AC_LANG_PROGRAM(
-+-    [[#ifdef HAVE_JSONCPP_JSON_JSON_H
-+-    #include <jsoncpp/json/json.h>
-+-    #else
-+-    #include <json/json.h>
-+-    #endif]], [Json::Features dummy])],
-+-    [HAVE_JSONCPP=1],
-+-    [AC_MSG_ERROR([libjsoncpp not found.])])
-+-AC_LANG_POP
-++PKG_CHECK_MODULES([jsoncpp], [jsoncpp], [], [AC_MSG_ERROR([jsoncpp not found])])
-+ 
-+-UPMPDCLI_LIBS="$LIBS $upnpp_LIBS"
-++UPMPDCLI_LIBS="$LIBS $upnpp_LIBS $libmpdclient_LIBS $libmicrohttpd_LIBS $jsoncpp_LIBS"
-+ echo "UPMPDCLI_LIBS=$UPMPDCLI_LIBS"
-+ 
-+ LIBS=""
-+-- 
-+2.10.0
-+
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+> ---
+>  .../0002-uname-processortype-from-fedora.patch     | 53 ++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 package/coreutils/0002-uname-processortype-from-fedora.patch
+> 
+> diff --git a/package/coreutils/0002-uname-processortype-from-fedora.patch b/package/coreutils/0002-uname-processortype-from-fedora.patch
+> new file mode 100644
+> index 0000000..bf8a309
+> --- /dev/null
+> +++ b/package/coreutils/0002-uname-processortype-from-fedora.patch
+> @@ -0,0 +1,53 @@
+> +From 99cafffe1000517f9af550210c84fed4c4ceb49d Mon Sep 17 00:00:00 2001
+> +From: Ondrej Vasik <ovasik@fedoraproject.org>
+> +Date: Sat, 19 Dec 2009 08:42:03 +0000
+> +Subject: bring back uname -p/-i functionality
+> +
+> +diff -urNp coreutils-8.2-orig/src/uname.c coreutils-8.2/src/uname.c
+> +--- coreutils-8.2-orig/src/uname.c	2009-09-23 10:25:44.000000000 +0200
+> ++++ coreutils-8.2/src/uname.c	2009-12-19 09:09:11.663607110 +0100
+> +@@ -299,13 +299,19 @@ main (int argc, char **argv)
+> + 
+> +   if (toprint & PRINT_PROCESSOR)
+> +     {
+> +-      char const *element = unknown;
+> ++      char *element = unknown;
+> + #if HAVE_SYSINFO && defined SI_ARCHITECTURE
+> +       {
+> +         static char processor[257];
+> +         if (0 <= sysinfo (SI_ARCHITECTURE, processor, sizeof processor))
+> +           element = processor;
+> +       }
+> ++#else
+> ++      {
+> ++	static struct utsname u;
+> ++	uname(&u);
+> ++	element = u.machine;
+> ++      }
+> + #endif
+> + #ifdef UNAME_PROCESSOR
+> +       if (element == unknown)
+> +@@ -343,7 +349,7 @@ main (int argc, char **argv)
+> + 
+> +   if (toprint & PRINT_HARDWARE_PLATFORM)
+> +     {
+> +-      char const *element = unknown;
+> ++      char *element = unknown;
+> + #if HAVE_SYSINFO && defined SI_PLATFORM
+> +       {
+> +         static char hardware_platform[257];
+> +@@ -351,6 +357,14 @@ main (int argc, char **argv)
+> +                           hardware_platform, sizeof hardware_platform))
+> +           element = hardware_platform;
+> +       }
+> ++#else
+> ++      {
+> ++	static struct utsname u;
+> ++	uname(&u);
+> ++	element = u.machine;
+> ++	if(strlen(element)==4 && element[0]=='i' && element[2]=='8' && element[3]=='6')
+> ++		element[1]='3';
+> ++      }
+> + #endif
+> + #ifdef UNAME_HARDWARE_PLATFORM
+> +       if (element == unknown)
+> 
+
 -- 
-2.10.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
