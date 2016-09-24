@@ -1,68 +1,81 @@
-From: =?ISO-8859-1?Q?J=F6rg_Krause?= <joerg.krause@embedded.rocks>
-Date: Sat, 24 Sep 2016 10:47:19 +0200
-Subject: [Buildroot] [PATCH] package/wvstreams: add patch to fix build
-	with C99 compilers
-In-Reply-To: <9fbfd5af-6933-9b6e-6898-9bcea17e22a1@gmail.com>
-References: <20160923214227.12888-1-joerg.krause@embedded.rocks>
- <9fbfd5af-6933-9b6e-6898-9bcea17e22a1@gmail.com>
-Message-ID: <A6BEEF15-B2C6-49FA-8D0F-A3F127248835@embedded.rocks>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 24 Sep 2016 11:37:51 +0200
+Subject: [Buildroot] [PATCH 1/3] toolchain-external: bump version of Linaro
+	ARM toolchain
+Message-ID: <1474709873-21387-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The gdb version is 7.11.1 not 7.10 as stated in the link below [1].
+See the manifest to check the version really used [2].
 
+Tested with Qemu 2.4.1 and qemu_arm_vexpress_defconfig.
 
-Hi Romain,
+[1] https://releases.linaro.org/components/toolchain/binaries/5.3-2016.05
+[2] https://releases.linaro.org/components/toolchain/binaries/5.3-2016.05/arm-linux-gnueabihf/gcc-linaro-5.3.1-2016.05-linux-manifest.txt
 
-Am 24. September 2016 10:31:57 MESZ, schrieb Romain Naour <romain.naour@gmail.com>:
->Hi J?rg,
->
->Le 23/09/2016 ? 23:42, J?rg Krause a ?crit :
->> wvstreams uses a bundled version of argp. Compiling argp fails for
->all
->> compilers not using the C89 standard by default:
->> 
->> """
->> In file included from argp-fmtstream.c:35:0:
->> argp-namefrob.h:62:32: error: redefinition of ?argp_fmtstream_write?
->>  #define __argp_fmtstream_write argp_fmtstream_write
->>                                 ^
->> argp-fmtstream.c:395:1: note: in expansion of macro
->> ?__argp_fmtstream_write?
->>  __argp_fmtstream_write (argp_fmtstream_t __fs,
->>  ^
->> In file included from argp-fmtstream.c:34:0:
->> argp-fmtstream.h:209:32: note: previous definition of
->> ?argp_fmtstream_write? was here
->>  #define __argp_fmtstream_write argp_fmtstream_write
->>                                 ^
->> argp-fmtstream.h:223:1: note: in expansion of macro
->> ?__argp_fmtstream_write?
->>  __argp_fmtstream_write (argp_fmtstream_t __fs,
->>  ^
->> """
->> 
->> The issue is that C99 changed inline semantics. This patch takes
->these
->> changes into account and allows to build the bundled argp and
->therefore
->> wvstreams with non-C89-compilers.
->> 
->> Note, that wvstreams is not maintained anymore. Last activity was on
->> Github was 2011, the current version 1.6.1 dates from 2009.
->
->Thanks for this investigation and the fix.
->Are you using wvstreams or it's for the sake of autobuilders ?
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/Config.in               | 6 +++---
+ toolchain/toolchain-external/toolchain-external.hash | 2 +-
+ toolchain/toolchain-external/toolchain-external.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-No, I am not using wvstreams and yes, it is for the sake of autobuilders.
-
->I'm wondering if we should deprecate this package ?
->Last time I looked at it, I disabled it for musl based toolchains.
->
->Thoughts ?
-
-I am not sure which policy Buildroot follows here, but I would like to know.
-
-J?rg
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index c3822ed..ab1ccd5 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -39,7 +39,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 
+ # See the note above.
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+-	bool "Linaro ARM 2016.02"
++	bool "Linaro ARM 2016.05"
+ 	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A
+ 	depends on BR2_HOSTARCH = "x86_64"
+@@ -54,8 +54,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	help
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2016.02 (based on gcc 5.3), Linaro GDB 2016.02 (based on
+-	  GDB 7.10), glibc 2.21, Binutils 2015.10 (based on 2.25). It
++	  GCC 2016.05 (based on gcc 5.3.1), Linaro GDB 2016.05 (based on
++	  GDB 7.11.1), glibc 2.21, Binutils 2016.05 (based on 2.25). It
+ 	  generates code that runs on all Cortex-A profile devices,
+ 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
+ 	  with the hard floating point calling convention, and uses
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+index 9d74cb7..9068741 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -37,7 +37,7 @@ sha256 25fbf0513ad7322b15cbaae964cafadcbb4c939f2708f57f40b8f9f2d601122b  arago-t
+ # ARM and Aarch64 toolchains from Linaro
+ sha256 0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891  gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+ sha256 eafeb3a5247e9ce31aa35d812e296fba5d5f1443e106d9bef9e38d3ee3ade006  gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+-sha256 dd66f07662e1f3b555eaa0d076f133b6db702ab0b9ab18f7dfc91a23eab653c5  gcc-linaro-5.3-2016.02-x86_64_arm-linux-gnueabihf.tar.xz
++sha256 987941c9fffdf56ffcbe90e8984673c16648c477b537fcf43add22fa62f161cd  gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf.tar.xz
+ sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+ sha256 bf5d3111dad5aa9aef0e955875fb7fc9e918cb24519af7014dd67a9e581a49b1  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+ sha256 f488caf46680b0c0a16b66b43fbfd157e3d6389df18e957983132e89529a9804  gcc-linaro-5.3-2016.02-x86_64_armeb-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index ad258b8..caa1253 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -335,8 +335,8 @@ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar
+ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_SYMLINK
+ else
+-TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/arm-linux-gnueabihf
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_arm-linux-gnueabihf.tar.xz
++TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.05/arm-linux-gnueabihf
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf.tar.xz
+ endif
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
+ ifeq ($(HOSTARCH),x86)
+-- 
+2.5.5
