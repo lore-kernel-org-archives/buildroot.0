@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Sep 2016 16:40:10 +0200
-Subject: [Buildroot] [git commit] samba4: bump to version 4.4.6
-Message-ID: <20160924144017.C2393818FE@busybox.osuosl.org>
+Date: Sat, 24 Sep 2016 16:40:09 +0200
+Subject: [Buildroot] [git commit] btrfs-progs: bump to version 4.7.3
+Message-ID: <20160924144017.A93F280567@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78af81de59d4f2d739263a3f7c2c53cf6b859cd6
+commit: https://git.buildroot.net/buildroot/commit/?id=ccb5dc39922c2ff5aa09d39928a387f0886e3751
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 5d2ac09..e48d5c8 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 4cd00aa..d3a0f31 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	b876ef2e63f66265490e80a122e66ef2d7616112b839df68f56ac2e1ce17a7bd	samba-4.4.5.tar.gz
-+sha256	37c423dd590c63099d952b06c07bf399da7cc6c2e72739b831eedd7dbe8cc18c	samba-4.4.6.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index facaca6..6d84f53 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256	f49bc9e143ffe60260c5bd70ef3b624576673f8b50f41e309892a425f7fbe60f	btrfs-progs-v4.7.2.tar.xz
++sha256	90cd6f0ce5a8bed5fcd6ea8a70d81de4a038163035d48a9ae0339bbf51df771c	btrfs-progs-v4.7.3.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index e094986..02820cc 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.4.5
-+SAMBA4_VERSION = 4.4.6
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-BTRFS_PROGS_VERSION = 4.7.2
++BTRFS_PROGS_VERSION = 4.7.3
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
