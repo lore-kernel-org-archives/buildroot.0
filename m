@@ -1,185 +1,68 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 24 Sep 2016 10:31:57 +0200
+From: =?ISO-8859-1?Q?J=F6rg_Krause?= <joerg.krause@embedded.rocks>
+Date: Sat, 24 Sep 2016 10:47:19 +0200
 Subject: [Buildroot] [PATCH] package/wvstreams: add patch to fix build
- with C99 compilers
-In-Reply-To: <20160923214227.12888-1-joerg.krause@embedded.rocks>
+	with C99 compilers
+In-Reply-To: <9fbfd5af-6933-9b6e-6898-9bcea17e22a1@gmail.com>
 References: <20160923214227.12888-1-joerg.krause@embedded.rocks>
-Message-ID: <9fbfd5af-6933-9b6e-6898-9bcea17e22a1@gmail.com>
+ <9fbfd5af-6933-9b6e-6898-9bcea17e22a1@gmail.com>
+Message-ID: <A6BEEF15-B2C6-49FA-8D0F-A3F127248835@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
 
-Le 23/09/2016 ? 23:42, J?rg Krause a ?crit :
-> wvstreams uses a bundled version of argp. Compiling argp fails for all
-> compilers not using the C89 standard by default:
-> 
-> """
-> In file included from argp-fmtstream.c:35:0:
-> argp-namefrob.h:62:32: error: redefinition of ?argp_fmtstream_write?
->  #define __argp_fmtstream_write argp_fmtstream_write
->                                 ^
-> argp-fmtstream.c:395:1: note: in expansion of macro
-> ?__argp_fmtstream_write?
->  __argp_fmtstream_write (argp_fmtstream_t __fs,
->  ^
-> In file included from argp-fmtstream.c:34:0:
-> argp-fmtstream.h:209:32: note: previous definition of
-> ?argp_fmtstream_write? was here
->  #define __argp_fmtstream_write argp_fmtstream_write
->                                 ^
-> argp-fmtstream.h:223:1: note: in expansion of macro
-> ?__argp_fmtstream_write?
->  __argp_fmtstream_write (argp_fmtstream_t __fs,
->  ^
-> """
-> 
-> The issue is that C99 changed inline semantics. This patch takes these
-> changes into account and allows to build the bundled argp and therefore
-> wvstreams with non-C89-compilers.
-> 
-> Note, that wvstreams is not maintained anymore. Last activity was on
-> Github was 2011, the current version 1.6.1 dates from 2009.
 
-Thanks for this investigation and the fix.
-Are you using wvstreams or it's for the sake of autobuilders ?
-I'm wondering if we should deprecate this package ?
-Last time I looked at it, I disabled it for musl based toolchains.
+Hi Romain,
 
-Thoughts ?
+Am 24. September 2016 10:31:57 MESZ, schrieb Romain Naour <romain.naour@gmail.com>:
+>Hi J?rg,
+>
+>Le 23/09/2016 ? 23:42, J?rg Krause a ?crit :
+>> wvstreams uses a bundled version of argp. Compiling argp fails for
+>all
+>> compilers not using the C89 standard by default:
+>> 
+>> """
+>> In file included from argp-fmtstream.c:35:0:
+>> argp-namefrob.h:62:32: error: redefinition of ?argp_fmtstream_write?
+>>  #define __argp_fmtstream_write argp_fmtstream_write
+>>                                 ^
+>> argp-fmtstream.c:395:1: note: in expansion of macro
+>> ?__argp_fmtstream_write?
+>>  __argp_fmtstream_write (argp_fmtstream_t __fs,
+>>  ^
+>> In file included from argp-fmtstream.c:34:0:
+>> argp-fmtstream.h:209:32: note: previous definition of
+>> ?argp_fmtstream_write? was here
+>>  #define __argp_fmtstream_write argp_fmtstream_write
+>>                                 ^
+>> argp-fmtstream.h:223:1: note: in expansion of macro
+>> ?__argp_fmtstream_write?
+>>  __argp_fmtstream_write (argp_fmtstream_t __fs,
+>>  ^
+>> """
+>> 
+>> The issue is that C99 changed inline semantics. This patch takes
+>these
+>> changes into account and allows to build the bundled argp and
+>therefore
+>> wvstreams with non-C89-compilers.
+>> 
+>> Note, that wvstreams is not maintained anymore. Last activity was on
+>> Github was 2011, the current version 1.6.1 dates from 2009.
+>
+>Thanks for this investigation and the fix.
+>Are you using wvstreams or it's for the sake of autobuilders ?
 
-Best regards,
-Romain
+No, I am not using wvstreams and yes, it is for the sake of autobuilders.
 
-> 
-> Fetch-from: http://review.gluster.org/6034
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/f01/f0166f030875ecaf0d757790de6361339071831e/
-> http://autobuild.buildroot.net/results/32b/32b4eba8c7cbe8a3b1cde2d67f1af3f913fcc292/
-> http://autobuild.buildroot.net/results/38f/38fefa126596c6e267ffaf0f2dd9c5e3dcf09aff/
-> http://autobuild.buildroot.net/results/ea2/ea223c8a4f817541f55aa36c47b159a316031bff/
-> .. and many more.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  .../0006-fix-build-with-C99-compilers.patch        | 105 +++++++++++++++++++++
->  1 file changed, 105 insertions(+)
->  create mode 100644 package/wvstreams/0006-fix-build-with-C99-compilers.patch
-> 
-> diff --git a/package/wvstreams/0006-fix-build-with-C99-compilers.patch b/package/wvstreams/0006-fix-build-with-C99-compilers.patch
-> new file mode 100644
-> index 0000000..2bd34a0
-> --- /dev/null
-> +++ b/package/wvstreams/0006-fix-build-with-C99-compilers.patch
-> @@ -0,0 +1,105 @@
-> +From b2dfa011a3fdcb7d22764d143517d0fbd1c2a201 Mon Sep 17 00:00:00 2001
-> +From: Emmanuel Dreyfus <manu@netbsd.org>
-> +Date: Wed, 22 Jan 2014 14:47:23 +0100
-> +Subject: [PATCH] Fix build with C99 compilers
-> +
-> +wvstreams uses a bundled version of argp. Compiling argp fails for all compilers
-> +not using the C89 standard by default:
-> +
-> +"""
-> +In file included from argp-fmtstream.c:35:0:
-> +argp-namefrob.h:62:32: error: redefinition of ?argp_fmtstream_write?
-> + #define __argp_fmtstream_write argp_fmtstream_write
-> +                                ^
-> +argp-fmtstream.c:395:1: note: in expansion of macro ?__argp_fmtstream_write?
-> + __argp_fmtstream_write (argp_fmtstream_t __fs,
-> + ^
-> +In file included from argp-fmtstream.c:34:0:
-> +argp-fmtstream.h:209:32: note: previous definition of ?argp_fmtstream_write? was here
-> + #define __argp_fmtstream_write argp_fmtstream_write
-> +                                ^
-> +argp-fmtstream.h:223:1: note: in expansion of macro ?__argp_fmtstream_write?
-> + __argp_fmtstream_write (argp_fmtstream_t __fs,
-> + ^
-> +"""
-> +
-> +The issue is that C99 changed inline semantics. This patch allows to build
-> +argp with non-C89-compilers.
-> +
-> +Fetch-from: http://review.gluster.org/6034
-> +
-> +Signed-off-by: Emmanuel Dreyfus <manu@netbsd.org>
-> +Reviewed-by: Harshavardhana <harsha@harshavardhana.net>
-> +Tested-by: Gluster Build System <jenkins@build.gluster.com>
-> +
-> +[Adapt paths for wvstreams. Add commit message.]
-> +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> +---
-> +
-> +diff --git a/argp/argp-fmtstream.c b/argp/argp-fmtstream.c
-> +index 7f79285..494b6b3 100644
-> +--- a/argp/argp-fmtstream.c
-> ++++ b/argp/argp-fmtstream.c
-> +@@ -389,6 +389,7 @@
-> + weak_alias (__argp_fmtstream_printf, argp_fmtstream_printf)
-> + #endif
-> + 
-> ++#if __STDC_VERSION__ - 199900L < 1
-> + /* Duplicate the inline definitions in argp-fmtstream.h, for compilers
-> +  * that don't do inlining. */
-> + size_t
-> +@@ -471,5 +472,6 @@
-> +     __argp_fmtstream_update (__fs);
-> +   return __fs->point_col >= 0 ? __fs->point_col : 0;
-> + }
-> ++#endif /* __STDC_VERSION__ - 199900L < 1 */
-> + 
-> + #endif /* !ARGP_FMTSTREAM_USE_LINEWRAP */
-> +diff --git a/argp/argp-fmtstream.h b/argp/argp-fmtstream.h
-> +index e797b11..828f435 100644
-> +--- a/argp/argp-fmtstream.h
-> ++++ b/argp/argp-fmtstream.h
-> +@@ -153,6 +153,7 @@
-> + 				      __const char *__fmt, ...)
-> +      PRINTF_STYLE(2,3);
-> + 
-> ++#if __STDC_VERSION__ - 199900L < 1
-> + extern int __argp_fmtstream_putc (argp_fmtstream_t __fs, int __ch);
-> + extern int argp_fmtstream_putc (argp_fmtstream_t __fs, int __ch);
-> + 
-> +@@ -163,6 +164,7 @@
-> + 				      __const char *__str, size_t __len);
-> + extern size_t argp_fmtstream_write (argp_fmtstream_t __fs,
-> + 				    __const char *__str, size_t __len);
-> ++#endif /* __STDC_VERSION__ - 199900L < 1 */
-> + 
+>I'm wondering if we should deprecate this package ?
+>Last time I looked at it, I disabled it for musl based toolchains.
+>
+>Thoughts ?
 
-> + /* Access macros for various bits of state.  */
-> + #define argp_fmtstream_lmargin(__fs) ((__fs)->lmargin)
-> +@@ -172,6 +174,7 @@
-> + #define __argp_fmtstream_rmargin argp_fmtstream_rmargin
-> + #define __argp_fmtstream_wmargin argp_fmtstream_wmargin
-> + 
-> ++#if __STDC_VERSION__ - 199900L < 1
-> + /* Set __FS's left margin to LMARGIN and return the old value.  */
-> + extern size_t argp_fmtstream_set_lmargin (argp_fmtstream_t __fs,
-> + 					  size_t __lmargin);
-> +@@ -193,6 +196,7 @@
-> + /* Return the column number of the current output point in __FS.  */
-> + extern size_t argp_fmtstream_point (argp_fmtstream_t __fs);
-> + extern size_t __argp_fmtstream_point (argp_fmtstream_t __fs);
-> ++#endif /* __STDC_VERSION__ - 199900L < 1 */
-> + 
-> + /* Internal routines.  */
-> + extern void _argp_fmtstream_update (argp_fmtstream_t __fs);
-> +@@ -216,7 +220,11 @@
-> + #endif
-> + 
-> + #ifndef ARGP_FS_EI
-> ++#if defined(__GNUC__) && !defined(__GNUC_STDC_INLINE__)
-> + #define ARGP_FS_EI extern inline
-> ++#else
-> ++#define ARGP_FS_EI inline
-> ++#endif
-> + #endif
-> + 
-> + ARGP_FS_EI size_t
-> 
+I am not sure which policy Buildroot follows here, but I would like to know.
+
+J?rg
