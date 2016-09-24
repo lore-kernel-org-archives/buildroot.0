@@ -1,83 +1,121 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 24 Sep 2016 14:28:35 -0300
-Subject: [Buildroot] [PATCH 2/9] wayland: bump to version 1.12.0
+Date: Sat, 24 Sep 2016 14:28:36 -0300
+Subject: [Buildroot] [PATCH 3/9] weston: bump to version 1.12.0
 In-Reply-To: <1474738122-18949-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1474738122-18949-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1474738122-18949-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1474738122-18949-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And drop upstream patch.
+Also drop upstream patch.
+Drop propietary RPI support since it's gone upstream.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...0002-scanner-Use-uint32_t-instead-of-uint.patch | 31 ----------------------
- package/wayland/wayland.hash                       |  4 +--
- package/wayland/wayland.mk                         |  2 +-
- 3 files changed, 3 insertions(+), 34 deletions(-)
- delete mode 100644 package/wayland/0002-scanner-Use-uint32_t-instead-of-uint.patch
+ ...ompositor-rdp-fix-no-break-space-U-A0-U8-.patch | 34 ----------------------
+ package/weston/Config.in                           |  6 ----
+ package/weston/weston.hash                         |  4 +--
+ package/weston/weston.mk                           | 11 +------
+ 4 files changed, 3 insertions(+), 52 deletions(-)
+ delete mode 100644 package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
 
-diff --git a/package/wayland/0002-scanner-Use-uint32_t-instead-of-uint.patch b/package/wayland/0002-scanner-Use-uint32_t-instead-of-uint.patch
+diff --git a/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch b/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
 deleted file mode 100644
-index 1d05f25..0000000
---- a/package/wayland/0002-scanner-Use-uint32_t-instead-of-uint.patch
+index b391147..0000000
+--- a/package/weston/0002-libweston-compositor-rdp-fix-no-break-space-U-A0-U8-.patch
 +++ /dev/null
-@@ -1,31 +0,0 @@
--From 6750b47d9e0d3074d2e56aa36c476493f533d696 Mon Sep 17 00:00:00 2001
--From: Khem Raj <raj.khem@gmail.com>
--Date: Fri, 15 Jul 2016 16:23:48 -0700
--Subject: [PATCH 1/1] scanner: Use uint32_t instead of uint
+@@ -1,34 +0,0 @@
+-From 7ee8589dd83e52ae6af3ec5247c3403e8ded69a5 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Tue, 9 Aug 2016 20:00:29 +0200
+-Subject: [PATCH] libweston/compositor-rdp: fix no-break space U+A0 (U8+C2A0)
 -
--uint32_t is C99 defined stdint type
+-There is a UTF-8 no-break space (U+A0, U8+C2A0) in the definition of
+-macro NSC_RESET in the case of  1.2.2 <= FreeRDP < 2.0.
 -
--Signed-off-by: Khem Raj <raj.khem@gmail.com>
--Reviewed-by: Daniel Stone <daniels@collabora.com>
--[Rahul Bedarkar: Backported from: 6750b47d9e0d3074d2e56aa36c476493f533d696]
--Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+-This is causing build issues (\302 is 0xC2, \240 is 0xA0):
+-    http://autobuild.buildroot.net/results/f49/f49a9cbb7bdc5d9e05dcf0a20bd83f059e234e74/build-end.log
+-
+-Fix that by using a plain, boring space U+20.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ----
-- src/scanner.c | 2 +-
+- libweston/compositor-rdp.c | 2 +-
 - 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/src/scanner.c b/src/scanner.c
--index 6e2c3a3..ebae4cc 100644
----- a/src/scanner.c
--+++ b/src/scanner.c
--@@ -819,7 +819,7 @@ find_enumeration(struct protocol *protocol,
-- 	struct interface *i;
-- 	struct enumeration *e;
-- 	char *enum_name;
---	uint idx = 0, j;
--+	uint32_t idx = 0, j;
-- 
-- 	for (j = 0; j + 1 < strlen(enum_attribute); j++) {
-- 		if (enum_attribute[j] == '.') {
+-diff --git a/src/compositor-rdp.c b/src/compositor-rdp.c
+-index 11f5f05..ee81300 100644
+---- a/src/compositor-rdp.c
+-+++ b/src/compositor-rdp.c
+-@@ -58,7 +58,7 @@
+- #	define NSC_RESET(C, W, H) nsc_context_reset(C, W, H)
+- #	define RFX_RESET(C, W, H) rfx_context_reset(C, W, H)
+- #else
+--#	define NSC_RESET(C, W, H) do {?nsc_context_reset(C); C->width = W; C->height = H; } while(0)
+-+#	define NSC_RESET(C, W, H) do { nsc_context_reset(C); C->width = W; C->height = H; } while(0)
+- #	define RFX_RESET(C, W, H) do { rfx_context_reset(C); C->width = W; C->height = H; } while(0)
+- #endif
+- #define FREERDP_CB_RET_TYPE BOOL
 --- 
--2.6.2
+-2.7.4
 -
-diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
-index be1b6b5..9a58c56 100644
---- a/package/wayland/wayland.hash
-+++ b/package/wayland/wayland.hash
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 6baa24b..b4e198d 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -77,12 +77,6 @@ comment "RDP compositor needs a toolchain w/ wchar, C++"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
+ 
+-# rpi-userland is an EGL/GLES provider, so we can't select it
+-config BR2_PACKAGE_WESTON_RPI
+-	bool "RPi compositor"
+-	depends on BR2_PACKAGE_RPI_USERLAND
+-	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+-
+ config BR2_PACKAGE_WESTON_X11
+ 	bool "X11 compositor"
+ 	depends on BR2_PACKAGE_XORG7
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index 4f23511..c966864 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-June/029163.html
--sha256  9540925f7928becfdf5e3b84c70757f6589bf1ceef09bea78784d8e4772c0db0	wayland-1.11.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-September/031121.html
-+sha256  d6b4135cba0188abcb7275513c72dede751d6194f6edc5b82183a3ba8b821ab1	wayland-1.12.0.tar.xz
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index d4b4664..a862394 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
+-# From https://lists.freedesktop.org/archives/wayland-devel/2016-June/029164.html
+-sha256  05e086e9f186a06843b9f7a5e1abf19347b1a6e4be26d7e74927abc17b6b7125  weston-1.11.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2016-September/031123.html
++sha256  ac7ac2a32e3b9f50131fccded5d2326bd36b2226712d90b61999118a09af5033  weston-1.12.0.tar.xz
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 31c9281..7d348dc 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAYLAND_VERSION = 1.11.0
-+WAYLAND_VERSION = 1.12.0
- WAYLAND_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
+-WESTON_VERSION = 1.11.0
++WESTON_VERSION = 1.12.0
+ WESTON_SITE = http://wayland.freedesktop.org/releases
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
+@@ -89,15 +89,6 @@ else
+ WESTON_CONF_OPTS += --disable-drm-compositor
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_WESTON_RPI),y)
+-WESTON_DEPENDENCIES += rpi-userland
+-WESTON_CONF_OPTS += --enable-rpi-compositor \
+-	--disable-resize-optimization \
+-	WESTON_NATIVE_BACKEND=rpi-backend.so
+-else
+-WESTON_CONF_OPTS += --disable-rpi-compositor
+-endif # BR2_PACKAGE_WESTON_RPI
+-
+ ifeq ($(BR2_PACKAGE_WESTON_X11),y)
+ WESTON_CONF_OPTS += \
+ 	--enable-x11-compositor \
 -- 
 2.7.3
