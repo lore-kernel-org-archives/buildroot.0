@@ -1,44 +1,67 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 24 Sep 2016 14:28:42 -0300
-Subject: [Buildroot] [PATCH 9/9] gtkmm3: bump to version 3.22.0
-In-Reply-To: <1474738122-18949-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1474738122-18949-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1474738122-18949-10-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 24 Sep 2016 19:31:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencv: Do not add libdl to
+	LINKER_LIBS for static builds
+Message-ID: <20160924173157.2330-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gtkmm3/gtkmm3.hash | 4 ++--
- package/gtkmm3/gtkmm3.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Fixes
+http://autobuild.buildroot.net/results/765/7657e01481995a4f0d725467e935a83928a59a04/
 
-diff --git a/package/gtkmm3/gtkmm3.hash b/package/gtkmm3/gtkmm3.hash
-index f2fc960..951b481 100644
---- a/package/gtkmm3/gtkmm3.hash
-+++ b/package/gtkmm3/gtkmm3.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.20/gtkmm-3.20.1.sha256sum
--sha256	051de1b8756ca6ec61f26264338cfc3060af936fd70bf4558bfe1e115418c612	gtkmm-3.20.1.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.22/gtkmm-3.22.0.sha256sum
-+sha256	05da4d4b628fb20c8384630ddf478a3b5562952b2d6181fe28d58f6cbc0514f5	gtkmm-3.22.0.tar.xz
-diff --git a/package/gtkmm3/gtkmm3.mk b/package/gtkmm3/gtkmm3.mk
-index 8c3e079..57b9b1f 100644
---- a/package/gtkmm3/gtkmm3.mk
-+++ b/package/gtkmm3/gtkmm3.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--GTKMM3_VERSION_MAJOR = 3.20
--GTKMM3_VERSION = $(GTKMM3_VERSION_MAJOR).1
-+GTKMM3_VERSION_MAJOR = 3.22
-+GTKMM3_VERSION = $(GTKMM3_VERSION_MAJOR).0
- GTKMM3_SOURCE = gtkmm-$(GTKMM3_VERSION).tar.xz
- GTKMM3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtkmm/$(GTKMM3_VERSION_MAJOR)
- GTKMM3_LICENSE = LGPLv2.1+ (library), GPLv2+ (tools)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/opencv/0004-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
+
+diff --git a/package/opencv/0004-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch b/package/opencv/0004-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
+new file mode 100644
+index 0000000..6d63411
+--- /dev/null
++++ b/package/opencv/0004-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
+@@ -0,0 +1,39 @@
++From 22e03ef8a9e3adcbc6b2f16c3cc98e4e14443eed Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 24 Sep 2016 17:51:22 +0200
++Subject: [PATCH 1/1] CMakeLists.txt: Do not add libdl to LINKER_LIBS for
++ static builds
++
++Without this patch -ldl is present in opencv.pc which breaks OpenCV
++detection by ffmpeg, detected by buildroot autobuilders:
++
++http://autobuild.buildroot.net/results/765/7657e01481995a4f0d725467e935a83928a59a04//ffmpeg-3.1.3/config.log
++
++/home/peko/autobuild/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.4/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -ldl
++
++Patch sent upstream: https://github.com/opencv/opencv/pull/7337
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ CMakeLists.txt | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 007b80d..99b047d 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -457,7 +457,10 @@ if(UNIX)
++     elseif(${CMAKE_SYSTEM_NAME} MATCHES "QNX")
++       set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} m)
++     else()
++-      set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} dl m pthread rt)
+++      if(BUILD_SHARED_LIBS)
+++        set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} dl)
+++      endif()
+++      set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} m pthread rt)
++     endif()
++   else()
++     set(HAVE_LIBPTHREAD YES)
++-- 
++2.9.3
++
 -- 
-2.7.3
+2.9.3
