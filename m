@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 24 Sep 2016 17:56:30 -0300
-Subject: [Buildroot] [PATCH] mpg123: bump to version 1.23.7
-Message-ID: <1474750590-11112-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 24 Sep 2016 19:51:40 -0300
+Subject: [Buildroot] [PATCH] gtksourceview: bump to version 3.22.0
+Message-ID: <1474757500-28174-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/mpg123/mpg123.hash | 2 +-
- package/mpg123/mpg123.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gtksourceview/gtksourceview.hash | 4 ++--
+ package/gtksourceview/gtksourceview.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index bf1e8c7..66a80ac 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
+diff --git a/package/gtksourceview/gtksourceview.hash b/package/gtksourceview/gtksourceview.hash
+index 1fd22af..7a00cd1 100644
+--- a/package/gtksourceview/gtksourceview.hash
++++ b/package/gtksourceview/gtksourceview.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	4073d9c60a43872f6f5a3a322f5ea21ab7f0869d2ed25e79c3eb8521fa3c32d4	mpg123-1.23.6.tar.bz2
-+sha256	934047120953159e364c790e059684b681d7e670884fe179e1954d17d1c6334b	mpg123-1.23.7.tar.bz2
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 2e7bdc5..b14efe7 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gtksourceview/3.21/gtksourceview-3.21.3.sha256sum:
+-sha256	12ea703e1903215629580ddab7751e419bf73a8aacfbbc53c75dc1b9cb0dfba7	gtksourceview-3.21.3.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gtksourceview/3.22/gtksourceview-3.22.0.sha256sum:
++sha256	70657f48732427984dce6cc812bdd3f2b701c0a49e0a0a08889705b3dadcf8e5	gtksourceview-3.22.0.tar.xz
+diff --git a/package/gtksourceview/gtksourceview.mk b/package/gtksourceview/gtksourceview.mk
+index 601d6e0..9ddce5a 100644
+--- a/package/gtksourceview/gtksourceview.mk
++++ b/package/gtksourceview/gtksourceview.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--MPG123_VERSION = 1.23.6
-+MPG123_VERSION = 1.23.7
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
+-GTKSOURCEVIEW_VERSION_MAJOR = 3.21
+-GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).3
++GTKSOURCEVIEW_VERSION_MAJOR = 3.22
++GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).0
+ GTKSOURCEVIEW_SOURCE = gtksourceview-$(GTKSOURCEVIEW_VERSION).tar.xz
+ GTKSOURCEVIEW_SITE = \
+ 	http://ftp.gnome.org/pub/gnome/sources/gtksourceview/$(GTKSOURCEVIEW_VERSION_MAJOR)
 -- 
 2.7.3
