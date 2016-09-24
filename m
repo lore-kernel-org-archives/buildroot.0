@@ -1,48 +1,32 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 24 Sep 2016 14:47:40 +0200
-Subject: [Buildroot] [PATCH] xvisor: needs gcc >= 4.9
-Message-ID: <1474721260-6810-1-git-send-email-eric.le.bihan.dev@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 24 Sep 2016 10:04:54 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 7}.x series
+Message-ID: <1474722295-20358-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xvisor needs gcc >= 4.9, as previous versions trigger an ICE on
-dwarf2out_frame_debug_adjust_cfa() [1].
-
-Fixes:
-
- - http://autobuild.buildroot.net/results/fdb/fdb5a568fb38a9d20780cd37eecb71b60b6ca96a/
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60264
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/xvisor/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xvisor/Config.in b/package/xvisor/Config.in
-index f450f6f..92e8937 100644
---- a/package/xvisor/Config.in
-+++ b/package/xvisor/Config.in
-@@ -1,6 +1,7 @@
- menuconfig BR2_PACKAGE_XVISOR
- 	bool "xvisor"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_arm || BR2_aarch64 || BR2_x86_64
- 	depends on !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV7M
- 	help
-@@ -56,3 +57,9 @@ config BR2_PACKAGE_XVISOR_BUILD_TEST_DTB
- 	  Build test device-tree blobs for popular boards.
- 
- endif
-+
-+comment "xvisor needs a toolchain w/ gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	depends on BR2_USE_MMU
-+	depends on BR2_arm || BR2_aarch64 || BR2_x86_64
-+	depends on !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV7M
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 09e187b..07f5338 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -240,8 +240,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.1.32"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.21"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.22"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+ 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
+-	default "4.7.4"		if BR2_KERNEL_HEADERS_4_7
++	default "4.7.5"		if BR2_KERNEL_HEADERS_4_7
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-2.4.11
+2.7.3
