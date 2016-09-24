@@ -1,161 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 24 Sep 2016 21:27:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/transmission: Use libsystemd
-	instead of libsystemd-daemon
-Message-ID: <20160924192728.4981-1-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 24 Sep 2016 17:56:30 -0300
+Subject: [Buildroot] [PATCH] mpg123: bump to version 1.23.7
+Message-ID: <1474750590-11112-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/78a/78af581f24758f7c2b19305a801e4c6c943730fb/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/transmission/0005-libsystemd.patch | 133 +++++++++++++++++++++++++++++
- 1 file changed, 133 insertions(+)
- create mode 100644 package/transmission/0005-libsystemd.patch
+ package/mpg123/mpg123.hash | 2 +-
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/transmission/0005-libsystemd.patch b/package/transmission/0005-libsystemd.patch
-new file mode 100644
-index 0000000..b32aff2
---- /dev/null
-+++ b/package/transmission/0005-libsystemd.patch
-@@ -0,0 +1,133 @@
-+From 0862099d0bf5a3ec8b2e9d538458d612897741a2 Mon Sep 17 00:00:00 2001
-+From: Mike Gelfand <mikedld@mikedld.com>
-+Date: Sat, 23 Apr 2016 16:13:25 +0000
-+Subject: [PATCH] #5921: Use libsystemd instead of libsystemd-daemon (original
-+ patches by Sandro Tosi and Mike Gilbert)
-+
-+In systemd v209, released over two years ago, the various libsystemd-*
-+libraries (libsystemd-journal.so, libsystemd-login.so, libsystem-daemon.so,
-+libsystemd-id128.so) were merged into a single libsystemd.so library to
-+reduce code duplication and avoid cyclic dependencies.
-+
-+Downloaded from upstream commit:
-+https://github.com/transmission/transmission/commit/0862099d0bf5a3ec8b2e9d538458d612897741a2
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ CMakeLists.txt        |  4 ++--
-+ configure.ac          | 16 ++++++++--------
-+ daemon/CMakeLists.txt |  8 ++++----
-+ daemon/Makefile.am    |  4 ++--
-+ daemon/daemon.c       |  2 +-
-+ 5 files changed, 17 insertions(+), 17 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 8b324dc..356fc2f 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -398,9 +398,9 @@ endif()
-+ if(WITH_SYSTEMD)
-+     tr_get_required_flag(WITH_SYSTEMD SYSTEMD_IS_REQUIRED)
-+ 
-+-    pkg_check_modules(SYSTEMD_DAEMON ${SYSTEMD_IS_REQUIRED} libsystemd-daemon)
-++    pkg_check_modules(SYSTEMD ${SYSTEMD_IS_REQUIRED} libsystemd)
-+ 
-+-    tr_fixup_auto_option(WITH_SYSTEMD SYSTEMD_DAEMON_FOUND SYSTEMD_IS_REQUIRED)
-++    tr_fixup_auto_option(WITH_SYSTEMD SYSTEMD_FOUND SYSTEMD_IS_REQUIRED)
-+ endif()
-+ 
-+ include_directories(${CMAKE_BINARY_DIR})
-+diff --git a/configure.ac b/configure.ac
-+index 92e4372..b64f2a3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -240,15 +240,15 @@ dnl
-+ dnl file monitoring for the daemon
-+ 
-+ # Check whether to enable systemd startup notification.
-+-# This requires libsystemd-daemon.
-+-AC_ARG_WITH([systemd-daemon], AS_HELP_STRING([--with-systemd-daemon],
-++# This requires libsystemd.
-++AC_ARG_WITH([systemd], AS_HELP_STRING([--with-systemd],
-+             [Add support for systemd startup notification (default is autodetected)]),
-+-            [USE_SYSTEMD_DAEMON=$withval], [USE_SYSTEMD_DAEMON=auto])
-+-AS_IF([test "x$USE_SYSTEMD_DAEMON" != "xno"], [
-+-    PKG_CHECK_MODULES([SYSTEMD_DAEMON], [libsystemd-daemon],
-+-        [AC_DEFINE(USE_SYSTEMD_DAEMON,1,[Use systemd startup notification])],
-+-        [AS_IF([test "x$USE_SYSTEMD_DAEMON" = "xyes"],
-+-            [AC_MSG_ERROR([systemd startup notification support requested, but libsystemd-daemon not found.])]
-++            [USE_SYSTEMD=$withval], [USE_SYSTEMD=auto])
-++AS_IF([test "x$USE_SYSTEMD" != "xno"], [
-++    PKG_CHECK_MODULES([SYSTEMD], [libsystemd],
-++        [AC_DEFINE(USE_SYSTEMD,1,[Use systemd startup notification])],
-++        [AS_IF([test "x$USE_SYSTEMD" = "xyes"],
-++            [AC_MSG_ERROR([systemd startup notification support requested, but libsystemd not found.])]
-+         )]
-+     )
-+ ])
-+diff --git a/daemon/CMakeLists.txt b/daemon/CMakeLists.txt
-+index e8f8b34..8ec3b95 100644
-+--- a/daemon/CMakeLists.txt
-++++ b/daemon/CMakeLists.txt
-+@@ -1,7 +1,7 @@
-+ project(trdaemon)
-+ 
-+ if(WITH_SYSTEMD)
-+-    add_definitions(-DUSE_SYSTEMD_DAEMON)
-++    add_definitions(-DUSE_SYSTEMD)
-+ endif()
-+ 
-+ include_directories(
-+@@ -37,14 +37,14 @@ add_executable(${TR_NAME}-daemon
-+     ${${PROJECT_NAME}_WIN32_RC_FILE})
-+ 
-+ set_target_properties(${TR_NAME}-daemon PROPERTIES
-+-    COMPILE_FLAGS "${SYSTEMD_DAEMON_CFLAGS}"
-+-    LINK_FLAGS "${SYSTEMD_DAEMON_LDFLAGS}"
-++    COMPILE_FLAGS "${SYSTEMD_CFLAGS}"
-++    LINK_FLAGS "${SYSTEMD_LDFLAGS}"
-+ )
-+ 
-+ target_link_libraries(${TR_NAME}-daemon
-+     ${TR_NAME}
-+     ${EVENT2_LIBRARIES}
-+-    ${SYSTEMD_DAEMON_LIBRARIES}
-++    ${SYSTEMD_LIBRARIES}
-+ )
-+ 
-+ tr_win32_app_info(${PROJECT_NAME}_remote_WIN32_RC_FILE
-+diff --git a/daemon/Makefile.am b/daemon/Makefile.am
-+index 677f765..34d7076 100644
-+--- a/daemon/Makefile.am
-++++ b/daemon/Makefile.am
-+@@ -3,7 +3,7 @@ AM_CPPFLAGS = -I at top_srcdir@ -DEMBEDDED
-+ AM_CFLAGS = \
-+     @LIBEVENT_CFLAGS@ \
-+     @LIBCURL_CFLAGS@ \
-+-    @SYSTEMD_DAEMON_CFLAGS@ \
-++    @SYSTEMD_CFLAGS@ \
-+     @ZLIB_CFLAGS@ \
-+     @PTHREAD_CFLAGS@
-+ 
-+@@ -29,7 +29,7 @@ LDADD = \
-+     @LIBCURL_LIBS@ \
-+     @CRYPTO_LIBS@ \
-+     @INTLLIBS@ \
-+-    @SYSTEMD_DAEMON_LIBS@ \
-++    @SYSTEMD_LIBS@ \
-+     @ZLIB_LIBS@ \
-+     @PTHREAD_LIBS@ \
-+     ${LIBM}
-+diff --git a/daemon/daemon.c b/daemon/daemon.c
-+index 40ac5a6..62ac715 100644
-+--- a/daemon/daemon.c
-++++ b/daemon/daemon.c
-+@@ -33,7 +33,7 @@
-+ #include <libtransmission/version.h>
-+ #include <libtransmission/watchdir.h>
-+ 
-+-#ifdef USE_SYSTEMD_DAEMON
-++#ifdef USE_SYSTEMD
-+  #include <systemd/sd-daemon.h>
-+ #else
-+  static void sd_notify (int status UNUSED, const char * str UNUSED) { }
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index bf1e8c7..66a80ac 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	4073d9c60a43872f6f5a3a322f5ea21ab7f0869d2ed25e79c3eb8521fa3c32d4	mpg123-1.23.6.tar.bz2
++sha256	934047120953159e364c790e059684b681d7e670884fe179e1954d17d1c6334b	mpg123-1.23.7.tar.bz2
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 2e7bdc5..b14efe7 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPG123_VERSION = 1.23.6
++MPG123_VERSION = 1.23.7
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
 -- 
-2.9.3
+2.7.3
