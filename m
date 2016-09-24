@@ -1,64 +1,57 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 24 Sep 2016 20:04:29 +0200
-Subject: [Buildroot] Update of pre-built Buildroot toolchains
-References: <20160921210722.1b078ab1@free-electrons.com>
-Message-ID: <XnsA68DCC3683FD3ID313208userindividu@bernd-kuhls.de>
+Date: Sat, 24 Sep 2016 20:55:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: backport upstream patch to fix
+	compat function for static_assert
+Message-ID: <20160924185502.16365-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Fixes
+http://autobuild.buildroot.net/results/3b9/3b9d15f226057706c185270788050dace7b7b535/
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20160921210722.1b078ab1 at free-electrons.com: 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/vlc/0009-static-assert.patch | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/vlc/0009-static-assert.patch
 
-> Hello,
-> 
-> I have just deployed a new set of pre-build Buildroot toolchains in the
-> autobuilders. The toolchains have all been rebuilt as of commit
-> 589cbc61b0913891fd00019365e52b9e50ff7250. Major changes are:
-> 
->  * Almost all toolchains have been switched to the default of gcc 5.x.
->    There are still a few toolchains that intentionally use different
->    gcc version: some using gcc 6.x, some using gcc 4.8.x.
-
-Hi Thomas,
-
-it seems to Cortex m4 toolchain is broken:
-
-wget http://autobuild.buildroot.net/toolchains/configs/br-arm-cortex-m4-
-full.config
-
-make defconfig BR2_DEFCONFIG=br-arm-cortex-m4-full.config
-make toolchain
-output/host/usr/bin/arm-linux-gcc -v
-[...]
-/home/buildroot/br6/output/host/usr/arm-buildroot-uclinux-uclibcgnueabi/sys
-root/usr/lib/crt1.o: In function `_start': (.text+0x30): undefined
-reference to `main' collect2: error: ld returned 1 exit status
-
-This breaks the mplayer build
-http://autobuild.buildroot.net/results/c1f/c1fcaa871c9c3ac52dc2060f71c34bd2
-6b193323//
-because mplayer extracts information about the compiler in use
-in mplayer-1.3.0/configure, line 1640 by executing gcc:
-
-cc_name=$($_cc -V 2>&1 | head -n 1 | cut -d ',' -f 1)
-
-For my host gcc this results in
-
-$ gcc -v 2>&1 | tail -n 1 | cut -d ' ' -f 1
-gcc
-
-For the Cortex m4 toolchain this code fails to detect gcc
-
-$ output/host/usr/bin/arm-linux-gcc -v 2>&1 | tail -n 1 | cut -d ' ' -f 1
-collect2:
-
-which breaks further gcc detection during mplayer configure by using the 
-host gcc as cross-compiler. 
-
-Regards, Bernd
+diff --git a/package/vlc/0009-static-assert.patch b/package/vlc/0009-static-assert.patch
+new file mode 100644
+index 0000000..33cf054
+--- /dev/null
++++ b/package/vlc/0009-static-assert.patch
+@@ -0,0 +1,29 @@
++From: Thomas Guillem <thomas@gllm.fr>
++Date: Mon, 14 Dec 2015 09:08:25 +0000 (+0100)
++Subject: compat: fix static_assert
++X-Git-Url: http://git.videolan.org/?p=vlc.git;a=commitdiff_plain;h=6faf9066670db6e0d241ead6a3926b2d9cc6a041
++
++compat: fix static_assert
++
++It was not possible to use it outside of functions.
++
++Signed-off-by: R?mi Denis-Courmont <remi@remlab.net>
++(backported and re-based for vlc 2.2)
++ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++
++diff --git a/include/vlc_fixups.h b/include/vlc_fixups.h
++index 213d3f3..bd798d0 100644
++--- a/include/vlc_fixups.h
+++++ b/include/vlc_fixups.h
++@@ -273,7 +273,9 @@ static inline locale_t newlocale(int mask, const char * locale, locale_t base)
++ #endif
++ 
++ #if !defined (HAVE_STATIC_ASSERT)
++-# define _Static_assert(x, s) ((void) sizeof (struct { unsigned:-!(x); }))
+++# define STATIC_ASSERT_CONCAT_(a, b) a##b
+++# define STATIC_ASSERT_CONCAT(a, b) STATIC_ASSERT_CONCAT_(a, b)
+++# define _Static_assert(x, s) extern char STATIC_ASSERT_CONCAT(static_assert_, __LINE__)[sizeof(struct { unsigned:-!(x); })]
++ # define static_assert _Static_assert
++ #endif
++ 
+-- 
+2.9.3
