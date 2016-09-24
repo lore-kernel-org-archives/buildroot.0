@@ -1,78 +1,63 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 24 Sep 2016 12:33:03 -0300
-Subject: [Buildroot] [PATCH 3/3] configs/imx: Bump to U-Boot 2016.09.01
-In-Reply-To: <1474731183-14968-1-git-send-email-festevam@gmail.com>
-References: <1474731183-14968-1-git-send-email-festevam@gmail.com>
-Message-ID: <1474731183-14968-3-git-send-email-festevam@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 24 Sep 2016 18:14:29 +0200
+Subject: [Buildroot] [PATCH] package/wvstreams: add patch to fix build
+ with C99 compilers
+In-Reply-To: <A6BEEF15-B2C6-49FA-8D0F-A3F127248835@embedded.rocks>
+References: <20160923214227.12888-1-joerg.krause@embedded.rocks>
+ <9fbfd5af-6933-9b6e-6898-9bcea17e22a1@gmail.com>
+ <A6BEEF15-B2C6-49FA-8D0F-A3F127248835@embedded.rocks>
+Message-ID: <5017ebbe-e45d-f80c-4c75-63f5c4ff20f6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
 
-2016.09.01 is a bugfix release, so bump to this version.
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- configs/imx6ulpico_defconfig | 2 +-
- configs/mx6cubox_defconfig   | 2 +-
- configs/wandboard_defconfig  | 2 +-
- configs/warp7_defconfig      | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+On 24-09-16 10:47, J?rg Krause wrote:
+> 
+> 
+> Hi Romain,
+> 
+> Am 24. September 2016 10:31:57 MESZ, schrieb Romain Naour <romain.naour@gmail.com>:
+>> Hi J?rg,
+>>
+>> Le 23/09/2016 ? 23:42, J?rg Krause a ?crit :
+[snip]
+>>> Note, that wvstreams is not maintained anymore. Last activity was on
+>>> Github was 2011, the current version 1.6.1 dates from 2009.
+>>
+>> Thanks for this investigation and the fix.
+>> Are you using wvstreams or it's for the sake of autobuilders ?
+> 
+> No, I am not using wvstreams and yes, it is for the sake of autobuilders.
+> 
+>> I'm wondering if we should deprecate this package ?
+>> Last time I looked at it, I disabled it for musl based toolchains.
+>>
+>> Thoughts ?
+> 
+> I am not sure which policy Buildroot follows here, but I would like to know.
 
-diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
-index f984bf4..67058f8 100644
---- a/configs/imx6ulpico_defconfig
-+++ b/configs/imx6ulpico_defconfig
-@@ -36,7 +36,7 @@ BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="pico-imx6ul"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # required tools to create the eMMC image
-diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
-index e27a2bb..b288ed7 100644
---- a/configs/mx6cubox_defconfig
-+++ b/configs/mx6cubox_defconfig
-@@ -10,7 +10,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6cuboxi"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
-index 4149ecf..7b075e4 100644
---- a/configs/wandboard_defconfig
-+++ b/configs/wandboard_defconfig
-@@ -10,7 +10,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="wandboard"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
-index 967df8e..63a9592 100644
---- a/configs/warp7_defconfig
-+++ b/configs/warp7_defconfig
-@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="warp7_secure"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # wifi firmware for brcm43430
+ This is precisely the kind of situation where we start considering deprecating
+a package.
+
+
+ In this case, wvstreams only exists for the sake of wvdial. I don't know of
+many alternatives however. modem-manager is somewhat bloaty, and chat + ppp.conf
+is a lot more difficult.
+
+
+ Adding Simon, the original contributor, for a second opinion.
+
+ Regards,
+ Arnout
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
