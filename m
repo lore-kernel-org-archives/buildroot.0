@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 24 Sep 2016 14:28:38 -0300
-Subject: [Buildroot] [PATCH 5/9] adwaita-icon-theme: bump to version 3.22.0
+Date: Sat, 24 Sep 2016 14:28:39 -0300
+Subject: [Buildroot] [PATCH 6/9] libgtk3: bump to version 3.22.0
 In-Reply-To: <1474738122-18949-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1474738122-18949-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1474738122-18949-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1474738122-18949-7-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/adwaita-icon-theme/adwaita-icon-theme.hash | 4 ++--
- package/adwaita-icon-theme/adwaita-icon-theme.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.hash b/package/adwaita-icon-theme/adwaita-icon-theme.hash
-index a416e23..61b5f14 100644
---- a/package/adwaita-icon-theme/adwaita-icon-theme.hash
-+++ b/package/adwaita-icon-theme/adwaita-icon-theme.hash
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index d839a01..3854faa 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/3.20/adwaita-icon-theme-3.20.sha256sum
--sha256	7a0a887349f340dd644032f89d81264b694c4b006bd51af1c2c368d431e7ae35	adwaita-icon-theme-3.20.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/3.22/adwaita-icon-theme-3.22.0.sha256sum
-+sha256	c18bf6e26087d9819a962c77288b291efab25d0419b73d909dd771716a45dcb7	adwaita-icon-theme-3.22.0.tar.xz
-diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.mk b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-index 24ce350..b9ec0c0 100644
---- a/package/adwaita-icon-theme/adwaita-icon-theme.mk
-+++ b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-@@ -4,8 +4,9 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.9.sha256sum
+-sha256	83a609ba2f3424b5509e73967c49c67833af466d6f91081b24ee5c64fce6ac17	gtk+-3.20.9.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.0.sha256sum
++sha256	88d0bb584be7ecec965b82ba88a9cf0aafd6f03eff7447653295ab2341c74134	gtk+-3.22.0.tar.xz
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 67a0f02..ed4860d 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--ADWAITA_ICON_THEME_VERSION = 3.20
--ADWAITA_ICON_THEME_SITE = http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION)
-+ADWAITA_ICON_THEME_VERSION_MAJOR = 3.22
-+ADWAITA_ICON_THEME_VERSION = $(ADWAITA_ICON_THEME_VERSION_MAJOR).0
-+ADWAITA_ICON_THEME_SITE = http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION_MAJOR)
- ADWAITA_ICON_THEME_SOURCE = adwaita-icon-theme-$(ADWAITA_ICON_THEME_VERSION).tar.xz
- ADWAITA_ICON_THEME_LICENSE = LGPLv3 or CC-BY-SA-3.0
- ADWAITA_ICON_THEME_LICENSE_FILES = COPYING COPYING_LGPL COPYING_CCBYSA3
+-LIBGTK3_VERSION_MAJOR = 3.20
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).9
++LIBGTK3_VERSION_MAJOR = 3.22
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).0
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPLv2+
 -- 
 2.7.3
