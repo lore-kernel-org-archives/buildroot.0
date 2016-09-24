@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 24 Sep 2016 11:24:15 -0300
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.7.3
-Message-ID: <1474727055-16309-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 24 Sep 2016 11:24:35 -0300
+Subject: [Buildroot] [PATCH] stunnel: bump to version 5.36
+Message-ID: <1474727075-16354-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/btrfs-progs/btrfs-progs.hash | 2 +-
- package/btrfs-progs/btrfs-progs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/stunnel/stunnel.hash | 4 ++--
+ package/stunnel/stunnel.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 4cd00aa..d3a0f31 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index abea1a2..c4e70a7 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256	f49bc9e143ffe60260c5bd70ef3b624576673f8b50f41e309892a425f7fbe60f	btrfs-progs-v4.7.2.tar.xz
-+sha256	90cd6f0ce5a8bed5fcd6ea8a70d81de4a038163035d48a9ae0339bbf51df771c	btrfs-progs-v4.7.3.tar.xz
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index e094986..02820cc 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://www.stunnel.org/pipermail/stunnel-announce/2016-July/000124.html
+-sha256	ffa386ae4c825f35f35157c285e7402a6d58779ad8c3822f74a9d355b54aba1d	stunnel-5.35.tar.gz
++# From http://www.stunnel.org/pipermail/stunnel-announce/2016-September/000125.html
++sha256	eb8952fcfdfcdf5056a1f1a78e1ec5014b819c5f5f7599b924dc4490ffe4b5ea	stunnel-5.36.tar.gz
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index ab4457e..5e35d67 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--BTRFS_PROGS_VERSION = 4.7.2
-+BTRFS_PROGS_VERSION = 4.7.3
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).35
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).36
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
 -- 
 2.7.3
