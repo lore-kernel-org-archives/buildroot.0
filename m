@@ -1,187 +1,223 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun, 25 Sep 2016 16:11:52 +0200
-Subject: [Buildroot] [PATCH v2] package/upmpdcli: add patch to fix error not
-	detecting jsoncpp
-Message-ID: <20160925141152.13952-1-joerg.krause@embedded.rocks>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Sep 2016 16:52:54 +0200
+Subject: [Buildroot] [PATCH 00/10 v5] br2-external: support multiple trees
+	at once
+Message-ID: <cover.1474815151.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/205463c9ea8651911972c2835e28ded1912c811a
-http://autobuild.buildroot.net/results/5e9279ee60c11a3dacacf6d78f87f8d1b92968f5
-http://autobuild.buildroot.net/results/97043f8defd5a59ae39b4c7f095a10d15c7fe632
-http://autobuild.buildroot.net/results/e775126d5939093289b1a833dd6323ac293322ed
-.. and many more.
+Hello All!
 
-libmpdclient, libmicrohttpd and jsoncpp provide a .pc file. Use
-pkg-config for detecting the libraries and for providing the necessary
-details for compiling and linking.
+This rather complex series introduces support for using multiple
+br2-external trees at once.
 
-The current build system of upmpdcli does not use PKG_CHECK_MODULES, but
-AC_LINK_IFELSE to detect jsoncpp. After bumping jsoncpp version from
-1.7.2 to 1.7.5 the detection fails, because the test program does not
-compile anymore:
+Currently, Buildroot can use what we call a br2-external tree, that is a
+location where one can store customisations outside of the Buildroot
+tree:
 
-"""
-In file included from
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/autolink.h:9:0,
-                 from
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:9,
-                 from test.c:1:
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:155:9:
-error: 'int64_t' does not name a type
- typedef int64_t Int64;
-         ^
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:156:9:
-error: 'uint64_t' does not name a type
- typedef uint64_t UInt64;
-         ^
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:158:9:
-error: 'Int64' does not name a type
- typedef Int64 LargestInt;
-         ^
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:159:9:
-error: 'UInt64' does not name a type
- typedef UInt64 LargestUInt;
-         ^
-In file included from
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:10:0,
-                 from test.c:1:
-/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/value.h:184:11:
-error: 'UInt64' in namespace 'Json' does not name a type
-   typedef Json::UInt64 UInt64;
+  - defconfig files;
+  - packages;
+  - custom make rules and logic;
+  - company-, project- and board-related configurations files, like a
+    kernel config file, a rootfs overlay;
+  - any other content that does not belong to the Buildroot tree...
 
-[..]
-"""
+This is very nice and very handy!
 
-Instead of fixing the test program use PKG_CHECK_MODULES to check for
-jsoncpp. While we're on it, add it for libmpdclient and libmicrohttpd,
-too.
+However, it is not possible to use more than one such br2-external tree
+at a time; Buildroot only supports using at most one br2-external tree.
 
-Upstream-status: https://github.com/medoc92/upmpdcli/pull/52
+Having support for using more than one br2-external tree at the same
+time would allow more flexibility organising those out-of-tree
+customisations. One could use a br2-external tree to store FLOSS
+packages not yet in Buildroot and a second br2-external tree for
+proprietary packages; such a separation would make compliance with
+FLOSS licenses easier (by allowing distributing only the br2-external
+tree with FLOSS packages, keeping the proprietary bits private).
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
-v2:
- - fix typo in patch
----
- ...ig-for-jsoncpp-libmpdclient-libmicrohttpd.patch | 105 +++++++++++++++++++++
- 1 file changed, 105 insertions(+)
- create mode 100644 package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch
+It could also be used to commonalise br2-external trees from different
+internal projects, where each would provide a set of extensions (new
+packages, new boards defconfigs...) that a project could cherry-pick.
 
-diff --git a/package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch b/package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch
-new file mode 100644
-index 0000000..a1f194a
---- /dev/null
-+++ b/package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch
-@@ -0,0 +1,105 @@
-+From 5091e1afd9d0a69bdf10d12d4a66f7147e8185a3 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Fri, 23 Sep 2016 21:37:36 +0200
-+Subject: [PATCH] Use pkg-config for jsoncpp, libmpdclient and libmicrohttpd
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+libmpdclient, libmicrohttpd and jsoncpp provide a .pc file. Use
-+pkg-config for detecting the libraries and for providing the necessary
-+details for compiling and linking.
-+
-+The current build system of upmpdcli does not use PKG_CHECK_MODULES, but
-+AC_LINK_IFELSE to detect jsoncpp. After bumping jsoncpp version from 1.7.2 to
-+1.7.5 the detection fails, because the test program does not compile:
-+
-+'''
-+In file included from /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/autolink.h:9:0,
-+                 from /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:9,
-+                 from test.c:1:
-+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:155:9: error: 'int64_t' does not name a type
-+ typedef int64_t Int64;
-+         ^
-+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:156:9: error: 'uint64_t' does not name a type
-+ typedef uint64_t UInt64;
-+         ^
-+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:158:9: error: 'Int64' does not name a type
-+ typedef Int64 LargestInt;
-+         ^
-+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:159:9: error: 'UInt64' does not name a type
-+ typedef UInt64 LargestUInt;
-+         ^
-+In file included from /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:10:0,
-+                 from test.c:1:
-+/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/value.h:184:11: error: 'UInt64' in namespace 'Json' does not name a type
-+   typedef Json::UInt64 UInt64;
-+
-+[..]
-+'''
-+
-+Instead of fixing the test program use PKG_CHECK_MODULES to check for
-+jsoncpp. While we're on it, add it for libmpdclient and libmicrohttpd, too.
-+
-+Upstream-status: https://github.com/medoc92/upmpdcli/pull/52
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ Makefile.am  |  3 ++-
-+ configure.ac | 24 +++++++-----------------
-+ 2 files changed, 9 insertions(+), 18 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 5c83aa1..6f6e018 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,5 +1,6 @@
-+ AM_CPPFLAGS = -DDEBUG -g -Wall \
-+-            $(upnpp_CFLAGS) \
-++            $(upnpp_CFLAGS)  $(libmpdclient_CFLAGS) $(libmicrohttpd_CFLAGS) \
-++            $(jsoncpp_CFLAGS) \
-+             -I$(top_srcdir)/src \
-+             -DDATADIR=\"${pkgdatadir}\" -DCONFIGDIR=\"${sysconfdir}\"
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index a165b5d..0ef0f3b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -36,27 +36,17 @@ dnl AC_CHECK_LIB([curl], [curl_easy_init], [],AC_MSG_ERROR([libcurl not found]))
-+ dnl AC_CHECK_LIB([expat], [XML_ParserCreate], [],AC_MSG_ERROR([libexpat not found]))
-+ 
-+ PKG_CHECK_MODULES([upnpp], [libupnpp], [], [AC_MSG_ERROR([libupnpp])])
-+-AC_CHECK_LIB([mpdclient], [mpd_connection_new], [],
-+-                          AC_MSG_ERROR([libmpdclient not found]))
-+-SCCTL_LIBS="$LIBS $upnpp_LIBS"
-++PKG_CHECK_MODULES([libmpdclient], [libmpdclient], [],
-++	[AC_MSG_ERROR([libmpdclient not found])])
-++SCCTL_LIBS="$LIBS $upnpp_LIBS $libmpdclient_LIBS"
-+ 
-+-AC_CHECK_LIB([microhttpd], [MHD_queue_response], [], [])
-+-
-+-AC_LANG_PUSH([C++])
-++PKG_CHECK_MODULES([libmicrohttpd], [libmicrohttpd], [],
-++	[AC_MSG_ERROR([libmicrohttpd not found])])
-+ 
-+ AC_CHECK_HEADERS(json/json.h jsoncpp/json/json.h)
-+-LIBS="$LIBS -ljsoncpp"
-+-AC_LINK_IFELSE([AC_LANG_PROGRAM(
-+-    [[#ifdef HAVE_JSONCPP_JSON_JSON_H
-+-    #include <jsoncpp/json/json.h>
-+-    #else
-+-    #include <json/json.h>
-+-    #endif]], [Json::Features dummy])],
-+-    [HAVE_JSONCPP=1],
-+-    [AC_MSG_ERROR([libjsoncpp not found.])])
-+-AC_LANG_POP
-++PKG_CHECK_MODULES([jsoncpp], [jsoncpp], [], [AC_MSG_ERROR([jsoncpp not found])])
-+ 
-+-UPMPDCLI_LIBS="$LIBS $upnpp_LIBS"
-++UPMPDCLI_LIBS="$LIBS $upnpp_LIBS $libmpdclient_LIBS $libmicrohttpd_LIBS $jsoncpp_LIBS"
-+ echo "UPMPDCLI_LIBS=$UPMPDCLI_LIBS"
-+ 
-+ LIBS=""
-+-- 
-+2.10.0
-+
+And countless other possibilities.
+
+This series is an attempt at making it possible to use such setups.
+
+The series is organised as such:
+
+  - patch 1 moves the hard-coded sourcing of BR2_EXTERNA/Config.in from
+    the main Config.in into the generated Kconfig snippet.
+
+  - patch 2 gets rid of our dummy br2-external tree, since we now can
+    include the br2-external only if specified by the user.
+
+  - patch 3 moves the handling of BR2_EXTERNAL out of the main Makefile
+    into the generated $(BASE_DIR)/.br-external.mk Makefile fragment. So
+    far, this fragment was already generated, but only memorised the
+    value of BR2_EXTERNAL so that it need not be specified at each call;
+    it now also defines a new internal variable, BR2_EXTERNAL_MK, that
+    contains the path to the external.mk file.
+
+    This allows us to offload all the logic about handling a
+    br2-external tree to a helper script, whether it be about the
+    Kconfig snippet or the Makefile fragment.
+
+  - patch 4 adds more validation of a br2-external tree than we
+    previously had.
+
+  - patch 5 introduces a layout change in the br2-external tree: a
+    br2-external tree must now declare its name. This name is used to
+    construct a set of variables unique to that br2-external tree.
+
+    This change is the foundation for using multiple br2-external trees
+    at once, as their paths will now be in different variables; see
+    below for more explanations.
+
+    As we now generate the Kconfig snippet and Makefile fragment, we can
+    easily (pre-)compute the variables from the helper script.
+
+    This change renders existing br2-external trees incompatible with
+    the new layout, as the BR2_EXTERNAL variable is now no longer to be
+    used by br2-external trees, and is no longer available in Kconfig
+    (although it still is available in Makefile, but we can't remove it
+    as we need it for the infra). See path 9 for the associated
+    documentation.
+
+  - patch 6 is the documentation for the br2-external name.
+
+  - patch 7 adds a blurb in the manual about how to easily convert an
+    old br2-external tree. This is referenced from the helper script and
+    displayed in case of error.
+
+  - patch 8 is the core of the change, that adds suport for using
+    multiple br2-external trees at once.
+
+    Again, because we generate the Kconfig snippet and Makefile fragment,
+    it is very easy to (pre-)compute the per-br2-external tree variables.
+
+    Each tree is now identified with its name, which is displayed both
+    in the Kconfig menu for that tree, as well as in the comment listing
+    the defconfig files from that tree.
+
+  - patch 9 is the documentation for mutliple br2-external trees.
+
+  - patch 10 amkes it opssible for a br2-external tree to override
+    defcongis present in Buildroot, as well as override defconfigs
+    in other br2-external trees (by the order they are listed in
+    BR2_EXTERNAL).
+
+The pivotal change in this series is implemented in patch 5, and aims
+at providing br2-external trees with a way to find their own files,
+given that their locations at runtime is completely unkown, and can
+not even be deduced relative to Buildroot's own TOPDIR; this is
+explained below.
+
+Unlike Makefiles, Kconfig does not allow us to redefine a variable at
+various moments of the parsing, because the values are only valid and
+acted upon when the complete Kconfig code has been parsed. So, we need
+a way to provide Config.in files from each br2-external with their
+actual location. For that, we need different variables, one for each
+br2-external tree.
+
+So, we need a way to uniquely identify each br2-external tree, and we
+need a stable scheme. We can't use indexes (because they would not be
+stable across various runs or various ordering of the br2-external
+trees); we can't use path-based hashing (because paths are not stable
+accross users/machines/time); we can't use content-based hashing
+(external.mk and/or Config.in may all be empty, giving the same hash);
+we can't use hashes altogether because they are not human-friendly.
+
+The solution is to require br2-external trees to provide a unique name
+that is used as a kind of 'name-space' for that tree: we eventually
+provide, for each br2-external tree, a variable,
+BR2_EXTERNAL_$(NAME)_PATH,
+that points to the location of that tree; because $(NAME) is known to
+the br2-external tree, it also knows BR2_EXTERNAL_$(NAME)_PATH exists,
+so it can use it, and we export it both in Config.in and external.mk .
+
+Therefore, br2-external trees must now use $(BR2_EXTERNAL_$(MY_NAME)_PATH)
+to refer to their own files. It also prevent them from (accidentally)
+including files from other br2-external trees.
+
+Note: unlike previous iterations, it is now mandatory that a br2-external
+tree defines its name, the rationale being that it is realtively trivial
+to upgrade an existing br2-external tree to the new layout.
+
+I'd like to thank Arnout for looking almost in realtime at this iteration
+as I was hacking on it and providing very useful review, suggestions,
+hints and very constructive criticism. Thanks! :-)
+
+And that's about all for this time. ;-)
+
+
+Changes v4 -> v5:
+  - introduce br2-external conversion earlier in the series  (Julien)
+  - fix intermediate-state br2-external helper script  (Julien)
+  - misc typoes
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 78af81de59d4f2d739263a3f7c2c53cf6b859cd6
+
+  samba4: bump to version 4.4.6 (2016-09-24 16:40:10 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 9e5c5a93eadc131329cb9295cb1d518d8064aeef
+
+  core: allow a br2-external tree to override a defconfig (2016-09-25 00:39:12 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (10):
+      core: do not hard-code inclusion of br2-external in Kconfig
+      core: get rid of our dummy br2-external tree
+      core: offload handling of BR2_EXTERNAL into the script
+      core/br2-external: validate even more
+      core: introduce per br2-external NAME
+      docs/manual: document the br2-external NAME
+      docs/manual: add appendix to convert old br2-external trees
+      core: add support for multiple br2-external trees
+      docs/manual: document multi br2-external
+      core: allow a br2-external tree to override a defconfig
+
+ Config.in                                     |  11 --
+ Makefile                                      |  86 ++++++----
+ boot/barebox/barebox-aux/Config.in            |   3 +-
+ boot/barebox/barebox/Config.in                |   3 +-
+ docs/manual/adding-packages-asciidoc.txt      |   6 +-
+ docs/manual/adding-packages-perl.txt          |   2 +-
+ docs/manual/adding-packages-python.txt        |   2 +-
+ docs/manual/appendix.txt                      |   1 +
+ docs/manual/br2-external-converting.txt       |  39 +++++
+ docs/manual/customize-directory-structure.txt |  13 +-
+ docs/manual/customize-outside-br.txt          | 171 +++++++++++++-------
+ docs/manual/customize-packages.txt            |  25 +--
+ package/Makefile.in                           |   3 +-
+ package/pkg-generic.mk                        |   4 +-
+ support/dummy-external/Config.in              |   0
+ support/dummy-external/external.mk            |   0
+ support/misc/utils.mk                         |   4 +
+ support/scripts/br2-external                  | 219 ++++++++++++++++++++++++++
+ 18 files changed, 454 insertions(+), 138 deletions(-)
+ create mode 100644 docs/manual/br2-external-converting.txt
+ delete mode 100644 support/dummy-external/Config.in
+ delete mode 100644 support/dummy-external/external.mk
+ create mode 100755 support/scripts/br2-external
+
 -- 
-2.10.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
