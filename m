@@ -1,39 +1,95 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 25 Sep 2016 23:33:42 +0200
-Subject: [Buildroot] [PATCH v1] assimp: fix pthread linking
-Message-ID: <1474839222-26976-1-git-send-email-ps.report@gmx.net>
+Date: Sun, 25 Sep 2016 23:44:14 +0200
+Subject: [Buildroot] [PATCH] systemd: let getty instead of serial-getty
+ handle /dev/console
+In-Reply-To: <46b6edf4-6e2e-7200-133c-0321299f5805@je-eigen-domein.nl>
+References: <1473437418-27792-1-git-send-email-bos@je-eigen-domein.nl>
+ <20160911210951.GP5740@free.fr> <87intpzqge.fsf@dell.be.48ers.dk>
+ <20160921220545.238279e6@gmx.net>
+ <68b49446-0228-174d-ad47-9209d23ae90a@je-eigen-domein.nl>
+ <20160922205012.13722beb@gmx.net>
+ <46b6edf4-6e2e-7200-133c-0321299f5805@je-eigen-domein.nl>
+Message-ID: <20160925234414.232f7008@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
+Hello Floris,
 
-  [100%] Linking CXX executable ../../bin/assimp
-  /home/test/autobuild/run/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-uclinux-uclibcgnueabi/5.4.0/../../../../arm-buildroot-uclinux-uclibcgnueabi/lib/libstdc++.a(guard.o): In function `(anonymous namespace)::get_static_cond()':
-  guard.cc:(.text._ZN12_GLOBAL__N_115get_static_condEv+0x6): undefined reference to `pthread_once'
-  ...
+On Thu, 22 Sep 2016 21:25:59 +0200, Floris Bos <bos@je-eigen-domein.nl> wrote:
 
-[1] http://autobuild.buildroot.net/results/c10/c10886686a0d29877004a0afe2106a77aa2f2ba0
+> On 09/22/2016 08:50 PM, Peter Seiderer wrote:
+> > Hello Floris,
+> >
+> > On Wed, 21 Sep 2016 23:47:02 +0200, Floris Bos <bos@je-eigen-domein.nl> wrote:
+> >
+> >> On 09/21/2016 10:05 PM, Peter Seiderer wrote:
+> >>> Hello *,
+> >>>
+> >>> On Wed, 21 Sep 2016 09:01:37 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+> >>>
+> >>>>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> >>>>    > Floris, All,
+> >>>>    > On 2016-09-09 18:10 +0200, Floris Bos spake thusly:
+> >>>>    >> The serial-getty unit depends on dev-%i.device which does not
+> >>>>    >> seem to be created for /dev/console
+> >>>>    >> Workaround this by letting normal getty unit handle things
+> >>>>    >> if BR2_TARGET_GENERIC_GETTY_PORT is set to 'console'
+> >>>>    >>
+> >>>>    >> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> >>>>
+> >>>>    > I haven't tested that, but I think this is OK just on principle.
+> >>>>
+> >>>>    > I just wonder if that behaves correctly when console is a serial line or
+> >>>>    > anything else (e.g. a VT on HDMI, or through a debug channel...)
+> >>>>
+> >>>> Yeah, me too. Does anybody know what the difference exactly is between
+> >>>> getty/serial-getty, and when one should be used over the other?
+> >>>>
+> >>> Tested for the rpi3/glibc/systemd case and failed: I get a doubled
+> >>> (and unusable) ' Welcome to Buildroot/buildroot login:' on serial and
+> >>> no login on hdmi...
+> >> Empty cmdline.txt will give hdmi.
+> >>
+> >> Recall you need "console=serial0,115200 console=tty1" with tty1 last in
+> >> cmdline.txt if you want them simultaneous.
+> > Changed cmdline.txt to:
+> >
+> > 	root=/dev/mmcblk0p2 rootwait console=ttyAMA0,115200 console=tty1
+> >
+> > Which gives me two (functional) logins on serial and hdmi.
+> >
+> > But I think changing package/rpi-firmware/cmdline.txt unconditional will
+> > break the other Init systems, see commit log from last patch touching
+> > cmdline.txt ([1):
+> >
+> >    ...change BR2_TARGET_GENERIC_GETTY_PORT to "console", so it starts a
+> >    getty on the last console= passed to the kernel, ttyAMA0...
+> 
+> Will withdraw my patch then, and wait for someone else to come up with a 
+> better solution.
+> 
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/assimp/assimp.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Ups, sorry, did not want to discourage you...
 
-diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
-index cda02dd..fecf6d7 100644
---- a/package/assimp/assimp.mk
-+++ b/package/assimp/assimp.mk
-@@ -18,4 +18,8 @@ endif
- 
- ASSIMP_CONF_OPTS += -DASSIMP_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(ASSIMP_CXXFLAGS)"
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+ASSIMP_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS="-pthread"
-+endif
-+
- $(eval $(cmake-package))
--- 
-2.8.1
+> I think the one-size-fits all cmdline.txt that listens to both on HDMI 
+> and serial console by default makes things too complicated anyway.
+> 
+
+Maybe its feasible to list all wanted login ports in BR2_TARGET_GENERIC_GETTY_PORT
+and only add the specified named systemd service links (an no generator ones)?
+
+Regards,
+Peter
+
+>
+> Yours sincerely,
+> 
+> Floris Bos
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
