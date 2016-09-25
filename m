@@ -1,50 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Sep 2016 23:30:29 +0200
-Subject: [Buildroot] [PATCH] u-boot: Fix building for ARC700
-In-Reply-To: <1474632473-30670-1-git-send-email-abrodkin@synopsys.com>
-References: <1474632473-30670-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20160925233029.699292db@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 25 Sep 2016 23:31:38 +0200
+Subject: [Buildroot] Error wget
+In-Reply-To: <CAHyxmEiFpOw6GDZKYOu9_ZSZd2jsQ8i=QP_-vFEHkobJw8kYuA@mail.gmail.com>
+References: <CAHyxmEiFpOw6GDZKYOu9_ZSZd2jsQ8i=QP_-vFEHkobJw8kYuA@mail.gmail.com>
+Message-ID: <20160925233138.14a0105b@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Marco,
 
-On Fri, 23 Sep 2016 15:07:53 +0300, Alexey Brodkin wrote:
-> With newer ARC toolchain obsolete -marcXXX were finally deperecated
-> and so compiler throws errors now about unknown option.
-> 
-> Solution is as simple as switching to more generic -mcu-XXX
-> options. Which we do. Unfortunately that change in upstream U-Boot [1]
-> happened right after v2016.09 was released an so we need to have that fix
-> for v2016.07 which is mentioned in axs10x defconfigs and for the latest
-> U-Boot release v2016.09 (which is selected by default if no defconfig is
-> used).
-> 
-> Once we deprecate either U-Boot version in U-Boot corresponding patch
-> should be removed essentially.
-> 
-> [1] http://git.denx.de/?p=u-boot.git;a=commit;h=7c8d81605302e7d7fdd3e7d8eb69302bddc64a2c
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch | 39 ++++++++++++++++++++++
->  ...-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch | 39 ++++++++++++++++++++++
->  2 files changed, 78 insertions(+)
->  create mode 100644 boot/uboot/2016.07/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
->  create mode 100644 boot/uboot/2016.09/0001-arc-Use-mcpu-XXX-instead-of-obsolete-marcXXX.patch
+On Fri, 23 Sep 2016 18:21:20 +0200, Marco Rosario Martino <marcorosm96@gmail.com> wrote:
 
-Applied to master. I've fixed the patch so that it works fine after the
-U-Boot bump to 2016.09.01.
+> Hi,
+> I'd make an .img for my raspberry pi.
+> In buildroot folder I did the command : make raspberrypi_defconfig and then
+> the command: make all,but I received this error : wget --passive-ftp -nd -t
+> 3 -O
+> '/home/marcorm96/buildroot-2016.08.1/output/build/.binutils-2.25.1.tar.bz2.kixqzn/output'
+> 'http://sources.buildroot.net/binutils-2.25.1.tar.bz2'
+> 
+> I'm using Linux Mint 18 64 bit
+> 
+> Thanks
 
-Thanks!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Your (shown) 'make all' log is missing the error message...
+
+Normally a buildroot build starts with downloading the source for each package before
+compiling..., I would suspect some network problem in case every download is failing...
+
+Regards,
+Peter
