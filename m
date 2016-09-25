@@ -1,35 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Sep 2016 20:58:51 +0200
-Subject: [Buildroot] pppd breaks build without libutils
-In-Reply-To: <CAOoxthNVzy2PCz1tsACpxdhaoVO=RZgQR-A1dMB2u0HA3yXPqA@mail.gmail.com>
-References: <CAOoxthNVzy2PCz1tsACpxdhaoVO=RZgQR-A1dMB2u0HA3yXPqA@mail.gmail.com>
-Message-ID: <20160925205851.18f334ec@free-electrons.com>
+Date: Sun, 25 Sep 2016 21:51:02 +0200
+Subject: [Buildroot] [git commit] xvisor: add
+	BR2_PACKAGE_XVISOR_ARCH_SUPPORTS
+Message-ID: <20160925195904.39C5D818ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d1a7491b8fc6aba900fbaab94295ebf3d12ce209
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 25 Sep 2016 13:53:05 -0300, Cassiano Martin wrote:
+To prepare the addition of a Config.in comment for xvisor, and avoid the
+repetition of the architecture dependencies, this commits adds a new
+BR2_PACKAGE_XVISOR_ARCH_SUPPORTS hidden option.
 
-> I am generating a small firmware environment, and pppd breaks build process
-> if libutils is not included. I looked under its sources and its used to
-> wtmp logging.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xvisor/Config.in | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Thanks for this report. Could you be more specific in terms of the
-Buildroot version that you're using, and the Buildroot configuration?
-What exact build issue are you facing (i.e can you copy/paste the error
-messages) ?
-
-Indeed, we have autobuilders that test random configurations, and pppd
-is built many times, and we haven't seen such an issue so far I believe.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/xvisor/Config.in b/package/xvisor/Config.in
+index f450f6f..c7a3b49 100644
+--- a/package/xvisor/Config.in
++++ b/package/xvisor/Config.in
+@@ -1,8 +1,13 @@
+-menuconfig BR2_PACKAGE_XVISOR
+-	bool "xvisor"
++config BR2_PACKAGE_XVISOR_ARCH_SUPPORTS
++	bool
++	default y
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_arm || BR2_aarch64 || BR2_x86_64
+ 	depends on !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV7M
++
++menuconfig BR2_PACKAGE_XVISOR
++	bool "xvisor"
++	depends on BR2_PACKAGE_XVISOR_ARCH_SUPPORTS
+ 	help
+ 	  Xvisor is an open-source type-1 hypervisor, which aims at providing
+ 	  a monolithic, light-weight, portable, and flexible virtualization
