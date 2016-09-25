@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 Sep 2016 15:35:59 +0200
-Subject: [Buildroot] [PATCH 5/6] package/x11r7/xlib_libXfont: bump version
-	to 1.5.2
+Date: Sun, 25 Sep 2016 15:36:00 +0200
+Subject: [Buildroot] [PATCH 6/6] package/x11r7/xproto_xproto: bump version
+	to 7.0.31
 In-Reply-To: <20160925133600.12316-1-bernd.kuhls@t-online.de>
 References: <20160925133600.12316-1-bernd.kuhls@t-online.de>
-Message-ID: <20160925133600.12316-5-bernd.kuhls@t-online.de>
+Message-ID: <20160925133600.12316-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXfont/xlib_libXfont.hash | 4 ++--
- package/x11r7/xlib_libXfont/xlib_libXfont.mk   | 2 +-
+ package/x11r7/xproto_xproto/xproto_xproto.hash | 4 ++--
+ package/x11r7/xproto_xproto/xproto_xproto.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.hash b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
-index 9543637..6db8339 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.hash
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
+diff --git a/package/x11r7/xproto_xproto/xproto_xproto.hash b/package/x11r7/xproto_xproto/xproto_xproto.hash
+index 8441bae..4b77d25 100644
+--- a/package/x11r7/xproto_xproto/xproto_xproto.hash
++++ b/package/x11r7/xproto_xproto/xproto_xproto.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-March/002551.html
--sha256	b70898527c73f9758f551bbab612af611b8a0962202829568d94f3edf4d86098	libXfont-1.5.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-August/002702.html
-+sha256 02945ea68da447102f3e6c2b896c1d2061fd115de99404facc2aca3ad7010d71  libXfont-1.5.2.tar.bz2
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-index d7acab4..422c01d 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+-# From https://lists.x.org/archives/xorg-announce/2016-May/002692.html
+-sha256	6c1a477092ca73233902b8d5f33012635c4b0208f17e7833cc7efe5c93ba9f8a	xproto-7.0.29.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-September/002713.html
++sha256 c6f9747da0bd3a95f86b17fb8dd5e717c8f3ab7f0ece3ba1b247899ec1ef7747  xproto-7.0.31.tar.bz2
+diff --git a/package/x11r7/xproto_xproto/xproto_xproto.mk b/package/x11r7/xproto_xproto/xproto_xproto.mk
+index e76adf8..76f9d32 100644
+--- a/package/x11r7/xproto_xproto/xproto_xproto.mk
++++ b/package/x11r7/xproto_xproto/xproto_xproto.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXFONT_VERSION = 1.5.1
-+XLIB_LIBXFONT_VERSION = 1.5.2
- XLIB_LIBXFONT_SOURCE = libXfont-$(XLIB_LIBXFONT_VERSION).tar.bz2
- XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXFONT_LICENSE = MIT
+-XPROTO_XPROTO_VERSION = 7.0.29
++XPROTO_XPROTO_VERSION = 7.0.31
+ XPROTO_XPROTO_SOURCE = xproto-$(XPROTO_XPROTO_VERSION).tar.bz2
+ XPROTO_XPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
+ XPROTO_XPROTO_LICENSE = MIT
 -- 
 2.9.3
