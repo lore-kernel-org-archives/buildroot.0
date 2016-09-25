@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 Sep 2016 15:36:00 +0200
-Subject: [Buildroot] [PATCH 6/6] package/x11r7/xproto_xproto: bump version
-	to 7.0.31
+Date: Sun, 25 Sep 2016 15:35:58 +0200
+Subject: [Buildroot] [PATCH 4/6] package/x11r7/xdriver_xf86-video-nouveau:
+	bump version to 1.0.13
 In-Reply-To: <20160925133600.12316-1-bernd.kuhls@t-online.de>
 References: <20160925133600.12316-1-bernd.kuhls@t-online.de>
-Message-ID: <20160925133600.12316-6-bernd.kuhls@t-online.de>
+Message-ID: <20160925133600.12316-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xproto_xproto/xproto_xproto.hash | 4 ++--
- package/x11r7/xproto_xproto/xproto_xproto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash      | 6 ++++--
+ .../x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk  | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xproto_xproto/xproto_xproto.hash b/package/x11r7/xproto_xproto/xproto_xproto.hash
-index 8441bae..4b77d25 100644
---- a/package/x11r7/xproto_xproto/xproto_xproto.hash
-+++ b/package/x11r7/xproto_xproto/xproto_xproto.hash
-@@ -1,2 +1,2 @@
--# From https://lists.x.org/archives/xorg-announce/2016-May/002692.html
--sha256	6c1a477092ca73233902b8d5f33012635c4b0208f17e7833cc7efe5c93ba9f8a	xproto-7.0.29.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-September/002713.html
-+sha256 c6f9747da0bd3a95f86b17fb8dd5e717c8f3ab7f0ece3ba1b247899ec1ef7747  xproto-7.0.31.tar.bz2
-diff --git a/package/x11r7/xproto_xproto/xproto_xproto.mk b/package/x11r7/xproto_xproto/xproto_xproto.mk
-index e76adf8..76f9d32 100644
---- a/package/x11r7/xproto_xproto/xproto_xproto.mk
-+++ b/package/x11r7/xproto_xproto/xproto_xproto.mk
+diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
+index 9633641..cfba3a0 100644
+--- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
++++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
+@@ -1,2 +1,4 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-December/002662.html
+-sha256	0ea057ad7fc31caba2d4e46c7e418fe2b3c762b04fb8d382f53383397fd8391e	xf86-video-nouveau-1.0.12.tar.bz2
++# Locally computed
++sha256 6d9242ba139c3df7afefffb455573b52f4427920b978161c00483c64a6da47cb  xf86-video-nouveau-1.0.13.tar.bz2
++# From http://www.linuxfromscratch.org/blfs/view/svn/x/x7driver.html#xorg-nouveau-driver
++md5 2d7b2917ef18c6e97a6f3817c3e9387b  xf86-video-nouveau-1.0.13.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
+index af84e79..70a7d87 100644
+--- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
++++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XPROTO_XPROTO_VERSION = 7.0.29
-+XPROTO_XPROTO_VERSION = 7.0.31
- XPROTO_XPROTO_SOURCE = xproto-$(XPROTO_XPROTO_VERSION).tar.bz2
- XPROTO_XPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
- XPROTO_XPROTO_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.12
++XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.13
+ XDRIVER_XF86_VIDEO_NOUVEAU_SOURCE = xf86-video-nouveau-$(XDRIVER_XF86_VIDEO_NOUVEAU_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_NOUVEAU_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_NOUVEAU_LICENSE = MIT
 -- 
 2.9.3
