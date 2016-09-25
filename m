@@ -1,41 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Sep 2016 23:13:30 +0200
-Subject: [Buildroot] [git commit] mpg123: bump to version 1.23.7
-Message-ID: <20160925211356.402EA805F2@busybox.osuosl.org>
+Date: Sun, 25 Sep 2016 23:15:01 +0200
+Subject: [Buildroot] [git commit] configs/imx: Bump to U-Boot 2016.09.01
+Message-ID: <20160925211504.EC47981D49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e5618998fab18d43f0d3699240da8f6a0e67df1
+commit: https://git.buildroot.net/buildroot/commit/?id=4723ed2c5ea3c5e4ef741b58acce62bb4f14d458
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+2016.09.01 is a bugfix release, so bump to this version.
+
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mpg123/mpg123.hash | 2 +-
- package/mpg123/mpg123.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/imx6ulpico_defconfig | 2 +-
+ configs/mx6cubox_defconfig   | 2 +-
+ configs/wandboard_defconfig  | 2 +-
+ configs/warp7_defconfig      | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index bf1e8c7..66a80ac 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	4073d9c60a43872f6f5a3a322f5ea21ab7f0869d2ed25e79c3eb8521fa3c32d4	mpg123-1.23.6.tar.bz2
-+sha256	934047120953159e364c790e059684b681d7e670884fe179e1954d17d1c6334b	mpg123-1.23.7.tar.bz2
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 2e7bdc5..b14efe7 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
+index f984bf4..67058f8 100644
+--- a/configs/imx6ulpico_defconfig
++++ b/configs/imx6ulpico_defconfig
+@@ -36,7 +36,7 @@ BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="pico-imx6ul"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
  
--MPG123_VERSION = 1.23.6
-+MPG123_VERSION = 1.23.7
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
+ # required tools to create the eMMC image
+diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
+index e27a2bb..b288ed7 100644
+--- a/configs/mx6cubox_defconfig
++++ b/configs/mx6cubox_defconfig
+@@ -10,7 +10,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6cuboxi"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index 4149ecf..7b075e4 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -10,7 +10,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="wandboard"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index 967df8e..63a9592 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7_secure"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # wifi firmware for brcm43430
