@@ -1,8 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 Sep 2016 15:35:55 +0200
-Subject: [Buildroot] [PATCH 1/6] package/x11r7/xdriver_xf86-input-libinput:
-	bump version to 0.19.1
-Message-ID: <20160925133600.12316-1-bernd.kuhls@t-online.de>
+Date: Sun, 25 Sep 2016 15:35:57 +0200
+Subject: [Buildroot] [PATCH 3/6] package/x11r7/xdriver_xf86-video-ati: bump
+	version to 7.7.1
+In-Reply-To: <20160925133600.12316-1-bernd.kuhls@t-online.de>
+References: <20160925133600.12316-1-bernd.kuhls@t-online.de>
+Message-ID: <20160925133600.12316-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,31 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash      | 4 ++--
- .../x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk  | 2 +-
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash | 4 ++--
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-index df3794f..24f9866 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+index 6eb3508..469e057 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
 @@ -1,2 +1,2 @@
--# From https://lists.x.org/archives/xorg-announce/2016-April/002687.html
--sha256	6c5d30dc7c8b8ae34261340e1dc9cbb8ef435078e084b8ef507527a8a21af477	xf86-input-libinput-0.19.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-September/002705.html
-+sha256 c7f1c9406f4af2dc28b6ed3c7cb9fe9d79e9a548c0bba823fbaba20795cd010d  xf86-input-libinput-0.19.1.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-index d49f4d1..2a5ad78 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+-# From https://lists.x.org/archives/xorg-announce/2016-April/002684.html
+-sha256	844d1c577b145c90dc8ef027678f0c27f554363f782cd696a3aea26415b2c1c3	xf86-video-ati-7.7.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-September/002707.html
++sha256 00a58588db62ee309095c5c5920bbd248d965e8627f88affe68a73b18865078d  xf86-video-ati-7.7.1.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index 29a0d2f..02a457b 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.19.0
-+XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.19.1
- XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_ATI_VERSION = 7.7.0
++XDRIVER_XF86_VIDEO_ATI_VERSION = 7.7.1
+ XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
 -- 
 2.9.3
