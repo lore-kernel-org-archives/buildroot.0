@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Sep 2016 23:13:48 +0200
-Subject: [Buildroot] [PATCH] gtksourceview: bump to version 3.22.0
-In-Reply-To: <1474757500-28174-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1474757500-28174-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160925231348.108b6670@free-electrons.com>
+Date: Sun, 25 Sep 2016 23:13:50 +0200
+Subject: [Buildroot] [PATCH] irssi: security bump to version 0.8.20
+In-Reply-To: <1474763339-20977-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1474763339-20977-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160925231350.1cbc7662@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 24 Sep 2016 19:51:40 -0300, Gustavo Zacarias wrote:
+On Sat, 24 Sep 2016 21:28:59 -0300, Gustavo Zacarias wrote:
+> Fixes two remote crash issues since version 0.8.17
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/gtksourceview/gtksourceview.hash | 4 ++--
->  package/gtksourceview/gtksourceview.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/irssi/irssi.hash | 2 +-
+>  package/irssi/irssi.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
