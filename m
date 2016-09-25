@@ -1,42 +1,41 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 24 Sep 2016 19:51:40 -0300
-Subject: [Buildroot] [PATCH] gtksourceview: bump to version 3.22.0
-Message-ID: <1474757500-28174-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 24 Sep 2016 21:28:59 -0300
+Subject: [Buildroot] [PATCH] irssi: security bump to version 0.8.20
+Message-ID: <1474763339-20977-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes two remote crash issues since version 0.8.17
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gtksourceview/gtksourceview.hash | 4 ++--
- package/gtksourceview/gtksourceview.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/irssi/irssi.hash | 2 +-
+ package/irssi/irssi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gtksourceview/gtksourceview.hash b/package/gtksourceview/gtksourceview.hash
-index 1fd22af..7a00cd1 100644
---- a/package/gtksourceview/gtksourceview.hash
-+++ b/package/gtksourceview/gtksourceview.hash
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index f65d6c3..33b2d0e 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
 @@ -1,2 +1,2 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gtksourceview/3.21/gtksourceview-3.21.3.sha256sum:
--sha256	12ea703e1903215629580ddab7751e419bf73a8aacfbbc53c75dc1b9cb0dfba7	gtksourceview-3.21.3.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gtksourceview/3.22/gtksourceview-3.22.0.sha256sum:
-+sha256	70657f48732427984dce6cc812bdd3f2b701c0a49e0a0a08889705b3dadcf8e5	gtksourceview-3.22.0.tar.xz
-diff --git a/package/gtksourceview/gtksourceview.mk b/package/gtksourceview/gtksourceview.mk
-index 601d6e0..9ddce5a 100644
---- a/package/gtksourceview/gtksourceview.mk
-+++ b/package/gtksourceview/gtksourceview.mk
-@@ -4,8 +4,8 @@
+ # Locally calculated after checking pgp signature
+-sha256	4ca0040548e814ea93eb7d602ab7d6d379afcbbdf10e84160523ce69c73ee5d3	irssi-0.8.19.tar.xz
++sha256	7882c4e821f5aac469c5e69e69d7e235f4986101285c675e81a9a95bfb20505a	irssi-0.8.20.tar.xz
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index a1e278e..0fb6fc7 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GTKSOURCEVIEW_VERSION_MAJOR = 3.21
--GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).3
-+GTKSOURCEVIEW_VERSION_MAJOR = 3.22
-+GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).0
- GTKSOURCEVIEW_SOURCE = gtksourceview-$(GTKSOURCEVIEW_VERSION).tar.xz
- GTKSOURCEVIEW_SITE = \
- 	http://ftp.gnome.org/pub/gnome/sources/gtksourceview/$(GTKSOURCEVIEW_VERSION_MAJOR)
+-IRSSI_VERSION = 0.8.19
++IRSSI_VERSION = 0.8.20
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
 -- 
 2.7.3
