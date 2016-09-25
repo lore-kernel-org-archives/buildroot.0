@@ -1,34 +1,83 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 Sep 2016 13:32:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: depends
-	on BR2_TOOLCHAIN_HAS_SYNC_4
-Message-ID: <20160925113232.1303-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 25 Sep 2016 14:23:58 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-09-24
+In-Reply-To: <20160925063044.8EA501036C4@stock.ovh.net>
+References: <20160925063044.8EA501036C4@stock.ovh.net>
+Message-ID: <d346a372-d8a0-d669-1d97-d6309a7df651@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It uses __sync_val_compare_and_swap_4 & __sync_bool_compare_and_swap_4.
+Hi Thomas,
 
-Fixes
-http://autobuild.buildroot.net/results/ecc/ecc083ffc00e05e15390b630c57d398fbe2356e0/
+Le 25/09/2016 ? 08:30, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> Build statistics for 2016-09-24
+> ================================
+> 
+>       successes : 218
+>        failures : 124
+>        timeouts : 5  
+>           TOTAL : 347
+> 
+> Classification of failures by reason
+> ====================================
+> 
+>                 alsa-lib-1.1.2 | 5 
+> 
+> Detail of failures
+> ===================
+> 
+>        nios2 |                 alsa-lib-1.1.2 | NOK | http://autobuild.buildroot.net/results/1fc9806a62b813b085c39d36000f4d9d18f779df
+>        nios2 |                 alsa-lib-1.1.2 | NOK | http://autobuild.buildroot.net/results/03eb11b6a783da1985c19858f6c5f69027e0ed9c
+>        nios2 |                 alsa-lib-1.1.2 | NOK | http://autobuild.buildroot.net/results/d620812ae79c4e8252d2b0c410f94e9cdcbcfbc3
+>        nios2 |                 alsa-lib-1.1.2 | NOK | http://autobuild.buildroot.net/results/04b7609f5decc71bf25e981f14756029715fc621
+>        nios2 |                 alsa-lib-1.1.2 | NOK | http://autobuild.buildroot.net/results/e85be7ffd62e7ab95c4dd0049b0c67ae98f75543
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xserver_xorg-server/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+As Gustavo said yesterday on IRC about Qemu-kernel-target version matching
+"sometimes there's a star alignment where everything works, but that's not
+always the case", here is the same about binutils-gcc-target.
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 5715a56..665be21 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	bool "xorg-server"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_USE_MMU # fork()
- 	# We need a SHA1 implementation. If either openssl or
- 	# libgcrypt are already part of the build, we'll use one of
--- 
-2.9.3
+The new nios2 toolchain doesn't work here due to binutils-gcc version mismatch
+(binutils 2.26.1 and gcc 5.4). I also tried with several build options (O1 and
+02) but it still fail with the same error.
+
+I've build some nios2 toolchains and it appear that gcc5 require binutils <=
+2.25 on this platform.
+If gcc6 is used with binutils 2.26.1, alsa-lib build fine.
+
+For now, I haven't investigated on the gcc history to find an upstream patch to
+backport but it can be time consuming...
+
+So, ether we rebuild the nios2 toolchain with binutils 2.25.1 or we bump the gcc
+version. But we have to rebuild this toolchain anyway.
+
+I would suggest to fallback to binutils 2.25.1 in order to avoid gcc6 issue (we
+already have our bleeding edge toolchain for that ;-) ).
+
+>        nios2 |                   boost-1.61.0 | NOK | http://autobuild.buildroot.net/results/0c6b321e490f7da90cc727734baa0440321d16ba
+
+Code Sourcery Binutils issue (fixed in our internal toolchain):
+BFD (Sourcery CodeBench Lite 2016.05-10) 2.25.51 assertion fail
+/scratch/sandra/nios2-linux-spring-release/obj/binutils-src-2016.05-10-nios2-linux-gnu-i686-pc-linux-gnu/bfd/elf32-nios2.c:1908
+
+Add an autobuilder exception for this toolchain ?
+
+>        nios2 |              freeswitch-1.6.10 | NOK | http://autobuild.buildroot.net/results/96f69b7be1978f85271e2827c2e18d4ed8de8dfc
+
+/tmp/ccKF8wFF.s: Assembler messages:
+/tmp/ccKF8wFF.s:5644: Error: r31 cannot be used with jmp; use ret instead
+
+Same toolchain issue than for alsa-lib.
+
+>        nios2 |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/a5ef0a9d8fec3c75cef55dd8f3c14ead353c92db
+>        nios2 |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/21be31a3163dbdef58f4d9361619710c05a1fd86
+
+Not related to nios2.
+
+Best regards,
+Romain
