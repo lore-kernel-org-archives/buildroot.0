@@ -1,95 +1,73 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 25 Sep 2016 23:44:14 +0200
-Subject: [Buildroot] [PATCH] systemd: let getty instead of serial-getty
- handle /dev/console
-In-Reply-To: <46b6edf4-6e2e-7200-133c-0321299f5805@je-eigen-domein.nl>
-References: <1473437418-27792-1-git-send-email-bos@je-eigen-domein.nl>
- <20160911210951.GP5740@free.fr> <87intpzqge.fsf@dell.be.48ers.dk>
- <20160921220545.238279e6@gmx.net>
- <68b49446-0228-174d-ad47-9209d23ae90a@je-eigen-domein.nl>
- <20160922205012.13722beb@gmx.net>
- <46b6edf4-6e2e-7200-133c-0321299f5805@je-eigen-domein.nl>
-Message-ID: <20160925234414.232f7008@gmx.net>
+From: Cassiano Martin <cassiano@polaco.pro.br>
+Date: Sun, 25 Sep 2016 20:39:01 -0300
+Subject: [Buildroot] pppd breaks build without libutils
+In-Reply-To: <20160925205851.18f334ec@free-electrons.com>
+References: <CAOoxthNVzy2PCz1tsACpxdhaoVO=RZgQR-A1dMB2u0HA3yXPqA@mail.gmail.com>
+ <20160925205851.18f334ec@free-electrons.com>
+Message-ID: <CAOoxthNdJjSjiLS7PT_SguV7VSWxHrF8UiK0qtPz+D3bDEpnUA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Floris,
+Sure, my fault not being version specific.
+Im currently running a git cloned version (Buildroot
+2016.08-git-01556-ge8c18f2-dirty)
+and I'm using a pre-built toolchain from realtek. Target is MIPS32 bit LSB.
+So far, I get this when compiling.
 
-On Thu, 22 Sep 2016 21:25:59 +0200, Floris Bos <bos@je-eigen-domein.nl> wrote:
+ude '-DDESTDIR="/usr"' -DCHAPMS=1 -DMPPE=1 -DHAS_SHADOW -DHAVE_CRYPT_H=1
+-DHAVE_LOGWTMP=1 -DUSE_CRYPT=1 -DHAVE_MULTILINK -DUSE_TDB=1 -DPLUGIN
+-DINET6=1 -DMAXOCTETS -Wl,-E -o pppd main.o magic.o fsm.o lcp.o ipcp.o
+upap.o chap-new.o md5.o ccp.o ecp.o auth.o options.o demand.o utils.o
+sys-linux.o ipxcp.o tty.o eap.o chap-md5.o session.o md4.o chap_ms.o sha1.o
+pppcrypt.o multilink.o tdb.o spinlock.o ipv6cp.o eui64.o  -lcrypt -lutil
+-ldl
+/home/cassiano/projects/oiw-2441apgn/realtek/rsdk-4.6.4-4181-EB-3.10-u0.9.33-m32-150324/bin/../lib/gcc/mips-linux-uclibc/4.6.4/../../../../mips-linux-uclibc/bin/ld:
+cannot find -lutil
+collect2: ld returned 1 exit status
+Makefile:217: recipe for target 'pppd' failed
+make[2]: *** [pppd] Error 1
+make[2]: Leaving directory
+'/home/cassiano/projects/oiw-2441apgn/output/build/pppd-2.4.7/pppd'
+Makefile:13: recipe for target 'all' failed
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+'/home/cassiano/projects/oiw-2441apgn/output/build/pppd-2.4.7'
+package/pkg-generic.mk:201: recipe for target
+'/home/cassiano/projects/oiw-2441apgn/output/build/pppd-2.4.7/.stamp_built'
+failed
 
-> On 09/22/2016 08:50 PM, Peter Seiderer wrote:
-> > Hello Floris,
-> >
-> > On Wed, 21 Sep 2016 23:47:02 +0200, Floris Bos <bos@je-eigen-domein.nl> wrote:
-> >
-> >> On 09/21/2016 10:05 PM, Peter Seiderer wrote:
-> >>> Hello *,
-> >>>
-> >>> On Wed, 21 Sep 2016 09:01:37 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
-> >>>
-> >>>>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> >>>>    > Floris, All,
-> >>>>    > On 2016-09-09 18:10 +0200, Floris Bos spake thusly:
-> >>>>    >> The serial-getty unit depends on dev-%i.device which does not
-> >>>>    >> seem to be created for /dev/console
-> >>>>    >> Workaround this by letting normal getty unit handle things
-> >>>>    >> if BR2_TARGET_GENERIC_GETTY_PORT is set to 'console'
-> >>>>    >>
-> >>>>    >> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-> >>>>
-> >>>>    > I haven't tested that, but I think this is OK just on principle.
-> >>>>
-> >>>>    > I just wonder if that behaves correctly when console is a serial line or
-> >>>>    > anything else (e.g. a VT on HDMI, or through a debug channel...)
-> >>>>
-> >>>> Yeah, me too. Does anybody know what the difference exactly is between
-> >>>> getty/serial-getty, and when one should be used over the other?
-> >>>>
-> >>> Tested for the rpi3/glibc/systemd case and failed: I get a doubled
-> >>> (and unusable) ' Welcome to Buildroot/buildroot login:' on serial and
-> >>> no login on hdmi...
-> >> Empty cmdline.txt will give hdmi.
-> >>
-> >> Recall you need "console=serial0,115200 console=tty1" with tty1 last in
-> >> cmdline.txt if you want them simultaneous.
-> > Changed cmdline.txt to:
-> >
-> > 	root=/dev/mmcblk0p2 rootwait console=ttyAMA0,115200 console=tty1
-> >
-> > Which gives me two (functional) logins on serial and hdmi.
-> >
-> > But I think changing package/rpi-firmware/cmdline.txt unconditional will
-> > break the other Init systems, see commit log from last patch touching
-> > cmdline.txt ([1):
-> >
-> >    ...change BR2_TARGET_GENERIC_GETTY_PORT to "console", so it starts a
-> >    getty on the last console= passed to the kernel, ttyAMA0...
-> 
-> Will withdraw my patch then, and wait for someone else to come up with a 
-> better solution.
-> 
 
-Ups, sorry, did not want to discourage you...
+2016-09-25 15:58 GMT-03:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-> I think the one-size-fits all cmdline.txt that listens to both on HDMI 
-> and serial console by default makes things too complicated anyway.
-> 
-
-Maybe its feasible to list all wanted login ports in BR2_TARGET_GENERIC_GETTY_PORT
-and only add the specified named systemd service links (an no generator ones)?
-
-Regards,
-Peter
-
+> Hello,
 >
-> Yours sincerely,
-> 
-> Floris Bos
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> On Sun, 25 Sep 2016 13:53:05 -0300, Cassiano Martin wrote:
+>
+> > I am generating a small firmware environment, and pppd breaks build
+> process
+> > if libutils is not included. I looked under its sources and its used to
+> > wtmp logging.
+>
+> Thanks for this report. Could you be more specific in terms of the
+> Buildroot version that you're using, and the Buildroot configuration?
+> What exact build issue are you facing (i.e can you copy/paste the error
+> messages) ?
+>
+> Indeed, we have autobuilders that test random configurations, and pppd
+> is built many times, and we haven't seen such an issue so far I believe.
+>
+> Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160925/c1b6f38b/attachment.html>
