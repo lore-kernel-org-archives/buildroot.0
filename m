@@ -1,83 +1,71 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 25 Sep 2016 14:23:58 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-09-24
-In-Reply-To: <20160925063044.8EA501036C4@stock.ovh.net>
-References: <20160925063044.8EA501036C4@stock.ovh.net>
-Message-ID: <d346a372-d8a0-d669-1d97-d6309a7df651@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Sep 2016 14:56:11 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: allow dumping reverse dependencies
+	of a package
+Message-ID: <1474808171-5652-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Finding the packages that select another one in a specific configuration
+is not very trivial:
 
-Le 25/09/2016 ? 08:30, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> Build statistics for 2016-09-24
-> ================================
-> 
->       successes : 218
->        failures : 124
->        timeouts : 5  
->           TOTAL : 347
-> 
-> Classification of failures by reason
-> ====================================
-> 
->                 alsa-lib-1.1.2 | 5 
-> 
-> Detail of failures
-> ===================
-> 
->        nios2 |                 alsa-lib-1.1.2 | NOK | http://autobuild.buildroot.net/results/1fc9806a62b813b085c39d36000f4d9d18f779df
->        nios2 |                 alsa-lib-1.1.2 | NOK | http://autobuild.buildroot.net/results/03eb11b6a783da1985c19858f6c5f69027e0ed9c
->        nios2 |                 alsa-lib-1.1.2 | NOK | http://autobuild.buildroot.net/results/d620812ae79c4e8252d2b0c410f94e9cdcbcfbc3
->        nios2 |                 alsa-lib-1.1.2 | NOK | http://autobuild.buildroot.net/results/04b7609f5decc71bf25e981f14756029715fc621
->        nios2 |                 alsa-lib-1.1.2 | NOK | http://autobuild.buildroot.net/results/e85be7ffd62e7ab95c4dd0049b0c67ae98f75543
+  - when optional, the dependency is not expressed in Kconfig
 
-As Gustavo said yesterday on IRC about Qemu-kernel-target version matching
-"sometimes there's a star alignment where everything works, but that's not
-always the case", here is the same about binutils-gcc-target.
+  - looking at the .mk files is not very nice.
 
-The new nios2 toolchain doesn't work here due to binutils-gcc version mismatch
-(binutils 2.26.1 and gcc 5.4). I also tried with several build options (O1 and
-02) but it still fail with the same error.
+Introduce a way to dump reverse dependencies of packages, i.e. the list
+of packages that directly depend on that package. Like for direct
+dependencies, we limit the list to the first-order reverse dependencies.
 
-I've build some nios2 toolchains and it appear that gcc5 require binutils <=
-2.25 on this platform.
-If gcc6 is used with binutils 2.26.1, alsa-lib build fine.
+Document it in the main help; use the opportunity to also docuemnt
+foo-show-depends.
 
-For now, I haven't investigated on the gcc history to find an upstream patch to
-backport but it can be time consuming...
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ Makefile               | 2 ++
+ package/pkg-generic.mk | 7 +++++++
+ 2 files changed, 9 insertions(+)
 
-So, ether we rebuild the nios2 toolchain with binutils 2.25.1 or we bump the gcc
-version. But we have to rebuild this toolchain anyway.
-
-I would suggest to fallback to binutils 2.25.1 in order to avoid gcc6 issue (we
-already have our bleeding edge toolchain for that ;-) ).
-
->        nios2 |                   boost-1.61.0 | NOK | http://autobuild.buildroot.net/results/0c6b321e490f7da90cc727734baa0440321d16ba
-
-Code Sourcery Binutils issue (fixed in our internal toolchain):
-BFD (Sourcery CodeBench Lite 2016.05-10) 2.25.51 assertion fail
-/scratch/sandra/nios2-linux-spring-release/obj/binutils-src-2016.05-10-nios2-linux-gnu-i686-pc-linux-gnu/bfd/elf32-nios2.c:1908
-
-Add an autobuilder exception for this toolchain ?
-
->        nios2 |              freeswitch-1.6.10 | NOK | http://autobuild.buildroot.net/results/96f69b7be1978f85271e2827c2e18d4ed8de8dfc
-
-/tmp/ccKF8wFF.s: Assembler messages:
-/tmp/ccKF8wFF.s:5644: Error: r31 cannot be used with jmp; use ret instead
-
-Same toolchain issue than for alsa-lib.
-
->        nios2 |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/a5ef0a9d8fec3c75cef55dd8f3c14ead353c92db
->        nios2 |                 upmpdcli-1.2.2 | NOK | http://autobuild.buildroot.net/results/21be31a3163dbdef58f4d9361619710c05a1fd86
-
-Not related to nios2.
-
-Best regards,
-Romain
+diff --git a/Makefile b/Makefile
+index 5e4daef..3039983 100644
+--- a/Makefile
++++ b/Makefile
+@@ -943,6 +943,8 @@ help:
+ 	@echo '  <pkg>-depends          - Build <pkg>'\''s dependencies'
+ 	@echo '  <pkg>-configure        - Build <pkg> up to the configure step'
+ 	@echo '  <pkg>-build            - Build <pkg> up to the build step'
++	@echo '  <pkg>-show-depends     - List packages on which <pkg> depends'
++	@echo '  <pkg>-show-rdepends    - List packages which have <pkg> as a dependency'
+ 	@echo '  <pkg>-graph-depends    - Generate a graph of <pkg>'\''s dependencies'
+ 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
+ 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 68ead3d..779f294 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -523,6 +523,10 @@ $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
+ $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
+ $(2)_FINAL_ALL_DEPENDENCIES = $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
+ 
++# Register package as a reverse-dependencies of all its dependencies
++$$(eval $$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),\
++	$$(call UPPERCASE,$$(p))_RDEPENDENCIES += $(1)$$(sep)))
++
+ $(2)_INSTALL_STAGING		?= NO
+ $(2)_INSTALL_IMAGES		?= NO
+ $(2)_INSTALL_TARGET		?= YES
+@@ -698,6 +702,9 @@ $(1)-show-version:
+ $(1)-show-depends:
+ 			@echo $$($(2)_FINAL_ALL_DEPENDENCIES)
+ 
++$(1)-show-rdepends:
++			@echo $$($(2)_RDEPENDENCIES)
++
+ $(1)-graph-depends: graph-depends-requirements
+ 			@$$(INSTALL) -d $$(GRAPHS_DIR)
+ 			@cd "$$(CONFIG_DIR)"; \
+-- 
+2.7.4
