@@ -1,54 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Sep 2016 21:30:50 +0200
-Subject: [Buildroot] [git commit] python-u-msgpack: bump to version 2.2
-Message-ID: <20160926193231.8418A818EC@busybox.osuosl.org>
+Date: Mon, 26 Sep 2016 21:45:37 +0200
+Subject: [Buildroot] Buildroot nodejs 6.6.0
+In-Reply-To: <CAFGQKxf-pPGUuML2c6-0J4moQfJidxhRLcWOC8avA46gqHon7Q@mail.gmail.com>
+ (Martin Bark's message of "Mon, 26 Sep 2016 13:51:30 +0100")
+References: <6C0FD5AC-BA66-48C8-BC00-3F8393524B7B@bluecordial.com>
+ <CAFGQKxf-pPGUuML2c6-0J4moQfJidxhRLcWOC8avA46gqHon7Q@mail.gmail.com>
+Message-ID: <87zimu30ny.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd9c4871d5506641a08d0c8690ea6175015a4a2c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
 
-Package archive includes a proper licence file now, so use it instead of
-a source file.
+ > Paul,
+ > I've been busy on other work recently so I've not had the time to bump the
+ > node version in buildroot for a while.  I do have some patches lined up to
+ > bump node to 6.6.0, however, I've held off submitting them because 6.7.0 is
+ > due tomorrow (see
+ > https://nodejs.org/en/blog/vulnerability/september-2016-security-releases/).
+ > So i expect to submit some patches hopefully later this week to bump node
+ > to 6.7.0.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-u-msgpack/python-u-msgpack.hash | 7 +++----
- package/python-u-msgpack/python-u-msgpack.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 7 deletions(-)
+Thanks. From that list I also see that security support for the 0.10.x
+series will end in October, so we should presumably remove 0.10.x
+support before the 2016.11 release.
 
-diff --git a/package/python-u-msgpack/python-u-msgpack.hash b/package/python-u-msgpack/python-u-msgpack.hash
-index 16f5040..12f2be3 100644
---- a/package/python-u-msgpack/python-u-msgpack.hash
-+++ b/package/python-u-msgpack/python-u-msgpack.hash
-@@ -1,4 +1,3 @@
--# md5 from https://pypi.python.org/pypi/u-msgpack-python/json
--md5	2ccadbf06c7e70bbdb58e920d045d50c  u-msgpack-python-2.1.tar.gz
--# sha256 calculated by scanpypi
--sha256	66a39ddc6830be29b6d304dee9d4ab37104550ac4565eab1aa4c2bd3d34d759f  u-msgpack-python-2.1.tar.gz
-+# md5 from https://pypi.python.org/pypi/u-msgpack-python/json, sha256 locally computed
-+md5	f5adfb3e19910d8a41e331d3b03aa7c6  u-msgpack-python-2.2.tar.gz
-+sha256	cdd5a88f2313856a6a9f481f652dab9edd5731059badbb0111280f27249930d7  u-msgpack-python-2.2.tar.gz
-diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
-index e389716..a88beeb 100644
---- a/package/python-u-msgpack/python-u-msgpack.mk
-+++ b/package/python-u-msgpack/python-u-msgpack.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_U_MSGPACK_VERSION = 2.1
-+PYTHON_U_MSGPACK_VERSION = 2.2
- PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
--PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/b7/8d/791f037a0954f98a8eceb09c7c14babb97db0a81c985108bb21939b801eb
-+PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/66/5b/36fe0fcf290bd39f6ef6c1f5924cf0a9a76b0dc94575975ad7d318619cf9
- PYTHON_U_MSGPACK_SETUP_TYPE = distutils
- PYTHON_U_MSGPACK_LICENSE = MIT
--PYTHON_U_MSGPACK_LICENSE_FILES = umsgpack.py
-+PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+-- 
+Bye, Peter Korsgaard
