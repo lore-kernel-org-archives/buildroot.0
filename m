@@ -1,33 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 26 Sep 2016 20:22:36 +0000
-Subject: [Buildroot] [Bug 9301] U-boot fails to build with default
- zynq_zed_defconfig configuration
-In-Reply-To: <bug-9301-163@https.bugs.busybox.net/>
-References: <bug-9301-163@https.bugs.busybox.net/>
-Message-ID: <bug-9301-163-Q5sZqlEF9m@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Sep 2016 22:38:42 +0200
+Subject: [Buildroot] [PATCH] package/ustr: reallt fix ldconfig
+In-Reply-To: <1474910414-13176-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Mon, 26 Sep 2016 19:20:14 +0200")
+References: <1474910414-13176-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87inti2y7h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9301
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ > In 99067c1 (package/ustr: don't run ldconfig), we tried to fix parallel
+ > build issues, caused by running ldconfig, by not running ldconfig.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+ > We borked that fix, as build issues still crop up from time to time:
+ > ldconfig is still run because our override is not accounted for by
+ > ustr's buildsystem. Instead of overriding ldocnifg at build time, we
+ > need to override it at configure time.
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
-Thanks for the report. We are currently discussing on the list about changing
-the logic to explicitly pass 'all' as the make target to fix this and similar
-issues:
+ > Just do that.
 
-http://lists.busybox.net/pipermail/buildroot/2016-September/172815.html
+ > Fixes:
+ >     http://autobuild.buildroot.org/results/7b1/7b12f00612da4ad8dffe0c8010b95db881630b17/
+ >     http://autobuild.buildroot.org/results/242/24209ba13f56889357024b0e460d508b7a03d1d2/
+ >     http://autobuild.buildroot.org/results/963/963141370a9b127f473a7fae161656a6b0a4f33b/
 
-Can you verify that explicitly passing 'all' also fixes it for you? Thanks
+ > (Those are the only three build issues in the more-than-a-month since we
+ > initially tried to fix that.)
+
+ > To be noted: upstream has accepted my patch, plus they completely
+ > removed calls to ldconfig altogether. Add a comment so we don;t forget
+ > to remove our workaround when we bump.
+
+Committed after fixing a few typos, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
