@@ -1,41 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Sep 2016 22:38:42 +0200
-Subject: [Buildroot] [PATCH] package/ustr: reallt fix ldconfig
-In-Reply-To: <1474910414-13176-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Mon, 26 Sep 2016 19:20:14 +0200")
-References: <1474910414-13176-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87inti2y7h.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Sep 2016 22:43:09 +0200
+Subject: [Buildroot] [PATCH 2/2] package/mono: bump to version 4.6.0.245
+In-Reply-To: <1474920079-30330-2-git-send-email-angelo.compagnucci@gmail.com>
+ (Angelo Compagnucci's message of "Mon, 26 Sep 2016 22:01:19 +0200")
+References: <1474920079-30330-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1474920079-30330-2-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <87eg462y02.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
- > In 99067c1 (package/ustr: don't run ldconfig), we tried to fix parallel
- > build issues, caused by running ldconfig, by not running ldconfig.
+ > * Bump to mono 4.6.0.245
+ > * Enabling previously disabled aot cause this version doesn't
+ >   compile without
 
- > We borked that fix, as build issues still crop up from time to time:
- > ldconfig is still run because our override is not accounted for by
- > ustr's buildsystem. Instead of overriding ldocnifg at build time, we
- > need to override it at configure time.
+ > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
- > Just do that.
+Did something get relicensed?
 
- > Fixes:
- >     http://autobuild.buildroot.org/results/7b1/7b12f00612da4ad8dffe0c8010b95db881630b17/
- >     http://autobuild.buildroot.org/results/242/24209ba13f56889357024b0e460d508b7a03d1d2/
- >     http://autobuild.buildroot.org/results/963/963141370a9b127f473a7fae161656a6b0a4f33b/
-
- > (Those are the only three build issues in the more-than-a-month since we
- > initially tried to fix that.)
-
- > To be noted: upstream has accepted my patch, plus they completely
- > removed calls to ldconfig altogether. Add a comment so we don;t forget
- > to remove our workaround when we bump.
-
-Committed after fixing a few typos, thanks.
+make mono-legal-info
+[..]
+cat: /home/peko/source/buildroot/output/build/mono-4.6.0.245/mcs/COPYING.LIB: No such file or directory
+package/mono/mono.mk:67: recipe for target 'mono-legal-info' failed
 
 -- 
 Bye, Peter Korsgaard
