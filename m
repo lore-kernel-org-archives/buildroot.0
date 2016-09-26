@@ -1,63 +1,32 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 26 Sep 2016 22:01:19 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mono: bump to version 4.6.0.245
-In-Reply-To: <1474920079-30330-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1474920079-30330-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1474920079-30330-2-git-send-email-angelo.compagnucci@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Sep 2016 22:10:22 +0200
+Subject: [Buildroot] RTAI math module compilation
+In-Reply-To: <78c4ab72-52be-571c-e81a-a0f78c1e2e7f@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 15 Sep 2016 23:21:58 +0200")
+References: <CAEqQue108OTCsmAejX1sR6q8HL2zCj7jXtaB927b=kHo=UQTrA@mail.gmail.com>
+ <78c4ab72-52be-571c-e81a-a0f78c1e2e7f@mind.be>
+Message-ID: <87vaxi2zip.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Bump to mono 4.6.0.245
-* Enabling previously disabled aot cause this version doesn't
-  compile without
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/mono/mono.hash | 2 +-
- package/mono/mono.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi,
 
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index c275e15..4d05458 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 900c2cc25ee55adeec04e1ae889316efc127c82cc0c392f928421f19f8f5b633  mono-4.4.2.11.tar.bz2
-+sha256 2981f518cace63bfe10953fecd57c7fef040077a1ac617967dde5466062c1327  mono-4.6.0.245.tar.bz2
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index 3d0b9bc..b655016 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONO_VERSION = 4.4.2.11
-+MONO_VERSION = 4.6.0.245
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
- MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
-@@ -22,7 +22,7 @@ MONO_CONF_OPTS = --disable-gtk-doc \
- 	--with-mcs-docs=no \
- 	--with-moonlight=no \
- 	--with-ikvm-native=no \
--	--enable-minimal=aot,profiler,debug \
-+	--enable-minimal=profiler,debug \
- 	--disable-mcs-build \
- 	--enable-static
- 
-@@ -49,7 +49,7 @@ HOST_MONO_CONF_OPTS = --disable-gtk-doc \
- 	--with-moonlight=no \
- 	--disable-libraries \
- 	--with-ikvm-native=no \
--	--enable-minimal=aot,profiler,debug \
-+	--enable-minimal=profiler,debug \
- 	--enable-static
- 
- # ensure monolite is used
+ >  Perhaps we should remove RTAI. The most recent patch for x86 is 3.8, and the
+ > most recent patch for ppc is 2.6.29... Oh, and there is a new version 5.0-test2
+ > released in May that goes up to 4.1 for x86 (and drops ppc).
+
+So x86 is the only supported arch? I see that test2 isn't even announced
+on rtai.org :/
+
+I personally don't have any issues removing RTAI if it doesn't get
+updated / nobody uses it.
+
+If you DO use it, please speak up.
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
