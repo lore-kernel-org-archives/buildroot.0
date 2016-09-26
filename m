@@ -1,63 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Sep 2016 22:37:51 +0200
-Subject: [Buildroot] [git commit] package/ustr: really fix ldconfig
-Message-ID: <20160926204447.A623B8218D@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 26 Sep 2016 20:44:55 -0300
+Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.2j
+Message-ID: <1474933495-2967-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22069232c25e3e227ed181dd1cda442533a3adc8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-In 99067c1 (package/ustr: don't run ldconfig), we tried to fix parallel
-build issues, caused by running ldconfig, by not running ldconfig.
-
-We borked that fix, as build issues still crop up from time to time:
-ldconfig is still run because our override is not accounted for by
-ustr's buildsystem. Instead of overriding ldconifg at build time, we
-need to override it at configure time.
-
-Just do that.
-
 Fixes:
-    http://autobuild.buildroot.org/results/7b1/7b12f00612da4ad8dffe0c8010b95db881630b17/
-    http://autobuild.buildroot.org/results/242/24209ba13f56889357024b0e460d508b7a03d1d2/
-    http://autobuild.buildroot.org/results/963/963141370a9b127f473a7fae161656a6b0a4f33b/
+CVE-2016-6309 - Fix Use After Free for large message sizes
+CVE-2016-7052 - Missing CRL sanity check
 
-(Those are the only three build issues in the more-than-a-month since we
-initially tried to fix that.)
-
-To be noted: upstream has accepted my patch, plus they completely
-removed calls to ldconfig altogether. Add a comment so we don't forget
-to remove our workaround when we bump.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ustr/ustr.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/openssl/openssl.hash | 4 ++--
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
-index 1d629ab..b3de50b 100644
---- a/package/ustr/ustr.mk
-+++ b/package/ustr/ustr.mk
-@@ -4,6 +4,8 @@
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 50a0cc7..0dc5450 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.0.2i.tar.gz.sha256
+-sha256	9287487d11c9545b6efb287cdb70535d4e9b284dd10d51441d9b9963d000de6f	openssl-1.0.2i.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2j.tar.gz.sha256
++sha256	e7aff292be21c259c6af26469c7a9b3ba26e9abaaffd325e3dccc9785256c431	openssl-1.0.2j.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 055ed79..6dc4b85 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
-+# When bumping the version to a new upstream release, be sure to remove
-+# the ldconfig hack, below.
- USTR_VERSION = 1.0.4
- USTR_SOURCE = ustr-$(USTR_VERSION).tar.bz2
- USTR_SITE = http://www.and.org/ustr/$(USTR_VERSION)
-@@ -23,7 +25,7 @@ USTR_INSTALL_STAGING = YES
- # 'all-shared' to the default 'all' rule.
- USTR_MAKE_OPTS = all all-shared
- 
--USTR_MAKE_OPTS += LDCONFIG=/bin/true
-+USTR_CONF_OPTS += LDCONFIG=/bin/true
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-OPENSSL_VERSION = 1.0.2i
++OPENSSL_VERSION = 1.0.2j
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
+-- 
+2.7.3
