@@ -1,35 +1,102 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 26 Sep 2016 09:33:44 +0300
-Subject: [Buildroot] [PATCH] pahomqtt-c: new package
-In-Reply-To: <1474871431-19111-1-git-send-email-Pranit.Sirsat@imgtec.com>
-References: <1474871431-19111-1-git-send-email-Pranit.Sirsat@imgtec.com>
-Message-ID: <20160926063344.gb43kh2qbg6vsew6@tarshish>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 26 Sep 2016 10:20:41 +0200
+Subject: [Buildroot] [PATCH] configs: nitrogen*: bump kernel and u-boot
+	revision
+Message-ID: <20160926082041.2443-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Pranit Tanaji Sirsat,
+Here are the main U-Boot modifications:
+- Add Spansion flash support
+- Add secure boot (HAB) support
 
-On Mon, Sep 26, 2016 at 12:00:31PM +0530, Pranit Tanaji Sirsat wrote:
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 84e00c8..19a4270 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1148,6 +1148,9 @@ N:	Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
->  F:	package/libdvbpsi/
->  F:	package/mraa/
->  
-> +N:	Pranit Sirsat <Pranit.Sirsat@imgtec.com>
-> +F:	package/pahomqtt-c/
+Here are the main Linux modifications:
+- Add HDMI2CSI 75Hz support
+- Add KD024FM display support
+- Fix PCIe reset gpios in device tree
+- Backport xhci fixes from mainline
+- Fix SOM PHY address bug
+- Enable IPU Prefetch engine for 6QP
+- Fix ft5x06 touch bug
 
-Please split the DEVELOPERS update to a separate patch. This makes later 
-cherry-picking easier.
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+Hi all,
 
-baruch
+This revision bump is mainly due to the touch driver issue fix that
+is needed by several customers. Also the IPU prefetch configuration
+for 6QP devices was missing, will increase performances.
 
+Regards,
+Gary
+---
+ configs/nitrogen6sx_defconfig | 4 ++--
+ configs/nitrogen6x_defconfig  | 4 ++--
+ configs/nitrogen7_defconfig   | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index b317525..3509ef0 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -26,13 +26,13 @@ BR2_TARGET_UBOOT_BOARDNAME="nitrogen6sx"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Last version of branch boundary-v2016.03
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/12f31130.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1ac27109.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_4.1.15_1.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/be36042a.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/207addbe.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index dc033dc..9eb0daa 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -26,13 +26,13 @@ BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Last version of branch boundary-v2016.03
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/12f31130.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1ac27109.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_4.1.15_1.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/be36042a.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/207addbe.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index adce0fb..e1fd58b 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -25,13 +25,13 @@ BR2_TARGET_UBOOT_BOARDNAME="nitrogen7"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Last version of branch boundary-v2016.03
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/12f31130.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1ac27109.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_4.1.15_1.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/be36042a.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/207addbe.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.9.3
