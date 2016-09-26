@@ -1,30 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Sep 2016 22:19:25 +0200
-Subject: [Buildroot] [PATCH] i2c-tools: install devt headers to staging
-	dir
-In-Reply-To: <0b8205ef-ee98-a652-455c-f4717b294939@mind.be> (Arnout
- Vandecappelle's message of "Fri, 23 Sep 2016 23:18:07 +0200")
-References: <1474639604-23866-1-git-send-email-julien.boibessot@free.fr>
- <0b8205ef-ee98-a652-455c-f4717b294939@mind.be>
-Message-ID: <87mviu2z3m.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 26 Sep 2016 20:22:36 +0000
+Subject: [Buildroot] [Bug 9301] U-boot fails to build with default
+ zynq_zed_defconfig configuration
+In-Reply-To: <bug-9301-163@https.bugs.busybox.net/>
+References: <bug-9301-163@https.bugs.busybox.net/>
+Message-ID: <bug-9301-163-Q5sZqlEF9m@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+https://bugs.busybox.net/show_bug.cgi?id=9301
 
-Hi,
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- >  Also, I would prefer to use the install target. The manual install was there
- > from the very first commit in 2008, I don't think it's still relevant. Peter?
- > Anyway, for staging the install target can definitely be used.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-Sorry, I don't remember. I *THINK* it installed a number of unneeded
-stuff.
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
+Thanks for the report. We are currently discussing on the list about changing
+the logic to explicitly pass 'all' as the make target to fix this and similar
+issues:
 
-Changing to make install is fine by me if it nowadays does something sensible.
+http://lists.busybox.net/pipermail/buildroot/2016-September/172815.html
+
+Can you verify that explicitly passing 'all' also fixes it for you? Thanks
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
