@@ -1,272 +1,61 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Mon, 26 Sep 2016 16:53:04 +0100
-Subject: [Buildroot] Buildroot nodejs 6.6.0
-In-Reply-To: <1089D3EA-D19C-4E8C-90BB-00195366B606@bluecordial.com>
-References: <6C0FD5AC-BA66-48C8-BC00-3F8393524B7B@bluecordial.com>
- <CAFGQKxf-pPGUuML2c6-0J4moQfJidxhRLcWOC8avA46gqHon7Q@mail.gmail.com>
- <CANCHnQrD=cPBZtJ62EKFYG527KGFFvc=hiPPPgLGLeQdWTLf5A@mail.gmail.com>
- <1089D3EA-D19C-4E8C-90BB-00195366B606@bluecordial.com>
-Message-ID: <CAFGQKxf5KTPt=U-bx2mSW4XtiukBe9+CJM3DkHaQ=n3gmVeayQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 26 Sep 2016 19:20:14 +0200
+Subject: [Buildroot] [PATCH] package/ustr: reallt fix ldconfig
+Message-ID: <1474910414-13176-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Paul,
+In 99067c1 (package/ustr: don't run ldconfig), we tried to fix parallel
+build issues, caused by running ldconfig, by not running ldconfig.
 
-It's probably because you're missing this patch
-https://git.buildroot.net/buildroot/commit/package/nodejs?id=7d0702a2bd5643d3fc1ca9500f8222aca1baa443
+We borked that fix, as build issues still crop up from time to time:
+ldconfig is still run because our override is not accounted for by
+ustr's buildsystem. Instead of overriding ldocnifg at build time, we
+need to override it at configure time.
 
+Just do that.
 
-Update to the master branch or the 2016.08 release.  Both include this fix
-and use node 6.2.1
+Fixes:
+    http://autobuild.buildroot.org/results/7b1/7b12f00612da4ad8dffe0c8010b95db881630b17/
+    http://autobuild.buildroot.org/results/242/24209ba13f56889357024b0e460d508b7a03d1d2/
+    http://autobuild.buildroot.org/results/963/963141370a9b127f473a7fae161656a6b0a4f33b/
 
-Thanks
+(Those are the only three build issues in the more-than-a-month since we
+initially tried to fix that.)
 
-Martin
+To be noted: upstream has accepted my patch, plus they completely
+removed calls to ldconfig altogether. Add a comment so we don;t forget
+to remove our workaround when we bump.
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/ustr/ustr.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-On 26 September 2016 at 15:48, Paul <paul@bluecordial.com> wrote:
-
-> Hi all.
->
->
->
-> This is the output when I try to use 6.6.0 using the 6.1.0 patch, thus
-> creating new 6.6.0 folder and adding the has key in, changing
-> BR2_NODEJS_VERSION=6.6.0;
->
->
->
->
->
-> >>> nodejs 6.6.0 Building
->
-> PATH="/opt/buildroot-toolchain-472/bin:/opt/buildroot-toolchain-472/sbin:/
-> opt/buildroot-toolchain-472/usr/bin:/opt/buildroot-
-> toolchain-472/usr/sbin:/home/paul/bin:/home/paul/.local/
-> bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/
-> sbin:/bin:/usr/games:/usr/local/games:/snap/bin" PYTHON=/opt/buildroot-toolchain-472/usr/bin/python2
-> /usr/bin/make -j5 -C /home/paul/Documents/AST/integra-buildroot/output/build/nodejs-6.6.0
-> PATH="/opt/buildroot-toolchain-472/bin:/opt/buildroot-toolchain-472/sbin:/
-> opt/buildroot-toolchain-472/usr/bin:/opt/buildroot-
-> toolchain-472/usr/sbin:/home/paul/bin:/home/paul/.local/
-> bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/
-> sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
-> AR="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-ar"
-> AS="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-as"
-> LD="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-ld"
-> NM="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-nm"
-> CC="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-gcc"
-> GCC="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-gcc"
-> CPP="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-cpp"
-> CXX="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-g++"
-> FC="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-gfortran"
-> RANLIB="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-ranlib"
-> READELF="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-readelf"
-> STRIP="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-strip"
-> OBJCOPY="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-objcopy"
-> OBJDUMP="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-objdump"
-> AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as"
-> CC_FOR_BUILD="/opt/buildroot-toolchain-472/usr/bin/ccache /usr/bin/gcc"
-> GCC_FOR_BUILD="/opt/buildroot-toolchain-472/usr/bin/ccache /usr/bin/gcc"
-> CXX_FOR_BUILD="/opt/buildroot-toolchain-472/usr/bin/ccache /usr/bin/g++"
-> LD_FOR_BUILD="/usr/bin/ld" CPPFLAGS_FOR_BUILD="-I/opt/
-> buildroot-toolchain-472/usr/include" CFLAGS_FOR_BUILD="-O2
-> -I/opt/buildroot-toolchain-472/usr/include" CXXFLAGS_FOR_BUILD="-O2
-> -I/opt/buildroot-toolchain-472/usr/include" LDFLAGS_FOR_BUILD="-L/opt/buildroot-toolchain-472/lib
-> -L/opt/buildroot-toolchain-472/usr/lib -Wl,-rpath,/opt/buildroot-toolchain-472/usr/lib"
-> FCFLAGS_FOR_BUILD="" DEFAULT_ASSEMBLER="/opt/buildroot-toolchain-472/usr/
-> bin/arm-buildroot-linux-gnueabi-as" DEFAULT_LINKER="/opt/
-> buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-ld"
-> CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
-> CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-> -Os " CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64  -Os " LDFLAGS="" FCFLAGS=""
-> PKG_CONFIG="/opt/buildroot-toolchain-472/usr/bin/pkg-config"
-> STAGING_DIR="/opt/buildroot-toolchain-472/usr/arm-buildroot-linux-gnueabi/sysroot"
-> INTLTOOL_PERL=/usr/bin/perl PATH=/home/paul/Documents/AST/
-> integra-buildroot/output/build/nodejs-6.6.0/bin:"/opt/
-> buildroot-toolchain-472/bin:/opt/buildroot-toolchain-472/
-> sbin:/opt/buildroot-toolchain-472/usr/bin:/opt/buildroot-
-> toolchain-472/usr/sbin:/home/paul/bin:/home/paul/.local/
-> bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/
-> sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
-> LD="/opt/buildroot-toolchain-472/usr/bin/arm-buildroot-linux-gnueabi-g++"
->
-> /usr/bin/make -C out BUILDTYPE=Release V=1
->
->   LD_LIBRARY_PATH=/home/paul/Documents/AST/integra-
-> buildroot/output/build/nodejs-6.6.0/out/Release/lib.host:/
-> home/paul/Documents/AST/integra-buildroot/output/build/nodejs-6.6.0/out/
-> Release/lib.target:$LD_LIBRARY_PATH; export LD_LIBRARY_PATH; cd
-> ../tools/icu; mkdir -p /home/paul/Documents/AST/integra-buildroot/output/
-> build/nodejs-6.6.0/out/Release/obj/gen/icutmp; python icutrim.py -P
-> "/home/paul/Documents/AST/integra-buildroot/output/build/nodejs-6.6.0/out/Release"
-> -D ../../deps/icu-small/source/data/in/icudt57l.dat --delete-tmp -T
-> "/home/paul/Documents/AST/integra-buildroot/output/build/nodejs-6.6.0/out/Release/obj/gen/icutmp"
-> -F icu_small.json -O icudt57l.dat -v -L en,root
->
->   touch 47dc1adc49f2b81e1082dac19d547163d9225782.intermediate
->
->   LD_LIBRARY_PATH=/home/paul/Documents/AST/integra-
-> buildroot/output/build/nodejs-6.6.0/out/Release/lib.host:/
-> home/paul/Documents/AST/integra-buildroot/output/build/nodejs-6.6.0/out/
-> Release/lib.target:$LD_LIBRARY_PATH; export LD_LIBRARY_PATH; cd
-> ../deps/v8_inspector/third_party/v8_inspector/platform/v8_inspector;
-> mkdir -p /home/paul/Documents/AST/integra-buildroot/output/
-> build/nodejs-6.6.0/out/Release/obj/gen/blink/platform/v8_inspector/public/protocol
-> /home/paul/Documents/AST/integra-buildroot/output/build/nodejs-6.6.0/out/
-> Release/obj/gen/blink/platform/v8_inspector/protocol
-> /home/paul/Documents/AST/integra-buildroot/output/build/nodejs-6.6.0/out/
-> Release/obj/gen/blink/platform/inspector_protocol; python
-> ../inspector_protocol/CodeGenerator.py --output_base
-> "/home/paul/Documents/AST/integra-buildroot/output/build/nodejs-6.6.0/out/
-> Release/obj/gen/blink/platform" --config inspector_protocol_config_stl.
-> json
->
-> Options: {'verbose': 1, 'filterfile': 'icu_small.json', 'toolpath':
-> '/home/paul/Documents/AST/integra-buildroot/output/build/nodejs-6.6.0/out/Release',
-> 'deltmpdir': 1, 'outfile': 'icudt57l.dat', 'datfile':
-> '../../deps/icu-small/source/data/in/icudt57l.dat', 'locales': 'en,root',
-> 'endian': 'little', 'tmpdir': '/home/paul/Documents/AST/
-> integra-buildroot/output/build/nodejs-6.6.0/out/Release/obj/gen/icutmp'}
->
-> icu_small.json: icutrim.py config: Trim down ICU to just a certain locale
-> set, needed for node.js use.
->
-> /home/paul/Documents/AST/integra-buildroot/output/build/nodejs-6.6.0/out/Release/icupkg:
-> 1: /home/paul/Documents/AST/integra-buildroot/output/
-> build/nodejs-6.6.0/out/Release/icupkg: Syntax error: word unexpected
-> (expecting ")")
->
-> FAILED: /home/paul/Documents/AST/integra-buildroot/output/
-> build/nodejs-6.6.0/out/Release/icupkg -tl ../../deps/icu-small/source/data/in/icudt57l.dat
-> /home/paul/Documents/AST/integra-buildroot/output/build/nodejs-6.6.0/out/
-> Release/obj/gen/icutmp/icudt57l.dat
->
-> tools/icu/icudata.target.mk:13: recipe for target
-> '/home/paul/Documents/AST/integra-buildroot/output/build/nodejs-6.6.0/out/
-> Release/obj/gen/icutmp/icudt57l.dat' failed
->
-> make[3]: *** [/home/paul/Documents/AST/integra-buildroot/output/
-> build/nodejs-6.6.0/out/Release/obj/gen/icutmp/icudt57l.dat] Error 1
->
-> make[3]: *** Waiting for unfinished jobs....
->
-> rm 47dc1adc49f2b81e1082dac19d547163d9225782.intermediate
->
-> Makefile:66: recipe for target 'node' failed
->
-> make[2]: *** [node] Error 2
->
-> package/pkg-generic.mk:195: recipe for target '/home/paul/Documents/AST/
-> integra-buildroot/output/build/nodejs-6.6.0/.stamp_built' failed
->
-> make[1]: *** [/home/paul/Documents/AST/integra-buildroot/output/
-> build/nodejs-6.6.0/.stamp_built] Error 2
->
-> Makefile:36: recipe for target '_all' failed
->
-> make: *** [_all] Error 2
->
->
->
-> Kind regards
->
-> Paul
->
->
->
-> *From: *Jeroen Roovers <jer@airfi.aero>
-> *Date: *Monday, 26 September 2016 at 15:40
-> *To: *Martin Bark <martin@barkynet.com>
-> *Cc: *Paul <paul@bluecordial.com>, <buildroot@buildroot.org>
-> *Subject: *Re: [Buildroot] Buildroot nodejs 6.6.0
->
->
->
-> I have seen no issues in testing 6.6.0 (bumped locally) on an armv7 target
-> in the last week, and the bump involved no patching beyond what was already
-> being done.
->
->
->
-> Kind regards,
->
->      jer
->
->
->
-> On 26 September 2016 at 14:51, Martin Bark <martin@barkynet.com> wrote:
->
-> Paul,
->
->
->
-> I've been busy on other work recently so I've not had the time to bump the
-> node version in buildroot for a while.  I do have some patches lined up to
-> bump node to 6.6.0, however, I've held off submitting them because 6.7.0 is
-> due tomorrow (see https://nodejs.org/en/blog/vulnerability/september-
-> 2016-security-releases/).  So i expect to submit some patches hopefully
-> later this week to bump node to 6.7.0.
->
->
->
-> Note: please keep the buildroot mailing list in the loop
->
->
->
-> Thanks
->
->
->
-> Martin
->
->
->
->
->
-> On 26 September 2016 at 10:31, Paul <paul@bluecordial.com> wrote:
->
-> Hi Martin,
->
->
->
-> Sorry for the email. I?m trying to get nodejs 6.6.0 installed using
-> buildroot and saw that you had done the patch for 6.1.0 and was wondering
-> if you have a patch available for node 6.6.0 or could point me to some
-> details of how this can be completed? The target is Armv7 softfloat.
->
->
->
-> Kind regards
->
-> Paul Ashford
->
->
->
-> *Contact Information: *
->
-> m: +44 (0)7885 469812
->
-> e: paul at bluecordial.com
->
-> skype: paulashford1975
->
-> twitter: @pdashford
->
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160926/51cdce9b/attachment.html>
+diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
+index 1d629ab..b3de50b 100644
+--- a/package/ustr/ustr.mk
++++ b/package/ustr/ustr.mk
+@@ -4,6 +4,8 @@
+ #
+ ################################################################################
+ 
++# When bumping the version to a new upstream release, be sure to remove
++# the ldconfig hack, below.
+ USTR_VERSION = 1.0.4
+ USTR_SOURCE = ustr-$(USTR_VERSION).tar.bz2
+ USTR_SITE = http://www.and.org/ustr/$(USTR_VERSION)
+@@ -23,7 +25,7 @@ USTR_INSTALL_STAGING = YES
+ # 'all-shared' to the default 'all' rule.
+ USTR_MAKE_OPTS = all all-shared
+ 
+-USTR_MAKE_OPTS += LDCONFIG=/bin/true
++USTR_CONF_OPTS += LDCONFIG=/bin/true
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+2.7.4
