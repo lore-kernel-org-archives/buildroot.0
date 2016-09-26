@@ -1,54 +1,65 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 26 Sep 2016 12:07:26 +0200
-Subject: [Buildroot] [PATCH] python-u-msgpack: bump to version 2.2
-Message-ID: <1474884446-19616-1-git-send-email-yegorslists@googlemail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 26 Sep 2016 12:21:02 +0200
+Subject: [Buildroot] [PATCH] i2c-tools: install devt headers to staging
+ dir
+In-Reply-To: <3aa07d73-d34f-0070-3020-a3786e5a82ae@free.fr>
+References: <1474639604-23866-1-git-send-email-julien.boibessot@free.fr>
+ <20160924161810.09ee4fa5@free-electrons.com>
+ <3aa07d73-d34f-0070-3020-a3786e5a82ae@free.fr>
+Message-ID: <6fa984a3-83e4-3ea5-8841-88b2db197ebc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Package archive includes a proper licence file now, so use it instead of
-a source file.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-u-msgpack/python-u-msgpack.hash | 7 +++----
- package/python-u-msgpack/python-u-msgpack.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 7 deletions(-)
+On 26-09-16 10:56, Julien Boibessot wrote:
+> Hello,
+> 
+> Arnout, Thomas,
+> thanks for reviewing.
+> 
+> On 24/09/2016 16:18, Thomas Petazzoni wrote:
+[snip]
+>>     This reverts commit ff673f9a22b1467878f1a117f2c6198e9683d5c7, as the
+>>     modified i2c-dev.h from i2c-tools has some definitions that conflict
+>>     with the i2c.h from the kernel headers. This means that a userspace
+>>     program or library that includes both will fail to build, as is the
+>>     case with libsoc.
+>>     
+>>     Fixes:
+>>     
+>>       http://autobuild.buildroot.org/results/1f4/1f451a338487a2a3c8a8f9b18540d41b90ee5aac/
+>>     
+>>     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>
+>> So, if we are going to merge the same patch again, I'd like to be sure
+>> that we won't fall into the exact same problems we had the previous
+>> time. Could you check this?
+> 
+> Sorry for having missed that one ! Sadly, the same problem will occur
+> with my patch.
+> I have currently no idea how to solve that and still trying to figure
+> out how it can works on debian systems with libi2c-dev package installed.
+> So meanwhile you can forget about my patch.
 
-diff --git a/package/python-u-msgpack/python-u-msgpack.hash b/package/python-u-msgpack/python-u-msgpack.hash
-index 16f5040..12f2be3 100644
---- a/package/python-u-msgpack/python-u-msgpack.hash
-+++ b/package/python-u-msgpack/python-u-msgpack.hash
-@@ -1,4 +1,3 @@
--# md5 from https://pypi.python.org/pypi/u-msgpack-python/json
--md5	2ccadbf06c7e70bbdb58e920d045d50c  u-msgpack-python-2.1.tar.gz
--# sha256 calculated by scanpypi
--sha256	66a39ddc6830be29b6d304dee9d4ab37104550ac4565eab1aa4c2bd3d34d759f  u-msgpack-python-2.1.tar.gz
-+# md5 from https://pypi.python.org/pypi/u-msgpack-python/json, sha256 locally computed
-+md5	f5adfb3e19910d8a41e331d3b03aa7c6  u-msgpack-python-2.2.tar.gz
-+sha256	cdd5a88f2313856a6a9f481f652dab9edd5731059badbb0111280f27249930d7  u-msgpack-python-2.2.tar.gz
-diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
-index e389716..a88beeb 100644
---- a/package/python-u-msgpack/python-u-msgpack.mk
-+++ b/package/python-u-msgpack/python-u-msgpack.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_U_MSGPACK_VERSION = 2.1
-+PYTHON_U_MSGPACK_VERSION = 2.2
- PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
--PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/b7/8d/791f037a0954f98a8eceb09c7c14babb97db0a81c985108bb21939b801eb
-+PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/66/5b/36fe0fcf290bd39f6ef6c1f5924cf0a9a76b0dc94575975ad7d318619cf9
- PYTHON_U_MSGPACK_SETUP_TYPE = distutils
- PYTHON_U_MSGPACK_LICENSE = MIT
--PYTHON_U_MSGPACK_LICENSE_FILES = umsgpack.py
-+PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+ I guess Debian doesn't have packages that include both i2c.h and i2c-dev.h.
+libsoc, for example, doesn't exist in Debian.
+
+ I guess the solution would be for i2c-tools to #include or #include_next the
+relevant kernel headers, instead of redefining. Or to have both i2c.h and
+i2c-dev.h so that both kernel headers end up being overwritten.
+
+ Regards,
+ Arnout
+
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
