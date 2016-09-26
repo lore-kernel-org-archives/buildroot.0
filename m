@@ -1,24 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Sep 2016 21:31:25 +0200
-Subject: [Buildroot] [PATCH] python-u-msgpack: bump to version 2.2
-In-Reply-To: <1474884446-19616-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Mon, 26 Sep 2016 12:07:26
- +0200")
-References: <1474884446-19616-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87h9924fw2.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Sep 2016 21:32:23 +0200
+Subject: [Buildroot] [PATCH] board: bump armadeus apf28's kernel version
+	to latest longterm (4.4.22)
+In-Reply-To: <1474900152-7332-1-git-send-email-julien.boibessot@free.fr>
+ (julien boibessot's message of "Mon, 26 Sep 2016 16:29:12 +0200")
+References: <1474900152-7332-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <87d1jq4fug.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Package archive includes a proper licence file now, so use it instead of
- > a source file.
-
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+ > Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
 Committed, thanks.
 
