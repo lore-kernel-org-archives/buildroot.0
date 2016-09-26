@@ -1,70 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Sep 2016 21:31:36 +0200
-Subject: [Buildroot] [git commit] board: bump armadeus apf28's kernel
-	version to latest longterm (4.4.22)
-Message-ID: <20160926193231.93D927FF6D@busybox.osuosl.org>
+Date: Mon, 26 Sep 2016 21:30:50 +0200
+Subject: [Buildroot] [git commit] python-u-msgpack: bump to version 2.2
+Message-ID: <20160926193231.8418A818EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=286d4850027cdde8f59f958433135910111326d9
+commit: https://git.buildroot.net/buildroot/commit/?id=dd9c4871d5506641a08d0c8690ea6175015a4a2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Package archive includes a proper licence file now, so use it instead of
+a source file.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/armadeus/apf28/{linux-3.12.config => linux-4.4.config} | 4 ++--
- configs/armadeus_apf28_defconfig                             | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-u-msgpack/python-u-msgpack.hash | 7 +++----
+ package/python-u-msgpack/python-u-msgpack.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/board/armadeus/apf28/linux-3.12.config b/board/armadeus/apf28/linux-4.4.config
-similarity index 100%
-rename from board/armadeus/apf28/linux-3.12.config
-rename to board/armadeus/apf28/linux-4.4.config
-index 137bd12..cf389d8 100644
---- a/board/armadeus/apf28/linux-3.12.config
-+++ b/board/armadeus/apf28/linux-4.4.config
-@@ -117,8 +117,6 @@ CONFIG_BACKLIGHT_CLASS_DEVICE=y
- # CONFIG_BACKLIGHT_GENERIC is not set
- CONFIG_BACKLIGHT_PWM=y
- CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_FONTS=y
--CONFIG_FONT_8x8=y
- CONFIG_LOGO=y
- # CONFIG_LOGO_LINUX_MONO is not set
- # CONFIG_LOGO_LINUX_VGA16 is not set
-@@ -183,3 +181,5 @@ CONFIG_NLS_ISO8859_1=y
- CONFIG_DEBUG_FS=y
- # CONFIG_CRYPTO_ANSI_CPRNG is not set
- # CONFIG_CRYPTO_HW is not set
-+CONFIG_FONTS=y
-+CONFIG_FONT_8x8=y
-diff --git a/configs/armadeus_apf28_defconfig b/configs/armadeus_apf28_defconfig
-index 3032906..708f20b 100644
---- a/configs/armadeus_apf28_defconfig
-+++ b/configs/armadeus_apf28_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_arm926t=y
+diff --git a/package/python-u-msgpack/python-u-msgpack.hash b/package/python-u-msgpack/python-u-msgpack.hash
+index 16f5040..12f2be3 100644
+--- a/package/python-u-msgpack/python-u-msgpack.hash
++++ b/package/python-u-msgpack/python-u-msgpack.hash
+@@ -1,4 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/u-msgpack-python/json
+-md5	2ccadbf06c7e70bbdb58e920d045d50c  u-msgpack-python-2.1.tar.gz
+-# sha256 calculated by scanpypi
+-sha256	66a39ddc6830be29b6d304dee9d4ab37104550ac4565eab1aa4c2bd3d34d759f  u-msgpack-python-2.1.tar.gz
++# md5 from https://pypi.python.org/pypi/u-msgpack-python/json, sha256 locally computed
++md5	f5adfb3e19910d8a41e331d3b03aa7c6  u-msgpack-python-2.2.tar.gz
++sha256	cdd5a88f2313856a6a9f481f652dab9edd5731059badbb0111280f27249930d7  u-msgpack-python-2.2.tar.gz
+diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
+index e389716..a88beeb 100644
+--- a/package/python-u-msgpack/python-u-msgpack.mk
++++ b/package/python-u-msgpack/python-u-msgpack.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 3.12 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
-+# Linux headers same as kernel, a 4.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+-PYTHON_U_MSGPACK_VERSION = 2.1
++PYTHON_U_MSGPACK_VERSION = 2.2
+ PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
+-PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/b7/8d/791f037a0954f98a8eceb09c7c14babb97db0a81c985108bb21939b801eb
++PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/66/5b/36fe0fcf290bd39f6ef6c1f5924cf0a9a76b0dc94575975ad7d318619cf9
+ PYTHON_U_MSGPACK_SETUP_TYPE = distutils
+ PYTHON_U_MSGPACK_LICENSE = MIT
+-PYTHON_U_MSGPACK_LICENSE_FILES = umsgpack.py
++PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
  
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf28"
-@@ -13,9 +13,9 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.22"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf28/linux-3.12.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf28/linux-4.4.config"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ $(eval $(python-package))
