@@ -1,65 +1,107 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 26 Sep 2016 12:21:02 +0200
-Subject: [Buildroot] [PATCH] i2c-tools: install devt headers to staging
- dir
-In-Reply-To: <3aa07d73-d34f-0070-3020-a3786e5a82ae@free.fr>
-References: <1474639604-23866-1-git-send-email-julien.boibessot@free.fr>
- <20160924161810.09ee4fa5@free-electrons.com>
- <3aa07d73-d34f-0070-3020-a3786e5a82ae@free.fr>
-Message-ID: <6fa984a3-83e4-3ea5-8841-88b2db197ebc@mind.be>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 26 Sep 2016 11:44:22 +0100
+Subject: [Buildroot] [PATCH 2/2] jsoncpp: patch to include stdint.h,
+	necessary for int64_t and uint64_t
+In-Reply-To: <1474886662-46914-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1474886662-46914-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1474886662-46914-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Otherwise failures like these one can happen during the configure phase
+of other applications that use jsoncpp, like upmpdcli for instance:
 
+checking jsoncpp/json/json.h usability... yes
+checking jsoncpp/json/json.h presence... yes
+checking for jsoncpp/json/json.h... yes
+configure: error: libjsoncpp not found.
 
-On 26-09-16 10:56, Julien Boibessot wrote:
-> Hello,
-> 
-> Arnout, Thomas,
-> thanks for reviewing.
-> 
-> On 24/09/2016 16:18, Thomas Petazzoni wrote:
-[snip]
->>     This reverts commit ff673f9a22b1467878f1a117f2c6198e9683d5c7, as the
->>     modified i2c-dev.h from i2c-tools has some definitions that conflict
->>     with the i2c.h from the kernel headers. This means that a userspace
->>     program or library that includes both will fail to build, as is the
->>     case with libsoc.
->>     
->>     Fixes:
->>     
->>       http://autobuild.buildroot.org/results/1f4/1f451a338487a2a3c8a8f9b18540d41b90ee5aac/
->>     
->>     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>
->> So, if we are going to merge the same patch again, I'd like to be sure
->> that we won't fall into the exact same problems we had the previous
->> time. Could you check this?
-> 
-> Sorry for having missed that one ! Sadly, the same problem will occur
-> with my patch.
-> I have currently no idea how to solve that and still trying to figure
-> out how it can works on debian systems with libi2c-dev package installed.
-> So meanwhile you can forget about my patch.
+And this is the actual problem that you can see in config.log:
 
- I guess Debian doesn't have packages that include both i2c.h and i2c-dev.h.
-libsoc, for example, doesn't exist in Debian.
+configure:5233: checking for jsoncpp/json/json.h
+configure:5233: result: yes
+configure:5259: /usr/bin/mipsel-linux-g++ -o conftest conftest.cpp
+-lmicrohttpd -lmpdclient -lpthread -ljsoncpp >&5
+In file included from /usr/include/jsoncpp/json/autolink.h:9:0,
+from /usr/include/jsoncpp/json/json.h:9,
+from conftest.cpp:26:
+/usr/include/jsoncpp/json/config.h:155:9: error: 'int64_t' does not name
+a type
+typedef int64_t Int64;
+^
+/usr/include/jsoncpp/json/config.h:156:9: error: 'uint64_t' does not
+name a type
+typedef uint64_t UInt64;
+^
 
- I guess the solution would be for i2c-tools to #include or #include_next the
-relevant kernel headers, instead of redefining. Or to have both i2c.h and
-i2c-dev.h so that both kernel headers end up being overwritten.
+Upstream status: pull request sent
+https://github.com/open-source-parsers/jsoncpp/pull/536
 
- Regards,
- Arnout
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ ...dint.h-necessary-for-int64_t-and-uint64_t.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/jsoncpp/0001-Include-stdint.h-necessary-for-int64_t-and-uint64_t.patch
 
-
+diff --git a/package/jsoncpp/0001-Include-stdint.h-necessary-for-int64_t-and-uint64_t.patch b/package/jsoncpp/0001-Include-stdint.h-necessary-for-int64_t-and-uint64_t.patch
+new file mode 100644
+index 0000000..26a11ff
+--- /dev/null
++++ b/package/jsoncpp/0001-Include-stdint.h-necessary-for-int64_t-and-uint64_t.patch
+@@ -0,0 +1,51 @@
++From ab0f1e234aa40147e39cdfd0b97bf6527b8ea5e8 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Mon, 26 Sep 2016 11:16:38 +0100
++Subject: [PATCH] Include stdint.h necessary for int64_t and uint64_t
++
++Otherwise failures like these one can happen during the configure phase
++of other applications that use jsoncpp, like upmpdcli for instance:
++
++checking jsoncpp/json/json.h usability... yes
++checking jsoncpp/json/json.h presence... yes
++checking for jsoncpp/json/json.h... yes
++configure: error: libjsoncpp not found.
++
++And this is the actual problem that you can see in config.log:
++
++configure:5233: checking for jsoncpp/json/json.h
++configure:5233: result: yes
++configure:5259: /usr/bin/mipsel-linux-g++ -o conftest conftest.cpp
++-lmicrohttpd -lmpdclient -lpthread  -ljsoncpp >&5
++In file included from /usr/include/jsoncpp/json/autolink.h:9:0,
++                 from /usr/include/jsoncpp/json/json.h:9,
++                 from conftest.cpp:26:
++/usr/include/jsoncpp/json/config.h:155:9: error: 'int64_t' does not name
++a type
++ typedef int64_t Int64;
++         ^
++/usr/include/jsoncpp/json/config.h:156:9: error: 'uint64_t' does not
++name a type
++ typedef uint64_t UInt64;
++         ^
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ include/json/config.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/include/json/config.h b/include/json/config.h
++index 6519101..71278c3 100644
++--- a/include/json/config.h
+++++ b/include/json/config.h
++@@ -7,6 +7,7 @@
++ #define JSON_CONFIG_H_INCLUDED
++ #include <stddef.h>
++ #include <string> //typdef String
+++#include <stdint.h> //typedef int64_t, uint64_t
++ 
++ /// If defined, indicates that json library is embedded in CppTL library.
++ //# define JSON_IN_CPPTL 1
++-- 
++2.7.3
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.3
