@@ -1,66 +1,92 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Mon, 26 Sep 2016 10:56:48 +0200
-Subject: [Buildroot] [PATCH] i2c-tools: install devt headers to staging
- dir
-In-Reply-To: <20160924161810.09ee4fa5@free-electrons.com>
-References: <1474639604-23866-1-git-send-email-julien.boibessot@free.fr>
- <20160924161810.09ee4fa5@free-electrons.com>
-Message-ID: <3aa07d73-d34f-0070-3020-a3786e5a82ae@free.fr>
+From: Pranit Tanaji Sirsat <Pranit.Sirsat@imgtec.com>
+Date: Mon, 26 Sep 2016 14:42:39 +0530
+Subject: [Buildroot] [PATCH v2 1/2] pahomqtt-c: new package
+Message-ID: <1474881160-30450-1-git-send-email-Pranit.Sirsat@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+mqtt client c library
 
-Arnout, Thomas,
-thanks for reviewing.
+Reviewed-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
+Reviewed-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Pranit Tanaji Sirsat <Pranit.Sirsat@imgtec.com>
 
-On 24/09/2016 16:18, Thomas Petazzoni wrote:
-> Hello,
->
-> On Fri, 23 Sep 2016 16:06:44 +0200, julien.boibessot at free.fr wrote:
->> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
->>
->> On debian (and maybe other distribs), there is a package named libi2c-dev
->> that install a useful header from i2c-tools (for the one wanting to write
->> I2C applications). See https://packages.debian.org/fr/wheezy/libi2c-dev.
->> Do the same in Buildroot. Note that "install" target in i2c-tools Makefile
->> would do the job, but BR installs i2c-tools's stuff manualy.
->>
->> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> We already merged exactly the same patch in commit
-> ff673f9a22b1467878f1a117f2c6198e9683d5c7, and finally reverted it in
-> 41711cfdeda6f5fd9b2531f538f3643854d7d3ea, with the following commit log:
->
-> commit 41711cfdeda6f5fd9b2531f538f3643854d7d3ea
-> Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Date:   Tue Mar 4 19:14:26 2014 +0100
->
->     Revert "i2c-tools: Add i2c-dev.h to staging directory for userspace i2c drivers."
->     
->     This reverts commit ff673f9a22b1467878f1a117f2c6198e9683d5c7, as the
->     modified i2c-dev.h from i2c-tools has some definitions that conflict
->     with the i2c.h from the kernel headers. This means that a userspace
->     program or library that includes both will fail to build, as is the
->     case with libsoc.
->     
->     Fixes:
->     
->       http://autobuild.buildroot.org/results/1f4/1f451a338487a2a3c8a8f9b18540d41b90ee5aac/
->     
->     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-> So, if we are going to merge the same patch again, I'd like to be sure
-> that we won't fall into the exact same problems we had the previous
-> time. Could you check this?
+---
+Changes v1 -> v2:
+  - remove updates to DEVELOPERS file (suggested by Baruch Siach)
+---
+ package/Config.in                  |  1 +
+ package/pahomqtt-c/Config.in       | 11 +++++++++++
+ package/pahomqtt-c/pahomqtt-c.hash |  2 ++
+ package/pahomqtt-c/pahomqtt-c.mk   | 18 ++++++++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/pahomqtt-c/Config.in
+ create mode 100644 package/pahomqtt-c/pahomqtt-c.hash
+ create mode 100644 package/pahomqtt-c/pahomqtt-c.mk
 
-Sorry for having missed that one ! Sadly, the same problem will occur
-with my patch.
-I have currently no idea how to solve that and still trying to figure
-out how it can works on debian systems with libi2c-dev package installed.
-So meanwhile you can forget about my patch.
-
-Best regards,
-Julien
+diff --git a/package/Config.in b/package/Config.in
+index 9ca6c15..c0d92ba 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1239,6 +1239,7 @@ menu "Networking"
+ 	source "package/openpgm/Config.in"
+ 	source "package/openzwave/Config.in"
+ 	source "package/ortp/Config.in"
++	source "package/pahomqtt-c/Config.in"
+ 	source "package/qdecoder/Config.in"
+ 	source "package/qpid-proton/Config.in"
+ 	source "package/rabbitmq-c/Config.in"
+diff --git a/package/pahomqtt-c/Config.in b/package/pahomqtt-c/Config.in
+new file mode 100644
+index 0000000..53ccef2
+--- /dev/null
++++ b/package/pahomqtt-c/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PAHOMQTT_C
++	bool "pahomqtt-c"
++	depends on !BR2_STATIC_LIBS  # dlopen()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  MQTT client C library
++
++	  https://eclipse.org/paho/clients/c/
++
++comment "pahomqtt-c needs a toolchain w/ threads and dynamic library support"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/pahomqtt-c/pahomqtt-c.hash b/package/pahomqtt-c/pahomqtt-c.hash
+new file mode 100644
+index 0000000..4bd1e5c
+--- /dev/null
++++ b/package/pahomqtt-c/pahomqtt-c.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  970b9621efc24251441d386274cd0a90cf6ad52b64031f3c8cb53fdd5526f5f3  pahomqtt-c-v1.1.0.tar.gz
+diff --git a/package/pahomqtt-c/pahomqtt-c.mk b/package/pahomqtt-c/pahomqtt-c.mk
+new file mode 100644
+index 0000000..2a533d1
+--- /dev/null
++++ b/package/pahomqtt-c/pahomqtt-c.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# pahomqtt-c
++#
++################################################################################
++
++PAHOMQTT_C_VERSION = v1.1.0
++PAHOMQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,$(PAHOMQTT_C_VERSION))
++PAHOMQTT_C_LICENSE = EPLv1.0, EDLv1.0
++PAHOMQTT_C_LICENSE_FILES = epl-v10 edl-v10
++PAHOMQTT_C_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++PAHOMQTT_C_DEPENDENCIES = openssl
++PAHOMQTT_C_CONF_OPTS = -DPAHO_WITH_SSL=TRUE
++endif
++
++$(eval $(cmake-package))
+-- 
+2.6.2
