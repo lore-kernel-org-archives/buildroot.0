@@ -1,41 +1,63 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 26 Sep 2016 22:01:18 +0200
-Subject: [Buildroot] [PATCH 1/2] package/monolite: bump to version 149
-Message-ID: <1474920079-30330-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Mon, 26 Sep 2016 22:01:19 +0200
+Subject: [Buildroot] [PATCH 2/2] package/mono: bump to version 4.6.0.245
+In-Reply-To: <1474920079-30330-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1474920079-30330-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <1474920079-30330-2-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps monolite to version 149
+* Bump to mono 4.6.0.245
+* Enabling previously disabled aot cause this version doesn't
+  compile without
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/monolite/monolite.hash | 2 +-
- package/monolite/monolite.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mono/mono.hash | 2 +-
+ package/mono/mono.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
-index 44ec39a..621e5e4 100644
---- a/package/monolite/monolite.hash
-+++ b/package/monolite/monolite.hash
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+index c275e15..4d05458 100644
+--- a/package/mono/mono.hash
++++ b/package/mono/mono.hash
 @@ -1,2 +1,2 @@
  # sha256 locally computed
--sha256 885270da1b64670bffec9c8df1272ab88ff0b96186d2ebb61bdfa47a5586f987  monolite-140-latest.tar.gz
-+sha256 c01e9ba37d8d8f9ef68e08170b2582cc710a8a77756e2412dff298a39b3c4d2b  monolite-149-latest.tar.gz
-diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
-index 91c01d7..d50d9f2 100644
---- a/package/monolite/monolite.mk
-+++ b/package/monolite/monolite.mk
+-sha256 900c2cc25ee55adeec04e1ae889316efc127c82cc0c392f928421f19f8f5b633  mono-4.4.2.11.tar.bz2
++sha256 2981f518cace63bfe10953fecd57c7fef040077a1ac617967dde5466062c1327  mono-4.6.0.245.tar.bz2
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index 3d0b9bc..b655016 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MONOLITE_VERSION = 140
-+MONOLITE_VERSION = 149
- MONOLITE_SITE = http://download.mono-project.com/monolite/
- MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
- MONOLITE_LICENSE = LGPLv2 or commercial
+-MONO_VERSION = 4.4.2.11
++MONO_VERSION = 4.6.0.245
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
+@@ -22,7 +22,7 @@ MONO_CONF_OPTS = --disable-gtk-doc \
+ 	--with-mcs-docs=no \
+ 	--with-moonlight=no \
+ 	--with-ikvm-native=no \
+-	--enable-minimal=aot,profiler,debug \
++	--enable-minimal=profiler,debug \
+ 	--disable-mcs-build \
+ 	--enable-static
+ 
+@@ -49,7 +49,7 @@ HOST_MONO_CONF_OPTS = --disable-gtk-doc \
+ 	--with-moonlight=no \
+ 	--disable-libraries \
+ 	--with-ikvm-native=no \
+-	--enable-minimal=aot,profiler,debug \
++	--enable-minimal=profiler,debug \
+ 	--enable-static
+ 
+ # ensure monolite is used
 -- 
 1.9.1
