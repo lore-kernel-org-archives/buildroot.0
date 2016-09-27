@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Sep 2016 15:10:38 +0200
-Subject: [Buildroot] Buildroot nodejs 6.6.0
-In-Reply-To: <CAFGQKxcFTgyOWB+h84PgRCVpcpTRYe1q9XrJe3B+dVZAycu1oQ@mail.gmail.com>
-References: <6C0FD5AC-BA66-48C8-BC00-3F8393524B7B@bluecordial.com>
- <CAFGQKxf-pPGUuML2c6-0J4moQfJidxhRLcWOC8avA46gqHon7Q@mail.gmail.com>
- <87zimu30ny.fsf@dell.be.48ers.dk>
- <CAFGQKxcFTgyOWB+h84PgRCVpcpTRYe1q9XrJe3B+dVZAycu1oQ@mail.gmail.com>
-Message-ID: <20160927151038.474df7de@free-electrons.com>
+Date: Tue, 27 Sep 2016 16:41:45 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2016-09-22
+In-Reply-To: <CAKbGBLhk7nPvHr_X_=htCAuJp2CkrsH3_kPR5FOuArHahk+Wyw@mail.gmail.com>
+References: <20160923063043.9B0AD102740@stock.ovh.net>
+ <CAKbGBLhk7nPvHr_X_=htCAuJp2CkrsH3_kPR5FOuArHahk+Wyw@mail.gmail.com>
+Message-ID: <20160927164145.41d6d6c4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +14,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 27 Sep 2016 09:22:02 +0100, Martin Bark wrote:
+(Added Waldemar + Buildroot ML in Cc)
 
-> > Thanks. From that list I also see that security support for the 0.10.x
-> > series will end in October, so we should presumably remove 0.10.x
-> > support before the 2016.11 release.  
-> 
-> The 0.10.x branch is only included for the armv5 since version > 0.10.x
-> dropped support.  In the past there was discussion around leavening 0.10.x
-> in buildroot even when support ended for it.  Personally i would like to
-> drop 0.10.x to help tidy up the nodejs package but I'm fine with leaving it
-> if people use it.
+On Thu, 22 Sep 2016 23:32:53 -0700, Steven Noonan wrote:
+> It looks like this failed because pthreads was broken somehow. Could
+> it be that the external toolchain didn't have libpthread or something?
 
-It is fine to support 0.10.x in Buildroot to support ARMv5 while 0.10.x
-is still maintained upstream. But as Peter mentioned, the support for
-0.10.x upstream will stop soon, so we should also remove it from
-Buildroot.
+Indeed, this seems like a uClibc issue. Waldemar, could you have a look
+(see below the reference to the autobuilder failure).
 
-Yes, it will leave people using ARMv5 without a NodeJS implementation,
-but that's upstream decision. If those people are unhappy with upstream
-decision, they should talk with upstream directly.
-
-Best regards,
+Thanks a lot!
 
 Thomas
+
+> 
+> On Thu, Sep 22, 2016 at 11:30 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Hello,
+> >
+> > This is the list of Buildroot build failures that occured on
+> > 2016-09-22, and for which you are a registered architecture developer
+> > or package developer. Please help us improving the quality of
+> > Buildroot by investigating those build failures and sending patches to
+> > fix them. Thanks!
+> >
+> > Build failures related to your packages:
+> >
+> >         m68k |                   powertop-2.7 | http://autobuild.buildroot.net/results/5c63959a89d5761fdefe3bfd36c8168dbe882dc9
+> >
+> > --
+> > http://autobuild.buildroot.net  
+
+
+
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
