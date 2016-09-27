@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Sep 2016 22:40:04 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: allow dumping reverse
- dependencies of a package
-In-Reply-To: <1474808171-5652-1-git-send-email-yann.morin.1998@free.fr>
-References: <1474808171-5652-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <7c4e9a67-c2f1-11fc-eeb9-9be2e391b94a@mind.be>
+Date: Tue, 27 Sep 2016 22:50:57 +0200
+Subject: [Buildroot] [PATCH v2 1/1] motion: new package
+In-Reply-To: <1474808455-21514-1-git-send-email-fabrice.fontaine@orange.com>
+References: <1474808455-21514-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <471db46e-838c-10b7-a4c5-7bb026d061ca@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,79 +12,150 @@ To: buildroot@busybox.net
 
 
 
-On 25-09-16 14:56, Yann E. MORIN wrote:
-> Finding the packages that select another one in a specific configuration
-> is not very trivial:
+On 25-09-16 15:00, Fabrice Fontaine wrote:
+> Motion is a program that monitors the video signal from
+> cameras. It is able to detect if a significant part of
+> the picture has changed; in other words, it can detect motion.
 > 
->   - when optional, the dependency is not expressed in Kconfig
+> libv4l has to be selected to be able to use a local camera.
 > 
->   - looking at the .mk files is not very nice.
-
- If I understand correctly, the idea is to answer the question "why is package
-foo built?", right?
-
- It would make sense to also add a foo-graph-rdepends, because often you'll want
-the transitive dependencies as well and it's always nice to have it in a graph.
-But this patch is of course a prerequisite of that feature.
-
+> https://motion-project.github.io
 > 
-> Introduce a way to dump reverse dependencies of packages, i.e. the list
-> of packages that directly depend on that package. Like for direct
-> dependencies, we limit the list to the first-order reverse dependencies.
-> 
-> Document it in the main help; use the opportunity to also docuemnt
-                                                            document
+> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 
-> foo-show-depends.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Some more small nits below.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
-> ---
->  Makefile               | 2 ++
->  package/pkg-generic.mk | 7 +++++++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index 5e4daef..3039983 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -943,6 +943,8 @@ help:
->  	@echo '  <pkg>-depends          - Build <pkg>'\''s dependencies'
->  	@echo '  <pkg>-configure        - Build <pkg> up to the configure step'
->  	@echo '  <pkg>-build            - Build <pkg> up to the build step'
-> +	@echo '  <pkg>-show-depends     - List packages on which <pkg> depends'
-> +	@echo '  <pkg>-show-rdepends    - List packages which have <pkg> as a dependency'
->  	@echo '  <pkg>-graph-depends    - Generate a graph of <pkg>'\''s dependencies'
->  	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
->  	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 68ead3d..779f294 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -523,6 +523,10 @@ $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
->  $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
->  $(2)_FINAL_ALL_DEPENDENCIES = $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
->  
-> +# Register package as a reverse-dependencies of all its dependencies
-> +$$(eval $$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),\
-> +	$$(call UPPERCASE,$$(p))_RDEPENDENCIES += $(1)$$(sep)))
+[snip]
+> diff --git a/package/motion/motion.mk b/package/motion/motion.mk
+> new file mode 100644
+> index 0000000..c3461a6
+> --- /dev/null
+> +++ b/package/motion/motion.mk
+> @@ -0,0 +1,82 @@
+> +################################################################################
+> +#
+> +# motion
+> +#
+> +################################################################################
 > +
->  $(2)_INSTALL_STAGING		?= NO
->  $(2)_INSTALL_IMAGES		?= NO
->  $(2)_INSTALL_TARGET		?= YES
-> @@ -698,6 +702,9 @@ $(1)-show-version:
->  $(1)-show-depends:
->  			@echo $$($(2)_FINAL_ALL_DEPENDENCIES)
->  
-> +$(1)-show-rdepends:
-> +			@echo $$($(2)_RDEPENDENCIES)
+> +MOTION_VERSION = release-3.4.1
+> +MOTION_SITE = $(call github,Motion-Project,motion,$(MOTION_VERSION))
+> +MOTION_LICENSE = GPLv2
+> +MOTION_LICENSE_FILES = COPYING
+> +MOTION_DEPENDENCIES = host-pkgconf jpeg
+> +MOTION_AUTORECONF = YES
+
+ Add a comment
+# From git, and configure.ac is patched
+
 > +
->  $(1)-graph-depends: graph-depends-requirements
->  			@$$(INSTALL) -d $$(GRAPHS_DIR)
->  			@cd "$$(CONFIG_DIR)"; \
+> +# This patch fixes detection of sqlite when cross-compiling
+> +MOTION_PATCH = \
+> +	https://github.com/Motion-Project/motion/commit/709f626b7ef83a2bb3ef1f77205276207ab27196.patch
+> +
+> +# This patch adds --with-sdl=[DIR] option to fix detection of sdl-config
+> +MOTION_PATCH = \
+> +	https://github.com/Motion-Project/motion/commit/72193ccaff83fcb074c9aaa37c5691a8d8a18c7c.patch 
+> +
+> +# motion does not use any specific function of jpeg-turbo, so just relies on
+> +# jpeg selection
+> +MOTION_CONF_OPTS += --without-jpeg-turbo
+> +
+> +ifeq ($(BR2_PACKAGE_FFMPEG_SWSCALE),y)
+> +MOTION_DEPENDENCIES += ffmpeg 
+
+ Spurious end-of-line whitespace here.
+
+ Also add MOTION_CONF_OPTS += --with-ffmpeg
+
+> +else
+> +MOTION_CONF_OPTS += --without-ffmpeg
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_MYSQL),y)
+> +MOTION_DEPENDENCIES += mysql
+> +MOTION_CONF_OPTS += --with-mysql-include=$(STAGING_DIR)/usr/include/mysql
+> +MOTION_CONF_OPTS += --with-mysql-lib=$(STAGING_DIR)/usr/lib
+
+ Add --with-mysql
+
+> +else
+> +MOTION_CONF_OPTS += --without-mysql
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
+> +MOTION_DEPENDENCIES += postgresql
+> +MOTION_CONF_OPTS += --with-pgsql-include=$(STAGING_DIR)/usr/include
+> +MOTION_CONF_OPTS += --with-pgsql-lib=$(STAGING_DIR)/usr/lib
+
+ Add --with-postgresql
+
+> +else
+> +MOTION_CONF_OPTS += --without-postgresql
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SDL),y)
+> +MOTION_DEPENDENCIES += sdl
+> +MOTION_CONF_OPTS += --with-sdl=$(STAGING_DIR)/usr
+> +else
+> +MOTION_CONF_OPTS += --without-sdl
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SQLITE),y)
+> +MOTION_DEPENDENCIES += sqlite
+
+ Add --with-sqlite3
+
+ With these changes, you can add my
+
+ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+ Regards,
+ Arnout
+
+> +else
+> +MOTION_CONF_OPTS += --without-sqlite3
+> +endif
+> +
+> +# Do not use default install target as it installs many unneeded files and
+> +# directories: docs, examples and init scripts
+> +define MOTION_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0644 $(@D)/motion-dist.conf \
+> +		$(TARGET_DIR)/etc/motion.conf
+> +	$(INSTALL) -D -m 0755 $(@D)/motion $(TARGET_DIR)/usr/bin/motion
+> +endef
+> +
+> +define MOTION_INSTALL_INIT_SYSV
+> +	$(INSTALL) -D -m 0755 package/motion/S99motion \
+> +		$(TARGET_DIR)/etc/init.d/S99motion
+> +endef
+> +
+> +define MOTION_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -D -m 644 package/motion/motion.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/motion.service
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +	ln -sf ../../../../usr/lib/systemd/system/motion.service \
+> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/motion.service
+> +endef
+> +
+> +$(eval $(autotools-package))
+> diff --git a/package/motion/motion.service b/package/motion/motion.service
+> new file mode 100644
+> index 0000000..c788cd6
+> --- /dev/null
+> +++ b/package/motion/motion.service
+> @@ -0,0 +1,10 @@
+> +[Unit]
+> +Description=Motion camera monitoring system
+> +After=network.target
+> +
+> +[Service]
+> +ExecStart=/usr/bin/motion
+> +Restart=always
+> +
+> +[Install]
+> +WantedBy=multi-user.target
 > 
 
 -- 
