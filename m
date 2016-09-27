@@ -1,71 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Sep 2016 23:33:33 +0200
-Subject: [Buildroot] pppd breaks build without libutils
-In-Reply-To: <CAOoxthNdJjSjiLS7PT_SguV7VSWxHrF8UiK0qtPz+D3bDEpnUA@mail.gmail.com>
-References: <CAOoxthNVzy2PCz1tsACpxdhaoVO=RZgQR-A1dMB2u0HA3yXPqA@mail.gmail.com>
- <20160925205851.18f334ec@free-electrons.com>
- <CAOoxthNdJjSjiLS7PT_SguV7VSWxHrF8UiK0qtPz+D3bDEpnUA@mail.gmail.com>
-Message-ID: <5cce18a6-b051-a6bf-17e0-e9fa82a1491e@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 27 Sep 2016 23:35:02 +0200
+Subject: [Buildroot] [PATCH 00/10 v5] br2-external: support multiple
+	trees at once
+In-Reply-To: <5ccb6156-272e-3ca9-f090-0ab32c43cf92@mind.be>
+References: <cover.1474815151.git.yann.morin.1998@free.fr>
+ <5ccb6156-272e-3ca9-f090-0ab32c43cf92@mind.be>
+Message-ID: <20160927213502.GB8646@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Arnout, All,
 
-
-On 26-09-16 01:39, Cassiano Martin wrote:
-> Sure, my fault not being version specific. 
-> Im currently running a git cloned version (Buildroot
-> 2016.08-git-01556-ge8c18f2-dirty)
-> and I'm using a pre-built toolchain from realtek. Target is MIPS32 bit LSB. 
-> So far, I get this when compiling.
+On 2016-09-27 23:07 +0200, Arnout Vandecappelle spake thusly:
+> On 25-09-16 16:52, Yann E. MORIN wrote:
+> > Note: unlike previous iterations, it is now mandatory that a br2-external
+> > tree defines its name, the rationale being that it is realtively trivial
+> > to upgrade an existing br2-external tree to the new layout.
+> > 
+> > I'd like to thank Arnout for looking almost in realtime at this iteration
+> > as I was hacking on it and providing very useful review, suggestions,
+> > hints and very constructive criticism. Thanks! 
 > 
-> ude '-DDESTDIR="/usr"' -DCHAPMS=1 -DMPPE=1 -DHAS_SHADOW -DHAVE_CRYPT_H=1
-> -DHAVE_LOGWTMP=1 -DUSE_CRYPT=1 -DHAVE_MULTILINK -DUSE_TDB=1 -DPLUGIN -DINET6=1
-> -DMAXOCTETS -Wl,-E -o pppd main.o magic.o fsm.o lcp.o ipcp.o upap.o chap-new.o
-> md5.o ccp.o ecp.o auth.o options.o demand.o utils.o sys-linux.o ipxcp.o tty.o
-> eap.o chap-md5.o session.o md4.o chap_ms.o sha1.o pppcrypt.o multilink.o tdb.o
-> spinlock.o ipv6cp.o eui64.o  -lcrypt -lutil -ldl
-> /home/cassiano/projects/oiw-2441apgn/realtek/rsdk-4.6.4-4181-EB-3.10-u0.9.33-m32-150324/bin/../lib/gcc/mips-linux-uclibc/4.6.4/../../../../mips-linux-uclibc/bin/ld:
-> cannot find -lutil
+>  This was actually for v4 of the series, not v5 :-) Now it will take a week or
+> two before I review it again :-P
 
- Looks like the Realtek toolchain is not compatible with Buildroot assumptions.
-libutil is part of the toolchain. I guess Realtek configures uClibc without
-UCLIBC_HAS_LIBUTIL.
+Eh.. I try to bribe you, abd that's all I get? ;-) Will it work for the
+v6 I'll respin shortly? ;-)
 
- Buildroot cannot support all possible uClibc configurations for all packages.
-Instead, we take minimal assumptions about the uClibc configuration - basically
-package/uclibc/uClibc-ng.config. If you have something less than that, then some
-packages may fail.
-
- The workaround you propose is basically disabling wtmp support. It's not really
-acceptable to do that for 95% of the users who actually do have this in their
-toolchain.
-
- We should probably add a FAQ entry for this kind of issue.
-
- Regards,
- Arnout
-
-> collect2: ld returned 1 exit status
-> Makefile:217: recipe for target 'pppd' failed
-> make[2]: *** [pppd] Error 1
-> make[2]: Leaving directory
-> '/home/cassiano/projects/oiw-2441apgn/output/build/pppd-2.4.7/pppd'
-> Makefile:13: recipe for target 'all' failed
-> make[1]: *** [all] Error 2
-> make[1]: Leaving directory
-> '/home/cassiano/projects/oiw-2441apgn/output/build/pppd-2.4.7'
-> package/pkg-generic.mk:201 <http://pkg-generic.mk:201>: recipe for target
-> '/home/cassiano/projects/oiw-2441apgn/output/build/pppd-2.4.7/.stamp_built' failed
-> 
-> 
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
