@@ -1,39 +1,43 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 27 Sep 2016 10:26:32 +0100
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.166
-Message-ID: <20160927092632.15855-1-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 27 Sep 2016 07:10:20 -0300
+Subject: [Buildroot] [PATCH] mpg123: security bump to version 1.23.8
+Message-ID: <1474971020-10240-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Fixes an out-of-bounds memory read in the ID3v2 parser for tags that
+claim an unrealistically small length. This crashes mpg123 or any
+application using libmpg123 with activated ID3v2 parsing.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
+ package/mpg123/mpg123.hash | 2 +-
+ package/mpg123/mpg123.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index c7e7307..a269eb6 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index 66a80ac..fa55809 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
 @@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 33324ad334852bc4217a9c33ded0a05645dac5141c68e34f1d385662be7e5bd5a4bc73539dd9c507cd7013d67b893b171df5d59e4f0b253233b003e7d48ac7a0  LVM2.2.02.165.tgz
-+sha512 8bebe9b474f791b5edf5366b0bd24861fbbaf8a83afa2a9e2a8e3917e05e4ecbf6877f018be03ffb4e9b4c8832208264165b85182bf79a07661adf35128b4a21  LVM2.2.02.166.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 3a5dcff..d76cdd2 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
+ # Locally calculated after checking pgp signature
+-sha256	934047120953159e364c790e059684b681d7e670884fe179e1954d17d1c6334b	mpg123-1.23.7.tar.bz2
++sha256	de2303c8ecb65593e39815c0a2f2f2d91f708c43b85a55fdd1934c82e677cf8e	mpg123-1.23.8.tar.bz2
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index b14efe7..27c46dc 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LVM2_VERSION = 2.02.165
-+LVM2_VERSION = 2.02.166
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+-MPG123_VERSION = 1.23.7
++MPG123_VERSION = 1.23.8
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
 -- 
-2.10.0
+2.7.3
