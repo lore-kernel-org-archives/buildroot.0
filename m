@@ -1,121 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 27 Sep 2016 23:32:49 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: allow dumping reverse
- dependencies of a package
-In-Reply-To: <7c4e9a67-c2f1-11fc-eeb9-9be2e391b94a@mind.be>
-References: <1474808171-5652-1-git-send-email-yann.morin.1998@free.fr>
- <7c4e9a67-c2f1-11fc-eeb9-9be2e391b94a@mind.be>
-Message-ID: <20160927213249.GA8646@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 27 Sep 2016 23:33:33 +0200
+Subject: [Buildroot] pppd breaks build without libutils
+In-Reply-To: <CAOoxthNdJjSjiLS7PT_SguV7VSWxHrF8UiK0qtPz+D3bDEpnUA@mail.gmail.com>
+References: <CAOoxthNVzy2PCz1tsACpxdhaoVO=RZgQR-A1dMB2u0HA3yXPqA@mail.gmail.com>
+ <20160925205851.18f334ec@free-electrons.com>
+ <CAOoxthNdJjSjiLS7PT_SguV7VSWxHrF8UiK0qtPz+D3bDEpnUA@mail.gmail.com>
+Message-ID: <5cce18a6-b051-a6bf-17e0-e9fa82a1491e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2016-09-27 22:40 +0200, Arnout Vandecappelle spake thusly:
+
+
+On 26-09-16 01:39, Cassiano Martin wrote:
+> Sure, my fault not being version specific. 
+> Im currently running a git cloned version (Buildroot
+> 2016.08-git-01556-ge8c18f2-dirty)
+> and I'm using a pre-built toolchain from realtek. Target is MIPS32 bit LSB. 
+> So far, I get this when compiling.
+> 
+> ude '-DDESTDIR="/usr"' -DCHAPMS=1 -DMPPE=1 -DHAS_SHADOW -DHAVE_CRYPT_H=1
+> -DHAVE_LOGWTMP=1 -DUSE_CRYPT=1 -DHAVE_MULTILINK -DUSE_TDB=1 -DPLUGIN -DINET6=1
+> -DMAXOCTETS -Wl,-E -o pppd main.o magic.o fsm.o lcp.o ipcp.o upap.o chap-new.o
+> md5.o ccp.o ecp.o auth.o options.o demand.o utils.o sys-linux.o ipxcp.o tty.o
+> eap.o chap-md5.o session.o md4.o chap_ms.o sha1.o pppcrypt.o multilink.o tdb.o
+> spinlock.o ipv6cp.o eui64.o  -lcrypt -lutil -ldl
+> /home/cassiano/projects/oiw-2441apgn/realtek/rsdk-4.6.4-4181-EB-3.10-u0.9.33-m32-150324/bin/../lib/gcc/mips-linux-uclibc/4.6.4/../../../../mips-linux-uclibc/bin/ld:
+> cannot find -lutil
+
+ Looks like the Realtek toolchain is not compatible with Buildroot assumptions.
+libutil is part of the toolchain. I guess Realtek configures uClibc without
+UCLIBC_HAS_LIBUTIL.
+
+ Buildroot cannot support all possible uClibc configurations for all packages.
+Instead, we take minimal assumptions about the uClibc configuration - basically
+package/uclibc/uClibc-ng.config. If you have something less than that, then some
+packages may fail.
+
+ The workaround you propose is basically disabling wtmp support. It's not really
+acceptable to do that for 95% of the users who actually do have this in their
+toolchain.
+
+ We should probably add a FAQ entry for this kind of issue.
+
+ Regards,
+ Arnout
+
+> collect2: ld returned 1 exit status
+> Makefile:217: recipe for target 'pppd' failed
+> make[2]: *** [pppd] Error 1
+> make[2]: Leaving directory
+> '/home/cassiano/projects/oiw-2441apgn/output/build/pppd-2.4.7/pppd'
+> Makefile:13: recipe for target 'all' failed
+> make[1]: *** [all] Error 2
+> make[1]: Leaving directory
+> '/home/cassiano/projects/oiw-2441apgn/output/build/pppd-2.4.7'
+> package/pkg-generic.mk:201 <http://pkg-generic.mk:201>: recipe for target
+> '/home/cassiano/projects/oiw-2441apgn/output/build/pppd-2.4.7/.stamp_built' failed
 > 
 > 
-> On 25-09-16 14:56, Yann E. MORIN wrote:
-> > Finding the packages that select another one in a specific configuration
-> > is not very trivial:
-> > 
-> >   - when optional, the dependency is not expressed in Kconfig
-> > 
-> >   - looking at the .mk files is not very nice.
-> 
->  If I understand correctly, the idea is to answer the question "why is package
-> foo built?", right?
-
-Right. In my use-case, that was "what do I need to disable so I can
-disable that broken package?".
-
->  It would make sense to also add a foo-graph-rdepends, because often you'll want
-> the transitive dependencies as well and it's always nice to have it in a graph.
-
-Yup, planned. But not trivial...
-
-> But this patch is of course a prerequisite of that feature.
-
-And it proved already usefull in its own right. ;-)
-
-> > Introduce a way to dump reverse dependencies of packages, i.e. the list
-> > of packages that directly depend on that package. Like for direct
-> > dependencies, we limit the list to the first-order reverse dependencies.
-> > 
-> > Document it in the main help; use the opportunity to also docuemnt
->                                                             document
-
-Boaf... One typo more, one typo less... I stopped countign a long time
-ago! ;-)
-
-> > foo-show-depends.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> > ---
-> >  Makefile               | 2 ++
-> >  package/pkg-generic.mk | 7 +++++++
-> >  2 files changed, 9 insertions(+)
-> > 
-> > diff --git a/Makefile b/Makefile
-> > index 5e4daef..3039983 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -943,6 +943,8 @@ help:
-> >  	@echo '  <pkg>-depends          - Build <pkg>'\''s dependencies'
-> >  	@echo '  <pkg>-configure        - Build <pkg> up to the configure step'
-> >  	@echo '  <pkg>-build            - Build <pkg> up to the build step'
-> > +	@echo '  <pkg>-show-depends     - List packages on which <pkg> depends'
-> > +	@echo '  <pkg>-show-rdepends    - List packages which have <pkg> as a dependency'
-> >  	@echo '  <pkg>-graph-depends    - Generate a graph of <pkg>'\''s dependencies'
-> >  	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
-> >  	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
-> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > index 68ead3d..779f294 100644
-> > --- a/package/pkg-generic.mk
-> > +++ b/package/pkg-generic.mk
-> > @@ -523,6 +523,10 @@ $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
-> >  $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
-> >  $(2)_FINAL_ALL_DEPENDENCIES = $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
-> >  
-> > +# Register package as a reverse-dependencies of all its dependencies
-> > +$$(eval $$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),\
-> > +	$$(call UPPERCASE,$$(p))_RDEPENDENCIES += $(1)$$(sep)))
-> > +
-> >  $(2)_INSTALL_STAGING		?= NO
-> >  $(2)_INSTALL_IMAGES		?= NO
-> >  $(2)_INSTALL_TARGET		?= YES
-> > @@ -698,6 +702,9 @@ $(1)-show-version:
-> >  $(1)-show-depends:
-> >  			@echo $$($(2)_FINAL_ALL_DEPENDENCIES)
-> >  
-> > +$(1)-show-rdepends:
-> > +			@echo $$($(2)_RDEPENDENCIES)
-> > +
-> >  $(1)-graph-depends: graph-depends-requirements
-> >  			@$$(INSTALL) -d $$(GRAPHS_DIR)
-> >  			@cd "$$(CONFIG_DIR)"; \
-> > 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
