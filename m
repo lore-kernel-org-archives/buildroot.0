@@ -1,47 +1,83 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 26 Sep 2016 20:44:55 -0300
-Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.2j
-Message-ID: <1474933495-2967-1-git-send-email-gustavo@zacarias.com.ar>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Mon, 26 Sep 2016 18:53:01 -0700
+Subject: [Buildroot] [RFC v3 0/3] mariadb: new package
+Message-ID: <20160927015304.5937-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2016-6309 - Fix Use After Free for large message sizes
-CVE-2016-7052 - Missing CRL sanity check
+This patch series represents my attempt to add MariaDB 10.1 to Buildroot.
+Based on feedback, this series does three things.  First, the old mysql package
+is renamed to oracle-mysql.  Second, mariadb is added as a new package.  Third,
+mysql is converted to a virtual package.  I have tested this on arm and x86_64
+with uclibc and glibc.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/openssl/openssl.hash | 4 ++--
- package/openssl/openssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Based on the work by:
+Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
+https://patchwork.ozlabs.org/patch/538045/
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index 50a0cc7..0dc5450 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.0.2i.tar.gz.sha256
--sha256	9287487d11c9545b6efb287cdb70535d4e9b284dd10d51441d9b9963d000de6f	openssl-1.0.2i.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2j.tar.gz.sha256
-+sha256	e7aff292be21c259c6af26469c7a9b3ba26e9abaaffd325e3dccc9785256c431	openssl-1.0.2j.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 055ed79..6dc4b85 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSL_VERSION = 1.0.2i
-+OPENSSL_VERSION = 1.0.2j
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+Changes v3 -> v2
+  - rebased
+  - add mariadb as new package instead of replacing mysql (suggested by Thomas Petazzoni)
+  - added patch to fix uclibc build on arm (suggested by Floris Bos)
+  - changed sysv startup script to use mysqladmin ping (suggested by Floris Bos)
+  - added depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS (suggested by Thomas Petazzoni)
+  - removed dependency on libtool (suggested by Thomas Petazzoni)
+  - fixed license (suggested by Thomas Petazzoni and Arnout Vandecappelle)
+  - formatting cleanups
+Changes v1 -> v2
+  - rebased
+  - added openssl as dependency (suggested by Floris Bos)
+  - bumped to mariadb version 10.1 (suggested by Floris Bos)
+  - replaced custom my.cnf with my-small.cnf provided in the target (suggested by Floris Bos)
+
+Ryan Coe (3):
+  mysql: rename package to oracle-mysql
+  mariadb: new package
+  mysql: convert to virtual package
+
+ DEVELOPERS                                         |   3 +
+ .../mariadb/0001-add-extra-check-for-librt.patch   |  26 ++++
+ ...ld-failure-when-HAVE_STACKTRACE-is-not-de.patch |  33 +++++
+ package/mariadb/S97mysqld                          |  77 ++++++++++++
+ package/mariadb/mariadb.hash                       |   2 +
+ package/mariadb/mariadb.mk                         | 114 +++++++++++++++++
+ package/mariadb/mysqld.service                     |  13 ++
+ package/mysql/Config.in                            |  73 +++++++++--
+ package/mysql/mysql.mk                             | 130 +-------------------
+ .../0000-ac_cache_check.patch                      |   0
+ .../0001-configure-ps-cache-check.patch            |   0
+ .../0002-use-new-readline-iface.patch              |   0
+ .../0003-ac_stack_direction-is-unset.patch         |   0
+ .../0004-Fix-gen_lex_hash-execution.patch          |   0
+ .../0005-bison_3_breaks_mysql_server_build.patch   |   0
+ .../0006-no-force-static-build.patch               |   0
+ .../0007-dont-install-in-mysql-directory.patch     |   0
+ package/{mysql => oracle-mysql}/S97mysqld          |   0
+ package/{mysql => oracle-mysql}/mysqld.service     |   0
+ .../mysql.hash => oracle-mysql/oracle-mysql.hash}  |   0
+ package/oracle-mysql/oracle-mysql.mk               | 136 +++++++++++++++++++++
+ 21 files changed, 471 insertions(+), 136 deletions(-)
+ create mode 100644 package/mariadb/0001-add-extra-check-for-librt.patch
+ create mode 100644 package/mariadb/0002-prevent-build-failure-when-HAVE_STACKTRACE-is-not-de.patch
+ create mode 100644 package/mariadb/S97mysqld
+ create mode 100644 package/mariadb/mariadb.hash
+ create mode 100644 package/mariadb/mariadb.mk
+ create mode 100644 package/mariadb/mysqld.service
+ rename package/{mysql => oracle-mysql}/0000-ac_cache_check.patch (100%)
+ rename package/{mysql => oracle-mysql}/0001-configure-ps-cache-check.patch (100%)
+ rename package/{mysql => oracle-mysql}/0002-use-new-readline-iface.patch (100%)
+ rename package/{mysql => oracle-mysql}/0003-ac_stack_direction-is-unset.patch (100%)
+ rename package/{mysql => oracle-mysql}/0004-Fix-gen_lex_hash-execution.patch (100%)
+ rename package/{mysql => oracle-mysql}/0005-bison_3_breaks_mysql_server_build.patch (100%)
+ rename package/{mysql => oracle-mysql}/0006-no-force-static-build.patch (100%)
+ rename package/{mysql => oracle-mysql}/0007-dont-install-in-mysql-directory.patch (100%)
+ rename package/{mysql => oracle-mysql}/S97mysqld (100%)
+ rename package/{mysql => oracle-mysql}/mysqld.service (100%)
+ rename package/{mysql/mysql.hash => oracle-mysql/oracle-mysql.hash} (100%)
+ create mode 100644 package/oracle-mysql/oracle-mysql.mk
+
 -- 
-2.7.3
+2.9.3
