@@ -1,85 +1,97 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 27 Sep 2016 20:46:39 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2016-09-22
-In-Reply-To: <20160927164145.41d6d6c4@free-electrons.com>
-References: <20160923063043.9B0AD102740@stock.ovh.net>
- <CAKbGBLhk7nPvHr_X_=htCAuJp2CkrsH3_kPR5FOuArHahk+Wyw@mail.gmail.com>
- <20160927164145.41d6d6c4@free-electrons.com>
-Message-ID: <20160927204639.7b704407@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 27 Sep 2016 22:40:04 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: allow dumping reverse
+ dependencies of a package
+In-Reply-To: <1474808171-5652-1-git-send-email-yann.morin.1998@free.fr>
+References: <1474808171-5652-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <7c4e9a67-c2f1-11fc-eeb9-9be2e391b94a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello *,
 
-On Tue, 27 Sep 2016 16:41:45 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-> Hello,
+On 25-09-16 14:56, Yann E. MORIN wrote:
+> Finding the packages that select another one in a specific configuration
+> is not very trivial:
 > 
-> (Added Waldemar + Buildroot ML in Cc)
+>   - when optional, the dependency is not expressed in Kconfig
 > 
-> On Thu, 22 Sep 2016 23:32:53 -0700, Steven Noonan wrote:
-> > It looks like this failed because pthreads was broken somehow. Could
-> > it be that the external toolchain didn't have libpthread or something?
+>   - looking at the .mk files is not very nice.
+
+ If I understand correctly, the idea is to answer the question "why is package
+foo built?", right?
+
+ It would make sense to also add a foo-graph-rdepends, because often you'll want
+the transitive dependencies as well and it's always nice to have it in a graph.
+But this patch is of course a prerequisite of that feature.
+
 > 
-> Indeed, this seems like a uClibc issue. Waldemar, could you have a look
-> (see below the reference to the autobuilder failure).
+> Introduce a way to dump reverse dependencies of packages, i.e. the list
+> of packages that directly depend on that package. Like for direct
+> dependencies, we limit the list to the first-order reverse dependencies.
 > 
+> Document it in the main help; use the opportunity to also docuemnt
+                                                            document
 
-Seems to be a similar failure as for the assimp package ([1]), linking with
--lpthread seems not enough, but linking with -pthread succeeds:
+> foo-show-depends.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-	$ build/powertop-2.7/src
-
-	$ diff -u Makefile_orig Makefile
---- Makefile_orig       2016-09-27 20:38:09.358325072 +0200
-+++ Makefile    2016-09-27 20:38:35.413247226 +0200
-@@ -294,7 +294,7 @@
- LIBICONV = -liconv
- LIBINTL = 
- LIBNL_CFLAGS = -I<...>/build_arm_assimp_001/host/usr/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/include/libnl3  
--LIBNL_LIBS = -L<...>/build_arm_assimp_001/host/usr/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib -lpthread -lm -lnl-genl-3 -lnl-3 -lpthread -lm  
-+LIBNL_LIBS = -L<...>/build_arm_assimp_001/host/usr/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib -pthread -lm -lnl-genl-3 -lnl-3 -lpthread -lm  
- LIBOBJS =  ${LIBOBJDIR}strtod$U.o
- LIBS = -lpthread -lncurses -lintl
- LIBTOOL = $(SHELL) $(top_builddir)/libtool
-
-	$ make
-make  all-am
-make[1]: Entering directory '/home/seiderer/Work/zeiss/freescale-imx6/build_arm_assimp_001/build/powertop-2.7/src'
-  CXXLD    powertop
-make[1]: Leaving directory '/home/seiderer/Work/zeiss/freescale-imx6/build_arm_assimp_001/build/powertop-2.7/src'
-
-Regards,
-Peter
-
-[1] http://lists.busybox.net/pipermail/buildroot/2016-September/173004.html
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
-> Thanks a lot!
+> ---
+>  Makefile               | 2 ++
+>  package/pkg-generic.mk | 7 +++++++
+>  2 files changed, 9 insertions(+)
 > 
-> Thomas
+> diff --git a/Makefile b/Makefile
+> index 5e4daef..3039983 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -943,6 +943,8 @@ help:
+>  	@echo '  <pkg>-depends          - Build <pkg>'\''s dependencies'
+>  	@echo '  <pkg>-configure        - Build <pkg> up to the configure step'
+>  	@echo '  <pkg>-build            - Build <pkg> up to the build step'
+> +	@echo '  <pkg>-show-depends     - List packages on which <pkg> depends'
+> +	@echo '  <pkg>-show-rdepends    - List packages which have <pkg> as a dependency'
+>  	@echo '  <pkg>-graph-depends    - Generate a graph of <pkg>'\''s dependencies'
+>  	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
+>  	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 68ead3d..779f294 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -523,6 +523,10 @@ $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
+>  $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
+>  $(2)_FINAL_ALL_DEPENDENCIES = $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
+>  
+> +# Register package as a reverse-dependencies of all its dependencies
+> +$$(eval $$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),\
+> +	$$(call UPPERCASE,$$(p))_RDEPENDENCIES += $(1)$$(sep)))
+> +
+>  $(2)_INSTALL_STAGING		?= NO
+>  $(2)_INSTALL_IMAGES		?= NO
+>  $(2)_INSTALL_TARGET		?= YES
+> @@ -698,6 +702,9 @@ $(1)-show-version:
+>  $(1)-show-depends:
+>  			@echo $$($(2)_FINAL_ALL_DEPENDENCIES)
+>  
+> +$(1)-show-rdepends:
+> +			@echo $$($(2)_RDEPENDENCIES)
+> +
+>  $(1)-graph-depends: graph-depends-requirements
+>  			@$$(INSTALL) -d $$(GRAPHS_DIR)
+>  			@cd "$$(CONFIG_DIR)"; \
 > 
-> > 
-> > On Thu, Sep 22, 2016 at 11:30 PM, Thomas Petazzoni
-> > <thomas.petazzoni@free-electrons.com> wrote:
-> > > Hello,
-> > >
-> > > This is the list of Buildroot build failures that occured on
-> > > 2016-09-22, and for which you are a registered architecture developer
-> > > or package developer. Please help us improving the quality of
-> > > Buildroot by investigating those build failures and sending patches to
-> > > fix them. Thanks!
-> > >
-> > > Build failures related to your packages:
-> > >
-> > >         m68k |                   powertop-2.7 | http://autobuild.buildroot.net/results/5c63959a89d5761fdefe3bfd36c8168dbe882dc9
-> > >
-> > > --
-> > > http://autobuild.buildroot.net  
-> 
-> 
-> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
