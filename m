@@ -1,43 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 27 Sep 2016 07:10:20 -0300
-Subject: [Buildroot] [PATCH] mpg123: security bump to version 1.23.8
-Message-ID: <1474971020-10240-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Sep 2016 15:10:38 +0200
+Subject: [Buildroot] Buildroot nodejs 6.6.0
+In-Reply-To: <CAFGQKxcFTgyOWB+h84PgRCVpcpTRYe1q9XrJe3B+dVZAycu1oQ@mail.gmail.com>
+References: <6C0FD5AC-BA66-48C8-BC00-3F8393524B7B@bluecordial.com>
+ <CAFGQKxf-pPGUuML2c6-0J4moQfJidxhRLcWOC8avA46gqHon7Q@mail.gmail.com>
+ <87zimu30ny.fsf@dell.be.48ers.dk>
+ <CAFGQKxcFTgyOWB+h84PgRCVpcpTRYe1q9XrJe3B+dVZAycu1oQ@mail.gmail.com>
+Message-ID: <20160927151038.474df7de@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes an out-of-bounds memory read in the ID3v2 parser for tags that
-claim an unrealistically small length. This crashes mpg123 or any
-application using libmpg123 with activated ID3v2 parsing.
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mpg123/mpg123.hash | 2 +-
- package/mpg123/mpg123.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Tue, 27 Sep 2016 09:22:02 +0100, Martin Bark wrote:
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index 66a80ac..fa55809 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	934047120953159e364c790e059684b681d7e670884fe179e1954d17d1c6334b	mpg123-1.23.7.tar.bz2
-+sha256	de2303c8ecb65593e39815c0a2f2f2d91f708c43b85a55fdd1934c82e677cf8e	mpg123-1.23.8.tar.bz2
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index b14efe7..27c46dc 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPG123_VERSION = 1.23.7
-+MPG123_VERSION = 1.23.8
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
+> > Thanks. From that list I also see that security support for the 0.10.x
+> > series will end in October, so we should presumably remove 0.10.x
+> > support before the 2016.11 release.  
+> 
+> The 0.10.x branch is only included for the armv5 since version > 0.10.x
+> dropped support.  In the past there was discussion around leavening 0.10.x
+> in buildroot even when support ended for it.  Personally i would like to
+> drop 0.10.x to help tidy up the nodejs package but I'm fine with leaving it
+> if people use it.
+
+It is fine to support 0.10.x in Buildroot to support ARMv5 while 0.10.x
+is still maintained upstream. But as Peter mentioned, the support for
+0.10.x upstream will stop soon, so we should also remove it from
+Buildroot.
+
+Yes, it will leave people using ARMv5 without a NodeJS implementation,
+but that's upstream decision. If those people are unhappy with upstream
+decision, they should talk with upstream directly.
+
+Best regards,
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
