@@ -1,35 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Sep 2016 16:45:11 +0200
-Subject: [Buildroot] [PATCH v2] python-pyqt5: new package
-In-Reply-To: <ffa5e5ad-a682-fb7e-98c7-3e14a7bdef43@mind.be>
-References: <20160819134225.1490-3-develop@manuel-voegele.de>
- <20160823092606.1462-1-develop@manuel-voegele.de>
- <20160920211456.7dc36850@free-electrons.com>
- <ffa5e5ad-a682-fb7e-98c7-3e14a7bdef43@mind.be>
-Message-ID: <20160927164511.28f43ff9@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Sep 2016 17:00:34 +0200
+Subject: [Buildroot] [PATCH] mpg123: security bump to version 1.23.8
+In-Reply-To: <1474971020-10240-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 27 Sep 2016 07:10:20 -0300")
+References: <1474971020-10240-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8760ph2xrh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Thu, 22 Sep 2016 22:54:08 +0200, Arnout Vandecappelle wrote:
+ > Fixes an out-of-bounds memory read in the ID3v2 parser for tags that
+ > claim an unrealistically small length. This crashes mpg123 or any
+ > application using libmpg123 with activated ID3v2 parsing.
 
->  Well, since the main symbol depends on !BR2_PACKAGE_QT, you would expect either
-> a comment that explains that, or you would expect the other comments to be
-> hidden. So to me it makes sense to have that depends for the comment. Otherwise,
-> you go and enable wchar, NPTL, C++, dynlib, you come back, and hey presto the
-> comment disappears but the package still can't be selected.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Indeed. Thanks for correcting me on this. Fixed in
-https://git.buildroot.org/buildroot/commit/?id=b62fdfdc274e592675a4894b893841991e72c913.
+Committed, thanks.
 
-Thanks again!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
