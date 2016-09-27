@@ -1,48 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 27 Sep 2016 06:57:47 +0300
-Subject: [Buildroot] [PATCH] i2c-tools: install devt headers to staging
- dir
-In-Reply-To: <87r3862z69.fsf@dell.be.48ers.dk>
-References: <1474639604-23866-1-git-send-email-julien.boibessot@free.fr>
- <20160924161810.09ee4fa5@free-electrons.com>
- <3aa07d73-d34f-0070-3020-a3786e5a82ae@free.fr>
- <6fa984a3-83e4-3ea5-8841-88b2db197ebc@mind.be>
- <87r3862z69.fsf@dell.be.48ers.dk>
-Message-ID: <20160927035747.b2t7jkxpdptn65fs@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Sep 2016 07:27:27 +0200
+Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.2j
+Message-ID: <20160927052915.02B5B81E70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=7ba5ed97bc1bf9b4f8aef2dec4a64520b444b677
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Sep 26, 2016 at 10:17:50PM +0200, Peter Korsgaard wrote:
-> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
->  >> Sorry for having missed that one ! Sadly, the same problem will occur
->  >> with my patch.
->  >> I have currently no idea how to solve that and still trying to figure
->  >> out how it can works on debian systems with libi2c-dev package installed.
->  >> So meanwhile you can forget about my patch.
-> 
->  >  I guess Debian doesn't have packages that include both i2c.h and i2c-dev.h.
->  > libsoc, for example, doesn't exist in Debian.
-> 
->  >  I guess the solution would be for i2c-tools to #include or #include_next the
->  > relevant kernel headers, instead of redefining. Or to have both i2c.h and
->  > i2c-dev.h so that both kernel headers end up being overwritten.
-> 
-> Does the i2c-tools version of this file add anything important on top of
-> the Linux headers? The i2c /dev interface afaik hasn't changed in MANY
-> years.
+Fixes:
+CVE-2016-7052 - Missing CRL sanity check
 
-The i2c-tools version of i2c-dev.h adds a number of convenient i2c_smbus_*() 
-routines, that wrap around the I2C_SMBUS ioctl.
+[Peter: drop CVE 6309 from description as pointed out by Baruch]
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openssl/openssl.hash | 4 ++--
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 50a0cc7..0dc5450 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.0.2i.tar.gz.sha256
+-sha256	9287487d11c9545b6efb287cdb70535d4e9b284dd10d51441d9b9963d000de6f	openssl-1.0.2i.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2j.tar.gz.sha256
++sha256	e7aff292be21c259c6af26469c7a9b3ba26e9abaaffd325e3dccc9785256c431	openssl-1.0.2j.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 055ed79..6dc4b85 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSL_VERSION = 1.0.2i
++OPENSSL_VERSION = 1.0.2j
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
