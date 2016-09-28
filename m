@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Sep 2016 13:40:04 +0200
-Subject: [Buildroot] [git commit] mpfr: bump to version 3.1.5
-Message-ID: <20160928123808.B26D8805EE@busybox.osuosl.org>
+Date: Wed, 28 Sep 2016 13:39:18 +0200
+Subject: [Buildroot] [git commit] bind: bump version to 9.10.4-P3
+Message-ID: <20160928123808.98AD1805EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a2a921f974f6f21d2ca8945f754c42daf0b01fd
+commit: https://git.buildroot.net/buildroot/commit/?id=a808500f2a189e1d4b079ac1d6a2eaa3a0bb59d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpfr/mpfr.hash | 2 +-
- package/mpfr/mpfr.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mpfr/mpfr.hash b/package/mpfr/mpfr.hash
-index a8b642b..d2c32f2 100644
---- a/package/mpfr/mpfr.hash
-+++ b/package/mpfr/mpfr.hash
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 0fb4eb4..8acfda5 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	761413b16d749c53e2bfd2b1dfaa3b027b0e793e404b90b5fbaeef60af6517f5	mpfr-3.1.4.tar.xz
-+sha256	015fde82b3979fbe5f83501986d328331ba8ddf008c1ff3da3c238f49ca062bc	mpfr-3.1.5.tar.xz
-diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
-index cc1034c..bb78ccc 100644
---- a/package/mpfr/mpfr.mk
-+++ b/package/mpfr/mpfr.mk
+-# Verified from ftp://ftp.isc.org/isc/bind9/9.10.4-P2/bind-9.10.4-P2.tar.gz.sha256.asc
+-sha256 b35b8af8fe030196d03b3e487f5ecd0c0836b5e124abc7a3ecd184740b444423  bind-9.10.4-P2.tar.gz
++# Verified from ftp://ftp.isc.org/isc/bind9/9.10.4-P3/bind-9.10.4-P3.tar.gz.sha256.asc
++sha256 a075e5ce89fddccb0e64d1777d59161387dd5151cf4e7d1a93875a487812baef  bind-9.10.4-P3.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index fc9e30e..e6bf204 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPFR_VERSION = 3.1.4
-+MPFR_VERSION = 3.1.5
- MPFR_SITE = http://www.mpfr.org/mpfr-$(MPFR_VERSION)
- MPFR_SOURCE = mpfr-$(MPFR_VERSION).tar.xz
- MPFR_LICENSE = LGPLv3+
+-BIND_VERSION = 9.10.4-P2
++BIND_VERSION = 9.10.4-P3
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
