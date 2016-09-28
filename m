@@ -1,60 +1,91 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 28 Sep 2016 14:41:42 +0200
-Subject: [Buildroot] (no subject)
-Message-ID: <20160928124141.GA12958@waldemar-brodkorb.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 Sep 2016 15:27:14 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/mono: bump to version
+	4.6.0.245
+In-Reply-To: <1474954789-14602-2-git-send-email-angelo.compagnucci@gmail.com>
+ (Angelo Compagnucci's message of "Tue, 27 Sep 2016 07:39:49 +0200")
+References: <1474954789-14602-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1474954789-14602-2-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <87vaxgyx1p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Glaser <tg@mirbsd.de>
-Bcc: 
-Subject: [PATCHv2 2/2] add mksh to system shell choice
-X-Operating-System: Linux 3.16.0-4-amd64 x86_64
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-Add mksh as a choice for system shells.
+ > * Bump to mono 4.6.0.245
+ > * Enabling previously disabled aot cause this version doesn't
+ >   compile without
+ > * Fixing removed licensing file in mcs/COPYING.LIB
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-v1 -> v2:
-  - separate patch
----
- system/Config.in | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+ > ---
+ >  package/mono/mono.hash | 2 +-
+ >  package/mono/mono.mk   | 8 ++++----
+ >  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index 77c665b..d3b2889 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -276,13 +276,19 @@ config BR2_SYSTEM_BIN_SH_DASH
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	select BR2_PACKAGE_DASH
+ > diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+ > index c275e15..4d05458 100644
+ > --- a/package/mono/mono.hash
+ > +++ b/package/mono/mono.hash
+ > @@ -1,2 +1,2 @@
+ >  # sha256 locally computed
+ > -sha256 900c2cc25ee55adeec04e1ae889316efc127c82cc0c392f928421f19f8f5b633  mono-4.4.2.11.tar.bz2
+ > +sha256 2981f518cace63bfe10953fecd57c7fef040077a1ac617967dde5466062c1327  mono-4.6.0.245.tar.bz2
+ > diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+ > index 3d0b9bc..8f90b9f 100644
+ > --- a/package/mono/mono.mk
+ > +++ b/package/mono/mono.mk
+ > @@ -4,11 +4,11 @@
+ >  #
+ >  ################################################################################
  
-+config BR2_SYSTEM_BIN_SH_MKSH
-+	bool "mksh"
-+	depends on BR2_USE_MMU # mksh
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	select BR2_PACKAGE_MKSH
-+
- config BR2_SYSTEM_BIN_SH_ZSH
- 	bool "zsh"
- 	depends on BR2_USE_MMU # zsh
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	select BR2_PACKAGE_ZSH
- 
--comment "bash, dash, zsh need BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
-+comment "bash, dash, mksh, zsh need BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
- 	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS && BR2_PACKAGE_BUSYBOX
- 
- config BR2_SYSTEM_BIN_SH_NONE
-@@ -295,6 +301,7 @@ config BR2_SYSTEM_BIN_SH
- 	default "busybox" if BR2_SYSTEM_BIN_SH_BUSYBOX
- 	default "bash"    if BR2_SYSTEM_BIN_SH_BASH
- 	default "dash"    if BR2_SYSTEM_BIN_SH_DASH
-+	default "mksh"    if BR2_SYSTEM_BIN_SH_MKSH
- 	default "zsh"     if BR2_SYSTEM_BIN_SH_ZSH
- 
- menuconfig BR2_TARGET_GENERIC_GETTY
+ > -MONO_VERSION = 4.4.2.11
+ > +MONO_VERSION = 4.6.0.245
+ >  MONO_SITE = http://download.mono-project.com/sources/mono
+ >  MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ >  MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
+ > -MONO_LICENSE_FILES = LICENSE COPYING.LIB mcs/COPYING.LIB mcs/COPYING \
+ > +MONO_LICENSE_FILES = LICENSE COPYING.LIB mcs/COPYING \
+
+But why was it removed? Looking at mono git I see it was removed by:
+
+commit ef0ddf45c3081e799edcb4e95770186514b80cf1
+Author: Miguel de Icaza <miguel@gnome.org>
+Date:   Wed Mar 23 11:12:01 2016 -0400
+
+    First set of licensing changes
+
+Which was followed by:
+
+commit 71f79f97bbfb6dc3ba33691cb0b584ddc0b61a68
+Author: Miguel de Icaza <miguel@gnome.org>
+Date:   Fri Mar 25 15:03:54 2016 -0400
+
+    Move all licenses to a single LICENSE file
+
+And the top level LICENSE file now lists:
+
+In general, the runtime and its class libraries are licensed under the
+terms of the MIT license, and some third party code is licensed under
+the 3-clause BSD license.  See the file "PATENTS.TXT" for Microsoft's
+patent grant on the Mono codebase.
+
+Googling around, I see:
+
+http://www.mono-project.com/news/2016/03/31/mono-relicensed-mit/
+
+So I *THINK* it should be:
+
+MONO_LICENSE = GPLv2 or MIT (compiler, tools), MIT (libs) or commercial
+
+COPYING.LIB is now also just a oneliner referring to LICENSE, so it
+should be dropped from _LICENSE_FILES.
+
+But I don't know anything about mono, so it would be good if people
+actually using it can confirm.
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
