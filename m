@@ -1,13 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Sep 2016 10:57:57 +0200
-Subject: [Buildroot] [PATCH] qt5: Disable passing of -isystem flag in
- CXXFLAGS
-In-Reply-To: <6467f1b7-7326-02f1-caf1-671099a34eac@mind.be>
-References: <1474642729-40702-1-git-send-email-abrodkin@synopsys.com>
- <81ddd556-d7fd-2378-d8da-2f2d73091fa3@mind.be>
- <1474889395.4184.8.camel@synopsys.com>
- <6467f1b7-7326-02f1-caf1-671099a34eac@mind.be>
-Message-ID: <20160928105757.4d65e0d4@free-electrons.com>
+Date: Wed, 28 Sep 2016 10:59:00 +0200
+Subject: [Buildroot] pppd breaks build without libutils
+In-Reply-To: <20160927214325.GC8646@free.fr>
+References: <CAOoxthNVzy2PCz1tsACpxdhaoVO=RZgQR-A1dMB2u0HA3yXPqA@mail.gmail.com>
+ <20160925205851.18f334ec@free-electrons.com>
+ <CAOoxthNdJjSjiLS7PT_SguV7VSWxHrF8UiK0qtPz+D3bDEpnUA@mail.gmail.com>
+ <5cce18a6-b051-a6bf-17e0-e9fa82a1491e@mind.be>
+ <20160927214325.GC8646@free.fr>
+Message-ID: <20160928105900.55310907@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,34 +16,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 28 Sep 2016 00:33:16 +0200, Arnout Vandecappelle wrote:
+On Tue, 27 Sep 2016 23:43:25 +0200, Yann E. MORIN wrote:
 
->  I mean that it's _our_ pkg-config that does the wrong thing.
+> Which suddenly rings a bell here: the latest uClibc-ng version, 1.0.18,
+> now is one-lib, i.e. everything merged into libc.so like musl is, so
+> we could get external toolchains which will lack libutil.so because
+> there is no longer such a library now.
 > 
-> ------ output/staging/usr/lib/pkgconfig/libpcre.pc --------
-> # Package Information for pkg-config
+> If uClibc-ng does like musl does, there will be a lot of empty static
+> versions of the libraries, libutil.a, libcrypt.a and so on, but there
+> will no longer be shared variants.
 > 
-> prefix=/usr
-> exec_prefix=/usr
-> libdir=${exec_prefix}/lib
-> includedir=${prefix}/include
-> 
-> Name: libpcre
-> Description: PCRE - Perl compatible regular expressions C library with 8 bit
-> character support
-> Version: 8.39
-> Libs: -L${libdir} -lpcre
-> Libs.private:
-> Cflags: -I${includedir}
-> ------------------------------------------------------------
-> 
-> output/host/usr/bin/pkg-config --cflags libpcre
-> -IXXX/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include
-> 
->  According to me, this should have returned empty.
+> We'll have to account for that in our external toolchain handling.
 
-So in other words, you're withdrawing your Reviewed-by on Alexey's
-patch, and say that we should fix host-pkgconf instead, right ?
+I'm not sure what needs to be handled. We already support musl that
+does this, and it works fine. It should be perfectly transparent to the
+external toolchain handling (except the copying of the shared libraries
+to the target, of course).
+
+Best regards,
 
 Thomas
 -- 
