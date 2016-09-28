@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Sep 2016 15:47:52 +0200
-Subject: [Buildroot] [PATCH] newt: bump to version 0.52.19
-In-Reply-To: <1475070228-18312-1-git-send-email-yegorslists@googlemail.com>
-References: <1475070228-18312-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160928154752.778031d3@free-electrons.com>
+Date: Wed, 28 Sep 2016 15:48:39 +0200
+Subject: [Buildroot] (no subject)
+In-Reply-To: <20160928124141.GA12958@waldemar-brodkorb.de>
+References: <20160928124141.GA12958@waldemar-brodkorb.de>
+Message-ID: <20160928154839.043e2e72@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 28 Sep 2016 15:43:48 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On Wed, 28 Sep 2016 14:41:42 +0200, Waldemar Brodkorb wrote:
+> Glaser <tg@mirbsd.de>
+> Bcc: 
+> Subject: [PATCHv2 2/2] add mksh to system shell choice
+> X-Operating-System: Linux 3.16.0-4-amd64 x86_64
 > 
-> Remove upstreamed patches and change download location.
+> Add mksh as a choice for system shells.
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  ...-instead-of-CPP-to-generate-.depend-files.patch | 38 ----------------------
->  ...e-bogus-I-usr-include-slang-from-CPPFLAGS.patch | 33 -------------------
->  package/newt/newt.hash                             |  2 +-
->  package/newt/newt.mk                               |  4 +--
->  4 files changed, 3 insertions(+), 74 deletions(-)
->  delete mode 100644 package/newt/0001-Use-CC-instead-of-CPP-to-generate-.depend-files.patch
->  delete mode 100644 package/newt/0002-Remove-bogus-I-usr-include-slang-from-CPPFLAGS.patch
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Applied to master, thanks.
+Something went bad here when sending this patch, the header is in the
+body, so the subject was not actually used as the e-mail subject.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
