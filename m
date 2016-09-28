@@ -1,131 +1,107 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 28 Sep 2016 00:48:58 +0200
-Subject: [Buildroot] [PATCH v2 1/2] pahomqtt-c: new package
-In-Reply-To: <1474881160-30450-1-git-send-email-Pranit.Sirsat@imgtec.com>
-References: <1474881160-30450-1-git-send-email-Pranit.Sirsat@imgtec.com>
-Message-ID: <401acd7b-ca31-6e39-0ab2-e2fa60daf17d@mind.be>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 27 Sep 2016 22:00:12 -0500
+Subject: [Buildroot] [PATCH v2] zynq: document how to use custom ps7_init
+	files
+Message-ID: <1475031612-43682-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Pranit,
+From: Masahiro Yamada <yamada.masahiro@socionext.com>
 
- Thank you for this contribution. I have a few remarks. Could you fix and resubmit?
+Since U-Boot supported SPL for Zynq boards at v2014.04 release, it
+became much easier to build a system.  At that time, however, users
+still needed to manually copy ps7_init.c/h to the U-Boot source tree
+to generate a working SPL image because ps7_init.c/h output from
+Xilinx tools are not compatible with GPL.
 
+Later, the license problem was solved when Xilinx tools became able
+to output the GPL-compatible variants (ps7_init_gpl.c/h) as well.
+U-Boot v2015.07 or later includes ps7_init_gpl.c/h for major Zynq
+boards so that users can build a boot image straight away.
 
-On 26-09-16 11:12, Pranit Tanaji Sirsat wrote:
-> mqtt client c library
-> 
-> Reviewed-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
-> Reviewed-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> Signed-off-by: Pranit Tanaji Sirsat <Pranit.Sirsat@imgtec.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - remove updates to DEVELOPERS file (suggested by Baruch Siach)
-> ---
->  package/Config.in                  |  1 +
->  package/pahomqtt-c/Config.in       | 11 +++++++++++
->  package/pahomqtt-c/pahomqtt-c.hash |  2 ++
->  package/pahomqtt-c/pahomqtt-c.mk   | 18 ++++++++++++++++++
->  4 files changed, 32 insertions(+)
->  create mode 100644 package/pahomqtt-c/Config.in
->  create mode 100644 package/pahomqtt-c/pahomqtt-c.hash
->  create mode 100644 package/pahomqtt-c/pahomqtt-c.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 9ca6c15..c0d92ba 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1239,6 +1239,7 @@ menu "Networking"
->  	source "package/openpgm/Config.in"
->  	source "package/openzwave/Config.in"
->  	source "package/ortp/Config.in"
-> +	source "package/pahomqtt-c/Config.in"
->  	source "package/qdecoder/Config.in"
->  	source "package/qpid-proton/Config.in"
->  	source "package/rabbitmq-c/Config.in"
-> diff --git a/package/pahomqtt-c/Config.in b/package/pahomqtt-c/Config.in
-> new file mode 100644
-> index 0000000..53ccef2
-> --- /dev/null
-> +++ b/package/pahomqtt-c/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_PAHOMQTT_C
-> +	bool "pahomqtt-c"
-> +	depends on !BR2_STATIC_LIBS  # dlopen()
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	help
-> +	  MQTT client C library
-> +
-> +	  https://eclipse.org/paho/clients/c/
-> +
-> +comment "pahomqtt-c needs a toolchain w/ threads and dynamic library support"
-> +	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/pahomqtt-c/pahomqtt-c.hash b/package/pahomqtt-c/pahomqtt-c.hash
-> new file mode 100644
-> index 0000000..4bd1e5c
-> --- /dev/null
-> +++ b/package/pahomqtt-c/pahomqtt-c.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256  970b9621efc24251441d386274cd0a90cf6ad52b64031f3c8cb53fdd5526f5f3  pahomqtt-c-v1.1.0.tar.gz
-> diff --git a/package/pahomqtt-c/pahomqtt-c.mk b/package/pahomqtt-c/pahomqtt-c.mk
-> new file mode 100644
-> index 0000000..2a533d1
-> --- /dev/null
-> +++ b/package/pahomqtt-c/pahomqtt-c.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# pahomqtt-c
-> +#
-> +################################################################################
-> +
-> +PAHOMQTT_C_VERSION = v1.1.0
-> +PAHOMQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,$(PAHOMQTT_C_VERSION))
+Now Buildroot supports 3 boards (Zedboard, MicroZed, ZC706) without
+any manual intervention.  This is a good thing itself, but commit
+b9cd72cdbfe3 ("zynq_zc706: bump U-Boot to xilinx-v2016.2") entirely
+dropped the information about custom ps7_init files.
 
- Since upstream calls it paho.mqtt.c but we don't want . in package names, I
-would call the package paho-mqtt-c.
+This commit provides up-to-date guidance for how to customize the
+ps7_init files.
 
-> +PAHOMQTT_C_LICENSE = EPLv1.0, EDLv1.0
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
- Although we already have two packages that use this convention, we really
-should follow the SPDX convention, so EPL-1.0. Also, EDLv1.0 is just BSD-3c
-(cfr. [1]). And finally, as I understand it, the intention is that the code can
-be distributed either under EPL or under EDL. So in my opinion it should be:
+---
+v1 -> v2
+ - Updated readme wording discussed in
+   https://patchwork.ozlabs.org/patch/654309/
 
-PAHO_MQTT_C_LICENSE = EPL-1.0 or BSD-3c
+---
+ board/zynq/readme.txt | 46 +++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 39 insertions(+), 7 deletions(-)
 
-> +PAHOMQTT_C_LICENSE_FILES = epl-v10 edl-v10
-> +PAHOMQTT_C_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +PAHOMQTT_C_DEPENDENCIES = openssl
-> +PAHOMQTT_C_CONF_OPTS = -DPAHO_WITH_SSL=TRUE
-
- Add an explicit -DPAHO_WITH_SSL=FALSE in the else branch.
-
- Also, I think it would be good to add a global -DPAHO_BUILD_DOCUMENTATION=FALSE
-and -DPAHO_BUILD_SAMPLES=FALSE. But those are already the default so maybe not
-needed.
-
- Regards,
- Arnout
-
-
-> +endif
-> +
-> +$(eval $(cmake-package))
-> 
-
-[1] http://spdx-legal.spdx.narkive.com/wmb1FKZ8/new-license-request#post2
+diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
+index 51e28b6..364ec39 100644
+--- a/board/zynq/readme.txt
++++ b/board/zynq/readme.txt
+@@ -6,13 +6,6 @@ Currently, three boards are natively supported by Buildroot:
+  - Avnet ZedBoard (zynq_zed_defconfig)
+  - Avnet MicroZed (zynq_microzed_defconfig)
+ 
+-The following build procedure focuses on them, but you can adjust it to your
+-board even if it is not listed above.  Major Zynq-based boards are supported by
+-U-Boot, and their Device Trees are merged in Linux Kernel.  If your board is the
+-case, booting the kernel is a piece of cake.  All you need to do is to change:
+- - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
+- - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_KCONFIG)
+-
+ Steps to create a working system for a Zynq board:
+ 
+ 1) Configuration (do one of the following)
+@@ -50,3 +43,42 @@ References:
+ 
+  - Zedboard/Microzed information including schematics, reference designs, and
+    manuals are available from http://www.zedboard.org .
++
++Support for other boards:
++
++If you want to build a system for other boards (for ex. Digilent Zybo board).
++Most major Zynq-based boards have U-Boot and Kernel support.  If your
++board happens to be supported, booting the kernel and using U-Boot
++just requires the following Buildroot updates:
++ - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
++ - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_DEFCONFIG)
++
++Custom ps7_init_gpl.c/h support:
++
++To generate a working boot.bin image, ps7_init_gpl.c/h are required in the
++U-Boot source tree.  Those files are output from the Xilinx tools, but for
++convenience, U-Boot includes the default ps7_init_gpl.c/h of popular boards.
++These files may need to be updated for any programmable logic customizations
++which impact ps7_init (clock/pin setup & mapping/AXI bridge setup/etc).
++See board/xilinx/zynq/ directory of U-Boot for natively supported ps7_init
++files.  If the ps7_init files for your board are not found in U-Boot, you need
++to add them by yourself.  (You can still override the existing ones if you want
++to customize them for your purpose.)
++
++1) Start with a defconfig supported by Buildroot (for ex. Zedboard)
++    make zynq_zed_defconfig
++
++2) make uboot-menuconfig
++    Visit the following menu and enable CONFIG_ZYNQ_CUSTOM_INIT.
++
++    ARM architecture  --->
++       [*] Use custom ps7_init provided by Xilinx tool
++
++3) Copy ps7_init_gpl.c/h generated by the Xilinx tools into
++   output/build/uboot-xilinx-<pkg version>/board/xilinx/zynq/custom_hw_platform/
++
++4) make
++
++*Notice*
++While the build will successfully complete with/without the ps7_init_gpl.*
++files, the boot.bin generated without ones will not be functional at all.
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.9.1
