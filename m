@@ -1,93 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Sep 2016 22:12:48 +0200
-Subject: [Buildroot] [git commit] package/acpitool: needs threads, shared;
-	unavailable for bfin
-Message-ID: <20160928201340.C571A819EB@busybox.osuosl.org>
+Date: Wed, 28 Sep 2016 22:14:10 +0200
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.166
+In-Reply-To: <20160927092632.15855-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Tue, 27 Sep 2016 10:26:32 +0100")
+References: <20160927092632.15855-1-Vincent.Riera@imgtec.com>
+Message-ID: <87h98zzsrx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=545cb34cb34c5bb03c946f2582168cfe37c37d67
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-acpitool requires threads.
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-However, it does not check for threads in its configure script, so
-forgets to link with -pthreads, so fails to build in static-only
-scenarii.
+Committed, thanks.
 
-However, upstream has been dead for the past 7+ years now, so there is
-not much point trying to fix this. Besides, a system with ACPI is most
-probably a biggish system, so shared libs will probably be enabled, so
-we just require shared libs.
-
-As for bfin, the cryptic configure failure:
-    configure: error: C++ compiler cannot create executables
-
-is due to the order in which AC_PROG_CXX and AC_PROG_CC are called.
-Calling AC_PROG_CC first fixes this error message in this specific case.
-However, this is a toolchain issue, as this does not occur for other
-toolchains.
-
-Still, inverting the call would anyway then cause linking errors:
-
-    /home/ymorin/dev/buildroot/O/host/usr/bin/bfin-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -o acpitool main.o acpitool.o ac_adapter.o toshiba.o asus.o thinkpad.o cpu.o battery.o freq.o -lgcc
-    acpitool.o: In function `Has_ACPI(char*)':
-    acpitool.cpp:(.text+0x1be): undefined reference to `_Unwind_Resume'
-    acpitool.o: In function `Get_Kernel_Version(char*, int)':
-    acpitool.cpp:(.text+0x2aa): undefined reference to `_Unwind_Resume'
-    acpitool.o: In function `Set_Kernel_Version()':
-    acpitool.cpp:(.text+0x43e): undefined reference to `_Unwind_Resume'
-    acpitool.o: In function `Do_Fan_Info(int)':
-    acpitool.cpp:(.text+0x60a): undefined reference to `_Unwind_Resume'
-    acpitool.o: In function `Show_WakeUp_Devices(int)':
-    acpitool.cpp:(.text+0x770): undefined reference to `_Unwind_Resume'
-    acpitool.o:acpitool.cpp:(.text+0x9ca): more undefined references to `_Unwind_Resume' follow
-    /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld: acpitool: hidden symbol `___udivsi3' in /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/libgcc.a(_udivsi3.o) is referenced by DSO
-    /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld: final link failed: Bad value
-    collect2: error: ld returned 1 exit status
-
-Again, because upstream is dead, there's not much point trying to fix
-this... And since there's not many chances that a bfin board has ACPI,
-we just disable acpitool for bfin.
-
-Fixes various build failures:
-    http://autobuild.buildroot.org/results/6fc/6fc568228b7c5c5be9e35aae73fb09b431896325/
-    http://autobuild.buildroot.org/results/f1e/f1eb711123c2d8aea8399b8984a007afec4f65fb/
-    http://autobuild.buildroot.org/results/70e/70eb7d7ed93a122b4c7a9890877e721b8d777b00/
-    [...]
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Erico Nunes <nunes.erico@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/acpitool/Config.in | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/package/acpitool/Config.in b/package/acpitool/Config.in
-index 7992e0f..a6f082c 100644
---- a/package/acpitool/Config.in
-+++ b/package/acpitool/Config.in
-@@ -1,5 +1,8 @@
- config BR2_PACKAGE_ACPITOOL
- 	bool "acpitool"
-+	depends on !BR2_bfin
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  A small, convenient command-line ACPI client with a lot of
-@@ -7,5 +10,7 @@ config BR2_PACKAGE_ACPITOOL
- 
- 	  http://acpitool.sourceforge.net
- 
--comment "acpitool needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "acpitool needs a toolchain w/ threads, C++, dynamic library"
-+	depends on !BR2_bfin
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_INSTALL_LIBSTDCPP
+-- 
+Bye, Peter Korsgaard
