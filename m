@@ -1,42 +1,78 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Wed, 28 Sep 2016 11:40:32 -0700
-Subject: [Buildroot] [PATCH] package/opencv3: fix CMAKE_CXX_FLAGS
-Message-ID: <1475088032-30321-1-git-send-email-jcmvbkbc@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 Sep 2016 22:13:26 +0200
+Subject: [Buildroot] [PATCH] package/acpitool: needs threads, shared;
+	unavailable for bfin
+In-Reply-To: <1475080960-23053-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Wed, 28 Sep 2016 18:42:40 +0200")
+References: <1475080960-23053-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87lgybzst5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The commit 4904c4c "package/opencv3: use BR2_TOOLCHAIN_HAS_LIBATOMIC"
-overrides CMAKE_CXX_FLAGS with the single -latomic, losing all ABI
-CFLAGS that are passed there by default. This breaks build on xtensa
-where ABI CFLAGS contain important code generation options.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Append $(TARGET_CXXFLAGS) to CMAKE_CXX_FLAGS along with -latomic.
+ > acpitool requires threads.
+ > However, it does not check fo threads in its configure script, so
+ > forgets to link with -pthreads, so fails to build in static-only
+ > scenarii.
 
-Fixes:
-  http://autobuild.buildroot.net/results/7f1c96abd8fbb5b358a07100ab623316e9bb9dcd
-  http://autobuild.buildroot.net/results/e0c93d0f6d1da0d62d4dbba211a275bfe75e9645
-  http://autobuild.buildroot.net/results/53e7e4b4b6a7b48b8012799d7507f7594dbf01b2
+ > However, upstream has been dead for the past 7+ years now, so there is
+ > not much point trying to fix this. Besides, a system with ACPI is most
+ > probably a biggish system, so shared libs will probably be enabled, so
+ > we just require shared libs.
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- package/opencv3/opencv3.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > As for bfin, the cryptic configure failure:
+ >     configure: error: C++ compiler cannot create executables
 
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 2529de9..10660a9 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -12,7 +12,7 @@ OPENCV3_LICENSE_FILES = LICENSE
- 
- # Uses __atomic_fetch_add_4
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--OPENCV3_CONF_OPTS += -DCMAKE_CXX_FLAGS="-latomic"
-+OPENCV3_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
- endif
- 
- # OpenCV component options
+ > is due to the order in which AC_PROG_CXX and AC_PROG_CC are called.
+ > Calling AC_PROG_CC first fixes this error message in this specific case.
+ > However, this is a toolchain issue, as this does not occur for other
+ > toolchains.
+
+ > Still, inverting the call would anyway then cause linking errors:
+
+ >     /home/ymorin/dev/buildroot/O/host/usr/bin/bfin-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -o acpitool main.o acpitool.o ac_adapter.o toshiba.o asus.o thinkpad.o cpu.o battery.o freq.o -lgcc
+ >     acpitool.o: In function `Has_ACPI(char*)':
+ >     acpitool.cpp:(.text+0x1be): undefined reference to `_Unwind_Resume'
+ >     acpitool.o: In function `Get_Kernel_Version(char*, int)':
+ >     acpitool.cpp:(.text+0x2aa): undefined reference to `_Unwind_Resume'
+ >     acpitool.o: In function `Set_Kernel_Version()':
+ >     acpitool.cpp:(.text+0x43e): undefined reference to `_Unwind_Resume'
+ >     acpitool.o: In function `Do_Fan_Info(int)':
+ >     acpitool.cpp:(.text+0x60a): undefined reference to `_Unwind_Resume'
+ >     acpitool.o: In function `Show_WakeUp_Devices(int)':
+ >     acpitool.cpp:(.text+0x770): undefined reference to `_Unwind_Resume'
+ >     acpitool.o:acpitool.cpp:(.text+0x9ca): more undefined references to `_Unwind_Resume' follow
+ >     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld: acpitool: hidden symbol `___udivsi3' in /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/libgcc.a(_udivsi3.o) is referenced by DSO
+ >     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld: final link failed: Bad value
+ >     collect2: error: ld returned 1 exit status
+
+ > Again, because upstream is dead, there's not much point trying to fix
+ > this... And since there's not many chances that a bfin board has ACPI,
+ > we just disable acpitool for bfin.
+
+ > Fixes various build failures:
+ >     http://autobuild.buildroot.org/results/6fc/6fc568228b7c5c5be9e35aae73fb09b431896325/
+ >     http://autobuild.buildroot.org/results/f1e/f1eb711123c2d8aea8399b8984a007afec4f65fb/
+ >     http://autobuild.buildroot.org/results/70e/70eb7d7ed93a122b4c7a9890877e721b8d777b00/
+ >     [...]
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Erico Nunes <nunes.erico@gmail.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+ > ---
+ > Changes v2 -> v3:
+ >   - actually add the dependencies on threads and !static  (Peter)
+ >   - tweak commit log to be clear that the C++ issue is a toolchain
+ >     issue  (Peter)
+
+Committed, thanks.
+
 -- 
-2.1.4
+Venlig hilsen,
+Peter Korsgaard 
