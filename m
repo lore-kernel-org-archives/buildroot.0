@@ -1,102 +1,48 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 28 Sep 2016 10:00:56 +0200
-Subject: [Buildroot] [PATCH v3] toolchain/wrapper: fix 'reinstall'
-Message-ID: <1475049656-12452-1-git-send-email-jezz@sysmic.org>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Wed, 28 Sep 2016 10:24:09 +0200
+Subject: [Buildroot] [PATCH] i2c-tools: install devt headers to staging
+ dir
+In-Reply-To: <20160927035747.b2t7jkxpdptn65fs@tarshish>
+References: <1474639604-23866-1-git-send-email-julien.boibessot@free.fr>
+ <20160924161810.09ee4fa5@free-electrons.com>
+ <3aa07d73-d34f-0070-3020-a3786e5a82ae@free.fr>
+ <6fa984a3-83e4-3ea5-8841-88b2db197ebc@mind.be>
+ <87r3862z69.fsf@dell.be.48ers.dk> <20160927035747.b2t7jkxpdptn65fs@tarshish>
+Message-ID: <fea13e44-54db-9e53-3bef-3c28caea623b@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-toolchain-wrapper was not reinstalled. So rules toolchain-external-reinstall,
-gcc-initial-reinstall, gcc-final-reinstall didn't work as expected.
+Hello,
 
-In add, normalize variable name: s/TOOLCHAIN_BUILD_WRAPPER/TOOLCHAIN_WRAPPER_BUILD/
+On 27/09/2016 05:57, Baruch Siach wrote:
+> Hi Peter,
+>
+> On Mon, Sep 26, 2016 at 10:17:50PM +0200, Peter Korsgaard wrote:
+>>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>  >> Sorry for having missed that one ! Sadly, the same problem will occur
+>>  >> with my patch.
+>>  >> I have currently no idea how to solve that and still trying to figure
+>>  >> out how it can works on debian systems with libi2c-dev package installed.
+>>  >> So meanwhile you can forget about my patch.
+>>
+>>  >  I guess Debian doesn't have packages that include both i2c.h and i2c-dev.h.
+>>  > libsoc, for example, doesn't exist in Debian.
+>>
+>>  >  I guess the solution would be for i2c-tools to #include or #include_next the
+>>  > relevant kernel headers, instead of redefining. Or to have both i2c.h and
+>>  > i2c-dev.h so that both kernel headers end up being overwritten.
+>>
+>> Does the i2c-tools version of this file add anything important on top of
+>> the Linux headers? The i2c /dev interface afaik hasn't changed in MANY
+>> years.
+> The i2c-tools version of i2c-dev.h adds a number of convenient i2c_smbus_*() 
+> routines, that wrap around the I2C_SMBUS ioctl.
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
-v2:
-  - Fix missed occurences of TOOLCHAIN_BUILD_WRAPPER in package/
-  - Do not write intermediate file with sources
-  - Use 'install' instead of 'mkdir'
-  - Fix indentation
-v3:
-  - Change patch subject since it is not specific to toolchain-external
-  - Forgot to add TOOLCHAIN_WRAPPER_INSTALL to gcc POST_INSTALL_HOOKS
-  - Fix TOOLCHAIN_WRAPPER_INSTALL
+These i2c_smbus_*() routines are used by some userspace I2C drivers (not
+yet in BR), that's why I sent the patch to re-install i2c-dev.h
 
- package/gcc/gcc-final/gcc-final.mk                 |  3 ++-
- package/gcc/gcc-initial/gcc-initial.mk             |  3 ++-
- toolchain/toolchain-external/toolchain-external.mk |  3 ++-
- toolchain/toolchain-wrapper.mk                     | 11 +++++++----
- 4 files changed, 13 insertions(+), 7 deletions(-)
-
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 36f185e..88da861 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -113,7 +113,8 @@ endef
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_CC_SYMLINKS
- 
- HOST_GCC_FINAL_TOOLCHAIN_WRAPPER_ARGS += $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
--HOST_GCC_FINAL_POST_BUILD_HOOKS += TOOLCHAIN_BUILD_WRAPPER
-+HOST_GCC_FINAL_POST_BUILD_HOOKS += TOOLCHAIN_WRAPPER_BUILD
-+HOST_GCC_FINAL_POST_INSTALL_HOOKS += TOOLCHAIN_WRAPPER_INSTALL
- # Note: this must be done after CREATE_CC_SYMLINKS, otherwise the
- # -cc symlink to the wrapper is not created.
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index aa88a68..7bb988b 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -61,7 +61,8 @@ HOST_GCC_INITIAL_INSTALL_OPTS += install-target-libgcc
- endif
- 
- HOST_GCC_INITIAL_TOOLCHAIN_WRAPPER_ARGS += $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
--HOST_GCC_INITIAL_POST_BUILD_HOOKS += TOOLCHAIN_BUILD_WRAPPER
-+HOST_GCC_INITIAL_POST_BUILD_HOOKS += TOOLCHAIN_WRAPPER_BUILD
-+HOST_GCC_INITIAL_POST_INSTALL_HOOKS += TOOLCHAIN_WRAPPER_INSTALL
- HOST_GCC_INITIAL_POST_INSTALL_HOOKS += HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
- 
- $(eval $(host-autotools-package))
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 6fd2742..e9e6340 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -787,9 +787,10 @@ define TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO
- 	fi
- endef
- 
--TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_BUILD_WRAPPER)
-+TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_WRAPPER_BUILD)
- 
- define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
-+	$(TOOLCHAIN_WRAPPER_INSTALL)
- 	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC)
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index af39071..e7aa5fb 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -30,11 +30,14 @@ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
- endif
- 
--# For simplicity, build directly into the install location
--define TOOLCHAIN_BUILD_WRAPPER
--	$(Q)mkdir -p $(HOST_DIR)/usr/bin
-+define TOOLCHAIN_WRAPPER_BUILD
- 	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
- 		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
- 		toolchain/toolchain-wrapper.c \
--		-o $(HOST_DIR)/usr/bin/toolchain-wrapper
-+		-o $(@D)/toolchain-wrapper
-+endef
-+
-+define TOOLCHAIN_WRAPPER_INSTALL
-+	$(INSTALL) -D -m 0755 $(@D)/toolchain-wrapper \
-+		$(HOST_DIR)/usr/bin/toolchain-wrapper
- endef
--- 
-1.9.1
+Regards,
+Julien
