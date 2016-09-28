@@ -1,91 +1,132 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Sep 2016 15:27:14 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/mono: bump to version
-	4.6.0.245
-In-Reply-To: <1474954789-14602-2-git-send-email-angelo.compagnucci@gmail.com>
- (Angelo Compagnucci's message of "Tue, 27 Sep 2016 07:39:49 +0200")
-References: <1474954789-14602-1-git-send-email-angelo.compagnucci@gmail.com>
- <1474954789-14602-2-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <87vaxgyx1p.fsf@dell.be.48ers.dk>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 28 Sep 2016 15:43:48 +0200
+Subject: [Buildroot] [PATCH] newt: bump to version 0.52.19
+Message-ID: <1475070228-18312-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
- > * Bump to mono 4.6.0.245
- > * Enabling previously disabled aot cause this version doesn't
- >   compile without
- > * Fixing removed licensing file in mcs/COPYING.LIB
+Remove upstreamed patches and change download location.
 
- > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
- > ---
- >  package/mono/mono.hash | 2 +-
- >  package/mono/mono.mk   | 8 ++++----
- >  2 files changed, 5 insertions(+), 5 deletions(-)
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ ...-instead-of-CPP-to-generate-.depend-files.patch | 38 ----------------------
+ ...e-bogus-I-usr-include-slang-from-CPPFLAGS.patch | 33 -------------------
+ package/newt/newt.hash                             |  2 +-
+ package/newt/newt.mk                               |  4 +--
+ 4 files changed, 3 insertions(+), 74 deletions(-)
+ delete mode 100644 package/newt/0001-Use-CC-instead-of-CPP-to-generate-.depend-files.patch
+ delete mode 100644 package/newt/0002-Remove-bogus-I-usr-include-slang-from-CPPFLAGS.patch
 
- > diff --git a/package/mono/mono.hash b/package/mono/mono.hash
- > index c275e15..4d05458 100644
- > --- a/package/mono/mono.hash
- > +++ b/package/mono/mono.hash
- > @@ -1,2 +1,2 @@
- >  # sha256 locally computed
- > -sha256 900c2cc25ee55adeec04e1ae889316efc127c82cc0c392f928421f19f8f5b633  mono-4.4.2.11.tar.bz2
- > +sha256 2981f518cace63bfe10953fecd57c7fef040077a1ac617967dde5466062c1327  mono-4.6.0.245.tar.bz2
- > diff --git a/package/mono/mono.mk b/package/mono/mono.mk
- > index 3d0b9bc..8f90b9f 100644
- > --- a/package/mono/mono.mk
- > +++ b/package/mono/mono.mk
- > @@ -4,11 +4,11 @@
- >  #
- >  ################################################################################
+diff --git a/package/newt/0001-Use-CC-instead-of-CPP-to-generate-.depend-files.patch b/package/newt/0001-Use-CC-instead-of-CPP-to-generate-.depend-files.patch
+deleted file mode 100644
+index 853472b..0000000
+--- a/package/newt/0001-Use-CC-instead-of-CPP-to-generate-.depend-files.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 65754effe16506a7a0a04069c8b6e1281811604d Mon Sep 17 00:00:00 2001
+-From: Samuel Martin <s.martin49@gmail.com>
+-Date: Sat, 10 Jan 2015 11:54:10 +0100
+-Subject: [PATCH newt 1/2] Use $(CC) instead of $(CPP) to generate .depend
+- files
+-
+-Use $(CC) instead of $(CPP) to generate .depend file because '$(CPP)
+--M' call does not support multiple input files.  This avoid the
+-following error:
+-
+-make[1]: Entering directory `/opt/br/output/build/newt-0.51.0'
+-/opt/br/output/host/usr/bin/arm-none-linux-gnueabi-cpp -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -M newt.c button.c form.c checkbox.c entry.c label.c listbox.c scrollbar.c textbox.c scale.c grid.c windows.c buttonbar.c checkboxtree.c > .depend
+-arm-none-linux-gnueabi-cpp: too many input files
+-make[1]: *** [depend] Error 1
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- Makefile.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index 7989203..17853e0 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -121,7 +121,7 @@ clean:
+- 		$(SHAREDDIR)/*.o *.$(SOEXT)*
+- 
+- depend:
+--	$(CPP) $(CFLAGS) $(CPPFLAGS) -M $(SOURCES) > .depend
+-+	$(CC) $(CFLAGS) $(CPPFLAGS) -M $(SOURCES) > .depend
+- 
+- $(SHAREDDIR):
+- 	mkdir -p $(SHAREDDIR)
+--- 
+-2.1.0
+-
+diff --git a/package/newt/0002-Remove-bogus-I-usr-include-slang-from-CPPFLAGS.patch b/package/newt/0002-Remove-bogus-I-usr-include-slang-from-CPPFLAGS.patch
+deleted file mode 100644
+index eb445dd..0000000
+--- a/package/newt/0002-Remove-bogus-I-usr-include-slang-from-CPPFLAGS.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 28145b46649165b94666ee585d064b41306e10fd Mon Sep 17 00:00:00 2001
+-From: Alex Suykov <alex.suykov@gmail.com>
+-Date: Sat, 10 Jan 2015 11:55:32 +0100
+-Subject: [PATCH newt 2/2] Remove bogus -I/usr/include/slang from CPPFLAGS
+-
+-Hardcoding -I/usr/include/slang in CPPFLAGS is bogus for
+-cross-compilation. With recent versions of slang, the headers are
+-installed in ${sysroot}/usr/include directly, so there is no need for
+-an additional flag. And if one was needed, it should be added by the
+-configure script, after detecting the right header location.
+-
+-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- Makefile.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index 17853e0..d32d784 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -5,7 +5,7 @@ CC = @CC@
+- CPP = @CPP@
+- CFLAGS = @CFLAGS@
+- LDFLAGS = @LDFLAGS@
+--CPPFLAGS = -D_GNU_SOURCE -I/usr/include/slang @CPPFLAGS@ 
+-+CPPFLAGS = -D_GNU_SOURCE @CPPFLAGS@
+- GNU_LD = @GNU_LD@
+- 
+- VERSION = @VERSION@
+--- 
+-2.1.0
+-
+diff --git a/package/newt/newt.hash b/package/newt/newt.hash
+index ca64f41..fe5870b 100644
+--- a/package/newt/newt.hash
++++ b/package/newt/newt.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	771b0e634ede56ae6a6acd910728bb5832ac13ddb0d1d27919d2498dab70c91e	newt-0.52.18.tar.gz
++sha256	08c0db56c21996af6a7cbab99491b774c6c09cef91cd9b03903c84634bff2e80  newt-0.52.19.tar.gz
+diff --git a/package/newt/newt.mk b/package/newt/newt.mk
+index 4c5d241..2b8d337 100644
+--- a/package/newt/newt.mk
++++ b/package/newt/newt.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- > -MONO_VERSION = 4.4.2.11
- > +MONO_VERSION = 4.6.0.245
- >  MONO_SITE = http://download.mono-project.com/sources/mono
- >  MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
- >  MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
- > -MONO_LICENSE_FILES = LICENSE COPYING.LIB mcs/COPYING.LIB mcs/COPYING \
- > +MONO_LICENSE_FILES = LICENSE COPYING.LIB mcs/COPYING \
-
-But why was it removed? Looking at mono git I see it was removed by:
-
-commit ef0ddf45c3081e799edcb4e95770186514b80cf1
-Author: Miguel de Icaza <miguel@gnome.org>
-Date:   Wed Mar 23 11:12:01 2016 -0400
-
-    First set of licensing changes
-
-Which was followed by:
-
-commit 71f79f97bbfb6dc3ba33691cb0b584ddc0b61a68
-Author: Miguel de Icaza <miguel@gnome.org>
-Date:   Fri Mar 25 15:03:54 2016 -0400
-
-    Move all licenses to a single LICENSE file
-
-And the top level LICENSE file now lists:
-
-In general, the runtime and its class libraries are licensed under the
-terms of the MIT license, and some third party code is licensed under
-the 3-clause BSD license.  See the file "PATENTS.TXT" for Microsoft's
-patent grant on the Mono codebase.
-
-Googling around, I see:
-
-http://www.mono-project.com/news/2016/03/31/mono-relicensed-mit/
-
-So I *THINK* it should be:
-
-MONO_LICENSE = GPLv2 or MIT (compiler, tools), MIT (libs) or commercial
-
-COPYING.LIB is now also just a oneliner referring to LICENSE, so it
-should be dropped from _LICENSE_FILES.
-
-But I don't know anything about mono, so it would be good if people
-actually using it can confirm.
-
+-NEWT_VERSION = 0.52.18
+-NEWT_SITE = https://fedorahosted.org/releases/n/e/newt
++NEWT_VERSION = 0.52.19
++NEWT_SITE = https://pagure.io/releases/newt
+ NEWT_INSTALL_STAGING = YES
+ NEWT_DEPENDENCIES = popt slang \
+ 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
 -- 
-Bye, Peter Korsgaard
+2.1.4
