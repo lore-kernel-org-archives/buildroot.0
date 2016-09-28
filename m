@@ -1,53 +1,48 @@
-From: Masahiro Yamada <yamada.masahiro@socionext.com>
-Date: Wed, 28 Sep 2016 14:45:13 +0900
-Subject: [Buildroot] [PATCH v2] zynq: document how to use custom
-	ps7_init files
-In-Reply-To: <1475031612-43682-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1475031612-43682-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <CAK7LNAS1Cxr5aovN=BAK2wAje0tZ1NMTVPDyvaw1jdkrOvSX2Q@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 Sep 2016 07:49:19 +0200
+Subject: [Buildroot] [PATCH] package/acpitool: needs threads, shared;
+	unavailable for bfin
+In-Reply-To: <1475013911-32258-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Wed, 28 Sep 2016 00:05:11 +0200")
+References: <1475013911-32258-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87pono1sm8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-2016-09-28 12:00 GMT+09:00 Matt Weber <matthew.weber@rockwellcollins.com>:
-> From: Masahiro Yamada <yamada.masahiro@socionext.com>
->
-> Since U-Boot supported SPL for Zynq boards at v2014.04 release, it
-> became much easier to build a system.  At that time, however, users
-> still needed to manually copy ps7_init.c/h to the U-Boot source tree
-> to generate a working SPL image because ps7_init.c/h output from
-> Xilinx tools are not compatible with GPL.
->
-> Later, the license problem was solved when Xilinx tools became able
-> to output the GPL-compatible variants (ps7_init_gpl.c/h) as well.
-> U-Boot v2015.07 or later includes ps7_init_gpl.c/h for major Zynq
-> boards so that users can build a boot image straight away.
->
-> Now Buildroot supports 3 boards (Zedboard, MicroZed, ZC706) without
-> any manual intervention.  This is a good thing itself, but commit
-> b9cd72cdbfe3 ("zynq_zc706: bump U-Boot to xilinx-v2016.2") entirely
-> dropped the information about custom ps7_init files.
->
-> This commit provides up-to-date guidance for how to customize the
-> ps7_init files.
->
-> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
->
-> ---
-> v1 -> v2
->  - Updated readme wording discussed in
->    https://patchwork.ozlabs.org/patch/654309/
->
+ > acpitool requires threads.
+ > However, it does not check fo threads in its configure script, so
+ > forgets to link with -pthreads, so fails to build in static-only
+ > scenarii.
 
+ > However, upstream has been dead for the past 7+ years now, so there is
+ > not much point trying to fix this. Besides, a system with ACPI is most
+ > probably a biggish system, so shared libs will probably be enabled, so
+ > we just require shared libs.
 
-Thank you very much!
+ > As for bfin, the cryptic configure failure:
+ >     configure: error: C++ compiler cannot create executables
 
+ > is due to the order in which AC_PROG_CXX and AC_PROG_CC are called.
+ > Calling AC_PROG_CC first fixes this error message.
+
+Didn't we conclude this was a toolchain issue?
+
+ > Since there's not many chances that a bfin board has ACPI, we just
+ > disable acpitool for bfin.
+
+Agreed.
+
+ > ---
+ > Changes v1 -> v2:
+ >   - add dependencies on threads and !static
+
+You seem to have forgotten to actually do so?
 
 -- 
-Best Regards
-Masahiro Yamada
+Venlig hilsen,
+Peter Korsgaard 
