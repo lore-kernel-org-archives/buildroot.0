@@ -1,80 +1,151 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 29 Sep 2016 22:23:25 +0200
-Subject: [Buildroot] RTAI math module compilation
-In-Reply-To: <CAEqQue3VOmTHMNOavNZrP93sagLki-VaUVYoO4EcXf95b2Sf=w@mail.gmail.com>
-References: <CAEqQue108OTCsmAejX1sR6q8HL2zCj7jXtaB927b=kHo=UQTrA@mail.gmail.com>
- <78c4ab72-52be-571c-e81a-a0f78c1e2e7f@mind.be>
- <87vaxi2zip.fsf@dell.be.48ers.dk>
- <CAEqQue3VOmTHMNOavNZrP93sagLki-VaUVYoO4EcXf95b2Sf=w@mail.gmail.com>
-Message-ID: <972d0f7c-d2fe-8be9-0973-c6acde90c6e4@mind.be>
+Date: Thu, 29 Sep 2016 22:37:51 +0200
+Subject: [Buildroot] [PATCH v2] zynq: document how to use custom
+ ps7_init files
+In-Reply-To: <1475031612-43682-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1475031612-43682-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <c12b938d-96da-ad8e-4dbd-bdf00bd281ed@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- [Please don't top-post, but reply in-line like so.]
+ Hi Matt,
 
+ I have a few minor and one major remark below.
 
-On 29-09-16 21:34, servo gmrt wrote:
-> Hi,
+On 28-09-16 05:00, Matt Weber wrote:
+> From: Masahiro Yamada <yamada.masahiro@socionext.com>
 > 
-> RTAI supports to ARM ,m68,  PPC and x86.
+> Since U-Boot supported SPL for Zynq boards at v2014.04 release, it
+> became much easier to build a system.  At that time, however, users
+> still needed to manually copy ps7_init.c/h to the U-Boot source tree
+> to generate a working SPL image because ps7_init.c/h output from
+> Xilinx tools are not compatible with GPL.
 > 
-> I am using it in my project.
+> Later, the license problem was solved when Xilinx tools became able
+> to output the GPL-compatible variants (ps7_init_gpl.c/h) as well.
+> U-Boot v2015.07 or later includes ps7_init_gpl.c/h for major Zynq
+> boards so that users can build a boot image straight away.
 > 
-> Recently I compiled RTAI-4.0.1 with 3.8.13 kernel. It is working fine.
-
- I guess for x86 then? Because I don't see a usable patch for 3.8 ARM or
-PowerPC, as I wrote below.
-
-
-> I found some changes and modifications are required for building rtai_math.ko
-> module.
+> Now Buildroot supports 3 boards (Zedboard, MicroZed, ZC706) without
+> any manual intervention.  This is a good thing itself, but commit
+> b9cd72cdbfe3 ("zynq_zc706: bump U-Boot to xilinx-v2016.2") entirely
+> dropped the information about custom ps7_init files.
 > 
-> I did the changes in generated makefile after that it started building. (I
-> followed http://mail.rtai.org/pipermail/rtai/2012-December/025250.html )
+> This commit provides up-to-date guidance for how to customize the
+> ps7_init files.
 > 
-> Rtai releases are not as fast as Linux Kernel and buildroot.Don't remove the
-> RTAI module from buildroot.
+> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> 
+> ---
+> v1 -> v2
+>  - Updated readme wording discussed in
+>    https://patchwork.ozlabs.org/patch/654309/
+> 
+> ---
+>  board/zynq/readme.txt | 46 +++++++++++++++++++++++++++++++++++++++-------
+>  1 file changed, 39 insertions(+), 7 deletions(-)
+> 
+> diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
+> index 51e28b6..364ec39 100644
+> --- a/board/zynq/readme.txt
+> +++ b/board/zynq/readme.txt
+> @@ -6,13 +6,6 @@ Currently, three boards are natively supported by Buildroot:
+>   - Avnet ZedBoard (zynq_zed_defconfig)
+>   - Avnet MicroZed (zynq_microzed_defconfig)
+>  
+> -The following build procedure focuses on them, but you can adjust it to your
+> -board even if it is not listed above.  Major Zynq-based boards are supported by
+> -U-Boot, and their Device Trees are merged in Linux Kernel.  If your board is the
+> -case, booting the kernel is a piece of cake.  All you need to do is to change:
+> - - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
+> - - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_KCONFIG)
+> -
+>  Steps to create a working system for a Zynq board:
+>  
+>  1) Configuration (do one of the following)
+> @@ -50,3 +43,42 @@ References:
+>  
+>   - Zedboard/Microzed information including schematics, reference designs, and
+>     manuals are available from http://www.zedboard.org .
+> +
+> +Support for other boards:
+> +
+> +If you want to build a system for other boards (for ex. Digilent Zybo board).
+> +Most major Zynq-based boards have U-Boot and Kernel support.  If your
+> +board happens to be supported, booting the kernel and using U-Boot
+> +just requires the following Buildroot updates:
+> + - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
+> + - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_DEFCONFIG)
+> +
+> +Custom ps7_init_gpl.c/h support:
+> +
+> +To generate a working boot.bin image, ps7_init_gpl.c/h are required in the
+> +U-Boot source tree.  Those files are output from the Xilinx tools, but for
 
- It doesn't make sense to keep RTAI if it is not possible to actually use it.
-Your problem shows that it is not usable at the moment. So unless you or someone
-else are willing to send patches to fix the issues with it, it makes no sense
-for us to keep it around. People who do need it can always recover it from git
-history and try to fix the failures.
+ I would put the notice from the end immediately here. I.e.
+
+To generate a working boot.bin image, ps7_init_gpl.c/h are required in the
+U-Boot source tree. Without those files, boot.bin will be built successfully
+but it will not be functional at all. Those files are output from ...
+
+> +convenience, U-Boot includes the default ps7_init_gpl.c/h of popular boards.
+> +These files may need to be updated for any programmable logic customizations
+
+ These -> those (otherwise it looks as if you are talking about different files
+than before).
+
+> +which impact ps7_init (clock/pin setup & mapping/AXI bridge setup/etc).
+> +See board/xilinx/zynq/ directory of U-Boot for natively supported ps7_init
+> +files.  If the ps7_init files for your board are not found in U-Boot, you need
+> +to add them by yourself.  (You can still override the existing ones if you want
+> +to customize them for your purpose.)
+
+ That last sentence doesn't make a lot of sense to me, and I suspect it's redundant.
+
+> +
+> +1) Start with a defconfig supported by Buildroot (for ex. Zedboard)
+
+ for ex. -> 'e.g.' or 'for example'
+
+> +    make zynq_zed_defconfig
+> +
+> +2) make uboot-menuconfig
+> +    Visit the following menu and enable CONFIG_ZYNQ_CUSTOM_INIT.
+> +
+> +    ARM architecture  --->
+> +       [*] Use custom ps7_init provided by Xilinx tool
+> +
+> +3) Copy ps7_init_gpl.c/h generated by the Xilinx tools into
+> +   output/build/uboot-xilinx-<pkg version>/board/xilinx/zynq/custom_hw_platform/
+
+ The user should be made aware that the custom files will disappear again if you
+clean. Something like:
+
+Note that the files need to be re-copied after cleaning the output directory,
+and there is no way to save it as part of the buildroot configuration except as
+a uboot patch.
+
+ Which makes me think: perhaps a uboot option should be added (conditional on
+BR2_TARGET_UBOOT_ZYNQ_IMAGE) that allows the user to specify a custom file?
+
+
+> +
+> +4) make
+
+
+> +
+> +*Notice*
+> +While the build will successfully complete with/without the ps7_init_gpl.*
+> +files, the boot.bin generated without ones will not be functional at all.
+
+ This last sentence didn't read very easily for me, I reworded it above.
 
  Regards,
  Arnout
-
-[Quoted text kept because I refer to it above.]
-
-
-> On Tue, Sep 27, 2016 at 1:40 AM, Peter Korsgaard <peter@korsgaard.com
-> <mailto:peter@korsgaard.com>> wrote:
-> 
->     >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be
->     <mailto:arnout@mind.be>> writes:
-> 
->     Hi,
-> 
->      >  Perhaps we should remove RTAI. The most recent patch for x86 is 3.8, and the
->      > most recent patch for ppc is 2.6.29... Oh, and there is a new version
->     5.0-test2
->      > released in May that goes up to 4.1 for x86 (and drops ppc).
-> 
->     So x86 is the only supported arch? I see that test2 isn't even announced
->     on rtai.org <http://rtai.org> :/
-> 
->     I personally don't have any issues removing RTAI if it doesn't get
->     updated / nobody uses it.
-> 
->     If you DO use it, please speak up.
-> 
->     --
->     Bye, Peter Korsgaard
-> 
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
