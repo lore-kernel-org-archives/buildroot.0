@@ -1,58 +1,46 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 29 Sep 2016 20:12:59 +0200
-Subject: [Buildroot] [PATCH] transmission: fix compile error
-Message-ID: <20160929181259.GA16185@waldemar-brodkorb.de>
+From: Lance Fredrickson <lancethepants@gmail.com>
+Date: Thu, 29 Sep 2016 12:17:25 -0600
+Subject: [Buildroot] uclibc-ng: bump to 1.0.18
+Message-ID: <48e09c43-e43d-f67f-c6cb-b640c367ab5a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After update to uClibc-ng 1.0.18 transmission fails to
-compile as the special treatment for sys/quota.h isn't required
-anymore, because upstream synced with GNU libc to fix a samba4
-compile problem.
+I've been anticipating uclibc-ng 1.0.18 since it follows musl's lead and 
+put everything (librt, libdl, pthread etc) into libc.
+On a previous release of buildroot I tried changing to 1.0.18 and it 
+stops in the build.  I also just tried a fresh clone of Master and come 
+upon the same error.
 
-Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
----
- ...ince-1.0.18-has-sys-quota.h-synced-with-G.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/transmission/0005-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch
+make[1]: Entering directory 
+'/home/lance/buildroot/output/build/uclibc-1.0.18/utils'
+   HOSTCC utils/locale.host
+../extra/locale/programs/locale.c:35:32: fatal error: 
+bits/uClibc_locale.h: No such file or directory
+  #include <bits/uClibc_locale.h>
+                                 ^
+compilation terminated.
+Makefile.in:113: recipe for target '../utils/locale.host' failed
 
-diff --git a/package/transmission/0005-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch b/package/transmission/0005-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch
-new file mode 100644
-index 0000000..91a962a
---- /dev/null
-+++ b/package/transmission/0005-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch
-@@ -0,0 +1,29 @@
-+From 8682fe1bad44acc06154003ca9c9163b917bf4e3 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Thu, 29 Sep 2016 19:52:49 +0200
-+Subject: [PATCH] uClibc-ng since 1.0.18 has sys/quota.h synced with GNU libc
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+
-+Pull Request:
-+https://github.com/transmission/transmission/pull/42
-+---
-+ libtransmission/platform-quota.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libtransmission/platform-quota.c b/libtransmission/platform-quota.c
-+index 58c518a..57377ef 100644
-+--- a/libtransmission/platform-quota.c
-++++ b/libtransmission/platform-quota.c
-+@@ -284,7 +284,7 @@ getquota (const char * device)
-+       spaceused = (int64_t) dq.dqb_curblocks >> 1;
-+ #elif defined(__APPLE__)
-+       spaceused = (int64_t) dq.dqb_curbytes;
-+-#elif defined(__UCLIBC__)
-++#elif defined(__UCLIBC__) && (__UCLIBC_MAJOR__ == 0 || (__UCLIBC_MAJOR__ == 1 && __UCLIBC_SUBLEVEL__ <= 17))
-+       spaceused = (int64_t) btodb(dq.dqb_curblocks);
-+ #elif defined(__sun) || (defined(_LINUX_QUOTA_VERSION) && _LINUX_QUOTA_VERSION < 2)
-+       spaceused = (int64_t) dq.dqb_curblocks >> 1;
-+-- 
-+2.1.4
-+
--- 
-2.1.4
+
+It appears by this point that it's successfully built the the library 
+itself, but is failing on 'hostutils'?
+I've attached a simple config that Master will fail on. Maybe should be 
+fixed upstream from you, but thought I'd mention it here.
+
+Lance
+-------------- next part --------------
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_OPTIMIZE_2=y
+BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_TOOLCHAIN_BUILDROOT_USE_SSP=y
+# BR2_UCLIBC_INSTALL_UTILS is not set
+BR2_BINUTILS_VERSION_2_25_X=y
+BR2_GCC_VERSION_6_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_INIT_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
