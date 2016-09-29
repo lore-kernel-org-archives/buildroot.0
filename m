@@ -1,83 +1,62 @@
-From: Cyril Bur <cyrilbur@gmail.com>
-Date: Thu, 29 Sep 2016 18:53:42 +1000
-Subject: [Buildroot] [RFC] kvm-unit-tests: Fix x86_64 to use host compiler
-Message-ID: <20160929085342.7600-1-cyrilbur@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Sep 2016 11:27:36 +0200
+Subject: [Buildroot] [PATCH] package/opencv3: fix CMAKE_CXX_FLAGS
+In-Reply-To: <1475088032-30321-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1475088032-30321-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20160929112736.27dc4474@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-kvm-unit-tests requires a multilib compiler for x86_64 as it compiles
-32bit boot code.
+Hello,
 
-This patch uses the BR2_HOSTARCH_NEEDS_IA32_COMPILER option to enforce
-this and avoids using TARGET_CROSS for x86_64 targets and uses the host
-32bit (and 64bit) capable compiler.
+Adding Samuel in Cc: there is a CMake issue below.
 
-Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
----
-Should be able to be merged as is but I hope the RFC might attract
-more eyes as this has me in an x86 caveat world that I'm utterly
-unfamilair with.
+On Wed, 28 Sep 2016 11:40:32 -0700, Max Filippov wrote:
+> The commit 4904c4c "package/opencv3: use BR2_TOOLCHAIN_HAS_LIBATOMIC"
+> overrides CMAKE_CXX_FLAGS with the single -latomic, losing all ABI
+> CFLAGS that are passed there by default. This breaks build on xtensa
+> where ABI CFLAGS contain important code generation options.
+> 
+> Append $(TARGET_CXXFLAGS) to CMAKE_CXX_FLAGS along with -latomic.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/7f1c96abd8fbb5b358a07100ab623316e9bb9dcd
+>   http://autobuild.buildroot.net/results/e0c93d0f6d1da0d62d4dbba211a275bfe75e9645
+>   http://autobuild.buildroot.net/results/53e7e4b4b6a7b48b8012799d7507f7594dbf01b2
+> 
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  package/opencv3/opencv3.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+> index 2529de9..10660a9 100644
+> --- a/package/opencv3/opencv3.mk
+> +++ b/package/opencv3/opencv3.mk
+> @@ -12,7 +12,7 @@ OPENCV3_LICENSE_FILES = LICENSE
+>  
+>  # Uses __atomic_fetch_add_4
+>  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> -OPENCV3_CONF_OPTS += -DCMAKE_CXX_FLAGS="-latomic"
+> +OPENCV3_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
 
-With this patch my Power build machine fails to build kvm-unit-tests
-for x86_64 (expected, I see the message about
-BR2_HOSTARCH_NEEDS_IA32_COMPILER) and has no problems building for
-ARM. My x86_64 build machine can build for x86_64 and still build
-other architectures.
+There is something fishy going on here. Indeed,
+support/misc/toolchainfile.cmake.in contains:
 
- package/kvm-unit-tests/Config.in         |  1 +
- package/kvm-unit-tests/kvm-unit-tests.mk | 12 ++++++++----
- 2 files changed, 9 insertions(+), 4 deletions(-)
+  set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
 
-diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
-index f771896..d72c734 100644
---- a/package/kvm-unit-tests/Config.in
-+++ b/package/kvm-unit-tests/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KVM_UNIT_TESTS
- 	bool "kvm-unit-tests"
-+	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_x86_64=y
- 	depends on BR2_arm || BR2_i386 || BR2_powerpc64 || \
- 		BR2_powerpc64le || BR2_x86_64
- 	help
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-index 7fd03ad..78b718a 100644
---- a/package/kvm-unit-tests/kvm-unit-tests.mk
-+++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-@@ -10,14 +10,19 @@ KVM_UNIT_TESTS_SITE_METHOD = git
- KVM_UNIT_TESTS_LICENSE = LGPLv2
- KVM_UNIT_TESTS_LICENSE_FILES = COPYRIGHT
- 
-+#Use HOSTCC for x86_64 as we'll need to compile 32bit code
-+#which buildroot cross compilers often can't do
-+ifeq ($(BR2_x86_64),y)
-+KVM_UNIT_TESTS_ARCH = x86_84
-+else
-+KVM_UNIT_TESTS_CONF_OPTS = --cross-prefix="$(TARGET_CROSS)"
-+endif
- ifeq ($(BR2_arm),y)
- KVM_UNIT_TESTS_ARCH = arm
- else ifeq ($(BR2_i386),y)
- KVM_UNIT_TESTS_ARCH = i386
- else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
- KVM_UNIT_TESTS_ARCH = ppc64
--else ifeq ($(BR2_x86_64),y)
--KVM_UNIT_TESTS_ARCH = x86_84
- endif
- 
- ifeq ($(BR2_ENDIAN),"LITTLE")
-@@ -26,9 +31,8 @@ else
- KVM_UNIT_TESTS_ENDIAN = big
- endif
- 
--KVM_UNIT_TESTS_CONF_OPTS =\
-+KVM_UNIT_TESTS_CONF_OPTS +=\
- 	--arch="$(KERNEL_ARCH)" \
--	--cross-prefix="$(TARGET_CROSS)" \
- 	--endian="$(KVM_UNIT_TESTS_ENDIAN)"
- 
- define KVM_UNIT_TESTS_CONFIGURE_CMDS
+So it should normally always prefix CMAKE_CXX_FLAGS with
+TARGET_CXXFLAGS. Can you check the toolchain.cmake file that gets
+generated during your build? Does it contains the Xtensa specific
+CXXFLAGS ?
+
+Best regards,
+
+Thomas
 -- 
-2.10.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
