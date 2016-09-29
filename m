@@ -1,102 +1,62 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 29 Sep 2016 20:12:46 +0100
-Subject: [Buildroot] [PATCH 2/2] package/nodejs: bump version to 6.7.0
-In-Reply-To: <1475176366-30034-1-git-send-email-martin@barkynet.com>
-References: <1475176366-30034-1-git-send-email-martin@barkynet.com>
-Message-ID: <1475176366-30034-2-git-send-email-martin@barkynet.com>
+From: servo gmrt <servo.gmrt@gmail.com>
+Date: Fri, 30 Sep 2016 01:04:19 +0530
+Subject: [Buildroot] RTAI math module compilation
+In-Reply-To: <87vaxi2zip.fsf@dell.be.48ers.dk>
+References: <CAEqQue108OTCsmAejX1sR6q8HL2zCj7jXtaB927b=kHo=UQTrA@mail.gmail.com>
+ <78c4ab72-52be-571c-e81a-a0f78c1e2e7f@mind.be>
+ <87vaxi2zip.fsf@dell.be.48ers.dk>
+Message-ID: <CAEqQue3VOmTHMNOavNZrP93sagLki-VaUVYoO4EcXf95b2Sf=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://nodejs.org/en/blog/release/v6.7.0/
+Hi,
 
-The patches from 6.2.1 have been copied to 6.7.0 with the following
-changes:
+RTAI supports to ARM ,m68,  PPC and x86.
 
-- Add 0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-  to disable the new V8 inspector when openssl is not included.
+I am using it in my project.
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- .../0001-gyp-force-link-command-to-use-CXX.patch   |  0
- ...-don-t-build-when-ssl-support-is-disabled.patch | 35 ++++++++++++++++++++++
- package/nodejs/Config.in                           |  2 +-
- package/nodejs/nodejs.hash                         |  4 +--
- 4 files changed, 38 insertions(+), 3 deletions(-)
- rename package/nodejs/{6.2.1 => 6.7.0}/0001-gyp-force-link-command-to-use-CXX.patch (100%)
- create mode 100644 package/nodejs/6.7.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+Recently I compiled RTAI-4.0.1 with 3.8.13 kernel. It is working fine.
 
-diff --git a/package/nodejs/6.2.1/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.7.0/0001-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/6.2.1/0001-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/6.7.0/0001-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/6.7.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch b/package/nodejs/6.7.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-new file mode 100644
-index 0000000..c07cbf8
---- /dev/null
-+++ b/package/nodejs/6.7.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-@@ -0,0 +1,35 @@
-+From 7fa541f6c0a31e3ddcab6ea85040b531bbaa4651 Mon Sep 17 00:00:00 2001
-+From: Martin Bark <martin@barkynet.com>
-+Date: Tue, 12 Jul 2016 19:03:28 +0100
-+Subject: [PATCH] inspector: don't build when ssl support is disabled
-+
-+Signed-off-by: Martin Bark <martin@barkynet.com>
-+---
-+ node.gyp | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/node.gyp b/node.gyp
-+index 8a8bd00..fdccd60 100644
-+--- a/node.gyp
-++++ b/node.gyp
-+@@ -302,7 +302,7 @@
-+             'deps/v8/src/third_party/vtune/v8vtune.gyp:v8_vtune'
-+           ],
-+         }],
-+-        [ 'v8_inspector=="true"', {
-++        [ 'v8_inspector=="true" and node_use_openssl =="true"', {
-+           'defines': [
-+             'HAVE_INSPECTOR=1',
-+             'V8_INSPECTOR_USE_STL=1',
-+@@ -828,7 +828,7 @@
-+       ],
-+ 
-+       'conditions': [
-+-        ['v8_inspector=="true"', {
-++        ['v8_inspector=="true" and node_use_openssl =="true"', {
-+           'sources': [
-+             'src/inspector_socket.cc',
-+             'test/cctest/test_inspector_socket.cc'
-+-- 
-+2.7.4
-+
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index b591b59..976be50 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "6.2.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "6.7.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.47"
- 
- config BR2_PACKAGE_NODEJS_NPM
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 97f2755..f334a47 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.47/SHASUMS256.txt
- sha256  335bdf4db702885a8acaf2c9f241c70cabd62497361da81aca65c8e8a8e7ff09  node-v0.10.47.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v6.2.1/SHASUMS256.txt
--sha256  dbaeb8fb68a599e5164b17c74f66d24f424ee4ab3a25d8de8a3c6808e5b42bfb  node-v6.2.1.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v6.7.0/SHASUMS256.txt
-+sha256  ceb028324aab1ee8c7ea6a62026f036f3ea71f5ef5212593d0f833f999dd3be5  node-v6.7.0.tar.xz
--- 
-2.7.4
+I found some changes and modifications are required for building
+rtai_math.ko module.
+
+I did the changes in generated makefile after that it started building. (I
+followed http://mail.rtai.org/pipermail/rtai/2012-December/025250.html )
+
+Rtai releases are not as fast as Linux Kernel and buildroot.Don't remove
+the RTAI module from buildroot.
+
+
+
+
+
+On Tue, Sep 27, 2016 at 1:40 AM, Peter Korsgaard <peter@korsgaard.com>
+wrote:
+
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>
+> Hi,
+>
+>  >  Perhaps we should remove RTAI. The most recent patch for x86 is 3.8,
+> and the
+>  > most recent patch for ppc is 2.6.29... Oh, and there is a new version
+> 5.0-test2
+>  > released in May that goes up to 4.1 for x86 (and drops ppc).
+>
+> So x86 is the only supported arch? I see that test2 isn't even announced
+> on rtai.org :/
+>
+> I personally don't have any issues removing RTAI if it doesn't get
+> updated / nobody uses it.
+>
+> If you DO use it, please speak up.
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160930/fe0a34d4/attachment.html>
