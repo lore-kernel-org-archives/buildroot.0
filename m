@@ -1,38 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Sep 2016 15:19:59 +0200
-Subject: [Buildroot] Build for Odroid-C2 not booting
-In-Reply-To: <CAOw_jL1fWrGQHCanQZ_BNXsH3ytiVZ0Kmj4NWNY6paYLXYKT2g@mail.gmail.com>
- (Gaha Bana's message of "Thu, 29 Sep 2016 10:15:51 +0000")
-References: <CAOw_jL1fWrGQHCanQZ_BNXsH3ytiVZ0Kmj4NWNY6paYLXYKT2g@mail.gmail.com>
-Message-ID: <874m4yzvuo.fsf@dell.be.48ers.dk>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Thu, 29 Sep 2016 18:53:20 +0530
+Subject: [Buildroot] [PATCH] libtasn1: clarify licensing info
+In-Reply-To: <1475111638-24640-1-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1475111638-24640-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <57ED15C8.5040805@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gaha" == Gaha Bana <gahabana@gmail.com> writes:
+Hi,
 
- > hi ,
- > i installed fresh buildroot from git, and followed instructions to the
- > letter from
- > https://github.com/buildroot/buildroot/tree/master/board/hardkernel/odroidc2
+On Thursday 29 September 2016 06:43 AM, 
+gustavo.zacarias at free-electrons.com wrote:
+> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+>
+> The library is LGPLv2.1+, the tests and tools are GPLv3+ so clarify to
+> avoid confusion.
+>
+> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> ---
+>   package/libtasn1/libtasn1.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+> index 6b7e6b3..79223a4 100644
+> --- a/package/libtasn1/libtasn1.mk
+> +++ b/package/libtasn1/libtasn1.mk
+> @@ -7,7 +7,7 @@
+>   LIBTASN1_VERSION = 4.9
+>   LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
+>   LIBTASN1_DEPENDENCIES = host-bison
+> -LIBTASN1_LICENSE = GPLv3+, LGPLv2.1+
+> +LIBTASN1_LICENSE = GPLv3+ (tests, tools), LGPLv2.1+ (library)
 
-Notice that URL is not the official location of the Buildroot git tree,
-just a mirror.
+examples are also licensed under GPLv3+. But I'm not sure if we should 
+add both tests and examples here when those don't go on target file system.
 
- > Result burned to SD-Card and when i turn it on, nothing happens - bluelight
- > doesn't even blink just stays on meaning linux kernel hasn't really loaded
- > (stuck on u-boot?)
+Apart form that
 
-Do you get any serial output?
+Reviewed-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 
- > Could ANYone confirm it works for them ?
-
-I don't have an odroid c2 myself, but very little has changed since the
-config was added.
-
-Dagg or Brian, can you confirm or help? Thanks.
-
--- 
-Bye, Peter Korsgaard
+Regards,
+Rahul
