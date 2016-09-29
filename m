@@ -1,41 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Sep 2016 22:14:00 +0200
-Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.166
-Message-ID: <20160928201453.7157D81D49@busybox.osuosl.org>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Wed, 28 Sep 2016 22:13:58 -0300
+Subject: [Buildroot] [PATCH] libtasn1: clarify licensing info
+Message-ID: <1475111638-24640-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23a9d07bf466b09c959fc57f62e5137843dffe26
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The library is LGPLv2.1+, the tests and tools are GPLv3+ so clarify to
+avoid confusion.
+
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libtasn1/libtasn1.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index c7e7307..a269eb6 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 33324ad334852bc4217a9c33ded0a05645dac5141c68e34f1d385662be7e5bd5a4bc73539dd9c507cd7013d67b893b171df5d59e4f0b253233b003e7d48ac7a0  LVM2.2.02.165.tgz
-+sha512 8bebe9b474f791b5edf5366b0bd24861fbbaf8a83afa2a9e2a8e3917e05e4ecbf6877f018be03ffb4e9b4c8832208264165b85182bf79a07661adf35128b4a21  LVM2.2.02.166.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 3a5dcff..d76cdd2 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LVM2_VERSION = 2.02.165
-+LVM2_VERSION = 2.02.166
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index 6b7e6b3..79223a4 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
+@@ -7,7 +7,7 @@
+ LIBTASN1_VERSION = 4.9
+ LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison
+-LIBTASN1_LICENSE = GPLv3+, LGPLv2.1+
++LIBTASN1_LICENSE = GPLv3+ (tests, tools), LGPLv2.1+ (library)
+ LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
+ LIBTASN1_INSTALL_STAGING = YES
+ # 'missing' fallback logic botched so disable it completely
+-- 
+2.7.3
