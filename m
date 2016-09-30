@@ -1,59 +1,99 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Fri, 30 Sep 2016 16:46:44 +0200
-Subject: [Buildroot] [PATCH 2/2] efibootmgr: bump to version 14
-In-Reply-To: <1475246804-26748-1-git-send-email-nunes.erico@gmail.com>
-References: <1475246804-26748-1-git-send-email-nunes.erico@gmail.com>
-Message-ID: <1475246804-26748-2-git-send-email-nunes.erico@gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri, 30 Sep 2016 09:32:16 -0700
+Subject: [Buildroot] [PATCH] package/opencv3: fix CMAKE_CXX_FLAGS
+In-Reply-To: <20160930101034.4adf4d7e@free-electrons.com>
+References: <1475088032-30321-1-git-send-email-jcmvbkbc@gmail.com>
+ <20160929112736.27dc4474@free-electrons.com>
+ <CAMo8BfKyMkgwNih1MSGh+qrKtRMob4_j8neOi3v4e5xEaJKnBg@mail.gmail.com>
+ <20160930101034.4adf4d7e@free-electrons.com>
+Message-ID: <CAMo8BfLX2teRjUXNyjhgc73F5Qt6OviZBr+ShMcPXq+e5_6kig@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream has changed version numbering scheme since version 13, which
-came after version 0.12.
+On Fri, Sep 30, 2016 at 1:10 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> On Thu, 29 Sep 2016 09:14:41 -0700, Max Filippov wrote:
+>> > There is something fishy going on here. Indeed,
+>> > support/misc/toolchainfile.cmake.in contains:
+>> >
+>> >   set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
+>> >
+>> > So it should normally always prefix CMAKE_CXX_FLAGS with
+>> > TARGET_CXXFLAGS. Can you check the toolchain.cmake file that gets
+>> > generated during your build? Does it contains the Xtensa specific
+>> > CXXFLAGS ?
+>>
+>> Yes, it does.
+>
+> So if it does, why is your patch necessary? I'm not following here.
+> Do you mean that the Xtensa-specific flags are present in the
+> toolchain.cmake file, but are in the end not used during the build ?
 
-There is now a make install target, so we can drop the manual file
-installing. The make install target also installs the new efibootdump
-tool.
+Right. The file
+  host/usr/share/buildroot/toolchainfile.cmake
+exists and contains the following (correct) lines:
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
----
- package/efibootmgr/efibootmgr.hash | 2 +-
- package/efibootmgr/efibootmgr.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+set(CMAKE_C_FLAGS "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os
+${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
+set(CMAKE_CXX_FLAGS "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os
+${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
 
-diff --git a/package/efibootmgr/efibootmgr.hash b/package/efibootmgr/efibootmgr.hash
-index a789942..f71dced 100644
---- a/package/efibootmgr/efibootmgr.hash
-+++ b/package/efibootmgr/efibootmgr.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 b180d7d6b377d24b0872869f2571e2700b618e4d7ebdc2133134a918efe2623b efibootmgr-efibootmgr-0.12.tar.gz
-+sha256 3f260491e2c62e93cb6347ea6f21aaa5f93152e9e7f0269d314623769d82e473 efibootmgr-14.tar.gz
-diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
-index a0c5646..731d6e9 100644
---- a/package/efibootmgr/efibootmgr.mk
-+++ b/package/efibootmgr/efibootmgr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EFIBOOTMGR_VERSION = efibootmgr-0.12
-+EFIBOOTMGR_VERSION = 14
- EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
- EFIBOOTMGR_LICENSE = GPLv2+
- EFIBOOTMGR_LICENSE_FILES = COPYING
-@@ -21,8 +21,8 @@ define EFIBOOTMGR_BUILD_CMDS
- endef
- 
- define EFIBOOTMGR_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/src/efibootmgr/efibootmgr \
--		$(TARGET_DIR)/usr/bin/efibootmgr
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		DESTDIR=$(TARGET_DIR) install
- endef
- 
- $(eval $(generic-package))
+But the file
+  build/opencv3-3.1.0/CMakeCache.txt
+that governs opencv3 build contains the following lines:
+
+//Buildroot CXXFLAGS
+CMAKE_CXX_FLAGS:STRING=-latomic
+//Buildroot CFLAGS
+CMAKE_C_FLAGS:STRING='-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os '
+
+Below is the output that I see during the failing opencv3 build:
+
+--     C++ flags (Release):         -latomic   -fsigned-char -W -Wall
+-Werror=return-type -Werror=non-virtual-dtor -Werror=address
+-Werror=sequence-point -Wformat -Werror=format-security
+-Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow
+-Wsign-promo -Wno-narrowing -Wno-delete-non-virtual-dtor
+-fdiagnostics-show-option -pthread -fomit-frame-pointer
+-ffunction-sections -fvisibility=hidden -fvisibility-inlines-hidden
+-O3 -DNDEBUG  -DNDEBUG
+--     C++ flags (Debug):           -latomic   -fsigned-char -W -Wall
+-Werror=return-type -Werror=non-virtual-dtor -Werror=address
+-Werror=sequence-point -Wformat -Werror=format-security
+-Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow
+-Wsign-promo -Wno-narrowing -Wno-delete-non-virtual-dtor
+-fdiagnostics-show-option -pthread -fomit-frame-pointer
+-ffunction-sections -fvisibility=hidden -fvisibility-inlines-hidden -g
+ -O0 -DDEBUG -D_DEBUG
+--     C Compiler:
+/home/jcmvbkbc/tmp/br/build-20160928-reproduce-opencv/host/usr/bin/xtensa-linux-gcc
+--     C flags (Release):           -D_LARGEFILE_SOURCE
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls
+-mauto-litpools -Os    -fsigned-char -W -Wall -Werror=return-type
+-Werror=non-virtual-dtor -Werror=address -Werror=sequence-point
+-Wformat -Werror=format-security -Wmissing-declarations
+-Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self
+-Wpointer-arith -Wshadow -Wno-narrowing -fdiagnostics-show-option
+-pthread -fomit-frame-pointer -ffunction-sections -fvisibility=hidden
+-O3 -DNDEBUG  -DNDEBUG
+--     C flags (Debug):             -D_LARGEFILE_SOURCE
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls
+-mauto-litpools -Os    -fsigned-char -W -Wall -Werror=return-type
+-Werror=non-virtual-dtor -Werror=address -Werror=sequence-point
+-Wformat -Werror=format-security -Wmissing-declarations
+-Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self
+-Wpointer-arith -Wshadow -Wno-narrowing -fdiagnostics-show-option
+-pthread -fomit-frame-pointer -ffunction-sections -fvisibility=hidden
+-g  -O0 -DDEBUG -D_DEBUG
+
+Notice the difference between the C and the C++ flags.
+
 -- 
-2.7.4
+Thanks.
+-- Max
