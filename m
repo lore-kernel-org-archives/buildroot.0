@@ -1,67 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Sep 2016 11:35:12 +0200
-Subject: [Buildroot] [git commit] package/nodejs: bump version to 0.10.47
-Message-ID: <20160930095716.ABF2D82266@busybox.osuosl.org>
+Date: Fri, 30 Sep 2016 11:56:36 +0200
+Subject: [Buildroot] [git commit] tmux: bump version to 2.3
+Message-ID: <20160930095716.DF416822F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=734ea7ce27bbe5f26f6aa4e04de5504e98aa5fe4
+commit: https://git.buildroot.net/buildroot/commit/?id=087f87111b9295b508262161f5644b69b2200336
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://nodejs.org/en/blog/release/v0.10.47/
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../{0.10.45 => 0.10.47}/0001-remove-python-bz2-dependency.patch      | 0
- .../{0.10.45 => 0.10.47}/0002-gyp-force-link-command-to-use-CXX.patch | 0
- .../{0.10.45 => 0.10.47}/0003-fix-musl-USE-MISC-build-issue.patch     | 0
- .../nodejs/{0.10.45 => 0.10.47}/0004-Fix-support-for-uClibc-ng.patch  | 0
- package/nodejs/Config.in                                              | 2 +-
- package/nodejs/nodejs.hash                                            | 4 ++--
- 6 files changed, 3 insertions(+), 3 deletions(-)
+ package/tmux/tmux.hash | 2 +-
+ package/tmux/tmux.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/0.10.45/0001-remove-python-bz2-dependency.patch b/package/nodejs/0.10.47/0001-remove-python-bz2-dependency.patch
-similarity index 100%
-rename from package/nodejs/0.10.45/0001-remove-python-bz2-dependency.patch
-rename to package/nodejs/0.10.47/0001-remove-python-bz2-dependency.patch
-diff --git a/package/nodejs/0.10.45/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/0.10.47/0002-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/0.10.45/0002-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/0.10.47/0002-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/0.10.45/0003-fix-musl-USE-MISC-build-issue.patch b/package/nodejs/0.10.47/0003-fix-musl-USE-MISC-build-issue.patch
-similarity index 100%
-rename from package/nodejs/0.10.45/0003-fix-musl-USE-MISC-build-issue.patch
-rename to package/nodejs/0.10.47/0003-fix-musl-USE-MISC-build-issue.patch
-diff --git a/package/nodejs/0.10.45/0004-Fix-support-for-uClibc-ng.patch b/package/nodejs/0.10.47/0004-Fix-support-for-uClibc-ng.patch
-similarity index 100%
-rename from package/nodejs/0.10.45/0004-Fix-support-for-uClibc-ng.patch
-rename to package/nodejs/0.10.47/0004-Fix-support-for-uClibc-ng.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index da9ca7f..b591b59 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -44,7 +44,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
- 	default "6.2.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
--	default "0.10.45"
-+	default "0.10.47"
+diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
+index f3cbe74..9195a16 100644
+--- a/package/tmux/tmux.hash
++++ b/package/tmux/tmux.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  bc28541b64f99929fe8e3ae7a02291263f3c97730781201824c0f05d7c8e19e4  tmux-2.2.tar.gz
++sha256 55313e132f0f42de7e020bf6323a1939ee02ab79c48634aa07475db41573852b  tmux-2.3.tar.gz
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index 1e1b2b7..f6dd1a9 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_NODEJS_NPM
- 	bool "NPM for the target"
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 9fce2f5..97f2755 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From upstream URL: http://nodejs.org/dist/v0.10.45/SHASUMS256.txt
--sha256  a71070ea7aece9c94450b45102f2d1be42f0add168dd9c9701e9032d363bd4fa  node-v0.10.45.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v0.10.47/SHASUMS256.txt
-+sha256  335bdf4db702885a8acaf2c9f241c70cabd62497361da81aca65c8e8a8e7ff09  node-v0.10.47.tar.xz
- 
- # From upstream URL: http://nodejs.org/dist/v6.2.1/SHASUMS256.txt
- sha256  dbaeb8fb68a599e5164b17c74f66d24f424ee4ab3a25d8de8a3c6808e5b42bfb  node-v6.2.1.tar.xz
+-TMUX_VERSION = 2.2
++TMUX_VERSION = 2.3
+ TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = README
