@@ -1,13 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 Oct 2016 00:51:24 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-09-28
-In-Reply-To: <20160930112705.GQ1947@waldemar-brodkorb.de>
-References: <20160929063048.6633A1049F9@stock.ovh.net>
- <20160930060433.GO1947@waldemar-brodkorb.de>
- <20160930084255.07d4833e@free-electrons.com>
- <20160930112705.GQ1947@waldemar-brodkorb.de>
-Message-ID: <1483d15b-1aed-f8b8-fc43-7c810af6b44b@mind.be>
+Date: Sat, 1 Oct 2016 01:08:32 +0200
+Subject: [Buildroot] Interfaces not coming up on DSA
+In-Reply-To: <5C6DB3AE-3775-4761-BF1A-9C4B101A7F37@bluecordial.com>
+References: <5C6DB3AE-3775-4761-BF1A-9C4B101A7F37@bluecordial.com>
+Message-ID: <9f3b6959-c313-836e-ab07-a0ad8831e64c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,43 +12,61 @@ To: buildroot@busybox.net
 
 
 
-On 30-09-16 13:27, Waldemar Brodkorb wrote:
-> Hi Thomas,
-> Thomas Petazzoni wrote,
-> 
->> Hello,
->>
->> On Fri, 30 Sep 2016 08:04:33 +0200, Waldemar Brodkorb wrote:
->>
->>> Thomas Petazzoni wrote,
->>>
->>>>         m68k |                    nload-0.7.4 | NOK | http://autobuild.buildroot.net/results/b0d10b82f2308a92a8d6c8ac768c9efa2c1770b7  
->>>
->>> This should be fixed by the update to uClibc-ng 1.0.18.
->>> Tested here with the internal toolchain.
->>
->> OK. Should I rebuild just the m68k toolchains with uClibc-ng 1.0.18, or
->> are there potentially fixes or patches affecting other architectures as
->> well?
-> 
-> I would prefer rebuilding all uClibc-ng toolchains as we get then a
-> good overview about the quality of the 1.0.18 release.
-> Furthermore all static/no-thread builds for other architectures are
-> affected by this release, a lot of issues regarding pthread_mutex_*
-> should be resolved. (libarchive issues,..)
-> 
-> May be the linker script fix should be applied before that.
-> I will sent the patch today.
+On 29-09-16 17:03, Paul wrote:
+> After upgrading to buildroot 2016.08.1 our dsa interfaces do not automatically
+> come up, using an existing 4.5.4 kernel. 
 
- I think it would be wise to always update the toolchains when something changed
-in the packages that generate them. That way they get maximum testing.
+ Do you use a custom skeleton? The system menu entries that manipulate files in
+the skeleton (e.g. password, network, getty settings) are no longer available
+for a custom skeleton, only for the default skeleton. The idea is that with a
+custom skeleton, buildroot has no idea what is there so its manipulations may fail.
 
- That would also give an early warning when something is wrong with a bump: you
-would have noticed the locale issue while building the toolchains, I think.
 
+> Ifconfig lan1 up brings up the
+> interface however not able to route, says destination unreachable. 
+
+ ifconfig only sets the IP address, it doesn't add a default route.
+
+> If we run an
+> ifup ?a everything works as normal.
+
+ Hm, so you do have a valid /etc/network/interfaces file. Buildroot installs
+/etc/init.d/S40network which will call ifup -a. Perhaps your lan1 interface
+doesn't exist yet by the time that script is called?
 
  Regards,
  Arnout
+
+
+
+> This was not the case using a previous
+> version of buildroot.
+> 
+>  
+> 
+> Kind regards
+> 
+> Paul Ashford
+> 
+>  
+> 
+> *Contact Information: *
+> 
+> m: +44 (0)7885 469812
+> 
+> e: paul at bluecordial.com
+> 
+> skype: paulashford1975
+> 
+> twitter: @pdashford
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
