@@ -1,9 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 Oct 2016 00:45:18 +0200
-Subject: [Buildroot] [PATCH] transmission: fix compile error
-In-Reply-To: <20160929181259.GA16185@waldemar-brodkorb.de>
-References: <20160929181259.GA16185@waldemar-brodkorb.de>
-Message-ID: <2269cdc1-0f21-09dc-6df2-c3af51f1a04f@mind.be>
+Date: Sat, 1 Oct 2016 00:51:24 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-09-28
+In-Reply-To: <20160930112705.GQ1947@waldemar-brodkorb.de>
+References: <20160929063048.6633A1049F9@stock.ovh.net>
+ <20160930060433.GO1947@waldemar-brodkorb.de>
+ <20160930084255.07d4833e@free-electrons.com>
+ <20160930112705.GQ1947@waldemar-brodkorb.de>
+Message-ID: <1483d15b-1aed-f8b8-fc43-7c810af6b44b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +16,43 @@ To: buildroot@busybox.net
 
 
 
-On 29-09-16 20:12, Waldemar Brodkorb wrote:
-> After update to uClibc-ng 1.0.18 transmission fails to
-> compile as the special treatment for sys/quota.h isn't required
-> anymore, because upstream synced with GNU libc to fix a samba4
-> compile problem.
+On 30-09-16 13:27, Waldemar Brodkorb wrote:
+> Hi Thomas,
+> Thomas Petazzoni wrote,
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-> ---
->  ...ince-1.0.18-has-sys-quota.h-synced-with-G.patch | 29 ++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/transmission/0005-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch
+>> Hello,
+>>
+>> On Fri, 30 Sep 2016 08:04:33 +0200, Waldemar Brodkorb wrote:
+>>
+>>> Thomas Petazzoni wrote,
+>>>
+>>>>         m68k |                    nload-0.7.4 | NOK | http://autobuild.buildroot.net/results/b0d10b82f2308a92a8d6c8ac768c9efa2c1770b7  
+>>>
+>>> This should be fixed by the update to uClibc-ng 1.0.18.
+>>> Tested here with the internal toolchain.
+>>
+>> OK. Should I rebuild just the m68k toolchains with uClibc-ng 1.0.18, or
+>> are there potentially fixes or patches affecting other architectures as
+>> well?
 > 
-> diff --git a/package/transmission/0005-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch b/package/transmission/0005-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch
-> new file mode 100644
-> index 0000000..91a962a
-> --- /dev/null
-> +++ b/package/transmission/0005-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch
-> @@ -0,0 +1,29 @@
-> +From 8682fe1bad44acc06154003ca9c9163b917bf4e3 Mon Sep 17 00:00:00 2001
-> +From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-> +Date: Thu, 29 Sep 2016 19:52:49 +0200
-> +Subject: [PATCH] uClibc-ng since 1.0.18 has sys/quota.h synced with GNU libc
-> +
-> +Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-> +
-> +Pull Request:
-> +https://github.com/transmission/transmission/pull/42
-> +---
-> + libtransmission/platform-quota.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/libtransmission/platform-quota.c b/libtransmission/platform-quota.c
-> +index 58c518a..57377ef 100644
-> +--- a/libtransmission/platform-quota.c
-> ++++ b/libtransmission/platform-quota.c
-> +@@ -284,7 +284,7 @@ getquota (const char * device)
-> +       spaceused = (int64_t) dq.dqb_curblocks >> 1;
-> + #elif defined(__APPLE__)
-> +       spaceused = (int64_t) dq.dqb_curbytes;
-> +-#elif defined(__UCLIBC__)
-> ++#elif defined(__UCLIBC__) && (__UCLIBC_MAJOR__ == 0 || (__UCLIBC_MAJOR__ == 1 && __UCLIBC_SUBLEVEL__ <= 17))
+> I would prefer rebuilding all uClibc-ng toolchains as we get then a
+> good overview about the quality of the 1.0.18 release.
+> Furthermore all static/no-thread builds for other architectures are
+> affected by this release, a lot of issues regarding pthread_mutex_*
+> should be resolved. (libarchive issues,..)
+> 
+> May be the linker script fix should be applied before that.
+> I will sent the patch today.
 
- Shouldn't this also include __UCLIBC_MINOR__ == 0, so the condition doesn't
-trigger when uClibc-ng 1.1.0 is released?
+ I think it would be wise to always update the toolchains when something changed
+in the packages that generate them. That way they get maximum testing.
+
+ That would also give an early warning when something is wrong with a bump: you
+would have noticed the locale issue while building the toolchains, I think.
+
 
  Regards,
  Arnout
-
-> +       spaceused = (int64_t) btodb(dq.dqb_curblocks);
-> + #elif defined(__sun) || (defined(_LINUX_QUOTA_VERSION) && _LINUX_QUOTA_VERSION < 2)
-> +       spaceused = (int64_t) dq.dqb_curblocks >> 1;
-> +-- 
-> +2.1.4
-> +
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
