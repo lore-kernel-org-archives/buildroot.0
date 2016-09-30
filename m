@@ -1,99 +1,117 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 30 Sep 2016 09:32:16 -0700
-Subject: [Buildroot] [PATCH] package/opencv3: fix CMAKE_CXX_FLAGS
-In-Reply-To: <20160930101034.4adf4d7e@free-electrons.com>
-References: <1475088032-30321-1-git-send-email-jcmvbkbc@gmail.com>
- <20160929112736.27dc4474@free-electrons.com>
- <CAMo8BfKyMkgwNih1MSGh+qrKtRMob4_j8neOi3v4e5xEaJKnBg@mail.gmail.com>
- <20160930101034.4adf4d7e@free-electrons.com>
-Message-ID: <CAMo8BfLX2teRjUXNyjhgc73F5Qt6OviZBr+ShMcPXq+e5_6kig@mail.gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 30 Sep 2016 19:25:11 +0200
+Subject: [Buildroot] [PATCH] uclibc: remove linker scripts for
+	libubacktrace/libuargp
+Message-ID: <20160930172511.GA20982@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 30, 2016 at 1:10 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Thu, 29 Sep 2016 09:14:41 -0700, Max Filippov wrote:
->> > There is something fishy going on here. Indeed,
->> > support/misc/toolchainfile.cmake.in contains:
->> >
->> >   set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
->> >
->> > So it should normally always prefix CMAKE_CXX_FLAGS with
->> > TARGET_CXXFLAGS. Can you check the toolchain.cmake file that gets
->> > generated during your build? Does it contains the Xtensa specific
->> > CXXFLAGS ?
->>
->> Yes, it does.
->
-> So if it does, why is your patch necessary? I'm not following here.
-> Do you mean that the Xtensa-specific flags are present in the
-> toolchain.cmake file, but are in the end not used during the build ?
+They are not required anymore and break some builds.
 
-Right. The file
-  host/usr/share/buildroot/toolchainfile.cmake
-exists and contains the following (correct) lines:
+Tested-by: Lance Fredrickson <lancethepants@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+---
+ ...uargp-remove-unneeded-and-false-linker-sc.patch | 89 ++++++++++++++++++++++
+ 1 file changed, 89 insertions(+)
+ create mode 100644 package/uclibc/0002-ubacktrace-uargp-remove-unneeded-and-false-linker-sc.patch
 
-set(CMAKE_C_FLAGS "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os
-${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
-set(CMAKE_CXX_FLAGS "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os
-${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
-
-But the file
-  build/opencv3-3.1.0/CMakeCache.txt
-that governs opencv3 build contains the following lines:
-
-//Buildroot CXXFLAGS
-CMAKE_CXX_FLAGS:STRING=-latomic
-//Buildroot CFLAGS
-CMAKE_C_FLAGS:STRING='-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os '
-
-Below is the output that I see during the failing opencv3 build:
-
---     C++ flags (Release):         -latomic   -fsigned-char -W -Wall
--Werror=return-type -Werror=non-virtual-dtor -Werror=address
--Werror=sequence-point -Wformat -Werror=format-security
--Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow
--Wsign-promo -Wno-narrowing -Wno-delete-non-virtual-dtor
--fdiagnostics-show-option -pthread -fomit-frame-pointer
--ffunction-sections -fvisibility=hidden -fvisibility-inlines-hidden
--O3 -DNDEBUG  -DNDEBUG
---     C++ flags (Debug):           -latomic   -fsigned-char -W -Wall
--Werror=return-type -Werror=non-virtual-dtor -Werror=address
--Werror=sequence-point -Wformat -Werror=format-security
--Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow
--Wsign-promo -Wno-narrowing -Wno-delete-non-virtual-dtor
--fdiagnostics-show-option -pthread -fomit-frame-pointer
--ffunction-sections -fvisibility=hidden -fvisibility-inlines-hidden -g
- -O0 -DDEBUG -D_DEBUG
---     C Compiler:
-/home/jcmvbkbc/tmp/br/build-20160928-reproduce-opencv/host/usr/bin/xtensa-linux-gcc
---     C flags (Release):           -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls
--mauto-litpools -Os    -fsigned-char -W -Wall -Werror=return-type
--Werror=non-virtual-dtor -Werror=address -Werror=sequence-point
--Wformat -Werror=format-security -Wmissing-declarations
--Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self
--Wpointer-arith -Wshadow -Wno-narrowing -fdiagnostics-show-option
--pthread -fomit-frame-pointer -ffunction-sections -fvisibility=hidden
--O3 -DNDEBUG  -DNDEBUG
---     C flags (Debug):             -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls
--mauto-litpools -Os    -fsigned-char -W -Wall -Werror=return-type
--Werror=non-virtual-dtor -Werror=address -Werror=sequence-point
--Wformat -Werror=format-security -Wmissing-declarations
--Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self
--Wpointer-arith -Wshadow -Wno-narrowing -fdiagnostics-show-option
--pthread -fomit-frame-pointer -ffunction-sections -fvisibility=hidden
--g  -O0 -DDEBUG -D_DEBUG
-
-Notice the difference between the C and the C++ flags.
-
+diff --git a/package/uclibc/0002-ubacktrace-uargp-remove-unneeded-and-false-linker-sc.patch b/package/uclibc/0002-ubacktrace-uargp-remove-unneeded-and-false-linker-sc.patch
+new file mode 100644
+index 0000000..dbb65c6
+--- /dev/null
++++ b/package/uclibc/0002-ubacktrace-uargp-remove-unneeded-and-false-linker-sc.patch
+@@ -0,0 +1,89 @@
++From 15186b99774df74cf8ab02acd1a3f0ffd4c54ca1 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@uclibc-ng.org>
++Date: Fri, 30 Sep 2016 04:49:58 +0200
++Subject: [PATCH] ubacktrace/uargp: remove unneeded and false linker scripts
++
++Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
++---
++ Rules.mak               | 28 ----------------------------
++ extra/Configs/Config.in |  9 +++------
++ 2 files changed, 3 insertions(+), 34 deletions(-)
++
++diff --git a/Rules.mak b/Rules.mak
++index 15dfa37..67189ff 100644
++--- a/Rules.mak
+++++ b/Rules.mak
++@@ -140,7 +140,6 @@ export MAJOR_VERSION MINOR_VERSION SUBLEVEL VERSION ABI_VERSION LC_ALL
++ 
++ LIBC := libc
++ SHARED_LIBNAME := $(LIBC).so.$(ABI_VERSION)
++-UBACKTRACE_DSO := libubacktrace.so.$(ABI_VERSION)
++ 
++ UCLIBC_LDSO_NAME := ld-uClibc
++ ARCH_NATIVE_BIT := 32
++@@ -548,33 +547,6 @@ link.asneeded = $(if $(CC_FLAG_ASNEEDED),$(if $(CC_FLAG_NO_ASNEEDED),$(CC_FLAG_A
++ # Check for AS_NEEDED support in linker script (binutils>=2.16.1 has it)
++ ifndef ASNEEDED
++ export ASNEEDED:=$(shell $(CC) -Wl,--help 2>/dev/null | grep -q -- --as-needed && echo "AS_NEEDED ( $(UCLIBC_LDSO) )" || echo "$(UCLIBC_LDSO)")
++-
++-# Only used in installed libc.so linker script
++-ifeq ($(UCLIBC_HAS_BACKTRACE),y)
++-ifeq ($(HARDWIRED_ABSPATH),y)
++-UBACKTRACE_FULL_NAME := $(subst //,/,$(RUNTIME_PREFIX)$(MULTILIB_DIR)/$(UBACKTRACE_DSO))
++-else
++-UBACKTRACE_FULL_NAME := $(UBACKTRACE_DSO)
++-endif
++-export UBACKTRACE_ASNEEDED:=$(shell $(CC) -Wl,--help 2>/dev/null | grep -q -- --as-needed && \
++-	echo "GROUP ( AS_NEEDED ( $(UBACKTRACE_FULL_NAME) ) )" || \
++-	echo "GROUP ( $(UBACKTRACE_FULL_NAME) )")
++-else
++-export UBACKTRACE_ASNEEDED:=""
++-endif
++-ifeq ($(UCLIBC_HAS_ARGP),y)
++-ifeq ($(HARDWIRED_ABSPATH),y)
++-# Only used in installed libc.so linker script
++-UARGP_FULL_NAME := $(subst //,/,$(RUNTIME_PREFIX)$(MULTILIB_DIR)/libuargp.so.$(MAJOR_VERSION))
++-else
++-UARGP_FULL_NAME := libuargp.so.$(MAJOR_VERSION)
++-endif
++-export UARGP_ASNEEDED:=$(shell $(CC) -Wl,--help 2>/dev/null | grep -q -- --as-needed && \
++-	echo "GROUP ( AS_NEEDED ( $(UARGP_FULL_NAME) ) )" || \
++-	echo "GROUP ( $(UARGP_FULL_NAME) )")
++-else
++-export UARGP_ASNEEDED:=""
++-endif
++ endif
++ 
++ # Add a bunch of extra pedantic annoyingly strict checks
++diff --git a/extra/Configs/Config.in b/extra/Configs/Config.in
++index fc6669b..c5e54e1 100644
++--- a/extra/Configs/Config.in
+++++ b/extra/Configs/Config.in
++@@ -1896,8 +1896,6 @@ config UCLIBC_HAS_ARGP
++ 	  `--help' and `--version' options.
++ 	  A library can export an argp option parser, which programs can easily
++ 	  use in conjunction with their own option parser.
++-	  A new shared object "libuargp" is created. The "libc.so" linker script
++-	  contains the AS_NEEDED entry for getting the libuargp linked automatically.
++ 	  Argp support is needed by elfutils libdw.
++ 
++ 	  Most people can safely answer N.
++@@ -2391,12 +2389,11 @@ config UCLIBC_HAS_BACKTRACE
++ 	bool "Add support for application self-debugging"
++ 	depends on HAVE_SHARED
++ 	help
++-	  Answer Y here to compile support for application self-debugging, by adding
++-	  a new shared object "libubacktrace.so" that provides the following new
++-	  functions:
+++	  Answer Y here to compile support for application self-debugging that
+++	  provides the following new functions:
++ 	  backtrace, backtrace_symbols, backtrace_symbols_fd
++ 
++-	  The backtrace functionality is currently supported on SH platform, and it
+++	  The backtrace functionality is currently supported on some platforms, and it
++ 	  based on dwarf2 informations to properly work, so any application that
++ 	  want to use backtrace needs to be built with -fexceptions flag.
++ 
++-- 
++2.1.4
++
 -- 
-Thanks.
--- Max
+2.1.4
