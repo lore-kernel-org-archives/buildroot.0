@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Sep 2016 11:56:36 +0200
-Subject: [Buildroot] [git commit] tmux: bump version to 2.3
-Message-ID: <20160930095716.DF416822F6@busybox.osuosl.org>
+Date: Fri, 30 Sep 2016 11:55:06 +0200
+Subject: [Buildroot] [git commit] nmap: bump version to 7.30
+Message-ID: <20160930095716.D1D9782266@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=087f87111b9295b508262161f5644b69b2200336
+commit: https://git.buildroot.net/buildroot/commit/?id=0de5da04d4bf3db97cf6845c3ce288f5e48473a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tmux/tmux.hash | 2 +-
- package/tmux/tmux.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nmap/nmap.hash | 4 ++--
+ package/nmap/nmap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
-index f3cbe74..9195a16 100644
---- a/package/tmux/tmux.hash
-+++ b/package/tmux/tmux.hash
+diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
+index 448a19b..94e189e 100644
+--- a/package/nmap/nmap.hash
++++ b/package/nmap/nmap.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256  bc28541b64f99929fe8e3ae7a02291263f3c97730781201824c0f05d7c8e19e4  tmux-2.2.tar.gz
-+sha256 55313e132f0f42de7e020bf6323a1939ee02ab79c48634aa07475db41573852b  tmux-2.3.tar.gz
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index 1e1b2b7..f6dd1a9 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
+-# From https://nmap.org/dist/sigs/nmap-7.12.tar.bz2.digest.txt
+-sha256	63df082a87c95a189865d37304357405160fc6333addcf5b84204c95e0539b04	nmap-7.12.tar.bz2
++# From https://nmap.org/dist/sigs/nmap-7.30.tar.bz2.digest.txt
++sha256  ba38a042ec67e315d903d28a4976b74999da94c646667c0c63f31e587d6d8d0f nmap-7.30.tar.bz2
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 46c6232..2cc7604 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TMUX_VERSION = 2.2
-+TMUX_VERSION = 2.3
- TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
- TMUX_LICENSE = ISC
- TMUX_LICENSE_FILES = README
+-NMAP_VERSION = 7.12
++NMAP_VERSION = 7.30
+ NMAP_SITE = http://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = libpcap pcre
