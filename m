@@ -1,92 +1,35 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 30 Sep 2016 09:31:15 +0200
-Subject: [Buildroot] [PATCH] uclibc: fix compile if locales are enabled
-In-Reply-To: <20160929104355.GA24031@waldemar-brodkorb.de>
-References: <20160929104355.GA24031@waldemar-brodkorb.de>
-Message-ID: <CAGm1_kvrfqd_XxczKZwYaraCBQCGE_vqXPf6rkogtsX==_K5EA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 30 Sep 2016 10:06:19 +0200
+Subject: [Buildroot] [PATCH] lzop: unbreak powerpc build with GCC >= 5
+In-Reply-To: <20160928143314.16109-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 28 Sep 2016 16:33:14 +0200")
+References: <20160928143314.16109-1-peter@korsgaard.com>
+Message-ID: <87vaxdyfpg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 29, 2016 at 12:43 PM, Waldemar Brodkorb <wbx@openadk.org> wrote:
-> Reported via #buildroot, the newly activated locale
-> tool should only build for the target, not for the host.
->
-> Fix from upstream.
->
-> Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/c60/c60554f7b84d5050b86c1735fb857856ddfa4dff/
+ > http://autobuild.buildroot.net/results/888/888ea1aea200a71d0887754e2afabdc6b260bf2f/
+ > http://autobuild.buildroot.net/results/219/219194d269d7f3cf4c3db120e6d8079085916bd3/
 
-Thanks for fixing this.
+ > GCC >= 5 changed the behaviour of 'extern inline', causing linking errors
+ > when the powerpc inline functions are used in multiple compilation units:
 
-Yegor
+ > https://gcc.gnu.org/gcc-5/porting_to.html
 
-> ---
->  ...remove-building-for-the-host-as-it-breaks.patch | 48 ++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 package/uclibc/0001-locale-remove-building-for-the-host-as-it-breaks.patch
->
-> diff --git a/package/uclibc/0001-locale-remove-building-for-the-host-as-it-breaks.patch b/package/uclibc/0001-locale-remove-building-for-the-host-as-it-breaks.patch
-> new file mode 100644
-> index 0000000..a04c6c6
-> --- /dev/null
-> +++ b/package/uclibc/0001-locale-remove-building-for-the-host-as-it-breaks.patch
-> @@ -0,0 +1,48 @@
-> +From 8c53e7524dfb9127b006e773307fdaa4df899a04 Mon Sep 17 00:00:00 2001
-> +From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-> +Date: Thu, 29 Sep 2016 11:40:52 +0200
-> +Subject: [PATCH] locale: remove building for the host, as it breaks
-> +
-> +Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-> +---
-> + utils/Makefile.in | 10 +---------
-> + 1 file changed, 1 insertion(+), 9 deletions(-)
-> +
-> +diff --git a/utils/Makefile.in b/utils/Makefile.in
-> +index 5457776..8666f89 100644
-> +--- a/utils/Makefile.in
-> ++++ b/utils/Makefile.in
-> +@@ -64,10 +64,6 @@ BUILD_CFLAGS-ldd.host      := \
-> +                               -I$(top_srcdir)ldso/ldso/$(TARGET_ARCH) \
-> +                               -I$(top_srcdir)ldso/include \
-> +                               -include $(top_srcdir)include/elf.h
-> +-BUILD_CFLAGS-locale.host   := \
-> +-                              -DNOT_IN_libc \
-> +-                              -I$(top_srcdir)utils/ \
-> +-                              -I.
-> + BUILD_CFLAGS-iconv.host    := \
-> +                       -include $(top_builddir)extra/locale/c8tables.h \
-> +                       -I$(top_srcdir)libc/misc/wchar -DL_iconv_main
-> +@@ -97,7 +93,6 @@ endif
-> + utils_OBJ := $(patsubst %,$(utils_OUT)/%,$(utils_OBJ))
-> +
-> + hostutils_OBJ := $(patsubst %,%.host,$(utils_OBJ))
-> +-hostutils_LOCALE_OBJ := $(patsubst %,%.host,$(utils_LOCALE_OBJ))
-> +
-> + utils: $(utils_OBJ) $(utils_LOCALE_OBJ)
-> +
-> +@@ -109,10 +104,7 @@ $(utils_OBJ): $(utils_OUT)/% : $(utils_DIR)/%.c | $(libc)
-> + $(utils_OUT)/locale: $(top_srcdir)extra/locale/programs/locale.c | $(libc)
-> +       $(compile.u)
-> +
-> +-$(utils_OUT)/locale.host: $(top_srcdir)extra/locale/programs/locale.c | $(libc)
-> +-      $(hcompile.u)
-> +-
-> +-hostutils: $(hostutils_OBJ) $(hostutils_LOCALE_OBJ)
-> ++hostutils: $(hostutils_OBJ)
-> +
-> + $(hostutils_OBJ): $(utils_OUT)/%.host : $(utils_DIR)/%.c
-> +       $(hcompile.u)
-> +--
-> +2.1.4
-> +
-> --
-> 2.1.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ > Add a patch from openembedded to change it to use static inline (which has
+ > the correct behaviour in both old/new GCC versions) to fix it.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
