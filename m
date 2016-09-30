@@ -1,40 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 30 Sep 2016 20:36:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump to version 1.6.11
-Message-ID: <20160930183632.6509-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 30 Sep 2016 23:17:37 +0200
+Subject: [Buildroot] [PATCH] docs/manual: no warranty on output of legal-info
+Message-ID: <1475270257-27153-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/freeswitch/freeswitch.hash | 4 ++--
- package/freeswitch/freeswitch.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Explicitly state that there is no warranty about the accuracy of the
+content of the output of 'make legal-info'.
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 4a4d6da..9d23174 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,2 +1,2 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.10.tar.xz.sha256
--sha256 b7beaaac29dc0a58cc34cfd402bf1c7e8ca06975722fd8ddb2983cbed17dd6e4  freeswitch-1.6.10.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.11.tar.xz.sha256
-+sha256 653aa8aa1ad012828e0b3d3441d4d2463dbeee0126b751006055c07417127b6e  freeswitch-1.6.11.tar.xz
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index b65096b..ce30d17 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ docs/manual/legal-notice.txt | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
+index 7c19bc3..ac291c8 100644
+--- a/docs/manual/legal-notice.txt
++++ b/docs/manual/legal-notice.txt
+@@ -73,6 +73,16 @@ distribution is required).
+ When you run +make legal-info+, Buildroot produces warnings in the +README+
+ file to inform you of relevant material that could not be saved.
  
--FREESWITCH_VERSION = 1.6.10
-+FREESWITCH_VERSION = 1.6.11
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
- FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
- FREESWITCH_LICENSE = MPLv1.1, \
++Finally, keep in mind that the output of +make legal-info+ is based on
++declarative statements in each of the packages recipes. The Buildroot
++developpers try to do their best at keeping those declarative statements
++as accurate as possible, to the best of their knowledge. However, it is
++very well possible that those declarative statements may not all be fully
++accurate nor exhaustive. You (or your legal department) _have_ to check
++the output of +make legal-info+ before using it as your own compliance
++delivery. See the _NO WARRANTY_ clauses (clauses 11 and 12) in the
+++COPYING+ file at the root of the Buildroot distribution.
++
+ [[legal-info-list-licenses]]
+ === License abbreviations
+ 
 -- 
-2.9.3
+2.7.4
