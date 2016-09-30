@@ -1,117 +1,26 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 30 Sep 2016 19:25:11 +0200
-Subject: [Buildroot] [PATCH] uclibc: remove linker scripts for
-	libubacktrace/libuargp
-Message-ID: <20160930172511.GA20982@waldemar-brodkorb.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 30 Sep 2016 20:16:54 +0200
+Subject: [Buildroot] [PATCH] transmission: fix compile error
+In-Reply-To: <20160929181259.GA16185@waldemar-brodkorb.de> (Waldemar
+ Brodkorb's message of "Thu, 29 Sep 2016 20:12:59 +0200")
+References: <20160929181259.GA16185@waldemar-brodkorb.de>
+Message-ID: <874m4xtfqh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-They are not required anymore and break some builds.
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-Tested-by: Lance Fredrickson <lancethepants@gmail.com>
-Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
----
- ...uargp-remove-unneeded-and-false-linker-sc.patch | 89 ++++++++++++++++++++++
- 1 file changed, 89 insertions(+)
- create mode 100644 package/uclibc/0002-ubacktrace-uargp-remove-unneeded-and-false-linker-sc.patch
+ > After update to uClibc-ng 1.0.18 transmission fails to
+ > compile as the special treatment for sys/quota.h isn't required
+ > anymore, because upstream synced with GNU libc to fix a samba4
+ > compile problem.
 
-diff --git a/package/uclibc/0002-ubacktrace-uargp-remove-unneeded-and-false-linker-sc.patch b/package/uclibc/0002-ubacktrace-uargp-remove-unneeded-and-false-linker-sc.patch
-new file mode 100644
-index 0000000..dbb65c6
---- /dev/null
-+++ b/package/uclibc/0002-ubacktrace-uargp-remove-unneeded-and-false-linker-sc.patch
-@@ -0,0 +1,89 @@
-+From 15186b99774df74cf8ab02acd1a3f0ffd4c54ca1 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Fri, 30 Sep 2016 04:49:58 +0200
-+Subject: [PATCH] ubacktrace/uargp: remove unneeded and false linker scripts
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ Rules.mak               | 28 ----------------------------
-+ extra/Configs/Config.in |  9 +++------
-+ 2 files changed, 3 insertions(+), 34 deletions(-)
-+
-+diff --git a/Rules.mak b/Rules.mak
-+index 15dfa37..67189ff 100644
-+--- a/Rules.mak
-++++ b/Rules.mak
-+@@ -140,7 +140,6 @@ export MAJOR_VERSION MINOR_VERSION SUBLEVEL VERSION ABI_VERSION LC_ALL
-+ 
-+ LIBC := libc
-+ SHARED_LIBNAME := $(LIBC).so.$(ABI_VERSION)
-+-UBACKTRACE_DSO := libubacktrace.so.$(ABI_VERSION)
-+ 
-+ UCLIBC_LDSO_NAME := ld-uClibc
-+ ARCH_NATIVE_BIT := 32
-+@@ -548,33 +547,6 @@ link.asneeded = $(if $(CC_FLAG_ASNEEDED),$(if $(CC_FLAG_NO_ASNEEDED),$(CC_FLAG_A
-+ # Check for AS_NEEDED support in linker script (binutils>=2.16.1 has it)
-+ ifndef ASNEEDED
-+ export ASNEEDED:=$(shell $(CC) -Wl,--help 2>/dev/null | grep -q -- --as-needed && echo "AS_NEEDED ( $(UCLIBC_LDSO) )" || echo "$(UCLIBC_LDSO)")
-+-
-+-# Only used in installed libc.so linker script
-+-ifeq ($(UCLIBC_HAS_BACKTRACE),y)
-+-ifeq ($(HARDWIRED_ABSPATH),y)
-+-UBACKTRACE_FULL_NAME := $(subst //,/,$(RUNTIME_PREFIX)$(MULTILIB_DIR)/$(UBACKTRACE_DSO))
-+-else
-+-UBACKTRACE_FULL_NAME := $(UBACKTRACE_DSO)
-+-endif
-+-export UBACKTRACE_ASNEEDED:=$(shell $(CC) -Wl,--help 2>/dev/null | grep -q -- --as-needed && \
-+-	echo "GROUP ( AS_NEEDED ( $(UBACKTRACE_FULL_NAME) ) )" || \
-+-	echo "GROUP ( $(UBACKTRACE_FULL_NAME) )")
-+-else
-+-export UBACKTRACE_ASNEEDED:=""
-+-endif
-+-ifeq ($(UCLIBC_HAS_ARGP),y)
-+-ifeq ($(HARDWIRED_ABSPATH),y)
-+-# Only used in installed libc.so linker script
-+-UARGP_FULL_NAME := $(subst //,/,$(RUNTIME_PREFIX)$(MULTILIB_DIR)/libuargp.so.$(MAJOR_VERSION))
-+-else
-+-UARGP_FULL_NAME := libuargp.so.$(MAJOR_VERSION)
-+-endif
-+-export UARGP_ASNEEDED:=$(shell $(CC) -Wl,--help 2>/dev/null | grep -q -- --as-needed && \
-+-	echo "GROUP ( AS_NEEDED ( $(UARGP_FULL_NAME) ) )" || \
-+-	echo "GROUP ( $(UARGP_FULL_NAME) )")
-+-else
-+-export UARGP_ASNEEDED:=""
-+-endif
-+ endif
-+ 
-+ # Add a bunch of extra pedantic annoyingly strict checks
-+diff --git a/extra/Configs/Config.in b/extra/Configs/Config.in
-+index fc6669b..c5e54e1 100644
-+--- a/extra/Configs/Config.in
-++++ b/extra/Configs/Config.in
-+@@ -1896,8 +1896,6 @@ config UCLIBC_HAS_ARGP
-+ 	  `--help' and `--version' options.
-+ 	  A library can export an argp option parser, which programs can easily
-+ 	  use in conjunction with their own option parser.
-+-	  A new shared object "libuargp" is created. The "libc.so" linker script
-+-	  contains the AS_NEEDED entry for getting the libuargp linked automatically.
-+ 	  Argp support is needed by elfutils libdw.
-+ 
-+ 	  Most people can safely answer N.
-+@@ -2391,12 +2389,11 @@ config UCLIBC_HAS_BACKTRACE
-+ 	bool "Add support for application self-debugging"
-+ 	depends on HAVE_SHARED
-+ 	help
-+-	  Answer Y here to compile support for application self-debugging, by adding
-+-	  a new shared object "libubacktrace.so" that provides the following new
-+-	  functions:
-++	  Answer Y here to compile support for application self-debugging that
-++	  provides the following new functions:
-+ 	  backtrace, backtrace_symbols, backtrace_symbols_fd
-+ 
-+-	  The backtrace functionality is currently supported on SH platform, and it
-++	  The backtrace functionality is currently supported on some platforms, and it
-+ 	  based on dwarf2 informations to properly work, so any application that
-+ 	  want to use backtrace needs to be built with -fexceptions flag.
-+ 
-+-- 
-+2.1.4
-+
+ > Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+
+Committed, thanks. Don't forget to submit the patch upstream.
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
