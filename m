@@ -1,94 +1,94 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 30 Sep 2016 10:36:51 +0100
-Subject: [Buildroot] [PATCH 05/13] MIPS: add mips32r5 generic architecture
+Date: Fri, 30 Sep 2016 10:36:52 +0100
+Subject: [Buildroot] [PATCH 06/13] MIPS: add mips64r5 generic architecture
 	variant
 In-Reply-To: <20160930093659.35032-1-Vincent.Riera@imgtec.com>
 References: <20160930093659.35032-1-Vincent.Riera@imgtec.com>
-Message-ID: <20160930093659.35032-6-Vincent.Riera@imgtec.com>
+Message-ID: <20160930093659.35032-7-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
--march=mips32r5 support started from GCC-5, so disable previous versions
+-march=mips64r5 support started from GCC-5, so disable previous versions
 when the CPU is R5.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
  arch/Config.in.mips        | 9 ++++++++-
- package/gcc/Config.in.host | 6 ++++++
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ package/gcc/Config.in.host | 6 +++---
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index 56b8a6b..94f6fa3 100644
+index 94f6fa3..63f23b4 100644
 --- a/arch/Config.in.mips
 +++ b/arch/Config.in.mips
-@@ -3,6 +3,8 @@ config BR2_MIPS_CPU_MIPS32
+@@ -11,6 +11,8 @@ config BR2_MIPS_CPU_MIPS64
  	bool
- config BR2_MIPS_CPU_MIPS32R2
+ config BR2_MIPS_CPU_MIPS64R2
  	bool
-+config BR2_MIPS_CPU_MIPS32R5
++config BR2_MIPS_CPU_MIPS64R5
 +	bool
- config BR2_MIPS_CPU_MIPS32R6
+ config BR2_MIPS_CPU_MIPS64R6
  	bool
- config BR2_MIPS_CPU_MIPS64
-@@ -21,7 +23,7 @@ choice
+ 
+@@ -22,7 +24,7 @@ choice
+ 	help
  	  Specific CPU variant to use
  
- 	  64bit cabable: 64, 64r2, 64r6
--	  non-64bit capable: 32, 32r2, 32r6
-+	  non-64bit capable: 32, 32r2, 32r5, 32r6
+-	  64bit cabable: 64, 64r2, 64r6
++	  64bit cabable: 64, 64r2, 64r5, 64r6
+ 	  non-64bit capable: 32, 32r2, 32r5, 32r6
  
  config BR2_mips_32
- 	bool "Generic MIPS32"
-@@ -31,6 +33,10 @@ config BR2_mips_32r2
- 	bool "Generic MIPS32R2"
- 	depends on !BR2_ARCH_IS_64
- 	select BR2_MIPS_CPU_MIPS32R2
-+config BR2_mips_32r5
-+	bool "Generic MIPS32R5"
-+	depends on !BR2_ARCH_IS_64
-+	select BR2_MIPS_CPU_MIPS32R5
- config BR2_mips_32r6
- 	bool "Generic MIPS32R6"
- 	depends on !BR2_ARCH_IS_64
-@@ -90,6 +96,7 @@ config BR2_ENDIAN
- config BR2_GCC_TARGET_ARCH
- 	default "mips32"	if BR2_mips_32
- 	default "mips32r2"	if BR2_mips_32r2
-+	default "mips32r5"	if BR2_mips_32r5
+@@ -49,6 +51,10 @@ config BR2_mips_64r2
+ 	bool "Generic MIPS64R2"
+ 	depends on BR2_ARCH_IS_64
+ 	select BR2_MIPS_CPU_MIPS64R2
++config BR2_mips_64r5
++	bool "Generic MIPS64R5"
++	depends on BR2_ARCH_IS_64
++	select BR2_MIPS_CPU_MIPS64R5
+ config BR2_mips_64r6
+ 	bool "Generic MIPS64R6"
+ 	depends on BR2_ARCH_IS_64
+@@ -100,6 +106,7 @@ config BR2_GCC_TARGET_ARCH
  	default "mips32r6"	if BR2_mips_32r6
  	default "mips64"	if BR2_mips_64
  	default "mips64r2"	if BR2_mips_64r2
++	default "mips64r5"	if BR2_mips_64r5
+ 	default "mips64r6"	if BR2_mips_64r6
+ 
+ config BR2_MIPS_OABI32
 diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 80bb880..0988a9c 100644
+index 0988a9c..c5fcbc8 100644
 --- a/package/gcc/Config.in.host
 +++ b/package/gcc/Config.in.host
-@@ -28,6 +28,8 @@ choice
- 		depends on !BR2_sparc_leon3
+@@ -29,7 +29,7 @@ choice
  		# Broken or unsupported x86 cores
  		depends on !BR2_x86_jaguar && !BR2_x86_steamroller
-+		# Unsupported for MIPS R5
-+		depends on !BR2_MIPS_CPU_MIPS32R5
+ 		# Unsupported for MIPS R5
+-		depends on !BR2_MIPS_CPU_MIPS32R5
++		depends on !BR2_MIPS_CPU_MIPS32R5 && !BR2_MIPS_CPU_MIPS64R5
  		# Unsupported for MIPS R6
  		depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
  		# musl ppc64 unsupported
-@@ -46,6 +48,8 @@ choice
- 		depends on !BR2_powerpc_power8
+@@ -49,7 +49,7 @@ choice
  		# gcc-4.8.x + binutils-2.25 is broken for MIPS
  		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && BR2_BINUTILS_VERSION_2_25_X)
-+		# Unsupported for MIPS R5
-+		depends on !BR2_MIPS_CPU_MIPS32R5
+ 		# Unsupported for MIPS R5
+-		depends on !BR2_MIPS_CPU_MIPS32R5
++		depends on !BR2_MIPS_CPU_MIPS32R5 && !BR2_MIPS_CPU_MIPS64R5
  		# Unsupported for MIPS R6
  		depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
  		# musl ppc64 unsupported
-@@ -70,6 +74,8 @@ choice
- 		depends on !BR2_arc && !BR2_bfin
+@@ -75,7 +75,7 @@ choice
  		# Broken or unsupported ARM cores
  		depends on !BR2_cortex_a17
-+		# Unsupported for MIPS R5
-+		depends on !BR2_MIPS_CPU_MIPS32R5
+ 		# Unsupported for MIPS R5
+-		depends on !BR2_MIPS_CPU_MIPS32R5
++		depends on !BR2_MIPS_CPU_MIPS32R5 && !BR2_MIPS_CPU_MIPS64R5
  		# Unsupported for MIPS R6
  		depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
  		# musl ppc64 unsupported
