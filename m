@@ -1,59 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Oct 2016 21:04:47 +0200
-Subject: [Buildroot] [PATCH 1/2] package.snappy: fix static builds
-Message-ID: <1475348688-1805-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sat,  1 Oct 2016 21:04:48 +0200
+Subject: [Buildroot] [PATCH 2/2] package/snappy: bump version
+In-Reply-To: <1475348688-1805-1-git-send-email-yann.morin.1998@free.fr>
+References: <1475348688-1805-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1475348688-1805-2-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some toolchains, libstdc++ uses pthread symbols:
-
-    .../lib/libstdc++.a(eh_alloc.o): In function `__gnu_cxx::__mutex::lock()':
-    eh_alloc.cc:(.text._ZN9__gnu_cxx7__mutex4lockEv[_ZN9__gnu_cxx7__mutex4lockEv]+0x2):
-    undefined reference to `pthread_mutex_lock'
-
-and a lot of other pthread symbols...
-
-However, when doing a static build, there is no way for the linker what
-library to link in, so the build fails miserably if -pthread is not
-specified at link time.
-
-Fixes:
-    http://autobuild.buildroot.org/results/15e/15ecaa23f0116e8120b3d62e553c838f0303df35/
-    http://autobuild.buildroot.org/results/f0a/f0abe301816e39eb4ae26d3e8cd42d90901d5ac5/
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
 ---
-Note: snappy's buildsystem uses libtool, and libsnappy.la does have the
-necessary -pthread listed as a "dependency":
+ package/snappy/snappy.hash | 2 +-
+ package/snappy/snappy.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-   16 # Linker flags that cannot go in dependency_libs.
-   17 inherited_linker_flags=' -pthread'
-
-But that is not picked-up by libtool, and I don't know why...
----
- package/snappy/snappy.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
+diff --git a/package/snappy/snappy.hash b/package/snappy/snappy.hash
+index fc979ae..bb7f104 100644
+--- a/package/snappy/snappy.hash
++++ b/package/snappy/snappy.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 d64e434e2ddfe9ae942708747003d489e27f2bfddaa5e9e070da98cb00f660f2  snappy-1ff9be9b8fafc8528ca9e055646f5932aa5db9c4.tar.gz
++sha256 f50719c6dc7103d65df66882a3b4569d598eda251266463eca716928187dc12b  snappy-32d6d7d8a2ef328a2ee1dd40f072e21f4983ebda.tar.gz
 diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
-index b00dddf..3e8d603 100644
+index 3e8d603..f491f03 100644
 --- a/package/snappy/snappy.mk
 +++ b/package/snappy/snappy.mk
-@@ -16,4 +16,12 @@ SNAPPY_INSTALL_STAGING = YES
- # Disable tests
- SNAPPY_CONF_OPTS = --disable-gtest
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# libsnappy links with libstdc++. libstdc++ uses pthread symbols. libstdc++
-+# does not have a .pc file, and its .la file does not mention -pthread.
-+# So, static links to libstdc++ will fail if -pthread is not explicity
-+# linked to. Only do that for static builds.
-+ifeq ($(BR2_STATIC_LIBS),y)
-+SNAPPY_CONF_OPTS += LIBS=-pthread
-+endif
-+
- $(eval $(autotools-package))
+-SNAPPY_VERSION = 1ff9be9b8fafc8528ca9e055646f5932aa5db9c4
++SNAPPY_VERSION = 32d6d7d8a2ef328a2ee1dd40f072e21f4983ebda
+ SNAPPY_SITE = $(call github,google,snappy,$(SNAPPY_VERSION))
+ SNAPPY_LICENSE = BSD-3c
+ SNAPPY_LICENSE_FILES = COPYING
 -- 
 2.7.4
