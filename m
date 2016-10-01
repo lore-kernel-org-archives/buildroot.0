@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 1 Oct 2016 10:00:09 +0200
-Subject: [Buildroot] [git commit] package/freeswitch: bump to version 1.6.11
-Message-ID: <20161001080051.71ACF81D8D@busybox.osuosl.org>
+Date: Sat, 1 Oct 2016 10:00:17 +0200
+Subject: [Buildroot] [git commit] orc: bump to version 0.4.26
+Message-ID: <20161001080051.7DC6D80163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=914df2ed7234d09504f69d0d690ee9bd0de691ca
+commit: https://git.buildroot.net/buildroot/commit/?id=118f523b1ed1079808890ec65ae3cd96feb458d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freeswitch/freeswitch.hash | 4 ++--
- package/freeswitch/freeswitch.mk   | 2 +-
+ package/orc/orc.hash | 4 ++--
+ package/orc/orc.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 4a4d6da..9d23174 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
+diff --git a/package/orc/orc.hash b/package/orc/orc.hash
+index 178d374..200467c 100644
+--- a/package/orc/orc.hash
++++ b/package/orc/orc.hash
 @@ -1,2 +1,2 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.10.tar.xz.sha256
--sha256 b7beaaac29dc0a58cc34cfd402bf1c7e8ca06975722fd8ddb2983cbed17dd6e4  freeswitch-1.6.10.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.11.tar.xz.sha256
-+sha256 653aa8aa1ad012828e0b3d3441d4d2463dbeee0126b751006055c07417127b6e  freeswitch-1.6.11.tar.xz
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index b65096b..ce30d17 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
+-# From https://lists.freedesktop.org/archives/gstreamer-devel/2016-March/057056.html
+-sha256	c1b1d54a58f26d483f0b3881538984789fe5d5460ab8fab74a1cacbd3d1c53d1	orc-0.4.25.tar.xz
++# From https://lists.freedesktop.org/archives/gstreamer-devel/2016-August/060159.html
++sha256	7d52fa80ef84988359c3434e1eea302d077a08987abdde6905678ebcad4fa649	orc-0.4.26.tar.xz
+diff --git a/package/orc/orc.mk b/package/orc/orc.mk
+index 5a49cba..4456f53 100644
+--- a/package/orc/orc.mk
++++ b/package/orc/orc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREESWITCH_VERSION = 1.6.10
-+FREESWITCH_VERSION = 1.6.11
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
- FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
- FREESWITCH_LICENSE = MPLv1.1, \
+-ORC_VERSION = 0.4.25
++ORC_VERSION = 0.4.26
+ ORC_SOURCE = orc-$(ORC_VERSION).tar.xz
+ ORC_SITE = http://gstreamer.freedesktop.org/data/src/orc
+ ORC_LICENSE = BSD-2c, BSD-3c
