@@ -1,39 +1,69 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  1 Oct 2016 23:04:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libass: bump version to 0.13.3
-Message-ID: <20161001210440.12982-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 01 Oct 2016 23:11:48 +0200
+Subject: [Buildroot] [PATCHv2 1/2] mksh: new package
+In-Reply-To: <20160928123952.GA27218@waldemar-brodkorb.de> (Waldemar
+ Brodkorb's message of "Wed, 28 Sep 2016 14:39:53 +0200")
+References: <20160928123952.GA27218@waldemar-brodkorb.de>
+Message-ID: <87lgy7rcyz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libass/libass.hash | 2 +-
- package/libass/libass.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-diff --git a/package/libass/libass.hash b/package/libass/libass.hash
-index 5dddc40..cb5016d 100644
---- a/package/libass/libass.hash
-+++ b/package/libass/libass.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	d698d0a6adca7c36c5a86b540d67b05bfd36cebc3c351ab7646497c43fe1face	libass-0.13.2.tar.xz
-+sha256 a641b653d7c9f2f3b9d6a5e5a906a004ac3e110487ad485d9dd029e944bb3f6d  libass-0.13.3.tar.xz
-diff --git a/package/libass/libass.mk b/package/libass/libass.mk
-index 716bca6..0e296ca 100644
---- a/package/libass/libass.mk
-+++ b/package/libass/libass.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBASS_VERSION = 0.13.2
-+LIBASS_VERSION = 0.13.3
- LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
- # Do not use the github helper here, the generated tarball is *NOT*
- # the same as the one uploaded by upstream for the release.
+ > The MirOS Korn Shell is a quite complete posix shell implementation,
+ > is rather small and supports vi mode properly.
+
+ > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > ---
+ > v1 -> v2:
+ >  - split off system shell patch, suggested by Thomas Petazzoni
+ >  - wrap description to 72, suggested by  Thomas Petazzoni
+ >  - simplify building in one step, suggested by Thorsten Glaser
+ >  - remove License file, add URL for MirOS License
+
+ > An example mkshrc can be added later.
+ > +++ b/package/mksh/mksh.mk
+ > @@ -0,0 +1,26 @@
+ > +################################################################################
+ > +#
+ > +# mksh
+ > +#
+ > +################################################################################
+ > +
+ > +MKSH_VERSION = R53a
+ > +MKSH_SOURCE = mksh-$(MKSH_VERSION).tgz
+ > +MKSH_SITE = https://www.mirbsd.org/MirOS/dist/mir/mksh
+ > +# For MirOS License see https://www.mirbsd.org/TaC-mksh.txt
+ > +MKSH_LICENSE = MirOS, ISC
+
+It would be good with a license file as well. The man page does a have a
+license snippet, so I've added:
+
+MKSH_LICENSE_FILES = mksh.1
+
+> +
+ > +define MKSH_BUILD_CMDS
+ > +	cd $(@D) && $(TARGET_MAKE_ENV) \
+ > +		CPPFLAGS="$(TARGET_CPPFLAGS)" \
+ > +		CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+ > +		LD="$(TARGET_LD)" LDFLAGS="$(TARGET_LDFLAGS)" \
+ > +		TARGET_OS=Linux \
+ > +		sh ./Build.sh
+
+I've changed this to use TARGET_CONFIGURE_OPTS.
+
+> +endef
+ > +
+ > +define MKSH_INSTALL_TARGET_CMDS
+ > +	$(INSTALL) -m 0755 $(@D)/mksh $(TARGET_DIR)/bin/mksh
+
+And use the -D option to ensure /bin gets created if needed.
+
+Committed with these fixes, thanks.
+
 -- 
-2.9.3
+Bye, Peter Korsgaard
