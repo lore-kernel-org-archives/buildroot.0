@@ -1,106 +1,70 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun,  2 Oct 2016 16:30:57 -0300
-Subject: [Buildroot] [PATCH] configs/imx6ulpico: Use common script for image
-	generation
-Message-ID: <1475436657-16369-1-git-send-email-festevam@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 02 Oct 2016 21:31:29 +0200
+Subject: [Buildroot] [PATCH 2/2] package/snappy: bump version
+In-Reply-To: <1475348688-1805-2-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 1 Oct 2016 21:04:48 +0200")
+References: <1475348688-1805-1-git-send-email-yann.morin.1998@free.fr>
+ <1475348688-1805-2-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87eg3ypmy6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Using the common board/freescale/common/post-image.sh can lead
-to some good amount of simplification.
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- board/technexion/imx6ulpico/genimage.cfg  | 41 -------------------------------
- board/technexion/imx6ulpico/post-image.sh | 14 -----------
- configs/imx6ulpico_defconfig              |  2 +-
- 3 files changed, 1 insertion(+), 56 deletions(-)
- delete mode 100644 board/technexion/imx6ulpico/genimage.cfg
- delete mode 100755 board/technexion/imx6ulpico/post-image.sh
+For these bump-to-another-git-revision changes I would prefer some
+context / details. For bumps to a new release we at least know that the
+maintainer thinks the sw is ready to be used. With random git versions
+not so much.
 
-diff --git a/board/technexion/imx6ulpico/genimage.cfg b/board/technexion/imx6ulpico/genimage.cfg
-deleted file mode 100644
-index 9e67105..0000000
---- a/board/technexion/imx6ulpico/genimage.cfg
-+++ /dev/null
-@@ -1,41 +0,0 @@
--# Minimal eMMC card image for the Technexion's i.MX6UL Pico board
--#
--# We mimic the .sdcard Freescale's image format for i.MX6UL:
--# * the eMMC must have 1 kB free space at the beginning,
--# * U-Boot is dumped as is,
--# * a FAT partition at offset 8 MB is containing zImage and dtbs,
--# * a single root filesystem partition is required (Ext4 in this case).
--#
--
--image boot.vfat {
--  vfat {
--    files = {
--      "imx6ul-pico-hobbit.dtb",
--      "zImage"
--    }
--  }
--  size = 16M
--}
--
--image sdcard.img {
--  hdimage {
--  }
--
--  partition u-boot {
--    in-partition-table = "no"
--    image = "u-boot.imx"
--    offset = 1024
--  }
--
--  partition boot {
--    partition-type = 0xC
--    bootable = "true"
--    image = "boot.vfat"
--    offset = 8M
--  }
--
--  partition rootfs {
--    partition-type = 0x83
--    image = "rootfs.ext4"
--  }
--}
-diff --git a/board/technexion/imx6ulpico/post-image.sh b/board/technexion/imx6ulpico/post-image.sh
-deleted file mode 100755
-index b4ac460..0000000
---- a/board/technexion/imx6ulpico/post-image.sh
-+++ /dev/null
-@@ -1,14 +0,0 @@
--#!/usr/bin/env bash
--
--BOARD_DIR="$(dirname $0)"
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
--rm -rf "${GENIMAGE_TMP}"
--
--genimage \
--  --rootpath "${TARGET_DIR}" \
--  --tmppath "${GENIMAGE_TMP}" \
--  --inputpath "${BINARIES_DIR}" \
--  --outputpath "${BINARIES_DIR}" \
--  --config "${GENIMAGE_CFG}"
-diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
-index 67058f8..d94478a 100644
---- a/configs/imx6ulpico_defconfig
-+++ b/configs/imx6ulpico_defconfig
-@@ -45,6 +45,6 @@ BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
+E.G. has some important bugfix or new feature been added? Have you used
+it yourself? Is the new hash the latest commit in the repo or something
+else? ..
+
+Anyway - Committed, thanks.
+
+> ---
+ >  package/snappy/snappy.hash | 2 +-
+ >  package/snappy/snappy.mk   | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
+
+ > diff --git a/package/snappy/snappy.hash b/package/snappy/snappy.hash
+ > index fc979ae..bb7f104 100644
+ > --- a/package/snappy/snappy.hash
+ > +++ b/package/snappy/snappy.hash
+ > @@ -1,2 +1,2 @@
+ >  # Locally calculated
+ > -sha256
+ > d64e434e2ddfe9ae942708747003d489e27f2bfddaa5e9e070da98cb00f660f2
+ > snappy-1ff9be9b8fafc8528ca9e055646f5932aa5db9c4.tar.gz
+ > +sha256
+ > f50719c6dc7103d65df66882a3b4569d598eda251266463eca716928187dc12b
+ > snappy-32d6d7d8a2ef328a2ee1dd40f072e21f4983ebda.tar.gz
+ > diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+ > index 3e8d603..f491f03 100644
+ > --- a/package/snappy/snappy.mk
+ > +++ b/package/snappy/snappy.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
  
- # filesystem / image
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/technexion/imx6ulpico/post-image.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
+ > -SNAPPY_VERSION = 1ff9be9b8fafc8528ca9e055646f5932aa5db9c4
+ > +SNAPPY_VERSION = 32d6d7d8a2ef328a2ee1dd40f072e21f4983ebda
+ >  SNAPPY_SITE = $(call github,google,snappy,$(SNAPPY_VERSION))
+ >  SNAPPY_LICENSE = BSD-3c
+ >  SNAPPY_LICENSE_FILES = COPYING
+ > -- 
+ > 2.7.4
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
