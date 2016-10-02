@@ -1,50 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Oct 2016 21:32:30 +0200
-Subject: [Buildroot] [git commit] efibootmgr: fix reverse dependency from
-	efivar
-Message-ID: <20161002193246.71948802AE@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 2 Oct 2016 21:44:30 +0200
+Subject: [Buildroot] [PATCH 2/2] package/snappy: bump version
+In-Reply-To: <87eg3ypmy6.fsf@dell.be.48ers.dk>
+References: <1475348688-1805-1-git-send-email-yann.morin.1998@free.fr>
+ <1475348688-1805-2-git-send-email-yann.morin.1998@free.fr>
+ <87eg3ypmy6.fsf@dell.be.48ers.dk>
+Message-ID: <20161002194430.GA4066@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93b83232d58995d9786017f132a657f00fde154e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-efivar minimum gcc version dependency changed from 4.7 to 4.9 in the
-last efivar bump, so this must be reflected in efibootmgr Config.in as
-well.
+On 2016-10-02 21:31 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> For these bump-to-another-git-revision changes I would prefer some
+> context / details. For bumps to a new release we at least know that the
+> maintainer thinks the sw is ready to be used. With random git versions
+> not so much.
+> 
+> E.G. has some important bugfix or new feature been added? Have you used
+> it yourself? Is the new hash the latest commit in the repo or something
+> else? ..
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/efibootmgr/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Here's your commit log:
 
-diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
-index 2c5c07f..988bf6d 100644
---- a/package/efibootmgr/Config.in
-+++ b/package/efibootmgr/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_EFIBOOTMGR
- 	bool "efibootmgr"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # efivar
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # efivar
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # efivar
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
- 		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII # efivar
- 	select BR2_PACKAGE_EFIVAR
-@@ -14,9 +14,9 @@ config BR2_PACKAGE_EFIBOOTMGR
- 
- 	  https://github.com/rhinstaller/efibootmgr
- 
--comment "efibootmgr requires a glibc toolchain w/ headers >= 3.12, gcc >= 4.7"
-+comment "efibootmgr requires a glibc toolchain w/ headers >= 3.12, gcc >= 4.9"
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
- 		!BR2_TOOLCHAIN_USES_GLIBC || \\
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
- 		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+There's been a single release of snappy since the move from GoogleCode
+to Github; that release was more than a year ago. In that time frame,
+only 14 commits went in master, of which to merges, so about 1 real
+commit per month...
+
+For a brief summary of additional stuff since the last release:
+  - provide snappy.pc
+  - a few generic bug fixes, as well as a few ARM-specific ones
+  - a few buildsystem fixes
+
+Since we can't say releases are made on a timely cadence, let's just hop
+to the latest master from the git tree.
+
+;-)
+
+> Anyway - Committed, thanks.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
