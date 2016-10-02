@@ -1,42 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Oct 2016 16:21:02 +0200
-Subject: [Buildroot] [git commit] libgtk3: bump to version 3.22.1
-Message-ID: <20161002142217.6894F7F984@busybox.osuosl.org>
+Date: Sun, 2 Oct 2016 13:15:04 +0200
+Subject: [Buildroot] [git commit] efibootmgr: bump to version 14
+Message-ID: <20161002142217.3F57B81EB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e3707be26eac96c989ef72c6a43299e2646c918
+commit: https://git.buildroot.net/buildroot/commit/?id=3413c4a0a8cd10e84e797d2ed00f022fab986117
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Upstream has changed version numbering scheme since version 13, which
+came after version 0.12.
+
+There is now a make install target, so we can drop the manual file
+installing. The make install target also installs the new efibootdump
+tool.
+
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/efibootmgr/efibootmgr.hash | 2 +-
+ package/efibootmgr/efibootmgr.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 3854faa..b449d1e 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
+diff --git a/package/efibootmgr/efibootmgr.hash b/package/efibootmgr/efibootmgr.hash
+index a789942..f71dced 100644
+--- a/package/efibootmgr/efibootmgr.hash
++++ b/package/efibootmgr/efibootmgr.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.0.sha256sum
--sha256	88d0bb584be7ecec965b82ba88a9cf0aafd6f03eff7447653295ab2341c74134	gtk+-3.22.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.1.sha256sum
-+sha256	127c8c5cfc32681f9ab3cb542eb0d5c16c1c02faba68bf8fcac9a3cf278ef471	gtk+-3.22.1.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index ed4860d..9edb999 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
+ # locally computed hash
+-sha256 b180d7d6b377d24b0872869f2571e2700b618e4d7ebdc2133134a918efe2623b efibootmgr-efibootmgr-0.12.tar.gz
++sha256 3f260491e2c62e93cb6347ea6f21aaa5f93152e9e7f0269d314623769d82e473 efibootmgr-14.tar.gz
+diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
+index a0c5646..731d6e9 100644
+--- a/package/efibootmgr/efibootmgr.mk
++++ b/package/efibootmgr/efibootmgr.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBGTK3_VERSION_MAJOR = 3.22
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).0
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).1
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPLv2+
+-EFIBOOTMGR_VERSION = efibootmgr-0.12
++EFIBOOTMGR_VERSION = 14
+ EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
+ EFIBOOTMGR_LICENSE = GPLv2+
+ EFIBOOTMGR_LICENSE_FILES = COPYING
+@@ -21,8 +21,8 @@ define EFIBOOTMGR_BUILD_CMDS
+ endef
+ 
+ define EFIBOOTMGR_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/src/efibootmgr/efibootmgr \
+-		$(TARGET_DIR)/usr/bin/efibootmgr
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
