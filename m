@@ -1,59 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Oct 2016 13:15:04 +0200
-Subject: [Buildroot] [git commit] efibootmgr: bump to version 14
-Message-ID: <20161002142217.3F57B81EB2@busybox.osuosl.org>
+Date: Sun, 2 Oct 2016 16:19:47 +0200
+Subject: [Buildroot] [git commit] neon: bump to version 0.30.2
+Message-ID: <20161002142217.580E07F984@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3413c4a0a8cd10e84e797d2ed00f022fab986117
+commit: https://git.buildroot.net/buildroot/commit/?id=98d929a255a8442765178a627c2f296448f7c0d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream has changed version numbering scheme since version 13, which
-came after version 0.12.
-
-There is now a make install target, so we can drop the manual file
-installing. The make install target also installs the new efibootdump
-tool.
-
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efibootmgr/efibootmgr.hash | 2 +-
- package/efibootmgr/efibootmgr.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/neon/neon.hash | 2 +-
+ package/neon/neon.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/efibootmgr/efibootmgr.hash b/package/efibootmgr/efibootmgr.hash
-index a789942..f71dced 100644
---- a/package/efibootmgr/efibootmgr.hash
-+++ b/package/efibootmgr/efibootmgr.hash
+diff --git a/package/neon/neon.hash b/package/neon/neon.hash
+index 9db5f82..d66b6fd 100644
+--- a/package/neon/neon.hash
++++ b/package/neon/neon.hash
 @@ -1,2 +1,2 @@
- # locally computed hash
--sha256 b180d7d6b377d24b0872869f2571e2700b618e4d7ebdc2133134a918efe2623b efibootmgr-efibootmgr-0.12.tar.gz
-+sha256 3f260491e2c62e93cb6347ea6f21aaa5f93152e9e7f0269d314623769d82e473 efibootmgr-14.tar.gz
-diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
-index a0c5646..731d6e9 100644
---- a/package/efibootmgr/efibootmgr.mk
-+++ b/package/efibootmgr/efibootmgr.mk
+ # Locally calculated after checking pgp signature
+-sha256	2962cfcb5d30f3272e3d2fa0e473434419770a3801afe3d46e5d1650787990c2	neon-0.30.0.tar.gz
++sha256	db0bd8cdec329b48f53a6f00199c92d5ba40b0f015b153718d1b15d3d967fbca	neon-0.30.2.tar.gz
+diff --git a/package/neon/neon.mk b/package/neon/neon.mk
+index 13d8084..ca1a6bd 100644
+--- a/package/neon/neon.mk
++++ b/package/neon/neon.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EFIBOOTMGR_VERSION = efibootmgr-0.12
-+EFIBOOTMGR_VERSION = 14
- EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
- EFIBOOTMGR_LICENSE = GPLv2+
- EFIBOOTMGR_LICENSE_FILES = COPYING
-@@ -21,8 +21,8 @@ define EFIBOOTMGR_BUILD_CMDS
- endef
- 
- define EFIBOOTMGR_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/src/efibootmgr/efibootmgr \
--		$(TARGET_DIR)/usr/bin/efibootmgr
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		DESTDIR=$(TARGET_DIR) install
- endef
- 
- $(eval $(generic-package))
+-NEON_VERSION = 0.30.0
++NEON_VERSION = 0.30.2
+ NEON_SITE = http://www.webdav.org/neon
+ NEON_LICENSE = LGPLv2+ (library), GPLv2+ (manual and tests)
+ NEON_LICENSE_FILES = src/COPYING.LIB test/COPYING README
