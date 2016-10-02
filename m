@@ -1,71 +1,106 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Oct 2016 21:19:40 +0200
-Subject: [Buildroot] [PATCH 1/2] package.snappy: fix static builds
-In-Reply-To: <1475348688-1805-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 1 Oct 2016 21:04:47 +0200")
-References: <1475348688-1805-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87intapnhv.fsf@dell.be.48ers.dk>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun,  2 Oct 2016 16:30:57 -0300
+Subject: [Buildroot] [PATCH] configs/imx6ulpico: Use common script for image
+	generation
+Message-ID: <1475436657-16369-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
- > For some toolchains, libstdc++ uses pthread symbols:
- >     .../lib/libstdc++.a(eh_alloc.o): In function `__gnu_cxx::__mutex::lock()':
- >     eh_alloc.cc:(.text._ZN9__gnu_cxx7__mutex4lockEv[_ZN9__gnu_cxx7__mutex4lockEv]+0x2):
- >     undefined reference to `pthread_mutex_lock'
+Using the common board/freescale/common/post-image.sh can lead
+to some good amount of simplification.
 
- > and a lot of other pthread symbols...
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ board/technexion/imx6ulpico/genimage.cfg  | 41 -------------------------------
+ board/technexion/imx6ulpico/post-image.sh | 14 -----------
+ configs/imx6ulpico_defconfig              |  2 +-
+ 3 files changed, 1 insertion(+), 56 deletions(-)
+ delete mode 100644 board/technexion/imx6ulpico/genimage.cfg
+ delete mode 100755 board/technexion/imx6ulpico/post-image.sh
 
- > However, when doing a static build, there is no way for the linker what
- > library to link in, so the build fails miserably if -pthread is not
- > specified at link time.
-
- > Fixes:
- >     http://autobuild.buildroot.org/results/15e/15ecaa23f0116e8120b3d62e553c838f0303df35/
- >     http://autobuild.buildroot.org/results/f0a/f0abe301816e39eb4ae26d3e8cd42d90901d5ac5/
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
- > ---
- > Note: snappy's buildsystem uses libtool, and libsnappy.la does have the
- > necessary -pthread listed as a "dependency":
-
- >    16 # Linker flags that cannot go in dependency_libs.
- >    17 inherited_linker_flags=' -pthread'
-
- > But that is not picked-up by libtool, and I don't know why...
-
-This is arguably a toolchain bug and the thing that fails to link is
-just a unit test, so we could also disable it - But OK.
-
-> ---
- >  package/snappy/snappy.mk | 8 ++++++++
- >  1 file changed, 8 insertions(+)
-
- > diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
- > index b00dddf..3e8d603 100644
- > --- a/package/snappy/snappy.mk
- > +++ b/package/snappy/snappy.mk
- > @@ -16,4 +16,12 @@ SNAPPY_INSTALL_STAGING = YES
- >  # Disable tests
- >  SNAPPY_CONF_OPTS = --disable-gtest
+diff --git a/board/technexion/imx6ulpico/genimage.cfg b/board/technexion/imx6ulpico/genimage.cfg
+deleted file mode 100644
+index 9e67105..0000000
+--- a/board/technexion/imx6ulpico/genimage.cfg
++++ /dev/null
+@@ -1,41 +0,0 @@
+-# Minimal eMMC card image for the Technexion's i.MX6UL Pico board
+-#
+-# We mimic the .sdcard Freescale's image format for i.MX6UL:
+-# * the eMMC must have 1 kB free space at the beginning,
+-# * U-Boot is dumped as is,
+-# * a FAT partition at offset 8 MB is containing zImage and dtbs,
+-# * a single root filesystem partition is required (Ext4 in this case).
+-#
+-
+-image boot.vfat {
+-  vfat {
+-    files = {
+-      "imx6ul-pico-hobbit.dtb",
+-      "zImage"
+-    }
+-  }
+-  size = 16M
+-}
+-
+-image sdcard.img {
+-  hdimage {
+-  }
+-
+-  partition u-boot {
+-    in-partition-table = "no"
+-    image = "u-boot.imx"
+-    offset = 1024
+-  }
+-
+-  partition boot {
+-    partition-type = 0xC
+-    bootable = "true"
+-    image = "boot.vfat"
+-    offset = 8M
+-  }
+-
+-  partition rootfs {
+-    partition-type = 0x83
+-    image = "rootfs.ext4"
+-  }
+-}
+diff --git a/board/technexion/imx6ulpico/post-image.sh b/board/technexion/imx6ulpico/post-image.sh
+deleted file mode 100755
+index b4ac460..0000000
+--- a/board/technexion/imx6ulpico/post-image.sh
++++ /dev/null
+@@ -1,14 +0,0 @@
+-#!/usr/bin/env bash
+-
+-BOARD_DIR="$(dirname $0)"
+-GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+-GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+-
+-rm -rf "${GENIMAGE_TMP}"
+-
+-genimage \
+-  --rootpath "${TARGET_DIR}" \
+-  --tmppath "${GENIMAGE_TMP}" \
+-  --inputpath "${BINARIES_DIR}" \
+-  --outputpath "${BINARIES_DIR}" \
+-  --config "${GENIMAGE_CFG}"
+diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
+index 67058f8..d94478a 100644
+--- a/configs/imx6ulpico_defconfig
++++ b/configs/imx6ulpico_defconfig
+@@ -45,6 +45,6 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
  
- > +# libsnappy links with libstdc++. libstdc++ uses pthread symbols. libstdc++
- > +# does not have a .pc file, and its .la file does not mention -pthread.
- > +# So, static links to libstdc++ will fail if -pthread is not explicity
- > +# linked to. Only do that for static builds.
- > +ifeq ($(BR2_STATIC_LIBS),y)
- > +SNAPPY_CONF_OPTS += LIBS=-pthread
- > +endif
-
-Snappy doesn't depend on threads, so this should only be done if
-BR2_TOOLCHAIN_HAS_THREADS.
-
-Committed with that fixed, thanks.
-
+ # filesystem / image
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/technexion/imx6ulpico/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
 -- 
-Bye, Peter Korsgaard
+2.7.4
