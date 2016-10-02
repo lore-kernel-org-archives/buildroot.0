@@ -1,41 +1,240 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Oct 2016 16:18:36 +0200
-Subject: [Buildroot] [git commit] package/libass: bump version to 0.13.3
-Message-ID: <20161002142217.493817F984@busybox.osuosl.org>
+Date: Sun, 2 Oct 2016 16:21:31 +0200
+Subject: [Buildroot] [git commit] nettle: bump to version 3.3
+Message-ID: <20161002142217.75FC67F984@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f34f025c01ffc806ae7dc769e076d733005a0506
+commit: https://git.buildroot.net/buildroot/commit/?id=998e75ec0ff67d39b6537ddd35747df1edc77bc2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Drop upstream patch and autoreconf.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libass/libass.hash | 2 +-
- package/libass/libass.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nettle/0002-fix-CVE-2016-6489.patch | 181 ----------------------------
+ package/nettle/nettle.hash                  |   2 +-
+ package/nettle/nettle.mk                    |   4 +-
+ 3 files changed, 2 insertions(+), 185 deletions(-)
 
-diff --git a/package/libass/libass.hash b/package/libass/libass.hash
-index 5dddc40..cb5016d 100644
---- a/package/libass/libass.hash
-+++ b/package/libass/libass.hash
+diff --git a/package/nettle/0002-fix-CVE-2016-6489.patch b/package/nettle/0002-fix-CVE-2016-6489.patch
+deleted file mode 100644
+index 8c99ff7..0000000
+--- a/package/nettle/0002-fix-CVE-2016-6489.patch
++++ /dev/null
+@@ -1,181 +0,0 @@
+-From 6450224f3e3c78fdfa37eadbe6ada8301279f6c1 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Niels=20M=C3=B6ller?= <nisse@lysator.liu.se>
+-Date: Mon, 20 Jun 2016 20:04:56 +0200
+-Subject: Use mpz_powm_sec.
+-Subject: Check for invalid keys, with even p, in dsa_sign.
+-Subject: Reject invalid keys, with even moduli, in rsa_compute_root_tr.
+-Subject: Reject invalid RSA keys with even modulo.
+-
+-Patch status: upstream
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff --git a/bignum.h b/bignum.h
+-index 24158e0..0d30534 100644
+---- a/bignum.h
+-+++ b/bignum.h
+-@@ -53,6 +53,8 @@
+- # define mpz_combit mpz_combit
+- # define mpz_import mpz_import
+- # define mpz_export mpz_export
+-+/* Side-channel silent powm not available in mini-gmp. */
+-+# define mpz_powm_sec mpz_powm
+- #else
+- # include <gmp.h>
+- #endif
+-diff --git a/configure.ac b/configure.ac
+-index e1ee64c..1e88477 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -236,9 +236,9 @@ fi
+- # Checks for libraries
+- if test "x$enable_public_key" = "xyes" ; then
+-   if test "x$enable_mini_gmp" = "xno" ; then
+--    AC_CHECK_LIB(gmp, __gmpz_getlimbn,,
+-+    AC_CHECK_LIB(gmp, __gmpz_powm_sec,,
+-         [AC_MSG_WARN(
+--    [GNU MP not found, or not 3.1 or up, see http://gmplib.org/.
+-+    [GNU MP not found, or too old. GMP-5.0 or later is needed, see http://gmplib.org/.
+-     Support for public key algorithms will be unavailable.])]
+-         enable_public_key=no)
+- 
+-diff --git a/dsa-sign.c b/dsa-sign.c
+-index 62c7d4a..b713743 100644
+---- a/dsa-sign.c
+-+++ b/dsa-sign.c
+-@@ -56,6 +56,11 @@ dsa_sign(const struct dsa_params *params,
+-   mpz_t tmp;
+-   int res;
+-   
+-+  /* Check that p is odd, so that invalid keys don't result in a crash
+-+     inside mpz_powm_sec. */
+-+  if (mpz_even_p (params->p))
+-+    return 0;
+-+
+-   /* Select k, 0<k<q, randomly */
+-   mpz_init_set(tmp, params->q);
+-   mpz_sub_ui(tmp, tmp, 1);
+-@@ -65,7 +70,7 @@ dsa_sign(const struct dsa_params *params,
+-   mpz_add_ui(k, k, 1);
+- 
+-   /* Compute r = (g^k (mod p)) (mod q) */
+--  mpz_powm(tmp, params->g, k, params->p);
+-+  mpz_powm_sec(tmp, params->g, k, params->p);
+-   mpz_fdiv_r(signature->r, tmp, params->q);
+- 
+-   /* Compute hash */
+-diff --git a/rsa-blind.c b/rsa-blind.c
+-index 7662f50..16b03d7 100644
+---- a/rsa-blind.c
+-+++ b/rsa-blind.c
+-@@ -61,7 +61,7 @@ _rsa_blind (const struct rsa_public_key *pub,
+-   while (!mpz_invert (ri, r, pub->n));
+- 
+-   /* c = c*(r^e) mod n */
+--  mpz_powm(r, r, pub->e, pub->n);
+-+  mpz_powm_sec(r, r, pub->e, pub->n);
+-   mpz_mul(c, c, r);
+-   mpz_fdiv_r(c, c, pub->n);
+- 
+-diff --git a/rsa-sign-tr.c b/rsa-sign-tr.c
+-index 3d80ed4..8542cae 100644
+---- a/rsa-sign-tr.c
+-+++ b/rsa-sign-tr.c
+-@@ -60,7 +60,7 @@ rsa_blind (const struct rsa_public_key *pub,
+-   while (!mpz_invert (ri, r, pub->n));
+- 
+-   /* c = c*(r^e) mod n */
+--  mpz_powm(r, r, pub->e, pub->n);
+-+  mpz_powm_sec(r, r, pub->e, pub->n);
+-   mpz_mul(c, m, r);
+-   mpz_fdiv_r(c, c, pub->n);
+- 
+-@@ -88,6 +88,14 @@ rsa_compute_root_tr(const struct rsa_public_key *pub,
+-   int res;
+-   mpz_t t, mb, xb, ri;
+- 
+-+  /* mpz_powm_sec handles only odd moduli. If p, q or n is even, the
+-+     key is invalid and rejected by rsa_private_key_prepare. However,
+-+     some applications, notably gnutls, don't use this function, and
+-+     we don't want an invalid key to lead to a crash down inside
+-+     mpz_powm_sec. So do an additional check here. */
+-+  if (mpz_even_p (pub->n) || mpz_even_p (key->p) || mpz_even_p (key->q))
+-+    return 0;
+-+
+-   mpz_init (mb);
+-   mpz_init (xb);
+-   mpz_init (ri);
+-@@ -97,7 +105,7 @@ rsa_compute_root_tr(const struct rsa_public_key *pub,
+- 
+-   rsa_compute_root (key, xb, mb);
+- 
+--  mpz_powm(t, xb, pub->e, pub->n);
+-+  mpz_powm_sec(t, xb, pub->e, pub->n);
+-   res = (mpz_cmp(mb, t) == 0);
+- 
+-   if (res)
+-diff --git a/rsa-sign.c b/rsa-sign.c
+-index eba7388..4832352 100644
+---- a/rsa-sign.c
+-+++ b/rsa-sign.c
+-@@ -96,11 +96,11 @@ rsa_compute_root(const struct rsa_private_key *key,
+- 
+-   /* Compute xq = m^d % q = (m%q)^b % q */
+-   mpz_fdiv_r(xq, m, key->q);
+--  mpz_powm(xq, xq, key->b, key->q);
+-+  mpz_powm_sec(xq, xq, key->b, key->q);
+- 
+-   /* Compute xp = m^d % p = (m%p)^a % p */
+-   mpz_fdiv_r(xp, m, key->p);
+--  mpz_powm(xp, xp, key->a, key->p);
+-+  mpz_powm_sec(xp, xp, key->a, key->p);
+- 
+-   /* Set xp' = (xp - xq) c % p. */
+-   mpz_sub(xp, xp, xq);
+-diff --git a/rsa.c b/rsa.c
+-index 19d93de..f594140 100644
+---- a/rsa.c
+-+++ b/rsa.c
+-@@ -58,13 +58,18 @@ rsa_public_key_clear(struct rsa_public_key *key)
+- }
+- 
+- /* Computes the size, in octets, of a the modulo. Returns 0 if the
+-- * modulo is too small to be useful. */
+--
+-+ * modulo is too small to be useful, or otherwise appears invalid. */
+- size_t
+- _rsa_check_size(mpz_t n)
+- {
+-   /* Round upwards */
+--  size_t size = (mpz_sizeinbase(n, 2) + 7) / 8;
+-+  size_t size;
+-+
+-+  /* Even moduli are invalid, and not supported by mpz_powm_sec. */
+-+  if (mpz_even_p (n))
+-+    return 0;
+-+
+-+  size = (mpz_sizeinbase(n, 2) + 7) / 8;
+- 
+-   if (size < RSA_MINIMUM_N_OCTETS)
+-     return 0;
+-diff --git a/testsuite/rsa-test.c b/testsuite/rsa-test.c
+-index e9b1c03..a429664 100644
+---- a/testsuite/rsa-test.c
+-+++ b/testsuite/rsa-test.c
+-@@ -57,6 +57,13 @@ test_main(void)
+- 
+-   test_rsa_sha512(&pub, &key, expected);
+- 
+-+  /* Test detection of invalid keys with even modulo */
+-+  mpz_clrbit (pub.n, 0);
+-+  ASSERT (!rsa_public_key_prepare (&pub));
+-+
+-+  mpz_clrbit (key.p, 0);
+-+  ASSERT (!rsa_private_key_prepare (&key));
+-+
+-   /* 777-bit key, generated by
+-    *
+-    *   lsh-keygen -a rsa -l 777 -f advanced-hex
+--- 
+-2.7.3
+-
+diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
+index 6332e13..cd911c0 100644
+--- a/package/nettle/nettle.hash
++++ b/package/nettle/nettle.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256	d698d0a6adca7c36c5a86b540d67b05bfd36cebc3c351ab7646497c43fe1face	libass-0.13.2.tar.xz
-+sha256 a641b653d7c9f2f3b9d6a5e5a906a004ac3e110487ad485d9dd029e944bb3f6d  libass-0.13.3.tar.xz
-diff --git a/package/libass/libass.mk b/package/libass/libass.mk
-index 716bca6..0e296ca 100644
---- a/package/libass/libass.mk
-+++ b/package/libass/libass.mk
+ # Locally calculated after checking pgp signature
+-sha256	ea4283def236413edab5a4cf9cf32adf540c8df1b9b67641cfc2302fca849d97	nettle-3.2.tar.gz
++sha256	46942627d5d0ca11720fec18d81fc38f7ef837ea4197c1f630e71ce0d470b11e	nettle-3.3.tar.gz
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index 0fbe57b..31789ec 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBASS_VERSION = 0.13.2
-+LIBASS_VERSION = 0.13.3
- LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
- # Do not use the github helper here, the generated tarball is *NOT*
- # the same as the one uploaded by upstream for the release.
+-NETTLE_VERSION = 3.2
++NETTLE_VERSION = 3.3
+ NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
+ NETTLE_DEPENDENCIES = gmp
+ NETTLE_INSTALL_STAGING = YES
+@@ -13,8 +13,6 @@ NETTLE_LICENSE_FILES = COPYING.LESSERv3 COPYINGv2
+ # don't include openssl support for (unused) examples as it has problems
+ # with static linking
+ NETTLE_CONF_OPTS = --disable-openssl
+-# For 0002-fix-CVE-2016-6489.patch
+-NETTLE_AUTORECONF = YES
+ 
+ # ARM assembly requires v6+ ISA
+ ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV7M),y)
