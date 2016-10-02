@@ -1,19 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Oct 2016 16:18:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libass: bump version to 0.13.3
-In-Reply-To: <20161001210440.12982-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 1 Oct 2016 23:04:40 +0200")
-References: <20161001210440.12982-1-bernd.kuhls@t-online.de>
-Message-ID: <874m4urg0b.fsf@dell.be.48ers.dk>
+Date: Sun, 02 Oct 2016 16:19:40 +0200
+Subject: [Buildroot] [PATCH] neon: bump to version 0.30.2
+In-Reply-To: <1475410072-30499-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 2 Oct 2016 09:07:52 -0300")
+References: <1475410072-30499-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zimmq1dv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
