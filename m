@@ -1,44 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Oct 2016 20:53:51 +0200
-Subject: [Buildroot] [git commit] package/libglew: bump to version 2.0.0
-Message-ID: <20161002185837.CCD3081EE5@busybox.osuosl.org>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Sun,  2 Oct 2016 21:15:37 +0200
+Subject: [Buildroot] [PATCH 1/1] efibootmgr: fix reverse dependency from
+	efivar
+Message-ID: <1475435737-11969-1-git-send-email-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfaaab0e362d636e7fb749ae208523cc88f1e87f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+efivar minimum gcc version dependency changed from 4.7 to 4.9 in the
+last efivar bump, so this must be reflected in efibootmgr Config.in as
+well.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libglew/libglew.hash | 5 ++++-
- package/libglew/libglew.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/efibootmgr/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libglew/libglew.hash b/package/libglew/libglew.hash
-index 5e12785..44684ff 100644
---- a/package/libglew/libglew.hash
-+++ b/package/libglew/libglew.hash
-@@ -1,2 +1,5 @@
-+# From https://sourceforge.net/projects/glew/files/glew/2.0.0/
-+sha1 6e15c84f7e1fad34cd3679f784a233744ddf048f  glew-2.0.0.tgz
-+md5 2a2cd7c98f13854d2fcddae0d2b20411  glew-2.0.0.tgz
- # Locally computed:
--sha256	aa25dc48ed84b0b64b8d41cdd42c8f40f149c37fa2ffa39cd97f42c78d128bc7	glew-1.13.0.tgz
-+sha256 c572c30a4e64689c342ba1624130ac98936d7af90c3103f9ce12b8a0c5736764  glew-2.0.0.tgz
-diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
-index dc73f39..7af3aff 100644
---- a/package/libglew/libglew.mk
-+++ b/package/libglew/libglew.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
+index 2c5c07f..988bf6d 100644
+--- a/package/efibootmgr/Config.in
++++ b/package/efibootmgr/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_EFIBOOTMGR
+ 	bool "efibootmgr"
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # efivar
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # efivar
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # efivar
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
+ 		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII # efivar
+ 	select BR2_PACKAGE_EFIVAR
+@@ -14,9 +14,9 @@ config BR2_PACKAGE_EFIBOOTMGR
  
--LIBGLEW_VERSION = 1.13.0
-+LIBGLEW_VERSION = 2.0.0
- LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
- LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
- LIBGLEW_LICENSE = BSD-3c, MIT
+ 	  https://github.com/rhinstaller/efibootmgr
+ 
+-comment "efibootmgr requires a glibc toolchain w/ headers >= 3.12, gcc >= 4.7"
++comment "efibootmgr requires a glibc toolchain w/ headers >= 3.12, gcc >= 4.9"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
+ 		!BR2_TOOLCHAIN_USES_GLIBC || \\
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
+ 		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+-- 
+2.7.4
