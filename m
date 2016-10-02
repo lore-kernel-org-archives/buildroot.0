@@ -1,7 +1,7 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon,  3 Oct 2016 00:36:33 +0200
-Subject: [Buildroot] [PATCH v2 1/1] ofono: bump to version 1.18
-Message-ID: <20161002223633.32230-1-petr.vorel@gmail.com>
+Date: Mon,  3 Oct 2016 00:42:08 +0200
+Subject: [Buildroot] [PATCH 1/1] modem-manager: bump to version 1.6.2
+Message-ID: <20161002224208.1654-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
-Changes since v1:
-Remove duplicate Signed-off-by:
+ package/modem-manager/modem-manager.hash | 4 ++--
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- package/ofono/ofono.hash | 2 +-
- package/ofono/ofono.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
-index 50c92ed..d611736 100644
---- a/package/ofono/ofono.hash
-+++ b/package/ofono/ofono.hash
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index 9e83488..481f7dd 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
--sha256	cbf20f07fd15253c682b23c1786d517f505c3688f7c4ea93da777e1523b89635  ofono-1.17.tar.xz
-+sha256	53cdbf342913f46bce4827241c60e24255a3d43a94945edf77482ae5b312d51f  ofono-1.18.tar.xz
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 588c9cd..8234396 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
+-# Locally computed:
+-sha256  a94f4657a8fa6835e2734fcc6edf20aa8c8d452f62299d7748541021c3eb2445  ModemManager-1.6.0.tar.xz
++# Locally computed
++sha256  e4544398d9c166f8e13fe7c97149f262ad1fb48af980e0d4f9c34013920c6393  ModemManager-1.6.2.tar.xz
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 252292a..c74c224 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OFONO_VERSION = 1.17
-+OFONO_VERSION = 1.18
- OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_LICENSE = GPLv2
+-MODEM_MANAGER_VERSION = 1.6.0
++MODEM_MANAGER_VERSION = 1.6.2
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
 -- 
 1.8.0
