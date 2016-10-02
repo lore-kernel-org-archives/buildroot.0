@@ -1,39 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  2 Oct 2016 09:07:52 -0300
-Subject: [Buildroot] [PATCH] neon: bump to version 0.30.2
-Message-ID: <1475410072-30499-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 02 Oct 2016 14:17:21 +0200
+Subject: [Buildroot] [PATCH 2/2] efibootmgr: bump to version 14
+In-Reply-To: <1475246804-26748-2-git-send-email-nunes.erico@gmail.com> (Erico
+ Nunes's message of "Fri, 30 Sep 2016 16:46:44 +0200")
+References: <1475246804-26748-1-git-send-email-nunes.erico@gmail.com>
+ <1475246804-26748-2-git-send-email-nunes.erico@gmail.com>
+Message-ID: <878tu7q71q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/neon/neon.hash | 2 +-
- package/neon/neon.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Erico" == Erico Nunes <nunes.erico@gmail.com> writes:
 
-diff --git a/package/neon/neon.hash b/package/neon/neon.hash
-index 9db5f82..d66b6fd 100644
---- a/package/neon/neon.hash
-+++ b/package/neon/neon.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	2962cfcb5d30f3272e3d2fa0e473434419770a3801afe3d46e5d1650787990c2	neon-0.30.0.tar.gz
-+sha256	db0bd8cdec329b48f53a6f00199c92d5ba40b0f015b153718d1b15d3d967fbca	neon-0.30.2.tar.gz
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index 13d8084..ca1a6bd 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NEON_VERSION = 0.30.0
-+NEON_VERSION = 0.30.2
- NEON_SITE = http://www.webdav.org/neon
- NEON_LICENSE = LGPLv2+ (library), GPLv2+ (manual and tests)
- NEON_LICENSE_FILES = src/COPYING.LIB test/COPYING README
+ > Upstream has changed version numbering scheme since version 13, which
+ > came after version 0.12.
+
+ > There is now a make install target, so we can drop the manual file
+ > installing. The make install target also installs the new efibootdump
+ > tool.
+
+I see it now installs into usr/sbin, and also installs efibootdump, but
+that is probably ok:
+
+install -m 755 efibootmgr /home/peko/source/buildroot/output/target//usr/sbin/efibootmgr
+install -m 755 efibootdump /home/peko/source/buildroot/output/target//usr/sbin/efibootdump
+
+Committed, thanks.
+
 -- 
-2.7.3
+Bye, Peter Korsgaard
