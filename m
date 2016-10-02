@@ -1,51 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Oct 2016 21:52:44 +0200
-Subject: [Buildroot] [PATCH 2/2] package/snappy: bump version
-In-Reply-To: <20161002194430.GA4066@free.fr> (Yann E. MORIN's message of "Sun, 
- 2 Oct 2016 21:44:30 +0200")
-References: <1475348688-1805-1-git-send-email-yann.morin.1998@free.fr>
- <1475348688-1805-2-git-send-email-yann.morin.1998@free.fr>
- <87eg3ypmy6.fsf@dell.be.48ers.dk> <20161002194430.GA4066@free.fr>
-Message-ID: <87shseo7eb.fsf@dell.be.48ers.dk>
+Date: Sun, 02 Oct 2016 21:53:19 +0200
+Subject: [Buildroot] [PATCH] vo-aacenc: disable arm optimizations on
+	thumb2-only variants
+In-Reply-To: <20161002153723.1135-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 2 Oct 2016 17:37:23 +0200")
+References: <20161002153723.1135-1-peter@korsgaard.com>
+Message-ID: <87oa32o7dc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Peter, All,
- > On 2016-10-02 21:31 +0200, Peter Korsgaard spake thusly:
- >> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
- >> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- >> 
- >> For these bump-to-another-git-revision changes I would prefer some
- >> context / details. For bumps to a new release we at least know that the
- >> maintainer thinks the sw is ready to be used. With random git versions
- >> not so much.
- >> 
- >> E.G. has some important bugfix or new feature been added? Have you used
- >> it yourself? Is the new hash the latest commit in the repo or something
- >> else? ..
+ > Fixes:
+ > http://autobuild.buildroot.org/results/258/258e14227cdd5a6f5cc83ab7fd176eb5b5b8445a/
+ > http://autobuild.buildroot.org/results/634/6345b4c491fca952cd692844e3ac2932ac4836dc/
 
- > Here's your commit log:
+ > The ARM assembly optimizations in vo-aacenc requires ARM instructions
+ > support, so disable for ARM variants without ARM instruction support (E.G.
+ > cortex-m).
 
- > There's been a single release of snappy since the move from GoogleCode
- > to Github; that release was more than a year ago. In that time frame,
- > only 14 commits went in master, of which to merges, so about 1 real
- > commit per month...
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- > For a brief summary of additional stuff since the last release:
- >   - provide snappy.pc
- >   - a few generic bug fixes, as well as a few ARM-specific ones
- >   - a few buildsystem fixes
-
- > Since we can't say releases are made on a timely cadence, let's just hop
- > to the latest master from the git tree.
-
-Great, please add this kind of info to the commit message next time, at
-least the .pc file could be interesting.
+Committed, thanks.
 
 -- 
 Venlig hilsen,
