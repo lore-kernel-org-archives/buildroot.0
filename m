@@ -1,7 +1,7 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sun,  2 Oct 2016 23:48:16 +0200
-Subject: [Buildroot] [PATCH 1/1] ofono: bump to version 1.18
-Message-ID: <20161002214816.15777-1-petr.vorel@gmail.com>
+Date: Mon,  3 Oct 2016 00:26:53 +0200
+Subject: [Buildroot] [PATCH 1/1] python-networkmanager: bump to version 1.2.1
+Message-ID: <20161002222653.28657-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,32 +9,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Petr Vorel <vorel@jablocom.com>
 ---
- package/ofono/ofono.hash | 2 +-
- package/ofono/ofono.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-networkmanager/python-networkmanager.hash | 6 +++---
+ package/python-networkmanager/python-networkmanager.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
-index 50c92ed..d611736 100644
---- a/package/ofono/ofono.hash
-+++ b/package/ofono/ofono.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
--sha256	cbf20f07fd15253c682b23c1786d517f505c3688f7c4ea93da777e1523b89635  ofono-1.17.tar.xz
-+sha256	53cdbf342913f46bce4827241c60e24255a3d43a94945edf77482ae5b312d51f  ofono-1.18.tar.xz
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 588c9cd..8234396 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
+index 00d31d0..cbd6feb 100644
+--- a/package/python-networkmanager/python-networkmanager.hash
++++ b/package/python-networkmanager/python-networkmanager.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=d7f0337b8e58c193c574ceae984cc65f, sha256 locally computed
+-md5	d7f0337b8e58c193c574ceae984cc65f  python-networkmanager-1.0.1.tar.gz
+-sha256	6eb4073a0d6572fe0bba8cbfe8423f6a8a51c4504a33e0eb4f1b1eadf54c4cee  python-networkmanager-1.0.1.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=97c84c19b84b1124903a06379b107f77, sha256 locally computed
++md5	97c84c19b84b1124903a06379b107f77  python-networkmanager-1.2.1.tar.gz
++sha256	7107c07383f8077cfac33fdbb3c4cda4de40be20a6b20d30840055eb519a0e89  python-networkmanager-1.2.1.tar.gz
+diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
+index 04a2702..0a8c442 100644
+--- a/package/python-networkmanager/python-networkmanager.mk
++++ b/package/python-networkmanager/python-networkmanager.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--OFONO_VERSION = 1.17
-+OFONO_VERSION = 1.18
- OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_LICENSE = GPLv2
+-PYTHON_NETWORKMANAGER_VERSION = 1.0.1
+-PYTHON_NETWORKMANAGER_SITE = http://pypi.python.org/packages/source/p/python-networkmanager
++PYTHON_NETWORKMANAGER_VERSION = 1.2.1
++PYTHON_NETWORKMANAGER_SOURCE = python-networkmanager-$(PYTHON_NETWORKMANAGER_VERSION).tar.gz
++PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/e7/b1/09993250ceea9e03bc65fbabcd5286540200292c011b22237b2963c11471
+ PYTHON_NETWORKMANAGER_SETUP_TYPE = distutils
+ PYTHON_NETWORKMANAGER_LICENSE = GPLv3+
+ PYTHON_NETWORKMANAGER_LICENSE_FILES = COPYING
 -- 
 1.8.0
