@@ -1,70 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Oct 2016 21:31:29 +0200
-Subject: [Buildroot] [PATCH 2/2] package/snappy: bump version
-In-Reply-To: <1475348688-1805-2-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 1 Oct 2016 21:04:48 +0200")
-References: <1475348688-1805-1-git-send-email-yann.morin.1998@free.fr>
- <1475348688-1805-2-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87eg3ypmy6.fsf@dell.be.48ers.dk>
+Date: Sun, 2 Oct 2016 21:21:22 +0200
+Subject: [Buildroot] [git commit] package.snappy: fix static builds with
+	threads
+Message-ID: <20161002193142.97AE881E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0e2ee0e6e8076d233402766086aa4c6297c62cb9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+For some toolchains, libstdc++ uses pthread symbols:
 
-For these bump-to-another-git-revision changes I would prefer some
-context / details. For bumps to a new release we at least know that the
-maintainer thinks the sw is ready to be used. With random git versions
-not so much.
+    .../lib/libstdc++.a(eh_alloc.o): In function `__gnu_cxx::__mutex::lock()':
+    eh_alloc.cc:(.text._ZN9__gnu_cxx7__mutex4lockEv[_ZN9__gnu_cxx7__mutex4lockEv]+0x2):
+    undefined reference to `pthread_mutex_lock'
 
-E.G. has some important bugfix or new feature been added? Have you used
-it yourself? Is the new hash the latest commit in the repo or something
-else? ..
+and a lot of other pthread symbols...
 
-Anyway - Committed, thanks.
+However, when doing a static build, there is no way for the linker to know
+what library to link in, so the build fails miserably if -pthread is not
+specified at link time.
 
-> ---
- >  package/snappy/snappy.hash | 2 +-
- >  package/snappy/snappy.mk   | 2 +-
- >  2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+    http://autobuild.buildroot.org/results/15e/15ecaa23f0116e8120b3d62e553c838f0303df35/
+    http://autobuild.buildroot.org/results/f0a/f0abe301816e39eb4ae26d3e8cd42d90901d5ac5/
 
- > diff --git a/package/snappy/snappy.hash b/package/snappy/snappy.hash
- > index fc979ae..bb7f104 100644
- > --- a/package/snappy/snappy.hash
- > +++ b/package/snappy/snappy.hash
- > @@ -1,2 +1,2 @@
- >  # Locally calculated
- > -sha256
- > d64e434e2ddfe9ae942708747003d489e27f2bfddaa5e9e070da98cb00f660f2
- > snappy-1ff9be9b8fafc8528ca9e055646f5932aa5db9c4.tar.gz
- > +sha256
- > f50719c6dc7103d65df66882a3b4569d598eda251266463eca716928187dc12b
- > snappy-32d6d7d8a2ef328a2ee1dd40f072e21f4983ebda.tar.gz
- > diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
- > index 3e8d603..f491f03 100644
- > --- a/package/snappy/snappy.mk
- > +++ b/package/snappy/snappy.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
+[Peter: only perform workaround if toolchain has threads support, tweak comment]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/snappy/snappy.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index b00dddf..6f89cf1 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
+@@ -16,4 +16,13 @@ SNAPPY_INSTALL_STAGING = YES
+ # Disable tests
+ SNAPPY_CONF_OPTS = --disable-gtest
  
- > -SNAPPY_VERSION = 1ff9be9b8fafc8528ca9e055646f5932aa5db9c4
- > +SNAPPY_VERSION = 32d6d7d8a2ef328a2ee1dd40f072e21f4983ebda
- >  SNAPPY_SITE = $(call github,google,snappy,$(SNAPPY_VERSION))
- >  SNAPPY_LICENSE = BSD-3c
- >  SNAPPY_LICENSE_FILES = COPYING
- > -- 
- > 2.7.4
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
-
--- 
-Bye, Peter Korsgaard
++# libsnappy links with libstdc++. Some libstdc++/arch variants use
++# pthread symbols for internal locking if built with thead
++# support. libstdc++ does not have a .pc file, and its .la file does
++# not mention -pthread.  So, static linkig to libstdc++ will fail if
++# -pthread is not explicity linked to. Only do that for static builds.
++ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
++SNAPPY_CONF_OPTS += LIBS=-pthread
++endif
++
+ $(eval $(autotools-package))
