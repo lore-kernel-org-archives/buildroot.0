@@ -1,50 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Oct 2016 21:53:13 +0200
-Subject: [Buildroot] [git commit] vo-aacenc: disable arm optimizations on
-	thumb2-only variants
-Message-ID: <20161002195329.D698181E64@busybox.osuosl.org>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sun,  2 Oct 2016 23:48:16 +0200
+Subject: [Buildroot] [PATCH 1/1] ofono: bump to version 1.18
+Message-ID: <20161002214816.15777-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=513a6a56361de32bb6969659a0b34c516cd3135e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-http://autobuild.buildroot.org/results/258/258e14227cdd5a6f5cc83ab7fd176eb5b5b8445a/
-http://autobuild.buildroot.org/results/634/6345b4c491fca952cd692844e3ac2932ac4836dc/
-
-The ARM assembly optimizations in vo-aacenc requires ARM instructions
-support, so disable for ARM variants without ARM instruction support (E.G.
-cortex-m).
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Petr Vorel <vorel@jablocom.com>
 ---
- package/vo-aacenc/vo-aacenc.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/ofono/ofono.hash | 2 +-
+ package/ofono/ofono.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vo-aacenc/vo-aacenc.mk b/package/vo-aacenc/vo-aacenc.mk
-index 23d7e62..ecdd584 100644
---- a/package/vo-aacenc/vo-aacenc.mk
-+++ b/package/vo-aacenc/vo-aacenc.mk
-@@ -15,6 +15,7 @@ VO_AACENC_CFLAGS = $(TARGET_CFLAGS)
- # arm specific asm optimizations
- ifeq ($(BR2_arm),y)
+diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
+index 50c92ed..d611736 100644
+--- a/package/ofono/ofono.hash
++++ b/package/ofono/ofono.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
+-sha256	cbf20f07fd15253c682b23c1786d517f505c3688f7c4ea93da777e1523b89635  ofono-1.17.tar.xz
++sha256	53cdbf342913f46bce4827241c60e24255a3d43a94945edf77482ae5b312d51f  ofono-1.18.tar.xz
+diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
+index 588c9cd..8234396 100644
+--- a/package/ofono/ofono.mk
++++ b/package/ofono/ofono.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_ARM_CPU_HAS_ARM),y)
- # vo-aacenc has ARM assembly code that cannot be compiled in Thumb2
- # mode, so we must force the traditional ARM mode.
- VO_AACENC_CFLAGS += -marm
-@@ -33,6 +34,10 @@ VO_AACENC_CONF_OPTS += --disable-armv5e
- endif
- 
- endif # !neon
-+
-+else
-+VO_AACENC_CONF_OPTS += --disable-armv7neon --disable-armv5e
-+endif # has-arm
- endif # arm
- 
- VO_AACENC_CONF_ENV = \
+-OFONO_VERSION = 1.17
++OFONO_VERSION = 1.18
+ OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
+ OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
+ OFONO_LICENSE = GPLv2
+-- 
+1.8.0
