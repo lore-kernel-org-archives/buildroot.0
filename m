@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  3 Oct 2016 23:11:31 +0200
-Subject: [Buildroot] [PATCH 11/28] package/python-flask: bump version to
-	0.11.1
+Date: Mon,  3 Oct 2016 23:11:27 +0200
+Subject: [Buildroot] [PATCH 07/28] package/python-cryptography: bump version
+	to 1.5.2
 In-Reply-To: <20161003211148.18603-1-bernd.kuhls@t-online.de>
 References: <20161003211148.18603-1-bernd.kuhls@t-online.de>
-Message-ID: <20161003211148.18603-11-bernd.kuhls@t-online.de>
+Message-ID: <20161003211148.18603-7-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-flask/python-flask.hash | 6 +++---
- package/python-flask/python-flask.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-cryptography/python-cryptography.hash | 7 +++----
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
-index 1432c55..01ccc6e 100644
---- a/package/python-flask/python-flask.hash
-+++ b/package/python-flask/python-flask.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=89fbdcb04b7b96c5b24625ae299cf48b, sha256 locally computed
--md5	89fbdcb04b7b96c5b24625ae299cf48b  Flask-0.11.tar.gz
--sha256	29a7405a7f0de178232fe48cd9b2a2403083bf03bd34eabe12168863d4cdb493  Flask-0.11.tar.gz
-+# md5 from https://pypi.python.org/pypi/flask/json, sha256 locally computed
-+md5	d2af95d8fe79cf7da099f062dd122a08  Flask-0.11.1.tar.gz
-+sha256	b4713f2bfb9ebc2966b8a49903ae0d3984781d5c878591cf2f7b484d28756b0e  Flask-0.11.1.tar.gz
-diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
-index db4ba74..204eba0 100644
---- a/package/python-flask/python-flask.mk
-+++ b/package/python-flask/python-flask.mk
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index 3f8f61b..60fe3eb 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,4 +1,3 @@
+-# From https://pypi.python.org/pypi?:action=show_md5&digest=defd153ed901089f5aeac6eb066d5ef7
+-md5     defd153ed901089f5aeac6eb066d5ef7  cryptography-1.3.4.tar.gz
+-# Calculated based on the hash above
+-sha256  423ff890c01be7c70dbfeaa967eeef5146f1a43a5f810ffdc07b178e48a105a9  cryptography-1.3.4.tar.gz
++# md5 from https://pypi.python.org/pypi/cryptography/json, sha256 locally computed
++md5	f977a6ddb38b071213c0157fc77c62ab  cryptography-1.5.2.tar.gz
++sha256	eb8875736734e8e870b09be43b17f40472dc189b1c422a952fa8580768204832  cryptography-1.5.2.tar.gz
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index fe392f9..75e6bb3 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FLASK_VERSION = 0.11
-+PYTHON_FLASK_VERSION = 0.11.1
- PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
--PYTHON_FLASK_SITE = https://pypi.python.org/packages/dc/ca/c0ed9cc90c079085c698e284b672edbc1ffd6866b1830574095cbc5b7752
-+PYTHON_FLASK_SITE = https://pypi.python.org/packages/55/8a/78e165d30f0c8bb5d57c429a30ee5749825ed461ad6c959688872643ffb3
- PYTHON_FLASK_SETUP_TYPE = setuptools
- PYTHON_FLASK_LICENSE = BSD-3c
- PYTHON_FLASK_LICENSE_FILES = LICENSE
+-PYTHON_CRYPTOGRAPHY_VERSION = 1.3.4
++PYTHON_CRYPTOGRAPHY_VERSION = 1.5.2
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/f8/70/d7bd5c9c764732d5876ad34293e1ca55b2305a73ae6fcf1312202d1a798e
++PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/03/1a/60984cb85cc38c4ebdfca27b32a6df6f1914959d8790f5a349608c78be61
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3c
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
 -- 
 2.9.3
