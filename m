@@ -1,36 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Oct 2016 14:27:06 +0200
-Subject: [Buildroot] [git commit] configs/olimex_a20_olinuxino_lime: Bump to
-	U-Boot 2016.09.01
-Message-ID: <20161003122741.199A381E7A@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 03 Oct 2016 14:58:45 +0200
+Subject: [Buildroot] [PATCH v3 2/2] couchdb: New package.
+References: <0dc17f18-b259-a618-67f3-099fd6ef0897@green-communications.fr>
+ <1467800649-22119-1-git-send-email-nicolas.cavallari@green-communications.fr>
+ <1467800649-22119-2-git-send-email-nicolas.cavallari@green-communications.fr>
+ <l9i9cdxqle.ln2@ID-313208.user.individual.net>
+ <CANCHnQrDJQ7Ke=wQU7hWPnOZTM7ruF-KbCber0KhBsMQkrhccQ@mail.gmail.com>
+Message-ID: <XnsA6969860770E4berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22aaccae4442a0d7b0e5f2773c68ed160b6be1a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Jeroen Roovers <jer@airfi.aero> wrote in
+news:CANCHnQrDJQ7Ke=wQU7hWPnOZTM7ruF-KbCber0KhBsMQkrhccQ at mail.gmail.com: 
 
-U-Boot 2016.09.01 is a bugfix release, so bump to this version.
+> If you're interested in my CouchDB/buildroot patches, let me know.
 
-Cc: Francois Perrad <fperrad@gmail.com>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/olimex_a20_olinuxino_lime_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Jeroen,
 
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 97c1ced..49987fe 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
+I guess a patch like Gentoo uses is enough to make couchdb 1.6.1
+compatible with the erlang version provided by buildroot?
+
+https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-db/couchdb/files/1.6.1-
+erlang-18.patch?id=f1e3aa13062e9b59ef383e8078c7e4f61f140604
+
+Regards, Bernd
