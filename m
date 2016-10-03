@@ -1,39 +1,201 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon,  3 Oct 2016 01:39:37 +0200
-Subject: [Buildroot] [PATCH 1/1] feh: bump to version 2.17.1
-Message-ID: <20161002233937.18587-1-petr.vorel@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 2 Oct 2016 20:47:07 -0500
+Subject: [Buildroot] [PATCH v2] zynq: document how to use custom
+	ps7_init files
+In-Reply-To: <c12b938d-96da-ad8e-4dbd-bdf00bd281ed@mind.be>
+References: <1475031612-43682-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <c12b938d-96da-ad8e-4dbd-bdf00bd281ed@mind.be>
+Message-ID: <CANQCQpZVLQ=QU=Gh5bMofFd-SVy2vWgOVVmpsK3p6X7g42fuLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/feh/feh.hash | 2 +-
- package/feh/feh.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Arnout,
 
-diff --git a/package/feh/feh.hash b/package/feh/feh.hash
-index 9d158e2..faca43d 100644
---- a/package/feh/feh.hash
-+++ b/package/feh/feh.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  6e55289a3be4495a437a0b037c7b5e86edf64ec74ab63d2d26fa50df1b62b6b3  feh-2.16.1.tar.bz2
-+sha256  a9e818a4ad6ab427597e1799527a7576856c233525e67afb1eb2cb3ae709d853  feh-2.17.1.tar.bz2
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index f5cc97f..0d5da06 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FEH_VERSION = 2.16.1
-+FEH_VERSION = 2.17.1
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org
- FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
+On Thu, Sep 29, 2016 at 3:37 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>  Hi Matt,
+>
+>  I have a few minor and one major remark below.
+>
+> On 28-09-16 05:00, Matt Weber wrote:
+> > From: Masahiro Yamada <yamada.masahiro@socionext.com>
+> >
+> > Since U-Boot supported SPL for Zynq boards at v2014.04 release, it
+> > became much easier to build a system.  At that time, however, users
+> > still needed to manually copy ps7_init.c/h to the U-Boot source tree
+> > to generate a working SPL image because ps7_init.c/h output from
+> > Xilinx tools are not compatible with GPL.
+> >
+> > Later, the license problem was solved when Xilinx tools became able
+> > to output the GPL-compatible variants (ps7_init_gpl.c/h) as well.
+> > U-Boot v2015.07 or later includes ps7_init_gpl.c/h for major Zynq
+> > boards so that users can build a boot image straight away.
+> >
+> > Now Buildroot supports 3 boards (Zedboard, MicroZed, ZC706) without
+> > any manual intervention.  This is a good thing itself, but commit
+> > b9cd72cdbfe3 ("zynq_zc706: bump U-Boot to xilinx-v2016.2") entirely
+> > dropped the information about custom ps7_init files.
+> >
+> > This commit provides up-to-date guidance for how to customize the
+> > ps7_init files.
+> >
+> > Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+> > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> >
+> > ---
+> > v1 -> v2
+> >  - Updated readme wording discussed in
+> >    https://patchwork.ozlabs.org/patch/654309/
+> >
+> > ---
+> >  board/zynq/readme.txt | 46 +++++++++++++++++++++++++++++++++++++++-------
+> >  1 file changed, 39 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
+> > index 51e28b6..364ec39 100644
+> > --- a/board/zynq/readme.txt
+> > +++ b/board/zynq/readme.txt
+> > @@ -6,13 +6,6 @@ Currently, three boards are natively supported by Buildroot:
+> >   - Avnet ZedBoard (zynq_zed_defconfig)
+> >   - Avnet MicroZed (zynq_microzed_defconfig)
+> >
+> > -The following build procedure focuses on them, but you can adjust it to your
+> > -board even if it is not listed above.  Major Zynq-based boards are supported by
+> > -U-Boot, and their Device Trees are merged in Linux Kernel.  If your board is the
+> > -case, booting the kernel is a piece of cake.  All you need to do is to change:
+> > - - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
+> > - - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_KCONFIG)
+> > -
+> >  Steps to create a working system for a Zynq board:
+> >
+> >  1) Configuration (do one of the following)
+> > @@ -50,3 +43,42 @@ References:
+> >
+> >   - Zedboard/Microzed information including schematics, reference designs, and
+> >     manuals are available from http://www.zedboard.org .
+> > +
+> > +Support for other boards:
+> > +
+> > +If you want to build a system for other boards (for ex. Digilent Zybo board).
+> > +Most major Zynq-based boards have U-Boot and Kernel support.  If your
+> > +board happens to be supported, booting the kernel and using U-Boot
+> > +just requires the following Buildroot updates:
+> > + - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
+> > + - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_DEFCONFIG)
+> > +
+> > +Custom ps7_init_gpl.c/h support:
+> > +
+> > +To generate a working boot.bin image, ps7_init_gpl.c/h are required in the
+> > +U-Boot source tree.  Those files are output from the Xilinx tools, but for
+>
+>  I would put the notice from the end immediately here. I.e.
+>
+> To generate a working boot.bin image, ps7_init_gpl.c/h are required in the
+> U-Boot source tree. Without those files, boot.bin will be built successfully
+> but it will not be functional at all. Those files are output from ...
+>
+
+Agree.
+
+>
+> > +convenience, U-Boot includes the default ps7_init_gpl.c/h of popular boards.
+> > +These files may need to be updated for any programmable logic customizations
+>
+>  These -> those (otherwise it looks as if you are talking about different files
+> than before).
+
+
+OK.
+>
+>
+> > +which impact ps7_init (clock/pin setup & mapping/AXI bridge setup/etc).
+> > +See board/xilinx/zynq/ directory of U-Boot for natively supported ps7_init
+> > +files.  If the ps7_init files for your board are not found in U-Boot, you need
+> > +to add them by yourself.  (You can still override the existing ones if you want
+> > +to customize them for your purpose.)
+>
+>  That last sentence doesn't make a lot of sense to me, and I suspect it's redundant.
+>
+
+Agree to remove, as that statement isn't needed in the Customize
+section as that's assumed to be what we're trying to do.
+
+>
+> > +
+> > +1) Start with a defconfig supported by Buildroot (for ex. Zedboard)
+>
+>  for ex. -> 'e.g.' or 'for example'
+
+
+Agree.
+
+>
+>
+> > +    make zynq_zed_defconfig
+> > +
+> > +2) make uboot-menuconfig
+> > +    Visit the following menu and enable CONFIG_ZYNQ_CUSTOM_INIT.
+> > +
+> > +    ARM architecture  --->
+> > +       [*] Use custom ps7_init provided by Xilinx tool
+> > +
+> > +3) Copy ps7_init_gpl.c/h generated by the Xilinx tools into
+> > +   output/build/uboot-xilinx-<pkg version>/board/xilinx/zynq/custom_hw_platform/
+>
+>  The user should be made aware that the custom files will disappear again if you
+> clean. Something like:
+>
+> Note that the files need to be re-copied after cleaning the output directory,
+> and there is no way to save it as part of the buildroot configuration except as
+> a uboot patch.
+>
+Good catch, I'll add that.
+
+>
+>  Which makes me think: perhaps a uboot option should be added (conditional on
+> BR2_TARGET_UBOOT_ZYNQ_IMAGE) that allows the user to specify a custom file?
+>
+
+Agree, Masahiro when you looked at the xilinx vs upstream u-boot, did
+both approach custom hw files in a similar manner?
+
+Another item to note is the Zynq MPSoC (next gen SoC) so far hasn't
+decided to use the u-boot SPL approach.   I'm hoping to get more
+details next week at a Xilinx conference to understand their direction
+as I think a new Buildroot Xilinx handoff files package maybe a better
+solution as there are multiple parts.  (i.e. FPGA bit files and other
+pieces we may want to install in images/, place the hw platform files
+for use by uboot  and use the handoff files headers to compile FPGA
+soft IP embeddedsw drivers (another package I need to finish getting
+patches ready for).
+
+>
+>
+> > +
+> > +4) make
+>
+>
+> > +
+> > +*Notice*
+> > +While the build will successfully complete with/without the ps7_init_gpl.*
+> > +files, the boot.bin generated without ones will not be functional at all.
+>
+>  This last sentence didn't read very easily for me, I reworded it above.
+>
+
+Ok,  maybe replace "ones" with "files".
+
+Appreciate the review.  Thanks!
+
 -- 
-1.8.0
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
