@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  3 Oct 2016 23:11:37 +0200
-Subject: [Buildroot] [PATCH 17/28] package/python-mistune: bump version to
-	0.7.3
+Date: Mon,  3 Oct 2016 23:11:48 +0200
+Subject: [Buildroot] [PATCH 28/28] package/python-requests: bump version to
+	2.11.1
 In-Reply-To: <20161003211148.18603-1-bernd.kuhls@t-online.de>
 References: <20161003211148.18603-1-bernd.kuhls@t-online.de>
-Message-ID: <20161003211148.18603-17-bernd.kuhls@t-online.de>
+Message-ID: <20161003211148.18603-28-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-mistune/python-mistune.hash | 6 +++---
- package/python-mistune/python-mistune.mk   | 4 ++--
+ package/python-requests/python-requests.hash | 6 +++---
+ package/python-requests/python-requests.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
-index 8509606..cfc6a25 100644
---- a/package/python-mistune/python-mistune.hash
-+++ b/package/python-mistune/python-mistune.hash
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index b567fe6..e441c00 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=ed9ac03c99261bd1803e44ddaa4f87cb, sha256 locally computed.
--md5	ed9ac03c99261bd1803e44ddaa4f87cb  mistune-0.7.2.tar.gz
--sha256	626f2516adcde4af608eaf83635ff20ff7e577c1898ad4d0f0fcd8c094399840  mistune-0.7.2.tar.gz
-+# md5 from https://pypi.python.org/pypi/mistune/json, sha256 locally computed
-+md5	4eba50bd121b83716fa4be6a4049004b  mistune-0.7.3.tar.gz
-+sha256	21d0e869df3b9189f248e022f1c9763cf9069e1a2f00676f1f1852bd7f98b713  mistune-0.7.3.tar.gz
-diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
-index f0301a7..91e97e8 100644
---- a/package/python-mistune/python-mistune.mk
-+++ b/package/python-mistune/python-mistune.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0b7f480d19012ec52bab78292efd976d, sha256 locally computed
+-md5	0b7f480d19012ec52bab78292efd976d  requests-2.9.1.tar.gz
+-sha256	c577815dd00f1394203fc44eb979724b098f88264a9ef898ee45b8e5e9cf587f  requests-2.9.1.tar.gz
++# md5 from https://pypi.python.org/pypi/requests/json, sha256 locally computed
++md5	ad5f9c47b5c5dfdb28363ad7546b0763  requests-2.11.1.tar.gz
++sha256	5acf980358283faba0b897c73959cecf8b841205bb4b2ad3ef545f46eae1a133  requests-2.11.1.tar.gz
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 8cda2c5..49980bf 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MISTUNE_VERSION = 0.7.2
-+PYTHON_MISTUNE_VERSION = 0.7.3
- PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
--PYTHON_MISTUNE_SITE = http://pypi.python.org/packages/source/m/mistune
-+PYTHON_MISTUNE_SITE = https://pypi.python.org/packages/88/1e/be99791262b3a794332fda598a07c2749a433b9378586361ba9d8e824607
- PYTHON_MISTUNE_LICENSE = BSD-3c
- PYTHON_MISTUNE_LICENSE_FILES = LICENSE
- PYTHON_MISTUNE_SETUP_TYPE = setuptools
+-PYTHON_REQUESTS_VERSION = 2.9.1
++PYTHON_REQUESTS_VERSION = 2.11.1
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = http://pypi.python.org/packages/source/r/requests
++PYTHON_REQUESTS_SITE = https://pypi.python.org/packages/2e/ad/e627446492cc374c284e82381215dcd9a0a87c4f6e90e9789afefe6da0ad
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
 -- 
 2.9.3
