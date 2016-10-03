@@ -1,36 +1,84 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon,  3 Oct 2016 09:23:33 -0300
-Subject: [Buildroot] [PATCH 2/2] configs/orangepipc: Bump to U-Boot
-	2016.09.01
-In-Reply-To: <1475497413-27708-1-git-send-email-festevam@gmail.com>
-References: <1475497413-27708-1-git-send-email-festevam@gmail.com>
-Message-ID: <1475497413-27708-2-git-send-email-festevam@gmail.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Mon,  3 Oct 2016 14:25:48 +0200
+Subject: [Buildroot] [PATCH v3] package/linux-tools: add gpio
+Message-ID: <20161003122548.2477-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-U-Boot 2016.09.01 is a bugfix release, so bump to this version.
-
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- configs/orangepipc_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v2 -> v3:
+ * Add info about supported Linux version in Config.in
+   (suggested by Baruch)
 
-diff --git a/configs/orangepipc_defconfig b/configs/orangepipc_defconfig
-index 1bea541..6d3a842 100644
---- a/configs/orangepipc_defconfig
-+++ b/configs/orangepipc_defconfig
-@@ -18,7 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+Changes v1 -> v2:
+ * Adapt to new linux-tools infra, which is moved to package/ directory
+   (suggested by Yann)
+
+ package/linux-tools/Config.in          | 12 ++++++++++++
+ package/linux-tools/linux-tool-gpio.mk | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
+ create mode 100644 package/linux-tools/linux-tool-gpio.mk
+
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 61c196f..bd07509 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -20,6 +20,18 @@ comment "cpupower needs a toolchain w/ wchar"
+ 	depends on !BR2_bfin
+ 	depends on !BR2_USE_WCHAR && BR2_NEEDS_GETTEXT
+ 
++config BR2_PACKAGE_LINUX_TOOLS_GPIO
++	bool "gpio"
++	select BR2_PACKAGE_LINUX_TOOLS
++	help
++	  gpio is a collection of tools to get information about,
++	  control and monitor gpios present on system.
++
++	  These tools use new gpio ABI which will deprecate sysfs gpio
++	  interface in the future.
++
++	  These tools are available only from kernel version 4.8.
++
+ config BR2_PACKAGE_LINUX_TOOLS_PERF
+ 	bool "perf"
+ 	select BR2_PACKAGE_LINUX_TOOLS
+diff --git a/package/linux-tools/linux-tool-gpio.mk b/package/linux-tools/linux-tool-gpio.mk
+new file mode 100644
+index 0000000..db0094a
+--- /dev/null
++++ b/package/linux-tools/linux-tool-gpio.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# gpio
++#
++################################################################################
++
++LINUX_TOOLS += gpio
++
++GPIO_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS)
++
++define GPIO_BUILD_CMDS
++	$(Q)if ! grep install $(LINUX_DIR)/tools/gpio/Makefile >/dev/null 2>&1 ; then \
++		echo "Your kernel version is too old and does not have the gpio tools." ; \
++		echo "At least kernel 4.8 must be used." ; \
++		exit 1 ; \
++	fi
++
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
++		$(GPIO_MAKE_OPTS) \
++		gpio
++endef
++
++define GPIO_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
++		$(GPIO_MAKE_OPTS) \
++		DESTDIR=$(TARGET_DIR) \
++		gpio_install
++endef
 -- 
-2.7.4
+2.10.0
