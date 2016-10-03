@@ -1,37 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Oct 2016 23:35:58 +0200
-Subject: [Buildroot] [git commit] ltp-testsuite: make Config.in libc comment
-	standard
-Message-ID: <20161003213608.7AD2081814@busybox.osuosl.org>
+Date: Mon, 3 Oct 2016 23:36:36 +0200
+Subject: [Buildroot] [git commit] configs/imx6ulpico: Bump to kernel 4.8
+Message-ID: <20161003213642.EAB0D81EE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ebc87ecf35729be9be7c9e2f8bb93f68754d150
+commit: https://git.buildroot.net/buildroot/commit/?id=3a66f4453506370669de2868f4e6cfb9979f7390
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ltp-testsuite was the only package to mention "non-musl" while all other
-packages have it as "glibc or uClibc". This change only adjusts it to
-look like all the other packages.
+Now that the final kernel 4.8 has been released, let's use it
+instead of 4.8-rc5.
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ltp-testsuite/Config.in | 2 +-
+ configs/imx6ulpico_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 8475902..274b03e 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -22,7 +22,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
- 
- 	  http://linux-test-project.github.io
- 
--comment "ltp-testsuite needs a non-musl toolchain w/ threads"
-+comment "ltp-testsuite needs a glibc or uClibc toolchain w/ threads"
- 	depends on !BR2_nios2
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
+diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
+index d94478a..71277d9 100644
+--- a/configs/imx6ulpico_defconfig
++++ b/configs/imx6ulpico_defconfig
+@@ -17,7 +17,7 @@ BR2_GLOBAL_PATCH_DIR="board/technexion/imx6ulpico/patches"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8-rc5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/technexion/imx6ulpico/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
