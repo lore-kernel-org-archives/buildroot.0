@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Oct 2016 23:19:58 +0200
-Subject: [Buildroot] [PATCH] uclibc: remove linker scripts for
- libubacktrace/libuargp
-In-Reply-To: <20160930172511.GA20982@waldemar-brodkorb.de>
-References: <20160930172511.GA20982@waldemar-brodkorb.de>
-Message-ID: <20161003231958.60e0aa94@free-electrons.com>
+Date: Mon, 3 Oct 2016 23:21:24 +0200
+Subject: [Buildroot] [PATCH 0/2] Symlinks in compilation path confuse
+ check-host-rpath
+In-Reply-To: <1475230194-18524-1-git-send-email-jezz@sysmic.org>
+References: <1475230194-18524-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20161003232124.05d609cd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 30 Sep 2016 19:25:11 +0200, Waldemar Brodkorb wrote:
-> They are not required anymore and break some builds.
-> 
-> Tested-by: Lance Fredrickson <lancethepants@gmail.com>
-> Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-> ---
->  ...uargp-remove-unneeded-and-false-linker-sc.patch | 89 ++++++++++++++++++++++
->  1 file changed, 89 insertions(+)
->  create mode 100644 package/uclibc/0002-ubacktrace-uargp-remove-unneeded-and-false-linker-sc.patch
+On Fri, 30 Sep 2016 12:09:52 +0200, J?r?me Pouiller wrote:
 
-Applied to master, thanks.
+> J?r?me Pouiller (2):
+>   check-host-rpath: support symlinks in rpath
+>   Canonicalize $(BASE_DIR)
+
+Samuel, Yann, Arnout, could you help reviewing this patch series?
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
