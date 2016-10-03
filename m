@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  3 Oct 2016 23:11:25 +0200
-Subject: [Buildroot] [PATCH 05/28] package/python-certifi: bump version to
-	2016.9.26
+Date: Mon,  3 Oct 2016 23:11:29 +0200
+Subject: [Buildroot] [PATCH 09/28] package/python-django: bump version to
+	1.10.2
 In-Reply-To: <20161003211148.18603-1-bernd.kuhls@t-online.de>
 References: <20161003211148.18603-1-bernd.kuhls@t-online.de>
-Message-ID: <20161003211148.18603-5-bernd.kuhls@t-online.de>
+Message-ID: <20161003211148.18603-9-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-certifi/python-certifi.hash | 6 +++---
- package/python-certifi/python-certifi.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-django/python-django.hash | 5 +++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index ade4db3..443cc6d 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5d672aa766e1f773c75cfeccd02d3650, sha256 locally computed
--md5   5d672aa766e1f773c75cfeccd02d3650  certifi-2016.2.28.tar.gz
--sha256  5e8eccf95924658c97b990b50552addb64f55e1e3dfe4880456ac1f287dc79d0  certifi-2016.2.28.tar.gz
-+# md5 from https://pypi.python.org/pypi/certifi/json, sha256 locally computed
-+md5	baa81e951a29958563689d868ef1064d  certifi-2016.9.26.tar.gz
-+sha256	8275aef1bbeaf05c53715bfc5d8569bd1e04ca1e8e69608cc52bcaac2604eb19  certifi-2016.9.26.tar.gz
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index 84db8ff..f69e7c1 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index f51c9b4..38b303b 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,2 +1,3 @@
+-# sha256 from https://www.djangoproject.com/m/pgp/Django-1.7.3.checksum.txt
+-sha256 f226fb8aa438456968d403f6739de1cf2dad128db86f66ee2b41dfebe3645c5b	Django-1.7.3.tar.gz
++# md5 from https://pypi.python.org/pypi/django/json, sha256 locally computed
++md5	5342e77374b2acd2eafa86d2bb68f8c9  Django-1.10.2.tar.gz
++sha256	e127f12a0bfb34843b6e8c82f91e26fff6445a7ca91d222c0794174cf97cbce1  Django-1.10.2.tar.gz
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index b67bce4..2a50231 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_CERTIFI_VERSION = 2016.2.28
-+PYTHON_CERTIFI_VERSION = 2016.9.26
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/source/c/certifi
-+PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/4f/75/e1bc6e363a2c76f8d7e754c27c437dbe4086414e1d6d2f6b2a3e7846f22b
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+-PYTHON_DJANGO_VERSION = 1.7.3
++PYTHON_DJANGO_VERSION = 1.10.2
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://pypi.python.org/packages/source/D/Django
++PYTHON_DJANGO_SITE = https://pypi.python.org/packages/57/9e/59444485f092b6ed4f1931e7d2e13b67fdab967c041d02f58a0d1dab8c23
+ PYTHON_DJANGO_LICENSE = BSD-3c
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
 -- 
 2.9.3
