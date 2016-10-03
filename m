@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  3 Oct 2016 23:11:32 +0200
-Subject: [Buildroot] [PATCH 12/28] package/python-html5lib: bump version to
-	1.0b10
+Date: Mon,  3 Oct 2016 23:11:35 +0200
+Subject: [Buildroot] [PATCH 15/28] package/python-json-schema-validator:
+	bump version to 2.4.1
 In-Reply-To: <20161003211148.18603-1-bernd.kuhls@t-online.de>
 References: <20161003211148.18603-1-bernd.kuhls@t-online.de>
-Message-ID: <20161003211148.18603-12-bernd.kuhls@t-online.de>
+Message-ID: <20161003211148.18603-15-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-html5lib/python-html5lib.hash | 6 +++---
- package/python-html5lib/python-html5lib.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../python-json-schema-validator/python-json-schema-validator.hash   | 5 +++--
+ package/python-json-schema-validator/python-json-schema-validator.mk | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-html5lib/python-html5lib.hash b/package/python-html5lib/python-html5lib.hash
-index 0ec712a..7ea082f 100644
---- a/package/python-html5lib/python-html5lib.hash
-+++ b/package/python-html5lib/python-html5lib.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=ef43cb05e9e799f25d65d1135838a96f, sha256 locally computed
--md5     ef43cb05e9e799f25d65d1135838a96f  html5lib-0.9999999.tar.gz
--sha256  2612a191a8d5842bfa057e41ba50bbb9dcb722419d2408c78cff4758d0754868  html5lib-0.9999999.tar.gz
-+# md5 from https://pypi.python.org/pypi/html5lib/json, sha256 locally computed
-+md5	5ada1243b7a863624b2f35245b2186e9  html5lib-1.0b10.tar.gz
-+sha256	0d5fd54d5b2b79b876007a70c033a4023577768d18022c15681c00561432a0f9  html5lib-1.0b10.tar.gz
-diff --git a/package/python-html5lib/python-html5lib.mk b/package/python-html5lib/python-html5lib.mk
-index 93eef9a..38affcb 100644
---- a/package/python-html5lib/python-html5lib.mk
-+++ b/package/python-html5lib/python-html5lib.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/python-json-schema-validator/python-json-schema-validator.hash b/package/python-json-schema-validator/python-json-schema-validator.hash
+index 96f5d89..7360aba 100644
+--- a/package/python-json-schema-validator/python-json-schema-validator.hash
++++ b/package/python-json-schema-validator/python-json-schema-validator.hash
+@@ -1,2 +1,3 @@
+-# locally computed
+-sha256  316befb9a6d981dff465f5243e423a3027b27775f7649510ce23fde300dde9b7  json-schema-validator-2.3.tar.gz
++# md5 from https://pypi.python.org/pypi/json-schema-validator/json, sha256 locally computed
++md5	7691b41739faaa8b0965279e72889932  json-schema-validator-2.4.1.tar.gz
++sha256	1562a21d83e56231cef09b9aa2c06e8f845974bd26f24be293de6cab9a2fac91  json-schema-validator-2.4.1.tar.gz
+diff --git a/package/python-json-schema-validator/python-json-schema-validator.mk b/package/python-json-schema-validator/python-json-schema-validator.mk
+index 0ff5554..1456c34 100644
+--- a/package/python-json-schema-validator/python-json-schema-validator.mk
++++ b/package/python-json-schema-validator/python-json-schema-validator.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HTML5LIB_VERSION = 0.9999999
-+PYTHON_HTML5LIB_VERSION = 1.0b10
- PYTHON_HTML5LIB_SOURCE = html5lib-$(PYTHON_HTML5LIB_VERSION).tar.gz
--PYTHON_HTML5LIB_SITE = https://pypi.python.org/packages/source/h/html5lib
-+PYTHON_HTML5LIB_SITE = https://pypi.python.org/packages/97/16/982214624095c1420c75f3bd295d9e658794aafb95fc075823de107e0ae4
- PYTHON_HTML5LIB_LICENSE = MIT
- PYTHON_HTML5LIB_LICENSE_FILES = LICENSE
--PYTHON_HTML5LIB_SETUP_TYPE = distutils
-+PYTHON_HTML5LIB_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
+-PYTHON_JSON_SCHEMA_VALIDATOR_VERSION = 2.3
++PYTHON_JSON_SCHEMA_VALIDATOR_VERSION = 2.4.1
+ PYTHON_JSON_SCHEMA_VALIDATOR_SOURCE = json-schema-validator-$(PYTHON_JSON_SCHEMA_VALIDATOR_VERSION).tar.gz
+-PYTHON_JSON_SCHEMA_VALIDATOR_SITE = http://pypi.python.org/packages/source/j/json-schema-validator
++PYTHON_JSON_SCHEMA_VALIDATOR_SITE = https://pypi.python.org/packages/70/46/ba39cb7efad1898cfc89bf3588b8612f24d128f1c25b761994f524a59cef
+ PYTHON_JSON_SCHEMA_VALIDATOR_LICENSE = LGPLv3
+ PYTHON_JSON_SCHEMA_VALIDATOR_SETUP_TYPE = setuptools
+ PYTHON_JSON_SCHEMA_VALIDATOR_DEPENDENCIES = python-versiontools
 -- 
 2.9.3
