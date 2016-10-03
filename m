@@ -1,37 +1,34 @@
 From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Date: Mon, 3 Oct 2016 14:06:32 +0200
-Subject: [Buildroot] [PATCH v3 2/2] couchdb: New package.
-In-Reply-To: <l9i9cdxqle.ln2@ID-313208.user.individual.net>
+Date: Mon, 3 Oct 2016 14:07:43 +0200
+Subject: [Buildroot] [PATCH v3 1/2] spidermonkey185: New package.
+In-Reply-To: <14i9cdxqle.ln2@ID-313208.user.individual.net>
 References: <0dc17f18-b259-a618-67f3-099fd6ef0897@green-communications.fr>
  <1467800649-22119-1-git-send-email-nicolas.cavallari@green-communications.fr>
- <1467800649-22119-2-git-send-email-nicolas.cavallari@green-communications.fr>
- <l9i9cdxqle.ln2@ID-313208.user.individual.net>
-Message-ID: <ae2578c0-0de1-7cd4-e595-cc88449d7615@green-communications.fr>
+ <14i9cdxqle.ln2@ID-313208.user.individual.net>
+Message-ID: <9ff10f2f-7ca2-f5ca-a25b-6f6582ef2f2e@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/10/2016 10:43, Bernd Kuhls wrote:
-> Hi,
+On 03/10/2016 10:40, Bernd Kuhls wrote:
+> The package fails to compile using this toolchain:
+> http://autobuild.buildroot.net/toolchains/configs/br-x86-64-core2-
+> full.config
 > 
-> Am Wed, 06 Jul 2016 12:24:09 +0200 schrieb Nicolas Cavallari:
+> jsapi.cpp:361:63: error: cannot convert ?__va_list_tag**? to 
+> ?__va_list_tag (*)[1]? for argument ?5? to ?JSBool TryArgumentFormatter
+> (JSContext*, const char**, JSBool, jsval**, __va_list_tag (*)[1])?
+>                                        JS_ADDRESSOF_VA_LIST(ap))) {
 > 
->> +	select BR2_PACKAGE_ERLANG
+> To solve the problem add
 > 
-> the elrang version provided by buildroot is detected as incompatible with 
-> couchdb 1.6.1:
+> printf("#define HAVE_VA_LIST_AS_ARRAY \n");
+> 
+> in js/src/jscpucfg.cpp after line 76 according to
+> https://groups.google.com/forum/#!topic/jsdb/CnWRh11hRHQ
 
-Yes, the erlang version was bumped one month after posting my patch.
-
-I remembered that patching the configure was enough for the thing to
-build anyway, but I couldn't test it because the other program that
-was using couchdb was utterly broken.
-
-But still, with the previous patch revision, people were unsure of
-whether my two patches were actually wanted, considering the uglyness
-of spidermonkey185.
-
-And, by the way, couchdb 2.0 is still not usable for distribution
-packaging, let alone cross-compilation.
+This link mention other modifications that one has to do for it to
+run.  I'm not sure i can just "pick them up" if they do not have a
+license.
