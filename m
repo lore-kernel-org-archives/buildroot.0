@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Oct 2016 13:14:23 +0200
-Subject: [Buildroot] [git commit] dbus-glib: bump version to 0.108
-Message-ID: <20161003111634.DADDC80468@busybox.osuosl.org>
+Date: Mon, 3 Oct 2016 13:14:55 +0200
+Subject: [Buildroot] [git commit] modem-manager: bump to version 1.6.2
+Message-ID: <20161003111634.E08377FAC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5446fc690a776375aa136132405d907a82502c86
+commit: https://git.buildroot.net/buildroot/commit/?id=c615ecffda399d6a4564bebae24e1b43b9b219aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus-glib/dbus-glib.hash | 2 +-
- package/dbus-glib/dbus-glib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/modem-manager/modem-manager.hash | 4 ++--
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dbus-glib/dbus-glib.hash b/package/dbus-glib/dbus-glib.hash
-index e5a2ebc..732ae97 100644
---- a/package/dbus-glib/dbus-glib.hash
-+++ b/package/dbus-glib/dbus-glib.hash
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index 9e83488..481f7dd 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 b38952706dcf68bad9c302999ef0f420b8cf1a2428227123f0ac4764b689c046  dbus-glib-0.106.tar.gz
-+sha256 9f340c7e2352e9cdf113893ca77ca9075d9f8d5e81476bf2bf361099383c602c  dbus-glib-0.108.tar.gz
-diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
-index e191507..4a1e4b4 100644
---- a/package/dbus-glib/dbus-glib.mk
-+++ b/package/dbus-glib/dbus-glib.mk
+-# Locally computed:
+-sha256  a94f4657a8fa6835e2734fcc6edf20aa8c8d452f62299d7748541021c3eb2445  ModemManager-1.6.0.tar.xz
++# Locally computed
++sha256  e4544398d9c166f8e13fe7c97149f262ad1fb48af980e0d4f9c34013920c6393  ModemManager-1.6.2.tar.xz
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 252292a..c74c224 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DBUS_GLIB_VERSION = 0.106
-+DBUS_GLIB_VERSION = 0.108
- DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib
- DBUS_GLIB_INSTALL_STAGING = YES
- DBUS_GLIB_LICENSE = AFLv2.1, GPLv2+
+-MODEM_MANAGER_VERSION = 1.6.0
++MODEM_MANAGER_VERSION = 1.6.2
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
