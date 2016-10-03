@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 03 Oct 2016 10:40:01 +0200
-Subject: [Buildroot] [PATCH v3 1/2] spidermonkey185: New package.
+Date: Mon, 03 Oct 2016 10:43:01 +0200
+Subject: [Buildroot] [PATCH v3 2/2] couchdb: New package.
 References: <0dc17f18-b259-a618-67f3-099fd6ef0897@green-communications.fr>
  <1467800649-22119-1-git-send-email-nicolas.cavallari@green-communications.fr>
-Message-ID: <14i9cdxqle.ln2@ID-313208.user.individual.net>
+ <1467800649-22119-2-git-send-email-nicolas.cavallari@green-communications.fr>
+Message-ID: <l9i9cdxqle.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +13,15 @@ To: buildroot@busybox.net
 
 Hi,
 
-Am Wed, 06 Jul 2016 12:24:08 +0200 schrieb Nicolas Cavallari:
+Am Wed, 06 Jul 2016 12:24:09 +0200 schrieb Nicolas Cavallari:
 
-> diff --git a/package/Config.in b/package/Config.in index
-> 15271a2..fdc3194 100644 --- a/package/Config.in +++ b/package/Config.in
-> @@ -1306,6 +1306,7 @@ endif
->  	source "package/qhull/Config.in"
->  	source "package/qlibc/Config.in"
->  	source "package/sphinxbase/Config.in"
-> +	source "package/spidermonkey185/Config.in"
->  	source "package/startup-notification/Config.in"
->  	source "package/tz/Config.in"
->  	source "package/tzdata/Config.in"
+> +	select BR2_PACKAGE_ERLANG
 
-after the addition of shapelib
+the elrang version provided by buildroot is detected as incompatible with 
+couchdb 1.6.1:
 
-https://git.buildroot.net/buildroot/commit/package/Config.in?
-id=2655d676f0151f6cfd36c42435cf84926c209e24
-
-your patch does not apply anymore.
-
-The package fails to compile using this toolchain:
-http://autobuild.buildroot.net/toolchains/configs/br-x86-64-core2-
-full.config
-
-jsapi.cpp:361:63: error: cannot convert ?__va_list_tag**? to 
-?__va_list_tag (*)[1]? for argument ?5? to ?JSBool TryArgumentFormatter
-(JSContext*, const char**, JSBool, jsval**, __va_list_tag (*)[1])?
-                                       JS_ADDRESSOF_VA_LIST(ap))) {
-
-To solve the problem add
-
-printf("#define HAVE_VA_LIST_AS_ARRAY \n");
-
-in js/src/jscpucfg.cpp after line 76 according to
-https://groups.google.com/forum/#!topic/jsdb/CnWRh11hRHQ
+checking Erlang version compatibility... detected Erlang version: 
+7.3.0...configure: error: The installed Erlang version must be >= R14B 
+(erts-5.8.1) and =< 17 (erts-6.0) major_version does not match
 
 Regards, Bernd
