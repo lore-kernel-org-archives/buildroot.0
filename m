@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Oct 2016 23:19:16 +0200
-Subject: [Buildroot] [PATCH v2 1/2] DEVELOPERS: update my entry list
-In-Reply-To: <20161001163314.10173-1-s.martin49@gmail.com>
-References: <20161001163314.10173-1-s.martin49@gmail.com>
-Message-ID: <20161003231916.397e0009@free-electrons.com>
+Date: Mon, 3 Oct 2016 23:19:25 +0200
+Subject: [Buildroot] [PATCHv2] docs/manual: no warranty on output of
+ legal-info
+In-Reply-To: <1475335592-15482-1-git-send-email-yann.morin.1998@free.fr>
+References: <1475335592-15482-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20161003231925.01aadaf3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  1 Oct 2016 18:33:13 +0200, Samuel Martin wrote:
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+On Sat,  1 Oct 2016 17:26:32 +0200, Yann E. MORIN wrote:
+> Explicitly state that there is no warranty about the accuracy of the
+> content of the output of 'make legal-info'.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+> 
 > ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
+> Changes v1 -> v2:
+>   - reword  (Arnout, Luca)
+>   - carry the ACKs from Arnout and Luca since I did exactly what they
+>     suggested and they both agreed to each other's reviews.
+> ---
+>  docs/manual/legal-notice.txt | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
 Applied to master, thanks.
 
