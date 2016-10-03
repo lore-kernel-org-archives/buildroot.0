@@ -1,41 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Oct 2016 17:14:46 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.8
-Message-ID: <20161003151521.0D8038218E@busybox.osuosl.org>
+Date: Mon, 3 Oct 2016 17:14:34 +0200
+Subject: [Buildroot] [git commit] linux-headers: add support for builtin 4.8
+	headers
+Message-ID: <20161003151521.041F781D7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1524980f5f13273266cdb647e3f8743475efd4d
+commit: https://git.buildroot.net/buildroot/commit/?id=3b27a4639fb7aaaae75143bfe4c0513fdfba2a09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The rest of the support was added in d3ac2bc6.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e98dc80..dd58562 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8353852..890fd7f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ comment "Kernel Header Options"
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_4_7
++	default BR2_KERNEL_HEADERS_4_8
+ 	help
+ 	  Select the kernel version to get headers from.
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.7.6)"
-+	bool "Latest version (4.8)"
+@@ -86,6 +86,10 @@ choice
+ 		bool "Linux 4.7.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
  
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -97,7 +97,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.7.6" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.8" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
++	config BR2_KERNEL_HEADERS_4_8
++		bool "Linux 4.8.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
++
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+ endchoice
+@@ -244,4 +248,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+ 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
+ 	default "4.7.6"		if BR2_KERNEL_HEADERS_4_7
++	default "4.8"		if BR2_KERNEL_HEADERS_4_8
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
