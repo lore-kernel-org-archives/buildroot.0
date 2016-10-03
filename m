@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  3 Oct 2016 23:11:30 +0200
-Subject: [Buildroot] [PATCH 10/28] package/python-flask-jsonrpc: bump
-	version to 0.3.1
+Date: Mon,  3 Oct 2016 23:11:38 +0200
+Subject: [Buildroot] [PATCH 18/28] package/python-paho-mqtt: bump version to
+	1.2
 In-Reply-To: <20161003211148.18603-1-bernd.kuhls@t-online.de>
 References: <20161003211148.18603-1-bernd.kuhls@t-online.de>
-Message-ID: <20161003211148.18603-10-bernd.kuhls@t-online.de>
+Message-ID: <20161003211148.18603-18-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-flask-jsonrpc/python-flask-jsonrpc.hash | 6 +++---
- package/python-flask-jsonrpc/python-flask-jsonrpc.mk   | 4 ++--
+ package/python-paho-mqtt/python-paho-mqtt.hash | 6 +++---
+ package/python-paho-mqtt/python-paho-mqtt.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-flask-jsonrpc/python-flask-jsonrpc.hash b/package/python-flask-jsonrpc/python-flask-jsonrpc.hash
-index 8b91af7..a25fbb7 100644
---- a/package/python-flask-jsonrpc/python-flask-jsonrpc.hash
-+++ b/package/python-flask-jsonrpc/python-flask-jsonrpc.hash
+diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
+index 52729cc..6cb3cc2 100644
+--- a/package/python-paho-mqtt/python-paho-mqtt.hash
++++ b/package/python-paho-mqtt/python-paho-mqtt.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/Flask-JSONRPC/0.3, sha256 locally computed:
--md5    a5beca4c3a882315f9b81acb57e83c68                                 Flask-JSONRPC-0.3.tar.gz
--sha256 5baf70bf9cf955e95c02316982026a122b89a5f4c78c5b26f9f476abdb3e13bc Flask-JSONRPC-0.3.tar.gz
-+# md5 from https://pypi.python.org/pypi/flask-jsonrpc/json, sha256 locally computed
-+md5	5c0592f53b2f18e34d5be435acee8842  Flask-JSONRPC-0.3.1.tar.gz
-+sha256	4d0cc9c20874093306af91f5a48009fb8659a041428dcdb11703598ffbbc97d0  Flask-JSONRPC-0.3.1.tar.gz
-diff --git a/package/python-flask-jsonrpc/python-flask-jsonrpc.mk b/package/python-flask-jsonrpc/python-flask-jsonrpc.mk
-index 624322e..ade39e1 100644
---- a/package/python-flask-jsonrpc/python-flask-jsonrpc.mk
-+++ b/package/python-flask-jsonrpc/python-flask-jsonrpc.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=a6407b74eb5e5411e157be1de5c11366, sha256 locally computed
+-md5     a6407b74eb5e5411e157be1de5c11366  paho-mqtt-1.1.tar.gz
+-sha256  0f7a629efe6e3a2c61b59d3550aa9f2c4529b5689a65fde45e6f1ac36b9a261e  paho-mqtt-1.1.tar.gz
++# md5 from https://pypi.python.org/pypi/paho-mqtt/json, sha256 locally computed
++md5	241150b3fcb920ddca4d33181f3238b1  paho-mqtt-1.2.tar.gz
++sha256	9100a6aa706ab699d414ec02705a21eb66f436184691d0bf1f2a85a6213c6c1f  paho-mqtt-1.2.tar.gz
+diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
+index 01da2b3..d783a9c 100644
+--- a/package/python-paho-mqtt/python-paho-mqtt.mk
++++ b/package/python-paho-mqtt/python-paho-mqtt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FLASK_JSONRPC_VERSION = 0.3
-+PYTHON_FLASK_JSONRPC_VERSION = 0.3.1
- PYTHON_FLASK_JSONRPC_SOURCE = Flask-JSONRPC-$(PYTHON_FLASK_JSONRPC_VERSION).tar.gz
--PYTHON_FLASK_JSONRPC_SITE = http://pypi.python.org/packages/source/F/Flask-JSONRPC
-+PYTHON_FLASK_JSONRPC_SITE = https://pypi.python.org/packages/cb/1f/e6d66e8498609ba04bac76155b2ea884df95531e93501bf4ef009d40a83c
- PYTHON_FLASK_JSONRPC_LICENSE = BSD-3c
- PYTHON_FLASK_JSONRPC_LICENSE_FILES = setup.py
- PYTHON_FLASK_JSONRPC_SETUP_TYPE = setuptools
+-PYTHON_PAHO_MQTT_VERSION = 1.1
++PYTHON_PAHO_MQTT_VERSION = 1.2
+ PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
+-PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/source/p/paho-mqtt
++PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/82/d9/7064d3a0a1d62756a1a809c85b99f864c641b66de84c15458f72193b7708
+ PYTHON_PAHO_MQTT_LICENSE = EPLv1.0 or EDLv1.0
+ PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
+ PYTHON_PAHO_MQTT_SETUP_TYPE = distutils
 -- 
 2.9.3
