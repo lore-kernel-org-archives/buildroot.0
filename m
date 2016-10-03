@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  3 Oct 2016 23:11:45 +0200
-Subject: [Buildroot] [PATCH 25/28] package/python-pyparsing: bump version to
-	2.1.9
+Date: Mon,  3 Oct 2016 23:11:39 +0200
+Subject: [Buildroot] [PATCH 19/28] package/python-paramiko: bump version to
+	2.0.2
 In-Reply-To: <20161003211148.18603-1-bernd.kuhls@t-online.de>
 References: <20161003211148.18603-1-bernd.kuhls@t-online.de>
-Message-ID: <20161003211148.18603-25-bernd.kuhls@t-online.de>
+Message-ID: <20161003211148.18603-19-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-pyparsing/python-pyparsing.hash | 6 +++---
- package/python-pyparsing/python-pyparsing.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-paramiko/python-paramiko.hash | 7 +++----
+ package/python-paramiko/python-paramiko.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
-index 93a0845..6cf686a 100644
---- a/package/python-pyparsing/python-pyparsing.hash
-+++ b/package/python-pyparsing/python-pyparsing.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/pyparsing/2.0.3, sha256 locally computed
--md5	0fe479be09fc2cf005f753d3acc35939  pyparsing-2.0.3.tar.gz
--sha256  06e729e1cbf5274703b1f47b6135ed8335999d547f9d8cf048b210fb8ebf844f  pyparsing-2.0.3.tar.gz
-+# md5 from https://pypi.python.org/pypi/pyparsing/json, sha256 locally computed
-+md5	ee943c354eac79526533c58342f322c7  pyparsing-2.1.9.tar.gz
-+sha256	93326f5490bcfe7069806ff342692e75f72529cfa82f20683b5fceeb5d4a7fc2  pyparsing-2.1.9.tar.gz
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index ad066b8..652345d 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/python-paramiko/python-paramiko.hash b/package/python-paramiko/python-paramiko.hash
+index 29af27d..f2aedc7 100644
+--- a/package/python-paramiko/python-paramiko.hash
++++ b/package/python-paramiko/python-paramiko.hash
+@@ -1,4 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/paramiko/json
+-md5	7e1203f5ffeb7d2bc2bffc4feb804216  paramiko-1.16.0.tar.gz
+-# sha256 calculated by scanpypi
+-sha256	3297ebd3cd072f573772f7c7426939a443c62c458d54bb632ff30fd6ecf96892  paramiko-1.16.0.tar.gz
++# md5 from https://pypi.python.org/pypi/paramiko/json, sha256 locally computed
++md5	6312aee79892801cf5a624eb4f8fd864  paramiko-2.0.2.tar.gz
++sha256	411bf90fa22b078a923ff19ef9772c1115a0953702db93549a2848acefd141dc  paramiko-2.0.2.tar.gz
+diff --git a/package/python-paramiko/python-paramiko.mk b/package/python-paramiko/python-paramiko.mk
+index 52822bb..e616049 100644
+--- a/package/python-paramiko/python-paramiko.mk
++++ b/package/python-paramiko/python-paramiko.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPARSING_VERSION = 2.0.3
-+PYTHON_PYPARSING_VERSION = 2.1.9
- PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
--PYTHON_PYPARSING_SITE = https://pypi.python.org/packages/source/p/pyparsing
-+PYTHON_PYPARSING_SITE = https://pypi.python.org/packages/87/ee/6f3a94d834c82a5c1a74f2fc77775ff05b5fbbf7d97f844e6fff5e2ff94b
- PYTHON_PYPARSING_LICENSE = MIT
- PYTHON_PYPARSING_LICENSE_FILES = LICENSE
--PYTHON_PYPARSING_SETUP_TYPE = distutils
-+PYTHON_PYPARSING_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
+-PYTHON_PARAMIKO_VERSION = 1.16.0
++PYTHON_PARAMIKO_VERSION = 2.0.2
+ PYTHON_PARAMIKO_SOURCE = paramiko-$(PYTHON_PARAMIKO_VERSION).tar.gz
+-PYTHON_PARAMIKO_SITE = https://pypi.python.org/packages/source/p/paramiko
++PYTHON_PARAMIKO_SITE = https://pypi.python.org/packages/6b/4e/971b8c917456a2ec9666311f7e695493002a64022397cd668150b5efd2a8
+ PYTHON_PARAMIKO_SETUP_TYPE = setuptools
+ PYTHON_PARAMIKO_LICENSE = LGPLv2.1+
+ PYTHON_PARAMIKO_LICENSE_FILES = LICENSE
 -- 
 2.9.3
