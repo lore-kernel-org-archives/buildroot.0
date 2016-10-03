@@ -1,44 +1,87 @@
-From: Jeroen Roovers <jer@airfi.aero>
-Date: Mon, 3 Oct 2016 15:04:14 +0200
-Subject: [Buildroot] [PATCH v3 2/2] couchdb: New package.
-In-Reply-To: <XnsA6969860770E4berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <0dc17f18-b259-a618-67f3-099fd6ef0897@green-communications.fr>
- <1467800649-22119-1-git-send-email-nicolas.cavallari@green-communications.fr>
- <1467800649-22119-2-git-send-email-nicolas.cavallari@green-communications.fr>
- <l9i9cdxqle.ln2@ID-313208.user.individual.net>
- <CANCHnQrDJQ7Ke=wQU7hWPnOZTM7ruF-KbCber0KhBsMQkrhccQ@mail.gmail.com>
- <XnsA6969860770E4berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <CANCHnQocnUzEK0vq50Sjg+PjjLZU6_TCraRJakdNoF1Cq=y+7Q@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  3 Oct 2016 16:17:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/perl: bump version to 5.24.0
+Message-ID: <20161003141728.25097-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes, my patch does a few things slightly differently with the same effect.
+perl-cross has a new version scheme since 1.1.0:
+https://github.com/arsv/perl-cross/releases
 
-On 3 October 2016 at 14:58, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+perl does not contain a version-specific perldelta.pod anymore:
+https://rt.perl.org/Public/Bug/Display.html?id=129328#txn-1424561
 
-> Jeroen Roovers <jer@airfi.aero> wrote in
-> news:CANCHnQrDJQ7Ke=wQU7hWPnOZTM7ruF-KbCber0KhBsMQkrhccQ at mail.gmail.com:
->
-> > If you're interested in my CouchDB/buildroot patches, let me know.
->
-> Hi Jeroen,
->
-> I guess a patch like Gentoo uses is enough to make couchdb 1.6.1
-> compatible with the erlang version provided by buildroot?
->
-> https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-db/couchdb/files/1.6.1-
-> erlang-18.patch?id=f1e3aa13062e9b59ef383e8078c7e4f61f140604
->
-> Regards, Bernd
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161003/7d2791ec/attachment.html>
+Therefore PERL_CROSS_SET_POD was changed accordingly.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/perl/perl.hash | 12 ++++++------
+ package/perl/perl.mk   | 16 +++++++---------
+ 2 files changed, 13 insertions(+), 15 deletions(-)
+
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 4afbd06..72063d8 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,7 +1,7 @@
+-# Hashes from: http://www.cpan.org/src/5.0/perl-5.22.2.tar.bz2.{md5,sha1,sha256}.txt
+-md5    24ec0b41fdd1a4cce0e66811ae1f5e1b                                 perl-5.22.2.tar.bz2
+-sha1   e2f465446dcd45a7fa3da696037f9ebe73e78e55                         perl-5.22.2.tar.bz2
+-sha256 f2322b9b04fe0cdbca9fe755360da04892cb6483d44959457cfebc0bcddc8058 perl-5.22.2.tar.bz2
++# Hashes from: http://www.cpan.org/src/5.0/perl-5.24.0.tar.bz2.{md5,sha1,sha256}.txt
++md5    59456ae4bd4b06cb6e57cb19a3b2d349                                 perl-5.24.0.tar.xz
++sha1   9d5424ac2debe979d1f7255fe0c818aff0b41b4c                         perl-5.24.0.tar.xz
++sha256 a9a37c0860380ecd7b23aa06d61c20fc5bc6d95198029f3684c44a9d7e2952f2 perl-5.24.0.tar.xz
+ 
+-# No upstream hashes for the following
+-sha256 250ab6e6c034a8b7ae447fa2b453fa0b61ebb7db4d039eba60c52e44ab5899bd perl-5.22.1-cross-1.0.2.tar.gz
++# From https://github.com/arsv/perl-cross/releases/download/1.1.0/perl-cross-1.1.0.hash
++sha256 d02e1f60076307655ace2c63fe38832e6d81d6195af84a98221e1c617c6c733d perl-cross-1.1.0.tar.gz
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 29b4455..ac7d418 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -5,23 +5,21 @@
+ ################################################################################
+ 
+ # When updating the version here, also update support/scripts/scancpan
+-PERL_VERSION_MAJOR = 22
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
++PERL_VERSION_MAJOR = 24
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).0
+ PERL_SITE = http://www.cpan.org/src/5.0
+-PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
++PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPLv1+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.0.2
+-PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).1
++PERL_CROSS_VERSION = 1.1.0
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+-PERL_CROSS_SOURCE = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
++PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+ PERL_EXTRA_DOWNLOADS = $(PERL_CROSS_SITE)/$(PERL_CROSS_SOURCE)
+ 
+-PERL_CROSS_OLD_POD = perl$(subst .,,$(PERL_CROSS_BASE_VERSION))delta.pod
+-PERL_CROSS_NEW_POD = perl$(subst .,,$(PERL_VERSION))delta.pod
++PERL_CROSS_OLD_POD = perl$(subst .,,$(PERL_VERSION))delta.pod
+ 
+ # We use the perlcross hack to cross-compile perl. It should
+ # be extracted over the perl sources, so we don't define that
+@@ -34,7 +32,7 @@ endef
+ PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
+ 
+ define PERL_CROSS_SET_POD
+-	$(SED) s/$(PERL_CROSS_OLD_POD)/$(PERL_CROSS_NEW_POD)/g $(@D)/Makefile
++	$(SED) s/$(PERL_CROSS_OLD_POD)/perldelta.pod/g $(@D)/Makefile
+ endef
+ PERL_POST_PATCH_HOOKS += PERL_CROSS_SET_POD
+ 
+-- 
+2.9.3
