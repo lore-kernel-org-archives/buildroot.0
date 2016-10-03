@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Oct 2016 23:15:22 +0200
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to
- arc-2016.09-eng015
-In-Reply-To: <1475486556-41668-1-git-send-email-vzakhar@synopsys.com>
-References: <1475486556-41668-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <20161003231522.1eb193bd@free-electrons.com>
+Date: Mon, 3 Oct 2016 23:18:09 +0200
+Subject: [Buildroot] [PATCH v2 2/2] toolchainfile.cmake: rework the
+ Buildroot flags addition
+In-Reply-To: <20161001163314.10173-2-s.martin49@gmail.com>
+References: <20161001163314.10173-1-s.martin49@gmail.com>
+ <20161001163314.10173-2-s.martin49@gmail.com>
+Message-ID: <20161003231809.1b84ec79@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,51 +14,46 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  3 Oct 2016 12:22:36 +0300, Vlad Zakharov wrote:
-> As described at:
-> 4520524ba055706236db9f00dd79f1b2e2e87fde
-> this commit continues a series of updates of ARC tools.
-> This time we're updating tools to arc-2016.09-eng015.
-> 
-> This tag introduces following changes:
-> 1. binutils: Rebase onto upstream master.
-> 2. gcc: Fix devdf3 emulation for arcem, disable TP register when
-> building for bare metal.
-> 
-> We still keep GDB as it is of arc-2016.03 release because there're some
-> issues we'd like to resolve before releasing it to wider audience.
-> 
-> So again note this is next engineering builds of arc-2016.09 series
-> and it might have all kinds of breakages, please don't use it for
-> production builds.
-> 
-> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-> ---
->  package/binutils/Config.in.host                                         | 2 +-
->  .../{arc-2016.09-eng013 => arc-2016.09-eng015}/0300-ld-makefile.patch   | 0
->  .../0301-check-ldrunpath-length.patch                                   | 0
->  .../0500-add-sysroot-fix-from-bug-3049.patch                            | 0
->  .../0600-poison-system-directories.patch                                | 0
->  package/binutils/binutils.hash                                          | 2 +-
->  package/binutils/binutils.mk                                            | 2 +-
->  package/gcc/Config.in.host                                              | 2 +-
->  .../301-missing-execinfo_h.patch                                        | 0
->  .../gcc/{arc-2016.09-eng013 => arc-2016.09-eng015}/860-cilk-wchar.patch | 0
->  .../940-uclinux-enable-threads.patch                                    | 0
->  package/gcc/gcc.hash                                                    | 2 +-
->  12 files changed, 5 insertions(+), 5 deletions(-)
->  rename package/binutils/{arc-2016.09-eng013 => arc-2016.09-eng015}/0300-ld-makefile.patch (100%)
->  rename package/binutils/{arc-2016.09-eng013 => arc-2016.09-eng015}/0301-check-ldrunpath-length.patch (100%)
->  rename package/binutils/{arc-2016.09-eng013 => arc-2016.09-eng015}/0500-add-sysroot-fix-from-bug-3049.patch (100%)
->  rename package/binutils/{arc-2016.09-eng013 => arc-2016.09-eng015}/0600-poison-system-directories.patch (100%)
->  rename package/gcc/{arc-2016.09-eng013 => arc-2016.09-eng015}/301-missing-execinfo_h.patch (100%)
->  rename package/gcc/{arc-2016.09-eng013 => arc-2016.09-eng015}/860-cilk-wchar.patch (100%)
->  rename package/gcc/{arc-2016.09-eng013 => arc-2016.09-eng015}/940-uclinux-enable-threads.patch (100%)
+On Sat,  1 Oct 2016 18:33:14 +0200, Samuel Martin wrote:
 
-Applied to master, thanks.
+> Thus, due to these CMake specifics, the implementation should take care
+> of a couple of things:
+> - keeping the per-package customization of the standard CMake flags;
+> - making sure the Buildroot's flags are added into the standard CMake
+>   flags;
+> - avoid introducing duplicates in resulting CMake flags.
+> 
+> So, this change introduces an helper in the toolchainfile.cmake file
+> that will extend the standard CMake flags variables with the flags
+> defined by Buildroot only when they are not already present (i.e. only
+> the first time the toolchain file is processed by CMake when configuring
+> a project).
+> Then, this helper is used to extend any standard CMake flags variables.
+
+This looks very complicated. What about not passing those
+CFLAGS/CXXFLAGS at all from the toolchain file?
+
+After all, for other packages (generic-package or autotools-package),
+we are currently:
+
+ * Passing some of the CFLAGS/CXXFLAGS hardcoded into the wrapper. This
+   also applies and works well for CMake packages.
+
+ * Passing some of the CFLAGS/CXXFLAGS in the environment, when
+   configuring/building. There is no reason why this shouldn't be done
+   for CMake as well.
+
+So what about giving up on passing TARGET_CFLAGS/TARGET_CXXFLAGS in the
+CMake toolchain file, and instead pass them explicitly when configuring
+CMake, in the <pkg>_CONFIGURE_CMDS of pkg-cmake.mk.
+
+Would this solve the problem without this awfully complicated CMake
+toolchain file?
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
