@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Oct 2016 13:11:03 +0200
-Subject: [Buildroot] [git commit] mc: bump version to 4.8.18
-Message-ID: <20161003111631.AB7788180B@busybox.osuosl.org>
+Date: Mon, 3 Oct 2016 13:15:22 +0200
+Subject: [Buildroot] [git commit] ofono: bump to version 1.18
+Message-ID: <20161003111634.D1B057FAC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06e31f7f122c7e217e2ea1294e974ddcd6e63e18
+commit: https://git.buildroot.net/buildroot/commit/?id=d55e222a2c4c2f6c415b898dfcf12fe32e6196d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mc/mc.hash | 4 ++--
- package/mc/mc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ofono/ofono.hash | 2 +-
+ package/ofono/ofono.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index 0d22d80..a8116d0 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
+diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
+index 50c92ed..d611736 100644
+--- a/package/ofono/ofono.hash
++++ b/package/ofono/ofono.hash
 @@ -1,2 +1,2 @@
--# Hash from http://ftp.midnight-commander.org/mc-4.8.17.sha256:
--sha256 0447bdddc0baa81866e66f50f9a545d29d6eebb68b0ab46c98d8fddd2bf4e44d  mc-4.8.17.tar.xz
-+# Hash from http://ftp.midnight-commander.org/mc-4.8.18.sha256:
-+sha256 f7636815c987c1719c4f5de2dcd156a0e7d097b1d10e4466d2bdead343d5bece  mc-4.8.18.tar.xz
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index 808f81c..ff4c8ad 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
+ # From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
+-sha256	cbf20f07fd15253c682b23c1786d517f505c3688f7c4ea93da777e1523b89635  ofono-1.17.tar.xz
++sha256	53cdbf342913f46bce4827241c60e24255a3d43a94945edf77482ae5b312d51f  ofono-1.18.tar.xz
+diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
+index 588c9cd..8234396 100644
+--- a/package/ofono/ofono.mk
++++ b/package/ofono/ofono.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MC_VERSION = 4.8.17
-+MC_VERSION = 4.8.18
- MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPLv3+
+-OFONO_VERSION = 1.17
++OFONO_VERSION = 1.18
+ OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
+ OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
+ OFONO_LICENSE = GPLv2
