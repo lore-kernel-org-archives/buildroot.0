@@ -1,21 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Oct 2016 13:15:51 +0200
-Subject: [Buildroot] [PATCH v2 1/1] ofono: bump to version 1.18
-In-Reply-To: <20161002223633.32230-1-petr.vorel@gmail.com> (Petr Vorel's
- message of "Mon, 3 Oct 2016 00:36:33 +0200")
-References: <20161002223633.32230-1-petr.vorel@gmail.com>
-Message-ID: <87lgy5n0ns.fsf@dell.be.48ers.dk>
+Date: Mon, 3 Oct 2016 13:10:15 +0200
+Subject: [Buildroot] [git commit] feh: bump to version 2.17.1
+Message-ID: <20161003111631.24E368180B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5bda592888189436a3b6da7c848c07fe7c2977c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/feh/feh.hash | 2 +-
+ package/feh/feh.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/feh/feh.hash b/package/feh/feh.hash
+index 9d158e2..faca43d 100644
+--- a/package/feh/feh.hash
++++ b/package/feh/feh.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256  6e55289a3be4495a437a0b037c7b5e86edf64ec74ab63d2d26fa50df1b62b6b3  feh-2.16.1.tar.bz2
++sha256  a9e818a4ad6ab427597e1799527a7576856c233525e67afb1eb2cb3ae709d853  feh-2.17.1.tar.bz2
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index f5cc97f..0d5da06 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FEH_VERSION = 2.16.1
++FEH_VERSION = 2.17.1
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org
+ FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
