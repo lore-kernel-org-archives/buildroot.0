@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  3 Oct 2016 23:11:48 +0200
-Subject: [Buildroot] [PATCH 28/28] package/python-requests: bump version to
-	2.11.1
+Date: Mon,  3 Oct 2016 23:11:46 +0200
+Subject: [Buildroot] [PATCH 26/28] package/python-pyroute2: bump version to
+	0.4.8
 In-Reply-To: <20161003211148.18603-1-bernd.kuhls@t-online.de>
 References: <20161003211148.18603-1-bernd.kuhls@t-online.de>
-Message-ID: <20161003211148.18603-28-bernd.kuhls@t-online.de>
+Message-ID: <20161003211148.18603-26-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,41 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-requests/python-requests.hash | 6 +++---
- package/python-requests/python-requests.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pyroute2/python-pyroute2.hash | 6 +++---
+ package/python-pyroute2/python-pyroute2.mk   | 8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
-index b567fe6..e441c00 100644
---- a/package/python-requests/python-requests.hash
-+++ b/package/python-requests/python-requests.hash
+diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
+index df9ff02..ff680fc 100644
+--- a/package/python-pyroute2/python-pyroute2.hash
++++ b/package/python-pyroute2/python-pyroute2.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0b7f480d19012ec52bab78292efd976d, sha256 locally computed
--md5	0b7f480d19012ec52bab78292efd976d  requests-2.9.1.tar.gz
--sha256	c577815dd00f1394203fc44eb979724b098f88264a9ef898ee45b8e5e9cf587f  requests-2.9.1.tar.gz
-+# md5 from https://pypi.python.org/pypi/requests/json, sha256 locally computed
-+md5	ad5f9c47b5c5dfdb28363ad7546b0763  requests-2.11.1.tar.gz
-+sha256	5acf980358283faba0b897c73959cecf8b841205bb4b2ad3ef545f46eae1a133  requests-2.11.1.tar.gz
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index 8cda2c5..49980bf 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
-@@ -4,9 +4,9 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=459b4020073b767cc129e360dabbd2d7, sha256 locally computed
+-md5     459b4020073b767cc129e360dabbd2d7  pyroute2-0.3.20.tar.gz
+-sha256  ed28856753b941d4277b2f14b89c9edec35be4c97e1831f900fe4ce6fc12161b  pyroute2-0.3.20.tar.gz
++# md5 from https://pypi.python.org/pypi/pyroute2/json, sha256 locally computed
++md5	317303ba8a5e3d55b4f918fd1b7e186d  pyroute2-0.4.8.tar.gz
++sha256	a59907d2c5756f188b5f8aa48e3060e31c6f40e076f8143b99240fe0108a48d6  pyroute2-0.4.8.tar.gz
+diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
+index 2e9e0dd..5ea4f54 100644
+--- a/package/python-pyroute2/python-pyroute2.mk
++++ b/package/python-pyroute2/python-pyroute2.mk
+@@ -1,12 +1,12 @@
+-#############################################################
++################################################################################
  #
- ################################################################################
+ # python-pyroute2
+ #
+-#############################################################
++################################################################################
  
--PYTHON_REQUESTS_VERSION = 2.9.1
-+PYTHON_REQUESTS_VERSION = 2.11.1
- PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
--PYTHON_REQUESTS_SITE = http://pypi.python.org/packages/source/r/requests
-+PYTHON_REQUESTS_SITE = https://pypi.python.org/packages/2e/ad/e627446492cc374c284e82381215dcd9a0a87c4f6e90e9789afefe6da0ad
- PYTHON_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
+-PYTHON_PYROUTE2_VERSION = 0.3.20
++PYTHON_PYROUTE2_VERSION = 0.4.8
+ PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
+-PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/source/p/pyroute2
++PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/fb/c1/2cbd9d3f91c663be7168ee2d8d6e919006ffeef57cac76bdd9e6cba7f468
+ PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPLv2+
+ PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache.v2 LICENSE.GPL.v2 README.license.md
+ PYTHON_PYROUTE2_SETUP_TYPE = distutils
 -- 
 2.9.3
