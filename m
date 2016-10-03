@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Oct 2016 13:10:37 +0200
-Subject: [Buildroot] [git commit] grep: bump version to 2.26
-Message-ID: <20161003111631.2BC198218E@busybox.osuosl.org>
+Date: Mon, 3 Oct 2016 13:11:03 +0200
+Subject: [Buildroot] [git commit] mc: bump version to 4.8.18
+Message-ID: <20161003111631.AB7788180B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=246c69868ec6f9b436b2e5b7c38b433665add2d8
+commit: https://git.buildroot.net/buildroot/commit/?id=06e31f7f122c7e217e2ea1294e974ddcd6e63e18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/grep/grep.hash | 2 +-
- package/grep/grep.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mc/mc.hash | 4 ++--
+ package/mc/mc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/grep/grep.hash b/package/grep/grep.hash
-index 409940a..789ceea 100644
---- a/package/grep/grep.hash
-+++ b/package/grep/grep.hash
+diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+index 0d22d80..a8116d0 100644
+--- a/package/mc/mc.hash
++++ b/package/mc/mc.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking signature
--sha256	e21e83bac50450e0d0d61a42c154ee0dceaacdbf4f604ef6e79071cb8e596830	grep-2.25.tar.xz
-+sha256 246a8fb37e82aa33d495b07c22fdab994c039ab0f818538eac81b01e78636870  grep-2.26.tar.xz
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index f87e838..a8e124e 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
+-# Hash from http://ftp.midnight-commander.org/mc-4.8.17.sha256:
+-sha256 0447bdddc0baa81866e66f50f9a545d29d6eebb68b0ab46c98d8fddd2bf4e44d  mc-4.8.17.tar.xz
++# Hash from http://ftp.midnight-commander.org/mc-4.8.18.sha256:
++sha256 f7636815c987c1719c4f5de2dcd156a0e7d097b1d10e4466d2bdead343d5bece  mc-4.8.18.tar.xz
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index 808f81c..ff4c8ad 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GREP_VERSION = 2.25
-+GREP_VERSION = 2.26
- GREP_SITE = $(BR2_GNU_MIRROR)/grep
- GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_LICENSE = GPLv3+
+-MC_VERSION = 4.8.17
++MC_VERSION = 4.8.18
+ MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE = GPLv3+
