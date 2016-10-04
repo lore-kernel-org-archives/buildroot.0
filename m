@@ -1,19 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Oct 2016 14:43:03 +0200
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.12.x series
-In-Reply-To: <1475577118-15610-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 4 Oct 2016 07:31:58 -0300")
-References: <1475577118-15610-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k2donv3c.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Oct 2016 14:43:18 +0200
+Subject: [Buildroot] [PATCH] package/libdrm: bump version to 2.4.71
+In-Reply-To: <1475547555-25769-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Mon, 3 Oct 2016 23:19:15 -0300")
+References: <1475547555-25769-1-git-send-email-festevam@gmail.com>
+Message-ID: <87fuocnv2x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
 Committed, thanks.
 
