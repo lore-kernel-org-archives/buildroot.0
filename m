@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Oct 2016 23:12:15 +0200
-Subject: [Buildroot] [PATCH v2 2/2] toolchainfile.cmake: rework the
- Buildroot flags addition
-In-Reply-To: <20161003231809.1b84ec79@free-electrons.com>
-References: <20161001163314.10173-1-s.martin49@gmail.com>
- <20161001163314.10173-2-s.martin49@gmail.com>
- <20161003231809.1b84ec79@free-electrons.com>
-Message-ID: <c2301830-d494-c809-ad11-c733aa210ce4@mind.be>
+Date: Tue, 4 Oct 2016 23:33:34 +0200
+Subject: [Buildroot] [PATCH 1/2] check-host-rpath: support symlinks in
+ rpath
+In-Reply-To: <1475230194-18524-2-git-send-email-jezz@sysmic.org>
+References: <1475230194-18524-1-git-send-email-jezz@sysmic.org>
+ <1475230194-18524-2-git-send-email-jezz@sysmic.org>
+Message-ID: <8fb2b678-db51-9ba7-c07d-d7956c9708db@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,63 +14,67 @@ To: buildroot@busybox.net
 
 
 
-On 03-10-16 23:18, Thomas Petazzoni wrote:
-> Hello,
+On 30-09-16 12:09, J?r?me Pouiller wrote:
+> If compilation path contains symlinks, rpath may sometime contains
+> symlinks and sometime canonicalized path.
 > 
-> On Sat,  1 Oct 2016 18:33:14 +0200, Samuel Martin wrote:
+> A pratical example:
 > 
->> Thus, due to these CMake specifics, the implementation should take care
->> of a couple of things:
->> - keeping the per-package customization of the standard CMake flags;
->> - making sure the Buildroot's flags are added into the standard CMake
->>   flags;
->> - avoid introducing duplicates in resulting CMake flags.
->>
->> So, this change introduces an helper in the toolchainfile.cmake file
->> that will extend the standard CMake flags variables with the flags
->> defined by Buildroot only when they are not already present (i.e. only
->> the first time the toolchain file is processed by CMake when configuring
->> a project).
->> Then, this helper is used to extend any standard CMake flags variables.
+>   $ ln -s /opt/buildroot /opt/buildroot-symblink
+>   $ cd /opt/buildroot-symlink
+>   $ make O=out
+>   $ make -C out package-rebuild
 > 
-> This looks very complicated. What about not passing those
-> CFLAGS/CXXFLAGS at all from the toolchain file?
+> This last command produce an error since already installed host binaries
+> contains /opt/buildroot/out/host/usr/lib as rpath while check-host-rpath expect
+> /opt/buildroot-symlink/out/host/usr/lib
 > 
-> After all, for other packages (generic-package or autotools-package),
-> we are currently:
-> 
->  * Passing some of the CFLAGS/CXXFLAGS hardcoded into the wrapper. This
->    also applies and works well for CMake packages.
-> 
->  * Passing some of the CFLAGS/CXXFLAGS in the environment, when
->    configuring/building. There is no reason why this shouldn't be done
->    for CMake as well.
-> 
-> So what about giving up on passing TARGET_CFLAGS/TARGET_CXXFLAGS in the
-> CMake toolchain file, and instead pass them explicitly when configuring
-> CMake, in the <pkg>_CONFIGURE_CMDS of pkg-cmake.mk.
+> This patch canonicalize all paths used in check-host-rpath in order to avoid
+> problem
 
- I was going to make a similar remark: we should perhaps move all the
-CFLAGS/CXXFLAGS/FCFLAGS to the wrapper.
+ Wouldn't this also be fixed by http://patchwork.ozlabs.org/patch/613854/ ? With
+that patch (series) applied, there shouldn't be any symlinks anymore once the
+real make starts.
 
- However, that doesn't work for the LDFLAGS, because we don't wrap LD yet, and
-we (currently) have no way of detecting if the wrapper call is for compile or
-for link. Hm, actually, it looks like gcc just ignores any linker options if you
-call it with -c, so perhaps we can just pass LDFLAGS unconditionally in the wrapper.
+ Note that I still had remarks on that specific patch and Samuel hasn't respun.
+Maybe something for in Berlin.
 
- Let's make it our mission to apply http://patchwork.ozlabs.org/patch/606688/
-next week :-)
 
  Regards,
  Arnout
 
 > 
-> Would this solve the problem without this awfully complicated CMake
-> toolchain file?
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  support/scripts/check-host-rpath | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> Best regards,
-> 
-> Thomas
+> diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+> index 6ce547c..2541e53 100755
+> --- a/support/scripts/check-host-rpath
+> +++ b/support/scripts/check-host-rpath
+> @@ -13,8 +13,8 @@ main() {
+>      local hostdir="${2}"
+>      local file ret
+>  
+> -    # Remove duplicate and trailing '/' for proper match
+> -    hostdir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${hostdir}" )"
+> +    # Canonicalize path: follow symlinks, remove duplicate and trailing '/'
+> +    hostdir="$( readlink -m "${hostdir}" )"
+>  
+>      ret=0
+>      while read file; do
+> @@ -56,8 +56,8 @@ check_elf_has_rpath() {
+>  
+>      while read rpath; do
+>          for dir in ${rpath//:/ }; do
+> -            # Remove duplicate and trailing '/' for proper match
+> -            dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
+> +            # Canonicalize path: follow symlinks, remove duplicate and trailing '/'
+> +            dir="$( readlink -m "${dir}" )"
+>              [ "${dir}" = "${hostdir}/usr/lib" ] && return 0
+>          done
+>      done < <( readelf -d "${file}"                                              \
 > 
 
 -- 
