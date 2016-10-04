@@ -1,33 +1,39 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Tue, 4 Oct 2016 10:06:04 -0300
-Subject: [Buildroot] [PATCH] imx6ulpico/readme: Update the image layout file
-Message-ID: <1475586364-29328-1-git-send-email-fabio.estevam@nxp.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Oct 2016 16:35:55 +0200
+Subject: [Buildroot] [PATCH] fakeroot: bump version to 1.21-2
+In-Reply-To: <20161004115320.647-1-maxime.hadjinlian@gmail.com>
+References: <20161004115320.647-1-maxime.hadjinlian@gmail.com>
+Message-ID: <20161004163555.7c8af28f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As we are using the common image layout now, update the
-readme.txt file accordingly.
+Hello,
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- board/technexion/imx6ulpico/readme.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue,  4 Oct 2016 13:53:20 +0200, Maxime Hadjinlian wrote:
 
-diff --git a/board/technexion/imx6ulpico/readme.txt b/board/technexion/imx6ulpico/readme.txt
-index ff78412..a7c3a44 100644
---- a/board/technexion/imx6ulpico/readme.txt
-+++ b/board/technexion/imx6ulpico/readme.txt
-@@ -46,7 +46,7 @@ command as root:
- *** WARNING! This will destroy all the card content. Use with care! ***
- 
- For details about the medium image layout, see the definition in
--board/technexion/imx6ulpico/genimage.cfg.
-+board/freescale/common/genimage.cfg.template.
- 
- Boot the i.MX6UL Pico board
- =========================
+> In this version, the configure and Makefile are not provided so we need
+> to generate them using the 'bootstrap' script included in the source.
+
+This is super annoying.
+
+First, your patch is wrong because the bootstrap script most likely
+needs autoconf and automake, possibly libtool as well, and you haven't
+added these to the fakeroot dependencies.
+
+But above all, it means that you would now be adding the build of
+autoconf and automake to *every* Buildroot build (since essentially
+host-fakeroot is always built). This is really annoying.
+
+So I'd prefer if we just took the Debian patch that works around the
+original problem.
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
