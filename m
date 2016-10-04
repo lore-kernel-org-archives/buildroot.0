@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Oct 2016 23:33:34 +0200
-Subject: [Buildroot] [PATCH 1/2] check-host-rpath: support symlinks in
- rpath
-In-Reply-To: <1475230194-18524-2-git-send-email-jezz@sysmic.org>
-References: <1475230194-18524-1-git-send-email-jezz@sysmic.org>
- <1475230194-18524-2-git-send-email-jezz@sysmic.org>
-Message-ID: <8fb2b678-db51-9ba7-c07d-d7956c9708db@mind.be>
+Date: Wed, 5 Oct 2016 00:05:27 +0200
+Subject: [Buildroot] [PATCH v3] package/linux-tools: add gpio
+In-Reply-To: <20161004154254.GA3806@free.fr>
+References: <20161003122548.2477-1-m.niestroj@grinn-global.com>
+ <20161003170644.GB3924@free.fr>
+ <3c84132d-9e2b-5e9c-83bb-b43e8acdf1db@grinn-global.com>
+ <20161004154254.GA3806@free.fr>
+Message-ID: <9bbb47e0-3da3-f735-9a79-3d26b1515e09@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,67 +15,98 @@ To: buildroot@busybox.net
 
 
 
-On 30-09-16 12:09, J?r?me Pouiller wrote:
-> If compilation path contains symlinks, rpath may sometime contains
-> symlinks and sometime canonicalized path.
+On 04-10-16 17:42, Yann E. MORIN wrote:
+> Marcin, All,
 > 
-> A pratical example:
+> On 2016-10-04 08:53 +0200, Marcin Niestroj spake thusly:
+>> On 03.10.2016 19:06, Yann E. MORIN wrote:
+>>> On 2016-10-03 14:25 +0200, Marcin Niestroj spake thusly:
+>>>> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> [--SNIP--]
+>>>> diff --git a/package/linux-tools/linux-tool-gpio.mk b/package/linux-tools/linux-tool-gpio.mk
+>>>> new file mode 100644
+>>>> index 0000000..db0094a
+>>>> --- /dev/null
+>>>> +++ b/package/linux-tools/linux-tool-gpio.mk
+>>>> @@ -0,0 +1,28 @@
+>>>> +################################################################################
+>>>> +#
+>>>> +# gpio
+>>>> +#
+>>>> +################################################################################
+>>>> +
+>>>> +LINUX_TOOLS += gpio
+>>>> +
+>>>> +GPIO_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS)
+>>>
+>>> Any reason not to use $(LINUX_MAKE_FLAGS) in the first place?
+>>>
+>>>    GPIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
+>>>
+>>> LINUX_MAKE_FLAGS shall contain all the required variable definitions
+>>> needed to build for the target.
+>>>
+>>> Yes, cpupower directly defines CROSS_COMPILE et al., but perf and
+>>> selftests do use LINUX_MAKE_FLAGS, and I think we should use that unless
+>>> there is a good reason not to.
+>>>
+>>> This would allow use to easily update the compile options/variables.
+>>
+>> I just did it similar to cpupower package. But using LINUX_MAKE_FLAGS
+>> looks like a better option.
+>>
+>> What about specifying also DESTDIR together:
+>> GPIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS) DESTDIR=$(TARGET_DIR)
+>> so we can simplify GPIO_INSTALL_TARGET_CMDS?
+>> This would be similar to perf package.
 > 
->   $ ln -s /opt/buildroot /opt/buildroot-symblink
->   $ cd /opt/buildroot-symlink
->   $ make O=out
->   $ make -C out package-rebuild
-> 
-> This last command produce an error since already installed host binaries
-> contains /opt/buildroot/out/host/usr/lib as rpath while check-host-rpath expect
-> /opt/buildroot-symlink/out/host/usr/lib
-> 
-> This patch canonicalize all paths used in check-host-rpath in order to avoid
-> problem
+> No, please specify DESTDIR only at install time.
 
- Wouldn't this also be fixed by http://patchwork.ozlabs.org/patch/613854/ ? With
-that patch (series) applied, there shouldn't be any symlinks anymore once the
-real make starts.
-
- Note that I still had remarks on that specific patch and Samuel hasn't respun.
-Maybe something for in Berlin.
-
+ This is because in general, there may also be installation to staging or
+images, and in those cases DESTDIR should be STAGING_DIR resp. IMAGES_DIR. So
+adding DESTDIR to the general _MAKE_OPTS is semantically incorrect.
 
  Regards,
  Arnout
 
 > 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  support/scripts/check-host-rpath | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+> Regards,
+> Yann E. MORIN.
 > 
-> diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-> index 6ce547c..2541e53 100755
-> --- a/support/scripts/check-host-rpath
-> +++ b/support/scripts/check-host-rpath
-> @@ -13,8 +13,8 @@ main() {
->      local hostdir="${2}"
->      local file ret
->  
-> -    # Remove duplicate and trailing '/' for proper match
-> -    hostdir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${hostdir}" )"
-> +    # Canonicalize path: follow symlinks, remove duplicate and trailing '/'
-> +    hostdir="$( readlink -m "${hostdir}" )"
->  
->      ret=0
->      while read file; do
-> @@ -56,8 +56,8 @@ check_elf_has_rpath() {
->  
->      while read rpath; do
->          for dir in ${rpath//:/ }; do
-> -            # Remove duplicate and trailing '/' for proper match
-> -            dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
-> +            # Canonicalize path: follow symlinks, remove duplicate and trailing '/'
-> +            dir="$( readlink -m "${dir}" )"
->              [ "${dir}" = "${hostdir}/usr/lib" ] && return 0
->          done
->      done < <( readelf -d "${file}"                                              \
+>>> (Sorry, I forgot to point that out in the previous review...)
+>>>
+>>> Regards,
+>>> Yann E. MORIN.
+>>>
+>>>> +define GPIO_BUILD_CMDS
+>>>> +	$(Q)if ! grep install $(LINUX_DIR)/tools/gpio/Makefile >/dev/null 2>&1 ; then \
+>>>> +		echo "Your kernel version is too old and does not have the gpio tools." ; \
+>>>> +		echo "At least kernel 4.8 must be used." ; \
+>>>> +		exit 1 ; \
+>>>> +	fi
+>>>> +
+>>>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+>>>> +		$(GPIO_MAKE_OPTS) \
+>>>> +		gpio
+>>>> +endef
+>>>> +
+>>>> +define GPIO_INSTALL_TARGET_CMDS
+>>>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+>>>> +		$(GPIO_MAKE_OPTS) \
+>>>> +		DESTDIR=$(TARGET_DIR) \
+>>>> +		gpio_install
+>>>> +endef
+>>>> --
+>>>> 2.10.0
+>>>>
+>>>> _______________________________________________
+>>>> buildroot mailing list
+>>>> buildroot at busybox.net
+>>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>>
+>> -- 
+>> Marcin Niestroj
 > 
 
 -- 
