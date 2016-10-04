@@ -1,78 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  4 Oct 2016 21:45:29 +0200
-Subject: [Buildroot] [PATCH] sunxi-tools: bump to latest git revision
-Message-ID: <20161004194529.26868-1-peter@korsgaard.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 4 Oct 2016 21:46:05 +0200
+Subject: [Buildroot] [PATCH v1] assimp: fix pthread linking
+In-Reply-To: <1474839222-26976-1-git-send-email-ps.report@gmx.net>
+References: <1474839222-26976-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20161004214605.65fc336e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Major changes since v1.3:
-- A64/A80 support
-- H3 fel speedup
-- Fel readl/writel/sid/reset64 commands
-- Fel progress bar support
-- Nand-image-builder tool
-- Linaro toolchain compatibility workaround
-- Portability fixes
+On Sun, 25 Sep 2016 23:33:42 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
 
-The build system has been reworked somewhat and extra compiler flags now
-have to be passed in EXTRA_CFLAGS instead of CFLAGS, so we cannot use
-{TARGET,HOST}_CONFIGURE_OPTS.
-Instead explicitly pass the needed variables (CC and LDFLAGS).
+> Fixes [1]:
+> 
+>   [100%] Linking CXX executable ../../bin/assimp
+>   /home/test/autobuild/run/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-uclinux-uclibcgnueabi/5.4.0/../../../../arm-buildroot-uclinux-uclibcgnueabi/lib/libstdc++.a(guard.o): In function `(anonymous namespace)::get_static_cond()':
+>   guard.cc:(.text._ZN12_GLOBAL__N_115get_static_condEv+0x6): undefined reference to `pthread_once'
+>   ...
+> 
+> [1] http://autobuild.buildroot.net/results/c10/c10886686a0d29877004a0afe2106a77aa2f2ba0
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/assimp/assimp.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+> index cda02dd..fecf6d7 100644
+> --- a/package/assimp/assimp.mk
+> +++ b/package/assimp/assimp.mk
+> @@ -18,4 +18,8 @@ endif
+>  
+>  ASSIMP_CONF_OPTS += -DASSIMP_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(ASSIMP_CXXFLAGS)"
+>  
+> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> +ASSIMP_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS="-pthread"
+> +endif
+> +
+>  $(eval $(cmake-package))
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sunxi-tools/sunxi-tools.hash |  2 +-
- package/sunxi-tools/sunxi-tools.mk   | 12 ++++++------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Waldemar is sure this is a uClibc-ng failure and will be fixed with update to
+uClibc-ng 1.0.18 (as stated for similar failure of powertop, see [2]), will
+defer this patch in patchwork...
 
-diff --git a/package/sunxi-tools/sunxi-tools.hash b/package/sunxi-tools/sunxi-tools.hash
-index c0499cd..90991a3 100644
---- a/package/sunxi-tools/sunxi-tools.hash
-+++ b/package/sunxi-tools/sunxi-tools.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	2aa0afc21476ee9b03acff20a19f32c522106e61bcbfa1a9463168fe90a85fc5  sunxi-tools-v1.3.tar.gz
-+sha256	8b5defeaabec99b6c759ed1d99d91e4d23188431868d17cf6ed144f37e42bee5  sunxi-tools-89dac0f7eaaedd0d8afa9d5a3c713c7c1ccb9cf6.tar.gz
-diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
-index 4c497c7..23e3135 100644
---- a/package/sunxi-tools/sunxi-tools.mk
-+++ b/package/sunxi-tools/sunxi-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUNXI_TOOLS_VERSION = v1.3
-+SUNXI_TOOLS_VERSION = 89dac0f7eaaedd0d8afa9d5a3c713c7c1ccb9cf6
- SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,$(SUNXI_TOOLS_VERSION))
- SUNXI_TOOLS_LICENSE = GPLv2+
- SUNXI_TOOLS_LICENSE_FILES = COPYING
-@@ -12,19 +12,19 @@ HOST_SUNXI_TOOLS_DEPENDENCIES = host-libusb host-pkgconf
- FEX2BIN = $(HOST_DIR)/usr/bin/fex2bin
- 
- define HOST_SUNXI_TOOLS_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr \
--		CFLAGS="$(HOST_CFLAGS) -std=c99 -D_POSIX_C_SOURCE=200112L -Iinclude/" \
-+	$(HOST_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" PREFIX=$(HOST_DIR)/usr \
-+		EXTRA_CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)" \
- 		-C $(@D) tools
- endef
- 
- define HOST_SUNXI_TOOLS_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr \
-+	$(HOST_MAKE_ENV) $(MAKE) PREFIX=$(HOST_DIR)/usr \
- 		-C $(@D) install-tools
- endef
- 
- define SUNXI_TOOLS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) PREFIX=/usr \
--		CFLAGS="$(TARGET_CFLAGS) -std=c99 -D_POSIX_C_SOURCE=200112L -Iinclude/" \
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" PREFIX=/usr \
-+		EXTRA_CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
- 		-C $(@D) sunxi-nand-part
- endef
- 
--- 
-2.9.3
+Regards,
+Peter
