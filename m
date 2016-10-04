@@ -1,118 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 Oct 2016 00:05:27 +0200
-Subject: [Buildroot] [PATCH v3] package/linux-tools: add gpio
-In-Reply-To: <20161004154254.GA3806@free.fr>
-References: <20161003122548.2477-1-m.niestroj@grinn-global.com>
- <20161003170644.GB3924@free.fr>
- <3c84132d-9e2b-5e9c-83bb-b43e8acdf1db@grinn-global.com>
- <20161004154254.GA3806@free.fr>
-Message-ID: <9bbb47e0-3da3-f735-9a79-3d26b1515e09@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 04 Oct 2016 22:17:04 +0000
+Subject: [Buildroot] [Bug 9326] Odroid-C2 build results in non-bootable image
+In-Reply-To: <bug-9326-163@https.bugs.busybox.net/>
+References: <bug-9326-163@https.bugs.busybox.net/>
+Message-ID: <bug-9326-163-0Uy9Vqp11j@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=9326
+
+--- Comment #1 from Erico Nunes <nunes.erico@gmail.com> ---
+I have tested odroidc2_defconfig with today's master (426a84c2fe) on my
+odroid-c2 and I can confirm that it isn't working out of the box with make
+odroidc2_defconfig && make.
+
+By monitoring the serial I see that it loads u-boot fine but hangs when it
+boots the kernel, after the messages:
+"Starting kernel ...
+
+uboot time: 4167629 us"
 
 
-On 04-10-16 17:42, Yann E. MORIN wrote:
-> Marcin, All,
-> 
-> On 2016-10-04 08:53 +0200, Marcin Niestroj spake thusly:
->> On 03.10.2016 19:06, Yann E. MORIN wrote:
->>> On 2016-10-03 14:25 +0200, Marcin Niestroj spake thusly:
->>>> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> [--SNIP--]
->>>> diff --git a/package/linux-tools/linux-tool-gpio.mk b/package/linux-tools/linux-tool-gpio.mk
->>>> new file mode 100644
->>>> index 0000000..db0094a
->>>> --- /dev/null
->>>> +++ b/package/linux-tools/linux-tool-gpio.mk
->>>> @@ -0,0 +1,28 @@
->>>> +################################################################################
->>>> +#
->>>> +# gpio
->>>> +#
->>>> +################################################################################
->>>> +
->>>> +LINUX_TOOLS += gpio
->>>> +
->>>> +GPIO_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS)
->>>
->>> Any reason not to use $(LINUX_MAKE_FLAGS) in the first place?
->>>
->>>    GPIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
->>>
->>> LINUX_MAKE_FLAGS shall contain all the required variable definitions
->>> needed to build for the target.
->>>
->>> Yes, cpupower directly defines CROSS_COMPILE et al., but perf and
->>> selftests do use LINUX_MAKE_FLAGS, and I think we should use that unless
->>> there is a good reason not to.
->>>
->>> This would allow use to easily update the compile options/variables.
->>
->> I just did it similar to cpupower package. But using LINUX_MAKE_FLAGS
->> looks like a better option.
->>
->> What about specifying also DESTDIR together:
->> GPIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS) DESTDIR=$(TARGET_DIR)
->> so we can simplify GPIO_INSTALL_TARGET_CMDS?
->> This would be similar to perf package.
-> 
-> No, please specify DESTDIR only at install time.
+I have debugged it a bit further though and found that:
 
- This is because in general, there may also be installation to staging or
-images, and in those cases DESTDIR should be STAGING_DIR resp. IMAGES_DIR. So
-adding DESTDIR to the general _MAKE_OPTS is semantically incorrect.
+- It works if you change the toolchain to a gcc 4.9.x version. Therefore, it's
+likely that this has stopped worked recently when we changed the default gcc
+version to 5.x for buildroot toolchains in commit e6ee58de3e.
 
- Regards,
- Arnout
+- Bumping the odroid-c2 kernel to the HEAD of the hardkernel odroidc2-3.14.y
+branch and u-boot to a newer commit in the hardkernel odroidc2-v2015.01 branch
+(the HEAD doesn't build for me with gcc 5.x) doesn't seem to have the problem
+fixed.
 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->>> (Sorry, I forgot to point that out in the previous review...)
->>>
->>> Regards,
->>> Yann E. MORIN.
->>>
->>>> +define GPIO_BUILD_CMDS
->>>> +	$(Q)if ! grep install $(LINUX_DIR)/tools/gpio/Makefile >/dev/null 2>&1 ; then \
->>>> +		echo "Your kernel version is too old and does not have the gpio tools." ; \
->>>> +		echo "At least kernel 4.8 must be used." ; \
->>>> +		exit 1 ; \
->>>> +	fi
->>>> +
->>>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
->>>> +		$(GPIO_MAKE_OPTS) \
->>>> +		gpio
->>>> +endef
->>>> +
->>>> +define GPIO_INSTALL_TARGET_CMDS
->>>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
->>>> +		$(GPIO_MAKE_OPTS) \
->>>> +		DESTDIR=$(TARGET_DIR) \
->>>> +		gpio_install
->>>> +endef
->>>> --
->>>> 2.10.0
->>>>
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at busybox.net
->>>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>
->>
->> -- 
->> Marcin Niestroj
-> 
+So, it looks like the hardkernel branches have trouble with gcc 5.x and one way
+of "fixing" it would be to make odroidc2_defconfig default to gcc 4.9.x, what
+do you think?
+As this is a vendor downstream kernel and u-boot, it's probably not worth to
+spend more time debugging it, we could do that and open an issue with them or
+just wait until upstream supports this board, which should happen eventually.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+You are receiving this mail because:
+You are on the CC list for the bug.
