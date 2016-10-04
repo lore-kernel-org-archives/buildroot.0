@@ -1,39 +1,114 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Oct 2016 23:40:44 +0200
-Subject: [Buildroot] Next Buildroot Developers Meeting approaching
-Message-ID: <20161003234044.55b98568@free-electrons.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon,  3 Oct 2016 20:09:56 -0500
+Subject: [Buildroot] [PATCH v3] zynq: document how to use custom ps7_init
+	files
+Message-ID: <1475543396-65164-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Masahiro Yamada <yamada.masahiro@socionext.com>
 
-Our next Buildroot Developers Meeting will take place on October 14-16
-in Berlin, so the date is approaching.
+Since U-Boot supported SPL for Zynq boards at v2014.04 release, it
+became much easier to build a system.  At that time, however, users
+still needed to manually copy ps7_init.c/h to the U-Boot source tree
+to generate a working SPL image because ps7_init.c/h output from
+Xilinx tools are not compatible with GPL.
 
-We know have 10 participants registered: 8 attending all three days, 1
-attending only 2 days, and one attending only one day.
+Later, the license problem was solved when Xilinx tools became able
+to output the GPL-compatible variants (ps7_init_gpl.c/h) as well.
+U-Boot v2015.07 or later includes ps7_init_gpl.c/h for major Zynq
+boards so that users can build a boot image straight away.
 
-More details:
+Now Buildroot supports 3 boards (Zedboard, MicroZed, ZC706) without
+any manual intervention.  This is a good thing itself, but commit
+b9cd72cdbfe3 ("zynq_zc706: bump U-Boot to xilinx-v2016.2") entirely
+dropped the information about custom ps7_init files.
 
-  http://elinux.org/Buildroot:DeveloperDaysELCE2016
+This commit provides up-to-date guidance for how to customize the
+ps7_init files.
 
-It's time to think about discussion and development topics. Even
-contributors not attending the meeting can suggest some topics. During
-the meeting we will be available on IRC and can organize live Google
-Hangout discussions with remote participants if there is interest.
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
-On my side, I think I'd like to spend a significant part of the 3 days
-working on the testing infrastructure. But to do so, I'd like to team
-up with someone present during the Developers Meeting. If someone is
-interested, let me know.
+---
+v2 -> v3
+[Arnout
+ - Moved notice of good build but bad images to top
+ - Updated wording when refering to files
+ - Removed redundant comment on overriding files
+ - Added suggested note on file copy and make clean's affect
 
-Best regards,
+v1 -> v2
+ - Updated readme wording discussed in
+   https://patchwork.ozlabs.org/patch/654309/
 
-Thomas
+---
+ board/zynq/readme.txt | 46 +++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 39 insertions(+), 7 deletions(-)
+
+diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
+index 51e28b6..24c12dd 100644
+--- a/board/zynq/readme.txt
++++ b/board/zynq/readme.txt
+@@ -6,13 +6,6 @@ Currently, three boards are natively supported by Buildroot:
+  - Avnet ZedBoard (zynq_zed_defconfig)
+  - Avnet MicroZed (zynq_microzed_defconfig)
+ 
+-The following build procedure focuses on them, but you can adjust it to your
+-board even if it is not listed above.  Major Zynq-based boards are supported by
+-U-Boot, and their Device Trees are merged in Linux Kernel.  If your board is the
+-case, booting the kernel is a piece of cake.  All you need to do is to change:
+- - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
+- - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_KCONFIG)
+-
+ Steps to create a working system for a Zynq board:
+ 
+ 1) Configuration (do one of the following)
+@@ -50,3 +43,42 @@ References:
+ 
+  - Zedboard/Microzed information including schematics, reference designs, and
+    manuals are available from http://www.zedboard.org .
++
++Support for other boards:
++
++If you want to build a system for other boards (for ex. Digilent Zybo board).
++Most major Zynq-based boards have U-Boot and Kernel support.  If your
++board happens to be supported, booting the kernel and using U-Boot
++just requires the following Buildroot updates:
++ - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
++ - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_DEFCONFIG)
++
++Custom ps7_init_gpl.c/h support:
++
++To generate a working boot.bin image, ps7_init_gpl.c/h are required in the
++U-Boot source tree.  Without those files, boot.bin will be built successfully
++but it will not be functional at all.  Those files are output from the Xilinx
++tools, but for convenience, U-Boot includes the default ps7_init_gpl.c/h of
++popular boards.  Those files may need to be updated for any programmable
++logic customizations which impact ps7_init (clock/pin setup & mapping/AXI
++bridge setup/etc).  See board/xilinx/zynq/ directory of U-Boot for natively
++supported ps7_init files.  If the ps7_init files for your board are not found
++in U-Boot, you need to add them by yourself.
++
++1) Start with a defconfig supported by Buildroot (e.g. Zedboard)
++    make zynq_zed_defconfig
++
++2) make uboot-menuconfig
++    Visit the following menu and enable CONFIG_ZYNQ_CUSTOM_INIT.
++
++    ARM architecture  --->
++       [*] Use custom ps7_init provided by Xilinx tool
++
++3) Copy ps7_init_gpl.c/h generated by the Xilinx tools into
++   output/build/uboot-xilinx-<pkg version>/board/xilinx/zynq/custom_hw_platform/
++
++4) make
++
++Note: The files in step 3 will need to be re-copied after cleaning the output
++directory and at this time, there is no way to save them as part of the buildroot
++configuration, except as a U-Boot patch.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+1.9.1
