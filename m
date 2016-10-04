@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  4 Oct 2016 07:31:38 -0300
+Date: Tue,  4 Oct 2016 07:31:58 -0300
 Subject: [Buildroot] [PATCH] linux-headers: bump 3.12.x series
-Message-ID: <1475577098-5838-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1475577118-15610-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
