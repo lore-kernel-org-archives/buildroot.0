@@ -1,67 +1,33 @@
-From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-Date: Tue, 4 Oct 2016 18:31:40 +0530
-Subject: [Buildroot] [PATCH] elfutils: clarify licensing info
-In-Reply-To: <1475577852-15870-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1475577852-15870-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <57F3A834.6090300@imgtec.com>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Tue, 4 Oct 2016 10:06:04 -0300
+Subject: [Buildroot] [PATCH] imx6ulpico/readme: Update the image layout file
+Message-ID: <1475586364-29328-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+As we are using the common image layout now, update the
+readme.txt file accordingly.
 
-On Tuesday 04 October 2016 04:14 PM, gustavo.zacarias at free-electrons.com 
-wrote:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
->
-> elfutils libraries are GPLv2 or LGPLv3+, standalone programs are GPLv3+
-> (see the NEWS file).
-> Make the GPLv3+ license tag/file dependant on the programs being
-> enabled, and make the GPLv2/LGPLv3+ tag more descriptive.
->
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ board/technexion/imx6ulpico/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-License string should be GPLv2+ instead of GPLv2 because license header 
-uses clause "either version 2 of the License, or (at your option) any 
-later version". With that license string for library is "GPLv2+ or LGPLv3+"
-
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> ---
->   package/elfutils/elfutils.mk | 10 ++++++++--
->   1 file changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-> index 6af1223..5026474 100644
-> --- a/package/elfutils/elfutils.mk
-> +++ b/package/elfutils/elfutils.mk
-> @@ -8,10 +8,16 @@ ELFUTILS_VERSION = 0.166
->   ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
->   ELFUTILS_SITE = https://fedorahosted.org/releases/e/l/elfutils/$(ELFUTILS_VERSION)
->   ELFUTILS_INSTALL_STAGING = YES
-> -ELFUTILS_LICENSE = GPLv3, GPLv2, LGPLv3
-> -ELFUTILS_LICENSE_FILES = COPYING COPYING-GPLV2 COPYING-LGPLV3
-> +ELFUTILS_LICENSE = GPLv2 or LGPLv3+ (library)
-
-As mentioned above it should be
-
-ELFUTILS_LICENSE = GPLv2+ or LGPLv3+ (library)
-
-> +ELFUTILS_LICENSE_FILES = COPYING-GPLV2 COPYING-LGPLV3
->   ELFUTILS_DEPENDENCIES = zlib
->
-> +# Programs are GPLv3+ so add it when they're enabled
-> +ifeq ($(BR2_PACKAGE_ELFUTILS_PROGS),y)
-
-There is same if condition down. Instead we should conditionally add 
-license there.
-
-> +ELFUTILS_LICENSE += GPLv3+ (programs)
-
-Since it is separate component, it should be comma separated.
-
-ELFUTILS_LICENSE := $(ELFUTILS_LICENSE), GPLv3+ (programs)
-
-
-Regards,
-Rahul
+diff --git a/board/technexion/imx6ulpico/readme.txt b/board/technexion/imx6ulpico/readme.txt
+index ff78412..a7c3a44 100644
+--- a/board/technexion/imx6ulpico/readme.txt
++++ b/board/technexion/imx6ulpico/readme.txt
+@@ -46,7 +46,7 @@ command as root:
+ *** WARNING! This will destroy all the card content. Use with care! ***
+ 
+ For details about the medium image layout, see the definition in
+-board/technexion/imx6ulpico/genimage.cfg.
++board/freescale/common/genimage.cfg.template.
+ 
+ Boot the i.MX6UL Pico board
+ =========================
+-- 
+2.7.4
