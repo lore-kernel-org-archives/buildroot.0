@@ -1,43 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Oct 2016 14:42:48 +0200
-Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.71
-Message-ID: <20161004124435.3D842821D6@busybox.osuosl.org>
+Date: Tue, 4 Oct 2016 14:43:34 +0200
+Subject: [Buildroot] [git commit] pciutils: bump to version 3.5.2
+Message-ID: <20161004124435.5BB507FE21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed83bf1c6a32ed999422c68fd1ef79128b0911b3
+commit: https://git.buildroot.net/buildroot/commit/?id=426a84c2fe347ff22ae5fab19b243738d20e0b2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libdrm/libdrm.hash | 4 ++--
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pciutils/pciutils.hash | 2 +-
+ package/pciutils/pciutils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index c205780..bda054e 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
+diff --git a/package/pciutils/pciutils.hash b/package/pciutils/pciutils.hash
+index efdb108..2572c35 100644
+--- a/package/pciutils/pciutils.hash
++++ b/package/pciutils/pciutils.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2016-July/113899.html
--sha256	b17d4b39ed97ca0e4cffa0db06ff609e617bac94646ec38e8e0579d530540e7b	libdrm-2.4.70.tar.bz2
-+# From https://lists.freedesktop.org/archives/dri-devel/2016-October/119998.html
-+sha256	c66287ddeee5f46ea8f8880b94b80acb3bbc33ba6321d17767eef145046df9b8	libdrm-2.4.71.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index d8d7744..d06f3ec 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
+ # From https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
+-sha256	2bf3a4605a562fb6b8b7673bff85a474a5cf383ed7e4bd8886b4f0939013d42f	pciutils-3.5.1.tar.xz
++sha256	3a99141a9f40528d0a0035665a06dc37ddb1ae341658e51b50a76ecf86235efc	pciutils-3.5.2.tar.xz
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index 4714cea..e65eadc 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDRM_VERSION = 2.4.70
-+LIBDRM_VERSION = 2.4.71
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+-PCIUTILS_VERSION = 3.5.1
++PCIUTILS_VERSION = 3.5.2
+ PCIUTILS_SITE = $(BR2_KERNEL_MIRROR)/software/utils/pciutils
+ PCIUTILS_SOURCE = pciutils-$(PCIUTILS_VERSION).tar.xz
+ PCIUTILS_INSTALL_STAGING = YES
