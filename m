@@ -1,142 +1,77 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Oct 2016 22:57:03 +0200
-Subject: [Buildroot] Installing package libclthreads
-In-Reply-To: <00b301d21d70$9e934540$dbb9cfc0$@synexint.com>
-References: <00b301d21d70$9e934540$dbb9cfc0$@synexint.com>
-Message-ID: <1006b3f0-301d-b8c3-99da-ef2c50c5ec00@mind.be>
+Date: Tue, 4 Oct 2016 23:12:15 +0200
+Subject: [Buildroot] [PATCH v2 2/2] toolchainfile.cmake: rework the
+ Buildroot flags addition
+In-Reply-To: <20161003231809.1b84ec79@free-electrons.com>
+References: <20161001163314.10173-1-s.martin49@gmail.com>
+ <20161001163314.10173-2-s.martin49@gmail.com>
+ <20161003231809.1b84ec79@free-electrons.com>
+Message-ID: <c2301830-d494-c809-ad11-c733aa210ce4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Herschel,
-
- Please avoid using HTML mail on this list.
 
 
-On 03-10-16 14:21, Herschel Karunaratne wrote:
-> Hi,
+On 03-10-16 23:18, Thomas Petazzoni wrote:
+> Hello,
 > 
->  
+> On Sat,  1 Oct 2016 18:33:14 +0200, Samuel Martin wrote:
 > 
-> I am trying to install ?jconvolver? and have to install  ?libclthreads? needed
-> by jconvolver. ?My ?libclthreads.mk? is as follows,
+>> Thus, due to these CMake specifics, the implementation should take care
+>> of a couple of things:
+>> - keeping the per-package customization of the standard CMake flags;
+>> - making sure the Buildroot's flags are added into the standard CMake
+>>   flags;
+>> - avoid introducing duplicates in resulting CMake flags.
+>>
+>> So, this change introduces an helper in the toolchainfile.cmake file
+>> that will extend the standard CMake flags variables with the flags
+>> defined by Buildroot only when they are not already present (i.e. only
+>> the first time the toolchain file is processed by CMake when configuring
+>> a project).
+>> Then, this helper is used to extend any standard CMake flags variables.
 > 
->  
+> This looks very complicated. What about not passing those
+> CFLAGS/CXXFLAGS at all from the toolchain file?
 > 
-> #####################################################################
+> After all, for other packages (generic-package or autotools-package),
+> we are currently:
 > 
-> #
+>  * Passing some of the CFLAGS/CXXFLAGS hardcoded into the wrapper. This
+>    also applies and works well for CMake packages.
 > 
-> # libclthreads
+>  * Passing some of the CFLAGS/CXXFLAGS in the environment, when
+>    configuring/building. There is no reason why this shouldn't be done
+>    for CMake as well.
 > 
-> #
-> 
-> ####################################################################
-> 
->  
-> 
-> LIBCLTHREADS_VERSION = 2.4.0
-> 
-> LIBCLTHREADS_SOURCE = clthreads-$(LIBCLTHREADS_VERSION).tar.bz2
+> So what about giving up on passing TARGET_CFLAGS/TARGET_CXXFLAGS in the
+> CMake toolchain file, and instead pass them explicitly when configuring
+> CMake, in the <pkg>_CONFIGURE_CMDS of pkg-cmake.mk.
 
- Small nit: since upstream calls it "clthreads", we prefer that the buildroot
-package has the same name.
+ I was going to make a similar remark: we should perhaps move all the
+CFLAGS/CXXFLAGS/FCFLAGS to the wrapper.
 
-> 
-> LIBCLTHREADS_SITE = http://kokkinizta.linuxaudio.org/linuxaudio/downloads
-> 
-> LIBCLTHREADS_LICENSE = LGPLv2.1+
-> 
-> LIBCLTHREADS_LICENSE_FILES = COPYING
-> 
-> LIBCLTHREADS_INSTALL_STAGING = YES
-> 
-> LIBCLTHREADS_INSTALL_TARGET = YES
+ However, that doesn't work for the LDFLAGS, because we don't wrap LD yet, and
+we (currently) have no way of detecting if the wrapper call is for compile or
+for link. Hm, actually, it looks like gcc just ignores any linker options if you
+call it with -c, so perhaps we can just pass LDFLAGS unconditionally in the wrapper.
 
- This one is not needed because the default.
-
-> 
->  
-> 
-> $(eval $(autotools-package))
-> 
->  
-> 
->  
-> 
->  
-> 
-> When I build it seems to be OK but nothing in the installed folders. This is
-> message I get when I build,
-> 
-[snip]
->>>> libclthreads 2.4.0 Installing to target
-
- Weird, the install to staging is missing... I can't explain that...
-
-
-> 
-> PATH="/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/bin:/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/sbin:/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/usr/bin:/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/arm-2014.05/bin:/root/bin:/opt/arm-2014.05/bin" 
-> /usr/bin/make -j5
-> DESTDIR=/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/target
-> install -C
-> /root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/libclthreads-2.4.0/
-> 
-> make[1]: Entering directory
-> `/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/libclthreads-2.4.0'
-> 
-> /usr/bin/install -d /usr/local/lib64
-
- It looks like this package ignores both the configure --prefix option and the
-DESTDIR argument to 'make install'. This basically makes the install commands
-unusable. Either patch the Makefile.in to correct this, or define
-LIBCLTHREADS_INSTALL_STAGING_CMDS and LIBCLTHREADS_INSTALL_TARGET_CMDS.
-
+ Let's make it our mission to apply http://patchwork.ozlabs.org/patch/606688/
+next week :-)
 
  Regards,
  Arnout
 
-
 > 
-> /usr/bin/install -m 644 clthreads.h /usr/local/include
+> Would this solve the problem without this awfully complicated CMake
+> toolchain file?
 > 
-> /usr/bin/install -m 755 libclthreads.so.2.4.0 /usr/local/lib64
+> Best regards,
 > 
-> /sbin/ldconfig -n /usr/local/lib64
-> 
-> ln -sf libclthreads.so.2.4.0 /usr/local/lib64/libclthreads.so
-> 
-> make[1]: Leaving directory
-> `/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/libclthreads-2.4.0'
-> 
->  
-> 
->  
-> 
->  
-> 
-> What could have gone wrong?
-> 
->  
-> 
-> Thanks in advance.
-> 
->  
-> 
->  
-> 
-> *Regards*
-> 
-> *Herschel*
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Thomas
 > 
 
 -- 
