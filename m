@@ -1,84 +1,105 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue,  4 Oct 2016 17:05:30 +0200
-Subject: [Buildroot] [PATCH] fakeroot: fix spurious message "undefined
-	symbol"
-Message-ID: <20161004150530.12197-1-maxime.hadjinlian@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Oct 2016 17:42:54 +0200
+Subject: [Buildroot] [PATCH v3] package/linux-tools: add gpio
+In-Reply-To: <3c84132d-9e2b-5e9c-83bb-b43e8acdf1db@grinn-global.com>
+References: <20161003122548.2477-1-m.niestroj@grinn-global.com>
+ <20161003170644.GB3924@free.fr>
+ <3c84132d-9e2b-5e9c-83bb-b43e8acdf1db@grinn-global.com>
+Message-ID: <20161004154254.GA3806@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the glibc 2.24-3, and this commit:
-https://sourceware.org/git/?p=glibc.git;a=commit;h=80f87443eed17838fe453f1f5406ccf5d3698c25
-fakeroot will print spurious message about symbols not being found.
+Marcin, All,
 
-[...]
-dlsym(acl_get_fd): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_get_fd
-dlsym(acl_get_file): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_get_file
-dlsym(acl_set_fd): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_set_fd
-dlsym(acl_set_file): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_set_file
-dlsym(acl_get_fd): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_get_fd
-dlsym(acl_get_file): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_get_file
-[...]
+On 2016-10-04 08:53 +0200, Marcin Niestroj spake thusly:
+> On 03.10.2016 19:06, Yann E. MORIN wrote:
+> >On 2016-10-03 14:25 +0200, Marcin Niestroj spake thusly:
+> >>Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+[--SNIP--]
+> >>diff --git a/package/linux-tools/linux-tool-gpio.mk b/package/linux-tools/linux-tool-gpio.mk
+> >>new file mode 100644
+> >>index 0000000..db0094a
+> >>--- /dev/null
+> >>+++ b/package/linux-tools/linux-tool-gpio.mk
+> >>@@ -0,0 +1,28 @@
+> >>+################################################################################
+> >>+#
+> >>+# gpio
+> >>+#
+> >>+################################################################################
+> >>+
+> >>+LINUX_TOOLS += gpio
+> >>+
+> >>+GPIO_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS)
+> >
+> >Any reason not to use $(LINUX_MAKE_FLAGS) in the first place?
+> >
+> >    GPIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
+> >
+> >LINUX_MAKE_FLAGS shall contain all the required variable definitions
+> >needed to build for the target.
+> >
+> >Yes, cpupower directly defines CROSS_COMPILE et al., but perf and
+> >selftests do use LINUX_MAKE_FLAGS, and I think we should use that unless
+> >there is a good reason not to.
+> >
+> >This would allow use to easily update the compile options/variables.
+> 
+> I just did it similar to cpupower package. But using LINUX_MAKE_FLAGS
+> looks like a better option.
+> 
+> What about specifying also DESTDIR together:
+> GPIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS) DESTDIR=$(TARGET_DIR)
+> so we can simplify GPIO_INSTALL_TARGET_CMDS?
+> This would be similar to perf package.
 
-It doesn't seem to impair the behavior of fakeroot, it's simply annoying
-for the user.
+No, please specify DESTDIR only at install time.
 
-Debian (which is the creator of fakeroot) has a patch which is a
-workaround: simply don't display the message.
+Regards,
+Yann E. MORIN.
 
-Note if you wish to bump fakeroot:
-A new version is available but the release tarball doesn't include the
-'configure' and 'Makefile' pre-generated.
-This means that if we were to bump, the package would need to run its
-own 'bootstrap' script which will add dependencies to
-host-{automake,autoconf,...} which would be annoying (since almost every
-build runs fakeroot).
+> >(Sorry, I forgot to point that out in the previous review...)
+> >
+> >Regards,
+> >Yann E. MORIN.
+> >
+> >>+define GPIO_BUILD_CMDS
+> >>+	$(Q)if ! grep install $(LINUX_DIR)/tools/gpio/Makefile >/dev/null 2>&1 ; then \
+> >>+		echo "Your kernel version is too old and does not have the gpio tools." ; \
+> >>+		echo "At least kernel 4.8 must be used." ; \
+> >>+		exit 1 ; \
+> >>+	fi
+> >>+
+> >>+	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+> >>+		$(GPIO_MAKE_OPTS) \
+> >>+		gpio
+> >>+endef
+> >>+
+> >>+define GPIO_INSTALL_TARGET_CMDS
+> >>+	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+> >>+		$(GPIO_MAKE_OPTS) \
+> >>+		DESTDIR=$(TARGET_DIR) \
+> >>+		gpio_install
+> >>+endef
+> >>--
+> >>2.10.0
+> >>
+> >>_______________________________________________
+> >>buildroot mailing list
+> >>buildroot at busybox.net
+> >>http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> 
+> -- 
+> Marcin Niestroj
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/fakeroot/hide-dlsym-error.patch | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/fakeroot/hide-dlsym-error.patch
-
-diff --git a/package/fakeroot/hide-dlsym-error.patch b/package/fakeroot/hide-dlsym-error.patch
-new file mode 100644
-index 0000000..3fd34c8
---- /dev/null
-+++ b/package/fakeroot/hide-dlsym-error.patch
-@@ -0,0 +1,32 @@
-+Description: Hide error from dlsym()
-+ dlsym(), starting in glibc 2.24 actually reports errors. In our case,
-+ we try to get ACL functions which are not in the glibc. This causes
-+ failures in test suites, so hide those messages for non-debugging
-+ purposes for now. It also makes the build logs annoying to read.
-+Author: Julian Andres Klode <juliank@ubuntu.com>
-+Origin: vendor
-+Bug-Debian: https://bugs.debian.org/830912
-+Forwarded: no
-+Last-Update: 2016-08-12
-+
-+--- a/libfakeroot.c
-++++ b/libfakeroot.c
-+@@ -256,10 +256,16 @@ void load_library_symbols(void){
-+  /* clear dlerror() just in case dlsym() legitimately returns NULL */
-+     msg = dlerror();
-+     *(next_wrap[i].doit)=dlsym(get_libc(), next_wrap[i].name);
-++
-+     if ( (msg = dlerror()) != NULL){
-+-      fprintf (stderr, "dlsym(%s): %s\n", next_wrap[i].name, msg);
-+-/*    abort ();*/
-++#ifdef LIBFAKEROOT_DEBUGGING
-++      if (fakeroot_debug) {
-++        fprintf (stderr, "dlsym(%s): %s\n", next_wrap[i].name, msg);
-++/*      abort ();*/
-++      }
-++#endif
-+     }
-++
-+   }
-+ }
-+ 
 -- 
-2.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
