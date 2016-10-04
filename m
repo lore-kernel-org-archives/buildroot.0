@@ -1,114 +1,41 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  3 Oct 2016 20:09:56 -0500
-Subject: [Buildroot] [PATCH v3] zynq: document how to use custom ps7_init
-	files
-Message-ID: <1475543396-65164-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon,  3 Oct 2016 23:19:15 -0300
+Subject: [Buildroot] [PATCH] package/libdrm: bump version to 2.4.71
+Message-ID: <1475547555-25769-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Masahiro Yamada <yamada.masahiro@socionext.com>
-
-Since U-Boot supported SPL for Zynq boards at v2014.04 release, it
-became much easier to build a system.  At that time, however, users
-still needed to manually copy ps7_init.c/h to the U-Boot source tree
-to generate a working SPL image because ps7_init.c/h output from
-Xilinx tools are not compatible with GPL.
-
-Later, the license problem was solved when Xilinx tools became able
-to output the GPL-compatible variants (ps7_init_gpl.c/h) as well.
-U-Boot v2015.07 or later includes ps7_init_gpl.c/h for major Zynq
-boards so that users can build a boot image straight away.
-
-Now Buildroot supports 3 boards (Zedboard, MicroZed, ZC706) without
-any manual intervention.  This is a good thing itself, but commit
-b9cd72cdbfe3 ("zynq_zc706: bump U-Boot to xilinx-v2016.2") entirely
-dropped the information about custom ps7_init files.
-
-This commit provides up-to-date guidance for how to customize the
-ps7_init files.
-
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
-v2 -> v3
-[Arnout
- - Moved notice of good build but bad images to top
- - Updated wording when refering to files
- - Removed redundant comment on overriding files
- - Added suggested note on file copy and make clean's affect
+ package/libdrm/libdrm.hash | 4 ++--
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-v1 -> v2
- - Updated readme wording discussed in
-   https://patchwork.ozlabs.org/patch/654309/
-
----
- board/zynq/readme.txt | 46 +++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 39 insertions(+), 7 deletions(-)
-
-diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
-index 51e28b6..24c12dd 100644
---- a/board/zynq/readme.txt
-+++ b/board/zynq/readme.txt
-@@ -6,13 +6,6 @@ Currently, three boards are natively supported by Buildroot:
-  - Avnet ZedBoard (zynq_zed_defconfig)
-  - Avnet MicroZed (zynq_microzed_defconfig)
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index c205780..bda054e 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2016-July/113899.html
+-sha256	b17d4b39ed97ca0e4cffa0db06ff609e617bac94646ec38e8e0579d530540e7b	libdrm-2.4.70.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2016-October/119998.html
++sha256	c66287ddeee5f46ea8f8880b94b80acb3bbc33ba6321d17767eef145046df9b8	libdrm-2.4.71.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index d8d7744..d06f3ec 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--The following build procedure focuses on them, but you can adjust it to your
--board even if it is not listed above.  Major Zynq-based boards are supported by
--U-Boot, and their Device Trees are merged in Linux Kernel.  If your board is the
--case, booting the kernel is a piece of cake.  All you need to do is to change:
-- - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
-- - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_KCONFIG)
--
- Steps to create a working system for a Zynq board:
- 
- 1) Configuration (do one of the following)
-@@ -50,3 +43,42 @@ References:
- 
-  - Zedboard/Microzed information including schematics, reference designs, and
-    manuals are available from http://www.zedboard.org .
-+
-+Support for other boards:
-+
-+If you want to build a system for other boards (for ex. Digilent Zybo board).
-+Most major Zynq-based boards have U-Boot and Kernel support.  If your
-+board happens to be supported, booting the kernel and using U-Boot
-+just requires the following Buildroot updates:
-+ - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
-+ - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_DEFCONFIG)
-+
-+Custom ps7_init_gpl.c/h support:
-+
-+To generate a working boot.bin image, ps7_init_gpl.c/h are required in the
-+U-Boot source tree.  Without those files, boot.bin will be built successfully
-+but it will not be functional at all.  Those files are output from the Xilinx
-+tools, but for convenience, U-Boot includes the default ps7_init_gpl.c/h of
-+popular boards.  Those files may need to be updated for any programmable
-+logic customizations which impact ps7_init (clock/pin setup & mapping/AXI
-+bridge setup/etc).  See board/xilinx/zynq/ directory of U-Boot for natively
-+supported ps7_init files.  If the ps7_init files for your board are not found
-+in U-Boot, you need to add them by yourself.
-+
-+1) Start with a defconfig supported by Buildroot (e.g. Zedboard)
-+    make zynq_zed_defconfig
-+
-+2) make uboot-menuconfig
-+    Visit the following menu and enable CONFIG_ZYNQ_CUSTOM_INIT.
-+
-+    ARM architecture  --->
-+       [*] Use custom ps7_init provided by Xilinx tool
-+
-+3) Copy ps7_init_gpl.c/h generated by the Xilinx tools into
-+   output/build/uboot-xilinx-<pkg version>/board/xilinx/zynq/custom_hw_platform/
-+
-+4) make
-+
-+Note: The files in step 3 will need to be re-copied after cleaning the output
-+directory and at this time, there is no way to save them as part of the buildroot
-+configuration, except as a U-Boot patch.
+-LIBDRM_VERSION = 2.4.70
++LIBDRM_VERSION = 2.4.71
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 -- 
-1.9.1
+2.7.4
