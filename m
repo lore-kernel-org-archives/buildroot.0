@@ -1,100 +1,176 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Oct 2016 19:00:49 +0200
-Subject: [Buildroot] [PATCH v2] package/linux-tools: add iio
-In-Reply-To: <20161004160139.4614-1-m.niestroj@grinn-global.com>
-References: <20161004160139.4614-1-m.niestroj@grinn-global.com>
-Message-ID: <20161005170049.GC3751@free.fr>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Wed, 5 Oct 2016 12:53:43 -0300
+Subject: [Buildroot] [PATCH] configs/mx6udoo: Add initial support
+Message-ID: <1475682823-28158-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marcin, All,
+Add the initial support for mx6q/dl udoo boards.
 
-On 2016-10-04 18:01 +0200, Marcin Niestroj spake thusly:
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+For information about these boards, please visit:
+http://www.udoo.org/
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+In linux.fragment we disable USB support for now because kernel 4.8
+hangs on udoo board.
 
-Regards,
-Yann E. MORIN.
+This is been addressed by Peter Chen's kernel patch series that provides
+a standard way to reset a USB hub.
 
-> ---
-> Changes v1 -> v2:
->  * Use LINUX_MAKE_FLAGS instead of directly specifying CROSS_COMPILE
->    (suggested by Yann)
-> 
->  package/linux-tools/Config.in         |  9 +++++++++
->  package/linux-tools/linux-tool-iio.mk | 27 +++++++++++++++++++++++++++
->  2 files changed, 36 insertions(+)
->  create mode 100644 package/linux-tools/linux-tool-iio.mk
-> 
-> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-> index 61c196f..bde70de 100644
-> --- a/package/linux-tools/Config.in
-> +++ b/package/linux-tools/Config.in
-> @@ -20,6 +20,15 @@ comment "cpupower needs a toolchain w/ wchar"
->  	depends on !BR2_bfin
->  	depends on !BR2_USE_WCHAR && BR2_NEEDS_GETTEXT
->  
-> +config BR2_PACKAGE_LINUX_TOOLS_IIO
-> +	bool "iio"
-> +	select BR2_PACKAGE_LINUX_TOOLS
-> +	help
-> +	  iio is a collection of tools to get information about,
-> +	  control and monitor iio devices present on system.
-> +
-> +	  These tools are available only from kernel version 4.7.
-> +
->  config BR2_PACKAGE_LINUX_TOOLS_PERF
->  	bool "perf"
->  	select BR2_PACKAGE_LINUX_TOOLS
-> diff --git a/package/linux-tools/linux-tool-iio.mk b/package/linux-tools/linux-tool-iio.mk
-> new file mode 100644
-> index 0000000..60d6249
-> --- /dev/null
-> +++ b/package/linux-tools/linux-tool-iio.mk
-> @@ -0,0 +1,27 @@
-> +################################################################################
-> +#
-> +# iio
-> +#
-> +################################################################################
-> +
-> +LINUX_TOOLS += iio
-> +
-> +IIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
-> +
-> +define IIO_BUILD_CMDS
-> +	$(Q)if ! grep install $(LINUX_DIR)/tools/iio/Makefile >/dev/null 2>&1 ; then \
-> +		echo "Your kernel version is too old and does not have install section in the iio tools." ; \
-> +		echo "At least kernel 4.7 must be used." ; \
-> +		exit 1 ; \
-> +	fi
-> +
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/iio \
-> +		$(IIO_MAKE_OPTS)
-> +endef
-> +
-> +define IIO_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/iio \
-> +		$(IIO_MAKE_OPTS) \
-> +		INSTALL_ROOT=$(TARGET_DIR) \
-> +		install
-> +endef
-> -- 
-> 2.10.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+When such series hit mainline, then we can bump the kernel and remove
+linux.fragment.
 
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ board/udoo/genimage.cfg   | 48 +++++++++++++++++++++++++++++++++++++++++++++++
+ board/udoo/linux.fragment |  1 +
+ board/udoo/post-image.sh  | 14 ++++++++++++++
+ board/udoo/readme.txt     | 17 +++++++++++++++++
+ configs/mx6udoo_defconfig | 26 +++++++++++++++++++++++++
+ 5 files changed, 106 insertions(+)
+ create mode 100644 board/udoo/genimage.cfg
+ create mode 100644 board/udoo/linux.fragment
+ create mode 100755 board/udoo/post-image.sh
+ create mode 100644 board/udoo/readme.txt
+ create mode 100644 configs/mx6udoo_defconfig
+
+diff --git a/board/udoo/genimage.cfg b/board/udoo/genimage.cfg
+new file mode 100644
+index 0000000..4361d54
+--- /dev/null
++++ b/board/udoo/genimage.cfg
+@@ -0,0 +1,48 @@
++# Minimal microSD card image for Udoo MX6Q/DL boards
++#
++# We mimic the .sdcard Freescale's image format for i.MX6:
++# * the microSD card must have 1 kB free space at the beginning,
++# * U-Boot is dumped as is,
++# * a FAT partition at offset 16 MB is containing zImage and dtbs,
++# * a single root filesystem partition is required (Ext4 in this case).
++#
++
++image boot.vfat {
++	vfat {
++		files = {
++			"imx6q-udoo.dtb",
++			"imx6dl-udoo.dtb",
++			"zImage"
++		}
++	}
++	size = 16M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition SPL {
++		in-partition-table = "no"
++		image = "SPL"
++		offset = 1K
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot.img"
++		offset = 69K
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++		offset = 16M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/udoo/linux.fragment b/board/udoo/linux.fragment
+new file mode 100644
+index 0000000..2acad15
+--- /dev/null
++++ b/board/udoo/linux.fragment
+@@ -0,0 +1 @@
++CONFIG_USB=n
+diff --git a/board/udoo/post-image.sh b/board/udoo/post-image.sh
+new file mode 100755
+index 0000000..b4ac460
+--- /dev/null
++++ b/board/udoo/post-image.sh
+@@ -0,0 +1,14 @@
++#!/usr/bin/env bash
++
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++  --rootpath "${TARGET_DIR}" \
++  --tmppath "${GENIMAGE_TMP}" \
++  --inputpath "${BINARIES_DIR}" \
++  --outputpath "${BINARIES_DIR}" \
++  --config "${GENIMAGE_CFG}"
+diff --git a/board/udoo/readme.txt b/board/udoo/readme.txt
+new file mode 100644
+index 0000000..acd05f6
+--- /dev/null
++++ b/board/udoo/readme.txt
+@@ -0,0 +1,17 @@
++Udoo MX6Q/DL board
++
++For information about MX6 Udoo boards:
++http://www.udoo.org/
++
++To build a minimal support for these boards:
++
++    $ make mx6udoo_defconfig
++    $ make
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be dumped on a micro SD card:
++
++dd if=output/images/sdcard.img of=/dev/<your-microsd-device>
++
++For details about the medium image layout, see the definition in
++board/udoo/genimage.cfg.
+diff --git a/configs/mx6udoo_defconfig b/configs/mx6udoo_defconfig
+new file mode 100644
+index 0000000..649284e
+--- /dev/null
++++ b/configs/mx6udoo_defconfig
+@@ -0,0 +1,26 @@
++BR2_arm=y
++BR2_cortex_a9=y
++# Linux headers same as kernel, a 4.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/udoo/post-image.sh"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="udoo"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="SPL"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/udoo/linux.fragment"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-udoo imx6dl-udoo"
++# required tools to create the SD card image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
