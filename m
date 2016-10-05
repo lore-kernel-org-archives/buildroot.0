@@ -1,49 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:00:47 +0200
-Subject: [Buildroot] [git commit] package/python-pathvalidate: bump version
-	to 0.7.1
-Message-ID: <20161005210758.A4B0C7FE41@busybox.osuosl.org>
+Date: Wed, 5 Oct 2016 23:00:52 +0200
+Subject: [Buildroot] [git commit] package/python-pymysql: bump version to
+	0.7.9
+Message-ID: <20161005210758.D5CF98222E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0593caf62041542c2a3bfcff15bb1a2ce347d05
+commit: https://git.buildroot.net/buildroot/commit/?id=925e3284cff4fb4ab71efebdd8a0ef6649ed9a3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pathvalidate/python-pathvalidate.hash | 7 +++----
- package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
+ package/python-pymysql/python-pymysql.hash | 7 +++----
+ package/python-pymysql/python-pymysql.mk   | 4 ++--
  2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
-index 90208f4..3a1bc1d 100644
---- a/package/python-pathvalidate/python-pathvalidate.hash
-+++ b/package/python-pathvalidate/python-pathvalidate.hash
+diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
+index fc7e5e3..9e058ab 100644
+--- a/package/python-pymysql/python-pymysql.hash
++++ b/package/python-pymysql/python-pymysql.hash
 @@ -1,4 +1,3 @@
--# md5 from https://pypi.python.org/pypi/pathvalidate/json
--md5	d3d89abc6c053b4182be29c23beccf26  pathvalidate-0.4.2.tar.gz
--# sha256 calculated locally
--sha256	4316cf5f862b70efd7792b98f46871592b80924840da69a28df1921d7702fcf9  pathvalidate-0.4.2.tar.gz
-+# md5 from https://pypi.python.org/pypi/pathvalidate/json, sha256 locally computed
-+md5	1ea321c363fb5f55451473071db30d28  pathvalidate-0.7.1.tar.gz
-+sha256	4d701cfc8b380ed39252e29ce972a54dd18ce1dbe5cd8758162480d8bd673e5d  pathvalidate-0.7.1.tar.gz
-diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
-index 0c7cc76..843b207 100644
---- a/package/python-pathvalidate/python-pathvalidate.mk
-+++ b/package/python-pathvalidate/python-pathvalidate.mk
+-#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=6d757cda8bfbd312714207f7c0bef5c7
+-md5     6d757cda8bfbd312714207f7c0bef5c7 PyMySQL-0.7.2.tar.gz
+-# Locally calculated:
+-sha256 bd7acb4990dbf097fae3417641f93e25c690e01ed25c3ed32ea638d6c3ac04ba  PyMySQL-0.7.2.tar.gz
++# md5 from https://pypi.python.org/pypi/pymysql/json, sha256 locally computed
++md5	bf82311ac2df4c43adad003a8c805b90  PyMySQL-0.7.9.tar.gz
++sha256	2331f82b7b85d407c8d9d7a8d7901a6abbeb420533e5d5d64ded5009b5c6dcc3  PyMySQL-0.7.9.tar.gz
+diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
+index e58ff7e..94a93a2 100644
+--- a/package/python-pymysql/python-pymysql.mk
++++ b/package/python-pymysql/python-pymysql.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PATHVALIDATE_VERSION = 0.4.2
-+PYTHON_PATHVALIDATE_VERSION = 0.7.1
- PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
--PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/fd/b9/726269557d5846f253f7ecec483d801582a27b77852a76e2dc9c61dba2b6
-+PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/85/39/94b634c076dc3192455b1c0a8d15061eeeffd65a9d267d2b9de237b159a2
- PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
- PYTHON_PATHVALIDATE_LICENSE = MIT
- PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
+-PYTHON_PYMYSQL_VERSION = 0.7.2
++PYTHON_PYMYSQL_VERSION = 0.7.9
+ PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
+-PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/source/P/PyMySQL
++PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/a4/c4/c15457f261fda9839637de044eca9b6da8f55503183fe887523801b85701
+ PYTHON_PYMYSQL_LICENSE = MIT
+ PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
+ PYTHON_PYMYSQL_SETUP_TYPE = setuptools
