@@ -1,48 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:00:50 +0200
-Subject: [Buildroot] [git commit] package/python-prompt-toolkit: bump
-	version to 1.0.7
-Message-ID: <20161005210758.BB8737FA39@busybox.osuosl.org>
+Date: Wed, 5 Oct 2016 23:00:54 +0200
+Subject: [Buildroot] [git commit] package/python-pyparsing: bump version to
+	2.1.9
+Message-ID: <20161005210758.E14F381916@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd3ae278b816aea858c5207c204b4f41c13b3923
+commit: https://git.buildroot.net/buildroot/commit/?id=678b9a6d0e78ceb8712e0f7b2c77e5623e28c80f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-prompt-toolkit/python-prompt-toolkit.hash | 6 +++---
- package/python-prompt-toolkit/python-prompt-toolkit.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pyparsing/python-pyparsing.hash | 6 +++---
+ package/python-pyparsing/python-pyparsing.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.hash b/package/python-prompt-toolkit/python-prompt-toolkit.hash
-index f33e99a..0211a96 100644
---- a/package/python-prompt-toolkit/python-prompt-toolkit.hash
-+++ b/package/python-prompt-toolkit/python-prompt-toolkit.hash
+diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
+index 93a0845..6cf686a 100644
+--- a/package/python-pyparsing/python-pyparsing.hash
++++ b/package/python-pyparsing/python-pyparsing.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/prompt_toolkit/json, sha256 locally computed
--md5	6c4133d099603f496c761491043bf0ef  prompt_toolkit-1.0.3.tar.gz
--sha256	805e026f0cbad27467e93f9dd3e3777718d401a62788c1e84ca038e967ad8ba2  prompt_toolkit-1.0.3.tar.gz
-+# md5 from https://pypi.python.org/pypi/prompt-toolkit/json, sha256 locally computed
-+md5	f74cd8ac84176fac1cdb136843ccb0d6  prompt_toolkit-1.0.7.tar.gz
-+sha256	ef0b8188179fe7d052161ed274b43e18f5a680ff84d01462293b327e1668d2ef  prompt_toolkit-1.0.7.tar.gz
-diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.mk b/package/python-prompt-toolkit/python-prompt-toolkit.mk
-index 634f20e..7e85dcd 100644
---- a/package/python-prompt-toolkit/python-prompt-toolkit.mk
-+++ b/package/python-prompt-toolkit/python-prompt-toolkit.mk
-@@ -4,9 +4,9 @@
+-# md5 from https://pypi.python.org/pypi/pyparsing/2.0.3, sha256 locally computed
+-md5	0fe479be09fc2cf005f753d3acc35939  pyparsing-2.0.3.tar.gz
+-sha256  06e729e1cbf5274703b1f47b6135ed8335999d547f9d8cf048b210fb8ebf844f  pyparsing-2.0.3.tar.gz
++# md5 from https://pypi.python.org/pypi/pyparsing/json, sha256 locally computed
++md5	ee943c354eac79526533c58342f322c7  pyparsing-2.1.9.tar.gz
++sha256	93326f5490bcfe7069806ff342692e75f72529cfa82f20683b5fceeb5d4a7fc2  pyparsing-2.1.9.tar.gz
+diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
+index ad066b8..652345d 100644
+--- a/package/python-pyparsing/python-pyparsing.mk
++++ b/package/python-pyparsing/python-pyparsing.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_PROMPT_TOOLKIT_VERSION = 1.0.3
-+PYTHON_PROMPT_TOOLKIT_VERSION = 1.0.7
- PYTHON_PROMPT_TOOLKIT_SOURCE = prompt_toolkit-$(PYTHON_PROMPT_TOOLKIT_VERSION).tar.gz
--PYTHON_PROMPT_TOOLKIT_SITE = https://pypi.python.org/packages/8d/de/412f23919929c01e6b55183e124623f705e4b91796d3d2dce2cb53d595ad
-+PYTHON_PROMPT_TOOLKIT_SITE = https://pypi.python.org/packages/dd/55/2fb4883d2b21d072204fd21ca5e6040faa253135554590d0b67380669176
- PYTHON_PROMPT_TOOLKIT_SETUP_TYPE = setuptools
- PYTHON_PROMPT_TOOLKIT_LICENSE = BSD-3c
- PYTHON_PROMPT_TOOLKIT_LICENSE_FILES = LICENSE
+-PYTHON_PYPARSING_VERSION = 2.0.3
++PYTHON_PYPARSING_VERSION = 2.1.9
+ PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
+-PYTHON_PYPARSING_SITE = https://pypi.python.org/packages/source/p/pyparsing
++PYTHON_PYPARSING_SITE = https://pypi.python.org/packages/87/ee/6f3a94d834c82a5c1a74f2fc77775ff05b5fbbf7d97f844e6fff5e2ff94b
+ PYTHON_PYPARSING_LICENSE = MIT
+ PYTHON_PYPARSING_LICENSE_FILES = LICENSE
+-PYTHON_PYPARSING_SETUP_TYPE = distutils
++PYTHON_PYPARSING_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
