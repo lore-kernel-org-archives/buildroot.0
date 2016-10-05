@@ -1,60 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 22:55:38 +0200
-Subject: [Buildroot] [PATCH v2] fakeroot: fix spurious message
- "undefined symbol"
-In-Reply-To: <20161005150123.6334-1-maxime.hadjinlian@gmail.com>
-References: <20161005150123.6334-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20161005225538.35a39fa4@free-electrons.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 5 Oct 2016 17:58:14 -0300
+Subject: [Buildroot] [PATCH] configs/mx6udoo: Add initial support
+In-Reply-To: <1475682823-28158-1-git-send-email-fabio.estevam@nxp.com>
+References: <1475682823-28158-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <CAOMZO5B96HBVts-Uj7BK5KUpk5LounD3h7ik7p0VQc7kSw6zZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, Oct 5, 2016 at 12:53 PM, Fabio Estevam <fabio.estevam@nxp.com> wrote:
+> Add the initial support for mx6q/dl udoo boards.
+>
+> For information about these boards, please visit:
+> http://www.udoo.org/
+>
+> In linux.fragment we disable USB support for now because kernel 4.8
+> hangs on udoo board.
+>
+> This is been addressed by Peter Chen's kernel patch series that provides
+> a standard way to reset a USB hub.
+>
+> When such series hit mainline, then we can bump the kernel and remove
+> linux.fragment.
+>
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 
-On Wed,  5 Oct 2016 17:01:23 +0200, Maxime Hadjinlian wrote:
-> Since the glibc 2.24-3, and this commit:
-> https://sourceware.org/git/?p=glibc.git;a=commit;h=80f87443eed17838fe453f1f5406ccf5d3698c25
-> fakeroot will print spurious message about symbols not being found.
-> 
-> [...]
-> dlsym(acl_get_fd): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_get_fd
-> dlsym(acl_get_file): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_get_file
-> dlsym(acl_set_fd): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_set_fd
-> dlsym(acl_set_file): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_set_file
-> dlsym(acl_get_fd): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_get_fd
-> dlsym(acl_get_file): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_get_file
-> [...]
-> 
-> It doesn't seem to impair the behavior of fakeroot, it's simply annoying
-> for the user.
-> 
-> Debian (which is the creator of fakeroot) has a patch which is a
-> workaround: simply don't display the message.
-> 
-> Note if you wish to bump fakeroot:
-> A new version is available but the release tarball doesn't include the
-> 'configure' and 'Makefile' pre-generated.
-> This means that if we were to bump, the package would need to run its
-> own 'bootstrap' script which will add dependencies to
-> host-{automake,autoconf,...} which would be annoying (since almost every
-> build runs fakeroot).
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
-> v1 -> v2:
->     - Rename patch to include ordering
->     - Add SoB on the patch
-> ---
->  package/fakeroot/0001-hide-dlsym-error.patch | 34 ++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 package/fakeroot/0001-hide-dlsym-error.patch
+Please discard this version. I need to fix an issue and will send a v2.
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks
