@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:13:27 +0200
-Subject: [Buildroot] [PATCH v2] board: add support for liteBoard
-In-Reply-To: <20161003074831.11889-1-m.niestroj@grinn-global.com>
-References: <20161003074831.11889-1-m.niestroj@grinn-global.com>
-Message-ID: <20161005231327.78ba68d5@free-electrons.com>
+Date: Wed, 5 Oct 2016 23:22:05 +0200
+Subject: [Buildroot] [PATCH] imx6ulpico/readme: Update the image layout
+ file
+In-Reply-To: <1475586364-29328-1-git-send-email-fabio.estevam@nxp.com>
+References: <1475586364-29328-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <20161005232205.4e2c3478@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  3 Oct 2016 09:48:31 +0200, Marcin Niestroj wrote:
-> Board support package includes:
+On Tue, 4 Oct 2016 10:06:04 -0300, Fabio Estevam wrote:
+> As we are using the common image layout now, update the
+> readme.txt file accordingly.
 > 
->  * Buildroot defconfig
->  * Mainline Linux kernel v4.8 with board support patches
->  * Mainline U-Boot v2016.09 with board support patches
->  * genimage config to create sdcard image
->  * Board readme.txt
-> 
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 > ---
-> Changes v1 -> v2:
->  * Bumped Linux version to 4.8
->  * Updated Linux patches to newest upstreamable version
->  * Updated U-Boot patches to upstreamable ones
+>  board/technexion/imx6ulpico/readme.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks. Thanks Fabio for the review!
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
