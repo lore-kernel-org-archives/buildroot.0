@@ -1,132 +1,68 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 6 Oct 2016 00:50:49 +0200
-Subject: [Buildroot] [PATCH] website: add Mind as a sponsor for the ELCE16
-	meeting
-Message-ID: <20161005225049.12399-1-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 6 Oct 2016 00:54:07 +0200
+Subject: [Buildroot] Xenomai 3.x
+In-Reply-To: <CAH-u=818PtBnsOqsUtSvUwACE9S-oxBsR0q+W3oQb7NRLwG2xg@mail.gmail.com>
+References: <CAH-u=80UriOruAmAcS0uiJfXzEXTB6LeM+OwV9=vB0D7+e3xgw@mail.gmail.com>
+ <20161005095532.683204d0@free-electrons.com>
+ <CAH-u=818PtBnsOqsUtSvUwACE9S-oxBsR0q+W3oQb7NRLwG2xg@mail.gmail.com>
+Message-ID: <64d74271-3535-198c-3ec5-b7675d031d34@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also move Openwide/SMILE down to the past sponsors. This also requires
-all the row endings to move.
 
-Note that I chose to mention Mind twice, once as current sponsor and
-once as past sponsor.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-I (accidentally) removed all the row divs at some point, and that still
-seemed to work... But I don't really understand this bootstrap stuff so
-I didn't dare touching it :-)
----
- docs/website/sponsors.html | 39 +++++++++++++++++++++++++++++----------
- 1 file changed, 29 insertions(+), 10 deletions(-)
+On 05-10-16 10:30, Jean-Michel Hautbois wrote:
+> Hi Thomas,
+> 
+> 2016-10-05 9:55 GMT+02:00 Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com>:
+>> Hello,
+>>
+>> On Wed, 5 Oct 2016 09:07:28 +0200, Jean-Michel Hautbois wrote:
+>>
+>>> I am trying to get a working Xenomai 3.x package with buildroot.
+>>> My main objective is to have it running with Mercury (ie. PREEMPT_RT
+>>> and not Adeos), and ideally with the compatibility layer for Xenomai
+>>> 2.x existing applications.
+>>>
+>>> I had a look at this thread :
+>>> http://lists.busybox.net/pipermail/buildroot/2016-January/150791.html
+>>>
+>>> I was wondering if anyone already worked on this stuff, in order to
+>>> combine the efforts ?
+>>> I can do it on my own, of course, but I think it would be better to
+>>> have it integrated upstream :) !
+>>
+>> So far, we haven't received any patch to add Xenomai 3.x support in
+>> Buildroot, and I've not heard (besides you asking questions on IRC)
+>> anyone working on this currently.
+>>
+>> So patches are definitely welcome. It's not clear to me whether we want
+>> to support both Xenomai 2.x and Xenomai 3.x, or if supporting Xenomai
+>> 3.x is sufficient, as a replacement for Xeonmai 2.x.
+> 
+> Well, yes, it is not clear for me either.
+> I am not sure that it has to be compiled the same way.
+> Well, if I have anything I can show, I will ask for advices.
 
-diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
-index 7a176ee..0a4373d 100644
---- a/docs/website/sponsors.html
-+++ b/docs/website/sponsors.html
-@@ -13,19 +13,19 @@
- 	  <div class="panel panel-default">
- 	    <div class="panel-body">
- 	      <div class="col-sm-4">
--		<a href="http://ingenierie.openwide.fr">
--		  <img class="img-responsive center-block" src="images/owi-smile-logo.png"/>
-+		<a href="http://www.mind.be">
-+		  <img class="img-responsive center-block" src="images/mind-logo.png"/>
- 		</a>
- 	      </div>
- 	      <div class="col-sm-8">
--		<a href="http://ingenierie.openwide.fr">OpenWide/Smile</a> is sponsoring
--		the Buildroot Summer Camp taking place on July 1-5 2016 in Toulouse, France. OpenWide/Smile is
--		sponsoring the participation of Romain Naour and paid the food expenses for the meeting participants.
-+		As it did in previous years and at FOSDEM, <a href="http://www.mind.be">Mind</a>
-+		is sponsoring the Friday night dinner at the <a href="http://elinux.org/Buildroot:DeveloperDaysELCE2016">Buildroot
-+		Developers Meeting at ELCE 2016</a> in Berlin.
- 	      </div>
- 	    </div>
- 	  </div>
- 	</div>
--      </div>
-+
-     </div>
-   </div>
- 
-@@ -40,6 +40,23 @@
- 	  <div class="panel panel-default panel-sponsor">
- 	    <div class="panel-body">
- 	      <div class="col-sm-12">
-+		<a href="http://ingenierie.openwide.fr">
-+		  <img class="img-responsive center-block" src="images/owi-smile-logo.png"/>
-+		</a>
-+	      </div>
-+	      <div class="col-sm-12">
-+		<a href="http://ingenierie.openwide.fr">OpenWide/Smile</a> sponsored
-+		the Buildroot Summer Camp that took place on July 1-5 2016 in Toulouse, France. OpenWide/Smile is
-+		sponsoring the participation of Romain Naour and paid the food expenses for the meeting participants.
-+	      </div>
-+	    </div>
-+	  </div>
-+	</div>
-+
-+	<div class="col-sm-4">
-+	  <div class="panel panel-default panel-sponsor">
-+	    <div class="panel-body">
-+	      <div class="col-sm-12">
- 		<a href="http://www.mind.be">
- 		  <img class="img-responsive center-block" src="images/mind-logo.png"/>
- 		</a>
-@@ -70,7 +87,9 @@
- 	    </div>
- 	  </div>
- 	</div>
-+      </div>
- 
-+      <div class="row">
- 	<div class="col-sm-4">
- 	  <div class="panel panel-default panel-sponsor">
- 	    <div class="panel-body">
-@@ -86,9 +105,7 @@
- 	    </div>
- 	  </div>
- 	</div>
--      </div>
- 
--      <div class="row">
- 	<div class="col-sm-4">
- 	  <div class="panel panel-default panel-sponsor">
- 	    <div class="panel-body">
-@@ -120,7 +137,9 @@
- 	    </div>
- 	  </div>
- 	</div>
-+      </div>
- 
-+      <div class="row">
- 	<div class="col-sm-4">
- 	  <div class="panel panel-default panel-sponsor">
- 	    <div class="panel-body">
-@@ -136,9 +155,7 @@
- 	    </div>
- 	  </div>
- 	</div>
--      </div>
- 
--      <div class="row">
- 	<div class="col-sm-4">
- 	  <div class="panel panel-default panel-sponsor">
- 	    <div class="panel-body">
-@@ -169,7 +186,9 @@
- 	    </div>
- 	  </div>
- 	</div>
-+      </div>
- 
-+      <div class="row">
- 	<div class="col-sm-4">
- 	  <div class="panel panel-default panel-sponsor">
- 	    <div class="panel-body">
+ AFAIK the Xenomai 3 API should be fully backward compatible with Xenomai 2, so
+I see no reason to support both. I'd just "bump" Xenomai.
+
+ A first patch would do a bump with just Cobalt, which is more or less what we
+have now. A second patch would add the option to use Mercury instead of Cobalt.
+
+ This is also the feedback I gave in the thread that you refer to.
+
+ Regards,
+ Arnout
+
 -- 
-2.9.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
