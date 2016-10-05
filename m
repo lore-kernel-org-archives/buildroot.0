@@ -1,47 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:00:49 +0200
-Subject: [Buildroot] [git commit] package/python-posix-ipc: bump version to
-	1.0.0
-Message-ID: <20161005210758.AF0A58022D@busybox.osuosl.org>
+Date: Wed, 5 Oct 2016 23:00:38 +0200
+Subject: [Buildroot] [git commit] package/python-html5lib: bump version to
+	1.0b10
+Message-ID: <20161005210758.3FC057FCD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f39c415576c5a178b2d4cca6ef518922278eb004
+commit: https://git.buildroot.net/buildroot/commit/?id=0f0416cd3f90553e1094af6c1475a74087225a82
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-posix-ipc/python-posix-ipc.hash | 5 +++--
- package/python-posix-ipc/python-posix-ipc.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-html5lib/python-html5lib.hash | 6 +++---
+ package/python-html5lib/python-html5lib.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-posix-ipc/python-posix-ipc.hash b/package/python-posix-ipc/python-posix-ipc.hash
-index 95ef4da..196f186 100644
---- a/package/python-posix-ipc/python-posix-ipc.hash
-+++ b/package/python-posix-ipc/python-posix-ipc.hash
-@@ -1,2 +1,3 @@
--# locally computed
--sha256  24e092ba995122869a2fca46a2579b1b2824cfdcb2ecc6938e2923a120460646  posix_ipc-0.9.6.tar.gz
-+# md5 from https://pypi.python.org/pypi/posix-ipc/json, sha256 locally computed
-+md5	85607a392087715ac3a3c7ded2492d06  posix_ipc-1.0.0.tar.gz
-+sha256	9c93070374ca672725575e5c9874930c8cde69367fb90378b2255e048e31efcb  posix_ipc-1.0.0.tar.gz
-diff --git a/package/python-posix-ipc/python-posix-ipc.mk b/package/python-posix-ipc/python-posix-ipc.mk
-index 5fa7471..7916537 100644
---- a/package/python-posix-ipc/python-posix-ipc.mk
-+++ b/package/python-posix-ipc/python-posix-ipc.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-html5lib/python-html5lib.hash b/package/python-html5lib/python-html5lib.hash
+index 0ec712a..7ea082f 100644
+--- a/package/python-html5lib/python-html5lib.hash
++++ b/package/python-html5lib/python-html5lib.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=ef43cb05e9e799f25d65d1135838a96f, sha256 locally computed
+-md5     ef43cb05e9e799f25d65d1135838a96f  html5lib-0.9999999.tar.gz
+-sha256  2612a191a8d5842bfa057e41ba50bbb9dcb722419d2408c78cff4758d0754868  html5lib-0.9999999.tar.gz
++# md5 from https://pypi.python.org/pypi/html5lib/json, sha256 locally computed
++md5	5ada1243b7a863624b2f35245b2186e9  html5lib-1.0b10.tar.gz
++sha256	0d5fd54d5b2b79b876007a70c033a4023577768d18022c15681c00561432a0f9  html5lib-1.0b10.tar.gz
+diff --git a/package/python-html5lib/python-html5lib.mk b/package/python-html5lib/python-html5lib.mk
+index 93eef9a..38affcb 100644
+--- a/package/python-html5lib/python-html5lib.mk
++++ b/package/python-html5lib/python-html5lib.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_POSIX_IPC_VERSION = 0.9.6
-+PYTHON_POSIX_IPC_VERSION = 1.0.0
- PYTHON_POSIX_IPC_SOURCE = posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
--PYTHON_POSIX_IPC_SITE = http://semanchuk.com/philip/posix_ipc
-+PYTHON_POSIX_IPC_SITE = https://pypi.python.org/packages/f0/e6/bff62b62b2e75f695b737695951b7a4c1c6595369268a37868f5c34e1c12
- PYTHON_POSIX_IPC_LICENSE = BSD-3c
- PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
- PYTHON_POSIX_IPC_SETUP_TYPE = distutils
+-PYTHON_HTML5LIB_VERSION = 0.9999999
++PYTHON_HTML5LIB_VERSION = 1.0b10
+ PYTHON_HTML5LIB_SOURCE = html5lib-$(PYTHON_HTML5LIB_VERSION).tar.gz
+-PYTHON_HTML5LIB_SITE = https://pypi.python.org/packages/source/h/html5lib
++PYTHON_HTML5LIB_SITE = https://pypi.python.org/packages/97/16/982214624095c1420c75f3bd295d9e658794aafb95fc075823de107e0ae4
+ PYTHON_HTML5LIB_LICENSE = MIT
+ PYTHON_HTML5LIB_LICENSE_FILES = LICENSE
+-PYTHON_HTML5LIB_SETUP_TYPE = distutils
++PYTHON_HTML5LIB_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
