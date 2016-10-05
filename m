@@ -1,49 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:00:52 +0200
-Subject: [Buildroot] [git commit] package/python-pymysql: bump version to
-	0.7.9
-Message-ID: <20161005210758.D5CF98222E@busybox.osuosl.org>
+Date: Wed, 5 Oct 2016 23:00:28 +0200
+Subject: [Buildroot] [git commit] package/python-bottle: bump version to
+	0.12.9
+Message-ID: <20161005210757.DA5827FD88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=925e3284cff4fb4ab71efebdd8a0ef6649ed9a3e
+commit: https://git.buildroot.net/buildroot/commit/?id=5f48be594e962cd7a07e36607c29162605e6a1a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pymysql/python-pymysql.hash | 7 +++----
- package/python-pymysql/python-pymysql.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/python-bottle/python-bottle.hash | 7 +++----
+ package/python-bottle/python-bottle.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
-index fc7e5e3..9e058ab 100644
---- a/package/python-pymysql/python-pymysql.hash
-+++ b/package/python-pymysql/python-pymysql.hash
+diff --git a/package/python-bottle/python-bottle.hash b/package/python-bottle/python-bottle.hash
+index 8c7d428..5a589f1 100644
+--- a/package/python-bottle/python-bottle.hash
++++ b/package/python-bottle/python-bottle.hash
 @@ -1,4 +1,3 @@
--#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=6d757cda8bfbd312714207f7c0bef5c7
--md5     6d757cda8bfbd312714207f7c0bef5c7 PyMySQL-0.7.2.tar.gz
--# Locally calculated:
--sha256 bd7acb4990dbf097fae3417641f93e25c690e01ed25c3ed32ea638d6c3ac04ba  PyMySQL-0.7.2.tar.gz
-+# md5 from https://pypi.python.org/pypi/pymysql/json, sha256 locally computed
-+md5	bf82311ac2df4c43adad003a8c805b90  PyMySQL-0.7.9.tar.gz
-+sha256	2331f82b7b85d407c8d9d7a8d7901a6abbeb420533e5d5d64ded5009b5c6dcc3  PyMySQL-0.7.9.tar.gz
-diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
-index e58ff7e..94a93a2 100644
---- a/package/python-pymysql/python-pymysql.mk
-+++ b/package/python-pymysql/python-pymysql.mk
-@@ -4,9 +4,9 @@
+-# From https://pypi.python.org/pypi/bottle/0.12.7
+-md5	ed0b83c9dbbdbde784e7c652d61c59f4	bottle-0.12.7.tar.gz
+-# Calculated based on the hash above
+-sha256	e3ea2191f06ca51af45bf6ca41ed2d1b2d809ceda0876466879fe205be7b2073	bottle-0.12.7.tar.gz
++# md5 from https://pypi.python.org/pypi/bottle/json, sha256 locally computed
++md5	f5850258a86224a791171e8ecbb66d99  bottle-0.12.9.tar.gz
++sha256	fe0a24b59385596d02df7ae7845fe7d7135eea73799d03348aeb9f3771500051  bottle-0.12.9.tar.gz
+diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
+index 441419e..ec09398 100644
+--- a/package/python-bottle/python-bottle.mk
++++ b/package/python-bottle/python-bottle.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYMYSQL_VERSION = 0.7.2
-+PYTHON_PYMYSQL_VERSION = 0.7.9
- PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
--PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/source/P/PyMySQL
-+PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/a4/c4/c15457f261fda9839637de044eca9b6da8f55503183fe887523801b85701
- PYTHON_PYMYSQL_LICENSE = MIT
- PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
- PYTHON_PYMYSQL_SETUP_TYPE = setuptools
+-PYTHON_BOTTLE_VERSION = 0.12.7
++PYTHON_BOTTLE_VERSION = 0.12.9
+ PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
+ PYTHON_BOTTLE_SITE = http://pypi.python.org/packages/source/b/bottle
+ PYTHON_BOTTLE_LICENSE = MIT
