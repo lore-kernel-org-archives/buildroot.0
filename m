@@ -1,36 +1,49 @@
-From: Jean-Michel Hautbois <jean-michel.hautbois@veo-labs.com>
-Date: Wed, 5 Oct 2016 10:31:28 +0200
-Subject: [Buildroot] Xenomai 3.x
-In-Reply-To: <0b8401d21edd$b0d2b3d0$12781b70$@chordia.co.uk>
-References: <CAH-u=80UriOruAmAcS0uiJfXzEXTB6LeM+OwV9=vB0D7+e3xgw@mail.gmail.com>
- <0b8401d21edd$b0d2b3d0$12781b70$@chordia.co.uk>
-Message-ID: <CAH-u=80h6GZDrk9inr751BjR5m_96tH71BWBOOKiKCJ54PGq8A@mail.gmail.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Wed, 05 Oct 2016 10:54:28 +0200
+Subject: [Buildroot] [PATCH 1/2] check-host-rpath: support symlinks in
+	rpath
+In-Reply-To: <8fb2b678-db51-9ba7-c07d-d7956c9708db@mind.be>
+References: <1475230194-18524-1-git-send-email-jezz@sysmic.org>
+ <1475230194-18524-2-git-send-email-jezz@sysmic.org>
+ <8fb2b678-db51-9ba7-c07d-d7956c9708db@mind.be>
+Message-ID: <2359483.ncWTPxTSyx@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jerry,
+Hi Arnout,
 
-2016-10-05 9:54 GMT+02:00  <jerry@chordia.co.uk>:
-> Hello Jean-Michel
->
->> Subject: Xenomai 3.x
->>
->> Hi !
->>
->> I am trying to get a working Xenomai 3.x package with buildroot.
->> My main objective is to have it running with Mercury (ie. PREEMPT_RT and
->> not Adeos), and ideally with the compatibility layer for Xenomai 2.x existing
->> applications.
->>
->
-> I'm afraid I ran out of time on that one and had to settle for PREMPT_RT alone.
+On Tuesday 04 October 2016 23:33:34 Arnout Vandecappelle wrote:
+> On 30-09-16 12:09, J?r?me Pouiller wrote:
+> > If compilation path contains symlinks, rpath may sometime contains
+> > symlinks and sometime canonicalized path.
+> > 
+> > A pratical example:
+> >   $ ln -s /opt/buildroot /opt/buildroot-symblink
+> >   $ cd /opt/buildroot-symlink
+> >   $ make O=out
+> >   $ make -C out package-rebuild
+> > 
+> > This last command produce an error since already installed host
+> > binaries contains /opt/buildroot/out/host/usr/lib as rpath while
+> > check-host-rpath expect /opt/buildroot-symlink/out/host/usr/lib
+> > 
+> > This patch canonicalize all paths used in check-host-rpath in order
+> > to avoid problem
+> 
+>  Wouldn't this also be fixed by
+> http://patchwork.ozlabs.org/patch/613854/ ? With that patch (series)
+> applied, there shouldn't be any symlinks anymore once the real make
+> starts.
 
-What do you mean exactly, did you install a PREEMPT_RT kernel and have
-a Xenomai 3.x on your side or no Xenomai at all, due to a lack of time
-?
+I didn't saw Samuel's patch. I will test it soon. I think it supersede 
+mine.
 
-Thanks
-JM
+BR,
+
+-- 
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
