@@ -1,23 +1,62 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 5 Oct 2016 18:49:08 -0300
-Subject: [Buildroot] [PATCH] configs/mx6udoo: Add initial support
-In-Reply-To: <CAOMZO5B96HBVts-Uj7BK5KUpk5LounD3h7ik7p0VQc7kSw6zZQ@mail.gmail.com>
-References: <1475682823-28158-1-git-send-email-fabio.estevam@nxp.com>
- <CAOMZO5B96HBVts-Uj7BK5KUpk5LounD3h7ik7p0VQc7kSw6zZQ@mail.gmail.com>
-Message-ID: <CAOMZO5AABu-AZjVnbqteOJ78Pw_qM=iMEb+EBMU4cKNsQTCv1Q@mail.gmail.com>
+Date: Wed,  5 Oct 2016 18:48:16 -0300
+Subject: [Buildroot] [PATCH] boot/uboot: Fix SPL binary installation
+Message-ID: <1475704096-22801-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 5, 2016 at 5:58 PM, Fabio Estevam <festevam@gmail.com> wrote:
+Commit fad58cefa4a392b ("boot/uboot: allow to build multiple U-Boot images")
+broke U-Boot SPL binary installation. Taking mx6cubox_defconfig target as an example:
 
-> Please discard this version. I need to fix an issue and will send a v2.
+  LD      u-boot
+  OBJCOPY u-boot-nodtb.bin
+  COPY    u-boot.bin
+  MKIMAGE u-boot.img
+>>> uboot 2016.09.01 Installing to target
+>>> uboot 2016.09.01 Installing to images directory
+cp -dpf /home/fabio/buildroot/output/build/uboot-2016.09.01/u-boot.bin /home/fabio/buildroot/output/images/
+cp -dpf /home/fabio/buildroot/output/build/uboot-2016.09.01/u-boot.img /home/fabio/buildroot/output/images/
+cp -dpf /home/fabio/buildroot/output/build/uboot-2016.09.01/SPL /home/fabio/buildroot/output/images/
+cp: cannot stat '/home/fabio/buildroot/output/build/uboot-2016.09.01/SPL': No such file or directory
 
-It turns out this issue is not related to the udoo board.
+Fix this problem by adding the SPL binary into UBOOT_BINS and UBOOT_MAKE_TARGET
+variables.
 
-It is commit fad58cefa4a392b ("boot/uboot: allow to build multiple
-U-Boot images") that broke SPL installation.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ boot/uboot/uboot.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Just sent a patch fixing it.
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 7379a4d..237ef26 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -71,6 +71,11 @@ UBOOT_BINS += u-boot-dtb.img
+ UBOOT_MAKE_TARGET += all u-boot-dtb.img
+ endif
+ 
++ifeq ($(BR2_TARGET_UBOOT_SPL),y)
++UBOOT_BINS += $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
++UBOOT_MAKE_TARGET += $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
+ UBOOT_BINS += u-boot.img
+ UBOOT_MAKE_TARGET += u-boot.img
+@@ -201,11 +206,6 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 	)
+ 	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
+ 		cp -dpf $(@D)/u-boot.sb $(BINARIES_DIR))
+-	$(if $(BR2_TARGET_UBOOT_SPL),
+-		$(foreach f,$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)), \
+-			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
+-		)
+-	)
+ 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+ 		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+ 			$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+-- 
+2.7.4
