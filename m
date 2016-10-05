@@ -1,32 +1,74 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 5 Oct 2016 17:58:14 -0300
-Subject: [Buildroot] [PATCH] configs/mx6udoo: Add initial support
-In-Reply-To: <1475682823-28158-1-git-send-email-fabio.estevam@nxp.com>
-References: <1475682823-28158-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <CAOMZO5B96HBVts-Uj7BK5KUpk5LounD3h7ik7p0VQc7kSw6zZQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Oct 2016 22:57:54 +0200
+Subject: [Buildroot] [git commit] package/linux-tools: add iio
+Message-ID: <20161005205918.81974805CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 5, 2016 at 12:53 PM, Fabio Estevam <fabio.estevam@nxp.com> wrote:
-> Add the initial support for mx6q/dl udoo boards.
->
-> For information about these boards, please visit:
-> http://www.udoo.org/
->
-> In linux.fragment we disable USB support for now because kernel 4.8
-> hangs on udoo board.
->
-> This is been addressed by Peter Chen's kernel patch series that provides
-> a standard way to reset a USB hub.
->
-> When such series hit mainline, then we can bump the kernel and remove
-> linux.fragment.
->
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=3afc4de8823d63ca8fc860c5ad1dab97e62e160f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Please discard this version. I need to fix an issue and will send a v2.
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-tools/Config.in         |  9 +++++++++
+ package/linux-tools/linux-tool-iio.mk | 27 +++++++++++++++++++++++++++
+ 2 files changed, 36 insertions(+)
 
-Thanks
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index bd07509..db9ed9f 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -32,6 +32,15 @@ config BR2_PACKAGE_LINUX_TOOLS_GPIO
+ 
+ 	  These tools are available only from kernel version 4.8.
+ 
++config BR2_PACKAGE_LINUX_TOOLS_IIO
++	bool "iio"
++	select BR2_PACKAGE_LINUX_TOOLS
++	help
++	  iio is a collection of tools to get information about,
++	  control and monitor iio devices present on system.
++
++	  These tools are available only from kernel version 4.7.
++
+ config BR2_PACKAGE_LINUX_TOOLS_PERF
+ 	bool "perf"
+ 	select BR2_PACKAGE_LINUX_TOOLS
+diff --git a/package/linux-tools/linux-tool-iio.mk b/package/linux-tools/linux-tool-iio.mk
+new file mode 100644
+index 0000000..60d6249
+--- /dev/null
++++ b/package/linux-tools/linux-tool-iio.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# iio
++#
++################################################################################
++
++LINUX_TOOLS += iio
++
++IIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
++
++define IIO_BUILD_CMDS
++	$(Q)if ! grep install $(LINUX_DIR)/tools/iio/Makefile >/dev/null 2>&1 ; then \
++		echo "Your kernel version is too old and does not have install section in the iio tools." ; \
++		echo "At least kernel 4.7 must be used." ; \
++		exit 1 ; \
++	fi
++
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/iio \
++		$(IIO_MAKE_OPTS)
++endef
++
++define IIO_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/iio \
++		$(IIO_MAKE_OPTS) \
++		INSTALL_ROOT=$(TARGET_DIR) \
++		install
++endef
