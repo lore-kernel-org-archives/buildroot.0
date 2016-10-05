@@ -1,48 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:00:36 +0200
-Subject: [Buildroot] [git commit] package/python-flask: bump version to
-	0.11.1
-Message-ID: <20161005210758.321827FF86@busybox.osuosl.org>
+Date: Wed, 5 Oct 2016 23:00:49 +0200
+Subject: [Buildroot] [git commit] package/python-posix-ipc: bump version to
+	1.0.0
+Message-ID: <20161005210758.AF0A58022D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=663686da65a531433cba025d7e833d9c05f2afff
+commit: https://git.buildroot.net/buildroot/commit/?id=f39c415576c5a178b2d4cca6ef518922278eb004
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-flask/python-flask.hash | 6 +++---
- package/python-flask/python-flask.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-posix-ipc/python-posix-ipc.hash | 5 +++--
+ package/python-posix-ipc/python-posix-ipc.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
-index 1432c55..01ccc6e 100644
---- a/package/python-flask/python-flask.hash
-+++ b/package/python-flask/python-flask.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=89fbdcb04b7b96c5b24625ae299cf48b, sha256 locally computed
--md5	89fbdcb04b7b96c5b24625ae299cf48b  Flask-0.11.tar.gz
--sha256	29a7405a7f0de178232fe48cd9b2a2403083bf03bd34eabe12168863d4cdb493  Flask-0.11.tar.gz
-+# md5 from https://pypi.python.org/pypi/flask/json, sha256 locally computed
-+md5	d2af95d8fe79cf7da099f062dd122a08  Flask-0.11.1.tar.gz
-+sha256	b4713f2bfb9ebc2966b8a49903ae0d3984781d5c878591cf2f7b484d28756b0e  Flask-0.11.1.tar.gz
-diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
-index db4ba74..204eba0 100644
---- a/package/python-flask/python-flask.mk
-+++ b/package/python-flask/python-flask.mk
+diff --git a/package/python-posix-ipc/python-posix-ipc.hash b/package/python-posix-ipc/python-posix-ipc.hash
+index 95ef4da..196f186 100644
+--- a/package/python-posix-ipc/python-posix-ipc.hash
++++ b/package/python-posix-ipc/python-posix-ipc.hash
+@@ -1,2 +1,3 @@
+-# locally computed
+-sha256  24e092ba995122869a2fca46a2579b1b2824cfdcb2ecc6938e2923a120460646  posix_ipc-0.9.6.tar.gz
++# md5 from https://pypi.python.org/pypi/posix-ipc/json, sha256 locally computed
++md5	85607a392087715ac3a3c7ded2492d06  posix_ipc-1.0.0.tar.gz
++sha256	9c93070374ca672725575e5c9874930c8cde69367fb90378b2255e048e31efcb  posix_ipc-1.0.0.tar.gz
+diff --git a/package/python-posix-ipc/python-posix-ipc.mk b/package/python-posix-ipc/python-posix-ipc.mk
+index 5fa7471..7916537 100644
+--- a/package/python-posix-ipc/python-posix-ipc.mk
++++ b/package/python-posix-ipc/python-posix-ipc.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FLASK_VERSION = 0.11
-+PYTHON_FLASK_VERSION = 0.11.1
- PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
--PYTHON_FLASK_SITE = https://pypi.python.org/packages/dc/ca/c0ed9cc90c079085c698e284b672edbc1ffd6866b1830574095cbc5b7752
-+PYTHON_FLASK_SITE = https://pypi.python.org/packages/55/8a/78e165d30f0c8bb5d57c429a30ee5749825ed461ad6c959688872643ffb3
- PYTHON_FLASK_SETUP_TYPE = setuptools
- PYTHON_FLASK_LICENSE = BSD-3c
- PYTHON_FLASK_LICENSE_FILES = LICENSE
+-PYTHON_POSIX_IPC_VERSION = 0.9.6
++PYTHON_POSIX_IPC_VERSION = 1.0.0
+ PYTHON_POSIX_IPC_SOURCE = posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
+-PYTHON_POSIX_IPC_SITE = http://semanchuk.com/philip/posix_ipc
++PYTHON_POSIX_IPC_SITE = https://pypi.python.org/packages/f0/e6/bff62b62b2e75f695b737695951b7a4c1c6595369268a37868f5c34e1c12
+ PYTHON_POSIX_IPC_LICENSE = BSD-3c
+ PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
+ PYTHON_POSIX_IPC_SETUP_TYPE = distutils
