@@ -1,49 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:00:32 +0200
-Subject: [Buildroot] [git commit] package/python-dataproperty: bump version
-	to 0.9.0
-Message-ID: <20161005210758.112938011C@busybox.osuosl.org>
+Date: Wed, 5 Oct 2016 23:00:41 +0200
+Subject: [Buildroot] [git commit] package/python-json-schema-validator: bump
+	version to 2.4.1
+Message-ID: <20161005210758.61E5B80F5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6791d0a291a29d7b95d257bc7fb23acf43e8cffa
+commit: https://git.buildroot.net/buildroot/commit/?id=36f095890107e1c8e60092b009ee3e793d75f14a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-dataproperty/python-dataproperty.hash | 7 +++----
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ .../python-json-schema-validator/python-json-schema-validator.hash   | 5 +++--
+ package/python-json-schema-validator/python-json-schema-validator.mk | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index 916352e..dc075b9 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
-@@ -1,4 +1,3 @@
--# md5 from https://pypi.python.org/pypi/dataproperty/json
--md5	7ad4dabb5469bb3f150dd1018680119c  DataProperty-0.7.1.tar.gz
--# sha256 calculated by scanpypi
--sha256	2d53019e6ca7b95511ec733ea57dc108d916d2dd0818d88d1b7c0e06854a2d2e  DataProperty-0.7.1.tar.gz
-+# md5 from https://pypi.python.org/pypi/dataproperty/json, sha256 locally computed
-+md5	9d910f0994b892df260977146f9a2bd1  DataProperty-0.9.0.tar.gz
-+sha256	02ab30a4873eeb1c538cc54552c9f9ef226b3243b7546e8317c583550960319d  DataProperty-0.9.0.tar.gz
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index 927fa69..727b8c7 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
+diff --git a/package/python-json-schema-validator/python-json-schema-validator.hash b/package/python-json-schema-validator/python-json-schema-validator.hash
+index 96f5d89..7360aba 100644
+--- a/package/python-json-schema-validator/python-json-schema-validator.hash
++++ b/package/python-json-schema-validator/python-json-schema-validator.hash
+@@ -1,2 +1,3 @@
+-# locally computed
+-sha256  316befb9a6d981dff465f5243e423a3027b27775f7649510ce23fde300dde9b7  json-schema-validator-2.3.tar.gz
++# md5 from https://pypi.python.org/pypi/json-schema-validator/json, sha256 locally computed
++md5	7691b41739faaa8b0965279e72889932  json-schema-validator-2.4.1.tar.gz
++sha256	1562a21d83e56231cef09b9aa2c06e8f845974bd26f24be293de6cab9a2fac91  json-schema-validator-2.4.1.tar.gz
+diff --git a/package/python-json-schema-validator/python-json-schema-validator.mk b/package/python-json-schema-validator/python-json-schema-validator.mk
+index 0ff5554..1456c34 100644
+--- a/package/python-json-schema-validator/python-json-schema-validator.mk
++++ b/package/python-json-schema-validator/python-json-schema-validator.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DATAPROPERTY_VERSION = 0.7.1
-+PYTHON_DATAPROPERTY_VERSION = 0.9.0
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/1f/64/b17e5ab3935484869cc3e8ec06ede0c94a296b4955c947d1dfe4460955f9
-+PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/d4/7a/8a214fc3c6eb2aeb42282a25355296f391cdcfd6c6b51c80bd644ce6b229
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+-PYTHON_JSON_SCHEMA_VALIDATOR_VERSION = 2.3
++PYTHON_JSON_SCHEMA_VALIDATOR_VERSION = 2.4.1
+ PYTHON_JSON_SCHEMA_VALIDATOR_SOURCE = json-schema-validator-$(PYTHON_JSON_SCHEMA_VALIDATOR_VERSION).tar.gz
+-PYTHON_JSON_SCHEMA_VALIDATOR_SITE = http://pypi.python.org/packages/source/j/json-schema-validator
++PYTHON_JSON_SCHEMA_VALIDATOR_SITE = https://pypi.python.org/packages/70/46/ba39cb7efad1898cfc89bf3588b8612f24d128f1c25b761994f524a59cef
+ PYTHON_JSON_SCHEMA_VALIDATOR_LICENSE = LGPLv3
+ PYTHON_JSON_SCHEMA_VALIDATOR_SETUP_TYPE = setuptools
+ PYTHON_JSON_SCHEMA_VALIDATOR_DEPENDENCIES = python-versiontools
