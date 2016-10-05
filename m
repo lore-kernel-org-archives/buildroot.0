@@ -1,44 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 09:55:32 +0200
-Subject: [Buildroot] Xenomai 3.x
-In-Reply-To: <CAH-u=80UriOruAmAcS0uiJfXzEXTB6LeM+OwV9=vB0D7+e3xgw@mail.gmail.com>
-References: <CAH-u=80UriOruAmAcS0uiJfXzEXTB6LeM+OwV9=vB0D7+e3xgw@mail.gmail.com>
-Message-ID: <20161005095532.683204d0@free-electrons.com>
+Date: Wed, 5 Oct 2016 09:55:48 +0200
+Subject: [Buildroot] [git commit] elfutils: clarify licensing info
+Message-ID: <20161005075552.2D82681D7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=506445e9638e7568b8a756a8bc76f0077d3e57b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 5 Oct 2016 09:07:28 +0200, Jean-Michel Hautbois wrote:
+elfutils libraries are GPLv2+ or LGPLv3+, standalone programs are GPLv3+
+(see the NEWS file).
+Make the GPLv3+ license tag/file dependant on the programs being
+enabled, and make the GPLv2+/LGPLv3+ tag more descriptive.
 
-> I am trying to get a working Xenomai 3.x package with buildroot.
-> My main objective is to have it running with Mercury (ie. PREEMPT_RT
-> and not Adeos), and ideally with the compatibility layer for Xenomai
-> 2.x existing applications.
-> 
-> I had a look at this thread :
-> http://lists.busybox.net/pipermail/buildroot/2016-January/150791.html
-> 
-> I was wondering if anyone already worked on this stuff, in order to
-> combine the efforts ?
-> I can do it on my own, of course, but I think it would be better to
-> have it integrated upstream :) !
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/elfutils/elfutils.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-So far, we haven't received any patch to add Xenomai 3.x support in
-Buildroot, and I've not heard (besides you asking questions on IRC)
-anyone working on this currently.
-
-So patches are definitely welcome. It's not clear to me whether we want
-to support both Xenomai 2.x and Xenomai 3.x, or if supporting Xenomai
-3.x is sufficient, as a replacement for Xeonmai 2.x.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 6af1223..9485d3b 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -8,8 +8,8 @@ ELFUTILS_VERSION = 0.166
+ ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
+ ELFUTILS_SITE = https://fedorahosted.org/releases/e/l/elfutils/$(ELFUTILS_VERSION)
+ ELFUTILS_INSTALL_STAGING = YES
+-ELFUTILS_LICENSE = GPLv3, GPLv2, LGPLv3
+-ELFUTILS_LICENSE_FILES = COPYING COPYING-GPLV2 COPYING-LGPLV3
++ELFUTILS_LICENSE = GPLv2+ or LGPLv3+ (library)
++ELFUTILS_LICENSE_FILES = COPYING-GPLV2 COPYING-LGPLV3
+ ELFUTILS_DEPENDENCIES = zlib
+ 
+ # We patch configure.ac
+@@ -66,6 +66,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_ELFUTILS_PROGS),y)
+ ELFUTILS_CONF_OPTS += --enable-progs
++ELFUTILS_LICENSE := $(ELFUTILS_LICENSE), GPLv3+ (programs)
++ELFUTILS_LICENSE_FILES += COPYING
+ else
+ ELFUTILS_CONF_OPTS += --disable-progs
+ endif
