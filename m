@@ -1,48 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:00:29 +0200
-Subject: [Buildroot] [git commit] package/python-certifi: bump version to
-	2016.9.26
-Message-ID: <20161005210757.E4F607FD88@busybox.osuosl.org>
+Date: Wed, 5 Oct 2016 23:00:24 +0200
+Subject: [Buildroot] [git commit] package/python-argh: bump version to 0.26.2
+Message-ID: <20161005210757.B9AE180301@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97562dd098f2e977a81ebd08a81caf8f6946bdcf
+commit: https://git.buildroot.net/buildroot/commit/?id=76cd20c98069704ef1bb7c3493ec6fdbf97d9994
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-certifi/python-certifi.hash | 6 +++---
- package/python-certifi/python-certifi.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-argh/python-argh.hash | 7 +++----
+ package/python-argh/python-argh.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index ade4db3..443cc6d 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5d672aa766e1f773c75cfeccd02d3650, sha256 locally computed
--md5   5d672aa766e1f773c75cfeccd02d3650  certifi-2016.2.28.tar.gz
--sha256  5e8eccf95924658c97b990b50552addb64f55e1e3dfe4880456ac1f287dc79d0  certifi-2016.2.28.tar.gz
-+# md5 from https://pypi.python.org/pypi/certifi/json, sha256 locally computed
-+md5	baa81e951a29958563689d868ef1064d  certifi-2016.9.26.tar.gz
-+sha256	8275aef1bbeaf05c53715bfc5d8569bd1e04ca1e8e69608cc52bcaac2604eb19  certifi-2016.9.26.tar.gz
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index 84db8ff..f69e7c1 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
+diff --git a/package/python-argh/python-argh.hash b/package/python-argh/python-argh.hash
+index 9e2e068..6f19de1 100644
+--- a/package/python-argh/python-argh.hash
++++ b/package/python-argh/python-argh.hash
+@@ -1,4 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/argh/json
+-md5	5a97ce2ae74bbe3b63194906213f1184  argh-0.26.1.tar.gz
+-# sha256 calculated by scanpypi
+-sha256	06a7442cb9130fb8806fe336000fcf20edf1f2f8ad205e7b62cec118505510db  argh-0.26.1.tar.gz
++# md5 from https://pypi.python.org/pypi/argh/json, sha256 locally computed
++md5	edda25f3f0164a963dd89c0e3c619973  argh-0.26.2.tar.gz
++sha256	e9535b8c84dc9571a48999094fda7f33e63c3f1b74f3e5f3ac0105a58405bb65  argh-0.26.2.tar.gz
+diff --git a/package/python-argh/python-argh.mk b/package/python-argh/python-argh.mk
+index 4b09e68..bc5d713 100644
+--- a/package/python-argh/python-argh.mk
++++ b/package/python-argh/python-argh.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CERTIFI_VERSION = 2016.2.28
-+PYTHON_CERTIFI_VERSION = 2016.9.26
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/source/c/certifi
-+PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/4f/75/e1bc6e363a2c76f8d7e754c27c437dbe4086414e1d6d2f6b2a3e7846f22b
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+-PYTHON_ARGH_VERSION = 0.26.1
++PYTHON_ARGH_VERSION = 0.26.2
+ PYTHON_ARGH_SOURCE = argh-$(PYTHON_ARGH_VERSION).tar.gz
+-PYTHON_ARGH_SITE = https://pypi.python.org/packages/14/7f/794a7f4a48cba505a4b4c714f81fed844a3a5f7340b171f448711439b09e
++PYTHON_ARGH_SITE = https://pypi.python.org/packages/e3/75/1183b5d1663a66aebb2c184e0398724b624cecd4f4b679cb6e25de97ed15
+ PYTHON_ARGH_SETUP_TYPE = setuptools
+ PYTHON_ARGH_LICENSE = LGPLv3+
+ PYTHON_ARGH_LICENSE_FILES = README.rst
