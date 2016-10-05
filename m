@@ -1,29 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 05 Oct 2016 09:39:34 +0000
-Subject: [Buildroot] [Bug 9326] Odroid-C2 build results in non-bootable image
-In-Reply-To: <bug-9326-163@https.bugs.busybox.net/>
-References: <bug-9326-163@https.bugs.busybox.net/>
-Message-ID: <bug-9326-163-zyXrZA2fZi@https.bugs.busybox.net/>
+From: jerry at chordia.co.uk <jerry@chordia.co.uk>
+Date: Wed, 5 Oct 2016 11:05:08 +0100
+Subject: [Buildroot] Xenomai 3.x
+In-Reply-To: <CAH-u=80h6GZDrk9inr751BjR5m_96tH71BWBOOKiKCJ54PGq8A@mail.gmail.com>
+References: <CAH-u=80UriOruAmAcS0uiJfXzEXTB6LeM+OwV9=vB0D7+e3xgw@mail.gmail.com>
+ <0b8401d21edd$b0d2b3d0$12781b70$@chordia.co.uk>
+ <CAH-u=80h6GZDrk9inr751BjR5m_96tH71BWBOOKiKCJ54PGq8A@mail.gmail.com>
+Message-ID: <0bdd01d21eef$f42d1d20$dc875760$@chordia.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9326
+Hi JM
 
---- Comment #2 from gahabana at gmail.com ---
-hi @Erico, 
-great points - am travelling until weekend, but can confirm (remotely) that by
-changing the Toolchain to gcc-4.9, it builds just fine. I assume it will work.
-Is there a possibility within buildroot to tell it that for Kernel and U-Boot
-it should use GCC < 5.0 and the rest of the packages can/could be built on 5.x
-(so that we keep older toolchain for Odroid-C2 kernel/uboot) and newer for
-packages ? Should be more compatible/tested down the road, but i am not sure
-how that could be added to package files ?
+> 
+> What do you mean exactly, did you install a PREEMPT_RT kernel and have a
+> Xenomai 3.x on your side or no Xenomai at all, due to a lack of time ?
 
-thank you !
+We ended up working with the PREEMPT_RT patch on its own. Adding Xenomai started to look like a project all of its own.
+ 
+> Thanks
+> JM
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+You are welcome. 
+
+May I ask about your project? Have you got something that already uses Xenomai or is the interest in RT Linux more generally?
+
+BR
