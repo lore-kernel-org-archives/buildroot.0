@@ -1,48 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:00:45 +0200
-Subject: [Buildroot] [git commit] package/python-paho-mqtt: bump version to
-	1.2
-Message-ID: <20161005210758.8B00381DD3@busybox.osuosl.org>
+Date: Wed, 5 Oct 2016 23:00:50 +0200
+Subject: [Buildroot] [git commit] package/python-prompt-toolkit: bump
+	version to 1.0.7
+Message-ID: <20161005210758.BB8737FA39@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4a5426784c178ff75b35aef39e3b1ee5b303b91
+commit: https://git.buildroot.net/buildroot/commit/?id=dd3ae278b816aea858c5207c204b4f41c13b3923
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-paho-mqtt/python-paho-mqtt.hash | 6 +++---
- package/python-paho-mqtt/python-paho-mqtt.mk   | 4 ++--
+ package/python-prompt-toolkit/python-prompt-toolkit.hash | 6 +++---
+ package/python-prompt-toolkit/python-prompt-toolkit.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
-index 52729cc..6cb3cc2 100644
---- a/package/python-paho-mqtt/python-paho-mqtt.hash
-+++ b/package/python-paho-mqtt/python-paho-mqtt.hash
+diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.hash b/package/python-prompt-toolkit/python-prompt-toolkit.hash
+index f33e99a..0211a96 100644
+--- a/package/python-prompt-toolkit/python-prompt-toolkit.hash
++++ b/package/python-prompt-toolkit/python-prompt-toolkit.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=a6407b74eb5e5411e157be1de5c11366, sha256 locally computed
--md5     a6407b74eb5e5411e157be1de5c11366  paho-mqtt-1.1.tar.gz
--sha256  0f7a629efe6e3a2c61b59d3550aa9f2c4529b5689a65fde45e6f1ac36b9a261e  paho-mqtt-1.1.tar.gz
-+# md5 from https://pypi.python.org/pypi/paho-mqtt/json, sha256 locally computed
-+md5	241150b3fcb920ddca4d33181f3238b1  paho-mqtt-1.2.tar.gz
-+sha256	9100a6aa706ab699d414ec02705a21eb66f436184691d0bf1f2a85a6213c6c1f  paho-mqtt-1.2.tar.gz
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
-index 01da2b3..d783a9c 100644
---- a/package/python-paho-mqtt/python-paho-mqtt.mk
-+++ b/package/python-paho-mqtt/python-paho-mqtt.mk
+-# md5 from https://pypi.python.org/pypi/prompt_toolkit/json, sha256 locally computed
+-md5	6c4133d099603f496c761491043bf0ef  prompt_toolkit-1.0.3.tar.gz
+-sha256	805e026f0cbad27467e93f9dd3e3777718d401a62788c1e84ca038e967ad8ba2  prompt_toolkit-1.0.3.tar.gz
++# md5 from https://pypi.python.org/pypi/prompt-toolkit/json, sha256 locally computed
++md5	f74cd8ac84176fac1cdb136843ccb0d6  prompt_toolkit-1.0.7.tar.gz
++sha256	ef0b8188179fe7d052161ed274b43e18f5a680ff84d01462293b327e1668d2ef  prompt_toolkit-1.0.7.tar.gz
+diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.mk b/package/python-prompt-toolkit/python-prompt-toolkit.mk
+index 634f20e..7e85dcd 100644
+--- a/package/python-prompt-toolkit/python-prompt-toolkit.mk
++++ b/package/python-prompt-toolkit/python-prompt-toolkit.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PAHO_MQTT_VERSION = 1.1
-+PYTHON_PAHO_MQTT_VERSION = 1.2
- PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
--PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/source/p/paho-mqtt
-+PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/82/d9/7064d3a0a1d62756a1a809c85b99f864c641b66de84c15458f72193b7708
- PYTHON_PAHO_MQTT_LICENSE = EPLv1.0 or EDLv1.0
- PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
- PYTHON_PAHO_MQTT_SETUP_TYPE = distutils
+-PYTHON_PROMPT_TOOLKIT_VERSION = 1.0.3
++PYTHON_PROMPT_TOOLKIT_VERSION = 1.0.7
+ PYTHON_PROMPT_TOOLKIT_SOURCE = prompt_toolkit-$(PYTHON_PROMPT_TOOLKIT_VERSION).tar.gz
+-PYTHON_PROMPT_TOOLKIT_SITE = https://pypi.python.org/packages/8d/de/412f23919929c01e6b55183e124623f705e4b91796d3d2dce2cb53d595ad
++PYTHON_PROMPT_TOOLKIT_SITE = https://pypi.python.org/packages/dd/55/2fb4883d2b21d072204fd21ca5e6040faa253135554590d0b67380669176
+ PYTHON_PROMPT_TOOLKIT_SETUP_TYPE = setuptools
+ PYTHON_PROMPT_TOOLKIT_LICENSE = BSD-3c
+ PYTHON_PROMPT_TOOLKIT_LICENSE_FILES = LICENSE
