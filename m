@@ -1,39 +1,181 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  5 Oct 2016 07:39:32 -0300
-Subject: [Buildroot] [PATCH] ethtool: bump to version 4.8
-Message-ID: <1475663972-1823-1-git-send-email-gustavo@zacarias.com.ar>
+From: Herschel Karunaratne <hk@synexint.com>
+Date: Wed, 5 Oct 2016 16:12:40 +0530
+Subject: [Buildroot] Installing package libclthreads
+In-Reply-To: <1006b3f0-301d-b8c3-99da-ef2c50c5ec00@mind.be>
+References: <00b301d21d70$9e934540$dbb9cfc0$@synexint.com>
+ <1006b3f0-301d-b8c3-99da-ef2c50c5ec00@mind.be>
+Message-ID: <000d01d21ef5$33361990$99a24cb0$@synexint.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Arnout,
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 73a25ed..7deb92a 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256	e90589a9349d008cce8c0510ac4e8878efdc0ddb1b732a9a4cc333b101313415	ethtool-4.6.tar.xz
-+sha256	403dfe288e2d8031eab0be3f5d0ca9128e120d61c52c3dc434474fa026eb4a43	ethtool-4.8.tar.xz
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index fb751a4..bb3ed92 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ETHTOOL_VERSION = 4.6
-+ETHTOOL_VERSION = 4.8
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPLv2
+Thanks for the reply.
+
+Sorry I will not use HTML. 
+
+Could you please send me a .mk file for this? I'm quite new to buildroot.
+
+Regards,
+Herschel
+
+
+-----Original Message-----
+From: Arnout Vandecappelle [mailto:arnout at mind.be] 
+Sent: Wednesday, October 5, 2016 2:27 AM
+To: Herschel Karunaratne <hk@synexint.com>; buildroot at busybox.net
+Subject: Re: [Buildroot] Installing package libclthreads
+
+ Hi Herschel,
+
+ Please avoid using HTML mail on this list.
+
+
+On 03-10-16 14:21, Herschel Karunaratne wrote:
+> Hi,
+> 
+>  
+> 
+> I am trying to install "jconvolver" and have to install  
+> "libclthreads" needed by jconvolver. "My "libclthreads.mk" is as 
+> follows,
+> 
+>  
+> 
+> #####################################################################
+> 
+> #
+> 
+> # libclthreads
+> 
+> #
+> 
+> ####################################################################
+> 
+>  
+> 
+> LIBCLTHREADS_VERSION = 2.4.0
+> 
+> LIBCLTHREADS_SOURCE = clthreads-$(LIBCLTHREADS_VERSION).tar.bz2
+
+ Small nit: since upstream calls it "clthreads", we prefer that the
+buildroot package has the same name.
+
+> 
+> LIBCLTHREADS_SITE = 
+> http://kokkinizta.linuxaudio.org/linuxaudio/downloads
+> 
+> LIBCLTHREADS_LICENSE = LGPLv2.1+
+> 
+> LIBCLTHREADS_LICENSE_FILES = COPYING
+> 
+> LIBCLTHREADS_INSTALL_STAGING = YES
+> 
+> LIBCLTHREADS_INSTALL_TARGET = YES
+
+ This one is not needed because the default.
+
+> 
+>  
+> 
+> $(eval $(autotools-package))
+> 
+>  
+> 
+>  
+> 
+>  
+> 
+> When I build it seems to be OK but nothing in the installed folders. 
+> This is message I get when I build,
+> 
+[snip]
+>>>> libclthreads 2.4.0 Installing to target
+
+ Weird, the install to staging is missing... I can't explain that...
+
+
+> 
+>
+PATH="/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/bin:
+/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/sbin:/root
+/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/usr/bin:/root/w
+ork/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/usr/sbin:/usr/loc
+al/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/arm-2014.05/bin:/r
+oot/bin:/opt/arm-2014.05/bin" 
+> /usr/bin/make -j5
+> DESTDIR=/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/t
+> arget
+> install -C
+> /root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/lib
+> clthreads-2.4.0/
+> 
+> make[1]: Entering directory
+>
+`/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/libclthr
+eads-2.4.0'
+> 
+> /usr/bin/install -d /usr/local/lib64
+
+ It looks like this package ignores both the configure --prefix option and
+the DESTDIR argument to 'make install'. This basically makes the install
+commands unusable. Either patch the Makefile.in to correct this, or define
+LIBCLTHREADS_INSTALL_STAGING_CMDS and LIBCLTHREADS_INSTALL_TARGET_CMDS.
+
+
+ Regards,
+ Arnout
+
+
+> 
+> /usr/bin/install -m 644 clthreads.h /usr/local/include
+> 
+> /usr/bin/install -m 755 libclthreads.so.2.4.0 /usr/local/lib64
+> 
+> /sbin/ldconfig -n /usr/local/lib64
+> 
+> ln -sf libclthreads.so.2.4.0 /usr/local/lib64/libclthreads.so
+> 
+> make[1]: Leaving directory
+>
+`/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/libclthr
+eads-2.4.0'
+> 
+>  
+> 
+>  
+> 
+>  
+> 
+> What could have gone wrong?
+> 
+>  
+> 
+> Thanks in advance.
+> 
+>  
+> 
+>  
+> 
+> *Regards*
+> 
+> *Herschel*
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 -- 
-2.7.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
