@@ -1,133 +1,114 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Wed, 5 Oct 2016 09:43:45 -0700
-Subject: [Buildroot] [PATCH v3] zynq: document how to use custom
-	ps7_init files
-In-Reply-To: <1475543396-65164-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1475543396-65164-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <CAKmqyKMkJsJgXRx-7tO=LqKC4791ZuBZGNGPd-gj4=GbDx3TVw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 5 Oct 2016 18:59:18 +0200
+Subject: [Buildroot] [PATCH v4] package/linux-tools: add gpio
+In-Reply-To: <20161004160114.4516-1-m.niestroj@grinn-global.com>
+References: <20161004160114.4516-1-m.niestroj@grinn-global.com>
+Message-ID: <20161005165918.GB3751@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 3, 2016 at 6:09 PM, Matt Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> From: Masahiro Yamada <yamada.masahiro@socionext.com>
->
-> Since U-Boot supported SPL for Zynq boards at v2014.04 release, it
-> became much easier to build a system.  At that time, however, users
-> still needed to manually copy ps7_init.c/h to the U-Boot source tree
-> to generate a working SPL image because ps7_init.c/h output from
-> Xilinx tools are not compatible with GPL.
->
-> Later, the license problem was solved when Xilinx tools became able
-> to output the GPL-compatible variants (ps7_init_gpl.c/h) as well.
-> U-Boot v2015.07 or later includes ps7_init_gpl.c/h for major Zynq
-> boards so that users can build a boot image straight away.
->
-> Now Buildroot supports 3 boards (Zedboard, MicroZed, ZC706) without
-> any manual intervention.  This is a good thing itself, but commit
-> b9cd72cdbfe3 ("zynq_zc706: bump U-Boot to xilinx-v2016.2") entirely
-> dropped the information about custom ps7_init files.
->
-> This commit provides up-to-date guidance for how to customize the
-> ps7_init files.
->
-> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Marcin, All,
 
-This looks good to me. If you want me to look at future Xilinx related
-patches just CC me and I'll comment/help where I can.
+On 2016-10-04 18:01 +0200, Marcin Niestroj spake thusly:
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 
-Acked-by: Alistair Francis <alistair.francis@xilinx.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thanks,
+Thanks for staying on-board for the respins! :-)
 
-Alistair
+Regards,
+Yann E. MORIN.
 
->
 > ---
-> v2 -> v3
-> [Arnout
->  - Moved notice of good build but bad images to top
->  - Updated wording when refering to files
->  - Removed redundant comment on overriding files
->  - Added suggested note on file copy and make clean's affect
->
-> v1 -> v2
->  - Updated readme wording discussed in
->    https://patchwork.ozlabs.org/patch/654309/
->
-> ---
->  board/zynq/readme.txt | 46 +++++++++++++++++++++++++++++++++++++++-------
->  1 file changed, 39 insertions(+), 7 deletions(-)
->
-> diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
-> index 51e28b6..24c12dd 100644
-> --- a/board/zynq/readme.txt
-> +++ b/board/zynq/readme.txt
-> @@ -6,13 +6,6 @@ Currently, three boards are natively supported by Buildroot:
->   - Avnet ZedBoard (zynq_zed_defconfig)
->   - Avnet MicroZed (zynq_microzed_defconfig)
->
-> -The following build procedure focuses on them, but you can adjust it to your
-> -board even if it is not listed above.  Major Zynq-based boards are supported by
-> -U-Boot, and their Device Trees are merged in Linux Kernel.  If your board is the
-> -case, booting the kernel is a piece of cake.  All you need to do is to change:
-> - - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
-> - - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_KCONFIG)
-> -
->  Steps to create a working system for a Zynq board:
->
->  1) Configuration (do one of the following)
-> @@ -50,3 +43,42 @@ References:
->
->   - Zedboard/Microzed information including schematics, reference designs, and
->     manuals are available from http://www.zedboard.org .
+> Changes v3 -> v4:
+>  * Use LINUX_MAKE_FLAGS instead of directly specifying CROSS_COMPILE
+>    (suggested by Yann)
+> 
+> Changes v2 -> v3:
+>  * Add info about supported Linux version in Config.in
+>    (suggested by Baruch)
+> 
+> Changes v1 -> v2:
+>  * Adapt to new linux-tools infra, which is moved to package/ directory
+>    (suggested by Yann)
+> 
+>  package/linux-tools/Config.in          | 12 ++++++++++++
+>  package/linux-tools/linux-tool-gpio.mk | 28 ++++++++++++++++++++++++++++
+>  2 files changed, 40 insertions(+)
+>  create mode 100644 package/linux-tools/linux-tool-gpio.mk
+> 
+> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+> index 61c196f..bd07509 100644
+> --- a/package/linux-tools/Config.in
+> +++ b/package/linux-tools/Config.in
+> @@ -20,6 +20,18 @@ comment "cpupower needs a toolchain w/ wchar"
+>  	depends on !BR2_bfin
+>  	depends on !BR2_USE_WCHAR && BR2_NEEDS_GETTEXT
+>  
+> +config BR2_PACKAGE_LINUX_TOOLS_GPIO
+> +	bool "gpio"
+> +	select BR2_PACKAGE_LINUX_TOOLS
+> +	help
+> +	  gpio is a collection of tools to get information about,
+> +	  control and monitor gpios present on system.
 > +
-> +Support for other boards:
+> +	  These tools use new gpio ABI which will deprecate sysfs gpio
+> +	  interface in the future.
 > +
-> +If you want to build a system for other boards (for ex. Digilent Zybo board).
-> +Most major Zynq-based boards have U-Boot and Kernel support.  If your
-> +board happens to be supported, booting the kernel and using U-Boot
-> +just requires the following Buildroot updates:
-> + - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
-> + - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_DEFCONFIG)
+> +	  These tools are available only from kernel version 4.8.
 > +
-> +Custom ps7_init_gpl.c/h support:
+>  config BR2_PACKAGE_LINUX_TOOLS_PERF
+>  	bool "perf"
+>  	select BR2_PACKAGE_LINUX_TOOLS
+> diff --git a/package/linux-tools/linux-tool-gpio.mk b/package/linux-tools/linux-tool-gpio.mk
+> new file mode 100644
+> index 0000000..ba75ab4
+> --- /dev/null
+> +++ b/package/linux-tools/linux-tool-gpio.mk
+> @@ -0,0 +1,28 @@
+> +################################################################################
+> +#
+> +# gpio
+> +#
+> +################################################################################
 > +
-> +To generate a working boot.bin image, ps7_init_gpl.c/h are required in the
-> +U-Boot source tree.  Without those files, boot.bin will be built successfully
-> +but it will not be functional at all.  Those files are output from the Xilinx
-> +tools, but for convenience, U-Boot includes the default ps7_init_gpl.c/h of
-> +popular boards.  Those files may need to be updated for any programmable
-> +logic customizations which impact ps7_init (clock/pin setup & mapping/AXI
-> +bridge setup/etc).  See board/xilinx/zynq/ directory of U-Boot for natively
-> +supported ps7_init files.  If the ps7_init files for your board are not found
-> +in U-Boot, you need to add them by yourself.
+> +LINUX_TOOLS += gpio
 > +
-> +1) Start with a defconfig supported by Buildroot (e.g. Zedboard)
-> +    make zynq_zed_defconfig
+> +GPIO_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
 > +
-> +2) make uboot-menuconfig
-> +    Visit the following menu and enable CONFIG_ZYNQ_CUSTOM_INIT.
+> +define GPIO_BUILD_CMDS
+> +	$(Q)if ! grep install $(LINUX_DIR)/tools/gpio/Makefile >/dev/null 2>&1 ; then \
+> +		echo "Your kernel version is too old and does not have the gpio tools." ; \
+> +		echo "At least kernel 4.8 must be used." ; \
+> +		exit 1 ; \
+> +	fi
 > +
-> +    ARM architecture  --->
-> +       [*] Use custom ps7_init provided by Xilinx tool
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+> +		$(GPIO_MAKE_OPTS) \
+> +		gpio
+> +endef
 > +
-> +3) Copy ps7_init_gpl.c/h generated by the Xilinx tools into
-> +   output/build/uboot-xilinx-<pkg version>/board/xilinx/zynq/custom_hw_platform/
-> +
-> +4) make
-> +
-> +Note: The files in step 3 will need to be re-copied after cleaning the output
-> +directory and at this time, there is no way to save them as part of the buildroot
-> +configuration, except as a U-Boot patch.
-> --
-> 1.9.1
->
+> +define GPIO_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+> +		$(GPIO_MAKE_OPTS) \
+> +		DESTDIR=$(TARGET_DIR) \
+> +		gpio_install
+> +endef
+> -- 
+> 2.10.0
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
