@@ -1,57 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 22:16:19 +0200
-Subject: [Buildroot] gdb texinfo dependency
-In-Reply-To: <CAAXf6LUJOwtpDmUg1zxDdBDKnOAnjkafxwuCAVRQP5aMm3zT9g@mail.gmail.com>
-References: <CAAXf6LUHdDJyUPNcW-vQuZx6RhZxsPrGv69SqRPvRrAy46ropA@mail.gmail.com>
- <20161005172756.77aea89c@free-electrons.com>
- <CAAXf6LUJOwtpDmUg1zxDdBDKnOAnjkafxwuCAVRQP5aMm3zT9g@mail.gmail.com>
-Message-ID: <20161005221619.6a958ba0@free-electrons.com>
+Date: Wed, 5 Oct 2016 22:54:04 +0200
+Subject: [Buildroot] [git commit] wireshark: security bump to version 2.2.1
+Message-ID: <20161005205436.9A9AC8223A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4ca6a5ed570efbb2dc5027877413eadbd638b4be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 5 Oct 2016 22:11:31 +0200, Thomas De Schampheleire wrote:
+Fixes:
+wnpa-sec-2016-56 - The Bluetooth L2CAP dissector could crash.
+wnpa-sec-2016-57 - The NCP dissector could crash.
 
-> I did that now. While I'm still running some more tests, I already
-> tested tarball versions 7.10.1 and 7.11.1, and both ARC and Microblaze
-> git versions. I currently only tested host-gdb, but for all these
-> cases I can get rid of the host-texinfo dependency with following
-> extra changes:
-> 
-> GDB_INSTALL_OPTS += MAKEINFO=true
-> GDB_MAKE_OPTS += MAKEINFO=true
-> HOST_GDB_INSTALL_OPTS += MAKEINFO=true
-> HOST_GDB_MAKE_OPTS += MAKEINFO=true
-> 
-> The INSTALL_OPTS were needed for the tarball versions, while the
-> MAKE_OPTS (and perhaps also the INSTALL_OPTS, not sure) for the git
-> versions.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wireshark/wireshark.hash | 4 ++--
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-OK.
-
-> I still need to test the (target-)gdb, but I guess it won't make a
-> difference as the Makefiles are the same.
-
-Worth testing to check that everything is alright.
-
-> Is this too simplistic? Am I missing something?
-
-If it works, then all good.
-
-Note that for binutils, we have a different work-around: we touch
-all .info files so that they have a date that is later than the source
-files they are generated from. But that only works for tarball releases
-(that contain .info files). For binutils fetched from Git, we depend on
-host-texinfo.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 73e57cd..21c003f 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,2 +1,2 @@
+-# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.0.txt
+-sha256 a6847e741efcba6cb9d92d464d4219917bee3ad0b8f5b0f80d4388ad2f3f1104  wireshark-2.2.0.tar.bz2
++# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.1.txt
++sha256 900e22af04c8b35e0d02a25a360ab1fb7cfe5ac18fc48a9afd75a7103e569149  wireshark-2.2.1.tar.bz2
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index aa0c6d0..8dc72da 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 2.2.0
++WIRESHARK_VERSION = 2.2.1
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
