@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 10:01:31 +0200
-Subject: [Buildroot] [PATCH] qt5: Disable passing of -isystem flag in
- CXXFLAGS
-In-Reply-To: <1474642729-40702-1-git-send-email-abrodkin@synopsys.com>
-References: <1474642729-40702-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20161005100131.7c0a4a38@free-electrons.com>
+Date: Wed, 5 Oct 2016 10:02:21 +0200
+Subject: [Buildroot] [PATCH] fakeroot: fix spurious message "undefined
+ symbol"
+In-Reply-To: <20161004150530.12197-1-maxime.hadjinlian@gmail.com>
+References: <20161004150530.12197-1-maxime.hadjinlian@gmail.com>
+Message-ID: <20161005100221.5ae0ad76@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 23 Sep 2016 17:58:49 +0300, Alexey Brodkin wrote:
-> Some Qt5 sub-projects as well as 3rd-party apps written on Qt
-> are failing to compile with gcc 6.x like that:
-> ---------------------------->8-------------------------  
-> In file included from XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/bits/stl_algo.h:59:0,
->                  from XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/algorithm:62,
->                  from XXX/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/qglobal.h:88,
->                  from XXX/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/qpair.h:37,
->                  from qmediametadata.h:37,
->                  from qmediametadata.cpp:28:
-> XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
->  #include_next <stdlib.h>
->                          ^
-> compilation terminated.
-> ---------------------------->8-------------------------  
+On Tue,  4 Oct 2016 17:05:30 +0200, Maxime Hadjinlian wrote:
 
-Applied to master, thanks a lot!
+> diff --git a/package/fakeroot/hide-dlsym-error.patch b/package/fakeroot/hide-dlsym-error.patch
+> new file mode 100644
+> index 0000000..3fd34c8
+> --- /dev/null
+> +++ b/package/fakeroot/hide-dlsym-error.patch
+
+This is not a proper name for a patch, it should have a sequence number.
+
+> @@ -0,0 +1,32 @@
+> +Description: Hide error from dlsym()
+> + dlsym(), starting in glibc 2.24 actually reports errors. In our case,
+> + we try to get ACL functions which are not in the glibc. This causes
+> + failures in test suites, so hide those messages for non-debugging
+> + purposes for now. It also makes the build logs annoying to read.
+> +Author: Julian Andres Klode <juliank@ubuntu.com>
+> +Origin: vendor
+> +Bug-Debian: https://bugs.debian.org/830912
+> +Forwarded: no
+> +Last-Update: 2016-08-12
+
+This lacks your Signed-off-by line.
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
