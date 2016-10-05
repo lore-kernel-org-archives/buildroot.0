@@ -1,29 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:08:50 +0200
-Subject: [Buildroot] [PATCH 01/28] package/python-argh: bump version to
- 0.26.2
-In-Reply-To: <20161003211148.18603-1-bernd.kuhls@t-online.de>
-References: <20161003211148.18603-1-bernd.kuhls@t-online.de>
-Message-ID: <20161005230850.58de56c1@free-electrons.com>
+Date: Wed, 5 Oct 2016 23:09:14 +0200
+Subject: [Buildroot] [git commit] imx6ulpico/readme: Update the image layout
+	file
+Message-ID: <20161005210917.EB4338222E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2b9bbb537e2fefe0e437dfab5a8b085bc7c98699
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  3 Oct 2016 23:11:21 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/python-argh/python-argh.hash | 7 +++----
->  package/python-argh/python-argh.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 6 deletions(-)
+As we are using the common image layout now, update the
+readme.txt file accordingly.
 
-All 28 patches applied. Thanks!
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/technexion/imx6ulpico/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/technexion/imx6ulpico/readme.txt b/board/technexion/imx6ulpico/readme.txt
+index ff78412..a7c3a44 100644
+--- a/board/technexion/imx6ulpico/readme.txt
++++ b/board/technexion/imx6ulpico/readme.txt
+@@ -46,7 +46,7 @@ command as root:
+ *** WARNING! This will destroy all the card content. Use with care! ***
+ 
+ For details about the medium image layout, see the definition in
+-board/technexion/imx6ulpico/genimage.cfg.
++board/freescale/common/genimage.cfg.template.
+ 
+ Boot the i.MX6UL Pico board
+ =========================
