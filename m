@@ -1,46 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:00:28 +0200
-Subject: [Buildroot] [git commit] package/python-bottle: bump version to
-	0.12.9
-Message-ID: <20161005210757.DA5827FD88@busybox.osuosl.org>
+Date: Wed, 5 Oct 2016 23:00:46 +0200
+Subject: [Buildroot] [git commit] package/python-paramiko: bump version to
+	2.0.2
+Message-ID: <20161005210758.986D98042B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f48be594e962cd7a07e36607c29162605e6a1a6
+commit: https://git.buildroot.net/buildroot/commit/?id=8816ba2e6c064ff673e082ef5c2289552e77b372
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-bottle/python-bottle.hash | 7 +++----
- package/python-bottle/python-bottle.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/python-paramiko/python-paramiko.hash | 7 +++----
+ package/python-paramiko/python-paramiko.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-bottle/python-bottle.hash b/package/python-bottle/python-bottle.hash
-index 8c7d428..5a589f1 100644
---- a/package/python-bottle/python-bottle.hash
-+++ b/package/python-bottle/python-bottle.hash
+diff --git a/package/python-paramiko/python-paramiko.hash b/package/python-paramiko/python-paramiko.hash
+index 29af27d..f2aedc7 100644
+--- a/package/python-paramiko/python-paramiko.hash
++++ b/package/python-paramiko/python-paramiko.hash
 @@ -1,4 +1,3 @@
--# From https://pypi.python.org/pypi/bottle/0.12.7
--md5	ed0b83c9dbbdbde784e7c652d61c59f4	bottle-0.12.7.tar.gz
--# Calculated based on the hash above
--sha256	e3ea2191f06ca51af45bf6ca41ed2d1b2d809ceda0876466879fe205be7b2073	bottle-0.12.7.tar.gz
-+# md5 from https://pypi.python.org/pypi/bottle/json, sha256 locally computed
-+md5	f5850258a86224a791171e8ecbb66d99  bottle-0.12.9.tar.gz
-+sha256	fe0a24b59385596d02df7ae7845fe7d7135eea73799d03348aeb9f3771500051  bottle-0.12.9.tar.gz
-diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
-index 441419e..ec09398 100644
---- a/package/python-bottle/python-bottle.mk
-+++ b/package/python-bottle/python-bottle.mk
-@@ -4,7 +4,7 @@
+-# md5 from https://pypi.python.org/pypi/paramiko/json
+-md5	7e1203f5ffeb7d2bc2bffc4feb804216  paramiko-1.16.0.tar.gz
+-# sha256 calculated by scanpypi
+-sha256	3297ebd3cd072f573772f7c7426939a443c62c458d54bb632ff30fd6ecf96892  paramiko-1.16.0.tar.gz
++# md5 from https://pypi.python.org/pypi/paramiko/json, sha256 locally computed
++md5	6312aee79892801cf5a624eb4f8fd864  paramiko-2.0.2.tar.gz
++sha256	411bf90fa22b078a923ff19ef9772c1115a0953702db93549a2848acefd141dc  paramiko-2.0.2.tar.gz
+diff --git a/package/python-paramiko/python-paramiko.mk b/package/python-paramiko/python-paramiko.mk
+index 52822bb..e616049 100644
+--- a/package/python-paramiko/python-paramiko.mk
++++ b/package/python-paramiko/python-paramiko.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BOTTLE_VERSION = 0.12.7
-+PYTHON_BOTTLE_VERSION = 0.12.9
- PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
- PYTHON_BOTTLE_SITE = http://pypi.python.org/packages/source/b/bottle
- PYTHON_BOTTLE_LICENSE = MIT
+-PYTHON_PARAMIKO_VERSION = 1.16.0
++PYTHON_PARAMIKO_VERSION = 2.0.2
+ PYTHON_PARAMIKO_SOURCE = paramiko-$(PYTHON_PARAMIKO_VERSION).tar.gz
+-PYTHON_PARAMIKO_SITE = https://pypi.python.org/packages/source/p/paramiko
++PYTHON_PARAMIKO_SITE = https://pypi.python.org/packages/6b/4e/971b8c917456a2ec9666311f7e695493002a64022397cd668150b5efd2a8
+ PYTHON_PARAMIKO_SETUP_TYPE = setuptools
+ PYTHON_PARAMIKO_LICENSE = LGPLv2.1+
+ PYTHON_PARAMIKO_LICENSE_FILES = LICENSE
