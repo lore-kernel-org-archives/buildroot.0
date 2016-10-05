@@ -1,49 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:00:31 +0200
-Subject: [Buildroot] [git commit] package/python-cryptography: bump version
-	to 1.5.2
-Message-ID: <20161005210758.0553C80301@busybox.osuosl.org>
+Date: Wed, 5 Oct 2016 23:00:39 +0200
+Subject: [Buildroot] [git commit] package/python-ipaddress: bump version to
+	1.0.17
+Message-ID: <20161005210758.4A33F7FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0b2d247266728972d1a0b681e81fa5f0d60ccb6
+commit: https://git.buildroot.net/buildroot/commit/?id=81cd9a46991bd5cdfe4e8f1fe40f3838b8033f7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-cryptography/python-cryptography.hash | 7 +++----
- package/python-cryptography/python-cryptography.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/python-ipaddress/python-ipaddress.hash | 6 +++---
+ package/python-ipaddress/python-ipaddress.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index 3f8f61b..60fe3eb 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
-@@ -1,4 +1,3 @@
--# From https://pypi.python.org/pypi?:action=show_md5&digest=defd153ed901089f5aeac6eb066d5ef7
--md5     defd153ed901089f5aeac6eb066d5ef7  cryptography-1.3.4.tar.gz
--# Calculated based on the hash above
--sha256  423ff890c01be7c70dbfeaa967eeef5146f1a43a5f810ffdc07b178e48a105a9  cryptography-1.3.4.tar.gz
-+# md5 from https://pypi.python.org/pypi/cryptography/json, sha256 locally computed
-+md5	f977a6ddb38b071213c0157fc77c62ab  cryptography-1.5.2.tar.gz
-+sha256	eb8875736734e8e870b09be43b17f40472dc189b1c422a952fa8580768204832  cryptography-1.5.2.tar.gz
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index fe392f9..75e6bb3 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-ipaddress/python-ipaddress.hash b/package/python-ipaddress/python-ipaddress.hash
+index 21bc373..a7c3803 100644
+--- a/package/python-ipaddress/python-ipaddress.hash
++++ b/package/python-ipaddress/python-ipaddress.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=12915e923b738107e47827478d553ba1, sha256 locally computed
+-md5     12915e923b738107e47827478d553ba1  ipaddress-1.0.15.tar.gz
+-sha256  af6c85cfc9cdb12b861655e6b9f2f59618bf3088cbde858727b2c0a98e9f6636  ipaddress-1.0.15.tar.gz
++# md5 from https://pypi.python.org/pypi/ipaddress/json, sha256 locally computed
++md5	8bbf0326719fafb1f453921ef96729fe  ipaddress-1.0.17.tar.gz
++sha256	3a21c5a15f433710aaa26f1ae174b615973a25182006ae7f9c26de151cd51716  ipaddress-1.0.17.tar.gz
+diff --git a/package/python-ipaddress/python-ipaddress.mk b/package/python-ipaddress/python-ipaddress.mk
+index 8019aa8..5ff70d4 100644
+--- a/package/python-ipaddress/python-ipaddress.mk
++++ b/package/python-ipaddress/python-ipaddress.mk
+@@ -4,10 +4,11 @@
  #
  ################################################################################
  
--PYTHON_CRYPTOGRAPHY_VERSION = 1.3.4
-+PYTHON_CRYPTOGRAPHY_VERSION = 1.5.2
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/f8/70/d7bd5c9c764732d5876ad34293e1ca55b2305a73ae6fcf1312202d1a798e
-+PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/03/1a/60984cb85cc38c4ebdfca27b32a6df6f1914959d8790f5a349608c78be61
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3c
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-PYTHON_IPADDRESS_VERSION = 1.0.15
++PYTHON_IPADDRESS_VERSION = 1.0.17
+ PYTHON_IPADDRESS_SOURCE = ipaddress-$(PYTHON_IPADDRESS_VERSION).tar.gz
+-PYTHON_IPADDRESS_SITE = https://pypi.python.org/packages/source/i/ipaddress
++PYTHON_IPADDRESS_SITE = https://pypi.python.org/packages/bb/26/3b64955ff73f9e3155079b9ed31812afdfa5333b5c76387454d651ef593a
+ PYTHON_IPADDRESS_LICENSE = Python software foundation license
++PYTHON_IPADDRESS_LICENSE_FILES = LICENSE
+ PYTHON_IPADDRESS_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
