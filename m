@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 6 Oct 2016 01:10:43 +0200
-Subject: [Buildroot] How can I add extra CFLAGS and LDFLAGS parameters
- in Busybox ?
-In-Reply-To: <CADZ=QZnXFXbkTw-om1Vy+Lk1xdAJsszGgeDavmRUpjBN_WQMhg@mail.gmail.com>
-References: <CADZ=QZnXFXbkTw-om1Vy+Lk1xdAJsszGgeDavmRUpjBN_WQMhg@mail.gmail.com>
-Message-ID: <0bc0290b-179f-069a-7451-fc73a362f402@mind.be>
+Date: Thu, 6 Oct 2016 01:20:56 +0200
+Subject: [Buildroot] [PATCH] Fix dhcp symlink in target/var/lib/dhcp
+In-Reply-To: <CAK-g76X-fwsZnfmQaDN8a90kLrJCRfduAgNYyXuYa-UytHSfpA@mail.gmail.com>
+References: <CAK-g76X-fwsZnfmQaDN8a90kLrJCRfduAgNYyXuYa-UytHSfpA@mail.gmail.com>
+Message-ID: <25c03ce6-8771-cd39-32ef-b815ede292f6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +12,78 @@ To: buildroot@busybox.net
 
 
 
-On 05-10-16 05:57, Jack wrote:
-> I tried to add new feature on busybox, and I need to call another API
-> in busybox toolchain.
+On 28-09-16 18:07, Root, Build wrote:
+> The symlink was to /tmp causing an error on the target install step:
+> rsync: chgrp "/<path>/output/target/var/lib/dhcp" failed: Operation
+> not permitted
 
- This sounds like something very weird and unlikely. But OK.
+ Could you explain this a little more? The install step of this package only
+calls $(INSTALL), not rsync or 'make install' or anything like that. So how does
+this happen?
+
+ Also note that we don't have such failures in the autobuilders. And anyway, I
+thought that a failing chgrp in rsync was non-fatal?
 
 
-> How can I add additional CFLAGS and LDFLAGS in busybox?
-> 
-> All I tried is, add "-I XXX" at CONFIG_EXTRA_CFLAGS and "-L XXX -lxxx"
-> at CONFIG_EXTRA_LDFLAGS in busybox config file without modifying
-> busybox's Makefile. It shows "XXX/XXX/ld: cannot find -lxxx" message.
+> Changing the symlink to "../../tmp" rather than "/tmp" references the
+> target's /tmp directory rather than the build machine's /tmp directory.
 
- Clearly that worked, or you wouldn't get the -lxxx message.
+ The problem is that /var/lib itself may be a symlink to somewhere else. Some
+people need to have /var/lib in a writeable partition while /var itself is on
+the readonly rootfs. When /var/lib is a symlink, the ../.. will be interpreted
+relative to the target of that symlink, which may be a different number of
+levels down from root.
 
- If you build with 'V=1' on the command line, you'll see the full argument list
-of the LD command.
+ Also, since /tmp always exists on the build machine, symlinking to /tmp just works.
 
- If you want actual help from us, provide all the details, i.e. your busybox
-config and the build log (with V=1). Put it in a pastebin to avoid spamming the
-list.
 
  Regards,
  Arnout
 
 > 
-> I already check "-l" library file in "-L" option PATH.
+> Signed-off-by: Gerald Van Baren <jerry@vibrationresearch.com>
+> ---
+>  package/dhcp/dhcp.mk | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+> index 5cb6043..80c984b 100644
+> --- a/package/dhcp/dhcp.mk
+> +++ b/package/dhcp/dhcp.mk
+> @@ -56,7 +56,7 @@ endif
+>  ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
+>  define DHCP_INSTALL_SERVER
+>         mkdir -p $(TARGET_DIR)/var/lib
+> -       (cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+> +       (cd $(TARGET_DIR)/var/lib; ln -snf ../../tmp dhcp)
+>         $(INSTALL) -m 0755 -D $(@D)/server/dhcpd $(TARGET_DIR)/usr/sbin/dhcpd
+>         $(INSTALL) -m 0644 -D package/dhcp/dhcpd.conf \
+>                 $(TARGET_DIR)/etc/dhcp/dhcpd.conf
+> @@ -66,7 +66,7 @@ endif
+>  ifeq ($(BR2_PACKAGE_DHCP_RELAY),y)
+>  define DHCP_INSTALL_RELAY
+>         mkdir -p $(TARGET_DIR)/var/lib
+> -       (cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+> +       (cd $(TARGET_DIR)/var/lib; ln -snf ../../tmp dhcp)
+>         $(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/dhcrelay \
+>                 $(TARGET_DIR)/usr/sbin/dhcrelay
+>  endef
+> @@ -75,7 +75,7 @@ endif
+>  ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+>  define DHCP_INSTALL_CLIENT
+>         mkdir -p $(TARGET_DIR)/var/lib
+> -       (cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+> +       (cd $(TARGET_DIR)/var/lib; ln -snf ../../tmp dhcp)
+>         $(INSTALL) -m 0755 -D $(DHCP_DIR)/client/dhclient \
+>                 $(TARGET_DIR)/sbin/dhclient
+>         $(INSTALL) -m 0644 -D package/dhcp/dhclient.conf \
+> --
+> 1.9.1
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
