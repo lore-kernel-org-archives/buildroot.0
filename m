@@ -1,48 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:00:25 +0200
-Subject: [Buildroot] [git commit] package/python-autobahn: bump version to
-	0.16.0
-Message-ID: <20161005210757.C3B977FA30@busybox.osuosl.org>
+Date: Wed, 5 Oct 2016 23:00:32 +0200
+Subject: [Buildroot] [git commit] package/python-dataproperty: bump version
+	to 0.9.0
+Message-ID: <20161005210758.112938011C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0b5dac328d57e98160e343858fe2caf9a72a82c
+commit: https://git.buildroot.net/buildroot/commit/?id=6791d0a291a29d7b95d257bc7fb23acf43e8cffa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-autobahn/python-autobahn.hash | 6 +++---
- package/python-autobahn/python-autobahn.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-dataproperty/python-dataproperty.hash | 7 +++----
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-index 1ee1e0e..cae9160 100644
---- a/package/python-autobahn/python-autobahn.hash
-+++ b/package/python-autobahn/python-autobahn.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/autobahn/json, sha256 locally computed.
--md5	576b63ce7fa7846f64650263842b712b  autobahn-0.14.1.tar.gz
--sha256	c1695e139e36daeaad9cb788dd3f9b907a3fd83b67884424e59b3e07032956e0  autobahn-0.14.1.tar.gz
-+# md5 from https://pypi.python.org/pypi/autobahn/json, sha256 locally computed
-+md5	9850702d0078c5a4aa17170afe2f233c  autobahn-0.16.0.tar.gz
-+sha256	a1dcb4315a0914da56ec484659816de72dfad229be4ac19fa61bbc0111ada884  autobahn-0.16.0.tar.gz
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index 2cc2e5d..a5e9aee 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index 916352e..dc075b9 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
+@@ -1,4 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/dataproperty/json
+-md5	7ad4dabb5469bb3f150dd1018680119c  DataProperty-0.7.1.tar.gz
+-# sha256 calculated by scanpypi
+-sha256	2d53019e6ca7b95511ec733ea57dc108d916d2dd0818d88d1b7c0e06854a2d2e  DataProperty-0.7.1.tar.gz
++# md5 from https://pypi.python.org/pypi/dataproperty/json, sha256 locally computed
++md5	9d910f0994b892df260977146f9a2bd1  DataProperty-0.9.0.tar.gz
++sha256	02ab30a4873eeb1c538cc54552c9f9ef226b3243b7546e8317c583550960319d  DataProperty-0.9.0.tar.gz
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index 927fa69..727b8c7 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AUTOBAHN_VERSION = 0.14.1
-+PYTHON_AUTOBAHN_VERSION = 0.16.0
- PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
--PYTHON_AUTOBAHN_SITE = https://pypi.python.org/packages/e3/37/1297551d3066ec9b013dd3a1a7e2cca85900d3fe95194779370e8e7a7af7
-+PYTHON_AUTOBAHN_SITE = https://pypi.python.org/packages/68/37/2523309412f0fb93a7784c65e5c5639b4b5d7a84f91374ad6c3c2d5af60b
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+-PYTHON_DATAPROPERTY_VERSION = 0.7.1
++PYTHON_DATAPROPERTY_VERSION = 0.9.0
+ PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/1f/64/b17e5ab3935484869cc3e8ec06ede0c94a296b4955c947d1dfe4460955f9
++PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/d4/7a/8a214fc3c6eb2aeb42282a25355296f391cdcfd6c6b51c80bd644ce6b229
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
