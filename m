@@ -1,45 +1,90 @@
-From: Jean-Michel Hautbois <jean-michel.hautbois@veo-labs.com>
-Date: Wed, 5 Oct 2016 14:59:18 +0200
-Subject: [Buildroot] Xenomai 3.x
-In-Reply-To: <20161005145655.31cf0349@free-electrons.com>
-References: <CAH-u=80UriOruAmAcS0uiJfXzEXTB6LeM+OwV9=vB0D7+e3xgw@mail.gmail.com>
- <0b8401d21edd$b0d2b3d0$12781b70$@chordia.co.uk>
- <CAH-u=80h6GZDrk9inr751BjR5m_96tH71BWBOOKiKCJ54PGq8A@mail.gmail.com>
- <0bdd01d21eef$f42d1d20$dc875760$@chordia.co.uk>
- <CAH-u=817AGbG8SXv=aiCus1vna6Jx2iO=xatLcufKGwuVjKGZA@mail.gmail.com>
- <20161005145655.31cf0349@free-electrons.com>
-Message-ID: <CAH-u=81O5-WK-JDN5T+X7p7dYjaTPMjCKV1pLjfzLA5vnqj+Wg@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed,  5 Oct 2016 17:01:23 +0200
+Subject: [Buildroot] [PATCH v2] fakeroot: fix spurious message "undefined
+	symbol"
+Message-ID: <20161005150123.6334-1-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Since the glibc 2.24-3, and this commit:
+https://sourceware.org/git/?p=glibc.git;a=commit;h=80f87443eed17838fe453f1f5406ccf5d3698c25
+fakeroot will print spurious message about symbols not being found.
 
-2016-10-05 14:56 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Wed, 5 Oct 2016 14:41:08 +0200, Jean-Michel Hautbois wrote:
->
->> Right now, I am still hesitating, as I can have one xenomai.mk file
->> which would be pretty much the same for Cobalt, but needs some
->> modifications for Mercury. And you get a lot of ifeq() statements
->> which is not nice.
->> Or, having one xenomai-2.mk and one xenomai-3.mk (or anything similar).
->> Or, having one xenomai.mk which would support Xenomai 2.x and Xenomai
->> 3.x Cobalt only, and one xenomai-mercury.mk which would add support
->> for mercury options.
->
-> For now, I think you should just start with a package/xenomai3/ package
-> that handles all aspects of Xenomai 3 (i.e Cobalt and Mercury). Once
-> you have something working, we can see what it looks like, and discuss
-> whether merging with xenomai.mk is appropriate or not.
->
-> What do you think about such an approach?
+[...]
+dlsym(acl_get_fd): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_get_fd
+dlsym(acl_get_file): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_get_file
+dlsym(acl_set_fd): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_set_fd
+dlsym(acl_set_file): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_set_file
+dlsym(acl_get_fd): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_get_fd
+dlsym(acl_get_file): /usr/lib/libfakeroot/libfakeroot.so: undefined symbol: acl_get_file
+[...]
 
-Sounds good.
-See you in Berlin :) !
+It doesn't seem to impair the behavior of fakeroot, it's simply annoying
+for the user.
 
-JM
+Debian (which is the creator of fakeroot) has a patch which is a
+workaround: simply don't display the message.
+
+Note if you wish to bump fakeroot:
+A new version is available but the release tarball doesn't include the
+'configure' and 'Makefile' pre-generated.
+This means that if we were to bump, the package would need to run its
+own 'bootstrap' script which will add dependencies to
+host-{automake,autoconf,...} which would be annoying (since almost every
+build runs fakeroot).
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+v1 -> v2:
+    - Rename patch to include ordering
+    - Add SoB on the patch
+---
+ package/fakeroot/0001-hide-dlsym-error.patch | 34 ++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/fakeroot/0001-hide-dlsym-error.patch
+
+diff --git a/package/fakeroot/0001-hide-dlsym-error.patch b/package/fakeroot/0001-hide-dlsym-error.patch
+new file mode 100644
+index 0000000..2c61fab
+--- /dev/null
++++ b/package/fakeroot/0001-hide-dlsym-error.patch
+@@ -0,0 +1,34 @@
++Description: Hide error from dlsym()
++ dlsym(), starting in glibc 2.24 actually reports errors. In our case,
++ we try to get ACL functions which are not in the glibc. This causes
++ failures in test suites, so hide those messages for non-debugging
++ purposes for now. It also makes the build logs annoying to read.
++Author: Julian Andres Klode <juliank@ubuntu.com>
++Origin: vendor
++Bug-Debian: https://bugs.debian.org/830912
++Forwarded: no
++Last-Update: 2016-08-12
++
++Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
++
++--- a/libfakeroot.c
+++++ b/libfakeroot.c
++@@ -256,10 +256,16 @@ void load_library_symbols(void){
++  /* clear dlerror() just in case dlsym() legitimately returns NULL */
++     msg = dlerror();
++     *(next_wrap[i].doit)=dlsym(get_libc(), next_wrap[i].name);
+++
++     if ( (msg = dlerror()) != NULL){
++-      fprintf (stderr, "dlsym(%s): %s\n", next_wrap[i].name, msg);
++-/*    abort ();*/
+++#ifdef LIBFAKEROOT_DEBUGGING
+++      if (fakeroot_debug) {
+++        fprintf (stderr, "dlsym(%s): %s\n", next_wrap[i].name, msg);
+++/*      abort ();*/
+++      }
+++#endif
++     }
+++
++   }
++ }
++
+-- 
+2.9.3
