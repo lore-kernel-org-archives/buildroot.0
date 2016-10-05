@@ -1,10 +1,10 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 10:02:21 +0200
-Subject: [Buildroot] [PATCH] fakeroot: fix spurious message "undefined
- symbol"
-In-Reply-To: <20161004150530.12197-1-maxime.hadjinlian@gmail.com>
-References: <20161004150530.12197-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20161005100221.5ae0ad76@free-electrons.com>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Wed, 5 Oct 2016 13:46:11 +0530
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2016-10-04
+In-Reply-To: <20161005063025.85A591027E8@stock.ovh.net>
+References: <20161005063025.85A591027E8@stock.ovh.net>
+Message-ID: <57F4B6CB.4030402@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  4 Oct 2016 17:05:30 +0200, Maxime Hadjinlian wrote:
+On Wednesday 05 October 2016 12:00 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+> This is the list of Buildroot build failures that occured on
+> 2016-10-04, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Build failures related to your packages:
+>
+>          bfin |                    glog-v0.3.4 | http://autobuild.buildroot.net/results/c41a7e2dbd03f9ac0017692c2fff2f86b5a1a599
+>          bfin |                    glog-v0.3.4 | http://autobuild.buildroot.net/results/c7eaf6f05e5b66032fcc822ceec935295b651997
+>
 
-> diff --git a/package/fakeroot/hide-dlsym-error.patch b/package/fakeroot/hide-dlsym-error.patch
-> new file mode 100644
-> index 0000000..3fd34c8
-> --- /dev/null
-> +++ b/package/fakeroot/hide-dlsym-error.patch
+bfin config on autobuilder is using old prebuild toolchain instead of 
+new one (br-bfin-full-2016.08-364-ga92d0da.tar.bz2) which has a fix for 
+this build issue. Earlier I mentioned about it in other thread [1].
 
-This is not a proper name for a patch, it should have a sequence number.
-
-> @@ -0,0 +1,32 @@
-> +Description: Hide error from dlsym()
-> + dlsym(), starting in glibc 2.24 actually reports errors. In our case,
-> + we try to get ACL functions which are not in the glibc. This causes
-> + failures in test suites, so hide those messages for non-debugging
-> + purposes for now. It also makes the build logs annoying to read.
-> +Author: Julian Andres Klode <juliank@ubuntu.com>
-> +Origin: vendor
-> +Bug-Debian: https://bugs.debian.org/830912
-> +Forwarded: no
-> +Last-Update: 2016-08-12
-
-This lacks your Signed-off-by line.
 
 Thanks,
+Rahul
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+[1] - 
+http://lists.busybox.net/pipermail/buildroot/2016-September/172771.html
