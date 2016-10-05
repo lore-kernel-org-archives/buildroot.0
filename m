@@ -1,42 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 10:00:04 +0200
-Subject: [Buildroot] [PATCH] sunxi-tools: bump to latest git revision
-In-Reply-To: <20161004194529.26868-1-peter@korsgaard.com>
-References: <20161004194529.26868-1-peter@korsgaard.com>
-Message-ID: <20161005100004.2fee14a0@free-electrons.com>
+Date: Wed, 5 Oct 2016 10:01:12 +0200
+Subject: [Buildroot] [git commit] qt5: Disable passing of -isystem flag in
+	CXXFLAGS
+Message-ID: <20161005080118.4EF347FAF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3a0ed5d25e26cb2ec99a1da077c9dcfea67b0ecc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  4 Oct 2016 21:45:29 +0200, Peter Korsgaard wrote:
-> Major changes since v1.3:
-> - A64/A80 support
-> - H3 fel speedup
-> - Fel readl/writel/sid/reset64 commands
-> - Fel progress bar support
-> - Nand-image-builder tool
-> - Linaro toolchain compatibility workaround
-> - Portability fixes
-> 
-> The build system has been reworked somewhat and extra compiler flags now
-> have to be passed in EXTRA_CFLAGS instead of CFLAGS, so we cannot use
-> {TARGET,HOST}_CONFIGURE_OPTS.
-> Instead explicitly pass the needed variables (CC and LDFLAGS).
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/sunxi-tools/sunxi-tools.hash |  2 +-
->  package/sunxi-tools/sunxi-tools.mk   | 12 ++++++------
->  2 files changed, 7 insertions(+), 7 deletions(-)
+Some Qt5 sub-projects as well as 3rd-party apps written on Qt
+are failing to compile with gcc 6.x like that:
+---------------------------->8-------------------------
+In file included from XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/bits/stl_algo.h:59:0,
+                 from XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/algorithm:62,
+                 from XXX/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/qglobal.h:88,
+                 from XXX/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/qt5/QtCore/qpair.h:37,
+                 from qmediametadata.h:37,
+                 from qmediametadata.cpp:28:
+XXX/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
+ #include_next <stdlib.h>
+                         ^
+compilation terminated.
+---------------------------->8-------------------------
 
-Applied to master, thanks.
+That happens because qmake trying to play smart passes some
+include paths in Makefile with "-isystem" prefix.
+Which in some cases lead to build failure well described in [1].
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+A little bit more details below on what really happens:
+
+1. In "configure" script Qt determines default include paths of the
+   toolchain and stores them in DEFAULT_INCDIRS variable, see [2].
+
+2. On qmake execution when it creates Makefile out of .pro-file
+   it parses headers in INCLUDEPATH variable and if a path matches
+   one in DEFAULT_INCDIRS then in CXXFLAGS that path is written
+   with $QMAKE_CFLAGS_ISYSTEM prefix, otherwise non-matching include
+   path ends up in CXXFLAGS with normal "-I" prefix.
+
+3. By default for gcc "QMAKE_CFLAGS_ISYSTEM = -isystem", see [3].
+
+4. gcc fails to find stdlib.h, again refer to J??rg's explanation in [1].
+
+What we do here we force set QMAKE_CFLAGS_ISYSTEM to "" and so qmake
+won't use "-isystem" any longer instead expected "-I" will be used for
+all headers, see [4].
+
+That fixes building of Qt5Webkit on ARM with gcc 6.x and a number of
+autobuilder failures for ARC (the an arch that uses gcc 6 by default) like:
+http://autobuild.buildroot.net/results/56a/56a6700774af692e7f5a99b452b15e4e8592310f
+http://autobuild.buildroot.net/results/697/697412b29bf031bf8f246cc3af97ebcbf6bf6d1b
+
+[1] https://git.buildroot.net/buildroot/commit/?id=e79272fa7ff3d66c18de3514b912cd9d68d121a4
+[2] http://code.qt.io/cgit/qt/qtbase.git/tree/configure?h=5.6.1#n3660
+[3] http://code.qt.io/cgit/qt/qtbase.git/tree/mkspecs/common/gcc-base.conf?h=5.6.1#n47
+[4] http://code.qt.io/cgit/qt/qtbase.git/tree/qmake/generators/unix/unixmake2.cpp?&h=5.6.1#n193
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5base/qmake.conf | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qt5/qt5base/qmake.conf b/package/qt5/qt5base/qmake.conf
+index 2152d3c..49cf898 100644
+--- a/package/qt5/qt5base/qmake.conf
++++ b/package/qt5/qt5base/qmake.conf
+@@ -19,6 +19,7 @@ QMAKE_CXXFLAGS_RELEASE += -O3
+ CONFIG                 += nostrip
+ 
+ QMAKE_LIBS             += -lrt -lpthread -ldl
++QMAKE_CFLAGS_ISYSTEM   =
+ 
+ include(../common/linux_device_post.conf)
+ load(qt_config)
