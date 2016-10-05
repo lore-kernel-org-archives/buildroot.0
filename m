@@ -1,48 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:00:34 +0200
-Subject: [Buildroot] [git commit] package/python-django: bump version to
-	1.10.2
-Message-ID: <20161005210758.1AC127FF86@busybox.osuosl.org>
+Date: Wed, 5 Oct 2016 23:00:26 +0200
+Subject: [Buildroot] [git commit] package/python-beautifulsoup4: bump
+	version to 4.5.1
+Message-ID: <20161005210757.D02957FD88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f8c6b3154318c3d664b62ab9fe13bfe24411174
+commit: https://git.buildroot.net/buildroot/commit/?id=7d8d0447e9d83702d1c4c8a26018e114f4288483
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-django/python-django.hash | 5 +++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-beautifulsoup4/python-beautifulsoup4.hash | 7 +++----
+ package/python-beautifulsoup4/python-beautifulsoup4.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index f51c9b4..38b303b 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,2 +1,3 @@
--# sha256 from https://www.djangoproject.com/m/pgp/Django-1.7.3.checksum.txt
--sha256 f226fb8aa438456968d403f6739de1cf2dad128db86f66ee2b41dfebe3645c5b	Django-1.7.3.tar.gz
-+# md5 from https://pypi.python.org/pypi/django/json, sha256 locally computed
-+md5	5342e77374b2acd2eafa86d2bb68f8c9  Django-1.10.2.tar.gz
-+sha256	e127f12a0bfb34843b6e8c82f91e26fff6445a7ca91d222c0794174cf97cbce1  Django-1.10.2.tar.gz
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index b67bce4..2a50231 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/python-beautifulsoup4/python-beautifulsoup4.hash b/package/python-beautifulsoup4/python-beautifulsoup4.hash
+index 885c266..c86879f 100644
+--- a/package/python-beautifulsoup4/python-beautifulsoup4.hash
++++ b/package/python-beautifulsoup4/python-beautifulsoup4.hash
+@@ -1,4 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/beautifulsoup4/json
+-md5	8fbd9a7cac0704645fa20d1419036815  beautifulsoup4-4.4.1.tar.gz
+-# sha256 calculated by scanpypi
+-sha256	87d4013d0625d4789a4f56b8d79a04d5ce6db1152bb65f1d39744f7709a366b4  beautifulsoup4-4.4.1.tar.gz
++# md5 from https://pypi.python.org/pypi/beautifulsoup4/json, sha256 locally computed
++md5	994abd90e691beaf7d42c00ffb2f3a67  beautifulsoup4-4.5.1.tar.gz
++sha256	3c9474036afda9136aac6463def733f81017bf9ef3510d25634f335b0c87f5e1  beautifulsoup4-4.5.1.tar.gz
+diff --git a/package/python-beautifulsoup4/python-beautifulsoup4.mk b/package/python-beautifulsoup4/python-beautifulsoup4.mk
+index 58481b9..e2fa9b3 100644
+--- a/package/python-beautifulsoup4/python-beautifulsoup4.mk
++++ b/package/python-beautifulsoup4/python-beautifulsoup4.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 1.7.3
-+PYTHON_DJANGO_VERSION = 1.10.2
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://pypi.python.org/packages/source/D/Django
-+PYTHON_DJANGO_SITE = https://pypi.python.org/packages/57/9e/59444485f092b6ed4f1931e7d2e13b67fdab967c041d02f58a0d1dab8c23
- PYTHON_DJANGO_LICENSE = BSD-3c
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
+-PYTHON_BEAUTIFULSOUP4_VERSION = 4.4.1
++PYTHON_BEAUTIFULSOUP4_VERSION = 4.5.1
+ PYTHON_BEAUTIFULSOUP4_SOURCE = beautifulsoup4-$(PYTHON_BEAUTIFULSOUP4_VERSION).tar.gz
+-PYTHON_BEAUTIFULSOUP4_SITE = https://pypi.python.org/packages/source/b/beautifulsoup4
++PYTHON_BEAUTIFULSOUP4_SITE = https://pypi.python.org/packages/86/ea/8e9fbce5c8405b9614f1fd304f7109d9169a3516a493ce4f7f77c39435b7
+ PYTHON_BEAUTIFULSOUP4_SETUP_TYPE = setuptools
+ PYTHON_BEAUTIFULSOUP4_LICENSE = MIT
+ PYTHON_BEAUTIFULSOUP4_LICENSE_FILES = COPYING.txt
