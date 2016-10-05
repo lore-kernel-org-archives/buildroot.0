@@ -1,31 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:22:05 +0200
-Subject: [Buildroot] [PATCH] imx6ulpico/readme: Update the image layout
- file
-In-Reply-To: <1475586364-29328-1-git-send-email-fabio.estevam@nxp.com>
-References: <1475586364-29328-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <20161005232205.4e2c3478@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 5 Oct 2016 23:23:38 +0200
+Subject: [Buildroot] gdb texinfo dependency
+In-Reply-To: <20161005221619.6a958ba0@free-electrons.com>
+References: <CAAXf6LUHdDJyUPNcW-vQuZx6RhZxsPrGv69SqRPvRrAy46ropA@mail.gmail.com>
+ <20161005172756.77aea89c@free-electrons.com>
+ <CAAXf6LUJOwtpDmUg1zxDdBDKnOAnjkafxwuCAVRQP5aMm3zT9g@mail.gmail.com>
+ <20161005221619.6a958ba0@free-electrons.com>
+Message-ID: <b6d8768f-9192-6e0a-0299-36584151f4e7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas?
 
-On Tue, 4 Oct 2016 10:06:04 -0300, Fabio Estevam wrote:
-> As we are using the common image layout now, update the
-> readme.txt file accordingly.
+Le 05/10/2016 ? 22:16, Thomas Petazzoni a ?crit :
+> Hello,
 > 
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-> ---
->  board/technexion/imx6ulpico/readme.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Wed, 5 Oct 2016 22:11:31 +0200, Thomas De Schampheleire wrote:
+> 
+>> I did that now. While I'm still running some more tests, I already
+>> tested tarball versions 7.10.1 and 7.11.1, and both ARC and Microblaze
+>> git versions. I currently only tested host-gdb, but for all these
+>> cases I can get rid of the host-texinfo dependency with following
+>> extra changes:
+>>
+>> GDB_INSTALL_OPTS += MAKEINFO=true
+>> GDB_MAKE_OPTS += MAKEINFO=true
+>> HOST_GDB_INSTALL_OPTS += MAKEINFO=true
+>> HOST_GDB_MAKE_OPTS += MAKEINFO=true
+>>
+>> The INSTALL_OPTS were needed for the tarball versions, while the
+>> MAKE_OPTS (and perhaps also the INSTALL_OPTS, not sure) for the git
+>> versions.
 
-Applied to master, thanks.
+I don't remember if I tried with INSTALL_OPTS += MAKEINFO=true...
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Initially we had ac_cv_prog_MAKEINFO=missing in CONF_ENV
+
+> 
+> OK.
+> 
+>> I still need to test the (target-)gdb, but I guess it won't make a
+>> difference as the Makefiles are the same.
+> 
+> Worth testing to check that everything is alright.
+> 
+>> Is this too simplistic? Am I missing something?
+> 
+> If it works, then all good.
+
+I tested here, and it seems good even for microblaze host-gdb.
+
+Best regards,
+Romain
+
+> 
+> Note that for binutils, we have a different work-around: we touch
+> all .info files so that they have a date that is later than the source
+> files they are generated from. But that only works for tarball releases
+> (that contain .info files). For binutils fetched from Git, we depend on
+> host-texinfo.
+> 
+> Best regards,
+> 
+> Thomas
+> 
