@@ -1,48 +1,40 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Tue,  4 Oct 2016 20:14:28 -0300
-Subject: [Buildroot] [PATCH v2] elfutils: clarify licensing info
-Message-ID: <1475622868-27338-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  4 Oct 2016 21:41:02 -0300
+Subject: [Buildroot] [PATCH] ccache: bump to version 3.3.2
+Message-ID: <1475628062-28045-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-
-elfutils libraries are GPLv2+ or LGPLv3+, standalone programs are GPLv3+
-(see the NEWS file).
-Make the GPLv3+ license tag/file dependant on the programs being
-enabled, and make the GPLv2+/LGPLv3+ tag more descriptive.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/elfutils/elfutils.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/ccache/ccache.hash | 4 ++--
+ package/ccache/ccache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 6af1223..9485d3b 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -8,8 +8,8 @@ ELFUTILS_VERSION = 0.166
- ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
- ELFUTILS_SITE = https://fedorahosted.org/releases/e/l/elfutils/$(ELFUTILS_VERSION)
- ELFUTILS_INSTALL_STAGING = YES
--ELFUTILS_LICENSE = GPLv3, GPLv2, LGPLv3
--ELFUTILS_LICENSE_FILES = COPYING COPYING-GPLV2 COPYING-LGPLV3
-+ELFUTILS_LICENSE = GPLv2+ or LGPLv3+ (library)
-+ELFUTILS_LICENSE_FILES = COPYING-GPLV2 COPYING-LGPLV3
- ELFUTILS_DEPENDENCIES = zlib
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index 81e0550..fdd0ddf 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,2 +1,2 @@
+-# Verified key https://samba.org/ftp/ccache/ccache-3.3.1.tar.xz.asc - sha256 computed locally
+-sha256	c6d87a49cc6d7639636d289ed9a5f560bc2acf7ab698fe8ee14e9c9f15ba41c6	ccache-3.3.1.tar.xz
++# Verified key https://samba.org/ftp/ccache/ccache-3.3.2.tar.xz.asc - sha256 computed locally
++sha256	907685cb23d8f82074b8d1a9b4ebabb36914d151ac7b96a840c68c08d1a14530	ccache-3.3.2.tar.xz
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index a93aabd..63907c2 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # We patch configure.ac
-@@ -66,6 +66,8 @@ endif
- 
- ifeq ($(BR2_PACKAGE_ELFUTILS_PROGS),y)
- ELFUTILS_CONF_OPTS += --enable-progs
-+ELFUTILS_LICENSE := $(ELFUTILS_LICENSE), GPLv3+ (programs)
-+ELFUTILS_LICENSE_FILES += COPYING
- else
- ELFUTILS_CONF_OPTS += --disable-progs
- endif
+-CCACHE_VERSION = 3.3.1
++CCACHE_VERSION = 3.3.2
+ CCACHE_SITE = https://samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPLv3+, others
 -- 
 2.7.3
