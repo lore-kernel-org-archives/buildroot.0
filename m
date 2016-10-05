@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 6 Oct 2016 00:54:07 +0200
-Subject: [Buildroot] Xenomai 3.x
-In-Reply-To: <CAH-u=818PtBnsOqsUtSvUwACE9S-oxBsR0q+W3oQb7NRLwG2xg@mail.gmail.com>
-References: <CAH-u=80UriOruAmAcS0uiJfXzEXTB6LeM+OwV9=vB0D7+e3xgw@mail.gmail.com>
- <20161005095532.683204d0@free-electrons.com>
- <CAH-u=818PtBnsOqsUtSvUwACE9S-oxBsR0q+W3oQb7NRLwG2xg@mail.gmail.com>
-Message-ID: <64d74271-3535-198c-3ec5-b7675d031d34@mind.be>
+Date: Thu, 6 Oct 2016 01:04:59 +0200
+Subject: [Buildroot] Installing package libclthreads
+In-Reply-To: <000d01d21ef5$33361990$99a24cb0$@synexint.com>
+References: <00b301d21d70$9e934540$dbb9cfc0$@synexint.com>
+ <1006b3f0-301d-b8c3-99da-ef2c50c5ec00@mind.be>
+ <000d01d21ef5$33361990$99a24cb0$@synexint.com>
+Message-ID: <27f42b97-7e99-ff93-3231-ed9c3a56360d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,50 +14,186 @@ To: buildroot@busybox.net
 
 
 
-On 05-10-16 10:30, Jean-Michel Hautbois wrote:
-> Hi Thomas,
+On 05-10-16 12:42, Herschel Karunaratne wrote:
+> Hi Arnout,
 > 
-> 2016-10-05 9:55 GMT+02:00 Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com>:
->> Hello,
->>
->> On Wed, 5 Oct 2016 09:07:28 +0200, Jean-Michel Hautbois wrote:
->>
->>> I am trying to get a working Xenomai 3.x package with buildroot.
->>> My main objective is to have it running with Mercury (ie. PREEMPT_RT
->>> and not Adeos), and ideally with the compatibility layer for Xenomai
->>> 2.x existing applications.
->>>
->>> I had a look at this thread :
->>> http://lists.busybox.net/pipermail/buildroot/2016-January/150791.html
->>>
->>> I was wondering if anyone already worked on this stuff, in order to
->>> combine the efforts ?
->>> I can do it on my own, of course, but I think it would be better to
->>> have it integrated upstream :) !
->>
->> So far, we haven't received any patch to add Xenomai 3.x support in
->> Buildroot, and I've not heard (besides you asking questions on IRC)
->> anyone working on this currently.
->>
->> So patches are definitely welcome. It's not clear to me whether we want
->> to support both Xenomai 2.x and Xenomai 3.x, or if supporting Xenomai
->> 3.x is sufficient, as a replacement for Xeonmai 2.x.
+> Thanks for the reply.
 > 
-> Well, yes, it is not clear for me either.
-> I am not sure that it has to be compiled the same way.
-> Well, if I have anything I can show, I will ask for advices.
+> Sorry I will not use HTML. 
 
- AFAIK the Xenomai 3 API should be fully backward compatible with Xenomai 2, so
-I see no reason to support both. I'd just "bump" Xenomai.
+ Please also don't top-post, but reply in-line :-)
 
- A first patch would do a bump with just Cobalt, which is more or less what we
-have now. A second patch would add the option to use Mercury instead of Cobalt.
 
- This is also the feedback I gave in the thread that you refer to.
+> Could you please send me a .mk file for this? I'm quite new to buildroot.
+
+ I'm sorry, I don't have the time to do that for you at the moment. But if you
+want, you can hire my company to do it, and I'll make time :-)
+
+ I took a quick look, and there is quite a lot wrong with the .mk file you
+previously sent. The URL is wrong, and the package is not actually an autotools
+package (it doesn't have a configure script). I don't know what kind of hacks
+you have done to get the output you showed earlier, but that is certainly *not*
+the output you get from that .mk file.
+
 
  Regards,
  Arnout
+
+
+> 
+> Regards,
+> Herschel
+> 
+> 
+> -----Original Message-----
+> From: Arnout Vandecappelle [mailto:arnout at mind.be] 
+> Sent: Wednesday, October 5, 2016 2:27 AM
+> To: Herschel Karunaratne <hk@synexint.com>; buildroot at busybox.net
+> Subject: Re: [Buildroot] Installing package libclthreads
+> 
+>  Hi Herschel,
+> 
+>  Please avoid using HTML mail on this list.
+> 
+> 
+> On 03-10-16 14:21, Herschel Karunaratne wrote:
+>> Hi,
+>>
+>>  
+>>
+>> I am trying to install "jconvolver" and have to install  
+>> "libclthreads" needed by jconvolver. "My "libclthreads.mk" is as 
+>> follows,
+>>
+>>  
+>>
+>> #####################################################################
+>>
+>> #
+>>
+>> # libclthreads
+>>
+>> #
+>>
+>> ####################################################################
+>>
+>>  
+>>
+>> LIBCLTHREADS_VERSION = 2.4.0
+>>
+>> LIBCLTHREADS_SOURCE = clthreads-$(LIBCLTHREADS_VERSION).tar.bz2
+> 
+>  Small nit: since upstream calls it "clthreads", we prefer that the
+> buildroot package has the same name.
+> 
+>>
+>> LIBCLTHREADS_SITE = 
+>> http://kokkinizta.linuxaudio.org/linuxaudio/downloads
+>>
+>> LIBCLTHREADS_LICENSE = LGPLv2.1+
+>>
+>> LIBCLTHREADS_LICENSE_FILES = COPYING
+>>
+>> LIBCLTHREADS_INSTALL_STAGING = YES
+>>
+>> LIBCLTHREADS_INSTALL_TARGET = YES
+> 
+>  This one is not needed because the default.
+> 
+>>
+>>  
+>>
+>> $(eval $(autotools-package))
+>>
+>>  
+>>
+>>  
+>>
+>>  
+>>
+>> When I build it seems to be OK but nothing in the installed folders. 
+>> This is message I get when I build,
+>>
+> [snip]
+>>>>> libclthreads 2.4.0 Installing to target
+> 
+>  Weird, the install to staging is missing... I can't explain that...
+> 
+> 
+>>
+>>
+> PATH="/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/bin:
+> /root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/sbin:/root
+> /work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/usr/bin:/root/w
+> ork/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/usr/sbin:/usr/loc
+> al/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/arm-2014.05/bin:/r
+> oot/bin:/opt/arm-2014.05/bin" 
+>> /usr/bin/make -j5
+>> DESTDIR=/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/t
+>> arget
+>> install -C
+>> /root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/lib
+>> clthreads-2.4.0/
+>>
+>> make[1]: Entering directory
+>>
+> `/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/libclthr
+> eads-2.4.0'
+>>
+>> /usr/bin/install -d /usr/local/lib64
+> 
+>  It looks like this package ignores both the configure --prefix option and
+> the DESTDIR argument to 'make install'. This basically makes the install
+> commands unusable. Either patch the Makefile.in to correct this, or define
+> LIBCLTHREADS_INSTALL_STAGING_CMDS and LIBCLTHREADS_INSTALL_TARGET_CMDS.
+> 
+> 
+>  Regards,
+>  Arnout
+> 
+> 
+>>
+>> /usr/bin/install -m 644 clthreads.h /usr/local/include
+>>
+>> /usr/bin/install -m 755 libclthreads.so.2.4.0 /usr/local/lib64
+>>
+>> /sbin/ldconfig -n /usr/local/lib64
+>>
+>> ln -sf libclthreads.so.2.4.0 /usr/local/lib64/libclthreads.so
+>>
+>> make[1]: Leaving directory
+>>
+> `/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/libclthr
+> eads-2.4.0'
+>>
+>>  
+>>
+>>  
+>>
+>>  
+>>
+>> What could have gone wrong?
+>>
+>>  
+>>
+>> Thanks in advance.
+>>
+>>  
+>>
+>>  
+>>
+>> *Regards*
+>>
+>> *Herschel*
+>>
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
