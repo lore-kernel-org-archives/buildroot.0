@@ -1,49 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2016 23:00:30 +0200
-Subject: [Buildroot] [git commit] package/python-configobj: bump version to
-	5.0.6
-Message-ID: <20161005210757.EE76A80301@busybox.osuosl.org>
+Date: Wed, 5 Oct 2016 23:00:55 +0200
+Subject: [Buildroot] [git commit] package/python-pyroute2: bump version to
+	0.4.8
+Message-ID: <20161005210758.EEF19807CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2ab057d31419a305c443230d91fc9084ac8453b
+commit: https://git.buildroot.net/buildroot/commit/?id=df9203648790b779b0f7d433fbb7ec67de3d556c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-configobj/python-configobj.hash | 7 +++----
- package/python-configobj/python-configobj.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/python-pyroute2/python-pyroute2.hash | 6 +++---
+ package/python-pyroute2/python-pyroute2.mk   | 8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-configobj/python-configobj.hash b/package/python-configobj/python-configobj.hash
-index e4f5c6c..d43c453 100644
---- a/package/python-configobj/python-configobj.hash
-+++ b/package/python-configobj/python-configobj.hash
-@@ -1,4 +1,3 @@
--# From https://pypi.python.org/pypi/configobj/4.7.2
--md5	201dbaa732a9049c839f9bb6c27fc7b5	configobj-4.7.2.tar.gz
--# Calculated based on the hash above
--sha256	515ff923462592e8321df8b48c47e3428f8d406ee22b8de77bef969d1af11171	configobj-4.7.2.tar.gz
-+# md5 from https://pypi.python.org/pypi/configobj/json, sha256 locally computed
-+md5	e472a3a1c2a67bb0ec9b5d54c13a47d6  configobj-5.0.6.tar.gz
-+sha256	a2f5650770e1c87fb335af19a9b7eb73fc05ccf22144eb68db7d00cd2bcb0902  configobj-5.0.6.tar.gz
-diff --git a/package/python-configobj/python-configobj.mk b/package/python-configobj/python-configobj.mk
-index 5211b1d..d9591d5 100644
---- a/package/python-configobj/python-configobj.mk
-+++ b/package/python-configobj/python-configobj.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
+index df9ff02..ff680fc 100644
+--- a/package/python-pyroute2/python-pyroute2.hash
++++ b/package/python-pyroute2/python-pyroute2.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=459b4020073b767cc129e360dabbd2d7, sha256 locally computed
+-md5     459b4020073b767cc129e360dabbd2d7  pyroute2-0.3.20.tar.gz
+-sha256  ed28856753b941d4277b2f14b89c9edec35be4c97e1831f900fe4ce6fc12161b  pyroute2-0.3.20.tar.gz
++# md5 from https://pypi.python.org/pypi/pyroute2/json, sha256 locally computed
++md5	317303ba8a5e3d55b4f918fd1b7e186d  pyroute2-0.4.8.tar.gz
++sha256	a59907d2c5756f188b5f8aa48e3060e31c6f40e076f8143b99240fe0108a48d6  pyroute2-0.4.8.tar.gz
+diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
+index 2e9e0dd..5ea4f54 100644
+--- a/package/python-pyroute2/python-pyroute2.mk
++++ b/package/python-pyroute2/python-pyroute2.mk
+@@ -1,12 +1,12 @@
+-#############################################################
++################################################################################
  #
- ################################################################################
+ # python-pyroute2
+ #
+-#############################################################
++################################################################################
  
--PYTHON_CONFIGOBJ_VERSION = 4.7.2
-+PYTHON_CONFIGOBJ_VERSION = 5.0.6
- PYTHON_CONFIGOBJ_SOURCE = configobj-$(PYTHON_CONFIGOBJ_VERSION).tar.gz
--PYTHON_CONFIGOBJ_SITE = http://pypi.python.org/packages/source/c/configobj
-+PYTHON_CONFIGOBJ_SITE = https://pypi.python.org/packages/64/61/079eb60459c44929e684fa7d9e2fdca403f67d64dd9dbac27296be2e0fab
- PYTHON_CONFIGOBJ_LICENSE = BSD-3c
- # License only mentioned in the source
- PYTHON_CONFIGOBJ_SETUP_TYPE = distutils
+-PYTHON_PYROUTE2_VERSION = 0.3.20
++PYTHON_PYROUTE2_VERSION = 0.4.8
+ PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
+-PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/source/p/pyroute2
++PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/fb/c1/2cbd9d3f91c663be7168ee2d8d6e919006ffeef57cac76bdd9e6cba7f468
+ PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPLv2+
+ PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache.v2 LICENSE.GPL.v2 README.license.md
+ PYTHON_PYROUTE2_SETUP_TYPE = distutils
