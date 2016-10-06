@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  6 Oct 2016 21:29:39 +0200
-Subject: [Buildroot] [PATCH 12/21] package/python-simplejson: bump version
-	to 3.8.2
+Date: Thu,  6 Oct 2016 21:29:47 +0200
+Subject: [Buildroot] [PATCH 20/21] package/python-xlsxwriter: bump version
+	to 0.9.3
 In-Reply-To: <20161006192948.27956-1-bernd.kuhls@t-online.de>
 References: <20161006192948.27956-1-bernd.kuhls@t-online.de>
-Message-ID: <20161006192948.27956-12-bernd.kuhls@t-online.de>
+Message-ID: <20161006192948.27956-20-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-simplejson/python-simplejson.hash | 5 +++--
- package/python-simplejson/python-simplejson.mk   | 8 ++++----
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-xlsxwriter/python-xlsxwriter.hash | 7 +++----
+ package/python-xlsxwriter/python-xlsxwriter.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
-index c0f33b2..19421b8 100644
---- a/package/python-simplejson/python-simplejson.hash
-+++ b/package/python-simplejson/python-simplejson.hash
-@@ -1,2 +1,3 @@
--# locally computed
--sha256  a80dc90320e1c1b8eaceaaa755ae2aed382d64a59321ae9f6ddbe0321c02878a  simplejson-3.5.3.tar.gz
-+# md5 from https://pypi.python.org/pypi/simplejson/json, sha256 locally computed
-+md5	53b1371bbf883b129a12d594a97e9a18  simplejson-3.8.2.tar.gz
-+sha256	d58439c548433adcda98e695be53e526ba940a4b9c44fb9a05d92cd495cdd47f  simplejson-3.8.2.tar.gz
-diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
-index 61283b7..703bca2 100644
---- a/package/python-simplejson/python-simplejson.mk
-+++ b/package/python-simplejson/python-simplejson.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/python-xlsxwriter/python-xlsxwriter.hash b/package/python-xlsxwriter/python-xlsxwriter.hash
+index 69bfc6f..5f1a942 100644
+--- a/package/python-xlsxwriter/python-xlsxwriter.hash
++++ b/package/python-xlsxwriter/python-xlsxwriter.hash
+@@ -1,4 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/XlsxWriter/json
+-md5	545c938f279abcfd7f11e705012302fe  XlsxWriter-0.8.9.tar.gz
+-# sha256 locally computed
+-sha256	cb90c5283b88af72549adf82f203d15623a0f4faeae29b6a20733e187dfde882  XlsxWriter-0.8.9.tar.gz
++# md5 from https://pypi.python.org/pypi/xlsxwriter/json, sha256 locally computed
++md5	9035b1e37a579c554e703404ffcebdd4  XlsxWriter-0.9.3.tar.gz
++sha256	19d2b5c0dd4d5fc00e8d7f164795f50e885b20d1cc27a3d04d5c7fec3c4d57f6  XlsxWriter-0.9.3.tar.gz
+diff --git a/package/python-xlsxwriter/python-xlsxwriter.mk b/package/python-xlsxwriter/python-xlsxwriter.mk
+index af911cc..a44a99b 100644
+--- a/package/python-xlsxwriter/python-xlsxwriter.mk
++++ b/package/python-xlsxwriter/python-xlsxwriter.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SIMPLEJSON_VERSION = 3.5.3
-+PYTHON_SIMPLEJSON_VERSION = 3.8.2
- PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
--PYTHON_SIMPLEJSON_SITE = http://pypi.python.org/packages/source/s/simplejson
--PYTHON_SIMPLEJSON_LICENSE = MIT
-+PYTHON_SIMPLEJSON_SITE = https://pypi.python.org/packages/f0/07/26b519e6ebb03c2a74989f7571e6ae6b82e9d7d81b8de6fcdbfc643c7b58
-+PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
- PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
--PYTHON_SIMPLEJSON_SETUP_TYPE = distutils
-+PYTHON_SIMPLEJSON_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
+-PYTHON_XLSXWRITER_VERSION = 0.8.9
++PYTHON_XLSXWRITER_VERSION = 0.9.3
+ PYTHON_XLSXWRITER_SOURCE = XlsxWriter-$(PYTHON_XLSXWRITER_VERSION).tar.gz
+-PYTHON_XLSXWRITER_SITE = https://pypi.python.org/packages/2a/de/4ee20ac103417662865e0e3acde859b002c13f52af0d50a2664d3eca5897
++PYTHON_XLSXWRITER_SITE = https://pypi.python.org/packages/75/46/f1552b4a4d6faa6ec39dc2ddcb56e6b9a2865f07b9e126b2144d9090f056
+ PYTHON_XLSXWRITER_SETUP_TYPE = setuptools
+ PYTHON_XLSXWRITER_LICENSE = BSD-2c
+ PYTHON_XLSXWRITER_LICENSE_FILES = LICENSE.txt
 -- 
 2.9.3
