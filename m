@@ -1,53 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  6 Oct 2016 21:29:41 +0200
-Subject: [Buildroot] [PATCH 14/21] package/python-thrift: bump version to
-	0.9.3
+Date: Thu,  6 Oct 2016 21:29:42 +0200
+Subject: [Buildroot] [PATCH 15/21] package/python-tornado: bump version to
+	4.4.2
 In-Reply-To: <20161006192948.27956-1-bernd.kuhls@t-online.de>
 References: <20161006192948.27956-1-bernd.kuhls@t-online.de>
-Message-ID: <20161006192948.27956-14-bernd.kuhls@t-online.de>
+Message-ID: <20161006192948.27956-15-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-PYTHON_THRIFT_SUBDIR is not needed anymore.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-thrift/python-thrift.hash | 5 +++--
- package/python-thrift/python-thrift.mk   | 7 +++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-tornado/python-tornado.hash | 4 ++--
+ package/python-tornado/python-tornado.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-thrift/python-thrift.hash b/package/python-thrift/python-thrift.hash
-index 811aa98..72269eb 100644
---- a/package/python-thrift/python-thrift.hash
-+++ b/package/python-thrift/python-thrift.hash
-@@ -1,2 +1,3 @@
--# From https://www.apache.org/dist/thrift/0.9.2/thrift-0.9.2.tar.gz.md5
--md5	89f63cc4d0100912f4a1f8a9dee63678	thrift-0.9.2.tar.gz
-+# md5 from https://pypi.python.org/pypi/thrift/json, sha256 locally computed
-+md5	b519551d7a086bb0b4f222a8f566b7e8  thrift-0.9.3.tar.gz
-+sha256	dfbc3d3bd19d396718dab05abaf46d93ae8005e2df798ef02e32793cd963877e  thrift-0.9.3.tar.gz
-diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
-index 99641b8..d0e3a14 100644
---- a/package/python-thrift/python-thrift.mk
-+++ b/package/python-thrift/python-thrift.mk
-@@ -4,12 +4,11 @@
+diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
+index 27385a5..ee4080f 100644
+--- a/package/python-tornado/python-tornado.hash
++++ b/package/python-tornado/python-tornado.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/tornado/json, sha256 locally computed
+-md5     fff8a7d7f580b04bacc2ffe7ddf41133 tornado-4.4.1.tar.gz
+-sha256  371d0cf3d56c47accc66116a77ad558d76eebaa8458a6b677af71ca606522146  tornado-4.4.1.tar.gz
++md5	b4816ea209118667ffc52ce9ff06ac85  tornado-4.4.2.tar.gz
++sha256	2898f992f898cd41eeb8d53b6df75495f2f423b6672890aadaf196ea1448edcc  tornado-4.4.2.tar.gz
+diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
+index 98d42b5..e512e60 100644
+--- a/package/python-tornado/python-tornado.mk
++++ b/package/python-tornado/python-tornado.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_THRIFT_VERSION = 0.9.2
-+PYTHON_THRIFT_VERSION = 0.9.3
- PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
--PYTHON_THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(PYTHON_THRIFT_VERSION)
-+PYTHON_THRIFT_SITE = https://pypi.python.org/packages/ae/58/35e3f0cd290039ff862c2c9d8ae8a76896665d70343d833bdc2f748b8e55
- PYTHON_THRIFT_LICENSE = Apache-2.0
--PYTHON_THRIFT_LICENSE_FILES = LICENSE
-+PYTHON_THRIFT_LICENSE_FILES = setup.py
- PYTHON_THRIFT_SETUP_TYPE = setuptools
--PYTHON_THRIFT_SUBDIR = lib/py
+-PYTHON_TORNADO_VERSION = 4.4.1
++PYTHON_TORNADO_VERSION = 4.4.2
+ PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
+-PYTHON_TORNADO_SITE = https://pypi.python.org/packages/96/5d/ff472313e8f337d5acda5d56e6ea79a43583cc8771b34c85a1f458e197c3
++PYTHON_TORNADO_SITE = https://pypi.python.org/packages/1e/7c/ea047f7bbd1ff22a7f69fe55e7561040e3e54d6f31da6267ef9748321f98
+ PYTHON_TORNADO_LICENSE = Apache-2.0
+ PYTHON_TORNADO_SETUP_TYPE = setuptools
  
- $(eval $(python-package))
 -- 
 2.9.3
