@@ -1,35 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Oct 2016 17:31:12 +0200
-Subject: [Buildroot] odroidc2 broken in latest git
-In-Reply-To: <trinity-97d923e3-1509-4df6-8cea-c6856bedc7ff-1475734297864@3capp-mailcom-bs04>
- (daggs@gmx.com's message of "Thu, 6 Oct 2016 08:11:37 +0200")
-References: <trinity-97d923e3-1509-4df6-8cea-c6856bedc7ff-1475734297864@3capp-mailcom-bs04>
-Message-ID: <87oa2xmr3z.fsf@dell.be.48ers.dk>
+Date: Thu, 06 Oct 2016 17:36:31 +0200
+Subject: [Buildroot] [PATCH v1] libdrm: add etnaviv (i.MX6/Vivante
+	GCxxx) option
+In-Reply-To: <CAOMZO5Ajo_8L0q-481QDNwJ2rgDnSEyq-yC4ZT8-rCWR4sQBsg@mail.gmail.com>
+ (Fabio Estevam's message of "Tue, 4 Oct 2016 17:02:31 -0300")
+References: <1475609361-9289-1-git-send-email-ps.report@gmx.net>
+ <CAOMZO5Ajo_8L0q-481QDNwJ2rgDnSEyq-yC4ZT8-rCWR4sQBsg@mail.gmail.com>
+Message-ID: <87h98pmqv4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "daggs" == daggs  <daggs@gmx.com> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > Greetings all,
- > following a complaint posted in the odroid forums I tried to boot
- > latest git with mininal config on my odroidc2 board and it doesn't
- > boot.
+ > Hi Peter,
+ > On Tue, Oct 4, 2016 at 4:29 PM, Peter Seiderer <ps.report@gmx.net> wrote:
+ >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Yes, it was also reported here and I CC'ed you on the mails.
+ > Glad to see your patch! I was about to write the same.
 
- > I've booted the last commit I know to work (61b6abb2a2198d0a659d305ac3dd813a1f900aa1) and it indeed boots.
- > I've checked the odroidc2 file's logs and there were no changes done after the commit mentioned above.
+ > Should we add a mesa-etnaviv package (from
+ > https://github.com/etnaviv/mesa/commits/12.0_etnaviv) in Buildroot
+ > while etnaviv is not yet supported in mainline mesa?
 
- > has there been any structural change that might cause this behavior?
+ > Any opinions?
 
-Without knowing it, I would guess it is related to the toolchain
-version. We have changed the default binutils and gcc version since
-August.
-
-Can you verify with the gcc/binutils versions used in 61b6abb2a219?
+If there is interest and the mesa support isn't expected to get merged /
+released soon - Then yeah, why not?
 
 -- 
 Bye, Peter Korsgaard
