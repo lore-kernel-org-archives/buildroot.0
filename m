@@ -1,245 +1,180 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 5 Oct 2016 18:18:12 -0500
-Subject: [Buildroot] [PATCH v2] zynq: document how to use custom
-	ps7_init files
-In-Reply-To: <CAK7LNAQwwsa-LO8=csD6gs7Yzi-XR7cjXxRN_vV1btiSnH1_SQ@mail.gmail.com>
-References: <1475031612-43682-1-git-send-email-matthew.weber@rockwellcollins.com>
- <c12b938d-96da-ad8e-4dbd-bdf00bd281ed@mind.be>
- <CANQCQpZVLQ=QU=Gh5bMofFd-SVy2vWgOVVmpsK3p6X7g42fuLQ@mail.gmail.com>
- <CAK7LNAQwwsa-LO8=csD6gs7Yzi-XR7cjXxRN_vV1btiSnH1_SQ@mail.gmail.com>
-Message-ID: <CANQCQpbq9c_WVfX_GDXHrO2z_R=LBjtHGBiU-Kgc=0O_r14RRA@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed,  5 Oct 2016 21:11:17 -0300
+Subject: [Buildroot] [PATCH v2] configs/mx6udoo: Add initial support
+Message-ID: <1475712677-29772-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Masahiro,
+Add the initial support for mx6q/dl udoo boards.
 
-On Mon, Oct 3, 2016 at 9:41 PM, Masahiro Yamada
-<yamada.masahiro@socionext.com> wrote:
-> Hi Matt,
->
-> 2016-10-03 10:47 GMT+09:00 Matthew Weber <matthew.weber@rockwellcollins.com>:
->> Arnout,
->>
->> On Thu, Sep 29, 2016 at 3:37 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>>
->>>  Hi Matt,
->>>
->>>  I have a few minor and one major remark below.
->>>
->>> On 28-09-16 05:00, Matt Weber wrote:
->>> > From: Masahiro Yamada <yamada.masahiro@socionext.com>
->>> >
->>> > Since U-Boot supported SPL for Zynq boards at v2014.04 release, it
->>> > became much easier to build a system.  At that time, however, users
->>> > still needed to manually copy ps7_init.c/h to the U-Boot source tree
->>> > to generate a working SPL image because ps7_init.c/h output from
->>> > Xilinx tools are not compatible with GPL.
->>> >
->>> > Later, the license problem was solved when Xilinx tools became able
->>> > to output the GPL-compatible variants (ps7_init_gpl.c/h) as well.
->>> > U-Boot v2015.07 or later includes ps7_init_gpl.c/h for major Zynq
->>> > boards so that users can build a boot image straight away.
->>> >
->>> > Now Buildroot supports 3 boards (Zedboard, MicroZed, ZC706) without
->>> > any manual intervention.  This is a good thing itself, but commit
->>> > b9cd72cdbfe3 ("zynq_zc706: bump U-Boot to xilinx-v2016.2") entirely
->>> > dropped the information about custom ps7_init files.
->>> >
->>> > This commit provides up-to-date guidance for how to customize the
->>> > ps7_init files.
->>> >
->>> > Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
->>> > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
->>> >
->>> > ---
->>> > v1 -> v2
->>> >  - Updated readme wording discussed in
->>> >    https://patchwork.ozlabs.org/patch/654309/
->>> >
->>> > ---
->>> >  board/zynq/readme.txt | 46 +++++++++++++++++++++++++++++++++++++++-------
->>> >  1 file changed, 39 insertions(+), 7 deletions(-)
->>> >
->>> > diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
->>> > index 51e28b6..364ec39 100644
->>> > --- a/board/zynq/readme.txt
->>> > +++ b/board/zynq/readme.txt
->>> > @@ -6,13 +6,6 @@ Currently, three boards are natively supported by Buildroot:
->>> >   - Avnet ZedBoard (zynq_zed_defconfig)
->>> >   - Avnet MicroZed (zynq_microzed_defconfig)
->>> >
->>> > -The following build procedure focuses on them, but you can adjust it to your
->>> > -board even if it is not listed above.  Major Zynq-based boards are supported by
->>> > -U-Boot, and their Device Trees are merged in Linux Kernel.  If your board is the
->>> > -case, booting the kernel is a piece of cake.  All you need to do is to change:
->>> > - - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
->>> > - - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_KCONFIG)
->>> > -
->>> >  Steps to create a working system for a Zynq board:
->>> >
->>> >  1) Configuration (do one of the following)
->>> > @@ -50,3 +43,42 @@ References:
->>> >
->>> >   - Zedboard/Microzed information including schematics, reference designs, and
->>> >     manuals are available from http://www.zedboard.org .
->>> > +
->>> > +Support for other boards:
->>> > +
->>> > +If you want to build a system for other boards (for ex. Digilent Zybo board).
->>> > +Most major Zynq-based boards have U-Boot and Kernel support.  If your
->>> > +board happens to be supported, booting the kernel and using U-Boot
->>> > +just requires the following Buildroot updates:
->>> > + - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
->>> > + - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_DEFCONFIG)
->>> > +
->>> > +Custom ps7_init_gpl.c/h support:
->>> > +
->>> > +To generate a working boot.bin image, ps7_init_gpl.c/h are required in the
->>> > +U-Boot source tree.  Those files are output from the Xilinx tools, but for
->>>
->>>  I would put the notice from the end immediately here. I.e.
->>>
->>> To generate a working boot.bin image, ps7_init_gpl.c/h are required in the
->>> U-Boot source tree. Without those files, boot.bin will be built successfully
->>> but it will not be functional at all. Those files are output from ...
->>>
->>
->> Agree.
->>
->>>
->>> > +convenience, U-Boot includes the default ps7_init_gpl.c/h of popular boards.
->>> > +These files may need to be updated for any programmable logic customizations
->>>
->>>  These -> those (otherwise it looks as if you are talking about different files
->>> than before).
->>
->>
->> OK.
->>>
->>>
->>> > +which impact ps7_init (clock/pin setup & mapping/AXI bridge setup/etc).
->>> > +See board/xilinx/zynq/ directory of U-Boot for natively supported ps7_init
->>> > +files.  If the ps7_init files for your board are not found in U-Boot, you need
->>> > +to add them by yourself.  (You can still override the existing ones if you want
->>> > +to customize them for your purpose.)
->>>
->>>  That last sentence doesn't make a lot of sense to me, and I suspect it's redundant.
->>>
->>
->> Agree to remove, as that statement isn't needed in the Customize
->> section as that's assumed to be what we're trying to do.
->>
->>>
->>> > +
->>> > +1) Start with a defconfig supported by Buildroot (for ex. Zedboard)
->>>
->>>  for ex. -> 'e.g.' or 'for example'
->>
->>
->> Agree.
->>
->>>
->>>
->>> > +    make zynq_zed_defconfig
->>> > +
->>> > +2) make uboot-menuconfig
->>> > +    Visit the following menu and enable CONFIG_ZYNQ_CUSTOM_INIT.
->>> > +
->>> > +    ARM architecture  --->
->>> > +       [*] Use custom ps7_init provided by Xilinx tool
->>> > +
->>> > +3) Copy ps7_init_gpl.c/h generated by the Xilinx tools into
->>> > +   output/build/uboot-xilinx-<pkg version>/board/xilinx/zynq/custom_hw_platform/
->>>
->>>  The user should be made aware that the custom files will disappear again if you
->>> clean. Something like:
->>>
->>> Note that the files need to be re-copied after cleaning the output directory,
->>> and there is no way to save it as part of the buildroot configuration except as
->>> a uboot patch.
->>>
->> Good catch, I'll add that.
->>
->>>
->>>  Which makes me think: perhaps a uboot option should be added (conditional on
->>> BR2_TARGET_UBOOT_ZYNQ_IMAGE) that allows the user to specify a custom file?
->>>
->>
->> Agree, Masahiro when you looked at the xilinx vs upstream u-boot, did
->> both approach custom hw files in a similar manner?
->
->
-> Sorry for my late reply.
->
-> I checked the code and the answer is no.
->
->
-> I' just noticed this part was changed a few months ago.
->
->
-> Please see the following commit of U-Boot mainline:
->
-> commit ad5b5801264e573bfbf17a20b04c546985c5bfc1
-> Author: Michal Simek <michal.simek@xilinx.com>
-> Date:   Fri May 20 14:59:33 2016 +0200
->
->     ARM: zynq: Simplify zynq configuration
->
->     Extending Kconfig for adding new platform is a lot of work
->     for nothing. Setting SYS_CONFIG_NAME directly in Kconfig and
->     remove all dependencies on TARGET_ZYNQ_* options including SPL.
->     As a side-effect it also remove custom init folder for ps7_init_gpl.*
->     files. Folder is chosen based on device-tree file.
->
->     Signed-off-by: Michal Simek <michal.simek@xilinx.com>
->
->
->
->
-> So, CONFIG_ZYNQ_CUSTOM_INIT no longer exists in the U-Boot upstream.
->
-> It will also be dropped from the next Xilinx tree release.
+For information about these boards, please visit:
+http://www.udoo.org/
 
-:-)  I'm working through a solution to add a package that
-automatically manages xilinx handoff files.  For the uboot file copy,
-it gets rather messy as you have to parse the uboot defconfig to find
-the dts name which is assumed to line up with the board folder name.
-All of this to get the location to copy the files to.
+In linux.fragment we disable USB support for now because kernel 4.8
+hangs on udoo board.
 
->
->
-> This README file must be re-visited when we bump U-Boot next time.
->
+This is been addressed by Peter Chen's kernel patch series that provides
+a standard way to reset a USB hub.
 
-Will do.
+When such series hit mainline, then we can bump the kernel and remove
+linux.fragment.
 
->
->
->> +   output/build/uboot-xilinx-<pkg version>/board/xilinx/zynq/custom_hw_platform/
->
-> As a result, this is valid for  <pkg version> = xilinx-v2016.2  (or older),
-> but will be invalid for xilinx-v2016.3 .
->
->
-> Otherwise, v3 looks good to me.  Thanks!
->
->
->
-> --
-> Best Regards
-> Masahiro Yamada
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+Changes since v1:
+- Add BR2_TARGET_UBOOT_FORMAT_IMG=y and remove the unneeded
+BR2_PACKAGE_HOST_UBOOT_TOOLS option
 
+ board/udoo/genimage.cfg   | 48 +++++++++++++++++++++++++++++++++++++++++++++++
+ board/udoo/linux.fragment |  1 +
+ board/udoo/post-image.sh  | 14 ++++++++++++++
+ board/udoo/readme.txt     | 17 +++++++++++++++++
+ configs/mx6udoo_defconfig | 26 +++++++++++++++++++++++++
+ 5 files changed, 106 insertions(+)
+ create mode 100644 board/udoo/genimage.cfg
+ create mode 100644 board/udoo/linux.fragment
+ create mode 100755 board/udoo/post-image.sh
+ create mode 100644 board/udoo/readme.txt
+ create mode 100644 configs/mx6udoo_defconfig
 
-
+diff --git a/board/udoo/genimage.cfg b/board/udoo/genimage.cfg
+new file mode 100644
+index 0000000..4361d54
+--- /dev/null
++++ b/board/udoo/genimage.cfg
+@@ -0,0 +1,48 @@
++# Minimal microSD card image for Udoo MX6Q/DL boards
++#
++# We mimic the .sdcard Freescale's image format for i.MX6:
++# * the microSD card must have 1 kB free space at the beginning,
++# * U-Boot is dumped as is,
++# * a FAT partition at offset 16 MB is containing zImage and dtbs,
++# * a single root filesystem partition is required (Ext4 in this case).
++#
++
++image boot.vfat {
++	vfat {
++		files = {
++			"imx6q-udoo.dtb",
++			"imx6dl-udoo.dtb",
++			"zImage"
++		}
++	}
++	size = 16M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition SPL {
++		in-partition-table = "no"
++		image = "SPL"
++		offset = 1K
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot.img"
++		offset = 69K
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++		offset = 16M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/udoo/linux.fragment b/board/udoo/linux.fragment
+new file mode 100644
+index 0000000..2acad15
+--- /dev/null
++++ b/board/udoo/linux.fragment
+@@ -0,0 +1 @@
++CONFIG_USB=n
+diff --git a/board/udoo/post-image.sh b/board/udoo/post-image.sh
+new file mode 100755
+index 0000000..b4ac460
+--- /dev/null
++++ b/board/udoo/post-image.sh
+@@ -0,0 +1,14 @@
++#!/usr/bin/env bash
++
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++  --rootpath "${TARGET_DIR}" \
++  --tmppath "${GENIMAGE_TMP}" \
++  --inputpath "${BINARIES_DIR}" \
++  --outputpath "${BINARIES_DIR}" \
++  --config "${GENIMAGE_CFG}"
+diff --git a/board/udoo/readme.txt b/board/udoo/readme.txt
+new file mode 100644
+index 0000000..acd05f6
+--- /dev/null
++++ b/board/udoo/readme.txt
+@@ -0,0 +1,17 @@
++Udoo MX6Q/DL board
++
++For information about MX6 Udoo boards:
++http://www.udoo.org/
++
++To build a minimal support for these boards:
++
++    $ make mx6udoo_defconfig
++    $ make
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be dumped on a micro SD card:
++
++dd if=output/images/sdcard.img of=/dev/<your-microsd-device>
++
++For details about the medium image layout, see the definition in
++board/udoo/genimage.cfg.
+diff --git a/configs/mx6udoo_defconfig b/configs/mx6udoo_defconfig
+new file mode 100644
+index 0000000..1ca2be4
+--- /dev/null
++++ b/configs/mx6udoo_defconfig
+@@ -0,0 +1,26 @@
++BR2_arm=y
++BR2_cortex_a9=y
++# Linux headers same as kernel, a 4.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/udoo/post-image.sh"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="udoo"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="SPL"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/udoo/linux.fragment"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-udoo imx6dl-udoo"
++# required tools to create the SD card image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+2.7.4
