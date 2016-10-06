@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  6 Oct 2016 21:29:35 +0200
-Subject: [Buildroot] [PATCH 08/21] package/python-pyudev: bump version to
-	0.21.0
+Date: Thu,  6 Oct 2016 21:29:33 +0200
+Subject: [Buildroot] [PATCH 06/21] package/python-pytablewriter: bump
+	version to 0.10.2
 In-Reply-To: <20161006192948.27956-1-bernd.kuhls@t-online.de>
 References: <20161006192948.27956-1-bernd.kuhls@t-online.de>
-Message-ID: <20161006192948.27956-8-bernd.kuhls@t-online.de>
+Message-ID: <20161006192948.27956-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-pyudev/python-pyudev.hash | 6 +++---
- package/python-pyudev/python-pyudev.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pytablewriter/python-pytablewriter.hash | 7 +++----
+ package/python-pytablewriter/python-pytablewriter.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pyudev/python-pyudev.hash b/package/python-pyudev/python-pyudev.hash
-index adda9a4..dca0650 100644
---- a/package/python-pyudev/python-pyudev.hash
-+++ b/package/python-pyudev/python-pyudev.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=07a60f5f7a6028e83725f759a1b9490a, sha256 locally computed
--md5     07a60f5f7a6028e83725f759a1b9490a  pyudev-0.18.tar.gz
--sha256  83b315f74e29c3a4aa6ea38b6cf73b0bb7e37066d7a5d70972ac418a80aed62a  pyudev-0.18.tar.gz
-+# md5 from https://pypi.python.org/pypi/pyudev/json, sha256 locally computed
-+md5	cf4d9db7d772622144ca1be6b5d9353b  pyudev-0.21.0.tar.gz
-+sha256	094b7a100150114748aaa3b70663485dd360457a709bfaaafe5a977371033f2b  pyudev-0.21.0.tar.gz
-diff --git a/package/python-pyudev/python-pyudev.mk b/package/python-pyudev/python-pyudev.mk
-index 70c4faf..a3e07b1 100644
---- a/package/python-pyudev/python-pyudev.mk
-+++ b/package/python-pyudev/python-pyudev.mk
+diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
+index 9c27aed..09fb8ff 100644
+--- a/package/python-pytablewriter/python-pytablewriter.hash
++++ b/package/python-pytablewriter/python-pytablewriter.hash
+@@ -1,4 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/pytablewriter/json
+-md5	7a28e4ddb8b59199e161b7ee9e97e3a3  pytablewriter-0.5.0.tar.gz
+-# sha256 calculated by scanpypi
+-sha256	e939adec820e68ed1b7c2eddfba73ce82a88f315aa90c81e04af0229020bfb7c  pytablewriter-0.5.0.tar.gz
++# md5 from https://pypi.python.org/pypi/pytablewriter/json, sha256 locally computed
++md5	1f63f9652c61c0d68f17dac054d2c923  pytablewriter-0.10.2.tar.gz
++sha256	9a45c632ffd94878153cb989ada412b7291100005ce40baaf33a3d4bd51708cf  pytablewriter-0.10.2.tar.gz
+diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
+index 1de7a69..bf89d0a 100644
+--- a/package/python-pytablewriter/python-pytablewriter.mk
++++ b/package/python-pytablewriter/python-pytablewriter.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYUDEV_VERSION = 0.18
-+PYTHON_PYUDEV_VERSION = 0.21.0
- PYTHON_PYUDEV_SOURCE = pyudev-$(PYTHON_PYUDEV_VERSION).tar.gz
--PYTHON_PYUDEV_SITE = https://pypi.python.org/packages/source/p/pyudev
-+PYTHON_PYUDEV_SITE = https://pypi.python.org/packages/bc/a2/31a07829acea8e70a28c247f43fa5d981229ae0f9edfeddedf52de00709b
- PYTHON_PYUDEV_LICENSE = LGPLv2.1+
- PYTHON_PYUDEV_LICENSE_FILES = COPYING
- PYTHON_PYUDEV_SETUP_TYPE = setuptools
+-PYTHON_PYTABLEWRITER_VERSION = 0.5.0
++PYTHON_PYTABLEWRITER_VERSION = 0.10.2
+ PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
+-PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/c8/01/e4b7f1d83434d268fe6a0aec2d8ad00515de042285e58533090cfd72904d
++PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/eb/4f/ca66fd21db4d9ef81f8bb2012dece42a1f5239295df149a04d955e492fc5
+ PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
+ PYTHON_PYTABLEWRITER_LICENSE = MIT
+ PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
 -- 
 2.9.3
