@@ -1,10 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  6 Oct 2016 21:29:32 +0200
-Subject: [Buildroot] [PATCH 05/21] package/python-pysnmp: bump version to
-	4.3.2
-In-Reply-To: <20161006192948.27956-1-bernd.kuhls@t-online.de>
-References: <20161006192948.27956-1-bernd.kuhls@t-online.de>
-Message-ID: <20161006192948.27956-5-bernd.kuhls@t-online.de>
+Date: Thu,  6 Oct 2016 21:29:28 +0200
+Subject: [Buildroot] [PATCH 01/21] package/python-pexpect: bump version to
+	4.2.1
+Message-ID: <20161006192948.27956-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +11,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-pysnmp/python-pysnmp.hash | 5 +++--
- package/python-pysnmp/python-pysnmp.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-pexpect/python-pexpect.hash | 6 +++---
+ package/python-pexpect/python-pexpect.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pysnmp/python-pysnmp.hash b/package/python-pysnmp/python-pysnmp.hash
-index c7957a0..b0f0f49 100644
---- a/package/python-pysnmp/python-pysnmp.hash
-+++ b/package/python-pysnmp/python-pysnmp.hash
-@@ -1,2 +1,3 @@
--# locally computed
--sha256  c5d78273f14afc6401b7456f086e7b56baaaa51fa0c39830d159bed611c9d89d  pysnmp-4.2.4.tar.gz
-+# md5 from https://pypi.python.org/pypi/pysnmp/json, sha256 locally computed
-+md5	9a4d23c4c1edea1c77faed72c469d8e8  pysnmp-4.3.2.tar.gz
-+sha256	7c2bd81df17aa7dca0057a68e7a32284a72231309a0237d66d5b803b5c118977  pysnmp-4.3.2.tar.gz
-diff --git a/package/python-pysnmp/python-pysnmp.mk b/package/python-pysnmp/python-pysnmp.mk
-index 3d0f3b5..dff8bdd 100644
---- a/package/python-pysnmp/python-pysnmp.mk
-+++ b/package/python-pysnmp/python-pysnmp.mk
-@@ -4,13 +4,13 @@
+diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
+index 29cf892..e383607 100644
+--- a/package/python-pexpect/python-pexpect.hash
++++ b/package/python-pexpect/python-pexpect.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org, sha256 locally computed
+-md5 056df81e6ca7081f1015b4b147b977b7 pexpect-4.0.1.tar.gz
+-sha256 232795ebcaaf2e120396dbbaa3a129eda51757eeaae1911558f4ef8ee414fc6c pexpect-4.0.1.tar.gz
++# md5 from https://pypi.python.org/pypi/pexpect/json, sha256 locally computed
++md5	3694410001a99dff83f0b500a1ca1c95  pexpect-4.2.1.tar.gz
++sha256	3d132465a75b57aa818341c6521392a06cc660feb3988d7f1074f39bd23c9a92  pexpect-4.2.1.tar.gz
+diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
+index 40a1741..f1f9903 100644
+--- a/package/python-pexpect/python-pexpect.mk
++++ b/package/python-pexpect/python-pexpect.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSNMP_VERSION = 4.2.4
-+PYTHON_PYSNMP_VERSION = 4.3.2
- PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
--PYTHON_PYSNMP_SITE = https://pypi.python.org/packages/source/p/pysnmp
-+PYTHON_PYSNMP_SITE = https://pypi.python.org/packages/9e/77/795fcc9d9a01adcb6175a3bf6532132addb8904922afd7877a9930d89f2f
- PYTHON_PYSNMP_SETUP_TYPE = setuptools
- 
- PYTHON_PYSNMP_LICENSE = BSD-3c
--PYTHON_PYSNMP_LICENSE_FILES = LICENSE
-+PYTHON_PYSNMP_LICENSE_FILES = LICENSE.txt
- 
- PYTHON_PYSNMP_DEPENDENCIES = python-pyasn python-pycrypto
- 
+-PYTHON_PEXPECT_VERSION = 4.0.1
+-PYTHON_PEXPECT_SITE = https://pypi.python.org/packages/source/p/pexpect
++PYTHON_PEXPECT_VERSION = 4.2.1
+ PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
++PYTHON_PEXPECT_SITE = https://pypi.python.org/packages/e8/13/d0b0599099d6cd23663043a2a0bb7c61e58c6ba359b2656e6fb000ef5b98
+ PYTHON_PEXPECT_LICENSE = ISC
+ PYTHON_PEXPECT_LICENSE_FILES = LICENSE
+ PYTHON_PEXPECT_SETUP_TYPE = distutils
 -- 
 2.9.3
