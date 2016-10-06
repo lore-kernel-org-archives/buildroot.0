@@ -1,57 +1,74 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 06 Oct 2016 15:56:35 +0000
-Subject: [Buildroot] [Bug 9336] New: Improve iconv support for external
- toolchain based builds
-Message-ID: <bug-9336-163@https.bugs.busybox.net/>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 6 Oct 2016 18:39:43 +0200
+Subject: [Buildroot] Next Buildroot Developers Meeting approaching
+In-Reply-To: <20161006170454.1249b20f@free-electrons.com>
+References: <20161003234044.55b98568@free-electrons.com>
+ <b385be1d-a433-331d-2d52-720b18bf43f1@mind.be>
+ <20161006170454.1249b20f@free-electrons.com>
+Message-ID: <1ab3e874-f752-68e8-1941-99dcbd33d95c@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9336
+Dear Thomas, Arnout,
 
-            Bug ID: 9336
-           Summary: Improve iconv support for external toolchain based
-                    builds
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: torso.nafi at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On 06/10/2016 17:04, Thomas Petazzoni wrote:
+[...]
+>>> On my side, I think I'd like to spend a significant part of the 3 days
+>>> working on the testing infrastructure. But to do so, I'd like to team
+>>> up with someone present during the Developers Meeting. If someone is
+>>> interested, let me know.  
+>>
+>>  I'm interested!
 
-Currently, when Linaro is selected as the build toolchain (and, quite possibly,
-with other external toolchains as well), only the very basic iconv support is
-available on target. Namely, the iconv utility from libc/usr/bin/iconv is not
-installed at all, nor are the contents of libc/usr/lib/<triplet>/gconv (which I
-presume to contain/implement conversion tables not baked in into libc binary).
+And I am too!
 
-If I manually copy the iconv utility onto the buildroot system, and then run
-the "iconv -l" command, I get the following list:
+>>  I think there are in fact three completely different testing enhancements we
+>> should consider:
+>>
+>> 1. Run-time testing, e.g. of the autobuilder artefacts.
+> 
+> Testing the autobuilder artefacts do not make sense. A large number of
+> the configurations we build do not make any sense to test at runtime.
+> Just a quick example: we allow building both Dropbear and OpenSSH in
+> the same image. What happens when you boot: two daemons try to bind on
+> port 22. Same thing with web servers for example.
+> 
+> So I don't think runtime testing the autobuilder artefacts makes sense.
+> 
+> However, what makes sense is to runtime test a set of configurations
+> that we define, and progressively extend to cover more and more cases.
+> 
+>> 2. Feature testing of Buildroot features, like BR2_EXTERNAL, umask handling,
+>> graph-depends, etc.
+> 
+> To me (1) and (2) is basically the same thing. The infrastructure I
+> have proposed at https://github.com/tpetazzoni/buildroot-runtime-test
+> handles both things:
+> 
+>  - runtime testing of generated images
+>  - testing Buildroot features (filesystem images, for example)
+> 
+>> 3. Extending the existing autobuilders with kernel and bootloader builds.
+> 
+> With the above infrastructure, you can add test cases to build the
+> kernel on various architectures, build various bootloaders in a number
+> of configurations, etc.
+> 
+>>  I guess you would concentrate on 1. I would love to work on 2, but I'm not so
+>> efficient so perhaps my time is better spent on reviewing + looking over your
+>> shoulder.
+> 
+> I'm still undecided on what's the right tool for the job. The
+> infrastructure I've proposed in the Github repository mentioned above
+> has some annoying shortcomings, which I'm not sure how to address.
+> 
+> Maybe this is something Luca has more experience with?
 
-  10646-1:1993, 10646-1:1993/UCS4, ANSI_X3.4-1968, ANSI_X3.4-1986, ANSI_X3.4,
-  ASCII, CP367, CSASCII, CSUCS4, IBM367, ISO-10646, ISO-10646/UCS2,
-  ISO-10646/UCS4, ISO-10646/UTF-8, ISO-10646/UTF8, ISO-IR-6, ISO-IR-193,
-  ISO646-US, ISO_646.IRV:1991, OSF00010020, OSF00010100, OSF00010101,
-  OSF00010102, OSF00010104, OSF00010105, OSF00010106, OSF05010001, UCS-2,
-  UCS-2BE, UCS-2LE, UCS-4, UCS-4BE, UCS-4LE, UCS2, UCS4, UNICODEBIG,
-  UNICODELITTLE, US-ASCII, US, UTF-8, UTF8, WCHAR_T
-
-Clearly this isn't sufficient for a good majority of tasks which involve
-character set conversions.
-
-I'd like to see the iconv-related files copied, or possible to be copied via
-configuration parameters, in next releases of buildroot. Particularly I'm
-missing the capability to convert from CP1251 to UTF-8, but other charsets
-might be pretty useful too.
+Probably not much, sorry. But I don't remember in detail the work you
+did. I'll try to refresh my memory before the meeting.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Luca
