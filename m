@@ -1,27 +1,38 @@
-From: daggs <daggs@gmx.com>
-Date: Thu, 6 Oct 2016 11:52:38 +0200
-Subject: [Buildroot] odroidc2 broken in latest git
-In-Reply-To: <CAK4VdL2-Ki_JSYurH7u4PsH+Cxb=aF_4AvKuhB4mXWazg8q5pQ@mail.gmail.com>
-References: <trinity-97d923e3-1509-4df6-8cea-c6856bedc7ff-1475734297864@3capp-mailcom-bs04>,
- <CAK4VdL2-Ki_JSYurH7u4PsH+Cxb=aF_4AvKuhB4mXWazg8q5pQ@mail.gmail.com>
-Message-ID: <trinity-f9574332-c876-48f3-b512-a1ac7e50f662-1475747558640@3capp-mailcom-bs03>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Thu,  6 Oct 2016 14:14:59 +0300
+Subject: [Buildroot] [PATCH] config/odroidc2: force usage of gcc 4.9.x
+Message-ID: <20161006111459.25547-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Erico,
+due to an issue with odroid's u-boot, compiling u-boot with
+gcc 5.x will result in a non booting image.
+so a gcc 4.9.x compiler must be used.
+this solve bug #9326
 
-> Hi Dagg,
-> I have tested it a few days ago and found out that it is not working only with gcc 5.x toolchains, please see:
-> https://bugs.busybox.net/show_bug.cgi?id=9326
-> Erico
+thanks to Erico Nunes <nunes.erico@gmail.com> for pointing
+to the right issue.
 
-you are absolutly correct, if I'm not mistaken gcc 5.x is default now and current u-boot does not support it, only 4.9.x
-I'll submit a patch to fix it.
-according to the guys at hardkernel, they are suppose to ship a new buildroot based on amlogic's 2016.8 so hopefully there will be some support for 5.x which can be migrated to mainline git.
+Reported-by: <gahabana@mail.com>
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+---
+ configs/odroidc2_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-thanks for the tip.
-
-Dagg.
+diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
+index 45ede62..0c8ff3d 100644
+--- a/configs/odroidc2_defconfig
++++ b/configs/odroidc2_defconfig
+@@ -7,6 +7,7 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
+ BR2_PACKAGE_ODROID_SCRIPTS=y
++BR2_GCC_VERSION_4_9_X=y
+ 
+ # Kernel
+ BR2_KERNEL_HEADERS_VERSION=y
+-- 
+2.10.1
