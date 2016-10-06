@@ -1,89 +1,232 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Oct 2016 17:04:54 +0200
-Subject: [Buildroot] Next Buildroot Developers Meeting approaching
-In-Reply-To: <b385be1d-a433-331d-2d52-720b18bf43f1@mind.be>
-References: <20161003234044.55b98568@free-electrons.com>
- <b385be1d-a433-331d-2d52-720b18bf43f1@mind.be>
-Message-ID: <20161006170454.1249b20f@free-electrons.com>
+From: Herschel Karunaratne <hk@synexint.com>
+Date: Thu, 6 Oct 2016 20:46:04 +0530
+Subject: [Buildroot] Installing package libclthreads
+In-Reply-To: <27f42b97-7e99-ff93-3231-ed9c3a56360d@mind.be>
+References: <00b301d21d70$9e934540$dbb9cfc0$@synexint.com>
+ <1006b3f0-301d-b8c3-99da-ef2c50c5ec00@mind.be>
+ <000d01d21ef5$33361990$99a24cb0$@synexint.com>
+ <27f42b97-7e99-ff93-3231-ed9c3a56360d@mind.be>
+Message-ID: <000001d21fe4$8fb2f400$af18dc00$@synexint.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Arnout,
 
-On Thu, 6 Oct 2016 00:26:26 +0200, Arnout Vandecappelle wrote:
+Thanks for the help and support. This only a hobby project, reverb for my
+organ, and not a commercial project. I will give it a try by correcting the
+errors you have shown. 
+Thanks again and any further guidance is greatly appreciated.
 
-> > Our next Buildroot Developers Meeting will take place on October 14-16
-> > in Berlin, so the date is approaching.  
+Regards
+?
+Herschel
+
+-----Original Message-----
+From: Arnout Vandecappelle [mailto:arnout at mind.be] 
+Sent: Thursday, October 6, 2016 4:35 AM
+To: Herschel Karunaratne <hk@synexint.com>; buildroot at busybox.net
+Subject: Re: [Buildroot] Installing package libclthreads
+
+
+
+On 05-10-16 12:42, Herschel Karunaratne wrote:
+> Hi Arnout,
 > 
->  I'm happy to announce that Mind will sponsor the Friday night dinner.
-
-Awesome!
-
-Thanks to Mind for this sponsoring!
-
->  We would still like a sponsor for the location, and it would also be nice if we
-> could get T-shirts for the participants. So if you think your employer would be
-> willing, please get in touch!
-
-I've asked my employer, but I believe it will be much easier to get
-funding once we have a legal entity and the associated bank account.
-
-> > On my side, I think I'd like to spend a significant part of the 3 days
-> > working on the testing infrastructure. But to do so, I'd like to team
-> > up with someone present during the Developers Meeting. If someone is
-> > interested, let me know.  
+> Thanks for the reply.
 > 
->  I'm interested!
+> Sorry I will not use HTML. 
+
+ Please also don't top-post, but reply in-line :-)
+
+
+> Could you please send me a .mk file for this? I'm quite new to buildroot.
+
+ I'm sorry, I don't have the time to do that for you at the moment. But if
+you want, you can hire my company to do it, and I'll make time :-)
+
+ I took a quick look, and there is quite a lot wrong with the .mk file you
+previously sent. The URL is wrong, and the package is not actually an
+autotools package (it doesn't have a configure script). I don't know what
+kind of hacks you have done to get the output you showed earlier, but that
+is certainly *not* the output you get from that .mk file.
+
+
+ Regards,
+ Arnout
+
+
 > 
->  I think there are in fact three completely different testing enhancements we
-> should consider:
+> Regards,
+> Herschel
 > 
-> 1. Run-time testing, e.g. of the autobuilder artefacts.
+> 
+> -----Original Message-----
+> From: Arnout Vandecappelle [mailto:arnout at mind.be]
+> Sent: Wednesday, October 5, 2016 2:27 AM
+> To: Herschel Karunaratne <hk@synexint.com>; buildroot at busybox.net
+> Subject: Re: [Buildroot] Installing package libclthreads
+> 
+>  Hi Herschel,
+> 
+>  Please avoid using HTML mail on this list.
+> 
+> 
+> On 03-10-16 14:21, Herschel Karunaratne wrote:
+>> Hi,
+>>
+>>  
+>>
+>> I am trying to install "jconvolver" and have to install 
+>> "libclthreads" needed by jconvolver. "My "libclthreads.mk" is as 
+>> follows,
+>>
+>>  
+>>
+>> #####################################################################
+>>
+>> #
+>>
+>> # libclthreads
+>>
+>> #
+>>
+>> ####################################################################
+>>
+>>  
+>>
+>> LIBCLTHREADS_VERSION = 2.4.0
+>>
+>> LIBCLTHREADS_SOURCE = clthreads-$(LIBCLTHREADS_VERSION).tar.bz2
+> 
+>  Small nit: since upstream calls it "clthreads", we prefer that the 
+> buildroot package has the same name.
+> 
+>>
+>> LIBCLTHREADS_SITE =
+>> http://kokkinizta.linuxaudio.org/linuxaudio/downloads
+>>
+>> LIBCLTHREADS_LICENSE = LGPLv2.1+
+>>
+>> LIBCLTHREADS_LICENSE_FILES = COPYING
+>>
+>> LIBCLTHREADS_INSTALL_STAGING = YES
+>>
+>> LIBCLTHREADS_INSTALL_TARGET = YES
+> 
+>  This one is not needed because the default.
+> 
+>>
+>>  
+>>
+>> $(eval $(autotools-package))
+>>
+>>  
+>>
+>>  
+>>
+>>  
+>>
+>> When I build it seems to be OK but nothing in the installed folders. 
+>> This is message I get when I build,
+>>
+> [snip]
+>>>>> libclthreads 2.4.0 Installing to target
+> 
+>  Weird, the install to staging is missing... I can't explain that...
+> 
+> 
+>>
+>>
+>
+PATH="/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/bin:
+> /root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/sbin
+> :/root 
+> /work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/usr/bin:/
+> root/w 
+> ork/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/usr/sbin:/u
+> sr/loc 
+> al/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/arm-2014.05/
+> bin:/r
+> oot/bin:/opt/arm-2014.05/bin" 
+>> /usr/bin/make -j5
+>> DESTDIR=/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/
+>> t
+>> arget
+>> install -C
+>> /root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/li
+>> b
+>> clthreads-2.4.0/
+>>
+>> make[1]: Entering directory
+>>
+> `/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/li
+> bclthr
+> eads-2.4.0'
+>>
+>> /usr/bin/install -d /usr/local/lib64
+> 
+>  It looks like this package ignores both the configure --prefix option 
+> and the DESTDIR argument to 'make install'. This basically makes the 
+> install commands unusable. Either patch the Makefile.in to correct 
+> this, or define LIBCLTHREADS_INSTALL_STAGING_CMDS and
+LIBCLTHREADS_INSTALL_TARGET_CMDS.
+> 
+> 
+>  Regards,
+>  Arnout
+> 
+> 
+>>
+>> /usr/bin/install -m 644 clthreads.h /usr/local/include
+>>
+>> /usr/bin/install -m 755 libclthreads.so.2.4.0 /usr/local/lib64
+>>
+>> /sbin/ldconfig -n /usr/local/lib64
+>>
+>> ln -sf libclthreads.so.2.4.0 /usr/local/lib64/libclthreads.so
+>>
+>> make[1]: Leaving directory
+>>
+> `/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/li
+> bclthr
+> eads-2.4.0'
+>>
+>>  
+>>
+>>  
+>>
+>>  
+>>
+>> What could have gone wrong?
+>>
+>>  
+>>
+>> Thanks in advance.
+>>
+>>  
+>>
+>>  
+>>
+>> *Regards*
+>>
+>> *Herschel*
+>>
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+> 
 
-Testing the autobuilder artefacts do not make sense. A large number of
-the configurations we build do not make any sense to test at runtime.
-Just a quick example: we allow building both Dropbear and OpenSSH in
-the same image. What happens when you boot: two daemons try to bind on
-port 22. Same thing with web servers for example.
-
-So I don't think runtime testing the autobuilder artefacts makes sense.
-
-However, what makes sense is to runtime test a set of configurations
-that we define, and progressively extend to cover more and more cases.
-
-> 2. Feature testing of Buildroot features, like BR2_EXTERNAL, umask handling,
-> graph-depends, etc.
-
-To me (1) and (2) is basically the same thing. The infrastructure I
-have proposed at https://github.com/tpetazzoni/buildroot-runtime-test
-handles both things:
-
- - runtime testing of generated images
- - testing Buildroot features (filesystem images, for example)
-
-> 3. Extending the existing autobuilders with kernel and bootloader builds.
-
-With the above infrastructure, you can add test cases to build the
-kernel on various architectures, build various bootloaders in a number
-of configurations, etc.
-
->  I guess you would concentrate on 1. I would love to work on 2, but I'm not so
-> efficient so perhaps my time is better spent on reviewing + looking over your
-> shoulder.
-
-I'm still undecided on what's the right tool for the job. The
-infrastructure I've proposed in the Github repository mentioned above
-has some annoying shortcomings, which I'm not sure how to address.
-
-Maybe this is something Luca has more experience with?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
