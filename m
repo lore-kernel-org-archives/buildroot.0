@@ -1,37 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Oct 2016 17:46:10 +0200
-Subject: [Buildroot] [PATCH] website: add Mind as a sponsor for the
-	ELCE16 meeting
-In-Reply-To: <20161005225049.12399-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Thu, 6 Oct 2016 00:50:49 +0200")
-References: <20161005225049.12399-1-arnout@mind.be>
-Message-ID: <87r37tlbul.fsf@dell.be.48ers.dk>
+Date: Thu, 6 Oct 2016 17:41:12 +0200
+Subject: [Buildroot] [git commit] package/Config.in: fix alphabetical order
+Message-ID: <20161006154645.4FEC5801E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4ac77e653c30853348df57fb096e1ef2c3496d78
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Also move Openwide/SMILE down to the past sponsors. This also requires
- > all the row endings to move.
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Note that I chose to mention Mind twice, once as current sponsor and
- > once as past sponsor.
-
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Wee!
-
-Committed, thanks.
-
-> ---
- > I (accidentally) removed all the row divs at some point, and that still
- > seemed to work... But I don't really understand this bootstrap stuff so
- > I didn't dare touching it :-)
-
-Naah, lets leave it as it is for now.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index ef82b2e..c3bcf73 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1461,8 +1461,8 @@ menu "Networking applications"
+ 	source "package/fmc/Config.in"
+ 	source "package/fping/Config.in"
+ 	source "package/freeswitch/Config.in"
+-	source "package/gupnp-tools/Config.in"
+ 	source "package/gesftpserver/Config.in"
++	source "package/gupnp-tools/Config.in"
+ 	source "package/gutenprint/Config.in"
+ 	source "package/hans/Config.in"
+ 	source "package/hiawatha/Config.in"
