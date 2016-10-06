@@ -1,74 +1,126 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 6 Oct 2016 18:39:43 +0200
-Subject: [Buildroot] Next Buildroot Developers Meeting approaching
-In-Reply-To: <20161006170454.1249b20f@free-electrons.com>
-References: <20161003234044.55b98568@free-electrons.com>
- <b385be1d-a433-331d-2d52-720b18bf43f1@mind.be>
- <20161006170454.1249b20f@free-electrons.com>
-Message-ID: <1ab3e874-f752-68e8-1941-99dcbd33d95c@lucaceresoli.net>
+From: Jerry Van Baren <gvb.buildroot@unssw.com>
+Date: Thu, 6 Oct 2016 13:38:19 -0400
+Subject: [Buildroot] [PATCH] Fix dhcp symlink in target/var/lib/dhcp
+In-Reply-To: <25c03ce6-8771-cd39-32ef-b815ede292f6@mind.be>
+References: <CAK-g76X-fwsZnfmQaDN8a90kLrJCRfduAgNYyXuYa-UytHSfpA@mail.gmail.com>
+ <25c03ce6-8771-cd39-32ef-b815ede292f6@mind.be>
+Message-ID: <CAK-g76Vp+TepJFwXN-RpFqWmr6nKUwVaHjUm0F8b5UDXXtE6Og@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas, Arnout,
+Hi Arnout,
 
-On 06/10/2016 17:04, Thomas Petazzoni wrote:
-[...]
->>> On my side, I think I'd like to spend a significant part of the 3 days
->>> working on the testing infrastructure. But to do so, I'd like to team
->>> up with someone present during the Developers Meeting. If someone is
->>> interested, let me know.  
+On Wed, Oct 5, 2016 at 7:20 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 28-09-16 18:07, Root, Build wrote:
+>> The symlink was to /tmp causing an error on the target install step:
+>> rsync: chgrp "/<path>/output/target/var/lib/dhcp" failed: Operation
+>> not permitted
+>
+>  Could you explain this a little more? The install step of this package only
+> calls $(INSTALL), not rsync or 'make install' or anything like that. So how does
+> this happen?
+
+I have not dug to the bottom of this, but the issue is the DHCP
+(server, not client)
+package is creates
+   /var/lib/dhcp/dhcpd.leases
+which ends up in /tmp/dhcpd.leases without the patch. With the patch it ends up
+in .../output/target/tmp/dhcpd.leases.
+
+(Informed guessing here) When buildroot creates the file system image, it does a
+rsync with chgrp (and chown) to the proper owner (root.root), but that
+is not allowed
+as an unprivileged user running buildroot on the host's /tmp directory.
+
+I'm running very stock Ubuntu 14.04.5 x86 "server" installation cross compiling
+to an ARM target.
+
+I did not have a problem with older versions of Buildroot, it was when we pulled
+our baseline forward to 2016.08 that we had the problem (previously was 2014
+timeframe).
+
+>  Also note that we don't have such failures in the autobuilders. And anyway, I
+> thought that a failing chgrp in rsync was non-fatal?
+
+Not for me. :-/ I will look into it further. Total speculation: it may
+be a double fault
+where the chown root fails followed by a chgrp root which also fails,
+aborting the script.
+
+As you note, the autobuilders are not catching it, so it might be
+something in how
+my build machine is set up.
+
+>> Changing the symlink to "../../tmp" rather than "/tmp" references the
+>> target's /tmp directory rather than the build machine's /tmp directory.
+>
+>  The problem is that /var/lib itself may be a symlink to somewhere else. Some
+> people need to have /var/lib in a writeable partition while /var itself is on
+> the readonly rootfs. When /var/lib is a symlink, the ../.. will be interpreted
+> relative to the target of that symlink, which may be a different number of
+> levels down from root.
+>
+>  Also, since /tmp always exists on the build machine, symlinking to /tmp just works.
+
+The symlink works fine, the chgrp to root on /tmp/dhcpd.leases doesn't. :-(
+
+Thanks,
+gvb
+
 >>
->>  I'm interested!
-
-And I am too!
-
->>  I think there are in fact three completely different testing enhancements we
->> should consider:
+>> Signed-off-by: Gerald Van Baren <jerry@vibrationresearch.com>
+>> ---
+>>  package/dhcp/dhcp.mk | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
 >>
->> 1. Run-time testing, e.g. of the autobuilder artefacts.
-> 
-> Testing the autobuilder artefacts do not make sense. A large number of
-> the configurations we build do not make any sense to test at runtime.
-> Just a quick example: we allow building both Dropbear and OpenSSH in
-> the same image. What happens when you boot: two daemons try to bind on
-> port 22. Same thing with web servers for example.
-> 
-> So I don't think runtime testing the autobuilder artefacts makes sense.
-> 
-> However, what makes sense is to runtime test a set of configurations
-> that we define, and progressively extend to cover more and more cases.
-> 
->> 2. Feature testing of Buildroot features, like BR2_EXTERNAL, umask handling,
->> graph-depends, etc.
-> 
-> To me (1) and (2) is basically the same thing. The infrastructure I
-> have proposed at https://github.com/tpetazzoni/buildroot-runtime-test
-> handles both things:
-> 
->  - runtime testing of generated images
->  - testing Buildroot features (filesystem images, for example)
-> 
->> 3. Extending the existing autobuilders with kernel and bootloader builds.
-> 
-> With the above infrastructure, you can add test cases to build the
-> kernel on various architectures, build various bootloaders in a number
-> of configurations, etc.
-> 
->>  I guess you would concentrate on 1. I would love to work on 2, but I'm not so
->> efficient so perhaps my time is better spent on reviewing + looking over your
->> shoulder.
-> 
-> I'm still undecided on what's the right tool for the job. The
-> infrastructure I've proposed in the Github repository mentioned above
-> has some annoying shortcomings, which I'm not sure how to address.
-> 
-> Maybe this is something Luca has more experience with?
-
-Probably not much, sorry. But I don't remember in detail the work you
-did. I'll try to refresh my memory before the meeting.
-
--- 
-Luca
+>> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+>> index 5cb6043..80c984b 100644
+>> --- a/package/dhcp/dhcp.mk
+>> +++ b/package/dhcp/dhcp.mk
+>> @@ -56,7 +56,7 @@ endif
+>>  ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
+>>  define DHCP_INSTALL_SERVER
+>>         mkdir -p $(TARGET_DIR)/var/lib
+>> -       (cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+>> +       (cd $(TARGET_DIR)/var/lib; ln -snf ../../tmp dhcp)
+>>         $(INSTALL) -m 0755 -D $(@D)/server/dhcpd $(TARGET_DIR)/usr/sbin/dhcpd
+>>         $(INSTALL) -m 0644 -D package/dhcp/dhcpd.conf \
+>>                 $(TARGET_DIR)/etc/dhcp/dhcpd.conf
+>> @@ -66,7 +66,7 @@ endif
+>>  ifeq ($(BR2_PACKAGE_DHCP_RELAY),y)
+>>  define DHCP_INSTALL_RELAY
+>>         mkdir -p $(TARGET_DIR)/var/lib
+>> -       (cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+>> +       (cd $(TARGET_DIR)/var/lib; ln -snf ../../tmp dhcp)
+>>         $(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/dhcrelay \
+>>                 $(TARGET_DIR)/usr/sbin/dhcrelay
+>>  endef
+>> @@ -75,7 +75,7 @@ endif
+>>  ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+>>  define DHCP_INSTALL_CLIENT
+>>         mkdir -p $(TARGET_DIR)/var/lib
+>> -       (cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+>> +       (cd $(TARGET_DIR)/var/lib; ln -snf ../../tmp dhcp)
+>>         $(INSTALL) -m 0755 -D $(DHCP_DIR)/client/dhclient \
+>>                 $(TARGET_DIR)/sbin/dhclient
+>>         $(INSTALL) -m 0644 -D package/dhcp/dhclient.conf \
+>> --
+>> 1.9.1
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
