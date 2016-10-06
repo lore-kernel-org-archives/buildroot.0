@@ -1,47 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  6 Oct 2016 21:29:42 +0200
-Subject: [Buildroot] [PATCH 15/21] package/python-tornado: bump version to
-	4.4.2
-In-Reply-To: <20161006192948.27956-1-bernd.kuhls@t-online.de>
-References: <20161006192948.27956-1-bernd.kuhls@t-online.de>
-Message-ID: <20161006192948.27956-15-bernd.kuhls@t-online.de>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu,  6 Oct 2016 21:35:26 +0200
+Subject: [Buildroot] [PATCH] luarocks: bump to version 2.4.1
+Message-ID: <1475782526-10472-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/python-tornado/python-tornado.hash | 4 ++--
- package/python-tornado/python-tornado.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/luarocks/luarocks.hash | 2 +-
+ package/luarocks/luarocks.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
-index 27385a5..ee4080f 100644
---- a/package/python-tornado/python-tornado.hash
-+++ b/package/python-tornado/python-tornado.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/tornado/json, sha256 locally computed
--md5     fff8a7d7f580b04bacc2ffe7ddf41133 tornado-4.4.1.tar.gz
--sha256  371d0cf3d56c47accc66116a77ad558d76eebaa8458a6b677af71ca606522146  tornado-4.4.1.tar.gz
-+md5	b4816ea209118667ffc52ce9ff06ac85  tornado-4.4.2.tar.gz
-+sha256	2898f992f898cd41eeb8d53b6df75495f2f423b6672890aadaf196ea1448edcc  tornado-4.4.2.tar.gz
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index 98d42b5..e512e60 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index 2750745..c35383a 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	44381c9128d036247d428531291d1ff9405ae1daa238581d3c15f96d899497c3  luarocks-2.4.0.tar.gz
++sha256	e429e0af9764bfd5cb640cac40f9d4ed1023fa17c052dff82ed0a41c05f3dcf9  luarocks-2.4.1.tar.gz
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 4a5ae03..64c8d5b 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_TORNADO_VERSION = 4.4.1
-+PYTHON_TORNADO_VERSION = 4.4.2
- PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
--PYTHON_TORNADO_SITE = https://pypi.python.org/packages/96/5d/ff472313e8f337d5acda5d56e6ea79a43583cc8771b34c85a1f458e197c3
-+PYTHON_TORNADO_SITE = https://pypi.python.org/packages/1e/7c/ea047f7bbd1ff22a7f69fe55e7561040e3e54d6f31da6267ef9748321f98
- PYTHON_TORNADO_LICENSE = Apache-2.0
- PYTHON_TORNADO_SETUP_TYPE = setuptools
- 
+-LUAROCKS_VERSION = 2.4.0
++LUAROCKS_VERSION = 2.4.1
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
 -- 
-2.9.3
+2.7.4
