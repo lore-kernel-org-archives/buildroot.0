@@ -1,8 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  6 Oct 2016 21:29:28 +0200
-Subject: [Buildroot] [PATCH 01/21] package/python-pexpect: bump version to
-	4.2.1
-Message-ID: <20161006192948.27956-1-bernd.kuhls@t-online.de>
+Date: Thu,  6 Oct 2016 21:29:34 +0200
+Subject: [Buildroot] [PATCH 07/21] package/python-pytz: bump version to
+	2016.7
+In-Reply-To: <20161006192948.27956-1-bernd.kuhls@t-online.de>
+References: <20161006192948.27956-1-bernd.kuhls@t-online.de>
+Message-ID: <20161006192948.27956-7-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,36 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-pexpect/python-pexpect.hash | 6 +++---
- package/python-pexpect/python-pexpect.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pytz/python-pytz.hash | 7 +++----
+ package/python-pytz/python-pytz.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
-index 29cf892..e383607 100644
---- a/package/python-pexpect/python-pexpect.hash
-+++ b/package/python-pexpect/python-pexpect.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org, sha256 locally computed
--md5 056df81e6ca7081f1015b4b147b977b7 pexpect-4.0.1.tar.gz
--sha256 232795ebcaaf2e120396dbbaa3a129eda51757eeaae1911558f4ef8ee414fc6c pexpect-4.0.1.tar.gz
-+# md5 from https://pypi.python.org/pypi/pexpect/json, sha256 locally computed
-+md5	3694410001a99dff83f0b500a1ca1c95  pexpect-4.2.1.tar.gz
-+sha256	3d132465a75b57aa818341c6521392a06cc660feb3988d7f1074f39bd23c9a92  pexpect-4.2.1.tar.gz
-diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
-index 40a1741..f1f9903 100644
---- a/package/python-pexpect/python-pexpect.mk
-+++ b/package/python-pexpect/python-pexpect.mk
+diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
+index 5047a8c..db362ec 100644
+--- a/package/python-pytz/python-pytz.hash
++++ b/package/python-pytz/python-pytz.hash
+@@ -1,4 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/pytz/json
+-md5	e56283d61935963157aebc5135206a47  pytz-2016.4.tar.bz2
+-# sha256 calculated by scanpypi
+-sha256	ee7c751544e35a7b7fb5e3fb25a49dade37d51e70a93e5107f10575d7102c311  pytz-2016.4.tar.bz2
++# md5 from https://pypi.python.org/pypi/pytz/json, sha256 locally computed
++md5	8d8121d619a43cf0b38a4195de1cb8a5  pytz-2016.7.tar.bz2
++sha256	6eab31709e3a4aea748457707da45e805b650cbb352583805d2417de2a1dd71e  pytz-2016.7.tar.bz2
+diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
+index a73c9cf..ffcab32 100644
+--- a/package/python-pytz/python-pytz.mk
++++ b/package/python-pytz/python-pytz.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PEXPECT_VERSION = 4.0.1
--PYTHON_PEXPECT_SITE = https://pypi.python.org/packages/source/p/pexpect
-+PYTHON_PEXPECT_VERSION = 4.2.1
- PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
-+PYTHON_PEXPECT_SITE = https://pypi.python.org/packages/e8/13/d0b0599099d6cd23663043a2a0bb7c61e58c6ba359b2656e6fb000ef5b98
- PYTHON_PEXPECT_LICENSE = ISC
- PYTHON_PEXPECT_LICENSE_FILES = LICENSE
- PYTHON_PEXPECT_SETUP_TYPE = distutils
+-PYTHON_PYTZ_VERSION = 2016.4
++PYTHON_PYTZ_VERSION = 2016.7
+ PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.bz2
+-PYTHON_PYTZ_SITE = https://pypi.python.org/packages/f4/7d/7c0c85e9c64a75dde11bc9d3e1adc4e09a42ce7cdb873baffa1598118709
++PYTHON_PYTZ_SITE = https://pypi.python.org/packages/53/35/6376f58fb82ce69e2c113ca0ebe5c0f69b20f006e184bcc238a6007f4bdb
+ PYTHON_PYTZ_SETUP_TYPE = setuptools
+ PYTHON_PYTZ_LICENSE = MIT
+ PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
 -- 
 2.9.3
