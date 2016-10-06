@@ -1,83 +1,79 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  6 Oct 2016 06:48:58 +0200
-Subject: [Buildroot] [PATCH 5/5] package/python-mwscrape: new package
+Date: Thu,  6 Oct 2016 06:48:56 +0200
+Subject: [Buildroot] [PATCH 3/5] package/python-pylru: new package
 In-Reply-To: <20161006044858.27768-1-bernd.kuhls@t-online.de>
 References: <20161006044858.27768-1-bernd.kuhls@t-online.de>
-Message-ID: <20161006044858.27768-5-bernd.kuhls@t-online.de>
+Message-ID: <20161006044858.27768-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Needed by upcoming python-mwscrape package.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                            |  1 +
- package/python-mwscrape/Config.in            | 10 ++++++++++
- package/python-mwscrape/python-mwscrape.hash |  2 ++
- package/python-mwscrape/python-mwscrape.mk   | 17 +++++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/python-mwscrape/Config.in
- create mode 100644 package/python-mwscrape/python-mwscrape.hash
- create mode 100644 package/python-mwscrape/python-mwscrape.mk
+ package/Config.in                      |  1 +
+ package/python-pylru/Config.in         |  6 ++++++
+ package/python-pylru/python-pylru.hash |  3 +++
+ package/python-pylru/python-pylru.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-pylru/Config.in
+ create mode 100644 package/python-pylru/python-pylru.hash
+ create mode 100644 package/python-pylru/python-pylru.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1f6b397..ebe173c 100644
+index 67c4aff..9b67c76 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -709,6 +709,7 @@ menu "External python modules"
- 	source "package/python-mistune/Config.in"
- 	source "package/python-msgpack/Config.in"
- 	source "package/python-mwclient/Config.in"
-+	source "package/python-mwscrape/Config.in"
- 	source "package/python-netaddr/Config.in"
- 	source "package/python-netifaces/Config.in"
- 	source "package/python-networkmanager/Config.in"
-diff --git a/package/python-mwscrape/Config.in b/package/python-mwscrape/Config.in
+@@ -735,6 +735,7 @@ menu "External python modules"
+ 	source "package/python-pygame/Config.in"
+ 	source "package/python-pygments/Config.in"
+ 	source "package/python-pyinotify/Config.in"
++	source "package/python-pylru/Config.in"
+ 	source "package/python-pymysql/Config.in"
+ 	source "package/python-pynacl/Config.in"
+ 	source "package/python-pyopenssl/Config.in"
+diff --git a/package/python-pylru/Config.in b/package/python-pylru/Config.in
 new file mode 100644
-index 0000000..bc2efb1
+index 0000000..c174576
 --- /dev/null
-+++ b/package/python-mwscrape/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_MWSCRAPE
-+	bool "python-mwscrape"
-+	select BR2_PACKAGE_PYTHON_COUCHDB
-+	select BR2_PACKAGE_PYTHON_FUTURES if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_MWCLIENT
-+	select BR2_PACKAGE_PYTHON_PYLRU
++++ b/package/python-pylru/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYLRU
++	bool "python-pylru"
 +	help
-+	  Download rendered articles from MediaWiki API to CouchDB
++	  A least recently used (LRU) cache implementation.
 +
-+	  https://github.com/itkach/mwscrape
-diff --git a/package/python-mwscrape/python-mwscrape.hash b/package/python-mwscrape/python-mwscrape.hash
++	  https://github.com/jlhutch/pylru
+diff --git a/package/python-pylru/python-pylru.hash b/package/python-pylru/python-pylru.hash
 new file mode 100644
-index 0000000..b91ef69
+index 0000000..806ea36
 --- /dev/null
-+++ b/package/python-mwscrape/python-mwscrape.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 8de8a5ef257851f6e1e41247f64710f48859a5e3f91ebc7200bb60769f02f296  python-mwscrape-6a58d7801eb1e884fd0516f1adbedbd4481c10e6.tar.gz
-diff --git a/package/python-mwscrape/python-mwscrape.mk b/package/python-mwscrape/python-mwscrape.mk
++++ b/package/python-pylru/python-pylru.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/pylru/json, sha256 locally computed
++md5	41369d58a1c4391c5cc36f84262abcdc  pylru-1.0.9.tar.gz
++sha256	71376192671f0ad1690b2a7427d39a29b1df994c8469a9b46b03ed7e28c0172c  pylru-1.0.9.tar.gz
+diff --git a/package/python-pylru/python-pylru.mk b/package/python-pylru/python-pylru.mk
 new file mode 100644
-index 0000000..44d156b
+index 0000000..314ddb2
 --- /dev/null
-+++ b/package/python-mwscrape/python-mwscrape.mk
-@@ -0,0 +1,17 @@
++++ b/package/python-pylru/python-pylru.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-mwscrape
++# python-pylru
 +#
 +################################################################################
 +
-+PYTHON_MWSCRAPE_VERSION = 6a58d7801eb1e884fd0516f1adbedbd4481c10e6
-+PYTHON_MWSCRAPE_SITE = $(call github,itkach,mwscrape,$(PYTHON_MWSCRAPE_VERSION))
-+PYTHON_MWSCRAPE_LICENSE = BSD-3c
-+PYTHON_MWSCRAPE_LICENSE_FILES = LICENSE.txt
-+PYTHON_MWSCRAPE_DEPENDENCIES = python-couchdb \
-+	$(if $(BR2_PACKAGE_PYTHON),python-futures,) \
-+	python-mwclient \
-+	python-pylru
-+PYTHON_MWSCRAPE_SETUP_TYPE = distutils
++PYTHON_PYLRU_VERSION = 1.0.9
++PYTHON_PYLRU_SOURCE = pylru-$(PYTHON_PYLRU_VERSION).tar.gz
++PYTHON_PYLRU_SITE = https://pypi.python.org/packages/c0/7d/0de1055632f3871dfeaabe5a3f0510317cd98b93e7b792b44e4c7de2b17b
++PYTHON_PYLRU_SETUP_TYPE = distutils
++PYTHON_PYLRU_LICENSE = GNU General Public License (GPL)
++PYTHON_PYLRU_LICENSE_FILES = LICENSE.txt
 +
 +$(eval $(python-package))
 -- 
