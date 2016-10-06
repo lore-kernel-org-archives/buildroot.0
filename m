@@ -1,77 +1,83 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  6 Oct 2016 06:48:54 +0200
-Subject: [Buildroot] [PATCH 1/5] package/python-couchdb: new package
-Message-ID: <20161006044858.27768-1-bernd.kuhls@t-online.de>
+Date: Thu,  6 Oct 2016 06:48:58 +0200
+Subject: [Buildroot] [PATCH 5/5] package/python-mwscrape: new package
+In-Reply-To: <20161006044858.27768-1-bernd.kuhls@t-online.de>
+References: <20161006044858.27768-1-bernd.kuhls@t-online.de>
+Message-ID: <20161006044858.27768-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed by upcoming python-mwscrape package.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                          |  1 +
- package/python-couchdb/Config.in           |  6 ++++++
- package/python-couchdb/python-couchdb.hash |  3 +++
- package/python-couchdb/python-couchdb.mk   | 14 ++++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/python-couchdb/Config.in
- create mode 100644 package/python-couchdb/python-couchdb.hash
- create mode 100644 package/python-couchdb/python-couchdb.mk
+ package/Config.in                            |  1 +
+ package/python-mwscrape/Config.in            | 10 ++++++++++
+ package/python-mwscrape/python-mwscrape.hash |  2 ++
+ package/python-mwscrape/python-mwscrape.mk   | 17 +++++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/python-mwscrape/Config.in
+ create mode 100644 package/python-mwscrape/python-mwscrape.hash
+ create mode 100644 package/python-mwscrape/python-mwscrape.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 26fcc31..c7f29e5 100644
+index 1f6b397..ebe173c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -656,6 +656,7 @@ menu "External python modules"
- 	source "package/python-coherence/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
-+	source "package/python-couchdb/Config.in"
- 	source "package/python-crc16/Config.in"
- 	source "package/python-crcmod/Config.in"
- 	source "package/python-crossbar/Config.in"
-diff --git a/package/python-couchdb/Config.in b/package/python-couchdb/Config.in
+@@ -709,6 +709,7 @@ menu "External python modules"
+ 	source "package/python-mistune/Config.in"
+ 	source "package/python-msgpack/Config.in"
+ 	source "package/python-mwclient/Config.in"
++	source "package/python-mwscrape/Config.in"
+ 	source "package/python-netaddr/Config.in"
+ 	source "package/python-netifaces/Config.in"
+ 	source "package/python-networkmanager/Config.in"
+diff --git a/package/python-mwscrape/Config.in b/package/python-mwscrape/Config.in
 new file mode 100644
-index 0000000..5b1937f
+index 0000000..bc2efb1
 --- /dev/null
-+++ b/package/python-couchdb/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_COUCHDB
-+	bool "python-couchdb"
++++ b/package/python-mwscrape/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_MWSCRAPE
++	bool "python-mwscrape"
++	select BR2_PACKAGE_PYTHON_COUCHDB
++	select BR2_PACKAGE_PYTHON_FUTURES if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_MWCLIENT
++	select BR2_PACKAGE_PYTHON_PYLRU
 +	help
-+	  Python library for working with CouchDB.
++	  Download rendered articles from MediaWiki API to CouchDB
 +
-+	  https://github.com/djc/couchdb-python/
-diff --git a/package/python-couchdb/python-couchdb.hash b/package/python-couchdb/python-couchdb.hash
++	  https://github.com/itkach/mwscrape
+diff --git a/package/python-mwscrape/python-mwscrape.hash b/package/python-mwscrape/python-mwscrape.hash
 new file mode 100644
-index 0000000..f9422a8
+index 0000000..b91ef69
 --- /dev/null
-+++ b/package/python-couchdb/python-couchdb.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/couchdb/json, sha256 locally computed
-+md5	2ed5ad2a477fd3cb472ed6dc5a381ff3  CouchDB-1.1.tar.gz
-+sha256	9503ea413956c33b5e2af248235afb5e0f011f33f816a32e872f8ff9b0a0e710  CouchDB-1.1.tar.gz
-diff --git a/package/python-couchdb/python-couchdb.mk b/package/python-couchdb/python-couchdb.mk
++++ b/package/python-mwscrape/python-mwscrape.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 8de8a5ef257851f6e1e41247f64710f48859a5e3f91ebc7200bb60769f02f296  python-mwscrape-6a58d7801eb1e884fd0516f1adbedbd4481c10e6.tar.gz
+diff --git a/package/python-mwscrape/python-mwscrape.mk b/package/python-mwscrape/python-mwscrape.mk
 new file mode 100644
-index 0000000..62dfb7f
+index 0000000..44d156b
 --- /dev/null
-+++ b/package/python-couchdb/python-couchdb.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-mwscrape/python-mwscrape.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# python-couchdb
++# python-mwscrape
 +#
 +################################################################################
 +
-+PYTHON_COUCHDB_VERSION = 1.1
-+PYTHON_COUCHDB_SOURCE = CouchDB-$(PYTHON_COUCHDB_VERSION).tar.gz
-+PYTHON_COUCHDB_SITE = https://pypi.python.org/packages/9a/e8/c3c8da6d00145aaca07f2b784794917613dad26532068da4e8392dc48d7f
-+PYTHON_COUCHDB_SETUP_TYPE = setuptools
-+PYTHON_COUCHDB_LICENSE = BSD
-+PYTHON_COUCHDB_LICENSE_FILES = COPYING
++PYTHON_MWSCRAPE_VERSION = 6a58d7801eb1e884fd0516f1adbedbd4481c10e6
++PYTHON_MWSCRAPE_SITE = $(call github,itkach,mwscrape,$(PYTHON_MWSCRAPE_VERSION))
++PYTHON_MWSCRAPE_LICENSE = BSD-3c
++PYTHON_MWSCRAPE_LICENSE_FILES = LICENSE.txt
++PYTHON_MWSCRAPE_DEPENDENCIES = python-couchdb \
++	$(if $(BR2_PACKAGE_PYTHON),python-futures,) \
++	python-mwclient \
++	python-pylru
++PYTHON_MWSCRAPE_SETUP_TYPE = distutils
 +
 +$(eval $(python-package))
 -- 
