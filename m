@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  6 Oct 2016 21:29:30 +0200
-Subject: [Buildroot] [PATCH 03/21] package/python-pydal: bump version to 16.9
+Date: Thu,  6 Oct 2016 21:29:39 +0200
+Subject: [Buildroot] [PATCH 12/21] package/python-simplejson: bump version
+	to 3.8.2
 In-Reply-To: <20161006192948.27956-1-bernd.kuhls@t-online.de>
 References: <20161006192948.27956-1-bernd.kuhls@t-online.de>
-Message-ID: <20161006192948.27956-3-bernd.kuhls@t-online.de>
+Message-ID: <20161006192948.27956-12-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +13,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-pydal/python-pydal.hash | 5 +++--
- package/python-pydal/python-pydal.mk   | 5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/python-simplejson/python-simplejson.hash | 5 +++--
+ package/python-simplejson/python-simplejson.mk   | 8 ++++----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
-index bb36617..ad17c33 100644
---- a/package/python-pydal/python-pydal.hash
-+++ b/package/python-pydal/python-pydal.hash
+diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
+index c0f33b2..19421b8 100644
+--- a/package/python-simplejson/python-simplejson.hash
++++ b/package/python-simplejson/python-simplejson.hash
 @@ -1,2 +1,3 @@
 -# locally computed
--sha256  e59c050c4b7656c36351707dfbbae187645d46327e67e42415e15b3bc32d48b3  python-pydal-v15.07.tar.gz
-+# md5 from https://pypi.python.org/pypi/pydal/json, sha256 locally computed
-+md5	74c6cc43d5ee57bcffa804c1204030d8  pyDAL-16.9.tar.gz
-+sha256	e5e18b10df044c4328a5a2fe0400793a8f643fe3526daee8c99103fc5589476e  pyDAL-16.9.tar.gz
-diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
-index 4c5da41..a0e9729 100644
---- a/package/python-pydal/python-pydal.mk
-+++ b/package/python-pydal/python-pydal.mk
-@@ -4,8 +4,9 @@
+-sha256  a80dc90320e1c1b8eaceaaa755ae2aed382d64a59321ae9f6ddbe0321c02878a  simplejson-3.5.3.tar.gz
++# md5 from https://pypi.python.org/pypi/simplejson/json, sha256 locally computed
++md5	53b1371bbf883b129a12d594a97e9a18  simplejson-3.8.2.tar.gz
++sha256	d58439c548433adcda98e695be53e526ba940a4b9c44fb9a05d92cd495cdd47f  simplejson-3.8.2.tar.gz
+diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
+index 61283b7..703bca2 100644
+--- a/package/python-simplejson/python-simplejson.mk
++++ b/package/python-simplejson/python-simplejson.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_PYDAL_VERSION = v15.07
--PYTHON_PYDAL_SITE = $(call github,web2py,pydal,$(PYTHON_PYDAL_VERSION))
-+PYTHON_PYDAL_VERSION = 16.9
-+PYTHON_PYDAL_SOURCE = pyDAL-$(PYTHON_PYDAL_VERSION).tar.gz
-+PYTHON_PYDAL_SITE = https://pypi.python.org/packages/31/cb/7537f8d848106e3e4b4063955395a5dc3177c32c2cd2cc0a1938a486d4fa
- PYTHON_PYDAL_LICENSE = BSD-3c
- PYTHON_PYDAL_LICENSE_FILES = LICENSE
- PYTHON_PYDAL_SETUP_TYPE = setuptools
+-PYTHON_SIMPLEJSON_VERSION = 3.5.3
++PYTHON_SIMPLEJSON_VERSION = 3.8.2
+ PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
+-PYTHON_SIMPLEJSON_SITE = http://pypi.python.org/packages/source/s/simplejson
+-PYTHON_SIMPLEJSON_LICENSE = MIT
++PYTHON_SIMPLEJSON_SITE = https://pypi.python.org/packages/f0/07/26b519e6ebb03c2a74989f7571e6ae6b82e9d7d81b8de6fcdbfc643c7b58
++PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
+ PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
+-PYTHON_SIMPLEJSON_SETUP_TYPE = distutils
++PYTHON_SIMPLEJSON_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
 -- 
 2.9.3
