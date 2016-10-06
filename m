@@ -1,126 +1,164 @@
-From: Jerry Van Baren <gvb.buildroot@unssw.com>
-Date: Thu, 6 Oct 2016 13:38:19 -0400
-Subject: [Buildroot] [PATCH] Fix dhcp symlink in target/var/lib/dhcp
-In-Reply-To: <25c03ce6-8771-cd39-32ef-b815ede292f6@mind.be>
-References: <CAK-g76X-fwsZnfmQaDN8a90kLrJCRfduAgNYyXuYa-UytHSfpA@mail.gmail.com>
- <25c03ce6-8771-cd39-32ef-b815ede292f6@mind.be>
-Message-ID: <CAK-g76Vp+TepJFwXN-RpFqWmr6nKUwVaHjUm0F8b5UDXXtE6Og@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 6 Oct 2016 20:57:52 +0200
+Subject: [Buildroot] gdb texinfo dependency
+In-Reply-To: <b6d8768f-9192-6e0a-0299-36584151f4e7@gmail.com>
+References: <CAAXf6LUHdDJyUPNcW-vQuZx6RhZxsPrGv69SqRPvRrAy46ropA@mail.gmail.com>
+ <20161005172756.77aea89c@free-electrons.com>
+ <CAAXf6LUJOwtpDmUg1zxDdBDKnOAnjkafxwuCAVRQP5aMm3zT9g@mail.gmail.com>
+ <20161005221619.6a958ba0@free-electrons.com>
+ <b6d8768f-9192-6e0a-0299-36584151f4e7@gmail.com>
+Message-ID: <CAAXf6LX5+csACE8dRjdL+ue-JYpGbCsHZDjQ=KOuaESuoehgDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi,
 
-On Wed, Oct 5, 2016 at 7:20 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+On Wed, Oct 5, 2016 at 11:23 PM, Romain Naour <romain.naour@gmail.com> wrote:
+> Hi Thomas?
 >
+> Le 05/10/2016 ? 22:16, Thomas Petazzoni a ?crit :
+>> Hello,
+>>
+>> On Wed, 5 Oct 2016 22:11:31 +0200, Thomas De Schampheleire wrote:
+>>
+>>> I did that now. While I'm still running some more tests, I already
+>>> tested tarball versions 7.10.1 and 7.11.1, and both ARC and Microblaze
+>>> git versions. I currently only tested host-gdb, but for all these
+>>> cases I can get rid of the host-texinfo dependency with following
+>>> extra changes:
+>>>
+>>> GDB_INSTALL_OPTS += MAKEINFO=true
+>>> GDB_MAKE_OPTS += MAKEINFO=true
+>>> HOST_GDB_INSTALL_OPTS += MAKEINFO=true
+>>> HOST_GDB_MAKE_OPTS += MAKEINFO=true
+>>>
+>>> The INSTALL_OPTS were needed for the tarball versions, while the
+>>> MAKE_OPTS (and perhaps also the INSTALL_OPTS, not sure) for the git
+>>> versions.
 >
-> On 28-09-16 18:07, Root, Build wrote:
->> The symlink was to /tmp causing an error on the target install step:
->> rsync: chgrp "/<path>/output/target/var/lib/dhcp" failed: Operation
->> not permitted
+> I don't remember if I tried with INSTALL_OPTS += MAKEINFO=true...
 >
->  Could you explain this a little more? The install step of this package only
-> calls $(INSTALL), not rsync or 'make install' or anything like that. So how does
-> this happen?
-
-I have not dug to the bottom of this, but the issue is the DHCP
-(server, not client)
-package is creates
-   /var/lib/dhcp/dhcpd.leases
-which ends up in /tmp/dhcpd.leases without the patch. With the patch it ends up
-in .../output/target/tmp/dhcpd.leases.
-
-(Informed guessing here) When buildroot creates the file system image, it does a
-rsync with chgrp (and chown) to the proper owner (root.root), but that
-is not allowed
-as an unprivileged user running buildroot on the host's /tmp directory.
-
-I'm running very stock Ubuntu 14.04.5 x86 "server" installation cross compiling
-to an ARM target.
-
-I did not have a problem with older versions of Buildroot, it was when we pulled
-our baseline forward to 2016.08 that we had the problem (previously was 2014
-timeframe).
-
->  Also note that we don't have such failures in the autobuilders. And anyway, I
-> thought that a failing chgrp in rsync was non-fatal?
-
-Not for me. :-/ I will look into it further. Total speculation: it may
-be a double fault
-where the chown root fails followed by a chgrp root which also fails,
-aborting the script.
-
-As you note, the autobuilders are not catching it, so it might be
-something in how
-my build machine is set up.
-
->> Changing the symlink to "../../tmp" rather than "/tmp" references the
->> target's /tmp directory rather than the build machine's /tmp directory.
+> Initially we had ac_cv_prog_MAKEINFO=missing in CONF_ENV
 >
->  The problem is that /var/lib itself may be a symlink to somewhere else. Some
-> people need to have /var/lib in a writeable partition while /var itself is on
-> the readonly rootfs. When /var/lib is a symlink, the ../.. will be interpreted
-> relative to the target of that symlink, which may be a different number of
-> levels down from root.
+>>
+>> OK.
+>>
+>>> I still need to test the (target-)gdb, but I guess it won't make a
+>>> difference as the Makefiles are the same.
+>>
+>> Worth testing to check that everything is alright.
+>>
+>>> Is this too simplistic? Am I missing something?
+>>
+>> If it works, then all good.
 >
->  Also, since /tmp always exists on the build machine, symlinking to /tmp just works.
+> I tested here, and it seems good even for microblaze host-gdb.
+>
 
-The symlink works fine, the chgrp to root on /tmp/dhcpd.leases doesn't. :-(
+I also tested target-gdb now, and the same trick looks fine no.
+
+I also applied the change on binutils, and it seems to work fine there
+too, but for tarballs as git versions.
+
+Current patch that I'm using is:
+
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 3a4a661..b578854 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -29,19 +29,8 @@ BINUTILS_LICENSE = GPLv3+, libiberty LGPLv2.1+
+ BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
+
+ ifeq ($(BINUTILS_FROM_GIT),y)
+-BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
+-HOST_BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
+-endif
+-
+-# The .info files in the >= 2.26 tarball have an incorrect timestamp,
+-# so binutils tries to re-generate them. In order to avoid the
+-# dependency on host-texinfo, we simply update the timestamps.
+-ifeq ($(BR2_BINUTILS_VERSION_2_26_X)$(BR2_BINUTILS_VERSION_2_27_X),y)
+-define BINUTILS_FIXUP_INFO_TIMESTAMPS
+-    find $(@D) -name '*.info' -exec touch {} \;
+-endef
+-BINUTILS_POST_PATCH_HOOKS += BINUTILS_FIXUP_INFO_TIMESTAMPS
+-HOST_BINUTILS_POST_PATCH_HOOKS += BINUTILS_FIXUP_INFO_TIMESTAMPS
++BINUTILS_DEPENDENCIES += host-flex host-bison
++HOST_BINUTILS_DEPENDENCIES += host-flex host-bison
+ endif
+
+ # When binutils sources are fetched from the binutils-gdb repository,
+@@ -68,8 +57,12 @@ endif
+
+ # Don't build documentation. It takes up extra space / build time,
+ # and sometimes needs specific makeinfo versions to work
+-BINUTILS_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+-HOST_BINUTILS_CONF_ENV += ac_cv_prog_MAKEINFO=missing
++BINUTILS_CONF_ENV += MAKEINFO=true
++BINUTILS_MAKE_OPTS += MAKEINFO=true
++BINUTILS_INSTALL_OPTS += MAKEINFO=true
++HOST_BINUTILS_CONF_ENV += MAKEINFO=true
++HOST_BINUTILS_MAKE_OPTS += MAKEINFO=true
++HOST_BINUTILS_INSTALL_OPTS += MAKEINFO=true
+
+ # gcc bug with Os/O2/O3, PR77311
+ # error: unable to find a register to spill in class 'CCREGS'
+@@ -109,7 +102,7 @@ HOST_BINUTILS_CONF_OPTS = \
+ # binutils run configure script of subdirs at make time, so ensure
+ # our TARGET_CONFIGURE_ARGS are taken into consideration for those
+ define BINUTILS_BUILD_CMDS
+-    $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_ARGS) $(MAKE) -C $(@D)
++    $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_ARGS) $(MAKE)
+$(BINUTILS_MAKE_OPTS) -C $(@D)
+ endef
+
+ # We just want libbfd, libiberty and libopcodes,
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 1c778e9..935e33b 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -37,13 +37,6 @@ endif
+ # also need ncurses.
+ HOST_GDB_DEPENDENCIES = host-expat host-ncurses
+
+-# Starting with gdb 7.10, gdb wants to re-generate its documentation.
+-# We were trying to avoid that by patching the Makefiles, but it wasn't
+-# working in all situations. So, we simply add a dependency on
+-# host-texinfo in all case.
+-GDB_DEPENDENCIES += host-texinfo
+-HOST_GDB_DEPENDENCIES += host-texinfo
+-
+ # Apply the Xtensa specific patches
+ XTENSA_CORE_NAME = $(call qstrip, $(BR2_XTENSA_CORE_NAME))
+ ifneq ($(XTENSA_CORE_NAME),)
+@@ -159,6 +152,12 @@ ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
+ GDB_POST_INSTALL_TARGET_HOOKS += GDB_SDK_INSTALL_GDBSERVER
+ endif
+
++# Disable building documentation
++GDB_MAKE_OPTS += MAKEINFO=true
++GDB_INSTALL_OPTS += MAKEINFO=true
++HOST_GDB_MAKE_OPTS += MAKEINFO=true
++HOST_GDB_INSTALL_OPTS += MAKEINFO=true
++
+ # A few notes:
+ #  * --target, because we're doing a cross build rather than a real
+ #    host build.
+
+
+
+Now, I find it kind of ugly to have all these '<PKG>_SOMETHING_OPTS +=
+MAKEINFO=true'.
+What would you say if we add this type of logic for all packages in
+package/pkg-generic.mk ? i.e. add 'MAKEINFO=true' to MAKE_OPTS,
+CONF_ENV, INSTALL_OPTS.
+
+Another question: we could replace 'true' by ':' which is a
+bash-interpreted command that also does nothing. I think Arnout once
+made such a comment (in another context). What do you think?
 
 Thanks,
-gvb
-
->>
->> Signed-off-by: Gerald Van Baren <jerry@vibrationresearch.com>
->> ---
->>  package/dhcp/dhcp.mk | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
->> index 5cb6043..80c984b 100644
->> --- a/package/dhcp/dhcp.mk
->> +++ b/package/dhcp/dhcp.mk
->> @@ -56,7 +56,7 @@ endif
->>  ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
->>  define DHCP_INSTALL_SERVER
->>         mkdir -p $(TARGET_DIR)/var/lib
->> -       (cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
->> +       (cd $(TARGET_DIR)/var/lib; ln -snf ../../tmp dhcp)
->>         $(INSTALL) -m 0755 -D $(@D)/server/dhcpd $(TARGET_DIR)/usr/sbin/dhcpd
->>         $(INSTALL) -m 0644 -D package/dhcp/dhcpd.conf \
->>                 $(TARGET_DIR)/etc/dhcp/dhcpd.conf
->> @@ -66,7 +66,7 @@ endif
->>  ifeq ($(BR2_PACKAGE_DHCP_RELAY),y)
->>  define DHCP_INSTALL_RELAY
->>         mkdir -p $(TARGET_DIR)/var/lib
->> -       (cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
->> +       (cd $(TARGET_DIR)/var/lib; ln -snf ../../tmp dhcp)
->>         $(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/dhcrelay \
->>                 $(TARGET_DIR)/usr/sbin/dhcrelay
->>  endef
->> @@ -75,7 +75,7 @@ endif
->>  ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
->>  define DHCP_INSTALL_CLIENT
->>         mkdir -p $(TARGET_DIR)/var/lib
->> -       (cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
->> +       (cd $(TARGET_DIR)/var/lib; ln -snf ../../tmp dhcp)
->>         $(INSTALL) -m 0755 -D $(DHCP_DIR)/client/dhclient \
->>                 $(TARGET_DIR)/sbin/dhclient
->>         $(INSTALL) -m 0644 -D package/dhcp/dhclient.conf \
->> --
->> 1.9.1
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas
