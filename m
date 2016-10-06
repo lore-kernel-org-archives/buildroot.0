@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  6 Oct 2016 21:29:34 +0200
-Subject: [Buildroot] [PATCH 07/21] package/python-pytz: bump version to
-	2016.7
+Date: Thu,  6 Oct 2016 21:29:29 +0200
+Subject: [Buildroot] [PATCH 02/21] package/python-pillow: bump version to
+	3.4.0
 In-Reply-To: <20161006192948.27956-1-bernd.kuhls@t-online.de>
 References: <20161006192948.27956-1-bernd.kuhls@t-online.de>
-Message-ID: <20161006192948.27956-7-bernd.kuhls@t-online.de>
+Message-ID: <20161006192948.27956-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-pytz/python-pytz.hash | 7 +++----
- package/python-pytz/python-pytz.mk   | 4 ++--
+ package/python-pillow/python-pillow.hash | 7 +++----
+ package/python-pillow/python-pillow.mk   | 4 ++--
  2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
-index 5047a8c..db362ec 100644
---- a/package/python-pytz/python-pytz.hash
-+++ b/package/python-pytz/python-pytz.hash
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index fa6834e..ed195f6 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
 @@ -1,4 +1,3 @@
--# md5 from https://pypi.python.org/pypi/pytz/json
--md5	e56283d61935963157aebc5135206a47  pytz-2016.4.tar.bz2
--# sha256 calculated by scanpypi
--sha256	ee7c751544e35a7b7fb5e3fb25a49dade37d51e70a93e5107f10575d7102c311  pytz-2016.4.tar.bz2
-+# md5 from https://pypi.python.org/pypi/pytz/json, sha256 locally computed
-+md5	8d8121d619a43cf0b38a4195de1cb8a5  pytz-2016.7.tar.bz2
-+sha256	6eab31709e3a4aea748457707da45e805b650cbb352583805d2417de2a1dd71e  pytz-2016.7.tar.bz2
-diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
-index a73c9cf..ffcab32 100644
---- a/package/python-pytz/python-pytz.mk
-+++ b/package/python-pytz/python-pytz.mk
+-https://pypi.python.org/pypi?:action=show_md5&digest=3bc85204223b52e96ed05c9441507eed
+-md5 3bc85204223b52e96ed05c9441507eed  Pillow-3.3.1.tar.gz
+-# sha256 locally computed
+-sha256 3491ca65d9fdba4db094ab3f8e17170425e7dd670e507921a665a1975d1b3df1  Pillow-3.3.1.tar.gz
++# md5 from https://pypi.python.org/pypi/pillow/json, sha256 locally computed
++md5	1ea45914e8cc375fb385da2555b37267  Pillow-3.4.0.tar.gz
++sha256	51027d511f4ab991f628f6f7b9b0fbf18f584ee8a67160410afe3b19685b9d50  Pillow-3.4.0.tar.gz
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 9116e12..f06ce8d 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYTZ_VERSION = 2016.4
-+PYTHON_PYTZ_VERSION = 2016.7
- PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.bz2
--PYTHON_PYTZ_SITE = https://pypi.python.org/packages/f4/7d/7c0c85e9c64a75dde11bc9d3e1adc4e09a42ce7cdb873baffa1598118709
-+PYTHON_PYTZ_SITE = https://pypi.python.org/packages/53/35/6376f58fb82ce69e2c113ca0ebe5c0f69b20f006e184bcc238a6007f4bdb
- PYTHON_PYTZ_SETUP_TYPE = setuptools
- PYTHON_PYTZ_LICENSE = MIT
- PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
+-PYTHON_PILLOW_VERSION = 3.3.1
++PYTHON_PILLOW_VERSION = 3.4.0
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+-PYTHON_PILLOW_SITE = https://pypi.python.org/packages/7b/32/e6978aed8fba6398c00eec25f12798fb57647a6cef4f85db1567e3d086ef
++PYTHON_PILLOW_SITE = https://pypi.python.org/packages/51/1d/6456623ea7e155249c0e82cf92715c42ba1902759d1eeff6ac5c3107e747
+ PYTHON_PILLOW_LICENSE = PIL Software License
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
+ PYTHON_PILLOW_SETUP_TYPE = setuptools
 -- 
 2.9.3
