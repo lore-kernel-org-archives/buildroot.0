@@ -1,39 +1,39 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu,  6 Oct 2016 21:35:26 +0200
-Subject: [Buildroot] [PATCH] luarocks: bump to version 2.4.1
-Message-ID: <1475782526-10472-1-git-send-email-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Oct 2016 21:36:26 +0200
+Subject: [Buildroot] gdb texinfo dependency
+In-Reply-To: <CAAXf6LWaBL_cifwis=3Y1NYLMgt0m1=eOmb99UqGyzgxF7FikQ@mail.gmail.com>
+References: <CAAXf6LUHdDJyUPNcW-vQuZx6RhZxsPrGv69SqRPvRrAy46ropA@mail.gmail.com>
+ <20161005172756.77aea89c@free-electrons.com>
+ <CAAXf6LUJOwtpDmUg1zxDdBDKnOAnjkafxwuCAVRQP5aMm3zT9g@mail.gmail.com>
+ <20161005221619.6a958ba0@free-electrons.com>
+ <b6d8768f-9192-6e0a-0299-36584151f4e7@gmail.com>
+ <CAAXf6LX5+csACE8dRjdL+ue-JYpGbCsHZDjQ=KOuaESuoehgDA@mail.gmail.com>
+ <CAAXf6LWaBL_cifwis=3Y1NYLMgt0m1=eOmb99UqGyzgxF7FikQ@mail.gmail.com>
+Message-ID: <20161006213626.5147dc08@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index 2750745..c35383a 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	44381c9128d036247d428531291d1ff9405ae1daa238581d3c15f96d899497c3  luarocks-2.4.0.tar.gz
-+sha256	e429e0af9764bfd5cb640cac40f9d4ed1023fa17c052dff82ed0a41c05f3dcf9  luarocks-2.4.1.tar.gz
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 4a5ae03..64c8d5b 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAROCKS_VERSION = 2.4.0
-+LUAROCKS_VERSION = 2.4.1
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+On Thu, 6 Oct 2016 20:59:47 +0200, Thomas De Schampheleire wrote:
+
+> Seems my mail was a bit cryptic, sorry... see below
+
+Indeed. With the replacements, it makes sense.
+
+Can you submit patches to fix this? Something like:
+
+ 1/ Fixing this in binutils
+ 2/ Fixing this in gdb
+ 3/ Removing (again) the host-texinfo package
+
+Thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
