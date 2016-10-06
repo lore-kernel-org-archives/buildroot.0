@@ -1,180 +1,81 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed,  5 Oct 2016 21:11:17 -0300
-Subject: [Buildroot] [PATCH v2] configs/mx6udoo: Add initial support
-Message-ID: <1475712677-29772-1-git-send-email-festevam@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  6 Oct 2016 06:48:55 +0200
+Subject: [Buildroot] [PATCH 2/5] package/python-futures: new package
+In-Reply-To: <20161006044858.27768-1-bernd.kuhls@t-online.de>
+References: <20161006044858.27768-1-bernd.kuhls@t-online.de>
+Message-ID: <20161006044858.27768-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the initial support for mx6q/dl udoo boards.
+Needed by upcoming python-mwscrape package.
 
-For information about these boards, please visit:
-http://www.udoo.org/
-
-In linux.fragment we disable USB support for now because kernel 4.8
-hangs on udoo board.
-
-This is been addressed by Peter Chen's kernel patch series that provides
-a standard way to reset a USB hub.
-
-When such series hit mainline, then we can bump the kernel and remove
-linux.fragment.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes since v1:
-- Add BR2_TARGET_UBOOT_FORMAT_IMG=y and remove the unneeded
-BR2_PACKAGE_HOST_UBOOT_TOOLS option
+ package/Config.in                          |  1 +
+ package/python-futures/Config.in           |  7 +++++++
+ package/python-futures/python-futures.hash |  3 +++
+ package/python-futures/python-futures.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-futures/Config.in
+ create mode 100644 package/python-futures/python-futures.hash
+ create mode 100644 package/python-futures/python-futures.mk
 
- board/udoo/genimage.cfg   | 48 +++++++++++++++++++++++++++++++++++++++++++++++
- board/udoo/linux.fragment |  1 +
- board/udoo/post-image.sh  | 14 ++++++++++++++
- board/udoo/readme.txt     | 17 +++++++++++++++++
- configs/mx6udoo_defconfig | 26 +++++++++++++++++++++++++
- 5 files changed, 106 insertions(+)
- create mode 100644 board/udoo/genimage.cfg
- create mode 100644 board/udoo/linux.fragment
- create mode 100755 board/udoo/post-image.sh
- create mode 100644 board/udoo/readme.txt
- create mode 100644 configs/mx6udoo_defconfig
-
-diff --git a/board/udoo/genimage.cfg b/board/udoo/genimage.cfg
+diff --git a/package/Config.in b/package/Config.in
+index c7f29e5..67c4aff 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -681,6 +681,7 @@ menu "External python modules"
+ 	source "package/python-flask-jsonrpc/Config.in"
+ 	source "package/python-flask-login/Config.in"
+ 	source "package/python-flup/Config.in"
++	source "package/python-futures/Config.in"
+ 	source "package/python-gobject/Config.in"
+ 	source "package/python-html5lib/Config.in"
+ 	source "package/python-httplib2/Config.in"
+diff --git a/package/python-futures/Config.in b/package/python-futures/Config.in
 new file mode 100644
-index 0000000..4361d54
+index 0000000..2eb40e9
 --- /dev/null
-+++ b/board/udoo/genimage.cfg
-@@ -0,0 +1,48 @@
-+# Minimal microSD card image for Udoo MX6Q/DL boards
-+#
-+# We mimic the .sdcard Freescale's image format for i.MX6:
-+# * the microSD card must have 1 kB free space at the beginning,
-+# * U-Boot is dumped as is,
-+# * a FAT partition at offset 16 MB is containing zImage and dtbs,
-+# * a single root filesystem partition is required (Ext4 in this case).
-+#
++++ b/package/python-futures/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_FUTURES
++	bool "python-futures"
++	depends on BR2_PACKAGE_PYTHON # not needed for python3
++	help
++	  Backport of the concurrent.futures package from Python 3.2.
 +
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"imx6q-udoo.dtb",
-+			"imx6dl-udoo.dtb",
-+			"zImage"
-+		}
-+	}
-+	size = 16M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition SPL {
-+		in-partition-table = "no"
-+		image = "SPL"
-+		offset = 1K
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "u-boot.img"
-+		offset = 69K
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+		offset = 16M
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/udoo/linux.fragment b/board/udoo/linux.fragment
++	  https://github.com/agronholm/pythonfutures
+diff --git a/package/python-futures/python-futures.hash b/package/python-futures/python-futures.hash
 new file mode 100644
-index 0000000..2acad15
+index 0000000..f0948ae
 --- /dev/null
-+++ b/board/udoo/linux.fragment
-@@ -0,0 +1 @@
-+CONFIG_USB=n
-diff --git a/board/udoo/post-image.sh b/board/udoo/post-image.sh
-new file mode 100755
-index 0000000..b4ac460
++++ b/package/python-futures/python-futures.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/futures/json, sha256 locally computed
++md5	ced2c365e518242512d7a398b515ff95  futures-3.0.5.tar.gz
++sha256	0542525145d5afc984c88f914a0c85c77527f65946617edb5274f72406f981df  futures-3.0.5.tar.gz
+diff --git a/package/python-futures/python-futures.mk b/package/python-futures/python-futures.mk
+new file mode 100644
+index 0000000..710c2c9
 --- /dev/null
-+++ b/board/udoo/post-image.sh
++++ b/package/python-futures/python-futures.mk
 @@ -0,0 +1,14 @@
-+#!/usr/bin/env bash
++################################################################################
++#
++# python-futures
++#
++################################################################################
 +
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++PYTHON_FUTURES_VERSION = 3.0.5
++PYTHON_FUTURES_SOURCE = futures-$(PYTHON_FUTURES_VERSION).tar.gz
++PYTHON_FUTURES_SITE = https://pypi.python.org/packages/55/db/97c1ca37edab586a1ae03d6892b6633d8eaa23b23ac40c7e5bbc55423c78
++PYTHON_FUTURES_SETUP_TYPE = setuptools
++PYTHON_FUTURES_LICENSE = BSD
++PYTHON_FUTURES_LICENSE_FILES = LICENSE
 +
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage \
-+  --rootpath "${TARGET_DIR}" \
-+  --tmppath "${GENIMAGE_TMP}" \
-+  --inputpath "${BINARIES_DIR}" \
-+  --outputpath "${BINARIES_DIR}" \
-+  --config "${GENIMAGE_CFG}"
-diff --git a/board/udoo/readme.txt b/board/udoo/readme.txt
-new file mode 100644
-index 0000000..acd05f6
---- /dev/null
-+++ b/board/udoo/readme.txt
-@@ -0,0 +1,17 @@
-+Udoo MX6Q/DL board
-+
-+For information about MX6 Udoo boards:
-+http://www.udoo.org/
-+
-+To build a minimal support for these boards:
-+
-+    $ make mx6udoo_defconfig
-+    $ make
-+
-+Buildroot prepares a bootable "sdcard.img" image in the output/images/
-+directory, ready to be dumped on a micro SD card:
-+
-+dd if=output/images/sdcard.img of=/dev/<your-microsd-device>
-+
-+For details about the medium image layout, see the definition in
-+board/udoo/genimage.cfg.
-diff --git a/configs/mx6udoo_defconfig b/configs/mx6udoo_defconfig
-new file mode 100644
-index 0000000..1ca2be4
---- /dev/null
-+++ b/configs/mx6udoo_defconfig
-@@ -0,0 +1,26 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+# Linux headers same as kernel, a 4.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/udoo/post-image.sh"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="udoo"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="SPL"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/udoo/linux.fragment"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-udoo imx6dl-udoo"
-+# required tools to create the SD card image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
++$(eval $(python-package))
 -- 
-2.7.4
+2.9.3
