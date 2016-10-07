@@ -1,48 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 7 Oct 2016 15:15:20 +0200
-Subject: [Buildroot] [git commit] package/python-werkzeug: bump version to
-	0.11.11
-Message-ID: <20161007131552.3D11E822E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-thrift: bump version to
+	0.9.3
+Message-ID: <20161007131552.0A4B8822F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c36047128895b0fb8746664dddae0fd40b47fe0
+commit: https://git.buildroot.net/buildroot/commit/?id=7a89b875ee8880610de77daa389d487fe19dd4e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+PYTHON_THRIFT_SUBDIR is not needed anymore.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-werkzeug/python-werkzeug.hash | 6 +++---
- package/python-werkzeug/python-werkzeug.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-thrift/python-thrift.hash | 5 +++--
+ package/python-thrift/python-thrift.mk   | 7 +++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index e2afd14..3f23352 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=780967186f9157e88f2bfbfa6f07a893, sha256 locally computed
--md5	780967186f9157e88f2bfbfa6f07a893  Werkzeug-0.11.10.tar.gz
--sha256	cc64dafbacc716cdd42503cf6c44cb5a35576443d82f29f6829e5c49264aeeee  Werkzeug-0.11.10.tar.gz
-+# md5 from https://pypi.python.org/pypi/werkzeug/json, sha256 locally computed
-+md5	1d34afa1f19abcef4c0da51ebc2c4ea7  Werkzeug-0.11.11.tar.gz
-+sha256	e72c46bc14405cba7a26bd2ce28df734471bc9016bc8b4cb69466c2c14c2f7e5  Werkzeug-0.11.11.tar.gz
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index c0af65c..072937f 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-thrift/python-thrift.hash b/package/python-thrift/python-thrift.hash
+index 811aa98..72269eb 100644
+--- a/package/python-thrift/python-thrift.hash
++++ b/package/python-thrift/python-thrift.hash
+@@ -1,2 +1,3 @@
+-# From https://www.apache.org/dist/thrift/0.9.2/thrift-0.9.2.tar.gz.md5
+-md5	89f63cc4d0100912f4a1f8a9dee63678	thrift-0.9.2.tar.gz
++# md5 from https://pypi.python.org/pypi/thrift/json, sha256 locally computed
++md5	b519551d7a086bb0b4f222a8f566b7e8  thrift-0.9.3.tar.gz
++sha256	dfbc3d3bd19d396718dab05abaf46d93ae8005e2df798ef02e32793cd963877e  thrift-0.9.3.tar.gz
+diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
+index 99641b8..d0e3a14 100644
+--- a/package/python-thrift/python-thrift.mk
++++ b/package/python-thrift/python-thrift.mk
+@@ -4,12 +4,11 @@
  #
  ################################################################################
  
--PYTHON_WERKZEUG_VERSION = 0.11.10
-+PYTHON_WERKZEUG_VERSION = 0.11.11
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
--PYTHON_WERKZEUG_SITE = https://pypi.python.org/packages/b7/7f/44d3cfe5a12ba002b253f6985a4477edfa66da53787a2a838a40f6415263
-+PYTHON_WERKZEUG_SITE = https://pypi.python.org/packages/43/2e/d822b4a4216804519ace92e0368dcfc4b0b2887462d852fdd476b253ecc9
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
- PYTHON_WERKZEUG_LICENSE = BSD-3c
- PYTHON_WERKZEUG_LICENSE_FILES = LICENSE
+-PYTHON_THRIFT_VERSION = 0.9.2
++PYTHON_THRIFT_VERSION = 0.9.3
+ PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
+-PYTHON_THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(PYTHON_THRIFT_VERSION)
++PYTHON_THRIFT_SITE = https://pypi.python.org/packages/ae/58/35e3f0cd290039ff862c2c9d8ae8a76896665d70343d833bdc2f748b8e55
+ PYTHON_THRIFT_LICENSE = Apache-2.0
+-PYTHON_THRIFT_LICENSE_FILES = LICENSE
++PYTHON_THRIFT_LICENSE_FILES = setup.py
+ PYTHON_THRIFT_SETUP_TYPE = setuptools
+-PYTHON_THRIFT_SUBDIR = lib/py
+ 
+ $(eval $(python-package))
