@@ -1,49 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 14:48:34 +0200
-Subject: [Buildroot] [git commit] package/python-pillow: bump version to
-	3.4.0
-Message-ID: <20161007131551.66A5182262@busybox.osuosl.org>
+Date: Fri, 7 Oct 2016 15:15:19 +0200
+Subject: [Buildroot] [git commit] package/python-pyxb: bump version to 1.2.5
+Message-ID: <20161007131551.BFBA080089@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86812795ea7cfa02278d692fb22501ee075a365a
+commit: https://git.buildroot.net/buildroot/commit/?id=f338578aa28f4aff461e0e865c559e16d48af0f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pillow/python-pillow.hash | 7 +++----
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/python-pyxb/python-pyxb.hash | 5 +++--
+ package/python-pyxb/python-pyxb.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index fa6834e..ed195f6 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,4 +1,3 @@
--https://pypi.python.org/pypi?:action=show_md5&digest=3bc85204223b52e96ed05c9441507eed
--md5 3bc85204223b52e96ed05c9441507eed  Pillow-3.3.1.tar.gz
--# sha256 locally computed
--sha256 3491ca65d9fdba4db094ab3f8e17170425e7dd670e507921a665a1975d1b3df1  Pillow-3.3.1.tar.gz
-+# md5 from https://pypi.python.org/pypi/pillow/json, sha256 locally computed
-+md5	1ea45914e8cc375fb385da2555b37267  Pillow-3.4.0.tar.gz
-+sha256	51027d511f4ab991f628f6f7b9b0fbf18f584ee8a67160410afe3b19685b9d50  Pillow-3.4.0.tar.gz
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 9116e12..f06ce8d 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-pyxb/python-pyxb.hash b/package/python-pyxb/python-pyxb.hash
+index d8b43f8..9aa50fc 100644
+--- a/package/python-pyxb/python-pyxb.hash
++++ b/package/python-pyxb/python-pyxb.hash
+@@ -1,2 +1,3 @@
+-# Locally computed:
+-sha256  14ced19ecce51e7cd26434446f9bd6b4e309e91806f1f6fc5e21f4ac736aa0de  python-pyxb-1.2.4.tar.gz
++# md5 from https://pypi.python.org/pypi/pyxb/json, sha256 locally computed
++md5	197c462ab8427ea197313ca3776b252a  PyXB-1.2.5.tar.gz
++sha256	4e8f62ee2cfffc37e4f40634ab9c79e0311cfaf28cf4ce5e7f4828ec56e4ff67  PyXB-1.2.5.tar.gz
+diff --git a/package/python-pyxb/python-pyxb.mk b/package/python-pyxb/python-pyxb.mk
+index eb9ffce..d0b2da5 100644
+--- a/package/python-pyxb/python-pyxb.mk
++++ b/package/python-pyxb/python-pyxb.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 3.3.1
-+PYTHON_PILLOW_VERSION = 3.4.0
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_SITE = https://pypi.python.org/packages/7b/32/e6978aed8fba6398c00eec25f12798fb57647a6cef4f85db1567e3d086ef
-+PYTHON_PILLOW_SITE = https://pypi.python.org/packages/51/1d/6456623ea7e155249c0e82cf92715c42ba1902759d1eeff6ac5c3107e747
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_SETUP_TYPE = setuptools
+-PYTHON_PYXB_VERSION = 1.2.4
+-PYTHON_PYXB_SITE = $(call github,pabigot,pyxb,PyXB-$(PYTHON_PYXB_VERSION))
++PYTHON_PYXB_VERSION = 1.2.5
++PYTHON_PYXB_SOURCE = PyXB-$(PYTHON_PYXB_VERSION).tar.gz
++PYTHON_PYXB_SITE = https://pypi.python.org/packages/43/7a/9d40392e4380463f37bf5aa2851dfd8ba7c0e4d2a9dc2355177b8b785794
+ PYTHON_PYXB_LICENSE = Apache-2.0
+ PYTHON_PYXB_LICENSE_FILES = LICENSE
+ PYTHON_PYXB_SETUP_TYPE = distutils
