@@ -1,41 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 14:47:41 +0200
-Subject: [Buildroot] [git commit] luarocks: bump to version 2.4.1
-Message-ID: <20161007124751.729EE81814@busybox.osuosl.org>
+Date: Fri, 7 Oct 2016 14:48:16 +0200
+Subject: [Buildroot] [PATCH] luarocks: bump to version 2.4.1
+In-Reply-To: <1475782526-10472-1-git-send-email-francois.perrad@gadz.org>
+References: <1475782526-10472-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20161007144816.743cc47f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83f9b65c5e0f053530bf482a7b722f744bd2ab54
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu,  6 Oct 2016 21:35:26 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/luarocks/luarocks.hash | 2 +-
+>  package/luarocks/luarocks.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index 2750745..c35383a 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	44381c9128d036247d428531291d1ff9405ae1daa238581d3c15f96d899497c3  luarocks-2.4.0.tar.gz
-+sha256	e429e0af9764bfd5cb640cac40f9d4ed1023fa17c052dff82ed0a41c05f3dcf9  luarocks-2.4.1.tar.gz
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 4a5ae03..64c8d5b 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAROCKS_VERSION = 2.4.0
-+LUAROCKS_VERSION = 2.4.1
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
