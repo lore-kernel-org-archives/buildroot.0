@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 15:23:31 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-libinput:
-	bump version to 0.20.0
-Message-ID: <20161007132630.A24CB81810@busybox.osuosl.org>
+Date: Fri, 7 Oct 2016 15:23:29 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xkeyboard-config: bump
+	version to 2.19
+Message-ID: <20161007132630.94569822F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13a77e9f16b2fc1e9891b18ec03674b4157460fc
+commit: https://git.buildroot.net/buildroot/commit/?id=fdbc3a8bbd9818655ab4314d52039ef031be5375
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash      | 4 ++--
- .../x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk  | 2 +-
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash | 4 ++--
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-index 24f9866..103e515 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index 7c2b64d..1869491 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
 @@ -1,2 +1,2 @@
--# From https://lists.x.org/archives/xorg-announce/2016-September/002705.html
--sha256 c7f1c9406f4af2dc28b6ed3c7cb9fe9d79e9a548c0bba823fbaba20795cd010d  xf86-input-libinput-0.19.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-September/002717.html
-+sha256 c54e8155d0ba0e5abba9de7bb227c4e4930959a01a904de96b6c0e52bb2a39b0  xf86-input-libinput-0.20.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-index 2a5ad78..c096032 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+-# From https://lists.x.org/archives/xorg-announce/2016-June/002698.html
+-sha256	c41d917d6c8a59feb7ccbda51c40a6ada824fdd1e9684b52dd48c9530617ddd0	xkeyboard-config-2.18.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-September/002715.html
++sha256 83dfd186b9eb9ced69e01d8d8e2f15b6a79b2e30124874ef086f2d3048f45827  xkeyboard-config-2.19.tar.bz2
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index e96d1d7..c3d1d89 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.19.1
-+XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.20.0
- XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+-XKEYBOARD_CONFIG_VERSION = 2.18
++XKEYBOARD_CONFIG_VERSION = 2.19
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
+ XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
