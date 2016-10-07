@@ -1,52 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 14:48:40 +0200
-Subject: [Buildroot] [git commit] package/python-pysnmp: bump version to
-	4.3.2
-Message-ID: <20161007131551.90F7882262@busybox.osuosl.org>
+Date: Fri, 7 Oct 2016 15:15:20 +0200
+Subject: [Buildroot] [git commit] package/python-twisted: bump version to
+	16.4.1
+Message-ID: <20161007131552.24FC2822E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cecbee260390e94513281f513100e09decf3597f
+commit: https://git.buildroot.net/buildroot/commit/?id=20468023e0299d9db5efabe910c3a7c1a3507feb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pysnmp/python-pysnmp.hash | 5 +++--
- package/python-pysnmp/python-pysnmp.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-twisted/python-twisted.hash | 6 +++---
+ package/python-twisted/python-twisted.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pysnmp/python-pysnmp.hash b/package/python-pysnmp/python-pysnmp.hash
-index c7957a0..b0f0f49 100644
---- a/package/python-pysnmp/python-pysnmp.hash
-+++ b/package/python-pysnmp/python-pysnmp.hash
-@@ -1,2 +1,3 @@
--# locally computed
--sha256  c5d78273f14afc6401b7456f086e7b56baaaa51fa0c39830d159bed611c9d89d  pysnmp-4.2.4.tar.gz
-+# md5 from https://pypi.python.org/pypi/pysnmp/json, sha256 locally computed
-+md5	9a4d23c4c1edea1c77faed72c469d8e8  pysnmp-4.3.2.tar.gz
-+sha256	7c2bd81df17aa7dca0057a68e7a32284a72231309a0237d66d5b803b5c118977  pysnmp-4.3.2.tar.gz
-diff --git a/package/python-pysnmp/python-pysnmp.mk b/package/python-pysnmp/python-pysnmp.mk
-index 3d0f3b5..dff8bdd 100644
---- a/package/python-pysnmp/python-pysnmp.mk
-+++ b/package/python-pysnmp/python-pysnmp.mk
-@@ -4,13 +4,13 @@
+diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
+index 8836a10..c3a6e95 100644
+--- a/package/python-twisted/python-twisted.hash
++++ b/package/python-twisted/python-twisted.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/Twisted/json, sha256 locally computed.
+-md5     8b35a88d5f1a4bfd762a008968fddabf  Twisted-16.2.0.tar.bz2
+-sha256  a090e8dc675e97fb20c3bb5f8114ae94169f4e29fd3b3cbede35705fd3cdbd79  Twisted-16.2.0.tar.bz2
++# md5 from https://pypi.python.org/pypi/twisted/json, sha256 locally computed
++md5	c6d09bdd681f538369659111f079c29d  Twisted-16.4.1.tar.bz2
++sha256	1d8d73f006c990744effb35588359fd44d43608649ac0b6b7edc71176e88e816  Twisted-16.4.1.tar.bz2
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+index 3c45d01..7e9e496 100644
+--- a/package/python-twisted/python-twisted.mk
++++ b/package/python-twisted/python-twisted.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSNMP_VERSION = 4.2.4
-+PYTHON_PYSNMP_VERSION = 4.3.2
- PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
--PYTHON_PYSNMP_SITE = https://pypi.python.org/packages/source/p/pysnmp
-+PYTHON_PYSNMP_SITE = https://pypi.python.org/packages/9e/77/795fcc9d9a01adcb6175a3bf6532132addb8904922afd7877a9930d89f2f
- PYTHON_PYSNMP_SETUP_TYPE = setuptools
- 
- PYTHON_PYSNMP_LICENSE = BSD-3c
--PYTHON_PYSNMP_LICENSE_FILES = LICENSE
-+PYTHON_PYSNMP_LICENSE_FILES = LICENSE.txt
- 
- PYTHON_PYSNMP_DEPENDENCIES = python-pyasn python-pycrypto
- 
+-PYTHON_TWISTED_VERSION = 16.2.0
++PYTHON_TWISTED_VERSION = 16.4.1
+ PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
+-PYTHON_TWISTED_SITE = https://pypi.python.org/packages/18/85/eb7af503356e933061bf1220033c3a85bad0dbc5035dfd9a97f1e900dfcb
++PYTHON_TWISTED_SITE = https://pypi.python.org/packages/6b/23/8dbe86fc83215015e221fbd861a545c6ec5c9e9cd7514af114d1f64084ab
+ PYTHON_TWISTED_SETUP_TYPE = setuptools
+ PYTHON_TWISTED_LICENSE = MIT
+ PYTHON_TWISTED_LICENSE_FILES = LICENSE
