@@ -1,47 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 15:15:20 +0200
-Subject: [Buildroot] [git commit] package/python-tornado: bump version to
-	4.4.2
-Message-ID: <20161007131552.189FA822E2@busybox.osuosl.org>
+Date: Fri, 7 Oct 2016 15:20:59 +0200
+Subject: [Buildroot] [PATCH 01/21] package/python-pexpect: bump version
+ to 4.2.1
+In-Reply-To: <20161006192948.27956-1-bernd.kuhls@t-online.de>
+References: <20161006192948.27956-1-bernd.kuhls@t-online.de>
+Message-ID: <20161007152059.4cb5fbb0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2473a312d424b33ae82f3da219332ca49dda5ed2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-tornado/python-tornado.hash | 4 ++--
- package/python-tornado/python-tornado.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Thu,  6 Oct 2016 21:29:28 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/python-pexpect/python-pexpect.hash | 6 +++---
+>  package/python-pexpect/python-pexpect.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
-index 27385a5..ee4080f 100644
---- a/package/python-tornado/python-tornado.hash
-+++ b/package/python-tornado/python-tornado.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/tornado/json, sha256 locally computed
--md5     fff8a7d7f580b04bacc2ffe7ddf41133 tornado-4.4.1.tar.gz
--sha256  371d0cf3d56c47accc66116a77ad558d76eebaa8458a6b677af71ca606522146  tornado-4.4.1.tar.gz
-+md5	b4816ea209118667ffc52ce9ff06ac85  tornado-4.4.2.tar.gz
-+sha256	2898f992f898cd41eeb8d53b6df75495f2f423b6672890aadaf196ea1448edcc  tornado-4.4.2.tar.gz
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index 98d42b5..e512e60 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_TORNADO_VERSION = 4.4.1
-+PYTHON_TORNADO_VERSION = 4.4.2
- PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
--PYTHON_TORNADO_SITE = https://pypi.python.org/packages/96/5d/ff472313e8f337d5acda5d56e6ea79a43583cc8771b34c85a1f458e197c3
-+PYTHON_TORNADO_SITE = https://pypi.python.org/packages/1e/7c/ea047f7bbd1ff22a7f69fe55e7561040e3e54d6f31da6267ef9748321f98
- PYTHON_TORNADO_LICENSE = Apache-2.0
- PYTHON_TORNADO_SETUP_TYPE = setuptools
- 
+I have applied all patches of this series, except the python-pyudev
+one. I'll reply to it specifically.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
