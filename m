@@ -1,48 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 7 Oct 2016 15:15:20 +0200
-Subject: [Buildroot] [git commit] package/python-urllib3: bump version to
-	1.18
-Message-ID: <20161007131552.30D33822E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tornado: bump version to
+	4.4.2
+Message-ID: <20161007131552.189FA822E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46ee7aa8b9be4365c825f29c0e2930d2f0a0effd
+commit: https://git.buildroot.net/buildroot/commit/?id=2473a312d424b33ae82f3da219332ca49dda5ed2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-urllib3/python-urllib3.hash | 6 +++---
- package/python-urllib3/python-urllib3.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-tornado/python-tornado.hash | 4 ++--
+ package/python-tornado/python-tornado.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
-index 266b8e9..fb5fd9d 100644
---- a/package/python-urllib3/python-urllib3.hash
-+++ b/package/python-urllib3/python-urllib3.hash
+diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
+index 27385a5..ee4080f 100644
+--- a/package/python-tornado/python-tornado.hash
++++ b/package/python-tornado/python-tornado.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5e1407428ac33b521c71a7ac273b3847, sha256 locally computed
--md5     5e1407428ac33b521c71a7ac273b3847  urllib3-1.14.tar.gz
--sha256  dd4fb13a4ce50b18338c7e4d665b21fd38632c5d4b1d9f1a1379276bd3c08d37  urllib3-1.14.tar.gz
-+# md5 from https://pypi.python.org/pypi/urllib3/json, sha256 locally computed
-+md5	1eadd93bd5e58d3528d977111f2997ea  urllib3-1.18.tar.gz
-+sha256	d30dd4d1cbbc36ebab6e4a2076820cfe0c60f10adf087fecbc5a3edae79fdc81  urllib3-1.18.tar.gz
-diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
-index 0101053..9043aa3 100644
---- a/package/python-urllib3/python-urllib3.mk
-+++ b/package/python-urllib3/python-urllib3.mk
+ # md5 from https://pypi.python.org/pypi/tornado/json, sha256 locally computed
+-md5     fff8a7d7f580b04bacc2ffe7ddf41133 tornado-4.4.1.tar.gz
+-sha256  371d0cf3d56c47accc66116a77ad558d76eebaa8458a6b677af71ca606522146  tornado-4.4.1.tar.gz
++md5	b4816ea209118667ffc52ce9ff06ac85  tornado-4.4.2.tar.gz
++sha256	2898f992f898cd41eeb8d53b6df75495f2f423b6672890aadaf196ea1448edcc  tornado-4.4.2.tar.gz
+diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
+index 98d42b5..e512e60 100644
+--- a/package/python-tornado/python-tornado.mk
++++ b/package/python-tornado/python-tornado.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_URLLIB3_VERSION = 1.14
-+PYTHON_URLLIB3_VERSION = 1.18
- PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
--PYTHON_URLLIB3_SITE = https://pypi.python.org/packages/source/u/urllib3
-+PYTHON_URLLIB3_SITE = https://pypi.python.org/packages/8f/45/7434a6a44d42744b74fb969a39720f0c3d4f31f921737e51a69d8b15c859
- PYTHON_URLLIB3_LICENSE = MIT
- PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
- PYTHON_URLLIB3_SETUP_TYPE = setuptools
+-PYTHON_TORNADO_VERSION = 4.4.1
++PYTHON_TORNADO_VERSION = 4.4.2
+ PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
+-PYTHON_TORNADO_SITE = https://pypi.python.org/packages/96/5d/ff472313e8f337d5acda5d56e6ea79a43583cc8771b34c85a1f458e197c3
++PYTHON_TORNADO_SITE = https://pypi.python.org/packages/1e/7c/ea047f7bbd1ff22a7f69fe55e7561040e3e54d6f31da6267ef9748321f98
+ PYTHON_TORNADO_LICENSE = Apache-2.0
+ PYTHON_TORNADO_SETUP_TYPE = setuptools
+ 
