@@ -1,35 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 15:51:41 +0200
-Subject: [Buildroot] [PATCH v3 2/2] DEVELOPERS: list paho-mqtt-c package
- under my name
-In-Reply-To: <1475141999-19771-2-git-send-email-Pranit.Sirsat@imgtec.com>
-References: <1475141999-19771-1-git-send-email-Pranit.Sirsat@imgtec.com>
- <1475141999-19771-2-git-send-email-Pranit.Sirsat@imgtec.com>
-Message-ID: <20161007155141.224ec9cd@free-electrons.com>
+Date: Fri, 7 Oct 2016 15:58:13 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add entry for fwts
+Message-ID: <20161007135823.A0FAE822CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=13fb1f6bf1ade73527fac0099bf8d01508d80f93
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 29 Sep 2016 15:09:59 +0530, Pranit Tanaji Sirsat wrote:
-> Signed-off-by: Pranit Tanaji Sirsat <Pranit.Sirsat@imgtec.com>
-> 
-> ---
-> Changes v2 -> v3:
->   - rename package (suggested by Arnout)
-> Changes v1 -> v2:
->   - no change
-> ---
->  DEVELOPERS | 3 +++
->  1 file changed, 3 insertions(+)
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6469c7c..5dd5066 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -418,6 +418,7 @@ F:	package/acpica/
+ F:	package/acpitool/
+ F:	package/efibootmgr/
+ F:	package/efivar/
++F:	package/fwts/
+ F:	package/spi-tools/
+ F:	package/xdotool/
+ 
