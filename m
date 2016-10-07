@@ -1,54 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 23:30:08 +0200
-Subject: [Buildroot] [git commit] package/python-rtslib-fb: bump version
- to 2.1.58
-In-Reply-To: <20161007231043.39e1d100@trantor>
-References: <20161007131551.D7C9680089@busybox.osuosl.org>
- <20161007181627.7ff94cb3@trantor>
- <20161007222619.1a5f7701@free-electrons.com>
- <20161007231043.39e1d100@trantor>
-Message-ID: <20161007233008.391cde28@free-electrons.com>
+Date: Fri, 7 Oct 2016 23:30:26 +0200
+Subject: [Buildroot] [git commit] Revert "package/python-rtslib-fb: bump
+	version to 2.1.58"
+Message-ID: <20161007213115.35C658225C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a0f399399c8af6ac931a4246d6e91caf8f646209
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 7 Oct 2016 23:10:43 +0200, Christophe Vu-Brugier wrote:
+This reverts commit e57ea511ee8f4e944bc6343b467386fff20acd37. As noted
+by the original author of the package, Christophe Vu-Brugier, this
+package should be updated together with python-configshell-fb and
+python-targetcli-fb.
 
-> > Buildroot's policy is to follow what upstream decides... even if you
-> > don't like it :)  
-> 
-> I understand Buildroot's policy.
-> 
-> The new dependencies are required by new features (user backstores rely
-> on dbus) or brought to improve the code and its stability (pyudev). I
-> am perfectly OK with this focus on features and stability.
-> 
-> And as the same time, as a buildroot user, I like when my rootfs is
-> small :) Let's call this "Embedded Schizophrenia".
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-rtslib-fb/python-rtslib-fb.hash | 5 ++---
+ package/python-rtslib-fb/python-rtslib-fb.mk   | 7 +++----
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-Well, nothing prevents you from complaining to the upstream developers,
-and ask them to make those new dependencies optional.
-
-> Sorry, I was not clear. I think it would be better to revert Bernd's
-> patch. I can cook up patches to:
-> 
->  * clarify that rtslib-fb should be fetched from GitHub instead of PyPI
->  * clarify that rtslib-fb, configshell-fb and targetcli-fb should be
->    kept in sync.
->  * later upgrade the three packages.
-> 
-> Would that be OK for Bernd and you?
-
-Makes sense to me. I'll revert Bernd's patch.
-
-Thanks for your feedback!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/python-rtslib-fb/python-rtslib-fb.hash b/package/python-rtslib-fb/python-rtslib-fb.hash
+index e4e56e7..fd06185 100644
+--- a/package/python-rtslib-fb/python-rtslib-fb.hash
++++ b/package/python-rtslib-fb/python-rtslib-fb.hash
+@@ -1,3 +1,2 @@
+-# md5 from https://pypi.python.org/pypi/rtslib-fb/json, sha256 locally computed
+-md5	f8a2c55cea6de95968fc0dd49beeef6f  rtslib-fb-2.1.58.tar.gz
+-sha256	5806f9903557907787abd9c8b9dffb2b312e6c5e3ff40d50d26b10c37b118d47  rtslib-fb-2.1.58.tar.gz
++# locally computed
++sha256  d5d81a78046b4c228d29ba88d9950e0f63858e5fcf601e3d0f8bf107fbaadc03  python-rtslib-fb-v2.1.fb57.tar.gz
+diff --git a/package/python-rtslib-fb/python-rtslib-fb.mk b/package/python-rtslib-fb/python-rtslib-fb.mk
+index f0864a0..85bee0b 100644
+--- a/package/python-rtslib-fb/python-rtslib-fb.mk
++++ b/package/python-rtslib-fb/python-rtslib-fb.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_RTSLIB_FB_VERSION = 2.1.58
+-PYTHON_RTSLIB_FB_SOURCE = rtslib-fb-$(PYTHON_RTSLIB_FB_VERSION).tar.gz
+-PYTHON_RTSLIB_FB_SITE = https://pypi.python.org/packages/c8/26/ae0ff9a721d046bef78c457d8fc19287f7dbe36f98f5e190b017f0d9e9b7
++PYTHON_RTSLIB_FB_VERSION = v2.1.fb57
++PYTHON_RTSLIB_FB_SITE = $(call github,agrover,rtslib-fb,$(PYTHON_RTSLIB_FB_VERSION))
+ PYTHON_RTSLIB_FB_LICENSE = Apache-2.0
+-PYTHON_RTSLIB_FB_LICENSE_FILES = setup.py
++PYTHON_RTSLIB_FB_LICENSE_FILES = COPYING
+ PYTHON_RTSLIB_FB_SETUP_TYPE = setuptools
+ PYTHON_RTSLIB_FB_DEPENDENCIES = python-six
+ 
