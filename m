@@ -1,46 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 14:48:35 +0200
-Subject: [Buildroot] [git commit] package/python-pydal: bump version to 16.9
-Message-ID: <20161007131551.7438A82262@busybox.osuosl.org>
+Date: Fri, 7 Oct 2016 15:15:19 +0200
+Subject: [Buildroot] [git commit] package/python-rtslib-fb: bump version to
+	2.1.58
+Message-ID: <20161007131551.D7C9680089@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09af710cb70b7414a4332d949e991cb8285d0c27
+commit: https://git.buildroot.net/buildroot/commit/?id=e57ea511ee8f4e944bc6343b467386fff20acd37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pydal/python-pydal.hash | 5 +++--
- package/python-pydal/python-pydal.mk   | 5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/python-rtslib-fb/python-rtslib-fb.hash | 5 +++--
+ package/python-rtslib-fb/python-rtslib-fb.mk   | 7 ++++---
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
-index bb36617..ad17c33 100644
---- a/package/python-pydal/python-pydal.hash
-+++ b/package/python-pydal/python-pydal.hash
+diff --git a/package/python-rtslib-fb/python-rtslib-fb.hash b/package/python-rtslib-fb/python-rtslib-fb.hash
+index fd06185..e4e56e7 100644
+--- a/package/python-rtslib-fb/python-rtslib-fb.hash
++++ b/package/python-rtslib-fb/python-rtslib-fb.hash
 @@ -1,2 +1,3 @@
 -# locally computed
--sha256  e59c050c4b7656c36351707dfbbae187645d46327e67e42415e15b3bc32d48b3  python-pydal-v15.07.tar.gz
-+# md5 from https://pypi.python.org/pypi/pydal/json, sha256 locally computed
-+md5	74c6cc43d5ee57bcffa804c1204030d8  pyDAL-16.9.tar.gz
-+sha256	e5e18b10df044c4328a5a2fe0400793a8f643fe3526daee8c99103fc5589476e  pyDAL-16.9.tar.gz
-diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
-index 4c5da41..a0e9729 100644
---- a/package/python-pydal/python-pydal.mk
-+++ b/package/python-pydal/python-pydal.mk
-@@ -4,8 +4,9 @@
+-sha256  d5d81a78046b4c228d29ba88d9950e0f63858e5fcf601e3d0f8bf107fbaadc03  python-rtslib-fb-v2.1.fb57.tar.gz
++# md5 from https://pypi.python.org/pypi/rtslib-fb/json, sha256 locally computed
++md5	f8a2c55cea6de95968fc0dd49beeef6f  rtslib-fb-2.1.58.tar.gz
++sha256	5806f9903557907787abd9c8b9dffb2b312e6c5e3ff40d50d26b10c37b118d47  rtslib-fb-2.1.58.tar.gz
+diff --git a/package/python-rtslib-fb/python-rtslib-fb.mk b/package/python-rtslib-fb/python-rtslib-fb.mk
+index 85bee0b..f0864a0 100644
+--- a/package/python-rtslib-fb/python-rtslib-fb.mk
++++ b/package/python-rtslib-fb/python-rtslib-fb.mk
+@@ -4,10 +4,11 @@
  #
  ################################################################################
  
--PYTHON_PYDAL_VERSION = v15.07
--PYTHON_PYDAL_SITE = $(call github,web2py,pydal,$(PYTHON_PYDAL_VERSION))
-+PYTHON_PYDAL_VERSION = 16.9
-+PYTHON_PYDAL_SOURCE = pyDAL-$(PYTHON_PYDAL_VERSION).tar.gz
-+PYTHON_PYDAL_SITE = https://pypi.python.org/packages/31/cb/7537f8d848106e3e4b4063955395a5dc3177c32c2cd2cc0a1938a486d4fa
- PYTHON_PYDAL_LICENSE = BSD-3c
- PYTHON_PYDAL_LICENSE_FILES = LICENSE
- PYTHON_PYDAL_SETUP_TYPE = setuptools
+-PYTHON_RTSLIB_FB_VERSION = v2.1.fb57
+-PYTHON_RTSLIB_FB_SITE = $(call github,agrover,rtslib-fb,$(PYTHON_RTSLIB_FB_VERSION))
++PYTHON_RTSLIB_FB_VERSION = 2.1.58
++PYTHON_RTSLIB_FB_SOURCE = rtslib-fb-$(PYTHON_RTSLIB_FB_VERSION).tar.gz
++PYTHON_RTSLIB_FB_SITE = https://pypi.python.org/packages/c8/26/ae0ff9a721d046bef78c457d8fc19287f7dbe36f98f5e190b017f0d9e9b7
+ PYTHON_RTSLIB_FB_LICENSE = Apache-2.0
+-PYTHON_RTSLIB_FB_LICENSE_FILES = COPYING
++PYTHON_RTSLIB_FB_LICENSE_FILES = setup.py
+ PYTHON_RTSLIB_FB_SETUP_TYPE = setuptools
+ PYTHON_RTSLIB_FB_DEPENDENCIES = python-six
+ 
