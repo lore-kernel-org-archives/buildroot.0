@@ -1,28 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 14:48:16 +0200
-Subject: [Buildroot] [PATCH] luarocks: bump to version 2.4.1
-In-Reply-To: <1475782526-10472-1-git-send-email-francois.perrad@gadz.org>
-References: <1475782526-10472-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20161007144816.743cc47f@free-electrons.com>
+Date: Fri, 7 Oct 2016 14:48:32 +0200
+Subject: [Buildroot] [git commit] package/python-pexpect: bump version to
+	4.2.1
+Message-ID: <20161007131551.59C0C82262@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9003254ed4f5d334967fdacee621a8ca90c3d69e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  6 Oct 2016 21:35:26 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/luarocks/luarocks.hash | 2 +-
->  package/luarocks/luarocks.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-pexpect/python-pexpect.hash | 6 +++---
+ package/python-pexpect/python-pexpect.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
+index 29cf892..e383607 100644
+--- a/package/python-pexpect/python-pexpect.hash
++++ b/package/python-pexpect/python-pexpect.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org, sha256 locally computed
+-md5 056df81e6ca7081f1015b4b147b977b7 pexpect-4.0.1.tar.gz
+-sha256 232795ebcaaf2e120396dbbaa3a129eda51757eeaae1911558f4ef8ee414fc6c pexpect-4.0.1.tar.gz
++# md5 from https://pypi.python.org/pypi/pexpect/json, sha256 locally computed
++md5	3694410001a99dff83f0b500a1ca1c95  pexpect-4.2.1.tar.gz
++sha256	3d132465a75b57aa818341c6521392a06cc660feb3988d7f1074f39bd23c9a92  pexpect-4.2.1.tar.gz
+diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
+index 40a1741..f1f9903 100644
+--- a/package/python-pexpect/python-pexpect.mk
++++ b/package/python-pexpect/python-pexpect.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PEXPECT_VERSION = 4.0.1
+-PYTHON_PEXPECT_SITE = https://pypi.python.org/packages/source/p/pexpect
++PYTHON_PEXPECT_VERSION = 4.2.1
+ PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
++PYTHON_PEXPECT_SITE = https://pypi.python.org/packages/e8/13/d0b0599099d6cd23663043a2a0bb7c61e58c6ba359b2656e6fb000ef5b98
+ PYTHON_PEXPECT_LICENSE = ISC
+ PYTHON_PEXPECT_LICENSE_FILES = LICENSE
+ PYTHON_PEXPECT_SETUP_TYPE = distutils
