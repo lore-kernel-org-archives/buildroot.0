@@ -1,57 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 16:02:30 +0200
-Subject: [Buildroot] [git commit] Revert "libmicrohttpd: update to 0.9.51"
-Message-ID: <20161007140251.B4EDE81971@busybox.osuosl.org>
+Date: Fri, 7 Oct 2016 16:04:32 +0200
+Subject: [Buildroot] [PATCH] libmicrohttpd: update to 0.9.51
+In-Reply-To: <20161001100102.GA26989@waldemar-brodkorb.de>
+References: <20161001100102.GA26989@waldemar-brodkorb.de>
+Message-ID: <20161007160432.635dc932@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3215e4caf5d8dc78f0b4b34c38e708e90451150d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This reverts commit 48073884101fe3db7d4bfc8d0b585232bd0e9080.
+On Sat, 1 Oct 2016 12:01:02 +0200, Waldemar Brodkorb wrote:
+> Bfin workaround is not required if the gcc bfin patch is applied.
+> (gcc: enable _REENTRANT for bfin when -lpthread is used)
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-The commit broke the build with the pre-built Blackfin toolchain.
+I initially applied this patch, but immediately reverted it after I
+realized it was breaking a valid situation: you're breaking the build
+with the Blackfin external toolchains.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libmicrohttpd/libmicrohttpd.hash | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+In addition to this, this patch is mixing a version bump, with removing
+some work-arounds, which are unrelated to the version bump.
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index 848eb65..b228716 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	3000bb0ba219061f2ea60251b8ea3d5f694e8c6ce1706bbff57e7e24867a23c7	libmicrohttpd-0.9.51.tar.gz
-+sha256	d1b6385068abded29b6470e383287aa7705de05ae3c08ad0bf5747ac4dc6ebd7	libmicrohttpd-0.9.50.tar.gz
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 9caa24a..2266d3c 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -4,18 +4,18 @@
- #
- ################################################################################
- 
--LIBMICROHTTPD_VERSION = 0.9.51
-+LIBMICROHTTPD_VERSION = 0.9.50
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
- LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-examples
- LIBMICROHTTPD_CFLAGS = $(TARGET_CFLAGS) -std=c99
- 
--# gcc on arc doesn't define _REENTRANT when -pthread is
-+# gcc on arc and bfin doesn't define _REENTRANT when -pthread is
- # passed while it should. Compensate this defiency here otherwise
- # libmicrohttpd configure script doesn't find that thread support is
- # enabled.
--ifeq ($(BR2_arc),y)
-+ifeq ($(BR2_arc)$(BR2_bfin),y)
- LIBMICROHTTPD_CFLAGS += -D_REENTRANT
- endif
- 
+So I've marked this patch as Rejected in patchwork. Please resend a
+patch that does just the version bump, and leaves the work-around in
+place.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
