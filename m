@@ -1,81 +1,70 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  7 Oct 2016 17:41:52 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/python-mwscrape: new package
-Message-ID: <20161007154152.22885-1-bernd.kuhls@t-online.de>
+From: Khem Raj <raj.khem@gmail.com>
+Date: Fri, 7 Oct 2016 09:20:53 -0700
+Subject: [Buildroot] gdb texinfo dependency
+In-Reply-To: <20161007142118.657d18ee@free-electrons.com>
+References: <CAAXf6LUHdDJyUPNcW-vQuZx6RhZxsPrGv69SqRPvRrAy46ropA@mail.gmail.com>
+ <20161005172756.77aea89c@free-electrons.com>
+ <CAAXf6LUJOwtpDmUg1zxDdBDKnOAnjkafxwuCAVRQP5aMm3zT9g@mail.gmail.com>
+ <20161005221619.6a958ba0@free-electrons.com>
+ <b6d8768f-9192-6e0a-0299-36584151f4e7@gmail.com>
+ <CAAXf6LX5+csACE8dRjdL+ue-JYpGbCsHZDjQ=KOuaESuoehgDA@mail.gmail.com>
+ <CAAXf6LWaBL_cifwis=3Y1NYLMgt0m1=eOmb99UqGyzgxF7FikQ@mail.gmail.com>
+ <20161006213626.5147dc08@free-electrons.com>
+ <CAAXf6LUwubkNu9+25LUZyOMchdFfHjYUa5pzdfOF9xYfjzWamA@mail.gmail.com>
+ <CAAXf6LXcZ2BOc+znu6GQFX3oC=LVAYO=inYGwk83JKHRQR2T-g@mail.gmail.com>
+ <CAAXf6LUeqZPO=QCcW189s6yvrtMXwvDsFrij0vn8U+tjjULYrw@mail.gmail.com>
+ <20161007142118.657d18ee@free-electrons.com>
+Message-ID: <16077173-0053-4A97-B519-674A9C7146D1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: reworked dependencies (Thomas)
 
- package/Config.in                            |  1 +
- package/python-mwscrape/Config.in            | 11 +++++++++++
- package/python-mwscrape/python-mwscrape.hash |  2 ++
- package/python-mwscrape/python-mwscrape.mk   | 13 +++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-mwscrape/Config.in
- create mode 100644 package/python-mwscrape/python-mwscrape.hash
- create mode 100644 package/python-mwscrape/python-mwscrape.mk
+> On Oct 7, 2016, at 5:21 AM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> 
+> Hello,
+> 
+> On Thu, 6 Oct 2016 21:50:12 +0200, Thomas De Schampheleire wrote:
+> 
+>> But also, is it possible that you did not see the two questions at the
+>> bottom of my mail?
+> 
+> No, I did not see those questions.
+> 
+>> 1. What about fixing it in pkg-generic.mk for all packages?
+> 
+> From a quick grep, it seems like we have 6 packages today that pass
+> MAKEINFO=true or MAKEINFO=:, with binutils and gdb that would be 8
+> packages. I'm not sure we've reached the point where moving it to the
+> common package infrastructure makes sense.
 
-diff --git a/package/Config.in b/package/Config.in
-index 05f9ca6..2e93cd1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -710,6 +710,7 @@ menu "External python modules"
- 	source "package/python-mistune/Config.in"
- 	source "package/python-msgpack/Config.in"
- 	source "package/python-mwclient/Config.in"
-+	source "package/python-mwscrape/Config.in"
- 	source "package/python-netaddr/Config.in"
- 	source "package/python-netifaces/Config.in"
- 	source "package/python-networkmanager/Config.in"
-diff --git a/package/python-mwscrape/Config.in b/package/python-mwscrape/Config.in
-new file mode 100644
-index 0000000..4b5457d
---- /dev/null
-+++ b/package/python-mwscrape/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_MWSCRAPE
-+	bool "python-mwscrape"
-+	depends on BR2_PACKAGE_PYTHON # mwclient
-+	select BR2_PACKAGE_PYTHON_COUCHDB # runtime
-+	select BR2_PACKAGE_PYTHON_FUTURES # runtime
-+	select BR2_PACKAGE_PYTHON_MWCLIENT # runtime
-+	select BR2_PACKAGE_PYTHON_PYLRU # runtime
-+	help
-+	  Download rendered articles from MediaWiki API to CouchDB
-+
-+	  https://github.com/itkach/mwscrape
-diff --git a/package/python-mwscrape/python-mwscrape.hash b/package/python-mwscrape/python-mwscrape.hash
-new file mode 100644
-index 0000000..b91ef69
---- /dev/null
-+++ b/package/python-mwscrape/python-mwscrape.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 8de8a5ef257851f6e1e41247f64710f48859a5e3f91ebc7200bb60769f02f296  python-mwscrape-6a58d7801eb1e884fd0516f1adbedbd4481c10e6.tar.gz
-diff --git a/package/python-mwscrape/python-mwscrape.mk b/package/python-mwscrape/python-mwscrape.mk
-new file mode 100644
-index 0000000..e2d4e5d
---- /dev/null
-+++ b/package/python-mwscrape/python-mwscrape.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-mwscrape
-+#
-+################################################################################
-+
-+PYTHON_MWSCRAPE_VERSION = 6a58d7801eb1e884fd0516f1adbedbd4481c10e6
-+PYTHON_MWSCRAPE_SITE = $(call github,itkach,mwscrape,$(PYTHON_MWSCRAPE_VERSION))
-+PYTHON_MWSCRAPE_LICENSE = BSD-3c
-+PYTHON_MWSCRAPE_LICENSE_FILES = LICENSE.txt
-+PYTHON_MWSCRAPE_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
--- 
-2.9.3
+I think for target packages ignoring info files is fine for small
+systems and other doc related code like manpages.
+for host packages may be it is still useful
+
+> 
+>> 2. What about using ':' instead of 'true'?
+> 
+> I don't really see the difference between the two. I guess ':' is a
+> shell built-in, and 'true' is a proper separate command. But I'm not
+> sure why we would use one instead of the other.
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 204 bytes
+Desc: Message signed with OpenPGP using GPGMail
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161007/8a6485ca/attachment.asc>
