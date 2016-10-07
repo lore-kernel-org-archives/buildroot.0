@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 15:23:39 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXtst: security bump
-	to 1.2.3
-Message-ID: <20161007132631.07358822F3@busybox.osuosl.org>
+Date: Fri, 7 Oct 2016 15:23:38 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXrender: security
+	bump to 0.9.10
+Message-ID: <20161007132630.F0FCF822F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46b271ae39b208b89d5803715f35659b5742de9e
+commit: https://git.buildroot.net/buildroot/commit/?id=e1c50412877fbda76f3629a6fc10d3084fb15d34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Please see the security advisory for details:
@@ -18,29 +18,29 @@ https://lists.x.org/archives/xorg-announce/2016-October/002720.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libXtst/xlib_libXtst.hash | 4 ++--
- package/x11r7/xlib_libXtst/xlib_libXtst.mk   | 2 +-
+ package/x11r7/xlib_libXrender/xlib_libXrender.hash | 4 ++--
+ package/x11r7/xlib_libXrender/xlib_libXrender.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.hash b/package/x11r7/xlib_libXtst/xlib_libXtst.hash
-index 4224121..7e55a75 100644
---- a/package/x11r7/xlib_libXtst/xlib_libXtst.hash
-+++ b/package/x11r7/xlib_libXtst/xlib_libXtst.hash
+diff --git a/package/x11r7/xlib_libXrender/xlib_libXrender.hash b/package/x11r7/xlib_libXrender/xlib_libXrender.hash
+index 2a9912a..bbc5b89 100644
+--- a/package/x11r7/xlib_libXrender/xlib_libXrender.hash
++++ b/package/x11r7/xlib_libXrender/xlib_libXrender.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2013-May/002237.html
--sha256	ef0a7ffd577e5f1a25b1663b375679529663a1880151beaa73e9186c8309f6d9	libXtst-1.2.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-October/002726.html
-+sha256 4655498a1b8e844e3d6f21f3b2c4e2b571effb5fd83199d428a6ba7ea4bf5204  libXtst-1.2.3.tar.bz2
-diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.mk b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-index ad3caea..d71290a 100644
---- a/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-+++ b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002593.html
+-sha256	fc2fe57980a14092426dffcd1f2d9de0987b9d40adea663bd70d6342c0e9be1a	libXrender-0.9.9.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-October/002725.html
++sha256 c06d5979f86e64cabbde57c223938db0b939dff49fdb5a793a1d3d0396650949  libXrender-0.9.10.tar.bz2
+diff --git a/package/x11r7/xlib_libXrender/xlib_libXrender.mk b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
+index 72626cf..6134c45 100644
+--- a/package/x11r7/xlib_libXrender/xlib_libXrender.mk
++++ b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXTST_VERSION = 1.2.2
-+XLIB_LIBXTST_VERSION = 1.2.3
- XLIB_LIBXTST_SOURCE = libXtst-$(XLIB_LIBXTST_VERSION).tar.bz2
- XLIB_LIBXTST_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXTST_LICENSE = MIT
+-XLIB_LIBXRENDER_VERSION = 0.9.9
++XLIB_LIBXRENDER_VERSION = 0.9.10
+ XLIB_LIBXRENDER_SOURCE = libXrender-$(XLIB_LIBXRENDER_VERSION).tar.bz2
+ XLIB_LIBXRENDER_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXRENDER_LICENSE = MIT
