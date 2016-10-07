@@ -1,47 +1,81 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 7 Oct 2016 11:39:39 -0300
-Subject: [Buildroot] [PATCH v2] Revert "boot/uboot: allow to build
- multiple U-Boot images"
-In-Reply-To: <20161007160515.2a6bc730@free-electrons.com>
-References: <1475761393-29715-1-git-send-email-fabio.estevam@nxp.com>
- <20161007160515.2a6bc730@free-electrons.com>
-Message-ID: <CAOMZO5D9_1g0WiTgz-TPT0w1QwP3Bonu4Lkotvw1Em4+M7Z4cQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  7 Oct 2016 16:49:11 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/python-couchdb: new package
+Message-ID: <20161007144911.5048-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Needed by upcoming python-mwscrape package.
 
-On Fri, Oct 7, 2016 at 11:05 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: fix license, clarify in help text that this module provides a
+    CouchDB client, the server can run on a remote machine (Thomas)
 
-> I don't think we want to revert this patch. Instead, we want to call
-> "make all" unconditionally.
+ package/Config.in                          |  1 +
+ package/python-couchdb/Config.in           |  6 ++++++
+ package/python-couchdb/python-couchdb.hash |  3 +++
+ package/python-couchdb/python-couchdb.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-couchdb/Config.in
+ create mode 100644 package/python-couchdb/python-couchdb.hash
+ create mode 100644 package/python-couchdb/python-couchdb.mk
 
-Like this?
-
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 7379a4d..86e5b84 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -48,6 +48,9 @@ UBOOT_MAKE_TARGET += mdbtrick
- endif
- endif
-
-+# Call 'make all' unconditionally
-+UBOOT_MAKE_TARGET += all
+diff --git a/package/Config.in b/package/Config.in
+index 183fc5d..68d23b8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -657,6 +657,7 @@ menu "External python modules"
+ 	source "package/python-coherence/Config.in"
+ 	source "package/python-configobj/Config.in"
+ 	source "package/python-configshell-fb/Config.in"
++	source "package/python-couchdb/Config.in"
+ 	source "package/python-crc16/Config.in"
+ 	source "package/python-crcmod/Config.in"
+ 	source "package/python-crossbar/Config.in"
+diff --git a/package/python-couchdb/Config.in b/package/python-couchdb/Config.in
+new file mode 100644
+index 0000000..413d1b9
+--- /dev/null
++++ b/package/python-couchdb/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_COUCHDB
++	bool "python-couchdb"
++	help
++	  Python client library for working with CouchDB.
 +
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
- UBOOT_BINS += u-boot.kwb
- UBOOT_MAKE_TARGET += u-boot.kwb
-@@ -68,7 +71,7 @@ endif
-
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_IMG),y)
- UBOOT_BINS += u-boot-dtb.img
--UBOOT_MAKE_TARGET += all u-boot-dtb.img
-+UBOOT_MAKE_TARGET += u-boot-dtb.img
- endif
-
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
++	  https://github.com/djc/couchdb-python/
+diff --git a/package/python-couchdb/python-couchdb.hash b/package/python-couchdb/python-couchdb.hash
+new file mode 100644
+index 0000000..f9422a8
+--- /dev/null
++++ b/package/python-couchdb/python-couchdb.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/couchdb/json, sha256 locally computed
++md5	2ed5ad2a477fd3cb472ed6dc5a381ff3  CouchDB-1.1.tar.gz
++sha256	9503ea413956c33b5e2af248235afb5e0f011f33f816a32e872f8ff9b0a0e710  CouchDB-1.1.tar.gz
+diff --git a/package/python-couchdb/python-couchdb.mk b/package/python-couchdb/python-couchdb.mk
+new file mode 100644
+index 0000000..c88787c
+--- /dev/null
++++ b/package/python-couchdb/python-couchdb.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-couchdb
++#
++################################################################################
++
++PYTHON_COUCHDB_VERSION = 1.1
++PYTHON_COUCHDB_SOURCE = CouchDB-$(PYTHON_COUCHDB_VERSION).tar.gz
++PYTHON_COUCHDB_SITE = https://pypi.python.org/packages/9a/e8/c3c8da6d00145aaca07f2b784794917613dad26532068da4e8392dc48d7f
++PYTHON_COUCHDB_SETUP_TYPE = setuptools
++PYTHON_COUCHDB_LICENSE = BSD-3c
++PYTHON_COUCHDB_LICENSE_FILES = COPYING
++
++$(eval $(python-package))
+-- 
+2.9.3
