@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  7 Oct 2016 16:36:31 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/python-futures: new package
-Message-ID: <20161007143631.24720-1-bernd.kuhls@t-online.de>
+Date: Fri,  7 Oct 2016 16:38:01 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/python-pylru: new package
+Message-ID: <20161007143801.3712-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,67 +14,66 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v2: fix license (Thomas)
 
- package/Config.in                          |  1 +
- package/python-futures/Config.in           |  7 +++++++
- package/python-futures/python-futures.hash |  3 +++
- package/python-futures/python-futures.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-futures/Config.in
- create mode 100644 package/python-futures/python-futures.hash
- create mode 100644 package/python-futures/python-futures.mk
+ package/Config.in                      |  1 +
+ package/python-pylru/Config.in         |  6 ++++++
+ package/python-pylru/python-pylru.hash |  3 +++
+ package/python-pylru/python-pylru.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-pylru/Config.in
+ create mode 100644 package/python-pylru/python-pylru.hash
+ create mode 100644 package/python-pylru/python-pylru.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 68d23b8..1ebdd68 100644
+index 1ebdd68..f9020ec 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -682,6 +682,7 @@ menu "External python modules"
- 	source "package/python-flask-jsonrpc/Config.in"
- 	source "package/python-flask-login/Config.in"
- 	source "package/python-flup/Config.in"
-+	source "package/python-futures/Config.in"
- 	source "package/python-gobject/Config.in"
- 	source "package/python-html5lib/Config.in"
- 	source "package/python-httplib2/Config.in"
-diff --git a/package/python-futures/Config.in b/package/python-futures/Config.in
+@@ -736,6 +736,7 @@ menu "External python modules"
+ 	source "package/python-pygame/Config.in"
+ 	source "package/python-pygments/Config.in"
+ 	source "package/python-pyinotify/Config.in"
++	source "package/python-pylru/Config.in"
+ 	source "package/python-pymysql/Config.in"
+ 	source "package/python-pynacl/Config.in"
+ 	source "package/python-pyopenssl/Config.in"
+diff --git a/package/python-pylru/Config.in b/package/python-pylru/Config.in
 new file mode 100644
-index 0000000..2eb40e9
+index 0000000..c174576
 --- /dev/null
-+++ b/package/python-futures/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_FUTURES
-+	bool "python-futures"
-+	depends on BR2_PACKAGE_PYTHON # not needed for python3
++++ b/package/python-pylru/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYLRU
++	bool "python-pylru"
 +	help
-+	  Backport of the concurrent.futures package from Python 3.2.
++	  A least recently used (LRU) cache implementation.
 +
-+	  https://github.com/agronholm/pythonfutures
-diff --git a/package/python-futures/python-futures.hash b/package/python-futures/python-futures.hash
++	  https://github.com/jlhutch/pylru
+diff --git a/package/python-pylru/python-pylru.hash b/package/python-pylru/python-pylru.hash
 new file mode 100644
-index 0000000..f0948ae
+index 0000000..806ea36
 --- /dev/null
-+++ b/package/python-futures/python-futures.hash
++++ b/package/python-pylru/python-pylru.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/futures/json, sha256 locally computed
-+md5	ced2c365e518242512d7a398b515ff95  futures-3.0.5.tar.gz
-+sha256	0542525145d5afc984c88f914a0c85c77527f65946617edb5274f72406f981df  futures-3.0.5.tar.gz
-diff --git a/package/python-futures/python-futures.mk b/package/python-futures/python-futures.mk
++# md5 from https://pypi.python.org/pypi/pylru/json, sha256 locally computed
++md5	41369d58a1c4391c5cc36f84262abcdc  pylru-1.0.9.tar.gz
++sha256	71376192671f0ad1690b2a7427d39a29b1df994c8469a9b46b03ed7e28c0172c  pylru-1.0.9.tar.gz
+diff --git a/package/python-pylru/python-pylru.mk b/package/python-pylru/python-pylru.mk
 new file mode 100644
-index 0000000..8a1afa3
+index 0000000..e670f3d
 --- /dev/null
-+++ b/package/python-futures/python-futures.mk
++++ b/package/python-pylru/python-pylru.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-futures
++# python-pylru
 +#
 +################################################################################
 +
-+PYTHON_FUTURES_VERSION = 3.0.5
-+PYTHON_FUTURES_SOURCE = futures-$(PYTHON_FUTURES_VERSION).tar.gz
-+PYTHON_FUTURES_SITE = https://pypi.python.org/packages/55/db/97c1ca37edab586a1ae03d6892b6633d8eaa23b23ac40c7e5bbc55423c78
-+PYTHON_FUTURES_SETUP_TYPE = setuptools
-+PYTHON_FUTURES_LICENSE = BSD-2c
-+PYTHON_FUTURES_LICENSE_FILES = LICENSE
++PYTHON_PYLRU_VERSION = 1.0.9
++PYTHON_PYLRU_SOURCE = pylru-$(PYTHON_PYLRU_VERSION).tar.gz
++PYTHON_PYLRU_SITE = https://pypi.python.org/packages/c0/7d/0de1055632f3871dfeaabe5a3f0510317cd98b93e7b792b44e4c7de2b17b
++PYTHON_PYLRU_SETUP_TYPE = distutils
++PYTHON_PYLRU_LICENSE = GPLv2
++PYTHON_PYLRU_LICENSE_FILES = LICENSE.txt
 +
 +$(eval $(python-package))
 -- 
