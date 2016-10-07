@@ -1,48 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 7 Oct 2016 15:15:20 +0200
-Subject: [Buildroot] [git commit] package/python-twisted: bump version to
-	16.4.1
-Message-ID: <20161007131552.24FC2822E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-spidev: bump version to 3.2
+Message-ID: <20161007131551.F247D80089@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20468023e0299d9db5efabe910c3a7c1a3507feb
+commit: https://git.buildroot.net/buildroot/commit/?id=010d34b739aa5c47d61356222c5da4762497b747
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Removed 0001-Fix-build-with-musl-libc.patch, applied upstream:
+https://github.com/doceme/py-spidev/pull/39/commits/3d6e59bff088783f249a60a5f1c900c7f99f933b
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-twisted/python-twisted.hash | 6 +++---
- package/python-twisted/python-twisted.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../0001-Fix-build-with-musl-libc.patch            | 43 ----------------------
+ package/python-spidev/python-spidev.hash           |  5 ++-
+ package/python-spidev/python-spidev.mk             |  4 +-
+ 3 files changed, 5 insertions(+), 47 deletions(-)
 
-diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
-index 8836a10..c3a6e95 100644
---- a/package/python-twisted/python-twisted.hash
-+++ b/package/python-twisted/python-twisted.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/Twisted/json, sha256 locally computed.
--md5     8b35a88d5f1a4bfd762a008968fddabf  Twisted-16.2.0.tar.bz2
--sha256  a090e8dc675e97fb20c3bb5f8114ae94169f4e29fd3b3cbede35705fd3cdbd79  Twisted-16.2.0.tar.bz2
-+# md5 from https://pypi.python.org/pypi/twisted/json, sha256 locally computed
-+md5	c6d09bdd681f538369659111f079c29d  Twisted-16.4.1.tar.bz2
-+sha256	1d8d73f006c990744effb35588359fd44d43608649ac0b6b7edc71176e88e816  Twisted-16.4.1.tar.bz2
-diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
-index 3c45d01..7e9e496 100644
---- a/package/python-twisted/python-twisted.mk
-+++ b/package/python-twisted/python-twisted.mk
+diff --git a/package/python-spidev/0001-Fix-build-with-musl-libc.patch b/package/python-spidev/0001-Fix-build-with-musl-libc.patch
+deleted file mode 100644
+index b22a73a..0000000
+--- a/package/python-spidev/0001-Fix-build-with-musl-libc.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 3d6e59bff088783f249a60a5f1c900c7f99f933b Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sun, 31 Jan 2016 15:03:50 +0100
+-Subject: [PATCH 1/1] Fix build with musl libc
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Include missing header to prevent build error:
+-
+-spidev_module.c: In function ???SpiDev_xfer???:
+-spidev_module.c:330:27: error: ???_IOC_SIZEBITS??? undeclared (first use in this function)
+-  status = ioctl(self->fd, SPI_IOC_MESSAGE(1), &xfer);
+-                           ^
+-spidev_module.c:330:27: note: each undeclared identifier is reported only once for each function it appears in
+-spidev_module.c: In function ???SpiDev_xfer2???:
+-spidev_module.c:421:27: error: ???_IOC_SIZEBITS??? undeclared (first use in this function)
+-  status = ioctl(self->fd, SPI_IOC_MESSAGE(1), &xfer);
+-                           ^
+-
+-Signed-off-by: Bernd Kuhls bernd.kuhls at t-online.de
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+-Patch sent upstream: https://github.com/doceme/py-spidev/pull/39
+-
+- spidev_module.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/spidev_module.c b/spidev_module.c
+-index d58ef07..bccaacf 100644
+---- a/spidev_module.c
+-+++ b/spidev_module.c
+-@@ -25,6 +25,7 @@
+- #include <linux/spi/spidev.h>
+- #include <linux/types.h>
+- #include <sys/ioctl.h>
+-+#include <linux/ioctl.h>
+- 
+- #define SPIDEV_MAXPATH 4096
+- 
+--- 
+-2.7.0
+-
+diff --git a/package/python-spidev/python-spidev.hash b/package/python-spidev/python-spidev.hash
+index 49e8db8..dc08925 100644
+--- a/package/python-spidev/python-spidev.hash
++++ b/package/python-spidev/python-spidev.hash
+@@ -1,2 +1,3 @@
+-# Locally calculated
+-sha256	355391e9ad3024950590626b080324394c12e75bb21923dbd56a978a1eac6ac7	spidev-3.1.tar.gz
++# md5 from https://pypi.python.org/pypi/spidev/json, sha256 locally computed
++md5	f601676f1bb48b9aa3b3897f95216365  spidev-3.2.tar.gz
++sha256	09d2b5122f0dd79910713a11f9a0020f71537224bf829916def4fffc0ea59456  spidev-3.2.tar.gz
+diff --git a/package/python-spidev/python-spidev.mk b/package/python-spidev/python-spidev.mk
+index 0a8dd15..d839bb3 100644
+--- a/package/python-spidev/python-spidev.mk
++++ b/package/python-spidev/python-spidev.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TWISTED_VERSION = 16.2.0
-+PYTHON_TWISTED_VERSION = 16.4.1
- PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
--PYTHON_TWISTED_SITE = https://pypi.python.org/packages/18/85/eb7af503356e933061bf1220033c3a85bad0dbc5035dfd9a97f1e900dfcb
-+PYTHON_TWISTED_SITE = https://pypi.python.org/packages/6b/23/8dbe86fc83215015e221fbd861a545c6ec5c9e9cd7514af114d1f64084ab
- PYTHON_TWISTED_SETUP_TYPE = setuptools
- PYTHON_TWISTED_LICENSE = MIT
- PYTHON_TWISTED_LICENSE_FILES = LICENSE
+-PYTHON_SPIDEV_VERSION = 3.1
++PYTHON_SPIDEV_VERSION = 3.2
+ PYTHON_SPIDEV_SOURCE = spidev-$(PYTHON_SPIDEV_VERSION).tar.gz
+-PYTHON_SPIDEV_SITE = https://pypi.python.org/packages/source/s/spidev
++PYTHON_SPIDEV_SITE = https://pypi.python.org/packages/36/83/73748b6e1819b57d8e1df8090200195cdae33aaa22a49a91ded16785eedd
+ PYTHON_SPIDEV_SETUP_TYPE = distutils
+ PYTHON_SPIDEV_LICENSE = GPLv2
+ PYTHON_SPIDEV_LICENSE_FILES = LICENSE.md
