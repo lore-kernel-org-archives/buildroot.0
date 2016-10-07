@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 15:31:44 +0200
-Subject: [Buildroot] [PATCH 3/5] package/python-pylru: new package
-In-Reply-To: <20161006044858.27768-3-bernd.kuhls@t-online.de>
+Date: Fri, 7 Oct 2016 15:32:47 +0200
+Subject: [Buildroot] [PATCH 4/5] package/python-mwclient: new package
+In-Reply-To: <20161006044858.27768-4-bernd.kuhls@t-online.de>
 References: <20161006044858.27768-1-bernd.kuhls@t-online.de>
- <20161006044858.27768-3-bernd.kuhls@t-online.de>
-Message-ID: <20161007153144.5c2f4aa3@free-electrons.com>
+ <20161006044858.27768-4-bernd.kuhls@t-online.de>
+Message-ID: <20161007153247.35bd422a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  6 Oct 2016 06:48:56 +0200, Bernd Kuhls wrote:
+On Thu,  6 Oct 2016 06:48:57 +0200, Bernd Kuhls wrote:
 
-> +PYTHON_PYLRU_VERSION = 1.0.9
-> +PYTHON_PYLRU_SOURCE = pylru-$(PYTHON_PYLRU_VERSION).tar.gz
-> +PYTHON_PYLRU_SITE = https://pypi.python.org/packages/c0/7d/0de1055632f3871dfeaabe5a3f0510317cd98b93e7b792b44e4c7de2b17b
-> +PYTHON_PYLRU_SETUP_TYPE = distutils
-> +PYTHON_PYLRU_LICENSE = GNU General Public License (GPL)
+> +++ b/package/python-mwclient/python-mwclient.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-mwclient
+> +#
+> +################################################################################
+> +
+> +PYTHON_MWCLIENT_VERSION = 0.8.1
+> +PYTHON_MWCLIENT_SOURCE = mwclient-$(PYTHON_MWCLIENT_VERSION).tar.gz
+> +PYTHON_MWCLIENT_SITE = https://pypi.python.org/packages/19/79/481b288a497f625ee8f76141ff3472d81428b1f14b7155a28a63a3247197
+> +PYTHON_MWCLIENT_SETUP_TYPE = setuptools
+> +PYTHON_MWCLIENT_LICENSE = MIT
+> +PYTHON_MWCLIENT_DEPENDENCIES = python-requests python-six
 
-License should be "GPLv2".
+Well, your Config.in says they are runtime dependencies, but you use
+them as build-time dependencies. This doesn't look good.
+
+Please use LICENSE.md as the license file.
+
+Thanks!
 
 Thomas
 -- 
