@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 15:32:47 +0200
-Subject: [Buildroot] [PATCH 4/5] package/python-mwclient: new package
-In-Reply-To: <20161006044858.27768-4-bernd.kuhls@t-online.de>
+Date: Fri, 7 Oct 2016 15:33:26 +0200
+Subject: [Buildroot] [PATCH 5/5] package/python-mwscrape: new package
+In-Reply-To: <20161006044858.27768-5-bernd.kuhls@t-online.de>
 References: <20161006044858.27768-1-bernd.kuhls@t-online.de>
- <20161006044858.27768-4-bernd.kuhls@t-online.de>
-Message-ID: <20161007153247.35bd422a@free-electrons.com>
+ <20161006044858.27768-5-bernd.kuhls@t-online.de>
+Message-ID: <20161007153326.576d6e64@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  6 Oct 2016 06:48:57 +0200, Bernd Kuhls wrote:
+On Thu,  6 Oct 2016 06:48:58 +0200, Bernd Kuhls wrote:
 
-> +++ b/package/python-mwclient/python-mwclient.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-mwclient
-> +#
-> +################################################################################
-> +
-> +PYTHON_MWCLIENT_VERSION = 0.8.1
-> +PYTHON_MWCLIENT_SOURCE = mwclient-$(PYTHON_MWCLIENT_VERSION).tar.gz
-> +PYTHON_MWCLIENT_SITE = https://pypi.python.org/packages/19/79/481b288a497f625ee8f76141ff3472d81428b1f14b7155a28a63a3247197
-> +PYTHON_MWCLIENT_SETUP_TYPE = setuptools
-> +PYTHON_MWCLIENT_LICENSE = MIT
-> +PYTHON_MWCLIENT_DEPENDENCIES = python-requests python-six
+> +config BR2_PACKAGE_PYTHON_MWSCRAPE
+> +	bool "python-mwscrape"
+> +	select BR2_PACKAGE_PYTHON_COUCHDB
+> +	select BR2_PACKAGE_PYTHON_FUTURES if BR2_PACKAGE_PYTHON
+> +	select BR2_PACKAGE_PYTHON_MWCLIENT
+> +	select BR2_PACKAGE_PYTHON_PYLRU
 
-Well, your Config.in says they are runtime dependencies, but you use
-them as build-time dependencies. This doesn't look good.
+I suspect some of those are runtime dependencies. Could you double
+check this?
 
-Please use LICENSE.md as the license file.
+> +PYTHON_MWSCRAPE_DEPENDENCIES = python-couchdb \
+> +	$(if $(BR2_PACKAGE_PYTHON),python-futures,) \
+> +	python-mwclient \
+> +	python-pylru
+
+And update this accordingly?
 
 Thanks!
 
