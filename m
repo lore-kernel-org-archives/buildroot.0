@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 15:23:33 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: security bump
-	to 1.6.4
-Message-ID: <20161007132630.C0D6C81810@busybox.osuosl.org>
+Date: Fri, 7 Oct 2016 15:23:39 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXtst: security bump
+	to 1.2.3
+Message-ID: <20161007132631.07358822F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=274ac0116bca258a009442db3197ef76f66cc13f
+commit: https://git.buildroot.net/buildroot/commit/?id=46b271ae39b208b89d5803715f35659b5742de9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Please see the security advisory for details:
@@ -18,30 +18,29 @@ https://lists.x.org/archives/xorg-announce/2016-October/002720.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 5 ++---
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/x11r7/xlib_libXtst/xlib_libXtst.hash | 4 ++--
+ package/x11r7/xlib_libXtst/xlib_libXtst.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index acae656..aeb0e9d 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,3 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-March/002543.html
--sha1	6f2aadf8346ee00b7419bd338461c6986e274733				libX11-1.6.3.tar.bz2
--sha256	cf31a7c39f2f52e8ebd0db95640384e63451f9b014eed2bb7f5de03e8adc8111	libX11-1.6.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-October/002721.html
-+sha256 b7c748be3aa16ec2cbd81edc847e9b6ee03f88143ab270fb59f58a044d34e441  libX11-1.6.4.tar.bz2
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 2595924..80e89b4 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.hash b/package/x11r7/xlib_libXtst/xlib_libXtst.hash
+index 4224121..7e55a75 100644
+--- a/package/x11r7/xlib_libXtst/xlib_libXtst.hash
++++ b/package/x11r7/xlib_libXtst/xlib_libXtst.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-May/002237.html
+-sha256	ef0a7ffd577e5f1a25b1663b375679529663a1880151beaa73e9186c8309f6d9	libXtst-1.2.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-October/002726.html
++sha256 4655498a1b8e844e3d6f21f3b2c4e2b571effb5fd83199d428a6ba7ea4bf5204  libXtst-1.2.3.tar.bz2
+diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.mk b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
+index ad3caea..d71290a 100644
+--- a/package/x11r7/xlib_libXtst/xlib_libXtst.mk
++++ b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBX11_VERSION = 1.6.3
-+XLIB_LIBX11_VERSION = 1.6.4
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+-XLIB_LIBXTST_VERSION = 1.2.2
++XLIB_LIBXTST_VERSION = 1.2.3
+ XLIB_LIBXTST_SOURCE = libXtst-$(XLIB_LIBXTST_VERSION).tar.bz2
+ XLIB_LIBXTST_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXTST_LICENSE = MIT
