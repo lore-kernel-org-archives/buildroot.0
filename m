@@ -1,35 +1,21 @@
-From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-Date: Fri,  7 Oct 2016 17:30:31 -0300
-Subject: [Buildroot] [PATCH 4/4] DEVELOPERS: list {,
-	net}atop package under my name
-In-Reply-To: <20161007203031.21528-1-ricardo.martincoski@datacom.ind.br>
-References: <20161007203031.21528-1-ricardo.martincoski@datacom.ind.br>
-Message-ID: <20161007203031.21528-4-ricardo.martincoski@datacom.ind.br>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 07 Oct 2016 22:34:57 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 7, 8}.x series
+In-Reply-To: <1475867611-28710-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 7 Oct 2016 16:13:30 -0300")
+References: <1475867611-28710-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wphjkidq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
----
- DEVELOPERS | 4 ++++
- 1 file changed, 4 insertions(+)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5dd5066..0deaefe 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1203,6 +1203,10 @@ F:	package/gupnp-av/
- N:	Renaud Aubin <root@renaud.io>
- F:	package/libhttpparser/
- 
-+N:	Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-+F:	package/atop/
-+F:	package/netatop/
-+
- N:	Rhys Williams <github@wilberforce.co.nz>
- F:	package/lirc-tools/
- 
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-2.9.3
+Bye, Peter Korsgaard
