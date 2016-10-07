@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Oct 2016 15:23:35 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXi: security bump to
-	1.7.7
-Message-ID: <20161007132630.D851781810@busybox.osuosl.org>
+Date: Fri, 7 Oct 2016 15:23:36 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXrandr: security
+	bump to 1.5.1
+Message-ID: <20161007132630.E560E822F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd61548a82352aefedee45c745c6034c4c3b75d1
+commit: https://git.buildroot.net/buildroot/commit/?id=5136df0116d31d03294eb66dbcd2afa58b60e78d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Please see the security advisory for details:
@@ -18,29 +18,29 @@ https://lists.x.org/archives/xorg-announce/2016-October/002720.html
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libXi/xlib_libXi.hash | 4 ++--
- package/x11r7/xlib_libXi/xlib_libXi.mk   | 2 +-
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.hash | 4 ++--
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXi/xlib_libXi.hash b/package/x11r7/xlib_libXi/xlib_libXi.hash
-index 28eb77e..a11b299 100644
---- a/package/x11r7/xlib_libXi/xlib_libXi.hash
-+++ b/package/x11r7/xlib_libXi/xlib_libXi.hash
+diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
+index e4b86a0..84a50cb 100644
+--- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
++++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-December/002664.html
--sha256	1f32a552cec0f056c0260bdb32e853cec0673d2f40646ce932ad5a9f0205b7ac	libXi-1.7.6.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-October/002723.html
-+sha256 996f834fa57b9b33ba36690f6f5c6a29320bc8213022943912462d8015b1e030  libXi-1.7.7.tar.bz2
-diff --git a/package/x11r7/xlib_libXi/xlib_libXi.mk b/package/x11r7/xlib_libXi/xlib_libXi.mk
-index 54c9af4..8dfea0f 100644
---- a/package/x11r7/xlib_libXi/xlib_libXi.mk
-+++ b/package/x11r7/xlib_libXi/xlib_libXi.mk
+-# From http://lists.x.org/archives/xorg-announce/2015-May/002606.html
+-sha256	6f864959b7fc35db11754b270d71106ef5b5cf363426aa58589cb8ac8266de58	libXrandr-1.5.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-October/002724.html
++sha256 1ff9e7fa0e4adea912b16a5f0cfa7c1d35b0dcda0e216831f7715c8a3abcf51a  libXrandr-1.5.1.tar.bz2
+diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+index 5abd8b1..0fd298c 100644
+--- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
++++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXI_VERSION = 1.7.6
-+XLIB_LIBXI_VERSION = 1.7.7
- XLIB_LIBXI_SOURCE = libXi-$(XLIB_LIBXI_VERSION).tar.bz2
- XLIB_LIBXI_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXI_LICENSE = MIT
+-XLIB_LIBXRANDR_VERSION = 1.5.0
++XLIB_LIBXRANDR_VERSION = 1.5.1
+ XLIB_LIBXRANDR_SOURCE = libXrandr-$(XLIB_LIBXRANDR_VERSION).tar.bz2
+ XLIB_LIBXRANDR_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXRANDR_LICENSE = MIT
