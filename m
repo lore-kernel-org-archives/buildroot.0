@@ -1,33 +1,25 @@
-From: Dagg Stompler <daggs@gmx.com>
-Date: Fri,  7 Oct 2016 13:13:50 +0300
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 07 Oct 2016 12:57:58 +0200
 Subject: [Buildroot] [PATCH] odroidc2: bump kernel rev to
 	925e508d37c76848881a8c8f7e9b02abc5731d88
-Message-ID: <20161007101350.30677-1-daggs@gmx.com>
+In-Reply-To: <trinity-e30c4e18-6cd0-464f-971e-5bd960759cf6-1475834680131@3capp-mailcom-bs10>
+ (daggs@gmx.com's message of "Fri, 7 Oct 2016 12:04:40 +0200")
+References: <20161007074951.25748-1-daggs@gmx.com>
+ <87mviglcoe.fsf@dell.be.48ers.dk>
+ <trinity-e30c4e18-6cd0-464f-971e-5bd960759cf6-1475834680131@3capp-mailcom-bs10>
+Message-ID: <87int4l93d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-odroidc2's kernel is based on 3.14, any code addition is either odroidc2 related bug fixes. odroidc2 related feature addons and patches that advance the kernel to newer versions.
+>>>>> "daggs" == daggs  <daggs@gmx.com> writes:
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
----
- configs/odroidc2_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> you are correct, will resend with more info
 
-diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
-index 0c8ff3d..44fc61a 100644
---- a/configs/odroidc2_defconfig
-+++ b/configs/odroidc2_defconfig
-@@ -16,7 +16,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/hardkernel/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="1cb48cebb9d525e524de0ede46710bb29f54d4a6"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="925e508d37c76848881a8c8f7e9b02abc5731d88"
- BR2_LINUX_KERNEL_DEFCONFIG="odroidc2"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_BUILD_DEFAULT_DTS=y
+Thanks!
+
 -- 
-2.10.1
+Venlig hilsen,
+Peter Korsgaard 
