@@ -1,54 +1,56 @@
-From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Date: Sat,  8 Oct 2016 16:34:50 +0200
-Subject: [Buildroot] [PATCH 1/3] package/python-rtslib-fb: update URL to the
-	open-iscsi organization
-Message-ID: <20161008143452.31637-1-cvubrugier@fastmail.fm>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  8 Oct 2016 17:16:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python3: add optional support for
+	lzma
+Message-ID: <20161008151621.8673-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add a comment to indicate that python-configshell-fb and
-targetcli-fb should be bumped every time python-rtslib-fb is bumped
-because upstream usually upgrades all of these packages at the same
-time.
+Python3 has optional support for lzma:
+https://hg.python.org/cpython/file/4def2a2901a5/setup.py#l1449
 
-Another comment warns that switching this package to PyPI would make us
-miss new versions of python-rtslib-fb.
+Needed by the upcoming python-mwscrape2slob package.
 
-Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-rtslib-fb/Config.in           | 2 +-
- package/python-rtslib-fb/python-rtslib-fb.mk | 5 ++++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/python3/Config.in  | 6 ++++++
+ package/python3/python3.mk | 4 ++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/package/python-rtslib-fb/Config.in b/package/python-rtslib-fb/Config.in
-index 7bae560..f408334 100644
---- a/package/python-rtslib-fb/Config.in
-+++ b/package/python-rtslib-fb/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_PYTHON_RTSLIB_FB
- 	  the LIO generic SCSI target, present in 3.x Linux kernel
- 	  versions.
+diff --git a/package/python3/Config.in b/package/python3/Config.in
+index 0f4fc88..29ee5e3 100644
+--- a/package/python3/Config.in
++++ b/package/python3/Config.in
+@@ -98,6 +98,12 @@ config BR2_PACKAGE_PYTHON3_PYEXPAT
+ 	help
+ 	  pyexpat and xml libraries for Python3.
  
--	  https://github.com/agrover/rtslib-fb
-+	  https://github.com/open-iscsi/rtslib-fb
-diff --git a/package/python-rtslib-fb/python-rtslib-fb.mk b/package/python-rtslib-fb/python-rtslib-fb.mk
-index 85bee0b..8236fb8 100644
---- a/package/python-rtslib-fb/python-rtslib-fb.mk
-+++ b/package/python-rtslib-fb/python-rtslib-fb.mk
-@@ -4,8 +4,11 @@
- #
- ################################################################################
++config BR2_PACKAGE_PYTHON3_XZ
++	select BR2_PACKAGE_XZ
++	bool "xz module"
++	help
++	  xz (a.k.a lzma) module for Python3
++
+ config BR2_PACKAGE_PYTHON3_ZLIB
+ 	bool "zlib module"
+ 	select BR2_PACKAGE_ZLIB
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 393b9fb..b3f31c0 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -103,6 +103,10 @@ ifeq ($(BR2_PACKAGE_PYTHON3_BZIP2),y)
+ PYTHON3_DEPENDENCIES += bzip2
+ endif
  
-+# When upgrading the version, be sure to also upgrade
-+# python-configshell-fb and targetcli-fb at the same time.
- PYTHON_RTSLIB_FB_VERSION = v2.1.fb57
--PYTHON_RTSLIB_FB_SITE = $(call github,agrover,rtslib-fb,$(PYTHON_RTSLIB_FB_VERSION))
-+# Do not switch site to PyPI: it does not contain the latest version.
-+PYTHON_RTSLIB_FB_SITE = $(call github,open-iscsi,rtslib-fb,$(PYTHON_RTSLIB_FB_VERSION))
- PYTHON_RTSLIB_FB_LICENSE = Apache-2.0
- PYTHON_RTSLIB_FB_LICENSE_FILES = COPYING
- PYTHON_RTSLIB_FB_SETUP_TYPE = setuptools
++ifeq ($(BR2_PACKAGE_PYTHON3_XZ),y)
++PYTHON3_DEPENDENCIES += xz
++endif
++
+ ifeq ($(BR2_PACKAGE_PYTHON3_ZLIB),y)
+ PYTHON3_DEPENDENCIES += zlib
+ endif
 -- 
 2.9.3
