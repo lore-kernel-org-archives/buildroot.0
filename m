@@ -1,71 +1,50 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Fri,  7 Oct 2016 20:52:32 -0700
-Subject: [Buildroot] [PATCH 1/1] sysklogd: add patch to fix build with glibc
-	2.24
-Message-ID: <20161008035232.24677-1-bluemrp9@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 8 Oct 2016 06:14:32 +0200
+Subject: [Buildroot] [PATCH 2/3] ltp-testsuite: bump to version 20160920
+In-Reply-To: <1475322624-20518-2-git-send-email-nunes.erico@gmail.com>
+References: <1475322624-20518-1-git-send-email-nunes.erico@gmail.com>
+ <1475322624-20518-2-git-send-email-nunes.erico@gmail.com>
+Message-ID: <20161008041431.GO2052@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building sysklogd with glibc 2.24 fails with the following error:
+Hi Erico,
+Erico Nunes wrote,
 
-syslogd.c: In function ?reapchild?:
-syslogd.c:2097:13: error: storage size of ?status? isn?t known
-  union wait status;
-             ^
-Makefile:99: recipe for target 'syslogd.o' failed
-make[2]: *** [syslogd.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-package/pkg-generic.mk:201: recipe for target './buildroot/output/build/sysklogd-1.5.1/.stamp_built' failed
-make[1]: *** [./buildroot/output/build/sysklogd-1.5.1/.stamp_built] Error 2
-Makefile:41: recipe for target '_all' failed
-make: *** [_all] Error 2
+> Patch 0001-fix-uClibc-build.patch is now part of upstream so it is not
+> needed in Buildroot anymore. The remaining patches were just rebased and
+> then renumbered so that they apply cleanly to this new version.
+> 
+> This has been build-tested with both glibc and uClibc toolchains and
+> run-tested on x86_64 and aarch64.
+> 
+> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+> 
+> ---
+> I wonder if we should really maintain the uClibc-related patches given
+> that even the patches themselves mention that they are not upstreamable.
+> This feels a bit like maintaining feature patches. If upstream adds more
+> changes that break uClibc, we would need to maintain that ourselves.
+> I'm interested in maintaining this package but if it turns out that it
+> eventually starts breaking for uClibc in future versions, I'd vote for
+> removing uClibc support for it.
 
-union wait was marked deprecated in glibc 2.23 and removed in glibc 2.24.
-The fix is to declare it as an int.
+No, I disagree here. The patches for uClibc are upstreamable.
+Only the libtirpc patch has the comment and this is related to
+features missing in uClibc and musl. (DES)
 
-See https://sourceware.org/ml/libc-alpha/2016-02/msg00342.html
+If more ltp tests should break and you want to maintain the package
+please work with me and LTP people to get things working.
 
-Sent upstream via their mailing list
+Compiling and running LTP with uClibc-ng is an important part of
+getting missing features or bugs fixed.
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
----
- ...01-replace-deprecated-union-wait-with-int.patch | 25 ++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 package/sysklogd/0001-replace-deprecated-union-wait-with-int.patch
+It is not an option to disable the package for uClibc-ng.
 
-diff --git a/package/sysklogd/0001-replace-deprecated-union-wait-with-int.patch b/package/sysklogd/0001-replace-deprecated-union-wait-with-int.patch
-new file mode 100644
-index 0000000..c9a30e9
---- /dev/null
-+++ b/package/sysklogd/0001-replace-deprecated-union-wait-with-int.patch
-@@ -0,0 +1,25 @@
-+From 86fe87cdf097e6286e76eadcc9c11c79be6258f2 Mon Sep 17 00:00:00 2001
-+From: Ryan Coe <bluemrp9@gmail.com>
-+Date: Fri, 7 Oct 2016 19:42:40 -0700
-+Subject: [PATCH 1/1] replace deprecated union wait with int
-+
-+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-+---
-+ syslogd.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/syslogd.c b/syslogd.c
-+index ea73ea5da5e935bb8cab328559f950cd3afc2d20..ace96c8be40f50d123120c0586a384a298212245 100644
-+--- a/syslogd.c
-++++ b/syslogd.c
-+@@ -2094,7 +2094,7 @@ void reapchild()
-+	(void) signal(SIGCHLD, reapchild);	/* reset signal handler -ASP */
-+	wait ((int *)0);
-+ #else
-+-	union wait status;
-++	int status;
-+
-+	while (wait3(&status, WNOHANG, (struct rusage *) NULL) > 0)
-+		;
-+--
-+2.9.3
--- 
-2.9.3
+This worked fine in the past, see exp10 related issues.
+
+best regards
+ Waldemar
