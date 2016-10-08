@@ -1,54 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Oct 2016 14:51:07 +0200
-Subject: [Buildroot] [PATCH v2 04/20] python3: make it exclusive from
- python
-In-Reply-To: <20161008122434.GA3802@free.fr>
-References: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1392756013-27757-5-git-send-email-thomas.petazzoni@free-electrons.com>
- <8nrfcdx2pk.ln2@ID-313208.user.individual.net>
- <20161005213018.7a5567da@free-electrons.com>
- <20161008122434.GA3802@free.fr>
-Message-ID: <20161008145107.277673a8@free-electrons.com>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Sat,  8 Oct 2016 15:41:54 +0200
+Subject: [Buildroot] [PATCH] wine: Bump to version 1.8.5
+Message-ID: <1475934114-30242-1-git-send-email-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/wine/wine.hash | 2 +-
+ package/wine/wine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sat, 8 Oct 2016 14:24:34 +0200, Yann E. MORIN wrote:
-
-> First, as Thomas said, we'd need to have the kcofnig-side sorted out.
-> When looking only at external python modules for themselves, it is not
-> very complex: we already have some modules depend on either python xor
-> python3 for those modules that have an explicit dependency.
-> 
-> Where it gets more complex is when a package needs a modules that works
-> only with python and another module that works only with python3. I
-> don't know if this situation is realistic, but we have to at least take
-> it in consideration.
-
-I don't understand how you solve the Kconfig side of the problem. How
-will you select which of the modules should be compiled for python2
-only, for python3 only or for both ?
-
-Let's say you have three Python packages A, B and C. They are all
-compatible with both Python 2 and Python 3. And for the purpose of my
-system, I need A only with Python 2, I need B only for Python 3 and I
-need C for both Python 2 and Python 3.
-
-> I've started looking into this, but I have absolutely no code to show. I
-> think it *might* be possible to come up with something, but that may
-> probably add quite a bit of complexity and uglyness in the python-package
-> infra. I'm not sure it would be worth the effort... :-/
-
-Please explain how to solve the Kconfig problem first. Until there is
-no solution for the Kconfig problem, there is really no point in even
-thinking about the build problems.
-
-Thomas
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index d58ac02..0f6b9d3 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 515d10439777a4816fe5b0a0fc9a4ce498a2ecfd23eba0c25dc00f3d6c805079 wine-1.8.4.tar.bz2
++sha256 dee2a4959e5f90a89aaf04566c23f2926e9590f8968ea662afd81947fdb6f6d6 wine-1.8.5.tar.bz2
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index aceea35..d9a0ecf 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WINE_VERSION = 1.8.4
++WINE_VERSION = 1.8.5
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
+ WINE_SITE = https://dl.winehq.org/wine/source/1.8
+ WINE_LICENSE = LGPLv2.1+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
