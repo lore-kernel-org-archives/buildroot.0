@@ -1,91 +1,72 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 8 Oct 2016 12:22:02 +0200
-Subject: [Buildroot] [PATCH] package/wvstreams: add patch to fix build
- with C99 compilers
-In-Reply-To: <5017ebbe-e45d-f80c-4c75-63f5c4ff20f6@mind.be>
-References: <20160923214227.12888-1-joerg.krause@embedded.rocks>
- <9fbfd5af-6933-9b6e-6898-9bcea17e22a1@gmail.com>
- <A6BEEF15-B2C6-49FA-8D0F-A3F127248835@embedded.rocks>
- <5017ebbe-e45d-f80c-4c75-63f5c4ff20f6@mind.be>
-Message-ID: <1ee46916-6643-a61a-05c0-0760ea3e9324@gmail.com>
+Date: Sat,  8 Oct 2016 12:37:39 +0200
+Subject: [Buildroot] [PATCH] package/wvstreams: mark as deprecated
+Message-ID: <1475923059-7328-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg, Arnout, All
+As reported by J?rg and I [1] [2], wvstreams is not maintained anymore. Last
+activity was on Github was 2011, the current version 1.6.1 dates from 2009.
 
-Le 24/09/2016 ? 18:14, Arnout Vandecappelle a ?crit :
-> 
-> 
-> On 24-09-16 10:47, J?rg Krause wrote:
->>
->>
->> Hi Romain,
->>
->> Am 24. September 2016 10:31:57 MESZ, schrieb Romain Naour <romain.naour@gmail.com>:
->>> Hi J?rg,
->>>
->>> Le 23/09/2016 ? 23:42, J?rg Krause a ?crit :
-> [snip]
->>>> Note, that wvstreams is not maintained anymore. Last activity was on
->>>> Github was 2011, the current version 1.6.1 dates from 2009.
->>>
->>> Thanks for this investigation and the fix.
->>> Are you using wvstreams or it's for the sake of autobuilders ?
->>
->> No, I am not using wvstreams and yes, it is for the sake of autobuilders.
->>
->>> I'm wondering if we should deprecate this package ?
->>> Last time I looked at it, I disabled it for musl based toolchains.
->>>
->>> Thoughts ?
->>
->> I am not sure which policy Buildroot follows here, but I would like to know.
-> 
->  This is precisely the kind of situation where we start considering deprecating
-> a package.
-> 
-> 
->  In this case, wvstreams only exists for the sake of wvdial. I don't know of
-> many alternatives however. modem-manager is somewhat bloaty, and chat + ppp.conf
-> is a lot more difficult.
-> 
-> 
->  Adding Simon, the original contributor, for a second opinion.
+Also it doesn't build anymore with a recent compiler (gcc5 and gcc6).
+Instead of stacking patches forever, mark this wvstreams and wvdial deprecated
+before removing them completely.
 
-I build tested this patch and indeed it fix the build with gcc5.
-But I tested with gcc6 and it fail with a weird C++ error:
+Remove following failures from autobuilders.
+http://autobuild.buildroot.net/results/f01/f0166f030875ecaf0d757790de6361339071831e
+http://autobuild.buildroot.net/results/32b/32b4eba8c7cbe8a3b1cde2d67f1af3f913fcc292
+http://autobuild.buildroot.net/results/38f/38fefa126596c6e267ffaf0f2dd9c5e3dcf09aff
+http://autobuild.buildroot.net/results/ea2/ea223c8a4f817541f55aa36c47b159a316031bff
 
-streams/wvstream.cc: In member function ?void
-WvStream::_build_selectinfo(IWvStream::SelectInfo&, time_t, bool, bool, bool,
-bool)?:
-streams/wvstream.cc:910:22: error: cannot convert ?IWvStreamCallback {aka
-std::tr1::function<void()>}? to ?bool? in assignment
-  si.wants.readable = readcb;
-                      ^~~~~~
-streams/wvstream.cc:911:22: error: cannot convert ?IWvStreamCallback {aka
-std::tr1::function<void()>}? to ?bool? in assignment
-  si.wants.writable = writecb;
-                      ^~~~~~~
-streams/wvstream.cc:912:25: error: cannot convert ?IWvStreamCallback {aka
-std::tr1::function<void()>}? to ?bool? in assignment
-  si.wants.isexception = exceptcb;
-                         ^~~~~~~~
-streams/wvstream.cc: In member function ?IWvStream::SelectRequest
-WvStream::get_select_request()?:
-streams/wvstream.cc:1022:62: error: no matching function for call to
-?IWvStream::SelectRequest::SelectRequest(IWvStreamCallback&, IWvStreamCallback&,
-IWvStreamCallback&)?
-     return IWvStream::SelectRequest(readcb, writecb, exceptcb);
-                                                              ^
-So, let's deprecate wvdial and wvstreams.
+[1] http://patchwork.ozlabs.org/patch/674238/
+[2] http://patchwork.ozlabs.org/patch/505304/
 
-Best regards,
-Romain
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Simon Dawson <spdawson@gmail.com>
+Cc: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/wvdial/Config.in    | 2 ++
+ package/wvstreams/Config.in | 2 ++
+ 2 files changed, 4 insertions(+)
 
-> 
->  Regards,
->  Arnout
-> 
+diff --git a/package/wvdial/Config.in b/package/wvdial/Config.in
+index 03730f3..0c13202 100644
+--- a/package/wvdial/Config.in
++++ b/package/wvdial/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_WVDIAL
+ 	bool "wvdial"
++	depends on BR2_DEPRECATED_SINCE_2016_08
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # wvstreams
+ 	depends on !BR2_STATIC_LIBS # wvstreams
+@@ -11,5 +12,6 @@ config BR2_PACKAGE_WVDIAL
+ 	  http://wvdial.googlecode.com/
+ 
+ comment "wvdial needs a glibc or uClibc toolchain w/ C++, dynamic library"
++	depends on BR2_DEPRECATED_SINCE_2016_08
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+diff --git a/package/wvstreams/Config.in b/package/wvstreams/Config.in
+index 3d2d8f4..a550c57 100644
+--- a/package/wvstreams/Config.in
++++ b/package/wvstreams/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_WVSTREAMS
+ 	bool "wvstreams"
++	depends on BR2_DEPRECATED_SINCE_2016_08
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
+@@ -13,5 +14,6 @@ config BR2_PACKAGE_WVSTREAMS
+ 	  http://wvstreams.googlecode.com/
+ 
+ comment "wvstreams needs a glibc or uClibc toolchain w/ C++, dynamic library"
++	depends on BR2_DEPRECATED_SINCE_2016_08
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+-- 
+2.5.5
