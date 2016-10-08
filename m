@@ -1,57 +1,42 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat,  8 Oct 2016 21:03:33 +0200
-Subject: [Buildroot] [PATCH v2 3/3] Revert "texinfo: new host package"
-In-Reply-To: <1475953413-1950-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1475953413-1950-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1475953413-1950-3-git-send-email-patrickdepinguin@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat, 08 Oct 2016 17:45:44 -0300
+Subject: [Buildroot] [PATCH 3/4] netatop: enable required kernel feature
+References: <20161007232042.0e49c4b2@free-electrons.com>
+Message-ID: <57f95af83f96b_78bc3fbbf8005ef8245d1@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Thomas,
 
-This reverts commit ea161cf6891c3a3a601dfce072f68ee4aed08d21.
+On Fri, Oct 07, 2016 at 06:20 PM, Thomas Petazzoni wrote:
 
-The host-texinfo dependency is no longer used by any package, after using
-another solution to the problem that required its introduction in the first
-place.
+> On Fri,  7 Oct 2016 17:30:30 -0300, Ricardo Martincoski wrote:
+>> When netatop is enabled, the required kernel feature is enabled.
+>> 
+>> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+> 
+> Is CONFIG_NETFILTER=y required to *build* the netatop module, or only
+> needed at runtime ?
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
- package/texinfo/texinfo.hash |  2 --
- package/texinfo/texinfo.mk   | 13 -------------
- 2 files changed, 15 deletions(-)
- delete mode 100644 package/texinfo/texinfo.hash
- delete mode 100644 package/texinfo/texinfo.mk
+It is required to build the module.
 
-diff --git a/package/texinfo/texinfo.hash b/package/texinfo/texinfo.hash
-deleted file mode 100644
-index 4bdf343..0000000
---- a/package/texinfo/texinfo.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated
--sha256 ac68394ce21b2420ba7ed7cec65d84aacf308cc88e9bf4716fcfff88286883d2 texinfo-6.1.tar.xz
-diff --git a/package/texinfo/texinfo.mk b/package/texinfo/texinfo.mk
-deleted file mode 100644
-index ebd0b48..0000000
---- a/package/texinfo/texinfo.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# texinfo
--#
--################################################################################
--
--TEXINFO_VERSION = 6.1
--TEXINFO_SITE = $(BR2_GNU_MIRROR)/texinfo
--TEXINFO_SOURCE = texinfo-$(TEXINFO_VERSION).tar.xz
--TEXINFO_LICENSE = GPLv3+
--TEXINFO_LICENSE_FILES = COPYING
--
--$(eval $(host-autotools-package))
--- 
-2.7.3
+> 
+> Two cases:
+> 
+>  - If it's needed to build the netatop module, then this change should
+>    be part of the commit adding the netatop package.
+
+Ok. I will send both in one commit when I respin.
+
+> 
+>  - If it's needed only at runtime, we have a more relaxed policy, and we
+>    generally don't enforce the kernel options in such a case.
+> 
+
+Thank you for your review.
+
+Regards,
+Ricardo
