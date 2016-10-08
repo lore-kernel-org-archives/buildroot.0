@@ -1,77 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat,  8 Oct 2016 10:14:25 +0200
-Subject: [Buildroot] [PATCH] minnowboard_max: defconfigs: bump linux kernel
-	to 4.8.1
-Message-ID: <20161008081425.25606-1-peter@korsgaard.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 8 Oct 2016 12:22:02 +0200
+Subject: [Buildroot] [PATCH] package/wvstreams: add patch to fix build
+ with C99 compilers
+In-Reply-To: <5017ebbe-e45d-f80c-4c75-63f5c4ff20f6@mind.be>
+References: <20160923214227.12888-1-joerg.krause@embedded.rocks>
+ <9fbfd5af-6933-9b6e-6898-9bcea17e22a1@gmail.com>
+ <A6BEEF15-B2C6-49FA-8D0F-A3F127248835@embedded.rocks>
+ <5017ebbe-e45d-f80c-4c75-63f5c4ff20f6@mind.be>
+Message-ID: <1ee46916-6643-a61a-05c0-0760ea3e9324@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/minnowboard/{linux-4.6.config => linux-4.8.config} | 0
- configs/minnowboard_max-graphical_defconfig              | 6 +++---
- configs/minnowboard_max_defconfig                        | 8 ++++----
- 3 files changed, 7 insertions(+), 7 deletions(-)
- rename board/minnowboard/{linux-4.6.config => linux-4.8.config} (100%)
+Hi J?rg, Arnout, All
 
-diff --git a/board/minnowboard/linux-4.6.config b/board/minnowboard/linux-4.8.config
-similarity index 100%
-rename from board/minnowboard/linux-4.6.config
-rename to board/minnowboard/linux-4.8.config
-diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
-index de803f0..1b95d8e 100644
---- a/configs/minnowboard_max-graphical_defconfig
-+++ b/configs/minnowboard_max-graphical_defconfig
-@@ -3,7 +3,7 @@ BR2_x86_64=y
- BR2_x86_atom=y
- 
- # Toolchain
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
- BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
-@@ -22,9 +22,9 @@ BR2_PACKAGE_HOST_MTOOLS=y
- # Linux
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux-4.6.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux-4.8.config"
- 
- # Bootloader
- BR2_TARGET_GRUB2=y
-diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
-index 0adb382..63190ea 100644
---- a/configs/minnowboard_max_defconfig
-+++ b/configs/minnowboard_max_defconfig
-@@ -8,8 +8,8 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="minnowboard-max"
- 
--# Linux headers same as kernel, a 4.6 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
-+# Linux headers same as kernel, a 4.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-@@ -21,9 +21,9 @@ BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux-4.6.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux-4.8.config"
- 
- # Bootloader
- BR2_TARGET_GRUB2=y
--- 
-2.9.3
+Le 24/09/2016 ? 18:14, Arnout Vandecappelle a ?crit :
+> 
+> 
+> On 24-09-16 10:47, J?rg Krause wrote:
+>>
+>>
+>> Hi Romain,
+>>
+>> Am 24. September 2016 10:31:57 MESZ, schrieb Romain Naour <romain.naour@gmail.com>:
+>>> Hi J?rg,
+>>>
+>>> Le 23/09/2016 ? 23:42, J?rg Krause a ?crit :
+> [snip]
+>>>> Note, that wvstreams is not maintained anymore. Last activity was on
+>>>> Github was 2011, the current version 1.6.1 dates from 2009.
+>>>
+>>> Thanks for this investigation and the fix.
+>>> Are you using wvstreams or it's for the sake of autobuilders ?
+>>
+>> No, I am not using wvstreams and yes, it is for the sake of autobuilders.
+>>
+>>> I'm wondering if we should deprecate this package ?
+>>> Last time I looked at it, I disabled it for musl based toolchains.
+>>>
+>>> Thoughts ?
+>>
+>> I am not sure which policy Buildroot follows here, but I would like to know.
+> 
+>  This is precisely the kind of situation where we start considering deprecating
+> a package.
+> 
+> 
+>  In this case, wvstreams only exists for the sake of wvdial. I don't know of
+> many alternatives however. modem-manager is somewhat bloaty, and chat + ppp.conf
+> is a lot more difficult.
+> 
+> 
+>  Adding Simon, the original contributor, for a second opinion.
+
+I build tested this patch and indeed it fix the build with gcc5.
+But I tested with gcc6 and it fail with a weird C++ error:
+
+streams/wvstream.cc: In member function ?void
+WvStream::_build_selectinfo(IWvStream::SelectInfo&, time_t, bool, bool, bool,
+bool)?:
+streams/wvstream.cc:910:22: error: cannot convert ?IWvStreamCallback {aka
+std::tr1::function<void()>}? to ?bool? in assignment
+  si.wants.readable = readcb;
+                      ^~~~~~
+streams/wvstream.cc:911:22: error: cannot convert ?IWvStreamCallback {aka
+std::tr1::function<void()>}? to ?bool? in assignment
+  si.wants.writable = writecb;
+                      ^~~~~~~
+streams/wvstream.cc:912:25: error: cannot convert ?IWvStreamCallback {aka
+std::tr1::function<void()>}? to ?bool? in assignment
+  si.wants.isexception = exceptcb;
+                         ^~~~~~~~
+streams/wvstream.cc: In member function ?IWvStream::SelectRequest
+WvStream::get_select_request()?:
+streams/wvstream.cc:1022:62: error: no matching function for call to
+?IWvStream::SelectRequest::SelectRequest(IWvStreamCallback&, IWvStreamCallback&,
+IWvStreamCallback&)?
+     return IWvStream::SelectRequest(readcb, writecb, exceptcb);
+                                                              ^
+So, let's deprecate wvdial and wvstreams.
+
+Best regards,
+Romain
+
+> 
+>  Regards,
+>  Arnout
+> 
