@@ -1,56 +1,72 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  8 Oct 2016 17:16:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python3: add optional support for
-	lzma
-Message-ID: <20161008151621.8673-1-bernd.kuhls@t-online.de>
+Date: Sat, 08 Oct 2016 17:57:39 +0200
+Subject: [Buildroot] [PATCH v2 04/20] python3: make it exclusive from
+	python
+References: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1392756013-27757-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <8nrfcdx2pk.ln2@ID-313208.user.individual.net>
+ <20161005213018.7a5567da@free-electrons.com>
+ <20161008122434.GA3802@free.fr>
+ <20161008145107.277673a8@free-electrons.com>
+ <20161008135130.GB3802@free.fr>
+ <20161008160228.71f9e08f@free-electrons.com>
+Message-ID: <jkhncdxdku.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Python3 has optional support for lzma:
-https://hg.python.org/cpython/file/4def2a2901a5/setup.py#l1449
+Hi Thomas, hi Yann,
 
-Needed by the upcoming python-mwscrape2slob package.
+Am Sat, 08 Oct 2016 16:02:28 +0200 schrieb Thomas Petazzoni:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/python3/Config.in  | 6 ++++++
- package/python3/python3.mk | 4 ++++
- 2 files changed, 10 insertions(+)
+>> Plain and simple: if a python module supports both python and python3,
+>> and both are enabled, that python module is built for both python and
+>> python3.
+> 
+> Well, that's horrible from a filesystem size point of view, and I'm not
+> really sure this would solve Bernd's issue. I'm pretty sure Bernd would
+> like to have a given set of modules built for Python 2, and another set
+> of modules built for Python 3.
 
-diff --git a/package/python3/Config.in b/package/python3/Config.in
-index 0f4fc88..29ee5e3 100644
---- a/package/python3/Config.in
-+++ b/package/python3/Config.in
-@@ -98,6 +98,12 @@ config BR2_PACKAGE_PYTHON3_PYEXPAT
- 	help
- 	  pyexpat and xml libraries for Python3.
- 
-+config BR2_PACKAGE_PYTHON3_XZ
-+	select BR2_PACKAGE_XZ
-+	bool "xz module"
-+	help
-+	  xz (a.k.a lzma) module for Python3
-+
- config BR2_PACKAGE_PYTHON3_ZLIB
- 	bool "zlib module"
- 	select BR2_PACKAGE_ZLIB
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 393b9fb..b3f31c0 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -103,6 +103,10 @@ ifeq ($(BR2_PACKAGE_PYTHON3_BZIP2),y)
- PYTHON3_DEPENDENCIES += bzip2
- endif
- 
-+ifeq ($(BR2_PACKAGE_PYTHON3_XZ),y)
-+PYTHON3_DEPENDENCIES += xz
-+endif
-+
- ifeq ($(BR2_PACKAGE_PYTHON3_ZLIB),y)
- PYTHON3_DEPENDENCIES += zlib
- endif
--- 
-2.9.3
+actually I solved the dependency problem by copying python2 and python3 
+to my target system ;) This is possible for me because I do not use a 
+filesystem created by buildroot but use files from output/target/ stored 
+as optional packages for the fli4l project, which then creates the 
+filesystem image for the target machine by including these packages.
+
+To achieve this I am building with one .config which has python2 + kodi/
+mwscrape and later another .config build is done with python3 + 
+mwscrape2slob.
+
+To clarify:
+mwscrape[1] downloads articles from mediawiki-based sites, stores them on 
+a couchdb server and has runtime dependencies to the following python 
+modules: couchdb, futures, mwclient and pylru. Because mwclient is 
+python2-only so is mwscrape.
+
+mwscrape2slob[2] downloads the stored mediawiki articles from the couchdb 
+server and creates files in .slob format for use in the Android app aard2
+[3], which is a offline-reader. It depends on the following python 
+modules: couchdb, cssselect, cssutils, lxml and slob. The modules slob 
+and mwscrape2slob are python3-only.
+
+Luckily no module with a python version restriction depends on a module 
+with a different python version restriction :)
+
+So yes, there are some modules which I only need in python2, others only 
+in python3, for this purpose I am using two different .config files and 
+build python2 and python3 seperately. Filesystem space is not a problem 
+for me, my target system is not an embedded device, therefore my solution 
+may not be suitable for the general use in the buildroot project.
+
+I expect to send the mwscrape2slob patch series in the coming days after 
+testing a self-build .slob file. Currently I am busy with downloading 
+Wikipedia data ;) The CouchDB server built with buildroot runs rock-solid.
+
+Regards, Bernd
+
+[1] https://github.com/itkach/mwscrape
+[2] https://github.com/itkach/mwscrape2slob
+[3] https://github.com/itkach/aard2-android
