@@ -1,8 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 08 Oct 2016 17:45:44 -0300
-Subject: [Buildroot] [PATCH 3/4] netatop: enable required kernel feature
-References: <20161007232042.0e49c4b2@free-electrons.com>
-Message-ID: <57f95af83f96b_78bc3fbbf8005ef8245d1@ultri3.mail>
+Date: Sat, 08 Oct 2016 18:58:41 -0300
+Subject: [Buildroot] [PATCH 2/4] netatop: new package
+References: <20161007231920.2a4050e6@free-electrons.com>
+Message-ID: <57f96c11c505c_78bc3fbbfa97ee242476d@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,30 +11,20 @@ To: buildroot@busybox.net
 
 Thomas,
 
-On Fri, Oct 07, 2016 at 06:20 PM, Thomas Petazzoni wrote:
+On Fri, Oct 07, 2016 at 06:19 PM, Thomas Petazzoni wrote:
+[snip]
+> In addition to the kernel module, netatop also builds a daemon,
+> netatopd, which gets started by the init script if available. But
+> your .mk file does not seem to build the netatopd daemon. Why so?
 
-> On Fri,  7 Oct 2016 17:30:30 -0300, Ricardo Martincoski wrote:
->> When netatop is enabled, the required kernel feature is enabled.
->> 
->> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-> 
-> Is CONFIG_NETFILTER=y required to *build* the netatop module, or only
-> needed at runtime ?
+Short answer ... for no good reason.
 
-It is required to build the module.
+While I was creating the patch series I decided to send a small patch.
+But I removed too much.
+atop and netatop module work without this daemon. But it adds the functionality
+of tracking counters of exited processes.
 
-> 
-> Two cases:
-> 
->  - If it's needed to build the netatop module, then this change should
->    be part of the commit adding the netatop package.
-
-Ok. I will send both in one commit when I respin.
-
-> 
->  - If it's needed only at runtime, we have a more relaxed policy, and we
->    generally don't enforce the kernel options in such a case.
-> 
+I will add the daemon to the .mk file when I resend.
 
 Thank you for your review.
 
