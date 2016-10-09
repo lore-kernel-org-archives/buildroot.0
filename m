@@ -1,91 +1,84 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Oct 2016 14:46:24 +0200
-Subject: [Buildroot] [PATCH v4 09/10] package/python-slob: new package
+Date: Sun,  9 Oct 2016 14:46:22 +0200
+Subject: [Buildroot] [PATCH v4 07/10] package/python-cssutils: new package
 In-Reply-To: <20161009124625.23303-1-bernd.kuhls@t-online.de>
 References: <20161009124625.23303-1-bernd.kuhls@t-online.de>
-Message-ID: <20161009124625.23303-9-bernd.kuhls@t-online.de>
+Message-ID: <20161009124625.23303-7-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for the upcoming python-mwscrape2slob package.
+Needed for upcoming python-mwscrape2slob package.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v4: no changes
 v3: initial version
 
- package/Config.in                    |  1 +
- package/python-slob/Config.in        | 17 +++++++++++++++++
- package/python-slob/python-slob.hash |  2 ++
- package/python-slob/python-slob.mk   | 13 +++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/python-slob/Config.in
- create mode 100644 package/python-slob/python-slob.hash
- create mode 100644 package/python-slob/python-slob.mk
+ package/Config.in                            |  1 +
+ package/python-cssutils/Config.in            |  8 ++++++++
+ package/python-cssutils/python-cssutils.hash |  3 +++
+ package/python-cssutils/python-cssutils.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-cssutils/Config.in
+ create mode 100644 package/python-cssutils/python-cssutils.hash
+ create mode 100644 package/python-cssutils/python-cssutils.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 731c040..74f506c 100644
+index bd2a3d8..d81b8e1 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -782,6 +782,7 @@ menu "External python modules"
- 	source "package/python-singledispatch/Config.in"
- 	source "package/python-sip/Config.in"
- 	source "package/python-six/Config.in"
-+	source "package/python-slob/Config.in"
- 	source "package/python-smbus-cffi/Config.in"
- 	source "package/python-socketio/Config.in"
- 	source "package/python-spidev/Config.in"
-diff --git a/package/python-slob/Config.in b/package/python-slob/Config.in
+@@ -663,6 +663,7 @@ menu "External python modules"
+ 	source "package/python-crossbar/Config.in"
+ 	source "package/python-cryptography/Config.in"
+ 	source "package/python-cssselect/Config.in"
++	source "package/python-cssutils/Config.in"
+ 	source "package/python-daemon/Config.in"
+ 	source "package/python-dataproperty/Config.in"
+ 	source "package/python-dateutil/Config.in"
+diff --git a/package/python-cssutils/Config.in b/package/python-cssutils/Config.in
 new file mode 100644
-index 0000000..2c8ddb0
+index 0000000..74de742
 --- /dev/null
-+++ b/package/python-slob/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_PYTHON_SLOB
-+	bool "python-slob"
-+	depends on !BR2_BINFMT_FLAT # python-pyicu -> icu
-+	depends on BR2_INSTALL_LIBSTDCPP # python-pyicu -> icu
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_PYICU # runtime
-+	# although optional, it is used as default compression
-+	select BR2_PACKAGE_PYTHON3_XZ # runtime
++++ b/package/python-cssutils/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_CSSUTILS
++	bool "python-cssutils"
++	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
 +	help
-+	  slob.py is a reference implementation of slob format reader
-+	  and writer.
++	  A CSS Cascading Style Sheets library for Python.
 +
-+	  https://github.com/itkach/slob
-+
-+comment "python-slob needs a toolchain w/ C++"
-+	depends on BR2_PACKAGE_PYTHON3 && !BR2_BINFMT_FLAT
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-slob/python-slob.hash b/package/python-slob/python-slob.hash
++	  http://cthedot.de/cssutils/
+diff --git a/package/python-cssutils/python-cssutils.hash b/package/python-cssutils/python-cssutils.hash
 new file mode 100644
-index 0000000..39d5d81
+index 0000000..7b188bc
 --- /dev/null
-+++ b/package/python-slob/python-slob.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 18eb4f45d09d49b1f776cac52ea70ab951566c60cd30bbec39e88f10908fd8ff  python-slob-31ad0e769360a5b10a4893f686587bb8e48c3895.tar.gz
-diff --git a/package/python-slob/python-slob.mk b/package/python-slob/python-slob.mk
++++ b/package/python-cssutils/python-cssutils.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/cssutils/json, sha256 locally computed
++md5	7fcdf2c3e9f053136af1990146eb361d  cssutils-1.0.1.tar.gz
++sha256	d8a18b2848ea1011750231f1dd64fe9053dbec1be0b37563c582561e7a529063  cssutils-1.0.1.tar.gz
+diff --git a/package/python-cssutils/python-cssutils.mk b/package/python-cssutils/python-cssutils.mk
 new file mode 100644
-index 0000000..474c0c9
+index 0000000..3dd501a
 --- /dev/null
-+++ b/package/python-slob/python-slob.mk
-@@ -0,0 +1,13 @@
++++ b/package/python-cssutils/python-cssutils.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-slob
++# python-cssutils
 +#
 +################################################################################
 +
-+PYTHON_SLOB_VERSION = 31ad0e769360a5b10a4893f686587bb8e48c3895
-+PYTHON_SLOB_SITE = $(call github,itkach,slob,$(PYTHON_SLOB_VERSION))
-+PYTHON_SLOB_LICENSE = GPLv3
-+PYTHON_SLOB_LICENSE_FILES = LICENSE
-+PYTHON_SLOB_SETUP_TYPE = distutils
++PYTHON_CSSUTILS_VERSION = 1.0.1
++PYTHON_CSSUTILS_SOURCE = cssutils-$(PYTHON_CSSUTILS_VERSION).tar.gz
++PYTHON_CSSUTILS_SITE = https://pypi.python.org/packages/22/de/6b03e0088baf0299ab7d2e95a9e26c2092e9cb3855876b958b6a62175ca2
++PYTHON_CSSUTILS_LICENSE = LGPLv3+
++PYTHON_CSSUTILS_LICENSE_FILES = COPYING.LESSER
++PYTHON_CSSUTILS_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
 -- 
