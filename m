@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Oct 2016 21:53:12 +0200
-Subject: [Buildroot] gc20 no space left issue
-In-Reply-To: <87vax1ib2q.fsf@dell.be.48ers.dk>
-References: <20161009204509.49fc7a4b@free-electrons.com>
- <87vax1ib2q.fsf@dell.be.48ers.dk>
-Message-ID: <20161009215312.7f8a98bb@free-electrons.com>
+Date: Sun, 9 Oct 2016 22:07:44 +0200
+Subject: [Buildroot] [PATCH 1/7] libglib2: bump to version 2.50.0
+In-Reply-To: <20160921141148.3aedf147@free-electrons.com>
+References: <1474383696-4045-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160921141148.3aedf147@free-electrons.com>
+Message-ID: <20161009220744.3f41b8f2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 09 Oct 2016 21:20:13 +0200, Peter Korsgaard wrote:
+On Wed, 21 Sep 2016 14:11:48 +0200, Thomas Petazzoni wrote:
 
->  > Could you see if you can fix this ?  
+> On Tue, 20 Sep 2016 12:01:30 -0300, Gustavo Zacarias wrote:
+> > It now requires util-linux libmount so add the dependency/select.
+> > 
+> > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>  
 > 
-> I dropped some of the bigger tarballs from instance-*/dl, so now there's
-> 11G free.
+> With this new version, the crc32 symbol gets defined twice in static
+> linking scenarios. See
+> http://autobuild.buildroot.net/results/c26/c2602f2e9db665d5a1d7cea8f3256099ce34a527/build-end.log
 
-OK.
+Since this issue has been there for a long time, and caused more than
+500 autobuilder failures, I've for now reverted the bump of libglib2 to
+2.50.0.
 
->  > Perhaps we should start thinking about a way of ignoring the build
->  > results caused by a lack of disk space ?  
-> 
-> Perhaps, if we can come up with a simple & robust way of detecting
-> it. On the other hand, this doesn't happen that often - And when it does
-> it is good to get notified about it.
+Could you look into this issue, and submit a new version of libglib2
+patch that doesn't exhibit this problem?
 
-Yes, I don't know if we can detect it reliably, indeed. Let's keep
-things as they are for now.
+Thanks a lot!
 
 Thomas
 -- 
