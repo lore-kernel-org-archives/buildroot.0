@@ -1,26 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Oct 2016 20:45:09 +0200
-Subject: [Buildroot] gc20 no space left issue
-Message-ID: <20161009204509.49fc7a4b@free-electrons.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 9 Oct 2016 15:58:13 -0300
+Subject: [Buildroot] [PATCH v1] libdrm: add etnaviv (i.MX6/Vivante
+	GCxxx) option
+In-Reply-To: <87h98pmqv4.fsf@dell.be.48ers.dk>
+References: <1475609361-9289-1-git-send-email-ps.report@gmx.net>
+ <CAOMZO5Ajo_8L0q-481QDNwJ2rgDnSEyq-yC4ZT8-rCWR4sQBsg@mail.gmail.com>
+ <87h98pmqv4.fsf@dell.be.48ers.dk>
+Message-ID: <CAOMZO5AdSoChX2Jv5S8+Zqf_Hj+fc2FaXVDKVXbR3rw9kOLuLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hi Peter,
 
-Due to a lack of disk space, gcc20 reports some build failures, such as:
+On Thu, Oct 6, 2016 at 12:36 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-  http://autobuild.buildroot.net/results/6a2/6a2d4cb453128c0aa1fc9ed0ac04ec7c8306e7e1/
+> If there is interest and the mesa support isn't expected to get merged /
+> released soon - Then yeah, why not?
 
-Could you see if you can fix this ?
+According to this message in the mesa list:
+https://lists.freedesktop.org/archives/mesa-dev/2016-October/130489.html
 
-Perhaps we should start thinking about a way of ignoring the build
-results caused by a lack of disk space ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+, we should have etnaviv support into 12.1, so I will wait for 12.1 to
+be released.
