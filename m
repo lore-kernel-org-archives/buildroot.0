@@ -1,60 +1,84 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 09 Oct 2016 09:55:40 +0200
-Subject: [Buildroot] [PATCH v2 04/20] python3: make it exclusive
-	from	python
-References: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1392756013-27757-5-git-send-email-thomas.petazzoni@free-electrons.com>
- <8nrfcdx2pk.ln2@ID-313208.user.individual.net>
- <20161005213018.7a5567da@free-electrons.com>
- <20161008122434.GA3802@free.fr>
- <20161008145107.277673a8@free-electrons.com>
- <20161008135130.GB3802@free.fr>
- <20161008160228.71f9e08f@free-electrons.com>
- <jkhncdxdku.ln2@ID-313208.user.individual.net>
- <CAGm1_kv=SFf1jZ=O+JAOiqL9e+_WtQ=UpxeTbX2AQayntH8BaQ@mail.gmail.com>
-Message-ID: <so9pcdxaht.ln2@ID-313208.user.individual.net>
+Date: Sun,  9 Oct 2016 10:04:31 +0200
+Subject: [Buildroot] [PATCH v3 03/10] package/python-futures: new package
+In-Reply-To: <20161009080438.4976-1-bernd.kuhls@t-online.de>
+References: <20161009080438.4976-1-bernd.kuhls@t-online.de>
+Message-ID: <20161009080438.4976-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 08 Oct 2016 20:23:09 +0200 schrieb Yegor Yefremov:
+Needed by upcoming python-mwscrape package.
 
-> isn't mwclient Python 3 compatible? See [1]
-> 
-> [1] https://github.com/mwclient/mwclient/blob/master/setup.py#L48
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v3: no changes, included in mwscrape2slob patch series
+v2: fix license (Thomas)
 
-Hi Yegor,
+ package/Config.in                          |  1 +
+ package/python-futures/Config.in           |  7 +++++++
+ package/python-futures/python-futures.hash |  3 +++
+ package/python-futures/python-futures.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-futures/Config.in
+ create mode 100644 package/python-futures/python-futures.hash
+ create mode 100644 package/python-futures/python-futures.mk
 
-using this defconfig
-
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON_MWCLIENT=y
-
-this error occurs with plain make:
--------------------------------------------------
->>>   Finalizing target directory
-PYTHONPATH="/home/buildroot/br3_couchdb/output/target/usr/lib/python3.5/
-sysconfigdata/:/home/buildroot/br3_couchdb/output/target/usr/lib/
-python3.5/site-packages/" /home/buildroot/br3_couchdb/output/host/usr/bin/
-python3.5 support/scripts/pycompile.py /home/buildroot/br3_couchdb/output/
-target/usr/lib/python3.5
-Traceback (most recent call last):
-  File "/home/buildroot/br3_couchdb/output/host/usr/lib/python3.5/
-py_compile.py", line 125, in compile
-    _optimize=optimize)
-  File "<frozen importlib._bootstrap_external>", line 700, in 
-source_to_code
-  File "<frozen importlib._bootstrap>", line 222, in 
-_call_with_frames_removed
-  File "/home/buildroot/br3_couchdb/output/target/usr/lib/python3.5/site-
-packages/mwclient/ex.py", line 15
-    exec _file in globals(), predata
-             ^
-SyntaxError: invalid syntax
--------------------------------------------------
-This error does not occur with python2.
-
-Regards, Bernd
+diff --git a/package/Config.in b/package/Config.in
+index 738f930..09f0039 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -682,6 +682,7 @@ menu "External python modules"
+ 	source "package/python-flask-jsonrpc/Config.in"
+ 	source "package/python-flask-login/Config.in"
+ 	source "package/python-flup/Config.in"
++	source "package/python-futures/Config.in"
+ 	source "package/python-gobject/Config.in"
+ 	source "package/python-html5lib/Config.in"
+ 	source "package/python-httplib2/Config.in"
+diff --git a/package/python-futures/Config.in b/package/python-futures/Config.in
+new file mode 100644
+index 0000000..2eb40e9
+--- /dev/null
++++ b/package/python-futures/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_FUTURES
++	bool "python-futures"
++	depends on BR2_PACKAGE_PYTHON # not needed for python3
++	help
++	  Backport of the concurrent.futures package from Python 3.2.
++
++	  https://github.com/agronholm/pythonfutures
+diff --git a/package/python-futures/python-futures.hash b/package/python-futures/python-futures.hash
+new file mode 100644
+index 0000000..f0948ae
+--- /dev/null
++++ b/package/python-futures/python-futures.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/futures/json, sha256 locally computed
++md5	ced2c365e518242512d7a398b515ff95  futures-3.0.5.tar.gz
++sha256	0542525145d5afc984c88f914a0c85c77527f65946617edb5274f72406f981df  futures-3.0.5.tar.gz
+diff --git a/package/python-futures/python-futures.mk b/package/python-futures/python-futures.mk
+new file mode 100644
+index 0000000..8a1afa3
+--- /dev/null
++++ b/package/python-futures/python-futures.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-futures
++#
++################################################################################
++
++PYTHON_FUTURES_VERSION = 3.0.5
++PYTHON_FUTURES_SOURCE = futures-$(PYTHON_FUTURES_VERSION).tar.gz
++PYTHON_FUTURES_SITE = https://pypi.python.org/packages/55/db/97c1ca37edab586a1ae03d6892b6633d8eaa23b23ac40c7e5bbc55423c78
++PYTHON_FUTURES_SETUP_TYPE = setuptools
++PYTHON_FUTURES_LICENSE = BSD-2c
++PYTHON_FUTURES_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+-- 
+2.9.3
