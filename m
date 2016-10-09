@@ -1,89 +1,91 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Oct 2016 10:04:36 +0200
-Subject: [Buildroot] [PATCH v3 08/10] package/python-pyicu: new package
+Date: Sun,  9 Oct 2016 10:04:38 +0200
+Subject: [Buildroot] [PATCH v3 10/10] package/python-mwscrape2slob: new
+	package
 In-Reply-To: <20161009080438.4976-1-bernd.kuhls@t-online.de>
 References: <20161009080438.4976-1-bernd.kuhls@t-online.de>
-Message-ID: <20161009080438.4976-8-bernd.kuhls@t-online.de>
+Message-ID: <20161009080438.4976-10-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for the upcoming python-slob package.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v3: initial version
 
- package/Config.in                      |  1 +
- package/python-pyicu/Config.in         | 13 +++++++++++++
- package/python-pyicu/python-pyicu.hash |  3 +++
- package/python-pyicu/python-pyicu.mk   | 15 +++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/python-pyicu/Config.in
- create mode 100644 package/python-pyicu/python-pyicu.hash
- create mode 100644 package/python-pyicu/python-pyicu.mk
+ package/Config.in                                     |  1 +
+ package/python-mwscrape2slob/Config.in                | 19 +++++++++++++++++++
+ .../python-mwscrape2slob/python-mwscrape2slob.hash    |  2 ++
+ package/python-mwscrape2slob/python-mwscrape2slob.mk  | 13 +++++++++++++
+ 4 files changed, 35 insertions(+)
+ create mode 100644 package/python-mwscrape2slob/Config.in
+ create mode 100644 package/python-mwscrape2slob/python-mwscrape2slob.hash
+ create mode 100644 package/python-mwscrape2slob/python-mwscrape2slob.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d81b8e1..731c040 100644
+index 74f506c..7cf9981 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -738,6 +738,7 @@ menu "External python modules"
- 	source "package/python-pyftpdlib/Config.in"
- 	source "package/python-pygame/Config.in"
- 	source "package/python-pygments/Config.in"
-+	source "package/python-pyicu/Config.in"
- 	source "package/python-pyinotify/Config.in"
- 	source "package/python-pylru/Config.in"
- 	source "package/python-pymysql/Config.in"
-diff --git a/package/python-pyicu/Config.in b/package/python-pyicu/Config.in
+@@ -712,6 +712,7 @@ menu "External python modules"
+ 	source "package/python-msgpack/Config.in"
+ 	source "package/python-mwclient/Config.in"
+ 	source "package/python-mwscrape/Config.in"
++	source "package/python-mwscrape2slob/Config.in"
+ 	source "package/python-netaddr/Config.in"
+ 	source "package/python-netifaces/Config.in"
+ 	source "package/python-networkmanager/Config.in"
+diff --git a/package/python-mwscrape2slob/Config.in b/package/python-mwscrape2slob/Config.in
 new file mode 100644
-index 0000000..a3578f1
+index 0000000..799ab29
 --- /dev/null
-+++ b/package/python-pyicu/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_PYICU
-+	bool "python-pyicu"
-+	depends on !BR2_BINFMT_FLAT # icu
-+	depends on BR2_INSTALL_LIBSTDCPP # icu
-+	select BR2_PACKAGE_ICU
++++ b/package/python-mwscrape2slob/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_PYTHON_MWSCRAPE2SLOB
++	bool "python-mwscrape2slob"
++	depends on !BR2_BINFMT_FLAT # python-slob -> python-pyicu -> icu
++	depends on BR2_INSTALL_LIBSTDCPP # python-slob -> python-pyicu -> icu
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_COUCHDB # runtime
++	select BR2_PACKAGE_PYTHON_CSSSELECT # runtime
++	select BR2_PACKAGE_PYTHON_CSSUTILS # runtime
++	select BR2_PACKAGE_PYTHON_LXML # runtime
++	select BR2_PACKAGE_PYTHON_SLOB # runtime
 +	help
-+	  Python extension wrapping the ICU C++ API.
++	  A tool to create slob with content from a MediaWiki CouchDB
++	  created by mwscrape.
 +
-+	  http://pyicu.osafoundation.org/
++	  https://github.com/itkach/mwscrape2slob
 +
-+comment "python-pyicu needs a toolchain w/ C++"
-+	depends on !BR2_BINFMT_FLAT
++comment "python-mwscrape2slob needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_PYTHON3 && !BR2_BINFMT_FLAT
 +	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pyicu/python-pyicu.hash b/package/python-pyicu/python-pyicu.hash
+diff --git a/package/python-mwscrape2slob/python-mwscrape2slob.hash b/package/python-mwscrape2slob/python-mwscrape2slob.hash
 new file mode 100644
-index 0000000..a05a30e
+index 0000000..f1f5e4f
 --- /dev/null
-+++ b/package/python-pyicu/python-pyicu.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/PyICU/json, sha256 locally computed
-+md5	fadaf9f85830632f915cb85875ae9a39  PyICU-1.9.3.tar.gz
-+sha256	1a7a96212cb3e42e8df85b9062f1f1d6e207474d44f087218fad1d4ec210fa42  PyICU-1.9.3.tar.gz
-diff --git a/package/python-pyicu/python-pyicu.mk b/package/python-pyicu/python-pyicu.mk
++++ b/package/python-mwscrape2slob/python-mwscrape2slob.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 367ffc3203f7eb2cc26211f58c0693526652d9a238af48c88f936920e804faf7  python-mwscrape2slob-0f9124ed62009dff6a230947d80340f5a61a6f49.tar.gz
+diff --git a/package/python-mwscrape2slob/python-mwscrape2slob.mk b/package/python-mwscrape2slob/python-mwscrape2slob.mk
 new file mode 100644
-index 0000000..fa3a7f4
+index 0000000..62f915f
 --- /dev/null
-+++ b/package/python-pyicu/python-pyicu.mk
-@@ -0,0 +1,15 @@
++++ b/package/python-mwscrape2slob/python-mwscrape2slob.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-pyicu
++# python-mwscrape2slob
 +#
 +################################################################################
 +
-+PYTHON_PYICU_VERSION = 1.9.3
-+PYTHON_PYICU_SOURCE = PyICU-$(PYTHON_PYICU_VERSION).tar.gz
-+PYTHON_PYICU_SITE = https://pypi.python.org/packages/bf/1f/cea237f542e3bb592980008a734850e8cbbc25c19c72c98767c71c1bd9c2
-+PYTHON_PYICU_LICENSE = MIT
-+PYTHON_PYICU_LICENSE_FILES = LICENSE
-+PYTHON_PYICU_DEPENDENCIES = icu
-+PYTHON_PYICU_SETUP_TYPE = setuptools
++PYTHON_MWSCRAPE2SLOB_VERSION = 0f9124ed62009dff6a230947d80340f5a61a6f49
++PYTHON_MWSCRAPE2SLOB_SITE = $(call github,itkach,mwscrape2slob,$(PYTHON_MWSCRAPE2SLOB_VERSION))
++PYTHON_MWSCRAPE2SLOB_LICENSE = GPLv3
++PYTHON_MWSCRAPE2SLOB_LICENSE_FILES = LICENSE
++PYTHON_MWSCRAPE2SLOB_SETUP_TYPE = distutils
 +
 +$(eval $(python-package))
 -- 
