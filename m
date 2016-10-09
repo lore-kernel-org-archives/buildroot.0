@@ -1,91 +1,99 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Oct 2016 10:04:37 +0200
-Subject: [Buildroot] [PATCH v3 09/10] package/python-slob: new package
-In-Reply-To: <20161009080438.4976-1-bernd.kuhls@t-online.de>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 9 Oct 2016 11:39:18 +0200
+Subject: [Buildroot] [PATCH v3 05/10] package/python-mwclient: new
+	package
+In-Reply-To: <20161009080438.4976-5-bernd.kuhls@t-online.de>
 References: <20161009080438.4976-1-bernd.kuhls@t-online.de>
-Message-ID: <20161009080438.4976-9-bernd.kuhls@t-online.de>
+ <20161009080438.4976-5-bernd.kuhls@t-online.de>
+Message-ID: <CAGm1_ktdhkjECy2d--ihLGVMhf92xXcWErG62O-6ikN62RUEXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for the upcoming python-mwscrape2slob package.
+HI Bernd,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v3: initial version
+On Sun, Oct 9, 2016 at 10:04 AM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Needed by upcoming python-mwscrape package.
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v3: no changes, included in mwscrape2slob patch series
+> v2: removed build dependencies (Thomas)
+>     added license file; needed to add a source code file, LICENSE.md is
+>     not part of the tarball provided by pypi (Thomas)
+>
+>  package/Config.in                            |  1 +
+>  package/python-mwclient/Config.in            |  9 +++++++++
+>  package/python-mwclient/python-mwclient.hash |  3 +++
+>  package/python-mwclient/python-mwclient.mk   | 14 ++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/python-mwclient/Config.in
+>  create mode 100644 package/python-mwclient/python-mwclient.hash
+>  create mode 100644 package/python-mwclient/python-mwclient.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 664ae2f..d8a63e9 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -709,6 +709,7 @@ menu "External python modules"
+>         source "package/python-meld3/Config.in"
+>         source "package/python-mistune/Config.in"
+>         source "package/python-msgpack/Config.in"
+> +       source "package/python-mwclient/Config.in"
+>         source "package/python-netaddr/Config.in"
+>         source "package/python-netifaces/Config.in"
+>         source "package/python-networkmanager/Config.in"
+> diff --git a/package/python-mwclient/Config.in b/package/python-mwclient/Config.in
+> new file mode 100644
+> index 0000000..deae1b7
+> --- /dev/null
+> +++ b/package/python-mwclient/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PYTHON_MWCLIENT
+> +       bool "python-mwclient"
+> +       depends on BR2_PACKAGE_PYTHON
 
- package/Config.in                    |  1 +
- package/python-slob/Config.in        | 17 +++++++++++++++++
- package/python-slob/python-slob.hash |  2 ++
- package/python-slob/python-slob.mk   | 13 +++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/python-slob/Config.in
- create mode 100644 package/python-slob/python-slob.hash
- create mode 100644 package/python-slob/python-slob.mk
+remove this dependency as mwclient is compatible with Python 3 too.
 
-diff --git a/package/Config.in b/package/Config.in
-index 731c040..74f506c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -782,6 +782,7 @@ menu "External python modules"
- 	source "package/python-singledispatch/Config.in"
- 	source "package/python-sip/Config.in"
- 	source "package/python-six/Config.in"
-+	source "package/python-slob/Config.in"
- 	source "package/python-smbus-cffi/Config.in"
- 	source "package/python-socketio/Config.in"
- 	source "package/python-spidev/Config.in"
-diff --git a/package/python-slob/Config.in b/package/python-slob/Config.in
-new file mode 100644
-index 0000000..2c8ddb0
---- /dev/null
-+++ b/package/python-slob/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_PYTHON_SLOB
-+	bool "python-slob"
-+	depends on !BR2_BINFMT_FLAT # python-pyicu -> icu
-+	depends on BR2_INSTALL_LIBSTDCPP # python-pyicu -> icu
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_PYICU # runtime
-+	# although optional, it is used as default compression
-+	select BR2_PACKAGE_PYTHON3_XZ # runtime
-+	help
-+	  slob.py is a reference implementation of slob format reader
-+	  and writer.
-+
-+	  https://github.com/itkach/slob
-+
-+comment "python-slob needs a toolchain w/ C++"
-+	depends on BR2_PACKAGE_PYTHON3 && !BR2_BINFMT_FLAT
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-slob/python-slob.hash b/package/python-slob/python-slob.hash
-new file mode 100644
-index 0000000..39d5d81
---- /dev/null
-+++ b/package/python-slob/python-slob.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 18eb4f45d09d49b1f776cac52ea70ab951566c60cd30bbec39e88f10908fd8ff  python-slob-31ad0e769360a5b10a4893f686587bb8e48c3895.tar.gz
-diff --git a/package/python-slob/python-slob.mk b/package/python-slob/python-slob.mk
-new file mode 100644
-index 0000000..474c0c9
---- /dev/null
-+++ b/package/python-slob/python-slob.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-slob
-+#
-+################################################################################
-+
-+PYTHON_SLOB_VERSION = 31ad0e769360a5b10a4893f686587bb8e48c3895
-+PYTHON_SLOB_SITE = $(call github,itkach,slob,$(PYTHON_SLOB_VERSION))
-+PYTHON_SLOB_LICENSE = GPLv3
-+PYTHON_SLOB_LICENSE_FILES = LICENSE
-+PYTHON_SLOB_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
--- 
-2.9.3
+Yegor
+
+> +       select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+> +       select BR2_PACKAGE_PYTHON_SIX # runtime
+> +       help
+> +         MediaWiki API client.
+> +
+> +         https://github.com/btongminh/mwclient
+> diff --git a/package/python-mwclient/python-mwclient.hash b/package/python-mwclient/python-mwclient.hash
+> new file mode 100644
+> index 0000000..1098971
+> --- /dev/null
+> +++ b/package/python-mwclient/python-mwclient.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi/mwclient/json, sha256 locally computed
+> +md5    c1334facf2d6ca54fe6dba4ab75ecf34  mwclient-0.8.1.tar.gz
+> +sha256 5f892711cc0b23ff2a6d8b7986ee63cd43fd1ec92b0783604ffa7613cd1662e4  mwclient-0.8.1.tar.gz
+> diff --git a/package/python-mwclient/python-mwclient.mk b/package/python-mwclient/python-mwclient.mk
+> new file mode 100644
+> index 0000000..1f1e209
+> --- /dev/null
+> +++ b/package/python-mwclient/python-mwclient.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-mwclient
+> +#
+> +################################################################################
+> +
+> +PYTHON_MWCLIENT_VERSION = 0.8.1
+> +PYTHON_MWCLIENT_SOURCE = mwclient-$(PYTHON_MWCLIENT_VERSION).tar.gz
+> +PYTHON_MWCLIENT_SITE = https://pypi.python.org/packages/19/79/481b288a497f625ee8f76141ff3472d81428b1f14b7155a28a63a3247197
+> +PYTHON_MWCLIENT_LICENSE = MIT
+> +PYTHON_MWCLIENT_LICENSE_FILES = mwclient/__init__.py
+> +PYTHON_MWCLIENT_SETUP_TYPE = setuptools
+> +
+> +$(eval $(python-package))
+> --
+> 2.9.3
+>
