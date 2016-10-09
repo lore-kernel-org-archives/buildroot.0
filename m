@@ -1,46 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Oct 2016 22:41:39 +0200
-Subject: [Buildroot] [PATCH] package/wvstreams: mark as deprecated
-In-Reply-To: <1475923059-7328-1-git-send-email-romain.naour@gmail.com>
-References: <1475923059-7328-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161009224139.640c124d@free-electrons.com>
+Date: Sun, 9 Oct 2016 22:42:56 +0200
+Subject: [Buildroot] [git commit] sysklogd: add patch to fix build with
+	glibc 2.24
+Message-ID: <20161009204301.581E08211E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=31e78ab72f4d51ab39b19fe58bf6b8a53bec1b01
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  8 Oct 2016 12:37:39 +0200, Romain Naour wrote:
-> As reported by J?rg and I [1] [2], wvstreams is not maintained anymore. Last
-> activity was on Github was 2011, the current version 1.6.1 dates from 2009.
-> 
-> Also it doesn't build anymore with a recent compiler (gcc5 and gcc6).
-> Instead of stacking patches forever, mark this wvstreams and wvdial deprecated
-> before removing them completely.
-> 
-> Remove following failures from autobuilders.
-> http://autobuild.buildroot.net/results/f01/f0166f030875ecaf0d757790de6361339071831e
-> http://autobuild.buildroot.net/results/32b/32b4eba8c7cbe8a3b1cde2d67f1af3f913fcc292
-> http://autobuild.buildroot.net/results/38f/38fefa126596c6e267ffaf0f2dd9c5e3dcf09aff
-> http://autobuild.buildroot.net/results/ea2/ea223c8a4f817541f55aa36c47b159a316031bff
-> 
-> [1] http://patchwork.ozlabs.org/patch/674238/
-> [2] http://patchwork.ozlabs.org/patch/505304/
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Simon Dawson <spdawson@gmail.com>
-> Cc: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/wvdial/Config.in    | 2 ++
->  package/wvstreams/Config.in | 2 ++
->  2 files changed, 4 insertions(+)
+Building sysklogd with glibc 2.24 fails with the following error:
 
-Applied to master, thanks.
+syslogd.c: In function ???reapchild???:
+syslogd.c:2097:13: error: storage size of ???status??? isn???t known
+  union wait status;
+             ^
+Makefile:99: recipe for target 'syslogd.o' failed
+make[2]: *** [syslogd.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+package/pkg-generic.mk:201: recipe for target './buildroot/output/build/sysklogd-1.5.1/.stamp_built' failed
+make[1]: *** [./buildroot/output/build/sysklogd-1.5.1/.stamp_built] Error 2
+Makefile:41: recipe for target '_all' failed
+make: *** [_all] Error 2
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+union wait was marked deprecated in glibc 2.23 and removed in glibc 2.24.
+The fix is to declare it as an int.
+
+See https://sourceware.org/ml/libc-alpha/2016-02/msg00342.html
+
+Sent upstream via their mailing list
+
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...01-replace-deprecated-union-wait-with-int.patch | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/package/sysklogd/0001-replace-deprecated-union-wait-with-int.patch b/package/sysklogd/0001-replace-deprecated-union-wait-with-int.patch
+new file mode 100644
+index 0000000..c9a30e9
+--- /dev/null
++++ b/package/sysklogd/0001-replace-deprecated-union-wait-with-int.patch
+@@ -0,0 +1,25 @@
++From 86fe87cdf097e6286e76eadcc9c11c79be6258f2 Mon Sep 17 00:00:00 2001
++From: Ryan Coe <bluemrp9@gmail.com>
++Date: Fri, 7 Oct 2016 19:42:40 -0700
++Subject: [PATCH 1/1] replace deprecated union wait with int
++
++Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
++---
++ syslogd.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/syslogd.c b/syslogd.c
++index ea73ea5da5e935bb8cab328559f950cd3afc2d20..ace96c8be40f50d123120c0586a384a298212245 100644
++--- a/syslogd.c
+++++ b/syslogd.c
++@@ -2094,7 +2094,7 @@ void reapchild()
++	(void) signal(SIGCHLD, reapchild);	/* reset signal handler -ASP */
++	wait ((int *)0);
++ #else
++-	union wait status;
+++	int status;
++
++	while (wait3(&status, WNOHANG, (struct rusage *) NULL) > 0)
++		;
++--
++2.9.3
