@@ -1,84 +1,91 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Oct 2016 14:46:21 +0200
-Subject: [Buildroot] [PATCH v4 06/10] package/python-mwscrape: new package
+Date: Sun,  9 Oct 2016 14:46:24 +0200
+Subject: [Buildroot] [PATCH v4 09/10] package/python-slob: new package
 In-Reply-To: <20161009124625.23303-1-bernd.kuhls@t-online.de>
 References: <20161009124625.23303-1-bernd.kuhls@t-online.de>
-Message-ID: <20161009124625.23303-6-bernd.kuhls@t-online.de>
+Message-ID: <20161009124625.23303-9-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Needed for the upcoming python-mwscrape2slob package.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v4: no changes
-v3: no changes, included in mwscrape2slob patch series
-v2: reworked dependencies (Thomas)
+v3: initial version
 
- package/Config.in                            |  1 +
- package/python-mwscrape/Config.in            | 11 +++++++++++
- package/python-mwscrape/python-mwscrape.hash |  2 ++
- package/python-mwscrape/python-mwscrape.mk   | 13 +++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-mwscrape/Config.in
- create mode 100644 package/python-mwscrape/python-mwscrape.hash
- create mode 100644 package/python-mwscrape/python-mwscrape.mk
+ package/Config.in                    |  1 +
+ package/python-slob/Config.in        | 17 +++++++++++++++++
+ package/python-slob/python-slob.hash |  2 ++
+ package/python-slob/python-slob.mk   | 13 +++++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 package/python-slob/Config.in
+ create mode 100644 package/python-slob/python-slob.hash
+ create mode 100644 package/python-slob/python-slob.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d8a63e9..bd2a3d8 100644
+index 731c040..74f506c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -710,6 +710,7 @@ menu "External python modules"
- 	source "package/python-mistune/Config.in"
- 	source "package/python-msgpack/Config.in"
- 	source "package/python-mwclient/Config.in"
-+	source "package/python-mwscrape/Config.in"
- 	source "package/python-netaddr/Config.in"
- 	source "package/python-netifaces/Config.in"
- 	source "package/python-networkmanager/Config.in"
-diff --git a/package/python-mwscrape/Config.in b/package/python-mwscrape/Config.in
+@@ -782,6 +782,7 @@ menu "External python modules"
+ 	source "package/python-singledispatch/Config.in"
+ 	source "package/python-sip/Config.in"
+ 	source "package/python-six/Config.in"
++	source "package/python-slob/Config.in"
+ 	source "package/python-smbus-cffi/Config.in"
+ 	source "package/python-socketio/Config.in"
+ 	source "package/python-spidev/Config.in"
+diff --git a/package/python-slob/Config.in b/package/python-slob/Config.in
 new file mode 100644
-index 0000000..273ce9a
+index 0000000..2c8ddb0
 --- /dev/null
-+++ b/package/python-mwscrape/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_MWSCRAPE
-+	bool "python-mwscrape"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_COUCHDB # runtime
-+	select BR2_PACKAGE_PYTHON_FUTURES # runtime
-+	select BR2_PACKAGE_PYTHON_MWCLIENT # runtime
-+	select BR2_PACKAGE_PYTHON_PYLRU # runtime
++++ b/package/python-slob/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_PYTHON_SLOB
++	bool "python-slob"
++	depends on !BR2_BINFMT_FLAT # python-pyicu -> icu
++	depends on BR2_INSTALL_LIBSTDCPP # python-pyicu -> icu
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_PYICU # runtime
++	# although optional, it is used as default compression
++	select BR2_PACKAGE_PYTHON3_XZ # runtime
 +	help
-+	  Download rendered articles from MediaWiki API to CouchDB
++	  slob.py is a reference implementation of slob format reader
++	  and writer.
 +
-+	  https://github.com/itkach/mwscrape
-diff --git a/package/python-mwscrape/python-mwscrape.hash b/package/python-mwscrape/python-mwscrape.hash
++	  https://github.com/itkach/slob
++
++comment "python-slob needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_PYTHON3 && !BR2_BINFMT_FLAT
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-slob/python-slob.hash b/package/python-slob/python-slob.hash
 new file mode 100644
-index 0000000..b91ef69
+index 0000000..39d5d81
 --- /dev/null
-+++ b/package/python-mwscrape/python-mwscrape.hash
++++ b/package/python-slob/python-slob.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 8de8a5ef257851f6e1e41247f64710f48859a5e3f91ebc7200bb60769f02f296  python-mwscrape-6a58d7801eb1e884fd0516f1adbedbd4481c10e6.tar.gz
-diff --git a/package/python-mwscrape/python-mwscrape.mk b/package/python-mwscrape/python-mwscrape.mk
++sha256 18eb4f45d09d49b1f776cac52ea70ab951566c60cd30bbec39e88f10908fd8ff  python-slob-31ad0e769360a5b10a4893f686587bb8e48c3895.tar.gz
+diff --git a/package/python-slob/python-slob.mk b/package/python-slob/python-slob.mk
 new file mode 100644
-index 0000000..e2d4e5d
+index 0000000..474c0c9
 --- /dev/null
-+++ b/package/python-mwscrape/python-mwscrape.mk
++++ b/package/python-slob/python-slob.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-mwscrape
++# python-slob
 +#
 +################################################################################
 +
-+PYTHON_MWSCRAPE_VERSION = 6a58d7801eb1e884fd0516f1adbedbd4481c10e6
-+PYTHON_MWSCRAPE_SITE = $(call github,itkach,mwscrape,$(PYTHON_MWSCRAPE_VERSION))
-+PYTHON_MWSCRAPE_LICENSE = BSD-3c
-+PYTHON_MWSCRAPE_LICENSE_FILES = LICENSE.txt
-+PYTHON_MWSCRAPE_SETUP_TYPE = distutils
++PYTHON_SLOB_VERSION = 31ad0e769360a5b10a4893f686587bb8e48c3895
++PYTHON_SLOB_SITE = $(call github,itkach,slob,$(PYTHON_SLOB_VERSION))
++PYTHON_SLOB_LICENSE = GPLv3
++PYTHON_SLOB_LICENSE_FILES = LICENSE
++PYTHON_SLOB_SETUP_TYPE = distutils
 +
 +$(eval $(python-package))
 -- 
