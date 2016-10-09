@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Oct 2016 22:51:41 +0200
-Subject: [Buildroot] [git commit] package/python-futures: new package
-Message-ID: <20161009205206.395827FA39@busybox.osuosl.org>
+Date: Sun, 9 Oct 2016 22:51:04 +0200
+Subject: [Buildroot] [git commit] package/python-couchdb: new package
+Message-ID: <20161009205206.2AB498211A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfe76ebfb9accd2b33a2d3d7cd679cb6e8ddaea0
+commit: https://git.buildroot.net/buildroot/commit/?id=8238368d0540318ae2446c6ed1324a356ac5993d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Needed by upcoming python-mwscrape package.
@@ -17,62 +17,63 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/Config.in                          |  1 +
- package/python-futures/Config.in           |  7 +++++++
- package/python-futures/python-futures.hash |  3 +++
- package/python-futures/python-futures.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
+ package/python-couchdb/Config.in           |  8 ++++++++
+ package/python-couchdb/python-couchdb.hash |  3 +++
+ package/python-couchdb/python-couchdb.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index f919bd5..d418126 100644
+index a1da86a..f919bd5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -682,6 +682,7 @@ menu "External python modules"
- 	source "package/python-flask-jsonrpc/Config.in"
- 	source "package/python-flask-login/Config.in"
- 	source "package/python-flup/Config.in"
-+	source "package/python-futures/Config.in"
- 	source "package/python-gobject/Config.in"
- 	source "package/python-html5lib/Config.in"
- 	source "package/python-httplib2/Config.in"
-diff --git a/package/python-futures/Config.in b/package/python-futures/Config.in
+@@ -657,6 +657,7 @@ menu "External python modules"
+ 	source "package/python-coherence/Config.in"
+ 	source "package/python-configobj/Config.in"
+ 	source "package/python-configshell-fb/Config.in"
++	source "package/python-couchdb/Config.in"
+ 	source "package/python-crc16/Config.in"
+ 	source "package/python-crcmod/Config.in"
+ 	source "package/python-crossbar/Config.in"
+diff --git a/package/python-couchdb/Config.in b/package/python-couchdb/Config.in
 new file mode 100644
-index 0000000..2eb40e9
+index 0000000..9156883
 --- /dev/null
-+++ b/package/python-futures/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_FUTURES
-+	bool "python-futures"
-+	depends on BR2_PACKAGE_PYTHON # not needed for python3
++++ b/package/python-couchdb/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_COUCHDB
++	bool "python-couchdb"
++	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
 +	help
-+	  Backport of the concurrent.futures package from Python 3.2.
++	  Python client library for working with CouchDB.
 +
-+	  https://github.com/agronholm/pythonfutures
-diff --git a/package/python-futures/python-futures.hash b/package/python-futures/python-futures.hash
++	  https://github.com/djc/couchdb-python/
+diff --git a/package/python-couchdb/python-couchdb.hash b/package/python-couchdb/python-couchdb.hash
 new file mode 100644
-index 0000000..f0948ae
+index 0000000..f9422a8
 --- /dev/null
-+++ b/package/python-futures/python-futures.hash
++++ b/package/python-couchdb/python-couchdb.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/futures/json, sha256 locally computed
-+md5	ced2c365e518242512d7a398b515ff95  futures-3.0.5.tar.gz
-+sha256	0542525145d5afc984c88f914a0c85c77527f65946617edb5274f72406f981df  futures-3.0.5.tar.gz
-diff --git a/package/python-futures/python-futures.mk b/package/python-futures/python-futures.mk
++# md5 from https://pypi.python.org/pypi/couchdb/json, sha256 locally computed
++md5	2ed5ad2a477fd3cb472ed6dc5a381ff3  CouchDB-1.1.tar.gz
++sha256	9503ea413956c33b5e2af248235afb5e0f011f33f816a32e872f8ff9b0a0e710  CouchDB-1.1.tar.gz
+diff --git a/package/python-couchdb/python-couchdb.mk b/package/python-couchdb/python-couchdb.mk
 new file mode 100644
-index 0000000..8a1afa3
+index 0000000..c88787c
 --- /dev/null
-+++ b/package/python-futures/python-futures.mk
++++ b/package/python-couchdb/python-couchdb.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-futures
++# python-couchdb
 +#
 +################################################################################
 +
-+PYTHON_FUTURES_VERSION = 3.0.5
-+PYTHON_FUTURES_SOURCE = futures-$(PYTHON_FUTURES_VERSION).tar.gz
-+PYTHON_FUTURES_SITE = https://pypi.python.org/packages/55/db/97c1ca37edab586a1ae03d6892b6633d8eaa23b23ac40c7e5bbc55423c78
-+PYTHON_FUTURES_SETUP_TYPE = setuptools
-+PYTHON_FUTURES_LICENSE = BSD-2c
-+PYTHON_FUTURES_LICENSE_FILES = LICENSE
++PYTHON_COUCHDB_VERSION = 1.1
++PYTHON_COUCHDB_SOURCE = CouchDB-$(PYTHON_COUCHDB_VERSION).tar.gz
++PYTHON_COUCHDB_SITE = https://pypi.python.org/packages/9a/e8/c3c8da6d00145aaca07f2b784794917613dad26532068da4e8392dc48d7f
++PYTHON_COUCHDB_SETUP_TYPE = setuptools
++PYTHON_COUCHDB_LICENSE = BSD-3c
++PYTHON_COUCHDB_LICENSE_FILES = COPYING
 +
 +$(eval $(python-package))
