@@ -1,55 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Oct 2016 15:01:45 +0200
-Subject: [Buildroot] [git commit] Revert "Revert "texinfo: new host package""
-Message-ID: <20161009130312.06C3F81D4F@busybox.osuosl.org>
+Date: Sun, 9 Oct 2016 15:04:51 +0200
+Subject: [Buildroot] [PATCH v2 1/3] gdb: get rid of host-texinfo
+ dependency
+In-Reply-To: <20161009135552.5dd553fe@free-electrons.com>
+References: <1475953413-1950-1-git-send-email-patrickdepinguin@gmail.com>
+ <20161009135552.5dd553fe@free-electrons.com>
+Message-ID: <20161009150451.404e6641@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b566ffb2d45266a4b5c40244b3752ed03a6a2927
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This reverts commit 79c8abdad7c997c1815c682859acfcf76ee619a8.
+On Sun, 9 Oct 2016 13:55:52 +0200, Thomas Petazzoni wrote:
 
-The change in the binutils package to avoid the texinfo dependency broke
-the toolchain build.
+> All three patches applied to master. Thanks!
 
-See:
+And I reverted the texinfo patch and the binutils patch. The binutils
+patch badly breaks the build of the toolchain. See:
 
-  http://autobuild.buildroot.net/results/90d0537bc12cbb2a7c6d344b3c6c9e1a5046d791/
+  http://autobuild.buildroot.net/results/90d/90d0537bc12cbb2a7c6d344b3c6c9e1a5046d791/build-end.log
+  http://autobuild.buildroot.net/results/9a2/9a2b30bfd08c3a4af43f0523276eb5f799699aaa/build-end.log
+  http://autobuild.buildroot.net/results/d8a/d8a4afeeec8d6b070b17a067d0ded5aefe4e3f6a/build-end.log
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/texinfo/texinfo.hash |  2 ++
- package/texinfo/texinfo.mk   | 13 +++++++++++++
- 2 files changed, 15 insertions(+)
+Please do a toolchain build before sending the next iterations of the
+patches. A basic ARM toolchain would not even build with your
+patches :-/
 
-diff --git a/package/texinfo/texinfo.hash b/package/texinfo/texinfo.hash
-new file mode 100644
-index 0000000..4bdf343
---- /dev/null
-+++ b/package/texinfo/texinfo.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 ac68394ce21b2420ba7ed7cec65d84aacf308cc88e9bf4716fcfff88286883d2 texinfo-6.1.tar.xz
-diff --git a/package/texinfo/texinfo.mk b/package/texinfo/texinfo.mk
-new file mode 100644
-index 0000000..ebd0b48
---- /dev/null
-+++ b/package/texinfo/texinfo.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# texinfo
-+#
-+################################################################################
-+
-+TEXINFO_VERSION = 6.1
-+TEXINFO_SITE = $(BR2_GNU_MIRROR)/texinfo
-+TEXINFO_SOURCE = texinfo-$(TEXINFO_VERSION).tar.xz
-+TEXINFO_LICENSE = GPLv3+
-+TEXINFO_LICENSE_FILES = COPYING
-+
-+$(eval $(host-autotools-package))
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
