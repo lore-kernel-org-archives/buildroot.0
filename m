@@ -1,83 +1,83 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Oct 2016 10:04:31 +0200
-Subject: [Buildroot] [PATCH v3 03/10] package/python-futures: new package
+Date: Sun,  9 Oct 2016 10:04:34 +0200
+Subject: [Buildroot] [PATCH v3 06/10] package/python-mwscrape: new package
 In-Reply-To: <20161009080438.4976-1-bernd.kuhls@t-online.de>
 References: <20161009080438.4976-1-bernd.kuhls@t-online.de>
-Message-ID: <20161009080438.4976-3-bernd.kuhls@t-online.de>
+Message-ID: <20161009080438.4976-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed by upcoming python-mwscrape package.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v3: no changes, included in mwscrape2slob patch series
-v2: fix license (Thomas)
+v2: reworked dependencies (Thomas)
 
- package/Config.in                          |  1 +
- package/python-futures/Config.in           |  7 +++++++
- package/python-futures/python-futures.hash |  3 +++
- package/python-futures/python-futures.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-futures/Config.in
- create mode 100644 package/python-futures/python-futures.hash
- create mode 100644 package/python-futures/python-futures.mk
+ package/Config.in                            |  1 +
+ package/python-mwscrape/Config.in            | 11 +++++++++++
+ package/python-mwscrape/python-mwscrape.hash |  2 ++
+ package/python-mwscrape/python-mwscrape.mk   | 13 +++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-mwscrape/Config.in
+ create mode 100644 package/python-mwscrape/python-mwscrape.hash
+ create mode 100644 package/python-mwscrape/python-mwscrape.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 738f930..09f0039 100644
+index d8a63e9..bd2a3d8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -682,6 +682,7 @@ menu "External python modules"
- 	source "package/python-flask-jsonrpc/Config.in"
- 	source "package/python-flask-login/Config.in"
- 	source "package/python-flup/Config.in"
-+	source "package/python-futures/Config.in"
- 	source "package/python-gobject/Config.in"
- 	source "package/python-html5lib/Config.in"
- 	source "package/python-httplib2/Config.in"
-diff --git a/package/python-futures/Config.in b/package/python-futures/Config.in
+@@ -710,6 +710,7 @@ menu "External python modules"
+ 	source "package/python-mistune/Config.in"
+ 	source "package/python-msgpack/Config.in"
+ 	source "package/python-mwclient/Config.in"
++	source "package/python-mwscrape/Config.in"
+ 	source "package/python-netaddr/Config.in"
+ 	source "package/python-netifaces/Config.in"
+ 	source "package/python-networkmanager/Config.in"
+diff --git a/package/python-mwscrape/Config.in b/package/python-mwscrape/Config.in
 new file mode 100644
-index 0000000..2eb40e9
+index 0000000..4b5457d
 --- /dev/null
-+++ b/package/python-futures/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_FUTURES
-+	bool "python-futures"
-+	depends on BR2_PACKAGE_PYTHON # not needed for python3
++++ b/package/python-mwscrape/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_MWSCRAPE
++	bool "python-mwscrape"
++	depends on BR2_PACKAGE_PYTHON # mwclient
++	select BR2_PACKAGE_PYTHON_COUCHDB # runtime
++	select BR2_PACKAGE_PYTHON_FUTURES # runtime
++	select BR2_PACKAGE_PYTHON_MWCLIENT # runtime
++	select BR2_PACKAGE_PYTHON_PYLRU # runtime
 +	help
-+	  Backport of the concurrent.futures package from Python 3.2.
++	  Download rendered articles from MediaWiki API to CouchDB
 +
-+	  https://github.com/agronholm/pythonfutures
-diff --git a/package/python-futures/python-futures.hash b/package/python-futures/python-futures.hash
++	  https://github.com/itkach/mwscrape
+diff --git a/package/python-mwscrape/python-mwscrape.hash b/package/python-mwscrape/python-mwscrape.hash
 new file mode 100644
-index 0000000..f0948ae
+index 0000000..b91ef69
 --- /dev/null
-+++ b/package/python-futures/python-futures.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/futures/json, sha256 locally computed
-+md5	ced2c365e518242512d7a398b515ff95  futures-3.0.5.tar.gz
-+sha256	0542525145d5afc984c88f914a0c85c77527f65946617edb5274f72406f981df  futures-3.0.5.tar.gz
-diff --git a/package/python-futures/python-futures.mk b/package/python-futures/python-futures.mk
++++ b/package/python-mwscrape/python-mwscrape.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 8de8a5ef257851f6e1e41247f64710f48859a5e3f91ebc7200bb60769f02f296  python-mwscrape-6a58d7801eb1e884fd0516f1adbedbd4481c10e6.tar.gz
+diff --git a/package/python-mwscrape/python-mwscrape.mk b/package/python-mwscrape/python-mwscrape.mk
 new file mode 100644
-index 0000000..8a1afa3
+index 0000000..e2d4e5d
 --- /dev/null
-+++ b/package/python-futures/python-futures.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-mwscrape/python-mwscrape.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-futures
++# python-mwscrape
 +#
 +################################################################################
 +
-+PYTHON_FUTURES_VERSION = 3.0.5
-+PYTHON_FUTURES_SOURCE = futures-$(PYTHON_FUTURES_VERSION).tar.gz
-+PYTHON_FUTURES_SITE = https://pypi.python.org/packages/55/db/97c1ca37edab586a1ae03d6892b6633d8eaa23b23ac40c7e5bbc55423c78
-+PYTHON_FUTURES_SETUP_TYPE = setuptools
-+PYTHON_FUTURES_LICENSE = BSD-2c
-+PYTHON_FUTURES_LICENSE_FILES = LICENSE
++PYTHON_MWSCRAPE_VERSION = 6a58d7801eb1e884fd0516f1adbedbd4481c10e6
++PYTHON_MWSCRAPE_SITE = $(call github,itkach,mwscrape,$(PYTHON_MWSCRAPE_VERSION))
++PYTHON_MWSCRAPE_LICENSE = BSD-3c
++PYTHON_MWSCRAPE_LICENSE_FILES = LICENSE.txt
++PYTHON_MWSCRAPE_SETUP_TYPE = distutils
 +
 +$(eval $(python-package))
 -- 
