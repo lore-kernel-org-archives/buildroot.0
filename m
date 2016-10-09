@@ -1,31 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Oct 2016 22:52:17 +0200
-Subject: [Buildroot] [PATCH v4 03/10] package/python-futures: new package
-In-Reply-To: <20161009124625.23303-3-bernd.kuhls@t-online.de>
-References: <20161009124625.23303-1-bernd.kuhls@t-online.de>
- <20161009124625.23303-3-bernd.kuhls@t-online.de>
-Message-ID: <20161009225217.267cb9d0@free-electrons.com>
+Date: Sun, 9 Oct 2016 22:53:17 +0200
+Subject: [Buildroot] [git commit] package/python-pylru: new package
+Message-ID: <20161009205526.DDF5C81E01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ae86d30913786765aecce38177a99353c7e800aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  9 Oct 2016 14:46:18 +0200, Bernd Kuhls wrote:
-> Needed by upcoming python-mwscrape package.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v4: no changes
-> v3: no changes, included in mwscrape2slob patch series
-> v2: fix license (Thomas)
+Needed by upcoming python-mwscrape package.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                      |  1 +
+ package/python-pylru/Config.in         |  6 ++++++
+ package/python-pylru/python-pylru.hash |  3 +++
+ package/python-pylru/python-pylru.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index d418126..db4f722 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -736,6 +736,7 @@ menu "External python modules"
+ 	source "package/python-pygame/Config.in"
+ 	source "package/python-pygments/Config.in"
+ 	source "package/python-pyinotify/Config.in"
++	source "package/python-pylru/Config.in"
+ 	source "package/python-pymysql/Config.in"
+ 	source "package/python-pynacl/Config.in"
+ 	source "package/python-pyopenssl/Config.in"
+diff --git a/package/python-pylru/Config.in b/package/python-pylru/Config.in
+new file mode 100644
+index 0000000..c174576
+--- /dev/null
++++ b/package/python-pylru/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYLRU
++	bool "python-pylru"
++	help
++	  A least recently used (LRU) cache implementation.
++
++	  https://github.com/jlhutch/pylru
+diff --git a/package/python-pylru/python-pylru.hash b/package/python-pylru/python-pylru.hash
+new file mode 100644
+index 0000000..806ea36
+--- /dev/null
++++ b/package/python-pylru/python-pylru.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/pylru/json, sha256 locally computed
++md5	41369d58a1c4391c5cc36f84262abcdc  pylru-1.0.9.tar.gz
++sha256	71376192671f0ad1690b2a7427d39a29b1df994c8469a9b46b03ed7e28c0172c  pylru-1.0.9.tar.gz
+diff --git a/package/python-pylru/python-pylru.mk b/package/python-pylru/python-pylru.mk
+new file mode 100644
+index 0000000..e670f3d
+--- /dev/null
++++ b/package/python-pylru/python-pylru.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pylru
++#
++################################################################################
++
++PYTHON_PYLRU_VERSION = 1.0.9
++PYTHON_PYLRU_SOURCE = pylru-$(PYTHON_PYLRU_VERSION).tar.gz
++PYTHON_PYLRU_SITE = https://pypi.python.org/packages/c0/7d/0de1055632f3871dfeaabe5a3f0510317cd98b93e7b792b44e4c7de2b17b
++PYTHON_PYLRU_SETUP_TYPE = distutils
++PYTHON_PYLRU_LICENSE = GPLv2
++PYTHON_PYLRU_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
