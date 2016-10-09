@@ -1,44 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Oct 2016 15:11:39 +0200
-Subject: [Buildroot] [git commit] Revert "libglib2: add host-util-linux for
-	host variant"
-Message-ID: <20161009161148.DC73680E27@busybox.osuosl.org>
+Date: Sun, 9 Oct 2016 15:12:15 +0200
+Subject: [Buildroot] [git commit] Revert "libglib2: bump to version 2.50.0"
+Message-ID: <20161009161148.EBB9080E27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f556ab99f51a0b90183610a7fecb9ed22ed4aa3
+commit: https://git.buildroot.net/buildroot/commit/?id=40da5b434d0d25662b447f14b724245da04ed90d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 71c5a81c96873c056cb2c54580e3ba2db528ca8a.
+This reverts commit 4c7c010f9fae01399070844991252d3f5b9aae5f.
 
 The bump to libglib2 2.25.0 causes a large number of build failures due
 to the redefinition of crc32() in both util-linux libblkid and
-zlib. This commit is related to the bump, so it needs to get reverted as
-well.
+zlib.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/ac65c9177dd63fc8d76dba3b9845f81b15faa716/
+  (and approximately 500 other similar build failures)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libglib2/libglib2.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ package/libglib2/Config.in     | 2 --
+ package/libglib2/libglib2.hash | 4 ++--
+ package/libglib2/libglib2.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
+diff --git a/package/libglib2/Config.in b/package/libglib2/Config.in
+index 80c7d67..84ee816 100644
+--- a/package/libglib2/Config.in
++++ b/package/libglib2/Config.in
+@@ -5,8 +5,6 @@ config BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBFFI
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_PCRE_UCP
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 	select BR2_PACKAGE_ZLIB
+ 	depends on BR2_USE_WCHAR # gettext
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 3bc4021..35728e2 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,2 +1,2 @@
+-# https://download.gnome.org/sources/glib/2.50/glib-2.50.0.sha256sum
+-sha256  830b551fa626bda06e12729205b3c5bb0d82b924a8cf64d948945878f01b7d70  glib-2.50.0.tar.xz
++# https://download.gnome.org/sources/glib/2.48/glib-2.48.2.sha256sum
++sha256  f25e751589cb1a58826eac24fbd4186cda4518af772806b666a3f91f66e6d3f4  glib-2.48.2.tar.xz
 diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index f199a4a..5bc6ed5 100644
+index 5bc6ed5..6b1a387 100644
 --- a/package/libglib2/libglib2.mk
 +++ b/package/libglib2/libglib2.mk
-@@ -105,12 +105,7 @@ LIBGLIB2_DEPENDENCIES = \
- 	libffi pcre util-linux zlib $(if $(BR2_NEEDS_GETTEXT),gettext)
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBGLIB2_VERSION_MAJOR = 2.50
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
++LIBGLIB2_VERSION_MAJOR = 2.48
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPLv2+
+@@ -102,7 +102,7 @@ HOST_LIBGLIB2_CONF_OPTS = \
+ 
+ LIBGLIB2_DEPENDENCIES = \
+ 	host-pkgconf host-libglib2 host-gettext \
+-	libffi pcre util-linux zlib $(if $(BR2_NEEDS_GETTEXT),gettext)
++	libffi pcre zlib $(if $(BR2_NEEDS_GETTEXT),gettext)
  
  HOST_LIBGLIB2_DEPENDENCIES = \
--	host-gettext \
--	host-libffi \
--	host-pcre \
--	host-pkgconf \
--	host-util-linux \
--	host-zlib
-+	host-gettext host-libffi host-pcre host-pkgconf host-zlib
- 
- LIBGLIB2_CONF_OPTS = \
- 	--with-pcre=system
+ 	host-gettext host-libffi host-pcre host-pkgconf host-zlib
