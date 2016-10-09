@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Oct 2016 14:05:46 +0200
-Subject: [Buildroot] [PATCH] package/gcc: nios2 Backport nios2 r31 fix
-In-Reply-To: <1475934412-29919-1-git-send-email-romain.naour@gmail.com>
-References: <1475934412-29919-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161009140546.223f5049@free-electrons.com>
+Date: Sun, 9 Oct 2016 14:06:04 +0200
+Subject: [Buildroot] [git commit] wine: Bump to version 1.8.5
+Message-ID: <20161009120607.709DB820EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0d936dd2d3a8f8d2810971597601679ccd012d35
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  8 Oct 2016 15:46:52 +0200, Romain Naour wrote:
-> As reported on the mailing list, gcc5 with binutils 2.26.1 produce some
-> assembler error "r31 cannot be used with jmp; use ret instead" [1]
-> 
-> The bug is reported upstream [2], but gcc 5.4 needs an upstream patch to
-> fix this issue.
-> 
-> Note: openembedded backported the same patch for gcc 5.3 [3]
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2016-September/172932.html
-> [2] https://sourceware.org/bugzilla/show_bug.cgi?id=20674
-> [3] http://lists.openembedded.org/pipermail/openembedded-core/2016-February/117633.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  .../5.4.0/880-gcc-nios2-Add-IJMP_REGS-enum.patch   | 103 +++++++++++++++++++++
->  1 file changed, 103 insertions(+)
->  create mode 100644 package/gcc/5.4.0/880-gcc-nios2-Add-IJMP_REGS-enum.patch
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wine/wine.hash | 2 +-
+ package/wine/wine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master after adding the references to the autobuilder
-failures.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index d58ac02..0f6b9d3 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 515d10439777a4816fe5b0a0fc9a4ce498a2ecfd23eba0c25dc00f3d6c805079 wine-1.8.4.tar.bz2
++sha256 dee2a4959e5f90a89aaf04566c23f2926e9590f8968ea662afd81947fdb6f6d6 wine-1.8.5.tar.bz2
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index aceea35..d9a0ecf 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WINE_VERSION = 1.8.4
++WINE_VERSION = 1.8.5
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
+ WINE_SITE = https://dl.winehq.org/wine/source/1.8
+ WINE_LICENSE = LGPLv2.1+
