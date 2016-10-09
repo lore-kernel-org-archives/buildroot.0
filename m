@@ -1,86 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Oct 2016 14:33:57 +0200
-Subject: [Buildroot] [PATCH v2] package/upmpdcli: add patch to fix error
- not detecting jsoncpp
-In-Reply-To: <20160925141152.13952-1-joerg.krause@embedded.rocks>
-References: <20160925141152.13952-1-joerg.krause@embedded.rocks>
-Message-ID: <20161009143357.56643d6b@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  9 Oct 2016 14:46:18 +0200
+Subject: [Buildroot] [PATCH v4 03/10] package/python-futures: new package
+In-Reply-To: <20161009124625.23303-1-bernd.kuhls@t-online.de>
+References: <20161009124625.23303-1-bernd.kuhls@t-online.de>
+Message-ID: <20161009124625.23303-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Needed by upcoming python-mwscrape package.
 
-On Sun, 25 Sep 2016 16:11:52 +0200, J?rg Krause wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/205463c9ea8651911972c2835e28ded1912c811a
-> http://autobuild.buildroot.net/results/5e9279ee60c11a3dacacf6d78f87f8d1b92968f5
-> http://autobuild.buildroot.net/results/97043f8defd5a59ae39b4c7f095a10d15c7fe632
-> http://autobuild.buildroot.net/results/e775126d5939093289b1a833dd6323ac293322ed
-> .. and many more.
-> 
-> libmpdclient, libmicrohttpd and jsoncpp provide a .pc file. Use
-> pkg-config for detecting the libraries and for providing the necessary
-> details for compiling and linking.
-> 
-> The current build system of upmpdcli does not use PKG_CHECK_MODULES, but
-> AC_LINK_IFELSE to detect jsoncpp. After bumping jsoncpp version from
-> 1.7.2 to 1.7.5 the detection fails, because the test program does not
-> compile anymore:
-> 
-> """
-> In file included from
-> /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/autolink.h:9:0,
->                  from
-> /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:9,
->                  from test.c:1:
-> /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:155:9:
-> error: 'int64_t' does not name a type
->  typedef int64_t Int64;
->          ^
-> /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:156:9:
-> error: 'uint64_t' does not name a type
->  typedef uint64_t UInt64;
->          ^
-> /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:158:9:
-> error: 'Int64' does not name a type
->  typedef Int64 LargestInt;
->          ^
-> /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:159:9:
-> error: 'UInt64' does not name a type
->  typedef UInt64 LargestUInt;
->          ^
-> In file included from
-> /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:10:0,
->                  from test.c:1:
-> /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/value.h:184:11:
-> error: 'UInt64' in namespace 'Json' does not name a type
->    typedef Json::UInt64 UInt64;
-> 
-> [..]
-> """
-> 
-> Instead of fixing the test program use PKG_CHECK_MODULES to check for
-> jsoncpp. While we're on it, add it for libmpdclient and libmicrohttpd,
-> too.
-> 
-> Upstream-status: https://github.com/medoc92/upmpdcli/pull/52
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
-> v2:
->  - fix typo in patch
-> ---
->  ...ig-for-jsoncpp-libmpdclient-libmicrohttpd.patch | 105 +++++++++++++++++++++
->  1 file changed, 105 insertions(+)
->  create mode 100644 package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v4: no changes
+v3: no changes, included in mwscrape2slob patch series
+v2: fix license (Thomas)
 
-Applied to master, thanks.
+ package/Config.in                          |  1 +
+ package/python-futures/Config.in           |  7 +++++++
+ package/python-futures/python-futures.hash |  3 +++
+ package/python-futures/python-futures.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-futures/Config.in
+ create mode 100644 package/python-futures/python-futures.hash
+ create mode 100644 package/python-futures/python-futures.mk
 
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 738f930..09f0039 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -682,6 +682,7 @@ menu "External python modules"
+ 	source "package/python-flask-jsonrpc/Config.in"
+ 	source "package/python-flask-login/Config.in"
+ 	source "package/python-flup/Config.in"
++	source "package/python-futures/Config.in"
+ 	source "package/python-gobject/Config.in"
+ 	source "package/python-html5lib/Config.in"
+ 	source "package/python-httplib2/Config.in"
+diff --git a/package/python-futures/Config.in b/package/python-futures/Config.in
+new file mode 100644
+index 0000000..2eb40e9
+--- /dev/null
++++ b/package/python-futures/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_FUTURES
++	bool "python-futures"
++	depends on BR2_PACKAGE_PYTHON # not needed for python3
++	help
++	  Backport of the concurrent.futures package from Python 3.2.
++
++	  https://github.com/agronholm/pythonfutures
+diff --git a/package/python-futures/python-futures.hash b/package/python-futures/python-futures.hash
+new file mode 100644
+index 0000000..f0948ae
+--- /dev/null
++++ b/package/python-futures/python-futures.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/futures/json, sha256 locally computed
++md5	ced2c365e518242512d7a398b515ff95  futures-3.0.5.tar.gz
++sha256	0542525145d5afc984c88f914a0c85c77527f65946617edb5274f72406f981df  futures-3.0.5.tar.gz
+diff --git a/package/python-futures/python-futures.mk b/package/python-futures/python-futures.mk
+new file mode 100644
+index 0000000..8a1afa3
+--- /dev/null
++++ b/package/python-futures/python-futures.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-futures
++#
++################################################################################
++
++PYTHON_FUTURES_VERSION = 3.0.5
++PYTHON_FUTURES_SOURCE = futures-$(PYTHON_FUTURES_VERSION).tar.gz
++PYTHON_FUTURES_SITE = https://pypi.python.org/packages/55/db/97c1ca37edab586a1ae03d6892b6633d8eaa23b23ac40c7e5bbc55423c78
++PYTHON_FUTURES_SETUP_TYPE = setuptools
++PYTHON_FUTURES_LICENSE = BSD-2c
++PYTHON_FUTURES_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.9.3
