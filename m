@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Oct 2016 13:55:52 +0200
-Subject: [Buildroot] [PATCH v2 1/3] gdb: get rid of host-texinfo
- dependency
-In-Reply-To: <1475953413-1950-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1475953413-1950-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20161009135552.5dd553fe@free-electrons.com>
+Date: Sun, 9 Oct 2016 13:56:05 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add entry for uclibc/mksh
+Message-ID: <20161009115609.8FC8481E7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3b4adcd675ba58b8df4e749f812ea69dd33a1808
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  8 Oct 2016 21:03:31 +0200, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> The host-texinfo dependency in gdb/host-gdb was added because gdb insisted
-> in building info documentation in recent versions, and we want to avoid
-> 'makeinfo' to be present on the build system.
-> 
-> However, there is another solution that does not require actually building
-> host-texinfo: instruct the makefiles to use a dummy makeinfo command
-> ('true').
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> ---
->  package/gdb/gdb.mk | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-All three patches applied to master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 481c845..240fb2c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1532,6 +1532,8 @@ N:	Waldemar Brodkorb <wbx@openadk.org>
+ F:	arch/Config.in.bfin
+ F:	arch/Config.in.sparc
+ F:	arch/Config.in.m68k
++F:	package/uclibc/
++F:	package/mksh/
+ 
+ N:	Waldemar Rymarkiewicz <waldemar.rymarkiewicz@tieto.com>
+ F:	package/ccid/
