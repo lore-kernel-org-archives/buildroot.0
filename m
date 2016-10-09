@@ -1,83 +1,87 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Oct 2016 10:04:34 +0200
-Subject: [Buildroot] [PATCH v3 06/10] package/python-mwscrape: new package
+Date: Sun,  9 Oct 2016 10:04:33 +0200
+Subject: [Buildroot] [PATCH v3 05/10] package/python-mwclient: new package
 In-Reply-To: <20161009080438.4976-1-bernd.kuhls@t-online.de>
 References: <20161009080438.4976-1-bernd.kuhls@t-online.de>
-Message-ID: <20161009080438.4976-6-bernd.kuhls@t-online.de>
+Message-ID: <20161009080438.4976-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Needed by upcoming python-mwscrape package.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v3: no changes, included in mwscrape2slob patch series
-v2: reworked dependencies (Thomas)
+v2: removed build dependencies (Thomas)
+    added license file; needed to add a source code file, LICENSE.md is
+    not part of the tarball provided by pypi (Thomas)
 
  package/Config.in                            |  1 +
- package/python-mwscrape/Config.in            | 11 +++++++++++
- package/python-mwscrape/python-mwscrape.hash |  2 ++
- package/python-mwscrape/python-mwscrape.mk   | 13 +++++++++++++
+ package/python-mwclient/Config.in            |  9 +++++++++
+ package/python-mwclient/python-mwclient.hash |  3 +++
+ package/python-mwclient/python-mwclient.mk   | 14 ++++++++++++++
  4 files changed, 27 insertions(+)
- create mode 100644 package/python-mwscrape/Config.in
- create mode 100644 package/python-mwscrape/python-mwscrape.hash
- create mode 100644 package/python-mwscrape/python-mwscrape.mk
+ create mode 100644 package/python-mwclient/Config.in
+ create mode 100644 package/python-mwclient/python-mwclient.hash
+ create mode 100644 package/python-mwclient/python-mwclient.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d8a63e9..bd2a3d8 100644
+index 664ae2f..d8a63e9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -710,6 +710,7 @@ menu "External python modules"
+@@ -709,6 +709,7 @@ menu "External python modules"
+ 	source "package/python-meld3/Config.in"
  	source "package/python-mistune/Config.in"
  	source "package/python-msgpack/Config.in"
- 	source "package/python-mwclient/Config.in"
-+	source "package/python-mwscrape/Config.in"
++	source "package/python-mwclient/Config.in"
  	source "package/python-netaddr/Config.in"
  	source "package/python-netifaces/Config.in"
  	source "package/python-networkmanager/Config.in"
-diff --git a/package/python-mwscrape/Config.in b/package/python-mwscrape/Config.in
+diff --git a/package/python-mwclient/Config.in b/package/python-mwclient/Config.in
 new file mode 100644
-index 0000000..4b5457d
+index 0000000..deae1b7
 --- /dev/null
-+++ b/package/python-mwscrape/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_MWSCRAPE
-+	bool "python-mwscrape"
-+	depends on BR2_PACKAGE_PYTHON # mwclient
-+	select BR2_PACKAGE_PYTHON_COUCHDB # runtime
-+	select BR2_PACKAGE_PYTHON_FUTURES # runtime
-+	select BR2_PACKAGE_PYTHON_MWCLIENT # runtime
-+	select BR2_PACKAGE_PYTHON_PYLRU # runtime
++++ b/package/python-mwclient/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_MWCLIENT
++	bool "python-mwclient"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
++	select BR2_PACKAGE_PYTHON_SIX # runtime
 +	help
-+	  Download rendered articles from MediaWiki API to CouchDB
++	  MediaWiki API client.
 +
-+	  https://github.com/itkach/mwscrape
-diff --git a/package/python-mwscrape/python-mwscrape.hash b/package/python-mwscrape/python-mwscrape.hash
++	  https://github.com/btongminh/mwclient
+diff --git a/package/python-mwclient/python-mwclient.hash b/package/python-mwclient/python-mwclient.hash
 new file mode 100644
-index 0000000..b91ef69
+index 0000000..1098971
 --- /dev/null
-+++ b/package/python-mwscrape/python-mwscrape.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 8de8a5ef257851f6e1e41247f64710f48859a5e3f91ebc7200bb60769f02f296  python-mwscrape-6a58d7801eb1e884fd0516f1adbedbd4481c10e6.tar.gz
-diff --git a/package/python-mwscrape/python-mwscrape.mk b/package/python-mwscrape/python-mwscrape.mk
++++ b/package/python-mwclient/python-mwclient.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/mwclient/json, sha256 locally computed
++md5	c1334facf2d6ca54fe6dba4ab75ecf34  mwclient-0.8.1.tar.gz
++sha256	5f892711cc0b23ff2a6d8b7986ee63cd43fd1ec92b0783604ffa7613cd1662e4  mwclient-0.8.1.tar.gz
+diff --git a/package/python-mwclient/python-mwclient.mk b/package/python-mwclient/python-mwclient.mk
 new file mode 100644
-index 0000000..e2d4e5d
+index 0000000..1f1e209
 --- /dev/null
-+++ b/package/python-mwscrape/python-mwscrape.mk
-@@ -0,0 +1,13 @@
++++ b/package/python-mwclient/python-mwclient.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-mwscrape
++# python-mwclient
 +#
 +################################################################################
 +
-+PYTHON_MWSCRAPE_VERSION = 6a58d7801eb1e884fd0516f1adbedbd4481c10e6
-+PYTHON_MWSCRAPE_SITE = $(call github,itkach,mwscrape,$(PYTHON_MWSCRAPE_VERSION))
-+PYTHON_MWSCRAPE_LICENSE = BSD-3c
-+PYTHON_MWSCRAPE_LICENSE_FILES = LICENSE.txt
-+PYTHON_MWSCRAPE_SETUP_TYPE = distutils
++PYTHON_MWCLIENT_VERSION = 0.8.1
++PYTHON_MWCLIENT_SOURCE = mwclient-$(PYTHON_MWCLIENT_VERSION).tar.gz
++PYTHON_MWCLIENT_SITE = https://pypi.python.org/packages/19/79/481b288a497f625ee8f76141ff3472d81428b1f14b7155a28a63a3247197
++PYTHON_MWCLIENT_LICENSE = MIT
++PYTHON_MWCLIENT_LICENSE_FILES = mwclient/__init__.py
++PYTHON_MWCLIENT_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
 -- 
