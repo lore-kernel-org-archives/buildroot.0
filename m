@@ -1,67 +1,44 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 9 Oct 2016 16:32:49 +0200
-Subject: [Buildroot] [PATCH v2 1/3] gdb: get rid of host-texinfo
- dependency
-In-Reply-To: <CAAXf6LXFxtsSONURriXdwWj2q03pK01yQ8_FrUfunTJuMOCsHQ@mail.gmail.com>
-References: <1475953413-1950-1-git-send-email-patrickdepinguin@gmail.com>
- <20161009135552.5dd553fe@free-electrons.com>
- <20161009150451.404e6641@free-electrons.com>
- <CAAXf6LXFxtsSONURriXdwWj2q03pK01yQ8_FrUfunTJuMOCsHQ@mail.gmail.com>
-Message-ID: <20161009143249.GQ2052@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 9 Oct 2016 15:11:39 +0200
+Subject: [Buildroot] [git commit] Revert "libglib2: add host-util-linux for
+	host variant"
+Message-ID: <20161009161148.DC73680E27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas De Schampheleire wrote,
+commit: https://git.buildroot.net/buildroot/commit/?id=2f556ab99f51a0b90183610a7fecb9ed22ed4aa3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> On Oct 9, 2016 15:05, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> wrote:
-> >
-> > Hello,
-> >
-> > On Sun, 9 Oct 2016 13:55:52 +0200, Thomas Petazzoni wrote:
-> >
-> > > All three patches applied to master. Thanks!
-> >
-> > And I reverted the texinfo patch and the binutils patch. The binutils
-> > patch badly breaks the build of the toolchain. See:
-> >
-> > ? http://autobuild.buildroot.net/results/90d/
-> 90d0537bc12cbb2a7c6d344b3c6c9e1a5046d791/build-end.log
-> > ? http://autobuild.buildroot.net/results/9a2/
-> 9a2b30bfd08c3a4af43f0523276eb5f799699aaa/build-end.log
-> > ? http://autobuild.buildroot.net/results/d8a/
-> d8a4afeeec8d6b070b17a067d0ded5aefe4e3f6a/build-end.log
-> >
-> > Please do a toolchain build before sending the next iterations of the
-> > patches. A basic ARM toolchain would not even build with your
-> > patches :-/
-> 
-> Will check, sorry...
+This reverts commit 71c5a81c96873c056cb2c54580e3ba2db528ca8a.
 
-Binutils isn't installed into output/host.
-May be try something like this:
-diff --git a/package/binutils/binutils.mk
-b/package/binutils/binutils.mk
-index 4e87fcb..8aa3fc7 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -59,10 +59,8 @@ endif
- # and sometimes needs specific makeinfo versions to work
- BINUTILS_CONF_ENV += MAKEINFO=true
- BINUTILS_MAKE_OPTS += MAKEINFO=true
--BINUTILS_INSTALL_TARGET_OPTS += MAKEINFO=true
- HOST_BINUTILS_CONF_ENV += MAKEINFO=true
- HOST_BINUTILS_MAKE_OPTS += MAKEINFO=true
--HOST_BINUTILS_INSTALL_OPTS += MAKEINFO=true
+The bump to libglib2 2.25.0 causes a large number of build failures due
+to the redefinition of crc32() in both util-linux libblkid and
+zlib. This commit is related to the bump, so it needs to get reverted as
+well.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libglib2/libglib2.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index f199a4a..5bc6ed5 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -105,12 +105,7 @@ LIBGLIB2_DEPENDENCIES = \
+ 	libffi pcre util-linux zlib $(if $(BR2_NEEDS_GETTEXT),gettext)
  
- # gcc bug with Os/O2/O3, PR77311
- # error: unable to find a register to spill in class 'CCREGS'
-
-It seem binutils get confused and just do true make install...
-
-best regards
- Waldemar
+ HOST_LIBGLIB2_DEPENDENCIES = \
+-	host-gettext \
+-	host-libffi \
+-	host-pcre \
+-	host-pkgconf \
+-	host-util-linux \
+-	host-zlib
++	host-gettext host-libffi host-pcre host-pkgconf host-zlib
+ 
+ LIBGLIB2_CONF_OPTS = \
+ 	--with-pcre=system
