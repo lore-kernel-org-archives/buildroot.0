@@ -1,34 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 09 Oct 2016 21:20:13 +0200
-Subject: [Buildroot] gc20 no space left issue
-In-Reply-To: <20161009204509.49fc7a4b@free-electrons.com> (Thomas Petazzoni's
- message of "Sun, 9 Oct 2016 20:45:09 +0200")
-References: <20161009204509.49fc7a4b@free-electrons.com>
-Message-ID: <87vax1ib2q.fsf@dell.be.48ers.dk>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 9 Oct 2016 21:39:13 +0200
+Subject: [Buildroot] [PATCH] uclibc: fix mips/mips64 build with older
+	compilers
+Message-ID: <20161009193913.GA31529@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+For example gcc 4.8.x fails to build uClibc-ng for mips/mips64.
+Check if feature exist before using it.
 
- > Hello Peter,
- > Due to a lack of disk space, gcc20 reports some build failures, such as:
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ ...5-fix-mips-mips64-build-for-old-compilers.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/uclibc/0005-fix-mips-mips64-build-for-old-compilers.patch
 
- >   http://autobuild.buildroot.net/results/6a2/6a2d4cb453128c0aa1fc9ed0ac04ec7c8306e7e1/
-
- > Could you see if you can fix this ?
-
-I dropped some of the bigger tarballs from instance-*/dl, so now there's
-11G free.
-
- > Perhaps we should start thinking about a way of ignoring the build
- > results caused by a lack of disk space ?
-
-Perhaps, if we can come up with a simple & robust way of detecting
-it. On the other hand, this doesn't happen that often - And when it does
-it is good to get notified about it.
-
+diff --git a/package/uclibc/0005-fix-mips-mips64-build-for-old-compilers.patch b/package/uclibc/0005-fix-mips-mips64-build-for-old-compilers.patch
+new file mode 100644
+index 0000000..1475132
+--- /dev/null
++++ b/package/uclibc/0005-fix-mips-mips64-build-for-old-compilers.patch
+@@ -0,0 +1,28 @@
++From 43c4bbf3e0e61f5f487a00a0066816913503656c Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@uclibc-ng.org>
++Date: Sun, 9 Oct 2016 20:15:00 +0200
++Subject: [PATCH] fix mips/mips64 build for old compilers
++
++Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
++---
++ Rules.mak | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Rules.mak b/Rules.mak
++index 67189ff..b9dbf25 100644
++--- a/Rules.mak
+++++ b/Rules.mak
++@@ -404,8 +404,8 @@ ifeq ($(TARGET_ARCH),mips)
++ 	CPU_CFLAGS-$(CONFIG_MIPS_N64_ABI)+=-mabi=64
++ 	CPU_CFLAGS-$(CONFIG_MIPS_O32_ABI)+=-mabi=32
++ 	CPU_CFLAGS-$(CONFIG_MIPS_N32_ABI)+=-mabi=n32
++-	CPU_CFLAGS-$(CONFIG_MIPS_NAN_LEGACY)+=-mnan=legacy
++-	CPU_CFLAGS-$(CONFIG_MIPS_NAN_2008)+=-mnan=2008
+++	CPU_CFLAGS-$(CONFIG_MIPS_NAN_LEGACY)+=$(call check_gcc,-mnan=legacy)
+++	CPU_CFLAGS-$(CONFIG_MIPS_NAN_2008)+=$(call check_gcc,-mnan=2008)
++ 	CPU_LDFLAGS-y += $(CPU_CFLAGS)
++ endif
++ 
++-- 
++2.1.4
++
 -- 
-Bye, Peter Korsgaard
+2.1.4
