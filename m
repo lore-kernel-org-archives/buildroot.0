@@ -1,79 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Oct 2016 23:00:49 +0200
-Subject: [Buildroot] [git commit] package/python-cssutils: new package
-Message-ID: <20161009210152.B4839818FB@busybox.osuosl.org>
+Date: Sun, 9 Oct 2016 23:02:22 +0200
+Subject: [Buildroot] [git commit] package/python-pyicu: new package
+Message-ID: <20161009210418.C06F381DD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b26a01906df2a3862feca130e4d08f084afb5d9
+commit: https://git.buildroot.net/buildroot/commit/?id=49b7a57d351719ee0148f21b5a807836de59c934
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Needed for upcoming python-mwscrape2slob package.
+Needed for the upcoming python-slob package.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                            |  1 +
- package/python-cssutils/Config.in            |  8 ++++++++
- package/python-cssutils/python-cssutils.hash |  3 +++
- package/python-cssutils/python-cssutils.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
+ package/Config.in                      |  1 +
+ package/python-pyicu/Config.in         | 13 +++++++++++++
+ package/python-pyicu/python-pyicu.hash |  3 +++
+ package/python-pyicu/python-pyicu.mk   | 15 +++++++++++++++
+ 4 files changed, 32 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 6172f0f..10381e4 100644
+index 10381e4..406a5ea 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -663,6 +663,7 @@ menu "External python modules"
- 	source "package/python-crossbar/Config.in"
- 	source "package/python-cryptography/Config.in"
- 	source "package/python-cssselect/Config.in"
-+	source "package/python-cssutils/Config.in"
- 	source "package/python-daemon/Config.in"
- 	source "package/python-dataproperty/Config.in"
- 	source "package/python-dateutil/Config.in"
-diff --git a/package/python-cssutils/Config.in b/package/python-cssutils/Config.in
+@@ -738,6 +738,7 @@ menu "External python modules"
+ 	source "package/python-pyftpdlib/Config.in"
+ 	source "package/python-pygame/Config.in"
+ 	source "package/python-pygments/Config.in"
++	source "package/python-pyicu/Config.in"
+ 	source "package/python-pyinotify/Config.in"
+ 	source "package/python-pylru/Config.in"
+ 	source "package/python-pymysql/Config.in"
+diff --git a/package/python-pyicu/Config.in b/package/python-pyicu/Config.in
 new file mode 100644
-index 0000000..74de742
+index 0000000..a3578f1
 --- /dev/null
-+++ b/package/python-cssutils/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_CSSUTILS
-+	bool "python-cssutils"
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
++++ b/package/python-pyicu/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_PYTHON_PYICU
++	bool "python-pyicu"
++	depends on !BR2_BINFMT_FLAT # icu
++	depends on BR2_INSTALL_LIBSTDCPP # icu
++	select BR2_PACKAGE_ICU
 +	help
-+	  A CSS Cascading Style Sheets library for Python.
++	  Python extension wrapping the ICU C++ API.
 +
-+	  http://cthedot.de/cssutils/
-diff --git a/package/python-cssutils/python-cssutils.hash b/package/python-cssutils/python-cssutils.hash
++	  http://pyicu.osafoundation.org/
++
++comment "python-pyicu needs a toolchain w/ C++"
++	depends on !BR2_BINFMT_FLAT
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-pyicu/python-pyicu.hash b/package/python-pyicu/python-pyicu.hash
 new file mode 100644
-index 0000000..7b188bc
+index 0000000..a05a30e
 --- /dev/null
-+++ b/package/python-cssutils/python-cssutils.hash
++++ b/package/python-pyicu/python-pyicu.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/cssutils/json, sha256 locally computed
-+md5	7fcdf2c3e9f053136af1990146eb361d  cssutils-1.0.1.tar.gz
-+sha256	d8a18b2848ea1011750231f1dd64fe9053dbec1be0b37563c582561e7a529063  cssutils-1.0.1.tar.gz
-diff --git a/package/python-cssutils/python-cssutils.mk b/package/python-cssutils/python-cssutils.mk
++# md5 from https://pypi.python.org/pypi/PyICU/json, sha256 locally computed
++md5	fadaf9f85830632f915cb85875ae9a39  PyICU-1.9.3.tar.gz
++sha256	1a7a96212cb3e42e8df85b9062f1f1d6e207474d44f087218fad1d4ec210fa42  PyICU-1.9.3.tar.gz
+diff --git a/package/python-pyicu/python-pyicu.mk b/package/python-pyicu/python-pyicu.mk
 new file mode 100644
-index 0000000..3dd501a
+index 0000000..fa3a7f4
 --- /dev/null
-+++ b/package/python-cssutils/python-cssutils.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-pyicu/python-pyicu.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-cssutils
++# python-pyicu
 +#
 +################################################################################
 +
-+PYTHON_CSSUTILS_VERSION = 1.0.1
-+PYTHON_CSSUTILS_SOURCE = cssutils-$(PYTHON_CSSUTILS_VERSION).tar.gz
-+PYTHON_CSSUTILS_SITE = https://pypi.python.org/packages/22/de/6b03e0088baf0299ab7d2e95a9e26c2092e9cb3855876b958b6a62175ca2
-+PYTHON_CSSUTILS_LICENSE = LGPLv3+
-+PYTHON_CSSUTILS_LICENSE_FILES = COPYING.LESSER
-+PYTHON_CSSUTILS_SETUP_TYPE = setuptools
++PYTHON_PYICU_VERSION = 1.9.3
++PYTHON_PYICU_SOURCE = PyICU-$(PYTHON_PYICU_VERSION).tar.gz
++PYTHON_PYICU_SITE = https://pypi.python.org/packages/bf/1f/cea237f542e3bb592980008a734850e8cbbc25c19c72c98767c71c1bd9c2
++PYTHON_PYICU_LICENSE = MIT
++PYTHON_PYICU_LICENSE_FILES = LICENSE
++PYTHON_PYICU_DEPENDENCIES = icu
++PYTHON_PYICU_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
