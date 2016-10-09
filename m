@@ -1,83 +1,85 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Oct 2016 10:04:35 +0200
-Subject: [Buildroot] [PATCH v3 07/10] package/python-cssutils: new package
+Date: Sun,  9 Oct 2016 10:04:30 +0200
+Subject: [Buildroot] [PATCH v3 02/10] package/python-couchdb: new package
 In-Reply-To: <20161009080438.4976-1-bernd.kuhls@t-online.de>
 References: <20161009080438.4976-1-bernd.kuhls@t-online.de>
-Message-ID: <20161009080438.4976-7-bernd.kuhls@t-online.de>
+Message-ID: <20161009080438.4976-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for upcoming python-mwscrape2slob package.
+Needed by upcoming python-mwscrape package.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v3: initial version
+v3: added SSL runtime dependency
+v2: fix license, clarify in help text that this module provides a
+    CouchDB client, the server can run on a remote machine (Thomas)
 
- package/Config.in                            |  1 +
- package/python-cssutils/Config.in            |  8 ++++++++
- package/python-cssutils/python-cssutils.hash |  3 +++
- package/python-cssutils/python-cssutils.mk   | 14 ++++++++++++++
+ package/Config.in                          |  1 +
+ package/python-couchdb/Config.in           |  8 ++++++++
+ package/python-couchdb/python-couchdb.hash |  3 +++
+ package/python-couchdb/python-couchdb.mk   | 14 ++++++++++++++
  4 files changed, 26 insertions(+)
- create mode 100644 package/python-cssutils/Config.in
- create mode 100644 package/python-cssutils/python-cssutils.hash
- create mode 100644 package/python-cssutils/python-cssutils.mk
+ create mode 100644 package/python-couchdb/Config.in
+ create mode 100644 package/python-couchdb/python-couchdb.hash
+ create mode 100644 package/python-couchdb/python-couchdb.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index bd2a3d8..d81b8e1 100644
+index 852aa50..738f930 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -663,6 +663,7 @@ menu "External python modules"
+@@ -657,6 +657,7 @@ menu "External python modules"
+ 	source "package/python-coherence/Config.in"
+ 	source "package/python-configobj/Config.in"
+ 	source "package/python-configshell-fb/Config.in"
++	source "package/python-couchdb/Config.in"
+ 	source "package/python-crc16/Config.in"
+ 	source "package/python-crcmod/Config.in"
  	source "package/python-crossbar/Config.in"
- 	source "package/python-cryptography/Config.in"
- 	source "package/python-cssselect/Config.in"
-+	source "package/python-cssutils/Config.in"
- 	source "package/python-daemon/Config.in"
- 	source "package/python-dataproperty/Config.in"
- 	source "package/python-dateutil/Config.in"
-diff --git a/package/python-cssutils/Config.in b/package/python-cssutils/Config.in
+diff --git a/package/python-couchdb/Config.in b/package/python-couchdb/Config.in
 new file mode 100644
-index 0000000..74de742
+index 0000000..9156883
 --- /dev/null
-+++ b/package/python-cssutils/Config.in
++++ b/package/python-couchdb/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_CSSUTILS
-+	bool "python-cssutils"
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
++config BR2_PACKAGE_PYTHON_COUCHDB
++	bool "python-couchdb"
++	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
 +	help
-+	  A CSS Cascading Style Sheets library for Python.
++	  Python client library for working with CouchDB.
 +
-+	  http://cthedot.de/cssutils/
-diff --git a/package/python-cssutils/python-cssutils.hash b/package/python-cssutils/python-cssutils.hash
++	  https://github.com/djc/couchdb-python/
+diff --git a/package/python-couchdb/python-couchdb.hash b/package/python-couchdb/python-couchdb.hash
 new file mode 100644
-index 0000000..7b188bc
+index 0000000..f9422a8
 --- /dev/null
-+++ b/package/python-cssutils/python-cssutils.hash
++++ b/package/python-couchdb/python-couchdb.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/cssutils/json, sha256 locally computed
-+md5	7fcdf2c3e9f053136af1990146eb361d  cssutils-1.0.1.tar.gz
-+sha256	d8a18b2848ea1011750231f1dd64fe9053dbec1be0b37563c582561e7a529063  cssutils-1.0.1.tar.gz
-diff --git a/package/python-cssutils/python-cssutils.mk b/package/python-cssutils/python-cssutils.mk
++# md5 from https://pypi.python.org/pypi/couchdb/json, sha256 locally computed
++md5	2ed5ad2a477fd3cb472ed6dc5a381ff3  CouchDB-1.1.tar.gz
++sha256	9503ea413956c33b5e2af248235afb5e0f011f33f816a32e872f8ff9b0a0e710  CouchDB-1.1.tar.gz
+diff --git a/package/python-couchdb/python-couchdb.mk b/package/python-couchdb/python-couchdb.mk
 new file mode 100644
-index 0000000..3dd501a
+index 0000000..c88787c
 --- /dev/null
-+++ b/package/python-cssutils/python-cssutils.mk
++++ b/package/python-couchdb/python-couchdb.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-cssutils
++# python-couchdb
 +#
 +################################################################################
 +
-+PYTHON_CSSUTILS_VERSION = 1.0.1
-+PYTHON_CSSUTILS_SOURCE = cssutils-$(PYTHON_CSSUTILS_VERSION).tar.gz
-+PYTHON_CSSUTILS_SITE = https://pypi.python.org/packages/22/de/6b03e0088baf0299ab7d2e95a9e26c2092e9cb3855876b958b6a62175ca2
-+PYTHON_CSSUTILS_LICENSE = LGPLv3+
-+PYTHON_CSSUTILS_LICENSE_FILES = COPYING.LESSER
-+PYTHON_CSSUTILS_SETUP_TYPE = setuptools
++PYTHON_COUCHDB_VERSION = 1.1
++PYTHON_COUCHDB_SOURCE = CouchDB-$(PYTHON_COUCHDB_VERSION).tar.gz
++PYTHON_COUCHDB_SITE = https://pypi.python.org/packages/9a/e8/c3c8da6d00145aaca07f2b784794917613dad26532068da4e8392dc48d7f
++PYTHON_COUCHDB_SETUP_TYPE = setuptools
++PYTHON_COUCHDB_LICENSE = BSD-3c
++PYTHON_COUCHDB_LICENSE_FILES = COPYING
 +
 +$(eval $(python-package))
 -- 
