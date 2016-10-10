@@ -1,39 +1,47 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 10 Oct 2016 12:56:08 -0300
-Subject: [Buildroot] [PATCH] xterm: bump to version 327
-Message-ID: <1476114968-29609-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 10 Oct 2016 12:56:40 -0300
+Subject: [Buildroot] [PATCH] dbus: security bump to version 1.10.12
+Message-ID: <1476115000-29806-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+Format string vulnerability processing ActivationFailure messages
+
+See:
+https://bugs.freedesktop.org/show_bug.cgi?id=98157
+
+CVE not assigned yet.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/xterm/xterm.hash | 2 +-
- package/xterm/xterm.mk   | 2 +-
+ package/dbus/dbus.hash | 2 +-
+ package/dbus/dbus.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index 206bb91..bbd0e11 100644
---- a/package/xterm/xterm.hash
-+++ b/package/xterm/xterm.hash
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 1b20d3f..27d38ea 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256	3b31b07a0c40427e9330ec3be9d1a748c72808f945953cea9e526e48be315f1b	xterm-325.tgz
-+sha256	66fb2f6c35b342148f549c276b12a3aa3fb408e27ab6360ddec513e14376150b	xterm-327.tgz
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 3495ad9..eba781f 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
+-sha256	9d8f1d069ab4d1a0255d7b400ea3bcef4430c42e729b1012abb2890e3f739a43  dbus-1.10.10.tar.gz
++sha256	210a79430b276eafc6406c71705e9140d25b9956d18068df98a70156dc0e475d  dbus-1.10.12.tar.gz
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 1388e34..8657128 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XTERM_VERSION = 325
-+XTERM_VERSION = 327
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = http://invisible-mirror.net/archives/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+-DBUS_VERSION = 1.10.10
++DBUS_VERSION = 1.10.12
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 or GPLv2+ (library, tools), GPLv2+ (tools)
+ DBUS_LICENSE_FILES = COPYING
 -- 
 2.7.3
