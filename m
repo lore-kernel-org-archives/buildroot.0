@@ -1,107 +1,58 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 10 Oct 2016 14:26:33 -0300
-Subject: [Buildroot] [PATCH] polarssl: deprecate on security grounds
-Message-ID: <1476120393-19918-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 10 Oct 2016 14:33:40 -0300
+Subject: [Buildroot] [PATCH] shared-mime-info: bump to version 1.7
+Message-ID: <1476120820-11596-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 1.2.x branch is no longer maintained and the latest release from the
-maintained branches (2.3, 2.1, 1.3) were security releases, so more
-likely than not 1.2 is affected.
-In consequence switch shairport-sync to the openssl backend.
+Switch URLs to avoid 301s.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- Config.in.legacy                         | 10 ++++++++++
- package/polarssl/Config.in               |  1 +
- package/shairport-sync/Config.in         |  2 +-
- package/shairport-sync/shairport-sync.mk | 12 ++----------
- 4 files changed, 14 insertions(+), 11 deletions(-)
+ package/shared-mime-info/Config.in             | 2 +-
+ package/shared-mime-info/shared-mime-info.hash | 2 +-
+ package/shared-mime-info/shared-mime-info.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 2fae812..90a9cca 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,16 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.11"
+diff --git a/package/shared-mime-info/Config.in b/package/shared-mime-info/Config.in
+index 91a5a15..514044b 100644
+--- a/package/shared-mime-info/Config.in
++++ b/package/shared-mime-info/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_SHARED_MIME_INFO
+ 	  database of common types and the update-mime-database
+ 	  command used to extend it.
  
-+config BR2_PACKAGE_POLARSSL
-+	bool "polarssl is no longer supported"
-+	select BR2_LEGACY
-+	help
-+	  Upstream isn't maintaining the 1.2 branch any more and there
-+	  has been a release in the maintained branches (2.3, 2.1, 1.3)
-+	  that contains security fixes, so 1.2 is likely affected to a
-+	  certain degree, and even if it isn't any future security fix
-+	  will likely go unnoticed.
-+
- config BR2_PACKAGE_WESTON_RPI
- 	bool "Weston propietary RPI support is gone"
- 	select BR2_LEGACY
-diff --git a/package/polarssl/Config.in b/package/polarssl/Config.in
-index 17125a3..3025e06 100644
---- a/package/polarssl/Config.in
-+++ b/package/polarssl/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_POLARSSL
- 	bool "polarssl"
-+	depends on BR2_DEPRECATED_SINCE_2016_11
- 	help
- 	  PolarSSL is an SSL library written in ANSI C. PolarSSL makes
- 	  it easy for developers to include cryptographic and SSL/TLS
-diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
-index c558a64..6c377f5 100644
---- a/package/shairport-sync/Config.in
-+++ b/package/shairport-sync/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_SHAIRPORT_SYNC
- 	select BR2_PACKAGE_ALSA_LIB_MIXER
- 	select BR2_PACKAGE_LIBCONFIG
- 	select BR2_PACKAGE_LIBDAEMON
--	select BR2_PACKAGE_POLARSSL if !BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_POPT
- 	help
- 	  Shairport Sync emulates an AirPort Express for the purpose of
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 49c6604..9f40758 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -9,7 +9,7 @@ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VE
+-	  http://freedesktop.org/wiki/Software/shared-mime-info
++	  https://freedesktop.org/wiki/Software/shared-mime-info/
  
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
- SHAIRPORT_SYNC_LICENSE_FILES = LICENSES
--SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libconfig libdaemon popt host-pkgconf
-+SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libconfig libdaemon openssl popt host-pkgconf
+ comment "shared-mime-info needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+diff --git a/package/shared-mime-info/shared-mime-info.hash b/package/shared-mime-info/shared-mime-info.hash
+index 997751d..2007e0e 100644
+--- a/package/shared-mime-info/shared-mime-info.hash
++++ b/package/shared-mime-info/shared-mime-info.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	b2f8f85b6467933824180d0252bbcaee523f550a8fbc95cc4391bd43c03bc34c	shared-mime-info-1.6.tar.xz
++sha256	eacc781cfebaa2074e43cf9521dc7ab4391ace8a4712902b2841669c83144d2e	shared-mime-info-1.7.tar.xz
+diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
+index a70bc9a..e917ab5 100644
+--- a/package/shared-mime-info/shared-mime-info.mk
++++ b/package/shared-mime-info/shared-mime-info.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # git clone, no configure
- SHAIRPORT_SYNC_AUTORECONF = YES
-@@ -17,6 +17,7 @@ SHAIRPORT_SYNC_AUTORECONF = YES
- SHAIRPORT_SYNC_CONF_OPTS = --with-alsa \
- 	--with-metadata \
- 	--with-pipe \
-+	--with-ssl=openssl \
- 	--with-stdout
- 
- # Avahi or tinysvcmdns (shaiport-sync bundles its own version of tinysvcmdns).
-@@ -31,15 +32,6 @@ else
- SHAIRPORT_SYNC_CONF_OPTS += --with-tinysvcmdns
- endif
- 
--# OpenSSL or PolarSSL
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--SHAIRPORT_SYNC_DEPENDENCIES += openssl
--SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=openssl
--else
--SHAIRPORT_SYNC_DEPENDENCIES += polarssl
--SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=polarssl
--endif
--
- ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR),y)
- SHAIRPORT_SYNC_DEPENDENCIES += libsoxr
- SHAIRPORT_SYNC_CONF_OPTS += --with-soxr
+-SHARED_MIME_INFO_VERSION = 1.6
++SHARED_MIME_INFO_VERSION = 1.7
+ SHARED_MIME_INFO_SOURCE = shared-mime-info-$(SHARED_MIME_INFO_VERSION).tar.xz
+-SHARED_MIME_INFO_SITE = http://freedesktop.org/~hadess
++SHARED_MIME_INFO_SITE = https://people.freedesktop.org/~hadess
+ SHARED_MIME_INFO_INSTALL_STAGING = YES
+ SHARED_MIME_INFO_CONF_ENV = XMLLINT=$(HOST_DIR)/usr/bin/xmllint
+ SHARED_MIME_INFO_DEPENDENCIES = host-shared-mime-info libxml2 libglib2
 -- 
 2.7.3
