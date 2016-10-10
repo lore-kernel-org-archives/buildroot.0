@@ -1,229 +1,87 @@
-From: Herschel Karunaratne <hk@synexint.com>
-Date: Mon, 10 Oct 2016 12:02:57 +0530
-Subject: [Buildroot] Installing package libclthreads
-In-Reply-To: <27f42b97-7e99-ff93-3231-ed9c3a56360d@mind.be>
-References: <00b301d21d70$9e934540$dbb9cfc0$@synexint.com>
- <1006b3f0-301d-b8c3-99da-ef2c50c5ec00@mind.be>
- <000d01d21ef5$33361990$99a24cb0$@synexint.com>
- <27f42b97-7e99-ff93-3231-ed9c3a56360d@mind.be>
-Message-ID: <001801d222c0$25228450$6f678cf0$@synexint.com>
+From: Rahul Jain <Rahul.Jain@imgtec.com>
+Date: Mon, 10 Oct 2016 16:15:49 +0530
+Subject: [Buildroot] [PATCH v3 1/3] ustream-ssl: new package
+Message-ID: <1476096351-29501-1-git-send-email-Rahul.Jain@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+ustream-ssl has support for polarssl and cyassl
+but since polarssl is made obsolete by mbedtls and cyassl
+is not present in buildroot, we have not added support for it.
 
-Thanks for the support and I manage to get it working.
+Signed-off-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
+---
+ Changes v2 -> v3:
+   - Remove entry from DEVELOPERS file
+ Changes v1 -> v2:
+   - No changes
 
-Regards
-?
-Herschel 
+ package/Config.in                  |  1 +
+ package/ustream-ssl/Config.in      | 12 ++++++++++++
+ package/ustream-ssl/ustream-ssl.mk | 20 ++++++++++++++++++++
+ 3 files changed, 33 insertions(+)
+ create mode 100644 package/ustream-ssl/Config.in
+ create mode 100644 package/ustream-ssl/ustream-ssl.mk
 
------Original Message-----
-From: Arnout Vandecappelle [mailto:arnout at mind.be] 
-Sent: Thursday, October 6, 2016 4:35 AM
-To: Herschel Karunaratne <hk@synexint.com>; buildroot at busybox.net
-Subject: Re: [Buildroot] Installing package libclthreads
-
-
-
-On 05-10-16 12:42, Herschel Karunaratne wrote:
-> Hi Arnout,
-> 
-> Thanks for the reply.
-> 
-> Sorry I will not use HTML. 
-
- Please also don't top-post, but reply in-line :-)
-
-
-> Could you please send me a .mk file for this? I'm quite new to buildroot.
-
- I'm sorry, I don't have the time to do that for you at the moment. But if
-you want, you can hire my company to do it, and I'll make time :-)
-
- I took a quick look, and there is quite a lot wrong with the .mk file you
-previously sent. The URL is wrong, and the package is not actually an
-autotools package (it doesn't have a configure script). I don't know what
-kind of hacks you have done to get the output you showed earlier, but that
-is certainly *not* the output you get from that .mk file.
-
-
- Regards,
- Arnout
-
-
-> 
-> Regards,
-> Herschel
-> 
-> 
-> -----Original Message-----
-> From: Arnout Vandecappelle [mailto:arnout at mind.be]
-> Sent: Wednesday, October 5, 2016 2:27 AM
-> To: Herschel Karunaratne <hk@synexint.com>; buildroot at busybox.net
-> Subject: Re: [Buildroot] Installing package libclthreads
-> 
->  Hi Herschel,
-> 
->  Please avoid using HTML mail on this list.
-> 
-> 
-> On 03-10-16 14:21, Herschel Karunaratne wrote:
->> Hi,
->>
->>  
->>
->> I am trying to install "jconvolver" and have to install 
->> "libclthreads" needed by jconvolver. "My "libclthreads.mk" is as 
->> follows,
->>
->>  
->>
->> #####################################################################
->>
->> #
->>
->> # libclthreads
->>
->> #
->>
->> ####################################################################
->>
->>  
->>
->> LIBCLTHREADS_VERSION = 2.4.0
->>
->> LIBCLTHREADS_SOURCE = clthreads-$(LIBCLTHREADS_VERSION).tar.bz2
-> 
->  Small nit: since upstream calls it "clthreads", we prefer that the 
-> buildroot package has the same name.
-> 
->>
->> LIBCLTHREADS_SITE =
->> http://kokkinizta.linuxaudio.org/linuxaudio/downloads
->>
->> LIBCLTHREADS_LICENSE = LGPLv2.1+
->>
->> LIBCLTHREADS_LICENSE_FILES = COPYING
->>
->> LIBCLTHREADS_INSTALL_STAGING = YES
->>
->> LIBCLTHREADS_INSTALL_TARGET = YES
-> 
->  This one is not needed because the default.
-> 
->>
->>  
->>
->> $(eval $(autotools-package))
->>
->>  
->>
->>  
->>
->>  
->>
->> When I build it seems to be OK but nothing in the installed folders. 
->> This is message I get when I build,
->>
-> [snip]
->>>>> libclthreads 2.4.0 Installing to target
-> 
->  Weird, the install to staging is missing... I can't explain that...
-> 
-> 
->>
->>
->
-PATH="/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/bin:
-> /root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/sbin
-> :/root 
-> /work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/usr/bin:/
-> root/w 
-> ork/sinlinx/a33-organ/lichee/buildroot-2016.05/output/host/usr/sbin:/u
-> sr/loc 
-> al/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/arm-2014.05/
-> bin:/r
-> oot/bin:/opt/arm-2014.05/bin" 
->> /usr/bin/make -j5
->> DESTDIR=/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/
->> t
->> arget
->> install -C
->> /root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/li
->> b
->> clthreads-2.4.0/
->>
->> make[1]: Entering directory
->>
-> `/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/li
-> bclthr
-> eads-2.4.0'
->>
->> /usr/bin/install -d /usr/local/lib64
-> 
->  It looks like this package ignores both the configure --prefix option 
-> and the DESTDIR argument to 'make install'. This basically makes the 
-> install commands unusable. Either patch the Makefile.in to correct 
-> this, or define LIBCLTHREADS_INSTALL_STAGING_CMDS and
-LIBCLTHREADS_INSTALL_TARGET_CMDS.
-> 
-> 
->  Regards,
->  Arnout
-> 
-> 
->>
->> /usr/bin/install -m 644 clthreads.h /usr/local/include
->>
->> /usr/bin/install -m 755 libclthreads.so.2.4.0 /usr/local/lib64
->>
->> /sbin/ldconfig -n /usr/local/lib64
->>
->> ln -sf libclthreads.so.2.4.0 /usr/local/lib64/libclthreads.so
->>
->> make[1]: Leaving directory
->>
-> `/root/work/sinlinx/a33-organ/lichee/buildroot-2016.05/output/build/li
-> bclthr
-> eads-2.4.0'
->>
->>  
->>
->>  
->>
->>  
->>
->> What could have gone wrong?
->>
->>  
->>
->> Thanks in advance.
->>
->>  
->>
->>  
->>
->> *Regards*
->>
->> *Herschel*
->>
->>
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
-> 
-
+diff --git a/package/Config.in b/package/Config.in
+index 60184ce..352ef42 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -910,6 +910,7 @@ menu "Crypto"
+ 	source "package/polarssl/Config.in"
+ 	source "package/tinydtls/Config.in"
+ 	source "package/trousers/Config.in"
++	source "package/ustream-ssl/Config.in"
+ endmenu
+ 
+ menu "Database"
+diff --git a/package/ustream-ssl/Config.in b/package/ustream-ssl/Config.in
+new file mode 100644
+index 0000000..540e436
+--- /dev/null
++++ b/package/ustream-ssl/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_USTREAM_SSL
++	bool "ustream-ssl"
++	depends on !BR2_STATIC_LIBS #libubox
++	select BR2_PACKAGE_LIBUBOX
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
++	help
++	  ustream SSL wrapper
++
++	  https://git.openwrt.org/?p=project/ustream-ssl.git;a=summary
++
++comment "ustream-ssl needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/ustream-ssl/ustream-ssl.mk b/package/ustream-ssl/ustream-ssl.mk
+new file mode 100644
+index 0000000..d8f8aed
+--- /dev/null
++++ b/package/ustream-ssl/ustream-ssl.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# ustream-ssl
++#
++################################################################################
++
++USTREAM_SSL_VERSION = ec80adaa1b47f28d426fa19c692011ce60b992d6
++USTREAM_SSL_SITE = git://git.openwrt.org/project/ustream-ssl.git
++USTREAM_SSL_LICENSE = ISC
++USTREAM_SSL_INSTALL_STAGING = YES
++USTREAM_SSL_DEPENDENCIES = libubox
++
++ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++USTREAM_SSL_DEPENDENCIES += mbedtls
++USTREAM_SSL_CONF_OPTS += -DMBEDTLS=ON
++else
++USTREAM_SSL_DEPENDENCIES += openssl
++endif
++
++$(eval $(cmake-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.6.2
