@@ -1,9 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 10 Oct 2016 12:50:10 -0300
-Subject: [Buildroot] [PATCH 2/2] squid: bump to version 3.5.22
-In-Reply-To: <1476114610-11134-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1476114610-11134-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1476114610-11134-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 10 Oct 2016 12:56:08 -0300
+Subject: [Buildroot] [PATCH] xterm: bump to version 327
+Message-ID: <1476114968-29609-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/xterm/xterm.hash | 2 +-
+ package/xterm/xterm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 30eed50..3b2f2de 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.21.tar.xz.asc
--md5 e6745a6e4ac0b48b7283861f64a40ae5  squid-3.5.21.tar.xz
--sha1 38c4f801a17e27ea530fef88c6ee24b42f08529c  squid-3.5.21.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.22.tar.xz.asc
-+md5 afb82d2748c06c95815c171463b4aa14  squid-3.5.22.tar.xz
-+sha1 73e9199dd9d2a7f107f78d03454830713a4a571d  squid-3.5.22.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index c8a7248..ddd0b83 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
+index 206bb91..bbd0e11 100644
+--- a/package/xterm/xterm.hash
++++ b/package/xterm/xterm.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	3b31b07a0c40427e9330ec3be9d1a748c72808f945953cea9e526e48be315f1b	xterm-325.tgz
++sha256	66fb2f6c35b342148f549c276b12a3aa3fb408e27ab6360ddec513e14376150b	xterm-327.tgz
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index 3495ad9..eba781f 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).21
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).22
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+-XTERM_VERSION = 325
++XTERM_VERSION = 327
+ XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+ XTERM_SITE = http://invisible-mirror.net/archives/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
 -- 
 2.7.3
