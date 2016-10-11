@@ -1,60 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Oct 2016 12:23:48 +0200
-Subject: [Buildroot] [git commit] shared-mime-info: bump to version 1.7
-Message-ID: <20161011102611.32CDC81938@busybox.osuosl.org>
+Date: Tue, 11 Oct 2016 12:28:52 +0200
+Subject: [Buildroot] [git commit] xterm: bump to version 327
+Message-ID: <20161011102923.AE62081E64@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d99a717d953124ea8543da814c004e7de2a08be0
+commit: https://git.buildroot.net/buildroot/commit/?id=0b193980f3685193a4dc854158dd9ae94a4dcc3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Switch URLs to avoid 301s.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/shared-mime-info/Config.in             | 2 +-
- package/shared-mime-info/shared-mime-info.hash | 2 +-
- package/shared-mime-info/shared-mime-info.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/xterm/xterm.hash | 2 +-
+ package/xterm/xterm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/shared-mime-info/Config.in b/package/shared-mime-info/Config.in
-index 91a5a15..514044b 100644
---- a/package/shared-mime-info/Config.in
-+++ b/package/shared-mime-info/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_SHARED_MIME_INFO
- 	  database of common types and the update-mime-database
- 	  command used to extend it.
- 
--	  http://freedesktop.org/wiki/Software/shared-mime-info
-+	  https://freedesktop.org/wiki/Software/shared-mime-info/
- 
- comment "shared-mime-info needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
-diff --git a/package/shared-mime-info/shared-mime-info.hash b/package/shared-mime-info/shared-mime-info.hash
-index 997751d..2007e0e 100644
---- a/package/shared-mime-info/shared-mime-info.hash
-+++ b/package/shared-mime-info/shared-mime-info.hash
+diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
+index 206bb91..bbd0e11 100644
+--- a/package/xterm/xterm.hash
++++ b/package/xterm/xterm.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	b2f8f85b6467933824180d0252bbcaee523f550a8fbc95cc4391bd43c03bc34c	shared-mime-info-1.6.tar.xz
-+sha256	eacc781cfebaa2074e43cf9521dc7ab4391ace8a4712902b2841669c83144d2e	shared-mime-info-1.7.tar.xz
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index a70bc9a..e917ab5 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -4,9 +4,9 @@
+ # Locally calculated after checking pgp signature
+-sha256	3b31b07a0c40427e9330ec3be9d1a748c72808f945953cea9e526e48be315f1b	xterm-325.tgz
++sha256	66fb2f6c35b342148f549c276b12a3aa3fb408e27ab6360ddec513e14376150b	xterm-327.tgz
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index 3495ad9..eba781f 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SHARED_MIME_INFO_VERSION = 1.6
-+SHARED_MIME_INFO_VERSION = 1.7
- SHARED_MIME_INFO_SOURCE = shared-mime-info-$(SHARED_MIME_INFO_VERSION).tar.xz
--SHARED_MIME_INFO_SITE = http://freedesktop.org/~hadess
-+SHARED_MIME_INFO_SITE = https://people.freedesktop.org/~hadess
- SHARED_MIME_INFO_INSTALL_STAGING = YES
- SHARED_MIME_INFO_CONF_ENV = XMLLINT=$(HOST_DIR)/usr/bin/xmllint
- SHARED_MIME_INFO_DEPENDENCIES = host-shared-mime-info libxml2 libglib2
+-XTERM_VERSION = 325
++XTERM_VERSION = 327
+ XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+ XTERM_SITE = http://invisible-mirror.net/archives/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
