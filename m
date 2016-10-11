@@ -1,80 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Oct 2016 12:14:36 +0200
-Subject: [Buildroot] [git commit] webkitgtk: add upstream patch for failed
-	gcc6 builds
-Message-ID: <20161011101533.2CA1380824@busybox.osuosl.org>
+Date: Tue, 11 Oct 2016 11:27:20 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself for
+	mwscrape-related python packages
+Message-ID: <20161011101533.22276817BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=053e21def21edf2412c4b2ec2f7df1bc797a1710
+commit: https://git.buildroot.net/buildroot/commit/?id=92310c993f0a4d54272026254ef98899f5f02175
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-[Thomas: add upstream patch description in the patch.]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/webkitgtk/0001-fix-gcc6-builds.patch | 53 ++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ DEVELOPERS | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/webkitgtk/0001-fix-gcc6-builds.patch b/package/webkitgtk/0001-fix-gcc6-builds.patch
-new file mode 100644
-index 0000000..35487ad
---- /dev/null
-+++ b/package/webkitgtk/0001-fix-gcc6-builds.patch
-@@ -0,0 +1,53 @@
-+[CMake] Build failure with GCC 6 (fatal error: stdlib.h: No such file or directory)
-+
-+https://bugs.webkit.org/show_bug.cgi?id=161697
-+
-+Reviewed by Michael Catanzaro.
-+
-+Get the list of system includes from GCC and add it to the CMake
-+list of implicit includes. This way, CMake will filter any of this
-+directories from the list of includes when calling the compiler.
-+
-+This avoids an issue with GCC 6 that causes build failures when
-+including the default include path as a system include (-isystem).
-+
-+Upstream, from: https://trac.webkit.org/changeset/205672
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+Index: trunk/Source/cmake/OptionsCommon.cmake
-+===================================================================
-+--- trunk/Source/cmake/OptionsCommon.cmake	(revision 204084)
-++++ trunk/Source/cmake/OptionsCommon.cmake	(revision 205672)
-+@@ -36,4 +36,31 @@
-+     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fcolor-diagnostics")
-+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics")
-++endif ()
-++
-++# Ensure that the default include system directories are added to the list of CMake implicit includes.
-++# This workarounds an issue that happens when using GCC 6 and using system includes (-isystem).
-++# For more details check: https://bugs.webkit.org/show_bug.cgi?id=161697
-++macro(DETERMINE_GCC_SYSTEM_INCLUDE_DIRS _lang _compiler _flags _result)
-++    file(WRITE "${CMAKE_BINARY_DIR}/CMakeFiles/dummy" "\n")
-++    separate_arguments(_buildFlags UNIX_COMMAND "${_flags}")
-++    execute_process(COMMAND ${_compiler} ${_buildFlags} -v -E -x ${_lang} -dD dummy
-++                    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/CMakeFiles OUTPUT_QUIET
-++                    ERROR_VARIABLE _gccOutput)
-++    file(REMOVE "${CMAKE_BINARY_DIR}/CMakeFiles/dummy")
-++    if ("${_gccOutput}" MATCHES "> search starts here[^\n]+\n *(.+) *\n *End of (search) list")
-++        set(${_result} ${CMAKE_MATCH_1})
-++        string(REPLACE "\n" " " ${_result} "${${_result}}")
-++        separate_arguments(${_result})
-++    endif ()
-++endmacro()
-++
-++if (CMAKE_COMPILER_IS_GNUCC)
-++   DETERMINE_GCC_SYSTEM_INCLUDE_DIRS("c" "${CMAKE_C_COMPILER}" "${CMAKE_C_FLAGS}" SYSTEM_INCLUDE_DIRS)
-++   set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES ${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES} ${SYSTEM_INCLUDE_DIRS})
-++endif ()
-++
-++if (CMAKE_COMPILER_IS_GNUCXX)
-++   DETERMINE_GCC_SYSTEM_INCLUDE_DIRS("c++" "${CMAKE_CXX_COMPILER}" "${CMAKE_CXX_FLAGS}" SYSTEM_INCLUDE_DIRS)
-++   set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES} ${SYSTEM_INCLUDE_DIRS})
-+ endif ()
-+ 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 240fb2c..0ae3150 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -235,7 +235,16 @@ F:	package/perl-www-robotrules/
+ F:	package/pixman/
+ F:	package/pound/
+ F:	package/pure-ftpd/
++F:	package/python-couchdb/
++F:	package/python-cssutils/
++F:	package/python-futures/
++F:	package/python-mwclient/
++F:	package/python-mwscrape/
++F:	package/python-mwscrape2slob/
+ F:	package/python-mako/
++F:	package/python-pyicu/
++F:	package/python-pylru/
++F:	package/python-slob/
+ F:	package/rtmpdump/
+ F:	package/softether/
+ F:	package/taglib/
