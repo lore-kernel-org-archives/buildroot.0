@@ -1,213 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Oct 2016 11:22:00 +0200
-Subject: [Buildroot] [git commit] util-linux: fix crc32 function collision
-Message-ID: <20161011092220.B768A82239@busybox.osuosl.org>
+Date: Tue, 11 Oct 2016 11:21:59 +0200
+Subject: [Buildroot] [git commit] Revert "Revert "libglib2: add
+	host-util-linux for host variant""
+Message-ID: <20161011092220.AFA447FD0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d74e5975daee19a262c0c16726661dd2be395705
+commit: https://git.buildroot.net/buildroot/commit/?id=bec4e518be7dc094b9158973c3d34acd2ca95a79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When linking both zlib and libblkid statically in the same target a
-collision occurs. Fix this by prefixing publicly-visible crc32 library
-functions. Fixes:
-
-http://autobuild.buildroot.net/results/25e/25efb79dd6ff1d93b5775baeccda23194d68c711/
+This reverts commit 2f556ab99f51a0b90183610a7fecb9ed22ed4aa3.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-lib-crc32-prefix-public-functions.patch   | 182 +++++++++++++++++++++
- 1 file changed, 182 insertions(+)
+ package/libglib2/libglib2.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/util-linux/0001-lib-crc32-prefix-public-functions.patch b/package/util-linux/0001-lib-crc32-prefix-public-functions.patch
-new file mode 100644
-index 0000000..fa68bd0
---- /dev/null
-+++ b/package/util-linux/0001-lib-crc32-prefix-public-functions.patch
-@@ -0,0 +1,182 @@
-+From b39b4cac29dcc5d060d8e30344f693462502066a Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Mon, 10 Oct 2016 17:42:42 -0300
-+Subject: [PATCH] lib/crc32: prefix public functions
-+
-+Make the publicly-visible crc32 library functions prefixed by ul_, such
-+as crc32() -> ul_crc32().
-+This is because it clashes with the crc32() function from zlib.
-+For newer versions of glib (2.50+) zlib and libblkid are required
-+dependencies and otherwise results in build failure when building
-+statically.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Status: submitted upstream
-+
-+ disk-utils/fsck.cramfs.c         | 12 ++++++------
-+ disk-utils/mkfs.cramfs.c         |  6 +++---
-+ include/crc32.h                  |  4 ++--
-+ lib/crc32.c                      |  4 ++--
-+ libblkid/src/partitions/gpt.c    |  2 +-
-+ libblkid/src/superblocks/nilfs.c |  6 +++---
-+ libfdisk/src/gpt.c               |  2 +-
-+ 7 files changed, 18 insertions(+), 18 deletions(-)
-+
-+diff --git a/disk-utils/fsck.cramfs.c b/disk-utils/fsck.cramfs.c
-+index 12009f2..f34e79f 100644
-+--- a/disk-utils/fsck.cramfs.c
-++++ b/disk-utils/fsck.cramfs.c
-+@@ -214,7 +214,7 @@ static void test_crc(int start)
-+ 		return;
-+ 	}
-+ 
-+-	crc = crc32(0L, Z_NULL, 0);
-++	crc = ul_crc32(0L, Z_NULL, 0);
-+ 
-+ 	buf =
-+ 	    mmap(NULL, super.size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
-+@@ -231,8 +231,8 @@ static void test_crc(int start)
-+ 	}
-+ 	if (buf != MAP_FAILED) {
-+ 		((struct cramfs_super *)((unsigned char *) buf + start))->fsid.crc =
-+-		    crc32(0L, Z_NULL, 0);
-+-		crc = crc32(crc, (unsigned char *) buf + start, super.size - start);
-++		    ul_crc32(0L, Z_NULL, 0);
-++		crc = ul_crc32(crc, (unsigned char *) buf + start, super.size - start);
-+ 		munmap(buf, super.size);
-+ 	} else {
-+ 		int retval;
-+@@ -249,15 +249,15 @@ static void test_crc(int start)
-+ 				break;
-+ 			if (length == 0)
-+ 				((struct cramfs_super *)buf)->fsid.crc =
-+-				    crc32(0L, Z_NULL, 0);
-++				    ul_crc32(0L, Z_NULL, 0);
-+ 			length += retval;
-+ 			if (length > (super.size - start)) {
-+-				crc = crc32(crc, buf,
-++				crc = ul_crc32(crc, buf,
-+ 					  retval - (length -
-+ 						    (super.size - start)));
-+ 				break;
-+ 			}
-+-			crc = crc32(crc, buf, retval);
-++			crc = ul_crc32(crc, buf, retval);
-+ 		}
-+ 		free(buf);
-+ 	}
-+diff --git a/disk-utils/mkfs.cramfs.c b/disk-utils/mkfs.cramfs.c
-+index 4e6b3ab..55d6871 100644
-+--- a/disk-utils/mkfs.cramfs.c
-++++ b/disk-utils/mkfs.cramfs.c
-+@@ -406,7 +406,7 @@ static unsigned int write_superblock(struct entry *root, char *base, int size)
-+ 	super->size = size;
-+ 	memcpy(super->signature, CRAMFS_SIGNATURE, sizeof(super->signature));
-+ 
-+-	super->fsid.crc = crc32(0L, Z_NULL, 0);
-++	super->fsid.crc = ul_crc32(0L, Z_NULL, 0);
-+ 	super->fsid.edition = opt_edition;
-+ 	super->fsid.blocks = total_blocks;
-+ 	super->fsid.files = total_nodes;
-+@@ -700,7 +700,7 @@ int main(int argc, char **argv)
-+ 	loff_t fslen_ub = sizeof(struct cramfs_super);
-+ 	unsigned int fslen_max;
-+ 	char const *dirname, *outfile;
-+-	uint32_t crc = crc32(0L, Z_NULL, 0);
-++	uint32_t crc = ul_crc32(0L, Z_NULL, 0);
-+ 	int c;
-+ 	cramfs_is_big_endian = HOST_IS_BIG_ENDIAN; /* default is to use host order */
-+ 
-+@@ -856,7 +856,7 @@ int main(int argc, char **argv)
-+ 		       sizeof(struct cramfs_super));
-+ 
-+ 	/* Put the checksum in. */
-+-	crc = crc32(crc, (unsigned char *) (rom_image+opt_pad), (offset-opt_pad));
-++	crc = ul_crc32(crc, (unsigned char *) (rom_image+opt_pad), (offset-opt_pad));
-+ 	((struct cramfs_super *) (rom_image+opt_pad))->fsid.crc = u32_toggle_endianness(cramfs_is_big_endian, crc);
-+ 	if (verbose)
-+ 		printf(_("CRC: %x\n"), crc);
-+diff --git a/include/crc32.h b/include/crc32.h
-+index ff2dd99..2551f50 100644
-+--- a/include/crc32.h
-++++ b/include/crc32.h
-+@@ -4,8 +4,8 @@
-+ #include <sys/types.h>
-+ #include <stdint.h>
-+ 
-+-extern uint32_t crc32(uint32_t seed, const unsigned char *buf, size_t len);
-+-extern uint32_t crc32_exclude_offset(uint32_t seed, const unsigned char *buf, size_t len,
-++extern uint32_t ul_crc32(uint32_t seed, const unsigned char *buf, size_t len);
-++extern uint32_t ul_crc32_exclude_offset(uint32_t seed, const unsigned char *buf, size_t len,
-+ 		                              size_t exclude_off, size_t exclude_len);
-+ 
-+ #endif
-+diff --git a/lib/crc32.c b/lib/crc32.c
-+index a5e3216..824693d 100644
-+--- a/lib/crc32.c
-++++ b/lib/crc32.c
-+@@ -108,7 +108,7 @@ static inline uint32_t crc32_add_char(uint32_t crc, unsigned char c)
-+  * and does __not__ xor at the end. Then individual users can do
-+  * whatever they need.
-+  */
-+-uint32_t crc32(uint32_t seed, const unsigned char *buf, size_t len)
-++uint32_t ul_crc32(uint32_t seed, const unsigned char *buf, size_t len)
-+ {
-+ 	uint32_t crc = seed;
-+ 	const unsigned char *p = buf;
-+@@ -121,7 +121,7 @@ uint32_t crc32(uint32_t seed, const unsigned char *buf, size_t len)
-+ 	return crc;
-+ }
-+ 
-+-uint32_t crc32_exclude_offset(uint32_t seed, const unsigned char *buf, size_t len,
-++uint32_t ul_crc32_exclude_offset(uint32_t seed, const unsigned char *buf, size_t len,
-+ 			      size_t exclude_off, size_t exclude_len)
-+ {
-+ 	uint32_t crc = seed;
-+diff --git a/libblkid/src/partitions/gpt.c b/libblkid/src/partitions/gpt.c
-+index dcc04e6..e6baa59 100644
-+--- a/libblkid/src/partitions/gpt.c
-++++ b/libblkid/src/partitions/gpt.c
-+@@ -105,7 +105,7 @@ struct gpt_entry {
-+ static inline uint32_t count_crc32(const unsigned char *buf, size_t len,
-+ 				   size_t exclude_off, size_t exclude_len)
-+ {
-+-	return (crc32_exclude_offset(~0L, buf, len, exclude_off, exclude_len) ^ ~0L);
-++	return (ul_crc32_exclude_offset(~0L, buf, len, exclude_off, exclude_len) ^ ~0L);
-+ }
-+ 
-+ static inline unsigned char *get_lba_buffer(blkid_probe pr,
-+diff --git a/libblkid/src/superblocks/nilfs.c b/libblkid/src/superblocks/nilfs.c
-+index ee5c5f9..95538ef 100644
-+--- a/libblkid/src/superblocks/nilfs.c
-++++ b/libblkid/src/superblocks/nilfs.c
-+@@ -89,9 +89,9 @@ static int nilfs_valid_sb(blkid_probe pr, struct nilfs_super_block *sb, int is_b
-+ 	if (bytes < crc_start || bytes > sizeof(struct nilfs_super_block))
-+ 		return 0;
-+ 
-+-	crc = crc32(le32_to_cpu(sb->s_crc_seed), (unsigned char *)sb, sumoff);
-+-	crc = crc32(crc, sum, 4);
-+-	crc = crc32(crc, (unsigned char *)sb + crc_start, bytes - crc_start);
-++	crc = ul_crc32(le32_to_cpu(sb->s_crc_seed), (unsigned char *)sb, sumoff);
-++	crc = ul_crc32(crc, sum, 4);
-++	crc = ul_crc32(crc, (unsigned char *)sb + crc_start, bytes - crc_start);
-+ 
-+ 	return blkid_probe_verify_csum(pr, crc, le32_to_cpu(sb->s_sum));
-+ }
-+diff --git a/libfdisk/src/gpt.c b/libfdisk/src/gpt.c
-+index 8377192..208699b 100644
-+--- a/libfdisk/src/gpt.c
-++++ b/libfdisk/src/gpt.c
-+@@ -850,7 +850,7 @@ fail:
-+ static inline uint32_t count_crc32(const unsigned char *buf, size_t len,
-+ 				   size_t ex_off, size_t ex_len)
-+ {
-+-	return (crc32_exclude_offset(~0L, buf, len, ex_off, ex_len) ^ ~0L);
-++	return (ul_crc32_exclude_offset(~0L, buf, len, ex_off, ex_len) ^ ~0L);
-+ }
-+ 
-+ static inline uint32_t gpt_header_count_crc32(struct gpt_header *header)
-+-- 
-+2.7.3
-+
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 5bc6ed5..f199a4a 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -105,7 +105,12 @@ LIBGLIB2_DEPENDENCIES = \
+ 	libffi pcre util-linux zlib $(if $(BR2_NEEDS_GETTEXT),gettext)
+ 
+ HOST_LIBGLIB2_DEPENDENCIES = \
+-	host-gettext host-libffi host-pcre host-pkgconf host-zlib
++	host-gettext \
++	host-libffi \
++	host-pcre \
++	host-pkgconf \
++	host-util-linux \
++	host-zlib
+ 
+ LIBGLIB2_CONF_OPTS = \
+ 	--with-pcre=system
