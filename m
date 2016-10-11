@@ -1,54 +1,95 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 11 Oct 2016 22:07:32 +0200
-Subject: [Buildroot] [PATCH] package/shairport-sync: bump to version 2.8.5
-Message-ID: <20161011200732.29826-1-joerg.krause@embedded.rocks>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Tue, 11 Oct 2016 16:44:49 -0400
+Subject: [Buildroot] [PATCH 1/2] php-amqp: new package
+Message-ID: <1476218690-23978-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In version 2.8.5 the default value for sysconfdir is changed to
-`/usr/local/etc`. As `/etc` is normally used in Linux and to retain the
-previous behaviour pass `--sysconfdir=/etc` to the configuration
-environment.
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/Config.in              |  1 +
+ package/php-amqp/Config.in     | 14 ++++++++++++++
+ package/php-amqp/php-amqp.hash |  2 ++
+ package/php-amqp/php-amqp.mk   | 26 ++++++++++++++++++++++++++
+ 4 files changed, 43 insertions(+)
+ create mode 100644 package/php-amqp/Config.in
+ create mode 100644 package/php-amqp/php-amqp.hash
+ create mode 100644 package/php-amqp/php-amqp.mk
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index 907a71e..dfe0d05 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  80dd94c5f37b43e9b157dd5335f8edaf11109859d0144e0046c7b86fe88f6547  shairport-sync-2.8.4.tar.gz
-+sha256  d19f6cd3d53f5010abcf24cc20a301934372b41efc3ff2a2e4e7d8fa49200cdc  shairport-sync-2.8.5.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 49c6604..1d0b863 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 2.8.4
-+SHAIRPORT_SYNC_VERSION = 2.8.5
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
-@@ -17,7 +17,8 @@ SHAIRPORT_SYNC_AUTORECONF = YES
- SHAIRPORT_SYNC_CONF_OPTS = --with-alsa \
- 	--with-metadata \
- 	--with-pipe \
--	--with-stdout
-+	--with-stdout \
-+	--sysconfdir=/etc
- 
- # Avahi or tinysvcmdns (shaiport-sync bundles its own version of tinysvcmdns).
- # Avahi support needs libavahi-client, which is built by avahi if avahi-daemon
+diff --git a/package/Config.in b/package/Config.in
+index 60184ce..f84327d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -623,6 +623,7 @@ endif
+ if BR2_PACKAGE_PHP
+ if !BR2_STATIC_LIBS
+ menu "External php extensions"
++	source "package/php-amqp/Config.in"
+ 	source "package/php-geoip/Config.in"
+ 	source "package/php-gnupg/Config.in"
+ 	source "package/php-imagick/Config.in"
+diff --git a/package/php-amqp/Config.in b/package/php-amqp/Config.in
+new file mode 100644
+index 0000000..253bfa7
+--- /dev/null
++++ b/package/php-amqp/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_PHP_AMQP
++	bool "php-amqp"
++	depends on BR2_PACKAGE_PHP
++	depends on BR2_TOOLCHAIN_HAS_THREADS # rabbitmq-c
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX # rabbitmq-c
++	select BR2_PACKAGE_RABBITMQ_C
++	help
++	  Communicate with any AMQP compliant server.
++
++	  http://pecl.php.net/package/amqp
++
++comment "php-amqp needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+diff --git a/package/php-amqp/php-amqp.hash b/package/php-amqp/php-amqp.hash
+new file mode 100644
+index 0000000..73c69d9
+--- /dev/null
++++ b/package/php-amqp/php-amqp.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 38a92eaef1aa863404170bcd15605f7f78140eeec1ff5be6af65c5b8081e2599  amqp-1.7.1.tgz
+diff --git a/package/php-amqp/php-amqp.mk b/package/php-amqp/php-amqp.mk
+new file mode 100644
+index 0000000..d3ffe16
+--- /dev/null
++++ b/package/php-amqp/php-amqp.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# php-amqp
++#
++################################################################################
++
++PHP_AMQP_VERSION = 1.7.1
++PHP_AMQP_SOURCE = amqp-$(PHP_AMQP_VERSION).tgz
++PHP_AMQP_SITE = https://pecl.php.net/get
++PHP_AMQP_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
++	--with-amqp=$(STAGING_DIR)/usr
++# phpize does the autoconf magic
++PHP_AMQP_DEPENDENCIES = rabbitmq-c php host-autoconf
++PHP_AMQP_LICENSE = PHP
++PHP_AMQP_LICENSE_FILES = LICENSE
++
++define PHP_AMQP_PHPIZE
++	(cd $(@D); \
++		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
++		$(STAGING_DIR)/usr/bin/phpize)
++endef
++
++PHP_AMQP_PRE_CONFIGURE_HOOKS += PHP_AMQP_PHPIZE
++
++$(eval $(autotools-package))
 -- 
-2.10.0
+2.7.4
