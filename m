@@ -1,43 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 10 Oct 2016 19:52:29 -0300
-Subject: [Buildroot] [PATCH] start-stop-daemon: bump to version 1.8.10
-Message-ID: <1476139949-5593-1-git-send-email-gustavo@zacarias.com.ar>
+From: Matt Kraai <kraai@ftbfs.org>
+Date: Mon, 10 Oct 2016 19:46:00 -0700
+Subject: [Buildroot] [PATCH] qt53d,
+	qt5serialbus: move to technology preview section
+Message-ID: <20161011024600.4939-1-kraai@ftbfs.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Matt Kraai <kraai@ftbfs.org>
 ---
- package/start-stop-daemon/start-stop-daemon.hash | 4 ++--
- package/start-stop-daemon/start-stop-daemon.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/qt5/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/start-stop-daemon/start-stop-daemon.hash b/package/start-stop-daemon/start-stop-daemon.hash
-index 18a1948..7ce6cc3 100644
---- a/package/start-stop-daemon/start-stop-daemon.hash
-+++ b/package/start-stop-daemon/start-stop-daemon.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.de.debian.org/debian/pool/main/d/dpkg/dpkg_1.18.7.dsc
--sha256	ace36d3a6dc750a42baf797f9e75ec580a21f92bb9ff96b482100755d6d9b87b	dpkg_1.18.7.tar.xz
-+# From http://ftp.de.debian.org/debian/pool/main/d/dpkg/dpkg_1.18.10.dsc
-+sha256	025524da41ba18b183ff11e388eb8686f7cc58ee835ed7d48bd159c46a8b6dc5	dpkg_1.18.10.tar.xz
-diff --git a/package/start-stop-daemon/start-stop-daemon.mk b/package/start-stop-daemon/start-stop-daemon.mk
-index d849bad..5aac541 100644
---- a/package/start-stop-daemon/start-stop-daemon.mk
-+++ b/package/start-stop-daemon/start-stop-daemon.mk
-@@ -7,9 +7,9 @@
- # Debian start-stop-daemon is part of dpkg. Since start-stop-daemon is the only
- # interesting tool in it, we call the buildroot package start-stop-daemon.
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 84cbb0f..234dfdd 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -31,7 +31,6 @@ menuconfig BR2_PACKAGE_QT5
  
--START_STOP_DAEMON_VERSION = 1.18.7
-+START_STOP_DAEMON_VERSION = 1.18.10
- START_STOP_DAEMON_SOURCE = dpkg_$(START_STOP_DAEMON_VERSION).tar.xz
--START_STOP_DAEMON_SITE = http://snapshot.debian.org/archive/debian/20160509T100042Z/pool/main/d/dpkg
-+START_STOP_DAEMON_SITE = http://snapshot.debian.org/archive/debian/20160731T221931Z/pool/main/d/dpkg
- START_STOP_DAEMON_CONF_OPTS = \
- 	--disable-dselect \
- 	--disable-update-alternatives \
+ if BR2_PACKAGE_QT5
+ source "package/qt5/qt5base/Config.in"
+-source "package/qt5/qt53d/Config.in"
+ source "package/qt5/qt5canvas3d/Config.in"
+ source "package/qt5/qt5connectivity/Config.in"
+ source "package/qt5/qt5declarative/Config.in"
+@@ -42,7 +41,6 @@ source "package/qt5/qt5location/Config.in"
+ source "package/qt5/qt5multimedia/Config.in"
+ source "package/qt5/qt5quickcontrols/Config.in"
+ source "package/qt5/qt5sensors/Config.in"
+-source "package/qt5/qt5serialbus/Config.in"
+ source "package/qt5/qt5serialport/Config.in"
+ source "package/qt5/qt5svg/Config.in"
+ source "package/qt5/qt5tools/Config.in"
+@@ -51,7 +49,9 @@ source "package/qt5/qt5websockets/Config.in"
+ source "package/qt5/qt5x11extras/Config.in"
+ source "package/qt5/qt5xmlpatterns/Config.in"
+ comment "technology preview"
++source "package/qt5/qt53d/Config.in"
+ source "package/qt5/qt5quickcontrols2/Config.in"
++source "package/qt5/qt5serialbus/Config.in"
+ comment "legacy compatibility"
+ source "package/qt5/qt5script/Config.in"
+ source "package/qt5/qt5webkit/Config.in"
 -- 
-2.7.3
+2.9.3
