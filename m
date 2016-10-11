@@ -1,31 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Oct 2016 23:14:17 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2016-10-09
-In-Reply-To: <20161010063023.5CD991033D9@stock.ovh.net>
-References: <20161010063023.5CD991033D9@stock.ovh.net>
-Message-ID: <20161011211417.GB5023@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 11 Oct 2016 20:26:19 -0300
+Subject: [Buildroot] [PATCH] libglib2: bump to version 2.50.1
+Message-ID: <1476228379-22199-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libglib2/libglib2.hash | 4 ++--
+ package/libglib2/libglib2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2016-10-10 08:30 +0200, Thomas Petazzoni spake thusly:
-> Build failures related to your packages:
->     mips64el |                      nut-2.7.2 | http://autobuild.buildroot.net/results/e739165a53753c9f91a7b93fe686689598ff533e
-
-Unable to reproduce, even after a complete build (just running 'make').
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 3bc4021..02c38ad 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,2 +1,2 @@
+-# https://download.gnome.org/sources/glib/2.50/glib-2.50.0.sha256sum
+-sha256  830b551fa626bda06e12729205b3c5bb0d82b924a8cf64d948945878f01b7d70  glib-2.50.0.tar.xz
++# https://download.gnome.org/sources/glib/2.50/glib-2.50.1.sha256sum
++sha256  2ef87a78f37c1eb5b95f4cc95efd5b66f69afad9c9c0899918d04659cf6df7dd  glib-2.50.1.tar.xz
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index f199a4a..a9b93c6 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGLIB2_VERSION_MAJOR = 2.50
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPLv2+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.3
