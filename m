@@ -1,38 +1,47 @@
-From: Matt Kraai <kraai@ftbfs.org>
-Date: Tue, 11 Oct 2016 04:35:16 -0700
-Subject: [Buildroot] [PATCH] qt53d,
- qt5serialbus: move to technology preview section
-In-Reply-To: <20161011112640.3005e46c@free-electrons.com>
-References: <20161011024600.4939-1-kraai@ftbfs.org>
- <20161011112640.3005e46c@free-electrons.com>
-Message-ID: <20161011113516.e2esmwwos7yzg7sp@ftbfs.org>
+From: Cupertino Miranda <Cupertino.Miranda@synopsys.com>
+Date: Tue, 11 Oct 2016 11:44:25 +0000
+Subject: [Buildroot] Webtool to analyze package build fail/pass from
+	autobuild
+Message-ID: <EB86EB452ADE4B44B294F7149B8A277702219383@DE02WEMBXB.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello everyone,
 
-On Tue, Oct 11, 2016 at 11:26:40AM +0200, Thomas Petazzoni wrote:
-> On Mon, 10 Oct 2016 19:46:00 -0700, Matt Kraai wrote:
-> > Signed-off-by: Matt Kraai <kraai@ftbfs.org>
-> 
-> qt5serialbus is indeed a "technology preview" in Qt 5.6, but I believe
-> qt3d was a technology preview in Qt 5.5, but then promoted as an
-> integral part of Qt as of Qt 5.6.
-> 
-> Do you have a source of information to confirm what your patch is doing?
+I am part of the ARC GNU team at Synopsys.
+More recently in order to analyze progress in buildroot package builds,
+I created a web tool that recovers latest build information from
+autobuild.buildroot.net and creates an internal database and web-tools
+to access it.
 
-Yes, I based this on
+This database/webtool is organize such that we can track progress of
+which packages are failing or passing at any specific moment, and trace
+this failures to a specific build where we can analyze any of the build
+related logs.
 
- https://wiki.qt.io/New_Features_in_Qt_5.6#Technology_Preview_Modules
+Moreover, each day/week the tool generates a report sent to all the
+team, where it clearly specifies which packages started failing or
+passed during the period.
 
-That section includes
+As this tools have been proven to be of great value to us, perhaps you
+would feel the same.
+The code is shared in:
+https://github.com/foss-for-synopsys-dwc-arc-processors/buildroot_stats
 
-* Qt 3D
-* Qt Quick Controls 2.0
-* Qt SerialBus
+Looking forward for your feedback. 
 
--- 
-Matt                                           https://ftbfs.org/~kraai/
+Best regards,
+Cupertino
+
+PS: I include some files with images of a report. 
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: example_report.png
+Type: image/png
+Size: 160789 bytes
+Desc: example_report.png
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161011/a1897d32/attachment.png>
