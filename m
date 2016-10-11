@@ -1,97 +1,94 @@
 From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Tue, 11 Oct 2016 13:56:14 +0100
-Subject: [Buildroot] [RESEND] [PATCH v3 2/3] new package: scpfirmware
+Date: Tue, 11 Oct 2016 13:56:15 +0100
+Subject: [Buildroot] [RESEND] [PATCH v3 3/3] configs: add u-boot and
+	atfirmware options to juno
 In-Reply-To: <cover.1467737979.git.jpinto@synopsys.com>
 References: <cover.1467737979.git.jpinto@synopsys.com>
-Message-ID: <59041f202d937ed5d6a7e4cfd6daa407a112fab0.1467737979.git.jpinto@synopsys.com>
+Message-ID: <f9038e1860e12ce20dc3f3e979d517affb773e5c.1467737979.git.jpinto@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a new package to buildroot: scpfirmware.
-It is a hidden package that only serves to get the scp binary
-from Linaro repository to be used by ATFirmware (Juno requirement).
+This patch adds the necessary U-Boot and ATFirmware configurations to the
+Juno's defconfig and updates the readme.txt file regarding the new output
+binaries.
 
 Signed-off-by: Joao Pinto <jpinto@synopsys.com>
 ---
 Changes v2->v3:
-- atfirmware and scpfirmware were broken into 2 patches
+- Nothing changed (just to keep up with patch set version)
 Changes v1->v2:
-- Nothing changed (just to keep up with patch set version).
+- Changed BR2_TARGET_UBOOT_DEFCONFIG to BR2_TARGET_UBOOT_BOARDNAME
+- Fixed a typo in the e-mail subject
 
- boot/Config.in                  |  1 +
- boot/scpfirmware/Config.in      | 23 +++++++++++++++++++++++
- boot/scpfirmware/scpfirmware.mk | 18 ++++++++++++++++++
- 3 files changed, 42 insertions(+)
- create mode 100644 boot/scpfirmware/Config.in
- create mode 100644 boot/scpfirmware/scpfirmware.mk
+ board/arm/juno/readme.txt  | 21 ++++++++++++++++++---
+ configs/arm_juno_defconfig |  9 +++++++++
+ 2 files changed, 27 insertions(+), 3 deletions(-)
 
-diff --git a/boot/Config.in b/boot/Config.in
-index ce0b50a..246d6a1 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -12,6 +12,7 @@ source "boot/gummiboot/Config.in"
- source "boot/lpc32xxcdl/Config.in"
- source "boot/mxs-bootlets/Config.in"
- source "boot/syslinux/Config.in"
-+source "boot/scpfirmware/Config.in"
- source "boot/uboot/Config.in"
- source "boot/xloader/Config.in"
+diff --git a/board/arm/juno/readme.txt b/board/arm/juno/readme.txt
+index 52fabf9..2a2af55 100644
+--- a/board/arm/juno/readme.txt
++++ b/board/arm/juno/readme.txt
+@@ -7,8 +7,8 @@ These instructions apply to all models of the ARM Juno:
+   - Juno r0 (does not support PCIe)
+   - Juno r1 (supports PCIe)
  
-diff --git a/boot/scpfirmware/Config.in b/boot/scpfirmware/Config.in
-new file mode 100644
-index 0000000..f2acc24
---- /dev/null
-+++ b/boot/scpfirmware/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_TARGET_SCPFIRMWARE
-+	bool
-+	depends on BR2_aarch64
+-Buildroot will generate the kernel image, device tree blob and a
+-minimal root filesystem.
++Buildroot will generate the kernel image, device tree blob, bootloader binaries
++and a minimal root filesystem.
+ 
+ How to build it
+ ===============
+@@ -42,6 +42,20 @@ After building, you should obtain this tree:
+     +-- juno.dtb (if Juno r0 is used)
+     +-- juno-r1.dtb (if Juno r1 is used)
+     +-- Image
++    +-- bl1.bin
++    +-- bl2.bin
++    +-- bl2u.bin
++    +-- bl31.bin
++    +-- fip.bin
++    +-- scp-fw.bin
++    +-- u-boot.bin
 +
-+if BR2_TARGET_SCPFIRMWARE
++Preparing your rootfs
++======================
 +
-+config BR2_TARGET_SCPFIRMWARE_VERSION
-+	string
-+	default BR2_TARGET_SCPFIRMWARE_CUSTOM_GIT_VERSION
++Format your pen drive as a ext3 filesystem by executing:
 +
-+config BR2_TARGET_SCPFIRMWARE_CUSTOM_GIT
-+	bool
-+	default "y"
-+
-+config BR2_TARGET_SCPFIRMWARE_CUSTOM_GIT_REPO_URL
-+	string
-+	default "https://git.linaro.org/arm/vexpress-firmware.git"
-+
-+config BR2_TARGET_SCPFIRMWARE_CUSTOM_GIT_VERSION
-+	string
-+	default "901f81977c3b367a2e0bf3d6444be302822d97a3"
-+
-+endif
-diff --git a/boot/scpfirmware/scpfirmware.mk b/boot/scpfirmware/scpfirmware.mk
-new file mode 100644
-index 0000000..0508a21
---- /dev/null
-+++ b/boot/scpfirmware/scpfirmware.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# System Control Processor (SCP) Firmware
-+#
-+################################################################################
-+
-+SCPFIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_SCPFIRMWARE_VERSION))
-+SCPFIRMWARE_SITE = $(call qstrip,$(BR2_TARGET_SCPFIRMWARE_CUSTOM_GIT_REPO_URL))
-+SCPFIRMWARE_SITE_METHOD = git
-+
-+SCPFIRMWARE_INSTALL_IMAGES = YES
-+
-+define SCPFIRMWARE_INSTALL_IMAGES_CMDS
-+	mv $(@D)/SOFTWARE/bl30.bin $(@D)/SOFTWARE/scp-fw.bin ;	\
-+	cp -dpf $(@D)/SOFTWARE/scp-fw.bin $(BINARIES_DIR)/ ;
-+endef
-+
-+$(eval $(generic-package))
++   $ mkfs.ext3 /dev/<your device>
+ 
+ Preparing your rootfs
+ ======================
+@@ -98,7 +112,8 @@ Installing kernel image and DTB
+ 3. Open the software/ folder
+ 4. Copy the 'Image' file to software/
+ 5. Copy the 'juno-r1.dtb' (r1) or the 'juno.dtb' (r0) file to software/
+-6. Press the red button in the front pannel of ARM Juno
++6. Copy the bootloader binaries (bl1.bin and fip.bin) to software/
++7. Press the red button in the front pannel of ARM Juno
+ 
+ At this time, the board will erase the Flash entry for each new item and
+ replace it with the lastest ones.
+diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
+index 87b6374..778661e 100644
+--- a/configs/arm_juno_defconfig
++++ b/configs/arm_juno_defconfig
+@@ -12,3 +12,12 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/juno/linux-juno-defconfig"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1"
++BR2_TARGET_ATFIRMWARE=y
++BR2_TARGET_ATFIRMWARE_CUSTOM_GIT=y
++BR2_TARGET_ATFIRMWARE_CUSTOM_GIT_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
++BR2_TARGET_ATFIRMWARE_CUSTOM_GIT_VERSION="v1.2"
++BR2_TARGET_ATFIRMWARE_PLATFORM="juno"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
 -- 
 1.8.1.5
