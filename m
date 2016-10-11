@@ -1,32 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Oct 2016 11:22:36 +0200
-Subject: [Buildroot] [PATCH 1/3] Revert "Revert "libglib2: bump to
- version 2.50.0""
-In-Reply-To: <1476135549-32056-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1476135549-32056-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20161011112236.2047f175@free-electrons.com>
+Date: Tue, 11 Oct 2016 11:22:56 +0200
+Subject: [Buildroot] [git commit] debianutils: bump to version 4.8
+Message-ID: <20161011092323.CF770821D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f7742092104b2875e0752782f19afeb00b046f13
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 10 Oct 2016 18:39:07 -0300, Gustavo Zacarias wrote:
-> This reverts commit 40da5b434d0d25662b447f14b724245da04ed90d.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/libglib2/Config.in     | 2 ++
->  package/libglib2/libglib2.hash | 4 ++--
->  package/libglib2/libglib2.mk   | 6 +++---
->  3 files changed, 7 insertions(+), 5 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/debianutils/debianutils.hash | 4 ++--
+ package/debianutils/debianutils.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks a lot, all three patches applied!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
+index 4d1b574..212d321 100644
+--- a/package/debianutils/debianutils.hash
++++ b/package/debianutils/debianutils.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.7.dsc
+-sha256	a269cacd40f52f2fa5d5636357714a49e8538459c16d77772efaa23711fe53d9	debianutils_4.7.tar.xz
++# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.8.dsc
++sha256	afa95bbe6b6fd3ef3c0c838b2d7232f09fabeff593ca4b5583cffa6748567ee2	debianutils_4.8.tar.xz
+diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
+index 17f0240..566d0ad 100644
+--- a/package/debianutils/debianutils.mk
++++ b/package/debianutils/debianutils.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-DEBIANUTILS_VERSION = 4.7
++DEBIANUTILS_VERSION = 4.8
+ DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.xz
+-DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20160126T220153Z/pool/main/d/debianutils
++DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20160629T224408Z/pool/main/d/debianutils
+ DEBIANUTILS_CONF_OPTS = --exec-prefix=/
+ # Make sure we override the busybox tools, such as which
+ DEBIANUTILS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
