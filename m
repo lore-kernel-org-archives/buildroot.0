@@ -1,58 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Oct 2016 15:07:04 +0200
-Subject: [Buildroot] [PATCH] package/nut: fix build with musl
-Message-ID: <1476191224-9474-1-git-send-email-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 11 Oct 2016 16:30:22 +0200
+Subject: [Buildroot] [PATCH 1/1] tinycbor: fix detection of cjson
+Message-ID: <1476196222-3723-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add missing header, backport from an upstream commit.
+Fixes:
+  - http://autobuild.buildroot.net/results/8fc/8fc7365e0dc777edc57e950a84df7fddc13c6776
 
-Fixes;
-    http://autobuild.buildroot.org/results/441/4419b24fff68dbddf488003100b6abd7b3cd5576/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 ---
- .../nut/0003-client-ups-add-missing-include.patch  | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/nut/0003-client-ups-add-missing-include.patch
+ package/tinycbor/tinycbor.hash | 1 +
+ package/tinycbor/tinycbor.mk   | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/nut/0003-client-ups-add-missing-include.patch b/package/nut/0003-client-ups-add-missing-include.patch
-new file mode 100644
-index 0000000..78472cd
---- /dev/null
-+++ b/package/nut/0003-client-ups-add-missing-include.patch
-@@ -0,0 +1,29 @@
-+From da0969b26ad4bb839bcb88362c8f41aaf0eb8363 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Tue, 11 Oct 2016 12:05:36 +0200
-+Subject: [PATCH] client/ups: add missing include
+diff --git a/package/tinycbor/tinycbor.hash b/package/tinycbor/tinycbor.hash
+index 8757047..f07fc17 100644
+--- a/package/tinycbor/tinycbor.hash
++++ b/package/tinycbor/tinycbor.hash
+@@ -1,3 +1,4 @@
+ # Locally computed:
+ sha256	f70de1e6b7e3750abb4ceacf0059e47b47c769f113434de10293b33867ce54c2	tinycbor-v0.3.2.tar.gz
+ sha256	7d3aa839ae246e9e14fc73e67869d88c684802c1578fb75503f3fdde1482dcf6	ede7f1431ae06c9086f2a83a57bd7832d99280e3.patch
++sha256	42054074478d074d0320e0c64e8d44f60081b6f0d8dc0e3607e0fb7f4dad96a4	ad09b6af11fc8b6391041973783785cfe1559d63.patch	
+diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
+index 6af2eef..8ce9a76 100644
+--- a/package/tinycbor/tinycbor.mk
++++ b/package/tinycbor/tinycbor.mk
+@@ -15,6 +15,11 @@ TINYCBOR_LICENSE_FILES = LICENSE
+ TINYCBOR_PATCH = \
+ 	https://github.com/01org/tinycbor/commit/ede7f1431ae06c9086f2a83a57bd7832d99280e3.patch
+ 
++# This patch fixes the issue on cjson detection
++# This patch is currently in dev branch and will be a part of v0.4
++TINYCBOR_PATCH += \
++	https://github.com/01org/tinycbor/commit/ad09b6af11fc8b6391041973783785cfe1559d63.patch
 +
-+struct timeval is declared in sys/time.h, so we need to #include it.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+Backported from upstream.
-+---
-+ clients/upsclient.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/clients/upsclient.c b/clients/upsclient.c
-+index 43c0e79..dfadd0d 100644
-+--- a/clients/upsclient.c
-++++ b/clients/upsclient.c
-+@@ -37,6 +37,7 @@
-+ #include <netinet/in.h>
-+ #include <arpa/inet.h>
-+ #include <fcntl.h>
-++#include <sys/time.h>
-+ 
-+ #include "upsclient.h"
-+ #include "common.h"
-+-- 
-+2.7.4
-+
+ TINYCBOR_DEPENDENCIES = host-pkgconf
+ TINYCBOR_INSTALL_STAGING = YES
+ 
 -- 
 2.7.4
