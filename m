@@ -1,7 +1,7 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 11 Oct 2016 20:54:50 +0200
-Subject: [Buildroot] [PATCH 1/2] package/wpa_supplicant: bump to version 2.6
-Message-ID: <20161011185451.1644-1-joerg.krause@embedded.rocks>
+Date: Tue, 11 Oct 2016 21:05:08 +0200
+Subject: [Buildroot] [PATCH] package/hostapd: bump to version 2.6
+Message-ID: <20161011190508.2207-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,108 +12,24 @@ Remove all patches as they are applied to or were fetched from upstream.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- .../0001-fix-readline-libs-ordering.patch          | 26 -------
- ...Key-Data-in-WNM-Sleep-Mode-Response-frame.patch | 32 --------
  ...-peer-Fix-last-fragment-length-validation.patch | 54 --------------
  ...erver-Fix-last-fragment-length-validation.patch | 51 -------------
- ...r-Fix-error-path-for-unexpected-Confirm-m.patch | 34 ---------
- .../wpa_supplicant/0006-fix-libwpa_client.patch    | 39 ----------
- ...ate-service-files-according-to-dbus-inter.patch | 77 --------------------
+ .../hostapd/0003-vlan-fix-musl-build-error.patch   | 60 ---------------
+ ...sl-libc-conflict-with-Linux-kernel-header.patch | 60 ---------------
  ...ject-a-Credential-with-invalid-passphrase.patch | 85 ----------------------
- ...parameter-set-with-invalid-passphrase-cha.patch | 53 --------------
- ...ines-from-wpa_supplicant-config-network-o.patch | 84 ---------------------
- ...CRED-commands-with-newline-characters-in-.patch | 65 -----------------
- ...commands-with-newline-characters-in-the-s.patch | 53 --------------
- package/wpa_supplicant/wpa_supplicant.hash         |  2 +-
- package/wpa_supplicant/wpa_supplicant.mk           |  2 +-
- 14 files changed, 2 insertions(+), 655 deletions(-)
- delete mode 100644 package/wpa_supplicant/0001-fix-readline-libs-ordering.patch
- delete mode 100644 package/wpa_supplicant/0002-WNM-Ignore-Key-Data-in-WNM-Sleep-Mode-Response-frame.patch
- delete mode 100644 package/wpa_supplicant/0003-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
- delete mode 100644 package/wpa_supplicant/0004-EAP-pwd-server-Fix-last-fragment-length-validation.patch
- delete mode 100644 package/wpa_supplicant/0005-EAP-pwd-peer-Fix-error-path-for-unexpected-Confirm-m.patch
- delete mode 100644 package/wpa_supplicant/0006-fix-libwpa_client.patch
- delete mode 100644 package/wpa_supplicant/0007-systemd-Update-service-files-according-to-dbus-inter.patch
- delete mode 100644 package/wpa_supplicant/0008-WPS-Reject-a-Credential-with-invalid-passphrase.patch
- delete mode 100644 package/wpa_supplicant/0009-Reject-psk-parameter-set-with-invalid-passphrase-cha.patch
- delete mode 100644 package/wpa_supplicant/0010-Remove-newlines-from-wpa_supplicant-config-network-o.patch
- delete mode 100644 package/wpa_supplicant/0011-Reject-SET_CRED-commands-with-newline-characters-in-.patch
- delete mode 100644 package/wpa_supplicant/0012-Reject-SET-commands-with-newline-characters-in-the-s.patch
+ package/hostapd/hostapd.hash                       |  2 +-
+ package/hostapd/hostapd.mk                         |  2 +-
+ 7 files changed, 2 insertions(+), 312 deletions(-)
+ delete mode 100644 package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
+ delete mode 100644 package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch
+ delete mode 100644 package/hostapd/0003-vlan-fix-musl-build-error.patch
+ delete mode 100644 package/hostapd/0004-vlan-fix-musl-libc-conflict-with-Linux-kernel-header.patch
+ delete mode 100644 package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch
 
-diff --git a/package/wpa_supplicant/0001-fix-readline-libs-ordering.patch b/package/wpa_supplicant/0001-fix-readline-libs-ordering.patch
-deleted file mode 100644
-index 2a9b832..0000000
---- a/package/wpa_supplicant/0001-fix-readline-libs-ordering.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--commit 631f0893038743cebd2def39df61aceb48bd43a9
--Author: David du Colombier <0intro@gmail.com>
--Date:   Sun Sep 13 23:40:43 2015 +0200
--
--    wpa_supplicant: fix static link with readline
--    
--    The readline library depends on ncurses, so
--    it should be set before ncurses on the linker
--    command line to be able to be statically linked
--    successfully.
--
--    Signed-off-by: David du Colombier <0intro@gmail.com>
--
--diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
--index 1597412..581db02 100644
----- a/wpa_supplicant/Makefile
--+++ b/wpa_supplicant/Makefile
--@@ -1408,7 +1408,7 @@ LIBS += $(DBUS_LIBS)
-- 
-- ifdef CONFIG_READLINE
-- OBJS_c += ../src/utils/edit_readline.o
---LIBS_c += -lncurses -lreadline
--+LIBS_c += -lreadline -lncurses
-- else
-- ifdef CONFIG_WPA_CLI_EDIT
-- OBJS_c += ../src/utils/edit.o
-diff --git a/package/wpa_supplicant/0002-WNM-Ignore-Key-Data-in-WNM-Sleep-Mode-Response-frame.patch b/package/wpa_supplicant/0002-WNM-Ignore-Key-Data-in-WNM-Sleep-Mode-Response-frame.patch
-deleted file mode 100644
-index 00e5b7c..0000000
---- a/package/wpa_supplicant/0002-WNM-Ignore-Key-Data-in-WNM-Sleep-Mode-Response-frame.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 6b12d93d2c7428a34bfd4b3813ba339ed57b698a Mon Sep 17 00:00:00 2001
--From: Jouni Malinen <j@w1.fi>
--Date: Sun, 25 Oct 2015 15:45:50 +0200
--Subject: [PATCH] WNM: Ignore Key Data in WNM Sleep Mode Response frame if no
-- PMF in use
--
--WNM Sleep Mode Response frame is used to update GTK/IGTK only if PMF is
--enabled. Verify that PMF is in use before using this field on station
--side to avoid accepting unauthenticated key updates. (CVE-2015-5310)
--
--Signed-off-by: Jouni Malinen <j@w1.fi>
-----
-- wpa_supplicant/wnm_sta.c | 6 ++++++
-- 1 file changed, 6 insertions(+)
--
--diff --git a/wpa_supplicant/wnm_sta.c b/wpa_supplicant/wnm_sta.c
--index 954de67..7d79499 100644
----- a/wpa_supplicant/wnm_sta.c
--+++ b/wpa_supplicant/wnm_sta.c
--@@ -187,6 +187,12 @@ static void wnm_sleep_mode_exit_success(struct wpa_supplicant *wpa_s,
-- 	end = ptr + key_len_total;
-- 	wpa_hexdump_key(MSG_DEBUG, "WNM: Key Data", ptr, key_len_total);
-- 
--+	if (key_len_total && !wpa_sm_pmf_enabled(wpa_s->wpa)) {
--+		wpa_msg(wpa_s, MSG_INFO,
--+			"WNM: Ignore Key Data in WNM-Sleep Mode Response - PMF not enabled");
--+		return;
--+	}
--+
-- 	while (ptr + 1 < end) {
-- 		if (ptr + 2 + ptr[1] > end) {
-- 			wpa_printf(MSG_DEBUG, "WNM: Invalid Key Data element "
-diff --git a/package/wpa_supplicant/0003-EAP-pwd-peer-Fix-last-fragment-length-validation.patch b/package/wpa_supplicant/0003-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
+diff --git a/package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch b/package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
 deleted file mode 100644
 index 82c2639..0000000
---- a/package/wpa_supplicant/0003-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
+--- a/package/hostapd/0001-EAP-pwd-peer-Fix-last-fragment-length-validation.patch
 +++ /dev/null
 @@ -1,54 +0,0 @@
 -From 8057821706784608b828e769ccefbced95591e50 Mon Sep 17 00:00:00 2001
@@ -170,10 +86,10 @@ index 82c2639..0000000
 --- 
 -1.9.1
 -
-diff --git a/package/wpa_supplicant/0004-EAP-pwd-server-Fix-last-fragment-length-validation.patch b/package/wpa_supplicant/0004-EAP-pwd-server-Fix-last-fragment-length-validation.patch
+diff --git a/package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch b/package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch
 deleted file mode 100644
 index bfc4c74..0000000
---- a/package/wpa_supplicant/0004-EAP-pwd-server-Fix-last-fragment-length-validation.patch
+--- a/package/hostapd/0002-EAP-pwd-server-Fix-last-fragment-length-validation.patch
 +++ /dev/null
 @@ -1,51 +0,0 @@
 -From bef802ece03f9ae9d52a21f0cf4f1bc2c5a1f8aa Mon Sep 17 00:00:00 2001
@@ -227,178 +143,142 @@ index bfc4c74..0000000
 --- 
 -1.9.1
 -
-diff --git a/package/wpa_supplicant/0005-EAP-pwd-peer-Fix-error-path-for-unexpected-Confirm-m.patch b/package/wpa_supplicant/0005-EAP-pwd-peer-Fix-error-path-for-unexpected-Confirm-m.patch
+diff --git a/package/hostapd/0003-vlan-fix-musl-build-error.patch b/package/hostapd/0003-vlan-fix-musl-build-error.patch
 deleted file mode 100644
-index 3088f6a..0000000
---- a/package/wpa_supplicant/0005-EAP-pwd-peer-Fix-error-path-for-unexpected-Confirm-m.patch
+index da1ffcb..0000000
+--- a/package/hostapd/0003-vlan-fix-musl-build-error.patch
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From 95577884ca4fa76be91344ff7a8d5d1e6dc3da61 Mon Sep 17 00:00:00 2001
--From: Jouni Malinen <j@w1.fi>
--Date: Sun, 1 Nov 2015 19:35:44 +0200
--Subject: [PATCH] EAP-pwd peer: Fix error path for unexpected Confirm message
--
--If the Confirm message is received from the server before the Identity
--exchange has been completed, the group has not yet been determined and
--data->grp is NULL. The error path in eap_pwd_perform_confirm_exchange()
--did not take this corner case into account and could end up
--dereferencing a NULL pointer and terminating the process if invalid
--message sequence is received. (CVE-2015-5316)
--
--Signed-off-by: Jouni Malinen <j@w1.fi>
-----
-- src/eap_peer/eap_pwd.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/src/eap_peer/eap_pwd.c b/src/eap_peer/eap_pwd.c
--index 75ceef1..892b590 100644
----- a/src/eap_peer/eap_pwd.c
--+++ b/src/eap_peer/eap_pwd.c
--@@ -774,7 +774,8 @@ eap_pwd_perform_confirm_exchange(struct eap_sm *sm, struct eap_pwd_data *data,
-- 	wpabuf_put_data(data->outbuf, conf, SHA256_MAC_LEN);
-- 
-- fin:
---	bin_clear_free(cruft, BN_num_bytes(data->grp->prime));
--+	if (data->grp)
--+		bin_clear_free(cruft, BN_num_bytes(data->grp->prime));
-- 	BN_clear_free(x);
-- 	BN_clear_free(y);
-- 	if (data->outbuf == NULL) {
---- 
--1.9.1
--
-diff --git a/package/wpa_supplicant/0006-fix-libwpa_client.patch b/package/wpa_supplicant/0006-fix-libwpa_client.patch
-deleted file mode 100644
-index 11c5402..0000000
---- a/package/wpa_supplicant/0006-fix-libwpa_client.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 6f7e0354a9035ce33742a5f869f817a6b39b2f31 Mon Sep 17 00:00:00 2001
+@@ -1,60 +0,0 @@
+-From 67ba6ed9871b2cab16eeee93818f05d9c49ccbab Mon Sep 17 00:00:00 2001
 -From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
--Date: Thu, 29 Oct 2015 11:39:03 +0100
--Subject: [PATCH 1/1] wpa_supplicant/Makefile: fix libwpa_client
+-Date: Tue, 8 Mar 2016 12:05:01 +0100
+-Subject: [PATCH] vlan: fix musl build error
 -MIME-Version: 1.0
 -Content-Type: text/plain; charset=UTF-8
 -Content-Transfer-Encoding: 8bit
 -
--Building libwpa_client requires src/utils/common.c for bin_clear_free() else
--loading the library fails with:
+-caddr_t is legacy BSD and should be avoided [1].
 -
--  Error relocating /usr/lib/libwpa_client.so: bin_clear_free: symbol not found
+-This fixes compile errors with the musl libc:
 -
--Backported from: 736b7cb2daf877a0cb9ad42ff15a2efbbd65fa42
+-../src/ap/vlan_init.c: In function 'br_delif':
+-../src/ap/vlan_init.c:218:18: error: '__caddr_t' undeclared (first use in this function)
+-  ifr.ifr_data = (__caddr_t) args;
+-
+-Upstream status: Pending [2]
+-
+-[1] http://stackoverflow.com/questions/6381526/what-is-the-significance-of-caddr-t-and-when-is-it-used
+-[2] http://lists.infradead.org/pipermail/hostap/2016-March/035350.html
 -
 -Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ----
-- wpa_supplicant/Makefile | 2 ++
-- 1 file changed, 2 insertions(+)
+- src/ap/vlan_init.c | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
 -
--diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
--index 61f8f18..0c444b0 100644
----- a/wpa_supplicant/Makefile
--+++ b/wpa_supplicant/Makefile
--@@ -1706,9 +1706,11 @@ wpa_cli: $(OBJS_c)
+-diff --git a/src/ap/vlan_init.c b/src/ap/vlan_init.c
+-index fd1c8dd..1670c0d 100644
+---- a/src/ap/vlan_init.c
+-+++ b/src/ap/vlan_init.c
+-@@ -215,7 +215,7 @@ static int br_delif(const char *br_name, const char *if_name)
+- 	args[1] = if_index;
 - 
-- LIBCTRL += ../src/common/wpa_ctrl.o
-- LIBCTRL += ../src/utils/os_$(CONFIG_OS).o
--+LIBCTRL += ../src/utils/common.c
-- LIBCTRL += ../src/utils/wpa_debug.o
-- LIBCTRLSO += ../src/common/wpa_ctrl.c
-- LIBCTRLSO += ../src/utils/os_$(CONFIG_OS).c
--+LIBCTRLSO += ../src/utils/common.c
-- LIBCTRLSO += ../src/utils/wpa_debug.c
+- 	os_strlcpy(ifr.ifr_name, br_name, sizeof(ifr.ifr_name));
+--	ifr.ifr_data = (__caddr_t) args;
+-+	ifr.ifr_data = (void *) args;
 - 
-- libwpa_client.a: $(LIBCTRL)
+- 	if (ioctl(fd, SIOCDEVPRIVATE, &ifr) < 0 && errno != EINVAL) {
+- 		/* No error if interface already removed. */
+-@@ -266,7 +266,7 @@ static int br_addif(const char *br_name, const char *if_name)
+- 	args[1] = if_index;
+- 
+- 	os_strlcpy(ifr.ifr_name, br_name, sizeof(ifr.ifr_name));
+--	ifr.ifr_data = (__caddr_t) args;
+-+	ifr.ifr_data = (void *) args;
+- 
+- 	if (ioctl(fd, SIOCDEVPRIVATE, &ifr) < 0) {
+- 		if (errno == EBUSY) {
+-@@ -394,7 +394,7 @@ static int br_getnumports(const char *br_name)
+- 
+- 	os_memset(ifindices, 0, sizeof(ifindices));
+- 	os_strlcpy(ifr.ifr_name, br_name, sizeof(ifr.ifr_name));
+--	ifr.ifr_data = (__caddr_t) arg;
+-+	ifr.ifr_data = (void *) arg;
+- 
+- 	if (ioctl(fd, SIOCDEVPRIVATE, &ifr) < 0) {
+- 		wpa_printf(MSG_ERROR, "VLAN: %s: BRCTL_GET_PORT_LIST "
 --- 
--2.6.2
+-2.7.2
 -
-diff --git a/package/wpa_supplicant/0007-systemd-Update-service-files-according-to-dbus-inter.patch b/package/wpa_supplicant/0007-systemd-Update-service-files-according-to-dbus-inter.patch
+diff --git a/package/hostapd/0004-vlan-fix-musl-libc-conflict-with-Linux-kernel-header.patch b/package/hostapd/0004-vlan-fix-musl-libc-conflict-with-Linux-kernel-header.patch
 deleted file mode 100644
-index 59c5450..0000000
---- a/package/wpa_supplicant/0007-systemd-Update-service-files-according-to-dbus-inter.patch
+index 3e753d6..0000000
+--- a/package/hostapd/0004-vlan-fix-musl-libc-conflict-with-Linux-kernel-header.patch
 +++ /dev/null
-@@ -1,77 +0,0 @@
--From b6cea24d6191d9ccdcd1ac38a5322e3da73218db Mon Sep 17 00:00:00 2001
--From: Marcin Niestroj <m.niestroj@grinn-global.com>
--Date: Mon, 11 Apr 2016 13:23:54 +0200
--Subject: [PATCH] systemd: Update service files according to dbus interface
-- version used
+@@ -1,60 +0,0 @@
+-From 71a517e922c91e2c6cad28d339a081b5f6de0932 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Tue, 8 Mar 2016 21:07:12 +0100
+-Subject: [PATCH] vlan: fix musl libc conflict with Linux kernel headers
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--systemd service files were supplied with old DBus bus name. After
--service activation systemd was waiting for appearance of specified bus
--name to consider it started successfully. However, if wpa_supplicant was
--compiled only with new dbus interface name, then systemd didn't notice
--configured (old) DBus bus name appearance. In the end service was
--considered malfunctioning and it was deactivated.
+-Due to both <netinet/in.h> (in "utils/includes.h") and <linux/in6.h> (in
+-<linux/if_bridge.h>) being included, the in6_addr is being redefined: once from
+-the C library headers and once from the Linux kernel headers. This causes some
+-build failures with for example the musl C library:
 -
--Update systemd service BusName property according to supported DBus
--interface version.
+-In file included from /usr/include/linux/if_bridge.h:18,
+-                 from ../src/ap/vlan_init.c:17:
+-/usr/include/linux/in6.h:32: error: redefinition of 'struct in6_addr'
+-/usr/include/linux/in6.h:49: error: redefinition of 'struct sockaddr_in6'
+-/usr/include/linux/in6.h:59: error: redefinition of 'struct ipv6_mreq'
 -
--Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+-Mixing C library and Linux kernel headers is a bit problematic [1] and should be
+-avoided if possible [2]. In order to fix this, define just the macros needed
+-from <linux/if_bridge.h> as done in Busybox for the brctl applet [3].
+-
+-Upstream status: Pending [4]
+-
+-[1] https://sourceware.org/bugzilla/show_bug.cgi?id=15850
+-[2] http://www.openwall.com/lists/musl/2015/10/06/1
+-[3] https://git.busybox.net/busybox/commit/?id=5fa6d1a632505789409a2ba6cf8e112529f9db18
+-[4] http://lists.infradead.org/pipermail/hostap/2016-March/035357.html
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ----
-- wpa_supplicant/Makefile                          | 8 ++++++--
-- wpa_supplicant/systemd/wpa_supplicant.service.in | 4 ++--
-- 2 files changed, 8 insertions(+), 4 deletions(-)
+- src/ap/vlan_init.c | 11 ++++++++++-
+- 1 file changed, 10 insertions(+), 1 deletion(-)
 -
--diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
--index ad9ead9..fbd1b25 100644
----- a/wpa_supplicant/Makefile
--+++ b/wpa_supplicant/Makefile
--@@ -1374,6 +1374,7 @@ ifndef DBUS_INCLUDE
-- DBUS_INCLUDE := $(shell $(PKG_CONFIG) --cflags dbus-1)
-- endif
-- DBUS_CFLAGS += $(DBUS_INCLUDE)
--+DBUS_INTERFACE=fi.epitest.hostap.WPASupplicant
-- endif
+-diff --git a/src/ap/vlan_init.c b/src/ap/vlan_init.c
+-index 1670c0d..f2e3da0 100644
+---- a/src/ap/vlan_init.c
+-+++ b/src/ap/vlan_init.c
+-@@ -14,7 +14,16 @@
+- #include <sys/ioctl.h>
+- #include <linux/sockios.h>
+- #include <linux/if_vlan.h>
+--#include <linux/if_bridge.h>
+-+/* From <linux/if_bridge.h> */
+-+#define BRCTL_GET_VERSION 0
+-+#define BRCTL_GET_BRIDGES 1
+-+#define BRCTL_ADD_BRIDGE 2
+-+#define BRCTL_DEL_BRIDGE 3
+-+#define BRCTL_ADD_IF 4
+-+#define BRCTL_DEL_IF 5
+-+#define BRCTL_GET_BRIDGE_INFO 6
+-+#define BRCTL_GET_PORT_LIST 7
+-+#define BRCTL_SET_BRIDGE_FORWARD_DELAY 8
+- #endif /* CONFIG_FULL_DYNAMIC_VLAN */
 - 
-- ifdef CONFIG_CTRL_IFACE_DBUS_NEW
--@@ -1399,6 +1400,7 @@ DBUS_OBJS += dbus/dbus_new_introspect.o
-- DBUS_CFLAGS += -DCONFIG_CTRL_IFACE_DBUS_INTRO
-- endif
-- DBUS_CFLAGS += $(DBUS_INCLUDE)
--+DBUS_INTERFACE=fi.w1.wpa_supplicant1
-- endif
-- 
-- ifdef DBUS
--@@ -1760,11 +1762,13 @@ else
-- endif
-- 
-- %.service: %.service.in
---	$(Q)sed -e 's|\@BINDIR\@|$(BINDIR)|g' $< >$@
--+	$(Q)sed -e 's|\@BINDIR\@|$(BINDIR)|g' \
--+		-e 's|\@DBUS_INTERFACE\@|$(DBUS_INTERFACE)|g' $< >$@
-- 	@$(E) "  sed" $<
-- 
-- %@.service: %.service.arg.in
---	$(Q)sed -e 's|\@BINDIR\@|$(BINDIR)|g' $< >$@
--+	$(Q)sed -e 's|\@BINDIR\@|$(BINDIR)|g' \
--+		-e 's|\@DBUS_INTERFACE\@|$(DBUS_INTERFACE)|g' $< >$@
-- 	@$(E) "  sed" $<
-- 
-- wpa_supplicant.exe: wpa_supplicant
--diff --git a/wpa_supplicant/systemd/wpa_supplicant.service.in b/wpa_supplicant/systemd/wpa_supplicant.service.in
--index ea964ce..bc5d49a 100644
----- a/wpa_supplicant/systemd/wpa_supplicant.service.in
--+++ b/wpa_supplicant/systemd/wpa_supplicant.service.in
--@@ -5,9 +5,9 @@ Wants=network.target
-- 
-- [Service]
-- Type=dbus
---BusName=fi.epitest.hostap.WPASupplicant
--+BusName=@DBUS_INTERFACE@
-- ExecStart=@BINDIR@/wpa_supplicant -u
-- 
-- [Install]
-- WantedBy=multi-user.target
---Alias=dbus-fi.epitest.hostap.WPASupplicant.service
--+Alias=dbus- at DBUS_INTERFACE@.service
+- #include "utils/common.h"
 --- 
--2.8.0
+-2.7.2
 -
-diff --git a/package/wpa_supplicant/0008-WPS-Reject-a-Credential-with-invalid-passphrase.patch b/package/wpa_supplicant/0008-WPS-Reject-a-Credential-with-invalid-passphrase.patch
+diff --git a/package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch b/package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch
 deleted file mode 100644
 index 282aa95..0000000
---- a/package/wpa_supplicant/0008-WPS-Reject-a-Credential-with-invalid-passphrase.patch
+--- a/package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch
 +++ /dev/null
 @@ -1,85 +0,0 @@
 -From ecbb0b3dc122b0d290987cf9c84010bbe53e1022 Mon Sep 17 00:00:00 2001
@@ -486,305 +366,26 @@ index 282aa95..0000000
 --- 
 -2.8.1
 -
-diff --git a/package/wpa_supplicant/0009-Reject-psk-parameter-set-with-invalid-passphrase-cha.patch b/package/wpa_supplicant/0009-Reject-psk-parameter-set-with-invalid-passphrase-cha.patch
-deleted file mode 100644
-index 316c070..0000000
---- a/package/wpa_supplicant/0009-Reject-psk-parameter-set-with-invalid-passphrase-cha.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 73e4abb24a936014727924d8b0b2965edfc117dd Mon Sep 17 00:00:00 2001
--From: Jouni Malinen <jouni@qca.qualcomm.com>
--Date: Fri, 4 Mar 2016 18:46:41 +0200
--Subject: [PATCH] Reject psk parameter set with invalid passphrase character
--
--WPA/WPA2-Personal passphrase is not allowed to include control
--characters. Reject a passphrase configuration attempt if that passphrase
--includes an invalid passphrase.
--
--This fixes an issue where wpa_supplicant could have updated the
--configuration file psk parameter with arbitrary data from the control
--interface or D-Bus interface. While those interfaces are supposed to be
--accessible only for trusted users/applications, it may be possible that
--an untrusted user has access to a management software component that
--does not validate the passphrase value before passing it to
--wpa_supplicant.
--
--This could allow such an untrusted user to inject up to 63 characters of
--almost arbitrary data into the configuration file. Such configuration
--file could result in wpa_supplicant trying to load a library (e.g.,
--opensc_engine_path, pkcs11_engine_path, pkcs11_module_path,
--load_dynamic_eap) from user controlled location when starting again.
--This would allow code from that library to be executed under the
--wpa_supplicant process privileges.
--
--Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: upstream (73e4abb24a936014727924d8b0b2965edfc117dd)
--
-- wpa_supplicant/config.c | 6 ++++++
-- 1 file changed, 6 insertions(+)
--
--diff --git a/wpa_supplicant/config.c b/wpa_supplicant/config.c
--index b1c7870dafe0..fdd964356afa 100644
----- a/wpa_supplicant/config.c
--+++ b/wpa_supplicant/config.c
--@@ -478,6 +478,12 @@ static int wpa_config_parse_psk(const struct parse_data *data,
-- 		}
-- 		wpa_hexdump_ascii_key(MSG_MSGDUMP, "PSK (ASCII passphrase)",
-- 				      (u8 *) value, len);
--+		if (has_ctrl_char((u8 *) value, len)) {
--+			wpa_printf(MSG_ERROR,
--+				   "Line %d: Invalid passphrase character",
--+				   line);
--+			return -1;
--+		}
-- 		if (ssid->passphrase && os_strlen(ssid->passphrase) == len &&
-- 		    os_memcmp(ssid->passphrase, value, len) == 0) {
-- 			/* No change to the previously configured value */
---- 
--2.8.1
--
-diff --git a/package/wpa_supplicant/0010-Remove-newlines-from-wpa_supplicant-config-network-o.patch b/package/wpa_supplicant/0010-Remove-newlines-from-wpa_supplicant-config-network-o.patch
-deleted file mode 100644
-index 8a40dce..0000000
---- a/package/wpa_supplicant/0010-Remove-newlines-from-wpa_supplicant-config-network-o.patch
-+++ /dev/null
-@@ -1,84 +0,0 @@
--From 0fe5a234240a108b294a87174ad197f6b5cb38e9 Mon Sep 17 00:00:00 2001
--From: Paul Stewart <pstew@google.com>
--Date: Thu, 3 Mar 2016 15:40:19 -0800
--Subject: [PATCH] Remove newlines from wpa_supplicant config network output
--
--Spurious newlines output while writing the config file can corrupt the
--wpa_supplicant configuration. Avoid writing these for the network block
--parameters. This is a generic filter that cover cases that may not have
--been explicitly addressed with a more specific commit to avoid control
--characters in the psk parameter.
--
--Signed-off-by: Paul Stewart <pstew@google.com>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: upstream (0fe5a234240a108b294a87174ad197f6b5cb38e9)
--
-- src/utils/common.c      | 11 +++++++++++
-- src/utils/common.h      |  1 +
-- wpa_supplicant/config.c | 15 +++++++++++++--
-- 3 files changed, 25 insertions(+), 2 deletions(-)
--
--diff --git a/src/utils/common.c b/src/utils/common.c
--index 27b7c02de10b..9856463242c7 100644
----- a/src/utils/common.c
--+++ b/src/utils/common.c
--@@ -709,6 +709,17 @@ int has_ctrl_char(const u8 *data, size_t len)
-- }
-- 
-- 
--+int has_newline(const char *str)
--+{
--+	while (*str) {
--+		if (*str == '\n' || *str == '\r')
--+			return 1;
--+		str++;
--+	}
--+	return 0;
--+}
--+
--+
-- size_t merge_byte_arrays(u8 *res, size_t res_len,
-- 			 const u8 *src1, size_t src1_len,
-- 			 const u8 *src2, size_t src2_len)
--diff --git a/src/utils/common.h b/src/utils/common.h
--index a97224070385..d19927b375bf 100644
----- a/src/utils/common.h
--+++ b/src/utils/common.h
--@@ -489,6 +489,7 @@ const char * wpa_ssid_txt(const u8 *ssid, size_t ssid_len);
-- char * wpa_config_parse_string(const char *value, size_t *len);
-- int is_hex(const u8 *data, size_t len);
-- int has_ctrl_char(const u8 *data, size_t len);
--+int has_newline(const char *str);
-- size_t merge_byte_arrays(u8 *res, size_t res_len,
-- 			 const u8 *src1, size_t src1_len,
-- 			 const u8 *src2, size_t src2_len);
--diff --git a/wpa_supplicant/config.c b/wpa_supplicant/config.c
--index fdd964356afa..eb97cd5e4e6e 100644
----- a/wpa_supplicant/config.c
--+++ b/wpa_supplicant/config.c
--@@ -2699,8 +2699,19 @@ char * wpa_config_get(struct wpa_ssid *ssid, const char *var)
-- 
-- 	for (i = 0; i < NUM_SSID_FIELDS; i++) {
-- 		const struct parse_data *field = &ssid_fields[i];
---		if (os_strcmp(var, field->name) == 0)
---			return field->writer(field, ssid);
--+		if (os_strcmp(var, field->name) == 0) {
--+			char *ret = field->writer(field, ssid);
--+
--+			if (ret && has_newline(ret)) {
--+				wpa_printf(MSG_ERROR,
--+					   "Found newline in value for %s; not returning it",
--+					   var);
--+				os_free(ret);
--+				ret = NULL;
--+			}
--+
--+			return ret;
--+		}
-- 	}
-- 
-- 	return NULL;
---- 
--2.8.1
--
-diff --git a/package/wpa_supplicant/0011-Reject-SET_CRED-commands-with-newline-characters-in-.patch b/package/wpa_supplicant/0011-Reject-SET_CRED-commands-with-newline-characters-in-.patch
-deleted file mode 100644
-index 530681f..0000000
---- a/package/wpa_supplicant/0011-Reject-SET_CRED-commands-with-newline-characters-in-.patch
-+++ /dev/null
-@@ -1,65 +0,0 @@
--From b166cd84a77a6717be9600bf95378a0055d6f5a5 Mon Sep 17 00:00:00 2001
--From: Jouni Malinen <jouni@qca.qualcomm.com>
--Date: Tue, 5 Apr 2016 23:33:10 +0300
--Subject: [PATCH] Reject SET_CRED commands with newline characters in the
-- string values
--
--Most of the cred block parameters are written as strings without
--filtering and if there is an embedded newline character in the value,
--unexpected configuration file data might be written.
--
--This fixes an issue where wpa_supplicant could have updated the
--configuration file cred parameter with arbitrary data from the control
--interface or D-Bus interface. While those interfaces are supposed to be
--accessible only for trusted users/applications, it may be possible that
--an untrusted user has access to a management software component that
--does not validate the credential value before passing it to
--wpa_supplicant.
--
--This could allow such an untrusted user to inject almost arbitrary data
--into the configuration file. Such configuration file could result in
--wpa_supplicant trying to load a library (e.g., opensc_engine_path,
--pkcs11_engine_path, pkcs11_module_path, load_dynamic_eap) from user
--controlled location when starting again. This would allow code from that
--library to be executed under the wpa_supplicant process privileges.
--
--Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: upstream (b166cd84a77a6717be9600bf95378a0055d6f5a5)
--
-- wpa_supplicant/config.c | 9 ++++++++-
-- 1 file changed, 8 insertions(+), 1 deletion(-)
--
--diff --git a/wpa_supplicant/config.c b/wpa_supplicant/config.c
--index eb97cd5e4e6e..69152efdea1a 100644
----- a/wpa_supplicant/config.c
--+++ b/wpa_supplicant/config.c
--@@ -2896,6 +2896,8 @@ int wpa_config_set_cred(struct wpa_cred *cred, const char *var,
-- 
-- 	if (os_strcmp(var, "password") == 0 &&
-- 	    os_strncmp(value, "ext:", 4) == 0) {
--+		if (has_newline(value))
--+			return -1;
-- 		str_clear_free(cred->password);
-- 		cred->password = os_strdup(value);
-- 		cred->ext_password = 1;
--@@ -2946,9 +2948,14 @@ int wpa_config_set_cred(struct wpa_cred *cred, const char *var,
-- 	}
-- 
-- 	val = wpa_config_parse_string(value, &len);
---	if (val == NULL) {
--+	if (val == NULL ||
--+	    (os_strcmp(var, "excluded_ssid") != 0 &&
--+	     os_strcmp(var, "roaming_consortium") != 0 &&
--+	     os_strcmp(var, "required_roaming_consortium") != 0 &&
--+	     has_newline(val))) {
-- 		wpa_printf(MSG_ERROR, "Line %d: invalid field '%s' string "
-- 			   "value '%s'.", line, var, value);
--+		os_free(val);
-- 		return -1;
-- 	}
-- 
---- 
--2.8.1
--
-diff --git a/package/wpa_supplicant/0012-Reject-SET-commands-with-newline-characters-in-the-s.patch b/package/wpa_supplicant/0012-Reject-SET-commands-with-newline-characters-in-the-s.patch
-deleted file mode 100644
-index a29df07..0000000
---- a/package/wpa_supplicant/0012-Reject-SET-commands-with-newline-characters-in-the-s.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 2a3f56502b52375c3bf113cf92adfa99bad6b488 Mon Sep 17 00:00:00 2001
--From: Jouni Malinen <jouni@qca.qualcomm.com>
--Date: Tue, 5 Apr 2016 23:55:48 +0300
--Subject: [PATCH] Reject SET commands with newline characters in the string
-- values
--
--Many of the global configuration parameters are written as strings
--without filtering and if there is an embedded newline character in the
--value, unexpected configuration file data might be written.
--
--This fixes an issue where wpa_supplicant could have updated the
--configuration file global parameter with arbitrary data from the control
--interface or D-Bus interface. While those interfaces are supposed to be
--accessible only for trusted users/applications, it may be possible that
--an untrusted user has access to a management software component that
--does not validate the value of a parameter before passing it to
--wpa_supplicant.
--
--This could allow such an untrusted user to inject almost arbitrary data
--into the configuration file. Such configuration file could result in
--wpa_supplicant trying to load a library (e.g., opensc_engine_path,
--pkcs11_engine_path, pkcs11_module_path, load_dynamic_eap) from user
--controlled location when starting again. This would allow code from that
--library to be executed under the wpa_supplicant process privileges.
--
--Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: upstream (2a3f56502b52375c3bf113cf92adfa99bad6b488)
--
-- wpa_supplicant/config.c | 6 ++++++
-- 1 file changed, 6 insertions(+)
--
--diff --git a/wpa_supplicant/config.c b/wpa_supplicant/config.c
--index 69152efdea1a..d9a1603f6d7e 100644
----- a/wpa_supplicant/config.c
--+++ b/wpa_supplicant/config.c
--@@ -3764,6 +3764,12 @@ static int wpa_global_config_parse_str(const struct global_parse_data *data,
-- 		return -1;
-- 	}
-- 
--+	if (has_newline(pos)) {
--+		wpa_printf(MSG_ERROR, "Line %d: invalid %s value with newline",
--+			   line, data->name);
--+		return -1;
--+	}
--+
-- 	tmp = os_strdup(pos);
-- 	if (tmp == NULL)
-- 		return -1;
---- 
--2.8.1
--
-diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
-index 19e4359..22b2e8d 100644
---- a/package/wpa_supplicant/wpa_supplicant.hash
-+++ b/package/wpa_supplicant/wpa_supplicant.hash
+diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
+index 869849b..fb89147 100644
+--- a/package/hostapd/hostapd.hash
++++ b/package/hostapd/hostapd.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	cce55bae483b364eae55c35ba567c279be442ed8bab5b80a3c7fb0d057b9b316  wpa_supplicant-2.5.tar.gz
-+sha256  b4936d34c4e6cdd44954beba74296d964bc2c9668ecaa5255e499636fe2b1450  wpa_supplicant-2.6.tar.gz
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index d46328e..e3e6f3a 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
+-sha256	8e272d954dc0d7026c264b79b15389ec2b2c555b32970de39f506b9f463ec74a  hostapd-2.5.tar.gz
++sha256  01526b90c1d23bec4b0f052039cc4456c2fd19347b4d830d1d58a0a6aea7117d  hostapd-2.6.tar.gz
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 5aa2b9a..a499011 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPA_SUPPLICANT_VERSION = 2.5
-+WPA_SUPPLICANT_VERSION = 2.6
- WPA_SUPPLICANT_SITE = http://hostap.epitest.fi/releases
- WPA_SUPPLICANT_LICENSE = BSD-3c
- WPA_SUPPLICANT_LICENSE_FILES = README
+-HOSTAPD_VERSION = 2.5
++HOSTAPD_VERSION = 2.6
+ HOSTAPD_SITE = http://hostap.epitest.fi/releases
+ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
 -- 
 2.10.0
