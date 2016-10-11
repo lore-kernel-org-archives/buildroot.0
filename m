@@ -1,28 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Oct 2016 12:29:25 +0200
-Subject: [Buildroot] [PATCH] xterm: bump to version 327
-In-Reply-To: <1476114968-29609-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1476114968-29609-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20161011122925.491d48fb@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 11 Oct 2016 12:20:16 +0100
+Subject: [Buildroot] [PATCH 1/2] git: bump version to 2.10.1
+Message-ID: <20161011112017.41472-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, 10 Oct 2016 12:56:08 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/xterm/xterm.hash | 2 +-
->  package/xterm/xterm.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/git/git.hash b/package/git/git.hash
+index e2cf300..73bb9cb 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 c73364ac00ae85ffc6cfb12ca2700bb0edf30f63262be97be4039be594ff29e7  git-2.10.0.tar.xz
++sha256 a9c32df9061cfc2c194ecaa0357ba273c1f24a0dbf0d856b03dcedafcd0a4dc6  git-2.10.1.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 3730b77..8bc2907 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.10.0
++GIT_VERSION = 2.10.1
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.10.0
