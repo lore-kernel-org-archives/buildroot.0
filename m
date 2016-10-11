@@ -1,39 +1,49 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 11 Oct 2016 21:09:30 +0200
-Subject: [Buildroot] [PATCH] package/jsoncpp: bump to version 1.7.7
-Message-ID: <20161011190930.6589-1-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 11 Oct 2016 21:32:14 +0200
+Subject: [Buildroot] [PATCH v2] package/upmpdcli: add patch to fix error
+	not detecting jsoncpp
+In-Reply-To: <20160925141152.13952-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Sun, 25 Sep 2016 16:11:52 +0200")
+References: <20160925141152.13952-1-joerg.krause@embedded.rocks>
+Message-ID: <8760oysmv5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/jsoncpp/jsoncpp.hash | 2 +-
- package/jsoncpp/jsoncpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-diff --git a/package/jsoncpp/jsoncpp.hash b/package/jsoncpp/jsoncpp.hash
-index e1768ed..504357f 100644
---- a/package/jsoncpp/jsoncpp.hash
-+++ b/package/jsoncpp/jsoncpp.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	4338c6cab8af8dee6cdfd54e6218bd0533785f552c6162bb083f8dd28bf8fbbe	jsoncpp-1.7.5.tar.gz
-+sha256  087640ebcf7fbcfe8e2717a0b9528fff89c52fcf69fa2a18cc2b538008098f97  jsoncpp-1.7.7.tar.gz
-diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
-index 83ce0a7..a969441 100644
---- a/package/jsoncpp/jsoncpp.mk
-+++ b/package/jsoncpp/jsoncpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JSONCPP_VERSION = 1.7.5
-+JSONCPP_VERSION = 1.7.7
- JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
- JSONCPP_LICENSE = Public Domain or MIT
- JSONCPP_LICENSE_FILES = LICENSE
+ > Fixes:
+ > http://autobuild.buildroot.net/results/205463c9ea8651911972c2835e28ded1912c811a
+ > http://autobuild.buildroot.net/results/5e9279ee60c11a3dacacf6d78f87f8d1b92968f5
+ > http://autobuild.buildroot.net/results/97043f8defd5a59ae39b4c7f095a10d15c7fe632
+ > http://autobuild.buildroot.net/results/e775126d5939093289b1a833dd6323ac293322ed
+ > .. and many more.
+
+ > libmpdclient, libmicrohttpd and jsoncpp provide a .pc file. Use
+ > pkg-config for detecting the libraries and for providing the necessary
+ > details for compiling and linking.
+
+ > The current build system of upmpdcli does not use PKG_CHECK_MODULES, but
+ > AC_LINK_IFELSE to detect jsoncpp. After bumping jsoncpp version from
+ > 1.7.2 to 1.7.5 the detection fails, because the test program does not
+ > compile anymore:
+
+ > """
+ > In file included from
+ > /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/autolink.h:9:0,
+ >                  from
+ > /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/json.h:9,
+ >                  from test.c:1:
+ > /usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/json/config.h:155:9:
+ > error: 'int64_t' does not name a type
+ >  typedef int64_t Int64;
+
+While changing to pkg-config is perfectly fine (if upstream accepts it),
+this problem is really about jsoncpp's config.h using int64_t without
+including <stdint.h>
+
 -- 
-2.10.0
+Bye, Peter Korsgaard
