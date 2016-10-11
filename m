@@ -1,58 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Oct 2016 19:13:00 +0200
-Subject: [Buildroot] [PATCH] polarssl: deprecate on security grounds
-In-Reply-To: <20161011122247.2dea9911@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 11 Oct 2016 12:22:47 +0200")
-References: <1476120393-19918-1-git-send-email-gustavo@zacarias.com.ar>
- <20161011122247.2dea9911@free-electrons.com>
-Message-ID: <87insystb7.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue, 11 Oct 2016 20:54:51 +0200
+Subject: [Buildroot] [PATCH 2/2] package/wpa_supplicant: enable interface
+	matching option
+In-Reply-To: <20161011185451.1644-1-joerg.krause@embedded.rocks>
+References: <20161011185451.1644-1-joerg.krause@embedded.rocks>
+Message-ID: <20161011185451.1644-2-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+The new wpa_supplicant command line argument -M can be used to describe
+matching rules with a wildcard interface name (e.g., "wlan*").
 
- > Hello,
- > On Mon, 10 Oct 2016 14:26:33 -0300, Gustavo Zacarias wrote:
- >> The 1.2.x branch is no longer maintained and the latest release from the
- >> maintained branches (2.3, 2.1, 1.3) were security releases, so more
- >> likely than not 1.2 is affected.
- >> In consequence switch shairport-sync to the openssl backend.
- >> 
- >> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This is very useful for systems without udev.
 
- > I'm fine with the principle, but..
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/wpa_supplicant/wpa_supplicant.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- >> Config.in.legacy                         | 10 ++++++++++
-
- > ... with your change, we get two definitions of the
- > BR2_PACKAGE_POLARSSL variable. The addition to Config.in.legacy should
- > only take place when the package gets removed. Deprecated packages are
- > meant to still allow the build to take place. But with the
- > Config.in.legacy option having the same name, you can't build, because
- > you're selecting BR2_LEGACY, which prevents the build from starting.
-
- > In fact, amusingly, with our process, "deprecating" a package means
- > that it blindly disappears for users.
-
-Yeah, that isn't really good. Perhaps we need to add a 'select
-BR2_NEEDS_DEPRECATED' to everything depending on BR2_DEPRECATED and add
-some logic to warn if BR2_NEEDS_DEPRECATED && !BR2_DEPRECATED?
-
-
- > But if you remove the package, we are warning the user by aborting the
- > build, thanks to the Config.in.legacy mechanism.
-
- > So I'm wondering if we shouldn't simply drop the polarssl package
- > altogether, in order to take advantage from the Config.in.legacy
- > mechanism.
-
- > Yann, Peter, Arnout, what do you think?
-
-Yes, I agree. Lets just remove it and add it to Config.in.legacy.
-
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index e3e6f3a..3c3317b 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -28,7 +28,8 @@ WPA_SUPPLICANT_CONFIG_ENABLE = \
+ 	CONFIG_IEEE80211N	\
+ 	CONFIG_IEEE80211R	\
+ 	CONFIG_INTERNAL_LIBTOMMATH \
+-	CONFIG_DEBUG_FILE
++	CONFIG_DEBUG_FILE \
++	CONFIG_MATCH_IFACE
+ 
+ WPA_SUPPLICANT_CONFIG_DISABLE = \
+ 	CONFIG_SMARTCARD
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.10.0
