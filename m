@@ -1,39 +1,58 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 11 Oct 2016 13:58:49 +0100
-Subject: [Buildroot] [PATCH] mutt: bump version to 1.7.1
-Message-ID: <20161011125849.7234-1-Vincent.Riera@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 11 Oct 2016 15:07:04 +0200
+Subject: [Buildroot] [PATCH] package/nut: fix build with musl
+Message-ID: <1476191224-9474-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Add missing header, backport from an upstream commit.
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index ae7de58..460cd5f 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 1d3e987433d8c92ef88a604f4dcefdb35a86ce73f3eff0157e2e491e5b55b345  mutt-1.7.0.tar.gz
-+sha256 e9c6f88e83d48690033f0d862a70293ac746286b77241554f5448bc23bd0d6df  mutt-1.7.1.tar.gz
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 989a1b6..cd44ca1 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUTT_VERSION = 1.7.0
-+MUTT_VERSION = 1.7.1
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPLv2+
- MUTT_LICENSE_FILES = GPL
+Fixes;
+    http://autobuild.buildroot.org/results/441/4419b24fff68dbddf488003100b6abd7b3cd5576/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ .../nut/0003-client-ups-add-missing-include.patch  | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/nut/0003-client-ups-add-missing-include.patch
+
+diff --git a/package/nut/0003-client-ups-add-missing-include.patch b/package/nut/0003-client-ups-add-missing-include.patch
+new file mode 100644
+index 0000000..78472cd
+--- /dev/null
++++ b/package/nut/0003-client-ups-add-missing-include.patch
+@@ -0,0 +1,29 @@
++From da0969b26ad4bb839bcb88362c8f41aaf0eb8363 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Tue, 11 Oct 2016 12:05:36 +0200
++Subject: [PATCH] client/ups: add missing include
++
++struct timeval is declared in sys/time.h, so we need to #include it.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++Backported from upstream.
++---
++ clients/upsclient.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/clients/upsclient.c b/clients/upsclient.c
++index 43c0e79..dfadd0d 100644
++--- a/clients/upsclient.c
+++++ b/clients/upsclient.c
++@@ -37,6 +37,7 @@
++ #include <netinet/in.h>
++ #include <arpa/inet.h>
++ #include <fcntl.h>
+++#include <sys/time.h>
++ 
++ #include "upsclient.h"
++ #include "common.h"
++-- 
++2.7.4
++
 -- 
-2.10.0
+2.7.4
