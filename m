@@ -1,42 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Oct 2016 22:29:16 +0200
-Subject: [Buildroot] [git commit] package/freeswitch: bump version to 1.6.12
-Message-ID: <20161012203923.5130081F0B@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 12 Oct 2016 17:52:19 -0300
+Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.8.1
+Message-ID: <1476305539-32726-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fff5039b3a58d86e42d884172259dfeef79a1a76
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/freeswitch/freeswitch.hash | 4 ++--
- package/freeswitch/freeswitch.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 9d23174..5b888f5 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index d3a0f31..c21cd3b 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
 @@ -1,2 +1,2 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.11.tar.xz.sha256
--sha256 653aa8aa1ad012828e0b3d3441d4d2463dbeee0126b751006055c07417127b6e  freeswitch-1.6.11.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.12.tar.xz.sha256
-+sha256 ae072ca2d96fd9ef59ca6f589f932048b088c7b469d46e468bb917371de24ff9  freeswitch-1.6.12.tar.xz
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index ce30d17..12b0913 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256	90cd6f0ce5a8bed5fcd6ea8a70d81de4a038163035d48a9ae0339bbf51df771c	btrfs-progs-v4.7.3.tar.xz
++sha256	836e6d707abfc155319c072f53d296261cbd17f0e03484a3694b8af48640db83	btrfs-progs-v4.8.1.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 02820cc..d9bd6e6 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREESWITCH_VERSION = 1.6.11
-+FREESWITCH_VERSION = 1.6.12
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
- FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
- FREESWITCH_LICENSE = MPLv1.1, \
+-BTRFS_PROGS_VERSION = 4.7.3
++BTRFS_PROGS_VERSION = 4.8.1
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
+-- 
+2.7.3
