@@ -1,9 +1,8 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Wed, 12 Oct 2016 23:05:24 +0200
-Subject: [Buildroot] [PATCH 4/4] package/tinydtls: indentation cleanup
-In-Reply-To: <1476306324-6162-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1476306324-6162-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <1476306324-6162-4-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Wed, 12 Oct 2016 23:05:21 +0200
+Subject: [Buildroot] [PATCH 1/4] package/systemd-bootchart: indentation
+	cleanup
+Message-ID: <1476306324-6162-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +11,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/tinydtls/Config.in | 2 +-
+ package/systemd-bootchart/systemd-bootchart.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tinydtls/Config.in b/package/tinydtls/Config.in
-index 33b08fe..2f90eb2 100644
---- a/package/tinydtls/Config.in
-+++ b/package/tinydtls/Config.in
-@@ -10,4 +10,4 @@ config BR2_PACKAGE_TINYDTLS
- 	  https://sourceforge.net/projects/tinydtls
+diff --git a/package/systemd-bootchart/systemd-bootchart.mk b/package/systemd-bootchart/systemd-bootchart.mk
+index 3d91b05..354270e 100644
+--- a/package/systemd-bootchart/systemd-bootchart.mk
++++ b/package/systemd-bootchart/systemd-bootchart.mk
+@@ -18,7 +18,7 @@ SYSTEMD_BOOTCHART_AUTORECONF = YES
+ SYSTEMD_BOOTCHART_CONF_OPTS = --disable-man
  
- comment "tinydtls needs a toolchain w/ threads"
--        depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ define SYSTEMD_BOOTCHART_INTLTOOLIZE
+-        cd $(@D) && $(HOST_DIR)/usr/bin/intltoolize --force --automake
++	cd $(@D) && $(HOST_DIR)/usr/bin/intltoolize --force --automake
+ endef
+ SYSTEMD_BOOTCHART_PRE_CONFIGURE_HOOKS = SYSTEMD_BOOTCHART_INTLTOOLIZE
+ 
 -- 
 1.9.1
