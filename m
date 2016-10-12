@@ -1,40 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 11 Oct 2016 20:26:53 -0300
-Subject: [Buildroot] [PATCH] gvfs: bump to version 1.30.1
-Message-ID: <1476228413-22292-1-git-send-email-gustavo@zacarias.com.ar>
+From: Jack <jackzzjack@gmail.com>
+Date: Wed, 12 Oct 2016 14:08:06 +0800
+Subject: [Buildroot] iptables issue on buildroot-2016.05
+Message-ID: <CADZ=QZmmiwCHEYdu3UXZvTkRGjaoTwVdkywj0sNo0G4BppPQhQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gvfs/gvfs.hash | 4 ++--
- package/gvfs/gvfs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
-index 9c53487..a7f0b89 100644
---- a/package/gvfs/gvfs.hash
-+++ b/package/gvfs/gvfs.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.0.sha256sum
--sha256	2285d387213eef528f09df4b113d9d2e54ce7108c50587355d07f2a885840da4	gvfs-1.30.0.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.1.sha256sum
-+sha256	e752e7bb46e64e4025f63428d4f5247e3e5c0d0b5eeb4f81dbf1cd7b75f59d7b	gvfs-1.30.1.tar.xz
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index 50a2fa2..897b1a9 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GVFS_VERSION_MAJOR = 1.30
--GVFS_VERSION = $(GVFS_VERSION_MAJOR).0
-+GVFS_VERSION = $(GVFS_VERSION_MAJOR).1
- GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
- GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
--- 
-2.7.3
+I use buildroot-2016.05 version, and I got a issue with iptables.
+
+The buildroot-2016.05 iptables version is v.1.6.0.
+When I try to type "iptables -A FORWARD -p udp -s 192.168.1.2 --sport
+3000 -j DROP", it shows "iptables v1.6.0: Port "3000" does not resolve
+to anything.".
+It seems iptables may have some trouble in v.1.6.0.
+
+I already tried v1.4.16.3. It works very well. Have I create a ticket
+on iptables issue tracker ? Or it's just about buildroot iptables
+problem ?
