@@ -1,33 +1,34 @@
-From: Julien Floret <julien.floret@6wind.com>
-Date: Wed, 12 Oct 2016 10:06:32 +0200
-Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add entry for python-pyelftools
-In-Reply-To: <20161012080632.21369-1-julien.floret@6wind.com>
-References: <20161012080632.21369-1-julien.floret@6wind.com>
-Message-ID: <20161012080632.21369-2-julien.floret@6wind.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 12 Oct 2016 07:24:42 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
+Message-ID: <1476267882-24640-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Julien Floret <julien.floret@6wind.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0ae3150a3658..25ded5b4d561 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1098,6 +1098,9 @@ N:	Oli Vogt <oli.vogt.pub01@gmail.com>
- F:	package/python-django/
- F:	package/python-flup/
- 
-+N:	Olivier Matz <olivier.matz@6wind.com>
-+F:	package/python-pyelftools/
-+
- N:	Olivier Schonken <olivier.schonken@gmail.com>
- F:	package/ijs/
- F:	package/poppler/
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c0e7067..b78bc64 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -238,10 +238,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.103"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.64"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.18.41"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.42"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.32"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.33"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+ 	default "4.4.24"	if BR2_KERNEL_HEADERS_4_4
 -- 
-2.9.0.244.g00fa316
+2.7.3
