@@ -1,39 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Oct 2016 13:58:25 +0200
-Subject: [Buildroot] [PATCH] package/upmpdcli: bump to version 1.2.8
-In-Reply-To: <20161011195503.26904-1-joerg.krause@embedded.rocks>
-References: <20161011195503.26904-1-joerg.krause@embedded.rocks>
-Message-ID: <20161012135825.2e95f6ef@free-electrons.com>
+Date: Wed, 12 Oct 2016 13:59:16 +0200
+Subject: [Buildroot] [git commit] package/wpa_supplicant: enable interface
+	matching option
+Message-ID: <20161012115936.C4FE4819CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cad565d42421b675d1d3a6621aef36c8ef956d79
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 11 Oct 2016 21:55:03 +0200, J?rg Krause wrote:
-> Remove patches applied upstream. As we are not touching configure.ac or
-> Makefile.am anymore there is no need for AUTORECONF.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/upmpdcli/0001-fix-jsoncpp-detection.patch  |  90 -----------------
->  .../0002-use-pkg-config-for-libupnpp.patch         |  66 -------------
->  ...including-header-file-log.h-from-libupnpp.patch | 110 ---------------------
->  ...ig-for-jsoncpp-libmpdclient-libmicrohttpd.patch | 105 --------------------
->  package/upmpdcli/upmpdcli.hash                     |   2 +-
->  package/upmpdcli/upmpdcli.mk                       |   6 +-
->  6 files changed, 2 insertions(+), 377 deletions(-)
->  delete mode 100644 package/upmpdcli/0001-fix-jsoncpp-detection.patch
->  delete mode 100644 package/upmpdcli/0002-use-pkg-config-for-libupnpp.patch
->  delete mode 100644 package/upmpdcli/0003-Fix-including-header-file-log.h-from-libupnpp.patch
->  delete mode 100644 package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch
+The new wpa_supplicant command line argument -M can be used to describe
+matching rules with a wildcard interface name (e.g., "wlan*").
 
-Applied to master, thanks.
+This is very useful for systems without udev.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wpa_supplicant/wpa_supplicant.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index e3e6f3a..3c3317b 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -28,7 +28,8 @@ WPA_SUPPLICANT_CONFIG_ENABLE = \
+ 	CONFIG_IEEE80211N	\
+ 	CONFIG_IEEE80211R	\
+ 	CONFIG_INTERNAL_LIBTOMMATH \
+-	CONFIG_DEBUG_FILE
++	CONFIG_DEBUG_FILE \
++	CONFIG_MATCH_IFACE
+ 
+ WPA_SUPPLICANT_CONFIG_DISABLE = \
+ 	CONFIG_SMARTCARD
