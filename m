@@ -1,36 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Oct 2016 22:27:38 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.18.x and 4.1.x series
-Message-ID: <20161012203923.3791881F0B@busybox.osuosl.org>
+Date: Wed, 12 Oct 2016 22:28:22 +0200
+Subject: [Buildroot] [git commit] libgee: bump to version 0.18.1
+Message-ID: <20161012203923.43A9C82266@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36b52da5a2395133351d0d927b937e6579ed0a25
+commit: https://git.buildroot.net/buildroot/commit/?id=d3b22a64fbd34fe6cdeb2ea344b67635d8447c01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libgee/libgee.hash | 4 ++--
+ package/libgee/libgee.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index c0e7067..ebb869b 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -238,10 +238,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.103"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.64"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
--	default "3.18.41"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.43"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.32"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.34"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
- 	default "4.4.24"	if BR2_KERNEL_HEADERS_4_4
+diff --git a/package/libgee/libgee.hash b/package/libgee/libgee.hash
+index 4c38c78..83ac810 100644
+--- a/package/libgee/libgee.hash
++++ b/package/libgee/libgee.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.18/libgee-0.18.0.sha256sum
+-sha256	4ad99ef937d071b4883c061df40bfe233f7649d50c354cf81235f180b4244399	libgee-0.18.0.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.18/libgee-0.18.1.sha256sum
++sha256	99686bbe5a9c89ba9502c25f61314ee8efa0dd2a1159c9a639afc1458c2839a2	libgee-0.18.1.tar.xz
+diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
+index 1df322c..1df54d2 100644
+--- a/package/libgee/libgee.mk
++++ b/package/libgee/libgee.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGEE_VERSION_MAJOR = 0.18
+-LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).0
++LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).1
+ LIBGEE_SITE = http://ftp.gnome.org/pub/gnome/sources/libgee/$(LIBGEE_VERSION_MAJOR)
+ LIBGEE_SOURCE = libgee-$(LIBGEE_VERSION).tar.xz
+ LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
