@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Oct 2016 22:29:23 +0200
-Subject: [Buildroot] [git commit] package/shairport-sync: bump to version
-	2.8.5
-Message-ID: <20161012203923.5EB5081F0B@busybox.osuosl.org>
+Date: Wed, 12 Oct 2016 22:29:16 +0200
+Subject: [Buildroot] [git commit] package/freeswitch: bump version to 1.6.12
+Message-ID: <20161012203923.5130081F0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05eef0d796b53521f609f66ed0fb1d9bb97a3be1
+commit: https://git.buildroot.net/buildroot/commit/?id=fff5039b3a58d86e42d884172259dfeef79a1a76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freeswitch/freeswitch.hash | 4 ++--
+ package/freeswitch/freeswitch.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index 907a71e..dfe0d05 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 9d23174..5b888f5 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256  80dd94c5f37b43e9b157dd5335f8edaf11109859d0144e0046c7b86fe88f6547  shairport-sync-2.8.4.tar.gz
-+sha256  d19f6cd3d53f5010abcf24cc20a301934372b41efc3ff2a2e4e7d8fa49200cdc  shairport-sync-2.8.5.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 49c6604..7af030b 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.11.tar.xz.sha256
+-sha256 653aa8aa1ad012828e0b3d3441d4d2463dbeee0126b751006055c07417127b6e  freeswitch-1.6.11.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.12.tar.xz.sha256
++sha256 ae072ca2d96fd9ef59ca6f589f932048b088c7b469d46e468bb917371de24ff9  freeswitch-1.6.12.tar.xz
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index ce30d17..12b0913 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SHAIRPORT_SYNC_VERSION = 2.8.4
-+SHAIRPORT_SYNC_VERSION = 2.8.5
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+-FREESWITCH_VERSION = 1.6.11
++FREESWITCH_VERSION = 1.6.12
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
+ FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
+ FREESWITCH_LICENSE = MPLv1.1, \
