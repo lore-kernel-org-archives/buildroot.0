@@ -1,40 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Oct 2016 09:37:32 -0300
-Subject: [Buildroot] [PATCH] libgee: bump to version 0.18.1
-Message-ID: <1476275852-25532-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 12 Oct 2016 18:53:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump version to 1.6.12
+Message-ID: <20161012165302.18267-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libgee/libgee.hash | 4 ++--
- package/libgee/libgee.mk   | 2 +-
+ package/freeswitch/freeswitch.hash | 4 ++--
+ package/freeswitch/freeswitch.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgee/libgee.hash b/package/libgee/libgee.hash
-index 4c38c78..83ac810 100644
---- a/package/libgee/libgee.hash
-+++ b/package/libgee/libgee.hash
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 9d23174..5b888f5 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.18/libgee-0.18.0.sha256sum
--sha256	4ad99ef937d071b4883c061df40bfe233f7649d50c354cf81235f180b4244399	libgee-0.18.0.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.18/libgee-0.18.1.sha256sum
-+sha256	99686bbe5a9c89ba9502c25f61314ee8efa0dd2a1159c9a639afc1458c2839a2	libgee-0.18.1.tar.xz
-diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
-index 1df322c..1df54d2 100644
---- a/package/libgee/libgee.mk
-+++ b/package/libgee/libgee.mk
-@@ -5,7 +5,7 @@
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.11.tar.xz.sha256
+-sha256 653aa8aa1ad012828e0b3d3441d4d2463dbeee0126b751006055c07417127b6e  freeswitch-1.6.11.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.12.tar.xz.sha256
++sha256 ae072ca2d96fd9ef59ca6f589f932048b088c7b469d46e468bb917371de24ff9  freeswitch-1.6.12.tar.xz
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index ce30d17..12b0913 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBGEE_VERSION_MAJOR = 0.18
--LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).0
-+LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).1
- LIBGEE_SITE = http://ftp.gnome.org/pub/gnome/sources/libgee/$(LIBGEE_VERSION_MAJOR)
- LIBGEE_SOURCE = libgee-$(LIBGEE_VERSION).tar.xz
- LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
+-FREESWITCH_VERSION = 1.6.11
++FREESWITCH_VERSION = 1.6.12
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
+ FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
+ FREESWITCH_LICENSE = MPLv1.1, \
 -- 
-2.7.3
+2.9.3
