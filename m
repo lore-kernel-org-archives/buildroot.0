@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Oct 2016 22:28:22 +0200
-Subject: [Buildroot] [git commit] libgee: bump to version 0.18.1
-Message-ID: <20161012203923.43A9C82266@busybox.osuosl.org>
+Date: Wed, 12 Oct 2016 22:29:23 +0200
+Subject: [Buildroot] [git commit] package/shairport-sync: bump to version
+	2.8.5
+Message-ID: <20161012203923.5EB5081F0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3b22a64fbd34fe6cdeb2ea344b67635d8447c01
+commit: https://git.buildroot.net/buildroot/commit/?id=05eef0d796b53521f609f66ed0fb1d9bb97a3be1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgee/libgee.hash | 4 ++--
- package/libgee/libgee.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgee/libgee.hash b/package/libgee/libgee.hash
-index 4c38c78..83ac810 100644
---- a/package/libgee/libgee.hash
-+++ b/package/libgee/libgee.hash
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 907a71e..dfe0d05 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.18/libgee-0.18.0.sha256sum
--sha256	4ad99ef937d071b4883c061df40bfe233f7649d50c354cf81235f180b4244399	libgee-0.18.0.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.18/libgee-0.18.1.sha256sum
-+sha256	99686bbe5a9c89ba9502c25f61314ee8efa0dd2a1159c9a639afc1458c2839a2	libgee-0.18.1.tar.xz
-diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
-index 1df322c..1df54d2 100644
---- a/package/libgee/libgee.mk
-+++ b/package/libgee/libgee.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+-sha256  80dd94c5f37b43e9b157dd5335f8edaf11109859d0144e0046c7b86fe88f6547  shairport-sync-2.8.4.tar.gz
++sha256  d19f6cd3d53f5010abcf24cc20a301934372b41efc3ff2a2e4e7d8fa49200cdc  shairport-sync-2.8.5.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 49c6604..7af030b 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBGEE_VERSION_MAJOR = 0.18
--LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).0
-+LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).1
- LIBGEE_SITE = http://ftp.gnome.org/pub/gnome/sources/libgee/$(LIBGEE_VERSION_MAJOR)
- LIBGEE_SOURCE = libgee-$(LIBGEE_VERSION).tar.xz
- LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
+-SHAIRPORT_SYNC_VERSION = 2.8.4
++SHAIRPORT_SYNC_VERSION = 2.8.5
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
