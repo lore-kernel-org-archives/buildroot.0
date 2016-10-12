@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Oct 2016 13:58:20 +0200
-Subject: [Buildroot] [PATCH] package/libupnpp: bump to version 0.15.1
-In-Reply-To: <20161011195006.24817-1-joerg.krause@embedded.rocks>
-References: <20161011195006.24817-1-joerg.krause@embedded.rocks>
-Message-ID: <20161012135820.2c880e5e@free-electrons.com>
+Date: Wed, 12 Oct 2016 13:58:25 +0200
+Subject: [Buildroot] [PATCH] package/upmpdcli: bump to version 1.2.8
+In-Reply-To: <20161011195503.26904-1-joerg.krause@embedded.rocks>
+References: <20161011195503.26904-1-joerg.krause@embedded.rocks>
+Message-ID: <20161012135825.2e95f6ef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 11 Oct 2016 21:50:06 +0200, J?rg Krause wrote:
-> Remove patches applied upstream. No need to set AUTORECONF anymore.
+On Tue, 11 Oct 2016 21:55:03 +0200, J?rg Krause wrote:
+> Remove patches applied upstream. As we are not touching configure.ac or
+> Makefile.am anymore there is no need for AUTORECONF.
 > 
 > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
->  package/libupnpp/0001-Check-for-std-future.patch | 127 -----------------------
->  package/libupnpp/0002-Add-pkg-config-file.patch  |  63 -----------
->  package/libupnpp/libupnpp.hash                   |   4 +-
->  package/libupnpp/libupnpp.mk                     |   6 +-
->  4 files changed, 3 insertions(+), 197 deletions(-)
->  delete mode 100644 package/libupnpp/0001-Check-for-std-future.patch
->  delete mode 100644 package/libupnpp/0002-Add-pkg-config-file.patch
+>  package/upmpdcli/0001-fix-jsoncpp-detection.patch  |  90 -----------------
+>  .../0002-use-pkg-config-for-libupnpp.patch         |  66 -------------
+>  ...including-header-file-log.h-from-libupnpp.patch | 110 ---------------------
+>  ...ig-for-jsoncpp-libmpdclient-libmicrohttpd.patch | 105 --------------------
+>  package/upmpdcli/upmpdcli.hash                     |   2 +-
+>  package/upmpdcli/upmpdcli.mk                       |   6 +-
+>  6 files changed, 2 insertions(+), 377 deletions(-)
+>  delete mode 100644 package/upmpdcli/0001-fix-jsoncpp-detection.patch
+>  delete mode 100644 package/upmpdcli/0002-use-pkg-config-for-libupnpp.patch
+>  delete mode 100644 package/upmpdcli/0003-Fix-including-header-file-log.h-from-libupnpp.patch
+>  delete mode 100644 package/upmpdcli/0004-Use-pkg-config-for-jsoncpp-libmpdclient-libmicrohttpd.patch
 
 Applied to master, thanks.
 
