@@ -1,65 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 13 Oct 2016 00:34:04 +0200
-Subject: [Buildroot] initramfs is not being linked into kernel
-In-Reply-To: <CAChFQ9QOe0BNc-AcZO1AYENwbWup9ss2PVj42h3Rqncwx7tQgw@mail.gmail.com>
-References: <CAChFQ9TE=2_k0xH2UwHBGOgkynMMASnuQ-xApx3v+xGFWCcsiQ@mail.gmail.com>
- <CAChFQ9QOe0BNc-AcZO1AYENwbWup9ss2PVj42h3Rqncwx7tQgw@mail.gmail.com>
-Message-ID: <a69f5bc3-a82e-c2a5-fb60-66cab28924a1@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 12 Oct 2016 20:17:17 -0300
+Subject: [Buildroot] [PATCH] c-ares: security bump to version 1.12.0
+Message-ID: <1476314237-26535-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+CVE-2016-5180 - ares_create_query single byte out of buffer write
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/c-ares/c-ares.hash | 2 +-
+ package/c-ares/c-ares.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 08-10-16 12:39, Adam Baxter wrote:
-> Hi all,
-> 
-> I've got the following external / overlay build setup
-> - https://github.com/baxterworks-build/buildroot-skeleton. BR2_TARGET_ROOTFS_INITRAMFS=y
-> is set, however the resulting bzImage doesn't have the rootfs linked into it.
-> This is more evident on the selfhost branch, where I do silly things like add a
-> complete set of compilers to the rootfs - in this case, rootfs.cpio is 40
-> megabytes, but bzImage is 2 megabytes.
-> 
-> Relevant
-> files: https://github.com/baxterworks-build/buildroot-skeleton/blob/master/external/configs/skeleton_defconfig
-> and https://github.com/baxterworks-build/buildroot-skeleton/blob/master/external/configs/kernel.config
-
- It seems to work for me (with a slightly modified buildroot config though) on
-current git master, and there are no relevant changes since 2016.08.
-
- Do you have this with a clean build, or only when you do a rebuild? Although
-the latter really shouldn't make a difference... Is the
-output/build/linux-4.7.2/.stamp_initramfs_rebuilt file created and up-to-date?
-Does output/build/linux-4.7.2/initramfs_data.cpio.gz look correct? initramfs_data.o?
-
-
- Regards,
- Arnout
-
-> 
-> I am building with 2016.08. Building with git HEAD appears to create an
-> unbootable kernel, but that's a story for another thread.
-> 
-> Any ideas why I can't get the initramfs to be linked in?
-> 
-> Thanks,
-> Adam
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
+diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+index f24cc36..f46ef02 100644
+--- a/package/c-ares/c-ares.hash
++++ b/package/c-ares/c-ares.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 b3612e6617d9682928a1d50c1040de4db6519f977f0b25d40cf1b632900b3efd c-ares-1.11.0.tar.gz
++sha256 8692f9403cdcdf936130e045c84021665118ee9bfea905d1a76f04d4e6f365fb c-ares-1.12.0.tar.gz
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index 298fe41..e817d4a 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-C_ARES_VERSION = 1.11.0
++C_ARES_VERSION = 1.12.0
+ C_ARES_SITE = http://c-ares.haxx.se/download
+ C_ARES_INSTALL_STAGING = YES
+ C_ARES_CONF_OPTS = --with-random=/dev/urandom
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.3
