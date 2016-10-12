@@ -1,40 +1,36 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 12 Oct 2016 22:38:16 +0200
-Subject: [Buildroot] [PATCH] package/enlightenment: bump to 0.21.3
-Message-ID: <1476304696-19238-1-git-send-email-romain.naour@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 12 Oct 2016 22:27:38 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.18.x and 4.1.x series
+Message-ID: <20161012203923.3791881F0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/enlightenment/enlightenment.hash | 4 ++--
- package/enlightenment/enlightenment.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=36b52da5a2395133351d0d927b937e6579ed0a25
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-index 8abbd96..6c82bdc 100644
---- a/package/enlightenment/enlightenment.hash
-+++ b/package/enlightenment/enlightenment.hash
-@@ -1,2 +1,2 @@
--# From https://www.enlightenment.org/news/e-0.21.2-release
--sha256	a877645dc70aee71141013888863b69a1029f575f685e285b570db7c736f253a 	enlightenment-0.21.2.tar.xz
-+# From https://www.enlightenment.org/news/e-0.21.3-release
-+sha256	b90517d3de780023043b6e3ade30f686bd2cdcf5b66d24155b50da720e665fd2 	enlightenment-0.21.3.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index d77421f..98f537d 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ENLIGHTENMENT_VERSION = 0.21.2
-+ENLIGHTENMENT_VERSION = 0.21.3
- ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
- ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2c
--- 
-2.5.5
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c0e7067..ebb869b 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -238,10 +238,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.103"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.64"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.18.41"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.43"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.32"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.34"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+ 	default "4.4.24"	if BR2_KERNEL_HEADERS_4_4
