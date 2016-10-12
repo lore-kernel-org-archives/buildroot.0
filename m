@@ -1,39 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Oct 2016 17:52:19 -0300
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.8.1
-Message-ID: <1476305539-32726-1-git-send-email-gustavo@zacarias.com.ar>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 12 Oct 2016 23:05:23 +0200
+Subject: [Buildroot] [PATCH 3/4] package/iozone: indentation cleanup
+In-Reply-To: <1476306324-6162-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1476306324-6162-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <1476306324-6162-3-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/btrfs-progs/btrfs-progs.hash | 2 +-
- package/btrfs-progs/btrfs-progs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/iozone/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index d3a0f31..c21cd3b 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256	90cd6f0ce5a8bed5fcd6ea8a70d81de4a038163035d48a9ae0339bbf51df771c	btrfs-progs-v4.7.3.tar.xz
-+sha256	836e6d707abfc155319c072f53d296261cbd17f0e03484a3694b8af48640db83	btrfs-progs-v4.8.1.tar.xz
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 02820cc..d9bd6e6 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/iozone/Config.in b/package/iozone/Config.in
+index fe49bd1..33c938e 100644
+--- a/package/iozone/Config.in
++++ b/package/iozone/Config.in
+@@ -10,4 +10,4 @@ config BR2_PACKAGE_IOZONE
  
--BTRFS_PROGS_VERSION = 4.7.3
-+BTRFS_PROGS_VERSION = 4.8.1
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
+ comment "iozone needs a toolchain w/ NPTL"
+ 	depends on BR2_USE_MMU
+-        depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 -- 
-2.7.3
+1.9.1
