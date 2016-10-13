@@ -1,22 +1,24 @@
-From: Pascal Speck <kernel@iktek.de>
-Date: Thu, 13 Oct 2016 15:05:09 +0200
-Subject: [Buildroot] [ BUG ] Gzip shell configuration ?
-Message-ID: <296b5618-884d-cb49-5cfb-ba74b05b1961@iktek.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Oct 2016 15:58:58 +0200
+Subject: [Buildroot] [PATCH 1/1] tinycbor: fix detection of cjson
+In-Reply-To: <1476196222-3723-1-git-send-email-fabrice.fontaine@orange.com>
+ (Fabrice Fontaine's message of "Tue, 11 Oct 2016 16:30:22 +0200")
+References: <1476196222-3723-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <87wphcic4d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear List,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-in my current Buildroot-Setup (2016.08) I'm experiencing the same problem as mentioned in:
+ > Fixes:
+ >   - http://autobuild.buildroot.net/results/8fc/8fc7365e0dc777edc57e950a84df7fddc13c6776
 
-http://lists.busybox.net/pipermail/buildroot/2015-September/139785.html
+ > Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 
-On my Buildsystem the gzip-1.8 Makefile is changing the /bin/sh in the scripts to /bin/bash as the $(SHELL) variable expands to /bin/bash, which is basically right...
+Committed, thanks.
 
-Unfortunately I don't like to have bash on my target system. Is there a known fix for this?
-
-Regards
-Pascal Speck
+-- 
+Bye, Peter Korsgaard
