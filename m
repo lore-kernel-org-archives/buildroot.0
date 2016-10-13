@@ -1,43 +1,31 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 13 Oct 2016 07:25:07 -0300
-Subject: [Buildroot] [PATCH] memcached: bump to version 1.4.32
-Message-ID: <1476354307-3881-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 13 Oct 2016 07:30:40 -0300
+Subject: [Buildroot] [PATCH] wpa_supplicant: AP mode now requires nl80211
+Message-ID: <1476354640-18512-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+http://autobuild.buildroot.net/results/427/4275ea6e9f5a18d2ed42c93bdafbe6cbd50126a9/
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/wpa_supplicant/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index 918a36b..dbc0c0d 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,4 +1,4 @@
--# From http://www.memcached.org/files/memcached-1.4.31.tar.gz.sha1
--sha1	3ea34f5bc5c5aacb76cfc07f4ee5847f33526cb6	memcached-1.4.31.tar.gz
-+# From http://www.memcached.org/files/memcached-1.4.32.tar.gz.sha1
-+sha1	cbec6b533fe037b5ad5c54d111e0d30bc9db4424	memcached-1.4.32.tar.gz
- # Calculated based on the hash above
--sha256	77ce5f820bafe94c33bf7bd86268d9bcdb3b76f68128d795b106db53d528707f	memcached-1.4.31.tar.gz
-+sha256	54bb9acd5fbbb73cd1fbfa67cbc6b301009a2835a26c8a4c3dba634a0c3d875d	memcached-1.4.32.tar.gz
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 4099428..2d84574 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 85520b6..454541f 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -31,6 +31,7 @@ comment "nl80211 support needs a toolchain w/ threads"
  
--MEMCACHED_VERSION = 1.4.31
-+MEMCACHED_VERSION = 1.4.32
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
+ 	bool "Enable AP mode"
++	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
+ 	help
+ 	  With this option enabled, wpa_supplicant can act as an
+ 	  access point much like hostapd does with a limited feature set.
 -- 
 2.7.3
