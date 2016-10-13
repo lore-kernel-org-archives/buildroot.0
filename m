@@ -1,32 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Oct 2016 12:36:05 +0200
-Subject: [Buildroot] [git commit] package/libamcodec: indentation cleanup
-Message-ID: <20161013104050.DEABA81D8B@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 13 Oct 2016 08:19:55 -0300
+Subject: [Buildroot] [PATCH] libgpgme: improve language bindings
+Message-ID: <1476357595-29340-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27186f8738d3f1a735a1efc18a65d6d30e71a208
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The C++ bindings require C++11 support with minimum gcc version 4.8, so
+handle it accordingly.
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The new python bindings require some work, but since they were
+previously unavailable just disable them for now until someone is
+interested in building/using them. Fixes:
+http://autobuild.buildroot.net/results/685/6853c21aa084952bc232f0ec3e96dcb972d8fbfe/
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libamcodec/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libgpgme/libgpgme.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/libamcodec/Config.in b/package/libamcodec/Config.in
-index 7300259..45846e6 100644
---- a/package/libamcodec/Config.in
-+++ b/package/libamcodec/Config.in
-@@ -9,6 +9,6 @@ config BR2_PACKAGE_LIBAMCODEC
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	select BR2_PACKAGE_ALSA_LIB
- 	help
--	    Interface library for Amlogic media codecs
-+	  Interface library for Amlogic media codecs
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 7e86daf..c581a3c 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -11,6 +11,7 @@ LIBGPGME_LICENSE = LGPLv2.1+
+ LIBGPGME_LICENSE_FILES = COPYING.LESSER
+ LIBGPGME_INSTALL_STAGING = YES
+ LIBGPGME_DEPENDENCIES = libassuan libgpg-error
++LIBGPGME_LANGUAGE_BINDINGS = cl
  
--	    https://github.com/mdrjr/c2_aml_libs.git
-+	  https://github.com/mdrjr/c2_aml_libs.git
+ # libgpgme, needs to know the gpg binary path on the target.
+ LIBGPGME_CONF_OPTS = --with-gpg=/usr/bin/gpg \
+@@ -19,7 +20,13 @@ LIBGPGME_CONF_OPTS = --with-gpg=/usr/bin/gpg \
+ 	--disable-gpgsm-test \
+ 	--disable-gpgconf-test \
+ 	--disable-g13-test \
+-	--disable-gpg-test
++	--disable-gpg-test \
++	--enable-languages=$(LIBGPGME_LANGUAGE_BINDINGS)
++
++# C++ bindings require a C++11 capable gcc
++ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),yy)
++LIBGPGME_LANGUAGE_BINDINGS := $(LIBGPGME_LANGUAGE_BINDINGS),cpp
++endif
+ 
+ # Handle argp-standalone or it errors out during build
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+-- 
+2.7.3
