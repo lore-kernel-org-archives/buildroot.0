@@ -1,34 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Oct 2016 21:45:45 +0200
-Subject: [Buildroot] [git commit] wpa_supplicant: AP mode now requires
-	nl80211
-Message-ID: <20161013194736.3594C802F4@busybox.osuosl.org>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Thu, 13 Oct 2016 22:56:21 +0300
+Subject: [Buildroot] [PATCH] configs/odroidc2: bump kernel headers to 3.14.79
+Message-ID: <20161013195621.6015-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c4f400007316127c9f5a4a7b843fac65c36a04d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+following commit 7de5b0d2d83bec38ec96ef5917259d9f46df58d4, bump kernel
+headers to 3.14.79 to match the kernel version.
 
-Fixes:
-http://autobuild.buildroot.net/results/427/4275ea6e9f5a18d2ed42c93bdafbe6cbd50126a9/
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
- package/wpa_supplicant/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ configs/odroidc2_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index 85520b6..454541f 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -31,6 +31,7 @@ comment "nl80211 support needs a toolchain w/ threads"
+diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
+index 44fc61a..95a9169 100644
+--- a/configs/odroidc2_defconfig
++++ b/configs/odroidc2_defconfig
+@@ -11,7 +11,7 @@ BR2_GCC_VERSION_4_9_X=y
  
- config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
- 	bool "Enable AP mode"
-+	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
- 	help
- 	  With this option enabled, wpa_supplicant can act as an
- 	  access point much like hostapd does with a limited feature set.
+ # Kernel
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.14.29"
++BR2_DEFAULT_KERNEL_VERSION="3.14.79"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-- 
+2.10.1
