@@ -1,41 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Oct 2016 07:41:56 +0200
-Subject: [Buildroot] [git commit] unrar: bump to version 5.4.5
-Message-ID: <20161013054826.83CA2805E5@busybox.osuosl.org>
+Date: Thu, 13 Oct 2016 07:41:19 +0200
+Subject: [Buildroot] [git commit] postgresql: security bump to version 9.5.4
+Message-ID: <20161013054826.79188805E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4db9bc15413c66c12af85c27998b52c3942ebf93
+commit: https://git.buildroot.net/buildroot/commit/?id=5454e25a69b13b4680d4d313864f98acdd9f835a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+CVE-2016-5423 - CASE/WHEN with inlining can cause untrusted pointer
+dereference (bsc#993454).
+CVE-2016-5424 - Fix client programs' handling of special characters in
+database and role names (bsc#993453).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/unrar/unrar.hash | 2 +-
- package/unrar/unrar.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
-index e6a146c..36450e0 100644
---- a/package/unrar/unrar.hash
-+++ b/package/unrar/unrar.hash
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 4dde589..0d54890 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256	e4f05190d9e379449a04c22baffc24cc2f03164a4738befe601b1325440db0c6	unrarsrc-5.4.3.tar.gz
-+sha256	e470c584332422893fb52e049f2cbd99e24dc6c6da971008b4e2ae4284f8796c	unrarsrc-5.4.5.tar.gz
-diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
-index e49fe6c..68d81b7 100644
---- a/package/unrar/unrar.mk
-+++ b/package/unrar/unrar.mk
+-# From https://ftp.postgresql.org/pub/source/v9.5.3/postgresql-9.5.3.tar.bz2.sha256
+-sha256 7385c01dc58acba8d7ac4e6ad42782bd7c0b59272862a3a3d5fe378d4503a0b4  postgresql-9.5.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.5.4/postgresql-9.5.4.tar.bz2.sha256
++sha256 cf5e571164ad66028ecd7dd8819e3765470d45bcd440d258b686be7e69c76ed0  postgresql-9.5.4.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 8edefb7..7179bbe 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UNRAR_VERSION = 5.4.3
-+UNRAR_VERSION = 5.4.5
- UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
- UNRAR_SITE = http://www.rarlab.com/rar
- UNRAR_LICENSE = unrar
+-POSTGRESQL_VERSION = 9.5.3
++POSTGRESQL_VERSION = 9.5.4
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
