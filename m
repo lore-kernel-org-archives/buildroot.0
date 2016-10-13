@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Thu, 13 Oct 2016 19:13:38 -0300
-Subject: [Buildroot] [PATCH 31/51] feh: use $(TARGET_MAKE_ENV) when calling
+Date: Thu, 13 Oct 2016 19:13:40 -0300
+Subject: [Buildroot] [PATCH 33/51] iw: use $(TARGET_MAKE_ENV) when calling
 	$(MAKE)
 In-Reply-To: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476396838-12276-32-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476396838-12276-34-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,27 +15,23 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/feh/feh.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/iw/iw.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 0d5da06..03651cd 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -12,12 +12,12 @@ FEH_LICENSE = MIT
- FEH_LICENSE_FILES = COPYING
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 6f3f309..925a770 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -11,7 +11,9 @@ IW_LICENSE = ISC
+ IW_LICENSE_FILES = COPYING
+ IW_DEPENDENCIES = host-pkgconf libnl
+ IW_MAKE_OPTS = CC="$(TARGET_CC)" LD="$(TARGET_LD)" LDFLAGS="$(TARGET_LDFLAGS)"
+-IW_MAKE_ENV = PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
++IW_MAKE_ENV = \
++	$(TARGET_MAKE_ENV) \
++	PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
+ 	GIT_DIR=$(IW_DIR)
  
- define FEH_BUILD_CMDS
--	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
-+	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
- 		-C $(@D) all
- endef
- 
- define FEH_INSTALL_TARGET_CMDS
--	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) " \
-+	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) " \
- 		PREFIX=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
- endef
- 
+ define IW_BUILD_CMDS
 -- 
 2.7.3
