@@ -1,155 +1,99 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Oct 2016 22:13:59 -0300
-Subject: [Buildroot] [PATCH 8/8] evince: new package
-In-Reply-To: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1476321239-13894-8-git-send-email-gustavo@zacarias.com.ar>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Wed, 12 Oct 2016 20:42:45 -0700
+Subject: [Buildroot] [PATCH 1/3] libite: new package
+Message-ID: <20161013034247.21603-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To see nice PDFs and other documents.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
+ DEVELOPERS                 |  3 +++
  package/Config.in          |  1 +
- package/evince/Config.in   | 20 ++++++++++++
- package/evince/evince.hash |  2 ++
- package/evince/evince.mk   | 76 ++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 99 insertions(+)
- create mode 100644 package/evince/Config.in
- create mode 100644 package/evince/evince.hash
- create mode 100644 package/evince/evince.mk
+ package/libite/Config.in   | 15 +++++++++++++++
+ package/libite/libite.hash |  2 ++
+ package/libite/libite.mk   | 14 ++++++++++++++
+ 5 files changed, 35 insertions(+)
+ create mode 100644 package/libite/Config.in
+ create mode 100644 package/libite/libite.hash
+ create mode 100644 package/libite/libite.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0ae3150..7a23c78 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1259,6 +1259,9 @@ F:	package/python-pysnmp-apps/
+ F:	package/python-pysnmp-mibs/
+ F:	package/python-tornado/
+ 
++N:	Ryan Coe <bluemrp9@gmail.com>
++F:	package/libite/
++
+ N:	Ryan Wilkins <ryan@deadfrog.net>
+ F:	package/biosdevname/
+ 
 diff --git a/package/Config.in b/package/Config.in
-index cf8552e..5871f50 100644
+index 60184ce..4c3f588 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -233,6 +233,7 @@ endmenu
- menu "Graphic libraries and applications (graphic/text)"
- 
- comment "Graphic applications"
-+	source "package/evince/Config.in"
- 	source "package/expedite/Config.in"
- 	source "package/fswebcam/Config.in"
- 	source "package/glmark2/Config.in"
-diff --git a/package/evince/Config.in b/package/evince/Config.in
+@@ -1310,6 +1310,7 @@ menu "Other"
+ 	source "package/libgee/Config.in"
+ 	source "package/libglib2/Config.in"
+ 	source "package/libical/Config.in"
++	source "package/libite/Config.in"
+ 	source "package/liblinear/Config.in"
+ 	source "package/libnspr/Config.in"
+ 	source "package/libpfm4/Config.in"
+diff --git a/package/libite/Config.in b/package/libite/Config.in
 new file mode 100644
-index 0000000..b0a7351
+index 0000000..78ac22f
 --- /dev/null
-+++ b/package/evince/Config.in
-@@ -0,0 +1,20 @@
-+comment "evince needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_EVINCE
-+	bool "evince"
-+	select BR2_PACKAGE_ADWAITA_ICON_THEME
-+	select BR2_PACKAGE_GSETTINGS_DESKTOP_SCHEMAS
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_SHARED_MIME_INFO
-+	select BR2_PACKAGE_ZLIB
-+	depends on BR2_USE_WCHAR # gettext
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_PACKAGE_LIBGTK3
++++ b/package/libite/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LIBITE
++	bool "libite"
 +	help
-+	  Evince is a document viewer for multiple document formats.
++	  Libite is a lightweight library of frog DNA. It can be used to fill
++	  the gaps in any dinosaur project. It holds useful functions and
++	  macros developed by both Finit and the OpenBSD project. Most notably
++	  the string functions: strlcpy(3), strlcat(3) and the highly useful
++	  *BSD sys/queue.h and sys/tree.h API's.
 +
-+	  https://wiki.gnome.org/Apps/Evince
-diff --git a/package/evince/evince.hash b/package/evince/evince.hash
++	  Libite is the frog DNA missing in GNU libc. However, -lite does not
++	  aim to become another GLIB! One noticeable gap in GLIBC is the
++	  missing _SAFE macros in the BSD sys/queue.h API - highly recommended
++	  when traversing lists to delete/free nodes.
++
++	  https://github.com/troglobit/libite
+diff --git a/package/libite/libite.hash b/package/libite/libite.hash
 new file mode 100644
-index 0000000..5dc103d
+index 0000000..67ad009
 --- /dev/null
-+++ b/package/evince/evince.hash
++++ b/package/libite/libite.hash
 @@ -0,0 +1,2 @@
-+# From http://ftp.acc.umu.se/pub/gnome/sources/evince/3.22/evince-3.22.1.sha256sum
-+sha256	f3d439db3b5a5745d26175d615a71dffa1535235b1e3aa0b85d397ea33ab231c	evince-3.22.1.tar.xz
-diff --git a/package/evince/evince.mk b/package/evince/evince.mk
++# Locally calculated
++sha256 b27e4af69e9e5b4d00924538d3a41b53752082cc439b9246edec5501aff2f22f libite-v1.8.2.tar.gz
+diff --git a/package/libite/libite.mk b/package/libite/libite.mk
 new file mode 100644
-index 0000000..571182e
+index 0000000..ff19aa2
 --- /dev/null
-+++ b/package/evince/evince.mk
-@@ -0,0 +1,76 @@
++++ b/package/libite/libite.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# evince
++# libite
 +#
 +################################################################################
 +
-+
-+EVINCE_VERSION_MAJOR = 3.22
-+EVINCE_VERSION = $(EVINCE_VERSION_MAJOR).1
-+EVINCE_SOURCE = evince-$(EVINCE_VERSION).tar.xz
-+EVINCE_SITE = http://ftp.gnome.org/pub/gnome/sources/evince/$(EVINCE_VERSION_MAJOR)
-+# Required for gschema build
-+EVINCE_INSTALL_STAGING = YES
-+EVINCE_DEPENDENCIES = \
-+	host-intltool \
-+	host-itstool \
-+	host-pkgconf \
-+	adwaita-icon-theme \
-+	gsettings-desktop-schemas \
-+	libglib2 \
-+	libgtk3 \
-+	shared-mime-info \
-+	zlib
-+
-+# previewer and thumbnailer can be built but aren't very useful
-+# without nautilus or a similarly-capable desktop/file manager
-+EVINCE_CONF_OPTS = \
-+	--disable-browser-plugin \
-+	--disable-djvu \
-+	--disable-dvi \
-+	--disable-libgnome-desktop \
-+	--disable-nautilus \
-+	--disable-previewer \
-+	--disable-ps \
-+	--disable-thumbnailer \
-+	--disable-xps \
-+	--enable-introspection=no
-+EVINCE_LICENSE = GPLv2+
-+EVINCE_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+EVINCE_CONF_OPTS += --enable-dbus
-+EVINCE_DEPENDENCIES += dbus
-+else
-+EVINCE_CONF_OPTS += --disable-dbus
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GSTREAMER1)$(BR2_PACKAGE_GST1_PLUGINS_BASE),yy)
-+EVINCE_CONF_OPTS += --enable-multimedia
-+EVINCE_DEPENDENCIES += gstreamer1 gst1-plugins-base
-+else
-+EVINCE_CONF_OPTS += --disable-multimedia
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSECRET),y)
-+EVINCE_CONF_OPTS += --with-keyring
-+EVINCE_DEPENDENCIES += libsecret
-+else
-+EVINCE_CONF_OPTS += --without-keyring
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TIFF),y)
-+EVINCE_CONF_OPTS += --enable-tiff
-+EVINCE_DEPENDENCIES += tiff
-+else
-+EVINCE_CONF_OPTS += --disable-tiff
-+endif
-+
-+ifeq ($(BR2_PACKAGE_POPPLER),y)
-+EVINCE_CONF_OPTS += --enable-pdf
-+EVINCE_DEPENDENCIES += poppler
-+else
-+EVINCE_CONF_OPTS += --disable-pdf
-+endif
++LIBITE_VERSION = v1.8.2
++LIBITE_SITE = $(call github,troglobit,libite,$(LIBITE_VERSION))
++LIBITE_LICENSE = MIT X11 ISC BSD
++LIBITE_LICENSE_FILES = LICENSE
++LIBITE_INSTALL_STAGING = YES
++LIBITE_AUTORECONF = YES
 +
 +$(eval $(autotools-package))
 -- 
-2.7.3
+2.9.3
