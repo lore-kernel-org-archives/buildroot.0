@@ -1,76 +1,33 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 13 Oct 2016 18:04:18 +0200
-Subject: [Buildroot] [PATCH v3 2/2] package/mono: bump to version 4.6.0.245
-In-Reply-To: <1476374658-32604-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1476374658-32604-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1476374658-32604-2-git-send-email-angelo.compagnucci@gmail.com>
+From: daggs <daggs@gmx.com>
+Date: Thu, 13 Oct 2016 19:37:52 +0200
+Subject: [Buildroot] minimal config for new xorg ddx driver testing
+In-Reply-To: <87shs0n6ba.fsf@dell.be.48ers.dk>
+References: <trinity-1074a4b4-83fd-4178-8f51-e9f3af810bd7-1476273824865@3capp-mailcom-bs01>,
+ <87shs0n6ba.fsf@dell.be.48ers.dk>
+Message-ID: <trinity-eefaf43a-2986-4224-bca9-05be1b31537e-1476380271995@3capp-mailcom-bs13>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Bump to mono 4.6.0.245
-* Enabling previously disabled aot cause this version doesn't
-  compile without
-* Fixing removed licensing file in mcs/COPYING.LIB
+Greetings,
+>
+> >>>>> "daggs" == daggs  <daggs@gmx.com> writes:
+> 
+>  > Greetings,
+>  > I'm trying to test a new xorg ddx driver, problem is that I'm unable
+>  > to start X properly. I never start by itself and I seem to always miss
+>  > some cli params.
+>  > is there any place were can I find a minimal config I can use that surely start an X based DE or something?
+> 
+> You can take a look at minnowboard_max-graphical_defconfig, as that one
+> boots up into a X11 environment.
+> 
+thanks, it was really helpful.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
-Changelog:
+Dagg.
 
-Fixed license and license files as suggested by Peter
-
- package/mono/mono.hash |  2 +-
- package/mono/mono.mk   | 12 ++++++------
- 2 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index c275e15..4d05458 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 900c2cc25ee55adeec04e1ae889316efc127c82cc0c392f928421f19f8f5b633  mono-4.4.2.11.tar.bz2
-+sha256 2981f518cace63bfe10953fecd57c7fef040077a1ac617967dde5466062c1327  mono-4.6.0.245.tar.bz2
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index 3d0b9bc..2d9dc8d 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--MONO_VERSION = 4.4.2.11
-+MONO_VERSION = 4.6.0.245
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
--MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
--MONO_LICENSE_FILES = LICENSE COPYING.LIB mcs/COPYING.LIB mcs/COPYING \
--	eglib/COPYING external/Newtonsoft.Json/Tools/7-zip/copying.txt
-+MONO_LICENSE = GPLv2 or MIT (compiler, tools), MIT (libs) or commercia
-+MONO_LICENSE_FILES = LICENSE mcs/COPYING eglib/COPYING \
-+	external/Newtonsoft.Json/Tools/7-zip/copying.txt
- MONO_INSTALL_STAGING = YES
- 
- ## Mono native
-@@ -22,7 +22,7 @@ MONO_CONF_OPTS = --disable-gtk-doc \
- 	--with-mcs-docs=no \
- 	--with-moonlight=no \
- 	--with-ikvm-native=no \
--	--enable-minimal=aot,profiler,debug \
-+	--enable-minimal=profiler,debug \
- 	--disable-mcs-build \
- 	--enable-static
- 
-@@ -49,7 +49,7 @@ HOST_MONO_CONF_OPTS = --disable-gtk-doc \
- 	--with-moonlight=no \
- 	--disable-libraries \
- 	--with-ikvm-native=no \
--	--enable-minimal=aot,profiler,debug \
-+	--enable-minimal=profiler,debug \
- 	--enable-static
- 
- # ensure monolite is used
--- 
-2.7.4
+> -- 
+> Bye, Peter Korsgaard
+> 
