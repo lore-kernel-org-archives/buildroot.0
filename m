@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Thu, 13 Oct 2016 19:13:25 -0300
-Subject: [Buildroot] [PATCH 18/51] ncurses: use $(TARGET_MAKE_ENV) when
+Date: Thu, 13 Oct 2016 19:13:26 -0300
+Subject: [Buildroot] [PATCH 19/51] smstools3: use $(TARGET_MAKE_ENV) when
 	calling $(MAKE)
 In-Reply-To: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476396838-12276-19-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476396838-12276-20-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +15,21 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/ncurses/ncurses.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/smstools3/smstools3.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 2764824..9555f1e 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -127,9 +127,9 @@ endif
- # ncurses breaks with parallel build, but takes quite a while to
- # build single threaded. Work around it similar to how Gentoo does
- define NCURSES_BUILD_CMDS
--	$(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) sources
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) sources
- 	rm -rf $(@D)/misc/pc-files
--	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR)
+diff --git a/package/smstools3/smstools3.mk b/package/smstools3/smstools3.mk
+index a1684de..52f9b31 100644
+--- a/package/smstools3/smstools3.mk
++++ b/package/smstools3/smstools3.mk
+@@ -14,7 +14,7 @@ SMSTOOLS3_CFLAGS += -D NUMBER_OF_MODEMS=$(BR2_PACKAGE_SMSTOOLS3_NB_MODEMS)
+ SMSTOOLS3_CFLAGS += -D NOSTATS
+ 
+ define SMSTOOLS3_BUILD_CMDS
+-	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(SMSTOOLS3_CFLAGS)" -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(SMSTOOLS3_CFLAGS)" -C $(@D)
  endef
  
- ifneq ($(BR2_STATIC_LIBS),y)
+ define SMSTOOLS3_INSTALL_INIT_SYSV
 -- 
 2.7.3
