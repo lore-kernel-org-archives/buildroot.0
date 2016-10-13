@@ -1,56 +1,41 @@
-From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-Date: Thu, 13 Oct 2016 10:50:59 -0500
-Subject: [Buildroot] [PATCH 1/1] support/download: Add git download method
-	for SHAs
-Message-ID: <1476373859-51202-1-git-send-email-bryce.ferguson@rockwellcollins.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu, 13 Oct 2016 18:04:17 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/monolite: bump to version 149
+Message-ID: <1476374658-32604-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Brandon Maier <brandon.maier@rockwellcollins.com>
+This patch bumps monolite to version 149
 
-Shallow clones don't work for downloading SHAs. However it's common to
-track a tag or branch by the commit SHA so that a branch or tag doesn't
-unexpectedly change.
-
-We can take advantage of this scenario by searching the remote for a ref
-that it equivalent to our sha, then shallow cloning that ref instead.
-
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- support/download/git | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ package/monolite/monolite.hash | 2 +-
+ package/monolite/monolite.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/download/git b/support/download/git
-index 281db61..1c6548d 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -55,6 +55,23 @@ if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
-     fi
- fi
- if [ ${git_done} -eq 0 ]; then
-+    # See if $cset is a sha that maps to a branch, then shallow clone that branch
-+    equivalent_ref="$(_git ls-remote --heads --tags "'${repo}'" | awk "/^${cset}/{ print \$2; exit }" | sed 's,refs/\(tags\|heads\)/,,')"
-+    if [ -n "$equivalent_ref" ]; then
-+        printf "Doing shallow clone with cset '%s' as '%s'\n" "$cset" "$equivalent_ref"
-+        if _git clone ${verbose} "${@}" --depth 1 -b "'${equivalent_ref}'" "'${repo}'" "'${basename}'"; then
-+            if (cd "${basename}" && _git show "'${cset}'" >/dev/null 2>&1); then
-+                git_done=1
-+            else
-+                rm -rf "${basename}"
-+                printf "Shallow clone failed, checked out wrong revision, falling back to doing a full clone\n"
-+            fi
-+        else
-+            printf "Shallow clone failed, falling back to doing a full clone\n"
-+        fi
-+    fi
-+fi
-+if [ ${git_done} -eq 0 ]; then
-     printf "Doing full clone\n"
-     _git clone ${verbose} "${@}" "'${repo}'" "'${basename}'"
- fi
+diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
+index 44ec39a..621e5e4 100644
+--- a/package/monolite/monolite.hash
++++ b/package/monolite/monolite.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 885270da1b64670bffec9c8df1272ab88ff0b96186d2ebb61bdfa47a5586f987  monolite-140-latest.tar.gz
++sha256 c01e9ba37d8d8f9ef68e08170b2582cc710a8a77756e2412dff298a39b3c4d2b  monolite-149-latest.tar.gz
+diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
+index 91c01d7..d50d9f2 100644
+--- a/package/monolite/monolite.mk
++++ b/package/monolite/monolite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONOLITE_VERSION = 140
++MONOLITE_VERSION = 149
+ MONOLITE_SITE = http://download.mono-project.com/monolite/
+ MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
+ MONOLITE_LICENSE = LGPLv2 or commercial
 -- 
-1.9.1
+2.7.4
