@@ -1,115 +1,58 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Oct 2016 22:13:57 -0300
-Subject: [Buildroot] [PATCH 6/8] python-libxml2: new host package
+Date: Wed, 12 Oct 2016 22:13:58 -0300
+Subject: [Buildroot] [PATCH 7/8] itstool: new host package
 In-Reply-To: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1476321239-13894-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1476321239-13894-7-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a new python-libxml2 package to build the libxml2 python bindings.
+ITS Tool allows you to translate your XML documents with PO files, using
+rules from the W3C Internationalization Tag Set (ITS) to determine what
+to translate and how to separate it into PO file messages.
 
-This is required for host-itstool which in turn is required to build
-evince.
+This is required by the upcoming evince package.
 
-Unfortunately since we can't detect host-python/host-python3 presence to
-enable it in the libxml2 package itself and leaving it to automatic
-would be problematic just make a separate package for it like
-mesa3d-headers to handle it deterministically.
+A target-variant package doesn't make much sense so leave it out.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../0001-setup.py-tweak-includes_dir.patch         | 40 ++++++++++++++++++++++
- package/python-libxml2/python-libxml2.hash         |  1 +
- package/python-libxml2/python-libxml2.mk           | 21 ++++++++++++
- 3 files changed, 62 insertions(+)
- create mode 100644 package/python-libxml2/0001-setup.py-tweak-includes_dir.patch
- create mode 120000 package/python-libxml2/python-libxml2.hash
- create mode 100644 package/python-libxml2/python-libxml2.mk
+ package/itstool/itstool.hash |  2 ++
+ package/itstool/itstool.mk   | 14 ++++++++++++++
+ 2 files changed, 16 insertions(+)
+ create mode 100644 package/itstool/itstool.hash
+ create mode 100644 package/itstool/itstool.mk
 
-diff --git a/package/python-libxml2/0001-setup.py-tweak-includes_dir.patch b/package/python-libxml2/0001-setup.py-tweak-includes_dir.patch
+diff --git a/package/itstool/itstool.hash b/package/itstool/itstool.hash
 new file mode 100644
-index 0000000..85ca829
+index 0000000..f266b93
 --- /dev/null
-+++ b/package/python-libxml2/0001-setup.py-tweak-includes_dir.patch
-@@ -0,0 +1,40 @@
-+From b29e99d93cf8103f64c62bd9a4394e39df549c29 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Mon, 10 Oct 2016 19:58:35 -0300
-+Subject: [PATCH] setup.py: tweak includes_dir
-+
-+Add a preprocessor variable @@INCLUDEDIR@@ so that the package makefile
-+can replace it with the host include directory. And keep the absolute
-+/usr/include directory as well for the iconv headers.
-+
-+This is completely unsuitable for target-variant package, but then that
-+can be handled in the libxml2 package proper if anyone wants target
-+libxml2 python bindings.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ python/setup.py | 8 +-------
-+ 1 file changed, 1 insertion(+), 7 deletions(-)
-+
-+diff --git a/python/setup.py b/python/setup.py
-+index c44269a..fd08c5c 100755
-+--- a/python/setup.py
-++++ b/python/setup.py
-+@@ -55,13 +55,7 @@ else:
-+ # - libxml2/libxml/tree.h
-+ # - iconv.h
-+ # - libxslt/xsltconfig.h
-+-includes_dir = [
-+-"/usr/include",
-+-"/usr/local/include",
-+-"/opt/include",
-+-os.path.join(ROOT,'include'),
-+-HOME
-+-];
-++includes_dir = [ "@@INCLUDEDIR@@", "/usr/include" ];
-+ 
-+ xml_includes=""
-+ for dir in includes_dir:
-+-- 
-+2.7.3
-+
-diff --git a/package/python-libxml2/python-libxml2.hash b/package/python-libxml2/python-libxml2.hash
-new file mode 120000
-index 0000000..d3ce9f8
---- /dev/null
-+++ b/package/python-libxml2/python-libxml2.hash
-@@ -0,0 +1 @@
-+../libxml2/libxml2.hash
-\ No newline at end of file
-diff --git a/package/python-libxml2/python-libxml2.mk b/package/python-libxml2/python-libxml2.mk
++++ b/package/itstool/itstool.hash
+@@ -0,0 +1,2 @@
++# From http://files.itstool.org/itstool/itstool-2.0.2.tar.bz2.sha256sum
++sha256	bf909fb59b11a646681a8534d5700fec99be83bb2c57badf8c1844512227033a	itstool-2.0.2.tar.bz2
+diff --git a/package/itstool/itstool.mk b/package/itstool/itstool.mk
 new file mode 100644
-index 0000000..631468b
+index 0000000..b8a282a
 --- /dev/null
-+++ b/package/python-libxml2/python-libxml2.mk
-@@ -0,0 +1,21 @@
++++ b/package/itstool/itstool.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-libxml2
++# itstool
 +#
 +################################################################################
 +
-+PYTHON_LIBXML2_VERSION = 2.9.4
-+PYTHON_LIBXML2_SOURCE = libxml2-$(PYTHON_LIBXML2_VERSION).tar.gz
-+PYTHON_LIBXML2_SITE = ftp://xmlsoft.org/libxml2
-+PYTHON_LIBXML2_LICENSE = MIT
-+PYTHON_LIBXML2_LICENSE_FILES = COPYING
-+PYTHON_LIBXML2_SETUP_TYPE = setuptools
-+PYTHON_LIBXML2_SUBDIR = python
-+HOST_PYTHON_LIBXML2_DEPENDENCIES = host-libxml2
++ITSTOOL_VERSION = 2.0.2
++ITSTOOL_SITE = http://files.itstool.org/itstool
++ITSTOOL_SOURCE = itstool-$(ITSTOOL_VERSION).tar.bz2
++HOST_ITSTOOL_DEPENDENCIES = host-python-libxml2 host-python
++ITSTOOL_LICENSE = GPLv3+
++ITSTOOL_LICENSE_FILES = COPYING COPYING.GPL3
 +
-+define PYTHON_LIBXML2_SET_HOST_DIR
-+	$(SED) "s,@@INCLUDEDIR@@,$(HOST_DIR)/usr/include," $(@D)/python/setup.py
-+endef
-+HOST_PYTHON_LIBXML2_PRE_CONFIGURE_HOOKS += PYTHON_LIBXML2_SET_HOST_DIR
-+
-+$(eval $(host-python-package))
++$(eval $(host-autotools-package))
 -- 
 2.7.3
