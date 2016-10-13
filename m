@@ -1,48 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Oct 2016 08:05:13 +0200
-Subject: [Buildroot] [git commit] imagemagick: security bump to version
-	7.0.3-3
-Message-ID: <20161013060802.4B69B82269@busybox.osuosl.org>
+Date: Thu, 13 Oct 2016 08:06:42 +0200
+Subject: [Buildroot] [git commit] mxml: bump to version 2.10
+Message-ID: <20161013060802.784FF822B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=618fa6da21e65291c131b05ed9e44acc3ab598ef
+commit: https://git.buildroot.net/buildroot/commit/?id=0dcdf20683a3c8adf7774e7ad6409c00179578cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-memory allocate failure in AcquireQuantumPixels (quantum.c)
-heap-based buffer overflow in IsPixelMonochrome (pixel-accessor.h)
-
-No CVEs assigned yet.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mxml/mxml.hash | 4 ++--
+ package/mxml/mxml.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index dcbef18..fa43d58 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 22df4f197985f36f77b7b0d44de92ff44415885045f0191b3319540bdc82ff53 ImageMagick-7.0.2-9.tar.xz
-+sha256 6ed0b059c9a108a631e0febcf9a9338342e25df4bbc9a9531ffe36d66031b0d8 ImageMagick-7.0.3-3.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 373765c..39d79d8 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
+diff --git a/package/mxml/mxml.hash b/package/mxml/mxml.hash
+index 310e2ca..9039275 100644
+--- a/package/mxml/mxml.hash
++++ b/package/mxml/mxml.hash
+@@ -1,4 +1,4 @@
+ # From http://www.msweet.org/downloads.php?L+Z3
+-md5 e21cad0f7aacd18f942aa0568a8dee19 mxml-2.9.tar.gz
++md5 8804c961a24500a95690ef287d150abe mxml-2.10.tar.gz
+ # Locally computed
+-sha256 cded54653c584b24c4a78a7fa1b3b4377d49ac4f451ddf170ebbc8161d85ff92 mxml-2.9.tar.gz
++sha256 267ff58b64ddc767170d71dab0c729c06f45e1df9a9b6f75180b564f09767891 mxml-2.10.tar.gz
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+index 7e9b4d6..f36c75c 100644
+--- a/package/mxml/mxml.mk
++++ b/package/mxml/mxml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.0.2-9
-+IMAGEMAGICK_VERSION = 7.0.3-3
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+-MXML_VERSION = 2.9
++MXML_VERSION = 2.10
+ MXML_SITE = http://www.msweet.org/files/project3
+ MXML_LICENSE = LGPLv2+ with exceptions
+ MXML_LICENSE_FILES = COPYING
