@@ -1,41 +1,33 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Oct 2016 22:13:52 -0300
-Subject: [Buildroot] [PATCH 1/8] gsettings-desktop-schemas: bump to version
-	3.22.0
-Message-ID: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 12 Oct 2016 22:13:53 -0300
+Subject: [Buildroot] [PATCH 2/8] adwaita-icon-theme: install to staging
+In-Reply-To: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1476321239-13894-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This is required for the upcoming evince package.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash | 4 ++--
- package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/adwaita-icon-theme/adwaita-icon-theme.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-index 7fed553..05ec7a4 100644
---- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-+++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/gsettings-desktop-schemas/3.20/gsettings-desktop-schemas-3.20.0.sha256sum
--sha256	55a41b533c0ab955e0a36a84d73829451c88b027d8d719955d8f695c35c6d9c1	gsettings-desktop-schemas-3.20.0.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/gsettings-desktop-schemas/3.22/gsettings-desktop-schemas-3.22.0.sha256sum
-+sha256	0f06c7ba34c3a99e4d58b10889496133c9aaad6698ea2d8405d481c7f1a7eae1	gsettings-desktop-schemas-3.22.0.tar.xz
-diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
-index 04ad2e0..7fa6181 100644
---- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
-+++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR = 3.20
-+GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR = 3.22
- GSETTINGS_DESKTOP_SCHEMAS_VERSION = $(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR).0
- GSETTINGS_DESKTOP_SCHEMAS_SOURCE = gsettings-desktop-schemas-$(GSETTINGS_DESKTOP_SCHEMAS_VERSION).tar.xz
- GSETTINGS_DESKTOP_SCHEMAS_SITE = http://ftp.gnome.org/pub/gnome/sources/gsettings-desktop-schemas/$(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR)
+diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.mk b/package/adwaita-icon-theme/adwaita-icon-theme.mk
+index b9ec0c0..fdf66c8 100644
+--- a/package/adwaita-icon-theme/adwaita-icon-theme.mk
++++ b/package/adwaita-icon-theme/adwaita-icon-theme.mk
+@@ -8,6 +8,7 @@ ADWAITA_ICON_THEME_VERSION_MAJOR = 3.22
+ ADWAITA_ICON_THEME_VERSION = $(ADWAITA_ICON_THEME_VERSION_MAJOR).0
+ ADWAITA_ICON_THEME_SITE = http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION_MAJOR)
+ ADWAITA_ICON_THEME_SOURCE = adwaita-icon-theme-$(ADWAITA_ICON_THEME_VERSION).tar.xz
++ADWAITA_ICON_THEME_INSTALL_STAGING = YES
+ ADWAITA_ICON_THEME_LICENSE = LGPLv3 or CC-BY-SA-3.0
+ ADWAITA_ICON_THEME_LICENSE_FILES = COPYING COPYING_LGPL COPYING_CCBYSA3
+ ADWAITA_ICON_THEME_DEPENDENCIES = host-intltool host-libgtk3
 -- 
 2.7.3
