@@ -1,79 +1,36 @@
-From: Dagg Stompler <daggs@gmx.com>
-Date: Thu, 13 Oct 2016 20:41:24 +0300
-Subject: [Buildroot] [PATCH 2/2] odroid-mali: add support for X11 driver
-In-Reply-To: <20161013174124.9639-1-daggs@gmx.com>
-References: <20161013174124.9639-1-daggs@gmx.com>
-Message-ID: <20161013174124.9639-2-daggs@gmx.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Thu, 13 Oct 2016 20:27:46 +0200
+Subject: [Buildroot] [PATCH 1/1] fwts: needs host-bison and host-flex
+Message-ID: <1476383266-30963-1-git-send-email-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-as the X11 odroidc2 driver requires special mali opengl	implmentation,
-use the mentoned above mali version if driver is selected.
+Fixes:
+http://autobuild.buildroot.net/results/2e6bc77e89868d7a9902123ffb602c5b745d4580
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
+Tested in a minimal debian environment, there should be no missing host
+package dependencies after these.
+
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 ---
- package/odroid-mali/Config.in      |  2 ++
- package/odroid-mali/odroid-mali.mk | 19 +++++++++++++++++--
- 2 files changed, 19 insertions(+), 2 deletions(-)
+ package/fwts/fwts.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
-index 2cd8e0d..edda615 100644
---- a/package/odroid-mali/Config.in
-+++ b/package/odroid-mali/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_ODROID_MALI
- 	select BR2_PACKAGE_ODROID_SCRIPTS # runtime
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_aarch64 || BR2_ARM_EABIHF
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XDRIVER_XF86_VIDEO_ODROIDC2
-+	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_XDRIVER_XF86_VIDEO_ODROIDC2
- 	help
- 	  Install the ARM Mali drivers for odroidc2 based systems.
+diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
+index c63e2c5..7ec1d5e 100644
+--- a/package/fwts/fwts.mk
++++ b/package/fwts/fwts.mk
+@@ -10,7 +10,7 @@ FWTS_STRIP_COMPONENTS = 0
+ FWTS_LICENSE = GPLv2, LGPLv2.1, Custom
+ FWTS_LICENSE_FILES = debian/copyright
+ FWTS_AUTORECONF = YES
+-FWTS_DEPENDENCIES = host-pkgconf json-c libglib2 \
++FWTS_DEPENDENCIES = host-bison host-flex host-pkgconf json-c libglib2 \
+ 	$(if $(BR2_PACKAGE_DTC),dtc)
  
-diff --git a/package/odroid-mali/odroid-mali.mk b/package/odroid-mali/odroid-mali.mk
-index 7b8e511..3649bbc 100644
---- a/package/odroid-mali/odroid-mali.mk
-+++ b/package/odroid-mali/odroid-mali.mk
-@@ -12,21 +12,36 @@ ODROID_MALI_LICENSE_FILES = README.md
- ODROID_MALI_INSTALL_STAGING = YES
- ODROID_MALI_PROVIDES = libegl libgles
- 
-+ifeq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_ODROIDC2),y)
-+ODROID_MALI_INSTALL_FOLDER = x11
-+ODROID_MALI_INSTALL_ARCH = mali_libs
-+else
-+ODROID_MALI_INSTALL_FOLDER = fbdev
- ifeq ($(BR2_aarch64),y)
- ODROID_MALI_INSTALL_ARCH = mali_libs
- else
- ODROID_MALI_INSTALL_ARCH = 32bit_libs
- endif
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBDRM),y)
-+ODROID_MALI_DEPENDENCIES += libdrm
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXDAMAGE),y)
-+ODROID_MALI_DEPENDENCIES += xlib_libXdamage
-+endif
-+
- 
- define ODROID_MALI_INSTALL_LIBS
--	cp -dpfr $(@D)/fbdev/$(ODROID_MALI_INSTALL_ARCH)/lib* $(1)/usr/lib/
-+	cp -dpfr $(@D)/$(ODROID_MALI_INSTALL_FOLDER)/$(ODROID_MALI_INSTALL_ARCH)/lib* $(1)/usr/lib/
- endef
- 
- define ODROID_MALI_INSTALL_STAGING_CMDS
- 	$(call ODROID_MALI_INSTALL_LIBS,$(STAGING_DIR))
- 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
- 	cp -dpfr $(@D)/pkgconfig/*.pc $(STAGING_DIR)/usr/lib/pkgconfig/
--	cp -dpfr $(@D)/fbdev/mali_headers/* $(STAGING_DIR)/usr/include
-+	cp -dpfr $(@D)/$(ODROID_MALI_INSTALL_FOLDER)/mali_headers/* $(STAGING_DIR)/usr/include
- endef
- 
- define ODROID_MALI_INSTALL_TARGET_CMDS
+ $(eval $(autotools-package))
 -- 
-2.10.1
+2.7.4
