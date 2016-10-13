@@ -1,7 +1,8 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Oct 2016 22:07:23 -0300
-Subject: [Buildroot] [PATCH] libgpgme: bump to version 1.7.0
-Message-ID: <1476320843-13384-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 12 Oct 2016 22:13:52 -0300
+Subject: [Buildroot] [PATCH 1/8] gsettings-desktop-schemas: bump to version
+	3.22.0
+Message-ID: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +11,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libgpgme/libgpgme.hash | 2 +-
- package/libgpgme/libgpgme.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash | 4 ++--
+ package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
-index a7efbf6..9b96fd2 100644
---- a/package/libgpgme/libgpgme.hash
-+++ b/package/libgpgme/libgpgme.hash
+diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
+index 7fed553..05ec7a4 100644
+--- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
++++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	0b3d3d5107680c594777aae65882a1ff6dd1ba629a83432e719c8b82a743c207	gpgme-1.5.5.tar.bz2
-+sha256	71f55fed0f2b3eaf7a606e59772aa645ce3ffff322d361ce359951b3f755cc48	gpgme-1.7.0.tar.bz2
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index 574ddd6..7e86daf 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
+-# From http://ftp.acc.umu.se/pub/gnome/sources/gsettings-desktop-schemas/3.20/gsettings-desktop-schemas-3.20.0.sha256sum
+-sha256	55a41b533c0ab955e0a36a84d73829451c88b027d8d719955d8f695c35c6d9c1	gsettings-desktop-schemas-3.20.0.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/gsettings-desktop-schemas/3.22/gsettings-desktop-schemas-3.22.0.sha256sum
++sha256	0f06c7ba34c3a99e4d58b10889496133c9aaad6698ea2d8405d481c7f1a7eae1	gsettings-desktop-schemas-3.22.0.tar.xz
+diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
+index 04ad2e0..7fa6181 100644
+--- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
++++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGPGME_VERSION = 1.5.5
-+LIBGPGME_VERSION = 1.7.0
- LIBGPGME_SITE = ftp://ftp.gnupg.org/gcrypt/gpgme
- LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
- LIBGPGME_LICENSE = LGPLv2.1+
+-GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR = 3.20
++GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR = 3.22
+ GSETTINGS_DESKTOP_SCHEMAS_VERSION = $(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR).0
+ GSETTINGS_DESKTOP_SCHEMAS_SOURCE = gsettings-desktop-schemas-$(GSETTINGS_DESKTOP_SCHEMAS_VERSION).tar.xz
+ GSETTINGS_DESKTOP_SCHEMAS_SITE = http://ftp.gnome.org/pub/gnome/sources/gsettings-desktop-schemas/$(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR)
 -- 
 2.7.3
