@@ -1,19 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Oct 2016 08:05:53 +0200
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.4.16
-In-Reply-To: <1476104628-17459-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 10 Oct 2016 10:03:48 -0300")
-References: <1476104628-17459-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87h98glr5q.fsf@dell.be.48ers.dk>
+Date: Thu, 13 Oct 2016 08:06:21 +0200
+Subject: [Buildroot] [PATCH] system: fix typo
+In-Reply-To: <20161010134559.27087-1-kraai@ftbfs.org> (Matt Kraai's message of
+ "Mon, 10 Oct 2016 06:45:59 -0700")
+References: <20161010134559.27087-1-kraai@ftbfs.org>
+Message-ID: <87d1j4lr4y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Matt" == Matt Kraai <kraai@ftbfs.org> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Matt Kraai <kraai@ftbfs.org>
 
 Committed, thanks.
 
