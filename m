@@ -1,33 +1,37 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Oct 2016 22:13:53 -0300
-Subject: [Buildroot] [PATCH 2/8] adwaita-icon-theme: install to staging
+Date: Wed, 12 Oct 2016 22:13:54 -0300
+Subject: [Buildroot] [PATCH 3/8] poppler: add explicit cairo support
 In-Reply-To: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1476321239-13894-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1476321239-13894-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is required for the upcoming evince package.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/adwaita-icon-theme/adwaita-icon-theme.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/poppler/poppler.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.mk b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-index b9ec0c0..fdf66c8 100644
---- a/package/adwaita-icon-theme/adwaita-icon-theme.mk
-+++ b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-@@ -8,6 +8,7 @@ ADWAITA_ICON_THEME_VERSION_MAJOR = 3.22
- ADWAITA_ICON_THEME_VERSION = $(ADWAITA_ICON_THEME_VERSION_MAJOR).0
- ADWAITA_ICON_THEME_SITE = http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION_MAJOR)
- ADWAITA_ICON_THEME_SOURCE = adwaita-icon-theme-$(ADWAITA_ICON_THEME_VERSION).tar.xz
-+ADWAITA_ICON_THEME_INSTALL_STAGING = YES
- ADWAITA_ICON_THEME_LICENSE = LGPLv3 or CC-BY-SA-3.0
- ADWAITA_ICON_THEME_LICENSE_FILES = COPYING COPYING_LGPL COPYING_CCBYSA3
- ADWAITA_ICON_THEME_DEPENDENCIES = host-intltool host-libgtk3
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index c6cd2eb..4632d8d 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -14,6 +14,13 @@ POPPLER_INSTALL_STAGING = YES
+ POPPLER_CONF_OPTS = --with-font-configuration=fontconfig \
+ 	--enable-xpdf-headers
+ 
++ifeq ($(BR2_PACKAGE_CAIRO),y)
++POPPLER_CONF_OPTS += --enable-cairo-output
++POPPLER_DEPENDENCIES += cairo
++else
++POPLER_CONF_OPTS += --disable-cairo-output
++endif
++
+ ifeq ($(BR2_PACKAGE_LCMS2),y)
+ POPPLER_CONF_OPTS += --enable-cms=lcms2
+ POPPLER_DEPENDENCIES += lcms2
 -- 
 2.7.3
