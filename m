@@ -1,9 +1,9 @@
 From: Ryan Coe <bluemrp9@gmail.com>
-Date: Wed, 12 Oct 2016 20:42:46 -0700
-Subject: [Buildroot] [PATCH 2/3] inadyn: do not install default conf file
+Date: Wed, 12 Oct 2016 20:42:47 -0700
+Subject: [Buildroot] [PATCH 3/3] inadyn: bump to version 2.0
 In-Reply-To: <20161013034247.21603-1-bluemrp9@gmail.com>
 References: <20161013034247.21603-1-bluemrp9@gmail.com>
-Message-ID: <20161013034247.21603-2-bluemrp9@gmail.com>
+Message-ID: <20161013034247.21603-3-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,74 +12,70 @@ To: buildroot@busybox.net
 
 Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
- package/inadyn/S70inadyn      |  4 ++--
- package/inadyn/inadyn.conf    | 11 -----------
- package/inadyn/inadyn.mk      |  6 ------
- package/inadyn/inadyn.service |  2 +-
- 4 files changed, 3 insertions(+), 20 deletions(-)
- delete mode 100644 package/inadyn/inadyn.conf
+ DEVELOPERS                 |  1 +
+ package/inadyn/Config.in   |  2 ++
+ package/inadyn/inadyn.hash |  4 ++--
+ package/inadyn/inadyn.mk   | 14 +++++++++++---
+ 4 files changed, 16 insertions(+), 5 deletions(-)
 
-diff --git a/package/inadyn/S70inadyn b/package/inadyn/S70inadyn
-index ca7b414..a66c3bd 100644
---- a/package/inadyn/S70inadyn
-+++ b/package/inadyn/S70inadyn
-@@ -5,8 +5,8 @@
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7a23c78..bd85c3b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1260,6 +1260,7 @@ F:	package/python-pysnmp-mibs/
+ F:	package/python-tornado/
  
- CONFIG=/etc/inadyn.conf
+ N:	Ryan Coe <bluemrp9@gmail.com>
++F:	package/inadyn/
+ F:	package/libite/
  
--# check if CONFIG exists, print message & exit if it doesn't
--[ ! -f $CONFIG ] && ( echo "The config file "$CONFIG" is missing...exiting now." && exit 2 )
-+# check if CONFIG exists, exit silently if it does not
-+[ ! -f $CONFIG ] && exit 1
- 
- # Allow a few customizations from a config file. Especially inadyn
- # must be explicitly enabled by adding ENABLED="yes" in this file.
-diff --git a/package/inadyn/inadyn.conf b/package/inadyn/inadyn.conf
-deleted file mode 100644
-index ab8aa36..0000000
---- a/package/inadyn/inadyn.conf
-+++ /dev/null
-@@ -1,11 +0,0 @@
--# Basic configuration file for inadyn
--#
--# /etc/inadyn.conf
--pidfile /var/run/inadyn.pid
--update_period_sec 600 # Check for a new IP every 600 seconds
--username test		# replace 'test' with your username
--password test		# replace 'test' with your password
--dyndns_system default at dyndns.org   # replace w/ your provider
--
--alias test.homeip.net
--# replace 'test.homeip.net' with yourdomainname for actual (non-test) use
+ N:	Ryan Wilkins <ryan@deadfrog.net>
+diff --git a/package/inadyn/Config.in b/package/inadyn/Config.in
+index 65f6851..55894ae 100644
+--- a/package/inadyn/Config.in
++++ b/package/inadyn/Config.in
+@@ -1,4 +1,6 @@
+ config BR2_PACKAGE_INADYN
++	select BR2_PACKAGE_LIBCONFUSE
++	select BR2_PACKAGE_LIBITE
+ 	bool "inadyn"
+ 	depends on BR2_USE_MMU # Uses fork()
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
+index 940bd16..a4e60c9 100644
+--- a/package/inadyn/inadyn.hash
++++ b/package/inadyn/inadyn.hash
+@@ -1,2 +1,2 @@
+-# From https://github.com/troglobit/inadyn/releases/download/1.99.12/inadyn-1.99.12.tar.xz.md5
+-md5	a620c9eab9cd31c8923e7264b08376f3	inadyn-1.99.12.tar.xz
++# Locally computed
++sha256	763c53eb3856decfe8b921cab8a54b428b079a62264fbcf6c89690713d63529a  inadyn-v2.0.tar.gz
 diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 8ceca4c..cf071da 100644
+index cf071da..4885831 100644
 --- a/package/inadyn/inadyn.mk
 +++ b/package/inadyn/inadyn.mk
-@@ -19,12 +19,6 @@ else
- INADYN_CONF_OPTS += --disable-ssl
- endif
+@@ -4,11 +4,19 @@
+ #
+ ################################################################################
  
--define INADYN_INSTALL_SAMPLE_CONFIG
--	$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
--		$(TARGET_DIR)/etc/inadyn.conf
--endef
--INADYN_POST_INSTALL_TARGET_HOOKS += INADYN_INSTALL_SAMPLE_CONFIG
--
- define INADYN_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/inadyn/S70inadyn \
- 		$(TARGET_DIR)/etc/init.d/S70inadyn
-diff --git a/package/inadyn/inadyn.service b/package/inadyn/inadyn.service
-index abc0a1e..199ad62 100644
---- a/package/inadyn/inadyn.service
-+++ b/package/inadyn/inadyn.service
-@@ -3,7 +3,7 @@ Description=DDNS client
- After=syslog.target network.target
+-INADYN_VERSION = 1.99.12
+-INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/$(INADYN_VERSION)
+-INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.xz
++INADYN_VERSION = v2.0
++INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
+ INADYN_LICENSE = GPLv2+
+ INADYN_LICENSE_FILES = COPYING
++INADYN_AUTORECONF = YES
++
++# Needed for autoreconf to work properly, see ./autogen.sh
++define INADYN_FIXUP_M4_DIR
++	mkdir $(@D)/m4
++endef
++INADYN_POST_EXTRACT_HOOKS += INADYN_FIXUP_M4_DIR
++
++INADYN_DEPENDENCIES += host-pkgconf libconfuse libite
  
- [Service]
--ExecStart=/usr/bin/inadyn
-+ExecStart=test -f /etc/inadyn.conf && /usr/bin/inadyn
- Restart=always
- 
- [Install]
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ INADYN_CONF_OPTS += --enable-openssl
 -- 
 2.9.3
