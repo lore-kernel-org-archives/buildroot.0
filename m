@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Thu, 13 Oct 2016 19:13:27 -0300
-Subject: [Buildroot] [PATCH 20/51] rtmpdump: use $(TARGET_MAKE_ENV) when
+Date: Thu, 13 Oct 2016 19:13:28 -0300
+Subject: [Buildroot] [PATCH 21/51] iputils: use $(TARGET_MAKE_ENV) when
 	calling $(MAKE)
 In-Reply-To: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476396838-12276-21-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476396838-12276-22-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,35 +15,21 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/rtmpdump/rtmpdump.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/iputils/iputils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index ad4308c..2e3428f 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
-@@ -38,7 +38,7 @@ RTMPDUMP_MAKE_FLAGS = \
- 	$(RTMPDUMP_SHARED)
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 0a89120..21f5dcb 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -62,7 +62,7 @@ IPUTILS_MAKE_OPTS += USE_CRYPTO=no
+ endif
  
- define RTMPDUMP_BUILD_CMDS
--	$(MAKE) $(RTMPDUMP_MAKE_FLAGS) \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(RTMPDUMP_MAKE_FLAGS) \
- 		XCFLAGS="$(RTMPDUMP_CFLAGS)" \
- 		XLDFLAGS="$(TARGET_LDFLAGS)" \
- 		CROSS_COMPILE="$(TARGET_CROSS)" \
-@@ -46,11 +46,11 @@ define RTMPDUMP_BUILD_CMDS
+ define IPUTILS_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(IPUTILS_MAKE_OPTS)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(IPUTILS_MAKE_OPTS)
  endef
  
- define RTMPDUMP_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D)/librtmp install DESTDIR=$(STAGING_DIR) $(RTMPDUMP_MAKE_FLAGS)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/librtmp install DESTDIR=$(STAGING_DIR) $(RTMPDUMP_MAKE_FLAGS)
- endef
- 
- define RTMPDUMP_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D)/librtmp install DESTDIR=$(TARGET_DIR) $(RTMPDUMP_MAKE_FLAGS)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/librtmp install DESTDIR=$(TARGET_DIR) $(RTMPDUMP_MAKE_FLAGS)
- endef
- 
- $(eval $(generic-package))
+ define IPUTILS_INSTALL_TARGET_CMDS
 -- 
 2.7.3
