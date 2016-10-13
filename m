@@ -1,7 +1,9 @@
 From: Ryan Coe <bluemrp9@gmail.com>
-Date: Wed, 12 Oct 2016 20:42:45 -0700
-Subject: [Buildroot] [PATCH 1/3] libite: new package
-Message-ID: <20161013034247.21603-1-bluemrp9@gmail.com>
+Date: Wed, 12 Oct 2016 20:42:46 -0700
+Subject: [Buildroot] [PATCH 2/3] inadyn: do not install default conf file
+In-Reply-To: <20161013034247.21603-1-bluemrp9@gmail.com>
+References: <20161013034247.21603-1-bluemrp9@gmail.com>
+Message-ID: <20161013034247.21603-2-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,90 +12,74 @@ To: buildroot@busybox.net
 
 Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
- DEVELOPERS                 |  3 +++
- package/Config.in          |  1 +
- package/libite/Config.in   | 15 +++++++++++++++
- package/libite/libite.hash |  2 ++
- package/libite/libite.mk   | 14 ++++++++++++++
- 5 files changed, 35 insertions(+)
- create mode 100644 package/libite/Config.in
- create mode 100644 package/libite/libite.hash
- create mode 100644 package/libite/libite.mk
+ package/inadyn/S70inadyn      |  4 ++--
+ package/inadyn/inadyn.conf    | 11 -----------
+ package/inadyn/inadyn.mk      |  6 ------
+ package/inadyn/inadyn.service |  2 +-
+ 4 files changed, 3 insertions(+), 20 deletions(-)
+ delete mode 100644 package/inadyn/inadyn.conf
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0ae3150..7a23c78 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1259,6 +1259,9 @@ F:	package/python-pysnmp-apps/
- F:	package/python-pysnmp-mibs/
- F:	package/python-tornado/
+diff --git a/package/inadyn/S70inadyn b/package/inadyn/S70inadyn
+index ca7b414..a66c3bd 100644
+--- a/package/inadyn/S70inadyn
++++ b/package/inadyn/S70inadyn
+@@ -5,8 +5,8 @@
  
-+N:	Ryan Coe <bluemrp9@gmail.com>
-+F:	package/libite/
-+
- N:	Ryan Wilkins <ryan@deadfrog.net>
- F:	package/biosdevname/
+ CONFIG=/etc/inadyn.conf
  
-diff --git a/package/Config.in b/package/Config.in
-index 60184ce..4c3f588 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1310,6 +1310,7 @@ menu "Other"
- 	source "package/libgee/Config.in"
- 	source "package/libglib2/Config.in"
- 	source "package/libical/Config.in"
-+	source "package/libite/Config.in"
- 	source "package/liblinear/Config.in"
- 	source "package/libnspr/Config.in"
- 	source "package/libpfm4/Config.in"
-diff --git a/package/libite/Config.in b/package/libite/Config.in
-new file mode 100644
-index 0000000..78ac22f
---- /dev/null
-+++ b/package/libite/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_LIBITE
-+	bool "libite"
-+	help
-+	  Libite is a lightweight library of frog DNA. It can be used to fill
-+	  the gaps in any dinosaur project. It holds useful functions and
-+	  macros developed by both Finit and the OpenBSD project. Most notably
-+	  the string functions: strlcpy(3), strlcat(3) and the highly useful
-+	  *BSD sys/queue.h and sys/tree.h API's.
-+
-+	  Libite is the frog DNA missing in GNU libc. However, -lite does not
-+	  aim to become another GLIB! One noticeable gap in GLIBC is the
-+	  missing _SAFE macros in the BSD sys/queue.h API - highly recommended
-+	  when traversing lists to delete/free nodes.
-+
-+	  https://github.com/troglobit/libite
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-new file mode 100644
-index 0000000..67ad009
---- /dev/null
-+++ b/package/libite/libite.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 b27e4af69e9e5b4d00924538d3a41b53752082cc439b9246edec5501aff2f22f libite-v1.8.2.tar.gz
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-new file mode 100644
-index 0000000..ff19aa2
---- /dev/null
-+++ b/package/libite/libite.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# libite
-+#
-+################################################################################
-+
-+LIBITE_VERSION = v1.8.2
-+LIBITE_SITE = $(call github,troglobit,libite,$(LIBITE_VERSION))
-+LIBITE_LICENSE = MIT X11 ISC BSD
-+LIBITE_LICENSE_FILES = LICENSE
-+LIBITE_INSTALL_STAGING = YES
-+LIBITE_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
+-# check if CONFIG exists, print message & exit if it doesn't
+-[ ! -f $CONFIG ] && ( echo "The config file "$CONFIG" is missing...exiting now." && exit 2 )
++# check if CONFIG exists, exit silently if it does not
++[ ! -f $CONFIG ] && exit 1
+ 
+ # Allow a few customizations from a config file. Especially inadyn
+ # must be explicitly enabled by adding ENABLED="yes" in this file.
+diff --git a/package/inadyn/inadyn.conf b/package/inadyn/inadyn.conf
+deleted file mode 100644
+index ab8aa36..0000000
+--- a/package/inadyn/inadyn.conf
++++ /dev/null
+@@ -1,11 +0,0 @@
+-# Basic configuration file for inadyn
+-#
+-# /etc/inadyn.conf
+-pidfile /var/run/inadyn.pid
+-update_period_sec 600 # Check for a new IP every 600 seconds
+-username test		# replace 'test' with your username
+-password test		# replace 'test' with your password
+-dyndns_system default at dyndns.org   # replace w/ your provider
+-
+-alias test.homeip.net
+-# replace 'test.homeip.net' with yourdomainname for actual (non-test) use
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 8ceca4c..cf071da 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -19,12 +19,6 @@ else
+ INADYN_CONF_OPTS += --disable-ssl
+ endif
+ 
+-define INADYN_INSTALL_SAMPLE_CONFIG
+-	$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
+-		$(TARGET_DIR)/etc/inadyn.conf
+-endef
+-INADYN_POST_INSTALL_TARGET_HOOKS += INADYN_INSTALL_SAMPLE_CONFIG
+-
+ define INADYN_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/inadyn/S70inadyn \
+ 		$(TARGET_DIR)/etc/init.d/S70inadyn
+diff --git a/package/inadyn/inadyn.service b/package/inadyn/inadyn.service
+index abc0a1e..199ad62 100644
+--- a/package/inadyn/inadyn.service
++++ b/package/inadyn/inadyn.service
+@@ -3,7 +3,7 @@ Description=DDNS client
+ After=syslog.target network.target
+ 
+ [Service]
+-ExecStart=/usr/bin/inadyn
++ExecStart=test -f /etc/inadyn.conf && /usr/bin/inadyn
+ Restart=always
+ 
+ [Install]
 -- 
 2.9.3
