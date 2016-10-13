@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Thu, 13 Oct 2016 19:13:37 -0300
-Subject: [Buildroot] [PATCH 30/51] bsdiff: use $(TARGET_MAKE_ENV) when
-	calling $(MAKE)
+Date: Thu, 13 Oct 2016 19:13:38 -0300
+Subject: [Buildroot] [PATCH 31/51] feh: use $(TARGET_MAKE_ENV) when calling
+	$(MAKE)
 In-Reply-To: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476396838-12276-31-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476396838-12276-32-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,23 +15,26 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/bsdiff/bsdiff.mk | 4 ++--
+ package/feh/feh.mk | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bsdiff/bsdiff.mk b/package/bsdiff/bsdiff.mk
-index 7d2b296..eb903e0 100644
---- a/package/bsdiff/bsdiff.mk
-+++ b/package/bsdiff/bsdiff.mk
-@@ -11,9 +11,9 @@ BSDIFF_LICENSE = BSD-2c
- BSDIFF_LICENSE_FILES = bsdiff.c
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index 0d5da06..03651cd 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -12,12 +12,12 @@ FEH_LICENSE = MIT
+ FEH_LICENSE_FILES = COPYING
  
- define BSDIFF_BUILD_CMDS
--	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-+	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
- 		$(@D)/bsdiff.c -lbz2 -o $(@D)/bsdiff
--	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-+	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
- 		$(@D)/bspatch.c -lbz2 -o $(@D)/bspatch
+ define FEH_BUILD_CMDS
+-	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
++	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
+ 		-C $(@D) all
+ endef
+ 
+ define FEH_INSTALL_TARGET_CMDS
+-	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) " \
++	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) " \
+ 		PREFIX=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
  endef
  
 -- 
