@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Thu, 13 Oct 2016 19:13:12 -0300
-Subject: [Buildroot] [PATCH 05/51] zlog: use $(TARGET_MAKE_ENV) when calling
+Date: Thu, 13 Oct 2016 19:13:13 -0300
+Subject: [Buildroot] [PATCH 06/51] ed: use $(TARGET_MAKE_ENV) when calling
 	$(MAKE)
 In-Reply-To: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476396838-12276-6-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476396838-12276-7-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +15,48 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/zlog/zlog.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/botan/botan.mk | 6 +++---
+ package/ed/ed.mk       | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
-index a60e1b0..4f7f469 100644
---- a/package/zlog/zlog.mk
-+++ b/package/zlog/zlog.mk
-@@ -11,16 +11,16 @@ ZLOG_LICENSE_FILES = COPYING
- ZLOG_INSTALL_STAGING = YES
- 
- define ZLOG_BUILD_CMDS
--	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
-+	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
- 		-C $(@D) all
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 69c973e..4da557a 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -48,15 +48,15 @@ define BOTAN_CONFIGURE_CMDS
  endef
  
- define ZLOG_INSTALL_STAGING_CMDS
--	$(MAKE) PREFIX=$(STAGING_DIR)/usr -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) PREFIX=$(STAGING_DIR)/usr -C $(@D) install
+ define BOTAN_BUILD_CMDS
+-	$(MAKE) -C $(@D) AR="$(TARGET_AR) crs"
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) AR="$(TARGET_AR) crs"
  endef
  
- define ZLOG_INSTALL_TARGET_CMDS
--	$(MAKE) PREFIX=$(TARGET_DIR)/usr -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) PREFIX=$(TARGET_DIR)/usr -C $(@D) install
+ define BOTAN_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)/usr" install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)/usr" install
+ endef
+ 
+ define BOTAN_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)/usr" install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)/usr" install
+ endef
+ 
+ $(eval $(generic-package))
+diff --git a/package/ed/ed.mk b/package/ed/ed.mk
+index f3bcb74..101be0e 100644
+--- a/package/ed/ed.mk
++++ b/package/ed/ed.mk
+@@ -21,11 +21,11 @@ define ED_CONFIGURE_CMDS
+ endef
+ 
+ define ED_BUILD_CMDS
+-	$(MAKE)	-C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
+ 
+ define ED_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
  endef
  
  $(eval $(generic-package))
