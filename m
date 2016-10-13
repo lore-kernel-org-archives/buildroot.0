@@ -1,39 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Oct 2016 21:57:02 -0300
-Subject: [Buildroot] [PATCH] unrar: bump to version 5.4.5
-Message-ID: <1476320222-31029-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 12 Oct 2016 22:03:06 -0300
+Subject: [Buildroot] [PATCH] libsigc: bump gcc version requirement to 4.8
+Message-ID: <1476320586-12465-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+It now uses C++11 features that aren't available in 4.7. Fixes:
+http://autobuild.buildroot.net/results/405/40563404e2612590a6ad19cbb39df14074fe160e/
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/unrar/unrar.hash | 2 +-
- package/unrar/unrar.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libsigc/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
-index e6a146c..36450e0 100644
---- a/package/unrar/unrar.hash
-+++ b/package/unrar/unrar.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	e4f05190d9e379449a04c22baffc24cc2f03164a4738befe601b1325440db0c6	unrarsrc-5.4.3.tar.gz
-+sha256	e470c584332422893fb52e049f2cbd99e24dc6c6da971008b4e2ae4284f8796c	unrarsrc-5.4.5.tar.gz
-diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
-index e49fe6c..68d81b7 100644
---- a/package/unrar/unrar.mk
-+++ b/package/unrar/unrar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libsigc/Config.in b/package/libsigc/Config.in
+index 41ea19e..f38749b 100644
+--- a/package/libsigc/Config.in
++++ b/package/libsigc/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBSIGC
+ 	bool "libsigc++"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  libsigc++ implements a typesafe callback system for standard C++.
+@@ -10,5 +10,5 @@ config BR2_PACKAGE_LIBSIGC
  
--UNRAR_VERSION = 5.4.3
-+UNRAR_VERSION = 5.4.5
- UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
- UNRAR_SITE = http://www.rarlab.com/rar
- UNRAR_LICENSE = unrar
+ 	  http://libsigc.sourceforge.net/
+ 
+-comment "libsigc++ needs a toolchain w/ C++, gcc >= 4.7"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++comment "libsigc++ needs a toolchain w/ C++, gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
 -- 
 2.7.3
