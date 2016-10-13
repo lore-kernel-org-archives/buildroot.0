@@ -1,26 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Oct 2016 07:53:13 +0200
-Subject: [Buildroot] minimal config for new xorg ddx driver testing
-In-Reply-To: <trinity-1074a4b4-83fd-4178-8f51-e9f3af810bd7-1476273824865@3capp-mailcom-bs01>
- (daggs@gmx.com's message of "Wed, 12 Oct 2016 14:03:44 +0200")
-References: <trinity-1074a4b4-83fd-4178-8f51-e9f3af810bd7-1476273824865@3capp-mailcom-bs01>
-Message-ID: <87shs0n6ba.fsf@dell.be.48ers.dk>
+Date: Thu, 13 Oct 2016 08:01:58 +0200
+Subject: [Buildroot] [PATCH 1/2] git: bump version to 2.10.1
+In-Reply-To: <20161011112017.41472-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Tue, 11 Oct 2016 12:20:16 +0100")
+References: <20161011112017.41472-1-Vincent.Riera@imgtec.com>
+Message-ID: <87oa2on5wp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "daggs" == daggs  <daggs@gmx.com> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Greetings,
- > I'm trying to test a new xorg ddx driver, problem is that I'm unable
- > to start X properly. I never start by itself and I seem to always miss
- > some cli params.
- > is there any place were can I find a minimal config I can use that surely start an X based DE or something?
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-You can take a look at minnowboard_max-graphical_defconfig, as that one
-boots up into a X11 environment.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
