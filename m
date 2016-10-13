@@ -1,74 +1,115 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Oct 2016 22:13:56 -0300
-Subject: [Buildroot] [PATCH 5/8] poppler: bump to version 0.48.0
+Date: Wed, 12 Oct 2016 22:13:57 -0300
+Subject: [Buildroot] [PATCH 6/8] python-libxml2: new host package
 In-Reply-To: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1476321239-13894-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1476321239-13894-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patch.
+Add a new python-libxml2 package to build the libxml2 python bindings.
+
+This is required for host-itstool which in turn is required to build
+evince.
+
+Unfortunately since we can't detect host-python/host-python3 presence to
+enable it in the libxml2 package itself and leaving it to automatic
+would be problematic just make a separate package for it like
+mesa3d-headers to handle it deterministically.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...invalid-shell-comparaison-in-libtiff-test.patch | 23 ----------------------
- package/poppler/poppler.hash                       |  2 +-
- package/poppler/poppler.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 25 deletions(-)
- delete mode 100644 package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch
+ .../0001-setup.py-tweak-includes_dir.patch         | 40 ++++++++++++++++++++++
+ package/python-libxml2/python-libxml2.hash         |  1 +
+ package/python-libxml2/python-libxml2.mk           | 21 ++++++++++++
+ 3 files changed, 62 insertions(+)
+ create mode 100644 package/python-libxml2/0001-setup.py-tweak-includes_dir.patch
+ create mode 120000 package/python-libxml2/python-libxml2.hash
+ create mode 100644 package/python-libxml2/python-libxml2.mk
 
-diff --git a/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch b/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch
-deleted file mode 100644
-index f40bee1..0000000
---- a/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--Fix syntax issue in configure script
--
--The change is not done in configure.ac, because the package doesn't
--autoreconf properly.
--
--Patch on configure.ac submitted upstream at
--https://bugs.freedesktop.org/show_bug.cgi?id=90292.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/configure
--===================================================================
----- a/configure
--+++ b/configure
--@@ -19738,7 +19738,7 @@
-- CXXFLAGS="$CXXFLAGS $LIBTIFF_CFLAGS"
-- LIBS="$LIBS $LIBTIFF_LIBS"
-- if test x$enable_libtiff = xyes; then
---  if test x"$LIBTIFF_LIBS" != ; then
--+  if test x"$LIBTIFF_LIBS" != x; then
--     ac_fn_cxx_check_func "$LINENO" "TIFFOpen" "ac_cv_func_TIFFOpen"
-- if test "x$ac_cv_func_TIFFOpen" = xyes; then :
-- 
-diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
-index c4c7f66..533178f 100644
---- a/package/poppler/poppler.hash
-+++ b/package/poppler/poppler.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	4963e31ba5e17530a87b16588e22928bc044e8d28d02303dded981bff6725b98	poppler-0.32.0.tar.xz
-+sha256	85a003968074c85d8e13bf320ec47cef647b496b56dcff4c790b34e5482fef93	poppler-0.48.0.tar.xz
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 172c428..202eac2 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POPPLER_VERSION = 0.32.0
-+POPPLER_VERSION = 0.48.0
- POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
- POPPLER_SITE = http://poppler.freedesktop.org
- POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+diff --git a/package/python-libxml2/0001-setup.py-tweak-includes_dir.patch b/package/python-libxml2/0001-setup.py-tweak-includes_dir.patch
+new file mode 100644
+index 0000000..85ca829
+--- /dev/null
++++ b/package/python-libxml2/0001-setup.py-tweak-includes_dir.patch
+@@ -0,0 +1,40 @@
++From b29e99d93cf8103f64c62bd9a4394e39df549c29 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Mon, 10 Oct 2016 19:58:35 -0300
++Subject: [PATCH] setup.py: tweak includes_dir
++
++Add a preprocessor variable @@INCLUDEDIR@@ so that the package makefile
++can replace it with the host include directory. And keep the absolute
++/usr/include directory as well for the iconv headers.
++
++This is completely unsuitable for target-variant package, but then that
++can be handled in the libxml2 package proper if anyone wants target
++libxml2 python bindings.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ python/setup.py | 8 +-------
++ 1 file changed, 1 insertion(+), 7 deletions(-)
++
++diff --git a/python/setup.py b/python/setup.py
++index c44269a..fd08c5c 100755
++--- a/python/setup.py
+++++ b/python/setup.py
++@@ -55,13 +55,7 @@ else:
++ # - libxml2/libxml/tree.h
++ # - iconv.h
++ # - libxslt/xsltconfig.h
++-includes_dir = [
++-"/usr/include",
++-"/usr/local/include",
++-"/opt/include",
++-os.path.join(ROOT,'include'),
++-HOME
++-];
+++includes_dir = [ "@@INCLUDEDIR@@", "/usr/include" ];
++ 
++ xml_includes=""
++ for dir in includes_dir:
++-- 
++2.7.3
++
+diff --git a/package/python-libxml2/python-libxml2.hash b/package/python-libxml2/python-libxml2.hash
+new file mode 120000
+index 0000000..d3ce9f8
+--- /dev/null
++++ b/package/python-libxml2/python-libxml2.hash
+@@ -0,0 +1 @@
++../libxml2/libxml2.hash
+\ No newline at end of file
+diff --git a/package/python-libxml2/python-libxml2.mk b/package/python-libxml2/python-libxml2.mk
+new file mode 100644
+index 0000000..631468b
+--- /dev/null
++++ b/package/python-libxml2/python-libxml2.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# python-libxml2
++#
++################################################################################
++
++PYTHON_LIBXML2_VERSION = 2.9.4
++PYTHON_LIBXML2_SOURCE = libxml2-$(PYTHON_LIBXML2_VERSION).tar.gz
++PYTHON_LIBXML2_SITE = ftp://xmlsoft.org/libxml2
++PYTHON_LIBXML2_LICENSE = MIT
++PYTHON_LIBXML2_LICENSE_FILES = COPYING
++PYTHON_LIBXML2_SETUP_TYPE = setuptools
++PYTHON_LIBXML2_SUBDIR = python
++HOST_PYTHON_LIBXML2_DEPENDENCIES = host-libxml2
++
++define PYTHON_LIBXML2_SET_HOST_DIR
++	$(SED) "s,@@INCLUDEDIR@@,$(HOST_DIR)/usr/include," $(@D)/python/setup.py
++endef
++HOST_PYTHON_LIBXML2_PRE_CONFIGURE_HOOKS += PYTHON_LIBXML2_SET_HOST_DIR
++
++$(eval $(host-python-package))
 -- 
 2.7.3
