@@ -1,21 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Oct 2016 07:48:03 +0200
-Subject: [Buildroot] [PATCH] package/enlightenment: bump to 0.21.3
-In-Reply-To: <1476304696-19238-1-git-send-email-romain.naour@gmail.com>
- (Romain Naour's message of "Wed, 12 Oct 2016 22:38:16 +0200")
-References: <1476304696-19238-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <87wphcn6jw.fsf@dell.be.48ers.dk>
+Date: Thu, 13 Oct 2016 07:38:24 +0200
+Subject: [Buildroot] [git commit] package/systemd-bootchart: indentation
+	cleanup
+Message-ID: <20161013054826.3B124817C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fde62c31a363218f1432caff8bbb0d46dac1081b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/systemd-bootchart/systemd-bootchart.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/systemd-bootchart/systemd-bootchart.mk b/package/systemd-bootchart/systemd-bootchart.mk
+index 3d91b05..354270e 100644
+--- a/package/systemd-bootchart/systemd-bootchart.mk
++++ b/package/systemd-bootchart/systemd-bootchart.mk
+@@ -18,7 +18,7 @@ SYSTEMD_BOOTCHART_AUTORECONF = YES
+ SYSTEMD_BOOTCHART_CONF_OPTS = --disable-man
+ 
+ define SYSTEMD_BOOTCHART_INTLTOOLIZE
+-        cd $(@D) && $(HOST_DIR)/usr/bin/intltoolize --force --automake
++	cd $(@D) && $(HOST_DIR)/usr/bin/intltoolize --force --automake
+ endef
+ SYSTEMD_BOOTCHART_PRE_CONFIGURE_HOOKS = SYSTEMD_BOOTCHART_INTLTOOLIZE
+ 
