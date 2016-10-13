@@ -1,42 +1,23 @@
-From: Eloi BAIL <eloi.bail@savoirfairelinux.com>
-Date: Thu, 13 Oct 2016 14:28:02 -0400
-Subject: [Buildroot] [PATCH 1/1] mysql: Make S97mysqld source a default file
-Message-ID: <1476383282-10739-1-git-send-email-eloi.bail@savoirfairelinux.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Oct 2016 21:47:05 +0200
+Subject: [Buildroot] [PATCH] wpa_supplicant: AP mode now requires nl80211
+In-Reply-To: <1476354640-18512-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 13 Oct 2016 07:30:40 -0300")
+References: <1476354640-18512-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87mvi8ghfq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hardcoded parameters are used for mysql installation.
-Make S97mysqld source a /etc/default/mysql file where these
-parameters can be overridden.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Eloi BAIL <eloi.bail@savoirfairelinux.com>
----
- package/mysql/S97mysqld | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/427/4275ea6e9f5a18d2ed42c93bdafbe6cbd50126a9/
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/mysql/S97mysqld b/package/mysql/S97mysqld
-index 5a660e9..638790f 100644
---- a/package/mysql/S97mysqld
-+++ b/package/mysql/S97mysqld
-@@ -1,10 +1,14 @@
- #!/bin/sh
- 
-+MYSQL_DIR="/var/mysql"
-+MYSQL_USER="mysql"
-+[ -r /etc/default/mysql ] && . /etc/default/mysql
-+
- case "$1" in
- 	start)
--		if [ ! -d /var/mysql/mysql ] ; then
-+		if [ ! -d $MYSQL_DIR/mysql ] ; then
- 			echo "Creating MySQL system tables..."
--			mysql_install_db --user=mysql --ldata=/var/mysql
-+			mysql_install_db --user=$MYSQL_USER --ldata=$MYSQL_DIR
- 		fi
- 
- 		# mysqld runs as user mysql, but /run is only writable by root
+Committed, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
