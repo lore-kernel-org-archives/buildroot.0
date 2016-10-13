@@ -1,36 +1,42 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Thu, 13 Oct 2016 20:27:46 +0200
-Subject: [Buildroot] [PATCH 1/1] fwts: needs host-bison and host-flex
-Message-ID: <1476383266-30963-1-git-send-email-nunes.erico@gmail.com>
+From: Eloi BAIL <eloi.bail@savoirfairelinux.com>
+Date: Thu, 13 Oct 2016 14:28:02 -0400
+Subject: [Buildroot] [PATCH 1/1] mysql: Make S97mysqld source a default file
+Message-ID: <1476383282-10739-1-git-send-email-eloi.bail@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/2e6bc77e89868d7a9902123ffb602c5b745d4580
+Hardcoded parameters are used for mysql installation.
+Make S97mysqld source a /etc/default/mysql file where these
+parameters can be overridden.
 
-Tested in a minimal debian environment, there should be no missing host
-package dependencies after these.
-
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Eloi BAIL <eloi.bail@savoirfairelinux.com>
 ---
- package/fwts/fwts.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mysql/S97mysqld | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
-index c63e2c5..7ec1d5e 100644
---- a/package/fwts/fwts.mk
-+++ b/package/fwts/fwts.mk
-@@ -10,7 +10,7 @@ FWTS_STRIP_COMPONENTS = 0
- FWTS_LICENSE = GPLv2, LGPLv2.1, Custom
- FWTS_LICENSE_FILES = debian/copyright
- FWTS_AUTORECONF = YES
--FWTS_DEPENDENCIES = host-pkgconf json-c libglib2 \
-+FWTS_DEPENDENCIES = host-bison host-flex host-pkgconf json-c libglib2 \
- 	$(if $(BR2_PACKAGE_DTC),dtc)
+diff --git a/package/mysql/S97mysqld b/package/mysql/S97mysqld
+index 5a660e9..638790f 100644
+--- a/package/mysql/S97mysqld
++++ b/package/mysql/S97mysqld
+@@ -1,10 +1,14 @@
+ #!/bin/sh
  
- $(eval $(autotools-package))
++MYSQL_DIR="/var/mysql"
++MYSQL_USER="mysql"
++[ -r /etc/default/mysql ] && . /etc/default/mysql
++
+ case "$1" in
+ 	start)
+-		if [ ! -d /var/mysql/mysql ] ; then
++		if [ ! -d $MYSQL_DIR/mysql ] ; then
+ 			echo "Creating MySQL system tables..."
+-			mysql_install_db --user=mysql --ldata=/var/mysql
++			mysql_install_db --user=$MYSQL_USER --ldata=$MYSQL_DIR
+ 		fi
+ 
+ 		# mysqld runs as user mysql, but /run is only writable by root
 -- 
 2.7.4
