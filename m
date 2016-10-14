@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Oct 2016 17:09:19 +0200
-Subject: [Buildroot] [PATCH 01/51] lsof: use $(TARGET_MAKE_ENV) when
+Date: Fri, 14 Oct 2016 17:10:24 +0200
+Subject: [Buildroot] [PATCH 37/51] moarvm: use $(TARGET_MAKE_ENV) when
  calling $(MAKE)
-In-Reply-To: <1476396838-12276-2-git-send-email-gustavo.zacarias@free-electrons.com>
+In-Reply-To: <1476396838-12276-38-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1476396838-12276-2-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <6630ba9f-2993-8208-7100-ac378b15363c@mind.be>
+ <1476396838-12276-38-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <febf6e2f-d5f7-e053-898e-90fd208de5c2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,34 +19,38 @@ On 14-10-16 00:13, gustavo.zacarias at free-electrons.com wrote:
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > ---
->  package/lsof/lsof.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/moarvm/moarvm.mk | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-> index 312d834..e5cd4bc 100644
-> --- a/package/lsof/lsof.mk
-> +++ b/package/lsof/lsof.mk
-> @@ -47,7 +47,7 @@ define LSOF_CONFIGURE_CMDS
+> diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+> index ee58f76..acdfff5 100644
+> --- a/package/moarvm/moarvm.mk
+> +++ b/package/moarvm/moarvm.mk
+> @@ -33,15 +33,15 @@ define MOARVM_CONFIGURE_CMDS
 >  endef
->  
->  define LSOF_BUILD_CMDS
-> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS)" -C $(@D)
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS)" -C $(@D)
 
- TARGET_CONFIGURE_OPTS is already there, so TARGET_MAKE_ENV shouldn't be needed
-anymore, right? Well, no, wrong: variables passed as arguments to make are not
-passed down to subprocesses, so we do want to explicitly set it in the
-environment again.
-
- (Just to be clear: this patch is OK, I just note this in case anyone else is
-looking at it.)
+ Again, I think the configure commands should get TARGET_MAKE_ENV as well.
 
  Regards,
  Arnout
 
+>  
+>  define MOARVM_BUILD_CMDS
+> -	$(MAKE) -C $(@D)
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 >  endef
 >  
->  define LSOF_INSTALL_TARGET_CMDS
+>  define MOARVM_INSTALL_STAGING_CMDS
+> -	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+>  endef
+>  
+>  define MOARVM_INSTALL_TARGET_CMDS
+> -	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+>  endef
+>  
+>  $(eval $(generic-package))
 > 
 
 -- 
