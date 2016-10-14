@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Oct 2016 14:54:06 +0200
-Subject: [Buildroot] [PATCH 1/2] jsoncpp: follow Debian, Ubuntu,
-	Arch convention for headers location
-In-Reply-To: <1474886662-46914-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Mon, 26 Sep 2016 11:44:21 +0100")
+Date: Fri, 14 Oct 2016 14:57:39 +0200
+Subject: [Buildroot] [PATCH 2/2] jsoncpp: patch to include stdint.h,
+	necessary for int64_t and uint64_t
+In-Reply-To: <1474886662-46914-2-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Mon, 26 Sep 2016 11:44:22 +0100")
 References: <1474886662-46914-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87mvi7851t.fsf@dell.be.48ers.dk>
+ <1474886662-46914-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87insv84vw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +15,27 @@ To: buildroot@busybox.net
 
 >>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Taken from here: https://bugs.gentoo.org/show_bug.cgi?id=452234
- > Currently headers are installed in /usr/include/json/ but this collides
- > with other JSON libraries that also install headers in the same
- > location.
+ > Otherwise failures like these one can happen during the configure phase
+ > of other applications that use jsoncpp, like upmpdcli for instance:
 
-What json libraries are these? I also worried about it, but from a quick
-test I didn't see any file name conflicts.
+ > checking jsoncpp/json/json.h usability... yes
+ > checking jsoncpp/json/json.h presence... yes
+ > checking for jsoncpp/json/json.h... yes
+ > configure: error: libjsoncpp not found.
 
-This specific problem is already fixed by:
+ > And this is the actual problem that you can see in config.log:
 
-5d076804edde7914c69f226f34a1d57097f02a55
+Thanks, but jsoncpp has already been bumped, and the new version
+contains this fix:
+
+commit e8d04791ff37be807995f6b7d242179756581343
 Author: J?rg Krause <joerg.krause@embedded.rocks>
-Date:   Sun Sep 25 16:11:52 2016 +0200
+Date:   Tue Oct 11 21:09:30 2016 +0200
 
-    package/upmpdcli: add patch to fix error not detecting jsoncpp
+    package/jsoncpp: bump to version 1.7.7
+
+    Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 -- 
 Bye, Peter Korsgaard
