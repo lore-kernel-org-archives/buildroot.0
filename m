@@ -1,63 +1,54 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Oct 2016 16:56:53 +0200
-Subject: [Buildroot] [PATCH 06/51] ed: use $(TARGET_MAKE_ENV) when
+Date: Fri, 14 Oct 2016 17:03:36 +0200
+Subject: [Buildroot] [PATCH 08/51] librtas: use $(TARGET_MAKE_ENV) when
  calling $(MAKE)
-In-Reply-To: <da642ca8-45f8-10e7-a4e9-cf7b09538193@mind.be>
+In-Reply-To: <1476396838-12276-9-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1476396838-12276-7-git-send-email-gustavo.zacarias@free-electrons.com>
- <19e5c882-c643-c09d-86b3-2a16673c06cc@mind.be>
- <da642ca8-45f8-10e7-a4e9-cf7b09538193@mind.be>
-Message-ID: <4882d678-6ed1-7120-13ab-d8ebe0326b48@mind.be>
+ <1476396838-12276-9-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <2a349e97-8268-0c92-5614-d738445645cd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[I'm sorry for reviewing this in pieces...]
 
-On 14-10-16 16:45, Arnout Vandecappelle wrote:
-> 
-> 
-> On 14-10-16 16:41, Arnout Vandecappelle wrote:
->>
->>
->> On 14-10-16 00:13, gustavo.zacarias at free-electrons.com wrote:
->>> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
->>>
->>> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-[snip]
->>> diff --git a/package/ed/ed.mk b/package/ed/ed.mk
->>> index f3bcb74..101be0e 100644
->>> --- a/package/ed/ed.mk
->>> +++ b/package/ed/ed.mk
->>> @@ -21,11 +21,11 @@ define ED_CONFIGURE_CMDS
->>>  endef
 
- ED_CONFIGURE_CMDS should also get TARGET_MAKE_ENV. It does already get
-TARGET_CONFIGURE_OPTS, but only as arguments to configure and as far as I can
-see that script doesn't load the assignment arguments in its environment.
-Admittedly, the configure script doesn't try to compile anything so it's not
-strictly needed to export the corrected staging dir, but for consistency it
-would be better to pass it anyway.
+On 14-10-16 00:13, gustavo.zacarias at free-electrons.com wrote:
+> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> ---
+>  package/librtas/librtas.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/librtas/librtas.mk b/package/librtas/librtas.mk
+> index 6e1ebd1..0af47e0 100644
+> --- a/package/librtas/librtas.mk
+> +++ b/package/librtas/librtas.mk
+> @@ -15,11 +15,11 @@ define LIBRTAS_BUILD_CMDS
+>  endef
+>  
+>  define LIBRTAS_INSTALL_STAGING_CMDS
+> -	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+
+ Hm, the LIBRTAS_BUILD_COMMANDS use TARGET_CONFIGURE_OPTS instead of
+TARGET_MAKE_ENV. So perhaps it nicer to use TARGET_CONFIGURE_OPTS as well for
+the install commands?
 
  Regards,
  Arnout
 
->>>  
->>>  define ED_BUILD_CMDS
->>> -	$(MAKE)	-C $(@D)
->>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
->>>  endef
->>>  
->>>  define ED_INSTALL_TARGET_CMDS
->>> -	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
->>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
->>>  endef
->>>  
->>>  $(eval $(generic-package))
->>>
->>
+
+>  endef
+>  
+>  define LIBRTAS_INSTALL_TARGET_CMDS
+> -	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+>  endef
+>  
+>  $(eval $(generic-package))
 > 
 
 -- 
