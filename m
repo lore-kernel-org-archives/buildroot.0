@@ -1,40 +1,100 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 14 Oct 2016 09:20:33 +0200
-Subject: [Buildroot] [PATCH 1/1] mbedtls: bump to version 2.3.0
-Message-ID: <1476429633-12304-1-git-send-email-fabrice.fontaine@orange.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Oct 2016 09:26:35 +0200
+Subject: [Buildroot] [git commit] php: security bump to version 7.0.12
+Message-ID: <20161014072652.2CC3E80ACC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
----
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=384e00515ba9b9d133998c3943889fb31ce59c4e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index eebbfe8..2d0fa11 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
+See http://www.php.net/ChangeLog-7.php#7.0.12 since there are no CVEs
+out yet.
+
+And drop upstream patch.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...pt-enclose-phpdbg_load_module_or_extensio.patch | 47 ----------------------
+ package/php/php.hash                               |  2 +-
+ package/php/php.mk                                 |  2 +-
+ 3 files changed, 2 insertions(+), 49 deletions(-)
+
+diff --git a/package/php/0007-phpdbg_prompt-enclose-phpdbg_load_module_or_extensio.patch b/package/php/0007-phpdbg_prompt-enclose-phpdbg_load_module_or_extensio.patch
+deleted file mode 100644
+index 006a034..0000000
+--- a/package/php/0007-phpdbg_prompt-enclose-phpdbg_load_module_or_extensio.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 9ca3de0446fcd31b1561b333020ae0674a83bec7 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Tue, 9 Aug 2016 11:39:10 +0200
+-Subject: [PATCH] phpdbg_prompt: enclose phpdbg_load_module_or_extension() in
+- HAVE_LIBDL
+-
+-The phpdbg_load_module_or_extension() function relies on libdl
+-functionality, so it should be enclosed in HAVE_LIBDL to avoid the
+-following build failure when libdl support is not available:
+-
+-php-7.0.9/sapi/phpdbg/phpdbg_prompt.c:(.text+0x1c20): undefined reference to `_DL_LOAD'
+-php-7.0.9/sapi/phpdbg/phpdbg_prompt.c:(.text+0x1c36): undefined reference to `_GET_DL_ERROR'
+-php-7.0.9/sapi/phpdbg/phpdbg_prompt.c:(.text+0x1c6a): undefined reference to `_DL_FETCH_SYMBOL'
+-php-7.0.9/sapi/phpdbg/phpdbg_prompt.c:(.text+0x1c7e): undefined reference to `_DL_FETCH_SYMBOL'
+-php-7.0.9/sapi/phpdbg/phpdbg_prompt.c:(.text+0x1dc6): undefined reference to `_DL_UNLOAD'
+-
+-This function is only called in the "dl" debug command, inside an
+-HAVE_LIBDL condition.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- sapi/phpdbg/phpdbg_prompt.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/sapi/phpdbg/phpdbg_prompt.c b/sapi/phpdbg/phpdbg_prompt.c
+-index 6f73d30..6768dc5 100644
+---- a/sapi/phpdbg/phpdbg_prompt.c
+-+++ b/sapi/phpdbg/phpdbg_prompt.c
+-@@ -1019,6 +1019,7 @@ static int add_zendext_info(zend_extension *ext) /* {{{ */ {
+- }
+- /* }}} */
+- 
+-+#ifdef HAVE_LIBDL
+- PHPDBG_API const char *phpdbg_load_module_or_extension(char **path, char **name) /* {{{ */ {
+- 	DL_HANDLE handle;
+- 	char *extension_dir;
+-@@ -1158,6 +1159,7 @@ quit:
+- 	DL_UNLOAD(handle);
+- 	return NULL;
+- }
+-+#endif
+- /* }}} */
+- 
+- PHPDBG_COMMAND(dl) /* {{{ */
+--- 
+-2.7.4
+-
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 0092095..dde6a64 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
 @@ -1,2 +1,2 @@
--# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.2.1-2.1.4-1.3.16-and-polarssl.1.2.19-released
--sha256	6ddd5ca2e7dfb43d2fd750400856246fc1c98344dabf01b1594eb2f9880ef7ce	mbedtls-2.2.1-apache.tgz
-+# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.3.0-2.1.5-and-1.3.17-released
-+sha256	590734c8bc8b3ac48e9123d44bf03562e91f8dce0d1ac2615c318c077f3215b2	mbedtls-2.3.0-apache.tgz
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 994a3f4..7067beb 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -5,7 +5,7 @@
+ # From http://php.net/downloads.php
+-sha256 d4cccea8da1d27c11b89386f8b8e95692ad3356610d571253d00ca67d524c735  php-7.0.11.tar.xz
++sha256 f3d6c49e1c242e5995dec15e503fde996c327eb86cd7ec45c690e93c971b83ff  php-7.0.12.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index b1b19ad..f925ec1 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.2.1
-+MBEDTLS_VERSION = 2.3.0
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
--- 
-2.7.4
+-PHP_VERSION = 7.0.11
++PHP_VERSION = 7.0.12
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
