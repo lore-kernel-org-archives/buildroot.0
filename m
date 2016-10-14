@@ -1,64 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Oct 2016 15:53:51 +0200
-Subject: [Buildroot] [PATCH] docs: update URL to uClibc-ng homepage
-In-Reply-To: <20161014092904.GA32247@waldemar-brodkorb.de>
-References: <20161014092904.GA32247@waldemar-brodkorb.de>
-Message-ID: <c3795718-ee9e-2058-9725-3b6a9417b9dc@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Oct 2016 15:57:00 +0200
+Subject: [Buildroot] qt5webkit: host-python dependency issue in Python3
+ environment
+In-Reply-To: <CAGm1_ktbKzd7jbaTRryp27yZF94HMPZnZTfMw+sC1vCC8-mVvA@mail.gmail.com>
+References: <CAGm1_ktbKzd7jbaTRryp27yZF94HMPZnZTfMw+sC1vCC8-mVvA@mail.gmail.com>
+Message-ID: <20161014155700.583f6e14@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Fri, 14 Oct 2016 09:53:53 +0200, Yegor Yefremov wrote:
+> My project uses both Python3 and Qt5 including qt5webkit package. The
+> problem in this particular constellation is, that
+> output/target/usr/bin/python is a symlink to
+> output/host/usr/bin/python2.
 
-On 14-10-16 11:29, Waldemar Brodkorb wrote:
-> It is not necessary to update all mentioning of uClibc, but
-> at least we should point to the right homepage of the used
-> project.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Hu? target/usr/bin/python is a symlink to host/usr/bin/python2 ? Are
+you sure ? If so, this is the problem, not the qt5webkit dependency on
+host-python.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+If you have a Python 3 enabled system, and qt5webkit is enabled, you
+should have the following situation:
 
- Can you also update the BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC in
-toolchain/toolchain-external/Config.in to mention both uClibc and uClibc-ng?
+ - target/usr/bin/python -> target/usr/bin/python3
+ - host/usr/bin/python -> host/usr/bin/python3
+ - host/usr/bin/python2
 
- Regards,
- Arnout
+I.e, Python 3 is the "default" version, but Python 2 for the host is
+also available, if called explicitly using host/usr/bin/python2.
 
-> ---
->  docs/manual/configure.txt | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-> index 0cd9f82..0739bc7 100644
-> --- a/docs/manual/configure.txt
-> +++ b/docs/manual/configure.txt
-> @@ -31,7 +31,7 @@ code for your system. It consists of a compiler (in our case, +gcc+),
->  binary utils like assembler and linker (in our case, +binutils+) and a
->  C standard library (for example
->  http://www.gnu.org/software/libc/libc.html[GNU Libc],
-> -http://www.uclibc.org/[uClibc]).
-> +http://www.uclibc-ng.org/[uClibc-ng]).
->  
->  The system installed on your development station certainly already has
->  a compilation toolchain that you can use to compile an application
-> @@ -81,7 +81,7 @@ by itself a cross-compilation toolchain, before building the userspace
->  applications and libraries for your target embedded system.
->  
->  This backend supports several C libraries:
-> -http://www.uclibc.org[uClibc],
-> +http://www.uclibc-ng.org[uClibc-ng],
->  http://www.gnu.org/software/libc/libc.html[glibc] and
->  http://www.musl-libc.org[musl].
->  
-> 
+So, I don't understand your original problem.
 
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
