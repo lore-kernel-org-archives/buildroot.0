@@ -1,44 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Oct 2016 16:51:47 +0200
-Subject: [Buildroot] [git commit] squid: bump to version 3.5.22
-Message-ID: <20161014145259.BF95C7F995@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 14 Oct 2016 16:56:53 +0200
+Subject: [Buildroot] [PATCH 06/51] ed: use $(TARGET_MAKE_ENV) when
+ calling $(MAKE)
+In-Reply-To: <da642ca8-45f8-10e7-a4e9-cf7b09538193@mind.be>
+References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <1476396838-12276-7-git-send-email-gustavo.zacarias@free-electrons.com>
+ <19e5c882-c643-c09d-86b3-2a16673c06cc@mind.be>
+ <da642ca8-45f8-10e7-a4e9-cf7b09538193@mind.be>
+Message-ID: <4882d678-6ed1-7120-13ab-d8ebe0326b48@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d391ed8b7a4751a3efe9453e81de373ae85a745
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+[I'm sorry for reviewing this in pieces...]
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On 14-10-16 16:45, Arnout Vandecappelle wrote:
+> 
+> 
+> On 14-10-16 16:41, Arnout Vandecappelle wrote:
+>>
+>>
+>> On 14-10-16 00:13, gustavo.zacarias at free-electrons.com wrote:
+>>> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+>>>
+>>> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+[snip]
+>>> diff --git a/package/ed/ed.mk b/package/ed/ed.mk
+>>> index f3bcb74..101be0e 100644
+>>> --- a/package/ed/ed.mk
+>>> +++ b/package/ed/ed.mk
+>>> @@ -21,11 +21,11 @@ define ED_CONFIGURE_CMDS
+>>>  endef
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 30eed50..3b2f2de 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.21.tar.xz.asc
--md5 e6745a6e4ac0b48b7283861f64a40ae5  squid-3.5.21.tar.xz
--sha1 38c4f801a17e27ea530fef88c6ee24b42f08529c  squid-3.5.21.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.22.tar.xz.asc
-+md5 afb82d2748c06c95815c171463b4aa14  squid-3.5.22.tar.xz
-+sha1 73e9199dd9d2a7f107f78d03454830713a4a571d  squid-3.5.22.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index c8a7248..ddd0b83 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).21
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).22
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+ ED_CONFIGURE_CMDS should also get TARGET_MAKE_ENV. It does already get
+TARGET_CONFIGURE_OPTS, but only as arguments to configure and as far as I can
+see that script doesn't load the assignment arguments in its environment.
+Admittedly, the configure script doesn't try to compile anything so it's not
+strictly needed to export the corrected staging dir, but for consistency it
+would be better to pass it anyway.
+
+ Regards,
+ Arnout
+
+>>>  
+>>>  define ED_BUILD_CMDS
+>>> -	$(MAKE)	-C $(@D)
+>>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+>>>  endef
+>>>  
+>>>  define ED_INSTALL_TARGET_CMDS
+>>> -	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+>>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+>>>  endef
+>>>  
+>>>  $(eval $(generic-package))
+>>>
+>>
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
