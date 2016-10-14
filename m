@@ -1,140 +1,33 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 14 Oct 2016 16:50:11 +0200
-Subject: [Buildroot] [PATCH v3 2/3] uhttpd: new package
-In-Reply-To: <1476096351-29501-2-git-send-email-Rahul.Jain@imgtec.com>
-References: <1476096351-29501-1-git-send-email-Rahul.Jain@imgtec.com>
- <1476096351-29501-2-git-send-email-Rahul.Jain@imgtec.com>
-Message-ID: <f1551376-9c0b-1d15-4e90-4a70a9f7b66d@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Oct 2016 16:50:24 +0200
+Subject: [Buildroot] [PATCH] package/Makefile.in: synchronize pkg-config
+	settings between HOST_{CONFIGURE_OPTS, MAKE_ENV}
+In-Reply-To: <20161014140944.9436-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 14 Oct 2016 16:09:44 +0200")
+References: <20161014140944.9436-1-peter@korsgaard.com>
+Message-ID: <87r37j56j3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Rahul,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On 10/10/16 12:45, Rahul Jain wrote:
-> Signed-off-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-> Signed-off-by: Neha Bairathi <Neha.Bairathi@imgtec.com>
-> Signed-off-by: Abhishek Singh <Abhishek.Singh@imgtec.com>
-> Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
-> ---
->  Changes v2 -> v3:
->    - Remove entry from DEVELOPERS file
->  Changes v1 -> v2:
->    - Updated the url in help (Suggested by Arnout)
->    - Use http url (Suggested by Arnout)
->    - Add hash file (Suggested by Arnout)
->    - Improve handling of optional dependency on lua (Suggested by Arnout)
->    - Remove unrequired config options (Suggested by Arnout)
->    - Explicitly specify the config option when enabling lua, ssl and ubus support (Suggested by Arnout)
->
->  package/Config.in          |  1 +
->  package/uhttpd/Config.in   | 18 ++++++++++++++++++
->  package/uhttpd/uhttpd.hash |  2 ++
->  package/uhttpd/uhttpd.mk   | 38 ++++++++++++++++++++++++++++++++++++++
->  4 files changed, 59 insertions(+)
->  create mode 100644 package/uhttpd/Config.in
->  create mode 100644 package/uhttpd/uhttpd.hash
->  create mode 100644 package/uhttpd/uhttpd.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 352ef42..426a1be 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1613,6 +1613,7 @@ endif
->  	source "package/tunctl/Config.in"
->  	source "package/tvheadend/Config.in"
->  	source "package/udpcast/Config.in"
-> +	source "package/uhttpd/Config.in"
->  	source "package/ulogd/Config.in"
->  	source "package/ushare/Config.in"
->  	source "package/ussp-push/Config.in"
-> diff --git a/package/uhttpd/Config.in b/package/uhttpd/Config.in
-> new file mode 100644
-> index 0000000..e463b93
-> --- /dev/null
-> +++ b/package/uhttpd/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_UHTTPD
-> +	bool "uhttpd"
-> +	depends on !BR2_STATIC_LIBS # dlopen()
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-> +	depends on BR2_USE_MMU # fork()
-> +	select BR2_PACKAGE_LIBUBOX
-> +	select BR2_PACKAGE_JSON_C
-> +	help
-> +	  uHTTPd is a tiny single threaded HTTP server with TLS, CGI and Lua
-> +	  support. It is intended as a drop-in replacement for the Busybox
-> +	  HTTP daemon.
-> +
-> +	  https://wiki.openwrt.org/doc/howto/http.uhttpd
-> +
-> +comment "uhttpd needs a toolchain w/ dynamic library"
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_STATIC_LIBS
-> diff --git a/package/uhttpd/uhttpd.hash b/package/uhttpd/uhttpd.hash
-> new file mode 100644
-> index 0000000..59e54ad
-> --- /dev/null
-> +++ b/package/uhttpd/uhttpd.hash
-> @@ -0,0 +1,2 @@
-> +# No hash for this git snapshot
-> +none	xxx	uhttpd-59e0c739634f46a164d939e54416287b91ff8a9b.tar.gz
+ > The pkg-config settings in HOST_CONFIGURE_OPTS and HOST_MAKE_ENV have
+ > diverged over time, so they now used different _LIBDIR and
+ > _ALLOW_SYSTEM_{CFLAGS,LIBS} settings.
 
+ > Conceptually _CONFIGURE_OPTS should be a superset of _MAKE_ENV, so move the
+ > definitions around and define _CONFIGURE_OPTS in terms of _MAKE_ENV instead
+ > of repeating the individual settings.
 
-> diff --git a/package/uhttpd/uhttpd.mk b/package/uhttpd/uhttpd.mk
-> new file mode 100644
-> index 0000000..b4ef291
-> --- /dev/null
-> +++ b/package/uhttpd/uhttpd.mk
-> @@ -0,0 +1,38 @@
-> +################################################################################
-> +#
-> +# uhttpd
-> +#
-> +################################################################################
-> +
-> +UHTTPD_VERSION = 59e0c739634f46a164d939e54416287b91ff8a9b
-> +UHTTPD_SITE = http://git.openwrt.org/project/uhttpd.git
-> +UHTTPD_SITE_METHOD = git
-> +UHTTPD_LICENSE = ISC
+ > Do this both for the target and host variant for consistency.
 
-Same thing here, UHTTPD_LICENSE_FILES is missing. You are saying that 
-the license is ISC, but, how can you check it? You need some file to 
-look at in order to check it.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Regards,
+Committed, thanks.
 
-Vincent.
-
-> +UHTTPD_DEPENDENCIES = libubox json-c
-> +
-> +ifeq ($(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION),"5.1")
-> +ifeq ($(BR2_PACKAGE_LUA),y)
-> +UHTTPD_DEPENDENCIES += lua
-> +else ifeq ($(BR2_PACKAGE_LUAJIT),y)
-> +UHTTPD_DEPENDENCIES += luajit
-> +endif
-> +UHTTPD_CONF_OPTS += -DLUA_SUPPORT=ON
-> +else
-> +UHTTPD_CONF_OPTS += -DLUA_SUPPORT=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_USTREAM_SSL),y)
-> +UHTTPD_DEPENDENCIES += ustream-ssl
-> +UHTTPD_CONF_OPTS += -DTLS_SUPPORT=ON
-> +else
-> +UHTTPD_CONF_OPTS += -DTLS_SUPPORT=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_UBUS),y)
-> +UHTTPD_DEPENDENCIES += ubus
-> +UHTTPD_CONF_OPTS += -DUBUS_SUPPORT=ON
-> +else
-> +UHTTPD_CONF_OPTS += -DUBUS_SUPPORT=OFF
-> +endif
-> +
-> +$(eval $(cmake-package))
->
+-- 
+Venlig hilsen,
+Peter Korsgaard 
