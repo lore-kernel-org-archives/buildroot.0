@@ -1,54 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Oct 2016 19:40:19 +0200
-Subject: [Buildroot] [git commit] Revert "texinfo: new host package"
-Message-ID: <20161014181012.B26738222F@busybox.osuosl.org>
+Date: Fri, 14 Oct 2016 19:40:09 +0200
+Subject: [Buildroot] [git commit] binutils: get rid of host-texinfo
+	dependency and other documentation tricks
+Message-ID: <20161014181012.A040F822CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e327d4c69720fb215c547de788e65cb211a9978
+commit: https://git.buildroot.net/buildroot/commit/?id=a4ebc1c1de6d2bb9090cd99253a3e84dff9d87e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit ea161cf6891c3a3a601dfce072f68ee4aed08d21.
+The binutils/host-binutils package applied several tricks to avoid building
+info documentation. In the worst case, host-texinfo is added as dependency.
 
-The host-texinfo dependency is no longer used by any package, after using
-another solution to the problem that required its introduction in the first
-place.
+However, there is a simpler solution that removes the need for all these
+tricks: instruct the makefiles to use a dummy makeinfo command ('true').
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/texinfo/texinfo.hash |  2 --
- package/texinfo/texinfo.mk   | 13 -------------
- 2 files changed, 15 deletions(-)
+ package/binutils/binutils.mk | 25 +++++++++----------------
+ 1 file changed, 9 insertions(+), 16 deletions(-)
 
-diff --git a/package/texinfo/texinfo.hash b/package/texinfo/texinfo.hash
-deleted file mode 100644
-index 4bdf343..0000000
---- a/package/texinfo/texinfo.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated
--sha256 ac68394ce21b2420ba7ed7cec65d84aacf308cc88e9bf4716fcfff88286883d2 texinfo-6.1.tar.xz
-diff --git a/package/texinfo/texinfo.mk b/package/texinfo/texinfo.mk
-deleted file mode 100644
-index ebd0b48..0000000
---- a/package/texinfo/texinfo.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# texinfo
--#
--################################################################################
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 3a4a661..966cc79 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -29,19 +29,8 @@ BINUTILS_LICENSE = GPLv3+, libiberty LGPLv2.1+
+ BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
+ 
+ ifeq ($(BINUTILS_FROM_GIT),y)
+-BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
+-HOST_BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
+-endif
 -
--TEXINFO_VERSION = 6.1
--TEXINFO_SITE = $(BR2_GNU_MIRROR)/texinfo
--TEXINFO_SOURCE = texinfo-$(TEXINFO_VERSION).tar.xz
--TEXINFO_LICENSE = GPLv3+
--TEXINFO_LICENSE_FILES = COPYING
--
--$(eval $(host-autotools-package))
+-# The .info files in the >= 2.26 tarball have an incorrect timestamp,
+-# so binutils tries to re-generate them. In order to avoid the
+-# dependency on host-texinfo, we simply update the timestamps.
+-ifeq ($(BR2_BINUTILS_VERSION_2_26_X)$(BR2_BINUTILS_VERSION_2_27_X),y)
+-define BINUTILS_FIXUP_INFO_TIMESTAMPS
+-	find $(@D) -name '*.info' -exec touch {} \;
+-endef
+-BINUTILS_POST_PATCH_HOOKS += BINUTILS_FIXUP_INFO_TIMESTAMPS
+-HOST_BINUTILS_POST_PATCH_HOOKS += BINUTILS_FIXUP_INFO_TIMESTAMPS
++BINUTILS_DEPENDENCIES += host-flex host-bison
++HOST_BINUTILS_DEPENDENCIES += host-flex host-bison
+ endif
+ 
+ # When binutils sources are fetched from the binutils-gdb repository,
+@@ -68,8 +57,12 @@ endif
+ 
+ # Don't build documentation. It takes up extra space / build time,
+ # and sometimes needs specific makeinfo versions to work
+-BINUTILS_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+-HOST_BINUTILS_CONF_ENV += ac_cv_prog_MAKEINFO=missing
++BINUTILS_CONF_ENV += MAKEINFO=true
++BINUTILS_MAKE_OPTS += MAKEINFO=true
++BINUTILS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MAKEINFO=true install
++HOST_BINUTILS_CONF_ENV += MAKEINFO=true
++HOST_BINUTILS_MAKE_OPTS += MAKEINFO=true
++HOST_BINUTILS_INSTALL_OPTS += MAKEINFO=true install
+ 
+ # gcc bug with Os/O2/O3, PR77311
+ # error: unable to find a register to spill in class 'CCREGS'
+@@ -109,7 +102,7 @@ HOST_BINUTILS_CONF_OPTS = \
+ # binutils run configure script of subdirs at make time, so ensure
+ # our TARGET_CONFIGURE_ARGS are taken into consideration for those
+ define BINUTILS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_ARGS) $(MAKE) -C $(@D)
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_ARGS) $(MAKE) $(BINUTILS_MAKE_OPTS) -C $(@D)
+ endef
+ 
+ # We just want libbfd, libiberty and libopcodes,
