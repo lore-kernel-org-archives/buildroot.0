@@ -1,33 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Oct 2016 09:34:03 +0200
-Subject: [Buildroot] [PATCH 1/1] fwts: needs host-bison and host-flex
-In-Reply-To: <1476383266-30963-1-git-send-email-nunes.erico@gmail.com>
-References: <1476383266-30963-1-git-send-email-nunes.erico@gmail.com>
-Message-ID: <20161014093403.1dea7cc1@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 14 Oct 2016 09:53:53 +0200
+Subject: [Buildroot] qt5webkit: host-python dependency issue in Python3
+	environment
+Message-ID: <CAGm1_ktbKzd7jbaTRryp27yZF94HMPZnZTfMw+sC1vCC8-mVvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+My project uses both Python3 and Qt5 including qt5webkit package. The
+problem in this particular constellation is, that
+output/target/usr/bin/python is a symlink to
+output/host/usr/bin/python2. i.e. host-python2 will be also built.
+This makes python usage on target impossible.
 
-On Thu, 13 Oct 2016 20:27:46 +0200, Erico Nunes wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/2e6bc77e89868d7a9902123ffb602c5b745d4580
-> 
-> Tested in a minimal debian environment, there should be no missing host
-> package dependencies after these.
-> 
-> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-> ---
->  package/fwts/fwts.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+I think this happens because qt5webkit has host-python dependency
+regardless of the selected Python flavor.
 
-Applied to master, thanks.
+Can qt5webkit be also built with host-python3?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Yegor
