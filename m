@@ -1,68 +1,102 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 14 Oct 2016 16:18:36 +0200
-Subject: [Buildroot] [PATCH v3 3/3] Revert "texinfo: new host package"
-In-Reply-To: <1476187354-13966-3-git-send-email-patrickdepinguin@gmail.com>
-References: <1476187354-13966-1-git-send-email-patrickdepinguin@gmail.com>
- <1476187354-13966-3-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <497ff96c-5c01-824e-8130-4ac7c056dc18@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 14 Oct 2016 16:19:43 +0200
+Subject: [Buildroot] [PATCH] package/Makefile.in: synchronize pkg-config
+ settings between HOST_{CONFIGURE_OPTS, MAKE_ENV}
+In-Reply-To: <20161014140944.9436-1-peter@korsgaard.com>
+References: <20161014140944.9436-1-peter@korsgaard.com>
+Message-ID: <287f3faf-8d88-cf75-74ac-14719a099f25@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
 
-Le 11/10/2016 ? 14:02, Thomas De Schampheleire a ?crit :
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> This reverts commit ea161cf6891c3a3a601dfce072f68ee4aed08d21.
-> 
-> The host-texinfo dependency is no longer used by any package, after using
-> another solution to the problem that required its introduction in the first
-> place.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+On 14-10-16 16:09, Peter Korsgaard wrote:
+> The pkg-config settings in HOST_CONFIGURE_OPTS and HOST_MAKE_ENV have
+> diverged over time, so they now used different _LIBDIR and
+> _ALLOW_SYSTEM_{CFLAGS,LIBS} settings.
+> 
+> Conceptually _CONFIGURE_OPTS should be a superset of _MAKE_ENV, so move the
+> definitions around and define _CONFIGURE_OPTS in terms of _MAKE_ENV instead
+> of repeating the individual settings.
+> 
+> Do this both for the target and host variant for consistency.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Best regards,
-Romain
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
 
 > ---
->  package/texinfo/texinfo.hash |  2 --
->  package/texinfo/texinfo.mk   | 13 -------------
->  2 files changed, 15 deletions(-)
->  delete mode 100644 package/texinfo/texinfo.hash
->  delete mode 100644 package/texinfo/texinfo.mk
+>  package/Makefile.in | 25 +++++++++++--------------
+>  1 file changed, 11 insertions(+), 14 deletions(-)
 > 
-> v2/v3: no changes
-> 
-> diff --git a/package/texinfo/texinfo.hash b/package/texinfo/texinfo.hash
-> deleted file mode 100644
-> index 4bdf343..0000000
-> --- a/package/texinfo/texinfo.hash
-> +++ /dev/null
-> @@ -1,2 +0,0 @@
-> -# Locally calculated
-> -sha256 ac68394ce21b2420ba7ed7cec65d84aacf308cc88e9bf4716fcfff88286883d2 texinfo-6.1.tar.xz
-> diff --git a/package/texinfo/texinfo.mk b/package/texinfo/texinfo.mk
-> deleted file mode 100644
-> index ebd0b48..0000000
-> --- a/package/texinfo/texinfo.mk
-> +++ /dev/null
-> @@ -1,13 +0,0 @@
-> -################################################################################
-> -#
-> -# texinfo
-> -#
-> -################################################################################
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index b4a4c60..98e30b4 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -235,8 +235,10 @@ export PERL=$(shell which perl)
+>  # finds this perl module by exporting the proper value for PERL5LIB.
+>  export PERL5LIB=$(HOST_DIR)/usr/lib/perl
+>  
+> +TARGET_MAKE_ENV = PATH=$(BR_PATH)
+> +
+>  TARGET_CONFIGURE_OPTS = \
+> -	PATH=$(BR_PATH) \
+> +	$(TARGET_MAKE_ENV) \
+>  	AR="$(TARGET_AR)" \
+>  	AS="$(TARGET_AS)" \
+>  	LD="$(TARGET_LD)" \
+> @@ -275,11 +277,17 @@ TARGET_CONFIGURE_OPTS = \
+>  	STAGING_DIR="$(STAGING_DIR)" \
+>  	INTLTOOL_PERL=$(PERL)
+>  
+> -TARGET_MAKE_ENV = PATH=$(BR_PATH)
+>  
+> +HOST_MAKE_ENV = \
+> +	PATH=$(BR_PATH) \
+> +	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+> +	PKG_CONFIG_SYSROOT_DIR="/" \
+> +	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+> +	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+> +	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig"
+>  
+>  HOST_CONFIGURE_OPTS = \
+> -	PATH=$(BR_PATH) \
+> +	$(HOST_MAKE_ENV) \
+>  	AR="$(HOSTAR)" \
+>  	AS="$(HOSTAS)" \
+>  	LD="$(HOSTLD)" \
+> @@ -294,19 +302,8 @@ HOST_CONFIGURE_OPTS = \
+>  	CFLAGS="$(HOST_CFLAGS)" \
+>  	CXXFLAGS="$(HOST_CXXFLAGS)" \
+>  	LDFLAGS="$(HOST_LDFLAGS)" \
+> -	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+> -	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+> -	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+> -	PKG_CONFIG_SYSROOT_DIR="/" \
+> -	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
+>  	INTLTOOL_PERL=$(PERL)
+>  
+> -HOST_MAKE_ENV = \
+> -	PATH=$(BR_PATH) \
+> -	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+> -	PKG_CONFIG_SYSROOT_DIR="/" \
+> -	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
 > -
-> -TEXINFO_VERSION = 6.1
-> -TEXINFO_SITE = $(BR2_GNU_MIRROR)/texinfo
-> -TEXINFO_SOURCE = texinfo-$(TEXINFO_VERSION).tar.xz
-> -TEXINFO_LICENSE = GPLv3+
-> -TEXINFO_LICENSE_FILES = COPYING
-> -
-> -$(eval $(host-autotools-package))
+>  # This is extra environment we can not export ourselves (eg. because some
+>  # packages use that variable internally, eg. uboot), so we have to
+>  # explicitly pass it to user-supplied external hooks (eg. post-build,
 > 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
