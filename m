@@ -1,85 +1,84 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Oct 2016 16:04:11 +0200
-Subject: [Buildroot] qt5webkit: host-python dependency issue in Python3
- environment
-In-Reply-To: <20161014155700.583f6e14@free-electrons.com>
-References: <CAGm1_ktbKzd7jbaTRryp27yZF94HMPZnZTfMw+sC1vCC8-mVvA@mail.gmail.com>
- <20161014155700.583f6e14@free-electrons.com>
-Message-ID: <e9d3d452-ed9e-612e-ddc2-f6d73666226e@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Oct 2016 16:09:44 +0200
+Subject: [Buildroot] [PATCH] package/Makefile.in: synchronize pkg-config
+	settings between HOST_{CONFIGURE_OPTS, MAKE_ENV}
+Message-ID: <20161014140944.9436-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The pkg-config settings in HOST_CONFIGURE_OPTS and HOST_MAKE_ENV have
+diverged over time, so they now used different _LIBDIR and
+_ALLOW_SYSTEM_{CFLAGS,LIBS} settings.
 
+Conceptually _CONFIGURE_OPTS should be a superset of _MAKE_ENV, so move the
+definitions around and define _CONFIGURE_OPTS in terms of _MAKE_ENV instead
+of repeating the individual settings.
 
-On 14-10-16 15:57, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 14 Oct 2016 09:53:53 +0200, Yegor Yefremov wrote:
->> My project uses both Python3 and Qt5 including qt5webkit package. The
->> problem in this particular constellation is, that
->> output/target/usr/bin/python is a symlink to
->> output/host/usr/bin/python2.
-> 
-> Hu? target/usr/bin/python is a symlink to host/usr/bin/python2 ? Are
-> you sure ? If so, this is the problem, not the qt5webkit dependency on
-> host-python.
-> 
-> If you have a Python 3 enabled system, and qt5webkit is enabled, you
-> should have the following situation:
-> 
->  - target/usr/bin/python -> target/usr/bin/python3
->  - host/usr/bin/python -> host/usr/bin/python3
->  - host/usr/bin/python2
-> 
-> I.e, Python 3 is the "default" version, but Python 2 for the host is
-> also available, if called explicitly using host/usr/bin/python2.
-> 
-> So, I don't understand your original problem.
+Do this both for the target and host variant for consistency.
 
- As reported by Johan Derycke in a different thread:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Makefile.in | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
-> I think there is an issue with this patch.
-> 
-> We make a link in $(@D)/bin/python:
-> 
-> define QT5WEBKIT_PYTHON2_SYMLINK
->   echo  $(@D)
->   mkdir -p $(@D)/bin
->   ln -sf $(HOST_DIR)/usr/bin/python2 $(@D)/bin/python
-> endef
-> 
-> 
-> But QT5WEBKIT_INSTALL_TARGET_CMDS copies $(@D)/bin/python to the target dir:
-> 
-> define QT5WEBKIT_INSTALL_TARGET_CMDS
->   cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebKit*.so.* $(TARGET_DIR)/usr/lib
->   cp -dpf $(@D)/bin/* $(TARGET_DIR)/usr/bin/
->   $(QT5WEBKIT_INSTALL_TARGET_QMLS)
-> endef
-> 
-> This overwrites the target python link with a bogus one.
-> 
-> The bin folder only contains 'jsc' which don't need. So removing the cp solves it for me.
-
- jsc is a command-line standalone javascript executor, which is used for webkit
-tests. It's not really meant for anything else though it _could_ be used to do
-some kind of simplified node.js. So we could either copy just jsc, or not copy
-anything from the bin directory at all. Alternatively, use a different subdir of
-$(@D), e.g. $(@D)/host-python-bin.
-
- Yegor or Johan, care to submit a patch that takes either of these approaches?
-
-
- Regards,
- Arnout
-
+diff --git a/package/Makefile.in b/package/Makefile.in
+index b4a4c60..98e30b4 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -235,8 +235,10 @@ export PERL=$(shell which perl)
+ # finds this perl module by exporting the proper value for PERL5LIB.
+ export PERL5LIB=$(HOST_DIR)/usr/lib/perl
+ 
++TARGET_MAKE_ENV = PATH=$(BR_PATH)
++
+ TARGET_CONFIGURE_OPTS = \
+-	PATH=$(BR_PATH) \
++	$(TARGET_MAKE_ENV) \
+ 	AR="$(TARGET_AR)" \
+ 	AS="$(TARGET_AS)" \
+ 	LD="$(TARGET_LD)" \
+@@ -275,11 +277,17 @@ TARGET_CONFIGURE_OPTS = \
+ 	STAGING_DIR="$(STAGING_DIR)" \
+ 	INTLTOOL_PERL=$(PERL)
+ 
+-TARGET_MAKE_ENV = PATH=$(BR_PATH)
+ 
++HOST_MAKE_ENV = \
++	PATH=$(BR_PATH) \
++	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++	PKG_CONFIG_SYSROOT_DIR="/" \
++	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
++	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
++	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig"
+ 
+ HOST_CONFIGURE_OPTS = \
+-	PATH=$(BR_PATH) \
++	$(HOST_MAKE_ENV) \
+ 	AR="$(HOSTAR)" \
+ 	AS="$(HOSTAS)" \
+ 	LD="$(HOSTLD)" \
+@@ -294,19 +302,8 @@ HOST_CONFIGURE_OPTS = \
+ 	CFLAGS="$(HOST_CFLAGS)" \
+ 	CXXFLAGS="$(HOST_CXXFLAGS)" \
+ 	LDFLAGS="$(HOST_LDFLAGS)" \
+-	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+-	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+-	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-	PKG_CONFIG_SYSROOT_DIR="/" \
+-	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
+ 	INTLTOOL_PERL=$(PERL)
+ 
+-HOST_MAKE_ENV = \
+-	PATH=$(BR_PATH) \
+-	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-	PKG_CONFIG_SYSROOT_DIR="/" \
+-	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
+-
+ # This is extra environment we can not export ourselves (eg. because some
+ # packages use that variable internally, eg. uboot), so we have to
+ # explicitly pass it to user-supplied external hooks (eg. post-build,
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.9.3
