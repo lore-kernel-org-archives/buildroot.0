@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Oct 2016 17:16:07 +0200
-Subject: [Buildroot] [PATCH 50/51] ocrad: use $(TARGET_MAKE_ENV) when
+Date: Fri, 14 Oct 2016 17:18:12 +0200
+Subject: [Buildroot] [PATCH 24/51] poco: use $(TARGET_MAKE_ENV) when
  calling $(MAKE)
-In-Reply-To: <1476396838-12276-51-git-send-email-gustavo.zacarias@free-electrons.com>
+In-Reply-To: <1476396838-12276-25-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1476396838-12276-51-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <db355d31-71aa-6834-d25f-bf774d86ecf2@mind.be>
+ <1476396838-12276-25-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <0b2a07d4-e857-b07d-b407-67426837f127@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,39 +19,42 @@ On 14-10-16 00:13, gustavo.zacarias at free-electrons.com wrote:
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > ---
->  package/ocrad/ocrad.mk | 6 +++---
+>  package/poco/poco.mk | 6 +++---
 >  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/ocrad/ocrad.mk b/package/ocrad/ocrad.mk
-> index 8a038e2..d0fbd4c 100644
-> --- a/package/ocrad/ocrad.mk
-> +++ b/package/ocrad/ocrad.mk
-> @@ -17,15 +17,15 @@ define OCRAD_CONFIGURE_CMDS
+> diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+> index 79452c0..535c9a3 100644
+> --- a/package/poco/poco.mk
+> +++ b/package/poco/poco.mk
+> @@ -58,19 +58,19 @@ define POCO_CONFIGURE_CMDS
 >  endef
 
- Again, should be done for configure as well. Even though the configure script
-doesn't call the compiler at the moment, it might in the future.
+ Again, I think it should be done for configure as well.
 
  Regards,
  Arnout
 
 >  
->  define OCRAD_BUILD_CMDS
-> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+>  define POCO_BUILD_CMDS
+> -	$(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
+> +	$(TARGET_MAKE_ENV) $(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
+>  		MYSQL_LIBDIR=$(STAGING_DIR)/usr/lib/mysql \
+>  		MYSQL_INCDIR=$(STAGING_DIR)/usr/include/mysql \
+>  		DEFAULT_TARGET=$(POCO_MAKE_TARGET) -C $(@D)
 >  endef
 >  
->  define OCRAD_INSTALL_STAGING_CMDS
-> -	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+>  define POCO_INSTALL_STAGING_CMDS
+> -	$(MAKE) DESTDIR=$(STAGING_DIR) POCO_TARGET_OSARCH=$(ARCH) \
+> +	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(STAGING_DIR) POCO_TARGET_OSARCH=$(ARCH) \
+>  		DEFAULT_TARGET=$(POCO_MAKE_TARGET) install -C $(@D)
 >  endef
 >  
->  define OCRAD_INSTALL_TARGET_CMDS
-> -	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+>  define POCO_INSTALL_TARGET_CMDS
+> -	$(MAKE) DESTDIR=$(TARGET_DIR) POCO_TARGET_OSARCH=$(ARCH) \
+> +	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) POCO_TARGET_OSARCH=$(ARCH) \
+>  		DEFAULT_TARGET=$(POCO_MAKE_TARGET) install -C $(@D)
 >  endef
 >  
->  $(eval $(generic-package))
 > 
 
 -- 
