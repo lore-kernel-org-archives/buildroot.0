@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Oct 2016 17:13:44 +0200
-Subject: [Buildroot] [PATCH 18/51] ncurses: use $(TARGET_MAKE_ENV) when
+Date: Fri, 14 Oct 2016 17:16:07 +0200
+Subject: [Buildroot] [PATCH 50/51] ocrad: use $(TARGET_MAKE_ENV) when
  calling $(MAKE)
-In-Reply-To: <1476396838-12276-19-git-send-email-gustavo.zacarias@free-electrons.com>
+In-Reply-To: <1476396838-12276-51-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1476396838-12276-19-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <e90ba386-2dab-07ce-edae-b1bce091f199@mind.be>
+ <1476396838-12276-51-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <db355d31-71aa-6834-d25f-bf774d86ecf2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,33 +18,40 @@ On 14-10-16 00:13, gustavo.zacarias at free-electrons.com wrote:
 > From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> ---
+>  package/ocrad/ocrad.mk | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/ocrad/ocrad.mk b/package/ocrad/ocrad.mk
+> index 8a038e2..d0fbd4c 100644
+> --- a/package/ocrad/ocrad.mk
+> +++ b/package/ocrad/ocrad.mk
+> @@ -17,15 +17,15 @@ define OCRAD_CONFIGURE_CMDS
+>  endef
 
-
- Could you add a patch that does the same for host-ncurses as well?
+ Again, should be done for configure as well. Even though the configure script
+doesn't call the compiler at the moment, it might in the future.
 
  Regards,
  Arnout
 
-> ---
->  package/ncurses/ncurses.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-> index 2764824..9555f1e 100644
-> --- a/package/ncurses/ncurses.mk
-> +++ b/package/ncurses/ncurses.mk
-> @@ -127,9 +127,9 @@ endif
->  # ncurses breaks with parallel build, but takes quite a while to
->  # build single threaded. Work around it similar to how Gentoo does
->  define NCURSES_BUILD_CMDS
-> -	$(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) sources
-> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) sources
->  	rm -rf $(@D)/misc/pc-files
-> -	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR)
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR)
+>  
+>  define OCRAD_BUILD_CMDS
+> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
 >  endef
 >  
->  ifneq ($(BR2_STATIC_LIBS),y)
+>  define OCRAD_INSTALL_STAGING_CMDS
+> -	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+>  endef
+>  
+>  define OCRAD_INSTALL_TARGET_CMDS
+> -	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+>  endef
+>  
+>  $(eval $(generic-package))
 > 
 
 -- 
