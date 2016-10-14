@@ -1,41 +1,85 @@
 From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Fri, 14 Oct 2016 16:18:30 +0100
-Subject: [Buildroot] [PATCHv3 0/3] new packages: atfirmware and scpfirmware
-Message-ID: <cover.1476458119.git.jpinto@synopsys.com>
+Date: Fri, 14 Oct 2016 16:18:33 +0100
+Subject: [Buildroot] [PATCHv3 3/3] configs: add u-boot and atfirmware
+	options to juno
+In-Reply-To: <cover.1476458119.git.jpinto@synopsys.com>
+References: <cover.1476458119.git.jpinto@synopsys.com>
+Message-ID: <f9038e1860e12ce20dc3f3e979d517affb773e5c.1476458119.git.jpinto@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds to buildroot an important package for ARM64 based development 
-boards: The ARM Trusted Firmware (atfirmware).
-It also adds the scpfirmware which is a hidden package to get the System Control
-Processor (SCP) binary to be included in the bootloader (fip image), which is
-a requirement for ARM Juno's board. With this 2 packages, Juno gets fully 
-supported in the Buildroot.
 
-Tested-by: Liviu Dudau <Liviu.Dudau@arm.com>
+Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+---
+ board/arm/juno/readme.txt  | 21 ++++++++++++++++++---
+ configs/arm_juno_defconfig |  9 +++++++++
+ 2 files changed, 27 insertions(+), 3 deletions(-)
 
-Joao Pinto (3):
-  new package: atfirmware
-  new package: scpfirmware
-  configs: add u-boot and atfirmware options to juno
-
- board/arm/juno/readme.txt       | 21 ++++++++--
- boot/Config.in                  |  2 +
- boot/atfirmware/Config.in       | 70 +++++++++++++++++++++++++++++++++
- boot/atfirmware/atfirmware.hash |  5 +++
- boot/atfirmware/atfirmware.mk   | 85 +++++++++++++++++++++++++++++++++++++++++
- boot/scpfirmware/Config.in      | 23 +++++++++++
- boot/scpfirmware/scpfirmware.mk | 18 +++++++++
- configs/arm_juno_defconfig      |  9 +++++
- 8 files changed, 230 insertions(+), 3 deletions(-)
- create mode 100644 boot/atfirmware/Config.in
- create mode 100644 boot/atfirmware/atfirmware.hash
- create mode 100644 boot/atfirmware/atfirmware.mk
- create mode 100644 boot/scpfirmware/Config.in
- create mode 100644 boot/scpfirmware/scpfirmware.mk
-
+diff --git a/board/arm/juno/readme.txt b/board/arm/juno/readme.txt
+index 52fabf9..2a2af55 100644
+--- a/board/arm/juno/readme.txt
++++ b/board/arm/juno/readme.txt
+@@ -7,8 +7,8 @@ These instructions apply to all models of the ARM Juno:
+   - Juno r0 (does not support PCIe)
+   - Juno r1 (supports PCIe)
+ 
+-Buildroot will generate the kernel image, device tree blob and a
+-minimal root filesystem.
++Buildroot will generate the kernel image, device tree blob, bootloader binaries
++and a minimal root filesystem.
+ 
+ How to build it
+ ===============
+@@ -42,6 +42,20 @@ After building, you should obtain this tree:
+     +-- juno.dtb (if Juno r0 is used)
+     +-- juno-r1.dtb (if Juno r1 is used)
+     +-- Image
++    +-- bl1.bin
++    +-- bl2.bin
++    +-- bl2u.bin
++    +-- bl31.bin
++    +-- fip.bin
++    +-- scp-fw.bin
++    +-- u-boot.bin
++
++Preparing your rootfs
++======================
++
++Format your pen drive as a ext3 filesystem by executing:
++
++   $ mkfs.ext3 /dev/<your device>
+ 
+ Preparing your rootfs
+ ======================
+@@ -98,7 +112,8 @@ Installing kernel image and DTB
+ 3. Open the software/ folder
+ 4. Copy the 'Image' file to software/
+ 5. Copy the 'juno-r1.dtb' (r1) or the 'juno.dtb' (r0) file to software/
+-6. Press the red button in the front pannel of ARM Juno
++6. Copy the bootloader binaries (bl1.bin and fip.bin) to software/
++7. Press the red button in the front pannel of ARM Juno
+ 
+ At this time, the board will erase the Flash entry for each new item and
+ replace it with the lastest ones.
+diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
+index 87b6374..778661e 100644
+--- a/configs/arm_juno_defconfig
++++ b/configs/arm_juno_defconfig
+@@ -12,3 +12,12 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/juno/linux-juno-defconfig"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1"
++BR2_TARGET_ATFIRMWARE=y
++BR2_TARGET_ATFIRMWARE_CUSTOM_GIT=y
++BR2_TARGET_ATFIRMWARE_CUSTOM_GIT_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
++BR2_TARGET_ATFIRMWARE_CUSTOM_GIT_VERSION="v1.2"
++BR2_TARGET_ATFIRMWARE_PLATFORM="juno"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
 -- 
 1.8.1.5
