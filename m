@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Oct 2016 09:26:55 +0200
-Subject: [Buildroot] [PATCH] php: security bump to version 7.0.12
-In-Reply-To: <1476398366-29332-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1476398366-29332-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20161014092655.452324f3@free-electrons.com>
+Date: Fri, 14 Oct 2016 09:30:20 +0200
+Subject: [Buildroot] [git commit] mbedtls: bump to version 2.3.0
+Message-ID: <20161014073026.E3CF37FFE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5239108c33374a2b361276f5dcea50a6d09e19d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 13 Oct 2016 19:39:26 -0300, Gustavo Zacarias wrote:
-> See http://www.php.net/ChangeLog-7.php#7.0.12 since there are no CVEs
-> out yet.
-> 
-> And drop upstream patch.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ...pt-enclose-phpdbg_load_module_or_extensio.patch | 47 ----------------------
->  package/php/php.hash                               |  2 +-
->  package/php/php.mk                                 |  2 +-
->  3 files changed, 2 insertions(+), 49 deletions(-)
->  delete mode 100644 package/php/0007-phpdbg_prompt-enclose-phpdbg_load_module_or_extensio.patch
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index eebbfe8..2d0fa11 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,2 +1,2 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.2.1-2.1.4-1.3.16-and-polarssl.1.2.19-released
+-sha256	6ddd5ca2e7dfb43d2fd750400856246fc1c98344dabf01b1594eb2f9880ef7ce	mbedtls-2.2.1-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.3.0-2.1.5-and-1.3.17-released
++sha256	590734c8bc8b3ac48e9123d44bf03562e91f8dce0d1ac2615c318c077f3215b2	mbedtls-2.3.0-apache.tgz
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 994a3f4..7067beb 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.2.1
++MBEDTLS_VERSION = 2.3.0
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
