@@ -1,43 +1,40 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 14 Oct 2016 11:29:04 +0200
-Subject: [Buildroot] [PATCH] docs: update URL to uClibc-ng homepage
-Message-ID: <20161014092904.GA32247@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Oct 2016 11:29:36 +0200
+Subject: [Buildroot] [PATCH 03/10] core: offload handling of
+ BR2_EXTERNAL into the script
+In-Reply-To: <7715d5d66e4d09a1d56432fcbbd8578bdade0663.1475399381.git.yann.morin.1998@free.fr>
+References: <cover.1475399381.git.yann.morin.1998@free.fr>
+ <7715d5d66e4d09a1d56432fcbbd8578bdade0663.1475399381.git.yann.morin.1998@free.fr>
+Message-ID: <20161014112936.272bf8e3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is not necessary to update all mentioning of uClibc, but
-at least we should point to the right homepage of the used
-project.
+Hello,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- docs/manual/configure.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sun,  2 Oct 2016 11:09:52 +0200, Yann E. MORIN wrote:
 
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index 0cd9f82..0739bc7 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -31,7 +31,7 @@ code for your system. It consists of a compiler (in our case, +gcc+),
- binary utils like assembler and linker (in our case, +binutils+) and a
- C standard library (for example
- http://www.gnu.org/software/libc/libc.html[GNU Libc],
--http://www.uclibc.org/[uClibc]).
-+http://www.uclibc-ng.org/[uClibc-ng]).
- 
- The system installed on your development station certainly already has
- a compilation toolchain that you can use to compile an application
-@@ -81,7 +81,7 @@ by itself a cross-compilation toolchain, before building the userspace
- applications and libraries for your target embedded system.
- 
- This backend supports several C libraries:
--http://www.uclibc.org[uClibc],
-+http://www.uclibc-ng.org[uClibc-ng],
- http://www.gnu.org/software/libc/libc.html[glibc] and
- http://www.musl-libc.org[musl].
- 
+> +$(shell support/scripts/br2-external \
+> +	-m \
+> +	-o '${BR2_EXTERNAL_FILE}' \
+> +	$(BR2_EXTERNAL))
+
+Excessive newline usage here. Also, why ${} instead of $() ?
+
+> +BR2_EXTERNAL_ERROR =
+> +include $(BR2_EXTERNAL_FILE)
+> +ifneq ($(BR2_EXTERNAL_ERROR),)
+> +$(error $(BR2_EXTERNAL_ERROR))
+>  endif
+
+I don't really like this BR2_EXTERNAL_ERROR variable that gets written
+in the .mk file by the br2-external script if it fails, and then
+re-used here. But I'm not sure I have a better proposal.
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
