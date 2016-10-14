@@ -1,73 +1,43 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 14 Oct 2016 10:56:55 +0200
-Subject: [Buildroot] qt5webkit: host-python dependency issue in Python3
-	environment
-In-Reply-To: <CAGm1_ksAHMEYWSpdsdB9CD1soJkLyxppE=n=nokuN0ho-sktew@mail.gmail.com>
-References: <CAGm1_ktbKzd7jbaTRryp27yZF94HMPZnZTfMw+sC1vCC8-mVvA@mail.gmail.com>
- <CAGm1_ksAHMEYWSpdsdB9CD1soJkLyxppE=n=nokuN0ho-sktew@mail.gmail.com>
-Message-ID: <CAGm1_ktOxQfj5mFH1SH_7vB8O0bAjKo6RWVbikLMgp4S5xhDfA@mail.gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 14 Oct 2016 11:29:04 +0200
+Subject: [Buildroot] [PATCH] docs: update URL to uClibc-ng homepage
+Message-ID: <20161014092904.GA32247@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 14, 2016 at 9:56 AM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> On Fri, Oct 14, 2016 at 9:53 AM, Yegor Yefremov
-> <yegorslists@googlemail.com> wrote:
->> My project uses both Python3 and Qt5 including qt5webkit package. The
->> problem in this particular constellation is, that
->> output/target/usr/bin/python is a symlink to
->> output/host/usr/bin/python2. i.e. host-python2 will be also built.
->> This makes python usage on target impossible.
->>
->> I think this happens because qt5webkit has host-python dependency
->> regardless of the selected Python flavor.
->>
->> Can qt5webkit be also built with host-python3?
->
-> I've just seen that Johan Derycke encounters this issue too.
+It is not necessary to update all mentioning of uClibc, but
+at least we should point to the right homepage of the used
+project.
 
-I've removed output/build/host-python-2.7.12 and made following hack:
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ docs/manual/configure.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5webkit/qt5webkit.mk
-b/package/qt5/qt5webkit/qt5webkit.mk
-index a47a235..b2db756 100644
---- a/package/qt5/qt5webkit/qt5webkit.mk
-+++ b/package/qt5/qt5webkit/qt5webkit.mk
-@@ -9,7 +9,7 @@ QT5WEBKIT_VERSION = b889f460280ad98c89ede179bd3b9ce9cb02002b
- # The http://code.qt.io/cgit/qt/qtwebkit.git/ repo doesn't allow to do so.
- QT5WEBKIT_SITE = $(call github,qtproject,qtwebkit,$(QT5WEBKIT_VERSION))
- QT5WEBKIT_DEPENDENCIES = \
--       host-bison host-flex host-gperf host-python host-ruby \
-+       host-bison host-flex host-gperf host-python3 host-ruby \
-        qt5base sqlite
- QT5WEBKIT_INSTALL_STAGING = YES
-
-@@ -37,11 +37,11 @@ endif
- # around this by forcing python2 early in the PATH, via a python->python2
- # symlink.
- QT5WEBKIT_ENV = PATH=$(@D)/bin:$(BR_PATH)
--define QT5WEBKIT_PYTHON2_SYMLINK
--       mkdir -p $(@D)/bin
--       ln -sf $(HOST_DIR)/usr/bin/python2 $(@D)/bin/python
--endef
--QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
-+#define QT5WEBKIT_PYTHON2_SYMLINK
-+#      mkdir -p $(@D)/bin
-+#      ln -sf $(HOST_DIR)/usr/bin/python2 $(@D)/bin/python
-+#endef
-+#QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
-
- # Since we get the source from git, generated header files are not included.
- # qmake detects that header file generation (using the syncqt tool) must be
-
-After this I've removed output/build/qt5webkit and rebuilt it. It worked.
-
-@Johan, @Yann could you test this?
-
-I've seen some commits regarding Python 3 build support. Even from
-Samuel Martin.
-
-Yegor
+diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+index 0cd9f82..0739bc7 100644
+--- a/docs/manual/configure.txt
++++ b/docs/manual/configure.txt
+@@ -31,7 +31,7 @@ code for your system. It consists of a compiler (in our case, +gcc+),
+ binary utils like assembler and linker (in our case, +binutils+) and a
+ C standard library (for example
+ http://www.gnu.org/software/libc/libc.html[GNU Libc],
+-http://www.uclibc.org/[uClibc]).
++http://www.uclibc-ng.org/[uClibc-ng]).
+ 
+ The system installed on your development station certainly already has
+ a compilation toolchain that you can use to compile an application
+@@ -81,7 +81,7 @@ by itself a cross-compilation toolchain, before building the userspace
+ applications and libraries for your target embedded system.
+ 
+ This backend supports several C libraries:
+-http://www.uclibc.org[uClibc],
++http://www.uclibc-ng.org[uClibc-ng],
+ http://www.gnu.org/software/libc/libc.html[glibc] and
+ http://www.musl-libc.org[musl].
+ 
+-- 
+2.1.4
