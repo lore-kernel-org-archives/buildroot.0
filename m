@@ -1,31 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Oct 2016 20:09:19 +0200
-Subject: [Buildroot] [PATCH v3 2/3] binutils: get rid of host-texinfo
-	dependency and other documentation tricks
-In-Reply-To: <1476187354-13966-2-git-send-email-patrickdepinguin@gmail.com>
- (Thomas De Schampheleire's message of "Tue, 11 Oct 2016 14:02:33
- +0200")
-References: <1476187354-13966-1-git-send-email-patrickdepinguin@gmail.com>
- <1476187354-13966-2-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <87bmymzttc.fsf@dell.be.48ers.dk>
+Date: Fri, 14 Oct 2016 19:32:43 +0200
+Subject: [Buildroot] [git commit] gdb: unbreak host/target install step
+Message-ID: <20161014181012.92CCC822CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8ae8d1162d92f14a0445fc497f473fde0aee6c3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
- > The binutils/host-binutils package applied several tricks to avoid building
- > info documentation. In the worst case, host-texinfo is added as dependency.
+Commit 12306a81f8edc (gdb: get rid of host-texinfo dependency) tried to
+append MAKEINFO=true to the host/target make install arguments, but as the
+default values for these are only added when (host-)autotools-package is
+evaluated (and only if empty), this effectively drops the default values and
+we ended up without the 'install' target and nothing got installed.
 
- > However, there is a simpler solution that removes the need for all these
- > tricks: instruct the makefiles to use a dummy makeinfo command ('true').
+To fix this, specify the full install arguments.
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gdb/gdb.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 0e7abfd..ccf9e49 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -39,9 +39,9 @@ HOST_GDB_DEPENDENCIES = host-expat host-ncurses
+ 
+ # Disable building documentation
+ GDB_MAKE_OPTS += MAKEINFO=true
+-GDB_INSTALL_TARGET_OPTS += MAKEINFO=true
++GDB_INSTALL_TARGET_OPTS += MAKEINFO=true DESTDIR=$(TARGET_DIR) install
+ HOST_GDB_MAKE_OPTS += MAKEINFO=true
+-HOST_GDB_INSTALL_OPTS += MAKEINFO=true
++HOST_GDB_INSTALL_OPTS += MAKEINFO=true install
+ 
+ # Apply the Xtensa specific patches
+ XTENSA_CORE_NAME = $(call qstrip, $(BR2_XTENSA_CORE_NAME))
