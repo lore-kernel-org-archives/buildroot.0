@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Oct 2016 16:41:18 +0200
-Subject: [Buildroot] [PATCH 06/51] ed: use $(TARGET_MAKE_ENV) when
+Date: Fri, 14 Oct 2016 16:43:59 +0200
+Subject: [Buildroot] [PATCH 15/51] openssl: use $(TARGET_MAKE_ENV) when
  calling $(MAKE)
-In-Reply-To: <1476396838-12276-7-git-send-email-gustavo.zacarias@free-electrons.com>
+In-Reply-To: <1476396838-12276-16-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1476396838-12276-7-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <19e5c882-c643-c09d-86b3-2a16673c06cc@mind.be>
+ <1476396838-12276-16-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <aa8ddb7f-92bc-d81c-f047-8f4185fb7c84@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,57 +19,42 @@ On 14-10-16 00:13, gustavo.zacarias at free-electrons.com wrote:
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > ---
->  package/botan/botan.mk | 6 +++---
+>  package/openssl/openssl.mk | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+> index 6dc4b85..5f6267c 100644
+> --- a/package/openssl/openssl.mk
+> +++ b/package/openssl/openssl.mk
+> @@ -106,11 +106,11 @@ define HOST_OPENSSL_BUILD_CMDS
+>  endef
 
- botan sneaked in into the same patch.
+ Could you add a patch that does the same for host-openssl as well?
 
  Regards,
  Arnout
 
->  package/ed/ed.mk       | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-> index 69c973e..4da557a 100644
-> --- a/package/botan/botan.mk
-> +++ b/package/botan/botan.mk
-> @@ -48,15 +48,15 @@ define BOTAN_CONFIGURE_CMDS
->  endef
 >  
->  define BOTAN_BUILD_CMDS
-> -	$(MAKE) -C $(@D) AR="$(TARGET_AR) crs"
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) AR="$(TARGET_AR) crs"
->  endef
->  
->  define BOTAN_INSTALL_STAGING_CMDS
-> -	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)/usr" install
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)/usr" install
->  endef
->  
->  define BOTAN_INSTALL_TARGET_CMDS
-> -	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)/usr" install
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)/usr" install
->  endef
->  
->  $(eval $(generic-package))
-> diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-> index f3bcb74..101be0e 100644
-> --- a/package/ed/ed.mk
-> +++ b/package/ed/ed.mk
-> @@ -21,11 +21,11 @@ define ED_CONFIGURE_CMDS
->  endef
->  
->  define ED_BUILD_CMDS
-> -	$(MAKE)	-C $(@D)
+>  define OPENSSL_BUILD_CMDS
+> -	$(MAKE) -C $(@D)
 > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 >  endef
 >  
->  define ED_INSTALL_TARGET_CMDS
-> -	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+>  define OPENSSL_INSTALL_STAGING_CMDS
+> -	$(MAKE) -C $(@D) INSTALL_PREFIX=$(STAGING_DIR) install
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) INSTALL_PREFIX=$(STAGING_DIR) install
 >  endef
 >  
->  $(eval $(generic-package))
+>  define HOST_OPENSSL_INSTALL_CMDS
+> @@ -118,7 +118,7 @@ define HOST_OPENSSL_INSTALL_CMDS
+>  endef
+>  
+>  define OPENSSL_INSTALL_TARGET_CMDS
+> -	$(MAKE) -C $(@D) INSTALL_PREFIX=$(TARGET_DIR) install
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) INSTALL_PREFIX=$(TARGET_DIR) install
+>  	rm -rf $(TARGET_DIR)/usr/lib/ssl
+>  	rm -f $(TARGET_DIR)/usr/bin/c_rehash
+>  endef
 > 
 
 -- 
