@@ -1,40 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Oct 2016 11:29:36 +0200
-Subject: [Buildroot] [PATCH 03/10] core: offload handling of
- BR2_EXTERNAL into the script
-In-Reply-To: <7715d5d66e4d09a1d56432fcbbd8578bdade0663.1475399381.git.yann.morin.1998@free.fr>
-References: <cover.1475399381.git.yann.morin.1998@free.fr>
- <7715d5d66e4d09a1d56432fcbbd8578bdade0663.1475399381.git.yann.morin.1998@free.fr>
-Message-ID: <20161014112936.272bf8e3@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 14 Oct 2016 12:02:22 +0000
+Subject: [Buildroot] [Bug 9356] New: gdb
+Message-ID: <bug-9356-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9356
 
-On Sun,  2 Oct 2016 11:09:52 +0200, Yann E. MORIN wrote:
+            Bug ID: 9356
+           Summary: gdb
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: gmg.kostik at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> +$(shell support/scripts/br2-external \
-> +	-m \
-> +	-o '${BR2_EXTERNAL_FILE}' \
-> +	$(BR2_EXTERNAL))
+commit
+https://git.buildroot.net/buildroot/commit/?id=12306a81f8edc6db84e4e3c5e58e707ba9e4c9f5
+not working
 
-Excessive newline usage here. Also, why ${} instead of $() ?
+host-texinfo install error.
 
-> +BR2_EXTERNAL_ERROR =
-> +include $(BR2_EXTERNAL_FILE)
-> +ifneq ($(BR2_EXTERNAL_ERROR),)
-> +$(error $(BR2_EXTERNAL_ERROR))
->  endif
-
-I don't really like this BR2_EXTERNAL_ERROR variable that gets written
-in the .mk file by the br2-external script if it fails, and then
-re-used here. But I'm not sure I have a better proposal.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
