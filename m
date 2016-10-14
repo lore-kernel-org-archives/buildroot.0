@@ -1,41 +1,93 @@
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Date: Fri, 14 Oct 2016 11:45:15 -0300
-Subject: [Buildroot] [PATCH 04/51] lz4: use $(TARGET_MAKE_ENV) when
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 14 Oct 2016 16:45:50 +0200
+Subject: [Buildroot] [PATCH 06/51] ed: use $(TARGET_MAKE_ENV) when
  calling $(MAKE)
-In-Reply-To: <ddcb7624-d3ed-20fd-e2a0-dd0ee6eeaa26@mind.be>
+In-Reply-To: <19e5c882-c643-c09d-86b3-2a16673c06cc@mind.be>
 References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1476396838-12276-5-git-send-email-gustavo.zacarias@free-electrons.com>
- <ddcb7624-d3ed-20fd-e2a0-dd0ee6eeaa26@mind.be>
-Message-ID: <59101c06a00a07b68e37c14be5fe3e6f@free-electrons.com>
+ <1476396838-12276-7-git-send-email-gustavo.zacarias@free-electrons.com>
+ <19e5c882-c643-c09d-86b3-2a16673c06cc@mind.be>
+Message-ID: <da642ca8-45f8-10e7-a4e9-cf7b09538193@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2016-10-14 11:40, Arnout Vandecappelle wrote:
 
+
+On 14-10-16 16:41, Arnout Vandecappelle wrote:
+> 
+> 
 > On 14-10-16 00:13, gustavo.zacarias at free-electrons.com wrote:
-
 >> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
->> 
+>>
 >> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 >> ---
->>  package/lz4/lz4.mk | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->> 
->> diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
->> index a5a41d3..f96e279 100644
->> --- a/package/lz4/lz4.mk
->> +++ b/package/lz4/lz4.mk
->> @@ -27,16 +27,16 @@ define HOST_LZ4_INSTALL_CMDS
->>  endef
+>>  package/botan/botan.mk | 6 +++---
 > 
->  Could you add a patch that does the same for host-lz4 as well?
+>  botan sneaked in into the same patch.
 > 
 >  Regards,
 >  Arnout
+> 
+>>  package/ed/ed.mk       | 4 ++--
+>>  2 files changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+>> index 69c973e..4da557a 100644
+>> --- a/package/botan/botan.mk
+>> +++ b/package/botan/botan.mk
+>> @@ -48,15 +48,15 @@ define BOTAN_CONFIGURE_CMDS
 
-Hi.
-Yes, i'll handle that on a separate series.
-Regards.
+ Also, I think you should pass it in CONFIGURE_CMDS as well - even if botan
+configure doesn't look at staging dir, it's better for symmetry and for the future.
+
+ Regards,
+ Arnout
+
+>>  endef
+>>  
+>>  define BOTAN_BUILD_CMDS
+>> -	$(MAKE) -C $(@D) AR="$(TARGET_AR) crs"
+>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) AR="$(TARGET_AR) crs"
+>>  endef
+>>  
+>>  define BOTAN_INSTALL_STAGING_CMDS
+>> -	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)/usr" install
+>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)/usr" install
+>>  endef
+>>  
+>>  define BOTAN_INSTALL_TARGET_CMDS
+>> -	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)/usr" install
+>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)/usr" install
+>>  endef
+>>  
+>>  $(eval $(generic-package))
+>> diff --git a/package/ed/ed.mk b/package/ed/ed.mk
+>> index f3bcb74..101be0e 100644
+>> --- a/package/ed/ed.mk
+>> +++ b/package/ed/ed.mk
+>> @@ -21,11 +21,11 @@ define ED_CONFIGURE_CMDS
+>>  endef
+>>  
+>>  define ED_BUILD_CMDS
+>> -	$(MAKE)	-C $(@D)
+>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+>>  endef
+>>  
+>>  define ED_INSTALL_TARGET_CMDS
+>> -	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+>>  endef
+>>  
+>>  $(eval $(generic-package))
+>>
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
