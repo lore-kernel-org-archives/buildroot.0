@@ -1,229 +1,174 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 14 Oct 2016 16:39:20 +0200
-Subject: [Buildroot] [PATCH 00/12 v7] br2-external: support multiple trees
-	at once
-Message-ID: <cover.1476455955.git.yann.morin.1998@free.fr>
+Date: Fri, 14 Oct 2016 16:39:13 +0200
+Subject: [Buildroot] [PATCH 01/12] core: do not hard-code inclusion of
+	br2-external in Kconfig
+In-Reply-To: <cover.1476455955.git.yann.morin.1998@free.fr>
+References: <cover.1476455955.git.yann.morin.1998@free.fr>
+Message-ID: <2d3270228b542e3b024131844bb813f2a19e64be.1476455955.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Move the inclusion of br2-external's Config.in to the generated kconfig
+snippet.
 
-This series introduces support for using multiple br2-external trees.
+This will ultimately allow us to use more than one br2-external tree.
 
-Currently, Buildroot can use what we call a br2-external tree, that is a
-location where one can store customisations outside of the Buildroot
-tree:
+Offload the "User-provided options" menu to the generated Kconfig
+snippet. We can also move the definition of the Kconfig-version of
+BR2_EXTERNAL into this snippet.
 
-  - defconfig files;
-  - packages;
-  - custom make rules and logic;
-  - company-, project- and board-related configurations files, like a
-    kernel config file, a rootfs overlay;
-  - any other content that does not belong to the Buildroot tree...
+We introduce an extra check that was not present in the previous code,
+to check that we do have permission on that directory. Prevciously, it
+was handled as a side effect of not being able to cd into there, but it
+is cleaner to check it expressly.
 
-This is very nice and very handy!
-
-However, it is not possible to use more than one such br2-external tree
-at a time; Buildroot only supports using at most one br2-external tree.
-
-Having support for using more than one br2-external tree at the same
-time would allow more flexibility organising those out-of-tree
-customisations. One could use a br2-external tree to store FLOSS
-packages not yet in Buildroot and a second br2-external tree for
-proprietary packages; such a separation would make compliance with
-FLOSS licenses easier (by allowing distributing only the br2-external
-tree with FLOSS packages, keeping the proprietary bits private).
-
-It could also be used to commonalise br2-external trees from different
-internal projects, where each would provide a set of extensions (new
-packages, new boards defconfigs...) that a project could cherry-pick.
-
-And countless other possibilities.
-
-This series is an attempt at making it possible to use such setups.
-
-Here's a brief overview of all the patches:
-
-  - patch 1 moves the hard-coded sourcing of BR2_EXTERNAL/Config.in from
-    the main Config.in into the generated Kconfig snippet.
-
-  - patch 2 gets rid of our dummy br2-external tree, since we now can
-    include the br2-external only if specified by the user.
-
-  - patch 3 moves the handling of BR2_EXTERNAL out of the main Makefile
-    into the generated $(BASE_DIR)/.br-external.mk Makefile fragment. So
-    far, this fragment was already generated, but it only memorised the
-    value of BR2_EXTERNAL so that it need not be specified at each call;
-    it now also defines a new internal variable, BR2_EXTERNAL_MK, that
-    contains the path to the BR2_EXTERNAL/external.mk makefile fragment.
-
-    This allows us to offload all the logic about handling a
-    br2-external tree to a helper script, whether it be about the
-    Kconfig snippet or the Makefile fragment.
-
-  - patch 4 adds more validation of a br2-external tree than we
-    previously had.
-
-  - patch 5 introduces a layout change in the br2-external tree: a
-    br2-external tree must now declare its name. This name is used to
-    construct a set of variables unique to that br2-external tree.
-
-    This change is the foundation for using multiple br2-external trees
-    at once, as their paths will now be in different variables; see
-    below for more explanations.
-
-    As we now generate the Kconfig snippet and Makefile fragment, we can
-    easily (pre-)compute the variables from the helper script.
-
-    This change renders existing br2-external trees incompatible with
-    the new layout, as the BR2_EXTERNAL variable is now no longer to be
-    used by br2-external trees, and is no longer available in Kconfig
-    (although it still is available in Makefile, but we can't remove it
-    as we need it for the infra).
-
-  - patch 6 is the documentation for the br2-external name.
-
-  - patch 7 adds a blurb in the manual about how to easily convert an
-    old br2-external tree. This is referenced from the helper script and
-    displayed in case of error.
-
-  - patch 8 is the core of the change, that adds suport for using
-    multiple br2-external trees at once.
-
-    Again, because we generate the Kconfig snippet and Makefile fragment,
-    it is very easy to (pre-)compute the per-br2-external tree variables.
-
-    Each tree is now identified with its name, which is displayed both
-    in the Kconfig menu for that tree, as well as in the comment listing
-    the defconfig files from that tree.
-
-  - patch 9 is the documentation for mutliple br2-external trees.
-
-  - patch 10 makes it possible for a br2-external tree to override
-    defcongis present in Buildroot, as well as override defconfigs
-    in other br2-external trees (by the order they are listed in
-    BR2_EXTERNAL).
-
-  - patches 11..12 adds support for a short description in the desc
-    file, and uses that, if present, to construct the user-visible
-    labels (list-defconfigs, menuconfig) instead of the name.
-
-The pivotal change in this series is implemented in patch 5, and aims
-at providing br2-external trees with a way to find their own files,
-given that their locations at runtime is completely unkown, and can
-not even be deduced relative to Buildroot's own TOPDIR; this is
-explained below.
-
-Unlike Makefiles, Kconfig does not allow us to redefine a variable at
-various moments of the parsing, because the values are only valid and
-acted upon when the complete Kconfig code has been parsed. So, we need
-a way to provide Config.in files from each br2-external with their
-actual location. For that, we need different variables, one for each
-br2-external tree.
-
-So, we need a way to uniquely identify each br2-external tree, and we
-need a stable scheme. We can't use indexes (because they would not be
-stable across various runs or various ordering of the br2-external
-trees); we can't use path-based hashing (because paths are not stable
-accross users/machines/time); we can't use content-based hashing
-(external.mk and/or Config.in may all be empty, giving the same hash);
-we can't use hashes altogether because they are not human-friendly.
-
-The solution is to require br2-external trees to provide a unique name
-that is used as a kind of 'name-space' for that tree: we eventually
-provide, for each br2-external tree, a variable, BR2_EXTERNAL_$(NAME)_PATH,
-that points to the location of that tree; because $(NAME) is known to
-the br2-external tree, it also knows BR2_EXTERNAL_$(NAME)_PATH exists,
-so it can use it, and we export it both in Config.in and external.mk .
-
-Therefore, br2-external trees must now use $(BR2_EXTERNAL_$(MY_NAME)_PATH)
-to refer to their own files. It also prevents them from (accidentally)
-including files from other br2-external trees.
-
-Note: unlike old iterations, it is now mandatory that a br2-external
-tree defines its name, the rationale being that it is relatively trivial
-to upgrade an existing br2-external tree to the new layout.
-
-And that's about all for this time. ;-)
-
-Changes v6 -> v7:
-  - use $(foo) instead of ${foo}  (Thomas)
-  - add the "desc" field in the desc file; add corresponding doc
-
-Changes v5 -> v6:
-  - the helper script is first run in Makefile context, so change the
-    error function to emit Makefile code
-
-Changes v4 -> v5:
-  - introduce br2-external conversion earlier in the series  (Julien)
-  - fix intermediate-state br2-external helper script  (Julien)
-  - misc typoes
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 64ace94d4ab30aad2d8dcae61abd2beebe00b226
-
-  fwts: needs host-bison and host-flex (2016-10-14 09:32:29 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 62a03b2f27e3d3e9eb1f1bbd8cb127da8b52ce8e
-
-  docs/manual: document the br2-external desc: field (2016-10-14 15:44:09 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (12):
-      core: do not hard-code inclusion of br2-external in Kconfig
-      core: get rid of our dummy br2-external tree
-      core: offload handling of BR2_EXTERNAL into the script
-      core/br2-external: validate even more
-      core: introduce per br2-external NAME
-      docs/manual: document the br2-external NAME
-      docs/manual: add appendix to convert old br2-external trees
-      core: add support for multiple br2-external trees
-      docs/manual: document multi br2-external
-      core: allow a br2-external tree to override a defconfig
-      core: support description for br2-external trees
-      docs/manual: document the br2-external desc: field
-
- Config.in                                     |  11 -
- Makefile                                      |  85 ++++---
- boot/barebox/barebox-aux/Config.in            |   3 +-
- boot/barebox/barebox/Config.in                |   3 +-
- docs/manual/adding-packages-asciidoc.txt      |   6 +-
- docs/manual/adding-packages-perl.txt          |   2 +-
- docs/manual/adding-packages-python.txt        |   2 +-
- docs/manual/appendix.txt                      |   1 +
- docs/manual/br2-external-converting.txt       |  39 +++
- docs/manual/customize-directory-structure.txt |  13 +-
- docs/manual/customize-outside-br.txt          | 327 +++++++++++++++++++++-----
- docs/manual/customize-packages.txt            |  25 +-
- package/Makefile.in                           |   3 +-
- package/pkg-generic.mk                        |   4 +-
- support/dummy-external/Config.in              |   0
- support/dummy-external/external.mk            |   0
- support/misc/utils.mk                         |   4 +
- support/scripts/br2-external                  | 220 +++++++++++++++++
- 18 files changed, 598 insertions(+), 150 deletions(-)
- create mode 100644 docs/manual/br2-external-converting.txt
- delete mode 100644 support/dummy-external/Config.in
- delete mode 100644 support/dummy-external/external.mk
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Romain Naour <romain.naour@openwide.fr>
+---
+ Config.in                    | 11 ------
+ Makefile                     |  2 +-
+ support/scripts/br2-external | 88 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 89 insertions(+), 12 deletions(-)
  create mode 100755 support/scripts/br2-external
 
+diff --git a/Config.in b/Config.in
+index 8d37c93..985c412 100644
+--- a/Config.in
++++ b/Config.in
+@@ -14,10 +14,6 @@ config BR2_HOSTARCH
+ 	string
+ 	option env="HOSTARCH"
+ 
+-config BR2_EXTERNAL
+-	string
+-	option env="BR2_EXTERNAL"
+-
+ config BR2_BUILD_DIR
+ 	string
+ 	option env="BUILD_DIR"
+@@ -759,11 +755,4 @@ source "package/Config.in.host"
+ 
+ source "Config.in.legacy"
+ 
+-menu "User-provided options"
+-	depends on BR2_EXTERNAL != "support/dummy-external"
+-
+-source "$BR2_EXTERNAL/Config.in"
+-
+-endmenu
+-
+ source "$BR2_BUILD_DIR/.br2-external.in"
+diff --git a/Makefile b/Makefile
+index 5e4daef..f44e509 100644
+--- a/Makefile
++++ b/Makefile
+@@ -883,7 +883,7 @@ endif
+ # value of BR2_EXTERNAL is changed.
+ .PHONY: $(BUILD_DIR)/.br2-external.in
+ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
+-	@touch $@
++	$(Q)support/scripts/br2-external -o "$(@)" $(BR2_EXTERNAL)
+ 
+ # printvars prints all the variables currently defined in our
+ # Makefiles. Alternatively, if a non-empty VARS variable is passed,
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+new file mode 100755
+index 0000000..6c2b85b
+--- /dev/null
++++ b/support/scripts/br2-external
+@@ -0,0 +1,88 @@
++#!/bin/bash
++set -e
++
++# The location of the br2-external tree, once validated.
++declare BR2_EXT
++
++main() {
++    local OPT OPTARG
++    local br2_ext ofile
++
++    while getopts :ho: OPT; do
++        case "${OPT}" in
++        h)  help; exit 0;;
++        o)  ofile="${OPTARG}";;
++        :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
++        \?) error "unknown option '%s'\n" "${OPTARG}";;
++        esac
++    done
++    # Forget options; keep only positional args
++    shift $((OPTIND-1))
++
++    if [ ${#} -ne 1 ]; then
++        error "need exactly one br2-external tree to be specified\n"
++    fi
++    br2_ext="${1}"
++
++    if [ -z "${ofile}" ]; then
++        error "no output file specified (-o)\n"
++    fi
++
++    do_validate "${br2_ext}"
++
++    do_kconfig >"${ofile}"
++}
++
++# Validates the br2-external tree passed as argument. Makes it cannonical
++# and store it in global variable BR2_EXT.
++do_validate() {
++    local br2_ext="${1}"
++
++    if [ ! -d "${br2_ext}" ]; then
++        error "'%s': no such file or directory\n" "${br2_ext}"
++    fi
++    if [ ! -r "${br2_ext}" -o ! -x "${br2_ext}" ]; then
++        error "'%s': permission denied\n" "${br2_ext}"
++    fi
++
++    BR2_EXT="$(cd "${br2_ext}"; pwd -P )"
++}
++
++# Generate the kconfig snippet for the br2-external tree.
++do_kconfig() {
++    printf '#\n# Automatically generated file; DO NOT EDIT.\n#\n'
++    printf '\n'
++    printf 'config BR2_EXTERNAL\n'
++    printf '\tstring\n'
++    printf '\tdefault "%s"\n' "${BR2_EXT}"
++    printf '\n'
++    printf 'menu "User-provided options"\n'
++    printf '\tdepends on BR2_EXTERNAL != "support/dummy-external"\n'
++    printf '\n'
++    printf 'source "%s/Config.in"\n' "${BR2_EXT}"
++    printf '\n'
++    printf "endmenu # User-provided options\n"
++}
++
++help() {
++    cat <<-_EOF_
++	Usage:
++	    ${my_name} -o FILE PATH
++
++	${my_name} generates the kconfig snippet to include the configuration
++	options specified in the br2-external tree passed as positional argument.
++
++	Options:
++	    -o FILE
++	        FILE in which to generate the kconfig snippet.
++
++	Returns:
++	    0   If no error
++	    !0  If any error
++	_EOF_
++}
++
++error() { local fmt="${1}"; shift; printf "%s: ${fmt}" "${my_name}" "${@}" >&2; exit 1; }
++
++my_name="${0##*/}"
++main "${@}"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
