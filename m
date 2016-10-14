@@ -1,84 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Oct 2016 16:09:44 +0200
-Subject: [Buildroot] [PATCH] package/Makefile.in: synchronize pkg-config
-	settings between HOST_{CONFIGURE_OPTS, MAKE_ENV}
-Message-ID: <20161014140944.9436-1-peter@korsgaard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 14 Oct 2016 16:12:10 +0200
+Subject: [Buildroot] [PATCH] qt5webkit: fix building in Python 3
+ environment
+In-Reply-To: <CAGm1_kuirawLGrFj3hTAOAn46Uj8+F6UVuB-m_Kxb65HO3zRmQ@mail.gmail.com>
+References: <1476451574-31822-1-git-send-email-yegorslists@googlemail.com>
+ <20161014154013.231da448@free-electrons.com>
+ <CAGm1_kuirawLGrFj3hTAOAn46Uj8+F6UVuB-m_Kxb65HO3zRmQ@mail.gmail.com>
+Message-ID: <2742504b-33f2-0fcc-cc7a-8297e563bc6b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The pkg-config settings in HOST_CONFIGURE_OPTS and HOST_MAKE_ENV have
-diverged over time, so they now used different _LIBDIR and
-_ALLOW_SYSTEM_{CFLAGS,LIBS} settings.
 
-Conceptually _CONFIGURE_OPTS should be a superset of _MAKE_ENV, so move the
-definitions around and define _CONFIGURE_OPTS in terms of _MAKE_ENV instead
-of repeating the individual settings.
 
-Do this both for the target and host variant for consistency.
+On 14-10-16 15:59, Yegor Yefremov wrote:
+> On Fri, Oct 14, 2016 at 3:40 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>>
+[snip]
+>> So if we apply your patch, I believe we will fall again into the
+>> autobuilder issues that commit ac16793eaaabfced0312420759e3a66cdaa1ea8e
+>> was fixing.
+>>
+>> Can you explain why your patch is needed, and what now makes qt5webkit
+>> build fine with Python 3 on the host ?
+> 
+> First of commit "package/qt5webkit: needs host-python" just adds
+> host-python dependency, that wasn't there before. As I've described
+> here [1], this approach breaks user space python, as the symlink
+> points to host binary. Then I greped in qt5webkit source folder and
+> found some hints about Python 3 fixes. Upstream qt5webkit
+> (http://code.qt.io/cgit/qt/qtwebkit.git) has following commits:
+> 
+> 18cb1a3ae907d76da9eb8c54528cf3bcb074d0e5 (Fix build failure with python3)
+> 95ae190ff329824019621b860cdfd048eeebe48d (Failure building with python3)
+> 
+> Then I've removed output/build/host-python directory and
+> output/build/qt5webkit and rebuilt this package having only
+> host-python3. I could succeesfully make this.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Makefile.in | 25 +++++++++++--------------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+ So, can you re-analyse the original autobuild failures and find out why they
+happened?
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index b4a4c60..98e30b4 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -235,8 +235,10 @@ export PERL=$(shell which perl)
- # finds this perl module by exporting the proper value for PERL5LIB.
- export PERL5LIB=$(HOST_DIR)/usr/lib/perl
- 
-+TARGET_MAKE_ENV = PATH=$(BR_PATH)
-+
- TARGET_CONFIGURE_OPTS = \
--	PATH=$(BR_PATH) \
-+	$(TARGET_MAKE_ENV) \
- 	AR="$(TARGET_AR)" \
- 	AS="$(TARGET_AS)" \
- 	LD="$(TARGET_LD)" \
-@@ -275,11 +277,17 @@ TARGET_CONFIGURE_OPTS = \
- 	STAGING_DIR="$(STAGING_DIR)" \
- 	INTLTOOL_PERL=$(PERL)
- 
--TARGET_MAKE_ENV = PATH=$(BR_PATH)
- 
-+HOST_MAKE_ENV = \
-+	PATH=$(BR_PATH) \
-+	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+	PKG_CONFIG_SYSROOT_DIR="/" \
-+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-+	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig"
- 
- HOST_CONFIGURE_OPTS = \
--	PATH=$(BR_PATH) \
-+	$(HOST_MAKE_ENV) \
- 	AR="$(HOSTAR)" \
- 	AS="$(HOSTAS)" \
- 	LD="$(HOSTLD)" \
-@@ -294,19 +302,8 @@ HOST_CONFIGURE_OPTS = \
- 	CFLAGS="$(HOST_CFLAGS)" \
- 	CXXFLAGS="$(HOST_CXXFLAGS)" \
- 	LDFLAGS="$(HOST_LDFLAGS)" \
--	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
--	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
--	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
--	PKG_CONFIG_SYSROOT_DIR="/" \
--	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
- 	INTLTOOL_PERL=$(PERL)
- 
--HOST_MAKE_ENV = \
--	PATH=$(BR_PATH) \
--	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
--	PKG_CONFIG_SYSROOT_DIR="/" \
--	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
--
- # This is extra environment we can not export ourselves (eg. because some
- # packages use that variable internally, eg. uboot), so we have to
- # explicitly pass it to user-supplied external hooks (eg. post-build,
+http://autobuild.buildroot.org/results/ea4/ea4dd00ee585f9f9ea1927b8b5fd9035e6733420/
+http://autobuild.buildroot.org/results/323/323ba220fae70d94c81bab9a348be844e90ace91/
+http://autobuild.buildroot.org/results/6c2/6c20c9e222f94e6b70b97b87e1393dd16da2718c/
+
+ Nothing has changed in qt5webkit since those autobuild failures, so simply
+reverting ac16793eaaabfc is going to re-introduce those failures.
+
+ Regards,
+ Arnout
+
+> [1] http://lists.busybox.net/pipermail/buildroot/2016-October/174215.html
+> 
+> Yegor
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 -- 
-2.9.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
