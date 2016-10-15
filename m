@@ -1,163 +1,110 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 16 Oct 2016 00:14:50 +0200
-Subject: [Buildroot] [PATCH v5 1/9] package/pkg-cmake.mk: fix build type
- and optimization flags
-In-Reply-To: <20161015210349.29432-2-s.martin49@gmail.com>
+Date: Sun, 16 Oct 2016 00:42:04 +0200
+Subject: [Buildroot] [PATCH v5 2/9] package/pkg-cmake.mk: move
+ CMAKE_BUILD_TYPE definition into toolchainfile.cmake
+In-Reply-To: <20161015210349.29432-3-s.martin49@gmail.com>
 References: <20161015210349.29432-1-s.martin49@gmail.com>
- <20161015210349.29432-2-s.martin49@gmail.com>
-Message-ID: <01bb48f3-1c37-20bc-7140-84a857793dfd@mind.be>
+ <20161015210349.29432-3-s.martin49@gmail.com>
+Message-ID: <838f8306-1385-0098-6b50-1a27141f4d92@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Subject is wrong: no optimization flags are fixed.
+
 
 On 15-10-16 23:03, Samuel Martin wrote:
-> tl;dr:
-> 
-> Before applying this patch, CMake packages are built with the following
-> options:
->   * if BR2_ENABLE_DEBUG is set:
->     The CMake build type is set to RelWithDebInfo, which means:
->     - Optimization level is forced to: -O2;
->     - no log nor assert due to -DNDEBUG;
->     - BR2_DEBUG_{1..3} effect is unchanged;
->   * otherwise:
->     The CMake build type is set to Release, which means:
->     - Optimization level is forced to: -O3;
->     - no log nor assert due to -DNDEBUG (as expected).
->   In any case, the optimization WRT the binary size is always ignored and
->   forced.
-> 
-> This change chooses the build type doing the closest thing to what
-> Buildroot attempts to do.
-> 
-> Long version:
-> 
-> Flags set by Buildroot depending on the configuration:
-> 
->   BR2_ENABLE_DEBUG | Optim. level   | Buildroot {C,CXX}FLAGS
->   =================+================+=======================
->           y        | BR2_OPTIMIZE_S | -Os -gx
->           y        | BR2_OPTIMIZE_G | -Og -gx
->           y        | BR2_OPTIMIZE_n | -On -gx
->           n        | BR2_OPTIMIZE_S | -Os
->           n        | BR2_OPTIMIZE_G | -Og
->           n        | BR2_OPTIMIZE_n | -On
-> 
-> Default flags appended by CMake depending on the build type:
-> 
->   Build type     | Flags           | Effects on {C,CXX}FLAGS
->   ===============+=================+===========================================
->   Debug          | -g              | Force -g, compatible with BR2_ENABLE_DEBUG
->   MinSizeRel     | -Os -DNDEBUG    | Set -Os, compatible with BR2_OPTIMIZE_S
->   Release        | -O3 -DNDEBUG    | Set -O3, closest to the others cases,
->                  |                 | though the optimization level is forced.
->   RelWithDebInfo | -O2 -g -DNDEBUG | Force -g and set -O2, not friendly with BR
-> 
-> Since CMake appends its own build type flags and because of the gcc
-> option parser, the CMake flags takes precedence over the Buildroot
-> flags.
-> 
-> So, this change sets the build type in a very simple way depending on
-> the BR2_ENABLE_DEBUG symbol.
-> 
-> Follow-up patches will fix the CMake flag variables that are appended by
-> CMake.
+> This change still allows overriding the build type from the configure
+> command line.
 
- Most of this explanation fits better in patch 3, because here we're not yet
-fixing anything.
+ Maybe explain why we want this:
 
- Also, this patch is now basically reverting
-4b0120183404913f7f7788ef4f0f6b51498ef363, so that should be mentioned.
+The chosen CMAKE_BUILD_TYPE encodes an option of the Buildroot configuration, so
+it makes more sense to save it in the toolchainfile.cmake than to pass it during
+configure.
 
- How about:
-
-package/pkg-cmake.mk: use Debug or Release build types
-
-Before applying this patch, CMake packages are built with the following
-options:
-  * if BR2_ENABLE_DEBUG is set:
-    The CMake build type is set to RelWithDebInfo, which means:
-    - Optimization level is forced to: -O2;
-    - no log nor assert due to -DNDEBUG;
-    - BR2_DEBUG_{1..3} effect is unchanged;
-  * otherwise:
-    The CMake build type is set to Release, which means:
-    - Optimization level is forced to: -O3;
-    - no log nor assert due to -DNDEBUG (as expected).
-  In any case, the optimization WRT the binary size is always ignored and
-  forced.
-
-In particular, the -DNDEBUG added by RelWithDebInfo is wrong because it removes
-assertions and logging, which is exactly what we do want in BR2_ENABLE_DEBUG.
-
-Follow-up patches will fix the CMake flag variables that are appended by CMake.
-But then, the 'Debug' and 'Release' config types make more semantical sense than
-'RelWithDebInfo' and 'Release'. So revert commit 4b012018 which introduced
-RelWithDebInfo.
-
+It is still possible to override the build type on the cmake command line.
 
 > 
-> Cc: Charles Hardin <ckhardin@exablox.com>
 > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > 
 > ---
 > changes v4->v5:
-> - none
+> - fix cmake set call
 > 
 > changes v3->v4:
-> - simplify build type selection
+> - new patch
 > ---
->  package/pkg-cmake.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+>  CHANGES                             | 6 ++++++
+>  package/pkg-cmake.mk                | 2 +-
+>  support/misc/toolchainfile.cmake.in | 3 +++
+>  3 files changed, 10 insertions(+), 1 deletion(-)
 > 
+> diff --git a/CHANGES b/CHANGES
+> index b4bd5fe..c0e3e79 100644
+> --- a/CHANGES
+> +++ b/CHANGES
+> @@ -1,3 +1,9 @@
+> +2016.11-rc1,
+> +
+> +    toolchainfile.cmake:
+> +    * when used outside of Buildroot, if not specified on the command
+> +      line, the CMAKE_BUILD_TYPE is by toolchainfile.cmake.
+
+ I'm not sure if this is something important enough to mention in the CHANGES.
+If it is (up to Peter to decide when commit I'd say), the maybe rephrase as
+
+   * when used outside of Buildroot, the toolchainfile.cmake will set the
+     CMAKE_BUILD_TYPE to Debug or Release, according to the configuration.
+     It is still possible to override this by adding -DCMAKE_BUILD_TYPE=...
+     on the cmake command line.
+
+> +
+>  2016.08, Released September 1st, 2016
+>  
+>  	Minor fixes.
 > diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index aca9e61..259865d 100644
+> index 259865d..5725ed6 100644
 > --- a/package/pkg-cmake.mk
 > +++ b/package/pkg-cmake.mk
-> @@ -35,6 +35,14 @@ ifneq ($(QUIET),)
->  CMAKE_QUIET = -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_INSTALL_MESSAGE=NEVER
->  endif
->  
-> +# Set the CMake build type which matches the best the build configuration sets
-> +# in Buildroot.
+> @@ -95,7 +95,6 @@ define $(2)_CONFIGURE_CMDS
+>  	PATH=$$(BR_PATH) \
+>  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+>  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+> -		-DCMAKE_BUILD_TYPE=$(BR_CMAKE_BUILD_TYPE) \
+>  		-DCMAKE_INSTALL_PREFIX="/usr" \
+>  		-DCMAKE_COLOR_MAKEFILE=OFF \
+>  		-DBUILD_DOC=OFF \
+> @@ -255,5 +254,6 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+>  		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
+>  		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
+>  		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
+> +		-e 's#@@BR_CMAKE_BUILD_TYPE@@#$(BR_CMAKE_BUILD_TYPE)#' \
 
- This explanation is now not needed anymore: it's quite obvious that debug
-corresponds to debug...
-
-> +ifeq ($(BR2_ENABLE_DEBUG),y)
-> +BR_CMAKE_BUILD_TYPE=Debug
-> +else
-> +BR_CMAKE_BUILD_TYPE=Release
-> +endif
-
- This is now so simple that the original in-line definition is good enough.
-
- In other words, I would do an exact revert of commit 4b012018 instead of
-introducing a new symbol that is used only once (after patch 2 it is still used
-only once).
+ So I'd still keep the $(if $(BR2_ENABLE_DEBUG),Debug,Release) form here.
 
  Regards,
  Arnout
 
+>  		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+>  		> $@
+> diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+> index 649b52d..2505256 100644
+> --- a/support/misc/toolchainfile.cmake.in
+> +++ b/support/misc/toolchainfile.cmake.in
+> @@ -13,6 +13,9 @@ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST
+>  set(CMAKE_SYSTEM_NAME Linux)
+>  set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
+>  
+> +# Build type from the Buildroot configuration
+> +set(CMAKE_BUILD_TYPE @@BR_CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configuration")
 > +
->  ################################################################################
->  # inner-cmake-package -- defines how the configuration, compilation and
->  # installation of a CMake package should be done, implements a few hooks to
-> @@ -87,7 +95,7 @@ define $(2)_CONFIGURE_CMDS
->  	PATH=$$(BR_PATH) \
->  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
->  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
-> -		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release) \
-> +		-DCMAKE_BUILD_TYPE=$(BR_CMAKE_BUILD_TYPE) \
->  		-DCMAKE_INSTALL_PREFIX="/usr" \
->  		-DCMAKE_COLOR_MAKEFILE=OFF \
->  		-DBUILD_DOC=OFF \
+>  set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
+>  set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
+>  set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@ ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Buildroot LDFLAGS")
 > 
 
 -- 
