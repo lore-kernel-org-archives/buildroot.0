@@ -1,36 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 12:10:41 +0200
-Subject: [Buildroot] [PATCH 1/2] python-pyelftools: new package
-In-Reply-To: <20161012080632.21369-1-julien.floret@6wind.com>
-References: <20161012080632.21369-1-julien.floret@6wind.com>
-Message-ID: <20161015121041.53db1a0a@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 15 Oct 2016 12:20:55 +0200
+Subject: [Buildroot] [PATCH v2] package/urg: update homepage and source
+	url
+In-Reply-To: <20161015100420.11832-1-s.martin49@gmail.com> (Samuel Martin's
+ message of "Sat, 15 Oct 2016 12:04:20 +0200")
+References: <20161015100420.11832-1-s.martin49@gmail.com>
+Message-ID: <87eg3hncag.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-On Wed, 12 Oct 2016 10:06:31 +0200, Julien Floret wrote:
-> From: Olivier Matz <olivier.matz@6wind.com>
-> 
-> Signed-off-by: Olivier Matz <olivier.matz@6wind.com>
-> Signed-off-by: Julien Floret <julien.floret@6wind.com>
-> ---
->  package/Config.in                                |  1 +
->  package/python-pyelftools/Config.in              |  7 +++++++
->  package/python-pyelftools/python-pyelftools.hash |  4 ++++
->  package/python-pyelftools/python-pyelftools.mk   | 14 ++++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/python-pyelftools/Config.in
->  create mode 100644 package/python-pyelftools/python-pyelftools.hash
->  create mode 100644 package/python-pyelftools/python-pyelftools.mk
+ > Fetch the source archive from fedora repository since this version of
+ > the source is not available of the project site since it moved to
+ > sourceforge.
 
-Both patches applied, thanks!
+ > Also add the md5 checksum computed by feodra to the *.hash file.
 
-Thomas
+ > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
