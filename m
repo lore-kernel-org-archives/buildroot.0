@@ -1,73 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Oct 2016 11:34:32 +0200
-Subject: [Buildroot] [git commit] poppler: bump to version 0.48.0
-Message-ID: <20161015094202.DE5527FC3A@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 15 Oct 2016 11:44:29 +0200
+Subject: [Buildroot] [PATCH v3 0/8] Misc. CMake fixes
+Message-ID: <20161015094437.6989-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b672b404d16ee5a7dc921c96a1677f4fb3fd48f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
 
-Drop upstream patch.
+Here is a short series reworking the way the Buildroot's CMake
+infrastructure handles compiler/linker flags.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...invalid-shell-comparaison-in-libtiff-test.patch | 23 ----------------------
- package/poppler/poppler.hash                       |  2 +-
- package/poppler/poppler.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 25 deletions(-)
+Patch 1 fixes the optimization and debug flags passed/set by CMake.
 
-diff --git a/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch b/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch
-deleted file mode 100644
-index f40bee1..0000000
---- a/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--Fix syntax issue in configure script
--
--The change is not done in configure.ac, because the package doesn't
--autoreconf properly.
--
--Patch on configure.ac submitted upstream at
--https://bugs.freedesktop.org/show_bug.cgi?id=90292.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/configure
--===================================================================
----- a/configure
--+++ b/configure
--@@ -19738,7 +19738,7 @@
-- CXXFLAGS="$CXXFLAGS $LIBTIFF_CFLAGS"
-- LIBS="$LIBS $LIBTIFF_LIBS"
-- if test x$enable_libtiff = xyes; then
---  if test x"$LIBTIFF_LIBS" != ; then
--+  if test x"$LIBTIFF_LIBS" != x; then
--     ac_fn_cxx_check_func "$LINENO" "TIFFOpen" "ac_cv_func_TIFFOpen"
-- if test "x$ac_cv_func_TIFFOpen" = xyes; then :
-- 
-diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
-index c4c7f66..533178f 100644
---- a/package/poppler/poppler.hash
-+++ b/package/poppler/poppler.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	4963e31ba5e17530a87b16588e22928bc044e8d28d02303dded981bff6725b98	poppler-0.32.0.tar.xz
-+sha256	85a003968074c85d8e13bf320ec47cef647b496b56dcff4c790b34e5482fef93	poppler-0.48.0.tar.xz
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 172c428..202eac2 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POPPLER_VERSION = 0.32.0
-+POPPLER_VERSION = 0.48.0
- POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
- POPPLER_SITE = http://poppler.freedesktop.org
- POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+Patches 2 to 6 clean up CMake-based package regarding {C,CXX,LD}FLAGS.
+
+Patch 7 reworks the way the compiler/linker flags are set in
+toolchainfile.cmake.
+
+Regards,
+Sam
+
+
+Max Filippov (1):
+  package/opencv3: fix CMAKE_CXX_FLAGS
+
+Samuel Martin (7):
+  package/pkg-cmake.mk: fix build type and optimization flags
+  package/assimp: wrap long lines
+  package/gflags: includes TARGET_CXXFLAGS to the overloaded CXXFLAGS
+  package/gnuradio: includes TARGET_CFLAGS to the overloaded CFLAGS
+  package/libcec: includes TARGET_{C,CXX}FLAGS to the overloaded
+    {C,CXX}FLAGS
+  package/rpi-userland: includes TARGET_CFLAGS to the overloaded CFLAGS
+  toochainfile.cmake: rework the way Buildroot sets flags
+
+ CHANGES                              |  6 ++++++
+ package/assimp/assimp.mk             |  3 ++-
+ package/gflags/gflags.mk             |  3 ++-
+ package/gnuradio/gnuradio.mk         |  2 +-
+ package/libcec/libcec.mk             |  5 +++--
+ package/opencv3/opencv3.mk           |  2 +-
+ package/pkg-cmake.mk                 | 12 +++++++++++-
+ package/rpi-userland/rpi-userland.mk |  3 ++-
+ support/misc/toolchainfile.cmake.in  | 14 ++++++++++----
+ 9 files changed, 38 insertions(+), 12 deletions(-)
+
+--
+2.10.0
