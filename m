@@ -1,56 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 12:50:37 +0200
-Subject: [Buildroot] [PATCH v4 1/3] vexpress-firmware: new package
-In-Reply-To: <1476518623-30654-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1476518623-30654-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1476518623-30654-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20161015125037.4a17bad5@free-electrons.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sat, 15 Oct 2016 12:54:23 +0200
+Subject: [Buildroot] [PATCH 2/2] core/legal-info: don't generate big
+ file with all license texts
+In-Reply-To: <52e41b4a3aab9e9d50ace8aee2501becc5080bb8.1476519329.git.yann.morin.1998@free.fr>
+References: <cover.1476519329.git.yann.morin.1998@free.fr>
+ <52e41b4a3aab9e9d50ace8aee2501becc5080bb8.1476519329.git.yann.morin.1998@free.fr>
+Message-ID: <3ccbad10-37e8-c0a1-543b-6ce5507ad9e0@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Yann,
 
-On Sat, 15 Oct 2016 10:03:41 +0200, Thomas Petazzoni wrote:
-> From: Joao Pinto <jpinto@synopsys.com>
-> 
-> This commit adds a new package for the SCP (System Control Processor)
-> firmware for the ARM reference platforms. There will most likely be
-> other SCP firmware provided by other vendors, but they might be provided
-> in a different form, so we for now create a vendor-specific package
-> named vexpress-firmware.
-> 
-> Since this firmware is used for booting, we create the package in boot/
-> and not in package/.
-> 
-> The package simply installs a single pre-built binary file into the
-> images directory.
-> 
-> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-> [Thomas:
->  - Rename the package from scpfirmware to vexpress-firmware.
->  - Add a Config.in prompt for the package.
->  - Remove the prompt-less Config.in options to select the Git repo and
->    version. Since we only support the Vexpress firmware, there's no need
->    for configurability here, so we just use the right Git repo/version
->    in the .mk file.
->  - Use $(INSTALL) -D to install the firmware file.
->  - Add license information.]
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  boot/Config.in                              |  1 +
->  boot/vexpress-firmware/Config.in            |  6 ++++++
->  boot/vexpress-firmware/vexpress-firmware.mk | 20 ++++++++++++++++++++
->  3 files changed, 27 insertions(+)
->  create mode 100644 boot/vexpress-firmware/Config.in
->  create mode 100644 boot/vexpress-firmware/vexpress-firmware.mk
+On 15/10/2016 10:15, Yann E. MORIN wrote:
+> By aggregating all the license files into a single big text-only file
+> means we have no way to use license files that are binary blobs (e.g.
+> pdf, rtf...).
 
-Applied to master, after adding a hash file, as suggested by Yann.
+Yeah, and we have a few PDFs already: libraw and libilbc.
 
-Thomas
+> Just do not generate that big file; if the user still wants it, it is
+> very easy to create it afterwards.
+> 
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Luca
