@@ -1,45 +1,56 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sat, 15 Oct 2016 12:48:53 +0200
-Subject: [Buildroot] [PATCH 1/2] core/legal-info: save empty string when
- no license file
-In-Reply-To: <4fdb0d67c86204e0a3048df9eaa86f9da98a4d12.1476519329.git.yann.morin.1998@free.fr>
-References: <cover.1476519329.git.yann.morin.1998@free.fr>
- <4fdb0d67c86204e0a3048df9eaa86f9da98a4d12.1476519329.git.yann.morin.1998@free.fr>
-Message-ID: <0240b817-d4e6-13c7-fc0b-8b748aeb1234@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 15 Oct 2016 12:50:37 +0200
+Subject: [Buildroot] [PATCH v4 1/3] vexpress-firmware: new package
+In-Reply-To: <1476518623-30654-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1476518623-30654-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1476518623-30654-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20161015125037.4a17bad5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
+Hello,
 
-On 15/10/2016 10:15, Yann E. MORIN wrote:
-> This is stored in the manifest file; it is perfectly possible to have
-> empty fields in there.
+On Sat, 15 Oct 2016 10:03:41 +0200, Thomas Petazzoni wrote:
+> From: Joao Pinto <jpinto@synopsys.com>
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> This commit adds a new package for the SCP (System Control Processor)
+> firmware for the ARM reference platforms. There will most likely be
+> other SCP firmware provided by other vendors, but they might be provided
+> in a different form, so we for now create a vendor-specific package
+> named vexpress-firmware.
+> 
+> Since this firmware is used for booting, we create the package in boot/
+> and not in package/.
+> 
+> The package simply installs a single pre-built binary file into the
+> images directory.
+> 
+> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+> [Thomas:
+>  - Rename the package from scpfirmware to vexpress-firmware.
+>  - Add a Config.in prompt for the package.
+>  - Remove the prompt-less Config.in options to select the Git repo and
+>    version. Since we only support the Vexpress firmware, there's no need
+>    for configurability here, so we just use the right Git repo/version
+>    in the .mk file.
+>  - Use $(INSTALL) -D to install the firmware file.
+>  - Add license information.]
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/pkg-generic.mk | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 68ead3d..92cc565 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -779,7 +779,6 @@ endif
->  ifneq ($$($(2)_LICENSE_FILES),)
->  $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
->  endif
-> -$(2)_MANIFEST_LICENSE_FILES ?= not saved
+>  boot/Config.in                              |  1 +
+>  boot/vexpress-firmware/Config.in            |  6 ++++++
+>  boot/vexpress-firmware/vexpress-firmware.mk | 20 ++++++++++++++++++++
+>  3 files changed, 27 insertions(+)
+>  create mode 100644 boot/vexpress-firmware/Config.in
+>  create mode 100644 boot/vexpress-firmware/vexpress-firmware.mk
 
-This makes the "license files" column always a list, and never a
-hard-coded magic string. So the semantic of the field is always
-constant, and I think this is good.
+Applied to master, after adding a hash file, as suggested by Yann.
 
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-
+Thomas
 -- 
-Luca
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
