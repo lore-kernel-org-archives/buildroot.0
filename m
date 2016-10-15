@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 15 Oct 2016 16:51:00 +0200
-Subject: [Buildroot] [PATCH 06/13] kodi-addon-xvdr: remove deprecated package
+Date: Sat, 15 Oct 2016 16:51:03 +0200
+Subject: [Buildroot] [PATCH 09/13] torsmo: remove deprecated package
 In-Reply-To: <20161015145107.18264-1-arnout@mind.be>
 References: <20161015145107.18264-1-arnout@mind.be>
-Message-ID: <20161015145107.18264-7-arnout@mind.be>
+Message-ID: <20161015145107.18264-10-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,151 +14,94 @@ We will remove BR2_DEPRECATED, so remove this deprecated package.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Config.in.legacy                                | 15 +++++++++++---
- package/kodi-addon-xvdr/0001-xbmc-rebrand.patch | 19 ------------------
- package/kodi-addon-xvdr/Config.in               | 16 ---------------
- package/kodi-addon-xvdr/kodi-addon-xvdr.hash    |  2 --
- package/kodi-addon-xvdr/kodi-addon-xvdr.mk      | 26 -------------------------
- package/kodi/Config.in                          |  1 -
- 6 files changed, 12 insertions(+), 67 deletions(-)
- delete mode 100644 package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
- delete mode 100644 package/kodi-addon-xvdr/Config.in
- delete mode 100644 package/kodi-addon-xvdr/kodi-addon-xvdr.hash
- delete mode 100644 package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+ Config.in.legacy           |  7 +++++++
+ package/Config.in          |  1 -
+ package/torsmo/Config.in   | 11 -----------
+ package/torsmo/torsmo.hash |  2 --
+ package/torsmo/torsmo.mk   | 18 ------------------
+ 5 files changed, 7 insertions(+), 32 deletions(-)
+ delete mode 100644 package/torsmo/Config.in
+ delete mode 100644 package/torsmo/torsmo.hash
+ delete mode 100644 package/torsmo/torsmo.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index c27ae3d..5e65d7b 100644
+index 1fcedfe..a372052 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -145,6 +145,14 @@ endif
+@@ -145,6 +145,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2016.11"
  
-+config BR2_PACKAGE_KODI_ADDON_XVDR
-+	bool "kodi-addon-xvdr removed"
++config BR2_PACKAGE_TORSMO
++	bool "torsmo removed"
 +	select BR2_LEGACY
 +	help
-+	  According to the github project page:
-+	  https://github.com/pipelka/xbmc-addon-xvdr
-+	  this package is discontinued.
++	  torsmo has been unmaintained for a long time, and nobody
++	  seems to be interested in it.
 +
- config BR2_PACKAGE_IPKG
- 	bool "ipkg removed"
+ config BR2_PACKAGE_SSTRIP
+ 	bool "sstrip removed"
  	select BR2_LEGACY
-@@ -1366,11 +1374,12 @@ config BR2_PACKAGE_STRONGSWAN_TOOLS
- 	  deprecated.
- 
- config BR2_PACKAGE_XBMC_ADDON_XVDR
--	bool "xbmc options have been renamed"
-+	bool "xbmc-addon-xvdr removed"
- 	select BR2_LEGACY
--	select BR2_PACKAGE_KODI_ADDON_XVDR
- 	help
--	  The XBMC media center project was renamed to Kodi entertainment center
-+	  According to the github project page:
-+	  https://github.com/pipelka/xbmc-addon-xvdr
-+	  this package is discontinued.
- 
- config BR2_PACKAGE_XBMC_PVR_ADDONS
- 	bool "xbmc options have been renamed"
-diff --git a/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+diff --git a/package/Config.in b/package/Config.in
+index 47c0801..0a17ce0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -305,7 +305,6 @@ comment "X applications"
+ 	source "package/qt-webkit-kiosk/Config.in"
+ 	source "package/rdesktop/Config.in"
+ 	source "package/synergy/Config.in"
+-	source "package/torsmo/Config.in"
+ 	source "package/wmctrl/Config.in"
+ 	source "package/x11vnc/Config.in"
+ 	source "package/xdotool/Config.in"
+diff --git a/package/torsmo/Config.in b/package/torsmo/Config.in
 deleted file mode 100644
-index 6e87b79..0000000
---- a/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+index 5c18ac6..0000000
+--- a/package/torsmo/Config.in
 +++ /dev/null
-@@ -1,19 +0,0 @@
--Update for Kodi
--
--Ported from OpenELEC:
--https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacenter/kodi-addon-xvdr/patches/kodi-addon-xvdr-xbmc-rebrand.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -Naur xbmc-addon-xvdr-2bf2563/configure.ac xbmc-addon-xvdr-2bf2563.patch/configure.ac
----- xbmc-addon-xvdr-2bf2563/configure.ac	2014-10-18 22:02:18.000000000 +0200
--+++ xbmc-addon-xvdr-2bf2563.patch/configure.ac	2014-10-20 03:03:20.525526996 +0200
--@@ -6,7 +6,7 @@
-- AC_INIT([xbmc-addon-xvdr], [MAJOR.MINOR.MICRO], [alexander.pipelka at gmail.com])
-- 
-- AC_CONFIG_AUX_DIR(autotools)
---AC_PREFIX_DEFAULT(/usr/lib/xbmc)
--+AC_PREFIX_DEFAULT(/usr/lib/kodi)
-- 
-- AC_CANONICAL_HOST
-- AC_CANONICAL_TARGET
-diff --git a/package/kodi-addon-xvdr/Config.in b/package/kodi-addon-xvdr/Config.in
-deleted file mode 100644
-index 85e9d60..0000000
---- a/package/kodi-addon-xvdr/Config.in
-+++ /dev/null
-@@ -1,16 +0,0 @@
--config BR2_PACKAGE_KODI_ADDON_XVDR
--	bool "kodi-addon-xvdr"
--	# upstream discontinued the development
--	depends on BR2_DEPRECATED_SINCE_2016_05
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_TORSMO
+-	bool "torsmo"
+-	depends on BR2_DEPRECATED_SINCE_2015_11
+-	depends on BR2_PACKAGE_XORG7
+-	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XLIB_LIBXEXT
 -	help
--	  This is a PVR add-on for Kodi to add VDR (http://tvdr.de/)
--	  as a TV/PVR Backend to Kodi.
+-	  Torsmo is a system monitor that sits in the corner of your desktop.
 -
--	  It adds support for Live TV watching, replaying of Recordings,
--	  programming Timers and EPG TV Guide to use on same computer or
--	  over the Network.
--
--	  https://github.com/pipelka/xbmc-addon-xvdr
--
--	  Note: since the VDR server is not packaged in Buildroot, using
--	  this addon requires that a remote VDR server be used.
-diff --git a/package/kodi-addon-xvdr/kodi-addon-xvdr.hash b/package/kodi-addon-xvdr/kodi-addon-xvdr.hash
+-	  http://mirror.egtvedt.no/avr32linux.org/twiki/pub/Main/Torsmo
+diff --git a/package/torsmo/torsmo.hash b/package/torsmo/torsmo.hash
 deleted file mode 100644
-index 933c7b8..0000000
---- a/package/kodi-addon-xvdr/kodi-addon-xvdr.hash
+index 8bbf9dc..0000000
+--- a/package/torsmo/torsmo.hash
 +++ /dev/null
 @@ -1,2 +0,0 @@
--# Locally computed
--sha256	783796eccc19c639c59b7a05cad1df705d557993b15cc7e29f7dbbd8388d698b	kodi-addon-xvdr-ae66610bc2e1a3efe49f4fa0db55ff3a7808a247.tar.gz
-diff --git a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+-# Locally calculated
+-sha256 6a6bc82e71c841ba9359f0ffe370e57ef7b04b49a448252bb0c1c28fc10e964c  torsmo-0.18.tar.gz
+diff --git a/package/torsmo/torsmo.mk b/package/torsmo/torsmo.mk
 deleted file mode 100644
-index ac7f3cb..0000000
---- a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+index 96a7976..0000000
+--- a/package/torsmo/torsmo.mk
 +++ /dev/null
-@@ -1,26 +0,0 @@
+@@ -1,18 +0,0 @@
 -################################################################################
 -#
--# kodi-addon-xvdr
+-# torsmo
 -#
 -################################################################################
 -
--# This cset is on master. When a Jarvis branch is made, we should
--# follow it, as incompatible changes in the plugins API can happen
--# on the master branch.
--KODI_ADDON_XVDR_VERSION = ae66610bc2e1a3efe49f4fa0db55ff3a7808a247
--KODI_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(KODI_ADDON_XVDR_VERSION))
--KODI_ADDON_XVDR_LICENSE = GPLv2+
--KODI_ADDON_XVDR_LICENSE_FILES = COPYING
+-TORSMO_VERSION = 0.18
+-TORSMO_SITE = http://mirror.egtvedt.no/avr32linux.org/twiki/pub/Main/Torsmo
+-TORSMO_LICENSE = BSD-3c
+-TORSMO_LICENSE_FILES = COPYING
 -
--# There's no ./configure in the git tree, we need to generate it
--# kodi-addon-xvdr uses a weird autogen.sh script, which
--# is even incorrect (it's missing the #! ) Sigh... :-(
--# Fortunately, with our little patch, it autoreconfs nicely! :-)
--KODI_ADDON_XVDR_AUTORECONF = YES
+-# help2man doesn't work when cross compiling
+-TORSMO_CONF_ENV = ac_cv_path_HELP2MAN=''
+-TORSMO_CONF_OPTS = --x-includes="-I$(STAGING_DIR)/usr/include/X11" --x-libraries="-I$(STAGING_DIR)/usr/lib" --with-x
 -
--# This really is a runtime dependency, but we need KODI to be installed
--# first, since we'll install files in KODI's directories _after_ KODI has
--# installed his own files
--KODI_ADDON_XVDR_DEPENDENCIES = kodi
+-TORSMO_DEPENDENCIES = xlib_libX11 xlib_libXext
 -
 -$(eval $(autotools-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index f388a72..1d610b2 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -284,7 +284,6 @@ menu "Audio encoder addons"
- endmenu
- 
- menu "PVR addons"
--	source "package/kodi-addon-xvdr/Config.in"
- 	source "package/kodi-pvr-argustv/Config.in"
- 	source "package/kodi-pvr-dvblink/Config.in"
- 	source "package/kodi-pvr-dvbviewer/Config.in"
 -- 
 2.9.3
