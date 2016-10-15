@@ -1,108 +1,32 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 15 Oct 2016 11:44:30 +0200
-Subject: [Buildroot] [PATCH v3 1/8] package/pkg-cmake.mk: fix build type and
-	optimization flags
+Date: Sat, 15 Oct 2016 11:44:31 +0200
+Subject: [Buildroot] [PATCH v3 2/8] package/assimp: wrap long lines
 In-Reply-To: <20161015094437.6989-1-s.martin49@gmail.com>
 References: <20161015094437.6989-1-s.martin49@gmail.com>
-Message-ID: <20161015094437.6989-2-s.martin49@gmail.com>
+Message-ID: <20161015094437.6989-3-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tl;dr:
-
-Before applying this patch, CMake packages are built with the following
-options:
-  * if BR2_ENABLE_DEBUG is set:
-    The CMake build type is set to RelWithDebInfo, which means:
-    - Optimization level is forced to: -O2;
-    - no log nor assert due to -DNDEBUG;
-    - BR2_DEBUG_{1..3} effect is unchanged;
-  * otherwise:
-    The CMake build type is set to Release, which means:
-    - Optimization level is forced to: -O3;
-    - no log nor assert due to -DNDEBUG (as expected).
-  In any case, the optimization WRT the binary size is always ignored and
-  forced.
-
-This change chooses the build type doing the closest thing to what
-Buildroot attempts to do.
-
-Long version:
-
-Flags set by Buildroot depending on the configuration:
-
-  BR2_ENABLE_DEBUG | Optim. level   | Buildroot {C,CXX}FLAGS
-  =================+================+=======================
-          y        | BR2_OPTIMIZE_S | -Os -gx
-          y        | BR2_OPTIMIZE_G | -Og -gx
-          y        | BR2_OPTIMIZE_n | -On -gx
-          n        | BR2_OPTIMIZE_S | -Os
-          n        | BR2_OPTIMIZE_G | -Og
-          n        | BR2_OPTIMIZE_n | -On
-
-Default flags appended by CMake depending on the build type:
-
-  Build type     | Flags           | Effects on {C,CXX}FLAGS
-  ===============+=================+===========================================
-  Debug          | -g              | Force -g, compatible with BR2_ENABLE_DEBUG
-  MinSizeRel     | -Os -DNDEBUG    | Set -Os, compatible with BR2_OPTIMIZE_S
-  Release        | -O3 -DNDEBUG    | Set -O3, closest to the others cases,
-                 |                 | though the optimization level is forced.
-  RelWithDebInfo | -O2 -g -DNDEBUG | Force -g and set -O2, not friendly with BR
-
-Since CMake appends its own build type flags and because of the gcc
-option parser, the CMake flags takes precedence over the Buildroot
-flags.
-
-So, this change sets the correct build type depending on the
-BR2_ENABLE_DEBUG and BR2_OPTIMIZE_* options.
-
-Note:
-  If CMake-based project forces using a given build type and/or
-  redefined the compiler and/or linker flags (the default ones or the
-  per-config ones - e.g. CMAKE_C_FLAGS/CMAKE_C_FLAGS_{DEBUG,RELEASE} -,
-  there is not much Buildroot can do about it.
-  So, the flags will be overwritten anyway in these cases.
-
-Cc: Charles Hardin <ckhardin@exablox.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/pkg-cmake.mk | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ package/assimp/assimp.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index aca9e61..eb4ec7a 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -79,6 +79,16 @@ endif
- ifndef $(2)_CONFIGURE_CMDS
- ifeq ($(4),target)
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index cda02dd..08893ff 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
+@@ -16,6 +16,7 @@ ifeq ($(BR2_m68k),y)
+ ASSIMP_CXXFLAGS += -mxgot
+ endif
  
-+# Here we choose the CMake build type which matches the best the build
-+# configuration set in Buildroot.
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+BR_CMAKE_BUILD_TYPE=Debug
-+else ifeq ($(BR2_OPTIMIZE_S),y)
-+BR_CMAKE_BUILD_TYPE=MinSizeRel
-+else
-+BR_CMAKE_BUILD_TYPE=Release
-+endif
-+
- # Configure package for target
- define $(2)_CONFIGURE_CMDS
- 	(mkdir -p $$($$(PKG)_BUILDDIR) && \
-@@ -87,7 +97,7 @@ define $(2)_CONFIGURE_CMDS
- 	PATH=$$(BR_PATH) \
- 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
- 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
--		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release) \
-+		-DCMAKE_BUILD_TYPE="$(BR_CMAKE_BUILD_TYPE)" \
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
- 		-DCMAKE_COLOR_MAKEFILE=OFF \
- 		-DBUILD_DOC=OFF \
+-ASSIMP_CONF_OPTS += -DASSIMP_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(ASSIMP_CXXFLAGS)"
++ASSIMP_CONF_OPTS += -DASSIMP_BUILD_TESTS=OFF \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(ASSIMP_CXXFLAGS)"
+ 
+ $(eval $(cmake-package))
 -- 
 2.10.0
