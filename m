@@ -1,41 +1,74 @@
-From: daggs <daggs@gmx.com>
-Date: Sat, 15 Oct 2016 07:57:38 +0200
-Subject: [Buildroot] [PATCH 2/2] odroid-mali: add support for X11 driver
-In-Reply-To: <4b3c5ef0-c62c-fce6-cce5-3cf4c091997b@mind.be>
-References: <20161013174124.9639-1-daggs@gmx.com>
- <20161013174124.9639-2-daggs@gmx.com>,
- <4b3c5ef0-c62c-fce6-cce5-3cf4c091997b@mind.be>
-Message-ID: <trinity-26433df8-3e12-4eb8-a67b-fe95a9ec41dd-1476511057951@3capp-mailcom-bs10>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 15 Oct 2016 08:17:50 +0200
+Subject: [Buildroot] [PATCH 1/1] size-stats: don't count hard links
+In-Reply-To: <1476489930-10456-1-git-send-email-fhunleth@troodon-software.com>
+References: <1476489930-10456-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20161015081750.75b59fb2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-Greetings Arnout, 
->  The Vivante driver has a similar issue as this one: there are different binary
-> blobs for X11 and for fbdev, and only one of them can be installed. For the
-> Vivante driver, we offer a choice to the user, and the x11-video driver depends
-> on the user making the right choice. I don't really like that option. However,
-> this one is not ideal either, because there is a two-way interdependence between
-> the odroid-mali and the xdriver-video package. In fact, the way it is now, the
-> two patches have to be squashed because the previoius one doesn't work without
-> this one.
+On Fri, 14 Oct 2016 20:05:30 -0400, Frank Hunleth wrote:
+> This change adds inode tracking to the size-stats script so that hard
+> links don't cause files to be double counted. This has a significant
+> effect on the size computation for some packages. For example, git has
+> around a dozen hard links to a large file. Before this change, git would
+> weigh in at about 170 MB with the total filesystem size reported as
+> 175 MB. The actual rootfs.ext2 size was around 16 MB. With the change,
+> the git package registers at 10.5 MB with a total filesystem size of
+> 15.8 MB.
 > 
->  So here is my idea: introduce a blind symbol BR2_PACKAGE_ODROID_MALI_X11 in
-> this package, and let that option steer the choice between X11 or fbdev. It's
-> blind, it's not part of a choice, so it can be selected from the xdriver-video
-> package. So from the user's POV, they just have to select the xdriver-video
-> package and not worry about the rest. This way, you can first have this patch,
-> and then add the xdriver-video package in a second patch.
-> 
->
-thanks for the feedback, this driver has some limitations, the X11 opengl libs supports only arm64. there is no implementation for arm.
-I want to see if I got the idea correct, as said, add the symbol mentioned above:
-1) arm: show only the fbdev as an option, the current implementation stays the same. the X11 driver is hidden.
-2) arm54: show fbdev and X11 option (if xorg + drivers is set), if fbdev is selected use the current implementation. if the X11 driver is selected, use the implementation in the patch.
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 
-am I correct?
+Thanks a lot for this change! Definitely this is something that needs
+to be handled.
 
-Dagg.
+> -def add_file(filesdict, relpath, abspath, pkg):
+> +def add_file(filesdict, seeninodes, relpath, abspath, pkg):
+>      if not os.path.exists(abspath):
+>          return
+>      if os.path.islink(abspath):
+>          return
+> -    sz = os.stat(abspath).st_size
+> +    if relpath in filesdict:
+> +        return
+
+I'm not sure why this test is being added, or at least why it's related
+to the inode tracking.
+
+> @@ -97,10 +113,11 @@ def build_package_size(filesdict, builddir):
+>              if not frelpath in filesdict:
+>                  print("WARNING: %s is not part of any package" % frelpath)
+>                  pkg = "unknown"
+> +                sz = os.path.getsize(fpath)
+
+So for files not belonging to packages, we do not track inodes?
+
+Maybe we should instead have our own filesize() helper function that
+takes care of returning the right size if we have never seen this
+inode, or 0 if we have already seen it. It could then be used in both
+places.
+
+Another concern is that some files will now be reported as having a 0
+size, while it's not entirely correct. This does not matter at all for
+the per-package graph or CSV file, but is a bit more annoying for the
+per-file CSV file. Indeed, a user inspecting this CSV file will wonder
+what those zero-size files are. So, another option is to divide the
+size of the file by the number of hard-links, and spread the size over
+the different hard-links. But it's also not very nice, as the size
+reported in the CSV will not match the visible size of the file.
+
+So, maybe we should just leave it like you propose, unless others have
+a better idea about this.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
