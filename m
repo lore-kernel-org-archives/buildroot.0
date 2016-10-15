@@ -1,43 +1,51 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 15 Oct 2016 15:37:59 +0000
-Subject: [Buildroot] [Bug 8941] "ls" of an NFSv4 share only works when
- pumped through strace
-In-Reply-To: <bug-8941-163@https.bugs.busybox.net/>
-References: <bug-8941-163@https.bugs.busybox.net/>
-Message-ID: <bug-8941-163-wr5IXqD3XX@https.bugs.busybox.net/>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 15 Oct 2016 17:37:51 +0200
+Subject: [Buildroot] [PATCH v3 7/8] package/rpi-userland: includes
+ TARGET_CFLAGS to the overloaded CFLAGS
+In-Reply-To: <20161015094437.6989-8-s.martin49@gmail.com>
+References: <20161015094437.6989-1-s.martin49@gmail.com>
+ <20161015094437.6989-8-s.martin49@gmail.com>
+Message-ID: <85b9d7b4-79d3-b258-1e94-38a61a377bb1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8941
+ Just noticed now: in the subject, s/includes/include/
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On 15-10-16 11:44, Samuel Martin wrote:
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WONTFIX
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Thanks for your bug report, and sorry for the slow response.
+ Regards,
+ Arnout
 
-Unfortunately, this doesn't really look like a Buildroot problem, but most
-likely a kernel problem.
-
-Can you test the same kernel, with another distribution (like a Debian
-distribution) ? Which C library are you using ? If you're using uClibc, can you
-try glibc ? Is it happening with a different hardware platform, like if you
-boot the Buildroot system under Qemu ?
-
-We would really need you to investigate further this bug.
-
-Alternatively, you could provide a detailed step-by-step process on how to
-reproduce the bug: a minimal Buildroot Qemu based defconfig that exhibits the
-problem, together with the details on how to setup a NFSv4 server. As it is,
-it's too much effort to setup everything that's needed to reproduce your bug.
+> ---
+>  package/rpi-userland/rpi-userland.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+> index 86cde87..4a6eb41 100644
+> --- a/package/rpi-userland/rpi-userland.mk
+> +++ b/package/rpi-userland/rpi-userland.mk
+> @@ -10,7 +10,8 @@ RPI_USERLAND_LICENSE = BSD-3c
+>  RPI_USERLAND_LICENSE_FILES = LICENCE
+>  RPI_USERLAND_INSTALL_STAGING = YES
+>  RPI_USERLAND_CONF_OPTS = -DVMCS_INSTALL_PREFIX=/usr \
+> -	-DCMAKE_C_FLAGS="-DVCFILED_LOCKFILE=\\\"/var/run/vcfiled.pid\\\""
+> +	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) \
+> +		-DVCFILED_LOCKFILE=\\\"/var/run/vcfiled.pid\\\""
+>  
+>  RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
+>  
+> 
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
