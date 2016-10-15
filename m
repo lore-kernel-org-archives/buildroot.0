@@ -1,54 +1,110 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 15 Oct 2016 23:03:40 +0200
-Subject: [Buildroot] [PATCH v5 0/9] Misc. CMake fixes
-Message-ID: <20161015210349.29432-1-s.martin49@gmail.com>
+Date: Sat, 15 Oct 2016 23:03:41 +0200
+Subject: [Buildroot] [PATCH v5 1/9] package/pkg-cmake.mk: fix build type and
+	optimization flags
+In-Reply-To: <20161015210349.29432-1-s.martin49@gmail.com>
+References: <20161015210349.29432-1-s.martin49@gmail.com>
+Message-ID: <20161015210349.29432-2-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+tl;dr:
 
-Here is a short series reworking the way the Buildroot's CMake
-infrastructure handles compiler/linker flags.
+Before applying this patch, CMake packages are built with the following
+options:
+  * if BR2_ENABLE_DEBUG is set:
+    The CMake build type is set to RelWithDebInfo, which means:
+    - Optimization level is forced to: -O2;
+    - no log nor assert due to -DNDEBUG;
+    - BR2_DEBUG_{1..3} effect is unchanged;
+  * otherwise:
+    The CMake build type is set to Release, which means:
+    - Optimization level is forced to: -O3;
+    - no log nor assert due to -DNDEBUG (as expected).
+  In any case, the optimization WRT the binary size is always ignored and
+  forced.
 
-Patch 1 to 3 fix the optimization and debug flags passed/set by CMake
-through the toolchainfile.cmake file.
+This change chooses the build type doing the closest thing to what
+Buildroot attempts to do.
 
-Patches 4 to 8 clean up CMake-based package regarding {C,CXX,LD}FLAGS.
+Long version:
 
-Patch 9 reworks the way the compiler/linker flags are set in
-toolchainfile.cmake.
+Flags set by Buildroot depending on the configuration:
 
-Regards,
-Sam
+  BR2_ENABLE_DEBUG | Optim. level   | Buildroot {C,CXX}FLAGS
+  =================+================+=======================
+          y        | BR2_OPTIMIZE_S | -Os -gx
+          y        | BR2_OPTIMIZE_G | -Og -gx
+          y        | BR2_OPTIMIZE_n | -On -gx
+          n        | BR2_OPTIMIZE_S | -Os
+          n        | BR2_OPTIMIZE_G | -Og
+          n        | BR2_OPTIMIZE_n | -On
 
+Default flags appended by CMake depending on the build type:
 
-Max Filippov (1):
-  package/opencv3: fix CMAKE_CXX_FLAGS
+  Build type     | Flags           | Effects on {C,CXX}FLAGS
+  ===============+=================+===========================================
+  Debug          | -g              | Force -g, compatible with BR2_ENABLE_DEBUG
+  MinSizeRel     | -Os -DNDEBUG    | Set -Os, compatible with BR2_OPTIMIZE_S
+  Release        | -O3 -DNDEBUG    | Set -O3, closest to the others cases,
+                 |                 | though the optimization level is forced.
+  RelWithDebInfo | -O2 -g -DNDEBUG | Force -g and set -O2, not friendly with BR
 
-Samuel Martin (8):
-  package/pkg-cmake.mk: fix build type and optimization flags
-  package/pkg-cmake.mk: move CMAKE_BUILD_TYPE definition into
-    toolchainfile.cmake
-  toolchainfile.cmake: set per-config appended {C,CXX}FLAGS
-  package/gflags: include TARGET_CXXFLAGS to the overloaded CXXFLAGS
-  package/gnuradio: include TARGET_CFLAGS to the overloaded CFLAGS
-  package/libcec: include TARGET_{C,CXX}FLAGS to the overloaded
-    {C,CXX}FLAGS
-  package/rpi-userland: include TARGET_CFLAGS to the overloaded CFLAGS
-  toochainfile.cmake: rework the way Buildroot sets flags
+Since CMake appends its own build type flags and because of the gcc
+option parser, the CMake flags takes precedence over the Buildroot
+flags.
 
- CHANGES                              |  9 +++++++++
- package/gflags/gflags.mk             |  3 ++-
- package/gnuradio/gnuradio.mk         |  2 +-
- package/libcec/libcec.mk             |  5 +++--
- package/opencv3/opencv3.mk           |  2 +-
- package/pkg-cmake.mk                 | 10 +++++++++-
- package/rpi-userland/rpi-userland.mk |  3 ++-
- support/misc/toolchainfile.cmake.in  | 32 ++++++++++++++++++++++++++++----
- 8 files changed, 55 insertions(+), 11 deletions(-)
+So, this change sets the build type in a very simple way depending on
+the BR2_ENABLE_DEBUG symbol.
 
---
+Follow-up patches will fix the CMake flag variables that are appended by
+CMake.
+
+Cc: Charles Hardin <ckhardin@exablox.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+
+---
+changes v4->v5:
+- none
+
+changes v3->v4:
+- simplify build type selection
+---
+ package/pkg-cmake.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index aca9e61..259865d 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -35,6 +35,14 @@ ifneq ($(QUIET),)
+ CMAKE_QUIET = -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_INSTALL_MESSAGE=NEVER
+ endif
+ 
++# Set the CMake build type which matches the best the build configuration sets
++# in Buildroot.
++ifeq ($(BR2_ENABLE_DEBUG),y)
++BR_CMAKE_BUILD_TYPE=Debug
++else
++BR_CMAKE_BUILD_TYPE=Release
++endif
++
+ ################################################################################
+ # inner-cmake-package -- defines how the configuration, compilation and
+ # installation of a CMake package should be done, implements a few hooks to
+@@ -87,7 +95,7 @@ define $(2)_CONFIGURE_CMDS
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+-		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release) \
++		-DCMAKE_BUILD_TYPE=$(BR_CMAKE_BUILD_TYPE) \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_DOC=OFF \
+-- 
 2.10.0
