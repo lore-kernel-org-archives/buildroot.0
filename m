@@ -1,65 +1,43 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 15 Oct 2016 22:31:17 +0200
-Subject: [Buildroot] [PATCH v4 3/9] toolchainfile.cmake: set per-config
-	appended {C, CXX}FLAGS
+Date: Sat, 15 Oct 2016 22:31:18 +0200
+Subject: [Buildroot] [PATCH v4 4/9] package/gflags: include TARGET_CXXFLAGS
+	to the overloaded CXXFLAGS
 In-Reply-To: <20161015203123.11241-1-s.martin49@gmail.com>
 References: <20161015203123.11241-1-s.martin49@gmail.com>
-Message-ID: <20161015203123.11241-4-s.martin49@gmail.com>
+Message-ID: <20161015203123.11241-5-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The toolchainfile.cmake file already sets the build type to get close
-to the Buildroot configuration.
-
-This change sets the per-config compiler flags CMake appends, so CMake
-does not mess up with the compilation flags Buildroot sets.
-
-This change still allows overriding the these variables from the
-configure command line.
-
-Note:
-  If a CMake-based project forces using a given build type and/or
-  force the compiler and/or linker flag definitions (the default ones or
-  the per-config ones - e.g. CMAKE_C_FLAGS/CMAKE_C_FLAGS_{DEBUG,RELEASE}),
-  there is not much Buildroot can do about it.
-  So, the flags will be overwritten anyway in these cases.
-
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
 changes v3->v4:
+- fix commit subject
+- update A/R/T tags
+
+changes v2->v3:
 - new patch
 ---
- support/misc/toolchainfile.cmake.in | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/gflags/gflags.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index b0a1cd9..fde141a 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -13,6 +13,18 @@ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST
- set(CMAKE_SYSTEM_NAME Linux)
- set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
+diff --git a/package/gflags/gflags.mk b/package/gflags/gflags.mk
+index 9dc4e15..89111ed 100644
+--- a/package/gflags/gflags.mk
++++ b/package/gflags/gflags.mk
+@@ -11,7 +11,8 @@ GFLAGS_LICENSE = BSD-3c
+ GFLAGS_LICENSE_FILES = COPYING.txt
  
-+# Give to CMake the {C,CXX}FLAGS to append in case the project's logic
-+# falls back on a build type or another (i.e. set CMAKE_{C,CXX}_FLAGS_*
-+# variables).
-+#
-+# Note:
-+#   if the project forces some of these flag variables, Buildroot is
-+#   screwed up and there is nothing Buildroot can do about that :(
-+set(CMAKE_C_FLAGS_DEBUG "" CACHE)
-+set(CMAKE_CXX_FLAGS_DEBUG "" CACHE)
-+set(CMAKE_C_FLAGS_RELEASE " -DNEBUG" CACHE)
-+set(CMAKE_CXX_FLAGS_RELEASE " -DNEBUG" CACHE)
-+
- # Build type from the Buildroot configuration
- set(CMAKE_BUILD_TYPE @@BR_CMAKE_BUILD_TYPE@@ CACHE)
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+-GFLAGS_CONF_OPTS = -DBUILD_gflags_LIB=OFF -DCMAKE_CXX_FLAGS=-DNO_THREADS
++GFLAGS_CONF_OPTS = -DBUILD_gflags_LIB=OFF \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DNO_THREADS"
+ endif
  
+ $(eval $(cmake-package))
 -- 
 2.10.0
