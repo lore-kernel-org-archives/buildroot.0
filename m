@@ -1,34 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 14:16:44 +0200
-Subject: [Buildroot] [git commit] pifmrds: use $(TARGET_MAKE_ENV) when
-	calling $(MAKE)
-Message-ID: <20161015121835.1975681F57@busybox.osuosl.org>
+Date: Sat, 15 Oct 2016 14:16:38 +0200
+Subject: [Buildroot] [git commit] zlog: use $(TARGET_MAKE_ENV) when calling
+	$(MAKE)
+Message-ID: <20161015121834.F04EF81F57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2672b225d4a4b3894c9d45a560e7657972f48d1
+commit: https://git.buildroot.net/buildroot/commit/?id=72be5e10879ab545010e95fc06f69fe9924519e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pifmrds/pifmrds.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/zlog/zlog.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pifmrds/pifmrds.mk b/package/pifmrds/pifmrds.mk
-index 5179715..a30c013 100644
---- a/package/pifmrds/pifmrds.mk
-+++ b/package/pifmrds/pifmrds.mk
-@@ -11,7 +11,7 @@ PIFMRDS_LICENSE = GPLv3+
- PIFMRDS_LICENSE_FILES = LICENSE
+diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
+index a60e1b0..4f7f469 100644
+--- a/package/zlog/zlog.mk
++++ b/package/zlog/zlog.mk
+@@ -11,16 +11,16 @@ ZLOG_LICENSE_FILES = COPYING
+ ZLOG_INSTALL_STAGING = YES
  
- define PIFMRDS_BUILD_CMDS
--	$(MAKE) -C $(@D)/src CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)" \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)" \
- 		CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -ffast-math -c" \
- 		app rds_wav
+ define ZLOG_BUILD_CMDS
+-	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
++	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
+ 		-C $(@D) all
  endef
+ 
+ define ZLOG_INSTALL_STAGING_CMDS
+-	$(MAKE) PREFIX=$(STAGING_DIR)/usr -C $(@D) install
++	$(TARGET_MAKE_ENV) $(MAKE) PREFIX=$(STAGING_DIR)/usr -C $(@D) install
+ endef
+ 
+ define ZLOG_INSTALL_TARGET_CMDS
+-	$(MAKE) PREFIX=$(TARGET_DIR)/usr -C $(@D) install
++	$(TARGET_MAKE_ENV) $(MAKE) PREFIX=$(TARGET_DIR)/usr -C $(@D) install
+ endef
+ 
+ $(eval $(generic-package))
