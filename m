@@ -1,80 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 Oct 2016 10:15:54 +0200
-Subject: [Buildroot] [PATCH 2/2] core/legal-info: don't generate big file
-	with all license texts
+Date: Sat, 15 Oct 2016 10:15:53 +0200
+Subject: [Buildroot] [PATCH 1/2] core/legal-info: save empty string when no
+	license file
 In-Reply-To: <cover.1476519329.git.yann.morin.1998@free.fr>
 References: <cover.1476519329.git.yann.morin.1998@free.fr>
-Message-ID: <52e41b4a3aab9e9d50ace8aee2501becc5080bb8.1476519329.git.yann.morin.1998@free.fr>
+Message-ID: <4fdb0d67c86204e0a3048df9eaa86f9da98a4d12.1476519329.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By aggregating all the license files into a single big text-only file
-means we have no way to use license files that are binary blobs (e.g.
-pdf, rtf...).
+This is stored in the manifest file; it is perfectly possible to have
+empty fields in there.
 
-Just do not generate that big file; if the user still wants it, it is
-very easy to create it afterwards.
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile               |  2 --
- package/pkg-generic.mk |  1 -
- package/pkg-utils.mk   | 12 ------------
- 3 files changed, 15 deletions(-)
+ package/pkg-generic.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 5e4daef..74b831e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -195,8 +195,6 @@ LICENSE_FILES_DIR_TARGET = $(LEGAL_INFO_DIR)/licenses
- LICENSE_FILES_DIR_HOST = $(LEGAL_INFO_DIR)/host-licenses
- LEGAL_MANIFEST_CSV_TARGET = $(LEGAL_INFO_DIR)/manifest.csv
- LEGAL_MANIFEST_CSV_HOST = $(LEGAL_INFO_DIR)/host-manifest.csv
--LEGAL_LICENSES_TXT_TARGET = $(LEGAL_INFO_DIR)/licenses.txt
--LEGAL_LICENSES_TXT_HOST = $(LEGAL_INFO_DIR)/host-licenses.txt
- LEGAL_WARNINGS = $(LEGAL_INFO_DIR)/.warnings
- LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
- 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 92cc565..12ae86f 100644
+index 68ead3d..92cc565 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -807,7 +807,6 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- # is that the license still applies to the files distributed as part
- # of the rootfs, even if the sources are not themselves redistributed.
- ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
--	@$$(call legal-license-nofiles,$$($(2)_RAW_BASE_NAME),$$(call UPPERCASE,$(4)))
- 	@$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
- else
- 	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAW_BASE_NAME),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 28db481..c5d4080 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -75,19 +75,7 @@ define legal-manifest # pkg, version, license, license-files, source, url, {HOST
- 	echo '"$(1)","$(2)","$(3)","$(4)","$(5)","$(6)"' >>$(LEGAL_MANIFEST_CSV_$(7))
- endef
+@@ -779,7 +779,6 @@ endif
+ ifneq ($$($(2)_LICENSE_FILES),)
+ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
+ endif
+-$(2)_MANIFEST_LICENSE_FILES ?= not saved
  
--define legal-license-header # pkg, license-file, {HOST|TARGET}
--	printf "$(LEGAL_INFO_SEPARATOR)\n\t$(1):\
--		$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n\n" >>$(LEGAL_LICENSES_TXT_$(3))
--endef
--
--define legal-license-nofiles # pkg, {HOST|TARGET}
--	$(call legal-license-header,$(1),unknown license file(s),$(2))
--endef
--
- define legal-license-file # pkg, filename, file-fullpath, {HOST|TARGET}
--	$(call legal-license-header,$(1),$(2) file,$(4)) && \
--	cat $(3) >>$(LEGAL_LICENSES_TXT_$(4)) && \
--	echo >>$(LEGAL_LICENSES_TXT_$(4)) && \
- 	mkdir -p $(LICENSE_FILES_DIR_$(4))/$(1)/$(dir $(2)) && \
- 	cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2)
- endef
+ # We need to extract and patch a package to be able to retrieve its
+ # license files (if any) and the list of patches applied to it (if
 -- 
 2.7.4
