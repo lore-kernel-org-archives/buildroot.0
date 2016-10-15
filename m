@@ -1,57 +1,144 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 12:44:29 +0200
-Subject: [Buildroot] [PATCH v3 1/8] package/pkg-cmake.mk: fix build type
- and optimization flags
-In-Reply-To: <CAHXCMM+1cbRY11V4cKHB=dCScSG7KGGraFz2NkWsWH+1tiG7XQ@mail.gmail.com>
-References: <20161015094437.6989-1-s.martin49@gmail.com>
- <20161015094437.6989-2-s.martin49@gmail.com>
- <20161015122557.25fd074f@free-electrons.com>
- <CAHXCMM+1cbRY11V4cKHB=dCScSG7KGGraFz2NkWsWH+1tiG7XQ@mail.gmail.com>
-Message-ID: <20161015124429.181dcdb8@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 15 Oct 2016 12:47:19 +0200
+Subject: [Buildroot] [PATCH v4 2/3] arm-trusted-firmware: new package
+In-Reply-To: <1476518623-30654-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1476518623-30654-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1476518623-30654-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20161015104719.GD3668@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, Joao, All,
 
-On Sat, 15 Oct 2016 12:34:29 +0200, Samuel Martin wrote:
-
-> > Can't we tell CMake to not do all this crap, and simply not add
-> > -g/-O<x> options by itself ?  
+On 2016-10-15 10:03 +0200, Thomas Petazzoni spake thusly:
+> From: Joao Pinto <jpinto@synopsys.com>
 > 
-> As discussed IRL, this solution is kind of the optimal one, not the
-> best one but the one that is the closest to what BR is trying to do in
-> all cases.
+> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+> [Thomas:
+>  - Rename the package from atfirmware to arm-trusted-firmware, in order
+>    to match upstream.
+>  - Remove option to apply custom patches. We no longer add such options,
+>    and use the global patch directory instead.
+>  - Rename the repo URL/version options, in order to not be Git specific,
+>    in case support for fetching from other VCS is added later. This is
+>    consistent with how other bootloaders handle this.
+>  - Add license information.
+>  - Do not add a weird dependency on the vexpress-firmware package in
+>    Config.in. Instead, simply use it if it's available. Of course, some
+>    configurations (such as the juno configuration) will fail to build if
+>    vexpress-image is not enabled, but it's the responsibility of the
+>    user to create a config that builds.
+>  - Simplify misc aspects in the .mk file.]
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  boot/Config.in                                     |  1 +
+>  boot/arm-trusted-firmware/Config.in                | 65 ++++++++++++++++++++
+>  .../arm-trusted-firmware/arm-trusted-firmware.hash |  3 +
+>  boot/arm-trusted-firmware/arm-trusted-firmware.mk  | 69 ++++++++++++++++++++++
+>  4 files changed, 138 insertions(+)
+>  create mode 100644 boot/arm-trusted-firmware/Config.in
+>  create mode 100644 boot/arm-trusted-firmware/arm-trusted-firmware.hash
+>  create mode 100644 boot/arm-trusted-firmware/arm-trusted-firmware.mk
+[--SNIP--]
+> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> new file mode 100644
+> index 0000000..5acfab3
+> --- /dev/null
+> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> @@ -0,0 +1,69 @@
+> +################################################################################
+> +#
+> +# arm-trusted-firmware
+> +#
+> +################################################################################
+> +
+> +ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
+> +ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3c
+> +ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.md
+> +
+> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += uboot
+> +
+> +ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
+> +# Handle custom ATF tarballs as specified by the configuration
+> +ARM_TRUSTED_FIRMWARE_TARBALL = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION))
+> +ARM_TRUSTED_FIRMWARE_SITE = $(patsubst %/,%,$(dir $(ARM_TRUSTED_FIRMWARE_TARBALL)))
+> +ARM_TRUSTED_FIRMWARE_SOURCE = $(notdir $(ARM_TRUSTED_FIRMWARE_TARBALL))
+> +BR_NO_CHECK_HASH_FOR += $(ARM_TRUSTED_FIRMWARE_SOURCE)
+> +else ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT),y)
+> +ARM_TRUSTED_FIRMWARE_SITE = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL))
+> +ARM_TRUSTED_FIRMWARE_SITE_METHOD = git
+> +else
+> +ARM_TRUSTED_FIRMWARE_SITE = $(call github,ARM-software,arm-trusted-firmware,$(ARM_TRUSTED_FIRMWARE_VERSION))
+> +endif
+> +
+> +ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES = YES
+> +
+> +ARM_TRUSTED_FIRMWARE_PLATFORM = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM))
+> +
+> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+> +	CROSS_COMPILE="$(TARGET_CROSS)" \
+> +	BL33=$(BINARIES_DIR)/u-boot.bin \
+> +	$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES)) \
+> +	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM) \
+> +	all fip
+> +
+> +ifeq ($(BR2_TARGET_VEXPRESS_FIRMWARE),y)
+> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += SCP_BL2=$(BINARIES_DIR)/scp-fw.bin
+> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += vexpress-firmware
+> +endif
+> +
+> +define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) \
+> +		$(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
+> +			$(ARM_TRUSTED_FIRMWARE_MAKE_TARGET)
+> +endef
+> +
+> +define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
+> +	cp -dpf $(@D)/build/$(ARM_TRUSTED_FIRMWARE_PLATFORM)/release/*.bin $(BINARIES_DIR)/
 
-Just to expand on that, a few more details from our discussions:
+Usually, we do create the destination directory before copying a bunch
+files in there. But that one directory, we do guarantee it exists.
 
- - If we don't pass a CMAKE_BUILD_TYPE, then CMake doesn't pass any
-   compiler flags. This would be ideal, but unfortunately some packages
-   force their own build type in their CMakeLists.txt), and in this case
-   CMake passes its own compiler flags. Which would mean some packages
-   may always be built in debug mode, or always be built in release,
-   depending on what they have chosen in their CMakeLists.txt to be the
-   default, and this wouldn't be affected by the Buildroot
-   configuration.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-   Due to this, we *want* to force CMAKE_BUILD_TYPE, as it ensures all
-   CMake packages are built in a way that is as close as possible to
-   the selected Buildroot configuration.
+Regards,
+Yann E. MORIN.
 
- - There is no way to tell CMake to not pass compiler flags and to
-   ignore the build type written in the CMakeLists.txt file. We could
-   patch CMake for that, but we are now using the system-provided cmake
-   when it's available, so we can hardly relying on cmake patching.
+> +endef
+> +
+> +# Configuration ckeck
+> +ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE)$(BR_BUILDING),yy)
+> +
+> +ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
+> +ifeq ($(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION))),)
+> +$(error No tarball location specified. Please check BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION))
+> +endif
+> +endif
+> +
+> +ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT),y)
+> +ifeq ($(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL)),)
+> +$(error No repository specified. Please check BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL)
+> +endif
+> +endif
+> +
+> +endif
+> +
+> +$(eval $(generic-package))
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Bottom line: your patch is indeed the best we can do. It's not perfect,
-but we can't easily do better.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
