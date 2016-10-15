@@ -1,47 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Oct 2016 23:14:44 +0200
-Subject: [Buildroot] [git commit] binutils: remove deprecated 2.24.X
-Message-ID: <20161015211550.0B5BF80262@busybox.osuosl.org>
+Date: Sat, 15 Oct 2016 23:14:45 +0200
+Subject: [Buildroot] [git commit] linux-headers: remove deprecated version
+	4.2 and 4.3
+Message-ID: <20161015211550.5412E80262@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8878112ad3df2a3d9468cf40a2401b581e7e432
+commit: https://git.buildroot.net/buildroot/commit/?id=133466f5f23a6550fd136170d841c58c6581a63c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We will remove BR2_DEPRECATED, so remove this deprecated option.
+We will remove BR2_DEPRECATED, so remove this deprecated package.
 
-[Peter: drop binutils patches]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                                   |   8 +
- .../001-fix-enable-install-libiberty-flag.patch    |  46 --
- ...ont-segv-on-initial-instructions-overflow.patch |  66 --
- package/binutils/2.24/120-sh-conf.patch            |  29 -
- .../binutils/2.24/300-001_ld_makefile_patch.patch  |  24 -
- .../2.24/300-012_check_ldrunpath_length.patch      |  21 -
- package/binutils/2.24/500-sysroot.patch            |  37 -
- .../2.24/600-poison-system-directories.patch       | 279 -------
- package/binutils/2.24/900-xtensa-trampolines.patch | 846 ---------------------
- .../2.24/901-xtensa-gas-first-frag-alignment.patch |  51 --
- .../902-xtensa-gas-ld-diff-relocation-signed.patch | 133 ----
- ...ix-ld-segfault-when-linking-linux-modules.patch |  47 --
- ...-target-out-of-range-xtensa-ld-relaxation.patch |  79 --
- ...ines-search-code-for-conditional-branches.patch |  90 ---
- ...nsa-optimize-check_section_ebb_pcrels_fit.patch | 502 ------------
- .../907-xtensa-optimize-removed_by_actions.patch   | 356 ---------
- .../908-xtensa-optimize-find_removed_literal.patch | 146 ----
- ...tensa-replace-action-list-with-splay-tree.patch | 826 --------------------
- ...10-xtensa-optimize-trampolines-relaxation.patch | 345 ---------
- ...localized-symbol-refcounting-with-gc-sect.patch |  57 --
- ...x-gas-segfault-with-text-section-literals.patch |  56 --
- .../2.24/913-xtensa-add-auto-litpools-option.patch | 698 -----------------
- ...-xtensa-fix-signedness-of-gas-relocations.patch |  99 ---
- ...15-xtensa-fix-.init-.fini-literals-moving.patch | 149 ----
- package/binutils/Config.in.host                    |  11 -
- 25 files changed, 8 insertions(+), 4993 deletions(-)
+ Config.in.legacy                     | 20 ++++++++++++++++++++
+ package/linux-headers/Config.in.host | 12 ------------
+ 2 files changed, 20 insertions(+), 12 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 5e65d7b..76365e6 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,26 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.11"
+ 
++config BR2_KERNEL_HEADERS_4_3
++	bool "kernel headers version 4.3.x are no longer supported"
++	select BR2_KERNEL_HEADERS_4_1
++	select BR2_LEGACY
++	help
++	  Version 4.3.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed. As an alternative,
++	  version 4.1.x of the headers have been automatically
++	  selected in your configuration.
++
++config BR2_KERNEL_HEADERS_4_2
++	bool "kernel headers version 4.2.x are no longer supported"
++	select BR2_KERNEL_HEADERS_4_1
++	select BR2_LEGACY
++	help
++	  Version 4.2.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed. As an alternative,
++	  version 4.1.x of the headers have been automatically
++	  selected in your configuration.
++
+ config BR2_PACKAGE_KODI_ADDON_XVDR
+ 	bool "kodi-addon-xvdr removed"
+ 	select BR2_LEGACY
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index ebb869b..60578b8 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -60,16 +60,6 @@ choice
+ 		bool "Linux 4.1.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
+ 
+-	config BR2_KERNEL_HEADERS_4_2
+-		bool "Linux 4.2.x kernel headers"
+-		depends on BR2_DEPRECATED_SINCE_2016_02
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
+-
+-	config BR2_KERNEL_HEADERS_4_3
+-		bool "Linux 4.3.x kernel headers"
+-		depends on BR2_DEPRECATED_SINCE_2016_05
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+-
+ 	config BR2_KERNEL_HEADERS_4_4
+ 		bool "Linux 4.4.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+@@ -242,8 +232,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.34"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+-	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+ 	default "4.4.24"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+ 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
