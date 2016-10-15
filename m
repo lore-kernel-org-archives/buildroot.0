@@ -1,11 +1,12 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 15 Oct 2016 12:28:53 +0200
-Subject: [Buildroot] [PATCH] bind: bump version to 9.11.0
-In-Reply-To: <20161015120504.2e88e2f7@free-electrons.com>
-References: <20161011125423.38125-1-Vincent.Riera@imgtec.com>
- <874m4eosfn.fsf@dell.be.48ers.dk>
- <20161015120504.2e88e2f7@free-electrons.com>
-Message-ID: <7938ab33-1e87-7374-35a0-7d5f4bf04072@imgtec.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 15 Oct 2016 12:34:29 +0200
+Subject: [Buildroot] [PATCH v3 1/8] package/pkg-cmake.mk: fix build type
+ and optimization flags
+In-Reply-To: <20161015122557.25fd074f@free-electrons.com>
+References: <20161015094437.6989-1-s.martin49@gmail.com>
+ <20161015094437.6989-2-s.martin49@gmail.com>
+ <20161015122557.25fd074f@free-electrons.com>
+Message-ID: <CAHXCMM+1cbRY11V4cKHB=dCScSG7KGGraFz2NkWsWH+1tiG7XQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,67 +15,74 @@ To: buildroot@busybox.net
 
 Hello,
 
-Regards,
-
-Vincent.
-
-On 15/10/16 12:05, Thomas Petazzoni wrote:
+On Sat, Oct 15, 2016 at 12:25 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
 >
-> On Sat, 15 Oct 2016 11:46:52 +0200, Peter Korsgaard wrote:
+> On Sat, 15 Oct 2016 11:44:30 +0200, Samuel Martin wrote:
 >
->>  > - With the release of BIND 9.11.0, ISC is changing the open source
->>  >   license for BIND from the ISC license to the Mozilla Public License
->>  >   (MPL 2.0). See release notes:
->>  >   http://ftp.isc.org/isc/bind9/9.11.0/RELEASE-NOTES-bind-9.11.0.html
+>> Before applying this patch, CMake packages are built with the following
+>> options:
+>>   * if BR2_ENABLE_DEBUG is set:
+>>     The CMake build type is set to RelWithDebInfo, which means:
+>>     - Optimization level is forced to: -O2;
+>>     - no log nor assert due to -DNDEBUG;
+>>     - BR2_DEBUG_{1..3} effect is unchanged;
+>>   * otherwise:
+>>     The CMake build type is set to Release, which means:
+>>     - Optimization level is forced to: -O3;
+>>     - no log nor assert due to -DNDEBUG (as expected).
+>>   In any case, the optimization WRT the binary size is always ignored and
+>>   forced.
 >>
->>  > - Explicitly enable/disable zlib support, otherwise the configure script
->>  >   will fail like this:
+>> This change chooses the build type doing the closest thing to what
+>> Buildroot attempts to do.
 >>
->>  >   checking for zlib library... yes
->>  >   checking for library containing deflate... no
->>  >   configure: error: found zlib include but not library.
+>> Long version:
 >>
->> Committed, thanks.
+>> Flags set by Buildroot depending on the configuration:
+>>
+>>   BR2_ENABLE_DEBUG | Optim. level   | Buildroot {C,CXX}FLAGS
+>>   =================+================+=======================
+>>           y        | BR2_OPTIMIZE_S | -Os -gx
+>>           y        | BR2_OPTIMIZE_G | -Og -gx
+>>           y        | BR2_OPTIMIZE_n | -On -gx
+>>           n        | BR2_OPTIMIZE_S | -Os
+>>           n        | BR2_OPTIMIZE_G | -Og
+>>           n        | BR2_OPTIMIZE_n | -On
+>>
+>> Default flags appended by CMake depending on the build type:
+>>
+>>   Build type     | Flags           | Effects on {C,CXX}FLAGS
+>>   ===============+=================+===========================================
+>>   Debug          | -g              | Force -g, compatible with BR2_ENABLE_DEBUG
+>>   MinSizeRel     | -Os -DNDEBUG    | Set -Os, compatible with BR2_OPTIMIZE_S
+>>   Release        | -O3 -DNDEBUG    | Set -O3, closest to the others cases,
+>>                  |                 | though the optimization level is forced.
+>>   RelWithDebInfo | -O2 -g -DNDEBUG | Force -g and set -O2, not friendly with BR
+>>
+>> Since CMake appends its own build type flags and because of the gcc
+>> option parser, the CMake flags takes precedence over the Buildroot
+>> flags.
+>>
+>> So, this change sets the correct build type depending on the
+>> BR2_ENABLE_DEBUG and BR2_OPTIMIZE_* options.
 >
-> Sorry I forgot to say it on the mailing list, but the license change is
-> a bit weird. Indeed, there is still a COPYRIGHT file which contains the
-> old license text. And this file is the one still referenced by the
-> LICENSE_FILES variable.
+> Can't we tell CMake to not do all this crap, and simply not add
+> -g/-O<x> options by itself ?
 
-that COPYRIGHT file doesn't contain the old license text. It has been 
-updated since 9.10.4-P3 (previous version), and now it contains a text 
-that specifies the license is MPL 2.0:
+As discussed IRL, this solution is kind of the optimal one, not the
+best one but the one that is the closest to what BR is trying to do in
+all cases.
 
---------------
-$ ~/bind-9.11.0 $ head -n5 COPYRIGHT
-
-Copyright (C) 1996-2016  Internet Systems Consortium, Inc. ("ISC")
-
-This Source Code Form is subject to the terms of the Mozilla Public
-License, v. 2.0. If a copy of the MPL was not distributed with this
-file, You can obtain one at http://mozilla.org/MPL/2.0/.
---------------
-
-Isn't that enough?
-
-Regards,
-
-Vincent
-
->
-> Then, there is a new file, called LICENSE, which really contains the
-> MPL 2.0 license text.
->
-> So:
->
->  1/ The LICENSE_FILES variable is now wrong.
->
->  2/ Upstream is very confusing with those two license files, and we
->     should probably report that to them. It currently makes it very
->     unclear if everything is under MPL2.0 or not.
->
-> Best regards,
 >
 > Thomas
->
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
+
+
+-- 
+Samuel
