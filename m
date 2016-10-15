@@ -1,597 +1,148 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 15 Oct 2016 16:51:06 +0200
-Subject: [Buildroot] [PATCH 12/13] wvstreams: remove deprecated package
-In-Reply-To: <20161015145107.18264-1-arnout@mind.be>
-References: <20161015145107.18264-1-arnout@mind.be>
-Message-ID: <20161015145107.18264-13-arnout@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 15 Oct 2016 16:58:23 +0200
+Subject: [Buildroot] [PATCH] core/legal-info: allow ignoring packages
+ from the legal-info
+In-Reply-To: <1476538102-8779-1-git-send-email-yann.morin.1998@free.fr>
+References: <1476538102-8779-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMJDzgm9f0o2xNbeQq53zem3OHOyJ03=G-QWZz=EN_oHmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We will remove BR2_DEPRECATED, so remove this deprecated package.
+Yann,
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in.legacy                                   |   7 +
- DEVELOPERS                                         |   1 -
- package/Config.in                                  |   1 -
- .../0001-fix-uClibc-compile-getcontext.patch       | 273 ---------------------
- ...002-fix-uClibc-compile-execinfo-backtrace.patch |  31 ---
- .../wvstreams/0003-fix-uClibc-compile-misc.patch   |  16 --
- package/wvstreams/0004-build-fixes.patch           |  40 ---
- package/wvstreams/0005-getuid.patch                |  25 --
- package/wvstreams/Config.in                        |  19 --
- package/wvstreams/wvstreams.hash                   |   2 -
- package/wvstreams/wvstreams.mk                     |  62 -----
- 11 files changed, 7 insertions(+), 470 deletions(-)
- delete mode 100644 package/wvstreams/0001-fix-uClibc-compile-getcontext.patch
- delete mode 100644 package/wvstreams/0002-fix-uClibc-compile-execinfo-backtrace.patch
- delete mode 100644 package/wvstreams/0003-fix-uClibc-compile-misc.patch
- delete mode 100644 package/wvstreams/0004-build-fixes.patch
- delete mode 100644 package/wvstreams/0005-getuid.patch
- delete mode 100644 package/wvstreams/Config.in
- delete mode 100644 package/wvstreams/wvstreams.hash
- delete mode 100644 package/wvstreams/wvstreams.mk
+On Sat, Oct 15, 2016 at 3:28 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> It might be necessary to not even mention a package in the output of
+> legal-info:
+>
+>   - virtual packages have virtually nothing to save in the legal-info
+>     output;
+>
+>   - for proprietary packages, it might not even be legal to even
+>     mention them, being under NDA or some other such restrictive
+>     conditions.
+>
+> Introduce the new FOO_GEN_LEGAL_INFO variable that a package can set
+> to 'NO' (default to 'YES') to indicate that the package should be
+> completely ignored from the legal-info output, in which case the
+> package is not mentioned in the maniufest, its source archive,
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index b5fb49f..f26f97f 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.11"
- 
-+config BR2_PACKAGE_WVSTREAMS
-+	bool "wvstreams removed"
-+	select BR2_LEGACY
-+	help
-+	  wvstreams is not maintained anymore since about 2009. It also
-+	  doesn't build anymore with recent compilers (GCC 5+).
-+
- config BR2_PACKAGE_WVDIAL
- 	bool "wvdial removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d8c6583..0a991e4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1348,7 +1348,6 @@ F:	package/sconeserver/
- F:	package/sound-theme-borealis/
- F:	package/sound-theme-freedesktop/
- F:	package/vlc/
--F:	package/wvstreams/
- F:	package/xscreensaver/
- F:	package/zmqpp/
- F:	package/zyre/
-diff --git a/package/Config.in b/package/Config.in
-index b7cb970..56813ea 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1260,7 +1260,6 @@ menu "Networking"
- 	source "package/sofia-sip/Config.in"
- 	source "package/thrift/Config.in"
- 	source "package/usbredir/Config.in"
--	source "package/wvstreams/Config.in"
- 	source "package/zeromq/Config.in"
- 	source "package/zmqpp/Config.in"
- 	source "package/zyre/Config.in"
-diff --git a/package/wvstreams/0001-fix-uClibc-compile-getcontext.patch b/package/wvstreams/0001-fix-uClibc-compile-getcontext.patch
-deleted file mode 100644
-index c78cc18..0000000
---- a/package/wvstreams/0001-fix-uClibc-compile-getcontext.patch
-+++ /dev/null
-@@ -1,273 +0,0 @@
--Fix wvstreams so that it builds with uClibc, which does not have the
--getcontext() and setcontext() functions.
--
--Signed-off-by: Simon Dawson <spdawson@gmail.com>
--
--diff -Nurp a/include/wvtask.h b/include/wvtask.h
----- a/include/wvtask.h	2008-07-14 20:11:35.000000000 +0100
--+++ b/include/wvtask.h	2012-07-28 12:29:53.559981240 +0100
--@@ -28,6 +28,13 @@
-- 
-- #define WVTASK_MAGIC 0x123678
-- 
--+#undef HAVE_GETCONTEXT
--+#ifdef HAVE_GETCONTEXT
--+typedef ucontext_t TaskContext;
--+#else
--+typedef jmp_buf TaskContext;
--+#endif
--+
-- class WvTaskMan;
-- 
-- /** Represents a single thread of control. */
--@@ -54,8 +61,8 @@ class WvTask
--     bool running, recycled;
--     
--     WvTaskMan &man;
---    ucontext_t mystate;	// used for resuming the task
---    ucontext_t func_call, func_return;
--+    TaskContext mystate;	// used for resuming the task
--+    TaskContext func_call, func_return;
--     
--     TaskFunc *func;
--     void *userdata;
--@@ -94,13 +101,13 @@ class WvTaskMan
--     static void call_func(WvTask *task);
-- 
--     static char *stacktop;
---    static ucontext_t stackmaster_task;
--+    static TaskContext stackmaster_task;
--     
--     static WvTask *stack_target;
---    static ucontext_t get_stack_return;
--+    static TaskContext get_stack_return;
--     
--     static WvTask *current_task;
---    static ucontext_t toplevel;
--+    static TaskContext toplevel;
--     
--     WvTaskMan();
--     virtual ~WvTaskMan();
--diff -Nurp a/utils/wvtask.cc b/utils/wvtask.cc
----- a/utils/wvtask.cc	2009-05-13 22:42:52.000000000 +0100
--+++ b/utils/wvtask.cc	2012-07-28 12:32:23.855974538 +0100
--@@ -60,12 +60,14 @@ int WvTask::taskcount, WvTask::numtasks,
-- WvTaskMan *WvTaskMan::singleton;
-- int WvTaskMan::links, WvTaskMan::magic_number;
-- WvTaskList WvTaskMan::all_tasks, WvTaskMan::free_tasks;
---ucontext_t WvTaskMan::stackmaster_task, WvTaskMan::get_stack_return,
--+TaskContext WvTaskMan::stackmaster_task, WvTaskMan::get_stack_return,
--     WvTaskMan::toplevel;
-- WvTask *WvTaskMan::current_task, *WvTaskMan::stack_target;
-- char *WvTaskMan::stacktop;
-- 
--+#ifdef HAVE_GETCONTEXT
-- static int context_return;
--+#endif
-- 
-- 
-- static bool use_shared_stack()
--@@ -198,9 +200,13 @@ WvTaskMan::WvTaskMan()
--     
--     stacktop = (char *)alloca(0);
--     
--+#ifdef HAVE_GETCONTEXT
--     context_return = 0;
--     assert(getcontext(&get_stack_return) == 0);
--     if (context_return == 0)
--+#else
--+    if (setjmp(get_stack_return) == 0)
--+#endif
--     {
-- 	// initial setup - start the stackmaster() task (never returns!)
-- 	stackmaster();
--@@ -257,22 +263,30 @@ int WvTaskMan::run(WvTask &task, int val
--         
--     WvTask *old_task = current_task;
--     current_task = &task;
---    ucontext_t *state;
--+    TaskContext *state;
--     
--     if (!old_task)
-- 	state = &toplevel; // top-level call (not in an actual task yet)
--     else
-- 	state = &old_task->mystate;
--     
--+#ifdef HAVE_GETCONTEXT
--     context_return = 0;
--     assert(getcontext(state) == 0);
--     int newval = context_return;
--+#else
--+    int newval = setjmp(*state);
--+#endif
--     if (newval == 0)
--     {
-- 	// saved the state, now run the task.
--+#ifdef HAVE_GETCONTEXT
--         context_return = val;
--         setcontext(&task.mystate);
--         return -1;
--+#else
--+        longjmp(task.mystate, val);
--+#endif
--     }
--     else
--     {
--@@ -317,16 +331,24 @@ int WvTaskMan::yield(int val)
--                 (long)current_task->stacksize);
--     }
-- #endif
---		
--+
--+#ifdef HAVE_GETCONTEXT		
--     context_return = 0;
--     assert(getcontext(&current_task->mystate) == 0);
--     int newval = context_return;
--+#else
--+    int newval = setjmp(current_task->mystate);
--+#endif
--     if (newval == 0)
--     {
-- 	// saved the task state; now yield to the toplevel.
--+#ifdef HAVE_GETCONTEXT
--         context_return = val;
--         setcontext(&toplevel);
--         return -1;
--+#else
--+        longjmp(toplevel, val);
--+#endif
--     }
--     else
--     {
--@@ -340,9 +362,13 @@ int WvTaskMan::yield(int val)
-- 
-- void WvTaskMan::get_stack(WvTask &task, size_t size)
-- {
--+#ifdef HAVE_GETCONTEXT
--     context_return = 0;
--     assert(getcontext(&get_stack_return) == 0);
--     if (context_return == 0)
--+#else
--+    if (setjmp(get_stack_return) == 0)
--+#endif
--     {
-- 	assert(magic_number == -WVTASK_MAGIC);
-- 	assert(task.magic_number == WVTASK_MAGIC);
--@@ -358,6 +384,7 @@ void WvTaskMan::get_stack(WvTask &task,
--             static char *next_stack_addr = NULL;
-- #endif
--         
--+#ifndef HAVE_GETCONTEXT
--             task.stack = mmap(next_stack_addr, task.stacksize,
--                 PROT_READ | PROT_WRITE,
-- #ifndef MACOS 
--@@ -366,12 +393,17 @@ void WvTaskMan::get_stack(WvTask &task,
--                 MAP_PRIVATE,
-- #endif
--                 -1, 0);
--+#endif // !HAVE_GETCONTEXT
--         }
-- 	
-- 	// initial setup
-- 	stack_target = &task;
--+#ifdef HAVE_GETCONTEXT
-- 	context_return = size/1024 + (size%1024 > 0);
-- 	setcontext(&stackmaster_task);
--+#else
--+	longjmp(stackmaster_task, size/1024 + (size%1024 > 0));
--+#endif
--     }
--     else
--     {
--@@ -408,9 +440,13 @@ void WvTaskMan::_stackmaster()
--     {
-- 	assert(magic_number == -WVTASK_MAGIC);
-- 	
--+#ifdef HAVE_GETCONTEXT
--         context_return = 0;
--         assert(getcontext(&stackmaster_task) == 0);
--         val = context_return;
--+#else
--+        val = setjmp(stackmaster_task);
--+#endif
-- 	if (val == 0)
-- 	{
-- 	    assert(magic_number == -WVTASK_MAGIC);
--@@ -418,8 +454,12 @@ void WvTaskMan::_stackmaster()
-- 	    // just did setjmp; save stackmaster's current state (with
-- 	    // all current stack allocations) and go back to get_stack
-- 	    // (or the constructor, if that's what called us)
--+#ifdef HAVE_GETCONTEXT
--             context_return = 1;
--             setcontext(&get_stack_return);
--+#else
--+            longjmp(get_stack_return, 1);
--+#endif
-- 	}
-- 	else
-- 	{
--@@ -462,7 +502,9 @@ void WvTaskMan::call_func(WvTask *task)
--     task->func(task->userdata);
--     Dprintf("WvTaskMan: returning from task #%d (%s)\n",
-- 	    task->tid, (const char *)task->name);
--+#ifdef HAVE_GETCONTEXT
--     context_return = 1;
--+#endif
-- }
-- 
-- 
--@@ -473,9 +515,13 @@ void WvTaskMan::do_task()
--     assert(task->magic_number == WVTASK_MAGIC);
-- 	
--     // back here from longjmp; someone wants stack space.    
--+#ifdef HAVE_GETCONTEXT
--     context_return = 0;
--     assert(getcontext(&task->mystate) == 0);
--     if (context_return == 0)
--+#else
--+    if (setjmp(task->mystate) == 0)
--+#endif
--     {
-- 	// done the setjmp; that means the target task now has
-- 	// a working jmp_buf all set up.  Leave space on the stack
--@@ -510,6 +556,7 @@ void WvTaskMan::do_task()
--                 }
--                 else
--                 {
--+#ifdef HAVE_GETCONTEXT
--                     assert(getcontext(&task->func_call) == 0);
--                     task->func_call.uc_stack.ss_size = task->stacksize;
--                     task->func_call.uc_stack.ss_sp = task->stack;
--@@ -519,11 +566,19 @@ void WvTaskMan::do_task()
--                             task->tid, (const char *)task->name);
--                     makecontext(&task->func_call,
--                             (void (*)(void))call_func, 1, task);
--+#else
--+                    assert(setjmp(task->func_call) == 0);
--+#endif
-- 
--+#ifdef HAVE_GETCONTEXT
--                     context_return = 0;
--                     assert(getcontext(&task->func_return) == 0);
--                     if (context_return == 0)
--                         setcontext(&task->func_call);
--+#else
--+                    if (setjmp(task->func_return) == 0)
--+                        longjmp(task->func_call, 0);
--+#endif
--                 }
-- 		
-- 		// the task's function terminated.
--@@ -544,8 +599,12 @@ const void *WvTaskMan::current_top_of_st
--     if (use_shared_stack() || current_task == NULL)
--         return __libc_stack_end;
--     else
--+#ifdef HAVE_GETCONTEXT
--         return (const char *)current_task->stack + current_task->stacksize;
-- #else
--+        return 0;
--+#endif
--+#else
--     return 0;
-- #endif
-- }
-diff --git a/package/wvstreams/0002-fix-uClibc-compile-execinfo-backtrace.patch b/package/wvstreams/0002-fix-uClibc-compile-execinfo-backtrace.patch
-deleted file mode 100644
-index c6317da..0000000
---- a/package/wvstreams/0002-fix-uClibc-compile-execinfo-backtrace.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--Fix wvstreams so that it builds with uClibc: we don't have execinfo.h,
--so we can't do backtrace() stuff.
--
--Signed-off-by: Simon Dawson <spdawson@gmail.com>
--
--diff -Nurp a/utils/wvcrash.cc b/utils/wvcrash.cc
----- a/utils/wvcrash.cc	2008-12-17 12:24:20.000000000 +0000
--+++ b/utils/wvcrash.cc	2012-07-27 22:00:15.456502262 +0100
--@@ -28,7 +28,9 @@
-- // FIXME: this file mostly only works in Linux
-- #ifdef __linux
-- 
---# include <execinfo.h>
--+#ifdef HAVE_EXECINFO_H
--+#include <execinfo.h>
--+#endif
-- #include <unistd.h>
-- 
-- #ifdef __USE_GNU
--@@ -267,9 +269,11 @@ static void wvcrash_real(int sig, int fd
-- 	}
--     }
-- 
--+#ifdef HAVE_EXECINFO_H
--     wr(fd, "\nBacktrace:\n");
--     backtrace_symbols_fd(trace,
-- 		 backtrace(trace, sizeof(trace)/sizeof(trace[0])), fd);
--+#endif
--     
--     if (pid > 0)
--     {
-diff --git a/package/wvstreams/0003-fix-uClibc-compile-misc.patch b/package/wvstreams/0003-fix-uClibc-compile-misc.patch
-deleted file mode 100644
-index 690a961..0000000
---- a/package/wvstreams/0003-fix-uClibc-compile-misc.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Fix wvstreams so that it builds with uClibc: const cast problem.
--
--Signed-off-by: Simon Dawson <spdawson@gmail.com>
--
--diff -Nurp a/crypto/wvx509.cc b/crypto/wvx509.cc
----- a/crypto/wvx509.cc	2008-10-23 21:23:49.000000000 +0100
--+++ b/crypto/wvx509.cc	2012-06-15 18:45:06.605899292 +0100
--@@ -1157,7 +1157,7 @@ WvString WvX509::get_extension(int nid)
--         
--         if (ext)
--         {
---            X509V3_EXT_METHOD *method = X509V3_EXT_get(ext);
--+          X509V3_EXT_METHOD *method = const_cast<X509V3_EXT_METHOD *>(X509V3_EXT_get(ext));
--             if (!method)
--             {
--                 WvDynBuf buf;
-diff --git a/package/wvstreams/0004-build-fixes.patch b/package/wvstreams/0004-build-fixes.patch
-deleted file mode 100644
-index 21792d7..0000000
---- a/package/wvstreams/0004-build-fixes.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--Add missing includes for proper build on Linux/glibc
--
--The current wvstreams code doesn't build on Linux/glibc, with error
--about chmod() not being available (for wvunixdgsocket.cc) or umask()
--not being available (for wvatomicfile.cc). Those errors turn out to be
--missing includes. Those includes were in fact already done, but
--conditionally for MacOS. We make them unconditional (it probably
--breaks other platforms, but since Buildroot is Linux only, we don't
--care).
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/ipstreams/wvunixdgsocket.cc
--===================================================================
----- a/ipstreams/wvunixdgsocket.cc
--+++ b/ipstreams/wvunixdgsocket.cc
--@@ -1,8 +1,6 @@
-- #include "wvunixdgsocket.h"
---#ifdef MACOS
-- #include <sys/types.h>
-- #include <sys/stat.h>
---#endif
-- 
-- WvUnixDGSocket::WvUnixDGSocket(WvStringParm filename, bool _server, int perms)
--     : socketfile(filename)
--Index: b/streams/wvatomicfile.cc
--===================================================================
----- a/streams/wvatomicfile.cc
--+++ b/streams/wvatomicfile.cc
--@@ -10,10 +10,7 @@
-- #include "wvatomicfile.h"
-- #include "wvfileutils.h"
-- #include "wvstrutils.h"
---
---#ifdef MACOS
-- #include <sys/stat.h>
---#endif
-- 
-- WvAtomicFile::WvAtomicFile(WvStringParm filename, int flags, mode_t create_mode)
--     : tmp_file(WvString::null)
-diff --git a/package/wvstreams/0005-getuid.patch b/package/wvstreams/0005-getuid.patch
-deleted file mode 100644
-index 6015066..0000000
---- a/package/wvstreams/0005-getuid.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--[PATCH] wvuid.cc: getuid needs sys/types.h + unistd.h
--
--Otherwise the build fails with:
--
--utils/wvuid.cc: In function 'wvuid_t wvgetuid()':
--utils/wvuid.cc:63:19: error: 'getuid' was not declared in this scope
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- utils/wvuid.cc |    2 ++
-- 1 file changed, 2 insertions(+)
--
--Index: wvstreams-4.6.1/utils/wvuid.cc
--===================================================================
----- wvstreams-4.6.1.orig/utils/wvuid.cc
--+++ wvstreams-4.6.1/utils/wvuid.cc
--@@ -33,6 +33,8 @@
-- 
-- #else // not WIN32
-- 
--+#include <unistd.h>
--+#include <sys/types.h>
-- 
-- WvString wv_username_from_uid(wvuid_t uid)
-- {
-diff --git a/package/wvstreams/Config.in b/package/wvstreams/Config.in
-deleted file mode 100644
-index a550c57..0000000
---- a/package/wvstreams/Config.in
-+++ /dev/null
-@@ -1,19 +0,0 @@
--config BR2_PACKAGE_WVSTREAMS
--	bool "wvstreams"
--	depends on BR2_DEPRECATED_SINCE_2016_08
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_STATIC_LIBS
--	depends on BR2_USE_MMU # fork()
--	# musl not supported and no upstream activity since 2011.
--	depends on !BR2_TOOLCHAIN_USES_MUSL
--	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_ZLIB
--	help
--	  C++ Network Programming Library.
--
--	  http://wvstreams.googlecode.com/
--
--comment "wvstreams needs a glibc or uClibc toolchain w/ C++, dynamic library"
--	depends on BR2_DEPRECATED_SINCE_2016_08
--	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/wvstreams/wvstreams.hash b/package/wvstreams/wvstreams.hash
-deleted file mode 100644
-index 17cad6d..0000000
---- a/package/wvstreams/wvstreams.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# locally computed
--sha256  8403f5fbf83aa9ac0c6ce15d97fd85607488152aa84e007b7d0621b8ebc07633  wvstreams-4.6.1.tar.gz
-diff --git a/package/wvstreams/wvstreams.mk b/package/wvstreams/wvstreams.mk
-deleted file mode 100644
-index 4d344e2..0000000
---- a/package/wvstreams/wvstreams.mk
-+++ /dev/null
-@@ -1,62 +0,0 @@
--################################################################################
--#
--# wvstreams
--#
--################################################################################
--
--WVSTREAMS_VERSION = 4.6.1
--WVSTREAMS_SITE = http://wvstreams.googlecode.com/files
--WVSTREAMS_DEPENDENCIES = openssl zlib host-pkgconf
--WVSTREAMS_INSTALL_STAGING = YES
--
--WVSTREAMS_LICENSE = LGPLv2+
--WVSTREAMS_LICENSE_FILES = LICENSE
--
--# N.B. parallel make fails
--WVSTREAMS_MAKE = $(MAKE1)
--
--# Needed to work around problem with wvassert.h
--WVSTREAMS_CONF_OPTS += CPPFLAGS=-DNDEBUG
--
--WVSTREAMS_CONF_OPTS += \
--	--with-openssl \
--	--with-zlib \
--	--without-pam \
--	--disable-warnings \
--	--without-tcl
--
--# needed for openssl detection when statically linking (as ssl needs lz)
--WVSTREAMS_CONF_ENV += LIBS=-lz
--
--ifneq ($(BR2_STATIC_LIBS),y)
--WVSTREAMS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fPIC"
--endif
--
--# wvstreams uses argp.h which can be provided by the argp-standalone
--# package
--ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
--WVSTREAMS_DEPENDENCIES += argp-standalone
--endif
--
--ifeq ($(BR2_PACKAGE_DBUS),y)
--WVSTREAMS_DEPENDENCIES += dbus
--WVSTREAMS_CONF_OPTS += --with-dbus
--else
--WVSTREAMS_CONF_OPTS += --without-dbus
--endif
--
--ifeq ($(BR2_PACKAGE_QT),y)
--WVSTREAMS_DEPENDENCIES += qt
--WVSTREAMS_CONF_OPTS += --with-qt
--else
--WVSTREAMS_CONF_OPTS += --without-qt
--endif
--
--ifeq ($(BR2_PACKAGE_VALGRIND),y)
--WVSTREAMS_DEPENDENCIES += valgrind
--WVSTREAMS_CONF_OPTS += --with-valgrind
--else
--WVSTREAMS_CONF_OPTS += --without-valgrind
--endif
--
--$(eval $(autotools-package))
+s/maniufest/manifest/
+
+> patches and license files are not saved into legal-info/ .
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+>
+> ---
+> Note: the name of the variable if up for discussion. However, this will
+
+s/if up/is up/
+
+> most probably never be used in Buildroot itself, but only in local
+> proprietary forks or br2-external trees. So we will probably never ever
+> see it publicly. So, we do not care much about that variable name...
+>
+
+Yann, you mention setting FOO_GEN_LEGAL_INFO=NO could benefit to
+virtual packages, but I see no change/patch on the virtual-package
+infrastructure. Did I miss something?
+
+> ---
+> Changes v6 -> v7:
+>   - rename the variable  (Thomas, Luca, Peter)
+>   - remove Luca's reviewed/tested-by tags (too much churn since given)
+> ---
+>  docs/manual/adding-packages-generic.txt | 13 +++++++++++++
+>  package/pkg-generic.mk                  | 16 +++++++++++++++-
+>  2 files changed, 28 insertions(+), 1 deletion(-)
+>
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index 51408e8..0dccfb4 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -443,6 +443,19 @@ information is (assuming the package name is +libfoo+) :
+>    non-opensource packages: Buildroot will not save the source code for this
+>    package when collecting the +legal-info+.
+>
+> +* +LIBFOO_GEN_LEGAL_INFO+ can be set to +YES+ (default) or +NO+ to indicate
+> +  that this package should be included or not in the output of the
+> +  +legal-info+.  If set to +NO+, that package will be completely excluded
+> +  from the output of +legal-info+: it will not be listed in the manifest,
+> +  the license files and the sources are not saved (the legal-info related
+> +  variables are all ignored: +LIBFOO_LICENSE+, +LIBFOO_LICENSE_FILES+,
+> +  +LIBFOO_ACTUAL_SOURCE_TARBALL+, +LIBFOO_ACTUAL_SOURCE_SITE+,
+> +  +LIBFOO_REDISTRIBUTE+).
+> ++
+> +.Note
+> +You probably do not want to set it to +NO+ for a package bundled in Buildroot.
+> +  It is meant for non-public, confidential, company-proprietary packages.
+> +
+>  * +LIBFOO_FLAT_STACKSIZE+ defines the stack size of an application built into
+>    the FLAT binary format. The application stack size on the NOMMU architecture
+>    processors can't be enlarged at run time. The default stack size for the
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 12ae86f..165000c 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -502,6 +502,14 @@ endif
+>
+>  $(2)_REDISTRIBUTE              ?= YES
+>
+> +ifndef $(2)_GEN_LEGAL_INFO
+> + ifdef $(3)_GEN_LEGAL_INFO
+> +  $(2)_GEN_LEGAL_INFO = $$($(3)_GEN_LEGAL_INFO)
+> + endif
+> +endif
+> +
+> +$(2)_GEN_LEGAL_INFO                    ?= YES
+> +
+>  $(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAW_BASE_NAME)
+>
+>  # When a target package is a toolchain dependency set this variable to
+> @@ -782,8 +790,10 @@ endif
+>
+>  # We need to extract and patch a package to be able to retrieve its
+>  # license files (if any) and the list of patches applied to it (if
+> -# any).
+> +# any). But not if we want to ignore that package completely.
+> +ifeq ($$($(2)_GEN_LEGAL_INFO),YES)
+>  $(1)-legal-info: $(1)-patch
+> +endif
+>
+>  # We only save the sources of packages we want to redistribute, that are
+>  # non-overriden (local or true override).
+> @@ -796,6 +806,8 @@ endif
+>
+>  # legal-info: produce legally relevant info.
+>  $(1)-legal-info:
+> +ifeq ($$($(2)_GEN_LEGAL_INFO),YES)
+> +
+>  # Packages without a source are assumed to be part of Buildroot, skip them.
+>         $$(foreach hook,$$($(2)_PRE_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+>  ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+> @@ -843,6 +855,8 @@ endif # other packages
+>  endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+>         $$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+>
+> +endif # $(2)_GEN_LEGAL_INFO == YES
+> +
+>  # add package to the general list of targets if requested by the buildroot
+>  # configuration
+>  ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+> --
+> 2.7.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Regards,
+
 -- 
-2.9.3
+Samuel
