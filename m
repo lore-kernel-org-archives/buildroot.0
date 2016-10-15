@@ -1,30 +1,26 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 15 Oct 2016 11:20:12 +0200
-Subject: [Buildroot] [PATCH] package/urg: update homepage url
-Message-ID: <20161015092012.1759-1-s.martin49@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 15 Oct 2016 11:22:03 +0200
+Subject: [Buildroot] [PATCH 1/1] mysql: Make S97mysqld source a default
+	file
+In-Reply-To: <1476383282-10739-1-git-send-email-eloi.bail@savoirfairelinux.com>
+ (Eloi BAIL's message of "Thu, 13 Oct 2016 14:28:02 -0400")
+References: <1476383282-10739-1-git-send-email-eloi.bail@savoirfairelinux.com>
+Message-ID: <87pon2q85g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/urg/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Eloi" == Eloi BAIL <eloi.bail@savoirfairelinux.com> writes:
 
-diff --git a/package/urg/Config.in b/package/urg/Config.in
-index 9d57645..c602624 100644
---- a/package/urg/Config.in
-+++ b/package/urg/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_URG
- 	help
- 	  Library to control Hokuyo's URG series sensors.
- 
--	  http://www.hokuyo-aut.jp/02sensor/07scanner/download/urg_programs_en/
-+	  https://sourceforge.net/p/urgnetwork/wiki/Home/
- 
- comment "urg needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
+ > Hardcoded parameters are used for mysql installation.
+ > Make S97mysqld source a /etc/default/mysql file where these
+ > parameters can be overridden.
+
+ > Signed-off-by: Eloi BAIL <eloi.bail@savoirfairelinux.com>
+
+Committed, thanks.
+
 -- 
-2.10.0
+Bye, Peter Korsgaard
