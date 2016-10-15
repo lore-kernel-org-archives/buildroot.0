@@ -1,23 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Oct 2016 23:04:21 +0200
-Subject: [Buildroot] [PATCH 10/13] webkitgtk24: remove deprecated package
-In-Reply-To: <20161015145107.18264-11-arnout@mind.be> (Arnout Vandecappelle's
- message of "Sat, 15 Oct 2016 16:51:04 +0200")
-References: <20161015145107.18264-1-arnout@mind.be>
- <20161015145107.18264-11-arnout@mind.be>
-Message-ID: <871szh8gtm.fsf@dell.be.48ers.dk>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 15 Oct 2016 23:03:46 +0200
+Subject: [Buildroot] [PATCH v5 6/9] package/libcec: include TARGET_{C,
+	CXX}FLAGS to the overloaded {C, CXX}FLAGS
+In-Reply-To: <20161015210349.29432-1-s.martin49@gmail.com>
+References: <20161015210349.29432-1-s.martin49@gmail.com>
+Message-ID: <20161015210349.29432-7-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- > We will remove BR2_DEPRECATED, so remove this deprecated package.
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+changes v4->v5:
+- none
 
-Committed, thanks.
+changes v3->v4:
+- fix commit subject
+- update A/R/T tags
 
+changes v2->v3:
+- new patch
+---
+ package/libcec/libcec.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index b762d88..55c5fbb 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -29,8 +29,9 @@ endif
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+ LIBCEC_DEPENDENCIES += rpi-userland
+ LIBCEC_CONF_OPTS += \
+-	-DCMAKE_C_FLAGS="-lvcos -lvchiq_arm" \
+-	-DCMAKE_CXX_FLAGS="-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux \
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -lvcos -lvchiq_arm" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) \
++		-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux \
+ 		-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads"
+ endif
+ 
 -- 
-Bye, Peter Korsgaard
+2.10.0
