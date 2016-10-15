@@ -1,56 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 Oct 2016 17:32:46 +0200
-Subject: [Buildroot] [PATCH] core/legal-info: allow ignoring packages
- from the legal-info
-In-Reply-To: <878ttpbq72.fsf@dell.be.48ers.dk>
-References: <1476538102-8779-1-git-send-email-yann.morin.1998@free.fr>
- <878ttpbq72.fsf@dell.be.48ers.dk>
-Message-ID: <20161015153246.GG3668@free.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sat, 15 Oct 2016 16:35:35 +0100
+Subject: [Buildroot] [PATCH] sqlite: bump version to 3150000 (3.15.0)
+Message-ID: <20161015153535.51346-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2016-10-15 17:13 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > It might be necessary to not even mention a package in the output of
->  > legal-info:
-> 
->  >   - virtual packages have virtually nothing to save in the legal-info
->  >     output;
-> 
->  >   - for proprietary packages, it might not even be legal to even
->  >     mention them, being under NDA or some other such restrictive
->  >     conditions.
-> 
->  > Introduce the new FOO_GEN_LEGAL_INFO variable that a package can set
->  > to 'NO' (default to 'YES') to indicate that the package should be
->  > completely ignored from the legal-info output, in which case the
->  > package is not mentioned in the maniufest, its source archive,
->  > patches and license files are not saved into legal-info/ .
-> 
-> Couldn't / shouldn't the 2nd part already be handled by
-> <foo>_REDISTRIBUTE = NO and/or <foo>_LICENSE = PROPRIETARY?
-
-No, because for a proprietary license, you may still have to at least
-list it in the manifest.
-
-For example, the nvidia-driver package has a proprietary license, is not
-redistributable, but we must still list it in the manifest.
-
-I'll update the commit log accordingly. Thanks! ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 308522b..b0418af 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1 5d3a6bccd9154963641960db61df901a4e0b3ca0  sqlite-autoconf-3140200.tar.gz
++sha1 b34cb4ee9710368598c62df0222f5c24dfc9c860  sqlite-autoconf-3150000.tar.gz
+ # Calculated based on the hash above
+-sha256 644f0c127f7d0cbe8765b9bbdf9ed09d6a2f2b9dfba48ddfd8ca0a42fdb5b3fc  sqlite-autoconf-3140200.tar.gz
++sha256 77162da9b4a0336d7e77d5252b690662850f62b47c12d9125f74ab9de78ded27  sqlite-autoconf-3150000.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index a8a36bb..0a5c1bb 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3140200
++SQLITE_VERSION = 3150000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2016
+ SQLITE_LICENSE = Public domain
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.10.0
