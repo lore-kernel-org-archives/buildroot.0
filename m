@@ -1,116 +1,103 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 16 Oct 2016 00:42:04 +0200
-Subject: [Buildroot] [PATCH v5 2/9] package/pkg-cmake.mk: move
- CMAKE_BUILD_TYPE definition into toolchainfile.cmake
-In-Reply-To: <20161015210349.29432-3-s.martin49@gmail.com>
-References: <20161015210349.29432-1-s.martin49@gmail.com>
- <20161015210349.29432-3-s.martin49@gmail.com>
-Message-ID: <838f8306-1385-0098-6b50-1a27141f4d92@mind.be>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sat, 15 Oct 2016 19:05:31 -0400
+Subject: [Buildroot] [PATCH 1/1] size-stats: don't count hard links
+In-Reply-To: <20161015081750.75b59fb2@free-electrons.com>
+References: <1476489930-10456-1-git-send-email-fhunleth@troodon-software.com>
+ <20161015081750.75b59fb2@free-electrons.com>
+Message-ID: <CA+-urNQ_S_GxnZrtuG1jJdrz=BaKz2d13fcdNoGkorxRPEiFRQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sat, Oct 15, 2016 at 2:17 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Fri, 14 Oct 2016 20:05:30 -0400, Frank Hunleth wrote:
+>> This change adds inode tracking to the size-stats script so that hard
+>> links don't cause files to be double counted. This has a significant
+>> effect on the size computation for some packages. For example, git has
+>> around a dozen hard links to a large file. Before this change, git would
+>> weigh in at about 170 MB with the total filesystem size reported as
+>> 175 MB. The actual rootfs.ext2 size was around 16 MB. With the change,
+>> the git package registers at 10.5 MB with a total filesystem size of
+>> 15.8 MB.
+>>
+>> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+>
+> Thanks a lot for this change! Definitely this is something that needs
+> to be handled.
+>
+>> -def add_file(filesdict, relpath, abspath, pkg):
+>> +def add_file(filesdict, seeninodes, relpath, abspath, pkg):
+>>      if not os.path.exists(abspath):
+>>          return
+>>      if os.path.islink(abspath):
+>>          return
+>> -    sz = os.stat(abspath).st_size
+>> +    if relpath in filesdict:
+>> +        return
+>
+> I'm not sure why this test is being added, or at least why it's related
+> to the inode tracking.
 
+I find that I often have duplicate files listed in
+package-file-list.txt. I think that they're all due to rebuilding
+packages. Without the hard link check, the duplicate files were
+harmless in that they just resulted in a file being added to filesdict
+more than once. With the hard link checking, an if statement was
+needed to make sure that a file with a previously seen inode wouldn't
+mistakenly be added as a hard link. Checking up front here seemed best
+since it not only address the hard link case, but also saved a little
+time handling duplicate entries.
 
-On 15-10-16 23:03, Samuel Martin wrote:
-> This change still allows overriding the build type from the configure
-> command line.
+>
+>> @@ -97,10 +113,11 @@ def build_package_size(filesdict, builddir):
+>>              if not frelpath in filesdict:
+>>                  print("WARNING: %s is not part of any package" % frelpath)
+>>                  pkg = "unknown"
+>> +                sz = os.path.getsize(fpath)
+>
+> So for files not belonging to packages, we do not track inodes?
 
- Maybe explain why we want this:
+Good point. I hadn't considered that anyone would use hard links
+outside of packages, but I suppose there's nothing preventing it.
 
-The chosen CMAKE_BUILD_TYPE encodes an option of the Buildroot configuration, so
-it makes more sense to save it in the toolchainfile.cmake than to pass it during
-configure.
+>
+> Maybe we should instead have our own filesize() helper function that
+> takes care of returning the right size if we have never seen this
+> inode, or 0 if we have already seen it. It could then be used in both
+> places.
+>
+> Another concern is that some files will now be reported as having a 0
+> size, while it's not entirely correct. This does not matter at all for
+> the per-package graph or CSV file, but is a bit more annoying for the
+> per-file CSV file. Indeed, a user inspecting this CSV file will wonder
+> what those zero-size files are. So, another option is to divide the
+> size of the file by the number of hard-links, and spread the size over
+> the different hard-links. But it's also not very nice, as the size
+> reported in the CSV will not match the visible size of the file.
+>
+> So, maybe we should just leave it like you propose, unless others have
+> a better idea about this.
 
-It is still possible to override the build type on the cmake command line.
+I had similar concerns about reporting 0 sized files, since it's not
+that obvious and which file gets picked as the non-zero length file is
+arbitrary. I hadn't thought of spreading the file size across all
+links, but I'm not sure that would make things more clear. The only
+idea I have is to add a comments field to the csv, add the file as 0
+length, and have a comment "hard link to xyz." I pretty much only use
+the package size stats, so I'll wait around for other suggestions too.
 
-> 
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v4->v5:
-> - fix cmake set call
-> 
-> changes v3->v4:
-> - new patch
-> ---
->  CHANGES                             | 6 ++++++
->  package/pkg-cmake.mk                | 2 +-
->  support/misc/toolchainfile.cmake.in | 3 +++
->  3 files changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/CHANGES b/CHANGES
-> index b4bd5fe..c0e3e79 100644
-> --- a/CHANGES
-> +++ b/CHANGES
-> @@ -1,3 +1,9 @@
-> +2016.11-rc1,
-> +
-> +    toolchainfile.cmake:
-> +    * when used outside of Buildroot, if not specified on the command
-> +      line, the CMAKE_BUILD_TYPE is by toolchainfile.cmake.
+Frank
 
- I'm not sure if this is something important enough to mention in the CHANGES.
-If it is (up to Peter to decide when commit I'd say), the maybe rephrase as
-
-   * when used outside of Buildroot, the toolchainfile.cmake will set the
-     CMAKE_BUILD_TYPE to Debug or Release, according to the configuration.
-     It is still possible to override this by adding -DCMAKE_BUILD_TYPE=...
-     on the cmake command line.
-
-> +
->  2016.08, Released September 1st, 2016
->  
->  	Minor fixes.
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index 259865d..5725ed6 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -95,7 +95,6 @@ define $(2)_CONFIGURE_CMDS
->  	PATH=$$(BR_PATH) \
->  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
->  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
-> -		-DCMAKE_BUILD_TYPE=$(BR_CMAKE_BUILD_TYPE) \
->  		-DCMAKE_INSTALL_PREFIX="/usr" \
->  		-DCMAKE_COLOR_MAKEFILE=OFF \
->  		-DBUILD_DOC=OFF \
-> @@ -255,5 +254,6 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
->  		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
->  		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
->  		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
-> +		-e 's#@@BR_CMAKE_BUILD_TYPE@@#$(BR_CMAKE_BUILD_TYPE)#' \
-
- So I'd still keep the $(if $(BR2_ENABLE_DEBUG),Debug,Release) form here.
-
- Regards,
- Arnout
-
->  		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
->  		> $@
-> diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-> index 649b52d..2505256 100644
-> --- a/support/misc/toolchainfile.cmake.in
-> +++ b/support/misc/toolchainfile.cmake.in
-> @@ -13,6 +13,9 @@ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST
->  set(CMAKE_SYSTEM_NAME Linux)
->  set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
->  
-> +# Build type from the Buildroot configuration
-> +set(CMAKE_BUILD_TYPE @@BR_CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configuration")
-> +
->  set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
->  set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
->  set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@ ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Buildroot LDFLAGS")
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
