@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 22:33:15 +0200
-Subject: [Buildroot] [PATCH] pppd: Provide error() implementation in
- pppoe-discovery
-In-Reply-To: <1476555914-22201-1-git-send-email-Stefan.Nickl@gmail.com>
-References: <1476555914-22201-1-git-send-email-Stefan.Nickl@gmail.com>
-Message-ID: <20161015223315.47f04e55@free-electrons.com>
+Date: Sat, 15 Oct 2016 22:34:08 +0200
+Subject: [Buildroot] [git commit] configs/arm_juno: use official kernel
+	tarball
+Message-ID: <20161015205123.1377981DD3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=51ec1dc27e7d0bd47226f124d4791e9f6cd3cbcf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 15 Oct 2016 20:25:14 +0200, stefan.nickl at gmail.com wrote:
-> From: Stefan Nickl <Stefan.Nickl@gmail.com>
-> 
-> The pppoe-discovery program calls error() from the CHECK_ROOM macro
-> defined in pppoe.h. Since pppoe-discovery is a standalone program not
-> linked with the rest of pppd, the only way this could build is by
-> linking to glibc's proprietary error(3) function instead of the function
-> of the same name (but with different arguments) defined in pppd/utils.c.
-> 
-> So with glibc this builds, but will probably crash when the assertion is
-> triggered. As the assertion is unlikely to fail, nobody has noticed.
-> 
-> The build however fails with musl libc or uClibc since they don't
-> provide the doppelganger.
-> 
-> Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+Since commit
+0924208839336f1a1bb29eb1a627005ba6b9065d ("configs/arm_juno: use 4.6
+mainline kernel"), we're using a mainline kernel for the ARM Juno
+board. But we're still fetching it from a Git repository, which is not
+really efficient, so let's switch to use a tarball instead.
 
-Thanks for this patch. Could you submit this as a Buildroot patch? I.e
-a patch that adds a patch to package/pppd/ ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/arm_juno_defconfig | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Also, can you detail how you produce this error (Buildroot defconfig
-that exhibits the issue) ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
+index 8bc3a7a..811524f 100644
+--- a/configs/arm_juno_defconfig
++++ b/configs/arm_juno_defconfig
+@@ -3,9 +3,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
+ BR2_TARGET_GENERIC_HOSTNAME="juno-buildroot"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS Juno by Buildroot"
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v4.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/juno/linux-juno-defconfig"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
