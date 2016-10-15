@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 14:17:13 +0200
-Subject: [Buildroot] [git commit] ti-utils: use $(TARGET_MAKE_ENV) when
+Date: Sat, 15 Oct 2016 14:17:18 +0200
+Subject: [Buildroot] [git commit] bsdiff: use $(TARGET_MAKE_ENV) when
 	calling $(MAKE)
-Message-ID: <20161015121835.B063581F57@busybox.osuosl.org>
+Message-ID: <20161015121835.CC84D81F57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19b22278035bde768a5d67712305724dec98a46e
+commit: https://git.buildroot.net/buildroot/commit/?id=f7c7b5570534a9ca2dc81666b9481e1ce29ce411
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ti-utils/ti-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bsdiff/bsdiff.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ti-utils/ti-utils.mk b/package/ti-utils/ti-utils.mk
-index 06aca6d..cfb0cb8 100644
---- a/package/ti-utils/ti-utils.mk
-+++ b/package/ti-utils/ti-utils.mk
-@@ -14,7 +14,7 @@ TI_UTILS_CFLAGS = `$(PKG_CONFIG_HOST_BINARY) --cflags libnl-genl-3.0`
- TI_UTILS_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs libnl-genl-3.0`
+diff --git a/package/bsdiff/bsdiff.mk b/package/bsdiff/bsdiff.mk
+index 7d2b296..eb903e0 100644
+--- a/package/bsdiff/bsdiff.mk
++++ b/package/bsdiff/bsdiff.mk
+@@ -11,9 +11,9 @@ BSDIFF_LICENSE = BSD-2c
+ BSDIFF_LICENSE_FILES = bsdiff.c
  
- define TI_UTILS_BUILD_CMDS
--	$(MAKE1) NFSROOT="$(STAGING_DIR)" \
-+	$(TARGET_MAKE_ENV) $(MAKE1) NFSROOT="$(STAGING_DIR)" \
- 		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(TI_UTILS_CFLAGS)" \
- 		LIBS="$(TI_UTILS_LIBS)" -C $(@D) all
+ define BSDIFF_BUILD_CMDS
+-	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
++	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
+ 		$(@D)/bsdiff.c -lbz2 -o $(@D)/bsdiff
+-	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
++	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
+ 		$(@D)/bspatch.c -lbz2 -o $(@D)/bspatch
  endef
+ 
