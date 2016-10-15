@@ -1,36 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 14:17:34 +0200
-Subject: [Buildroot] [git commit] mongoose: use $(TARGET_MAKE_ENV) when
-	calling $(MAKE)
-Message-ID: <20161015121836.1983181F57@busybox.osuosl.org>
+Date: Sat, 15 Oct 2016 14:17:24 +0200
+Subject: [Buildroot] [git commit] iw: use $(TARGET_MAKE_ENV) when calling
+	$(MAKE)
+Message-ID: <20161015121835.E8A4B81F57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c11b9d006883dba6427781277983c46274f3a2a0
+commit: https://git.buildroot.net/buildroot/commit/?id=ce3e7a33cb6244a46879487d42883cca56ce5397
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mongoose/mongoose.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/iw/iw.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 98f6525..7dfa119 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -19,8 +19,8 @@ MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
- endif
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 6f3f309..925a770 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -11,7 +11,9 @@ IW_LICENSE = ISC
+ IW_LICENSE_FILES = COPYING
+ IW_DEPENDENCIES = host-pkgconf libnl
+ IW_MAKE_OPTS = CC="$(TARGET_CC)" LD="$(TARGET_LD)" LDFLAGS="$(TARGET_LDFLAGS)"
+-IW_MAKE_ENV = PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
++IW_MAKE_ENV = \
++	$(TARGET_MAKE_ENV) \
++	PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
+ 	GIT_DIR=$(IW_DIR)
  
- define MONGOOSE_BUILD_CMDS
--	$(TARGET_CC) -c $(@D)/mongoose.c $(MONGOOSE_CFLAGS) -o $(@D)/mongoose.o
--	$(TARGET_AR) rcs $(@D)/libmongoose.a $(@D)/mongoose.o
-+	$(TARGET_MAKE_ENV) $(TARGET_CC) -c $(@D)/mongoose.c $(MONGOOSE_CFLAGS) -o $(@D)/mongoose.o
-+	$(TARGET_MAKE_ENV) $(TARGET_AR) rcs $(@D)/libmongoose.a $(@D)/mongoose.o
- endef
- 
- define MONGOOSE_INSTALL_STAGING_CMDS
+ define IW_BUILD_CMDS
