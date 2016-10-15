@@ -1,60 +1,54 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 15 Oct 2016 12:04:20 +0200
-Subject: [Buildroot] [PATCH v2] package/urg: update homepage and source url
-Message-ID: <20161015100420.11832-1-s.martin49@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 15 Oct 2016 12:05:04 +0200
+Subject: [Buildroot] [PATCH] bind: bump version to 9.11.0
+In-Reply-To: <874m4eosfn.fsf@dell.be.48ers.dk>
+References: <20161011125423.38125-1-Vincent.Riera@imgtec.com>
+ <874m4eosfn.fsf@dell.be.48ers.dk>
+Message-ID: <20161015120504.2e88e2f7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fetch the source archive from fedora repository since this version of
-the source is not available of the project site since it moved to
-sourceforge.
+Hello,
 
-Also add the md5 checksum computed by feodra to the *.hash file.
+On Sat, 15 Oct 2016 11:46:52 +0200, Peter Korsgaard wrote:
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/urg/Config.in | 2 +-
- package/urg/urg.hash  | 2 ++
- package/urg/urg.mk    | 2 +-
- 3 files changed, 4 insertions(+), 2 deletions(-)
+>  > - With the release of BIND 9.11.0, ISC is changing the open source
+>  >   license for BIND from the ISC license to the Mozilla Public License
+>  >   (MPL 2.0). See release notes:
+>  >   http://ftp.isc.org/isc/bind9/9.11.0/RELEASE-NOTES-bind-9.11.0.html  
+> 
+>  > - Explicitly enable/disable zlib support, otherwise the configure script
+>  >   will fail like this:  
+> 
+>  >   checking for zlib library... yes
+>  >   checking for library containing deflate... no
+>  >   configure: error: found zlib include but not library.  
+> 
+> Committed, thanks.
 
-diff --git a/package/urg/Config.in b/package/urg/Config.in
-index 9d57645..c602624 100644
---- a/package/urg/Config.in
-+++ b/package/urg/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_URG
- 	help
- 	  Library to control Hokuyo's URG series sensors.
- 
--	  http://www.hokuyo-aut.jp/02sensor/07scanner/download/urg_programs_en/
-+	  https://sourceforge.net/p/urgnetwork/wiki/Home/
- 
- comment "urg needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/urg/urg.hash b/package/urg/urg.hash
-index 5764a14..41749d7 100644
---- a/package/urg/urg.hash
-+++ b/package/urg/urg.hash
-@@ -1,2 +1,4 @@
-+# from http://pkgs.fedoraproject.org/repo/pkgs/urg/urg-0.8.18.zip/
-+md5		93f90d2ccc36e784407c5282ef6bd2cb	urg-0.8.18.zip
- # Locally calculated
- sha256	b2cab7e539c90c60fc99a2350a42b5d5390ff952b694b196c3cbb54623cfee7f	urg-0.8.18.zip
-diff --git a/package/urg/urg.mk b/package/urg/urg.mk
-index 41ac4f4..5d49aeb 100644
---- a/package/urg/urg.mk
-+++ b/package/urg/urg.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- URG_VERSION = 0.8.18
--URG_SITE = http://www.hokuyo-aut.jp/02sensor/07scanner/download/urg_programs_en
-+URG_SITE = http://pkgs.fedoraproject.org/repo/pkgs/urg/urg-0.8.18.zip/md5/93f90d2ccc36e784407c5282ef6bd2cb
- URG_SOURCE = urg-$(URG_VERSION).zip
- URG_LICENSE = LGPLv3
- URG_LICENSE_FILES = COPYING
+Sorry I forgot to say it on the mailing list, but the license change is
+a bit weird. Indeed, there is still a COPYRIGHT file which contains the
+old license text. And this file is the one still referenced by the
+LICENSE_FILES variable.
+
+Then, there is a new file, called LICENSE, which really contains the
+MPL 2.0 license text.
+
+So:
+
+ 1/ The LICENSE_FILES variable is now wrong.
+
+ 2/ Upstream is very confusing with those two license files, and we
+    should probably report that to them. It currently makes it very
+    unclear if everything is under MPL2.0 or not.
+
+Best regards,
+
+Thomas
 -- 
-2.10.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
