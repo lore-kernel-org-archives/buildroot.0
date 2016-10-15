@@ -1,54 +1,78 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 15 Oct 2016 22:31:14 +0200
-Subject: [Buildroot] [PATCH v4 0/9] Misc. CMake fixes
-Message-ID: <20161015203123.11241-1-s.martin49@gmail.com>
+Date: Sat, 15 Oct 2016 22:31:16 +0200
+Subject: [Buildroot] [PATCH v4 2/9] package/pkg-cmake.mk: move
+	CMAKE_BUILD_TYPE definition into toolchainfile.cmake
+In-Reply-To: <20161015203123.11241-1-s.martin49@gmail.com>
+References: <20161015203123.11241-1-s.martin49@gmail.com>
+Message-ID: <20161015203123.11241-3-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+This change still allows overriding the build type from the configure
+command line.
 
-Here is a short series reworking the way the Buildroot's CMake
-infrastructure handles compiler/linker flags.
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Patch 1 to 3 fix the optimization and debug flags passed/set by CMake
-through the toolchainfile.cmake file.
+---
+changes v3->v4:
+- new patch
+---
+ CHANGES                             | 6 ++++++
+ package/pkg-cmake.mk                | 2 +-
+ support/misc/toolchainfile.cmake.in | 3 +++
+ 3 files changed, 10 insertions(+), 1 deletion(-)
 
-Patches 4 to 8 clean up CMake-based package regarding {C,CXX,LD}FLAGS.
-
-Patch 9 reworks the way the compiler/linker flags are set in
-toolchainfile.cmake.
-
-Regards,
-Sam
-
-
-Max Filippov (1):
-  package/opencv3: fix CMAKE_CXX_FLAGS
-
-Samuel Martin (8):
-  package/pkg-cmake.mk: fix build type and optimization flags
-  package/pkg-cmake.mk: move CMAKE_BUILD_TYPE definition into
-    toolchainfile.cmake
-  toolchainfile.cmake: set per-config appended {C,CXX}FLAGS
-  package/gflags: include TARGET_CXXFLAGS to the overloaded CXXFLAGS
-  package/gnuradio: include TARGET_CFLAGS to the overloaded CFLAGS
-  package/libcec: include TARGET_{C,CXX}FLAGS to the overloaded
-    {C,CXX}FLAGS
-  package/rpi-userland: include TARGET_CFLAGS to the overloaded CFLAGS
-  toochainfile.cmake: rework the way Buildroot sets flags
-
- CHANGES                              |  9 +++++++++
- package/gflags/gflags.mk             |  3 ++-
- package/gnuradio/gnuradio.mk         |  2 +-
- package/libcec/libcec.mk             |  5 +++--
- package/opencv3/opencv3.mk           |  2 +-
- package/pkg-cmake.mk                 | 10 +++++++++-
- package/rpi-userland/rpi-userland.mk |  3 ++-
- support/misc/toolchainfile.cmake.in  | 32 ++++++++++++++++++++++++++++----
- 8 files changed, 55 insertions(+), 11 deletions(-)
-
---
+diff --git a/CHANGES b/CHANGES
+index b4bd5fe..c0e3e79 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,9 @@
++2016.11-rc1,
++
++    toolchainfile.cmake:
++    * when used outside of Buildroot, if not specified on the command
++      line, the CMAKE_BUILD_TYPE is by toolchainfile.cmake.
++
+ 2016.08, Released September 1st, 2016
+ 
+ 	Minor fixes.
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 259865d..5725ed6 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -95,7 +95,6 @@ define $(2)_CONFIGURE_CMDS
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+-		-DCMAKE_BUILD_TYPE=$(BR_CMAKE_BUILD_TYPE) \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_DOC=OFF \
+@@ -255,5 +254,6 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+ 		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
+ 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
+ 		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
++		-e 's#@@BR_CMAKE_BUILD_TYPE@@#$(BR_CMAKE_BUILD_TYPE)#' \
+ 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+ 		> $@
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index 649b52d..b0a1cd9 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -13,6 +13,9 @@ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST
+ set(CMAKE_SYSTEM_NAME Linux)
+ set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
+ 
++# Build type from the Buildroot configuration
++set(CMAKE_BUILD_TYPE @@BR_CMAKE_BUILD_TYPE@@ CACHE)
++
+ set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
+ set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
+ set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@ ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Buildroot LDFLAGS")
+-- 
 2.10.0
