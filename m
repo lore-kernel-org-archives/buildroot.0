@@ -1,20 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Oct 2016 11:34:21 +0200
-Subject: [Buildroot] [git commit] poppler: add explicit libglib2 support
-Message-ID: <20161015094202.D2E687FC3A@busybox.osuosl.org>
+Date: Sat, 15 Oct 2016 11:33:49 +0200
+Subject: [Buildroot] [git commit] poppler: add explicit cairo support
+Message-ID: <20161015094202.C8AEF7FC3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d0a731d8f3e0314e579523fdcb9812ea737bd7e
+commit: https://git.buildroot.net/buildroot/commit/?id=ab2c6b4b06be4cb8ebb7c3e8fe71372175562562
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Evince needs poppler-glib support (when poppler is enabled, for PDF
-reading support), so add explicit handling to the package.
-And poppler-glib requires cairo output, hence the conditional on both
-libglib2 and cairo to enable it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
@@ -23,20 +18,20 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 4632d8d..172c428 100644
+index c6cd2eb..4632d8d 100644
 --- a/package/poppler/poppler.mk
 +++ b/package/poppler/poppler.mk
-@@ -28,6 +28,13 @@ else
- POPPLER_CONF_OPTS += --enable-cms=none
- endif
+@@ -14,6 +14,13 @@ POPPLER_INSTALL_STAGING = YES
+ POPPLER_CONF_OPTS = --with-font-configuration=fontconfig \
+ 	--enable-xpdf-headers
  
-+ifeq ($(BR2_PACKAGE_CAIRO)$(BR2_PACKAGE_LIBGLIB2),yy)
-+POPPLER_CONF_OPTS += --enable-poppler-glib
-+POPPLER_DEPENDENCIES += libglib2
++ifeq ($(BR2_PACKAGE_CAIRO),y)
++POPPLER_CONF_OPTS += --enable-cairo-output
++POPPLER_DEPENDENCIES += cairo
 +else
-+POPPLER_CONF_OPTS += --disable-poppler-glib
++POPLER_CONF_OPTS += --disable-cairo-output
 +endif
 +
- ifeq ($(BR2_PACKAGE_TIFF),y)
- POPPLER_CONF_OPTS += --enable-libtiff
- # Help poppler to find libtiff in static linking scenarios
+ ifeq ($(BR2_PACKAGE_LCMS2),y)
+ POPPLER_CONF_OPTS += --enable-cms=lcms2
+ POPPLER_DEPENDENCIES += lcms2
