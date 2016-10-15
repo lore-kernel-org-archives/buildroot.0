@@ -1,34 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 14:17:05 +0200
-Subject: [Buildroot] [git commit] iputils: use $(TARGET_MAKE_ENV) when
+Date: Sat, 15 Oct 2016 14:17:03 +0200
+Subject: [Buildroot] [git commit] rtmpdump: use $(TARGET_MAKE_ENV) when
 	calling $(MAKE)
-Message-ID: <20161015121835.8865881F57@busybox.osuosl.org>
+Message-ID: <20161015121835.7E23F81F57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e62d6cf9c93f5ce05051c0fe3b156ac4d0c707fb
+commit: https://git.buildroot.net/buildroot/commit/?id=503aabf672ed3cbe09996f5d949a3e4d1426061f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iputils/iputils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/rtmpdump/rtmpdump.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 0a89120..21f5dcb 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -62,7 +62,7 @@ IPUTILS_MAKE_OPTS += USE_CRYPTO=no
- endif
+diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
+index ad4308c..2e3428f 100644
+--- a/package/rtmpdump/rtmpdump.mk
++++ b/package/rtmpdump/rtmpdump.mk
+@@ -38,7 +38,7 @@ RTMPDUMP_MAKE_FLAGS = \
+ 	$(RTMPDUMP_SHARED)
  
- define IPUTILS_BUILD_CMDS
--	$(MAKE) -C $(@D) $(IPUTILS_MAKE_OPTS)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(IPUTILS_MAKE_OPTS)
+ define RTMPDUMP_BUILD_CMDS
+-	$(MAKE) $(RTMPDUMP_MAKE_FLAGS) \
++	$(TARGET_MAKE_ENV) $(MAKE) $(RTMPDUMP_MAKE_FLAGS) \
+ 		XCFLAGS="$(RTMPDUMP_CFLAGS)" \
+ 		XLDFLAGS="$(TARGET_LDFLAGS)" \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" \
+@@ -46,11 +46,11 @@ define RTMPDUMP_BUILD_CMDS
  endef
  
- define IPUTILS_INSTALL_TARGET_CMDS
+ define RTMPDUMP_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D)/librtmp install DESTDIR=$(STAGING_DIR) $(RTMPDUMP_MAKE_FLAGS)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/librtmp install DESTDIR=$(STAGING_DIR) $(RTMPDUMP_MAKE_FLAGS)
+ endef
+ 
+ define RTMPDUMP_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D)/librtmp install DESTDIR=$(TARGET_DIR) $(RTMPDUMP_MAKE_FLAGS)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/librtmp install DESTDIR=$(TARGET_DIR) $(RTMPDUMP_MAKE_FLAGS)
+ endef
+ 
+ $(eval $(generic-package))
