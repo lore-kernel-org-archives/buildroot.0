@@ -1,146 +1,112 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 15 Oct 2016 16:50:54 +0200
-Subject: [Buildroot] Deprecate BR2_DEPRECATED
-Message-ID: <20161015145107.18264-1-arnout@mind.be>
+Date: Sat, 15 Oct 2016 16:50:56 +0200
+Subject: [Buildroot] [PATCH 02/13] configs/freescale_mpc8315erdb: remove
+	U-Boot build
+In-Reply-To: <20161015145107.18264-1-arnout@mind.be>
+References: <20161015145107.18264-1-arnout@mind.be>
+Message-ID: <20161015145107.18264-3-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- The BR2_DEPRECATED logic is a lot less useful than the legacy handling,
-because the symbols just disappears without warning to the user. For
-example, we had a few defconfigs that were using deprecated symbols
-(which were not actually used because BR2_DEPRECATED wasn't set) so
-these didn't build the expected code anymore.
+Binutils was locked down to 2.24 because U-Boot 2014.01 didn't build
+with more recent binutils. However, this doesn't work anymore because
+binutils 2.24 is deprecated.
 
- Also, the idea behind BR2_DEPRECATED is that you can easily revive it
-again if there is interest. However, it is relatively easy to revert
-the removal of a package as well.
+Current U-Boot 2016.09.01 doesn't work out of the box because the
+u-boot-nand.img support has been removed.
 
- The deprecation is also more effort because it has to be removed twice:
-once when deprecating, and once when really removing.
+Since updating U-Boot is generally not needed anyway, we just remove
+the U-Boot support.
 
- Patches 1 and 2 remove the U-Boot build from two defconfigs that were
-using the deprecated binutils 2.24. Similarly, lego_ev3_defconfig is
-using the deprecated gcc 4.7 symbol; I didn't update that one because
-either Vincent Stehl? will update that defconfig, or we will remove it.
-
- Patches 3-12 remove the packages or package options that are currently
-deprecated.
-
- Patch 13 removed BR2_DEPRECATED itself.
-
- Regards,
- Arnout
-
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-The following changes since commit 81bf01cbffeb73f9db1cc67738030a00749324b7:
+Gustavo still has this board to test again, so when he has time, he
+will try to revive with current U-Boot.
+---
+ board/freescale/mpc8315erdb/readme.txt  | 30 ++++--------------------------
+ configs/freescale_mpc8315erdb_defconfig |  9 ---------
+ 2 files changed, 4 insertions(+), 35 deletions(-)
 
-  core/legal-info: don't generate big file with all license texts (2016-10-15 12:52:42 +0200)
-
-are available in the git repository at:
-
-  https://github.com/arnout/buildroot.git 
-
-for you to fetch changes up to ce8bfe45893dcf53776c3e9a5eeace1943bd91ba:
-
-  Remove BR2_DEPRECATED (2016-10-15 16:32:48 +0200)
-
-----------------------------------------------------------------
-Arnout Vandecappelle (13):
-      configs/freescale_p1010rdb_pa: remove U-Boot build
-      configs/freescale_mpc8315erdb: remove U-Boot build
-      binutils: remove deprecated 2.24.X
-      gcc: remove deprecated 4.7.x
-      ipkg: remove deprecated package
-      kodi-addon-xvdr: remove deprecated package
-      linux-headers: remove deprecated version 4.2 and 4.3
-      sstrip: remove deprecated package
-      torsmo: remove deprecated package
-      webkitgtk24: remove deprecated package
-      wvdial: remove deprecated package
-      wvstreams: remove deprecated package
-      Remove BR2_DEPRECATED
-
- Config.in                                          |  30 ---
- Config.in.legacy                                   |  97 +++++++-
- DEVELOPERS                                         |   3 -
- Makefile                                           |   2 -
- Makefile.legacy                                    |   3 -
- board/freescale/mpc8315erdb/readme.txt             |  30 +--
- board/freescale/p1010rdb/readme.txt                |  45 +---
- configs/freescale_mpc8315erdb_defconfig            |   9 -
- configs/freescale_p1010rdb_pa_defconfig            |   8 -
- package/Config.in                                  |   6 -
- package/binutils/Config.in.host                    |  11 -
- package/gcc/Config.in.host                         |  23 --
- package/gcc/gcc-final/gcc-final.mk                 |  12 -
- package/ipkg/0001-fix-musl-build.patch             |  50 ----
- package/ipkg/0002-fix-nommu.patch                  |  24 --
- package/ipkg/Config.in                             |   7 -
- package/ipkg/ipkg-build                            | 127 ----------
- package/ipkg/ipkg.hash                             |   2 -
- package/ipkg/ipkg.mk                               |  13 -
- package/kodi-addon-xvdr/0001-xbmc-rebrand.patch    |  19 --
- package/kodi-addon-xvdr/Config.in                  |  16 --
- package/kodi-addon-xvdr/kodi-addon-xvdr.hash       |   2 -
- package/kodi-addon-xvdr/kodi-addon-xvdr.mk         |  26 --
- package/kodi/Config.in                             |   1 -
- package/linux-headers/Config.in.host               |  12 -
- package/sstrip/Config.in                           |   8 -
- package/sstrip/sstrip.mk                           |  20 --
- package/torsmo/Config.in                           |  11 -
- package/torsmo/torsmo.hash                         |   2 -
- package/torsmo/torsmo.mk                           |  18 --
- package/uclibc/uclibc.mk                           |   7 +-
- package/webkitgtk24/0001-fix-ppc32.patch           |  34 ---
- ...etty-quotes-in-licence-break-Python-stdin.patch |  36 ---
- package/webkitgtk24/Config.in                      |  83 -------
- package/webkitgtk24/webkitgtk24.hash               |   4 -
- package/webkitgtk24/webkitgtk24.mk                 | 124 ----------
- package/wvdial/0001-uClibc-scandir.patch           |  23 --
- package/wvdial/Config.in                           |  17 --
- package/wvdial/wvdial.hash                         |   2 -
- package/wvdial/wvdial.mk                           |  32 ---
- .../0001-fix-uClibc-compile-getcontext.patch       | 273 ---------------------
- ...002-fix-uClibc-compile-execinfo-backtrace.patch |  31 ---
- .../wvstreams/0003-fix-uClibc-compile-misc.patch   |  16 --
- package/wvstreams/0004-build-fixes.patch           |  40 ---
- package/wvstreams/0005-getuid.patch                |  25 --
- package/wvstreams/Config.in                        |  19 --
- package/wvstreams/wvstreams.hash                   |   2 -
- package/wvstreams/wvstreams.mk                     |  62 -----
- 48 files changed, 105 insertions(+), 1362 deletions(-)
- delete mode 100644 package/ipkg/0001-fix-musl-build.patch
- delete mode 100644 package/ipkg/0002-fix-nommu.patch
- delete mode 100644 package/ipkg/Config.in
- delete mode 100755 package/ipkg/ipkg-build
- delete mode 100644 package/ipkg/ipkg.hash
- delete mode 100644 package/ipkg/ipkg.mk
- delete mode 100644 package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
- delete mode 100644 package/kodi-addon-xvdr/Config.in
- delete mode 100644 package/kodi-addon-xvdr/kodi-addon-xvdr.hash
- delete mode 100644 package/kodi-addon-xvdr/kodi-addon-xvdr.mk
- delete mode 100644 package/sstrip/Config.in
- delete mode 100644 package/sstrip/sstrip.mk
- delete mode 100644 package/torsmo/Config.in
- delete mode 100644 package/torsmo/torsmo.hash
- delete mode 100644 package/torsmo/torsmo.mk
- delete mode 100644 package/webkitgtk24/0001-fix-ppc32.patch
- delete mode 100644 package/webkitgtk24/0003-Pretty-quotes-in-licence-break-Python-stdin.patch
- delete mode 100644 package/webkitgtk24/Config.in
- delete mode 100644 package/webkitgtk24/webkitgtk24.hash
- delete mode 100644 package/webkitgtk24/webkitgtk24.mk
- delete mode 100644 package/wvdial/0001-uClibc-scandir.patch
- delete mode 100644 package/wvdial/Config.in
- delete mode 100644 package/wvdial/wvdial.hash
- delete mode 100644 package/wvdial/wvdial.mk
- delete mode 100644 package/wvstreams/0001-fix-uClibc-compile-getcontext.patch
- delete mode 100644 package/wvstreams/0002-fix-uClibc-compile-execinfo-backtrace.patch
- delete mode 100644 package/wvstreams/0003-fix-uClibc-compile-misc.patch
- delete mode 100644 package/wvstreams/0004-build-fixes.patch
- delete mode 100644 package/wvstreams/0005-getuid.patch
- delete mode 100644 package/wvstreams/Config.in
- delete mode 100644 package/wvstreams/wvstreams.hash
- delete mode 100644 package/wvstreams/wvstreams.mk
+diff --git a/board/freescale/mpc8315erdb/readme.txt b/board/freescale/mpc8315erdb/readme.txt
+index 446bd39..b4c87b4 100644
+--- a/board/freescale/mpc8315erdb/readme.txt
++++ b/board/freescale/mpc8315erdb/readme.txt
+@@ -1,14 +1,3 @@
+-
+-******************** WARNING ********************
+-The compiled U-Boot binary is intended for NAND flash only!
+-It won't work for NOR and will brick that bootloader!
+-
+-Also don't go playing around with different U-boot versions or flash targets
+-unless you've got the necessary hardware and/or know-how to unbrick your kit.
+-
+-2014.04 is known good for NAND.
+-******************** WARNING ********************
+-
+ You'll need to program the files created by buildroot into the flash.
+ The fast way is to tftp transfer the files via one of the network interfaces.
+ 
+@@ -17,36 +6,25 @@ file transfer from your terminal program by using a "loady" command
+ from the u-boot prompt instead of the "tftp ..." commands stated below.
+ Beware that serial console file transfers are quite slow!
+ 
+-Remember to set the MPC8315ERDB switches to NAND boot if you want to use
+-your newly built U-Boot.
+-
+-1. Program the new U-Boot binary to NAND flash (optional)
+-    If you don't feel confident upgrading your bootloader then don't do it,
+-    it's unnecessary most of the time.
+-
+-    => tftp $loadaddr u-boot-nand.bin
+-    => nand erase 0 0x80000
+-    => nand write $loadaddr 0 0x80000 $filesize
+-
+-2. Program the kernel to NAND flash
++1. Program the kernel to NAND flash
+ 
+     => tftp $loadaddr uImage
+     => nand erase 0x100000 0x1e0000
+     => nand write $loadaddr 0x100000 0x1e0000
+ 
+-3. Program the DTB to NAND flash
++2. Program the DTB to NAND flash
+ 
+     => tftp $loadaddr mpc8315erdb.dtb
+     => nand erase 0x2e0000 0x20000
+     => nand write $loadaddr 0x2e0000 0x20000
+ 
+-4. Program the root filesystem to NAND flash
++3. Program the root filesystem to NAND flash
+ 
+     => tftp $loadaddr rootfs.jffs2
+     => nand erase 0x400000 0x1c00000
+     => nand write $loadaddr 0x400000 $filesize
+ 
+-5. Booting your new system
++4. Booting your new system
+ 
+     => setenv nandboot 'setenv bootargs root=/dev/mtdblock3 rootfstype=jffs2 console=$consoledev,$baudrate;nand read $fdtaddr 0x2e0000 0x20000;nand read $loadaddr 0x100000 0x1e0000;bootm $loadaddr - $fdtaddr'
+ 
+diff --git a/configs/freescale_mpc8315erdb_defconfig b/configs/freescale_mpc8315erdb_defconfig
+index 628aaad..de7e561 100644
+--- a/configs/freescale_mpc8315erdb_defconfig
++++ b/configs/freescale_mpc8315erdb_defconfig
+@@ -26,12 +26,3 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="mpc8315erdb"
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+-
+-# Bootloader
+-# Lock down binutils to <2.25 to avoid U-Boot build failure
+-BR2_BINUTILS_VERSION_2_24_X=y
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="MPC8315ERDB_NAND"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2014.04"
+-BR2_TARGET_UBOOT_FORMAT_NAND_BIN=y
+-- 
+2.9.3
