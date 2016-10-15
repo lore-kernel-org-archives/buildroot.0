@@ -1,74 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 Oct 2016 22:13:28 +0200
-Subject: [Buildroot] [PATCH] core/legal-info: allow ignoring packages
- from the legal-info
-In-Reply-To: <520a1ab5-06bb-7a22-1ace-7b4d1febc2c1@mind.be>
-References: <1476538102-8779-1-git-send-email-yann.morin.1998@free.fr>
- <878ttpbq72.fsf@dell.be.48ers.dk> <20161015153246.GG3668@free.fr>
- <ce7a11dc-d228-5724-9821-5ef47eb670dc@lucaceresoli.net>
- <18b75237-c88f-586e-347c-d1c1a1d15cd5@mind.be>
- <20161015173729.GI3668@free.fr>
- <520a1ab5-06bb-7a22-1ace-7b4d1febc2c1@mind.be>
-Message-ID: <20161015201327.GA3982@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 15 Oct 2016 22:31:14 +0200
+Subject: [Buildroot] [PATCH v4 0/9] Misc. CMake fixes
+Message-ID: <20161015203123.11241-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hi all,
 
-On 2016-10-15 20:06 +0200, Arnout Vandecappelle spake thusly:
-> On 15-10-16 19:37, Yann E. MORIN wrote:
-> > On 2016-10-15 19:22 +0200, Arnout Vandecappelle spake thusly:
-> >> On 15-10-16 17:40, Luca Ceresoli wrote:
-[--SNIP--]
-> >>> I suggest listing the three possible cases:
-> >>>  * FOO_GEN_LEGAL_INFO = NO: save nothing
-> >>>  * FOO_GEN_LEGAL_INFO = YES, FOO_REDISTRIBUTE = NO: list only
-> >>>  * FOO_GEN_LEGAL_INFO = YES, FOO_REDISTRIBUTE = NO: list + save source
-> >>  I hate that we have all these combinations. That was actually my first thought
-> >> when I saw this patch: oh no, yet another variation point. But I don't see a way
-> >> to simplify it. So OK.
-> > The alternative would be:
-> >   - get rid of LIBFOO_REDISTRIBUTE
-> >   - add LIBFOO_LEGAL_INFO = {IGNORE,LIST,FULL} (or whatever name/values).
-> > 
-> > Thomas, Peter and Luca were not very happy with such a tristate, and in
-> > retrospect, neither am I...
->  Neither am I.
+Here is a short series reworking the way the Buildroot's CMake
+infrastructure handles compiler/linker flags.
 
-Eh! ;-)
+Patch 1 to 3 fix the optimization and debug flags passed/set by CMake
+through the toolchainfile.cmake file.
 
-> >>  One remark though: I think the pre- and post-hooks should still run even if
-> >> _GEN_LEGAL_INFO = NO.
-> > Not so sure... Such hooks are made to save extra stuff into legal-info,
-> > or to prepare the package for legal-info. So, if the package is excluded
-> > for legal-info, there is no reason to run those hooks to start with, is
-> > there?
->  First of all, both _GEN_LEGAL_INFO and _LEGAL_INFO_HOOKS are package-specific
-> so the package knows what it's doing.
-> 
->  The reason to run hooks is that you may still want to do *something* in the
-> legal info for excluded packages. I can't give a concrete example, but I'm
-> thinking along the lines of e.g. doing some check and erroring out, or still
-> adding some custom information to legal info. You know, what the hooks are meant
-> for in the first place :-) The point is, this option disables the normal
-> legal-info, but that doesn't mean that there would be no legal-info at all.
+Patches 4 to 8 clean up CMake-based package regarding {C,CXX,LD}FLAGS.
 
-I would argue that, if a packager elected to have its package completely
-ignored by the legal-info infra, we should just abide by this wish and
-just completely ignore it. Altogether.
-
-Let's see what others think... ;-)
+Patch 9 reworks the way the compiler/linker flags are set in
+toolchainfile.cmake.
 
 Regards,
-Yann E. MORIN.
+Sam
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+Max Filippov (1):
+  package/opencv3: fix CMAKE_CXX_FLAGS
+
+Samuel Martin (8):
+  package/pkg-cmake.mk: fix build type and optimization flags
+  package/pkg-cmake.mk: move CMAKE_BUILD_TYPE definition into
+    toolchainfile.cmake
+  toolchainfile.cmake: set per-config appended {C,CXX}FLAGS
+  package/gflags: include TARGET_CXXFLAGS to the overloaded CXXFLAGS
+  package/gnuradio: include TARGET_CFLAGS to the overloaded CFLAGS
+  package/libcec: include TARGET_{C,CXX}FLAGS to the overloaded
+    {C,CXX}FLAGS
+  package/rpi-userland: include TARGET_CFLAGS to the overloaded CFLAGS
+  toochainfile.cmake: rework the way Buildroot sets flags
+
+ CHANGES                              |  9 +++++++++
+ package/gflags/gflags.mk             |  3 ++-
+ package/gnuradio/gnuradio.mk         |  2 +-
+ package/libcec/libcec.mk             |  5 +++--
+ package/opencv3/opencv3.mk           |  2 +-
+ package/pkg-cmake.mk                 | 10 +++++++++-
+ package/rpi-userland/rpi-userland.mk |  3 ++-
+ support/misc/toolchainfile.cmake.in  | 32 ++++++++++++++++++++++++++++----
+ 8 files changed, 55 insertions(+), 11 deletions(-)
+
+--
+2.10.0
