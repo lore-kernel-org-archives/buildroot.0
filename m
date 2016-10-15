@@ -1,43 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Oct 2016 11:32:14 +0200
-Subject: [Buildroot] [git commit] gsettings-desktop-schemas: bump to version
-	3.22.0
-Message-ID: <20161015094202.C19A9817A8@busybox.osuosl.org>
+Date: Sat, 15 Oct 2016 11:34:32 +0200
+Subject: [Buildroot] [git commit] poppler: bump to version 0.48.0
+Message-ID: <20161015094202.DE5527FC3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f090540e279c8ce21ecc07e29af670f7501897ab
+commit: https://git.buildroot.net/buildroot/commit/?id=b672b404d16ee5a7dc921c96a1677f4fb3fd48f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop upstream patch.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash | 4 ++--
- package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...invalid-shell-comparaison-in-libtiff-test.patch | 23 ----------------------
+ package/poppler/poppler.hash                       |  2 +-
+ package/poppler/poppler.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 25 deletions(-)
 
-diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-index 7fed553..05ec7a4 100644
---- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-+++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
+diff --git a/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch b/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch
+deleted file mode 100644
+index f40bee1..0000000
+--- a/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-Fix syntax issue in configure script
+-
+-The change is not done in configure.ac, because the package doesn't
+-autoreconf properly.
+-
+-Patch on configure.ac submitted upstream at
+-https://bugs.freedesktop.org/show_bug.cgi?id=90292.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/configure
+-===================================================================
+---- a/configure
+-+++ b/configure
+-@@ -19738,7 +19738,7 @@
+- CXXFLAGS="$CXXFLAGS $LIBTIFF_CFLAGS"
+- LIBS="$LIBS $LIBTIFF_LIBS"
+- if test x$enable_libtiff = xyes; then
+--  if test x"$LIBTIFF_LIBS" != ; then
+-+  if test x"$LIBTIFF_LIBS" != x; then
+-     ac_fn_cxx_check_func "$LINENO" "TIFFOpen" "ac_cv_func_TIFFOpen"
+- if test "x$ac_cv_func_TIFFOpen" = xyes; then :
+- 
+diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
+index c4c7f66..533178f 100644
+--- a/package/poppler/poppler.hash
++++ b/package/poppler/poppler.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/gsettings-desktop-schemas/3.20/gsettings-desktop-schemas-3.20.0.sha256sum
--sha256	55a41b533c0ab955e0a36a84d73829451c88b027d8d719955d8f695c35c6d9c1	gsettings-desktop-schemas-3.20.0.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/gsettings-desktop-schemas/3.22/gsettings-desktop-schemas-3.22.0.sha256sum
-+sha256	0f06c7ba34c3a99e4d58b10889496133c9aaad6698ea2d8405d481c7f1a7eae1	gsettings-desktop-schemas-3.22.0.tar.xz
-diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
-index 04ad2e0..7fa6181 100644
---- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
-+++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
+ # Locally calculated
+-sha256	4963e31ba5e17530a87b16588e22928bc044e8d28d02303dded981bff6725b98	poppler-0.32.0.tar.xz
++sha256	85a003968074c85d8e13bf320ec47cef647b496b56dcff4c790b34e5482fef93	poppler-0.48.0.tar.xz
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 172c428..202eac2 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR = 3.20
-+GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR = 3.22
- GSETTINGS_DESKTOP_SCHEMAS_VERSION = $(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR).0
- GSETTINGS_DESKTOP_SCHEMAS_SOURCE = gsettings-desktop-schemas-$(GSETTINGS_DESKTOP_SCHEMAS_VERSION).tar.xz
- GSETTINGS_DESKTOP_SCHEMAS_SITE = http://ftp.gnome.org/pub/gnome/sources/gsettings-desktop-schemas/$(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR)
+-POPPLER_VERSION = 0.32.0
++POPPLER_VERSION = 0.48.0
+ POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
+ POPPLER_SITE = http://poppler.freedesktop.org
+ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
