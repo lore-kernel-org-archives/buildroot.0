@@ -1,39 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 18:32:58 +0200
-Subject: [Buildroot] [PATCH 2/2] configs: new defconfig for
- beaglebone_qt5
-In-Reply-To: <1474582849-10730-2-git-send-email-lothar.felten@gmail.com>
-References: <1474582849-10730-1-git-send-email-lothar.felten@gmail.com>
- <1474582849-10730-2-git-send-email-lothar.felten@gmail.com>
-Message-ID: <20161015183258.1463f9c0@free-electrons.com>
+Date: Sat, 15 Oct 2016 18:33:39 +0200
+Subject: [Buildroot] [git commit] sqlite: bump version to 3150000 (3.15.0)
+Message-ID: <20161015163402.99BC181F71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=75fc043ce0c2ebd96051683278cb792b84ab32d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 23 Sep 2016 00:20:49 +0200, Lothar Felten wrote:
-> Add a target configuration for the beaglebone that supports the SGX530
-> graphics acceleration and builds the qt5 demos with the eglfs backend.
-> The imagination technologies demos and fbv are also included.
-> The linux kernel is based on the omap2plus defconfig, a config fragment
-> adds the required settings for SGX accelerator support.
-> 
-> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
-> ---
->  board/beaglebone/linux-4.1-sgx.fragment | 12 ++++++++++
->  board/beaglebone/readme.txt             |  2 +-
->  configs/beaglebone_qt5_defconfig        | 39 +++++++++++++++++++++++++++++++++
->  3 files changed, 52 insertions(+), 1 deletion(-)
->  create mode 100644 board/beaglebone/linux-4.1-sgx.fragment
->  create mode 100644 configs/beaglebone_qt5_defconfig
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 308522b..b0418af 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1 5d3a6bccd9154963641960db61df901a4e0b3ca0  sqlite-autoconf-3140200.tar.gz
++sha1 b34cb4ee9710368598c62df0222f5c24dfc9c860  sqlite-autoconf-3150000.tar.gz
+ # Calculated based on the hash above
+-sha256 644f0c127f7d0cbe8765b9bbdf9ed09d6a2f2b9dfba48ddfd8ca0a42fdb5b3fc  sqlite-autoconf-3140200.tar.gz
++sha256 77162da9b4a0336d7e77d5252b690662850f62b47c12d9125f74ab9de78ded27  sqlite-autoconf-3150000.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index a8a36bb..0a5c1bb 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3140200
++SQLITE_VERSION = 3150000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2016
+ SQLITE_LICENSE = Public domain
