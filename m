@@ -1,90 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 14:13:59 +0200
-Subject: [Buildroot] [git commit] configs/arm_juno: add the bootloader build
-Message-ID: <20161015121402.C9DCE81F57@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 15 Oct 2016 14:15:00 +0200
+Subject: [Buildroot] lego ev3 defconfig
+Message-ID: <874m4dizaz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04a89b8fa73deea856138b98f6be1509db6bc6d5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Vincent,
 
-Thanks to the recent addition of the vexpress-firmware and
-arm-trusted-firmware packages, this commit improves the ARM Juno
-defconfig to also build a bootloader.
+You added the lego_ev3_defconfig 2 years ago. Do you still have an ev3?
 
-Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/arm/juno/readme.txt  | 21 ++++++++++++++++++---
- configs/arm_juno_defconfig | 10 ++++++++++
- 2 files changed, 28 insertions(+), 3 deletions(-)
+The defconfig is using gcc 4.7 with a note that the kernel doesn't boot
+with 4.8 - But gcc 4.7 is deprecated and we are about to remove it, so
+that isn't really good.
 
-diff --git a/board/arm/juno/readme.txt b/board/arm/juno/readme.txt
-index 9314bb0..b292d96 100644
---- a/board/arm/juno/readme.txt
-+++ b/board/arm/juno/readme.txt
-@@ -8,8 +8,8 @@ These instructions apply to all models of the ARM Juno:
-   - Juno r1 (supports PCIe)
-   - Juno r2 (Big Cluster with A72)
- 
--Buildroot will generate the kernel image, device tree blob and a
--minimal root filesystem.
-+Buildroot will generate the kernel image, device tree blob, bootloader binaries
-+and a minimal root filesystem.
- 
- How to build it
- ===============
-@@ -44,6 +44,20 @@ After building, you should obtain this tree:
-     +-- juno-r1.dtb (if Juno r1 is used)
-     +-- juno-r2.dtb (if Juno r2 is used)
-     +-- Image
-+    +-- bl1.bin
-+    +-- bl2.bin
-+    +-- bl2u.bin
-+    +-- bl31.bin
-+    +-- fip.bin
-+    +-- scp-fw.bin
-+    +-- u-boot.bin
-+
-+Preparing your rootfs
-+======================
-+
-+Format your pen drive as a ext3 filesystem by executing:
-+
-+   $ mkfs.ext3 /dev/<your device>
- 
- Preparing your rootfs
- ======================
-@@ -113,7 +127,8 @@ Installing kernel image and DTB
- 3. Open the software/ folder
- 4. Copy the 'Image' file to software/
- 5. Copy the 'juno-r1.dtb' (r1), 'juno.dtb' (r0) or juno-r2.dtb (r2) file to software/
--6. Press the red button in the front pannel of ARM Juno
-+6. Copy the bootloader binaries (bl1.bin and fip.bin) to software/
-+7. Press the red button in the front pannel of ARM Juno
- 
- At this time, the board will erase the Flash entry for each new item and
- replace it with the lastest ones.
-diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
-index 75ed63c..8bc3a7a 100644
---- a/configs/arm_juno_defconfig
-+++ b/configs/arm_juno_defconfig
-@@ -10,3 +10,13 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/juno/linux-juno-defconfig"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1 arm/juno-r2"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.2"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
-+BR2_TARGET_VEXPRESS_FIRMWARE=y
+I see that there's a number of newer kernel version available on
+
+https://github.com/ev3dev/ev3-kernel/releases
+
+Could you perhaps test if one of these work with our default gcc (5.x)?
+Thanks.
+
+-- 
+Bye, Peter Korsgaard
