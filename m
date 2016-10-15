@@ -1,54 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 12:05:04 +0200
-Subject: [Buildroot] [PATCH] bind: bump version to 9.11.0
-In-Reply-To: <874m4eosfn.fsf@dell.be.48ers.dk>
-References: <20161011125423.38125-1-Vincent.Riera@imgtec.com>
- <874m4eosfn.fsf@dell.be.48ers.dk>
-Message-ID: <20161015120504.2e88e2f7@free-electrons.com>
+Date: Sat, 15 Oct 2016 12:09:01 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add entry for python-pyelftools
+Message-ID: <20161015100906.95B5A81EF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=84902bd0f651c92e1b2ad12122fe98b0ac0e802d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 15 Oct 2016 11:46:52 +0200, Peter Korsgaard wrote:
+Signed-off-by: Julien Floret <julien.floret@6wind.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
->  > - With the release of BIND 9.11.0, ISC is changing the open source
->  >   license for BIND from the ISC license to the Mozilla Public License
->  >   (MPL 2.0). See release notes:
->  >   http://ftp.isc.org/isc/bind9/9.11.0/RELEASE-NOTES-bind-9.11.0.html  
-> 
->  > - Explicitly enable/disable zlib support, otherwise the configure script
->  >   will fail like this:  
-> 
->  >   checking for zlib library... yes
->  >   checking for library containing deflate... no
->  >   configure: error: found zlib include but not library.  
-> 
-> Committed, thanks.
-
-Sorry I forgot to say it on the mailing list, but the license change is
-a bit weird. Indeed, there is still a COPYRIGHT file which contains the
-old license text. And this file is the one still referenced by the
-LICENSE_FILES variable.
-
-Then, there is a new file, called LICENSE, which really contains the
-MPL 2.0 license text.
-
-So:
-
- 1/ The LICENSE_FILES variable is now wrong.
-
- 2/ Upstream is very confusing with those two license files, and we
-    should probably report that to them. It currently makes it very
-    unclear if everything is under MPL2.0 or not.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0ae3150..25ded5b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1098,6 +1098,9 @@ N:	Oli Vogt <oli.vogt.pub01@gmail.com>
+ F:	package/python-django/
+ F:	package/python-flup/
+ 
++N:	Olivier Matz <olivier.matz@6wind.com>
++F:	package/python-pyelftools/
++
+ N:	Olivier Schonken <olivier.schonken@gmail.com>
+ F:	package/ijs/
+ F:	package/poppler/
