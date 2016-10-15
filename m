@@ -1,177 +1,123 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Oct 2016 16:38:58 +0200
-Subject: [Buildroot] [git commit] gcc: add patches to fix PR70473
-Message-ID: <20161015144058.E11D882037@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 15 Oct 2016 16:50:55 +0200
+Subject: [Buildroot] [PATCH 01/13] configs/freescale_p1010rdb_pa: remove
+	U-Boot build
+In-Reply-To: <20161015145107.18264-1-arnout@mind.be>
+References: <20161015145107.18264-1-arnout@mind.be>
+Message-ID: <20161015145107.18264-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c97033a01585b7de567847a6b113890001a7a0d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Binutils was locked down to 2.24 because U-Boot 2014.01 didn't build
+with more recent binutils. However, this doesn't work anymore because
+binutils 2.24 is deprecated.
 
-gcc 5.x introduced a regression in the ARM build, which causes the
-s-automata program to consume a very significant amount of RAM during
-the gcc build. This causes numerous failures with our Travis-CI based
-testing of defconfigs.
+Current U-Boot 2016.09.01 does build successfully, but we don't have a
+board anymore to test it.
 
-In order to address this, this commit backports a commit from the gcc
-master branch, to both our gcc 5.x and gcc 6.x support.
+Since updating U-Boot is generally not needed anyway, we just remove
+the U-Boot support.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...et-70473-Reduce-size-of-Cortex-A8-automat.patch | 68 +++++++++++++++++++++
- ...et-70473-Reduce-size-of-Cortex-A8-automat.patch | 69 ++++++++++++++++++++++
- 2 files changed, 137 insertions(+)
+ board/freescale/p1010rdb/readme.txt     | 45 +++------------------------------
+ configs/freescale_p1010rdb_pa_defconfig |  8 ------
+ 2 files changed, 4 insertions(+), 49 deletions(-)
 
-diff --git a/package/gcc/5.4.0/831-ARM-PR-target-70473-Reduce-size-of-Cortex-A8-automat.patch b/package/gcc/5.4.0/831-ARM-PR-target-70473-Reduce-size-of-Cortex-A8-automat.patch
-new file mode 100644
-index 0000000..d8c74f9
---- /dev/null
-+++ b/package/gcc/5.4.0/831-ARM-PR-target-70473-Reduce-size-of-Cortex-A8-automat.patch
-@@ -0,0 +1,68 @@
-+From 89bd94250827f887b38211ac048b4006229dc9c0 Mon Sep 17 00:00:00 2001
-+From: ktkachov <ktkachov@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Fri, 26 Aug 2016 10:23:20 +0000
-+Subject: [PATCH] [ARM] PR target/70473: Reduce size of Cortex-A8 automaton
-+
-+	PR target/70473
-+	* config/arm/cortex-a8-neon.md (cortex_a8_vfp_muld): Reduce
-+	reservation duration to 15 cycles.
-+	(cortex_a8_vfp_macs): Likewise.
-+	(cortex_a8_vfp_macd): Likewise.
-+	(cortex_a8_vfp_divs): Likewise.
-+	(cortex_a8_vfp_divd): Likewise.
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 239772 138bc75d-0d04-0410-961f-82ee72b054a4
-+
-+[Backport from gcc upstream commit 79f5d5e3cd5a668d5ecb2b6b0cce80ef5706ac53.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ gcc/config/arm/cortex-a8-neon.md | 14 +++++++++-----
-+ 1 file changed, 9 insertions(+), 5 deletions(-)
-+
-+diff --git a/gcc/config/arm/cortex-a8-neon.md b/gcc/config/arm/cortex-a8-neon.md
-+index 04fa01e..4e6d05d 100644
-+--- a/gcc/config/arm/cortex-a8-neon.md
-++++ b/gcc/config/arm/cortex-a8-neon.md
-+@@ -357,30 +357,34 @@
-+        (eq_attr "type" "fmuls"))
-+   "cortex_a8_vfp,cortex_a8_vfplite*11")
-+ 
-++;; Don't model a reservation for more than 15 cycles as this explodes the
-++;; state space of the automaton for little gain.  It is unlikely that the
-++;; scheduler will find enough instructions to hide the full latency of the
-++;; instructions.
-+ (define_insn_reservation "cortex_a8_vfp_muld" 17
-+   (and (eq_attr "tune" "cortexa8")
-+        (eq_attr "type" "fmuld"))
-+-  "cortex_a8_vfp,cortex_a8_vfplite*16")
-++  "cortex_a8_vfp,cortex_a8_vfplite*15")
-+ 
-+ (define_insn_reservation "cortex_a8_vfp_macs" 21
-+   (and (eq_attr "tune" "cortexa8")
-+        (eq_attr "type" "fmacs,ffmas"))
-+-  "cortex_a8_vfp,cortex_a8_vfplite*20")
-++  "cortex_a8_vfp,cortex_a8_vfplite*15")
-+ 
-+ (define_insn_reservation "cortex_a8_vfp_macd" 26
-+   (and (eq_attr "tune" "cortexa8")
-+        (eq_attr "type" "fmacd,ffmad"))
-+-  "cortex_a8_vfp,cortex_a8_vfplite*25")
-++  "cortex_a8_vfp,cortex_a8_vfplite*15")
-+ 
-+ (define_insn_reservation "cortex_a8_vfp_divs" 37
-+   (and (eq_attr "tune" "cortexa8")
-+        (eq_attr "type" "fdivs, fsqrts"))
-+-  "cortex_a8_vfp,cortex_a8_vfplite*36")
-++  "cortex_a8_vfp,cortex_a8_vfplite*15")
-+ 
-+ (define_insn_reservation "cortex_a8_vfp_divd" 65
-+   (and (eq_attr "tune" "cortexa8")
-+        (eq_attr "type" "fdivd, fsqrtd"))
-+-  "cortex_a8_vfp,cortex_a8_vfplite*64")
-++  "cortex_a8_vfp,cortex_a8_vfplite*15")
-+ 
-+ ;; Comparisons can actually take 7 cycles sometimes instead of four,
-+ ;; but given all the other instructions lumped into type=ffarith that
-+-- 
-+2.7.4
-+
-diff --git a/package/gcc/6.2.0/831-ARM-PR-target-70473-Reduce-size-of-Cortex-A8-automat.patch b/package/gcc/6.2.0/831-ARM-PR-target-70473-Reduce-size-of-Cortex-A8-automat.patch
-new file mode 100644
-index 0000000..af9fb1d
---- /dev/null
-+++ b/package/gcc/6.2.0/831-ARM-PR-target-70473-Reduce-size-of-Cortex-A8-automat.patch
-@@ -0,0 +1,69 @@
-+From 07453188b18a2cbe815917dbb893b4ebfdd793b6 Mon Sep 17 00:00:00 2001
-+From: ktkachov <ktkachov@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Fri, 26 Aug 2016 10:23:20 +0000
-+Subject: [PATCH] [ARM] PR target/70473: Reduce size of Cortex-A8 automaton
-+
-+	PR target/70473
-+	* config/arm/cortex-a8-neon.md (cortex_a8_vfp_muld): Reduce
-+	reservation duration to 15 cycles.
-+	(cortex_a8_vfp_macs): Likewise.
-+	(cortex_a8_vfp_macd): Likewise.
-+	(cortex_a8_vfp_divs): Likewise.
-+	(cortex_a8_vfp_divd): Likewise.
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 239772
-+138bc75d-0d04-0410-961f-82ee72b054a4
-+
-+[Backport from gcc upstream commit 79f5d5e3cd5a668d5ecb2b6b0cce80ef5706ac53.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ gcc/config/arm/cortex-a8-neon.md | 14 +++++++++-----
-+ 1 file changed, 9 insertions(+), 5 deletions(-)
-+
-+diff --git a/gcc/config/arm/cortex-a8-neon.md b/gcc/config/arm/cortex-a8-neon.md
-+index 45f861f..b16c299 100644
-+--- a/gcc/config/arm/cortex-a8-neon.md
-++++ b/gcc/config/arm/cortex-a8-neon.md
-+@@ -357,30 +357,34 @@
-+        (eq_attr "type" "fmuls"))
-+   "cortex_a8_vfp,cortex_a8_vfplite*11")
-+ 
-++;; Don't model a reservation for more than 15 cycles as this explodes the
-++;; state space of the automaton for little gain.  It is unlikely that the
-++;; scheduler will find enough instructions to hide the full latency of the
-++;; instructions.
-+ (define_insn_reservation "cortex_a8_vfp_muld" 17
-+   (and (eq_attr "tune" "cortexa8")
-+        (eq_attr "type" "fmuld"))
-+-  "cortex_a8_vfp,cortex_a8_vfplite*16")
-++  "cortex_a8_vfp,cortex_a8_vfplite*15")
-+ 
-+ (define_insn_reservation "cortex_a8_vfp_macs" 21
-+   (and (eq_attr "tune" "cortexa8")
-+        (eq_attr "type" "fmacs,ffmas"))
-+-  "cortex_a8_vfp,cortex_a8_vfplite*20")
-++  "cortex_a8_vfp,cortex_a8_vfplite*15")
-+ 
-+ (define_insn_reservation "cortex_a8_vfp_macd" 26
-+   (and (eq_attr "tune" "cortexa8")
-+        (eq_attr "type" "fmacd,ffmad"))
-+-  "cortex_a8_vfp,cortex_a8_vfplite*25")
-++  "cortex_a8_vfp,cortex_a8_vfplite*15")
-+ 
-+ (define_insn_reservation "cortex_a8_vfp_divs" 37
-+   (and (eq_attr "tune" "cortexa8")
-+        (eq_attr "type" "fdivs, fsqrts"))
-+-  "cortex_a8_vfp,cortex_a8_vfplite*36")
-++  "cortex_a8_vfp,cortex_a8_vfplite*15")
-+ 
-+ (define_insn_reservation "cortex_a8_vfp_divd" 65
-+   (and (eq_attr "tune" "cortexa8")
-+        (eq_attr "type" "fdivd, fsqrtd"))
-+-  "cortex_a8_vfp,cortex_a8_vfplite*64")
-++  "cortex_a8_vfp,cortex_a8_vfplite*15")
-+ 
-+ ;; Comparisons can actually take 7 cycles sometimes instead of four,
-+ ;; but given all the other instructions lumped into type=ffarith that
-+-- 
-+2.7.4
-+
+diff --git a/board/freescale/p1010rdb/readme.txt b/board/freescale/p1010rdb/readme.txt
+index b119f9a..025c97e 100644
+--- a/board/freescale/p1010rdb/readme.txt
++++ b/board/freescale/p1010rdb/readme.txt
+@@ -1,28 +1,3 @@
+-
+-******************** WARNING ********************
+-The compiled U-Boot binary is intended for NOR flash only!
+-It won't work for NAND or SPI and will brick those bootloaders!
+-
+-Also don't go playing around with different U-boot versions or flash targets
+-unless you've got the necessary hardware and/or know-how to unbrick your kit.
+-
+-2014.01 is known good for NOR on the P1010RDB-PA kit.
+-
+-Freescale released a revised version of the kit with a faster processor and
+-some other hardware changes named P1010RDB-PB. U-Boot needs to be configured
+-differently for this kit hence this default config WILL NOT WORK.
+-This is ONLY related to U-Boot, otherwise the configuration is the same,
+-you can perfectly use the generated kernel and rootfs.
+-
+-IF you want to build an U-Boot for the new kit just change
+-BR2_TARGET_UBOOT_BOARDNAME from P1010RDB-PA_NOR to P1010RDB-PB_NOR.
+-!!!!! THIS IS COMPLETELY UNTESTED BY BR DEVS SO YOU ARE ON YOUR OWN !!!!!
+-If it works we'd like to know so drop an email to the mailing list. Thanks.
+-
+-If your kit doesn't mention PA nor PB in their shipping inventory then it's
+-the old version (PA).
+-******************** WARNING ********************
+-
+ You'll need to program the files created by buildroot into the flash.
+ The fast way is to tftp transfer the files via one of the network interfaces.
+ 
+@@ -31,37 +6,25 @@ file transfer from your terminal program by using a "loady" command
+ from the u-boot prompt instead of the "tftp ..." commands stated below.
+ Beware that serial console file transfers are quite slow!
+ 
+-Remember to set the P1010RDB switches to NOR boot if you want to use
+-your newly built U-Boot.
+-
+-1. Program the new U-Boot binary to NOR flash (optional)
+-    If you don't feel confident upgrading your bootloader then don't do it,
+-    it's unnecessary most of the time.
+-
+-    => tftp $loadaddr u-boot.bin
+-    => protect off 0xeff80000 +$filesize
+-    => erase 0xeff80000 +$filesize
+-    => cp.b $loadaddr 0xeff80000 $filesize
+-
+-2. Program the DTB to NOR flash
++1. Program the DTB to NOR flash
+ 
+     => tftp $loadaddr p1010rdb-pa.dtb
+     => erase 0xee000000 +$filesize
+     => cp.b $loadaddr 0xee000000 $filesize
+ 
+-3. Program the kernel to NOR flash
++2. Program the kernel to NOR flash
+ 
+     => tftp $loadaddr uImage
+     => erase 0xee080000 +$filesize
+     => cp.b $loadaddr 0xee080000 $filesize
+ 
+-4. Program the root filesystem to NOR flash
++3. Program the root filesystem to NOR flash
+ 
+     => tftp $loadaddr rootfs.jffs2
+     => erase 0xee800000 0xeff5ffff
+     => cp.b $loadaddr 0xee800000 $filesize
+ 
+-5. Booting your new system
++4. Booting your new system
+ 
+     => setenv norboot 'setenv bootargs root=/dev/mtdblock2 rootfstype=jffs2 console=$consoledev,$baudrate;bootm 0xee080000 - 0xee000000'
+ 
+diff --git a/configs/freescale_p1010rdb_pa_defconfig b/configs/freescale_p1010rdb_pa_defconfig
+index 7f48248..3497275 100644
+--- a/configs/freescale_p1010rdb_pa_defconfig
++++ b/configs/freescale_p1010rdb_pa_defconfig
+@@ -25,11 +25,3 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb-pa"
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+-
+-# Bootloader
+-# Lock down binutils to <2.25 to avoid U-Boot build failure
+-BR2_BINUTILS_VERSION_2_24_X=y
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="P1010RDB-PA_NOR"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2014.01"
+-- 
+2.9.3
