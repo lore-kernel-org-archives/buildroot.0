@@ -1,75 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Oct 2016 11:46:33 +0200
-Subject: [Buildroot] [git commit] bind: bump version to 9.11.0
-Message-ID: <20161015094708.278D481ED4@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 15 Oct 2016 11:49:33 +0200
+Subject: [Buildroot] [PATCH] package/urg: update homepage url
+In-Reply-To: <87funyq7w3.fsf@dell.be.48ers.dk>
+References: <20161015092012.1759-1-s.martin49@gmail.com>
+ <87funyq7w3.fsf@dell.be.48ers.dk>
+Message-ID: <CAHXCMMKz0oC8oiNaKG5tz-R+tht10_otsGEDYHrcuC1o4Y1mVA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e662416d844040806a49a97c608aa674dcdd6580
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, Oct 15, 2016 at 11:27 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+>
+>  > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>  > ---
+>  >  package/urg/Config.in | 2 +-
+>  >  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>  > diff --git a/package/urg/Config.in b/package/urg/Config.in
+>  > index 9d57645..c602624 100644
+>  > --- a/package/urg/Config.in
+>  > +++ b/package/urg/Config.in
+>  > @@ -4,7 +4,7 @@ config BR2_PACKAGE_URG
+>  >      help
+>  >        Library to control Hokuyo's URG series sensors.
+>
+>  > -      http://www.hokuyo-aut.jp/02sensor/07scanner/download/urg_programs_en/
+>  > +      https://sourceforge.net/p/urgnetwork/wiki/Home/
+>
+> What about the source code location? That one also seems to generate a
+> 404 here:
 
-- With the release of BIND 9.11.0, ISC is changing the open source
-  license for BIND from the ISC license to the Mozilla Public License
-  (MPL 2.0). See release notes:
-  http://ftp.isc.org/isc/bind9/9.11.0/RELEASE-NOTES-bind-9.11.0.html
+gah!
+Indeed I thought the sources were still available there :-/
+I'll update it
 
-- Explicitly enable/disable zlib support, otherwise the configure script
-  will fail like this:
 
-  checking for zlib library... yes
-  checking for library containing deflate... no
-  configure: error: found zlib include but not library.
+>
+> wget http://www.hokuyo-aut.jp/02sensor/07scanner/download/urg_programs_en/urg-0.8.18.zip
+> --2016-10-15 11:27:00--  http://www.hokuyo-aut.jp/02sensor/07scanner/download/urg_programs_en/urg-0.8.18.zip
+> Resolving www.hokuyo-aut.jp (www.hokuyo-aut.jp)... 133.18.9.243
+> Connecting to www.hokuyo-aut.jp (www.hokuyo-aut.jp)|133.18.9.243|:80... connected.
+> HTTP request sent, awaiting response... 404 Not Found
+>
+> --
+> Bye, Peter Korsgaard
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bind/bind.hash |  4 ++--
- package/bind/bind.mk   | 11 +++++++++--
- 2 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 8acfda5..bc46604 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,2 @@
--# Verified from ftp://ftp.isc.org/isc/bind9/9.10.4-P3/bind-9.10.4-P3.tar.gz.sha256.asc
--sha256 a075e5ce89fddccb0e64d1777d59161387dd5151cf4e7d1a93875a487812baef  bind-9.10.4-P3.tar.gz
-+# Verified from ftp://ftp.isc.org/isc/bind9/9.11.0/bind-9.11.0.tar.gz.sha256.asc
-+sha256 6f0b403036e0281b272a0fbdd0dc3417f3050b625cb059c5409432611418058b  bind-9.11.0.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index e6bf204..cda9fed 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.10.4-P3
-+BIND_VERSION = 9.11.0
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
- BIND_INSTALL_STAGING = YES
- BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
--BIND_LICENSE = ISC
-+BIND_LICENSE = MPLv2.0
- BIND_LICENSE_FILES = COPYRIGHT
- BIND_TARGET_SERVER_SBIN = arpaname ddns-confgen dnssec-checkds dnssec-coverage
- BIND_TARGET_SERVER_SBIN += dnssec-importkey dnssec-keygen dnssec-revoke
-@@ -32,6 +32,13 @@ BIND_CONF_OPTS = \
- 	--enable-rrl \
- 	--enable-filter-aaaa
- 
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+BIND_CONF_OPTS += --with-zlib
-+BIND_DEPENDENCIES += zlib
-+else
-+BIND_CONF_OPTS += --without-zlib
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- BIND_CONF_OPTS += --enable-linux-caps
- BIND_DEPENDENCIES += libcap
+
+-- 
+Samuel
