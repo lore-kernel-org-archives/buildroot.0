@@ -1,53 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Oct 2016 13:22:10 +0200
-Subject: [Buildroot] [PATCH 00/13] MIPS: improve architecture support
-	and add specific cores
-In-Reply-To: <20160930093659.35032-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Fri, 30 Sep 2016 10:36:46 +0100")
-References: <20160930093659.35032-1-Vincent.Riera@imgtec.com>
-Message-ID: <87eg3hj1r1.fsf@dell.be.48ers.dk>
+Date: Sat, 15 Oct 2016 13:22:16 +0200
+Subject: [Buildroot] [git commit] MIPS: add default CPU ISAs
+Message-ID: <20161015112247.4C4A981EB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6fae290a94d436d24fc19d27d1a70123baa07a86
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This patch series aims to improve the MIPS architecture support and add
- > a small starting set of MIPS cores.
+Meant to be used by the target architecture variants.
 
- > Currently you can build root file systems for mips32, mips32r2,
- > mips32r6, mips64, mips64r2 and mips64r6 ISAs. These are all generic
- > -march options so the compiler will not activate any core specific
- > optimizations.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ arch/Config.in.mips | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
- > The first thing we do in this series is to add some blind options to
- > specify which CPU ISA is gonna be used.
-
- > Then we make the current target architecture variants to select those
- > new added CPU ISA options. We do this in preparation for the addition
- > of specific cores that are also based on some ISA, so the will also
- > select the appropriate one. This will still allow us to apply ISA
- > specific tweaks as we already do.
-
- > After that, we replace any occurrences of BR2_mips_* by the appropriate
- > CPU ISA option so this will still be valid when the user select an
- > specific core instead of a generic variant.
-
- > The next step is to make the options of the "Target Architecture
- > Variant" menu more explicit by specifying they are generic. This is just
- > a cosmetic change but also useful so people will not get confused.
-
- > After that we add new generic variants for R5 ISAs.
-
- > The Codescape MTI external toolchain currently depends on R2 ISAs, but
- > it also has support for R5, so we enable that.
-
- > Finally we add suport for some specific MIPS cores, disabling the
- > unsuported GCC versions and external toolchains when appropriate.
-
-Committed series, thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index fda1a1d..5e97fd0 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -1,3 +1,17 @@
++# mips default CPU ISAs
++config BR2_MIPS_CPU_MIPS32
++	bool
++config BR2_MIPS_CPU_MIPS32R2
++	bool
++config BR2_MIPS_CPU_MIPS32R6
++	bool
++config BR2_MIPS_CPU_MIPS64
++	bool
++config BR2_MIPS_CPU_MIPS64R2
++	bool
++config BR2_MIPS_CPU_MIPS64R6
++	bool
++
+ choice
+ 	prompt "Target Architecture Variant"
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
