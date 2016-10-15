@@ -1,34 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 13:19:34 +0200
-Subject: [Buildroot] [PATCH 1/2] core/legal-info: save empty string when
- no license file
-In-Reply-To: <4fdb0d67c86204e0a3048df9eaa86f9da98a4d12.1476519329.git.yann.morin.1998@free.fr>
-References: <cover.1476519329.git.yann.morin.1998@free.fr>
- <4fdb0d67c86204e0a3048df9eaa86f9da98a4d12.1476519329.git.yann.morin.1998@free.fr>
-Message-ID: <20161015131934.149dd8a3@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 15 Oct 2016 13:22:10 +0200
+Subject: [Buildroot] [PATCH 00/13] MIPS: improve architecture support
+	and add specific cores
+In-Reply-To: <20160930093659.35032-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Fri, 30 Sep 2016 10:36:46 +0100")
+References: <20160930093659.35032-1-Vincent.Riera@imgtec.com>
+Message-ID: <87eg3hj1r1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On Sat, 15 Oct 2016 10:15:53 +0200, Yann E. MORIN wrote:
-> This is stored in the manifest file; it is perfectly possible to have
-> empty fields in there.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/pkg-generic.mk | 1 -
->  1 file changed, 1 deletion(-)
+ > This patch series aims to improve the MIPS architecture support and add
+ > a small starting set of MIPS cores.
 
-Applied to master, thanks.
+ > Currently you can build root file systems for mips32, mips32r2,
+ > mips32r6, mips64, mips64r2 and mips64r6 ISAs. These are all generic
+ > -march options so the compiler will not activate any core specific
+ > optimizations.
 
-Thomas
+ > The first thing we do in this series is to add some blind options to
+ > specify which CPU ISA is gonna be used.
+
+ > Then we make the current target architecture variants to select those
+ > new added CPU ISA options. We do this in preparation for the addition
+ > of specific cores that are also based on some ISA, so the will also
+ > select the appropriate one. This will still allow us to apply ISA
+ > specific tweaks as we already do.
+
+ > After that, we replace any occurrences of BR2_mips_* by the appropriate
+ > CPU ISA option so this will still be valid when the user select an
+ > specific core instead of a generic variant.
+
+ > The next step is to make the options of the "Target Architecture
+ > Variant" menu more explicit by specifying they are generic. This is just
+ > a cosmetic change but also useful so people will not get confused.
+
+ > After that we add new generic variants for R5 ISAs.
+
+ > The Codescape MTI external toolchain currently depends on R2 ISAs, but
+ > it also has support for R5, so we enable that.
+
+ > Finally we add suport for some specific MIPS cores, disabling the
+ > unsuported GCC versions and external toolchains when appropriate.
+
+Committed series, thanks!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
