@@ -1,30 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 Oct 2016 09:44:05 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-10-14
-In-Reply-To: <20161015063031.33F2B10294D@stock.ovh.net>
-References: <20161015063031.33F2B10294D@stock.ovh.net>
-Message-ID: <20161015074405.GA3668@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 15 Oct 2016 09:44:51 +0200
+Subject: [Buildroot] [PATCH] hiawatha: bump version to 10.4
+Message-ID: <20161015074451.25202-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Needed for compatibility with mbedtls 2.3.0
 
-On 2016-10-15 08:30 +0200, Thomas Petazzoni spake thusly:
->     mips64el |                       unzip-60 | NOK | http://autobuild.buildroot.net/results/be2bf44e6c9ce7e79db2bead215ba71ebaa49dc0
+Fixes:
+http://autobuild.buildroot.net/results/8d7/8d77069856620ec0e95a2e9bd865be08180fedff/
+http://autobuild.buildroot.net/results/54b/54b2c7df1b1d2edab5f4925455248eaabea7ef87/
 
-Transient network error, works right now...
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/hiawatha/hiawatha.hash | 2 +-
+ package/hiawatha/hiawatha.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/hiawatha/hiawatha.hash b/package/hiawatha/hiawatha.hash
+index a5207a1..31025d9 100644
+--- a/package/hiawatha/hiawatha.hash
++++ b/package/hiawatha/hiawatha.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	99d185fb16bb1ab706724494d3cac86464f1485ed4b0fff09a192eca6da5ff8e	hiawatha-10.3.tar.gz
++sha256	e40ebcbde8fbd5a14dbf7279143757aea02a461940daa5c460496871eaa75454	hiawatha-10.4.tar.gz
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index dc49216..8821b0f 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HIAWATHA_VERSION = 10.3
++HIAWATHA_VERSION = 10.4
+ HIAWATHA_SITE = http://www.hiawatha-webserver.org/files
+ HIAWATHA_DEPENDENCIES = zlib
+ HIAWATHA_LICENSE = GPLv2
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.9.3
