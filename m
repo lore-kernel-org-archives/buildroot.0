@@ -1,105 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 17:39:46 +0200
-Subject: [Buildroot] [git commit] configs/beaglebone_qt5: new defconfig
-Message-ID: <20161015153951.50C437FBDD@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sat, 15 Oct 2016 17:40:06 +0200
+Subject: [Buildroot] [PATCH] core/legal-info: allow ignoring packages
+ from the legal-info
+In-Reply-To: <20161015153246.GG3668@free.fr>
+References: <1476538102-8779-1-git-send-email-yann.morin.1998@free.fr>
+ <878ttpbq72.fsf@dell.be.48ers.dk> <20161015153246.GG3668@free.fr>
+Message-ID: <ce7a11dc-d228-5724-9821-5ef47eb670dc@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d53b26698648b2e590b4347b6515936c4c126880
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Add a target configuration for the beaglebone that supports the SGX530
-graphics acceleration and builds the qt5 demos with the eglfs backend.
-The imagination technologies demos and fbv are also included. The Linux
-kernel is based on the omap2plus defconfig, a config fragment adds the
-required settings for SGX accelerator support.
+On 15/10/2016 17:32, Yann E. MORIN wrote:
+> Peter, All,
+> 
+> On 2016-10-15 17:13 +0200, Peter Korsgaard spake thusly:
+>>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>
+>>  > It might be necessary to not even mention a package in the output of
+>>  > legal-info:
+>>
+>>  >   - virtual packages have virtually nothing to save in the legal-info
+>>  >     output;
+>>
+>>  >   - for proprietary packages, it might not even be legal to even
+>>  >     mention them, being under NDA or some other such restrictive
+>>  >     conditions.
+>>
+>>  > Introduce the new FOO_GEN_LEGAL_INFO variable that a package can set
+>>  > to 'NO' (default to 'YES') to indicate that the package should be
+>>  > completely ignored from the legal-info output, in which case the
+>>  > package is not mentioned in the maniufest, its source archive,
+>>  > patches and license files are not saved into legal-info/ .
+>>
+>> Couldn't / shouldn't the 2nd part already be handled by
+>> <foo>_REDISTRIBUTE = NO and/or <foo>_LICENSE = PROPRIETARY?
+> 
+> No, because for a proprietary license, you may still have to at least
+> list it in the manifest.
+> 
+> For example, the nvidia-driver package has a proprietary license, is not
+> redistributable, but we must still list it in the manifest.
+> 
+> I'll update the commit log accordingly. Thanks! ;-)
 
-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/beaglebone/linux-4.1-sgx.fragment | 12 ++++++++++
- board/beaglebone/readme.txt             |  2 ++
- configs/beaglebone_qt5_defconfig        | 41 +++++++++++++++++++++++++++++++++
- 3 files changed, 55 insertions(+)
+I suggest listing the three possible cases:
 
-diff --git a/board/beaglebone/linux-4.1-sgx.fragment b/board/beaglebone/linux-4.1-sgx.fragment
-new file mode 100644
-index 0000000..c0d2e7b
---- /dev/null
-+++ b/board/beaglebone/linux-4.1-sgx.fragment
-@@ -0,0 +1,12 @@
-+CONFIG_PREEMPT=y
-+CONFIG_PREEMPT_COUNT=y
-+CONFIG_OMAP2_DSS_INIT=y
-+CONFIG_OMAP_DSS_BASE=y
-+CONFIG_OMAP2_DSS=y
-+CONFIG_OMAP2_DSS_DPI=y
-+CONFIG_DRM_OMAP=y
-+CONFIG_DRM_OMAP_NUM_CRTCS=2
-+CONFIG_DRM_OMAP_WB_M2M=y
-+CONFIG_DRM_TILCDC=y
-+CONFIG_DRM_I2C_NXP_TDA998X=y
-+CONFIG_DRM=y
-diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
-index de7f954..e908b22 100644
---- a/board/beaglebone/readme.txt
-+++ b/board/beaglebone/readme.txt
-@@ -10,6 +10,8 @@ EEPROM. The configuration is based on the
- ti-processor-sdk-02.00.00.00. Device tree blobs for beaglebone
- variants and the evm-sk are built too.
- 
-+For Qt5 support support use the beaglebone_qt5_defconfig.
-+
- How to build it
- ===============
- 
-diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
-new file mode 100644
-index 0000000..31ee35a
---- /dev/null
-+++ b/configs/beaglebone_qt5_defconfig
-@@ -0,0 +1,41 @@
-+BR2_arm=y
-+BR2_cortex_a8=y
-+BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="52c4aa7cdb93d61f8008f380135beaf7b8fa6593"
-+BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/beaglebone/linux-4.1-sgx.fragment"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-evmsk"
-+BR2_PACKAGE_FBV=y
-+BR2_PACKAGE_QT5=y
-+BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-+BR2_PACKAGE_QT5BASE_EXAMPLES=y
-+BR2_PACKAGE_QT5BASE_EGLFS=y
-+BR2_PACKAGE_QT5QUICKCONTROLS=y
-+BR2_PACKAGE_TI_SGX_DEMOS=y
-+BR2_PACKAGE_TI_SGX_KM=y
-+BR2_PACKAGE_TI_SGX_UM=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="MLO"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+ * FOO_GEN_LEGAL_INFO = NO: save nothing
+ * FOO_GEN_LEGAL_INFO = YES, FOO_REDISTRIBUTE = NO: list only
+ * FOO_GEN_LEGAL_INFO = YES, FOO_REDISTRIBUTE = NO: list + save source
+
+Maybe in the manual as well?
+
+-- 
+Luca
