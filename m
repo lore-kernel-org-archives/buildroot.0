@@ -1,74 +1,61 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 15 Oct 2016 10:38:55 +0200
-Subject: [Buildroot] [PATCH 1/1] mysql: Make S97mysqld source a default
- file
-In-Reply-To: <1476383282-10739-1-git-send-email-eloi.bail@savoirfairelinux.com>
-References: <1476383282-10739-1-git-send-email-eloi.bail@savoirfairelinux.com>
-Message-ID: <0dd340cf-7cd1-497b-9ce4-cc344dd0d2a4@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 15 Oct 2016 10:56:12 +0200
+Subject: [Buildroot] [PATCH 1/2] rabbitmq-server: new package
+In-Reply-To: <1476215129-29979-1-git-send-email-fhunleth@troodon-software.com>
+ (Frank Hunleth's message of "Tue, 11 Oct 2016 15:45:28 -0400")
+References: <1476215129-29979-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <87funyt2hf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Eloi,
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
-On 13/10/16 20:28, Eloi BAIL wrote:
-> Hardcoded parameters are used for mysql installation.
-> Make S97mysqld source a /etc/default/mysql file where these
-> parameters can be overridden.
->
-> Signed-off-by: Eloi BAIL <eloi.bail@savoirfairelinux.com>
+ > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+ > ---
+ >  package/Config.in                            |  1 +
+ >  package/rabbitmq-server/Config.in            | 11 +++++++++++
+ >  package/rabbitmq-server/rabbitmq-server.hash |  2 ++
+ >  package/rabbitmq-server/rabbitmq-server.mk   | 29 ++++++++++++++++++++++++++++
+ >  4 files changed, 43 insertions(+)
+ >  create mode 100644 package/rabbitmq-server/Config.in
+ >  create mode 100644 package/rabbitmq-server/rabbitmq-server.hash
+ >  create mode 100644 package/rabbitmq-server/rabbitmq-server.mk
 
-I've done a run test on qemu creating different /etc/default/mysql 
-files. Everything worked as expected, so...
+Thanks. I don't know much about erlang and rabbitmq, but the
+installation paths seems kind of odd to me:
 
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+find target -type f -perm -u=x -name rabbitmq\*
+target/usr/lib/erlang/lib/rabbitmq_server-3.6.1/sbin/rabbitmqctl
+target/usr/lib/erlang/lib/rabbitmq_server-3.6.1/sbin/rabbitmq-server
+target/usr/lib/erlang/lib/rabbitmq_server-3.6.1/sbin/rabbitmq-env
+target/usr/lib/erlang/lib/rabbitmq_server-3.6.1/sbin/rabbitmq-defaults
+target/usr/lib/erlang/lib/rabbitmq_server-3.6.1/sbin/rabbitmq-plugins
 
-However I'm not sure if this approach is correct as someone may expect a 
-different content in the default file. For instance a content compatible 
-to be used with the --defaults-file and --defaults-extra-file options:
+Looking at the Debian package, they install the programs into /usr/sbin:
 
-[mysql_install_db]
-user    = mysql
-datadir = /var/mysql
+https://packages.debian.org/stretch/all/rabbitmq-server/filelist
 
-Why don't we call mysql_install_db with those options passing that kind 
-of default file, instead of sourcing it as you do in your patch? There 
-are two options to do that. The first one is doing it manually (not in 
-the init script). The second one is to do it in the init script, as is 
-done right now, but we would need to grab the value of "datadir" with 
-something like "grep datadir /etc/default/mysql | cut -d= -f2".
+It would also be good if you could add an init script to the package.
 
-Let's see what the others devs think about it.
+ > +RABBITMQ_SERVER_VERSION = 3.6.1
+ > +RABBITMQ_SERVER_SITE = http://www.rabbitmq.com/releases/rabbitmq-server/v$(RABBITMQ_SERVER_VERSION)
+ > +RABBITMQ_SERVER_SOURCE = rabbitmq-server-$(RABBITMQ_SERVER_VERSION).tar.xz
+ > +RABBITMQ_SERVER_LICENSE = Apache-2.0, BSD-2c, EPL, MIT, MPLv1.1, MPLv2.0
+ > +RABBITMQ_SERVER_LICENSE_FILES = LICENSE LICENSE-APACHE2-ExplorerCanvas \
+ > +				LICENSE-APL2-Rebar LICENSE-APL2-Stomp-Websocket \
+ > +				LICENSE-BSD-base64js LICENSE-BSD-glMatrix \
+ > +				LICENSE-EPL-OTP LICENSE-MIT-EJS10 \
+ > +				LICENSE-MIT-Flot LICENSE-MIT-jQuery164 \
+ > +				LICENSE-MIT-Mochi LICENSE-MIT-Mochiweb \
+ > +				LICENSE-MIT-Sammy060 LICENSE-MIT-SockJS \
+ > +				LICENSE-MPL2 LICENSE-MPL-RabbitMQ
 
-Regards,
+The license details are quite complicated. Perhaps we should list
+MPLv1.1 first as that seems to be the "main" license according to the
+LICENSE file.
 
-Vincent.
-
-> ---
->  package/mysql/S97mysqld | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/package/mysql/S97mysqld b/package/mysql/S97mysqld
-> index 5a660e9..638790f 100644
-> --- a/package/mysql/S97mysqld
-> +++ b/package/mysql/S97mysqld
-> @@ -1,10 +1,14 @@
->  #!/bin/sh
->
-> +MYSQL_DIR="/var/mysql"
-> +MYSQL_USER="mysql"
-> +[ -r /etc/default/mysql ] && . /etc/default/mysql
-> +
->  case "$1" in
->  	start)
-> -		if [ ! -d /var/mysql/mysql ] ; then
-> +		if [ ! -d $MYSQL_DIR/mysql ] ; then
->  			echo "Creating MySQL system tables..."
-> -			mysql_install_db --user=mysql --ldata=/var/mysql
-> +			mysql_install_db --user=$MYSQL_USER --ldata=$MYSQL_DIR
->  		fi
->
->  		# mysqld runs as user mysql, but /run is only writable by root
->
+-- 
+Bye, Peter Korsgaard
