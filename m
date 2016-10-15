@@ -1,75 +1,90 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 15 Oct 2016 10:28:21 +0200
-Subject: [Buildroot] [PATCH 2/2] odroid-mali: add support for X11 driver
-In-Reply-To: <trinity-26433df8-3e12-4eb8-a67b-fe95a9ec41dd-1476511057951@3capp-mailcom-bs10>
+Date: Sat, 15 Oct 2016 10:35:27 +0200
+Subject: [Buildroot] [PATCH 1/2] X11/odroidc2-driver: New Package.
+In-Reply-To: <trinity-bfdd0cd1-6066-4ebc-b82e-d255078fccac-1476512840803@3capp-mailcom-bs10>
 References: <20161013174124.9639-1-daggs@gmx.com>
- <20161013174124.9639-2-daggs@gmx.com>
- <4b3c5ef0-c62c-fce6-cce5-3cf4c091997b@mind.be>
- <trinity-26433df8-3e12-4eb8-a67b-fe95a9ec41dd-1476511057951@3capp-mailcom-bs10>
-Message-ID: <783516b3-2433-7678-5c8a-5772f3dd2375@mind.be>
+ <9fe82330-7c8d-0f31-e777-db4e5014cf5f@mind.be>
+ <trinity-bfdd0cd1-6066-4ebc-b82e-d255078fccac-1476512840803@3capp-mailcom-bs10>
+Message-ID: <d768be8a-a656-14e9-f915-f83e4e554ebe@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- I'm CC'ing Gary here because the same issues exist for Vivante, which uses a
-slightly different approach. Gary, can you comment if you think this is a good
-approach?
 
-On 15-10-16 07:57, daggs wrote:
+
+On 15-10-16 08:27, daggs wrote:
+> Greetings Arnout,
+>>  Hi Dagg,
+>>
+>>  You subject line should be:
+>>
+>> xdriver_xf86-video-odroidc2: new package
+>>
+> noted, thanks.
+>  
+>>  I have a generic remark about this package and I'm not sure how to solve it.
+>> This is actually the source that comes from ARM:
+>>
+>> http://malideveloper.arm.com/downloads/drivers/DX910/r7p0-00rel0/DX910-SW-99003-r7p0-00rel0.tgz
+>>
+>> which has been lightly patched in unfathomable ways. The igloo community has a
+>> similar patches driver. There are probably others as well.
+>>
+>>  The github repo is really a mess (well, the ARM tarball as well but slightly
+>> less so). It is full of build artefacts, like the .deps directory... It has just
+>> two commits. The changes w.r.t. the ARM tarball are not a separate commit.
+>>
+>>  But I don't know what the options are here. We can have duplicates of this
+>> package for each board that hacks it in a different way. Or we could have a
+>> single xdriver_xf86-video-mali package based on the ARM tarball, but then a
+>> different patch would probably have to be applied to it depending on the board.
+>> Either by somehow detecting the board in the .mk file, or by putting the patch
+>> in the global patch dir of the odroid boards.
+> imho this idea has aome problems.
+> maintaining a patchset for each driver is a lot of work, each time someone commits a patch to the repo, the maintainer needs to know of that, extract the patch and add it to the patchset.
+> lets assume there is a repo with 1000 commits, there can be 1000 patches in that are in the buildroot tree, there is a possibility to banch it to 1 patch but it will be a huge file that us needed to be maintained.
+
+ I completely agree with this. The problem really is that the ARM tarball still
+has to be hacked on. That is just wrong, it should support any SoC or board
+using the mali without modification.
+
+
+> imho to fix this, under the assumption that all drivers derive from the same file, there is a need to add support for buildroot that extract all the commits of a repo minus the the initial commit which must be the original drive and apply them to the original source.
+> with these repos (as messy as there are), the maintainer takes care of it.
 > 
-> Greetings Arnout, 
->>  The Vivante driver has a similar issue as this one: there are different binary
->> blobs for X11 and for fbdev, and only one of them can be installed. For the
->> Vivante driver, we offer a choice to the user, and the x11-video driver depends
->> on the user making the right choice. I don't really like that option. However,
->> this one is not ideal either, because there is a two-way interdependence between
->> the odroid-mali and the xdriver-video package. In fact, the way it is now, the
->> two patches have to be squashed because the previoius one doesn't work without
->> this one.
+>> Oh, and there is no upstream we
+>> can send this to (or do we expect ARM to be responsive to patches? Note that the
+>> bugurl they specify in the package is freedesktop...).
 >>
->>  So here is my idea: introduce a blind symbol BR2_PACKAGE_ODROID_MALI_X11 in
->> this package, and let that option steer the choice between X11 or fbdev. It's
->> blind, it's not part of a choice, so it can be selected from the xdriver-video
->> package. So from the user's POV, they just have to select the xdriver-video
->> package and not worry about the rest. This way, you can first have this patch,
->> and then add the xdriver-video package in a second patch.
->>
->>
-> thanks for the feedback, this driver has some limitations, the X11 opengl libs supports only arm64. there is no implementation for arm.
-> I want to see if I got the idea correct, as said, add the symbol mentioned above:
-> 1) arm: show only the fbdev as an option, the current implementation stays the same. the X11 driver is hidden.
+> there is, I'm in contact with the maintainer of the c2 repos, I've submitted patches which were merged to other repos before.
+> according to him, we can semd patches via mail, github merge request and by sending him the patches via the odroid forums.
 
- The X11 option would always be hidden. So:
+ No, what i meant is sending patches to ARM so they can update the common
+mali-x11 driver so that there is no need to make board-specific derivatives.
 
-config BR2_PACKAGE_ODROID_MALI_X11
-	bool
-	depends on BR2_aarch64 # No 32 bit version available
 
-and in the xvideo package:
+ Note BTW that there is also a true open source xf86-video-armsoc driver. It
+doesn't even seem to depend on the mali blob so I'm not sure what it's doing.
 
-	depends on BR2_aarch64 # odroid-mali X11
-	select BR2_PACKAGE_ODROID_MALI
-	select BR2_PACKAGE_ODROID_MALI_X11
-
-> 2) arm54: show fbdev and X11 option (if xorg + drivers is set), if fbdev is selected use the current implementation. if the X11 driver is selected, use the implementation in the patch.
-
- Yes, except that it wouldn't be a user-visible option.
-
- I don't think it makes sense to make the option user visible, because you
-anyway need another package to make use of it, and it's very unlikely that that
-will be a custom package for X11. So whatever package makes use of it can select
-the symbol.
-
- There should be some help text in odroid-mali to explain that the X11 version
-of the blob will be used if the xvideo driver is selected.
 
  Regards,
  Arnout
 
-
-> am I correct?
+> 
+>>  All of that sounds a bit too complicated, so let's keep this package for the
+>> time being. I'd only like two major changes (+ comments below):
+>>
+>> - rename the package to xdriver_xf86-video-mali-odroidc2
+>>
+>> - in the help text refer to the real upstream, e.g.
+>> http://malideveloper.arm.com/resources/drivers/open-source-mali-gpus-linux-exadri2-and-x11-display-drivers/
+>> and explained that this is a hacked version of it.
+>>
+>>
+> will update and resend.
+> thanks for the feedback.
 > 
 > Dagg.
 > 
