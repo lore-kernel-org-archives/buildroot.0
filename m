@@ -1,33 +1,56 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 15 Oct 2016 15:31:12 +0000
-Subject: [Buildroot] [Bug 8856] python tornado runtime wasn't met on
-	buildroot 2016.02
-In-Reply-To: <bug-8856-163@https.bugs.busybox.net/>
-References: <bug-8856-163@https.bugs.busybox.net/>
-Message-ID: <bug-8856-163-DGlQX8uGpS@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 15 Oct 2016 17:32:46 +0200
+Subject: [Buildroot] [PATCH] core/legal-info: allow ignoring packages
+ from the legal-info
+In-Reply-To: <878ttpbq72.fsf@dell.be.48ers.dk>
+References: <1476538102-8779-1-git-send-email-yann.morin.1998@free.fr>
+ <878ttpbq72.fsf@dell.be.48ers.dk>
+Message-ID: <20161015153246.GG3668@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8856
+Peter, All,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On 2016-10-15 17:13 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  > It might be necessary to not even mention a package in the output of
+>  > legal-info:
+> 
+>  >   - virtual packages have virtually nothing to save in the legal-info
+>  >     output;
+> 
+>  >   - for proprietary packages, it might not even be legal to even
+>  >     mention them, being under NDA or some other such restrictive
+>  >     conditions.
+> 
+>  > Introduce the new FOO_GEN_LEGAL_INFO variable that a package can set
+>  > to 'NO' (default to 'YES') to indicate that the package should be
+>  > completely ignored from the legal-info output, in which case the
+>  > package is not mentioned in the maniufest, its source archive,
+>  > patches and license files are not saved into legal-info/ .
+> 
+> Couldn't / shouldn't the 2nd part already be handled by
+> <foo>_REDISTRIBUTE = NO and/or <foo>_LICENSE = PROPRIETARY?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+No, because for a proprietary license, you may still have to at least
+list it in the manifest.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-This issue was fixed in c37648bac43344750bdff130cb3cda97fa9152f5.
+For example, the nvidia-driver package has a proprietary license, is not
+redistributable, but we must still list it in the manifest.
 
-In fact, we don't need to package python-backports-ssl-match-hostname because
-Python 2.7.9, which we have in Buildroot provides what's needed. See the
-detailed commit log of c37648bac43344750bdff130cb3cda97fa9152f5 for more
-details.
+I'll update the commit log accordingly. Thanks! ;-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
