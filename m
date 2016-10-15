@@ -1,318 +1,1767 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 15 Oct 2016 23:14:44 +0200
-Subject: [Buildroot] [git commit] ipkg: remove deprecated package
-Message-ID: <20161015211550.32E0C82110@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gcc: remove deprecated 4.7.x
+Message-ID: <20161015211550.1FFD181F03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b80ca8913a6f29664f0a16a71516f8bf532acd9
+commit: https://git.buildroot.net/buildroot/commit/?id=a7c13c1b288b1134b06d1e14c6ff008b4ed26ff9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We will remove BR2_DEPRECATED, so remove this deprecated package.
+We will remove BR2_DEPRECATED, so remove this deprecated option.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                       |   8 +++
- package/Config.in                      |   1 -
- package/ipkg/0001-fix-musl-build.patch |  50 -------------
- package/ipkg/0002-fix-nommu.patch      |  24 -------
- package/ipkg/Config.in                 |   7 --
- package/ipkg/ipkg-build                | 127 ---------------------------------
- package/ipkg/ipkg.hash                 |   2 -
- package/ipkg/ipkg.mk                   |  13 ----
- 8 files changed, 8 insertions(+), 224 deletions(-)
+ Config.in.legacy                                   |   7 +
+ package/gcc/4.7.4/100-uclibc-conf.patch            |  13 -
+ ...00-powerpc-link-with-math-lib.patch.conditional | 127 -----
+ package/gcc/4.7.4/111-pr65730.patch                |  37 --
+ package/gcc/4.7.4/130-pr43538.patch                |  25 -
+ package/gcc/4.7.4/301-missing-execinfo_h.patch     |  11 -
+ .../gcc/4.7.4/305-libmudflap-susv3-legacy.patch    |  49 --
+ package/gcc/4.7.4/810-arm-softfloat-libgcc.patch   |  25 -
+ package/gcc/4.7.4/830-arm_unbreak_armv4t.patch     |  13 -
+ .../4.7.4/843-gcc-4.7.3-Fix-PR-target-58595.patch  | 102 ----
+ .../gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch    |  42 --
+ package/gcc/4.7.4/850-libstdcxx-uclibc-c99.patch   | 273 ----------
+ package/gcc/4.7.4/851-PR-other-56780.patch         | 244 ---------
+ package/gcc/4.7.4/900-musl-support.patch           | 587 ---------------------
+ package/gcc/Config.in.host                         |  27 -
+ package/gcc/gcc-final/gcc-final.mk                 |  12 -
+ package/uclibc/uclibc.mk                           |   7 +-
+ 17 files changed, 10 insertions(+), 1591 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 7d68c67..c27ae3d 100644
+index 45814ca..7d68c67 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -145,6 +145,14 @@ endif
+@@ -145,6 +145,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2016.11"
  
-+config BR2_PACKAGE_IPKG
-+	bool "ipkg removed"
++config BR2_GCC_VERSION_4_7_X
++	bool "gcc 4.7.x support removed"
 +	select BR2_LEGACY
 +	help
-+	  ipkg dates back to the early 2000s when Compaq started the
-+	  handhelds.org project and it hasn't seen development since 2006.
-+	  Use opkg as a replacement.
++	  Support for gcc version 4.7.x has been removed. The current
++	  default version (4.9.x or later) has been selected instead.
 +
- config BR2_GCC_VERSION_4_7_X
- 	bool "gcc 4.7.x support removed"
+ config BR2_BINUTILS_VERSION_2_24_X
+ 	bool "binutils version 2.24 support removed"
  	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 1b0ffcf..0257685 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1651,7 +1651,6 @@ comment "*                                                      "
- comment "See the manual:                                        "
- comment "http://buildroot.org/manual.html#faq-no-binary-packages"
- comment "-------------------------------------------------------"
--	source "package/ipkg/Config.in"
- 	source "package/opkg/Config.in"
- 	source "package/rpm/Config.in"
- endmenu
-diff --git a/package/ipkg/0001-fix-musl-build.patch b/package/ipkg/0001-fix-musl-build.patch
+diff --git a/package/gcc/4.7.4/100-uclibc-conf.patch b/package/gcc/4.7.4/100-uclibc-conf.patch
 deleted file mode 100644
-index fce3ec4..0000000
---- a/package/ipkg/0001-fix-musl-build.patch
+index 6bad179..0000000
+--- a/package/gcc/4.7.4/100-uclibc-conf.patch
 +++ /dev/null
-@@ -1,50 +0,0 @@
--Remove __P macro usage to fix musl build
+@@ -1,13 +0,0 @@
+---- gcc/gcc/config/--- gcc/contrib/regression/objs-gcc.sh
+-+++ gcc/contrib/regression/objs-gcc.sh
+-@@ -105,6 +105,10 @@
+-  then
+-   make all-gdb all-dejagnu all-ld || exit 1
+-   make install-gdb install-dejagnu install-ld || exit 1
+-+elif [ $H_REAL_TARGET = $H_REAL_HOST -a $H_REAL_TARGET = i686-pc-linux-uclibc ]
+-+ then
+-+  make all-gdb all-dejagnu all-ld || exit 1
+-+  make install-gdb install-dejagnu install-ld || exit 1
+- elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+-   make bootstrap || exit 1
+-   make install || exit 1
+diff --git a/package/gcc/4.7.4/1000-powerpc-link-with-math-lib.patch.conditional b/package/gcc/4.7.4/1000-powerpc-link-with-math-lib.patch.conditional
+deleted file mode 100644
+index 2554263..0000000
+--- a/package/gcc/4.7.4/1000-powerpc-link-with-math-lib.patch.conditional
++++ /dev/null
+@@ -1,127 +0,0 @@
+-http://gcc.gnu.org/ml/gcc-patches/2008-10/msg00269.html
 -
--__P() is used for compatibility with old K&R C compilers. With ANSI C
--this macro has no effect.
+-On glibc the libc.so carries a copy of the math function copysignl() but
+-on uClibc math functions like copysignl() live in libm. Since libgcc_s
+-contains unresolved symbols, any attempt to link against libgcc_s
+-without explicitely specifying -lm fails, resulting in a broken
+-bootstrap of the compiler.
 -
--This fixes a compilation error with musl libc because of undeclared
--__P.
+-Forward ported to gcc 4.7.3
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura gcc-4.7.3.orig/libgcc/config/t-slibgcc gcc-4.7.3/libgcc/config/t-slibgcc
+---- gcc-4.7.3.orig/libgcc/config/t-slibgcc	2013-04-11 15:23:46.491571116 -0300
+-+++ gcc-4.7.3/libgcc/config/t-slibgcc	2013-04-11 15:25:06.241141824 -0300
+-@@ -27,7 +27,7 @@
+- SHLIB_OBJS = @shlib_objs@
+- SHLIB_DIR = @multilib_dir@
+- SHLIB_SLIBDIR_QUAL = @shlib_slibdir_qual@
+--SHLIB_LC = -lc
+-+SHLIB_LC = @libgcc_libm@ -lc
+- SHLIB_MAKE_SOLINK = $(LN_S) $(SHLIB_SONAME) $(SHLIB_DIR)/$(SHLIB_SOLINK)
+- SHLIB_INSTALL_SOLINK = $(LN_S) $(SHLIB_SONAME) \
+- 	$(DESTDIR)$(slibdir)$(SHLIB_SLIBDIR_QUAL)/$(SHLIB_SOLINK)
+-diff -Nura gcc-4.7.3.orig/libgcc/configure gcc-4.7.3/libgcc/configure
+---- gcc-4.7.3.orig/libgcc/configure	2013-04-11 15:23:46.551573051 -0300
+-+++ gcc-4.7.3/libgcc/configure	2013-04-11 15:25:06.243141875 -0300
+-@@ -563,6 +563,7 @@
+- tmake_file
+- sfp_machine_header
+- set_use_emutls
+-+LIBGCC_LIBM
+- set_have_cc_tls
+- vis_hide
+- fixed_point
+-@@ -4445,6 +4446,37 @@
+- 	fi
+- fi
+- 
+-+# On powerpc libgcc_s references copysignl which is a libm function but
+-+# glibc apparently also provides it via libc as opposed to uClibc where
+-+# it lives in libm.
+-+echo "$as_me:$LINENO: checking for library containing copysignl" >&5
+-+echo $ECHO_N "checking for library containing copysignl... $ECHO_C" >&6
+-+if test "${libgcc_cv_copysignl_lib+set}" = set; then
+-+  echo $ECHO_N "(cached) $ECHO_C" >&6
+-+else
+-+
+-+    echo '#include <features.h>' > conftest.c
+-+    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
+-+    libgcc_cv_copysignl_lib="-lc"
+-+    if { ac_try='${CC-cc} -S conftest.c -o conftest.s 1>&5'
+-+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+-+  (eval $ac_try) 2>&5
+-+  ac_status=$?
+-+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-+  (exit $ac_status); }; }
+-+    then
+-+       libgcc_cv_copysignl_lib="-lm"
+-+    fi
+-+    rm -f conftest.*
+-+
+-+fi
+-+echo "$as_me:$LINENO: result: $libgcc_cv_copysignl_lib" >&5
+-+echo "${ECHO_T}$libgcc_cv_copysignl_lib" >&6
+-+
+-+case /${libgcc_cv_copysignl_lib}/ in
+-+  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
+-+  *) LIBGCC_LIBM= ;;
+-+esac
+- 
+- # Conditionalize the makefile for this target machine.
+- tmake_file_=
+-diff -Nura gcc-4.7.3.orig/libgcc/configure.ac gcc-4.7.3/libgcc/configure.ac
+---- gcc-4.7.3.orig/libgcc/configure.ac	2013-04-11 15:23:46.551573051 -0300
+-+++ gcc-4.7.3/libgcc/configure.ac	2013-04-11 15:25:06.244141901 -0300
+-@@ -324,6 +324,27 @@
+- fi
+- AC_SUBST(set_have_cc_tls)
+- 
+-+# On powerpc libgcc_s references copysignl which is a libm function but
+-+# glibc apparently also provides it via libc as opposed to uClibc where
+-+# it lives in libm.
+-+AC_CACHE_CHECK
+-+  libgcc_cv_copysignl_lib,
+-+    echo '#include <features.h>' > conftest.c
+-+    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
+-+    libgcc_cv_copysignl_lib="-lc"
+-+    if AC_TRY_COMMAND(${CC-cc} -S conftest.c -o conftest.s 1>&AS_MESSAGE_LOG_FD)
+-+    then
+-+       libgcc_cv_copysignl_lib="-lm"
+-+    fi
+-+    rm -f conftest.*
+-+  ])
+-+
+-+case /${libgcc_cv_copysignl_lib}/ in
+-+  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
+-+  *) LIBGCC_LIBM= ;;
+-+esac
+-+AC_SUBST(LIBGCC_LIBM)
+-+
+- # See if we have emulated thread-local storage.
+- GCC_CHECK_EMUTLS
+- set_use_emutls=
+-diff -Nura gcc-4.7.3.orig/libgcc/Makefile.in gcc-4.7.3/libgcc/Makefile.in
+---- gcc-4.7.3.orig/libgcc/Makefile.in	2013-04-11 15:23:46.537572599 -0300
+-+++ gcc-4.7.3/libgcc/Makefile.in	2013-04-11 15:25:06.241141824 -0300
+-@@ -41,6 +41,7 @@
+- decimal_float = @decimal_float@
+- enable_decimal_float = @enable_decimal_float@
+- fixed_point = @fixed_point@
+-+LIBGCC_LIBM = @LIBGCC_LIBM@
+- 
+- host_noncanonical = @host_noncanonical@
+- target_noncanonical = @target_noncanonical@
+-@@ -928,9 +929,10 @@
+- 		@multilib_dir@,$(MULTIDIR),$(subst \
+- 		@shlib_objs@,$(objects) libgcc.a,$(subst \
+- 		@shlib_base_name@,libgcc_s,$(subst \
+-+		@libgcc_libm@,$(LIBGCC_LIBM),$(subst \
+- 		@shlib_map_file@,$(mapfile),$(subst \
+- 		@shlib_slibdir_qual@,$(MULTIOSSUBDIR),$(subst \
+--		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK))))))))
+-+		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK)))))))))
+- 
+- libunwind$(SHLIB_EXT): $(libunwind-s-objects) $(extra-parts)
+- 	# @multilib_flags@ is still needed because this may use
+diff --git a/package/gcc/4.7.4/111-pr65730.patch b/package/gcc/4.7.4/111-pr65730.patch
+deleted file mode 100644
+index f195e30..0000000
+--- a/package/gcc/4.7.4/111-pr65730.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From b9a7775674d91c7af8043a83211ffeaa576327d7 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Fri, 10 Apr 2015 17:46:30 +0300
+-Subject: [PATCH] Fix PR target/65730
+-
+-2015-05-20  Max Filippov  <jcmvbkbc@gmail.com>
+-gcc/
+-	* config/xtensa/xtensa.c (init_alignment_context): Replace MULT
+-	by BITS_PER_UNIT with ASHIFT by exact_log2 (BITS_PER_UNIT).
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+-Backported from: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 223452
+-Changes to ChangeLog are dropped.
+-
+- gcc/config/xtensa/xtensa.c | 5 +++--
+- 1 file changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
+-index eb039ba..7296e36 100644
+---- a/gcc/config/xtensa/xtensa.c
+-+++ b/gcc/config/xtensa/xtensa.c
+-@@ -1461,8 +1461,9 @@ init_alignment_context (struct alignment_context *ac, rtx mem)
+-   if (ac->shift != NULL_RTX)
+-     {
+-       /* Shift is the byte count, but we need the bitcount.  */
+--      ac->shift = expand_simple_binop (SImode, MULT, ac->shift,
+--				       GEN_INT (BITS_PER_UNIT),
+-+      gcc_assert (exact_log2 (BITS_PER_UNIT) >= 0);
+-+      ac->shift = expand_simple_binop (SImode, ASHIFT, ac->shift,
+-+				       GEN_INT (exact_log2 (BITS_PER_UNIT)),
+- 				       NULL_RTX, 1, OPTAB_DIRECT);
+-       ac->modemask = expand_simple_binop (SImode, ASHIFT,
+- 					  GEN_INT (GET_MODE_MASK (mode)),
+--- 
+-1.8.1.4
+-
+diff --git a/package/gcc/4.7.4/130-pr43538.patch b/package/gcc/4.7.4/130-pr43538.patch
+deleted file mode 100644
+index 19e57bb..0000000
+--- a/package/gcc/4.7.4/130-pr43538.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From c037df1be41f8daf4d581d7ffa4ec8cfa640bccf Mon Sep 17 00:00:00 2001
+-From: glisse <glisse@138bc75d-0d04-0410-961f-82ee72b054a4>
+-Date: Fri, 25 Apr 2014 08:03:08 +0000
+-Subject: [PATCH] 2014-04-25  Marc Glisse  <marc.glisse@inria.fr>
+-
+-	PR target/43538
+-	* mt-gnu: Don't reset CXXFLAGS_FOR_TARGET.
+-
+-
+-git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 209784 138bc75d-0d04-0410-961f-82ee72b054a4
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- config/mt-gnu    | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/config/mt-gnu b/config/mt-gnu
+-index 15bf417..5c696f5 100644
+---- a/config/mt-gnu
+-+++ b/config/mt-gnu
+-@@ -1 +1 @@
+--CXXFLAGS_FOR_TARGET = $(CXXFLAGS) -D_GNU_SOURCE
+-+CXXFLAGS_FOR_TARGET += -D_GNU_SOURCE
+--- 
+-2.1.4
+-
+diff --git a/package/gcc/4.7.4/301-missing-execinfo_h.patch b/package/gcc/4.7.4/301-missing-execinfo_h.patch
+deleted file mode 100644
+index 0e2092f..0000000
+--- a/package/gcc/4.7.4/301-missing-execinfo_h.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- gcc-4.0.0/boehm-gc/include/gc.h-orig	2005-04-28 22:28:57.000000000 -0500
+-+++ gcc-4.0.0/boehm-gc/include/gc.h	2005-04-28 22:30:38.000000000 -0500
+-@@ -500,7 +500,7 @@
+- #ifdef __linux__
+- # include <features.h>
+- # if (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1 || __GLIBC__ > 2) \
+--     && !defined(__ia64__)
+-+     && !defined(__ia64__) && !defined(__UCLIBC__)
+- #   ifndef GC_HAVE_BUILTIN_BACKTRACE
+- #     define GC_HAVE_BUILTIN_BACKTRACE
+- #   endif
+diff --git a/package/gcc/4.7.4/305-libmudflap-susv3-legacy.patch b/package/gcc/4.7.4/305-libmudflap-susv3-legacy.patch
+deleted file mode 100644
+index 374b1f8..0000000
+--- a/package/gcc/4.7.4/305-libmudflap-susv3-legacy.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-Index: gcc-4.2/libmudflap/mf-hooks2.c
+-===================================================================
+---- gcc-4.2/libmudflap/mf-hooks2.c	(revision 119834)
+-+++ gcc-4.2/libmudflap/mf-hooks2.c	(working copy)
+-@@ -427,7 +427,7 @@
+- {
+-   TRACE ("%s\n", __PRETTY_FUNCTION__);
+-   MF_VALIDATE_EXTENT(s, n, __MF_CHECK_WRITE, "bzero region");
+--  bzero (s, n);
+-+  memset (s, 0, n);
+- }
+- 
+- 
+-@@ -437,7 +437,7 @@
+-   TRACE ("%s\n", __PRETTY_FUNCTION__);
+-   MF_VALIDATE_EXTENT(src, n, __MF_CHECK_READ, "bcopy src");
+-   MF_VALIDATE_EXTENT(dest, n, __MF_CHECK_WRITE, "bcopy dest");
+--  bcopy (src, dest, n);
+-+  memmove (dest, src, n);
+- }
+- 
+- 
+-@@ -447,7 +447,7 @@
+-   TRACE ("%s\n", __PRETTY_FUNCTION__);
+-   MF_VALIDATE_EXTENT(s1, n, __MF_CHECK_READ, "bcmp 1st arg");
+-   MF_VALIDATE_EXTENT(s2, n, __MF_CHECK_READ, "bcmp 2nd arg");
+--  return bcmp (s1, s2, n);
+-+  return n == 0 ? 0 : memcmp (s1, s2, n);
+- }
+- 
+- 
+-@@ -456,7 +456,7 @@
+-   size_t n = strlen (s);
+-   TRACE ("%s\n", __PRETTY_FUNCTION__);
+-   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "index region");
+--  return index (s, c);
+-+  return strchr (s, c);
+- }
+- 
+- 
+-@@ -465,7 +465,7 @@
+-   size_t n = strlen (s);
+-   TRACE ("%s\n", __PRETTY_FUNCTION__);
+-   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "rindex region");
+--  return rindex (s, c);
+-+  return strrchr (s, c);
+- }
+- 
+- /* XXX:  stpcpy, memccpy */
+diff --git a/package/gcc/4.7.4/810-arm-softfloat-libgcc.patch b/package/gcc/4.7.4/810-arm-softfloat-libgcc.patch
+deleted file mode 100644
+index a3d7db0..0000000
+--- a/package/gcc/4.7.4/810-arm-softfloat-libgcc.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+---- a/gcc/config/arm/linux-elf.h
+-+++ b/gcc/config/arm/linux-elf.h
+-@@ -57,7 +57,7 @@
+-    %{shared:-lc} \
+-    %{!shared:%{profile:-lc_p}%{!profile:-lc}}"
+- 
+--#define LIBGCC_SPEC "%{mfloat-abi=soft*:-lfloat} -lgcc"
+-+#define LIBGCC_SPEC "-lgcc"
+- 
+- #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
+- 
+---- a/libgcc/config/arm/t-linux
+-+++ b/libgcc/config/arm/t-linux
+-@@ -1,6 +1,10 @@
+- LIB1ASMSRC = arm/lib1funcs.S
+- LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx _clzsi2 _clzdi2 \
+--	_arm_addsubdf3 _arm_addsubsf3
+-+	_arm_addsubdf3 _arm_addsubsf3 \
+-+	_arm_negdf2 _arm_muldivdf3 _arm_cmpdf2 _arm_unorddf2 \
+-+	_arm_fixdfsi _arm_fixunsdfsi _arm_truncdfsf2 \
+-+	_arm_negsf2 _arm_muldivsf3 _arm_cmpsf2 _arm_unordsf2 \
+-+	_arm_fixsfsi _arm_fixunssfsi
+- 
+- # Just for these, we omit the frame pointer since it makes such a big
+- # difference.
+diff --git a/package/gcc/4.7.4/830-arm_unbreak_armv4t.patch b/package/gcc/4.7.4/830-arm_unbreak_armv4t.patch
+deleted file mode 100644
+index 37f8f2a..0000000
+--- a/package/gcc/4.7.4/830-arm_unbreak_armv4t.patch
++++ /dev/null
+@@ -1,13 +0,0 @@
+-http://sourceware.org/ml/crossgcc/2008-05/msg00009.html
+-
+---- a/gcc/config/arm/linux-eabi.h
+-+++ b/gcc/config/arm/linux-eabi.h
+-@@ -45,7 +45,7 @@
+-    The ARM10TDMI core is the default for armv5t, so set
+-    SUBTARGET_CPU_DEFAULT to achieve this.  */
+- #undef  SUBTARGET_CPU_DEFAULT
+--#define SUBTARGET_CPU_DEFAULT TARGET_CPU_arm10tdmi
+-+#define SUBTARGET_CPU_DEFAULT TARGET_CPU_arm9tdmi
+- 
+- /* TARGET_BIG_ENDIAN_DEFAULT is set in
+-    config.gcc for big endian configurations.  */
+diff --git a/package/gcc/4.7.4/843-gcc-4.7.3-Fix-PR-target-58595.patch b/package/gcc/4.7.4/843-gcc-4.7.3-Fix-PR-target-58595.patch
+deleted file mode 100644
+index 656952c..0000000
+--- a/package/gcc/4.7.4/843-gcc-4.7.3-Fix-PR-target-58595.patch
++++ /dev/null
+@@ -1,102 +0,0 @@
+-commit 4fa1f8926227d4e79975b674dc4292b9bec4b137
+-Author: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
+-Date:   Thu Mar 6 12:07:07 2014 +0000
+-
+-    	PR target/58595
+-    	* config/arm/arm.c (arm_tls_symbol_p): Remove.
+-    	(arm_legitimize_address): Call legitimize_tls_address for any
+-    	arm_tls_referenced_p expression, handle constant addend.  Call it
+-    	before testing for !TARGET_ARM.
+-    	(thumb_legitimize_address): Don't handle arm_tls_symbol_p here.
+-    
+-    	* gcc.dg/tls/pr58595.c: New test.
+-    
+-    
+-    git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 208380 138bc75d-0d04-0410-961f-82ee72b054a4
+-
+-diff --git a/gcc/config/arm/arm.c b/gcc/config/arm/arm.c
+-index ce24bfe..af5666b 100644
+---- a/gcc/config/arm/arm.c
+-+++ b/gcc/config/arm/arm.c
+-@@ -235,7 +235,6 @@ static tree arm_gimplify_va_arg_expr (tree, tree, gimple_seq *, gimple_seq *);
+- static void arm_option_override (void);
+- static unsigned HOST_WIDE_INT arm_shift_truncation_mask (enum machine_mode);
+- static bool arm_cannot_copy_insn_p (rtx);
+--static bool arm_tls_symbol_p (rtx x);
+- static int arm_issue_rate (void);
+- static void arm_output_dwarf_dtprel (FILE *, int, rtx) ATTRIBUTE_UNUSED;
+- static bool arm_output_addr_const_extra (FILE *, rtx);
+-@@ -7336,6 +7335,32 @@ legitimize_tls_address (rtx x, rtx reg)
+- rtx
+- arm_legitimize_address (rtx x, rtx orig_x, enum machine_mode mode)
+- {
+-+  if (arm_tls_referenced_p (x))
+-+    {
+-+      rtx addend = NULL;
+-+
+-+      if (GET_CODE (x) == CONST && GET_CODE (XEXP (x, 0)) == PLUS)
+-+	{
+-+	  addend = XEXP (XEXP (x, 0), 1);
+-+	  x = XEXP (XEXP (x, 0), 0);
+-+	}
+-+
+-+      if (GET_CODE (x) != SYMBOL_REF)
+-+	return x;
+-+
+-+      gcc_assert (SYMBOL_REF_TLS_MODEL (x) != 0);
+-+
+-+      x = legitimize_tls_address (x, NULL_RTX);
+-+
+-+      if (addend)
+-+	{
+-+	  x = gen_rtx_PLUS (SImode, x, addend);
+-+	  orig_x = x;
+-+	}
+-+      else
+-+	return x;
+-+    }
+-+
+-   if (!TARGET_ARM)
+-     {
+-       /* TODO: legitimize_address for Thumb2.  */
+-@@ -7344,9 +7369,6 @@ arm_legitimize_address (rtx x, rtx orig_x, enum machine_mode mode)
+-       return thumb_legitimize_address (x, orig_x, mode);
+-     }
+- 
+--  if (arm_tls_symbol_p (x))
+--    return legitimize_tls_address (x, NULL_RTX);
+--
+-   if (GET_CODE (x) == PLUS)
+-     {
+-       rtx xop0 = XEXP (x, 0);
+-@@ -7459,9 +7481,6 @@ arm_legitimize_address (rtx x, rtx orig_x, enum machine_mode mode)
+- rtx
+- thumb_legitimize_address (rtx x, rtx orig_x, enum machine_mode mode)
+- {
+--  if (arm_tls_symbol_p (x))
+--    return legitimize_tls_address (x, NULL_RTX);
+--
+-   if (GET_CODE (x) == PLUS
+-       && CONST_INT_P (XEXP (x, 1))
+-       && (INTVAL (XEXP (x, 1)) >= 32 * GET_MODE_SIZE (mode)
+-@@ -7756,20 +7775,6 @@ thumb_legitimize_reload_address (rtx *x_p,
+- 
+- /* Test for various thread-local symbols.  */
+- 
+--/* Return TRUE if X is a thread-local symbol.  */
+--
+--static bool
+--arm_tls_symbol_p (rtx x)
+--{
+--  if (! TARGET_HAVE_TLS)
+--    return false;
+--
+--  if (GET_CODE (x) != SYMBOL_REF)
+--    return false;
+--
+--  return SYMBOL_REF_TLS_MODEL (x) != 0;
+--}
+--
+- /* Helper for arm_tls_referenced_p.  */
+- 
+- static int
+diff --git a/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch b/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch
+deleted file mode 100644
+index b076e54..0000000
+--- a/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 4fb4acf88912dd978bb63ecab79641a5795ce84f Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Mon, 27 Jul 2015 15:05:14 +0200
+-Subject: [PATCH] gcc: fix build with gcc5
+-
+-gcc < 4.8 doesn't build with gcc5.
+-
+-Patch is from DragonFlyBSD github [1]
+-
+-[1] https://github.com/DragonFlyBSD/DPorts/issues/136
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- gcc/cp/cfns.h | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/gcc/cp/cfns.h b/gcc/cp/cfns.h
+-index 62cdfab..4f63cc4 100644
+---- a/gcc/cp/cfns.h
+-+++ b/gcc/cp/cfns.h
+-@@ -53,6 +53,9 @@ __inline
+- static unsigned int hash (const char *, unsigned int);
+- #ifdef __GNUC__
+- __inline
+-+#ifdef __GNUC_STDC_INLINE__
+-+__attribute__ ((__gnu_inline__))
+-+#endif
+- #endif
+- const char * libc_name_p (const char *, unsigned int);
+- /* maximum key range = 391, duplicates = 0 */
+-@@ -96,7 +99,7 @@ hash (register const char *str, register unsigned int len)
+-       400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
+-       400, 400, 400, 400, 400, 400, 400
+-     };
+--  register int hval = len;
+-+  register int hval = (int)len;
+- 
+-   switch (hval)
+-     {
+--- 
+-2.4.3
+-
+diff --git a/package/gcc/4.7.4/850-libstdcxx-uclibc-c99.patch b/package/gcc/4.7.4/850-libstdcxx-uclibc-c99.patch
+deleted file mode 100644
+index 79cd7a9..0000000
+--- a/package/gcc/4.7.4/850-libstdcxx-uclibc-c99.patch
++++ /dev/null
+@@ -1,273 +0,0 @@
+-Allow C99-depending features of libstdc++ with uClibc
+-
+-The libstdc++ code is fairly restrictive on how it checks for C99
+-compatibility: it requires *complete* C99 support to enable certain
+-features. For example, uClibc provides a good number of C99 features,
+-but not C99 complex number support. For this reason, libstdc++
+-completely disables many the standard C++ methods that can in fact
+-work because uClibc provides the necessary functions.
+-
+-This patch is similar and highly inspired from
+-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58393, but implemented in
+-a way that doesn't involve changing the configure.ac script, as
+-autoreconfiguring gcc is complicated. It simply relies on the fact
+-that uClibc defines the __UCLIBC__ definition.
 -
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -
--Index: b/md5.c
+-Index: b/libstdc++-v3/config/locale/generic/c_locale.h
 -===================================================================
----- a/md5.c
--+++ b/md5.c
--@@ -97,21 +97,21 @@
+---- a/libstdc++-v3/config/locale/generic/c_locale.h
+-+++ b/libstdc++-v3/config/locale/generic/c_locale.h
+-@@ -71,7 +71,7 @@
+-     __builtin_va_list __args;
+-     __builtin_va_start(__args, __fmt);
 - 
-- /* Initialize structure containing state of computation.
--    (RFC 1321, 3.3: Step 3)  */
---static void md5_init_ctx __P ((struct md5_ctx *ctx));
--+static void md5_init_ctx (struct md5_ctx *ctx);
+--#ifdef _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+-     const int __ret = __builtin_vsnprintf(__out, __size, __fmt, __args);
+- #else
+-     const int __ret = __builtin_vsprintf(__out, __fmt, __args);
+-Index: b/libstdc++-v3/config/locale/gnu/c_locale.h
+-===================================================================
+---- a/libstdc++-v3/config/locale/gnu/c_locale.h
+-+++ b/libstdc++-v3/config/locale/gnu/c_locale.h
+-@@ -89,7 +89,7 @@
+-     __builtin_va_list __args;
+-     __builtin_va_start(__args, __fmt);
 - 
-- /* Starting with the result of former calls of this function (or the
--    initialization function update the context for the next LEN bytes
--    starting at BUFFER.
--    It is necessary that LEN is a multiple of 64!!! */
---static void md5_process_block __P ((const void *buffer, size_t len,
---				    struct md5_ctx *ctx));
--+static void md5_process_block (const void *buffer, size_t len,
--+				    struct md5_ctx *ctx);
+--#ifdef _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+-     const int __ret = __builtin_vsnprintf(__out, __size, __fmt, __args);
+- #else
+-     const int __ret = __builtin_vsprintf(__out, __fmt, __args);
+-Index: b/libstdc++-v3/include/bits/basic_string.h
+-===================================================================
+---- a/libstdc++-v3/include/bits/basic_string.h
+-+++ b/libstdc++-v3/include/bits/basic_string.h
+-@@ -2806,7 +2806,7 @@
+- _GLIBCXX_END_NAMESPACE_VERSION
+- } // namespace
 - 
-- /* Starting with the result of former calls of this function (or the
--    initialization function update the context for the next LEN bytes
--    starting at BUFFER.
--    It is NOT required that LEN is a multiple of 64.  */
---static void md5_process_bytes __P ((const void *buffer, size_t len,
---				    struct md5_ctx *ctx));
--+static void md5_process_bytes (const void *buffer, size_t len,
--+				    struct md5_ctx *ctx);
+--#if (defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(_GLIBCXX_USE_C99) \
+-+#if (defined(__GXX_EXPERIMENTAL_CXX0X__) && (defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)) \
+-      && !defined(_GLIBCXX_HAVE_BROKEN_VSWPRINTF))
 - 
-- /* Process the remaining bytes in the buffer and put result from CTX
--    in first 16 bytes following RESBUF.  The result is always in little
--@@ -120,7 +120,7 @@
+- #include <ext/string_conversions.h>
+-Index: b/libstdc++-v3/include/bits/locale_facets.tcc
+-===================================================================
+---- a/libstdc++-v3/include/bits/locale_facets.tcc
+-+++ b/libstdc++-v3/include/bits/locale_facets.tcc
+-@@ -989,7 +989,7 @@
+- 	char __fbuf[16];
+- 	__num_base::_S_format_float(__io, __fbuf, __mod);
 - 
--    IMPORTANT: On some systems it is required that RESBUF is correctly
--    aligned for a 32 bits value.  */
---static void *md5_finish_ctx __P ((struct md5_ctx *ctx, void *resbuf));
--+static void *md5_finish_ctx (struct md5_ctx *ctx, void *resbuf);
+--#ifdef _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+- 	// First try a buffer perhaps big enough (most probably sufficient
+- 	// for non-ios_base::fixed outputs)
+- 	int __cs_size = __max_digits * 3;
+-Index: b/libstdc++-v3/include/bits/locale_facets_nonio.tcc
+-===================================================================
+---- a/libstdc++-v3/include/bits/locale_facets_nonio.tcc
+-+++ b/libstdc++-v3/include/bits/locale_facets_nonio.tcc
+-@@ -572,7 +572,7 @@
+-     {
+-       const locale __loc = __io.getloc();
+-       const ctype<_CharT>& __ctype = use_facet<ctype<_CharT> >(__loc);
+--#ifdef _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+-       // First try a buffer perhaps big enough.
+-       int __cs_size = 64;
+-       char* __cs = static_cast<char*>(__builtin_alloca(__cs_size));
+-Index: b/libstdc++-v3/include/c_compatibility/math.h
+-===================================================================
+---- a/libstdc++-v3/include/c_compatibility/math.h
+-+++ b/libstdc++-v3/include/c_compatibility/math.h
+-@@ -57,7 +57,7 @@
+- using std::floor;
+- using std::fmod;
 - 
-- //----------------------------------------------------------------------------
-- //--------end of md5.h
-diff --git a/package/ipkg/0002-fix-nommu.patch b/package/ipkg/0002-fix-nommu.patch
-deleted file mode 100644
-index 64cec1e..0000000
---- a/package/ipkg/0002-fix-nommu.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--libbb: fix no MMU build
--
--uClibc-ng defines __ARCH_HAS_MMU__ for ARM or m68k because these
--architectures may potentially have MMU. The code should test for
--__ARCH_USE_MMU__, which indicates if the MMU is really in use. But
--since the configure script detects the presence of fork(), using
--HAVE_FORK directly is a better solution.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: no active upstream
--
--diff -Nuar ipkg-0.99.163-orig/libbb/libbb.h ipkg-0.99.163/libbb/libbb.h
----- ipkg-0.99.163-orig/libbb/libbb.h	2006-02-06 10:13:02.000000000 +0200
--+++ ipkg-0.99.163/libbb/libbb.h	2016-07-26 13:50:09.296988855 +0300
--@@ -341,7 +341,7 @@
-- #define CONSOLE_DEV "/dev/console"
+--#if _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+- using std::fpclassify;
+- using std::isfinite;
+- using std::isinf;
+-Index: b/libstdc++-v3/include/c_compatibility/wchar.h
+-===================================================================
+---- a/libstdc++-v3/include/c_compatibility/wchar.h
+-+++ b/libstdc++-v3/include/c_compatibility/wchar.h
+-@@ -103,7 +103,7 @@
+- using std::wmemset;
+- using std::wcsftime;
 - 
-- /* Cope with mmu-less systems somewhat gracefully */
---#if defined(__UCLIBC__) && !defined(__ARCH_HAS_MMU__)
--+#if !defined(HAVE_FORK)
-- #define fork	vfork
+--#if _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+- using std::wcstold;
+- using std::wcstoll;
+- using std::wcstoull;
+-Index: b/libstdc++-v3/include/c_global/cstdlib
+-===================================================================
+---- a/libstdc++-v3/include/c_global/cstdlib
+-+++ b/libstdc++-v3/include/c_global/cstdlib
+-@@ -146,7 +146,7 @@
+- _GLIBCXX_END_NAMESPACE_VERSION
+- } // namespace
+- 
+--#if _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+- 
+- #undef _Exit
+- #undef llabs
+-Index: b/libstdc++-v3/include/c_global/cwchar
+-===================================================================
+---- a/libstdc++-v3/include/c_global/cwchar
+-+++ b/libstdc++-v3/include/c_global/cwchar
+-@@ -234,7 +234,7 @@
+- _GLIBCXX_END_NAMESPACE_VERSION
+- } // namespace
+- 
+--#if _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+- 
+- #undef wcstold
+- #undef wcstoll
+-@@ -291,7 +291,7 @@
+-   using std::vwscanf;
 - #endif
 - 
-diff --git a/package/ipkg/Config.in b/package/ipkg/Config.in
+--#if _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+-   using std::wcstold;
+-   using std::wcstoll;
+-   using std::wcstoull;
+-Index: b/libstdc++-v3/include/c_std/cstdio
+-===================================================================
+---- a/libstdc++-v3/include/c_std/cstdio
+-+++ b/libstdc++-v3/include/c_std/cstdio
+-@@ -140,7 +140,7 @@
+-   using ::vsprintf;
+- } // namespace std
+- 
+--#if _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+- 
+- #undef snprintf
+- #undef vfscanf
+-Index: b/libstdc++-v3/include/c_std/cstdlib
+-===================================================================
+---- a/libstdc++-v3/include/c_std/cstdlib
+-+++ b/libstdc++-v3/include/c_std/cstdlib
+-@@ -143,7 +143,7 @@
+- _GLIBCXX_END_NAMESPACE_VERSION
+- } // namespace
+- 
+--#if _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+- 
+- #undef _Exit
+- #undef llabs
+-Index: b/libstdc++-v3/include/c_std/cwchar
+-===================================================================
+---- a/libstdc++-v3/include/c_std/cwchar
+-+++ b/libstdc++-v3/include/c_std/cwchar
+-@@ -230,7 +230,7 @@
+- _GLIBCXX_END_NAMESPACE_VERSION
+- } // namespace
+- 
+--#if _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+- 
+- #undef wcstold
+- #undef wcstoll
+-Index: b/libstdc++-v3/include/ext/vstring.h
+-===================================================================
+---- a/libstdc++-v3/include/ext/vstring.h
+-+++ b/libstdc++-v3/include/ext/vstring.h
+-@@ -2537,7 +2537,7 @@
+- _GLIBCXX_END_NAMESPACE_VERSION
+- } // namespace
+- 
+--#if (defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(_GLIBCXX_USE_C99))
+-+#if (defined(__GXX_EXPERIMENTAL_CXX0X__) && (defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)))
+- 
+- #include <ext/string_conversions.h>
+- 
+-Index: b/libstdc++-v3/include/tr1/cstdio
+-===================================================================
+---- a/libstdc++-v3/include/tr1/cstdio
+-+++ b/libstdc++-v3/include/tr1/cstdio
+-@@ -33,7 +33,7 @@
+- 
+- #include <cstdio>
+- 
+--#if _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+- 
+- namespace std _GLIBCXX_VISIBILITY(default)
+- {
+-Index: b/libstdc++-v3/include/tr1/cstdlib
+-===================================================================
+---- a/libstdc++-v3/include/tr1/cstdlib
+-+++ b/libstdc++-v3/include/tr1/cstdlib
+-@@ -35,7 +35,7 @@
+- 
+- #if _GLIBCXX_HOSTED
+- 
+--#if _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+- 
+- namespace std _GLIBCXX_VISIBILITY(default)
+- {
+-Index: b/libstdc++-v3/include/tr1/cwchar
+-===================================================================
+---- a/libstdc++-v3/include/tr1/cwchar
+-+++ b/libstdc++-v3/include/tr1/cwchar
+-@@ -52,7 +52,7 @@
+-   using std::vwscanf;
+- #endif
+- 
+--#if _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+-   using std::wcstold;
+-   using std::wcstoll;
+-   using std::wcstoull;
+-Index: b/libstdc++-v3/include/tr1/stdlib.h
+-===================================================================
+---- a/libstdc++-v3/include/tr1/stdlib.h
+-+++ b/libstdc++-v3/include/tr1/stdlib.h
+-@@ -33,7 +33,7 @@
+- 
+- #if _GLIBCXX_HOSTED
+- 
+--#if _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+- 
+- using std::tr1::atoll;
+- using std::tr1::strtoll;
+-Index: b/libstdc++-v3/src/c++11/debug.cc
+-===================================================================
+---- a/libstdc++-v3/src/c++11/debug.cc
+-+++ b/libstdc++-v3/src/c++11/debug.cc
+-@@ -783,7 +783,7 @@
+- 				     int __n __attribute__ ((__unused__)), 
+- 				     const char* __fmt, _Tp __s) const throw ()
+-     {
+--#ifdef _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+-       std::snprintf(__buf, __n, __fmt, __s);
+- #else
+-       std::sprintf(__buf, __fmt, __s);
+-Index: b/libstdc++-v3/include/c_global/cstdio
+-===================================================================
+---- a/libstdc++-v3/include/c_global/cstdio
+-+++ b/libstdc++-v3/include/c_global/cstdio
+-@@ -140,7 +140,7 @@
+-   using ::vsprintf;
+- } // namespace
+- 
+--#if _GLIBCXX_USE_C99
+-+#if defined(_GLIBCXX_USE_C99) || defined(__UCLIBC__)
+- 
+- #undef snprintf
+- #undef vfscanf
+diff --git a/package/gcc/4.7.4/851-PR-other-56780.patch b/package/gcc/4.7.4/851-PR-other-56780.patch
 deleted file mode 100644
-index a987bd6..0000000
---- a/package/ipkg/Config.in
+index a4ae830..0000000
+--- a/package/gcc/4.7.4/851-PR-other-56780.patch
 +++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_IPKG
--	bool "ipkg"
--	depends on BR2_DEPRECATED_SINCE_2016_08
--	help
--	  The Itsy Package Installer from handhelds.org
+@@ -1,244 +0,0 @@
+-From 4e318d50b876def5f97e2031926354055e442ca3 Mon Sep 17 00:00:00 2001
+-From: ian <ian@138bc75d-0d04-0410-961f-82ee72b054a4>
+-Date: Sat, 1 Jun 2013 00:20:49 +0000
+-Subject: [PATCH] PR other/56780
 -
--	  http://www.handhelds.org
-diff --git a/package/ipkg/ipkg-build b/package/ipkg/ipkg-build
-deleted file mode 100755
-index f3f5d0c..0000000
---- a/package/ipkg/ipkg-build
-+++ /dev/null
-@@ -1,127 +0,0 @@
--#!/bin/sh
+-* libiberty/configure.ac: Move test for --enable-install-libiberty
+-outside of the 'with_target_subdir' test so that it actually gets
+-run.  Add output messages to show the test result.
+-* libiberty/configure: Regenerate.
+-* libiberty/Makefile.in (install_to_libdir): Place the
+-installation of the libiberty library in the same guard as that
+-used for the headers to prevent it being installed unless
+-requested via --enable-install-libiberty.
 -
--# ipkg-build -- construct a .ipk from a directory
--# Carl Worth <cworth@east.isi.edu>
--# based on a script by Steve Redler IV, steve at sr-tech.com 5-21-2001
--set -e
+-git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 199570 138bc75d-0d04-0410-961f-82ee72b054a4
 -
--ipkg_extract_value() {
--	sed -e "s/^[^:]*:[[:space:]]*//"
--}
+-libiberty: fix --enable-install-libiberty flag [PR 56780]
 -
--required_field() {
--	field=$1
+-Commit 199570 fixed the --disable-install-libiberty behavior, but it also
+-added a bug where the enable path never works because the initial clear
+-of target_header_dir wasn't deleted.  So we end up initializing properly
+-at the top only to reset it at the end all the time.
 -
--	value=`grep "^$field:" < $CONTROL/control | ipkg_extract_value`
--	if [ -z "$value" ]; then
--		echo "ipkg-build: Error: $CONTROL/control is missing field $field" ;
--		PKG_ERROR=1
--	fi
--	echo $value
--}
+-git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 206367 138bc75d-0d04-0410-961f-82ee72b054a4
 -
--pkg_appears_sane() {
--	local pkg_dir=$1
+-[Romain
+-  squash the two upstream commits
+-  Remove the ChangeLog]
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- libiberty/Makefile.in  | 24 ++++++++++-----------
+- libiberty/configure    | 57 +++++++++++++++++++++++++++-----------------------
+- libiberty/configure.ac | 47 ++++++++++++++++++++++-------------------
+- 3 files changed, 68 insertions(+), 60 deletions(-)
 -
--	local owd=`pwd`
--	cd $pkg_dir
+-diff --git a/libiberty/Makefile.in b/libiberty/Makefile.in
+-index 5280bc1..a69c6b6 100644
+---- a/libiberty/Makefile.in
+-+++ b/libiberty/Makefile.in
+-@@ -353,19 +353,19 @@ install-strip: install
+- # since it will be passed the multilib flags.
+- MULTIOSDIR = `$(CC) $(CFLAGS) -print-multi-os-directory`
+- install_to_libdir: all
+--	${mkinstalldirs} $(DESTDIR)$(libdir)/$(MULTIOSDIR)
+--	$(INSTALL_DATA) $(TARGETLIB) $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)n
+--	( cd $(DESTDIR)$(libdir)/$(MULTIOSDIR) ; chmod 644 $(TARGETLIB)n ;$(RANLIB) $(TARGETLIB)n )
+--	mv -f $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)n $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)
+- 	if test -n "${target_header_dir}"; then \
+--	  case "${target_header_dir}" in \
+--	    /*)    thd=${target_header_dir};; \
+--	    *)     thd=${includedir}/${target_header_dir};; \
+--	  esac; \
+--	  ${mkinstalldirs} $(DESTDIR)$${thd}; \
+--	  for h in ${INSTALLED_HEADERS}; do \
+--	    ${INSTALL_DATA} $$h $(DESTDIR)$${thd}; \
+--	  done; \
+-+		${mkinstalldirs} $(DESTDIR)$(libdir)/$(MULTIOSDIR); \
+-+		$(INSTALL_DATA) $(TARGETLIB) $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)n; \
+-+		( cd $(DESTDIR)$(libdir)/$(MULTIOSDIR) ; chmod 644 $(TARGETLIB)n ;$(RANLIB) $(TARGETLIB)n ); \
+-+		mv -f $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)n $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB); \
+-+		case "${target_header_dir}" in \
+-+		  /*)    thd=${target_header_dir};; \
+-+		  *)     thd=${includedir}/${target_header_dir};; \
+-+		esac; \
+-+		${mkinstalldirs} $(DESTDIR)$${thd}; \
+-+		for h in ${INSTALLED_HEADERS}; do \
+-+		  ${INSTALL_DATA} $$h $(DESTDIR)$${thd}; \
+-+		done; \
+- 	fi
+- 	@$(MULTIDO) $(FLAGS_TO_PASS) multi-do DO=install
+- 
+-diff --git a/libiberty/configure b/libiberty/configure
+-index 6e98352..44d1f78 100755
+---- a/libiberty/configure
+-+++ b/libiberty/configure
+-@@ -675,8 +675,8 @@ with_cross_host
+- with_newlib
+- enable_maintainer_mode
+- enable_multilib
+--enable_largefile
+- enable_install_libiberty
+-+enable_largefile
+- '
+-       ac_precious_vars='build_alias
+- host_alias
+-@@ -1303,8 +1303,8 @@ Optional Features:
+-                           enable make rules and dependencies not useful
+-                           (and sometimes confusing) to the casual installer
+-   --enable-multilib       build many library versions (default)
+-+  --enable-install-libiberty       Install headers and library for end users
+-   --disable-largefile     omit support for large files
+--  --enable-install-libiberty       Install headers for end users
+- 
+- Optional Packages:
+-   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+-@@ -2784,6 +2784,35 @@ if test $cross_compiling = no && test $multilib = yes \
+-    cross_compiling=maybe
+- fi
+- 
+-+# We may wish to install the target headers somewhere.
+-+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to install libiberty headers and static library" >&5
+-+$as_echo_n "checking whether to install libiberty headers and static library... " >&6; }
+-+
+-+# Check whether --enable-install-libiberty was given.
+-+if test "${enable_install_libiberty+set}" = set; then :
+-+  enableval=$enable_install_libiberty; enable_install_libiberty=$enableval
+-+else
+-+  enable_install_libiberty=no
+-+fi
+-+
+-+# Option parsed, now set things appropriately.
+-+case x"$enable_install_libiberty" in
+-+  xyes|x)
+-+    target_header_dir=libiberty
+-+    ;;
+-+  xno)
+-+    target_header_dir=
+-+    ;;
+-+  *)
+-+    # This could be sanity-checked in various ways...
+-+    target_header_dir="${enable_install_libiberty}"
+-+    ;;
+-+esac
+-+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_install_libiberty" >&5
+-+$as_echo "$enable_install_libiberty" >&6; }
+-+{ $as_echo "$as_me:${as_lineno-$LINENO}: target_header_dir = $target_header_dir" >&5
+-+$as_echo "$as_me: target_header_dir = $target_header_dir" >&6;}
+-+
+- 
+- ac_ext=c
+- ac_cpp='$CPP $CPPFLAGS'
+-@@ -5475,7 +5504,6 @@ fi
+- 
+- setobjs=
+- CHECK=
+--target_header_dir=
+- if test -n "${with_target_subdir}"; then
+- 
+-   # We are being configured as a target library.  AC_REPLACE_FUNCS
+-@@ -5752,29 +5780,6 @@ _ACEOF
+- 
+-   esac
+- 
+--  # We may wish to install the target headers somewhere.
+--  # Check whether --enable-install-libiberty was given.
+--if test "${enable_install_libiberty+set}" = set; then :
+--  enableval=$enable_install_libiberty; enable_install_libiberty=$enableval
+--else
+--  enable_install_libiberty=no
+--fi
+--
+--  # Option parsed, now set things appropriately.
+--  case x"$enable_install_libiberty" in
+--    xyes|x)
+--      target_header_dir=libiberty
+--      ;;
+--    xno)
+--      target_header_dir=
+--      ;;
+--    *)
+--      # This could be sanity-checked in various ways...
+--      target_header_dir="${enable_install_libiberty}"
+--      ;;
+--  esac
+--
+--
+- else
+- 
+-    # Not a target library, so we set things up to run the test suite.
+-diff --git a/libiberty/configure.ac b/libiberty/configure.ac
+-index 754b66a..04260ec 100644
+---- a/libiberty/configure.ac
+-+++ b/libiberty/configure.ac
+-@@ -128,6 +128,31 @@ if test $cross_compiling = no && test $multilib = yes \
+-    cross_compiling=maybe
+- fi
+- 
+-+# We may wish to install the target headers somewhere.
+-+AC_MSG_CHECKING([whether to install libiberty headers and static library])
+-+dnl install-libiberty is disabled by default
+-+
+-+AC_ARG_ENABLE(install-libiberty,
+-+[  --enable-install-libiberty       Install headers and library for end users],
+-+enable_install_libiberty=$enableval,
+-+enable_install_libiberty=no)dnl
+-+
+-+# Option parsed, now set things appropriately.
+-+case x"$enable_install_libiberty" in
+-+  xyes|x)
+-+    target_header_dir=libiberty
+-+    ;;
+-+  xno)   
+-+    target_header_dir=
+-+    ;;
+-+  *) 
+-+    # This could be sanity-checked in various ways...
+-+    target_header_dir="${enable_install_libiberty}"
+-+    ;;
+-+esac
+-+AC_MSG_RESULT($enable_install_libiberty)
+-+AC_MSG_NOTICE([target_header_dir = $target_header_dir])
+-+
+- GCC_NO_EXECUTABLES
+- AC_PROG_CC
+- AC_SYS_LARGEFILE
+-@@ -379,7 +404,6 @@ fi
+- 
+- setobjs=
+- CHECK=
+--target_header_dir=
+- if test -n "${with_target_subdir}"; then
+- 
+-   # We are being configured as a target library.  AC_REPLACE_FUNCS
+-@@ -490,27 +514,6 @@ if test -n "${with_target_subdir}"; then
+- 
+-   esac
+- 
+--  # We may wish to install the target headers somewhere.
+--  AC_ARG_ENABLE(install-libiberty,
+--  [  --enable-install-libiberty       Install headers for end users],
+--  enable_install_libiberty=$enableval,
+--  enable_install_libiberty=no)dnl
+--  
+--  # Option parsed, now set things appropriately.
+--  case x"$enable_install_libiberty" in
+--    xyes|x)
+--      target_header_dir=libiberty
+--      ;;
+--    xno)   
+--      target_header_dir=
+--      ;;
+--    *) 
+--      # This could be sanity-checked in various ways...
+--      target_header_dir="${enable_install_libiberty}"
+--      ;;
+--  esac
+--
+--
+- else
+- 
+-    # Not a target library, so we set things up to run the test suite.
+--- 
+-2.4.3
 -
--	PKG_ERROR=0
--	if [ ! -f "$CONTROL/control" ]; then
--		echo "ipkg-build: Error: Control file $pkg_dir/$CONTROL/control not found."
--		cd $owd
--		return 1
--	fi
--
--	pkg=`required_field Package`
--	version=`required_field Version`
--	arch=`required_field Architecture`
--	required_field Maintainer >/dev/null
--	required_field Description >/dev/null
--
--	if echo $pkg | grep '[^a-z0-9.+-]'; then
--		echo "ipkg-build: Error: Package name $name contains illegal characters, (other than [a-z0-9.+-])"
--		PKG_ERROR=1;
--	fi
--
--	local bad_fields=`sed -ne 's/^\([^[:space:]][^:[:space:]]\+[[:space:]]\+\)[^:].*/\1/p' < $CONTROL/control | sed -e 's/\\n//'`
--	if [ -n "$bad_fields" ]; then
--		bad_fields=`echo $bad_fields`
--		echo "ipkg-build: Error: The following fields in $CONTROL/control are missing a ':'"
--		echo "	$bad_fields"
--		echo "ipkg-build: This may be due to a missing initial space for a multi-line field value"
--		PKG_ERROR=1
--	fi
--
--	for script in $CONTROL/preinst $CONTROL/postinst $CONTROL/prerm $CONTROL/postrm; do
--		if [ -f $script -a ! -x $script ]; then
--			echo "ipkg-build: Error: package script $script is not executable"
--			PKG_ERROR=1
--		fi
--	done
--
--	if [ -f $CONTROL/conffiles ]; then
--		for cf in `cat $CONTROL/conffiles`; do
--			if [ ! -f ./$cf ]; then
--				echo "ipkg-build: Error: $CONTROL/conffiles mentions conffile $cf which does not exist"
--				PKG_ERROR=1
--			fi
--		done
--	fi
--
--	cd $owd
--	return $PKG_ERROR
--}
--
--###
--# ipkg-build "main"
--###
--
--case $# in
--1)
--	dest_dir=.
--	;;
--2)
--	dest_dir=$2
--	;;
--*)
--	echo "Usage: ipkg-build <pkg_directory> [<destination_directory>]" ;
--	exit 1 
--	;;
--esac
--
--pkg_dir=$1
--
--if [ ! -d $pkg_dir ]; then
--	echo "ipkg-build: Error: Directory $pkg_dir does not exist"
--	exit 1
--fi
--
--# CONTROL is second so that it takes precedence
--CONTROL=
--[ -d $pkg_dir/DEBIAN ] && CONTROL=DEBIAN
--[ -d $pkg_dir/CONTROL ] && CONTROL=CONTROL
--if [ -z "$CONTROL" ]; then
--	echo "ipkg-build: Error: Directory $pkg_dir has no CONTROL subdirectory."
--	exit 1
--fi
--
--if ! pkg_appears_sane $pkg_dir; then
--	echo "Please fix the above errors and try again."
--	exit 1
--fi
--
--tmp_dir=$dest_dir/IPKG_BUILD.$$
--mkdir $tmp_dir
--
--tar -C $pkg_dir -czf $tmp_dir/data.tar.gz . --exclude=$CONTROL
--tar -C $pkg_dir/$CONTROL -czf $tmp_dir/control.tar.gz .
--
--echo "2.0" > $tmp_dir/debian-binary
--
--pkg_file=$dest_dir/${pkg}_${version}_${arch}.ipk
--tar -C $tmp_dir -czf $pkg_file debian-binary data.tar.gz control.tar.gz
--rm $tmp_dir/debian-binary $tmp_dir/data.tar.gz $tmp_dir/control.tar.gz
--rmdir $tmp_dir
--
--echo "Packaged contents of $pkg_dir into $pkg_file"
-diff --git a/package/ipkg/ipkg.hash b/package/ipkg/ipkg.hash
+diff --git a/package/gcc/4.7.4/900-musl-support.patch b/package/gcc/4.7.4/900-musl-support.patch
 deleted file mode 100644
-index 34a2d62..0000000
---- a/package/ipkg/ipkg.hash
+index bf8fbc0..0000000
+--- a/package/gcc/4.7.4/900-musl-support.patch
 +++ /dev/null
-@@ -1,2 +0,0 @@
--# locally computed
--sha256  405743e1ba320ed6095d42a898f1486e3af1d745cae2bd45dfe1d8403a4d8995  ipkg-0.99.163.tar.gz
-diff --git a/package/ipkg/ipkg.mk b/package/ipkg/ipkg.mk
-deleted file mode 100644
-index 10ef207..0000000
---- a/package/ipkg/ipkg.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# ipkg
--#
--################################################################################
+@@ -1,587 +0,0 @@
+-Add musl support to gcc
 -
--IPKG_VERSION = 0.99.163
--IPKG_SITE = http://www.handhelds.org/download/packages/ipkg
--IPKG_INSTALL_STAGING = YES
--IPKG_LICENSE = GPLv2+
--IPKG_LICENSE_FILES = COPYING
+-This patch comes from the musl-cross project at
+-https://bitbucket.org/GregorR/musl-cross/src. Compared to the upstream version:
 -
--$(eval $(autotools-package))
+- * the config.sub modifications have been removed, because Buildroot
+-   already overwrites all config.sub with a more recent config.sub
+-   that has musl support.
+-
+- * change to ensure that a dummy dynamic linker path
+-   MUSL_DYNAMIC_LINKER<foo> is defined for all architectures,
+-   otherwise building gcc for architectures not supported by musl was
+-   causing build failure. Bug reported upstream at
+-   https://bitbucket.org/GregorR/musl-gcc-patches/issue/4/musl-gcc-patches-break-the-build-on.
+-
+- * change the USE_PT_GNU_EH_FRAME logic to keep the existing gcc logic
+-   and only add the musl one as an addition, not as a replacement. Not
+-   doing this breaks C++ exception handling with glibc, because
+-   USE_PT_GNU_EH_FRAME doesn't get defined due to the configure script
+-   not testing dl_iterate_phdr() on any system except Solaris.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+-
+-# HG changeset patch
+-# Parent f50bb54f331f73405131a30b4f353cfda1c70304
+-Use the generic implementation of libstdc++ primitives when we're on musl, not the glibc one.
+-
+-Index: b/libstdc++-v3/configure.host
+-===================================================================
+---- a/libstdc++-v3/configure.host
+-+++ b/libstdc++-v3/configure.host
+-@@ -243,6 +243,13 @@
+-     os_include_dir="os/bsd/freebsd"
+-     ;;
+-   gnu* | linux* | kfreebsd*-gnu | knetbsd*-gnu)
+-+    # check for musl by target
+-+    case "${host_os}" in
+-+      *-musl*)
+-+        os_include_dir="os/generic"
+-+        ;;
+-+      *)
+-+
+-     if [ "$uclibc" = "yes" ]; then
+-       os_include_dir="os/uclibc"
+-     elif [ "$bionic" = "yes" ]; then
+-@@ -251,6 +258,9 @@
+-       os_include_dir="os/gnu-linux"
+-     fi
+-     ;;
+-+
+-+    esac
+-+    ;;
+-   hpux*)
+-     os_include_dir="os/hpux"
+-     ;;
+-Index: b/gcc/config.gcc
+-===================================================================
+---- a/gcc/config.gcc
+-+++ b/gcc/config.gcc
+-@@ -522,7 +522,7 @@
+- esac
+- 
+- # Common C libraries.
+--tm_defines="$tm_defines LIBC_GLIBC=1 LIBC_UCLIBC=2 LIBC_BIONIC=3"
+-+tm_defines="$tm_defines LIBC_GLIBC=1 LIBC_UCLIBC=2 LIBC_BIONIC=3 LIBC_MUSL=4"
+- 
+- # Common parts for widely ported systems.
+- case ${target} in
+-@@ -625,6 +625,9 @@
+-     *-*-*uclibc*)
+-       tm_defines="$tm_defines DEFAULT_LIBC=LIBC_UCLIBC"
+-       ;;
+-+    *-*-*musl*)
+-+      tm_defines="$tm_defines DEFAULT_LIBC=LIBC_MUSL"
+-+      ;;
+-     *)
+-       tm_defines="$tm_defines DEFAULT_LIBC=LIBC_GLIBC"
+-       ;;
+-@@ -2091,6 +2094,10 @@
+- 	    powerpc*-*-linux*paired*)
+- 		tm_file="${tm_file} rs6000/750cl.h" ;;
+- 	esac
+-+        case ${target} in
+-+            *-linux*-musl*)
+-+                enable_secureplt=yes ;;
+-+        esac
+- 	if test x${enable_secureplt} = xyes; then
+- 		tm_file="rs6000/secureplt.h ${tm_file}"
+- 	fi
+-Index: b/gcc/config/linux.h
+-===================================================================
+---- a/gcc/config/linux.h
+-+++ b/gcc/config/linux.h
+-@@ -33,10 +33,12 @@
+- #define OPTION_GLIBC  (DEFAULT_LIBC == LIBC_GLIBC)
+- #define OPTION_UCLIBC (DEFAULT_LIBC == LIBC_UCLIBC)
+- #define OPTION_BIONIC (DEFAULT_LIBC == LIBC_BIONIC)
+-+#define OPTION_MUSL   (DEFAULT_LIBC == LIBC_MUSL)
+- #else
+- #define OPTION_GLIBC  (linux_libc == LIBC_GLIBC)
+- #define OPTION_UCLIBC (linux_libc == LIBC_UCLIBC)
+- #define OPTION_BIONIC (linux_libc == LIBC_BIONIC)
+-+#define OPTION_MUSL   (linux_libc == LIBC_MUSL)
+- #endif
+- 
+- #define GNU_USER_TARGET_OS_CPP_BUILTINS()			\
+-@@ -54,18 +56,21 @@
+-    uClibc or Bionic is the default C library and whether
+-    -muclibc or -mglibc or -mbionic has been passed to change the default.  */
+- 
+--#define CHOOSE_DYNAMIC_LINKER1(LIBC1, LIBC2, LIBC3, LD1, LD2, LD3)	\
+--  "%{" LIBC2 ":" LD2 ";:%{" LIBC3 ":" LD3 ";:" LD1 "}}"
+-+#define CHOOSE_DYNAMIC_LINKER1(LIBC1, LIBC2, LIBC3, LIBC4, LD1, LD2, LD3, LD4)	\
+-+  "%{" LIBC2 ":" LD2 ";:%{" LIBC3 ":" LD3 ";:%{" LIBC4 ":" LD4 ";:" LD1 "}}}"
+- 
+- #if DEFAULT_LIBC == LIBC_GLIBC
+--#define CHOOSE_DYNAMIC_LINKER(G, U, B) \
+--  CHOOSE_DYNAMIC_LINKER1 ("mglibc", "muclibc", "mbionic", G, U, B)
+-+#define CHOOSE_DYNAMIC_LINKER(G, U, B, M) \
+-+  CHOOSE_DYNAMIC_LINKER1 ("mglibc", "muclibc", "mbionic", "mmusl", G, U, B, M)
+- #elif DEFAULT_LIBC == LIBC_UCLIBC
+--#define CHOOSE_DYNAMIC_LINKER(G, U, B) \
+--  CHOOSE_DYNAMIC_LINKER1 ("muclibc", "mglibc", "mbionic", U, G, B)
+-+#define CHOOSE_DYNAMIC_LINKER(G, U, B, M) \
+-+  CHOOSE_DYNAMIC_LINKER1 ("muclibc", "mglibc", "mbionic", "mmusl", U, G, B, M)
+- #elif DEFAULT_LIBC == LIBC_BIONIC
+--#define CHOOSE_DYNAMIC_LINKER(G, U, B) \
+--  CHOOSE_DYNAMIC_LINKER1 ("mbionic", "mglibc", "muclibc", B, G, U)
+-+#define CHOOSE_DYNAMIC_LINKER(G, U, B, M) \
+-+  CHOOSE_DYNAMIC_LINKER1 ("mbionic", "mglibc", "muclibc", "mmusl", B, G, U, M)
+-+#elif DEFAULT_LIBC == LIBC_MUSL
+-+#define CHOOSE_DYNAMIC_LINKER(G, U, B, M) \
+-+  CHOOSE_DYNAMIC_LINKER1 ("mmusl", "mglibc", "muclibc", "mbionic", M, G, U, B)
+- #else
+- #error "Unsupported DEFAULT_LIBC"
+- #endif /* DEFAULT_LIBC */
+-@@ -83,23 +88,32 @@
+- #define BIONIC_DYNAMIC_LINKER64 "/system/bin/linker64"
+- #define BIONIC_DYNAMIC_LINKERX32 "/system/bin/linkerx32"
+- 
+-+/* Musl dynamic linker paths must be defined on a per-architecture
+-+   basis, for each architecture supported by Musl. However, in order
+-+   to let other architectures continue to build with other C
+-+   libraries, we provide a dummy definition of the following defines. */
+-+#define MUSL_DYNAMIC_LINKER "invalid"
+-+#define MUSL_DYNAMIC_LINKER32 "invalid"
+-+#define MUSL_DYNAMIC_LINKER64 "invalid"
+-+#define MUSL_DYNAMIC_LINKERX32 "invalid"
+-+
+- #define GNU_USER_DYNAMIC_LINKER						\
+-   CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER,	\
+--			 BIONIC_DYNAMIC_LINKER)
+-+			 BIONIC_DYNAMIC_LINKER, MUSL_DYNAMIC_LINKER)
+- #define GNU_USER_DYNAMIC_LINKER32					\
+-   CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER32, UCLIBC_DYNAMIC_LINKER32, \
+--			 BIONIC_DYNAMIC_LINKER32)
+-+			 BIONIC_DYNAMIC_LINKER32, MUSL_DYNAMIC_LINKER32)
+- #define GNU_USER_DYNAMIC_LINKER64					\
+-   CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER64, UCLIBC_DYNAMIC_LINKER64, \
+--			 BIONIC_DYNAMIC_LINKER64)
+-+			 BIONIC_DYNAMIC_LINKER64, MUSL_DYNAMIC_LINKER64)
+- #define GNU_USER_DYNAMIC_LINKERX32					\
+-   CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKERX32, UCLIBC_DYNAMIC_LINKERX32, \
+--			 BIONIC_DYNAMIC_LINKERX32)
+-+			 BIONIC_DYNAMIC_LINKERX32, MUSL_DYNAMIC_LINKERX32)
+- 
+- /* Determine whether the entire c99 runtime
+-    is present in the runtime library.  */
+- #undef TARGET_C99_FUNCTIONS
+--#define TARGET_C99_FUNCTIONS (OPTION_GLIBC)
+-+#define TARGET_C99_FUNCTIONS (OPTION_GLIBC || OPTION_MUSL)
+- 
+- /* Whether we have sincos that follows the GNU extension.  */
+- #undef TARGET_HAS_SINCOS
+-@@ -108,3 +122,74 @@
+- /* Whether we have Bionic libc runtime */
+- #undef TARGET_HAS_BIONIC
+- #define TARGET_HAS_BIONIC (OPTION_BIONIC)
+-+
+-+/* musl avoids problematic includes by rearranging the include directories.
+-+ * Unfortunately, this is mostly duplicated from cppdefault.c */
+-+#if DEFAULT_LIBC == LIBC_MUSL
+-+#define INCLUDE_DEFAULTS_MUSL_GPP			\
+-+    { GPLUSPLUS_INCLUDE_DIR, "G++", 1, 1,		\
+-+      GPLUSPLUS_INCLUDE_DIR_ADD_SYSROOT, 0 },		\
+-+    { GPLUSPLUS_TOOL_INCLUDE_DIR, "G++", 1, 1,		\
+-+      GPLUSPLUS_INCLUDE_DIR_ADD_SYSROOT, 1 },		\
+-+    { GPLUSPLUS_BACKWARD_INCLUDE_DIR, "G++", 1, 1,	\
+-+      GPLUSPLUS_INCLUDE_DIR_ADD_SYSROOT, 0 },
+-+
+-+#ifdef LOCAL_INCLUDE_DIR
+-+#define INCLUDE_DEFAULTS_MUSL_LOCAL			\
+-+    { LOCAL_INCLUDE_DIR, 0, 0, 1, 1, 2 },		\
+-+    { LOCAL_INCLUDE_DIR, 0, 0, 1, 1, 0 },
+-+#else
+-+#define INCLUDE_DEFAULTS_MUSL_LOCAL
+-+#endif
+-+
+-+#ifdef PREFIX_INCLUDE_DIR
+-+#define INCLUDE_DEFAULTS_MUSL_PREFIX			\
+-+    { PREFIX_INCLUDE_DIR, 0, 0, 1, 0, 0},
+-+#else
+-+#define INCLUDE_DEFAULTS_MUSL_PREFIX
+-+#endif
+-+
+-+#ifdef CROSS_INCLUDE_DIR
+-+#define INCLUDE_DEFAULTS_MUSL_CROSS			\
+-+    { CROSS_INCLUDE_DIR, "GCC", 0, 0, 0, 0},
+-+#else
+-+#define INCLUDE_DEFAULTS_MUSL_CROSS
+-+#endif
+-+
+-+#ifdef TOOL_INCLUDE_DIR
+-+#define INCLUDE_DEFAULTS_MUSL_TOOL			\
+-+    { TOOL_INCLUDE_DIR, "BINUTILS", 0, 1, 0, 0},
+-+#else
+-+#define INCLUDE_DEFAULTS_MUSL_TOOL
+-+#endif
+-+
+-+#ifdef NATIVE_SYSTEM_HEADER_DIR
+-+#define INCLUDE_DEFAULTS_MUSL_NATIVE			\
+-+    { NATIVE_SYSTEM_HEADER_DIR, 0, 0, 0, 1, 2 },	\
+-+    { NATIVE_SYSTEM_HEADER_DIR, 0, 0, 0, 1, 0 },
+-+#else
+-+#define INCLUDE_DEFAULTS_MUSL_NATIVE
+-+#endif
+-+
+-+#if defined (CROSS_DIRECTORY_STRUCTURE) && !defined (TARGET_SYSTEM_ROOT)
+-+# undef INCLUDE_DEFAULTS_MUSL_LOCAL
+-+# define INCLUDE_DEFAULTS_MUSL_LOCAL
+-+# undef INCLUDE_DEFAULTS_MUSL_NATIVE
+-+# define INCLUDE_DEFAULTS_MUSL_NATIVE
+-+#else
+-+# undef INCLUDE_DEFAULTS_MUSL_CROSS
+-+# define INCLUDE_DEFAULTS_MUSL_CROSS
+-+#endif
+-+
+-+#undef INCLUDE_DEFAULTS
+-+#define INCLUDE_DEFAULTS				\
+-+  {							\
+-+    INCLUDE_DEFAULTS_MUSL_GPP				\
+-+    INCLUDE_DEFAULTS_MUSL_PREFIX			\
+-+    INCLUDE_DEFAULTS_MUSL_CROSS				\
+-+    INCLUDE_DEFAULTS_MUSL_TOOL				\
+-+    INCLUDE_DEFAULTS_MUSL_NATIVE			\
+-+    { GCC_INCLUDE_DIR, "GCC", 0, 1, 0, 0 },		\
+-+    { 0, 0, 0, 0, 0, 0 }				\
+-+  }
+-+#endif
+-Index: b/gcc/config/linux.opt
+-===================================================================
+---- a/gcc/config/linux.opt
+-+++ b/gcc/config/linux.opt
+-@@ -30,3 +30,7 @@
+- muclibc
+- Target Report RejectNegative Var(linux_libc,LIBC_UCLIBC) Negative(mbionic)
+- Use uClibc C library
+-+
+-+mmusl
+-+Target Report RejectNegative Var(linux_libc,LIBC_MUSL) Negative(mglibc)
+-+Use musl C library
+-Index: b/gcc/ginclude/stddef.h
+-===================================================================
+---- a/gcc/ginclude/stddef.h
+-+++ b/gcc/ginclude/stddef.h
+-@@ -184,6 +184,7 @@
+- #ifndef _GCC_SIZE_T
+- #ifndef _SIZET_
+- #ifndef __size_t
+-+#ifndef __DEFINED_size_t /* musl */
+- #define __size_t__	/* BeOS */
+- #define __SIZE_T__	/* Cray Unicos/Mk */
+- #define _SIZE_T
+-@@ -200,6 +201,7 @@
+- #define ___int_size_t_h
+- #define _GCC_SIZE_T
+- #define _SIZET_
+-+#define __DEFINED_size_t /* musl */
+- #if (defined (__FreeBSD__) && (__FreeBSD__ >= 5)) \
+-   || defined(__FreeBSD_kernel__)
+- /* __size_t is a typedef on FreeBSD 5, must not trash it. */
+-@@ -215,6 +217,7 @@
+- typedef long ssize_t;
+- #endif /* __BEOS__ */
+- #endif /* !(defined (__GNUG__) && defined (size_t)) */
+-+#endif /* __DEFINED_size_t */
+- #endif /* __size_t */
+- #endif /* _SIZET_ */
+- #endif /* _GCC_SIZE_T */
+-Index: b/libgomp/config/posix/time.c
+-===================================================================
+---- a/libgomp/config/posix/time.c
+-+++ b/libgomp/config/posix/time.c
+-@@ -28,6 +28,8 @@
+-    The following implementation uses the most simple POSIX routines.
+-    If present, POSIX 4 clocks should be used instead.  */
+- 
+-+#define _POSIX_C_SOURCE 199309L /* for clocks */
+-+
+- #include "libgomp.h"
+- #include <unistd.h>
+- #if TIME_WITH_SYS_TIME
+-Index: b/libgcc/unwind-dw2-fde-dip.c
+-===================================================================
+---- a/libgcc/unwind-dw2-fde-dip.c
+-+++ b/libgcc/unwind-dw2-fde-dip.c
+-@@ -71,6 +71,13 @@
+- # define USE_PT_GNU_EH_FRAME
+- #endif
+- 
+-+/* For musl libc, TARGET_DL_ITERATE_PHDR gets defined by the configure
+-+   script. */
+-+#if !defined(inhibit_libc) && defined(HAVE_LD_EH_FRAME_HDR) \
+-+    && defined(TARGET_DL_ITERATE_PHDR)
+-+# define USE_PT_GNU_EH_FRAME
+-+#endif
+-+
+- #if defined(USE_PT_GNU_EH_FRAME)
+- 
+- #include <link.h>
+-Index: b/gcc/configure
+-===================================================================
+---- a/gcc/configure
+-+++ b/gcc/configure
+-@@ -26906,6 +26910,9 @@
+-       gcc_cv_target_dl_iterate_phdr=no
+-     fi
+-     ;;
+-+  *-linux-musl*)
+-+    gcc_cv_target_dl_iterate_phdr=yes
+-+    ;;
+- esac
+- 
+- if test x$gcc_cv_target_dl_iterate_phdr = xyes; then
+-Index: b/gcc/configure.ac
+-===================================================================
+---- a/gcc/configure.ac
+-+++ b/gcc/configure.ac
+-@@ -4767,6 +4771,9 @@
+-       gcc_cv_target_dl_iterate_phdr=no
+-     fi
+-     ;;
+-+  *-linux-musl*)
+-+    gcc_cv_target_dl_iterate_phdr=yes
+-+    ;;
+- esac
+- GCC_TARGET_TEMPLATE([TARGET_DL_ITERATE_PHDR])
+- if test x$gcc_cv_target_dl_iterate_phdr = xyes; then
+-Index: b/fixincludes/mkfixinc.sh
+-===================================================================
+---- a/fixincludes/mkfixinc.sh
+-+++ b/fixincludes/mkfixinc.sh
+-@@ -20,7 +20,8 @@
+-     powerpc-*-eabi*    | \
+-     powerpc-*-rtems*   | \
+-     powerpcle-*-eabisim* | \
+--    powerpcle-*-eabi* )
+-+    powerpcle-*-eabi* | \
+-+    *-musl* )
+- 	#  IF there is no include fixing,
+- 	#  THEN create a no-op fixer and exit
+- 	(echo "#! /bin/sh" ; echo "exit 0" ) > ${target}
+-Index: b/gcc/config/i386/linux.h
+-===================================================================
+---- a/gcc/config/i386/linux.h
+-+++ b/gcc/config/i386/linux.h
+-@@ -22,3 +22,5 @@
+- 
+- #define GNU_USER_LINK_EMULATION "elf_i386"
+- #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
+-+#undef MUSL_DYNAMIC_LINKER
+-+#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-i386.so.1"
+-Index: b/gcc/config/i386/linux64.h
+-===================================================================
+---- a/gcc/config/i386/linux64.h
+-+++ b/gcc/config/i386/linux64.h
+-@@ -31,3 +31,10 @@
+- #define GLIBC_DYNAMIC_LINKER32 "/lib/ld-linux.so.2"
+- #define GLIBC_DYNAMIC_LINKER64 "/lib64/ld-linux-x86-64.so.2"
+- #define GLIBC_DYNAMIC_LINKERX32 "/libx32/ld-linux-x32.so.2"
+-+
+-+#undef MUSL_DYNAMIC_LINKER32
+-+#undef MUSL_DYNAMIC_LINKER64
+-+#undef MUSL_DYNAMIC_LINKERX32
+-+#define MUSL_DYNAMIC_LINKER32 "/lib/ld-musl-i386.so.1"
+-+#define MUSL_DYNAMIC_LINKER64 "/lib/ld-musl-x86_64.so.1"
+-+#define MUSL_DYNAMIC_LINKERX32 "/lib/ld-musl-x32.so.1"
+-Index: b/libitm/config/linux/x86/tls.h
+-===================================================================
+---- a/libitm/config/linux/x86/tls.h
+-+++ b/libitm/config/linux/x86/tls.h
+-@@ -25,16 +25,19 @@
+- #ifndef LIBITM_X86_TLS_H
+- #define LIBITM_X86_TLS_H 1
+- 
+--#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 10)
+-+#if defined(__GLIBC_PREREQ)
+-+#if __GLIBC_PREREQ(2, 10)
+- /* Use slots in the TCB head rather than __thread lookups.
+-    GLIBC has reserved words 10 through 13 for TM.  */
+- #define HAVE_ARCH_GTM_THREAD 1
+- #define HAVE_ARCH_GTM_THREAD_DISP 1
+- #endif
+-+#endif
+- 
+- #include "config/generic/tls.h"
+- 
+--#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 10)
+-+#if defined(__GLIBC_PREREQ)
+-+#if __GLIBC_PREREQ(2, 10)
+- namespace GTM HIDDEN {
+- 
+- #ifdef __x86_64__
+-@@ -101,5 +104,6 @@
+- 
+- } // namespace GTM
+- #endif /* >= GLIBC 2.10 */
+-+#endif
+- 
+- #endif // LIBITM_X86_TLS_H
+-Index: b/gcc/config/arm/linux-eabi.h
+-===================================================================
+---- a/gcc/config/arm/linux-eabi.h
+-+++ b/gcc/config/arm/linux-eabi.h
+-@@ -64,6 +64,23 @@
+- #undef  GLIBC_DYNAMIC_LINKER
+- #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.3"
+- 
+-+/* For ARM musl currently supports four dynamic linkers:
+-+   - ld-musl-arm.so.1 - for the EABI-derived soft-float ABI
+-+   - ld-musl-armhf.so.1 - for the EABI-derived hard-float ABI
+-+   - ld-musl-armeb.so.1 - for the EABI-derived soft-float ABI, EB
+-+   - ld-musl-armebhf.so.1 - for the EABI-derived hard-float ABI, EB
+-+   musl does not support the legacy OABI mode.
+-+   All the dynamic linkers live in /lib.
+-+   We default to soft-float, EL. */
+-+#undef  MUSL_DYNAMIC_LINKER
+-+#if TARGET_BIG_ENDIAN_DEFAULT
+-+#define MUSL_DYNAMIC_LINKER_E "%{mlittle-endian:;:eb}"
+-+#else
+-+#define MUSL_DYNAMIC_LINKER_E "%{mbig-endian:eb}"
+-+#endif
+-+#define MUSL_DYNAMIC_LINKER \
+-+  "/lib/ld-musl-arm" MUSL_DYNAMIC_LINKER_E "%{mfloat-abi=hard:hf}.so.1"
+-+
+- /* At this point, bpabi.h will have clobbered LINK_SPEC.  We want to
+-    use the GNU/Linux version, not the generic BPABI version.  */
+- #undef  LINK_SPEC
+-Index: b/libitm/config/arm/hwcap.cc
+-===================================================================
+---- a/libitm/config/arm/hwcap.cc
+-+++ b/libitm/config/arm/hwcap.cc
+-@@ -40,7 +40,11 @@
+- 
+- #ifdef __linux__
+- #include <unistd.h>
+-+#ifdef __GLIBC__
+- #include <sys/fcntl.h>
+-+#else
+-+#include <fcntl.h>
+-+#endif
+- #include <elf.h>
+- 
+- static void __attribute__((constructor))
+-Index: b/gcc/config/mips/linux.h
+-===================================================================
+---- a/gcc/config/mips/linux.h
+-+++ b/gcc/config/mips/linux.h
+-@@ -19,3 +19,11 @@
+- <http://www.gnu.org/licenses/>.  */
+- 
+- #define GLIBC_DYNAMIC_LINKER "/lib/ld.so.1"
+-+
+-+#if TARGET_ENDIAN_DEFAULT == 0 /* LE */
+-+#define MUSL_DYNAMIC_LINKER_E "%{EB:;:el}"
+-+#else
+-+#define MUSL_DYNAMIC_LINKER_E "%{EL:el}"
+-+#endif
+-+#undef MUSL_DYNAMIC_LINKER
+-+#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-mips" MUSL_DYNAMIC_LINKER_E "%{msoft-float:-sf}.so.1"
+-Index: b/gcc/config/rs6000/linux64.h
+-===================================================================
+---- a/gcc/config/rs6000/linux64.h
+-+++ b/gcc/config/rs6000/linux64.h
+-@@ -362,17 +362,23 @@
+- #define GLIBC_DYNAMIC_LINKER64 "/lib64/ld64.so.1"
+- #define UCLIBC_DYNAMIC_LINKER32 "/lib/ld-uClibc.so.0"
+- #define UCLIBC_DYNAMIC_LINKER64 "/lib/ld64-uClibc.so.0"
+-+#undef MUSL_DYNAMIC_LINKER32
+-+#undef MUSL_DYNAMIC_LINKER64
+-+#define MUSL_DYNAMIC_LINKER32 "/lib/ld-musl-powerpc.so.1"
+-+#define MUSL_DYNAMIC_LINKER64 "/lib/ld-musl-powerpc64.so.1"
+- #if DEFAULT_LIBC == LIBC_UCLIBC
+--#define CHOOSE_DYNAMIC_LINKER(G, U) "%{mglibc:" G ";:" U "}"
+-+#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{mmusl:" M ";:" U "}}"
+- #elif DEFAULT_LIBC == LIBC_GLIBC
+--#define CHOOSE_DYNAMIC_LINKER(G, U) "%{muclibc:" U ";:" G "}"
+-+#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{muclibc:" U ";:%{mmusl:" M ";:" G "}}"
+-+#elif DEFAULT_LIBC == LIBC_MUSL
+-+#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{muclibc:" U ";:" M "}}"
+- #else
+- #error "Unsupported DEFAULT_LIBC"
+- #endif
+- #define GNU_USER_DYNAMIC_LINKER32 \
+--  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER32, UCLIBC_DYNAMIC_LINKER32)
+-+  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER32, UCLIBC_DYNAMIC_LINKER32, MUSL_DYNAMIC_LINKER32)
+- #define GNU_USER_DYNAMIC_LINKER64 \
+--  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER64, UCLIBC_DYNAMIC_LINKER64)
+-+  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER64, UCLIBC_DYNAMIC_LINKER64, MUSL_DYNAMIC_LINKER64)
+- 
+- 
+- #define LINK_OS_LINUX_SPEC32 "-m elf32ppclinux %{!shared: %{!static: \
+-Index: b/gcc/config/rs6000/secureplt.h
+-===================================================================
+---- a/gcc/config/rs6000/secureplt.h
+-+++ b/gcc/config/rs6000/secureplt.h
+-@@ -18,3 +18,4 @@
+- <http://www.gnu.org/licenses/>.  */
+- 
+- #define CC1_SECURE_PLT_DEFAULT_SPEC "-msecure-plt"
+-+#define LINK_SECURE_PLT_DEFAULT_SPEC "--secure-plt"
+-Index: b/gcc/config/rs6000/sysv4.h
+-===================================================================
+---- a/gcc/config/rs6000/sysv4.h
+-+++ b/gcc/config/rs6000/sysv4.h
+-@@ -566,6 +566,9 @@
+- #ifndef CC1_SECURE_PLT_DEFAULT_SPEC
+- #define CC1_SECURE_PLT_DEFAULT_SPEC ""
+- #endif
+-+#ifndef LINK_SECURE_PLT_DEFAULT_SPEC
+-+#define LINK_SECURE_PLT_DEFAULT_SPEC ""
+-+#endif
+- 
+- /* Pass -G xxx to the compiler and set correct endian mode.  */
+- #define	CC1_SPEC "%{G*} %(cc1_cpu) \
+-@@ -626,7 +629,8 @@
+- %{mlittle: --oformat elf32-powerpcle } %{mlittle-endian: --oformat elf32-powerpcle } \
+- %{!mlittle: %{!mlittle-endian: %{!mbig: %{!mbig-endian: \
+-     %{mcall-i960-old: --oformat elf32-powerpcle} \
+--  }}}}"
+-+  }}}} \
+-+%{!mbss-plt: %{!msecure-plt: %(link_secure_plt_default)}}"
+- 
+- /* Any specific OS flags.  */
+- #define LINK_OS_SPEC "\
+-@@ -804,15 +808,19 @@
+- 
+- #define GLIBC_DYNAMIC_LINKER "/lib/ld.so.1"
+- #define UCLIBC_DYNAMIC_LINKER "/lib/ld-uClibc.so.0"
+-+#undef MUSL_DYNAMIC_LINKER
+-+#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-powerpc.so.1"
+- #if DEFAULT_LIBC == LIBC_UCLIBC
+--#define CHOOSE_DYNAMIC_LINKER(G, U) "%{mglibc:" G ";:" U "}"
+-+#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{mmusl:" M ";:" U "}}"
+-+#elif DEFAULT_LIBC == LIBC_MUSL
+-+#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{muclibc:" U ";:" M "}}"
+- #elif !defined (DEFAULT_LIBC) || DEFAULT_LIBC == LIBC_GLIBC
+--#define CHOOSE_DYNAMIC_LINKER(G, U) "%{muclibc:" U ";:" G "}"
+-+#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{muclibc:" U ";:%{mmusl:" M ";:" G "}}"
+- #else
+- #error "Unsupported DEFAULT_LIBC"
+- #endif
+- #define GNU_USER_DYNAMIC_LINKER \
+--  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER)
+-+  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER, MUSL_DYNAMIC_LINKER)
+- 
+- #define LINK_OS_LINUX_SPEC "-m elf32ppclinux %{!shared: %{!static: \
+-   %{rdynamic:-export-dynamic} \
+-@@ -938,6 +946,7 @@
+-   { "cc1_endian_little",	CC1_ENDIAN_LITTLE_SPEC },		\
+-   { "cc1_endian_default",	CC1_ENDIAN_DEFAULT_SPEC },		\
+-   { "cc1_secure_plt_default",	CC1_SECURE_PLT_DEFAULT_SPEC },		\
+-+  { "link_secure_plt_default",	LINK_SECURE_PLT_DEFAULT_SPEC },		\
+-   { "cpp_os_ads",		CPP_OS_ADS_SPEC },			\
+-   { "cpp_os_yellowknife",	CPP_OS_YELLOWKNIFE_SPEC },		\
+-   { "cpp_os_mvme",		CPP_OS_MVME_SPEC },			\
+-Index: b/gcc/config/mips/linux64.h
+-===================================================================
+---- a/gcc/config/mips/linux64.h
+-+++ b/gcc/config/mips/linux64.h
+-@@ -30,4 +30,4 @@
+- #define BIONIC_DYNAMIC_LINKERN32 "/system/bin/linker32"
+- #define GNU_USER_DYNAMIC_LINKERN32 \
+-   CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKERN32, UCLIBC_DYNAMIC_LINKERN32, \
+--			 BIONIC_DYNAMIC_LINKERN32)
+-+			 BIONIC_DYNAMIC_LINKERN32, MUSL_DYNAMIC_LINKER)
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 2eb6133..efe6028 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -13,32 +13,6 @@ choice
+ 	help
+ 	  Select the version of gcc you wish to use.
+ 
+-	config BR2_GCC_VERSION_4_7_X
+-		bool "gcc 4.7.x"
+-		depends on BR2_DEPRECATED_SINCE_2016_05
+-		# Broken or unsupported architectures
+-		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
+-			&& !BR2_powerpc64le && !BR2_nios2 && !BR2_bfin
+-		# Broken or unsupported ARM cores
+-		depends on !BR2_cortex_a12 && !BR2_pj4 && !BR2_cortex_a17
+-		# Broken or unsupported PPC cores
+-		depends on !BR2_powerpc_e5500 && !BR2_powerpc_e6500 && \
+-			!BR2_powerpc_power8
+-		# SPARC -mcpu=leon3 appeared in gcc 4.8.x
+-		depends on !BR2_sparc_leon3
+-		# Broken or unsupported x86 cores
+-		depends on !BR2_x86_jaguar && !BR2_x86_steamroller
+-		# Unsupported MIPS cores
+-		depends on !BR2_mips_interaptiv
+-		# Unsupported for MIPS R5
+-		depends on !BR2_MIPS_CPU_MIPS32R5 && !BR2_MIPS_CPU_MIPS64R5
+-		# Unsupported for MIPS R6
+-		depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
+-		# musl ppc64 unsupported
+-		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
+-		select BR2_GCC_NEEDS_MPC
+-		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+-
+ 	config BR2_GCC_VERSION_4_8_X
+ 		bool "gcc 4.8.x"
+ 		# Broken or unsupported architectures
+@@ -133,7 +107,6 @@ config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
+ 
+ config BR2_GCC_VERSION
+ 	string
+-	default "4.7.4"     if BR2_GCC_VERSION_4_7_X
+ 	default "4.8.5"     if BR2_GCC_VERSION_4_8_X
+ 	default "4.9.4"     if BR2_GCC_VERSION_4_9_X
+ 	default "5.4.0"     if BR2_GCC_VERSION_5_X
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 36f185e..9104273 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -118,18 +118,6 @@ HOST_GCC_FINAL_POST_BUILD_HOOKS += TOOLCHAIN_BUILD_WRAPPER
+ # -cc symlink to the wrapper is not created.
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
+ 
+-# In gcc 4.7.x, the ARM EABIhf library loader path for glibc was not
+-# correct, so we create a symbolic link to make things work
+-# properly. glibc installs the library loader as ld-linux-armhf.so.3,
+-# but gcc creates binaries that reference ld-linux.so.3.
+-ifeq ($(BR2_arm)$(BR2_ARM_EABIHF)$(BR2_GCC_VERSION_4_7_X)$(BR2_TOOLCHAIN_USES_GLIBC),yyyy)
+-define HOST_GCC_FINAL_LD_LINUX_LINK
+-	ln -sf ld-linux-armhf.so.3 $(TARGET_DIR)/lib/ld-linux.so.3
+-	ln -sf ld-linux-armhf.so.3 $(STAGING_DIR)/lib/ld-linux.so.3
+-endef
+-HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_LD_LINUX_LINK
+-endif
+-
+ # coldfire is not working without removing these object files from libgcc.a
+ ifeq ($(BR2_m68k_cf),y)
+ define HOST_GCC_FINAL_M68K_LIBGCC_FIXUP
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 16fc0dd..da83d8a 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -113,10 +113,9 @@ define UCLIBC_ARM_ABI_CONFIG
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_EABI,$(@D)/.config)
+ endef
+ 
+-# Thumb1 build is broken with threads with old gcc versions (4.7 and
+-# 4.8). Since all cores supporting Thumb1 also support ARM, we use ARM
+-# code in this case.
+-ifeq ($(BR2_GCC_VERSION_4_7_X)$(BR2_GCC_VERSION_4_8_X):$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),y:yy)
++# Thumb1 build is broken with threads with old gcc versions (< 4.8). Since
++# all cores supporting Thumb1 also support ARM, we use ARM code in this case.
++ifeq ($(BR2_GCC_VERSION_4_8_X)$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yyy)
+ UCLIBC_EXTRA_CFLAGS += -marm
+ endif
+ 
