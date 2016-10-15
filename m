@@ -1,88 +1,104 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 15 Oct 2016 12:34:29 +0200
-Subject: [Buildroot] [PATCH v3 1/8] package/pkg-cmake.mk: fix build type
- and optimization flags
-In-Reply-To: <20161015122557.25fd074f@free-electrons.com>
-References: <20161015094437.6989-1-s.martin49@gmail.com>
- <20161015094437.6989-2-s.martin49@gmail.com>
- <20161015122557.25fd074f@free-electrons.com>
-Message-ID: <CAHXCMM+1cbRY11V4cKHB=dCScSG7KGGraFz2NkWsWH+1tiG7XQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 15 Oct 2016 12:35:28 +0200
+Subject: [Buildroot] [git commit] vexpress-firmware: new package
+Message-ID: <20161015103554.BFF7C81E70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=82e84a4f358c9dd2a527015d923d7b355f3a7fa5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, Oct 15, 2016 at 12:25 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Sat, 15 Oct 2016 11:44:30 +0200, Samuel Martin wrote:
->
->> Before applying this patch, CMake packages are built with the following
->> options:
->>   * if BR2_ENABLE_DEBUG is set:
->>     The CMake build type is set to RelWithDebInfo, which means:
->>     - Optimization level is forced to: -O2;
->>     - no log nor assert due to -DNDEBUG;
->>     - BR2_DEBUG_{1..3} effect is unchanged;
->>   * otherwise:
->>     The CMake build type is set to Release, which means:
->>     - Optimization level is forced to: -O3;
->>     - no log nor assert due to -DNDEBUG (as expected).
->>   In any case, the optimization WRT the binary size is always ignored and
->>   forced.
->>
->> This change chooses the build type doing the closest thing to what
->> Buildroot attempts to do.
->>
->> Long version:
->>
->> Flags set by Buildroot depending on the configuration:
->>
->>   BR2_ENABLE_DEBUG | Optim. level   | Buildroot {C,CXX}FLAGS
->>   =================+================+=======================
->>           y        | BR2_OPTIMIZE_S | -Os -gx
->>           y        | BR2_OPTIMIZE_G | -Og -gx
->>           y        | BR2_OPTIMIZE_n | -On -gx
->>           n        | BR2_OPTIMIZE_S | -Os
->>           n        | BR2_OPTIMIZE_G | -Og
->>           n        | BR2_OPTIMIZE_n | -On
->>
->> Default flags appended by CMake depending on the build type:
->>
->>   Build type     | Flags           | Effects on {C,CXX}FLAGS
->>   ===============+=================+===========================================
->>   Debug          | -g              | Force -g, compatible with BR2_ENABLE_DEBUG
->>   MinSizeRel     | -Os -DNDEBUG    | Set -Os, compatible with BR2_OPTIMIZE_S
->>   Release        | -O3 -DNDEBUG    | Set -O3, closest to the others cases,
->>                  |                 | though the optimization level is forced.
->>   RelWithDebInfo | -O2 -g -DNDEBUG | Force -g and set -O2, not friendly with BR
->>
->> Since CMake appends its own build type flags and because of the gcc
->> option parser, the CMake flags takes precedence over the Buildroot
->> flags.
->>
->> So, this change sets the correct build type depending on the
->> BR2_ENABLE_DEBUG and BR2_OPTIMIZE_* options.
->
-> Can't we tell CMake to not do all this crap, and simply not add
-> -g/-O<x> options by itself ?
+This commit adds a new package for the SCP (System Control Processor)
+firmware for the ARM reference platforms. There will most likely be
+other SCP firmware provided by other vendors, but they might be provided
+in a different form, so we for now create a vendor-specific package
+named vexpress-firmware.
 
-As discussed IRL, this solution is kind of the optimal one, not the
-best one but the one that is the closest to what BR is trying to do in
-all cases.
+Since this firmware is used for booting, we create the package in boot/
+and not in package/.
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+The package simply installs a single pre-built binary file into the
+images directory.
 
+Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+[Thomas:
+ - Rename the package from scpfirmware to vexpress-firmware.
+ - Add a Config.in prompt for the package.
+ - Remove the prompt-less Config.in options to select the Git repo and
+   version. Since we only support the Vexpress firmware, there's no need
+   for configurability here, so we just use the right Git repo/version
+   in the .mk file.
+ - Use $(INSTALL) -D to install the firmware file.
+ - Add license information.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Thomas: add hash file, as suggested by Yann.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/Config.in                                |  1 +
+ boot/vexpress-firmware/Config.in              |  6 ++++++
+ boot/vexpress-firmware/vexpress-firmware.hash |  2 ++
+ boot/vexpress-firmware/vexpress-firmware.mk   | 20 ++++++++++++++++++++
+ 4 files changed, 29 insertions(+)
 
-
--- 
-Samuel
+diff --git a/boot/Config.in b/boot/Config.in
+index 677e5f0..6ffacc6 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -15,6 +15,7 @@ source "boot/s500-bootloader/Config.in"
+ source "boot/syslinux/Config.in"
+ source "boot/ts4800-mbrboot/Config.in"
+ source "boot/uboot/Config.in"
++source "boot/vexpress-firmware/Config.in"
+ source "boot/xloader/Config.in"
+ 
+ endmenu
+diff --git a/boot/vexpress-firmware/Config.in b/boot/vexpress-firmware/Config.in
+new file mode 100644
+index 0000000..8479df3
+--- /dev/null
++++ b/boot/vexpress-firmware/Config.in
+@@ -0,0 +1,6 @@
++config BR2_TARGET_VEXPRESS_FIRMWARE
++	bool "vexpress-firmware"
++	depends on BR2_aarch64
++	help
++	  Versatile Express firmware from ARM, with Linaro mods last
++	  change.
+diff --git a/boot/vexpress-firmware/vexpress-firmware.hash b/boot/vexpress-firmware/vexpress-firmware.hash
+new file mode 100644
+index 0000000..40f64c7
+--- /dev/null
++++ b/boot/vexpress-firmware/vexpress-firmware.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 def599c86ab3606f7f67c0190e9b237fbc0cf934a951ffb1c5fb0c47d8a8f3d2	vexpress-firmware-901f81977c3b367a2e0bf3d6444be302822d97a3.tar.gz
+diff --git a/boot/vexpress-firmware/vexpress-firmware.mk b/boot/vexpress-firmware/vexpress-firmware.mk
+new file mode 100644
+index 0000000..693a9cb
+--- /dev/null
++++ b/boot/vexpress-firmware/vexpress-firmware.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# vexpress-firmware
++#
++################################################################################
++
++VEXPRESS_FIRMWARE_VERSION = 901f81977c3b367a2e0bf3d6444be302822d97a3
++VEXPRESS_FIRMWARE_SITE = https://git.linaro.org/arm/vexpress-firmware.git
++VEXPRESS_FIRMWARE_SITE_METHOD = git
++# The only available license files are in PDF and RTF formats, and we
++# support only plain text.
++VEXPRESS_FIRMWARE_LICENSE = ARM EULA
++
++VEXPRESS_FIRMWARE_INSTALL_IMAGES = YES
++
++define VEXPRESS_FIRMWARE_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/SOFTWARE/bl30.bin $(BINARIES_DIR)/scp-fw.bin
++endef
++
++$(eval $(generic-package))
