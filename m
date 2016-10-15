@@ -1,42 +1,67 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 15 Oct 2016 16:35:35 +0100
-Subject: [Buildroot] [PATCH] sqlite: bump version to 3150000 (3.15.0)
-Message-ID: <20161015153535.51346-1-Vincent.Riera@imgtec.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 15 Oct 2016 17:35:43 +0200
+Subject: [Buildroot] [PATCH v3 6/8] package/opencv3: fix CMAKE_CXX_FLAGS
+In-Reply-To: <20161015094437.6989-7-s.martin49@gmail.com>
+References: <20161015094437.6989-1-s.martin49@gmail.com>
+ <20161015094437.6989-7-s.martin49@gmail.com>
+Message-ID: <a9b59faa-aa01-014a-44b6-bff841862a8a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 308522b..b0418af 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1 5d3a6bccd9154963641960db61df901a4e0b3ca0  sqlite-autoconf-3140200.tar.gz
-+sha1 b34cb4ee9710368598c62df0222f5c24dfc9c860  sqlite-autoconf-3150000.tar.gz
- # Calculated based on the hash above
--sha256 644f0c127f7d0cbe8765b9bbdf9ed09d6a2f2b9dfba48ddfd8ca0a42fdb5b3fc  sqlite-autoconf-3140200.tar.gz
-+sha256 77162da9b4a0336d7e77d5252b690662850f62b47c12d9125f74ab9de78ded27  sqlite-autoconf-3150000.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index a8a36bb..0a5c1bb 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3140200
-+SQLITE_VERSION = 3150000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2016
- SQLITE_LICENSE = Public domain
+
+On 15-10-16 11:44, Samuel Martin wrote:
+> From: Max Filippov <jcmvbkbc@gmail.com>
+> 
+> The commit 4904c4c "package/opencv3: use BR2_TOOLCHAIN_HAS_LIBATOMIC"
+> overrides CMAKE_CXX_FLAGS with the single -latomic, losing all ABI
+> CFLAGS that are passed there by default. This breaks build on xtensa
+> where ABI CFLAGS contain important code generation options.
+
+ Really, these important ABI flags should be added to the wrapper and not just
+passed as CFLAGS. Still, this patch is correct, so:
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+ Regards,
+ Arnout
+
+> 
+> Append $(TARGET_CXXFLAGS) to CMAKE_CXX_FLAGS along with -latomic.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/7f1c96abd8fbb5b358a07100ab623316e9bb9dcd
+>   http://autobuild.buildroot.net/results/e0c93d0f6d1da0d62d4dbba211a275bfe75e9645
+>   http://autobuild.buildroot.net/results/53e7e4b4b6a7b48b8012799d7507f7594dbf01b2
+> 
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  package/opencv3/opencv3.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+> index 2529de9..10660a9 100644
+> --- a/package/opencv3/opencv3.mk
+> +++ b/package/opencv3/opencv3.mk
+> @@ -12,7 +12,7 @@ OPENCV3_LICENSE_FILES = LICENSE
+>  
+>  # Uses __atomic_fetch_add_4
+>  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> -OPENCV3_CONF_OPTS += -DCMAKE_CXX_FLAGS="-latomic"
+> +OPENCV3_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
+>  endif
+>  
+>  # OpenCV component options
+> 
+
 -- 
-2.10.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
