@@ -1,28 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Oct 2016 11:11:52 +0200
-Subject: [Buildroot] [PATCH] qemu: add ARM noMMU defconfig
-In-Reply-To: <20160929105520.GA27219@waldemar-brodkorb.de> (Waldemar
- Brodkorb's message of "Thu, 29 Sep 2016 12:55:20 +0200")
-References: <20160929105520.GA27219@waldemar-brodkorb.de>
-Message-ID: <87lgxqrn6v.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 15 Oct 2016 10:08:03 +0200
+Subject: [Buildroot] [PATCHv3 0/3] new packages: atfirmware and
+ scpfirmware
+In-Reply-To: <cover.1476458119.git.jpinto@synopsys.com>
+References: <cover.1476458119.git.jpinto@synopsys.com>
+Message-ID: <20161015100803.0a714960@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+Hello,
 
- > Useful for testing no-MMU ARM code in Qemu.
- > The newer Linux Kernels with DT support for Qemu Versatile isn't
- > yet working, so use latest 4.4 kernel.
+On Fri, 14 Oct 2016 16:21:08 +0100, Joao Pinto wrote:
+> This patch adds to buildroot an important package for ARM64 based development 
+> boards: The ARM Trusted Firmware (atfirmware).
+> It also adds the scpfirmware which is a hidden package to get the System Control
+> Processor (SCP) binary to be included in the bootloader (fip image), which is
+> a requirement for ARM Juno's board. With this 2 packages, Juno gets fully 
+> supported in the Buildroot.
+> 
+> Tested-by: Liviu Dudau <Liviu.Dudau@arm.com>
 
- > Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
- > ---
- > Only tested with serial output.
- > Anyone with Linux und Xorg can test framebuffer?
+I sent a new iteration of your patches, see
+http://lists.busybox.net/pipermail/buildroot/2016-October/174316.html.
+Sorry I forgot to Cc you on this.
 
-Committed, thanks.
+Best regards,
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
