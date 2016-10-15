@@ -1,40 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Oct 2016 13:12:20 +0200
-Subject: [Buildroot] [PATCH 2/2] core/legal-info: don't generate big
- file with all license texts
-In-Reply-To: <52e41b4a3aab9e9d50ace8aee2501becc5080bb8.1476519329.git.yann.morin.1998@free.fr>
-References: <cover.1476519329.git.yann.morin.1998@free.fr>
- <52e41b4a3aab9e9d50ace8aee2501becc5080bb8.1476519329.git.yann.morin.1998@free.fr>
-Message-ID: <20161015131220.02e0dd8c@free-electrons.com>
+Date: Sat, 15 Oct 2016 13:15:15 +0200
+Subject: [Buildroot] [git commit] core/legal-info: save empty string when no
+	license file
+Message-ID: <20161015111912.B36F680676@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=574c14f370fdc1c8c12968766775274a07119f33
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 15 Oct 2016 10:15:54 +0200, Yann E. MORIN wrote:
-> By aggregating all the license files into a single big text-only file
-> means we have no way to use license files that are binary blobs (e.g.
-> pdf, rtf...).
-> 
-> Just do not generate that big file; if the user still wants it, it is
-> very easy to create it afterwards.
-> 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->  Makefile               |  2 --
->  package/pkg-generic.mk |  1 -
->  package/pkg-utils.mk   | 12 ------------
->  3 files changed, 15 deletions(-)
+This is stored in the manifest file; it is perfectly possible to have
+empty fields in there.
 
-Applied to master, thanks.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-generic.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1a37b12..12ae86f 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -779,7 +779,6 @@ endif
+ ifneq ($$($(2)_LICENSE_FILES),)
+ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
+ endif
+-$(2)_MANIFEST_LICENSE_FILES ?= not saved
+ 
+ # We need to extract and patch a package to be able to retrieve its
+ # license files (if any) and the list of patches applied to it (if
