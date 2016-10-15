@@ -1,167 +1,106 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 15 Oct 2016 23:14:45 +0200
-Subject: [Buildroot] [git commit] wvdial: remove deprecated package
-Message-ID: <20161015211550.95A9A81F03@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Remove BR2_DEPRECATED
+Message-ID: <20161015211550.B3EC381F03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=152d4b66c4006f297076ca170749ed25c5a33b70
+commit: https://git.buildroot.net/buildroot/commit/?id=49315f2fac540b53125b46df341f7d815bbb95cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We will remove BR2_DEPRECATED, so remove this deprecated package.
+The BR2_DEPRECATED logic is a lot less useful than the legacy handling,
+because the symbols just disappears without warning to the user. For
+example, we had a few defconfigs that were using deprecated symbols
+(which were not actually used because BR2_DEPRECATED wasn't set) so
+these didn't build the expected code anymore.
+
+Also, the idea behind BR2_DEPRECATED is that you can easily revive it
+again if there is interest. However, it is relatively easy to revert
+the removal of a package as well.
+
+The deprecation is also more effort because it has to be removed twice:
+once when deprecating, and once when really removing.
+
+It doesn't make sense to add a legacy entry for BR2_DEPRECATED. Users
+who actually used it will get legacy warnings instead.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                         |  7 +++++++
- DEVELOPERS                               |  1 -
- package/Config.in                        |  1 -
- package/wvdial/0001-uClibc-scandir.patch | 23 -----------------------
- package/wvdial/Config.in                 | 17 -----------------
- package/wvdial/wvdial.hash               |  2 --
- package/wvdial/wvdial.mk                 | 32 --------------------------------
- 7 files changed, 7 insertions(+), 76 deletions(-)
+ Config.in       | 30 ------------------------------
+ Makefile        |  2 --
+ Makefile.legacy |  3 ---
+ 3 files changed, 35 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 0c47992..b5fb49f 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.11"
+diff --git a/Config.in b/Config.in
+index 8d37c93..d9fc400 100644
+--- a/Config.in
++++ b/Config.in
+@@ -361,36 +361,6 @@ config BR2_CCACHE_USE_BASEDIR
  
-+config BR2_PACKAGE_WVDIAL
-+	bool "wvdial removed"
-+	select BR2_LEGACY
-+	help
-+	  wvdial is not maintained anymore since about 2009. It also
-+	  doesn't build anymore with recent compilers (GCC 5+).
-+
- config BR2_PACKAGE_WEBKITGTK24
- 	bool "webkitgtk 2.4.x removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5bc9ba7..00b853d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1348,7 +1348,6 @@ F:	package/sconeserver/
- F:	package/sound-theme-borealis/
- F:	package/sound-theme-freedesktop/
- F:	package/vlc/
--F:	package/wvdial/
- F:	package/wvstreams/
- F:	package/xscreensaver/
- F:	package/zmqpp/
-diff --git a/package/Config.in b/package/Config.in
-index cdaf9e3..b7cb970 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1628,7 +1628,6 @@ endif
- 	source "package/wireshark/Config.in"
- 	source "package/wpa_supplicant/Config.in"
- 	source "package/wpan-tools/Config.in"
--	source "package/wvdial/Config.in"
- 	source "package/xinetd/Config.in"
- 	source "package/xl2tp/Config.in"
- 	source "package/xtables-addons/Config.in"
-diff --git a/package/wvdial/0001-uClibc-scandir.patch b/package/wvdial/0001-uClibc-scandir.patch
-deleted file mode 100644
-index b611e94..0000000
---- a/package/wvdial/0001-uClibc-scandir.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--Fix wvdial so that it works with scandir as defined in uClibc.
--
--Signed-off-by: Simon Dawson <spdawson@gmail.com>
--
--diff -Nurp a/wvmodemscan.cc b/wvmodemscan.cc
----- a/wvmodemscan.cc	2009-09-29 18:27:28.000000000 +0100
--+++ b/wvmodemscan.cc	2012-07-28 14:03:56.359729660 +0100
--@@ -495,13 +495,13 @@ static int fileselect(const struct diren
-- 	// (no internal ISDN support)   || !strncmp(e->d_name, "ttyI", 4);
-- }
-- 
---#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 10)
--+#if defined(__UCLIBC__) || (defined(__GLIBC__) && __GLIBC_PREREQ(2, 10))
-- static int filesort(const dirent **e1, const dirent **e2)
-- #else
-- static int filesort(const void *_e1, const void *_e2)
-- #endif
-- {
---#if !(defined(__GLIBC__) && __GLIBC_PREREQ(2, 10))
--+#if !(defined(__UCLIBC__) || (defined(__GLIBC__) && __GLIBC_PREREQ(2, 10)))
--     dirent const * const *e1 = (dirent const * const *)_e1;
--     dirent const * const *e2 = (dirent const * const *)_e2;
-- #endif
-diff --git a/package/wvdial/Config.in b/package/wvdial/Config.in
-deleted file mode 100644
-index 0c13202..0000000
---- a/package/wvdial/Config.in
-+++ /dev/null
-@@ -1,17 +0,0 @@
--config BR2_PACKAGE_WVDIAL
--	bool "wvdial"
--	depends on BR2_DEPRECATED_SINCE_2016_08
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_MMU # wvstreams
--	depends on !BR2_STATIC_LIBS # wvstreams
--	depends on !BR2_TOOLCHAIN_USES_MUSL # wvstreams
--	select BR2_PACKAGE_WVSTREAMS
+ endif
+ 
+-config BR2_DEPRECATED
+-	bool "Show options and packages that are deprecated or obsolete"
 -	help
--	  wvdial is an intelligent Point-to-Point Protocol dialer
+-	  This option shows outdated/obsolete versions of packages and
+-	  options that are otherwise hidden.
 -
--	  http://wvdial.googlecode.com/
+-if BR2_DEPRECATED
 -
--comment "wvdial needs a glibc or uClibc toolchain w/ C++, dynamic library"
--	depends on BR2_DEPRECATED_SINCE_2016_08
--	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/wvdial/wvdial.hash b/package/wvdial/wvdial.hash
-deleted file mode 100644
-index ac49209..0000000
---- a/package/wvdial/wvdial.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# locally computed
--sha256  99906d9560cbdbc97e1855e7b0a7169f1e11983be3ac539140423f09debced82  wvdial-1.61.tar.bz2
-diff --git a/package/wvdial/wvdial.mk b/package/wvdial/wvdial.mk
-deleted file mode 100644
-index e89dfc5..0000000
---- a/package/wvdial/wvdial.mk
-+++ /dev/null
-@@ -1,32 +0,0 @@
--################################################################################
+-config BR2_DEPRECATED_SINCE_2015_11
+-	bool
+-	default y
+-
+-config BR2_DEPRECATED_SINCE_2016_02
+-	bool
+-	default y
+-
+-config BR2_DEPRECATED_SINCE_2016_05
+-	bool
+-	default y
+-
+-config BR2_DEPRECATED_SINCE_2016_08
+-	bool
+-	default y
+-
+-config BR2_DEPRECATED_SINCE_2016_11
+-	bool
+-	default y
+-
+-endif
+-
+ config BR2_ENABLE_DEBUG
+ 	bool "build packages with debugging symbols"
+ 	help
+diff --git a/Makefile b/Makefile
+index 74b831e..4110861 100644
+--- a/Makefile
++++ b/Makefile
+@@ -436,9 +436,7 @@ all: world
+ 
+ # Include legacy before the other things, because package .mk files
+ # may rely on it.
+-ifneq ($(BR2_DEPRECATED),y)
+ include Makefile.legacy
+-endif
+ 
+ include package/Makefile.in
+ include support/dependencies/dependencies.mk
+diff --git a/Makefile.legacy b/Makefile.legacy
+index 764cfcd..800c089 100644
+--- a/Makefile.legacy
++++ b/Makefile.legacy
+@@ -4,9 +4,6 @@
+ # This file contains placeholders to detect backward-compatibility problems.
+ # When a buildroot "API" feature is being deprecated, a rule should be added
+ # here that issues an error when the old feature is used.
 -#
--# wvdial
--#
--################################################################################
--
--WVDIAL_VERSION = 1.61
--WVDIAL_SITE = http://wvdial.googlecode.com/files
--WVDIAL_SOURCE = wvdial-$(WVDIAL_VERSION).tar.bz2
--WVDIAL_DEPENDENCIES = wvstreams
--
--WVDIAL_LICENSE = LGPLv2
--WVDIAL_LICENSE_FILES = COPYING.LIB
--
--# N.B. parallel make fails
--WVDIAL_MAKE = $(MAKE1)
--
--WVDIAL_MAKE_ENV += $(TARGET_CONFIGURE_OPTS) \
--	WVSTREAMS_INC="$(STAGING_DIR)/usr/include" \
--	WVSTREAMS_LIB="$(STAGING_DIR)/usr/lib"
--
--define WVDIAL_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(WVDIAL_MAKE_ENV) $(WVDIAL_MAKE) -C $(@D)
--endef
--
--define WVDIAL_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(WVDIAL_MAKE_ENV) $(WVDIAL_MAKE) \
--		prefix="$(TARGET_DIR)/usr" PPPDIR="$(TARGET_DIR)/etc/ppp/peers" \
--		install -C $(@D)
--endef
--
--$(eval $(generic-package))
+-# This file is not included if BR2_DEPRECATED is selected, so it is possible
+-# to bypass the errors (although that's usually a bad idea).
+ 
+ ifeq ($(BR2_LEGACY),y)
+ $(error "You have legacy configuration in your .config! Please check your configuration.")
