@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 15 Oct 2016 21:22:25 +0200
-Subject: [Buildroot] [PATCH v1] qt5: bump version to 5.6.2
-In-Reply-To: <1476552497-21735-1-git-send-email-ps.report@gmx.net>
-References: <1476552497-21735-1-git-send-email-ps.report@gmx.net>
-Message-ID: <ca21a13d-a07f-a1f0-230f-31c318a4dc28@mind.be>
+Date: Sat, 15 Oct 2016 21:25:15 +0200
+Subject: [Buildroot] [PATCH] configs/lego_ev3: bump kernel to 4.4 series
+In-Reply-To: <20161015165155.20004-1-vincent.stehle@laposte.net>
+References: <d7af770a-9e6e-abfc-d034-1bb301c716e5@mind.be>
+ <20161015165155.20004-1-vincent.stehle@laposte.net>
+Message-ID: <845b7e57-435a-c0df-c572-0a14e2caebf7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,49 @@ To: buildroot@busybox.net
 
 
 
-On 15-10-16 19:28, Peter Seiderer wrote:
-> - qt5base: remove obsolete '-no-nis' configure parameter ([1])
-> - qt5base: remove  upstream committed patch 0007-Remove-libudev-dependency-from-kms.pro.patch ([2])
-> - qt5imageformats: remove upstream committed  patch 0001-tvOS-support.patch ([3])
+On 15-10-16 18:51, Vincent Stehle wrote:
+> From: Vincent Stehl? <vincent.stehle@laposte.net>
 > 
-> [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=644d0e75240811212ed9fd0c21e3bd05db3ba5db
-> [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=72492735b7b7770808fcc9fe067e8f03fab827fc
-> [3] https://git.buildroot.net/buildroot/commit/package/qt5?id=9a55b996651fdfbc40e202cb4dd725dce624ca91
+> Bump kernel revision used by lego_ev3_defconfig to the latest tag from
+> ev3dev, as suggested by Peter. This is a 4.4 series kernel, which has the
+> added benefit of not necessitating a specific gcc to boot.
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> We need a patch to create an empty drivers/lego/Kconfig file for the build
+> to succeed though, as the ev3dev kernel normally expects a drivers tree to
+> be checked out there.
+> 
+> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+> Suggested-by: Peter Korsgaard <peter@korsgaard.com>
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (build test of a few packages with mips64el-ctng_n64-linux)
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+> ---
+> 
+> 
+> Hi Peter,                                                                                                                                                                 
+>                                                                                                                                                                           
+> Thanks for the suggestion. Here is a patch to update lego_ev3_defconfig.                                                                                                  
+> This boots fine for me, with gcc 5.4.                                                                                                                                     
+>                                                                                                                                                                           
+> One remark though: the ev3dev project has a separate drivers tree managed                                                                                                 
+> as a git submodule of the kernel (!) I do not really know how to cope with                                                                                                
+> that properly, so I just added a patch to repair the build for the moment.                                                                                                
+>                                                                                                                                                                           
+> Do you know if it is possible for the `linux' recipe to have extra                                                                                                        
+> downloads like other packages do? But how would one extract the extra                                                                                                     
+> archives to the proper place then?                                                                                                                                        
+>   Maybe this calls for an additional `ev3 drivers' package after all, what                                                                                                
+> do you think?                                                                                                                                                             
+>                                                                                                                                                                           
+> Arnout I just saw your e-mail. Thanks for the config file, I double-checked                                                                                               
+> the one in this patch. If you don't mind I'd rather stay with a git tree                                                                                                  
+> (shallow cloned) rather than a tarball. Is that ok for you?           
+
+ Any reason why you prefer a git tree?
 
  Regards,
  Arnout
+
 
 [snip]
 
