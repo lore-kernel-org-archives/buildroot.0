@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 15 Oct 2016 17:25:27 +0200
-Subject: [Buildroot] [PATCH v3 4/8] package/gnuradio: includes
- TARGET_CFLAGS to the overloaded CFLAGS
-In-Reply-To: <20161015094437.6989-5-s.martin49@gmail.com>
+Date: Sat, 15 Oct 2016 17:30:36 +0200
+Subject: [Buildroot] [PATCH v3 5/8] package/libcec: includes TARGET_{C,
+ CXX}FLAGS to the overloaded {C, CXX}FLAGS
+In-Reply-To: <20161015094437.6989-6-s.martin49@gmail.com>
 References: <20161015094437.6989-1-s.martin49@gmail.com>
- <20161015094437.6989-5-s.martin49@gmail.com>
-Message-ID: <199cc443-37f4-afbf-98ce-e60d5cbd2880@mind.be>
+ <20161015094437.6989-6-s.martin49@gmail.com>
+Message-ID: <9ab49a65-6a26-39f1-2c7e-95b353aeefbf@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,22 +23,25 @@ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
  Arnout
 
 > ---
->  package/gnuradio/gnuradio.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/libcec/libcec.mk | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-> index 972f7a4..5cb00d2 100644
-> --- a/package/gnuradio/gnuradio.mk
-> +++ b/package/gnuradio/gnuradio.mk
-> @@ -36,7 +36,7 @@ GNURADIO_INSTALL_STAGING = YES
->  # CFLAGS to decide whether to build the NEON functions or not, and
->  # wants to see the string 'armv7' in the CFLAGS.
->  ifeq ($(BR2_ARM_CPU_ARMV7A)$(BR2_ARM_CPU_HAS_NEON),yy)
-> -GNURADIO_CONF_OPTS += -DCMAKE_C_FLAGS="-march=armv7-a"
-> +GNURADIO_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -march=armv7-a"
+> diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+> index b762d88..55c5fbb 100644
+> --- a/package/libcec/libcec.mk
+> +++ b/package/libcec/libcec.mk
+> @@ -29,8 +29,9 @@ endif
+>  ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+>  LIBCEC_DEPENDENCIES += rpi-userland
+>  LIBCEC_CONF_OPTS += \
+> -	-DCMAKE_C_FLAGS="-lvcos -lvchiq_arm" \
+> -	-DCMAKE_CXX_FLAGS="-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux \
+> +	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -lvcos -lvchiq_arm" \
+> +	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) \
+> +		-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux \
+>  		-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads"
 >  endif
 >  
->  # As soon as -mfpu=neon is supported by the compiler, gnuradio will try
 > 
 
 -- 
