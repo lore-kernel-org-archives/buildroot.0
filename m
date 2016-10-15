@@ -1,29 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 15 Oct 2016 20:55:58 +0000
-Subject: [Buildroot] [Bug 9221] [Package] Kodi needs "Python .py and .pyc
- support" otherwise it crashes when pressing buttons.
-In-Reply-To: <bug-9221-163@https.bugs.busybox.net/>
-References: <bug-9221-163@https.bugs.busybox.net/>
-Message-ID: <bug-9221-163-NXdnqgr4GK@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 15 Oct 2016 22:57:46 +0200
+Subject: [Buildroot] [PATCH 05/13] ipkg: remove deprecated package
+In-Reply-To: <20161015145107.18264-6-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Sat, 15 Oct 2016 16:50:59 +0200")
+References: <20161015145107.18264-1-arnout@mind.be>
+ <20161015145107.18264-6-arnout@mind.be>
+Message-ID: <87mvi58h4l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9221
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+ > We will remove BR2_DEPRECATED, so remove this deprecated package.
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
-
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=95bf21910899dd0bcd7df6ecdff13914f7aa99ef
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
