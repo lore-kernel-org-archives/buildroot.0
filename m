@@ -1,27 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Oct 2016 14:15:00 +0200
-Subject: [Buildroot] lego ev3 defconfig
-Message-ID: <874m4dizaz.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 15 Oct 2016 14:16:35 +0200
+Subject: [Buildroot] [git commit] p910nd: use $(TARGET_MAKE_ENV) when
+	calling $(MAKE)
+Message-ID: <20161015121834.DA22181F57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
+commit: https://git.buildroot.net/buildroot/commit/?id=1b95cc2898b9f1a5a836bddb8a64fe8316aea9f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-You added the lego_ev3_defconfig 2 years ago. Do you still have an ev3?
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/p910nd/p910nd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The defconfig is using gcc 4.7 with a note that the kernel doesn't boot
-with 4.8 - But gcc 4.7 is deprecated and we are about to remove it, so
-that isn't really good.
-
-I see that there's a number of newer kernel version available on
-
-https://github.com/ev3dev/ev3-kernel/releases
-
-Could you perhaps test if one of these work with our default gcc (5.x)?
-Thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/p910nd/p910nd.mk b/package/p910nd/p910nd.mk
+index 73667d7..a1afdb3 100644
+--- a/package/p910nd/p910nd.mk
++++ b/package/p910nd/p910nd.mk
+@@ -11,7 +11,7 @@ P910ND_LICENSE = GPLv2
+ P910ND_LICENSE_FILES = COPYING
+ 
+ define P910ND_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endef
+ 
+ define P910ND_INSTALL_TARGET_CMDS
