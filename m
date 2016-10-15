@@ -1,107 +1,65 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 15 Oct 2016 22:31:15 +0200
-Subject: [Buildroot] [PATCH v4 1/9] package/pkg-cmake.mk: fix build type and
-	optimization flags
+Date: Sat, 15 Oct 2016 22:31:17 +0200
+Subject: [Buildroot] [PATCH v4 3/9] toolchainfile.cmake: set per-config
+	appended {C, CXX}FLAGS
 In-Reply-To: <20161015203123.11241-1-s.martin49@gmail.com>
 References: <20161015203123.11241-1-s.martin49@gmail.com>
-Message-ID: <20161015203123.11241-2-s.martin49@gmail.com>
+Message-ID: <20161015203123.11241-4-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tl;dr:
+The toolchainfile.cmake file already sets the build type to get close
+to the Buildroot configuration.
 
-Before applying this patch, CMake packages are built with the following
-options:
-  * if BR2_ENABLE_DEBUG is set:
-    The CMake build type is set to RelWithDebInfo, which means:
-    - Optimization level is forced to: -O2;
-    - no log nor assert due to -DNDEBUG;
-    - BR2_DEBUG_{1..3} effect is unchanged;
-  * otherwise:
-    The CMake build type is set to Release, which means:
-    - Optimization level is forced to: -O3;
-    - no log nor assert due to -DNDEBUG (as expected).
-  In any case, the optimization WRT the binary size is always ignored and
-  forced.
+This change sets the per-config compiler flags CMake appends, so CMake
+does not mess up with the compilation flags Buildroot sets.
 
-This change chooses the build type doing the closest thing to what
-Buildroot attempts to do.
+This change still allows overriding the these variables from the
+configure command line.
 
-Long version:
+Note:
+  If a CMake-based project forces using a given build type and/or
+  force the compiler and/or linker flag definitions (the default ones or
+  the per-config ones - e.g. CMAKE_C_FLAGS/CMAKE_C_FLAGS_{DEBUG,RELEASE}),
+  there is not much Buildroot can do about it.
+  So, the flags will be overwritten anyway in these cases.
 
-Flags set by Buildroot depending on the configuration:
-
-  BR2_ENABLE_DEBUG | Optim. level   | Buildroot {C,CXX}FLAGS
-  =================+================+=======================
-          y        | BR2_OPTIMIZE_S | -Os -gx
-          y        | BR2_OPTIMIZE_G | -Og -gx
-          y        | BR2_OPTIMIZE_n | -On -gx
-          n        | BR2_OPTIMIZE_S | -Os
-          n        | BR2_OPTIMIZE_G | -Og
-          n        | BR2_OPTIMIZE_n | -On
-
-Default flags appended by CMake depending on the build type:
-
-  Build type     | Flags           | Effects on {C,CXX}FLAGS
-  ===============+=================+===========================================
-  Debug          | -g              | Force -g, compatible with BR2_ENABLE_DEBUG
-  MinSizeRel     | -Os -DNDEBUG    | Set -Os, compatible with BR2_OPTIMIZE_S
-  Release        | -O3 -DNDEBUG    | Set -O3, closest to the others cases,
-                 |                 | though the optimization level is forced.
-  RelWithDebInfo | -O2 -g -DNDEBUG | Force -g and set -O2, not friendly with BR
-
-Since CMake appends its own build type flags and because of the gcc
-option parser, the CMake flags takes precedence over the Buildroot
-flags.
-
-So, this change sets the build type in a very simple way depending on
-the BR2_ENABLE_DEBUG symbol.
-
-Follow-up patches will fix the CMake flag variables that are appended by
-CMake.
-
-Cc: Charles Hardin <ckhardin@exablox.com>
 Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
 ---
 changes v3->v4:
-- simplify build type selection
+- new patch
 ---
- package/pkg-cmake.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ support/misc/toolchainfile.cmake.in | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index aca9e61..259865d 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -35,6 +35,14 @@ ifneq ($(QUIET),)
- CMAKE_QUIET = -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_INSTALL_MESSAGE=NEVER
- endif
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index b0a1cd9..fde141a 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -13,6 +13,18 @@ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST
+ set(CMAKE_SYSTEM_NAME Linux)
+ set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
  
-+# Set the CMake build type which matches the best the build configuration sets
-+# in Buildroot.
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+BR_CMAKE_BUILD_TYPE=Debug
-+else
-+BR_CMAKE_BUILD_TYPE=Release
-+endif
++# Give to CMake the {C,CXX}FLAGS to append in case the project's logic
++# falls back on a build type or another (i.e. set CMAKE_{C,CXX}_FLAGS_*
++# variables).
++#
++# Note:
++#   if the project forces some of these flag variables, Buildroot is
++#   screwed up and there is nothing Buildroot can do about that :(
++set(CMAKE_C_FLAGS_DEBUG "" CACHE)
++set(CMAKE_CXX_FLAGS_DEBUG "" CACHE)
++set(CMAKE_C_FLAGS_RELEASE " -DNEBUG" CACHE)
++set(CMAKE_CXX_FLAGS_RELEASE " -DNEBUG" CACHE)
 +
- ################################################################################
- # inner-cmake-package -- defines how the configuration, compilation and
- # installation of a CMake package should be done, implements a few hooks to
-@@ -87,7 +95,7 @@ define $(2)_CONFIGURE_CMDS
- 	PATH=$$(BR_PATH) \
- 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
- 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
--		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release) \
-+		-DCMAKE_BUILD_TYPE=$(BR_CMAKE_BUILD_TYPE) \
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
- 		-DCMAKE_COLOR_MAKEFILE=OFF \
- 		-DBUILD_DOC=OFF \
+ # Build type from the Buildroot configuration
+ set(CMAKE_BUILD_TYPE @@BR_CMAKE_BUILD_TYPE@@ CACHE)
+ 
 -- 
 2.10.0
