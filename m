@@ -1,94 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Oct 2016 12:05:10 +0200
-Subject: [Buildroot] [PATCH v2 1/4] toolchain: wrap 'ld' with
- toolchain-wrapper
-In-Reply-To: <1459885521-25434-1-git-send-email-heyleke@gmail.com>
-References: <1459885521-25434-1-git-send-email-heyleke@gmail.com>
-Message-ID: <20161016120510.55c138f0@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 16 Oct 2016 12:06:52 +0200
+Subject: [Buildroot] [PATCH 1/2] dependencies: check for MakeMaker Perl
+ module
+In-Reply-To: <1467845012-10531-1-git-send-email-romain.naour@gmail.com>
+References: <1467845012-10531-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <3b4e74c5-2569-b00f-db9e-2a2c8cd4dfec@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Tue,  5 Apr 2016 21:45:18 +0200, Jan Heylen wrote:
-> extend the toolchain wrapper to also wrap the ld linker.
+On 07-07-16 00:43, Romain Naour wrote:
+> ExtUtils::MakeMaker is one of the Perl Core modules usually packaged in
+> Perl package for a Debian/Ubuntu based system.
+> For a Fedora based system, each Perl Core modules have their own RPM
+> package. So install only Perl package is not enough.
 > 
-> Tested with gnu ld and gnu 'gold'
-> BR2_BINUTILS_EXTRA_CONFIG_OPTIONS="--enable-gold=default --enable-plugins"
+> Fixes:
+>>>> host-libxml-parser-perl 2.41 Configuring
+> [...]
+> perl `which perl` Makefile.PL
+> Can't locate ExtUtils/MakeMaker.pm in @INC (you may need to install the ExtUtils::MakeMaker module)
 > 
-> make host-binutils result in: (ld and ld.gold are equal)
-> <ARCH>-buildroot-linux-uclibc-ld -> toolchain-wrapper
-> <ARCH>-buildroot-linux-uclibc-ld.bfd
-> <ARCH>-buildroot-linux-uclibc-ld.br_real
-> <ARCH>-buildroot-linux-uclibc-ld.gold -> toolchain-wrapper
-> <ARCH>-buildroot-linux-uclibc-ld.gold.br_real
-> <ARCH>-linux-ld -> toolchain-wrapper
-> <ARCH>-linux-ld.br_real -> <ARCH>-buildroot-linux-uclibc-ld.br_real
-> <ARCH>-linux-ld.gold -> toolchain-wrapper
-> <ARCH>-linux-ld.gold.br_real -> <ARCH>-buildroot-linux-uclibc-ld.gold.br_real
-> toolchain-wrapper
+> Add a new Perl module check in dependency.sh.
 > 
-> after host-gcc-initial, toolchain-wrapper will be rebuild, but the ld
-> symlinks remain
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Fran?ois Perrad <francois.perrad@gadz.org>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+> ---
+>  support/dependencies/dependencies.sh | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Based upon patch from Thomas Petazzoni:
-> http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/60942
+> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> index 3146401..5832cf3 100755
+> --- a/support/dependencies/dependencies.sh
+> +++ b/support/dependencies/dependencies.sh
+> @@ -238,6 +238,7 @@ fi
+>  
+>  # Check that the Perl installation is complete enough for Buildroot.
+>  required_perl_modules="Data::Dumper" # Needed to build host-autoconf
+> +required_perl_modules="$required_perl_modules ExtUtils::MakeMaker" # Used by host-libxml-parser-perl
+>  required_perl_modules="$required_perl_modules Thread::Queue" # Used by host-automake
+>  
+>  # This variable will keep the modules that are missing in your system.
+> 
 
-We had a discussion at the Buildroot Developers meeting today about
-this patch series. After discussion, we concluded that there should be
-no need to wrap ld. ld should not be used directly, except in very
-specific cases, where the caller knows what it is doing and should pass
-the right arguments.
-
-As far as we know, the only case that was broken was the libiscsi
-package, but such a package should definitely *not* use ld directly. So
-the fix should be done in libiscsi, not in the wrapper.
-
-However, your patch series triggered a very useful discussion about
-reworking how flags are handled by the wrapper, and we took the
-following notes of things to do:
-
- - We want to refactor how the CFLAGS are handled by the wrapper:
-
-   - Combine BR2_TARGET_OPTIMIZATION and BR2_TARGET_LDFLAGS into a
-     single BR2_TARGET_EXTRA_FLAGS
-
-   - Have a make variable called TARGET_WRAPPER_FLAGS that includes
-     all flags we want to include in the wrapper:
-
-      * $(TARGET_ABI)
-      * $(TARGET_CPPFLAGS)
-      * $(BR2_TARGET_EXTRA_FLAGS)
-      * Custom flags added by package/Makefile.in
-
-     $(TARGET_OPTIMIZATION) and $(TARGET_DEBUGGING) are *NOT* in the
-     wrapper.
-
-   - TARGET_CFLAGS = $(TARGET_WRAPPER_CFLAGS) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
-     TARGET_CXXFLAGS = $(TARGET_CFLAGS)
-     TARGET_LDFLAGS = $(TARGET_CFLAGS)
-     TARGET_FCFLAGS = $(TARGET_CFLAGS)
-
-   - The wrapper, instead of having special cases for different flags,
-     just receives (at build time), the list of hardcoded flag. A
-     special logic needs to be put in place to handle precious flags
-     (mcpu, march, mtune, mfloat-abi, etc.), for which the
-     command-line passed flag must be preserved if passed.
-
- - Define LD to "false" in $(TARGET_CONFIGURE_OPTS) so that we detect
-   the crappy packages that use LD directly. Individual packages can
-   still pass LD=$(TARGET_LD) or LD=$(TARGET_CC) if really needed.
-
-We're of course not asking you to work on those topics. Arnout has
-volunteered to do it already.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
