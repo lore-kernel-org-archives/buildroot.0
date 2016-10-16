@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Oct 2016 15:56:12 +0200
-Subject: [Buildroot] [PATCH v7 2/3] util-linux: expand selection of
- libraries and utilities
-In-Reply-To: <1468113369-16118-4-git-send-email-casantos@datacom.ind.br>
+Date: Sun, 16 Oct 2016 16:02:24 +0200
+Subject: [Buildroot] [PATCH v7 3/3] util-linux: rework utilities menu
+ for finer control
+In-Reply-To: <1468113369-16118-5-git-send-email-casantos@datacom.ind.br>
 References: <20160708205217.GB3757@free.fr>
  <1468113369-16118-1-git-send-email-casantos@datacom.ind.br>
- <1468113369-16118-4-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20161016155612.05e4238d@free-electrons.com>
+ <1468113369-16118-5-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20161016160224.18b1f027@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  9 Jul 2016 22:16:08 -0300, Carlos Santos wrote:
-> - Add option to control installation of libfdisk
-> - Add libfdisk license to the comment in util-linux.mk
-> - List all utilities provided by the basic set and document that
->   linux32, linux64, uname26, i386 and x86_64 are symlinks to setarch
-> - Add options to install cal, ipcrm, ipcs, logger, lslogin and pg
+On Sat,  9 Jul 2016 22:16:09 -0300, Carlos Santos wrote:
+> When even a single extra util-linux utility is enabled, the
+> default build and install will install many more programs,
+> including many that overlap with those offered by busybox.
+> 
+> Fix by reworking the install-utilies menu to take advantage
+> of the new --disable-all-programs config option.  This option
+> make it possible to disable the basic set of apps, and then
+> enable only the desired apps.
+> 
+> Original patch by Danomi Manchego, visible at
+> http://patchwork.ozlabs.org/patch/494866/
 > 
 > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 > ---
->  package/util-linux/Config.in     | 51 ++++++++++++++++++++++++++++++++++++++++
->  package/util-linux/util-linux.mk |  9 ++++++-
->  2 files changed, 59 insertions(+), 1 deletion(-)
+>  Config.in.legacy                 | 16 ++++++++++++
+>  package/util-linux/Config.in     | 53 +++++++++++++++++++++++++++++++---------
+>  package/util-linux/util-linux.mk | 15 ++++++------
+>  3 files changed, 66 insertions(+), 18 deletions(-)
 
-Applied to master, with the following changes:
+We've applied your patch, but after doing some fairly significant
+change. Namely, we have removed the choice...endchoice entirely. It is
+indeed not necessary at all: simply make the per-tool options visible
+even if the "basic set" option is disabled. It allows the same
+flexibility, with less options, no legacy, etc.
 
-    [Thomas: add missing dependency of the new lslogins option on
-    libsmartcols, and therefore !MMU.]
-
-Also, I added a patch that adjusts the way the license string is
-formatted, to match with what we do in the rest of Buildroot.
+Thanks!
 
 Thomas
 -- 
