@@ -1,52 +1,97 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 16 Oct 2016 23:01:27 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/vlc: use
-	BR2_TOOLCHAIN_HAS_LIBATOMIC
-In-Reply-To: <20161016210127.29654-1-bernd.kuhls@t-online.de>
-References: <20161016210127.29654-1-bernd.kuhls@t-online.de>
-Message-ID: <20161016210127.29654-3-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 16 Oct 2016 20:53:47 +0200
+Subject: [Buildroot] [PATCH v6 1/9] Revert "package/cmake: with
+ BR2_ENABLE_DEBUG use RelWithDebInfo"
+In-Reply-To: <20161016111245.1847-2-s.martin49@gmail.com>
+References: <20161016111245.1847-1-s.martin49@gmail.com>
+ <20161016111245.1847-2-s.martin49@gmail.com>
+Message-ID: <e9db2ea4-567a-8ab0-27c6-d49272a531ad@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While fixing
-http://autobuild.buildroot.net/results/d95/d9572bcafc1776eebe88bbcaf031a05cd6ee4b23/
-by using http://patchwork.ozlabs.org/patch/674337/ the build stopped at
-a later stage with
 
-/home/buildroot/br4/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `__atomic_fetch_add_4'
-/home/buildroot/br4/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `__atomic_fetch_sub_4'
-/home/buildroot/br4/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `__atomic_fetch_or_1'
-/home/buildroot/br4/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `__atomic_compare_exchange_4'
-/home/buildroot/br4/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `__atomic_exchange_1'
-collect2: error: ld returned 1 exit status
 
-so libatomic must be pulled in if necessary.
+On 16-10-16 13:12, Samuel Martin wrote:
+> This reverts commit 4b0120183404913f7f7788ef4f0f6b51498ef363.
+> 
+> Before reverting this patch, CMake packages are built with the following
+> options:
+>   * if BR2_ENABLE_DEBUG is set:
+>     The CMake build type is set to RelWithDebInfo, which means:
+>     - Optimization level is forced to: -O2;
+>     - no log nor assert due to -DNDEBUG;
+>     - BR2_DEBUG_{1..3} effect is unchanged;
+>   * otherwise:
+>     The CMake build type is set to Release, which means:
+>     - Optimization level is forced to: -O3;
+>     - no log nor assert due to -DNDEBUG (as expected).
+>   In any case, the optimization WRT the binary size is always ignored
+>   and forced.
+> 
+> Reverting to the previous situation, so Buildroot now chooses between
+> the 'Debug' and 'Release' config types, which are semantically closer
+> to what Buildroot does everywhere else:
+>   * if BR2_ENABLE_DEBUG is set:
+>     The CMake build type is set to Debug, which means:
+>     - only -g option is passed by CMake;
+>     - optimization is not forced, nor debug level, so they are kept
+>       as-is;
+>   * otherwise:
+>     The CMake build type is set to Release, so no change in this case:
+>     - Optimization level is forced to: -O3;
+>     - no log nor assert due to -DNDEBUG (as expected);
+>     - size optimization is ignored.
+> 
+> Follow-up patches will fix the CMake flag variables that are appended by
+> CMake.
+> 
+> Cc: Charles Hardin <ckhardin@exablox.com>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: no changes
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- package/vlc/vlc.mk | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 8efbecb..cf0b557 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -56,6 +56,11 @@ VLC_CONF_OPTS += \
- 	--disable-addonmanagermodules \
- 	--enable-run-as-root \
- 
-+# Uses __atomic_fetch_add_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+VLC_CONF_ENV += LIBS="-latomic"
-+endif
-+
- # Building static and shared doesn't work, so force static off.
- ifeq ($(BR2_STATIC_LIBS),)
- VLC_CONF_OPTS += --disable-static
+ Regards,
+ Arnout
+
+> 
+> ---
+> changes v5->v6:
+> - revert 4b01201 instead (Arnout)
+> 
+> changes v4->v5:
+> - none
+> 
+> changes v3->v4:
+> - simplify build type selection
+> ---
+>  package/pkg-cmake.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index aca9e61..4883b3b 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -87,7 +87,7 @@ define $(2)_CONFIGURE_CMDS
+>  	PATH=$$(BR_PATH) \
+>  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+>  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+> -		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release) \
+> +		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
+>  		-DCMAKE_INSTALL_PREFIX="/usr" \
+>  		-DCMAKE_COLOR_MAKEFILE=OFF \
+>  		-DBUILD_DOC=OFF \
+> 
+
 -- 
-2.9.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
