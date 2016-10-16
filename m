@@ -1,59 +1,109 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 16 Oct 2016 15:24:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/trinity: needs headers >= 3.4
-Message-ID: <20161016132411.17404-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 16 Oct 2016 15:53:53 +0200
+Subject: [Buildroot] [git commit] util-linux: allow disabling the basic set
+	of tools
+Message-ID: <20161016135433.8E4B9817E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-IPV6_UNICAST_IF was added with kernel 3.4:
-https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/log/include/linux/in6.h?id=refs/tags/v3.4.112
+commit: https://git.buildroot.net/buildroot/commit/?id=e8ddc0de9eb1ee6dc0c255ef03ba654f42453433
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To prove this compare with kernel 3.3:
-https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/log/include/linux/in6.h?h=linux-3.3.y
+When even a single extra util-linux utility is enabled, the default
+build and install will install many more programs, including many that
+overlap with those offered by busybox.
 
-The trinity package contains some compat code in
-https://github.com/kernelslacker/trinity/blob/master/include/compat.h
+Fix by reworking the install-utilies menu to take advantage of the new
+--disable-all-programs config option. This option make it possible to
+disable the basic set of apps, and then enable only the desired apps.
 
-but it does not trigger for IPV6_UNICAST_IF
-https://github.com/kernelslacker/trinity/blob/master/include/compat.h#L662
+Original patch by Danomi Manchego, visible at
+http://patchwork.ozlabs.org/patch/494866/
 
-Instead of hacking compat.h to death just depend on headers >= 3.4.
-
-Fixes a build error
-net/proto-ipv6.c: At top level:
-net/proto-ipv6.c:157:12: error: ?IPV6_UNICAST_IF? undeclared here (not in a function)
-  { .name = IPV6_UNICAST_IF, },
-
-not yet caught by autobuilders using this defconfig:
-http://autobuild.buildroot.net/results/394/394e22be0ef986463e97b3040dad8f978262732c/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+[Thomas/Arnout: remove the choice between all/custom/no, and simply have
+a list of options with the basic set of tools, and then one option for
+each tool. This gives the same flexibility, but avoids the choice, which
+is never nice to have.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/trinity/Config.in | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/util-linux/Config.in     | 20 ++++++++------------
+ package/util-linux/util-linux.mk |  7 +------
+ 2 files changed, 9 insertions(+), 18 deletions(-)
 
-diff --git a/package/trinity/Config.in b/package/trinity/Config.in
-index 2495e5d..48fa608 100644
---- a/package/trinity/Config.in
-+++ b/package/trinity/Config.in
-@@ -4,7 +4,15 @@ config BR2_PACKAGE_TRINITY
- 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
- 		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
- 		BR2_powerpc64le || BR2_sparc || BR2_x86_64
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # IPV6_UNICAST_IF
- 	help
- 	  A Linux System call fuzz tester
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 917a53d..38d68ca 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -45,7 +45,7 @@ config BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	  Install libuuid.
  
- 	  http://codemonkey.org.uk/projects/trinity/
-+
-+comment "trinity needs a toolchain w/ headers >= 3.4"
-+	depends on BR2_USE_MMU
-+	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
-+		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
-+		BR2_powerpc64le || BR2_sparc || BR2_x86_64
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
--- 
-2.9.3
+ config BR2_PACKAGE_UTIL_LINUX_BINARIES
+-	bool "install utilities"
++	bool "basic set"
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+@@ -55,19 +55,17 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
+ 	help
+ 	  Install the basic set of util-linux binaries.
+ 
+-	  blkdiscard, blkid, blockdev, cfdisk, chcpu, col, colcrt,
+-	  colrm, column, ctrlaltdel, dmesg, fdisk, findfs, findmnt,
+-	  flock, fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize,
+-	  ldattach, look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie,
+-	  mkfs, mkswap, namei, prlimit, readprofile, renice, rev,
+-	  rtcwake, script, scriptreplay, setarch, setsid, sfdisk,
+-	  swaplabel, swapoff, swapon, tailf, uuidgen, whereis, wipefs
++	  blkdiscard, blkid, blockdev, chcpu, col, colcrt, colrm,
++	  column, ctrlaltdel, dmesg, fdisk, findfs, findmnt, flock,
++	  fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize, ldattach,
++	  look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie, mkfs,
++	  mkswap, namei, prlimit, readprofile, renice, rev, rtcwake,
++	  script, scriptreplay, setarch, setsid, sfdisk, swaplabel,
++	  swapoff, swapon, tailf, uuidgen, whereis, wipefs
+ 
+ 	  The setarch utility also installs architecture-specific
+ 	  symlinks like linux32, linux64, uname26, i386 and x86_64.
+ 
+-if BR2_PACKAGE_UTIL_LINUX_BINARIES
+-
+ config BR2_PACKAGE_UTIL_LINUX_AGETTY
+ 	bool "agetty"
+ 	depends on BR2_USE_MMU # fork()
+@@ -371,7 +369,5 @@ config BR2_PACKAGE_UTIL_LINUX_ZRAMCTL
+ 
+ endif
+ 
+-endif
+-
+ comment "util-linux needs a toolchain w/ wchar"
+ 	depends on !BR2_USE_WCHAR
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 4dadc3f..bd6508c 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -71,6 +71,7 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
+ 
+ # Disable/Enable utilities
+ UTIL_LINUX_CONF_OPTS += \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_BINARIES),--enable-all-programs,--disable-all-programs) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_BFS),--enable-bfs,--disable-bfs) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_CAL),--enable-cal,--disable-cal) \
+@@ -142,12 +143,6 @@ else
+ HOST_UTIL_LINUX_CONF_OPTS += --disable-all-programs
+ endif
+ 
+-# Avoid building the tools if they are disabled since we can't install on
+-# a per-directory basis.
+-ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),)
+-UTIL_LINUX_CONF_OPTS += --disable-all-programs
+-endif
+-
+ # Install libmount Python bindings
+ ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
+ UTIL_LINUX_CONF_OPTS += --with-python
