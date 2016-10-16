@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Oct 2016 16:02:24 +0200
-Subject: [Buildroot] [PATCH v7 3/3] util-linux: rework utilities menu
- for finer control
-In-Reply-To: <1468113369-16118-5-git-send-email-casantos@datacom.ind.br>
-References: <20160708205217.GB3757@free.fr>
- <1468113369-16118-1-git-send-email-casantos@datacom.ind.br>
- <1468113369-16118-5-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20161016160224.18b1f027@free-electrons.com>
+Date: Sun, 16 Oct 2016 16:32:51 +0200
+Subject: [Buildroot] [PATCH 2/2] fwup: link in pthreads for static builds
+In-Reply-To: <1470868546-8237-2-git-send-email-fhunleth@troodon-software.com>
+References: <1470868546-8237-1-git-send-email-fhunleth@troodon-software.com>
+ <1470868546-8237-2-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20161016163251.33b3e357@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +13,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  9 Jul 2016 22:16:09 -0300, Carlos Santos wrote:
-> When even a single extra util-linux utility is enabled, the
-> default build and install will install many more programs,
-> including many that overlap with those offered by busybox.
+On Wed, 10 Aug 2016 18:35:46 -0400, Frank Hunleth wrote:
+> Both libconfuse (via libintl) and libarchive have references to pthreads
+> but do not specify pthreads in their pkg-config descriptions. This
+> change adds pthreads to the fwup linker options so that the link step
+> succeeds.
 > 
-> Fix by reworking the install-utilies menu to take advantage
-> of the new --disable-all-programs config option.  This option
-> make it possible to disable the basic set of apps, and then
-> enable only the desired apps.
+> Fixes autobuilder failures:
 > 
-> Original patch by Danomi Manchego, visible at
-> http://patchwork.ozlabs.org/patch/494866/
+> http://autobuild.buildroot.net/results/ce3793c79d5dc4e296d645c75f22e121f35030d3/
+> http://autobuild.buildroot.net/results/0c5ffec5438f766dade951a64ebfa1b734a3c0aa/
+> http://autobuild.buildroot.net/results/802/802b6d77e1b77b7c8fcb8f3b394cdabfd406de7a/
 > 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  Config.in.legacy                 | 16 ++++++++++++
->  package/util-linux/Config.in     | 53 +++++++++++++++++++++++++++++++---------
->  package/util-linux/util-linux.mk | 15 ++++++------
->  3 files changed, 66 insertions(+), 18 deletions(-)
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 
-We've applied your patch, but after doing some fairly significant
-change. Namely, we have removed the choice...endchoice entirely. It is
-indeed not necessary at all: simply make the per-tool options visible
-even if the "basic set" option is disabled. It allows the same
-flexibility, with less options, no legacy, etc.
+Thanks to the recent uClibc-ng bump, which merges libpthread into libc,
+the problem that this patch was trying to fix no longer exists.
+
+I double checked: with an older uClibc-ng toolchain, I could reproduce
+the static linking issue. With the newer uClibc-ng toolchain, the built
+went fine.
+
+Therefore, I've marked your patch as Rejected in patchwork.
 
 Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
