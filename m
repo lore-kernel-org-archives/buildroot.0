@@ -1,10 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 16 Oct 2016 13:12:41 +0200
-Subject: [Buildroot] [PATCH v6 5/9] package/gnuradio: include TARGET_CFLAGS
-	to the overloaded CFLAGS
+Date: Sun, 16 Oct 2016 13:12:42 +0200
+Subject: [Buildroot] [PATCH v6 6/9] package/libcec: include TARGET_{C,
+	CXX}FLAGS to the overloaded {C, CXX}FLAGS
 In-Reply-To: <20161016111245.1847-1-s.martin49@gmail.com>
 References: <20161016111245.1847-1-s.martin49@gmail.com>
-Message-ID: <20161016111245.1847-6-s.martin49@gmail.com>
+Message-ID: <20161016111245.1847-7-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -28,21 +28,24 @@ changes v3->v4:
 changes v2->v3:
 - new patch
 ---
- package/gnuradio/gnuradio.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcec/libcec.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index 972f7a4..5cb00d2 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -36,7 +36,7 @@ GNURADIO_INSTALL_STAGING = YES
- # CFLAGS to decide whether to build the NEON functions or not, and
- # wants to see the string 'armv7' in the CFLAGS.
- ifeq ($(BR2_ARM_CPU_ARMV7A)$(BR2_ARM_CPU_HAS_NEON),yy)
--GNURADIO_CONF_OPTS += -DCMAKE_C_FLAGS="-march=armv7-a"
-+GNURADIO_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -march=armv7-a"
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index b762d88..55c5fbb 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -29,8 +29,9 @@ endif
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+ LIBCEC_DEPENDENCIES += rpi-userland
+ LIBCEC_CONF_OPTS += \
+-	-DCMAKE_C_FLAGS="-lvcos -lvchiq_arm" \
+-	-DCMAKE_CXX_FLAGS="-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux \
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -lvcos -lvchiq_arm" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) \
++		-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux \
+ 		-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads"
  endif
  
- # As soon as -mfpu=neon is supported by the compiler, gnuradio will try
 -- 
 2.10.0
