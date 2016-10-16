@@ -1,63 +1,101 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Oct 2016 10:57:42 +0200
-Subject: [Buildroot] [PATCH 1/1] support/download/git: add --reference
- option to git clone.
-In-Reply-To: <1464789807-26407-1-git-send-email-julien.rosener@digital-scratch.org>
-References: <1464789807-26407-1-git-send-email-julien.rosener@digital-scratch.org>
-Message-ID: <20161016085741.GA14007@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 16 Oct 2016 11:05:48 +0200
+Subject: [Buildroot] [git commit] package/qt: Avoid X11 header collision
+	with OpenGL/EGL
+Message-ID: <20161016090627.49FAE8172B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, all,
+commit: https://git.buildroot.net/buildroot/commit/?id=0a7c9b6b0ac63d01ca55a75363e9c446dca19772
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-06-01 16:03 +0200, Julien Rosener spake thusly:
-> In case of big Git repositories stored over very slow network, git clone can
-> take hours to be done. The option --reference can be used to specify a local
-> cache directory which contains mirrors.
-> 
-> The cache directory is a bare git repository:
->   git init --bare
-> All mirrored repositories are added into this repository:
->   git remote add <repo_name> <repo_url>
-> The full cache directory can be periodically updated:
->   git fetch --all
-> 
-> It does not matter if the cache directory is not fully up to date because Git
-> will take the last changes from the real remote repository. If a repository is
-> not in the cache, git will do a full remote clone without error.
-> 
-> A buildroot variable was added to specify the path of the cache directory
-> (BR2_GIT_CACHE) at the "Build options >> Commands >> git" menu entry level. The
-> value is passed to the Git download helper script as an argument and is used if
-> defined (indeed in this case every calls to git clone will be using the cache
-> directory).
+Including X11 headers via EGL/egl.h leads to a collision of defines
+between Qt and X11. To fix this qt5 added
+  DEFINES += MESA_EGL_NO_X11_HEADERS
+in various files:
 
-As we discussed at the Biuldroot meeting, we've marked this patch as
-"Changes Rejected" in patchwork.
+https://github.com/qtproject/qtbase/blob/dev/src/platformsupport/eglconvenience/eglconvenience.pri#L19
+https://github.com/qtproject/qtbase/blob/dev/src/plugins/platforms/minimalegl/minimalegl.pro#L10
+https://github.com/qtproject/qtbase/blob/dev/src/plugins/platforms/eglfs/deviceintegration/eglfs_x11/eglfs_x11.pro#L6
+[...]
 
-Waiting back for your respin with what we concluded:
+This patch fixes a similar compile error in qt4:
+http://autobuild.buildroot.net/results/9b0/9b0ed92984eead89d148eaa71aff6e2f1e117837/
+http://autobuild.buildroot.org/results/4fd/4fd57553336d36439fab32a7221fc8639758e887/
+http://autobuild.buildroot.org/results/5cb/5cb8072f8220f7203fa79936eedcc43eab53ec66/
 
-  - When a package is first built, it is cloned in DL_DIR and not removed.
-  - If the clone already exists, it is updated with a git fetch. git fetch
-    can specify an explicit local ref to make sure we can refer to it later.
-  - It's not clear if a tarball still needs to be created. Probably yes,
-    otherwise the extract step has to change.
-  - Problem for parallel downloads (important in a shared DL_DIR): if
-    something is locked, git will just fail. So either we have to do locking
-    ourselves, or the download helper has to retry. It is possible to do
-    two fetches in parallel as long as they download to two different local
-    references. Needs more investigation.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...012-OpenGL-EGL-Avoid-X11-header-collision.patch | 60 ++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch b/package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch
+new file mode 100644
+index 0000000..8c65d1d
+--- /dev/null
++++ b/package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch
+@@ -0,0 +1,60 @@
++From 87c9c18fad02744238336a6cf1ce70d3ec2c89c2 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 11 Jun 2016 17:03:07 +0200
++Subject: [PATCH 1/1] OpenGL/EGL: Avoid X11 header collision
++
++Including X11 headers via EGL/egl.h leads to a collision of defines
++between Qt and X11. To fix this qt5 added
++  DEFINES += MESA_EGL_NO_X11_HEADERS
++in various files:
++
++https://github.com/qtproject/qtbase/blob/dev/src/platformsupport/eglconvenience/eglconvenience.pri#L19
++https://github.com/qtproject/qtbase/blob/dev/src/plugins/platforms/minimalegl/minimalegl.pro#L10
++https://github.com/qtproject/qtbase/blob/dev/src/plugins/platforms/eglfs/deviceintegration/eglfs_x11/eglfs_x11.pro#L6
++[...]
++
++This patch fixes a similar compile error in qt4:
++http://autobuild.buildroot.net/results/9b0/9b0ed92984eead89d148eaa71aff6e2f1e117837/
++http://autobuild.buildroot.org/results/4fd/4fd57553336d36439fab32a7221fc8639758e887/
++http://autobuild.buildroot.org/results/5cb/5cb8072f8220f7203fa79936eedcc43eab53ec66/
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(patch not sent upstream because qt4 branch is closed:
++ http://blog.qt.io/blog/2015/05/26/qt-4-8-7-released/)
++---
++
++ src/gui/egl/egl.pri   | 3 +++
++ src/opengl/opengl.pro | 3 +++
++ 2 files changed, 6 insertions(+)
++
++diff --git a/src/gui/egl/egl.pri b/src/gui/egl/egl.pri
++index 8e8664c..715ffd7 100644
++--- a/src/gui/egl/egl.pri
+++++ b/src/gui/egl/egl.pri
++@@ -22,6 +22,9 @@ contains(QT_CONFIG, egl): {
++             !isEmpty(QMAKE_LIBS_EGL): LIBS += $$QMAKE_LIBS_EGL
++         }
++ 
+++	# Avoid X11 header collision
+++	DEFINES += MESA_EGL_NO_X11_HEADERS
+++
++ 	wince*: SOURCES += egl/qegl_wince.cpp
++ 
++ 	unix {
++diff --git a/src/opengl/opengl.pro b/src/opengl/opengl.pro
++index ce1a5d2..65b1031 100644
++--- a/src/opengl/opengl.pro
+++++ b/src/opengl/opengl.pro
++@@ -149,6 +149,9 @@ embedded {
++                qglwindowsurface_qws_p.h \
++                qgl_egl_p.h
++ 
+++    # Avoid X11 header collision
+++    DEFINES += MESA_EGL_NO_X11_HEADERS
+++
++     contains(QT_CONFIG, fontconfig) {
++         include($$QT_SOURCE_TREE/config.tests/unix/freetype/freetype.pri)
++     } else {
++-- 
++2.8.1
++
