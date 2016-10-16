@@ -1,190 +1,235 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 16 Oct 2016 15:53:53 +0200
-Subject: [Buildroot] [git commit] util-linux: expand selection of libraries
-	and utilities
-Message-ID: <20161016135433.71FB9817E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] util-linux: clean up libraries and tools
+	selections
+Message-ID: <20161016135433.6568C8197C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc2d5d3ec71db904213131df56c749acfa9874cf
+commit: https://git.buildroot.net/buildroot/commit/?id=0e10c7324c7273163bd4abc6128e85e9f790793a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Add option to control installation of libfdisk
-- Add libfdisk license to the comment in util-linux.mk
-- List all utilities provided by the basic set and document that
-  linux32, linux64, uname26, i386 and x86_64 are symlinks to setarch
-- Add options to install cal, ipcrm, ipcs, logger, lslogin and pg
+Fix several problems in the package recipe:
+
+- Make 'bool "lib<foo>"' the first item in each block
+- Move the depends before the selects
+- Add missing dependencies on BR2_USE_MMU, for fork()
+- Improve help for cramfs utilities and login utilities
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-[Thomas: add missing dependency of the new lslogins option on
-libsmartcols, and therefore !MMU.]
+[Thomas:
+ - remove capitalization of prompts, for consistency
+ - add missing dependencies on libsmartcols, and therefore !MMU]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/util-linux/Config.in     | 53 ++++++++++++++++++++++++++++++++++++++++
- package/util-linux/util-linux.mk |  9 ++++++-
- 2 files changed, 61 insertions(+), 1 deletion(-)
+ package/util-linux/Config.in | 55 ++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 45 insertions(+), 10 deletions(-)
 
 diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 8945b7f..917a53d 100644
+index b2307f4..8945b7f 100644
 --- a/package/util-linux/Config.in
 +++ b/package/util-linux/Config.in
-@@ -18,6 +18,14 @@ config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+@@ -12,22 +12,22 @@ menuconfig BR2_PACKAGE_UTIL_LINUX
+ if BR2_PACKAGE_UTIL_LINUX
+ 
+ config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+-	depends on BR2_USE_MMU # fork
+ 	bool "libblkid"
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
  	help
  	  Install libblkid.
  
-+config BR2_PACKAGE_UTIL_LINUX_LIBFDISK
-+	bool "libfdisk"
+ config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+-	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+-	depends on BR2_USE_MMU # util-linux/libblkid
+ 	bool "libmount"
 +	depends on BR2_USE_MMU # fork()
 +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	help
-+	  Install libfdisk.
-+
- config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	bool "libmount"
- 	depends on BR2_USE_MMU # fork()
-@@ -41,11 +49,23 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-+	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
- 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
  	help
- 	  Install the basic set of util-linux binaries.
+ 	  Install libmount.
  
-+	  blkdiscard, blkid, blockdev, cfdisk, chcpu, col, colcrt,
-+	  colrm, column, ctrlaltdel, dmesg, fdisk, findfs, findmnt,
-+	  flock, fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize,
-+	  ldattach, look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie,
-+	  mkfs, mkswap, namei, prlimit, readprofile, renice, rev,
-+	  rtcwake, script, scriptreplay, setarch, setsid, sfdisk,
-+	  swaplabel, swapoff, swapon, tailf, uuidgen, whereis, wipefs
-+
-+	  The setarch utility also installs architecture-specific
-+	  symlinks like linux32, linux64, uname26, i386 and x86_64.
-+
- if BR2_PACKAGE_UTIL_LINUX_BINARIES
+ config BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
+ 	bool "libsmartcols"
+-	depends on BR2_USE_MMU # fork
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Install libsmartcols.
+ 
+@@ -50,6 +50,7 @@ if BR2_PACKAGE_UTIL_LINUX_BINARIES
  
  config BR2_PACKAGE_UTIL_LINUX_AGETTY
-@@ -59,6 +79,11 @@ config BR2_PACKAGE_UTIL_LINUX_BFS
+ 	bool "agetty"
++	depends on BR2_USE_MMU # fork()
  	help
- 	  SCO bfs filesystem support
+ 	  Alternative linux getty
  
-+config BR2_PACKAGE_UTIL_LINUX_CAL
-+	bool "cal"
-+	help
-+	  Display a calendar, or some part of it
-+
- config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
- 	bool "chfn/chsh"
+@@ -76,10 +77,14 @@ config BR2_PACKAGE_UTIL_LINUX_CRAMFS
+ 	bool "cramfs utilities"
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+-	  Build fsck.cramfs and mkfs.cramfs
++	  Utilities for compressed ROM file system (fsck.cramfs, mkfs.cramfs)
+ 
+ config BR2_PACKAGE_UTIL_LINUX_EJECT
+ 	bool "eject"
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  Eject removable media
+ 
+@@ -95,6 +100,10 @@ config BR2_PACKAGE_UTIL_LINUX_FDFORMAT
+ 
+ config BR2_PACKAGE_UTIL_LINUX_FSCK
+ 	bool "fsck"
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  Check and repair a linux filesystem
+ 
+@@ -120,13 +129,14 @@ config BR2_PACKAGE_UTIL_LINUX_LINE
+ 
+ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
+ 	bool "login utilities"
++	depends on BR2_USE_MMU # fork() (login, runuser, su, sulogin)
  	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
-@@ -112,6 +137,16 @@ config BR2_PACKAGE_UTIL_LINUX_HWCLOCK
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+ 	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
  	help
- 	  Query or set the hardware clock (RTC)
+-	  Build login utilities (last, login, su, sulogin)
++	  Login utilities (last, login, runuser, su, sulogin)
  
-+config BR2_PACKAGE_UTIL_LINUX_IPCRM
-+	bool "ipcrm"
-+	help
-+	  Remove certain IPC resources
-+
-+config BR2_PACKAGE_UTIL_LINUX_IPCS
-+	bool "ipcs"
-+	help
-+	  Show information on IPC facilities
-+
- config BR2_PACKAGE_UTIL_LINUX_KILL
- 	bool "kill"
- 	help
-@@ -142,6 +177,11 @@ comment "login utilities needs a uClibc or glibc toolchain w/ wchar, locale, dyn
+ comment "login utilities needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
  	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
- 		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+@@ -134,6 +144,8 @@ comment "login utilities needs a uClibc or glibc toolchain w/ wchar, locale, dyn
  
-+config BR2_PACKAGE_UTIL_LINUX_LOGGER
-+	bool "logger"
-+	help
-+	  Enter messages into the system log
-+
  config BR2_PACKAGE_UTIL_LINUX_LOSETUP
  	bool "losetup"
- 	depends on BR2_USE_MMU # libsmartcols
-@@ -149,6 +189,13 @@ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
++	depends on BR2_USE_MMU # libsmartcols
++	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
  	help
  	  Set up and control loop devices
  
-+config BR2_PACKAGE_UTIL_LINUX_LSLOGINS
-+	bool "lslogins"
-+	depends on BR2_USE_MMU # libsmartcols
-+	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-+	help
-+	  Display information about known users in the system
-+
- config BR2_PACKAGE_UTIL_LINUX_MESG
- 	bool "mesg"
+@@ -149,17 +161,26 @@ config BR2_PACKAGE_UTIL_LINUX_MINIX
+ 
+ config BR2_PACKAGE_UTIL_LINUX_MORE
+ 	bool "more"
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
  	help
-@@ -204,6 +251,12 @@ config BR2_PACKAGE_UTIL_LINUX_NSENTER
+ 	  File perusal filter for crt viewing
+ 
+ config BR2_PACKAGE_UTIL_LINUX_MOUNT
+ 	bool "mount/umount"
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  Mount/unmount filesystems
+ 
+ config BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT
+ 	bool "mountpoint"
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  See if a directory is a mountpoint
+ 
+@@ -175,17 +196,21 @@ config BR2_PACKAGE_UTIL_LINUX_NOLOGIN
+ 
+ config BR2_PACKAGE_UTIL_LINUX_NSENTER
+ 	bool "nsenter"
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	help
+-	  Enter the namespaces of another process.
++	  Enter the namespaces of another process
+ 
  comment "nsenter needs a toolchain w/ headers >= 3.0"
  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
  
-+config BR2_PACKAGE_UTIL_LINUX_PG
-+	bool "pg"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Browse pagewise through text files
-+
  config BR2_PACKAGE_UTIL_LINUX_PARTX
  	bool "partition utilities"
- 	depends on BR2_USE_MMU # fork()
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index f648155..ca00f30 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -11,7 +11,7 @@ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERS
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+-	  Partition tools (addpart, delpart, partx)
++	  Partition utilities (addpart, delpart, partx)
  
- # README.licensing claims that some files are GPLv2-only, but this is not true.
- # Some files are GPLv3+ but only in tests.
--UTIL_LINUX_LICENSE = GPLv2+, BSD-4c, libblkid and libmount LGPLv2.1+, libuuid BSD-3c
-+UTIL_LINUX_LICENSE = GPLv2+, BSD-4c, libblkid, libfdisk and libmount LGPLv2.1+, libuuid BSD-3c
- UTIL_LINUX_LICENSE_FILES = README.licensing Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.UCB Documentation/licenses/COPYING.LGPLv2.1 Documentation/licenses/COPYING.BSD-3
- UTIL_LINUX_INSTALL_STAGING = YES
- UTIL_LINUX_DEPENDENCIES = host-pkgconf
-@@ -73,6 +73,7 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
- UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_BFS),--enable-bfs,--disable-bfs) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_CAL),--enable-cal,--disable-cal) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
-@@ -80,15 +81,20 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FDFORMAT),--enable-fdformat,--disable-fdformat) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_HWCLOCK),--enable-hwclock,--disable-hwclock) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCRM),--enable-ipcrm,--disable-ipcrm) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCS),--enable-ipcs,--disable-ipcs) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBFDISK),--enable-libfdisk,--disable-libfdisk) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS),--enable-libsmartcols,--disable-libsmartcols) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGGER),--enable-logger,--disable-logger) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LSLOGINS),--enable-lslogins,--disable-lslogins) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MINIX),--enable-minix,--disable-minix) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MORE),--enable-more,--disable-more) \
-@@ -98,6 +104,7 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_NOLOGIN),--enable-nologin,--disable-nologin) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_NSENTER),--enable-nsenter,--disable-nsenter) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),--enable-partx,--disable-partx) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_PG),--enable-pg,--disable-pg) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT),--enable-pivot_root,--disable-pivot_root) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
+ config BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
+ 	bool "pivot_root"
+@@ -208,7 +233,7 @@ config BR2_PACKAGE_UTIL_LINUX_RESET
+ 	  Reset the terminal
+ 
+ config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
+-	bool "schedutils"
++	bool "scheduling utilities"
+ 	help
+ 	  Scheduling utilities (chrt, ionice, taskset)
+ 
+@@ -226,6 +251,7 @@ config BR2_PACKAGE_UTIL_LINUX_SETTERM
+ 
+ config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
+ 	bool "switch_root"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Switch to another filesystem as the root of the mount tree
+ 
+@@ -243,6 +269,7 @@ config BR2_PACKAGE_UTIL_LINUX_UL
+ 
+ config BR2_PACKAGE_UTIL_LINUX_UNSHARE
+ 	bool "unshare"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Run program with some namespaces unshared from parent
+ 
+@@ -253,21 +280,27 @@ config BR2_PACKAGE_UTIL_LINUX_UTMPDUMP
+ 
+ config BR2_PACKAGE_UTIL_LINUX_UUIDD
+ 	bool "uuidd"
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  UUID generation daemon
+ 
+ config BR2_PACKAGE_UTIL_LINUX_VIPW
+ 	bool "vipw"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Edit the password, group, shadow-password or shadow-group file
+ 
+ config BR2_PACKAGE_UTIL_LINUX_WALL
+ 	bool "wall"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Send a message to everybody's terminal
+ 
+ config BR2_PACKAGE_UTIL_LINUX_WDCTL
+ 	bool "wdctl"
++	depends on BR2_USE_MMU # libsmartcols
++	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
+ 	help
+ 	  Shows hardware watchdog status
+ 
+@@ -278,6 +311,8 @@ config BR2_PACKAGE_UTIL_LINUX_WRITE
+ 
+ config BR2_PACKAGE_UTIL_LINUX_ZRAMCTL
+ 	bool "zramctl"
++	depends on BR2_USE_MMU # libsmartcols
++	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
+ 	help
+ 	  Set up and control zram devices
+ 
