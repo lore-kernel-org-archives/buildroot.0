@@ -1,22 +1,58 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 16 Oct 2016 13:12:38 +0200
-Subject: [Buildroot] [PATCH v6 2/9] package/pkg-cmake.mk: move
-	CMAKE_BUILD_TYPE definition into toolchainfile.cmake
+Date: Sun, 16 Oct 2016 13:12:39 +0200
+Subject: [Buildroot] [PATCH v6 3/9] toolchainfile.cmake: set per-config
+	appended {C, CXX}FLAGS
 In-Reply-To: <20161016111245.1847-1-s.martin49@gmail.com>
 References: <20161016111245.1847-1-s.martin49@gmail.com>
-Message-ID: <20161016111245.1847-3-s.martin49@gmail.com>
+Message-ID: <20161016111245.1847-4-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The chosen CMAKE_BUILD_TYPE encodes an option of the Buildroot
-configuration, so it makes more sense to save it in the
-toolchainfile.cmake than to pass it during configure.
+When a build type is set, CMake does append some flags that can override
+those set by Buildroot due to the gcc option parser (in which the last
+argument controling an option wins).
 
-It is still possible to override the build type on the cmake
+Hereafter is a summary of the optimization and debug flags set by
+Buildroot and appended by CMake.
+
+* Flags set by Buildroot depending on the configuration:
+
+  BR2_ENABLE_DEBUG | Optim. level        | Buildroot {C,CXX}FLAGS
+  =================+=====================+=======================
+          y        | BR2_OPTIMIZE_S      | -Os -gx
+          y        | BR2_OPTIMIZE_G      | -Og -gx
+          y        | BR2_OPTIMIZE_{0..3} | -On -gx
+          n        | BR2_OPTIMIZE_S      | -Os
+          n        | BR2_OPTIMIZE_G      | -Og
+          n        | BR2_OPTIMIZE_{0..3} | -On
+
+* Default flags appended by CMake depending on the build type:
+
+  Build type     | Flags           | Effects on {C,CXX}FLAGS
+  ===============+=================+===========================================
+  Debug          | -g              | Force -g, compatible with BR2_ENABLE_DEBUG
+  MinSizeRel     | -Os -DNDEBUG    | Set -Os, compatible with BR2_OPTIMIZE_S
+  Release        | -O3 -DNDEBUG    | Set -O3, closest to the others cases,
+                 |                 | though the optimization level is forced.
+  RelWithDebInfo | -O2 -g -DNDEBUG | Force -g and set -O2, not friendly with BR
+
+To avoid the CMake flags take precedence over the Buildroot ones, this
+change sets in toolchainfile.cmake the per-config compiler flags CMake
+can append depending on the build type Buildroot defined.
+So, CMake does not mess up with the compilation flags Buildroot sets.
+
+It is still possible to override these per-config flags on the cmake
 command line.
+
+Note:
+  If a CMake-based project forces the compiler and/or linker flag
+  definitions (the default ones or the per-config ones - e.g.
+  CMAKE_C_FLAGS/CMAKE_C_FLAGS_{DEBUG,RELEASE}), there is not much
+  Buildroot can do about it.
+  So, the flags will be overwritten anyway in these cases.
 
 Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
@@ -24,8 +60,7 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 changes v5->v6:
-- reword commit log (Arnout)
-- simplify/remove intermediate variable (Arnout)
+- reword commit log
 
 changes v4->v5:
 - fix cmake set call
@@ -33,57 +68,30 @@ changes v4->v5:
 changes v3->v4:
 - new patch
 ---
- CHANGES                             | 6 ++++++
- package/pkg-cmake.mk                | 2 +-
- support/misc/toolchainfile.cmake.in | 3 +++
- 3 files changed, 10 insertions(+), 1 deletion(-)
+ support/misc/toolchainfile.cmake.in | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index b4bd5fe..c0e3e79 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,9 @@
-+2016.11-rc1,
-+
-+    toolchainfile.cmake:
-+    * when used outside of Buildroot, if not specified on the command
-+      line, the CMAKE_BUILD_TYPE is by toolchainfile.cmake.
-+
- 2016.08, Released September 1st, 2016
- 
- 	Minor fixes.
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 4883b3b..4e0e838 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -87,7 +87,6 @@ define $(2)_CONFIGURE_CMDS
- 	PATH=$$(BR_PATH) \
- 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
- 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
--		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
- 		-DCMAKE_COLOR_MAKEFILE=OFF \
- 		-DBUILD_DOC=OFF \
-@@ -247,5 +246,6 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
- 		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
- 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
- 		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
-+		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
- 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
- 		> $@
 diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index 649b52d..1c5031f 100644
+index 1c5031f..2ace940 100644
 --- a/support/misc/toolchainfile.cmake.in
 +++ b/support/misc/toolchainfile.cmake.in
-@@ -13,6 +13,9 @@ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST
+@@ -13,6 +13,17 @@ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST
  set(CMAKE_SYSTEM_NAME Linux)
  set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
  
-+# Build type from the Buildroot configuration
-+set(CMAKE_BUILD_TYPE @@CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configuration")
++# Set the {C,CXX}FLAGS appended by CMake depending on the build type
++# sets by Buildroot.
++#
++# Note:
++#   if the project forces some of these flag variables, Buildroot is
++#   screwed up and there is nothing Buildroot can do about that :(
++set(CMAKE_C_FLAGS_DEBUG "" CACHE STRING "Debug CFLAGS")
++set(CMAKE_CXX_FLAGS_DEBUG "" CACHE STRING "Debug CXXFLAGS")
++set(CMAKE_C_FLAGS_RELEASE " -DNEBUG" CACHE STRING "Release CFLAGS")
++set(CMAKE_CXX_FLAGS_RELEASE " -DNEBUG" CACHE STRING "Release CXXFLAGS")
 +
- set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
- set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
- set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@ ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Buildroot LDFLAGS")
+ # Build type from the Buildroot configuration
+ set(CMAKE_BUILD_TYPE @@CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configuration")
+ 
 -- 
 2.10.0
