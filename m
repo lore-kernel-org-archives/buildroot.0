@@ -1,38 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Oct 2016 13:12:41 +0200
-Subject: [Buildroot] [PATCH 1/4] toolchain/external: bump Linaro ARM to
- 2016.05 for i686 hosts
-In-Reply-To: <1476219900-13020-1-git-send-email-romain.naour@gmail.com>
-References: <1476219900-13020-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161016131241.43839c5b@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 16 Oct 2016 13:12:36 +0200
+Subject: [Buildroot] [PATCH v6 0/9] Misc. CMake fixes
+Message-ID: <20161016111245.1847-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi all,
 
-On Tue, 11 Oct 2016 23:04:57 +0200, Romain Naour wrote:
-> This Linaro release provide a new toolchain archive for i686 hosts, so update our
-> old 2014.09.
-> 
-> Tested with Qemu qemu-2.4.1-11.fc23 and with HOSTARCH set to x86 in the Buildroot
-> main Makefile.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> My host is a x86_64
-> ---
->  toolchain/toolchain-external/Config.in             | 29 +---------------------
->  .../toolchain-external/toolchain-external.hash     |  3 +--
->  toolchain/toolchain-external/toolchain-external.mk |  7 ++----
->  3 files changed, 4 insertions(+), 35 deletions(-)
+Here is a short series reworking the way the Buildroot's CMake
+infrastructure handles compiler/linker flags.
 
-All four patches applied. Thanks!
+Patch 1 to 3 fix the optimization and debug flags passed/set by CMake
+through the toolchainfile.cmake file.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Patches 4 to 8 clean up CMake-based package regarding {C,CXX,LD}FLAGS.
+
+Patch 9 reworks the way the compiler/linker flags are set in
+toolchainfile.cmake.
+
+Regards,
+Sam
+
+
+Max Filippov (1):
+  package/opencv3: fix CMAKE_CXX_FLAGS
+
+Samuel Martin (8):
+  Revert "package/cmake: with BR2_ENABLE_DEBUG use RelWithDebInfo"
+  package/pkg-cmake.mk: move CMAKE_BUILD_TYPE definition into
+    toolchainfile.cmake
+  toolchainfile.cmake: set per-config appended {C,CXX}FLAGS
+  package/gflags: include TARGET_CXXFLAGS to the overloaded CXXFLAGS
+  package/gnuradio: include TARGET_CFLAGS to the overloaded CFLAGS
+  package/libcec: include TARGET_{C,CXX}FLAGS to the overloaded
+    {C,CXX}FLAGS
+  package/rpi-userland: include TARGET_CFLAGS to the overloaded CFLAGS
+  toochainfile.cmake: rework the way Buildroot sets flags
+
+ CHANGES                              |  9 +++++++++
+ package/gflags/gflags.mk             |  3 ++-
+ package/gnuradio/gnuradio.mk         |  2 +-
+ package/libcec/libcec.mk             |  5 +++--
+ package/opencv3/opencv3.mk           |  2 +-
+ package/pkg-cmake.mk                 |  2 +-
+ package/rpi-userland/rpi-userland.mk |  3 ++-
+ support/misc/toolchainfile.cmake.in  | 31 +++++++++++++++++++++++++++----
+ 8 files changed, 46 insertions(+), 11 deletions(-)
+
+--
+2.10.0
