@@ -1,32 +1,72 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 16 Oct 2016 23:42:46 +0200
-Subject: [Buildroot] Report of the Buildroot Developer Meeting available
-Message-ID: <fef64e6a-c511-d363-0cc9-c34091066c98@mind.be>
+From: Brandon Maier <brandon.maier@rockwellcollins.com>
+Date: Sun, 16 Oct 2016 18:11:50 -0500
+Subject: [Buildroot] [PATCH 1/1] support/download: Add git download
+ method for SHAs
+In-Reply-To: <97a00115-1935-4e29-05b6-55d781f2c11b@mind.be>
+References: <54fbe894-b6c0-574f-7b52-7eb8c09525f5@mind.be>
+ <580308adbc1c4_26773ff56a3c4b24498bb@ultri3.mail>
+ <97a00115-1935-4e29-05b6-55d781f2c11b@mind.be>
+Message-ID: <CA+fik50Rmi9JKdTLq+JZVFQOh9MiznP0Bd3XDEb1_UCM94tYJA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi all,
+On Sun, Oct 16, 2016 at 2:25 AM, Arnout Vandecappelle <arnout@mind.be>
+wrote:
+>
+>
+>  Actually, it is better to use the whole ref, includes refs/*/ because
+> there may
+> be a branch and tag with the same name. And incidentally this simplifies
+> the awk
+> expression :-)
+>
+>  Grmbl, git clone doesn't support refs/.../... style of refs. git clone
+> sucks.
+> Why don't we do
+>
+> git init
+> git fetch
+>
+> all the time? We're anyway doing a git fetch down there... Could just as
+> well be
+> done always. Oh, and git fetch does support --depth so no issue there.
+>
 
- We just finished the Buildroot Developer Meeting in Berlin. We discussed quite
-a few topics as you can find in the report [1]. In addition, we have worked on a
-number of pending issues for which patches were already available in patchwork,
-and we've reduced the patchwork backlog from about 190 patches (excluding
-Gustavo's 50-patch series) to 94 now.
+That seems reasonable. As Ricardo and you mentioned, git fetch seems to
+work with any ref (including special refs), and is smart about searching
+for matching branches. We could simplify this down greatly and also cover
+the special refs scenario from Yann's patch. Something like...
 
- We'll meet again at FOSDEM, most likely on February 6 and 7 2017.
+equivalent_ref="$(git ls-remote $repo | awk '/^$cset/{ print $2; exit}')"
+git init $basename
+pushd $basename
+git remote add origin $repo
+if [ -n $equivalent_ref ]; then
+    git fetch --depth=1 origin $equivalent_ref
+    # $cset must be a SHA-1 here, so checkout $cset so we know we got the
+correct commit
+    git checkout $cset
+    git_done=1
+fi
+if [ $git_done -ne 1 ]; then
+    # Don't know if cset is a sha or ref, so don't try to add to local
+refs, instead checkout FETCH_HEAD
+    git fetch --depth=1 origin $cset
+    git checkout FETCH_HEAD
+    git_done=1
+fi
+# Full fetch w/ special refs
+if [ $git_done -ne 1]; then
+    git fetch -u origin 'refs/*:refs/*'
+    git checkout $cset
+fi
 
- Regards,
- Arnout
-
-[1] http://elinux.org/Buildroot:DeveloperDaysELCE2016#Report
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+The downside is we won't add refs to our local refs/ on a shallow clone.
+But it looks like we only needed them for checkout, which we can do via
+FETCH_HEAD instead.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161016/5d6f3239/attachment.html>
