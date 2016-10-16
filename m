@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 16 Oct 2016 19:48:34 +0200
-Subject: [Buildroot] [PATCH v11 4/4] core: only remove O from
-	MAKEOVERRIDES
-In-Reply-To: <20161016115423.17881-5-s.martin49@gmail.com>
-References: <20161016115423.17881-1-s.martin49@gmail.com>
- <20161016115423.17881-5-s.martin49@gmail.com>
-Message-ID: <2e3bb5cb-3101-ab44-da26-37ac0226a3d4@mind.be>
+Date: Sun, 16 Oct 2016 21:05:57 +0200
+Subject: [Buildroot] [PATCH v6 2/9] package/pkg-cmake.mk: move
+ CMAKE_BUILD_TYPE definition into toolchainfile.cmake
+In-Reply-To: <20161016111245.1847-3-s.martin49@gmail.com>
+References: <20161016111245.1847-1-s.martin49@gmail.com>
+ <20161016111245.1847-3-s.martin49@gmail.com>
+Message-ID: <1f0e1114-76f4-92fd-f342-c58f1b7fc8a0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,61 +14,94 @@ To: buildroot@busybox.net
 
 
 
-On 16-10-16 13:54, Samuel Martin wrote:
-> For no apparent reason, MAKEOVERRIDES is not treated the same way
-> depending on whether O is set or not on the command line:
-> * when O is set on the command line (i.e. out-of-tree build): all
->   variables were stripped away from MAKEOVERRIDES;
-> * when O is not set on the command line (i.e. in-Buildroot-source-tree
->   build): all variables are kept and forwarded to the sub-make call.
+On 16-10-16 13:12, Samuel Martin wrote:
+> The chosen CMAKE_BUILD_TYPE encodes an option of the Buildroot
+> configuration, so it makes more sense to save it in the
+> toolchainfile.cmake than to pass it during configure.
 > 
-> This change cleans things up by only removing the relevant variables
-> from MAKEOVERRIDES when appropriate (i.e. removing O from MAKEOVERRIDES
-> when O is set on the command line) keeping all other variables as-is in the
-> sub-make call; O is set on the sub-make call anyway.
+> It is still possible to override the build type on the cmake
+> command line.
+> 
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- I'm not sure about this one. Clearing MAKEOVERRIDES makes sure that whatever we
-set on the commandline of Buildroot's make will not get passed down to
-sub-makes. I don't see anything for which it would be useful to pass it down to
-sub-makes as commandline overrides.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+except for a small typo in the CHANGES file...
 
- Note that whatever we specify on the command line will be passed down in two
-ways (unless it's overridden by the Makefile, like is done for O): it is passed
-in the environment, and it is passed in MAKEFLAGS in the environment. So even if
-we clear MAKEOVERRIDES, things still get passed down but just in the environment.
+> 
+> ---
+> changes v5->v6:
+> - reword commit log (Arnout)
+> - simplify/remove intermediate variable (Arnout)
+> 
+> changes v4->v5:
+> - fix cmake set call
+> 
+> changes v3->v4:
+> - new patch
+> ---
+>  CHANGES                             | 6 ++++++
+>  package/pkg-cmake.mk                | 2 +-
+>  support/misc/toolchainfile.cmake.in | 3 +++
+>  3 files changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/CHANGES b/CHANGES
+> index b4bd5fe..c0e3e79 100644
+> --- a/CHANGES
+> +++ b/CHANGES
+> @@ -1,3 +1,9 @@
+> +2016.11-rc1,
+> +
+> +    toolchainfile.cmake:
+> +    * when used outside of Buildroot, if not specified on the command
+> +      line, the CMAKE_BUILD_TYPE is by toolchainfile.cmake.
+                                      ^^set
 
- So, I don't see a good reason to apply this patch.
+ Actually the "when used outside of Buildroot" part is redundant because it is
+still true when used inside Buildroot :-)
+
 
  Regards,
  Arnout
 
-> 
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v9->v10:
-> - new patch
-> ---
->  Makefile | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index dcf8552..dc0a6d8 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -38,8 +38,9 @@ else
->  # Other packages might also support Linux-style out of tree builds
->  # with the O=<dir> syntax (E.G. BusyBox does). As make automatically
->  # forwards command line variable definitions those packages get very
-> -# confused. Fix this by telling make to not do so.
-> -MAKEOVERRIDES :=
-> +# confused. Fix this by telling make to not do so, only for O=..., but
-> +# keep all others (such as BR2_EXTERNAL, BR2_DL_DIR, etc).
-> +MAKEOVERRIDES := $(filter-out O=%,$(MAKEOVERRIDES))
->  # Strangely enough O is still passed to submakes with MAKEOVERRIDES
->  # (with make 3.81 atleast), the only thing that changes is the output
->  # of the origin function (command line -> environment).
+> +
+>  2016.08, Released September 1st, 2016
+>  
+>  	Minor fixes.
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 4883b3b..4e0e838 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -87,7 +87,6 @@ define $(2)_CONFIGURE_CMDS
+>  	PATH=$$(BR_PATH) \
+>  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+>  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+> -		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
+>  		-DCMAKE_INSTALL_PREFIX="/usr" \
+>  		-DCMAKE_COLOR_MAKEFILE=OFF \
+>  		-DBUILD_DOC=OFF \
+> @@ -247,5 +246,6 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+>  		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
+>  		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
+>  		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
+> +		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
+>  		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+>  		> $@
+> diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+> index 649b52d..1c5031f 100644
+> --- a/support/misc/toolchainfile.cmake.in
+> +++ b/support/misc/toolchainfile.cmake.in
+> @@ -13,6 +13,9 @@ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST
+>  set(CMAKE_SYSTEM_NAME Linux)
+>  set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
+>  
+> +# Build type from the Buildroot configuration
+> +set(CMAKE_BUILD_TYPE @@CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configuration")
+> +
+>  set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
+>  set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
+>  set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@ ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Buildroot LDFLAGS")
 > 
 
 -- 
