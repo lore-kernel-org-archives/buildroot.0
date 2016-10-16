@@ -1,52 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Oct 2016 13:12:29 +0200
-Subject: [Buildroot] [git commit] gzip: force shell shebang to /bin/sh
-Message-ID: <20161016111259.6E69081EC1@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 16 Oct 2016 13:12:41 +0200
+Subject: [Buildroot] [PATCH v6 5/9] package/gnuradio: include TARGET_CFLAGS
+	to the overloaded CFLAGS
+In-Reply-To: <20161016111245.1847-1-s.martin49@gmail.com>
+References: <20161016111245.1847-1-s.martin49@gmail.com>
+Message-ID: <20161016111245.1847-6-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ae8d415e60fec75997b9d9a533ab5103d4d93d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-gzip's configure uses $SHELL to find a POSIX-compliant shell to put in
-the shebang of its shell scripts (zcat, gzexe, ...). However, we set
-$SHELL to /bin/bash in the Makefile, which may not be present on the
-target. We do make sure that /bin/sh always points to a valid shell on
-the target so we can use that.
-
-The configure discovery is completely broken for cross-compilation. The
-same $SHELL is used during the build (it is used by make to run the
-commands in rules) and on the target. Also, the checks for a valid
-shell use the host shell, not the target shell.
-
-We could try to patch gzip to fix that, but the checks can anyway not
-be run for the target shell, so we'll have to override it with a cache
-value anyway. So we can just as well do exactly that, without patching.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reported-by: Pascal Speck <kernel@iktek.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gzip/gzip.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+changes v5->v6:
+- none
 
-diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
-index 6dc910e..c4e91b0 100644
---- a/package/gzip/gzip.mk
-+++ b/package/gzip/gzip.mk
-@@ -14,5 +14,12 @@ GZIP_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- GZIP_LICENSE = GPLv3+
- GZIP_LICENSE_FILES = COPYING
- GZIP_CONF_ENV += gl_cv_func_fflush_stdin=yes
-+# configure substitutes $(SHELL) for the shell shebang in scripts like
-+# gzexe. Unfortunately, the same $(SHELL) variable will also be used by
-+# make to run its commands. Fortunately, /bin/sh is always a POSIX shell
-+# on both the target and host systems that we support. Even with this,
-+# the configure check is slightly broken and prints a bogus warning:
-+#  "using /bin/sh, even though it may have file descriptor bugs"
-+GZIP_CONF_ENV += ac_cv_path_shell=/bin/sh
+changes v4->v5:
+- none
+
+changes v3->v4:
+- fix commit subject
+- update A/R/T tags
+
+changes v2->v3:
+- new patch
+---
+ package/gnuradio/gnuradio.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index 972f7a4..5cb00d2 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -36,7 +36,7 @@ GNURADIO_INSTALL_STAGING = YES
+ # CFLAGS to decide whether to build the NEON functions or not, and
+ # wants to see the string 'armv7' in the CFLAGS.
+ ifeq ($(BR2_ARM_CPU_ARMV7A)$(BR2_ARM_CPU_HAS_NEON),yy)
+-GNURADIO_CONF_OPTS += -DCMAKE_C_FLAGS="-march=armv7-a"
++GNURADIO_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -march=armv7-a"
+ endif
  
- $(eval $(autotools-package))
+ # As soon as -mfpu=neon is supported by the compiler, gnuradio will try
+-- 
+2.10.0
