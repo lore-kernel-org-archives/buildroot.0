@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 16 Oct 2016 20:53:47 +0200
-Subject: [Buildroot] [PATCH v6 1/9] Revert "package/cmake: with
- BR2_ENABLE_DEBUG use RelWithDebInfo"
-In-Reply-To: <20161016111245.1847-2-s.martin49@gmail.com>
-References: <20161016111245.1847-1-s.martin49@gmail.com>
- <20161016111245.1847-2-s.martin49@gmail.com>
-Message-ID: <e9db2ea4-567a-8ab0-27c6-d49272a531ad@mind.be>
+Date: Sun, 16 Oct 2016 19:48:34 +0200
+Subject: [Buildroot] [PATCH v11 4/4] core: only remove O from
+	MAKEOVERRIDES
+In-Reply-To: <20161016115423.17881-5-s.martin49@gmail.com>
+References: <20161016115423.17881-1-s.martin49@gmail.com>
+ <20161016115423.17881-5-s.martin49@gmail.com>
+Message-ID: <2e3bb5cb-3101-ab44-da26-37ac0226a3d4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,78 +14,61 @@ To: buildroot@busybox.net
 
 
 
-On 16-10-16 13:12, Samuel Martin wrote:
-> This reverts commit 4b0120183404913f7f7788ef4f0f6b51498ef363.
+On 16-10-16 13:54, Samuel Martin wrote:
+> For no apparent reason, MAKEOVERRIDES is not treated the same way
+> depending on whether O is set or not on the command line:
+> * when O is set on the command line (i.e. out-of-tree build): all
+>   variables were stripped away from MAKEOVERRIDES;
+> * when O is not set on the command line (i.e. in-Buildroot-source-tree
+>   build): all variables are kept and forwarded to the sub-make call.
 > 
-> Before reverting this patch, CMake packages are built with the following
-> options:
->   * if BR2_ENABLE_DEBUG is set:
->     The CMake build type is set to RelWithDebInfo, which means:
->     - Optimization level is forced to: -O2;
->     - no log nor assert due to -DNDEBUG;
->     - BR2_DEBUG_{1..3} effect is unchanged;
->   * otherwise:
->     The CMake build type is set to Release, which means:
->     - Optimization level is forced to: -O3;
->     - no log nor assert due to -DNDEBUG (as expected).
->   In any case, the optimization WRT the binary size is always ignored
->   and forced.
-> 
-> Reverting to the previous situation, so Buildroot now chooses between
-> the 'Debug' and 'Release' config types, which are semantically closer
-> to what Buildroot does everywhere else:
->   * if BR2_ENABLE_DEBUG is set:
->     The CMake build type is set to Debug, which means:
->     - only -g option is passed by CMake;
->     - optimization is not forced, nor debug level, so they are kept
->       as-is;
->   * otherwise:
->     The CMake build type is set to Release, so no change in this case:
->     - Optimization level is forced to: -O3;
->     - no log nor assert due to -DNDEBUG (as expected);
->     - size optimization is ignored.
-> 
-> Follow-up patches will fix the CMake flag variables that are appended by
-> CMake.
-> 
-> Cc: Charles Hardin <ckhardin@exablox.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> This change cleans things up by only removing the relevant variables
+> from MAKEOVERRIDES when appropriate (i.e. removing O from MAKEOVERRIDES
+> when O is set on the command line) keeping all other variables as-is in the
+> sub-make call; O is set on the sub-make call anyway.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ I'm not sure about this one. Clearing MAKEOVERRIDES makes sure that whatever we
+set on the commandline of Buildroot's make will not get passed down to
+sub-makes. I don't see anything for which it would be useful to pass it down to
+sub-makes as commandline overrides.
 
+ Note that whatever we specify on the command line will be passed down in two
+ways (unless it's overridden by the Makefile, like is done for O): it is passed
+in the environment, and it is passed in MAKEFLAGS in the environment. So even if
+we clear MAKEOVERRIDES, things still get passed down but just in the environment.
+
+ So, I don't see a good reason to apply this patch.
 
  Regards,
  Arnout
 
 > 
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> 
 > ---
-> changes v5->v6:
-> - revert 4b01201 instead (Arnout)
-> 
-> changes v4->v5:
-> - none
-> 
-> changes v3->v4:
-> - simplify build type selection
+> changes v9->v10:
+> - new patch
 > ---
->  package/pkg-cmake.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Makefile | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index aca9e61..4883b3b 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -87,7 +87,7 @@ define $(2)_CONFIGURE_CMDS
->  	PATH=$$(BR_PATH) \
->  	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
->  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
-> -		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release) \
-> +		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
->  		-DCMAKE_INSTALL_PREFIX="/usr" \
->  		-DCMAKE_COLOR_MAKEFILE=OFF \
->  		-DBUILD_DOC=OFF \
+> diff --git a/Makefile b/Makefile
+> index dcf8552..dc0a6d8 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -38,8 +38,9 @@ else
+>  # Other packages might also support Linux-style out of tree builds
+>  # with the O=<dir> syntax (E.G. BusyBox does). As make automatically
+>  # forwards command line variable definitions those packages get very
+> -# confused. Fix this by telling make to not do so.
+> -MAKEOVERRIDES :=
+> +# confused. Fix this by telling make to not do so, only for O=..., but
+> +# keep all others (such as BR2_EXTERNAL, BR2_DL_DIR, etc).
+> +MAKEOVERRIDES := $(filter-out O=%,$(MAKEOVERRIDES))
+>  # Strangely enough O is still passed to submakes with MAKEOVERRIDES
+>  # (with make 3.81 atleast), the only thing that changes is the output
+>  # of the origin function (command line -> environment).
 > 
 
 -- 
