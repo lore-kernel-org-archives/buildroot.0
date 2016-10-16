@@ -1,58 +1,61 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 16 Oct 2016 11:58:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/go-bootstrap: bump version to 1.4.3
-Message-ID: <20161016095854.3646-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 16 Oct 2016 12:01:29 +0200
+Subject: [Buildroot] [PATCH v3 1/2] spidermonkey185: New package.
+In-Reply-To: <1467800649-22119-1-git-send-email-nicolas.cavallari@green-communications.fr>
+References: <0dc17f18-b259-a618-67f3-099fd6ef0897@green-communications.fr>
+ <1467800649-22119-1-git-send-email-nicolas.cavallari@green-communications.fr>
+Message-ID: <20161016120129.4c40ec20@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bump includes
-https://go.googlesource.com/go/+/a527bdbda39c48fa772d8d54eb6b849f240442c1
+Hello Nicolas,
 
-which fixes a gcc6-related compile error
+On Wed,  6 Jul 2016 12:24:08 +0200, Nicolas Cavallari wrote:
+> This is the old 1.8.5 branch of spidermonkey, used in Firefox 4.
+> It is rather unmaintained, but some software still depend on it,
+> such as couchdb.
+> 
+> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> ---
+>  package/Config.in                                  |  1 +
+>  ...01-remove-unused-pkgconfg-nspr-dependency.patch | 18 +++++
+>  .../0002-make-shlib-synlink-relative.patch         | 21 +++++
+>  .../0003-regenerate-configure.patch                | 44 ++++++++++
+>  ...val_layout-on-64-bit-big-endian-platforms.patch | 91 +++++++++++++++++++++
+>  ...tatic-assert-fix-strict-aliasing-warnings.patch | 94 ++++++++++++++++++++++
+>  ...heFlush-support-error-on-exotic-platforms.patch | 34 ++++++++
+>  package/spidermonkey185/Config.in                  | 14 ++++
+>  package/spidermonkey185/spidermonkey185.hash       |  2 +
+>  package/spidermonkey185/spidermonkey185.mk         | 30 +++++++
+>  10 files changed, 349 insertions(+)
+>  create mode 100644 package/spidermonkey185/0001-remove-unused-pkgconfg-nspr-dependency.patch
+>  create mode 100644 package/spidermonkey185/0002-make-shlib-synlink-relative.patch
+>  create mode 100644 package/spidermonkey185/0003-regenerate-configure.patch
+>  create mode 100644 package/spidermonkey185/0004-Fix-jsval_layout-on-64-bit-big-endian-platforms.patch
+>  create mode 100644 package/spidermonkey185/0005-Remove-bad-static-assert-fix-strict-aliasing-warnings.patch
+>  create mode 100644 package/spidermonkey185/0006-Avoid-missing-cacheFlush-support-error-on-exotic-platforms.patch
+>  create mode 100644 package/spidermonkey185/Config.in
+>  create mode 100644 package/spidermonkey185/spidermonkey185.hash
+>  create mode 100644 package/spidermonkey185/spidermonkey185.mk
 
-cmd/6c
-/home/buildroot/br2/output/build/host-go-bootstrap-1.4.2/src/cmd/6c/txt.c: In function 'gmove':
-/home/buildroot/br2/output/build/host-go-bootstrap-1.4.2/src/cmd/6c/txt.c:995:28: error: left shift of negative value [-Werror=shift-negative-value]
-     f->vconst |= (vlong)~0 << 32;
-                            ^~
-/home/buildroot/br2/output/build/host-go-bootstrap-1.4.2/src/cmd/6c/txt.c:1045:28: error: left shift of negative value [-Werror=shift-negative-value]
-     f->vconst |= (vlong)~0 << 32;
-                            ^~
-cc1: all warnings being treated as errors
+We have been looking a bit at your patches during the Buildroot meeting
+this week-end. For both patches (spidermonkey185 and couchdb) there
+have been a number of comments. If you're still interested, could you
+address those comments ?
 
-not yet caught by autobuilders using this defconfig:
+Another thing is that CouchDB 2.0 has now been released (on September
+20), so we would preferably have that version packaged, if possible.
 
-http://autobuild.buildroot.net/results/394/394e22be0ef986463e97b3040dad8f978262732c/
+We'll mark your patches as Changes Requested in patchwork, so don't
+forget to send an updated version, otherwise we will forget about them.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/go-bootstrap/go-bootstrap.hash | 2 +-
- package/go-bootstrap/go-bootstrap.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks a lot!
 
-diff --git a/package/go-bootstrap/go-bootstrap.hash b/package/go-bootstrap/go-bootstrap.hash
-index 1d0566a..8938266 100644
---- a/package/go-bootstrap/go-bootstrap.hash
-+++ b/package/go-bootstrap/go-bootstrap.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 299a6fd8f8adfdce15bc06bde926e7b252ae8e24dd5b16b7d8791ed79e7b5e9b go1.4.2.src.tar.gz
-+sha256 9947fc705b0b841b5938c48b22dc33e9647ec0752bae66e50278df4f23f64959  go1.4.3.src.tar.gz
-diff --git a/package/go-bootstrap/go-bootstrap.mk b/package/go-bootstrap/go-bootstrap.mk
-index 29f2b03..f403f78 100644
---- a/package/go-bootstrap/go-bootstrap.mk
-+++ b/package/go-bootstrap/go-bootstrap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_BOOTSTRAP_VERSION = 1.4.2
-+GO_BOOTSTRAP_VERSION = 1.4.3
- GO_BOOTSTRAP_SITE = https://storage.googleapis.com/golang
- GO_BOOTSTRAP_SOURCE = go$(GO_BOOTSTRAP_VERSION).src.tar.gz
- 
+Thomas
 -- 
-2.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
