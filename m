@@ -1,138 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Oct 2016 13:07:08 +0200
-Subject: [Buildroot] [git commit] libiscsi: bump version to 1.18.0
-Message-ID: <20161016111151.991A781D5B@busybox.osuosl.org>
+Date: Sun, 16 Oct 2016 13:08:14 +0200
+Subject: [Buildroot] [git commit] toolchain/external: bump Linaro AArch64 to
+	2016.05 for i686 hosts
+Message-ID: <20161016111151.B821880195@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2206a0c0a7381cbfb53f6997e6c2405e96b391f8
+commit: https://git.buildroot.net/buildroot/commit/?id=fe3f9ecfecbe745112a73b377c2f22a744f620ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also...
+Tested with Qemu 2.6.1 and qemu_aarch64_virt_defconfig and with
+HOSTARCH set to x86 in the Buildroot main Makefile.
 
-- Switch to GitHub.
-- Remove LD=CC logic in libscsi.mk. This is now handled by the configure
-  script.
-- Add patch to fix unsafe include paths issues. This patch has been sent
-  upstream as a pull request.
-- Use a hook to create the m4 directory so autoreconf doesn't fail.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...lude.-This-is-unsafe-when-cross-compiling.patch | 67 ++++++++++++++++++++++
- package/libiscsi/libiscsi.hash                     |  2 +-
- package/libiscsi/libiscsi.mk                       | 13 +++--
- 3 files changed, 76 insertions(+), 6 deletions(-)
+ toolchain/toolchain-external/Config.in               | 20 +-------------------
+ toolchain/toolchain-external/toolchain-external.hash |  3 +--
+ toolchain/toolchain-external/toolchain-external.mk   |  7 ++-----
+ 3 files changed, 4 insertions(+), 26 deletions(-)
 
-diff --git a/package/libiscsi/0001-Do-not-use-I-usr-include.-This-is-unsafe-when-cross-compiling.patch b/package/libiscsi/0001-Do-not-use-I-usr-include.-This-is-unsafe-when-cross-compiling.patch
-new file mode 100644
-index 0000000..dc047ef
---- /dev/null
-+++ b/package/libiscsi/0001-Do-not-use-I-usr-include.-This-is-unsafe-when-cross-compiling.patch
-@@ -0,0 +1,67 @@
-+From f27bdf64f0c375352ca42928071a9178a5a04c46 Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Sun, 16 Oct 2016 10:53:13 +0100
-+Subject: [PATCH] Do not use -I/usr/include. This is unsafe when cross-compiling.
-+
-+Upstream status: PR sent (https://github.com/sahlberg/libiscsi/pull/219)
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+---
-+ examples/Makefile.am | 2 +-
-+ lib/Makefile.am      | 2 +-
-+ tests/Makefile.am    | 2 +-
-+ utils/Makefile.am    | 2 +-
-+ 4 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/examples/Makefile.am b/examples/Makefile.am
-+index 0de0b1f..42ad818 100644
-+--- a/examples/Makefile.am
-++++ b/examples/Makefile.am
-+@@ -1,6 +1,6 @@
-+ AM_CPPFLAGS=-I. -I${srcdir}/../include "-D_U_=__attribute__((unused))" \
-+ 	"-D_R_(A,B)=__attribute__((format(printf,A,B)))"
-+-AM_CFLAGS=$(WARN_CFLAGS) -I/usr/include
-++AM_CFLAGS=$(WARN_CFLAGS)
-+ LDADD = ../lib/libiscsi.la
-+ 
-+ noinst_PROGRAMS = iscsiclient iscsi-dd
-+diff --git a/lib/Makefile.am b/lib/Makefile.am
-+index d612fb7..47ffc33 100644
-+--- a/lib/Makefile.am
-++++ b/lib/Makefile.am
-+@@ -29,7 +29,7 @@ libiscsi_la_CPPFLAGS = -I${srcdir}/../include -I$(srcdir)/include \
-+ 	"-D_U_=__attribute__((unused))" \
-+ 	"-D_R_(A,B)=__attribute__((format(printf,A,B)))"
-+ 
-+-AM_CFLAGS=$(WARN_CFLAGS) -I/usr/include
-++AM_CFLAGS=$(WARN_CFLAGS)
-+ 
-+ dist_noinst_DATA = libiscsi.syms libiscsi.def
-+ 
-+diff --git a/tests/Makefile.am b/tests/Makefile.am
-+index 9d699fc..b4cbf21 100644
-+--- a/tests/Makefile.am
-++++ b/tests/Makefile.am
-+@@ -1,6 +1,6 @@
-+ AM_CPPFLAGS = -I../include "-D_U_=__attribute__((unused))" \
-+ 	"-D_R_(A,B)=__attribute__((format(printf,A,B)))"
-+-AM_CFLAGS = $(WARN_CFLAGS) -I/usr/include
-++AM_CFLAGS = $(WARN_CFLAGS)
-+ LDADD = ../lib/libiscsi.la
-+ 
-+ noinst_PROGRAMS = prog_reconnect prog_reconnect_timeout prog_noop_reply \
-+diff --git a/utils/Makefile.am b/utils/Makefile.am
-+index 657ca9d..bde1c81 100644
-+--- a/utils/Makefile.am
-++++ b/utils/Makefile.am
-+@@ -1,6 +1,6 @@
-+ AM_CPPFLAGS = -I${srcdir}/../include "-D_U_=__attribute__((unused))" \
-+ 	"-D_R_(A,B)=__attribute__((format(printf,A,B)))"
-+-AM_CFLAGS = $(WARN_CFLAGS) -I/usr/include
-++AM_CFLAGS = $(WARN_CFLAGS)
-+ LDADD = ../lib/libiscsi.la
-+ 
-+ bin_PROGRAMS = iscsi-inq iscsi-ls iscsi-perf iscsi-readcapacity16 \
-+-- 
-+2.10.0
-+
-diff --git a/package/libiscsi/libiscsi.hash b/package/libiscsi/libiscsi.hash
-index 8ccc264..4f7d1af 100644
---- a/package/libiscsi/libiscsi.hash
-+++ b/package/libiscsi/libiscsi.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 26aa5583053d4fe0d4686f76a76c216c7dce00130f008e652ece305b88758ff1  libiscsi-1.15.0.tar.gz
-+sha256 464d104e12533dc11f0dd7662cbc2f01c132f94aa4f5bd519e3413ef485830e8  libiscsi-1.18.0.tar.gz
-diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
-index 71c10c1..4c8a229 100644
---- a/package/libiscsi/libiscsi.mk
-+++ b/package/libiscsi/libiscsi.mk
-@@ -4,14 +4,17 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index eb01cf3..cdf01c9 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -483,28 +483,10 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
  
--LIBISCSI_VERSION = 1.15.0
--LIBISCSI_SITE = https://sites.google.com/site/libiscsitarballs/libiscsitarballs
-+LIBISCSI_VERSION = 1.18.0
-+LIBISCSI_SITE = $(call github,sahlberg,libiscsi,$(LIBISCSI_VERSION))
- LIBISCSI_LICENSE = GPLv2+, LGPLv2.1+
- LIBISCSI_LICENSE_FILES = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
- LIBISCSI_INSTALL_STAGING = YES
-+LIBISCSI_AUTORECONF = YES
+-# See note about Linaro ARM/ARMEB toolchains, above.
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+-	bool "Linaro AArch64 14.09"
+-	depends on BR2_aarch64
+-	depends on BR2_HOSTARCH = "x86"
+-	depends on !BR2_STATIC_LIBS
+-	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-	select BR2_TOOLCHAIN_HAS_FORTRAN
+-	help
+-	  Toolchain for the AArch64 architecture, from
+-	  http://www.linaro.org/engineering/armv8/
+-
+-# See note about Linaro ARM/ARMEB toolchains, above.
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	bool "Linaro AArch64 2016.05"
+ 	depends on BR2_aarch64
+-	depends on BR2_HOSTARCH = "x86_64"
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+index 65be7dd..41c2ab3 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -39,8 +39,7 @@ sha256 f1421c580ce977226f4fefc9c409b3b423260cc65a6e9dc6da88bb3478a521a0  gcc-lin
+ sha256 987941c9fffdf56ffcbe90e8984673c16648c477b537fcf43add22fa62f161cd  gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf.tar.xz
+ sha256 f6e9c0d3320760fe8f89e9ec3acdd7b4da7eff889c094b4a2acc286fd46f334f  gcc-linaro-5.3.1-2016.05-i686_armeb-linux-gnueabihf.tar.xz
+ sha256 6cf41c8944be56279cc14992aa075174b7a4c5938502536266eaaeef048f9440  gcc-linaro-5.3.1-2016.05-x86_64_armeb-linux-gnueabihf.tar.xz
+-sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+-sha256 a7b8f842fdc9d9be22ca4e0c999429780fc6f16ea798b032421b5ec0cfa53b3e  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
++sha256 d43227248f282a652da42322fcf4abfd3021f2a2f62e0cf6e242d82f55966ba9  gcc-linaro-5.3.1-2016.05-i686_aarch64-linux-gnu.tar.xz
+ sha256 1941dcf6229d6706bcb89b7976d5d43d170efdd17c27d5fe1738e7ecf22adc37  gcc-linaro-5.3.1-2016.05-x86_64_aarch64-linux-gnu.tar.xz
  
--# Force libiscsi to use gcc as the linker, otherwise it uses directly
--# ld, which doesn't work for certain architectures.
--LIBISCSI_CONF_ENV = LD="$(TARGET_CC)"
-+# We need to create the m4 directory to make autoreconf work properly.
-+define LIBISCSI_CREATE_M4_DIR
-+	mkdir -p $(@D)/m4
-+endef
-+LIBISCSI_POST_PATCH_HOOKS += LIBISCSI_CREATE_M4_DIR
- 
- $(eval $(autotools-package))
+ # Codescape toolchains from Imagination Technologies
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index fd1e75a..39c5734 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -376,13 +376,10 @@ TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2014R1-RC2.i
+ TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 3
+ TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_BLACKFIN_UCLIBC_EXTRA_EXTRACT
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64),y)
++TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.05/aarch64-linux-gnu
+ ifeq ($(HOSTARCH),x86)
+-TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+-TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_SYMLINK
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3.1-2016.05-i686_aarch64-linux-gnu.tar.xz
+ else
+-TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.05/aarch64-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3.1-2016.05-x86_64_aarch64-linux-gnu.tar.xz
+ endif
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
