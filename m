@@ -1,54 +1,79 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 16 Oct 2016 13:12:36 +0200
-Subject: [Buildroot] [PATCH v6 0/9] Misc. CMake fixes
-Message-ID: <20161016111245.1847-1-s.martin49@gmail.com>
+Date: Sun, 16 Oct 2016 13:12:37 +0200
+Subject: [Buildroot] [PATCH v6 1/9] Revert "package/cmake: with
+	BR2_ENABLE_DEBUG use RelWithDebInfo"
+In-Reply-To: <20161016111245.1847-1-s.martin49@gmail.com>
+References: <20161016111245.1847-1-s.martin49@gmail.com>
+Message-ID: <20161016111245.1847-2-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+This reverts commit 4b0120183404913f7f7788ef4f0f6b51498ef363.
 
-Here is a short series reworking the way the Buildroot's CMake
-infrastructure handles compiler/linker flags.
+Before reverting this patch, CMake packages are built with the following
+options:
+  * if BR2_ENABLE_DEBUG is set:
+    The CMake build type is set to RelWithDebInfo, which means:
+    - Optimization level is forced to: -O2;
+    - no log nor assert due to -DNDEBUG;
+    - BR2_DEBUG_{1..3} effect is unchanged;
+  * otherwise:
+    The CMake build type is set to Release, which means:
+    - Optimization level is forced to: -O3;
+    - no log nor assert due to -DNDEBUG (as expected).
+  In any case, the optimization WRT the binary size is always ignored
+  and forced.
 
-Patch 1 to 3 fix the optimization and debug flags passed/set by CMake
-through the toolchainfile.cmake file.
+Reverting to the previous situation, so Buildroot now chooses between
+the 'Debug' and 'Release' config types, which are semantically closer
+to what Buildroot does everywhere else:
+  * if BR2_ENABLE_DEBUG is set:
+    The CMake build type is set to Debug, which means:
+    - only -g option is passed by CMake;
+    - optimization is not forced, nor debug level, so they are kept
+      as-is;
+  * otherwise:
+    The CMake build type is set to Release, so no change in this case:
+    - Optimization level is forced to: -O3;
+    - no log nor assert due to -DNDEBUG (as expected);
+    - size optimization is ignored.
 
-Patches 4 to 8 clean up CMake-based package regarding {C,CXX,LD}FLAGS.
+Follow-up patches will fix the CMake flag variables that are appended by
+CMake.
 
-Patch 9 reworks the way the compiler/linker flags are set in
-toolchainfile.cmake.
+Cc: Charles Hardin <ckhardin@exablox.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Regards,
-Sam
+---
+changes v5->v6:
+- revert 4b01201 instead (Arnout)
 
+changes v4->v5:
+- none
 
-Max Filippov (1):
-  package/opencv3: fix CMAKE_CXX_FLAGS
+changes v3->v4:
+- simplify build type selection
+---
+ package/pkg-cmake.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Samuel Martin (8):
-  Revert "package/cmake: with BR2_ENABLE_DEBUG use RelWithDebInfo"
-  package/pkg-cmake.mk: move CMAKE_BUILD_TYPE definition into
-    toolchainfile.cmake
-  toolchainfile.cmake: set per-config appended {C,CXX}FLAGS
-  package/gflags: include TARGET_CXXFLAGS to the overloaded CXXFLAGS
-  package/gnuradio: include TARGET_CFLAGS to the overloaded CFLAGS
-  package/libcec: include TARGET_{C,CXX}FLAGS to the overloaded
-    {C,CXX}FLAGS
-  package/rpi-userland: include TARGET_CFLAGS to the overloaded CFLAGS
-  toochainfile.cmake: rework the way Buildroot sets flags
-
- CHANGES                              |  9 +++++++++
- package/gflags/gflags.mk             |  3 ++-
- package/gnuradio/gnuradio.mk         |  2 +-
- package/libcec/libcec.mk             |  5 +++--
- package/opencv3/opencv3.mk           |  2 +-
- package/pkg-cmake.mk                 |  2 +-
- package/rpi-userland/rpi-userland.mk |  3 ++-
- support/misc/toolchainfile.cmake.in  | 31 +++++++++++++++++++++++++++----
- 8 files changed, 46 insertions(+), 11 deletions(-)
-
---
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index aca9e61..4883b3b 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -87,7 +87,7 @@ define $(2)_CONFIGURE_CMDS
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+-		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release) \
++		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_DOC=OFF \
+-- 
 2.10.0
