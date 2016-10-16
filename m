@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Oct 2016 15:54:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/transmission: Use libsystemd
- instead of libsystemd-daemon
-In-Reply-To: <20160924192728.4981-1-bernd.kuhls@t-online.de>
-References: <20160924192728.4981-1-bernd.kuhls@t-online.de>
-Message-ID: <20161016155455.3f3b2e28@free-electrons.com>
+Date: Sun, 16 Oct 2016 15:55:38 +0200
+Subject: [Buildroot] [PATCH v7 1/3] util-linux: clean up libraries and
+ tools selections
+In-Reply-To: <1468113369-16118-2-git-send-email-casantos@datacom.ind.br>
+References: <20160708205217.GB3757@free.fr>
+ <1468113369-16118-1-git-send-email-casantos@datacom.ind.br>
+ <1468113369-16118-2-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20161016155538.41de2d46@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +15,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 24 Sep 2016 21:27:28 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/78a/78af581f24758f7c2b19305a801e4c6c943730fb/
+On Sat,  9 Jul 2016 22:16:06 -0300, Carlos Santos wrote:
+> Fix several problems in the package recipe:
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> - Make 'bool "lib<foo>"' the first item in each block
+> - Move the depends before the selects
+> - Add missing dependencies on BR2_USE_MMU, for fork()
+> - Put option names corresponding to package/utility/library names in
+>   lowercase, others start with capital letter
+> - Improve help for cramfs utilities and login utilities
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 > ---
->  package/transmission/0005-libsystemd.patch | 133 +++++++++++++++++++++++++++++
->  1 file changed, 133 insertions(+)
->  create mode 100644 package/transmission/0005-libsystemd.patch
+>  package/util-linux/Config.in     | 67 ++++++++++++++++++++++++++--------------
+>  package/util-linux/util-linux.mk |  2 --
+>  2 files changed, 43 insertions(+), 26 deletions(-)
 
-Applied to master, thanks.
+Applied to master, with the following changes:
+
+    [Thomas:
+     - remove capitalization of prompts, for consistency
+     - add missing dependencies on libsmartcols, and therefore !MMU]
 
 Thomas
 -- 
