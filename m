@@ -1,162 +1,119 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Oct 2016 15:53:53 +0200
-Subject: [Buildroot] [git commit] package/transmission: Use libsystemd
-	instead of libsystemd-daemon
-Message-ID: <20161016135433.5A266817E3@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sun, 16 Oct 2016 15:54:44 +0200
+Subject: [Buildroot] [PATCH] package/opencv3: fix CMAKE_CXX_FLAGS
+In-Reply-To: <CAHXCMM+jmUvDWGebiNyTfyAy=eOGtQFFtJndt1m5N84J6u6+pw@mail.gmail.com>
+References: <1475088032-30321-1-git-send-email-jcmvbkbc@gmail.com>
+ <20160929112736.27dc4474@free-electrons.com>
+ <CAMo8BfKyMkgwNih1MSGh+qrKtRMob4_j8neOi3v4e5xEaJKnBg@mail.gmail.com>
+ <20160930101034.4adf4d7e@free-electrons.com>
+ <CAMo8BfLX2teRjUXNyjhgc73F5Qt6OviZBr+ShMcPXq+e5_6kig@mail.gmail.com>
+ <CAHXCMM+jmUvDWGebiNyTfyAy=eOGtQFFtJndt1m5N84J6u6+pw@mail.gmail.com>
+Message-ID: <94ac736c-923d-3a56-50f3-63db0cea70fb@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8355f50b51d1a7bf2aa8372d9eb54bb3e23f3092
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes
-http://autobuild.buildroot.net/results/78a/78af581f24758f7c2b19305a801e4c6c943730fb/
+since this patch has been included [1] in Samuel's series I'm marking it
+as superseded in patchwork.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/transmission/0006-libsystemd.patch | 133 +++++++++++++++++++++++++++++
- 1 file changed, 133 insertions(+)
+1: https://patchwork.ozlabs.org/patch/682674/
 
-diff --git a/package/transmission/0006-libsystemd.patch b/package/transmission/0006-libsystemd.patch
-new file mode 100644
-index 0000000..b32aff2
---- /dev/null
-+++ b/package/transmission/0006-libsystemd.patch
-@@ -0,0 +1,133 @@
-+From 0862099d0bf5a3ec8b2e9d538458d612897741a2 Mon Sep 17 00:00:00 2001
-+From: Mike Gelfand <mikedld@mikedld.com>
-+Date: Sat, 23 Apr 2016 16:13:25 +0000
-+Subject: [PATCH] #5921: Use libsystemd instead of libsystemd-daemon (original
-+ patches by Sandro Tosi and Mike Gilbert)
-+
-+In systemd v209, released over two years ago, the various libsystemd-*
-+libraries (libsystemd-journal.so, libsystemd-login.so, libsystem-daemon.so,
-+libsystemd-id128.so) were merged into a single libsystemd.so library to
-+reduce code duplication and avoid cyclic dependencies.
-+
-+Downloaded from upstream commit:
-+https://github.com/transmission/transmission/commit/0862099d0bf5a3ec8b2e9d538458d612897741a2
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ CMakeLists.txt        |  4 ++--
-+ configure.ac          | 16 ++++++++--------
-+ daemon/CMakeLists.txt |  8 ++++----
-+ daemon/Makefile.am    |  4 ++--
-+ daemon/daemon.c       |  2 +-
-+ 5 files changed, 17 insertions(+), 17 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 8b324dc..356fc2f 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -398,9 +398,9 @@ endif()
-+ if(WITH_SYSTEMD)
-+     tr_get_required_flag(WITH_SYSTEMD SYSTEMD_IS_REQUIRED)
-+ 
-+-    pkg_check_modules(SYSTEMD_DAEMON ${SYSTEMD_IS_REQUIRED} libsystemd-daemon)
-++    pkg_check_modules(SYSTEMD ${SYSTEMD_IS_REQUIRED} libsystemd)
-+ 
-+-    tr_fixup_auto_option(WITH_SYSTEMD SYSTEMD_DAEMON_FOUND SYSTEMD_IS_REQUIRED)
-++    tr_fixup_auto_option(WITH_SYSTEMD SYSTEMD_FOUND SYSTEMD_IS_REQUIRED)
-+ endif()
-+ 
-+ include_directories(${CMAKE_BINARY_DIR})
-+diff --git a/configure.ac b/configure.ac
-+index 92e4372..b64f2a3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -240,15 +240,15 @@ dnl
-+ dnl file monitoring for the daemon
-+ 
-+ # Check whether to enable systemd startup notification.
-+-# This requires libsystemd-daemon.
-+-AC_ARG_WITH([systemd-daemon], AS_HELP_STRING([--with-systemd-daemon],
-++# This requires libsystemd.
-++AC_ARG_WITH([systemd], AS_HELP_STRING([--with-systemd],
-+             [Add support for systemd startup notification (default is autodetected)]),
-+-            [USE_SYSTEMD_DAEMON=$withval], [USE_SYSTEMD_DAEMON=auto])
-+-AS_IF([test "x$USE_SYSTEMD_DAEMON" != "xno"], [
-+-    PKG_CHECK_MODULES([SYSTEMD_DAEMON], [libsystemd-daemon],
-+-        [AC_DEFINE(USE_SYSTEMD_DAEMON,1,[Use systemd startup notification])],
-+-        [AS_IF([test "x$USE_SYSTEMD_DAEMON" = "xyes"],
-+-            [AC_MSG_ERROR([systemd startup notification support requested, but libsystemd-daemon not found.])]
-++            [USE_SYSTEMD=$withval], [USE_SYSTEMD=auto])
-++AS_IF([test "x$USE_SYSTEMD" != "xno"], [
-++    PKG_CHECK_MODULES([SYSTEMD], [libsystemd],
-++        [AC_DEFINE(USE_SYSTEMD,1,[Use systemd startup notification])],
-++        [AS_IF([test "x$USE_SYSTEMD" = "xyes"],
-++            [AC_MSG_ERROR([systemd startup notification support requested, but libsystemd not found.])]
-+         )]
-+     )
-+ ])
-+diff --git a/daemon/CMakeLists.txt b/daemon/CMakeLists.txt
-+index e8f8b34..8ec3b95 100644
-+--- a/daemon/CMakeLists.txt
-++++ b/daemon/CMakeLists.txt
-+@@ -1,7 +1,7 @@
-+ project(trdaemon)
-+ 
-+ if(WITH_SYSTEMD)
-+-    add_definitions(-DUSE_SYSTEMD_DAEMON)
-++    add_definitions(-DUSE_SYSTEMD)
-+ endif()
-+ 
-+ include_directories(
-+@@ -37,14 +37,14 @@ add_executable(${TR_NAME}-daemon
-+     ${${PROJECT_NAME}_WIN32_RC_FILE})
-+ 
-+ set_target_properties(${TR_NAME}-daemon PROPERTIES
-+-    COMPILE_FLAGS "${SYSTEMD_DAEMON_CFLAGS}"
-+-    LINK_FLAGS "${SYSTEMD_DAEMON_LDFLAGS}"
-++    COMPILE_FLAGS "${SYSTEMD_CFLAGS}"
-++    LINK_FLAGS "${SYSTEMD_LDFLAGS}"
-+ )
-+ 
-+ target_link_libraries(${TR_NAME}-daemon
-+     ${TR_NAME}
-+     ${EVENT2_LIBRARIES}
-+-    ${SYSTEMD_DAEMON_LIBRARIES}
-++    ${SYSTEMD_LIBRARIES}
-+ )
-+ 
-+ tr_win32_app_info(${PROJECT_NAME}_remote_WIN32_RC_FILE
-+diff --git a/daemon/Makefile.am b/daemon/Makefile.am
-+index 677f765..34d7076 100644
-+--- a/daemon/Makefile.am
-++++ b/daemon/Makefile.am
-+@@ -3,7 +3,7 @@ AM_CPPFLAGS = -I at top_srcdir@ -DEMBEDDED
-+ AM_CFLAGS = \
-+     @LIBEVENT_CFLAGS@ \
-+     @LIBCURL_CFLAGS@ \
-+-    @SYSTEMD_DAEMON_CFLAGS@ \
-++    @SYSTEMD_CFLAGS@ \
-+     @ZLIB_CFLAGS@ \
-+     @PTHREAD_CFLAGS@
-+ 
-+@@ -29,7 +29,7 @@ LDADD = \
-+     @LIBCURL_LIBS@ \
-+     @CRYPTO_LIBS@ \
-+     @INTLLIBS@ \
-+-    @SYSTEMD_DAEMON_LIBS@ \
-++    @SYSTEMD_LIBS@ \
-+     @ZLIB_LIBS@ \
-+     @PTHREAD_LIBS@ \
-+     ${LIBM}
-+diff --git a/daemon/daemon.c b/daemon/daemon.c
-+index 40ac5a6..62ac715 100644
-+--- a/daemon/daemon.c
-++++ b/daemon/daemon.c
-+@@ -33,7 +33,7 @@
-+ #include <libtransmission/version.h>
-+ #include <libtransmission/watchdir.h>
-+ 
-+-#ifdef USE_SYSTEMD_DAEMON
-++#ifdef USE_SYSTEMD
-+  #include <systemd/sd-daemon.h>
-+ #else
-+  static void sd_notify (int status UNUSED, const char * str UNUSED) { }
+Regards,
+
+Vincent.
+
+On 01/10/16 00:07, Samuel Martin wrote:
+> Hi all,
+> 
+> On Fri, Sep 30, 2016 at 6:32 PM, Max Filippov <jcmvbkbc@gmail.com> wrote:
+>> On Fri, Sep 30, 2016 at 1:10 AM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>>> On Thu, 29 Sep 2016 09:14:41 -0700, Max Filippov wrote:
+>>>>> There is something fishy going on here. Indeed,
+>>>>> support/misc/toolchainfile.cmake.in contains:
+>>>>>
+>>>>>   set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
+>>>>>
+>>>>> So it should normally always prefix CMAKE_CXX_FLAGS with
+>>>>> TARGET_CXXFLAGS. Can you check the toolchain.cmake file that gets
+>>>>> generated during your build? Does it contains the Xtensa specific
+>>>>> CXXFLAGS ?
+>>>>
+>>>> Yes, it does.
+>>>
+>>> So if it does, why is your patch necessary? I'm not following here.
+>>> Do you mean that the Xtensa-specific flags are present in the
+>>> toolchain.cmake file, but are in the end not used during the build ?
+>>
+>> Right. The file
+>>   host/usr/share/buildroot/toolchainfile.cmake
+>> exists and contains the following (correct) lines:
+>>
+>> set(CMAKE_C_FLAGS "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+>> -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os
+>> ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
+>> set(CMAKE_CXX_FLAGS "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+>> -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os
+>> ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
+>>
+>> But the file
+>>   build/opencv3-3.1.0/CMakeCache.txt
+>> that governs opencv3 build contains the following lines:
+>>
+>> //Buildroot CXXFLAGS
+>> CMAKE_CXX_FLAGS:STRING=-latomic
+>> //Buildroot CFLAGS
+>> CMAKE_C_FLAGS:STRING='-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+>> -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os '
+>>
+>> Below is the output that I see during the failing opencv3 build:
+>>
+>> --     C++ flags (Release):         -latomic   -fsigned-char -W -Wall
+>> -Werror=return-type -Werror=non-virtual-dtor -Werror=address
+>> -Werror=sequence-point -Wformat -Werror=format-security
+>> -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow
+>> -Wsign-promo -Wno-narrowing -Wno-delete-non-virtual-dtor
+>> -fdiagnostics-show-option -pthread -fomit-frame-pointer
+>> -ffunction-sections -fvisibility=hidden -fvisibility-inlines-hidden
+>> -O3 -DNDEBUG  -DNDEBUG
+>> --     C++ flags (Debug):           -latomic   -fsigned-char -W -Wall
+>> -Werror=return-type -Werror=non-virtual-dtor -Werror=address
+>> -Werror=sequence-point -Wformat -Werror=format-security
+>> -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow
+>> -Wsign-promo -Wno-narrowing -Wno-delete-non-virtual-dtor
+>> -fdiagnostics-show-option -pthread -fomit-frame-pointer
+>> -ffunction-sections -fvisibility=hidden -fvisibility-inlines-hidden -g
+>>  -O0 -DDEBUG -D_DEBUG
+>> --     C Compiler:
+>> /home/jcmvbkbc/tmp/br/build-20160928-reproduce-opencv/host/usr/bin/xtensa-linux-gcc
+>> --     C flags (Release):           -D_LARGEFILE_SOURCE
+>> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls
+>> -mauto-litpools -Os    -fsigned-char -W -Wall -Werror=return-type
+>> -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point
+>> -Wformat -Werror=format-security -Wmissing-declarations
+>> -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self
+>> -Wpointer-arith -Wshadow -Wno-narrowing -fdiagnostics-show-option
+>> -pthread -fomit-frame-pointer -ffunction-sections -fvisibility=hidden
+>> -O3 -DNDEBUG  -DNDEBUG
+>> --     C flags (Debug):             -D_LARGEFILE_SOURCE
+>> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls
+>> -mauto-litpools -Os    -fsigned-char -W -Wall -Werror=return-type
+>> -Werror=non-virtual-dtor -Werror=address -Werror=sequence-point
+>> -Wformat -Werror=format-security -Wmissing-declarations
+>> -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self
+>> -Wpointer-arith -Wshadow -Wno-narrowing -fdiagnostics-show-option
+>> -pthread -fomit-frame-pointer -ffunction-sections -fvisibility=hidden
+>> -g  -O0 -DDEBUG -D_DEBUG
+>>
+>> Notice the difference between the C and the C++ flags.
+> 
+> Indeed, there is a bug in the way we are currently setting/expending
+> {C,CXX}FLAGS in the CMake toolchain file.
+> I'll post a patch fixing it quickly.
+> 
+> Regards,
+> 
