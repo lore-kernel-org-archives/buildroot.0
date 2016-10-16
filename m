@@ -1,14 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 16 Oct 2016 13:01:02 +0200
-Subject: [Buildroot] [git commit] docs/manual: document multi br2-external
-Message-ID: <20161016110154.893508211D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual: add appendix to convert old
+	br2-external trees
+Message-ID: <20161016110154.6D79C8211D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b496d40e3457e42fcf35004c677af4dc91dd935
+commit: https://git.buildroot.net/buildroot/commit/?id=a71e311df62505bf69b74e9f16b43a5f91bb4623
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -17,131 +18,104 @@ Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Romain Naour <romain.naour@openwide.fr>
 Cc: Julien CORJON <corjon.j@ecagroup.com>
+[Peter: slightly reword]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/br2-external-converting.txt |  9 ++++--
- docs/manual/customize-outside-br.txt    | 49 ++++++++++++++++++++++++---------
- 2 files changed, 42 insertions(+), 16 deletions(-)
+ docs/manual/appendix.txt                |  1 +
+ docs/manual/br2-external-converting.txt | 36 +++++++++++++++++++++++++++++++++
+ docs/manual/customize-outside-br.txt    |  5 +++++
+ support/scripts/br2-external            |  7 ++++++-
+ 4 files changed, 48 insertions(+), 1 deletion(-)
 
+diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
+index 03dbbd1..4d4bbec 100644
+--- a/docs/manual/appendix.txt
++++ b/docs/manual/appendix.txt
+@@ -3,3 +3,4 @@
+ 
+ include::makedev-syntax.txt[]
+ include::makeusers-syntax.txt[]
++include::br2-external-converting.txt[]
 diff --git a/docs/manual/br2-external-converting.txt b/docs/manual/br2-external-converting.txt
-index 73bd878..831addf 100644
---- a/docs/manual/br2-external-converting.txt
+new file mode 100644
+index 0000000..73bd878
+--- /dev/null
 +++ b/docs/manual/br2-external-converting.txt
-@@ -4,9 +4,12 @@
- [[br2-external-converting]]
- == Converting old br2-external trees
- 
--Buildroot 2016.11 introduced a backward-incompatible change in the way
--br2-external trees are handled. A minor change has to be made: adding
--a name to your br2-external tree, see xref:outside-br-custom[].
-+Before Buildroot 2016.11, it was possible to use only one br2-external
-+tree at once. With Buildroot 2016.11 came the possibility to use more
-+than one simultaneously (for details, see xref:outside-br-custom[]).
+@@ -0,0 +1,36 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+This however means that older br2-external trees are not usable as-is.
-+A minor change has to be made: adding a name to your br2-external tree.
- 
- This can be done very easily in just a few steps:
- 
++[[br2-external-converting]]
++== Converting old br2-external trees
++
++Buildroot 2016.11 introduced a backward-incompatible change in the way
++br2-external trees are handled. A minor change has to be made: adding
++a name to your br2-external tree, see xref:outside-br-custom[].
++
++This can be done very easily in just a few steps:
++
++ * First, create a new file named +external.desc+, at the root of your
++   br2-external tree, with a single line defining the name of your
++   br2-external tree:
+++
++----
++$ echo 'name: NAME_OF_YOUR_TREE' >external.desc
++----
+++
++.Note
++Be careful when choosing a name: It has to be unique and be made
++with only ASCII characters from the set +[A-Za-z0-9_]+.
++
++ * Then, change every occurence of +BR2_EXTERNAL+ in your br2-external
++   tree with the new variable:
+++
++----
++$ find . -type f | xargs sed -i 's/BR2_EXTERNAL/BR2_EXTERNAL_NAME_OF_YOUR_TREE_PATH/g'
++----
++
++Now, your br2-external tree can be used with Buildroot 2016.11 onward.
++
++.Note:
++This change makes your br2-external tree incompatible with Buildroot
++before 2016.11.
 diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index 3ad0bc0..09977e0 100644
+index f2a83a6..3ad0bc0 100644
 --- a/docs/manual/customize-outside-br.txt
 +++ b/docs/manual/customize-outside-br.txt
-@@ -19,10 +19,10 @@ place project-specific customizations in two locations:
-    the br2-external mechanism and what to provide in a br2-external
-    tree.
+@@ -33,6 +33,11 @@ If it is passed as a relative path, it is important to note that it is
+ interpreted relative to the main Buildroot source directory, *not* to
+ the Buildroot output directory.
  
--One can tell Buildroot to use a br2-external tree by setting the
--+BR2_EXTERNAL+ make variable set to the path of the br2-external tree
--to use. It can be passed to any Buildroot +make+ invocation. It is
--automatically saved in the hidden +.br-external.mk+ file in the output
-+One can tell Buildroot to use one or more br2-external trees by setting
-+the +BR2_EXTERNAL+ make variable set to the path(s) of the br2-external
-+tree(s) to use. It can be passed to any Buildroot +make+ invocation. It
-+is automatically saved in the hidden +.br-external.mk+ file in the output
- directory. Thanks to this, there is no need to pass +BR2_EXTERNAL+ at
- every +make+ invocation. It can however be changed at any time by
- passing a new value, and can be removed by passing an empty value.
-@@ -41,10 +41,10 @@ xref:br2-external-converting[] for help on doing so.
++.Note:
++If using an br2-external tree from before Buildroot 2016.11, you need to
++convert it before you can use it with Buildroot 2016.11 onward. See
++xref:br2-external-converting[] for help on doing so.
++
  Some examples:
  
  -----
--buildroot/ $ make BR2_EXTERNAL=/path/to/foobar menuconfig
-+buildroot/ $ make BR2_EXTERNAL=/path/to/foo menuconfig
- -----
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index 21d7351..281a084 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -5,6 +5,10 @@ set -e
+ declare BR2_NAME
+ declare BR2_EXT
  
--From now on, definitions from the +/path/to/foobar+ br2-external tree
-+From now on, definitions from the +/path/to/foo+ br2-external tree
- will be used:
- 
- -----
-@@ -55,9 +55,15 @@ buildroot/ $ make legal-info
- We can switch to another br2-external tree at any time:
- 
- -----
--buildroot/ $ make BR2_EXTERNAL=/where/we/have/barfoo xconfig
-+buildroot/ $ make BR2_EXTERNAL=/where/we/have/bar xconfig
- -----
- 
-+We can also use multiple br2-external trees:
++# URL to manual for help in converting old br2-external trees.
++# Escape '#' so that make does not consider it a comment.
++MANUAL_URL='https://buildroot.org/manual/manual.html\#br2-external-converting'
 +
-+----
-+buildroot/ $ make BR2_EXTERNAL=/path/to/foo:/where/we/have/bar menuconfig
-+----
-+
- Or disable the usage of any br2-external tree:
- 
- -----
-@@ -73,13 +79,23 @@ A br2-external tree must contain at least those three files:
-    the keyword 'name:', followed by one or more spaces, followed by the
-    name.
- +
--Buildroot sets +BR2_EXTERNAL_$(NAME)_PATH+ to the absolute path of the
-+Buildroot sets +BR2_EXTERNAL_$(NAME)_PATH+ to the absolute path of each
-    br2-external tree, so that you can use it to refer to your br2-external
-    tree. This variable is available both in Kconfig, so you can use it
-    to source your Kconfig files (see below) and in the Makefile, so that
-    you can use it to include other Makefiles (see below) or refer to other
-    files (like data files) from your br2-external tree.
- +
-+.Note:
-+Since it is possible to use multiple br2-external trees at once, this
-+  name is used by Buildroot to generate variables for each of those trees.
-+  That name is used to identify your br2-external tree, so try to come up
-+  with a name that really describes your br2-external tree, in order for
-+  it to be relatively unique, so that it does not clash with another name
-+  from another br2-external tree, especially if you are planning on
-+  somehow sharing your br2-external tree with third parties or using
-+  br2-external trees from third parties.
-++
- Example of an +external.desc+ file that declares the name +FOO+:
- +
- ----
-@@ -119,9 +135,10 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=$(BR2_EXTERNAL_BAR_42_FOO)/board/<boardname>
- 
-  * One can store package recipes (i.e. +Config.in+ and +<packagename>.mk+),
-    or even custom configuration options and make logic. Buildroot
--   automatically includes +Config.in+ to make it appear in the top-level
--   configuration menu, and includes +external.mk+ with the rest of the
--   makefile logic.
-+   automatically includes the +Config.in+ from each br2-external tree to
-+   make it appear in the top-level configuration menu, and includes the
-+   +external.mk+ from each br2-external tree with the rest of the makefile
-+   logic.
- +
- The main usage of this is to store package recipes. The recommended way
-    to do this is to write a +Config.in+ file that looks like:
-@@ -146,5 +163,11 @@ And then in +$(BR2_EXTERNAL_FOO_42_PATH)/package/package1+ and
-  * One can store Buildroot defconfigs in the +configs+ subdirectory of
-    the br2-external tree. Buildroot will automatically show them in the
-    output of +make list-defconfigs+ and allow them to be loaded with the
--   normal +make <name>_defconfig+ command. They will be visible under the
--   +User-provided configs+' label in the 'make list-defconfigs' output.
-+   normal +make <name>_defconfig+ command. They will be visible in the
-+   'make list-defconfigs' output, below an +External configs+ label that
-+   contains the name of the br2-extermnal tree they are defined in.
-++
-+.Note:
-+If a defconfig file is present in more than one br2-external tree, then
-+   the first one is used. It is not possible to override a defconfig
-+   bundled in Buildroot.
+ main() {
+     local OPT OPTARG
+     local br2_ext ofile ofmt
+@@ -70,7 +74,8 @@ do_validate() {
+         error "'%s': permission denied\n" "${br2_ext}"
+     fi
+     if [ ! -f "${br2_ext}/external.desc" ]; then
+-        error "'%s': does not have a name (in 'external.desc')\n" "${br2_ext}"
++        error "'%s': does not have a name (in 'external.desc'). See %s\n" \
++            "${br2_ext}" "${MANUAL_URL}"
+     fi
+     br2_name="$(sed -r -e '/^name: +(.*)$/!d; s//\1/' "${br2_ext}/external.desc")"
+     if [ -z "${br2_name}" ]; then
