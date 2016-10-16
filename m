@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Oct 2016 16:32:51 +0200
-Subject: [Buildroot] [PATCH 2/2] fwup: link in pthreads for static builds
-In-Reply-To: <1470868546-8237-2-git-send-email-fhunleth@troodon-software.com>
-References: <1470868546-8237-1-git-send-email-fhunleth@troodon-software.com>
- <1470868546-8237-2-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20161016163251.33b3e357@free-electrons.com>
+Date: Sun, 16 Oct 2016 16:33:27 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/libarchive: fix static
+ linking against libpthread
+In-Reply-To: <20160828102121.13601-1-bernd.kuhls@t-online.de>
+References: <20160828102121.13601-1-bernd.kuhls@t-online.de>
+Message-ID: <20161016163327.64042dbe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +13,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 10 Aug 2016 18:35:46 -0400, Frank Hunleth wrote:
-> Both libconfuse (via libintl) and libarchive have references to pthreads
-> but do not specify pthreads in their pkg-config descriptions. This
-> change adds pthreads to the fwup linker options so that the link step
-> succeeds.
+On Sun, 28 Aug 2016 12:21:21 +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/e94/e943ee5abc06b1812d7b34976e3a807859958935/
 > 
-> Fixes autobuilder failures:
+> This commit also fixes fwup:
+> http://autobuild.buildroot.net/results/36b/36b0c6b68209ddd1b0f2db8449392af36876411f/
 > 
-> http://autobuild.buildroot.net/results/ce3793c79d5dc4e296d645c75f22e121f35030d3/
-> http://autobuild.buildroot.net/results/0c5ffec5438f766dade951a64ebfa1b734a3c0aa/
-> http://autobuild.buildroot.net/results/802/802b6d77e1b77b7c8fcb8f3b394cdabfd406de7a/
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: Changed LIBARCHIVE_CONF_ENV from using LDFLAGS to using LIBS, this
+>     way -lpthread is included in libarchive.pc fixing linking problems
+>     in other packages using libarchive
+>     This patch follows the advice from Khem Raj:
+>     http://lists.busybox.net/pipermail/buildroot/2016-August/169712.html
 
-Thanks to the recent uClibc-ng bump, which merges libpthread into libc,
-the problem that this patch was trying to fix no longer exists.
-
-I double checked: with an older uClibc-ng toolchain, I could reproduce
-the static linking issue. With the newer uClibc-ng toolchain, the built
-went fine.
-
-Therefore, I've marked your patch as Rejected in patchwork.
+With the recent change in uClibc-ng merging libpthread in libc, this
+patch is no longer needed, so I've marked it as rejected in patchwork.
+I tested with fwup, and the problem is indeed fixed.
 
 Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
