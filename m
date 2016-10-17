@@ -1,157 +1,83 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Oct 2016 22:52:30 +0200
-Subject: [Buildroot] [PATCH 1/1] pkg-download: use raw basename for repo
- archiving to remove host- prefix
-In-Reply-To: <1476709687-21484-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1476709687-21484-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <c436b9ba-8144-3015-347c-1c5e89115272@mind.be>
+Date: Mon, 17 Oct 2016 22:55:09 +0200
+Subject: [Buildroot] [PATCH] trinity: not available on musl
+In-Reply-To: <1476721016-21596-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1476721016-21596-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <764db8e1-cf6b-773f-0c41-811ad260044d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Thomas,
 
- Excellent commit message!
 
-On 17-10-16 15:08, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 17-10-16 18:16, Rahul Bedarkar wrote:
+> After fixing following build failures with musl:
 > 
-> For packages that use a version control repository rather than a pre-made
-> tarball, the directory prefix used inside the tarball is currently
-> FOO_BASE_NAME, which can be 'foo' or 'host-foo'.
+> * error: unknown type name __uint32_t and __uint64_t
+> * error: unknown type name pid_t and uid_t
+> * error: fatal error: bits/sockaddr.h: No such file or directory
 > 
-> This means that the hash of such tarball will be different for target and
-> host packages, even though the contents are exactly the same. Hence, if the
-> hash file is created based on 'foo', and later a fresh build is made where
-> 'host-foo' happens to be built before 'foo' (with a different config, for
-> example), the hash will be detected as incorrect and a new download is
-> started.
+> it fails with
 > 
-> This problem does not affect many packages/users, due to the number of
-> conditions to be met:
-> - the package should be available for target _and_ host
-> - the package needs to use a VCS download method, e.g. git, hg, svn, ...
->   This does not include standard github downloads, which download a pre-made
->   archive.
-> - there should be a hash file containing the hash of the downloaded archive.
->   Since normally there is no hash file for packages with sources coming from
->   a version control system, this restricts even further. Some examples of
->   packages in this category that do have a hash file (but not necessarily
->   match the earlier conditions): expedite, vexpress-firmware, squashfs, ...
-> - the archive needs to be stored in a 'primary site' after initial archiving
->   and thus be downloaded later using a non-version-controlled method, like
->   wget or scp. This is because the version control download methods do not
->   receive a '-H' parameter pointing to the hash file and thus no hashes are
->   checked at all even if the file is present.
-
- This is wrong (i.e., a bug), in two ways:
-- for reproducible download methods (git at least; is hg archive reproducible?),
-the hash *should* be checked;
-- for non-reproducible download methods, the hash *should not* be checked when
-downloading from primary or secondary - if it is a non-reproducible download
-method, then the hash in primary or secondary may also be wrong.
-
- The second case, however, i.e. the one you are hitting, should already be
-covered... In DOWNLOAD_INNER, we set BR_NO_CHECK_HASH_FOR=$(2) for the
-non-hash-checked download methods. Ah, of course, it's not the hash check that
-fails, it's the fact that a hash file is present but the tarball isn't mentioned
-in it.
-
- Actually, we could make all download methods reproducible using the method that
-we use for git to make a reproducible tarball. Well, maybe CVS is an exception.
-
+>   fds/files.c: In function 'file_tree_callback':
+>   fds/files.c:172:10: error: 'FTW_CONTINUE' undeclared (first use in this function)
+>      return FTW_CONTINUE;
+>             ^
+>   fds/files.c:172:10: note: each undeclared identifier is reported only once for each function it appears in
+>   fds/files.c:178:10: error: 'FTW_SKIP_SUBTREE' undeclared (first use in this function)
+>      return FTW_SKIP_SUBTREE;
+>             ^
+>   fds/files.c:185:10: error: 'FTW_STOP' undeclared (first use in this function)
+>      return FTW_STOP;
+>             ^
+>   fds/files.c: In function 'open_fds_from_path':
+>   fds/files.c:197:26: error: 'FTW_ACTIONRETVAL' undeclared (first use in this function)
+>     int flags = FTW_DEPTH | FTW_ACTIONRETVAL | FTW_MOUNT;
 > 
-> While packages matching the third condition could be considered to be 'wrong'
-> and need to be fixed, it does actually makes sense to have a hash file for
-> packages from version control, in particular if they are stored in a
-> primary site as mentioned in the last condition.
+> As per ftw man-page, flag FTW_ACTIONRETVAL is specific to glibc. It is
+> not available on musl. Since package uses it unconditionally, we mark
+> it not available on musl.
 > 
-> Regardless of any different opinions on the previous paragraph, it is also
-> not conceptually correct that a tarball of a package source can contain a
-> Buildroot-specific directory prefix 'host-'.  
-
- Even worse, it is incorrect that the tarball name depends on the order in which
-things are executed...
-
-> Therefore, use
-> FOO_RAW_BASE_NAME instead of FOO_BASE_NAME when calling the dl-wrapper.
+> Fixes:
+>   http://autobuild.buildroot.net/results/cb4/cb4a665746652679487dee2c2e4bca881be3724b/
 > 
-> Example test scenario that exhibits the problem:
-> $ rm -rf /tmp/dl dl/squashfs-9c1db6d13a51a2e009f0027ef336ce03624eac0d.tar.gz
-> $ make qemu_x86_64_defconfig
-> $ make host-squashfs-dirclean host-squashfs-source
-> $ mkdir /tmp/dl
-> $ mv dl/squashfs-9c1db6d13a51a2e009f0027ef336ce03624eac0d.tar.gz /tmp/dl/
-> $ sed -i -e 's,BR2_PRIMARY_SITE=.*,BR2_PRIMARY_SITE="file:///tmp/dl",' \
->          -e '/BR2_PRIMARY_SITE/aBR2_PRIMARY_SITE_ONLY=y'  .config
-> $ make host-squashfs-dirclean host-squashfs-source
-
- All right! As soon as the test infra is merged we can add a test for this!
-
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 
  Regards,
  Arnout
 
 > ---
->  package/pkg-download.mk | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  package/trinity/Config.in | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 3b6561b..0f542e6 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -81,7 +81,7 @@ define DOWNLOAD_GIT
->  		-- \
->  		$($(PKG)_SITE) \
->  		$($(PKG)_DL_VERSION) \
-> -		$($(PKG)_BASE_NAME) \
-> +		$($(PKG)_RAW_BASE_NAME) \
->  		$($(PKG)_DL_OPTS)
->  endef
+> diff --git a/package/trinity/Config.in b/package/trinity/Config.in
+> index 2495e5d..02cd20a 100644
+> --- a/package/trinity/Config.in
+> +++ b/package/trinity/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_TRINITY
+>  	bool "trinity"
+>  	depends on BR2_USE_MMU # fork()
+> +	depends on !BR2_TOOLCHAIN_USES_MUSL # FTW_ACTIONRETVAL
+>  	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
+>  		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
+>  		BR2_powerpc64le || BR2_sparc || BR2_x86_64
+> @@ -8,3 +9,10 @@ config BR2_PACKAGE_TRINITY
+>  	  A Linux System call fuzz tester
 >  
-> @@ -98,7 +98,7 @@ define DOWNLOAD_BZR
->  		-- \
->  		$($(PKG)_SITE) \
->  		$($(PKG)_DL_VERSION) \
-> -		$($(PKG)_BASE_NAME) \
-> +		$($(PKG)_RAW_BASE_NAME) \
->  		$($(PKG)_DL_OPTS)
->  endef
->  
-> @@ -114,7 +114,7 @@ define DOWNLOAD_CVS
->  		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
->  		$($(PKG)_DL_VERSION) \
->  		$($(PKG)_RAWNAME) \
-> -		$($(PKG)_BASE_NAME) \
-> +		$($(PKG)_RAW_BASE_NAME) \
->  		$($(PKG)_DL_OPTS)
->  endef
->  
-> @@ -130,7 +130,7 @@ define DOWNLOAD_SVN
->  		-- \
->  		$($(PKG)_SITE) \
->  		$($(PKG)_DL_VERSION) \
-> -		$($(PKG)_BASE_NAME) \
-> +		$($(PKG)_RAW_BASE_NAME) \
->  		$($(PKG)_DL_OPTS)
->  endef
->  
-> @@ -162,7 +162,7 @@ define DOWNLOAD_HG
->  		-- \
->  		$($(PKG)_SITE) \
->  		$($(PKG)_DL_VERSION) \
-> -		$($(PKG)_BASE_NAME) \
-> +		$($(PKG)_RAW_BASE_NAME) \
->  		$($(PKG)_DL_OPTS)
->  endef
->  
+>  	  http://codemonkey.org.uk/projects/trinity/
+> +
+> +comment "trinity needs a uClibc or glibc toolchain"
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_TOOLCHAIN_USES_MUSL
+> +	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
+> +		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
+> +		BR2_powerpc64le || BR2_sparc || BR2_x86_64
 > 
 
 -- 
