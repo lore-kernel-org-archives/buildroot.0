@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 17 Oct 2016 13:06:54 -0300
-Subject: [Buildroot] [PATCH 67/93] libsepol: use $(HOST_MAKE_ENV) when
+Date: Mon, 17 Oct 2016 13:06:55 -0300
+Subject: [Buildroot] [PATCH 68/93] luajit: use $(TARGET_MAKE_ENV) when
 	calling $(MAKE)
 In-Reply-To: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476720440-22239-68-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476720440-22239-69-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,35 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/libsepol/libsepol.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/luajit/luajit.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index 650e36d..bf85eef 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
-@@ -34,11 +34,11 @@ define LIBSEPOL_INSTALL_TARGET_CMDS
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 81a2660..24909fb 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -36,7 +36,7 @@ endif
+ # We unfortunately can't use TARGET_CONFIGURE_OPTS, because the luajit
+ # build system uses non conventional variable names.
+ define LUAJIT_BUILD_CMDS
+-	$(MAKE) PREFIX="/usr" \
++	$(TARGET_MAKE_ENV) $(MAKE) PREFIX="/usr" \
+ 		STATIC_CC="$(TARGET_CC)" \
+ 		DYNAMIC_CC="$(TARGET_CC) -fPIC" \
+ 		TARGET_LD="$(TARGET_CC)" \
+@@ -52,11 +52,11 @@ define LUAJIT_BUILD_CMDS
  endef
  
- define HOST_LIBSEPOL_BUILD_CMDS
--	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
+ define LUAJIT_INSTALL_STAGING_CMDS
+-	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" LDCONFIG=true -C $(@D) install
++	$(TARGET_MAKE_ENV) $(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" LDCONFIG=true -C $(@D) install
  endef
  
- define HOST_LIBSEPOL_INSTALL_CMDS
--	$(MAKE) -C $(@D) install $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
- 	mv $(HOST_DIR)/lib/libsepol.so.1 $(HOST_DIR)/usr/lib
- 	(cd $(HOST_DIR)/usr/lib; rm -f libsepol.so; ln -s libsepol.so.1 libsepol.so)
- 	-rmdir $(HOST_DIR)/lib
+ define LUAJIT_INSTALL_TARGET_CMDS
+-	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" LDCONFIG=true -C $(@D) install
++	$(TARGET_MAKE_ENV) $(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" LDCONFIG=true -C $(@D) install
+ endef
+ 
+ define LUAJIT_INSTALL_SYMLINK
 -- 
 2.7.3
