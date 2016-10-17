@@ -1,11 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Oct 2016 14:17:51 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-10-16
-In-Reply-To: <1119811525.1122795.1476702040533.JavaMail.zimbra@datacom.ind.br>
-References: <20161017063033.11712102EE9@stock.ovh.net>
- <1119811525.1122795.1476702040533.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20161017141751.0a92a2e5@free-electrons.com>
+Date: Mon, 17 Oct 2016 14:19:28 +0200
+Subject: [Buildroot] [PATCH v4 1/3] vexpress-firmware: new package
+In-Reply-To: <20161017121541.GI8762@e106497-lin.cambridge.arm.com>
+References: <1476518623-30654-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1476518623-30654-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20161015131024.76916be0@free-electrons.com>
+ <2eb11843-a5a8-2bb7-8b98-c4a902e5b7bc@synopsys.com>
+ <20161017121541.GI8762@e106497-lin.cambridge.arm.com>
+Message-ID: <20161017141928.5d76a062@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +16,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 17 Oct 2016 09:00:40 -0200 (BRST), Carlos Santos wrote:
-> > From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> > To: buildroot at buildroot.org
-> > Sent: Monday, October 17, 2016 4:30:33 AM
-> > Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-10-16  
-> [...]
-> >             util-linux-2.28.2 | 1  
-> [...]
-> >      x86_64 |              util-linux-2.28.2 | NOK |
-> >      http://autobuild.buildroot.net/results/be2e81b27a21355d7a453316d9df1cd4b0da2106  
+On Mon, 17 Oct 2016 13:15:41 +0100, Liviu Dudau wrote:
+
+> > This was the version suggested by Liviu Dudau.
+> > @Liviu: Could you please confirm that there is more recent version that we can use?  
 > 
-> I'm investigating this error.
+> I think at that time that was the latest HEAD version. You can pick any
+> later versions from Linaro. I suggest (for now) to use 16.08 tag.
 
-It needs a select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS + depends on
-BR2_USE_MMU.
+Could you send a patch doing this?
 
-Thanks!
+It should also add the license.pdf file in the LICENSE_FILES variable.
+
+Thanks a lot!
 
 Thomas
 -- 
