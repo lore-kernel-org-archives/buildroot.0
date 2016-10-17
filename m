@@ -1,40 +1,53 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 17 Oct 2016 22:44:48 +0200
-Subject: [Buildroot] [PATCH v1] motion: fix sdl-config detection
-Message-ID: <1476737088-1492-1-git-send-email-ps.report@gmx.net>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 17 Oct 2016 22:48:14 +0200
+Subject: [Buildroot] [PATCH v11 4/4] core: only remove O from
+	MAKEOVERRIDES
+In-Reply-To: <2e3bb5cb-3101-ab44-da26-37ac0226a3d4@mind.be>
+References: <20161016115423.17881-1-s.martin49@gmail.com>
+ <20161016115423.17881-5-s.martin49@gmail.com>
+ <2e3bb5cb-3101-ab44-da26-37ac0226a3d4@mind.be>
+Message-ID: <CAHXCMMKbTnchbsUyBgw=pNMe4zYKv-V51DgEENG2qm4f43fezw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Overwrite ac_cv_path_CONFIG_SDL in case sdl development is
-installed on the host.
+On Sun, Oct 16, 2016 at 7:48 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 16-10-16 13:54, Samuel Martin wrote:
+>> For no apparent reason, MAKEOVERRIDES is not treated the same way
+>> depending on whether O is set or not on the command line:
+>> * when O is set on the command line (i.e. out-of-tree build): all
+>>   variables were stripped away from MAKEOVERRIDES;
+>> * when O is not set on the command line (i.e. in-Buildroot-source-tree
+>>   build): all variables are kept and forwarded to the sub-make call.
+>>
+>> This change cleans things up by only removing the relevant variables
+>> from MAKEOVERRIDES when appropriate (i.e. removing O from MAKEOVERRIDES
+>> when O is set on the command line) keeping all other variables as-is in the
+>> sub-make call; O is set on the sub-make call anyway.
+>
+>  I'm not sure about this one. Clearing MAKEOVERRIDES makes sure that whatever we
+> set on the commandline of Buildroot's make will not get passed down to
+> sub-makes. I don't see anything for which it would be useful to pass it down to
+> sub-makes as commandline overrides.
+>
+>  Note that whatever we specify on the command line will be passed down in two
+> ways (unless it's overridden by the Makefile, like is done for O): it is passed
+> in the environment, and it is passed in MAKEFLAGS in the environment. So even if
+> we clear MAKEOVERRIDES, things still get passed down but just in the environment.
 
-Fixes [1]:
+Interesting, I did not know that.
 
-  ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include/SDL'
+>
+>  So, I don't see a good reason to apply this patch.
 
-[1] http://autobuild.buildroot.net/results/459/4592eb83efa393f77f5ee014f93a271f2313bee6
+Fair enough.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/motion/motion.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Regards,
 
-diff --git a/package/motion/motion.mk b/package/motion/motion.mk
-index de29a2a..cf9be76 100644
---- a/package/motion/motion.mk
-+++ b/package/motion/motion.mk
-@@ -54,6 +54,9 @@ endif
- ifeq ($(BR2_PACKAGE_SDL),y)
- MOTION_DEPENDENCIES += sdl
- MOTION_CONF_OPTS += --with-sdl=$(STAGING_DIR)/usr
-+# overwrite ac_cv_path_CONFIG_SDL in case sdl development is
-+# installed on the host
-+MOTION_CONF_ENV += ac_cv_path_CONFIG_SDL=$(STAGING_DIR)/usr/bin/sdl-config
- else
- MOTION_CONF_OPTS += --without-sdl
- endif
+
 -- 
-2.8.1
+Samuel
