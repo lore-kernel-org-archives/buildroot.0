@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 17 Oct 2016 13:07:10 -0300
-Subject: [Buildroot] [PATCH 83/93] ezxml: use $(TARGET_MAKE_ENV) when
-	calling $(MAKE)
+Date: Mon, 17 Oct 2016 13:07:11 -0300
+Subject: [Buildroot] [PATCH 84/93] qwt: use $(TARGET_MAKE_ENV) when calling
+	$(MAKE)
 In-Reply-To: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476720440-22239-84-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476720440-22239-85-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +15,27 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/ezxml/ezxml.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/qwt/qwt.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ezxml/ezxml.mk b/package/ezxml/ezxml.mk
-index 7693466..e2b288b 100644
---- a/package/ezxml/ezxml.mk
-+++ b/package/ezxml/ezxml.mk
-@@ -11,7 +11,7 @@ EZXML_LICENSE = MIT
- EZXML_LICENSE_FILES = license.txt
+diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+index da30dd2..d1bb524 100644
+--- a/package/qwt/qwt.mk
++++ b/package/qwt/qwt.mk
+@@ -54,13 +54,13 @@ endef
+ # that when building with qmake, -L$(STAGING_DIR)/usr/lib is used and
+ # not -L/usr/lib.
+ define QWT_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
+ 	$(SED) "s%QWT_INSTALL_PREFIX = .*%QWT_INSTALL_PREFIX = $(STAGING_DIR)/usr%" \
+ 		$(STAGING_DIR)/usr/mkspecs/features/qwtconfig.pri
+ endef
  
- define EZXML_BUILD_CMDS
--	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" AR=$(TARGET_AR) \
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" AR=$(TARGET_AR) \
- 	-f GNUmakefile -C $(@D)
+ define QWT_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
+ 	rm -Rf $(TARGET_DIR)/usr/mkspecs
  endef
  
 -- 
