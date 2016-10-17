@@ -1,56 +1,74 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 17 Oct 2016 10:22:23 +0200
-Subject: [Buildroot] [PATCH] core/legal-info: allow ignoring packages
- from the legal-info
-In-Reply-To: <20161015201327.GA3982@free.fr>
-References: <1476538102-8779-1-git-send-email-yann.morin.1998@free.fr>
- <878ttpbq72.fsf@dell.be.48ers.dk> <20161015153246.GG3668@free.fr>
- <ce7a11dc-d228-5724-9821-5ef47eb670dc@lucaceresoli.net>
- <18b75237-c88f-586e-347c-d1c1a1d15cd5@mind.be>
- <20161015173729.GI3668@free.fr>
- <520a1ab5-06bb-7a22-1ace-7b4d1febc2c1@mind.be>
- <20161015201327.GA3982@free.fr>
-Message-ID: <23f14628-b4d9-4fb2-4faf-c3f95749bf9c@lucaceresoli.net>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Mon, 17 Oct 2016 01:27:13 -0700
+Subject: [Buildroot] [PATCH] linux-pam: backport build fix when crypt() is
+	not part of crypt_libs
+Message-ID: <1476692833-20087-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Arnout,
+The build fails at pam_pwhistory.so linking step with the following
+message:
+  ld: cannot find -l-lintl
+This happens because the configure script incorrectly adds '-l' to LIBS
+when the crypt function is a part of libc.
 
-On 15/10/2016 22:13, Yann E. MORIN wrote:
-[...]
->>>>  One remark though: I think the pre- and post-hooks should still run even if
->>>> _GEN_LEGAL_INFO = NO.
->>> Not so sure... Such hooks are made to save extra stuff into legal-info,
->>> or to prepare the package for legal-info. So, if the package is excluded
->>> for legal-info, there is no reason to run those hooks to start with, is
->>> there?
->>  First of all, both _GEN_LEGAL_INFO and _LEGAL_INFO_HOOKS are package-specific
->> so the package knows what it's doing.
->>
->>  The reason to run hooks is that you may still want to do *something* in the
->> legal info for excluded packages. I can't give a concrete example, but I'm
->> thinking along the lines of e.g. doing some check and erroring out, or still
->> adding some custom information to legal info. You know, what the hooks are meant
->> for in the first place :-) The point is, this option disables the normal
->> legal-info, but that doesn't mean that there would be no legal-info at all.
-> 
-> I would argue that, if a packager elected to have its package completely
-> ignored by the legal-info infra, we should just abide by this wish and
-> just completely ignore it. Altogether.
-> 
-> Let's see what others think... ;-)
+Backport fix from the linux-pam mainline.
+Backported from: 01e0038fa55581c4afc9d63b6180d2ea77ba2940
 
-I think Arnout is right. The hooks would allow to implement any weird
-behavior that the infra is not (and should not even be) flexible enough
-to do. Of course this would be doable with a user-provided script, but
-then the script should also detect whether the given package is enabled
-or not, while the hooks do it for free.
+Fixes:
+  http://autobuild.buildroot.net/results/7d0/7d0b61da93551ab49ae70210d5886324398b2ab0/
+  http://autobuild.buildroot.net/results/6ea/6eafccaa6aefdae7544789c49699c48dd0409623/
+  http://autobuild.buildroot.net/results/394/394e22be0ef986463e97b3040dad8f978262732c/
+  http://autobuild.buildroot.net/results/62d/62d19cc368637e10d9ecb0b8a942a99e32941240/
+  http://autobuild.buildroot.net/results/9a7/9a7ec6b1938c03589fbff4bc54e151f058baca1c/
+  http://autobuild.buildroot.net/results/f00/f00073f4e13c7e48efacfa11e68af42f4d6eba51/
 
-As far as the code is concerned, it should be only a matter of moving
-the if/endif a few lines below/above, so it shouldn't add complexity.
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ ...uild-when-crypt-is-not-part-of-crypt_libs.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/linux-pam/0004-build-fix-build-when-crypt-is-not-part-of-crypt_libs.patch
 
+diff --git a/package/linux-pam/0004-build-fix-build-when-crypt-is-not-part-of-crypt_libs.patch b/package/linux-pam/0004-build-fix-build-when-crypt-is-not-part-of-crypt_libs.patch
+new file mode 100644
+index 0000000..e1b65b2
+--- /dev/null
++++ b/package/linux-pam/0004-build-fix-build-when-crypt-is-not-part-of-crypt_libs.patch
+@@ -0,0 +1,32 @@
++From 01e0038fa55581c4afc9d63b6180d2ea77ba2940 Mon Sep 17 00:00:00 2001
++From: Thorsten Kukuk <kukuk@thkukuk.de>
++Date: Mon, 4 Apr 2016 11:35:57 +0200
++Subject: [PATCH] build: fix build when crypt() is not part of crypt_libs
++ [ticket#46]
++
++* configure.ac: Don't set empty -l option in crypt check
++
++Signed-off-by: Yousong Zhou <yszhou4tech@gmail.com>
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: 01e0038fa55581c4afc9d63b6180d2ea77ba2940
++
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 739390e..b377e56 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -401,7 +401,7 @@ AS_IF([test "x$ac_cv_header_xcrypt_h" = "xyes"],
++   [crypt_libs="crypt"])
++ 
++ BACKUP_LIBS=$LIBS
++-AC_SEARCH_LIBS([crypt],[$crypt_libs], LIBCRYPT="-l$ac_lib", LIBCRYPT="")
+++AC_SEARCH_LIBS([crypt],[$crypt_libs], LIBCRYPT="${ac_lib:+-l$ac_lib}", LIBCRYPT="")
++ AC_CHECK_FUNCS(crypt_r crypt_gensalt_r)
++ LIBS=$BACKUP_LIBS
++ AC_SUBST(LIBCRYPT)
++-- 
++2.1.4
++
 -- 
-Luca
+2.1.4
