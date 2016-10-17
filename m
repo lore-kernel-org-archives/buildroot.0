@@ -1,11 +1,15 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Oct 2016 00:37:12 +0200
-Subject: [Buildroot] [PATCH 1/2] X11/odroidc2-driver: New Package.
-In-Reply-To: <trinity-122b1f64-5a75-4714-b1e0-471c25487584-1476738693195@3capp-mailcom-bs01>
-References: <20161013174124.9639-1-daggs@gmx.com>
- <9fe82330-7c8d-0f31-e777-db4e5014cf5f@mind.be>
- <trinity-122b1f64-5a75-4714-b1e0-471c25487584-1476738693195@3capp-mailcom-bs01>
-Message-ID: <5c997397-22ef-70f1-9a92-c1b7466de872@mind.be>
+Date: Tue, 18 Oct 2016 00:58:27 +0200
+Subject: [Buildroot] [PATCH 1/1] support/download: Add git download
+ method for SHAs
+In-Reply-To: <CA+fik53vbiSC1bO=6NhkZ=THeZwbGX4Nqh2dw_VHf3k7p+ku-g@mail.gmail.com>
+References: <54fbe894-b6c0-574f-7b52-7eb8c09525f5@mind.be>
+ <580308adbc1c4_26773ff56a3c4b24498bb@ultri3.mail>
+ <97a00115-1935-4e29-05b6-55d781f2c11b@mind.be>
+ <CA+fik50Rmi9JKdTLq+JZVFQOh9MiznP0Bd3XDEb1_UCM94tYJA@mail.gmail.com>
+ <dc9fb93d-9e0a-5ab7-4b9c-cfcafbe14038@mind.be>
+ <CA+fik53vbiSC1bO=6NhkZ=THeZwbGX4Nqh2dw_VHf3k7p+ku-g@mail.gmail.com>
+Message-ID: <316a0e80-b3bc-fc37-678b-62261b26cda8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,73 +18,161 @@ To: buildroot@busybox.net
 
 
 
-On 17-10-16 23:11, daggs wrote:
-
-[snip]
->>  You forgot to select or depend on ODROID_MALI. I think the appropriate approach
->> is to select it in this case. Then of course you do have to add the reverse
->> dependencies:
->> 	depends on BR2_aarch64 || BR2_ARM_EABIHF # odroid-mali
->> 	depends on BR2_TOOLCHAIN_USES_GLIBC # odroid-mali
-> will do.
+On 18-10-16 00:11, Brandon Maier wrote:
+> On Mon, Oct 17, 2016 at 3:18 PM, Arnout Vandecappelle <arnout@mind.be
+> <mailto:arnout@mind.be>> wrote:
 > 
-[snip]
->>> +comment "xf86-video-odroidc2 needs egl support from odroid-mali and ARM64 arch"
->>> +	depends on !BR2_PACKAGE_ODROID_MALI || !BR2_aarch64
->>
->>  This should become a glibc + NPTL threads comment instead.
-> why? are we sure this won't work for uclibc or musl?
+> 
+> 
+>     On 17-10-16 01:11, Brandon Maier wrote:
+>     >
+>     > That seems reasonable. As Ricardo and you mentioned, git fetch seems to work
+>     > with any ref (including special refs), and is smart about searching for matching
+>     > branches. We could simplify this down greatly and also cover the special refs
+>     > scenario from Yann's patch. Something like...
+>     >
+>     > equivalent_ref="$(git ls-remote $repo | awk '/^$cset/{ print $2; exit}')"
+> 
+>      There are two boundary cases that we should also handle:
+>     - an actual ref that could also be a commit sha, e.g. "added";
+> 
+>  
+> I can move the 'git fetch $cset' before the 'git fetch $equivalent_ref' so that
+> if cset matches a ref, it will be fetched first. Also has the bonus that we can
+> skip the ls-remote call entirely if it's a ref or the server supports fetching
+> sha-1s.
 
- Because of the 'select BR2_PACKAGE_ODROID_MALI' you have a dependency on glibc.
+ Sounds good!
 
- Oh, and we don't mention arch dependencies in the comment, so it should be
-	depend on BR2_aarch64
-	depends on !BR2_TOOLCHAIN_USES_GLIBC
+> 
+>     - an incomplete commit sha that matches several refs. 
+> 
+> 
+> As in a shortened sha that collides with multiple full shas? I could change the
+> awk to '\$1 == $cset{ print \$2; exit}' so that we only match on a complete
+> 40-byte sha. It looks like all the PKG_VERSIONS in buildroot use the full sha
+> anyway.
 
-[snip]
->>> +XDRIVER_XF86_VIDEO_ODROIDC2_LICENSE_FILES = README.txt 
->>> +XDRIVER_XF86_VIDEO_ODROIDC2_DEPENDENCIES = \
->>> +	odroid-mali \
->>> +	xproto_fontsproto \
->>> +	xproto_xproto \
->>
->>  You also select dri2proto, is that not needed? But actually, I don't see any
->> inclusion of either of these three proto packages, only of xserver stuff (and a
->> few that I can't place, like ump.h)
-> ump.h is part of the x11 egl pkg.
-> I've added the above deps based on compilation errors I've got.
+ I indeed meant an avbreviated sha. Inside Buildroot we indeed require full
+sha's, but in BR2_EXTERNAL packages that's not always the case.
 
- I suspect that it actually comes from the headers of odroid-mali. If that is
-the case, it would be better to put the dependency in odroid-mali itself
-(conditional on using the X11 version, of course).
+ I'd just error out if there are multiple matches.
 
->>
->>> +	mesa3d \
->>> +	xserver_xorg-server
->>> +
->>> +define XDRIVER_XF86_VIDEO_ODROIDC2_INSTALL_CONF_FILE
->>> +        $(INSTALL) -m 0644 -D $(@D)/src/xorg.conf $(TARGET_DIR)/etc/X11/xorg.conf
->>
->>  Hm, not sure about this one. If all packages do that we get conflicts. For e.g.
->> the Vivante X11 driver, we put in the help text what you have to add to
->> xorg.conf to make it work.
-> alternatively one can us the turbofb X11 driver to X to work do I based the pkg on that. 
-> can I see the expected result in the Vivante X11 driver?
 
- Well, you picked the _only_ driver that installs a xorg.conf... We just haven't
-noticed when Scott Fann contributed that driver.
+>     > git init $basename
+>     > pushd $basename
+>     > git remote add origin $repo
+> 
+>      I'm not a big fan of adding an explicit remote, just use $repo everywhere.
+> 
+> 
+> Either way is fine by me
+>  
+> 
+> 
+>     > if [ -n $equivalent_ref ]; then
+>     >     git fetch --depth=1 origin $equivalent_ref
+>     >     # $cset must be a SHA-1 here, so checkout $cset so we know we got the
+>     > correct commit
+>     >     git checkout $cset
+>     >     git_done=1
+> 
+>      Only if checkout was successful, I guess.
+> 
+> 
+> Yep, I wrote this quick. But all the git fetches and checkouts should be wrapped
+> in an 'if ...; then git_done=1; else printf "failed..."; fi'
+>  
+> 
+> 
+>     > fi
+>     > if [ $git_done -ne 1 ]; then
+> 
+>      I think this could be an else. If the first case failed, the second one is very
+>     unlikely to succeed.
+> 
+> 
+> If cset is a ref, equivalent_ref will be empty and we'd want to fallback here.
+
+ Exactly, so an else of the [ -n $equivalent_ref ].
+
+>  
+> 
+> 
+>     >     # Don't know if cset is a sha or ref, so don't try to add to local refs,
+>     > instead checkout FETCH_HEAD
+>     >     git fetch --depth=1 origin $cset
+>     >     git checkout FETCH_HEAD
+> 
+>      I kind of prefer to specify the target ref explicitly instead of relying on
+>     FETCH_HEAD. I.e., create a local special ref for it. Could be e.g.
+>     refs/buildroot/$cset.
+> 
+> 
+> Is it possible for FETCH_HEAD to be incorrect? Maybe if someone is messing
+> around in the repo? Otherwise this could add an (albeit extremely unlikely)
+> corner case where the repo has a special ref called refs/buildroot/xyz.
+
+ We own the buildroot namespace :-P
+
+>  
+> 
+> 
+>     >     git_done=1
+> 
+>      Here checkout was always successful.
+> 
+>     > fi
+>     > # Full fetch w/ special refs
+>     > if [ $git_done -ne 1]; then
+>     >     git fetch -u origin 'refs/*:refs/*'
+> 
+>      This could theoretically be a much larger clone than a simple "git fetch -u
+>     origin", so it might be worthwhile to first try that one still. And it's a
+>     pretty unusual situation that you specified a sha that is only reachable from a
+>     special ref, not from a normal branch/tag.
+> 
+>      However, in practice I don't think the extra objects added by gerrit will
+>     amount to much on a large repo. gerrit will die a thousand deads before it can
+>     even approximate one "change" per e.g. kernel commit.
+> 
+> 
+> We'd need to do a "git fetch -u origin 'refs/tags/*:refs/tags/*'
+> 'refs/heads/*:refs/heads/*'" otherwise it wouldn't fetch the tags and branches,
+
+ Euh, isn't this exactly equivalent to "git fetch -u origin" ?
+
+> which I'm fine with adding. But if we agree that special refs probably won't
+> make up a large portion of fetches, I'd rather keep it simple and just fetch
+> everything.
+
+ Good enough for me.
+
+> 
+> 
+>     >     git checkout $cset
+>     > fi
+>     >
+>     > The downside is we won't add refs to our local refs/ on a shallow clone. But it
+>     > looks like we only needed them for checkout, which we can do via FETCH_HEAD instead.
+> 
+>      Except in the sha-gotten-through-shallow-clone-of-ref case, because in that
+>     case the fetched ref may have already changed compared to what was there when we
+>     did the ls-remote.
+> 
+> 
+> Yes, but in that case we can do "git checkout $cset" because $cset must be a
+> commit's sha, and we don't need to fetch refs to checkout shas.
+> 
+> 
+> Otherwise, if we think switching to fetches is an acceptable solution, I'll
+> create a new patchset to do the change-over.
+
+ Do it in two patches: first convert the current situation to fetches, then add
+the shallow download of tag SHAs.
 
  Regards,
  Arnout
-
-> 
->>
->>> +endef
->>> +
->>> +XDRIVER_XF86_VIDEO_ODROIDC2_POST_INSTALL_TARGET_HOOKS += XDRIVER_XF86_VIDEO_ODROIDC2_INSTALL_CONF_FILE
->>> +
->>> +$(eval $(autotools-package))
->>>
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
