@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 17 Oct 2016 13:05:49 -0300
-Subject: [Buildroot] [PATCH 02/93] poco: use $(TARGET_MAKE_ENV) when calling
-	$(MAKE)
+Date: Mon, 17 Oct 2016 13:05:50 -0300
+Subject: [Buildroot] [PATCH 03/93] ocrad: use $(TARGET_MAKE_ENV) when
+	calling $(MAKE)
 In-Reply-To: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476720440-22239-3-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476720440-22239-4-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,44 +15,36 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/poco/poco.mk | 8 ++++----
+ package/ocrad/ocrad.mk | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 79452c0..4b82c50 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -47,7 +47,7 @@ POCO_MAKE_TARGET = all_release
- endif
- 
- define POCO_CONFIGURE_CMDS
--	(cd $(@D); ./configure \
-+	(cd $(@D); $(TARGET_MAKE_ENV) ./configure \
- 		--config=Linux		\
- 		--prefix=/usr		\
- 		--omit="$(POCO_OMIT)"	\
-@@ -58,19 +58,19 @@ define POCO_CONFIGURE_CMDS
+diff --git a/package/ocrad/ocrad.mk b/package/ocrad/ocrad.mk
+index 8a038e2..7e4f8c1 100644
+--- a/package/ocrad/ocrad.mk
++++ b/package/ocrad/ocrad.mk
+@@ -13,19 +13,19 @@ OCRAD_INSTALL_STAGING = YES
+ # This is not a true autotools package.
+ define OCRAD_CONFIGURE_CMDS
+ 	cd $(@D) && \
+-	./configure --prefix=/usr --sysconfdir=/etc $(TARGET_CONFIGURE_OPTS)
++	$(TARGET_MAKE_ENV) ./configure --prefix=/usr --sysconfdir=/etc $(TARGET_CONFIGURE_OPTS)
  endef
  
- define POCO_BUILD_CMDS
--	$(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
-+	$(TARGET_MAKE_ENV) $(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
- 		MYSQL_LIBDIR=$(STAGING_DIR)/usr/lib/mysql \
- 		MYSQL_INCDIR=$(STAGING_DIR)/usr/include/mysql \
- 		DEFAULT_TARGET=$(POCO_MAKE_TARGET) -C $(@D)
+ define OCRAD_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
  endef
  
- define POCO_INSTALL_STAGING_CMDS
--	$(MAKE) DESTDIR=$(STAGING_DIR) POCO_TARGET_OSARCH=$(ARCH) \
-+	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(STAGING_DIR) POCO_TARGET_OSARCH=$(ARCH) \
- 		DEFAULT_TARGET=$(POCO_MAKE_TARGET) install -C $(@D)
+ define OCRAD_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
  endef
  
- define POCO_INSTALL_TARGET_CMDS
--	$(MAKE) DESTDIR=$(TARGET_DIR) POCO_TARGET_OSARCH=$(ARCH) \
-+	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) POCO_TARGET_OSARCH=$(ARCH) \
- 		DEFAULT_TARGET=$(POCO_MAKE_TARGET) install -C $(@D)
+ define OCRAD_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
  endef
  
+ $(eval $(generic-package))
 -- 
 2.7.3
