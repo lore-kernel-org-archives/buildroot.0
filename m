@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 17 Oct 2016 13:06:01 -0300
-Subject: [Buildroot] [PATCH 14/93] mysql: use $(HOST_MAKE_ENV) when calling
-	$(MAKE)
+Date: Mon, 17 Oct 2016 13:06:02 -0300
+Subject: [Buildroot] [PATCH 15/93] dvb-apps: use $(TARGET_CONFIGURE_OPTS)
+	when calling $(MAKE)
 In-Reply-To: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476720440-22239-15-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476720440-22239-16-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,33 +15,28 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/mysql/mysql.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ package/dvb-apps/dvb-apps.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
-index 7af4711..92bf45a 100644
---- a/package/mysql/mysql.mk
-+++ b/package/mysql/mysql.mk
-@@ -47,13 +47,13 @@ HOST_MYSQL_CONF_OPTS = \
- 	--disable-mysql-maintainer-mode
- 
- define HOST_MYSQL_BUILD_CMDS
--	$(MAKE) -C $(@D)/include my_config.h
--	$(MAKE) -C $(@D)/mysys libmysys.a
--	$(MAKE) -C $(@D)/strings libmystrings.a
--	$(MAKE) -C $(@D)/vio libvio.a
--	$(MAKE) -C $(@D)/dbug libdbug.a
--	$(MAKE) -C $(@D)/regex libregex.a
--	$(MAKE) -C $(@D)/sql gen_lex_hash
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/include my_config.h
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/mysys libmysys.a
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/strings libmystrings.a
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/vio libvio.a
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/dbug libdbug.a
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/regex libregex.a
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/sql gen_lex_hash
+diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
+index b5b8a1f..c52252c 100644
+--- a/package/dvb-apps/dvb-apps.mk
++++ b/package/dvb-apps/dvb-apps.mk
+@@ -30,11 +30,13 @@ define DVB_APPS_BUILD_CMDS
  endef
  
- define HOST_MYSQL_INSTALL_CMDS
+ define DVB_APPS_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) $(DVB_APPS_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		$(DVB_APPS_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+ endef
+ 
+ define DVB_APPS_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(DVB_APPS_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		$(DVB_APPS_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.7.3
