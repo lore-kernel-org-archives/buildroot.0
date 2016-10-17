@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 17 Oct 2016 13:05:48 -0300
-Subject: [Buildroot] [PATCH 01/93] pppd: use $(TARGET_MAKE_ENV) when calling
+Date: Mon, 17 Oct 2016 13:05:49 -0300
+Subject: [Buildroot] [PATCH 02/93] poco: use $(TARGET_MAKE_ENV) when calling
 	$(MAKE)
 In-Reply-To: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476720440-22239-2-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476720440-22239-3-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,35 +15,44 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/pppd/pppd.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/poco/poco.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 92897be..b37832d 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -46,11 +46,11 @@ PPPD_POST_EXTRACT_HOOKS += PPPD_SET_RESOLV_CONF
- define PPPD_CONFIGURE_CMDS
- 	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
- 	$(SED) 's/ifneq ($$(wildcard \/usr\/include\/pcap-bpf.h),)/ifdef FILTER/' $(PPPD_DIR)/*/Makefile.linux
--	( cd $(@D); ./configure --prefix=/usr )
-+	( cd $(@D); $(TARGET_MAKE_ENV) ./configure --prefix=/usr )
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 79452c0..4b82c50 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -47,7 +47,7 @@ POCO_MAKE_TARGET = all_release
+ endif
+ 
+ define POCO_CONFIGURE_CMDS
+-	(cd $(@D); ./configure \
++	(cd $(@D); $(TARGET_MAKE_ENV) ./configure \
+ 		--config=Linux		\
+ 		--prefix=/usr		\
+ 		--omit="$(POCO_OMIT)"	\
+@@ -58,19 +58,19 @@ define POCO_CONFIGURE_CMDS
  endef
  
- define PPPD_BUILD_CMDS
--	$(MAKE) CC="$(TARGET_CC)" COPTS="$(TARGET_CFLAGS)" \
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" COPTS="$(TARGET_CFLAGS)" \
- 		-C $(@D) $(PPPD_MAKE_OPTS)
+ define POCO_BUILD_CMDS
+-	$(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
++	$(TARGET_MAKE_ENV) $(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
+ 		MYSQL_LIBDIR=$(STAGING_DIR)/usr/lib/mysql \
+ 		MYSQL_INCDIR=$(STAGING_DIR)/usr/include/mysql \
+ 		DEFAULT_TARGET=$(POCO_MAKE_TARGET) -C $(@D)
  endef
  
-@@ -104,7 +104,7 @@ define PPPD_INSTALL_TARGET_CMDS
+ define POCO_INSTALL_STAGING_CMDS
+-	$(MAKE) DESTDIR=$(STAGING_DIR) POCO_TARGET_OSARCH=$(ARCH) \
++	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(STAGING_DIR) POCO_TARGET_OSARCH=$(ARCH) \
+ 		DEFAULT_TARGET=$(POCO_MAKE_TARGET) install -C $(@D)
  endef
  
- define PPPD_INSTALL_STAGING_CMDS
--	$(MAKE) INSTROOT=$(STAGING_DIR)/ -C $(@D) $(PPPD_MAKE_OPTS) install-devel
-+	$(TARGET_MAKE_ENV) $(MAKE) INSTROOT=$(STAGING_DIR)/ -C $(@D) $(PPPD_MAKE_OPTS) install-devel
+ define POCO_INSTALL_TARGET_CMDS
+-	$(MAKE) DESTDIR=$(TARGET_DIR) POCO_TARGET_OSARCH=$(ARCH) \
++	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) POCO_TARGET_OSARCH=$(ARCH) \
+ 		DEFAULT_TARGET=$(POCO_MAKE_TARGET) install -C $(@D)
  endef
  
- $(eval $(generic-package))
 -- 
 2.7.3
