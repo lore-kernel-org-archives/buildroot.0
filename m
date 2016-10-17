@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 17 Oct 2016 13:06:02 -0300
-Subject: [Buildroot] [PATCH 15/93] dvb-apps: use $(TARGET_CONFIGURE_OPTS)
-	when calling $(MAKE)
+Date: Mon, 17 Oct 2016 13:06:03 -0300
+Subject: [Buildroot] [PATCH 16/93] mrouted: use $(TARGET_MAKE_ENV) when
+	calling $(MAKE)
 In-Reply-To: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476720440-22239-16-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476720440-22239-17-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,24 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/dvb-apps/dvb-apps.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/mrouted/mrouted.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-index b5b8a1f..c52252c 100644
---- a/package/dvb-apps/dvb-apps.mk
-+++ b/package/dvb-apps/dvb-apps.mk
-@@ -30,11 +30,13 @@ define DVB_APPS_BUILD_CMDS
+diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
+index 01b4a9f..2969e36 100644
+--- a/package/mrouted/mrouted.mk
++++ b/package/mrouted/mrouted.mk
+@@ -17,11 +17,11 @@ define MROUTED_CONFIGURE_CMDS
  endef
  
- define DVB_APPS_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) $(DVB_APPS_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		$(DVB_APPS_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+ define MROUTED_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
  endef
  
- define DVB_APPS_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) $(DVB_APPS_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		$(DVB_APPS_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+ define MROUTED_INSTALL_TARGET_CMDS
+-	$(MAKE) prefix=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
++	$(TARGET_MAKE_ENV) $(MAKE) prefix=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
  endef
  
  $(eval $(generic-package))
