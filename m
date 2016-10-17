@@ -1,39 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 17 Oct 2016 07:08:49 -0300
-Subject: [Buildroot] [PATCH 2/8] adwaita-icon-theme: install to staging
-In-Reply-To: <20161016181520.4f8b4ea1@free-electrons.com>
-References: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
- <1476321239-13894-2-git-send-email-gustavo@zacarias.com.ar>
- <20161016181520.4f8b4ea1@free-electrons.com>
-Message-ID: <5ff81c29-dec0-4e89-0232-18f16d1068e1@zacarias.com.ar>
+From: Rahul Jain <rahul.jain@imgtec.com>
+Date: Mon, 17 Oct 2016 15:55:26 +0530
+Subject: [Buildroot] [PATCH v3 2/3] uhttpd: new package
+In-Reply-To: <f1551376-9c0b-1d15-4e90-4a70a9f7b66d@imgtec.com>
+References: <1476096351-29501-1-git-send-email-Rahul.Jain@imgtec.com>
+ <1476096351-29501-2-git-send-email-Rahul.Jain@imgtec.com>
+ <f1551376-9c0b-1d15-4e90-4a70a9f7b66d@imgtec.com>
+Message-ID: <5804A716.4000408@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/10/16 13:15, Thomas Petazzoni wrote:
+Hi Vicente,
 
-> Hello,
->
-> On Wed, 12 Oct 2016 22:13:53 -0300, Gustavo Zacarias wrote:
->> This is required for the upcoming evince package.
+Thanks for your comments.
+
+On Friday 14 October 2016 08:20 PM, Vicente Olivert Riera wrote:
+>> diff --git a/package/uhttpd/uhttpd.mk b/package/uhttpd/uhttpd.mk
+>> new file mode 100644
+>> index 0000000..b4ef291
+>> --- /dev/null
+>> +++ b/package/uhttpd/uhttpd.mk
+>> @@ -0,0 +1,38 @@
+>> +################################################################################
 >>
->> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->> ---
->>  package/adwaita-icon-theme/adwaita-icon-theme.mk | 1 +
->>  1 file changed, 1 insertion(+)
+>> +#
+>> +# uhttpd
+>> +#
+>> +################################################################################
+>>
+>> +
+>> +UHTTPD_VERSION = 59e0c739634f46a164d939e54416287b91ff8a9b
+>> +UHTTPD_SITE = http://git.openwrt.org/project/uhttpd.git
+>> +UHTTPD_SITE_METHOD = git
+>> +UHTTPD_LICENSE = ISC
 >
-> It feels a bit odd that evince needs icons in the staging directory.
-> Could you improve the commit message a bit to explain why this is
-> needed?
+> Same thing here, UHTTPD_LICENSE_FILES is missing. You are saying that
+> the license is ISC, but, how can you check it? You need some file to
+> look at in order to check it.
 >
-> Thanks!
->
-> Thomas
+The package does not provide any license file, but all the source files 
+have the ISC license header. I will add one of the source file as the
+license file.
 
-Hi.
-It's actually very simple, evince checks for adwaita icons via 
-pkgconfig, hence  if they're not installed in staging they're not found.
-Should i resend the series or just this one?
-Regards.
+Thanks,
+Rahul Jain
