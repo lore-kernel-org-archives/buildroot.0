@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 17 Oct 2016 13:07:15 -0300
-Subject: [Buildroot] [PATCH 88/93] wiringpi: use $(TARGET_MAKE_ENV) when
+Date: Mon, 17 Oct 2016 13:07:16 -0300
+Subject: [Buildroot] [PATCH 89/93] tinyhttpd: use $(TARGET_MAKE_ENV) when
 	calling $(MAKE)
 In-Reply-To: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476720440-22239-89-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476720440-22239-90-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +15,21 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/wiringpi/wiringpi.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/tinyhttpd/tinyhttpd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wiringpi/wiringpi.mk b/package/wiringpi/wiringpi.mk
-index baa8753..87b1b6a 100644
---- a/package/wiringpi/wiringpi.mk
-+++ b/package/wiringpi/wiringpi.mk
-@@ -40,13 +40,13 @@ define WIRINGPI_BUILD_CMDS
+diff --git a/package/tinyhttpd/tinyhttpd.mk b/package/tinyhttpd/tinyhttpd.mk
+index 194249b..058f6bd 100644
+--- a/package/tinyhttpd/tinyhttpd.mk
++++ b/package/tinyhttpd/tinyhttpd.mk
+@@ -10,7 +10,7 @@ TINYHTTPD_LICENSE = GPL
+ TINYHTTPD_LICENSE_FILES = README
+ 
+ define TINYHTTPD_BUILD_CMDS
+-	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+ 		LDFLAGS="$(TARGET_LDFLAGS)"
  endef
  
- define WIRINGPI_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D)/wiringPi $(WIRINGPI_LIB_INSTALL_TARGETS) DESTDIR=$(STAGING_DIR) PREFIX=/usr LDCONFIG=true
--	$(MAKE) -C $(@D)/devLib $(WIRINGPI_LIB_INSTALL_TARGETS) DESTDIR=$(STAGING_DIR) PREFIX=/usr LDCONFIG=true
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/wiringPi $(WIRINGPI_LIB_INSTALL_TARGETS) DESTDIR=$(STAGING_DIR) PREFIX=/usr LDCONFIG=true
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/devLib $(WIRINGPI_LIB_INSTALL_TARGETS) DESTDIR=$(STAGING_DIR) PREFIX=/usr LDCONFIG=true
- endef
- 
- define WIRINGPI_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D)/wiringPi $(WIRINGPI_LIB_INSTALL_TARGETS) DESTDIR=$(TARGET_DIR) PREFIX=/usr LDCONFIG=true
--	$(MAKE) -C $(@D)/devLib $(WIRINGPI_LIB_INSTALL_TARGETS) DESTDIR=$(TARGET_DIR) PREFIX=/usr LDCONFIG=true
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/wiringPi $(WIRINGPI_LIB_INSTALL_TARGETS) DESTDIR=$(TARGET_DIR) PREFIX=/usr LDCONFIG=true
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/devLib $(WIRINGPI_LIB_INSTALL_TARGETS) DESTDIR=$(TARGET_DIR) PREFIX=/usr LDCONFIG=true
- 	$(INSTALL) -D -m 0755 $(@D)/gpio/gpio $(TARGET_DIR)/usr/bin/gpio
- 	$(INSTALL) -D -m 0755 $(@D)/gpio/pintest $(TARGET_DIR)/usr/bin/pintest
- endef
 -- 
 2.7.3
