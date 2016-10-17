@@ -1,64 +1,55 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 17 Oct 2016 23:08:00 +0200
-Subject: [Buildroot] [PATCH v11 3/4] core: re-enter make if $(CURDIR) or
- $(O) are not canonical paths
-In-Reply-To: <805b2212-70b5-06fe-3563-aa06395a1def@mind.be>
-References: <20161016115423.17881-1-s.martin49@gmail.com>
- <20161016115423.17881-4-s.martin49@gmail.com>
- <805b2212-70b5-06fe-3563-aa06395a1def@mind.be>
-Message-ID: <CAHXCMM+d4s8nkT5q+FANymRSmPkVOKD97nys8n4aAbFNxrnVnw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 17 Oct 2016 23:08:31 +0200
+Subject: [Buildroot] any opinions on uClibc-ng test-suite?
+In-Reply-To: <20161017184120.GM21808@waldemar-brodkorb.de>
+References: <20161017184120.GM21808@waldemar-brodkorb.de>
+Message-ID: <bf1755cb-2741-5c6b-9b35-6eac1426a81b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+ Hi Waldemar,
 
-On Sun, Oct 16, 2016 at 5:59 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 16-10-16 13:54, Samuel Martin wrote:
->> When $(CURDIR) and/or $(O) contain symlinks in their paths, they can be
->> resolved differently, depending on each package build-system (whether it
->> uses the given paths or get the absolute canonical ones).
->>
->> Using absolute canonical paths will help achieving reproducible builds and
->> will make easier tracking down host machine paths leaking into the host,
->> target or staging trees.
->> So, this change ensure the build takes place with the CURDIR and O
->                         ^s
->
->> variables are set to their absolute canonical paths.
->>
->> In order to recall the toplevel makefile with absolute canonical paths
->> for $(CURDIR) and $(O), we need to:
->> 1- Compute the absolute canonical paths for $(CURDIR) and $(O) that will
->>    be passed to the sub-make. This is achieved using the 'realpath' make
->>    primitive. However, some care must be taken when manipulating O:
->>    - the out-of-tree makefile wrapper happens a trailing "/.", we need
->>      to strip this part away to not break the comparison driving the
->>      sub-make call;
->>    - the user can leave a trailing '/' to $(O);
->>    - according to [1,2], realpath returns an empty string in case of
->>      non-existing entry. So, to avoid passing an empty O= variable to
->>      sub-make, it is necessary to define the output directory and create
->>      it prior to call realpath on it (because on the first invocation,
->>      $(O) usually does not yet exists), hence the trick doing the mkdir
->>      right before calling realpath.
->> 2- Update EXTRAMAKEARGS with the absolute canonical $(O) and use it
->>    when call recalling the top-level makefile with umask and paths
->>    correctly set.
->> 3- Lastly, update the condition for setting the CONFIG_DIR and
->>    NEED_WRAPPER variables.
->
->  Actually for $(O) it is not strictly needed to re-enter make, but it just
-> simplifies things, right?
+On 17-10-16 20:41, Waldemar Brodkorb wrote:
+> Hi,
+> 
+> see here:
+> http://mailman.uclibc-ng.org/pipermail/devel/2016-October/001224.html
 
-I think so.
+ I'm replying here because I'm too lazy to subscribe to the uClibc-ng mailing
+list...
 
-Regards,
+ Normally I prefer that the test suite stays with the package. At least from the
+buildroot point of view, we can solve the not-complete-toolchain issue by adding
+a uClibc-test package that builds the uClibc tests after the toolchain has been
+built. A bit similar to how linux-tools are separated from the linux kernel build.
 
+ I would try, however, to reuse and expand libc-test if at all possible. If that
+upstream agrees with it, it shouldn't be too hard to convert the make-based
+runner to a shell-based runner. Hell, the target_template can almost be reused
+as-is to generate runner shell fragments...
+
+
+ Regards,
+ Arnout
+
+
+> 
+> best regards
+>  Waldemar
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
-Samuel
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
