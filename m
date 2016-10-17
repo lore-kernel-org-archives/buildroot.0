@@ -1,31 +1,40 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Mon, 17 Oct 2016 07:25:24 -0700
-Subject: [Buildroot] [PATCH v2 3/3] DEVELOPERS: add entry for inadyn
-In-Reply-To: <20161017142524.12026-1-bluemrp9@gmail.com>
-References: <20161017142524.12026-1-bluemrp9@gmail.com>
-Message-ID: <20161017142524.12026-3-bluemrp9@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 17 Oct 2016 17:02:40 +0200
+Subject: [Buildroot] Update of pre-built Buildroot toolchains
+In-Reply-To: <57E3D8F9.4020109@imgtec.com>
+References: <20160921210722.1b078ab1@free-electrons.com>
+ <57E3D8F9.4020109@imgtec.com>
+Message-ID: <20161017170240.1a014f88@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+Hello,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ed89b09..16d9b55 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1263,6 +1263,7 @@ F:	package/python-pysnmp-mibs/
- F:	package/python-tornado/
- 
- N:	Ryan Coe <bluemrp9@gmail.com>
-+F:	package/inadyn/
- F:	package/libite/
- 
- N:	Ryan Wilkins <ryan@deadfrog.net>
+On Thu, 22 Sep 2016 18:43:29 +0530, Rahul Bedarkar wrote:
+
+> >   * Almost all toolchains have been switched to the default of gcc 5.x.
+> >     There are still a few toolchains that intentionally use different
+> >     gcc version: some using gcc 6.x, some using gcc 4.8.x.
+> >
+> >   * The ARC toolchain has been updated with the latest version of the
+> >     ARC toolchain components.
+> >
+> >   * The Blackfin toolchain has the latest uClibc fix.  
+> 
+> It looks like bfin config on autobuilder is not updated to use new 
+> pre-build toolchain.
+
+Indeed. I've updated all toolchains now, freshly rebuilt.
+
+Thanks for reporting the issue!
+
+Best regards,
+
+Thomas
 -- 
-2.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
