@@ -1,49 +1,56 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 17 Oct 2016 21:40:55 +0000
-Subject: [Buildroot] [Bug 9366] New: no link rootfs.ext4 -> rootfs.ext2
-Message-ID: <bug-9366-163@https.bugs.busybox.net/>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 17 Oct 2016 23:53:02 +0200
+Subject: [Buildroot] [PATCH v2] support/misc/Vagrantfile: bump to ubuntu
+	16.04
+Message-ID: <1476741182-23366-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9366
+* Updating to ubuntu 16.04
+* Fixing dependencies
+* Fixing locale complaints
+* Removing unused packages
 
-            Bug ID: 9366
-           Summary: no link rootfs.ext4 -> rootfs.ext2
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: mikhail_tchernychev at yahoo.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+Changelog
 
-Created attachment 6766
-  --> https://bugs.busybox.net/attachment.cgi?id=6766&action=edit
-this is .config file which make this problem.
+* Changed to C locale as suggested by Arnout Vandecappelle
 
-Hi, I have compiled raspberry pi 3 image with config file attached here. 
-Unfortunately at the very last stage I had manually link 
+ support/misc/Vagrantfile | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-ln -s rootfs.ext2 rootfs.ext4
-
-in the images/ directory, then run make again and it assembled sdcard.img
-
-When I used default rpi3 config it was not the case, so it is something in my 
-custom config, which is default based.
-
-It seems it is something minor.
-
-Thank you
-Mikhail
-
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index cf269fe..5e56d5d 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -12,7 +12,7 @@ VM_MEMORY=2048
+ VM_CORES=1
+ 
+ Vagrant.configure('2') do |config|
+-	config.vm.box = 'ubuntu/trusty64'
++	config.vm.box = 'bento/ubuntu-16.04'
+ 
+ 	config.vm.provider :vmware_fusion do |v, override|
+ 		v.vmx['memsize'] = VM_MEMORY
+@@ -44,10 +44,13 @@ Vagrant.configure('2') do |config|
+ 	config.vm.provision 'shell', inline:
+ 		"sudo dpkg --add-architecture i386
+ 		sudo apt-get -q update
++		sudo apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
++		sudo apt-get -q -y upgrade
+ 		sudo apt-get -q -y install build-essential libncurses5-dev \
+-			git bzr cvs mercurial subversion libc6:i386 unzip
++			git bzr cvs mercurial subversion libc6:i386 unzip bc
+ 		sudo apt-get -q -y autoremove
+-		sudo apt-get -q -y clean"
++		sudo apt-get -q -y clean
++		sudo update-locale LC_ALL=C"
+ 
+ 	config.vm.provision 'shell', privileged: false, inline:
+ 		"echo 'Downloading and extracting buildroot #{RELEASE}'
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.7.4
