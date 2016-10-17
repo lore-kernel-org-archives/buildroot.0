@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 17 Oct 2016 13:07:00 -0300
-Subject: [Buildroot] [PATCH 73/93] ti-sgx-um: use $(TARGET_MAKE_ENV) when
-	calling $(MAKE)
+Date: Mon, 17 Oct 2016 13:07:01 -0300
+Subject: [Buildroot] [PATCH 74/93] perl: use $(TARGET_MAKE_ENV) when calling
+	$(MAKE)
 In-Reply-To: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476720440-22239-74-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476720440-22239-75-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,31 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/ti-sgx-um/ti-sgx-um.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/perl/perl.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ti-sgx-um/ti-sgx-um.mk b/package/ti-sgx-um/ti-sgx-um.mk
-index d9ff2df..d5c50a0 100644
---- a/package/ti-sgx-um/ti-sgx-um.mk
-+++ b/package/ti-sgx-um/ti-sgx-um.mk
-@@ -15,11 +15,11 @@ TI_SGX_UM_INSTALL_STAGING = YES
- TI_SGX_UM_DEPENDENCIES = libdrm
- 
- define TI_SGX_UM_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) DISCIMAGE=$(STAGING_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DISCIMAGE=$(STAGING_DIR) install
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 29b4455..fa051b9 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -80,15 +80,15 @@ define PERL_CONFIGURE_CMDS
  endef
  
- define TI_SGX_UM_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) DISCIMAGE=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DISCIMAGE=$(TARGET_DIR) install
+ define PERL_BUILD_CMDS
+-	$(MAKE1) -C $(@D) all
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) all
  endef
  
- # libs use the following file for configuration
+ define PERL_INSTALL_STAGING_CMDS
+-	$(MAKE1) -C $(@D) DESTDIR="$(STAGING_DIR)" install.perl
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR="$(STAGING_DIR)" install.perl
+ endef
+ 
+ define PERL_INSTALL_TARGET_CMDS
+-	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
+ endef
+ 
+ HOST_PERL_CONF_OPTS = \
 -- 
 2.7.3
