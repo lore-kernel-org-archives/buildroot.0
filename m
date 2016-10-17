@@ -1,35 +1,33 @@
 From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Mon, 17 Oct 2016 22:31:31 +0530
-Subject: [Buildroot] [PATCH 1/2] get-developers: use --cc instead of --to
-	for developers
-Message-ID: <1476723692-22814-1-git-send-email-rahul.bedarkar@imgtec.com>
+Date: Mon, 17 Oct 2016 22:31:32 +0530
+Subject: [Buildroot] [PATCH 2/2] openswan: remove duplicate word toolchain
+	from comment
+In-Reply-To: <1476723692-22814-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1476723692-22814-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <1476723692-22814-2-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Output of get-developers script in our manual uses --cc for developers,
-but actual output of get-developers script uses --to. This patch makes
-code consistent with documentation, by using --cc for developers.
-
 Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 ---
- support/scripts/get-developers | 2 +-
+ package/openswan/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/scripts/get-developers b/support/scripts/get-developers
-index f73512f..8b1891d 100755
---- a/support/scripts/get-developers
-+++ b/support/scripts/get-developers
-@@ -74,7 +74,7 @@ def __main__():
+diff --git a/package/openswan/Config.in b/package/openswan/Config.in
+index ba5d53d..5db665c 100644
+--- a/package/openswan/Config.in
++++ b/package/openswan/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_OPENSWAN
  
-         result = "--to buildroot at buildroot.org"
-         for dev in matching_devs:
--            result += " --to \"%s\"" % dev
-+            result += " --cc \"%s\"" % dev
+ 	  http://www.openswan.org
  
-         if result != "":
-             print("git send-email %s" % result)
+-comment "openswan needs a uClibc or glibc toolchain toolchain w/ headers >= 3.0"
++comment "openswan needs a uClibc or glibc toolchain w/ headers >= 3.0"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || \
+ 		BR2_TOOLCHAIN_USES_MUSL
 -- 
 2.6.2
