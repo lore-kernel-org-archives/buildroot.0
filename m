@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 17 Oct 2016 13:06:38 -0300
-Subject: [Buildroot] [PATCH 51/93] rs485conf: use $(TARGET_MAKE_ENV) when
-	calling $(MAKE)
+Date: Mon, 17 Oct 2016 13:06:30 -0300
+Subject: [Buildroot] [PATCH 43/93] fio: use $(TARGET_MAKE_ENV) when calling
+	$(MAKE)
 In-Reply-To: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476720440-22239-52-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476720440-22239-44-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,26 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/rs485conf/rs485conf.mk | 4 ++--
+ package/fio/fio.mk | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rs485conf/rs485conf.mk b/package/rs485conf/rs485conf.mk
-index 7fda39c..8749268 100644
---- a/package/rs485conf/rs485conf.mk
-+++ b/package/rs485conf/rs485conf.mk
-@@ -10,11 +10,11 @@ RS485CONF_LICENSE = BSD-3c
- RS485CONF_LICENSE_FILES = LICENSE
+diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+index 3270629..5c02bc9 100644
+--- a/package/fio/fio.mk
++++ b/package/fio/fio.mk
+@@ -22,11 +22,11 @@ FIO_DEPENDENCIES += zlib
+ endif
  
- define RS485CONF_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ define FIO_CONFIGURE_CMDS
+-	(cd $(@D); ./configure --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
++	(cd $(@D); $(TARGET_MAKE_ENV) ./configure --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
  endef
  
- define RS485CONF_INSTALL_TARGET_CMDS
--	$(MAKE) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
+ define FIO_BUILD_CMDS
+-	$(MAKE) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
  endef
  
- $(eval $(generic-package))
+ define FIO_INSTALL_TARGET_CMDS
 -- 
 2.7.3
