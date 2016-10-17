@@ -1,35 +1,71 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 17 Oct 2016 13:07:20 -0300
-Subject: [Buildroot] [PATCH 93/93] cryptodev-linux: use $(TARGET_MAKE_ENV)
-	when calling $(MAKE)
-In-Reply-To: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476720440-22239-94-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Mon, 17 Oct 2016 21:46:56 +0530
+Subject: [Buildroot] [PATCH] trinity: not available on musl
+Message-ID: <1476721016-21596-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+After fixing following build failures with musl:
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+* error: unknown type name __uint32_t and __uint64_t
+* error: unknown type name pid_t and uid_t
+* error: fatal error: bits/sockaddr.h: No such file or directory
+
+it fails with
+
+  fds/files.c: In function 'file_tree_callback':
+  fds/files.c:172:10: error: 'FTW_CONTINUE' undeclared (first use in this function)
+     return FTW_CONTINUE;
+            ^
+  fds/files.c:172:10: note: each undeclared identifier is reported only once for each function it appears in
+  fds/files.c:178:10: error: 'FTW_SKIP_SUBTREE' undeclared (first use in this function)
+     return FTW_SKIP_SUBTREE;
+            ^
+  fds/files.c:185:10: error: 'FTW_STOP' undeclared (first use in this function)
+     return FTW_STOP;
+            ^
+  fds/files.c: In function 'open_fds_from_path':
+  fds/files.c:197:26: error: 'FTW_ACTIONRETVAL' undeclared (first use in this function)
+    int flags = FTW_DEPTH | FTW_ACTIONRETVAL | FTW_MOUNT;
+
+As per ftw man-page, flag FTW_ACTIONRETVAL is specific to glibc. It is
+not available on musl. Since package uses it unconditionally, we mark
+it not available on musl.
+
+Fixes:
+  http://autobuild.buildroot.net/results/cb4/cb4a665746652679487dee2c2e4bca881be3724b/
+
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 ---
- package/cryptodev-linux/cryptodev-linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/trinity/Config.in | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index d23b647..e23e1e3 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
-@@ -13,7 +13,7 @@ CRYPTODEV_LINUX_LICENSE_FILES = COPYING
- CRYPTODEV_LINUX_PROVIDES = cryptodev
+diff --git a/package/trinity/Config.in b/package/trinity/Config.in
+index 2495e5d..02cd20a 100644
+--- a/package/trinity/Config.in
++++ b/package/trinity/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_TRINITY
+ 	bool "trinity"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_TOOLCHAIN_USES_MUSL # FTW_ACTIONRETVAL
+ 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
+ 		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
+ 		BR2_powerpc64le || BR2_sparc || BR2_x86_64
+@@ -8,3 +9,10 @@ config BR2_PACKAGE_TRINITY
+ 	  A Linux System call fuzz tester
  
- define CRYPTODEV_LINUX_MODULE_GEN_VERSION_H
--	$(MAKE) -C $(@D) version.h
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) version.h
- endef
- CRYPTODEV_LINUX_PRE_BUILD_HOOKS += CRYPTODEV_LINUX_MODULE_GEN_VERSION_H
- 
+ 	  http://codemonkey.org.uk/projects/trinity/
++
++comment "trinity needs a uClibc or glibc toolchain"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_USES_MUSL
++	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
++		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
++		BR2_powerpc64le || BR2_sparc || BR2_x86_64
 -- 
-2.7.3
+2.6.2
