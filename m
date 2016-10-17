@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 17 Oct 2016 13:07:18 -0300
-Subject: [Buildroot] [PATCH 91/93] qt: use $(TARGET_MAKE_ENV) when calling
-	$(MAKE)
+Date: Mon, 17 Oct 2016 13:07:19 -0300
+Subject: [Buildroot] [PATCH 92/93] aufs-util: use $(HOST_MAKE_ENV) when
+	calling $(MAKE)
 In-Reply-To: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476720440-22239-92-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476720440-22239-93-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,26 @@ To: buildroot@busybox.net
 
 From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
+In this case in particular a host tool is built inside the target build
+step.
+
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/qt/qt.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/aufs-util/aufs-util.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 8c0ff7b..508f35a 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -505,7 +505,7 @@ endef
- endif
+diff --git a/package/aufs-util/aufs-util.mk b/package/aufs-util/aufs-util.mk
+index a2d0bad..d41b4ac 100644
+--- a/package/aufs-util/aufs-util.mk
++++ b/package/aufs-util/aufs-util.mk
+@@ -41,7 +41,7 @@ AUFS_UTIL_POST_PATCH_HOOKS += AUFS_UTIL_REMOVE_RDU64
  
- define QT_CONFIGURE_CMDS
--	-[ -f $(@D)/Makefile ] && $(MAKE) -C $(@D) confclean
-+	-[ -f $(@D)/Makefile ] && $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) confclean
- 	$(QT_CONFIGURE_IPV6)
- 	$(QT_CONFIGURE_CONFIG_FILE)
- 	# Fix compiler path
-@@ -632,7 +632,7 @@ endef
- # remove the sysroot path from them, since pkg-config already adds it
- # automatically.
- define QT_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
- 	mkdir -p $(HOST_DIR)/usr/bin
- 	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)) $(HOST_DIR)/usr/bin
- 	ln -sf $(STAGING_DIR)/usr/mkspecs $(HOST_DIR)/usr/mkspecs
+ # First, we build the host tools, needed to build the target tools.
+ define AUFS_UTIL_BUILD_CMDS
+-	$(MAKE) -C $(@D) \
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CPPFLAGS="$(AUFS_UTIL_HOST_CPPFLAGS)" \
+ 		HOSTCC="$(HOSTCC)" HOSTLD="$(HOSTLD)" \
 -- 
 2.7.3
