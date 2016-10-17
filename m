@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 17 Oct 2016 13:06:47 -0300
-Subject: [Buildroot] [PATCH 60/93] ti-gfx: use $(TARGET_MAKE_ENV) when
+Date: Mon, 17 Oct 2016 13:06:48 -0300
+Subject: [Buildroot] [PATCH 61/93] memtester: use $(TARGET_MAKE_ENV) when
 	calling $(MAKE)
 In-Reply-To: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476720440-22239-61-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476720440-22239-62-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +15,26 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/ti-gfx/ti-gfx.mk | 4 ++--
+ package/memtester/memtester.mk | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
-index 47eb474..428878a 100644
---- a/package/ti-gfx/ti-gfx.mk
-+++ b/package/ti-gfx/ti-gfx.mk
-@@ -101,7 +101,7 @@ define TI_GFX_EXTRACT_CMDS
+diff --git a/package/memtester/memtester.mk b/package/memtester/memtester.mk
+index d12babc..802c1e4 100644
+--- a/package/memtester/memtester.mk
++++ b/package/memtester/memtester.mk
+@@ -13,11 +13,11 @@ MEMTESTER_TARGET_INSTALL_OPTS = INSTALLPATH=$(TARGET_DIR)/usr
+ 
+ define MEMTESTER_BUILD_CMDS
+ 	$(SED) "s,^cc,$(TARGET_CC)," $(@D)/conf-*
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
  endef
  
- define TI_GFX_BUILD_KM_CMDS
--	$(MAKE) $(TI_GFX_KM_MAKE_OPTS) -C $(@D)/GFX_Linux_KM all
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TI_GFX_KM_MAKE_OPTS) -C $(@D)/GFX_Linux_KM all
+ define MEMTESTER_INSTALL_TARGET_CMDS
+-	$(MAKE) $(MEMTESTER_TARGET_INSTALL_OPTS) -C $(@D) install
++	$(TARGET_MAKE_ENV) $(MAKE) $(MEMTESTER_TARGET_INSTALL_OPTS) -C $(@D) install
  endef
  
- ifeq ($(BR2_PACKAGE_TI_GFX_DEMOS),y)
-@@ -156,7 +156,7 @@ define TI_GFX_INSTALL_STAGING_CMDS
- endef
- 
- define TI_GFX_INSTALL_KM_CMDS
--	$(MAKE) $(TI_GFX_KM_MAKE_OPTS) -C $(@D)/GFX_Linux_KM install
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TI_GFX_KM_MAKE_OPTS) -C $(@D)/GFX_Linux_KM install
- endef
- 
- define TI_GFX_INSTALL_BINS_CMDS
+ $(eval $(generic-package))
 -- 
 2.7.3
