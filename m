@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Oct 2016 22:23:48 +0200
-Subject: [Buildroot] [PATCH] support/misc/Vagrantfile: bump to ubuntu
- 16.04
-In-Reply-To: <1476686386-31512-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1476686386-31512-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <7a44219c-1e9b-48ef-5f44-3f44deb3cece@mind.be>
+Date: Mon, 17 Oct 2016 22:30:22 +0200
+Subject: [Buildroot] [PATCH 2/8] adwaita-icon-theme: install to staging
+In-Reply-To: <5ff81c29-dec0-4e89-0232-18f16d1068e1@zacarias.com.ar>
+References: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
+ <1476321239-13894-2-git-send-email-gustavo@zacarias.com.ar>
+ <20161016181520.4f8b4ea1@free-electrons.com>
+ <5ff81c29-dec0-4e89-0232-18f16d1068e1@zacarias.com.ar>
+Message-ID: <60ae2d27-8c3c-8ec5-6524-9c1aecc4ee3e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +15,50 @@ To: buildroot@busybox.net
 
 
 
-On 17-10-16 08:39, Angelo Compagnucci wrote:
-> * Updating to ubuntu 16.04
-> * Fixing dependencies
-> * Fixing locale complaints
-
- Could you explain this a little?
-
-> * Removing unused packages
+On 17-10-16 12:08, Gustavo Zacarias wrote:
+> On 16/10/16 13:15, Thomas Petazzoni wrote:
 > 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>> Hello,
+>>
+>> On Wed, 12 Oct 2016 22:13:53 -0300, Gustavo Zacarias wrote:
+>>> This is required for the upcoming evince package.
+>>>
+>>> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>>> ---
+>>>  package/adwaita-icon-theme/adwaita-icon-theme.mk | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>
+>> It feels a bit odd that evince needs icons in the staging directory.
+>> Could you improve the commit message a bit to explain why this is
+>> needed?
+>>
+>> Thanks!
+>>
+>> Thomas
+> 
+> Hi.
+> It's actually very simple, evince checks for adwaita icons via pkgconfig, hence 
+> if they're not installed in staging they're not found.
+
+ I indeed thought something like that, but then I thought: why bother installing
+everything to staging if only the .pc file is needed? However, it is staging, so
+we don't really care how much crap is in there, and we do prefer to use the
+upstream install commands. So OK for me.
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> ---
->  support/misc/Vagrantfile | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-> index cf269fe..01262b7 100644
-> --- a/support/misc/Vagrantfile
-> +++ b/support/misc/Vagrantfile
-> @@ -12,7 +12,7 @@ VM_MEMORY=2048
->  VM_CORES=1
->  
->  Vagrant.configure('2') do |config|
-> -	config.vm.box = 'ubuntu/trusty64'
-> +	config.vm.box = 'bento/ubuntu-16.04'
->  
->  	config.vm.provider :vmware_fusion do |v, override|
->  		v.vmx['memsize'] = VM_MEMORY
-> @@ -44,10 +44,13 @@ Vagrant.configure('2') do |config|
->  	config.vm.provision 'shell', inline:
->  		"sudo dpkg --add-architecture i386
->  		sudo apt-get -q update
-> +		sudo apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
+> Should i resend the series or just this one?
 
- Yeah, die snap die :-)
+ Normally I'd say: the series. However, we're not going to accept
+python-libxml2. The idea is to bite the bullet and add Config.in.host entries
+for all host packages, so this type of problem can be properly resolved. We'll
+do that gradually. Python and python3 would be good to start with - although
+those are already pretty heavy, roughly 50 packages need to be updated to select
+BR2_PACKAGE_HOST_PYTHON{,3}).
 
-> +		sudo apt-get -q -y upgrade
->  		sudo apt-get -q -y install build-essential libncurses5-dev \
-> -			git bzr cvs mercurial subversion libc6:i386 unzip
-> +			git bzr cvs mercurial subversion libc6:i386 unzip bc
->  		sudo apt-get -q -y autoremove
-> -		sudo apt-get -q -y clean"
-> +		sudo apt-get -q -y clean
-> +		sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8"
-
- Why en_US and not C? Are there problems with accented characters somewhere?
-
- Note that I have no idea how people use such a box. Do they actually work
-inside it, or do they do there development from outside and just ssh or whatever
-to start a build?
 
  Regards,
  Arnout
-
->  
->  	config.vm.provision 'shell', privileged: false, inline:
->  		"echo 'Downloading and extracting buildroot #{RELEASE}'
-> 
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
