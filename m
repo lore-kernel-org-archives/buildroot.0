@@ -1,49 +1,115 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 17 Oct 2016 22:01:28 +0200
-Subject: [Buildroot] [PATCH v1] motion: fix postgresql support
-Message-ID: <1476734488-3436-1-git-send-email-ps.report@gmx.net>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 17 Oct 2016 22:03:21 +0200
+Subject: [Buildroot] [PATCH v4 1/3] ustream-ssl: new package
+In-Reply-To: <1476702145-25280-1-git-send-email-Rahul.Jain@imgtec.com>
+References: <1476702145-25280-1-git-send-email-Rahul.Jain@imgtec.com>
+Message-ID: <CAHXCMMK6hSim5VSKp8kZR__0=Orw+4a=0xoC7wiy9ygSXmcZHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The commandline paramter to enable/disable postgresql support is
-called '--with-pgsql/--without-pgsql' and not '--with-postgresql/
---without-postgresql'.
+Hi,
 
-Fixes [1] in case postgresql development files are installed on the host:
+On Mon, Oct 17, 2016 at 1:02 PM, Rahul Jain <Rahul.Jain@imgtec.com> wrote:
+> ustream-ssl has support for polarssl and cyassl
+> but since polarssl is made obsolete by mbedtls and cyassl
+> is not present in buildroot, we have not added support for it.
+>
+> Signed-off-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+> Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
+> ---
+>  Changes v3 -> v4:
+>    - add USTREAM_SSL_LICENSE_FILES variable
+>  Changes v2 -> v3:
+>    - Remove entry from DEVELOPERS file
+>  Changes v1 -> v2:
+>    - No changes
+>
+>  package/Config.in                  |  1 +
+>  package/ustream-ssl/Config.in      | 12 ++++++++++++
+>  package/ustream-ssl/ustream-ssl.mk | 21 +++++++++++++++++++++
+>  3 files changed, 34 insertions(+)
+>  create mode 100644 package/ustream-ssl/Config.in
+>  create mode 100644 package/ustream-ssl/ustream-ssl.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 9399f63..89de7af 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -911,6 +911,7 @@ menu "Crypto"
+>         source "package/polarssl/Config.in"
+>         source "package/tinydtls/Config.in"
+>         source "package/trousers/Config.in"
+> +       source "package/ustream-ssl/Config.in"
+>  endmenu
+>
+>  menu "Database"
+> diff --git a/package/ustream-ssl/Config.in b/package/ustream-ssl/Config.in
+> new file mode 100644
+> index 0000000..540e436
+> --- /dev/null
+> +++ b/package/ustream-ssl/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_USTREAM_SSL
+> +       bool "ustream-ssl"
+> +       depends on !BR2_STATIC_LIBS #libubox
+> +       select BR2_PACKAGE_LIBUBOX
+> +       select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
+> +       help
+> +         ustream SSL wrapper
+> +
+> +         https://git.openwrt.org/?p=project/ustream-ssl.git;a=summary
+> +
+> +comment "ustream-ssl needs a toolchain w/ dynamic library"
+> +       depends on BR2_STATIC_LIBS
+> diff --git a/package/ustream-ssl/ustream-ssl.mk b/package/ustream-ssl/ustream-ssl.mk
+> new file mode 100644
+> index 0000000..b83d129
+> --- /dev/null
+> +++ b/package/ustream-ssl/ustream-ssl.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# ustream-ssl
+> +#
+> +################################################################################
+> +
+> +USTREAM_SSL_VERSION = ec80adaa1b47f28d426fa19c692011ce60b992d6
+> +USTREAM_SSL_SITE = git://git.openwrt.org/project/ustream-ssl.git
+> +USTREAM_SSL_LICENSE = ISC
+> +USTREAM_SSL_LICENSE_FILES = ustream-ssl.h
+> +USTREAM_SSL_INSTALL_STAGING = YES
+> +USTREAM_SSL_DEPENDENCIES = libubox
+> +
+> +ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+> +USTREAM_SSL_DEPENDENCIES += mbedtls
+> +USTREAM_SSL_CONF_OPTS += -DMBEDTLS=ON
+> +else
 
-  checking for PostgreSQL... testing
-  checking autodect pgsql headers... yes /usr/include/postgresql
-  checking autodect pgsql libs... /usr/lib64
-  checking for PQconnectStart in -lpq... no
-  configure: error: PostgreSQL support can't build without PostgreSQL libraries
+We usually prefer having the disable option sets here as well, i.e.:
+ifeq (...)
+USTREAM_SSL_CONF_OPTS += -DMBEDTLS=ON
+...
+else
+USTREAM_SSL_CONF_OPTS += -DMBEDTLS=ON
+...
+endif
 
-[1] http://autobuild.buildroot.net/results/749/7497730da2affffe0e5b9b790081de10c269f416
+> +USTREAM_SSL_DEPENDENCIES += openssl
+> +endif
+> +
+> +$(eval $(cmake-package))
+> --
+> 2.6.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/motion/motion.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Regards,
 
-diff --git a/package/motion/motion.mk b/package/motion/motion.mk
-index de29a2a..1b80561 100644
---- a/package/motion/motion.mk
-+++ b/package/motion/motion.mk
-@@ -44,11 +44,11 @@ endif
- ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
- MOTION_DEPENDENCIES += postgresql
- MOTION_CONF_OPTS += \
--	--with-postgresql \
-+	--with-pgsql \
- 	--with-pgsql-include=$(STAGING_DIR)/usr/include \
- 	--with-pgsql-lib=$(STAGING_DIR)/usr/lib
- else
--MOTION_CONF_OPTS += --without-postgresql
-+MOTION_CONF_OPTS += --without-pgsql
- endif
- 
- ifeq ($(BR2_PACKAGE_SDL),y)
 -- 
-2.8.1
+Samuel
