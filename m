@@ -1,14 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Oct 2016 14:15:08 +0200
-Subject: [Buildroot] [PATCH] qt5webkit: fix building in Python 3
- environment
-In-Reply-To: <CAGm1_kuE3c=-pbGwGiXU+r-PUikz3oUG4d8COzHBTVoacWyQRQ@mail.gmail.com>
-References: <1476451574-31822-1-git-send-email-yegorslists@googlemail.com>
- <20161014154013.231da448@free-electrons.com>
- <CAGm1_kuirawLGrFj3hTAOAn46Uj8+F6UVuB-m_Kxb65HO3zRmQ@mail.gmail.com>
- <2742504b-33f2-0fcc-cc7a-8297e563bc6b@mind.be>
- <CAGm1_kuE3c=-pbGwGiXU+r-PUikz3oUG4d8COzHBTVoacWyQRQ@mail.gmail.com>
-Message-ID: <20161017141508.32b6f3bb@free-electrons.com>
+Date: Mon, 17 Oct 2016 14:17:51 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-10-16
+In-Reply-To: <1119811525.1122795.1476702040533.JavaMail.zimbra@datacom.ind.br>
+References: <20161017063033.11712102EE9@stock.ovh.net>
+ <1119811525.1122795.1476702040533.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <20161017141751.0a92a2e5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,24 +14,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 17 Oct 2016 12:29:48 +0200, Yegor Yefremov wrote:
-
-> I've reverted the patch with python 2 workaround, changed all
-> occurrences of python in qt5webkit build files to python3 and compiled
-> the stuff again, but it
-> doesn't fail. My build system has following Python versions:
+On Mon, 17 Oct 2016 09:00:40 -0200 (BRST), Carlos Santos wrote:
+> > From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> > To: buildroot at buildroot.org
+> > Sent: Monday, October 17, 2016 4:30:33 AM
+> > Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-10-16  
+> [...]
+> >             util-linux-2.28.2 | 1  
+> [...]
+> >      x86_64 |              util-linux-2.28.2 | NOK |
+> >      http://autobuild.buildroot.net/results/be2e81b27a21355d7a453316d9df1cd4b0da2106  
 > 
-> Python 2.7.9
-> Python 3.4.2
-> 
-> It would be interesting to know, what python versions were on this
-> particular build machine, that caused build failures. Where can I get
-> such information?
+> I'm investigating this error.
 
-Look at the "submitter" file available in each build result. It tells
-you on which autobuilder the build took place. Then you can get in
-touch with the relevant people so that they can reproduce the problem,
-or give additional details about the autobuilder setup.
+It needs a select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS + depends on
+BR2_USE_MMU.
 
 Thanks!
 
