@@ -1,108 +1,40 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 17 Oct 2016 22:42:43 +0200
-Subject: [Buildroot] [PATCH] support/misc/Vagrantfile: bump to ubuntu
-	16.04
-In-Reply-To: <7a44219c-1e9b-48ef-5f44-3f44deb3cece@mind.be>
-References: <1476686386-31512-1-git-send-email-angelo.compagnucci@gmail.com>
- <7a44219c-1e9b-48ef-5f44-3f44deb3cece@mind.be>
-Message-ID: <CA+TH9VmntKU0B7p7u3FxsQiG1M22+JaG1B43S6ZBM2wGpw2r+g@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 17 Oct 2016 22:44:48 +0200
+Subject: [Buildroot] [PATCH v1] motion: fix sdl-config detection
+Message-ID: <1476737088-1492-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout,
+Overwrite ac_cv_path_CONFIG_SDL in case sdl development is
+installed on the host.
 
-2016-10-17 22:23 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+Fixes [1]:
 
->
->
-> On 17-10-16 08:39, Angelo Compagnucci wrote:
-> > * Updating to ubuntu 16.04
-> > * Fixing dependencies
-> > * Fixing locale complaints
->
->  Could you explain this a little?
->
-> > * Removing unused packages
-> >
-> > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
-> > ---
-> >  support/misc/Vagrantfile | 9 ++++++---
-> >  1 file changed, 6 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-> > index cf269fe..01262b7 100644
-> > --- a/support/misc/Vagrantfile
-> > +++ b/support/misc/Vagrantfile
-> > @@ -12,7 +12,7 @@ VM_MEMORY=2048
-> >  VM_CORES=1
-> >
-> >  Vagrant.configure('2') do |config|
-> > -     config.vm.box = 'ubuntu/trusty64'
-> > +     config.vm.box = 'bento/ubuntu-16.04'
-> >
-> >       config.vm.provider :vmware_fusion do |v, override|
-> >               v.vmx['memsize'] = VM_MEMORY
-> > @@ -44,10 +44,13 @@ Vagrant.configure('2') do |config|
-> >       config.vm.provision 'shell', inline:
-> >               "sudo dpkg --add-architecture i386
-> >               sudo apt-get -q update
-> > +             sudo apt-get purge -q -y snapd lxcfs lxd
-> ubuntu-core-launcher snap-confine
->
->  Yeah, die snap die :-)
->
-> > +             sudo apt-get -q -y upgrade
-> >               sudo apt-get -q -y install build-essential libncurses5-dev
-> \
-> > -                     git bzr cvs mercurial subversion libc6:i386 unzip
-> > +                     git bzr cvs mercurial subversion libc6:i386 unzip
-> bc
-> >               sudo apt-get -q -y autoremove
-> > -             sudo apt-get -q -y clean"
-> > +             sudo apt-get -q -y clean
-> > +             sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8"
->
->  Why en_US and not C? Are there problems with accented characters
-> somewhere?
->
->  Note that I have no idea how people use such a box. Do they actually work
-> inside it, or do they do there development from outside and just ssh or
-> whatever
-> to start a build?
->
+  ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include/SDL'
 
-There is no a particular reason, it's only to silence the complaints of a
-missing locale configuration. I f you think C it's better, I can change
-without problem. In the meantime I'll try with the C locale.
+[1] http://autobuild.buildroot.net/results/459/4592eb83efa393f77f5ee014f93a271f2313bee6
 
->
->  Regards,
->  Arnout
->
-> >
-> >       config.vm.provision 'shell', privileged: false, inline:
-> >               "echo 'Downloading and extracting buildroot #{RELEASE}'
-> >
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/motion/motion.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-
-
+diff --git a/package/motion/motion.mk b/package/motion/motion.mk
+index de29a2a..cf9be76 100644
+--- a/package/motion/motion.mk
++++ b/package/motion/motion.mk
+@@ -54,6 +54,9 @@ endif
+ ifeq ($(BR2_PACKAGE_SDL),y)
+ MOTION_DEPENDENCIES += sdl
+ MOTION_CONF_OPTS += --with-sdl=$(STAGING_DIR)/usr
++# overwrite ac_cv_path_CONFIG_SDL in case sdl development is
++# installed on the host
++MOTION_CONF_ENV += ac_cv_path_CONFIG_SDL=$(STAGING_DIR)/usr/bin/sdl-config
+ else
+ MOTION_CONF_OPTS += --without-sdl
+ endif
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161017/0a0eb920/attachment.html>
+2.8.1
