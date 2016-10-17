@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 17 Oct 2016 13:06:59 -0300
-Subject: [Buildroot] [PATCH 72/93] mii-diag: use $(TARGET_MAKE_ENV) when
+Date: Mon, 17 Oct 2016 13:07:00 -0300
+Subject: [Buildroot] [PATCH 73/93] ti-sgx-um: use $(TARGET_MAKE_ENV) when
 	calling $(MAKE)
 In-Reply-To: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1476720440-22239-73-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1476720440-22239-74-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,26 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/mii-diag/mii-diag.mk | 4 ++--
+ package/ti-sgx-um/ti-sgx-um.mk | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
-index ae8defd..6efd5be 100644
---- a/package/mii-diag/mii-diag.mk
-+++ b/package/mii-diag/mii-diag.mk
-@@ -22,11 +22,11 @@ endef
- MII_DIAG_POST_PATCH_HOOKS = MII_DIAG_DEBIAN_PATCHES
+diff --git a/package/ti-sgx-um/ti-sgx-um.mk b/package/ti-sgx-um/ti-sgx-um.mk
+index d9ff2df..d5c50a0 100644
+--- a/package/ti-sgx-um/ti-sgx-um.mk
++++ b/package/ti-sgx-um/ti-sgx-um.mk
+@@ -15,11 +15,11 @@ TI_SGX_UM_INSTALL_STAGING = YES
+ TI_SGX_UM_DEPENDENCIES = libdrm
  
- define MII_DIAG_BUILD_CMDS
--	$(MAKE) $(MII_DIAG_MAKE_OPTS) -C $(@D) mii-diag
-+	$(TARGET_MAKE_ENV) $(MAKE) $(MII_DIAG_MAKE_OPTS) -C $(@D) mii-diag
+ define TI_SGX_UM_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) DISCIMAGE=$(STAGING_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DISCIMAGE=$(STAGING_DIR) install
  endef
  
- define MII_DIAG_INSTALL_TARGET_CMDS
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install-mii-diag
-+	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install-mii-diag
+ define TI_SGX_UM_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) DISCIMAGE=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DISCIMAGE=$(TARGET_DIR) install
  endef
  
- $(eval $(generic-package))
+ # libs use the following file for configuration
 -- 
 2.7.3
