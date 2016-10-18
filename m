@@ -1,41 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Oct 2016 15:51:19 +0200
-Subject: [Buildroot] [PATCH] qt5base: fix misspelling of "directfb"
-In-Reply-To: <20161018134754.lp7vtfqt3j33hp5z@ftbfs.org>
-References: <20161018020957.2662-1-kraai@ftbfs.org>
- <20161018114556.238563ea@free-electrons.com>
- <20161018134754.lp7vtfqt3j33hp5z@ftbfs.org>
-Message-ID: <20161018155119.06d87f56@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 18 Oct 2016 13:51:58 +0000
+Subject: [Buildroot] [Bug 9366] no link rootfs.ext4 -> rootfs.ext2
+In-Reply-To: <bug-9366-163@https.bugs.busybox.net/>
+References: <bug-9366-163@https.bugs.busybox.net/>
+Message-ID: <bug-9366-163-BkI7vuZVqr@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9366
 
-On Tue, 18 Oct 2016 06:47:54 -0700, Matt Kraai wrote:
+Arnout Vandecappelle <arnout@mind.be> changed:
 
-> If the comment is removed, then there is no indication that a directfb
-> backend is available if directfb is disabled.  That's inconsistent
-> with the handling of the other backends, which have the following
-> comments if they're not available:
-> 
-> * X.org XCB backend available if X.org is enabled
-> * eglfs backend available if OpenGL and EGL are enabled
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |INVALID
 
-Indeed.
+--- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
+You set BR2_TARGET_ROOTFS_EXT2_GZIP=y, so the symlink will be rootfs.ext4.gz ->
+rootfs.ext2.gz instead of rootfs.ext4 -> rootfs.ext2. If you make such a change
+you have to adapt the post-image script.
 
-> Should I still remove the comment?  Or make the message consistent
-> with the other backends (i.e., "directfb backend available if directfb
-> is enabled")?
-
-Let's keep the comment, just adjusted.
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
