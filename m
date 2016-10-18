@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Oct 2016 21:58:12 +0200
-Subject: [Buildroot] [PATCH 36/93] 4th: use $(TARGET_MAKE_ENV) when
- calling $(MAKE)
-In-Reply-To: <1476720440-22239-37-git-send-email-gustavo.zacarias@free-electrons.com>
+Date: Tue, 18 Oct 2016 22:06:16 +0200
+Subject: [Buildroot] [PATCH 18/93] cryptopp: use $(HOST_CONFIGURE_OPTS)
+ when calling $(MAKE)
+In-Reply-To: <1476720440-22239-19-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1476720440-22239-37-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <6c999e41-e55c-14ee-b5c9-1120cf57d574@mind.be>
+ <1476720440-22239-19-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <42237853-2c32-5558-8c6e-f36c38513a17@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,35 +19,38 @@ On 17-10-16 18:06, gustavo.zacarias at free-electrons.com wrote:
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > ---
->  package/4th/4th.mk | 4 ++--
+>  package/cryptopp/cryptopp.mk | 4 ++--
 >  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/4th/4th.mk b/package/4th/4th.mk
-> index 071c2d4..7828592 100644
-> --- a/package/4th/4th.mk
-> +++ b/package/4th/4th.mk
-> @@ -17,9 +17,9 @@
->  4TH_CFLAGS = $(TARGET_CFLAGS) -DUNIX -fsigned-char
+> diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+> index df07cf6..dc53e07 100644
+> --- a/package/cryptopp/cryptopp.mk
+> +++ b/package/cryptopp/cryptopp.mk
+> @@ -22,11 +22,11 @@ HOST_CRYPTOPP_MAKE_OPTS = \
+>  	CXXFLAGS="$(HOST_CXXFLAGS) -fPIC"
 >  
->  ifeq ($(BR2_STATIC_LIBS),y)
-> -4TH_MAKE_ENV = STATIC=1
-> +4TH_MAKE_ENV = $(TARGET_MAKE_ENV) STATIC=1
+>  define HOST_CRYPTOPP_BUILD_CMDS
+> -	$(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) shared
+> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) shared
 
- I would have preferred 4TH_MAKE_ENV = $(TARGET_MAKE_ENV) outside the condition
-and += inside, but that's just nitpicking.
+ HOST_CRYPTOPP_MAKE_OPTS already contains HOST_CONFIGURE_OPTS. Why didn't you
+use HOST_MAKE_ENV here?
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>  endef
+>  
+>  define HOST_CRYPTOPP_INSTALL_CMDS
+> -	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install
+> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install
 
+ Here it would make sense to add HOST_CONFIGURE_OPTS as the argument of make,
+but you still need HOST_MAKE_ENV.
 
  Regards,
  Arnout
 
->  else
-> -4TH_MAKE_ENV = SHARED=1
-> +4TH_MAKE_ENV = $(TARGET_MAKE_ENV) SHARED=1
->  4TH_CFLAGS += -fPIC
->  endif
+>  endef
 >  
+>  $(eval $(host-generic-package))
 > 
 
 -- 
