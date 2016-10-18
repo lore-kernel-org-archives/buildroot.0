@@ -1,51 +1,80 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 18 Oct 2016 20:51:27 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain-wrapper.mk: refactor additional
-	flags into TARGET_FLAGS
-Message-ID: <20161018185128.6404-1-arnout@mind.be>
+Date: Tue, 18 Oct 2016 20:51:28 +0200
+Subject: [Buildroot] [PATCH 2/2] MIPS: add support for MSA
+In-Reply-To: <20161018185128.6404-1-arnout@mind.be>
+References: <20161018185128.6404-1-arnout@mind.be>
+Message-ID: <20161018185128.6404-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the additional flags encoded in the toolchain wrapper are
-limited to BR2_TARGET_OPTIMIZATION. However, we are going to add more
-flags to it, so it is convenient to have a TARGET_FLAGS variable
-that collects all of them and do the list-to-array conversion on all
-of them together.
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-The variable is called TARGET_FLAGS because later it will be modified
-to include all the flags that we pass to the toolchain wrapper, and
-it will also be used as the base for TARGET_CFLAGS etc.
-
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+[Arnout: use the TARGET_FLAGS variable]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- toolchain/toolchain-wrapper.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+v2: use the TARGET_FLAGS variable introduced by the previous patch
+   (Arnout)
+---
+ arch/Config.in.mips            | 17 +++++++++++++++++
+ toolchain/toolchain-wrapper.mk |  7 +++++++
+ 2 files changed, 24 insertions(+)
 
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index f7bfa21..fb9053c 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -16,6 +16,14 @@ config BR2_MIPS_CPU_MIPS64R5
+ config BR2_MIPS_CPU_MIPS64R6
+ 	bool
+ 
++# mips cpu features
++config BR2_MIPS_CPU_HAS_MSA
++	bool
++
++# for some cores, MSA support is optional
++config BR2_MIPS_CPU_MAYBE_HAS_MSA
++	bool
++
+ choice
+ 	prompt "Target Architecture Variant"
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+@@ -113,6 +121,15 @@ config BR2_MIPS_SOFT_FLOAT
+ 	  floating point functions, then everything will need to be
+ 	  compiled with soft floating point support (-msoft-float).
+ 
++config BR2_MIPS_ENABLE_MSA
++	bool "Enable MIPS SIMD Architecture (MSA) support"
++	depends on BR2_MIPS_CPU_MAYBE_HAS_MSA && !BR2_SOFT_FLOAT
++	select BR2_MIPS_CPU_HAS_MSA
++	help
++	  For some CPU cores, the MSA extension is optional.
++	  Select this option if you are certain your particular
++	  implementation has MSA support and you want to use it.
++
+ config BR2_ARCH
+ 	default "mips"		if BR2_mips
+ 	default "mipsel"	if BR2_mipsel
 diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index af39071..8939650 100644
+index 8939650..76fd557 100644
 --- a/toolchain/toolchain-wrapper.mk
 +++ b/toolchain/toolchain-wrapper.mk
-@@ -9,14 +9,15 @@ else
+@@ -9,6 +9,13 @@ else
  TOOLCHAIN_WRAPPER_HASH_STYLE = both
  endif
  
-+TARGET_FLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
++# MIPS optimization flags
++ifeq ($(BR2_MIPS_CPU_HAS_MSA),y)
++TARGET_FLAGS += -mmsa
++endif
 +
++# Keep BR2_TARGET_OPTIMIZATION as the last one since it may be used
++# to override the automatically added options above.
+ TARGET_FLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+ 
  TOOLCHAIN_WRAPPER_ARGS = $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
- 
- # We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each flag is a
- # separate argument when used in execv() by the toolchain wrapper.
--TOOLCHAIN_WRAPPER_OPTS = \
--	$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)"$(comma))
--TOOLCHAIN_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(TOOLCHAIN_WRAPPER_OPTS)'
-+TOOLCHAIN_WRAPPER_ARGS += \
-+	-DBR_ADDITIONAL_CFLAGS='$(foreach f,$(TARGET_FLAGS),"$(f)"$(comma))'
- 
- ifeq ($(BR2_CCACHE),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE
 -- 
 2.9.3
