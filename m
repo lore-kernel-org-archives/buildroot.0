@@ -1,53 +1,48 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 18 Oct 2016 14:26:32 +0300
-Subject: [Buildroot] [PATCH 3/3] wireshark: needs the qt5tools lrelease
-	utility
-In-Reply-To: <a6f0bcffe24a338538c4da2f04091967593fa058.1476789992.git.baruch@tkos.co.il>
-References: <a6f0bcffe24a338538c4da2f04091967593fa058.1476789992.git.baruch@tkos.co.il>
-Message-ID: <1b772d44273db8f887bbb378e5dd59053a328c3d.1476789992.git.baruch@tkos.co.il>
+Date: Tue, 18 Oct 2016 14:26:30 +0300
+Subject: [Buildroot] [PATCH 1/3] wireshark: use https for download and
+	homepage link
+Message-ID: <a6f0bcffe24a338538c4da2f04091967593fa058.1476789992.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/0a4/0a4ccf752ed1e81e2416d33a78984b47087f68bd/
-http://autobuild.buildroot.net/results/196/196b96e28a2cd5983a58948df4a2c3eb3bccdfa4/
-http://autobuild.buildroot.net/results/056/056b3299ce45552fe3e7cbf5aa68b223f8fa458e/
+Saves a redirect.
 
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/wireshark/Config.in    | 2 ++
+ package/wireshark/Config.in    | 2 +-
  package/wireshark/wireshark.mk | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
-index 4982c1f8d53d..959fb5b4f79d 100644
+index defeb4b3e479..4982c1f8d53d 100644
 --- a/package/wireshark/Config.in
 +++ b/package/wireshark/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_WIRESHARK
- 	bool "wireshark"
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_QT5TOOLS if BR2_PACKAGE_QT5BASE_WIDGETS
-+	select BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS if BR2_PACKAGE_QT5BASE_WIDGETS
- 	depends on BR2_USE_MMU # fork(), glib2
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_WIRESHARK
+ 	help
+ 	  Network traffic sniffer and protocol decoder.
+ 
+-	  http://www.wireshark.org
++	  https://www.wireshark.org
+ 
+ comment "wireshark needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
 diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 01886c803ea8..a2aa205e29e8 100644
+index 8dc72da940d7..e71b419d8773 100644
 --- a/package/wireshark/wireshark.mk
 +++ b/package/wireshark/wireshark.mk
-@@ -40,7 +40,7 @@ endif
- # Qt4 needs accessibility, we don't support it
- ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
- WIRESHARK_CONF_OPTS += --with-qt=5
--WIRESHARK_DEPENDENCIES += qt5base
-+WIRESHARK_DEPENDENCIES += qt5base qt5tools
- WIRESHARK_CONF_ENV += ac_cv_path_QTCHOOSER=""
- # Seems it expects wrappers and passes a -qt=X parameter for version
- WIRESHARK_MAKE_OPTS += \
+@@ -6,7 +6,7 @@
+ 
+ WIRESHARK_VERSION = 2.2.1
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+-WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
++WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
+ WIRESHARK_LICENSE_FILES = COPYING
+ WIRESHARK_DEPENDENCIES = host-pkgconf libpcap libglib2
 -- 
 2.9.3
