@@ -1,68 +1,62 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 18 Oct 2016 22:47:02 +0200
-Subject: [Buildroot] [Patch v3 1/2] rust-bootstrap: new package
-In-Reply-To: <2a62ef7a-1d5f-546d-0287-78cb505a0ec3@mind.be>
-References: <1468533676-10894-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1468533676-10894-2-git-send-email-eric.le.bihan.dev@free.fr>
- <2a62ef7a-1d5f-546d-0287-78cb505a0ec3@mind.be>
-Message-ID: <20161018204701.GA18610@itchy>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Oct 2016 22:47:16 +0200
+Subject: [Buildroot] [PATCH 49/93] lzip: use $(HOST_MAKE_ENV) when
+ calling $(MAKE)
+In-Reply-To: <1476720440-22239-50-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <1476720440-22239-50-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <83c28345-7de1-d93c-f0c0-9da0737dfa66@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
 
-On 16-10-16 13:27:51, Arnout Vandecappelle wrote:
->
->
-> On 15-07-16 00:01, Eric Le Bihan wrote:
 
-[...]
+On 17-10-16 18:06, gustavo.zacarias at free-electrons.com wrote:
+> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> ---
+>  package/lzip/lzip.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
+> index 7b1fdf4..60555c5 100644
+> --- a/package/lzip/lzip.mk
+> +++ b/package/lzip/lzip.mk
+> @@ -24,7 +24,7 @@ define LZIP_BUILD_CMDS
+>  endef
+>  
+>  define HOST_LZIP_BUILD_CMDS
+> -	$(MAKE) -C $(@D)
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
 
-> > +
-> > +RUST_BOOTSTRAP_VERSION = 1.9.0
-> > +RUST_BOOTSTRAP_DATE = 2016-05-24
-> > +
-> > +ifeq ($(HOSTARCH),x86_64)
-> > +RUST_BOOTSTRAP_ARCH = x86_64
-> > +else ifeq ($(HOSTARCH),x86)
-> > +RUST_BOOTSTRAP_ARCH = i686
-> > +else
-> > +$(error Unsupported host architecture)
->
->  This is not good because it is evaluated even if host-rust-bootstrap is not
-> selected. You need to protect it somehow, which is difficult because there is no
-> user visible symbol that can ever select this package. So instead you could do a
-> check in e.g. CONFIGURE_CMDS.
->
->  However, this is not needed, because this package can only be built if rust is
-> built, and rust can only be built if BR2_PACKAGE_HOST_RUST_ARCH_SUPPORTS=y, and
-> that one already checks for hostarch.
->
->  IOW, just drop this check.
+ How about CONFIGURE_CMDS? Even though this custom configure script doesn't
+compile anything, it could do so in the future.
 
-OK.
+ Regards,
+ Arnout
 
-> > +endif
-> > +
-> > +RUST_BOOTSTRAP_SITE = https://static.rust-lang.org/dist/$(RUST_BOOTSTRAP_DATE)
-> > +
-> > +RUST_BOOTSTRAP_SOURCE = rustc-$(RUST_BOOTSTRAP_VERSION)-$(RUST_BOOTSTRAP_ARCH)-unknown-linux-gnu.tar.gz
-> > +RUST_BOOTSTRAP_LICENSE = Apache-2.0, MIT
->
->  Can you specify which parts or under which license?
+>  endef
+>  
+>  define LZIP_INSTALL_TARGET_CMDS
+> @@ -32,7 +32,7 @@ define LZIP_INSTALL_TARGET_CMDS
+>  endef
+>  
+>  define HOST_LZIP_INSTALL_CMDS
+> -	$(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
+>  endef
+>  
+>  # It's not autotools-based
+> 
 
-Rust is dual licensed (Apache-2.0 OR MIT). So, I'll change it to:
-
-RUST_BOOTSTRAP_LICENSE = Dual Apache-2.0/MIT
-
-I'll do the same for the rust package.
-
-Thanks for the review.
-
-Best regards,
-
---
-ELB
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
