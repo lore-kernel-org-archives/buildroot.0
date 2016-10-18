@@ -1,137 +1,93 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 18 Oct 2016 22:35:25 +0300
-Subject: [Buildroot] [PATCH] lirc-tools: fix build with kernel headers v4.8+
-Message-ID: <7ccf454919745520121768791455dc138ccdf6db.1476819325.git.baruch@tkos.co.il>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Oct 2016 21:46:38 +0200
+Subject: [Buildroot] [PATCH] MIPS: add support for M6201 cores
+In-Reply-To: <20161018155525.29327-1-Vincent.Riera@imgtec.com>
+References: <20161018155525.29327-1-Vincent.Riera@imgtec.com>
+Message-ID: <572899bc-b196-b9de-082b-3e43547f1ecd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport upstream path that removes reverence to macros that are no longer in
-the kernel lirc.h headers.
 
-Fixes:
-http://autobuild.buildroot.net/results/f01/f015d52faa214f7786dd3169628ce74b738a8b46/
-http://autobuild.buildroot.net/results/55f/55f1ac19736499ef536561bd65c011d2649f43da/
-http://autobuild.buildroot.net/results/c68/c689786b6b0867cea2e45df1c5556cccdd377b33/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...e-use-of-functions-killed-in-kernel-4.8.0.patch | 105 +++++++++++++++++++++
- 1 file changed, 105 insertions(+)
- create mode 100644 package/lirc-tools/0005-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
+On 18-10-16 17:55, Vicente Olivert Riera wrote:
+> -march=m6201 is not yet supported in GCC upstream, so disabling all
+> versions when selecting this core.
+> 
+> Note that M6201 implies a MIPS R6 CPU, and some GCC versions are already
+> disabled for R6, so we don't need to disable those ones for M6201 as
+> well.
+> 
+> The external Codescape IMG GNU Linux Toolchain has support for this
+> core.
 
-diff --git a/package/lirc-tools/0005-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch b/package/lirc-tools/0005-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
-new file mode 100644
-index 000000000000..9fe5256cebcf
---- /dev/null
-+++ b/package/lirc-tools/0005-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
-@@ -0,0 +1,105 @@
-+From 45c590f64dd79e8e1704d5c94ce3456a5cdbfa5f Mon Sep 17 00:00:00 2001
-+From: Alec Leamas <leamas.alec@gmail.com>
-+Date: Fri, 19 Aug 2016 04:48:02 +0200
-+Subject: [PATCH] lircd: Remove use of functions killed in kernel 4.8.0
-+
-+From 4.8.0 the kernel no longer supports LIRC_NOTIFY_DECODE,
-+LIRC_SETUP_START/LIRC_SETUP_END and several constants related
-+to initiating filters. Remove corresponding calls from lircd.
-+
-+[baruch: move DRVCTL_NOTIFY_DECODE into lircd.cpp]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: backported from upstream 31fcc8aa39f62c5c
-+---
-+ daemons/lircd.cpp | 53 ++++-------------------------------------------------
-+ 1 file changed, 4 insertions(+), 49 deletions(-)
-+
-+diff --git a/daemons/lircd.cpp b/daemons/lircd.cpp
-+index 782b6d3f8342..d778aa19308b 100644
-+--- a/daemons/lircd.cpp
-++++ b/daemons/lircd.cpp
-+@@ -78,6 +78,8 @@
-+ #define lirc_gid gid_t
-+ #endif
-+ 
-++#define DRVCTL_NOTIFY_DECODE		7
-++
-+ #ifdef DARWIN
-+ #include <mach/mach_time.h>
-+ #define CLOCK_REALTIME 0
-+@@ -462,50 +464,6 @@ static int setup_timeout(void)
-+ }
-+ 
-+ 
-+-static int setup_filter(void)
-+-{
-+-	int ret1, ret2;
-+-	lirc_t min_pulse_supported = 0, max_pulse_supported = 0;
-+-	lirc_t min_space_supported = 0, max_space_supported = 0;
-+-
-+-	if (!(curr_driver->features & LIRC_CAN_SET_REC_FILTER))
-+-		return 1;
-+-	if (curr_driver->drvctl_func(LIRC_GET_MIN_FILTER_PULSE,
-+-				     &min_pulse_supported) == -1 ||
-+-	    curr_driver->drvctl_func(LIRC_GET_MAX_FILTER_PULSE, &max_pulse_supported) == -1
-+-	    || curr_driver->drvctl_func(LIRC_GET_MIN_FILTER_SPACE, &min_space_supported) == -1
-+-	    || curr_driver->drvctl_func(LIRC_GET_MAX_FILTER_SPACE, &max_space_supported) == -1) {
-+-		log_error("could not get filter range");
-+-		log_perror_err(__func__);
-+-	}
-+-
-+-	if (setup_min_pulse > max_pulse_supported)
-+-		setup_min_pulse = max_pulse_supported;
-+-	else if (setup_min_pulse < min_pulse_supported)
-+-		setup_min_pulse = 0;    /* disable filtering */
-+-
-+-	if (setup_min_space > max_space_supported)
-+-		setup_min_space = max_space_supported;
-+-	else if (setup_min_space < min_space_supported)
-+-		setup_min_space = 0;    /* disable filtering */
-+-
-+-	ret1 = curr_driver->drvctl_func(LIRC_SET_REC_FILTER_PULSE, &setup_min_pulse);
-+-	ret2 = curr_driver->drvctl_func(LIRC_SET_REC_FILTER_SPACE, &setup_min_space);
-+-	if (ret1 == -1 || ret2 == -1) {
-+-		if (curr_driver->
-+-		    drvctl_func(LIRC_SET_REC_FILTER,
-+-				setup_min_pulse < setup_min_space ? &setup_min_pulse : &setup_min_space) == -1) {
-+-			log_error("could not set filter");
-+-			log_perror_err(__func__);
-+-			return 0;
-+-		}
-+-	}
-+-	return 1;
-+-}
-+-
-+-
-+-
-+-
-+ static int setup_hardware(void)
-+ {
-+ 	int ret = 1;
-+@@ -514,10 +472,7 @@ static int setup_hardware(void)
-+ 		if ((curr_driver->features & LIRC_CAN_SET_REC_CARRIER)
-+ 		    || (curr_driver->features & LIRC_CAN_SET_REC_TIMEOUT)
-+ 		    || (curr_driver->features & LIRC_CAN_SET_REC_FILTER)) {
-+-			(void)curr_driver->drvctl_func(LIRC_SETUP_START, NULL);
-+-			ret = setup_frequency() && setup_timeout()
-+-			      && setup_filter();
-+-			(void)curr_driver->drvctl_func(LIRC_SETUP_END, NULL);
-++				ret = setup_frequency() && setup_timeout();
-+ 		}
-+ 	}
-+ 	return ret;
-+@@ -2162,7 +2117,7 @@ void loop(void)
-+ 			int reps;
-+ 
-+ 			if (curr_driver->drvctl_func && (curr_driver->features & LIRC_CAN_NOTIFY_DECODE))
-+-				curr_driver->drvctl_func(LIRC_NOTIFY_DECODE, NULL);
-++				curr_driver->drvctl_func(DRVCTL_NOTIFY_DECODE, NULL);
-+ 
-+ 			get_release_data(&remote_name, &button_name, &reps);
-+ 
-+-- 
-+2.9.3
-+
+ However, BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS supports MIPS32R6 and I don't expect
+it supports this core...
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  arch/Config.in.mips        | 5 +++++
+>  package/gcc/Config.in.host | 5 +++--
+>  2 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+> index f7bfa21..3662fed 100644
+> --- a/arch/Config.in.mips
+> +++ b/arch/Config.in.mips
+> @@ -55,6 +55,10 @@ config BR2_mips_m5101
+>  	bool "M5101"
+>  	depends on !BR2_ARCH_IS_64
+>  	select BR2_MIPS_CPU_MIPS32R5
+> +config BR2_mips_m6201
+> +	bool "M6201"
+> +	depends on !BR2_ARCH_IS_64
+> +	select BR2_MIPS_CPU_MIPS32R6
+>  config BR2_mips_p5600
+>  	bool "P5600"
+>  	depends on !BR2_ARCH_IS_64
+> @@ -131,6 +135,7 @@ config BR2_GCC_TARGET_ARCH
+>  	default "interaptiv"	if BR2_mips_interaptiv
+>  	default "m5100"		if BR2_mips_m5100
+>  	default "m5101"		if BR2_mips_m5101
+> +	default "m6201"		if BR2_mips_m6201
+>  	default "p5600"		if BR2_mips_p5600
+>  	default "mips64"	if BR2_mips_64
+>  	default "mips64r2"	if BR2_mips_64r2
+> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+> index df60c65..d204bf7 100644
+> --- a/package/gcc/Config.in.host
+> +++ b/package/gcc/Config.in.host
+> @@ -63,7 +63,8 @@ choice
+>  		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
+>  		# Unsupported MIPS cores
+>  		depends on !BR2_mips_interaptiv && !BR2_mips_m5100 && \
+> -			!BR2_mips_m5101 && !BR2_mips_i6400 && !BR2_mips_p6600
+> +			!BR2_mips_m5101 && !BR2_mips_m6201 && !BR2_mips_i6400 && \
+> +			!BR2_mips_p6600
+>  		# musl mips64 unsupported
+>  		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
+>  		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> @@ -73,7 +74,7 @@ choice
+>  		# Broken or unsupported architectures
+>  		depends on !BR2_arc
+>  		# Unsupported MIPS cores
+> -		depends on !BR2_mips_p6600
+> +		depends on !BR2_mips_m6201 && !BR2_mips_p6600
+>  		select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+>  
+>  endchoice
+> 
+
 -- 
-2.9.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
