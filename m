@@ -1,120 +1,39 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 18 Oct 2016 12:31:07 +0200
-Subject: [Buildroot] [PATCH 1/1] pkg-download: use raw basename for repo
- archiving to remove host- prefix
-In-Reply-To: <c436b9ba-8144-3015-347c-1c5e89115272@mind.be>
-References: <1476709687-21484-1-git-send-email-patrickdepinguin@gmail.com>
- <c436b9ba-8144-3015-347c-1c5e89115272@mind.be>
-Message-ID: <CAAXf6LW-eM54JAcB9aphG9SmriKhskeTMu4qGBHZjfN7y-+r0A@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 18 Oct 2016 11:45:24 +0100
+Subject: [Buildroot] [PATCH] linux: bump default to version 4.8.2
+Message-ID: <20161018104524.32325-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 17, 2016 at 10:52 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Hi Thomas,
->
->  Excellent commit message!
->
-> On 17-10-16 15:08, Thomas De Schampheleire wrote:
->> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->>
->> For packages that use a version control repository rather than a pre-made
->> tarball, the directory prefix used inside the tarball is currently
->> FOO_BASE_NAME, which can be 'foo' or 'host-foo'.
->>
->> This means that the hash of such tarball will be different for target and
->> host packages, even though the contents are exactly the same. Hence, if the
->> hash file is created based on 'foo', and later a fresh build is made where
->> 'host-foo' happens to be built before 'foo' (with a different config, for
->> example), the hash will be detected as incorrect and a new download is
->> started.
->>
->> This problem does not affect many packages/users, due to the number of
->> conditions to be met:
->> - the package should be available for target _and_ host
->> - the package needs to use a VCS download method, e.g. git, hg, svn, ...
->>   This does not include standard github downloads, which download a pre-made
->>   archive.
->> - there should be a hash file containing the hash of the downloaded archive.
->>   Since normally there is no hash file for packages with sources coming from
->>   a version control system, this restricts even further. Some examples of
->>   packages in this category that do have a hash file (but not necessarily
->>   match the earlier conditions): expedite, vexpress-firmware, squashfs, ...
->> - the archive needs to be stored in a 'primary site' after initial archiving
->>   and thus be downloaded later using a non-version-controlled method, like
->>   wget or scp. This is because the version control download methods do not
->>   receive a '-H' parameter pointing to the hash file and thus no hashes are
->>   checked at all even if the file is present.
->
->  This is wrong (i.e., a bug), in two ways:
-> - for reproducible download methods (git at least; is hg archive reproducible?),
-> the hash *should* be checked;
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Yes, as far as I know hg archive behaves just like git archive and is
-reproducible.
-
-> - for non-reproducible download methods, the hash *should not* be checked when
-> downloading from primary or secondary - if it is a non-reproducible download
-> method, then the hash in primary or secondary may also be wrong.
-
-Can you give an example of a non-reproducible download?
-
->
->  The second case, however, i.e. the one you are hitting, should already be
-> covered... In DOWNLOAD_INNER, we set BR_NO_CHECK_HASH_FOR=$(2) for the
-> non-hash-checked download methods. Ah, of course, it's not the hash check that
-> fails, it's the fact that a hash file is present but the tarball isn't mentioned
-> in it.
-
-In the case of squashfs, there is a hashfile, the tarball _is_
-mentioned in it, but either the vcs method is used and then the hash
-file is not checked, or a primary site is used and then the hash file
-is checked but the hash is incorrect if it was downloaded as
-host-squashfs.
-
->
->  Actually, we could make all download methods reproducible using the method that
-> we use for git to make a reproducible tarball. Well, maybe CVS is an exception.
->
->>
->> While packages matching the third condition could be considered to be 'wrong'
->> and need to be fixed, it does actually makes sense to have a hash file for
->> packages from version control, in particular if they are stored in a
->> primary site as mentioned in the last condition.
->>
->> Regardless of any different opinions on the previous paragraph, it is also
->> not conceptually correct that a tarball of a package source can contain a
->> Buildroot-specific directory prefix 'host-'.
->
->  Even worse, it is incorrect that the tarball name depends on the order in which
-> things are executed...
-
-The tarball name itself was correct for squashfs and thus git. I
-haven't explicitly checked the other download methods.
-It was only the contents.
-
->
->> Therefore, use
->> FOO_RAW_BASE_NAME instead of FOO_BASE_NAME when calling the dl-wrapper.
->>
->> Example test scenario that exhibits the problem:
->> $ rm -rf /tmp/dl dl/squashfs-9c1db6d13a51a2e009f0027ef336ce03624eac0d.tar.gz
->> $ make qemu_x86_64_defconfig
->> $ make host-squashfs-dirclean host-squashfs-source
->> $ mkdir /tmp/dl
->> $ mv dl/squashfs-9c1db6d13a51a2e009f0027ef336ce03624eac0d.tar.gz /tmp/dl/
->> $ sed -i -e 's,BR2_PRIMARY_SITE=.*,BR2_PRIMARY_SITE="file:///tmp/dl",' \
->>          -e '/BR2_PRIMARY_SITE/aBR2_PRIMARY_SITE_ONLY=y'  .config
->> $ make host-squashfs-dirclean host-squashfs-source
->
->  All right! As soon as the test infra is merged we can add a test for this!
->
->>
->> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Thanks!
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index d8294ca..e0e24e6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.8.1)"
++	bool "Latest version (4.8.2)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.8.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.8.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-- 
+2.10.0
