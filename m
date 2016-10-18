@@ -1,139 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Oct 2016 22:20:38 +0200
-Subject: [Buildroot] [git commit] lirc-tools: fix build with kernel headers
-	v4.8+
-Message-ID: <20161018202210.C93907FC1B@busybox.osuosl.org>
+Date: Tue, 18 Oct 2016 22:12:27 +0200
+Subject: [Buildroot] [git commit] qt5base: improve message if directfb is
+	disabled
+Message-ID: <20161018202210.7D51481D4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef99f585803bcbde838d2b65389833fd2b2b8b2c
+commit: https://git.buildroot.net/buildroot/commit/?id=cdf47aff42ad968a9987110cc2688dd4f947a258
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backport upstream path that removes references to macros that are no longer
-in the kernel lirc.h headers.
-
-Fixes:
-http://autobuild.buildroot.net/results/f01/f015d52faa214f7786dd3169628ce74b738a8b46/
-http://autobuild.buildroot.net/results/55f/55f1ac19736499ef536561bd65c011d2649f43da/
-http://autobuild.buildroot.net/results/c68/c689786b6b0867cea2e45df1c5556cccdd377b33/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Matt Kraai <kraai@ftbfs.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...e-use-of-functions-killed-in-kernel-4.8.0.patch | 105 +++++++++++++++++++++
- 1 file changed, 105 insertions(+)
+ package/qt5/qt5base/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lirc-tools/0005-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch b/package/lirc-tools/0005-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
-new file mode 100644
-index 0000000..9fe5256
---- /dev/null
-+++ b/package/lirc-tools/0005-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
-@@ -0,0 +1,105 @@
-+From 45c590f64dd79e8e1704d5c94ce3456a5cdbfa5f Mon Sep 17 00:00:00 2001
-+From: Alec Leamas <leamas.alec@gmail.com>
-+Date: Fri, 19 Aug 2016 04:48:02 +0200
-+Subject: [PATCH] lircd: Remove use of functions killed in kernel 4.8.0
-+
-+From 4.8.0 the kernel no longer supports LIRC_NOTIFY_DECODE,
-+LIRC_SETUP_START/LIRC_SETUP_END and several constants related
-+to initiating filters. Remove corresponding calls from lircd.
-+
-+[baruch: move DRVCTL_NOTIFY_DECODE into lircd.cpp]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: backported from upstream 31fcc8aa39f62c5c
-+---
-+ daemons/lircd.cpp | 53 ++++-------------------------------------------------
-+ 1 file changed, 4 insertions(+), 49 deletions(-)
-+
-+diff --git a/daemons/lircd.cpp b/daemons/lircd.cpp
-+index 782b6d3f8342..d778aa19308b 100644
-+--- a/daemons/lircd.cpp
-++++ b/daemons/lircd.cpp
-+@@ -78,6 +78,8 @@
-+ #define lirc_gid gid_t
-+ #endif
-+ 
-++#define DRVCTL_NOTIFY_DECODE		7
-++
-+ #ifdef DARWIN
-+ #include <mach/mach_time.h>
-+ #define CLOCK_REALTIME 0
-+@@ -462,50 +464,6 @@ static int setup_timeout(void)
-+ }
-+ 
-+ 
-+-static int setup_filter(void)
-+-{
-+-	int ret1, ret2;
-+-	lirc_t min_pulse_supported = 0, max_pulse_supported = 0;
-+-	lirc_t min_space_supported = 0, max_space_supported = 0;
-+-
-+-	if (!(curr_driver->features & LIRC_CAN_SET_REC_FILTER))
-+-		return 1;
-+-	if (curr_driver->drvctl_func(LIRC_GET_MIN_FILTER_PULSE,
-+-				     &min_pulse_supported) == -1 ||
-+-	    curr_driver->drvctl_func(LIRC_GET_MAX_FILTER_PULSE, &max_pulse_supported) == -1
-+-	    || curr_driver->drvctl_func(LIRC_GET_MIN_FILTER_SPACE, &min_space_supported) == -1
-+-	    || curr_driver->drvctl_func(LIRC_GET_MAX_FILTER_SPACE, &max_space_supported) == -1) {
-+-		log_error("could not get filter range");
-+-		log_perror_err(__func__);
-+-	}
-+-
-+-	if (setup_min_pulse > max_pulse_supported)
-+-		setup_min_pulse = max_pulse_supported;
-+-	else if (setup_min_pulse < min_pulse_supported)
-+-		setup_min_pulse = 0;    /* disable filtering */
-+-
-+-	if (setup_min_space > max_space_supported)
-+-		setup_min_space = max_space_supported;
-+-	else if (setup_min_space < min_space_supported)
-+-		setup_min_space = 0;    /* disable filtering */
-+-
-+-	ret1 = curr_driver->drvctl_func(LIRC_SET_REC_FILTER_PULSE, &setup_min_pulse);
-+-	ret2 = curr_driver->drvctl_func(LIRC_SET_REC_FILTER_SPACE, &setup_min_space);
-+-	if (ret1 == -1 || ret2 == -1) {
-+-		if (curr_driver->
-+-		    drvctl_func(LIRC_SET_REC_FILTER,
-+-				setup_min_pulse < setup_min_space ? &setup_min_pulse : &setup_min_space) == -1) {
-+-			log_error("could not set filter");
-+-			log_perror_err(__func__);
-+-			return 0;
-+-		}
-+-	}
-+-	return 1;
-+-}
-+-
-+-
-+-
-+-
-+ static int setup_hardware(void)
-+ {
-+ 	int ret = 1;
-+@@ -514,10 +472,7 @@ static int setup_hardware(void)
-+ 		if ((curr_driver->features & LIRC_CAN_SET_REC_CARRIER)
-+ 		    || (curr_driver->features & LIRC_CAN_SET_REC_TIMEOUT)
-+ 		    || (curr_driver->features & LIRC_CAN_SET_REC_FILTER)) {
-+-			(void)curr_driver->drvctl_func(LIRC_SETUP_START, NULL);
-+-			ret = setup_frequency() && setup_timeout()
-+-			      && setup_filter();
-+-			(void)curr_driver->drvctl_func(LIRC_SETUP_END, NULL);
-++				ret = setup_frequency() && setup_timeout();
-+ 		}
-+ 	}
-+ 	return ret;
-+@@ -2162,7 +2117,7 @@ void loop(void)
-+ 			int reps;
-+ 
-+ 			if (curr_driver->drvctl_func && (curr_driver->features & LIRC_CAN_NOTIFY_DECODE))
-+-				curr_driver->drvctl_func(LIRC_NOTIFY_DECODE, NULL);
-++				curr_driver->drvctl_func(DRVCTL_NOTIFY_DECODE, NULL);
-+ 
-+ 			get_release_data(&remote_name, &button_name, &reps);
-+ 
-+-- 
-+2.9.3
-+
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 64a7f65..7244fbe 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -180,7 +180,7 @@ config BR2_PACKAGE_QT5BASE_DIRECTFB
+ 	bool "directfb support"
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 
+-comment "directfb backend if directb is enabled"
++comment "directfb backend available if directfb is enabled"
+ 	depends on !BR2_PACKAGE_DIRECTFB
+ 
+ config BR2_PACKAGE_QT5BASE_XCB
