@@ -1,54 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Oct 2016 17:25:43 +0200
-Subject: [Buildroot] [PATCH 1/1] avahi: link with libintl if libglib2 is
- enabled
-In-Reply-To: <1476802403-5879-1-git-send-email-johan.oudinet@gmail.com>
-References: <1476802403-5879-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <20161018172543.20a693fa@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 18 Oct 2016 16:55:25 +0100
+Subject: [Buildroot] [PATCH] MIPS: add support for M6201 cores
+Message-ID: <20161018155525.29327-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+-march=m6201 is not yet supported in GCC upstream, so disabling all
+versions when selecting this core.
 
-On Tue, 18 Oct 2016 16:53:23 +0200, Johan Oudinet wrote:
+Note that M6201 implies a MIPS R6 CPU, and some GCC versions are already
+disabled for R6, so we don't need to disable those ones for M6201 as
+well.
 
-> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-> index 069b45a..c9cf2bc 100644
-> --- a/package/avahi/avahi.mk
-> +++ b/package/avahi/avahi.mk
-> @@ -168,7 +168,9 @@ endif
->  
->  AVAHI_CONF_ENV += CFLAGS="$(AVAHI_CFLAGS)"
->  
-> -AVAHI_MAKE_OPTS += $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),LIBS=-lintl)
-> +# If either locale or libglib2 is defined, avahi needs libintl.
-> +AVAHI_MAKE_OPTS += \
-> +	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_PACKAGE_LIBGLIB2),LIBS=-lintl)
+The external Codescape IMG GNU Linux Toolchain has support for this
+core.
 
-Hum, I wondering if it wouldn't be nicer to rely on the fact that the
-Config.in of those packages enable BR2_PACKAGE_GETTEXT when necessary.
-So maybe we should instead rely on BR2_PACKAGE_GETTEXT=y, with
-something like:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ arch/Config.in.mips        | 5 +++++
+ package/gcc/Config.in.host | 5 +++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-ifeq ($(BR2_PACKAGE_GETTEXT),y)
-AVAHI_DEPENDENCIES += gettext
-AVAHI_MAKE_OPTS += LIBS=-lintl
-endif
-
-(and of course, remove the gettext dependency added conditionally on
-BR2_NEEDS_GETTEXT_IF_LOCALE).
-
-It would be necessary to also test this with musl and glibc
-configurations, with gettext enabled, to make sure it doesn't break.
-
-And if it works, then we should update the Buildroot manual, which has
-a section on the gettext integration.
-
-Thomas
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index f7bfa21..3662fed 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -55,6 +55,10 @@ config BR2_mips_m5101
+ 	bool "M5101"
+ 	depends on !BR2_ARCH_IS_64
+ 	select BR2_MIPS_CPU_MIPS32R5
++config BR2_mips_m6201
++	bool "M6201"
++	depends on !BR2_ARCH_IS_64
++	select BR2_MIPS_CPU_MIPS32R6
+ config BR2_mips_p5600
+ 	bool "P5600"
+ 	depends on !BR2_ARCH_IS_64
+@@ -131,6 +135,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default "interaptiv"	if BR2_mips_interaptiv
+ 	default "m5100"		if BR2_mips_m5100
+ 	default "m5101"		if BR2_mips_m5101
++	default "m6201"		if BR2_mips_m6201
+ 	default "p5600"		if BR2_mips_p5600
+ 	default "mips64"	if BR2_mips_64
+ 	default "mips64r2"	if BR2_mips_64r2
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index df60c65..d204bf7 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -63,7 +63,8 @@ choice
+ 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
+ 		# Unsupported MIPS cores
+ 		depends on !BR2_mips_interaptiv && !BR2_mips_m5100 && \
+-			!BR2_mips_m5101 && !BR2_mips_i6400 && !BR2_mips_p6600
++			!BR2_mips_m5101 && !BR2_mips_m6201 && !BR2_mips_i6400 && \
++			!BR2_mips_p6600
+ 		# musl mips64 unsupported
+ 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
+ 		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+@@ -73,7 +74,7 @@ choice
+ 		# Broken or unsupported architectures
+ 		depends on !BR2_arc
+ 		# Unsupported MIPS cores
+-		depends on !BR2_mips_p6600
++		depends on !BR2_mips_m6201 && !BR2_mips_p6600
+ 		select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
+ endchoice
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.10.1
