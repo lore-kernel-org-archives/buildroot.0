@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Oct 2016 13:58:25 +0200
+Date: Tue, 18 Oct 2016 14:03:53 +0200
 Subject: [Buildroot] [PATCH v2] support/misc/Vagrantfile: bump to ubuntu
  16.04
-In-Reply-To: <1476741182-23366-1-git-send-email-angelo.compagnucci@gmail.com>
+In-Reply-To: <CA+TH9Vm+QmqEOxPmrypq6MqZGjOjQhB7rgKY_O0nCB7D69Y6Ag@mail.gmail.com>
 References: <1476741182-23366-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <a573224b-5e31-cad6-be0b-fe816adbaac8@mind.be>
+ <20161018114615.4a6f95b7@free-electrons.com>
+ <CA+TH9Vm+QmqEOxPmrypq6MqZGjOjQhB7rgKY_O0nCB7D69Y6Ag@mail.gmail.com>
+Message-ID: <3fc3c742-0be1-d297-49af-8d442fc2b567@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +15,52 @@ To: buildroot@busybox.net
 
 
 
-On 17-10-16 23:53, Angelo Compagnucci wrote:
-> * Updating to ubuntu 16.04
-> * Fixing dependencies
-> * Fixing locale complaints
-> * Removing unused packages
+On 18-10-16 12:00, Angelo Compagnucci wrote:
+> Dear Thomas,
 > 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> 2016-10-18 11:46 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@free-electrons.com
+> <mailto:thomas.petazzoni@free-electrons.com>>:
+> 
+>     Hello,
+> 
+>     On Mon, 17 Oct 2016 23:53:02 +0200, Angelo Compagnucci wrote:
+> 
+>     > +             sudo apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
+> 
+>     Why are you doing this step?
+> 
+> 
+> Ubuntu 16.04 introduced a number of services releated to the ops world and they
+> are not strictly releated to our use case. So I'm removing them to free some
+> space on disk and gain a bit of cpu cycles.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ I'm completely on board with doing that. Although it's really only snapd that
+takes space (25MB). There may even be more cruft that can be removed, but people
+can contribute if they want to :-).
 
- Regards,
- Arnout
+ BTW, how are you going to gain CPU cycles this way?
 
-> ---
-> Changelog
 > 
-> * Changed to C locale as suggested by Arnout Vandecappelle
 > 
->  support/misc/Vagrantfile | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+>     Thanks,
 > 
-> diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-> index cf269fe..5e56d5d 100644
-> --- a/support/misc/Vagrantfile
-> +++ b/support/misc/Vagrantfile
-> @@ -12,7 +12,7 @@ VM_MEMORY=2048
->  VM_CORES=1
->  
->  Vagrant.configure('2') do |config|
-> -	config.vm.box = 'ubuntu/trusty64'
-> +	config.vm.box = 'bento/ubuntu-16.04'
->  
->  	config.vm.provider :vmware_fusion do |v, override|
->  		v.vmx['memsize'] = VM_MEMORY
-> @@ -44,10 +44,13 @@ Vagrant.configure('2') do |config|
->  	config.vm.provision 'shell', inline:
->  		"sudo dpkg --add-architecture i386
->  		sudo apt-get -q update
-> +		sudo apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
-> +		sudo apt-get -q -y upgrade
->  		sudo apt-get -q -y install build-essential libncurses5-dev \
-> -			git bzr cvs mercurial subversion libc6:i386 unzip
-> +			git bzr cvs mercurial subversion libc6:i386 unzip bc
->  		sudo apt-get -q -y autoremove
-> -		sudo apt-get -q -y clean"
-> +		sudo apt-get -q -y clean
-> +		sudo update-locale LC_ALL=C"
->  
->  	config.vm.provision 'shell', privileged: false, inline:
->  		"echo 'Downloading and extracting buildroot #{RELEASE}'
+>     Thomas
+>     --
+>     Thomas Petazzoni, CTO, Free Electrons
+>     Embedded Linux and Kernel engineering
+>     http://free-electrons.com
+> 
+> 
+> 
+> 
+> -- 
+> Profile: http://it.linkedin.com/in/compagnucciangelo
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
 -- 
