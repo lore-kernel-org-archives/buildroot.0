@@ -1,45 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Oct 2016 11:54:02 +0200
-Subject: [Buildroot] any opinions on uClibc-ng test-suite?
-In-Reply-To: <20161018114849.2c1a2cd2@free-electrons.com>
-References: <20161017184120.GM21808@waldemar-brodkorb.de>
- <bf1755cb-2741-5c6b-9b35-6eac1426a81b@mind.be>
- <20161018114849.2c1a2cd2@free-electrons.com>
-Message-ID: <5ab72170-d579-8390-9ef2-dd31418f9688@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Oct 2016 12:00:07 +0200
+Subject: [Buildroot] [git commit] filemq: disable documentation generation
+Message-ID: <20161018100012.8722B81D4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=345e2db8549145df87f100f9e66f6955b4908fb1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The parameter to disable asciidoc documentation generation changed from
+'fmq_have_asciidoc' to 'filemq_have_asciidoc'.
 
-On 18-10-16 11:48, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon, 17 Oct 2016 23:08:31 +0200, Arnout Vandecappelle wrote:
-> 
->>  Normally I prefer that the test suite stays with the package.
-> 
-> Well, I agree in general. But for C library tests, it's a bit annoying
-> when they are bundled with the C library source code itself. Indeed,
-> this prevents from building those tests in an external toolchain
-> scenario.
-> 
-> So I actually find having tests separate from the C library tarball a
-> nicer way, as it allows to package them very easily, and use them even
-> with external toolchains.
+Fixes [1], [2], [3]:
 
- Ack that.
+  File "/usr/bin/asciidoc", line 101
+    except KeyError, k: raise AttributeError, k
+                   ^
+  SyntaxError: invalid syntax
 
- Regards,
- Arnout
+[1] http://autobuild.buildroot.net/results/5f0/5f0558235756419eff15b8e909b5d630712f5141
+[2] http://autobuild.buildroot.net/results/a23/a23d92b09dadc12b3753c951900e28fc19bd14cd
+[3] http://autobuild.buildroot.net/results/a45/a450ff5c6008ccf290a028e6eab7ff26369243e7
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/filemq/filemq.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
+index 0e73591..d57208e 100644
+--- a/package/filemq/filemq.mk
++++ b/package/filemq/filemq.mk
+@@ -8,7 +8,7 @@ FILEMQ_VERSION = e59951489045825d6fc5bdc6a5a5ecf1abf51943
+ FILEMQ_SITE = $(call github,zeromq,filemq,$(FILEMQ_VERSION))
+ 
+ FILEMQ_AUTORECONF = YES
+-FILEMQ_CONF_ENV = fmq_have_asciidoc=no
++FILEMQ_CONF_ENV = filemq_have_asciidoc=no
+ FILEMQ_INSTALL_STAGING = YES
+ FILEMQ_DEPENDENCIES = czmq openssl zeromq
+ FILEMQ_LICENSE = LGPLv3+ with exceptions
