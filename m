@@ -1,52 +1,30 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Oct 2016 22:18:41 +0200
-Subject: [Buildroot] [PATCH 87/93] fmlib: use $(TARGET_MAKE_ENV) when
- calling $(MAKE)
-In-Reply-To: <1476720440-22239-88-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1476720440-22239-88-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <78861b50-c769-927c-2585-83b989200ca4@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 18 Oct 2016 22:20:56 +0200
+Subject: [Buildroot] [PATCH] lirc-tools: fix build with kernel headers
+	v4.8+
+In-Reply-To: <7ccf454919745520121768791455dc138ccdf6db.1476819325.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 18 Oct 2016 22:35:25 +0300")
+References: <7ccf454919745520121768791455dc138ccdf6db.1476819325.git.baruch@tkos.co.il>
+Message-ID: <87lgxlflxz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
+ > Backport upstream path that removes reverence to macros that are no longer in
+ > the kernel lirc.h headers.
 
-On 17-10-16 18:07, gustavo.zacarias at free-electrons.com wrote:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> ---
->  package/fmlib/fmlib.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-> index 42cdc27..1d3f3be 100644
-> --- a/package/fmlib/fmlib.mk
-> +++ b/package/fmlib/fmlib.mk
-> @@ -31,7 +31,7 @@ endef
->  
->  define FMLIB_INSTALL_STAGING_CMDS
->  	$(RM) $(STAGING_DIR)/usr/lib/libfm.a
-> -	$(FMLIB_MAKE_ENV) $(MAKE) $(FMLIB_MAKE_OPTS) -C $(@D) install-libfm-$(FMLIB_ARCHTYPE)
-> +	$(TARGET_MAKE_ENV) $(FMLIB_MAKE_ENV) $(MAKE) $(FMLIB_MAKE_OPTS) -C $(@D) install-libfm-$(FMLIB_ARCHTYPE)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/f01/f015d52faa214f7786dd3169628ce74b738a8b46/
+ > http://autobuild.buildroot.net/results/55f/55f1ac19736499ef536561bd65c011d2649f43da/
+ > http://autobuild.buildroot.net/results/c68/c689786b6b0867cea2e45df1c5556cccdd377b33/
 
- FMLIB_MAKE_ENV doesn't exist so you can just replace that one.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
- Regards,
- Arnout
-
->  endef
->  
->  $(eval $(generic-package))
-> 
+Committed, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
