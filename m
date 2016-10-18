@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Oct 2016 23:32:48 +0200
-Subject: [Buildroot] [PATCH 75/93] perl: use $(HOST_MAKE_ENV) when
+Date: Tue, 18 Oct 2016 23:32:35 +0200
+Subject: [Buildroot] [PATCH 74/93] perl: use $(TARGET_MAKE_ENV) when
  calling $(MAKE)
-In-Reply-To: <1476720440-22239-76-git-send-email-gustavo.zacarias@free-electrons.com>
+In-Reply-To: <1476720440-22239-75-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1476720440-22239-76-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <8c3e80e1-8ab5-6ed1-a390-ba801e03b6be@mind.be>
+ <1476720440-22239-75-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <38ded37a-9177-343b-bcae-214a42796eec@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,14 +19,14 @@ On 17-10-16 18:07, gustavo.zacarias at free-electrons.com wrote:
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > ---
->  package/perl/perl.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/perl/perl.mk | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
 > diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-> index fa051b9..9c1389c 100644
+> index 29b4455..fa051b9 100644
 > --- a/package/perl/perl.mk
 > +++ b/package/perl/perl.mk
-> @@ -101,11 +101,11 @@ define HOST_PERL_CONFIGURE_CMDS
+> @@ -80,15 +80,15 @@ define PERL_CONFIGURE_CMDS
 >  endef
 
  How about configure?
@@ -35,17 +35,22 @@ On 17-10-16 18:07, gustavo.zacarias at free-electrons.com wrote:
  Arnout
 
 >  
->  define HOST_PERL_BUILD_CMDS
-> -	$(MAKE) -C $(@D)
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+>  define PERL_BUILD_CMDS
+> -	$(MAKE1) -C $(@D) all
+> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) all
 >  endef
 >  
->  define HOST_PERL_INSTALL_CMDS
-> -	$(MAKE) -C $(@D) INSTALL_DEPENDENCE='' install
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALL_DEPENDENCE='' install
+>  define PERL_INSTALL_STAGING_CMDS
+> -	$(MAKE1) -C $(@D) DESTDIR="$(STAGING_DIR)" install.perl
+> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR="$(STAGING_DIR)" install.perl
 >  endef
 >  
->  $(eval $(generic-package))
+>  define PERL_INSTALL_TARGET_CMDS
+> -	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
+> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
+>  endef
+>  
+>  HOST_PERL_CONF_OPTS = \
 > 
 
 -- 
