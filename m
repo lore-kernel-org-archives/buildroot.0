@@ -1,49 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Oct 2016 22:13:41 +0200
-Subject: [Buildroot] [git commit] beaglebone: defconfigs: select ext4 as
-	rootfs
-Message-ID: <20161018202210.974047FC1B@busybox.osuosl.org>
+Date: Tue, 18 Oct 2016 22:15:41 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.8.2
+Message-ID: <20161018202210.AF49F81D4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70f5fb8c697126bd6470d9b9a53c709ec816aa2f
+commit: https://git.buildroot.net/buildroot/commit/?id=6029a25a9055cbf9ab80111e5e0ae7c5cdf86f37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Select ext4 as root file system as the genimage config expects ext4 not ext2.
-Tested on beaglebone, beagleboneblack and AM335x EVM
-
-[Peter: reworded slightly]
-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/beaglebone_defconfig     | 1 +
- configs/beaglebone_qt5_defconfig | 1 +
- 2 files changed, 2 insertions(+)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 072719b..a3efabf 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -12,6 +12,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-evmsk"
- BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
-index 31ee35a..18ee139 100644
---- a/configs/beaglebone_qt5_defconfig
-+++ b/configs/beaglebone_qt5_defconfig
-@@ -25,6 +25,7 @@ BR2_PACKAGE_TI_SGX_DEMOS=y
- BR2_PACKAGE_TI_SGX_KM=y
- BR2_PACKAGE_TI_SGX_UM=y
- BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+diff --git a/linux/Config.in b/linux/Config.in
+index d8294ca..e0e24e6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.8.1)"
++	bool "Latest version (4.8.2)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.8.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.8.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
