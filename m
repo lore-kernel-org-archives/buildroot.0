@@ -1,23 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Oct 2016 22:14:31 +0200
-Subject: [Buildroot] [PATCH] beaglebone_defconfig: select ext4 as rootfs
-In-Reply-To: <1476820313-27600-1-git-send-email-lothar.felten@gmail.com>
- (Lothar Felten's message of "Tue, 18 Oct 2016 21:51:53 +0200")
-References: <1476820313-27600-1-git-send-email-lothar.felten@gmail.com>
-Message-ID: <8737jth0t4.fsf@dell.be.48ers.dk>
+Date: Tue, 18 Oct 2016 22:15:44 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 7, 8}.x series
+In-Reply-To: <1476698653-4386-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 17 Oct 2016 07:04:12 -0300")
+References: <1476698653-4386-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87y41lfm6n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Lothar" == Lothar Felten <lothar.felten@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > beaglebone_defconfig and beaglebone_qt5_defconfig:
- > Select ext4 as root file system as the genimage config expects ext4 not ext2
- > Tested on beaglebone, beagleboneblack and AM335x EVM
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed after rewording the commit message slightly, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
