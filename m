@@ -1,51 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Oct 2016 23:38:37 +0200
-Subject: [Buildroot] [PATCH] trinity: not available on musl
-In-Reply-To: <1476721016-21596-1-git-send-email-rahul.bedarkar@imgtec.com>
- (Rahul Bedarkar's message of "Mon, 17 Oct 2016 21:46:56 +0530")
-References: <1476721016-21596-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <87bmyhfici.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Oct 2016 23:38:54 +0200
+Subject: [Buildroot] [PATCH 91/93] qt: use $(TARGET_MAKE_ENV) when
+ calling $(MAKE)
+In-Reply-To: <1476720440-22239-92-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <1476720440-22239-92-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <9d82dd47-b4d5-728a-ed2f-3cef7b95a0b5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Rahul" == Rahul Bedarkar <rahul.bedarkar@imgtec.com> writes:
 
- > After fixing following build failures with musl:
- > * error: unknown type name __uint32_t and __uint64_t
- > * error: unknown type name pid_t and uid_t
- > * error: fatal error: bits/sockaddr.h: No such file or directory
 
- > it fails with
+On 17-10-16 18:07, gustavo.zacarias at free-electrons.com wrote:
+> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> ---
+>  package/qt/qt.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+> index 8c0ff7b..508f35a 100644
+> --- a/package/qt/qt.mk
+> +++ b/package/qt/qt.mk
+> @@ -505,7 +505,7 @@ endef
+>  endif
+>  
+>  define QT_CONFIGURE_CMDS
+> -	-[ -f $(@D)/Makefile ] && $(MAKE) -C $(@D) confclean
+> +	-[ -f $(@D)/Makefile ] && $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) confclean
 
- >   fds/files.c: In function 'file_tree_callback':
- >   fds/files.c:172:10: error: 'FTW_CONTINUE' undeclared (first use in this function)
- >      return FTW_CONTINUE;
- >             ^
- >   fds/files.c:172:10: note: each undeclared identifier is reported only once for each function it appears in
- >   fds/files.c:178:10: error: 'FTW_SKIP_SUBTREE' undeclared (first use in this function)
- >      return FTW_SKIP_SUBTREE;
- >             ^
- >   fds/files.c:185:10: error: 'FTW_STOP' undeclared (first use in this function)
- >      return FTW_STOP;
- >             ^
- >   fds/files.c: In function 'open_fds_from_path':
- >   fds/files.c:197:26: error: 'FTW_ACTIONRETVAL' undeclared (first use in this function)
- >     int flags = FTW_DEPTH | FTW_ACTIONRETVAL | FTW_MOUNT;
+ The configure call itself is missing TARGET_MAKE_ENV as well. It _does_ have a
+QT_CONFIGURE_ENV which is never set, so you can replace that one.
 
- > As per ftw man-page, flag FTW_ACTIONRETVAL is specific to glibc. It is
- > not available on musl. Since package uses it unconditionally, we mark
- > it not available on musl.
+ Regards,
+ Arnout
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/cb4/cb4a665746652679487dee2c2e4bca881be3724b/
-
- > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-
-Committed, thanks.
+>  	$(QT_CONFIGURE_IPV6)
+>  	$(QT_CONFIGURE_CONFIG_FILE)
+>  	# Fix compiler path
+> @@ -632,7 +632,7 @@ endef
+>  # remove the sysroot path from them, since pkg-config already adds it
+>  # automatically.
+>  define QT_INSTALL_STAGING_CMDS
+> -	$(MAKE) -C $(@D) install
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+>  	mkdir -p $(HOST_DIR)/usr/bin
+>  	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)) $(HOST_DIR)/usr/bin
+>  	ln -sf $(STAGING_DIR)/usr/mkspecs $(HOST_DIR)/usr/mkspecs
+> 
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
