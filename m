@@ -1,32 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Oct 2016 22:12:57 +0200
-Subject: [Buildroot] [git commit] wireshark: fix libgtk2 dependency typo
-Message-ID: <20161018202210.8D70D7FC1B@busybox.osuosl.org>
+Date: Tue, 18 Oct 2016 22:15:35 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 7, 8}.x series
+Message-ID: <20161018202210.A39C97FC1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=638f0a817cc96da5ea983e41d75a0c447e121141
+commit: https://git.buildroot.net/buildroot/commit/?id=6d9791f059a404ad9d99f6823420a442a4c80241
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 8dc72da..9cd92c4 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -32,7 +32,7 @@ WIRESHARK_CONF_OPTS += --with-gtk=3
- WIRESHARK_DEPENDENCIES += libgtk3
- else ifeq ($(BR2_PACKAGE_LIBGTK2),y)
- WIRESHARK_CONF_OPTS += --with-gtk=2
--WIRESHARK_DEPENDECIES += libgtk2
-+WIRESHARK_DEPENDENCIES += libgtk2
- else
- WIRESHARK_CONF_OPTS += --with-gtk=no
- endif
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 60578b8..759959f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -232,9 +232,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.34"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.24"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.25"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+ 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
+-	default "4.7.7"		if BR2_KERNEL_HEADERS_4_7
+-	default "4.8.1"		if BR2_KERNEL_HEADERS_4_8
++	default "4.7.8"		if BR2_KERNEL_HEADERS_4_7
++	default "4.8.2"		if BR2_KERNEL_HEADERS_4_8
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
