@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Oct 2016 11:46:15 +0200
-Subject: [Buildroot] [PATCH v2] support/misc/Vagrantfile: bump to ubuntu
- 16.04
-In-Reply-To: <1476741182-23366-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1476741182-23366-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20161018114615.4a6f95b7@free-electrons.com>
+Date: Tue, 18 Oct 2016 11:48:49 +0200
+Subject: [Buildroot] any opinions on uClibc-ng test-suite?
+In-Reply-To: <bf1755cb-2741-5c6b-9b35-6eac1426a81b@mind.be>
+References: <20161017184120.GM21808@waldemar-brodkorb.de>
+ <bf1755cb-2741-5c6b-9b35-6eac1426a81b@mind.be>
+Message-ID: <20161018114849.2c1a2cd2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 17 Oct 2016 23:53:02 +0200, Angelo Compagnucci wrote:
+On Mon, 17 Oct 2016 23:08:31 +0200, Arnout Vandecappelle wrote:
 
-> +		sudo apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
+>  Normally I prefer that the test suite stays with the package.
 
-Why are you doing this step?
+Well, I agree in general. But for C library tests, it's a bit annoying
+when they are bundled with the C library source code itself. Indeed,
+this prevents from building those tests in an external toolchain
+scenario.
 
-Thanks,
+So I actually find having tests separate from the C library tarball a
+nicer way, as it allows to package them very easily, and use them even
+with external toolchains.
 
 Thomas
 -- 
