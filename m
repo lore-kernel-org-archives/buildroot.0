@@ -1,45 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Oct 2016 12:00:23 +0200
-Subject: [Buildroot] [PATCH v1] filemq: disable documentation generation
-In-Reply-To: <1476739227-12396-1-git-send-email-ps.report@gmx.net>
-References: <1476739227-12396-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20161018120023.1dcb337e@free-electrons.com>
+Date: Tue, 18 Oct 2016 12:00:33 +0200
+Subject: [Buildroot] [git commit] libwebsockets: bump to version 2.1.0
+Message-ID: <20161018100036.2060E81D4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d49fed8fe21d0b9173157b7d096ace43a8964992
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 17 Oct 2016 23:20:27 +0200, Peter Seiderer wrote:
-> The parameter to disable asciidoc documentation generation changed from
-> 'fmq_have_asciidoc' to 'filemq_have_asciidoc'.
-> 
-> Fixes [1], [2], [3]:
-> 
->   File "/usr/bin/asciidoc", line 101
->     except KeyError, k: raise AttributeError, k
->                    ^
->   SyntaxError: invalid syntax
-> 
-> [1] http://autobuild.buildroot.net/results/5f0/5f0558235756419eff15b8e909b5d630712f5141
-> [2] http://autobuild.buildroot.net/results/a23/a23d92b09dadc12b3753c951900e28fc19bd14cd
-> [3] http://autobuild.buildroot.net/results/a45/a450ff5c6008ccf290a028e6eab7ff26369243e7
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Remark: could not reproduce the original asciidoc error, but changing
-> fmq_have_asciidoc to filemq_have_asciidoc prevents the call to
-> asciidoc at all.
-> ---
->  package/filemq/filemq.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes:
+    http://autobuild.buildroot.net/results/d88/d88889ba30444e73cfb12ae1357db25ff6a3a4fb/
 
-Applied to master, thanks.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libwebsockets/libwebsockets.hash | 2 +-
+ package/libwebsockets/libwebsockets.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+index dc44da5..cbd1101 100644
+--- a/package/libwebsockets/libwebsockets.hash
++++ b/package/libwebsockets/libwebsockets.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  43865604debd06686ac4d8d0783976c4e10dd519ccd5c94e1b53878ec6178a59  libwebsockets-v2.0.2.tar.gz
++sha256  bcc96aaa609daae4d3f7ab1ee480126709ef4f6a8bf9c85de40aae48e38cce66  libwebsockets-v2.1.0.tar.gz
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index a9b4a25..bf46291 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBWEBSOCKETS_VERSION = v2.0.2
++LIBWEBSOCKETS_VERSION = v2.1.0
+ LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,$(LIBWEBSOCKETS_VERSION))
+ LIBWEBSOCKETS_LICENSE = LGPLv2.1 with exceptions
+ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
