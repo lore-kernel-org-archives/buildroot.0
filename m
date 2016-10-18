@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Oct 2016 22:30:02 +0200
-Subject: [Buildroot] [PATCH 62/93] libselinux: use
- $(TARGET_CONFIGURE_OPTS) when calling $(MAKE)
-In-Reply-To: <1476720440-22239-63-git-send-email-gustavo.zacarias@free-electrons.com>
+Date: Tue, 18 Oct 2016 22:30:48 +0200
+Subject: [Buildroot] [PATCH 63/93] libselinux: use
+ $(HOST_CONFIGURE_OPTS) when calling $(MAKE)
+In-Reply-To: <1476720440-22239-64-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1476720440-22239-63-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <adad96b2-340b-7093-2f7f-22b39d424bf3@mind.be>
+ <1476720440-22239-64-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <27936ade-d4f1-b90e-16b3-7f82b4d6d68b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,39 +19,43 @@ On 17-10-16 18:06, gustavo.zacarias at free-electrons.com wrote:
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > ---
->  package/libselinux/libselinux.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/libselinux/libselinux.mk | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
 > diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-> index 6f94173..bc0d0e3 100644
+> index bc0d0e3..36abf49 100644
 > --- a/package/libselinux/libselinux.mk
 > +++ b/package/libselinux/libselinux.mk
-> @@ -23,15 +23,15 @@ LIBSELINUX_MAKE_OPTS = \
->  define LIBSELINUX_BUILD_CMDS
+> @@ -64,18 +64,18 @@ HOST_LIBSELINUX_MAKE_OPTS = \
+>  define HOST_LIBSELINUX_BUILD_CMDS
 >  	# DESTDIR is needed during the compile to compute library and
 >  	# header paths.
-> -	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
-> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
+> -	$(MAKE1) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
+> +	$(HOST_CONFIGURE_OPTS) $(MAKE1) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
 
- TARGET_CONFIGURE_OPTS is already part of LIBSELINUX_MAKE_OPTS, so it should
-have been TARGET_MAKE_ENV here. Don't forget to update subject line.
+ HOST_CONFIGURE_OPTS is already part of HOST_LIBSELINUX_MAKE_OPTS, so this
+should have been HOST_MAKE_ENV (+ subject line).
 
  Regards,
  Arnout
 
+>  		SHLIBDIR=$(HOST_DIR)/usr/lib all
+>  	# Generate python interface wrapper
+> -	$(MAKE1) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
+> +	$(HOST_CONFIGURE_OPTS) $(MAKE1) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
 >  endef
 >  
->  define LIBSELINUX_INSTALL_STAGING_CMDS
-> -	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
-> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+>  define HOST_LIBSELINUX_INSTALL_CMDS
+> -	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
+> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
+>  		SHLIBDIR=$(HOST_DIR)/usr/lib SBINDIR=$(HOST_DIR)/usr/sbin install
+>  	(cd $(HOST_DIR)/usr/lib; $(HOSTLN) -sf libselinux.so.1 libselinux.so)
+>  	# Install python interface wrapper
+> -	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
+> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
 >  endef
 >  
->  define LIBSELINUX_INSTALL_TARGET_CMDS
-> -	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
-> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
->  	# Create the selinuxfs mount point
->  	if [ ! -d "$(TARGET_DIR)/selinux" ]; then mkdir $(TARGET_DIR)/selinux; fi
->  	if ! grep -q "selinuxfs" $(TARGET_DIR)/etc/fstab; then \
+>  $(eval $(generic-package))
 > 
 
 -- 
