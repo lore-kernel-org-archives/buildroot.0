@@ -1,185 +1,139 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Oct 2016 22:21:03 +0200
-Subject: [Buildroot] [git commit] lirc-tools: bump to version 0.9.4b
-Message-ID: <20161018202210.D61D87FC1B@busybox.osuosl.org>
+Date: Tue, 18 Oct 2016 22:20:38 +0200
+Subject: [Buildroot] [git commit] lirc-tools: fix build with kernel headers
+	v4.8+
+Message-ID: <20161018202210.C93907FC1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4614229fda7f32da52bea4e400e452be343682c1
+commit: https://git.buildroot.net/buildroot/commit/?id=ef99f585803bcbde838d2b65389833fd2b2b8b2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop upstream patches. Renumber the rest.
+Backport upstream path that removes references to macros that are no longer
+in the kernel lirc.h headers.
+
+Fixes:
+http://autobuild.buildroot.net/results/f01/f015d52faa214f7786dd3169628ce74b738a8b46/
+http://autobuild.buildroot.net/results/55f/55f1ac19736499ef536561bd65c011d2649f43da/
+http://autobuild.buildroot.net/results/c68/c689786b6b0867cea2e45df1c5556cccdd377b33/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...per-linking-method-to-avoid-parallel-buil.patch | 46 ------------------
- ...make_rel_symlink.py-can-also-use-python2.patch} |  0
- ...nfigure-check-for-clock_gettime-in-librt.patch} |  0
- ...-build-commandir-unless-we-have-usb.h-191.patch | 54 ----------------------
- ...-use-of-functions-killed-in-kernel-4.8.0.patch} |  0
- package/lirc-tools/lirc-tools.hash                 |  6 +--
- package/lirc-tools/lirc-tools.mk                   |  6 +--
- 7 files changed, 5 insertions(+), 107 deletions(-)
+ ...e-use-of-functions-killed-in-kernel-4.8.0.patch | 105 +++++++++++++++++++++
+ 1 file changed, 105 insertions(+)
 
-diff --git a/package/lirc-tools/0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch b/package/lirc-tools/0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch
-deleted file mode 100644
-index 5863128..0000000
---- a/package/lirc-tools/0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From f2fc8c48e5e55a91b309225f377b6cb3783fc6f6 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Wed, 25 May 2016 15:21:57 +0200
--Subject: [PATCH] lib: use proper linking method to avoid parallel build issue
--
--Using <foo>_LDFLAGS = -l<library> is correct when <library> is an
--external library. However, when it is built by the same package, and
--especially in the same directory, this is wrong and can cause parallel
--build issues. In lib/Makefile.am, there was:
--
--libirrecord_la_LDFLAGS      = -llirc
--
--But the liblirc library is built in the same directory. Or, due to the
--using of <foo>_LDFLAGS, make is not aware of the build dependency
--between libirrecord and liblirc.
--
--To solve this, <foo>_LIBADD should be used instead, as follows:
--
--libirrecord_la_LIBADD       = liblirc.la
--
--This fixes parallel build issues seen by automated build tests
--conducted by the Buildroot project, such as:
--
--  http://autobuild.buildroot.org/results/eb4/eb47d57de8182d25b1dacbf0ac3726ed20063d04/build-end.log
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- lib/Makefile.am | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lib/Makefile.am b/lib/Makefile.am
--index ce5c94c..8780f88 100644
----- a/lib/Makefile.am
--+++ b/lib/Makefile.am
--@@ -29,7 +29,7 @@ liblirc_la_SOURCES          = config_file.c \
--                               transmit.c \
--                               util.c
-- 
---libirrecord_la_LDFLAGS      = -llirc
--+libirrecord_la_LIBADD       = liblirc.la
-- libirrecord_la_SOURCES      = irrecord.c
-- 
-- liblirc_client_la_LDFLAGS   = -version-info 4:0:4
---- 
--2.7.4
--
-diff --git a/package/lirc-tools/0002-tools-make_rel_symlink.py-can-also-use-python2.patch b/package/lirc-tools/0001-tools-make_rel_symlink.py-can-also-use-python2.patch
-similarity index 100%
-rename from package/lirc-tools/0002-tools-make_rel_symlink.py-can-also-use-python2.patch
-rename to package/lirc-tools/0001-tools-make_rel_symlink.py-can-also-use-python2.patch
-diff --git a/package/lirc-tools/0004-configure-check-for-clock_gettime-in-librt.patch b/package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch
-similarity index 100%
-rename from package/lirc-tools/0004-configure-check-for-clock_gettime-in-librt.patch
-rename to package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch
-diff --git a/package/lirc-tools/0003-Don-t-build-commandir-unless-we-have-usb.h-191.patch b/package/lirc-tools/0003-Don-t-build-commandir-unless-we-have-usb.h-191.patch
-deleted file mode 100644
-index a3f2f3b..0000000
---- a/package/lirc-tools/0003-Don-t-build-commandir-unless-we-have-usb.h-191.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From f346045e0f63289909322a3264e69b967a911636 Mon Sep 17 00:00:00 2001
--From: Alec Leamas <leamas.alec@gmail.com>
--Date: Tue, 24 May 2016 19:56:09 +0200
--Subject: [PATCH] Don't build commandir unless we have usb.h (#191).
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--(backported from git master:
-- https://sourceforge.net/p/lirc/git/ci/f346045e0f63289909322a3264e69b967a911636/tree/plugins/Makefile.am?diff=4b26eb383291576b3f56820c6cec5f6a75814807)
-----
-- plugins/Makefile.am | 14 +++++++++-----
-- 1 file changed, 9 insertions(+), 5 deletions(-)
--
--diff --git a/plugins/Makefile.am b/plugins/Makefile.am
--index 3bd89ed..2116658 100644
----- a/plugins/Makefile.am
--+++ b/plugins/Makefile.am
--@@ -14,6 +14,7 @@ EXTRA_DIST                  = pluginlist.am make-pluginlist.sh
-- plugin_LTLIBRARIES          =
-- 
-- if BUILD_USB
--+
-- plugin_LTLIBRARIES          += atilibusb.la
-- atilibusb_la_SOURCES        = atilibusb.c
-- atilibusb_la_LDFLAGS        = $(AM_LDFLAGS) @usb_libs@
--@@ -33,6 +34,14 @@ plugin_LTLIBRARIES          += srm7500libusb.la
-- srm7500libusb_la_SOURCES    = srm7500libusb.c
-- srm7500libusb_la_LDFLAGS    = $(AM_LDFLAGS) @usb_libs@
-- srm7500libusb_la_CFLAGS     = $(AM_CFLAGS) $(LIBUSB_CFLAGS)
--+
--+if !BSD
--+plugin_LTLIBRARIES          += commandir.la
--+commandir_la_SOURCES        = commandir.c
--+commandir_la_LDFLAGS        = $(AM_LDFLAGS) @usb_libs@
--+commandir_la_CFLAGS         = $(AM_CFLAGS) $(LIBUSB_CFLAGS)
--+endif
--+
-- endif
-- 
-- if BUILD_FTDI
--@@ -99,11 +108,6 @@ if !BSD
-- plugin_LTLIBRARIES          += default.la
-- default_la_SOURCES          = default.c
-- 
---plugin_LTLIBRARIES          += commandir.la
---commandir_la_SOURCES        = commandir.c
---commandir_la_LDFLAGS        = $(AM_LDFLAGS) @usb_libs@
---commandir_la_CFLAGS         = $(AM_CFLAGS) $(LIBUSB_CFLAGS)
---
-- plugin_LTLIBRARIES          += hiddev.la
-- hiddev_la_SOURCES           = hiddev.c
-- 
---- 
--2.8.1
--
-diff --git a/package/lirc-tools/0005-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch b/package/lirc-tools/0003-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
-similarity index 100%
-rename from package/lirc-tools/0005-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
-rename to package/lirc-tools/0003-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
-diff --git a/package/lirc-tools/lirc-tools.hash b/package/lirc-tools/lirc-tools.hash
-index afbca6e..239c766 100644
---- a/package/lirc-tools/lirc-tools.hash
-+++ b/package/lirc-tools/lirc-tools.hash
-@@ -1,3 +1,3 @@
--# hash from http://sourceforge.net/projects/lirc/files/LIRC/0.9.4/
--sha1 79d2300b4864ed85d6468d554ac777f39b6740ac lirc-0.9.4.tar.bz2
--md5 da6aca942154256bff696d1ffa3ef646 lirc-0.9.4.tar.bz2
-+# hash from http://sourceforge.net/projects/lirc/files/LIRC/0.9.4b/
-+sha1 7cb2867de1b486708781413aa33568e0612fb912 lirc-0.9.4b.tar.bz2
-+md5 9e3f2869a47bbd7c973dd63f30c13fc2 lirc-0.9.4b.tar.bz2
-diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-index 547df46..bd0f96f 100644
---- a/package/lirc-tools/lirc-tools.mk
-+++ b/package/lirc-tools/lirc-tools.mk
-@@ -4,16 +4,14 @@
- #
- ################################################################################
- 
--LIRC_TOOLS_VERSION = 0.9.4
-+LIRC_TOOLS_VERSION = 0.9.4b
- LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
- LIRC_TOOLS_SITE = http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)
- LIRC_TOOLS_LICENSE = GPLv2+
- LIRC_TOOLS_LICENSE_FILES = COPYING
- LIRC_TOOLS_DEPENDENCIES = host-libxslt host-pkgconf host-python3
- LIRC_TOOLS_INSTALL_STAGING = YES
--# 0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch
--# 0003-Don-t-build-commandir-unless-we-have-usb.h-191.patch
--# 0004-configure-check-for-clock_gettime-in-librt.patch
-+# 0002-configure-check-for-clock_gettime-in-librt.patch
- LIRC_TOOLS_AUTORECONF = YES
- 
- LIRC_TOOLS_CONF_ENV = XSLTPROC=yes
+diff --git a/package/lirc-tools/0005-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch b/package/lirc-tools/0005-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
+new file mode 100644
+index 0000000..9fe5256
+--- /dev/null
++++ b/package/lirc-tools/0005-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
+@@ -0,0 +1,105 @@
++From 45c590f64dd79e8e1704d5c94ce3456a5cdbfa5f Mon Sep 17 00:00:00 2001
++From: Alec Leamas <leamas.alec@gmail.com>
++Date: Fri, 19 Aug 2016 04:48:02 +0200
++Subject: [PATCH] lircd: Remove use of functions killed in kernel 4.8.0
++
++From 4.8.0 the kernel no longer supports LIRC_NOTIFY_DECODE,
++LIRC_SETUP_START/LIRC_SETUP_END and several constants related
++to initiating filters. Remove corresponding calls from lircd.
++
++[baruch: move DRVCTL_NOTIFY_DECODE into lircd.cpp]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: backported from upstream 31fcc8aa39f62c5c
++---
++ daemons/lircd.cpp | 53 ++++-------------------------------------------------
++ 1 file changed, 4 insertions(+), 49 deletions(-)
++
++diff --git a/daemons/lircd.cpp b/daemons/lircd.cpp
++index 782b6d3f8342..d778aa19308b 100644
++--- a/daemons/lircd.cpp
+++++ b/daemons/lircd.cpp
++@@ -78,6 +78,8 @@
++ #define lirc_gid gid_t
++ #endif
++ 
+++#define DRVCTL_NOTIFY_DECODE		7
+++
++ #ifdef DARWIN
++ #include <mach/mach_time.h>
++ #define CLOCK_REALTIME 0
++@@ -462,50 +464,6 @@ static int setup_timeout(void)
++ }
++ 
++ 
++-static int setup_filter(void)
++-{
++-	int ret1, ret2;
++-	lirc_t min_pulse_supported = 0, max_pulse_supported = 0;
++-	lirc_t min_space_supported = 0, max_space_supported = 0;
++-
++-	if (!(curr_driver->features & LIRC_CAN_SET_REC_FILTER))
++-		return 1;
++-	if (curr_driver->drvctl_func(LIRC_GET_MIN_FILTER_PULSE,
++-				     &min_pulse_supported) == -1 ||
++-	    curr_driver->drvctl_func(LIRC_GET_MAX_FILTER_PULSE, &max_pulse_supported) == -1
++-	    || curr_driver->drvctl_func(LIRC_GET_MIN_FILTER_SPACE, &min_space_supported) == -1
++-	    || curr_driver->drvctl_func(LIRC_GET_MAX_FILTER_SPACE, &max_space_supported) == -1) {
++-		log_error("could not get filter range");
++-		log_perror_err(__func__);
++-	}
++-
++-	if (setup_min_pulse > max_pulse_supported)
++-		setup_min_pulse = max_pulse_supported;
++-	else if (setup_min_pulse < min_pulse_supported)
++-		setup_min_pulse = 0;    /* disable filtering */
++-
++-	if (setup_min_space > max_space_supported)
++-		setup_min_space = max_space_supported;
++-	else if (setup_min_space < min_space_supported)
++-		setup_min_space = 0;    /* disable filtering */
++-
++-	ret1 = curr_driver->drvctl_func(LIRC_SET_REC_FILTER_PULSE, &setup_min_pulse);
++-	ret2 = curr_driver->drvctl_func(LIRC_SET_REC_FILTER_SPACE, &setup_min_space);
++-	if (ret1 == -1 || ret2 == -1) {
++-		if (curr_driver->
++-		    drvctl_func(LIRC_SET_REC_FILTER,
++-				setup_min_pulse < setup_min_space ? &setup_min_pulse : &setup_min_space) == -1) {
++-			log_error("could not set filter");
++-			log_perror_err(__func__);
++-			return 0;
++-		}
++-	}
++-	return 1;
++-}
++-
++-
++-
++-
++ static int setup_hardware(void)
++ {
++ 	int ret = 1;
++@@ -514,10 +472,7 @@ static int setup_hardware(void)
++ 		if ((curr_driver->features & LIRC_CAN_SET_REC_CARRIER)
++ 		    || (curr_driver->features & LIRC_CAN_SET_REC_TIMEOUT)
++ 		    || (curr_driver->features & LIRC_CAN_SET_REC_FILTER)) {
++-			(void)curr_driver->drvctl_func(LIRC_SETUP_START, NULL);
++-			ret = setup_frequency() && setup_timeout()
++-			      && setup_filter();
++-			(void)curr_driver->drvctl_func(LIRC_SETUP_END, NULL);
+++				ret = setup_frequency() && setup_timeout();
++ 		}
++ 	}
++ 	return ret;
++@@ -2162,7 +2117,7 @@ void loop(void)
++ 			int reps;
++ 
++ 			if (curr_driver->drvctl_func && (curr_driver->features & LIRC_CAN_NOTIFY_DECODE))
++-				curr_driver->drvctl_func(LIRC_NOTIFY_DECODE, NULL);
+++				curr_driver->drvctl_func(DRVCTL_NOTIFY_DECODE, NULL);
++ 
++ 			get_release_data(&remote_name, &button_name, &reps);
++ 
++-- 
++2.9.3
++
