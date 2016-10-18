@@ -1,18 +1,18 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Oct 2016 22:27:55 +0200
-Subject: [Buildroot] [PATCH 20/93] libpfm4: use $(TARGET_MAKE_ENV) when
- calling $(MAKE)
-In-Reply-To: <1476720440-22239-21-git-send-email-gustavo.zacarias@free-electrons.com>
+Date: Tue, 18 Oct 2016 22:28:34 +0200
+Subject: [Buildroot] [PATCH 21/93] libpfm4: use $(TARGET_CONFIGURE_OPTS)
+ when calling $(MAKE)
+In-Reply-To: <1476720440-22239-22-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <1476720440-22239-21-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <299dcb60-5ffb-e713-3d9e-6e8e8a4d55cf@mind.be>
+ <1476720440-22239-22-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <cccbb513-afd6-d173-1dfa-84ce604b20e2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Why not TARGET_CONFIGURE_OPTS here?
+ Subject line is wrong: libpfm4 -> xl2tp
 
  Regards,
  Arnout
@@ -22,29 +22,19 @@ On 17-10-16 18:06, gustavo.zacarias at free-electrons.com wrote:
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > ---
->  package/libpfm4/libpfm4.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/xl2tp/xl2tp.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/libpfm4/libpfm4.mk b/package/libpfm4/libpfm4.mk
-> index 358fd9d..913fc35 100644
-> --- a/package/libpfm4/libpfm4.mk
-> +++ b/package/libpfm4/libpfm4.mk
-> @@ -17,15 +17,15 @@ LIBPFM4_FLAGS = SYS=Linux ARCH=$(BR2_ARCH) \
->  	DBG=
->  
->  define LIBPFM4_BUILD_CMDS
-> -	$(MAKE) -C $(@D) $(LIBPFM4_FLAGS)
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBPFM4_FLAGS)
+> diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
+> index a823716..29e2f28 100644
+> --- a/package/xl2tp/xl2tp.mk
+> +++ b/package/xl2tp/xl2tp.mk
+> @@ -20,7 +20,7 @@ define XL2TP_BUILD_CMDS
 >  endef
 >  
->  define LIBPFM4_INSTALL_STAGING_CMDS
-> -	$(MAKE) -C $(@D) $(LIBPFM4_FLAGS) PREFIX=$(STAGING_DIR)/usr install
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBPFM4_FLAGS) PREFIX=$(STAGING_DIR)/usr install
->  endef
->  
->  define LIBPFM4_INSTALL_TARGET_CMDS
-> -	$(MAKE) -C $(@D) $(LIBPFM4_FLAGS) PREFIX=$(TARGET_DIR)/usr install
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBPFM4_FLAGS) PREFIX=$(TARGET_DIR)/usr install
+>  define XL2TP_INSTALL_TARGET_CMDS
+> -	$(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D) install
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D) install
 >  endef
 >  
 >  $(eval $(generic-package))
