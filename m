@@ -1,100 +1,43 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 18 Oct 2016 14:10:39 +0200
-Subject: [Buildroot] [PATCH v2] support/misc/Vagrantfile: bump to ubuntu
-	16.04
-In-Reply-To: <3fc3c742-0be1-d297-49af-8d442fc2b567@mind.be>
-References: <1476741182-23366-1-git-send-email-angelo.compagnucci@gmail.com>
- <20161018114615.4a6f95b7@free-electrons.com>
- <CA+TH9Vm+QmqEOxPmrypq6MqZGjOjQhB7rgKY_O0nCB7D69Y6Ag@mail.gmail.com>
- <3fc3c742-0be1-d297-49af-8d442fc2b567@mind.be>
-Message-ID: <CA+TH9V=YO9o5MPJ5PiTs+Lm-bOtrpcPD-fYMs0hyYzF54p5Ymw@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 18 Oct 2016 13:24:21 +0100
+Subject: [Buildroot] [PATCH] ci20_defconfig: disable madd instructions to
+	avoid FPU bug
+Message-ID: <20161018122421.64118-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout,
+MIPS Creator CI20 has an Ingenic JZ4780 SoC which features an XBurst
+CPU. The FPU on that CPU has a bug that can generate incorrect results
+in certain cases. The problem shows up when you have several of these
+instructions in sequence with dependant operands.
 
-2016-10-18 14:03 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+Using the -mno-fused-madd option prevents gcc from emitting these
+instructions.
 
->
->
-> On 18-10-16 12:00, Angelo Compagnucci wrote:
-> > Dear Thomas,
-> >
-> > 2016-10-18 11:46 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@free-
-> electrons.com
-> > <mailto:thomas.petazzoni@free-electrons.com>>:
-> >
-> >     Hello,
-> >
-> >     On Mon, 17 Oct 2016 23:53:02 +0200, Angelo Compagnucci wrote:
-> >
-> >     > +             sudo apt-get purge -q -y snapd lxcfs lxd
-> ubuntu-core-launcher snap-confine
-> >
-> >     Why are you doing this step?
-> >
-> >
-> > Ubuntu 16.04 introduced a number of services releated to the ops world
-> and they
-> > are not strictly releated to our use case. So I'm removing them to free
-> some
-> > space on disk and gain a bit of cpu cycles.
->
->  I'm completely on board with doing that. Although it's really only snapd
-> that
-> takes space (25MB). There may even be more cruft that can be removed, but
-> people
-> can contribute if they want to :-).
->
->  BTW, how are you going to gain CPU cycles this way?
->
+More details here:
+ - https://groups.google.com/forum/#!topic/mips-creator-ci20/spDB2jjbizM
+ - https://android.googlesource.com/platform/build/+/90ce45347064210585a3a1f59a0514c22c753c8a
 
-They runs several background services (like snapd, lxcfs) that potentially
-could use cpu to do thier unnecessary (for us) duties.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ configs/ci20_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Sincerely, Angelo
-
-
->
-> >
-> >
-> >     Thanks,
-> >
-> >     Thomas
-> >     --
-> >     Thomas Petazzoni, CTO, Free Electrons
-> >     Embedded Linux and Kernel engineering
-> >     http://free-electrons.com
-> >
-> >
-> >
-> >
-> > --
-> > Profile: http://it.linkedin.com/in/compagnucciangelo
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
-
-
-
+diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+index 0455170..1894554 100644
+--- a/configs/ci20_defconfig
++++ b/configs/ci20_defconfig
+@@ -8,6 +8,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
++# Avoid FPU bug
++BR2_TARGET_OPTIMIZATION="-mno-fused-madd"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161018/9743b1d1/attachment.html>
+2.10.1
