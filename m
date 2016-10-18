@@ -1,50 +1,42 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 18 Oct 2016 12:00:28 +0200
-Subject: [Buildroot] [PATCH v2] support/misc/Vagrantfile: bump to ubuntu
-	16.04
-In-Reply-To: <20161018114615.4a6f95b7@free-electrons.com>
-References: <1476741182-23366-1-git-send-email-angelo.compagnucci@gmail.com>
- <20161018114615.4a6f95b7@free-electrons.com>
-Message-ID: <CA+TH9Vm+QmqEOxPmrypq6MqZGjOjQhB7rgKY_O0nCB7D69Y6Ag@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Oct 2016 12:01:05 +0200
+Subject: [Buildroot] [git commit] motion: fix sdl-config detection
+Message-ID: <20161018100129.14A8580285@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=8ae6e3bc9f54bfc94f003e3ad81a98c738b78572
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-2016-10-18 11:46 GMT+02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+Overwrite ac_cv_path_CONFIG_SDL in case sdl development is
+installed on the host.
 
-> Hello,
->
-> On Mon, 17 Oct 2016 23:53:02 +0200, Angelo Compagnucci wrote:
->
-> > +             sudo apt-get purge -q -y snapd lxcfs lxd
-> ubuntu-core-launcher snap-confine
->
-> Why are you doing this step?
->
+Fixes [1]:
 
-Ubuntu 16.04 introduced a number of services releated to the ops world and
-they are not strictly releated to our use case. So I'm removing them to
-free some space on disk and gain a bit of cpu cycles.
+  ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include/SDL'
 
+[1] http://autobuild.buildroot.net/results/459/4592eb83efa393f77f5ee014f93a271f2313bee6
 
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/motion/motion.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161018/d556a9f8/attachment.html>
+diff --git a/package/motion/motion.mk b/package/motion/motion.mk
+index de29a2a..cf9be76 100644
+--- a/package/motion/motion.mk
++++ b/package/motion/motion.mk
+@@ -54,6 +54,9 @@ endif
+ ifeq ($(BR2_PACKAGE_SDL),y)
+ MOTION_DEPENDENCIES += sdl
+ MOTION_CONF_OPTS += --with-sdl=$(STAGING_DIR)/usr
++# overwrite ac_cv_path_CONFIG_SDL in case sdl development is
++# installed on the host
++MOTION_CONF_ENV += ac_cv_path_CONFIG_SDL=$(STAGING_DIR)/usr/bin/sdl-config
+ else
+ MOTION_CONF_OPTS += --without-sdl
+ endif
