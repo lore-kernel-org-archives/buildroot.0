@@ -1,79 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 23:20:43 +0200
-Subject: [Buildroot] [git commit] docs/manual: document both user-facing
-	br2-external variables
-Message-ID: <20161019212523.A99CD81E59@busybox.osuosl.org>
+Date: Wed, 19 Oct 2016 23:19:14 +0200
+Subject: [Buildroot] [git commit] core/br2-external: export paths and
+	descriptions
+Message-ID: <20161019212523.8EF3581DF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29673c8b1e5d5764fce58b2dcef839d412286552
+commit: https://git.buildroot.net/buildroot/commit/?id=5feff4403833a4aa7cddb99c5da6083c090cd15f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While BR2_EXTERNAL_<NAME>_PATH was already documented, it was not
-made obvious that it could be reused in post-biuld, post-image and
-in-fakeroot scripts.
+Now that we support multiple br2-external trees, BR2_EXTERNAL is no
+longer exported in the environment.
 
-The BR2_EXTERNAL_<NAME>_DESC variable was not documented at all.
+This means that post-build scripts in a br2-external tree can no longer
+find their own files (well, they could re-invent the path by stripping
+their known-relative path, but that'd be ugly, especially since we can
+very well provide it).
 
-Update the manual to fix this.
+Export the path for each br2-external trees as environment variables.
+Do so for the description as well, as a courtesy.
 
-Note: a2x chokes on this:
+Also, re-order variable definitions to be more logical: first, purely
+internal variables, then exported variables.
 
-    .Note:
-    Both +BR2_EXTERNAL_$(NAME)_PATH+ and +BR2_EXTERNAL_$(NAME)_DESC+ are
-      available [...]
-
-and spits out a totally useless error message:
-
-    a2x: ERROR: "xsltproc" --stringparam toc.section.depth 1 --stringparam
-    callout.graphics 0 --stringparam navig.graphics 0 --stringparam
-    admon.textlabel 1 --stringparam admon.graphic 0 --stringparam
-    chunk.section.depth 0 --output "/home/ymorin/dev/buildroot/O/docs/manual/manual.html"
-    "/etc/asciidoc/docbook-xsl/xhtml.xsl"
-    "/home/ymorin/dev/buildroot/O/docs/manual/manual.xml" returned
-    non-zero exit status 6
-
-So, we had to resort to using different quoting styles for each
-variables. They are not semantically equivalent, but the rendering
-is the same with the default CSS (which we are using). That's gonna
-be good-enough for now...
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reported-by: Beno??t Allard <benoit.allard@greenbone.net>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Beno??t Allard <benoit.allard@greenbone.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/customize-outside-br.txt | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ support/scripts/br2-external | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index 56c2c8a..70efabe 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -120,7 +120,8 @@ Since it is possible to use multiple br2-external trees at once, this
-    and is used when displaying information about a br2-external tree (e.g.
-    above the list of defconfig files, or as the prompt in the menuconfig);
-    as such, it should relatively brief (40 chars is probably a good upper
--   limit).
-+   limit). The description is available in the +BR2_EXTERNAL_$(NAME)_DESC+
-+   variable.
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index 038525e..848c851 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -142,10 +142,10 @@ do_mk() {
+         br2_ext="${BR2_EXT_PATHS["${br2_name}"]}"
+         printf '\n'
+         printf 'BR2_EXTERNAL_NAMES += %s\n' "${br2_name}"
+-        printf 'BR2_EXTERNAL_%s_PATH = %s\n' "${br2_name}" "${br2_ext}"
+-        printf 'BR2_EXTERNAL_%s_DESC = %s\n' "${br2_name}" "${br2_desc}"
+         printf 'BR2_EXTERNAL_DIRS += %s\n' "${br2_ext}"
+         printf 'BR2_EXTERNAL_MKS += %s/external.mk\n' "${br2_ext}"
++        printf 'export BR2_EXTERNAL_%s_PATH = %s\n' "${br2_name}" "${br2_ext}"
++        printf 'export BR2_EXTERNAL_%s_DESC = %s\n' "${br2_name}" "${br2_desc}"
+     done
+ }
  
- Examples of names and the corresponding +BR2_EXTERNAL_$(NAME)_PATH+
- variables:
-@@ -130,6 +131,12 @@ variables:
- 
- In the following examples, it is assumed the name to be set to +BAR_42+.
- 
-+.Note:
-+Both +BR2_EXTERNAL_$(NAME)_PATH+ and `BR2_EXTERNAL_$(NAME)_DESC` are
-+  available in the Kconfig files and the Makefiles. They are also
-+  exported in the environment so are available in post-build, post-image
-+  and in-fakeroot scripts.
-+
- ===== The +Config.in+ and +external.mk+ files
- 
- Those files (which may each be empty) can be used to define package
