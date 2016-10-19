@@ -1,7 +1,9 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 19 Oct 2016 00:50:38 -0400
-Subject: [Buildroot] [PATCH 1/1] go: bump to 1.7.2
-Message-ID: <1476852638-6306-1-git-send-email-christian@paral.in>
+Date: Wed, 19 Oct 2016 00:53:24 -0400
+Subject: [Buildroot] [PATCH 2/3] docker-containerd: bump to v0.2.4
+In-Reply-To: <1476852805-11450-1-git-send-email-christian@paral.in>
+References: <1476852805-11450-1-git-send-email-christian@paral.in>
+Message-ID: <1476852805-11450-2-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
+ package/docker-containerd/docker-containerd.hash | 2 +-
+ package/docker-containerd/docker-containerd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 6826891..ff0e8f7 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index ec9c13e..533157e 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256 787b0b750d037016a30c6ed05a8a70a91b2e9db4bd9b1a2453aa502a63f1bccc   go1.6.2.src.tar.gz
-+sha256 ce4f331352313ad7ba9db5daf6f7f81581f3ca9c862d272ae02ee5a3cb294023  go1.7.2.src.tar.gz
-diff --git a/package/go/go.mk b/package/go/go.mk
-index d5d964f..057d9fd 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+ # Computed locally
+-sha256 5c1bcd8e3b7bc6034e7523b6eca7de974562b7fdc72c440494234ae10a0e545b  docker-containerd-0ac3cd1be170d180b2baed755e8f0da547ceb267.tar.gz
++sha256 34805aef6300fbf37adcf4362a2315fac1ea57a9ceb8b0c7b1a0859cba975428  docker-containerd-v0.2.4.tar.gz
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index 06432e9..17cc9be 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.6.2
-+GO_VERSION = 1.7.2
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-DOCKER_CONTAINERD_VERSION = 0ac3cd1be170d180b2baed755e8f0da547ceb267
++DOCKER_CONTAINERD_VERSION = v0.2.4
+ DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
 -- 
 2.7.3
