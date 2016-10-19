@@ -1,41 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 23:38:02 +0200
-Subject: [Buildroot] [PATCH v1] motion: fix postgresql support
-In-Reply-To: <1476734488-3436-1-git-send-email-ps.report@gmx.net>
-References: <1476734488-3436-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20161019233802.40916531@free-electrons.com>
+Date: Wed, 19 Oct 2016 23:38:16 +0200
+Subject: [Buildroot] [git commit] get-developers: use --cc instead of --to
+	for developers
+Message-ID: <20161019213822.22A1F80809@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a1d12fe93935234ae3b635cc01665cb0c4ebb583
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 17 Oct 2016 22:01:28 +0200, Peter Seiderer wrote:
-> The commandline paramter to enable/disable postgresql support is
-> called '--with-pgsql/--without-pgsql' and not '--with-postgresql/
-> --without-postgresql'.
-> 
-> Fixes [1] in case postgresql development files are installed on the host:
-> 
->   checking for PostgreSQL... testing
->   checking autodect pgsql headers... yes /usr/include/postgresql
->   checking autodect pgsql libs... /usr/lib64
->   checking for PQconnectStart in -lpq... no
->   configure: error: PostgreSQL support can't build without PostgreSQL libraries
-> 
-> [1] http://autobuild.buildroot.net/results/749/7497730da2affffe0e5b9b790081de10c269f416
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/motion/motion.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Output of get-developers script in our manual uses --cc for developers,
+but actual output of get-developers script uses --to. This patch makes
+code consistent with documentation, by using --cc for developers.
 
-Applied to master, thanks.
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/get-developers | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/scripts/get-developers b/support/scripts/get-developers
+index f73512f..8b1891d 100755
+--- a/support/scripts/get-developers
++++ b/support/scripts/get-developers
+@@ -74,7 +74,7 @@ def __main__():
+ 
+         result = "--to buildroot at buildroot.org"
+         for dev in matching_devs:
+-            result += " --to \"%s\"" % dev
++            result += " --cc \"%s\"" % dev
+ 
+         if result != "":
+             print("git send-email %s" % result)
