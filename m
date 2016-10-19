@@ -1,50 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 Oct 2016 21:53:02 +0200
-Subject: [Buildroot] [PATCH] core/br2-external: export paths and descriptions
-Message-ID: <1476906782-30017-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Oct 2016 21:55:35 +0200
+Subject: [Buildroot] [PATCH 1/1] avahi: link with libintl if libglib2 is
+ enabled
+In-Reply-To: <ea383c3d-9ace-bafe-5c32-0bc8fad656c3@mind.be>
+References: <1476802403-5879-1-git-send-email-johan.oudinet@gmail.com>
+ <20161018172543.20a693fa@free-electrons.com>
+ <CAJtjsKbAHTY4LwuS=oGpxhCf=hCupmk0Si7-kCTnA3YYtFbgfA@mail.gmail.com>
+ <20161019145904.6a82c434@free-electrons.com>
+ <CAJtjsKbabwixT3bieo4uXFFyUhA=JXgFsoV5Td=yB+JfckRY1w@mail.gmail.com>
+ <ea383c3d-9ace-bafe-5c32-0bc8fad656c3@mind.be>
+Message-ID: <20161019215535.52d363c0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we support multiple br2-external trees, BR2_EXTERNAL is no
-longer exported in the environment.
+Hello,
 
-This means that post-build scripts in a br2-external tree can no longer
-find their own files (well, they could re-invent the path by stripping
-their known-relative path, but that'd be ugly, especially since we can
-very well provide it).
+On Wed, 19 Oct 2016 18:27:29 +0200, Arnout Vandecappelle wrote:
 
-Export the path for each br2-external trees as environment variables.
-Do so for the description as well, as a courtesy.
+> > Sure. However, It does break if I activate gettext with glibc:  
+> 
+>  That was exactly my concern with Thomas's proposal...
 
-Also, re-order variable definitions to be more logical: first, purely
-internal variables, then exported variables.
+Yes, I also thought about it.
 
-Reported-by: Beno?t Allard <benoit.allard@greenbone.net>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Beno?t Allard <benoit.allard@greenbone.net>
----
- support/scripts/br2-external | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>  I would say: don't touch this now, and schedule it for discussion at the next
+> BR developer meeting.
 
-diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-index 038525e..848c851 100755
---- a/support/scripts/br2-external
-+++ b/support/scripts/br2-external
-@@ -142,10 +142,10 @@ do_mk() {
-         br2_ext="${BR2_EXT_PATHS["${br2_name}"]}"
-         printf '\n'
-         printf 'BR2_EXTERNAL_NAMES += %s\n' "${br2_name}"
--        printf 'BR2_EXTERNAL_%s_PATH = %s\n' "${br2_name}" "${br2_ext}"
--        printf 'BR2_EXTERNAL_%s_DESC = %s\n' "${br2_name}" "${br2_desc}"
-         printf 'BR2_EXTERNAL_DIRS += %s\n' "${br2_ext}"
-         printf 'BR2_EXTERNAL_MKS += %s/external.mk\n' "${br2_ext}"
-+        printf 'export BR2_EXTERNAL_%s_PATH = %s\n' "${br2_name}" "${br2_ext}"
-+        printf 'export BR2_EXTERNAL_%s_DESC = %s\n' "${br2_name}" "${br2_desc}"
-     done
- }
- 
+I don't think we can do that: there is a real build failure today if we
+don't make a fix.
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
