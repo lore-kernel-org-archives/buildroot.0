@@ -1,60 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 11:32:29 +0200
-Subject: [Buildroot] [PATCH] ci20_defconfig: disable madd instructions
- to avoid FPU bug
-In-Reply-To: <68e76d80-a505-e029-941a-fe43d9780536@imgtec.com>
-References: <20161018122421.64118-1-Vincent.Riera@imgtec.com>
- <20161018145413.37ae0751@free-electrons.com>
- <68e76d80-a505-e029-941a-fe43d9780536@imgtec.com>
-Message-ID: <20161019113229.02a9d8c3@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 19 Oct 2016 12:35:02 +0300
+Subject: [Buildroot] [PATCH v2] liburcu: needs MMU
+Message-ID: <8a309fcafc9f624385affeb31aac21249e1feb68.1476869702.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The test_urcu_fork.c test calls fork(). Upstream provides no easy way to
+disable tests build.
 
-On Wed, 19 Oct 2016 09:47:03 +0100, Vicente Olivert Riera wrote:
+Fixes:
+http://autobuild.buildroot.net/results/9eb/9eb182ab2d0b396eeff3d637a040da5a4d5bdcd7/
+http://autobuild.buildroot.net/results/47a/47aabc219a2fd50105881b1e2715f7eeb1a6a588/
+http://autobuild.buildroot.net/results/566/56631605f76b8623c9674f25c529ac67d0de12a8/
 
-> We could add an Ingenic XBurst entry in the MIPS CPU selection, and then
-> add that -mno-fused-madd option to the wrapper based on that selection.
-> 
-> If you are OK with that, please let me know and I'll cook the patch.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2: move MMU dependency to BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS (ThomasP)
+---
+ package/liburcu/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-If I understand correctly:
-
- - JZ4780 is the SoC
- - XBurst is the core
- - MIPS32r2 is the ISA
-
-So indeed, it makes sense to add an option for XBurst, in order to
-mimic what we do on ARM.
-
-Ideally, we should mimic what we do on ARM, and only list in
-"Target architecture variants" the cores and not the ISA. How many
-vendors are doing MIPS cores, and how many cores are they doing?
-
-If you look at ARM, we have the following situation:
-
- - Freescale, TI, Atmel, Marvell, Qualcomm, Nvidia, etc. are doing SoCs
-   They are way too many for Buildroot to have a list of them.
-
- - Very few vendors are doing cores. Most of the SoC vendors are using
-   the cores from ARM. For example, we have ARM926, Cortex-A7, Cortex-A8,
-   Cortex-A53, etc.
-
-   Those are the ones that are listed in "Target Architecture Variant",
-   and we use the selected option to know the ISA.
-
- - ISAs are ARMv4, ARMv5, ARMv6, ARMv7, ARMv8, with a few variants.
-
-So having a similar model for MIPS would be ideal.
-
-Best regards,
-
-Thomas
+diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
+index 49510da4956c..b5b632687851 100644
+--- a/package/liburcu/Config.in
++++ b/package/liburcu/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	bool
+ 	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
++	depends on BR2_USE_MMU # fork() in test
+ 	default y
+ 
+ config BR2_PACKAGE_LIBURCU
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
