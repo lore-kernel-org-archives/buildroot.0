@@ -1,42 +1,32 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 19 Oct 2016 12:30:30 +0300
-Subject: [Buildroot] [PATCH 2/2] liburcu: needs MMU
-In-Reply-To: <20161019112757.483622d2@free-electrons.com>
-References: <ef30f526d3d31123695b867262dac86030da8af2.1476867634.git.baruch@tkos.co.il>
- <5feff8d883fff7c5e9929d9b191d776c27de3cfa.1476867634.git.baruch@tkos.co.il>
- <20161019112757.483622d2@free-electrons.com>
-Message-ID: <20161019093030.s5wt6nklyczbachq@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 Oct 2016 11:31:54 +0200
+Subject: [Buildroot] [PATCH] ci20_defconfig: disable madd instructions
+	to avoid FPU bug
+In-Reply-To: <68e76d80-a505-e029-941a-fe43d9780536@imgtec.com> (Vicente
+ Olivert Riera's message of "Wed, 19 Oct 2016 09:47:03 +0100")
+References: <20161018122421.64118-1-Vincent.Riera@imgtec.com>
+ <20161018145413.37ae0751@free-electrons.com>
+ <68e76d80-a505-e029-941a-fe43d9780536@imgtec.com>
+Message-ID: <87a8e0elbp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On Wed, Oct 19, 2016 at 11:27:57AM +0200, Thomas Petazzoni wrote:
-> On Wed, 19 Oct 2016 12:00:34 +0300, Baruch Siach wrote:
-> 
-> > diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-> > index 49510da4956c..915b17ab9d6d 100644
-> > --- a/package/liburcu/Config.in
-> > +++ b/package/liburcu/Config.in
-> > @@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
-> >  config BR2_PACKAGE_LIBURCU
-> >  	bool "liburcu"
-> >  	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
-> > +	depends on BR2_USE_MMU # fork() in test
-> 
-> You want to put this in BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS so that you
-> don't have to propagate it to reverse dependencies of liburcu (which
-> BTW your patch forgot to do).
+Hi,
 
-Good point. Will do.
+ >> Note: this is *really* a question. I am not sure we want to make such a
+ >> change to the MIPS CPU selection.
 
-Thanks for reviewing,
-baruch
+ > We could add an Ingenic XBurst entry in the MIPS CPU selection, and then
+ > add that -mno-fused-madd option to the wrapper based on that selection.
+
+ > If you are OK with that, please let me know and I'll cook the patch.
+
+Yes, I believe this is the way we want to move forward.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
