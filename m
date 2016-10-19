@@ -1,40 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 19 Oct 2016 07:05:18 -0300
-Subject: [Buildroot] [PATCH] gvfs: bump to version 1.30.1.1
-Message-ID: <1476871518-736-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 19 Oct 2016 11:17:14 +0100
+Subject: [Buildroot] [PATCH 2/2] ci20_defconfig: use XBurst CPU
+In-Reply-To: <20161019101714.21506-1-Vincent.Riera@imgtec.com>
+References: <20161019101714.21506-1-Vincent.Riera@imgtec.com>
+Message-ID: <20161019101714.21506-2-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/gvfs/gvfs.hash | 4 ++--
- package/gvfs/gvfs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/ci20_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
-index a7f0b89..f54d239 100644
---- a/package/gvfs/gvfs.hash
-+++ b/package/gvfs/gvfs.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.1.sha256sum
--sha256	e752e7bb46e64e4025f63428d4f5247e3e5c0d0b5eeb4f81dbf1cd7b75f59d7b	gvfs-1.30.1.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.1.1.sha256sum
-+sha256	585b5de66eb99a09c020f34955db31e4764c8260a8afbb761ae264a958152ecc	gvfs-1.30.1.1.tar.xz
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index 897b1a9..60bfb59 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+index bd30cbd..ecf3007 100644
+--- a/configs/ci20_defconfig
++++ b/configs/ci20_defconfig
+@@ -1,6 +1,6 @@
+ # architecture
+ BR2_mipsel=y
+-BR2_mips_32r2=y
++BR2_mips_xburst=y
+ # BR2_MIPS_SOFT_FLOAT is not set
  
- GVFS_VERSION_MAJOR = 1.30
--GVFS_VERSION = $(GVFS_VERSION_MAJOR).1
-+GVFS_VERSION = $(GVFS_VERSION_MAJOR).1.1
- GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
- GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
+ # Linux headers same as kernel, a 3.18 series
 -- 
-2.7.3
+2.10.1
