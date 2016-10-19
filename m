@@ -1,129 +1,50 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 19 Oct 2016 16:23:09 +0200
-Subject: [Buildroot] [PATCH 4/4] mfgtools: new package
+Date: Wed, 19 Oct 2016 16:23:07 +0200
+Subject: [Buildroot] [PATCH 2/4] imx-uuc: switch to open source version
 In-Reply-To: <20161019142309.15628-1-gary.bisson@boundarydevices.com>
 References: <20161019142309.15628-1-gary.bisson@boundarydevices.com>
-Message-ID: <20161019142309.15628-5-gary.bisson@boundarydevices.com>
+Message-ID: <20161019142309.15628-3-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package contains the Freescale manufacturing tool.
-It is designed to program firmware to i.MX boards during production.
-The communication is done over USB using the Freescale UTP protocol.
+The tool will be maintained as an open source project.
+The repository can be found at:
+https://github.com/NXPmicro/imx-uuc
 
-The project is maintained on NXPMicro Github repository:
-https://github.com/NXPmicro/mfgtools
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-freescale/commit/9b56bf13
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
-Hi,
+ package/freescale-imx/imx-uuc/imx-uuc.hash | 2 +-
+ package/freescale-imx/imx-uuc/imx-uuc.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-A couple of remarks. First here is the procedure I followed to test it:
-$ cd output
-$ mkdir -p "Profiles/Linux/OS Firmware/firmware"
-$ wget https://storage.googleapis.com/boundarydevices.com/ucl2.xml \
-  -O Profiles/Linux/OS\ Firmware/ucl2.xml
-$ cp images/u-boot.imx images/zImage images/imx6q-sabrelite.dtb \
-  images/rootfs.cpio.uboot Profiles/Linux/OS\ Firmware/firmware/
-$ ./host/usr/bin/mfgtoolcli -l mmc -s uboot_defconfig=imx \
-  -s dtbname=imx6q-sabrelite.dtb -s initramfs=rootfs.cpio.uboot \
-  -s mmc=2 -p 1
-
-Note sure if you want this to be in the commit log.
-
-Also, not sure if the DEVELOPERS file should be updated within this
-patch or if it should be part of a follow-up patch.
-
-Regards,
-Gary
----
- package/Config.in.host          |  1 +
- package/mfgtools/Config.in.host | 10 ++++++++++
- package/mfgtools/mfgtools.hash  |  2 ++
- package/mfgtools/mfgtools.mk    | 34 ++++++++++++++++++++++++++++++++++
- 4 files changed, 47 insertions(+)
- create mode 100644 package/mfgtools/Config.in.host
- create mode 100644 package/mfgtools/mfgtools.hash
- create mode 100644 package/mfgtools/mfgtools.mk
-
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 1140c70..e33cbb5 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -22,6 +22,7 @@ menu "Host utilities"
- 	source "package/jq/Config.in.host"
- 	source "package/jsmin/Config.in.host"
- 	source "package/lpc3250loader/Config.in.host"
-+	source "package/mfgtools/Config.in.host"
- 	source "package/mke2img/Config.in.host"
- 	source "package/mkpasswd/Config.in.host"
- 	source "package/mtd/Config.in.host"
-diff --git a/package/mfgtools/Config.in.host b/package/mfgtools/Config.in.host
-new file mode 100644
-index 0000000..8bba9e2
---- /dev/null
-+++ b/package/mfgtools/Config.in.host
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_MFGTOOLS
-+	bool "host mfgtools"
-+	depends on BR2_arm
-+	help
-+	  This package contains the Freescale manufacturing tool.
-+	  It is designed to program firmware to i.MX boards during
-+	  production. The communication is done over USB using the
-+	  Freescale UTP protocol.
-+
-+	  https://github.com/NXPmicro/mfgtools
-diff --git a/package/mfgtools/mfgtools.hash b/package/mfgtools/mfgtools.hash
-new file mode 100644
-index 0000000..e73a7fa
---- /dev/null
-+++ b/package/mfgtools/mfgtools.hash
-@@ -0,0 +1,2 @@
-+# locally computed
-+sha256  6ce93a33c269282df305cf7e517d2d14fde78203537d8ea75b064966afe48464  mfgtools-b219fc219a35c365010897ed093c40750f8cdac6.tar.gz
-diff --git a/package/mfgtools/mfgtools.mk b/package/mfgtools/mfgtools.mk
-new file mode 100644
-index 0000000..c5f9ad0
---- /dev/null
-+++ b/package/mfgtools/mfgtools.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# mfgtools
-+#
-+################################################################################
-+
-+MFGTOOLS_VERSION = b219fc219a35c365010897ed093c40750f8cdac6
-+MFGTOOLS_SITE = $(call github,NXPmicro,mfgtools,$(MFGTOOLS_VERSION))
-+MFGTOOLS_LICENSE = Freescale Proprietary License
-+MFGTOOLS_LICENSE_FILES = LICENSE
-+HOST_MFGTOOLS_DEPENDENCIES = host-cmake host-libusb
-+
-+MFGTOOLS_CFLAGS = $(HOST_CFLAGS)
-+MFGTOOLS_CFLAGS += -l pthread -Wl,-rpath=$(HOST_DIR)/usr/lib
-+MFGTOOLS_CFLAGS += -l usb-1.0 -I$(HOST_DIR)/usr/include/libusb-1.0
-+MFGTOOLS_CFLAGS += -L . -l MfgToolLib -I$(@D)/MfgToolLib
-+MFGTOOLS_CFLAGS += -fpermissive -Wno-write-strings
-+
-+define HOST_MFGTOOLS_CONFIGURE_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) CMAKE=$(HOST_DIR)/usr/bin/cmake \
-+		-C $(@D)/TestPrgm cmake
-+endef
-+
-+define HOST_MFGTOOLS_BUILD_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) CC=$(HOSTCXX) CFLAGS="$(MFGTOOLS_CFLAGS)" \
-+		-C $(@D)/TestPrgm
-+endef
-+
-+define HOST_MFGTOOLS_INSTALL_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/TestPrgm/libMfgToolLib.so $(HOST_DIR)/usr/lib
-+	$(INSTALL) -D -m 755 $(@D)/TestPrgm/mfgtoolcli $(HOST_DIR)/usr/bin
-+endef
-+
-+$(eval $(host-generic-package))
+diff --git a/package/freescale-imx/imx-uuc/imx-uuc.hash b/package/freescale-imx/imx-uuc/imx-uuc.hash
+index 05501c8..d6e4d97 100644
+--- a/package/freescale-imx/imx-uuc/imx-uuc.hash
++++ b/package/freescale-imx/imx-uuc/imx-uuc.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 95d7f7b075f58fedc07602fbc0e5bf5212d28deea3d09cdbcbd80992dcd18482  imx-uuc-0.5.1.tar.gz
++sha256 eac0c3e288c845cd9b82d02993f8358731a7a03e51591b27feeb453b143beb73  imx-uuc-3440b1108373e79669cc17ba1d2be91a123a2053.tar.gz
+diff --git a/package/freescale-imx/imx-uuc/imx-uuc.mk b/package/freescale-imx/imx-uuc/imx-uuc.mk
+index 58e749e..12d9312 100644
+--- a/package/freescale-imx/imx-uuc/imx-uuc.mk
++++ b/package/freescale-imx/imx-uuc/imx-uuc.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-IMX_UUC_VERSION = 0.5.1
+-IMX_UUC_SITE = $(FREESCALE_IMX_SITE)
++IMX_UUC_VERSION = 3440b1108373e79669cc17ba1d2be91a123a2053
++IMX_UUC_SITE = $(call github,NXPmicro,imx-uuc,$(IMX_UUC_VERSION))
+ IMX_UUC_LICENSE = GPLv2+
+ IMX_UUC_LICENSE_FILES = COPYING
+ 
 -- 
 2.9.3
