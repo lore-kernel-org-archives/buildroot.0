@@ -1,51 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 17:49:21 +0200
-Subject: [Buildroot] [git commit] qt5webkit: do not overwrite target python
-Message-ID: <20161019155125.4A60781E3E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 Oct 2016 17:54:22 +0200
+Subject: [Buildroot] [git commit] beaglebone: defconfigs: u-boot needs dtc
+Message-ID: <20161019155436.3C5AA81E50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4b494b71e33a52db55b01c4c8f02d184b708615
+commit: https://git.buildroot.net/buildroot/commit/?id=ae2dc85b89b644dd59ea7ef4c6d51d0070a024bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit fixes an issue introduced in commit
-ac16793eaaabfced0312420759e3a66cdaa1ea8e. This commit creates a link
-$(@D)/bin/python pointing to the host Python 2, and adds $(@D)/bin/ to
-the PATH. However, the QT5WEBKIT_INSTALL_TARGET_CMDS variable copies the
-contents of $(@D)/bin/ to the target filesystem, in order to install
-binaries produced by the qt5webkit build. By doing this, we overwrite
-the 'python' symbolic link on the target.
+Fixes:
+https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/168763221
 
-In order to fix this, we simply create the 'python' symbolic link used
-to trick qt5webkit to use python2 on the host in the $(@D)/host-bin/
-sub-directory.
-
-Signed-off-by: Johan Derycke <johan.derycke@barco.com>
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Thomas: rework commit log.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5webkit/qt5webkit.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ configs/beaglebone_defconfig     | 1 +
+ configs/beaglebone_qt5_defconfig | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-index f300c11..378cdf7 100644
---- a/package/qt5/qt5webkit/qt5webkit.mk
-+++ b/package/qt5/qt5webkit/qt5webkit.mk
-@@ -36,10 +36,10 @@ endif
- # QtWebkit's build system uses python, but only supports python2. We work
- # around this by forcing python2 early in the PATH, via a python->python2
- # symlink.
--QT5WEBKIT_ENV = PATH=$(@D)/bin:$(BR_PATH)
-+QT5WEBKIT_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
- define QT5WEBKIT_PYTHON2_SYMLINK
--	mkdir -p $(@D)/bin
--	ln -sf $(HOST_DIR)/usr/bin/python2 $(@D)/bin/python
-+	mkdir -p $(@D)/host-bin
-+	ln -sf $(HOST_DIR)/usr/bin/python2 $(@D)/host-bin/python
- endef
- QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
- 
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index a3efabf..eefa81c 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -18,6 +18,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 18ee139..a9ab5a2 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -31,6 +31,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
