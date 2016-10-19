@@ -1,45 +1,80 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 19 Oct 2016 12:00:34 +0300
-Subject: [Buildroot] [PATCH 2/2] liburcu: needs MMU
-In-Reply-To: <ef30f526d3d31123695b867262dac86030da8af2.1476867634.git.baruch@tkos.co.il>
-References: <ef30f526d3d31123695b867262dac86030da8af2.1476867634.git.baruch@tkos.co.il>
-Message-ID: <5feff8d883fff7c5e9929d9b191d776c27de3cfa.1476867634.git.baruch@tkos.co.il>
+Date: Wed, 19 Oct 2016 12:00:33 +0300
+Subject: [Buildroot] [PATCH 1/2] liburcu: bump to version 0.9.2
+Message-ID: <ef30f526d3d31123695b867262dac86030da8af2.1476867634.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The test_urcu_fork.c test calls fork(). Upstream provides no easy way to
-disable tests build.
-
-Fixes:
-http://autobuild.buildroot.net/results/9eb/9eb182ab2d0b396eeff3d637a040da5a4d5bdcd7/
-http://autobuild.buildroot.net/results/47a/47aabc219a2fd50105881b1e2715f7eeb1a6a588/
-http://autobuild.buildroot.net/results/566/56631605f76b8623c9674f25c529ac67d0de12a8/
+Drop aarch64 support patch; no longer needed.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/liburcu/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/liburcu/0002-support-aarch64.patch | 21 ---------------------
+ package/liburcu/liburcu.hash               |  6 +++---
+ package/liburcu/liburcu.mk                 |  3 +--
+ 3 files changed, 4 insertions(+), 26 deletions(-)
+ delete mode 100644 package/liburcu/0002-support-aarch64.patch
 
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-index 49510da4956c..915b17ab9d6d 100644
---- a/package/liburcu/Config.in
-+++ b/package/liburcu/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- config BR2_PACKAGE_LIBURCU
- 	bool "liburcu"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU # fork() in test
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Userspace implementation of the Read-Copy-Update (RCU)
-@@ -23,4 +24,5 @@ config BR2_PACKAGE_LIBURCU
+diff --git a/package/liburcu/0002-support-aarch64.patch b/package/liburcu/0002-support-aarch64.patch
+deleted file mode 100644
+index 6830e25ebe9c..000000000000
+--- a/package/liburcu/0002-support-aarch64.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-libucru: recognize aarch64
+-
+-Make the same as "arm" internally.
+-
+-Upstream-Status: Pending
+-
+-Signed-off-by: joe.slater at windriver.com
+-[moved to buildroot from openembedded-core]
+-Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
+-
+-
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -77,6 +77,7 @@ AS_CASE([$host_cpu],
+- 	[alpha*], [ARCHTYPE="alpha"],
+- 	[ia64], [ARCHTYPE="gcc"],
+- 	[arm*], [ARCHTYPE="arm"],
+-+	[aarch64], [ARCHTYPE="arm"],
+- 	[mips*], [ARCHTYPE="mips"],
+- 	[tile*], [ARCHTYPE="gcc"],
+- 	[ARCHTYPE="unknown"]
+diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
+index 64ba90195af5..5866d805ca4d 100644
+--- a/package/liburcu/liburcu.hash
++++ b/package/liburcu/liburcu.hash
+@@ -1,4 +1,4 @@
+-# http://www.lttng.org/files/urcu/userspace-rcu-0.8.7.tar.bz2.sha1
+-sha1  5306999b8a3296f3dea91246d92e0a993d732898  userspace-rcu-0.8.7.tar.bz2
++# http://www.lttng.org/files/urcu/userspace-rcu-0.9.2.tar.bz2.sha1
++sha1  61d1d0d1b955c7a67a7253317647304d04b400a0  userspace-rcu-0.9.2.tar.bz2
+ # Locally generated
+-sha256 b523f22c4726ca6bb77a77d258e76d8c33c89724433bd65313024b98e55c4295 userspace-rcu-0.8.7.tar.bz2
++sha256 8f7fa313b1e0a3f742cea24ce63a39c0efe63e615a769e2961e55bd2663ecaa3 userspace-rcu-0.9.2.tar.bz2
+diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+index c886a1cf0e4b..33a301df1793 100644
+--- a/package/liburcu/liburcu.mk
++++ b/package/liburcu/liburcu.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
  
- comment "liburcu needs a toolchain w/ threads"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-LIBURCU_VERSION = 0.8.7
++LIBURCU_VERSION = 0.9.2
+ LIBURCU_SITE = http://lttng.org/files/urcu
+ LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+ LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE; GPLv2+ for test; GPLv3 for few *.m4 files
+ LIBURCU_LICENSE_FILES = lgpl-2.1.txt lgpl-relicensing.txt gpl-2.0.txt LICENSE
+ 
+-LIBURCU_AUTORECONF = YES
+ LIBURCU_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
 -- 
 2.9.3
