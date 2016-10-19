@@ -1,80 +1,101 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 19 Oct 2016 12:00:33 +0300
-Subject: [Buildroot] [PATCH 1/2] liburcu: bump to version 0.9.2
-Message-ID: <ef30f526d3d31123695b867262dac86030da8af2.1476867634.git.baruch@tkos.co.il>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 19 Oct 2016 10:02:21 +0100
+Subject: [Buildroot] [PATCH] MIPS: add support for M6201 cores
+In-Reply-To: <572899bc-b196-b9de-082b-3e43547f1ecd@mind.be>
+References: <20161018155525.29327-1-Vincent.Riera@imgtec.com>
+ <572899bc-b196-b9de-082b-3e43547f1ecd@mind.be>
+Message-ID: <c0367bab-0d45-1359-d942-a8c7f11633d1@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop aarch64 support patch; no longer needed.
+Hello Arnout,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/liburcu/0002-support-aarch64.patch | 21 ---------------------
- package/liburcu/liburcu.hash               |  6 +++---
- package/liburcu/liburcu.mk                 |  3 +--
- 3 files changed, 4 insertions(+), 26 deletions(-)
- delete mode 100644 package/liburcu/0002-support-aarch64.patch
+On 18/10/16 20:46, Arnout Vandecappelle wrote:
+> 
+> 
+> On 18-10-16 17:55, Vicente Olivert Riera wrote:
+>> -march=m6201 is not yet supported in GCC upstream, so disabling all
+>> versions when selecting this core.
+>>
+>> Note that M6201 implies a MIPS R6 CPU, and some GCC versions are already
+>> disabled for R6, so we don't need to disable those ones for M6201 as
+>> well.
+>>
+>> The external Codescape IMG GNU Linux Toolchain has support for this
+>> core.
+> 
+>  However, BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS supports MIPS32R6 and I don't expect
+> it supports this core...
 
-diff --git a/package/liburcu/0002-support-aarch64.patch b/package/liburcu/0002-support-aarch64.patch
-deleted file mode 100644
-index 6830e25ebe9c..000000000000
---- a/package/liburcu/0002-support-aarch64.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--libucru: recognize aarch64
--
--Make the same as "arm" internally.
--
--Upstream-Status: Pending
--
--Signed-off-by: joe.slater at windriver.com
--[moved to buildroot from openembedded-core]
--Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
--
--
----- a/configure.ac
--+++ b/configure.ac
--@@ -77,6 +77,7 @@ AS_CASE([$host_cpu],
-- 	[alpha*], [ARCHTYPE="alpha"],
-- 	[ia64], [ARCHTYPE="gcc"],
-- 	[arm*], [ARCHTYPE="arm"],
--+	[aarch64], [ARCHTYPE="arm"],
-- 	[mips*], [ARCHTYPE="mips"],
-- 	[tile*], [ARCHTYPE="gcc"],
-- 	[ARCHTYPE="unknown"]
-diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
-index 64ba90195af5..5866d805ca4d 100644
---- a/package/liburcu/liburcu.hash
-+++ b/package/liburcu/liburcu.hash
-@@ -1,4 +1,4 @@
--# http://www.lttng.org/files/urcu/userspace-rcu-0.8.7.tar.bz2.sha1
--sha1  5306999b8a3296f3dea91246d92e0a993d732898  userspace-rcu-0.8.7.tar.bz2
-+# http://www.lttng.org/files/urcu/userspace-rcu-0.9.2.tar.bz2.sha1
-+sha1  61d1d0d1b955c7a67a7253317647304d04b400a0  userspace-rcu-0.9.2.tar.bz2
- # Locally generated
--sha256 b523f22c4726ca6bb77a77d258e76d8c33c89724433bd65313024b98e55c4295 userspace-rcu-0.8.7.tar.bz2
-+sha256 8f7fa313b1e0a3f742cea24ce63a39c0efe63e615a769e2961e55bd2663ecaa3 userspace-rcu-0.9.2.tar.bz2
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-index c886a1cf0e4b..33a301df1793 100644
---- a/package/liburcu/liburcu.mk
-+++ b/package/liburcu/liburcu.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
- 
--LIBURCU_VERSION = 0.8.7
-+LIBURCU_VERSION = 0.9.2
- LIBURCU_SITE = http://lttng.org/files/urcu
- LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
- LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE; GPLv2+ for test; GPLv3 for few *.m4 files
- LIBURCU_LICENSE_FILES = lgpl-2.1.txt lgpl-relicensing.txt gpl-2.0.txt LICENSE
- 
--LIBURCU_AUTORECONF = YES
- LIBURCU_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
--- 
-2.9.3
+No, that toolchain is disabled for MIPS R6 (both 32 and 64 bit):
+
+From toolchain/toolchain-external/Config.in:
+
+ 520 config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+ [snip]
+ 532         # Unsupported for MIPS R6
+ 533         depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
+
+Vincent
+
+>  Regards,
+>  Arnout
+> 
+>>
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> ---
+>>  arch/Config.in.mips        | 5 +++++
+>>  package/gcc/Config.in.host | 5 +++--
+>>  2 files changed, 8 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+>> index f7bfa21..3662fed 100644
+>> --- a/arch/Config.in.mips
+>> +++ b/arch/Config.in.mips
+>> @@ -55,6 +55,10 @@ config BR2_mips_m5101
+>>  	bool "M5101"
+>>  	depends on !BR2_ARCH_IS_64
+>>  	select BR2_MIPS_CPU_MIPS32R5
+>> +config BR2_mips_m6201
+>> +	bool "M6201"
+>> +	depends on !BR2_ARCH_IS_64
+>> +	select BR2_MIPS_CPU_MIPS32R6
+>>  config BR2_mips_p5600
+>>  	bool "P5600"
+>>  	depends on !BR2_ARCH_IS_64
+>> @@ -131,6 +135,7 @@ config BR2_GCC_TARGET_ARCH
+>>  	default "interaptiv"	if BR2_mips_interaptiv
+>>  	default "m5100"		if BR2_mips_m5100
+>>  	default "m5101"		if BR2_mips_m5101
+>> +	default "m6201"		if BR2_mips_m6201
+>>  	default "p5600"		if BR2_mips_p5600
+>>  	default "mips64"	if BR2_mips_64
+>>  	default "mips64r2"	if BR2_mips_64r2
+>> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+>> index df60c65..d204bf7 100644
+>> --- a/package/gcc/Config.in.host
+>> +++ b/package/gcc/Config.in.host
+>> @@ -63,7 +63,8 @@ choice
+>>  		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
+>>  		# Unsupported MIPS cores
+>>  		depends on !BR2_mips_interaptiv && !BR2_mips_m5100 && \
+>> -			!BR2_mips_m5101 && !BR2_mips_i6400 && !BR2_mips_p6600
+>> +			!BR2_mips_m5101 && !BR2_mips_m6201 && !BR2_mips_i6400 && \
+>> +			!BR2_mips_p6600
+>>  		# musl mips64 unsupported
+>>  		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
+>>  		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+>> @@ -73,7 +74,7 @@ choice
+>>  		# Broken or unsupported architectures
+>>  		depends on !BR2_arc
+>>  		# Unsupported MIPS cores
+>> -		depends on !BR2_mips_p6600
+>> +		depends on !BR2_mips_m6201 && !BR2_mips_p6600
+>>  		select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+>>  
+>>  endchoice
+>>
+> 
