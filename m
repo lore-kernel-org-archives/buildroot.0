@@ -1,40 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 23:20:03 +0200
-Subject: [Buildroot] [PATCH 3/3] wireshark: needs the qt5tools lrelease
- utility
-In-Reply-To: <1b772d44273db8f887bbb378e5dd59053a328c3d.1476789992.git.baruch@tkos.co.il>
-References: <a6f0bcffe24a338538c4da2f04091967593fa058.1476789992.git.baruch@tkos.co.il>
- <1b772d44273db8f887bbb378e5dd59053a328c3d.1476789992.git.baruch@tkos.co.il>
-Message-ID: <20161019232003.4841be63@free-electrons.com>
+Date: Wed, 19 Oct 2016 23:20:18 +0200
+Subject: [Buildroot] [git commit] core/br2-external: fix link to manual for
+	converting old trees
+Message-ID: <20161019212523.99F5B80765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e30fa61d80b957fea9e22667bf83a2ccc3f35726
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 18 Oct 2016 14:26:32 +0300, Baruch Siach wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/0a4/0a4ccf752ed1e81e2416d33a78984b47087f68bd/
-> http://autobuild.buildroot.net/results/196/196b96e28a2cd5983a58948df4a2c3eb3bccdfa4/
-> http://autobuild.buildroot.net/results/056/056b3299ce45552fe3e7cbf5aa68b223f8fa458e/
-> 
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+To be noted: that link will only be valid once we have a released
+manual. In the meantime, it's accessible on the nightly manual:
+    http://nightly.buildroot.org/#br2-external-converting
 
-This patch causes a recursive Kconfig dependency:
+Reported-by: Beno??t Allard <benoit.allard@greenbone.net>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Beno??t Allard <benoit.allard@greenbone.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/br2-external | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-package/qt5/qt5base/Config.in:118:error: recursive dependency detected!
-package/qt5/qt5base/Config.in:118:	symbol BR2_PACKAGE_QT5BASE_GUI is selected by BR2_PACKAGE_QT5TOOLS_PIXELTOOL
-package/qt5/qt5tools/Config.in:19:	symbol BR2_PACKAGE_QT5TOOLS_PIXELTOOL depends on BR2_PACKAGE_QT5TOOLS
-package/qt5/qt5tools/Config.in:1:	symbol BR2_PACKAGE_QT5TOOLS is selected by BR2_PACKAGE_QT5BASE_WIDGETS
-package/qt5/qt5base/Config.in:131:	symbol BR2_PACKAGE_QT5BASE_WIDGETS is selected by BR2_PACKAGE_QT5X11EXTRAS
-package/qt5/qt5x11extras/Config.in:1:	symbol BR2_PACKAGE_QT5X11EXTRAS depends on BR2_PACKAGE_QT5BASE_XCB
-package/qt5/qt5base/Config.in:186:	symbol BR2_PACKAGE_QT5BASE_XCB depends on BR2_PACKAGE_QT5BASE_GUI
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index 848c851..055dc08 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -8,7 +8,7 @@ declare -A BR2_EXT_DESCS
+ 
+ # URL to manual for help in converting old br2-external trees.
+ # Escape '#' so that make does not consider it a comment.
+-MANUAL_URL='https://buildroot.org/manual/manual.html\#br2-external-converting'
++MANUAL_URL='https://buildroot.org/manual.html\#br2-external-converting'
+ 
+ main() {
+     local OPT OPTARG
