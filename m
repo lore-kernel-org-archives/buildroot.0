@@ -1,66 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Oct 2016 00:09:30 +0200
-Subject: [Buildroot] [Patch v3 1/2] rust-bootstrap: new package
-In-Reply-To: <20161018204701.GA18610@itchy>
-References: <1468533676-10894-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1468533676-10894-2-git-send-email-eric.le.bihan.dev@free.fr>
- <2a62ef7a-1d5f-546d-0287-78cb505a0ec3@mind.be> <20161018204701.GA18610@itchy>
-Message-ID: <ee04066a-2251-60d0-78f5-3fd3e0525bf1@mind.be>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 19 Oct 2016 00:10:46 -0400
+Subject: [Buildroot] [PATCH 1/1] package/docker-engine: add option for
+	static client
+Message-ID: <1476850246-12883-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Adds an option to selectively enable a static client.
 
+This is useful when bind-mounting the docker client binary into
+containers for a docker-in-docker setup.
 
-On 18-10-16 22:47, Eric Le Bihan wrote:
-> Hi!
-> 
-> On 16-10-16 13:27:51, Arnout Vandecappelle wrote:
->>
->>
->> On 15-07-16 00:01, Eric Le Bihan wrote:
-[snip]
->>> +RUST_BOOTSTRAP_LICENSE = Apache-2.0, MIT
->>
->>  Can you specify which parts or under which license?
-> 
-> Rust is dual licensed (Apache-2.0 OR MIT). So, I'll change it to:
-> 
-> RUST_BOOTSTRAP_LICENSE = Dual Apache-2.0/MIT
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/docker-engine/Config.in        | 6 ++++++
+ package/docker-engine/docker-engine.mk | 7 ++++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
- No, it should be
-
-RUST_BOOTSTRAP_LICENSE = Apache-2.0 or MIT
-
-See the example in the manual under the generic package infra [1].
-
-
- Regards,
- Arnout
-
-[1] https://buildroot.org/downloads/manual/manual.html#generic-package-reference
-
-> 
-> I'll do the same for the rust package.
-> 
-> Thanks for the review.
-> 
-> Best regards,
-> 
-> --
-> ELB
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index b9b9aac..1756977 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -25,6 +25,12 @@ config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
+ config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
+ 	bool "build experimental features"
+ 
++config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
++	bool "build static client"
++	depends on !BR2_STATIC_LIBS
++	help
++	  Build a static docker client.
++
+ if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
+ 
+ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 3d39aac..b95b9a2 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -25,8 +25,13 @@ DOCKER_ENGINE_GLDFLAGS = \
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DOCKER_ENGINE_GLDFLAGS += -extldflags '-static'
++else
++ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT),y)
++DOCKER_ENGINE_GLDFLAGS_DOCKER += -extldflags '-static'
++endif
+ endif
+ 
++
+ DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
+ DOCKER_ENGINE_BUILD_TARGETS = docker
+ 
+@@ -93,7 +98,7 @@ define DOCKER_ENGINE_BUILD_CMDS
+ 		$(HOST_DIR)/usr/bin/go build -v \
+ 			-o $(@D)/bin/$(target) \
+ 			-tags "$(DOCKER_ENGINE_BUILD_TAGS)" \
+-			-ldflags "$(DOCKER_ENGINE_GLDFLAGS)" \
++			-ldflags "$(DOCKER_ENGINE_GLDFLAGS) $(DOCKER_ENGINE_GLDFLAGS_$(call UPPERCASE,$(target)))" \
+ 			./cmd/$(target)
+ 	)
+ endef
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.3
