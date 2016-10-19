@@ -1,37 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 09:34:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/docker-engine: add option for
-	static client
-In-Reply-To: <1476850246-12883-1-git-send-email-christian@paral.in>
-References: <1476850246-12883-1-git-send-email-christian@paral.in>
-Message-ID: <20161019093408.0ce0f8a4@free-electrons.com>
+From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Date: Wed, 19 Oct 2016 09:45:54 +0200
+Subject: [Buildroot] [PATCH] kexec: bump to 2.0.13
+Message-ID: <1476863154-16774-1-git-send-email-marcin.nowakowski@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+---
+ package/kexec/kexec.hash | 2 +-
+ package/kexec/kexec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, 19 Oct 2016 00:10:46 -0400, Christian Stewart wrote:
-> Adds an option to selectively enable a static client.
-> 
-> This is useful when bind-mounting the docker client binary into
-> containers for a docker-in-docker setup.
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-
-We normally don't provide per-package options to build statically.
-Indeed, if we were to start doing this, we would have to create one
-additional option for every package in Buildroot.
-
-Though, if there's a really serious use-case for having just the docker
-client built statically, maybe we can make an exception.
-
-Thanks,
-
-Thomas
+diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
+index 24a71e7..90a7ce9 100644
+--- a/package/kexec/kexec.hash
++++ b/package/kexec/kexec.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
+-sha256	b1097986ffdb928cf41a94e8a5dfddc981a8fa710cccf13298e7f8dd939a2ee3	kexec-tools-2.0.11.tar.xz
++sha256	874baf421171dbfca0084af2da71ccf5a67749dd2a27c3023da5f72460bae5cc kexec-tools-2.0.13.tar.xz
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index 0e64c0d..4ca55e5 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KEXEC_VERSION = 2.0.11
++KEXEC_VERSION = 2.0.13
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPLv2
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
