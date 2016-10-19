@@ -1,32 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Oct 2016 17:37:58 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.12.x series
-Message-ID: <20161019153835.A88468198C@busybox.osuosl.org>
+Date: Wed, 19 Oct 2016 17:38:05 +0200
+Subject: [Buildroot] [git commit] nginx: bump to version 1.10.2
+Message-ID: <20161019153835.B28A57FD3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a899cb8b8c8e1942708150f260472df3691ad75c
+commit: https://git.buildroot.net/buildroot/commit/?id=f6dfbfeb53b6ff63ce97ccd95b3aca409ee4ccf4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/nginx/nginx.hash | 2 +-
+ package/nginx/nginx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 759959f..ec8c389 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -226,7 +226,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.82"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.103"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.64"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.65"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.18.43"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index c4b0f89..7db2ada 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	1fd35846566485e03c0e318989561c135c598323ff349c503a6c14826487a801	nginx-1.10.1.tar.gz
++sha256	1045ac4987a396e2fa5d0011daf8987b612dd2f05181b67507da68cbe7d765c2	nginx-1.10.2.tar.gz
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index d57f3d0..6563627 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NGINX_VERSION = 1.10.1
++NGINX_VERSION = 1.10.2
+ NGINX_SITE = http://nginx.org/download
+ NGINX_LICENSE = BSD-2c
+ NGINX_LICENSE_FILES = LICENSE
