@@ -1,88 +1,69 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 19 Oct 2016 11:17:13 +0100
-Subject: [Buildroot] [PATCH 1/2] MIPS: add support for XBurst cores
-Message-ID: <20161019101714.21506-1-Vincent.Riera@imgtec.com>
+Date: Wed, 19 Oct 2016 11:19:12 +0100
+Subject: [Buildroot] [PATCH] ci20_defconfig: disable madd instructions
+ to avoid FPU bug
+In-Reply-To: <20161019113229.02a9d8c3@free-electrons.com>
+References: <20161018122421.64118-1-Vincent.Riera@imgtec.com>
+ <20161018145413.37ae0751@free-electrons.com>
+ <68e76d80-a505-e029-941a-fe43d9780536@imgtec.com>
+ <20161019113229.02a9d8c3@free-electrons.com>
+Message-ID: <658f27ff-7be4-1109-5b10-28816be2c38c@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- There isn't any matching -march option for this core family, so we
-  need to stick with the generic mips32r2.
-- Add an option to the toolchain wrapper to avoid an FPU bug.
-- Add an option to the toolchain wrapper to use the MXU SIMD extension.
-  This is currently not supported on upstream gcc and binutils, but the
-  Codescape MTI toolchain does support it.
+Hello Peter and Thomas,
 
-Related: http://www.ingenic.com/en/?xburst.html
+thanks both of you for your comments. I have marked this patch as
+changes requested and I've already sent a 2-patch series to add support
+for XBurst cores and select that kind of core in the ci20_defconfig.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- arch/Config.in.mips            | 5 +++++
- toolchain/toolchain-wrapper.c  | 6 ++++++
- toolchain/toolchain-wrapper.mk | 9 +++++++++
- 3 files changed, 20 insertions(+)
+Regards,
 
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index f7bfa21..fec1b94 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -59,6 +59,10 @@ config BR2_mips_p5600
- 	bool "P5600"
- 	depends on !BR2_ARCH_IS_64
- 	select BR2_MIPS_CPU_MIPS32R5
-+config BR2_mips_xburst
-+	bool "XBurst"
-+	depends on !BR2_ARCH_IS_64
-+	select BR2_MIPS_CPU_MIPS32R2
- config BR2_mips_64
- 	bool "Generic MIPS64"
- 	depends on BR2_ARCH_IS_64
-@@ -132,6 +136,7 @@ config BR2_GCC_TARGET_ARCH
- 	default "m5100"		if BR2_mips_m5100
- 	default "m5101"		if BR2_mips_m5101
- 	default "p5600"		if BR2_mips_p5600
-+	default "mips32r2"	if BR2_mips_xburst
- 	default "mips64"	if BR2_mips_64
- 	default "mips64r2"	if BR2_mips_64r2
- 	default "mips64r5"	if BR2_mips_64r5
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index 925d013..188afa1 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -66,6 +66,12 @@ static char *predef_args[] = {
- #ifdef BR_OMIT_LOCK_PREFIX
- 	"-Wa,-momit-lock-prefix=yes",
- #endif
-+#ifdef BR_NO_FUSED_MADD
-+	"-mno-fused-madd",
-+#endif
-+#ifdef BR_MXU
-+	"-Wa,-mmxu",
-+#endif
- #ifdef BR_BINFMT_FLAT
- 	"-Wl,-elf2flt",
- #endif
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index af39071..5ba9d4c 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -26,6 +26,15 @@ ifeq ($(BR2_x86_x1000),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_OMIT_LOCK_PREFIX
- endif
- 
-+ifeq ($(BR2_mips_xburst),y)
-+# Avoid FPU bug on XBurst CPUs
-+TOOLCHAIN_WRAPPER_ARGS += -DBR_NO_FUSED_MADD
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS),y)
-+# Enable XBurst Media Extension Unit (MXU)
-+TOOLCHAIN_WRAPPER_ARGS += -DBR_MXU
-+endif
-+endif
-+
- ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
- endif
--- 
-2.10.1
+Vincent
+
+On 19/10/16 10:32, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 19 Oct 2016 09:47:03 +0100, Vicente Olivert Riera wrote:
+> 
+>> We could add an Ingenic XBurst entry in the MIPS CPU selection, and then
+>> add that -mno-fused-madd option to the wrapper based on that selection.
+>>
+>> If you are OK with that, please let me know and I'll cook the patch.
+> 
+> If I understand correctly:
+> 
+>  - JZ4780 is the SoC
+>  - XBurst is the core
+>  - MIPS32r2 is the ISA
+> 
+> So indeed, it makes sense to add an option for XBurst, in order to
+> mimic what we do on ARM.
+> 
+> Ideally, we should mimic what we do on ARM, and only list in
+> "Target architecture variants" the cores and not the ISA. How many
+> vendors are doing MIPS cores, and how many cores are they doing?
+> 
+> If you look at ARM, we have the following situation:
+> 
+>  - Freescale, TI, Atmel, Marvell, Qualcomm, Nvidia, etc. are doing SoCs
+>    They are way too many for Buildroot to have a list of them.
+> 
+>  - Very few vendors are doing cores. Most of the SoC vendors are using
+>    the cores from ARM. For example, we have ARM926, Cortex-A7, Cortex-A8,
+>    Cortex-A53, etc.
+> 
+>    Those are the ones that are listed in "Target Architecture Variant",
+>    and we use the selected option to know the ISA.
+> 
+>  - ISAs are ARMv4, ARMv5, ARMv6, ARMv7, ARMv8, with a few variants.
+> 
+> So having a similar model for MIPS would be ideal.
+> 
+> Best regards,
+> 
+> Thomas
+> 
