@@ -1,40 +1,60 @@
-From: johanderycke at gmail.com <johanderycke@gmail.com>
-Date: Wed, 19 Oct 2016 13:49:06 +0200
-Subject: [Buildroot] [PATCH V2, 1/1] Fix: qt5webkit overwrites target python.
-Message-ID: <1476877746-13572-1-git-send-email-johanderycke@gmail.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Wed, 19 Oct 2016 14:42:45 +0200
+Subject: [Buildroot] [PATCH 1/1] avahi: link with libintl if libglib2 is
+	enabled
+In-Reply-To: <20161018172543.20a693fa@free-electrons.com>
+References: <1476802403-5879-1-git-send-email-johan.oudinet@gmail.com>
+ <20161018172543.20a693fa@free-electrons.com>
+Message-ID: <CAJtjsKbAHTY4LwuS=oGpxhCf=hCupmk0Si7-kCTnA3YYtFbgfA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Johan Derycke <johan.derycke@barco.com>
+Hi Thomas,
 
-Signed-off-by: Johan Derycke <johan.derycke@barco.com>
----
-Changes v1 -> v2:
-- simpler fix suggested by Thomas
+On Tue, Oct 18, 2016 at 5:25 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> On Tue, 18 Oct 2016 16:53:23 +0200, Johan Oudinet wrote:
+>
+>> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+>> index 069b45a..c9cf2bc 100644
+>> --- a/package/avahi/avahi.mk
+>> +++ b/package/avahi/avahi.mk
+>> @@ -168,7 +168,9 @@ endif
+>>
+>>  AVAHI_CONF_ENV += CFLAGS="$(AVAHI_CFLAGS)"
+>>
+>> -AVAHI_MAKE_OPTS += $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),LIBS=-lintl)
+>> +# If either locale or libglib2 is defined, avahi needs libintl.
+>> +AVAHI_MAKE_OPTS += \
+>> +     $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_PACKAGE_LIBGLIB2),LIBS=-lintl)
+>
+> Hum, I wondering if it wouldn't be nicer to rely on the fact that the
+> Config.in of those packages enable BR2_PACKAGE_GETTEXT when necessary.
+> So maybe we should instead rely on BR2_PACKAGE_GETTEXT=y, with
+> something like:
+>
+> ifeq ($(BR2_PACKAGE_GETTEXT),y)
+> AVAHI_DEPENDENCIES += gettext
+> AVAHI_MAKE_OPTS += LIBS=-lintl
+> endif
+>
+> (and of course, remove the gettext dependency added conditionally on
+> BR2_NEEDS_GETTEXT_IF_LOCALE).
+>
+> It would be necessary to also test this with musl and glibc
+> configurations, with gettext enabled, to make sure it doesn't break.
+>
+> And if it works, then we should update the Buildroot manual, which has
+> a section on the gettext integration.
+>
 
- package/qt5/qt5webkit/qt5webkit.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Good idea. I'm trying it and if it works, I'll send a patch serie. One
+to modify the documentation, and one to update every packet that
+integrates gettext.
 
-diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-index f300c11..378cdf7 100644
---- a/package/qt5/qt5webkit/qt5webkit.mk
-+++ b/package/qt5/qt5webkit/qt5webkit.mk
-@@ -36,10 +36,10 @@ endif
- # QtWebkit's build system uses python, but only supports python2. We work
- # around this by forcing python2 early in the PATH, via a python->python2
- # symlink.
--QT5WEBKIT_ENV = PATH=$(@D)/bin:$(BR_PATH)
-+QT5WEBKIT_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
- define QT5WEBKIT_PYTHON2_SYMLINK
--	mkdir -p $(@D)/bin
--	ln -sf $(HOST_DIR)/usr/bin/python2 $(@D)/bin/python
-+	mkdir -p $(@D)/host-bin
-+	ln -sf $(HOST_DIR)/usr/bin/python2 $(@D)/host-bin/python
- endef
- QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
- 
 -- 
-2.1.4
+Johan
