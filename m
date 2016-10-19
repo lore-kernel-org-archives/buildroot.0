@@ -1,39 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 19 Oct 2016 12:35:02 +0300
-Subject: [Buildroot] [PATCH v2] liburcu: needs MMU
-Message-ID: <8a309fcafc9f624385affeb31aac21249e1feb68.1476869702.git.baruch@tkos.co.il>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 19 Oct 2016 07:05:18 -0300
+Subject: [Buildroot] [PATCH] gvfs: bump to version 1.30.1.1
+Message-ID: <1476871518-736-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The test_urcu_fork.c test calls fork(). Upstream provides no easy way to
-disable tests build.
-
-Fixes:
-http://autobuild.buildroot.net/results/9eb/9eb182ab2d0b396eeff3d637a040da5a4d5bdcd7/
-http://autobuild.buildroot.net/results/47a/47aabc219a2fd50105881b1e2715f7eeb1a6a588/
-http://autobuild.buildroot.net/results/566/56631605f76b8623c9674f25c529ac67d0de12a8/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-v2: move MMU dependency to BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS (ThomasP)
----
- package/liburcu/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/gvfs/gvfs.hash | 4 ++--
+ package/gvfs/gvfs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-index 49510da4956c..b5b632687851 100644
---- a/package/liburcu/Config.in
-+++ b/package/liburcu/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	bool
- 	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_USE_MMU # fork() in test
- 	default y
+diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
+index a7f0b89..f54d239 100644
+--- a/package/gvfs/gvfs.hash
++++ b/package/gvfs/gvfs.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.1.sha256sum
+-sha256	e752e7bb46e64e4025f63428d4f5247e3e5c0d0b5eeb4f81dbf1cd7b75f59d7b	gvfs-1.30.1.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.1.1.sha256sum
++sha256	585b5de66eb99a09c020f34955db31e4764c8260a8afbb761ae264a958152ecc	gvfs-1.30.1.1.tar.xz
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index 897b1a9..60bfb59 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- config BR2_PACKAGE_LIBURCU
+ GVFS_VERSION_MAJOR = 1.30
+-GVFS_VERSION = $(GVFS_VERSION_MAJOR).1
++GVFS_VERSION = $(GVFS_VERSION_MAJOR).1.1
+ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
+ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
+ GVFS_INSTALL_STAGING = YES
 -- 
-2.9.3
+2.7.3
