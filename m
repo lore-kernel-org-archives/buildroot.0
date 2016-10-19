@@ -1,53 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 23:19:14 +0200
-Subject: [Buildroot] [git commit] core/br2-external: export paths and
-	descriptions
-Message-ID: <20161019212523.8EF3581DF4@busybox.osuosl.org>
+Date: Wed, 19 Oct 2016 23:26:12 +0200
+Subject: [Buildroot] [PATCH 1/1] docker-engine: add iptables runtime
+ dependency
+In-Reply-To: <1476911115-12760-1-git-send-email-christian@paral.in>
+References: <1476911115-12760-1-git-send-email-christian@paral.in>
+Message-ID: <20161019232612.2cfb2965@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5feff4403833a4aa7cddb99c5da6083c090cd15f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Now that we support multiple br2-external trees, BR2_EXTERNAL is no
-longer exported in the environment.
+On Wed, 19 Oct 2016 17:05:15 -0400, Christian Stewart wrote:
+> The Docker engine calls iptables internally:
+> 
+> https://github.com/docker/libnetwork/blob/2c921b/iptables/iptables.go#L400
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  package/docker-engine/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-This means that post-build scripts in a br2-external tree can no longer
-find their own files (well, they could re-invent the path by stripping
-their known-relative path, but that'd be ugly, especially since we can
-very well provide it).
+Applied to master, after fixing the indentation. Thanks!
 
-Export the path for each br2-external trees as environment variables.
-Do so for the description as well, as a courtesy.
-
-Also, re-order variable definitions to be more logical: first, purely
-internal variables, then exported variables.
-
-Reported-by: Beno??t Allard <benoit.allard@greenbone.net>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Beno??t Allard <benoit.allard@greenbone.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/scripts/br2-external | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-index 038525e..848c851 100755
---- a/support/scripts/br2-external
-+++ b/support/scripts/br2-external
-@@ -142,10 +142,10 @@ do_mk() {
-         br2_ext="${BR2_EXT_PATHS["${br2_name}"]}"
-         printf '\n'
-         printf 'BR2_EXTERNAL_NAMES += %s\n' "${br2_name}"
--        printf 'BR2_EXTERNAL_%s_PATH = %s\n' "${br2_name}" "${br2_ext}"
--        printf 'BR2_EXTERNAL_%s_DESC = %s\n' "${br2_name}" "${br2_desc}"
-         printf 'BR2_EXTERNAL_DIRS += %s\n' "${br2_ext}"
-         printf 'BR2_EXTERNAL_MKS += %s/external.mk\n' "${br2_ext}"
-+        printf 'export BR2_EXTERNAL_%s_PATH = %s\n' "${br2_name}" "${br2_ext}"
-+        printf 'export BR2_EXTERNAL_%s_DESC = %s\n' "${br2_name}" "${br2_desc}"
-     done
- }
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
