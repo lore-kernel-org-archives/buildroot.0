@@ -1,69 +1,74 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 19 Oct 2016 09:47:03 +0100
-Subject: [Buildroot] [PATCH] ci20_defconfig: disable madd instructions
- to avoid FPU bug
-In-Reply-To: <20161018145413.37ae0751@free-electrons.com>
-References: <20161018122421.64118-1-Vincent.Riera@imgtec.com>
- <20161018145413.37ae0751@free-electrons.com>
-Message-ID: <68e76d80-a505-e029-941a-fe43d9780536@imgtec.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 19 Oct 2016 10:55:22 +0200
+Subject: [Buildroot] [PATCH 00/93] TLP/PPS: package cleanup part 2
+In-Reply-To: <487b6d27-cde3-da79-b88b-af45b3b11d6c@mind.be>
+References: <1476720440-22239-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <487b6d27-cde3-da79-b88b-af45b3b11d6c@mind.be>
+Message-ID: <f8bd87b0-1c73-6b40-870a-ad91bbed014c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
 
-On 18/10/16 13:54, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 18 Oct 2016 13:24:21 +0100, Vicente Olivert Riera wrote:
->> MIPS Creator CI20 has an Ingenic JZ4780 SoC which features an XBurst
->> CPU. The FPU on that CPU has a bug that can generate incorrect results
->> in certain cases. The problem shows up when you have several of these
->> instructions in sequence with dependant operands.
+
+On 19-10-16 00:04, Arnout Vandecappelle wrote:
+>
+> On 17-10-16 18:05, gustavo.zacarias at free-electrons.com wrote:
+>> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 >>
->> Using the -mno-fused-madd option prevents gcc from emitting these
->> instructions.
+>> This patchset takes over from the first round of cleanup.
 >>
->> More details here:
->>  - https://groups.google.com/forum/#!topic/mips-creator-ci20/spDB2jjbizM
->>  - https://android.googlesource.com/platform/build/+/90ce45347064210585a3a1f59a0514c22c753c8a
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
->>  configs/ci20_defconfig | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
->> index 0455170..1894554 100644
->> --- a/configs/ci20_defconfig
->> +++ b/configs/ci20_defconfig
->> @@ -8,6 +8,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
->>  
->>  # system
->>  BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
->> +# Avoid FPU bug
->> +BR2_TARGET_OPTIMIZATION="-mno-fused-madd"
-> 
-> Unfortunately, this means that other people using the same MIPS CPU,
-> but not using your defconfig will fall into this issue.
+>> It takes into account feedback on the patches that weren't applied for
+>> the previous set and addressed them, like setting the proper host env
+>> for host packages and other steps like configure and install for target
+>> packages.
+>  I reviewed the series, posted comments on some, and the ones that can go in
+> have been added to a bundle:
+>
+> http://patchwork.ozlabs.org/bundle/arnout/gustavoz_target_make_env_2/
+>
+>  However, please first consider the question I asked in the cryptopp patch:
+>
+> HOST_CONFIGURE_OPTS already contains HOST_MAKE_ENV, so if
+> HOST_CONFIGURE_OPTS is passed as the argument to MAKE, does it still make sense
+> to pass it in the environment as well?
 
-True.
+ I have been super stupid. Variables passed to make on the argument list do not
+get propagated to the environment of subprocesses, unless they are already in
+the environment or they are explicitly exported by the Makefile.
 
-> For the Intel X1000, which also had a bug, we've added a separate
-> entry in arch/Config.in.x86. Should we be doing the same here for this
-> MIPS CPU ?
-> 
-> Note: this is *really* a question. I am not sure we want to make such a
-> change to the MIPS CPU selection.
+ Since the intention here is for PPS to add something like
+BR_STAGING_DIR=$($(PKG)_STAGING_DIR)
+to the environment, and use that to calculate the --sysroot argument in the
+toolchain wrapper, it is clearly mandatory for this variable to be present in
+the environment.
 
-We could add an Ingenic XBurst entry in the MIPS CPU selection, and then
-add that -mno-fused-madd option to the wrapper based on that selection.
+ That said, as I wrote earlier, I believe that all of this is not strictly
+needed, because we can just export BR_STAGING_DIR from the Buildroot Makefile.
+The value of that environment variable will be different for each package
+because $(PKG) is different. So there is no need at all to add it to
+TARGET_MAKE_ENV. But also, as I wrote earlier, it is a good idea to make sure
+that all our packages properly use TARGET_MAKE_ENV.
 
-If you are OK with that, please let me know and I'll cook the patch.
+ Regards,
+ Arnout
 
-Vincent.
+>
+>  I haven't marked the remaining ones as Changes Requested yet, that's a lot
+> easier to do once the bundle has been merged. Oh, Thomas, there's really no need
+> to manually add my Reviewed-by everywhere...
+>
+>
+>  Regards,
+>  Arnout
+>
 
-> Thomas
-> 
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
