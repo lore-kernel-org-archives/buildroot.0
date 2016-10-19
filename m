@@ -1,81 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 17:57:08 +0200
-Subject: [Buildroot] [git commit] liburcu: bump to version 0.9.2
-Message-ID: <20161019155725.394DF81E59@busybox.osuosl.org>
+Date: Wed, 19 Oct 2016 17:57:18 +0200
+Subject: [Buildroot] [git commit] liburcu: needs MMU
+Message-ID: <20161019155725.451EF81E5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6820b555afc911ec7032277b66418ba50dd00f9c
+commit: https://git.buildroot.net/buildroot/commit/?id=7a25ecc3c9f6b3b5e93e70e2be376e5c82d935a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop aarch64 support patch; no longer needed.
+The test_urcu_fork.c test calls fork(). Upstream provides no easy way to
+disable tests build.
+
+Fixes:
+http://autobuild.buildroot.net/results/9eb/9eb182ab2d0b396eeff3d637a040da5a4d5bdcd7/
+http://autobuild.buildroot.net/results/47a/47aabc219a2fd50105881b1e2715f7eeb1a6a588/
+http://autobuild.buildroot.net/results/566/56631605f76b8623c9674f25c529ac67d0de12a8/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/liburcu/0002-support-aarch64.patch | 21 ---------------------
- package/liburcu/liburcu.hash               |  6 +++---
- package/liburcu/liburcu.mk                 |  3 +--
- 3 files changed, 4 insertions(+), 26 deletions(-)
+ package/liburcu/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/liburcu/0002-support-aarch64.patch b/package/liburcu/0002-support-aarch64.patch
-deleted file mode 100644
-index 6830e25..0000000
---- a/package/liburcu/0002-support-aarch64.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--libucru: recognize aarch64
--
--Make the same as "arm" internally.
--
--Upstream-Status: Pending
--
--Signed-off-by: joe.slater at windriver.com
--[moved to buildroot from openembedded-core]
--Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
--
--
----- a/configure.ac
--+++ b/configure.ac
--@@ -77,6 +77,7 @@ AS_CASE([$host_cpu],
-- 	[alpha*], [ARCHTYPE="alpha"],
-- 	[ia64], [ARCHTYPE="gcc"],
-- 	[arm*], [ARCHTYPE="arm"],
--+	[aarch64], [ARCHTYPE="arm"],
-- 	[mips*], [ARCHTYPE="mips"],
-- 	[tile*], [ARCHTYPE="gcc"],
-- 	[ARCHTYPE="unknown"]
-diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
-index 64ba901..5866d80 100644
---- a/package/liburcu/liburcu.hash
-+++ b/package/liburcu/liburcu.hash
-@@ -1,4 +1,4 @@
--# http://www.lttng.org/files/urcu/userspace-rcu-0.8.7.tar.bz2.sha1
--sha1  5306999b8a3296f3dea91246d92e0a993d732898  userspace-rcu-0.8.7.tar.bz2
-+# http://www.lttng.org/files/urcu/userspace-rcu-0.9.2.tar.bz2.sha1
-+sha1  61d1d0d1b955c7a67a7253317647304d04b400a0  userspace-rcu-0.9.2.tar.bz2
- # Locally generated
--sha256 b523f22c4726ca6bb77a77d258e76d8c33c89724433bd65313024b98e55c4295 userspace-rcu-0.8.7.tar.bz2
-+sha256 8f7fa313b1e0a3f742cea24ce63a39c0efe63e615a769e2961e55bd2663ecaa3 userspace-rcu-0.9.2.tar.bz2
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-index c886a1c..33a301d 100644
---- a/package/liburcu/liburcu.mk
-+++ b/package/liburcu/liburcu.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
+diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
+index 49510da..b5b6326 100644
+--- a/package/liburcu/Config.in
++++ b/package/liburcu/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	bool
+ 	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
++	depends on BR2_USE_MMU # fork() in test
+ 	default y
  
--LIBURCU_VERSION = 0.8.7
-+LIBURCU_VERSION = 0.9.2
- LIBURCU_SITE = http://lttng.org/files/urcu
- LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
- LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE; GPLv2+ for test; GPLv3 for few *.m4 files
- LIBURCU_LICENSE_FILES = lgpl-2.1.txt lgpl-relicensing.txt gpl-2.0.txt LICENSE
- 
--LIBURCU_AUTORECONF = YES
- LIBURCU_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+ config BR2_PACKAGE_LIBURCU
