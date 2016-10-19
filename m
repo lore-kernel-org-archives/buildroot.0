@@ -1,50 +1,50 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 19 Oct 2016 16:23:07 +0200
-Subject: [Buildroot] [PATCH 2/4] imx-uuc: switch to open source version
-In-Reply-To: <20161019142309.15628-1-gary.bisson@boundarydevices.com>
-References: <20161019142309.15628-1-gary.bisson@boundarydevices.com>
-Message-ID: <20161019142309.15628-3-gary.bisson@boundarydevices.com>
+Date: Wed, 19 Oct 2016 16:23:05 +0200
+Subject: [Buildroot] [PATCH 0/4] Update i.MX manufacturing tools
+Message-ID: <20161019142309.15628-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The tool will be maintained as an open source project.
-The repository can be found at:
-https://github.com/NXPmicro/imx-uuc
+Hi,
 
-This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-freescale/commit/9b56bf13
+This series updates several components necessary during the manufacturing
+process:
+- imx-kobs: used to flash U-Boot to Nand, now open-source
+- imx-uuc: used to communicate using Freescale UTP protocol, now open-source
+- imx-usb-loader: used to boot i.MX devices using the SDP protocol
+- mfgtools: now open-source and working on Linux
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- package/freescale-imx/imx-uuc/imx-uuc.hash | 2 +-
- package/freescale-imx/imx-uuc/imx-uuc.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Note that it is nice that many projects are now open-source. Also, NXP has
+proven to be very responsive and quickly merges pull-requests.
 
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.hash b/package/freescale-imx/imx-uuc/imx-uuc.hash
-index 05501c8..d6e4d97 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.hash
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 95d7f7b075f58fedc07602fbc0e5bf5212d28deea3d09cdbcbd80992dcd18482  imx-uuc-0.5.1.tar.gz
-+sha256 eac0c3e288c845cd9b82d02993f8358731a7a03e51591b27feeb453b143beb73  imx-uuc-3440b1108373e79669cc17ba1d2be91a123a2053.tar.gz
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.mk b/package/freescale-imx/imx-uuc/imx-uuc.mk
-index 58e749e..12d9312 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.mk
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--IMX_UUC_VERSION = 0.5.1
--IMX_UUC_SITE = $(FREESCALE_IMX_SITE)
-+IMX_UUC_VERSION = 3440b1108373e79669cc17ba1d2be91a123a2053
-+IMX_UUC_SITE = $(call github,NXPmicro,imx-uuc,$(IMX_UUC_VERSION))
- IMX_UUC_LICENSE = GPLv2+
- IMX_UUC_LICENSE_FILES = COPYING
- 
+Let me know if you have any question.
+
+Regards,
+Gary
+
+Gary Bisson (4):
+  imx-kobs: switch to open source version
+  imx-uuc: switch to open source version
+  imx-usb-loader: bump version
+  mfgtools: new package
+
+ package/Config.in.host                       |  1 +
+ package/freescale-imx/imx-kobs/imx-kobs.hash |  2 +-
+ package/freescale-imx/imx-kobs/imx-kobs.mk   |  4 ++--
+ package/freescale-imx/imx-uuc/imx-uuc.hash   |  2 +-
+ package/freescale-imx/imx-uuc/imx-uuc.mk     |  4 ++--
+ package/imx-usb-loader/imx-usb-loader.hash   |  2 +-
+ package/imx-usb-loader/imx-usb-loader.mk     |  2 +-
+ package/mfgtools/Config.in.host              | 10 ++++++++
+ package/mfgtools/mfgtools.hash               |  2 ++
+ package/mfgtools/mfgtools.mk                 | 34 ++++++++++++++++++++++++++++
+ 10 files changed, 55 insertions(+), 8 deletions(-)
+ create mode 100644 package/mfgtools/Config.in.host
+ create mode 100644 package/mfgtools/mfgtools.hash
+ create mode 100644 package/mfgtools/mfgtools.mk
+
 -- 
 2.9.3
