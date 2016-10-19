@@ -1,38 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 17:54:58 +0200
-Subject: [Buildroot] [PATCH V3,
- 1/1] Fix: qt5webkit overwrites target python.
-In-Reply-To: <1476887724-30979-1-git-send-email-johanderycke@gmail.com>
-References: <1476887724-30979-1-git-send-email-johanderycke@gmail.com>
-Message-ID: <20161019175458.127b4fcf@free-electrons.com>
+Date: Wed, 19 Oct 2016 17:55:39 +0200
+Subject: [Buildroot] [git commit] imx-kobs: switch to open source version
+Message-ID: <20161019155542.847B781D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=59b6eb96b0a34b3b36d725b49d463bbf41feb1dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The commit title should always have the format:
+The tools "kobs-ng" will be maintained as a open source project.
+The repository location is https://github.com/NXPmicro/imx-kobs
 
-	<package>: <what you're doing>
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-freescale/commit/c23736b3
 
-On Wed, 19 Oct 2016 16:35:24 +0200, johanderycke at gmail.com wrote:
-> From: Johan Derycke <johan.derycke@barco.com>
-> 
-> Fixes issue with https://git.buildroot.net/buildroot/commit/?id=ac16793eaaabfced0312420759e3a66cdaa1ea8e.
-> We made a link in $(@D)/bin/python which is copied to $(TARGET_DIR) during install and overwrites target pyton.
-> Fixed by using $(@D)/host-bin instead.
-> 
-> Signed-off-by: Johan Derycke <johan.derycke@barco.com>
-> Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freescale-imx/imx-kobs/imx-kobs.hash | 2 +-
+ package/freescale-imx/imx-kobs/imx-kobs.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I've fixed the commit title, reworked the commit log, and applied.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.hash b/package/freescale-imx/imx-kobs/imx-kobs.hash
+index b942bd3..258d08c 100644
+--- a/package/freescale-imx/imx-kobs/imx-kobs.hash
++++ b/package/freescale-imx/imx-kobs/imx-kobs.hash
+@@ -1 +1 @@
+-sha256	85171b46068ac47c42fedb8104167bf9afd33dd9527ed127e1ca2eb29d7a86bf  imx-kobs-5.4.tar.gz
++sha256	5b040de6e3db5d47371b311e7068380926827a7a6ef02e45fb2ba08b680d0ec5  imx-kobs-b402243a04e5a6760a860445e5ff6a931d86f794.tar.gz
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.mk b/package/freescale-imx/imx-kobs/imx-kobs.mk
+index b80d5bd..8f490c2 100644
+--- a/package/freescale-imx/imx-kobs/imx-kobs.mk
++++ b/package/freescale-imx/imx-kobs/imx-kobs.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-IMX_KOBS_VERSION = 5.4
+-IMX_KOBS_SITE = $(FREESCALE_IMX_SITE)
++IMX_KOBS_VERSION = b402243a04e5a6760a860445e5ff6a931d86f794
++IMX_KOBS_SITE = $(call github,NXPmicro,imx-kobs,$(IMX_KOBS_VERSION))
+ IMX_KOBS_LICENSE = GPLv2+
+ IMX_KOBS_LICENSE_FILES = COPYING
+ 
