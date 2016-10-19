@@ -1,41 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 21:57:35 +0200
-Subject: [Buildroot] [PATCH 1/1] avahi: link with libintl if libglib2 is
- enabled
-In-Reply-To: <20161019172550.GV21808@waldemar-brodkorb.de>
-References: <1476802403-5879-1-git-send-email-johan.oudinet@gmail.com>
- <20161018172543.20a693fa@free-electrons.com>
- <CAJtjsKbAHTY4LwuS=oGpxhCf=hCupmk0Si7-kCTnA3YYtFbgfA@mail.gmail.com>
- <20161019145904.6a82c434@free-electrons.com>
- <CAJtjsKbabwixT3bieo4uXFFyUhA=JXgFsoV5Td=yB+JfckRY1w@mail.gmail.com>
- <ea383c3d-9ace-bafe-5c32-0bc8fad656c3@mind.be>
- <20161019172550.GV21808@waldemar-brodkorb.de>
-Message-ID: <20161019215735.52749cd8@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 Oct 2016 21:58:30 +0200
+Subject: [Buildroot] [PATCH] core/br2-external: fix link to manual for
+	converting old trees
+Message-ID: <1476907110-32195-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+To be noted: that link will only be valid once we have a released
+manual. In the meantime, it's accessible on the nightly manual:
+    http://nightly.buildroot.org/#br2-external-converting
 
-On Wed, 19 Oct 2016 19:25:50 +0200, Waldemar Brodkorb wrote:
+Reported-by: Beno?t Allard <benoit.allard@greenbone.net>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Beno?t Allard <benoit.allard@greenbone.net>
+---
+ support/scripts/br2-external | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Just want to mention that I want integrate gettext-tiny into
-> uClibc-ng soon. It is a stub implementation. The existing stub isn't
-> selectable since a while...
-> 
-> https://github.com/rofl0r/gettext-tiny
-
-Interesting. I once started experimenting a bit with integrating
-gettext-tiny in Buildroot, but it was not that easy to achieve.
-
-In fact, the problem with gettext is two-fold: it's both the target
-gettext (i.e libintl) but also the host gettext (for gettext tools)
-that are annoyingly long to build.
-
-Thomas
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index 848c851..055dc08 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -8,7 +8,7 @@ declare -A BR2_EXT_DESCS
+ 
+ # URL to manual for help in converting old br2-external trees.
+ # Escape '#' so that make does not consider it a comment.
+-MANUAL_URL='https://buildroot.org/manual/manual.html\#br2-external-converting'
++MANUAL_URL='https://buildroot.org/manual.html\#br2-external-converting'
+ 
+ main() {
+     local OPT OPTARG
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
