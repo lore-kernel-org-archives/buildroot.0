@@ -1,33 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 23:38:28 +0200
-Subject: [Buildroot] [git commit] openswan: remove duplicate word toolchain
-	from comment
-Message-ID: <20161019213948.EDAE980AC2@busybox.osuosl.org>
+Date: Wed, 19 Oct 2016 23:39:59 +0200
+Subject: [Buildroot] [PATCH 1/1] docs/manual: fix scanpypi path typos
+In-Reply-To: <1476638105-2310-1-git-send-email-danomimanchego123@gmail.com>
+References: <1476638105-2310-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20161019233959.48365806@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d6d365190dcef1c4a2de4e462f46733b555e499
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/openswan/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, 16 Oct 2016 13:15:05 -0400, Danomi Manchego wrote:
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> ---
+>  docs/manual/adding-packages-python.txt | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openswan/Config.in b/package/openswan/Config.in
-index ba5d53d..5db665c 100644
---- a/package/openswan/Config.in
-+++ b/package/openswan/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_OPENSWAN
- 
- 	  http://www.openswan.org
- 
--comment "openswan needs a uClibc or glibc toolchain toolchain w/ headers >= 3.0"
-+comment "openswan needs a uClibc or glibc toolchain w/ headers >= 3.0"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || \
- 		BR2_TOOLCHAIN_USES_MUSL
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
