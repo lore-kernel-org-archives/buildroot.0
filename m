@@ -1,33 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Oct 2016 11:23:59 +0200
-Subject: [Buildroot] [PATCH] bind: don't lookup zlib.h in host headers
-In-Reply-To: <e3ea410def37657791e392d7b96910ed79041b8e.1476865452.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 19 Oct 2016 11:24:12 +0300")
-References: <e3ea410def37657791e392d7b96910ed79041b8e.1476865452.git.baruch@tkos.co.il>
-Message-ID: <87insoelow.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Oct 2016 11:27:57 +0200
+Subject: [Buildroot] [PATCH 2/2] liburcu: needs MMU
+In-Reply-To: <5feff8d883fff7c5e9929d9b191d776c27de3cfa.1476867634.git.baruch@tkos.co.il>
+References: <ef30f526d3d31123695b867262dac86030da8af2.1476867634.git.baruch@tkos.co.il>
+ <5feff8d883fff7c5e9929d9b191d776c27de3cfa.1476867634.git.baruch@tkos.co.il>
+Message-ID: <20161019112757.483622d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Hello,
 
- > configure.in looks in host headers for zlib.h, unless given a headers
- > directory as --with-zlib parameter.
+On Wed, 19 Oct 2016 12:00:34 +0300, Baruch Siach wrote:
 
- > Note: a bug in the zlib.h header lookup logic causes configure.in to add
- > -l$(STAGING_DIR)/usr/include/include, and -L$(STAGING_DIR)/usr/include/lib.
- > But this does not affect us.
+> diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
+> index 49510da4956c..915b17ab9d6d 100644
+> --- a/package/liburcu/Config.in
+> +++ b/package/liburcu/Config.in
+> @@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+>  config BR2_PACKAGE_LIBURCU
+>  	bool "liburcu"
+>  	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+> +	depends on BR2_USE_MMU # fork() in test
 
- > Fixes:
- > http://autobuild.buildroot.net/results/e96/e96a36c4da3c3be4b79a27af75a70bb8955c31a9/
- > http://autobuild.buildroot.net/results/e0b/e0bd7df5c19c7c65ce0009b7c2b4d4104a5c3109/
- > http://autobuild.buildroot.net/results/e99/e993940067f7ae841132765f91bfee7248ab125f/
+You want to put this in BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS so that you
+don't have to propagate it to reverse dependencies of liburcu (which
+BTW your patch forgot to do).
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Thanks,
 
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
