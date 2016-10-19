@@ -1,56 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 15:10:11 +0200
-Subject: [Buildroot] Webtool to analyze package build fail/pass from
-	autobuild
-In-Reply-To: <1476882214.26312.22.camel@synopsys.com>
-References: <EB86EB452ADE4B44B294F7149B8A277702219383@DE02WEMBXB.internal.synopsys.com>
- <1476882214.26312.22.camel@synopsys.com>
-Message-ID: <20161019151011.68cc5079@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 19 Oct 2016 15:41:54 +0200
+Subject: [Buildroot] [PATCH V2,
+	1/1] Fix: qt5webkit overwrites target python.
+In-Reply-To: <20161019150115.5f331124@free-electrons.com>
+References: <1476877746-13572-1-git-send-email-johanderycke@gmail.com>
+ <20161019150115.5f331124@free-electrons.com>
+Message-ID: <CAGm1_kuZamZ0mAJQ-ZaFGVq+MQy3Gky1qw6te-G7A2DSBJtEcw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, Oct 19, 2016 at 3:01 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Wed, 19 Oct 2016 13:49:06 +0200, johanderycke at gmail.com wrote:
+>> From: Johan Derycke <johan.derycke@barco.com>
+>>
+>> Signed-off-by: Johan Derycke <johan.derycke@barco.com>
 
-On Wed, 19 Oct 2016 13:04:04 +0000, Alexey Brodkin wrote:
+Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-> > As this tools have been proven to be of great value to us, perhaps you
-> > would feel the same.
-> > The code is shared in:
-> > https://github.com/foss-for-synopsys-dwc-arc-processors/buildroot_stats
-> > 
-> > Looking forward for your feedback.?  
-> 
-> I'm wondering if there's any interest in proposed thing from your side?
-
-Yes, sorry for not replying earlier. Recent times have been busy with
-ELCE and the Buildroot meeting. It definitely looks interesting, but I
-want to take a closer look before giving some detailed feedback.
-
-> We may indeed deploy it on some public server and encourage people
-> to start using that but I'm not sure if there's a point in adding
-> "3rd-party" services around?http://autobuild.buildroot.net/?instead
-> of enhancing autobuild server itself.
-
-Fully agreed.
-
-Though one initial issue is that Cupertino wrote his logic in Ruby
-(which I don't really read/write). The existing autobuild.buildroot.net
-code base is some horrible PHP crap that I wrote. I'm hoping to rewrite
-that crap someday, but definitely not in Ruby, but rather in Python,
-which is more widely used in the Buildroot community than Ruby, and
-also a language that I happen to read/write (even though my Python-fu
-is really basic, it's good enough for this kind of stuff).
-
-But I guess this is just an implementation detail, and we can work in
-bringing Cupertino's logic in autobuild.buildroot.net somehow.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> This really requires a more detailed commit log.
+>
+>> -QT5WEBKIT_ENV = PATH=$(@D)/bin:$(BR_PATH)
+>> +QT5WEBKIT_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
+>>  define QT5WEBKIT_PYTHON2_SYMLINK
+>> -     mkdir -p $(@D)/bin
+>> -     ln -sf $(HOST_DIR)/usr/bin/python2 $(@D)/bin/python
+>> +     mkdir -p $(@D)/host-bin
+>> +     ln -sf $(HOST_DIR)/usr/bin/python2 $(@D)/host-bin/python
+>>  endef
+>
+> Otherwise, this looks good.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
