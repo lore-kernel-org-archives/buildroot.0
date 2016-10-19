@@ -1,15 +1,16 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 21:55:35 +0200
+Date: Wed, 19 Oct 2016 21:57:35 +0200
 Subject: [Buildroot] [PATCH 1/1] avahi: link with libintl if libglib2 is
  enabled
-In-Reply-To: <ea383c3d-9ace-bafe-5c32-0bc8fad656c3@mind.be>
+In-Reply-To: <20161019172550.GV21808@waldemar-brodkorb.de>
 References: <1476802403-5879-1-git-send-email-johan.oudinet@gmail.com>
  <20161018172543.20a693fa@free-electrons.com>
  <CAJtjsKbAHTY4LwuS=oGpxhCf=hCupmk0Si7-kCTnA3YYtFbgfA@mail.gmail.com>
  <20161019145904.6a82c434@free-electrons.com>
  <CAJtjsKbabwixT3bieo4uXFFyUhA=JXgFsoV5Td=yB+JfckRY1w@mail.gmail.com>
  <ea383c3d-9ace-bafe-5c32-0bc8fad656c3@mind.be>
-Message-ID: <20161019215535.52d363c0@free-electrons.com>
+ <20161019172550.GV21808@waldemar-brodkorb.de>
+Message-ID: <20161019215735.52749cd8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,21 +19,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 19 Oct 2016 18:27:29 +0200, Arnout Vandecappelle wrote:
+On Wed, 19 Oct 2016 19:25:50 +0200, Waldemar Brodkorb wrote:
 
-> > Sure. However, It does break if I activate gettext with glibc:  
+> Just want to mention that I want integrate gettext-tiny into
+> uClibc-ng soon. It is a stub implementation. The existing stub isn't
+> selectable since a while...
 > 
->  That was exactly my concern with Thomas's proposal...
+> https://github.com/rofl0r/gettext-tiny
 
-Yes, I also thought about it.
+Interesting. I once started experimenting a bit with integrating
+gettext-tiny in Buildroot, but it was not that easy to achieve.
 
->  I would say: don't touch this now, and schedule it for discussion at the next
-> BR developer meeting.
-
-I don't think we can do that: there is a real build failure today if we
-don't make a fix.
-
-Best regards,
+In fact, the problem with gettext is two-fold: it's both the target
+gettext (i.e libintl) but also the host gettext (for gettext tools)
+that are annoyingly long to build.
 
 Thomas
 -- 
