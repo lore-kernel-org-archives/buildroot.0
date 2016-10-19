@@ -1,43 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 17:59:29 +0200
-Subject: [Buildroot] [PATCH v2] liburcu: needs MMU
-In-Reply-To: <8a309fcafc9f624385affeb31aac21249e1feb68.1476869702.git.baruch@tkos.co.il>
-References: <8a309fcafc9f624385affeb31aac21249e1feb68.1476869702.git.baruch@tkos.co.il>
-Message-ID: <20161019175929.73cde75d@free-electrons.com>
+From: Chris Frederick <cdf123@cdf123.net>
+Date: Wed, 19 Oct 2016 11:08:29 -0500
+Subject: [Buildroot] [PATCH 1/2] sudo: Add ldap support for sudoers rules
+Message-ID: <1476893310-25852-1-git-send-email-cdf123@cdf123.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Added Config.in options to enable/disable the option, and check options
+in sudo.mk to add openldap as a dependancy and compile with --with-ldap.
 
-On Wed, 19 Oct 2016 12:35:02 +0300, Baruch Siach wrote:
-> The test_urcu_fork.c test calls fork(). Upstream provides no easy way to
-> disable tests build.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/9eb/9eb182ab2d0b396eeff3d637a040da5a4d5bdcd7/
-> http://autobuild.buildroot.net/results/47a/47aabc219a2fd50105881b1e2715f7eeb1a6a588/
-> http://autobuild.buildroot.net/results/566/56631605f76b8623c9674f25c529ac67d0de12a8/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> v2: move MMU dependency to BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS (ThomasP)
-> ---
->  package/liburcu/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Chris Frederick <cdf123@cdf123.net>
+---
+ package/sudo/Config.in | 12 ++++++++++++
+ package/sudo/sudo.mk   |  5 +++++
+ 2 files changed, 17 insertions(+)
 
-Applied to master, thanks. However, it would be good if you could
-report the issue upstream. It's indeed rather annoying that only for
-their tests we have to disable this package on no-MMU platform. Not
-annoying enough to have us spend time on this, but annoying enough to
-report it upstream IMO.
-
-Thanks!
-
-Thomas
+diff --git a/package/sudo/Config.in b/package/sudo/Config.in
+index cbef15d..2e9e35a 100644
+--- a/package/sudo/Config.in
++++ b/package/sudo/Config.in
+@@ -9,3 +9,15 @@ config BR2_PACKAGE_SUDO
+ 	  but still allow people to get their work done.
+ 
+ 	  http://www.sudo.ws/sudo/
++
++if BR2_PACKAGE_SUDO && BR2_PACKAGE_OPENLDAP
++config BR2_PACKAGE_SUDO_LDAP
++	bool "ldap integration"
++	depends on BR2_PACKAGE_SUDO
++	help
++	  Allows you to manage sudoers rules in a centralized ldap
++	  directory.
++
++	  http://www.sudo.ws/man/1.8.15/sudoers.ldap.man.html
++endif
++
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index f28312a..b4d071c 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -30,6 +30,11 @@ else
+ SUDO_CONF_OPTS += --without-pam
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SUDO_LDAP),y)
++SUDO_DEPENDENCIES += openldap
++SUDO_CONF_OPTS += --with-ldap
++endif
++
+ # mksigname/mksiglist needs to run on build host to generate source files
+ define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+ 	$(MAKE) $(HOST_CONFIGURE_OPTS) \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
