@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 23:26:20 +0200
-Subject: [Buildroot] [PATCH] core/br2-external: export paths and
- descriptions
-In-Reply-To: <1476906782-30017-1-git-send-email-yann.morin.1998@free.fr>
-References: <1476906782-30017-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20161019232620.13a69b84@free-electrons.com>
+Date: Wed, 19 Oct 2016 23:26:23 +0200
+Subject: [Buildroot] [PATCH] core/br2-external: fix link to manual for
+ converting old trees
+In-Reply-To: <1476907110-32195-1-git-send-email-yann.morin.1998@free.fr>
+References: <1476907110-32195-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20161019232623.2e250b9b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 19 Oct 2016 21:53:02 +0200, Yann E. MORIN wrote:
-> Now that we support multiple br2-external trees, BR2_EXTERNAL is no
-> longer exported in the environment.
-> 
-> This means that post-build scripts in a br2-external tree can no longer
-> find their own files (well, they could re-invent the path by stripping
-> their known-relative path, but that'd be ugly, especially since we can
-> very well provide it).
-> 
-> Export the path for each br2-external trees as environment variables.
-> Do so for the description as well, as a courtesy.
-> 
-> Also, re-order variable definitions to be more logical: first, purely
-> internal variables, then exported variables.
+On Wed, 19 Oct 2016 21:58:30 +0200, Yann E. MORIN wrote:
+> To be noted: that link will only be valid once we have a released
+> manual. In the meantime, it's accessible on the nightly manual:
+>     http://nightly.buildroot.org/#br2-external-converting
 > 
 > Reported-by: Beno?t Allard <benoit.allard@greenbone.net>
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Beno?t Allard <benoit.allard@greenbone.net>
 > ---
->  support/scripts/br2-external | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  support/scripts/br2-external | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
