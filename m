@@ -1,52 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 23:39:42 +0200
-Subject: [Buildroot] [git commit] docs/manual: fix scanpypi path typos
-Message-ID: <20161019213949.05C1180AC2@busybox.osuosl.org>
+Date: Wed, 19 Oct 2016 23:38:28 +0200
+Subject: [Buildroot] [git commit] openswan: remove duplicate word toolchain
+	from comment
+Message-ID: <20161019213948.EDAE980AC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=556e9f327893eab613f13952a0adc861513889e9
+commit: https://git.buildroot.net/buildroot/commit/?id=7d6d365190dcef1c4a2de4e462f46733b555e499
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-python.txt | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/openswan/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
-index abcd4ca..19d31e2 100644
---- a/docs/manual/adding-packages-python.txt
-+++ b/docs/manual/adding-packages-python.txt
-@@ -178,7 +178,7 @@ your host.
- When at the root of your buildroot directory just do :
+diff --git a/package/openswan/Config.in b/package/openswan/Config.in
+index ba5d53d..5db665c 100644
+--- a/package/openswan/Config.in
++++ b/package/openswan/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_OPENSWAN
  
- -----------------------
--./support/script/scanpypi foo bar -o package
-+./support/scripts/scanpypi foo bar -o package
- -----------------------
+ 	  http://www.openswan.org
  
- This will generate packages +python-foo+ and +python-bar+ in the package
-@@ -198,7 +198,7 @@ If your Buildroot package is not in the official Buildroot tree but in
- a br2-external tree, use the -o flag as follows:
- 
- -----------------------
--./support/script/scanpypi foo bar -o other_package_dir
-+./support/scripts/scanpypi foo bar -o other_package_dir
- -----------------------
- 
- This will generate packages +python-foo+ and +python-bar+ in the
-@@ -207,7 +207,7 @@ This will generate packages +python-foo+ and +python-bar+ in the
- Option +-h+ will list the available options:
- 
- -----------------------
--./support/script/scanpypi -h
-+./support/scripts/scanpypi -h
- -----------------------
- 
- [[python-package-cffi-backend]]
+-comment "openswan needs a uClibc or glibc toolchain toolchain w/ headers >= 3.0"
++comment "openswan needs a uClibc or glibc toolchain w/ headers >= 3.0"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || \
+ 		BR2_TOOLCHAIN_USES_MUSL
