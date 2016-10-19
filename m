@@ -1,37 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 23:18:45 +0200
-Subject: [Buildroot] [git commit] docker-engine: add iptables runtime
-	dependency
-Message-ID: <20161019211855.09BA181D54@busybox.osuosl.org>
+Date: Wed, 19 Oct 2016 23:20:03 +0200
+Subject: [Buildroot] [PATCH 3/3] wireshark: needs the qt5tools lrelease
+ utility
+In-Reply-To: <1b772d44273db8f887bbb378e5dd59053a328c3d.1476789992.git.baruch@tkos.co.il>
+References: <a6f0bcffe24a338538c4da2f04091967593fa058.1476789992.git.baruch@tkos.co.il>
+ <1b772d44273db8f887bbb378e5dd59053a328c3d.1476789992.git.baruch@tkos.co.il>
+Message-ID: <20161019232003.4841be63@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=092d3e5e0c28f131e1a6bf375273f4d8f7c2f16d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The Docker engine calls iptables internally:
+On Tue, 18 Oct 2016 14:26:32 +0300, Baruch Siach wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/0a4/0a4ccf752ed1e81e2416d33a78984b47087f68bd/
+> http://autobuild.buildroot.net/results/196/196b96e28a2cd5983a58948df4a2c3eb3bccdfa4/
+> http://autobuild.buildroot.net/results/056/056b3299ce45552fe3e7cbf5aa68b223f8fa458e/
+> 
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-https://github.com/docker/libnetwork/blob/2c921b/iptables/iptables.go#L400
+This patch causes a recursive Kconfig dependency:
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-[Thomas: fix indentation.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/docker-engine/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+package/qt5/qt5base/Config.in:118:error: recursive dependency detected!
+package/qt5/qt5base/Config.in:118:	symbol BR2_PACKAGE_QT5BASE_GUI is selected by BR2_PACKAGE_QT5TOOLS_PIXELTOOL
+package/qt5/qt5tools/Config.in:19:	symbol BR2_PACKAGE_QT5TOOLS_PIXELTOOL depends on BR2_PACKAGE_QT5TOOLS
+package/qt5/qt5tools/Config.in:1:	symbol BR2_PACKAGE_QT5TOOLS is selected by BR2_PACKAGE_QT5BASE_WIDGETS
+package/qt5/qt5base/Config.in:131:	symbol BR2_PACKAGE_QT5BASE_WIDGETS is selected by BR2_PACKAGE_QT5X11EXTRAS
+package/qt5/qt5x11extras/Config.in:1:	symbol BR2_PACKAGE_QT5X11EXTRAS depends on BR2_PACKAGE_QT5BASE_XCB
+package/qt5/qt5base/Config.in:186:	symbol BR2_PACKAGE_QT5BASE_XCB depends on BR2_PACKAGE_QT5BASE_GUI
 
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index b9b9aac..5c4e0ee 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -16,6 +16,7 @@ config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
- 	depends on BR2_USE_MMU # docker-containerd
- 	depends on BR2_USE_WCHAR # docker-containerd
- 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
-+	select BR2_PACKAGE_IPTABLES # runtime dependency
- 	select BR2_PACKAGE_SQLITE # runtime dependency
- 	default y
- 	help
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
