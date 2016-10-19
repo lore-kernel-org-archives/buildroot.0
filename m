@@ -1,32 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Oct 2016 11:31:54 +0200
-Subject: [Buildroot] [PATCH] ci20_defconfig: disable madd instructions
-	to avoid FPU bug
-In-Reply-To: <68e76d80-a505-e029-941a-fe43d9780536@imgtec.com> (Vicente
- Olivert Riera's message of "Wed, 19 Oct 2016 09:47:03 +0100")
-References: <20161018122421.64118-1-Vincent.Riera@imgtec.com>
- <20161018145413.37ae0751@free-electrons.com>
- <68e76d80-a505-e029-941a-fe43d9780536@imgtec.com>
-Message-ID: <87a8e0elbp.fsf@dell.be.48ers.dk>
+Date: Wed, 19 Oct 2016 11:21:14 +0200
+Subject: [Buildroot] [git commit] kexec: bump to 2.0.13
+Message-ID: <20161019093219.B1EAD7FB06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=26a37a26e16a2fa6d3d0d7ceb097d42e2342841c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/kexec/kexec.hash | 2 +-
+ package/kexec/kexec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- >> Note: this is *really* a question. I am not sure we want to make such a
- >> change to the MIPS CPU selection.
-
- > We could add an Ingenic XBurst entry in the MIPS CPU selection, and then
- > add that -mno-fused-madd option to the wrapper based on that selection.
-
- > If you are OK with that, please let me know and I'll cook the patch.
-
-Yes, I believe this is the way we want to move forward.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
+index 24a71e7..90a7ce9 100644
+--- a/package/kexec/kexec.hash
++++ b/package/kexec/kexec.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
+-sha256	b1097986ffdb928cf41a94e8a5dfddc981a8fa710cccf13298e7f8dd939a2ee3	kexec-tools-2.0.11.tar.xz
++sha256	874baf421171dbfca0084af2da71ccf5a67749dd2a27c3023da5f72460bae5cc kexec-tools-2.0.13.tar.xz
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index 0e64c0d..4ca55e5 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KEXEC_VERSION = 2.0.11
++KEXEC_VERSION = 2.0.13
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPLv2
