@@ -1,50 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Oct 2016 23:40:56 +0200
-Subject: [Buildroot] [git commit] package/vlc: use
-	BR2_TOOLCHAIN_HAS_LIBATOMIC
-Message-ID: <20161019214102.24CDC81DDB@busybox.osuosl.org>
+Date: Wed, 19 Oct 2016 23:41:18 +0200
+Subject: [Buildroot] [PATCH 1/3] package/vlc: renumber patch 0008 -> 0009
+In-Reply-To: <20161016210127.29654-1-bernd.kuhls@t-online.de>
+References: <20161016210127.29654-1-bernd.kuhls@t-online.de>
+Message-ID: <20161019234118.5bdcf38a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03f6e005e6a9617767b24a9026da9477848020cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-While fixing
-http://autobuild.buildroot.net/results/d95/d9572bcafc1776eebe88bbcaf031a05cd6ee4b23/
-by using http://patchwork.ozlabs.org/patch/674337/ the build stopped at
-a later stage with
+On Sun, 16 Oct 2016 23:01:25 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/vlc/{0008-ffmpeg-3.0.patch => 0009-ffmpeg-3.0.patch} | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename package/vlc/{0008-ffmpeg-3.0.patch => 0009-ffmpeg-3.0.patch} (100%)
 
-/home/buildroot/br4/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `__atomic_fetch_add_4'
-/home/buildroot/br4/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `__atomic_fetch_sub_4'
-/home/buildroot/br4/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `__atomic_fetch_or_1'
-/home/buildroot/br4/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `__atomic_compare_exchange_4'
-/home/buildroot/br4/output/build/vlc-2.2.4/src/.libs/libvlccore.so: undefined reference to `__atomic_exchange_1'
-collect2: error: ld returned 1 exit status
+All three patches applied. Thanks!
 
-so libatomic must be pulled in if necessary.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vlc/vlc.mk | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 8efbecb..cf0b557 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -56,6 +56,11 @@ VLC_CONF_OPTS += \
- 	--disable-addonmanagermodules \
- 	--enable-run-as-root \
- 
-+# Uses __atomic_fetch_add_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+VLC_CONF_ENV += LIBS="-latomic"
-+endif
-+
- # Building static and shared doesn't work, so force static off.
- ifeq ($(BR2_STATIC_LIBS),)
- VLC_CONF_OPTS += --disable-static
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
