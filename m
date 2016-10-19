@@ -1,46 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Oct 2016 17:54:22 +0200
-Subject: [Buildroot] [git commit] beaglebone: defconfigs: u-boot needs dtc
-Message-ID: <20161019155436.3C5AA81E50@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Oct 2016 17:54:58 +0200
+Subject: [Buildroot] [PATCH V3,
+ 1/1] Fix: qt5webkit overwrites target python.
+In-Reply-To: <1476887724-30979-1-git-send-email-johanderycke@gmail.com>
+References: <1476887724-30979-1-git-send-email-johanderycke@gmail.com>
+Message-ID: <20161019175458.127b4fcf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae2dc85b89b644dd59ea7ef4c6d51d0070a024bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/168763221
+The commit title should always have the format:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/beaglebone_defconfig     | 1 +
- configs/beaglebone_qt5_defconfig | 1 +
- 2 files changed, 2 insertions(+)
+	<package>: <what you're doing>
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index a3efabf..eefa81c 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -18,6 +18,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
-index 18ee139..a9ab5a2 100644
---- a/configs/beaglebone_qt5_defconfig
-+++ b/configs/beaglebone_qt5_defconfig
-@@ -31,6 +31,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+On Wed, 19 Oct 2016 16:35:24 +0200, johanderycke at gmail.com wrote:
+> From: Johan Derycke <johan.derycke@barco.com>
+> 
+> Fixes issue with https://git.buildroot.net/buildroot/commit/?id=ac16793eaaabfced0312420759e3a66cdaa1ea8e.
+> We made a link in $(@D)/bin/python which is copied to $(TARGET_DIR) during install and overwrites target pyton.
+> Fixed by using $(@D)/host-bin instead.
+> 
+> Signed-off-by: Johan Derycke <johan.derycke@barco.com>
+> Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+I've fixed the commit title, reworked the commit log, and applied.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
