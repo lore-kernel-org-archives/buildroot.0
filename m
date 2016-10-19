@@ -1,41 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Oct 2016 09:46:54 +0200
-Subject: [Buildroot] [git commit] docker-containerd: bump to v0.2.4
-Message-ID: <20161019075444.00308800D6@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 19 Oct 2016 11:24:12 +0300
+Subject: [Buildroot] [PATCH] bind: don't lookup zlib.h in host headers
+Message-ID: <e3ea410def37657791e392d7b96910ed79041b8e.1476865452.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fef19b44f1c15680836b6eaf0e71c2048a592138
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+configure.in looks in host headers for zlib.h, unless given a headers
+directory as --with-zlib parameter.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Note: a bug in the zlib.h header lookup logic causes configure.in to add
+-l$(STAGING_DIR)/usr/include/include, and -L$(STAGING_DIR)/usr/include/lib.
+But this does not affect us.
+
+Fixes:
+http://autobuild.buildroot.net/results/e96/e96a36c4da3c3be4b79a27af75a70bb8955c31a9/
+http://autobuild.buildroot.net/results/e0b/e0bd7df5c19c7c65ce0009b7c2b4d4104a5c3109/
+http://autobuild.buildroot.net/results/e99/e993940067f7ae841132765f91bfee7248ab125f/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/docker-containerd/docker-containerd.hash | 2 +-
- package/docker-containerd/docker-containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bind/bind.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index ec9c13e..533157e 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
-@@ -1,2 +1,2 @@
- # Computed locally
--sha256 5c1bcd8e3b7bc6034e7523b6eca7de974562b7fdc72c440494234ae10a0e545b  docker-containerd-0ac3cd1be170d180b2baed755e8f0da547ceb267.tar.gz
-+sha256 34805aef6300fbf37adcf4362a2315fac1ea57a9ceb8b0c7b1a0859cba975428  docker-containerd-v0.2.4.tar.gz
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 06432e9..17cc9be 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index cda9fed875f9..9b5d8c56de6d 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -33,7 +33,7 @@ BIND_CONF_OPTS = \
+ 	--enable-filter-aaaa
  
--DOCKER_CONTAINERD_VERSION = 0ac3cd1be170d180b2baed755e8f0da547ceb267
-+DOCKER_CONTAINERD_VERSION = v0.2.4
- DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+-BIND_CONF_OPTS += --with-zlib
++BIND_CONF_OPTS += --with-zlib=$(STAGING_DIR)/usr/include
+ BIND_DEPENDENCIES += zlib
+ else
+ BIND_CONF_OPTS += --without-zlib
+-- 
+2.9.3
