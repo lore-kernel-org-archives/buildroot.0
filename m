@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Oct 2016 11:21:14 +0200
-Subject: [Buildroot] [git commit] kexec: bump to 2.0.13
-Message-ID: <20161019093219.B1EAD7FB06@busybox.osuosl.org>
+Date: Wed, 19 Oct 2016 11:23:00 +0200
+Subject: [Buildroot] [git commit] bind: don't lookup zlib.h in host headers
+Message-ID: <20161019093219.BD27381E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26a37a26e16a2fa6d3d0d7ceb097d42e2342841c
+commit: https://git.buildroot.net/buildroot/commit/?id=8ec6dae302e31af3869be5ad0af79e8d18416ff7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+configure.in looks in host headers for zlib.h, unless given a headers
+directory as --with-zlib parameter.
+
+Note: a bug in the zlib.h header lookup logic causes configure.in to add
+-l$(STAGING_DIR)/usr/include/include, and -L$(STAGING_DIR)/usr/include/lib.
+But this does not affect us.
+
+Fixes:
+http://autobuild.buildroot.net/results/e96/e96a36c4da3c3be4b79a27af75a70bb8955c31a9/
+http://autobuild.buildroot.net/results/e0b/e0bd7df5c19c7c65ce0009b7c2b4d4104a5c3109/
+http://autobuild.buildroot.net/results/e99/e993940067f7ae841132765f91bfee7248ab125f/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kexec/kexec.hash | 2 +-
- package/kexec/kexec.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bind/bind.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
-index 24a71e7..90a7ce9 100644
---- a/package/kexec/kexec.hash
-+++ b/package/kexec/kexec.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
--sha256	b1097986ffdb928cf41a94e8a5dfddc981a8fa710cccf13298e7f8dd939a2ee3	kexec-tools-2.0.11.tar.xz
-+sha256	874baf421171dbfca0084af2da71ccf5a67749dd2a27c3023da5f72460bae5cc kexec-tools-2.0.13.tar.xz
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index 0e64c0d..4ca55e5 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index cda9fed..9b5d8c5 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -33,7 +33,7 @@ BIND_CONF_OPTS = \
+ 	--enable-filter-aaaa
  
--KEXEC_VERSION = 2.0.11
-+KEXEC_VERSION = 2.0.13
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPLv2
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+-BIND_CONF_OPTS += --with-zlib
++BIND_CONF_OPTS += --with-zlib=$(STAGING_DIR)/usr/include
+ BIND_DEPENDENCIES += zlib
+ else
+ BIND_CONF_OPTS += --without-zlib
