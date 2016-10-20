@@ -1,49 +1,44 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 20 Oct 2016 21:47:55 +0200
-Subject: [Buildroot] [PATCH 2/2] postgresql: enable ldap support for
- pg_service.conf
-In-Reply-To: <1476893310-25852-2-git-send-email-cdf123@cdf123.net>
-References: <1476893310-25852-1-git-send-email-cdf123@cdf123.net>
- <1476893310-25852-2-git-send-email-cdf123@cdf123.net>
-Message-ID: <20161020214755.5e27504b@gmx.net>
+Date: Thu, 20 Oct 2016 21:49:32 +0200
+Subject: [Buildroot] [PATCH v1] postgresql: bump version to 9.6.0
+Message-ID: <1476992972-1868-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Chris,
+For release notes see [1].
 
-On Wed, 19 Oct 2016 11:08:30 -0500, Chris Frederick <cdf123@cdf123.net> wrote:
+[1] https://www.postgresql.org/docs/9.6/static/release-9-6.html
 
-> Just needed to add --with-ldap to POSTGRESQL_CONF_OPTS and add openldap
-> to POSTGRESQL_DEPENDENCIES when BR2_PACKAGE_OPENLDAP is on
-> 
-> Signed-off-by: Chris Frederick <cdf123@cdf123.net>
-> ---
->  package/postgresql/postgresql.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-> index 7179bbe..ab615d0 100644
-> --- a/package/postgresql/postgresql.mk
-> +++ b/package/postgresql/postgresql.mk
-> @@ -57,6 +57,11 @@ POSTGRESQL_DEPENDENCIES += openssl
->  POSTGRESQL_CONF_OPTS += --with-openssl
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_OPENLDAP),y)
-> +POSTGRESQL_DEPENDENCIES += openldap
-> +POSTGRESQL_CONF_OPTS += --with-ldap
-> +endif
-> +
->  define POSTGRESQL_USERS
->  	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
->  endef
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Tested-by: Peter Seiderer <ps.report@gmx.net>
-
-Compile tested (and checked for the 'build with LDAP support... yes' configure output).
-
-Regards,
-Peter
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 0d54890..5e73bad 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.postgresql.org/pub/source/v9.5.4/postgresql-9.5.4.tar.bz2.sha256
+-sha256 cf5e571164ad66028ecd7dd8819e3765470d45bcd440d258b686be7e69c76ed0  postgresql-9.5.4.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.6.0/postgresql-9.6.0.tar.bz2.sha256
++sha256 3b5fe9634b80a4511aac1832a087586a7caa8c3413619562bdda009a015863ce  postgresql-9.6.0.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 7179bbe..e2756bf 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 9.5.4
++POSTGRESQL_VERSION = 9.6.0
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
+-- 
+2.8.1
