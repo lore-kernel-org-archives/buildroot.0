@@ -1,61 +1,49 @@
-From: Stefan Nickl <stefan.nickl@gmail.com>
-Date: Thu, 20 Oct 2016 23:24:25 +0200
-Subject: [Buildroot] [PATCH] pppd: Provide error() implementation in
-	pppoe-discovery
-In-Reply-To: <7e6742e0-fcd9-8ee3-e77d-358e345bd595@mind.be>
-References: <1476555914-22201-1-git-send-email-Stefan.Nickl@gmail.com>
- <20161015223315.47f04e55@free-electrons.com>
- <CAFOMc=SKjm5J-hn=+qexzeRqqNWJEXKWUUQnckX3ei8c6BMTkA@mail.gmail.com>
- <7e6742e0-fcd9-8ee3-e77d-358e345bd595@mind.be>
-Message-ID: <CAFOMc=RqfAsKHB9QXwhVepW-YKeYh2znH06MQixZg6E=yDLwag@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Oct 2016 23:26:21 +0200
+Subject: [Buildroot] [git commit] qemu: fix build of target variant
+Message-ID: <20161020212813.712FC7FF73@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 16, 2016 at 11:14 PM, Arnout Vandecappelle <arnout@mind.be>
-wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=630708155498a4a4c4e1f90e25eabd23951982d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->  Are the patches[1] that you submitted to fix musl builds still valid?
->
->
->  Regards,
->  Arnout
->
-> [1] http://patchwork.ozlabs.org/patch/664683/
->
->
-Hi Arnout and Thomas,
+Similar to what was done in commit
+524b6b85595274ca13bd7d01adb61ce2dddd786c for the host variant, this
+commit fixes the build of qemu's host variant. Qemu expects that the
+cpp it is passed behave like cc: it passes the -c option, which is not
+allowed by cpp, but is allowed for cc.
 
-sort of, but:
-1) One of those patches changes stuff in the area where the current uclibc
-breakage happens, but I don't know how it interacts with that. I also just
-sent out a new patch for that one.
-2) The series didn't include one final patch for actually allowing musl in
-Config.in. I also added some stuff to expose more options from the ppp
-Makefile, so that patch probably needs breaking up before it makes sense to
-submit (but see alternate proposal below).
-3) The patch that started this thread is a "nicer" version for one in the
-series.
+Fix that by overriding CPP when calling configure.
 
-The thing is that pppd seems mostly unmaintained now, it contains lots of
-non-linux platform code and drags stuff along that is no longer relevant,
-especially for embedded people (IPX, anyone?).
+Fixes:
 
-So I'm trying for a stripped-down fork of pppd at
-https://github.com/snickl/lppp/tree/lpppd
+  http://autobuild.buildroot.net/results/0850e80ba62294397b44d8adea197a244a9a8205/
 
-The idea would be to only have the most urgent/minimal fixes for classic
-pppd and do musl-ification among other things in lpppd.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qemu/qemu.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-However at least in the beginning I'd like to drop the rp-pppoe plugin from
-lpppd, which is quite a troublemaker.
-
-Any thoughts?
-
--- 
-Stefan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161020/24d947a1/attachment.html>
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 9815f76..cf23f16 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -196,11 +196,14 @@ else
+ QEMU_OPTS += --disable-fdt
+ endif
+ 
++# Override CPP, as it expects to be able to call it like it'd
++# call the compiler.
+ define QEMU_CONFIGURE_CMDS
+ 	( cd $(@D);                                     \
+ 		LIBS='$(QEMU_LIBS)'                     \
+ 		$(TARGET_CONFIGURE_OPTS)                \
+ 		$(TARGET_CONFIGURE_ARGS)                \
++		CPP="$(TARGET_CC) -E"			\
+ 		$(QEMU_VARS)                            \
+ 		./configure                             \
+ 			--prefix=/usr                   \
