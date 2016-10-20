@@ -1,35 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Oct 2016 21:56:32 +0200
-Subject: [Buildroot] [git commit] util-linux: select libsmartcols when
- partx is selected
-In-Reply-To: <20161020195500.18FA981946@busybox.osuosl.org>
-References: <20161020195500.18FA981946@busybox.osuosl.org>
-Message-ID: <20161020215632.0264925d@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 Oct 2016 21:56:41 +0200
+Subject: [Buildroot] [PATCH] package/wireshark: properly guard sub-options
+Message-ID: <1476993401-11776-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+... otherwise we would end up forcefully enabling the linguist tool even
+when wireshark would not be enabled.
 
-On Thu, 20 Oct 2016 21:54:53 +0200, Thomas Petazzoni wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=1854018b01df9cbb24911f617753b8ebe217b965
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/be2/be2e81b27a21355d7a453316d9df1cd4b0da2106/
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/util-linux/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Baruch Siach <baruch@tkos.co.il>
+---
+ package/wireshark/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+index b5a874b..c5b5c3e 100644
+--- a/package/wireshark/Config.in
++++ b/package/wireshark/Config.in
+@@ -10,6 +10,8 @@ config BR2_PACKAGE_WIRESHARK
+ 
+ 	  https://www.wireshark.org
+ 
++if BR2_PACKAGE_WIRESHARK
++
+ config BR2_PACKAGE_WIRESHARK_QT
+ 	bool
+ 	default y
+@@ -23,6 +25,8 @@ config BR2_PACKAGE_WIRESHARK_GUI
+ 	default y if BR2_PACKAGE_LIBGTK3
+ 	default y if BR2_PACKAGE_WIRESHARK_QT
+ 
++endif # BR2_PACKAGE_WIRESHARK
++
+ comment "wireshark needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
