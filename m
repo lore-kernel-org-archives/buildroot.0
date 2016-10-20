@@ -1,52 +1,35 @@
-From: stefan.nickl at gmail.com <stefan.nickl@gmail.com>
-Date: Thu, 20 Oct 2016 23:12:37 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Oct 2016 23:23:39 +0200
 Subject: [Buildroot] [PATCH] pppd: Move netinet/in.h above linux header
-	includes
-Message-ID: <1476997957-27184-1-git-send-email-Stefan.Nickl@gmail.com>
+ includes
+In-Reply-To: <1476997957-27184-1-git-send-email-Stefan.Nickl@gmail.com>
+References: <1476997957-27184-1-git-send-email-Stefan.Nickl@gmail.com>
+Message-ID: <20161020232339.54683f92@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Stefan Nickl <Stefan.Nickl@gmail.com>
+Hello,
 
-Linux uapi headers try to avoid redeclaring things from libc via
-linux/libc-compat.h. However that only works if the libc header is
-included first.
+On Thu, 20 Oct 2016 23:12:37 +0200, stefan.nickl at gmail.com wrote:
+> From: Stefan Nickl <Stefan.Nickl@gmail.com>
+> 
+> Linux uapi headers try to avoid redeclaring things from libc via
+> linux/libc-compat.h. However that only works if the libc header is
+> included first.
+> 
+> Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
 
-Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+Thanks for your contribution! However, exactly 15 minutes before you
+sent this patch, I committed a change for the same problem:
+https://git.buildroot.org/buildroot/commit/?id=035567b2793f3649e2ddc6cd34b75dd643f47d73.
 
----
-This looks better now regarding the uclibc breakage.
+Best regards,
 
-diff --git a/package/pppd/0001-Move-netinet-in.h-above-linux-header-includes.patch b/package/pppd/0001-Move-netinet-in.h-above-linux-header-includes.patch
-new file mode 100644
-index 0000000..2f6933f
---- /dev/null
-+++ b/package/pppd/0001-Move-netinet-in.h-above-linux-header-includes.patch
-@@ -0,0 +1,22 @@
-+diff --git a/pppd/plugins/rp-pppoe/pppoe.h b/pppd/plugins/rp-pppoe/pppoe.h
-+index 9ab2eee..b827620 100644
-+--- a/pppd/plugins/rp-pppoe/pppoe.h
-++++ b/pppd/plugins/rp-pppoe/pppoe.h
-+@@ -47,6 +47,8 @@
-+ #include <sys/socket.h>
-+ #endif
-+ 
-++#include <netinet/in.h>
-++
-+ /* Ugly header files on some Linux boxes... */
-+ #if defined(HAVE_LINUX_IF_H)
-+ #include <linux/if.h>
-+@@ -84,8 +86,6 @@ typedef unsigned long UINT32_t;
-+ #include <linux/if_ether.h>
-+ #endif
-+ 
-+-#include <netinet/in.h>
-+-
-+ #ifdef HAVE_NETINET_IF_ETHER_H
-+ #include <sys/types.h>
-+ 
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
