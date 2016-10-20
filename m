@@ -1,67 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Oct 2016 23:31:09 +0200
-Subject: [Buildroot] [git commit] uboot: add option to optionally depend on
-	host-openssl
-Message-ID: <20161020213127.2266B81D4F@busybox.osuosl.org>
+Date: Thu, 20 Oct 2016 23:31:14 +0200
+Subject: [Buildroot] [git commit] configs/zynq_*: add
+	BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+Message-ID: <20161020213127.2C38C7F990@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02e11d02f40ad2ec236bdcc6359729dbf2604069
+commit: https://git.buildroot.net/buildroot/commit/?id=59b9cc7a2dffcd5eb192609eebe3f6a9a9293462
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some U-Boot board configurations have CONFIG_FIT_SIGNATURE=y. In this
-case, when U-Boot builds its tools, it requires OpenSSL support on the
-host system.
+The U-Boot configuration for Zynq boards have CONFIG_FIT_SIGNATURE=y,
+so they need OpenSSL to be available on the host system. In order to
+add OpenSSL to the build this commit adds the
+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y to the relevant defconfigs.
 
-Since we clearly don't want to unconditionally depend on host-openssl,
-we introduce a new option to explicitly enable the dependency on
-host-openssl. This is exactly identical to the existing
-BR2_TARGET_UBOOT_NEEDS_DTC, for the dependency on host-dtc. It is
-therefore the responsibility of the user to enable this option if his
-board configuration uses CONFIG_FIT_SIGNATURE=y.
-
-Necessary to fix bug #9316.
+Fixes #9316.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/uboot/Config.in | 8 ++++++++
- boot/uboot/uboot.mk  | 4 ++++
- 2 files changed, 12 insertions(+)
+ configs/zynq_microzed_defconfig | 1 +
+ configs/zynq_zc706_defconfig    | 1 +
+ configs/zynq_zed_defconfig      | 1 +
+ configs/zynq_zybo_defconfig     | 1 +
+ 4 files changed, 4 insertions(+)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index d46a757..fabf27d 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -137,6 +137,14 @@ config BR2_TARGET_UBOOT_NEEDS_DTC
- 	  Select this option if your U-Boot board configuration
- 	  requires the Device Tree compiler to be available.
- 
-+config BR2_TARGET_UBOOT_NEEDS_OPENSSL
-+	bool "U-Boot needs OpenSSL"
-+	help
-+	  Select this option if your U-Boot board configuration
-+	  requires OpenSSL to be available on the host. This is
-+	  typically the case when the board configuration has
-+	  CONFIG_FIT_SIGNATURE enabled.
-+
- menu "U-Boot binary format"
- 
- config BR2_TARGET_UBOOT_FORMAT_AIS
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 86e5b84..ae7539d 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -133,6 +133,10 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
- UBOOT_DEPENDENCIES += host-dtc
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSSL),y)
-+UBOOT_DEPENDENCIES += host-openssl
-+endif
-+
- # prior to u-boot 2013.10 the license info was in COPYING. Copy it so
- # legal-info finds it
- define UBOOT_COPY_OLD_LICENSE_FILE
+diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
+index ca6d010..dd580ab 100644
+--- a/configs/zynq_microzed_defconfig
++++ b/configs/zynq_microzed_defconfig
+@@ -23,6 +23,7 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2016.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_microzed"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
+index 6f7215c..3f7fd8c 100644
+--- a/configs/zynq_zc706_defconfig
++++ b/configs/zynq_zc706_defconfig
+@@ -24,6 +24,7 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2016.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zc706"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
+index e5bf3de..0febf82 100644
+--- a/configs/zynq_zed_defconfig
++++ b/configs/zynq_zed_defconfig
+@@ -23,6 +23,7 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2016.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zed"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+diff --git a/configs/zynq_zybo_defconfig b/configs/zynq_zybo_defconfig
+index aef1ac2..ee6fa06 100644
+--- a/configs/zynq_zybo_defconfig
++++ b/configs/zynq_zybo_defconfig
+@@ -21,6 +21,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zybo"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_ZYNQ_IMAGE=y
