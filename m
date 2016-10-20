@@ -1,41 +1,158 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 20 Oct 2016 10:31:43 -0300
-Subject: [Buildroot] [PATCH] hdparm: bump to version 9.50
-Message-ID: <1476970303-1748-1-git-send-email-gustavo@zacarias.com.ar>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Thu, 20 Oct 2016 11:43:59 -0400
+Subject: [Buildroot] [PATCH 4/4] mfgtools: new package
+In-Reply-To: <20161019142309.15628-5-gary.bisson@boundarydevices.com>
+References: <20161019142309.15628-1-gary.bisson@boundarydevices.com>
+ <20161019142309.15628-5-gary.bisson@boundarydevices.com>
+Message-ID: <CA+-urNRE0tx7RL-5WQCVqbiywUxu8eW1AJDP4vjPoWadkhN+xQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/hdparm/hdparm.hash | 4 ++--
- package/hdparm/hdparm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Gary,
 
-diff --git a/package/hdparm/hdparm.hash b/package/hdparm/hdparm.hash
-index 7d70f0b..96f8650 100644
---- a/package/hdparm/hdparm.hash
-+++ b/package/hdparm/hdparm.hash
-@@ -1,3 +1,3 @@
- # From http://sourceforge.net/projects/hdparm/files/hdparm/
--md5	213efdbe7471fad3408198918e164354		hdparm-9.48.tar.gz
--sha1	1efce086ef47667cf8016861d3ce958969e70dfc	hdparm-9.48.tar.gz
-+md5	d380062ad6c4b40076736efbb640f1f5		hdparm-9.50.tar.gz
-+sha1	2acfb9ab9f6aae0d1d69e302ae2861342e4a374e	hdparm-9.50.tar.gz
-diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
-index a2b3e8c..e9a2088 100644
---- a/package/hdparm/hdparm.mk
-+++ b/package/hdparm/hdparm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HDPARM_VERSION = 9.48
-+HDPARM_VERSION = 9.50
- HDPARM_SITE = http://downloads.sourceforge.net/project/hdparm/hdparm
- HDPARM_LICENSE = BSD-Style
- HDPARM_LICENSE_FILES = LICENSE.TXT
--- 
-2.7.3
+Thanks - your timing on submitting the mfgtools was really good. Some
+comments below:
+
+On Wed, Oct 19, 2016 at 10:23 AM, Gary Bisson
+<gary.bisson@boundarydevices.com> wrote:
+> This package contains the Freescale manufacturing tool.
+> It is designed to program firmware to i.MX boards during production.
+> The communication is done over USB using the Freescale UTP protocol.
+>
+> The project is maintained on NXPMicro Github repository:
+> https://github.com/NXPmicro/mfgtools
+>
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> ---
+> Hi,
+>
+> A couple of remarks. First here is the procedure I followed to test it:
+> $ cd output
+> $ mkdir -p "Profiles/Linux/OS Firmware/firmware"
+> $ wget https://storage.googleapis.com/boundarydevices.com/ucl2.xml \
+>   -O Profiles/Linux/OS\ Firmware/ucl2.xml
+> $ cp images/u-boot.imx images/zImage images/imx6q-sabrelite.dtb \
+>   images/rootfs.cpio.uboot Profiles/Linux/OS\ Firmware/firmware/
+> $ ./host/usr/bin/mfgtoolcli -l mmc -s uboot_defconfig=imx \
+>   -s dtbname=imx6q-sabrelite.dtb -s initramfs=rootfs.cpio.uboot \
+>   -s mmc=2 -p 1
+>
+> Note sure if you want this to be in the commit log.
+>
+> Also, not sure if the DEVELOPERS file should be updated within this
+> patch or if it should be part of a follow-up patch.
+>
+> Regards,
+> Gary
+> ---
+>  package/Config.in.host          |  1 +
+>  package/mfgtools/Config.in.host | 10 ++++++++++
+>  package/mfgtools/mfgtools.hash  |  2 ++
+>  package/mfgtools/mfgtools.mk    | 34 ++++++++++++++++++++++++++++++++++
+>  4 files changed, 47 insertions(+)
+>  create mode 100644 package/mfgtools/Config.in.host
+>  create mode 100644 package/mfgtools/mfgtools.hash
+>  create mode 100644 package/mfgtools/mfgtools.mk
+>
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 1140c70..e33cbb5 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -22,6 +22,7 @@ menu "Host utilities"
+>         source "package/jq/Config.in.host"
+>         source "package/jsmin/Config.in.host"
+>         source "package/lpc3250loader/Config.in.host"
+> +       source "package/mfgtools/Config.in.host"
+>         source "package/mke2img/Config.in.host"
+>         source "package/mkpasswd/Config.in.host"
+>         source "package/mtd/Config.in.host"
+> diff --git a/package/mfgtools/Config.in.host b/package/mfgtools/Config.in.host
+> new file mode 100644
+> index 0000000..8bba9e2
+> --- /dev/null
+> +++ b/package/mfgtools/Config.in.host
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_HOST_MFGTOOLS
+> +       bool "host mfgtools"
+> +       depends on BR2_arm
+> +       help
+> +         This package contains the Freescale manufacturing tool.
+> +         It is designed to program firmware to i.MX boards during
+> +         production. The communication is done over USB using the
+> +         Freescale UTP protocol.
+> +
+> +         https://github.com/NXPmicro/mfgtools
+> diff --git a/package/mfgtools/mfgtools.hash b/package/mfgtools/mfgtools.hash
+> new file mode 100644
+> index 0000000..e73a7fa
+> --- /dev/null
+> +++ b/package/mfgtools/mfgtools.hash
+> @@ -0,0 +1,2 @@
+> +# locally computed
+> +sha256  6ce93a33c269282df305cf7e517d2d14fde78203537d8ea75b064966afe48464  mfgtools-b219fc219a35c365010897ed093c40750f8cdac6.tar.gz
+> diff --git a/package/mfgtools/mfgtools.mk b/package/mfgtools/mfgtools.mk
+> new file mode 100644
+> index 0000000..c5f9ad0
+> --- /dev/null
+> +++ b/package/mfgtools/mfgtools.mk
+> @@ -0,0 +1,34 @@
+> +################################################################################
+> +#
+> +# mfgtools
+> +#
+> +################################################################################
+> +
+> +MFGTOOLS_VERSION = b219fc219a35c365010897ed093c40750f8cdac6
+> +MFGTOOLS_SITE = $(call github,NXPmicro,mfgtools,$(MFGTOOLS_VERSION))
+> +MFGTOOLS_LICENSE = Freescale Proprietary License
+
+The license is BSD-3c with a couple files covered by the Code Project License.
+
+> +MFGTOOLS_LICENSE_FILES = LICENSE
+> +HOST_MFGTOOLS_DEPENDENCIES = host-cmake host-libusb
+> +
+> +MFGTOOLS_CFLAGS = $(HOST_CFLAGS)
+> +MFGTOOLS_CFLAGS += -l pthread -Wl,-rpath=$(HOST_DIR)/usr/lib
+> +MFGTOOLS_CFLAGS += -l usb-1.0 -I$(HOST_DIR)/usr/include/libusb-1.0
+> +MFGTOOLS_CFLAGS += -L . -l MfgToolLib -I$(@D)/MfgToolLib
+> +MFGTOOLS_CFLAGS += -fpermissive -Wno-write-strings
+
+I had to add "-std=c++11" to get it to compile on my system. If I
+didn't do this, I'd get errors from std:stoi not being defined. Their
+Makefile added this as well.
+
+I would add a "TestedBy", but the tool is so flaky for me that I'm not
+sure if I really tested it. It did upload u-boot and Linux to my board
+(custom iMX6) and rebooted to run the programming script, but I never
+could get it to get all the way through the programming script. I
+don't think that's your issue, though.
+
+Frank
+
+> +
+> +define HOST_MFGTOOLS_CONFIGURE_CMDS
+> +       $(HOST_CONFIGURE_OPTS) $(MAKE) CMAKE=$(HOST_DIR)/usr/bin/cmake \
+> +               -C $(@D)/TestPrgm cmake
+> +endef
+> +
+> +define HOST_MFGTOOLS_BUILD_CMDS
+> +       $(HOST_CONFIGURE_OPTS) $(MAKE) CC=$(HOSTCXX) CFLAGS="$(MFGTOOLS_CFLAGS)" \
+> +               -C $(@D)/TestPrgm
+> +endef
+> +
+> +define HOST_MFGTOOLS_INSTALL_CMDS
+> +       $(INSTALL) -D -m 755 $(@D)/TestPrgm/libMfgToolLib.so $(HOST_DIR)/usr/lib
+> +       $(INSTALL) -D -m 755 $(@D)/TestPrgm/mfgtoolcli $(HOST_DIR)/usr/bin
+> +endef
+> +
+> +$(eval $(host-generic-package))
+> --
+> 2.9.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
