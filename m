@@ -1,58 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Oct 2016 21:40:44 +0200
-Subject: [Buildroot] [PATCH RFC] package/wireshark: fix kconfig
- depndencies
-In-Reply-To: <1476980905-3997-1-git-send-email-yann.morin.1998@free.fr>
-References: <1476980905-3997-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20161020214044.51087b22@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 Oct 2016 21:45:51 +0200
+Subject: [Buildroot] cached downloads for scm branches
+In-Reply-To: <f006d88783fb1d99aaef2d6cab1dfc88@walle.cc>
+References: <f006d88783fb1d99aaef2d6cab1dfc88@walle.cc>
+Message-ID: <20161020194551.GA3372@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Michael, All,
 
-On Thu, 20 Oct 2016 18:28:25 +0200, Yann E. MORIN wrote:
-> Commit fa6feff (wireshark: needs the qt5tools lrelease utility)
-> introduced a circular dependency chain in Kconfig:
+On 2016-10-20 19:27 +0200, Michael Walle spake thusly:
+> Hi,
 > 
->     package/qt5/qt5base/Config.in:118:error: recursive dependency detected!
->     package/qt5/qt5base/Config.in:118:      symbol BR2_PACKAGE_QT5BASE_GUI is selected by BR2_PACKAGE_QT5TOOLS_PIXELTOOL
->     package/qt5/qt5tools/Config.in:19:      symbol BR2_PACKAGE_QT5TOOLS_PIXELTOOL depends on BR2_PACKAGE_QT5TOOLS
->     package/qt5/qt5tools/Config.in:1:       symbol BR2_PACKAGE_QT5TOOLS is selected by BR2_PACKAGE_QT5BASE_WIDGETS
->     package/qt5/qt5base/Config.in:131:      symbol BR2_PACKAGE_QT5BASE_WIDGETS is selected by BR2_PACKAGE_QT5X11EXTRAS
->     package/qt5/qt5x11extras/Config.in:1:   symbol BR2_PACKAGE_QT5X11EXTRAS depends on BR2_PACKAGE_QT5BASE_XCB
->     package/qt5/qt5base/Config.in:186:      symbol BR2_PACKAGE_QT5BASE_XCB depends on BR2_PACKAGE_QT5BASE_GUI
-> 
-> Fix that by dropping the select on the Qt5Tools, and introduce an
-> intermediate kconfig-level variable to represent the new condition, to
-> simplify the .mk file.
-> 
-> That would make the condition for enabling/disabling the GUI to be a
-> little bit more complex by adding yet another (long-ish) variable.
-> 
-> So we also introduce an intermediate kconfig-level variable that
-> represent the condition to enable the GUI.
-> 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> 
-> ---
-> Note: UNTESTED. It does fix the Kconfig issue, but it is otherwise not
-> even build-tested. Baruch? ;-)
-> ---
->  package/wireshark/Config.in    | 15 +++++++++++++--
->  package/wireshark/wireshark.mk |  4 ++--
->  2 files changed, 15 insertions(+), 4 deletions(-)
+> If I have a package which downloads it's source from a SCM branch, the
+> download will be cached in DL_DIR/<pkgname>-<branchname>.tar.gz. This makes
+> sense if the version is a tag or a (git) hash. But if used with branches,
+> the package will never be downloaded again until I remove it from the
+> DL_DIR. This may be the intended behaviour, but as far as I can tell, I have
+> no chance to change it.
 
-Applied to master, after fixing the typo in the commit title. Thanks a
-lot for looking into this issue!
+Yes, this is the intended behaviour: you should not use a branch names
+or other unstable references Using a branch name makes the build
+non-reproducible, and that is not good.
 
-Thomas
+Only use stable references, like a tag or a sha1 or ...
+
+If however you are actively working on the package, then you should use
+the source-override mechanism instead:
+
+  - create a local.mk file (in the directory where you ran 'make
+    menuconfig')
+
+  - in that file, add this line
+
+        MY_PACKAGE_OVERRIDE_SRCDIR = /path/to/my-package
+
+Then you can manage that location "by hand" (like pulling new changes...)
+and have it automatically used by Buildroot:
+
+    make my-package-rebuild
+
+(and other such commands, see "make help" and the manual for the
+complete set.)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
