@@ -1,46 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 20 Oct 2016 09:49:29 +0000
-Subject: [Buildroot] [Bug 9371] New: openssl: download failes with "Only
- allow downloads from primary download site" + local server
-Message-ID: <bug-9371-163@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 20 Oct 2016 07:42:53 -0300
+Subject: [Buildroot] [PATCH] libgpgme: bump to version 1.7.1
+Message-ID: <1476960173-30400-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9371
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libgpgme/libgpgme.hash | 2 +-
+ package/libgpgme/libgpgme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-            Bug ID: 9371
-           Summary: openssl: download failes with "Only allow downloads
-                    from primary download site" + local server
-           Product: buildroot
-           Version: 2016.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: johanderycke at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-We have " Only allow downloads from primary download site" enabled and have a
-local webserver with all needed packages on it.
-For openssl some patches are added to "OPENSSL_PATCH" (eg.
-https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d)
-
-Our server has this file available but wget fails because of the "?" in the
-name.
-
-Any suggestions on a working workaround?
-
-Best regards,
-
-Johan
-
+diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
+index 9b96fd2..5ef7b0e 100644
+--- a/package/libgpgme/libgpgme.hash
++++ b/package/libgpgme/libgpgme.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	71f55fed0f2b3eaf7a606e59772aa645ce3ffff322d361ce359951b3f755cc48	gpgme-1.7.0.tar.bz2
++sha256	d0abe1449395315eac37e4e45076bbb82732cedf94210937b37776e10cdc2bb6	gpgme-1.7.1.tar.bz2
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index c581a3c..84f4d22 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPGME_VERSION = 1.7.0
++LIBGPGME_VERSION = 1.7.1
+ LIBGPGME_SITE = ftp://ftp.gnupg.org/gcrypt/gpgme
+ LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
+ LIBGPGME_LICENSE = LGPLv2.1+
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.7.3
