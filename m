@@ -1,49 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Oct 2016 23:26:21 +0200
-Subject: [Buildroot] [git commit] qemu: fix build of target variant
-Message-ID: <20161020212813.712FC7FF73@busybox.osuosl.org>
+Date: Thu, 20 Oct 2016 23:31:09 +0200
+Subject: [Buildroot] [git commit] uboot: add option to optionally depend on
+	host-openssl
+Message-ID: <20161020213127.2266B81D4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=630708155498a4a4c4e1f90e25eabd23951982d9
+commit: https://git.buildroot.net/buildroot/commit/?id=02e11d02f40ad2ec236bdcc6359729dbf2604069
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Similar to what was done in commit
-524b6b85595274ca13bd7d01adb61ce2dddd786c for the host variant, this
-commit fixes the build of qemu's host variant. Qemu expects that the
-cpp it is passed behave like cc: it passes the -c option, which is not
-allowed by cpp, but is allowed for cc.
+Some U-Boot board configurations have CONFIG_FIT_SIGNATURE=y. In this
+case, when U-Boot builds its tools, it requires OpenSSL support on the
+host system.
 
-Fix that by overriding CPP when calling configure.
+Since we clearly don't want to unconditionally depend on host-openssl,
+we introduce a new option to explicitly enable the dependency on
+host-openssl. This is exactly identical to the existing
+BR2_TARGET_UBOOT_NEEDS_DTC, for the dependency on host-dtc. It is
+therefore the responsibility of the user to enable this option if his
+board configuration uses CONFIG_FIT_SIGNATURE=y.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/0850e80ba62294397b44d8adea197a244a9a8205/
+Necessary to fix bug #9316.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qemu/qemu.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ boot/uboot/Config.in | 8 ++++++++
+ boot/uboot/uboot.mk  | 4 ++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 9815f76..cf23f16 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -196,11 +196,14 @@ else
- QEMU_OPTS += --disable-fdt
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index d46a757..fabf27d 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -137,6 +137,14 @@ config BR2_TARGET_UBOOT_NEEDS_DTC
+ 	  Select this option if your U-Boot board configuration
+ 	  requires the Device Tree compiler to be available.
+ 
++config BR2_TARGET_UBOOT_NEEDS_OPENSSL
++	bool "U-Boot needs OpenSSL"
++	help
++	  Select this option if your U-Boot board configuration
++	  requires OpenSSL to be available on the host. This is
++	  typically the case when the board configuration has
++	  CONFIG_FIT_SIGNATURE enabled.
++
+ menu "U-Boot binary format"
+ 
+ config BR2_TARGET_UBOOT_FORMAT_AIS
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 86e5b84..ae7539d 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -133,6 +133,10 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
+ UBOOT_DEPENDENCIES += host-dtc
  endif
  
-+# Override CPP, as it expects to be able to call it like it'd
-+# call the compiler.
- define QEMU_CONFIGURE_CMDS
- 	( cd $(@D);                                     \
- 		LIBS='$(QEMU_LIBS)'                     \
- 		$(TARGET_CONFIGURE_OPTS)                \
- 		$(TARGET_CONFIGURE_ARGS)                \
-+		CPP="$(TARGET_CC) -E"			\
- 		$(QEMU_VARS)                            \
- 		./configure                             \
- 			--prefix=/usr                   \
++ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSSL),y)
++UBOOT_DEPENDENCIES += host-openssl
++endif
++
+ # prior to u-boot 2013.10 the license info was in COPYING. Copy it so
+ # legal-info finds it
+ define UBOOT_COPY_OLD_LICENSE_FILE
