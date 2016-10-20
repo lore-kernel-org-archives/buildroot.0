@@ -1,76 +1,76 @@
-From: Michael Walle <michael@walle.cc>
-Date: Thu, 20 Oct 2016 22:29:15 +0200
-Subject: [Buildroot] cached downloads for scm branches
-In-Reply-To: <20161020213841.75105d07@free-electrons.com>
-References: <f006d88783fb1d99aaef2d6cab1dfc88@walle.cc>
- <20161020213841.75105d07@free-electrons.com>
-Message-ID: <D2934D97-E0A4-4AE5-933C-49D38BFFB436@walle.cc>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Oct 2016 22:57:11 +0200
+Subject: [Buildroot] [git commit] pppd: fix build with Linux 4.8 headers
+Message-ID: <20161020205844.B81578041E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi, 
+commit: https://git.buildroot.net/buildroot/commit/?id=035567b2793f3649e2ddc6cd34b75dd643f47d73
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-thanks. yeah i thought so. Just to give you some background regarding my question. We have some kind of CI, actually it's rather a daily build. we build a root filesystem with some fixed packages, but also with multiple packages of our own and we want to track the tip of a branch for a build (because it is CI ;)). I don't think the src override method really suit the CI case. I guess one way could be that the CI defines the commit that should be build. Or simply delete the download. mhh ;) 
+This commit fixes the build of pppd with toolchain using Linux 4.8
+headers. The patch has been taken from a pull request pending on the
+Github project, which is unfortunately somewhat dead.
 
--michael
+The fix is not the most beautiful one, but it does the job, in a piece
+of source code that's anyway rather messy in terms of mixing userspace
+headers and kernel headers.
 
-sorry for the tofu. i'm on my mobile. 
+Fixes:
 
+  http://autobuild.buildroot.net/results/bdc4f274e527c5aebf9bd1b2ca85ba8e7da57e9d/
+  and numerous similar other build failures
 
-Am 20. Oktober 2016 21:38:41 MESZ, schrieb Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->Hello,
->
->On Thu, 20 Oct 2016 19:27:19 +0200, Michael Walle wrote:
->
->> If I have a package which downloads it's source from a SCM branch,
->the 
->> download will be cached in DL_DIR/<pkgname>-<branchname>.tar.gz. This
->
->> makes sense if the version is a tag or a (git) hash. But if used with
->
->> branches, the package will never be downloaded again until I remove
->it 
->> from the DL_DIR. This may be the intended behaviour, but as far as I
->can 
->> tell, I have no chance to change it.
->> 
->> Do I miss something? Does it make sense to add a new package variable
->to 
->> force a download?
->
->This behavior is intended and adding a new package variable to force a
->download is not what we want to do. Indeed, Buildroot aims at doing
->*reproducible* builds. If a package points to a branch, then you have
->no idea what you are building, this what you're building depends on the
->moment you start the build (as it decides when you will fetch, and
->therefore what you will fetch).
->
->*However*, we have a mechanism called <pkg>_OVERRIDE_SRCDIR, which
->allows you to tell Buildroot: "For this specific package, please skip
->the download/extract/patch steps, and instead take the source from
-><this> local directory". Thanks to that, you can checkout/clone your
->project source code in <this> folder, and ask Buildroot to fetch it
->from there. This is what we recommend during active development on a
->given component.
->
->See
->http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf
->slides 261 and following for more details.
->
->Best regards,
->
->Thomas
->-- 
->Thomas Petazzoni, CTO, Free Electrons
->Embedded Linux and Kernel engineering
->http://free-electrons.com
->_______________________________________________
->buildroot mailing list
->buildroot at busybox.net
->http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161020/41bb724b/attachment.html>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../pppd/0001-fix-building-with-linux-4.8.patch    | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+
+diff --git a/package/pppd/0001-fix-building-with-linux-4.8.patch b/package/pppd/0001-fix-building-with-linux-4.8.patch
+new file mode 100644
+index 0000000..d09e392
+--- /dev/null
++++ b/package/pppd/0001-fix-building-with-linux-4.8.patch
+@@ -0,0 +1,39 @@
++From 492e240a651e3d32b84cac66e4675ee99dcbe05a Mon Sep 17 00:00:00 2001
++From: Jackie Huang <jackie.huang@windriver.com>
++Date: Thu, 13 Oct 2016 13:41:43 +0800
++Subject: [PATCH] ppp: fix building with linux-4.8
++
++Fix a build error when using the linux-4.8 headers that results in:
++
++In file included from pppoe.h:87:0,
++                 from plugin.c:29:
++../usr/include/netinet/in.h:211:8: note: originally defined here
++ struct in6_addr
++        ^~~~~~~~
++In file included from ../usr/include/linux/if_pppol2tp.h:20:0,
++                 from ../usr/include/linux/if_pppox.h:26,
++                 from plugin.c:52:
++../usr/include/linux/in6.h:49:8: error: redefinition of 'struct sockaddr_in6'
++ struct sockaddr_in6 {
++        ^~~~~~~~~~~~
++
++Signed-off-by: Jackie Huang <jackie.huang@windriver.com>
++[Thomas: downloaded from https://github.com/paulusmack/ppp/pull/69.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ pppd/plugins/rp-pppoe/pppoe.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/pppd/plugins/rp-pppoe/pppoe.h b/pppd/plugins/rp-pppoe/pppoe.h
++index 9ab2eee..96d2794 100644
++--- a/pppd/plugins/rp-pppoe/pppoe.h
+++++ b/pppd/plugins/rp-pppoe/pppoe.h
++@@ -84,7 +84,7 @@ typedef unsigned long UINT32_t;
++ #include <linux/if_ether.h>
++ #endif
++ 
++-#include <netinet/in.h>
+++#include <linux/in.h>
++ 
++ #ifdef HAVE_NETINET_IF_ETHER_H
++ #include <sys/types.h>
