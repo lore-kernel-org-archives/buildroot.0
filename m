@@ -1,158 +1,111 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Thu, 20 Oct 2016 11:43:59 -0400
-Subject: [Buildroot] [PATCH 4/4] mfgtools: new package
-In-Reply-To: <20161019142309.15628-5-gary.bisson@boundarydevices.com>
-References: <20161019142309.15628-1-gary.bisson@boundarydevices.com>
- <20161019142309.15628-5-gary.bisson@boundarydevices.com>
-Message-ID: <CA+-urNRE0tx7RL-5WQCVqbiywUxu8eW1AJDP4vjPoWadkhN+xQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 Oct 2016 18:15:31 +0200
+Subject: [Buildroot] [PATCH 3/3] wireshark: needs the qt5tools lrelease
+ utility
+In-Reply-To: <20161019220635.yorzdmcvd2qyfpki@tarshish>
+References: <a6f0bcffe24a338538c4da2f04091967593fa058.1476789992.git.baruch@tkos.co.il>
+ <1b772d44273db8f887bbb378e5dd59053a328c3d.1476789992.git.baruch@tkos.co.il>
+ <20161019232003.4841be63@free-electrons.com>
+ <20161019220635.yorzdmcvd2qyfpki@tarshish>
+Message-ID: <20161020161531.GA3720@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
+Baruch, All,
 
-Thanks - your timing on submitting the mfgtools was really good. Some
-comments below:
+On 2016-10-20 01:06 +0300, Baruch Siach spake thusly:
+> On Wed, Oct 19, 2016 at 11:20:03PM +0200, Thomas Petazzoni wrote:
+> > On Tue, 18 Oct 2016 14:26:32 +0300, Baruch Siach wrote:
+> > > Fixes:
+> > > http://autobuild.buildroot.net/results/0a4/0a4ccf752ed1e81e2416d33a78984b47087f68bd/
+> > > http://autobuild.buildroot.net/results/196/196b96e28a2cd5983a58948df4a2c3eb3bccdfa4/
+> > > http://autobuild.buildroot.net/results/056/056b3299ce45552fe3e7cbf5aa68b223f8fa458e/
+> > > 
+> > > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> > > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > 
+> > This patch causes a recursive Kconfig dependency:
+> > 
+> > package/qt5/qt5base/Config.in:118:error: recursive dependency detected!
+> > package/qt5/qt5base/Config.in:118:	symbol BR2_PACKAGE_QT5BASE_GUI is selected by BR2_PACKAGE_QT5TOOLS_PIXELTOOL
+> > package/qt5/qt5tools/Config.in:19:	symbol BR2_PACKAGE_QT5TOOLS_PIXELTOOL depends on BR2_PACKAGE_QT5TOOLS
+> > package/qt5/qt5tools/Config.in:1:	symbol BR2_PACKAGE_QT5TOOLS is selected by BR2_PACKAGE_QT5BASE_WIDGETS
+> > package/qt5/qt5base/Config.in:131:	symbol BR2_PACKAGE_QT5BASE_WIDGETS is selected by BR2_PACKAGE_QT5X11EXTRAS
+> > package/qt5/qt5x11extras/Config.in:1:	symbol BR2_PACKAGE_QT5X11EXTRAS depends on BR2_PACKAGE_QT5BASE_XCB
+> > package/qt5/qt5base/Config.in:186:	symbol BR2_PACKAGE_QT5BASE_XCB depends on BR2_PACKAGE_QT5BASE_GUI
+> 
+> I actually saw this during testing, but it was not apparent to me that the 
+> wireshark Config.in change is the trigger. Not sure what is the correct 
+> solution here. Maybe remove the Config.in change, and do instead:
+> 
+> ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS)$(BR2_PACKAGE_QT5TOOLS),yy)
+> WIRESHARK_CONF_OPTS += --with-qt=5
+> ...
+> else
+> WIRESHARK_CONF_OPTS += --with-qt=no
+> endif
 
-On Wed, Oct 19, 2016 at 10:23 AM, Gary Bisson
-<gary.bisson@boundarydevices.com> wrote:
-> This package contains the Freescale manufacturing tool.
-> It is designed to program firmware to i.MX boards during production.
-> The communication is done over USB using the Freescale UTP protocol.
->
-> The project is maintained on NXPMicro Github repository:
-> https://github.com/NXPmicro/mfgtools
->
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
-> Hi,
->
-> A couple of remarks. First here is the procedure I followed to test it:
-> $ cd output
-> $ mkdir -p "Profiles/Linux/OS Firmware/firmware"
-> $ wget https://storage.googleapis.com/boundarydevices.com/ucl2.xml \
->   -O Profiles/Linux/OS\ Firmware/ucl2.xml
-> $ cp images/u-boot.imx images/zImage images/imx6q-sabrelite.dtb \
->   images/rootfs.cpio.uboot Profiles/Linux/OS\ Firmware/firmware/
-> $ ./host/usr/bin/mfgtoolcli -l mmc -s uboot_defconfig=imx \
->   -s dtbname=imx6q-sabrelite.dtb -s initramfs=rootfs.cpio.uboot \
->   -s mmc=2 -p 1
->
-> Note sure if you want this to be in the commit log.
->
-> Also, not sure if the DEVELOPERS file should be updated within this
-> patch or if it should be part of a follow-up patch.
->
-> Regards,
-> Gary
-> ---
->  package/Config.in.host          |  1 +
->  package/mfgtools/Config.in.host | 10 ++++++++++
->  package/mfgtools/mfgtools.hash  |  2 ++
->  package/mfgtools/mfgtools.mk    | 34 ++++++++++++++++++++++++++++++++++
->  4 files changed, 47 insertions(+)
->  create mode 100644 package/mfgtools/Config.in.host
->  create mode 100644 package/mfgtools/mfgtools.hash
->  create mode 100644 package/mfgtools/mfgtools.mk
->
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 1140c70..e33cbb5 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -22,6 +22,7 @@ menu "Host utilities"
->         source "package/jq/Config.in.host"
->         source "package/jsmin/Config.in.host"
->         source "package/lpc3250loader/Config.in.host"
-> +       source "package/mfgtools/Config.in.host"
->         source "package/mke2img/Config.in.host"
->         source "package/mkpasswd/Config.in.host"
->         source "package/mtd/Config.in.host"
-> diff --git a/package/mfgtools/Config.in.host b/package/mfgtools/Config.in.host
-> new file mode 100644
-> index 0000000..8bba9e2
-> --- /dev/null
-> +++ b/package/mfgtools/Config.in.host
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_HOST_MFGTOOLS
-> +       bool "host mfgtools"
-> +       depends on BR2_arm
-> +       help
-> +         This package contains the Freescale manufacturing tool.
-> +         It is designed to program firmware to i.MX boards during
-> +         production. The communication is done over USB using the
-> +         Freescale UTP protocol.
-> +
-> +         https://github.com/NXPmicro/mfgtools
-> diff --git a/package/mfgtools/mfgtools.hash b/package/mfgtools/mfgtools.hash
-> new file mode 100644
-> index 0000000..e73a7fa
-> --- /dev/null
-> +++ b/package/mfgtools/mfgtools.hash
-> @@ -0,0 +1,2 @@
-> +# locally computed
-> +sha256  6ce93a33c269282df305cf7e517d2d14fde78203537d8ea75b064966afe48464  mfgtools-b219fc219a35c365010897ed093c40750f8cdac6.tar.gz
-> diff --git a/package/mfgtools/mfgtools.mk b/package/mfgtools/mfgtools.mk
-> new file mode 100644
-> index 0000000..c5f9ad0
-> --- /dev/null
-> +++ b/package/mfgtools/mfgtools.mk
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# mfgtools
-> +#
-> +################################################################################
-> +
-> +MFGTOOLS_VERSION = b219fc219a35c365010897ed093c40750f8cdac6
-> +MFGTOOLS_SITE = $(call github,NXPmicro,mfgtools,$(MFGTOOLS_VERSION))
-> +MFGTOOLS_LICENSE = Freescale Proprietary License
+That's what we discussed with Thomas yesterday on IRC. That is an easy
+and simple solution, while fixing the kconfig-level dependencies is not
+trivial.
 
-The license is BSD-3c with a couple files covered by the Code Project License.
+> That will make the detection of no GUI below harder.
 
-> +MFGTOOLS_LICENSE_FILES = LICENSE
-> +HOST_MFGTOOLS_DEPENDENCIES = host-cmake host-libusb
-> +
-> +MFGTOOLS_CFLAGS = $(HOST_CFLAGS)
-> +MFGTOOLS_CFLAGS += -l pthread -Wl,-rpath=$(HOST_DIR)/usr/lib
-> +MFGTOOLS_CFLAGS += -l usb-1.0 -I$(HOST_DIR)/usr/include/libusb-1.0
-> +MFGTOOLS_CFLAGS += -L . -l MfgToolLib -I$(@D)/MfgToolLib
-> +MFGTOOLS_CFLAGS += -fpermissive -Wno-write-strings
+Then you can do:
 
-I had to add "-std=c++11" to get it to compile on my system. If I
-didn't do this, I'd get errors from std:stoi not being defined. Their
-Makefile added this as well.
+    ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS)$(BR2_PACKAGE_QT5TOOLS),yy)
+    WIRESHARK_QT_GUI = y
+    WIRESHARK_CONF_OPTS += --with-qt=5
+    ...
+    else
+    WIRESHARK_CONF_OPTS += --with-qt=no
+    fi
 
-I would add a "TestedBy", but the tool is so flaky for me that I'm not
-sure if I really tested it. It did upload u-boot and Linux to my board
-(custom iMX6) and rebooted to run the programming script, but I never
-could get it to get all the way through the programming script. I
-don't think that's your issue, though.
+    ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3)$(WIRESHARK_QT_GUI),)
+    ...
+    endif
 
-Frank
+But then, we could do all that in Kconfig still:
 
-> +
-> +define HOST_MFGTOOLS_CONFIGURE_CMDS
-> +       $(HOST_CONFIGURE_OPTS) $(MAKE) CMAKE=$(HOST_DIR)/usr/bin/cmake \
-> +               -C $(@D)/TestPrgm cmake
-> +endef
-> +
-> +define HOST_MFGTOOLS_BUILD_CMDS
-> +       $(HOST_CONFIGURE_OPTS) $(MAKE) CC=$(HOSTCXX) CFLAGS="$(MFGTOOLS_CFLAGS)" \
-> +               -C $(@D)/TestPrgm
-> +endef
-> +
-> +define HOST_MFGTOOLS_INSTALL_CMDS
-> +       $(INSTALL) -D -m 755 $(@D)/TestPrgm/libMfgToolLib.so $(HOST_DIR)/usr/lib
-> +       $(INSTALL) -D -m 755 $(@D)/TestPrgm/mfgtoolcli $(HOST_DIR)/usr/bin
-> +endef
-> +
-> +$(eval $(host-generic-package))
-> --
-> 2.9.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+    config BR2_PACKAGE_WIRESHARK_QT
+        bool
+        default y
+        depends on BR2_PACKAGE_QT5BASE_WIDGETS
+        depends on BR2_PACKAGE_QT5TOOLS
+        depends on BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
+
+    config BR2_PACKAGE_WIRESHARK_GUI
+        bool
+        default y if BR2_PACKAGE_LIBGTK2
+        default y if BR2_PACKAGE_LIBGTK3
+        default y if BR2_PACKAGE_WIRESHARK_QT
+
+And then re-use that in the .mk file:
+
+    ifeq ($(BR2_PACKAGE_WIRESHARK_QT),y)
+    WIRESHARK_CONF_OPTS += --with-qt=5
+    ...
+    else
+    WIRESHARK_CONF_OPTS += --with-qt=no
+    endif
+
+    ifeq ($(BR2_PACKAGE_WIRESHARK_GUI),)
+    WIRESHARK_CONF_OPTS += --disable-wireshark
+    endif
+
+I would prefer that last solution, if at all possible. I'll send a patch
+to that effect shortly.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
