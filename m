@@ -1,36 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Oct 2016 21:34:37 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 7, 8}.x series
-Message-ID: <20161020193500.7F0C47FEC7@busybox.osuosl.org>
+Date: Thu, 20 Oct 2016 21:34:26 +0200
+Subject: [Buildroot] [git commit] iw: bump to version 4.9
+Message-ID: <20161020193500.68BFA7FEC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=730185643214d804c0b6154951215930ee2e5f35
+commit: https://git.buildroot.net/buildroot/commit/?id=8f3762716f8e0d322f87facb0205d0dc8bd53b8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/iw/iw.hash | 2 +-
+ package/iw/iw.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index ec8c389..d1e2ecf 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -232,9 +232,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.34"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.25"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.26"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
- 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
--	default "4.7.8"		if BR2_KERNEL_HEADERS_4_7
--	default "4.8.2"		if BR2_KERNEL_HEADERS_4_8
-+	default "4.7.9"		if BR2_KERNEL_HEADERS_4_7
-+	default "4.8.3"		if BR2_KERNEL_HEADERS_4_8
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/iw/iw.hash b/package/iw/iw.hash
+index f22ceb1..414f342 100644
+--- a/package/iw/iw.hash
++++ b/package/iw/iw.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/iw/sha256sums.asc
+-sha256	d1720c04bc26661d42e71d13746d5c3aeedb6bdf743f7d6b7b056f0abd345ee8	iw-4.7.tar.xz
++sha256	324cc805fad52cba2c16b9ab569906889fb645cc962aac4cfda1db85d2de97ce	iw-4.9.tar.xz
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 925a770..faff5fc 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IW_VERSION = 4.7
++IW_VERSION = 4.9
+ IW_SOURCE = iw-$(IW_VERSION).tar.xz
+ IW_SITE = $(BR2_KERNEL_MIRROR)/software/network/iw
+ IW_LICENSE = ISC
