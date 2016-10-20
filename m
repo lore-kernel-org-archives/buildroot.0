@@ -1,35 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Oct 2016 23:23:39 +0200
-Subject: [Buildroot] [PATCH] pppd: Move netinet/in.h above linux header
- includes
-In-Reply-To: <1476997957-27184-1-git-send-email-Stefan.Nickl@gmail.com>
-References: <1476997957-27184-1-git-send-email-Stefan.Nickl@gmail.com>
-Message-ID: <20161020232339.54683f92@free-electrons.com>
+From: Stefan Nickl <stefan.nickl@gmail.com>
+Date: Thu, 20 Oct 2016 23:24:25 +0200
+Subject: [Buildroot] [PATCH] pppd: Provide error() implementation in
+	pppoe-discovery
+In-Reply-To: <7e6742e0-fcd9-8ee3-e77d-358e345bd595@mind.be>
+References: <1476555914-22201-1-git-send-email-Stefan.Nickl@gmail.com>
+ <20161015223315.47f04e55@free-electrons.com>
+ <CAFOMc=SKjm5J-hn=+qexzeRqqNWJEXKWUUQnckX3ei8c6BMTkA@mail.gmail.com>
+ <7e6742e0-fcd9-8ee3-e77d-358e345bd595@mind.be>
+Message-ID: <CAFOMc=RqfAsKHB9QXwhVepW-YKeYh2znH06MQixZg6E=yDLwag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, Oct 16, 2016 at 11:14 PM, Arnout Vandecappelle <arnout@mind.be>
+wrote:
 
-On Thu, 20 Oct 2016 23:12:37 +0200, stefan.nickl at gmail.com wrote:
-> From: Stefan Nickl <Stefan.Nickl@gmail.com>
-> 
-> Linux uapi headers try to avoid redeclaring things from libc via
-> linux/libc-compat.h. However that only works if the libc header is
-> included first.
-> 
-> Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+>  Are the patches[1] that you submitted to fix musl builds still valid?
+>
+>
+>  Regards,
+>  Arnout
+>
+> [1] http://patchwork.ozlabs.org/patch/664683/
+>
+>
+Hi Arnout and Thomas,
 
-Thanks for your contribution! However, exactly 15 minutes before you
-sent this patch, I committed a change for the same problem:
-https://git.buildroot.org/buildroot/commit/?id=035567b2793f3649e2ddc6cd34b75dd643f47d73.
+sort of, but:
+1) One of those patches changes stuff in the area where the current uclibc
+breakage happens, but I don't know how it interacts with that. I also just
+sent out a new patch for that one.
+2) The series didn't include one final patch for actually allowing musl in
+Config.in. I also added some stuff to expose more options from the ppp
+Makefile, so that patch probably needs breaking up before it makes sense to
+submit (but see alternate proposal below).
+3) The patch that started this thread is a "nicer" version for one in the
+series.
 
-Best regards,
+The thing is that pppd seems mostly unmaintained now, it contains lots of
+non-linux platform code and drags stuff along that is no longer relevant,
+especially for embedded people (IPX, anyone?).
 
-Thomas
+So I'm trying for a stripped-down fork of pppd at
+https://github.com/snickl/lppp/tree/lpppd
+
+The idea would be to only have the most urgent/minimal fixes for classic
+pppd and do musl-ification among other things in lpppd.
+
+However at least in the beginning I'd like to drop the rp-pppoe plugin from
+lpppd, which is quite a troublemaker.
+
+Any thoughts?
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Stefan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161020/24d947a1/attachment.html>
