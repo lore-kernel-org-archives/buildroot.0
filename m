@@ -1,58 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 Oct 2016 21:45:51 +0200
-Subject: [Buildroot] cached downloads for scm branches
-In-Reply-To: <f006d88783fb1d99aaef2d6cab1dfc88@walle.cc>
-References: <f006d88783fb1d99aaef2d6cab1dfc88@walle.cc>
-Message-ID: <20161020194551.GA3372@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 20 Oct 2016 21:47:55 +0200
+Subject: [Buildroot] [PATCH 2/2] postgresql: enable ldap support for
+ pg_service.conf
+In-Reply-To: <1476893310-25852-2-git-send-email-cdf123@cdf123.net>
+References: <1476893310-25852-1-git-send-email-cdf123@cdf123.net>
+ <1476893310-25852-2-git-send-email-cdf123@cdf123.net>
+Message-ID: <20161020214755.5e27504b@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael, All,
+Hello Chris,
 
-On 2016-10-20 19:27 +0200, Michael Walle spake thusly:
-> Hi,
+On Wed, 19 Oct 2016 11:08:30 -0500, Chris Frederick <cdf123@cdf123.net> wrote:
+
+> Just needed to add --with-ldap to POSTGRESQL_CONF_OPTS and add openldap
+> to POSTGRESQL_DEPENDENCIES when BR2_PACKAGE_OPENLDAP is on
 > 
-> If I have a package which downloads it's source from a SCM branch, the
-> download will be cached in DL_DIR/<pkgname>-<branchname>.tar.gz. This makes
-> sense if the version is a tag or a (git) hash. But if used with branches,
-> the package will never be downloaded again until I remove it from the
-> DL_DIR. This may be the intended behaviour, but as far as I can tell, I have
-> no chance to change it.
+> Signed-off-by: Chris Frederick <cdf123@cdf123.net>
+> ---
+>  package/postgresql/postgresql.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+> index 7179bbe..ab615d0 100644
+> --- a/package/postgresql/postgresql.mk
+> +++ b/package/postgresql/postgresql.mk
+> @@ -57,6 +57,11 @@ POSTGRESQL_DEPENDENCIES += openssl
+>  POSTGRESQL_CONF_OPTS += --with-openssl
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_OPENLDAP),y)
+> +POSTGRESQL_DEPENDENCIES += openldap
+> +POSTGRESQL_CONF_OPTS += --with-ldap
+> +endif
+> +
+>  define POSTGRESQL_USERS
+>  	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
+>  endef
 
-Yes, this is the intended behaviour: you should not use a branch names
-or other unstable references Using a branch name makes the build
-non-reproducible, and that is not good.
+Tested-by: Peter Seiderer <ps.report@gmx.net>
 
-Only use stable references, like a tag or a sha1 or ...
-
-If however you are actively working on the package, then you should use
-the source-override mechanism instead:
-
-  - create a local.mk file (in the directory where you ran 'make
-    menuconfig')
-
-  - in that file, add this line
-
-        MY_PACKAGE_OVERRIDE_SRCDIR = /path/to/my-package
-
-Then you can manage that location "by hand" (like pulling new changes...)
-and have it automatically used by Buildroot:
-
-    make my-package-rebuild
-
-(and other such commands, see "make help" and the manual for the
-complete set.)
+Compile tested (and checked for the 'build with LDAP support... yes' configure output).
 
 Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Peter
