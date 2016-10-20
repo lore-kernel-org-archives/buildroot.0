@@ -1,52 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Oct 2016 21:38:41 +0200
-Subject: [Buildroot] cached downloads for scm branches
-In-Reply-To: <f006d88783fb1d99aaef2d6cab1dfc88@walle.cc>
-References: <f006d88783fb1d99aaef2d6cab1dfc88@walle.cc>
-Message-ID: <20161020213841.75105d07@free-electrons.com>
+Date: Thu, 20 Oct 2016 21:40:12 +0200
+Subject: [Buildroot] [git commit] package/wireshark: fix kconfig dependencies
+Message-ID: <20161020194031.793468023A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=151c4ba71abbaf6b3f40fae1f177d7e322e483ef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 20 Oct 2016 19:27:19 +0200, Michael Walle wrote:
+Commit fa6feff (wireshark: needs the qt5tools lrelease utility)
+introduced a circular dependency chain in Kconfig:
 
-> If I have a package which downloads it's source from a SCM branch, the 
-> download will be cached in DL_DIR/<pkgname>-<branchname>.tar.gz. This 
-> makes sense if the version is a tag or a (git) hash. But if used with 
-> branches, the package will never be downloaded again until I remove it 
-> from the DL_DIR. This may be the intended behaviour, but as far as I can 
-> tell, I have no chance to change it.
-> 
-> Do I miss something? Does it make sense to add a new package variable to 
-> force a download?
+    package/qt5/qt5base/Config.in:118:error: recursive dependency detected!
+    package/qt5/qt5base/Config.in:118:      symbol BR2_PACKAGE_QT5BASE_GUI is selected by BR2_PACKAGE_QT5TOOLS_PIXELTOOL
+    package/qt5/qt5tools/Config.in:19:      symbol BR2_PACKAGE_QT5TOOLS_PIXELTOOL depends on BR2_PACKAGE_QT5TOOLS
+    package/qt5/qt5tools/Config.in:1:       symbol BR2_PACKAGE_QT5TOOLS is selected by BR2_PACKAGE_QT5BASE_WIDGETS
+    package/qt5/qt5base/Config.in:131:      symbol BR2_PACKAGE_QT5BASE_WIDGETS is selected by BR2_PACKAGE_QT5X11EXTRAS
+    package/qt5/qt5x11extras/Config.in:1:   symbol BR2_PACKAGE_QT5X11EXTRAS depends on BR2_PACKAGE_QT5BASE_XCB
+    package/qt5/qt5base/Config.in:186:      symbol BR2_PACKAGE_QT5BASE_XCB depends on BR2_PACKAGE_QT5BASE_GUI
 
-This behavior is intended and adding a new package variable to force a
-download is not what we want to do. Indeed, Buildroot aims at doing
-*reproducible* builds. If a package points to a branch, then you have
-no idea what you are building, this what you're building depends on the
-moment you start the build (as it decides when you will fetch, and
-therefore what you will fetch).
+Fix that by dropping the select on the Qt5Tools, and introduce an
+intermediate kconfig-level variable to represent the new condition, to
+simplify the .mk file.
 
-*However*, we have a mechanism called <pkg>_OVERRIDE_SRCDIR, which
-allows you to tell Buildroot: "For this specific package, please skip
-the download/extract/patch steps, and instead take the source from
-<this> local directory". Thanks to that, you can checkout/clone your
-project source code in <this> folder, and ask Buildroot to fetch it
-from there. This is what we recommend during active development on a
-given component.
+That would make the condition for enabling/disabling the GUI to be a
+little bit more complex by adding yet another (long-ish) variable.
 
-See
-http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf
-slides 261 and following for more details.
+So we also introduce an intermediate kconfig-level variable that
+represent the condition to enable the GUI.
 
-Best regards,
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Tested-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wireshark/Config.in    | 15 +++++++++++++--
+ package/wireshark/wireshark.mk |  4 ++--
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+index 959fb5b..b5a874b 100644
+--- a/package/wireshark/Config.in
++++ b/package/wireshark/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_WIRESHARK
+ 	bool "wireshark"
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_QT5TOOLS if BR2_PACKAGE_QT5BASE_WIDGETS
+-	select BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS if BR2_PACKAGE_QT5BASE_WIDGETS
+ 	depends on BR2_USE_MMU # fork(), glib2
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+@@ -12,6 +10,19 @@ config BR2_PACKAGE_WIRESHARK
+ 
+ 	  https://www.wireshark.org
+ 
++config BR2_PACKAGE_WIRESHARK_QT
++	bool
++	default y
++	depends on BR2_PACKAGE_QT5BASE_WIDGETS
++	depends on BR2_PACKAGE_QT5TOOLS
++	select BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
++
++config BR2_PACKAGE_WIRESHARK_GUI
++	bool
++	default y if BR2_PACKAGE_LIBGTK2
++	default y if BR2_PACKAGE_LIBGTK3
++	default y if BR2_PACKAGE_WIRESHARK_QT
++
+ comment "wireshark needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 593b196..227ead6 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -38,7 +38,7 @@ WIRESHARK_CONF_OPTS += --with-gtk=no
+ endif
+ 
+ # Qt4 needs accessibility, we don't support it
+-ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
++ifeq ($(BR2_PACKAGE_WIRESHARK_QT),y)
+ WIRESHARK_CONF_OPTS += --with-qt=5
+ WIRESHARK_DEPENDENCIES += qt5base qt5tools
+ WIRESHARK_CONF_ENV += ac_cv_path_QTCHOOSER=""
+@@ -52,7 +52,7 @@ WIRESHARK_CONF_OPTS += --with-qt=no
+ endif
+ 
+ # No GUI at all
+-ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3)$(BR2_PACKAGE_QT5BASE_WIDGETS),)
++ifeq ($(BR2_PACKAGE_WIRESHARK_GUI),)
+ WIRESHARK_CONF_OPTS += --disable-wireshark
+ endif
+ 
