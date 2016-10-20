@@ -1,111 +1,101 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 Oct 2016 18:15:31 +0200
-Subject: [Buildroot] [PATCH 3/3] wireshark: needs the qt5tools lrelease
- utility
-In-Reply-To: <20161019220635.yorzdmcvd2qyfpki@tarshish>
-References: <a6f0bcffe24a338538c4da2f04091967593fa058.1476789992.git.baruch@tkos.co.il>
- <1b772d44273db8f887bbb378e5dd59053a328c3d.1476789992.git.baruch@tkos.co.il>
- <20161019232003.4841be63@free-electrons.com>
- <20161019220635.yorzdmcvd2qyfpki@tarshish>
-Message-ID: <20161020161531.GA3720@free.fr>
+Date: Thu, 20 Oct 2016 18:28:25 +0200
+Subject: [Buildroot] [PATCH RFC] package/wireshark: fix kconfig depndencies
+Message-ID: <1476980905-3997-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Commit fa6feff (wireshark: needs the qt5tools lrelease utility)
+introduced a circular dependency chain in Kconfig:
 
-On 2016-10-20 01:06 +0300, Baruch Siach spake thusly:
-> On Wed, Oct 19, 2016 at 11:20:03PM +0200, Thomas Petazzoni wrote:
-> > On Tue, 18 Oct 2016 14:26:32 +0300, Baruch Siach wrote:
-> > > Fixes:
-> > > http://autobuild.buildroot.net/results/0a4/0a4ccf752ed1e81e2416d33a78984b47087f68bd/
-> > > http://autobuild.buildroot.net/results/196/196b96e28a2cd5983a58948df4a2c3eb3bccdfa4/
-> > > http://autobuild.buildroot.net/results/056/056b3299ce45552fe3e7cbf5aa68b223f8fa458e/
-> > > 
-> > > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> > > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > 
-> > This patch causes a recursive Kconfig dependency:
-> > 
-> > package/qt5/qt5base/Config.in:118:error: recursive dependency detected!
-> > package/qt5/qt5base/Config.in:118:	symbol BR2_PACKAGE_QT5BASE_GUI is selected by BR2_PACKAGE_QT5TOOLS_PIXELTOOL
-> > package/qt5/qt5tools/Config.in:19:	symbol BR2_PACKAGE_QT5TOOLS_PIXELTOOL depends on BR2_PACKAGE_QT5TOOLS
-> > package/qt5/qt5tools/Config.in:1:	symbol BR2_PACKAGE_QT5TOOLS is selected by BR2_PACKAGE_QT5BASE_WIDGETS
-> > package/qt5/qt5base/Config.in:131:	symbol BR2_PACKAGE_QT5BASE_WIDGETS is selected by BR2_PACKAGE_QT5X11EXTRAS
-> > package/qt5/qt5x11extras/Config.in:1:	symbol BR2_PACKAGE_QT5X11EXTRAS depends on BR2_PACKAGE_QT5BASE_XCB
-> > package/qt5/qt5base/Config.in:186:	symbol BR2_PACKAGE_QT5BASE_XCB depends on BR2_PACKAGE_QT5BASE_GUI
-> 
-> I actually saw this during testing, but it was not apparent to me that the 
-> wireshark Config.in change is the trigger. Not sure what is the correct 
-> solution here. Maybe remove the Config.in change, and do instead:
-> 
-> ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS)$(BR2_PACKAGE_QT5TOOLS),yy)
-> WIRESHARK_CONF_OPTS += --with-qt=5
-> ...
-> else
-> WIRESHARK_CONF_OPTS += --with-qt=no
-> endif
+    package/qt5/qt5base/Config.in:118:error: recursive dependency detected!
+    package/qt5/qt5base/Config.in:118:      symbol BR2_PACKAGE_QT5BASE_GUI is selected by BR2_PACKAGE_QT5TOOLS_PIXELTOOL
+    package/qt5/qt5tools/Config.in:19:      symbol BR2_PACKAGE_QT5TOOLS_PIXELTOOL depends on BR2_PACKAGE_QT5TOOLS
+    package/qt5/qt5tools/Config.in:1:       symbol BR2_PACKAGE_QT5TOOLS is selected by BR2_PACKAGE_QT5BASE_WIDGETS
+    package/qt5/qt5base/Config.in:131:      symbol BR2_PACKAGE_QT5BASE_WIDGETS is selected by BR2_PACKAGE_QT5X11EXTRAS
+    package/qt5/qt5x11extras/Config.in:1:   symbol BR2_PACKAGE_QT5X11EXTRAS depends on BR2_PACKAGE_QT5BASE_XCB
+    package/qt5/qt5base/Config.in:186:      symbol BR2_PACKAGE_QT5BASE_XCB depends on BR2_PACKAGE_QT5BASE_GUI
 
-That's what we discussed with Thomas yesterday on IRC. That is an easy
-and simple solution, while fixing the kconfig-level dependencies is not
-trivial.
+Fix that by dropping the select on the Qt5Tools, and introduce an
+intermediate kconfig-level variable to represent the new condition, to
+simplify the .mk file.
 
-> That will make the detection of no GUI below harder.
+That would make the condition for enabling/disabling the GUI to be a
+little bit more complex by adding yet another (long-ish) variable.
 
-Then you can do:
+So we also introduce an intermediate kconfig-level variable that
+represent the condition to enable the GUI.
 
-    ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS)$(BR2_PACKAGE_QT5TOOLS),yy)
-    WIRESHARK_QT_GUI = y
-    WIRESHARK_CONF_OPTS += --with-qt=5
-    ...
-    else
-    WIRESHARK_CONF_OPTS += --with-qt=no
-    fi
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
 
-    ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3)$(WIRESHARK_QT_GUI),)
-    ...
-    endif
+---
+Note: UNTESTED. It does fix the Kconfig issue, but it is otherwise not
+even build-tested. Baruch? ;-)
+---
+ package/wireshark/Config.in    | 15 +++++++++++++--
+ package/wireshark/wireshark.mk |  4 ++--
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-But then, we could do all that in Kconfig still:
-
-    config BR2_PACKAGE_WIRESHARK_QT
-        bool
-        default y
-        depends on BR2_PACKAGE_QT5BASE_WIDGETS
-        depends on BR2_PACKAGE_QT5TOOLS
-        depends on BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
-
-    config BR2_PACKAGE_WIRESHARK_GUI
-        bool
-        default y if BR2_PACKAGE_LIBGTK2
-        default y if BR2_PACKAGE_LIBGTK3
-        default y if BR2_PACKAGE_WIRESHARK_QT
-
-And then re-use that in the .mk file:
-
-    ifeq ($(BR2_PACKAGE_WIRESHARK_QT),y)
-    WIRESHARK_CONF_OPTS += --with-qt=5
-    ...
-    else
-    WIRESHARK_CONF_OPTS += --with-qt=no
-    endif
-
-    ifeq ($(BR2_PACKAGE_WIRESHARK_GUI),)
-    WIRESHARK_CONF_OPTS += --disable-wireshark
-    endif
-
-I would prefer that last solution, if at all possible. I'll send a patch
-to that effect shortly.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+index 959fb5b..b5a874b 100644
+--- a/package/wireshark/Config.in
++++ b/package/wireshark/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_WIRESHARK
+ 	bool "wireshark"
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_QT5TOOLS if BR2_PACKAGE_QT5BASE_WIDGETS
+-	select BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS if BR2_PACKAGE_QT5BASE_WIDGETS
+ 	depends on BR2_USE_MMU # fork(), glib2
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+@@ -12,6 +10,19 @@ config BR2_PACKAGE_WIRESHARK
+ 
+ 	  https://www.wireshark.org
+ 
++config BR2_PACKAGE_WIRESHARK_QT
++	bool
++	default y
++	depends on BR2_PACKAGE_QT5BASE_WIDGETS
++	depends on BR2_PACKAGE_QT5TOOLS
++	select BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
++
++config BR2_PACKAGE_WIRESHARK_GUI
++	bool
++	default y if BR2_PACKAGE_LIBGTK2
++	default y if BR2_PACKAGE_LIBGTK3
++	default y if BR2_PACKAGE_WIRESHARK_QT
++
+ comment "wireshark needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index f7cc8f8..5b5abf2 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -38,7 +38,7 @@ WIRESHARK_CONF_OPTS += --with-gtk=no
+ endif
+ 
+ # Qt4 needs accessibility, we don't support it
+-ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
++ifeq ($(BR2_PACKAGE_WIRESHARK_QT),y)
+ WIRESHARK_CONF_OPTS += --with-qt=5
+ WIRESHARK_DEPENDENCIES += qt5base qt5tools
+ WIRESHARK_CONF_ENV += ac_cv_path_QTCHOOSER=""
+@@ -52,7 +52,7 @@ WIRESHARK_CONF_OPTS += --with-qt=no
+ endif
+ 
+ # No GUI at all
+-ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3)$(BR2_PACKAGE_QT5BASE_WIDGETS),)
++ifeq ($(BR2_PACKAGE_WIRESHARK_GUI),)
+ WIRESHARK_CONF_OPTS += --disable-wireshark
+ endif
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
