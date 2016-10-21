@@ -1,58 +1,41 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 21 Oct 2016 12:04:09 +0000
-Subject: [Buildroot] [PATCH][autobuild] autobuild-run: introduce
- "--tc-cfg-uri" option for toolchain configs URI
-In-Reply-To: <1477050979.28679.16.camel@synopsys.com>
-References: <1477045454-8660-1-git-send-email-vzakhar@synopsys.com>
- <20161021133452.0508e5c5@free-electrons.com>
- <1477050979.28679.16.camel@synopsys.com>
-Message-ID: <1477051416.3325.11.camel@synopsys.com>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Fri, 21 Oct 2016 18:38:21 +0530
+Subject: [Buildroot] [PATCH] libglib2: fix static linking with libgio
+In-Reply-To: <20161020220429.228ec132@free-electrons.com>
+References: <1476813787-9672-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <20161020220429.228ec132@free-electrons.com>
+Message-ID: <580A1345.6030903@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 
-On Fri, 2016-10-21 at 11:56 +0000, Vlad Zakharov wrote:
-> Hi Thomas,
-> 
-> Yes, we wan't to use?
-> 
-> On Fri, 2016-10-21 at 13:34 +0200, Thomas Petazzoni wrote:
-> > 
-> > Hello,
-> > 
-> > On Fri, 21 Oct 2016 13:24:14 +0300, Vlad Zakharov wrote:
-> > > 
-> > > 
-> > > This commit introduces "--tc-cfg-uri" option (short "-t").
-> > > Described option is used to pass URI of file that contain
-> > > toolchains configurations to be used in autobuilds.
-> > > 
-> > > Default value refers to standard buildroot autobuild toolchain
-> > > configuration file:
-> > > http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv
-> > > 
-> > > Such update allows users to add their own toolchain configurations
-> > > to use in buildroot autobuilds.
-> > > 
-> > > Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-> > 
-> > I am not sure I like this approach very much. It means people can start
-> > using a non-default set of toolchains, and then submit results to
-> > autobuild.buildroot.org. Such results would possibly not be
-> > reproducible by others because we may not have access to those
-> > toolchains.
+On Friday 21 October 2016 01:34 AM, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Tue, 18 Oct 2016 23:33:07 +0530, Rahul Bedarkar wrote:
+>> When statically linking with libgio, application needs to link with all
+>> internal libraries that libgio uses. This commit adds patch which
+>> includes libmount as Libs.private.
+>>
+>> Fixes:
+>>    http://autobuild.buildroot.net/results/fdf/fdf26abbed0014606a7788ce5d60828a0e871186
+>>    http://autobuild.buildroot.net/results/1d6/1d69b8ea34cf57255be54de0c87fc83590fb1337
+>>
+>> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+>> ---
+>>   ...o-2.0.pc-include-libmount-in-Libs.private.patch | 32 ++++++++++++++++++++++
+>>   1 file changed, 32 insertions(+)
+>>   create mode 100644 package/libglib2/0003-gio-2.0.pc-include-libmount-in-Libs.private.patch
+>
+> Applied to master, thanks a lot! Could you please submit the patch
+> upstream?
 
-Well as long as you have control over stuff that gets added in your
-autobuilder web-server through distribution of credentials
-IMHO there should be no problems. In worst case one day somebody
-will catch unexpected path to external toolchain in .config from
-one report and that will be a reason to ask owner of corresponding
-build server to not play that games.
+Yes, I will submit patch upstream.
 
-Still I might be missing something.
-
--Alexey
+Thanks,
+Rahul
