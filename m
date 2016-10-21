@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 21 Oct 2016 20:09:55 +0200
-Subject: [Buildroot] cached downloads for scm branches
-In-Reply-To: <D2934D97-E0A4-4AE5-933C-49D38BFFB436@walle.cc>
-References: <f006d88783fb1d99aaef2d6cab1dfc88@walle.cc>
- <20161020213841.75105d07@free-electrons.com>
- <D2934D97-E0A4-4AE5-933C-49D38BFFB436@walle.cc>
-Message-ID: <df0e1d12-0919-2bf8-3d52-add41effabae@mind.be>
+Date: Fri, 21 Oct 2016 20:13:51 +0200
+Subject: [Buildroot] [PATCH][autobuild] autobuild-run: introduce
+ "--tc-cfg-uri" option for toolchain configs URI
+In-Reply-To: <20161021133452.0508e5c5@free-electrons.com>
+References: <1477045454-8660-1-git-send-email-vzakhar@synopsys.com>
+ <20161021133452.0508e5c5@free-electrons.com>
+Message-ID: <1efebf79-366d-f274-fd4c-d41264cfcd77@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +14,41 @@ To: buildroot@busybox.net
 
 
 
-On 20-10-16 22:29, Michael Walle wrote:
-> thanks. yeah i thought so. Just to give you some background regarding my
-> question. We have some kind of CI, actually it's rather a daily build. we build
-> a root filesystem with some fixed packages, but also with multiple packages of
-> our own and we want to track the tip of a branch for a build (because it is CI
-> ;)). I don't think the src override method really suit the CI case. I guess one
-> way could be that the CI defines the commit that should be build. Or simply
-> delete the download. mhh ;)
+On 21-10-16 13:34, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 21 Oct 2016 13:24:14 +0300, Vlad Zakharov wrote:
+>> This commit introduces "--tc-cfg-uri" option (short "-t").
+>> Described option is used to pass URI of file that contain
+>> toolchains configurations to be used in autobuilds.
+>>
+>> Default value refers to standard buildroot autobuild toolchain
+>> configuration file:
+>> http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv
+>>
+>> Such update allows users to add their own toolchain configurations
+>> to use in buildroot autobuilds.
+>>
+>> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+> 
+> I am not sure I like this approach very much. It means people can start
+> using a non-default set of toolchains, and then submit results to
+> autobuild.buildroot.org. Such results would possibly not be
+> reproducible by others because we may not have access to those
+> toolchains.
 
- Actually, the src override method fits the CI case perfectly because CI can
-watch the repositories to be overridden and check them out.
+ Maybe just make this option mutually exclusive --upload? I.e., automatically
+disable upload if this option is set. I guess that's OK for the ARC use case?
 
  Regards,
  Arnout
+
+> 
+> Is this intended to run tests only the ARC architecture builds on your
+> autobuilder?
+> 
+> Thomas
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
