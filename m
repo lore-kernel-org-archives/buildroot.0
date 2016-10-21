@@ -1,41 +1,40 @@
-From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-Date: Fri, 21 Oct 2016 18:38:21 +0530
-Subject: [Buildroot] [PATCH] libglib2: fix static linking with libgio
-In-Reply-To: <20161020220429.228ec132@free-electrons.com>
-References: <1476813787-9672-1-git-send-email-rahul.bedarkar@imgtec.com>
- <20161020220429.228ec132@free-electrons.com>
-Message-ID: <580A1345.6030903@imgtec.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 21 Oct 2016 17:11:14 +0100
+Subject: [Buildroot] [PATCH] nmap: bump version to 7.31
+Message-ID: <20161021161114.24508-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/nmap/nmap.hash | 4 ++--
+ package/nmap/nmap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Friday 21 October 2016 01:34 AM, Thomas Petazzoni wrote:
-> Hello,
->
-> On Tue, 18 Oct 2016 23:33:07 +0530, Rahul Bedarkar wrote:
->> When statically linking with libgio, application needs to link with all
->> internal libraries that libgio uses. This commit adds patch which
->> includes libmount as Libs.private.
->>
->> Fixes:
->>    http://autobuild.buildroot.net/results/fdf/fdf26abbed0014606a7788ce5d60828a0e871186
->>    http://autobuild.buildroot.net/results/1d6/1d69b8ea34cf57255be54de0c87fc83590fb1337
->>
->> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
->> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
->> ---
->>   ...o-2.0.pc-include-libmount-in-Libs.private.patch | 32 ++++++++++++++++++++++
->>   1 file changed, 32 insertions(+)
->>   create mode 100644 package/libglib2/0003-gio-2.0.pc-include-libmount-in-Libs.private.patch
->
-> Applied to master, thanks a lot! Could you please submit the patch
-> upstream?
-
-Yes, I will submit patch upstream.
-
-Thanks,
-Rahul
+diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
+index 94e189e..2a26557 100644
+--- a/package/nmap/nmap.hash
++++ b/package/nmap/nmap.hash
+@@ -1,2 +1,2 @@
+-# From https://nmap.org/dist/sigs/nmap-7.30.tar.bz2.digest.txt
+-sha256  ba38a042ec67e315d903d28a4976b74999da94c646667c0c63f31e587d6d8d0f nmap-7.30.tar.bz2
++# From https://nmap.org/dist/sigs/nmap-7.31.tar.bz2.digest.txt
++sha256 cb9f4e03c0771c709cd47dc8fc6ac3421eadbdd313f0aae52276829290583842  nmap-7.31.tar.bz2
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 2cc7604..3087903 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NMAP_VERSION = 7.30
++NMAP_VERSION = 7.31
+ NMAP_SITE = http://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = libpcap pcre
+-- 
+2.10.1
