@@ -1,30 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Oct 2016 11:57:20 +0200
-Subject: [Buildroot] Lets keep in touch
-In-Reply-To: <CAMcwGNT2BQyY-esY7EBxvd5T-=Wu9GqPwdkW6xLjmBD0D8Bf_Q@mail.gmail.com>
-References: <CAMcwGNT2BQyY-esY7EBxvd5T-=Wu9GqPwdkW6xLjmBD0D8Bf_Q@mail.gmail.com>
-Message-ID: <20161021115720.611f40df@free-electrons.com>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Fri, 21 Oct 2016 13:24:14 +0300
+Subject: [Buildroot] [PATCH][autobuild] autobuild-run: introduce
+	"--tc-cfg-uri" option for toolchain configs URI
+Message-ID: <1477045454-8660-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joao,
+This commit introduces "--tc-cfg-uri" option (short "-t").
+Described option is used to pass URI of file that contain
+toolchains configurations to be used in autobuilds.
 
-On Fri, 21 Oct 2016 10:39:17 +0100, Jo?o Pinto wrote:
+Default value refers to standard buildroot autobuild toolchain
+configuration file:
+http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv
 
-> Although I am leaving Synopsys, I would like to keep working with the
-> Buildroot community and help in what you might find useful. For that I
-> am sending this e-mail to give you my new contact.
+Such update allows users to add their own toolchain configurations
+to use in buildroot autobuilds.
 
-Thanks a lot for your contributions to Buildroot so far. I wish you all
-the best in your new professional adventures!
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+---
+ scripts/autobuild-run | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Best regards,
-
-Thomas
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 33a0481..4b0d7c2 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -66,6 +66,7 @@ defaults = {
+     '--make-opts': '',
+     '--nice': 0,
+     '--pid-file': '/tmp/buildroot-autobuild.pid',
++    '--tc-cfg-uri': 'http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv',
+ }
+ 
+ doc = """autobuild-run - run Buildroot autobuilder
+@@ -97,6 +98,7 @@ Options:
+                                  Defaults to %(--pid-file)s.
+   -c, --config CONFIG            path to configuration file
+                                  Not set by default.
++  -t, --tc-cfg-uri URI           URI of toolchain configuration file
+ 
+ Format of the configuration file:
+ 
+@@ -243,7 +245,7 @@ class SystemInfo:
+ 
+         return not missing_requirements
+ 
+-def get_toolchain_configs():
++def get_toolchain_configs(**kwargs):
+     """Fetch and return the possible toolchain configurations
+ 
+     This function returns an array of dictionaries, with for each toolchain:
+@@ -252,7 +254,7 @@ def get_toolchain_configs():
+         - hostarch: the host architecture for which the toolchain is built
+         - contents: an array of lines of the defconfig
+     """
+-    tc_cfg_uri = 'http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv'
++    tc_cfg_uri = kwargs['tc_cfg_uri']
+ 
+     with urlopen_closing(tc_cfg_uri) as r:
+         l = decode_byte_list(r.readlines())
+@@ -514,7 +516,7 @@ def gen_config(**kwargs):
+     log_write(log, "INFO: generate the configuration")
+ 
+     # Select a random toolchain configuration
+-    configs = get_toolchain_configs()
++    configs = get_toolchain_configs(**kwargs)
+     i = randint(0, len(configs) - 1)
+     config = configs[i]
+ 
+@@ -905,6 +907,7 @@ def main():
+                 submitter = args['--submitter'],
+                 make_opts = (args['--make-opts'] or ''),
+                 nice = (args['--nice'] or 0),
++                tc_cfg_uri = args['--tc-cfg-uri'],
+                 upload = upload,
+                 buildpid = buildpid
+             ))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.5.5
