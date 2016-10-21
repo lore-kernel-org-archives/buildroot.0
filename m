@@ -1,12 +1,15 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 21 Oct 2016 09:54:48 +0300
-Subject: [Buildroot] [PATCH] kexec: fix build for arm
-Message-ID: <73d400d1c401d240e0f37e41a68ea095f10975bb.1477032888.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Oct 2016 09:17:05 +0200
+Subject: [Buildroot] [git commit] kexec: fix build for arm
+Message-ID: <20161021072143.B6EE5802B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=2974b64f199a99d1c1dc26870d8505e40fef620a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Add a patch equivalent to upstream commit 1574ff1aae4 (arm: include
 phys_to_virt.h and iomem.h in distribution).
@@ -18,14 +21,14 @@ http://autobuild.buildroot.net/results/ec2/ec26f1dd97f1e861e401d2709a243ae55bd6f
 
 Cc: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  .../0002-arm-add-phys_to_virt.h-and-iomem.patch    | 35 ++++++++++++++++++++++
  1 file changed, 35 insertions(+)
- create mode 100644 package/kexec/0002-arm-add-phys_to_virt.h-and-iomem.patch
 
 diff --git a/package/kexec/0002-arm-add-phys_to_virt.h-and-iomem.patch b/package/kexec/0002-arm-add-phys_to_virt.h-and-iomem.patch
 new file mode 100644
-index 000000000000..748acbde18ec
+index 0000000..748acbd
 --- /dev/null
 +++ b/package/kexec/0002-arm-add-phys_to_virt.h-and-iomem.patch
 @@ -0,0 +1,35 @@
@@ -64,5 +67,3 @@ index 000000000000..748acbde18ec
 ++extern uint64_t phys_offset;
 ++
 ++#endif
--- 
-2.9.3
