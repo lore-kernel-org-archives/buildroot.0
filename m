@@ -1,9 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 21 Oct 2016 20:22:13 +0200
-Subject: [Buildroot] [PATCH v2 1/2] MIPS: add support for XBurst cores
-In-Reply-To: <20161021094557.41859-1-Vincent.Riera@imgtec.com>
-References: <20161021094557.41859-1-Vincent.Riera@imgtec.com>
-Message-ID: <695f8b59-fb16-eaf9-8a0c-de733b810743@mind.be>
+Date: Fri, 21 Oct 2016 20:30:24 +0200
+Subject: [Buildroot] [PATCH] pppd: Provide error() implementation in
+ pppoe-discovery
+In-Reply-To: <CAFOMc=RqfAsKHB9QXwhVepW-YKeYh2znH06MQixZg6E=yDLwag@mail.gmail.com>
+References: <1476555914-22201-1-git-send-email-Stefan.Nickl@gmail.com>
+ <20161015223315.47f04e55@free-electrons.com>
+ <CAFOMc=SKjm5J-hn=+qexzeRqqNWJEXKWUUQnckX3ei8c6BMTkA@mail.gmail.com>
+ <7e6742e0-fcd9-8ee3-e77d-358e345bd595@mind.be>
+ <CAFOMc=RqfAsKHB9QXwhVepW-YKeYh2znH06MQixZg6E=yDLwag@mail.gmail.com>
+Message-ID: <d7a5d657-bf0f-d5d4-a340-5d26dce15ffc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,94 +17,63 @@ To: buildroot@busybox.net
 
 
 
-On 21-10-16 11:45, Vicente Olivert Riera wrote:
-> - There isn't any matching -march option for this core family, so we
->   need to stick with the generic mips32r2.
-> - Add an option to the toolchain wrapper to avoid an FPU bug.
+On 20-10-16 23:24, Stefan Nickl wrote:
+> On Sun, Oct 16, 2016 at 11:14 PM, Arnout Vandecappelle <arnout@mind.be
+> <mailto:arnout@mind.be>> wrote:
+> 
+>      Are the patches[1] that you submitted to fix musl builds still valid?
+> 
+> 
+>      Regards,
+>      Arnout
+> 
+>     [1] http://patchwork.ozlabs.org/patch/664683/
+>     <http://patchwork.ozlabs.org/patch/664683/>
+> 
+> 
+> Hi Arnout and Thomas,
+> 
+> sort of, but:
+> 1) One of those patches changes stuff in the area where the current uclibc
+> breakage happens, but I don't know how it interacts with that. I also just sent
+> out a new patch for that one.
+> 2) The series didn't include one final patch for actually allowing musl in
+> Config.in. I also added some stuff to expose more options from the ppp Makefile,
+> so that patch probably needs breaking up before it makes sense to submit (but
+> see alternate proposal below).
+> 3) The patch that started this thread is a "nicer" version for one in the series.
+> 
+> The thing is that pppd seems mostly unmaintained now, it contains lots of
+> non-linux platform code and drags stuff along that is no longer relevant,
+> especially for embedded people (IPX, anyone?).
+> 
+> So I'm trying for a stripped-down fork of pppd at
+> https://github.com/snickl/lppp/tree/lpppd
+> 
+> The idea would be to only have the most urgent/minimal fixes for classic pppd
+> and do musl-ification among other things in lpppd.
 
- You commit log should explain in more detail that this is actually a generic
-mips32r2 core, but it has a hardware bug that has to be worked around.
+ Sounds good to me. I'll mark the musl patch as rejected.
+
+ This patch, however, still seems relevant, since it even fixes for glibc, no?
 
 > 
-> Related: http://www.ingenic.com/en/?xburst.html
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> 
-> ---
-> Changes v1 -> v2:
->  - Do not add -mmxu to the wrapper.
-> ---
->  arch/Config.in.mips            | 5 +++++
->  toolchain/toolchain-wrapper.c  | 3 +++
->  toolchain/toolchain-wrapper.mk | 5 +++++
->  3 files changed, 13 insertions(+)
-> 
-> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-> index 3662fed..3075d3f 100644
-> --- a/arch/Config.in.mips
-> +++ b/arch/Config.in.mips
-> @@ -63,6 +63,10 @@ config BR2_mips_p5600
->  	bool "P5600"
->  	depends on !BR2_ARCH_IS_64
->  	select BR2_MIPS_CPU_MIPS32R5
-> +config BR2_mips_xburst
-> +	bool "XBurst"
-> +	depends on !BR2_ARCH_IS_64
-> +	select BR2_MIPS_CPU_MIPS32R2
+> However at least in the beginning I'd like to drop the rp-pppoe plugin from
+> lpppd, which is quite a troublemaker.
 
- Since this is a special case, it makes sense to add a help text here to explain
-the details and add a reference. Like it's done for BR2_x86_x1000.
+ It's certainly acceptable to start with an lpppd without rp-pppoe. Especially
+if there is an active upstream, it will be possible to work with them to fix any
+issues.
 
->  config BR2_mips_64
->  	bool "Generic MIPS64"
->  	depends on BR2_ARCH_IS_64
-> @@ -137,6 +141,7 @@ config BR2_GCC_TARGET_ARCH
->  	default "m5101"		if BR2_mips_m5101
->  	default "m6201"		if BR2_mips_m6201
->  	default "p5600"		if BR2_mips_p5600
-> +	default "mips32r2"	if BR2_mips_xburst
->  	default "mips64"	if BR2_mips_64
->  	default "mips64r2"	if BR2_mips_64r2
->  	default "mips64r5"	if BR2_mips_64r5
-> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-> index 925d013..d59629b 100644
-> --- a/toolchain/toolchain-wrapper.c
-> +++ b/toolchain/toolchain-wrapper.c
-> @@ -66,6 +66,9 @@ static char *predef_args[] = {
->  #ifdef BR_OMIT_LOCK_PREFIX
->  	"-Wa,-momit-lock-prefix=yes",
->  #endif
-> +#ifdef BR_NO_FUSED_MADD
-> +	"-mno-fused-madd",
-> +#endif
-
- So this is definitely NOT what we want. We want it in TARGET_FLAGS, i.e. we
-want it in a series together with http://patchwork.ozlabs.org/patch/683830/
-At least I do :-)
 
  Regards,
  Arnout
 
->  #ifdef BR_BINFMT_FLAT
->  	"-Wl,-elf2flt",
->  #endif
-> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-> index af39071..dc3210d 100644
-> --- a/toolchain/toolchain-wrapper.mk
-> +++ b/toolchain/toolchain-wrapper.mk
-> @@ -26,6 +26,11 @@ ifeq ($(BR2_x86_x1000),y)
->  TOOLCHAIN_WRAPPER_ARGS += -DBR_OMIT_LOCK_PREFIX
->  endif
->  
-> +# Avoid FPU bug on XBurst CPUs
-> +ifeq ($(BR2_mips_xburst),y)
-> +TOOLCHAIN_WRAPPER_ARGS += -DBR_NO_FUSED_MADD
-> +endif
-> +
->  ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
->  TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
->  endif
 > 
+> Any thoughts?
+> 
+> -- 
+> Stefan
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
