@@ -1,50 +1,84 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 21 Oct 2016 21:14:16 +0200
-Subject: [Buildroot] [PATCH 2/2] postgresql: enable ldap support for
- pg_service.conf
-In-Reply-To: <1476893310-25852-2-git-send-email-cdf123@cdf123.net>
+Date: Fri, 21 Oct 2016 21:13:57 +0200
+Subject: [Buildroot] [PATCH 1/2] sudo: Add ldap support for sudoers rules
+In-Reply-To: <1476893310-25852-1-git-send-email-cdf123@cdf123.net>
 References: <1476893310-25852-1-git-send-email-cdf123@cdf123.net>
- <1476893310-25852-2-git-send-email-cdf123@cdf123.net>
-Message-ID: <ed73fb23-f2f2-caaa-1387-4a867d85d5f6@mind.be>
+Message-ID: <ffe77538-4bad-a040-c0e3-fd745270a849@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Chris,
 
+ Thank you for your patch. I have a few comments below. Can you fix and
+resubmit? I have marked your patch as "Changes Requested" in our patch tracking
+system so if you don't resubmit we will forget about it.
 
 On 19-10-16 18:08, Chris Frederick wrote:
-> Just needed to add --with-ldap to POSTGRESQL_CONF_OPTS and add openldap
-> to POSTGRESQL_DEPENDENCIES when BR2_PACKAGE_OPENLDAP is on
+> Added Config.in options to enable/disable the option, and check options
+> in sudo.mk to add openldap as a dependancy and compile with --with-ldap.
 > 
 > Signed-off-by: Chris Frederick <cdf123@cdf123.net>
 > ---
->  package/postgresql/postgresql.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+>  package/sudo/Config.in | 12 ++++++++++++
+>  package/sudo/sudo.mk   |  5 +++++
+>  2 files changed, 17 insertions(+)
 > 
-> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-> index 7179bbe..ab615d0 100644
-> --- a/package/postgresql/postgresql.mk
-> +++ b/package/postgresql/postgresql.mk
-> @@ -57,6 +57,11 @@ POSTGRESQL_DEPENDENCIES += openssl
->  POSTGRESQL_CONF_OPTS += --with-openssl
+> diff --git a/package/sudo/Config.in b/package/sudo/Config.in
+> index cbef15d..2e9e35a 100644
+> --- a/package/sudo/Config.in
+> +++ b/package/sudo/Config.in
+> @@ -9,3 +9,15 @@ config BR2_PACKAGE_SUDO
+>  	  but still allow people to get their work done.
+>  
+>  	  http://www.sudo.ws/sudo/
+> +
+> +if BR2_PACKAGE_SUDO && BR2_PACKAGE_OPENLDAP
+> +config BR2_PACKAGE_SUDO_LDAP
+
+ As far as I know, there is no need to make this option configurable. Just
+enable LDAP support when BR2_PACKASGE_OPENLDAP is selected, like you do for
+postgresql.
+
+> +	bool "ldap integration"
+> +	depends on BR2_PACKAGE_SUDO
+> +	help
+> +	  Allows you to manage sudoers rules in a centralized ldap
+> +	  directory.
+> +
+> +	  http://www.sudo.ws/man/1.8.15/sudoers.ldap.man.html
+> +endif
+> +
+> diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+> index f28312a..b4d071c 100644
+> --- a/package/sudo/sudo.mk
+> +++ b/package/sudo/sudo.mk
+> @@ -30,6 +30,11 @@ else
+>  SUDO_CONF_OPTS += --without-pam
 >  endif
 >  
-> +ifeq ($(BR2_PACKAGE_OPENLDAP),y)
-> +POSTGRESQL_DEPENDENCIES += openldap
-> +POSTGRESQL_CONF_OPTS += --with-ldap
+> +ifeq ($(BR2_PACKAGE_SUDO_LDAP),y)
+> +SUDO_DEPENDENCIES += openldap
+> +SUDO_CONF_OPTS += --with-ldap
 
- Same here: add --without-ldap.
+ We also prefer to explicitly disable options, to avoid problems with e.g.
+looking up on the host. So add
+
+else
+SUDO_CONF_OPTS += --without-ldap
+
+or if that is not possible, a comment why not.
 
  Regards,
  Arnout
 
 > +endif
 > +
->  define POSTGRESQL_USERS
->  	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
->  endef
+>  # mksigname/mksiglist needs to run on build host to generate source files
+>  define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+>  	$(MAKE) $(HOST_CONFIGURE_OPTS) \
 > 
 
 -- 
