@@ -1,80 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Oct 2016 18:39:37 +0200
-Subject: [Buildroot] Report from the Buildroot Meeting in Berlin
-In-Reply-To: <20161019221035.2350c181@free-electrons.com>
-References: <20161019221035.2350c181@free-electrons.com>
-Message-ID: <c2da1832-3282-33f0-1588-e828f3df4801@mind.be>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Fri, 21 Oct 2016 10:18:14 +0200
+Subject: [Buildroot] [PATCH] package/linux-tools: add iio
+In-Reply-To: <20161003122611.2527-1-m.niestroj@grinn-global.com>
+References: <20161003122611.2527-1-m.niestroj@grinn-global.com>
+Message-ID: <90042fdb-018c-3918-f949-3a5a866a4592@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Don't look into it. I've sent it by mistake!
 
-
-On 19-10-16 22:10, Thomas Petazzoni wrote:
->  - Toolchain wrapper and CFLAGS. A patch series from Jan Heylen that
->    changes the toolchain wrapper to also wrap 'ld' triggered a fairly
->    lengthy discussion on how we handle CFLAGS. Some of them are
->    encoded in the wrapper, some are not, with no clear
->    definition. After this long discussion, we came to the conclusion
->    that wrapping 'ld' was not needed (packages should not use 'ld'
->    directly), and that the wrapper/CFLAGS handling should be reworked
->    as follows:
-> 
->    * Combine BR2_TARGET_OPTIMIZATION and BR2_TARGET_LDFLAGS into a
->      single BR2_TARGET_EXTRA_FLAGS
-> 
->    * Have a make variable called TARGET_WRAPPER_FLAGS that includes
->      all flags we want to include in the wrapper:
-> 
->       * $(TARGET_ABI)
->       * $(TARGET_CPPFLAGS)
->       * $(BR2_TARGET_EXTRA_FLAGS)
->       * Custom flags added by package/Makefile.in
-> 
->      $(TARGET_OPTIMIZATION) and $(TARGET_DEBUGGING) are *NOT* in the
->      wrapper.
-> 
->    * TARGET_CFLAGS = $(TARGET_WRAPPER_CFLAGS) $(TARGET_OPTIMIZATION) \
->                      $(TARGET_DEBUGGING)
->      TARGET_CXXFLAGS = $(TARGET_CFLAGS)
->      TARGET_LDFLAGS = $(TARGET_CFLAGS)
->      TARGET_FCFLAGS = $(TARGET_CFLAGS)
-
- Turns out that it will be slightly more complicated than this. For MIPS, the
--mmsa option to enable SIMD processing MUST NOT be used in kernel and bootloader
-builds. Therefore we cannot add it to TARGET_WRAPPER_CFLAGS. Instead, we'll have
-a TARGET_EXTRA_CFLAGS that does not get added to the wrapper but does get added
-to TARGET_CFLAGS and therefore passed to package buidls.
-
- The kernel and bootloaders don't use TARGET_CFLAGS, so those are safe. Also, it
-is possible to link libraries built with -mmsa with programs that are built
-without that option, so even if build systems ignore TARGET_CFLAGS it should be OK.
-
- That's the theory, we'll see how it develops in practice.
-
-
->    * The wrapper, instead of having special cases for different flags,
->      just receives (at build time), the list of hardcoded flag. A
->      special logic needs to be put in place to handle conflicting
->      flags (mcpu, march, mtune, mfloat-abi, etc.), for which the
->      command-line passed flag must be preserved if passed.
-> 
->    Arnout has volunteered to do this work.
-
- As usual, I won't have this finished any time soon. Given that we're already
-deep in October, don't expect this feature for 2016.11. Also I'd feel much more
-comfortable if there were some test infrastructure in place before I start
-submitting this magic :-).
-
- Regards,
- Arnout
+On 21.10.2016 10:16, Marcin Niestroj wrote:
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> ---
+>  package/linux-tools/Config.in         |  9 +++++++++
+>  package/linux-tools/linux-tool-iio.mk | 27 +++++++++++++++++++++++++++
+>  2 files changed, 36 insertions(+)
+>  create mode 100644 package/linux-tools/linux-tool-iio.mk
+>
+> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+> index 61c196f..bde70de 100644
+> --- a/package/linux-tools/Config.in
+> +++ b/package/linux-tools/Config.in
+> @@ -20,6 +20,15 @@ comment "cpupower needs a toolchain w/ wchar"
+>  	depends on !BR2_bfin
+>  	depends on !BR2_USE_WCHAR && BR2_NEEDS_GETTEXT
+>
+> +config BR2_PACKAGE_LINUX_TOOLS_IIO
+> +	bool "iio"
+> +	select BR2_PACKAGE_LINUX_TOOLS
+> +	help
+> +	  iio is a collection of tools to get information about,
+> +	  control and monitor iio devices present on system.
+> +
+> +	  These tools are available only from kernel version 4.7.
+> +
+>  config BR2_PACKAGE_LINUX_TOOLS_PERF
+>  	bool "perf"
+>  	select BR2_PACKAGE_LINUX_TOOLS
+> diff --git a/package/linux-tools/linux-tool-iio.mk b/package/linux-tools/linux-tool-iio.mk
+> new file mode 100644
+> index 0000000..3f6e078
+> --- /dev/null
+> +++ b/package/linux-tools/linux-tool-iio.mk
+> @@ -0,0 +1,27 @@
+> +################################################################################
+> +#
+> +# iio
+> +#
+> +################################################################################
+> +
+> +LINUX_TOOLS += iio
+> +
+> +IIO_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS)
+> +
+> +define IIO_BUILD_CMDS
+> +	$(Q)if ! grep install $(LINUX_DIR)/tools/iio/Makefile >/dev/null 2>&1 ; then \
+> +		echo "Your kernel version is too old and does not have install section in the iio tools." ; \
+> +		echo "At least kernel 4.7 must be used." ; \
+> +		exit 1 ; \
+> +	fi
+> +
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/iio \
+> +		$(IIO_MAKE_OPTS)
+> +endef
+> +
+> +define IIO_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/iio \
+> +		$(IIO_MAKE_OPTS) \
+> +		INSTALL_ROOT=$(TARGET_DIR) \
+> +		install
+> +endef
+>
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Marcin Niestroj
