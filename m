@@ -1,82 +1,30 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 21 Oct 2016 10:45:56 +0100
-Subject: [Buildroot] [PATCH v2 1/2] MIPS: add support for XBurst cores
-Message-ID: <20161021094557.41859-1-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Oct 2016 11:57:20 +0200
+Subject: [Buildroot] Lets keep in touch
+In-Reply-To: <CAMcwGNT2BQyY-esY7EBxvd5T-=Wu9GqPwdkW6xLjmBD0D8Bf_Q@mail.gmail.com>
+References: <CAMcwGNT2BQyY-esY7EBxvd5T-=Wu9GqPwdkW6xLjmBD0D8Bf_Q@mail.gmail.com>
+Message-ID: <20161021115720.611f40df@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- There isn't any matching -march option for this core family, so we
-  need to stick with the generic mips32r2.
-- Add an option to the toolchain wrapper to avoid an FPU bug.
+Hello Joao,
 
-Related: http://www.ingenic.com/en/?xburst.html
+On Fri, 21 Oct 2016 10:39:17 +0100, Jo?o Pinto wrote:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Although I am leaving Synopsys, I would like to keep working with the
+> Buildroot community and help in what you might find useful. For that I
+> am sending this e-mail to give you my new contact.
 
----
-Changes v1 -> v2:
- - Do not add -mmxu to the wrapper.
----
- arch/Config.in.mips            | 5 +++++
- toolchain/toolchain-wrapper.c  | 3 +++
- toolchain/toolchain-wrapper.mk | 5 +++++
- 3 files changed, 13 insertions(+)
+Thanks a lot for your contributions to Buildroot so far. I wish you all
+the best in your new professional adventures!
 
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index 3662fed..3075d3f 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -63,6 +63,10 @@ config BR2_mips_p5600
- 	bool "P5600"
- 	depends on !BR2_ARCH_IS_64
- 	select BR2_MIPS_CPU_MIPS32R5
-+config BR2_mips_xburst
-+	bool "XBurst"
-+	depends on !BR2_ARCH_IS_64
-+	select BR2_MIPS_CPU_MIPS32R2
- config BR2_mips_64
- 	bool "Generic MIPS64"
- 	depends on BR2_ARCH_IS_64
-@@ -137,6 +141,7 @@ config BR2_GCC_TARGET_ARCH
- 	default "m5101"		if BR2_mips_m5101
- 	default "m6201"		if BR2_mips_m6201
- 	default "p5600"		if BR2_mips_p5600
-+	default "mips32r2"	if BR2_mips_xburst
- 	default "mips64"	if BR2_mips_64
- 	default "mips64r2"	if BR2_mips_64r2
- 	default "mips64r5"	if BR2_mips_64r5
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index 925d013..d59629b 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -66,6 +66,9 @@ static char *predef_args[] = {
- #ifdef BR_OMIT_LOCK_PREFIX
- 	"-Wa,-momit-lock-prefix=yes",
- #endif
-+#ifdef BR_NO_FUSED_MADD
-+	"-mno-fused-madd",
-+#endif
- #ifdef BR_BINFMT_FLAT
- 	"-Wl,-elf2flt",
- #endif
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index af39071..dc3210d 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -26,6 +26,11 @@ ifeq ($(BR2_x86_x1000),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_OMIT_LOCK_PREFIX
- endif
- 
-+# Avoid FPU bug on XBurst CPUs
-+ifeq ($(BR2_mips_xburst),y)
-+TOOLCHAIN_WRAPPER_ARGS += -DBR_NO_FUSED_MADD
-+endif
-+
- ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
- endif
+Best regards,
+
+Thomas
 -- 
-2.10.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
