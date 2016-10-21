@@ -1,15 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 21 Oct 2016 21:33:24 +0200
-Subject: [Buildroot] [PATCH 1/2] X11/odroidc2-driver: New Package.
-In-Reply-To: <trinity-1276538b-c0a7-428c-b075-e61e507d8e4a-1476985276905@3capp-mailcom-bs07>
-References: <20161013174124.9639-1-daggs@gmx.com>
- <9fe82330-7c8d-0f31-e777-db4e5014cf5f@mind.be>
- <trinity-122b1f64-5a75-4714-b1e0-471c25487584-1476738693195@3capp-mailcom-bs01>
- <5c997397-22ef-70f1-9a92-c1b7466de872@mind.be>
- <trinity-1310d2bf-8c3b-45fa-991f-bdfe4076c3af-1476777721158@3capp-mailcom-bs14>
- <33ce6fd6-016f-6654-ed86-e7098025cd3d@mind.be>
- <trinity-1276538b-c0a7-428c-b075-e61e507d8e4a-1476985276905@3capp-mailcom-bs07>
-Message-ID: <5998c23d-941a-d12b-187b-550aa82cb4f6@mind.be>
+Date: Fri, 21 Oct 2016 21:45:52 +0200
+Subject: [Buildroot] [PATCH] ci20_defconfig: disable madd instructions
+ to avoid FPU bug
+In-Reply-To: <20161019113229.02a9d8c3@free-electrons.com>
+References: <20161018122421.64118-1-Vincent.Riera@imgtec.com>
+ <20161018145413.37ae0751@free-electrons.com>
+ <68e76d80-a505-e029-941a-fe43d9780536@imgtec.com>
+ <20161019113229.02a9d8c3@free-electrons.com>
+Message-ID: <d058213e-21f3-59e3-49ae-103d4fce6a8c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,74 +16,66 @@ To: buildroot@busybox.net
 
 
 
-On 20-10-16 19:41, daggs wrote:
-> Greetings Arnout,
+On 19-10-16 11:32, Thomas Petazzoni wrote:
+> Hello,
 > 
->> On 18-10-16 10:02, daggs wrote:
->>> Greetings Arnout,
->>>
->>>> On 17-10-16 23:11, daggs wrote:
->>>>
+> On Wed, 19 Oct 2016 09:47:03 +0100, Vicente Olivert Riera wrote:
+> 
+>> We could add an Ingenic XBurst entry in the MIPS CPU selection, and then
+>> add that -mno-fused-madd option to the wrapper based on that selection.
 >>
->>>> [snip]
->>>>>>> +XDRIVER_XF86_VIDEO_ODROIDC2_LICENSE_FILES = README.txt 
->>>>>>> +XDRIVER_XF86_VIDEO_ODROIDC2_DEPENDENCIES = \
->>>>>>> +	odroid-mali \
->>>>>>> +	xproto_fontsproto \
->>>>>>> +	xproto_xproto \
->>>>>>
->>>>>>  You also select dri2proto, is that not needed? But actually, I don't see any
->>>>>> inclusion of either of these three proto packages, only of xserver stuff (and a
->>>>>> few that I can't place, like ump.h)
->>>>> ump.h is part of the x11 egl pkg.
->>>>> I've added the above deps based on compilation errors I've got.
->>>>
->>>>  I suspect that it actually comes from the headers of odroid-mali. If that is
->>>> the case, it would be better to put the dependency in odroid-mali itself
->>>> (conditional on using the X11 version, of course).
->>> I don't understand one thing, the existence of dri2proto does affects odroid-mali, why should I depend odroid-mali dri2proto it when there is no logic to do so?
->>
->>  I'm sorry but I couldn't parse your sentence. So I'll just re-explain.
->>
->>  I suspect that xproto_fontsproto and xproto_xproto are not included by the
->> video driver itself, but are included by odroid-mali headers. So I checked and
->> indeed, the odroid-mali headers include X11/Xlib.h and X11/Xutil.h. So, in
->> odroid-mali.mk you should add something like
->>
->> ifeq ($(BR2_PACKAGE_ODROID_MALI_X11),y)
->> # The X11 version of the headers include X11/Xlib.h and X11/Xutil.h
->> ODROID_MALI_DEPENDENCIES += xlib_libX11
->> endif
-> won't this means that xlib_libX11 will be built? if so, the headers mentioned above won't be deleted by xlib_libX11?
+>> If you are OK with that, please let me know and I'll cook the patch.
+> 
+> If I understand correctly:
+> 
+>  - JZ4780 is the SoC
+>  - XBurst is the core
+>  - MIPS32r2 is the ISA
+> 
+> So indeed, it makes sense to add an option for XBurst, in order to
+> mimic what we do on ARM.
+> 
+> Ideally, we should mimic what we do on ARM, and only list in
+> "Target architecture variants" the cores and not the ISA. How many
+> vendors are doing MIPS cores, and how many cores are they doing?
 
- Yes, xlib_libX11 will be built, so Xlib.h and Xutil.h get installed to staging,
-which is exactly what we want, no?
+ I believe that for MIPS, every vendor uses their own core, and that there is an
+almost one-to-one mapping between SoC family and core. AFAIU it's only the
+instruction set that is standardized. My gcc supports 74 cores... Do we really
+want to add all of these?
 
-> 
->>
->> and in Config.in:
->> 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_ODROID_MALI_X11
->>
-> ok, I understand this.
-> 
->>
->>  For the video driver, the required packages seem to be:
->>
->> xserver_xorg-server (for damage.h, dri2.h, exa.h, micmap.h, ...)
->> libdrm (for xf86drm.h)
->>
->>  But I haven't actually tried building it so I'm not sure.
-> it needs testing, will do after I'll finish understanding all the rejects.
-> 
-> what about the xorg.conf? I'm pretty sure that it won't work without the xorg.conf.
-> what is the right way to address it?
+ That said, now we already have a bit a mixed situation: we have a few
+processors and a few generic options in Config.in.mips. But I expect that
+Buildroot will often be used on SoCs where either Buildroot or GCC doesn't have
+a processor-specific option yet, so the generic ones will still be needed.
 
- Of course it won't work without xorg.conf adaptations. But many drivers need or
-may need xorg.conf adaptations. So what you should do is to add an explanation
-to the help text in Config.in. Look at xdriver_xf86-video-imx-viv as an example.
+> If you look at ARM, we have the following situation:
+> 
+>  - Freescale, TI, Atmel, Marvell, Qualcomm, Nvidia, etc. are doing SoCs
+>    They are way too many for Buildroot to have a list of them.
+> 
+>  - Very few vendors are doing cores. Most of the SoC vendors are using
+>    the cores from ARM. For example, we have ARM926, Cortex-A7, Cortex-A8,
+>    Cortex-A53, etc.
+
+ That's the difference of course. ARM owns the core, while MIPS is a more or
+less open architecture. Not open enough, of course, which is why RISC-V was started.
 
  Regards,
  Arnout
+
+
+>    Those are the ones that are listed in "Target Architecture Variant",
+>    and we use the selected option to know the ISA.
+> 
+>  - ISAs are ARMv4, ARMv5, ARMv6, ARMv7, ARMv8, with a few variants.
+> 
+> So having a similar model for MIPS would be ideal.
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
