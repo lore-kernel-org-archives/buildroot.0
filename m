@@ -1,39 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Oct 2016 11:05:26 +0200
-Subject: [Buildroot] Report from the Buildroot Meeting in Berlin
-In-Reply-To: <51578cf5-58ba-38ce-6fee-6535784bd150@mind.be>
-References: <20161019221035.2350c181@free-electrons.com>
- <c2da1832-3282-33f0-1588-e828f3df4801@mind.be>
- <20161021102556.10d9a5e6@free-electrons.com>
- <51578cf5-58ba-38ce-6fee-6535784bd150@mind.be>
-Message-ID: <20161021110526.7829792f@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 21 Oct 2016 10:45:57 +0100
+Subject: [Buildroot] [PATCH v2 2/2] ci20_defconfig: use XBurst CPU
+In-Reply-To: <20161021094557.41859-1-Vincent.Riera@imgtec.com>
+References: <20161021094557.41859-1-Vincent.Riera@imgtec.com>
+Message-ID: <20161021094557.41859-2-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-On Fri, 21 Oct 2016 10:57:28 +0200, Arnout Vandecappelle wrote:
+---
+Changes v1 -> v2:
+ - None.
+---
+ configs/ci20_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > That being said, what matters to me is that we improve the code to make
-> > it clear which flags go in the wrapper and which flags do not. Having a
-> > TARGET_WRAPPER_CFLAGS separate from TARGET_EXTRA_CFLAGS will make this
-> > very clear, which TARGET_CFLAGS being set to $(TARGET_WRAPPER_CFLAGS)
-> > $(TARGET_EXTRA_CFLAGS).  
-> 
->  +1 to the naming. Although I think I'll call it TARGET_FLAGS because we will
-> use them for LDFLAGS and CXXFLAGS and FCFLAGS as well.
-
-Yes, absolutely. I had forgotten about that, but I continue to agree
-with TARGET_FLAGS, which is then used to set all of CFLAGS, CXXFLAGS,
-LDFLAGS and FCFLAGS.
-
-Thanks,
-
-Thomas
+diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+index bd30cbd..ecf3007 100644
+--- a/configs/ci20_defconfig
++++ b/configs/ci20_defconfig
+@@ -1,6 +1,6 @@
+ # architecture
+ BR2_mipsel=y
+-BR2_mips_32r2=y
++BR2_mips_xburst=y
+ # BR2_MIPS_SOFT_FLOAT is not set
+ 
+ # Linux headers same as kernel, a 3.18 series
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.10.1
