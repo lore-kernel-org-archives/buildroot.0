@@ -1,79 +1,45 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Fri, 21 Oct 2016 10:18:14 +0200
-Subject: [Buildroot] [PATCH] package/linux-tools: add iio
-In-Reply-To: <20161003122611.2527-1-m.niestroj@grinn-global.com>
-References: <20161003122611.2527-1-m.niestroj@grinn-global.com>
-Message-ID: <90042fdb-018c-3918-f949-3a5a866a4592@grinn-global.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Oct 2016 10:25:56 +0200
+Subject: [Buildroot] Report from the Buildroot Meeting in Berlin
+In-Reply-To: <c2da1832-3282-33f0-1588-e828f3df4801@mind.be>
+References: <20161019221035.2350c181@free-electrons.com>
+ <c2da1832-3282-33f0-1588-e828f3df4801@mind.be>
+Message-ID: <20161021102556.10d9a5e6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't look into it. I've sent it by mistake!
+Hello,
 
-On 21.10.2016 10:16, Marcin Niestroj wrote:
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
->  package/linux-tools/Config.in         |  9 +++++++++
->  package/linux-tools/linux-tool-iio.mk | 27 +++++++++++++++++++++++++++
->  2 files changed, 36 insertions(+)
->  create mode 100644 package/linux-tools/linux-tool-iio.mk
->
-> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-> index 61c196f..bde70de 100644
-> --- a/package/linux-tools/Config.in
-> +++ b/package/linux-tools/Config.in
-> @@ -20,6 +20,15 @@ comment "cpupower needs a toolchain w/ wchar"
->  	depends on !BR2_bfin
->  	depends on !BR2_USE_WCHAR && BR2_NEEDS_GETTEXT
->
-> +config BR2_PACKAGE_LINUX_TOOLS_IIO
-> +	bool "iio"
-> +	select BR2_PACKAGE_LINUX_TOOLS
-> +	help
-> +	  iio is a collection of tools to get information about,
-> +	  control and monitor iio devices present on system.
-> +
-> +	  These tools are available only from kernel version 4.7.
-> +
->  config BR2_PACKAGE_LINUX_TOOLS_PERF
->  	bool "perf"
->  	select BR2_PACKAGE_LINUX_TOOLS
-> diff --git a/package/linux-tools/linux-tool-iio.mk b/package/linux-tools/linux-tool-iio.mk
-> new file mode 100644
-> index 0000000..3f6e078
-> --- /dev/null
-> +++ b/package/linux-tools/linux-tool-iio.mk
-> @@ -0,0 +1,27 @@
-> +################################################################################
-> +#
-> +# iio
-> +#
-> +################################################################################
-> +
-> +LINUX_TOOLS += iio
-> +
-> +IIO_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS)
-> +
-> +define IIO_BUILD_CMDS
-> +	$(Q)if ! grep install $(LINUX_DIR)/tools/iio/Makefile >/dev/null 2>&1 ; then \
-> +		echo "Your kernel version is too old and does not have install section in the iio tools." ; \
-> +		echo "At least kernel 4.7 must be used." ; \
-> +		exit 1 ; \
-> +	fi
-> +
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/iio \
-> +		$(IIO_MAKE_OPTS)
-> +endef
-> +
-> +define IIO_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/iio \
-> +		$(IIO_MAKE_OPTS) \
-> +		INSTALL_ROOT=$(TARGET_DIR) \
-> +		install
-> +endef
->
+On Thu, 20 Oct 2016 18:39:37 +0200, Arnout Vandecappelle wrote:
 
+>  Turns out that it will be slightly more complicated than this. For MIPS, the
+> -mmsa option to enable SIMD processing MUST NOT be used in kernel and bootloader
+> builds. Therefore we cannot add it to TARGET_WRAPPER_CFLAGS. Instead, we'll have
+> a TARGET_EXTRA_CFLAGS that does not get added to the wrapper but does get added
+> to TARGET_CFLAGS and therefore passed to package buidls.
+> 
+>  The kernel and bootloaders don't use TARGET_CFLAGS, so those are safe. Also, it
+> is possible to link libraries built with -mmsa with programs that are built
+> without that option, so even if build systems ignore TARGET_CFLAGS it should be OK.
+
+That's a bit annoying because it then moves away from the idea "all
+architecture variant, ABI, floating point, etc. options are encoded in
+the wrapper", which was the key part of our discussion during the
+meeting.
+
+However, I don't really see a good way around it.
+
+That being said, what matters to me is that we improve the code to make
+it clear which flags go in the wrapper and which flags do not. Having a
+TARGET_WRAPPER_CFLAGS separate from TARGET_EXTRA_CFLAGS will make this
+very clear, which TARGET_CFLAGS being set to $(TARGET_WRAPPER_CFLAGS)
+$(TARGET_EXTRA_CFLAGS).
+
+Thomas
 -- 
-Marcin Niestroj
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
