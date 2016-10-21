@@ -1,40 +1,36 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 21 Oct 2016 17:11:14 +0100
-Subject: [Buildroot] [PATCH] nmap: bump version to 7.31
-Message-ID: <20161021161114.24508-1-Vincent.Riera@imgtec.com>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Fri, 21 Oct 2016 23:15:56 +0530
+Subject: [Buildroot] [PATCH] pppd: fix config file name
+Message-ID: <1477071956-17212-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/nmap/nmap.hash | 4 ++--
- package/nmap/nmap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+When radius plugin is enabled, we get following error:
 
-diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-index 94e189e..2a26557 100644
---- a/package/nmap/nmap.hash
-+++ b/package/nmap/nmap.hash
-@@ -1,2 +1,2 @@
--# From https://nmap.org/dist/sigs/nmap-7.30.tar.bz2.digest.txt
--sha256  ba38a042ec67e315d903d28a4976b74999da94c646667c0c63f31e587d6d8d0f nmap-7.30.tar.bz2
-+# From https://nmap.org/dist/sigs/nmap-7.31.tar.bz2.digest.txt
-+sha256 cb9f4e03c0771c709cd47dc8fc6ac3421eadbdd313f0aae52276829290583842  nmap-7.31.tar.bz2
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 2cc7604..3087903 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+/usr/bin/install: cannot stat '/home/rahul.bedarkar/buildroot/output/build/pppd-2.4.7/pppd/plugins/radius/etc/server': No such file or directory
+
+Name of config file is 'servers' instead of 'server'.
+
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+ package/pppd/pppd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 92897be..3741f92 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -18,7 +18,7 @@ PPPD_TARGET_BINS = chat pppd pppdump pppstats
+ PPPD_RADIUS_CONF = \
+ 	dictionary dictionary.ascend dictionary.compat \
+ 	dictionary.merit dictionary.microsoft \
+-	issue port-id-map realms server radiusclient.conf
++	issue port-id-map realms servers radiusclient.conf
  
--NMAP_VERSION = 7.30
-+NMAP_VERSION = 7.31
- NMAP_SITE = http://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = libpcap pcre
+ ifeq ($(BR2_PACKAGE_PPPD_FILTER),y)
+ PPPD_DEPENDENCIES += libpcap
 -- 
-2.10.1
+2.6.2
