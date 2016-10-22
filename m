@@ -1,23 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 22 Oct 2016 19:59:00 +0000
-Subject: [Buildroot] [Bug 9251] Shared C++ libraries for Microblaze results
- in Segmentation Fault
-In-Reply-To: <bug-9251-163@https.bugs.busybox.net/>
-References: <bug-9251-163@https.bugs.busybox.net/>
-Message-ID: <bug-9251-163-hDDb9rYcL0@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 22 Oct 2016 14:58:00 +0200
+Subject: [Buildroot] [PATCH 2/2] rsyslog: bump version to 8.22.0
+In-Reply-To: <1477077074-5602-2-git-send-email-rahul.bedarkar@imgtec.com>
+ (Rahul Bedarkar's message of "Sat, 22 Oct 2016 00:41:14 +0530")
+References: <1477077074-5602-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <1477077074-5602-2-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <87vawka6cn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9251
+>>>>> "Rahul" == Rahul Bedarkar <rahul.bedarkar@imgtec.com> writes:
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Waldemar has identified that this is a regression between binutils 2.25 and
-binutils 2.26. I.e, with binutils 2.25, C++ programs linked dynamically work
-fine on Microblaze. Starting with binutils 2.26, they no longer work.
+ > Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
