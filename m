@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] pppd: use $(TARGET_MAKE_ENV) when calling
-	$(MAKE)
-Message-ID: <20161022132036.6F5D181974@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lm-sensors: use $(TARGET_MAKE_ENV) when
+	calling $(MAKE)
+Message-ID: <20161022132038.3AB6C7F925@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebd73fab3e0c0a5bef351d1d6f14ed2323b6e24f
+commit: https://git.buildroot.net/buildroot/commit/?id=30b69cc2526d35e477931de6aee97700918b60f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pppd/pppd.mk | 6 +++---
+ package/lm-sensors/lm-sensors.mk | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 3741f92..55630a8 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -46,11 +46,11 @@ PPPD_POST_EXTRACT_HOOKS += PPPD_SET_RESOLV_CONF
- define PPPD_CONFIGURE_CMDS
- 	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
- 	$(SED) 's/ifneq ($$(wildcard \/usr\/include\/pcap-bpf.h),)/ifdef FILTER/' $(PPPD_DIR)/*/Makefile.linux
--	( cd $(@D); ./configure --prefix=/usr )
-+	( cd $(@D); $(TARGET_MAKE_ENV) ./configure --prefix=/usr )
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index d2080d8..314d107 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -38,16 +38,16 @@ LM_SENSORS_MAKE_OPTS += BUILD_STATIC_LIB=1
+ endif
+ 
+ define LM_SENSORS_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LM_SENSORS_MAKE_OPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) $(LM_SENSORS_MAKE_OPTS) -C $(@D)
  endef
  
- define PPPD_BUILD_CMDS
--	$(MAKE) CC="$(TARGET_CC)" COPTS="$(TARGET_CFLAGS)" \
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" COPTS="$(TARGET_CFLAGS)" \
- 		-C $(@D) $(PPPD_MAKE_OPTS)
+ define LM_SENSORS_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) $(LM_SENSORS_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LM_SENSORS_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+ 	rm -f $(addprefix $(STAGING_DIR)/usr/,$(LM_SENSORS_BINS_) $(LM_SENSORS_BINS_y))
  endef
  
-@@ -104,7 +104,7 @@ define PPPD_INSTALL_TARGET_CMDS
+ define LM_SENSORS_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(LM_SENSORS_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LM_SENSORS_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/,$(LM_SENSORS_BINS_))
  endef
  
- define PPPD_INSTALL_STAGING_CMDS
--	$(MAKE) INSTROOT=$(STAGING_DIR)/ -C $(@D) $(PPPD_MAKE_OPTS) install-devel
-+	$(TARGET_MAKE_ENV) $(MAKE) INSTROOT=$(STAGING_DIR)/ -C $(@D) $(PPPD_MAKE_OPTS) install-devel
- endef
- 
- $(eval $(generic-package))
