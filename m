@@ -1,39 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] tvheadend: use $(TARGET_MAKE_ENV) when
-	calling $(MAKE)
-Message-ID: <20161022132037.4979A819A0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 22 Oct 2016 14:10:01 +0200
+Subject: [Buildroot] [git commit] pkg-download: use raw basename for
+	repo archiving to remove host- prefix
+In-Reply-To: <20161020215647.7dcbab0d@free-electrons.com> (Thomas Petazzoni's
+ message of "Thu, 20 Oct 2016 21:56:47 +0200")
+References: <20161020195440.B127A81801@busybox.osuosl.org>
+ <20161020215647.7dcbab0d@free-electrons.com>
+Message-ID: <87lgxgbn52.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1b52dad267ede052a8555bc0447c4af17ba8c53
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tvheadend/tvheadend.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > Hello,
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 516cbd3..af90a82 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -88,11 +88,11 @@ define TVHEADEND_CONFIGURE_CMDS
- endef
- 
- define TVHEADEND_BUILD_CMDS
--	$(MAKE) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
- endef
- 
- define TVHEADEND_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
- endef
- 
- # Remove documentation and source files that are not needed because we
+ > Applied to master, thanks a lot for the great commit log!
+
+Did you change anything in your scripts? Lately your applied mails seems
+to be replies to the git notification mails rather than the mail from
+the contributor?
+
+-- 
+Bye, Peter Korsgaard
