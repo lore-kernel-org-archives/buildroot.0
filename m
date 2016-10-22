@@ -1,39 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] memtester: use $(TARGET_MAKE_ENV) when
-	calling $(MAKE)
-Message-ID: <20161022132038.C3FC6819A0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 22 Oct 2016 14:58:07 +0200
+Subject: [Buildroot] [git commit] rsyslog: bump version to 8.22.0
+Message-ID: <20161022125828.AF58D80093@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=856459aca6dad68eecd7d6557a8ecb5f57161f68
+commit: https://git.buildroot.net/buildroot/commit/?id=7828bf001c4470ac4049400310854b97aa2c8fd2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/memtester/memtester.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/rsyslog/rsyslog.hash | 2 +-
+ package/rsyslog/rsyslog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/memtester/memtester.mk b/package/memtester/memtester.mk
-index d12babc..802c1e4 100644
---- a/package/memtester/memtester.mk
-+++ b/package/memtester/memtester.mk
-@@ -13,11 +13,11 @@ MEMTESTER_TARGET_INSTALL_OPTS = INSTALLPATH=$(TARGET_DIR)/usr
+diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+index 7dc341a..4fe6a0e 100644
+--- a/package/rsyslog/rsyslog.hash
++++ b/package/rsyslog/rsyslog.hash
+@@ -1,2 +1,2 @@
+ # From http://www.rsyslog.com/downloads/download-v8-stable/
+-sha256	3379b30f2e6ef05a0f1c7327c73923fa5877a80b984506cdf48ed068c94a575e	rsyslog-8.19.0.tar.gz
++sha256	06e2884181333dccecceaca82827ae24ca7a258b4fbf7b1e07a80d4caae640ca	rsyslog-8.22.0.tar.gz
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 18a5737..a0875b7 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define MEMTESTER_BUILD_CMDS
- 	$(SED) "s,^cc,$(TARGET_CC)," $(@D)/conf-*
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
- endef
- 
- define MEMTESTER_INSTALL_TARGET_CMDS
--	$(MAKE) $(MEMTESTER_TARGET_INSTALL_OPTS) -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) $(MEMTESTER_TARGET_INSTALL_OPTS) -C $(@D) install
- endef
- 
- $(eval $(generic-package))
+-RSYSLOG_VERSION = 8.19.0
++RSYSLOG_VERSION = 8.22.0
+ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
+ RSYSLOG_LICENSE = GPLv3, LGPLv3, Apache-2.0
+ RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
