@@ -1,55 +1,104 @@
-From: Jan Heylen <heyleke@gmail.com>
-Date: Sat, 22 Oct 2016 21:08:16 +0200
-Subject: [Buildroot] [PATCH 1/1] protobuf: bump to version 3.0.0
-In-Reply-To: <20161022160753.65f5e3d5@free-electrons.com>
-References: <1476983609-17269-1-git-send-email-heyleke@gmail.com>
- <20161022160753.65f5e3d5@free-electrons.com>
-Message-ID: <CAGszK3hvwQ8MDM4igAz-qbPSW+hgs4EhGrjZenO51Tzr88rn=g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Oct 2016 16:20:17 +0200
+Subject: [Buildroot] [git commit] toolchainfile.cmake: set per-config
+	appended {C, CXX}FLAGS
+Message-ID: <20161022144115.83B207FF62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ok, thx for fixing up the patch, I'll do better searching for dependencies
-next time.
+commit: https://git.buildroot.net/buildroot/commit/?id=12494ef48f893684d0800e7f6fe39a2ceaed0451
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-br,
+When a build type is set, CMake does append some flags that can override
+those set by Buildroot due to the gcc option parser (in which the last
+argument controling an option wins).
 
-Jan
+Hereafter is a summary of the optimization and debug flags set by
+Buildroot and appended by CMake.
 
-On Sat, Oct 22, 2016 at 4:07 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+* Flags set by Buildroot depending on the configuration:
 
-> Hello,
->
-> On Thu, 20 Oct 2016 19:13:29 +0200, Jan Heylen wrote:
-> > Signed-off-by: Jan Heylen <heyleke@gmail.com>
-> > ---
-> >  ...GLE_PROTOBUF_ATOMICOPS_ERROR-syntax-error.patch | 61
-> ----------------------
-> >  ...onfigure.ac-check-if-libatomic-is-needed.patch} |  4 +-
-> >  package/protobuf/protobuf.hash                     |  2 +-
-> >  package/protobuf/protobuf.mk                       |  2 +-
-> >  4 files changed, 4 insertions(+), 65 deletions(-)
-> >  delete mode 100644 package/protobuf/0001-Fix-GOOGLE_PROTOBUF_ATOMICOPS_
-> ERROR-syntax-error.patch
-> >  rename package/protobuf/{0002-configure.ac-check-if-libatomic-is-needed.patch
-> => 0001-configure.ac-check-if-libatomic-is-needed.patch} (85%)
->
-> I've applied, but you forgot to test building the python-protobuf
-> package, which uses the same source code. So I've fixed that up, and
-> also added a comment in protobuf.mk to remind people bumping this
-> package to also check python-protobuf.
->
-> Thanks a lot!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161022/15516b13/attachment.html>
+  BR2_ENABLE_DEBUG | Optim. level        | Buildroot {C,CXX}FLAGS
+  =================+=====================+=======================
+          y        | BR2_OPTIMIZE_S      | -Os -gx
+          y        | BR2_OPTIMIZE_G      | -Og -gx
+          y        | BR2_OPTIMIZE_{0..3} | -On -gx
+          n        | BR2_OPTIMIZE_S      | -Os
+          n        | BR2_OPTIMIZE_G      | -Og
+          n        | BR2_OPTIMIZE_{0..3} | -On
+
+* Default flags appended by CMake depending on the build type:
+
+  Build type     | Flags           | Effects on {C,CXX}FLAGS
+  ===============+=================+===========================================
+  Debug          | -g              | Force -g, compatible with BR2_ENABLE_DEBUG
+  MinSizeRel     | -Os -DNDEBUG    | Set -Os, compatible with BR2_OPTIMIZE_S
+  Release        | -O3 -DNDEBUG    | Set -O3, closest to the others cases,
+                 |                 | though the optimization level is forced.
+  RelWithDebInfo | -O2 -g -DNDEBUG | Force -g and set -O2, not friendly with BR
+
+To avoid the CMake flags take precedence over the Buildroot ones, this
+change sets in toolchainfile.cmake the per-config compiler flags CMake
+can append depending on the build type Buildroot defined.
+So, CMake does not mess up with the compilation flags Buildroot sets.
+
+It is still possible to override these per-config flags on the cmake
+command line.
+
+Note:
+  If a CMake-based project forces the compiler and/or linker flag
+  definitions (the default ones or the per-config ones - e.g.
+  CMAKE_C_FLAGS/CMAKE_C_FLAGS_{DEBUG,RELEASE}), there is not much
+  Buildroot can do about it.
+  So, the flags will be overwritten anyway in these cases.
+
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas:
+ - adjust comment in toolchainfile.cmake.in, as suggested by Arnout.
+ - also handle CMAKE_Fortran_FLAGS_*, as suggested by Arnout.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/misc/toolchainfile.cmake.in | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index 1c5031f..a8476d9 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -13,6 +13,21 @@ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST
+ set(CMAKE_SYSTEM_NAME Linux)
+ set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
+ 
++# Set the {C,CXX}FLAGS appended by CMake depending on the build type
++# defined by Buildroot. CMake defaults these variables with -g and/or
++# -O options, and they are appended at the end of the argument list,
++# so the Buildroot options are overridden. Therefore these variables
++# have to be cleared, so that the options passed in CMAKE_C_FLAGS do
++# apply.
++#
++# Note:
++#   if the project forces some of these flag variables, Buildroot is
++#   screwed up and there is nothing Buildroot can do about that :(
++set(CMAKE_C_FLAGS_DEBUG "" CACHE STRING "Debug CFLAGS")
++set(CMAKE_CXX_FLAGS_DEBUG "" CACHE STRING "Debug CXXFLAGS")
++set(CMAKE_C_FLAGS_RELEASE " -DNEBUG" CACHE STRING "Release CFLAGS")
++set(CMAKE_CXX_FLAGS_RELEASE " -DNEBUG" CACHE STRING "Release CXXFLAGS")
++
+ # Build type from the Buildroot configuration
+ set(CMAKE_BUILD_TYPE @@CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configuration")
+ 
+@@ -34,6 +49,8 @@ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+ set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
+ set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
+ if(@@TOOLCHAIN_HAS_FORTRAN@@)
++  set(CMAKE_Fortran_FLAGS_DEBUG "" CACHE STRING "Debug CFLAGS")
++  set(CMAKE_Fortran_FLAGS_RELEASE " -DNEBUG" CACHE STRING "Release CFLAGS")
+   set(CMAKE_Fortran_FLAGS "@@TARGET_FCFLAGS@@ ${CMAKE_Fortran_FLAGS}" CACHE STRING "Buildroot FCFLAGS")
+   set(CMAKE_Fortran_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_FC@@")
+ endif()
