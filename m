@@ -1,36 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] ncurses: use $(HOST_MAKE_ENV) when calling
-	$(MAKE)
-Message-ID: <20161022132036.CBABA819A4@busybox.osuosl.org>
+Date: Sat, 22 Oct 2016 15:36:01 +0200
+Subject: [Buildroot] [PATCH v1] postgresql: bump version to 9.6.0
+In-Reply-To: <1476992972-1868-1-git-send-email-ps.report@gmx.net>
+References: <1476992972-1868-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20161022153601.6b120397@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7bb73d0fb9c30e84f973234c4bccacf4bea6b26
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ncurses/ncurses.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Thu, 20 Oct 2016 21:49:32 +0200, Peter Seiderer wrote:
+> For release notes see [1].
+> 
+> [1] https://www.postgresql.org/docs/9.6/static/release-9-6.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/postgresql/postgresql.hash | 4 ++--
+>  package/postgresql/postgresql.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 9555f1e..343909f 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -169,8 +169,8 @@ endef # NCURSES_INSTALL_TARGET_CMDS
- # ourselves, and use that during installation.
- #
- define HOST_NCURSES_BUILD_CMDS
--	$(MAKE1) -C $(@D) sources
--	$(MAKE) -C $(@D)/progs tic
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) sources
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/progs tic
- endef
- 
- HOST_NCURSES_CONF_OPTS = \
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
