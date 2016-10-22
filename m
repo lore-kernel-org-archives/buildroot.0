@@ -1,32 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 16:43:30 +0200
-Subject: [Buildroot] [PATCH v6 2/9] package/pkg-cmake.mk: move
- CMAKE_BUILD_TYPE definition into toolchainfile.cmake
-In-Reply-To: <20161016111245.1847-3-s.martin49@gmail.com>
-References: <20161016111245.1847-1-s.martin49@gmail.com>
- <20161016111245.1847-3-s.martin49@gmail.com>
-Message-ID: <20161022164330.6dfc7bbd@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 22 Oct 2016 11:25:11 +0200
+Subject: [Buildroot] [PATCH 2/2] package/ffmpeg: bump version to 3.1.5
+In-Reply-To: <20161022092511.1854-1-bernd.kuhls@t-online.de>
+References: <20161022092511.1854-1-bernd.kuhls@t-online.de>
+Message-ID: <20161022092511.1854-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sun, 16 Oct 2016 13:12:38 +0200, Samuel Martin wrote:
-
-> +    toolchainfile.cmake:
-> +    * when used outside of Buildroot, if not specified on the command
-> +      line, the CMAKE_BUILD_TYPE is by toolchainfile.cmake.
-
-I've reworded this differently. Please double check that the new text
-is fine.
-
-Thanks,
-
-Thomas
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 160e31d..7b1e140 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 a80cb378dda5c9bbcdbd62a99bdec0e4eedbcb47f290e72845af4855c1146b5b  ffmpeg-3.1.4.tar.xz
++sha256 49cc3105f7891c5637f8fabb1b75ebb19c9b5123b311a3ccc6182aa35d58b89a  ffmpeg-3.1.5.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 52a39de..52d2f38 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 3.1.4
++FFMPEG_VERSION = 3.1.5
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
