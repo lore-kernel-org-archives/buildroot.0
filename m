@@ -1,39 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] turbolua: use $(TARGET_MAKE_ENV) when
-	calling $(MAKE)
-Message-ID: <20161022132039.9E6C780335@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 22 Oct 2016 14:56:53 +0200
+Subject: [Buildroot] [git commit] pppd: fix config file name
+Message-ID: <20161022125828.5060680093@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fd8cde1ffb43e38cdacc2f349224edfa1afdd59
+commit: https://git.buildroot.net/buildroot/commit/?id=4da424cfbe040c88f65773e0a1db58a6f396522d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/turbolua/turbolua.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+When radius plugin is enabled, we get following error:
 
-diff --git a/package/turbolua/turbolua.mk b/package/turbolua/turbolua.mk
-index bf6d491..bf9e27f 100644
---- a/package/turbolua/turbolua.mk
-+++ b/package/turbolua/turbolua.mk
-@@ -22,11 +22,11 @@ TURBOLUA_MAKE_OPTS += SSL=none
- endif
+/usr/bin/install: cannot stat '/home/rahul.bedarkar/buildroot/output/build/pppd-2.4.7/pppd/plugins/radius/etc/server': No such file or directory
+
+Name of config file is 'servers' instead of 'server'.
+
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pppd/pppd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 92897be..3741f92 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -18,7 +18,7 @@ PPPD_TARGET_BINS = chat pppd pppdump pppstats
+ PPPD_RADIUS_CONF = \
+ 	dictionary dictionary.ascend dictionary.compat \
+ 	dictionary.merit dictionary.microsoft \
+-	issue port-id-map realms server radiusclient.conf
++	issue port-id-map realms servers radiusclient.conf
  
- define TURBOLUA_BUILD_CMDS
--	$(MAKE) $(TURBOLUA_MAKE_OPTS) -C $(@D) all
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TURBOLUA_MAKE_OPTS) -C $(@D) all
- endef
- 
- define TURBOLUA_INSTALL_TARGET_CMDS
--	$(MAKE) $(TURBOLUA_MAKE_OPTS) LDCONFIG=true \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TURBOLUA_MAKE_OPTS) LDCONFIG=true \
- 		PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
- endef
- 
+ ifeq ($(BR2_PACKAGE_PPPD_FILTER),y)
+ PPPD_DEPENDENCIES += libpcap
