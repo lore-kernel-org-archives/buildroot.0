@@ -1,37 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] aufs-util: use $(HOST_MAKE_ENV) when
-	calling $(MAKE)
-Message-ID: <20161022132039.A722280335@busybox.osuosl.org>
+Date: Sat, 22 Oct 2016 15:35:37 +0200
+Subject: [Buildroot] [git commit] postgresql: bump version to 9.6.0
+Message-ID: <20161022133554.A1C5880DCE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1d218b7447d60c00aff8f71a29206a526b400d2
+commit: https://git.buildroot.net/buildroot/commit/?id=0603b9ea3eff9e11aba2b7408215e03d9247b977
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In this case in particular a host tool is built inside the target build
-step.
+For release notes see [1].
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[1] https://www.postgresql.org/docs/9.6/static/release-9-6.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/aufs-util/aufs-util.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/aufs-util/aufs-util.mk b/package/aufs-util/aufs-util.mk
-index a2d0bad..d41b4ac 100644
---- a/package/aufs-util/aufs-util.mk
-+++ b/package/aufs-util/aufs-util.mk
-@@ -41,7 +41,7 @@ AUFS_UTIL_POST_PATCH_HOOKS += AUFS_UTIL_REMOVE_RDU64
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 0d54890..5e73bad 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.postgresql.org/pub/source/v9.5.4/postgresql-9.5.4.tar.bz2.sha256
+-sha256 cf5e571164ad66028ecd7dd8819e3765470d45bcd440d258b686be7e69c76ed0  postgresql-9.5.4.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.6.0/postgresql-9.6.0.tar.bz2.sha256
++sha256 3b5fe9634b80a4511aac1832a087586a7caa8c3413619562bdda009a015863ce  postgresql-9.6.0.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 7179bbe..e2756bf 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # First, we build the host tools, needed to build the target tools.
- define AUFS_UTIL_BUILD_CMDS
--	$(MAKE) -C $(@D) \
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(HOST_CONFIGURE_OPTS) \
- 		CPPFLAGS="$(AUFS_UTIL_HOST_CPPFLAGS)" \
- 		HOSTCC="$(HOSTCC)" HOSTLD="$(HOSTLD)" \
+-POSTGRESQL_VERSION = 9.5.4
++POSTGRESQL_VERSION = 9.6.0
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
