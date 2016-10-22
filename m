@@ -1,41 +1,48 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 22 Oct 2016 17:09:05 +0200
-Subject: [Buildroot] [PATCH v6 0/9] Misc. CMake fixes
-In-Reply-To: <20161022164205.2a21afef@free-electrons.com>
-References: <20161016111245.1847-1-s.martin49@gmail.com>
- <20161022164205.2a21afef@free-electrons.com>
-Message-ID: <CAHXCMMJS6kdsAdgrDe1qP5W21xKNWi6OnWA20FnRsL+E=_Ui-w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Oct 2016 14:08:38 +0200
+Subject: [Buildroot] [PATCH] ci20_defconfig: disable madd instructions
+ to avoid FPU bug
+In-Reply-To: <d058213e-21f3-59e3-49ae-103d4fce6a8c@mind.be>
+References: <20161018122421.64118-1-Vincent.Riera@imgtec.com>
+ <20161018145413.37ae0751@free-electrons.com>
+ <68e76d80-a505-e029-941a-fe43d9780536@imgtec.com>
+ <20161019113229.02a9d8c3@free-electrons.com>
+ <d058213e-21f3-59e3-49ae-103d4fce6a8c@mind.be>
+Message-ID: <20161022140838.165b2fc0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Oct 22, 2016 at 4:42 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Sun, 16 Oct 2016 13:12:36 +0200, Samuel Martin wrote:
->
->> Max Filippov (1):
->>   package/opencv3: fix CMAKE_CXX_FLAGS
->>
->> Samuel Martin (8):
->>   Revert "package/cmake: with BR2_ENABLE_DEBUG use RelWithDebInfo"
->>   package/pkg-cmake.mk: move CMAKE_BUILD_TYPE definition into
->>     toolchainfile.cmake
->>   toolchainfile.cmake: set per-config appended {C,CXX}FLAGS
->>   package/gflags: include TARGET_CXXFLAGS to the overloaded CXXFLAGS
->>   package/gnuradio: include TARGET_CFLAGS to the overloaded CFLAGS
->>   package/libcec: include TARGET_{C,CXX}FLAGS to the overloaded
->>     {C,CXX}FLAGS
->>   package/rpi-userland: include TARGET_CFLAGS to the overloaded CFLAGS
->>   toochainfile.cmake: rework the way Buildroot sets flags
->
-> I've applied the series. I've done a few changes on specific patches,
-> I'll reply to the patches themselves.
+Hello,
 
-All fixes/amendments look fine, thanks.
+On Fri, 21 Oct 2016 21:45:52 +0200, Arnout Vandecappelle wrote:
 
+> > Ideally, we should mimic what we do on ARM, and only list in
+> > "Target architecture variants" the cores and not the ISA. How many
+> > vendors are doing MIPS cores, and how many cores are they doing?  
+> 
+>  I believe that for MIPS, every vendor uses their own core, and that there is an
+> almost one-to-one mapping between SoC family and core. AFAIU it's only the
+> instruction set that is standardized. My gcc supports 74 cores... Do we really
+> want to add all of these?
+
+Well, did you count for ARM? There are also many many cores supported
+in gcc. Admittedly probably not 74 cores, indeed.
+
+>  That said, now we already have a bit a mixed situation: we have a few
+> processors and a few generic options in Config.in.mips. But I expect that
+> Buildroot will often be used on SoCs where either Buildroot or GCC doesn't have
+> a processor-specific option yet, so the generic ones will still be needed.
+
+OK, fair enough. Then maybe they should be clearly separated by a
+comment within the choice...endchoice block.
+
+Best regards,
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
