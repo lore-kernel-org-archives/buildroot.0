@@ -1,55 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 16:10:24 +0200
-Subject: [Buildroot] [git commit] trinity: refactor dependencies using
-	BR2_PACKAGE_TRINITY_ARCH_SUPPORTS
-Message-ID: <20161022141233.775D9817FF@busybox.osuosl.org>
+Date: Sat, 22 Oct 2016 15:19:24 +0200
+Subject: [Buildroot] [git commit] xtables-addons: use $(TARGET_MAKE_ENV)
+	when calling $(MAKE)
+Message-ID: <20161022132038.8A8217F9EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a076414af9bf81c24da11d0f1d1a5bff8b1ba94
+commit: https://git.buildroot.net/buildroot/commit/?id=cc5e9fe4bb0322f7e26fa369cd23923f32c1eeb4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In order to avoid duplicating architecture dependencies in the trinity
-Config.in file, this commit introduces a
-BR2_PACKAGE_TRINITY_ARCH_SUPPORTS Config.in variable.
-
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/trinity/Config.in | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ package/xtables-addons/xtables-addons.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/trinity/Config.in b/package/trinity/Config.in
-index 02cd20a..4a31ba0 100644
---- a/package/trinity/Config.in
-+++ b/package/trinity/Config.in
-@@ -1,18 +1,20 @@
--config BR2_PACKAGE_TRINITY
--	bool "trinity"
-+config BR2_PACKAGE_TRINITY_ARCH_SUPPORTS
-+	bool
-+	default y
- 	depends on BR2_USE_MMU # fork()
--	depends on !BR2_TOOLCHAIN_USES_MUSL # FTW_ACTIONRETVAL
- 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
- 		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
- 		BR2_powerpc64le || BR2_sparc || BR2_x86_64
-+
-+config BR2_PACKAGE_TRINITY
-+	bool "trinity"
-+	depends on BR2_PACKAGE_TRINITY_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # FTW_ACTIONRETVAL
- 	help
- 	  A Linux System call fuzz tester
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index 7fc7312..54d1517 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
+@@ -23,11 +23,11 @@ endef
+ XTABLES_ADDONS_POST_PATCH_HOOKS += XTABLES_DISABLE_GEOIP_HELPERS
  
- 	  http://codemonkey.org.uk/projects/trinity/
+ define XTABLES_ADDONS_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS)
+ endef
  
- comment "trinity needs a uClibc or glibc toolchain"
--	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_TRINITY_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_USES_MUSL
--	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
--		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
--		BR2_powerpc64le || BR2_sparc || BR2_x86_64
+ define XTABLES_ADDONS_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) DESTDIR="$(TARGET_DIR)" install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) DESTDIR="$(TARGET_DIR)" install
+ endef
+ 
+ $(eval $(autotools-package))
