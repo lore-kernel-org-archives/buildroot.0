@@ -1,46 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] mysql: use $(HOST_MAKE_ENV) when calling
-	$(MAKE)
-Message-ID: <20161022132037.01587819A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libpfm4: use $(TARGET_MAKE_ENV) when
+	calling $(MAKE)
+Message-ID: <20161022132037.394598199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=354554418bf4e9ec4d6f079deb854c5b9ee66995
+commit: https://git.buildroot.net/buildroot/commit/?id=78cefe7e60d13c88c565839d7264d8cc52d7b7a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mysql/mysql.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ package/libpfm4/libpfm4.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
-index 7af4711..92bf45a 100644
---- a/package/mysql/mysql.mk
-+++ b/package/mysql/mysql.mk
-@@ -47,13 +47,13 @@ HOST_MYSQL_CONF_OPTS = \
- 	--disable-mysql-maintainer-mode
+diff --git a/package/libpfm4/libpfm4.mk b/package/libpfm4/libpfm4.mk
+index 358fd9d..913fc35 100644
+--- a/package/libpfm4/libpfm4.mk
++++ b/package/libpfm4/libpfm4.mk
+@@ -17,15 +17,15 @@ LIBPFM4_FLAGS = SYS=Linux ARCH=$(BR2_ARCH) \
+ 	DBG=
  
- define HOST_MYSQL_BUILD_CMDS
--	$(MAKE) -C $(@D)/include my_config.h
--	$(MAKE) -C $(@D)/mysys libmysys.a
--	$(MAKE) -C $(@D)/strings libmystrings.a
--	$(MAKE) -C $(@D)/vio libvio.a
--	$(MAKE) -C $(@D)/dbug libdbug.a
--	$(MAKE) -C $(@D)/regex libregex.a
--	$(MAKE) -C $(@D)/sql gen_lex_hash
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/include my_config.h
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/mysys libmysys.a
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/strings libmystrings.a
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/vio libvio.a
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/dbug libdbug.a
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/regex libregex.a
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/sql gen_lex_hash
+ define LIBPFM4_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(LIBPFM4_FLAGS)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBPFM4_FLAGS)
  endef
  
- define HOST_MYSQL_INSTALL_CMDS
+ define LIBPFM4_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) $(LIBPFM4_FLAGS) PREFIX=$(STAGING_DIR)/usr install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBPFM4_FLAGS) PREFIX=$(STAGING_DIR)/usr install
+ endef
+ 
+ define LIBPFM4_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(LIBPFM4_FLAGS) PREFIX=$(TARGET_DIR)/usr install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBPFM4_FLAGS) PREFIX=$(TARGET_DIR)/usr install
+ endef
+ 
+ $(eval $(generic-package))
