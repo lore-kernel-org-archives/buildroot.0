@@ -1,39 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] checkpolicy: use $(HOST_MAKE_ENV) when
-	calling $(MAKE)
-Message-ID: <20161022132038.5FA8C7F925@busybox.osuosl.org>
+Date: Sat, 22 Oct 2016 16:43:01 +0200
+Subject: [Buildroot] [PATCH v6 3/9] toolchainfile.cmake: set per-config
+ appended {C, CXX}FLAGS
+In-Reply-To: <20161016111245.1847-4-s.martin49@gmail.com>
+References: <20161016111245.1847-1-s.martin49@gmail.com>
+ <20161016111245.1847-4-s.martin49@gmail.com>
+Message-ID: <20161022164301.01c0a11a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61a237e98fdfa2a51eeddf03e5f38212b76d0655
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/checkpolicy/checkpolicy.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sun, 16 Oct 2016 13:12:39 +0200, Samuel Martin wrote:
 
-diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
-index f1b76d0..a21b39e 100644
---- a/package/checkpolicy/checkpolicy.mk
-+++ b/package/checkpolicy/checkpolicy.mk
-@@ -17,11 +17,11 @@ HOST_CHECKPOLICY_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) \
- 
- # DESTDIR is used at build time to find host-libselinux
- define HOST_CHECKPOLICY_BUILD_CMDS
--	$(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
- endef
- 
- define HOST_CHECKPOLICY_INSTALL_CMDS
--	$(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR) install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR) install
- endef
- 
- $(eval $(host-generic-package))
+> +# Set the {C,CXX}FLAGS appended by CMake depending on the build type
+> +# sets by Buildroot.
+> +#
+> +# Note:
+> +#   if the project forces some of these flag variables, Buildroot is
+> +#   screwed up and there is nothing Buildroot can do about that :(
+> +set(CMAKE_C_FLAGS_DEBUG "" CACHE STRING "Debug CFLAGS")
+> +set(CMAKE_CXX_FLAGS_DEBUG "" CACHE STRING "Debug CXXFLAGS")
+> +set(CMAKE_C_FLAGS_RELEASE " -DNEBUG" CACHE STRING "Release CFLAGS")
+> +set(CMAKE_CXX_FLAGS_RELEASE " -DNEBUG" CACHE STRING "Release CXXFLAGS")
+
+As suggested by Arnout, I've changed this commit to also adjust
+CMAKE_Fortran_FLAGS_{DEBUG,RELEASE}. Please double check what I've done.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
