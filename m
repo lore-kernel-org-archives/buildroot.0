@@ -1,38 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 22 Oct 2016 14:56:53 +0200
-Subject: [Buildroot] [git commit] pppd: fix config file name
-Message-ID: <20161022125828.5060680093@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Oct 2016 15:19:24 +0200
+Subject: [Buildroot] [git commit] aufs-util: use $(HOST_MAKE_ENV) when
+	calling $(MAKE)
+Message-ID: <20161022132039.A722280335@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4da424cfbe040c88f65773e0a1db58a6f396522d
+commit: https://git.buildroot.net/buildroot/commit/?id=b1d218b7447d60c00aff8f71a29206a526b400d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When radius plugin is enabled, we get following error:
+In this case in particular a host tool is built inside the target build
+step.
 
-/usr/bin/install: cannot stat '/home/rahul.bedarkar/buildroot/output/build/pppd-2.4.7/pppd/plugins/radius/etc/server': No such file or directory
-
-Name of config file is 'servers' instead of 'server'.
-
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pppd/pppd.mk | 2 +-
+ package/aufs-util/aufs-util.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 92897be..3741f92 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -18,7 +18,7 @@ PPPD_TARGET_BINS = chat pppd pppdump pppstats
- PPPD_RADIUS_CONF = \
- 	dictionary dictionary.ascend dictionary.compat \
- 	dictionary.merit dictionary.microsoft \
--	issue port-id-map realms server radiusclient.conf
-+	issue port-id-map realms servers radiusclient.conf
+diff --git a/package/aufs-util/aufs-util.mk b/package/aufs-util/aufs-util.mk
+index a2d0bad..d41b4ac 100644
+--- a/package/aufs-util/aufs-util.mk
++++ b/package/aufs-util/aufs-util.mk
+@@ -41,7 +41,7 @@ AUFS_UTIL_POST_PATCH_HOOKS += AUFS_UTIL_REMOVE_RDU64
  
- ifeq ($(BR2_PACKAGE_PPPD_FILTER),y)
- PPPD_DEPENDENCIES += libpcap
+ # First, we build the host tools, needed to build the target tools.
+ define AUFS_UTIL_BUILD_CMDS
+-	$(MAKE) -C $(@D) \
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CPPFLAGS="$(AUFS_UTIL_HOST_CPPFLAGS)" \
+ 		HOSTCC="$(HOSTCC)" HOSTLD="$(HOSTLD)" \
