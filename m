@@ -1,38 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] softether: use $(HOST_MAKE_ENV) when
-	calling $(MAKE)
-Message-ID: <20161022132037.B51F07F9EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lshw: use $(TARGET_MAKE_ENV) when calling
+	$(MAKE)
+Message-ID: <20161022132038.B263E819A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fec991c78270ac3fe00e11ad1203ffc26e1f9cb
+commit: https://git.buildroot.net/buildroot/commit/?id=aa9ee8138f0c2c77edef100fbb8370ea7683dc5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/softether/softether.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/lshw/lshw.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/softether/softether.mk b/package/softether/softether.mk
-index 9f98774..da7d129 100644
---- a/package/softether/softether.mk
-+++ b/package/softether/softether.mk
-@@ -34,9 +34,9 @@ HOST_SOFTETHER_DEPENDENCIES = host-pkgconf host-openssl host-readline
- # target build creates the file hamcore.se2 which needs the host variant of
- # hamcorebuilder, for details see http://www.vpnusers.com/viewtopic.php?p=5426
- define HOST_SOFTETHER_BUILD_CMDS
--	$(MAKE) -C $(@D)/src/Mayaqua
--	$(MAKE) -C $(@D)/src/Cedar
--	$(MAKE) -C $(@D)/src/hamcorebuilder
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/src/Mayaqua
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/src/Cedar
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/src/hamcorebuilder
- endef
+diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
+index 9227584..32c0bc0 100644
+--- a/package/lshw/lshw.mk
++++ b/package/lshw/lshw.mk
+@@ -16,7 +16,9 @@ endif
  
- define HOST_SOFTETHER_INSTALL_CMDS
+ LSHW_MAKE_OPTS = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" AR="$(TARGET_AR)" \
+ 	RPM_OPT_FLAGS="$(LSHW_CFLAGS)" all
+-LSHW_MAKE_ENV = LIBS="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
++LSHW_MAKE_ENV = \
++	$(TARGET_MAKE_ENV) \
++	LIBS="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
+ LSHW_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ 
+ define LSHW_BUILD_CMDS
