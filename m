@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] libsemanage: use $(HOST_MAKE_ENV) when
-	calling $(MAKE)
-Message-ID: <20161022132037.E84A87F925@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] qwt: use $(TARGET_MAKE_ENV) when calling
+	$(MAKE)
+Message-ID: <20161022132039.7479C7F9EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0547150d9131bda611c9362ca555f32cd2dbb526
+commit: https://git.buildroot.net/buildroot/commit/?id=6614054ff6d6450ec5cefff763d5bfc8e6969390
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsemanage/libsemanage.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/qwt/qwt.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index 9effea0..005b822 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
-@@ -49,13 +49,13 @@ endif
- define HOST_LIBSEMANAGE_BUILD_CMDS
- 	# DESTDIR is needed during the compile to compute library and
- 	# header paths.
--	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) all
--	$(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) all
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
+diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+index da30dd2..d1bb524 100644
+--- a/package/qwt/qwt.mk
++++ b/package/qwt/qwt.mk
+@@ -54,13 +54,13 @@ endef
+ # that when building with qmake, -L$(STAGING_DIR)/usr/lib is used and
+ # not -L/usr/lib.
+ define QWT_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
+ 	$(SED) "s%QWT_INSTALL_PREFIX = .*%QWT_INSTALL_PREFIX = $(STAGING_DIR)/usr%" \
+ 		$(STAGING_DIR)/usr/mkspecs/features/qwtconfig.pri
  endef
  
- define HOST_LIBSEMANAGE_INSTALL_CMDS
--	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) install
--	$(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
+ define QWT_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
+ 	rm -Rf $(TARGET_DIR)/usr/mkspecs
  endef
  
- $(eval $(generic-package))
