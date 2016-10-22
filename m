@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 16:42:05 +0200
-Subject: [Buildroot] [PATCH v6 0/9] Misc. CMake fixes
-In-Reply-To: <20161016111245.1847-1-s.martin49@gmail.com>
-References: <20161016111245.1847-1-s.martin49@gmail.com>
-Message-ID: <20161022164205.2a21afef@free-electrons.com>
+Date: Sat, 22 Oct 2016 16:45:20 +0200
+Subject: [Buildroot] [PATCH] libtasn1: clarify licensing info
+In-Reply-To: <1475111638-24640-1-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1475111638-24640-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <20161022164520.06afdf09@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 16 Oct 2016 13:12:36 +0200, Samuel Martin wrote:
-
-> Max Filippov (1):
->   package/opencv3: fix CMAKE_CXX_FLAGS
+On Wed, 28 Sep 2016 22:13:58 -0300, gustavo.zacarias at free-electrons.com
+wrote:
+> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > 
-> Samuel Martin (8):
->   Revert "package/cmake: with BR2_ENABLE_DEBUG use RelWithDebInfo"
->   package/pkg-cmake.mk: move CMAKE_BUILD_TYPE definition into
->     toolchainfile.cmake
->   toolchainfile.cmake: set per-config appended {C,CXX}FLAGS
->   package/gflags: include TARGET_CXXFLAGS to the overloaded CXXFLAGS
->   package/gnuradio: include TARGET_CFLAGS to the overloaded CFLAGS
->   package/libcec: include TARGET_{C,CXX}FLAGS to the overloaded
->     {C,CXX}FLAGS
->   package/rpi-userland: include TARGET_CFLAGS to the overloaded CFLAGS
->   toochainfile.cmake: rework the way Buildroot sets flags
+> The library is LGPLv2.1+, the tests and tools are GPLv3+ so clarify to
+> avoid confusion.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> ---
+>  package/libtasn1/libtasn1.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-I've applied the series. I've done a few changes on specific patches,
-I'll reply to the patches themselves.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
