@@ -1,34 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] nanocom: use $(TARGET_MAKE_ENV) when
-	calling $(MAKE)
-Message-ID: <20161022132037.416618199C@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 22 Oct 2016 20:02:51 +0000
+Subject: [Buildroot] [Bug 9291] perl: SysV message queues not configured,
+ even if available
+In-Reply-To: <bug-9291-163@https.bugs.busybox.net/>
+References: <bug-9291-163@https.bugs.busybox.net/>
+Message-ID: <bug-9291-163-xpyEcfwJvV@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3e496bcfb7a8370f4e59705aee32857b31ac4be
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=9291
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nanocom/nanocom.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fran?ois Perrad, who takes care of the Perl packaging in Buildroot, has
+reported the issue upstream: https://github.com/arsv/perl-cross/issues/41. A
+fix has already been committed in perl-cross upstream, we need to backport it
+in Buildroot.
 
-diff --git a/package/nanocom/nanocom.mk b/package/nanocom/nanocom.mk
-index 293dd09..caab368 100644
---- a/package/nanocom/nanocom.mk
-+++ b/package/nanocom/nanocom.mk
-@@ -12,7 +12,7 @@ NANOCOM_LICENSE = GPLv2+
- NANOCOM_LICENSE_FILES = COPYING
- 
- define NANOCOM_BUILD_CMDS
--	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" -C $(@D)
- endef
- 
- define NANOCOM_INSTALL_TARGET_CMDS
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
