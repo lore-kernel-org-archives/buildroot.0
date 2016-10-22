@@ -1,39 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] netplug: use $(TARGET_MAKE_ENV) when
-	calling $(MAKE)
-Message-ID: <20161022132038.709FD81974@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] snowball-hdmiservice: use
+	$(TARGET_MAKE_ENV) when calling $(MAKE)
+Message-ID: <20161022132037.53EB2819A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15c229ea4232e052063a65f9f57153ba1ba0579b
+commit: https://git.buildroot.net/buildroot/commit/?id=d21fc79a4d2e5d961d5c0fb1ab1bebe99acc3a21
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netplug/netplug.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/snowball-hdmiservice/snowball-hdmiservice.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/netplug/netplug.mk b/package/netplug/netplug.mk
-index aeebcad..a165192 100644
---- a/package/netplug/netplug.mk
-+++ b/package/netplug/netplug.mk
-@@ -11,11 +11,11 @@ NETPLUG_LICENSE = GPLv2
- NETPLUG_LICENSE_FILES = COPYING
+diff --git a/package/snowball-hdmiservice/snowball-hdmiservice.mk b/package/snowball-hdmiservice/snowball-hdmiservice.mk
+index 267b5ad..4aa1a27 100644
+--- a/package/snowball-hdmiservice/snowball-hdmiservice.mk
++++ b/package/snowball-hdmiservice/snowball-hdmiservice.mk
+@@ -11,15 +11,15 @@ SNOWBALL_HDMISERVICE_LICENSE_FILES = debian/copyright
+ SNOWBALL_HDMISERVICE_INSTALL_STAGING = YES
  
- define NETPLUG_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ define SNOWBALL_HDMISERVICE_BUILD_CMDS
+-	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)"
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)"
  endef
  
- define NETPLUG_INSTALL_TARGET_CMDS
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+ define SNOWBALL_HDMISERVICE_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" DESTDIR=$(STAGING_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" DESTDIR=$(STAGING_DIR) install
  endef
  
- define NETPLUG_INSTALL_INIT_SYSV
+ define SNOWBALL_HDMISERVICE_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" DESTDIR=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
