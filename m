@@ -1,43 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] openssl: use $(HOST_MAKE_ENV) when calling
-	$(MAKE)
-Message-ID: <20161022132036.DDB7C819A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libsepol: use $(TARGET_MAKE_ENV) when
+	calling $(MAKE)
+Message-ID: <20161022132038.DFAF3819A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e290ae72024c3db1f1213012bcf8c25f25056be1
+commit: https://git.buildroot.net/buildroot/commit/?id=d059e8cca6f784e7eae49a897ed96afde3aaec82
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openssl/openssl.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libsepol/libsepol.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 5f6267c..814c435 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -102,7 +102,7 @@ OPENSSL_POST_CONFIGURE_HOOKS += OPENSSL_FIXUP_STATIC_MAKEFILE
- endif
- 
- define HOST_OPENSSL_BUILD_CMDS
--	$(MAKE) -C $(@D)
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index 3b02175..650e36d 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -22,15 +22,15 @@ endif
+ define LIBSEPOL_BUILD_CMDS
+ 	# DESTDIR is needed during the compile to compute library and
+ 	# header paths.
+-	$(MAKE) -C $(@D) $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(STAGING_DIR)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(STAGING_DIR)
  endef
  
- define OPENSSL_BUILD_CMDS
-@@ -114,7 +114,7 @@ define OPENSSL_INSTALL_STAGING_CMDS
+ define LIBSEPOL_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(STAGING_DIR)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(STAGING_DIR)
  endef
  
- define HOST_OPENSSL_INSTALL_CMDS
--	$(MAKE) -C $(@D) install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+ define LIBSEPOL_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(TARGET_DIR)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(TARGET_DIR)
  endef
  
- define OPENSSL_INSTALL_TARGET_CMDS
+ define HOST_LIBSEPOL_BUILD_CMDS
