@@ -1,49 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] botan: use $(TARGET_MAKE_ENV) when calling
+Date: Sat, 22 Oct 2016 15:28:53 +0200
+Subject: [Buildroot] [git commit] lzip: use $(TARGET_MAKE_ENV) when calling
 	$(MAKE)
-Message-ID: <20161022132036.AFB0681974@busybox.osuosl.org>
+Message-ID: <20161022132857.EAC3A81941@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1889786650da4815378224e5706b34a1c7f8ba06
+commit: https://git.buildroot.net/buildroot/commit/?id=00a44f89575317bef010d03eea28e617cf56aa90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/botan/botan.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/lzip/lzip.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 69c973e..94f1edd 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -44,19 +44,19 @@ BOTAN_CONF_OPTS += --with-zlib
- endif
- 
- define BOTAN_CONFIGURE_CMDS
--	(cd $(@D); ./configure.py $(BOTAN_CONF_OPTS))
-+	(cd $(@D); $(TARGET_MAKE_ENV) ./configure.py $(BOTAN_CONF_OPTS))
+diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
+index 7b1fdf4..c6f0543 100644
+--- a/package/lzip/lzip.mk
++++ b/package/lzip/lzip.mk
+@@ -20,7 +20,7 @@ define HOST_LZIP_CONFIGURE_CMDS
  endef
  
- define BOTAN_BUILD_CMDS
--	$(MAKE) -C $(@D) AR="$(TARGET_AR) crs"
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) AR="$(TARGET_AR) crs"
+ define LZIP_BUILD_CMDS
+-	$(MAKE) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
  endef
  
- define BOTAN_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)/usr" install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)/usr" install
+ define HOST_LZIP_BUILD_CMDS
+@@ -28,7 +28,7 @@ define HOST_LZIP_BUILD_CMDS
  endef
  
- define BOTAN_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)/usr" install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)/usr" install
+ define LZIP_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
  endef
  
- $(eval $(generic-package))
+ define HOST_LZIP_INSTALL_CMDS
