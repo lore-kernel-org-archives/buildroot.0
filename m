@@ -1,22 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 22 Oct 2016 14:58:00 +0200
-Subject: [Buildroot] [PATCH 2/2] rsyslog: bump version to 8.22.0
-In-Reply-To: <1477077074-5602-2-git-send-email-rahul.bedarkar@imgtec.com>
- (Rahul Bedarkar's message of "Sat, 22 Oct 2016 00:41:14 +0530")
-References: <1477077074-5602-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1477077074-5602-2-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <87vawka6cn.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Oct 2016 15:19:24 +0200
+Subject: [Buildroot] [git commit] botan: use $(TARGET_MAKE_ENV) when calling
+	$(MAKE)
+Message-ID: <20161022132036.AFB0681974@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Rahul" == Rahul Bedarkar <rahul.bedarkar@imgtec.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1889786650da4815378224e5706b34a1c7f8ba06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/botan/botan.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 69c973e..94f1edd 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -44,19 +44,19 @@ BOTAN_CONF_OPTS += --with-zlib
+ endif
+ 
+ define BOTAN_CONFIGURE_CMDS
+-	(cd $(@D); ./configure.py $(BOTAN_CONF_OPTS))
++	(cd $(@D); $(TARGET_MAKE_ENV) ./configure.py $(BOTAN_CONF_OPTS))
+ endef
+ 
+ define BOTAN_BUILD_CMDS
+-	$(MAKE) -C $(@D) AR="$(TARGET_AR) crs"
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) AR="$(TARGET_AR) crs"
+ endef
+ 
+ define BOTAN_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)/usr" install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)/usr" install
+ endef
+ 
+ define BOTAN_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)/usr" install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)/usr" install
+ endef
+ 
+ $(eval $(generic-package))
