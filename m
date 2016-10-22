@@ -1,41 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 22 Oct 2016 11:25:11 +0200
-Subject: [Buildroot] [PATCH 2/2] package/ffmpeg: bump version to 3.1.5
-In-Reply-To: <20161022092511.1854-1-bernd.kuhls@t-online.de>
-References: <20161022092511.1854-1-bernd.kuhls@t-online.de>
-Message-ID: <20161022092511.1854-2-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Oct 2016 15:19:24 +0200
+Subject: [Buildroot] [git commit] librtas: use $(TARGET_CONFIGURE_OPTS) when
+	calling $(MAKE)
+Message-ID: <20161022132036.96BDA8198C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=da006138cdf84dcd0ae7d9b30e159c2831bad295
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 160e31d..7b1e140 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 a80cb378dda5c9bbcdbd62a99bdec0e4eedbcb47f290e72845af4855c1146b5b  ffmpeg-3.1.4.tar.xz
-+sha256 49cc3105f7891c5637f8fabb1b75ebb19c9b5123b311a3ccc6182aa35d58b89a  ffmpeg-3.1.5.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 52a39de..52d2f38 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/librtas/librtas.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/librtas/librtas.mk b/package/librtas/librtas.mk
+index 6e1ebd1..46c4cb4 100644
+--- a/package/librtas/librtas.mk
++++ b/package/librtas/librtas.mk
+@@ -15,11 +15,11 @@ define LIBRTAS_BUILD_CMDS
+ endef
  
--FFMPEG_VERSION = 3.1.4
-+FFMPEG_VERSION = 3.1.5
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
--- 
-2.9.3
+ define LIBRTAS_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+ endef
+ 
+ define LIBRTAS_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
