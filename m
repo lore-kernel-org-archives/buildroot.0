@@ -1,24 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 22 Oct 2016 14:56:43 +0200
-Subject: [Buildroot] [PATCH] pppd: fix config file name
-In-Reply-To: <1477071956-17212-1-git-send-email-rahul.bedarkar@imgtec.com>
- (Rahul Bedarkar's message of "Fri, 21 Oct 2016 23:15:56 +0530")
-References: <1477071956-17212-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <874m44bkz8.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Oct 2016 15:19:24 +0200
+Subject: [Buildroot] [git commit] dtc: use $(HOST_CONFIGURE_OPTS) when
+	calling $(MAKE)
+Message-ID: <20161022132039.3C09E819A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Rahul" == Rahul Bedarkar <rahul.bedarkar@imgtec.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6fa39e2162b95a1ed8037af3e1f6bebc381429ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > When radius plugin is enabled, we get following error:
- > /usr/bin/install: cannot stat '/home/rahul.bedarkar/buildroot/output/build/pppd-2.4.7/pppd/plugins/radius/etc/server': No such file or directory
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dtc/dtc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Name of config file is 'servers' instead of 'server'.
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index 9dbca0a..0a48644 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -51,7 +51,7 @@ define HOST_DTC_BUILD_CMDS
+ endef
+ 
+ define HOST_DTC_INSTALL_CMDS
+-	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install-bin
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install-bin
+ endef
+ 
+ $(eval $(generic-package))
