@@ -1,41 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 22 Oct 2016 09:08:32 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.8.4
-In-Reply-To: <1477138112-12983-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1477138112-12983-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1477138112-12983-2-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 22 Oct 2016 20:36:05 +0000
+Subject: [Buildroot] [Bug 9321] Vanilla libcrypt++ v5.6.3 doesn't allow to
+ work Nvidia Tegra's flash utility (tegrarcm)
+In-Reply-To: <bug-9321-163@https.bugs.busybox.net/>
+References: <bug-9321-163@https.bugs.busybox.net/>
+Message-ID: <bug-9321-163-5Rvg9tKY51@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=9321
 
-diff --git a/linux/Config.in b/linux/Config.in
-index dc79d42..df8baf5 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.8.3)"
-+	bool "Latest version (4.8.4)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -97,7 +97,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.8.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.8.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
+
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks for your patch. However, all your patches (except the conversion to
+autotools) have already been merged in upstream cryptopp, so I've simply bumped
+our cryptopp package to version 5.6.5.
+
+See
+https://git.buildroot.org/buildroot/commit/?id=da90437be784fa88e1f149067056096dd6847c26
+for more details.
+
+Do not hesitate to test tegrarcm again with this updated cryptopp version, and
+report back. Thanks a lot!
+
 -- 
-2.7.3
+You are receiving this mail because:
+You are on the CC list for the bug.
