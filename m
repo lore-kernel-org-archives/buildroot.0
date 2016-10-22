@@ -1,47 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 22 Oct 2016 09:08:31 -0300
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{2, 10, 12}.x and 4.{4,
-	7, 8}.x series
-Message-ID: <1477138112-12983-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Oct 2016 14:20:02 +0200
+Subject: [Buildroot] [git commit] pkg-download: use raw basename for
+ repo archiving to remove host- prefix
+In-Reply-To: <87lgxgbn52.fsf@dell.be.48ers.dk>
+References: <20161020195440.B127A81801@busybox.osuosl.org>
+ <20161020215647.7dcbab0d@free-electrons.com>
+ <87lgxgbn52.fsf@dell.be.48ers.dk>
+Message-ID: <20161022142002.58e7414b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Hello,
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d1e2ecf..ae2a3cd 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -223,18 +223,18 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.82"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.83"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.103"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.65"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.12.66"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.18.43"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.34"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.26"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.27"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
- 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
--	default "4.7.9"		if BR2_KERNEL_HEADERS_4_7
--	default "4.8.3"		if BR2_KERNEL_HEADERS_4_8
-+	default "4.7.10"	if BR2_KERNEL_HEADERS_4_7
-+	default "4.8.4"		if BR2_KERNEL_HEADERS_4_8
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+On Sat, 22 Oct 2016 14:10:01 +0200, Peter Korsgaard wrote:
+
+>  > Applied to master, thanks a lot for the great commit log!  
+> 
+> Did you change anything in your scripts? Lately your applied mails seems
+> to be replies to the git notification mails rather than the mail from
+> the contributor?
+
+I don't use scripts at all to send the notification e-mails, I do this
+manually. However, I usually do search by subject to find the e-mail to
+reply to, so I might have made a mistake and replied to the git commit
+e-mail rather than the original patch.
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
