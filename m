@@ -1,37 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 16:07:53 +0200
-Subject: [Buildroot] [PATCH 1/1] protobuf: bump to version 3.0.0
-In-Reply-To: <1476983609-17269-1-git-send-email-heyleke@gmail.com>
-References: <1476983609-17269-1-git-send-email-heyleke@gmail.com>
-Message-ID: <20161022160753.65f5e3d5@free-electrons.com>
+Date: Sat, 22 Oct 2016 15:19:24 +0200
+Subject: [Buildroot] [git commit] poco: use $(TARGET_MAKE_ENV) when calling
+	$(MAKE)
+Message-ID: <20161022132036.795997F9EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4ffca9a66da6d7bbd5dc65dc1144bd200bfdb977
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 20 Oct 2016 19:13:29 +0200, Jan Heylen wrote:
-> Signed-off-by: Jan Heylen <heyleke@gmail.com>
-> ---
->  ...GLE_PROTOBUF_ATOMICOPS_ERROR-syntax-error.patch | 61 ----------------------
->  ...onfigure.ac-check-if-libatomic-is-needed.patch} |  4 +-
->  package/protobuf/protobuf.hash                     |  2 +-
->  package/protobuf/protobuf.mk                       |  2 +-
->  4 files changed, 4 insertions(+), 65 deletions(-)
->  delete mode 100644 package/protobuf/0001-Fix-GOOGLE_PROTOBUF_ATOMICOPS_ERROR-syntax-error.patch
->  rename package/protobuf/{0002-configure.ac-check-if-libatomic-is-needed.patch => 0001-configure.ac-check-if-libatomic-is-needed.patch} (85%)
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/poco/poco.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I've applied, but you forgot to test building the python-protobuf
-package, which uses the same source code. So I've fixed that up, and
-also added a comment in protobuf.mk to remind people bumping this
-package to also check python-protobuf.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 79452c0..4b82c50 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -47,7 +47,7 @@ POCO_MAKE_TARGET = all_release
+ endif
+ 
+ define POCO_CONFIGURE_CMDS
+-	(cd $(@D); ./configure \
++	(cd $(@D); $(TARGET_MAKE_ENV) ./configure \
+ 		--config=Linux		\
+ 		--prefix=/usr		\
+ 		--omit="$(POCO_OMIT)"	\
+@@ -58,19 +58,19 @@ define POCO_CONFIGURE_CMDS
+ endef
+ 
+ define POCO_BUILD_CMDS
+-	$(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
++	$(TARGET_MAKE_ENV) $(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
+ 		MYSQL_LIBDIR=$(STAGING_DIR)/usr/lib/mysql \
+ 		MYSQL_INCDIR=$(STAGING_DIR)/usr/include/mysql \
+ 		DEFAULT_TARGET=$(POCO_MAKE_TARGET) -C $(@D)
+ endef
+ 
+ define POCO_INSTALL_STAGING_CMDS
+-	$(MAKE) DESTDIR=$(STAGING_DIR) POCO_TARGET_OSARCH=$(ARCH) \
++	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(STAGING_DIR) POCO_TARGET_OSARCH=$(ARCH) \
+ 		DEFAULT_TARGET=$(POCO_MAKE_TARGET) install -C $(@D)
+ endef
+ 
+ define POCO_INSTALL_TARGET_CMDS
+-	$(MAKE) DESTDIR=$(TARGET_DIR) POCO_TARGET_OSARCH=$(ARCH) \
++	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) POCO_TARGET_OSARCH=$(ARCH) \
+ 		DEFAULT_TARGET=$(POCO_MAKE_TARGET) install -C $(@D)
+ endef
+ 
