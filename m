@@ -1,44 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] libsemanage: use $(TARGET_MAKE_ENV) when
-	calling $(MAKE)
-Message-ID: <20161022132037.DE3CF7F925@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] openssl: use $(HOST_MAKE_ENV) when calling
+	$(MAKE)
+Message-ID: <20161022132036.DDB7C819A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9702249d98a88bc22f11a361206fe279149e8cd1
+commit: https://git.buildroot.net/buildroot/commit/?id=e290ae72024c3db1f1213012bcf8c25f25056be1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsemanage/libsemanage.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/openssl/openssl.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index beb34ba..9effea0 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
-@@ -16,15 +16,15 @@ LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
- define LIBSEMANAGE_BUILD_CMDS
- 	# DESTDIR is needed during the compile to compute library and
- 	# header paths.
--	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 5f6267c..814c435 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -102,7 +102,7 @@ OPENSSL_POST_CONFIGURE_HOOKS += OPENSSL_FIXUP_STATIC_MAKEFILE
+ endif
+ 
+ define HOST_OPENSSL_BUILD_CMDS
+-	$(MAKE) -C $(@D)
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
  endef
  
- define LIBSEMANAGE_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+ define OPENSSL_BUILD_CMDS
+@@ -114,7 +114,7 @@ define OPENSSL_INSTALL_STAGING_CMDS
  endef
  
- define LIBSEMANAGE_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+ define HOST_OPENSSL_INSTALL_CMDS
+-	$(MAKE) -C $(@D) install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
  endef
  
- HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libselinux \
+ define OPENSSL_INSTALL_TARGET_CMDS
