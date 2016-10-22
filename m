@@ -1,39 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] ti-sgx-um: use $(TARGET_MAKE_ENV) when
+Subject: [Buildroot] [git commit] mrouted: use $(TARGET_MAKE_ENV) when
 	calling $(MAKE)
-Message-ID: <20161022132039.31864819A0@busybox.osuosl.org>
+Message-ID: <20161022132037.40553819D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b5ddccfc69c188bc71d4f60054d65eb7ee2f0b1
+commit: https://git.buildroot.net/buildroot/commit/?id=4d4c32bc9b4fd9efcd730038f94a103425c71a1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ti-sgx-um/ti-sgx-um.mk | 4 ++--
+ package/mrouted/mrouted.mk | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ti-sgx-um/ti-sgx-um.mk b/package/ti-sgx-um/ti-sgx-um.mk
-index d9ff2df..d5c50a0 100644
---- a/package/ti-sgx-um/ti-sgx-um.mk
-+++ b/package/ti-sgx-um/ti-sgx-um.mk
-@@ -15,11 +15,11 @@ TI_SGX_UM_INSTALL_STAGING = YES
- TI_SGX_UM_DEPENDENCIES = libdrm
- 
- define TI_SGX_UM_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) DISCIMAGE=$(STAGING_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DISCIMAGE=$(STAGING_DIR) install
+diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
+index 01b4a9f..2969e36 100644
+--- a/package/mrouted/mrouted.mk
++++ b/package/mrouted/mrouted.mk
+@@ -17,11 +17,11 @@ define MROUTED_CONFIGURE_CMDS
  endef
  
- define TI_SGX_UM_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) DISCIMAGE=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DISCIMAGE=$(TARGET_DIR) install
+ define MROUTED_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
  endef
  
- # libs use the following file for configuration
+ define MROUTED_INSTALL_TARGET_CMDS
+-	$(MAKE) prefix=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
++	$(TARGET_MAKE_ENV) $(MAKE) prefix=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
+ endef
+ 
+ $(eval $(generic-package))
