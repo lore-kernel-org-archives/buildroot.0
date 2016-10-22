@@ -1,56 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 15:03:17 +0200
-Subject: [Buildroot] [PATCH] rp-pppoe: pass the appropriate path for various
-	tools
-Message-ID: <1477141397-22592-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Oct 2016 15:19:24 +0200
+Subject: [Buildroot] [git commit] checkpolicy: use $(HOST_MAKE_ENV) when
+	calling $(MAKE)
+Message-ID: <20161022132038.5FA8C7F925@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The rp-pppoe configure script uses AC_PATH_PROG() to find the path of
-a number of tools on the build machine. But in fact, those paths are
-not used to call the tools on the build machine, but rather to replace
-variables in scripts that are executed in the target.
+commit: https://git.buildroot.net/buildroot/commit/?id=61a237e98fdfa2a51eeddf03e5f38212b76d0655
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Due to this, if those tools on the build machine are not located at
-the same place as their equivalent in the target, the scripts will
-fail to run. To address this, we pass the necessary cache variables to
-override the autoconf checks.
-
-The path from pppd has been taken from the build result of the pppd
-package. The path for setsid, id and echo have been taken from the
-build result of Busybox, assuming that full-blown variants of those
-tools would be installed at the same location.
-
-Fixes bug #8811.
-
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rp-pppoe/rp-pppoe.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/checkpolicy/checkpolicy.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
-index 4306254..99d231e 100644
---- a/package/rp-pppoe/rp-pppoe.mk
-+++ b/package/rp-pppoe/rp-pppoe.mk
-@@ -15,8 +15,16 @@ RP_PPPOE_TARGET_SCRIPTS = pppoe-connect pppoe-init pppoe-setup pppoe-start \
- 	pppoe-status pppoe-stop
- RP_PPPOE_MAKE_OPTS = PLUGIN_DIR=/usr/lib/pppd/$(PPPD_VERSION)
- RP_PPPOE_CONF_OPTS = --disable-debugging
-+
-+# The pppd, echo, setsid and id paths must be the ones on the
-+# target. Indeed, the result of these checks is used to replace
-+# variables in scripts that are installed in the target.
- RP_PPPOE_CONF_ENV = \
- 	rpppoe_cv_pack_bitfields=normal \
-+	ac_cv_path_PPPD=/usr/sbin/pppd \
-+	ac_cv_path_ECHO=/bin/echo \
-+	ac_cv_path_SETSID=/usr/bin/setsid \
-+	ac_cv_path_ID=/usr/bin/id \
- 	PPPD_H=$(PPPD_DIR)/pppd/pppd.h
+diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
+index f1b76d0..a21b39e 100644
+--- a/package/checkpolicy/checkpolicy.mk
++++ b/package/checkpolicy/checkpolicy.mk
+@@ -17,11 +17,11 @@ HOST_CHECKPOLICY_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) \
  
- define RP_PPPOE_INSTALL_TARGET_CMDS
--- 
-2.7.4
+ # DESTDIR is used at build time to find host-libselinux
+ define HOST_CHECKPOLICY_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
+ endef
+ 
+ define HOST_CHECKPOLICY_INSTALL_CMDS
+-	$(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR) install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR) install
+ endef
+ 
+ $(eval $(host-generic-package))
