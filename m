@@ -1,70 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 16:14:07 +0200
-Subject: [Buildroot] [git commit] Revert "package/cmake: with
-	BR2_ENABLE_DEBUG use RelWithDebInfo"
-Message-ID: <20161022144115.6CC0F8172A@busybox.osuosl.org>
+Date: Sat, 22 Oct 2016 23:28:31 +0200
+Subject: [Buildroot] [PATCH v2] skeleton: /etc/network/interface.d/*
+ support
+In-Reply-To: <1471361908-51757-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1471361908-51757-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20161022232831.030a10ad@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=104bb29e0490bfb487e2e665448dd3ca07fcc2b5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This reverts commit 4b0120183404913f7f7788ef4f0f6b51498ef363.
+On Tue, 16 Aug 2016 10:38:28 -0500, Matt Weber wrote:
 
-Before reverting this patch, CMake packages are built with the following
-options:
-  * if BR2_ENABLE_DEBUG is set:
-    The CMake build type is set to RelWithDebInfo, which means:
-    - Optimization level is forced to: -O2;
-    - no log nor assert due to -DNDEBUG;
-    - BR2_DEBUG_{1..3} effect is unchanged;
-  * otherwise:
-    The CMake build type is set to Release, which means:
-    - Optimization level is forced to: -O3;
-    - no log nor assert due to -DNDEBUG (as expected).
-  In any case, the optimization WRT the binary size is always ignored
-  and forced.
+> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+> index 1000161..39e2cbb 100644
+> --- a/package/skeleton/skeleton.mk
+> +++ b/package/skeleton/skeleton.mk
+> @@ -170,9 +170,19 @@ define SKELETON_SET_NETWORK_DHCP
+>  endef
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_IFUPDOWN),y)
+> +define SKELETON_SET_NETWORK_SUPPORT_INTERFACES_D
+> +	( \
+> +		echo ;                                               \
+> +		echo "source interfaces.d/*";                        \
+> +	) >> $(TARGET_DIR)/etc/network/interfaces
+> +endef
+> +endif
+> +
+>  define SKELETON_SET_NETWORK
+>  	mkdir -p $(TARGET_DIR)/etc/network/
+>  	$(SKELETON_SET_NETWORK_LOCALHOST)
+> +	$(SKELETON_SET_NETWORK_SUPPORT_INTERFACES_D)
+>  	$(SKELETON_SET_NETWORK_DHCP)
+>  endef
+>  
+> diff --git a/system/device_table.txt b/system/device_table.txt
+> index dc1af51..69b1d46 100644
+> --- a/system/device_table.txt
+> +++ b/system/device_table.txt
+> @@ -17,5 +17,6 @@
+>  /etc/network/if-pre-up.d		d	755	0	0	-	-	-	-	-
+>  /etc/network/if-down.d			d	755	0	0	-	-	-	-	-
+>  /etc/network/if-post-down.d		d	755	0	0	-	-	-	-	-
+> +/etc/network/interfaces.d		d	755	0	0	-	-	-	-	-
+>  # uncomment this to allow starting x as non-root
+>  #/usr/X11R6/bin/Xfbdev		     	f	4755	0	0	-	-	-	-	-
+> diff --git a/system/skeleton/etc/network/interfaces.d/.empty b/system/skeleton/etc/network/interfaces.d/.empty
+> new file mode 100644
+> index 0000000..e69de29
 
-Reverting to the previous situation, so Buildroot now chooses between
-the 'Debug' and 'Release' config types, which are semantically closer
-to what Buildroot does everywhere else:
-  * if BR2_ENABLE_DEBUG is set:
-    The CMake build type is set to Debug, which means:
-    - only -g option is passed by CMake;
-    - optimization is not forced, nor debug level, so they are kept
-      as-is;
-  * otherwise:
-    The CMake build type is set to Release, so no change in this case:
-    - Optimization level is forced to: -O3;
-    - no log nor assert due to -DNDEBUG (as expected);
-    - size optimization is ignored.
+Sorry for the late answer. I believe none of this should go in the main
+skeleton, as it is really specific to ifupdown. What about instead
+adding the following in ifupdown.mk:
 
-Follow-up patches will fix the CMake flag variables that are appended by
-CMake.
+ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+define IFUPDOWN_TUNE_ETC_NETWORK_INTERFACES
+	mkdir -p $(TARGET_DIR)/etc/network/interfaces.d
+	echo "source interfaces.d/*" >> $(TARGET_DIR)/etc/network/interfaces
+endef
+IFUPDOWN_TARGET_FINALIZE_HOOKS += IFUPDOWN_TUNE_ETC_NETWORK_INTERFACES
+endif
 
-Cc: Charles Hardin <ckhardin@exablox.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-cmake.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+define IFUPDOWN_PERMISSIONS
+/etc/network/interfaces.d		d	755	0	0	-	-	-	-	-
+endef
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index aca9e61..4883b3b 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -87,7 +87,7 @@ define $(2)_CONFIGURE_CMDS
- 	PATH=$$(BR_PATH) \
- 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
- 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
--		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release) \
-+		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
- 		-DCMAKE_COLOR_MAKEFILE=OFF \
- 		-DBUILD_DOC=OFF \
+This should do exactly the same thing, but is isolated in the ifupdown
+package.
+
+Could you look into this?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
