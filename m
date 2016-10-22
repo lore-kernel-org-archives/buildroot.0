@@ -1,27 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 22 Oct 2016 14:57:50 +0200
-Subject: [Buildroot] [PATCH 1/2] libfastjson: bump version to 0.99.4
-In-Reply-To: <1477077074-5602-1-git-send-email-rahul.bedarkar@imgtec.com>
- (Rahul Bedarkar's message of "Sat, 22 Oct 2016 00:41:13 +0530")
-References: <1477077074-5602-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <87zilwa6cx.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 23 Oct 2016 00:04:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gcc: disable libmpx for gcc6-based
+	musl builds
+Message-ID: <20161022220422.14839-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Rahul" == Rahul Bedarkar <rahul.bedarkar@imgtec.com> writes:
+Building this minimal defconfig
 
- > Drop upstream patch and rename remaining one.
- > Also fixes:
- >   http://autobuild.buildroot.net/results/bfe/bfe8ebe3966324b16ca572bfba0a1a8ddc275db9
+BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+BR2_GCC_VERSION_6_X=y
 
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+fails:
 
-Committed, thanks.
+In file included from ../../../../libmpx/mpxrt/mpxrt.c:54:0:
+../../../../libmpx/mpxrt/mpxrt.c: In function 'read_mpx_status_sig':
+../../../../libmpx/mpxrt/mpxrt.h:52:42: error: invalid application of
+'sizeof' to incomplete type 'struct _libc_fpstate'
+ #define XSAVE_OFFSET_IN_FPMEM    sizeof (struct _libc_fpstate)
 
+To fix disable libmpx for musl builds, other projects did the same:
+
+https://github.com/crosstool-ng/crosstool-ng/commit/3ec2211548a853203e070af6810f49825ec46a6a
+http://git.alpinelinux.org/cgit/aports/commit/main/gcc/APKBUILD?id=1830e485126ea9a95d763317fb0c508c1ff297d2
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/gcc/gcc.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index c971151..464e4c9 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -116,6 +116,11 @@ ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libitm
+ endif
+ 
++# libmpx uses secure_getenv and struct _libc_fpstate not present in musl
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_MUSL)$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),yy)
++HOST_GCC_COMMON_CONF_OPTS += --disable-libmpx
++endif
++
+ # quadmath support requires wchar
+ ifeq ($(BR2_USE_WCHAR)$(BR2_TOOLCHAIN_HAS_LIBQUADMATH),yy)
+ HOST_GCC_COMMON_CONF_OPTS += --enable-libquadmath
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.9.3
