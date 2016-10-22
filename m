@@ -1,41 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] luajit: use $(HOST_MAKE_ENV) when calling
-	$(MAKE)
-Message-ID: <20161022132039.06646819A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] am33x-cm3: use $(TARGET_MAKE_ENV) when
+	calling $(MAKE)
+Message-ID: <20161022132038.0A05D7F9EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfe64eab73ed4b1ca3379f1fedc6054431ed7eea
+commit: https://git.buildroot.net/buildroot/commit/?id=16fa28058b73b92bc33164e81fcc5ee52a0ea7da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/luajit/luajit.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/am33x-cm3/am33x-cm3.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 24909fb..d3ef3b7 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -66,13 +66,13 @@ LUAJIT_POST_INSTALL_TARGET_HOOKS += LUAJIT_INSTALL_SYMLINK
- 
- # host-efl package needs host-luajit to be linked dynamically.
- define HOST_LUAJIT_BUILD_CMDS
--	$(MAKE) PREFIX="$(HOST_DIR)/usr" BUILDMODE=dynamic \
-+	$(HOST_MAKE_ENV) $(MAKE) PREFIX="$(HOST_DIR)/usr" BUILDMODE=dynamic \
- 		TARGET_LDFLAGS="$(HOST_LDFLAGS)" \
- 		-C $(@D) amalg
+diff --git a/package/am33x-cm3/am33x-cm3.mk b/package/am33x-cm3/am33x-cm3.mk
+index 01cb9a0..629a832 100644
+--- a/package/am33x-cm3/am33x-cm3.mk
++++ b/package/am33x-cm3/am33x-cm3.mk
+@@ -14,7 +14,7 @@ AM33X_CM3_LICENSE_FILES = License.txt
+ # The build command below will use the standard cross-compiler (normally
+ # build for Cortex-A8, to build the FW for the Cortex-M3.
+ define AM33X_CM3_BUILD_CMDS
+-	$(MAKE) CC="$(TARGET_CC)" CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
  endef
  
- define HOST_LUAJIT_INSTALL_CMDS
--	$(MAKE) PREFIX="$(HOST_DIR)/usr" LDCONFIG=true -C $(@D) install
-+	$(HOST_MAKE_ENV) $(MAKE) PREFIX="$(HOST_DIR)/usr" LDCONFIG=true -C $(@D) install
- endef
- 
- $(eval $(generic-package))
+ # Not all of the firmware files are used
