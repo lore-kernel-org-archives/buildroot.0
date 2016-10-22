@@ -1,27 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 22 Oct 2016 14:10:01 +0200
-Subject: [Buildroot] [git commit] pkg-download: use raw basename for
-	repo archiving to remove host- prefix
-In-Reply-To: <20161020215647.7dcbab0d@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 20 Oct 2016 21:56:47 +0200")
-References: <20161020195440.B127A81801@busybox.osuosl.org>
- <20161020215647.7dcbab0d@free-electrons.com>
-Message-ID: <87lgxgbn52.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Oct 2016 15:19:24 +0200
+Subject: [Buildroot] [git commit] nanocom: use $(TARGET_MAKE_ENV) when
+	calling $(MAKE)
+Message-ID: <20161022132037.416618199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a3e496bcfb7a8370f4e59705aee32857b31ac4be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nanocom/nanocom.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Applied to master, thanks a lot for the great commit log!
-
-Did you change anything in your scripts? Lately your applied mails seems
-to be replies to the git notification mails rather than the mail from
-the contributor?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nanocom/nanocom.mk b/package/nanocom/nanocom.mk
+index 293dd09..caab368 100644
+--- a/package/nanocom/nanocom.mk
++++ b/package/nanocom/nanocom.mk
+@@ -12,7 +12,7 @@ NANOCOM_LICENSE = GPLv2+
+ NANOCOM_LICENSE_FILES = COPYING
+ 
+ define NANOCOM_BUILD_CMDS
+-	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" -C $(@D)
+ endef
+ 
+ define NANOCOM_INSTALL_TARGET_CMDS
