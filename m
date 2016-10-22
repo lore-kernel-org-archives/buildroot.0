@@ -1,104 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 16:20:17 +0200
-Subject: [Buildroot] [git commit] toolchainfile.cmake: set per-config
-	appended {C, CXX}FLAGS
-Message-ID: <20161022144115.83B207FF62@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 22 Oct 2016 09:08:32 -0300
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.8.4
+In-Reply-To: <1477138112-12983-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1477138112-12983-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1477138112-12983-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12494ef48f893684d0800e7f6fe39a2ceaed0451
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When a build type is set, CMake does append some flags that can override
-those set by Buildroot due to the gcc option parser (in which the last
-argument controling an option wins).
-
-Hereafter is a summary of the optimization and debug flags set by
-Buildroot and appended by CMake.
-
-* Flags set by Buildroot depending on the configuration:
-
-  BR2_ENABLE_DEBUG | Optim. level        | Buildroot {C,CXX}FLAGS
-  =================+=====================+=======================
-          y        | BR2_OPTIMIZE_S      | -Os -gx
-          y        | BR2_OPTIMIZE_G      | -Og -gx
-          y        | BR2_OPTIMIZE_{0..3} | -On -gx
-          n        | BR2_OPTIMIZE_S      | -Os
-          n        | BR2_OPTIMIZE_G      | -Og
-          n        | BR2_OPTIMIZE_{0..3} | -On
-
-* Default flags appended by CMake depending on the build type:
-
-  Build type     | Flags           | Effects on {C,CXX}FLAGS
-  ===============+=================+===========================================
-  Debug          | -g              | Force -g, compatible with BR2_ENABLE_DEBUG
-  MinSizeRel     | -Os -DNDEBUG    | Set -Os, compatible with BR2_OPTIMIZE_S
-  Release        | -O3 -DNDEBUG    | Set -O3, closest to the others cases,
-                 |                 | though the optimization level is forced.
-  RelWithDebInfo | -O2 -g -DNDEBUG | Force -g and set -O2, not friendly with BR
-
-To avoid the CMake flags take precedence over the Buildroot ones, this
-change sets in toolchainfile.cmake the per-config compiler flags CMake
-can append depending on the build type Buildroot defined.
-So, CMake does not mess up with the compilation flags Buildroot sets.
-
-It is still possible to override these per-config flags on the cmake
-command line.
-
-Note:
-  If a CMake-based project forces the compiler and/or linker flag
-  definitions (the default ones or the per-config ones - e.g.
-  CMAKE_C_FLAGS/CMAKE_C_FLAGS_{DEBUG,RELEASE}), there is not much
-  Buildroot can do about it.
-  So, the flags will be overwritten anyway in these cases.
-
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas:
- - adjust comment in toolchainfile.cmake.in, as suggested by Arnout.
- - also handle CMAKE_Fortran_FLAGS_*, as suggested by Arnout.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- support/misc/toolchainfile.cmake.in | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index 1c5031f..a8476d9 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -13,6 +13,21 @@ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST
- set(CMAKE_SYSTEM_NAME Linux)
- set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
+diff --git a/linux/Config.in b/linux/Config.in
+index dc79d42..df8baf5 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
  
-+# Set the {C,CXX}FLAGS appended by CMake depending on the build type
-+# defined by Buildroot. CMake defaults these variables with -g and/or
-+# -O options, and they are appended at the end of the argument list,
-+# so the Buildroot options are overridden. Therefore these variables
-+# have to be cleared, so that the options passed in CMAKE_C_FLAGS do
-+# apply.
-+#
-+# Note:
-+#   if the project forces some of these flag variables, Buildroot is
-+#   screwed up and there is nothing Buildroot can do about that :(
-+set(CMAKE_C_FLAGS_DEBUG "" CACHE STRING "Debug CFLAGS")
-+set(CMAKE_CXX_FLAGS_DEBUG "" CACHE STRING "Debug CXXFLAGS")
-+set(CMAKE_C_FLAGS_RELEASE " -DNEBUG" CACHE STRING "Release CFLAGS")
-+set(CMAKE_CXX_FLAGS_RELEASE " -DNEBUG" CACHE STRING "Release CXXFLAGS")
-+
- # Build type from the Buildroot configuration
- set(CMAKE_BUILD_TYPE @@CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configuration")
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.8.3)"
++	bool "Latest version (4.8.4)"
  
-@@ -34,6 +49,8 @@ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
- set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
- set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
- if(@@TOOLCHAIN_HAS_FORTRAN@@)
-+  set(CMAKE_Fortran_FLAGS_DEBUG "" CACHE STRING "Debug CFLAGS")
-+  set(CMAKE_Fortran_FLAGS_RELEASE " -DNEBUG" CACHE STRING "Release CFLAGS")
-   set(CMAKE_Fortran_FLAGS "@@TARGET_FCFLAGS@@ ${CMAKE_Fortran_FLAGS}" CACHE STRING "Buildroot FCFLAGS")
-   set(CMAKE_Fortran_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_FC@@")
- endif()
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.8.3" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.8.4" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-- 
+2.7.3
