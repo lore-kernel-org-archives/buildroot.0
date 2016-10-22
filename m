@@ -1,34 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] iodine: use $(TARGET_CONFIGURE_OPTS) when
-	calling $(MAKE)
-Message-ID: <20161022132039.51376819A0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 22 Oct 2016 14:00:55 +0200
+Subject: [Buildroot] [PATCH v2] support/misc/Vagrantfile: bump to ubuntu
+	16.04
+In-Reply-To: <1476741182-23366-1-git-send-email-angelo.compagnucci@gmail.com>
+ (Angelo Compagnucci's message of "Mon, 17 Oct 2016 23:53:02 +0200")
+References: <1476741182-23366-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <87r378bnk8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9b1e6edc3aec38fd3171464fbabc31f1bca5255
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/iodine/iodine.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > * Updating to ubuntu 16.04
+ > * Fixing dependencies
+ > * Fixing locale complaints
+ > * Removing unused packages
 
-diff --git a/package/iodine/iodine.mk b/package/iodine/iodine.mk
-index 9de54e0..711d709 100644
---- a/package/iodine/iodine.mk
-+++ b/package/iodine/iodine.mk
-@@ -26,7 +26,7 @@ define IODINE_BUILD_CMDS
- endef
+ > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+ > ---
+ > Changelog
+
+ > * Changed to C locale as suggested by Arnout Vandecappelle
+
+ >  support/misc/Vagrantfile | 9 ++++++---
+ >  1 file changed, 6 insertions(+), 3 deletions(-)
+
+ > diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+ > index cf269fe..5e56d5d 100644
+ > --- a/support/misc/Vagrantfile
+ > +++ b/support/misc/Vagrantfile
+ > @@ -12,7 +12,7 @@ VM_MEMORY=2048
+ >  VM_CORES=1
  
- define IODINE_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) install DESTDIR="$(TARGET_DIR)" prefix=/usr
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install DESTDIR="$(TARGET_DIR)" prefix=/usr
- endef
- 
- $(eval $(generic-package))
+ >  Vagrant.configure('2') do |config|
+ > -	config.vm.box = 'ubuntu/trusty64'
+ > +	config.vm.box = 'bento/ubuntu-16.04'
+
+What is the reason to use a base image from the bento project instead of
+the official ubuntu image?
+
+https://atlas.hashicorp.com/ubuntu/boxes/xenial64
+
+-- 
+Bye, Peter Korsgaard
