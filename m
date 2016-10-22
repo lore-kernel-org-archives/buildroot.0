@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 23:18:27 +0200
-Subject: [Buildroot] [PATCH 2/2] xen: Remove TARGET_CONFIGURE_OPTS from
- make
-In-Reply-To: <1473799504-20372-2-git-send-email-alistair.francis@xilinx.com>
-References: <1473799504-20372-1-git-send-email-alistair.francis@xilinx.com>
- <1473799504-20372-2-git-send-email-alistair.francis@xilinx.com>
-Message-ID: <20161022231827.44cc8d96@free-electrons.com>
+Date: Sat, 22 Oct 2016 16:43:30 +0200
+Subject: [Buildroot] [PATCH v6 2/9] package/pkg-cmake.mk: move
+ CMAKE_BUILD_TYPE definition into toolchainfile.cmake
+In-Reply-To: <20161016111245.1847-3-s.martin49@gmail.com>
+References: <20161016111245.1847-1-s.martin49@gmail.com>
+ <20161016111245.1847-3-s.martin49@gmail.com>
+Message-ID: <20161022164330.6dfc7bbd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +14,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 13 Sep 2016 13:45:04 -0700, Alistair Francis wrote:
-> The TARGET_CONFIGURE_OPTS variable resulted in a double definition
-> error:
-> <command-line>:0:0: error: "__OBJECT_FILE__" redefined [-Werror]
-> 
-> Remove the options to avoid the error.
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+On Sun, 16 Oct 2016 13:12:38 +0200, Samuel Martin wrote:
 
-Yann told me that you found the root cause of the problem during a
-short investigation session at ELCE.
+> +    toolchainfile.cmake:
+> +    * when used outside of Buildroot, if not specified on the command
+> +      line, the CMAKE_BUILD_TYPE is by toolchainfile.cmake.
 
-Could you share what the conclusion was? When do you expect to submit a
-patch?
+I've reworded this differently. Please double check that the new text
+is fine.
 
-In the mean time, I've marked
-https://patchwork.ozlabs.org/patch/669641/ as Rejected, since this is
-clearly not the proper fix for the problem.
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
