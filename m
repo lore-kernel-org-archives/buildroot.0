@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Oct 2016 17:21:51 +0200
+Date: Sun, 23 Oct 2016 17:23:48 +0200
 Subject: [Buildroot] [PATCH] pkg-download: fix fetching URLs with ? from
  PRIMARY/SECONDARY
-In-Reply-To: <20161022150413.25a85c1c@free-electrons.com>
+In-Reply-To: <20161023145420.6172618b@free-electrons.com>
 References: <20161021202715.16528-1-arnout@mind.be>
- <20161022150413.25a85c1c@free-electrons.com>
-Message-ID: <679e0dd7-6a24-e90f-4136-8b3caef2033d@mind.be>
+ <20161023145420.6172618b@free-electrons.com>
+Message-ID: <faeae44f-ed90-612f-b705-f01846c3f2fd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +14,8 @@ To: buildroot@busybox.net
 
 
 
-On 22-10-16 15:04, Thomas Petazzoni wrote:
+On 23-10-16 14:54, Thomas Petazzoni wrote:
 > Hello,
-> 
-> There is nothing named "SECONDARY" in Buildroot, it's called "BACKUP".
-> This can be fixed when applying the patch.
 > 
 > On Fri, 21 Oct 2016 22:27:15 +0200, Arnout Vandecappelle
 > (Essensium/Mind) wrote:
@@ -31,36 +28,29 @@ On 22-10-16 15:04, Thomas Petazzoni wrote:
 >> To fix, we need to replace the ? with %3F. Obviously, this should
 >> be done only when fetching from PRIMARY or SECONDARY. For fetching
 >> from the real upstream, the ? really does designate the query part.
+>>
+>> Fixes #9371.
+>>
+>> Reported-by: Johan Derycke <johanderycke@gmail.com>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> ---
+>> I tested with
+>> make BR2_PRIMARY_SITE=http://localhost/dl BR2_PRIMARY_SITE_ONLY=y BR2_DL_DIR=/tmp/dl openssl
+>> and also checked with a file:// primary site, with secondary site, and
+>> openssl-source-check
+>> ---
+>>  package/pkg-download.mk | 8 ++++++--
+>>  1 file changed, 6 insertions(+), 2 deletions(-)
 > 
-> One thing I'm wondering is if the '?' character is the only one that
-> needs to be escaped like this, or not.
+> Applied to master, after s/SECONDARY/BACKUP/.
+> 
+> Peter can you take the appropriate actions in sources.b.o ?
 
- From wikipedia, an URL is:
-
-scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]
-
-so after the path, only ? and # are interpreted differently between the normal
-download and the PRIMARY/BACKUP download. You might think that & (or ;) is also
-special, but those characters are only special when they appear _after_ '?'.
-Just to be sure I tested a ?...&... scenario (just adding \&foo after one of the
-openssl patches) and with this patch it works correctly both for normal and
-PRIMARY downloads. [1]
-
- As to #fragment, that's very simple: it can never occur because it's
-interpreted by the client and doesn't get sent to the server. If a # ends up in
-a URL somehow, it already has to be escaped anyway or it won't get passed by wget.
-
- Note: I haven't tested a PRIMARY that has scp or file download method, but
-those are not affected by this patch anyway.
+ There's nothing to do AFAICS. I did test a download of the openssl patches from
+sources.buildroot.net and that worked.
 
  Regards,
  Arnout
-
-[1]  Well, actually it doesn't work at all, our download handling fails
-dramatically when there is a & in the URL. I tried fixing it by adding quoting
-here and there, but it's not exactly trivial. Since we don't have URLs with &
-and I don't expect any, I'm not continuing work on this. But at least using our
-dl-wrapper works for a URL like ...%3F...&...
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
