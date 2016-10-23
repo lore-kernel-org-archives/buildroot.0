@@ -1,61 +1,31 @@
-From: stefan.nickl at gmail.com <stefan.nickl@gmail.com>
-Date: Sun, 23 Oct 2016 20:49:58 +0200
-Subject: [Buildroot] [PATCH v2] pppd: Provide error() implementation in
+From: Stefan Nickl <stefan.nickl@gmail.com>
+Date: Sun, 23 Oct 2016 20:56:22 +0200
+Subject: [Buildroot] [PATCH] pppd: Provide error() implementation in
 	pppoe-discovery
-Message-ID: <1477248598-6052-1-git-send-email-Stefan.Nickl@gmail.com>
+In-Reply-To: <d7a5d657-bf0f-d5d4-a340-5d26dce15ffc@mind.be>
+References: <1476555914-22201-1-git-send-email-Stefan.Nickl@gmail.com>
+ <20161015223315.47f04e55@free-electrons.com>
+ <CAFOMc=SKjm5J-hn=+qexzeRqqNWJEXKWUUQnckX3ei8c6BMTkA@mail.gmail.com>
+ <7e6742e0-fcd9-8ee3-e77d-358e345bd595@mind.be>
+ <CAFOMc=RqfAsKHB9QXwhVepW-YKeYh2znH06MQixZg6E=yDLwag@mail.gmail.com>
+ <d7a5d657-bf0f-d5d4-a340-5d26dce15ffc@mind.be>
+Message-ID: <CAFOMc=REvRBG9nuZbkjoFuqoVDWow3wA52p97jORmvGShUnU-w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Stefan Nickl <Stefan.Nickl@gmail.com>
+On Fri, Oct 21, 2016 at 8:30 PM, Arnout Vandecappelle <arnout@mind.be>
+wrote:
 
-The pppoe-discovery program calls error() from the CHECK_ROOM macro
-defined in pppoe.h. Since pppoe-discovery is a standalone program not
-linked with the rest of pppd, the only way this could build is by
-linking to glibc's proprietary error(3) function instead of the function
-of the same name (but with different arguments) defined in pppd/utils.c.
+>  This patch, however, still seems relevant, since it even fixes for glibc,
+> no?
+>
+> I just sent out a "PATCH v2" about that.
 
-So with glibc and uClibc this builds, but will probably crash when the
-assertion is triggered. As the assertion is unlikely to fail, nobody has
-noticed. The build however fails with musl libc since it doesn't
-provide the doppelganger.
-
-Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
-
-diff --git a/package/pppd/0002-rp-pppoe-error.patch b/package/pppd/0002-rp-pppoe-error.patch
-new file mode 100644
-index 0000000..f103f4d
---- /dev/null
-+++ b/package/pppd/0002-rp-pppoe-error.patch
-@@ -0,0 +1,27 @@
-+diff --git a/pppd/plugins/rp-pppoe/pppoe-discovery.c b/pppd/plugins/rp-pppoe/pppoe-discovery.c
-+index 3d3bf4e..55037df 100644
-+--- a/pppd/plugins/rp-pppoe/pppoe-discovery.c
-++++ b/pppd/plugins/rp-pppoe/pppoe-discovery.c
-+@@ -9,6 +9,7 @@
-+  *
-+  */
-+ 
-++#include <stdarg.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+@@ -55,6 +56,14 @@ void die(int status)
-+ 	exit(status);
-+ }
-+ 
-++void error(char *fmt, ...)
-++{
-++    va_list pvar;
-++    va_start(pvar, fmt);
-++    vfprintf(stderr, fmt, pvar);
-++    va_end(pvar);
-++}
-++
-+ /* Initialize frame types to RFC 2516 values.  Some broken peers apparently
-+    use different frame types... sigh... */
-+ 
 -- 
-2.7.4
+Stefan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161023/c4e6137b/attachment.html>
