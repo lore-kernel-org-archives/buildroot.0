@@ -1,36 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 23 Oct 2016 16:48:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libbluray: include signal.h to
- fix	build errors
-References: <20161023144115.19982-1-bernd.kuhls@t-online.de>
-Message-ID: <16vuddxe2s.ln2@ID-313208.user.individual.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Oct 2016 17:08:13 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: allow dumping reverse
+ dependencies of a package
+In-Reply-To: <20161023152333.3f9d3f64@free-electrons.com>
+References: <1474808171-5652-1-git-send-email-yann.morin.1998@free.fr>
+ <20161023152333.3f9d3f64@free-electrons.com>
+Message-ID: <20161023150813.GA3605@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 23 Oct 2016 16:41:15 +0200 schrieb Bernd Kuhls:
+Thomas, All,
 
-> Fixes build errors with uClibc-ng on the following platforms:
+On 2016-10-23 15:23 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 25 Sep 2016 14:56:11 +0200, Yann E. MORIN wrote:
+> > Finding the packages that select another one in a specific configuration
+> > is not very trivial:
+> > 
+> >   - when optional, the dependency is not expressed in Kconfig
+> > 
+> >   - looking at the .mk files is not very nice.
+> > 
+> > Introduce a way to dump reverse dependencies of packages, i.e. the list
+> > of packages that directly depend on that package. Like for direct
+> > dependencies, we limit the list to the first-order reverse dependencies.
+> > 
+> > Document it in the main help; use the opportunity to also docuemnt
+> > foo-show-depends.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> bfin: http://autobuild.buildroot.net/results/fbf/fbf63bbe0974b490b875a95fb930ba601364b85a/
-> m68k: http://autobuild.buildroot.net/results/cc9/cc9b87c4c695f97a056cc53f19e7662750dffeff/
-> microblazeel: http://autobuild.buildroot.net/results/941/941c06e29f6542e258f20799dc6f3f94b2f8af88/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> I am unsure whether this is the right fix or not, therefore I did not
-> send the patch upstream yet. A different solution is to include signal.h
-> in sysroot/usr/include/pthread.h in line 686, right before the header
-> file bits/sigthread.h is included. This may point to a problem either in
-> the prebuilt toolchain or uClibc itself, CC'ing Thomas & Waldemar.
+> I was about to apply this patch, but after testing it, I'm a little bit
+> skeptical.
+[--SNIP--]
+> So in the end, I find the semantic of this "show-rdepends" a bit weird.
+> It shows reverse dependencies, some according to the current
+> configuration, some not.
 
-Hi,
+Right, good catch.
 
-similar problems seem to exist for libbdplus and transmission:
+I've fixed it here now to take this into account. It should now match
+the behaviour of -show-depends.
 
-http://autobuild.buildroot.net/?reason=libbdplus-0.1.2
-http://autobuild.buildroot.net/?reason=transmission-2.92
+I'll spin it soon.
 
-Regards, Bernd
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
