@@ -1,35 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 23 Oct 2016 09:37:18 +0000
-Subject: [Buildroot] [Bug 8696] xdriver_xf86-input-mouse install header
- files in target directory
-In-Reply-To: <bug-8696-163@https.bugs.busybox.net/>
-References: <bug-8696-163@https.bugs.busybox.net/>
-Message-ID: <bug-8696-163-Q627sULvxR@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Oct 2016 14:03:07 +0200
+Subject: [Buildroot] [git commit] cryptopp: bump to 5.6.5
+In-Reply-To: <87shrno3ny.fsf@dell.be.48ers.dk>
+References: <20161022203101.35BC4819C0@busybox.osuosl.org>
+ <87shrno3ny.fsf@dell.be.48ers.dk>
+Message-ID: <20161023140307.2195b676@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8696
-
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|gustavo at zacarias.com.ar     |yann.morin.1998 at free.fr
-
---- Comment #8 from Yann E. MORIN <yann.morin.1998@free.fr> ---
 Hello,
 
-I've given that issue another spin, and we still have three xorg packages
-that still install headers in target/ :
-  - xdriver_xf86-input-synaptics
-  - xdriver_xf86-input-joystick
-  - xdriver_xf86-input-mouse
+On Sun, 23 Oct 2016 10:44:33 +0200, Peter Korsgaard wrote:
 
-I'll see how to fix them...
+>  > This commit bumps cryptopp from 5.6.3 to 5.6.5 in order to fix bug  
+> 
+> Heh, hit by the strip-lines-beginning-with-a-# git feature? ;)
 
+Yeah :-/
+
+> Otherwise a very nice commit message, thanks!
+
+Thanks!
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
