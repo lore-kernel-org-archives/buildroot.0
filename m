@@ -1,402 +1,148 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 23 Oct 2016 22:48:09 +0200
-Subject: [Buildroot] [PATCH 08/30] toolchain-external-custom: new package
+Date: Sun, 23 Oct 2016 22:48:29 +0200
+Subject: [Buildroot] [PATCH 28/30] toolchain/toolchain-external: move bfin
+	specific logic into a separate file
 In-Reply-To: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
 References: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1477255711-28603-9-git-send-email-romain.naour@gmail.com>
+Message-ID: <1477255711-28603-29-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Use pkg-toolchain-external-bfin.mk for the definition of various variables like
+TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC and TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT
+which install some specific bfin toolchain componant to TARGET_DIR.
 
-This commit adds a new package to support custom external
-toolchains. As of this commit, the code is currently not used, but it
-will be used as soon as the external toolchain infrastructure gets
-introduced in a future commit.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../toolchain-external-custom/Config.in            |   5 +
- .../toolchain-external-custom/Config.in.options    | 331 +++++++++++++++++++++
- .../toolchain-external-custom.mk                   |  16 +
- 3 files changed, 352 insertions(+)
- create mode 100644 toolchain/toolchain-external/toolchain-external-custom/Config.in
- create mode 100644 toolchain/toolchain-external/toolchain-external-custom/Config.in.options
- create mode 100644 toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
+ .../pkg-toolchain-external-bfin.mk                 | 56 ++++++++++++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk | 49 -------------------
+ 2 files changed, 56 insertions(+), 49 deletions(-)
+ create mode 100644 toolchain/toolchain-external/pkg-toolchain-external-bfin.mk
 
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in b/toolchain/toolchain-external/toolchain-external-custom/Config.in
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external-bfin.mk b/toolchain/toolchain-external/pkg-toolchain-external-bfin.mk
 new file mode 100644
-index 0000000..a913feb
+index 0000000..cfba5ae
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-+	bool "Custom toolchain"
-+	help
-+	  Use this option to use a custom toolchain pre-installed on
-+	  your system.
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-new file mode 100644
-index 0000000..b15670e
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -0,0 +1,331 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-+
-+config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-custom"
-+
-+config BR2_TOOLCHAIN_EXTERNAL_URL
-+	string "Toolchain URL"
-+	depends on BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
-+	help
-+	  URL of the custom toolchain tarball to download and install.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
-+	string "Toolchain prefix"
-+	default "$(ARCH)-linux"
-+
-+choice
-+	bool "External toolchain gcc version"
-+	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
-+	help
-+	  Set to the gcc version that is used by your external
-+	  toolchain.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_6
-+	bool "6.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_5
-+	bool "5.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
-+	bool "4.9.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
-+	bool "4.8.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
-+	bool "4.7.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
-+	bool "4.6.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
-+	bool "4.5.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
-+	bool "4.4.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
-+	bool "4.3.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
-+
-+endchoice
-+
-+choice
-+	bool "External toolchain kernel headers series"
-+	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
-+	help
-+	  Set to the kernel headers version that were used to build
-+	  this external toolchain.
-+
-+	  This is used to hide/show some packages that have strict
-+	  requirements on the version of kernel headers.
-+
-+	  If unsure what version your toolchain is using, you can look
-+	  at the value of LINUX_VERSION_CODE in linux/version.h in your
-+	  toolchain. The Linux version is M.m.p, with:
-+	    M = ( LINUX_VERSION_CODE >> 16 ) & 0xFF
-+	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
-+	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_8
-+	bool "4.8.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_7
-+	bool "4.7.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_6
-+	bool "4.6.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_5
-+	bool "4.5.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4
-+	bool "4.4.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3
-+	bool "4.3.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_2
-+	bool "4.2.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1
-+	bool "4.1.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_0
-+	bool "4.0.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_19
-+	bool "3.19.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_18
-+	bool "3.18.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17
-+	bool "3.17.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16
-+	bool "3.16.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_15
-+	bool "3.15.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14
-+	bool "3.14.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_13
-+	bool "3.13.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12
-+	bool "3.12.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_11
-+	bool "3.11.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10
-+	bool "3.10.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9
-+	bool "3.9.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_8
-+	bool "3.8.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_7
-+	bool "3.7.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_6
-+	bool "3.6.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_5
-+	bool "3.5.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_4
-+	bool "3.4.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_3
-+	bool "3.3.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2
-+	bool "3.2.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_1
-+	bool "3.1.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_0
-+	bool "3.0.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
-+	bool "2.6.x"
-+
-+endchoice
-+
-+choice
-+	prompt "External toolchain C library"
-+	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
-+	bool "uClibc/uClibc-ng"
-+	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	# For the time being, we assume that all custom external
-+	# toolchains have shadow password support.
-+	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
-+	help
-+	  Select this option if your external toolchain uses the
-+	  uClibc (available from http://www.uclibc.org/)
-+	  or uClibc-ng (available from http://www.uclibc-ng.org)
-+	  C library.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
-+	bool "glibc/eglibc"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	help
-+	  Select this option if your external toolchain uses the GNU C
-+	  library (available from https://www.gnu.org/software/libc/)
-+	  or its variant the eglibc library (http://www.eglibc.org/).
-+
-+	  Note: eglibc is a variant of glibc that (among other things)
-+	  can be configured to exclude some of its features. Using a
-+	  toolchain with eglibc configured to exclude key features may
-+	  cause build failures to some packages.
-+
-+comment "(e)glibc only available with shared lib support"
-+	depends on BR2_STATIC_LIBS
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
-+	bool "musl (experimental)"
-+	select BR2_TOOLCHAIN_EXTERNAL_MUSL
-+	help
-+	  Select this option if your external toolchain uses the
-+	  'musl' C library, available from http://www.musl-libc.org/.
-+
-+endchoice
-+
-+if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
-+
-+config BR2_TOOLCHAIN_EXTERNAL_WCHAR
-+	bool "Toolchain has WCHAR support?"
-+	select BR2_USE_WCHAR
-+	help
-+	  Select this option if your external toolchain supports
-+	  WCHAR. If you don't know, leave the default value, Buildroot
-+	  will tell you if it's correct or not.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_LOCALE
-+	bool "Toolchain has locale support?"
-+	select BR2_TOOLCHAIN_EXTERNAL_WCHAR
-+	select BR2_ENABLE_LOCALE
-+	help
-+	  Select this option if your external toolchain has locale
-+	  support. If you don't know, leave the default value,
-+	  Buildroot will tell you if it's correct or not.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
-+	bool "Toolchain has threads support?"
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	default y
-+	help
-+	  Select this option if your external toolchain has thread
-+	  support. If you don't know, leave the default value,
-+	  Buildroot will tell you if it's correct or not.
-+
-+if BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
-+	bool "Toolchain has threads debugging support?"
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	default y
-+	help
-+	  Select this option if your external toolchain has thread
-+	  debugging support. If you don't know, leave the default
-+	  value, Buildroot will tell you if it's correct or not.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL
-+	bool "Toolchain has NPTL threads support?"
-+	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	default y
-+	help
-+	  Select this option if your external toolchain uses the NPTL
-+	  (Native Posix Thread Library) implementation of Posix
-+	  threads. If you don't know, leave the default value,
-+	  Buildroot will tell you if it's correct or not.
-+
-+endif # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
-+
-+endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
-+	bool "Toolchain has SSP support?"
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	default y if BR2_TOOLCHAIN_EXTERNAL_MUSL
-+	help
-+	  Selection this option if your external toolchain has Stack
-+	  Smashing Protection support enabled. If you don't know,
-+	  leave the default value, Buildroot will tell you if it's
-+	  correct or not.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
-+	bool "Toolchain has RPC support?"
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_MUSL
-+	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	help
-+	  Select this option if your external toolchain supports
-+	  RPC. If you don't know, leave the default value, Buildroot
-+	  will tell you if it's correct or not.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CXX
-+	bool "Toolchain has C++ support?"
-+	select BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Select this option if your external toolchain has C++
-+	  support. If you don't know, leave the default value,
-+	  Buildroot will tell you if it's correct or not.
-+
-+config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
-+	string "Extra toolchain libraries to be copied to target"
-+	help
-+	  If your external toolchain provides extra libraries that
-+	  need to be copied to the target filesystem, enter them
-+	  here, separated by spaces. They will be copied to the
-+	  target's /lib directory.
-+
-+endif
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk b/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
-new file mode 100644
-index 0000000..1d40f08
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
-@@ -0,0 +1,16 @@
-+################################################################################
++++ b/toolchain/toolchain-external/pkg-toolchain-external-bfin.mk
+@@ -0,0 +1,56 @@
 +#
-+# toolchain-external-custom
++# This file contains functions used by the external toolchain package
++# infrastructure to handle the Blackfin specific
++# BR2_BFIN_INSTALL_FDPIC_SHARED and BR2_BFIN_INSTALL_FLAT_SHARED
++# options.
 +#
-+################################################################################
 +
-+TOOLCHAIN_EXTERNAL_CUSTOM_SITE = $(patsubst %/,%,$(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL))))
-+TOOLCHAIN_EXTERNAL_CUSTOM_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
-+TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX))
++# Special installation target used on the Blackfin architecture when
++# FDPIC is not the primary binary format being used, but the user has
++# nonetheless requested the installation of the FDPIC libraries to the
++# target filesystem.
++# $1: toolchain CC
++# $2: toolchain CFLAGS
++ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
++define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC
++	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to staging...")
++	$(Q)FDPIC_EXTERNAL_CC=$(dir $(1))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
++	FDPIC_SYSROOT_DIR="$(call toolchain_find_sysroot,$${FDPIC_EXTERNAL_CC} $(2))" ; \
++	FDPIC_LIB_DIR="$(call toolchain_find_libdir,$${FDPIC_EXTERNAL_CC} $(2))" ; \
++	FDPIC_SUPPORT_LIB_DIR="" ; \
++	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
++	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(2) -print-file-name=libstdc++.a) ; \
++	        if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
++	                FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
++	        fi ; \
++	fi ; \
++	$(call copy_toolchain_sysroot,$${FDPIC_SYSROOT_DIR},$${FDPIC_SYSROOT_DIR},,$${FDPIC_LIB_DIR},$${FDPIC_SUPPORT_LIB_DIR})
++endef
 +
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),y)
-+# We can't check hashes for custom downloaded toolchains
-+BR_NO_CHECK_HASH_FOR += $(TOOLCHAIN_EXTERNAL_SOURCE)
++# $1: toolchain LIBS
++define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC
++	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...")
++	$(Q)for libs in $(1); do \
++		$(call copy_toolchain_lib_root,$$libs); \
++	done
++endef
 +endif
 +
-+$(eval $(toolchain-external-package))
++# Special installation target used on the Blackfin architecture when
++# shared FLAT is not the primary format being used, but the user has
++# nonetheless requested the installation of the shared FLAT libraries
++# to the target filesystem. The flat libraries are found and linked
++# according to the index in name "libN.so". Index 1 is reserved for
++# the standard C library. Customer libraries can use 4 and above.
++# $1: toolchain CC
++# $2: toolchain CFLAGS
++ifeq ($(BR2_BFIN_INSTALL_FLAT_SHARED),y)
++define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT
++	$(Q)$(call MESSAGE,"Install external toolchain FLAT libraries to target...")
++	$(Q)FLAT_EXTERNAL_CC=$(dir $(1))../../bfin-uclinux/bin/bfin-uclinux-gcc ; \
++	FLAT_LIBC_A_LOCATION=`$${FLAT_EXTERNAL_CC} $(2) -mid-shared-library -print-file-name=libc`; \
++	if [ -f $${FLAT_LIBC_A_LOCATION} -a ! -h $${FLAT_LIBC_A_LOCATION} ] ; then \
++	        $(INSTALL) -D $${FLAT_LIBC_A_LOCATION} $(TARGET_DIR)/lib/lib1.so; \
++	fi
++endef
++endif
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 8aeb610..4911688 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -390,55 +390,6 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+ 	$(Q)$(call check_toolchain_ssp,$(TOOLCHAIN_EXTERNAL_CC))
+ endef
+ 
+-# Special installation target used on the Blackfin architecture when
+-# FDPIC is not the primary binary format being used, but the user has
+-# nonetheless requested the installation of the FDPIC libraries to the
+-# target filesystem.
+-# $1: toolchain CC
+-# $2: toolchain CFLAGS
+-ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
+-define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC
+-	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to staging...")
+-	$(Q)FDPIC_EXTERNAL_CC=$(dir $(1))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
+-	FDPIC_SYSROOT_DIR="$(call toolchain_find_sysroot,$${FDPIC_EXTERNAL_CC} $(2))" ; \
+-	FDPIC_LIB_DIR="$(call toolchain_find_libdir,$${FDPIC_EXTERNAL_CC} $(2))" ; \
+-	FDPIC_SUPPORT_LIB_DIR="" ; \
+-	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
+-	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(2) -print-file-name=libstdc++.a) ; \
+-	        if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
+-	                FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
+-	        fi ; \
+-	fi ; \
+-	$(call copy_toolchain_sysroot,$${FDPIC_SYSROOT_DIR},$${FDPIC_SYSROOT_DIR},,$${FDPIC_LIB_DIR},$${FDPIC_SUPPORT_LIB_DIR})
+-endef
+-# $1: toolchain LIBS
+-define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC
+-	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...")
+-	$(Q)for libs in $(1); do \
+-		$(call copy_toolchain_lib_root,$$libs); \
+-	done
+-endef
+-endif
+-
+-# Special installation target used on the Blackfin architecture when
+-# shared FLAT is not the primary format being used, but the user has
+-# nonetheless requested the installation of the shared FLAT libraries
+-# to the target filesystem. The flat libraries are found and linked
+-# according to the index in name "libN.so". Index 1 is reserved for
+-# the standard C library. Customer libraries can use 4 and above.
+-# $1: toolchain CC
+-# $2: toolchain CFLAGS
+-ifeq ($(BR2_BFIN_INSTALL_FLAT_SHARED),y)
+-define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT
+-	$(Q)$(call MESSAGE,"Install external toolchain FLAT libraries to target...")
+-	$(Q)FLAT_EXTERNAL_CC=$(dir $(1))../../bfin-uclinux/bin/bfin-uclinux-gcc ; \
+-	FLAT_LIBC_A_LOCATION=`$${FLAT_EXTERNAL_CC} $(2) -mid-shared-library -print-file-name=libc`; \
+-	if [ -f $${FLAT_LIBC_A_LOCATION} -a ! -h $${FLAT_LIBC_A_LOCATION} ] ; then \
+-	        $(INSTALL) -D $${FLAT_LIBC_A_LOCATION} $(TARGET_DIR)/lib/lib1.so; \
+-	fi
+-endef
+-endif
+-
+ TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_BUILD_WRAPPER)
+ 
+ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
 -- 
 2.5.5
