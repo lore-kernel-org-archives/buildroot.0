@@ -1,43 +1,97 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] ux500-firmware: use $(TARGET_MAKE_ENV)
-	when calling $(MAKE)
-Message-ID: <20161022132037.7A63C819A0@busybox.osuosl.org>
+From: daggs <daggs@gmx.com>
+Date: Sun, 23 Oct 2016 06:40:40 +0200
+Subject: [Buildroot] [PATCH 1/2] X11/odroidc2-driver: New Package.
+In-Reply-To: <5998c23d-941a-d12b-187b-550aa82cb4f6@mind.be>
+References: <20161013174124.9639-1-daggs@gmx.com>
+ <9fe82330-7c8d-0f31-e777-db4e5014cf5f@mind.be>
+ <trinity-122b1f64-5a75-4714-b1e0-471c25487584-1476738693195@3capp-mailcom-bs01>
+ <5c997397-22ef-70f1-9a92-c1b7466de872@mind.be>
+ <trinity-1310d2bf-8c3b-45fa-991f-bdfe4076c3af-1476777721158@3capp-mailcom-bs14>
+ <33ce6fd6-016f-6654-ed86-e7098025cd3d@mind.be>
+ <trinity-1276538b-c0a7-428c-b075-e61e507d8e4a-1476985276905@3capp-mailcom-bs07>,
+ <5998c23d-941a-d12b-187b-550aa82cb4f6@mind.be>
+Message-ID: <trinity-939ad751-65c4-4f9b-b45f-78d5398531f2-1477197640539@3capp-mailcom-bs06>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e71dd6ec76b62bb1938cd68edbcd5540c59b23b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Greetings Arnout,
 
-And remove whitespace.
+> On 20-10-16 19:41, daggs wrote:
+> > Greetings Arnout,
+> > 
+> >> On 18-10-16 10:02, daggs wrote:
+> >>> Greetings Arnout,
+> >>>
+> >>>> On 17-10-16 23:11, daggs wrote:
+> >>>>
+> >>
+> >>>> [snip]
+> >>>>>>> +XDRIVER_XF86_VIDEO_ODROIDC2_LICENSE_FILES = README.txt 
+> >>>>>>> +XDRIVER_XF86_VIDEO_ODROIDC2_DEPENDENCIES = \
+> >>>>>>> +	odroid-mali \
+> >>>>>>> +	xproto_fontsproto \
+> >>>>>>> +	xproto_xproto \
+> >>>>>>
+> >>>>>>  You also select dri2proto, is that not needed? But actually, I don't see any
+> >>>>>> inclusion of either of these three proto packages, only of xserver stuff (and a
+> >>>>>> few that I can't place, like ump.h)
+> >>>>> ump.h is part of the x11 egl pkg.
+> >>>>> I've added the above deps based on compilation errors I've got.
+> >>>>
+> >>>>  I suspect that it actually comes from the headers of odroid-mali. If that is
+> >>>> the case, it would be better to put the dependency in odroid-mali itself
+> >>>> (conditional on using the X11 version, of course).
+> >>> I don't understand one thing, the existence of dri2proto does affects odroid-mali, why should I depend odroid-mali dri2proto it when there is no logic to do so?
+> >>
+> >>  I'm sorry but I couldn't parse your sentence. So I'll just re-explain.
+> >>
+> >>  I suspect that xproto_fontsproto and xproto_xproto are not included by the
+> >> video driver itself, but are included by odroid-mali headers. So I checked and
+> >> indeed, the odroid-mali headers include X11/Xlib.h and X11/Xutil.h. So, in
+> >> odroid-mali.mk you should add something like
+> >>
+> >> ifeq ($(BR2_PACKAGE_ODROID_MALI_X11),y)
+> >> # The X11 version of the headers include X11/Xlib.h and X11/Xutil.h
+> >> ODROID_MALI_DEPENDENCIES += xlib_libX11
+> >> endif
+> > won't this means that xlib_libX11 will be built? if so, the headers mentioned above won't be deleted by xlib_libX11?
+> 
+>  Yes, xlib_libX11 will be built, so Xlib.h and Xutil.h get installed to staging,
+> which is exactly what we want, no?
+indeed, thought of that a few hours after I send this mail.
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ux500-firmware/ux500-firmware.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> > 
+> >>
+> >> and in Config.in:
+> >> 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_ODROID_MALI_X11
+> >>
+> > ok, I understand this.
+> > 
+> >>
+> >>  For the video driver, the required packages seem to be:
+> >>
+> >> xserver_xorg-server (for damage.h, dri2.h, exa.h, micmap.h, ...)
+> >> libdrm (for xf86drm.h)
+> >>
+> >>  But I haven't actually tried building it so I'm not sure.
+> > it needs testing, will do after I'll finish understanding all the rejects.
+> > 
+> > what about the xorg.conf? I'm pretty sure that it won't work without the xorg.conf.
+> > what is the right way to address it?
+> 
+>  Of course it won't work without xorg.conf adaptations. But many drivers need or
+> may need xorg.conf adaptations. So what you should do is to add an explanation
+> to the help text in Config.in. Look at xdriver_xf86-video-imx-viv as an example.
+imho the one in xdriver_xf86-video-imx-viv isn't good for this driver. the xdriver_xf86-video-imx-viv has a generic explanation.
+this driver needs specific xorg.conf, imho pasting the entire file to the help is not a good idea.
+so I have an alternative suggestion, instead of installing it to /etc/X11/xorg.conf, it will be installed to /usr/share/X11/xorg.conf.odroidc2.
+in addition, a entry to the help screen pointing to the location of the file is added.
+thus the user can easily copy the file to the right location and there is not possible collision upon build.
+this can be done to the trubofb driver.
+thoughts?
 
-diff --git a/package/ux500-firmware/ux500-firmware.mk b/package/ux500-firmware/ux500-firmware.mk
-index 7e947f3..428ed34 100644
---- a/package/ux500-firmware/ux500-firmware.mk
-+++ b/package/ux500-firmware/ux500-firmware.mk
-@@ -8,13 +8,13 @@ UX500_FIRMWARE_VERSION = 1.1.3-6
- UX500_FIRMWARE_SOURCE = ux500-firmware_$(UX500_FIRMWARE_VERSION)linaro1.tar.gz
- UX500_FIRMWARE_SITE = https://launchpad.net/~igloocommunity-maintainers/+archive/snowball/+files
- UX500_FIRMWARE_LICENSE = Snowball click-wrap license
--UX500_FIRMWARE_LICENSE_FILES = license.txt 
-+UX500_FIRMWARE_LICENSE_FILES = license.txt
- UX500_FIRMWARE_REDISTRIBUTE = NO
- 
- # The CG2900 linux driver has to load firmware named CG29XX_* but the firmware
- # filenames contained in this package are CG2900_* hence the code below
- define UX500_FIRMWARE_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
- 	for f in $(TARGET_DIR)/lib/firmware/CG2900* ; do \
- 		mv $$f $${f/CG2900/CG29XX}; \
- 	done
+Dagg.
