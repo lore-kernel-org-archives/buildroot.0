@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Oct 2016 14:39:48 +0200
-Subject: [Buildroot] [git commit] lua-csnappy: bump to version 0.1.4
-Message-ID: <20161023123956.63FA5819EF@busybox.osuosl.org>
+Date: Sun, 23 Oct 2016 14:39:53 +0200
+Subject: [Buildroot] [git commit] lua-messagepack: bump to version 0.3.5
+Message-ID: <20161023123956.72E02819EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4419eb90423d0fad999b0d7e3d6bc9fc7f85e18f
+commit: https://git.buildroot.net/buildroot/commit/?id=d250914f3c17866f0f4a4715b0cced9f26ca756b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lua-csnappy/lua-csnappy.hash | 2 +-
- package/lua-csnappy/lua-csnappy.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lua-messagepack/lua-messagepack.hash | 4 ++--
+ package/lua-messagepack/lua-messagepack.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua-csnappy/lua-csnappy.hash b/package/lua-csnappy/lua-csnappy.hash
-index 2864c3f..1363634 100644
---- a/package/lua-csnappy/lua-csnappy.hash
-+++ b/package/lua-csnappy/lua-csnappy.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/lua-messagepack/lua-messagepack.hash b/package/lua-messagepack/lua-messagepack.hash
+index b46b686..87e42d8 100644
+--- a/package/lua-messagepack/lua-messagepack.hash
++++ b/package/lua-messagepack/lua-messagepack.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256	3504789c7832f4ed3d7aef47ba9d62940985cde7556284db2233842bfb7d8876  lua-csnappy-0.1.3-1.src.rock
-+sha256	855331feb8e09a32eea8366ab9bcd4386db6392de82383f08ae5e59adbb7d8a6  lua-csnappy-0.1.4-1.src.rock
-diff --git a/package/lua-csnappy/lua-csnappy.mk b/package/lua-csnappy/lua-csnappy.mk
-index 60b92ac..0739259 100644
---- a/package/lua-csnappy/lua-csnappy.mk
-+++ b/package/lua-csnappy/lua-csnappy.mk
+-sha256	be6827c93383c8d7214c9ac9b7a62ab04186db4c6c2a3a7b36036157784f58b8  lua-messagepack-0.3.4-1.src.rock
+-sha256	5ab74601696973a66802de1fec614859db0d93d5fa960fac0f70cb04a490e5e5  lua-messagepack-lua53-0.3.4-1.src.rock
++sha256	7136e47a37f01960c244fe0ad42215e2cf6e96f50cb7292c5295fa3e93fd50c1  lua-messagepack-0.3.5-1.src.rock
++sha256	b8d1c3cff8eef0b8ef1a3287228cfac4149933744235d3a5d88d65d4e3b048bb  lua-messagepack-lua53-0.3.5-1.src.rock
+diff --git a/package/lua-messagepack/lua-messagepack.mk b/package/lua-messagepack/lua-messagepack.mk
+index 18a4e4a..f8cc132 100644
+--- a/package/lua-messagepack/lua-messagepack.mk
++++ b/package/lua-messagepack/lua-messagepack.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_CSNAPPY_VERSION_UPSTREAM = 0.1.3
-+LUA_CSNAPPY_VERSION_UPSTREAM = 0.1.4
- LUA_CSNAPPY_VERSION = $(LUA_CSNAPPY_VERSION_UPSTREAM)-1
- LUA_CSNAPPY_SUBDIR = lua-csnappy-$(LUA_CSNAPPY_VERSION_UPSTREAM)
- LUA_CSNAPPY_LICENSE = BSD-3c
+-LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.3.4
++LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.3.5
+ ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+ LUA_MESSAGEPACK_VERSION = lua53-$(LUA_MESSAGEPACK_VERSION_UPSTREAM)-1
+ else
