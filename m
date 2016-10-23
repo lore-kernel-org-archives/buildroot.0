@@ -1,148 +1,109 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 23 Oct 2016 22:48:29 +0200
-Subject: [Buildroot] [PATCH 28/30] toolchain/toolchain-external: move bfin
-	specific logic into a separate file
+Date: Sun, 23 Oct 2016 22:48:12 +0200
+Subject: [Buildroot] [PATCH 11/30] toolchain-external-linaro-armeb: new
+	package
 In-Reply-To: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
 References: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1477255711-28603-29-git-send-email-romain.naour@gmail.com>
+Message-ID: <1477255711-28603-12-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use pkg-toolchain-external-bfin.mk for the definition of various variables like
-TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC and TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT
-which install some specific bfin toolchain componant to TARGET_DIR.
+This commit adds a new package for the Linaro external toolchain for
+the ARM big endian architecture. As of this commit, the code is currently
+not used, but it will be used as soon as the external toolchain
+infrastructure gets introduced in a future commit.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../pkg-toolchain-external-bfin.mk                 | 56 ++++++++++++++++++++++
- toolchain/toolchain-external/toolchain-external.mk | 49 -------------------
- 2 files changed, 56 insertions(+), 49 deletions(-)
- create mode 100644 toolchain/toolchain-external/pkg-toolchain-external-bfin.mk
+ .../toolchain-external-linaro-armeb/Config.in      | 26 ++++++++++++++++++++++
+ .../Config.in.options                              |  6 +++++
+ .../toolchain-external-linaro-armeb.hash           |  3 +++
+ .../toolchain-external-linaro-armeb.mk             | 17 ++++++++++++++
+ 4 files changed, 52 insertions(+)
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.mk
 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external-bfin.mk b/toolchain/toolchain-external/pkg-toolchain-external-bfin.mk
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
 new file mode 100644
-index 0000000..cfba5ae
+index 0000000..ed84c47
 --- /dev/null
-+++ b/toolchain/toolchain-external/pkg-toolchain-external-bfin.mk
-@@ -0,0 +1,56 @@
-+#
-+# This file contains functions used by the external toolchain package
-+# infrastructure to handle the Blackfin specific
-+# BR2_BFIN_INSTALL_FDPIC_SHARED and BR2_BFIN_INSTALL_FLAT_SHARED
-+# options.
-+#
++++ b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
+@@ -0,0 +1,26 @@
++comment "Linaro toolchains available for Cortex-A + EABIhf"
++	depends on BR2_armeb
++	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
++	depends on !BR2_STATIC_LIBS
 +
-+# Special installation target used on the Blackfin architecture when
-+# FDPIC is not the primary binary format being used, but the user has
-+# nonetheless requested the installation of the FDPIC libraries to the
-+# target filesystem.
-+# $1: toolchain CC
-+# $2: toolchain CFLAGS
-+ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
-+define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC
-+	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to staging...")
-+	$(Q)FDPIC_EXTERNAL_CC=$(dir $(1))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
-+	FDPIC_SYSROOT_DIR="$(call toolchain_find_sysroot,$${FDPIC_EXTERNAL_CC} $(2))" ; \
-+	FDPIC_LIB_DIR="$(call toolchain_find_libdir,$${FDPIC_EXTERNAL_CC} $(2))" ; \
-+	FDPIC_SUPPORT_LIB_DIR="" ; \
-+	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
-+	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(2) -print-file-name=libstdc++.a) ; \
-+	        if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
-+	                FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
-+	        fi ; \
-+	fi ; \
-+	$(call copy_toolchain_sysroot,$${FDPIC_SYSROOT_DIR},$${FDPIC_SYSROOT_DIR},,$${FDPIC_LIB_DIR},$${FDPIC_SUPPORT_LIB_DIR})
-+endef
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
++	bool "Linaro armeb 2016.05"
++	depends on BR2_armeb
++	depends on BR2_ARM_CPU_ARMV7A
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_ARM_EABIHF
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	help
++	  Linaro toolchain for the ARM big endian architecture. It
++	  uses Linaro GCC 2016.05 (based on gcc 5.3.1), Linaro GDB
++	  2016.05 (based on GDB 7.11.1), glibc 2.21, Binutils 2016.05
++	  (based on 2.25). It generates code that runs on all Cortex-A
++	  profile devices, but tuned for the Cortex-A9. The code
++	  generated is Thumb 2, with the hard floating point calling
++	  convention, and uses the VFPv3-D16 FPU instructions.
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options
+new file mode 100644
+index 0000000..0fa7619
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options
+@@ -0,0 +1,6 @@
++if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
 +
-+# $1: toolchain LIBS
-+define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC
-+	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...")
-+	$(Q)for libs in $(1); do \
-+		$(call copy_toolchain_lib_root,$$libs); \
-+	done
-+endef
++config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
++	default "toolchain-external-linaro-armeb"
++
++endif
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.hash b/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.hash
+new file mode 100644
+index 0000000..7952b50
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 f6e9c0d3320760fe8f89e9ec3acdd7b4da7eff889c094b4a2acc286fd46f334f  gcc-linaro-5.3.1-2016.05-i686_armeb-linux-gnueabihf.tar.xz
++sha256 6cf41c8944be56279cc14992aa075174b7a4c5938502536266eaaeef048f9440  gcc-linaro-5.3.1-2016.05-x86_64_armeb-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.mk b/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.mk
+new file mode 100644
+index 0000000..9d4d843
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# toolchain-external-linaro-armeb
++#
++################################################################################
++
++TOOLCHAIN_EXTERNAL_LINARO_ARMEB_VERSION = 2016.05
++TOOLCHAIN_EXTERNAL_LINARO_ARMEB_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-$(TOOLCHAIN_EXTERNAL_LINARO_ARMEB_VERSION)/armeb-linux-gnueabihf
++TOOLCHAIN_EXTERNAL_LINARO_ARMEB_PREFIX = armeb-linux-gnueabihf
++
++ifeq ($(HOSTARCH),x86)
++TOOLCHAIN_EXTERNAL_LINARO_ARMEB_SOURCE = gcc-linaro-5.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARMEB_VERSION)-i686_armeb-linux-gnueabihf.tar.xz
++else
++TOOLCHAIN_EXTERNAL_LINARO_ARMEB_SOURCE = gcc-linaro-5.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARMEB_VERSION)-x86_64_armeb-linux-gnueabihf.tar.xz
 +endif
 +
-+# Special installation target used on the Blackfin architecture when
-+# shared FLAT is not the primary format being used, but the user has
-+# nonetheless requested the installation of the shared FLAT libraries
-+# to the target filesystem. The flat libraries are found and linked
-+# according to the index in name "libN.so". Index 1 is reserved for
-+# the standard C library. Customer libraries can use 4 and above.
-+# $1: toolchain CC
-+# $2: toolchain CFLAGS
-+ifeq ($(BR2_BFIN_INSTALL_FLAT_SHARED),y)
-+define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT
-+	$(Q)$(call MESSAGE,"Install external toolchain FLAT libraries to target...")
-+	$(Q)FLAT_EXTERNAL_CC=$(dir $(1))../../bfin-uclinux/bin/bfin-uclinux-gcc ; \
-+	FLAT_LIBC_A_LOCATION=`$${FLAT_EXTERNAL_CC} $(2) -mid-shared-library -print-file-name=libc`; \
-+	if [ -f $${FLAT_LIBC_A_LOCATION} -a ! -h $${FLAT_LIBC_A_LOCATION} ] ; then \
-+	        $(INSTALL) -D $${FLAT_LIBC_A_LOCATION} $(TARGET_DIR)/lib/lib1.so; \
-+	fi
-+endef
-+endif
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 8aeb610..4911688 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -390,55 +390,6 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 	$(Q)$(call check_toolchain_ssp,$(TOOLCHAIN_EXTERNAL_CC))
- endef
- 
--# Special installation target used on the Blackfin architecture when
--# FDPIC is not the primary binary format being used, but the user has
--# nonetheless requested the installation of the FDPIC libraries to the
--# target filesystem.
--# $1: toolchain CC
--# $2: toolchain CFLAGS
--ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
--define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC
--	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to staging...")
--	$(Q)FDPIC_EXTERNAL_CC=$(dir $(1))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
--	FDPIC_SYSROOT_DIR="$(call toolchain_find_sysroot,$${FDPIC_EXTERNAL_CC} $(2))" ; \
--	FDPIC_LIB_DIR="$(call toolchain_find_libdir,$${FDPIC_EXTERNAL_CC} $(2))" ; \
--	FDPIC_SUPPORT_LIB_DIR="" ; \
--	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
--	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(2) -print-file-name=libstdc++.a) ; \
--	        if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
--	                FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
--	        fi ; \
--	fi ; \
--	$(call copy_toolchain_sysroot,$${FDPIC_SYSROOT_DIR},$${FDPIC_SYSROOT_DIR},,$${FDPIC_LIB_DIR},$${FDPIC_SUPPORT_LIB_DIR})
--endef
--# $1: toolchain LIBS
--define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC
--	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...")
--	$(Q)for libs in $(1); do \
--		$(call copy_toolchain_lib_root,$$libs); \
--	done
--endef
--endif
--
--# Special installation target used on the Blackfin architecture when
--# shared FLAT is not the primary format being used, but the user has
--# nonetheless requested the installation of the shared FLAT libraries
--# to the target filesystem. The flat libraries are found and linked
--# according to the index in name "libN.so". Index 1 is reserved for
--# the standard C library. Customer libraries can use 4 and above.
--# $1: toolchain CC
--# $2: toolchain CFLAGS
--ifeq ($(BR2_BFIN_INSTALL_FLAT_SHARED),y)
--define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT
--	$(Q)$(call MESSAGE,"Install external toolchain FLAT libraries to target...")
--	$(Q)FLAT_EXTERNAL_CC=$(dir $(1))../../bfin-uclinux/bin/bfin-uclinux-gcc ; \
--	FLAT_LIBC_A_LOCATION=`$${FLAT_EXTERNAL_CC} $(2) -mid-shared-library -print-file-name=libc`; \
--	if [ -f $${FLAT_LIBC_A_LOCATION} -a ! -h $${FLAT_LIBC_A_LOCATION} ] ; then \
--	        $(INSTALL) -D $${FLAT_LIBC_A_LOCATION} $(TARGET_DIR)/lib/lib1.so; \
--	fi
--endef
--endif
--
- TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_BUILD_WRAPPER)
- 
- define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
++$(eval $(toolchain-external-package))
 -- 
 2.5.5
