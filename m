@@ -1,187 +1,270 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 23 Oct 2016 22:48:23 +0200
-Subject: [Buildroot] [PATCH 22/30] toolchain-external-codescape-mti-mips:
-	new package
+Date: Sun, 23 Oct 2016 22:48:26 +0200
+Subject: [Buildroot] [PATCH 25/30] toolchain/toolchain-external: move the
+	definition of various variables into a separate file
 In-Reply-To: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
 References: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1477255711-28603-23-git-send-email-romain.naour@gmail.com>
+Message-ID: <1477255711-28603-26-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a new package for the Codescape external toolchain for
-the MIPS architecture. As of this commit, the code is currently not
-used, but it will be used as soon as the external toolchain
-infrastructure gets introduced in a future commit.
+Use pkg-toolchain-external-vars.mk for the definition of various variables:
+list of libraries to copy to the target, wrapper arguments and cflags
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- .../Config.in                                      | 73 ++++++++++++++++++++++
- .../Config.in.options                              |  6 ++
- .../toolchain-external-codescape-mti-mips.hash     |  3 +
- .../toolchain-external-codescape-mti-mips.mk       | 48 ++++++++++++++
- 4 files changed, 130 insertions(+)
- create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
- create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options
- create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
- create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
+ .../pkg-toolchain-external-vars.mk                 | 120 +++++++++++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk | 101 -----------------
+ 2 files changed, 120 insertions(+), 101 deletions(-)
+ create mode 100644 toolchain/toolchain-external/pkg-toolchain-external-vars.mk
 
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external-vars.mk b/toolchain/toolchain-external/pkg-toolchain-external-vars.mk
 new file mode 100644
-index 0000000..f899467
+index 0000000..af8c146
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-@@ -0,0 +1,73 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
-+	bool "Codescape MTI GNU Linux Toolchain 2016.05"
-+	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_MIPS_CPU_MIPS32R2 || (BR2_MIPS_CPU_MIPS64R2 && !BR2_MIPS_SOFT_FLOAT) || \
-+		BR2_MIPS_CPU_MIPS32R5 || (BR2_MIPS_CPU_MIPS64R5 && !BR2_MIPS_SOFT_FLOAT)
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	help
-+	  Codescape MTI GNU Linux Toolchain 2015.10 for the MIPS
-+	  architecture, from Imagination Technologies. It uses gcc
-+	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
-+	  headers 4.0. It has support for the following variants:
-+	    - MIPS32r2 - Big-Endian, Hard-Float, Legacy NaN, o32 ABI
-+	      Select 'MIPS (big endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	    - MIPS32r2 - Big-Endian, Hard-Float, 2008 NaN, o32 ABI
-+	      Select 'MIPS (big endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
-+	    - MIPS32r2 - Big-Endian, Soft-Float, Legacy NaN, o32 ABI
-+	      Select 'MIPS (big endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Enable 'Use soft-float'
-+	    - MIPS32r2 - Little-Endian, Hard-Float, Legacy NaN, o32 ABI
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	    - MIPS32r2 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
-+	    - MIPS32r2 - Little-Endian, Soft-Float, Legacy NaN, o32 ABI
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Enable 'Use soft-float'
-+	    - MIPS32r2 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI, microMIPS
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Enable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
-+	    - MIPS32r2 - Little-Endian, Soft-Float, Legacy NaN, o32 ABI, microMIPS
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
-+	    - MIPS64r2 - Big-Endian, Hard-Float, Legacy NaN, n32 ABI
-+	      Select 'MIPS64 (big endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n32' Target ABI
-+	      Disable 'Use soft-float'
-+	    - MIPS64r2 - Little-Endian, Hard-Float, Legacy NaN, n32 ABI
-+	      Select 'MIPS64 (little endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n32' Target ABI
-+	      Disable 'Use soft-float'
-+	    - MIPS64r2 - Big-Endian, Hard-Float, Legacy NaN, n64 ABI
-+	      Select 'MIPS64 (big endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n64' Target ABI
-+	      Disable 'Use soft-float'
-+	    - MIPS64r2 - Little-Endian, Hard-Float, Legacy NaN, n64 ABI
-+	      Select 'MIPS64 (little endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n64' Target ABI
-+	      Disable 'Use soft-float'
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options
-new file mode 100644
-index 0000000..c6a3c4b
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options
-@@ -0,0 +1,6 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
++++ b/toolchain/toolchain-external/pkg-toolchain-external-vars.mk
+@@ -0,0 +1,120 @@
++#
++# This file contains various variable definitions that are used by the
++# external toolchain infrastructure:
++#
++#  - Definitions of the list of libraries that should be copied to the
++#    target.
++#  - Definition of the CFLAGS to use with the external toolchain, as
++#    well as the common toolchain wrapper build arguments
++#
 +
-+config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-codescape-mti-mips"
++#
++# Define the list of libraries to copy
++#
 +
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
++LIB_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_ARM_EABIHF),yy)
++LIB_EXTERNAL_LIBS += ld-linux-armhf.so.*
++else
++LIB_EXTERNAL_LIBS += ld*.so.*
 +endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
-new file mode 100644
-index 0000000..0d785f2
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
-@@ -0,0 +1,3 @@
-+# Codescape toolchains from Imagination Technologies
-+# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03/downloads.html
-+sha256 10b8ab6d7c492abc19ecabafedc6bc5f12ff88107a3cb76dc452b3a9522d9c56  Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
-new file mode 100644
-index 0000000..b605881
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
-@@ -0,0 +1,48 @@
-+################################################################################
-+#
-+# toolchain-external-codescape-mti-mips
-+#
-+################################################################################
-+
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION = 2016.05-03
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_STRIP_COMPONENTS = 2
-+
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION).for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_PREFIX = mips-mti-linux-gnu
-+
-+# Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
-+# sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
-+# -> sbin-<abi> so that the rest of Buildroot can find the toolchain
-+# tools in the appropriate location.
-+ifeq ($(BR2_MIPS_OABI32),y)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX = o32
-+else ifeq ($(BR2_MIPS_NABI32),y)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX = n32
-+else ifeq ($(BR2_MIPS_NABI64),y)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX = n64
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIB_EXTERNAL_LIBS += libpthread.so.*
++ifneq ($(BR2_PACKAGE_GDB)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
++LIB_EXTERNAL_LIBS += libthread_db.so.*
++endif # gdbserver
++endif # ! no threads
 +endif
 +
-+define TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_STAGING_FIXUPS
-+	rmdir $(STAGING_DIR)/usr/bin $(STAGING_DIR)/usr/sbin
-+	ln -sf bin-$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX) $(STAGING_DIR)/usr/bin
-+	ln -sf sbin-$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX) $(STAGING_DIR)/usr/sbin
-+endef
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
++LIB_EXTERNAL_LIBS += libnss_files.so.* libnss_dns.so.*
++endif
 +
-+# The Codescape toolchain uses a sysroot layout that places them
-+# side-by-side instead of nested like multilibs. A symlink is needed
-+# much like for the nested sysroots which are handled in
-+# copy_toolchain_sysroot but there is not enough information in there
-+# to determine whether the sysroot layout was nested or side-by-side.
-+# Add the symlink here for now.
-+define TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SYMLINK
-+	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_CC) $(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_CFLAGS))"; \
-+	ARCH_SUBDIR=`basename $${ARCH_SYSROOT_DIR}`; \
-+	ln -snf . $(STAGING_DIR)/$${ARCH_SUBDIR}
-+endef
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
++LIB_EXTERNAL_LIBS += libc.so libgcc_s.so.*
++endif
 +
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_POST_INSTALL_STAGING_HOOKS += \
-+	TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_STAGING_FIXUPS \
-+	TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SYMLINK
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++USR_LIB_EXTERNAL_LIBS += libstdc++.so.*
++endif
 +
-+$(eval $(toolchain-external-package))
++ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
++USR_LIB_EXTERNAL_LIBS += libgfortran.so.*
++# fortran needs quadmath on x86 and x86_64
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBQUADMATH),y)
++USR_LIB_EXTERNAL_LIBS += libquadmath.so*
++endif
++endif
++
++LIB_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
++
++#
++# Calculate the common CFLAGS and wrapper arguments
++#
++
++ifeq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
++CC_TARGET_CPU_ := $(call qstrip,$(BR2_GCC_TARGET_CPU))
++else
++CC_TARGET_CPU_ := $(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
++endif
++
++CC_TARGET_ARCH_ := $(call qstrip,$(BR2_GCC_TARGET_ARCH))
++CC_TARGET_ABI_ := $(call qstrip,$(BR2_GCC_TARGET_ABI))
++CC_TARGET_FPU_ := $(call qstrip,$(BR2_GCC_TARGET_FPU))
++CC_TARGET_FLOAT_ABI_ := $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
++CC_TARGET_MODE_ := $(call qstrip,$(BR2_GCC_TARGET_MODE))
++
++# march/mtune/floating point mode needs to be passed to the external toolchain
++# to select the right multilib variant
++ifeq ($(BR2_x86_64),y)
++TOOLCHAIN_EXTERNAL_CFLAGS += -m64
++TOOLCHAIN_EXTERNAL_COMMON_WRAPPER_ARGS += -DBR_64
++endif
++ifneq ($(CC_TARGET_ARCH_),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH_)
++TOOLCHAIN_EXTERNAL_COMMON_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
++endif
++ifneq ($(CC_TARGET_CPU_),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(CC_TARGET_CPU_)
++TOOLCHAIN_EXTERNAL_COMMON_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
++endif
++ifneq ($(CC_TARGET_ABI_),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
++TOOLCHAIN_EXTERNAL_COMMON_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
++endif
++ifneq ($(CC_TARGET_FPU_),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=$(CC_TARGET_FPU_)
++TOOLCHAIN_EXTERNAL_COMMON_WRAPPER_ARGS += -DBR_FPU='"$(CC_TARGET_FPU_)"'
++endif
++ifneq ($(CC_TARGET_FLOAT_ABI_),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(CC_TARGET_FLOAT_ABI_)
++TOOLCHAIN_EXTERNAL_COMMON_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(CC_TARGET_FLOAT_ABI_)"'
++endif
++ifneq ($(CC_TARGET_MODE_),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -m$(CC_TARGET_MODE_)
++TOOLCHAIN_EXTERNAL_COMMON_WRAPPER_ARGS += -DBR_MODE='"$(CC_TARGET_MODE_)"'
++endif
++ifeq ($(BR2_BINFMT_FLAT),y)
++TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
++TOOLCHAIN_EXTERNAL_COMMON_WRAPPER_ARGS += -DBR_BINFMT_FLAT
++endif
++ifeq ($(BR2_mipsel)$(BR2_mips64el),y)
++TOOLCHAIN_EXTERNAL_COMMON_WRAPPER_ARGS += -DBR_MIPS_TARGET_LITTLE_ENDIAN
++TOOLCHAIN_EXTERNAL_CFLAGS += -EL
++endif
++ifeq ($(BR2_mips)$(BR2_mips64),y)
++TOOLCHAIN_EXTERNAL_COMMON_WRAPPER_ARGS += -DBR_MIPS_TARGET_BIG_ENDIAN
++TOOLCHAIN_EXTERNAL_CFLAGS += -EB
++endif
++ifeq ($(BR2_arceb),y)
++TOOLCHAIN_EXTERNAL_COMMON_WRAPPER_ARGS += -DBR_ARC_TARGET_BIG_ENDIAN
++TOOLCHAIN_EXTERNAL_CFLAGS += -EB
++endif
++
++TOOLCHAIN_EXTERNAL_CFLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
++
++ifeq ($(BR2_SOFT_FLOAT),y)
++TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
++TOOLCHAIN_EXTERNAL_COMMON_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
++endif
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index ea8bc36..f56f049 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -63,43 +63,6 @@
+ #  $(HOST_DIR)/usr/bin like for the internal toolchains, and the rest
+ #  of Buildroot is handled identical for the 2 toolchain types.
+ 
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+-TOOLCHAIN_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_ARM_EABIHF),yy)
+-TOOLCHAIN_EXTERNAL_LIBS += ld-linux-armhf.so.*
+-else
+-TOOLCHAIN_EXTERNAL_LIBS += ld*.so.*
+-endif
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-TOOLCHAIN_EXTERNAL_LIBS += libpthread.so.*
+-ifneq ($(BR2_PACKAGE_GDB)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
+-TOOLCHAIN_EXTERNAL_LIBS += libthread_db.so.*
+-endif # gdbserver
+-endif # ! no threads
+-endif
+-
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
+-TOOLCHAIN_EXTERNAL_LIBS += libnss_files.so.* libnss_dns.so.*
+-endif
+-
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
+-TOOLCHAIN_EXTERNAL_LIBS += libc.so libgcc_s.so.*
+-endif
+-
+-ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+-TOOLCHAIN_EXTERNAL_LIBS += libstdc++.so.*
+-endif
+-
+-ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
+-TOOLCHAIN_EXTERNAL_LIBS += libgfortran.so.*
+-# fortran needs quadmath on x86 and x86_64
+-ifeq ($(BR2_TOOLCHAIN_HAS_LIBQUADMATH),y)
+-TOOLCHAIN_EXTERNAL_LIBS += libquadmath.so*
+-endif
+-endif
+-
+-TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+-
+ # Details about sysroot directory selection.
+ #
+ # To find the sysroot directory, we use the trick of looking for the
+@@ -183,70 +146,6 @@ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
+ 	-DBR_CROSS_PATH_REL='"$(TOOLCHAIN_EXTERNAL_BIN:$(HOST_DIR)/%=%)"'
+ endif
+ 
+-ifeq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
+-CC_TARGET_CPU_ := $(call qstrip,$(BR2_GCC_TARGET_CPU))
+-else
+-CC_TARGET_CPU_ := $(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
+-endif
+-CC_TARGET_ARCH_ := $(call qstrip,$(BR2_GCC_TARGET_ARCH))
+-CC_TARGET_ABI_ := $(call qstrip,$(BR2_GCC_TARGET_ABI))
+-CC_TARGET_FPU_ := $(call qstrip,$(BR2_GCC_TARGET_FPU))
+-CC_TARGET_FLOAT_ABI_ := $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
+-CC_TARGET_MODE_ := $(call qstrip,$(BR2_GCC_TARGET_MODE))
+-
+-# march/mtune/floating point mode needs to be passed to the external toolchain
+-# to select the right multilib variant
+-ifeq ($(BR2_x86_64),y)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -m64
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_64
+-endif
+-ifneq ($(CC_TARGET_ARCH_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
+-endif
+-ifneq ($(CC_TARGET_CPU_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(CC_TARGET_CPU_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
+-endif
+-ifneq ($(CC_TARGET_ABI_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
+-endif
+-ifneq ($(CC_TARGET_FPU_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=$(CC_TARGET_FPU_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FPU='"$(CC_TARGET_FPU_)"'
+-endif
+-ifneq ($(CC_TARGET_FLOAT_ABI_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(CC_TARGET_FLOAT_ABI_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(CC_TARGET_FLOAT_ABI_)"'
+-endif
+-ifneq ($(CC_TARGET_MODE_),)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -m$(CC_TARGET_MODE_)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MODE='"$(CC_TARGET_MODE_)"'
+-endif
+-ifeq ($(BR2_BINFMT_FLAT),y)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_BINFMT_FLAT
+-endif
+-ifeq ($(BR2_mipsel)$(BR2_mips64el),y)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MIPS_TARGET_LITTLE_ENDIAN
+-TOOLCHAIN_EXTERNAL_CFLAGS += -EL
+-endif
+-ifeq ($(BR2_mips)$(BR2_mips64),y)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MIPS_TARGET_BIG_ENDIAN
+-TOOLCHAIN_EXTERNAL_CFLAGS += -EB
+-endif
+-ifeq ($(BR2_arceb),y)
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARC_TARGET_BIG_ENDIAN
+-TOOLCHAIN_EXTERNAL_CFLAGS += -EB
+-endif
+-
+-TOOLCHAIN_EXTERNAL_CFLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+-
+-ifeq ($(BR2_SOFT_FLOAT),y)
+-TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
+-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
+-endif
+ 
+ # musl does not provide an implementation for sys/queue.h or sys/cdefs.h.
+ # So, add the musl-compat-headers package that will install those files,
 -- 
 2.5.5
