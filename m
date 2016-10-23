@@ -1,141 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Oct 2016 19:19:44 +0200
-Subject: [Buildroot] [PATCH] core/graph-depends: add option to graph reverse
-	dependencies
-In-Reply-To: <1477236531-16771-1-git-send-email-yann.morin.1998@free.fr>
-References: <1477236531-16771-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1477243184-32610-1-git-send-email-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 23 Oct 2016 19:59:11 +0200
+Subject: [Buildroot] [PATCH v2 1/1] openzwave: fix compilation of MinOZW
+Message-ID: <1477245551-46216-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we can dump the reverse dependencies of a package, add the
-ability to graph those.
+LIBDIR was used in cpp/examples/MinOZW/Makefile to add dynamic
+libraries. However, as it was unset by default, the cross-compilation
+could fail if the host had a library such as libnss3.so in /.
+To fix this issue, this patch sets LIBDIR to top_buildir if it is unset
 
-It does not make sense to do a full reverse graph, as it would be
-semantically equivalent to the direct graph. So we only provide a
-per-package reverse graph.
+Fixes:
+  http://autobuild.buildroot.net/results/68719fdf1320a69310bada6d3c47654dacdb5898
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 ---
- Makefile                      |  3 ++-
- package/pkg-generic.mk        | 21 ++++++++++++++-------
- support/scripts/graph-depends | 18 ++++++++++++++++--
- 3 files changed, 32 insertions(+), 10 deletions(-)
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Download patch from upstream
 
-diff --git a/Makefile b/Makefile
-index 5c65f90..c00e200 100644
---- a/Makefile
-+++ b/Makefile
-@@ -761,7 +761,7 @@ graph-depends: graph-depends-requirements
- 	@$(INSTALL) -d $(GRAPHS_DIR)
- 	@cd "$(CONFIG_DIR)"; \
- 	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
--		-o $(GRAPHS_DIR)/$(@).dot
-+		--direct -o $(GRAPHS_DIR)/$(@).dot
- 	dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) \
- 		-o $(GRAPHS_DIR)/$(@).$(BR_GRAPH_OUT) \
- 		$(GRAPHS_DIR)/$(@).dot
-@@ -977,6 +977,7 @@ help:
- 	@echo '  <pkg>-show-depends     - List packages on which <pkg> depends'
- 	@echo '  <pkg>-show-rdepends    - List packages which have <pkg> as a dependency'
- 	@echo '  <pkg>-graph-depends    - Generate a graph of <pkg>'\''s dependencies'
-+	@echo '  <pkg>-graph-rdepends   - Generate a graph of <pkg>'\''s reverse dependencies'
- 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
- 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
- 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 81bb82c..3349092 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -317,6 +317,16 @@ be selected at a time. Please fix your configuration)
- endif
- endef
+ package/openzwave/openzwave.hash | 1 +
+ package/openzwave/openzwave.mk   | 6 ++++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/package/openzwave/openzwave.hash b/package/openzwave/openzwave.hash
+index cd1231f..d07961e 100644
+--- a/package/openzwave/openzwave.hash
++++ b/package/openzwave/openzwave.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256	abfb4c7e7728e86ba374c2e0ef7de912594eb24a8c44935457352df844530238	openzwave-V1.5.tar.gz
++sha256	98851964fd8de3dd40f00d0032b47c61c17a4cf789ad5792e14149da5ab8755e	599e2a11c6f48dde744012ec45686c08e15f3059.patch
+diff --git a/package/openzwave/openzwave.mk b/package/openzwave/openzwave.mk
+index 2723086..199d9e1 100644
+--- a/package/openzwave/openzwave.mk
++++ b/package/openzwave/openzwave.mk
+@@ -13,6 +13,12 @@ OPENZWAVE_LICENSE_FILES = license/license.txt license/lgpl.txt \
+ OPENZWAVE_DEPENDENCIES = host-pkgconf udev
+ OPENZWAVE_INSTALL_STAGING = YES
  
-+define pkg-graph-depends
-+	@$$(INSTALL) -d $$(GRAPHS_DIR)
-+	@cd "$$(CONFIG_DIR)"; \
-+	$$(TOPDIR)/support/scripts/graph-depends $$(BR2_GRAPH_DEPS_OPTS) \
-+		-p $(1) $(2) -o $$(GRAPHS_DIR)/$$(@).dot
-+	dot $$(BR2_GRAPH_DOT_OPTS) -T$$(BR_GRAPH_OUT) \
-+		-o $$(GRAPHS_DIR)/$$(@).$$(BR_GRAPH_OUT) \
-+		$$(GRAPHS_DIR)/$$(@).dot
-+endef
++# This patch fixes incorrect default value of LIBDIR:
++# http://autobuild.buildroot.net/results/68719fdf1320a69310bada6d3c47654dacdb5898
++# This patch is currently in dev branch and will be a part of v1.6
++OPENZWAVE_PATCH = \
++	https://github.com/OpenZWave/open-zwave/commit/599e2a11c6f48dde744012ec45686c08e15f3059.patch
 +
- ################################################################################
- # inner-generic-package -- generates the make targets needed to build a
- # generic package
-@@ -702,13 +712,10 @@ $(1)-show-rdepends:
- 			@echo $$($(2)_RDEPENDENCIES)
- 
- $(1)-graph-depends: graph-depends-requirements
--			@$$(INSTALL) -d $$(GRAPHS_DIR)
--			@cd "$$(CONFIG_DIR)"; \
--			$$(TOPDIR)/support/scripts/graph-depends $$(BR2_GRAPH_DEPS_OPTS) \
--				-p $(1) -o $$(GRAPHS_DIR)/$$(@).dot
--			dot $$(BR2_GRAPH_DOT_OPTS) -T$$(BR_GRAPH_OUT) \
--				-o $$(GRAPHS_DIR)/$$(@).$$(BR_GRAPH_OUT) \
--				$$(GRAPHS_DIR)/$$(@).dot
-+	$(call pkg-graph-depends,$(1),--direct)
-+
-+$(1)-graph-rdepends: graph-depends-requirements
-+	$(call pkg-graph-depends,$(1),--reverse)
- 
- $(1)-all-source:	$(1)-source
- $(1)-all-source:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index cb00383..c3c97cb 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -63,6 +63,10 @@ parser.add_argument("--transitive", dest="transitive", action='store_true',
-                     default=False)
- parser.add_argument("--no-transitive", dest="transitive", action='store_false',
-                     help="Draw (do not draw) transitive dependencies")
-+parser.add_argument("--direct", dest="direct", action='store_true', default=True,
-+                    help="Draw direct dependencies (the default)")
-+parser.add_argument("--reverse", dest="direct", action='store_false',
-+                    help="Draw reverse dependencies")
- args = parser.parse_args()
- 
- check_only = args.check_only
-@@ -95,6 +99,16 @@ else:
- 
- transitive = args.transitive
- 
-+if args.direct:
-+    rule = "show-depends"
-+    arrow_dir = "forward"
-+else:
-+    if mode == MODE_FULL:
-+        sys.stderr.write("--reverse needs a package\n")
-+        sys.exit(1)
-+    rule = "show-rdepends"
-+    arrow_dir = "back"
-+
- # Get the colours: we need exactly three colours,
- # so no need not split more than 4
- # We'll let 'dot' validate the colours...
-@@ -151,7 +165,7 @@ def get_depends(pkgs):
-     sys.stderr.write("Getting dependencies for %s\n" % pkgs)
-     cmd = ["make", "-s", "--no-print-directory" ]
-     for pkg in pkgs:
--        cmd.append("%s-show-depends" % pkg)
-+        cmd.append("%s-%s" % (pkg, rule))
-     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
-     output = p.communicate()[0]
-     if p.returncode != 0:
-@@ -418,7 +432,7 @@ def print_pkg_deps(depth, pkg):
-                     add = False
-                     break
-             if add:
--                outfile.write("%s -> %s\n" % (pkg_node_name(pkg), pkg_node_name(d)))
-+                outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
-                 print_pkg_deps(depth+1, d)
- 
- # Start printing the graph data
+ # Set instlibdir to install libopenzwave.so* in the correct directory
+ # otherwise openzwave will check that /lib64 exists (on the host) to
+ # know if the library should be installed in $(PREFIX)/lib or $(PREFIX)/lib64.
 -- 
-2.7.4
+2.5.0
