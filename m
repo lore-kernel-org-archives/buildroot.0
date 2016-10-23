@@ -1,29 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Oct 2016 14:39:38 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: renumber patch 0013 ->
- 0001
-In-Reply-To: <20161022092511.1854-1-bernd.kuhls@t-online.de>
-References: <20161022092511.1854-1-bernd.kuhls@t-online.de>
-Message-ID: <20161023143938.4419d143@free-electrons.com>
+Date: Sun, 23 Oct 2016 14:39:48 +0200
+Subject: [Buildroot] [git commit] lua-csnappy: bump to version 0.1.4
+Message-ID: <20161023123956.63FA5819EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4419eb90423d0fad999b0d7e3d6bc9fc7f85e18f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 22 Oct 2016 11:25:10 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...in-disable-optimization.patch => 0001-bfin-disable-optimization.patch} | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename package/ffmpeg/{0013-bfin-disable-optimization.patch => 0001-bfin-disable-optimization.patch} (100%)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lua-csnappy/lua-csnappy.hash | 2 +-
+ package/lua-csnappy/lua-csnappy.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lua-csnappy/lua-csnappy.hash b/package/lua-csnappy/lua-csnappy.hash
+index 2864c3f..1363634 100644
+--- a/package/lua-csnappy/lua-csnappy.hash
++++ b/package/lua-csnappy/lua-csnappy.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	3504789c7832f4ed3d7aef47ba9d62940985cde7556284db2233842bfb7d8876  lua-csnappy-0.1.3-1.src.rock
++sha256	855331feb8e09a32eea8366ab9bcd4386db6392de82383f08ae5e59adbb7d8a6  lua-csnappy-0.1.4-1.src.rock
+diff --git a/package/lua-csnappy/lua-csnappy.mk b/package/lua-csnappy/lua-csnappy.mk
+index 60b92ac..0739259 100644
+--- a/package/lua-csnappy/lua-csnappy.mk
++++ b/package/lua-csnappy/lua-csnappy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_CSNAPPY_VERSION_UPSTREAM = 0.1.3
++LUA_CSNAPPY_VERSION_UPSTREAM = 0.1.4
+ LUA_CSNAPPY_VERSION = $(LUA_CSNAPPY_VERSION_UPSTREAM)-1
+ LUA_CSNAPPY_SUBDIR = lua-csnappy-$(LUA_CSNAPPY_VERSION_UPSTREAM)
+ LUA_CSNAPPY_LICENSE = BSD-3c
