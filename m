@@ -1,115 +1,402 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 23 Oct 2016 22:48:28 +0200
-Subject: [Buildroot] [PATCH 27/30] toolchain/toolchain-external: move musl
-	specific logic into a separate file
+Date: Sun, 23 Oct 2016 22:48:09 +0200
+Subject: [Buildroot] [PATCH 08/30] toolchain-external-custom: new package
 In-Reply-To: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
 References: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1477255711-28603-28-git-send-email-romain.naour@gmail.com>
+Message-ID: <1477255711-28603-9-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use pkg-toolchain-external-musl.mk for the definition of various variables:
-Set MUSL_ARCH to create a symbolic link to libc.so and add a dependency to
-musl-compat-headers package
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
+This commit adds a new package to support custom external
+toolchains. As of this commit, the code is currently not used, but it
+will be used as soon as the external toolchain infrastructure gets
+introduced in a future commit.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../pkg-toolchain-external-musl.mk                 | 34 ++++++++++++++++++++++
- toolchain/toolchain-external/toolchain-external.mk | 31 --------------------
- 2 files changed, 34 insertions(+), 31 deletions(-)
- create mode 100644 toolchain/toolchain-external/pkg-toolchain-external-musl.mk
+ .../toolchain-external-custom/Config.in            |   5 +
+ .../toolchain-external-custom/Config.in.options    | 331 +++++++++++++++++++++
+ .../toolchain-external-custom.mk                   |  16 +
+ 3 files changed, 352 insertions(+)
+ create mode 100644 toolchain/toolchain-external/toolchain-external-custom/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external-musl.mk b/toolchain/toolchain-external/pkg-toolchain-external-musl.mk
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in b/toolchain/toolchain-external/toolchain-external-custom/Config.in
 new file mode 100644
-index 0000000..dbe07a0
+index 0000000..a913feb
 --- /dev/null
-+++ b/toolchain/toolchain-external/pkg-toolchain-external-musl.mk
-@@ -0,0 +1,34 @@
-+#
-+# This file contains various utility functions used by the external
-+# toolchain based on musl.
-+#
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in
+@@ -0,0 +1,5 @@
++config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
++	bool "Custom toolchain"
++	help
++	  Use this option to use a custom toolchain pre-installed on
++	  your system.
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+new file mode 100644
+index 0000000..b15670e
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -0,0 +1,331 @@
++if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
 +
-+# musl does not provide an implementation for sys/queue.h or sys/cdefs.h.
-+# So, add the musl-compat-headers package that will install those files,
-+# into the staging directory:
-+#   sys/queue.h:  header from NetBSD
-+#   sys/cdefs.h:  minimalist header bundled in Buildroot
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+TOOLCHAIN_EXTERNAL_DEPENDENCIES += musl-compat-headers
++config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
++	default "toolchain-external-custom"
++
++config BR2_TOOLCHAIN_EXTERNAL_URL
++	string "Toolchain URL"
++	depends on BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
++	help
++	  URL of the custom toolchain tarball to download and install.
++
++config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
++	string "Toolchain prefix"
++	default "$(ARCH)-linux"
++
++choice
++	bool "External toolchain gcc version"
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
++	help
++	  Set to the gcc version that is used by your external
++	  toolchain.
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_6
++	bool "6.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_5
++	bool "5.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
++	bool "4.9.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
++	bool "4.8.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
++	bool "4.7.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
++	bool "4.6.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
++	bool "4.5.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
++	bool "4.4.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
++	bool "4.3.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
++
++endchoice
++
++choice
++	bool "External toolchain kernel headers series"
++	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
++	help
++	  Set to the kernel headers version that were used to build
++	  this external toolchain.
++
++	  This is used to hide/show some packages that have strict
++	  requirements on the version of kernel headers.
++
++	  If unsure what version your toolchain is using, you can look
++	  at the value of LINUX_VERSION_CODE in linux/version.h in your
++	  toolchain. The Linux version is M.m.p, with:
++	    M = ( LINUX_VERSION_CODE >> 16 ) & 0xFF
++	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
++	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_8
++	bool "4.8.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_7
++	bool "4.7.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_6
++	bool "4.6.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_5
++	bool "4.5.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4
++	bool "4.4.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3
++	bool "4.3.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_2
++	bool "4.2.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1
++	bool "4.1.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_0
++	bool "4.0.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_19
++	bool "3.19.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_18
++	bool "3.18.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17
++	bool "3.17.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16
++	bool "3.16.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_15
++	bool "3.15.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14
++	bool "3.14.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_13
++	bool "3.13.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12
++	bool "3.12.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_11
++	bool "3.11.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10
++	bool "3.10.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9
++	bool "3.9.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_8
++	bool "3.8.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_7
++	bool "3.7.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_6
++	bool "3.6.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_5
++	bool "3.5.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_4
++	bool "3.4.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_3
++	bool "3.3.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2
++	bool "3.2.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_1
++	bool "3.1.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_0
++	bool "3.0.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
++	bool "2.6.x"
++
++endchoice
++
++choice
++	prompt "External toolchain C library"
++	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
++
++config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
++	bool "uClibc/uClibc-ng"
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	# For the time being, we assume that all custom external
++	# toolchains have shadow password support.
++	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
++	help
++	  Select this option if your external toolchain uses the
++	  uClibc (available from http://www.uclibc.org/)
++	  or uClibc-ng (available from http://www.uclibc-ng.org)
++	  C library.
++
++config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
++	bool "glibc/eglibc"
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	help
++	  Select this option if your external toolchain uses the GNU C
++	  library (available from https://www.gnu.org/software/libc/)
++	  or its variant the eglibc library (http://www.eglibc.org/).
++
++	  Note: eglibc is a variant of glibc that (among other things)
++	  can be configured to exclude some of its features. Using a
++	  toolchain with eglibc configured to exclude key features may
++	  cause build failures to some packages.
++
++comment "(e)glibc only available with shared lib support"
++	depends on BR2_STATIC_LIBS
++
++config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
++	bool "musl (experimental)"
++	select BR2_TOOLCHAIN_EXTERNAL_MUSL
++	help
++	  Select this option if your external toolchain uses the
++	  'musl' C library, available from http://www.musl-libc.org/.
++
++endchoice
++
++if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
++
++config BR2_TOOLCHAIN_EXTERNAL_WCHAR
++	bool "Toolchain has WCHAR support?"
++	select BR2_USE_WCHAR
++	help
++	  Select this option if your external toolchain supports
++	  WCHAR. If you don't know, leave the default value, Buildroot
++	  will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_LOCALE
++	bool "Toolchain has locale support?"
++	select BR2_TOOLCHAIN_EXTERNAL_WCHAR
++	select BR2_ENABLE_LOCALE
++	help
++	  Select this option if your external toolchain has locale
++	  support. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
++	bool "Toolchain has threads support?"
++	select BR2_TOOLCHAIN_HAS_THREADS
++	default y
++	help
++	  Select this option if your external toolchain has thread
++	  support. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
++
++if BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
++
++config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
++	bool "Toolchain has threads debugging support?"
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	default y
++	help
++	  Select this option if your external toolchain has thread
++	  debugging support. If you don't know, leave the default
++	  value, Buildroot will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL
++	bool "Toolchain has NPTL threads support?"
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	default y
++	help
++	  Select this option if your external toolchain uses the NPTL
++	  (Native Posix Thread Library) implementation of Posix
++	  threads. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
++
++endif # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
++
++endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
++
++config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
++	bool "Toolchain has SSP support?"
++	select BR2_TOOLCHAIN_HAS_SSP
++	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	default y if BR2_TOOLCHAIN_EXTERNAL_MUSL
++	help
++	  Selection this option if your external toolchain has Stack
++	  Smashing Protection support enabled. If you don't know,
++	  leave the default value, Buildroot will tell you if it's
++	  correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
++	bool "Toolchain has RPC support?"
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on !BR2_TOOLCHAIN_EXTERNAL_MUSL
++	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	help
++	  Select this option if your external toolchain supports
++	  RPC. If you don't know, leave the default value, Buildroot
++	  will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_CXX
++	bool "Toolchain has C++ support?"
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Select this option if your external toolchain has C++
++	  support. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
++	string "Extra toolchain libraries to be copied to target"
++	help
++	  If your external toolchain provides extra libraries that
++	  need to be copied to the target filesystem, enter them
++	  here, separated by spaces. They will be copied to the
++	  target's /lib directory.
++
++endif
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk b/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
+new file mode 100644
+index 0000000..1d40f08
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# toolchain-external-custom
++#
++################################################################################
++
++TOOLCHAIN_EXTERNAL_CUSTOM_SITE = $(patsubst %/,%,$(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL))))
++TOOLCHAIN_EXTERNAL_CUSTOM_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
++TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX))
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),y)
++# We can't check hashes for custom downloaded toolchains
++BR_NO_CHECK_HASH_FOR += $(TOOLCHAIN_EXTERNAL_SOURCE)
 +endif
 +
-+# With the musl C library, the libc.so library directly plays the role
-+# of the dynamic library loader. We just need to create a symbolic
-+# link to libc.so with the appropriate name.
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
-+ifeq ($(BR2_i386),y)
-+MUSL_ARCH = i386
-+else ifeq ($(BR2_ARM_EABIHF),y)
-+MUSL_ARCH = armhf
-+else ifeq ($(BR2_mipsel):$(BR2_SOFT_FLOAT),y:y)
-+MUSL_ARCH = mipsel-sf
-+else ifeq ($(BR2_sh),y)
-+MUSL_ARCH = sh
-+else
-+MUSL_ARCH = $(ARCH)
-+endif
-+define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
-+	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
-+endef
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
-+endif
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index cb63dd2..8aeb610 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -146,16 +146,6 @@ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
- 	-DBR_CROSS_PATH_REL='"$(TOOLCHAIN_EXTERNAL_BIN:$(HOST_DIR)/%=%)"'
- endif
- 
--
--# musl does not provide an implementation for sys/queue.h or sys/cdefs.h.
--# So, add the musl-compat-headers package that will install those files,
--# into the staging directory:
--#   sys/queue.h:  header from NetBSD
--#   sys/cdefs.h:  minimalist header bundled in Buildroot
--ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
--TOOLCHAIN_EXTERNAL_DEPENDENCIES += musl-compat-headers
--endif
--
- # The Codescape toolchain uses a sysroot layout that places them
- # side-by-side instead of nested like multilibs. A symlink is needed
- # much like for the nested sysroots which are handled in
-@@ -400,27 +390,6 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 	$(Q)$(call check_toolchain_ssp,$(TOOLCHAIN_EXTERNAL_CC))
- endef
- 
--# With the musl C library, the libc.so library directly plays the role
--# of the dynamic library loader. We just need to create a symbolic
--# link to libc.so with the appropriate name.
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
--ifeq ($(BR2_i386),y)
--MUSL_ARCH = i386
--else ifeq ($(BR2_ARM_EABIHF),y)
--MUSL_ARCH = armhf
--else ifeq ($(BR2_mipsel):$(BR2_SOFT_FLOAT),y:y)
--MUSL_ARCH = mipsel-sf
--else ifeq ($(BR2_sh),y)
--MUSL_ARCH = sh
--else
--MUSL_ARCH = $(ARCH)
--endif
--define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
--	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
--endef
--TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
--endif
--
- # Special installation target used on the Blackfin architecture when
- # FDPIC is not the primary binary format being used, but the user has
- # nonetheless requested the installation of the FDPIC libraries to the
++$(eval $(toolchain-external-package))
 -- 
 2.5.5
