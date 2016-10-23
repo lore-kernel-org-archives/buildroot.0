@@ -1,26 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Oct 2016 10:44:33 +0200
-Subject: [Buildroot] [git commit] cryptopp: bump to 5.6.5
-In-Reply-To: <20161022203101.35BC4819C0@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sat, 22 Oct 2016 22:26:32 +0200")
-References: <20161022203101.35BC4819C0@busybox.osuosl.org>
-Message-ID: <87shrno3ny.fsf@dell.be.48ers.dk>
+Date: Sun, 23 Oct 2016 10:52:14 +0200
+Subject: [Buildroot] [PATCH 00/51] TLP/PPS: intro, package cleanup.
+In-Reply-To: <c6791be8-032d-f800-0d2d-3b9597d05415@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 17 Oct 2016 18:52:43 +0200")
+References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <6e24662f-d0fd-461e-0059-6f2e23273480@mind.be>
+ <d8e3ec4c46175ca4d852efcfdea65c19@free-electrons.com>
+ <c6791be8-032d-f800-0d2d-3b9597d05415@mind.be>
+Message-ID: <87lgxfo3b5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=da90437be784fa88e1f149067056096dd6847c26
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ >> I'm toying with the idea of a sandbox as well that will just restrict the view
+ >> of the full staging area per-package to the dependencies it needs (LD_PRELOADed).
+ >> This would alleviate the overhead in copying/linking all those files, but it's a
+ >> bit more complex.
 
- > This commit bumps cryptopp from 5.6.3 to 5.6.5 in order to fix bug
+ >  Yeah, perhaps we should use bitbake instead of make :-P
 
-Heh, hit by the strip-lines-beginning-with-a-# git feature? ;)
-
-Otherwise a very nice commit message, thanks!
+Argh!
 
 -- 
 Bye, Peter Korsgaard
