@@ -1,40 +1,44 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 23 Oct 2016 12:57:17 +0000
-Subject: [Buildroot] [Bug 9256] [Config file] New device: Odroid-U2/U3
-In-Reply-To: <bug-9256-163@https.bugs.busybox.net/>
-References: <bug-9256-163@https.bugs.busybox.net/>
-Message-ID: <bug-9256-163-nlzr7VCJEI@https.bugs.busybox.net/>
+Date: Sun, 23 Oct 2016 13:09:52 +0000
+Subject: [Buildroot] [Bug 9336] Improve iconv support for external toolchain
+	based builds
+In-Reply-To: <bug-9336-163@https.bugs.busybox.net/>
+References: <bug-9336-163@https.bugs.busybox.net/>
+Message-ID: <bug-9336-163-TumnD7hq4l@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9256
+https://bugs.busybox.net/show_bug.cgi?id=9336
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-         Resolution|---                         |INVALID
              Status|NEW                         |RESOLVED
+         Resolution|---                         |WORKSFORME
 
 --- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Thanks a lot. Could you instead submit a patch to the Buildroot mailing list?
-See https://buildroot.org/downloads/manual/manual.html#submitting-patches for
-some guidelines.
+There is already a Buildroot option to copy gconv modules to the target, it
+just seems you missed it. In the toolchain menu, when a glibc toolchain is
+used, you have:
 
-Compared to your proposal, we would need:
+  [*] Copy gconv libraries
+  ()    Gconv libraries to copy
 
- - Keep the default toolchain configuration (i.e don't select glibc, binutils
-2.26, gcc 6 and C++ support)
+If you leave the second option empty, all gconv modules are copied to the
+target. Otherwise, if it's non-empty, only the specified list of gconv modules
+are copied.
 
- - Use a fixed version for the kernel and u-boot, so that the defconfig is
-reproducible
+I've just tested again today, leaving the list empty. Indeed, all gconv modules
+are copied, and a simple C program that converts an UTF-8 string to CP1251
+using iconv_open() / iconv() works just fine on the target.
 
- - Add a readme.txt in board/ to detail how to use the defconfig.
-
-Thanks!
+The iconv binary itself is however indeed not copied. Maybe we should add an
+option to copy additional binaries from the toolchain to the target? Could you
+submit such a patch?
 
 -- 
 You are receiving this mail because:
