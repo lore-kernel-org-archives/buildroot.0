@@ -1,48 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Oct 2016 20:20:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libbluray: include signal.h to
- fix build errors
-In-Reply-To: <20161023144115.19982-1-bernd.kuhls@t-online.de>
-References: <20161023144115.19982-1-bernd.kuhls@t-online.de>
-Message-ID: <20161023202051.0a8e4b05@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Oct 2016 20:31:52 +0200
+Subject: [Buildroot] [PATCH] pkg-download: fix fetching URLs with ? from
+	PRIMARY/SECONDARY
+In-Reply-To: <20161023145420.6172618b@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 23 Oct 2016 14:54:20 +0200")
+References: <20161021202715.16528-1-arnout@mind.be>
+ <20161023145420.6172618b@free-electrons.com>
+Message-ID: <87lgxench3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, 23 Oct 2016 16:41:15 +0200, Bernd Kuhls wrote:
-> Fixes build errors with uClibc-ng on the following platforms:
-> 
-> bfin: http://autobuild.buildroot.net/results/fbf/fbf63bbe0974b490b875a95fb930ba601364b85a/
-> m68k: http://autobuild.buildroot.net/results/cc9/cc9b87c4c695f97a056cc53f19e7662750dffeff/
-> microblazeel: http://autobuild.buildroot.net/results/941/941c06e29f6542e258f20799dc6f3f94b2f8af88/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> I am unsure whether this is the right fix or not, therefore I did not
-> send the patch upstream yet. A different solution is to include signal.h
-> in sysroot/usr/include/pthread.h in line 686, right before the header
-> file bits/sigthread.h is included. This may point to a problem either in
-> the prebuilt toolchain or uClibc itself, CC'ing Thomas & Waldemar.
+Hi,
 
-I already reported this issue to Waldemar yesterday. I think it's a
-uClibc-ng bug, because:
+ >> package/pkg-download.mk | 8 ++++++--
+ >> 1 file changed, 6 insertions(+), 2 deletions(-)
 
- 1/ It happens only with -std=c99
+ > Applied to master, after s/SECONDARY/BACKUP/.
 
- 2/ It shouldn't be necessary to include another header to make
-    #include <pthread.h> work properly.
+ > Peter can you take the appropriate actions in sources.b.o ?
 
-See
-http://mailman.uclibc-ng.org/pipermail/devel/2016-October/001235.html
+Yes. From a quick look it seems I copied files instead of renaming them,
+so everything should be good (I'll leave the copies for older BR
+versions).
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
