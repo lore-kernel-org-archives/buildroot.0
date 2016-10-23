@@ -1,57 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Oct 2016 14:38:46 +0200
-Subject: [Buildroot] [PATCH 1/1] openzwave: fix compilation of MinOZW
-In-Reply-To: <1474988445-22639-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1474988445-22639-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20161023143846.34c77ab4@free-electrons.com>
+Date: Sun, 23 Oct 2016 14:39:18 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: renumber patch 0013 -> 0001
+Message-ID: <20161023123926.F154A80334@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=91f8f41dab07362224e1537436f594ae45871f03
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 27 Sep 2016 17:00:45 +0200, Fabrice Fontaine wrote:
-> LIBDIR was used in cpp/examples/MinOZW/Makefile to add dynamic
-> libraries. However, as it was unset by default, the cross-compilation
-> could fail if the host had a library such as libnss3.so in /.
-> To fix this issue, this patch sets LIBDIR to top_buildir if it is unset
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/68719fdf1320a69310bada6d3c47654dacdb5898
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...in-disable-optimization.patch => 0001-bfin-disable-optimization.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-Why is a patch needed?
-
-Doing the following seems to be sufficient:
-
-diff --git a/package/openzwave/openzwave.mk b/package/openzwave/openzwave.mk
-index 2723086..9c50cb8 100644
---- a/package/openzwave/openzwave.mk
-+++ b/package/openzwave/openzwave.mk
-@@ -29,7 +29,8 @@ OPENZWAVE_MAKE_OPTS = \
-        instlibdir=/usr/lib \
-        pkgconfigdir=/usr/lib/pkgconfig \
-        sysconfdir=/etc/openzwave \
--       DOXYGEN=
-+       DOXYGEN= \
-+       LIBDIR=$(@D)
- 
- define OPENZWAVE_BUILD_CMDS
-        $(TARGET_MAKE_ENV) $(MAKE) $(OPENZWAVE_MAKE_OPTS) -C $(@D)
-
-If you agree with this, could you submit a patch with this solution,
-preferably after adding a comment that explains why we're passing such
-a strange value for LIBDIR.
-
-Of course, please submit a bug report to the upstream project.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/0013-bfin-disable-optimization.patch b/package/ffmpeg/0001-bfin-disable-optimization.patch
+similarity index 100%
+rename from package/ffmpeg/0013-bfin-disable-optimization.patch
+rename to package/ffmpeg/0001-bfin-disable-optimization.patch
