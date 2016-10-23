@@ -1,61 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Oct 2016 17:23:48 +0200
-Subject: [Buildroot] [PATCH] pkg-download: fix fetching URLs with ? from
- PRIMARY/SECONDARY
-In-Reply-To: <20161023145420.6172618b@free-electrons.com>
-References: <20161021202715.16528-1-arnout@mind.be>
- <20161023145420.6172618b@free-electrons.com>
-Message-ID: <faeae44f-ed90-612f-b705-f01846c3f2fd@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Oct 2016 17:28:51 +0200
+Subject: [Buildroot] [PATCHv2] pkg-infra: allow dumping reverse dependencies
+	of a package
+Message-ID: <1477236531-16771-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Finding the packages that select another one in a specific configuration
+is not very trivial:
 
+  - when optional, the dependency is not expressed in Kconfig
 
-On 23-10-16 14:54, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 21 Oct 2016 22:27:15 +0200, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
->> Some packages download files (especially patches) with a ? in the
->> URL. The ? marks the query part of the URL. However, the downloaded
->> file still contains the ? but from then on it doesn't designate a
->> query part anymore. Therefore, when fetching from PRIMARY or
->> SECONDARY site over http, the server will report a 404 Not Found.
->>
->> To fix, we need to replace the ? with %3F. Obviously, this should
->> be done only when fetching from PRIMARY or SECONDARY. For fetching
->> from the real upstream, the ? really does designate the query part.
->>
->> Fixes #9371.
->>
->> Reported-by: Johan Derycke <johanderycke@gmail.com>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> ---
->> I tested with
->> make BR2_PRIMARY_SITE=http://localhost/dl BR2_PRIMARY_SITE_ONLY=y BR2_DL_DIR=/tmp/dl openssl
->> and also checked with a file:// primary site, with secondary site, and
->> openssl-source-check
->> ---
->>  package/pkg-download.mk | 8 ++++++--
->>  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> Applied to master, after s/SECONDARY/BACKUP/.
-> 
-> Peter can you take the appropriate actions in sources.b.o ?
+  - looking at the .mk files is not very nice.
 
- There's nothing to do AFAICS. I did test a download of the openssl patches from
-sources.buildroot.net and that worked.
+Introduce a way to dump reverse dependencies of packages, i.e. the list
+of packages that directly depend on that package. Like for direct
+dependencies, we limit the list to the first-order reverse dependencies.
 
- Regards,
- Arnout
+Document it in the main help; use the opportunity to also document
+foo-show-depends.
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+---
+Changes v1 -> v2:
+  - only add dependencies for enabled packages  (Thomas)
+  - typoes  (Arnout)
+---
+ Makefile               | 2 ++
+ package/pkg-generic.mk | 7 +++++++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 3ba1490..5c65f90 100644
+--- a/Makefile
++++ b/Makefile
+@@ -974,6 +974,8 @@ help:
+ 	@echo '  <pkg>-depends          - Build <pkg>'\''s dependencies'
+ 	@echo '  <pkg>-configure        - Build <pkg> up to the configure step'
+ 	@echo '  <pkg>-build            - Build <pkg> up to the build step'
++	@echo '  <pkg>-show-depends     - List packages on which <pkg> depends'
++	@echo '  <pkg>-show-rdepends    - List packages which have <pkg> as a dependency'
+ 	@echo '  <pkg>-graph-depends    - Generate a graph of <pkg>'\''s dependencies'
+ 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
+ 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index e726ac5..81bb82c 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -698,6 +698,9 @@ $(1)-show-version:
+ $(1)-show-depends:
+ 			@echo $$($(2)_FINAL_ALL_DEPENDENCIES)
+ 
++$(1)-show-rdepends:
++			@echo $$($(2)_RDEPENDENCIES)
++
+ $(1)-graph-depends: graph-depends-requirements
+ 			@$$(INSTALL) -d $$(GRAPHS_DIR)
+ 			@cd "$$(CONFIG_DIR)"; \
+@@ -854,6 +857,10 @@ $$(foreach pkg,$$($(2)_PROVIDES),\
+ 	$$(eval $$(call virt-provides-single,$$(pkg),$$(call UPPERCASE,$$(pkg)),$(1))$$(sep)))
+ endif
+ 
++# Register package as a reverse-dependencies of all its dependencies
++$$(eval $$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),\
++	$$(call UPPERCASE,$$(p))_RDEPENDENCIES += $(1)$$(sep)))
++
+ # Ensure unified variable name conventions between all packages Some
+ # of the variables are used by more than one infrastructure; so,
+ # rather than duplicating the checks in each infrastructure, we check
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
