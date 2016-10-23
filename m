@@ -1,47 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Oct 2016 15:19:24 +0200
-Subject: [Buildroot] [git commit] ed: use $(TARGET_MAKE_ENV) when calling
-	$(MAKE)
-Message-ID: <20161022132036.A33BB81974@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Oct 2016 10:44:33 +0200
+Subject: [Buildroot] [git commit] cryptopp: bump to 5.6.5
+In-Reply-To: <20161022203101.35BC4819C0@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 22 Oct 2016 22:26:32 +0200")
+References: <20161022203101.35BC4819C0@busybox.osuosl.org>
+Message-ID: <87shrno3ny.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca3ae3bd35cf08f45b4ac06c6a09bcae35cbaa09
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ed/ed.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ > commit: https://git.buildroot.net/buildroot/commit/?id=da90437be784fa88e1f149067056096dd6847c26
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-index f3bcb74..36f2f2e 100644
---- a/package/ed/ed.mk
-+++ b/package/ed/ed.mk
-@@ -14,18 +14,18 @@ ED_LICENSE_FILES = COPYING
- 
- define ED_CONFIGURE_CMDS
- 	(cd $(@D); \
--		./configure \
-+		$(TARGET_MAKE_ENV) ./configure \
- 		--prefix=/usr \
- 		$(TARGET_CONFIGURE_OPTS) \
- 	)
- endef
- 
- define ED_BUILD_CMDS
--	$(MAKE)	-C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
- endef
- 
- define ED_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
- endef
- 
- $(eval $(generic-package))
+ > This commit bumps cryptopp from 5.6.3 to 5.6.5 in order to fix bug
+
+Heh, hit by the strip-lines-beginning-with-a-# git feature? ;)
+
+Otherwise a very nice commit message, thanks!
+
+-- 
+Bye, Peter Korsgaard
