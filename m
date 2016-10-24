@@ -1,87 +1,100 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 24 Oct 2016 15:52:27 +0100
-Subject: [Buildroot] Report from the Buildroot Meeting in Berlin
-In-Reply-To: <8c64e8e7-1907-5e74-c743-3d980539be06@mind.be>
-References: <20161019221035.2350c181@free-electrons.com>
- <c2da1832-3282-33f0-1588-e828f3df4801@mind.be>
- <874m42lztg.fsf@dell.be.48ers.dk>
- <b4fb3016-266b-d9bf-bbe1-ec7169c7136a@imgtec.com>
- <20161024142840.4c398e72@free-electrons.com>
- <8c64e8e7-1907-5e74-c743-3d980539be06@mind.be>
-Message-ID: <bf335e58-9056-4b66-6c07-6b5e0570eaa7@imgtec.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 24 Oct 2016 16:52:52 +0200
+Subject: [Buildroot] [PATCH 1/2] sudo: Add ldap support for sudoers rules
+In-Reply-To: <7b9bf544-b035-0b55-c70f-5bc07cb98e14@cdf123.net>
+References: <1476893310-25852-1-git-send-email-cdf123@cdf123.net>
+ <ffe77538-4bad-a040-c0e3-fd745270a849@mind.be>
+ <7b9bf544-b035-0b55-c70f-5bc07cb98e14@cdf123.net>
+Message-ID: <c23e73df-3b0c-c052-31d4-e3a8b3257168@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/10/16 14:05, Arnout Vandecappelle wrote:
-> 
-> 
-> On 24-10-16 14:28, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Mon, 24 Oct 2016 13:19:30 +0100, Vicente Olivert Riera wrote:
-> [snip]
->>> And another question. What happen if we use the real compiler to build
->>> kernels and bootloaders? Would that be a problem? I don't know other
->>> architectures, but for MIPS the only variable we need to pass to the
->>> make program for building a kernel is ARCH=mips. The defconfig will set
->>> all the rest (float, endian, etc.).
->>
->> Could be an approach to investigate, but I'm afraid is not as simple as
->> it looks. "perf" for example is part of the kernel, built with our
->> cross-compiler, but we would need to go through the wrapper because
->> "perf" is user-space code, and it does need to link with a bunch of
->> libraries available in our sysroot (so the --sysroot flag is important).
-> 
->  ... but perf *is* built separately from the kernel code, in linux-tools-perf.
-> 
->  I kind of like the idea of having a TARGET_CC_UNWRAPPED that we pass to the
-> packages that are non-hosted.
-> 
-> 
->> Perhaps we need an environment variable in the wrapper that tells it
->> "use all your flags" vs. "use only the flags that are really important,
->> such as --sysroot". We could then set this environment variable when
->> building specific packages such as the kernel and bootloaders.
-> 
->  This, however, is probably the safest solution, and fairly elegant as well.
-> I'll keep it in mind when I (finally) start working on this :-)
 
-I proposed basically the same idea on IRC few days ago, but instead of
-checking an env variable I was proposing to add an option to the wrapper
-in order to switch which flags should be used.
 
-You didn't like the idea because "it's hard to distinguish between
-'kernel-like' and 'userspace-like' packages" and because "you want to be
-able to use the buildroot-generated toolchain to build a kernel
-externally, without adding hacks".
-
-I'm confused. With Thomas proposal you will need to declare that env
-variable if you want to be able to build a kernel with that
-buildroot-generated toolchain. That's a hack similar as adding an option
-called -foo, for instance.
-
-Plus, I don't see how the problem of distinguishing between
-'kernel-like' and 'userspace-like' package is solved if we use an env
-variable instead of an option.
-
-I'm not saying that I don't like Thomas proposal. I do like it, and in
-fact, probably is cleaner than adding an option to the wrapper. What I
-don't understand is that you said you didn't like my idea due to those
-two reasons, and now you say that you "kind of like" Thomas' idea which
-(I think) still has the same issues as mine ('kernel-like' and
-'userspace-like' packages distinguishing plus buildroot-generated
-toolchain reuse without hacks).
-
-Am I missing something here?
-
-Regards,
-
-Vincent
-
+On 24-10-16 16:10, Chris Frederick wrote:
+> Hi Arnout,
 > 
->  Regards,
->  Arnout
+> Comments below...
 > 
+> On 10/21/16 14:13, Arnout Vandecappelle wrote:
+>> >  Hi Chris,
+>> > 
+>> >  Thank you for your patch. I have a few comments below. Can you fix and
+>> > resubmit? I have marked your patch as "Changes Requested" in our patch tracking
+>> > system so if you don't resubmit we will forget about it.
+>> > 
+>> > On 19-10-16 18:08, Chris Frederick wrote:
+>>> >> Added Config.in options to enable/disable the option, and check options
+>>> >> in sudo.mk to add openldap as a dependancy and compile with --with-ldap.
+>>> >>
+>>> >> Signed-off-by: Chris Frederick <cdf123@cdf123.net>
+>>> >> ---
+>>> >>  package/sudo/Config.in | 12 ++++++++++++
+>>> >>  package/sudo/sudo.mk   |  5 +++++
+>>> >>  2 files changed, 17 insertions(+)
+>>> >>
+>>> >> diff --git a/package/sudo/Config.in b/package/sudo/Config.in
+>>> >> index cbef15d..2e9e35a 100644
+>>> >> --- a/package/sudo/Config.in
+>>> >> +++ b/package/sudo/Config.in
+>>> >> @@ -9,3 +9,15 @@ config BR2_PACKAGE_SUDO
+>>> >>  	  but still allow people to get their work done.
+>>> >>  
+>>> >>  	  http://www.sudo.ws/sudo/
+>>> >> +
+>>> >> +if BR2_PACKAGE_SUDO && BR2_PACKAGE_OPENLDAP
+>>> >> +config BR2_PACKAGE_SUDO_LDAP
+>> > 
+>> >  As far as I know, there is no need to make this option configurable. Just
+>> > enable LDAP support when BR2_PACKASGE_OPENLDAP is selected, like you do for
+>> > postgresql.
+> From my experience with sudo built with ldap, it stops checking /etc/sudoers for rules and instead looks for /etc/ldap.conf.  According to the
+> link in the help text, /etc/sudoers is only read for defaults, everything else needs to come from ldap.  And if /etc/ldap.conf hasn't been
+> configured by the user, sudo will fail with a "no valid sudoers sources found" error.  So I wanted to make sure a user explicitly selected the
+> option.  That's just been my experience using this in buildroot and gentoo.  I should probably add that to the help.
+> 
+> How about this:
+> 
+> help:
+>   Allows you to manage sudoers rules in a centralized ldap
+>   directory.  This restricts the /etc/sudoers file from
+>   defining rules, only defaults will be read. All rules will
+>   need to be provided via ldap configured in /etc/ldap.conf
+> 
+>   http://www.sudo.ws/man/1.8.15/sudoers.ldap.man.html
+
+ OK, then indeed it's better to make it an option.
+
+ One small coding style nit: write it like:
+
+if BR2_PACKAGE_SUDO
+config BR2_PACKAGE_SUDO_LDAP
+	depends on BR2_PACKAGE_OPENLDAP
+
+so future sudo extensions can reuse the same conditions - not likely, but htis
+is the pattern that we follow everywhere else.
+
+ Normally we would use 'select' instead of 'depends on', but in this case
+'depends' is indeed better.
+
+ Please also summarise the above in the commit message. And you can add the
+following to the commit message too:
+
+Since the user explicitly has to provide /etc/ldap.conf, we use 'depends on' so
+that the user is obliged to explicitly enable openldap before the option becomes
+visible.
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
