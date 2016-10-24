@@ -1,65 +1,44 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Mon, 24 Oct 2016 09:19:14 +0200
-Subject: [Buildroot] [PATCH 2/2] xen: Remove TARGET_CONFIGURE_OPTS from
-	make
-In-Reply-To: <20161022231827.44cc8d96@free-electrons.com>
-References: <1473799504-20372-1-git-send-email-alistair.francis@xilinx.com>
- <1473799504-20372-2-git-send-email-alistair.francis@xilinx.com>
- <20161022231827.44cc8d96@free-electrons.com>
-Message-ID: <CAKmqyKOo+xM5djopNqAAknr5HzGGTh9_vyJj6AyAk_5ipp2m4g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 24 Oct 2016 09:25:46 +0200
+Subject: [Buildroot] Report from the Buildroot Meeting in Berlin
+In-Reply-To: <20161024005421.GA2747@tungsten.ozlabs.ibm.com>
+References: <20161019221035.2350c181@free-electrons.com>
+ <20161024005421.GA2747@tungsten.ozlabs.ibm.com>
+Message-ID: <20161024092546.21e4dc0f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Oct 22, 2016 at 11:18 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Tue, 13 Sep 2016 13:45:04 -0700, Alistair Francis wrote:
->> The TARGET_CONFIGURE_OPTS variable resulted in a double definition
->> error:
->> <command-line>:0:0: error: "__OBJECT_FILE__" redefined [-Werror]
->>
->> Remove the options to avoid the error.
->>
->> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
->
-> Yann told me that you found the root cause of the problem during a
-> short investigation session at ELCE.
+Hello,
 
-Hey Thomas,
+On Mon, 24 Oct 2016 11:54:23 +1100, Sam Bobroff wrote:
 
-Yeah, I talked to Yann and we worked out the problem and a hopeful fix.
+> >  - Improving the developer experience when using _OVERRIDE_SRCDIR or
+> >    "local" packages. Currently, since the source code is copied in the
+> >    build directory, the build errors and warnings refers to the build
+> >    directory. That's not convenient for users running an IDE, since
+> >    clicking on the warning or error does not bring to the correct
+> >    file. After much discusion, it appears that the only reasonable
+> >    solution is to implement per-package out-of-tree build.  
+> 
+> Great! Will this allow the use of --delete with the rsync that copies the
+> source? (It would fix the problem caused by certain moved/renamed files in your
+> source directory when using _OVERRIDE_SOURCEDIR.)
 
->
-> Could you share what the conclusion was? When do you expect to submit a
-> patch?
+Well, if we have per-package out-of-tree, then there is no rsync at all
+anymore. The source code stays in the directory specified in
+_OVERRIDE_SRCDIR, and only the build tree is in
+output/build/<pkg>-<version>/.
 
-I'm still traveling at the moment, but I should be able to send out
-the new patch this week with an explanation.
+However, this obviously works only for packages that use a sane build
+system supporting out of tree build.
 
->
-> In the mean time, I've marked
-> https://patchwork.ozlabs.org/patch/669641/ as Rejected, since this is
-> clearly not the proper fix for the problem.
+Best regards,
 
-Sounds good to me.
-
-Thanks,
-
-Alistair
-
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
