@@ -1,39 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Oct 2016 23:33:44 +0200
-Subject: [Buildroot] [PATCH v3] toolchain/wrapper: fix 'reinstall'
-In-Reply-To: <1475049656-12452-1-git-send-email-jezz@sysmic.org>
-References: <1475049656-12452-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20161024233344.4c51d87f@free-electrons.com>
+Date: Mon, 24 Oct 2016 23:34:53 +0200
+Subject: [Buildroot] [git commit] package/ts4900-fpga: remove the default
+	value of the _INSTALL_{IMAGES, TARGET} variables
+Message-ID: <20161024213500.C696B81D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1cbef932b9c5bda880dcb49509252519ac6aa880
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 28 Sep 2016 10:00:56 +0200, J?r?me Pouiller wrote:
-> toolchain-wrapper was not reinstalled. So rules toolchain-external-reinstall,
-> gcc-initial-reinstall, gcc-final-reinstall didn't work as expected.
-> 
-> In add, normalize variable name: s/TOOLCHAIN_BUILD_WRAPPER/TOOLCHAIN_WRAPPER_BUILD/
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
-> v2:
->   - Fix missed occurences of TOOLCHAIN_BUILD_WRAPPER in package/
->   - Do not write intermediate file with sources
->   - Use 'install' instead of 'mkdir'
->   - Fix indentation
-> v3:
->   - Change patch subject since it is not specific to toolchain-external
->   - Forgot to add TOOLCHAIN_WRAPPER_INSTALL to gcc POST_INSTALL_HOOKS
->   - Fix TOOLCHAIN_WRAPPER_INSTALL
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ts4900-fpga/ts4900-fpga.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ts4900-fpga/ts4900-fpga.mk b/package/ts4900-fpga/ts4900-fpga.mk
+index e0d351f..ed951b8 100644
+--- a/package/ts4900-fpga/ts4900-fpga.mk
++++ b/package/ts4900-fpga/ts4900-fpga.mk
+@@ -10,9 +10,6 @@ TS4900_FPGA_SITE = ftp://ftp.embeddedarm.com/ts-socket-macrocontrollers/ts-4900-
+ # No license file provided, Yocto recipe from the vendor claims MIT.
+ # https://github.com/embeddedarm/meta-ts/blob/f31860f1204b64f765a5380d3b93a2cf18234f90/recipes-extras/ts4900-fpga/ts4900-fpga.bb#L6
+ 
+-TS4900_FPGA_INSTALL_IMAGES = NO
+-TS4900_FPGA_INSTALL_TARGET = YES
+-
+ define TS4900_FPGA_EXTRACT_CMDS
+ 	cp $(DL_DIR)/$(TS4900_FPGA_SOURCE) $(@D)
+ endef
