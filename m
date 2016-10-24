@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Oct 2016 18:38:50 +0200
-Subject: [Buildroot] [PATCH 4/6] package/xdriver_xf86-input-mouse: fix
+Date: Mon, 24 Oct 2016 18:38:49 +0200
+Subject: [Buildroot] [PATCH 3/6] package/xdriver_xf86-input-libinput: fix
 	install paths
 In-Reply-To: <cover.1477327063.git.yann.morin.1998@free.fr>
 References: <cover.1477327063.git.yann.morin.1998@free.fr>
-Message-ID: <40814b98e26c8ae23f0d3fe62ae881392def0730.1477327064.git.yann.morin.1998@free.fr>
+Message-ID: <0686a679b3bd91eb7b00c32ac540f42570c44c83.1477327064.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,20 +22,20 @@ Cc: buildroot at netsolux.ch
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-build-get-rid-of-sdkdir.patch             | 81 ++++++++++++++++++++++
- .../xdriver_xf86-input-mouse.mk                    |  1 +
- 2 files changed, 82 insertions(+)
- create mode 100644 package/x11r7/xdriver_xf86-input-mouse/0001-build-get-rid-of-sdkdir.patch
+ .../0001-build-get-rid-of-sdkdir.patch             | 78 ++++++++++++++++++++++
+ .../xdriver_xf86-input-libinput.mk                 |  1 +
+ 2 files changed, 79 insertions(+)
+ create mode 100644 package/x11r7/xdriver_xf86-input-libinput/0001-build-get-rid-of-sdkdir.patch
 
-diff --git a/package/x11r7/xdriver_xf86-input-mouse/0001-build-get-rid-of-sdkdir.patch b/package/x11r7/xdriver_xf86-input-mouse/0001-build-get-rid-of-sdkdir.patch
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/0001-build-get-rid-of-sdkdir.patch b/package/x11r7/xdriver_xf86-input-libinput/0001-build-get-rid-of-sdkdir.patch
 new file mode 100644
-index 0000000..d5f97f9
+index 0000000..2f9784c
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-input-mouse/0001-build-get-rid-of-sdkdir.patch
-@@ -0,0 +1,81 @@
-+From aef3d9bca4d77db833f71d50b1c84b16c69d7deb Mon Sep 17 00:00:00 2001
++++ b/package/x11r7/xdriver_xf86-input-libinput/0001-build-get-rid-of-sdkdir.patch
+@@ -0,0 +1,78 @@
++From 1b2cf6e6c2640e08166af36eee775542a45325af Mon Sep 17 00:00:00 2001
 +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 23 Oct 2016 22:53:21 +0200
++Date: Sun, 23 Oct 2016 22:36:40 +0200
 +Subject: [PATCH] build: get rid of sdkdir
 +
 +Use of sdkdir causes problems during cross-compilation, where the full
@@ -47,36 +47,34 @@ index 0000000..d5f97f9
 +
 +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +---
-+ Makefile.am         |  3 ---
-+ configure.ac        | 10 ----------
-+ include/Makefile.am |  4 +++-
-+ xorg-mouse.pc.in    |  3 +--
-+ 4 files changed, 4 insertions(+), 16 deletions(-)
++ Makefile.am         | 2 --
++ configure.ac        | 8 --------
++ include/Makefile.am | 4 +++-
++ xorg-libinput.pc.in | 5 +++--
++ 4 files changed, 6 insertions(+), 13 deletions(-)
 +
 +diff --git a/Makefile.am b/Makefile.am
-+index 7142485..efe66cb 100644
++index a447d61..7aa5523 100644
 +--- a/Makefile.am
 ++++ b/Makefile.am
-+@@ -34,9 +34,6 @@ ChangeLog:
++@@ -19,8 +19,6 @@
++ #  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 + 
-+ dist-hook: ChangeLog INSTALL
 + 
-+-# Provide an sdk location that is writable by this module
 +-DISTCHECK_CONFIGURE_FLAGS = --with-sdkdir='$${includedir}/xorg'
 +-
-+ if LINT
-+ # Check source code with tools like lint & sparse
-+ lint:
++ SUBDIRS = src include man test
++ MAINTAINERCLEANFILES = ChangeLog INSTALL
++ 
 +diff --git a/configure.ac b/configure.ac
-+index 15d9047..515681d 100644
++index 9894817..fe198cb 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -60,16 +60,6 @@ AC_ARG_WITH(xorg-module-dir,
-+ inputdir=${moduledir}/input
-+ AC_SUBST(inputdir)
++@@ -63,14 +63,6 @@ AC_ARG_WITH(xorg-conf-dir,
++             [xorgconfdir='${prefix}/share/X11/xorg.conf.d'])
++ AC_SUBST(xorgconfdir)
 + 
-+-# X Server SDK location is required to install xf86-mouse-properties.h
-+-# This location is also relayed in the xorg-mouse.pc file
++-# X Server SDK location is required to install header files
 +-sdkdir=`$PKG_CONFIG --variable=sdkdir xorg-server`
 +-
 +-# Workaround overriding sdkdir to be able to create a tarball when user has no
@@ -84,45 +82,44 @@ index 0000000..d5f97f9
 +-AC_ARG_WITH([sdkdir], [], [sdkdir="$withval"])
 +-AC_SUBST([sdkdir])
 +-
-+-
-+ # Work out which OS mouse driver we need to build
-+ case $host_os in
-+   linux*)
++ DRIVER_NAME=libinput
++ AC_SUBST([DRIVER_NAME])
++ 
 +diff --git a/include/Makefile.am b/include/Makefile.am
-+index 27ce0fb..2b85e4e 100644
++index 0d52b9b..271ffac 100644
 +--- a/include/Makefile.am
 ++++ b/include/Makefile.am
 +@@ -1 +1,3 @@
-+-sdk_HEADERS = xf86-mouse-properties.h
++-sdk_HEADERS = libinput-properties.h
 ++# Location formerly known as 'sdkdir'
 ++xorgincludedir = $(includedir)/xorg
-++xorginclude_HEADERS = xf86-mouse-properties.h
-+diff --git a/xorg-mouse.pc.in b/xorg-mouse.pc.in
-+index 57df596..8355e61 100644
-+--- a/xorg-mouse.pc.in
-++++ b/xorg-mouse.pc.in
-+@@ -1,6 +1,7 @@ prefix=@prefix@
+++xorginclude_HEADERS = libinput-properties.h
++diff --git a/xorg-libinput.pc.in b/xorg-libinput.pc.in
++index ff98189..9c0f506 100644
++--- a/xorg-libinput.pc.in
+++++ b/xorg-libinput.pc.in
++@@ -1,6 +1,7 @@
 +-sdkdir=@sdkdir@
 ++prefix=@prefix@
 ++includedir=@includedir@
 + 
-+ Name: xorg-mouse
-+ Description: X.Org mouse input driver for non-evdev OS'es
++ Name: xorg-libinput
++ Description: X.Org libinput input driver.
 + Version: @PACKAGE_VERSION@
 +-Cflags: -I${sdkdir}
 ++Cflags: -I${includedir}/xorg
 +-- 
 +2.7.4
 +
-diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-index 0e19467..e1bd81a 100644
---- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-+++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-@@ -10,5 +10,6 @@ XDRIVER_XF86_INPUT_MOUSE_SITE = http://xorg.freedesktop.org/releases/individual/
- XDRIVER_XF86_INPUT_MOUSE_LICENSE = MIT
- XDRIVER_XF86_INPUT_MOUSE_LICENSE_FILES = COPYING
- XDRIVER_XF86_INPUT_MOUSE_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
-+XDRIVER_XF86_INPUT_MOUSE_AUTORECONF = YES
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index c096032..eacacea 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+@@ -10,5 +10,6 @@ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individu
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE_FILES = COPYING
+ XDRIVER_XF86_INPUT_LIBINPUT_DEPENDENCIES = libinput xserver_xorg-server xproto_inputproto xproto_xproto
++XDRIVER_XF86_INPUT_LIBINPUT_AUTORECONF = YES
  
  $(eval $(autotools-package))
 -- 
