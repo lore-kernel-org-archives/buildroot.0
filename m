@@ -1,59 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Oct 2016 14:50:00 +0200
-Subject: [Buildroot] [git commit] uclibc: fix pthread.h
-Message-ID: <20161024125008.C2825819E1@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 24 Oct 2016 15:05:00 +0200
+Subject: [Buildroot] Report from the Buildroot Meeting in Berlin
+In-Reply-To: <20161024142840.4c398e72@free-electrons.com>
+References: <20161019221035.2350c181@free-electrons.com>
+ <c2da1832-3282-33f0-1588-e828f3df4801@mind.be>
+ <874m42lztg.fsf@dell.be.48ers.dk>
+ <b4fb3016-266b-d9bf-bbe1-ec7169c7136a@imgtec.com>
+ <20161024142840.4c398e72@free-electrons.com>
+Message-ID: <8c64e8e7-1907-5e74-c743-3d980539be06@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90e38737a699a25f577684742c767375e74683c5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- bfin: http://autobuild.buildroot.net/results/fbf/fbf63bbe0974b490b875a95fb930ba601364b85a/
- m68k: http://autobuild.buildroot.net/results/cc9/cc9b87c4c695f97a056cc53f19e7662750dffeff/
- microblazeel: http://autobuild.buildroot.net/results/941/941c06e29f6542e258f20799dc6f3f94b2f8af88/
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-linuxthreads-add-back-signal.h.patch      | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+On 24-10-16 14:28, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 24 Oct 2016 13:19:30 +0100, Vicente Olivert Riera wrote:
+[snip]
+>> And another question. What happen if we use the real compiler to build
+>> kernels and bootloaders? Would that be a problem? I don't know other
+>> architectures, but for MIPS the only variable we need to pass to the
+>> make program for building a kernel is ARCH=mips. The defconfig will set
+>> all the rest (float, endian, etc.).
+> 
+> Could be an approach to investigate, but I'm afraid is not as simple as
+> it looks. "perf" for example is part of the kernel, built with our
+> cross-compiler, but we would need to go through the wrapper because
+> "perf" is user-space code, and it does need to link with a bunch of
+> libraries available in our sysroot (so the --sysroot flag is important).
 
-diff --git a/package/uclibc/0001-linuxthreads-add-back-signal.h.patch b/package/uclibc/0001-linuxthreads-add-back-signal.h.patch
-new file mode 100644
-index 0000000..1a957c5
---- /dev/null
-+++ b/package/uclibc/0001-linuxthreads-add-back-signal.h.patch
-@@ -0,0 +1,28 @@
-+From 543308f6c46cf2edf8a524bc9c631e472570fe72 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Mon, 24 Oct 2016 05:15:07 +0200
-+Subject: [PATCH] linuxthreads: add back signal.h
-+
-+Somehow this got removed with f1d7505e40654a185843bdc8f1cf1fd00ab55c04.
-+
-+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ libpthread/linuxthreads/sysdeps/pthread/pthread.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libpthread/linuxthreads/sysdeps/pthread/pthread.h b/libpthread/linuxthreads/sysdeps/pthread/pthread.h
-+index cf043b5..cc13a52 100644
-+--- a/libpthread/linuxthreads/sysdeps/pthread/pthread.h
-++++ b/libpthread/linuxthreads/sysdeps/pthread/pthread.h
-+@@ -20,6 +20,7 @@
-+ #include <sched.h>
-+ #include <time.h>
-+ 
-++#include <signal.h>
-+ #include <bits/pthreadtypes.h>
-+ #include <bits/initspin.h>
-+ 
-+-- 
-+2.1.4
-+
+ ... but perf *is* built separately from the kernel code, in linux-tools-perf.
+
+ I kind of like the idea of having a TARGET_CC_UNWRAPPED that we pass to the
+packages that are non-hosted.
+
+
+> Perhaps we need an environment variable in the wrapper that tells it
+> "use all your flags" vs. "use only the flags that are really important,
+> such as --sysroot". We could then set this environment variable when
+> building specific packages such as the kernel and bootloaders.
+
+ This, however, is probably the safest solution, and fairly elegant as well.
+I'll keep it in mind when I (finally) start working on this :-)
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
