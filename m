@@ -1,44 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Oct 2016 09:25:46 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Oct 2016 14:02:51 +0200
 Subject: [Buildroot] Report from the Buildroot Meeting in Berlin
-In-Reply-To: <20161024005421.GA2747@tungsten.ozlabs.ibm.com>
+In-Reply-To: <c2da1832-3282-33f0-1588-e828f3df4801@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 20 Oct 2016 18:39:37 +0200")
 References: <20161019221035.2350c181@free-electrons.com>
- <20161024005421.GA2747@tungsten.ozlabs.ibm.com>
-Message-ID: <20161024092546.21e4dc0f@free-electrons.com>
+ <c2da1832-3282-33f0-1588-e828f3df4801@mind.be>
+Message-ID: <874m42lztg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Mon, 24 Oct 2016 11:54:23 +1100, Sam Bobroff wrote:
+ >> * TARGET_CFLAGS = $(TARGET_WRAPPER_CFLAGS) $(TARGET_OPTIMIZATION) \
+ >> $(TARGET_DEBUGGING)
+ >> TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+ >> TARGET_LDFLAGS = $(TARGET_CFLAGS)
+ >> TARGET_FCFLAGS = $(TARGET_CFLAGS)
 
-> >  - Improving the developer experience when using _OVERRIDE_SRCDIR or
-> >    "local" packages. Currently, since the source code is copied in the
-> >    build directory, the build errors and warnings refers to the build
-> >    directory. That's not convenient for users running an IDE, since
-> >    clicking on the warning or error does not bring to the correct
-> >    file. After much discusion, it appears that the only reasonable
-> >    solution is to implement per-package out-of-tree build.  
-> 
-> Great! Will this allow the use of --delete with the rsync that copies the
-> source? (It would fix the problem caused by certain moved/renamed files in your
-> source directory when using _OVERRIDE_SOURCEDIR.)
+ >  Turns out that it will be slightly more complicated than this. For MIPS, the
+ > -mmsa option to enable SIMD processing MUST NOT be used in kernel and bootloader
+ > builds. Therefore we cannot add it to TARGET_WRAPPER_CFLAGS. Instead, we'll have
+ > a TARGET_EXTRA_CFLAGS that does not get added to the wrapper but does get added
+ > to TARGET_CFLAGS and therefore passed to package buidls.
 
-Well, if we have per-package out-of-tree, then there is no rsync at all
-anymore. The source code stays in the directory specified in
-_OVERRIDE_SRCDIR, and only the build tree is in
-output/build/<pkg>-<version>/.
+If that is the only problem, couldn't we just add -mno-msa to the
+kernel/bootloader if _MIPS_MSA is enabled?
 
-However, this obviously works only for packages that use a sane build
-system supporting out of tree build.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
