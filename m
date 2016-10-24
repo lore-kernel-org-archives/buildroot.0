@@ -1,71 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Oct 2016 14:28:40 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Oct 2016 14:39:38 +0200
 Subject: [Buildroot] Report from the Buildroot Meeting in Berlin
-In-Reply-To: <b4fb3016-266b-d9bf-bbe1-ec7169c7136a@imgtec.com>
+In-Reply-To: <b4fb3016-266b-d9bf-bbe1-ec7169c7136a@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 24 Oct 2016 13:19:30 +0100")
 References: <20161019221035.2350c181@free-electrons.com>
  <c2da1832-3282-33f0-1588-e828f3df4801@mind.be>
  <874m42lztg.fsf@dell.be.48ers.dk>
  <b4fb3016-266b-d9bf-bbe1-ec7169c7136a@imgtec.com>
-Message-ID: <20161024142840.4c398e72@free-electrons.com>
+Message-ID: <87ziltly45.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On Mon, 24 Oct 2016 13:19:30 +0100, Vicente Olivert Riera wrote:
+ >> If that is the only problem, couldn't we just add -mno-msa to the
+ >> kernel/bootloader if _MIPS_MSA is enabled?
 
-> Do we want to do that? It looks better and cleaner to have a variable
-> that holds flags suitable for building packages but not for building
-> kernels/bootloaders. I think that's what Arnout means with the
-> TARGET_EXTRA_CFLAGS.
-> 
-> My question is, if that TARGET_EXTRA_CFLAGS is not added to the wrapper,
-> what will happen with those packages that have a crappy build system
-> that doesn't respect the env variables?
+ > That would be a solution, filter (or append -mno-* counterparts) to the
+ > flags when building kernel or bootloaders. The thing is we would need to
+ > do this for other optimization options (not just MSA) and architectures.
 
-Well, then they will of course not see the TARGET_EXTRA_CFLAGS. That's
-the *whole* point of having the wrapper in the first place: to make
-sure a given set of flags gets passed to the compiler, regardless of
-the package build system. The very first option for which we added the
-wrapper was --sysroot, for external toolchains. If it isn't passed, then
-the compiler will not use the Buildroot sysroot.
+ > Do we want to do that? It looks better and cleaner to have a variable
+ > that holds flags suitable for building packages but not for building
+ > kernels/bootloaders. I think that's what Arnout means with the
+ > TARGET_EXTRA_CFLAGS.
 
-So of course, if a set of flags is left out of the wrapper, and kept
-only in a TARGET_EXTRA_CFLAGS passed in the environment, then those
-broken packages will not use such flags.
+Do we expect to have a lot of such new flags in the future? We already
+do something similar for some of the arm specific flags (E.G. force
+-marm for stuff that cannot be built in thumb2 mode).
 
-You can't say at the same time:
+I agree that it isn't very pretty, but again it is a tradeoff between
+how complicated we want to make the toolchain wrapper.
 
- - I don't want those flags encoded in the wrapper, because they break
-   the kernel/bootloader build
-
- - I want those flags encoded in the wrapper, because otherwise broken
-   packages will not use them.
-
-> And another question. What happen if we use the real compiler to build
-> kernels and bootloaders? Would that be a problem? I don't know other
-> architectures, but for MIPS the only variable we need to pass to the
-> make program for building a kernel is ARCH=mips. The defconfig will set
-> all the rest (float, endian, etc.).
-
-Could be an approach to investigate, but I'm afraid is not as simple as
-it looks. "perf" for example is part of the kernel, built with our
-cross-compiler, but we would need to go through the wrapper because
-"perf" is user-space code, and it does need to link with a bunch of
-libraries available in our sysroot (so the --sysroot flag is important).
-
-Perhaps we need an environment variable in the wrapper that tells it
-"use all your flags" vs. "use only the flags that are really important,
-such as --sysroot". We could then set this environment variable when
-building specific packages such as the kernel and bootloaders.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
