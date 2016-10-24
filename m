@@ -1,56 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Oct 2016 14:49:41 +0200
-Subject: [Buildroot] [PATCH v2 1/1] php: rework selection of interfaces
-In-Reply-To: <1473715867-17245-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1473715867-17245-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20161024144941.7a2a0e1d@free-electrons.com>
+Date: Mon, 24 Oct 2016 14:50:00 +0200
+Subject: [Buildroot] [git commit] uclibc: fix pthread.h
+Message-ID: <20161024125008.C2825819E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=90e38737a699a25f577684742c767375e74683c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 12 Sep 2016 23:31:07 +0200, Fabrice Fontaine wrote:
-> Following suggestion of Yann Morin, rework selection of php interfaces:
-> use booleans instead of choice to be able to select multiple interfaces
-> as they are not exclusive
-> 
-> The choice was introduced in commit fcdc9f891 to make sure at least one
-> SAPI option was selected. Here, we use an auxiliary symbol
-> BR2_PACKAGE_PHP_HAS_SAPI and CGI will be selected if this symbol is not
-> set.
-> 
-> It should be noted that previously CGI and FPM could not be selected at
-> the same time. This is now possible. Bug that prevented compilation of
-> CGI and FPM binaries at the same time has been fixed since PHP 5.4
-> (https://github.com/php-build/php-build/issues/101)
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Fixes:
+ bfin: http://autobuild.buildroot.net/results/fbf/fbf63bbe0974b490b875a95fb930ba601364b85a/
+ m68k: http://autobuild.buildroot.net/results/cc9/cc9b87c4c695f97a056cc53f19e7662750dffeff/
+ microblazeel: http://autobuild.buildroot.net/results/941/941c06e29f6542e258f20799dc6f3f94b2f8af88/
 
-I've applied, after changing one thing, see below.
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-linuxthreads-add-back-signal.h.patch      | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-
-> -config BR2_PACKAGE_PHP_CLI
-> +# Helper to make sure at least one interface is selected.
-> +# All SAPI options except CGI will select this symbol.
-> +config BR2_PACKAGE_PHP_HAS_SAPI
->  	bool
-
-This is really not needed. It was much simpler to just do:
-
-	select BR2_PACKAGE_PHP_SAPI_CGI if \
-		!BR2_PACKAGE_PHP_SAPI_CLI && \
-		!BR2_PACKAGE_PHP_SAPI_FPM
-
-in the main BR2_PACKAGE_PHP option. I've adjusted the commit log
-accordingly before applying.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/uclibc/0001-linuxthreads-add-back-signal.h.patch b/package/uclibc/0001-linuxthreads-add-back-signal.h.patch
+new file mode 100644
+index 0000000..1a957c5
+--- /dev/null
++++ b/package/uclibc/0001-linuxthreads-add-back-signal.h.patch
+@@ -0,0 +1,28 @@
++From 543308f6c46cf2edf8a524bc9c631e472570fe72 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@uclibc-ng.org>
++Date: Mon, 24 Oct 2016 05:15:07 +0200
++Subject: [PATCH] linuxthreads: add back signal.h
++
++Somehow this got removed with f1d7505e40654a185843bdc8f1cf1fd00ab55c04.
++
++Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
++---
++ libpthread/linuxthreads/sysdeps/pthread/pthread.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libpthread/linuxthreads/sysdeps/pthread/pthread.h b/libpthread/linuxthreads/sysdeps/pthread/pthread.h
++index cf043b5..cc13a52 100644
++--- a/libpthread/linuxthreads/sysdeps/pthread/pthread.h
+++++ b/libpthread/linuxthreads/sysdeps/pthread/pthread.h
++@@ -20,6 +20,7 @@
++ #include <sched.h>
++ #include <time.h>
++ 
+++#include <signal.h>
++ #include <bits/pthreadtypes.h>
++ #include <bits/initspin.h>
++ 
++-- 
++2.1.4
++
