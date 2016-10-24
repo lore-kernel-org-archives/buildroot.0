@@ -1,57 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Oct 2016 23:42:09 +0200
-Subject: [Buildroot] [git commit] rp-pppoe: pass the appropriate path for
-	various tools
-Message-ID: <20161024214249.019B57FED4@busybox.osuosl.org>
+Date: Mon, 24 Oct 2016 23:35:51 +0200
+Subject: [Buildroot] [git commit] firejail: new package
+Message-ID: <20161024214248.D5C157FF7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cebf8219f319d1153fa10a1d43d02577bff5b966
+commit: https://git.buildroot.net/buildroot/commit/?id=8a5224415ceb61e5340e4dd92028b37ce57ca849
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The rp-pppoe configure script uses AC_PATH_PROG() to find the path of
-a number of tools on the build machine. But in fact, those paths are
-not used to call the tools on the build machine, but rather to replace
-variables in scripts that are executed in the target.
+Firejail Security Sandbox
+https://firejail.wordpress.com/
 
-Due to this, if those tools on the build machine are not located at
-the same place as their equivalent in the target, the scripts will
-fail to run. To address this, we pass the necessary cache variables to
-override the autoconf checks.
+Lightweight application sandboxing system using seccomp and kernel
+namespaces.
 
-The path from pppd has been taken from the build result of the pppd
-package. The path for setsid, id and echo have been taken from the
-build result of Busybox, assuming that full-blown variants of those
-tools would be installed at the same location.
-
-Fixes bug #8811.
-
+Signed-off-by: Chris Frederick <cdf123@cdf123.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rp-pppoe/rp-pppoe.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/Config.in              |  1 +
+ package/firejail/Config.in     | 12 ++++++++++++
+ package/firejail/firejail.hash |  2 ++
+ package/firejail/firejail.mk   | 24 ++++++++++++++++++++++++
+ 4 files changed, 39 insertions(+)
 
-diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
-index 4306254..99d231e 100644
---- a/package/rp-pppoe/rp-pppoe.mk
-+++ b/package/rp-pppoe/rp-pppoe.mk
-@@ -15,8 +15,16 @@ RP_PPPOE_TARGET_SCRIPTS = pppoe-connect pppoe-init pppoe-setup pppoe-start \
- 	pppoe-status pppoe-stop
- RP_PPPOE_MAKE_OPTS = PLUGIN_DIR=/usr/lib/pppd/$(PPPD_VERSION)
- RP_PPPOE_CONF_OPTS = --disable-debugging
+diff --git a/package/Config.in b/package/Config.in
+index 9399f63..be20478 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1710,6 +1710,7 @@ menu "System tools"
+ 	source "package/efibootmgr/Config.in"
+ 	source "package/efivar/Config.in"
+ 	source "package/emlog/Config.in"
++	source "package/firejail/Config.in"
+ 	source "package/ftop/Config.in"
+ 	source "package/getent/Config.in"
+ 	source "package/htop/Config.in"
+diff --git a/package/firejail/Config.in b/package/firejail/Config.in
+new file mode 100644
+index 0000000..8b5b66a
+--- /dev/null
++++ b/package/firejail/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_FIREJAIL
++	bool "firejail"
++	help
++	  Firejail is a SUID program that reduces the risk of security
++	  breaches by restricting the running environment of untrusted
++	  applications using Linux namespaces and seccomp-bpf. It
++	  allows a process and all its descendants to have their own
++	  private view of the globally shared kernel resources, such
++	  as the network stack, process table, mount table.
 +
-+# The pppd, echo, setsid and id paths must be the ones on the
-+# target. Indeed, the result of these checks is used to replace
-+# variables in scripts that are installed in the target.
- RP_PPPOE_CONF_ENV = \
- 	rpppoe_cv_pack_bitfields=normal \
-+	ac_cv_path_PPPD=/usr/sbin/pppd \
-+	ac_cv_path_ECHO=/bin/echo \
-+	ac_cv_path_SETSID=/usr/bin/setsid \
-+	ac_cv_path_ID=/usr/bin/id \
- 	PPPD_H=$(PPPD_DIR)/pppd/pppd.h
- 
- define RP_PPPOE_INSTALL_TARGET_CMDS
++	  https://firejail.wordpress.com/
++
+diff --git a/package/firejail/firejail.hash b/package/firejail/firejail.hash
+new file mode 100644
+index 0000000..dc2eb80
+--- /dev/null
++++ b/package/firejail/firejail.hash
+@@ -0,0 +1,2 @@
++# From http://download.sourceforge.net/firejail/firejail-0.9.42.asc
++sha256 4f3bceee973b84fdf13a5d5ab0060d140ecc8e42c19c945e7fb93f0fd8499b47  firejail-0.9.42.tar.xz
+diff --git a/package/firejail/firejail.mk b/package/firejail/firejail.mk
+new file mode 100644
+index 0000000..ec02ea4
+--- /dev/null
++++ b/package/firejail/firejail.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# firejail
++#
++################################################################################
++
++FIREJAIL_VERSION = 0.9.42
++FIREJAIL_SITE = http://download.sourceforge.net/firejail
++FIREJAIL_SOURCE = firejail-$(FIREJAIL_VERSION).tar.xz
++FIREJAIL_LICENSE = GPLv2
++FIREJAIL_LICENSE_FILES = COPYING
++FIREJAIL_CONF_OPTS = \
++	--enable-bind \
++	--enable-busybox-workaround \
++	--enable-file-transfer \
++	--enable-network \
++	--enable-seccomp \
++	--enable-userns
++
++define FIREJAIL_PERMISSIONS
++	/usr/bin/firejail f 4755 0 0 - - - - -
++endef
++
++$(eval $(autotools-package))
