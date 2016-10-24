@@ -1,80 +1,137 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Oct 2016 18:38:49 +0200
-Subject: [Buildroot] [PATCH 0/6] xorg: fix imput drivers install paths
-Message-ID: <cover.1477327063.git.yann.morin.1998@free.fr>
+Date: Mon, 24 Oct 2016 18:38:47 +0200
+Subject: [Buildroot] [PATCH 1/6] package/xdriver_xf86-input-evdev: fix
+	install paths
+In-Reply-To: <cover.1477327063.git.yann.morin.1998@free.fr>
+References: <cover.1477327063.git.yann.morin.1998@free.fr>
+Message-ID: <6015079ed90967b9d3631e92e72ae08667974e05.1477327063.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Get rid of the borked sdkdir variable.
 
-This series fixes the install paths of the few remaining input drivers
-that incorrectly installed headers in $(TARGET_DIR)/$(STAGING_DIR).
+Fixes (partially):
+    https://bugs.busybox.net/show_bug.cgi?id=8696
 
-The underlying issue is that xorg defines an "sdkdir" pkg-config
-variable, as the location to find/install headers. This location is an
-absolute path to the staging dir (aka sysroot), but headers are
-installed in $(DESTDIR)/$(sdkdir).
-
-We fix that by entirely ditching the use of sdkdir, as was done in all
-other xorg dirvers, with the 5 first patches of the series.
-
-Additionally, to catch such situation, the 6th and last patch of the
-series checks no such paths are present, neither in target/ nor in
-staging/ .
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 90e38737a699a25f577684742c767375e74683c5
-
-  uclibc: fix pthread.h (2016-10-24 14:50:00 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 705884038a0fa0824f162280fc1ac2adfd6f03d7
-
-  core/pkg-generic: check proper package installation (2016-10-24 18:05:23 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (6):
-      package/xdriver_xf86-input-evdev: fix install paths
-      package/xdriver_xf86-input-joystick: fix install paths
-      package/xdriver_xf86-input-libinput: fix install paths
-      package/xdriver_xf86-input-mouse: fix install paths
-      package/xdriver_xf86-input-synaptics: fix install paths
-      core/pkg-generic: check proper package installation
-
- package/pkg-generic.mk                             | 15 ++++
- .../0001-build-get-rid-of-sdkdir.patch             | 87 +++++++++++++++++++++
+Reported-by: buildroot at netsolux.ch
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: buildroot at netsolux.ch
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-build-get-rid-of-sdkdir.patch             | 87 ++++++++++++++++++++++
  .../xdriver_xf86-input-evdev.mk                    |  2 +
- .../0001-build-get-rid-of-sdkdir.patch             | 78 +++++++++++++++++++
- .../xdriver_xf86-input-joystick.mk                 |  1 +
- .../0001-build-get-rid-of-sdkdir.patch             | 78 +++++++++++++++++++
- .../xdriver_xf86-input-libinput.mk                 |  1 +
- .../0001-build-get-rid-of-sdkdir.patch             | 81 ++++++++++++++++++++
- .../xdriver_xf86-input-mouse.mk                    |  1 +
- .../0001-build-get-rid-of-sdkdir.patch             | 88 ++++++++++++++++++++++
- .../xdriver_xf86-input-synaptics.mk                |  1 +
- 11 files changed, 433 insertions(+)
+ 2 files changed, 89 insertions(+)
  create mode 100644 package/x11r7/xdriver_xf86-input-evdev/0001-build-get-rid-of-sdkdir.patch
- create mode 100644 package/x11r7/xdriver_xf86-input-joystick/0001-build-get-rid-of-sdkdir.patch
- create mode 100644 package/x11r7/xdriver_xf86-input-libinput/0001-build-get-rid-of-sdkdir.patch
- create mode 100644 package/x11r7/xdriver_xf86-input-mouse/0001-build-get-rid-of-sdkdir.patch
- create mode 100644 package/x11r7/xdriver_xf86-input-synaptics/0001-build-get-rid-of-sdkdir.patch
 
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/0001-build-get-rid-of-sdkdir.patch b/package/x11r7/xdriver_xf86-input-evdev/0001-build-get-rid-of-sdkdir.patch
+new file mode 100644
+index 0000000..b342295
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-input-evdev/0001-build-get-rid-of-sdkdir.patch
+@@ -0,0 +1,87 @@
++From 1ad5e1593556f767150c2ca75176453bee4771e6 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 23 Oct 2016 22:00:10 +0200
++Subject: [PATCH] build: get rid of sdkdir
++
++Use of sdkdir causes problems during cross-compilation, where the full
++path is then appended to the DESTDIR, leading to host paths being
++appended in the target:
++    https://bugs.busybox.net/show_bug.cgi?id=8696
++
++Other drivers (e.g. keyboard) got rid of sdkdir. Do the same.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ Makefile.am         |  4 ----
++ configure.ac        |  9 ---------
++ include/Makefile.am |  5 ++++-
++ xorg-evdev.pc.in    | 10 ++++++++--
++ 4 files changed, 12 insertions(+), 16 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 1cc3ea6..1ae042a 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -18,10 +18,6 @@
++ #  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
++ #  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++ 
++-
++-# Provide an sdk location that is writable by the evdev module
++-DISTCHECK_CONFIGURE_FLAGS = --with-sdkdir='$${includedir}/xorg'
++-
++ SUBDIRS = src man include
++ MAINTAINERCLEANFILES = ChangeLog INSTALL
++ 
++diff --git a/configure.ac b/configure.ac
++index e4887a3..4adfa43 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -66,15 +66,6 @@ AC_ARG_WITH(xorg-conf-dir,
++             [xorgconfdir="$prefix/share/X11/xorg.conf.d"])
++ AC_SUBST(xorgconfdir)
++ 
++-# X Server SDK location is required to install evdev header files
++-# This location is also relayed in the xorg-evdev.pc file
++-sdkdir=`$PKG_CONFIG --variable=sdkdir xorg-server`
++-
++-# Workaround overriding sdkdir to be able to create a tarball when user has no
++-# write permission in sdkdir. See DISTCHECK_CONFIGURE_FLAGS in Makefile.am
++-AC_ARG_WITH([sdkdir], [], [sdkdir="$withval"])
++-AC_SUBST([sdkdir])
++-
++ DRIVER_NAME=evdev
++ AC_SUBST([DRIVER_NAME])
++ 
++diff --git a/include/Makefile.am b/include/Makefile.am
++index 0e3fc1b..afc96ed 100644
++--- a/include/Makefile.am
+++++ b/include/Makefile.am
++@@ -1 +1,4 @@
++-sdk_HEADERS = evdev-properties.h
+++# location formerly known as 'sdkdir':
+++xorgincludedir = $(includedir)/xorg
+++
+++xorginclude_HEADERS = evdev-properties.h
++diff --git a/xorg-evdev.pc.in b/xorg-evdev.pc.in
++index 20710a6..fcbf511 100644
++--- a/xorg-evdev.pc.in
+++++ b/xorg-evdev.pc.in
++@@ -1,6 +1,12 @@
++-sdkdir=@sdkdir@
+++prefix=@prefix@
+++exec_prefix=@exec_prefix@
+++libdir=@libdir@
+++includedir=@includedir@
+++datarootdir=@datarootdir@
+++moduledir=@moduledir@
+++sysconfigdir=@sysconfigdir@
++ 
++ Name: xorg-evdev
++ Description: X.Org evdev input driver.
++ Version: @PACKAGE_VERSION@
++-Cflags: -I${sdkdir}
+++Cflags: -I${includedir}/xorg
++-- 
++2.7.4
++
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+index 606f1be..9ec893b 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+@@ -9,6 +9,8 @@ XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VE
+ XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
+ XDRIVER_XF86_INPUT_EVDEV_LICENSE_FILES = COPYING
++XDRIVER_XF86_INPUT_EVDEV_AUTORECONF = YES
++
+ XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	libevdev \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
