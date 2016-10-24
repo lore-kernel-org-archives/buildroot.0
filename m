@@ -1,68 +1,92 @@
-From: Chris Frederick <cdf123@cdf123.net>
-Date: Mon, 24 Oct 2016 10:34:23 -0500
-Subject: [Buildroot] [PATCH 1/1] sudo: Add ldap support for sudoers rules
-Message-ID: <1477323263-6689-1-git-send-email-cdf123@cdf123.net>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Mon, 24 Oct 2016 11:38:08 -0400
+Subject: [Buildroot] [PATCH 1/1] package/erlang: add optional dependency
+ to unixodbc
+In-Reply-To: <20161023153403.18413-1-bernd.kuhls@t-online.de>
+References: <20161023153403.18413-1-bernd.kuhls@t-online.de>
+Message-ID: <CA+-urNRZhGgK-ku2bbHzvwVtRzyrFdVtJ4DamuTZRM+yhLreJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added Config.in options to enable/disable the option, and check options
-in sudo.mk to add openldap as a dependancy and compile with --with-ldap.
+On Sun, Oct 23, 2016 at 11:34 AM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Quote from erlang configure without unixodbc:
+>
+> checking for odbc in standard locations... no
+> configure: WARNING: No odbc library found skipping odbc
+> configure: WARNING: "ODBC library - header check failed"
+> configure: WARNING: "ODBC library - link check failed"
+>
+> Quote from erlang configure with unixodbc:
+>
+> checking for odbc in standard locations... -L/home/buildroot/br3_couchdb/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/lib
+> checking for SQLAllocHandle in -lodbc... yes
+>
+> To check for unixodbc support used by erlang use readelf:
+>
+> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/erlang/lib/odbc-2.11.1/priv/bin/odbcserver | grep NEEDED
+>  0x00000001 (NEEDED)                     Shared library: [libodbc.so.2]
+>  0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+>
+> Tested using this minimal defconfig:
+>
+> BR2_PACKAGE_ERLANG=y
+> BR2_PACKAGE_ERLANG_SMP=y
+> BR2_PACKAGE_UNIXODBC=y
+>
 
-When sudo is built with ldap, /etc/sudoers is only read in for defaults,
-all rules need to be provided via ldap which is configured by the user
-in /etc/ldap.conf.
+Looks good to me. I tried it out by running Erlang, starting the odbc
+application and running a couple functions against it to see that it
+would call into the library fine. I didn't connect to a database, but
+I could tell that it was interacting with the unixodbc library based
+on the error messages. If something changes and you need to test it
+again, I think this is sufficient:
 
-Since the user explicitly has to provide /etc/ldap.conf, we use 'depends
-on' so that the user is obliged to explicitly enable openldap before the
-option becomes visible.
+# erl
+Eshell V7.3  (abort with ^G)
+1> odbc:start().
+ok
+2> odbc:connect("DSN=sql-server;UID=aladdin;PWD=sesame", []).
+{error,"[unixODBC][Driver Manager]Data source name not found, and no
+default driver specified SQLSTATE IS: IM002 Connection to database
+failed."}
 
-Signed-off-by: Chris Frederick <cdf123@cdf123.net>
----
- package/sudo/Config.in | 13 +++++++++++++
- package/sudo/sudo.mk   |  7 +++++++
- 2 files changed, 20 insertions(+)
+Tested-by: Frank Hunleth <fhunleth@troodon-software.com>
 
-diff --git a/package/sudo/Config.in b/package/sudo/Config.in
-index cbef15d..72bb5d7 100644
---- a/package/sudo/Config.in
-+++ b/package/sudo/Config.in
-@@ -9,3 +9,16 @@ config BR2_PACKAGE_SUDO
- 	  but still allow people to get their work done.
- 
- 	  http://www.sudo.ws/sudo/
-+
-+if BR2_PACKAGE_SUDO
-+config BR2_PACKAGE_SUDO_LDAP
-+	bool "ldap integration"
-+	depends on BR2_PACKAGE_OPENLDAP
-+	help
-+	  Allows you to manage sudoers rules in a centralized ldap
-+	  directory. This restricts the /etc/sudoers file from
-+	  defining rules, only defaults will be read. All rules will
-+	  need to be provided via ldap configured in /etc/ldap.conf
-+
-+	  http://www.sudo.ws/man/1.8.15/sudoers.ldap.man.html
-+endif
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index f28312a..45273bb 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -30,6 +30,13 @@ else
- SUDO_CONF_OPTS += --without-pam
- endif
- 
-+ifeq ($(BR2_PACKAGE_SUDO_LDAP),y)
-+SUDO_DEPENDENCIES += openldap
-+SUDO_CONF_OPTS += --with-ldap
-+else
-+SUDO_CONF_OPTS += --without-ldap
-+endif
-+
- # mksigname/mksiglist needs to run on build host to generate source files
- define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
- 	$(MAKE) $(HOST_CONFIGURE_OPTS) \
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/erlang/erlang.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+> index 6efffde..c9d7b22 100644
+> --- a/package/erlang/erlang.mk
+> +++ b/package/erlang/erlang.mk
+> @@ -55,6 +55,10 @@ else
+>  ERLANG_CONF_OPTS += --without-ssl
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+> +ERLANG_DEPENDENCIES += unixodbc
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_ZLIB),y)
+>  ERLANG_CONF_OPTS += --enable-shared-zlib
+>  ERLANG_DEPENDENCIES += zlib
+> --
+> 2.9.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-2.7.3
+Frank Hunleth
+Troodon Software LLC
+Embedded Software Development
+http://troodon-software.com/
