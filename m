@@ -1,41 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Oct 2016 18:46:00 +0200
-Subject: [Buildroot] [PATCH] legacy: add missing select
-Message-ID: <1477327560-12770-1-git-send-email-yann.morin.1998@free.fr>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 24 Oct 2016 16:51:06 -0200
+Subject: [Buildroot] [PATCH] util-linux: select ncurses when "pg" is selected
+Message-ID: <1477335066-14783-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When adding a boolean option to legacy, it should slect BR2_LEGACY, to
-trigger the legacy warning.
+Fixes:
+http://autobuild.buildroot.net/results/63374203f32d2e9407531b53cd5d8f2665944fbe
+http://autobuild.buildroot.net/results/6279cd6f45f54ed5857a2fc08a21d9e257b6bc4b
+http://autobuild.buildroot.net/results/5604c56c0c92483d28e51eb4e70a9741c3c4effe
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- Config.in.legacy | 2 ++
- 1 file changed, 2 insertions(+)
+ package/util-linux/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 50ccedd..8c41b05 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -149,6 +149,7 @@ config BR2_PACKAGE_PHP_SAPI_CLI_CGI
- 	bool "PHP CGI and CLI options are now seperate"
- 	select BR2_PACKAGE_PHP_SAPI_CLI
- 	select BR2_PACKAGE_PHP_SAPI_CGI
-+	select BR2_LEGACY
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 0c33919..9b70f9f 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -252,6 +252,7 @@ comment "nsenter needs a toolchain w/ headers >= 3.0"
+ config BR2_PACKAGE_UTIL_LINUX_PG
+ 	bool "pg"
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_NCURSES
  	help
- 	  The PHP Interface options have been split up into a
- 	  separate option for each interface.
-@@ -157,6 +158,7 @@ config BR2_PACKAGE_PHP_SAPI_CLI_FPM
- 	bool "PHP CLI and FPM options are now separate"
- 	select BR2_PACKAGE_PHP_SAPI_CLI
- 	select BR2_PACKAGE_PHP_SAPI_FPM
-+	select BR2_LEGACY
- 	help
- 	  The PHP Interface options have been split up into a
- 	  separate option for each interface.
+ 	  Browse pagewise through text files
+ 
 -- 
 2.7.4
