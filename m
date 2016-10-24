@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Oct 2016 18:38:47 +0200
-Subject: [Buildroot] [PATCH 1/6] package/xdriver_xf86-input-evdev: fix
+Date: Mon, 24 Oct 2016 18:38:48 +0200
+Subject: [Buildroot] [PATCH 2/6] package/xdriver_xf86-input-joystick: fix
 	install paths
 In-Reply-To: <cover.1477327063.git.yann.morin.1998@free.fr>
 References: <cover.1477327063.git.yann.morin.1998@free.fr>
-Message-ID: <6015079ed90967b9d3631e92e72ae08667974e05.1477327063.git.yann.morin.1998@free.fr>
+Message-ID: <d0ee7eab04dc3a4ee01e8ecea6ada791c65bc43b.1477327064.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,20 +22,20 @@ Cc: buildroot at netsolux.ch
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-build-get-rid-of-sdkdir.patch             | 87 ++++++++++++++++++++++
- .../xdriver_xf86-input-evdev.mk                    |  2 +
- 2 files changed, 89 insertions(+)
- create mode 100644 package/x11r7/xdriver_xf86-input-evdev/0001-build-get-rid-of-sdkdir.patch
+ .../0001-build-get-rid-of-sdkdir.patch             | 78 ++++++++++++++++++++++
+ .../xdriver_xf86-input-joystick.mk                 |  1 +
+ 2 files changed, 79 insertions(+)
+ create mode 100644 package/x11r7/xdriver_xf86-input-joystick/0001-build-get-rid-of-sdkdir.patch
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/0001-build-get-rid-of-sdkdir.patch b/package/x11r7/xdriver_xf86-input-evdev/0001-build-get-rid-of-sdkdir.patch
+diff --git a/package/x11r7/xdriver_xf86-input-joystick/0001-build-get-rid-of-sdkdir.patch b/package/x11r7/xdriver_xf86-input-joystick/0001-build-get-rid-of-sdkdir.patch
 new file mode 100644
-index 0000000..b342295
+index 0000000..a611f15
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-input-evdev/0001-build-get-rid-of-sdkdir.patch
-@@ -0,0 +1,87 @@
-+From 1ad5e1593556f767150c2ca75176453bee4771e6 Mon Sep 17 00:00:00 2001
++++ b/package/x11r7/xdriver_xf86-input-joystick/0001-build-get-rid-of-sdkdir.patch
+@@ -0,0 +1,78 @@
++From 2826691dcd01f470d30dc8eb3bbd24a96cd3a93c Mon Sep 17 00:00:00 2001
 +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 23 Oct 2016 22:00:10 +0200
++Date: Sun, 23 Oct 2016 22:29:29 +0200
 +Subject: [PATCH] build: get rid of sdkdir
 +
 +Use of sdkdir causes problems during cross-compilation, where the full
@@ -47,91 +47,81 @@ index 0000000..b342295
 +
 +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +---
-+ Makefile.am         |  4 ----
-+ configure.ac        |  9 ---------
-+ include/Makefile.am |  5 ++++-
-+ xorg-evdev.pc.in    | 10 ++++++++--
-+ 4 files changed, 12 insertions(+), 16 deletions(-)
++ Makefile.am         | 1 -
++ configure.ac        | 9 ---------
++ include/Makefile.am | 5 ++++-
++ xorg-joystick.pc.in | 2 +-
++ 4 files changed, 5 insertions(+), 12 deletions(-)
 +
 +diff --git a/Makefile.am b/Makefile.am
-+index 1cc3ea6..1ae042a 100644
++index 13946b8..c1567ae 100644
 +--- a/Makefile.am
 ++++ b/Makefile.am
-+@@ -18,10 +18,6 @@
++@@ -18,7 +18,6 @@
 + #  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 + #  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 + 
-+-
-+-# Provide an sdk location that is writable by the evdev module
-+-DISTCHECK_CONFIGURE_FLAGS = --with-sdkdir='$${includedir}/xorg'
-+-
-+ SUBDIRS = src man include
++-DISTCHECK_CONFIGURE_FLAGS = --with-sdkdir=\$${includedir}/xorg
++ SUBDIRS = src man config include
 + MAINTAINERCLEANFILES = ChangeLog INSTALL
 + 
 +diff --git a/configure.ac b/configure.ac
-+index e4887a3..4adfa43 100644
++index b5834a5..44b9d27 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -66,15 +66,6 @@ AC_ARG_WITH(xorg-conf-dir,
-+             [xorgconfdir="$prefix/share/X11/xorg.conf.d"])
-+ AC_SUBST(xorgconfdir)
++@@ -66,15 +66,6 @@ AC_ARG_WITH(xorg-module-dir,
++ inputdir=${moduledir}/input
++ AC_SUBST(inputdir)
 + 
-+-# X Server SDK location is required to install evdev header files
-+-# This location is also relayed in the xorg-evdev.pc file
-+-sdkdir=`$PKG_CONFIG --variable=sdkdir xorg-server`
++-# Define a configure option for an alternate X Server SDK Headers
++-# X Server SDK location is required to install joystick header files
++-AC_ARG_WITH(sdkdir,
++-            AS_HELP_STRING([--with-sdkdir=<path>],
++-                           [Xorg X Server sdk headers (default is autodetected)]),
++-            [sdkdir="$withval"],
++-            [sdkdir=`$PKG_CONFIG --variable=sdkdir xorg-server`])
++-AC_SUBST(sdkdir)
 +-
-+-# Workaround overriding sdkdir to be able to create a tarball when user has no
-+-# write permission in sdkdir. See DISTCHECK_CONFIGURE_FLAGS in Makefile.am
-+-AC_ARG_WITH([sdkdir], [], [sdkdir="$withval"])
-+-AC_SUBST([sdkdir])
-+-
-+ DRIVER_NAME=evdev
-+ AC_SUBST([DRIVER_NAME])
-+ 
++ # Define a configure option to enable code debugging
++ AC_ARG_ENABLE(debug, AS_HELP_STRING([--disable-debug],
++                                     [Disable debugging code (default: enabled)]),
 +diff --git a/include/Makefile.am b/include/Makefile.am
-+index 0e3fc1b..afc96ed 100644
++index ed618c2..d656568 100644
 +--- a/include/Makefile.am
 ++++ b/include/Makefile.am
-+@@ -1 +1,4 @@
-+-sdk_HEADERS = evdev-properties.h
-++# location formerly known as 'sdkdir':
++@@ -18,4 +18,7 @@
++ #  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
++ #  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++ 
++-sdk_HEADERS = joystick-properties.h
+++# Location formerly known as 'sdkdir'
 ++xorgincludedir = $(includedir)/xorg
 ++
-++xorginclude_HEADERS = evdev-properties.h
-+diff --git a/xorg-evdev.pc.in b/xorg-evdev.pc.in
-+index 20710a6..fcbf511 100644
-+--- a/xorg-evdev.pc.in
-++++ b/xorg-evdev.pc.in
-+@@ -1,6 +1,12 @@
-+-sdkdir=@sdkdir@
-++prefix=@prefix@
-++exec_prefix=@exec_prefix@
-++libdir=@libdir@
-++includedir=@includedir@
-++datarootdir=@datarootdir@
-++moduledir=@moduledir@
-++sysconfigdir=@sysconfigdir@
-+ 
-+ Name: xorg-evdev
-+ Description: X.Org evdev input driver.
+++xorginclude_HEADERS = joystick-properties.h
++diff --git a/xorg-joystick.pc.in b/xorg-joystick.pc.in
++index 76bb92f..a5972c7 100644
++--- a/xorg-joystick.pc.in
+++++ b/xorg-joystick.pc.in
++@@ -4,4 +4,4 @@ includedir=@includedir@
++ Name: xorg-joystick
++ Description: X.Org joystick input driver.
 + Version: @PACKAGE_VERSION@
-+-Cflags: -I${sdkdir}
++-Cflags: -I${includedir}
 ++Cflags: -I${includedir}/xorg
 +-- 
 +2.7.4
 +
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index 606f1be..9ec893b 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-@@ -9,6 +9,8 @@ XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VE
- XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
- XDRIVER_XF86_INPUT_EVDEV_LICENSE_FILES = COPYING
-+XDRIVER_XF86_INPUT_EVDEV_AUTORECONF = YES
-+
- XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = \
- 	host-pkgconf \
- 	libevdev \
+diff --git a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
+index 2696e2b..76f2577 100644
+--- a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
++++ b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
+@@ -10,6 +10,7 @@ XDRIVER_XF86_INPUT_JOYSTICK_SITE = http://xorg.freedesktop.org/releases/individu
+ XDRIVER_XF86_INPUT_JOYSTICK_LICENSE = MIT
+ XDRIVER_XF86_INPUT_JOYSTICK_LICENSE_FILES = COPYING
+ XDRIVER_XF86_INPUT_JOYSTICK_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
++XDRIVER_XF86_INPUT_JOYSTICK_AUTORECONF = YES
+ 
+ define XDRIVER_XF86_INPUT_JOYSTICK_CONF
+ 	$(INSTALL) -m 0644 -D \
 -- 
 2.7.4
