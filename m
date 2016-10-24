@@ -1,46 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Oct 2016 23:40:44 +0200
-Subject: [Buildroot] [PATCH 1/1] firejail: new package
-In-Reply-To: <1476986053-11910-1-git-send-email-cdf123@cdf123.net>
-References: <1476986053-11910-1-git-send-email-cdf123@cdf123.net>
-Message-ID: <20161024234044.2749e6a6@free-electrons.com>
+Date: Mon, 24 Oct 2016 23:42:09 +0200
+Subject: [Buildroot] [git commit] rp-pppoe: pass the appropriate path for
+	various tools
+Message-ID: <20161024214249.019B57FED4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cebf8219f319d1153fa10a1d43d02577bff5b966
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this contribution!
+The rp-pppoe configure script uses AC_PATH_PROG() to find the path of
+a number of tools on the build machine. But in fact, those paths are
+not used to call the tools on the build machine, but rather to replace
+variables in scripts that are executed in the target.
 
-On Thu, 20 Oct 2016 12:54:13 -0500, Chris Frederick wrote:
-> Firejail Security Sandbox
-> https://firejail.wordpress.com/
-> 
-> Lightweight application sandboxing system using seccomp and kernel
-> namespaces.
-> 
-> Signed-off-by: Chris Frederick <cdf123@cdf123.net>
+Due to this, if those tools on the build machine are not located at
+the same place as their equivalent in the target, the scripts will
+fail to run. To address this, we pass the necessary cache variables to
+override the autoconf checks.
 
-This package does not cross-compile properly: building for an ARM
-target, it produces a host binary (x86-64) in my case:
+The path from pppd has been taken from the build result of the pppd
+package. The path for setsid, id and echo have been taken from the
+build result of Busybox, assuming that full-blown variants of those
+tools would be installed at the same location.
 
-$ file output/target/usr/bin/firejail 
-output/target/usr/bin/firejail: setuid ELF 64-bit LSB shared object, x86-64 [...]
+Fixes bug #8811.
 
-In addition, it's using fork(), so you need a BR2_USE_MMU dependency,
-it uses pthread so you need a BR2_TOOLCHAIN_HAS_THREADS dependency.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rp-pppoe/rp-pppoe.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Also, the license is GPLv2+ apparently, not GPLv2.
-
-Finally, please include in the same patch series a patch updating the
-DEVELOPERS file for this new package addition.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
+index 4306254..99d231e 100644
+--- a/package/rp-pppoe/rp-pppoe.mk
++++ b/package/rp-pppoe/rp-pppoe.mk
+@@ -15,8 +15,16 @@ RP_PPPOE_TARGET_SCRIPTS = pppoe-connect pppoe-init pppoe-setup pppoe-start \
+ 	pppoe-status pppoe-stop
+ RP_PPPOE_MAKE_OPTS = PLUGIN_DIR=/usr/lib/pppd/$(PPPD_VERSION)
+ RP_PPPOE_CONF_OPTS = --disable-debugging
++
++# The pppd, echo, setsid and id paths must be the ones on the
++# target. Indeed, the result of these checks is used to replace
++# variables in scripts that are installed in the target.
+ RP_PPPOE_CONF_ENV = \
+ 	rpppoe_cv_pack_bitfields=normal \
++	ac_cv_path_PPPD=/usr/sbin/pppd \
++	ac_cv_path_ECHO=/bin/echo \
++	ac_cv_path_SETSID=/usr/bin/setsid \
++	ac_cv_path_ID=/usr/bin/id \
+ 	PPPD_H=$(PPPD_DIR)/pppd/pppd.h
+ 
+ define RP_PPPOE_INSTALL_TARGET_CMDS
