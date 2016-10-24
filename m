@@ -1,31 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 24 Oct 2016 16:41:07 +0000
-Subject: [Buildroot] [Bug 8696] xdriver_xf86-input-mouse install header
- files in target directory
-In-Reply-To: <bug-8696-163@https.bugs.busybox.net/>
-References: <bug-8696-163@https.bugs.busybox.net/>
-Message-ID: <bug-8696-163-YwKxnC4XQn@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Oct 2016 18:46:00 +0200
+Subject: [Buildroot] [PATCH] legacy: add missing select
+Message-ID: <1477327560-12770-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8696
+When adding a boolean option to legacy, it should slect BR2_LEGACY, to
+trigger the legacy warning.
 
---- Comment #11 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Hello,
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ Config.in.legacy | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I just sent a series to fix this issue:
-    http://lists.busybox.net/pipermail/buildroot/2016-October/175496.html
-
-Please give it a spin, and see if it fixes it for you.
-
-Please, can you also reply to my question in comment #9?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 50ccedd..8c41b05 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -149,6 +149,7 @@ config BR2_PACKAGE_PHP_SAPI_CLI_CGI
+ 	bool "PHP CGI and CLI options are now seperate"
+ 	select BR2_PACKAGE_PHP_SAPI_CLI
+ 	select BR2_PACKAGE_PHP_SAPI_CGI
++	select BR2_LEGACY
+ 	help
+ 	  The PHP Interface options have been split up into a
+ 	  separate option for each interface.
+@@ -157,6 +158,7 @@ config BR2_PACKAGE_PHP_SAPI_CLI_FPM
+ 	bool "PHP CLI and FPM options are now separate"
+ 	select BR2_PACKAGE_PHP_SAPI_CLI
+ 	select BR2_PACKAGE_PHP_SAPI_FPM
++	select BR2_LEGACY
+ 	help
+ 	  The PHP Interface options have been split up into a
+ 	  separate option for each interface.
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.7.4
