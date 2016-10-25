@@ -1,35 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 24 Oct 2016 21:56:19 +0000
-Subject: [Buildroot] [Bug 8831] image generation fails on host ZFS due to
-	"no free space"
-In-Reply-To: <bug-8831-163@https.bugs.busybox.net/>
-References: <bug-8831-163@https.bugs.busybox.net/>
-Message-ID: <bug-8831-163-EQNqTX7FcQ@https.bugs.busybox.net/>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Tue, 25 Oct 2016 13:21:23 +1100
+Subject: [Buildroot] Report from the Buildroot Meeting in Berlin
+In-Reply-To: <20161024092546.21e4dc0f@free-electrons.com>
+References: <20161019221035.2350c181@free-electrons.com>
+ <20161024005421.GA2747@tungsten.ozlabs.ibm.com>
+ <20161024092546.21e4dc0f@free-electrons.com>
+Message-ID: <20161025022123.GB8599@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8831
+On Mon, Oct 24, 2016 at 09:25:46AM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 24 Oct 2016 11:54:23 +1100, Sam Bobroff wrote:
+> 
+> > >  - Improving the developer experience when using _OVERRIDE_SRCDIR or
+> > >    "local" packages. Currently, since the source code is copied in the
+> > >    build directory, the build errors and warnings refers to the build
+> > >    directory. That's not convenient for users running an IDE, since
+> > >    clicking on the warning or error does not bring to the correct
+> > >    file. After much discusion, it appears that the only reasonable
+> > >    solution is to implement per-package out-of-tree build.  
+> > 
+> > Great! Will this allow the use of --delete with the rsync that copies the
+> > source? (It would fix the problem caused by certain moved/renamed files in your
+> > source directory when using _OVERRIDE_SOURCEDIR.)
+> 
+> Well, if we have per-package out-of-tree, then there is no rsync at all
+> anymore. The source code stays in the directory specified in
+> _OVERRIDE_SRCDIR, and only the build tree is in
+> output/build/<pkg>-<version>/.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-FWIW, the current release of e2fsprogs we have in Buildroot can generate
-filesystem images:
+That is even better, from my point of view (as someone who uses buildroot as a
+cross-compilation development environment) :-)
 
-./output/host/usr/sbin/mke2fs -d fs/ test.img 1024
+> However, this obviously works only for packages that use a sane build
+> system supporting out of tree build.
+> 
+> Best regards,
+> 
+> Thomas
 
-However, it will *not* solve the problem: you still have to pass the size of
-the filesystem to be created, either in number of blocks or in KB/MB/GB.
-Therefore, we still have to estimate it (like we're doing today), and
-potentially get it wrong.
-
-Maybe it is simply impossible to automatically calculate the filesystem size,
-and we should stop supporting auto-calculation, and instead ask the user to
-fill in a size for the filesystem (either in blocks or KB/MB/GB).
-
-Thoughts?
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Cheers,
+Sam.
