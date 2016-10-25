@@ -1,71 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2016 21:55:08 +0200
-Subject: [Buildroot] [PATCH] libglob: new package
-In-Reply-To: <20160801195836.30837-1-joerg.krause@embedded.rocks>
-References: <20160801195836.30837-1-joerg.krause@embedded.rocks>
-Message-ID: <20161025215508.7fe47ff8@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Oct 2016 21:58:32 +0200
+Subject: [Buildroot] [PATCH v2 1/2] rabbitmq-server: new package
+In-Reply-To: <CA+-urNQbHROqF0PAyPAaVtYKEA=3RTt8ZxYRKMF6SRxahvWcuA@mail.gmail.com>
+ (Frank Hunleth's message of "Tue, 25 Oct 2016 15:44:28 -0400")
+References: <1477410548-9977-1-git-send-email-fhunleth@troodon-software.com>
+ <87bmy8jl7m.fsf@dell.be.48ers.dk>
+ <CA+-urNQbHROqF0PAyPAaVtYKEA=3RTt8ZxYRKMF6SRxahvWcuA@mail.gmail.com>
+Message-ID: <8737jkjj4n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
-On Mon,  1 Aug 2016 21:58:36 +0200, J?rg Krause wrote:
-> libglob is the OpenBSD implementation of glob(3).
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Hi,
 
-I've applied your patch, with one minor change (see below).
+ >> > +ExecStop=/usr/sbin/rabbitmqctl stop
+ >> 
+ >> How does /var/run/rabbitmq get created in the systemd case?
 
-I remember this was necessary to fix the build of a package with musl.
-Do you remember which one?
+ > I'm actually getting skeptical that /var/run/rabbitmq really gets
+ > used. I saw that it was included somewhere else, but I think it's
+ > bogus. Our rabbitmq-server was originally running on a system that
+ > used BusyBox init. We're in the process of converting to systemd, and
+ > so far rabbitmq-server appears to be working without the directory.
+ > I'll be doing more testing in the next couple weeks, and assuming
+ > everything goes well, I'll send a patch up removing the
+ > /var/run/rabbitmq parts.
 
-> +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+OK, thanks!
 
-I've added:
-
-LIBGLOB_MAKE_TARGETS += libglob.so
-
-here.
-
-> +# $1: destination directory
-> +define LIBGLOB_INSTALL_SHARED
-> +	$(INSTALL) -m 0755 -D $(@D)/libglob.so.0.0.0 \
-> +		$(1)/usr/lib/libglob.so.0.0.0
-> +	ln -sf libglob.so.0.0.0 $(1)/usr/lib/libglob.so.0
-> +	ln -sf libglob.so.0.0.0 $(1)/usr/lib/libglob.so
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-
-LIBGLOB_MAKE_TARGETS += libglob.a
-
-here.
-
-> +# $1: destination directory
-> +define LIBGLOB_INSTALL_STATIC
-> +	$(INSTALL) -m 0644 -D $(@D)/libglob.a $(1)/usr/lib/libglob.a
-> +endef
-> +endif
-> +
-> +define LIBGLOB_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +		$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),libglob.so) \
-> +		$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),libglob.a)
-
-And replaced those two lines by:
-
-		$(LIBGLOB_MAKE_TARGETS)
-
-This way, we have the conditions around static/shared only in one place.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
