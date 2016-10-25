@@ -1,49 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2016 13:44:11 +0200
-Subject: [Buildroot] [PATCH 02/30] toolchain-external: pass CC and
- CFLAGS as arguments
-In-Reply-To: <d9ace2a7-d062-64a3-fe7d-9afeb4adec42@mind.be>
-References: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
- <1477255711-28603-3-git-send-email-romain.naour@gmail.com>
- <d9ace2a7-d062-64a3-fe7d-9afeb4adec42@mind.be>
-Message-ID: <20161025134411.12a91a7d@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Oct 2016 13:45:02 +0200
+Subject: [Buildroot] [PATCH 0/6] xorg: fix imput drivers install paths
+In-Reply-To: <20161025133942.7613a6cb@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 25 Oct 2016 13:39:42 +0200")
+References: <cover.1477327063.git.yann.morin.1998@free.fr>
+ <87funkllfh.fsf@dell.be.48ers.dk>
+ <20161025133942.7613a6cb@free-electrons.com>
+Message-ID: <87bmy8lkjl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 25 Oct 2016 13:07:01 +0200, Arnout Vandecappelle wrote:
+Hi,
 
->  This is exactly the same commit message as the previous commit. However, what
-> this patch actually does is
-> 
-> 1. Pass up CC and CFLAGS one level more
->  -> I think this should be squashed with the previous commit.  
-> 
-> 2. pass LIBS as arguments
->  -> This should be a separate commit, with the appropriate commit message.  
+ >> Sounds sensible to me. Did you try proposing the patches upstream?
 
-I believe Romain's idea is to split this per *function* (or family
-of functions) being changed, not per arguments being passed. So indeed,
-the wording of his commit titles and logs is not very good. It should
-have been:
+ > Yes, Yann was about to do this, we were discussing his cover letter for
+ > upstream yesterday evening.
 
- toolchain-external: TOOLCHAIN_EXTERNAL_CREATE_*_LIB_SYMLINK: use arguments instead of global variables
- toolchain-external: TOOLCHAIN_EXTERNAL_INSTALL_*_LIBS: use arguments instead of global variables
- toolchain-external: TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER: use arguments instead of global variables
- toolchain-external: TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER: use arguments instead of global variables
+Ok, great.
 
-I find this split a lot more logical than a split by argument being
-added, as the latter would mean a given function gets modified in two
-different patches.
+ >> This seems to overlap with the checks Samuel is adding,
+ >> E.G. TARGET_DIR/STAGING_DIR are subdirs of the host build directory, so
+ >> that check should catch these issues as well.
 
-Best regards,
+ > Hum, are you sure it's checking the same thing? Yann is checking that
+ > $(TARGET_DIR)/$(O) and $(STAGING_DIR)/$(O) don't exist.
 
-Thomas
+I was of the understanding that this was what the proposed
+leak-of-host-paths check was supposed to check, yes. Samuel?
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
