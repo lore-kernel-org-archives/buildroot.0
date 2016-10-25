@@ -1,50 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2016 22:57:01 +0200
-Subject: [Buildroot] [PATCHv2] pkg-infra: allow dumping reverse
- dependencies of a package
-In-Reply-To: <1477236531-16771-1-git-send-email-yann.morin.1998@free.fr>
-References: <1477236531-16771-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20161025225701.5e28fae7@free-electrons.com>
+Date: Tue, 25 Oct 2016 22:57:16 +0200
+Subject: [Buildroot] [git commit] package/erlang: add optional dependency to
+	unixodbc
+Message-ID: <20161025205742.1C8B280E58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f33fcdf2254beb07677a86416ff46ee6d7aed866
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 23 Oct 2016 17:28:51 +0200, Yann E. MORIN wrote:
-> Finding the packages that select another one in a specific configuration
-> is not very trivial:
-> 
->   - when optional, the dependency is not expressed in Kconfig
-> 
->   - looking at the .mk files is not very nice.
-> 
-> Introduce a way to dump reverse dependencies of packages, i.e. the list
-> of packages that directly depend on that package. Like for direct
-> dependencies, we limit the list to the first-order reverse dependencies.
-> 
-> Document it in the main help; use the opportunity to also document
-> foo-show-depends.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - only add dependencies for enabled packages  (Thomas)
->   - typoes  (Arnout)
-> ---
->  Makefile               | 2 ++
->  package/pkg-generic.mk | 7 +++++++
->  2 files changed, 9 insertions(+)
+Quote from erlang configure without unixodbc:
 
-Applied to master, thanks.
+checking for odbc in standard locations... no
+configure: WARNING: No odbc library found skipping odbc
+configure: WARNING: "ODBC library - header check failed"
+configure: WARNING: "ODBC library - link check failed"
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Quote from erlang configure with unixodbc:
+
+checking for odbc in standard locations... -L/home/buildroot/br3_couchdb/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/lib
+checking for SQLAllocHandle in -lodbc... yes
+
+To check for unixodbc support used by erlang use readelf:
+
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/erlang/lib/odbc-2.11.1/priv/bin/odbcserver | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libodbc.so.2]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+
+Tested using this minimal defconfig:
+
+BR2_PACKAGE_ERLANG=y
+BR2_PACKAGE_ERLANG_SMP=y
+BR2_PACKAGE_UNIXODBC=y
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang/erlang.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 6efffde..c9d7b22 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -55,6 +55,10 @@ else
+ ERLANG_CONF_OPTS += --without-ssl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_UNIXODBC),y)
++ERLANG_DEPENDENCIES += unixodbc
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ ERLANG_CONF_OPTS += --enable-shared-zlib
+ ERLANG_DEPENDENCIES += zlib
