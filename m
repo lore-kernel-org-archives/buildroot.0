@@ -1,60 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Oct 2016 19:57:08 +0200
-Subject: [Buildroot] [git commit] motion: bump to version 4.0.1
-Message-ID: <20161025175906.1E2DD800B0@busybox.osuosl.org>
+Date: Tue, 25 Oct 2016 19:52:24 +0200
+Subject: [Buildroot] [git commit] rsyslog: not available on musl
+Message-ID: <20161025175906.133528073E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c490f3b08f12a53a70899fe9fbbf07d3e4f6e4be
+commit: https://git.buildroot.net/buildroot/commit/?id=cea81b6925de166e2fd2c75a51aea94420f7f06a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: adjust autoreconf comment]
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+With musl C library, we get following error when building rsyslog:
+
+  imfile.c: In function 'in_setupFileWatchStatic':
+  imfile.c:1614:28: error: 'GLOB_BRACE' undeclared (first use in this function)
+        GLOB_MARK|GLOB_NOSORT|GLOB_BRACE, NULL, &files);
+                              ^
+flag GLOB_BRACE is not available on musl. Since package uses it
+unconditionally, we mark it not available for musl.
+
+Fixes:
+  http://autobuild.buildroot.net/results/6d4/6d480bb1e1466809d8ff119f6b35bb91df00785c/
+
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/motion/motion.hash |  4 +---
- package/motion/motion.mk   | 12 ++----------
- 2 files changed, 3 insertions(+), 13 deletions(-)
+ package/rsyslog/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/motion/motion.hash b/package/motion/motion.hash
-index 27f66b5..e859117 100644
---- a/package/motion/motion.hash
-+++ b/package/motion/motion.hash
-@@ -1,4 +1,2 @@
- # Locally computed:
--sha256	0d1702c7958fd03b99bf4fdcb45d8e604864e5867034f825f2fc543e8be64549	motion-release-3.4.1.tar.gz
--sha256	24e7150b753da04f3477276c36ce5664453965f279196f892668063ca4d6e975	709f626b7ef83a2bb3ef1f77205276207ab27196.patch
--sha256	45ddb1599b850176a319afbcebb7f0bec309c918331da6d5fd6c3cba35387405	72193ccaff83fcb074c9aaa37c5691a8d8a18c7c.patch 
-+sha256	2f67669a09ce0481ecd987028dae1c5cb135dfdc3c254c06ab7c9ca0c6c183f0	motion-release-4.0.1.tar.gz
-diff --git a/package/motion/motion.mk b/package/motion/motion.mk
-index 16ce406..49c0c6a 100644
---- a/package/motion/motion.mk
-+++ b/package/motion/motion.mk
-@@ -4,22 +4,14 @@
- #
- ################################################################################
+diff --git a/package/rsyslog/Config.in b/package/rsyslog/Config.in
+index b3c146d..c4dc97a 100644
+--- a/package/rsyslog/Config.in
++++ b/package/rsyslog/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_RSYSLOG
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # modules
++	depends on !BR2_TOOLCHAIN_USES_MUSL # GLOB_BRACE
+ 	# Propagate the exact same dependency from libfastjson,
+ 	# even though rsyslog already depends on threads for itself:
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_THREADS
+@@ -16,8 +17,9 @@ config BR2_PACKAGE_RSYSLOG
  
--MOTION_VERSION = release-3.4.1
-+MOTION_VERSION = release-4.0.1
- MOTION_SITE = $(call github,Motion-Project,motion,$(MOTION_VERSION))
- MOTION_LICENSE = GPLv2
- MOTION_LICENSE_FILES = COPYING
- MOTION_DEPENDENCIES = host-pkgconf jpeg
--# From git and configure.ac is patched
-+# From git
- MOTION_AUTORECONF = YES
+ 	  http://www.rsyslog.com
  
--# This patch fixes detection of sqlite when cross-compiling
--MOTION_PATCH = \
--	https://github.com/Motion-Project/motion/commit/709f626b7ef83a2bb3ef1f77205276207ab27196.patch
--
--# This patch adds --with-sdl=[DIR] option to fix detection of sdl-config
--MOTION_PATCH += \
--	https://github.com/Motion-Project/motion/commit/72193ccaff83fcb074c9aaa37c5691a8d8a18c7c.patch
--
- # motion does not use any specific function of jpeg-turbo, so just relies on
- # jpeg selection
- MOTION_CONF_OPTS += --without-jpeg-turbo
+-comment "rsyslog needs a toolchain w/ threads, dynamic library"
++comment "rsyslog needs a uClibc or glibc toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
++		|| BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
