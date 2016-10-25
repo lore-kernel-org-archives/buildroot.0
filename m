@@ -1,39 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Oct 2016 13:45:02 +0200
-Subject: [Buildroot] [PATCH 0/6] xorg: fix imput drivers install paths
-In-Reply-To: <20161025133942.7613a6cb@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 25 Oct 2016 13:39:42 +0200")
-References: <cover.1477327063.git.yann.morin.1998@free.fr>
- <87funkllfh.fsf@dell.be.48ers.dk>
- <20161025133942.7613a6cb@free-electrons.com>
-Message-ID: <87bmy8lkjl.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Oct 2016 13:46:52 +0200
+Subject: [Buildroot] [git commit] swupdate: allow luajit to enable HAVE_LUA
+Message-ID: <20161025114833.B323B819A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=515ced20087407189bc5523a2bf7c19b239cb78d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Until now, HAVE_LUA=y was only passed when BR2_PACKAGE_LUA=y. However,
+swupdate can also use LuaJIT instead of the classic Lua. Therefore,
+this commit updates the package to use BR2_PACKAGE_HAS_LUAINTERPRETER
+and the luainterpreter virtual package.
 
- >> Sounds sensible to me. Did you try proposing the patches upstream?
+Note that the swupdate configuration needs to be updated separately
+(via swupdate-menuconfig) to enable Lua support, and to specify the
+Lua version (which should be jit-5.1 to link against LuaJIT).
 
- > Yes, Yann was about to do this, we were discussing his cover letter for
- > upstream yesterday evening.
+Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
+[Thomas: use the luainterpreter virtual package, expand commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/swupdate/swupdate.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Ok, great.
-
- >> This seems to overlap with the checks Samuel is adding,
- >> E.G. TARGET_DIR/STAGING_DIR are subdirs of the host build directory, so
- >> that check should catch these issues as well.
-
- > Hum, are you sure it's checking the same thing? Yann is checking that
- > $(TARGET_DIR)/$(O) and $(STAGING_DIR)/$(O) don't exist.
-
-I was of the understanding that this was what the proposed
-leak-of-host-paths check was supposed to check, yes. Samuel?
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 313a54f..d442810 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -39,8 +39,8 @@ else
+ SWUPDATE_MAKE_ENV += HAVE_LIBCURL=n
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LUA),y)
+-SWUPDATE_DEPENDENCIES += lua host-pkgconf
++ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
++SWUPDATE_DEPENDENCIES += luainterpreter host-pkgconf
+ SWUPDATE_MAKE_ENV += HAVE_LUA=y
+ else
+ SWUPDATE_MAKE_ENV += HAVE_LUA=n
