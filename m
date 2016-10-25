@@ -1,47 +1,197 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2016 23:28:42 +0200
-Subject: [Buildroot] [PATCH 2/2] package/lvm2: disable for musl
- toolchains
-In-Reply-To: <1471991636-29161-2-git-send-email-romain.naour@gmail.com>
-References: <1471991636-29161-1-git-send-email-romain.naour@gmail.com>
- <1471991636-29161-2-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161025232842.2e3a9c3c@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 25 Oct 2016 23:29:46 +0200
+Subject: [Buildroot] [PATCH v1] valgrind: bump version to 3.12.0
+Message-ID: <1477430986-18875-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+See [1] for release notes.
 
-On Wed, 24 Aug 2016 00:33:56 +0200, Romain Naour wrote:
-> lvm2 doesn't build with musl toolchains due to several assignment of read-only
-> variable like stdin, stdout and stderr.
-> Also, it use mallinfo function which is not available with musl.
-> 
-> These issues has been reported upstream [2] but some of them remains
-> even with the latest stable release 2.02.163.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/3d4df873a3d4fa199e03d8aa8694eafeac474e5a
-> [...]
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
-> [2] https://www.redhat.com/archives/linux-lvm/2016-February/msg00024.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/cryptsetup/Config.in    | 6 ++++--
->  package/dmraid/Config.in        | 6 ++++--
->  package/docker-engine/Config.in | 1 +
->  package/lvm2/Config.in          | 6 ++++--
->  package/udisks/Config.in        | 5 +++--
->  5 files changed, 16 insertions(+), 8 deletions(-)
+- removed 0003-mips-replace-addi-with-addiu.patch (applied upstream, see [2])
 
-Applied to master, thanks.
+[1] http://valgrind.org/docs/manual/dist.news.html
+[2] https://bugs.kde.org/show_bug.cgi?id=356112
 
-Thomas
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Patch 0003-mips-replace-addi-with-addiu.patch is only applied partly upstream,
+the '#ifdef' parts are missing.
+
+@Vicente: Should I re-add the upstream missing parts of the removed
+patch?
+---
+ .../0003-mips-replace-addi-with-addiu.patch        | 137 ---------------------
+ package/valgrind/valgrind.hash                     |   2 +-
+ package/valgrind/valgrind.mk                       |   2 +-
+ 3 files changed, 2 insertions(+), 139 deletions(-)
+ delete mode 100644 package/valgrind/0003-mips-replace-addi-with-addiu.patch
+
+diff --git a/package/valgrind/0003-mips-replace-addi-with-addiu.patch b/package/valgrind/0003-mips-replace-addi-with-addiu.patch
+deleted file mode 100644
+index 624f6fa..0000000
+--- a/package/valgrind/0003-mips-replace-addi-with-addiu.patch
++++ /dev/null
+@@ -1,137 +0,0 @@
+-mips: replace addi with addiu
+-
+-ADDI instruction has been removed in R6 so let's use ADDIU instead.
+-
+-This patch has been sent upstream:
+-
+-  https://bugs.kde.org/show_bug.cgi?id=356112
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-Index: valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S
+-===================================================================
+---- valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S	(revision 15740)
+-+++ valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S	(working copy)
+-@@ -196,7 +196,7 @@
+-         addu $13, $13, $14
+- 
+-         lw $12, 0($13) /* t3 = VG_(tt_fast)[hash] :: ULong* */
+--        addi $13, $13, 4
+-+        addiu $13, $13, 4
+-         lw $25, 0($13) /* little-endian, so comparing 1st 32bit word */
+-         nop
+- 
+-Index: valgrind/coregrind/m_dispatch/dispatch-mips64-linux.S
+-===================================================================
+---- valgrind/coregrind/m_dispatch/dispatch-mips64-linux.S	(revision 15740)
+-+++ valgrind/coregrind/m_dispatch/dispatch-mips64-linux.S	(working copy)
+-@@ -196,7 +196,7 @@
+-         daddu $13, $13, $14
+-
+-         ld $12, 0($13) /* t3 = VG_(tt_fast)[hash] :: ULong* */
+--        daddi $13, $13, 8
+-+        daddiu $13, $13, 8
+-         ld $25, 0($13) /* little-endian, so comparing 1st 32bit word */
+-         nop
+-
+-Index: valgrind/coregrind/m_libcsetjmp.c
+-===================================================================
+---- valgrind/coregrind/m_libcsetjmp.c	(revision 15740)
+-+++ valgrind/coregrind/m_libcsetjmp.c	(working copy)
+-@@ -594,7 +594,7 @@
+- /* Checking whether second argument is zero. */
+- "   bnez $a1, 1f                \n\t"
+- "   nop                         \n\t"
+--"   addi $a1, $a1, 1            \n\t"  /* We must return 1 if val=0. */
+-+"   addiu $a1, $a1, 1           \n\t"  /* We must return 1 if val=0. */
+- "1:                             \n\t"
+- "   move $v0, $a1               \n\t"  /* Return value of second argument. */
+- "   j    $ra                    \n\t"
+-Index: valgrind/coregrind/m_syswrap/syswrap-mips64-linux.c
+-===================================================================
+---- valgrind/coregrind/m_syswrap/syswrap-mips64-linux.c	(revision 15740)
+-+++ valgrind/coregrind/m_syswrap/syswrap-mips64-linux.c	(working copy)
+-@@ -173,7 +173,7 @@
+- "   ld $30, 8($29)\n"
+- "   ld $28, 16($29)\n"
+- "   jr $31\n"
+--"   daddi $29,$29, 32\n"
+-+"   daddiu $29,$29, 32\n"
+- ".previous\n"
+- );
+-
+-Index: valgrind/coregrind/m_trampoline.S
+-===================================================================
+---- valgrind/coregrind/m_trampoline.S	(revision 15740)
+-+++ valgrind/coregrind/m_trampoline.S	(working copy)
+-@@ -1254,8 +1254,8 @@
+-       //la $a0, string
+-       j strlen_cond
+-    strlen_loop:
+--      addi $v0, $v0, 1
+--      addi $a0, $a0, 1
+-+      addiu $v0, $v0, 1
+-+      addiu $a0, $a0, 1
+-    strlen_cond:
+-       lbu $t0, ($a0)
+-       bne $t0, $zero, strlen_loop
+-Index: valgrind/helgrind/tests/tc08_hbl2.c
+-===================================================================
+---- valgrind/helgrind/tests/tc08_hbl2.c	(revision 15740)
+-+++ valgrind/helgrind/tests/tc08_hbl2.c	(working copy)
+-@@ -125,11 +125,11 @@
+- #  define INC(_lval,_lqual)                         \
+-      __asm__ __volatile__ (                         \
+-       "L1xyzzy1" _lqual":\n"                        \
+--      "        move $t0, %0\n"                      \
+--      "        ll   $t1, 0($t0)\n"                  \
+--      "        addi $t1, $t1, 1\n"                  \
+--      "        sc   $t1, 0($t0)\n"                  \
+--      "        beqz $t1, L1xyzzy1" _lqual           \
+-+      "        move  $t0, %0\n"                     \
+-+      "        ll    $t1, 0($t0)\n"                 \
+-+      "        addiu $t1, $t1, 1\n"                 \
+-+      "        sc    $t1, 0($t0)\n"                 \
+-+      "        beqz  $t1, L1xyzzy1" _lqual          \
+-       : /*out*/ : /*in*/ "r"(&(_lval))              \
+-       : /*trash*/ "t0", "t1", "memory"              \
+-         )
+-Index: valgrind/VEX/priv/guest_mips_toIR.c
+-===================================================================
+---- valgrind/VEX/priv/guest_mips_toIR.c	(revision 3206)
+-+++ valgrind/VEX/priv/guest_mips_toIR.c	(working copy)
+-@@ -16794,6 +16794,7 @@
+-                                      mkU64(0x0) : mkU32(0x0)))), imm);
+-       break;
+-
+-+#if defined(__mips__) && ((defined(__mips_isa_rev) && __mips_isa_rev < 6))
+-    case 0x08: {  /* ADDI */
+-       DIP("addi r%u, r%u, %u", rt, rs, imm);
+-       IRTemp tmpRs32 = newTemp(Ity_I32);
+-@@ -16831,6 +16832,8 @@
+-       putIReg(rt,  mkWidenFrom32(ty, mkexpr(t0), True));
+-       break;
+-    }
+-+#endif
+-+
+-    case 0x09:  /* ADDIU */
+-       DIP("addiu r%u, r%u, %u", rt, rs, imm);
+-       if (mode64) {
+-@@ -16888,7 +16891,8 @@
+-                                             mkU32(extend_s_16to32(imm)))));
+-       break;
+-
+--   case 0x18: {  /* Doubleword Add Immidiate - DADD; MIPS64 */
+-+#if defined(__mips__) && ((defined(__mips_isa_rev) && __mips_isa_rev < 6))
+-+   case 0x18: {  /* Doubleword Add Immidiate - DADDI; MIPS64 */
+-       DIP("daddi r%u, r%u, %u", rt, rs, imm);
+-       IRTemp tmpRs64 = newTemp(Ity_I64);
+-       assign(tmpRs64, getIReg(rs));
+-@@ -16926,6 +16930,7 @@
+-       putIReg(rt,  mkexpr(t0));
+-       break;
+-    }
+-+#endif
+-
+-    case 0x19:  /* Doubleword Add Immidiate Unsigned - DADDIU; MIPS64 */
+-       DIP("daddiu r%u, r%u, %u", rt, rs, imm);
+diff --git a/package/valgrind/valgrind.hash b/package/valgrind/valgrind.hash
+index f2cd6e8..5d7da19 100644
+--- a/package/valgrind/valgrind.hash
++++ b/package/valgrind/valgrind.hash
+@@ -1,2 +1,2 @@
+ # From http://valgrind.org/downloads/current.html
+-md5	4ea62074da73ae82e0162d6550d3f129	valgrind-3.11.0.tar.bz2
++md5 6eb03c0c10ea917013a7622e483d61bb valgrind-3.12.0.tar.bz2
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index b97d446..09f7116 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VALGRIND_VERSION = 3.11.0
++VALGRIND_VERSION = 3.12.0
+ VALGRIND_SITE = http://valgrind.org/downloads
+ VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
+ VALGRIND_LICENSE = GPLv2 GFDLv1.2
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
