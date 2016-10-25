@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2016 23:35:22 +0200
-Subject: [Buildroot] [RESEND][PATCH v2 2/3] gcc: configs: rename
- BR2_EXTRA_GCC_CONFIG_OPTIONS
-In-Reply-To: <1470681301-6374-2-git-send-email-pgynther@google.com>
-References: <1470681301-6374-1-git-send-email-pgynther@google.com>
- <1470681301-6374-2-git-send-email-pgynther@google.com>
-Message-ID: <20161025233522.4452eba8@free-electrons.com>
+Date: Tue, 25 Oct 2016 23:36:52 +0200
+Subject: [Buildroot] [PATCH 1/1] perl: update config.{sub,
+ guess} using autotools hook
+In-Reply-To: <1477430469-17537-1-git-send-email-nunes.erico@gmail.com>
+References: <1477430469-17537-1-git-send-email-nunes.erico@gmail.com>
+Message-ID: <20161025233652.46faa126@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +13,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  8 Aug 2016 11:35:00 -0700, Petri Gynther wrote:
-> Rename BR2_EXTRA_GCC_CONFIG_OPTIONS to BR2_GCC_EXTRA_CONFIG_OPTIONS
-> to be consistent with BR2_GCC_* and BR2_BINUTILS_EXTRA_CONFIG_OPTIONS.
+On Tue, 25 Oct 2016 23:21:09 +0200, Erico Nunes wrote:
+> perl may fail to build on newer host architectures such as aarch64 due
+> to its inability to guess the host architecture to build 'miniperl',
+> which is built during the process. An error message looks like this:
 > 
-> Signed-off-by: Petri Gynther <pgynther@google.com>
+>   Configuring build-time miniperl for unknown
+>   ERROR: No $target defined (?!)
+>   ERROR: configure --mode=buildmini failed
+> 
+> This happens because the config.sub and config.guess files from perl are
+> not modified and may become outdated.
+> These files are normally updated automatically by a Buildroot hook for
+> autotools packages, to avoid problems like these.
+> Although perl uses the config.sub and config.guess files, it is not a
+> strict autotools package, so it is not defined as an "autotools-package"
+> in Buildroot and so it doesn't inherit the hook.
+> This commit makes perl borrow the hook from the autotools infrastructure
+> so that it can build on newer build architectures.
+> This has been tested by building it on an aarch64 host machine.
+> 
+> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 
-I've rejected this patch (2/3) and the following one (3/3). Indeed,
-those renames are not really necessary, and renaming options causes
-unnecessary breakage of existing configurations. So the benefit of the
-rename is too small compared to the breakage for users. I know it's
-annoying, I would also prefer to have a more consistent option naming,
-but some amount of backward compatibility is more important.
+Please use the get-developers script when sending patches, so that the
+appropriate developers are CC'ed. In this case, Fran?ois should have
+been CC'ed.
+
+Fran?ois, can you have a look at Erico's patch? See
+https://patchwork.ozlabs.org/patch/686713/.
 
 Thanks,
 
