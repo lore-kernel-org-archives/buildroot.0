@@ -1,197 +1,162 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 25 Oct 2016 23:29:46 +0200
-Subject: [Buildroot] [PATCH v1] valgrind: bump version to 3.12.0
-Message-ID: <1477430986-18875-1-git-send-email-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Oct 2016 23:31:47 +0200
+Subject: [Buildroot] [git commit] toolchain: configs: improve toolchain
+	config readability
+Message-ID: <20161025213353.41BED817BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See [1] for release notes.
+commit: https://git.buildroot.net/buildroot/commit/?id=8218ab8019bbab0538b484c663df4469e44fecf1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- removed 0003-mips-replace-addi-with-addiu.patch (applied upstream, see [2])
+Add (or move) comment lines in toolchain-related Config.in files
+to improve readability of the toolchain config section.
 
-[1] http://valgrind.org/docs/manual/dist.news.html
-[2] https://bugs.kde.org/show_bug.cgi?id=356112
+Source linux-headers/Config.in.host after toolchain-buildroot items.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+For toolchain-buildroot case, the config file now looks like this:
+*
+* Toolchain
+*
+
+*
+* Toolchain Buildroot Options
+*
+
+*
+* Kernel Header Options
+*
+
+*
+* uClibc Options
+*
+
+*
+* Binutils Options
+*
+
+*
+* GCC Options
+*
+
+*
+* Host GDB Options
+*
+
+*
+* Toolchain Generic Options
+*
+
+Signed-off-by: Petri Gynther <pgynther@google.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Patch 0003-mips-replace-addi-with-addiu.patch is only applied partly upstream,
-the '#ifdef' parts are missing.
+ package/gdb/Config.in.host              | 2 ++
+ package/linux-headers/Config.in.host    | 4 ++--
+ package/uclibc/Config.in                | 4 ++--
+ toolchain/toolchain-buildroot/Config.in | 5 +++--
+ toolchain/toolchain-common.in           | 2 ++
+ toolchain/toolchain-external/Config.in  | 2 ++
+ 6 files changed, 13 insertions(+), 6 deletions(-)
 
-@Vicente: Should I re-add the upstream missing parts of the removed
-patch?
----
- .../0003-mips-replace-addi-with-addiu.patch        | 137 ---------------------
- package/valgrind/valgrind.hash                     |   2 +-
- package/valgrind/valgrind.mk                       |   2 +-
- 3 files changed, 2 insertions(+), 139 deletions(-)
- delete mode 100644 package/valgrind/0003-mips-replace-addi-with-addiu.patch
-
-diff --git a/package/valgrind/0003-mips-replace-addi-with-addiu.patch b/package/valgrind/0003-mips-replace-addi-with-addiu.patch
-deleted file mode 100644
-index 624f6fa..0000000
---- a/package/valgrind/0003-mips-replace-addi-with-addiu.patch
-+++ /dev/null
-@@ -1,137 +0,0 @@
--mips: replace addi with addiu
--
--ADDI instruction has been removed in R6 so let's use ADDIU instead.
--
--This patch has been sent upstream:
--
--  https://bugs.kde.org/show_bug.cgi?id=356112
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--Index: valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S
--===================================================================
----- valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S	(revision 15740)
--+++ valgrind/coregrind/m_dispatch/dispatch-mips32-linux.S	(working copy)
--@@ -196,7 +196,7 @@
--         addu $13, $13, $14
-- 
--         lw $12, 0($13) /* t3 = VG_(tt_fast)[hash] :: ULong* */
---        addi $13, $13, 4
--+        addiu $13, $13, 4
--         lw $25, 0($13) /* little-endian, so comparing 1st 32bit word */
--         nop
-- 
--Index: valgrind/coregrind/m_dispatch/dispatch-mips64-linux.S
--===================================================================
----- valgrind/coregrind/m_dispatch/dispatch-mips64-linux.S	(revision 15740)
--+++ valgrind/coregrind/m_dispatch/dispatch-mips64-linux.S	(working copy)
--@@ -196,7 +196,7 @@
--         daddu $13, $13, $14
--
--         ld $12, 0($13) /* t3 = VG_(tt_fast)[hash] :: ULong* */
---        daddi $13, $13, 8
--+        daddiu $13, $13, 8
--         ld $25, 0($13) /* little-endian, so comparing 1st 32bit word */
--         nop
--
--Index: valgrind/coregrind/m_libcsetjmp.c
--===================================================================
----- valgrind/coregrind/m_libcsetjmp.c	(revision 15740)
--+++ valgrind/coregrind/m_libcsetjmp.c	(working copy)
--@@ -594,7 +594,7 @@
-- /* Checking whether second argument is zero. */
-- "   bnez $a1, 1f                \n\t"
-- "   nop                         \n\t"
---"   addi $a1, $a1, 1            \n\t"  /* We must return 1 if val=0. */
--+"   addiu $a1, $a1, 1           \n\t"  /* We must return 1 if val=0. */
-- "1:                             \n\t"
-- "   move $v0, $a1               \n\t"  /* Return value of second argument. */
-- "   j    $ra                    \n\t"
--Index: valgrind/coregrind/m_syswrap/syswrap-mips64-linux.c
--===================================================================
----- valgrind/coregrind/m_syswrap/syswrap-mips64-linux.c	(revision 15740)
--+++ valgrind/coregrind/m_syswrap/syswrap-mips64-linux.c	(working copy)
--@@ -173,7 +173,7 @@
-- "   ld $30, 8($29)\n"
-- "   ld $28, 16($29)\n"
-- "   jr $31\n"
---"   daddi $29,$29, 32\n"
--+"   daddiu $29,$29, 32\n"
-- ".previous\n"
-- );
--
--Index: valgrind/coregrind/m_trampoline.S
--===================================================================
----- valgrind/coregrind/m_trampoline.S	(revision 15740)
--+++ valgrind/coregrind/m_trampoline.S	(working copy)
--@@ -1254,8 +1254,8 @@
--       //la $a0, string
--       j strlen_cond
--    strlen_loop:
---      addi $v0, $v0, 1
---      addi $a0, $a0, 1
--+      addiu $v0, $v0, 1
--+      addiu $a0, $a0, 1
--    strlen_cond:
--       lbu $t0, ($a0)
--       bne $t0, $zero, strlen_loop
--Index: valgrind/helgrind/tests/tc08_hbl2.c
--===================================================================
----- valgrind/helgrind/tests/tc08_hbl2.c	(revision 15740)
--+++ valgrind/helgrind/tests/tc08_hbl2.c	(working copy)
--@@ -125,11 +125,11 @@
-- #  define INC(_lval,_lqual)                         \
--      __asm__ __volatile__ (                         \
--       "L1xyzzy1" _lqual":\n"                        \
---      "        move $t0, %0\n"                      \
---      "        ll   $t1, 0($t0)\n"                  \
---      "        addi $t1, $t1, 1\n"                  \
---      "        sc   $t1, 0($t0)\n"                  \
---      "        beqz $t1, L1xyzzy1" _lqual           \
--+      "        move  $t0, %0\n"                     \
--+      "        ll    $t1, 0($t0)\n"                 \
--+      "        addiu $t1, $t1, 1\n"                 \
--+      "        sc    $t1, 0($t0)\n"                 \
--+      "        beqz  $t1, L1xyzzy1" _lqual          \
--       : /*out*/ : /*in*/ "r"(&(_lval))              \
--       : /*trash*/ "t0", "t1", "memory"              \
--         )
--Index: valgrind/VEX/priv/guest_mips_toIR.c
--===================================================================
----- valgrind/VEX/priv/guest_mips_toIR.c	(revision 3206)
--+++ valgrind/VEX/priv/guest_mips_toIR.c	(working copy)
--@@ -16794,6 +16794,7 @@
--                                      mkU64(0x0) : mkU32(0x0)))), imm);
--       break;
--
--+#if defined(__mips__) && ((defined(__mips_isa_rev) && __mips_isa_rev < 6))
--    case 0x08: {  /* ADDI */
--       DIP("addi r%u, r%u, %u", rt, rs, imm);
--       IRTemp tmpRs32 = newTemp(Ity_I32);
--@@ -16831,6 +16832,8 @@
--       putIReg(rt,  mkWidenFrom32(ty, mkexpr(t0), True));
--       break;
--    }
--+#endif
--+
--    case 0x09:  /* ADDIU */
--       DIP("addiu r%u, r%u, %u", rt, rs, imm);
--       if (mode64) {
--@@ -16888,7 +16891,8 @@
--                                             mkU32(extend_s_16to32(imm)))));
--       break;
--
---   case 0x18: {  /* Doubleword Add Immidiate - DADD; MIPS64 */
--+#if defined(__mips__) && ((defined(__mips_isa_rev) && __mips_isa_rev < 6))
--+   case 0x18: {  /* Doubleword Add Immidiate - DADDI; MIPS64 */
--       DIP("daddi r%u, r%u, %u", rt, rs, imm);
--       IRTemp tmpRs64 = newTemp(Ity_I64);
--       assign(tmpRs64, getIReg(rs));
--@@ -16926,6 +16930,7 @@
--       putIReg(rt,  mkexpr(t0));
--       break;
--    }
--+#endif
--
--    case 0x19:  /* Doubleword Add Immidiate Unsigned - DADDIU; MIPS64 */
--       DIP("daddiu r%u, r%u, %u", rt, rs, imm);
-diff --git a/package/valgrind/valgrind.hash b/package/valgrind/valgrind.hash
-index f2cd6e8..5d7da19 100644
---- a/package/valgrind/valgrind.hash
-+++ b/package/valgrind/valgrind.hash
-@@ -1,2 +1,2 @@
- # From http://valgrind.org/downloads/current.html
--md5	4ea62074da73ae82e0162d6550d3f129	valgrind-3.11.0.tar.bz2
-+md5 6eb03c0c10ea917013a7622e483d61bb valgrind-3.12.0.tar.bz2
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index b97d446..09f7116 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 081073b..a36dc0f 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -1,3 +1,5 @@
++comment "Host GDB Options"
++
+ config BR2_PACKAGE_HOST_GDB
+ 	bool "Build cross gdb for the host"
+ 	# When the external toolchain gdbserver is used, we shouldn't
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index ae2a3cd..47ef25d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -1,8 +1,8 @@
++comment "Kernel Header Options"
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ 	bool
  
--VALGRIND_VERSION = 3.11.0
-+VALGRIND_VERSION = 3.12.0
- VALGRIND_SITE = http://valgrind.org/downloads
- VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
- VALGRIND_LICENSE = GPLv2 GFDLv1.2
--- 
-2.8.1
+-comment "Kernel Header Options"
+-
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index cbae096..fdf007e 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -1,12 +1,12 @@
+ if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 
++comment "uClibc Options"
++
+ config BR2_PACKAGE_UCLIBC
+ 	bool
+ 	default y
+ 	select BR2_PACKAGE_LINUX_HEADERS
+ 
+-comment "uClibc Options"
+-
+ config BR2_UCLIBC_CONFIG
+ 	string "uClibc configuration file to use?"
+ 	default "package/uclibc/uClibc-ng.config"
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index c89e181..c8436cc 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -2,6 +2,8 @@
+ 
+ if BR2_TOOLCHAIN_BUILDROOT
+ 
++comment "Toolchain Buildroot Options"
++
+ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
+ 	string "custom toolchain vendor name"
+ 	default "buildroot"
+@@ -18,8 +20,6 @@ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
+ 
+ 	  If you're not sure, just leave the default "buildroot" value.
+ 
+-source "package/linux-headers/Config.in.host"
+-
+ choice
+ 	prompt "C library"
+ 	default BR2_TOOLCHAIN_UCLIBC
+@@ -89,6 +89,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+ 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 	default "musl"	 if BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 
++source "package/linux-headers/Config.in.host"
+ source "package/linux-headers/Config.in"
+ source "package/musl/Config.in"
+ source "package/uclibc/Config.in"
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index b682e4d..bf9dc7b 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -5,6 +5,8 @@
+ # so put it here instead
+ source "package/gdb/Config.in.host"
+ 
++comment "Toolchain Generic Options"
++
+ # https://sourceware.org/bugzilla/show_bug.cgi?id=19405
+ config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405
+ 	bool
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index cdf01c9..5324599 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -1,5 +1,7 @@
+ if BR2_TOOLCHAIN_EXTERNAL
+ 
++comment "Toolchain External Options"
++
+ choice
+ 	prompt "Toolchain"
+ 
