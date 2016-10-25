@@ -1,55 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2016 12:38:46 +0200
-Subject: [Buildroot] [PATCH 00/30] Splitting the toolchain-external
- package
-In-Reply-To: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
-References: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161025123846.30632376@free-electrons.com>
+Date: Tue, 25 Oct 2016 12:43:27 +0200
+Subject: [Buildroot] [git commit] scripts/get-developers: correct type of
+	patches argument
+Message-ID: <20161025104503.03FA781D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1b0df8f23c690d9464d82f4d3e57fe2a334b5d98
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adding Peter, Arnout, Yann and Thomas DS in Cc.
+Current type for 'patches' argument is str. It supposed to only
+contain names of files.
 
-On Sun, 23 Oct 2016 22:48:01 +0200, Romain Naour wrote:
+If we specify FileType as type, then we don't need to open file ourself
+and it allows script to read patch from standard input as well.
 
-> Here is the first version of the toolchain-external package infra which
-> was started by Thomas Petazzoni last year. This new infra will clearly
-> separate the common external toolchain logic from the
-> toolchain-specific details and generally make the external toolchain
-> code hopefully easier to maintain.
-> 
-> The four first patches change all the functions used in
-> INSTALL_STAGING_CMDS and INSTALL_TARGET_CMDS to take more arguments
-> rather than using global variables.
-> 
-> Then all toolchain packages are introduced but are not yet used since
-> the new toolchain-external infra will be added latter.
-> 
-> Before introduce the new toolchain-external infra, some specific
-> functions and logic are moved into a separate file (toolchain utility,
-> toolchain wrapper, variables definition, uClibc, musl and bfin).
-> 
-> The final patch introduce the new toolchain external package infra
-> (see it's commit log for more information).
+e.g.
+$ git show -1 | ./support/scripts/get-developers -
 
-Unless someone disagrees with this series, my intent is to apply it in
-the next few days. For having worked on this topic, I know how much of
-a pain it is to keep this series rebased on top of the latest master,
-so I'd like to get this merged soon.
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/get-developers     |  4 ++--
+ support/scripts/getdeveloperlib.py | 25 ++++++++++++-------------
+ 2 files changed, 14 insertions(+), 15 deletions(-)
 
-Therefore, if you disagree, please speak up now. If your only concerns
-are typos or further possible improvements, then those can be addressed
-once the series is merged, in patches of much more reasonable size.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/support/scripts/get-developers b/support/scripts/get-developers
+index 8b1891d..83f1e5b 100755
+--- a/support/scripts/get-developers
++++ b/support/scripts/get-developers
+@@ -5,8 +5,8 @@ import getdeveloperlib
+ 
+ def parse_args():
+     parser = argparse.ArgumentParser()
+-    parser.add_argument('patches', metavar='P', type=str, nargs='*',
+-                        help='list of patches')
++    parser.add_argument('patches', metavar='P', type=argparse.FileType('r'), nargs='*',
++                        help='list of patches (use - to read patches from stdin)')
+     parser.add_argument('-a', dest='architecture', action='store',
+                         help='find developers in charge of this architecture')
+     parser.add_argument('-p', dest='package', action='store',
+diff --git a/support/scripts/getdeveloperlib.py b/support/scripts/getdeveloperlib.py
+index 7b39041..6519107 100644
+--- a/support/scripts/getdeveloperlib.py
++++ b/support/scripts/getdeveloperlib.py
+@@ -16,19 +16,18 @@ def analyze_patch(patch):
+     removed by the patch."""
+     files = set()
+     infras = set()
+-    with open(patch, "r") as f:
+-        for line in f:
+-            # If the patch is adding a package, find which infra it is
+-            m = FIND_INFRA_IN_PATCH.match(line)
+-            if m:
+-                infras.add(m.group(2))
+-            if not line.startswith("+++ "):
+-                continue
+-            line.strip()
+-            fname = line[line.find("/") + 1 : ].strip()
+-            if fname == "dev/null":
+-                continue
+-            files.add(fname)
++    for line in patch:
++        # If the patch is adding a package, find which infra it is
++        m = FIND_INFRA_IN_PATCH.match(line)
++        if m:
++            infras.add(m.group(2))
++        if not line.startswith("+++ "):
++            continue
++        line.strip()
++        fname = line[line.find("/") + 1 : ].strip()
++        if fname == "dev/null":
++            continue
++        files.add(fname)
+     return (files, infras)
+ 
+ FIND_INFRA_IN_MK = re.compile("^\$\(eval \$\((host-)?([^-]*)-package\)\)$")
