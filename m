@@ -1,44 +1,78 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Tue, 25 Oct 2016 09:59:54 +0200
-Subject: [Buildroot] [PATCH 00/51] TLP/PPS: intro, package cleanup.
-In-Reply-To: <c6791be8-032d-f800-0d2d-3b9597d05415@mind.be>
-References: <1476396838-12276-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <d8e3ec4c46175ca4d852efcfdea65c19@free-electrons.com>
- <c6791be8-032d-f800-0d2d-3b9597d05415@mind.be>
-Message-ID: <3048503.7rCYbyTDax@sagittea>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 25 Oct 2016 10:04:19 +0200
+Subject: [Buildroot] [PATCH v2] support/misc/Vagrantfile: bump to ubuntu
+	16.04
+In-Reply-To: <87r378bnk8.fsf@dell.be.48ers.dk>
+References: <1476741182-23366-1-git-send-email-angelo.compagnucci@gmail.com>
+ <87r378bnk8.fsf@dell.be.48ers.dk>
+Message-ID: <CA+TH9Vn=nu=bGb8BV0rDJSxXeQ-1ZH3abz415q5vbVPEEmerqA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnoult,
+Hi Peter,
 
-On Monday 17 October 2016 18:52:43 Arnout Vandecappelle wrote:
-> On 17-10-16 18:02, Gustavo Zacarias wrote:
-> [snip]
-> 
-> > And then there's PPL (Per-Package Logging) since looking at the
-> > output when building TLP makes debugging very hard, so having a
-> > per-package configure/build/install/etc log will make life easier
-> > (with a decent playback when things go bad).
-> 
->  Would be great, but isn't that super-complicated or wouldn't it
-> require major surgery to the infrastructure? You'd need to somehow
-> amend the _CMDS to redirect their output, or run every package in a
-> separate sub-make, or something like that...
+2016-10-22 14:00 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
 
-Even if I think it can't be an official solution, some time ago I 
-suggested a hack to redirect output of Buildroot in separate log files:
+> >>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> writes:
+>
+>  > * Updating to ubuntu 16.04
+>  > * Fixing dependencies
+>  > * Fixing locale complaints
+>  > * Removing unused packages
+>
+>  > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>  > ---
+>  > Changelog
+>
+>  > * Changed to C locale as suggested by Arnout Vandecappelle
+>
+>  >  support/misc/Vagrantfile | 9 ++++++---
+>  >  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+>  > diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+>  > index cf269fe..5e56d5d 100644
+>  > --- a/support/misc/Vagrantfile
+>  > +++ b/support/misc/Vagrantfile
+>  > @@ -12,7 +12,7 @@ VM_MEMORY=2048
+>  >  VM_CORES=1
+>
+>  >  Vagrant.configure('2') do |config|
+>  > -    config.vm.box = 'ubuntu/trusty64'
+>  > +    config.vm.box = 'bento/ubuntu-16.04'
+>
+> What is the reason to use a base image from the bento project instead of
+> the official ubuntu image?
+>
+> https://atlas.hashicorp.com/ubuntu/boxes/xenial64
 
-  http://lists.busybox.net/pipermail/buildroot/2014-November/112991.html
 
-I think it should also work with top level parallelization.
+The official images from Canonical are broken in many ways, for example
+this bug [1] prevents the image working properly cause it lacks the vagrant
+user.
+
+Bento images are instead very well tested and triaged from the Chef team,
+you can find more info here [2]
+
+[1] https://bugs.launchpad.net/cloud-images/+bug/1569237
+[2] http://chef.github.io/bento/
+
+Sincerely, Angelo
 
 
-BR,
+>
+>
+> --
+> Bye, Peter Korsgaard
+>
+
+
 
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Profile: http://it.linkedin.com/in/compagnucciangelo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161025/2f2c0cf7/attachment.html>
