@@ -1,40 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2016 17:38:23 +0200
-Subject: [Buildroot] [PATCH 00/30] Splitting the toolchain-external
- package
-In-Reply-To: <e1154660-3e25-d1fc-1279-738e7d5c110e@mind.be>
-References: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
- <f0262d9f-d9e0-9690-7a51-a094dd57c06b@mind.be>
- <20161025165404.2c91f30b@free-electrons.com>
- <e1154660-3e25-d1fc-1279-738e7d5c110e@mind.be>
-Message-ID: <20161025173823.4e6794b5@free-electrons.com>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Tue, 25 Oct 2016 21:18:59 +0530
+Subject: [Buildroot] [PATCH] rsyslog: not available on musl
+Message-ID: <1477410539-13478-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+With musl C library, we get following error when building rsyslog:
 
-On Tue, 25 Oct 2016 17:11:05 +0200, Arnout Vandecappelle wrote:
+  imfile.c: In function 'in_setupFileWatchStatic':
+  imfile.c:1614:28: error: 'GLOB_BRACE' undeclared (first use in this function)
+        GLOB_MARK|GLOB_NOSORT|GLOB_BRACE, NULL, &files);
+                              ^
+flag GLOB_BRACE is not available on musl. Since package uses it
+unconditionally, we mark it not available for musl.
 
-> > I'm personally fine with your proposal, we can keep everything in
-> > pkg-toolchain-external.mk, both the infrastructure itself and all its
-> > helper functions.  
-> 
->  OK! So, do you prefer Romain to respin, or will you just apply and we fix later?
+Fixes:
+  http://autobuild.buildroot.net/results/6d4/6d480bb1e1466809d8ff119f6b35bb91df00785c/
 
-Romain, could you respin with:
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+ package/rsyslog/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- - Fixing the commit titles/logs for the first four patches
-
- - Regroup the utility functions in pkg-toolchain-external.mk, as
-   Arnout suggests
-
-Thanks!
-
-Thomas
+diff --git a/package/rsyslog/Config.in b/package/rsyslog/Config.in
+index b3c146d..c4dc97a 100644
+--- a/package/rsyslog/Config.in
++++ b/package/rsyslog/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_RSYSLOG
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # modules
++	depends on !BR2_TOOLCHAIN_USES_MUSL # GLOB_BRACE
+ 	# Propagate the exact same dependency from libfastjson,
+ 	# even though rsyslog already depends on threads for itself:
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_THREADS
+@@ -16,8 +17,9 @@ config BR2_PACKAGE_RSYSLOG
+ 
+ 	  http://www.rsyslog.com
+ 
+-comment "rsyslog needs a toolchain w/ threads, dynamic library"
++comment "rsyslog needs a uClibc or glibc toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
++		|| BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.6.2
