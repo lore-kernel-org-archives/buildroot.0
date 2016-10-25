@@ -1,88 +1,101 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 25 Oct 2016 23:56:09 +0200
-Subject: [Buildroot] [PATCH] core/graph-depends: add option to graph
- reverse dependencies
-In-Reply-To: <20161025230434.2a2a69b1@free-electrons.com>
-References: <1477236531-16771-1-git-send-email-yann.morin.1998@free.fr>
- <1477243184-32610-1-git-send-email-yann.morin.1998@free.fr>
- <20161025230434.2a2a69b1@free-electrons.com>
-Message-ID: <20161025215609.GA3450@free.fr>
+From: =?UTF-8?q?Myl=C3=A8ne=20Josserand?= <mylene.josserand@free-electrons.com>
+Date: Tue, 25 Oct 2016 23:48:26 +0200
+Subject: [Buildroot] [PATCH 1/1] tzdata: Improve right/posix installation
+Message-ID: <20161025214826.17275-1-mylene.josserand@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Improve the right/posix timezone installation by creating new options
+to choose between these two versions. As one version is necessary, the
+default one is posix.
+Now, the user can install both versions or one of both. It reduces the
+image size when only one version is needed.
 
-On 2016-10-25 23:04 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 23 Oct 2016 19:19:44 +0200, Yann E. MORIN wrote:
-> > Now that we can dump the reverse dependencies of a package, add the
-> > ability to graph those.
-[--SNIP--]
-> I've applied, thanks. However, our logic that gets rid of "redundant"
-> dependencies also has the consequence of creating some graphs that are
-> quite weird.
-> 
-> I tested a configuration where I enabled python and libglib2, both of
-> which depend on libffi. When you do:
-> 
-> $ make libffi-show-rdepends
-> 
-> You get as expected "libglib2 python"
-> 
-> However, when you do
-> 
-> $ make libffi-graph-rdepends
-> 
-> The resulting graph is a bit weird. You would expect something like
-> this:
-> 
->            libffi
->        ------/ \------
->        |             |
->     libglib2       python
+Signed-off-by: Myl?ne Josserand <mylene.josserand@free-electrons.com>
+---
+ package/tzdata/tzdata.mk | 26 ++++++++++++++++++++------
+ system/Config.in         | 15 +++++++++++++++
+ 2 files changed, 35 insertions(+), 6 deletions(-)
 
-make BR2_GRAPH_DEPS_OPTS='--transitive -d1' libffi-graph-rdepends
-would give you the expected graph.
-
-But using options is not what you want. ;-)
-
-> But instead, what you get is:
-> 
->   libffi
->     /\
->     ||
->    python
->     /\
->     ||
->  util-linux
->     /\
->     ||
->   libglib2
-> 
-> Because indeed libglib2 depends on util-linux, and util-linux can
-> optionally build python bindings and therefore depend on python.
-> 
-> Not sure what we can do about this: keeping all dependencies was really
-> creating huge and unreadable graphs.
-
-Well, that's the crux of the issue: keeping the whole graph is quickly
-unworkable with even non-complex configurations.
-
-Maybe what we should stress is that the graph-depends and graph-rdepends
-display the build-order dependencies.
-
-But yes, the apparent discrepancies between foo-show-rdepends and
-foo-graph-rdepends can look weird on first sight, but both are correct.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index de7d1be..d1ed21c 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -32,10 +32,20 @@ TZDATA_EXTRACT_CMDS =
+ define TZDATA_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/zoneinfo
+ 	cp -a $(HOST_DIR)/usr/share/zoneinfo/* $(TARGET_DIR)/usr/share/zoneinfo
+-	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
+-	for zone in posix/*; do                 \
+-	    ln -sfn "$${zone}" "$${zone##*/}";  \
+-	done
++	cd $(TARGET_DIR)/usr/share/zoneinfo;     \
++	if [ -n "$(BR2_TARGET_TZ_POSIX)" ]; then \
++		for zone in posix/*; do \
++			ln -sfn "$${zone}" "$${zone##*/}"; \
++		done \
++	fi;
++	# If "right" is the only version enabled
++	cd $(TARGET_DIR)/usr/share/zoneinfo; \
++	if [ -n "$(BR2_TARGET_TZ_RIGHT)" ] && [ -z "$(BR2_TARGET_TZ_POSIX)" ]; then \
++		for zone in right/*; do \
++			ln -sfn "$${zone}" "$${zone##*/}"; \
++		done \
++	fi;
++
+ 	if [ -n "$(TZDATA_LOCALTIME)" ]; then                           \
+ 	    if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/$(TZDATA_LOCALTIME) ]; then \
+ 	        printf "Error: '%s' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting\n" \
+@@ -51,8 +61,12 @@ endef
+ define HOST_TZDATA_BUILD_CMDS
+ 	(cd $(@D); \
+ 		for zone in $(TZDATA_ZONELIST); do \
+-			$(ZIC) -d _output/posix -y yearistype.sh $$zone || exit 1; \
+-			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone || exit 1; \
++			if [ -n "$(BR2_TARGET_TZ_POSIX)" ]; then \
++				$(ZIC) -d _output/posix -y yearistype.sh $$zone || exit 1; \
++			fi; \
++			if [ -n "$(BR2_TARGET_TZ_RIGHT)" ]; then \
++				$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone || exit 1; \
++			fi; \
+ 		done; \
+ 	)
+ endef
+diff --git a/system/Config.in b/system/Config.in
+index f9a3bda..dcc9f6b 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -429,6 +429,7 @@ config BR2_TARGET_TZ_INFO
+ 	select BR2_PACKAGE_TZDATA if BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_TZDATA if BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_TZ if BR2_TOOLCHAIN_USES_UCLIBC
++	select BR2_TARGET_TZ_POSIX if ! BR2_TARGET_TZ_RIGHT
+ 	help
+ 	  Say 'y' here to install timezone info.
+ 
+@@ -461,6 +462,20 @@ config BR2_TARGET_LOCALTIME
+ 	  If empty, no local time will be set, and the dates will be
+ 	  expressed in UTC.
+ 
++config BR2_TARGET_TZ_POSIX
++	tristate "Install the Posix timezone"
++	help
++	  The time zone can be provided by two versions : a posix and a right version.
++	  The "posix" version is based on the Coordinated Universal Time (UTC).
++	  This is the default one.
++
++config BR2_TARGET_TZ_RIGHT
++	tristate "Install the Right timezone"
++	help
++	  The time zone can be provided by two versions : a posix and a right version.
++	  The "right" version is based on the International Atomic Time (TAI) and
++	  includes the leap seconds.
++
+ endif # BR2_TARGET_TZ_INFO
+ 
+ config BR2_ROOTFS_USERS_TABLES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.9.3
