@@ -1,37 +1,34 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Tue, 25 Oct 2016 14:21:39 -0200
-Subject: [Buildroot] [PATCH 1/2] imx28evk: Fix the first partition location
-Message-ID: <1477412500-18757-1-git-send-email-fabio.estevam@nxp.com>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Tue, 25 Oct 2016 23:06:41 +0530
+Subject: [Buildroot] [PATCH] zyre: disable docs
+Message-ID: <1477417001-27870-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the SD card is connected to the host PC it can be mount as
-/dev/mmcblk0.
+Fixes:
+  http://autobuild.buildroot.net/results/c30/c307cfae46b800603b76f623840bd0fd950f0e3f/
 
-In this case the first partition is /dev/mmcblk0p1, not /dev/mmcblk01.
-
-So use the ${PART1} variable to correctly assign this location.
-
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 ---
- board/freescale/imx28evk/create-boot-sd.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Note: Build doesn't fail on my PC. But confirmed that docs doesn't build.
+---
+ package/zyre/zyre.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/freescale/imx28evk/create-boot-sd.sh b/board/freescale/imx28evk/create-boot-sd.sh
-index 5e050cb..bce2212 100755
---- a/board/freescale/imx28evk/create-boot-sd.sh
-+++ b/board/freescale/imx28evk/create-boot-sd.sh
-@@ -71,7 +71,7 @@ sync
+diff --git a/package/zyre/zyre.mk b/package/zyre/zyre.mk
+index 8647456..e47da97 100644
+--- a/package/zyre/zyre.mk
++++ b/package/zyre/zyre.mk
+@@ -11,6 +11,7 @@ ZYRE_LICENSE_FILES = LICENSE
+ ZYRE_INSTALL_STAGING = YES
+ ZYRE_DEPENDENCIES = czmq zeromq host-pkgconf
+ ZYRE_AUTORECONF = YES
++ZYRE_CONF_OPTS = --without-docs
  
- # Copy the bootloader at offset 2048
- # (We need to skip the partition table in the .sd, too.)
--dd if=output/images/u-boot.sd of=${DEV}1 bs=1M
-+dd if=output/images/u-boot.sd of=${PART1} bs=1M
- 
- # Prepare a temp dir for mounting partitions
- TMPDIR=$(mktemp -d)
+ define ZYRE_CREATE_CONFIG_DIR
+ 	mkdir -p $(@D)/config
 -- 
-2.7.4
+2.6.2
