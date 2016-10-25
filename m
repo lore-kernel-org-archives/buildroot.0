@@ -1,40 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2016 21:41:51 +0200
-Subject: [Buildroot] [git commit] swupdate: improved help text for Lua
-	support
-Message-ID: <20161025194202.1C69D81DA0@busybox.osuosl.org>
+Date: Tue, 25 Oct 2016 21:43:02 +0200
+Subject: [Buildroot] [PATCH 3/4] swupdate: improved help text for Lua
+ support
+In-Reply-To: <20160724232739.14132-4-jordan@yelloz.me>
+References: <20160724232739.14132-1-jordan@yelloz.me>
+ <20160724232739.14132-4-jordan@yelloz.me>
+Message-ID: <20161025214302.65896375@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02549bd9182f9d333dc47682d51c277786001467
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-It now explains limitations of building against Lua < 5.2 interpreters
-and how to link to LuaJIT library.
+On Sun, 24 Jul 2016 16:27:38 -0700, Jordan Yelloz wrote:
+> It now explains limitations of building against Lua < 5.2 interpreters
+> and how to link to LuaJIT library.
+> 
+> Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
+> ---
+>  package/swupdate/Config.in | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 
-Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/swupdate/Config.in | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+In the end, I decided to apply your patch, with just a little bit of
+rewording.
 
-diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-index d7217af..d9ef1bc 100644
---- a/package/swupdate/Config.in
-+++ b/package/swupdate/Config.in
-@@ -19,7 +19,11 @@ config BR2_PACKAGE_SWUPDATE
- 	  use your own modified configuration, you have to select the
- 	  necessary packages manually:
- 
--	  * Select BR2_PACKAGE_LUA if you want to have Lua support.
-+	  * Select BR2_PACKAGE_LUA or BR2_PACKAGE_LUAJIT if you want
-+	    to have Lua support.
-+	    CONFIG_HANDLER_IN_LUA is not supported in LuaJIT or Lua 5.1.
-+	    Note that for LuaJIT support, you need to set
-+	    CONFIG_LUAVERSION="jit-5.1".
- 	  * Select BR2_LIBCURL if you want to use the download feature.
- 	  * Select BR2_PACKAGE_OPENSSL is you want to add encryption support.
- 	  * Select BR2_PACKAGE_MTD if you want to use swupdate with UBI
+Following the discussion we had back in July, do not hesitate to send
+another patch series that uses KCONFIG_SET_OPT to automatically set the
+appropriate options in swupdate configuration. But this should be done
+not only for Lua, but also for other features.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
