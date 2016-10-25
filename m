@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2016 23:36:52 +0200
-Subject: [Buildroot] [PATCH 1/1] perl: update config.{sub,
- guess} using autotools hook
-In-Reply-To: <1477430469-17537-1-git-send-email-nunes.erico@gmail.com>
-References: <1477430469-17537-1-git-send-email-nunes.erico@gmail.com>
-Message-ID: <20161025233652.46faa126@free-electrons.com>
+Date: Tue, 25 Oct 2016 23:41:13 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain-wrapper.mk: refactor
+ additional flags into TARGET_FLAGS
+In-Reply-To: <4a388102-267d-9be5-b293-0877e55ca958@mind.be>
+References: <20161018185128.6404-1-arnout@mind.be>
+ <4a388102-267d-9be5-b293-0877e55ca958@mind.be>
+Message-ID: <20161025234113.45462506@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +14,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 25 Oct 2016 23:21:09 +0200, Erico Nunes wrote:
-> perl may fail to build on newer host architectures such as aarch64 due
-> to its inability to guess the host architecture to build 'miniperl',
-> which is built during the process. An error message looks like this:
-> 
->   Configuring build-time miniperl for unknown
->   ERROR: No $target defined (?!)
->   ERROR: configure --mode=buildmini failed
-> 
-> This happens because the config.sub and config.guess files from perl are
-> not modified and may become outdated.
-> These files are normally updated automatically by a Buildroot hook for
-> autotools packages, to avoid problems like these.
-> Although perl uses the config.sub and config.guess files, it is not a
-> strict autotools package, so it is not defined as an "autotools-package"
-> in Buildroot and so it doesn't inherit the hook.
-> This commit makes perl borrow the hook from the autotools infrastructure
-> so that it can build on newer build architectures.
-> This has been tested by building it on an aarch64 host machine.
-> 
-> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+On Tue, 18 Oct 2016 20:57:55 +0200, Arnout Vandecappelle wrote:
 
-Please use the get-developers script when sending patches, so that the
-appropriate developers are CC'ed. In this case, Fran?ois should have
-been CC'ed.
+>  So this is a part of a series I'm trying to build that will sanitize the flags
+> passed to the wrapper and passed to the build systems. The idea is that all the
+> flags that are currently hardcoded in toolchain-wrapper.c will move into
+> TARGET_FLAGS, and that all flags that are currently added to TARGET_CFLAGS but
+> not to the wrapper get added to TARGET_FLAGS as well.
+> 
+>  I have only lightly tested this; Vincent, please include this in your series
+> and test for real.
+> 
+>  I wanted to push this patch fast so Vicente can use it in his series. However,
+> the idea is to move all this setting of flags into a new .mk file. I was
+> thinking of toolchain/toolchain-flags.mk. If anyone has better ideas, please
+> speak up!
 
-Fran?ois, can you have a look at Erico's patch? See
-https://patchwork.ozlabs.org/patch/686713/.
+Following Vicente's feedback on -mmsa being unsuitable hardcoded in the
+wrapper as it breaks the kernel build, I guess your PATCH 2/2 is
+not suitable. And therefore, it makes PATCH 1/2 a bit useless.
+
+Until we figure out the appropriate way of solving this problem, I've
+marked those two patches as Changes Requested.
 
 Thanks,
 
