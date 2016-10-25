@@ -1,74 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2016 12:15:28 +0200
-Subject: [Buildroot] [PATCH] kvm-unit-tests: Fix x86_64 to use host
- compiler
-In-Reply-To: <20161025054240.10957-1-cyrilbur@gmail.com>
-References: <20161025054240.10957-1-cyrilbur@gmail.com>
-Message-ID: <20161025121528.7880d604@free-electrons.com>
+Date: Tue, 25 Oct 2016 12:35:20 +0200
+Subject: [Buildroot] [git commit] php: fix selection of interfaces depending
+	on BR2_USE_MMU
+Message-ID: <20161025103557.CFA207FFCB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cyril,
+commit: https://git.buildroot.net/buildroot/commit/?id=2d1ceeba0264c32b782d3a27ffbf532230274efd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for fixing this issue!
+Commit c457213fbca5f3493544c8a4335b623620458b0c reworked the selection
+of PHP interfaces, moving from a choice..endchoice to a three
+independent sub-options.
 
-On Tue, 25 Oct 2016 16:42:40 +1100, Cyril Bur wrote:
-> diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-> index 7fd03ad..cdce1e4 100644
-> --- a/package/kvm-unit-tests/kvm-unit-tests.mk
-> +++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-> @@ -4,20 +4,25 @@
->  #
->  ################################################################################
->  
-> -KVM_UNIT_TESTS_VERSION = 0b04ed0610035792514fd8499eb4dacc185520d9
-> +KVM_UNIT_TESTS_VERSION = 9111ccab0bb42d93d9f2b84c9089b5790e763056
+Thanks to how choices are handled by kconfig, an option suitable for
+noMMU platforms was automatically chosen by default. When the
+choice...endchoice got removed in
+c457213fbca5f3493544c8a4335b623620458b0c, we introduced a "select" for
+one of the interfaces, to make sure at least one interface is
+selected.
 
-Is this bump related to using the host compiler on x86-64 ? I don't
-think it is, so it should be a separate patch. Or if it's related, it
-should be explained in the commit log.
+Unfortunately, the selected interface does not build on noMMU
+platforms. In order to preserve the previous behavior (CGI interface
+is selected by default on MMU capable platforms), this commit makes
+the select logic a bit more complicated:
 
->  KVM_UNIT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/scm/virt/kvm/kvm-unit-tests.git
->  KVM_UNIT_TESTS_SITE_METHOD = git
->  KVM_UNIT_TESTS_LICENSE = LGPLv2
->  KVM_UNIT_TESTS_LICENSE_FILES = COPYRIGHT
->  
-> +#Use HOSTCC for x86_64 as we'll need to compile 32bit code
-> +#which buildroot cross compilers often can't do
+ - CGI is selected on MMU-capable platforms if neither CLI or FPM are
+   selected
 
-Add one space after the # on each line.
+ - CLI is selected on MMU-less platforms, since this is anyway the
+   only available interface.
 
-> +ifeq ($(BR2_x86_64),y)
-> +KVM_UNIT_TESTS_ARCH = x86_84
-> +else
-> +KVM_UNIT_TESTS_CONF_OPTS = --cross-prefix="$(TARGET_CROSS)"
-> +endif
->  ifeq ($(BR2_arm),y)
->  KVM_UNIT_TESTS_ARCH = arm
->  else ifeq ($(BR2_i386),y)
->  KVM_UNIT_TESTS_ARCH = i386
->  else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
->  KVM_UNIT_TESTS_ARCH = ppc64
-> -else ifeq ($(BR2_x86_64),y)
-> -KVM_UNIT_TESTS_ARCH = x86_84
->  endif
+Fixes:
 
-Please keep this sequence of ifeq / else ifeq / else ifeq / endif, and
-instead add:
+  http://autobuild.buildroot.net/results/85ea09188f1e996cb14b4b83a17736c096c569a8/
 
-# For all architectures but x86-64, use the cross-compiler. On x86-64,
-# use the host compiler, since we need to build 32 bits binaries
-ifneq ($(BR2_x86_64),y)
-KVM_UNIT_TESTS_CONF_OPTS = --cross-prefix="$(TARGET_CROSS)"
-endif
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/php/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/php/Config.in b/package/php/Config.in
+index 2e9e344..3020bcc 100644
+--- a/package/php/Config.in
++++ b/package/php/Config.in
+@@ -2,7 +2,9 @@ config BR2_PACKAGE_PHP
+ 	bool "php"
+ 	select BR2_PACKAGE_PHP_SAPI_CGI if \
+ 	       !BR2_PACKAGE_PHP_SAPI_CLI && \
+-	       !BR2_PACKAGE_PHP_SAPI_FPM
++	       !BR2_PACKAGE_PHP_SAPI_FPM &&  \
++	       BR2_USE_MMU
++	select BR2_PACKAGE_PHP_SAPI_CLI if !BR2_USE_MMU
+ 	help
+ 	  PHP  is a widely-used general-purpose scripting
+ 	  language that is especially suited for Web development
