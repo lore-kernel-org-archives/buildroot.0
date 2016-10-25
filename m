@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2016 22:03:05 +0200
-Subject: [Buildroot] [PATCH] support/scripts: tool to create fragments
-In-Reply-To: <1477425699-37971-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1477425699-37971-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20161025220305.1cb73355@free-electrons.com>
+Date: Tue, 25 Oct 2016 22:03:56 +0200
+Subject: [Buildroot] [PATCH v1] motion: fix static linking of mysql with
+ enabled libz library
+In-Reply-To: <1477424240-3672-1-git-send-email-ps.report@gmx.net>
+References: <1477424240-3672-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20161025220356.2df4024c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +13,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 25 Oct 2016 15:01:39 -0500, Matt Weber wrote:
-> From: Sam Voss <samuel.voss@rockwellcollins.com>
+On Tue, 25 Oct 2016 21:37:20 +0200, Peter Seiderer wrote:
+> Fixes ([1]):
 > 
-> Add script to create kconfig fragment; defaults to busybox fragment if
-> only one config is specified (compares to package/busybox/busybox.config).
+>   checking for mysql_init in -lmysqlclient... no
+>   configure: error: MySQL support can't build without MySQL libraries
 > 
-> Signed-off-by: Sam Voss <samuel.voss@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> [1] http://autobuild.buildroot.net/results/6cf/6cf38698a2a9a041ff375c01ae8898eace17cfb2
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Could you show an example on how this script is intended to be used ?
+Can I say how much I hate when packages don't use pkg-config ? :-)
+
+
+> +diff --git a/configure.ac b/configure.ac
+> +index 5782fd6..aa5d9dd 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -618,8 +618,8 @@ else
+> + 		#LDFLAGS="-L$MYSQL_LIBDIR"
+> + 		saved_CFLAGS=$CFLAGS
+> + 		saved_LIBS=$LIBS
+> +-		CFLAGS="-I$MYSQL_INCDIR"
+> +-		LIBS="-L$MYSQL_LIBDIR"
+> ++		CFLAGS="-I$MYSQL_INCDIR $CFLAGS"
+> ++		LIBS="-L$MYSQL_LIBDIR $LIBS"
+> + 		AC_CHECK_LIB(mysqlclient,mysql_init,[
+> + 					TEMP_LIBS="$TEMP_LIBS -L$MYSQL_LIBDIR -lmysqlclient -lz"
+
+Isn't it already linking with -lz here ?
+
+Why is an additional -lz needed ?
 
 Thanks,
 
