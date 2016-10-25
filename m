@@ -1,55 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Oct 2016 19:52:24 +0200
-Subject: [Buildroot] [git commit] rsyslog: not available on musl
-Message-ID: <20161025175906.133528073E@busybox.osuosl.org>
+Date: Tue, 25 Oct 2016 19:59:26 +0200
+Subject: [Buildroot] [PATCH] zyre: disable docs
+In-Reply-To: <1477417001-27870-1-git-send-email-rahul.bedarkar@imgtec.com>
+ (Rahul Bedarkar's message of "Tue, 25 Oct 2016 23:06:41 +0530")
+References: <1477417001-27870-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <87insgjon5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cea81b6925de166e2fd2c75a51aea94420f7f06a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Rahul" == Rahul Bedarkar <rahul.bedarkar@imgtec.com> writes:
 
-With musl C library, we get following error when building rsyslog:
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/c30/c307cfae46b800603b76f623840bd0fd950f0e3f/
 
-  imfile.c: In function 'in_setupFileWatchStatic':
-  imfile.c:1614:28: error: 'GLOB_BRACE' undeclared (first use in this function)
-        GLOB_MARK|GLOB_NOSORT|GLOB_BRACE, NULL, &files);
-                              ^
-flag GLOB_BRACE is not available on musl. Since package uses it
-unconditionally, we mark it not available for musl.
+ > Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+ > ---
+ > Note: Build doesn't fail on my PC. But confirmed that docs doesn't build.
 
-Fixes:
-  http://autobuild.buildroot.net/results/6d4/6d480bb1e1466809d8ff119f6b35bb91df00785c/
+Committed, thanks.
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rsyslog/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/rsyslog/Config.in b/package/rsyslog/Config.in
-index b3c146d..c4dc97a 100644
---- a/package/rsyslog/Config.in
-+++ b/package/rsyslog/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_RSYSLOG
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # modules
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # GLOB_BRACE
- 	# Propagate the exact same dependency from libfastjson,
- 	# even though rsyslog already depends on threads for itself:
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_THREADS
-@@ -16,8 +17,9 @@ config BR2_PACKAGE_RSYSLOG
- 
- 	  http://www.rsyslog.com
- 
--comment "rsyslog needs a toolchain w/ threads, dynamic library"
-+comment "rsyslog needs a uClibc or glibc toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
-+		|| BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-- 
+Bye, Peter Korsgaard
