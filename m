@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2016 23:34:08 +0200
-Subject: [Buildroot] [RESEND][PATCH v2 1/3] toolchain: configs: improve
- toolchain config readability
-In-Reply-To: <1470681301-6374-1-git-send-email-pgynther@google.com>
+Date: Tue, 25 Oct 2016 23:35:22 +0200
+Subject: [Buildroot] [RESEND][PATCH v2 2/3] gcc: configs: rename
+ BR2_EXTRA_GCC_CONFIG_OPTIONS
+In-Reply-To: <1470681301-6374-2-git-send-email-pgynther@google.com>
 References: <1470681301-6374-1-git-send-email-pgynther@google.com>
-Message-ID: <20161025233408.548c288b@free-electrons.com>
+ <1470681301-6374-2-git-send-email-pgynther@google.com>
+Message-ID: <20161025233522.4452eba8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +14,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  8 Aug 2016 11:34:59 -0700, Petri Gynther wrote:
-> Add (or move) comment lines in toolchain-related Config.in files
-> to improve readability of the toolchain config section.
-> 
-> Source linux-headers/Config.in.host after toolchain-buildroot items.
-> 
-> For toolchain-buildroot case, the config file now looks like this:
-> *
-> * Toolchain
-> *
-> 
-> *
-> * Toolchain Buildroot Options
-> *
-> 
-> *
-> * Kernel Header Options
-> *
-> 
-> *
-> * uClibc Options
-> *
-> 
-> *
-> * Binutils Options
-> *
-> 
-> *
-> * GCC Options
-> *
-> 
-> *
-> * Host GDB Options
-> *
-> 
-> *
-> * Toolchain Generic Options
-> *
+On Mon,  8 Aug 2016 11:35:00 -0700, Petri Gynther wrote:
+> Rename BR2_EXTRA_GCC_CONFIG_OPTIONS to BR2_GCC_EXTRA_CONFIG_OPTIONS
+> to be consistent with BR2_GCC_* and BR2_BINUTILS_EXTRA_CONFIG_OPTIONS.
 > 
 > Signed-off-by: Petri Gynther <pgynther@google.com>
-> ---
->  package/gdb/Config.in.host              | 2 ++
->  package/linux-headers/Config.in.host    | 4 ++--
->  package/uclibc/Config.in                | 4 ++--
->  toolchain/toolchain-buildroot/Config.in | 5 +++--
->  toolchain/toolchain-common.in           | 2 ++
->  toolchain/toolchain-external/Config.in  | 2 ++
->  6 files changed, 13 insertions(+), 6 deletions(-)
 
-Applied to master, thanks.
+I've rejected this patch (2/3) and the following one (3/3). Indeed,
+those renames are not really necessary, and renaming options causes
+unnecessary breakage of existing configurations. So the benefit of the
+rename is too small compared to the breakage for users. I know it's
+annoying, I would also prefer to have a more consistent option naming,
+but some amount of backward compatibility is more important.
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
