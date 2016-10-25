@@ -1,70 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Oct 2016 14:57:43 +0200
-Subject: [Buildroot] [PATCH 02/30] toolchain-external: pass CC and
- CFLAGS as arguments
-In-Reply-To: <20161025144843.24d86639@free-electrons.com>
-References: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
- <1477255711-28603-3-git-send-email-romain.naour@gmail.com>
- <d9ace2a7-d062-64a3-fe7d-9afeb4adec42@mind.be>
- <20161025134411.12a91a7d@free-electrons.com>
- <d5b1eb4e-5451-dc97-1a62-70ddb2898ae9@mind.be>
- <20161025144843.24d86639@free-electrons.com>
-Message-ID: <8cd79a3d-6d78-de81-d2bb-de4d5e890206@mind.be>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 25 Oct 2016 08:14:28 -0500
+Subject: [Buildroot] [PATCH v2] skeleton: /etc/network/interface.d/*
+	support
+In-Reply-To: <87twc1kkr2.fsf@dell.be.48ers.dk>
+References: <1471361908-51757-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20161022232831.030a10ad@free-electrons.com> <8737jnnubv.fsf@dell.be.48ers.dk>
+ <20161023141720.626b89d6@free-electrons.com>
+ <CANQCQpamR1dU8zTt_XwX_u2MgzLW3dBvw5e3Tc=RmGfhwW3g+Q@mail.gmail.com>
+ <87twc1kkr2.fsf@dell.be.48ers.dk>
+Message-ID: <CANQCQpZ5EyFnKAjzkyunDLOW2tn0g+dq6q2mF4UhXW16TKBcsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Peter,
 
+On Tue, Oct 25, 2016 at 1:25 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+>
+> Hi,
+>
+>  >> > We afaik provide no explicit guarantees on the ordering of the various
+>  >> > _TARGET_FINALIZE hooks
+>  >>
+>  >> Correct.
+>  >>
+>  >> >, but it afaik will run in (package-)alphabetical
+>  >> > order, E.G. before the finalize hooks of skeleton so this doesn't work
+>  >> > :/
+>  >>
+>  >> Hum, my thinking was that it did not matter if the "source" line is
+>  >> before or after the lo definition. However, the skeleton package
+>  >> completely overwrites the file, so indeed, it doesn't work.
+>
+>  > So leave it as is in the skeleton.mk?
+>
+> I think that is the only place we can add it, yes.
+>
+> With that said, there's afaik no packages using interface.d, so if this
+> is just for project customization then you might as well handle it there
+> (E.G. you might already have a custom interfaces or appending the line
+> to it in your post-build is easy).
 
-On 25-10-16 14:48, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 25 Oct 2016 14:46:01 +0200, Arnout Vandecappelle wrote:
-> 
->>>  toolchain-external: TOOLCHAIN_EXTERNAL_CREATE_*_LIB_SYMLINK: use arguments instead of global variables
->>>  toolchain-external: TOOLCHAIN_EXTERNAL_INSTALL_*_LIBS: use arguments instead of global variables
->>>  toolchain-external: TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER: use arguments instead of global variables
->>>  toolchain-external: TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER: use arguments instead of global variables
->>>
->>> I find this split a lot more logical than a split by argument being
->>> added, as the latter would mean a given function gets modified in two
->>> different patches.  
->>
->>  Sure, but then it would have been 4 patches instead of 2. The way it was split
->> up now was completely illogical IMHO.
-> 
-> There are four patches in the current patch series:
-> 
->   toolchain-external: pass CC and CFLAGS as arguments
->   toolchain-external: pass CC and CFLAGS as arguments
->   toolchain-external: pass arguments CROSS to install wrapper
->   toolchain-external: pass arguments CC, CFLAGS, INSTALL_DIR while
->     installing gdbserver
-> 
-> They are split *exactly* like I said above, except that their commit
-> title and description are not very good.
+Agree, but in this case we thought it might make sense to include by
+default, so that we encourage the practice of using that style of
+interface configuration which follows the behavior/intent of larger
+Linux distros.  Especially since the user intentionally enables
+ifupdown for more advanced use cases.
 
- I'm sorry, I was reading this mail to quickly, I only looked at
-TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT in the second patch and didn't
-notice the relation with TOOLCHAIN_EXTERNAL_INSTALL_*_LIBS (it is really
-installing libs, just not called _LIBS because the name is very long already I
-guess).
-
- I agree with the current split and your renaming.
-
- Regards,
- Arnout
-
-> 
-> Thomas
-> 
+I'm good either way.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
