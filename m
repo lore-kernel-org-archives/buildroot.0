@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2016 21:43:02 +0200
-Subject: [Buildroot] [PATCH 3/4] swupdate: improved help text for Lua
- support
-In-Reply-To: <20160724232739.14132-4-jordan@yelloz.me>
+Date: Tue, 25 Oct 2016 21:43:55 +0200
+Subject: [Buildroot] [PATCH 4/4] swupdate: added a warning for
+ LuaJIT/Lua 5.1
+In-Reply-To: <1469809234.3805.10.camel@embedded.rocks>
 References: <20160724232739.14132-1-jordan@yelloz.me>
- <20160724232739.14132-4-jordan@yelloz.me>
-Message-ID: <20161025214302.65896375@free-electrons.com>
+ <20160724232739.14132-5-jordan@yelloz.me>
+ <1469809234.3805.10.camel@embedded.rocks>
+Message-ID: <20161025214355.21a8d0d7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +15,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 24 Jul 2016 16:27:38 -0700, Jordan Yelloz wrote:
-> It now explains limitations of building against Lua < 5.2 interpreters
-> and how to link to LuaJIT library.
+On Fri, 29 Jul 2016 18:20:34 +0200, J?rg Krause wrote:
+
+> > +if BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
+> > +comment "swupdate cannot use CONFIG_HANDLER_IN_LUA with Lua API <
+> > 5.2."
+> > +comment "Lua parsers and pre/post-install hooks should still
+> > work.????"
+> > +endif
+> > +  
 > 
-> Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
-> ---
->  package/swupdate/Config.in | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> I would prefer to put this as a note in the help text.
 
-In the end, I decided to apply your patch, with just a little bit of
-rewording.
+Agreed. And it's actually in the help text now, thanks to PATCH 3/4 of
+this series. See
+https://git.buildroot.org/buildroot/commit/?id=02549bd9182f9d333dc47682d51c277786001467.
 
-Following the discussion we had back in July, do not hesitate to send
-another patch series that uses KCONFIG_SET_OPT to automatically set the
-appropriate options in swupdate configuration. But this should be done
-not only for Lua, but also for other features.
+So I'll mark this PATCH 4/4 as Rejected.
 
-Best regards,
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
