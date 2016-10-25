@@ -1,56 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 25 Oct 2016 17:27:42 +0200
-Subject: [Buildroot] [PATCH 1/1] motion: bump to version 4.0.1
-Message-ID: <1477409262-76278-1-git-send-email-fabrice.fontaine@orange.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Oct 2016 17:38:23 +0200
+Subject: [Buildroot] [PATCH 00/30] Splitting the toolchain-external
+ package
+In-Reply-To: <e1154660-3e25-d1fc-1279-738e7d5c110e@mind.be>
+References: <1477255711-28603-1-git-send-email-romain.naour@gmail.com>
+ <f0262d9f-d9e0-9690-7a51-a094dd57c06b@mind.be>
+ <20161025165404.2c91f30b@free-electrons.com>
+ <e1154660-3e25-d1fc-1279-738e7d5c110e@mind.be>
+Message-ID: <20161025173823.4e6794b5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
----
- package/motion/motion.hash |  4 +---
- package/motion/motion.mk   | 10 +---------
- 2 files changed, 2 insertions(+), 12 deletions(-)
+Hello,
 
-diff --git a/package/motion/motion.hash b/package/motion/motion.hash
-index 27f66b5..e859117 100644
---- a/package/motion/motion.hash
-+++ b/package/motion/motion.hash
-@@ -1,4 +1,2 @@
- # Locally computed:
--sha256	0d1702c7958fd03b99bf4fdcb45d8e604864e5867034f825f2fc543e8be64549	motion-release-3.4.1.tar.gz
--sha256	24e7150b753da04f3477276c36ce5664453965f279196f892668063ca4d6e975	709f626b7ef83a2bb3ef1f77205276207ab27196.patch
--sha256	45ddb1599b850176a319afbcebb7f0bec309c918331da6d5fd6c3cba35387405	72193ccaff83fcb074c9aaa37c5691a8d8a18c7c.patch 
-+sha256	2f67669a09ce0481ecd987028dae1c5cb135dfdc3c254c06ab7c9ca0c6c183f0	motion-release-4.0.1.tar.gz
-diff --git a/package/motion/motion.mk b/package/motion/motion.mk
-index 16ce406..bd9a63f 100644
---- a/package/motion/motion.mk
-+++ b/package/motion/motion.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOTION_VERSION = release-3.4.1
-+MOTION_VERSION = release-4.0.1
- MOTION_SITE = $(call github,Motion-Project,motion,$(MOTION_VERSION))
- MOTION_LICENSE = GPLv2
- MOTION_LICENSE_FILES = COPYING
-@@ -12,14 +12,6 @@ MOTION_DEPENDENCIES = host-pkgconf jpeg
- # From git and configure.ac is patched
- MOTION_AUTORECONF = YES
- 
--# This patch fixes detection of sqlite when cross-compiling
--MOTION_PATCH = \
--	https://github.com/Motion-Project/motion/commit/709f626b7ef83a2bb3ef1f77205276207ab27196.patch
--
--# This patch adds --with-sdl=[DIR] option to fix detection of sdl-config
--MOTION_PATCH += \
--	https://github.com/Motion-Project/motion/commit/72193ccaff83fcb074c9aaa37c5691a8d8a18c7c.patch
--
- # motion does not use any specific function of jpeg-turbo, so just relies on
- # jpeg selection
- MOTION_CONF_OPTS += --without-jpeg-turbo
+On Tue, 25 Oct 2016 17:11:05 +0200, Arnout Vandecappelle wrote:
+
+> > I'm personally fine with your proposal, we can keep everything in
+> > pkg-toolchain-external.mk, both the infrastructure itself and all its
+> > helper functions.  
+> 
+>  OK! So, do you prefer Romain to respin, or will you just apply and we fix later?
+
+Romain, could you respin with:
+
+ - Fixing the commit titles/logs for the first four patches
+
+ - Regroup the utility functions in pkg-toolchain-external.mk, as
+   Arnout suggests
+
+Thanks!
+
+Thomas
 -- 
-2.5.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
