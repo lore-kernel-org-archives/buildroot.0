@@ -1,157 +1,153 @@
 From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-Date: Tue, 25 Oct 2016 14:26:05 -0500
-Subject: [Buildroot] [PATCH v13 3/8] linux-pam: add system auth file and
-	host variant
+Date: Tue, 25 Oct 2016 14:26:08 -0500
+Subject: [Buildroot] [PATCH v13 6/8] qemu x86 selinux: base br defconfig
 In-Reply-To: <1477423570-15694-1-git-send-email-bryce.ferguson@rockwellcollins.com>
 References: <1477423570-15694-1-git-send-email-bryce.ferguson@rockwellcollins.com>
-Message-ID: <1477423570-15694-3-git-send-email-bryce.ferguson@rockwellcollins.com>
+Message-ID: <1477423570-15694-6-git-send-email-bryce.ferguson@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Niranjan <niranjan.reddy@rockwellcollins.com>
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
-This patch creates system-auth.pamd file for pam services
-and adds host-linux-pam variant for creating pam.d files.
+This will build a base SELinux system that boots with SELinux
+in permissive mode. Also adding documentation on how to use it.
 
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
 
 ---
 Changes v12 -> v13:
-  - No changes
+  - Bump kernel to 4.8
+  - Fixed error in fragment config line: 6 (ONFIG_EXT2_FS -> CONFIG_EXT2_FS)
 
 Changes v11 -> v12:
-  - No changes
+  - Bump kernel to 4.6
+  - Renamed fragment config to be 4.x vs 4.0
 
 Changes v10 -> v11:
-  - Added host-linux-pam variant as it is the dependency for creating pam_conv1 files.
-  - Removed semicolon at the end of if condition (after fi).
-  - Merged system auth patch with host selinux dependencies patch
+  - Removed configs BR2_ROOTFS_XXX (post build script,device table and overlay) from this patch
+    and added these configs to another patch (common-selinux-support-files.patch)
+  - Included configuration BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES in defconfig.
 
 Changes v9 -> v10:
-  - Dropped host linux-pam variant,optional selinux and audit dependencies and created seperate
-    Patches (Suggedted by Thomas).
+  - Changed version number of QEMU from 2.2.1 to 2.3.0
 
 Changes v8 -> v9:
   - No changes
 
 Changes v7 -> v8:
-  - Removed sub-shell around the config file install block and
-    refactored the block to use absolute paths for the copying
-    (Suggested by Samuel)
-  - Changed the enable-db=no configure option to disable-db to be
-    consistent with the rest of the configure options (Suggested by
-    Samuel)
+  - No changes
 
 Changes v6 -> v7:
-  - Added missing host-pkgconf dependency and removed unneeded
-    host-autoconf dependency(Clayton S.)
+  - No changes
 
 Changes v5 -> v6:
   - No changes
 
 Changes v4 -> v5:
-  - Dropping unneeded patch (Clayton S.)
+  - Update the qemu_x86_defconfig to the 4.0 kernel series (Clayton S.)
 
 Changes v1 -> v4:
   - Did not exist
 ---
- package/linux-pam/linux-pam.mk     | 41 +++++++++++++++++++++++++++++++++++++-
- package/linux-pam/system-auth.pamd | 15 ++++++++++++++
- 2 files changed, 55 insertions(+), 1 deletion(-)
- create mode 100644 package/linux-pam/system-auth.pamd
+ board/qemu/x86/linux-4.x-selinux.config | 19 +++++++++++++++++++
+ board/qemu/x86/readme.txt               | 17 +++++++++++++++++
+ configs/qemu_x86_selinux_defconfig      | 31 +++++++++++++++++++++++++++++++
+ 3 files changed, 67 insertions(+)
+ create mode 100644 board/qemu/x86/linux-4.x-selinux.config
+ create mode 100644 configs/qemu_x86_selinux_defconfig
 
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 6ce3839..57c2be2 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -8,15 +8,18 @@ LINUX_PAM_VERSION = 1.3.0
- LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.bz2
- LINUX_PAM_SITE = http://linux-pam.org/library
- LINUX_PAM_INSTALL_STAGING = YES
-+# disable cracklib in linux pam config options
- LINUX_PAM_CONF_OPTS = \
- 	--disable-prelude \
- 	--disable-isadir \
- 	--disable-nis \
- 	--disable-db \
-+	--disable-cracklib \
- 	--disable-regenerate-docu \
- 	--enable-securedir=/lib/security \
- 	--libdir=/lib
--LINUX_PAM_DEPENDENCIES = flex host-flex host-pkgconf
-+# host-linux-pam is needed for creating pam conf files
-+LINUX_PAM_DEPENDENCIES = flex host-flex host-pkgconf host-linux-pam
- LINUX_PAM_AUTORECONF = YES
- LINUX_PAM_LICENSE = BSD-3c
- LINUX_PAM_LICENSE_FILES = Copyright
-@@ -48,6 +51,42 @@ define LINUX_PAM_INSTALL_CONFIG
- 		$(TARGET_DIR)/etc/pam.d/other
- endef
- 
-+# Use the host-pam pam_conv1 app to create the pam.d files
-+define LINUX_PAM_CONFIG_FILE_TARGET_INSTALL
-+	if [ -d $(TARGET_DIR)/etc/pam.d/ ]; then \
-+		mv $(TARGET_DIR)/etc/pam.d/ $(TARGET_DIR)/etc/pam.d.orig/; \
-+	fi
-+	cd $(TARGET_DIR)/etc/ && cat $(@D)/conf/pam.conf | $(HOST_DIR)/usr/bin/pam_conv1; \
-+	if [ -d $(TARGET_DIR)/etc/pam.d.orig ]; then \
-+		cp -a $(TARGET_DIR)/etc/pam.d/* $(TARGET_DIR)/etc/pam.d.orig/; \
-+		rm -rf $(TARGET_DIR)/etc/pam.d/; \
-+		mv $(TARGET_DIR)/etc/pam.d.orig/ $(TARGET_DIR)/etc/pam.d/; \
-+	fi
-+	$(INSTALL) -D -m 0644 package/linux-pam/system-auth.pamd $(TARGET_DIR)/etc/pam.d/system-auth
-+endef
-+
-+LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_CONFIG_FILE_TARGET_INSTALL
- LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_INSTALL_CONFIG
- 
-+HOST_LINUX_PAM_DEPENDENCIES = host-flex host-pkgconf
-+
-+HOST_LINUX_PAM_CONF_OPTS = \
-+	--disable-rpath \
-+	--enable-read-both-confs \
-+	--disable-regenerate-docu \
-+	--disable-isadir \
-+	--disable-nis \
-+	--enable-securedir=/lib/security \
-+	--disable-prelude \
-+	--disable-cracklib \
-+	--disable-lckpwdf \
-+	--disable-db \
-+	--disable-selinux \
-+	--disable-audit \
-+
-+define HOST_LINUX_PAM_INSTALL_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/conf/pam_conv1/pam_conv1 $(HOST_DIR)/usr/bin/pam_conv1
-+endef
-+
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-diff --git a/package/linux-pam/system-auth.pamd b/package/linux-pam/system-auth.pamd
+diff --git a/board/qemu/x86/linux-4.x-selinux.config b/board/qemu/x86/linux-4.x-selinux.config
 new file mode 100644
-index 0000000..2fa116a
+index 0000000..6c715f0
 --- /dev/null
-+++ b/package/linux-pam/system-auth.pamd
-@@ -0,0 +1,15 @@
-+#%PAM-1.0
-+auth        required      pam_env.so
-+auth        sufficient    pam_unix.so
-+auth        required      pam_deny.so
++++ b/board/qemu/x86/linux-4.x-selinux.config
+@@ -0,0 +1,19 @@
++CONFIG_AUDIT=y
++CONFIG_MODULES=y
++CONFIG_IP_PNP=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT2_FS_XATTR=y
++CONFIG_EXT2_FS_POSIX_ACL=y
++CONFIG_EXT2_FS_SECURITY=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++CONFIG_EXT3_FS_SECURITY=y
++CONFIG_NFS_FS=y
++CONFIG_ROOT_NFS=y
++CONFIG_SECURITY=y
++CONFIG_SECURITY_NETWORK=y
++CONFIG_SECURITY_SELINUX=y
++CONFIG_SECURITY_SELINUX_BOOTPARAM=y
++CONFIG_CRYPTO_ANSI_CPRNG=y
+diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
+index 4f2e4c7..f7bf256 100644
+--- a/board/qemu/x86/readme.txt
++++ b/board/qemu/x86/readme.txt
+@@ -7,3 +7,20 @@ Optionally add -smp N to emulate a SMP system with N CPUs.
+ The login prompt will appear in the graphical window.
+ 
+ Tested with QEMU 2.5.0
 +
-+account     required      pam_unix.so
++-------------------------------------------------------------------
 +
-+#password    required      pam_cracklib.so try_first_pass retry=3
-+password    sufficient    pam_unix.so md5 shadow try_first_pass
-+password    required      pam_deny.so
++Run the SElinux target emulation with:
 +
-+session     optional      pam_keyinit.so revoke
-+session     required      pam_limits.so
-+session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
-+session     required      pam_unix.so
++  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append "root=/dev/sda rw console=ttyS0 selinux=1" -net nic,model=rtl8139 -net user -display none -serial stdio
++
++The emulation should reboot once the first time for relabeling and
++then provide a login prompt. The login is username root and password
++root because PAM requires a password in this secure configuration. To
++enable SELinux enforcing at boot, login and edit the
++/etc/selinux/config and set SELINUX to enforcing. Save and make sure
++to "sync" before restarting the emulation as the ext2 fs would
++otherwise corrupt when the emulation exits. After enforcing is
++default, the selinux= provided as part of the qemu "append" above can
++be used to turn enforcing on/off. This configuration would be tailored
++as part of a targets refpolicy customization.
+diff --git a/configs/qemu_x86_selinux_defconfig b/configs/qemu_x86_selinux_defconfig
+new file mode 100644
+index 0000000..ebfe4ca
+--- /dev/null
++++ b/configs/qemu_x86_selinux_defconfig
+@@ -0,0 +1,31 @@
++BR2_x86_pentiumpro=y
++
++# Internal tool chain glibc
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++
++# Select SYSV init to provide selinux enabled init
++BR2_INIT_SYSV=y
++BR2_ROOTFS_DEVICE_TABLE="system/device_table.txt board/common_selinux/skeleton_permissions.txt"
++BR2_TARGET_GENERIC_ROOT_PASSWD="root"
++BR2_ROOTFS_OVERLAY="board/common_selinux/skeleton"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/common_selinux/post_build.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-4.8.config"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/x86/linux-4.x-selinux.config"
++
++# Ensure busybox is built as individual binaries for the
++# SELinux refpolicy to work correctly
++BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES=y
++BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_REFPOLICY=y
++BR2_PACKAGE_RSYSLOG=y
++BR2_PACKAGE_UTIL_LINUX=y
++BR2_PACKAGE_UTIL_LINUX_BINARIES=y
++BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_RESBLKS=5
++BR2_PACKAGE_HOST_CHECKPOLICY=y
 -- 
 1.9.1
