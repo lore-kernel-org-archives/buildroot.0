@@ -1,48 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Oct 2016 12:18:00 +0200
-Subject: [Buildroot] [git commit] util-linux: fix host build when ncurses is
-	not installed
-Message-ID: <20161026102005.1E7E681E3B@busybox.osuosl.org>
+Date: Wed, 26 Oct 2016 12:23:35 +0200
+Subject: [Buildroot] [git commit] package/ti-sgx-km: indentation cleanup
+Message-ID: <20161026102338.9FC947FB23@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=679e133bfd6ec062659bb8cfe09b593e8081fef8
+commit: https://git.buildroot.net/buildroot/commit/?id=8dd0b2beace34a4f56471362a2b5a682699ec443
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-lib/colors.c uses HAVE_LIBTINFO to decide whether term.h and ncurses.h
-should be included. However, the configure.ac check is bogus: it
-checks for tinfo using pkg-config, and then if it fails, checks with
-AC_CHECK_LIB(). So, if you have tinfo installed, but not the
-corresponding development package, the pkg-config test will fail, but
-the AC_CHECK_LIB test will succeed, even though the headers are not
-available.
-
-To address this, we explicitly tell host-util-linux that tinfo is not
-available, like we're already doing for ncurses.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/3c447e601a7b728860e78cabf2191ab206e6480d/
-
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/util-linux/util-linux.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/ti-sgx-km/ti-sgx-km.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index bd6508c..cf03fd4 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -133,7 +133,8 @@ HOST_UTIL_LINUX_CONF_OPTS += \
- 	--enable-libblkid \
- 	--enable-libmount \
- 	--enable-libuuid \
--	--without-ncurses
-+	--without-ncurses \
-+	--without-tinfo
+diff --git a/package/ti-sgx-km/ti-sgx-km.mk b/package/ti-sgx-km/ti-sgx-km.mk
+index 58ba3f0..48c8a6d 100644
+--- a/package/ti-sgx-km/ti-sgx-km.mk
++++ b/package/ti-sgx-km/ti-sgx-km.mk
+@@ -31,7 +31,7 @@ TI_SGX_KM_SUBDIR = eurasia_km/eurasiacon/build/linux2/$(TI_SGX_KM_PLATFORM_NAME)
  
- ifeq ($(BR2_PACKAGE_HOST_UTIL_LINUX),y)
- HOST_UTIL_LINUX_CONF_OPTS += --disable-makeinstall-chown
+ define TI_SGX_KM_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TI_SGX_KM_MAKE_OPTS) \
+-		 -C $(@D)/$(TI_SGX_KM_SUBDIR)
++		-C $(@D)/$(TI_SGX_KM_SUBDIR)
+ endef
+ 
+ define TI_SGX_KM_INSTALL_TARGET_CMDS
