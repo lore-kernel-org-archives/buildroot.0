@@ -1,61 +1,53 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 26 Oct 2016 13:35:00 -0400
-Subject: [Buildroot] [PATCH 4/4] mfgtools: new package
-In-Reply-To: <CAAMH-ytjN5TC4tG7A7y_R0f7DpOnEHN33u8wgCJDqLk+kDCCug@mail.gmail.com>
-References: <20161019142309.15628-1-gary.bisson@boundarydevices.com>
- <20161019142309.15628-5-gary.bisson@boundarydevices.com>
- <CA+-urNRE0tx7RL-5WQCVqbiywUxu8eW1AJDP4vjPoWadkhN+xQ@mail.gmail.com>
- <CAAMH-ysyagimdb6+rk1Nq5JpYUkqwsBKAoRoRsz_E3c1i-yO0g@mail.gmail.com>
- <CA+-urNRFcDDP-s6KO7XWO_hrW6YNYLWBknEg6Dsb=GeeBS5Vqg@mail.gmail.com>
- <CAAMH-ytjN5TC4tG7A7y_R0f7DpOnEHN33u8wgCJDqLk+kDCCug@mail.gmail.com>
-Message-ID: <CA+-urNSigaUCdEaxYWB4gdyoyUroFeuUF=aQveoY7ORjrb1PmQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Oct 2016 21:13:54 +0200
+Subject: [Buildroot] [git commit] kvm-unit-tests: add gcc version
+	dependencies
+Message-ID: <20161026191410.C660D8172D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
+commit: https://git.buildroot.net/buildroot/commit/?id=bde0250f069d80a6f823766566d9b146d7559dce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Oct 26, 2016 at 4:56 AM, Gary Bisson
-<gary.bisson@boundarydevices.com> wrote:
-> Hi Frank,
->
-> On Mon, Oct 24, 2016 at 5:58 PM, Frank Hunleth
-> <fhunleth@troodon-software.com> wrote:
->> <snip>
->>> What happens exactly? I've generated an initramfs for the target that
->>> includes uuc and it was ok. Actually I had to do one thing manually
->>> which was to modprobe the g_mass_storage module manually. I need to
->>> add it to the init scripts but I'm not sure how to do that in the
->>> systemd service file, I need to look at it.
->>
->> I'm using a pre-existing 'ucl2.xml' that came with binaries for the
->> loader versions of U-Boot and Linux. I'm including it below since it's
->> not too long. The "BootStrap" stsps appeared to work. The "Updater"
->> steps hung at the "Sending U-Boot" command. I'm not convinced that the
->> other steps really worked, though, since it took them quite a while to
->> run like they may have just timed out. Since I rarely need to run this
->> script, I wasn't planning on debugging it. Maybe this will give you
->> some hints, though?
->
-> When you say the bootstrap steps are working, do you mean that you can
-> see on the serial console that U-Boot, Kernel and initramfs are
-> properly loaded and booted from?
->
-> Then the tool is actually going back to the "Sending U-Boot" state as
-> long as it doesn't recognize a UTP linux image booted up. If you're
-> system properly booted (1st question), it is most likely due to bad
-> permissions. Are you sure you have a udev rule for the UTP VID/PID? If
-> not, please add it (or use sudo, but it's evil).
+On x86 (both i386 and x86_64), the kvm-unit-tests code uses
+__builtin_reachable, which appeared in gcc 4.5. This commit adds the
+relevant dependencies to kvm-unit-tests:
 
-I actually ran it as sudo out of desperation when it wasn't working,
-and now due to unrelated issues, that particular board is no longer of
-interest. Sorry that I can't be of more help. If I get back to it in
-the future, I'll try some more. I don't think my experience should
-hold up your patch, since it clearly builds and runs (at least a
-little). I really appreciate you trying to help figure out what went
-wrong for me.
+ - on i386, we need gcc 4.5 as the target compiler
 
-Thanks,
-Frank
+ - on x86-64, we need gcc 4.5 as the host compiler, because we use the
+   host compiler to build kvm-unit-tests for this architecture
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/21340a7e6494e23adb2fe8dc6253ab220c380fec/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kvm-unit-tests/Config.in | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
+index d72c734..f704a8e 100644
+--- a/package/kvm-unit-tests/Config.in
++++ b/package/kvm-unit-tests/Config.in
+@@ -1,8 +1,14 @@
+ config BR2_PACKAGE_KVM_UNIT_TESTS
+ 	bool "kvm-unit-tests"
+ 	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_x86_64=y
+-	depends on BR2_arm || BR2_i386 || BR2_powerpc64 || \
+-		BR2_powerpc64le || BR2_x86_64
++	# on i386 and x86-64, __builtin_reachable is used, so we need
++	# gcc 4.5 at least. on i386, we use the target gcc, while on
++	# x86-64 we use the host gcc (see .mk file for details)
++	depends on BR2_arm || \
++		(BR2_i386 && BR2_TOOLCHAIN_GCC_AT_LEAST_4_5) || \
++		BR2_powerpc64 || \
++		BR2_powerpc64le || \
++		(BR2_x86_64 && BR2_HOST_GCC_AT_LEAST_4_5)
+ 	help
+ 	  kvm-unit-tests is a project as old as KVM. As its name
+ 	  suggests, it's purpose is to provide unit tests for KVM. The
