@@ -1,120 +1,61 @@
-From: Chris Frederick <cdf123@cdf123.net>
-Date: Wed, 26 Oct 2016 12:22:32 -0500
-Subject: [Buildroot] [PATCH 1/1] firejail: new package
-Message-ID: <1477502552-4236-1-git-send-email-cdf123@cdf123.net>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 26 Oct 2016 13:35:00 -0400
+Subject: [Buildroot] [PATCH 4/4] mfgtools: new package
+In-Reply-To: <CAAMH-ytjN5TC4tG7A7y_R0f7DpOnEHN33u8wgCJDqLk+kDCCug@mail.gmail.com>
+References: <20161019142309.15628-1-gary.bisson@boundarydevices.com>
+ <20161019142309.15628-5-gary.bisson@boundarydevices.com>
+ <CA+-urNRE0tx7RL-5WQCVqbiywUxu8eW1AJDP4vjPoWadkhN+xQ@mail.gmail.com>
+ <CAAMH-ysyagimdb6+rk1Nq5JpYUkqwsBKAoRoRsz_E3c1i-yO0g@mail.gmail.com>
+ <CA+-urNRFcDDP-s6KO7XWO_hrW6YNYLWBknEg6Dsb=GeeBS5Vqg@mail.gmail.com>
+ <CAAMH-ytjN5TC4tG7A7y_R0f7DpOnEHN33u8wgCJDqLk+kDCCug@mail.gmail.com>
+Message-ID: <CA+-urNSigaUCdEaxYWB4gdyoyUroFeuUF=aQveoY7ORjrb1PmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Firejail Security Sandbox
-https://firejail.wordpress.com/
+Hi Gary,
 
-Lightweight application sandboxing system using seccomp and kernel
-namespaces.
+On Wed, Oct 26, 2016 at 4:56 AM, Gary Bisson
+<gary.bisson@boundarydevices.com> wrote:
+> Hi Frank,
+>
+> On Mon, Oct 24, 2016 at 5:58 PM, Frank Hunleth
+> <fhunleth@troodon-software.com> wrote:
+>> <snip>
+>>> What happens exactly? I've generated an initramfs for the target that
+>>> includes uuc and it was ok. Actually I had to do one thing manually
+>>> which was to modprobe the g_mass_storage module manually. I need to
+>>> add it to the init scripts but I'm not sure how to do that in the
+>>> systemd service file, I need to look at it.
+>>
+>> I'm using a pre-existing 'ucl2.xml' that came with binaries for the
+>> loader versions of U-Boot and Linux. I'm including it below since it's
+>> not too long. The "BootStrap" stsps appeared to work. The "Updater"
+>> steps hung at the "Sending U-Boot" command. I'm not convinced that the
+>> other steps really worked, though, since it took them quite a while to
+>> run like they may have just timed out. Since I rarely need to run this
+>> script, I wasn't planning on debugging it. Maybe this will give you
+>> some hints, though?
+>
+> When you say the bootstrap steps are working, do you mean that you can
+> see on the serial console that U-Boot, Kernel and initramfs are
+> properly loaded and booted from?
+>
+> Then the tool is actually going back to the "Sending U-Boot" state as
+> long as it doesn't recognize a UTP linux image booted up. If you're
+> system properly booted (1st question), it is most likely due to bad
+> permissions. Are you sure you have a udev rule for the UTP VID/PID? If
+> not, please add it (or use sudo, but it's evil).
 
-Signed-off-by: Chris Frederick <cdf123@cdf123.net>
----
- DEVELOPERS                     |  3 +++
- package/Config.in              |  1 +
- package/firejail/Config.in     | 17 +++++++++++++++++
- package/firejail/firejail.hash |  2 ++
- package/firejail/firejail.mk   | 27 +++++++++++++++++++++++++++
- 5 files changed, 50 insertions(+)
- create mode 100644 package/firejail/Config.in
- create mode 100644 package/firejail/firejail.hash
- create mode 100644 package/firejail/firejail.mk
+I actually ran it as sudo out of desperation when it wasn't working,
+and now due to unrelated issues, that particular board is no longer of
+interest. Sorry that I can't be of more help. If I get back to it in
+the future, I'll try some more. I don't think my experience should
+hold up your patch, since it clearly builds and runs (at least a
+little). I really appreciate you trying to help figure out what went
+wrong for me.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 16d9b55..3dcd0e2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -291,6 +291,9 @@ F:	package/libdvbsi/
- F:	package/libsvg/
- F:	package/libsvg-cairo/
- 
-+N:	Chris Frederick (chrisf at cdf123.net)
-+F:	package/firejail/
-+
- N:	Chris Packham <judge.packham@gmail.com>
- F:	package/eventlog/
- F:	package/micropython/
-diff --git a/package/Config.in b/package/Config.in
-index 9399f63..be20478 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1710,6 +1710,7 @@ menu "System tools"
- 	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
- 	source "package/emlog/Config.in"
-+	source "package/firejail/Config.in"
- 	source "package/ftop/Config.in"
- 	source "package/getent/Config.in"
- 	source "package/htop/Config.in"
-diff --git a/package/firejail/Config.in b/package/firejail/Config.in
-new file mode 100644
-index 0000000..45fc496
---- /dev/null
-+++ b/package/firejail/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_FIREJAIL
-+	bool "firejail"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	help
-+	  Firejail is a SUID program that reduces the risk of security
-+	  breaches by restricting the running environment of untrusted
-+	  applications using Linux namespaces and seccomp-bpf. It
-+	  allows a process and all its descendants to have their own
-+	  private view of the globally shared kernel resources, such
-+	  as the network stack, process table, mount table.
-+
-+	  https://firejail.wordpress.com/
-+
-+comment "firejail needs a glibc toolchain"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/firejail/firejail.hash b/package/firejail/firejail.hash
-new file mode 100644
-index 0000000..dc2eb80
---- /dev/null
-+++ b/package/firejail/firejail.hash
-@@ -0,0 +1,2 @@
-+# From http://download.sourceforge.net/firejail/firejail-0.9.42.asc
-+sha256 4f3bceee973b84fdf13a5d5ab0060d140ecc8e42c19c945e7fb93f0fd8499b47  firejail-0.9.42.tar.xz
-diff --git a/package/firejail/firejail.mk b/package/firejail/firejail.mk
-new file mode 100644
-index 0000000..3926e8a
---- /dev/null
-+++ b/package/firejail/firejail.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# firejail
-+#
-+################################################################################
-+
-+FIREJAIL_VERSION = 0.9.42
-+FIREJAIL_SITE = http://download.sourceforge.net/firejail
-+FIREJAIL_SOURCE = firejail-$(FIREJAIL_VERSION).tar.xz
-+FIREJAIL_LICENSE = GPLv2+
-+FIREJAIL_LICENSE_FILES = COPYING
-+FIREJAIL_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
-+	USERCOMPILE="$(TARGET_CFLAGS)" USERLINK="$(TARGET_LDFLAGS)"
-+
-+FIREJAIL_CONF_OPTS = \
-+	--enable-bind \
-+	--enable-busybox-workaround \
-+	--enable-file-transfer \
-+	--enable-network \
-+	--enable-seccomp \
-+	--enable-userns
-+
-+define FIREJAIL_PERMISSIONS
-+	/usr/bin/firejail f 4755 0 0 - - - - -
-+endef
-+
-+$(eval $(autotools-package))
--- 
-2.7.3
+Thanks,
+Frank
