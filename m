@@ -1,41 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Oct 2016 12:29:29 +0200
-Subject: [Buildroot] [git commit] file: bump version to 5.29
-Message-ID: <20161026103026.E24EB81E50@busybox.osuosl.org>
+Date: Wed, 26 Oct 2016 12:33:31 +0200
+Subject: [Buildroot] [git commit] kvm-unit-tests: Fix x86_64 to use host
+	compiler
+Message-ID: <20161026103355.00C7C81EB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f63b2a4e9c1807c787c648cc7cdb0fd9fcc9dfe9
+commit: https://git.buildroot.net/buildroot/commit/?id=e1b344070c607f9a3f0a7004650f00c9e6e83c7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+kvm-unit-tests requires a multilib compiler for x86_64 as it compiles
+32bit boot code.
+
+This patch uses the BR2_HOSTARCH_NEEDS_IA32_COMPILER option to enforce
+this and avoids using TARGET_CROSS for x86_64 targets and uses the host
+32bit (and 64bit) capable compiler.
+
+Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
+[Thomas: reword comment in .mk file.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/file/file.hash | 2 +-
- package/file/file.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kvm-unit-tests/Config.in         | 1 +
+ package/kvm-unit-tests/kvm-unit-tests.mk | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/file/file.hash b/package/file/file.hash
-index 21067b5..9a4c9f1 100644
---- a/package/file/file.hash
-+++ b/package/file/file.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	0ecb5e146b8655d1fa84159a847ee619fc102575205a0ff9c6cc60fc5ee2e012	file-5.28.tar.gz
-+sha256 ea661277cd39bf8f063d3a83ee875432cc3680494169f952787e002bdd3884c0  file-5.29.tar.gz
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 201651c..3309c95 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
+index f771896..d72c734 100644
+--- a/package/kvm-unit-tests/Config.in
++++ b/package/kvm-unit-tests/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KVM_UNIT_TESTS
+ 	bool "kvm-unit-tests"
++	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_x86_64=y
+ 	depends on BR2_arm || BR2_i386 || BR2_powerpc64 || \
+ 		BR2_powerpc64le || BR2_x86_64
+ 	help
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index 7fd03ad..1ace2e7 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -28,9 +28,16 @@ endif
  
--FILE_VERSION = 5.28
-+FILE_VERSION = 5.29
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- HOST_FILE_DEPENDENCIES = host-zlib
+ KVM_UNIT_TESTS_CONF_OPTS =\
+ 	--arch="$(KERNEL_ARCH)" \
+-	--cross-prefix="$(TARGET_CROSS)" \
+ 	--endian="$(KVM_UNIT_TESTS_ENDIAN)"
+ 
++# For all architectures but x86-64, we use the target
++# compiler. However, for x86-64, we use the host compiler, as
++# kvm-unit-tests builds 32 bit code, which Buildroot toolchains for
++# x86-64 cannot do.
++ifneq ($(BR2_x86_64),y)
++KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
++endif
++
+ define KVM_UNIT_TESTS_CONFIGURE_CMDS
+ 	cd $(@D) && ./configure $(KVM_UNIT_TESTS_CONF_OPTS)
+ endef
