@@ -1,47 +1,49 @@
-From: Sam Voss <samuel.voss@rockwellcollins.com>
-Date: Wed, 26 Oct 2016 10:45:21 -0500
-Subject: [Buildroot] [PATCH] support/scripts: tool to create fragments
-In-Reply-To: <20161026161752.0fa1a3da@free-electrons.com>
-References: <1477425699-37971-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20161025220305.1cb73355@free-electrons.com>
- <CAH=K+6khOEyfhomv9HMbOnB7eNcgiX4V0Z_vALNLDAdL5QLVww@mail.gmail.com>
- <20161026161752.0fa1a3da@free-electrons.com>
-Message-ID: <CAH=K+6kbTXmRoAXz-C+zEeOtTdCXUVTn0WYLvw9F=_DAWJ_p0w@mail.gmail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed, 26 Oct 2016 18:08:01 +0200
+Subject: [Buildroot] [PATCH v2 0/2] mfgtools: new package
+Message-ID: <20161026160803.30262-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hi,
 
-> OK, understood. So in fact, you have reimplemented the diffconfig tool
-> available in the Linux kernel scripts/ directory.
+Here is the v2 with the following modifications:
+- Use host-cmake-package and build the CLI as a post build hook
+- Fix licenses: now BSD-3c and CPOL
+- Fix MFGTOOLS_CFLAGS and rename it HOST_MFGTOOLS_CFLAGS
+- Use HOST_LDFLAGS instead of specifyin the rpath manually
+- Fix install commands to have the full destination path
+- Add readme.txt file
+- Add a follow-up patch to add the package to DEVELOPERS
 
-Interesting, I didn't know this tool existed!
+Thomas, I will send a cmake patch upstream later, hope that's ok.
 
-> However, calling it gen-config-fragment looks a bit wrong to me. What
-> about diffconfig, like in the Linux kernel?
+Frank, I did try both the mfgtools files from NXP on a SabreSD and my own
+sample file on a SabreLite, it worked on both. Hope you'll be able to try it.
 
-I agree with a name change, however might it be confused (in discussion)
-with the other tool? If that is not a problem I would agree with the new name.
+Note that I've put some effort into the readme.txt not to forget the steps ;)
 
-> No need to give so many examples, but just one example would be good.
+Regards,
+Gary
 
-Will update the patch to include one along with the changes Matt mentioned.
+Gary Bisson (2):
+  mfgtools: new package
+  DEVELOPERS: add entry for mfgtools
 
-> In terms of implementation, should we re-use the diffconfig tool from
-> the kernel, simply tweaked in terms of output format?
+ DEVELOPERS                      |  1 +
+ package/Config.in.host          |  1 +
+ package/mfgtools/Config.in.host | 10 ++++++++
+ package/mfgtools/mfgtools.hash  |  2 ++
+ package/mfgtools/mfgtools.mk    | 34 +++++++++++++++++++++++++
+ package/mfgtools/readme.txt     | 56 +++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 104 insertions(+)
+ create mode 100644 package/mfgtools/Config.in.host
+ create mode 100644 package/mfgtools/mfgtools.hash
+ create mode 100644 package/mfgtools/mfgtools.mk
+ create mode 100644 package/mfgtools/readme.txt
 
-I actually don't think this would be a best course of action. As it is
-written it will work
-on busybox or kernel configs, however if we choose to reuse the output
-of the diffconfig
-tool either logic will have to be added to figure out what configs are
-being generated or
-another argument will have to specify it and I'm not sure if it is
-worth that extra code.
-
-Thanks,
-
-Sam
+-- 
+2.9.3
