@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Oct 2016 12:29:58 +0200
-Subject: [Buildroot] [PATCH 1/2] file: bump version to 5.29
-In-Reply-To: <20161026100246.19477-1-Vincent.Riera@imgtec.com>
-References: <20161026100246.19477-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161026122958.260c744b@free-electrons.com>
+Date: Wed, 26 Oct 2016 12:30:22 +0200
+Subject: [Buildroot] [PATCH] board: fix indentation in zybo readme.txt
+In-Reply-To: <20161026020216.8439-1-kraai@ftbfs.org>
+References: <20161026020216.8439-1-kraai@ftbfs.org>
+Message-ID: <20161026123022.7f896c50@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 26 Oct 2016 11:02:45 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Tue, 25 Oct 2016 19:02:16 -0700, Matt Kraai wrote:
+> Signed-off-by: Matt Kraai <kraai@ftbfs.org>
 > ---
->  package/file/file.hash | 2 +-
->  package/file/file.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  board/digilent/zybo/readme.txt | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-Both applied, thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
