@@ -1,39 +1,48 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 26 Oct 2016 11:02:45 +0100
-Subject: [Buildroot] [PATCH 1/2] file: bump version to 5.29
-Message-ID: <20161026100246.19477-1-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Oct 2016 12:18:00 +0200
+Subject: [Buildroot] [git commit] util-linux: fix host build when ncurses is
+	not installed
+Message-ID: <20161026102005.1E7E681E3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/file/file.hash | 2 +-
- package/file/file.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=679e133bfd6ec062659bb8cfe09b593e8081fef8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/file/file.hash b/package/file/file.hash
-index 21067b5..9a4c9f1 100644
---- a/package/file/file.hash
-+++ b/package/file/file.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	0ecb5e146b8655d1fa84159a847ee619fc102575205a0ff9c6cc60fc5ee2e012	file-5.28.tar.gz
-+sha256 ea661277cd39bf8f063d3a83ee875432cc3680494169f952787e002bdd3884c0  file-5.29.tar.gz
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 201651c..3309c95 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+lib/colors.c uses HAVE_LIBTINFO to decide whether term.h and ncurses.h
+should be included. However, the configure.ac check is bogus: it
+checks for tinfo using pkg-config, and then if it fails, checks with
+AC_CHECK_LIB(). So, if you have tinfo installed, but not the
+corresponding development package, the pkg-config test will fail, but
+the AC_CHECK_LIB test will succeed, even though the headers are not
+available.
+
+To address this, we explicitly tell host-util-linux that tinfo is not
+available, like we're already doing for ncurses.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/3c447e601a7b728860e78cabf2191ab206e6480d/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/util-linux/util-linux.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index bd6508c..cf03fd4 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -133,7 +133,8 @@ HOST_UTIL_LINUX_CONF_OPTS += \
+ 	--enable-libblkid \
+ 	--enable-libmount \
+ 	--enable-libuuid \
+-	--without-ncurses
++	--without-ncurses \
++	--without-tinfo
  
--FILE_VERSION = 5.28
-+FILE_VERSION = 5.29
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- HOST_FILE_DEPENDENCIES = host-zlib
--- 
-2.10.1
+ ifeq ($(BR2_PACKAGE_HOST_UTIL_LINUX),y)
+ HOST_UTIL_LINUX_CONF_OPTS += --disable-makeinstall-chown
