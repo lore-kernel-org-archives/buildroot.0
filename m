@@ -1,34 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Oct 2016 22:05:44 +0200
-Subject: [Buildroot] [PATCH 1/2] libpcap: drop libnl headers patch
-In-Reply-To: <806b12235b685b37dced54464cbd380abf091c33.1477501390.git.baruch@tkos.co.il>
-References: <806b12235b685b37dced54464cbd380abf091c33.1477501390.git.baruch@tkos.co.il>
-Message-ID: <20161026220544.3183194e@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 26 Oct 2016 22:08:09 +0200
+Subject: [Buildroot] [PATCH] core/download: remove support for special git
+	refs
+Message-ID: <1477512489-14710-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+f8b8251a (support/download: fetch all refs on full git clone) added
+support for fetching so-called special refs, to retrieve changesets from
+code-review tools like Gerrit or Github PRs.
 
-On Wed, 26 Oct 2016 20:03:09 +0300, Baruch Siach wrote:
-> We can avoid host headers using a --with-libnl parameter to override the
-> default host headers path. The configure script adds /include suffix to the
-> include path. So we still need to manually add -I with the correct path to
-> CFLAGS because libnl headers are under the libnl3/ directory.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  .../libpcap/0001-remove-libnl-include-path.patch   | 25 ----------------------
->  package/libpcap/libpcap.mk                         |  1 +
->  2 files changed, 1 insertion(+), 25 deletions(-)
->  delete mode 100644 package/libpcap/0001-remove-libnl-include-path.patch
+However, the use-case for using those special refs is not entirely
+clear, and is getting more and more complex (with still-pending patches
+about that).
 
-Both patches applied, thanks!
+Those special refs are from code-review tools. As such, they are very
+volatile in nature: re-pushing a rebased branch to github would change
+the content fetched with such a ref (Gerrit seems to be more
+conservative, but still). So, they cannot be used for reproducible
+builds:
+  - they can't be used in a .mk file (normal packages)
+  - they can't be used in a .config file (linux, bootloader...)
 
-Thomas
+So, going back to the black board, two main use-cases have been
+identified:
+  - a developper that wants to manually test a PR
+  - an automated build farm that automatically builds a known
+    configuration against PRs
+
+In either case, there is a better solution that we've been advertising
+all along: the override-srcdir mechanism.
+
+Whether by a build farm or a developper, it looks like it would be much
+easier to do the clone (or a fetch from an existing repo), write a
+local.mk with an override-srcdir, and kick off the build, rather than do
+the various tweaking (in .mk and/or .config).
+
+(note: a developper that wants to test a PR is probably already active
+on that project, so will already have a local clone, so the fetch would
+only grab very few blobs, wo will be very fast).
+
+So, just remove the support for such special refs altogether.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Cc: Henrique Marks <henrique.marks@datacom.ind.br>
+---
+ support/download/git | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/support/download/git b/support/download/git
+index 7921411..c46422d 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -61,17 +61,6 @@ fi
+ 
+ pushd "${basename}" >/dev/null
+ 
+-# Try to get the special refs exposed by some forges (pull-requests for
+-# github, changes for gerrit...). There is no easy way to know whether
+-# the cset the user passed us is such a special ref or a tag or a sha1
+-# or whatever else. We'll eventually fail at checking out that cset,
+-# below, if there is an issue anyway. Since most of the cset we're gonna
+-# have to clone are not such special refs, consign the output to oblivion
+-# so as not to alarm unsuspecting users, but still trace it as a warning.
+-if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
+-    printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
+-fi
+-
+ # Checkout the required changeset, so that we can update the required
+ # submodules.
+ _git checkout -q "'${cset}'"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
