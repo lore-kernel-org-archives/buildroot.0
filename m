@@ -1,68 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Oct 2016 23:33:46 +0200
-Subject: [Buildroot] [git commit] package/opencv: Do not add libdl to
-	LINKER_LIBS for static builds
-Message-ID: <20161026213356.0AD7281EE3@busybox.osuosl.org>
+Date: Wed, 26 Oct 2016 23:34:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencv: Do not add libdl to
+ LINKER_LIBS for static builds
+In-Reply-To: <20160924173157.2330-1-bernd.kuhls@t-online.de>
+References: <20160924173157.2330-1-bernd.kuhls@t-online.de>
+Message-ID: <20161026233412.7b4c2b9b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=652a8b3e907a0b73a57fbb028590f5c6139bc88c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes
-http://autobuild.buildroot.net/results/765/7657e01481995a4f0d725467e935a83928a59a04/
+On Sat, 24 Sep 2016 19:31:57 +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/765/7657e01481995a4f0d725467e935a83928a59a04/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch | 39 ++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 package/opencv/0004-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+Applied to master, thanks. Could you please follow-up with the feedback
+from upstream in the Github pull request?
 
-diff --git a/package/opencv/0004-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch b/package/opencv/0004-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
-new file mode 100644
-index 0000000..6d63411
---- /dev/null
-+++ b/package/opencv/0004-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
-@@ -0,0 +1,39 @@
-+From 22e03ef8a9e3adcbc6b2f16c3cc98e4e14443eed Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 24 Sep 2016 17:51:22 +0200
-+Subject: [PATCH 1/1] CMakeLists.txt: Do not add libdl to LINKER_LIBS for
-+ static builds
-+
-+Without this patch -ldl is present in opencv.pc which breaks OpenCV
-+detection by ffmpeg, detected by buildroot autobuilders:
-+
-+http://autobuild.buildroot.net/results/765/7657e01481995a4f0d725467e935a83928a59a04//ffmpeg-3.1.3/config.log
-+
-+/home/peko/autobuild/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.4/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -ldl
-+
-+Patch sent upstream: https://github.com/opencv/opencv/pull/7337
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ CMakeLists.txt | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 007b80d..99b047d 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -457,7 +457,10 @@ if(UNIX)
-+     elseif(${CMAKE_SYSTEM_NAME} MATCHES "QNX")
-+       set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} m)
-+     else()
-+-      set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} dl m pthread rt)
-++      if(BUILD_SHARED_LIBS)
-++        set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} dl)
-++      endif()
-++      set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} m pthread rt)
-+     endif()
-+   else()
-+     set(HAVE_LIBPTHREAD YES)
-+-- 
-+2.9.3
-+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
