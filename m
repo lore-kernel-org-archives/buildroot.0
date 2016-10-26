@@ -1,70 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Oct 2016 09:12:27 +0200
-Subject: [Buildroot] Autobuilder for powerpc64le?
-In-Reply-To: <20161026051532.GA13988@tungsten.ozlabs.ibm.com>
-References: <20161026051532.GA13988@tungsten.ozlabs.ibm.com>
-Message-ID: <20161026091227.7eb2f99f@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 26 Oct 2016 07:36:18 +0000
+Subject: [Buildroot] [Bug 9256] [Config file] New device: Odroid-U2/U3
+In-Reply-To: <bug-9256-163@https.bugs.busybox.net/>
+References: <bug-9256-163@https.bugs.busybox.net/>
+Message-ID: <bug-9256-163-BogJC3pr3T@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sam,
+https://bugs.busybox.net/show_bug.cgi?id=9256
 
-On Wed, 26 Oct 2016 16:15:32 +1100, Sam Bobroff wrote:
+--- Comment #2 from Wesley Chan <qlb1234@gmail.com> ---
+Dear Thomas,
 
-> (I'm guessing from all the autobuilder email that you're the right person to
-> talk to!)
+Thank you for your suggestion. However, I decided I don't want to submit the
+patch to the mailing list for the following reasons:
 
-Indeed :)
+1. I was subscribed to the mailing list in before and sent my config file. Not
+only no one has replied, I got tons of mails discussing all kinds of bugs that
+I don't care.
 
-> Are you interested in having an autobuilder for powerpc64le and possibly
-> powerpc64 (big endian)?
+2. I don't want to be disrespectful and put a fake e-mail address on the commit
+history, yet I don't want my real e-mail address on it.
 
-Are you talking about:
+3. I can follow the instructions to create a patch but I have zero experience
+about the Buildroot project, so I'm afraid I won't be providing a patch with
+100% correctness on the format your team demands. I don't want to go back and
+forth for a tiny enhancement.
 
- 1. Using powerpc64le/power64 as the *build* machine
- 2. Using powerpc64le/powerpc64 as the *target*
+I still want to contribute, but not in an engaged way. I think it's the best
+for me to just leave the config file and readme.txt here. Please tell me if
+your team still wants it. Thanks.
 
-I'd say that both are useful, though (2) looks more interesting to me.
+Regards,
 
-> If so, what would be involved in setting it up?
-
-Depends if you're talking about (1) or (2), so let's talk about both.
-
- (1) Requires you to have a machine available to do builds. You install
-     the autobuild-run script from
-     https://git.buildroot.org/buildroot-test/tree/scripts/autobuild-run
-     on this machine, and simply run it. By default, it simply does
-     some builds and keeps the build results around. This way, you can
-     check if everything looks OK and you don't have bogus results due
-     to missing things on the build machine. Once you have run this for
-     about a day and checked that there doesn't seem to be any bogus
-     result, then I can create credentials for you so that
-     autobuild-run can upload the build results on
-     http://autobuild.buildroot.org.
-
- (2) Requires adding some base toolchain configurations in
-     https://git.buildroot.org/buildroot-test/tree/web/toolchains/configs/.
-     One .config file per toolchain configuration, and each of them
-     should be referenced in toolchain-configs.csv.
-
-Also, if you're interested in powerpc64 and powerpc64le and we indeed
-add toolchain configurations in the autobuilders, it would be nice if
-you could add:
-
-N:	Sam Bobroff <sam.bobroff@au1.ibm.com>
-F:	arch/Config.in.powerpc
-
-to the DEVELOPERS file. This way, you will receive a daily e-mail with
-the failures that occurred on powerpc, powerpc64 and powerpc64le (i.e
-all BR2_ARCH values described in arch/Config.in.powerpc).
-
-Thanks! 
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
