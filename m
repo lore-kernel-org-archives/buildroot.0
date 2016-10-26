@@ -1,81 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 26 Oct 2016 22:08:09 +0200
-Subject: [Buildroot] [PATCH] core/download: remove support for special git
-	refs
-Message-ID: <1477512489-14710-1-git-send-email-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 26 Oct 2016 22:13:44 +0200
+Subject: [Buildroot] raspberry pi 3 wifi in default build
+In-Reply-To: <1644680147.2566209.1476806733728@mail.yahoo.com>
+References: <1644680147.2566209.1476806733728.ref@mail.yahoo.com>
+ <1644680147.2566209.1476806733728@mail.yahoo.com>
+Message-ID: <ec2e47ae-5221-0cfa-a575-f3ab9b6dafba@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-f8b8251a (support/download: fetch all refs on full git clone) added
-support for fetching so-called special refs, to retrieve changesets from
-code-review tools like Gerrit or Github PRs.
+Hi,
 
-However, the use-case for using those special refs is not entirely
-clear, and is getting more and more complex (with still-pending patches
-about that).
+Le 18/10/2016 ? 18:05, Mikhail Tchernychev a ?crit :
+> Hi,
+> 
+> I tried to enable build in wifi in rpi3,  no success so far.
+> raspberry3_defconfig  seem does not have it enabled.
+> I tried  to add BCM43438 but still no luck. In contrary openwrt build for Rpi 3
+> has it (I built openwrt myself)
+> 
+> Sorry if it was already asked, search button on mail list returns "server not
+> found" to me.  I searched few
+> month by hand but seen did not find anything similar.
+> 
+> The question is how to enable wifi on rapsberry pi 3 ?
 
-Those special refs are from code-review tools. As such, they are very
-volatile in nature: re-pushing a rebased branch to github would change
-the content fetched with such a ref (Gerrit seems to be more
-conservative, but still). So, they cannot be used for reproducible
-builds:
-  - they can't be used in a .mk file (normal packages)
-  - they can't be used in a .config file (linux, bootloader...)
+This issue has already been discussed in this thread recently [1], the rpi3 wifi
+support is not available/enabled with the raspberry3_defconfig.
 
-So, going back to the black board, two main use-cases have been
-identified:
-  - a developper that wants to manually test a PR
-  - an automated build farm that automatically builds a known
-    configuration against PRs
+So, you have to select the linux-firmware package and select
+BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX. But linux-fimware provide only the .bin.
 
-In either case, there is a better solution that we've been advertising
-all along: the override-srcdir mechanism.
+As reported by Floris Bos, you also need [2] on your target.
 
-Whether by a build farm or a developper, it looks like it would be much
-easier to do the clone (or a fetch from an existing repo), write a
-local.mk with an override-srcdir, and kick off the build, rather than do
-the various tweaking (in .mk and/or .config).
+I don't really understand why the .txt is not provided by linux-firmware...
 
-(note: a developper that wants to test a PR is probably already active
-on that project, so will already have a local clone, so the fetch would
-only grab very few blobs, wo will be very fast).
+Best regards,
+Romain
 
-So, just remove the support for such special refs altogether.
+[1] http://lists.busybox.net/pipermail/buildroot/2016-September/172261.html
+[2]
+https://github.com/RPi-Distro/firmware-nonfree/blob/master/brcm80211/brcm/brcmfmac43430-sdio.txt
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-Cc: Henrique Marks <henrique.marks@datacom.ind.br>
----
- support/download/git | 11 -----------
- 1 file changed, 11 deletions(-)
-
-diff --git a/support/download/git b/support/download/git
-index 7921411..c46422d 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -61,17 +61,6 @@ fi
- 
- pushd "${basename}" >/dev/null
- 
--# Try to get the special refs exposed by some forges (pull-requests for
--# github, changes for gerrit...). There is no easy way to know whether
--# the cset the user passed us is such a special ref or a tag or a sha1
--# or whatever else. We'll eventually fail at checking out that cset,
--# below, if there is an issue anyway. Since most of the cset we're gonna
--# have to clone are not such special refs, consign the output to oblivion
--# so as not to alarm unsuspecting users, but still trace it as a warning.
--if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
--    printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
--fi
--
- # Checkout the required changeset, so that we can update the required
- # submodules.
- _git checkout -q "'${cset}'"
--- 
-2.7.4
+> Thank you
+> 
+> 
+> Best Regards, Mikhail Tchernychev
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
