@@ -1,31 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Oct 2016 14:08:25 +0200
-Subject: [Buildroot] [PATCH v2 2/2] kvm-unit-tests: Bump version
-In-Reply-To: <20161026031916.17158-2-cyrilbur@gmail.com>
-References: <20161026031916.17158-1-cyrilbur@gmail.com>
- <20161026031916.17158-2-cyrilbur@gmail.com>
-Message-ID: <20161026140825.0ed40657@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 26 Oct 2016 12:11:29 +0000
+Subject: [Buildroot] [Bug 9381] check-host-rpath issues
+In-Reply-To: <bug-9381-163@https.bugs.busybox.net/>
+References: <bug-9381-163@https.bugs.busybox.net/>
+Message-ID: <bug-9381-163-pByxGR9fPC@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=9381
+
+--- Comment #2 from Jean-pierre Cartal <jpcartal@free.fr> ---
 Hello,
 
-On Wed, 26 Oct 2016 14:19:16 +1100, Cyril Bur wrote:
-> This version bump includes several fixes for x86 and a significant fix
-> to powerpc transactional memory tests.
-> 
-> Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
-> ---
->  package/kvm-unit-tests/kvm-unit-tests.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for your answer.
 
-Applied to master, thanks.
+I tried with release 2016.08, I'll give the master version a try and let you
+know.
 
-Thomas
+Do you know if there is any plan to support the $ORIGIN ld feature ?
+
+Regards.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
