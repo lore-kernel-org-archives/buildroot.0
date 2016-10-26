@@ -1,57 +1,57 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 26 Oct 2016 22:13:44 +0200
-Subject: [Buildroot] raspberry pi 3 wifi in default build
-In-Reply-To: <1644680147.2566209.1476806733728@mail.yahoo.com>
-References: <1644680147.2566209.1476806733728.ref@mail.yahoo.com>
- <1644680147.2566209.1476806733728@mail.yahoo.com>
-Message-ID: <ec2e47ae-5221-0cfa-a575-f3ab9b6dafba@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Oct 2016 22:34:18 +0200
+Subject: [Buildroot] [git commit] perl: update cnf/config.{sub,
+	guess} using autotools hook
+Message-ID: <20161026203433.1B6BE81909@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=9687e7435b76707afcf8b9aef15c98ea5287da75
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 18/10/2016 ? 18:05, Mikhail Tchernychev a ?crit :
-> Hi,
-> 
-> I tried to enable build in wifi in rpi3,  no success so far.
-> raspberry3_defconfig  seem does not have it enabled.
-> I tried  to add BCM43438 but still no luck. In contrary openwrt build for Rpi 3
-> has it (I built openwrt myself)
-> 
-> Sorry if it was already asked, search button on mail list returns "server not
-> found" to me.  I searched few
-> month by hand but seen did not find anything similar.
-> 
-> The question is how to enable wifi on rapsberry pi 3 ?
+perl may fail to build on newer host architectures such as aarch64 due
+to its inability to guess the host architecture to build 'miniperl',
+which is built during the process. An error message looks like this:
 
-This issue has already been discussed in this thread recently [1], the rpi3 wifi
-support is not available/enabled with the raspberry3_defconfig.
+  Configuring build-time miniperl for unknown
+  ERROR: No $target defined (?!)
+  ERROR: configure --mode=buildmini failed
 
-So, you have to select the linux-firmware package and select
-BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX. But linux-fimware provide only the .bin.
+This happens because the config.sub and config.guess files from perl are
+not modified and may become outdated.
+These files are normally updated automatically by a Buildroot hook for
+autotools packages, to avoid problems like these.
+Although perl uses the config.sub and config.guess files, it is not a
+strict autotools package, so it is not defined as an "autotools-package"
+in Buildroot and so it doesn't inherit the hook.
+This commit makes perl borrow the hook from the autotools infrastructure
+so that it can build on newer build architectures.
+This has been tested by building it on an aarch64 host machine.
 
-As reported by Floris Bos, you also need [2] on your target.
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perl/perl.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-I don't really understand why the .txt is not provided by linux-firmware...
-
-Best regards,
-Romain
-
-[1] http://lists.busybox.net/pipermail/buildroot/2016-September/172261.html
-[2]
-https://github.com/RPi-Distro/firmware-nonfree/blob/master/brcm80211/brcm/brcmfmac43430-sdio.txt
-
-> Thank you
-> 
-> 
-> Best Regards, Mikhail Tchernychev
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 29b4455..a8768b2 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -33,6 +33,12 @@ define PERL_CROSS_EXTRACT
+ endef
+ PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
+ 
++# Even though perl is not an autotools-package, it uses config.sub and
++# config.guess. Up-to-date versions of these files may be needed to build perl
++# on newer host architectures, so we borrow the hook which updates them from the
++# autotools infrastructure.
++PERL_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
++
+ define PERL_CROSS_SET_POD
+ 	$(SED) s/$(PERL_CROSS_OLD_POD)/$(PERL_CROSS_NEW_POD)/g $(@D)/Makefile
+ endef
