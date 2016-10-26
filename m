@@ -1,68 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Oct 2016 21:29:32 +0200
-Subject: [Buildroot] [git commit] libpcap: drop libnl headers patch
-Message-ID: <20161026195442.F01CA81E16@busybox.osuosl.org>
+Date: Wed, 26 Oct 2016 22:02:58 +0200
+Subject: [Buildroot] [git commit] olsr: disable in musl configurations
+Message-ID: <20161026200342.B4CB4802DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2d9202f6f9119e1cea44a913306e361b03d90e5
+commit: https://git.buildroot.net/buildroot/commit/?id=4bca88c839e54a9140c06010666f5e034127b8b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We can avoid host headers using a --with-libnl parameter to override the
-default host headers path. The configure script adds /include suffix to the
-include path. So we still need to manually add -I with the correct path to
-CFLAGS because libnl headers are under the libnl3/ directory.
+olsr doesn't build on musl, so let's disable it. The issue has been
+reported upstream at https://github.com/OLSR/olsrd/issues/6.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes:
+
+  http://autobuild.buildroot.net/results/74cff8fc87d95d70840394fc049fc038797b9888/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../libpcap/0001-remove-libnl-include-path.patch   | 25 ----------------------
- package/libpcap/libpcap.mk                         |  1 +
- 2 files changed, 1 insertion(+), 25 deletions(-)
+ package/olsr/Config.in | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpcap/0001-remove-libnl-include-path.patch b/package/libpcap/0001-remove-libnl-include-path.patch
-deleted file mode 100644
-index d0760d4..0000000
---- a/package/libpcap/0001-remove-libnl-include-path.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--Remove hardcoded path to libnl3 include directory
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Gustavo: update for 1.7.2]
--
--diff -Nura libpcap-1.7.2.orig/configure.in libpcap-1.7.2/configure.in
----- libpcap-1.7.2.orig/configure.in	2015-03-14 08:02:05.538706347 -0300
--+++ libpcap-1.7.2/configure.in	2015-03-14 08:17:22.637519050 -0300
--@@ -461,14 +461,13 @@
-- 			#
-- 			# Yes, we have libnl 3.x.
-- 			#
---			LIBS="${libnldir} -lnl-genl-3 -lnl-3 $LIBS"
--+			LIBS="-lnl-genl-3 -lnl-3 $LIBS"
-- 			AC_DEFINE(HAVE_LIBNL,1,[if libnl exists])
-- 			AC_DEFINE(HAVE_LIBNL_3_x,1,[if libnl exists and is version 3.x])
-- 			AC_DEFINE(HAVE_LIBNL_NLE,1,[libnl has NLE_FAILURE])
-- 			AC_DEFINE(HAVE_LIBNL_SOCKETS,1,[libnl has new-style socket api])
---			V_INCLS="$V_INCLS ${incdir}"
-- 			have_any_nl="yes"
---		],[], ${incdir} ${libnldir} -lnl-genl-3 -lnl-3 )
--+		],[], -lnl-genl-3 -lnl-3 )
-- 
-- 		if test x$have_any_nl = xno ; then
-- 			#
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 4c7a66c..0a74de7 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -51,6 +51,7 @@ endif
- ifeq ($(BR2_PACKAGE_LIBNL),y)
- LIBPCAP_DEPENDENCIES += libnl
- LIBPCAP_CFLAGS += "-I$(STAGING_DIR)/usr/include/libnl3"
-+LIBPCAP_CONF_OPTS += --with-libnl=$(STAGING_DIR)/usr
- else
- LIBPCAP_CONF_OPTS += --without-libnl
- endif
+diff --git a/package/olsr/Config.in b/package/olsr/Config.in
+index a49c4e0..2f3d024 100644
+--- a/package/olsr/Config.in
++++ b/package/olsr/Config.in
+@@ -3,6 +3,9 @@ config BR2_PACKAGE_OLSR
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
++	# doesn't build with musl,
++	# https://github.com/OLSR/olsrd/issues/6
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  The Optimized Link State Routing protocol (OLSR) is a
+ 	  routing protocol that is optimised for mobile ad-hoc
+@@ -13,6 +16,7 @@ config BR2_PACKAGE_OLSR
+ 
+ 	  http://www.olsr.org/
+ 
+-comment "olsr needs a toolchain w/ threads, dynamic library"
++comment "olsr needs a uClibc or glibc toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		BR2_TOOLCHAIN_USES_MUSL
