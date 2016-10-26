@@ -1,28 +1,47 @@
-From: Jeroen Roovers <jer@airfi.aero>
-Date: Wed, 26 Oct 2016 17:19:49 +0200
-Subject: [Buildroot] [git commit] tcpdump: bump version to 4.8.1
-In-Reply-To: <20161026144219.gbxity3ht33wgsy6@sapphire.tkos.co.il>
-References: <20161026103026.ED15581E81@busybox.osuosl.org>
- <CANCHnQp-rgEdvxh82WT=W51XGneryQJ=rx=qr+mRVBSmXFmCRQ@mail.gmail.com>
- <20161026162910.6e90e1a9@free-electrons.com>
- <20161026144219.gbxity3ht33wgsy6@sapphire.tkos.co.il>
-Message-ID: <CANCHnQpLhXmWoj-rsuBdSGCri=ttGKtWEL+zy6zL6pxYYgYnmw@mail.gmail.com>
+From: Sam Voss <samuel.voss@rockwellcollins.com>
+Date: Wed, 26 Oct 2016 10:45:21 -0500
+Subject: [Buildroot] [PATCH] support/scripts: tool to create fragments
+In-Reply-To: <20161026161752.0fa1a3da@free-electrons.com>
+References: <1477425699-37971-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20161025220305.1cb73355@free-electrons.com>
+ <CAH=K+6khOEyfhomv9HMbOnB7eNcgiX4V0Z_vALNLDAdL5QLVww@mail.gmail.com>
+ <20161026161752.0fa1a3da@free-electrons.com>
+Message-ID: <CAH=K+6kbTXmRoAXz-C+zEeOtTdCXUVTn0WYLvw9F=_DAWJ_p0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26 October 2016 at 16:42, Baruch Siach <baruch@tkos.co.il> wrote:
->> Also, should we add a comment in tcpdump.mk and libpcap.mk to indicate that
->> they should preferably be bumped together?
->
-> I don't think there is a strict version dependency between tcpdump and
-> libpcap. Previous versions (4.7.4 and 1.7.4, respectively) were not even
-> released at the same date. See http://www.tcpdump.org/.
+Thomas,
 
-Hence "preferably", I guess.
+> OK, understood. So in fact, you have reimplemented the diffconfig tool
+> available in the Linux kernel scripts/ directory.
 
+Interesting, I didn't know this tool existed!
 
-Kind regards,
-     jer
+> However, calling it gen-config-fragment looks a bit wrong to me. What
+> about diffconfig, like in the Linux kernel?
+
+I agree with a name change, however might it be confused (in discussion)
+with the other tool? If that is not a problem I would agree with the new name.
+
+> No need to give so many examples, but just one example would be good.
+
+Will update the patch to include one along with the changes Matt mentioned.
+
+> In terms of implementation, should we re-use the diffconfig tool from
+> the kernel, simply tweaked in terms of output format?
+
+I actually don't think this would be a best course of action. As it is
+written it will work
+on busybox or kernel configs, however if we choose to reuse the output
+of the diffconfig
+tool either logic will have to be added to figure out what configs are
+being generated or
+another argument will have to specify it and I'm not sure if it is
+worth that extra code.
+
+Thanks,
+
+Sam
