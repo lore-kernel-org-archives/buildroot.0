@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Oct 2016 22:36:42 +0200
-Subject: [Buildroot] [git commit] package/xdriver_xf86-input-synaptics: fix
+Date: Wed, 26 Oct 2016 22:36:40 +0200
+Subject: [Buildroot] [git commit] package/xdriver_xf86-input-libinput: fix
 	install paths
-Message-ID: <20161026203713.873018179A@busybox.osuosl.org>
+Message-ID: <20161026203713.67AAF7FD9B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b63951da35f56a2c606b9383e6e39bfd61e92b34
+commit: https://git.buildroot.net/buildroot/commit/?id=b8bd2bea3b1ce2cdb0c510e2aee889ae9b3f2c92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Get rid of the borked sdkdir variable.
@@ -24,19 +24,19 @@ Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-build-get-rid-of-sdkdir.patch             | 88 ++++++++++++++++++++++
- .../xdriver_xf86-input-synaptics.mk                |  1 +
- 2 files changed, 89 insertions(+)
+ .../0001-build-get-rid-of-sdkdir.patch             | 78 ++++++++++++++++++++++
+ .../xdriver_xf86-input-libinput.mk                 |  1 +
+ 2 files changed, 79 insertions(+)
 
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/0001-build-get-rid-of-sdkdir.patch b/package/x11r7/xdriver_xf86-input-synaptics/0001-build-get-rid-of-sdkdir.patch
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/0001-build-get-rid-of-sdkdir.patch b/package/x11r7/xdriver_xf86-input-libinput/0001-build-get-rid-of-sdkdir.patch
 new file mode 100644
-index 0000000..62950b0
+index 0000000..2f9784c
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-input-synaptics/0001-build-get-rid-of-sdkdir.patch
-@@ -0,0 +1,88 @@
-+From 231a35e99fee8aba23f18cce21dfb5fa8bef0c36 Mon Sep 17 00:00:00 2001
++++ b/package/x11r7/xdriver_xf86-input-libinput/0001-build-get-rid-of-sdkdir.patch
+@@ -0,0 +1,78 @@
++From 1b2cf6e6c2640e08166af36eee775542a45325af Mon Sep 17 00:00:00 2001
 +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 23 Oct 2016 23:07:33 +0200
++Date: Sun, 23 Oct 2016 22:36:40 +0200
 +Subject: [PATCH] build: get rid of sdkdir
 +
 +Use of sdkdir causes problems during cross-compilation, where the full
@@ -48,88 +48,78 @@ index 0000000..62950b0
 +
 +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +---
-+ Makefile.am          | 1 -
-+ configure.ac         | 9 ---------
-+ include/Makefile.am  | 4 +++-
-+ xorg-synaptics.pc.in | 5 +++--
++ Makefile.am         | 2 --
++ configure.ac        | 8 --------
++ include/Makefile.am | 4 +++-
++ xorg-libinput.pc.in | 5 +++--
 + 4 files changed, 6 insertions(+), 13 deletions(-)
 +
 +diff --git a/Makefile.am b/Makefile.am
-+index 678124c..c48c5c8 100644
++index a447d61..7aa5523 100644
 +--- a/Makefile.am
 ++++ b/Makefile.am
-+@@ -21,7 +21,6 @@
-+ # During distcheck, system locations (as provided by pkg-config) may
-+ # not be writable; provide instead relative locations.
-+ DISTCHECK_CONFIGURE_FLAGS = \
-+-	--with-sdkdir='$${includedir}/xorg' \
-+ 	--with-xorg-conf-dir='$${datadir}/X11/xorg.conf.d'
++@@ -19,8 +19,6 @@
++ #  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 + 
-+ SUBDIRS = include src man tools conf
++ 
++-DISTCHECK_CONFIGURE_FLAGS = --with-sdkdir='$${includedir}/xorg'
++-
++ SUBDIRS = src include man test
++ MAINTAINERCLEANFILES = ChangeLog INSTALL
++ 
 +diff --git a/configure.ac b/configure.ac
-+index 970dd5f..574353b 100644
++index 9894817..fe198cb 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -55,11 +55,6 @@ XORG_DRIVER_CHECK_EXT(RANDR, randrproto)
-+ # Obtain compiler/linker options for the Synaptics driver dependencies
-+ PKG_CHECK_MODULES(XORG, [inputproto >= 2.1.99.3] [xorg-server >= 1.12] xproto inputproto $REQUIRED_MODULES)
++@@ -63,14 +63,6 @@ AC_ARG_WITH(xorg-conf-dir,
++             [xorgconfdir='${prefix}/share/X11/xorg.conf.d'])
++ AC_SUBST(xorgconfdir)
 + 
-+-# X Server SDK location is required to install Synaptics header files
-+-# This location is also relayed in the xorg-synaptics.pc file
++-# X Server SDK location is required to install header files
 +-sdkdir=`$PKG_CONFIG --variable=sdkdir xorg-server`
-+-AC_SUBST([sdkdir])
 +-
-+ # -----------------------------------------------------------------------------
-+ #			Configuration options
-+ # -----------------------------------------------------------------------------
-+@@ -154,10 +149,6 @@ if test "x$have_libxtst" = "xyes" ; then
-+ fi
-+ # -----------------------------------------------------------------------------
-+ 
 +-# Workaround overriding sdkdir to be able to create a tarball when user has no
 +-# write permission in sdkdir. See DISTCHECK_CONFIGURE_FLAGS in Makefile.am
 +-AC_ARG_WITH([sdkdir], [], [sdkdir="$withval"])
++-AC_SUBST([sdkdir])
 +-
-+ AC_CONFIG_FILES([Makefile
-+                 src/Makefile
-+                 man/Makefile
++ DRIVER_NAME=libinput
++ AC_SUBST([DRIVER_NAME])
++ 
 +diff --git a/include/Makefile.am b/include/Makefile.am
-+index 8234020..565868b 100644
++index 0d52b9b..271ffac 100644
 +--- a/include/Makefile.am
 ++++ b/include/Makefile.am
-+@@ -18,4 +18,6 @@
-+ #  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-+ #  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-+ 
-+-sdk_HEADERS = synaptics-properties.h
++@@ -1 +1,3 @@
++-sdk_HEADERS = libinput-properties.h
 ++# Location formerly known as 'sdkdir'
 ++xorgincludedir = $(includedir)/xorg
-++xorginclude_HEADERS = synaptics-properties.h
-+diff --git a/xorg-synaptics.pc.in b/xorg-synaptics.pc.in
-+index 159cfbf..68e0fbe 100644
-+--- a/xorg-synaptics.pc.in
-++++ b/xorg-synaptics.pc.in
+++xorginclude_HEADERS = libinput-properties.h
++diff --git a/xorg-libinput.pc.in b/xorg-libinput.pc.in
++index ff98189..9c0f506 100644
++--- a/xorg-libinput.pc.in
+++++ b/xorg-libinput.pc.in
 +@@ -1,6 +1,7 @@
 +-sdkdir=@sdkdir@
 ++prefix=@prefix@
 ++includedir=@includedir@
 + 
-+ Name: synaptics
-+ Description: X.Org synaptics input driver.
++ Name: xorg-libinput
++ Description: X.Org libinput input driver.
 + Version: @PACKAGE_VERSION@
 +-Cflags: -I${sdkdir}
 ++Cflags: -I${includedir}/xorg
 +-- 
 +2.7.4
 +
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-index b6ade4c..d6164d0 100644
---- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-+++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-@@ -10,5 +10,6 @@ XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individ
- XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE = MIT
- XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE_FILES = COPYING
- XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = libevdev xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto mtdev
-+XDRIVER_XF86_INPUT_SYNAPTICS_AUTORECONF = YES
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index c096032..eacacea 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+@@ -10,5 +10,6 @@ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individu
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE_FILES = COPYING
+ XDRIVER_XF86_INPUT_LIBINPUT_DEPENDENCIES = libinput xserver_xorg-server xproto_inputproto xproto_xproto
++XDRIVER_XF86_INPUT_LIBINPUT_AUTORECONF = YES
  
  $(eval $(autotools-package))
