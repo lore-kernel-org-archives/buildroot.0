@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Oct 2016 12:29:52 +0200
-Subject: [Buildroot] [PATCH 1/2] package/nvidia-driver: indentation
- cleanup
-In-Reply-To: <1477473548-16918-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1477473548-16918-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20161026122952.78deb14e@free-electrons.com>
+Date: Wed, 26 Oct 2016 12:29:58 +0200
+Subject: [Buildroot] [PATCH 1/2] file: bump version to 5.29
+In-Reply-To: <20161026100246.19477-1-Vincent.Riera@imgtec.com>
+References: <20161026100246.19477-1-Vincent.Riera@imgtec.com>
+Message-ID: <20161026122958.260c744b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 26 Oct 2016 11:19:07 +0200, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+On Wed, 26 Oct 2016 11:02:45 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/nvidia-driver/nvidia-driver.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/file/file.hash | 2 +-
+>  package/file/file.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Both applied, thanks!
 
