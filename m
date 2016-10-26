@@ -1,78 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Oct 2016 16:17:52 +0200
-Subject: [Buildroot] [PATCH] support/scripts: tool to create fragments
-In-Reply-To: <CAH=K+6khOEyfhomv9HMbOnB7eNcgiX4V0Z_vALNLDAdL5QLVww@mail.gmail.com>
-References: <1477425699-37971-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20161025220305.1cb73355@free-electrons.com>
- <CAH=K+6khOEyfhomv9HMbOnB7eNcgiX4V0Z_vALNLDAdL5QLVww@mail.gmail.com>
-Message-ID: <20161026161752.0fa1a3da@free-electrons.com>
+Date: Wed, 26 Oct 2016 16:24:41 +0200
+Subject: [Buildroot] [git commit] python-pyqt5: fix the build with Qt 5.6.2
+Message-ID: <20161026142604.13E7581D8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6c042622e1f1aeda4c6de8b04a5853657377302a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 26 Oct 2016 09:06:12 -0500, Sam Voss wrote:
+This commit adds a patch to the python-pyqt5 package that fixes the
+build with Qt 5.6.2.
 
-> Assuming you have already done a `make linux-savedefconfig` and have
-> an older version to compare against (example files given below), it
-> would be used (from the
-> buildroot root directory) as follows:
-> 
-> ./support/scripts/gen-config-fragment.sh
-> output/build/linux-4.8.1/defconfig  board/qemu/x86_64/linux-4.8.config
+It has been verified to fix:
 
-[...]
+  http://autobuild.buildroot.net/results/8ca61ec09cf0e6577d72fe5d809867aa284c8f1e/
 
-> Giving output file of - output/build/linux-4.8.1/defconfig.fragment
-> 
-> CONFIG_DEVTMPFS_MOUNT=y
-> CONFIG_DEVTMPFS=y
-> # CONFIG_X86_MPPARSE is not set
+And it should also fix:
 
-OK, understood. So in fact, you have reimplemented the diffconfig tool
-available in the Linux kernel scripts/ directory. For your two
-configuration files, it shows:
+  http://autobuild.buildroot.net/results/4e0c5776264a7382c842f04e333fe4ded7d14f8a/
+  http://autobuild.buildroot.net/results/0306710e0f39591dba74f24aff40f7f094bcfa6e/
 
-thomas at skate:/tmp$ ~/projets/linux-2.6/scripts/diffconfig config1 config2 
--DEVTMPFS y
--DEVTMPFS_MOUNT y
--X86_MPPARSE n
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-pyqt5/0002-fix-qt-5.6.2.patch | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-Though I agree that your output format is better, as it can be re-used
-as a fragment as-is.
-
-However, calling it gen-config-fragment looks a bit wrong to me. What
-about diffconfig, like in the Linux kernel?
-
-> Should I add an example execution of this in the header of the script?
->  Something like the following?
-> 
-> #
-> # Linux Example
-> # ./support/scripts/gen-config-fragment.sh <output
-> dir>/build/linux-x.y.z/defconfig  
-> board/custom-board/linux-x.y.z.config
-> #
-> # Busybox Example using default base config
-> # ./support/scripts/gen-config-fragment.sh <output
-> dir>/build/busybox-x.y.z/.config  
-> #
-> # Busybox Example using custom base config
-> # ./support/scripts/gen-config-fragment.sh <output
-> dir>/build/busybox-x.y.z/.config board/custom-board/busybox.config  
-
-No need to give so many examples, but just one example would be good.
-
-In terms of implementation, should we re-use the diffconfig tool from
-the kernel, simply tweaked in terms of output format?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/python-pyqt5/0002-fix-qt-5.6.2.patch b/package/python-pyqt5/0002-fix-qt-5.6.2.patch
+new file mode 100644
+index 0000000..a56af09
+--- /dev/null
++++ b/package/python-pyqt5/0002-fix-qt-5.6.2.patch
+@@ -0,0 +1,28 @@
++Fix the build with Qt 5.6.2
++
++Building PyQt 5.7 with versions of Qt older than Qt 5.7 is supposed to
++work, but currently fails in practice. In fact, this is due to the
++fact that the %Timeline variable in QtCoremod.sip didn't contain the
++5.6.2 Qt version, so if this version was used, PyQt was assuming it
++was the later version 5.7, and therefore started enabling APIs only
++available in Qt 5.7, causing build failures when building against Qt
++5.6.2.
++
++Adding Qt_5_6_2 to the timeline fixes this problem. This fix was
++suggested by Phil Thompson <phil@riverbankcomputing.com>.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: PyQt5_gpl-5.7/sip/QtCore/QtCoremod.sip
++===================================================================
++--- PyQt5_gpl-5.7.orig/sip/QtCore/QtCoremod.sip	2016-07-25 15:55:37.000000000 +0200
+++++ PyQt5_gpl-5.7/sip/QtCore/QtCoremod.sip	2016-10-26 15:45:43.577153825 +0200
++@@ -22,7 +22,7 @@
++ 
++ %Module(name=PyQt5.QtCore, call_super_init=True, default_VirtualErrorHandler=PyQt5, keyword_arguments="Optional", version=1)
++ 
++-%Timeline {Qt_5_0_0 Qt_5_0_1 Qt_5_0_2 Qt_5_1_0 Qt_5_1_1 Qt_5_2_0 Qt_5_2_1 Qt_5_3_0 Qt_5_3_1 Qt_5_3_2 Qt_5_4_0 Qt_5_4_1 Qt_5_4_2 Qt_5_5_0 Qt_5_5_1 Qt_5_6_0 Qt_5_6_1 Qt_5_7_0}
+++%Timeline {Qt_5_0_0 Qt_5_0_1 Qt_5_0_2 Qt_5_1_0 Qt_5_1_1 Qt_5_2_0 Qt_5_2_1 Qt_5_3_0 Qt_5_3_1 Qt_5_3_2 Qt_5_4_0 Qt_5_4_1 Qt_5_4_2 Qt_5_5_0 Qt_5_5_1 Qt_5_6_0 Qt_5_6_1 Qt_5_6_2 Qt_5_7_0}
++ 
++ %Platforms {WS_X11 WS_WIN WS_MACX}
++ 
