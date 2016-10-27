@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 27 Oct 2016 21:56:49 +0000
+Date: Thu, 27 Oct 2016 22:13:41 +0000
 Subject: [Buildroot] [Bug 9386] ubinize fails with or without custom config
 In-Reply-To: <bug-9386-163@https.bugs.busybox.net/>
 References: <bug-9386-163@https.bugs.busybox.net/>
-Message-ID: <bug-9386-163-L81K5Y0NIa@https.bugs.busybox.net/>
+Message-ID: <bug-9386-163-vKCIcoIbKH@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,32 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=9386
 
---- Comment #5 from Arnout Vandecappelle <arnout@mind.be> ---
-Nothing weird in your log...
+--- Comment #6 from Andrey Yurovsky <yurovsky@gmail.com> ---
+I have SELinux but it's set to 'permissive' right now, nothing else is
+configured differently from a standard Fedora 24 install.
 
-Can you check the permissions of output/build/ubinize.cfg? And its contents?
+ubi.mk rm's the ubinize.cfg file, if I comment that out it'll be left behind
+and then:
 
-Do you have ACLs, SMACK, SELinux or anything like that?
+$ stat output/build/ubinize.cfg 
+  File: 'output/build/ubinize.cfg'
+  Size: 124             Blocks: 8          IO Block: 4096   regular file
+Device: fd03h/64771d    Inode: 1596887     Links: 1
+Access: (0644/-rw-r--r--)  Uid: ( 1000/ayurovsky)   Gid: ( 1000/ayurovsky)
+Context: unconfined_u:object_r:user_home_t:s0
+Access: 2016-10-27 15:10:37.142923074 -0700
+Modify: 2016-10-27 15:10:37.142923074 -0700
+Change: 2016-10-27 15:10:37.142923074 -0700
+ Birth: -
 
-I really don't see how running ubinize from without or outside of fakeroot
-could make a difference...
+What I can't explain is that if instead I leave everything alone and just
+insert a line like:
 
-Maybe add an strace in front of the ubinize command in ubi.mk to see what is
-really going on?
+stat $(BUILD_DIR)/ubinize.cf
 
-
-I do think it's a good idea to do the ubinize outside of fakeroot. However, I'd
-like to understand why this is happening - if it happens for ubinize, it could
-happen for something else as well...
+in ubi.mk (in its _CMD), stat reports that the path doesn't exist (as does
+ubinize).  So why does it exist if I remove the last line in _CMD (the rm) but
+it doesn't exist after the first line (the $(INSTALL)) ... ?
 
 -- 
 You are receiving this mail because:
