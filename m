@@ -1,39 +1,65 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Oct 2016 07:36:50 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{4, 18}.x and 4.1.x series
-Message-ID: <1477564610-29283-1-git-send-email-gustavo@zacarias.com.ar>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Thu, 27 Oct 2016 08:43:25 -0200 (BRST)
+Subject: [Buildroot] [PATCH] core/download: remove support for
+	special	git refs
+In-Reply-To: <20161027091027.6410d400@free-electrons.com>
+References: <1477512489-14710-1-git-send-email-yann.morin.1998@free.fr>
+ <87d1imsq36.fsf@ketchup.i-did-not-set--mail-host-address--so-tickle-me>
+ <20161027091027.6410d400@free-electrons.com>
+Message-ID: <1879889648.3139938.1477565005989.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: "Vivien Didelot" <vivien.didelot@savoirfairelinux.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, "Ricardo Martincoski" <ricardo.martincoski@datacom.ind.br>,
+> buildroot at buildroot.org
+> Sent: Thursday, October 27, 2016 5:10:27 AM
+> Subject: Re: [Buildroot] [PATCH] core/download: remove support for special	git refs
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 47ef25d..37936f6 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -224,14 +224,14 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.83"	if BR2_KERNEL_HEADERS_3_2
--	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.66"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
--	default "3.18.43"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.44"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.34"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.35"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.27"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
- 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
--- 
-2.7.3
+> Hello,
+> 
+> On Wed, 26 Oct 2016 18:27:57 -0400, Vivien Didelot wrote:
+> 
+>> > So, just remove the support for such special refs altogether.
+>> 
+>> I don't see why it is hard to maintain. A Github pull request ref or a
+>> Gerrit change ref, as well as a custom ref, are valid git references.
+> 
+> They are valid, but moving references, right? A little bit like a
+> branch.
+> 
+> And we don't support using Git branches as the Git version. Indeed, if
+> you do that, Buildroot will clone the Git repo once, tarball it in
+> $(DL_DIR), and will never download it again, because the name of the
+> branch doesn't change, so the name of the tarball doesn't change.
+> 
+> And we don't even try to solve this problem, because using a branch
+> name as the <pkg>_VERSION is just plain wrong.
+
+As far as I know nobody is asking Buildroot to support branch names in
+<pkg>_VERSION.
+
+>> That can totally end up in a customer defconfig.
+> 
+> And this is bogus, and precisely why we don't want to support such
+> thing. Github pull request and Gerrit change references are moving, so
+> a given Github pull request can one day contain a given version of the
+> code, and the next day a different version of the code. Hence you're
+> giving your customers something that is not reproducible. Not good.
+
+I'm not sure about Github pull requests but Gerrit change-ids could not
+be used in <pkg>_VERSION because they are not valid Git commit-ids.
+
+Each patchset in a Gerrit change has a unique commmit-id, which is not
+a moving reference. It be referred to ether by a SHA-1 or by an explicit
+path like "refs/changes/70/24070/1". The later is ugly but still unique
+and will be saved be saved as 
+
+   $(DL_DIR)/<pkg>-refs_changes_70_24070_1.tar.gz
+
+Carlos Santos (Casantos)
+DATACOM, P&D
