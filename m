@@ -1,38 +1,79 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Thu, 27 Oct 2016 13:28:31 -0400
-Subject: [Buildroot] [PATCH 2/2] rabbitmq-server: add missing host
-	dependencies
-In-Reply-To: <1477589311-12803-1-git-send-email-fhunleth@troodon-software.com>
-References: <1477589311-12803-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <1477589311-12803-2-git-send-email-fhunleth@troodon-software.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 27 Oct 2016 19:47:07 +0200
+Subject: [Buildroot] [PATCH] toolchain-external.mk: fix ARCH_SUBDIR for
+ side-by-side sysroot toolchains
+In-Reply-To: <20161027153342.27718-1-Vincent.Riera@imgtec.com>
+References: <20161027153342.27718-1-Vincent.Riera@imgtec.com>
+Message-ID: <20161027174707.GA3549@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/0ec785b8fa876d879934af618851d77a3ce70f55
-http://autobuild.buildroot.net/results/03eb39eb9498eb42202ac8b16c1ffc175c0b69d3
-http://autobuild.buildroot.net/results/199b04408fa8d9c94b9bed42fdcaafb03278f03c
+Vicente, All,
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/rabbitmq-server/rabbitmq-server.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2016-10-27 16:33 +0100, Vicente Olivert Riera spake thusly:
+> ARCH_SUBDIR is computed based on the value of ARCH_SYSROOT_DIR and
+> SYSROOT_DIR. For nested toolchains ARCH_SYSROOT_DIR is a subdir of
+> SYSROOT_DIR, so a sed command like this one...
+> 
+>   sed -r -e "s:^${SYSROOT_DIR}(.*)/$:\1:"
+> 
+> ...basically removes the leading SYSROOT_DIR part from ARCH_SYSROOT_DIR.
+> 
+> But, for side-by-side sysroot toolchains ARCH_SYSROOT_DIR and
+> SYSROOT_DIR are at the same level, so the above sed command doesn't
+> make any effect. This patch detects that situation and uses an
+> appropriate sed command for it.
 
-diff --git a/package/rabbitmq-server/rabbitmq-server.mk b/package/rabbitmq-server/rabbitmq-server.mk
-index 4a38955..7e13c2d 100644
---- a/package/rabbitmq-server/rabbitmq-server.mk
-+++ b/package/rabbitmq-server/rabbitmq-server.mk
-@@ -17,7 +17,7 @@ RABBITMQ_SERVER_LICENSE_FILES = LICENSE-MPL-RabbitMQ \
- 				LICENSE-MIT-Mochi LICENSE-MIT-Mochiweb \
- 				LICENSE-MIT-Sammy060 LICENSE-MIT-SockJS \
- 				LICENSE-MPL2
--RABBITMQ_SERVER_DEPENDENCIES = erlang libxslt
-+RABBITMQ_SERVER_DEPENDENCIES = host-libxslt host-zip erlang libxslt
- RABBITMQ_SERVER_TARGET_BINS = rabbitmq-plugins rabbitmq-server rabbitmqctl rabbitmq-env rabbitmq-defaults
- 
- define RABBITMQ_SERVER_BUILD_CMDS
+As discussed on IRC, there was a previous patch of mine on the topic:
+    https://patchwork.ozlabs.org/patch/627505/
+
+I did not yet send v2 of that patch:
+    https://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/ext-toolchain-fixes&id=30ab28ce467b7d7dea5e181cae69ae882f936e98
+
+I'll send it shortly so we can compare the two and decide which is
+best.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  toolchain/toolchain-external/toolchain-external.mk | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index f7c6a19..a25c102 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -665,7 +665,12 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+>  			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
+>  		fi ; \
+>  	fi ; \
+> -	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+> +	if [ "`dirname $${ARCH_SYSROOT_DIR}`" = "`dirname $${SYSROOT_DIR}`" ] ; then \
+> +		SYSROOT_DIR_DIRNAME=`dirname $${SYSROOT_DIR}`/ ; \
+> +		ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR_DIRNAME}(.*)/$$:\1:"` ; \
+> +	else \
+> +		ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+> +	fi ; \
+>  	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
+>  	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
+>  endef
+> -- 
+> 2.10.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
