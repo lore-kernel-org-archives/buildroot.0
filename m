@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Oct 2016 10:38:48 +0200
-Subject: [Buildroot] [git commit] core/pkg-generic: check proper package
-	installation
-In-Reply-To: <20161026203713.9732A7FD9B@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Wed, 26 Oct 2016 22:36:44 +0200")
-References: <20161026203713.9732A7FD9B@busybox.osuosl.org>
-Message-ID: <878ttajief.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Oct 2016 10:40:59 +0200
+Subject: [Buildroot] [PATCH 1/2] glibc: install libmvec.so when available
+In-Reply-To: <1477518479-6256-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 26 Oct 2016 23:47:58 +0200")
+References: <1477518479-6256-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <874m3yjias.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +13,26 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=938f47c7e89362e7b824dbd0bd1ee9839d56d603
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > On some architectures (namely x86-64), glibc may provide a libmvec
+ > library since glibc 2.22, which programs built with gcc OpenMP support
+ > might get linked to.
 
- > Some packages misbehave, and install files in either $(STAGING_DIR)/$(O)
- > or in $(TARGET_DIR)/$(O) .
+ > In order for these programs to work on the target, we need to copy
+ > this library to the target filesystem.
 
- > One common reason for that is that pkgconf now prepends the sysroot path
- > to all the paths it returns. Other reasons vary, but are mostly due to
- > poorly writen generic-packages.
+ > This commit takes care of this for the glibc package (used for the
+ > internal toolchain backend). Note that libraries listed in
+ > GLIBC_LIBS_LIB are silently ignored if they don't exist. Therefore, we
+ > don't need to have any condition on the architecture or glibc version.
 
- > And a new step hooks to check that no file gets installed in either
- > location, called after the install-target and install-staging steps.
+ > For more details on libmvec, see
+ > https://sourceware.org/glibc/wiki/libmvec.
 
-Didn't we just discuss that this duplicates the proposed
-leak-of-host-paths stuff Samuel is working on?
+ > Fixes bug #9111.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
