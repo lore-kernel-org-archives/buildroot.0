@@ -1,10 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Oct 2016 10:40:59 +0200
-Subject: [Buildroot] [PATCH 1/2] glibc: install libmvec.so when available
-In-Reply-To: <1477518479-6256-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 26 Oct 2016 23:47:58 +0200")
+Date: Thu, 27 Oct 2016 10:41:04 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain-external: install libmvec.so
+	from glibc toolchains
+In-Reply-To: <1477518479-6256-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 26 Oct 2016 23:47:59 +0200")
 References: <1477518479-6256-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <874m3yjias.fsf@dell.be.48ers.dk>
+ <1477518479-6256-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87zilqi3q7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,10 +22,10 @@ To: buildroot@busybox.net
  > In order for these programs to work on the target, we need to copy
  > this library to the target filesystem.
 
- > This commit takes care of this for the glibc package (used for the
- > internal toolchain backend). Note that libraries listed in
- > GLIBC_LIBS_LIB are silently ignored if they don't exist. Therefore, we
- > don't need to have any condition on the architecture or glibc version.
+ > This commit takes care of this for the external toolchain
+ > situation. Note that libraries listed in TOOLCHAIN_EXTERNAL_LIBS are
+ > silently ignored if they don't exist. Therefore, we don't need to have
+ > any condition on the architecture or glibc version.
 
  > For more details on libmvec, see
  > https://sourceware.org/glibc/wiki/libmvec.
