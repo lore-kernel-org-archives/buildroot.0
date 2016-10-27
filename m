@@ -1,79 +1,186 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 27 Oct 2016 19:47:07 +0200
-Subject: [Buildroot] [PATCH] toolchain-external.mk: fix ARCH_SUBDIR for
- side-by-side sysroot toolchains
-In-Reply-To: <20161027153342.27718-1-Vincent.Riera@imgtec.com>
-References: <20161027153342.27718-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161027174707.GA3549@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 27 Oct 2016 21:00:03 +0300
+Subject: [Buildroot] [PATCH] bridge-utils: bump to version 1.6
+Message-ID: <7f80513e7b1d337f33ae39842c4c89e916e940dc.1477591203.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente, All,
+Drop upstream patches.
 
-On 2016-10-27 16:33 +0100, Vicente Olivert Riera spake thusly:
-> ARCH_SUBDIR is computed based on the value of ARCH_SYSROOT_DIR and
-> SYSROOT_DIR. For nested toolchains ARCH_SYSROOT_DIR is a subdir of
-> SYSROOT_DIR, so a sed command like this one...
-> 
->   sed -r -e "s:^${SYSROOT_DIR}(.*)/$:\1:"
-> 
-> ...basically removes the leading SYSROOT_DIR part from ARCH_SYSROOT_DIR.
-> 
-> But, for side-by-side sysroot toolchains ARCH_SYSROOT_DIR and
-> SYSROOT_DIR are at the same level, so the above sed command doesn't
-> make any effect. This patch detects that situation and uses an
-> appropriate sed command for it.
+Change download and homepage to kernel.org, and use .xz tarball.
 
-As discussed on IRC, there was a previous patch of mine on the topic:
-    https://patchwork.ozlabs.org/patch/627505/
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../0002-fix-for-kernel-headers-3.8+.patch         | 30 --------
+ package/bridge-utils/0003-sysfs-write-fixes.patch  | 81 ----------------------
+ package/bridge-utils/Config.in                     |  2 +-
+ package/bridge-utils/bridge-utils.hash             |  5 +-
+ package/bridge-utils/bridge-utils.mk               |  5 +-
+ 5 files changed, 6 insertions(+), 117 deletions(-)
+ delete mode 100644 package/bridge-utils/0002-fix-for-kernel-headers-3.8+.patch
+ delete mode 100644 package/bridge-utils/0003-sysfs-write-fixes.patch
 
-I did not yet send v2 of that patch:
-    https://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/ext-toolchain-fixes&id=30ab28ce467b7d7dea5e181cae69ae882f936e98
-
-I'll send it shortly so we can compare the two and decide which is
-best.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  toolchain/toolchain-external/toolchain-external.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index f7c6a19..a25c102 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -665,7 +665,12 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
->  			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
->  		fi ; \
->  	fi ; \
-> -	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
-> +	if [ "`dirname $${ARCH_SYSROOT_DIR}`" = "`dirname $${SYSROOT_DIR}`" ] ; then \
-> +		SYSROOT_DIR_DIRNAME=`dirname $${SYSROOT_DIR}`/ ; \
-> +		ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR_DIRNAME}(.*)/$$:\1:"` ; \
-> +	else \
-> +		ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
-> +	fi ; \
->  	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
->  	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
->  endef
-> -- 
-> 2.10.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/bridge-utils/0002-fix-for-kernel-headers-3.8+.patch b/package/bridge-utils/0002-fix-for-kernel-headers-3.8+.patch
+deleted file mode 100644
+index 0455a9085cc1..000000000000
+--- a/package/bridge-utils/0002-fix-for-kernel-headers-3.8+.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-commit 5eebb7f9288b7881ffb929b1fd494fe3ac3be27d
+-Author: Russell Senior <russell@personaltelco.net>
+-Date:   Wed Mar 6 12:49:42 2013 -0800
+-
+-    bridge-utils: Fix compile against linux-3.8.x
+-    
+-    Linux 3.8 has a header, include/uapi/linux/if_bridge.h that uses a
+-    struct in6_addr but doesn't define it.  The trivial seeming fix of
+-    including the header that does define it causes more problems.  The
+-    problem was discussed on mailing lists in January 2013.  The final
+-    suggestion I found was here:
+-    
+-          http://www.redhat.com/archives/libvir-list/2013-January/msg01253.html
+-    
+-    This is intended to implement that suggestion.
+-    
+-    Signed-off-by: Russell Senior <russell@personaltelco.net>
+-
+-diff --git a/libbridge/libbridge.h b/libbridge/libbridge.h
+-index 39964f2..dd14bae 100644
+---- a/libbridge/libbridge.h
+-+++ b/libbridge/libbridge.h
+-@@ -20,6 +20,7 @@
+- #define _LIBBRIDGE_H
+- 
+- #include <sys/socket.h>
+-+#include <netinet/in.h>
+- #include <linux/if.h>
+- #include <linux/if_bridge.h>
+- 
+diff --git a/package/bridge-utils/0003-sysfs-write-fixes.patch b/package/bridge-utils/0003-sysfs-write-fixes.patch
+deleted file mode 100644
+index a7ff1979f5e8..000000000000
+--- a/package/bridge-utils/0003-sysfs-write-fixes.patch
++++ /dev/null
+@@ -1,81 +0,0 @@
+-commit bb9970a9df95837e39d680021b1f73d231e85406
+-Author: Stephen Hemminger <shemminger@vyatta.com>
+-Date:   Tue May 3 09:52:43 2011 -0700
+-
+-    Check error returns from write to sysfs
+-
+-    Add helper function to check write to sysfs files.
+-
+-    Fix incorrect sysfs path in br_set.
+-
+-[Thomas De Schampheleire: update commit message only]
+-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+-
+-diff --git a/libbridge/libbridge_devif.c b/libbridge/libbridge_devif.c
+-index aa8bc36..1e83925 100644
+---- a/libbridge/libbridge_devif.c
+-+++ b/libbridge/libbridge_devif.c
+-@@ -280,25 +280,38 @@ fallback:
+- 	return old_get_port_info(brname, port, info);
+- }
+- 
+-+static int set_sysfs(const char *path, unsigned long value)
+-+{
+-+	int fd, ret = 0, cc;
+-+	char buf[32];
+-+
+-+	fd = open(path, O_WRONLY);
+-+	if (fd < 0)
+-+		return -1;
+-+
+-+	cc = snprintf(buf, sizeof(buf), "%lu\n", value);
+-+	if (write(fd, buf, cc) < 0)
+-+		ret = -1;
+-+	close(fd);
+-+
+-+	return ret;
+-+}
+-+
+- 
+- static int br_set(const char *bridge, const char *name,
+- 		  unsigned long value, unsigned long oldcode)
+- {
+- 	int ret;
+- 	char path[SYSFS_PATH_MAX];
+--	FILE *f;
+- 
+--	snprintf(path, SYSFS_PATH_MAX, SYSFS_CLASS_NET "%s/%s", bridge, name);
+-+	snprintf(path, SYSFS_PATH_MAX, SYSFS_CLASS_NET "%s/bridge/%s",
+-+		 bridge, name);
+- 
+--	f = fopen(path, "w");
+--	if (f) {
+--		ret = fprintf(f, "%ld\n", value);
+--		fclose(f);
+--	} else {
+-+	if ((ret = set_sysfs(path, value)) < 0) {
+- 		/* fallback to old ioctl */
+- 		struct ifreq ifr;
+- 		unsigned long args[4] = { oldcode, value, 0, 0 };
+--		
+-+
+- 		strncpy(ifr.ifr_name, bridge, IFNAMSIZ);
+- 		ifr.ifr_data = (char *) &args;
+- 		ret = ioctl(br_socket_fd, SIOCDEVPRIVATE, &ifr);
+-@@ -348,14 +361,10 @@ static int port_set(const char *bridge, const char *ifname,
+- {
+- 	int ret;
+- 	char path[SYSFS_PATH_MAX];
+--	FILE *f;
+- 
+- 	snprintf(path, SYSFS_PATH_MAX, SYSFS_CLASS_NET "%s/brport/%s", ifname, name);
+--	f = fopen(path, "w");
+--	if (f) {
+--		ret = fprintf(f, "%ld\n", value);
+--		fclose(f);
+--	} else {
+-+
+-+	if ((ret = set_sysfs(path, value)) < 0) {
+- 		int index = get_portno(bridge, ifname);
+- 
+- 		if (index < 0)
+diff --git a/package/bridge-utils/Config.in b/package/bridge-utils/Config.in
+index 537eb1f59fd7..fb9c7df4274f 100644
+--- a/package/bridge-utils/Config.in
++++ b/package/bridge-utils/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_BRIDGE_UTILS
+ 	  Manage ethernet bridging; a way to connect networks together to
+ 	  form a larger network.
+ 
+-	  http://linux-net.osdl.org/index.php/Bridge
++	  https://git.kernel.org/cgit/linux/kernel/git/shemminger/bridge-utils.git/
+diff --git a/package/bridge-utils/bridge-utils.hash b/package/bridge-utils/bridge-utils.hash
+index c85fd04154bd..e699b24a6386 100644
+--- a/package/bridge-utils/bridge-utils.hash
++++ b/package/bridge-utils/bridge-utils.hash
+@@ -1,3 +1,2 @@
+-# From http://sourceforge.net/projects/bridge/files/bridge/
+-md5	ec7b381160b340648dede58c31bb2238	bridge-utils-1.5.tar.gz
+-sha1	19d2a58cd3a70f971aa931b40256174a847e60d6	bridge-utils-1.5.tar.gz
++# From https://www.kernel.org/pub/linux/utils/net/bridge-utils/sha256sums.asc
++sha256 cc67efb5d5fb8928a6569b3fade2b4042ec17da04678dab127d96b46489e26c8 bridge-utils-1.6.tar.xz
+diff --git a/package/bridge-utils/bridge-utils.mk b/package/bridge-utils/bridge-utils.mk
+index ae4c4197c789..efe57cd97999 100644
+--- a/package/bridge-utils/bridge-utils.mk
++++ b/package/bridge-utils/bridge-utils.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-BRIDGE_UTILS_VERSION = 1.5
+-BRIDGE_UTILS_SITE = http://downloads.sourceforge.net/project/bridge/bridge
++BRIDGE_UTILS_VERSION = 1.6
++BRIDGE_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/bridge-utils
++BRIDGE_UTILS_SOURCE = bridge-utils-1.6.tar.xz
+ BRIDGE_UTILS_AUTORECONF = YES
+ BRIDGE_UTILS_CONF_OPTS = --with-linux-headers=$(LINUX_HEADERS_DIR)
+ BRIDGE_UTILS_LICENSE = GPLv2+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.9.3
