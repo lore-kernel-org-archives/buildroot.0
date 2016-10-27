@@ -1,51 +1,49 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 27 Oct 2016 08:44:54 -0200
-Subject: [Buildroot] [PATCH 1/2] configs: add defconfig for TS-4600
-In-Reply-To: <20161027000807.20206-2-sebastien.bourdelin@savoirfairelinux.com>
-References: <20161027000807.20206-1-sebastien.bourdelin@savoirfairelinux.com>
- <20161027000807.20206-2-sebastien.bourdelin@savoirfairelinux.com>
-Message-ID: <CAOMZO5Acw0Hr8AW20k-FMtprFwQj84BQXaV8P9SLeHUR-jGzjg@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 27 Oct 2016 16:33:42 +0100
+Subject: [Buildroot] [PATCH] toolchain-external.mk: fix ARCH_SUBDIR for
+	side-by-side sysroot toolchains
+Message-ID: <20161027153342.27718-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 26, 2016 at 10:08 PM, Sebastien Bourdelin
-<sebastien.bourdelin@savoirfairelinux.com> wrote:
-> The TS-4600 is a TS-SOCKET macrocontroller board based on the Freescale
+ARCH_SUBDIR is computed based on the value of ARCH_SYSROOT_DIR and
+SYSROOT_DIR. For nested toolchains ARCH_SYSROOT_DIR is a subdir of
+SYSROOT_DIR, so a sed command like this one...
 
-microcontroller?
+  sed -r -e "s:^${SYSROOT_DIR}(.*)/$:\1:"
 
-> i.MX28 ARM CPU.
->
-> The TS-4600 uses a custom Linux 2.6.35 from Technologic Systems:
-> https://github.com/embeddedarm/linux-2.6.35.3-imx28.git
+...basically removes the leading SYSROOT_DIR part from ARCH_SYSROOT_DIR.
 
-What about adding mainline kernel support for this board? mx28 support
-in mainline kernel is decent.
+But, for side-by-side sysroot toolchains ARCH_SYSROOT_DIR and
+SYSROOT_DIR are at the same level, so the above sed command doesn't
+make any effect. This patch detects that situation and uses an
+appropriate sed command for it.
 
-> The i.MX28 internal ROM loader supports a special image data that
-> Freescale calls "bootstream".
-> This bootstream contains a stream of boot commands and a boot image
-> which here combines a TS custom version of Freescale imx-bootlets
-> v10.12.01 and the Linux kernel.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Other option would be to use mainline U-Boot, which does not need the
-separate imx-bootlets package.
-
-> The custom imx-bootlets and its toolchain comes as a part of the Linux
-> repository and the package ts4600-bootrom has been introduced to handle
-> the bootstream generation.
->
-> The ts4600-bootrom-sign tool has also been introduced to prepare the
-> bootable partition image which prepends the TS Bootrom with a signature
-> and the Boot Control Block required by the i.MX28 SoC when using the
-> SD/MMC boot mode.
->
-> A post-image script is provided to generate an image that can be
-> directly written to an SD card.
-
-I will give it a try on using your script on a mx28evk.
-
-Thanks
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index f7c6a19..a25c102 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -665,7 +665,12 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+ 			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
+ 		fi ; \
+ 	fi ; \
+-	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
++	if [ "`dirname $${ARCH_SYSROOT_DIR}`" = "`dirname $${SYSROOT_DIR}`" ] ; then \
++		SYSROOT_DIR_DIRNAME=`dirname $${SYSROOT_DIR}`/ ; \
++		ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR_DIRNAME}(.*)/$$:\1:"` ; \
++	else \
++		ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
++	fi ; \
+ 	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
+ 	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
+ endef
+-- 
+2.10.1
