@@ -1,65 +1,39 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 27 Oct 2016 08:43:25 -0200 (BRST)
-Subject: [Buildroot] [PATCH] core/download: remove support for
-	special	git refs
-In-Reply-To: <20161027091027.6410d400@free-electrons.com>
-References: <1477512489-14710-1-git-send-email-yann.morin.1998@free.fr>
- <87d1imsq36.fsf@ketchup.i-did-not-set--mail-host-address--so-tickle-me>
- <20161027091027.6410d400@free-electrons.com>
-Message-ID: <1879889648.3139938.1477565005989.JavaMail.zimbra@datacom.ind.br>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 27 Oct 2016 11:44:23 +0100
+Subject: [Buildroot] [PATCH] ser2net: bump version to 3.0
+Message-ID: <20161027104423.27760-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Vivien Didelot" <vivien.didelot@savoirfairelinux.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, "Ricardo Martincoski" <ricardo.martincoski@datacom.ind.br>,
-> buildroot at buildroot.org
-> Sent: Thursday, October 27, 2016 5:10:27 AM
-> Subject: Re: [Buildroot] [PATCH] core/download: remove support for special	git refs
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/ser2net/ser2net.hash | 2 +-
+ package/ser2net/ser2net.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Hello,
-> 
-> On Wed, 26 Oct 2016 18:27:57 -0400, Vivien Didelot wrote:
-> 
->> > So, just remove the support for such special refs altogether.
->> 
->> I don't see why it is hard to maintain. A Github pull request ref or a
->> Gerrit change ref, as well as a custom ref, are valid git references.
-> 
-> They are valid, but moving references, right? A little bit like a
-> branch.
-> 
-> And we don't support using Git branches as the Git version. Indeed, if
-> you do that, Buildroot will clone the Git repo once, tarball it in
-> $(DL_DIR), and will never download it again, because the name of the
-> branch doesn't change, so the name of the tarball doesn't change.
-> 
-> And we don't even try to solve this problem, because using a branch
-> name as the <pkg>_VERSION is just plain wrong.
-
-As far as I know nobody is asking Buildroot to support branch names in
-<pkg>_VERSION.
-
->> That can totally end up in a customer defconfig.
-> 
-> And this is bogus, and precisely why we don't want to support such
-> thing. Github pull request and Gerrit change references are moving, so
-> a given Github pull request can one day contain a given version of the
-> code, and the next day a different version of the code. Hence you're
-> giving your customers something that is not reproducible. Not good.
-
-I'm not sure about Github pull requests but Gerrit change-ids could not
-be used in <pkg>_VERSION because they are not valid Git commit-ids.
-
-Each patchset in a Gerrit change has a unique commmit-id, which is not
-a moving reference. It be referred to ether by a SHA-1 or by an explicit
-path like "refs/changes/70/24070/1". The later is ugly but still unique
-and will be saved be saved as 
-
-   $(DL_DIR)/<pkg>-refs_changes_70_24070_1.tar.gz
-
-Carlos Santos (Casantos)
-DATACOM, P&D
+diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
+index a02a981..3e62f1c 100644
+--- a/package/ser2net/ser2net.hash
++++ b/package/ser2net/ser2net.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  cee4ad8fb3531281e8761751694dfab39d681022b2363b1edeba764d397c3c99  ser2net-2.10.1.tar.gz
++sha256 e8aaf6c629c78bbc424e8a6810758061f9c68a4ffea0faf7c5031de26ce1c3e1  ser2net-3.0.tar.gz
+diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
+index 85b23ae..01aee95 100644
+--- a/package/ser2net/ser2net.mk
++++ b/package/ser2net/ser2net.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SER2NET_VERSION = 2.10.1
++SER2NET_VERSION = 3.0
+ SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ SER2NET_LICENSE = GPLv2+
+ SER2NET_LICENSE_FILES = COPYING
+-- 
+2.10.1
