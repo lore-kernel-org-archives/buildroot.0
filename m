@@ -1,39 +1,51 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 27 Oct 2016 11:44:23 +0100
-Subject: [Buildroot] [PATCH] ser2net: bump version to 3.0
-Message-ID: <20161027104423.27760-1-Vincent.Riera@imgtec.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 27 Oct 2016 08:44:54 -0200
+Subject: [Buildroot] [PATCH 1/2] configs: add defconfig for TS-4600
+In-Reply-To: <20161027000807.20206-2-sebastien.bourdelin@savoirfairelinux.com>
+References: <20161027000807.20206-1-sebastien.bourdelin@savoirfairelinux.com>
+ <20161027000807.20206-2-sebastien.bourdelin@savoirfairelinux.com>
+Message-ID: <CAOMZO5Acw0Hr8AW20k-FMtprFwQj84BQXaV8P9SLeHUR-jGzjg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/ser2net/ser2net.hash | 2 +-
- package/ser2net/ser2net.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, Oct 26, 2016 at 10:08 PM, Sebastien Bourdelin
+<sebastien.bourdelin@savoirfairelinux.com> wrote:
+> The TS-4600 is a TS-SOCKET macrocontroller board based on the Freescale
 
-diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-index a02a981..3e62f1c 100644
---- a/package/ser2net/ser2net.hash
-+++ b/package/ser2net/ser2net.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  cee4ad8fb3531281e8761751694dfab39d681022b2363b1edeba764d397c3c99  ser2net-2.10.1.tar.gz
-+sha256 e8aaf6c629c78bbc424e8a6810758061f9c68a4ffea0faf7c5031de26ce1c3e1  ser2net-3.0.tar.gz
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index 85b23ae..01aee95 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SER2NET_VERSION = 2.10.1
-+SER2NET_VERSION = 3.0
- SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPLv2+
- SER2NET_LICENSE_FILES = COPYING
--- 
-2.10.1
+microcontroller?
+
+> i.MX28 ARM CPU.
+>
+> The TS-4600 uses a custom Linux 2.6.35 from Technologic Systems:
+> https://github.com/embeddedarm/linux-2.6.35.3-imx28.git
+
+What about adding mainline kernel support for this board? mx28 support
+in mainline kernel is decent.
+
+> The i.MX28 internal ROM loader supports a special image data that
+> Freescale calls "bootstream".
+> This bootstream contains a stream of boot commands and a boot image
+> which here combines a TS custom version of Freescale imx-bootlets
+> v10.12.01 and the Linux kernel.
+
+Other option would be to use mainline U-Boot, which does not need the
+separate imx-bootlets package.
+
+> The custom imx-bootlets and its toolchain comes as a part of the Linux
+> repository and the package ts4600-bootrom has been introduced to handle
+> the bootstream generation.
+>
+> The ts4600-bootrom-sign tool has also been introduced to prepare the
+> bootable partition image which prepends the TS Bootrom with a signature
+> and the Boot Control Block required by the i.MX28 SoC when using the
+> SD/MMC boot mode.
+>
+> A post-image script is provided to generate an image that can be
+> directly written to an SD card.
+
+I will give it a try on using your script on a mx28evk.
+
+Thanks
