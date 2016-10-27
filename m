@@ -1,46 +1,77 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 27 Oct 2016 23:22:14 +0200
-Subject: [Buildroot] [PATCH v1] mmc-utils: bump version to 2cb6695
-Message-ID: <1477603334-1917-1-git-send-email-ps.report@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 27 Oct 2016 21:24:38 +0000
+Subject: [Buildroot] [Bug 9386] ubinize fails with or without custom config
+In-Reply-To: <bug-9386-163@https.bugs.busybox.net/>
+References: <bug-9386-163@https.bugs.busybox.net/>
+Message-ID: <bug-9386-163-BOHrC0yVkk@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change log since last version bump:
+https://bugs.busybox.net/show_bug.cgi?id=9386
 
-  2cb6695 Add missing -c for write_reliability
-  e094e28 Fix return value check from set_partitioning_setting_completed()
-  f90eac4 Add help texts for -c option
-  752072d Add -c option for partitioning commands
-  55380d9 Register being set is other than mentioned in printed message.
-  3c02759 Fix reported offset for enhanced user area start address
-  a3d3331 mmc-utils: Add Command Queue fields to Extended CSD
-  0ca049f mmc-utils: Add ability to configure write protect on an eMMC device
-  bb779ac mmc-utils: Add disable partition boot to 'mmc bootpart enable'
-  89cd01e mmc_utils: add ffu support
-  4af1749 mmc-utils: Merge the lsmmc tool into mmc-utils
-  44f94b9 mmc_utils: doc: add man-page
-  928ff07 mmc_utils: gp create: only allow partition [1-4] to be selected
+--- Comment #4 from Andrey Yurovsky <yurovsky@gmail.com> ---
+Ok, I've reproduced it with your defconfig and I've left all paths in here.  To
+build I just ran:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/mmc-utils/mmc-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+make atmel_sama5d4_xplained_defconfig
+make
 
-diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
-index 82468bc..7473a1b 100644
---- a/package/mmc-utils/mmc-utils.mk
-+++ b/package/mmc-utils/mmc-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MMC_UTILS_VERSION = d0b46442b50794217e53b2455c1344c548d9d088
-+MMC_UTILS_VERSION = 2cb6695e8dec00d887bdd5309d1b57d836fcd214
- MMC_UTILS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
- MMC_UTILS_LICENSE = GPLv2
- 
+And in the end the output is:
+
+>>>   Generating root filesystem image rootfs.ubi
+rm -f /home/ayurovsky/dev/build-system/buildroot/output/build/_fakeroot.fs
+rm -f
+/home/ayurovsky/dev/build-system/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+rm -f /home/ayurovsky/dev/build-system/buildroot/output/build/_users_table.txt
+echo '#!/bin/sh' >
+/home/ayurovsky/dev/build-system/buildroot/output/build/_fakeroot.fs
+echo "set -e" >>
+/home/ayurovsky/dev/build-system/buildroot/output/build/_fakeroot.fs
+echo "chown -h -R 0:0 /home/ayurovsky/dev/build-system/buildroot/output/target"
+>> /home/ayurovsky/dev/build-system/buildroot/output/build/_fakeroot.fs
+printf '   \n' >>
+/home/ayurovsky/dev/build-system/buildroot/output/build/_users_table.txt
+PATH="/home/ayurovsky/dev/build-system/buildroot/output/host/bin:/home/ayurovsky/dev/build-system/buildroot/output/host/sbin:/home/ayurovsky/dev/build-system/buildroot/output/host/usr/bin:/home/ayurovsky/dev/build-system/buildroot/output/host/usr/sbin:/usr/lib64/qt-3.3/bin:/usr/lib64/ccache:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/ayurovsky/.local/bin:/home/ayurovsky/bin"
+/home/ayurovsky/dev/build-system/buildroot/support/scripts/mkusers
+/home/ayurovsky/dev/build-system/buildroot/output/build/_users_table.txt
+/home/ayurovsky/dev/build-system/buildroot/output/target >>
+/home/ayurovsky/dev/build-system/buildroot/output/build/_fakeroot.fs
+cat system/device_table.txt >
+/home/ayurovsky/dev/build-system/buildroot/output/build/_device_table.txt
+printf '        /bin/busybox                     f 4755 0  0 - - - - -\n
+/dev/console c 622 0 0 5 1 - - -\n\n' >>
+/home/ayurovsky/dev/build-system/buildroot/output/build/_device_table.txt
+echo "/home/ayurovsky/dev/build-system/buildroot/output/host/usr/bin/makedevs
+-d /home/ayurovsky/dev/build-system/buildroot/output/build/_device_table.txt
+/home/ayurovsky/dev/build-system/buildroot/output/target" >>
+/home/ayurovsky/dev/build-system/buildroot/output/build/_fakeroot.fs
+printf '        /usr/bin/install -m 0644 fs/ubifs/ubinize.cfg
+/home/ayurovsky/dev/build-system/buildroot/output/build/ubinize.cfg\n    
+/usr/bin/sed -i -e
+'\''s;BR2_ROOTFS_UBIFS_PATH;/home/ayurovsky/dev/build-system/buildroot/output/images/rootfs.ubifs;'\''
+/home/ayurovsky/dev/build-system/buildroot/output/build/ubinize.cfg\n
+/home/ayurovsky/dev/build-system/buildroot/output/host/usr/sbin/ubinize -o
+/home/ayurovsky/dev/build-system/buildroot/output/images/rootfs.ubi -m 0x1000
+-p 0x40000 
+/home/ayurovsky/dev/build-system/buildroot/output/build/ubinize.cfg\n      rm
+/home/ayurovsky/dev/build-system/buildroot/output/build/ubinize.cfg\n' >>
+/home/ayurovsky/dev/build-system/buildroot/output/build/_fakeroot.fs
+chmod a+x /home/ayurovsky/dev/build-system/buildroot/output/build/_fakeroot.fs
+PATH="/home/ayurovsky/dev/build-system/buildroot/output/host/bin:/home/ayurovsky/dev/build-system/buildroot/output/host/sbin:/home/ayurovsky/dev/build-system/buildroot/output/host/usr/bin:/home/ayurovsky/dev/build-system/buildroot/output/host/usr/sbin:/usr/lib64/qt-3.3/bin:/usr/lib64/ccache:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/ayurovsky/.local/bin:/home/ayurovsky/bin"
+/home/ayurovsky/dev/build-system/buildroot/output/host/usr/bin/fakeroot --
+/home/ayurovsky/dev/build-system/buildroot/output/build/_fakeroot.fs
+rootdir=/home/ayurovsky/dev/build-system/buildroot/output/target
+table='/home/ayurovsky/dev/build-system/buildroot/output/build/_device_table.txt'
+iniparser: cannot open
+/home/ayurovsky/dev/build-system/buildroot/output/build/ubinize.cfg
+ubinize: error!: cannot load the input ini file
+"/home/ayurovsky/dev/build-system/buildroot/output/build/ubinize.cfg"
+/usr/bin/install -m 0644 support/misc/target-dir-warning.txt
+/home/ayurovsky/dev/build-system/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+
 -- 
-2.8.1
+You are receiving this mail because:
+You are on the CC list for the bug.
