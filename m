@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Oct 2016 21:53:01 +0200
-Subject: [Buildroot] [git commit] lft: bump to version 3.77
-Message-ID: <20161027195405.3672980765@busybox.osuosl.org>
+Date: Thu, 27 Oct 2016 21:52:38 +0200
+Subject: [Buildroot] [git commit] harfbuzz: bump to version 1.3.3
+Message-ID: <20161027195405.0930580765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21db6fe246016266ba033c6b802aeb35944f613b
+commit: https://git.buildroot.net/buildroot/commit/?id=b389f9d23bc3080f092aa5ab5b67807cd45ad7b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lft/lft.hash | 2 +-
- package/lft/lft.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/harfbuzz/harfbuzz.hash | 4 ++--
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lft/lft.hash b/package/lft/lft.hash
-index 714b7bd..b045e7c 100644
---- a/package/lft/lft.hash
-+++ b/package/lft/lft.hash
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index cf89133..aa864c6 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
 @@ -1,2 +1,2 @@
- # Locally calculated, matches download from fossies.org and pwhois.org
--sha256	fa163f8eaa9c27e12ecf533e79d8606895a301d2a75b9a77f0df29ef9a20c561	lft-3.76.tar.gz
-+sha256	d182d6774e64dcdeb19ed1a598fa588e57ddb6cbb6847d9277c405d3a4597d89	lft-3.77.tar.gz
-diff --git a/package/lft/lft.mk b/package/lft/lft.mk
-index d2b82b2..72f43fa 100644
---- a/package/lft/lft.mk
-+++ b/package/lft/lft.mk
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.3.2.tar.bz2.sha256
+-sha256	8543a6372f08c5987c632dfaa86210c7edb3f43fbacd96095c609bc3539ce027	harfbuzz-1.3.2.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.3.3.tar.bz2.sha256
++sha256	2620987115a4122b47321610dccbcc18f7f121115fd7b88dc8a695c8b66cb3c9	harfbuzz-1.3.3.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index a014d7d..2290eeb 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LFT_VERSION = 3.76
-+LFT_VERSION = 3.77
- LFT_SITE = http://pwhois.org/get
- LFT_DEPENDENCIES = libpcap
- LFT_LICENSE = VOSTROM Public License for Open Source
+-HARFBUZZ_VERSION = 1.3.2
++HARFBUZZ_VERSION = 1.3.3
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
