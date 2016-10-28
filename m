@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Fri, 28 Oct 2016 10:18:25 -0300
-Subject: [Buildroot] [PATCH 07/11] perl: use $(HOST_MAKE_ENV) when calling
-	$(MAKE)
+Date: Fri, 28 Oct 2016 10:18:26 -0300
+Subject: [Buildroot] [PATCH 08/11] dtc: use $(TARGET_CONFIGURE_OPTS) when
+	calling $(MAKE)
 In-Reply-To: <1477660709-5935-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1477660709-5935-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1477660709-5935-7-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1477660709-5935-8-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,33 +14,29 @@ To: buildroot@busybox.net
 From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/perl/perl.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/dtc/dtc.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index b19fa78..23ea728 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -104,15 +104,16 @@ HOST_PERL_CONF_OPTS = \
- 	-Dcc="$(HOSTCC)"
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index 0a48644..f6800f3 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -37,12 +37,12 @@ endef
  
- define HOST_PERL_CONFIGURE_CMDS
--	(cd $(@D); HOSTCC='$(HOSTCC_NOCCACHE)' ./Configure $(HOST_PERL_CONF_OPTS))
-+	(cd $(@D); HOSTCC='$(HOSTCC_NOCCACHE)' $(HOST_MAKE_ENV) \
-+		./Configure $(HOST_PERL_CONF_OPTS))
+ # For staging, only the library is needed
+ define DTC_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install-lib \
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install-lib \
+ 		install-includes
  endef
  
- define HOST_PERL_BUILD_CMDS
--	$(MAKE) -C $(@D)
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+ define DTC_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr $(DTC_INSTALL_GOAL)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr $(DTC_INSTALL_GOAL)
  endef
  
- define HOST_PERL_INSTALL_CMDS
--	$(MAKE) -C $(@D) INSTALL_DEPENDENCE='' install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALL_DEPENDENCE='' install
- endef
- 
- $(eval $(generic-package))
+ # host build
 -- 
 2.7.3
