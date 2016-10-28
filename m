@@ -1,27 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Oct 2016 15:17:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libglob: fix license typo
-In-Reply-To: <1477660439-12336-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1477660439-12336-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20161028151750.47073861@free-electrons.com>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Fri, 28 Oct 2016 10:18:19 -0300
+Subject: [Buildroot] [PATCH 01/11] cryptopp: use $(HOST_MAKE_ENV) when
+	calling $(MAKE)
+Message-ID: <1477660709-5935-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-On Fri, 28 Oct 2016 15:13:59 +0200, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/libglob/libglob.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ package/cryptopp/cryptopp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index 86a2da1..456876c 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -20,11 +20,11 @@ HOST_CRYPTOPP_MAKE_OPTS = \
+ 	CXXFLAGS="$(HOST_CXXFLAGS) -fPIC"
+ 
+ define HOST_CRYPTOPP_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) shared
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) shared
+ endef
+ 
+ define HOST_CRYPTOPP_INSTALL_CMDS
+-	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install
+ endef
+ 
+ $(eval $(host-generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
