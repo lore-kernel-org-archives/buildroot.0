@@ -1,32 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 28 Oct 2016 10:13:23 -0300
-Subject: [Buildroot] [PATCH] adwaita-icon-theme: install to staging
-Message-ID: <1477660403-5847-1-git-send-email-gustavo@zacarias.com.ar>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Fri, 28 Oct 2016 15:13:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libglob: fix license typo
+Message-ID: <1477660439-12336-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is required for the upcoming evince package which checks for adwaita
-presence via pkgconfig file, which normally resides in staging.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/adwaita-icon-theme/adwaita-icon-theme.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libglob/libglob.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.mk b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-index b9ec0c0..fdf66c8 100644
---- a/package/adwaita-icon-theme/adwaita-icon-theme.mk
-+++ b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-@@ -8,6 +8,7 @@ ADWAITA_ICON_THEME_VERSION_MAJOR = 3.22
- ADWAITA_ICON_THEME_VERSION = $(ADWAITA_ICON_THEME_VERSION_MAJOR).0
- ADWAITA_ICON_THEME_SITE = http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION_MAJOR)
- ADWAITA_ICON_THEME_SOURCE = adwaita-icon-theme-$(ADWAITA_ICON_THEME_VERSION).tar.xz
-+ADWAITA_ICON_THEME_INSTALL_STAGING = YES
- ADWAITA_ICON_THEME_LICENSE = LGPLv3 or CC-BY-SA-3.0
- ADWAITA_ICON_THEME_LICENSE_FILES = COPYING COPYING_LGPL COPYING_CCBYSA3
- ADWAITA_ICON_THEME_DEPENDENCIES = host-intltool host-libgtk3
+diff --git a/package/libglob/libglob.mk b/package/libglob/libglob.mk
+index 534f936..cd6922e 100644
+--- a/package/libglob/libglob.mk
++++ b/package/libglob/libglob.mk
+@@ -7,7 +7,7 @@
+ LIBGLOB_VERSION = 1.0
+ LIBGLOB_SITE = $(call github,voidlinux,libglob,$(LIBGLOB_VERSION))
+ LIBGLOB_LICENSE = BSD-3c
+-LIBGLOB_LICENSE_FILE = LICENSE
++LIBGLOB_LICENSE_FILES = LICENSE
+ LIBGLOB_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
 -- 
-2.7.3
+1.9.1
