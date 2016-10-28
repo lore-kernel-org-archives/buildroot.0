@@ -1,48 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Oct 2016 14:42:50 +0200
-Subject: [Buildroot] [git commit] mmc-utils: bump version to 2cb6695
-Message-ID: <20161028124448.8D08581972@busybox.osuosl.org>
+Date: Fri, 28 Oct 2016 14:43:59 +0200
+Subject: [Buildroot] [git commit] linux-firmware: Include all bnx2x firmwares
+Message-ID: <20161028124448.B01FB81972@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52b8a5d4f8be1b297f02c15d6e74a6e6ce383677
+commit: https://git.buildroot.net/buildroot/commit/?id=e37a9115f51c15115dfde7bc896c408ca0840561
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change log since last version bump:
+Currently buildroot will create a broken system for any kernel version
+not between 3.18 and 4.1, as the bnx2x firmware it includes is only
+valid for that version of the upstream driver.
 
-  2cb6695 Add missing -c for write_reliability
-  e094e28 Fix return value check from set_partitioning_setting_completed()
-  f90eac4 Add help texts for -c option
-  752072d Add -c option for partitioning commands
-  55380d9 Register being set is other than mentioned in printed message.
-  3c02759 Fix reported offset for enhanced user area start address
-  a3d3331 mmc-utils: Add Command Queue fields to Extended CSD
-  0ca049f mmc-utils: Add ability to configure write protect on an eMMC device
-  bb779ac mmc-utils: Add disable partition boot to 'mmc bootpart enable'
-  89cd01e mmc_utils: add ffu support
-  4af1749 mmc-utils: Merge the lsmmc tool into mmc-utils
-  44f94b9 mmc_utils: doc: add man-page
-  928ff07 mmc_utils: gp create: only allow partition [1-4] to be selected
+This change modifies the build so that all versions are included as there was a
+strong preference for not adding options for each version, nor only supporting
+the latest kernel:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+On Fri, Feb 26, 2016 at 7:09 PM, Thomas Petazzoni wrote:
+> I think adding new config to chose between different versions of a
+> given firmware is going a bit too far. If we were to do that for all
+> firmwares in linux-firmware, it would really increase the number of
+> Config.in options too much.
+>
+> Shall I suggest to install both versions of the firmware? The firmware
+> files are not that large, and if filesystem size is really a strong
+> issue, it is always possible to clean up the non-required firmware
+> files in a post-build script.
+
+On Wed, Mar 2, 2016 at 7:47 AM, Arnout Vandecappelle wrote:
+> No, this is certainly not good, it fixes 4.2+ and simultaneously breaks 4.1-.
+>
+> What is wrong with Thomas's proposal to remove the unneeded versions in a
+> post-build script? If your size is so important that 640K matters, you would
+> probably anyway want to keep only one of the six binaries instead of three
+> different chip revisions.
+
+It is up to the user to ensure they remove the versions they don't want.
+
+Note that this increases the size of the root file system by about 8MB.
+
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mmc-utils/mmc-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linux-firmware/linux-firmware.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
-index 82468bc..7473a1b 100644
---- a/package/mmc-utils/mmc-utils.mk
-+++ b/package/mmc-utils/mmc-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 38bced6..535b69a 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -295,10 +295,7 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+ endif
  
--MMC_UTILS_VERSION = d0b46442b50794217e53b2455c1344c548d9d088
-+MMC_UTILS_VERSION = 2cb6695e8dec00d887bdd5309d1b57d836fcd214
- MMC_UTILS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
- MMC_UTILS_LICENSE = GPLv2
- 
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BNX2X),y)
+-LINUX_FIRMWARE_FILES += \
+-	bnx2x/bnx2x-e1-7.10.51.0.fw \
+-	bnx2x/bnx2x-e1h-7.10.51.0.fw \
+-	bnx2x/bnx2x-e2-7.10.51.0.fw
++LINUX_FIRMWARE_FILES += bnx2x/*
+ # No license file; the license is in the file WHENCE
+ # which is installed unconditionally
+ endif
