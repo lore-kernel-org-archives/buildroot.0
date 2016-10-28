@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Oct 2016 14:45:13 +0200
-Subject: [Buildroot] [PATCH] ipset: bump to version 6.30
-In-Reply-To: <5bad5b335c9996465da802d8ef6cf63ed43ffab3.1477630308.git.baruch@tkos.co.il>
-References: <5bad5b335c9996465da802d8ef6cf63ed43ffab3.1477630308.git.baruch@tkos.co.il>
-Message-ID: <20161028144513.37715ba3@free-electrons.com>
+Date: Fri, 28 Oct 2016 14:45:18 +0200
+Subject: [Buildroot] [PATCH 1/2] package/postgresql: indentation cleanup
+In-Reply-To: <1477649644-5187-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1477649644-5187-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20161028144518.703ce89c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 28 Oct 2016 07:51:48 +0300, Baruch Siach wrote:
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Fri, 28 Oct 2016 12:14:03 +0200, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 > ---
->  package/ipset/ipset.hash | 6 +++---
->  package/ipset/ipset.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/postgresql/postgresql.mk | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Both applied, thanks!
 
 Thomas
 -- 
