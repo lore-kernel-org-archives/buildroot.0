@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Fri, 28 Oct 2016 10:18:21 -0300
-Subject: [Buildroot] [PATCH 03/11] lzip: use $(TARGET_MAKE_ENV) for
-	configure as well
+Date: Fri, 28 Oct 2016 10:18:22 -0300
+Subject: [Buildroot] [PATCH 04/11] libselinux: use $(TARGET_MAKE_ENV) when
+	calling $(MAKE)
 In-Reply-To: <1477660709-5935-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1477660709-5935-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1477660709-5935-3-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1477660709-5935-4-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,34 @@ From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/lzip/lzip.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libselinux/libselinux.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
-index ecf70a3..8180fd0 100644
---- a/package/lzip/lzip.mk
-+++ b/package/lzip/lzip.mk
-@@ -10,7 +10,7 @@ LZIP_LICENSE = GPLv3+
- LZIP_LICENSE_FILES = COPYING
- 
- define LZIP_CONFIGURE_CMDS
--	(cd $(@D); ./configure --prefix=/usr \
-+	(cd $(@D); $(TARGET_MAKE_ENV) ./configure --prefix=/usr \
- 		$(TARGET_CONFIGURE_OPTS) )
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 6f94173..29ed0ef 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -23,15 +23,18 @@ LIBSELINUX_MAKE_OPTS = \
+ define LIBSELINUX_BUILD_CMDS
+ 	# DESTDIR is needed during the compile to compute library and
+ 	# header paths.
+-	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
  endef
  
+ define LIBSELINUX_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+ endef
+ 
+ define LIBSELINUX_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+ 	# Create the selinuxfs mount point
+ 	if [ ! -d "$(TARGET_DIR)/selinux" ]; then mkdir $(TARGET_DIR)/selinux; fi
+ 	if ! grep -q "selinuxfs" $(TARGET_DIR)/etc/fstab; then \
 -- 
 2.7.3
