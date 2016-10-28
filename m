@@ -1,50 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Oct 2016 14:42:17 +0200
-Subject: [Buildroot] [PATCH] toolchain-external.mk: fix ARCH_SUBDIR for
- side-by-side sysroot toolchains
-In-Reply-To: <20161027153342.27718-1-Vincent.Riera@imgtec.com>
-References: <20161027153342.27718-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161028144217.46ac552d@free-electrons.com>
+Date: Fri, 28 Oct 2016 14:42:50 +0200
+Subject: [Buildroot] [git commit] mmc-utils: bump version to 2cb6695
+Message-ID: <20161028124448.8D08581972@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=52b8a5d4f8be1b297f02c15d6e74a6e6ce383677
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 27 Oct 2016 16:33:42 +0100, Vicente Olivert Riera wrote:
+Change log since last version bump:
 
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index f7c6a19..a25c102 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -665,7 +665,12 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
->  			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
->  		fi ; \
->  	fi ; \
-> -	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
-> +	if [ "`dirname $${ARCH_SYSROOT_DIR}`" = "`dirname $${SYSROOT_DIR}`" ] ; then \
-> +		SYSROOT_DIR_DIRNAME=`dirname $${SYSROOT_DIR}`/ ; \
-> +		ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR_DIRNAME}(.*)/$$:\1:"` ; \
-> +	else \
-> +		ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
-> +	fi ; \
+  2cb6695 Add missing -c for write_reliability
+  e094e28 Fix return value check from set_partitioning_setting_completed()
+  f90eac4 Add help texts for -c option
+  752072d Add -c option for partitioning commands
+  55380d9 Register being set is other than mentioned in printed message.
+  3c02759 Fix reported offset for enhanced user area start address
+  a3d3331 mmc-utils: Add Command Queue fields to Extended CSD
+  0ca049f mmc-utils: Add ability to configure write protect on an eMMC device
+  bb779ac mmc-utils: Add disable partition boot to 'mmc bootpart enable'
+  89cd01e mmc_utils: add ffu support
+  4af1749 mmc-utils: Merge the lsmmc tool into mmc-utils
+  44f94b9 mmc_utils: doc: add man-page
+  928ff07 mmc_utils: gp create: only allow partition [1-4] to be selected
 
-I've applied your patch, which I have slightly improved to handle the
-SYSROOT_DIR == ARCH_SYSROOT_DIR case, where ARCH_SUBDIR should be
-empty. This way, I believe we handle all three cases:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mmc-utils/mmc-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- 1. SYSROOT_DIR == ARCH_SYSROOT_DIR
-
- 2. SYSROOT_DIR and ARCH_SYSROOT_DIR are side-by-side
-
- 3. ARCH_SYSROOT_DIR is nested in SYSROOT_DIR
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
+index 82468bc..7473a1b 100644
+--- a/package/mmc-utils/mmc-utils.mk
++++ b/package/mmc-utils/mmc-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MMC_UTILS_VERSION = d0b46442b50794217e53b2455c1344c548d9d088
++MMC_UTILS_VERSION = 2cb6695e8dec00d887bdd5309d1b57d836fcd214
+ MMC_UTILS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
+ MMC_UTILS_LICENSE = GPLv2
+ 
