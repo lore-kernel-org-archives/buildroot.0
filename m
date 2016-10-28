@@ -1,10 +1,10 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Fri, 28 Oct 2016 10:18:27 -0300
-Subject: [Buildroot] [PATCH 09/11] ezxml: use $(TARGET_MAKE_ENV) when
+Date: Fri, 28 Oct 2016 10:18:28 -0300
+Subject: [Buildroot] [PATCH 10/11] fmlib: use $(TARGET_MAKE_ENV) when
 	calling $(MAKE)
 In-Reply-To: <1477660709-5935-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1477660709-5935-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1477660709-5935-9-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1477660709-5935-10-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,25 @@ To: buildroot@busybox.net
 
 From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
+And drop FMLIB_MAKE_ENV which is non-existant as pointed by Arnout.
+
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/ezxml/ezxml.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/fmlib/fmlib.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ezxml/ezxml.mk b/package/ezxml/ezxml.mk
-index 7693466..972e44d 100644
---- a/package/ezxml/ezxml.mk
-+++ b/package/ezxml/ezxml.mk
-@@ -11,8 +11,8 @@ EZXML_LICENSE = MIT
- EZXML_LICENSE_FILES = license.txt
+diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
+index 42cdc27..16e8176 100644
+--- a/package/fmlib/fmlib.mk
++++ b/package/fmlib/fmlib.mk
+@@ -31,7 +31,7 @@ endef
  
- define EZXML_BUILD_CMDS
--	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" AR=$(TARGET_AR) \
--	-f GNUmakefile -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) -f GNUmakefile
-+	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" AR=$(TARGET_AR) \
+ define FMLIB_INSTALL_STAGING_CMDS
+ 	$(RM) $(STAGING_DIR)/usr/lib/libfm.a
+-	$(FMLIB_MAKE_ENV) $(MAKE) $(FMLIB_MAKE_OPTS) -C $(@D) install-libfm-$(FMLIB_ARCHTYPE)
++	$(TARGET_MAKE_ENV) $(MAKE) $(FMLIB_MAKE_OPTS) -C $(@D) install-libfm-$(FMLIB_ARCHTYPE)
  endef
  
- define EZXML_INSTALL_STAGING_CMDS
+ $(eval $(generic-package))
 -- 
 2.7.3
