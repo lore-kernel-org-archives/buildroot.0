@@ -1,80 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Oct 2016 15:24:19 +0200
-Subject: [Buildroot] [PATCH v2] pppd: Provide error() implementation in
- pppoe-discovery
-In-Reply-To: <1477248598-6052-1-git-send-email-Stefan.Nickl@gmail.com>
-References: <1477248598-6052-1-git-send-email-Stefan.Nickl@gmail.com>
-Message-ID: <20161028152419.6ffba279@free-electrons.com>
+Date: Fri, 28 Oct 2016 15:32:55 +0200
+Subject: [Buildroot] [PATCH 6/8] python-libxml2: new host package
+In-Reply-To: <1476321239-13894-6-git-send-email-gustavo@zacarias.com.ar>
+References: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
+ <1476321239-13894-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20161028153255.5c0e15d3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Gustavo,
 
-On Sun, 23 Oct 2016 20:49:58 +0200, stefan.nickl at gmail.com wrote:
-> From: Stefan Nickl <Stefan.Nickl@gmail.com>
+On Wed, 12 Oct 2016 22:13:57 -0300, Gustavo Zacarias wrote:
+> Add a new python-libxml2 package to build the libxml2 python bindings.
 > 
-> The pppoe-discovery program calls error() from the CHECK_ROOM macro
-> defined in pppoe.h. Since pppoe-discovery is a standalone program not
-> linked with the rest of pppd, the only way this could build is by
-> linking to glibc's proprietary error(3) function instead of the function
-> of the same name (but with different arguments) defined in pppd/utils.c.
+> This is required for host-itstool which in turn is required to build
+> evince.
 > 
-> So with glibc and uClibc this builds, but will probably crash when the
-> assertion is triggered. As the assertion is unlikely to fail, nobody has
-> noticed. The build however fails with musl libc since it doesn't
-> provide the doppelganger.
+> Unfortunately since we can't detect host-python/host-python3 presence to
+> enable it in the libxml2 package itself and leaving it to automatic
+> would be problematic just make a separate package for it like
+> mesa3d-headers to handle it deterministically.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-What do you mean by doppelganger?
+We discussed this patch during the Developers meeting, and I believe
+the general consensus is that we'd instead prefer to introduce hidden
+Config.in knobs for host packages.
 
-> diff --git a/package/pppd/0002-rp-pppoe-error.patch b/package/pppd/0002-rp-pppoe-error.patch
-> new file mode 100644
-> index 0000000..f103f4d
-> --- /dev/null
-> +++ b/package/pppd/0002-rp-pppoe-error.patch
-> @@ -0,0 +1,27 @@
-> +diff --git a/pppd/plugins/rp-pppoe/pppoe-discovery.c b/pppd/plugins/rp-pppoe/pppoe-discovery.c
-> +index 3d3bf4e..55037df 100644
-> +--- a/pppd/plugins/rp-pppoe/pppoe-discovery.c
-> ++++ b/pppd/plugins/rp-pppoe/pppoe-discovery.c
+This is not only useful for this situation, but also for other
+situations.
 
-The patch lacks a description + Signed-off-by.
+For this one, I see two possibilities:
 
-> +@@ -9,6 +9,7 @@
-> +  *
-> +  */
-> + 
-> ++#include <stdarg.h>
-> + #include <stdio.h>
-> + #include <stdlib.h>
-> + #include <unistd.h>
-> +@@ -55,6 +56,14 @@ void die(int status)
-> + 	exit(status);
-> + }
-> + 
-> ++void error(char *fmt, ...)
-> ++{
-> ++    va_list pvar;
-> ++    va_start(pvar, fmt);
-> ++    vfprintf(stderr, fmt, pvar);
-> ++    va_end(pvar);
-> ++}
+ * The python/python3 packages gain some hidden host Config.in options
+   BR2_PACKAGE_HOST_PYTHON(3). The host-libxml2 package then looks at
+   BR2_PACKAGE_HOST_PYTHON(3) and if enabled, then the python support
+   in host-libxml2 is enabled.
 
-This really doesn't seem like the right approach, for several reasons:
+   Drawback of this approach is that if we want to do it right, every
+   package that uses host-python(3) should start selecting this new
+   option.
 
- - There is already a function with the same name provided in the C
-   library, which means static linking scenarios will no longer work,
-   as you'll have clashing symbols.
+ * The libxml2 package gains a sub-option
+   BR2_PACKAGE_HOST_LIBXML2_PYTHON, which allows to enable python
+   support. Of course, later we could add BR2_PACKAGE_HOST_LIBXML2 as
+   well, and fix the packages that depend on host-libxml2, but it can
+   be done later.
 
- - The rest of the pppoe-discovery code is using perror(), which is
-   provided by the C library. So I believe the better fix is to change
-   the CHECK_ROOM() macro to use the perror() function instead.
+Arnout, Peter, which of those two options do you prefer? Or maybe you
+were thinking of different approaches?
 
-Could you rework your patch accordingly?
-
-Thanks a lot,
+Thanks,
 
 Thomas
 -- 
