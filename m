@@ -1,76 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 28 Oct 2016 12:04:02 -0300
-Subject: [Buildroot] [PATCH] mpv: bump to version 0.21.0
-Message-ID: <1477667042-1274-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 28 Oct 2016 12:09:07 -0300
+Subject: [Buildroot] [PATCH] json-glib: bump to version 1.2.2
+Message-ID: <1477667347-4861-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It now requires gcc 4.9+ with arch atomics for stdatomic support
-(https://gcc.gnu.org/wiki/C11Status) or alternatively
-BR2_TOOLCHAIN_HAS_SYNC_1 for emulation fallback.
-
-Fixes:
-http://autobuild.buildroot.net/results/0b7/0b7b42a72ac2bef2dd476e23a71f87adad6690f6/
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/mpv/Config.in | 11 ++++++++---
- package/mpv/mpv.hash  |  2 +-
- package/mpv/mpv.mk    |  2 +-
- 3 files changed, 10 insertions(+), 5 deletions(-)
+ package/json-glib/json-glib.hash | 4 ++--
+ package/json-glib/json-glib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mpv/Config.in b/package/mpv/Config.in
-index 25288a4..183700d 100644
---- a/package/mpv/Config.in
-+++ b/package/mpv/Config.in
-@@ -2,7 +2,10 @@ config BR2_PACKAGE_MPV
- 	bool "mpv"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-+	# It needs basic atomics support
-+	# Uses stdatomic.h (gcc 4.9+) or emulation via sync_add_and_fetch_1
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || BR2_TOOLCHAIN_HAS_SYNC_1
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
-@@ -15,7 +18,9 @@ config BR2_PACKAGE_MPV
- 
- 	  https://mpv.io/
- 
--comment "mpv needs a toolchain w/ threads, gcc >= 4.5"
-+comment "mpv needs a toolchain w/ threads, gcc >= 4.9"
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on !BR2_TOOLCHAIN_HAS_SYNC_1
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
-index eea0db0..d8fa3b4 100644
---- a/package/mpv/mpv.hash
-+++ b/package/mpv/mpv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	fe6ec9d2ded5ce84b963f54b812d579d04f944f4a737f3ae639c4d5d9e842b56	v0.20.0.tar.gz
-+sha256	d05f8ece859c500ef1649cdfea911ec1529df1898b8fda3e217766dc28dc9bd3	v0.21.0.tar.gz
- sha256	01bf2beab2106d1558800c8709bc2c8e496d3da4a2ca343fe091f22fca60c98b	waf-1.8.12
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 4f04fdf..61e80e2 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
+index 18e1aa0..2a56939 100644
+--- a/package/json-glib/json-glib.hash
++++ b/package/json-glib/json-glib.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.2/json-glib-1.2.0.sha256sum
+-sha256	99d6dfbe49c08fd7529f1fe8dcb1893b810a1bb222f1e7b65f41507658b8a7d3	json-glib-1.2.0.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.2/json-glib-1.2.2.sha256sum
++sha256	ea128ab52a824fcd06e5448fbb2bd8d9a13740d51c66d445828edba71321a621	json-glib-1.2.2.tar.xz
+diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+index f7c52c0..305c9ac 100644
+--- a/package/json-glib/json-glib.mk
++++ b/package/json-glib/json-glib.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--MPV_VERSION = 0.20.0
-+MPV_VERSION = 0.21.0
- MPV_WAF_VERSION = 1.8.12
- MPV_SITE = https://github.com/mpv-player/mpv/archive
- MPV_SOURCE = v$(MPV_VERSION).tar.gz
+ JSON_GLIB_VERSION_MAJOR = 1.2
+-JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).0
++JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).2
+ JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
+ JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
+ JSON_GLIB_LICENSE = LGPLv2.1+
 -- 
 2.7.3
