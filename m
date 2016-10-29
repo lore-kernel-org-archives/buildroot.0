@@ -1,108 +1,43 @@
 From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Sat, 29 Oct 2016 14:03:35 -0400
-Subject: [Buildroot] [PATCH 1/5] lttng-libust: bump to version 2.8.1
+Date: Sat, 29 Oct 2016 14:03:37 -0400
+Subject: [Buildroot] [PATCH 3/5] lttng-tools: remove dependency on
+	host-lttng-babeltrace
 In-Reply-To: <20161029180339.24535-1-eeppeliteloop@gmail.com>
 References: <20161029180339.24535-1-eeppeliteloop@gmail.com>
-Message-ID: <20161029180339.24535-2-eeppeliteloop@gmail.com>
+Message-ID: <20161029180339.24535-4-eeppeliteloop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+We don't need to build Babeltrace for the host here. Any host running
+a major Linux distribution can get a recent version of Babeltrace.
+
+See <http://diamon.org/babeltrace/>.
+
 Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 ---
- ...lf.c-define-NT_GNU_BUILD_ID-if-not-define.patch | 31 ++++++++++++++++++++++
- package/lttng-libust/lttng-libust.hash             | 12 +++++----
- package/lttng-libust/lttng-libust.mk               | 10 +++----
- 3 files changed, 42 insertions(+), 11 deletions(-)
- create mode 100644 package/lttng-libust/0001-lttng-ust-elf.c-define-NT_GNU_BUILD_ID-if-not-define.patch
+ package/lttng-tools/lttng-tools.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/package/lttng-libust/0001-lttng-ust-elf.c-define-NT_GNU_BUILD_ID-if-not-define.patch b/package/lttng-libust/0001-lttng-ust-elf.c-define-NT_GNU_BUILD_ID-if-not-define.patch
-new file mode 100644
-index 0000000..7fc2148
---- /dev/null
-+++ b/package/lttng-libust/0001-lttng-ust-elf.c-define-NT_GNU_BUILD_ID-if-not-define.patch
-@@ -0,0 +1,31 @@
-+From d400314757a8d5d52bd5722d263bfd5886bb6595 Mon Sep 17 00:00:00 2001
-+From: Philippe Proulx <eeppeliteloop@gmail.com>
-+Date: Sat, 29 Oct 2016 13:32:57 -0400
-+Subject: [PATCH] lttng-ust-elf.c: define NT_GNU_BUILD_ID if not defined
-+
-+On uClibc, NT_GNU_BUILD_ID is not defined, so we define it
-+manually in this case.
-+
-+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
-+---
-+ liblttng-ust/lttng-ust-elf.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/liblttng-ust/lttng-ust-elf.c b/liblttng-ust/lttng-ust-elf.c
-+index 5f27920..beaa7f3 100644
-+--- a/liblttng-ust/lttng-ust-elf.c
-++++ b/liblttng-ust/lttng-ust-elf.c
-+@@ -29,6 +29,10 @@
-+ 
-+ #define BUF_LEN	4096
-+ 
-++#ifndef NT_GNU_BUILD_ID
-++# define NT_GNU_BUILD_ID	3
-++#endif
-++
-+ /*
-+  * Retrieve the nth (where n is the `index` argument) phdr (program
-+  * header) from the given elf instance.
-+-- 
-+2.9.3
-+
-diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
-index 1494acf..eddbc84 100644
---- a/package/lttng-libust/lttng-libust.hash
-+++ b/package/lttng-libust/lttng-libust.hash
-@@ -1,6 +1,8 @@
--# http://www.lttng.org/files/lttng-ust/lttng-ust-2.7.1.tar.bz2.sha1
--sha1  597ebecb885debb58c263de57f30b1096d4eefc6  lttng-ust-2.7.1.tar.bz2
-+# From http://lttng.org/files/lttng-ust/lttng-ust-2.8.1.tar.bz2.md5
-+md5     be505077245dc05f93370a565eec15f4  lttng-ust-2.8.1.tar.bz2
- 
--# Locally computed
--sha1  2e79c98e458b2e052930fb81441e6ca8377a2ed7 787364e8bac9a146f9d65c763633c2b75eb76463.patch
--sha1  cf77ec415111f77573be7917d9b62d8e49dc6304 30307a67b48641875b122d8f832bbfb454e95d92.patch
-+# From http://lttng.org/files/lttng-ust/lttng-ust-2.8.0.tar.bz2.sha1
-+sha1    8bebdcbcb453d2643fb226dbe92de61764f1ee3b  lttng-ust-2.8.1.tar.bz2
-+
-+# Locally generated
-+sha256  6e41349107e83e7b43c69ed358e48788ca2fd095bad61737b850e3f3d2c0508a  lttng-ust-2.8.1.tar.bz2
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index 61ffed4..da54c5a 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -5,22 +5,20 @@
- ################################################################################
- 
- LTTNG_LIBUST_SITE = http://lttng.org/files/lttng-ust
--LTTNG_LIBUST_VERSION = 2.7.1
-+LTTNG_LIBUST_VERSION = 2.8.1
- LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
- LTTNG_LIBUST_LICENSE = LGPLv2.1, MIT (system headers), GPLv2 (liblttng-ust-ctl/ustctl.c used by lttng-sessiond)
- LTTNG_LIBUST_LICENSE_FILES = COPYING
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 3d884d3..9d9cb1c 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -10,12 +10,7 @@ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ LTTNG_TOOLS_LICENSE = GPLv2+, LGPLv2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
+ LTTNG_TOOLS_LICENSE_FILES = gpl-2.0.txt lgpl-2.1.txt LICENSE
+ LTTNG_TOOLS_CONF_OPTS += --with-xml-prefix=$(STAGING_DIR)/usr --disable-man-pages
 -
--LTTNG_LIBUST_PATCH = \
--	https://github.com/lttng/lttng-ust/commit/787364e8bac9a146f9d65c763633c2b75eb76463.patch \
--	https://github.com/lttng/lttng-ust/commit/30307a67b48641875b122d8f832bbfb454e95d92.patch
--
- LTTNG_LIBUST_INSTALL_STAGING = YES
- LTTNG_LIBUST_DEPENDENCIES = liburcu util-linux
-+LTTNG_LIBUST_CONF_OPTS += --disable-man-pages
+-# The host-lttng-babeltrace technically isn't a required build
+-# dependency. However, having the babeltrace utilities built for the
+-# host is very useful, since those tools allow to convert the binary
+-# trace format into an human readable format.
+-LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt host-lttng-babeltrace util-linux
++LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt util-linux
  
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- LTTNG_LIBUST_DEPENDENCIES += python
-+LTTNG_LIBUST_CONF_OPTS += --enable-python-agent
- else ifeq ($(BR2_PACKAGE_PYTHON3),y)
- LTTNG_LIBUST_DEPENDENCIES += python3
-+LTTNG_LIBUST_CONF_OPTS += --enable-python-agent
- else
- LTTNG_LIBUST_CONF_ENV = am_cv_pathless_PYTHON="none"
- endif
+ ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
+ LTTNG_TOOLS_CONF_OPTS += --with-lttng-ust
 -- 
 2.9.3
