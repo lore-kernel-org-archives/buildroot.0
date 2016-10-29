@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Oct 2016 15:15:04 +0200
-Subject: [Buildroot] [git commit] package/tvheadend: bump version
-Message-ID: <20161029131519.8D1EC802DE@busybox.osuosl.org>
+Date: Sat, 29 Oct 2016 15:15:01 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-libinput:
+	bump version to 0.22.0
+Message-ID: <20161029131519.6EC68802C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44c908f31b01a66b8e9701abbae4ab6e25e94568
+commit: https://git.buildroot.net/buildroot/commit/?id=23f8cbb95db981533950837054a11214a5accc64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tvheadend/tvheadend.hash | 2 +-
- package/tvheadend/tvheadend.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash      | 4 ++--
+ .../x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index 0479971..ca10dc3 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+index 103e515..6edc391 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256	b6035c0eedfdcbec965116248471c23bed7f8b7f899e403d670495325002ba78	tvheadend-8e637f9f903f6d820f701a1461b144e67665c6fa.tar.gz
-+sha256 71dd3d8efa32d592342ff6955cc2cd317f07e74d2d546977eb9bc45136dd5de6  tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657.tar.gz
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index af90a82..a3afec8 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
+-# From https://lists.x.org/archives/xorg-announce/2016-September/002717.html
+-sha256 c54e8155d0ba0e5abba9de7bb227c4e4930959a01a904de96b6c0e52bb2a39b0  xf86-input-libinput-0.20.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-October/002732.html
++sha256 c762b4072ed448e2ae9f35cebd7fec8df7fd42b3ae61462cc3b2f720a873eae2  xf86-input-libinput-0.22.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index eacacea..517e5d2 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TVHEADEND_VERSION = 8e637f9f903f6d820f701a1461b144e67665c6fa
-+TVHEADEND_VERSION = 50a370707aedf5c127e92bb517c378aa8ac04657
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+-XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.20.0
++XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.22.0
+ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
