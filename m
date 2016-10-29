@@ -1,46 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Oct 2016 15:52:38 +0200
-Subject: [Buildroot] [git commit] libselinux: use $(TARGET_MAKE_ENV) when
+Date: Sat, 29 Oct 2016 15:52:32 +0200
+Subject: [Buildroot] [git commit] cryptopp: use $(HOST_MAKE_ENV) when
 	calling $(MAKE)
-Message-ID: <20161029135923.66E2B7FEB8@busybox.osuosl.org>
+Message-ID: <20161029135923.42AA7800FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dba1ebe551c32b101cdc31402b2a580101765b8b
+commit: https://git.buildroot.net/buildroot/commit/?id=bb50481b36425ae428991595bac391a1f571ded3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libselinux/libselinux.mk | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ package/cryptopp/cryptopp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index 6f94173..29ed0ef 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -23,15 +23,18 @@ LIBSELINUX_MAKE_OPTS = \
- define LIBSELINUX_BUILD_CMDS
- 	# DESTDIR is needed during the compile to compute library and
- 	# header paths.
--	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index 86a2da1..456876c 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -20,11 +20,11 @@ HOST_CRYPTOPP_MAKE_OPTS = \
+ 	CXXFLAGS="$(HOST_CXXFLAGS) -fPIC"
+ 
+ define HOST_CRYPTOPP_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) shared
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) shared
  endef
  
- define LIBSELINUX_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+ define HOST_CRYPTOPP_INSTALL_CMDS
+-	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install
  endef
  
- define LIBSELINUX_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
- 	# Create the selinuxfs mount point
- 	if [ ! -d "$(TARGET_DIR)/selinux" ]; then mkdir $(TARGET_DIR)/selinux; fi
- 	if ! grep -q "selinuxfs" $(TARGET_DIR)/etc/fstab; then \
+ $(eval $(host-generic-package))
