@@ -1,73 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Oct 2016 16:43:27 +0200
-Subject: [Buildroot] [PATCH] package/xen: fix build failure on x86 after
-	bump to 47
-In-Reply-To: <CAKmqyKPsF-MiNFtj3jRaU4cS0usMs0hYitxvj+FKDAQTUDgnaw@mail.gmail.com>
-References: <CAKmqyKPsF-MiNFtj3jRaU4cS0usMs0hYitxvj+FKDAQTUDgnaw@mail.gmail.com>
-Message-ID: <1477752207-16549-1-git-send-email-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 29 Oct 2016 16:54:33 +0200
+Subject: [Buildroot] [PATCH 1/2] python-jsonschema: new package
+In-Reply-To: <20161029160239.4ce7e48b@free-electrons.com>
+References: <1477419935-86355-1-git-send-email-fabrice.fontaine@orange.com>
+ <20161029160239.4ce7e48b@free-electrons.com>
+Message-ID: <CAPi7W806jxUczm3UTKphuK6rYqwFrwXAEbo063MvQ0feSKuOow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump to 4.7, Xen fails to build because of a double definition
-of __OBJECT_FILE__. This is due to (who would have guessed) the weirdness
-of their buildsystem.
+Hello,
 
-Fix that with a dirty hack: undefine the macro before defining it.
+You're right the soletta package does not need the target variant of this
+package. We could indeed keep it for other people or I can send a new
+version of my patch without the target variant of python-jsonschema.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Alistair Francis <alistair.francis@xilinx.com>
+Best Regards,
 
----
-Note: totally untested.
----
- ...mk-fix-build-with-CFLAGS-from-environment.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
+Fabrice
 
-diff --git a/package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch b/package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
-new file mode 100644
-index 0000000..0d4e581
---- /dev/null
-+++ b/package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
-@@ -0,0 +1,36 @@
-+From 2a310549aaeaba05f640ade43488bb893101ce4a Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sat, 29 Oct 2016 16:35:26 +0200
-+Subject: [PATCH] xen/Rules.mk: fix build with CFLAGS from environment
-+
-+When CFLAGS are passed from the environment, the first-level make
-+invocation will append -D__OBJECT_FILE__ to it, then call a second
-+make invocation, that will have those new CFLAGS in its environment,
-+but will also append -D__OBJECT_FILE__ to those.
-+
-+Then, the compiler fails because __OBEJECT_FILE__ is defined twice.
-+
-+Just undefine it before defining it again, as a *workaround* to this
-+issue.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ xen/Rules.mk | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/xen/Rules.mk b/xen/Rules.mk
-+index a9fda71..09ccbfa 100644
-+--- a/xen/Rules.mk
-++++ b/xen/Rules.mk
-+@@ -49,7 +49,7 @@ ALL_OBJS-$(CONFIG_CRYPTO)   += $(BASEDIR)/crypto/built_in.o
-+ CFLAGS += -nostdinc -fno-builtin -fno-common
-+ CFLAGS += -Werror -Wredundant-decls -Wno-pointer-arith
-+ CFLAGS += -pipe -g -D__XEN__ -include $(BASEDIR)/include/xen/config.h
-+-CFLAGS += '-D__OBJECT_FILE__="$@"'
-++CFLAGS += -U__OBJECT_FILE__ '-D__OBJECT_FILE__="$@"'
-+ 
-+ ifneq ($(clang),y)
-+ # Clang doesn't understand this command line argument, and doesn't appear to
-+-- 
-+2.7.4
-+
--- 
-2.7.4
+2016-10-29 16:02 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
+> Hello,
+>
+> On Tue, 25 Oct 2016 20:25:34 +0200, Fabrice Fontaine wrote:
+>
+> > +PYTHON_JSONSCHEMA_VERSION = 2.5.1
+> > +PYTHON_JSONSCHEMA_SOURCE = jsonschema-$(PYTHON_
+> JSONSCHEMA_VERSION).tar.gz
+> > +PYTHON_JSONSCHEMA_SITE = \
+> > +     https://pypi.python.org/packages/58/0d/
+> c816f5ea5adaf1293a1d81d32e4cdfdaf8496973aa5049786d7fdb14e7e7
+> > +PYTHON_JSONSCHEMA_SETUP_TYPE = setuptools
+> > +PYTHON_JSONSCHEMA_LICENSE = MIT
+> > +PYTHON_JSONSCHEMA_LICENSE_FILES = COPYING
+> > +
+> > +$(eval $(python-package))
+> > +$(eval $(host-python-package))
+>
+> Is there a motivation to add the target variant of this package? Your
+> patch 2/2 seems to be using only the host variant of python-jsonschema.
+> Am I missing something, or are you just adding the target variant just
+> because it can also be useful to other people?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161029/ba190777/attachment.html>
