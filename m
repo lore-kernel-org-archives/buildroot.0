@@ -1,59 +1,30 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Oct 2016 16:54:33 +0200
-Subject: [Buildroot] [PATCH 1/2] python-jsonschema: new package
-In-Reply-To: <20161029160239.4ce7e48b@free-electrons.com>
-References: <1477419935-86355-1-git-send-email-fabrice.fontaine@orange.com>
- <20161029160239.4ce7e48b@free-electrons.com>
-Message-ID: <CAPi7W806jxUczm3UTKphuK6rYqwFrwXAEbo063MvQ0feSKuOow@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 29 Oct 2016 19:11:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/leafnode2: fix SITE url
+Message-ID: <20161029171145.4844-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/leafnode2/leafnode2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You're right the soletta package does not need the target variant of this
-package. We could indeed keep it for other people or I can send a new
-version of my patch without the target variant of python-jsonschema.
-
-Best Regards,
-
-Fabrice
-
-2016-10-29 16:02 GMT+02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
-
-> Hello,
->
-> On Tue, 25 Oct 2016 20:25:34 +0200, Fabrice Fontaine wrote:
->
-> > +PYTHON_JSONSCHEMA_VERSION = 2.5.1
-> > +PYTHON_JSONSCHEMA_SOURCE = jsonschema-$(PYTHON_
-> JSONSCHEMA_VERSION).tar.gz
-> > +PYTHON_JSONSCHEMA_SITE = \
-> > +     https://pypi.python.org/packages/58/0d/
-> c816f5ea5adaf1293a1d81d32e4cdfdaf8496973aa5049786d7fdb14e7e7
-> > +PYTHON_JSONSCHEMA_SETUP_TYPE = setuptools
-> > +PYTHON_JSONSCHEMA_LICENSE = MIT
-> > +PYTHON_JSONSCHEMA_LICENSE_FILES = COPYING
-> > +
-> > +$(eval $(python-package))
-> > +$(eval $(host-python-package))
->
-> Is there a motivation to add the target variant of this package? Your
-> patch 2/2 seems to be using only the host variant of python-jsonschema.
-> Am I missing something, or are you just adding the target variant just
-> because it can also be useful to other people?
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161029/ba190777/attachment.html>
+diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
+index 5b9b854..0c20fd0 100644
+--- a/package/leafnode2/leafnode2.mk
++++ b/package/leafnode2/leafnode2.mk
+@@ -6,7 +6,7 @@
+ 
+ LEAFNODE2_VERSION = 2.0.0.alpha20140727b
+ LEAFNODE2_SOURCE = leafnode-$(LEAFNODE2_VERSION).tar.bz2
+-LEAFNODE2_SITE = http://www.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
++LEAFNODE2_SITE = http://krusty.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
+ LEAFNODE2_LICENSE = LGPLv2.1
+ LEAFNODE2_LICENSE_FILES = COPYING COPYING.LGPL
+ LEAFNODE2_DEPENDENCIES = host-pcre pcre
+-- 
+2.10.1
