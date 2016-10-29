@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Oct 2016 15:42:22 +0200
-Subject: [Buildroot] [PATCH v2] ezxml: use $(TARGET_MAKE_ENV) when
- calling $(MAKE)
-In-Reply-To: <1477677339-13156-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1477677339-13156-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <20161029154222.0fadaaa2@free-electrons.com>
+Date: Sat, 29 Oct 2016 15:43:39 +0200
+Subject: [Buildroot] [PATCH] mfgtools: add gcc version dependency
+In-Reply-To: <20161028143244.29212-1-gary.bisson@boundarydevices.com>
+References: <20161028143244.29212-1-gary.bisson@boundarydevices.com>
+Message-ID: <20161029154339.18a273ac@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 28 Oct 2016 14:55:39 -0300, gustavo.zacarias at free-electrons.com
-wrote:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+On Fri, 28 Oct 2016 16:32:44 +0200, Gary Bisson wrote:
+> MfgTools requires gcc >= 4.8 since it needs C++11 support.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> Fixes the following autobuild issues:
+> http://autobuild.buildroot.net/results/c8cbc4e5296af91be5fa8b17871bedf08b6a2697
+> http://autobuild.buildroot.net/results/fadabb38d8dde6f2be85fbc286b060e2f3e82f65
+> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 > ---
->  package/ezxml/ezxml.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/mfgtools/Config.in.host | 4 ++++
+>  1 file changed, 4 insertions(+)
 
 Applied to master, thanks.
 
