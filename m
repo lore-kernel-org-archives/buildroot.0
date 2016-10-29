@@ -1,42 +1,50 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 29 Oct 2016 11:43:25 +0200
-Subject: [Buildroot] [PATCH] autobuild-run: Add an exception for CS nios2
-	2016.05 with boost package.
-Message-ID: <1477734205-13453-1-git-send-email-romain.naour@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 29 Oct 2016 14:08:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 3.2
+Message-ID: <20161029120802.25370-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This toolchain is affected by PR19405 and instead of adding a toolchain
-dependency on boost package and it's reverse dependencies, use an
-autobuilder exception.
+Support for libfaac was removed upstream:
+https://github.com/xbmc/FFmpeg/commit/dc0f711459e0c682bf9f94ba38d26736e90cff45
 
-https://sourceware.org/bugzilla/show_bug.cgi?id=19405
-
-Fixes:
-http://autobuild.buildroot.net/results/620/620b1cc2165a6d55c180b890fdb652f3a03e1ded
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- scripts/autobuild-run | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index d78f836..19c1600 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -492,6 +492,10 @@ def fixup_config(**kwargs):
-     if 'BR2_PACKAGE_WESTON=y\n' in configlines and \
-        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
-+    # The cs nios2 2016.05 toolchain is affected by PR19405
-+    if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
-+       'BR2_PACKAGE_BOOST=y\n' in configlines:
-+        return False
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 7b1e140..541f421 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 49cc3105f7891c5637f8fabb1b75ebb19c9b5123b311a3ccc6182aa35d58b89a  ffmpeg-3.1.5.tar.xz
++sha256 88f70c1b8cab108f494ecbab5ba302cdb35d59a84cea88008b5fe49be068d5da  ffmpeg-3.2.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 52d2f38..de6d841 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     with open(os.path.join(outputdir, ".config"), "w+") as configf:
-         configf.writelines(configlines)
+-FFMPEG_VERSION = 3.1.5
++FFMPEG_VERSION = 3.2
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+@@ -50,7 +50,6 @@ FFMPEG_CONF_OPTS = \
+ 	--disable-libopencore-amrwb \
+ 	--disable-libcdio \
+ 	--disable-libdc1394 \
+-	--disable-libfaac \
+ 	--disable-libgsm \
+ 	--disable-libilbc \
+ 	--disable-libnut \
 -- 
-2.5.5
+2.10.1
