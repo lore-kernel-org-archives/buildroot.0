@@ -1,67 +1,121 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 29 Oct 2016 14:08:49 +0200
-Subject: [Buildroot] [PATCH v2 04/23] toolchain-external:
-	TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER: use arguments
-	instead of global variables
+Date: Sat, 29 Oct 2016 14:08:50 +0200
+Subject: [Buildroot] [PATCH v2 05/23] toolchain-external-blackfin-uclinux:
+	new package
 In-Reply-To: <1477742948-11490-1-git-send-email-romain.naour@gmail.com>
 References: <1477742948-11490-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1477742948-11490-5-git-send-email-romain.naour@gmail.com>
+Message-ID: <1477742948-11490-6-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A new external toolchain package infrastructure will be introduced in a
-followup patch, so TOOLCHAIN_EXTERNAL_{CC,CFLAGS...} global variables
-will no longer exist. Instead, each external-toolchain packages will
-provide it's own <toolchain-external-name>_{CC,CFLAGS...} variables.
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-So additional arguments are needed to provide CC, CFLAG and INSTALL_DIR
-when calling TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER.
+This commit adds a new package for the Analog Devices external
+toolchain for the Blackfin architecture. As of this commit, the code
+is currently not used, but it will be used as soon as the external
+toolchain infrastructure gets introduced in a future commit.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
-v2: rework commit log/title (Arnout)
----
- toolchain/toolchain-external/toolchain-external.mk | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ .../toolchain-external-blackfin-uclinux/Config.in  | 17 ++++++++++
+ .../Config.in.options                              |  6 ++++
+ .../toolchain-external-blackfin-uclinux.hash       |  3 ++
+ .../toolchain-external-blackfin-uclinux.mk         | 36 ++++++++++++++++++++++
+ 4 files changed, 62 insertions(+)
+ create mode 100644 toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.mk
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 84b6a03..6ae4bf5 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -640,16 +640,19 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
- endef
- endif
- 
-+# $1: toolchain CC
-+# $2: toolchain CFLAGS
-+# $3: toolchain INSTALL_DIR
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),y)
- define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER
- 	$(Q)$(call MESSAGE,"Copying gdbserver")
--	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
--	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(1) $(2))" ; \
-+	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(1) $(2))" ; \
- 	gdbserver_found=0 ; \
- 	for d in $${ARCH_SYSROOT_DIR}/usr \
- 		 $${ARCH_SYSROOT_DIR}/../debug-root/usr \
- 		 $${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} \
--		 $(TOOLCHAIN_EXTERNAL_INSTALL_DIR); do \
-+		 $(3); do \
- 		if test -f $${d}/bin/gdbserver ; then \
- 			install -m 0755 -D $${d}/bin/gdbserver $(TARGET_DIR)/usr/bin/gdbserver ; \
- 			gdbserver_found=1 ; \
-@@ -811,7 +814,7 @@ endef
- define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
- 	$(call TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
- 	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS,$(TOOLCHAIN_EXTERNAL_LIBS))
--	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER)
-+	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS),$(TOOLCHAIN_EXTERNAL_INSTALL_DIR))
- 	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC,$(TOOLCHAIN_EXTERNAL_LIBS))
- 	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
- 	$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
+diff --git a/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in
+new file mode 100644
+index 0000000..8b299e8
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in
+@@ -0,0 +1,17 @@
++config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
++	bool "Blackfin.uclinux.org 2014R1"
++	depends on BR2_bfin
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_USE_WCHAR
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	help
++	  Toolchain for the Blackfin architecture, from
++	  http://blackfin.uclinux.org.
+diff --git a/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in.options b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in.options
+new file mode 100644
+index 0000000..a13cbba
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in.options
+@@ -0,0 +1,6 @@
++if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
++
++config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
++	default "toolchain-external-blackfin-uclinux"
++
++endif
+diff --git a/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.hash b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.hash
+new file mode 100644
+index 0000000..b320d94
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 e424e90d8481d942a40266d78d1488726561fed3ec38403094f98055e61889d0  blackfin-toolchain-2014R1-RC2.i386.tar.bz2
++sha256 c65b1b4b918d5185349d62a3b7bf43b4b21e1175c52598ec047ca56b3f11d857  blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
+diff --git a/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.mk b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.mk
+new file mode 100644
+index 0000000..0c3eb9b
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# toolchain-external-blackfin-uclinux
++#
++################################################################################
++
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION = 2014R1-RC2
++
++ifeq ($(BR2_BINFMT_FLAT),y)
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_SUBDIR = bfin-uclinux
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_PREFIX = bfin-uclinux
++else
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_SUBDIR = bfin-linux-uclibc
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_PREFIX = bfin-linux-uclibc
++endif
++
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION_MAJOR = $(firstword $(subst -, ,$(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION)))
++
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_SITE = http://downloads.sourceforge.net/project/adi-toolchain/$(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION_MAJOR)/$(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION)/i386
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_SOURCE = blackfin-toolchain-$(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION).i386.tar.bz2
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-$(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION).i386.tar.bz2
++
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_STRIP_COMPONENTS = 3
++
++# Special handling for Blackfin toolchain, because of the split in two
++# tarballs, and the organization of tarball contents. The tarballs
++# contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
++# which themselves contain the toolchain. This is why we strip more
++# components than usual.
++define TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_UCLIBC_EXTRA_EXTRACT
++	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_EXTRA_DOWNLOADS) | \
++		$(TAR) --strip-components=3 -C $(@D) $(TAR_OPTIONS) -
++endef
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_UCLIBC_EXTRA_EXTRACT
++
++$(eval $(toolchain-external-package))
 -- 
 2.5.5
