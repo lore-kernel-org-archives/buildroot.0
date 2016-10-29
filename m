@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Oct 2016 15:30:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x265: bump version to 2.1
-In-Reply-To: <20161029120934.25522-1-bernd.kuhls@t-online.de>
-References: <20161029120934.25522-1-bernd.kuhls@t-online.de>
-Message-ID: <20161029153059.29cd31af@free-electrons.com>
+Date: Sat, 29 Oct 2016 15:31:07 +0200
+Subject: [Buildroot] [PATCH 1/2] package/x11r7/xlib_libXi: bump version
+ to 1.7.8
+In-Reply-To: <20161029121010.25575-1-bernd.kuhls@t-online.de>
+References: <20161029121010.25575-1-bernd.kuhls@t-online.de>
+Message-ID: <20161029153107.224adcf1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 29 Oct 2016 14:09:34 +0200, Bernd Kuhls wrote:
+On Sat, 29 Oct 2016 14:10:09 +0200, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/x265/x265.hash | 2 +-
->  package/x265/x265.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/x11r7/xlib_libXi/xlib_libXi.hash | 4 ++--
+>  package/x11r7/xlib_libXi/xlib_libXi.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Both applied, thanks!
 
 Thomas
 -- 
