@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Oct 2016 15:30:53 +0200
-Subject: [Buildroot] [git commit] package/x264: bump version
-Message-ID: <20161029133059.1567C817EA@busybox.osuosl.org>
+Date: Sat, 29 Oct 2016 15:30:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x265: bump version to 2.1
+In-Reply-To: <20161029120934.25522-1-bernd.kuhls@t-online.de>
+References: <20161029120934.25522-1-bernd.kuhls@t-online.de>
+Message-ID: <20161029153059.29cd31af@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbb5f4a1961f704142b3d9fece1db7caa9b46aff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x264/x264.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, 29 Oct 2016 14:09:34 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/x265/x265.hash | 2 +-
+>  package/x265/x265.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index 6055a8a..19111f0 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--X264_VERSION = 3b70645597bea052d2398005bc723212aeea6875
-+X264_VERSION = 72d53ab2ac7af24597a824e868f2ef363a22f5d4
- X264_SITE = git://git.videolan.org/x264.git
- X264_LICENSE = GPLv2+
- X264_DEPENDENCIES = host-pkgconf
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
