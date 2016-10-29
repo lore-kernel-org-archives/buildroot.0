@@ -1,41 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Oct 2016 14:54:11 +0200
-Subject: [Buildroot] [git commit] package/x265: bump version to 2.1
-Message-ID: <20161029130557.DC98280D9B@busybox.osuosl.org>
+Date: Sat, 29 Oct 2016 15:03:58 +0200
+Subject: [Buildroot] [git commit] network-manager: remove bogus --mandir
+	option
+Message-ID: <20161029130557.E76EA80DB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ba7b6a4f12977aec994c4f38d5be38cfdb27846
+commit: https://git.buildroot.net/buildroot/commit/?id=fe70f20daece4a845fbcc4ea2e7758c0e006d2fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The network-manager.mk passes --mandir=$(STAGING_DIR)/usr/man/, which
+causes man pages to be installed in
+$(STAGING_DIR)/$(STAGING_DIR)/usr/man and
+$(TARGET_DIR)/$(STAGING_DIR)/usr/man.
+
+This is definitely bogus and causes some build failures thanks to the
+new check added by Yann E. Morin. This option was in
+network-manager.mk since the addition of the package. Maybe it was
+fixing a bug in the package logic back at the time, but nowadays, it
+causes an installation at the wrong location. Without this commit, the
+man pages are properly installed at the right location.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/92683749b0b8e726bc83781ca6d8e103428362ba/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x265/x265.hash | 2 +-
- package/x265/x265.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/network-manager/network-manager.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/x265/x265.hash b/package/x265/x265.hash
-index 92b5bea..d6dec12 100644
---- a/package/x265/x265.hash
-+++ b/package/x265/x265.hash
-@@ -1,2 +1,2 @@
- # Locally generated
--sha256	3e4654133ed957a98708fdb4cb9a154d9e80922b84e26e43fc462a101c5b15c8	x265_1.9.tar.gz
-+sha256 88fcb9af4ba52c0757ac9c0d8cd5ec79951a22905ae886897e06954353d6a643  x265_2.1.tar.gz
-diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index e737c31..ba284da 100644
---- a/package/x265/x265.mk
-+++ b/package/x265/x265.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 663348a..3d7a1bf 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -24,7 +24,6 @@ NETWORK_MANAGER_CONF_ENV = \
  
--X265_VERSION = 1.9
-+X265_VERSION = 2.1
- X265_SOURCE = x265_$(X265_VERSION).tar.gz
- X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
- X265_LICENSE = GPLv2+
+ 
+ NETWORK_MANAGER_CONF_OPTS = \
+-	--mandir=$(STAGING_DIR)/usr/man/ \
+ 	--disable-tests \
+ 	--disable-qt \
+ 	--disable-more-warnings \
