@@ -1,7 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Oct 2016 14:11:06 +0200
-Subject: [Buildroot] [PATCH 1/2] package/dtv-scan-tables: bump version
-Message-ID: <20161029121107.25636-1-bernd.kuhls@t-online.de>
+Date: Sat, 29 Oct 2016 14:11:07 +0200
+Subject: [Buildroot] [PATCH 2/2] package/tvheadend: bump version
+In-Reply-To: <20161029121107.25636-1-bernd.kuhls@t-online.de>
+References: <20161029121107.25636-1-bernd.kuhls@t-online.de>
+Message-ID: <20161029121107.25636-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dtv-scan-tables/dtv-scan-tables.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
-index 0081369..8ef42b9 100644
---- a/package/dtv-scan-tables/dtv-scan-tables.mk
-+++ b/package/dtv-scan-tables/dtv-scan-tables.mk
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 0479971..ca10dc3 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	b6035c0eedfdcbec965116248471c23bed7f8b7f899e403d670495325002ba78	tvheadend-8e637f9f903f6d820f701a1461b144e67665c6fa.tar.gz
++sha256 71dd3d8efa32d592342ff6955cc2cd317f07e74d2d546977eb9bc45136dd5de6  tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657.tar.gz
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index af90a82..a3afec8 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DTV_SCAN_TABLES_VERSION = 0c92e5e5d3590da60acb4bcc92c19f041dc7e481
-+DTV_SCAN_TABLES_VERSION = ceb11833b35f05813b1f0397a60e0f3b99430aab
- DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
- DTV_SCAN_TABLES_SITE_METHOD = git
- 
+-TVHEADEND_VERSION = 8e637f9f903f6d820f701a1461b144e67665c6fa
++TVHEADEND_VERSION = 50a370707aedf5c127e92bb517c378aa8ac04657
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 -- 
 2.10.1
