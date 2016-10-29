@@ -1,44 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Oct 2016 15:53:49 +0200
-Subject: [Buildroot] [git commit] perl: use $(HOST_MAKE_ENV) when calling
-	$(MAKE)
-Message-ID: <20161029135923.847607FEB8@busybox.osuosl.org>
+Date: Sat, 29 Oct 2016 15:59:29 +0200
+Subject: [Buildroot] [PATCH v1] motion: fix static linking of mysql with
+ enabled libz library
+In-Reply-To: <1477424240-3672-1-git-send-email-ps.report@gmx.net>
+References: <1477424240-3672-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20161029155929.6a762c93@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57711efbe8a766b1534beeed37a3812777e3ba36
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/perl/perl.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+On Tue, 25 Oct 2016 21:37:20 +0200, Peter Seiderer wrote:
+> Fixes ([1]):
+> 
+>   checking for mysql_init in -lmysqlclient... no
+>   configure: error: MySQL support can't build without MySQL libraries
+> 
+> [1] http://autobuild.buildroot.net/results/6cf/6cf38698a2a9a041ff375c01ae8898eace17cfb2
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Checked with motion 3.4.1 and 4.0.1.
+> ---
+>  ...c-use-given-CFLAGS-LIBS-for-mysqlclient-l.patch | 31 ++++++++++++++++++++++
+>  package/motion/motion.mk                           |  6 ++++-
+>  2 files changed, 36 insertions(+), 1 deletion(-)
+>  create mode 100644 package/motion/0001-configure.ac-use-given-CFLAGS-LIBS-for-mysqlclient-l.patch
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 56fc579..84af75d 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -104,15 +104,16 @@ HOST_PERL_CONF_OPTS = \
- 	-Dcc="$(HOSTCC)"
- 
- define HOST_PERL_CONFIGURE_CMDS
--	(cd $(@D); HOSTCC='$(HOSTCC_NOCCACHE)' ./Configure $(HOST_PERL_CONF_OPTS))
-+	(cd $(@D); $(HOST_MAKE_ENV) HOSTCC='$(HOSTCC_NOCCACHE)' \
-+		./Configure $(HOST_PERL_CONF_OPTS))
- endef
- 
- define HOST_PERL_BUILD_CMDS
--	$(MAKE) -C $(@D)
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
- endef
- 
- define HOST_PERL_INSTALL_CMDS
--	$(MAKE) -C $(@D) INSTALL_DEPENDENCE='' install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALL_DEPENDENCE='' install
- endef
- 
- $(eval $(generic-package))
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
