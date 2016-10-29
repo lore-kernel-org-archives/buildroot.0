@@ -1,51 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Oct 2016 15:52:40 +0200
-Subject: [Buildroot] [git commit] libselinux: use $(HOST_MAKE_ENV) when
-	calling $(MAKE)
-Message-ID: <20161029135923.7243F7FEB8@busybox.osuosl.org>
+Date: Sat, 29 Oct 2016 15:59:16 +0200
+Subject: [Buildroot] [git commit] motion: fix static linking of mysql with
+	enabled libz library
+Message-ID: <20161029135923.AE0BC7FEB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ccc376bc4f1f41e3d8f623fb8d2ddaa4538771c
+commit: https://git.buildroot.net/buildroot/commit/?id=b83107e53ceace4f6d95520a193545bec729cae6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Fixes ([1]):
+
+  checking for mysql_init in -lmysqlclient... no
+  configure: error: MySQL support can't build without MySQL libraries
+
+[1] http://autobuild.buildroot.net/results/6cf/6cf38698a2a9a041ff375c01ae8898eace17cfb2
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libselinux/libselinux.mk | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ ...c-use-given-CFLAGS-LIBS-for-mysqlclient-l.patch | 31 ++++++++++++++++++++++
+ package/motion/motion.mk                           |  6 ++++-
+ 2 files changed, 36 insertions(+), 1 deletion(-)
 
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index 29ed0ef..165ac4c 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -67,18 +67,22 @@ HOST_LIBSELINUX_MAKE_OPTS = \
- define HOST_LIBSELINUX_BUILD_CMDS
- 	# DESTDIR is needed during the compile to compute library and
- 	# header paths.
--	$(MAKE1) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) \
-+		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
- 		SHLIBDIR=$(HOST_DIR)/usr/lib all
- 	# Generate python interface wrapper
--	$(MAKE1) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) \
-+		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
- endef
+diff --git a/package/motion/0001-configure.ac-use-given-CFLAGS-LIBS-for-mysqlclient-l.patch b/package/motion/0001-configure.ac-use-given-CFLAGS-LIBS-for-mysqlclient-l.patch
+new file mode 100644
+index 0000000..4211fe6
+--- /dev/null
++++ b/package/motion/0001-configure.ac-use-given-CFLAGS-LIBS-for-mysqlclient-l.patch
+@@ -0,0 +1,31 @@
++From 5a1081d36bf2861ffc882354c583a0eb6b0ee3d5 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 25 Oct 2016 21:27:41 +0200
++Subject: [PATCH] configure.ac: use given CFLAGS/LIBS for mysqlclient library
++ check
++
++Needed for static linking of mysql with enabled libz.
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.ac | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 5782fd6..aa5d9dd 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -618,8 +618,8 @@ else
++ 		#LDFLAGS="-L$MYSQL_LIBDIR"
++ 		saved_CFLAGS=$CFLAGS
++ 		saved_LIBS=$LIBS
++-		CFLAGS="-I$MYSQL_INCDIR"
++-		LIBS="-L$MYSQL_LIBDIR"
+++		CFLAGS="-I$MYSQL_INCDIR $CFLAGS"
+++		LIBS="-L$MYSQL_LIBDIR $LIBS"
++ 		AC_CHECK_LIB(mysqlclient,mysql_init,[
++ 					TEMP_LIBS="$TEMP_LIBS -L$MYSQL_LIBDIR -lmysqlclient -lz"
++ 					TEMP_CFLAGS="$TEMP_CFLAGS -I$MYSQL_INCDIR"
++-- 
++2.8.1
++
+diff --git a/package/motion/motion.mk b/package/motion/motion.mk
+index 49c0c6a..d27def2 100644
+--- a/package/motion/motion.mk
++++ b/package/motion/motion.mk
+@@ -9,7 +9,7 @@ MOTION_SITE = $(call github,Motion-Project,motion,$(MOTION_VERSION))
+ MOTION_LICENSE = GPLv2
+ MOTION_LICENSE_FILES = COPYING
+ MOTION_DEPENDENCIES = host-pkgconf jpeg
+-# From git
++# From git and patched configure.ac
+ MOTION_AUTORECONF = YES
  
- define HOST_LIBSELINUX_INSTALL_CMDS
--	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
- 		SHLIBDIR=$(HOST_DIR)/usr/lib SBINDIR=$(HOST_DIR)/usr/sbin install
- 	(cd $(HOST_DIR)/usr/lib; $(HOSTLN) -sf libselinux.so.1 libselinux.so)
- 	# Install python interface wrapper
--	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
- endef
- 
- $(eval $(generic-package))
+ # motion does not use any specific function of jpeg-turbo, so just relies on
+@@ -29,6 +29,10 @@ MOTION_CONF_OPTS += \
+ 	--with-mysql \
+ 	--with-mysql-include=$(STAGING_DIR)/usr/include/mysql \
+ 	--with-mysql-lib=$(STAGING_DIR)/usr/lib
++# static link of mysql needs -lz
++ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_ZLIB),yy)
++MOTION_CONF_ENV += LIBS="-lz"
++endif
+ else
+ MOTION_CONF_OPTS += --without-mysql
+ endif
