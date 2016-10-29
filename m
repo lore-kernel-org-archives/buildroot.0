@@ -1,10 +1,9 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 29 Oct 2016 14:08:51 +0200
-Subject: [Buildroot] [PATCH v2 06/23] toolchain-external-arago-armv7a: new
-	package
+Date: Sat, 29 Oct 2016 14:08:53 +0200
+Subject: [Buildroot] [PATCH v2 08/23] toolchain-external-custom: new package
 In-Reply-To: <1477742948-11490-1-git-send-email-romain.naour@gmail.com>
 References: <1477742948-11490-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1477742948-11490-7-git-send-email-romain.naour@gmail.com>
+Message-ID: <1477742948-11490-9-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,102 +12,390 @@ To: buildroot@busybox.net
 
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-This commit adds a new package for the Arago external toolchain for
-the ARM architecture. As of this commit, the code is currently not
-used, but it will be used as soon as the external toolchain
-infrastructure gets introduced in a future commit.
+This commit adds a new package to support custom external
+toolchains. As of this commit, the code is currently not used, but it
+will be used as soon as the external toolchain infrastructure gets
+introduced in a future commit.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../toolchain-external-arago-armv7a/Config.in      | 24 ++++++++++++++++++++++
- .../Config.in.options                              |  6 ++++++
- .../toolchain-external-arago-armv7a.hash           |  3 +++
- .../toolchain-external-arago-armv7a.mk             | 23 +++++++++++++++++++++
- 4 files changed, 56 insertions(+)
- create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv7a/Config.in
- create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv7a/Config.in.options
- create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv7a/toolchain-external-arago-armv7a.hash
- create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv7a/toolchain-external-arago-armv7a.mk
+ .../toolchain-external-custom/Config.in            |   5 +
+ .../toolchain-external-custom/Config.in.options    | 331 +++++++++++++++++++++
+ .../toolchain-external-custom.mk                   |  16 +
+ 3 files changed, 352 insertions(+)
+ create mode 100644 toolchain/toolchain-external/toolchain-external-custom/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arago-armv7a/Config.in b/toolchain/toolchain-external/toolchain-external-arago-armv7a/Config.in
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in b/toolchain/toolchain-external/toolchain-external-custom/Config.in
 new file mode 100644
-index 0000000..a3ea6b2
+index 0000000..a913feb
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-arago-armv7a/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
-+	bool "Arago ARMv7 2011.09"
-+	depends on BR2_arm
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_ARM_CPU_ARMV7A
-+	depends on BR2_ARM_EABI
-+	depends on BR2_ARM_CPU_HAS_VFPV3
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-+	# kernel headers: 2.6.31
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in
+@@ -0,0 +1,5 @@
++config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
++	bool "Custom toolchain"
 +	help
-+	  Texas Instruments Arago 2011.09 toolchain, with gcc 4.5.3,
-+	  binutils 2.20.1, glibc 2.12, gdb 7.2.
-+
-+	  This toolchain uses -mfloat-abi=softfp (i.e can use FPU
-+	  instructions, but passes floating point function arguments
-+	  in integer registers), and requires a VFPv3 floating point
-+	  unit to work properly. This unit is available on most
-+	  Cortex-A ARM processors, but not all.
-diff --git a/toolchain/toolchain-external/toolchain-external-arago-armv7a/Config.in.options b/toolchain/toolchain-external/toolchain-external-arago-armv7a/Config.in.options
++	  Use this option to use a custom toolchain pre-installed on
++	  your system.
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
 new file mode 100644
-index 0000000..96018f5
+index 0000000..b15670e
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-arago-armv7a/Config.in.options
-@@ -0,0 +1,6 @@
-+if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -0,0 +1,331 @@
++if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
 +
 +config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-arago-armv7a"
++	default "toolchain-external-custom"
++
++config BR2_TOOLCHAIN_EXTERNAL_URL
++	string "Toolchain URL"
++	depends on BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
++	help
++	  URL of the custom toolchain tarball to download and install.
++
++config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
++	string "Toolchain prefix"
++	default "$(ARCH)-linux"
++
++choice
++	bool "External toolchain gcc version"
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
++	help
++	  Set to the gcc version that is used by your external
++	  toolchain.
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_6
++	bool "6.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_5
++	bool "5.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
++	bool "4.9.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
++	bool "4.8.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
++	bool "4.7.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
++	bool "4.6.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
++	bool "4.5.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
++	bool "4.4.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
++	bool "4.3.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
++
++endchoice
++
++choice
++	bool "External toolchain kernel headers series"
++	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
++	help
++	  Set to the kernel headers version that were used to build
++	  this external toolchain.
++
++	  This is used to hide/show some packages that have strict
++	  requirements on the version of kernel headers.
++
++	  If unsure what version your toolchain is using, you can look
++	  at the value of LINUX_VERSION_CODE in linux/version.h in your
++	  toolchain. The Linux version is M.m.p, with:
++	    M = ( LINUX_VERSION_CODE >> 16 ) & 0xFF
++	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
++	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_8
++	bool "4.8.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_7
++	bool "4.7.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_6
++	bool "4.6.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_5
++	bool "4.5.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4
++	bool "4.4.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3
++	bool "4.3.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_2
++	bool "4.2.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1
++	bool "4.1.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_0
++	bool "4.0.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_19
++	bool "3.19.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_18
++	bool "3.18.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17
++	bool "3.17.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16
++	bool "3.16.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_15
++	bool "3.15.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14
++	bool "3.14.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_13
++	bool "3.13.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12
++	bool "3.12.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_11
++	bool "3.11.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10
++	bool "3.10.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9
++	bool "3.9.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_8
++	bool "3.8.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_7
++	bool "3.7.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_6
++	bool "3.6.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_5
++	bool "3.5.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_4
++	bool "3.4.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_3
++	bool "3.3.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2
++	bool "3.2.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_1
++	bool "3.1.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_0
++	bool "3.0.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
++	bool "2.6.x"
++
++endchoice
++
++choice
++	prompt "External toolchain C library"
++	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
++
++config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
++	bool "uClibc/uClibc-ng"
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	# For the time being, we assume that all custom external
++	# toolchains have shadow password support.
++	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
++	help
++	  Select this option if your external toolchain uses the
++	  uClibc (available from http://www.uclibc.org/)
++	  or uClibc-ng (available from http://www.uclibc-ng.org)
++	  C library.
++
++config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
++	bool "glibc/eglibc"
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	help
++	  Select this option if your external toolchain uses the GNU C
++	  library (available from https://www.gnu.org/software/libc/)
++	  or its variant the eglibc library (http://www.eglibc.org/).
++
++	  Note: eglibc is a variant of glibc that (among other things)
++	  can be configured to exclude some of its features. Using a
++	  toolchain with eglibc configured to exclude key features may
++	  cause build failures to some packages.
++
++comment "(e)glibc only available with shared lib support"
++	depends on BR2_STATIC_LIBS
++
++config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
++	bool "musl (experimental)"
++	select BR2_TOOLCHAIN_EXTERNAL_MUSL
++	help
++	  Select this option if your external toolchain uses the
++	  'musl' C library, available from http://www.musl-libc.org/.
++
++endchoice
++
++if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
++
++config BR2_TOOLCHAIN_EXTERNAL_WCHAR
++	bool "Toolchain has WCHAR support?"
++	select BR2_USE_WCHAR
++	help
++	  Select this option if your external toolchain supports
++	  WCHAR. If you don't know, leave the default value, Buildroot
++	  will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_LOCALE
++	bool "Toolchain has locale support?"
++	select BR2_TOOLCHAIN_EXTERNAL_WCHAR
++	select BR2_ENABLE_LOCALE
++	help
++	  Select this option if your external toolchain has locale
++	  support. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
++	bool "Toolchain has threads support?"
++	select BR2_TOOLCHAIN_HAS_THREADS
++	default y
++	help
++	  Select this option if your external toolchain has thread
++	  support. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
++
++if BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
++
++config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
++	bool "Toolchain has threads debugging support?"
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	default y
++	help
++	  Select this option if your external toolchain has thread
++	  debugging support. If you don't know, leave the default
++	  value, Buildroot will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL
++	bool "Toolchain has NPTL threads support?"
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	default y
++	help
++	  Select this option if your external toolchain uses the NPTL
++	  (Native Posix Thread Library) implementation of Posix
++	  threads. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
++
++endif # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
++
++endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
++
++config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
++	bool "Toolchain has SSP support?"
++	select BR2_TOOLCHAIN_HAS_SSP
++	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	default y if BR2_TOOLCHAIN_EXTERNAL_MUSL
++	help
++	  Selection this option if your external toolchain has Stack
++	  Smashing Protection support enabled. If you don't know,
++	  leave the default value, Buildroot will tell you if it's
++	  correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
++	bool "Toolchain has RPC support?"
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on !BR2_TOOLCHAIN_EXTERNAL_MUSL
++	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	help
++	  Select this option if your external toolchain supports
++	  RPC. If you don't know, leave the default value, Buildroot
++	  will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_CXX
++	bool "Toolchain has C++ support?"
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Select this option if your external toolchain has C++
++	  support. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
++	string "Extra toolchain libraries to be copied to target"
++	help
++	  If your external toolchain provides extra libraries that
++	  need to be copied to the target filesystem, enter them
++	  here, separated by spaces. They will be copied to the
++	  target's /lib directory.
 +
 +endif
-diff --git a/toolchain/toolchain-external/toolchain-external-arago-armv7a/toolchain-external-arago-armv7a.hash b/toolchain/toolchain-external/toolchain-external-arago-armv7a/toolchain-external-arago-armv7a.hash
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk b/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
 new file mode 100644
-index 0000000..a66900a
+index 0000000..1d40f08
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-arago-armv7a/toolchain-external-arago-armv7a.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 f2febf3b3c565536461ad4405f1bcb835d75a6afb2a8bec958a1248cb4b81fc7  arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
-+sha256 25fbf0513ad7322b15cbaae964cafadcbb4c939f2708f57f40b8f9f2d601122b  arago-toolchain-2011.09-sources.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-arago-armv7a/toolchain-external-arago-armv7a.mk b/toolchain/toolchain-external/toolchain-external-arago-armv7a/toolchain-external-arago-armv7a.mk
-new file mode 100644
-index 0000000..93e3e79
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-arago-armv7a/toolchain-external-arago-armv7a.mk
-@@ -0,0 +1,23 @@
++++ b/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# toolchain-external-arago-armv7a
++# toolchain-external-custom
 +#
 +################################################################################
 +
-+TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports
-+TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_VERSION = 2011.09
-+TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_PREFIX = arm-arago-linux-gnueabi
++TOOLCHAIN_EXTERNAL_CUSTOM_SITE = $(patsubst %/,%,$(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL))))
++TOOLCHAIN_EXTERNAL_CUSTOM_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
++TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX))
 +
-+TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_SOURCE = \
-+	arago-$(TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_VERSION)-armv7a-linux-gnueabi-sdk.tar.bz2
-+
-+TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_ACTUAL_SOURCE_TARBALL = arago-toolchain-$(TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_VERSION)-sources.tar.bz2
-+
-+define TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_FIXUP_EXTRACT
-+	mv $(@D)/arago-2011.09/armv7a/* $(@D)/
-+	rm -rf $(@D)/arago-2011.09/
-+endef
-+
-+TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_FIXUP_EXTRACT
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),y)
++# We can't check hashes for custom downloaded toolchains
++BR_NO_CHECK_HASH_FOR += $(TOOLCHAIN_EXTERNAL_SOURCE)
++endif
 +
 +$(eval $(toolchain-external-package))
 -- 
