@@ -1,102 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Oct 2016 17:02:18 +0100
-Subject: [Buildroot] [PATCH 00/10] core: add waf-package infra,
-	convert packages
-Message-ID: <cover.1477843328.git.yann.morin.1998@free.fr>
+Date: Sun, 30 Oct 2016 17:02:12 +0100
+Subject: [Buildroot] [PATCH 01/10] package/waf: new host package
+In-Reply-To: <cover.1477843328.git.yann.morin.1998@free.fr>
+References: <cover.1477843328.git.yann.morin.1998@free.fr>
+Message-ID: <866827010ad3057640f15eb124ed58ce1b7e96c6.1477843328.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+host-waf will be used by waf-based packages that do not include it in
+their release tarballs, like mpv.
 
-This series introduces the waf-package infrastructure for packages based
-on the Waf buildsystem.
+mpv is currently the only case we have, but with the upcoming
+waf-package infra, having host-waf available just makes the infra
+complete from the onset.
 
-Then, packages using Waf are converted to use this new infra, except for
-samba4 which only uses it for configure, not for build.
-
-The converted packages still build fine with this defconfig:
-
-    BR2_arm=y
-    BR2_cortex_a7=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_PACKAGE_GSTREAMER1=y
-    BR2_PACKAGE_GST1_IMX=y
-    BR2_PACKAGE_JACK2=y
-    BR2_PACKAGE_MPV=y
-    BR2_PACKAGE_GLMARK2=y
-    BR2_PACKAGE_MESA3D=y
-    BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4=y
-    BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-    BR2_PACKAGE_MESA3D_OPENGL_ES=y
-    BR2_PACKAGE_FREESCALE_IMX=y
-    BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
-    BR2_PACKAGE_LIBIMXVPUAPI=y
-    BR2_PACKAGE_NORM=y
-
-Except for these platitudes, nothing interesting to state about this new
-infra; it is pretty straightforward...
-
-Thanks to Romain for early review. ;-)
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 5f1e0e688bba9b94287302258afdfacd6e6344e2
-
-  trinity: fix Config.in depends on logic (2016-10-30 16:42:16 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to f821d5032f417f98141d6fb30f92c28feb16d2e0
-
-  package/norm: make it a waf-package (2016-10-30 17:00:52 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (10):
-      package/waf: new host package
-      core: add waf-package infra
-      docs/manual: document the waf-package infra
-      developpers: add myself as pkg-waf devel
-      package/glmark2: make it a waf-package
-      package/gst1-imx: make it a waf-package
-      package/jack2: make it a waf-package
-      package/libimxvpuapi: make it a waf-package
-      package/mpv: make it a waf-package
-      package/norm: make it a waf-package
-
- DEVELOPERS                              |   1 +
- docs/manual/adding-packages-waf.txt     |  67 ++++++++++++++++++
- docs/manual/adding-packages.txt         |   2 +
- package/Makefile.in                     |   1 +
- package/glmark2/glmark2.mk              |  20 +-----
- package/gstreamer1/gst1-imx/gst1-imx.mk |  20 +-----
- package/jack2/jack2.mk                  |  34 +--------
- package/libimxvpuapi/libimxvpuapi.mk    |  23 +-----
- package/mpv/mpv.hash                    |   1 -
- package/mpv/mpv.mk                      |  30 +-------
- package/norm/norm.mk                    |  28 +-------
- package/pkg-waf.mk                      | 119 ++++++++++++++++++++++++++++++++
- package/waf/waf.hash                    |   3 +
- package/waf/waf.mk                      |  28 ++++++++
- 14 files changed, 234 insertions(+), 143 deletions(-)
- create mode 100644 docs/manual/adding-packages-waf.txt
- create mode 100644 package/pkg-waf.mk
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@openwide.fr>
+---
+ package/waf/waf.hash |  3 +++
+ package/waf/waf.mk   | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
  create mode 100644 package/waf/waf.hash
  create mode 100644 package/waf/waf.mk
 
+diff --git a/package/waf/waf.hash b/package/waf/waf.hash
+new file mode 100644
+index 0000000..9d610b2
+--- /dev/null
++++ b/package/waf/waf.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha1    33d170c738ed8c92dda2945b445272972f558244                          waf-1.9.5
++sha256  101f14e0f47a6410c00b8feda094948516cd3989491c56eb8268907fcd164909  waf-1.9.5
+diff --git a/package/waf/waf.mk b/package/waf/waf.mk
+new file mode 100644
+index 0000000..cd0c67e
+--- /dev/null
++++ b/package/waf/waf.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# waf
++#
++################################################################################
++
++WAF_VERSION = 1.9.5
++WAF_SOURCE = waf-$(WAF_VERSION)
++WAF_SITE = https://waf.io/
++
++# Waf is a python script, compatible with any python >= 2.6, but some
++# packages have wafscripts not compatible with python3. So always use
++# python2.
++#
++# We don't really need host-python to install host-waf, but having this
++# dependency here will hide it from packages themselves
++HOST_WAF_DEPENDENCIES = host-python
++
++# Not really needed, but here for consistency with other packages.
++define HOST_WAF_EXTRACT_CMDS
++	$(INSTALL) -D -m 0755 $(DL_DIR)/waf-$(WAF_VERSION) $(@D)/waf
++endef
++
++define HOST_WAF_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/waf $(HOST_DIR)/usr/bin/waf
++endef
++
++$(eval $(host-generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
