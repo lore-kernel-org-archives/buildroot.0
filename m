@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Oct 2016 16:43:40 +0100
-Subject: [Buildroot] [PATCH] binutils: add comment with bug report
- reference
-In-Reply-To: <20161030132511.GA23794@waldemar-brodkorb.de>
-References: <20161030132511.GA23794@waldemar-brodkorb.de>
-Message-ID: <20161030164340.6d8d079b@free-electrons.com>
+Date: Sun, 30 Oct 2016 16:50:16 +0100
+Subject: [Buildroot] [PATCH 1/5] lttng-libust: bump to version 2.8.1
+In-Reply-To: <20161029180339.24535-2-eeppeliteloop@gmail.com>
+References: <20161029180339.24535-1-eeppeliteloop@gmail.com>
+ <20161029180339.24535-2-eeppeliteloop@gmail.com>
+Message-ID: <20161030165016.06b121eb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 30 Oct 2016 14:25:11 +0100, Waldemar Brodkorb wrote:
-> Add requested bug report
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/binutils/Config.in.host | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-> index a7610b4..dce6996 100644
-> --- a/package/binutils/Config.in.host
-> +++ b/package/binutils/Config.in.host
-> @@ -18,6 +18,7 @@ choice
->  	config BR2_BINUTILS_VERSION_2_27_X
->  		bool "binutils 2.27"
->  		# supported but broken on Microblaze
-> +		# see https://sourceware.org/bugzilla/show_bug.cgi?id=20748
->  		depends on !BR2_microblaze
+On Sat, 29 Oct 2016 14:03:35 -0400, Philippe Proulx wrote:
+> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 
-Your bug report is about binutils 2.27 generating broken binaries for
-microblaze/musl, but you disable binutils 2.27 completely for
-microblaze, and not just for musl. Why so?
+It would be great to not have an empty commit log here. In fact, you
+included a lot of information in your cover letter, but the cover
+letter contents is not part of any Git commit, so it isn't present in
+the Git history.
+
+So please transfer more details about the different patches in the
+description of each patch. Thanks.
+
+> ---
+>  ...lf.c-define-NT_GNU_BUILD_ID-if-not-define.patch | 31 ++++++++++++++++++++++
+>  package/lttng-libust/lttng-libust.hash             | 12 +++++----
+>  package/lttng-libust/lttng-libust.mk               | 10 +++----
+>  3 files changed, 42 insertions(+), 11 deletions(-)
+>  create mode 100644 package/lttng-libust/0001-lttng-ust-elf.c-define-NT_GNU_BUILD_ID-if-not-define.patch
+
+This patch looks good, but I'm going to wait for the entire series to
+be ready before applying them. See below one question, though.
+
+> diff --git a/package/lttng-libust/0001-lttng-ust-elf.c-define-NT_GNU_BUILD_ID-if-not-define.patch b/package/lttng-libust/0001-lttng-ust-elf.c-define-NT_GNU_BUILD_ID-if-not-define.patch
+> new file mode 100644
+> index 0000000..7fc2148
+> --- /dev/null
+> +++ b/package/lttng-libust/0001-lttng-ust-elf.c-define-NT_GNU_BUILD_ID-if-not-define.patch
+> @@ -0,0 +1,31 @@
+> +From d400314757a8d5d52bd5722d263bfd5886bb6595 Mon Sep 17 00:00:00 2001
+> +From: Philippe Proulx <eeppeliteloop@gmail.com>
+> +Date: Sat, 29 Oct 2016 13:32:57 -0400
+> +Subject: [PATCH] lttng-ust-elf.c: define NT_GNU_BUILD_ID if not defined
+> +
+> +On uClibc, NT_GNU_BUILD_ID is not defined, so we define it
+> +manually in this case.
+
+Did you submit this patch upstream?
 
 Thanks,
 
