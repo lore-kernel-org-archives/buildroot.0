@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Oct 2016 22:24:07 +0100
-Subject: [Buildroot] [PATCH v2 3/5] lttng-tools: remove dependency on
- host-lttng-babeltrace
-In-Reply-To: <20161030195649.6415-4-eeppeliteloop@gmail.com>
+Date: Sun, 30 Oct 2016 22:41:14 +0100
+Subject: [Buildroot] [PATCH v2 4/5] lttng-modules: bump to version 2.8.3
+In-Reply-To: <20161030195649.6415-5-eeppeliteloop@gmail.com>
 References: <20161030195649.6415-1-eeppeliteloop@gmail.com>
- <20161030195649.6415-4-eeppeliteloop@gmail.com>
-Message-ID: <20161030212407.GH18077@free.fr>
+ <20161030195649.6415-5-eeppeliteloop@gmail.com>
+Message-ID: <20161030214114.GI18077@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,66 +13,86 @@ To: buildroot@busybox.net
 
 Philippe, All,
 
+Eh, undoing my patch here. Meh... ;-]
+
 On 2016-10-30 15:56 -0400, Philippe Proulx spake thusly:
-> We don't need to build Babeltrace for the host here. Any host running a
-> major Linux distribution can get a recent version of Babeltrace.
+> LTTng-modules has its own Makefile to build its modules. In particular,
+> starting from v2.8, LTTng-modules has a way to be included as part of a
+> Linux kernel image, that is, not as loadable kernel modules. This
+> implies that additional environment variables need to be passed to the
+> Makefile and kernel build system.
 
-The LTS entreprise-class distribution may have a quite old version of
-babeltrace. For example, on Ubuntu Precise (14.04):
+OK, so two things here:
 
-    $ apt-cache policy babeltrace
-    babeltrace:
-      Installed: (none)
-      Candidate: 1.0.0~rc1-0ubuntu1
-      Version table:
-         1.0.0~rc1-0ubuntu1 0
-            500 http://archive.ubuntu.com/ubuntu/ precise/universe i386 Packages
+ 1- We do not support building LTTng built-in to the kernel do we? Or do
+    you plan in making that possible?
 
-Is this recent enough to deal with traces from today?
+ 2- we can pass additional variables when building modules:
+    https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_building_kernel_modules
 
-If not, then maybe add an entry in the "Host utilities" sub-menu?
+    LTTNG_MODULES_MODULE_MAKE_OPTS = VARIABLE=value
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> It's always a good idea for this project to use its Makefile directly,
+> not building it like you build your typical kernel modules, that is,
+> using make with `-C` to change directory to the kernel source, and
+> pointing the module with `M=`. The LTTng-modules does this internally
+> anyway.
+> 
+> Using the project's Makefile directly instead of the generic BR
+> kernel-module package ensures that future minor bumps of this project
+> will be easier as well.
+
+Using the kernel-module infra makes it sure that we pass the kernel
+related variables.
+
+I'm not too fond of changing that back.
+
+> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+[--SNIP--]
+> diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+> index 5d0c422..34bb0fb 100644
+> --- a/package/lttng-modules/lttng-modules.mk
+> +++ b/package/lttng-modules/lttng-modules.mk
+> @@ -4,11 +4,34 @@
+>  #
+>  ################################################################################
+> 
+> -LTTNG_MODULES_VERSION = 2.7.1
+> +LTTNG_MODULES_VERSION = 2.8.3
+>  LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
+>  LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+>  LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
+>  LTTNG_MODULES_LICENSE_FILES = lgpl-2.1.txt gpl-2.0.txt mit-license.txt LICENSE
+> +LTTNG_MODULES_DEPENDENCIES = linux
+> +
+> +ifeq ($(BR2_PACKAGE_LTTNG_MODULES),y)
+> +LINUX_NEEDS_MODULES = y
+> +endif
+> +
+> +LTTNG_MODULES_MAKE_OPTS = \
+> +	KERNELDIR="$(LINUX_DIR)" \
+> +	ARCH="$(KERNEL_ARCH)" \
+> +	CROSS_COMPILE="$(TARGET_CROSS)"
+> +
+> +define LTTNG_MODULES_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(LTTNG_MODULES_MAKE_OPTS) -C $(@D)
+> +endef
+> +
+> +define LTTNG_MODULES_INSTALL_STAGING_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(LTTNG_MODULES_MAKE_OPTS) \
+> +		INSTALL_MOD_PATH="$(STAGING_DIR)" -C $(@D) modules_install
+> +endef
+
+Why do you need to install the modules in staging?
+
+I stand by the fact that we should use the kernel-modules infra, if it
+can be made to work with specifying just the few new variables that are
+needed, as explained above.
+
+If not possible, then provide an explanation why this is not sufficient.
 
 Regards,
 Yann E. MORIN.
-
-> See <http://diamon.org/babeltrace/>.
-> 
-> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
-> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> Changes v1 -> v2:
->   - Add Reviewed-by tag.
-> 
->  package/lttng-tools/lttng-tools.mk | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-> index 3d884d3..9d9cb1c 100644
-> --- a/package/lttng-tools/lttng-tools.mk
-> +++ b/package/lttng-tools/lttng-tools.mk
-> @@ -10,12 +10,7 @@ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
->  LTTNG_TOOLS_LICENSE = GPLv2+, LGPLv2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
->  LTTNG_TOOLS_LICENSE_FILES = gpl-2.0.txt lgpl-2.1.txt LICENSE
->  LTTNG_TOOLS_CONF_OPTS += --with-xml-prefix=$(STAGING_DIR)/usr --disable-man-pages
-> -
-> -# The host-lttng-babeltrace technically isn't a required build
-> -# dependency. However, having the babeltrace utilities built for the
-> -# host is very useful, since those tools allow to convert the binary
-> -# trace format into an human readable format.
-> -LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt host-lttng-babeltrace util-linux
-> +LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt util-linux
-> 
->  ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
->  LTTNG_TOOLS_CONF_OPTS += --with-lttng-ust
-> --
-> 2.9.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
