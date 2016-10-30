@@ -1,49 +1,86 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Oct 2016 18:29:18 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/libfribidi: remove optional
-	dependency to libglib
-Message-ID: <20161030172918.29960-1-bernd.kuhls@t-online.de>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Date: Sun, 30 Oct 2016 13:33:19 -0400
+Subject: [Buildroot] [PATCH 2/5] lttng-tools: bump to version 2.8.2
+In-Reply-To: <20161030171328.4bfa9809@free-electrons.com>
+References: <20161029180339.24535-1-eeppeliteloop@gmail.com>
+ <20161029180339.24535-3-eeppeliteloop@gmail.com>
+ <20161030171328.4bfa9809@free-electrons.com>
+Message-ID: <CAB4xu_1CnvnFcm0wwhxCz9F=DW1DjvPJHVuj2NiK-2Oku_3D3g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes vdr compile error:
-http://autobuild.buildroot.net/results/725/7252decffe29e19051eed0554786651aee216573/
+On Sun, Oct 30, 2016 at 12:13 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Sat, 29 Oct 2016 14:03:36 -0400, Philippe Proulx wrote:
+>> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+>
+> Again, the commit log shouldn't be empty. Especially, please include
+> some details about the patches that are dropped (why?) and the patches
+> that are added.
+>
+>> diff --git a/package/lttng-tools/0001-Fix-snapshot-del-output-with-name-on-musl.patch b/package/lttng-tools/0001-Fix-snapshot-del-output-with-name-on-musl.patch
+>> new file mode 100644
+>> index 0000000..b5cc7ec
+>> --- /dev/null
+>> +++ b/package/lttng-tools/0001-Fix-snapshot-del-output-with-name-on-musl.patch
+>> @@ -0,0 +1,11 @@
+>
+> This patch lacks a description + Signed-off-by.
+>
+>> diff --git a/package/lttng-tools/0002-Fix-strerror_r-behavior-is-glibc-specific.patch b/package/lttng-tools/0002-Fix-strerror_r-behavior-is-glibc-specific.patch
+>> new file mode 100644
+>> index 0000000..f1fe873
+>> --- /dev/null
+>> +++ b/package/lttng-tools/0002-Fix-strerror_r-behavior-is-glibc-specific.patch
+>> @@ -0,0 +1,26 @@
+>> +From fc743b22fc26eab9f9dbf48e4505ed2394924bba Mon Sep 17 00:00:00 2001
+>> +From: Michael Jeanson <mjeanson@efficios.com>
+>> +Date: Mon, 13 Jun 2016 18:44:17 -0400
+>> +Subject: [PATCH lttng-tools 4/4] Fix: strerror_r behavior is glibc specific
+>
+> Please generate the patches with "git format-patch -N", so that we
+> don't have a specifier like 3/4 or 4/4, which doesn't make any sense.
+>
 
-Instead of fixing fribidi.pc or adding optional CFLAGS to the vdr
-package we remove the optional libglib dependency because it does not
-contain "any thing substantial" as pointed out in an pull request sent
-upstream: https://github.com/behdad/fribidi/pull/14
+I did not generate those patches. I took them from the mailing list or from
+the package repository of other distributions. They apply over v2.8.2.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v3: instead of patching libfribidi we force glib=no (Thomas)
-v2: added patch 0003 to fix fribidi.pc
+Should I regenerate them, or change their content? What's the recommended
+approach here? I can specify in the commit message that they come as is
+from other places.
 
- package/libfribidi/libfribidi.mk | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+Phil
 
-diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
-index 4e82a5e..86e722a 100644
---- a/package/libfribidi/libfribidi.mk
-+++ b/package/libfribidi/libfribidi.mk
-@@ -14,11 +14,9 @@ LIBFRIBIDI_INSTALL_STAGING = YES
- # Run autoreconf to regenerate ltmain.sh.
- LIBFRIBIDI_AUTORECONF = YES
- LIBFRIBIDI_DEPENDENCIES = host-pkgconf
--
--ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
--LIBFRIBIDI_DEPENDENCIES += libglib2
--else
--LIBFRIBIDI_CONF_OPTS += --with-glib=no
--endif
-+# libglib2 dependency causes a build failure, and this optional
-+# dependency is going to be removed usptream, see
-+# https://github.com/behdad/fribidi/pull/14
-+LIBFRIBIDI_CONF_OPTS = --with-glib=no
- 
- $(eval $(autotools-package))
--- 
-2.10.1
+>> +
+>> +Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+>
+> Please add your Signed-off-by on the patch, and if they come from
+> upstream, a reference to the upstream commit.
+>
+>> diff --git a/package/lttng-tools/0003-Set-thread-stack-size-to-ulimit-soft-value.patch b/package/lttng-tools/0003-Set-thread-stack-size-to-ulimit-soft-value.patch
+>> new file mode 100644
+>> index 0000000..dc6a7dd
+>> --- /dev/null
+>> +++ b/package/lttng-tools/0003-Set-thread-stack-size-to-ulimit-soft-value.patch
+>> @@ -0,0 +1,427 @@
+>> +From 451f4d875537c073a966d6ccfb2fe08a497fbd7b Mon Sep 17 00:00:00 2001
+>> +From: Michael Jeanson <mjeanson@efficios.com>
+>> +Date: Wed, 15 Jun 2016 11:01:08 -0500
+>> +Subject: [PATCH lttng-tools 3/3] Set thread stack size to ulimit soft value
+>
+> Why do we need this?
+>
+> Also same comments as for the previous patch.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
