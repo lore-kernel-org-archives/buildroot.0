@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Oct 2016 16:41:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/leafnode2: fix SITE url
-In-Reply-To: <20161029171145.4844-1-bernd.kuhls@t-online.de>
-References: <20161029171145.4844-1-bernd.kuhls@t-online.de>
-Message-ID: <20161030164152.165b7f99@free-electrons.com>
+Date: Sun, 30 Oct 2016 16:42:00 +0100
+Subject: [Buildroot] [PATCH 1/1] domoticz: bump to version 3.5834
+In-Reply-To: <1477771596-55967-1-git-send-email-fabrice.fontaine@orange.com>
+References: <1477771596-55967-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <20161030164200.3f8b7101@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 29 Oct 2016 19:11:45 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Sat, 29 Oct 2016 22:06:36 +0200, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 > ---
->  package/leafnode2/leafnode2.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/domoticz/domoticz.hash | 2 +-
+>  package/domoticz/domoticz.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
