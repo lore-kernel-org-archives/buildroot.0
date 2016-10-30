@@ -1,34 +1,31 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sun, 30 Oct 2016 13:51:45 +0100
-Subject: [Buildroot] [PATCH 1/1] trinity: fix Config.in depends on logic
-Message-ID: <1477831905-14615-1-git-send-email-nunes.erico@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 30 Oct 2016 14:25:11 +0100
+Subject: [Buildroot] [PATCH] binutils: add comment with bug report reference
+Message-ID: <20161030132511.GA23794@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The comment from trinity Config.in currently does not show up in
-menuconfig for glibc or uClibc toolchains with older headers.
-This commit fixes the logic so that it shows up when either one of the
-dependencies from trinity are not met.
+Add requested bug report
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/trinity/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/binutils/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/trinity/Config.in b/package/trinity/Config.in
-index 35b54d8..0ce1f9a 100644
---- a/package/trinity/Config.in
-+++ b/package/trinity/Config.in
-@@ -18,5 +18,5 @@ config BR2_PACKAGE_TRINITY
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index a7610b4..dce6996 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -18,6 +18,7 @@ choice
+ 	config BR2_BINUTILS_VERSION_2_27_X
+ 		bool "binutils 2.27"
+ 		# supported but broken on Microblaze
++		# see https://sourceware.org/bugzilla/show_bug.cgi?id=20748
+ 		depends on !BR2_microblaze
  
- comment "trinity needs a uClibc or glibc toolchain w/ headers >= 3.4"
- 	depends on BR2_PACKAGE_TRINITY_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_MUSL
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+	depends on BR2_TOOLCHAIN_USES_MUSL || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ endchoice
 -- 
-2.7.4
+2.1.4
