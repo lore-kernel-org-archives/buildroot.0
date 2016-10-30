@@ -1,87 +1,117 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Oct 2016 23:09:14 +0100
-Subject: [Buildroot] [PATCH 1/1] gupnp-tools: fix when using latest
- gupnp-av
-In-Reply-To: <1477864053-111298-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1477864053-111298-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20161030220914.GK18077@free.fr>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Date: Sun, 30 Oct 2016 18:13:00 -0400
+Subject: [Buildroot] [PATCH v2 4/5] lttng-modules: bump to version 2.8.3
+In-Reply-To: <20161030214114.GI18077@free.fr>
+References: <20161030195649.6415-1-eeppeliteloop@gmail.com>
+ <20161030195649.6415-5-eeppeliteloop@gmail.com>
+ <20161030214114.GI18077@free.fr>
+Message-ID: <CAB4xu_3U3qskp+x4mqFqRRmMmLb6XDuiH5toQujR=AwevgQZQQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+On Sun, Oct 30, 2016 at 5:41 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Philippe, All,
+>
+> Eh, undoing my patch here. Meh... ;-]
+>
+> On 2016-10-30 15:56 -0400, Philippe Proulx spake thusly:
+>> LTTng-modules has its own Makefile to build its modules. In particular,
+>> starting from v2.8, LTTng-modules has a way to be included as part of a
+>> Linux kernel image, that is, not as loadable kernel modules. This
+>> implies that additional environment variables need to be passed to the
+>> Makefile and kernel build system.
+>
+> OK, so two things here:
+>
+>  1- We do not support building LTTng built-in to the kernel do we? Or do
+>     you plan in making that possible?
+>
+>  2- we can pass additional variables when building modules:
+>     https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_building_kernel_modules
+>
+>     LTTNG_MODULES_MODULE_MAKE_OPTS = VARIABLE=value
+>
+>> It's always a good idea for this project to use its Makefile directly,
+>> not building it like you build your typical kernel modules, that is,
+>> using make with `-C` to change directory to the kernel source, and
+>> pointing the module with `M=`. The LTTng-modules does this internally
+>> anyway.
+>>
+>> Using the project's Makefile directly instead of the generic BR
+>> kernel-module package ensures that future minor bumps of this project
+>> will be easier as well.
+>
+> Using the kernel-module infra makes it sure that we pass the kernel
+> related variables.
+>
+> I'm not too fond of changing that back.
+>
+>> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+> [--SNIP--]
+>> diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+>> index 5d0c422..34bb0fb 100644
+>> --- a/package/lttng-modules/lttng-modules.mk
+>> +++ b/package/lttng-modules/lttng-modules.mk
+>> @@ -4,11 +4,34 @@
+>>  #
+>>  ################################################################################
+>>
+>> -LTTNG_MODULES_VERSION = 2.7.1
+>> +LTTNG_MODULES_VERSION = 2.8.3
+>>  LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
+>>  LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+>>  LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
+>>  LTTNG_MODULES_LICENSE_FILES = lgpl-2.1.txt gpl-2.0.txt mit-license.txt LICENSE
+>> +LTTNG_MODULES_DEPENDENCIES = linux
+>> +
+>> +ifeq ($(BR2_PACKAGE_LTTNG_MODULES),y)
+>> +LINUX_NEEDS_MODULES = y
+>> +endif
+>> +
+>> +LTTNG_MODULES_MAKE_OPTS = \
+>> +     KERNELDIR="$(LINUX_DIR)" \
+>> +     ARCH="$(KERNEL_ARCH)" \
+>> +     CROSS_COMPILE="$(TARGET_CROSS)"
+>> +
+>> +define LTTNG_MODULES_BUILD_CMDS
+>> +     $(TARGET_CONFIGURE_OPTS) $(MAKE) $(LTTNG_MODULES_MAKE_OPTS) -C $(@D)
+>> +endef
+>> +
+>> +define LTTNG_MODULES_INSTALL_STAGING_CMDS
+>> +     $(TARGET_CONFIGURE_OPTS) $(MAKE) $(LTTNG_MODULES_MAKE_OPTS) \
+>> +             INSTALL_MOD_PATH="$(STAGING_DIR)" -C $(@D) modules_install
+>> +endef
+>
+> Why do you need to install the modules in staging?
 
-On 2016-10-30 22:47 +0100, Fabrice Fontaine spake thusly:
-> Include gupnp.h ourselves, gupnp-av.h doesn't drag it in anymore
-> 
-> Backported from: e9ec9634207e4c2eea6d268ee29b57e687c1f178
-> The patch retrieved from the official gnome URL
-> (https://git.gnome.org/browse/gupnp-tools/patch/?id=e9ec9634207e4c2eea6d268ee29b57e687c1f178)
-> can not be applied through GUPNP_TOOLS_PATCH as it does not end with the
-> '.patch*' pattern
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/329851daa060f23c55f996c1b0f323d41f85ccb2
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Oh that's a bad copy from another package. Indeed this is not needed
+in staging.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> I stand by the fact that we should use the kernel-modules infra, if it
+> can be made to work with specifying just the few new variables that are
+> needed, as explained above.
+>
+> If not possible, then provide an explanation why this is not sufficient.
 
-Regards,
-Yann E. MORIN.
+It's definitely possible. I changed it because upstream said that it's better to
+use their own Makefile as they can add new variables without having to
+track them in the distribution build systems. I can convert it back to using the
+the kernel-module infra if you prefer. I have no other arguments.
 
-> ---
->  ...-Fix-compiling-when-using-recent-GUPnP-AV.patch | 27 ++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 package/gupnp-tools/0001-Fix-compiling-when-using-recent-GUPnP-AV.patch
-> 
-> diff --git a/package/gupnp-tools/0001-Fix-compiling-when-using-recent-GUPnP-AV.patch b/package/gupnp-tools/0001-Fix-compiling-when-using-recent-GUPnP-AV.patch
-> new file mode 100644
-> index 0000000..1830ebe
-> --- /dev/null
-> +++ b/package/gupnp-tools/0001-Fix-compiling-when-using-recent-GUPnP-AV.patch
-> @@ -0,0 +1,27 @@
-> +From e9ec9634207e4c2eea6d268ee29b57e687c1f178 Mon Sep 17 00:00:00 2001
-> +From: Jens Georg <mail@jensge.org>
-> +Date: Sun, 16 Oct 2016 21:51:39 +0200
-> +Subject: av-cp: Fix compiling when using recent GUPnP-AV
-> +
-> +Inlcude gupnp.h ourselves, gupnp-av.h doesn't drag it in anymore
-> +
-> +Signed-off-by: Jens Georg <mail@jensge.org>
-> +---
-> + src/av-cp/playlist-treeview.h | 2 ++
-> + 1 file changed, 2 insertions(+)
-> +
-> +diff --git a/src/av-cp/playlist-treeview.h b/src/av-cp/playlist-treeview.h
-> +index 8637ae8..16b131e 100644
-> +--- a/src/av-cp/playlist-treeview.h
-> ++++ b/src/av-cp/playlist-treeview.h
-> +@@ -23,6 +23,8 @@
-> + 
-> + #include <config.h>
-> + #include <gtk/gtk.h>
-> ++
-> ++#include <libgupnp/gupnp.h>
-> + #include <libgupnp-av/gupnp-av.h>
-> + 
-> + typedef void (* MetadataFunc) (const char *metadata,
-> +-- 
-> +cgit v0.12
-> -- 
-> 2.5.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Phil
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
