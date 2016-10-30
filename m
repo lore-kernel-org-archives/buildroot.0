@@ -1,160 +1,109 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Oct 2016 17:02:13 +0100
-Subject: [Buildroot] [PATCH 02/10] core: add waf-package infra
+Date: Sun, 30 Oct 2016 17:02:14 +0100
+Subject: [Buildroot] [PATCH 03/10] docs/manual: document the waf-package
+	infra
 In-Reply-To: <cover.1477843328.git.yann.morin.1998@free.fr>
 References: <cover.1477843328.git.yann.morin.1998@free.fr>
-Message-ID: <6556713514fd3c751384c5ea655420dba5e8876a.1477843328.git.yann.morin.1998@free.fr>
+Message-ID: <e41ab5eee8961c89c1fe9c4566383844e36b24f9.1477843328.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new waf-package infrastructure simplifies writing waf-based
-packages. It can be used by our six current such packages, plus a
-later-incoming one by Romain.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Romain Naour <romain.naour@openwide.fr>
 ---
- package/Makefile.in |   1 +
- package/pkg-waf.mk  | 119 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 120 insertions(+)
- create mode 100644 package/pkg-waf.mk
+ docs/manual/adding-packages-waf.txt | 67 +++++++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt     |  2 ++
+ 2 files changed, 69 insertions(+)
+ create mode 100644 docs/manual/adding-packages-waf.txt
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 5d591e9..dd18d2b 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -398,3 +398,4 @@ include package/pkg-generic.mk
- include package/pkg-kconfig.mk
- include package/pkg-rebar.mk
- include package/pkg-kernel-module.mk
-+include package/pkg-waf.mk
-diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
+diff --git a/docs/manual/adding-packages-waf.txt b/docs/manual/adding-packages-waf.txt
 new file mode 100644
-index 0000000..b36f47a
+index 0000000..31c7167
 --- /dev/null
-+++ b/package/pkg-waf.mk
-@@ -0,0 +1,119 @@
-+################################################################################
-+# WAF package infrastructure
-+#
-+# This file implements an infrastructure that eases development of package
-+# .mk files for WAF packages. It should be used for all packages that use
-+# WAF as their build system.
-+#
-+# See the Buildroot documentation for details on the usage of this
-+# infrastructure
-+#
-+# In terms of implementation, this WAF infrastructure requires the .mk file
-+# to only specify metadata information about the package: name, version,
-+# download URL, etc.
-+#
-+# We still allow the package .mk file to override what the different steps
-+# are doing, if needed. For example, if <PKG>_BUILD_CMDS is already defined,
-+# it is used as the list of commands to perform to build the package,
-+# instead of the default WAF behaviour. The package can also define some
-+# post operation hooks.
-+#
-+################################################################################
++++ b/docs/manual/adding-packages-waf.txt
+@@ -0,0 +1,67 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+################################################################################
-+# inner-waf-package -- defines how the configuration, compilation and
-+# installation of a waf package should be done, implements a few hooks
-+# to tune the build process for waf specifities and calls the generic
-+# package infrastructure to generate the necessary make targets
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including a HOST_ prefix
-+#             for host packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 4 is the type (target or host)
-+################################################################################
++=== Infrastructure for Waf-based packages
 +
-+define inner-waf-package
++[[waf-package-tutorial]]
 +
-+# If the package does not have its own waf, use our own.
-+ifeq ($$($(2)_BUNDLED_WAF),NO)
-+# Dependency on host-python is done by host-waf
-+$(2)_DEPENDENCIES += host-waf
-+$(2)_WAF = $(HOST_DIR)/usr/bin/waf
-+else
-+# We need host-python to run the package's waf
-+$(2)_DEPENDENCIES += host-python
-+$(2)_WAF = ./waf
-+endif
++==== +waf-package+ tutorial
 +
-+ifndef $(2)_MAKE
-+ ifdef $(3)_MAKE
-+  $(2)_MAKE = $$($(3)_MAKE)
-+ else
-+  $(2)_MAKE ?= $$(MAKE)
-+ endif
-+endif
++First, let's see how to write a +.mk+ file for a Waf-based package, with
++an example :
 +
-+#
-+# Configure step. Only define it if not already defined by the package
-+# .mk file.
-+#
-+ifndef $(2)_CONFIGURE_CMDS
-+define $(2)_CONFIGURE_CMDS
-+	cd $$(@D) && \
-+	$$(TARGET_CONFIGURE_OPTS) \
-+	$$($(2)_CONF_ENV) \
-+	$$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) configure \
-+		--prefix=/usr \
-+		--libdir=/usr/lib \
-+		$$($(2)_CONF_OPTS)
-+endef
-+endif
++------------------------
++01: ################################################################################
++02: #
++03: # libfoo
++04: #
++05: ################################################################################
++06:
++07: LIBFOO_VERSION = 1.0
++08: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
++09: LIBFOO_SITE = http://www.foosoftware.org/download
++10: LIBFOO_CONF_OPTS = --eanble-bar --disable-baz
++11: LIBFOO_DEPENDENCIES = bar
++12:
++13: $(eval $(waf-package))
++------------------------
 +
-+#
-+# Build step. Only define it if not already defined by the package .mk
-+# file.
-+#
-+ifndef $(2)_BUILD_CMDS
-+define $(2)_BUILD_CMDS
-+	cd $$(@D) && \
-+	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) build -j $$(PARALLEL_JOBS)
-+endef
-+endif
++On line 7, we declare the version of the package.
 +
-+#
-+# Staging installation step. Only define it if not already defined by
-+# the package .mk file.
-+#
-+ifndef $(2)_INSTALL_STAGING_CMDS
-+define $(2)_INSTALL_STAGING_CMDS
-+	cd $$(@D) && \
-+	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
-+		install --destdir=$$(STAGING_DIR)
-+endef
-+endif
++On line 8 and 9, we declare the name of the tarball (xz-ed tarball
++recommended) and the location of the tarball on the Web. Buildroot
++will automatically download the tarball from this location.
 +
-+#
-+# Target installation step. Only define it if not already defined by
-+# the package .mk file.
-+#
-+ifndef $(2)_INSTALL_TARGET_CMDS
-+define $(2)_INSTALL_TARGET_CMDS
-+	cd $$(@D) && \
-+	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
-+		install --destdir=$$(TARGET_DIR)
-+endef
-+endif
++On line 10, we tell Buildroot what options to enable for libfoo.
 +
-+# Call the generic package infrastructure to generate the necessary
-+# make targets
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
++On line 11, we tell Buildroot the depednencies of libfoo.
 +
-+endef
++Finally, on line line 13, we invoke the +waf-package+
++macro that generates all the Makefile rules that actually allows the
++package to be built.
 +
-+################################################################################
-+# waf-package -- the target generator macro for WAF packages
-+################################################################################
++[[waf-package-reference]]
 +
-+waf-package = $(call inner-waf-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++==== +waf-package+ reference
++
++The main macro of the Waf package infrastructure is +waf-package+.
++It is similar to the +generic-package+ macro.
++
++Just like the generic infrastructure, the Waf infrastructure works
++by defining a number of variables before calling the +waf-package+
++macro.
++
++First, all the package metadata information variables that exist in
++the generic infrastructure also exist in the Waf infrastructure:
+++LIBFOO_VERSION+, +LIBFOO_SOURCE+, +LIBFOO_PATCH+, +LIBFOO_SITE+,
+++LIBFOO_SUBDIR+, +LIBFOO_DEPENDENCIES+, +LIBFOO_INSTALL_STAGING+,
+++LIBFOO_INSTALL_TARGET+.
++
++An additional variable, specific to the Waf infrastructure, can
++also be defined.
++
++* +LIBFOO_BUNDLED_WAF+ can be set to +YES+ or +NO+ to tell Buildroot to
++  use the bundled +waf+ executable. If set to +YES+, the default, then
++  Buildroot will use the waf executable in the package source tree; if
++  set to +NO+, then Buidlroot will download and install waf as a
++  host-tool.
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index 76f90c9..4595991 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -29,6 +29,8 @@ include::adding-packages-kconfig.txt[]
+ 
+ include::adding-packages-rebar.txt[]
+ 
++include::adding-packages-waf.txt[]
++
+ include::adding-packages-kernel-module.txt[]
+ 
+ include::adding-packages-asciidoc.txt[]
 -- 
 2.7.4
