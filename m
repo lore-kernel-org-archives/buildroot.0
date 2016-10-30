@@ -1,116 +1,43 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Mon, 31 Oct 2016 15:06:30 -0700
-Subject: [Buildroot] [PATCH] package/xen: fix build failure on x86 after
- bump to 47
-In-Reply-To: <20161029182714.GA3490@free.fr>
-References: <CAKmqyKPsF-MiNFtj3jRaU4cS0usMs0hYitxvj+FKDAQTUDgnaw@mail.gmail.com>
- <1477752207-16549-1-git-send-email-yann.morin.1998@free.fr>
- <20161029182714.GA3490@free.fr>
-Message-ID: <CAKmqyKN-vfzzqwzA6OM3pXco7fE93W0rCGdtRyP0ktmMy=r_bw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Oct 2016 16:43:56 +0100
+Subject: [Buildroot] [git commit] package/mysql: fix SITE url,
+	add sha256 hash
+Message-ID: <20161101135035.D7E40817E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Oct 29, 2016 at 11:27 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Alistair, All,
->
-> On 2016-10-29 16:43 +0200, Yann E. MORIN spake thusly:
->> Since the bump to 4.7, Xen fails to build because of a double definition
->> of __OBJECT_FILE__. This is due to (who would have guessed) the weirdness
->> of their buildsystem.
->>
->> Fix that with a dirty hack: undefine the macro before defining it.
->>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Alistair Francis <alistair.francis@xilinx.com>
->>
->> ---
->> Note: totally untested.
->
-> Now build-tested, the double-definition issue is fixed, and the build
-> succeeds with this defconfig:
->
->     BR2_aarch64=y
->     BR2_TOOLCHAIN_EXTERNAL=y
->     BR2_PACKAGE_XEN=y
->     BR2_PACKAGE_XEN_HYPERVISOR=y
->     BR2_PACKAGE_XEN_TOOLS=y
->
-> Not booted, I don't know Xen enough to test...
+commit: https://git.buildroot.net/buildroot/commit/?id=9f4e7311ea1be940e37dbec6ef644af7eaecd864
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The patch looks good to me!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mysql/mysql.hash | 2 ++
+ package/mysql/mysql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-I just did a build test as well and it works, running a boot test now.
-
-Thanks,
-
-Alistair
-
->
-> Regards,
-> Yann E. MORIN.
->
->> ---
->>  ...mk-fix-build-with-CFLAGS-from-environment.patch | 36 ++++++++++++++++++++++
->>  1 file changed, 36 insertions(+)
->>  create mode 100644 package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
->>
->> diff --git a/package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch b/package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
->> new file mode 100644
->> index 0000000..0d4e581
->> --- /dev/null
->> +++ b/package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
->> @@ -0,0 +1,36 @@
->> +From 2a310549aaeaba05f640ade43488bb893101ce4a Mon Sep 17 00:00:00 2001
->> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> +Date: Sat, 29 Oct 2016 16:35:26 +0200
->> +Subject: [PATCH] xen/Rules.mk: fix build with CFLAGS from environment
->> +
->> +When CFLAGS are passed from the environment, the first-level make
->> +invocation will append -D__OBJECT_FILE__ to it, then call a second
->> +make invocation, that will have those new CFLAGS in its environment,
->> +but will also append -D__OBJECT_FILE__ to those.
->> +
->> +Then, the compiler fails because __OBEJECT_FILE__ is defined twice.
->> +
->> +Just undefine it before defining it again, as a *workaround* to this
->> +issue.
->> +
->> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> +---
->> + xen/Rules.mk | 2 +-
->> + 1 file changed, 1 insertion(+), 1 deletion(-)
->> +
->> +diff --git a/xen/Rules.mk b/xen/Rules.mk
->> +index a9fda71..09ccbfa 100644
->> +--- a/xen/Rules.mk
->> ++++ b/xen/Rules.mk
->> +@@ -49,7 +49,7 @@ ALL_OBJS-$(CONFIG_CRYPTO)   += $(BASEDIR)/crypto/built_in.o
->> + CFLAGS += -nostdinc -fno-builtin -fno-common
->> + CFLAGS += -Werror -Wredundant-decls -Wno-pointer-arith
->> + CFLAGS += -pipe -g -D__XEN__ -include $(BASEDIR)/include/xen/config.h
->> +-CFLAGS += '-D__OBJECT_FILE__="$@"'
->> ++CFLAGS += -U__OBJECT_FILE__ '-D__OBJECT_FILE__="$@"'
->> +
->> + ifneq ($(clang),y)
->> + # Clang doesn't understand this command line argument, and doesn't appear to
->> +--
->> +2.7.4
->> +
->> --
->> 2.7.4
->>
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/mysql/mysql.hash b/package/mysql/mysql.hash
+index 84f3361..bc309ec 100644
+--- a/package/mysql/mysql.hash
++++ b/package/mysql/mysql.hash
+@@ -1,2 +1,4 @@
+ # From https://downloads.mariadb.com/archives/mysql-5.1/mysql-5.1.73.tar.gz.md5
+ md5	887f869bcc757957067b9198f707f32f	mysql-5.1.73.tar.gz
++# Locally computed
++sha256 05ebe21305408b24407d14b77607a3e5ffa3c300e03f1359d3066f301989dcb5  mysql-5.1.73.tar.gz
+diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+index 92bf45a..ea330f2 100644
+--- a/package/mysql/mysql.mk
++++ b/package/mysql/mysql.mk
+@@ -7,7 +7,7 @@
+ MYSQL_VERSION_MAJOR = 5.1
+ MYSQL_VERSION = $(MYSQL_VERSION_MAJOR).73
+ MYSQL_SOURCE = mysql-$(MYSQL_VERSION).tar.gz
+-MYSQL_SITE = http://downloads.skysql.com/archives/mysql-$(MYSQL_VERSION_MAJOR)
++MYSQL_SITE = http://dev.mysql.com/get/Downloads/MySQL-$(MYSQL_VERSION_MAJOR)
+ MYSQL_INSTALL_STAGING = YES
+ MYSQL_DEPENDENCIES = readline ncurses
+ MYSQL_AUTORECONF = YES
