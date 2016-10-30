@@ -1,118 +1,96 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 30 Oct 2016 17:31:01 +0100
-Subject: [Buildroot] [PATCH 03/10] docs/manual: document the waf-package
- infra
-In-Reply-To: <e41ab5eee8961c89c1fe9c4566383844e36b24f9.1477843328.git.yann.morin.1998@free.fr>
-References: <cover.1477843328.git.yann.morin.1998@free.fr>
- <e41ab5eee8961c89c1fe9c4566383844e36b24f9.1477843328.git.yann.morin.1998@free.fr>
-Message-ID: <f3643009-90a7-30fa-94ae-e7bc41c452d5@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 30 Oct 2016 17:31:22 +0100
+Subject: [Buildroot] [PATCH v2 04/23] toolchain-external:
+ TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER: use arguments instead of
+ global variables
+In-Reply-To: <1477742948-11490-5-git-send-email-romain.naour@gmail.com>
+References: <1477742948-11490-1-git-send-email-romain.naour@gmail.com>
+ <1477742948-11490-5-git-send-email-romain.naour@gmail.com>
+Message-ID: <20161030163122.GD3463@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+Romain, All,
 
-Le 30/10/2016 ? 17:02, Yann E. MORIN a ?crit :
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Romain Naour <romain.naour@openwide.fr>
+On 2016-10-29 14:08 +0200, Romain Naour spake thusly:
+> A new external toolchain package infrastructure will be introduced in a
+> followup patch, so TOOLCHAIN_EXTERNAL_{CC,CFLAGS...} global variables
+> will no longer exist. Instead, each external-toolchain packages will
+> provide it's own <toolchain-external-name>_{CC,CFLAGS...} variables.
+> 
+> So additional arguments are needed to provide CC, CFLAG and INSTALL_DIR
+> when calling TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Best regards,
-Romain
+But see below...
 
 > ---
->  docs/manual/adding-packages-waf.txt | 67 +++++++++++++++++++++++++++++++++++++
->  docs/manual/adding-packages.txt     |  2 ++
->  2 files changed, 69 insertions(+)
->  create mode 100644 docs/manual/adding-packages-waf.txt
+> v2: rework commit log/title (Arnout)
+> ---
+>  toolchain/toolchain-external/toolchain-external.mk | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
 > 
-> diff --git a/docs/manual/adding-packages-waf.txt b/docs/manual/adding-packages-waf.txt
-> new file mode 100644
-> index 0000000..31c7167
-> --- /dev/null
-> +++ b/docs/manual/adding-packages-waf.txt
-> @@ -0,0 +1,67 @@
-> +// -*- mode:doc; -*-
-> +// vim: set syntax=asciidoc:
-> +
-> +=== Infrastructure for Waf-based packages
-> +
-> +[[waf-package-tutorial]]
-> +
-> +==== +waf-package+ tutorial
-> +
-> +First, let's see how to write a +.mk+ file for a Waf-based package, with
-> +an example :
-> +
-> +------------------------
-> +01: ################################################################################
-> +02: #
-> +03: # libfoo
-> +04: #
-> +05: ################################################################################
-> +06:
-> +07: LIBFOO_VERSION = 1.0
-> +08: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
-> +09: LIBFOO_SITE = http://www.foosoftware.org/download
-> +10: LIBFOO_CONF_OPTS = --eanble-bar --disable-baz
-> +11: LIBFOO_DEPENDENCIES = bar
-> +12:
-> +13: $(eval $(waf-package))
-> +------------------------
-> +
-> +On line 7, we declare the version of the package.
-> +
-> +On line 8 and 9, we declare the name of the tarball (xz-ed tarball
-> +recommended) and the location of the tarball on the Web. Buildroot
-> +will automatically download the tarball from this location.
-> +
-> +On line 10, we tell Buildroot what options to enable for libfoo.
-> +
-> +On line 11, we tell Buildroot the depednencies of libfoo.
-> +
-> +Finally, on line line 13, we invoke the +waf-package+
-> +macro that generates all the Makefile rules that actually allows the
-> +package to be built.
-> +
-> +[[waf-package-reference]]
-> +
-> +==== +waf-package+ reference
-> +
-> +The main macro of the Waf package infrastructure is +waf-package+.
-> +It is similar to the +generic-package+ macro.
-> +
-> +Just like the generic infrastructure, the Waf infrastructure works
-> +by defining a number of variables before calling the +waf-package+
-> +macro.
-> +
-> +First, all the package metadata information variables that exist in
-> +the generic infrastructure also exist in the Waf infrastructure:
-> ++LIBFOO_VERSION+, +LIBFOO_SOURCE+, +LIBFOO_PATCH+, +LIBFOO_SITE+,
-> ++LIBFOO_SUBDIR+, +LIBFOO_DEPENDENCIES+, +LIBFOO_INSTALL_STAGING+,
-> ++LIBFOO_INSTALL_TARGET+.
-> +
-> +An additional variable, specific to the Waf infrastructure, can
-> +also be defined.
-> +
-> +* +LIBFOO_BUNDLED_WAF+ can be set to +YES+ or +NO+ to tell Buildroot to
-> +  use the bundled +waf+ executable. If set to +YES+, the default, then
-> +  Buildroot will use the waf executable in the package source tree; if
-> +  set to +NO+, then Buidlroot will download and install waf as a
-> +  host-tool.
-> diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-> index 76f90c9..4595991 100644
-> --- a/docs/manual/adding-packages.txt
-> +++ b/docs/manual/adding-packages.txt
-> @@ -29,6 +29,8 @@ include::adding-packages-kconfig.txt[]
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index 84b6a03..6ae4bf5 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -640,16 +640,19 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
+>  endef
+>  endif
 >  
->  include::adding-packages-rebar.txt[]
->  
-> +include::adding-packages-waf.txt[]
-> +
->  include::adding-packages-kernel-module.txt[]
->  
->  include::adding-packages-asciidoc.txt[]
+> +# $1: toolchain CC
+> +# $2: toolchain CFLAGS
+> +# $3: toolchain INSTALL_DIR
+>  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),y)
+>  define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER
+>  	$(Q)$(call MESSAGE,"Copying gdbserver")
+> -	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+> -	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+> +	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(1) $(2))" ; \
+> +	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(1) $(2))" ; \
+>  	gdbserver_found=0 ; \
+>  	for d in $${ARCH_SYSROOT_DIR}/usr \
+>  		 $${ARCH_SYSROOT_DIR}/../debug-root/usr \
+>  		 $${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} \
+> -		 $(TOOLCHAIN_EXTERNAL_INSTALL_DIR); do \
+> +		 $(3); do \
+>  		if test -f $${d}/bin/gdbserver ; then \
+>  			install -m 0755 -D $${d}/bin/gdbserver $(TARGET_DIR)/usr/bin/gdbserver ; \
+>  			gdbserver_found=1 ; \
+> @@ -811,7 +814,7 @@ endef
+>  define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
+>  	$(call TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
+>  	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS,$(TOOLCHAIN_EXTERNAL_LIBS))
+> -	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER)
+> +	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS),$(TOOLCHAIN_EXTERNAL_INSTALL_DIR))
+>  	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC,$(TOOLCHAIN_EXTERNAL_LIBS))
+>  	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
+>  	$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
+
+Now, TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO is the only macro that is
+not $(call)ed. Maybe change it for consistency with the rest?
+
+Regards,
+Yann E. MORIN.
+
+> -- 
+> 2.5.5
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
