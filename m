@@ -1,60 +1,73 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sun, 30 Oct 2016 17:12:48 +0100
-Subject: [Buildroot] [PATCH 00/10] core: add waf-package infra,
-	convert packages
-In-Reply-To: <cover.1477843328.git.yann.morin.1998@free.fr>
-References: <cover.1477843328.git.yann.morin.1998@free.fr>
-Message-ID: <adba05c8-5d13-7960-cce9-002353712fd8@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Oct 2016 17:13:28 +0100
+Subject: [Buildroot] [PATCH 2/5] lttng-tools: bump to version 2.8.2
+In-Reply-To: <20161029180339.24535-3-eeppeliteloop@gmail.com>
+References: <20161029180339.24535-1-eeppeliteloop@gmail.com>
+ <20161029180339.24535-3-eeppeliteloop@gmail.com>
+Message-ID: <20161030171328.4bfa9809@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+Hello,
 
-Le 30/10/2016 ? 17:02, Yann E. MORIN a ?crit :
-> Hello All!
-> 
-> This series introduces the waf-package infrastructure for packages based
-> on the Waf buildsystem.
-> 
-> Then, packages using Waf are converted to use this new infra, except for
-> samba4 which only uses it for configure, not for build.
-> 
-> The converted packages still build fine with this defconfig:
-> 
->     BR2_arm=y
->     BR2_cortex_a7=y
->     BR2_TOOLCHAIN_EXTERNAL=y
->     BR2_PACKAGE_GSTREAMER1=y
->     BR2_PACKAGE_GST1_IMX=y
->     BR2_PACKAGE_JACK2=y
->     BR2_PACKAGE_MPV=y
->     BR2_PACKAGE_GLMARK2=y
->     BR2_PACKAGE_MESA3D=y
->     BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4=y
->     BR2_PACKAGE_MESA3D_OPENGL_EGL=y
->     BR2_PACKAGE_MESA3D_OPENGL_ES=y
->     BR2_PACKAGE_FREESCALE_IMX=y
->     BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
->     BR2_PACKAGE_LIBIMXVPUAPI=y
->     BR2_PACKAGE_NORM=y
-> 
-> Except for these platitudes, nothing interesting to state about this new
-> infra; it is pretty straightforward...
-> 
-> Thanks to Romain for early review. ;-)
+On Sat, 29 Oct 2016 14:03:36 -0400, Philippe Proulx wrote:
+> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 
-I'll add a new package (aubio) which use waf as build system and I asked on IRC
-if it's time for adding the waf-infra. So here it is, thanks Yann :)
+Again, the commit log shouldn't be empty. Especially, please include
+some details about the patches that are dropped (why?) and the patches
+that are added.
 
-Best regards,
-Romain
+> diff --git a/package/lttng-tools/0001-Fix-snapshot-del-output-with-name-on-musl.patch b/package/lttng-tools/0001-Fix-snapshot-del-output-with-name-on-musl.patch
+> new file mode 100644
+> index 0000000..b5cc7ec
+> --- /dev/null
+> +++ b/package/lttng-tools/0001-Fix-snapshot-del-output-with-name-on-musl.patch
+> @@ -0,0 +1,11 @@
 
-> 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> 
+This patch lacks a description + Signed-off-by.
+
+> diff --git a/package/lttng-tools/0002-Fix-strerror_r-behavior-is-glibc-specific.patch b/package/lttng-tools/0002-Fix-strerror_r-behavior-is-glibc-specific.patch
+> new file mode 100644
+> index 0000000..f1fe873
+> --- /dev/null
+> +++ b/package/lttng-tools/0002-Fix-strerror_r-behavior-is-glibc-specific.patch
+> @@ -0,0 +1,26 @@
+> +From fc743b22fc26eab9f9dbf48e4505ed2394924bba Mon Sep 17 00:00:00 2001
+> +From: Michael Jeanson <mjeanson@efficios.com>
+> +Date: Mon, 13 Jun 2016 18:44:17 -0400
+> +Subject: [PATCH lttng-tools 4/4] Fix: strerror_r behavior is glibc specific
+
+Please generate the patches with "git format-patch -N", so that we
+don't have a specifier like 3/4 or 4/4, which doesn't make any sense.
+
+> +
+> +Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+
+Please add your Signed-off-by on the patch, and if they come from
+upstream, a reference to the upstream commit.
+
+> diff --git a/package/lttng-tools/0003-Set-thread-stack-size-to-ulimit-soft-value.patch b/package/lttng-tools/0003-Set-thread-stack-size-to-ulimit-soft-value.patch
+> new file mode 100644
+> index 0000000..dc6a7dd
+> --- /dev/null
+> +++ b/package/lttng-tools/0003-Set-thread-stack-size-to-ulimit-soft-value.patch
+> @@ -0,0 +1,427 @@
+> +From 451f4d875537c073a966d6ccfb2fe08a497fbd7b Mon Sep 17 00:00:00 2001
+> +From: Michael Jeanson <mjeanson@efficios.com>
+> +Date: Wed, 15 Jun 2016 11:01:08 -0500
+> +Subject: [PATCH lttng-tools 3/3] Set thread stack size to ulimit soft value
+
+Why do we need this?
+
+Also same comments as for the previous patch.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
