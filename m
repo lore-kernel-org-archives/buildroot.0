@@ -1,115 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Oct 2016 17:20:46 +0100
-Subject: [Buildroot] [PATCH v2 01/23] toolchain-external:
- TOOLCHAIN_EXTERNAL_CREATE_*_LIB_SYMLINK: use arguments instead of global
- variables
-In-Reply-To: <1477742948-11490-2-git-send-email-romain.naour@gmail.com>
-References: <1477742948-11490-1-git-send-email-romain.naour@gmail.com>
- <1477742948-11490-2-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161030162046.GA3463@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 30 Oct 2016 17:21:49 +0100
+Subject: [Buildroot] [PATCH 01/10] package/waf: new host package
+In-Reply-To: <866827010ad3057640f15eb124ed58ce1b7e96c6.1477843328.git.yann.morin.1998@free.fr>
+References: <cover.1477843328.git.yann.morin.1998@free.fr>
+ <866827010ad3057640f15eb124ed58ce1b7e96c6.1477843328.git.yann.morin.1998@free.fr>
+Message-ID: <67dd596b-9a70-e685-f514-36d27ece63b0@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Hi Yann,
 
-On 2016-10-29 14:08 +0200, Romain Naour spake thusly:
-> A new external toolchain package infrastructure will be introduced in a
-> followup patch, so TOOLCHAIN_EXTERNAL_{CC,CFLAGS...} global variables
-> will no longer exist. Instead, each external-toolchain packages will
-> provide it's own <toolchain-external-name>_{CC,CFLAGS...} variables.
-
-What's missing in this explanation is why those variables will no longer
-exist.
-
-But I guess that's inherent to the entire rework. In which case the
-cover-letter should have had a global explanation on the rework, and
-what it entails for those functions/macros.
-
-> So additional arguments are needed to provide CC and CFLAG when calling
-> TOOLCHAIN_EXTERNAL_CREATE_*_LIB_SYMLINK.
+Le 30/10/2016 ? 17:02, Yann E. MORIN a ?crit :
+> host-waf will be used by waf-based packages that do not include it in
+> their release tarballs, like mpv.
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> mpv is currently the only case we have, but with the upcoming
+> waf-package infra, having host-waf available just makes the infra
+> complete from the onset.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Romain Naour <romain.naour@openwide.fr>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
-Regards,
-Yann E. MORIN.
+Best regards,
+Romain
 
 > ---
-> v2: rework commit log/title (Arnout)
-> ---
->  toolchain/toolchain-external/toolchain-external.mk | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
+>  package/waf/waf.hash |  3 +++
+>  package/waf/waf.mk   | 28 ++++++++++++++++++++++++++++
+>  2 files changed, 31 insertions(+)
+>  create mode 100644 package/waf/waf.hash
+>  create mode 100644 package/waf/waf.mk
 > 
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index b7a36be..d383d5f 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -554,20 +554,28 @@ endif
->  # (as appropriate)
->  #
->  # $1: destination directory (TARGET_DIR / STAGING_DIR)
-> +# $2: toolchain CC
-> +# $3: toolchain CFLAGS
->  create_lib_symlinks = \
->         $(Q)DESTDIR="$(strip $1)" ; \
-> -       ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-> +       TOOLCHAIN_CC="$(strip $2)" ; \
-> +       TOOLCHAIN_CFLAGS="$(strip $3)" ; \
-> +       ARCH_LIB_DIR="$(call toolchain_find_libdir,$${TOOLCHAIN_CC} $${TOOLCHAIN_CFLAGS})" ; \
->         if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
->                 ln -snf lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
->                 ln -snf lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
->         fi
->  
-> +# $1: toolchain CC
-> +# $2: toolchain CFLAGS
->  define TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK
-> -       $(call create_lib_symlinks,$(STAGING_DIR))
-> +       $(call create_lib_symlinks,$(STAGING_DIR),$(1),$(2))
->  endef
->  
-> +# $1: toolchain CC
-> +# $2: toolchain CFLAGS
->  define TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK
-> -       $(call create_lib_symlinks,$(TARGET_DIR))
-> +       $(call create_lib_symlinks,$(TARGET_DIR),$(1),$(2))
->  endef
->  
->  # Integration of the toolchain into Buildroot: find the main sysroot
-> @@ -781,7 +789,7 @@ TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_WRAPPER_BUILD)
->  
->  define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
->  	$(TOOLCHAIN_WRAPPER_INSTALL)
-> -	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
-> +	$(call TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC)
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
-> @@ -792,7 +800,7 @@ endef
->  # and the target directory, we do everything within the
->  # install-staging step, arbitrarily.
->  define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
-> -	$(TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK)
-> +	$(call TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER)
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC)
-> -- 
-> 2.5.5
+> diff --git a/package/waf/waf.hash b/package/waf/waf.hash
+> new file mode 100644
+> index 0000000..9d610b2
+> --- /dev/null
+> +++ b/package/waf/waf.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed
+> +sha1    33d170c738ed8c92dda2945b445272972f558244                          waf-1.9.5
+> +sha256  101f14e0f47a6410c00b8feda094948516cd3989491c56eb8268907fcd164909  waf-1.9.5
+> diff --git a/package/waf/waf.mk b/package/waf/waf.mk
+> new file mode 100644
+> index 0000000..cd0c67e
+> --- /dev/null
+> +++ b/package/waf/waf.mk
+> @@ -0,0 +1,28 @@
+> +################################################################################
+> +#
+> +# waf
+> +#
+> +################################################################################
+> +
+> +WAF_VERSION = 1.9.5
+> +WAF_SOURCE = waf-$(WAF_VERSION)
+> +WAF_SITE = https://waf.io/
+> +
+> +# Waf is a python script, compatible with any python >= 2.6, but some
+> +# packages have wafscripts not compatible with python3. So always use
+> +# python2.
+> +#
+> +# We don't really need host-python to install host-waf, but having this
+> +# dependency here will hide it from packages themselves
+> +HOST_WAF_DEPENDENCIES = host-python
+> +
+> +# Not really needed, but here for consistency with other packages.
+> +define HOST_WAF_EXTRACT_CMDS
+> +	$(INSTALL) -D -m 0755 $(DL_DIR)/waf-$(WAF_VERSION) $(@D)/waf
+> +endef
+> +
+> +define HOST_WAF_INSTALL_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/waf $(HOST_DIR)/usr/bin/waf
+> +endef
+> +
+> +$(eval $(host-generic-package))
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
