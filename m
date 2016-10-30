@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Oct 2016 17:02:19 +0100
-Subject: [Buildroot] [PATCH 08/10] package/libimxvpuapi: make it a
-	waf-package
+Date: Sun, 30 Oct 2016 17:02:21 +0100
+Subject: [Buildroot] [PATCH 10/10] package/norm: make it a waf-package
 In-Reply-To: <cover.1477843328.git.yann.morin.1998@free.fr>
 References: <cover.1477843328.git.yann.morin.1998@free.fr>
-Message-ID: <68afe0c571dbe4cf5843205b7ab15cf748075de4.1477843328.git.yann.morin.1998@free.fr>
+Message-ID: <f821d5032f417f98141d6fb30f92c28feb16d2e0.1477843328.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +11,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libimxvpuapi/libimxvpuapi.mk | 23 +----------------------
- 1 file changed, 1 insertion(+), 22 deletions(-)
+ package/norm/norm.mk | 28 +++-------------------------
+ 1 file changed, 3 insertions(+), 25 deletions(-)
 
-diff --git a/package/libimxvpuapi/libimxvpuapi.mk b/package/libimxvpuapi/libimxvpuapi.mk
-index df84806..fde4429 100644
---- a/package/libimxvpuapi/libimxvpuapi.mk
-+++ b/package/libimxvpuapi/libimxvpuapi.mk
-@@ -11,25 +11,4 @@ LIBIMXVPUAPI_LICENSE_FILES = LICENSE
- LIBIMXVPUAPI_DEPENDENCIES = host-pkgconf host-python imx-vpu
- LIBIMXVPUAPI_INSTALL_STAGING = YES
+diff --git a/package/norm/norm.mk b/package/norm/norm.mk
+index e1b3a5f..8af76f8 100644
+--- a/package/norm/norm.mk
++++ b/package/norm/norm.mk
+@@ -15,32 +15,10 @@ ifeq ($(BR2_PACKAGE_LIBNETFILTER_QUEUE),y)
+ NORM_DEPENDENCIES += libnetfilter_queue
+ endif
  
--define LIBIMXVPUAPI_CONFIGURE_CMDS
+-define NORM_CONFIGURE_CMDS
 -	cd $(@D); \
--	$(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python2 ./waf configure \
--		--prefix=/usr --libdir=/usr/lib
+-		$(TARGET_CONFIGURE_OPTS) \
+-		./waf configure --prefix=/usr
 -endef
 -
--define LIBIMXVPUAPI_BUILD_CMDS
+-define NORM_BUILD_CMDS
 -	cd $(@D); \
--	$(HOST_DIR)/usr/bin/python2 ./waf build -j $(PARALLEL_JOBS)
+-		$(TARGET_MAKE_ENV) \
+-		./waf build
 -endef
 -
--define LIBIMXVPUAPI_INSTALL_STAGING_CMDS
+ # install target doesn't install headers unfortunately...
+-define NORM_INSTALL_STAGING_CMDS
 -	cd $(@D); \
--	$(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(STAGING_DIR) install
--endef
--
--define LIBIMXVPUAPI_INSTALL_TARGET_CMDS
+-		$(TARGET_MAKE_ENV) \
+-		DESTDIR=$(STAGING_DIR) \
+-		./waf install
++define NORM_INSTALL_HEADERS
+ 	cp -f $(@D)/include/norm* $(STAGING_DIR)/usr/include
+ endef
++NORM_POST_INSTALL_STAGING_HOOKS += NORM_INSTALL_HEADERS
+ 
+-define NORM_INSTALL_TARGET_CMDS
 -	cd $(@D); \
--	$(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(TARGET_DIR) install
+-		$(TARGET_MAKE_ENV) \
+-		DESTDIR=$(TARGET_DIR) \
+-		./waf install
 -endef
 -
 -$(eval $(generic-package))
