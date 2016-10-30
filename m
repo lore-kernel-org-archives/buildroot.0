@@ -1,31 +1,32 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 30 Oct 2016 14:25:11 +0100
-Subject: [Buildroot] [PATCH] binutils: add comment with bug report reference
-Message-ID: <20161030132511.GA23794@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Oct 2016 16:29:21 +0100
+Subject: [Buildroot] [git commit] package/leafnode2: fix SITE url
+Message-ID: <20161030152932.9531E817C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add requested bug report
+commit: https://git.buildroot.net/buildroot/commit/?id=6ac9823f99a3fbfdeb544396e65d466d4db2b5eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+ package/leafnode2/leafnode2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index a7610b4..dce6996 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -18,6 +18,7 @@ choice
- 	config BR2_BINUTILS_VERSION_2_27_X
- 		bool "binutils 2.27"
- 		# supported but broken on Microblaze
-+		# see https://sourceware.org/bugzilla/show_bug.cgi?id=20748
- 		depends on !BR2_microblaze
+diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
+index 5b9b854..0c20fd0 100644
+--- a/package/leafnode2/leafnode2.mk
++++ b/package/leafnode2/leafnode2.mk
+@@ -6,7 +6,7 @@
  
- endchoice
--- 
-2.1.4
+ LEAFNODE2_VERSION = 2.0.0.alpha20140727b
+ LEAFNODE2_SOURCE = leafnode-$(LEAFNODE2_VERSION).tar.bz2
+-LEAFNODE2_SITE = http://www.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
++LEAFNODE2_SITE = http://krusty.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
+ LEAFNODE2_LICENSE = LGPLv2.1
+ LEAFNODE2_LICENSE_FILES = COPYING COPYING.LGPL
+ LEAFNODE2_DEPENDENCIES = host-pcre pcre
