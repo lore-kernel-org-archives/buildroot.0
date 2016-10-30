@@ -1,103 +1,129 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Oct 2016 19:17:00 +0100
-Subject: [Buildroot] [PATCH v2 05/23]
- toolchain-external-blackfin-uclinux: new package
-In-Reply-To: <20161030183734.26f568d4@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 30 Oct 2016 19:38:20 +0100
+Subject: [Buildroot] [PATCH v2 23/23] toolchain-external: introduce and
+ use external toolchain infra
+In-Reply-To: <1477742948-11490-24-git-send-email-romain.naour@gmail.com>
 References: <1477742948-11490-1-git-send-email-romain.naour@gmail.com>
- <1477742948-11490-6-git-send-email-romain.naour@gmail.com>
- <20161030164752.GA18077@free.fr>
- <20161030183734.26f568d4@free-electrons.com>
-Message-ID: <20161030181700.GC18077@free.fr>
+ <1477742948-11490-24-git-send-email-romain.naour@gmail.com>
+Message-ID: <28350dcb-4c46-22ce-63aa-5d4ff8902b47@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi All,
 
-On 2016-10-30 18:37 +0100, Thomas Petazzoni spake thusly:
-> Hello,
+Le 29/10/2016 ? 14:09, Romain Naour a ?crit :
+> This fairly large commit is needed to switch in one atomic change from
+> the old single package based external toolchain handling, to a
+> mechanism based on a common external toolchain package infrastructure
+> and separate packages for each toolchain family. The purpose is to
+> clearly separate the common external toolchain logic from the
+> toolchain-specific details and generally make the external toolchain
+> code hopefully easier to maintain.
 > 
-> On Sun, 30 Oct 2016 17:47:52 +0100, Yann E. MORIN wrote:
+> To achieve this, this commit:
 > 
-> > I think you could very well:
-> > 
-> >  1- introduce an empty infra that does nothing at all, except it does
-> >     exist;
-> > 
-> >  2- introduce the virtual package. It would not kick any dependency
-> >     until much later, but it would exist.
+>  - Introduce in pkg-toolchain-external.mk the
+>      'toolchain-external-package' macro, which is the core of the
+>      external toolchain package infrastructure. Like any other package
+>      infrastructure, it defines a number of variables and provides a
+>      behavior for the configure, build and install steps.
 > 
-> The virtual package should be named "toolchain-external", which clashes
-> with the existing "toolchain-external" package that you remove in step
-> (5). So you can't do your step (2) before doing your step (5), unless
-> of course you name the packages differently.
-
-A virtual package is but a generic package, so nothing prevents it from
-having its own _CMDS macros; it can download, configure and build stuff
-of its own.
-
-Alternatively, you can have the toolchain-external package depend on
-each of the new toochain-external-foo when it is added, as a kind of
-manually-handled virtual package, before eventually converting it to a
-real virtual package once everything as been split out to individual
-providers.
-
-That's what I'm doing with the split of the skeleton package to handle
-systemd, by the way. It works nicely and makes for a series that is
-fully operational at each step.
-
-> And all in all it doesn't change anything: it creates packages that are
-> not used/referenced by anything, until your step (5). Which is exactly
-> what's already happening.
+>    - Turn the toolchain-external.mk file in a simple virtual package,
+>      which automatically depends on the selected external
+>      toolchain. Like any other virtual package, the Kconfig variable
+>      BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL indicates which package is
+>      providing the currently selected toolchain.
 > 
-> So it's really a matter of taste of what is the less ugly option, but
-> all options will introduce code that is orphaned until the final commit
-> that switches everything over.
+>    - Removes all the toolchain-specific definitions from
+>      toolchain/toolchain-external/Config.in as well as the hash file,
+>      and instead use the per-toolchain packages in the subdirectories
+>      toolchain/toolchain-external/*/.
+> 
+>    - Wine: Use $(TOOLCHAIN_EXTERNAL_PREFIX) instead of
+>      $(BR2_TOOLCHAIN_EXTERNAL_PREFIX) which was removed.
+> 
+>    - Remove the old toolchain-external.hash file. The hash is now
+>      provided by the toolchain package.
+> 
+> Notes:
+>    - The hack for setting TOOLCHAIN_EXTERNAL_BIN for the ADI bfin
+>      toolchain is no longer needed.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> v2: - merge all pkg-toolchain-external* into pkg-toolchain-external.mk (Arnout)
+>     - rebase on master
+> 
+>     fix two big issue:
+>     1) TOOLCHAIN_EXTERNAL_COMMON_WRAPPER_ARGS were not included in the
+>        toolchain wrapper.
+>     2) TOOLCHAIN_EXTERNAL_CFLAGS wasn't included in $(2)_CFLAGS, same
+>        for TOOLCHAIN_EXTERNAL_LIBS and $(2)_LIBS. So no libraries were
+>        intalled in target.
+> ---
 
-Not if, as I stated above, you make them real package from the onset, on
-which tooclhain-external depends.
+[...]
 
-Yes, this is a bit more work. But it makes the series fully bisectable,
-with each commit adding code that *is* actually used at the time it is
-added. Adding code that is unused is not good, because the only option
-in case something goes amiss is to just revert the whole stuff rather
-than the failing hunks...
+> +source "toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-arago-armv5te/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-arago-armv7a/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-musl-cross/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in"
 
-> With this in mind, going for one option
-> or another really doesn't make much difference. And knowing how painful
-> it is to keep this series up-to-date, I'm personally happy with the
-> current way things are introduced.
+The codesourcery toolchains were named sourcery in a previous version of this
+series, but now it's not sorted alphabetically.
+Also, for ARM the default toochain choice is arago which is an very old
+toolchain (2011), do we want to keep the default ARM choice to linaro or
+codesourcery toolchain ?
 
-Since when is "maintaining this series is painful" a rationale for
-applying said series?
+With the change, some existing defconfig will not use the same toolchain.
 
-I've known (and maintained and still maintain) series that were (are)
-more difficukt to maintain than this one. And yet, you rarely if ever
-argued those series should be applied just because they were hard to
-maintain...  (And I'm not speaking only for my own series, far from
-it.)
+Best regards,
+Romain
 
-> >  3- add the per pre-built toolchain packages liek you did
-> > 
-> >  4- implement the new infra
-> > 
-> >  5- turn toolchain/toolchain-external/toolchain-external.mk from a
-> >     generic package to a virtual package
+> +source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in"
+> +
+> +# Kept last, so it remains the non-default choice, unless there isn't
+> +# any available toolchain profile for the currently selected
+> +# architecture.
+> +source "toolchain/toolchain-external/toolchain-external-custom/Config.in"
 
-But maybe the order I described is not the best...
 
-Anyway, just go ahead and commit this series; a cleanup in there is long
-overdue.
 
-Regards,
-Yann E. MORIN.
+[...]
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> +source "toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-arago-armv5te/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-arago-armv7a/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-musl-cross/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options"
+> +source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options"
+> +
+> +source "toolchain/toolchain-external/toolchain-external-custom/Config.in.options"
+>  
