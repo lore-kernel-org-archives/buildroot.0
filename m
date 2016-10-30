@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Oct 2016 16:42:25 +0100
-Subject: [Buildroot] [PATCH 1/1] trinity: fix Config.in depends on logic
-In-Reply-To: <1477831905-14615-1-git-send-email-nunes.erico@gmail.com>
-References: <1477831905-14615-1-git-send-email-nunes.erico@gmail.com>
-Message-ID: <20161030164225.4beb99a2@free-electrons.com>
+Date: Sun, 30 Oct 2016 16:43:40 +0100
+Subject: [Buildroot] [PATCH] binutils: add comment with bug report
+ reference
+In-Reply-To: <20161030132511.GA23794@waldemar-brodkorb.de>
+References: <20161030132511.GA23794@waldemar-brodkorb.de>
+Message-ID: <20161030164340.6d8d079b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 30 Oct 2016 13:51:45 +0100, Erico Nunes wrote:
-> The comment from trinity Config.in currently does not show up in
-> menuconfig for glibc or uClibc toolchains with older headers.
-> This commit fixes the logic so that it shows up when either one of the
-> dependencies from trinity are not met.
+On Sun, 30 Oct 2016 14:25:11 +0100, Waldemar Brodkorb wrote:
+> Add requested bug report
 > 
-> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  package/trinity/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/binutils/Config.in.host | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+> index a7610b4..dce6996 100644
+> --- a/package/binutils/Config.in.host
+> +++ b/package/binutils/Config.in.host
+> @@ -18,6 +18,7 @@ choice
+>  	config BR2_BINUTILS_VERSION_2_27_X
+>  		bool "binutils 2.27"
+>  		# supported but broken on Microblaze
+> +		# see https://sourceware.org/bugzilla/show_bug.cgi?id=20748
+>  		depends on !BR2_microblaze
 
-Applied to master, thanks.
+Your bug report is about binutils 2.27 generating broken binaries for
+microblaze/musl, but you disable binutils 2.27 completely for
+microblaze, and not just for musl. Why so?
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
