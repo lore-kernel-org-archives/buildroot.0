@@ -1,82 +1,185 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 30 Oct 2016 17:21:49 +0100
-Subject: [Buildroot] [PATCH 01/10] package/waf: new host package
-In-Reply-To: <866827010ad3057640f15eb124ed58ce1b7e96c6.1477843328.git.yann.morin.1998@free.fr>
-References: <cover.1477843328.git.yann.morin.1998@free.fr>
- <866827010ad3057640f15eb124ed58ce1b7e96c6.1477843328.git.yann.morin.1998@free.fr>
-Message-ID: <67dd596b-9a70-e685-f514-36d27ece63b0@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 30 Oct 2016 17:27:33 +0100
+Subject: [Buildroot] [PATCH v2 02/23] toolchain-external:
+ TOOLCHAIN_EXTERNAL_INSTALL_*_LIBS: use arguments instead of global
+ variables
+In-Reply-To: <1477742948-11490-3-git-send-email-romain.naour@gmail.com>
+References: <1477742948-11490-1-git-send-email-romain.naour@gmail.com>
+ <1477742948-11490-3-git-send-email-romain.naour@gmail.com>
+Message-ID: <20161030162733.GB3463@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Romain, All,
 
-Le 30/10/2016 ? 17:02, Yann E. MORIN a ?crit :
-> host-waf will be used by waf-based packages that do not include it in
-> their release tarballs, like mpv.
+On 2016-10-29 14:08 +0200, Romain Naour spake thusly:
+> A new external toolchain package infrastructure will be introduced in a
+> followup patch, so TOOLCHAIN_EXTERNAL_{CC,CFLAGS...} global variables
+> will no longer exist. Instead, each external toolchain packages will
+> provide it's own <toolchain-external-name>_{CC,CFLAGS...} variables.
 > 
-> mpv is currently the only case we have, but with the upcoming
-> waf-package infra, having host-waf available just makes the infra
-> complete from the onset.
+> So additional arguments are needed to provide CC and CFLAG when calling
+> TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS,
+> TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC and
+> TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Romain Naour <romain.naour@openwide.fr>
-
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
+> Also, an additional argument is needed to provide LIBS (the shared
+> libraries list) when calling TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS to
+> copy the external toolchain libraries to target.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  package/waf/waf.hash |  3 +++
->  package/waf/waf.mk   | 28 ++++++++++++++++++++++++++++
->  2 files changed, 31 insertions(+)
->  create mode 100644 package/waf/waf.hash
->  create mode 100644 package/waf/waf.mk
+> v2: rework commit log/title (Arnout)
+> ---
+>  toolchain/toolchain-external/toolchain-external.mk | 42 +++++++++++++---------
+>  1 file changed, 25 insertions(+), 17 deletions(-)
 > 
-> diff --git a/package/waf/waf.hash b/package/waf/waf.hash
-> new file mode 100644
-> index 0000000..9d610b2
-> --- /dev/null
-> +++ b/package/waf/waf.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed
-> +sha1    33d170c738ed8c92dda2945b445272972f558244                          waf-1.9.5
-> +sha256  101f14e0f47a6410c00b8feda094948516cd3989491c56eb8268907fcd164909  waf-1.9.5
-> diff --git a/package/waf/waf.mk b/package/waf/waf.mk
-> new file mode 100644
-> index 0000000..cd0c67e
-> --- /dev/null
-> +++ b/package/waf/waf.mk
-> @@ -0,0 +1,28 @@
-> +################################################################################
-> +#
-> +# waf
-> +#
-> +################################################################################
-> +
-> +WAF_VERSION = 1.9.5
-> +WAF_SOURCE = waf-$(WAF_VERSION)
-> +WAF_SITE = https://waf.io/
-> +
-> +# Waf is a python script, compatible with any python >= 2.6, but some
-> +# packages have wafscripts not compatible with python3. So always use
-> +# python2.
-> +#
-> +# We don't really need host-python to install host-waf, but having this
-> +# dependency here will hide it from packages themselves
-> +HOST_WAF_DEPENDENCIES = host-python
-> +
-> +# Not really needed, but here for consistency with other packages.
-> +define HOST_WAF_EXTRACT_CMDS
-> +	$(INSTALL) -D -m 0755 $(DL_DIR)/waf-$(WAF_VERSION) $(@D)/waf
-> +endef
-> +
-> +define HOST_WAF_INSTALL_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/waf $(HOST_DIR)/usr/bin/waf
-> +endef
-> +
-> +$(eval $(host-generic-package))
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index d383d5f..ddf77aa 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -630,10 +630,11 @@ endef
+>  # Buildroot, Crosstool-NG, CodeSourcery and Linaro
+>  # before doing any modification on the below logic.
+>  
+> +# $1: toolchain LIBS
+>  ifeq ($(BR2_STATIC_LIBS),)
+>  define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
+>  	$(Q)$(call MESSAGE,"Copying external toolchain libraries to target...")
+> -	$(Q)for libs in $(TOOLCHAIN_EXTERNAL_LIBS); do \
+> +	$(Q)for libs in $(1); do \
+>  		$(call copy_toolchain_lib_root,$$libs); \
+>  	done
+>  endef
+> @@ -662,13 +663,15 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER
+>  endef
+>  endif
+>  
+> +# $1: toolchain CC
+> +# $2: toolchain CFLAGS
+>  define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+> -	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
+> -	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+> -	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+> +	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(1))" ; \
+> +	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(1) $(2))" ; \
+> +	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(1) $(2))" ; \
+>  	SUPPORT_LIB_DIR="" ; \
+>  	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
+> -		LIBSTDCPP_A_LOCATION=$$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
+> +		LIBSTDCPP_A_LOCATION=$$(LANG=C $(1) $(2) -print-file-name=libstdc++.a) ; \
+
+For some functions/macros (like create_lib_symlinks in your previous
+patch), $(1), $(2) etc... are assigned to local variables, while here
+they are drectly used.
+
+This is not very consistent.
+
+I know that you are only changing the code "in place" without any
+cleanup, but still, it would have been nice to take the opportunity to
+add some consistency in those complex functions/macros.
+
+Ditto below...
+
+Otherwise:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+>  		if [ -e "$${LIBSTDCPP_A_LOCATION}" ]; then \
+>  			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
+>  		fi ; \
+> @@ -689,24 +692,27 @@ endef
+>  # FDPIC is not the primary binary format being used, but the user has
+>  # nonetheless requested the installation of the FDPIC libraries to the
+>  # target filesystem.
+> +# $1: toolchain CC
+> +# $2: toolchain CFLAGS
+>  ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
+>  define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC
+>  	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to staging...")
+> -	$(Q)FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
+> -	FDPIC_SYSROOT_DIR="$(call toolchain_find_sysroot,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+> -	FDPIC_LIB_DIR="$(call toolchain_find_libdir,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+> +	$(Q)FDPIC_EXTERNAL_CC=$(dir $(1))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
+> +	FDPIC_SYSROOT_DIR="$(call toolchain_find_sysroot,$${FDPIC_EXTERNAL_CC} $(2))" ; \
+> +	FDPIC_LIB_DIR="$(call toolchain_find_libdir,$${FDPIC_EXTERNAL_CC} $(2))" ; \
+>  	FDPIC_SUPPORT_LIB_DIR="" ; \
+>  	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
+> -	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
+> +	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(2) -print-file-name=libstdc++.a) ; \
+>  	        if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
+>  	                FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
+>  	        fi ; \
+>  	fi ; \
+>  	$(call copy_toolchain_sysroot,$${FDPIC_SYSROOT_DIR},$${FDPIC_SYSROOT_DIR},,$${FDPIC_LIB_DIR},$${FDPIC_SUPPORT_LIB_DIR})
+>  endef
+> +# $1: toolchain LIBS
+>  define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC
+>  	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...")
+> -	$(Q)for libs in $(TOOLCHAIN_EXTERNAL_LIBS); do \
+> +	$(Q)for libs in $(1); do \
+>  		$(call copy_toolchain_lib_root,$$libs); \
+>  	done
+>  endef
+> @@ -718,11 +724,13 @@ endif
+>  # to the target filesystem. The flat libraries are found and linked
+>  # according to the index in name "libN.so". Index 1 is reserved for
+>  # the standard C library. Customer libraries can use 4 and above.
+> +# $1: toolchain CC
+> +# $2: toolchain CFLAGS
+>  ifeq ($(BR2_BFIN_INSTALL_FLAT_SHARED),y)
+>  define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT
+>  	$(Q)$(call MESSAGE,"Install external toolchain FLAT libraries to target...")
+> -	$(Q)FLAT_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))../../bfin-uclinux/bin/bfin-uclinux-gcc ; \
+> -	FLAT_LIBC_A_LOCATION=`$${FLAT_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -mid-shared-library -print-file-name=libc`; \
+> +	$(Q)FLAT_EXTERNAL_CC=$(dir $(1))../../bfin-uclinux/bin/bfin-uclinux-gcc ; \
+> +	FLAT_LIBC_A_LOCATION=`$${FLAT_EXTERNAL_CC} $(2) -mid-shared-library -print-file-name=libc`; \
+>  	if [ -f $${FLAT_LIBC_A_LOCATION} -a ! -h $${FLAT_LIBC_A_LOCATION} ] ; then \
+>  	        $(INSTALL) -D $${FLAT_LIBC_A_LOCATION} $(TARGET_DIR)/lib/lib1.so; \
+>  	fi
+> @@ -790,8 +798,8 @@ TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_WRAPPER_BUILD)
+>  define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+>  	$(TOOLCHAIN_WRAPPER_INSTALL)
+>  	$(call TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
+> -	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
+> -	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC)
+> +	$(call TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
+> +	$(call TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
+>  	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
+>  	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+>  endef
+> @@ -801,10 +809,10 @@ endef
+>  # install-staging step, arbitrarily.
+>  define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
+>  	$(call TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
+> -	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
+> +	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS,$(TOOLCHAIN_EXTERNAL_LIBS))
+>  	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER)
+> -	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC)
+> -	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT)
+> +	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC,$(TOOLCHAIN_EXTERNAL_LIBS))
+> +	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
+>  	$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
+>  endef
+>  
+> -- 
+> 2.5.5
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
