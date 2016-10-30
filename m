@@ -1,11 +1,10 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 30 Oct 2016 17:35:13 +0100
-Subject: [Buildroot] [PATCH 06/10] package/gst1-imx: make it a
-	waf-package
-In-Reply-To: <0c135c7f96ee794320682db44e5fd881cb0d2069.1477843328.git.yann.morin.1998@free.fr>
+Date: Sun, 30 Oct 2016 17:38:17 +0100
+Subject: [Buildroot] [PATCH 07/10] package/jack2: make it a waf-package
+In-Reply-To: <0a8d8d5285bc70ab413f32da9c5c4a23ed0e658a.1477843328.git.yann.morin.1998@free.fr>
 References: <cover.1477843328.git.yann.morin.1998@free.fr>
- <0c135c7f96ee794320682db44e5fd881cb0d2069.1477843328.git.yann.morin.1998@free.fr>
-Message-ID: <ca096150-cb02-0a5b-3511-da3e1d21a519@gmail.com>
+ <0a8d8d5285bc70ab413f32da9c5c4a23ed0e658a.1477843328.git.yann.morin.1998@free.fr>
+Message-ID: <f51db4d2-0272-725f-c9ec-c338700c41a0@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,8 +15,7 @@ Hi Yann, All,
 
 Le 30/10/2016 ? 17:02, Yann E. MORIN a ?crit :
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Cc: Wojciech M. Zabolotny <wzab01@gmail.com>
 
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
@@ -25,40 +23,54 @@ Best regards,
 Romain
 
 > ---
->  package/gstreamer1/gst1-imx/gst1-imx.mk | 20 +-------------------
->  1 file changed, 1 insertion(+), 19 deletions(-)
+>  package/jack2/jack2.mk | 34 +++-------------------------------
+>  1 file changed, 3 insertions(+), 31 deletions(-)
 > 
-> diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
-> index 3c6b1b6..57a2ad2 100644
-> --- a/package/gstreamer1/gst1-imx/gst1-imx.mk
-> +++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
-> @@ -14,7 +14,6 @@ GST1_IMX_INSTALL_STAGING = YES
+> diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+> index fa9e451..23c9723 100644
+> --- a/package/jack2/jack2.mk
+> +++ b/package/jack2/jack2.mk
+> @@ -11,6 +11,8 @@ JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
+>  JACK2_INSTALL_STAGING = YES
+>  JACK2_PATCH = https://github.com/jackaudio/jack2/commit/ff1ed2c4524095055140370c1008a2d9cccc5645.patch
 >  
->  GST1_IMX_DEPENDENCIES += \
->  	host-pkgconf \
-> -	host-python \
->  	gstreamer1 \
->  	gst1-plugins-base
->  
-> @@ -53,21 +52,4 @@ endif
+> +JACK2_CONF_OPTS = --alsa
+> +
+>  ifeq ($(BR2_PACKAGE_OPUS),y)
+>  JACK2_DEPENDENCIES += opus
 >  endif
->  endif
+> @@ -42,34 +44,4 @@ endif
+>  # gtkiostream, which we do not have, so we don't need to depend on
+>  # eigen.
 >  
-> -define GST1_IMX_CONFIGURE_CMDS
-> -	cd $(@D); \
+> -define JACK2_CONFIGURE_CMDS
+> -	(cd $(@D); \
+> -		$(TARGET_CONFIGURE_OPTS)	\
+> -		$(HOST_DIR)/usr/bin/python2 ./waf configure \
+> -		--prefix=/usr			\
+> -		--alsa				\
+> -		$(JACK2_CONF_OPTS)		\
+> -	)
+> -endef
+> -
+> -define JACK2_BUILD_CMDS
+> -	(cd $(@D); \
 > -		$(TARGET_CONFIGURE_OPTS) \
-> -		$(HOST_DIR)/usr/bin/python2 ./waf configure $(GST1_IMX_CONF_OPTS)
+> -		$(HOST_DIR)/usr/bin/python2 ./waf build -j $(PARALLEL_JOBS))
 > -endef
 > -
-> -define GST1_IMX_BUILD_CMDS
-> -	cd $(@D); \
-> -		$(HOST_DIR)/usr/bin/python2 ./waf build -j $(PARALLEL_JOBS)
-> -endef
-> -
-> -define GST1_IMX_INSTALL_TARGET_CMDS
-> -	cd $(@D); \
+> -define JACK2_INSTALL_TARGET_CMDS
+> -	(cd $(@D); \
+> -		$(TARGET_CONFIGURE_OPTS) \
 > -		$(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(TARGET_DIR) \
-> -		install
+> -		install)
+> -endef
+> -
+> -define JACK2_INSTALL_STAGING_CMDS
+> -	(cd $(@D); \
+> -		$(TARGET_CONFIGURE_OPTS) \
+> -		$(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(STAGING_DIR) \
+> -		install)
 > -endef
 > -
 > -$(eval $(generic-package))
