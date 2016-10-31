@@ -1,71 +1,108 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 31 Oct 2016 15:56:53 +0100
-Subject: [Buildroot] [PATCH v3 04/24] toolchain-external:
-	TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER: use arguments
-	instead of global variables
+Date: Mon, 31 Oct 2016 15:56:57 +0100
+Subject: [Buildroot] [PATCH v3 08/24] toolchain-external-arago-armv5te: new
+	package
 In-Reply-To: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
 References: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1477925833-27204-5-git-send-email-romain.naour@gmail.com>
+Message-ID: <1477925833-27204-9-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A new external toolchain package infrastructure will be introduced in a
-followup patch, so TOOLCHAIN_EXTERNAL_{CC,CFLAGS...} global variables
-will no longer exist. Instead, each external-toolchain packages will
-provide it's own <toolchain-external-name>_{CC,CFLAGS...} variables.
+This commit adds a new package for the Arago external toolchain for
+the ARM architecture. As of this commit, the code is currently not
+used, but it will be used as soon as the external toolchain
+infrastructure gets introduced in a future commit.
 
-So additional arguments are needed to provide CC, CFLAG and INSTALL_DIR
-when calling TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER.
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
-v3: use local variables for functions/macros (Yann)
-v2: rework commit log/title (Arnout)
----
- toolchain/toolchain-external/toolchain-external.mk | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ .../toolchain-external-arago-armv5te/Config.in     | 19 ++++++++++++++++++
+ .../Config.in.options                              |  6 ++++++
+ .../toolchain-external-arago-armv5te.hash          |  3 +++
+ .../toolchain-external-arago-armv5te.mk            | 23 ++++++++++++++++++++++
+ 4 files changed, 51 insertions(+)
+ create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv5te/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv5te/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv5te/toolchain-external-arago-armv5te.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv5te/toolchain-external-arago-armv5te.mk
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index dd8bc21..06b8105 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -645,16 +645,22 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
- endef
- endif
- 
-+# $1: toolchain CC
-+# $2: toolchain CFLAGS
-+# $3: toolchain INSTALL_DIR
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),y)
- define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER
- 	$(Q)$(call MESSAGE,"Copying gdbserver")
--	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
--	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	$(Q)TOOLCHAIN_CC="$(strip $1)" ; \
-+	TOOLCHAIN_CFLAGS="$(strip $2)" ; \
-+	TOOLCHAIN_INSTALL_DIR="$(strip $3)" ; \
-+	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$${TOOLCHAIN_CC} $${TOOLCHAIN_CFLAGS})" ; \
-+	ARCH_LIB_DIR="$(call toolchain_find_libdir,$${TOOLCHAIN_CC} $${TOOLCHAIN_CFLAGS})" ; \
- 	gdbserver_found=0 ; \
- 	for d in $${ARCH_SYSROOT_DIR}/usr \
- 		 $${ARCH_SYSROOT_DIR}/../debug-root/usr \
- 		 $${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} \
--		 $(TOOLCHAIN_EXTERNAL_INSTALL_DIR); do \
-+		 $${TOOLCHAIN_INSTALL_DIR}; do \
- 		if test -f $${d}/bin/gdbserver ; then \
- 			install -m 0755 -D $${d}/bin/gdbserver $(TARGET_DIR)/usr/bin/gdbserver ; \
- 			gdbserver_found=1 ; \
-@@ -824,7 +830,7 @@ endef
- define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
- 	$(call TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
- 	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS,$(TOOLCHAIN_EXTERNAL_LIBS))
--	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER)
-+	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS),$(TOOLCHAIN_EXTERNAL_INSTALL_DIR))
- 	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC,$(TOOLCHAIN_EXTERNAL_LIBS))
- 	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
- 	$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
+diff --git a/toolchain/toolchain-external/toolchain-external-arago-armv5te/Config.in b/toolchain/toolchain-external/toolchain-external-arago-armv5te/Config.in
+new file mode 100644
+index 0000000..2c821a4
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-arago-armv5te/Config.in
+@@ -0,0 +1,19 @@
++config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
++	bool "Arago ARMv5 2011.09"
++	depends on BR2_arm
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_ARM_CPU_ARMV4
++	depends on BR2_ARM_EABI
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	# kernel headers: 2.6.31
++	help
++	  Texas Instruments Arago ARMv5 2011.09 toolchain, with gcc
++	  4.5.3, binutils 2.20.1, glibc 2.12, gdb 7.2.
++
++	  This toolchain uses software-floating point.
+diff --git a/toolchain/toolchain-external/toolchain-external-arago-armv5te/Config.in.options b/toolchain/toolchain-external/toolchain-external-arago-armv5te/Config.in.options
+new file mode 100644
+index 0000000..dd08ee0
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-arago-armv5te/Config.in.options
+@@ -0,0 +1,6 @@
++if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
++
++config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
++	default "toolchain-external-arago-armv5te"
++
++endif
+diff --git a/toolchain/toolchain-external/toolchain-external-arago-armv5te/toolchain-external-arago-armv5te.hash b/toolchain/toolchain-external/toolchain-external-arago-armv5te/toolchain-external-arago-armv5te.hash
+new file mode 100644
+index 0000000..dd70004
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-arago-armv5te/toolchain-external-arago-armv5te.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
++sha256 25fbf0513ad7322b15cbaae964cafadcbb4c939f2708f57f40b8f9f2d601122b  arago-toolchain-2011.09-sources.tar.bz2
+diff --git a/toolchain/toolchain-external/toolchain-external-arago-armv5te/toolchain-external-arago-armv5te.mk b/toolchain/toolchain-external/toolchain-external-arago-armv5te/toolchain-external-arago-armv5te.mk
+new file mode 100644
+index 0000000..f06728e
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-arago-armv5te/toolchain-external-arago-armv5te.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# toolchain-external-arago-armv5te
++#
++################################################################################
++
++TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports
++TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_VERSION = 2011.09
++TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_PREFIX = arm-arago-linux-gnueabi
++
++TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_SOURCE = \
++	arago-$(TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_VERSION)-armv5te-linux-gnueabi-sdk.tar.bz2
++
++TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_ACTUAL_SOURCE_TARBALL = arago-toolchain-$(TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_VERSION)-sources.tar.bz2
++
++define TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_FIXUP_EXTRACT
++	mv $(@D)/arago-2011.09/armv5te/* $(@D)/
++	rm -rf $(@D)/arago-2011.09/
++endef
++
++TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_FIXUP_EXTRACT
++
++$(eval $(toolchain-external-package))
 -- 
 2.5.5
