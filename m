@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 31 Oct 2016 11:39:38 +0100
-Subject: [Buildroot] [PATCH v3 0/9] Update LTTng packages to 2.8.x and
- Babeltrace to 1.4.0
-In-Reply-To: <20161031074624.7576-1-eeppeliteloop@gmail.com>
+Date: Mon, 31 Oct 2016 12:24:49 +0100
+Subject: [Buildroot] [PATCH v3 8/9] lttng-babeltrace: add debug info
+ support
+In-Reply-To: <20161031074624.7576-9-eeppeliteloop@gmail.com>
 References: <20161031074624.7576-1-eeppeliteloop@gmail.com>
-Message-ID: <20161031103938.GH3389@free.fr>
+ <20161031074624.7576-9-eeppeliteloop@gmail.com>
+Message-ID: <20161031112449.GI3389@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,60 +15,84 @@ To: buildroot@busybox.net
 Philippe, All,
 
 On 2016-10-31 03:46 -0400, Philippe Proulx spake thusly:
-> See individual patches for changes.
+> Since Babeltrace 1.4, there is support for printing debug information
+> along with compatible traces and event records. Babeltrace needs
+> elfutils in this case. If elfutils can be built with the current
+> configuration, the lttng-babeltrace package selects it and builds
+> with support for debug information. Otherwise the menuconfig shows
+> a comment which explains why debug information support cannot be
+> built.
 > 
-> Philippe Proulx (9):
->   lttng-libust: bump to version 2.8.1
->   lttng-libust: enable Python agent when Python is available
->   lttng-tools: bump to version 2.8.2
->   lttng-tools: remove dependency on host-lttng-babeltrace
->   lttng-modules: bump to version 2.8.3
->   lttng-babeltrace: bump to version 1.4.0
->   lttng-babeltrace: add host Babeltrace as host utility
->   lttng-babeltrace: add debug info support
->   lttng-babeltrace: rename to babeltrace
+> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 
-Durng the review, I wanted to check something so I tried to apply th
-series on top of master. Some of the patches do not apply, but I can't
-see why:
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-    Description: [v3,3/9] lttng-tools: bump to version 2.8.2
-    Applying: lttng-tools: bump to version 2.8.2
-    .git/rebase-apply/patch:117: space before tab in indent.
-            errno = 0;
-    .git/rebase-apply/patch:118: space before tab in indent.
-            id = strtol(argv[1], &name, 10);
-    .git/rebase-apply/patch:121: space before tab in indent.
-                    ret = del_output(UINT32_MAX, name);
-    .git/rebase-apply/patch:122: space before tab in indent.
-            } else if (errno == 0 && *name == '\0') {
-    .git/rebase-apply/patch:123: space before tab in indent.
-                    ret = del_output(id, NULL);
-    error: patch failed: package/lttng-tools/0001-Fix-build-failure-when-__GLIBC_PREREQ-is-missing.patch:1
-    error: package/lttng-tools/0001-Fix-build-failure-when-__GLIBC_PREREQ-is-missing.patch: patch does not apply
-    error: patch failed: package/lttng-tools/0002-Fix-add-missing-sys-types.h-header.patch:1
-    error: package/lttng-tools/0002-Fix-add-missing-sys-types.h-header.patch: patch does not apply
-    Patch failed at 0001 lttng-tools: bump to version 2.8.2
-    The copy of the patch that failed is found in: .git/rebase-apply/patch
-    When you have resolved this problem, run "git am --continue".
-    If you prefer to skip this patch, run "git am --skip" instead.
-    To restore the original branch and stop patching, run "git am --abort".
-    'git am' failed with exit status 128
-
-So, those patches do not apply:
-    lttng-tools: bump to version 2.8.2
-    lttng-babeltrace: bump to version 1.4.0
-
-The failures (in both cases) occur when trying to delete existing
-patches, but not for all removals:
-    package/lttng-tools/0001-Fix-build-failure-when-__GLIBC_PREREQ-is-missing.patch
-    package/lttng-tools/0002-Fix-add-missing-sys-types.h-header.patch
-    package/lttng-babeltrace/0002-configure-fix-uuid-support-detection-on-static-build.patch
-
-I've had a look at the patches, but they look correct. :-/
+But then you do not enable debug info for the host variant. That's
+because elfutils does not have a host variant. I'll send a patch
+shortly.
 
 Regards,
 Yann E. MORIN.
+
+> ---
+> This is a new patch in v3.
+> 
+>  package/lttng-babeltrace/Config.in           | 17 +++++++++++++++++
+>  package/lttng-babeltrace/lttng-babeltrace.mk |  7 +++++++
+>  2 files changed, 24 insertions(+)
+> 
+> diff --git a/package/lttng-babeltrace/Config.in b/package/lttng-babeltrace/Config.in
+> index 95b635d..55e2143 100644
+> --- a/package/lttng-babeltrace/Config.in
+> +++ b/package/lttng-babeltrace/Config.in
+> @@ -27,6 +27,23 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
+> 
+>  	  http://diamon.org/babeltrace
+> 
+> +if BR2_PACKAGE_LTTNG_BABELTRACE
+> +
+> +config BR2_PACKAGE_LTTNG_BABELTRACE_DEBUG_INFO
+> +	bool
+> +	default y
+> +	depends on !BR2_bfin # elfutils
+> +	depends on !BR2_STATIC_LIBS # elfutils
+> +	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+> +	select BR2_PACKAGE_ELFUTILS
+> +
+> +comment "handling debug info in traces needs a glibc or uClibc toolchain w/ dynamic library"
+> +	depends on !BR2_bfin # elfutils
+> +	depends on BR2_STATIC_LIBS \
+> +		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+> +
+> +endif
+> +
+>  comment "lttng-babeltrace needs a toolchain w/ wchar, threads"
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+> index 30c5f6e..260a8ee 100644
+> --- a/package/lttng-babeltrace/lttng-babeltrace.mk
+> +++ b/package/lttng-babeltrace/lttng-babeltrace.mk
+> @@ -18,5 +18,12 @@ HOST_LTTNG_BABELTRACE_CONF_OPTS += --disable-debug-info
+>  # For 0001-configure.ac-remove-elfutils-version-test-for-Buildr.patch
+>  LTTNG_BABELTRACE_AUTORECONF = YES
+> 
+> +ifeq ($(BR2_PACKAGE_LTTNG_BABELTRACE_DEBUG_INFO),y)
+> +LTTNG_BABELTRACE_DEPENDENCIES += elfutils
+> +LTTNG_BABELTRACE_CONF_OPTS += --enable-debug-info
+> +else
+> +LTTNG_BABELTRACE_CONF_OPTS += --disable-debug-info
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> --
+> 2.9.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
