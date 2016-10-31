@@ -1,82 +1,107 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Mon, 31 Oct 2016 12:42:45 -0400
-Subject: [Buildroot] [PATCH v3 0/9] Update LTTng packages to 2.8.x and
- Babeltrace to 1.4.0
-In-Reply-To: <20161031103938.GH3389@free.fr>
-References: <20161031074624.7576-1-eeppeliteloop@gmail.com>
- <20161031103938.GH3389@free.fr>
-Message-ID: <CAB4xu_2LtuQ0Ox+GzqpxTXP0ziB3sxeKjzSp6sGDeM4AzF5xsA@mail.gmail.com>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Mon, 31 Oct 2016 15:06:30 -0700
+Subject: [Buildroot] [PATCH] package/xen: fix build failure on x86 after
+ bump to 47
+In-Reply-To: <20161029182714.GA3490@free.fr>
+References: <CAKmqyKPsF-MiNFtj3jRaU4cS0usMs0hYitxvj+FKDAQTUDgnaw@mail.gmail.com>
+ <1477752207-16549-1-git-send-email-yann.morin.1998@free.fr>
+ <20161029182714.GA3490@free.fr>
+Message-ID: <CAKmqyKN-vfzzqwzA6OM3pXco7fE93W0rCGdtRyP0ktmMy=r_bw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 31, 2016 at 6:39 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Philippe, All,
+On Sat, Oct 29, 2016 at 11:27 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Alistair, All,
 >
-> On 2016-10-31 03:46 -0400, Philippe Proulx spake thusly:
->> See individual patches for changes.
+> On 2016-10-29 16:43 +0200, Yann E. MORIN spake thusly:
+>> Since the bump to 4.7, Xen fails to build because of a double definition
+>> of __OBJECT_FILE__. This is due to (who would have guessed) the weirdness
+>> of their buildsystem.
 >>
->> Philippe Proulx (9):
->>   lttng-libust: bump to version 2.8.1
->>   lttng-libust: enable Python agent when Python is available
->>   lttng-tools: bump to version 2.8.2
->>   lttng-tools: remove dependency on host-lttng-babeltrace
->>   lttng-modules: bump to version 2.8.3
->>   lttng-babeltrace: bump to version 1.4.0
->>   lttng-babeltrace: add host Babeltrace as host utility
->>   lttng-babeltrace: add debug info support
->>   lttng-babeltrace: rename to babeltrace
+>> Fix that with a dirty hack: undefine the macro before defining it.
+>>
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> Cc: Alistair Francis <alistair.francis@xilinx.com>
+>>
+>> ---
+>> Note: totally untested.
 >
-> Durng the review, I wanted to check something so I tried to apply th
-> series on top of master. Some of the patches do not apply, but I can't
-> see why:
+> Now build-tested, the double-definition issue is fixed, and the build
+> succeeds with this defconfig:
 >
->     Description: [v3,3/9] lttng-tools: bump to version 2.8.2
->     Applying: lttng-tools: bump to version 2.8.2
->     .git/rebase-apply/patch:117: space before tab in indent.
->             errno = 0;
->     .git/rebase-apply/patch:118: space before tab in indent.
->             id = strtol(argv[1], &name, 10);
->     .git/rebase-apply/patch:121: space before tab in indent.
->                     ret = del_output(UINT32_MAX, name);
->     .git/rebase-apply/patch:122: space before tab in indent.
->             } else if (errno == 0 && *name == '\0') {
->     .git/rebase-apply/patch:123: space before tab in indent.
->                     ret = del_output(id, NULL);
->     error: patch failed: package/lttng-tools/0001-Fix-build-failure-when-__GLIBC_PREREQ-is-missing.patch:1
->     error: package/lttng-tools/0001-Fix-build-failure-when-__GLIBC_PREREQ-is-missing.patch: patch does not apply
->     error: patch failed: package/lttng-tools/0002-Fix-add-missing-sys-types.h-header.patch:1
->     error: package/lttng-tools/0002-Fix-add-missing-sys-types.h-header.patch: patch does not apply
->     Patch failed at 0001 lttng-tools: bump to version 2.8.2
->     The copy of the patch that failed is found in: .git/rebase-apply/patch
->     When you have resolved this problem, run "git am --continue".
->     If you prefer to skip this patch, run "git am --skip" instead.
->     To restore the original branch and stop patching, run "git am --abort".
->     'git am' failed with exit status 128
+>     BR2_aarch64=y
+>     BR2_TOOLCHAIN_EXTERNAL=y
+>     BR2_PACKAGE_XEN=y
+>     BR2_PACKAGE_XEN_HYPERVISOR=y
+>     BR2_PACKAGE_XEN_TOOLS=y
 >
-> So, those patches do not apply:
->     lttng-tools: bump to version 2.8.2
->     lttng-babeltrace: bump to version 1.4.0
->
-> The failures (in both cases) occur when trying to delete existing
-> patches, but not for all removals:
->     package/lttng-tools/0001-Fix-build-failure-when-__GLIBC_PREREQ-is-missing.patch
->     package/lttng-tools/0002-Fix-add-missing-sys-types.h-header.patch
->     package/lttng-babeltrace/0002-configure-fix-uuid-support-detection-on-static-build.patch
->
-> I've had a look at the patches, but they look correct. :-/
+> Not booted, I don't know Xen enough to test...
 
-I suspect my text editor removed some trailing whitespaces, but I'm
-not sure. I can try to disable trailing whitespace removal, and submit a
-v4, or the committer can remove those 3 files manually, as you wish.
+The patch looks good to me!
 
-Phil
+I just did a build test as well and it works, running a boot test now.
+
+Thanks,
+
+Alistair
 
 >
 > Regards,
 > Yann E. MORIN.
+>
+>> ---
+>>  ...mk-fix-build-with-CFLAGS-from-environment.patch | 36 ++++++++++++++++++++++
+>>  1 file changed, 36 insertions(+)
+>>  create mode 100644 package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
+>>
+>> diff --git a/package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch b/package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
+>> new file mode 100644
+>> index 0000000..0d4e581
+>> --- /dev/null
+>> +++ b/package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
+>> @@ -0,0 +1,36 @@
+>> +From 2a310549aaeaba05f640ade43488bb893101ce4a Mon Sep 17 00:00:00 2001
+>> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> +Date: Sat, 29 Oct 2016 16:35:26 +0200
+>> +Subject: [PATCH] xen/Rules.mk: fix build with CFLAGS from environment
+>> +
+>> +When CFLAGS are passed from the environment, the first-level make
+>> +invocation will append -D__OBJECT_FILE__ to it, then call a second
+>> +make invocation, that will have those new CFLAGS in its environment,
+>> +but will also append -D__OBJECT_FILE__ to those.
+>> +
+>> +Then, the compiler fails because __OBEJECT_FILE__ is defined twice.
+>> +
+>> +Just undefine it before defining it again, as a *workaround* to this
+>> +issue.
+>> +
+>> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> +---
+>> + xen/Rules.mk | 2 +-
+>> + 1 file changed, 1 insertion(+), 1 deletion(-)
+>> +
+>> +diff --git a/xen/Rules.mk b/xen/Rules.mk
+>> +index a9fda71..09ccbfa 100644
+>> +--- a/xen/Rules.mk
+>> ++++ b/xen/Rules.mk
+>> +@@ -49,7 +49,7 @@ ALL_OBJS-$(CONFIG_CRYPTO)   += $(BASEDIR)/crypto/built_in.o
+>> + CFLAGS += -nostdinc -fno-builtin -fno-common
+>> + CFLAGS += -Werror -Wredundant-decls -Wno-pointer-arith
+>> + CFLAGS += -pipe -g -D__XEN__ -include $(BASEDIR)/include/xen/config.h
+>> +-CFLAGS += '-D__OBJECT_FILE__="$@"'
+>> ++CFLAGS += -U__OBJECT_FILE__ '-D__OBJECT_FILE__="$@"'
+>> +
+>> + ifneq ($(clang),y)
+>> + # Clang doesn't understand this command line argument, and doesn't appear to
+>> +--
+>> +2.7.4
+>> +
+>> --
+>> 2.7.4
+>>
 >
 > --
 > .-----------------.--------------------.------------------.--------------------.
@@ -85,3 +110,7 @@ Phil
 > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 > '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
