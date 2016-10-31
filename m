@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 31 Oct 2016 10:55:54 +0100
-Subject: [Buildroot] [PATCH v3 4/9] lttng-tools: remove dependency on
- host-lttng-babeltrace
-In-Reply-To: <20161031074624.7576-5-eeppeliteloop@gmail.com>
+Date: Mon, 31 Oct 2016 10:57:35 +0100
+Subject: [Buildroot] [PATCH v3 5/9] lttng-modules: bump to version 2.8.3
+In-Reply-To: <20161031074624.7576-6-eeppeliteloop@gmail.com>
 References: <20161031074624.7576-1-eeppeliteloop@gmail.com>
- <20161031074624.7576-5-eeppeliteloop@gmail.com>
-Message-ID: <20161031095554.GD3389@free.fr>
+ <20161031074624.7576-6-eeppeliteloop@gmail.com>
+Message-ID: <20161031095735.GE3389@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,13 +14,13 @@ To: buildroot@busybox.net
 Philippe, All,
 
 On 2016-10-31 03:46 -0400, Philippe Proulx spake thusly:
-> We don't need to build Babeltrace for the host here. Any host running
-> a major Linux distribution can get a recent version of Babeltrace.
-> 
-> See <http://diamon.org/babeltrace/>.
+> LTTng-modules, starting from v2.8, has a mechanism to be built directly
+> into a Linux kernel image, that is, not as loadable kernel modules. For
+> this the `CONFIG_LTTNG_CLOCK_PLUGIN_TEST` and `CONFIG_LTTNG` Make
+> variables were introduced. They need to be explicitly set to `m` here to
+> build the project as loadable kernel modules.
 > 
 > Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
-> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -30,32 +29,44 @@ Yann E. MORIN.
 
 > ---
 > Changes v2 -> v3:
->   - Nothing changed.
+>   - Go back to kernel-module infra, but with custom Make options.
 > 
 > Changes v1 -> v2:
->   - Add Reviewed-by tag.
+>   - Detailed commit message.
 > 
->  package/lttng-tools/lttng-tools.mk | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
+>  package/lttng-modules/lttng-modules.hash | 6 ++++--
+>  package/lttng-modules/lttng-modules.mk   | 3 ++-
+>  2 files changed, 6 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-> index 3d884d3..9d9cb1c 100644
-> --- a/package/lttng-tools/lttng-tools.mk
-> +++ b/package/lttng-tools/lttng-tools.mk
-> @@ -10,12 +10,7 @@ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
->  LTTNG_TOOLS_LICENSE = GPLv2+, LGPLv2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
->  LTTNG_TOOLS_LICENSE_FILES = gpl-2.0.txt lgpl-2.1.txt LICENSE
->  LTTNG_TOOLS_CONF_OPTS += --with-xml-prefix=$(STAGING_DIR)/usr --disable-man-pages
-> -
-> -# The host-lttng-babeltrace technically isn't a required build
-> -# dependency. However, having the babeltrace utilities built for the
-> -# host is very useful, since those tools allow to convert the binary
-> -# trace format into an human readable format.
-> -LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt host-lttng-babeltrace util-linux
-> +LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt util-linux
+> diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
+> index 2d50287..81e2d5c 100644
+> --- a/package/lttng-modules/lttng-modules.hash
+> +++ b/package/lttng-modules/lttng-modules.hash
+> @@ -1,2 +1,4 @@
+> -# from http://lttng.org/files/lttng-tools/lttng-modules-2.7.1.tar.bz2.sha1
+> -sha1  38c42ec89b4966c7a4cc04aea75f5841634d8d66  lttng-modules-2.7.1.tar.bz2
+> +# From http://lttng.org/files/lttng-modules/lttng-modules-2.8.3.tar.bz2.{md5,sha1}
+> +md5   424354c4834d20235dacd9a1fd7653b6  lttng-modules-2.8.3.tar.bz2
+> +sha1  862705784a54962f70226004f1fd0bf77f73f10f  lttng-modules-2.8.3.tar.bz2
+> +
+> diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+> index 5d0c422..9ecf572 100644
+> --- a/package/lttng-modules/lttng-modules.mk
+> +++ b/package/lttng-modules/lttng-modules.mk
+> @@ -4,11 +4,12 @@
+>  #
+>  ################################################################################
 > 
->  ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
->  LTTNG_TOOLS_CONF_OPTS += --with-lttng-ust
+> -LTTNG_MODULES_VERSION = 2.7.1
+> +LTTNG_MODULES_VERSION = 2.8.3
+>  LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
+>  LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+>  LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
+>  LTTNG_MODULES_LICENSE_FILES = lgpl-2.1.txt gpl-2.0.txt mit-license.txt LICENSE
+> +LTTNG_MODULES_MODULE_MAKE_OPTS = CONFIG_LTTNG=m CONFIG_LTTNG_CLOCK_PLUGIN_TEST=m
+> 
+>  $(eval $(kernel-module))
+>  $(eval $(generic-package))
 > --
 > 2.9.3
 > 
