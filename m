@@ -1,186 +1,111 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 31 Oct 2016 15:57:12 +0100
-Subject: [Buildroot] [PATCH v3 23/24] toolchain-external-codescape-mti-mips:
-	new package
+Date: Mon, 31 Oct 2016 15:57:00 +0100
+Subject: [Buildroot] [PATCH v3 11/24] toolchain-external-linaro-arm: new
+	package
 In-Reply-To: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
 References: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1477925833-27204-24-git-send-email-romain.naour@gmail.com>
+Message-ID: <1477925833-27204-12-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a new package for the Codescape external toolchain for
-the MIPS architecture. As of this commit, the code is currently not
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+This commit adds a new package for the Linaro external toolchain for
+the ARM architecture. As of this commit, the code is currently not
 used, but it will be used as soon as the external toolchain
 infrastructure gets introduced in a future commit.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- .../Config.in                                      | 73 ++++++++++++++++++++++
- .../Config.in.options                              |  6 ++
- .../toolchain-external-codescape-mti-mips.hash     |  3 +
- .../toolchain-external-codescape-mti-mips.mk       | 48 ++++++++++++++
- 4 files changed, 130 insertions(+)
- create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
- create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options
- create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
- create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
+ .../toolchain-external-linaro-arm/Config.in        | 27 ++++++++++++++++++++++
+ .../Config.in.options                              |  6 +++++
+ .../toolchain-external-linaro-arm.hash             |  3 +++
+ .../toolchain-external-linaro-arm.mk               | 17 ++++++++++++++
+ 4 files changed, 53 insertions(+)
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
 
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
 new file mode 100644
-index 0000000..f899467
+index 0000000..bf8649a
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-@@ -0,0 +1,73 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
-+	bool "Codescape MTI GNU Linux Toolchain 2016.05"
-+	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+@@ -0,0 +1,27 @@
++comment "Linaro toolchains available for Cortex-A + EABIhf"
++	depends on BR2_arm
++	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
++	depends on !BR2_STATIC_LIBS
++
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
++	bool "Linaro ARM 2016.05"
++	depends on BR2_arm
++	depends on BR2_ARM_CPU_ARMV7A
 +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_MIPS_CPU_MIPS32R2 || (BR2_MIPS_CPU_MIPS64R2 && !BR2_MIPS_SOFT_FLOAT) || \
-+		BR2_MIPS_CPU_MIPS32R5 || (BR2_MIPS_CPU_MIPS64R5 && !BR2_MIPS_SOFT_FLOAT)
++	depends on BR2_ARM_EABIHF
++	depends on !BR2_STATIC_LIBS
 +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
 +	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
 +	select BR2_TOOLCHAIN_HAS_FORTRAN
 +	help
-+	  Codescape MTI GNU Linux Toolchain 2015.10 for the MIPS
-+	  architecture, from Imagination Technologies. It uses gcc
-+	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
-+	  headers 4.0. It has support for the following variants:
-+	    - MIPS32r2 - Big-Endian, Hard-Float, Legacy NaN, o32 ABI
-+	      Select 'MIPS (big endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	    - MIPS32r2 - Big-Endian, Hard-Float, 2008 NaN, o32 ABI
-+	      Select 'MIPS (big endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
-+	    - MIPS32r2 - Big-Endian, Soft-Float, Legacy NaN, o32 ABI
-+	      Select 'MIPS (big endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Enable 'Use soft-float'
-+	    - MIPS32r2 - Little-Endian, Hard-Float, Legacy NaN, o32 ABI
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	    - MIPS32r2 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
-+	    - MIPS32r2 - Little-Endian, Soft-Float, Legacy NaN, o32 ABI
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Enable 'Use soft-float'
-+	    - MIPS32r2 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI, microMIPS
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Enable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
-+	    - MIPS32r2 - Little-Endian, Soft-Float, Legacy NaN, o32 ABI, microMIPS
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
-+	    - MIPS64r2 - Big-Endian, Hard-Float, Legacy NaN, n32 ABI
-+	      Select 'MIPS64 (big endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n32' Target ABI
-+	      Disable 'Use soft-float'
-+	    - MIPS64r2 - Little-Endian, Hard-Float, Legacy NaN, n32 ABI
-+	      Select 'MIPS64 (little endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n32' Target ABI
-+	      Disable 'Use soft-float'
-+	    - MIPS64r2 - Big-Endian, Hard-Float, Legacy NaN, n64 ABI
-+	      Select 'MIPS64 (big endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n64' Target ABI
-+	      Disable 'Use soft-float'
-+	    - MIPS64r2 - Little-Endian, Hard-Float, Legacy NaN, n64 ABI
-+	      Select 'MIPS64 (little endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n64' Target ABI
-+	      Disable 'Use soft-float'
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options
++	  Linaro toolchain for the ARM architecture. It uses Linaro
++	  GCC 2016.05 (based on gcc 5.3.1), Linaro GDB 2016.05 (based on
++	  GDB 7.11.1), glibc 2.21, Binutils 2016.05 (based on 2.25). It
++	  generates code that runs on all Cortex-A profile devices,
++	  but tuned for the Cortex-A9. The code generated is Thumb 2,
++	  with the hard floating point calling convention, and uses
++	  the VFPv3-D16 FPU instructions.
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options
 new file mode 100644
-index 0000000..c6a3c4b
+index 0000000..9d9ecef
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options
 @@ -0,0 +1,6 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
++if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
 +
 +config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-codescape-mti-mips"
++	default "toolchain-external-linaro-arm"
 +
 +endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
 new file mode 100644
-index 0000000..0d785f2
+index 0000000..8106426
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
 @@ -0,0 +1,3 @@
-+# Codescape toolchains from Imagination Technologies
-+# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03/downloads.html
-+sha256 10b8ab6d7c492abc19ecabafedc6bc5f12ff88107a3cb76dc452b3a9522d9c56  Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
++# Locally calculated
++sha256 f1421c580ce977226f4fefc9c409b3b423260cc65a6e9dc6da88bb3478a521a0  gcc-linaro-5.3.1-2016.05-i686_arm-linux-gnueabihf.tar.xz
++sha256 987941c9fffdf56ffcbe90e8984673c16648c477b537fcf43add22fa62f161cd  gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
 new file mode 100644
-index 0000000..b605881
+index 0000000..bb7718a
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
-@@ -0,0 +1,48 @@
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# toolchain-external-codescape-mti-mips
++# toolchain-external-linaro-arm
 +#
 +################################################################################
 +
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION = 2016.05-03
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_STRIP_COMPONENTS = 2
++TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION = 2016.05
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
++TOOLCHAIN_EXTERNAL_LINARO_ARM_PREFIX = arm-linux-gnueabihf
 +
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION).for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_PREFIX = mips-mti-linux-gnu
-+
-+# Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
-+# sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
-+# -> sbin-<abi> so that the rest of Buildroot can find the toolchain
-+# tools in the appropriate location.
-+ifeq ($(BR2_MIPS_OABI32),y)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX = o32
-+else ifeq ($(BR2_MIPS_NABI32),y)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX = n32
-+else ifeq ($(BR2_MIPS_NABI64),y)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX = n64
++ifeq ($(HOSTARCH),x86)
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-5.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
++else
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-5.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
 +endif
-+
-+define TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_STAGING_FIXUPS
-+	rmdir $(STAGING_DIR)/usr/bin $(STAGING_DIR)/usr/sbin
-+	ln -sf bin-$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX) $(STAGING_DIR)/usr/bin
-+	ln -sf sbin-$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX) $(STAGING_DIR)/usr/sbin
-+endef
-+
-+# The Codescape toolchain uses a sysroot layout that places them
-+# side-by-side instead of nested like multilibs. A symlink is needed
-+# much like for the nested sysroots which are handled in
-+# copy_toolchain_sysroot but there is not enough information in there
-+# to determine whether the sysroot layout was nested or side-by-side.
-+# Add the symlink here for now.
-+define TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SYMLINK
-+	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_CC) $(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_CFLAGS))"; \
-+	ARCH_SUBDIR=`basename $${ARCH_SYSROOT_DIR}`; \
-+	ln -snf . $(STAGING_DIR)/$${ARCH_SUBDIR}
-+endef
-+
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_POST_INSTALL_STAGING_HOOKS += \
-+	TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_STAGING_FIXUPS \
-+	TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SYMLINK
 +
 +$(eval $(toolchain-external-package))
 -- 
