@@ -1,108 +1,55 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 31 Oct 2016 15:57:03 +0100
-Subject: [Buildroot] [PATCH v3 14/24]
-	toolchain-external-codesourcery-aarch64: new package
+Date: Mon, 31 Oct 2016 15:56:54 +0100
+Subject: [Buildroot] [PATCH v3 05/24] toolchain-external: use $(call) for
+	all remaining macros for consistency
 In-Reply-To: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
 References: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1477925833-27204-15-git-send-email-romain.naour@gmail.com>
+Message-ID: <1477925833-27204-6-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+TOOLCHAIN_WRAPPER_INSTALL, TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT and
+TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO are the remaining macros
+called without parameters. Use $(call) for consistency with other
+functions.
 
-This commit adds a new package for the Sourcery CodeBench external
-toolchain for the AArch64 architecture. As of this commit, the code is
-currently not used, but it will be used as soon as the external
-toolchain infrastructure gets introduced in a future commit.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../Config.in                                      | 17 ++++++++++++++++
- .../Config.in.options                              |  6 ++++++
- .../toolchain-external-codesourcery-aarch64.hash   |  3 +++
- .../toolchain-external-codesourcery-aarch64.mk     | 23 ++++++++++++++++++++++
- 4 files changed, 49 insertions(+)
- create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
- create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options
- create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash
- create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
+v3: changes suggested by Yann.
+---
+ toolchain/toolchain-external/toolchain-external.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
-new file mode 100644
-index 0000000..2fbb218
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
-+	bool "CodeSourcery AArch64 2014.11"
-+	depends on BR2_aarch64
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	help
-+	  Sourcery CodeBench toolchain for the AArch64 architecture,
-+	  from Mentor Graphics. It uses gcc 4.9.1, binutils
-+	  2.24.51.20140217, glibc 2.20, gdb 7.7.50 and kernel headers
-+	  3.16.2.
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options
-new file mode 100644
-index 0000000..706c35d
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options
-@@ -0,0 +1,6 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
-+
-+config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-codesourcery-aarch64"
-+
-+endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash
-new file mode 100644
-index 0000000..f7d3f29
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 405aada821146755c5f2df566375c2a682456d6b8451ee47b88cf1a52b093676  aarch64-amd-2014.11-95-aarch64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 3f50dd6ee433eb5b6992a1071b988e50379a738f54f58722bc60081613764716  aarch64-amd-2014.11-95-aarch64-amd-linux-gnu.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-new file mode 100644
-index 0000000..198e9e0
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# toolchain-external-codesourcery-aarch64
-+#
-+################################################################################
-+
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SITE = http://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_PREFIX)
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION = 2014.11-95
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SOURCE = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_PREFIX)-i686-pc-linux-gnu.tar.bz2
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_ACTUAL_SOURCE_TARBALL = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_PREFIX).src.tar.bz2
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_PREFIX = aarch64-amd-linux-gnu
-+
-+define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP
-+	ln -sf ld-2.20.so $(STAGING_DIR)/lib/ld-linux-aarch64.so.1
-+endef
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP
-+
-+define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_TARGET_FIXUP
-+	ln -sf ld-2.20.so $(TARGET_DIR)/lib/ld-linux-aarch64.so.1
-+endef
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_POST_INSTALL_TARGET_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_TARGET_FIXUP
-+
-+$(eval $(toolchain-external-package))
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 06b8105..16d0094 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -816,12 +816,12 @@ endef
+ TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_WRAPPER_BUILD)
+ 
+ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+-	$(TOOLCHAIN_WRAPPER_INSTALL)
++	$(call TOOLCHAIN_WRAPPER_INSTALL)
+ 	$(call TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
+ 	$(call TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
+ 	$(call TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
+ 	$(call TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER,$(TOOLCHAIN_EXTERNAL_CROSS))
+-	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
++	$(call TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+ endef
+ 
+ # Even though we're installing things in both the staging, the host
+@@ -833,7 +833,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
+ 	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS),$(TOOLCHAIN_EXTERNAL_INSTALL_DIR))
+ 	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC,$(TOOLCHAIN_EXTERNAL_LIBS))
+ 	$(call TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
+-	$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
++	$(call TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.5.5
