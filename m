@@ -1,400 +1,107 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 31 Oct 2016 15:56:58 +0100
-Subject: [Buildroot] [PATCH v3 09/24] toolchain-external-custom: new package
+Date: Mon, 31 Oct 2016 15:57:01 +0100
+Subject: [Buildroot] [PATCH v3 12/24] toolchain-external-linaro-armeb: new
+	package
 In-Reply-To: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
 References: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1477925833-27204-10-git-send-email-romain.naour@gmail.com>
+Message-ID: <1477925833-27204-13-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-This commit adds a new package to support custom external
-toolchains. As of this commit, the code is currently not used, but it
-will be used as soon as the external toolchain infrastructure gets
-introduced in a future commit.
+This commit adds a new package for the Linaro external toolchain for
+the ARM big endian architecture. As of this commit, the code is currently
+not used, but it will be used as soon as the external toolchain
+infrastructure gets introduced in a future commit.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../toolchain-external-custom/Config.in            |   5 +
- .../toolchain-external-custom/Config.in.options    | 331 +++++++++++++++++++++
- .../toolchain-external-custom.mk                   |  16 +
- 3 files changed, 352 insertions(+)
- create mode 100644 toolchain/toolchain-external/toolchain-external-custom/Config.in
- create mode 100644 toolchain/toolchain-external/toolchain-external-custom/Config.in.options
- create mode 100644 toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
+ .../toolchain-external-linaro-armeb/Config.in      | 26 ++++++++++++++++++++++
+ .../Config.in.options                              |  6 +++++
+ .../toolchain-external-linaro-armeb.hash           |  3 +++
+ .../toolchain-external-linaro-armeb.mk             | 17 ++++++++++++++
+ 4 files changed, 52 insertions(+)
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.mk
 
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in b/toolchain/toolchain-external/toolchain-external-custom/Config.in
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
 new file mode 100644
-index 0000000..a913feb
+index 0000000..ed84c47
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-+	bool "Custom toolchain"
-+	help
-+	  Use this option to use a custom toolchain pre-installed on
-+	  your system.
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-new file mode 100644
-index 0000000..b15670e
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -0,0 +1,331 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
++++ b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
+@@ -0,0 +1,26 @@
++comment "Linaro toolchains available for Cortex-A + EABIhf"
++	depends on BR2_armeb
++	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
++	depends on !BR2_STATIC_LIBS
 +
-+config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-custom"
-+
-+config BR2_TOOLCHAIN_EXTERNAL_URL
-+	string "Toolchain URL"
-+	depends on BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
-+	help
-+	  URL of the custom toolchain tarball to download and install.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
-+	string "Toolchain prefix"
-+	default "$(ARCH)-linux"
-+
-+choice
-+	bool "External toolchain gcc version"
-+	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
-+	help
-+	  Set to the gcc version that is used by your external
-+	  toolchain.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_6
-+	bool "6.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_5
-+	bool "5.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
-+	bool "4.9.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
-+	bool "4.8.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
-+	bool "4.7.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
-+	bool "4.6.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
-+	bool "4.5.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
-+	bool "4.4.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
-+	bool "4.3.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
-+
-+endchoice
-+
-+choice
-+	bool "External toolchain kernel headers series"
-+	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
-+	help
-+	  Set to the kernel headers version that were used to build
-+	  this external toolchain.
-+
-+	  This is used to hide/show some packages that have strict
-+	  requirements on the version of kernel headers.
-+
-+	  If unsure what version your toolchain is using, you can look
-+	  at the value of LINUX_VERSION_CODE in linux/version.h in your
-+	  toolchain. The Linux version is M.m.p, with:
-+	    M = ( LINUX_VERSION_CODE >> 16 ) & 0xFF
-+	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
-+	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_8
-+	bool "4.8.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_7
-+	bool "4.7.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_6
-+	bool "4.6.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_5
-+	bool "4.5.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4
-+	bool "4.4.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3
-+	bool "4.3.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_2
-+	bool "4.2.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1
-+	bool "4.1.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_0
-+	bool "4.0.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_19
-+	bool "3.19.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_18
-+	bool "3.18.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17
-+	bool "3.17.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16
-+	bool "3.16.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_15
-+	bool "3.15.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14
-+	bool "3.14.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_13
-+	bool "3.13.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12
-+	bool "3.12.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_11
-+	bool "3.11.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10
-+	bool "3.10.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9
-+	bool "3.9.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_8
-+	bool "3.8.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_7
-+	bool "3.7.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_6
-+	bool "3.6.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_5
-+	bool "3.5.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_4
-+	bool "3.4.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_3
-+	bool "3.3.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2
-+	bool "3.2.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_1
-+	bool "3.1.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_0
-+	bool "3.0.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
-+	bool "2.6.x"
-+
-+endchoice
-+
-+choice
-+	prompt "External toolchain C library"
-+	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
-+	bool "uClibc/uClibc-ng"
-+	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	# For the time being, we assume that all custom external
-+	# toolchains have shadow password support.
-+	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
-+	help
-+	  Select this option if your external toolchain uses the
-+	  uClibc (available from http://www.uclibc.org/)
-+	  or uClibc-ng (available from http://www.uclibc-ng.org)
-+	  C library.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
-+	bool "glibc/eglibc"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
++	bool "Linaro armeb 2016.05"
++	depends on BR2_armeb
++	depends on BR2_ARM_CPU_ARMV7A
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_ARM_EABIHF
 +	depends on !BR2_STATIC_LIBS
 +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	help
-+	  Select this option if your external toolchain uses the GNU C
-+	  library (available from https://www.gnu.org/software/libc/)
-+	  or its variant the eglibc library (http://www.eglibc.org/).
-+
-+	  Note: eglibc is a variant of glibc that (among other things)
-+	  can be configured to exclude some of its features. Using a
-+	  toolchain with eglibc configured to exclude key features may
-+	  cause build failures to some packages.
-+
-+comment "(e)glibc only available with shared lib support"
-+	depends on BR2_STATIC_LIBS
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
-+	bool "musl (experimental)"
-+	select BR2_TOOLCHAIN_EXTERNAL_MUSL
-+	help
-+	  Select this option if your external toolchain uses the
-+	  'musl' C library, available from http://www.musl-libc.org/.
-+
-+endchoice
-+
-+if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
-+
-+config BR2_TOOLCHAIN_EXTERNAL_WCHAR
-+	bool "Toolchain has WCHAR support?"
-+	select BR2_USE_WCHAR
-+	help
-+	  Select this option if your external toolchain supports
-+	  WCHAR. If you don't know, leave the default value, Buildroot
-+	  will tell you if it's correct or not.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_LOCALE
-+	bool "Toolchain has locale support?"
-+	select BR2_TOOLCHAIN_EXTERNAL_WCHAR
-+	select BR2_ENABLE_LOCALE
-+	help
-+	  Select this option if your external toolchain has locale
-+	  support. If you don't know, leave the default value,
-+	  Buildroot will tell you if it's correct or not.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
-+	bool "Toolchain has threads support?"
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	default y
-+	help
-+	  Select this option if your external toolchain has thread
-+	  support. If you don't know, leave the default value,
-+	  Buildroot will tell you if it's correct or not.
-+
-+if BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
-+	bool "Toolchain has threads debugging support?"
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	default y
-+	help
-+	  Select this option if your external toolchain has thread
-+	  debugging support. If you don't know, leave the default
-+	  value, Buildroot will tell you if it's correct or not.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL
-+	bool "Toolchain has NPTL threads support?"
-+	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	default y
-+	help
-+	  Select this option if your external toolchain uses the NPTL
-+	  (Native Posix Thread Library) implementation of Posix
-+	  threads. If you don't know, leave the default value,
-+	  Buildroot will tell you if it's correct or not.
-+
-+endif # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
-+
-+endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
-+	bool "Toolchain has SSP support?"
 +	select BR2_TOOLCHAIN_HAS_SSP
-+	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	default y if BR2_TOOLCHAIN_EXTERNAL_MUSL
-+	help
-+	  Selection this option if your external toolchain has Stack
-+	  Smashing Protection support enabled. If you don't know,
-+	  leave the default value, Buildroot will tell you if it's
-+	  correct or not.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
-+	bool "Toolchain has RPC support?"
 +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_MUSL
-+	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	help
-+	  Select this option if your external toolchain supports
-+	  RPC. If you don't know, leave the default value, Buildroot
-+	  will tell you if it's correct or not.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CXX
-+	bool "Toolchain has C++ support?"
 +	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
 +	help
-+	  Select this option if your external toolchain has C++
-+	  support. If you don't know, leave the default value,
-+	  Buildroot will tell you if it's correct or not.
++	  Linaro toolchain for the ARM big endian architecture. It
++	  uses Linaro GCC 2016.05 (based on gcc 5.3.1), Linaro GDB
++	  2016.05 (based on GDB 7.11.1), glibc 2.21, Binutils 2016.05
++	  (based on 2.25). It generates code that runs on all Cortex-A
++	  profile devices, but tuned for the Cortex-A9. The code
++	  generated is Thumb 2, with the hard floating point calling
++	  convention, and uses the VFPv3-D16 FPU instructions.
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options
+new file mode 100644
+index 0000000..0fa7619
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options
+@@ -0,0 +1,6 @@
++if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
 +
-+config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
-+	string "Extra toolchain libraries to be copied to target"
-+	help
-+	  If your external toolchain provides extra libraries that
-+	  need to be copied to the target filesystem, enter them
-+	  here, separated by spaces. They will be copied to the
-+	  target's /lib directory.
++config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
++	default "toolchain-external-linaro-armeb"
 +
 +endif
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk b/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.hash b/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.hash
 new file mode 100644
-index 0000000..1d40f08
+index 0000000..7952b50
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
-@@ -0,0 +1,16 @@
++++ b/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 f6e9c0d3320760fe8f89e9ec3acdd7b4da7eff889c094b4a2acc286fd46f334f  gcc-linaro-5.3.1-2016.05-i686_armeb-linux-gnueabihf.tar.xz
++sha256 6cf41c8944be56279cc14992aa075174b7a4c5938502536266eaaeef048f9440  gcc-linaro-5.3.1-2016.05-x86_64_armeb-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.mk b/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.mk
+new file mode 100644
+index 0000000..9d4d843
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# toolchain-external-custom
++# toolchain-external-linaro-armeb
 +#
 +################################################################################
 +
-+TOOLCHAIN_EXTERNAL_CUSTOM_SITE = $(patsubst %/,%,$(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL))))
-+TOOLCHAIN_EXTERNAL_CUSTOM_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
-+TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX))
++TOOLCHAIN_EXTERNAL_LINARO_ARMEB_VERSION = 2016.05
++TOOLCHAIN_EXTERNAL_LINARO_ARMEB_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-$(TOOLCHAIN_EXTERNAL_LINARO_ARMEB_VERSION)/armeb-linux-gnueabihf
++TOOLCHAIN_EXTERNAL_LINARO_ARMEB_PREFIX = armeb-linux-gnueabihf
 +
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),y)
-+# We can't check hashes for custom downloaded toolchains
-+BR_NO_CHECK_HASH_FOR += $(TOOLCHAIN_EXTERNAL_SOURCE)
++ifeq ($(HOSTARCH),x86)
++TOOLCHAIN_EXTERNAL_LINARO_ARMEB_SOURCE = gcc-linaro-5.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARMEB_VERSION)-i686_armeb-linux-gnueabihf.tar.xz
++else
++TOOLCHAIN_EXTERNAL_LINARO_ARMEB_SOURCE = gcc-linaro-5.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARMEB_VERSION)-x86_64_armeb-linux-gnueabihf.tar.xz
 +endif
 +
 +$(eval $(toolchain-external-package))
