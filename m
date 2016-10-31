@@ -1,50 +1,47 @@
 From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Mon, 31 Oct 2016 03:46:19 -0400
-Subject: [Buildroot] [PATCH v3 4/9] lttng-tools: remove dependency on
-	host-lttng-babeltrace
+Date: Mon, 31 Oct 2016 03:46:17 -0400
+Subject: [Buildroot] [PATCH v3 2/9] lttng-libust: enable Python agent when
+	Python is available
 In-Reply-To: <20161031074624.7576-1-eeppeliteloop@gmail.com>
 References: <20161031074624.7576-1-eeppeliteloop@gmail.com>
-Message-ID: <20161031074624.7576-5-eeppeliteloop@gmail.com>
+Message-ID: <20161031074624.7576-3-eeppeliteloop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't need to build Babeltrace for the host here. Any host running
-a major Linux distribution can get a recent version of Babeltrace.
+Add the --enable-python-agent configure option to build the LTTng-UST
+Python agent when Python 2 or Python 3 is also part of the BR image. The
+LTTng-UST Python agent is a Python package which adds LTTng tracing to
+Python's standard logging when imported.
 
-See <http://diamon.org/babeltrace/>.
+Disable the Python agent otherwise.
 
 Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v2 -> v3:
-  - Nothing changed.
+This is a new patch in v3.
 
-Changes v1 -> v2:
-  - Add Reviewed-by tag.
+ package/lttng-libust/lttng-libust.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
- package/lttng-tools/lttng-tools.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index feeeb43..7a83f46 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -15,10 +15,13 @@ LTTNG_LIBUST_CONF_OPTS += --disable-man-pages
 
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index 3d884d3..9d9cb1c 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -10,12 +10,7 @@ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
- LTTNG_TOOLS_LICENSE = GPLv2+, LGPLv2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
- LTTNG_TOOLS_LICENSE_FILES = gpl-2.0.txt lgpl-2.1.txt LICENSE
- LTTNG_TOOLS_CONF_OPTS += --with-xml-prefix=$(STAGING_DIR)/usr --disable-man-pages
--
--# The host-lttng-babeltrace technically isn't a required build
--# dependency. However, having the babeltrace utilities built for the
--# host is very useful, since those tools allow to convert the binary
--# trace format into an human readable format.
--LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt host-lttng-babeltrace util-linux
-+LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt util-linux
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ LTTNG_LIBUST_DEPENDENCIES += python
++LTTNG_LIBUST_CONF_OPTS += --enable-python-agent
+ else ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ LTTNG_LIBUST_DEPENDENCIES += python3
++LTTNG_LIBUST_CONF_OPTS += --enable-python-agent
+ else
+ LTTNG_LIBUST_CONF_ENV = am_cv_pathless_PYTHON="none"
++LTTNG_LIBUST_CONF_OPTS += --disable-python-agent
+ endif
 
- ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
- LTTNG_TOOLS_CONF_OPTS += --with-lttng-ust
+ $(eval $(autotools-package))
 --
 2.9.3
