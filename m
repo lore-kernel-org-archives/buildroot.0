@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 31 Oct 2016 10:42:51 +0100
-Subject: [Buildroot] [PATCH v3 2/9] lttng-libust: enable Python agent
- when Python is available
-In-Reply-To: <20161031074624.7576-3-eeppeliteloop@gmail.com>
+Date: Mon, 31 Oct 2016 10:55:27 +0100
+Subject: [Buildroot] [PATCH v3 3/9] lttng-tools: bump to version 2.8.2
+In-Reply-To: <20161031074624.7576-4-eeppeliteloop@gmail.com>
 References: <20161031074624.7576-1-eeppeliteloop@gmail.com>
- <20161031074624.7576-3-eeppeliteloop@gmail.com>
-Message-ID: <20161031094251.GB3389@free.fr>
+ <20161031074624.7576-4-eeppeliteloop@gmail.com>
+Message-ID: <20161031095527.GC3389@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,51 +14,32 @@ To: buildroot@busybox.net
 Philippe, All,
 
 On 2016-10-31 03:46 -0400, Philippe Proulx spake thusly:
-> Add the --enable-python-agent configure option to build the LTTng-UST
-> Python agent when Python 2 or Python 3 is also part of the BR image. The
-> LTTng-UST Python agent is a Python package which adds LTTng tracing to
-> Python's standard logging when imported.
+> The current patches are dropped because they were merged upstream.
 > 
-> Disable the Python agent otherwise.
+> The new patches exist to fix the build with musl. They were submitted on
+> the lttng-dev mailing list, but not merged yet, or not merged in 2.8.2.
+> 
+> LTTng-tools now has its man pages written in AsciiDoc and they get
+> converted to troff at build time. This is not needed in a Buildroot
+> image anyway.
+> 
+> The --enable-lttng-ust/--disable-lttng-ust configure options are renamed
+> to --with-lttng-ust/--without-lttng-ust in v2.8.
 > 
 > Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Regards,
-Yann E. MORIN.
-
 > ---
-> This is a new patch in v3.
-> 
->  package/lttng-libust/lttng-libust.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-> index feeeb43..7a83f46 100644
-> --- a/package/lttng-libust/lttng-libust.mk
-> +++ b/package/lttng-libust/lttng-libust.mk
-> @@ -15,10 +15,13 @@ LTTNG_LIBUST_CONF_OPTS += --disable-man-pages
-> 
->  ifeq ($(BR2_PACKAGE_PYTHON),y)
->  LTTNG_LIBUST_DEPENDENCIES += python
-> +LTTNG_LIBUST_CONF_OPTS += --enable-python-agent
->  else ifeq ($(BR2_PACKAGE_PYTHON3),y)
->  LTTNG_LIBUST_DEPENDENCIES += python3
-> +LTTNG_LIBUST_CONF_OPTS += --enable-python-agent
->  else
->  LTTNG_LIBUST_CONF_ENV = am_cv_pathless_PYTHON="none"
-> +LTTNG_LIBUST_CONF_OPTS += --disable-python-agent
->  endif
-> 
->  $(eval $(autotools-package))
-> --
-> 2.9.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Changes v2 -> v3:
+>   - Add links to original patches in patch files.
+>   - Remove the original patch index from the subject of patch files.
+
+You forgot to remove it for one patch:
+
+> +Subject: [PATCH lttng-tools 4/4] Fix: strerror_r behavior is glibc specific
+
+But that's not too much a problem.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
