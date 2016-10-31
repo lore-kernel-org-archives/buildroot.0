@@ -1,101 +1,115 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 31 Oct 2016 15:57:09 +0100
-Subject: [Buildroot] [PATCH v3 20/24] toolchain-external-codesourcery-amd64:
-	new package
+Date: Mon, 31 Oct 2016 15:57:10 +0100
+Subject: [Buildroot] [PATCH v3 21/24] toolchain-external-synopsys-arc: new
+	package
 In-Reply-To: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
 References: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1477925833-27204-21-git-send-email-romain.naour@gmail.com>
+Message-ID: <1477925833-27204-22-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a new package for the Sourcery CodeBench external
-toolchain for the x86_64 architecture. As of this commit, the code is
-currently not used, but it will be used as soon as the external
-toolchain infrastructure gets introduced in a future commit.
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
+This commit adds a new package for the Synopsys external toolchain for
+the ARC architecture. As of this commit, the code is currently not
+used, but it will be used as soon as the external toolchain
+infrastructure gets introduced in a future commit.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../Config.in                                      | 24 ++++++++++++++++++++++
- .../Config.in.options                              |  6 ++++++
- .../toolchain-external-codesourcery-amd64.hash     |  3 +++
- .../toolchain-external-codesourcery-amd64.mk       | 13 ++++++++++++
- 4 files changed, 46 insertions(+)
- create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
- create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options
- create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.hash
- create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.mk
+ .../toolchain-external-synopsys-arc/Config.in      | 20 +++++++++++++++++
+ .../Config.in.options                              |  6 +++++
+ .../toolchain-external-synopsys-arc.hash           |  5 +++++
+ .../toolchain-external-synopsys-arc.mk             | 26 ++++++++++++++++++++++
+ 4 files changed, 57 insertions(+)
+ create mode 100644 toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
 
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
 new file mode 100644
-index 0000000..86486c8
+index 0000000..641eca8
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
-+	bool "Sourcery CodeBench AMD64 2015.11"
-+	depends on BR2_x86_64
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_x86_jaguar || BR2_x86_steamroller
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+@@ -0,0 +1,20 @@
++config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
++	bool "Synopsys ARC 2014.12 toolchain"
++	depends on BR2_arc
++	depends on BR2_HOSTARCH = "x86_64"
++	# does not provide IPv6, and lacks many uClibc features
++	# expected by Buildroot. The next Synopsys toolchain version
++	# should fix those problems.
++	depends on BROKEN
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
 +	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_ENABLE_LOCALE
++	select BR2_USE_WCHAR
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
 +	help
-+	  Sourcery CodeBench toolchain for the amd64 (x86_64)
-+	  architectures, from Mentor Graphics. It uses gcc 5.2,
-+	  binutils 2.25.51, glibc 2.22, gdb 7.10.50 and kernel headers
-+	  4.2. It has support for the following variants:
-+	    - AMD Puma/Jaguar (family 16h), glibc
-+	    Default for x86_64, nothing special to do.
-+	    - AMD Steamroller (family 15h), glibc
-+	    Select a steamroller core.
-+	  No other architecture variants are supported since glibc
-+	  is optimized for one of these two baselines.
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options
++	  Toolchain for the ARC cores, from
++	  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options
 new file mode 100644
-index 0000000..9ba67f8
+index 0000000..dfa9d84
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options
 @@ -0,0 +1,6 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
++if BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
 +
 +config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-codesourcery-amd64"
++	default "toolchain-external-synopsys-arc"
 +
 +endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.hash
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
 new file mode 100644
-index 0000000..ea5f300
+index 0000000..b684cce
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.hash
-@@ -0,0 +1,3 @@
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+@@ -0,0 +1,5 @@
 +# Locally calculated
-+sha256 3c31206c8b9277f409ee00e4777ba82dfa6da2a4ca0926501cd5fb6bbd1b407e  amd-2015.11-139-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 0b673f5035f97d5d03c31272cddab0f117d39ad76a5ad2a3bc98c156571527de  amd-2015.11-139-x86_64-amd-linux-gnu.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.mk
++sha256 1fa4ea2c8616623205f1c7beca02ea31b019099528a7433e5b020b0876b93bf3  arc_gnu_2014.12_prebuilt_uclibc_le_arc700_linux_install.tar.gz
++sha256 1080f07fcae2bfc176a3ea8d30b9ed8eaecab70fb786639d6ec70cae8322df10  arc_gnu_2014.12_prebuilt_uclibc_be_arc700_linux_install.tar.gz
++sha256 aaaf6facd1f60a3cd2a537154ea39cd7d70501c175e30e01a97e8df6cb8226c7  arc_gnu_2014.12_prebuilt_uclibc_le_archs_linux_install.tar.gz
++sha256 30711c5f15762764d4cd5ec1e6ced5b1fddd03aac41c424b0c4ec8a45d5d79cd  arc_gnu_2014.12_prebuilt_uclibc_be_archs_linux_install.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
 new file mode 100644
-index 0000000..e82b35f
+index 0000000..bc3a43c
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.mk
-@@ -0,0 +1,13 @@
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# toolchain-external-codesourcery-amd64
++# toolchain-external-synopsys-arc
 +#
 +################################################################################
 +
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_PREFIX)
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_VERSION = 2015.11-139
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_SOURCE = amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_VERSION)-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_PREFIX)-i686-pc-linux-gnu.tar.bz2
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_ACTUAL_SOURCE_TARBALL = amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_VERSION)-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_PREFIX).src.tar.bz2
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_PREFIX = x86_64-amd-linux-gnu
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2014.12
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)
++
++ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = arc700
++else
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = archs
++endif
++
++ifeq ($(BR2_arcle),y)
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS = le
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_PREFIX = arc-linux
++else
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS = be
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_PREFIX = arceb-linux
++endif
++
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SOURCE = arc_gnu_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_CORE)_linux_install.tar.gz
 +
 +$(eval $(toolchain-external-package))
 -- 
