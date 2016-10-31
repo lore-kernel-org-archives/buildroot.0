@@ -1,47 +1,61 @@
 From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Mon, 31 Oct 2016 03:46:17 -0400
-Subject: [Buildroot] [PATCH v3 2/9] lttng-libust: enable Python agent when
-	Python is available
+Date: Mon, 31 Oct 2016 03:46:20 -0400
+Subject: [Buildroot] [PATCH v3 5/9] lttng-modules: bump to version 2.8.3
 In-Reply-To: <20161031074624.7576-1-eeppeliteloop@gmail.com>
 References: <20161031074624.7576-1-eeppeliteloop@gmail.com>
-Message-ID: <20161031074624.7576-3-eeppeliteloop@gmail.com>
+Message-ID: <20161031074624.7576-6-eeppeliteloop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the --enable-python-agent configure option to build the LTTng-UST
-Python agent when Python 2 or Python 3 is also part of the BR image. The
-LTTng-UST Python agent is a Python package which adds LTTng tracing to
-Python's standard logging when imported.
-
-Disable the Python agent otherwise.
+LTTng-modules, starting from v2.8, has a mechanism to be built directly
+into a Linux kernel image, that is, not as loadable kernel modules. For
+this the `CONFIG_LTTNG_CLOCK_PLUGIN_TEST` and `CONFIG_LTTNG` Make
+variables were introduced. They need to be explicitly set to `m` here to
+build the project as loadable kernel modules.
 
 Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 ---
-This is a new patch in v3.
+Changes v2 -> v3:
+  - Go back to kernel-module infra, but with custom Make options.
 
- package/lttng-libust/lttng-libust.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Changes v1 -> v2:
+  - Detailed commit message.
 
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index feeeb43..7a83f46 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -15,10 +15,13 @@ LTTNG_LIBUST_CONF_OPTS += --disable-man-pages
+ package/lttng-modules/lttng-modules.hash | 6 ++++--
+ package/lttng-modules/lttng-modules.mk   | 3 ++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- LTTNG_LIBUST_DEPENDENCIES += python
-+LTTNG_LIBUST_CONF_OPTS += --enable-python-agent
- else ifeq ($(BR2_PACKAGE_PYTHON3),y)
- LTTNG_LIBUST_DEPENDENCIES += python3
-+LTTNG_LIBUST_CONF_OPTS += --enable-python-agent
- else
- LTTNG_LIBUST_CONF_ENV = am_cv_pathless_PYTHON="none"
-+LTTNG_LIBUST_CONF_OPTS += --disable-python-agent
- endif
+diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
+index 2d50287..81e2d5c 100644
+--- a/package/lttng-modules/lttng-modules.hash
++++ b/package/lttng-modules/lttng-modules.hash
+@@ -1,2 +1,4 @@
+-# from http://lttng.org/files/lttng-tools/lttng-modules-2.7.1.tar.bz2.sha1
+-sha1  38c42ec89b4966c7a4cc04aea75f5841634d8d66  lttng-modules-2.7.1.tar.bz2
++# From http://lttng.org/files/lttng-modules/lttng-modules-2.8.3.tar.bz2.{md5,sha1}
++md5   424354c4834d20235dacd9a1fd7653b6  lttng-modules-2.8.3.tar.bz2
++sha1  862705784a54962f70226004f1fd0bf77f73f10f  lttng-modules-2.8.3.tar.bz2
++
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index 5d0c422..9ecf572 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
 
- $(eval $(autotools-package))
+-LTTNG_MODULES_VERSION = 2.7.1
++LTTNG_MODULES_VERSION = 2.8.3
+ LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
+ LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
+ LTTNG_MODULES_LICENSE_FILES = lgpl-2.1.txt gpl-2.0.txt mit-license.txt LICENSE
++LTTNG_MODULES_MODULE_MAKE_OPTS = CONFIG_LTTNG=m CONFIG_LTTNG_CLOCK_PLUGIN_TEST=m
+
+ $(eval $(kernel-module))
+ $(eval $(generic-package))
 --
 2.9.3
