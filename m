@@ -1,99 +1,41 @@
-From: David Lechner <david@lechnology.com>
-Date: Mon, 31 Oct 2016 10:57:21 -0500
-Subject: [Buildroot] [PATCH 2/4] board/lego/ev3: Create images using
- genimage
-In-Reply-To: <20161031041934.o4fdgk7n6hwaiuba@tarshish>
-References: <1477870346-4941-1-git-send-email-david@lechnology.com>
- <1477870346-4941-3-git-send-email-david@lechnology.com>
- <20161031041934.o4fdgk7n6hwaiuba@tarshish>
-Message-ID: <c49d988f-64fb-284f-ba72-a81c116fce2a@lechnology.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 31 Oct 2016 16:19:19 +0000
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.8.6
+In-Reply-To: <20161031161919.10946-1-Vincent.Riera@imgtec.com>
+References: <20161031161919.10946-1-Vincent.Riera@imgtec.com>
+Message-ID: <20161031161919.10946-2-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/30/2016 11:19 PM, Baruch Siach wrote:
-> Hi David,
->
-> On Sun, Oct 30, 2016 at 06:32:24PM -0500, David Lechner wrote:
->> This adds a script to create SD card and flash images for LEGO MINDSTORMS
->> EV3 using the genimage tool.
->>
->> The default kernel config had to be modifed to add support for squashfs
->> and to add a ram disk.
->>
->> Signed-off-by: David Lechner <david@lechnology.com>
->> ---
->>  board/lego/ev3/genimage.cfg    |  57 ++++++++
->>  board/lego/ev3/linux_defconfig | 291 +++++++++++++++++++++++++++++++++++++++++
->>  board/lego/ev3/post-image.sh   |  14 ++
->>  board/lego/ev3/readme.txt      |  80 +++--------
->>  configs/lego_ev3_defconfig     |   8 +-
->>  5 files changed, 386 insertions(+), 64 deletions(-)
->>  create mode 100644 board/lego/ev3/genimage.cfg
->>  create mode 100644 board/lego/ev3/linux_defconfig
->>  create mode 100755 board/lego/ev3/post-image.sh
->
-> [...]
->
->> diff --git a/board/lego/ev3/linux_defconfig b/board/lego/ev3/linux_defconfig
->> new file mode 100644
->> index 0000000..998e6da
->> --- /dev/null
->> +++ b/board/lego/ev3/linux_defconfig
->> @@ -0,0 +1,291 @@
-> [...]
->> +CONFIG_EXT2_FS=m
->> +CONFIG_EXT3_FS=m
->
-> ext3 was removed in kernel version 4.3, while lego_ev3_defconfig uses kernel
-> version 4.4. Under which kernel have you generated this defconfig?
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-4.4. There is still a kernel option for ext3 that does nothing (for 
-backwards compatibility according to the help text).
-
->
-> You may try using a config fragment file to add support for additional kernel
-> features. See pc_x86_64_bios_defconfig, for example.
-
-That is much better. Thanks for the idea.
-
->
->> diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
->> index bf425f1..e96a689 100644
->> --- a/configs/lego_ev3_defconfig
->> +++ b/configs/lego_ev3_defconfig
->> @@ -8,7 +8,7 @@ BR2_GLOBAL_PATCH_DIR="board/lego/ev3/patches"
->>  # system
->>  BR2_TARGET_GENERIC_GETTY=y
->>  BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
->> -
->> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lego/ev3/post-image.sh"
->>  # Linux headers same as kernel, a 4.4 series
->>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
->>
->> @@ -17,15 +17,19 @@ BR2_LINUX_KERNEL=y
->>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
->>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/ev3dev/ev3dev-kernel.git"
->>  BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v4.4.19-15-ev3dev-ev3_1"
->> -BR2_LINUX_KERNEL_DEFCONFIG="ev3dev"
->> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/lego/ev3/linux_defconfig"
->>  BR2_LINUX_KERNEL_UIMAGE=y
->>
->>  # filesystem
->>  BR2_TARGET_ROOTFS_EXT2=y
->>  BR2_TARGET_ROOTFS_EXT2_3=y
->> +BR2_TARGET_ROOTFS_SQUASHFS=y
->> +BR2_TARGET_ROOTFS_SQUASHFS4_XZ=y
->>  # BR2_TARGET_ROOTFS_TAR is not set
->>
->>  # U-Boot
->>  BR2_TARGET_UBOOT=y
->>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="legoev3"
->> +BR2_PACKAGE_HOST_GENIMAGE=y
->
-> baruch
->
+diff --git a/linux/Config.in b/linux/Config.in
+index 268516f..3f4097d 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.8.5)"
++	bool "Latest version (4.8.6)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.8.5" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.8.6" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-- 
+2.10.1
