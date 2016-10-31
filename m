@@ -1,92 +1,226 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 31 Oct 2016 15:56:50 +0100
-Subject: [Buildroot] [PATCH v3 01/24] toolchain-external:
-	TOOLCHAIN_EXTERNAL_CREATE_*_LIB_SYMLINK: use arguments
-	instead of global variables
-In-Reply-To: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
-References: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1477925833-27204-2-git-send-email-romain.naour@gmail.com>
+Date: Mon, 31 Oct 2016 15:56:49 +0100
+Subject: [Buildroot] [PATCH v3 00/24] Splitting the toolchain-external
+	package
+Message-ID: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A new external toolchain package infrastructure will be introduced in a
-followup patch, so TOOLCHAIN_EXTERNAL_{CC,CFLAGS...} global variables
-will no longer exist since the toolchain-external package will be turned
-into a virtual package. Each external-toolchain packages providers will
-provide it's own <toolchain-external-name>_{CC,CFLAGS...} variables.
+Here is the third version of the toolchain-external package infra which
+was started by Thomas Petazzoni last year. This new infra will clearly
+separate the common external toolchain logic from the
+toolchain-specific details and generally make the external toolchain
+code hopefully easier to maintain.
 
-So additional arguments are needed to provide CC and CFLAG when calling
-TOOLCHAIN_EXTERNAL_CREATE_*_LIB_SYMLINK.
+The four first patches change all the functions used in
+INSTALL_STAGING_CMDS and INSTALL_TARGET_CMDS to take more arguments
+rather than using global variables.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-v3: explain that the toolchain-external package will be a virtual package (Yann)
-    use local variables for functions/macros (Yann)
-v2: rework commit log/title (Arnout)
----
- toolchain/toolchain-external/toolchain-external.mk | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+Then all toolchain packages are introduced but are not yet used since
+the new toolchain-external infra will be added in the final patch.
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index b7a36be..2b07da0 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -554,20 +554,32 @@ endif
- # (as appropriate)
- #
- # $1: destination directory (TARGET_DIR / STAGING_DIR)
-+# $2: toolchain CC
-+# $3: toolchain CFLAGS
- create_lib_symlinks = \
-        $(Q)DESTDIR="$(strip $1)" ; \
--       ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+       TOOLCHAIN_CC="$(strip $2)" ; \
-+       TOOLCHAIN_CFLAGS="$(strip $3)" ; \
-+       ARCH_LIB_DIR="$(call toolchain_find_libdir,$${TOOLCHAIN_CC} $${TOOLCHAIN_CFLAGS})" ; \
-        if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
-                ln -snf lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
-                ln -snf lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
-        fi
- 
-+# $1: toolchain CC
-+# $2: toolchain CFLAGS
- define TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK
--       $(call create_lib_symlinks,$(STAGING_DIR))
-+       TOOLCHAIN_CC="$(strip $1)" ; \
-+       TOOLCHAIN_CFLAGS="$(strip $2)" ; \
-+       $(call create_lib_symlinks,$(STAGING_DIR),$${TOOLCHAIN_CC},$${TOOLCHAIN_CFLAGS})
- endef
- 
-+# $1: toolchain CC
-+# $2: toolchain CFLAGS
- define TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK
--       $(call create_lib_symlinks,$(TARGET_DIR))
-+       TOOLCHAIN_CC="$(strip $1)" ; \
-+       TOOLCHAIN_CFLAGS="$(strip $2)" ; \
-+       $(call create_lib_symlinks,$(TARGET_DIR),$${TOOLCHAIN_CC},$${TOOLCHAIN_CFLAGS})
- endef
- 
- # Integration of the toolchain into Buildroot: find the main sysroot
-@@ -781,7 +793,7 @@ TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_WRAPPER_BUILD)
- 
- define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
- 	$(TOOLCHAIN_WRAPPER_INSTALL)
--	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
-+	$(call TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
-@@ -792,7 +804,7 @@ endef
- # and the target directory, we do everything within the
- # install-staging step, arbitrarily.
- define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
--	$(TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK)
-+	$(call TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK,$(TOOLCHAIN_EXTERNAL_CC),$(TOOLCHAIN_EXTERNAL_CFLAGS))
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC)
+The final patch introduce the new toolchain external package infra
+(see it's commit log for more information).
+
+The second version take into acount the Arnout and Thomas review (Thanks).
+
+This third version take into acount Yann's review but doesn't address his
+comment about adding a virtual package provider without
+"a-not-yet-existing-virtual-pakage" [1].
+
+[1] http://lists.busybox.net/pipermail/buildroot/2016-October/176020.html
+
+Best regards,
+Romain
+
+
+Romain Naour (11):
+  toolchain-external: TOOLCHAIN_EXTERNAL_CREATE_*_LIB_SYMLINK: use
+    arguments instead of global variables
+  toolchain-external: TOOLCHAIN_EXTERNAL_INSTALL_*_LIBS: use arguments
+    instead of global variables
+  toolchain-external: TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER: use arguments
+    instead of global variables
+  toolchain-external: TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER: use
+    arguments instead of global variables
+  toolchain-external: use $(call) for all remaining macros for
+    consistency
+  toolchain-external-arago-armv5te: new package
+  toolchain-external-linaro-armeb: new package
+  toolchain-external-codesourcery-amd64: new package
+  toolchain-external-codescape-img-mips: new package
+  toolchain-external-codescape-mti-mips: new package
+  toolchain-external: introduce and use external toolchain infra
+
+Thomas Petazzoni (13):
+  toolchain-external-blackfin-uclinux: new package
+  toolchain-external-arago-armv7a: new package
+  toolchain-external-custom: new package
+  toolchain-external-linaro-aarch64: new package
+  toolchain-external-linaro-arm: new package
+  toolchain-external-musl-cross: new package
+  toolchain-external-codesourcery-aarch64: new package
+  toolchain-external-codesourcery-arm: new package
+  toolchain-external-codesourcery-mips: new package
+  toolchain-external-codesourcery-niosII: new package
+  toolchain-external-codesourcery-sh: new package
+  toolchain-external-codesourcery-x86: new package
+  toolchain-external-synopsys-arc: new package
+
+ package/Makefile.in                                |    2 +-
+ package/wine/wine.mk                               |    2 +-
+ toolchain/toolchain-external/Config.in             | 1001 ++------------------
+ ...chain-external.mk => pkg-toolchain-external.mk} |  864 ++++++++---------
+ .../toolchain-external-arago-armv5te/Config.in     |   19 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-arago-armv5te.hash          |    3 +
+ .../toolchain-external-arago-armv5te.mk            |   23 +
+ .../toolchain-external-arago-armv7a/Config.in      |   24 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-arago-armv7a.hash           |    3 +
+ .../toolchain-external-arago-armv7a.mk             |   23 +
+ .../toolchain-external-blackfin-uclinux/Config.in  |   17 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-blackfin-uclinux.hash       |    3 +
+ .../toolchain-external-blackfin-uclinux.mk         |   35 +
+ .../Config.in                                      |   62 ++
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-codescape-img-mips.hash     |    3 +
+ .../toolchain-external-codescape-img-mips.mk       |   48 +
+ .../Config.in                                      |   73 ++
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-codescape-mti-mips.hash     |    3 +
+ .../toolchain-external-codescape-mti-mips.mk       |   48 +
+ .../Config.in                                      |   17 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-codesourcery-aarch64.hash   |    3 +
+ .../toolchain-external-codesourcery-aarch64.mk     |   23 +
+ .../Config.in                                      |   24 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-codesourcery-amd64.hash     |    3 +
+ .../toolchain-external-codesourcery-amd64.mk       |   13 +
+ .../toolchain-external-codesourcery-arm/Config.in  |   33 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-codesourcery-arm.hash       |    3 +
+ .../toolchain-external-codesourcery-arm.mk         |   14 +
+ .../toolchain-external-codesourcery-mips/Config.in |   93 ++
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-codesourcery-mips.hash      |    3 +
+ .../toolchain-external-codesourcery-mips.mk        |   14 +
+ .../Config.in                                      |   17 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-codesourcery-niosII.hash    |    3 +
+ .../toolchain-external-codesourcery-niosII.mk      |   14 +
+ .../toolchain-external-codesourcery-sh/Config.in   |   25 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-codesourcery-sh.hash        |    3 +
+ .../toolchain-external-codesourcery-sh.mk          |   14 +
+ .../toolchain-external-codesourcery-x86/Config.in  |   29 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-codesourcery-x86.hash       |    3 +
+ .../toolchain-external-codesourcery-x86.mk         |   13 +
+ .../toolchain-external-custom/Config.in            |    5 +
+ .../toolchain-external-custom/Config.in.options    |  331 +++++++
+ .../toolchain-external-custom.mk                   |   16 +
+ .../toolchain-external-linaro-aarch64/Config.in    |   15 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-linaro-aarch64.hash         |    3 +
+ .../toolchain-external-linaro-aarch64.mk           |   17 +
+ .../toolchain-external-linaro-arm/Config.in        |   27 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-linaro-arm.hash             |    3 +
+ .../toolchain-external-linaro-arm.mk               |   17 +
+ .../toolchain-external-linaro-armeb/Config.in      |   26 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-linaro-armeb.hash           |    3 +
+ .../toolchain-external-linaro-armeb.mk             |   17 +
+ .../toolchain-external-musl-cross/Config.in        |   30 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-musl-cross.hash             |   12 +
+ .../toolchain-external-musl-cross.mk               |   36 +
+ .../toolchain-external-synopsys-arc/Config.in      |   20 +
+ .../Config.in.options                              |    6 +
+ .../toolchain-external-synopsys-arc.hash           |    5 +
+ .../toolchain-external-synopsys-arc.mk             |   26 +
+ .../toolchain-external/toolchain-external.hash     |   67 --
+ toolchain/toolchain-external/toolchain-external.mk |  797 +---------------
+ 77 files changed, 1923 insertions(+), 2272 deletions(-)
+ copy toolchain/toolchain-external/{toolchain-external.mk => pkg-toolchain-external.mk} (50%)
+ create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv5te/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv5te/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv5te/toolchain-external-arago-armv5te.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv5te/toolchain-external-arago-armv5te.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv7a/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv7a/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv7a/toolchain-external-arago-armv7a.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-arago-armv7a/toolchain-external-arago-armv7a.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-mips/toolchain-external-codesourcery-mips.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-mips/toolchain-external-codesourcery-mips.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-custom/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-musl-cross/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-musl-cross/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.mk
+ create mode 100644 toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+ delete mode 100644 toolchain/toolchain-external/toolchain-external.hash
+
 -- 
 2.5.5
