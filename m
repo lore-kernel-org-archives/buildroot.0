@@ -1,22 +1,32 @@
-From: Matt Kraai <kraai@ftbfs.org>
-Date: Mon, 31 Oct 2016 08:18:52 -0700
-Subject: [Buildroot] Unused QT5WEB{CHANNEL, SOCKETS}_INSTALL_TARGET_EXAMPLES
-Message-ID: <20161031151852.GA12370@ftbfs.org>
+From: Patrick Doyle <wpdster@gmail.com>
+Date: Mon, 31 Oct 2016 11:33:42 -0400
+Subject: [Buildroot] buildroot and SELinux
+Message-ID: <CAF_dkJDYo2pxYTYojvOiUcCw0p6dV46_H6C4s6GVm2-nR+wqRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+I'm not sure if SELinux is the right answer to my question(*), but
+assuming that it is... how well do buildroot and SELinux play
+together?  I found an email thread from 2013 where Clayton Shotwell
+and Tomas Patazzoni were discussing rolling SELinux into buildroot.
+And I see configuration items related to that now.  From the age of
+that post, and the configuration items in the the system now, is it
+reasonable to assume that it basically works?  Or did nothing ever
+come of that and am I about to open up a can of worms?
 
-QT5WEBCHANNELL_INSTALL_TARGET_EXAMPLES and
-QT5WEBSOCKETS_INSTALL_TARGET_EXAMPLES are defined in
-package/qt5/qt5webchannel/qt5webchannel.mk and
-package/qt5/qt5webchannel/qt5websockets.mk, respectively, but they are
-never used.  Should they be removed or should they be added to
-QT5WEBCHANNEL_INSTALL_TARGET_CMDS and
-QT5WEBSOCKETS_INSTALL_TARGET_CMDS?
+(*) and my real question is: can I use SELinux to make a binary
+executable, but unreadable by anybody, including root?  An ancillary
+question would be, if that executable were included as part of the
+CRAMFS rootfs built into the kernel, how would I set the the
+attributes for that executable at buildtime to achieve this
+executable-but-not-readable state?
 
--- 
-Matt                                           https://ftbfs.org/~kraai/
+Please feel free to recognize my total lack of any experience in this
+area and to point me at appropriate resources.
+
+Thank you,
+
+--wpd
