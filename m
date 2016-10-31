@@ -1,69 +1,50 @@
 From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Mon, 31 Oct 2016 03:46:15 -0400
-Subject: [Buildroot] [PATCH v3 0/9] Update LTTng packages to 2.8.x and
-	Babeltrace to 1.4.0
-Message-ID: <20161031074624.7576-1-eeppeliteloop@gmail.com>
+Date: Mon, 31 Oct 2016 03:46:19 -0400
+Subject: [Buildroot] [PATCH v3 4/9] lttng-tools: remove dependency on
+	host-lttng-babeltrace
+In-Reply-To: <20161031074624.7576-1-eeppeliteloop@gmail.com>
+References: <20161031074624.7576-1-eeppeliteloop@gmail.com>
+Message-ID: <20161031074624.7576-5-eeppeliteloop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See individual patches for changes.
+We don't need to build Babeltrace for the host here. Any host running
+a major Linux distribution can get a recent version of Babeltrace.
 
-Philippe Proulx (9):
-  lttng-libust: bump to version 2.8.1
-  lttng-libust: enable Python agent when Python is available
-  lttng-tools: bump to version 2.8.2
-  lttng-tools: remove dependency on host-lttng-babeltrace
-  lttng-modules: bump to version 2.8.3
-  lttng-babeltrace: bump to version 1.4.0
-  lttng-babeltrace: add host Babeltrace as host utility
-  lttng-babeltrace: add debug info support
-  lttng-babeltrace: rename to babeltrace
+See <http://diamon.org/babeltrace/>.
 
- Config.in.legacy                                   |   8 +
- package/Config.in                                  |   2 +-
- package/Config.in.host                             |   1 +
- ...c-remove-elfutils-version-test-for-Buildr.patch |  30 ++
- ...b-Makefile.am-remove-unneeded-static-flag.patch |  36 ++
- package/{lttng-babeltrace => babeltrace}/Config.in |  35 +-
- package/babeltrace/Config.in.host                  |  18 +
- package/babeltrace/babeltrace.hash                 |   6 +
- package/babeltrace/babeltrace.mk                   |  29 ++
- .../0001-no-posix-fallocate-in-uclibc.patch        |  37 --
- ...ix-uuid-support-detection-on-static-build.patch |  63 ---
- package/lttng-babeltrace/lttng-babeltrace.hash     |   7 -
- package/lttng-babeltrace/lttng-babeltrace.mk       |  21 -
- ...lf.c-define-NT_GNU_BUILD_ID-if-not-define.patch |  34 ++
- package/lttng-libust/lttng-libust.hash             |  10 +-
- package/lttng-libust/lttng-libust.mk               |  11 +-
- package/lttng-modules/lttng-modules.hash           |   6 +-
- package/lttng-modules/lttng-modules.mk             |   3 +-
- ...ld-failure-when-__GLIBC_PREREQ-is-missing.patch |  55 ---
- ...Fix-snapshot-del-output-with-name-on-musl.patch |  32 ++
- .../0002-Fix-add-missing-sys-types.h-header.patch  |  29 --
- ...Fix-strerror_r-behavior-is-glibc-specific.patch |  30 ++
- ...et-thread-stack-size-to-ulimit-soft-value.patch | 431 +++++++++++++++++++++
- package/lttng-tools/lttng-tools.hash               |   6 +-
- package/lttng-tools/lttng-tools.mk                 |  17 +-
- 25 files changed, 708 insertions(+), 249 deletions(-)
- create mode 100644 package/babeltrace/0001-configure.ac-remove-elfutils-version-test-for-Buildr.patch
- create mode 100644 package/babeltrace/0002-tests-lib-Makefile.am-remove-unneeded-static-flag.patch
- rename package/{lttng-babeltrace => babeltrace}/Config.in (50%)
- create mode 100644 package/babeltrace/Config.in.host
- create mode 100644 package/babeltrace/babeltrace.hash
- create mode 100644 package/babeltrace/babeltrace.mk
- delete mode 100644 package/lttng-babeltrace/0001-no-posix-fallocate-in-uclibc.patch
- delete mode 100644 package/lttng-babeltrace/0002-configure-fix-uuid-support-detection-on-static-build.patch
- delete mode 100644 package/lttng-babeltrace/lttng-babeltrace.hash
- delete mode 100644 package/lttng-babeltrace/lttng-babeltrace.mk
- create mode 100644 package/lttng-libust/0001-lttng-ust-elf.c-define-NT_GNU_BUILD_ID-if-not-define.patch
- delete mode 100644 package/lttng-tools/0001-Fix-build-failure-when-__GLIBC_PREREQ-is-missing.patch
- create mode 100644 package/lttng-tools/0001-Fix-snapshot-del-output-with-name-on-musl.patch
- delete mode 100644 package/lttng-tools/0002-Fix-add-missing-sys-types.h-header.patch
- create mode 100644 package/lttng-tools/0002-Fix-strerror_r-behavior-is-glibc-specific.patch
- create mode 100644 package/lttng-tools/0003-Set-thread-stack-size-to-ulimit-soft-value.patch
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+Changes v2 -> v3:
+  - Nothing changed.
 
+Changes v1 -> v2:
+  - Add Reviewed-by tag.
+
+ package/lttng-tools/lttng-tools.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 3d884d3..9d9cb1c 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -10,12 +10,7 @@ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ LTTNG_TOOLS_LICENSE = GPLv2+, LGPLv2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
+ LTTNG_TOOLS_LICENSE_FILES = gpl-2.0.txt lgpl-2.1.txt LICENSE
+ LTTNG_TOOLS_CONF_OPTS += --with-xml-prefix=$(STAGING_DIR)/usr --disable-man-pages
+-
+-# The host-lttng-babeltrace technically isn't a required build
+-# dependency. However, having the babeltrace utilities built for the
+-# host is very useful, since those tools allow to convert the binary
+-# trace format into an human readable format.
+-LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt host-lttng-babeltrace util-linux
++LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt util-linux
+
+ ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
+ LTTNG_TOOLS_CONF_OPTS += --with-lttng-ust
 --
 2.9.3
