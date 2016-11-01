@@ -1,96 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Nov 2016 19:14:55 +0100
-Subject: [Buildroot] [PATCH v2 05/23]
- toolchain-external-blackfin-uclinux: new package
-In-Reply-To: <464e77de-831e-beeb-4d83-be59aa659f88@gmail.com>
-References: <1477742948-11490-1-git-send-email-romain.naour@gmail.com>
- <1477742948-11490-6-git-send-email-romain.naour@gmail.com>
- <20161030164752.GA18077@free.fr>
- <20161030183734.26f568d4@free-electrons.com>
- <20161030181700.GC18077@free.fr>
- <20161101141944.01daf548@free-electrons.com>
- <464e77de-831e-beeb-4d83-be59aa659f88@gmail.com>
-Message-ID: <20161101181455.GA30593@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Nov 2016 19:27:46 +0100
+Subject: [Buildroot] [git commit] xdriver_xf86-video-imx-viv: bump version
+	to 5.0.11.p8.6
+Message-ID: <20161101182816.D765180DE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=8182b741b021616beea06c927e4b199e18869675
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-11-01 19:06 +0100, Romain Naour spake thusly:
-> Le 01/11/2016 ? 14:19, Thomas Petazzoni a ?crit :
-> > Hello,
-> > 
-> > On Sun, 30 Oct 2016 19:17:00 +0100, Yann E. MORIN wrote:
-> > 
-> >>> The virtual package should be named "toolchain-external", which clashes
-> >>> with the existing "toolchain-external" package that you remove in step
-> >>> (5). So you can't do your step (2) before doing your step (5), unless
-> >>> of course you name the packages differently.  
-> >>
-> >> A virtual package is but a generic package, so nothing prevents it from
-> >> having its own _CMDS macros; it can download, configure and build stuff
-> >> of its own.
-> >>
-> >> Alternatively, you can have the toolchain-external package depend on
-> >> each of the new toochain-external-foo when it is added, as a kind of
-> >> manually-handled virtual package, before eventually converting it to a
-> >> real virtual package once everything as been split out to individual
-> >> providers.
-> > 
-> > So when the series if half applied, you have:
-> > 
-> >  - The toolchain-external package infrastructure, which is used by some
-> >    of the toolchains
-> > 
-> >  - The toolchain-external package, which depending on the toolchain,
-> >    either:
-> > 
-> >    - Implements itself the logic (for toolchains not yet converted)
-> > 
-> >    - Depends on another package, toolchain-external-foo, that
-> >      uses the toolchain-external package infrastructure ?
-> > 
-> > So at some point, if you have two times the code to handle the external
-> > toolchain logic. But I agree that this can work.
-> > 
-> > Romain, what do you think?
-> 
-> I think we should decide if we really want this series before -rc1 or delay it
-> for -next.
-> If we want this series for -rc1, I might not have finished the rework on time.
-> If not, I can take the time to rework with Yann's proposal.
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-freescale/commit/0c40332c
 
-As we discussed on IRC just a few minutes ago, I am not in favour of you
-rewriting this series, whether it is material for -rc1 or -next.
+The following xorg.conf was used in order to force the use of the
+vivante module:
+https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
 
-As for the ordering of the toolchains, I think we should have them
-ordered by alpahbetiacal order.
+Note that the X server must be started with the "noreset" option to
+avoid crashes when closing X apps.
+Tested with:
+ # X -noreset &
+ # cd /usr/share/examples/viv_samples/vdk/
+ # DISPLAY=:0 ./tutorial7
 
-After all, we never really advertised that defconfigs would be
-"reansposable" as-is during an upgrade. The real process for an upgrade
-should be:
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash    | 2 +-
+ package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-    make foo_defconfig
-    git pull
-    make oldconfig
-    (check)
-    make savedefconfig
-
-Which is the only way we can ensure correctness in a configuration file,
-because that will also cover the legacy stuff. Not doing so would risk
-keeping legacy symbols in a defconfig, so the process above is what one
-should do when upgrading Buildroot.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
+index 2cdf2d0..7d7da84 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
+@@ -1 +1 @@
+-sha256	ddb6de9e00ce0b22f6c905eaf6694424413eade53ef6cd3b36e20ac99dcc0e0f  xserver-xorg-video-imx-viv-5.0.11.p8.4.tar.gz
++sha256	3eed38193e31bb5ba8d2c817bd9b4f6e2fe7540d2cab36de9098cb4f11946a9f  xserver-xorg-video-imx-viv-5.0.11.p8.6.tar.gz
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+index 9ce08ef..2a3e997 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 5.0.11.p8.4
++XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 5.0.11.p8.6
+ XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
+ XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
+ XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv xserver_xorg-server \
