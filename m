@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 21:27:36 +0100
-Subject: [Buildroot] auto-detecting toolchain metadata?
-In-Reply-To: <20161101184626.GB30593@free.fr>
-References: <c1d1dc6d-c815-1ea2-3de9-13a1da0adaec@mentor.com>
- <20161101184626.GB30593@free.fr>
-Message-ID: <20161101212736.790ef8af@free-electrons.com>
+Date: Tue, 1 Nov 2016 21:32:57 +0100
+Subject: [Buildroot] [PATCH 1/1] Autobuilder: add powerpc64 and
+ powerpc64le
+In-Reply-To: <20161101154827.3b5b652f@free-electrons.com>
+References: <955cacaf56560ef6d27555e5e969a576187daba3.1477975719.git.sam.bobroff@au1.ibm.com>
+ <20161101154827.3b5b652f@free-electrons.com>
+Message-ID: <20161101213257.21f2e590@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +14,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 1 Nov 2016 19:46:26 +0100, Yann E. MORIN wrote:
-
-> On 2016-11-01 11:39 -0700, Hollis Blanchard spake thusly:
-> [--SNIP--]
-> > Another option I'm considering is a script to try to detect the necessary
-> > metadata from a given toolchain path. As far as I can see, every piece of it
-> > can be detected from external observation. It could be invoked outside
-> > Buildroot (modifying defconfig), but of course it could be invoked from
-> > within Buildroot's toolchain recipes too. Is there a reason this is a bad
-> > idea or hasn't already been done?  
+On Tue, 1 Nov 2016 15:48:27 +0100, Thomas Petazzoni wrote:
+> > * I haven't inlcuded a pre-built tool chain. I'd like to have one
+> >   but I assume it can be set up separately.  
 > 
-> Such a script would be ideed very usefull.
-
-Agreed.
-
-> The problem is that we need to know the characteristics of the toolchain
-> inside the menuconfig, so we can hide/show packages that have strict
-> requirements (e.g. on gcc version for C++11, on kernel headers, on the C
-> library...) but we only know the toolchain to use from inside the
-> menuconfig, so it is too late to run the script.
-
-Absolutely. In your e-mail Hollis you said:
-
-"""
-but of course it could 
-be invoked from within Buildroot's toolchain recipes too
-"""
-
-but as Yann explained, this is simply not possible. We need to know, at
-the Kconfig level, the properties of the toolchain. Except that the
-toolchain location/choice itself is defined at the Kconfig level. So
-there's no way we can have Kconfig automatically "know" the properties
-of the toolchain.
-
-> So what Buildroot currently does is check the settings after the fact,
-> because there is no way we can do otherwise.
+> That's the point I wanted to discuss. I think I'd prefer to have
+> pre-built toolchains. Pre-built toolchains mean that people can much
+> more quickly reproduce build failures, as they can re-use the
+> pre-existing toolchain and just build the failing package. It *saves* a
+> lot of time. Also, using pre-built toolchains means that our
+> autobuilders CPU time is more dedicated into building packages than
+> building the toolchain.
 > 
-> But if there was a script that would look at a toolchain and spit out
-> the settings, like:
+> The only drawback of pre-built toolchains is that they are not
+> automatically rebuilt when the toolchains components are
+> updated/patches. But I very regularly trigger a rebuild of the
+> pre-built toolchains, at least whenever I see some gcc/binutils/libc
+> changes, or when one of the person interested in a specific
+> architecture/toolchain asks me to do so.
 > 
->     ./support/scripts/scan-ext-toolchain /path/to/toolchain
->     BR2_USES_MUSL=y
->     BR2_GCC_ATLEAST_4_9=y
->     [and so on]
+> So I think I'll just add a powerpc64/power7 pre-built toolchain and a
+> powerpc64le/power8 pre-built toolchain, if that's OK with you.
 
-Yes, this woudl be great.
+I just added those toolchains in the autobuilder infrastructure:
 
-> with that output to be used as a base defconfig, then that would be
-> tremendously useful, indeed.
-> 
-> And probably not very dificult to do either...
-> 
-> Bonus would be if we could also use that script to check the current
-> configuration against the configured toolchain (that would mean
-> extracting a lot of logic out of the Makefiles, which is not necessarily
-> a bad idea either).
+  https://git.buildroot.org/buildroot-test/commit/
 
-I didn't think about this idea, but maybe it makes sense indeed. At
-least it's worth trying and see what it looks like.
+So you should see the first build results for powerpc64(le) appear on
+http://autobuild.buildroot.org within the next few hours.
 
-Best regards,
+I've also added you in the DEVELOPERS file as a developer for the
+PowerPC architecture (which includes powerpc64/powerpc64le):
+
+  https://git.buildroot.org/buildroot/commit/?id=adec13992ce2ee333353bac71faef18ea22f7974
+
+This way starting tomorrow morning, you will receive every day a
+summary of the build failures that took place on powerpc.
+
+Thanks!
 
 Thomas
 -- 
