@@ -1,50 +1,52 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue,  1 Nov 2016 17:10:02 +0100
-Subject: [Buildroot] [PATCH 5/8] kernel-module-imx-gpu-viv: bump version to
-	5.0.11.p8.6
+Date: Tue,  1 Nov 2016 17:10:03 +0100
+Subject: [Buildroot] [PATCH 6/8] imx-codec: bump to version 4.1.4
 In-Reply-To: <20161101161005.13302-1-gary.bisson@boundarydevices.com>
 References: <20161101161005.13302-1-gary.bisson@boundarydevices.com>
-Message-ID: <20161101161005.13302-6-gary.bisson@boundarydevices.com>
+Message-ID: <20161101161005.13302-7-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-freescale/commit/51148d70
+Changelog
+- Upgrade license chksum to v14 EULA
+- Check for lib_src_ppp_arm11_elinux.so library before removing
+- Fixes for error hadling and robustness
 
-This package has been tested with the following commands:
- # modprobe galcore
- # cd /usr/share/examples/viv_samples/vdk/
- # ./tutorial7
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-freescale/commit/78856879
+
+Implicitly tested through gstreamer as the 0.10 plugin relies on it:
+ # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash            | 2 +-
- .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk              | 2 +-
+ package/freescale-imx/imx-codec/imx-codec.hash | 2 +-
+ package/freescale-imx/imx-codec/imx-codec.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-index 6d810ea..9c43ea3 100644
---- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+diff --git a/package/freescale-imx/imx-codec/imx-codec.hash b/package/freescale-imx/imx-codec/imx-codec.hash
+index 39bddc1..2bb7a24 100644
+--- a/package/freescale-imx/imx-codec/imx-codec.hash
++++ b/package/freescale-imx/imx-codec/imx-codec.hash
 @@ -1,2 +1,2 @@
  # locally computed
--sha256	6618b36baefd591e94a41167fa50d325c3df473918bceef027ca5a067aa1cffd  kernel-module-imx-gpu-viv-aa83874b916cf5655cb90498b1ea5691537fdbc8.tar.gz
-+sha256	51dd137bd67ae991fa58fff4151c6bd7dd46bafd613f43e83d8403ec37217a90  kernel-module-imx-gpu-viv-bfa78b095a892705a09afe9514fc5d236b3124d2.tar.gz
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-index 11c6768..bcbd8d2 100644
---- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+-sha256	62bda182143cde9743cba0eb2a1c315a53cb434294605742f9fc364219958888  imx-codec-4.0.9.bin
++sha256	98fe71cb44f7e858c64c5eda81741ed02f40afaadc3d4ed1e693c7d1e684b81d  imx-codec-4.1.4.bin
+diff --git a/package/freescale-imx/imx-codec/imx-codec.mk b/package/freescale-imx/imx-codec/imx-codec.mk
+index 4840872..911ad8b 100644
+--- a/package/freescale-imx/imx-codec/imx-codec.mk
++++ b/package/freescale-imx/imx-codec/imx-codec.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KERNEL_MODULE_IMX_GPU_VIV_VERSION = aa83874b916cf5655cb90498b1ea5691537fdbc8
-+KERNEL_MODULE_IMX_GPU_VIV_VERSION = bfa78b095a892705a09afe9514fc5d236b3124d2
- KERNEL_MODULE_IMX_GPU_VIV_SITE = \
- 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
- KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPLv2
+-IMX_CODEC_VERSION = 4.0.9
++IMX_CODEC_VERSION = 4.1.4
+ IMX_CODEC_SITE = $(FREESCALE_IMX_SITE)
+ IMX_CODEC_SOURCE = imx-codec-$(IMX_CODEC_VERSION).bin
+ IMX_CODEC_INSTALL_STAGING = YES
 -- 
 2.9.3
