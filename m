@@ -1,30 +1,39 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 1 Nov 2016 11:52:46 +0100
-Subject: [Buildroot] [PATCH 08/10] package/libimxvpuapi: make it a
-	waf-package
-In-Reply-To: <464302bc-d471-f54a-89b3-a613acace22a@gmail.com>
-References: <cover.1477843328.git.yann.morin.1998@free.fr>
- <68afe0c571dbe4cf5843205b7ab15cf748075de4.1477843328.git.yann.morin.1998@free.fr>
- <464302bc-d471-f54a-89b3-a613acace22a@gmail.com>
-Message-ID: <CAAMH-ytxtQ4MK2dJTb-gQsQFxekZrPpsnbG4UR92xtMS-_5UCA@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 1 Nov 2016 10:59:47 +0000
+Subject: [Buildroot] [PATCH] lighttpd: bump version to 1.4.43
+Message-ID: <20161101105947.56217-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/lighttpd/lighttpd.hash | 2 +-
+ package/lighttpd/lighttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sun, Oct 30, 2016 at 5:39 PM, Romain Naour <romain.naour@gmail.com> wrote:
-> Hi Yann, All,
->
-> Le 30/10/2016 ? 17:02, Yann E. MORIN a ?crit :
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Gary Bisson <gary.bisson@boundarydevices.com>
->
-> Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
-
-Regards,
-Gary
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index edec58f..c00236b 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,2 +1,2 @@
+ # From http://www.lighttpd.net/
+-sha256 b2c9069ed0bade9362c27b469a9b884641786aea1c3d686f9fd9f01d15e2a15f  lighttpd-1.4.42.tar.xz
++sha256 fe0c4a06dd2408a83ee7a2bfedc45e09597f3313cbda82485507573ae8fa948a  lighttpd-1.4.43.tar.xz
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 537604a..9f7599a 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).42
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).43
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3c
+-- 
+2.10.1
