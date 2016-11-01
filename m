@@ -1,109 +1,129 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 01 Sep 2016 01:59:03 +0200
-Subject: [Buildroot] [PATCH v2] package/libshout: add patches to fix
-	static linking
-In-Reply-To: <871t14y3qx.fsf@dell.be.48ers.dk>
-References: <20160831202607.24374-1-joerg.krause@embedded.rocks>
- <871t14y3qx.fsf@dell.be.48ers.dk>
-Message-ID: <1472687943.30005.1.camel@embedded.rocks>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Mon, 31 Oct 2016 17:42:34 -0700
+Subject: [Buildroot] [PATCH] package/xen: fix build failure on x86 after
+ bump to 47
+In-Reply-To: <CAKmqyKN-vfzzqwzA6OM3pXco7fE93W0rCGdtRyP0ktmMy=r_bw@mail.gmail.com>
+References: <CAKmqyKPsF-MiNFtj3jRaU4cS0usMs0hYitxvj+FKDAQTUDgnaw@mail.gmail.com>
+ <1477752207-16549-1-git-send-email-yann.morin.1998@free.fr>
+ <20161029182714.GA3490@free.fr>
+ <CAKmqyKN-vfzzqwzA6OM3pXco7fE93W0rCGdtRyP0ktmMy=r_bw@mail.gmail.com>
+Message-ID: <CAKmqyKNeBjXG+taGpVKBm0cJYE9+V-B+LNTpnk7vZOAtsMFgbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Do, 2016-09-01 at 00:26 +0200, Peter Korsgaard wrote:
-> > 
-> > > 
-> > > > 
-> > > > > 
-> > > > > > 
-> > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
-> 
-> ?> This series includes two patches to fix static linking with
-> libshout.
-> ?> The first patch fixes two typos resulting in an uninterpretable
-> library
-> ?> propagation and is mainly needed for the follow-up patch.
-> 
-> ?> The second patch makes sure that `@SHOUT_REQUIRES@` and therefore
-> ?> `Requires.private` includes ssl as `Requires.private` defines a
-> list of private
-> ?> packages required by this package but not exposed to applications.
-> 
-> ?> Note that autoreconf is enabled as the first patch touches
-> configure.ac.
-> 
-> ?> Fixes:
-> ?> http://autobuild.buildroot.net/results/b82/b82408fccbf816575125dcc
-> 1a1de7260f66f62e8/
-> ?> http://autobuild.buildroot.net/results/360/3605750023267e4cd35d984
-> 51bd283f9e70a6106/
-> ?> http://autobuild.buildroot.net/results/03b/03b98b313dd6ed2909607cd
-> c0c4f6fb87be3ccfe/
-> ?> http://autobuild.buildroot.net/results/70b/70ba47e04d1fc0d2379bf1a
-> c7aab4c52d6193001/
-> 
-> ?> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ?> ---
-> ?> v2:
-> ?>??* Replace patch #2 to make sure `Requires.private` contains ssl
-> if needed
-> ?>????(suggested by Thomas)
-> 
-> ?> +Since OpenSSL installs its own .pc files, make sure that
-> @SHOUT_REQUIRES@
-> ?> +contains `ssl`.
-> ?> +
-> ?> +Upstream status: pending
-> ?> +https://github.com/xiph/Icecast-libshout/pull/5
-> ?> +
-> ?> +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ?> +---
-> ?> + configure.ac | 4 ++++
-> ?> + 1 file changed, 4 insertions(+)
-> ?> +
-> ?> +diff --git a/configure.ac b/configure.ac
-> ?> +index 85f18ad..2b9c505 100644
-> ?> +--- a/configure.ac
-> ?> ++++ b/configure.ac
-> ?> +@@ -197,6 +197,10 @@ XIPH_PATH_OPENSSL([
-> ?> +?????])
-> ?> + AC_SUBST([SHOUT_TLS])
-> ?> + AM_CONDITIONAL([HAVE_TLS], [test -n "$OPENSSL_LIBS"])
-> ?> ++if test "$SHOUT_TLS" = "1"
-> ?> ++then
-> ?> ++??SHOUT_REQUIRES="$SHOUT_REQUIRES, ssl"
-> 
-> Did you test this?
-> 
-> The libssl .pc file is called libssl.pc, not ssl.pc, so this doesn't
-> work.
+On Mon, Oct 31, 2016 at 3:06 PM, Alistair Francis
+<alistair.francis@xilinx.com> wrote:
+> On Sat, Oct 29, 2016 at 11:27 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> Alistair, All,
+>>
+>> On 2016-10-29 16:43 +0200, Yann E. MORIN spake thusly:
+>>> Since the bump to 4.7, Xen fails to build because of a double definition
+>>> of __OBJECT_FILE__. This is due to (who would have guessed) the weirdness
+>>> of their buildsystem.
+>>>
+>>> Fix that with a dirty hack: undefine the macro before defining it.
+>>>
+>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> Cc: Alistair Francis <alistair.francis@xilinx.com>
+>>>
+>>> ---
+>>> Note: totally untested.
+>>
+>> Now build-tested, the double-definition issue is fixed, and the build
+>> succeeds with this defconfig:
+>>
+>>     BR2_aarch64=y
+>>     BR2_TOOLCHAIN_EXTERNAL=y
+>>     BR2_PACKAGE_XEN=y
+>>     BR2_PACKAGE_XEN_HYPERVISOR=y
+>>     BR2_PACKAGE_XEN_TOOLS=y
+>>
+>> Not booted, I don't know Xen enough to test...
+>
+> The patch looks good to me!
+>
+> I just did a build test as well and it works, running a boot test now.
 
-Sorry for that! You're right! I did tested for compilation, which ends
-without errors, however, mpd does not find libshout and therefore does
-not link with it. Thanks for catching this!
+Tested on ARMv7 (little endian) boot.
 
-> > 
-> > diff --git a/package/libshout/libshout.mk
-> > b/package/libshout/libshout.mk
-> ?> index 029c134..9f54463 100644
-> ?> --- a/package/libshout/libshout.mk
-> ?> +++ b/package/libshout/libshout.mk
-> ?> @@ -11,6 +11,9 @@ LIBSHOUT_LICENSE_FILES = COPYING
-> ?>??LIBSHOUT_INSTALL_STAGING = YES
-> ?>??LIBSHOUT_DEPENDENCIES = host-pkgconf libogg libvorbis
-> ?
-> ?> +# patching congigure.ac
-> 
-> typo.
-> 
-> What is odd about this fix / autobuilder issues is:
-> 
-> - libshout has no (optional) dependency on openssl
-> - mpd has no (optional) dependency on libshout
-> 
-> So that's pretty bad. I've pushed 2 commits to fix this.
-> 
-> Committed after fixing the above, thanks.
-> 
+Tested-by: Alistair Francis <alistair.francis@xilinx.com>
+Reviewed-by: Alistair Francis <alistair.francis@xilinx.com>
+
+Thanks,
+
+Alistair
+
+>
+> Thanks,
+>
+> Alistair
+>
+>>
+>> Regards,
+>> Yann E. MORIN.
+>>
+>>> ---
+>>>  ...mk-fix-build-with-CFLAGS-from-environment.patch | 36 ++++++++++++++++++++++
+>>>  1 file changed, 36 insertions(+)
+>>>  create mode 100644 package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
+>>>
+>>> diff --git a/package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch b/package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
+>>> new file mode 100644
+>>> index 0000000..0d4e581
+>>> --- /dev/null
+>>> +++ b/package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
+>>> @@ -0,0 +1,36 @@
+>>> +From 2a310549aaeaba05f640ade43488bb893101ce4a Mon Sep 17 00:00:00 2001
+>>> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> +Date: Sat, 29 Oct 2016 16:35:26 +0200
+>>> +Subject: [PATCH] xen/Rules.mk: fix build with CFLAGS from environment
+>>> +
+>>> +When CFLAGS are passed from the environment, the first-level make
+>>> +invocation will append -D__OBJECT_FILE__ to it, then call a second
+>>> +make invocation, that will have those new CFLAGS in its environment,
+>>> +but will also append -D__OBJECT_FILE__ to those.
+>>> +
+>>> +Then, the compiler fails because __OBEJECT_FILE__ is defined twice.
+>>> +
+>>> +Just undefine it before defining it again, as a *workaround* to this
+>>> +issue.
+>>> +
+>>> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> +---
+>>> + xen/Rules.mk | 2 +-
+>>> + 1 file changed, 1 insertion(+), 1 deletion(-)
+>>> +
+>>> +diff --git a/xen/Rules.mk b/xen/Rules.mk
+>>> +index a9fda71..09ccbfa 100644
+>>> +--- a/xen/Rules.mk
+>>> ++++ b/xen/Rules.mk
+>>> +@@ -49,7 +49,7 @@ ALL_OBJS-$(CONFIG_CRYPTO)   += $(BASEDIR)/crypto/built_in.o
+>>> + CFLAGS += -nostdinc -fno-builtin -fno-common
+>>> + CFLAGS += -Werror -Wredundant-decls -Wno-pointer-arith
+>>> + CFLAGS += -pipe -g -D__XEN__ -include $(BASEDIR)/include/xen/config.h
+>>> +-CFLAGS += '-D__OBJECT_FILE__="$@"'
+>>> ++CFLAGS += -U__OBJECT_FILE__ '-D__OBJECT_FILE__="$@"'
+>>> +
+>>> + ifneq ($(clang),y)
+>>> + # Clang doesn't understand this command line argument, and doesn't appear to
+>>> +--
+>>> +2.7.4
+>>> +
+>>> --
+>>> 2.7.4
+>>>
+>>
+>> --
+>> .-----------------.--------------------.------------------.--------------------.
+>> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+>> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+>> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+>> '------------------------------^-------^------------------^--------------------'
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
