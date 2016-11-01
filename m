@@ -1,49 +1,41 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Tue, 1 Nov 2016 09:30:33 -0400
-Subject: [Buildroot] buildroot and SELinux
-In-Reply-To: <CANCHnQph3GgcJdrozS0g52E9k+OQ1trWtZ3kWvsM2rMDFFbr7Q@mail.gmail.com>
-References: <CAF_dkJDYo2pxYTYojvOiUcCw0p6dV46_H6C4s6GVm2-nR+wqRw@mail.gmail.com>
- <CANCHnQph3GgcJdrozS0g52E9k+OQ1trWtZ3kWvsM2rMDFFbr7Q@mail.gmail.com>
-Message-ID: <CAF_dkJDX5Nnsy+XpxEfGRT5jwMgRSJcyA0xCaprL3O3391yYxg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Nov 2016 14:50:51 +0100
+Subject: [Buildroot] [git commit] lighttpd: bump version to 1.4.43
+Message-ID: <20161101135055.0DB07817E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jeroen,
+commit: https://git.buildroot.net/buildroot/commit/?id=b3450a888d0764a4f4d31dcad483c7b6092225cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thank you for your reply.  And for your advice.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lighttpd/lighttpd.hash | 2 +-
+ package/lighttpd/lighttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, Nov 1, 2016 at 6:49 AM, Jeroen Roovers <jer@airfi.aero> wrote:
-> You could simply ensure that the up and running userland can't read
-> the file, possibly by excluding userland support for reading cramfs or
-> whatever filesystem you choose, so that only the kernel can read it at
-> boot time, and then removing (rm) the file from the ramdisk during
-> boot up and after you've used it.
-
-That could work.  But it's that time between "during boot up and after
-you've used it" bit that has me worried.  During that interval, a root
-user who has compromised the system would be able to make a copy of
-the executable.  That is what I would like to prevent, and am now
-exploring SELinux and AppArmor to see they offer the tools to do this.
-Also, implementing that strategy would require that I reboot the
-system to restart the executable, which may not be the best answer.
-
-I'm exploring ideas right now, and am open to advice.  The main intent
-of my question on this list was to ensure that, if I went down the
-SELinux path, I didn't box myself in a corner.
-
-> Doing this with SELinux would require you to build a policy for that
-> file so that its execution is only allowed in specific security
-> contexts.
-Assuming I can learn how to build the appropriate policy, how would I
-bake that policy into the buildroot generated kernel/rootfs such that
-it boots up enabled and immutable?  Does the policy get baked into the
-kernel?  Or do I run tools on the cramfs to set the policy for that
-file prior to its incorporation into the kernel?
-
-
-Thanks again.
-
---wpd
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index edec58f..c00236b 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,2 +1,2 @@
+ # From http://www.lighttpd.net/
+-sha256 b2c9069ed0bade9362c27b469a9b884641786aea1c3d686f9fd9f01d15e2a15f  lighttpd-1.4.42.tar.xz
++sha256 fe0c4a06dd2408a83ee7a2bfedc45e09597f3313cbda82485507573ae8fa948a  lighttpd-1.4.43.tar.xz
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 537604a..9f7599a 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).42
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).43
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3c
