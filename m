@@ -1,81 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 15:30:31 +0100
-Subject: [Buildroot] [PATCH v3 6/9] lttng-babeltrace: bump to version
- 1.4.0
-In-Reply-To: <20161031074624.7576-7-eeppeliteloop@gmail.com>
-References: <20161031074624.7576-1-eeppeliteloop@gmail.com>
- <20161031074624.7576-7-eeppeliteloop@gmail.com>
-Message-ID: <20161101153031.44d4e7c0@free-electrons.com>
+Date: Tue, 1 Nov 2016 15:30:47 +0100
+Subject: [Buildroot] [git commit] lttng-modules: bump to version 2.8.3
+Message-ID: <20161101143108.D6E16818C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=83676c3117130ae6e738105937aed12a4a7715a3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 31 Oct 2016 03:46:21 -0400, Philippe Proulx wrote:
-> Current patches are dropped because they were merged upstream.
-> 
-> Official upstream site of Babeltrace for the distribution of tarballs
-> changed from lttng.org to efficios.com (see
-> <http://diamon.org/babeltrace>).
-> 
-> Official Babeltrace's website changed from
-> <http://www.efficios.com/babeltrace> to <http://diamon.org/babeltrace>.
-> 
-> I explicitly disable the support for debug informations in this patch to
-> add it in a separate patch.
-> 
-> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+LTTng-modules, starting from v2.8, has a mechanism to be built directly
+into a Linux kernel image, that is, not as loadable kernel modules. For
+this the `CONFIG_LTTNG_CLOCK_PLUGIN_TEST` and `CONFIG_LTTNG` Make
+variables were introduced. They need to be explicitly set to `m` here to
+build the project as loadable kernel modules.
 
-This commit doesn't apply:
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lttng-modules/lttng-modules.hash | 5 +++--
+ package/lttng-modules/lttng-modules.mk   | 3 ++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-thomas at skate:~/projets/buildroot (master)$ git pwam 689227
-Applying patch #689227 using 'git am -s -3'
-Description: [v3,6/9] lttng-babeltrace: bump to version 1.4.0
-Applying: lttng-babeltrace: bump to version 1.4.0
-Using index info to reconstruct a base tree...
-.git/rebase-apply/patch:55: space before tab in indent.
- 	    # Check if libelf and libdw are present
-.git/rebase-apply/patch:56: space before tab in indent.
- 	    AC_CHECK_LIB([elf], [elf_version], [], [AC_MSG_ERROR(Missing libelf (from elfutils >= 0.154) which is required by debug info. You can disable this feature using --disable-debug-info.)])
-.git/rebase-apply/patch:57: space before tab in indent.
- 	    AC_CHECK_LIB([dw], [dwarf_begin], [], [AC_MSG_ERROR(Missing libdw (from elfutils >= 0.154) which is required by debug info. You can disable this feature using --disable-debug-info.)])
-.git/rebase-apply/patch:203: space before tab in indent.
- 		test_ctf_writer_complete
-.git/rebase-apply/patch:208: space before tab in indent.
- 	$(top_builddir)/lib/libbabeltrace.la \
-error: patch failed: package/lttng-babeltrace/0002-configure-fix-uuid-support-detection-on-static-build.patch:1
-error: package/lttng-babeltrace/0002-configure-fix-uuid-support-detection-on-static-build.patch: patch does not apply
-error: Did you hand edit your patch?
-It does not apply to blobs recorded in its index.
-Patch failed at 0001 lttng-babeltrace: bump to version 1.4.0
-The copy of the patch that failed is found in: .git/rebase-apply/patch
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
-
-It seems that again, your patches are not correct.
-
-
-> +@@ -268,7 +268,6 @@ AS_IF([test "x$_enable_debug_info" = xyes], [
-> + 	    # Check if libelf and libdw are present
-> + 	    AC_CHECK_LIB([elf], [elf_version], [], [AC_MSG_ERROR(Missing libelf (from elfutils >= 0.154) which is required by debug info. You can disable this feature using --disable-debug-info.)])
-> + 	    AC_CHECK_LIB([dw], [dwarf_begin], [], [AC_MSG_ERROR(Missing libdw (from elfutils >= 0.154) which is required by debug info. You can disable this feature using --disable-debug-info.)])
-> +-	    AX_LIB_ELFUTILS([0], [154], [], [AC_MSG_ERROR(elfutils >= 0.154 is required to use the debug info feature. You can disable this feature using --disable-debug-info.)])
-
-Rather than removing a check, please add an autoconf cache variable, so
-that we can override the result of the test using a cache variable, and
-your patch can be submitted (and hopefully) accepted upstream.
-
-I'm going to skip patches 7 to 9, since they also apply to
-lttng-babeltrace.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
+index 2d50287..ce725ec 100644
+--- a/package/lttng-modules/lttng-modules.hash
++++ b/package/lttng-modules/lttng-modules.hash
+@@ -1,2 +1,3 @@
+-# from http://lttng.org/files/lttng-tools/lttng-modules-2.7.1.tar.bz2.sha1
+-sha1  38c42ec89b4966c7a4cc04aea75f5841634d8d66  lttng-modules-2.7.1.tar.bz2
++# From http://lttng.org/files/lttng-modules/lttng-modules-2.8.3.tar.bz2.{md5,sha1}
++md5   424354c4834d20235dacd9a1fd7653b6  lttng-modules-2.8.3.tar.bz2
++sha1  862705784a54962f70226004f1fd0bf77f73f10f  lttng-modules-2.8.3.tar.bz2
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index 5d0c422..9ecf572 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
+ 
+-LTTNG_MODULES_VERSION = 2.7.1
++LTTNG_MODULES_VERSION = 2.8.3
+ LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
+ LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
+ LTTNG_MODULES_LICENSE_FILES = lgpl-2.1.txt gpl-2.0.txt mit-license.txt LICENSE
++LTTNG_MODULES_MODULE_MAKE_OPTS = CONFIG_LTTNG=m CONFIG_LTTNG_CLOCK_PLUGIN_TEST=m
+ 
+ $(eval $(kernel-module))
+ $(eval $(generic-package))
