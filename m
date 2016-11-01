@@ -1,60 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 21:32:57 +0100
-Subject: [Buildroot] [PATCH 1/1] Autobuilder: add powerpc64 and
- powerpc64le
-In-Reply-To: <20161101154827.3b5b652f@free-electrons.com>
-References: <955cacaf56560ef6d27555e5e969a576187daba3.1477975719.git.sam.bobroff@au1.ibm.com>
- <20161101154827.3b5b652f@free-electrons.com>
-Message-ID: <20161101213257.21f2e590@free-electrons.com>
+From: Stefan Nickl <stefan.nickl@gmail.com>
+Date: Tue, 1 Nov 2016 22:24:53 +0100
+Subject: [Buildroot] [PATCH v2] pppd: Provide error() implementation in
+	pppoe-discovery
+In-Reply-To: <20161028152419.6ffba279@free-electrons.com>
+References: <1477248598-6052-1-git-send-email-Stefan.Nickl@gmail.com>
+ <20161028152419.6ffba279@free-electrons.com>
+Message-ID: <CAFOMc=TC79VoZmWRzCsBZp3bBCnB+OaWGZ0vi3BXAaHpQODpnQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Tue, 1 Nov 2016 15:48:27 +0100, Thomas Petazzoni wrote:
-> > * I haven't inlcuded a pre-built tool chain. I'd like to have one
-> >   but I assume it can be set up separately.  
-> 
-> That's the point I wanted to discuss. I think I'd prefer to have
-> pre-built toolchains. Pre-built toolchains mean that people can much
-> more quickly reproduce build failures, as they can re-use the
-> pre-existing toolchain and just build the failing package. It *saves* a
-> lot of time. Also, using pre-built toolchains means that our
-> autobuilders CPU time is more dedicated into building packages than
-> building the toolchain.
-> 
-> The only drawback of pre-built toolchains is that they are not
-> automatically rebuilt when the toolchains components are
-> updated/patches. But I very regularly trigger a rebuild of the
-> pre-built toolchains, at least whenever I see some gcc/binutils/libc
-> changes, or when one of the person interested in a specific
-> architecture/toolchain asks me to do so.
-> 
-> So I think I'll just add a powerpc64/power7 pre-built toolchain and a
-> powerpc64le/power8 pre-built toolchain, if that's OK with you.
+On Fri, Oct 28, 2016 at 3:24 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-I just added those toolchains in the autobuilder infrastructure:
+> What do you mean by doppelganger?
 
-  https://git.buildroot.org/buildroot-test/commit/
 
-So you should see the first build results for powerpc64(le) appear on
-http://autobuild.buildroot.org within the next few hours.
+If you do "man 3 error" on a desktop Linux box, you'll get this function,
+which is provided by glibc and uclibc, but not by musl:
 
-I've also added you in the DEVELOPERS file as a developer for the
-PowerPC architecture (which includes powerpc64/powerpc64le):
+void error(int status, int errnum, const char *format, ...)
 
-  https://git.buildroot.org/buildroot/commit/?id=adec13992ce2ee333353bac71faef18ea22f7974
+If you look at ppp/pppd/utils.c, you'll find a function with this
+prototype, looking like the one in my patch:
 
-This way starting tomorrow morning, you will receive every day a
-summary of the build failures that took place on powerpc.
+void error(char *fmt, ...)
 
-Thanks!
+The libc version is actually defined as a weak symbol:
 
-Thomas
+# nm -D /lib/libc.so.6 |grep -w error
+000f5990 W error
+
+When rp-pppoe.so is built from pppd/plugins/rp-pppoe/common.c (among
+others), CHECK_ROOM expands into an error() call that matches the second
+signature, as is custom within ppp. When the plugin is dynamically loaded
+into pppd, that call to error() uses the function from utils.c, overriding
+the weak symbol in the libc.
+
+But for the standalone pppoe-discovery, there is no error() in the program,
+and the linker just silently uses the unrelated/wrong weak symbol from libc
+instead.
+
+It does not really matter because at most it makes the utility terminate
+cleanly instead of crashing if it detects some internal error, which may
+never even happen. I only minded because Arnout asked about it; it does
+matter for musl, but there it only solves one out of several issues.
+
+
+> This really doesn't seem like the right approach, for several reasons:
+>
+>  - There is already a function with the same name provided in the C
+>    library, which means static linking scenarios will no longer work,
+>    as you'll have clashing symbols.
+>
+
+As mentioned, the very idea is to provide a correct alternative so the
+weak/wrong error() from libc is not used.
+
+
+>  - The rest of the pppoe-discovery code is using perror(), which is
+>    provided by the C library. So I believe the better fix is to change
+>    the CHECK_ROOM() macro to use the perror() function instead.
+>
+
+Translation units that go into the rp-pppoe.so plugin also use this macro,
+and in this context, "void error(char *fmt, ...)" is certainly the correct
+choice. Also, perror(3) is for translating errno, which is not applicable
+for CHECK_ROOM. But there is also a lot of fprintf(stderr...) going on
+in pppoe-discovery.c.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Stefan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161101/5f16bd4e/attachment.html>
