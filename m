@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 15:36:20 +0100
-Subject: [Buildroot] [PATCH] owfs: install python bindings in the
- correct location
-In-Reply-To: <20161101141448.14792-1-arnout@mind.be>
-References: <20161101141448.14792-1-arnout@mind.be>
-Message-ID: <20161101153620.3b040c9f@free-electrons.com>
+Date: Tue, 1 Nov 2016 15:37:01 +0100
+Subject: [Buildroot] [PATCH 1/2] qt5webchannel: remove
+ QT5WEBCHANNEL_INSTALL_TARGET_EXAMPLES
+In-Reply-To: <20161101140933.859-1-kraai@ftbfs.org>
+References: <20161101140933.859-1-kraai@ftbfs.org>
+Message-ID: <20161101153701.04acd1d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 1 Nov 2016 15:14:48 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
+On Tue,  1 Nov 2016 07:09:32 -0700, Matt Kraai wrote:
+> Signed-off-by: Matt Kraai <kraai@ftbfs.org>
+> ---
+>  package/qt5/qt5webchannel/qt5webchannel.mk | 6 ------
+>  1 file changed, 6 deletions(-)
 
-> +# The configure scripts finds PYSITEDIR as the python_lib directory of
-> +# host-python, and then prepends DESTDIR in front of it. So we end up
-> +# installing things in $(TARGET_DIR)/$(HOST_DIR)/usr/lib/python which is
-> +# clearly wrong.
-> +# Patching owfs to do the right thing is not trivial, it's much easier to
-> +# override the PYSITEDIR variable in make. That, in turn, is easier to do by
-> +# setting OWFS_MAKE, otherwise both OWFS_INSTALL_STAGING_OPTS and
-> +# OWFS_INSTALL_TARGET_OPTS would have to be overridden
-> +OWFS_MAKE = $(MAKE) PYSITEDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+Rather than removing these, we should instead make it consistent with
+what qt5engineio is doing, i.e install those examples. See
+qt5engineio.mk.
 
-Could we instead introduce a OWFS_MAKE_OPTS variable? Yes, that's a
-slightly larger change, but it's our usual pattern to handle such
-situations, so I'd prefer to have it handled like this in owfs as well.
+Could you rework your patches accordingly?
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
