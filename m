@@ -1,84 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Nov 2016 16:00:14 +0100
-Subject: [Buildroot] [PATCH] owfs: install python bindings in the
- correct location
-In-Reply-To: <990f7aa3-b4ac-5ef1-a325-155df1e821bf@mind.be>
-References: <20161101141448.14792-1-arnout@mind.be>
- <20161101153620.3b040c9f@free-electrons.com>
- <990f7aa3-b4ac-5ef1-a325-155df1e821bf@mind.be>
-Message-ID: <9b48b0e7-c638-e41d-ee76-e4e6e99b44d6@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Nov 2016 16:02:05 +0100
+Subject: [Buildroot] [PATCH 1/4] configs/lego_ev3: add U-Boot support
+In-Reply-To: <1477870346-4941-2-git-send-email-david@lechnology.com>
+References: <1477870346-4941-1-git-send-email-david@lechnology.com>
+ <1477870346-4941-2-git-send-email-david@lechnology.com>
+Message-ID: <20161101160205.74aea6d9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+Thanks for this patch series updating the lego_ev3 support, much appreciated!
 
-On 01-11-16 15:51, Arnout Vandecappelle wrote:
+On Sun, 30 Oct 2016 18:32:23 -0500, David Lechner wrote:
+> This adds U-Boot configuration for LEGO MINDSTORMS EV3. U-Boot has
+> had support for LEGO MINDSTORMS EV3 since v2016.05.
 > 
+> Signed-off-by: David Lechner <david@lechnology.com>
+> ---
+>  configs/lego_ev3_defconfig | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> On 01-11-16 15:36, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Tue, 1 Nov 2016 15:14:48 +0100, Arnout Vandecappelle
->> (Essensium/Mind) wrote:
->>
->>> +# The configure scripts finds PYSITEDIR as the python_lib directory of
->>> +# host-python, and then prepends DESTDIR in front of it. So we end up
->>> +# installing things in $(TARGET_DIR)/$(HOST_DIR)/usr/lib/python which is
->>> +# clearly wrong.
->>> +# Patching owfs to do the right thing is not trivial, it's much easier to
->>> +# override the PYSITEDIR variable in make. That, in turn, is easier to do by
->>> +# setting OWFS_MAKE, otherwise both OWFS_INSTALL_STAGING_OPTS and
->>> +# OWFS_INSTALL_TARGET_OPTS would have to be overridden
->>> +OWFS_MAKE = $(MAKE) PYSITEDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
->>
->> Could we instead introduce a OWFS_MAKE_OPTS variable? Yes, that's a
->> slightly larger change, but it's our usual pattern to handle such
->> situations, so I'd prefer to have it handled like this in owfs as well.
-> 
->  You mean:
-> 
-> OWFS_MAKE_OPTS += PYSITEDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-> 
-> and then outside of the condition:
-> 
-> OWFS_MAKE = $(MAKE) $(OWFS_MAKE_OPTS)
+> diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
+> index 1ddc4f9..bf425f1 100644
+> --- a/configs/lego_ev3_defconfig
+> +++ b/configs/lego_ev3_defconfig
+> @@ -24,3 +24,8 @@ BR2_LINUX_KERNEL_UIMAGE=y
+>  BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_3=y
+>  # BR2_TARGET_ROOTFS_TAR is not set
+> +
+> +# U-Boot
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="legoev3"
 
- It'll have to be something different from _MAKE_OPTS though, because _MAKE_OPTS
-is already taken by the autotools package infra.
+You should use a specific U-Boot version, so that we're sure we'll
+continue to use the same tested version over time. See other defconfigs:
 
- Ideally, _MAKE_OPTS would be used in the autotools install commands as well.
-However, _MAKE_OPTS is sometimes used to specify the target (e.g.
-SETSERIAL_MAKE_OPTS = setserial) and sometimes to specify additional options
-(e.g. TN5250_MAKE_OPTS = CPPFLAGS=""). So it'd have to be split up into a
-_MAKE_OPTS and _MAKE_TARGET (and the existing _INSTALL_STAGING/TARGET_OPTS would
-have to becom _TARGET as well).
+wandboard_defconfig:BR2_TARGET_UBOOT=y
+wandboard_defconfig:BR2_TARGET_UBOOT_BOARDNAME="wandboard"
+wandboard_defconfig:BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+wandboard_defconfig:BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
 
- In short, what you're asking is not a trivial change :-)
+Thanks!
 
- Regards,
- Arnout
-
-> 
-> ?
-> 
->  Regards,
->  Arnout
-> 
-> 
->>
->> Thanks,
->>
->> Thomas
->>
-> 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
