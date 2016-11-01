@@ -1,66 +1,60 @@
-From: Cupertino Miranda <Cupertino.Miranda@synopsys.com>
-Date: Tue, 1 Nov 2016 15:56:38 +0000
-Subject: [Buildroot] Webtool to analyze package build fail/pass from
-	autobuild
-References: <EB86EB452ADE4B44B294F7149B8A277702219383@DE02WEMBXB.internal.synopsys.com>
- <1476882214.26312.22.camel@synopsys.com>
- <20161019151011.68cc5079@free-electrons.com>
-Message-ID: <EB86EB452ADE4B44B294F7149B8A2777022237C4@DE02WEMBXB.internal.synopsys.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue,  1 Nov 2016 17:09:57 +0100
+Subject: [Buildroot] [PATCH 0/8] Bump Freescale/NXP packages to version
+	4.1.15_2.0.0_ga
+Message-ID: <20161101161005.13302-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas and everyone,
+Hi all,
 
-I understand your concerns with Ruby.
-However, please allow me to try to demystify it a little.
+This series updates Freescale/NXP packages to be in line with the 4.1.15_2.0.0_ga release[1].
 
-The problem with either Python or Ruby languages its not necessarily the
-language itself, but the frameworks created around specific topics (like
-web development) that make code seem magical.
-This will not change if you decide to go a different path and
-re-implement in Python, PHP, or any other language.
-To efficiently be able to do this websites I did my own learning during
-years in Ruby and some frameworks.
+I don't expect this series to be in 2016.11 release necessarily, I just had some time so decided to submit it now.
 
-Unfortunately, I will not be able to contribute to this in other
-language, as it would involve too much effort to learn other framework,
-and as you know this is not my main topic. :-)
-Please notice I am in no way a web developer, and I am sure there is
-plenty of people capable to do a better job than myself.
+It was tested on Nitrogen6_MAX with current nitrogen6x_defconfig as a base.
 
-Nevertheless, in my humble opinion, unless there is someone with greater
-experience doing this kind of projects in Python, or any other language,
-in the mailing list, I would not advise to delay improving this tools
-because of a language limitation.
+Regards,
+Gary
 
-What I would like to propose would be to contribute a new web framework,
-in parallel with the existing one.
-This way nothing will be lost and you can always fall back to the
-previous version.
-Moreover, I already have managerial approval to offer myself as a
-maintainer up until someone else fells comfortable with Ruby and its
-frameworks and everything is stabilized.
+[1] http://www.nxp.com/products/software-and-tools/software-development-tools/i.mx-software-and-tools/i.mx-6-series-software-and-development-tool-resources:IMX6_SW
 
-Looking forward for your feedback.
+Gary Bisson (8):
+  configs: freescale_imx*: bump to version 4.1.15_2.0.0_ga
+  imx-vpu: bump to version 5.4.35
+  imx-gpu-viv: bump to version 5.0.11.p8.6
+  xdriver_xf86-video-imx-viv: bump version to 5.0.11.p8.6
+  kernel-module-imx-gpu-viv: bump version to 5.0.11.p8.6
+  imx-codec: bump to version 4.1.4
+  imx-parser: bump to version 4.1.4
+  imx-vpuwrap: bump to version 1.0.68
 
-Best regards,
-Cupertino
+ configs/freescale_imx6dlsabreauto_defconfig                         | 6 +++---
+ configs/freescale_imx6dlsabresd_defconfig                           | 6 +++---
+ configs/freescale_imx6qsabreauto_defconfig                          | 6 +++---
+ configs/freescale_imx6qsabresd_defconfig                            | 6 +++---
+ configs/freescale_imx6sololiteevk_defconfig                         | 6 +++---
+ configs/freescale_imx6sxsabresd_defconfig                           | 6 +++---
+ configs/freescale_imx6ulevk_defconfig                               | 6 +++---
+ configs/freescale_imx7dsabresd_defconfig                            | 6 +++---
+ package/freescale-imx/imx-codec/imx-codec.hash                      | 2 +-
+ package/freescale-imx/imx-codec/imx-codec.mk                        | 2 +-
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash                  | 2 +-
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk                    | 2 +-
+ package/freescale-imx/imx-parser/imx-parser.hash                    | 2 +-
+ package/freescale-imx/imx-parser/imx-parser.mk                      | 2 +-
+ package/freescale-imx/imx-vpu/imx-vpu.hash                          | 2 +-
+ package/freescale-imx/imx-vpu/imx-vpu.mk                            | 2 +-
+ package/freescale-imx/imx-vpuwrap/imx-vpuwrap.hash                  | 2 +-
+ package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk                    | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash        | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk          | 2 +-
+ .../xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash      | 2 +-
+ .../x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk  | 2 +-
+ 22 files changed, 38 insertions(+), 38 deletions(-)
 
-On 10/19/2016 03:10 PM, Thomas Petazzoni wrote:
-> Fully agreed.
->
-> Though one initial issue is that Cupertino wrote his logic in Ruby
-> (which I don't really read/write). The existing autobuild.buildroot.net
-> code base is some horrible PHP crap that I wrote. I'm hoping to rewrite
-> that crap someday, but definitely not in Ruby, but rather in Python,
-> which is more widely used in the Buildroot community than Ruby, and
-> also a language that I happen to read/write (even though my Python-fu
-> is really basic, it's good enough for this kind of stuff).
->
-> But I guess this is just an implementation detail, and we can work in
-> bringing Cupertino's logic in autobuild.buildroot.net somehow.
->
-> Thanks,
+-- 
+2.9.3
