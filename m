@@ -1,33 +1,37 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 1 Nov 2016 12:08:23 -0200
-Subject: [Buildroot] [PATCH] configs/imx28evk: Generate the standard
-	sdcard.img
-In-Reply-To: <20161101150354.758991a2@free-electrons.com>
-References: <1477923118-9395-1-git-send-email-festevam@gmail.com>
- <20161101150354.758991a2@free-electrons.com>
-Message-ID: <CAOMZO5DQS3XqJ79Hi1Y8+bzz-x6NKLZy_Mgzem=QKsMknPuyVw@mail.gmail.com>
+From: Matt Kraai <kraai@ftbfs.org>
+Date: Tue,  1 Nov 2016 07:09:33 -0700
+Subject: [Buildroot] [PATCH 2/2] qt5websockets: remove
+	QT5WEBSOCKETS_INSTALL_TARGET_EXAMPLES
+In-Reply-To: <20161101140933.859-1-kraai@ftbfs.org>
+References: <20161101140933.859-1-kraai@ftbfs.org>
+Message-ID: <20161101140933.859-2-kraai@ftbfs.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 1, 2016 at 12:03 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon, 31 Oct 2016 12:11:58 -0200, Fabio Estevam wrote:
->
->> diff --git a/board/freescale/imx28evk/readme.txt b/board/freescale/imx28evk/readme.txt
->> index cbf6aae..02fde06 100644
->> --- a/board/freescale/imx28evk/readme.txt
->> +++ b/board/freescale/imx28evk/readme.txt
->> @@ -37,7 +37,7 @@ and copy the bootloader, kernel and root filesystem as needed.
->>
->>  *** WARNING! The script will destroy all the card content. Use with care! ***
->
-> This warning (and the paragraph) above it was still referring to a
-> "script", but there is not script to run anymore. So I've reworded this
-> a bit, and applied.
+Signed-off-by: Matt Kraai <kraai@ftbfs.org>
+---
+ package/qt5/qt5websockets/qt5websockets.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Thanks for rewording it!
+diff --git a/package/qt5/qt5websockets/qt5websockets.mk b/package/qt5/qt5websockets/qt5websockets.mk
+index f1200c2..9e4c850 100644
+--- a/package/qt5/qt5websockets/qt5websockets.mk
++++ b/package/qt5/qt5websockets/qt5websockets.mk
+@@ -41,12 +41,6 @@ define QT5WEBSOCKETS_INSTALL_TARGET_QMLS
+ endef
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+-define QT5WEBSOCKETS_INSTALL_TARGET_EXAMPLES
+-	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/websockets $(TARGET_DIR)/usr/lib/qt/examples/
+-endef
+-endif
+-
+ ifneq ($(BR2_STATIC_LIBS),y)
+ define QT5WEBSOCKETS_INSTALL_TARGET_LIBS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebSockets.so.* $(TARGET_DIR)/usr/lib
+-- 
+2.10.2
