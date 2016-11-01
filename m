@@ -1,64 +1,78 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Wed, 30 Nov 2016 16:22:42 -0800
-Subject: [Buildroot] [PATCH] package/xen: fix build failure on x86 after
- bump to 4.7
-In-Reply-To: <20161101145415.6f9dbad5@free-electrons.com>
-References: <1477989452-26462-1-git-send-email-yann.morin.1998@free.fr>
- <20161101145415.6f9dbad5@free-electrons.com>
-Message-ID: <CAKmqyKOzeQUtaGGVWUokwJ1koim=HhrOm_+21P893oiH5XJ=Mg@mail.gmail.com>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Tue, 1 Nov 2016 15:52:46 +1100
+Subject: [Buildroot] Autobuilder for powerpc64le?
+In-Reply-To: <20161027095607.4fdc7bc5@free-electrons.com>
+References: <20161026051532.GA13988@tungsten.ozlabs.ibm.com>
+ <20161026091227.7eb2f99f@free-electrons.com>
+ <20161027035203.GA2558@tungsten.ozlabs.ibm.com>
+ <20161027095607.4fdc7bc5@free-electrons.com>
+Message-ID: <20161101045246.GA8382@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 1, 2016 at 6:54 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+On Thu, Oct 27, 2016 at 09:56:07AM +0200, Thomas Petazzoni wrote:
 > Hello,
->
-> On Tue,  1 Nov 2016 09:37:32 +0100, Yann E. MORIN wrote:
->> Since the bump to 4.7, Xen fails to build because of a double definition
->> of __OBJECT_FILE__. This is due to (who would have guessed) the weirdness
->> of their buildsystem.
->>
->> Fix that with a dirty hack: undefine the macro before defining it.
->>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Alistair Francis <alistair.francis@xilinx.com>
->> [Alistair: Tested on ARMv7 (little endian) boot.]
->> Tested-by: Alistair Francis <alistair.francis@xilinx.com>
->> Reviewed-by: Alistair Francis <alistair.francis@xilinx.com>
->> ---
->>  ...mk-fix-build-with-CFLAGS-from-environment.patch | 36 ++++++++++++++++++++++
->>  1 file changed, 36 insertions(+)
->>  create mode 100644 package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
->
-> This is indeed not the prettiest solution, but it's good enough. Has
-> one of you reported the problem upstream to the Xen people?
+> 
+> On Thu, 27 Oct 2016 14:52:03 +1100, Sam Bobroff wrote:
+> 
+> > > I'd say that both are useful, though (2) looks more interesting to me.  
+> > 
+> > At the moment, it's (2), although I might eventually try to get (1) going as
+> > well.
+> 
+> OK.
+> 
+> > >  (2) Requires adding some base toolchain configurations in
+> > >      https://git.buildroot.org/buildroot-test/tree/web/toolchains/configs/.
+> > >      One .config file per toolchain configuration, and each of them
+> > >      should be referenced in toolchain-configs.csv.  
+> > 
+> > OK! It's (2), so what do I need do next? Do I need to create the configs or
+> > provide you with some info? (If it's me, are there instructions somewhere?)
+> 
+> You clone the Git repository at
+> https://git.buildroot.org/buildroot-test/, add new .config files in
+> web/toolchains/configs/, and reference them in
+> web/toolchains/configs/toolchain-configs.csv, and then send patches on
+> the Buildroot mailing list, as usual.
 
-Sorry about the radio silence here, I was away for a bit and then super busy.
+Great, I'll send a patch shortly.
 
-If it's ok with you Yann I was planning on sending the two Xen patches
-we have to mainline Xen and at least see what they think about this
-issue. I don't have a huge amount of experience with them so I'm not
-sure if they are interested in this, but I figured it is worth a try
-anyway.
+> > Oh, also, how are the pre-built toolchains managed? I notice that some of the
+> > configs use them and some don't. Can we create ones for the new targets?
+> 
+> Yes, we can. In this case, just provide me the base Buildroot
+> configuration for those targets, and I'll build the toolchains
+> accordingly.
+> 
+> Do you want just powerpc64/glibc and powerpc64el/glibc, or are there
+> other interesting C libraries supporting powerpc64 that we should test ?
 
-Thanks,
+Just those at the moment.
 
-Alistair
+> > > Also, if you're interested in powerpc64 and powerpc64le and we indeed
+> > > add toolchain configurations in the autobuilders, it would be nice if
+> > > you could add:
+> > > 
+> > > N:	Sam Bobroff <sam.bobroff@au1.ibm.com>
+> > > F:	arch/Config.in.powerpc
+> > > 
+> > > to the DEVELOPERS file. This way, you will receive a daily e-mail with
+> > > the failures that occurred on powerpc, powerpc64 and powerpc64le (i.e
+> > > all BR2_ARCH values described in arch/Config.in.powerpc).  
+> > 
+> > I can only help with powerpc64 and powerpc64le, if that's OK then I'm happy to
+> > add myself. I can probably find someone else around here to put their hand up
+> > too. Should I just send a buildroot patch with the change?
+> 
+> We currently don't have a way of expressing interest only for powerpc64
+> but not powerpc. Is it fine if you get both results?
 
->
-> I've applied Yann's patch anyway.
->
-> Thanks a lot for the investigation and workaround!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+It is, I'll send a patch for that as soon as the autobuilders are
+in :-)
+
+Cheers,
+Sam.
