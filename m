@@ -1,64 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Nov 2016 19:46:26 +0100
-Subject: [Buildroot] auto-detecting toolchain metadata?
-In-Reply-To: <c1d1dc6d-c815-1ea2-3de9-13a1da0adaec@mentor.com>
-References: <c1d1dc6d-c815-1ea2-3de9-13a1da0adaec@mentor.com>
-Message-ID: <20161101184626.GB30593@free.fr>
+From: =?UTF-8?Q?Vincent_Stehl=c3=a9?= <vincent.stehle@laposte.net>
+Date: Tue, 1 Nov 2016 19:54:39 +0100
+Subject: [Buildroot] <DKIM> [PATCH 2/4] board/lego/ev3: Create images
+ using genimage
+In-Reply-To: <1477870346-4941-3-git-send-email-david@lechnology.com>
+References: <1477870346-4941-1-git-send-email-david@lechnology.com>
+ <1477870346-4941-3-git-send-email-david@lechnology.com>
+Message-ID: <9a91d8fb-28b4-4296-19fe-a2f16ade6b00@bergerie>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hollis, All,
+On 10/31/2016 12:32 AM, David Lechner wrote:
+> This adds a script to create SD card and flash images for LEGO MINDSTORMS
+> EV3 using the genimage tool.
 
-On 2016-11-01 11:39 -0700, Hollis Blanchard spake thusly:
-[--SNIP--]
-> Another option I'm considering is a script to try to detect the necessary
-> metadata from a given toolchain path. As far as I can see, every piece of it
-> can be detected from external observation. It could be invoked outside
-> Buildroot (modifying defconfig), but of course it could be invoked from
-> within Buildroot's toolchain recipes too. Is there a reason this is a bad
-> idea or hasn't already been done?
+Hi David,
 
-Such a script would be ideed very usefull.
+Thank you very much for your ev3 patches series!
 
-The problem is that we need to know the characteristics of the toolchain
-inside the menuconfig, so we can hide/show packages that have strict
-requirements (e.g. on gcc version for C++11, on kernel headers, on the C
-library...) but we only know the toolchain to use from inside the
-menuconfig, so it is too late to run the script.
+..
+> diff --git a/board/lego/ev3/readme.txt b/board/lego/ev3/readme.txt
+> index 7d9ec4f..878dd2e 100644
+> --- a/board/lego/ev3/readme.txt
+> +++ b/board/lego/ev3/readme.txt
+> @@ -25,9 +25,13 @@ How it works
+>  Boot process :
+>  --------------
+>  
+> -The u-boot on-board the EV3 brick has provision to boot a Linux kernel from the
+> -external ?SD card. It will try to load a uImage from the first ?SD card
+> -partition, which must be formatted with a FAT filesystem.
+> +The EV3 boots from an EEPROM. This loads whatever is on the built-in 16MB flash
+> +(usually U-Boot) and runs it. The U-Boot from the official LEGO firmware and
+> +mainline U-Boot will attempt to boot a Linux kernel from the external ?SD card.
+> +It will try to load a uImage (and optional boot.scr) from the first ?SD card
+> +partition, which must be formatted with a FAT filesystem. If no ?SD is found or
+> +it does not contain a uImage file, then the EV3 will boot the uImage from from
 
-So what Buildroot currently does is check the settings after the fact,
-because there is no way we can do otherwise.
+Very minor remark: there is a duplicate "from" at the end of the line.
 
-But if there was a script that would look at a toolchain and spit out
-the settings, like:
+As Thomas mentioned already I needed to add host-dosfstools and
+host-mtools for proper build, then the generated sdcard.img booted ok,
+and I do see weedo.ko from the ev3dev "extra" drivers.
 
-    ./support/scripts/scan-ext-toolchain /path/to/toolchain
-    BR2_USES_MUSL=y
-    BR2_GCC_ATLEAST_4_9=y
-    [and so on]
+Thanks!
 
-with that output to be used as a base defconfig, then that would be
-tremendously useful, indeed.
+Best regards,
 
-And probably not very dificult to do either...
-
-Bonus would be if we could also use that script to check the current
-configuration against the configured toolchain (that would mean
-extracting a lot of logic out of the Makefiles, which is not necessarily
-a bad idea either).
-
-Waiting for your patch... ;-]
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Vincent.
