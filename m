@@ -1,52 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 15:56:07 +0100
-Subject: [Buildroot] [PATCH] owfs: install python bindings in the
- correct location
-In-Reply-To: <990f7aa3-b4ac-5ef1-a325-155df1e821bf@mind.be>
-References: <20161101141448.14792-1-arnout@mind.be>
- <20161101153620.3b040c9f@free-electrons.com>
- <990f7aa3-b4ac-5ef1-a325-155df1e821bf@mind.be>
-Message-ID: <20161101155607.5b80018b@free-electrons.com>
+From: Matt Kraai <kraai@ftbfs.org>
+Date: Tue, 1 Nov 2016 07:57:19 -0700
+Subject: [Buildroot] [PATCH 1/2] qt5webchannel: remove
+ QT5WEBCHANNEL_INSTALL_TARGET_EXAMPLES
+In-Reply-To: <20161101153701.04acd1d2@free-electrons.com>
+References: <20161101140933.859-1-kraai@ftbfs.org>
+ <20161101153701.04acd1d2@free-electrons.com>
+Message-ID: <20161101145719.qyvdvq6wgfqx5loj@ftbfs.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Tue, 1 Nov 2016 15:51:09 +0100, Arnout Vandecappelle wrote:
-
-> > Could we instead introduce a OWFS_MAKE_OPTS variable? Yes, that's a
-> > slightly larger change, but it's our usual pattern to handle such
-> > situations, so I'd prefer to have it handled like this in owfs as well.  
+On Tue, Nov 01, 2016 at 03:37:01PM +0100, Thomas Petazzoni wrote:
+> On Tue,  1 Nov 2016 07:09:32 -0700, Matt Kraai wrote:
+> > Signed-off-by: Matt Kraai <kraai@ftbfs.org>
+> > ---
+> >  package/qt5/qt5webchannel/qt5webchannel.mk | 6 ------
+> >  1 file changed, 6 deletions(-)
 > 
->  You mean:
+> Rather than removing these, we should instead make it consistent with
+> what qt5engineio is doing, i.e install those examples. See
+> qt5engineio.mk.
 > 
-> OWFS_MAKE_OPTS += PYSITEDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-> 
-> and then outside of the condition:
-> 
-> OWFS_MAKE = $(MAKE) $(OWFS_MAKE_OPTS)
+> Could you rework your patches accordingly?
 
-Yes, considering what we have in the autotools package infrastructure
-right now.
+I've sent updated patches.  Thank you for the suggestion on a better
+approach.
 
-However, I find our usage of those variables in the infrastructure a
-bit weird:
-
- - We use <pkg>_MAKE_OPTS only during the build
-
- - We use <pkg>_INSTALL_{TARGET,STAGING}_OPTS at install time, with a
-   default value of DESTDIR=$(..._DIR) install, which has sometimes
-   caused some issues as people forgot about it.
-
-Maybe we should use <pkg>_MAKE_OPTS also at install time?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Matt                                           https://ftbfs.org/~kraai/
