@@ -1,209 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 19:27:42 +0100
-Subject: [Buildroot] [git commit] configs: freescale_imx*: bump to version
-	4.1.15_2.0.0_ga
-Message-ID: <20161101182816.AE7A880DE2@busybox.osuosl.org>
+Date: Tue, 1 Nov 2016 19:27:44 +0100
+Subject: [Buildroot] [git commit] imx-gpu-viv: bump to version 5.0.11.p8.6
+Message-ID: <20161101182816.CAE3780DE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af413afff382e49d3e2dba6e6495213d07f6145d
+commit: https://git.buildroot.net/buildroot/commit/?id=8700d722942bcc68947dc100b908281cc5ee7f7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Bug Fixes for P8.6 Graphics includes:
+
+3D: MGS-2239 Destroy EGL window surface and makecurrent new surface
+cause segmentation fault
+3D: MGS-2237 [6Q-SDB] FB met GPU STATE DUMP when testing ES30
+Conformance 100%
+3D: MGS-2101 EGLImage created with an OpenVG parent image always returns
+EGL_BAD_ACCESS
+3D: MGS-2086 Met GPU dump when do driver test under dvfs stress test
+3D: MGS-2150 optimized vertex copy for attribute upload
+3D: MGS-2100 CubeMap sub-texture copy disappears when small size and
+small x/y offset
+3D: MA-8321 testTextureViewStress200Hz fail on kk4.4.3_2.0.1 with GPU
+5.0.11p8
+3D: MA-8302 testOpenGlEsVersion fail on kk4.4.3_2.0.1 with GPU 5.0.11p8
+3D: MA-8300 Fix antutu3.0.3 2D/3D performance downgrade
+3D: MA-8104 fix Antutu6.x benchmark 3D not supported issue
+3D: MA-8110 Change NOTIFY_OK to NOTIFY_DONE in task_notify_func.
+3D: MGS-1851 fix the integer id resource leak
+3D: MGS-1845 refine es11 extension
+3D: MGS-1717 display no output when use gplay to do loopback test
+Compiler: MGS-1948 Fix UBO in shader can not support by new bsp release.
+2D-VG: MGS-2154 VG kernel driver Allocate and Free wrong memory type
+2D-VG: MGS-2089 fix gc355 vg freeze with interrupt signal
+2D-VG: MGS-2084 fix vg pbuffer memory leak
+2D-VG: MGS-1756 Portability issue: OpenVG includes "malloc.h" instead of
+"stdlib.h" for malloc() function
+2D: MA-8378 Refine g2d and gpu helper functions.
+2D: MGS-1847 fix G2D build broken with g2dBUILD_FOR_VIVANTE=1
+General: MGS-2243 Fix high impact Coverity issue in GPU kernel driver
+General: MGS-2233 fix gpu axi bus error with process kill operations
+General: MGS-2188 Fix misleading indents causing errors in gcc6
+General: MGS-1624 QNX - port gmem_info tool
+General: MGS-1630-1 5.0.11.p8 driver can't pass build with kernel 4.1 on
+Android M6.0
+
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-freescale/commit/f4e7a140
-https://github.com/Freescale/meta-freescale/commit/d4c994cb
-https://github.com/Freescale/meta-freescale/commit/7ad6dcc3
+https://github.com/Freescale/meta-freescale/commit/de26bc15
+
+This package has been tested with both X11 and Framebuffer backends:
+ # cd /usr/share/examples/viv_samples/vdk/
+ # apitrace trace --api egl ./tutorial7
+ # gmem_info
+ ... display memory use per PID ...
+ #??apitrace replay tutorial7.trace
+ #??eglretrace tutorial7.trace
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Cc: Fabio Estevam <festevam@gmail.com>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/freescale_imx6dlsabreauto_defconfig | 6 +++---
- configs/freescale_imx6dlsabresd_defconfig   | 6 +++---
- configs/freescale_imx6qsabreauto_defconfig  | 6 +++---
- configs/freescale_imx6qsabresd_defconfig    | 6 +++---
- configs/freescale_imx6sololiteevk_defconfig | 6 +++---
- configs/freescale_imx6sxsabresd_defconfig   | 6 +++---
- configs/freescale_imx6ulevk_defconfig       | 6 +++---
- configs/freescale_imx7dsabresd_defconfig    | 6 +++---
- 8 files changed, 24 insertions(+), 24 deletions(-)
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash | 2 +-
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/freescale_imx6dlsabreauto_defconfig b/configs/freescale_imx6dlsabreauto_defconfig
-index 8eb3632..ed5f67c 100644
---- a/configs/freescale_imx6dlsabreauto_defconfig
-+++ b/configs/freescale_imx6dlsabreauto_defconfig
-@@ -14,8 +14,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabreauto"
-@@ -36,4 +36,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabreauto"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-index 7e42faa..0cbe974 100644
---- a/configs/freescale_imx6dlsabresd_defconfig
-+++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -14,8 +14,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabresd"
-@@ -35,4 +35,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabresd"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
-diff --git a/configs/freescale_imx6qsabreauto_defconfig b/configs/freescale_imx6qsabreauto_defconfig
-index 4536dc4..9ae2f81 100644
---- a/configs/freescale_imx6qsabreauto_defconfig
-+++ b/configs/freescale_imx6qsabreauto_defconfig
-@@ -14,8 +14,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabreauto"
-@@ -36,4 +36,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
-diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index 4191e99..913a724 100644
---- a/configs/freescale_imx6qsabresd_defconfig
-+++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -14,8 +14,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
-@@ -36,4 +36,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
-diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
-index fa83f0c..79ebcb8 100644
---- a/configs/freescale_imx6sololiteevk_defconfig
-+++ b/configs/freescale_imx6sololiteevk_defconfig
-@@ -11,8 +11,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-evk"
-@@ -32,4 +32,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6slevk"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
-diff --git a/configs/freescale_imx6sxsabresd_defconfig b/configs/freescale_imx6sxsabresd_defconfig
-index 9f8df63..fed1a3e 100644
---- a/configs/freescale_imx6sxsabresd_defconfig
-+++ b/configs/freescale_imx6sxsabresd_defconfig
-@@ -14,8 +14,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-sdb"
-@@ -34,5 +34,5 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sxsabresd"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
-diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
-index fb860b5..d033b99 100644
---- a/configs/freescale_imx6ulevk_defconfig
-+++ b/configs/freescale_imx6ulevk_defconfig
-@@ -11,8 +11,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.1_patch"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-14x14-evk"
-@@ -22,7 +22,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6ul_14x14_evk"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+index f94d3148..6c526c5 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+@@ -1 +1 @@
+-sha256	8f79ce562d8ac1efb0a2af403b405541f98c55ae1631a18a3d7fad3224dfb44b  imx-gpu-viv-5.0.11.p8.4-hfp.bin
++sha256	caaabd59a259e29aa5b7f9d1d7f3fe71cff9336ba44904485d258baef276351f  imx-gpu-viv-5.0.11.p8.6-hfp.bin
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index c7b1d9c..961f574 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # required tools to create the microSD image
-diff --git a/configs/freescale_imx7dsabresd_defconfig b/configs/freescale_imx7dsabresd_defconfig
-index 311f8ac..4bedef1 100644
---- a/configs/freescale_imx7dsabresd_defconfig
-+++ b/configs/freescale_imx7dsabresd_defconfig
-@@ -11,8 +11,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.0.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
-@@ -26,7 +26,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.0.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
+-IMX_GPU_VIV_VERSION = 5.0.11.p8.4-hfp
++IMX_GPU_VIV_VERSION = 5.0.11.p8.6-hfp
+ IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
+ IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
  
- # required tools to create the microSD image
