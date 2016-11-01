@@ -1,44 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 14:54:15 +0100
-Subject: [Buildroot] [PATCH] package/xen: fix build failure on x86 after
- bump to 4.7
-In-Reply-To: <1477989452-26462-1-git-send-email-yann.morin.1998@free.fr>
-References: <1477989452-26462-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20161101145415.6f9dbad5@free-electrons.com>
+Date: Tue, 1 Nov 2016 14:54:49 +0100
+Subject: [Buildroot] [git commit] package/opencv: update sysctl patch
+Message-ID: <20161101135742.A9D018180E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a1e30d9365f3ecdf6e4aa97ad4b29c26dba2f8a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  1 Nov 2016 09:37:32 +0100, Yann E. MORIN wrote:
-> Since the bump to 4.7, Xen fails to build because of a double definition
-> of __OBJECT_FILE__. This is due to (who would have guessed) the weirdness
-> of their buildsystem.
-> 
-> Fix that with a dirty hack: undefine the macro before defining it.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Alistair Francis <alistair.francis@xilinx.com>
-> [Alistair: Tested on ARMv7 (little endian) boot.]
-> Tested-by: Alistair Francis <alistair.francis@xilinx.com>
-> Reviewed-by: Alistair Francis <alistair.francis@xilinx.com>
-> ---
->  ...mk-fix-build-with-CFLAGS-from-environment.patch | 36 ++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
+Fixes:
+  http://autobuild.buildroot.net/results/845/845f5e906fda3e87a2fc439a62baede44842283b/
 
-This is indeed not the prettiest solution, but it's good enough. Has
-one of you reported the problem upstream to the Xen people?
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/opencv/0002-avoid-sysctl_h.patch | 48 ++++++++++++++++++++++++++------
+ 1 file changed, 39 insertions(+), 9 deletions(-)
 
-I've applied Yann's patch anyway.
-
-Thanks a lot for the investigation and workaround!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/opencv/0002-avoid-sysctl_h.patch b/package/opencv/0002-avoid-sysctl_h.patch
+index 6032205..b63ba55 100644
+--- a/package/opencv/0002-avoid-sysctl_h.patch
++++ b/package/opencv/0002-avoid-sysctl_h.patch
+@@ -1,13 +1,24 @@
+-From upstream master branch:
+-https://github.com/Itseez/opencv/blob/master/modules/core/src/
++From e5e71c31d54562f9c67a8226f0bfc08ad24b81cf Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Tue, 1 Nov 2016 09:30:23 +0100
++Subject: [PATCH 2/4] From upstream master branch:
++ https://github.com/Itseez/opencv/blob/master/modules/core/src/
+ 
+ Do not include sysctl.h targeting Linux systems.
+ 
+ Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++[Samuel Martin: convert patch to git diff, add cap_ffmpeg_impl.hpp fix]
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ modules/core/src/parallel.cpp           | 2 +-
++ modules/core/src/system.cpp             | 2 +-
++ modules/highgui/src/cap_ffmpeg_impl.hpp | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
+ 
+-diff -Nur opencv-2.4.12.3.orig/modules/core/src/parallel.cpp opencv-2.4.12.3/modules/core/src/parallel.cpp
+---- opencv-2.4.12.3.orig/modules/core/src/parallel.cpp	2015-10-26 08:56:34.000000000 +0100
+-+++ opencv-2.4.12.3/modules/core/src/parallel.cpp	2016-04-05 12:59:37.750143762 +0200
++diff --git a/modules/core/src/parallel.cpp b/modules/core/src/parallel.cpp
++index 4459a24..0374876 100644
++--- a/modules/core/src/parallel.cpp
+++++ b/modules/core/src/parallel.cpp
+ @@ -56,7 +56,7 @@
+      #include <sys/types.h>
+      #if defined ANDROID
+@@ -17,10 +28,11 @@ diff -Nur opencv-2.4.12.3.orig/modules/core/src/parallel.cpp opencv-2.4.12.3/mod
+          #include <sys/sysctl.h>
+      #endif
+  #endif
+-diff -Nur opencv-2.4.12.3.orig/modules/core/src/system.cpp opencv-2.4.12.3/modules/core/src/system.cpp
+---- opencv-2.4.12.3.orig/modules/core/src/system.cpp	2015-10-26 08:56:34.000000000 +0100
+-+++ opencv-2.4.12.3/modules/core/src/system.cpp	2016-04-05 13:05:22.468323717 +0200
+-@@ -163,7 +163,7 @@
++diff --git a/modules/core/src/system.cpp b/modules/core/src/system.cpp
++index 9a7b262..731f090 100644
++--- a/modules/core/src/system.cpp
+++++ b/modules/core/src/system.cpp
++@@ -163,7 +163,7 @@ std::wstring GetTempFileNameWinRT(std::wstring prefix)
+  #include <sys/types.h>
+  #if defined ANDROID
+  #include <sys/sysconf.h>
+@@ -29,3 +41,21 @@ diff -Nur opencv-2.4.12.3.orig/modules/core/src/system.cpp opencv-2.4.12.3/modul
+  #include <sys/sysctl.h>
+  #endif
+  #endif
++diff --git a/modules/highgui/src/cap_ffmpeg_impl.hpp b/modules/highgui/src/cap_ffmpeg_impl.hpp
++index dc3e10d..23674ff 100644
++--- a/modules/highgui/src/cap_ffmpeg_impl.hpp
+++++ b/modules/highgui/src/cap_ffmpeg_impl.hpp
++@@ -126,9 +126,9 @@ extern "C" {
++     #include <unistd.h>
++     #include <stdio.h>
++     #include <sys/types.h>
++-    #include <sys/sysctl.h>
++     #include <sys/time.h>
++ #if defined __APPLE__
+++    #include <sys/sysctl.h>
++     #include <mach/clock.h>
++     #include <mach/mach.h>
++ #endif
++-- 
++2.10.2
++
