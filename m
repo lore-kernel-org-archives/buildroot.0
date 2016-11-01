@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 14:58:34 +0100
-Subject: [Buildroot] [git commit] git: bump version to 2.10.2
-Message-ID: <20161101140028.97D0D81974@busybox.osuosl.org>
+Date: Tue, 1 Nov 2016 14:58:35 +0100
+Subject: [Buildroot] [git commit] nano: bump version to 2.7.1
+Message-ID: <20161101140028.94B25817FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcf7a64b463cb418b963665f7a8bfdbdeda10f5f
+commit: https://git.buildroot.net/buildroot/commit/?id=91081e2a6b8e0cc68de7ad1e41cb1fd06de7c0f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 73bb9cb..0815641 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index fc628eb..cb411b7 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
 @@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 a9c32df9061cfc2c194ecaa0357ba273c1f24a0dbf0d856b03dcedafcd0a4dc6  git-2.10.1.tar.xz
-+sha256 94802903dd707d85ca3b9a2be35e936a54ce86375f52c6a789efe7ce7e238671  git-2.10.2.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 8bc2907..a7768ac 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally calculated after checking pgp signature
+-sha256 f86af39514ae74e20bef3c29cd01d1090a9aca772a70e9c9f9e70c3d14b39521  nano-2.7.0.tar.xz
++sha256 df5cbe69831d7394c0a32fb27373ab313335ea4dc586d6f4be4081eb1de857cd  nano-2.7.1.tar.xz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 984a5fc..88e3cdb 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GIT_VERSION = 2.10.1
-+GIT_VERSION = 2.10.2
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
+ NANO_VERSION_MAJOR = 2.7
+-NANO_VERSION = $(NANO_VERSION_MAJOR).0
++NANO_VERSION = $(NANO_VERSION_MAJOR).1
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPLv3+
