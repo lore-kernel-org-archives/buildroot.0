@@ -1,53 +1,87 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue,  1 Nov 2016 17:09:59 +0100
-Subject: [Buildroot] [PATCH 2/8] imx-vpu: bump to version 5.4.35
+Date: Tue,  1 Nov 2016 17:10:00 +0100
+Subject: [Buildroot] [PATCH 3/8] imx-gpu-viv: bump to version 5.0.11.p8.6
 In-Reply-To: <20161101161005.13302-1-gary.bisson@boundarydevices.com>
 References: <20161101161005.13302-1-gary.bisson@boundarydevices.com>
-Message-ID: <20161101161005.13302-3-gary.bisson@boundarydevices.com>
+Message-ID: <20161101161005.13302-4-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-Coverity fixes for resources leaks, null dereference, string overflows
-and checking return.
+Bug Fixes for P8.6 Graphics includes:
+
+3D: MGS-2239 Destroy EGL window surface and makecurrent new surface
+cause segmentation fault
+3D: MGS-2237 [6Q-SDB] FB met GPU STATE DUMP when testing ES30
+Conformance 100%
+3D: MGS-2101 EGLImage created with an OpenVG parent image always returns
+EGL_BAD_ACCESS
+3D: MGS-2086 Met GPU dump when do driver test under dvfs stress test
+3D: MGS-2150 optimized vertex copy for attribute upload
+3D: MGS-2100 CubeMap sub-texture copy disappears when small size and
+small x/y offset
+3D: MA-8321 testTextureViewStress200Hz fail on kk4.4.3_2.0.1 with GPU
+5.0.11p8
+3D: MA-8302 testOpenGlEsVersion fail on kk4.4.3_2.0.1 with GPU 5.0.11p8
+3D: MA-8300 Fix antutu3.0.3 2D/3D performance downgrade
+3D: MA-8104 fix Antutu6.x benchmark 3D not supported issue
+3D: MA-8110 Change NOTIFY_OK to NOTIFY_DONE in task_notify_func.
+3D: MGS-1851 fix the integer id resource leak
+3D: MGS-1845 refine es11 extension
+3D: MGS-1717 display no output when use gplay to do loopback test
+Compiler: MGS-1948 Fix UBO in shader can not support by new bsp release.
+2D-VG: MGS-2154 VG kernel driver Allocate and Free wrong memory type
+2D-VG: MGS-2089 fix gc355 vg freeze with interrupt signal
+2D-VG: MGS-2084 fix vg pbuffer memory leak
+2D-VG: MGS-1756 Portability issue: OpenVG includes "malloc.h" instead of
+"stdlib.h" for malloc() function
+2D: MA-8378 Refine g2d and gpu helper functions.
+2D: MGS-1847 fix G2D build broken with g2dBUILD_FOR_VIVANTE=1
+General: MGS-2243 Fix high impact Coverity issue in GPU kernel driver
+General: MGS-2233 fix gpu axi bus error with process kill operations
+General: MGS-2188 Fix misleading indents causing errors in gcc6
+General: MGS-1624 QNX - port gmem_info tool
+General: MGS-1630-1 5.0.11.p8 driver can't pass build with kernel 4.1 on
+Android M6.0
 
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-freescale/commit/b138b5b0
+https://github.com/Freescale/meta-freescale/commit/de26bc15
 
-Implicitly tested through gstreamer as the plugins rely on it:
- # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
- # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
-       matroskademux ! imxvpudec ! imxipuvideosink
+This package has been tested with both X11 and Framebuffer backends:
+ # cd /usr/share/examples/viv_samples/vdk/
+ # apitrace trace --api egl ./tutorial7
+ # gmem_info
+ ... display memory use per PID ...
+ #?apitrace replay tutorial7.trace
+ #?eglretrace tutorial7.trace
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/freescale-imx/imx-vpu/imx-vpu.hash | 2 +-
- package/freescale-imx/imx-vpu/imx-vpu.mk   | 2 +-
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash | 2 +-
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash b/package/freescale-imx/imx-vpu/imx-vpu.hash
-index 67ebaf2..b3d617d 100644
---- a/package/freescale-imx/imx-vpu/imx-vpu.hash
-+++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	2e670ef2337a5dbe6c32fa07128ad9aad32afdbf472c23d44133245ec6a66d46  imx-vpu-5.4.33.bin
-+sha256	e1d6550426dfc59e4fd0352f1d312ea7eff5dcf18974f923ed7a85007cb40e27  imx-vpu-5.4.35.bin
-diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
-index 09ff5a8..0b464d8 100644
---- a/package/freescale-imx/imx-vpu/imx-vpu.mk
-+++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+index f94d3148..6c526c5 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+@@ -1 +1 @@
+-sha256	8f79ce562d8ac1efb0a2af403b405541f98c55ae1631a18a3d7fad3224dfb44b  imx-gpu-viv-5.0.11.p8.4-hfp.bin
++sha256	caaabd59a259e29aa5b7f9d1d7f3fe71cff9336ba44904485d258baef276351f  imx-gpu-viv-5.0.11.p8.6-hfp.bin
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index c7b1d9c..961f574 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMX_VPU_VERSION = 5.4.33
-+IMX_VPU_VERSION = 5.4.35
- IMX_VPU_SITE = $(FREESCALE_IMX_SITE)
- IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
+-IMX_GPU_VIV_VERSION = 5.0.11.p8.4-hfp
++IMX_GPU_VIV_VERSION = 5.0.11.p8.6-hfp
+ IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
+ IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
  
 -- 
 2.9.3
