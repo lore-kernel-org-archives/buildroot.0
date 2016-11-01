@@ -1,52 +1,72 @@
-From: =?UTF-8?Q?Vincent_Stehl=c3=a9?= <vincent.stehle@laposte.net>
-Date: Tue, 1 Nov 2016 19:54:39 +0100
-Subject: [Buildroot] <DKIM> [PATCH 2/4] board/lego/ev3: Create images
- using genimage
-In-Reply-To: <1477870346-4941-3-git-send-email-david@lechnology.com>
-References: <1477870346-4941-1-git-send-email-david@lechnology.com>
- <1477870346-4941-3-git-send-email-david@lechnology.com>
-Message-ID: <9a91d8fb-28b4-4296-19fe-a2f16ade6b00@bergerie>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  1 Nov 2016 20:24:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+	mesa3d-headers}: bump version to 13.0.0
+Message-ID: <20161101192451.16248-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/31/2016 12:32 AM, David Lechner wrote:
-> This adds a script to create SD card and flash images for LEGO MINDSTORMS
-> EV3 using the genimage tool.
+Udev support was removed upstream:
+https://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=13.0&id=f9f7e44c94f7eee4778768adf7afffba6c0581e7
 
-Hi David,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 9 +--------
+ 3 files changed, 4 insertions(+), 11 deletions(-)
 
-Thank you very much for your ev3 patches series!
-
-..
-> diff --git a/board/lego/ev3/readme.txt b/board/lego/ev3/readme.txt
-> index 7d9ec4f..878dd2e 100644
-> --- a/board/lego/ev3/readme.txt
-> +++ b/board/lego/ev3/readme.txt
-> @@ -25,9 +25,13 @@ How it works
->  Boot process :
->  --------------
->  
-> -The u-boot on-board the EV3 brick has provision to boot a Linux kernel from the
-> -external ?SD card. It will try to load a uImage from the first ?SD card
-> -partition, which must be formatted with a FAT filesystem.
-> +The EV3 boots from an EEPROM. This loads whatever is on the built-in 16MB flash
-> +(usually U-Boot) and runs it. The U-Boot from the official LEGO firmware and
-> +mainline U-Boot will attempt to boot a Linux kernel from the external ?SD card.
-> +It will try to load a uImage (and optional boot.scr) from the first ?SD card
-> +partition, which must be formatted with a FAT filesystem. If no ?SD is found or
-> +it does not contain a uImage file, then the EV3 will boot the uImage from from
-
-Very minor remark: there is a duplicate "from" at the end of the line.
-
-As Thomas mentioned already I needed to add host-dosfstools and
-host-mtools for proper build, then the generated sdcard.img booted ok,
-and I do see weedo.ko from the ev3dev "extra" drivers.
-
-Thanks!
-
-Best regards,
-
-Vincent.
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 3080afe..b3b80eb 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 12.0.3
++MESA3D_HEADERS_VERSION = 13.0.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 09923fd..7dbe1ac 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2016-September/000236.html
+-sha256 1dc86dd9b51272eee1fad3df65e18cda2e556ef1bc0b6e07cd750b9757f493b1  mesa-12.0.3.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2016-November/000264.html
++sha256 94edb4ebff82066a68be79d9c2627f15995e1fe10f67ab3fc63deb842027d727  mesa-13.0.0.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1aa82d8..e17db5c 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 12.0.3
++MESA3D_VERSION = 13.0.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
+@@ -41,13 +41,6 @@ MESA3D_DEPENDENCIES += libsha1
+ MESA3D_CONF_OPTS += --with-sha1=libsha1
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+-MESA3D_DEPENDENCIES += udev
+-MESA3D_CONF_OPTS += --disable-sysfs
+-else
+-MESA3D_CONF_OPTS += --enable-sysfs
+-endif
+-
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_DEPENDENCIES += \
+ 	xproto_xf86driproto \
+-- 
+2.10.1
