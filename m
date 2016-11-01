@@ -1,52 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 19:27:48 +0100
-Subject: [Buildroot] [git commit] imx-codec: bump to version 4.1.4
-Message-ID: <20161101182817.042BA80DE2@busybox.osuosl.org>
+Date: Tue, 1 Nov 2016 19:27:43 +0100
+Subject: [Buildroot] [git commit] imx-vpu: bump to version 5.4.35
+Message-ID: <20161101182816.BCBE880DE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5852fd53de9384e369e558b1d4723e1e28052166
+commit: https://git.buildroot.net/buildroot/commit/?id=e95190db7c9a7093ab0978f3ce327f4d6d5afd03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog
-- Upgrade license chksum to v14 EULA
-- Check for lib_src_ppp_arm11_elinux.so library before removing
-- Fixes for error hadling and robustness
+Changelog:
+Coverity fixes for resources leaks, null dereference, string overflows
+and checking return.
 
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-freescale/commit/78856879
+https://github.com/Freescale/meta-freescale/commit/b138b5b0
 
-Implicitly tested through gstreamer as the 0.10 plugin relies on it:
+Implicitly tested through gstreamer as the plugins rely on it:
  # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
+ # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+       matroskademux ! imxvpudec ! imxipuvideosink
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freescale-imx/imx-codec/imx-codec.hash | 2 +-
- package/freescale-imx/imx-codec/imx-codec.mk   | 2 +-
+ package/freescale-imx/imx-vpu/imx-vpu.hash | 2 +-
+ package/freescale-imx/imx-vpu/imx-vpu.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/imx-codec/imx-codec.hash b/package/freescale-imx/imx-codec/imx-codec.hash
-index 39bddc1..2bb7a24 100644
---- a/package/freescale-imx/imx-codec/imx-codec.hash
-+++ b/package/freescale-imx/imx-codec/imx-codec.hash
+diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash b/package/freescale-imx/imx-vpu/imx-vpu.hash
+index 67ebaf2..b3d617d 100644
+--- a/package/freescale-imx/imx-vpu/imx-vpu.hash
++++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
 @@ -1,2 +1,2 @@
- # locally computed
--sha256	62bda182143cde9743cba0eb2a1c315a53cb434294605742f9fc364219958888  imx-codec-4.0.9.bin
-+sha256	98fe71cb44f7e858c64c5eda81741ed02f40afaadc3d4ed1e693c7d1e684b81d  imx-codec-4.1.4.bin
-diff --git a/package/freescale-imx/imx-codec/imx-codec.mk b/package/freescale-imx/imx-codec/imx-codec.mk
-index 4840872..911ad8b 100644
---- a/package/freescale-imx/imx-codec/imx-codec.mk
-+++ b/package/freescale-imx/imx-codec/imx-codec.mk
+ # Locally computed
+-sha256	2e670ef2337a5dbe6c32fa07128ad9aad32afdbf472c23d44133245ec6a66d46  imx-vpu-5.4.33.bin
++sha256	e1d6550426dfc59e4fd0352f1d312ea7eff5dcf18974f923ed7a85007cb40e27  imx-vpu-5.4.35.bin
+diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
+index 09ff5a8..0b464d8 100644
+--- a/package/freescale-imx/imx-vpu/imx-vpu.mk
++++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMX_CODEC_VERSION = 4.0.9
-+IMX_CODEC_VERSION = 4.1.4
- IMX_CODEC_SITE = $(FREESCALE_IMX_SITE)
- IMX_CODEC_SOURCE = imx-codec-$(IMX_CODEC_VERSION).bin
- IMX_CODEC_INSTALL_STAGING = YES
+-IMX_VPU_VERSION = 5.4.33
++IMX_VPU_VERSION = 5.4.35
+ IMX_VPU_SITE = $(FREESCALE_IMX_SITE)
+ IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
+ 
