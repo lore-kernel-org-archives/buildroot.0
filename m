@@ -1,40 +1,33 @@
-From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-Date: Tue,  1 Nov 2016 17:33:52 -0200
-Subject: [Buildroot] [PATCH 1/3] support/download/git: log checked out sha1
-Message-ID: <20161101193354.8716-1-ricardo.martincoski@datacom.ind.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Nov 2016 21:19:44 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add Sam Bobroff as
+	PowerPC-interested person
+Message-ID: <20161101202021.BA01281922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In preparation to have automated tests for this script, display the
-checked out sha1 in the build log.
+commit: https://git.buildroot.net/buildroot/commit/?id=adec13992ce2ee333353bac71faef18ea22f7974
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
----
-Another solution would be to use an environment variable set by the test
-to print that info, e.g. if [ "1" == "${GIT_DOWNLOAD_AUTOTEST}" ]; then
----
- support/download/git | 6 ++++++
- 1 file changed, 6 insertions(+)
+This will allow Sam to receive PowerPC64(le) related build failures.
 
-diff --git a/support/download/git b/support/download/git
-index 7921411..7c44c65 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -85,6 +85,12 @@ if [ ${recurse} -eq 1 ]; then
-     _git submodule update --init --recursive
- fi
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d0a51da..5b3a986 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1285,6 +1285,7 @@ F:	package/qdecoder/
+ F:	package/qlibc/
  
-+# Log the sha1. It can be used for automated tests and debug.
-+if [ -z ${verbose} ]; then
-+    sha1=$(_git rev-parse HEAD)
-+    printf "Checked out '%s'.\n" "${sha1}"
-+fi
-+
- # We do not need the .git dir; we keep other .git files, in case they
- # are the only files in their directory.
- rm -rf .git
--- 
-2.9.3
+ N:	Sam Bobroff <sam.bobroff@au1.ibm.com>
++F:	arch/Config.in.powerpc
+ F:	package/librtas/
+ 
+ N:	Samuel Martin <s.martin49@gmail.com>
