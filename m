@@ -1,10 +1,10 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue,  1 Nov 2016 17:10:01 +0100
-Subject: [Buildroot] [PATCH 4/8] xdriver_xf86-video-imx-viv: bump version to
+Date: Tue,  1 Nov 2016 17:10:02 +0100
+Subject: [Buildroot] [PATCH 5/8] kernel-module-imx-gpu-viv: bump version to
 	5.0.11.p8.6
 In-Reply-To: <20161101161005.13302-1-gary.bisson@boundarydevices.com>
 References: <20161101161005.13302-1-gary.bisson@boundarydevices.com>
-Message-ID: <20161101161005.13302-5-gary.bisson@boundarydevices.com>
+Message-ID: <20161101161005.13302-6-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,44 +12,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-freescale/commit/0c40332c
+https://github.com/Freescale/meta-freescale/commit/51148d70
 
-The following xorg.conf was used in order to force the use of the
-vivante module:
-https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
-
-Note that the X server must be started with the "noreset" option to
-avoid crashes when closing X apps.
-Tested with:
- # X -noreset &
+This package has been tested with the following commands:
+ # modprobe galcore
  # cd /usr/share/examples/viv_samples/vdk/
- # DISPLAY=:0 ./tutorial7
+ # ./tutorial7
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- .../x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash    | 2 +-
- package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk  | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash            | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk              | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
-index 2cdf2d0..7d7da84 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
-@@ -1 +1 @@
--sha256	ddb6de9e00ce0b22f6c905eaf6694424413eade53ef6cd3b36e20ac99dcc0e0f  xserver-xorg-video-imx-viv-5.0.11.p8.4.tar.gz
-+sha256	3eed38193e31bb5ba8d2c817bd9b4f6e2fe7540d2cab36de9098cb4f11946a9f  xserver-xorg-video-imx-viv-5.0.11.p8.6.tar.gz
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-index 9ce08ef..2a3e997 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index 6d810ea..9c43ea3 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256	6618b36baefd591e94a41167fa50d325c3df473918bceef027ca5a067aa1cffd  kernel-module-imx-gpu-viv-aa83874b916cf5655cb90498b1ea5691537fdbc8.tar.gz
++sha256	51dd137bd67ae991fa58fff4151c6bd7dd46bafd613f43e83d8403ec37217a90  kernel-module-imx-gpu-viv-bfa78b095a892705a09afe9514fc5d236b3124d2.tar.gz
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index 11c6768..bcbd8d2 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 5.0.11.p8.4
-+XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 5.0.11.p8.6
- XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
- XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
- XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv xserver_xorg-server \
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = aa83874b916cf5655cb90498b1ea5691537fdbc8
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = bfa78b095a892705a09afe9514fc5d236b3124d2
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPLv2
 -- 
 2.9.3
