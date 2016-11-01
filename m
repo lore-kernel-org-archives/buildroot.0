@@ -1,55 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 15:30:47 +0100
-Subject: [Buildroot] [git commit] lttng-modules: bump to version 2.8.3
-Message-ID: <20161101143108.D6E16818C0@busybox.osuosl.org>
+Date: Tue, 1 Nov 2016 15:36:20 +0100
+Subject: [Buildroot] [PATCH] owfs: install python bindings in the
+ correct location
+In-Reply-To: <20161101141448.14792-1-arnout@mind.be>
+References: <20161101141448.14792-1-arnout@mind.be>
+Message-ID: <20161101153620.3b040c9f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83676c3117130ae6e738105937aed12a4a7715a3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-LTTng-modules, starting from v2.8, has a mechanism to be built directly
-into a Linux kernel image, that is, not as loadable kernel modules. For
-this the `CONFIG_LTTNG_CLOCK_PLUGIN_TEST` and `CONFIG_LTTNG` Make
-variables were introduced. They need to be explicitly set to `m` here to
-build the project as loadable kernel modules.
+On Tue, 1 Nov 2016 15:14:48 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
 
-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lttng-modules/lttng-modules.hash | 5 +++--
- package/lttng-modules/lttng-modules.mk   | 3 ++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+> +# The configure scripts finds PYSITEDIR as the python_lib directory of
+> +# host-python, and then prepends DESTDIR in front of it. So we end up
+> +# installing things in $(TARGET_DIR)/$(HOST_DIR)/usr/lib/python which is
+> +# clearly wrong.
+> +# Patching owfs to do the right thing is not trivial, it's much easier to
+> +# override the PYSITEDIR variable in make. That, in turn, is easier to do by
+> +# setting OWFS_MAKE, otherwise both OWFS_INSTALL_STAGING_OPTS and
+> +# OWFS_INSTALL_TARGET_OPTS would have to be overridden
+> +OWFS_MAKE = $(MAKE) PYSITEDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
 
-diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
-index 2d50287..ce725ec 100644
---- a/package/lttng-modules/lttng-modules.hash
-+++ b/package/lttng-modules/lttng-modules.hash
-@@ -1,2 +1,3 @@
--# from http://lttng.org/files/lttng-tools/lttng-modules-2.7.1.tar.bz2.sha1
--sha1  38c42ec89b4966c7a4cc04aea75f5841634d8d66  lttng-modules-2.7.1.tar.bz2
-+# From http://lttng.org/files/lttng-modules/lttng-modules-2.8.3.tar.bz2.{md5,sha1}
-+md5   424354c4834d20235dacd9a1fd7653b6  lttng-modules-2.8.3.tar.bz2
-+sha1  862705784a54962f70226004f1fd0bf77f73f10f  lttng-modules-2.8.3.tar.bz2
-diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-index 5d0c422..9ecf572 100644
---- a/package/lttng-modules/lttng-modules.mk
-+++ b/package/lttng-modules/lttng-modules.mk
-@@ -4,11 +4,12 @@
- #
- ################################################################################
- 
--LTTNG_MODULES_VERSION = 2.7.1
-+LTTNG_MODULES_VERSION = 2.8.3
- LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
- LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
- LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
- LTTNG_MODULES_LICENSE_FILES = lgpl-2.1.txt gpl-2.0.txt mit-license.txt LICENSE
-+LTTNG_MODULES_MODULE_MAKE_OPTS = CONFIG_LTTNG=m CONFIG_LTTNG_CLOCK_PLUGIN_TEST=m
- 
- $(eval $(kernel-module))
- $(eval $(generic-package))
+Could we instead introduce a OWFS_MAKE_OPTS variable? Yes, that's a
+slightly larger change, but it's our usual pattern to handle such
+situations, so I'd prefer to have it handled like this in owfs as well.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
