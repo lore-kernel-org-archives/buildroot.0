@@ -1,41 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 16:22:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python: Remove runtime library
- paths
-In-Reply-To: <20161030094226.32070-1-bernd.kuhls@t-online.de>
-References: <20161030094226.32070-1-bernd.kuhls@t-online.de>
-Message-ID: <20161101162238.7fd4264b@free-electrons.com>
+Date: Tue, 1 Nov 2016 16:24:06 +0100
+Subject: [Buildroot] [git commit] package/transmission: fix SITE url
+Message-ID: <20161101152519.CDA27817EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=92fa50ae5107a5b3999a91dc2e3775582aaf6878
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 30 Oct 2016 10:42:26 +0100, Bernd Kuhls wrote:
-> This patch re-adds the rebased version of python-2.7-011-no-rpath.patch
-> which was removed with the 2.7.6 bump:
-> https://git.busybox.net/buildroot/commit/package/python?id=7e960dc9da56d4a484b5480746aaf617ca491274
-> 
-> Without this patch usr/lib/python2.7/lib-dynload/_bsddb.so contains
-> 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/python2.7/lib-dynload/_bsddb.so | grep RPATH
->  0x0000000f (RPATH)                      Library rpath: [/home/buildroot/br2/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/lib]
-> 
-> With this patch:
-> 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/python2.7/lib-dynload/_bsddb.so | grep RPATH
-> $
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/transmission/transmission.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I think the idea for rpath pollution is to have a global solution with
-patchelf to remove bogus rpath from all target binaries. Samuel Martin
-is working on this, maybe you can help?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index e0cfc2d..923ba40 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ TRANSMISSION_VERSION = 2.92
+-TRANSMISSION_SITE = http://download.transmissionbt.com/files
++TRANSMISSION_SITE = https://github.com/transmission/transmission-releases/raw/master
+ TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
+ TRANSMISSION_DEPENDENCIES = \
+ 	host-pkgconf \
