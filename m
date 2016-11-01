@@ -1,34 +1,84 @@
-From: Matt Kraai <kraai@ftbfs.org>
-Date: Tue, 1 Nov 2016 07:57:19 -0700
-Subject: [Buildroot] [PATCH 1/2] qt5webchannel: remove
- QT5WEBCHANNEL_INSTALL_TARGET_EXAMPLES
-In-Reply-To: <20161101153701.04acd1d2@free-electrons.com>
-References: <20161101140933.859-1-kraai@ftbfs.org>
- <20161101153701.04acd1d2@free-electrons.com>
-Message-ID: <20161101145719.qyvdvq6wgfqx5loj@ftbfs.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Nov 2016 16:00:14 +0100
+Subject: [Buildroot] [PATCH] owfs: install python bindings in the
+ correct location
+In-Reply-To: <990f7aa3-b4ac-5ef1-a325-155df1e821bf@mind.be>
+References: <20161101141448.14792-1-arnout@mind.be>
+ <20161101153620.3b040c9f@free-electrons.com>
+ <990f7aa3-b4ac-5ef1-a325-155df1e821bf@mind.be>
+Message-ID: <9b48b0e7-c638-e41d-ee76-e4e6e99b44d6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-On Tue, Nov 01, 2016 at 03:37:01PM +0100, Thomas Petazzoni wrote:
-> On Tue,  1 Nov 2016 07:09:32 -0700, Matt Kraai wrote:
-> > Signed-off-by: Matt Kraai <kraai@ftbfs.org>
-> > ---
-> >  package/qt5/qt5webchannel/qt5webchannel.mk | 6 ------
-> >  1 file changed, 6 deletions(-)
-> 
-> Rather than removing these, we should instead make it consistent with
-> what qt5engineio is doing, i.e install those examples. See
-> qt5engineio.mk.
-> 
-> Could you rework your patches accordingly?
 
-I've sent updated patches.  Thank you for the suggestion on a better
-approach.
+On 01-11-16 15:51, Arnout Vandecappelle wrote:
+> 
+> 
+> On 01-11-16 15:36, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> On Tue, 1 Nov 2016 15:14:48 +0100, Arnout Vandecappelle
+>> (Essensium/Mind) wrote:
+>>
+>>> +# The configure scripts finds PYSITEDIR as the python_lib directory of
+>>> +# host-python, and then prepends DESTDIR in front of it. So we end up
+>>> +# installing things in $(TARGET_DIR)/$(HOST_DIR)/usr/lib/python which is
+>>> +# clearly wrong.
+>>> +# Patching owfs to do the right thing is not trivial, it's much easier to
+>>> +# override the PYSITEDIR variable in make. That, in turn, is easier to do by
+>>> +# setting OWFS_MAKE, otherwise both OWFS_INSTALL_STAGING_OPTS and
+>>> +# OWFS_INSTALL_TARGET_OPTS would have to be overridden
+>>> +OWFS_MAKE = $(MAKE) PYSITEDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+>>
+>> Could we instead introduce a OWFS_MAKE_OPTS variable? Yes, that's a
+>> slightly larger change, but it's our usual pattern to handle such
+>> situations, so I'd prefer to have it handled like this in owfs as well.
+> 
+>  You mean:
+> 
+> OWFS_MAKE_OPTS += PYSITEDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+> 
+> and then outside of the condition:
+> 
+> OWFS_MAKE = $(MAKE) $(OWFS_MAKE_OPTS)
+
+ It'll have to be something different from _MAKE_OPTS though, because _MAKE_OPTS
+is already taken by the autotools package infra.
+
+ Ideally, _MAKE_OPTS would be used in the autotools install commands as well.
+However, _MAKE_OPTS is sometimes used to specify the target (e.g.
+SETSERIAL_MAKE_OPTS = setserial) and sometimes to specify additional options
+(e.g. TN5250_MAKE_OPTS = CPPFLAGS=""). So it'd have to be split up into a
+_MAKE_OPTS and _MAKE_TARGET (and the existing _INSTALL_STAGING/TARGET_OPTS would
+have to becom _TARGET as well).
+
+ In short, what you're asking is not a trivial change :-)
+
+ Regards,
+ Arnout
+
+> 
+> ?
+> 
+>  Regards,
+>  Arnout
+> 
+> 
+>>
+>> Thanks,
+>>
+>> Thomas
+>>
+> 
 
 -- 
-Matt                                           https://ftbfs.org/~kraai/
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
