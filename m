@@ -1,41 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 19:29:25 +0100
-Subject: [Buildroot] [PATCH 0/8] Bump Freescale/NXP packages to version
- 4.1.15_2.0.0_ga
-In-Reply-To: <20161101161005.13302-1-gary.bisson@boundarydevices.com>
-References: <20161101161005.13302-1-gary.bisson@boundarydevices.com>
-Message-ID: <20161101192925.6370c3ab@free-electrons.com>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Tue, 1 Nov 2016 11:39:35 -0700
+Subject: [Buildroot] auto-detecting toolchain metadata?
+Message-ID: <c1d1dc6d-c815-1ea2-3de9-13a1da0adaec@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+I'm running into a problem where I'm distributing a Buildroot-based tree 
+(config + scripts) to some users. They really only use Linux, 
+bootloader, and busybox, and since they've been building those pieces 
+for a while, they already have toolchains laying around.
 
-On Tue,  1 Nov 2016 17:09:57 +0100, Gary Bisson wrote:
+I'd like to let them use whatever toolchain they've been using, and 
+ideally that would be as simple as "change BR2_TOOLCHAIN_EXTERNAL_PATH 
+in defconfig". Of course, it's not that simple; Buildroot wants more 
+information: gcc version, kernel headers, target tuple, etc. I suspect 
+the reason Buildroot needs that extra metadata is to build userland 
+packages that are more complex than busybox.
 
-> Gary Bisson (8):
->   configs: freescale_imx*: bump to version 4.1.15_2.0.0_ga
->   imx-vpu: bump to version 5.4.35
->   imx-gpu-viv: bump to version 5.0.11.p8.6
->   xdriver_xf86-video-imx-viv: bump version to 5.0.11.p8.6
->   kernel-module-imx-gpu-viv: bump version to 5.0.11.p8.6
->   imx-codec: bump to version 4.1.4
->   imx-parser: bump to version 4.1.4
->   imx-vpuwrap: bump to version 1.0.68
+Providing another toolchain to them, with known settings for the 
+defconfig, is one option. However, it's hard to justify throwing away 
+the toolchain they've been using without problem, especially since they 
+don't really care about userland. (Some of them may want to get really 
+fancy and add an SSH server, but I've only seen that once.)
 
-Entire series applied, thanks.
-
-BTW, I noticed that you are not indicated in the DEVELOPERS for several
-of those packages, even though you are in practice the person taking
-care of them currently. Could you send a patch updating the DEVELOPERS
-file with you as the developer for those packages?
+Another option I'm considering is a script to try to detect the 
+necessary metadata from a given toolchain path. As far as I can see, 
+every piece of it can be detected from external observation. It could be 
+invoked outside Buildroot (modifying defconfig), but of course it could 
+be invoked from within Buildroot's toolchain recipes too. Is there a 
+reason this is a bad idea or hasn't already been done?
 
 Thanks!
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Hollis Blanchard <hollis_blanchard@mentor.com>
+Mentor Graphics Emulation Division
