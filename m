@@ -1,39 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  1 Nov 2016 10:18:08 +0100
-Subject: [Buildroot] [PATCH] package/uboot: define help commands when using
-	Kconfig
-Message-ID: <1477991888-27844-1-git-send-email-yann.morin.1998@free.fr>
+From: Jeroen Roovers <jer@airfi.aero>
+Date: Tue, 1 Nov 2016 11:49:19 +0100
+Subject: [Buildroot] buildroot and SELinux
+In-Reply-To: <CAF_dkJDYo2pxYTYojvOiUcCw0p6dV46_H6C4s6GVm2-nR+wqRw@mail.gmail.com>
+References: <CAF_dkJDYo2pxYTYojvOiUcCw0p6dV46_H6C4s6GVm2-nR+wqRw@mail.gmail.com>
+Message-ID: <CANCHnQph3GgcJdrozS0g52E9k+OQ1trWtZ3kWvsM2rMDFFbr7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Expose the Kconfig-related help commands when U-Boot uses the Kconfig
-configuration. Like others (like Linux, barebox, busybox), only expose
-menuconfig, not all the configurators.
+On 31 October 2016 at 16:33, Patrick Doyle <wpdster@gmail.com> wrote:
+> I'm not sure if SELinux is the right answer to my question(*), but
+> assuming that it is... how well do buildroot and SELinux play
+> together?  I found an email thread from 2013 where Clayton Shotwell
+> and Tomas Patazzoni were discussing rolling SELinux into buildroot.
+> And I see configuration items related to that now.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- boot/uboot/uboot.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+SELinux works absolutely fine for me. But I don't think it's the best
+answer to your question.
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index ae7539d..3e347c1 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -181,6 +181,12 @@ endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
- 
- UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
- UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS)
-+define UBOOT_HELP_CMDS
-+	@echo '  uboot-menuconfig       - Run U-Boot menuconfig'
-+	@echo '  uboot-savedefconfig    - Run U-Boot savedefconfig'
-+	@echo '  uboot-update-defconfig - Save the U-Boot configuration to the path specified'
-+	@echo '                             by BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE'
-+endef
- endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
- 
- define UBOOT_BUILD_CMDS
--- 
-2.7.4
+> (*) and my real question is: can I use SELinux to make a binary
+> executable, but unreadable by anybody, including root?  An ancillary
+> question would be, if that executable were included as part of the
+> CRAMFS rootfs built into the kernel, how would I set the the
+> attributes for that executable at buildtime to achieve this
+> executable-but-not-readable state?
+
+You could simply ensure that the up and running userland can't read
+the file, possibly by excluding userland support for reading cramfs or
+whatever filesystem you choose, so that only the kernel can read it at
+boot time, and then removing (rm) the file from the ramdisk during
+boot up and after you've used it.
+
+Doing this with SELinux would require you to build a policy for that
+file so that its execution is only allowed in specific security
+contexts.
+
+
+Regards,
+     jer
