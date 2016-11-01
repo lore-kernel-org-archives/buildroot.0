@@ -1,63 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 14:23:14 +0100
-Subject: [Buildroot] [PATCH v2 23/23] toolchain-external: introduce and
- use external toolchain infra
-In-Reply-To: <28350dcb-4c46-22ce-63aa-5d4ff8902b47@gmail.com>
-References: <1477742948-11490-1-git-send-email-romain.naour@gmail.com>
- <1477742948-11490-24-git-send-email-romain.naour@gmail.com>
- <28350dcb-4c46-22ce-63aa-5d4ff8902b47@gmail.com>
-Message-ID: <20161101142314.7248d448@free-electrons.com>
+From: Patrick Doyle <wpdster@gmail.com>
+Date: Tue, 1 Nov 2016 09:30:33 -0400
+Subject: [Buildroot] buildroot and SELinux
+In-Reply-To: <CANCHnQph3GgcJdrozS0g52E9k+OQ1trWtZ3kWvsM2rMDFFbr7Q@mail.gmail.com>
+References: <CAF_dkJDYo2pxYTYojvOiUcCw0p6dV46_H6C4s6GVm2-nR+wqRw@mail.gmail.com>
+ <CANCHnQph3GgcJdrozS0g52E9k+OQ1trWtZ3kWvsM2rMDFFbr7Q@mail.gmail.com>
+Message-ID: <CAF_dkJDX5Nnsy+XpxEfGRT5jwMgRSJcyA0xCaprL3O3391yYxg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Jeroen,
 
-On Sun, 30 Oct 2016 19:38:20 +0100, Romain Naour wrote:
-> > +source "toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-arago-armv5te/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-arago-armv7a/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-musl-cross/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in"
-> > +source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in"  
-> 
-> The codesourcery toolchains were named sourcery in a previous version of this
-> series, but now it's not sorted alphabetically.
-> Also, for ARM the default toochain choice is arago which is an very old
-> toolchain (2011), do we want to keep the default ARM choice to linaro or
-> codesourcery toolchain ?
+Thank you for your reply.  And for your advice.
 
-You're talking about Arago vs. Sourcery, and you conclude with a
-question about Linaro vs. Sourcery, so I'm confused.
+On Tue, Nov 1, 2016 at 6:49 AM, Jeroen Roovers <jer@airfi.aero> wrote:
+> You could simply ensure that the up and running userland can't read
+> the file, possibly by excluding userland support for reading cramfs or
+> whatever filesystem you choose, so that only the kernel can read it at
+> boot time, and then removing (rm) the file from the ramdisk during
+> boot up and after you've used it.
 
-So:
+That could work.  But it's that time between "during boot up and after
+you've used it" bit that has me worried.  During that interval, a root
+user who has compromised the system would be able to make a copy of
+the executable.  That is what I would like to prevent, and am now
+exploring SELinux and AppArmor to see they offer the tools to do this.
+Also, implementing that strategy would require that I reboot the
+system to restart the executable, which may not be the best answer.
 
- - The Linaro toolchain is EABIhf, the Sourcery toolchain is EABI, so
-   there is never a choice between Linaro and Sourcery for a given
-   target configuration.
+I'm exploring ideas right now, and am open to advice.  The main intent
+of my question on this list was to ensure that, if I went down the
+SELinux path, I didn't box myself in a corner.
 
- - The Arago toolchain is indeed old, and I'd rather not use it for our
-   default on ARM. Maybe we can keep an alphabetic ordering, and add a
-   "default" Config.in clause in the choice...endchoice? Yes, it is
-   weird to have such a default in the generic code, but I don't see
-   another option.
+> Doing this with SELinux would require you to build a policy for that
+> file so that its execution is only allowed in specific security
+> contexts.
+Assuming I can learn how to build the appropriate policy, how would I
+bake that policy into the buildroot generated kernel/rootfs such that
+it boots up enabled and immutable?  Does the policy get baked into the
+kernel?  Or do I run tools on the cramfs to set the policy for that
+file prior to its incorporation into the kernel?
 
-Thanks,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Thanks again.
+
+--wpd
