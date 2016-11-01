@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Nov 2016 14:58:52 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 8}.x series
-In-Reply-To: <20161031161919.10946-1-Vincent.Riera@imgtec.com>
-References: <20161031161919.10946-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161101145852.4e017ad5@free-electrons.com>
+Date: Tue, 1 Nov 2016 14:58:58 +0100
+Subject: [Buildroot] [PATCH 1/3] git: bump version to 2.10.2
+In-Reply-To: <20161031163125.14131-1-Vincent.Riera@imgtec.com>
+References: <20161031163125.14131-1-Vincent.Riera@imgtec.com>
+Message-ID: <20161101145858.4d829c48@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 31 Oct 2016 16:19:18 +0000, Vicente Olivert Riera wrote:
+On Mon, 31 Oct 2016 16:31:23 +0000, Vicente Olivert Riera wrote:
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/linux-headers/Config.in.host | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/git/git.hash | 2 +-
+>  package/git/git.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied, thanks!
+All three applied, thanks!
 
 Thomas
 -- 
