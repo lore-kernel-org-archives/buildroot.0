@@ -1,92 +1,71 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Tue,  1 Nov 2016 15:53:04 +1100
-Subject: [Buildroot] [PATCH 1/1] Autobuilder: add powerpc64 and powerpc64le
-Message-ID: <955cacaf56560ef6d27555e5e969a576187daba3.1477975719.git.sam.bobroff@au1.ibm.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 1 Nov 2016 09:37:01 +0100
+Subject: [Buildroot] [PATCH] package/xen: fix build failure on x86 after
+ bump to 47
+In-Reply-To: <CAKmqyKNeBjXG+taGpVKBm0cJYE9+V-B+LNTpnk7vZOAtsMFgbQ@mail.gmail.com>
+References: <CAKmqyKPsF-MiNFtj3jRaU4cS0usMs0hYitxvj+FKDAQTUDgnaw@mail.gmail.com>
+ <1477752207-16549-1-git-send-email-yann.morin.1998@free.fr>
+ <20161029182714.GA3490@free.fr>
+ <CAKmqyKN-vfzzqwzA6OM3pXco7fE93W0rCGdtRyP0ktmMy=r_bw@mail.gmail.com>
+ <CAKmqyKNeBjXG+taGpVKBm0cJYE9+V-B+LNTpnk7vZOAtsMFgbQ@mail.gmail.com>
+Message-ID: <20161101083701.GA19336@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add autobuilder configuration for powerpc64le, with a Power8 CPU.
-Add autobuilder configuration for powerpc64 (big endian), with a
-generic PowerPC CPU.
+Alistair, All,
 
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
----
-Hello Buildroot,
+On 2016-10-31 17:42 -0700, Alistair Francis spake thusly:
+> On Mon, Oct 31, 2016 at 3:06 PM, Alistair Francis
+> <alistair.francis@xilinx.com> wrote:
+> > On Sat, Oct 29, 2016 at 11:27 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >> Alistair, All,
+> >>
+> >> On 2016-10-29 16:43 +0200, Yann E. MORIN spake thusly:
+> >>> Since the bump to 4.7, Xen fails to build because of a double definition
+> >>> of __OBJECT_FILE__. This is due to (who would have guessed) the weirdness
+> >>> of their buildsystem.
+> >>>
+> >>> Fix that with a dirty hack: undefine the macro before defining it.
+> >>>
+> >>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >>> Cc: Alistair Francis <alistair.francis@xilinx.com>
+> >>>
+> >>> ---
+> >>> Note: totally untested.
+> >>
+> >> Now build-tested, the double-definition issue is fixed, and the build
+> >> succeeds with this defconfig:
+> >>
+> >>     BR2_aarch64=y
+> >>     BR2_TOOLCHAIN_EXTERNAL=y
+> >>     BR2_PACKAGE_XEN=y
+> >>     BR2_PACKAGE_XEN_HYPERVISOR=y
+> >>     BR2_PACKAGE_XEN_TOOLS=y
+> >>
+> >> Not booted, I don't know Xen enough to test...
+> >
+> > The patch looks good to me!
+> >
+> > I just did a build test as well and it works, running a boot test now.
+> 
+> Tested on ARMv7 (little endian) boot.
+> 
+> Tested-by: Alistair Francis <alistair.francis@xilinx.com>
+> Reviewed-by: Alistair Francis <alistair.francis@xilinx.com>
 
-Here are autobuilder configurations for powerpc64le and powerpc64
-(big endian).
+OK, thanks for the testing! I'll resend the patch officially now (it was
+not in patchwork).
 
-The powerpc64le configuration is set up for Power8 CPUs, because
-that's where little endian support starts.
+Regards,
+Yann E. MORIN.
 
-The powerpc64 configuration is set up for a generic PowerPC CPU, as
-that makes it as widely usable as possible but Power7 would be another
-reasonable choice.
-
-I tried to follow the same style as the other configurations but I
-should point out that:
-* I did not prefix the name with "br-". I'm not sure what it means.
-* For the actual configuration (.config files) I cut and trimmed the
-  "Target options" section of a working Buildroot configuration.
-* I haven't inlcuded a pre-built tool chain. I'd like to have one
-  but I assume it can be set up separately.
-* I wasn't sure if I needed to put anything in the commit message so
-  it's pretty bare.
-
-I've run the autobuilder locally on my configurations and it seems to
-work (I produced some successful builds), although I did hack the
-autobuilder script a bit so that it would use the local configuration.
-
-Anyway, I hope this is pretty close :-)
-
-Cheers,
-Sam.
-
- web/toolchains/configs/powerpc64.config          | 6 ++++++
- web/toolchains/configs/powerpc64le-power8.config | 5 +++++
- web/toolchains/configs/toolchain-configs.csv     | 2 ++
- 3 files changed, 13 insertions(+)
- create mode 100644 web/toolchains/configs/powerpc64.config
- create mode 100644 web/toolchains/configs/powerpc64le-power8.config
-
-diff --git a/web/toolchains/configs/powerpc64.config b/web/toolchains/configs/powerpc64.config
-new file mode 100644
-index 0000000..13986b1
---- /dev/null
-+++ b/web/toolchains/configs/powerpc64.config
-@@ -0,0 +1,6 @@
-+BR2_ARCH_IS_64=y
-+BR2_powerpc64=y
-+BR2_ARCH="powerpc64"
-+BR2_ENDIAN="BIG"
-+BR2_generic_powerpc=y
-+BR2_powerpc_CLASSIC=y
-diff --git a/web/toolchains/configs/powerpc64le-power8.config b/web/toolchains/configs/powerpc64le-power8.config
-new file mode 100644
-index 0000000..d35c579
---- /dev/null
-+++ b/web/toolchains/configs/powerpc64le-power8.config
-@@ -0,0 +1,5 @@
-+BR2_ARCH_IS_64=y
-+BR2_powerpc64le=y
-+BR2_ARCH="powerpc64le"
-+BR2_ENDIAN="LITTLE"
-+BR2_powerpc_power8=y
-diff --git a/web/toolchains/configs/toolchain-configs.csv b/web/toolchains/configs/toolchain-configs.csv
-index 0bb0741..2389743 100644
---- a/web/toolchains/configs/toolchain-configs.csv
-+++ b/web/toolchains/configs/toolchain-configs.csv
-@@ -40,6 +40,8 @@ http://autobuild.buildroot.org/toolchains/configs/linaro-aarch64.config,x86,glib
- http://autobuild.buildroot.org/toolchains/configs/linaro-arm.config,x86,glibc
- http://autobuild.buildroot.org/toolchains/configs/mips64el-ctng_n32-linux-gnu.config,x86,glibc
- http://autobuild.buildroot.org/toolchains/configs/mips64el-ctng_n64-linux-gnu.config,x86,glibc
-+http://autobuild.buildroot.org/toolchains/configs/powerpc64.config,x86_64,glibc
-+http://autobuild.buildroot.org/toolchains/configs/powerpc64le-power8.config,x86_64,glibc
- http://autobuild.buildroot.org/toolchains/configs/powerpc-ctng_e500v2-linux-gnuspe.config,x86,glibc
- http://autobuild.buildroot.org/toolchains/configs/sourcery-arm-armv4t.config,x86,glibc
- http://autobuild.buildroot.org/toolchains/configs/sourcery-arm.config,x86,glibc
 -- 
-2.10.0.297.gf6727b0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
