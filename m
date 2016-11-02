@@ -1,36 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Nov 2016 23:25:18 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: add David Lechner
-Message-ID: <20161102222522.41F7E818D9@busybox.osuosl.org>
+Date: Wed, 2 Nov 2016 23:26:46 +0100
+Subject: [Buildroot] [PATCH 1/1] Bump libxmlrpc
+In-Reply-To: <1478080601-8754-1-git-send-email-alvaro.gamez@hazent.com>
+References: <20160825063044.CF4CA101E4C@stock.ovh.net>
+ <1478080601-8754-1-git-send-email-alvaro.gamez@hazent.com>
+Message-ID: <20161102232646.69bfff3d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aed8107168f6c3bd8e4646e156a9507a7e800009
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: David Lechner <david@lechnology.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Wed,  2 Nov 2016 10:56:41 +0100, Alvaro G. M wrote:
+> Signed-off-by: Alvaro Gamez <alvaro.gamez@hazent.com>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d89bc03..1c3d6d7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -387,6 +387,12 @@ F:	package/openldap/
- N:	David du Colombier <0intro@gmail.com>
- F:	package/x264/
- 
-+N:	David Lechner <david@lechnology.com>
-+F:	board/lego/ev3/
-+F:	configs/lego_ev3_defconfig
-+F:	linux/linux-ext-ev3dev-linux-drivers.mk
-+F:	package/ev3dev-linux-drivers/
-+
- N:	Davide Viti <zinosat@tiscali.it>
- F:	package/flann/
- F:	package/python-paho-mqtt/
+Thanks for your contribution. However, there are a few issues with it:
+
+ - The title should be:
+
+	libxmlrpc: bump to version xyz
+
+ - The commit log should contain a lot more details, especially:
+
+   * what changes are made to the patches
+
+   * why you are adding the AR and RANLIB definitions in MAKE_OPTS
+
+Could you rework your patch accordingly?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
