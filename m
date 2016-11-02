@@ -1,11 +1,9 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Nov 2016 17:46:56 +0100
-Subject: [Buildroot] [PATCH v2 2/4] board/lego/ev3: Create images using
- genimage
-In-Reply-To: <1478056556-30242-3-git-send-email-david@lechnology.com>
-References: <1478056556-30242-1-git-send-email-david@lechnology.com>
- <1478056556-30242-3-git-send-email-david@lechnology.com>
-Message-ID: <20161102174656.73b018bb@free-electrons.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Wed, 02 Nov 2016 15:22:56 -0200
+Subject: [Buildroot] [PATCH 1/1] support/download: Add git download
+ method for SHAs
+References: <316a0e80-b3bc-fc37-678b-62261b26cda8@mind.be>
+Message-ID: <581a20f02a2cd_1dd03ff0be914c7447628@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,29 +12,10 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  1 Nov 2016 22:15:54 -0500, David Lechner wrote:
-> This adds a script to create SD card and flash images for LEGO MINDSTORMS
-> EV3 using the genimage tool.
-> 
-> The default kernel config had to be modifed to add support for squashfs
-> and to add a ram disk.
-> 
-> Signed-off-by: David Lechner <david@lechnology.com>
-> ---
->  board/lego/ev3/genimage.cfg   | 57 ++++++++++++++++++++++++++++++
->  board/lego/ev3/linux.fragment |  7 ++++
->  board/lego/ev3/post-image.sh  | 14 ++++++++
->  board/lego/ev3/readme.txt     | 80 ++++++++++---------------------------------
->  configs/lego_ev3_defconfig    | 10 +++++-
->  5 files changed, 105 insertions(+), 63 deletions(-)
->  create mode 100644 board/lego/ev3/genimage.cfg
->  create mode 100644 board/lego/ev3/linux.fragment
->  create mode 100755 board/lego/ev3/post-image.sh
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Please take a look at this patch series:
+http://patchwork.ozlabs.org/patch/690099/
+http://patchwork.ozlabs.org/patch/690097/ (please read the WARNING)
+http://patchwork.ozlabs.org/patch/690098/
+        
+Regards,
+Ricardo
