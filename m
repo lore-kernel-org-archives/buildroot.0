@@ -1,51 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Nov 2016 21:49:27 +0100
-Subject: [Buildroot] [PATCH] ubifs: Fix regression in ubifs_readdir()
-In-Reply-To: <1478116619.8549.1.camel@embedded.rocks>
-References: <1477648432-9543-1-git-send-email-richard@nod.at>
- <1477671544.8927.1.camel@embedded.rocks>
- <c542e099-0404-be8e-ebeb-d4265d3204d6@nod.at>
- <1477693395.31471.1.camel@embedded.rocks>
- <20161101232215.5bf7cabd@free-electrons.com>
- <1478116619.8549.1.camel@embedded.rocks>
-Message-ID: <20161102214927.30b0d74f@free-electrons.com>
+From: David Lechner <david@lechnology.com>
+Date: Wed,  2 Nov 2016 16:01:12 -0500
+Subject: [Buildroot] [PATCH] DEVELOPERS: add David Lechner
+Message-ID: <1478120472-23486-1-git-send-email-david@lechnology.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: David Lechner <david@lechnology.com>
+---
+ DEVELOPERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-On Wed, 02 Nov 2016 20:56:59 +0100, J?rg Krause wrote:
-
-> > This is *really* bad. Which Buildroot version are you using?  
-> 
-> 2016.11 #
-> 
-> Note that I am using Buildroot as a submodule [1] and I needed to port
-> the br2-external tree. Maybe I messed something up?
-> 
-> > Are you able to reproduce the bad ccache behavior here?  
-> 
-> Yes, I am. Linux kernel source directory is located locally and the
-> path is set using LINUX_OVERRIDE_SRCDIR in local.mk.
-> 
-> 1/ Checkout Linux kernel version 4.7.10
-> 2/ make linux-dirclean all
-> 3/ Booted Linux version is 4.7.10
-> 
-> 4/ Checkout Linux kernel version 4.8.5
-> 5/ make linux-dirclean all
-> 6/ Booted Linux version is still 4.7.10
-
-And this scenario works fine with ccache *disabled*, but breaks when
-you enable ccache support in Buildroot?
-
-Thanks,
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d0a51da..645897f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -387,6 +387,12 @@ F:	package/openldap/
+ N:	David du Colombier <0intro@gmail.com>
+ F:	package/x264/
+ 
++N:	David Lechner <david@lechnology.com>
++F:	board/lego/ev3/
++F:	configs/lego_ev3_defconfig
++F:	linux/linux-ext-ev3dev-linux-drivers.mk
++F:	package/ev3dev-linux-drivers/
++
+ N:	Davide Viti <zinosat@tiscali.it>
+ F:	package/flann/
+ F:	package/python-paho-mqtt/
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
