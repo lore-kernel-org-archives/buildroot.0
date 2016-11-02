@@ -1,37 +1,51 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed,  2 Nov 2016 09:59:11 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add entry for
-	xdriver_xf86-video-imx-viv
-Message-ID: <20161102085911.6526-1-gary.bisson@boundarydevices.com>
+Date: Wed,  2 Nov 2016 10:01:36 +0100
+Subject: [Buildroot] [PATCH] sshpass: bump version to 1.06
+Message-ID: <20161102090136.6704-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Changelog:
+- Add -P for overriding the password prompt we search for
+- Add -v for verbose logging of the prompt detection prompt.
+- Allow packagers and compilers to change the default password prompt.
+- When giving -V, also print the default password prompt.
+
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
-Hi all,
-
-Also kept that package under Jerome's watch, just added my name.
+Reading the DEVELOPERS file I realized I had sshpass to look after. So here is
+an update.
 
 Regards,
 Gary
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/sshpass/sshpass.hash | 2 +-
+ package/sshpass/sshpass.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d0a51da..f437ca8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -536,6 +536,7 @@ F:	package/gstreamer1/gst1-imx/
- F:	package/libimxvpuapi/
- F:	package/mfgtools/
- F:	package/sshpass/
-+F:	package/x11r7/xdriver_xf86-video-imx-viv/
+diff --git a/package/sshpass/sshpass.hash b/package/sshpass/sshpass.hash
+index 12871e1..f6e0611 100644
+--- a/package/sshpass/sshpass.hash
++++ b/package/sshpass/sshpass.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  c3f78752a68a0c3f62efb3332cceea0c8a1f04f7cf6b46e00ec0c3000bc8483e  sshpass-1.05.tar.gz
++sha256  c6324fcee608b99a58f9870157dfa754837f8c48be3df0f5e2f3accf145dee60  sshpass-1.06.tar.gz
+diff --git a/package/sshpass/sshpass.mk b/package/sshpass/sshpass.mk
+index 7344ca6..de46604 100644
+--- a/package/sshpass/sshpass.mk
++++ b/package/sshpass/sshpass.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Geoff Levand <geoff@infradead.org>
- F:	package/flannel/
+-SSHPASS_VERSION = 1.05
++SSHPASS_VERSION = 1.06
+ SSHPASS_SITE = http://downloads.sourceforge.net/project/sshpass/sshpass/$(SSHPASS_VERSION)
+ SSHPASS_LICENSE = GPLv2+
+ SSHPASS_LICENSE_FILES = COPYING
 -- 
 2.9.3
