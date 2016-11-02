@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Nov 2016 17:25:55 +0100
-Subject: [Buildroot] [PATCH] libcurl: bump version to 7.51.0 (security)
-In-Reply-To: <20161102115231.1289-1-Vincent.Riera@imgtec.com>
-References: <20161102115231.1289-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161102172555.742330d4@free-electrons.com>
+Date: Wed, 2 Nov 2016 17:26:58 +0100
+Subject: [Buildroot] [git commit] bind: security bump to version 9.11.0-P1
+Message-ID: <20161102162724.016018183F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4a9f2cb2ee597583107a3add8b17f2217b3e0915
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 2 Nov 2016 11:52:31 +0000, Vicente Olivert Riera wrote:
-> List of fixed CVEs:
-> 
-> CVE-2016-8615: cookie injection for other servers
-> CVE-2016-8616: case insensitive password comparison
-> CVE-2016-8617: OOB write via unchecked multiplication
-> CVE-2016-8618: double-free in curl_maprintf
-> CVE-2016-8619: double-free in krb5 code
-> CVE-2016-8620: glob parser write/read out of bounds
-> CVE-2016-8621: curl_getdate read out of bounds
-> CVE-2016-8622: URL unescape heap overflow via integer truncation
-> CVE-2016-8623: Use-after-free via shared cookies
-> CVE-2016-8624: invalid URL parsing with '#'
-> CVE-2016-8625: IDNA 2003 makes curl use wrong host
-> 
-> Full ChangeLog:
-> 
-> https://curl.haxx.se/changes.html#7_51_0
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/libcurl/libcurl.hash | 2 +-
->  package/libcurl/libcurl.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+CVE-2016-8864 - denial-of-service vector which can potentially be
+exploited against BIND 9 servers.
 
-Applied to master, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Thomas: fix hash URL in .hash file, noticed by Vicente.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index bc46604..3522149 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,2 @@
+-# Verified from ftp://ftp.isc.org/isc/bind9/9.11.0/bind-9.11.0.tar.gz.sha256.asc
+-sha256 6f0b403036e0281b272a0fbdd0dc3417f3050b625cb059c5409432611418058b  bind-9.11.0.tar.gz
++# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P1/bind-9.11.0-P1.tar.gz.sha256.asc
++sha256 094cd3134ba1b44f0910de1334f05a7dca68d583da038de40a8ad7a0cb1592c6  bind-9.11.0-P1.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 9b5d8c5..ee50acf 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.11.0
++BIND_VERSION = 9.11.0-P1
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
