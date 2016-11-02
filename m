@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Nov 2016 23:27:11 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add David Lechner
-In-Reply-To: <1478120472-23486-1-git-send-email-david@lechnology.com>
-References: <1478120472-23486-1-git-send-email-david@lechnology.com>
-Message-ID: <20161102232711.14e7a55c@free-electrons.com>
+Date: Wed, 2 Nov 2016 23:29:30 +0100
+Subject: [Buildroot] [PATCH 2/2] package/babeltrace: enable debug info
+ support for the host variant
+In-Reply-To: <1477918137-25258-2-git-send-email-yann.morin.1998@free.fr>
+References: <20161031074624.7576-10-eeppeliteloop@gmail.com>
+ <1477918137-25258-2-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20161102232930.61516f88@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +14,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  2 Nov 2016 16:01:12 -0500, David Lechner wrote:
-> Signed-off-by: David Lechner <david@lechnology.com>
+On Mon, 31 Oct 2016 13:48:57 +0100, Yann E. MORIN wrote:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Philippe Proulx <eeppeliteloop@gmail.com>
 > ---
->  DEVELOPERS | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  package/babeltrace/babeltrace.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/babeltrace/babeltrace.mk b/package/babeltrace/babeltrace.mk
+> index d178a6c..17eaaaa 100644
+> --- a/package/babeltrace/babeltrace.mk
+> +++ b/package/babeltrace/babeltrace.mk
+> @@ -12,8 +12,8 @@ BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
+>  BABELTRACE_DEPENDENCIES = popt util-linux libglib2 host-pkgconf
+>  BABELTRACE_CONF_OPTS += --disable-debug-info
+>  HOST_BABELTRACE_DEPENDENCIES = \
+> -	host-popt host-util-linux host-libglib2 host-pkgconf
+> -HOST_BABELTRACE_CONF_OPTS += --disable-debug-info
+> +	host-popt host-util-linux host-libglib2 host-pkgconf host-elfutils
 
-Applied to master, thanks.
+Since the dependency on elfutils is not mandatory, do we really want to
+force building the support of debug info?
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
