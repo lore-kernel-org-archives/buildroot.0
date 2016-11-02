@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Nov 2016 21:48:16 +0100
-Subject: [Buildroot] [PATCH v2 3/4] linux: add ev3dev extension
-In-Reply-To: <1478056556-30242-4-git-send-email-david@lechnology.com>
+Date: Wed, 2 Nov 2016 21:48:21 +0100
+Subject: [Buildroot] [PATCH v2 4/4] board/lego/ev3: Use ev3dev linux ext
+ for ev3dev drivers
+In-Reply-To: <1478056556-30242-5-git-send-email-david@lechnology.com>
 References: <1478056556-30242-1-git-send-email-david@lechnology.com>
- <1478056556-30242-4-git-send-email-david@lechnology.com>
-Message-ID: <20161102214816.70ac4508@free-electrons.com>
+ <1478056556-30242-5-git-send-email-david@lechnology.com>
+Message-ID: <20161102214821.009a3ef7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +14,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  1 Nov 2016 22:15:55 -0500, David Lechner wrote:
-> This adds an ev3dev Linux drivers extension that provides Linux kernel
-> drivers for LEGO MINDSTORMS EV3 from the ev3dev project.
+On Tue,  1 Nov 2016 22:15:56 -0500, David Lechner wrote:
+> This uses the ev3dev linux extension to compile the ev3dev drivers for
+> LEGO MINDSTORMS EV3.
 > 
 > Signed-off-by: David Lechner <david@lechnology.com>
+> ---
+>  .../0001-Create-empty-drivers-lego-Kconfig.patch   | 24 ----------------------
+>  board/lego/ev3/readme.txt                          |  4 ++--
+>  configs/lego_ev3_defconfig                         |  4 +---
+>  3 files changed, 3 insertions(+), 29 deletions(-)
+>  delete mode 100644 board/lego/ev3/patches/linux/0001-Create-empty-drivers-lego-Kconfig.patch
 
-I've applied, with one minor change, see below.
-
-
-> +define EV3DEV_LINUX_DRIVERS_PREPARE_KERNEL
-> +	mkdir -p $(LINUX_DIR)/drivers/lego; \
-
-The ; \ was useless, those two commands can be separate.
-
-> +	cp -dpfr $(EV3DEV_LINUX_DRIVERS_DIR)/* $(LINUX_DIR)/drivers/lego/
-
-The rest is applied as-is.
-
-Could you submit a patch to the DEVELOPERS file that adds you as a
-developer for the ev3dev package, the linux extension, and the board?
-
-Something along those lines:
-
-N:	David Lechner <david@lechnology.com>
-F:	board/lego/ev3/
-F:	configs/lego_ev3_defconfig
-F:	package/ev3dev-linux-drivers/
-F:	linux/linux-ext-ev3dev-linux-drivers.mk
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
