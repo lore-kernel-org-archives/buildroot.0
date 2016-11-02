@@ -1,209 +1,185 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Nov 2016 20:48:59 +0100
-Subject: [Buildroot] [PATCH] core/download: remove support for special
- git refs
-In-Reply-To: <2007136107.3100904.1477526517392.JavaMail.zimbra@datacom.ind.br>
-References: <1477512489-14710-1-git-send-email-yann.morin.1998@free.fr>
- <2007136107.3100904.1477526517392.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <309f1ad4-8e84-a2ac-d813-12d5fe3d0d59@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 2 Nov 2016 23:18:30 +0100
+Subject: [Buildroot] [git commit] core: re-enter make if $(CURDIR) or
+ $(O) are not canonical paths
+In-Reply-To: <20161019211757.83C7D80DB7@busybox.osuosl.org>
+References: <20161019211757.83C7D80DB7@busybox.osuosl.org>
+Message-ID: <20161102221830.GA3319@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Samuel, All,
 
-
-On 27-10-16 02:01, Carlos Santos wrote:
->> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> To: buildroot at buildroot.org
->> Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, "Ricardo Martincoski"
->> <ricardo.martincoski@datacom.ind.br>, "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Sent: Wednesday, October 26, 2016 6:08:09 PM
->> Subject: [Buildroot] [PATCH] core/download: remove support for special git	refs
+On 2016-10-19 23:11 +0200, Thomas Petazzoni spake thusly:
+> commit: https://git.buildroot.net/buildroot/commit/?id=173135df5b69dfd5ae6fe6cf2de8833c6f74c143
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
->> f8b8251a (support/download: fetch all refs on full git clone) added
->> support for fetching so-called special refs, to retrieve changesets from
->> code-review tools like Gerrit or Github PRs.
->>
->> However, the use-case for using those special refs is not entirely
->> clear, and is getting more and more complex (with still-pending patches
->> about that).
+> When $(CURDIR) and/or $(O) contain symlinks in their paths, they can be
+> resolved differently, depending on each package build-system (whether it
+> uses the given paths or get the absolute canonical ones).
 > 
-> The use case is pretty clear, and you told it: retrieve changesets from
-> code-review tools like Gerrit or Github PRs. 
-
- But you have to admit that such a use case seems weird and complicated. So you
-push a change in a package to Gerrit, then you modify your br2_external to refer
-to that change, commit it and I suppose also push it to Gerrit, and finally you
-go and tell CI to fetch that stuff.
-
- To me, it would make a lot more sense if your br2_external packages are kept
-together in a repository using git submodules, so you can simply do a
-commit/review of the integration repository whenever you updated the
-subrepositories.
-
- In fact, I like to keep the buildroot infra inside the package repos
-themselves, so the integration repository doubles as a br2_external repository.
-
-
-> We (DATACOM) have been
-> doing this for months and I can assure you that it improved our development
-> process *a lot*. The fact that there are still pending patches only means
-> that the feature needs improvements and that different people have been
-> trying to make it better.
-
- Well, the problem is that the git download helper is becoming so complicated
-that we don't understand it anymore, and that any change we make might break one
-of the use cases we purportedly support. So the idea is to actively *not*
-support some use cases, which allows us to break them.
-
- Actually, I would say that what we need to support is: any ref that works with
-'git fetch <site> <ref>'.
-
-
->> Those special refs are from code-review tools. As such, they are very
->> volatile in nature: re-pushing a rebased branch to github would change
->> the content fetched with such a ref (Gerrit seems to be more
->> conservative, but still). So, they cannot be used for reproducible
->> builds:
->>  - they can't be used in a .mk file (normal packages)
+> Using absolute canonical paths will help achieving reproducible builds and
+> will make easier tracking down host machine paths leaking into the host,
+> target or staging trees.
+> So, this change ensures the build takes place with the CURDIR and O
+> variables are set to their absolute canonical paths.
 > 
-> Yes, they do. They may not be so useful for buildroot official packages
-> but for packages maintained in-house and/or by distributed development
-> teams such feature is extremely handy.
+> In order to recall the toplevel makefile with absolute canonical paths
+> for $(CURDIR) and $(O), we need to:
+> 1- Compute the absolute canonical paths for $(CURDIR) and $(O) that will
+>    be passed to the sub-make. This is achieved using the 'realpath' make
+>    primitive. However, some care must be taken when manipulating O:
+>    - the out-of-tree makefile wrapper happens a trailing "/.", we need
+>      to strip this part away to not break the comparison driving the
+>      sub-make call;
+>    - the user can leave a trailing '/' to $(O);
+>    - according to [1,2], realpath returns an empty string in case of
+>      non-existing entry. So, to avoid passing an empty O= variable to
+>      sub-make, it is necessary to define the output directory and create
+>      it prior to call realpath on it (because on the first invocation,
+>      $(O) usually does not yet exists), hence the trick doing the mkdir
+>      right before calling realpath.
+> 2- Update EXTRAMAKEARGS with the absolute canonical $(O) and use it
+>    when call recalling the top-level makefile with umask and paths
+>    correctly set.
+> 3- Lastly, update the condition for setting the CONFIG_DIR and
+>    NEED_WRAPPER variables.
+> 
+> Note:
+> * This change takes care of the makefile wrapper installed in $(O) to
+>   avoid unneeded make recursion.
 
- Even for in-house development unstables refs are not a good idea. But as
-already mentioned several times, gerrit's refs/changes/xx/xxx/N refs are pretty
-stable.
+This commit breaks a few use-cases that were previously working.
 
-> 
->>  - they can't be used in a .config file (linux, bootloader...)
-> 
-> Yes they do. I'm currently working on a change that upgrades both linux
-> and u-boot for a half-dozen boards.
-> 
->> So, going back to the black board, two main use-cases have been
->> identified:
->>  - a developper that wants to manually test a PR
-> 
-> A developer who needs to share work in progress with colleagues so they
-> can test it. One of my colleagues is currently working on a change that
-> affects around twenty modules used on four different products. He shares
-> his work by mens of a change in our br2_external repository in which the
-> package versions in the .mk files are replaced by the current SHA-1 in
-> the corresponding changes in the modules.
+for example, Maxime reports that:
 
- Which IMHO would be dramatically less work with submodules (simply 'git commit'
-rather than first updating 20 files and then doing 'git commit').
+    make BR2_PRIMARY_SITE=blabla source
 
- But here really we come to the crux of the problem: you want to use sha1 refs
-for things which are not in a normal 'clone'. In other words, you want to do
-something which would be really hard to do if you did it manually. No wonder a
-lot of special magic is needed in the git download helper to make that work.
+no longer works.
 
-> 
->>  - an automated build farm that automatically builds a known
->>    configuration against PRs
-> 
-> This is a particular case of the previous one, with the restriction that
-> it is necessary to automate the retrieval of WIP code my means of some
-> custom <FOO>_VERSION variables.
-> 
->> In either case, there is a better solution that we've been advertising
->> all along: the override-srcdir mechanism.
-> 
-> The override-srcdir mechanism suffices when you work alone on a few
-> packages. It becomes much harder when you work on many modules and need
-> to share intermediary results with other developers.
-> 
->> Whether by a build farm or a developper, it looks like it would be much
->> easier to do the clone (or a fetch from an existing repo), write a
->> local.mk with an override-srcdir, and kick off the build, rather than do
->> the various tweaking (in .mk and/or .config).
-> 
-> We tried this approach and it became a nightmare. Sooner or later some
-> developer forgets to update the local copy of one of the modules and
-> his/her build breaks. Using a build farm for WIP was impossible because
-> required tricks to fetch custom versions of the source code of some packages.
-> 
->> (note: a developper that wants to test a PR is probably already active
->> on that project, so will already have a local clone, so the fetch would
->> only grab very few blobs, wo will be very fast).
-> 
-> This might work for lone developers or small teams, not for dozens of
-> programmers coding fiercely for a multi-site organization, using a DVCS
-> like Gerrit. Read this, please:
-> 
-> http://lists.busybox.net/pipermail/buildroot/2015-October/143248.html
+Also, the autobuilders now no longer respect their 'njobs' configuration
+option, for the same reason; they (basivally) do:
 
- Well, that mail doesn't mention the need for handling special refs, and it
-actually predates the patch that made special refs work, so I guess that it
-wasn't needed back then?
+    make BR2_JLEVEL=kwargs["--njobs"]
 
+but this is nol onger working either.
 
+Care to have a look at this, please?
 
- Regards,
- Arnout
+Regards,
+Yann E. MORIN.
 
+> [1] https://www.gnu.org/software/make/manual/html_node/File-Name-Functions.html
+> [2] http://man7.org/linux/man-pages/man3/realpath.3.html
 > 
->> So, just remove the support for such special refs altogether.
->>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> Cc: Arnout Vandecappelle <arnout@mind.be>
->> Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
->> Cc: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
->> Cc: Henrique Marks <henrique.marks@datacom.ind.br>
->> ---
->> support/download/git | 11 -----------
->> 1 file changed, 11 deletions(-)
->>
->> diff --git a/support/download/git b/support/download/git
->> index 7921411..c46422d 100755
->> --- a/support/download/git
->> +++ b/support/download/git
->> @@ -61,17 +61,6 @@ fi
->>
->> pushd "${basename}" >/dev/null
->>
->> -# Try to get the special refs exposed by some forges (pull-requests for
->> -# github, changes for gerrit...). There is no easy way to know whether
->> -# the cset the user passed us is such a special ref or a tag or a sha1
->> -# or whatever else. We'll eventually fail at checking out that cset,
->> -# below, if there is an issue anyway. Since most of the cset we're gonna
->> -# have to clone are not such special refs, consign the output to oblivion
->> -# so as not to alarm unsuspecting users, but still trace it as a warning.
->> -if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
->> -    printf "Could not fetch special ref '%s'; assuming it is not special.\n"
->> "${cset}"
->> -fi
->> -
->> # Checkout the required changeset, so that we can update the required
->> # submodules.
->> _git checkout -q "'${cset}'"
->> --
->> 2.7.4
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+> Reported-by: Matthew Weber <matt@thewebers.ws>
+> Cc: Matthew Weber <matt@thewebers.ws>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  Makefile | 40 ++++++++++++++++++++++++++++++----------
+>  1 file changed, 30 insertions(+), 10 deletions(-)
 > 
-> 
-> 
-> Carlos Santos (Casantos)
-> DATACOM, P&D
+> diff --git a/Makefile b/Makefile
+> index 717b2db..3ba1490 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -33,7 +33,7 @@ SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
+>  # or avoid confusing packages that can use the O=<dir> syntax for out-of-tree
+>  # build by preventing it from being forwarded to sub-make calls.
+>  ifneq ("$(origin O)", "command line")
+> -O := output
+> +O := $(CURDIR)/output
+>  else
+>  # Other packages might also support Linux-style out of tree builds
+>  # with the O=<dir> syntax (E.G. BusyBox does). As make automatically
+> @@ -50,27 +50,46 @@ endif
+>  
+>  # Check if the current Buildroot execution meets all the pre-requisites.
+>  # If they are not met, Buildroot will actually do its job in a sub-make meeting
+> -# its pre-requisites, which is:
+> +# its pre-requisites, which are:
+>  #  1- Permissive enough umask:
+>  #       Wrong or too restrictive umask will prevent Buildroot and packages from
+>  #       creating files and directories.
+> +#  2- Absolute canonical CWD (i.e. $(CURDIR)):
+> +#       Otherwise, some packages will use CWD as-is, others will compute its
+> +#       absolute canonical path. This makes harder tracking and fixing host
+> +#       machine path leaks.
+> +#  3- Absolute canonical output location (i.e. $(O)):
+> +#       For the same reason as the one for CWD.
+> +
+> +# Remove the trailing '/.' from $(O) as it can be added by the makefile wrapper
+> +# installed in the $(O) directory.
+> +# Also remove the trailing '/' the user can set when on the command line.
+> +override O := $(patsubst %/,%,$(patsubst %.,%,$(O)))
+> +# Make sure $(O) actually exists before calling realpath on it; this is to
+> +# avoid empty CANONICAL_O in case on non-existing entry.
+> +CANONICAL_O := $(shell mkdir -p $(O) >/dev/null 2>&1)$(realpath $(O))
+> +
+> +CANONICAL_CURDIR = $(realpath $(CURDIR))
+>  
+>  REQ_UMASK = 0022
+>  
+> -# we need to pass O= everywhere we call back into the toplevel makefile
+> -EXTRAMAKEARGS = O=$(O)
+> +# Make sure O= is passed (with its absolute canonical path) everywhere the
+> +# toplevel makefile is called back.
+> +EXTRAMAKEARGS := O=$(CANONICAL_O)
+>  
+>  # Check Buildroot execution pre-requisites here.
+> -ifneq ($(shell umask),$(REQ_UMASK))
+> +ifneq ($(shell umask):$(CURDIR):$(O),$(REQ_UMASK):$(CANONICAL_CURDIR):$(CANONICAL_O))
+>  .PHONY: _all $(MAKECMDGOALS)
+>  
+>  $(MAKECMDGOALS): _all
+>  	@:
+>  
+>  _all:
+> -	@umask $(REQ_UMASK) && $(MAKE) --no-print-directory $(MAKECMDGOALS)
+> +	@umask $(REQ_UMASK) && \
+> +		$(MAKE) -C $(CANONICAL_CURDIR) --no-print-directory \
+> +			$(MAKECMDGOALS) $(EXTRAMAKEARGS)
+>  
+> -else # umask
+> +else # umask / $(CURDIR) / $(O)
+>  
+>  # This is our default rule, so must come first
+>  all:
+> @@ -140,8 +159,9 @@ endif
+>  include support/misc/utils.mk
+>  
+>  # Set variables related to in-tree or out-of-tree build.
+> -ifeq ($(O),output)
+> -CONFIG_DIR := $(TOPDIR)
+> +# Here, both $(O) and $(CURDIR) are absolute canonical paths.
+> +ifeq ($(O),$(CURDIR)/output)
+> +CONFIG_DIR := $(CURDIR)
+>  NEED_WRAPPER =
+>  else
+>  CONFIG_DIR := $(O)
+> @@ -1038,4 +1058,4 @@ include docs/manual/manual.mk
+>  
+>  .PHONY: $(noconfig_targets)
+>  
+> -endif #umask
+> +endif #umask / $(CURDIR) / $(O)
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
