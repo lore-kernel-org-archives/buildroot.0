@@ -1,11 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Nov 2016 21:48:21 +0100
-Subject: [Buildroot] [PATCH v2 4/4] board/lego/ev3: Use ev3dev linux ext
- for ev3dev drivers
-In-Reply-To: <1478056556-30242-5-git-send-email-david@lechnology.com>
-References: <1478056556-30242-1-git-send-email-david@lechnology.com>
- <1478056556-30242-5-git-send-email-david@lechnology.com>
-Message-ID: <20161102214821.009a3ef7@free-electrons.com>
+Date: Wed, 2 Nov 2016 21:49:27 +0100
+Subject: [Buildroot] [PATCH] ubifs: Fix regression in ubifs_readdir()
+In-Reply-To: <1478116619.8549.1.camel@embedded.rocks>
+References: <1477648432-9543-1-git-send-email-richard@nod.at>
+ <1477671544.8927.1.camel@embedded.rocks>
+ <c542e099-0404-be8e-ebeb-d4265d3204d6@nod.at>
+ <1477693395.31471.1.camel@embedded.rocks>
+ <20161101232215.5bf7cabd@free-electrons.com>
+ <1478116619.8549.1.camel@embedded.rocks>
+Message-ID: <20161102214927.30b0d74f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +17,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  1 Nov 2016 22:15:56 -0500, David Lechner wrote:
-> This uses the ev3dev linux extension to compile the ev3dev drivers for
-> LEGO MINDSTORMS EV3.
-> 
-> Signed-off-by: David Lechner <david@lechnology.com>
-> ---
->  .../0001-Create-empty-drivers-lego-Kconfig.patch   | 24 ----------------------
->  board/lego/ev3/readme.txt                          |  4 ++--
->  configs/lego_ev3_defconfig                         |  4 +---
->  3 files changed, 3 insertions(+), 29 deletions(-)
->  delete mode 100644 board/lego/ev3/patches/linux/0001-Create-empty-drivers-lego-Kconfig.patch
+On Wed, 02 Nov 2016 20:56:59 +0100, J?rg Krause wrote:
 
-Applied to master, thanks.
+> > This is *really* bad. Which Buildroot version are you using?  
+> 
+> 2016.11 #
+> 
+> Note that I am using Buildroot as a submodule [1] and I needed to port
+> the br2-external tree. Maybe I messed something up?
+> 
+> > Are you able to reproduce the bad ccache behavior here?  
+> 
+> Yes, I am. Linux kernel source directory is located locally and the
+> path is set using LINUX_OVERRIDE_SRCDIR in local.mk.
+> 
+> 1/ Checkout Linux kernel version 4.7.10
+> 2/ make linux-dirclean all
+> 3/ Booted Linux version is 4.7.10
+> 
+> 4/ Checkout Linux kernel version 4.8.5
+> 5/ make linux-dirclean all
+> 6/ Booted Linux version is still 4.7.10
+
+And this scenario works fine with ccache *disabled*, but breaks when
+you enable ccache support in Buildroot?
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
