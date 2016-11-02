@@ -1,34 +1,39 @@
 From: David Lechner <david@lechnology.com>
-Date: Wed,  2 Nov 2016 16:01:12 -0500
-Subject: [Buildroot] [PATCH] DEVELOPERS: add David Lechner
-Message-ID: <1478120472-23486-1-git-send-email-david@lechnology.com>
+Date: Wed,  2 Nov 2016 16:13:02 -0500
+Subject: [Buildroot] [PATCH] linux/linux-ext-fbtft: remove unnecessary ; \
+Message-ID: <1478121182-17011-1-git-send-email-david@lechnology.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The makefile has some unnecessary instances of ; \ at the end of the lines,
+so remove them to make code a bit more readable.
+
 Signed-off-by: David Lechner <david@lechnology.com>
 ---
- DEVELOPERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+ linux/linux-ext-fbtft.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d0a51da..645897f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -387,6 +387,12 @@ F:	package/openldap/
- N:	David du Colombier <0intro@gmail.com>
- F:	package/x264/
- 
-+N:	David Lechner <david@lechnology.com>
-+F:	board/lego/ev3/
-+F:	configs/lego_ev3_defconfig
-+F:	linux/linux-ext-ev3dev-linux-drivers.mk
-+F:	package/ev3dev-linux-drivers/
-+
- N:	Davide Viti <zinosat@tiscali.it>
- F:	package/flann/
- F:	package/python-paho-mqtt/
+diff --git a/linux/linux-ext-fbtft.mk b/linux/linux-ext-fbtft.mk
+index 5eb3d94..64e65a1 100644
+--- a/linux/linux-ext-fbtft.mk
++++ b/linux/linux-ext-fbtft.mk
+@@ -13,10 +13,10 @@ define FBTFT_PREPARE_KERNEL
+ 		dest=drivers/video/fbdev ; \
+ 	else \
+ 		dest=drivers/video ; \
+-	fi ; \
+-	mkdir -p $(LINUX_DIR)/$${dest}/fbtft; \
+-	cp -dpfr $(FBTFT_DIR)/* $(LINUX_DIR)/$${dest}/fbtft/ ; \
++	fi
++	mkdir -p $(LINUX_DIR)/$${dest}/fbtft
++	cp -dpfr $(FBTFT_DIR)/* $(LINUX_DIR)/$${dest}/fbtft/
+ 	echo "source \"$${dest}/fbtft/Kconfig\"" \
+-		>> $(LINUX_DIR)/$${dest}/Kconfig ; \
++		>> $(LINUX_DIR)/$${dest}/Kconfig
+ 	echo 'obj-y += fbtft/' >> $(LINUX_DIR)/$${dest}/Makefile
+ endef
 -- 
 2.7.4
