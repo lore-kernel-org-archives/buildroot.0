@@ -1,28 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Nov 2016 16:37:11 +0100
-Subject: [Buildroot] [PATCH 1/2] mesa3d: bump version to 13.0.0
-In-Reply-To: <20161102144136.34786-1-Vincent.Riera@imgtec.com>
-References: <20161102144136.34786-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161102163711.7eaa1f58@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 2 Nov 2016 15:46:12 +0000
+Subject: [Buildroot] [PATCH] bind: bump version to 9.11.0-P1 (security)
+In-Reply-To: <20161102163642.251b80aa@free-electrons.com>
+References: <20161102142941.2769-1-Vincent.Riera@imgtec.com>
+ <20161102163642.251b80aa@free-electrons.com>
+Message-ID: <5149de66-db01-87a6-6ddc-c1ca11a5583d@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 02/11/16 15:36, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 2 Nov 2016 14:29:41 +0000, Vicente Olivert Riera wrote:
+>> List of fixed CVEs:
+>>
+>> CVE-2016-8864
+>>
+>> Release notes:
+>>
+>> http://ftp.isc.org/isc/bind9/9.11.0-P1/RELEASE-NOTES-bind-9.11.0-P1.html
+>>
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> 
+> This patch has already been sent by Gustavo earlier today.
 
-On Wed, 2 Nov 2016 14:41:35 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/mesa3d/mesa3d.hash | 4 ++--
->  package/mesa3d/mesa3d.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Oh, true. Sorry I didn't see it.
 
-These patches have already been sent yesterday evening by Bernd.
+Gustavo's patch has a small issue: he forgot to update the URL of the
+.asc file used to verify the tarball (in the bind.hash file).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Please consider amending his patch when applying.
+
+Thanks,
+
+Vincent
+
+> Thomas
+> 
