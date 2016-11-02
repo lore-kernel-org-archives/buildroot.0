@@ -1,49 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Nov 2016 17:25:15 +0100
-Subject: [Buildroot] [git commit] board/boundarydevices: remove u-boot from
-	genimage.cfg
-Message-ID: <20161102162525.1559B7FC0F@busybox.osuosl.org>
+Date: Wed, 2 Nov 2016 17:25:02 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add entry for
+	xdriver_xf86-video-imx-viv
+Message-ID: <20161102162524.EB999817AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dac9e45b5fa1faa1bbdab9a89c48c9f24d45aa45
+commit: https://git.buildroot.net/buildroot/commit/?id=57d5012c656710f0b11bd31d0259386aad2ece5f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Adding a comment to explain how to update the bootloader since it is
-located in NOR flash memory.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/boundarydevices/common/genimage.cfg | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/boundarydevices/common/genimage.cfg b/board/boundarydevices/common/genimage.cfg
-index 7a5e71e..a383fb7 100644
---- a/board/boundarydevices/common/genimage.cfg
-+++ b/board/boundarydevices/common/genimage.cfg
-@@ -1,13 +1,15 @@
-+# Minimal SD card image for Boundary Devices platforms
-+#
-+# It does not need a boot section for a bootloader since it is booted
-+# from its NOR flash memory.
-+#
-+# To update the bootloader, execute the following from U-Boot prompt:
-+# => run upgradeu
-+
- image sdcard.img {
- 	hdimage {
- 	}
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5b3a986..d89bc03 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -536,6 +536,7 @@ F:	package/gstreamer1/gst1-imx/
+ F:	package/libimxvpuapi/
+ F:	package/mfgtools/
+ F:	package/sshpass/
++F:	package/x11r7/xdriver_xf86-video-imx-viv/
  
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot.imx"
--		offset = 1024
--	}
--
- 	partition rootfs {
- 		partition-type = 0x83
- 		image = "rootfs.ext4"
+ N:	Geoff Levand <geoff@infradead.org>
+ F:	package/flannel/
