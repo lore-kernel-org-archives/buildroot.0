@@ -1,74 +1,56 @@
 From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Wed, 2 Nov 2016 19:01:24 -0400
-Subject: [Buildroot] [PATCH v4 4/4] lttng-babeltrace: add debug info
-	support
-In-Reply-To: <20161102231023.392100c6@free-electrons.com>
+Date: Wed, 2 Nov 2016 19:05:36 -0400
+Subject: [Buildroot] [PATCH v4 0/4] Update LTTng packages to 2.8.x and
+ Babeltrace to 1.4.0
+In-Reply-To: <20161102231534.235a45c0@free-electrons.com>
 References: <20161102065508.3162-1-eeppeliteloop@gmail.com>
- <20161102065508.3162-5-eeppeliteloop@gmail.com>
- <20161102231023.392100c6@free-electrons.com>
-Message-ID: <CAB4xu_3SxjOQ-KV=46wNR0PqO1PmW8XticcqstaW6hJJyUD8cA@mail.gmail.com>
+ <20161102230852.3784bbdb@free-electrons.com>
+ <20161102231534.235a45c0@free-electrons.com>
+Message-ID: <CAB4xu_3q1daWFv2kdF1dFNG_Ke-L68spXe+H4rfbm+X7WitnWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 2, 2016 at 6:10 PM, Thomas Petazzoni
+On Wed, Nov 2, 2016 at 6:15 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
 >
-> On Wed,  2 Nov 2016 02:55:08 -0400, Philippe Proulx wrote:
+> On Wed, 2 Nov 2016 23:08:52 +0100, Thomas Petazzoni wrote:
 >
->> diff --git a/package/lttng-babeltrace/0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch b/package/lttng-babeltrace/0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
->> new file mode 100644
->> index 0000000..b592d7f
->> --- /dev/null
->> +++ b/package/lttng-babeltrace/0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
->> @@ -0,0 +1,74 @@
->> +From 697ab0905c59561562dc52cd3b925781e07814f3 Mon Sep 17 00:00:00 2001
->> +From: Philippe Proulx <eeppeliteloop@gmail.com>
->> +Date: Wed, 2 Nov 2016 01:40:12 -0400
->> +Subject: [PATCH 1/3] m4/ax_lib_elfutils.m4: add cache variable
+>> On Wed,  2 Nov 2016 02:55:04 -0400, Philippe Proulx wrote:
+>> > See if this is okay and I will rename lttng-babeltrace to babeltrace
+>> > again and submit this last patch.
+>> >
+>> > Philippe Proulx (4):
+>> >   lttng-tools: bump to version 2.8.2
+>> >   lttng-babeltrace: bump to version 1.4.0
+>> >   lttng-babeltrace: add host Babeltrace as host utility
+>> >   lttng-babeltrace: add debug info support
+>>
+>> I've applied all patches, with some changes to the last patch. I'll
+>> reply to this one separately.
 >
-> Please use git format-patch -N to generate the patches. I've fixed that
-> up manually.
+> BTW, would you mind adding yourself to the DEVELOPERS file for the
+> lttng related packages? I'm currently listed as the person taking care
+> of them since I initially introduced those packages, but I'm not
+> actively using LTTng, so it would be better if someone else was listed
+> for those packages.
+>
+> Being listed as a developer means that:
+>
+>  1/ You will be Cc'ed on patches submitted by others that touch those
+>     packages
+>
+>  2/ You will receive a notification when there are build issues related
+>     to those packages.
+>
+> If you agree, please remove me as the developer for those packages, in
+> the same patch.
 
-I always forget this, sorry.
-
->
->> +
->
-> This patch really needed a better commit log, so I've added some
-> details here.
->
-> Essentially: an empty commit log for a non-trivial patch is always a
-> bug. And I believe this rule is not Buildroot specific.
->
->> +if BR2_PACKAGE_LTTNG_BABELTRACE
->> +
->> +config BR2_PACKAGE_LTTNG_BABELTRACE_DEBUG_INFO
->> +     bool
->> +     default y
->> +     depends on !BR2_bfin # elfutils
->> +     depends on !BR2_STATIC_LIBS # elfutils
->> +     depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
->> +     select BR2_PACKAGE_ELFUTILS
->> +
->> +comment "handling debug info in traces needs a glibc or uClibc toolchain w/ dynamic library"
->> +     depends on !BR2_bfin # elfutils
->> +     depends on BR2_STATIC_LIBS \
->> +             || !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
->> +
->> +endif
->
-> This stuff is really complicated, so I've instead removed the
-> sub-option, and simply made lttng-babeltrace.mk enable debug info
-> support when BR2_PACKAGE_ELFUTILS=y.
-
-But then, if BR2_PACKAGE_ELFUTILS=n, you don't know that you could have
-debug info support in Babeltrace if BR2_PACKAGE_ELFUTILS=y.
-
-Or maybe it's not the job of menuconfig to tell the available features.
+Yes, why not. I'm in a pretty good position to know the updates of those
+projects, so will do.
 
 Phil
 
