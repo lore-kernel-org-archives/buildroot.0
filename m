@@ -1,61 +1,48 @@
 From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Wed, 2 Nov 2016 19:05:36 -0400
-Subject: [Buildroot] [PATCH v4 0/4] Update LTTng packages to 2.8.x and
- Babeltrace to 1.4.0
-In-Reply-To: <20161102231534.235a45c0@free-electrons.com>
-References: <20161102065508.3162-1-eeppeliteloop@gmail.com>
- <20161102230852.3784bbdb@free-electrons.com>
- <20161102231534.235a45c0@free-electrons.com>
-Message-ID: <CAB4xu_3q1daWFv2kdF1dFNG_Ke-L68spXe+H4rfbm+X7WitnWg@mail.gmail.com>
+Date: Wed, 2 Nov 2016 19:07:11 -0400
+Subject: [Buildroot] [PATCH 2/2] package/babeltrace: enable debug info
+ support for the host variant
+In-Reply-To: <20161102232930.61516f88@free-electrons.com>
+References: <20161031074624.7576-10-eeppeliteloop@gmail.com>
+ <1477918137-25258-2-git-send-email-yann.morin.1998@free.fr>
+ <20161102232930.61516f88@free-electrons.com>
+Message-ID: <CAB4xu_2PJ2gf1+fNhbHvrHKTUeg3H_Lb0ADMrdywxK0tKphgrw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 2, 2016 at 6:15 PM, Thomas Petazzoni
+On Wed, Nov 2, 2016 at 6:29 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
 >
-> On Wed, 2 Nov 2016 23:08:52 +0100, Thomas Petazzoni wrote:
->
->> On Wed,  2 Nov 2016 02:55:04 -0400, Philippe Proulx wrote:
->> > See if this is okay and I will rename lttng-babeltrace to babeltrace
->> > again and submit this last patch.
->> >
->> > Philippe Proulx (4):
->> >   lttng-tools: bump to version 2.8.2
->> >   lttng-babeltrace: bump to version 1.4.0
->> >   lttng-babeltrace: add host Babeltrace as host utility
->> >   lttng-babeltrace: add debug info support
+> On Mon, 31 Oct 2016 13:48:57 +0100, Yann E. MORIN wrote:
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> Cc: Philippe Proulx <eeppeliteloop@gmail.com>
+>> ---
+>>  package/babeltrace/babeltrace.mk | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
 >>
->> I've applied all patches, with some changes to the last patch. I'll
->> reply to this one separately.
+>> diff --git a/package/babeltrace/babeltrace.mk b/package/babeltrace/babeltrace.mk
+>> index d178a6c..17eaaaa 100644
+>> --- a/package/babeltrace/babeltrace.mk
+>> +++ b/package/babeltrace/babeltrace.mk
+>> @@ -12,8 +12,8 @@ BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
+>>  BABELTRACE_DEPENDENCIES = popt util-linux libglib2 host-pkgconf
+>>  BABELTRACE_CONF_OPTS += --disable-debug-info
+>>  HOST_BABELTRACE_DEPENDENCIES = \
+>> -     host-popt host-util-linux host-libglib2 host-pkgconf
+>> -HOST_BABELTRACE_CONF_OPTS += --disable-debug-info
+>> +     host-popt host-util-linux host-libglib2 host-pkgconf host-elfutils
 >
-> BTW, would you mind adding yourself to the DEVELOPERS file for the
-> lttng related packages? I'm currently listed as the person taking care
-> of them since I initially introduced those packages, but I'm not
-> actively using LTTng, so it would be better if someone else was listed
-> for those packages.
->
-> Being listed as a developer means that:
->
->  1/ You will be Cc'ed on patches submitted by others that touch those
->     packages
->
->  2/ You will receive a notification when there are build issues related
->     to those packages.
->
-> If you agree, please remove me as the developer for those packages, in
-> the same patch.
+> Since the dependency on elfutils is not mandatory, do we really want to
+> force building the support of debug info?
 
-Yes, why not. I'm in a pretty good position to know the updates of those
-projects, so will do.
+Ideally, no. I guess we should use the same strategy as for the target package.
 
 Phil
 
->
-> Thanks!
 >
 > Thomas
 > --
