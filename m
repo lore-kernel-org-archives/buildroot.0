@@ -1,51 +1,55 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed,  2 Nov 2016 10:01:36 +0100
-Subject: [Buildroot] [PATCH] sshpass: bump version to 1.06
-Message-ID: <20161102090136.6704-1-gary.bisson@boundarydevices.com>
+Date: Wed,  2 Nov 2016 10:17:43 +0100
+Subject: [Buildroot] [PATCH] board/boundarydevices: remove u-boot from
+	genimage.cfg
+Message-ID: <20161102091743.8494-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-- Add -P for overriding the password prompt we search for
-- Add -v for verbose logging of the prompt detection prompt.
-- Allow packagers and compilers to change the default password prompt.
-- When giving -V, also print the default password prompt.
+Adding a comment to explain how to update the bootloader since it is
+located in NOR flash memory.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
-Reading the DEVELOPERS file I realized I had sshpass to look after. So here is
-an update.
+Hi,
+
+Just realized that our genimage.cfg can be confusing since it copies
+the u-boot binary although the BootROM will always boot from NOR.
 
 Regards,
 Gary
 ---
- package/sshpass/sshpass.hash | 2 +-
- package/sshpass/sshpass.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/boundarydevices/common/genimage.cfg | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/sshpass/sshpass.hash b/package/sshpass/sshpass.hash
-index 12871e1..f6e0611 100644
---- a/package/sshpass/sshpass.hash
-+++ b/package/sshpass/sshpass.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  c3f78752a68a0c3f62efb3332cceea0c8a1f04f7cf6b46e00ec0c3000bc8483e  sshpass-1.05.tar.gz
-+sha256  c6324fcee608b99a58f9870157dfa754837f8c48be3df0f5e2f3accf145dee60  sshpass-1.06.tar.gz
-diff --git a/package/sshpass/sshpass.mk b/package/sshpass/sshpass.mk
-index 7344ca6..de46604 100644
---- a/package/sshpass/sshpass.mk
-+++ b/package/sshpass/sshpass.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/boundarydevices/common/genimage.cfg b/board/boundarydevices/common/genimage.cfg
+index 7a5e71e..a383fb7 100644
+--- a/board/boundarydevices/common/genimage.cfg
++++ b/board/boundarydevices/common/genimage.cfg
+@@ -1,13 +1,15 @@
++# Minimal SD card image for Boundary Devices platforms
++#
++# It does not need a boot section for a bootloader since it is booted
++# from its NOR flash memory.
++#
++# To update the bootloader, execute the following from U-Boot prompt:
++# => run upgradeu
++
+ image sdcard.img {
+ 	hdimage {
+ 	}
  
--SSHPASS_VERSION = 1.05
-+SSHPASS_VERSION = 1.06
- SSHPASS_SITE = http://downloads.sourceforge.net/project/sshpass/sshpass/$(SSHPASS_VERSION)
- SSHPASS_LICENSE = GPLv2+
- SSHPASS_LICENSE_FILES = COPYING
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot.imx"
+-		offset = 1024
+-	}
+-
+ 	partition rootfs {
+ 		partition-type = 0x83
+ 		image = "rootfs.ext4"
 -- 
 2.9.3
