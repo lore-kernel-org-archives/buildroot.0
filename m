@@ -1,278 +1,169 @@
 From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Wed,  2 Nov 2016 02:55:06 -0400
-Subject: [Buildroot] [PATCH v4 2/4] lttng-babeltrace: bump to version 1.4.0
+Date: Wed,  2 Nov 2016 02:55:08 -0400
+Subject: [Buildroot] [PATCH v4 4/4] lttng-babeltrace: add debug info support
 In-Reply-To: <20161102065508.3162-1-eeppeliteloop@gmail.com>
 References: <20161102065508.3162-1-eeppeliteloop@gmail.com>
-Message-ID: <20161102065508.3162-3-eeppeliteloop@gmail.com>
+Message-ID: <20161102065508.3162-5-eeppeliteloop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Current patches are dropped because they were merged upstream.
-
-Official upstream site of Babeltrace for the distribution of tarballs
-changed from lttng.org to efficios.com (see
-<http://diamon.org/babeltrace>).
-
-Official Babeltrace's website changed from
-<http://www.efficios.com/babeltrace> to <http://diamon.org/babeltrace>.
-
-I explicitly disable the support for debug informations in this patch to
-add it in a separate patch.
+Since Babeltrace 1.4, there is support for printing debug information
+along with compatible traces and event records. Babeltrace needs
+elfutils in this case. If elfutils can be built with the current
+configuration, the lttng-babeltrace package selects it and builds
+with support for debug information. Otherwise the menuconfig shows
+a comment which explains why debug information support cannot be
+built.
 
 Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 ---
 Changes v3 -> v4:
-  - Remove patch related to configure.ac for elfutils (not needed here
-  	since debug infos are disabled).
-  - Fix patch file that does not apply.
+  - Remove duplicate --disable-debug-info.
+  - Replace patch to remove line in configure.ac with patch submitted
+    upstream to add a cache variable to the elfutils check.
+  - Use said cache variable in LTTNG_BABELTRACE_CONF_ENV.
 
-Changes v2 -> v3:
-  - Add links to original patches in patch files.
-  - Do not take care of debug info stuff in this patch.
-  - Do not remove the host babeltrace build (needed for the next patch).
+ ...-m4-ax_lib_elfutils.m4-add-cache-variable.patch | 74 ++++++++++++++++++++++
+ package/lttng-babeltrace/Config.in                 | 17 +++++
+ package/lttng-babeltrace/lttng-babeltrace.mk       | 12 +++-
+ 3 files changed, 102 insertions(+), 1 deletion(-)
+ create mode 100644 package/lttng-babeltrace/0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
 
-Changes v1 -> v2:
-  - Detailed commit message.
-  - Detailed patch messages.
-  - Add comment above `LTTNG_BABELTRACE_AUTORECONF = YES` in
-    `lttng-babeltrace.mk`.
-
- .../0001-no-posix-fallocate-in-uclibc.patch        | 37 -------------
- ...b-Makefile.am-remove-unneeded-static-flag.patch | 36 +++++++++++++
- ...ix-uuid-support-detection-on-static-build.patch | 63 ----------------------
- package/lttng-babeltrace/Config.in                 | 10 ++--
- package/lttng-babeltrace/lttng-babeltrace.hash     | 11 ++--
- package/lttng-babeltrace/lttng-babeltrace.mk       |  9 ++--
- 6 files changed, 48 insertions(+), 118 deletions(-)
- delete mode 100644 package/lttng-babeltrace/0001-no-posix-fallocate-in-uclibc.patch
- create mode 100644 package/lttng-babeltrace/0001-tests-lib-Makefile.am-remove-unneeded-static-flag.patch
- delete mode 100644 package/lttng-babeltrace/0002-configure-fix-uuid-support-detection-on-static-build.patch
-
-diff --git a/package/lttng-babeltrace/0001-no-posix-fallocate-in-uclibc.patch b/package/lttng-babeltrace/0001-no-posix-fallocate-in-uclibc.patch
-deleted file mode 100644
-index d77825f..0000000
---- a/package/lttng-babeltrace/0001-no-posix-fallocate-in-uclibc.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--Do not call posix_fallocate() on uClibc
--
--uClibc does not implement posix_fallocate(), and posix_fallocate() is
--mostly only an hint to the kernel that we will need such or such
--amount of space inside a file. So we just don't call posix_fallocate()
--when building against uClibc.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Peter: add #include <features.h>
-----
-- formats/ctf/ctf.c |    3 +++
-- 1 file changed, 3 insertions(+)
--
--Index: lttng-babeltrace-0.8/formats/ctf/ctf.c
--===================================================================
----- lttng-babeltrace-0.8.orig/formats/ctf/ctf.c
--+++ lttng-babeltrace-0.8/formats/ctf/ctf.c
--@@ -32,6 +32,7 @@
-- #include <sys/stat.h>
-- #include <fcntl.h>
-- #include <dirent.h>
--+#include <features.h>
-- #include <glib.h>
-- #include <unistd.h>
-- #include <stdlib.h>
--@@ -384,9 +385,11 @@
-- 		}
-- 		pos->content_size = -1U;	/* Unknown at this point */
-- 		pos->packet_size = WRITE_PACKET_LEN;
--+#ifndef __UCLIBC__
-- 		off = posix_fallocate(pos->fd, pos->mmap_offset,
-- 				      pos->packet_size / CHAR_BIT);
-- 		assert(off >= 0);
--+#endif
-- 		pos->offset = 0;
-- 	} else {
-- 	read_next_packet:
-diff --git a/package/lttng-babeltrace/0001-tests-lib-Makefile.am-remove-unneeded-static-flag.patch b/package/lttng-babeltrace/0001-tests-lib-Makefile.am-remove-unneeded-static-flag.patch
+diff --git a/package/lttng-babeltrace/0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch b/package/lttng-babeltrace/0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
 new file mode 100644
-index 0000000..b903d87
+index 0000000..b592d7f
 --- /dev/null
-+++ b/package/lttng-babeltrace/0001-tests-lib-Makefile.am-remove-unneeded-static-flag.patch
-@@ -0,0 +1,36 @@
-+From 27e37d2621317d25e08ba0683bf8540b05b9347d Mon Sep 17 00:00:00 2001
++++ b/package/lttng-babeltrace/0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
+@@ -0,0 +1,74 @@
++From 697ab0905c59561562dc52cd3b925781e07814f3 Mon Sep 17 00:00:00 2001
 +From: Philippe Proulx <eeppeliteloop@gmail.com>
-+Date: Fri, 28 Oct 2016 02:09:20 -0400
-+Subject: [PATCH] tests/lib/Makefile.am: remove unneeded -static flag
-+
-+Having those -static flags breaks the build in shared-only builds.
++Date: Wed, 2 Nov 2016 01:40:12 -0400
++Subject: [PATCH 1/3] m4/ax_lib_elfutils.m4: add cache variable
 +
 +Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 +[Philippe: grabbed from this pull request:
-+    https://github.com/efficios/babeltrace/pull/49
++    https://github.com/efficios/babeltrace/pull/52
 +]
 +---
-+ tests/lib/Makefile.am | 2 --
-+ 1 file changed, 2 deletions(-)
++ m4/ax_lib_elfutils.m4 | 32 +++++++++++++++++---------------
++ 1 file changed, 17 insertions(+), 15 deletions(-)
 +
-+diff --git a/tests/lib/Makefile.am b/tests/lib/Makefile.am
-+index 33ada16..c685e77 100644
-+--- a/tests/lib/Makefile.am
-++++ b/tests/lib/Makefile.am
-+@@ -31,13 +31,11 @@ check_SCRIPTS = test_seek_big_trace \
-+ 		test_ctf_writer_complete
++diff --git a/m4/ax_lib_elfutils.m4 b/m4/ax_lib_elfutils.m4
++index fcfe06b..f4fcb0d 100644
++--- a/m4/ax_lib_elfutils.m4
+++++ b/m4/ax_lib_elfutils.m4
++@@ -21,7 +21,9 @@
++ # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++ #
++ # Check the currently installed version of elfutils by using the
++-# _ELFUTILS_PREREQ macro defined in elfutils/version.h.
+++# `_ELFUTILS_PREREQ` macro defined in <elfutils/version.h>.
+++#
+++# The cache variable for this test is `bt_cv_lib_elfutils`.
++ #
++ # AX_LIB_ELFUTILS(MAJOR_VERSION, MINOR_VERSION, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
++ # ---------------------------------------------------------------------------
++@@ -29,7 +31,6 @@ AC_DEFUN([AX_LIB_ELFUTILS], [
++ 	m4_pushdef([major_version], [$1])
++ 	m4_pushdef([minor_version], [$2])
 + 
-+ if ENABLE_DEBUG_INFO
-+-test_dwarf_LDFLAGS = -static
-+ test_dwarf_LDADD = $(LIBTAP) \
-+ 	$(top_builddir)/lib/libbabeltrace.la \
-+ 	$(top_builddir)/lib/libdebug-info.la
-+ test_dwarf_SOURCES = test_dwarf.c
++-	AC_MSG_CHECKING([for elfutils version >= major_version.minor_version])
++ 	m4_if([$#], 3, [
++ 		m4_pushdef([true_action], [$3])
++ 	], [
++@@ -43,20 +44,21 @@ AC_DEFUN([AX_LIB_ELFUTILS], [
++ 			AC_MSG_ERROR(elfutils >= major_version.minor_version is required)])
++ 	])
 + 
-+-test_bin_info_LDFLAGS = -static
-+ test_bin_info_LDADD = $(LIBTAP) \
-+ 	$(top_builddir)/lib/libbabeltrace.la \
-+ 	$(top_builddir)/lib/libdebug-info.la
++-	AC_RUN_IFELSE([
++-		AC_LANG_SOURCE([
++-			#include <stdlib.h>
++-			#include <elfutils/version.h>
+++	AC_CACHE_CHECK(
+++		[for elfutils version >= major_version.minor_version],
+++		[bt_cv_lib_elfutils], [
+++			AC_RUN_IFELSE([AC_LANG_SOURCE([
+++				#include <stdlib.h>
+++				#include <elfutils/version.h>
+++
+++				int main(void) {
+++					return _ELFUTILS_PREREQ(major_version, minor_version) ? EXIT_SUCCESS : EXIT_FAILURE;
+++				}
+++			])], [bt_cv_lib_elfutils=yes], [bt_cv_lib_elfutils=no])
+++		]
+++	)
++ 
++-			int main(void) {
++-				return _ELFUTILS_PREREQ(major_version, minor_version) ? EXIT_SUCCESS : EXIT_FAILURE;
++-			}
++-		])
++-	],
++-		echo yes
++-		true_action,
++-		echo no
++-		false_action)
+++	AS_IF([test "x$bt_cv_lib_elfutils" = "xyes"], [true_action], [false_action])
++ 
++ 	m4_popdef([false_action])
++ 	m4_popdef([true_action])
 +-- 
 +2.9.3
 +
-diff --git a/package/lttng-babeltrace/0002-configure-fix-uuid-support-detection-on-static-build.patch b/package/lttng-babeltrace/0002-configure-fix-uuid-support-detection-on-static-build.patch
-deleted file mode 100644
-index 849c0a3..0000000
---- a/package/lttng-babeltrace/0002-configure-fix-uuid-support-detection-on-static-build.patch
-+++ /dev/null
-@@ -1,63 +0,0 @@
--From 670d0961a823df0db28f39a354430f3dc2519418 Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Sat, 28 May 2016 12:53:33 +0200
--Subject: [PATCH] configure: fix uuid support detection on static build
--
--This change adds uuid support detection using pkg-config, before falling
--back on default AC_CHECK_LIB calls.
--
--Using flags from pkg-config is useful for static build, because they
--also include dependency flags; whereas
--
--AC_CHECK_LIB function achieves its test by trying to link against the
--requested library, without taking care of its dependency
--requirements/flags. Therefore, in case of static build, it can fail on
--the uuid detection like [1], because the uuid's dependency flags
--(regarding gettext) are missing.
--Instead, using pkg-config to do the check will take care of getting and
--setting all required flags.
--
--This change adds uuid detection using pkg-config helper before falling
--back on the standard AC_CHECK_LIB detection for platforms missing
--pkg-config.
--
--This issue [1] has been triggered on Buildroot farms.
--
--[1] http://autobuild.buildroot.net/results/43b/43b98ddf9eb44152ed9ac4a98d887af14831d8da/build-end.log
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-----
-- configure.ac | 10 ++++++++++
-- 1 file changed, 10 insertions(+)
--
--diff --git a/configure.ac b/configure.ac
--index 632fe39..b344fa8 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -65,6 +65,15 @@ esac
-- AM_CONDITIONAL([BABELTRACE_BUILD_WITH_MINGW], [test "x$MINGW32" = "xyes"])
-- 
-- # Check for libuuid
--+PKG_CHECK_MODULES([UUID], [uuid],
--+[
--+	LIBS="${UUID_LIBS} ${LIBS}"
--+	CFLAGS="${CFLAGS} ${UUID_CFLAGS}"
--+	AC_DEFINE_UNQUOTED([BABELTRACE_HAVE_LIBUUID], 1, [Has libuuid support.])
--+	have_libuuid=yes
--+],
--+[
--+# try detecting libuuid without pkg-config
-- AC_CHECK_LIB([uuid], [uuid_generate],
-- [
-- 	AC_DEFINE_UNQUOTED([BABELTRACE_HAVE_LIBUUID], 1, [Has libuuid support.])
--@@ -83,6 +92,7 @@ AC_CHECK_LIB([uuid], [uuid_generate],
-- 			AC_MSG_ERROR([Cannot find libuuid uuid_generate nor libc uuid_create. Use [LDFLAGS]=-Ldir to specify their location.])
-- 		fi
-- 	])
--+])
-- ]
-- )
-- AM_CONDITIONAL([BABELTRACE_BUILD_WITH_LIBUUID], [test "x$have_libuuid" = "xyes"])
---- 
--2.8.3
--
 diff --git a/package/lttng-babeltrace/Config.in b/package/lttng-babeltrace/Config.in
-index d362779..2e8d778 100644
+index 95b635d..55e2143 100644
 --- a/package/lttng-babeltrace/Config.in
 +++ b/package/lttng-babeltrace/Config.in
-@@ -14,18 +14,16 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
- 	  to/from another trace format.
+@@ -27,6 +27,23 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
  
- 	  Babeltrace is the reference implementation of the Common
--	  Trace Format (see <http://diamon.org/docs/ctf/>). Babeltrace
-+	  Trace Format (see <http://diamon.org/ctf/>). Babeltrace
- 	  can decode and display LTTng traces, since the latter are
- 	  written using the CTF format.
+ 	  http://diamon.org/babeltrace
  
- 	  Having this tool on the target is not mandatory. You can
- 	  transfer the binary trace output from the target to your
--	  development workstation, and use babeltrace here. Buildroot
--	  automatically builds a host babeltrace in
--	  $(O)/host/usr/bin/babeltrace as a dependency of the
--	  lttng-tools package.
-+	  development workstation, and use babeltrace here. Babeltrace
-+	  is packaged for all major Linux distributions.
- 
--	  http://www.efficios.com/babeltrace
-+	  http://diamon.org/babeltrace
- 
++if BR2_PACKAGE_LTTNG_BABELTRACE
++
++config BR2_PACKAGE_LTTNG_BABELTRACE_DEBUG_INFO
++	bool
++	default y
++	depends on !BR2_bfin # elfutils
++	depends on !BR2_STATIC_LIBS # elfutils
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
++	select BR2_PACKAGE_ELFUTILS
++
++comment "handling debug info in traces needs a glibc or uClibc toolchain w/ dynamic library"
++	depends on !BR2_bfin # elfutils
++	depends on BR2_STATIC_LIBS \
++		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
++
++endif
++
  comment "lttng-babeltrace needs a toolchain w/ wchar, threads"
  	depends on BR2_USE_MMU
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.hash b/package/lttng-babeltrace/lttng-babeltrace.hash
-index a9f45b2..bca0bdb 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.hash
-+++ b/package/lttng-babeltrace/lttng-babeltrace.hash
-@@ -1,7 +1,6 @@
--# From http://lttng.org/files/babeltrace/babeltrace-1.2.4.tar.bz2.md5
--md5     20a806fa7570e69a91707855a98f3ca6 babeltrace-1.2.4.tar.bz2
--# From http://lttng.org/files/babeltrace/babeltrace-1.2.4.tar.bz2.sha1
--sha1    c72a80e8fd905cb1ae3b0cf88885517faafe0fa1  babeltrace-1.2.4.tar.bz2
--# Locally generated
--sha256  666e3a1ad2dc7d5703059963056e7800f0eab59c8eeb6be2efe4f3acc5209eb1  babeltrace-1.2.4.tar.bz2
-+# From http://www.efficios.com/files/babeltrace/babeltrace-1.4.0.tar.bz2.{md5,sha1}
-+md5     fa99064048af5c9c6ff00e489ac809c2  babeltrace-1.4.0.tar.bz2
-+sha1    3b162480ee883625e8581bf163817f78a4b6487b  babeltrace-1.4.0.tar.bz2
- 
-+# Locally generated
-+sha256  9469eeb22617cd12668683b04c27003e5337e9ac66ade914988df3642fc0d0e4  babeltrace-1.4.0.tar.bz2
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index b2e03a9..291a561 100644
+index deb2d07..2139435 100644
 --- a/package/lttng-babeltrace/lttng-babeltrace.mk
 +++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -4,18 +4,15 @@
- #
- ################################################################################
- 
--LTTNG_BABELTRACE_SITE = http://lttng.org/files/babeltrace
--LTTNG_BABELTRACE_VERSION = 1.2.4
-+LTTNG_BABELTRACE_SITE = http://www.efficios.com/files/babeltrace
-+LTTNG_BABELTRACE_VERSION = 1.4.0
- LTTNG_BABELTRACE_SOURCE = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
+@@ -10,10 +10,20 @@ LTTNG_BABELTRACE_SOURCE = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
  LTTNG_BABELTRACE_LICENSE = MIT, LGPLv2.1 (include/babeltrace/list.h), GPLv2 (test code)
  LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
--
  LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2 host-pkgconf
-+LTTNG_BABELTRACE_CONF_OPTS += --disable-debug-info
+-LTTNG_BABELTRACE_CONF_OPTS += --disable-debug-info
  HOST_LTTNG_BABELTRACE_DEPENDENCIES = \
  	host-popt host-util-linux host-libglib2 host-pkgconf
+ HOST_LTTNG_BABELTRACE_CONF_OPTS += --disable-debug-info
  
--# for 0002-configure-fix-uuid-support-detection-on-static-build.patch
--LTTNG_BABELTRACE_AUTORECONF = YES
--
++# For 0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
++LTTNG_BABELTRACE_AUTORECONF = YES
++
++ifeq ($(BR2_PACKAGE_LTTNG_BABELTRACE_DEBUG_INFO),y)
++LTTNG_BABELTRACE_DEPENDENCIES += elfutils
++LTTNG_BABELTRACE_CONF_OPTS += --enable-debug-info
++LTTNG_BABELTRACE_CONF_ENV += bt_cv_lib_elfutils=yes
++else
++LTTNG_BABELTRACE_CONF_OPTS += --disable-debug-info
++endif
++
  $(eval $(autotools-package))
  $(eval $(host-autotools-package))
 -- 
