@@ -1,51 +1,51 @@
 From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Wed, 2 Nov 2016 19:07:11 -0400
-Subject: [Buildroot] [PATCH 2/2] package/babeltrace: enable debug info
- support for the host variant
-In-Reply-To: <20161102232930.61516f88@free-electrons.com>
-References: <20161031074624.7576-10-eeppeliteloop@gmail.com>
- <1477918137-25258-2-git-send-email-yann.morin.1998@free.fr>
- <20161102232930.61516f88@free-electrons.com>
-Message-ID: <CAB4xu_2PJ2gf1+fNhbHvrHKTUeg3H_Lb0ADMrdywxK0tKphgrw@mail.gmail.com>
+Date: Wed,  2 Nov 2016 19:23:35 -0400
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: transfer lttng-* and liburcu
+	projects to Philippe Proulx
+Message-ID: <20161102232335.6274-1-eeppeliteloop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 2, 2016 at 6:29 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon, 31 Oct 2016 13:48:57 +0100, Yann E. MORIN wrote:
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Philippe Proulx <eeppeliteloop@gmail.com>
->> ---
->>  package/babeltrace/babeltrace.mk | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/babeltrace/babeltrace.mk b/package/babeltrace/babeltrace.mk
->> index d178a6c..17eaaaa 100644
->> --- a/package/babeltrace/babeltrace.mk
->> +++ b/package/babeltrace/babeltrace.mk
->> @@ -12,8 +12,8 @@ BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
->>  BABELTRACE_DEPENDENCIES = popt util-linux libglib2 host-pkgconf
->>  BABELTRACE_CONF_OPTS += --disable-debug-info
->>  HOST_BABELTRACE_DEPENDENCIES = \
->> -     host-popt host-util-linux host-libglib2 host-pkgconf
->> -HOST_BABELTRACE_CONF_OPTS += --disable-debug-info
->> +     host-popt host-util-linux host-libglib2 host-pkgconf host-elfutils
->
-> Since the dependency on elfutils is not mandatory, do we really want to
-> force building the support of debug info?
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+---
+ DEVELOPERS | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Ideally, no. I guess we should use the same strategy as for the target package.
-
-Phil
-
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1c3d6d7..3229a2f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1197,7 +1197,12 @@ F:	package/libassuan/
+ F:	package/libgpgme/
+ 
+ N:	Philippe Proulx <eeppeliteloop@gmail.com>
++F:	package/lttng-babeltrace/
++F:	package/lttng-libust/
++F:	package/lttng-modules/
++F:	package/lttng-tools/
+ F:	package/python-ipython/
++F:	package/liburcu/
+ 
+ N:	Pierre Floury <pierre.floury@gmail.com>
+ F:	package/trace-cmd/
+@@ -1477,15 +1482,10 @@ F:	package/libcap/
+ F:	package/libffi/
+ F:	package/libsha1/
+ F:	package/libtirpc/
+-F:	package/liburcu/
+ F:	package/libxkbcommon/
+ F:	package/libxml-parser-perl/
+ F:	package/localedef/
+ F:	package/log4cxx/
+-F:	package/lttng-babeltrace/
+-F:	package/lttng-libust/
+-F:	package/lttng-modules/
+-F:	package/lttng-tools/
+ F:	package/monit/
+ F:	package/mpdecimal/
+ F:	package/msmtp/
+-- 
+2.9.3
