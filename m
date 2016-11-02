@@ -1,17 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Nov 2016 10:48:17 +0100
-Subject: [Buildroot] [PATCH v2 05/23]
- toolchain-external-blackfin-uclinux: new package
-In-Reply-To: <20161101181455.GA30593@free.fr>
+Date: Wed, 2 Nov 2016 10:55:37 +0100
+Subject: [Buildroot] [PATCH v2 23/23] toolchain-external: introduce and
+ use external toolchain infra
+In-Reply-To: <db5e7d52-3abe-a74b-ee86-06d60a9491d9@gmail.com>
 References: <1477742948-11490-1-git-send-email-romain.naour@gmail.com>
- <1477742948-11490-6-git-send-email-romain.naour@gmail.com>
- <20161030164752.GA18077@free.fr>
- <20161030183734.26f568d4@free-electrons.com>
- <20161030181700.GC18077@free.fr>
- <20161101141944.01daf548@free-electrons.com>
- <464e77de-831e-beeb-4d83-be59aa659f88@gmail.com>
- <20161101181455.GA30593@free.fr>
-Message-ID: <20161102104817.50c360ab@free-electrons.com>
+ <1477742948-11490-24-git-send-email-romain.naour@gmail.com>
+ <28350dcb-4c46-22ce-63aa-5d4ff8902b47@gmail.com>
+ <20161101142314.7248d448@free-electrons.com>
+ <db5e7d52-3abe-a74b-ee86-06d60a9491d9@gmail.com>
+Message-ID: <20161102105537.69bd0a55@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,39 +17,54 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 1 Nov 2016 19:14:55 +0100, Yann E. MORIN wrote:
+On Tue, 1 Nov 2016 18:42:22 +0100, Romain Naour wrote:
 
-> As we discussed on IRC just a few minutes ago, I am not in favour of you
-> rewriting this series, whether it is material for -rc1 or -next.
-
-IMO, we're too close to -rc1 for this series to go in. I'll probably
-merge the first five preparation patches, but I'd prefer to merge the
-rest in the next branch.
-
-> As for the ordering of the toolchains, I think we should have them
-> ordered by alpahbetiacal order.
-
-Right.
-
-> After all, we never really advertised that defconfigs would be
-> "reansposable" as-is during an upgrade.
-
-Well, this is what we are trying to achieve to some extent with the
-Config.in.legacy.
-
-> The real process for an upgrade should be:
+> >  - The Linaro toolchain is EABIhf, the Sourcery toolchain is EABI, so
+> >    there is never a choice between Linaro and Sourcery for a given
+> >    target configuration.  
 > 
->     make foo_defconfig
->     git pull
->     make oldconfig
->     (check)
->     make savedefconfig
+> Ok for this one but my concern was about Sourcery over Arago ARM toolchains and
+> Sourcery over Codescape MIPS toolchains. Notice that Linaro provide an EABI
+> toolchains [1], if someone add this toolchain in Buildroot we will have a choice
+> between Linaro and Sourcery toolchains.
 
-Regardless of whether it's for backward compat reasons or not, I still
-think the Sourcery toolchain should be used by default on ARM EABI, and
-not the older Arago toolchain, even if Arago is sorted alphabetically
-before Sourcery. Which is why I suggest to have a "default" statement
-in the Config.in choice for external toolchains.
+OK.
+
+> My understanding is: currently we have a list of "preferred" toolchains with a
+> fall back to custom toolchains. So even if we want to keep toolchains sorted
+> alphabetically here, we have to make an exception for toolchain-external-custom
+> package.
+
+Correct, the "custom" option should definitely be the last one, we
+prefer to use pre-defined toolchains when available.
+
+> >  - The Arago toolchain is indeed old, and I'd rather not use it for our
+> >    default on ARM. Maybe we can keep an alphabetic ordering, and add a
+> >    "default" Config.in clause in the choice...endchoice? Yes, it is
+> >    weird to have such a default in the generic code, but I don't see
+> >    another option.  
+> 
+> I guess you don't really like the patch 24/24 of the last series (v3):
+> http://patchwork.ozlabs.org/patch/689378/
+
+So, in fact we have two choice:
+
+ (1) Play with the "source" order, to get some toolchains considered as
+     the default choice over other toolchains. This is what your patch
+     24/24 currently does.
+
+     Advantage is that we don't have to maintain a list of "default"
+     statement. The only drawback is that we violate the rule of "let's
+     include by alphabetic ordering".
+
+ (2) Add a potentially long list of "default" statement. This solution
+     is painful IMO, and its only advantage is that we don't violate
+     the "order alphabetically" rule.
+
+So despite what Yann said, I'm in fact going to propose that we stick
+with (1), i.e what your patch does currently. Yes, it's a violation of
+the "order alphabetically" rule, but it's the easiest solution, and is
+probably explained by comments in your patch.
 
 Best regards,
 
