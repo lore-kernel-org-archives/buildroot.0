@@ -1,100 +1,49 @@
 From: David Lechner <david@lechnology.com>
-Date: Tue,  1 Nov 2016 22:15:56 -0500
-Subject: [Buildroot] [PATCH v2 4/4] board/lego/ev3: Use ev3dev linux ext for
-	ev3dev drivers
-In-Reply-To: <1478056556-30242-1-git-send-email-david@lechnology.com>
-References: <1478056556-30242-1-git-send-email-david@lechnology.com>
-Message-ID: <1478056556-30242-5-git-send-email-david@lechnology.com>
+Date: Tue,  1 Nov 2016 22:15:52 -0500
+Subject: [Buildroot] [PATCH v2 0/4] LEGO MINDSTORMS EV3 Updates
+Message-ID: <1478056556-30242-1-git-send-email-david@lechnology.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This uses the ev3dev linux extension to compile the ev3dev drivers for
-LEGO MINDSTORMS EV3.
+v2 changes:
+* Specified specific U-Boot version
+* Using config fragment for linux kernel config changes
+* Added dependency host-dosfstool and host-mtools
+* Renamed ev3dev package and kernel extension to ev3dev-linux-drivers
+* Removed dest variable to simplify kernel extension makefile
+* Fixed "from from" typo
 
-Signed-off-by: David Lechner <david@lechnology.com>
----
- .../0001-Create-empty-drivers-lego-Kconfig.patch   | 24 ----------------------
- board/lego/ev3/readme.txt                          |  4 ++--
- configs/lego_ev3_defconfig                         |  4 +---
- 3 files changed, 3 insertions(+), 29 deletions(-)
+David Lechner (4):
+  configs/lego_ev3: add U-Boot support
+  board/lego/ev3: Create images using genimage
+  linux: add ev3dev extension
+  board/lego/ev3: Use ev3dev linux ext for ev3dev drivers
+
+ board/lego/ev3/genimage.cfg                        | 57 +++++++++++++++
+ board/lego/ev3/linux.fragment                      |  7 ++
+ .../0001-Create-empty-drivers-lego-Kconfig.patch   | 24 -------
+ board/lego/ev3/post-image.sh                       | 14 ++++
+ board/lego/ev3/readme.txt                          | 84 ++++++----------------
+ configs/lego_ev3_defconfig                         | 21 ++++--
+ linux/Config.ext.in                                | 10 +++
+ linux/linux-ext-ev3dev-linux-drivers.mk            | 12 ++++
+ package/Config.in                                  |  1 +
+ package/ev3dev-linux-drivers/Config.in             | 12 ++++
+ .../ev3dev-linux-drivers/ev3dev-linux-drivers.mk   | 11 +++
+ .../ev3dev-linux-drivers/lego-linux-drivers.hash   |  2 +
+ support/scripts/pkg-stats                          |  1 +
+ 13 files changed, 164 insertions(+), 92 deletions(-)
+ create mode 100644 board/lego/ev3/genimage.cfg
+ create mode 100644 board/lego/ev3/linux.fragment
  delete mode 100644 board/lego/ev3/patches/linux/0001-Create-empty-drivers-lego-Kconfig.patch
+ create mode 100755 board/lego/ev3/post-image.sh
+ create mode 100644 linux/linux-ext-ev3dev-linux-drivers.mk
+ create mode 100644 package/ev3dev-linux-drivers/Config.in
+ create mode 100644 package/ev3dev-linux-drivers/ev3dev-linux-drivers.mk
+ create mode 100644 package/ev3dev-linux-drivers/lego-linux-drivers.hash
 
-diff --git a/board/lego/ev3/patches/linux/0001-Create-empty-drivers-lego-Kconfig.patch b/board/lego/ev3/patches/linux/0001-Create-empty-drivers-lego-Kconfig.patch
-deleted file mode 100644
-index 614d53d..0000000
---- a/board/lego/ev3/patches/linux/0001-Create-empty-drivers-lego-Kconfig.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--From 72c5727488f10160abfadcc77dd9763c4408b5e9 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
--Date: Sat, 15 Oct 2016 16:23:31 +0200
--Subject: [PATCH] Create empty drivers/lego/Kconfig
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
-----
-- drivers/lego/Kconfig | 1 +
-- 1 file changed, 1 insertion(+)
-- create mode 100644 drivers/lego/Kconfig
--
--diff --git a/drivers/lego/Kconfig b/drivers/lego/Kconfig
--new file mode 100644
--index 0000000..d7cbf4f
----- /dev/null
--+++ b/drivers/lego/Kconfig
--@@ -0,0 +1 @@
--+# Empty Kconfig just to make source from drivers/Kconfig succeed.
---- 
--2.9.3
--
-diff --git a/board/lego/ev3/readme.txt b/board/lego/ev3/readme.txt
-index c075af5..c40907c 100644
---- a/board/lego/ev3/readme.txt
-+++ b/board/lego/ev3/readme.txt
-@@ -4,8 +4,7 @@ Intro
- =====
- 
- This is the buildroot basic board support for the Lego Mindstorms EV3
--programmable brick. No support for sensors and drivers is provided for the
--moment.
-+programmable brick.
- 
- The Lego Mindstorms EV3 brick comprises a Texas Instruments AM1808 SoC, with
- an ARM 926EJ-S main processor running at 300 MHz.
-@@ -17,6 +16,7 @@ See:
- The buildroot configuration uses the Linux kernel of the ev3dev project.
- See:
- - https://github.com/ev3dev/ev3-kernel/
-+- https://github.com/ev3dev/lego-linux-drivers/
- - http://www.ev3dev.org/
- 
- How it works
-diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
-index ea76d59..543a227 100644
---- a/configs/lego_ev3_defconfig
-+++ b/configs/lego_ev3_defconfig
-@@ -2,9 +2,6 @@
- BR2_arm=y
- BR2_arm926t=y
- 
--# patches
--BR2_GLOBAL_PATCH_DIR="board/lego/ev3/patches"
--
- # system
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
-@@ -20,6 +17,7 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v4.4.19-15-ev3dev-ev3_1"
- BR2_LINUX_KERNEL_DEFCONFIG="ev3dev"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lego/ev3/linux.fragment"
- BR2_LINUX_KERNEL_UIMAGE=y
-+BR2_LINUX_KERNEL_EXT_EV3DEV_LINUX_DRIVERS=y
- 
- # filesystem
- BR2_TARGET_ROOTFS_EXT2=y
 -- 
 2.7.4
