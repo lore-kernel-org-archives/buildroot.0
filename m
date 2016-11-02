@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Nov 2016 17:28:10 +0100
-Subject: [Buildroot] [PATCH] memcached: security bump to version 1.4.33
-In-Reply-To: <1478041170-5083-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1478041170-5083-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20161102172810.0bd8d4cb@free-electrons.com>
+Date: Wed, 2 Nov 2016 17:28:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 13.0.0
+In-Reply-To: <20161101192451.16248-1-bernd.kuhls@t-online.de>
+References: <20161101192451.16248-1-bernd.kuhls@t-online.de>
+Message-ID: <20161102172817.74ec1828@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  1 Nov 2016 19:59:30 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2016-8704 - server append/prepend remote code execution
-> vulnerability.
-> CVE-2016-8705 - server update remote code execution vulnerability.
-> CVE-2016-8706 - server SASL authentication remote code execution
-> vulnerability.
+On Tue,  1 Nov 2016 20:24:51 +0100, Bernd Kuhls wrote:
+> Udev support was removed upstream:
+> https://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=13.0&id=f9f7e44c94f7eee4778768adf7afffba6c0581e7
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/memcached/memcached.hash | 6 +++---
->  package/memcached/memcached.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+>  package/mesa3d/mesa3d.hash               | 4 ++--
+>  package/mesa3d/mesa3d.mk                 | 9 +--------
+>  3 files changed, 4 insertions(+), 11 deletions(-)
 
 Applied to master, thanks.
 
