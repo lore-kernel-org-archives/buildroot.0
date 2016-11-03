@@ -1,64 +1,156 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  3 Nov 2016 06:58:40 -0300
-Subject: [Buildroot] [PATCH 14/14] gst1-plugins-bad: add srtp support
-In-Reply-To: <1478167120-3285-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1478167120-3285-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1478167120-3285-14-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 3 Nov 2016 11:22:31 +0100
+Subject: [Buildroot] [PATCH] ubifs: Fix regression in ubifs_readdir()
+In-Reply-To: <1478157814.9853.1.camel@embedded.rocks>
+References: <1477648432-9543-1-git-send-email-richard@nod.at>
+ <1477671544.8927.1.camel@embedded.rocks>
+ <c542e099-0404-be8e-ebeb-d4265d3204d6@nod.at>
+ <1477693395.31471.1.camel@embedded.rocks>
+ <20161101232215.5bf7cabd@free-electrons.com>
+ <1478116619.8549.1.camel@embedded.rocks>
+ <20161102214927.30b0d74f@free-electrons.com>
+ <1478126967.8549.4.camel@embedded.rocks>
+ <87f68565-765b-4e9b-a3f0-34dae0b45e93@mind.be>
+ <1478157814.9853.1.camel@embedded.rocks>
+Message-ID: <d5f41448-c95c-54e3-69dc-ad3615580042@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's not new for 1.10.0 but hasn't been enabled when libsrtp was added
-to buildroot.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gstreamer1/gst1-plugins-bad/Config.in           | 4 ++++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 8 +++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index ac081b5..4143f41 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -670,6 +670,10 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SNDFILE
- 	bool "sndfile"
- 	select BR2_PACKAGE_LIBSNDFILE
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SRTP
-+	bool "srtp"
-+	select BR2_PACKAGE_LIBSRTP
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD
- 	bool "vcd"
- 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index a42bb0c..9e61b86 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -44,7 +44,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
- 	--disable-ladspa \
- 	--disable-lv2 \
- 	--disable-libde265 \
--	--disable-srtp \
- 	--disable-linsys \
- 	--disable-modplug \
- 	--disable-mimic \
-@@ -780,6 +779,13 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-sndfile
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SRTP),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-srtp
-+GST1_PLUGINS_BAD_DEPENDENCIES += libsrtp
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-srtp
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-vcd
- else
+On 03-11-16 08:23, J?rg Krause wrote:
+> On Thu, 2016-11-03 at 03:46 +0100, Arnout Vandecappelle wrote:
+>>
+>> On 02-11-16 23:49, J?rg Krause wrote:
+[snip]
+>>>>> Yes, I am. Linux kernel source directory is located locally and
+>>>>> the
+>>>>> path is set using LINUX_OVERRIDE_SRCDIR in local.mk.
+>>>>>
+>>>>> 1/ Checkout Linux kernel version 4.7.10
+>>>>> 2/ make linux-dirclean all
+>>>>> 3/ Booted Linux version is 4.7.10
+>>>>>
+>>>>> 4/ Checkout Linux kernel version 4.8.5
+>>>>> 5/ make linux-dirclean all
+>>>>> 6/ Booted Linux version is still 4.7.10
+>>>>
+>>>> And this scenario works fine with ccache *disabled*, but breaks
+>>>> when
+>>>> you enable ccache support in Buildroot?
+>>>
+>>> Yes.
+>>
+>>  I can't reproduce this. I've got a nice mix of cache misses and
+>> cache hits when
+>> building a different version, and version.o is definitely a cache
+>> miss.
+>>
+>>  Can you double-check the version in output/build/linux-
+>> custom/init/version.o?
+> 
+> I checked the version string in version.o with hexdump -C and they
+> differ.
+
+ And the version that is in there is correct, right? (Use strings to get it, the
+first string it finds should be the version string as in uname -a).
+
+ This is very weird, because version.o gets linked into the vmlinux.elf and
+eventually the zImage, and ccache doesn't get activated anymore in that path
+because it's all linking and no compiling...
+
+> 
+>> And the one in output/build/linux-
+>> custom/include/generated/utsrelease.h?
+> 
+> This as well.
+> 
+>>  Hm, hang on, is there maybe a utsrelease.h that ends up in your
+>> staging dir and that is used by ccache?
+> 
+> No, there is only the linux generated file.
+> 
+> ---
+> 
+> I am not experienced with ccache, but I got some statistics:
+> 
+> I cleared the cache by removing ~/.buildroot-ccache, than run `make
+> linux-dirclean linux`:
+> 
+> cache hit (direct)                     0
+> cache hit (preprocessed)               0
+> cache miss                          1088
+> cache hit rate                      0.00 %
+> called for link                       10
+> called for preprocessing               5
+> no input file                        394
+> cleanups performed                     0
+> files in cache                      3250
+> 
+> Then I re-run `make linux-dirclean linux` (without altering the linux
+> sources):
+> 
+> cache hit (direct)                  1076
+> cache hit (preprocessed)              10
+> cache miss                          1090
+> cache hit rate                     49.91 %
+> called for link                       20
+> called for preprocessing              10
+> no input file                        788
+> cleanups performed                     0
+> files in cache                      3264
+> 
+> Again, clear the cache and run `make linux-dirclean linux`, but alter
+> the linux sources by checking out a different branch:
+> 
+> cache hit (direct)                    10
+
+ This is weird, it shouldn't go down... Did you clear the cache or the
+statistics somewhere in between?
+
+> cache hit (preprocessed)              62
+> cache miss                          2102
+> cache hit rate                      3.31 %
+> called for link                       20
+> called for preprocessing              10
+> no input file                        773
+> cleanups performed                     0
+> files in cache                      6386
+> 
+> ---
+> 
+> Furthermore, I did the following for the different linux builds:
+> 
+> After building branch-4.7.y:
+> # cp output/build/linux-custom/arch/arm/boot/zImage zImage-4.7.10
+> 
+> After building branch-4.8.y:
+> # cp output/build/linux-custom/arch/arm/boot/zImage zImage-4.8.5
+> 
+> Afterwards, diff shows no differences:
+> # diff zImage-4.7.10 zImage-4.8.5
+
+ Since version.o differs, it means the version.o doesn't end up in the zImage...
+Again, can you check for the intermediate files what happens to them? E.g.
+init/built-in.o, .tmp_vmlinux1, arch/arm/boot/Image. Maybe just do "mv
+output/build/linux-custom output/build/linux-custom.orig" before rebuilding and
+do a full tree compare to find which files are identical.
+
+ Regards,
+ Arnout
+
+> 
+> Best regards,
+> J?rg Krause
+> 
+
 -- 
-2.7.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
