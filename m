@@ -1,37 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Nov 2016 23:28:01 +0100
-Subject: [Buildroot] [git commit] fs/iso9660: drop reference to host-fakeroot
-Message-ID: <20161103223211.2F2227FD45@busybox.osuosl.org>
+Date: Thu, 3 Nov 2016 23:34:39 +0100
+Subject: [Buildroot] [PATCH 1/4] package/pseudo: needs sqlite
+In-Reply-To: <66a2e2ef68a1edaaaee0d92c60279cc8b2e5325b.1478211656.git.yann.morin.1998@free.fr>
+References: <cover.1478211656.git.yann.morin.1998@free.fr>
+ <66a2e2ef68a1edaaaee0d92c60279cc8b2e5325b.1478211656.git.yann.morin.1998@free.fr>
+Message-ID: <20161103233439.02cd07a4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5ed7fcad1da81894a32ec2908f56b001feefb6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Since commit 41f0688d9113dd33a5971c5654c7efd022727ed2 ("fs/iso9660:
-convert to the filesystem infrastructure"), the is9660 logic uses the
-common filesystem infrastructure, so the dependency on host-fakeroot is
-no longer needed, and has actually become bogus since we switched to
-host-pseudo.
+On Thu,  3 Nov 2016 23:21:05 +0100, Yann E. MORIN wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- fs/iso9660/iso9660.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +HOST_PSEUDO_DEPENDENCIES = host-sqlite
+> +HOST_PSEUDO_CONF_OPTS = \
+> +	--libdir=$(HOST_DIR)/usr/lib \
+> +	--with-sqlite=$(HOST_DIR)/usr
 
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 32d79d7..d1d9cbf 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -24,7 +24,7 @@
- 
- ROOTFS_ISO9660_BOOT_MENU = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
- 
--ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit host-fakeroot linux
-+ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit linux
- 
- ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
- ROOTFS_ISO9660_USE_INITRD = YES
+I've added a comment above this to explain why we pass --libdir even
+though this shouldn't be needed for autotools packages.
+
+However, the fact that pseudo doesn't use a real autoconf configure
+script also means that it shouldn't be using the autotools-package
+infra: it should use the generic-package infra. Something to fix in a
+follow-up patch.
+
+Applied with the comment added, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
