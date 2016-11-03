@@ -1,36 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  3 Nov 2016 09:59:27 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: remove invalid email address
-Message-ID: <1b22ef5842b7059d4a63a0523c0d85fc164ea752.1478159967.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Nov 2016 09:23:57 +0100
+Subject: [Buildroot] [PATCH v4 4/4] lttng-babeltrace: add debug info
+ support
+In-Reply-To: <CAB4xu_3SxjOQ-KV=46wNR0PqO1PmW8XticcqstaW6hJJyUD8cA@mail.gmail.com>
+References: <20161102065508.3162-1-eeppeliteloop@gmail.com>
+ <20161102065508.3162-5-eeppeliteloop@gmail.com>
+ <20161102231023.392100c6@free-electrons.com>
+ <CAB4xu_3SxjOQ-KV=46wNR0PqO1PmW8XticcqstaW6hJJyUD8cA@mail.gmail.com>
+Message-ID: <20161103092357.2ba4cd29@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Merge the two entries of Richard Braun under the correct address.
+Hello,
 
-Cc: Richard Braun <rbraun@sceen.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- DEVELOPERS | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On Wed, 2 Nov 2016 19:01:24 -0400, Philippe Proulx wrote:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1c3d6d7d0448..10b431b9eb6b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1232,10 +1232,8 @@ F:	package/atop/
- N:	Rhys Williams <github@wilberforce.co.nz>
- F:	package/lirc-tools/
- 
--N:	Richard Braun <rbraun@>
--F:	package/curlftpfs/
--
- N:	Richard Braun <rbraun@sceen.net>
-+F:	package/curlftpfs/
- F:	package/tzdata/
- 
- N:	Rico Bachmann <bachmann@tofwerk.com>
+> > This stuff is really complicated, so I've instead removed the
+> > sub-option, and simply made lttng-babeltrace.mk enable debug info
+> > support when BR2_PACKAGE_ELFUTILS=y.  
+> 
+> But then, if BR2_PACKAGE_ELFUTILS=n, you don't know that you could have
+> debug info support in Babeltrace if BR2_PACKAGE_ELFUTILS=y.
+
+We have such automatic dependencies in a large number of packages, we
+simply can't add sub-options for each and every features. Since this
+one is not necessarily trivial, I've added in the commit an additional
+paragraph in the Config.in help text to hint the user about the need to
+enable elfutils to get debug info support.
+
+Best regards,
+
+Thomas
 -- 
-2.10.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
