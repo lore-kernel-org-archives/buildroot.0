@@ -1,307 +1,71 @@
 From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Thu, 3 Nov 2016 15:08:38 +0100
-Subject: [Buildroot] [PATCH 1/4] configs: at91sam9x5ek: add development
-	rootfs
-Message-ID: <20161103140841.28789-1-ludovic.desroches@atmel.com>
+Date: Thu, 3 Nov 2016 15:08:39 +0100
+Subject: [Buildroot] [PATCH 2/4] board: atmel: genimage: add 1M offset for
+	FAT partition
+In-Reply-To: <20161103140841.28789-1-ludovic.desroches@atmel.com>
+References: <20161103140841.28789-1-ludovic.desroches@atmel.com>
+Message-ID: <20161103140841.28789-2-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add development rootfs based on linux4sam_5.4 for at91sam9x5ek for both
-NAND flash and SD card.
-
 Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 ---
- board/atmel/at91sam9x5ek_mmc/genimage.cfg  |  34 ++++++++++
- board/atmel/at91sam9x5ek_mmc/post-image.sh |  20 ++++++
- configs/at91sam9x5ek_dev_defconfig         |  99 ++++++++++++++++++++++++++++
- configs/at91sam9x5ek_mmc_dev_defconfig     | 102 +++++++++++++++++++++++++++++
- 4 files changed, 255 insertions(+)
- create mode 100644 board/atmel/at91sam9x5ek_mmc/genimage.cfg
- create mode 100755 board/atmel/at91sam9x5ek_mmc/post-image.sh
- create mode 100644 configs/at91sam9x5ek_dev_defconfig
- create mode 100644 configs/at91sam9x5ek_mmc_dev_defconfig
+ board/atmel/at91sam9x5ek_mmc/genimage.cfg     | 1 +
+ board/atmel/sama5d2_xplained_mmc/genimage.cfg | 1 +
+ board/atmel/sama5d3_xplained_mmc/genimage.cfg | 1 +
+ board/atmel/sama5d4_xplained_mmc/genimage.cfg | 1 +
+ 4 files changed, 4 insertions(+)
 
 diff --git a/board/atmel/at91sam9x5ek_mmc/genimage.cfg b/board/atmel/at91sam9x5ek_mmc/genimage.cfg
-new file mode 100644
-index 0000000..46c2dc9
---- /dev/null
+index 46c2dc9..b2be647 100644
+--- a/board/atmel/at91sam9x5ek_mmc/genimage.cfg
 +++ b/board/atmel/at91sam9x5ek_mmc/genimage.cfg
-@@ -0,0 +1,34 @@
-+# Image for SD card boot on Atmel at91sam9x5ek boards
-+#
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"at91sam9g15ek.dtb",
-+			"at91sam9g25ek.dtb",
-+			"at91sam9g35ek.dtb",
-+			"at91sam9x25ek.dtb",
-+			"at91sam9x35ek.dtb",
-+			"boot.bin",
-+			"u-boot.bin"
-+		}
-+	}
-+	size = 16M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/atmel/at91sam9x5ek_mmc/post-image.sh b/board/atmel/at91sam9x5ek_mmc/post-image.sh
-new file mode 100755
-index 0000000..b560fd3
---- /dev/null
-+++ b/board/atmel/at91sam9x5ek_mmc/post-image.sh
-@@ -0,0 +1,20 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+echo --rootpath "${TARGET_DIR}"
-+echo --tmppath "${GENIMAGE_TMP}"
-+echo --inputpath "${BINARIES_DIR}"
-+echo --outputpath "${BINARIES_DIR}"
-+echo --config "${GENIMAGE_CFG}"
-+
-+genimage                               \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
-new file mode 100644
-index 0000000..279ce3d
---- /dev/null
-+++ b/configs/at91sam9x5ek_dev_defconfig
-@@ -0,0 +1,99 @@
-+# Architecture
-+BR2_arm=y
-+BR2_arm926t=y
-+
-+# Toolchain
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+# Needed for some packages
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+# Needed for gdb
-+BR2_PTHREAD_DEBUG=y
-+# Needed for some packages
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+# System Configuration
-+# Needed for usb-utils
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.5"
-+BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9g15ek at91sam9g25ek at91sam9g35ek at91sam9x25ek at91sam9x35ek"
-+
-+# Packages
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_ALSA_UTILS=y
-+BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
-+BR2_PACKAGE_ALSA_UTILS_APLAY=y
-+BR2_PACKAGE_FFMPEG=y
-+BR2_PACKAGE_FFMPEG_GPL=y
-+BR2_PACKAGE_FFMPEG_SWSCALE=y
-+BR2_PACKAGE_MPG123=y
-+BR2_PACKAGE_BZIP2=y
-+BR2_PACKAGE_GZIP=y
-+BR2_PACKAGE_UNZIP=y
-+BR2_PACKAGE_XZ=y
-+BR2_PACKAGE_ZIP=y
-+BR2_PACKAGE_GDB=y
-+BR2_PACKAGE_LMBENCH=y
-+BR2_PACKAGE_DOSFSTOOLS=y
-+BR2_PACKAGE_DOSFSTOOLS_FATLABEL=y
-+BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
-+BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
-+BR2_PACKAGE_MMC_UTILS=y
-+BR2_PACKAGE_MTD=y
-+BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_DEVMEM2=y
-+BR2_PACKAGE_EVTEST=y
-+BR2_PACKAGE_I2C_TOOLS=y
-+BR2_PACKAGE_SETSERIAL=y
-+BR2_PACKAGE_SPI_TOOLS=y
-+BR2_PACKAGE_USBUTILS=y
-+BR2_PACKAGE_LIBDRM=y
-+BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
-+BR2_PACKAGE_DTC=y
-+BR2_PACKAGE_DTC_PROGRAMS=y
-+BR2_PACKAGE_BLUEZ_UTILS=y
-+BR2_PACKAGE_BRIDGE_UTILS=y
-+BR2_PACKAGE_CAN_UTILS=y
-+BR2_PACKAGE_DROPBEAR=y
-+BR2_PACKAGE_ETHTOOL=y
-+BR2_PACKAGE_IPERF=y
-+BR2_PACKAGE_IPROUTE2=y
-+BR2_PACKAGE_IPTABLES=y
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_LRZSZ=y
-+BR2_PACKAGE_MII_DIAG=y
-+BR2_PACKAGE_OPENSSH=y
-+BR2_PACKAGE_WGET=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_BASH=y
-+BR2_PACKAGE_HTOP=y
-+BR2_PACKAGE_VIM=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
-+BR2_TARGET_ROOTFS_UBI=y
-+BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
-+
-+# Bootloaders
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9x5eknf_uboot"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="at91sam9x5ek_nandflash"
-+
-+# Host packages
-+BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
-new file mode 100644
-index 0000000..103b457
---- /dev/null
-+++ b/configs/at91sam9x5ek_mmc_dev_defconfig
-@@ -0,0 +1,102 @@
-+# Architecture
-+BR2_arm=y
-+BR2_arm926t=y
-+
-+# Toolchain
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+# Needed for some packages
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+# Needed for gdb
-+BR2_PTHREAD_DEBUG=y
-+# Needed for some packages
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+# System Configuration
-+# Needed for usb-utils
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+# Creation of the SD card image
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/at91sam9x5ek_mmc/post-image.sh"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.5"
-+BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9g15ek at91sam9g25ek at91sam9g35ek at91sam9x25ek at91sam9x35ek"
-+
-+# Packages
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_ALSA_UTILS=y
-+BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
-+BR2_PACKAGE_ALSA_UTILS_APLAY=y
-+BR2_PACKAGE_FFMPEG=y
-+BR2_PACKAGE_FFMPEG_GPL=y
-+BR2_PACKAGE_FFMPEG_SWSCALE=y
-+BR2_PACKAGE_MPG123=y
-+BR2_PACKAGE_BZIP2=y
-+BR2_PACKAGE_GZIP=y
-+BR2_PACKAGE_UNZIP=y
-+BR2_PACKAGE_XZ=y
-+BR2_PACKAGE_ZIP=y
-+BR2_PACKAGE_GDB=y
-+BR2_PACKAGE_LMBENCH=y
-+BR2_PACKAGE_DOSFSTOOLS=y
-+BR2_PACKAGE_DOSFSTOOLS_FATLABEL=y
-+BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
-+BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
-+BR2_PACKAGE_MMC_UTILS=y
-+BR2_PACKAGE_MTD=y
-+BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_DEVMEM2=y
-+BR2_PACKAGE_EVTEST=y
-+BR2_PACKAGE_I2C_TOOLS=y
-+BR2_PACKAGE_SETSERIAL=y
-+BR2_PACKAGE_SPI_TOOLS=y
-+BR2_PACKAGE_USBUTILS=y
-+BR2_PACKAGE_LIBDRM=y
-+BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
-+BR2_PACKAGE_DTC=y
-+BR2_PACKAGE_DTC_PROGRAMS=y
-+BR2_PACKAGE_BLUEZ_UTILS=y
-+BR2_PACKAGE_BRIDGE_UTILS=y
-+BR2_PACKAGE_CAN_UTILS=y
-+BR2_PACKAGE_DROPBEAR=y
-+BR2_PACKAGE_ETHTOOL=y
-+BR2_PACKAGE_IPERF=y
-+BR2_PACKAGE_IPROUTE2=y
-+BR2_PACKAGE_IPTABLES=y
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_LRZSZ=y
-+BR2_PACKAGE_MII_DIAG=y
-+BR2_PACKAGE_OPENSSH=y
-+BR2_PACKAGE_WGET=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_BASH=y
-+BR2_PACKAGE_HTOP=y
-+BR2_PACKAGE_VIM=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Bootloaders
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9x5eksd_uboot"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="at91sam9x5ek_mmc"
-+
-+# Host packages
-+# Needed to generate the SD card image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+@@ -24,6 +24,7 @@ image sdcard.img {
+ 		partition-type = 0xC
+ 		bootable = "true"
+ 		image = "boot.vfat"
++		offset = 1M
+ 	}
+ 
+ 	partition rootfs {
+diff --git a/board/atmel/sama5d2_xplained_mmc/genimage.cfg b/board/atmel/sama5d2_xplained_mmc/genimage.cfg
+index b0ba22d..d3b7af5 100644
+--- a/board/atmel/sama5d2_xplained_mmc/genimage.cfg
++++ b/board/atmel/sama5d2_xplained_mmc/genimage.cfg
+@@ -23,6 +23,7 @@ image sdcard.img {
+ 		partition-type = 0xC
+ 		bootable = "true"
+ 		image = "boot.vfat"
++		offset = 1M
+ 	}
+ 
+ 	partition rootfs {
+diff --git a/board/atmel/sama5d3_xplained_mmc/genimage.cfg b/board/atmel/sama5d3_xplained_mmc/genimage.cfg
+index 32df453..277ce5f 100644
+--- a/board/atmel/sama5d3_xplained_mmc/genimage.cfg
++++ b/board/atmel/sama5d3_xplained_mmc/genimage.cfg
+@@ -23,6 +23,7 @@ image sdcard.img {
+ 		partition-type = 0xC
+ 		bootable = "true"
+ 		image = "boot.vfat"
++		offset = 1M
+ 	}
+ 
+ 	partition rootfs {
+diff --git a/board/atmel/sama5d4_xplained_mmc/genimage.cfg b/board/atmel/sama5d4_xplained_mmc/genimage.cfg
+index b23ebe4..70bb3e4 100644
+--- a/board/atmel/sama5d4_xplained_mmc/genimage.cfg
++++ b/board/atmel/sama5d4_xplained_mmc/genimage.cfg
+@@ -24,6 +24,7 @@ image sdcard.img {
+ 		partition-type = 0xC
+ 		bootable = "true"
+ 		image = "boot.vfat"
++		offset = 1M
+ 	}
+ 
+ 	partition rootfs {
 -- 
 2.9.0
