@@ -1,44 +1,112 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Nov 2016 22:16:45 +0100
-Subject: [Buildroot] [PATCH v2] owfs: install python bindings in the
- correct location
-In-Reply-To: <20161103203604.19427-1-arnout@mind.be>
-References: <20161103203604.19427-1-arnout@mind.be>
-Message-ID: <20161103221645.7f515094@free-electrons.com>
+Date: Thu, 3 Nov 2016 22:17:17 +0100
+Subject: [Buildroot] [git commit] net-tools: add a patch to avoid struct
+	redefinition
+Message-ID: <20161103212904.39584818DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=108b9c1e6b15d74d2e3a3241901fbdaca42df524
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 3 Nov 2016 21:36:04 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> The owfs build system has a pretty complicated way of configuring the
-> Python bindings. It ends up with setting PYSITEDIR to the host-python
-> site-packages path, and it still prepends DESTDIR to that.
-> 
-> As a simple fix, override PYSITEDIR with the correct value on the make
-> command line.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/200/200846650641494290aa67d28ea6fb2c9351d4dc
-> http://autobuild.buildroot.net/results/99c/99c00248dd8b00071bcdbc73336cc276c68a4c16
-> and many more
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> v2: use an intermediate OWFS_EXTRA_MAKE_OPTS instead of directly
->     overwriting OWFS_MAKE, so it is easier to append stuff.
-> ---
->  package/owfs/owfs.mk | 9 +++++++++
->  1 file changed, 9 insertions(+)
+This fixes a struct redefinition problem like this one:
 
-Applied to master, thanks.
+================================
+In file included from /usr/include/linux/if_tunnel.h:6:0,
+from iptunnel.c:34:
+/usr/include/linux/ip.h:85:8: error: redefinition of 'struct iphdr'
+struct iphdr {
+^
+In file included from iptunnel.c:29:0:
+/usr/include/netinet/ip.h:45:8: note: originally defined here
+struct iphdr
+^
+================================
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+iptunnel.c includes netinet/ip.h which contains a definition of the
+iphdr struct.
+
+iptunnel.c also includes linux/if_tunnel.h which includes linux/ip.h
+which contains a definition of the iphdr struct.
+
+So, both netinet/ip.h and linux/ip.h define the iphdr struct, and both
+of them have been included directly or indirectly by iptunnel.c. Because
+of that the compilation fails due to a struct redefinition.
+
+The problem can be solved by just not including netinet/ip.h.
+
+The patch has been sent upstream as a merge request:
+  https://sourceforge.net/p/net-tools/code/merge-requests/3/
+
+Fixes:
+  http://autobuild.buildroot.net/results/dce/dce499da84b2a41bab946d5109a283ccb85c8b81/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...02-iptunnel.c-do-not-include-netinet-ip.h.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+
+diff --git a/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch b/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch
+new file mode 100644
+index 0000000..002c9da
+--- /dev/null
++++ b/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch
+@@ -0,0 +1,54 @@
++From 7a9a369d9de784791a2ab384877aab5ff3801d4e Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Thu, 3 Nov 2016 12:59:39 +0000
++Subject: [PATCH] iptunnel.c: do not include netinet/ip.h
++
++This fixes a struct redefinition problem like this one:
++
++================================
++In file included from /usr/include/linux/if_tunnel.h:6:0,
++                 from iptunnel.c:34:
++/usr/include/linux/ip.h:85:8: error: redefinition of 'struct iphdr'
++ struct iphdr {
++        ^
++In file included from iptunnel.c:29:0:
++/usr/include/netinet/ip.h:45:8: note: originally defined here
++ struct iphdr
++        ^
++================================
++
++iptunnel.c includes netinet/ip.h which contains a definition of the
++iphdr struct.
++
++iptunnel.c also includes linux/if_tunnel.h which includes linux/ip.h
++which contains a definition of the iphdr struct.
++
++So, both netinet/ip.h and linux/ip.h define the iphdr struct, and both
++of them have been included directly or indirectly by iptunnel.c. Because
++of that the compilation fails due to a struct redefinition.
++
++The problem can be solved by just not including netinet/ip.h.
++
++Upstream status: merge request sent
++https://sourceforge.net/p/net-tools/code/merge-requests/3/
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ iptunnel.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/iptunnel.c b/iptunnel.c
++index 3fe1b84..247ae10 100644
++--- a/iptunnel.c
+++++ b/iptunnel.c
++@@ -26,7 +26,6 @@
++ #include <sys/socket.h>
++ #include <sys/ioctl.h>
++ #include <netinet/in.h>
++-#include <netinet/ip.h>
++ #include <arpa/inet.h>
++ #include <net/if.h>
++ #include <net/if_arp.h>
++-- 
++2.10.1
++
