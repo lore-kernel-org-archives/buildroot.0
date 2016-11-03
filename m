@@ -1,31 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 03 Nov 2016 20:45:25 +0000
-Subject: [Buildroot] [Bug 9111] glibc 2.23: libmvec.so not copied
-In-Reply-To: <bug-9111-163@https.bugs.busybox.net/>
-References: <bug-9111-163@https.bugs.busybox.net/>
-Message-ID: <bug-9111-163-COq3zcsMBA@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Nov 2016 21:46:51 +0100
+Subject: [Buildroot] [git commit] CHANGES: additional updates for 2016.11-rc1
+Message-ID: <20161103204704.CFE6781992@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9111
+commit: https://git.buildroot.net/buildroot/commit/?id=2bc3d067ef2f30bf54b11d970f9e4b8908278ead
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ CHANGES | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
-
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Patches have been merged:
-https://git.buildroot.org/buildroot/commit/package/glibc?id=2c877590b3b18df4853989a66378c184713ccd55
-and
-https://git.buildroot.org/buildroot/commit/toolchain/toolchain-external?id=447e9051f32936a3a185af926c7ec394cbd61962.
-Therefore, the bug is fixed.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/CHANGES b/CHANGES
+index c041ec8..db27bc7 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -23,13 +23,13 @@
+ 	toolchainfile.cmake also no longer passes the compiler/linker
+ 	flags defined by Buildroot.
+ 
+-	New defconfigs: warp7, Solidrun's MX6 Cubox/Hummingboard,
++	New defconfigs: WaRP7, Solidrun's MX6 Cubox/Hummingboard,
+ 	TS-4900, Grinn's liteBoard, Udoo MX6Q/DL, Qemu ARM noMMU,
+-	BeagleBone Qt5 demo, Digilent Zybo.
++	BeagleBone Qt5 demo, Digilent Zybo, FriendlyARM Nanopi NEO.
+ 
+ 	New packages: arm-trusted-firmware, amd-catalyst, atop, aufs,
+ 	aufs-util, fwts, gst1-rtsp-server, libglob, libite, mfgtools,
+-	mksh, motion, paho-mqtt-c, php-amqp, python-couchdb,
++	mksh, motion, paho-mqtt-c, php-amqp, pseudo, python-couchdb,
+ 	python-crcmod, python-cssutils, python-docutils,
+ 	python-futures, python-mwclient, python-mwscrape,
+ 	python-mwscrape2slob, python-pyelftools, python-pyicu,
+@@ -67,6 +67,7 @@
+ 	#8946: Valgrind fails to build with stack protection turned on
+ 	#9021: Kodi - Broken: Illegal instruction (core dumped)
+ 	#9096: rootfs.ubi not created
++	#9111: glibc 2.23: libmvec.so not copied
+ 	#9176: minnowboard : USB not mounted
+ 	#9196: raspberry pi 3 default build seem broken
+ 	#9201: Permission denied make: *** [core-dependencies] Error 126 in
+@@ -88,6 +89,7 @@
+ 	#9371: openssl: download failes with "Only allow downloads from primary
+ 	       download site" + local server
+ 	#9381: check-host-rpath issues
++	#9386: ubinize fails with or without custom config
+ 
+ 2016.08, Released September 1st, 2016
+ 
