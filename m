@@ -1,46 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Nov 2016 22:09:57 +0100
-Subject: [Buildroot] [PATCH] boards: add FriendlyARM Nanopi NEO
-In-Reply-To: <20161103210232.76trmtm3bc2jz27c@lukather>
-References: <1478204278-9650-1-git-send-email-yann.morin.1998@free.fr>
- <20161103210232.76trmtm3bc2jz27c@lukather>
-Message-ID: <20161103210957.GA4087@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Nov 2016 22:15:02 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: Add an entry for
+	mx6udoo_defconfig
+Message-ID: <20161103211519.D453E8199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=7ead164ba38656607fdd29529752210045ce2f4f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-11-03 22:02 +0100, Maxime Ripard spake thusly:
-> On Thu, Nov 03, 2016 at 09:17:58PM +0100, Yann E. MORIN wrote:
-> > The FriendlyARM Nanopi NEO is a 4x4cm? board with an Allwiner H3 SoC:
-> >   - quad-core Cortex-A7 @1.2GHz
-> >   - 256 or 512MiB of DDR
-> >   - uSDCard as only storage option
-> >   - 3x USB 2.0 host (one socket, two on expansion pin-holes)
-> >   - 1x USB 2.0 OTG (also used as power source)
-> >   - 10/100 etehrnet MAC
-> >   - GPIOs, SPI, I2c...
-> > 
-> > Support for the Nanopi NEO in U-Boot and Linux is very recent, so much
-> > so that we have to use an -rc tag for U-Boot and a special Linux tree.
-> 
-> I'm not sure why you need that custom tree, the DT is in 4.9 already.
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Yup. But with 4.9-rc3, I had mmc corruption. With your tree and
-sunxi-next, I don't have those. Not sure what hapenned...
-
-I can re-check to be sure.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 10b431b..c4b3117 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -462,6 +462,7 @@ F:	board/warp7/
+ F:	configs/freescale_imx*
+ F:	configs/imx6ulpico_defconfig
+ F:	configs/mx6cubox_defconfig
++F:	configs/mx6udoo_defconfig
+ F:	configs/warp7_defconfig
+ 
+ N:	Fabio Porcedda <fabio.porcedda@gmail.com>
