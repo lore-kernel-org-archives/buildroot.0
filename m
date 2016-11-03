@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Nov 2016 22:31:29 +0100
-Subject: [Buildroot] [PATCH] libcurl: move site to https
-In-Reply-To: <5f12f7953ffa20c0fdfe34227fad9d298b2b7ba9.1478159593.git.baruch@tkos.co.il>
-References: <5f12f7953ffa20c0fdfe34227fad9d298b2b7ba9.1478159593.git.baruch@tkos.co.il>
-Message-ID: <20161103223129.3cc34055@free-electrons.com>
+Date: Thu, 3 Nov 2016 22:31:50 +0100
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: transfer lttng-* and
+ liburcu projects to Philippe Proulx
+In-Reply-To: <20161102232335.6274-1-eeppeliteloop@gmail.com>
+References: <20161102232335.6274-1-eeppeliteloop@gmail.com>
+Message-ID: <20161103223150.2de7ccba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +13,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  3 Nov 2016 09:53:13 +0200, Baruch Siach wrote:
-> Saves a redirect.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Wed,  2 Nov 2016 19:23:35 -0400, Philippe Proulx wrote:
+> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 > ---
->  package/libcurl/libcurl.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  DEVELOPERS | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
