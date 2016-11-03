@@ -1,12 +1,16 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 Nov 2016 02:58:03 +0100
-Subject: [Buildroot] [git commit] core: re-enter make if $(CURDIR) or
- $(O) are not canonical paths
-In-Reply-To: <CAHXCMMLoxKuaHnb_g7qtWuN-yC==pM-EzXq5JiD0Et5ZronfxA@mail.gmail.com>
-References: <20161019211757.83C7D80DB7@busybox.osuosl.org>
- <20161102221830.GA3319@free.fr>
- <CAHXCMMLoxKuaHnb_g7qtWuN-yC==pM-EzXq5JiD0Et5ZronfxA@mail.gmail.com>
-Message-ID: <00e6d7a0-0e8e-ffaa-6382-6084a3af8162@mind.be>
+Date: Thu, 3 Nov 2016 03:46:39 +0100
+Subject: [Buildroot] [PATCH] ubifs: Fix regression in ubifs_readdir()
+In-Reply-To: <1478126967.8549.4.camel@embedded.rocks>
+References: <1477648432-9543-1-git-send-email-richard@nod.at>
+ <1477671544.8927.1.camel@embedded.rocks>
+ <c542e099-0404-be8e-ebeb-d4265d3204d6@nod.at>
+ <1477693395.31471.1.camel@embedded.rocks>
+ <20161101232215.5bf7cabd@free-electrons.com>
+ <1478116619.8549.1.camel@embedded.rocks>
+ <20161102214927.30b0d74f@free-electrons.com>
+ <1478126967.8549.4.camel@embedded.rocks>
+Message-ID: <87f68565-765b-4e9b-a3f0-34dae0b45e93@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,96 +19,50 @@ To: buildroot@busybox.net
 
 
 
-On 03-11-16 00:27, Samuel Martin wrote:
-> Yann, Arnout, all,
-> 
-> On Wed, Nov 2, 2016 at 11:18 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> Samuel, All,
+On 02-11-16 23:49, J?rg Krause wrote:
+> On Wed, 2016-11-02 at 21:49 +0100, Thomas Petazzoni wrote:
+>> Hello,
 >>
->> On 2016-10-19 23:11 +0200, Thomas Petazzoni spake thusly:
->>> commit: https://git.buildroot.net/buildroot/commit/?id=173135df5b69dfd5ae6fe6cf2de8833c6f74c143
->>> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>> On Wed, 02 Nov 2016 20:56:59 +0100, J?rg Krause wrote:
+>>
+>>>> This is *really* bad. Which Buildroot version are you using?  
 >>>
->>> When $(CURDIR) and/or $(O) contain symlinks in their paths, they can be
->>> resolved differently, depending on each package build-system (whether it
->>> uses the given paths or get the absolute canonical ones).
+>>> 2016.11 #
 >>>
->>> Using absolute canonical paths will help achieving reproducible builds and
->>> will make easier tracking down host machine paths leaking into the host,
->>> target or staging trees.
->>> So, this change ensures the build takes place with the CURDIR and O
->>> variables are set to their absolute canonical paths.
+>>> Note that I am using Buildroot as a submodule [1] and I needed to
+>>> port
+>>> the br2-external tree. Maybe I messed something up?
 >>>
->>> In order to recall the toplevel makefile with absolute canonical paths
->>> for $(CURDIR) and $(O), we need to:
->>> 1- Compute the absolute canonical paths for $(CURDIR) and $(O) that will
->>>    be passed to the sub-make. This is achieved using the 'realpath' make
->>>    primitive. However, some care must be taken when manipulating O:
->>>    - the out-of-tree makefile wrapper happens a trailing "/.", we need
->>>      to strip this part away to not break the comparison driving the
->>>      sub-make call;
->>>    - the user can leave a trailing '/' to $(O);
->>>    - according to [1,2], realpath returns an empty string in case of
->>>      non-existing entry. So, to avoid passing an empty O= variable to
->>>      sub-make, it is necessary to define the output directory and create
->>>      it prior to call realpath on it (because on the first invocation,
->>>      $(O) usually does not yet exists), hence the trick doing the mkdir
->>>      right before calling realpath.
->>> 2- Update EXTRAMAKEARGS with the absolute canonical $(O) and use it
->>>    when call recalling the top-level makefile with umask and paths
->>>    correctly set.
->>> 3- Lastly, update the condition for setting the CONFIG_DIR and
->>>    NEED_WRAPPER variables.
+>>>> Are you able to reproduce the bad ccache behavior here?  
 >>>
->>> Note:
->>> * This change takes care of the makefile wrapper installed in $(O) to
->>>   avoid unneeded make recursion.
+>>> Yes, I am. Linux kernel source directory is located locally and the
+>>> path is set using LINUX_OVERRIDE_SRCDIR in local.mk.
+>>>
+>>> 1/ Checkout Linux kernel version 4.7.10
+>>> 2/ make linux-dirclean all
+>>> 3/ Booted Linux version is 4.7.10
+>>>
+>>> 4/ Checkout Linux kernel version 4.8.5
+>>> 5/ make linux-dirclean all
+>>> 6/ Booted Linux version is still 4.7.10
 >>
->> This commit breaks a few use-cases that were previously working.
->>
->> for example, Maxime reports that:
->>
->>     make BR2_PRIMARY_SITE=blabla source
->>
->> no longer works.
->>
->> Also, the autobuilders now no longer respect their 'njobs' configuration
->> option, for the same reason; they (basivally) do:
->>
->>     make BR2_JLEVEL=kwargs["--njobs"]
->>
->> but this is nol onger working either.
->>
->> Care to have a look at this, please?
+>> And this scenario works fine with ccache *disabled*, but breaks when
+>> you enable ccache support in Buildroot?
 > 
-> Could you explain in details a test case you got (what you look at
-> exactly to get this, or maybe you just git-bisect-ed?)?
-> 
-> I think it may be cause by this patch [1] not being apply.
-> Would you mind give it a try and report back?
-> I gave it a quick try using this diff [2], and running 'make
-> foo-reconfigure' w/ and w/o various variables on the command line.
-> 
-> Arnout, do you have an idea about what happens here?... this is a bit
-> beyond my make-fu :-/
+> Yes.
 
- Yay make-fu!
+ I can't reproduce this. I've got a nice mix of cache misses and cache hits when
+building a different version, and version.o is definitely a cache miss.
 
-http://patchwork.ozlabs.org/patch/690649/
+ Can you double-check the version in output/build/linux-custom/init/version.o?
+And the one in output/build/linux-custom/include/generated/utsrelease.h?
 
-
- I shouldn't have dismissed your patch [1] so easily...
+ Hm, hang on, is there maybe a utsrelease.h that ends up in your staging dir and
+that is used by ccache?
 
  Regards,
  Arnout
 
-> 
-> Regards,
-> 
-> [1] http://patchwork.ozlabs.org/patch/682684/
-> [2] http://code.bulix.org/8k4x9g-107063/?raw
-> 
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
