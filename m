@@ -1,38 +1,28 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 3 Nov 2016 14:19:07 +0200
-Subject: [Buildroot] [PATCH 1/1] berkeleydb: fix build on powerpc64le
-In-Reply-To: <20161103055805.z67aqczyccsgmnax@tarshish>
-References: <8e91fa81e0236517f95907ca16ac00830306854a.1478151515.git.sam.bobroff@au1.ibm.com>
- <20161103055805.z67aqczyccsgmnax@tarshish>
-Message-ID: <20161103121907.3axoqgm4m5ftyiyb@tarshish>
+From: Jeroen Roovers <jer@airfi.aero>
+Date: Thu,  3 Nov 2016 13:56:13 +0100
+Subject: [Buildroot] [PATCH v2 0/2] libcurl: Incorrect fix for CVE-2016-8625
+Message-ID: <20161103125615.21592-1-jer@airfi.aero>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sam,
+CVE-2016-8625 was fixed by switching from libidn to libidn2.
 
-On Thu, Nov 03, 2016 at 07:58:05AM +0200, Baruch Siach wrote:
-> On Thu, Nov 03, 2016 at 04:38:41PM +1100, Sam Bobroff wrote:
-> > ++	  ppc64le-*linux*|powerpc64le-*linux*)
-> > ++	    LD="${LD-ld} -m elf64lppc"
-> > ++	    ;;
-> > + 	  ppc*-*linux*|powerpc*-*linux*)
-> 
-> This is strange. This older pattern looks like a superset of your new pattern. 
-> Why doesn't it work?
-> 
-> > + 	    LD="${LD-ld} -m elf64ppc"
-> > + 	    ;;
+Jeroen Roovers (2):
+  libidn2: new package
+  libcurl: Use libidn2 instead of libidn 
 
-I missed the distinction between elf64ppc and elf64lppc.
-
-Sorry for the noise.
-
-baruch
+ package/Config.in            |  1 +
+ package/libcurl/libcurl.mk   |  2 +-
+ package/libidn2/Config.in    |  4 ++++
+ package/libidn2/libidn2.hash |  2 ++
+ package/libidn2/libidn2.mk   | 11 +++++++++++
+ 5 files changed, 19 insertions(+), 1 deletion(-)
+ create mode 100644 package/libidn2/Config.in
+ create mode 100644 package/libidn2/libidn2.hash
+ create mode 100644 package/libidn2/libidn2.mk
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.10.2
