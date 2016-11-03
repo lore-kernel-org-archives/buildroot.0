@@ -1,73 +1,115 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 3 Nov 2016 02:55:16 +0100
-Subject: [Buildroot] [PATCH 1/2] core: don't reset MAKEOVERRIDES when
-	re-entering make
-Message-ID: <20161103015517.15943-1-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 3 Nov 2016 02:58:03 +0100
+Subject: [Buildroot] [git commit] core: re-enter make if $(CURDIR) or
+ $(O) are not canonical paths
+In-Reply-To: <CAHXCMMLoxKuaHnb_g7qtWuN-yC==pM-EzXq5JiD0Et5ZronfxA@mail.gmail.com>
+References: <20161019211757.83C7D80DB7@busybox.osuosl.org>
+ <20161102221830.GA3319@free.fr>
+ <CAHXCMMLoxKuaHnb_g7qtWuN-yC==pM-EzXq5JiD0Et5ZronfxA@mail.gmail.com>
+Message-ID: <00e6d7a0-0e8e-ffaa-6382-6084a3af8162@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We reset MAKEOVERRIDES to avoid passing down variables that are
-overridden on the command line to the package build systems. Indeed,
-the variables overridden on the command line will be Buildroot
-variables and not relevant to the package build system. In particular
-the O option is used by some packages and the value passed in on the
-command line is plain wrong for the individual package.
 
-However, in commit 916e614b, MAKEOVERRIDES was moved earlier and it
-was reset _before_ re-entering make in the cases when something has
-to be fixed up (incorrect umask, non-absolute paths in O or CURDIR).
-Therefore, if make is re-entered, any command line overrides are lost.
 
-This particularly bites the autobuilders, because they use
-O=<relative path> to specify the output directory, and they add
-BR2_JLEVEL=... to avoid starting too many jobs in parallel. The
-BR2_JLEVEL override is lost.
+On 03-11-16 00:27, Samuel Martin wrote:
+> Yann, Arnout, all,
+> 
+> On Wed, Nov 2, 2016 at 11:18 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> Samuel, All,
+>>
+>> On 2016-10-19 23:11 +0200, Thomas Petazzoni spake thusly:
+>>> commit: https://git.buildroot.net/buildroot/commit/?id=173135df5b69dfd5ae6fe6cf2de8833c6f74c143
+>>> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>
+>>> When $(CURDIR) and/or $(O) contain symlinks in their paths, they can be
+>>> resolved differently, depending on each package build-system (whether it
+>>> uses the given paths or get the absolute canonical ones).
+>>>
+>>> Using absolute canonical paths will help achieving reproducible builds and
+>>> will make easier tracking down host machine paths leaking into the host,
+>>> target or staging trees.
+>>> So, this change ensures the build takes place with the CURDIR and O
+>>> variables are set to their absolute canonical paths.
+>>>
+>>> In order to recall the toplevel makefile with absolute canonical paths
+>>> for $(CURDIR) and $(O), we need to:
+>>> 1- Compute the absolute canonical paths for $(CURDIR) and $(O) that will
+>>>    be passed to the sub-make. This is achieved using the 'realpath' make
+>>>    primitive. However, some care must be taken when manipulating O:
+>>>    - the out-of-tree makefile wrapper happens a trailing "/.", we need
+>>>      to strip this part away to not break the comparison driving the
+>>>      sub-make call;
+>>>    - the user can leave a trailing '/' to $(O);
+>>>    - according to [1,2], realpath returns an empty string in case of
+>>>      non-existing entry. So, to avoid passing an empty O= variable to
+>>>      sub-make, it is necessary to define the output directory and create
+>>>      it prior to call realpath on it (because on the first invocation,
+>>>      $(O) usually does not yet exists), hence the trick doing the mkdir
+>>>      right before calling realpath.
+>>> 2- Update EXTRAMAKEARGS with the absolute canonical $(O) and use it
+>>>    when call recalling the top-level makefile with umask and paths
+>>>    correctly set.
+>>> 3- Lastly, update the condition for setting the CONFIG_DIR and
+>>>    NEED_WRAPPER variables.
+>>>
+>>> Note:
+>>> * This change takes care of the makefile wrapper installed in $(O) to
+>>>   avoid unneeded make recursion.
+>>
+>> This commit breaks a few use-cases that were previously working.
+>>
+>> for example, Maxime reports that:
+>>
+>>     make BR2_PRIMARY_SITE=blabla source
+>>
+>> no longer works.
+>>
+>> Also, the autobuilders now no longer respect their 'njobs' configuration
+>> option, for the same reason; they (basivally) do:
+>>
+>>     make BR2_JLEVEL=kwargs["--njobs"]
+>>
+>> but this is nol onger working either.
+>>
+>> Care to have a look at this, please?
+> 
+> Could you explain in details a test case you got (what you look at
+> exactly to get this, or maybe you just git-bisect-ed?)?
+> 
+> I think it may be cause by this patch [1] not being apply.
+> Would you mind give it a try and report back?
+> I gave it a quick try using this diff [2], and running 'make
+> foo-reconfigure' w/ and w/o various variables on the command line.
+> 
+> Arnout, do you have an idea about what happens here?... this is a bit
+> beyond my make-fu :-/
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
----
-I have a little worry, because there are two other places where we re-
-enter top-level make and those are not handled: silentoldconfig and
-external-deps. BR2_JLEVEL is not relevant for those, but other command-
-line overridden options may be. However, this hasn't changed from before
-commit 916e614b so I guess it's OK.
----
- Makefile | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ Yay make-fu!
 
-diff --git a/Makefile b/Makefile
-index c00e200..4b494a3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -35,11 +35,6 @@ SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
- ifneq ("$(origin O)", "command line")
- O := $(CURDIR)/output
- else
--# Other packages might also support Linux-style out of tree builds
--# with the O=<dir> syntax (E.G. BusyBox does). As make automatically
--# forwards command line variable definitions those packages get very
--# confused. Fix this by telling make to not do so.
--MAKEOVERRIDES :=
- # Strangely enough O is still passed to submakes with MAKEOVERRIDES
- # (with make 3.81 atleast), the only thing that changes is the output
- # of the origin function (command line -> environment).
-@@ -155,6 +150,13 @@ else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
- BR_BUILDING = y
- endif
- 
-+# We call make recursively to build packages. The command-line overrides that
-+# are passed to Buildroot don't apply to those package build systems. In
-+# particular, we don't want to pass down the O=<dir> option for out-of-tree
-+# builds, because the value specified on the command line will not be correct
-+# for packages.
-+MAKEOVERRIDES :=
-+
- # Include some helper macros and variables
- include support/misc/utils.mk
- 
+http://patchwork.ozlabs.org/patch/690649/
+
+
+ I shouldn't have dismissed your patch [1] so easily...
+
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> 
+> [1] http://patchwork.ozlabs.org/patch/682684/
+> [2] http://code.bulix.org/8k4x9g-107063/?raw
+> 
+> 
+
 -- 
-2.9.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
