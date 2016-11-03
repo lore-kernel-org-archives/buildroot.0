@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 Nov 2016 17:58:18 +0100
-Subject: [Buildroot] [PATCH 1/2] libidn2: new package
-In-Reply-To: <20161103110512.13676-2-jer@airfi.aero>
-References: <20161103110512.13676-1-jer@airfi.aero>
- <20161103110512.13676-2-jer@airfi.aero>
-Message-ID: <c2abc739-8522-b42b-f102-3f8c38e23f56@mind.be>
+Date: Thu, 3 Nov 2016 18:00:39 +0100
+Subject: [Buildroot] [PATCH v2 1/2] libidn2: new package
+In-Reply-To: <20161103130341.6485-1-jer@airfi.aero>
+References: <20161103130341.6485-1-jer@airfi.aero>
+Message-ID: <43b9a262-91d8-a267-d94a-2468809f4ce7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +12,29 @@ To: buildroot@busybox.net
 
 
 
-On 03-11-16 12:05, Jeroen Roovers wrote:
+On 03-11-16 14:03, Jeroen Roovers wrote:
 > An implementation of the IDNA2008 specifications (RFC 5890, RFC 5891,
 > RFC 5892, RFC 5893)
+
+ Would be good to mention that libidn only does IDNA2003 which is not acceptable
+for .de domains.
+
 > 
 > Signed-off-by: Jeroen Roovers <jer@airfi.aero>
+
+ I should have replied to this version of the patch (which is v3 by the way, not
+v2), but my remarks from v1 still apply.
+
+
+ Regards,
+ Arnout
+
 > ---
 >  package/Config.in            |  1 +
->  package/libidn2/Config.in    |  5 +++++
+>  package/libidn2/Config.in    |  4 ++++
 >  package/libidn2/libidn2.hash |  2 ++
->  package/libidn2/libidn2.mk   | 12 ++++++++++++
->  4 files changed, 20 insertions(+)
+>  package/libidn2/libidn2.mk   | 11 +++++++++++
+>  4 files changed, 18 insertions(+)
 >  create mode 100644 package/libidn2/Config.in
 >  create mode 100644 package/libidn2/libidn2.hash
 >  create mode 100644 package/libidn2/libidn2.mk
@@ -42,64 +53,37 @@ On 03-11-16 12:05, Jeroen Roovers wrote:
 >  	source "package/libmbus/Config.in"
 > diff --git a/package/libidn2/Config.in b/package/libidn2/Config.in
 > new file mode 100644
-> index 0000000..ce0a841
+> index 0000000..991a4aa
 > --- /dev/null
 > +++ b/package/libidn2/Config.in
-> @@ -0,0 +1,5 @@
+> @@ -0,0 +1,4 @@
 > +config BR2_PACKAGE_LIBIDN2
 > +	bool "libidn2"
-> +
 > +	help
 > +	  An implementation of the IDNA2008 specifications (RFCs 5890, 5891, 5892, 5893)
-
- The line is too long (wrap at 72 characters).
-
- Upstream URL is missing. Just use http://www.gnu.org/software/libidn/
-
- Shouldn't there be a BR2_PACKAGE_LIBIDN2_BINARY option like for libidn?
-Although it looks like the binary is pretty small so not worth it.
-
-
 > diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
 > new file mode 100644
-> index 0000000..5aedde0
+> index 0000000..a9e5295
 > --- /dev/null
 > +++ b/package/libidn2/libidn2.hash
 > @@ -0,0 +1,2 @@
 > +# Calculated locally after checking signature
-
- You should add the URL of the signature you checked.
-
-> +sha256  3d301890bdbb137424f5ea495f82730a4b85b6a2549e47de3a34afebeac3e0e3  libidn2-0.10.tar.gz
+> +sha256  5d397bdc258b372b8a25c8fb5240430d6fae28f9d790d3670f4b6012fa87bfff  libidn2-0.11.tar.gz
 > diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
 > new file mode 100644
-> index 0000000..7adc1d8
+> index 0000000..40221f3
 > --- /dev/null
 > +++ b/package/libidn2/libidn2.mk
-> @@ -0,0 +1,12 @@
+> @@ -0,0 +1,11 @@
 > +################################################################################
 > +#
 > +# libidn2
 > +#
 > +################################################################################
 > +
-> +LIBIDN2_VERSION = 0.10
+> +LIBIDN2_VERSION = 0.11
 > +LIBIDN2_SITE = ftp://alpha.gnu.org/gnu/libidn
-
- My first reaction was: shouldn't we instead upgrade libidn? But it looks like
-the API is completely different. It's weird to use an alpha version for security
-reasons, but that's what upstream curl does so OK.
-
-> +LIBIDN2_SOURCE = libidn2-$(LIBIDN2_VERSION).tar.gz
 > +LIBIDN2_INSTALL_STAGING = YES
-
- I haven't tried, but it looks like documentation can't be disabled and the
-examples are always installed. Doesn't it need to be patched to allow building
-in a minimal environment (i.e. without texinfo)?
-
- Regards,
- Arnout
-
 > +
 > +$(eval $(autotools-package))
 > 
