@@ -1,393 +1,173 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Nov 2016 22:43:26 +0100
-Subject: [Buildroot] [git commit] configs: atmel: xplained boards: bump to
-	linux4sam_5.5
-Message-ID: <20161103214339.397428180F@busybox.osuosl.org>
+Date: Thu, 3 Nov 2016 22:44:57 +0100
+Subject: [Buildroot] [git commit] bridge-utils: fix build with musl
+Message-ID: <20161103214508.63EB881768@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9ebe40a92756c8ba248e5ee505afb912ce91bd2
+commit: https://git.buildroot.net/buildroot/commit/?id=a167081c5d5a5aee95b642a14200d18d8a84dbcc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump at91bootstrap to v3.8.7, U-Boot to linux4sam_5.5, Linux to linux4sam_5.5
-(based on v4.4.x).
+Apply a patch that removes direct include of kernel headers to avoid conflict
+of definitions.
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+Fixes:
+http://autobuild.buildroot.net/results/4aa/4aaeca4f1fca1794b039d7255a1828ff724f2234/
+http://autobuild.buildroot.net/results/b48/b48a70137a4a568b31337f899fd21d05552db5e2/
+http://autobuild.buildroot.net/results/bff/bff5767fc7e821a7674ee022111db84e4a9449d0/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/atmel_sama5d2_xplained_mmc_defconfig     | 8 ++++----
- configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 8 ++++----
- configs/atmel_sama5d3_xplained_defconfig         | 8 ++++----
- configs/atmel_sama5d3_xplained_dev_defconfig     | 8 ++++----
- configs/atmel_sama5d3_xplained_mmc_defconfig     | 8 ++++----
- configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 8 ++++----
- configs/atmel_sama5d4_xplained_defconfig         | 8 ++++----
- configs/atmel_sama5d4_xplained_dev_defconfig     | 8 ++++----
- configs/atmel_sama5d4_xplained_mmc_defconfig     | 8 ++++----
- configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 8 ++++----
- 10 files changed, 40 insertions(+), 40 deletions(-)
+ ...ridge-fix-headers-conflict-with-musl-libc.patch | 140 +++++++++++++++++++++
+ 1 file changed, 140 insertions(+)
 
-diff --git a/configs/atmel_sama5d2_xplained_mmc_defconfig b/configs/atmel_sama5d2_xplained_mmc_defconfig
-index 7eb969f..13086af 100644
---- a/configs/atmel_sama5d2_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_defconfig
-@@ -3,12 +3,12 @@ BR2_cortex_a5=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d2_xplained_mmc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_xplained at91-sama5d2_xplained_pda4 at91-sama5d2_xplained_pda7 at91-sama5d2_xplained_pda7b"
-@@ -17,13 +17,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_xplained_mmc"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-index d7f4717..a225091 100644
---- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-@@ -6,7 +6,7 @@ BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- 
- # Toolchain
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- # Needed for gdb
-@@ -24,7 +24,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d2_xplained_mmc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_xplained at91-sama5d2_xplained_pda4 at91-sama5d2_xplained_pda7 at91-sama5d2_xplained_pda7b"
-@@ -89,13 +89,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_xplained_mmc"
- 
- # Host packages
-diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
-index 480f2fd..307bbaa 100644
---- a/configs/atmel_sama5d3_xplained_defconfig
-+++ b/configs/atmel_sama5d3_xplained_defconfig
-@@ -2,11 +2,11 @@ BR2_arm=y
- BR2_cortex_a5=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
-@@ -17,12 +17,12 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
-index d51a141..4905148 100644
---- a/configs/atmel_sama5d3_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_dev_defconfig
-@@ -5,7 +5,7 @@ BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- 
- # Toolchain
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- # Needed for gdb
-@@ -21,7 +21,7 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
-@@ -88,13 +88,13 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
- 
- # Host packages
-diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
-index 14ca3f5..0a44dc7 100644
---- a/configs/atmel_sama5d3_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
-@@ -2,12 +2,12 @@ BR2_arm=y
- BR2_cortex_a5=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d3_xplained_mmc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
-@@ -16,13 +16,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-index c45c2ce..1fc8452 100644
---- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-@@ -5,7 +5,7 @@ BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- 
- # Toolchain
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- # Needed for gdb
-@@ -23,7 +23,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d3_xplained_mmc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
-@@ -88,13 +88,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
- 
- # Host packages
-diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
-index 65313f3..5646723 100644
---- a/configs/atmel_sama5d4_xplained_defconfig
-+++ b/configs/atmel_sama5d4_xplained_defconfig
-@@ -3,11 +3,11 @@ BR2_cortex_a5=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained at91-sama5d4_xplained_hdmi at91-sama5d4_xplained_pda4 at91-sama5d4_xplained_pda7 at91-sama5d4_xplained_pda7b"
-@@ -21,12 +21,12 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
-index 7dadeca..b3dc815 100644
---- a/configs/atmel_sama5d4_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_dev_defconfig
-@@ -6,7 +6,7 @@ BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- 
- # Toolchain
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- # Needed for gdb
-@@ -22,7 +22,7 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained at91-sama5d4_xplained_hdmi at91-sama5d4_xplained_pda4 at91-sama5d4_xplained_pda7 at91-sama5d4_xplained_pda7b"
-@@ -92,13 +92,13 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
- 
- # Host packages
-diff --git a/configs/atmel_sama5d4_xplained_mmc_defconfig b/configs/atmel_sama5d4_xplained_mmc_defconfig
-index 7f93a82..03055cf 100644
---- a/configs/atmel_sama5d4_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_defconfig
-@@ -3,12 +3,12 @@ BR2_cortex_a5=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d4_xplained_mmc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained at91-sama5d4_xplained_hdmi at91-sama5d4_xplained_pda4 at91-sama5d4_xplained_pda7 at91-sama5d4_xplained_pda7b"
-@@ -17,13 +17,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-index 9e11efa..1d4cfcb 100644
---- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-@@ -6,7 +6,7 @@ BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- 
- # Toolchain
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- # Needed for gdb
-@@ -24,7 +24,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d4_xplained_mmc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained at91-sama5d4_xplained_hdmi at91-sama5d4_xplained_pda4 at91-sama5d4_xplained_pda7 at91-sama5d4_xplained_pda7b"
-@@ -89,13 +89,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
- 
- # Host packages
+diff --git a/package/bridge-utils/0002-libbridge-fix-headers-conflict-with-musl-libc.patch b/package/bridge-utils/0002-libbridge-fix-headers-conflict-with-musl-libc.patch
+new file mode 100644
+index 0000000..fd7f45e
+--- /dev/null
++++ b/package/bridge-utils/0002-libbridge-fix-headers-conflict-with-musl-libc.patch
+@@ -0,0 +1,140 @@
++From 24e5409190820a14e4d097924b1acaab62bb3b99 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Sun, 30 Oct 2016 18:12:00 +0200
++Subject: [PATCH] libbridge: fix headers conflict with musl libc
++
++Don't including kernel headers directly to avoid headers conflict like:
++
++In file included from .../sysroot/usr/include/linux/if_bridge.h:18:0,
++                 from libbridge.h:26,
++                 from libbridge_if.c:26:
++.../sysroot/usr/include/linux/in6.h:32:8: error: redefinition of ???struct in6_addr???
++ struct in6_addr {
++        ^
++In file included from libbridge.h:24:0,
++                 from libbridge_if.c:26:
++.../sysroot/usr/include/netinet/in.h:23:8: note: originally defined here
++ struct in6_addr {
++        ^
++
++Instead copy the required linux/if_bridge.h definitions into
++libbridge_private.h.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: Nacked
++(https://lists.linuxfoundation.org/pipermail/bridge/2016-November/010107.html)
++---
++ libbridge/libbridge.h         |  1 -
++ libbridge/libbridge_private.h | 83 ++++++++++++++++++++++++++++++++++++++++++-
++ 2 files changed, 82 insertions(+), 2 deletions(-)
++
++diff --git a/libbridge/libbridge.h b/libbridge/libbridge.h
++index ff047f933cd6..18b40cd90413 100644
++--- a/libbridge/libbridge.h
+++++ b/libbridge/libbridge.h
++@@ -23,7 +23,6 @@
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++ #include <linux/if.h>
++-#include <linux/if_bridge.h>
++ 
++ /* defined in net/if.h but that conflicts with linux/if.h... */
++ extern unsigned int if_nametoindex (const char *__ifname);
++diff --git a/libbridge/libbridge_private.h b/libbridge/libbridge_private.h
++index 99a511dae00a..565025b7bccb 100644
++--- a/libbridge/libbridge_private.h
+++++ b/libbridge/libbridge_private.h
++@@ -24,7 +24,88 @@
++ #include <linux/sockios.h>
++ #include <sys/time.h>
++ #include <sys/ioctl.h>
++-#include <linux/if_bridge.h>
+++
+++/* From linux/if_ether.h */
+++#ifndef ETH_ALEN
+++#define ETH_ALEN	6
+++#endif
+++
+++/* From linux/if_bridge.h */
+++#ifndef BRCTL_GET_VERSION
+++#define BRCTL_GET_VERSION 0
+++#define BRCTL_GET_BRIDGES 1
+++#define BRCTL_ADD_BRIDGE 2
+++#define BRCTL_DEL_BRIDGE 3
+++#define BRCTL_ADD_IF 4
+++#define BRCTL_DEL_IF 5
+++#define BRCTL_GET_BRIDGE_INFO 6
+++#define BRCTL_GET_PORT_LIST 7
+++#define BRCTL_SET_BRIDGE_FORWARD_DELAY 8
+++#define BRCTL_SET_BRIDGE_HELLO_TIME 9
+++#define BRCTL_SET_BRIDGE_MAX_AGE 10
+++#define BRCTL_SET_AGEING_TIME 11
+++#define BRCTL_SET_GC_INTERVAL 12
+++#define BRCTL_GET_PORT_INFO 13
+++#define BRCTL_SET_BRIDGE_STP_STATE 14
+++#define BRCTL_SET_BRIDGE_PRIORITY 15
+++#define BRCTL_SET_PORT_PRIORITY 16
+++#define BRCTL_SET_PATH_COST 17
+++#define BRCTL_GET_FDB_ENTRIES 18
+++
+++#define BR_STATE_DISABLED 0
+++#define BR_STATE_LISTENING 1
+++#define BR_STATE_LEARNING 2
+++#define BR_STATE_FORWARDING 3
+++#define BR_STATE_BLOCKING 4
+++
+++struct __bridge_info {
+++	__u64 designated_root;
+++	__u64 bridge_id;
+++	__u32 root_path_cost;
+++	__u32 max_age;
+++	__u32 hello_time;
+++	__u32 forward_delay;
+++	__u32 bridge_max_age;
+++	__u32 bridge_hello_time;
+++	__u32 bridge_forward_delay;
+++	__u8 topology_change;
+++	__u8 topology_change_detected;
+++	__u8 root_port;
+++	__u8 stp_enabled;
+++	__u32 ageing_time;
+++	__u32 gc_interval;
+++	__u32 hello_timer_value;
+++	__u32 tcn_timer_value;
+++	__u32 topology_change_timer_value;
+++	__u32 gc_timer_value;
+++};
+++
+++struct __port_info {
+++	__u64 designated_root;
+++	__u64 designated_bridge;
+++	__u16 port_id;
+++	__u16 designated_port;
+++	__u32 path_cost;
+++	__u32 designated_cost;
+++	__u8 state;
+++	__u8 top_change_ack;
+++	__u8 config_pending;
+++	__u8 unused0;
+++	__u32 message_age_timer_value;
+++	__u32 forward_delay_timer_value;
+++	__u32 hold_timer_value;
+++};
+++
+++struct __fdb_entry {
+++	__u8 mac_addr[ETH_ALEN];
+++	__u8 port_no;
+++	__u8 is_local;
+++	__u32 ageing_timer_value;
+++	__u8 port_hi;
+++	__u8 pad0;
+++	__u16 unused;
+++};
+++#endif /* BRCTL_GET_VERSION */
++ 
++ #define MAX_BRIDGES	1024
++ #define MAX_PORTS	1024
++-- 
++2.10.1
++
