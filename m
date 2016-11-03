@@ -1,73 +1,118 @@
-From: Jeroen Roovers <jer@airfi.aero>
-Date: Thu,  3 Nov 2016 14:03:41 +0100
-Subject: [Buildroot] [PATCH v2 1/2] libidn2: new package
-Message-ID: <20161103130341.6485-1-jer@airfi.aero>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu,  3 Nov 2016 14:09:04 +0100
+Subject: [Buildroot] [PATCH] authsae: new package
+Message-ID: <1478178544-27509-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An implementation of the IDNA2008 specifications (RFC 5890, RFC 5891,
-RFC 5892, RFC 5893)
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Jeroen Roovers <jer@airfi.aero>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in            |  1 +
- package/libidn2/Config.in    |  4 ++++
- package/libidn2/libidn2.hash |  2 ++
- package/libidn2/libidn2.mk   | 11 +++++++++++
- 4 files changed, 18 insertions(+)
- create mode 100644 package/libidn2/Config.in
- create mode 100644 package/libidn2/libidn2.hash
- create mode 100644 package/libidn2/libidn2.mk
+ package/Config.in                                  |  1 +
+ .../0001-CMake-install-libsae.so-as-well.patch     | 25 ++++++++++++++++++++++
+ package/authsae/Config.in                          | 11 ++++++++++
+ package/authsae/authsae.hash                       |  2 ++
+ package/authsae/authsae.mk                         | 17 +++++++++++++++
+ 5 files changed, 56 insertions(+)
+ create mode 100644 package/authsae/0001-CMake-install-libsae.so-as-well.patch
+ create mode 100644 package/authsae/Config.in
+ create mode 100644 package/authsae/authsae.hash
+ create mode 100644 package/authsae/authsae.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9ed296f..7ffb756 100644
+index 0f6260b..d51d01b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1198,6 +1198,7 @@ menu "Networking"
- 	source "package/libgsasl/Config.in"
- 	source "package/libhttpparser/Config.in"
- 	source "package/libidn/Config.in"
-+	source "package/libidn2/Config.in"
- 	source "package/libiscsi/Config.in"
- 	source "package/libldns/Config.in"
- 	source "package/libmbus/Config.in"
-diff --git a/package/libidn2/Config.in b/package/libidn2/Config.in
+@@ -1430,6 +1430,7 @@ menu "Networking applications"
+ 	source "package/argus/Config.in"
+ 	source "package/arptables/Config.in"
+ 	source "package/atftp/Config.in"
++	source "package/authsae/Config.in"
+ 	source "package/autossh/Config.in"
+ 	source "package/avahi/Config.in"
+ 	source "package/axel/Config.in"
+diff --git a/package/authsae/0001-CMake-install-libsae.so-as-well.patch b/package/authsae/0001-CMake-install-libsae.so-as-well.patch
 new file mode 100644
-index 0000000..991a4aa
+index 0000000..02794d0
 --- /dev/null
-+++ b/package/libidn2/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_LIBIDN2
-+	bool "libidn2"
-+	help
-+	  An implementation of the IDNA2008 specifications (RFCs 5890, 5891, 5892, 5893)
-diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
++++ b/package/authsae/0001-CMake-install-libsae.so-as-well.patch
+@@ -0,0 +1,25 @@
++From 173cf3896dd9c2e423863814b1c7f129a0af8d02 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Thu, 3 Nov 2016 10:08:38 +0100
++Subject: [PATCH] CMake: install libsae.so as well
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ CMakeLists.txt | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 08599a0..4bb0381 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -71,6 +71,7 @@ LIST(APPEND libsae_sources
++ 
++ ADD_LIBRARY(sae ${libsae_sources})
++ TARGET_LINK_LIBRARIES(sae ${libsae_libs})
+++INSTALL(TARGETS sae DESTINATION lib)
++ 
++ #####################################################################
++ IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
++-- 
++2.1.4
++
+diff --git a/package/authsae/Config.in b/package/authsae/Config.in
 new file mode 100644
-index 0000000..a9e5295
+index 0000000..0753da1
 --- /dev/null
-+++ b/package/libidn2/libidn2.hash
-@@ -0,0 +1,2 @@
-+# Calculated locally after checking signature
-+sha256  5d397bdc258b372b8a25c8fb5240430d6fae28f9d790d3670f4b6012fa87bfff  libidn2-0.11.tar.gz
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-new file mode 100644
-index 0000000..40221f3
---- /dev/null
-+++ b/package/libidn2/libidn2.mk
++++ b/package/authsae/Config.in
 @@ -0,0 +1,11 @@
++config BR2_PACKAGE_AUTHSAE
++	bool "authsae"
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBCONFIG
++	help
++	  Simultaneous Authentication of Equals (SAE) provides a secure
++	  password-based authentication mechanism for 802.11. It is
++	  resistant to passive attack, active attack, and dictionary
++	  attack.
++
++	  https://github.com/cozybit/authsae
+diff --git a/package/authsae/authsae.hash b/package/authsae/authsae.hash
+new file mode 100644
+index 0000000..fee1c9c
+--- /dev/null
++++ b/package/authsae/authsae.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 ee8021c0052600a3d7fe5d2886887116993ed684d6857db6fb5fe2af2a865fe4  authsae-06d383ec944120c9dbbb3e0b95b3d1420a80f074.tar.gz
+diff --git a/package/authsae/authsae.mk b/package/authsae/authsae.mk
+new file mode 100644
+index 0000000..8ac28b4
+--- /dev/null
++++ b/package/authsae/authsae.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# libidn2
++# authsae
 +#
 +################################################################################
 +
-+LIBIDN2_VERSION = 0.11
-+LIBIDN2_SITE = ftp://alpha.gnu.org/gnu/libidn
-+LIBIDN2_INSTALL_STAGING = YES
++AUTHSAE_VERSION = 06d383ec944120c9dbbb3e0b95b3d1420a80f074
++AUTHSAE_SITE = $(call github,cozybit,authsae,$(AUTHSAE_VERSION))
++AUTHSAE_DEPENDENCIES = openssl libconfig host-pkgconf
++AUTHSAE_LICENSE = BSD-3c
++AUTHSAE_LICENSE_FILES = sae.c
 +
-+$(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_LIBNL),y)
++AUTHSAE_DEPENDENCIES += libnl
++endif
++
++$(eval $(cmake-package))
 -- 
-2.10.2
+2.1.4
