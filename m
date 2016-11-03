@@ -1,38 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  3 Nov 2016 23:21:07 +0100
-Subject: [Buildroot] [PATCH 3/4] package/pseudo: add a legacy symlink to
-	emulate fakeroot
+Date: Thu,  3 Nov 2016 23:21:06 +0100
+Subject: [Buildroot] [PATCH 2/4] fs/iso9660: use pseudo instead of fakeroot
 In-Reply-To: <cover.1478211656.git.yann.morin.1998@free.fr>
 References: <cover.1478211656.git.yann.morin.1998@free.fr>
-Message-ID: <52f872897022915168b1df835622d5fba57e1780.1478211656.git.yann.morin.1998@free.fr>
+Message-ID: <30f63b816aaf5e8bf4764f1debcf7fae2d654f43.1478211656.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In cae some post-image script want to call fakeroot, add a symlink to
-use pseudo instead.
+We're dropping fakeroot in favour of pseudo, now.
 
-Reported-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pseudo/pseudo.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ fs/iso9660/iso9660.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
-index ffa6e58..b4f2df3 100644
---- a/package/pseudo/pseudo.mk
-+++ b/package/pseudo/pseudo.mk
-@@ -17,4 +17,9 @@ HOST_PSEUDO_CONF_OPTS = \
- 	--libdir=$(HOST_DIR)/usr/lib \
- 	--with-sqlite=$(HOST_DIR)/usr
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 32d79d7..c9af4bd 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -24,7 +24,7 @@
  
-+define HOST_PSEUDO_FAKEROOT_SYMLINK
-+	ln -sf pseudo $(HOST_DIR)/usr/bin/fakeroot
-+endef
-+HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_FAKEROOT_SYMLINK
-+
- $(eval $(host-autotools-package))
+ ROOTFS_ISO9660_BOOT_MENU = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
+ 
+-ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit host-fakeroot linux
++ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit host-pseudo linux
+ 
+ ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+ ROOTFS_ISO9660_USE_INITRD = YES
 -- 
 2.7.4
