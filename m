@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 Nov 2016 18:00:39 +0100
-Subject: [Buildroot] [PATCH v2 1/2] libidn2: new package
-In-Reply-To: <20161103130341.6485-1-jer@airfi.aero>
-References: <20161103130341.6485-1-jer@airfi.aero>
-Message-ID: <43b9a262-91d8-a267-d94a-2468809f4ce7@mind.be>
+Date: Thu, 3 Nov 2016 18:02:35 +0100
+Subject: [Buildroot] [PATCH 1/1] berkeleydb: fix build on powerpc64le
+In-Reply-To: <f671f551-8851-b1c2-2be1-46ea91e7e13b@lucaceresoli.net>
+References: <8e91fa81e0236517f95907ca16ac00830306854a.1478151515.git.sam.bobroff@au1.ibm.com>
+ <f671f551-8851-b1c2-2be1-46ea91e7e13b@lucaceresoli.net>
+Message-ID: <0d33472d-917e-6d6d-2800-eabd7b66fd95@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,80 +13,75 @@ To: buildroot@busybox.net
 
 
 
-On 03-11-16 14:03, Jeroen Roovers wrote:
-> An implementation of the IDNA2008 specifications (RFC 5890, RFC 5891,
-> RFC 5892, RFC 5893)
-
- Would be good to mention that libidn only does IDNA2003 which is not acceptable
-for .de domains.
-
+On 03-11-16 09:41, Luca Ceresoli wrote:
 > 
-> Signed-off-by: Jeroen Roovers <jer@airfi.aero>
+> 
+> On 03/11/2016 06:38, Sam Bobroff wrote:
+>> Fixes
+>> http://autobuild.buildroot.net/results/964326466789f8d6ff8a064327c38cf145409ab0
+>>
+>> The issue appears as a link failure in exim, where pthread symbols are
+>> undefined (they are not even used by the binary that causes the first
+>> failure). This is caused by libdb (used by exim) producing static
+>> rather than shared libraries, and this is due to berkeleydb's
+>> configure failing to correctly detect shared library support.
+>>
+>> Add a case for powerpc64le to allow correct detection of shared library
+>> support in the linker.
+>>
+>> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+>> ---
+>>
+>>  .../berkeleydb/0001-configure-powerpc64le.patch    | 29 ++++++++++++++++++++++
+>>  1 file changed, 29 insertions(+)
+>>  create mode 100644 package/berkeleydb/0001-configure-powerpc64le.patch
+>>
+>> diff --git a/package/berkeleydb/0001-configure-powerpc64le.patch b/package/berkeleydb/0001-configure-powerpc64le.patch
+>> new file mode 100644
+>> index 0000000..1f76562
+>> --- /dev/null
+>> +++ b/package/berkeleydb/0001-configure-powerpc64le.patch
+>> @@ -0,0 +1,29 @@
+>> +Currently, dist/configure on powerpc64le fails to determine the
+>> +availability of shared library support in the toolchain, causing
+>> +static libraries to be built even when shared libraries are supported.
+>> +This can lead to linker failures in packages that use libdb.
+>> +
+>> +Add a case for powerpc64le which corrects the problem.
+>> +
+>> +Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+>> +---
+>> + dist/configure | 3 +++
+>> + 1 file changed, 3 insertions(+)
+>> +
+>> +diff --git a/dist/configure b/dist/configure
+>> +index db718de..81f2fae 100755
+>> +--- a/dist/configure
+>> ++++ b/dist/configure
+>> +@@ -9330,6 +9330,9 @@ s390*-*linux*|s390*-*tpf*|sparc*-*linux*)
+>> + 	  x86_64-*linux*)
+>> + 	    LD="${LD-ld} -m elf_x86_64"
+>> + 	    ;;
+>> ++	  ppc64le-*linux*|powerpc64le-*linux*)
+>> ++	    LD="${LD-ld} -m elf64lppc"
+>> ++	    ;;
+>> + 	  ppc*-*linux*|powerpc*-*linux*)
+>> + 	    LD="${LD-ld} -m elf64ppc"
+>> + 	    ;;
+> 
+> I tested this patch and it does fix the build failure.
+> 
+> However, the best way to fix the issue should be to fix configure.ac and
+> then enable BERKELEYDB_AUTORECONF in berkeleydb.mk so the configure
+> script gets regenerated. Can you have a look to that?
 
- I should have replied to this version of the patch (which is v3 by the way, not
-v2), but my remarks from v1 still apply.
-
+ And of course, send the patch upstream!
 
  Regards,
  Arnout
 
-> ---
->  package/Config.in            |  1 +
->  package/libidn2/Config.in    |  4 ++++
->  package/libidn2/libidn2.hash |  2 ++
->  package/libidn2/libidn2.mk   | 11 +++++++++++
->  4 files changed, 18 insertions(+)
->  create mode 100644 package/libidn2/Config.in
->  create mode 100644 package/libidn2/libidn2.hash
->  create mode 100644 package/libidn2/libidn2.mk
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index 9ed296f..7ffb756 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1198,6 +1198,7 @@ menu "Networking"
->  	source "package/libgsasl/Config.in"
->  	source "package/libhttpparser/Config.in"
->  	source "package/libidn/Config.in"
-> +	source "package/libidn2/Config.in"
->  	source "package/libiscsi/Config.in"
->  	source "package/libldns/Config.in"
->  	source "package/libmbus/Config.in"
-> diff --git a/package/libidn2/Config.in b/package/libidn2/Config.in
-> new file mode 100644
-> index 0000000..991a4aa
-> --- /dev/null
-> +++ b/package/libidn2/Config.in
-> @@ -0,0 +1,4 @@
-> +config BR2_PACKAGE_LIBIDN2
-> +	bool "libidn2"
-> +	help
-> +	  An implementation of the IDNA2008 specifications (RFCs 5890, 5891, 5892, 5893)
-> diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
-> new file mode 100644
-> index 0000000..a9e5295
-> --- /dev/null
-> +++ b/package/libidn2/libidn2.hash
-> @@ -0,0 +1,2 @@
-> +# Calculated locally after checking signature
-> +sha256  5d397bdc258b372b8a25c8fb5240430d6fae28f9d790d3670f4b6012fa87bfff  libidn2-0.11.tar.gz
-> diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-> new file mode 100644
-> index 0000000..40221f3
-> --- /dev/null
-> +++ b/package/libidn2/libidn2.mk
-> @@ -0,0 +1,11 @@
-> +################################################################################
-> +#
-> +# libidn2
-> +#
-> +################################################################################
-> +
-> +LIBIDN2_VERSION = 0.11
-> +LIBIDN2_SITE = ftp://alpha.gnu.org/gnu/libidn
-> +LIBIDN2_INSTALL_STAGING = YES
-> +
-> +$(eval $(autotools-package))
+> Thanks!
 > 
 
 -- 
