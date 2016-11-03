@@ -1,76 +1,58 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 3 Nov 2016 09:41:11 +0100
-Subject: [Buildroot] [PATCH 1/1] berkeleydb: fix build on powerpc64le
-In-Reply-To: <8e91fa81e0236517f95907ca16ac00830306854a.1478151515.git.sam.bobroff@au1.ibm.com>
-References: <8e91fa81e0236517f95907ca16ac00830306854a.1478151515.git.sam.bobroff@au1.ibm.com>
-Message-ID: <f671f551-8851-b1c2-2be1-46ea91e7e13b@lucaceresoli.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  3 Nov 2016 06:58:27 -0300
+Subject: [Buildroot] [PATCH 01/14] gstreamer1: bump to version 1.10.0
+Message-ID: <1478167120-3285-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Remove gstconfig.h compatibility kludge since it has been
+fixed/reinstated upstream.
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gstreamer1/gstreamer1/gstreamer1.hash |  4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 12 +-----------
+ 2 files changed, 3 insertions(+), 13 deletions(-)
 
-On 03/11/2016 06:38, Sam Bobroff wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/964326466789f8d6ff8a064327c38cf145409ab0
-> 
-> The issue appears as a link failure in exim, where pthread symbols are
-> undefined (they are not even used by the binary that causes the first
-> failure). This is caused by libdb (used by exim) producing static
-> rather than shared libraries, and this is due to berkeleydb's
-> configure failing to correctly detect shared library support.
-> 
-> Add a case for powerpc64le to allow correct detection of shared library
-> support in the linker.
-> 
-> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-> ---
-> 
->  .../berkeleydb/0001-configure-powerpc64le.patch    | 29 ++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/berkeleydb/0001-configure-powerpc64le.patch
-> 
-> diff --git a/package/berkeleydb/0001-configure-powerpc64le.patch b/package/berkeleydb/0001-configure-powerpc64le.patch
-> new file mode 100644
-> index 0000000..1f76562
-> --- /dev/null
-> +++ b/package/berkeleydb/0001-configure-powerpc64le.patch
-> @@ -0,0 +1,29 @@
-> +Currently, dist/configure on powerpc64le fails to determine the
-> +availability of shared library support in the toolchain, causing
-> +static libraries to be built even when shared libraries are supported.
-> +This can lead to linker failures in packages that use libdb.
-> +
-> +Add a case for powerpc64le which corrects the problem.
-> +
-> +Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-> +---
-> + dist/configure | 3 +++
-> + 1 file changed, 3 insertions(+)
-> +
-> +diff --git a/dist/configure b/dist/configure
-> +index db718de..81f2fae 100755
-> +--- a/dist/configure
-> ++++ b/dist/configure
-> +@@ -9330,6 +9330,9 @@ s390*-*linux*|s390*-*tpf*|sparc*-*linux*)
-> + 	  x86_64-*linux*)
-> + 	    LD="${LD-ld} -m elf_x86_64"
-> + 	    ;;
-> ++	  ppc64le-*linux*|powerpc64le-*linux*)
-> ++	    LD="${LD-ld} -m elf64lppc"
-> ++	    ;;
-> + 	  ppc*-*linux*|powerpc*-*linux*)
-> + 	    LD="${LD-ld} -m elf64ppc"
-> + 	    ;;
-
-I tested this patch and it does fix the build failure.
-
-However, the best way to fix the issue should be to fix configure.ac and
-then enable BERKELEYDB_AUTORECONF in berkeleydb.mk so the configure
-script gets regenerated. Can you have a look to that?
-
-Thanks!
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index c85518e..8bd7782 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.3.tar.xz.sha256sum
+-sha256	66b37762d4fdcd63bce5a2bec57e055f92420e95037361609900278c0db7c53f  gstreamer-1.8.3.tar.xz
++# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.10.0.tar.xz.sha256sum
++sha256	1e7778fabe480185bfc4ce552f0860de1443f6618a68a86ccdd65854fed37207  gstreamer-1.10.0.tar.xz
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index d69c3e8..f0afdd9 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GSTREAMER1_VERSION = 1.8.3
++GSTREAMER1_VERSION = 1.10.0
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
+@@ -36,14 +36,4 @@ GSTREAMER1_CONF_OPTS = \
+ 
+ GSTREAMER1_DEPENDENCIES = libglib2 host-pkgconf host-bison host-flex
+ 
+-# gstreamer-1.6 changed the location of its gstconfig.h file,
+-# and unfortunately, not all (by far!) consumers have been
+-# updated to look in the correct location.
+-# Add a symlink to the legacy location
+-define GSTREAMER1_LEGACY_CGSTCONFIG_H
+-	cd $(STAGING_DIR)/usr/include/gstreamer-1.0/gst && \
+-		ln -sf ../../../lib/gstreamer-1.0/include/gst/gstconfig.h .
+-endef
+-GSTREAMER1_POST_INSTALL_STAGING_HOOKS += GSTREAMER1_LEGACY_CGSTCONFIG_H
+-
+ $(eval $(autotools-package))
 -- 
-Luca
+2.7.3
