@@ -1,90 +1,53 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  3 Nov 2016 06:58:33 -0300
-Subject: [Buildroot] [PATCH 07/14] gst1-plugins-bad: enable webrtc plugin
+Date: Thu,  3 Nov 2016 06:58:34 -0300
+Subject: [Buildroot] [PATCH 08/14] gst1-plugins-bad: add new timecode plugin
 In-Reply-To: <1478167120-3285-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1478167120-3285-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1478167120-3285-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1478167120-3285-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's new for 1.10.0, add an explicit option for the webrtc plugin.
+Add a new explicit option for the dependency-less timecode plugin.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in      | 28 ++++++++++++++++++++++
- .../gst1-plugins-bad/gst1-plugins-bad.mk           |  7 ++++++
- 2 files changed, 35 insertions(+)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 3 +++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 6 ++++++
+ 2 files changed, 9 insertions(+)
 
 diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 37731cf..1d28a66 100644
+index 1d28a66..ac081b5 100644
 --- a/package/gstreamer1/gst1-plugins-bad/Config.in
 +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -522,10 +522,21 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FBDEV
+@@ -419,6 +419,9 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SUBENC
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_STEREO
+ 	bool "stereo"
  
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FDK
- 	bool "fdkaac"
-+	# Dependencies from fdk-aac
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
-+		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-+		BR2_powerpc || BR2_sh
- 	select BR2_PACKAGE_FDK_AAC
- 	help
- 	  MPEG AAC encoder/decoder
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TIMECODE
++	bool "timecode"
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTA
+ 	bool "tta"
  
-+comment "fdkaac needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
-+		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-+		BR2_powerpc || BR2_sh
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
- 	bool "gl"
- 	default y
-@@ -676,6 +687,23 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBP
- 	help
- 	  Webp image format plugin
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
-+	bool "webrtc"
-+	# All depends from webrtc-audio-processing
-+	depends on BR2_arm || BR2_i386 || BR2_x86_64
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
-+	select BR2_PACKAGE_WEBRTC
-+	help
-+	  WebRTC echo-cancellation, gain control and noise suppression
-+
-+comment "webrtc needs a toolchain w/ C++, NPTL, gcc >= 4.8"
-+	depends on BR2_arm || BR2_i386 || BR2_x86_64
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265
- 	bool "x265"
- 	depends on BR2_INSTALL_LIBSTDCPP
 diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 77f64e4..3352f1a 100644
+index 3352f1a..a42bb0c 100644
 --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
 +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -794,6 +794,13 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-webp
+@@ -517,6 +517,12 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-stereo
  endif
  
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc
-+GST1_PLUGINS_BAD_DEPENDENCIES += webrtc-audio-processing
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TIMECODE),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-timecode
 +else
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-timecode
 +endif
 +
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-x265
- GST1_PLUGINS_BAD_DEPENDENCIES += x265
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTA),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-tta
+ else
 -- 
 2.7.3
