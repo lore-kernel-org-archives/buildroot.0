@@ -1,138 +1,64 @@
 From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Thu,  3 Nov 2016 14:25:34 +1100
-Subject: [Buildroot] [PATCH 1/1] alsa-lib: fix build on powerpc64 and
-	powerpc64le
-Message-ID: <c51221ec7f459272dd2bd2bf01097537cdb045b3.1478143517.git.sam.bobroff@au1.ibm.com>
+Date: Thu,  3 Nov 2016 16:38:41 +1100
+Subject: [Buildroot] [PATCH 1/1] berkeleydb: fix build on powerpc64le
+Message-ID: <8e91fa81e0236517f95907ca16ac00830306854a.1478151515.git.sam.bobroff@au1.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes linker error
-http://autobuild.buildroot.net/results/c6272ac900d1a53b976839ac4f50a210b3e6b354
+Fixes
+http://autobuild.buildroot.net/results/964326466789f8d6ff8a064327c38cf145409ab0
 
-On powerpc64 (and powerpc64le) the build fails due to linker problems
-because of an old (2003) workaround for powerpc64, presumably working
-around an old toolchain problem that is no longer present. Removing
-the workaround allows the build to succeed. A new patch is added for
-this.
+The issue appears as a link failure in exim, where pthread symbols are
+undefined (they are not even used by the binary that causes the first
+failure). This is caused by libdb (used by exim) producing static
+rather than shared libraries, and this is due to berkeleydb's
+configure failing to correctly detect shared library support.
 
-Additionally, there was a mistake in patch 3: the patch added a test
-for HAVE_LIBDL to include/alsa-symbols.h but it was positioned in the
-file before config.h was included, so HAVE_LIBDL is never seen as
-defined.  The test was also using HAVE_LIBDL (which indicates the
-library) rather than HAVE_DLFCN (which indicates the header).
+Add a case for powerpc64le to allow correct detection of shared library
+support in the linker.
 
 Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
 ---
 
- package/alsa-lib/0003-dlmisc.patch                 | 10 ++--
- .../0005-remove-powerpc64-workaround.patch         | 67 ++++++++++++++++++++++
- 2 files changed, 73 insertions(+), 4 deletions(-)
- create mode 100644 package/alsa-lib/0005-remove-powerpc64-workaround.patch
+ .../berkeleydb/0001-configure-powerpc64le.patch    | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/berkeleydb/0001-configure-powerpc64le.patch
 
-diff --git a/package/alsa-lib/0003-dlmisc.patch b/package/alsa-lib/0003-dlmisc.patch
-index 05dc70e..24b7230 100644
---- a/package/alsa-lib/0003-dlmisc.patch
-+++ b/package/alsa-lib/0003-dlmisc.patch
-@@ -36,10 +36,11 @@ diff --git a/modules/mixer/simple/sbasedl.c b/modules/mixer/simple/sbasedl.c
-  #include <fcntl.h>
-  #include <sys/ioctl.h>
-  #include <math.h>
--+#ifdef HAVE_LIBDL
-++#include "config.h"
-++#ifdef HAVE_DLFCN
-  #include <dlfcn.h>
- +#endif
-- #include "config.h"
-+-#include "config.h"
-  #include "asoundlib.h"
-  #include "mixer_abst.h"
- diff --git a/src/mixer/simple_abst.c b/src/mixer/simple_abst.c
-@@ -49,9 +50,10 @@ diff --git a/src/mixer/simple_abst.c b/src/mixer/simple_abst.c
-  #include <fcntl.h>
-  #include <sys/ioctl.h>
-  #include <math.h>
--+#ifdef HAVE_LIBDL
-++#include "config.h"
-++#ifdef HAVE_DLFCN
-  #include <dlfcn.h>
- +#endif
-- #include "config.h"
-+-#include "config.h"
-  #include "asoundlib.h"
-  #include "mixer_simple.h"
-diff --git a/package/alsa-lib/0005-remove-powerpc64-workaround.patch b/package/alsa-lib/0005-remove-powerpc64-workaround.patch
+diff --git a/package/berkeleydb/0001-configure-powerpc64le.patch b/package/berkeleydb/0001-configure-powerpc64le.patch
 new file mode 100644
-index 0000000..57a369e
+index 0000000..1f76562
 --- /dev/null
-+++ b/package/alsa-lib/0005-remove-powerpc64-workaround.patch
-@@ -0,0 +1,67 @@
-+Linking currently fails on powerpc64 and powerpc64le when configured
-+with --without-versioned, as follows:
-+../src/.libs/libasound.so: undefined reference to `.__snd_pcm_hw_params_set_format_first'
-+(And many similar messages.)
++++ b/package/berkeleydb/0001-configure-powerpc64le.patch
+@@ -0,0 +1,29 @@
++Currently, dist/configure on powerpc64le fails to determine the
++availability of shared library support in the toolchain, causing
++static libraries to be built even when shared libraries are supported.
++This can lead to linker failures in packages that use libdb.
 +
-+This appears to be due to a very old (2003) workaround for powerpc64,
-+(introduced by commit 06221f86) in include/alsa-symbols.h which alters
-+symbol names. While it was probably necessary at the time, it does not
-+appear to be necessary now and removing it fixes the build.
++Add a case for powerpc64le which corrects the problem.
 +
 +Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
 +---
-+ include/alsa-symbols.h | 25 ++++---------------------
-+ 1 file changed, 4 insertions(+), 21 deletions(-)
++ dist/configure | 3 +++
++ 1 file changed, 3 insertions(+)
 +
-+diff --git a/include/alsa-symbols.h b/include/alsa-symbols.h
-+index 51cb982..0cb0b9f 100644
-+--- a/include/alsa-symbols.h
-++++ b/include/alsa-symbols.h
-+@@ -29,19 +29,10 @@
-+ #define INTERNAL_CONCAT2_2(Pre, Post) Pre##Post
-+ #define INTERNAL(Name) INTERNAL_CONCAT2_2(__, Name)
-+ 
-+-#ifdef __powerpc64__
-+-# define symbol_version(real, name, version) 			\
-+-	__asm__ (".symver " ASM_NAME(#real) "," ASM_NAME(#name) "@" #version);	\
-+-	__asm__ (".symver ." ASM_NAME(#real) ",." ASM_NAME(#name) "@" #version)
-+-# define default_symbol_version(real, name, version) 		\
-+-	__asm__ (".symver " ASM_NAME(#real) "," ASM_NAME(#name) "@@" #version);	\
-+-	__asm__ (".symver ." ASM_NAME(#real) ",." ASM_NAME(#name) "@@" #version)
-+-#else
-+-# define symbol_version(real, name, version) \
-+-	__asm__ (".symver " ASM_NAME(#real) "," ASM_NAME(#name) "@" #version)
-+-# define default_symbol_version(real, name, version) \
-+-	__asm__ (".symver " ASM_NAME(#real) "," ASM_NAME(#name) "@@" #version)
-+-#endif
-++#define symbol_version(real, name, version) \
-++__asm__ (".symver " ASM_NAME(#real) "," ASM_NAME(#name) "@" #version)
-++#define default_symbol_version(real, name, version) \
-++__asm__ (".symver " ASM_NAME(#real) "," ASM_NAME(#name) "@@" #version)
-+ 
-+ #ifdef USE_VERSIONED_SYMBOLS
-+ #define use_symbol_version(real, name, version) \
-+@@ -50,13 +41,6 @@
-+ 		default_symbol_version(real, name, version)
-+ #else
-+ #define use_symbol_version(real, name, version) /* nothing */
-+-#ifdef __powerpc64__
-+-#define use_default_symbol_version(real, name, version) \
-+-	__asm__ (".weak " ASM_NAME(#name)); 			\
-+-	__asm__ (".weak ." ASM_NAME(#name)); 			\
-+-	__asm__ (".set " ASM_NAME(#name) "," ASM_NAME(#real));		\
-+-	__asm__ (".set ." ASM_NAME(#name) ",." ASM_NAME(#real))
-+-#else
-+ #if defined(__alpha__) || defined(__mips__)
-+ #define use_default_symbol_version(real, name, version) \
-+         __asm__ (".weak " ASM_NAME(#name)); \
-+@@ -67,6 +51,5 @@
-+ 	__asm__ (".set " ASM_NAME(#name) "," ASM_NAME(#real))
-+ #endif
-+ #endif
-+-#endif
-+ 
-+ #endif /* __ALSA_SYMBOLS_H */
++diff --git a/dist/configure b/dist/configure
++index db718de..81f2fae 100755
++--- a/dist/configure
+++++ b/dist/configure
++@@ -9330,6 +9330,9 @@ s390*-*linux*|s390*-*tpf*|sparc*-*linux*)
++ 	  x86_64-*linux*)
++ 	    LD="${LD-ld} -m elf_x86_64"
++ 	    ;;
+++	  ppc64le-*linux*|powerpc64le-*linux*)
+++	    LD="${LD-ld} -m elf64lppc"
+++	    ;;
++ 	  ppc*-*linux*|powerpc*-*linux*)
++ 	    LD="${LD-ld} -m elf64ppc"
++ 	    ;;
 +-- 
 +2.10.0.297.gf6727b0
 +
