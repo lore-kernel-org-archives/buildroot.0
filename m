@@ -1,60 +1,53 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 3 Nov 2016 21:36:04 +0100
-Subject: [Buildroot] [PATCH v2] owfs: install python bindings in the correct
-	location
-Message-ID: <20161103203604.19427-1-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Nov 2016 21:36:15 +0100
+Subject: [Buildroot] [git commit] fs: use pseudo instead of fakeroot
+Message-ID: <20161103203922.8DFE981992@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The owfs build system has a pretty complicated way of configuring the
-Python bindings. It ends up with setting PYSITEDIR to the host-python
-site-packages path, and it still prepends DESTDIR to that.
+commit: https://git.buildroot.net/buildroot/commit/?id=8035ceb56cc3ba2541aba0d0ead3f29900d9e310
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As a simple fix, override PYSITEDIR with the correct value on the make
-command line.
+fakeroot misbhaves when there are SElinux contexts, as reported in #9386,
+and further detailed in https://bugzilla.redhat.com/show_bug.cgi?id=1238802
 
-Fixes:
-http://autobuild.buildroot.net/results/200/200846650641494290aa67d28ea6fb2c9351d4dc
-http://autobuild.buildroot.net/results/99c/99c00248dd8b00071bcdbc73336cc276c68a4c16
-and many more
+A proposal in the FC bug is to use pseudo instead of fakeroot. Pseudo is
+a from-scratch re-implementation of fakeroot; it is used in Poky/OE
+instead of fakeroot.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fixes #9386.
+
+Reported-by: Andrey Yurovsky <yurovsky@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Andrey Yurovsky <yurovsky@gmail.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2: use an intermediate OWFS_EXTRA_MAKE_OPTS instead of directly
-    overwriting OWFS_MAKE, so it is easier to append stuff.
----
- package/owfs/owfs.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ fs/common.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
-index 83614af..e0679d2 100644
---- a/package/owfs/owfs.mk
-+++ b/package/owfs/owfs.mk
-@@ -66,6 +66,13 @@ OWFS_MAKE_ENV += \
- 	_python_prefix=/usr \
- 	_python_exec_prefix=/usr
- OWFS_DEPENDENCIES += python host-swig
-+# The configure scripts finds PYSITEDIR as the python_lib directory of
-+# host-python, and then prepends DESTDIR in front of it. So we end up
-+# installing things in $(TARGET_DIR)/$(HOST_DIR)/usr/lib/python which is
-+# clearly wrong.
-+# Patching owfs to do the right thing is not trivial, it's much easier to
-+# override the PYSITEDIR variable in make.
-+OWFS_EXTRA_MAKE_OPTS += PYSITEDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- else
- OWFS_CONF_OPTS += --disable-owpython --without-python
- endif
-@@ -75,6 +82,8 @@ ifeq ($(BR2_STATIC_LIBS),y)
- OWFS_CONF_OPTS += --disable-zero
- endif
+diff --git a/fs/common.mk b/fs/common.mk
+index 2b31e12..2dbef4d 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -43,7 +43,7 @@ ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+ define ROOTFS_TARGET_INTERNAL
  
-+OWFS_MAKE = $(MAKE) $(OWFS_EXTRA_MAKE_OPTS)
-+
- define OWFS_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 $(OWFS_PKGDIR)S25owserver \
- 		$(TARGET_DIR)/etc/init.d/S25owserver
--- 
-2.9.3
+ # extra deps
+-ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
++ROOTFS_$(2)_DEPENDENCIES += host-pseudo host-makedevs \
+ 	$$(if $$(PACKAGES_USERS)$$(ROOTFS_USERS_TABLES),host-mkpasswd)
+ 
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
+@@ -97,7 +97,7 @@ endif
+ 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+ 	chmod a+x $$(FAKEROOT_SCRIPT)
+-	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
++	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/pseudo -- $$(FAKEROOT_SCRIPT)
+ 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
+ 	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
+ ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
