@@ -1,64 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Nov 2016 22:46:56 +0100
-Subject: [Buildroot] [PATCH] bridge-utils: fix build with musl
-In-Reply-To: <0b4d1e33355f00f915768a2bc3f5c4d997206731.1478152430.git.baruch@tkos.co.il>
-References: <0b4d1e33355f00f915768a2bc3f5c4d997206731.1478152430.git.baruch@tkos.co.il>
-Message-ID: <20161103224656.1e6466a6@free-electrons.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Thu, 3 Nov 2016 22:49:19 +0100
+Subject: [Buildroot] [PATCH] boards: add FriendlyARM Nanopi NEO
+In-Reply-To: <20161103210957.GA4087@free.fr>
+References: <1478204278-9650-1-git-send-email-yann.morin.1998@free.fr>
+ <20161103210232.76trmtm3bc2jz27c@lukather>
+ <20161103210957.GA4087@free.fr>
+Message-ID: <20161103214919.mnogy5lzeqlqrohz@lukather>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Thu,  3 Nov 2016 07:53:50 +0200, Baruch Siach wrote:
-> Apply a patch that removes direct include of kernel headers to avoid conflict
-> of definitions.
+On Thu, Nov 03, 2016 at 10:09:57PM +0100, Yann E. MORIN wrote:
+> Maxime, All,
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/4aa/4aaeca4f1fca1794b039d7255a1828ff724f2234/
-> http://autobuild.buildroot.net/results/b48/b48a70137a4a568b31337f899fd21d05552db5e2/
-> http://autobuild.buildroot.net/results/bff/bff5767fc7e821a7674ee022111db84e4a9449d0/
+> On 2016-11-03 22:02 +0100, Maxime Ripard spake thusly:
+> > On Thu, Nov 03, 2016 at 09:17:58PM +0100, Yann E. MORIN wrote:
+> > > The FriendlyARM Nanopi NEO is a 4x4cm? board with an Allwiner H3 SoC:
+> > >   - quad-core Cortex-A7 @1.2GHz
+> > >   - 256 or 512MiB of DDR
+> > >   - uSDCard as only storage option
+> > >   - 3x USB 2.0 host (one socket, two on expansion pin-holes)
+> > >   - 1x USB 2.0 OTG (also used as power source)
+> > >   - 10/100 etehrnet MAC
+> > >   - GPIOs, SPI, I2c...
+> > > 
+> > > Support for the Nanopi NEO in U-Boot and Linux is very recent, so much
+> > > so that we have to use an -rc tag for U-Boot and a special Linux tree.
+> > 
+> > I'm not sure why you need that custom tree, the DT is in 4.9 already.
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Applied, thanks!
-
-> In a discussion of this issue on the musl list last year Rich Felker
-> suggested[1] the following hack for fixing the widespread musl issue with
-> packages using kernel headers:
+> Yup. But with 4.9-rc3, I had mmc corruption. With your tree and
+> sunxi-next, I don't have those. Not sure what hapenned...
 > 
->  --- usr/include/linux/libc-compat.h-orig	2016-11-03 07:25:09.853807823 +0200
->  +++ usr/include/linux/libc-compat.h	2016-11-03 07:25:49.602834223 +0200
->  @@ -49,7 +49,7 @@
->   #define _LIBC_COMPAT_H
-> 
->   /* We have included glibc headers... */
->  -#if defined(__GLIBC__)
->  +#if 1
-> 
->   /* Coordinate with glibc net/if.h header. */
->   #if defined(_NET_IF_H) && defined(__USE_MISC)
-> 
-> I verified that it fixes this build failure. What do you think of that as a
-> temporary measure until musl finds a better solution[2]?
+> I can re-check to be sure.
 
-Yes, we probably need to do something like that. I'm sick of all the
-patches we need to fix this structure redefinition mess, so if we have
-a global solution, it would be nice. I guess it needs to be applied in
-both the linux-headers package and the toolchain-external package.
+I don't think we have any fix in there for the H3 and the MMC. If
+something is missing in 4.9, then it should be reported :)
 
-I'm glad to see that musl is trying to find a better solution for this
-problem. So far, every time I raised this issue, the answer was that:
-"the kernel headers are broken", and apparently they can't easily be
-fixed without breaking the user-space exposed definitions (and
-therefore potentially break the build of userspace libs/apps).
+Maxime
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
+Maxime Ripard, Free Electrons
 Embedded Linux and Kernel engineering
 http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 801 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161103/b907ce8e/attachment.asc>
