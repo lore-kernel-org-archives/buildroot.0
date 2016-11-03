@@ -1,59 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Nov 2016 21:36:01 +0100
-Subject: [Buildroot] [git commit] package/pseudo: new package
-Message-ID: <20161103203922.83A7081945@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 03 Nov 2016 20:40:43 +0000
+Subject: [Buildroot] [Bug 9386] ubinize fails with or without custom config
+In-Reply-To: <bug-9386-163@https.bugs.busybox.net/>
+References: <bug-9386-163@https.bugs.busybox.net/>
+Message-ID: <bug-9386-163-tMuZBySlDr@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d62522722921342af7ea24214e8f6eda76a4fca1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=9386
 
-Pseudo is a program that can either be used directly or as an
-LD_PRELOAD, which allows these operations to succeed as if the
-user did have system administrator privileges even though they
-are an ordinary user.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Pseudo has a lot of similarities to fakeroot but is a new
-implementation that improves on the problems seen using fakeroot.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Andrey Yurovsky <yurovsky@gmail.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pseudo/pseudo.hash |  2 ++
- package/pseudo/pseudo.mk   | 15 +++++++++++++++
- 2 files changed, 17 insertions(+)
+--- Comment #12 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by switching from fakeroot to pseudo to build the root filesystem, done
+in commit
+https://git.buildroot.org/buildroot/commit/?id=8035ceb56cc3ba2541aba0d0ead3f29900d9e310.
+Thanks Yann for providing the patches, and thanks Andrey for reporting the
+problem in the first place!
 
-diff --git a/package/pseudo/pseudo.hash b/package/pseudo/pseudo.hash
-new file mode 100644
-index 0000000..5822d0e
---- /dev/null
-+++ b/package/pseudo/pseudo.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  d7767c9a73b0df4f1f26952cf5eca4c6ff6fc4bc5ef15a904ea3839c70161936  pseudo-7abc9396731149df5eaf43c84fed4f3053b64de6.tar.gz
-diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
-new file mode 100644
-index 0000000..314fa82
---- /dev/null
-+++ b/package/pseudo/pseudo.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# pseudo
-+#
-+################################################################################
-+
-+PSEUDO_VERSION = 7abc9396731149df5eaf43c84fed4f3053b64de6
-+PSEUDO_SITE = https://git.yoctoproject.org/git/pseudo
-+PSEUDO_SITE_METHOD = git
-+
-+# No "or later" clause.
-+PSEUDO_LICENSE = LGPLv2.1
-+PSEUDO_LICENSE_FILES = COPYING
-+
-+$(eval $(host-autotools-package))
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
