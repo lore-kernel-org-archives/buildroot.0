@@ -1,38 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Nov 2016 21:48:25 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: remove invalid email address
-Message-ID: <20161103204829.311A981992@busybox.osuosl.org>
+Date: Thu, 3 Nov 2016 21:48:47 +0100
+Subject: [Buildroot] [git commit] core: remove redundant "override O := $(O)"
+Message-ID: <20161103204902.965E481972@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e4ceb105fc40e45e1c120c9b90b0986c5decd0b
+commit: https://git.buildroot.net/buildroot/commit/?id=2048e22fa1fe2d5ff654e0fb6a17042254efc2a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Merge the two entries of Richard Braun under the correct address.
+The top-level Makefile contains an "override O := $(O)" statement that
+is purportedly required to make sure the O flag doesn't leak into the
+environment of sub-makes. However, since commit 173135d, there is
+already an "override O := ..." a few lines down. Therefore, the first
+override is redundant.
 
-Cc: Richard Braun <rbraun@sceen.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ Makefile | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1c3d6d7..10b431b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1232,10 +1232,8 @@ F:	package/atop/
- N:	Rhys Williams <github@wilberforce.co.nz>
- F:	package/lirc-tools/
+diff --git a/Makefile b/Makefile
+index 4b494a3..cb030d4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -34,13 +34,6 @@ SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
+ # build by preventing it from being forwarded to sub-make calls.
+ ifneq ("$(origin O)", "command line")
+ O := $(CURDIR)/output
+-else
+-# Strangely enough O is still passed to submakes with MAKEOVERRIDES
+-# (with make 3.81 atleast), the only thing that changes is the output
+-# of the origin function (command line -> environment).
+-# Unfortunately some packages don't look at origin (E.G. uClibc 0.9.31+)
+-# To really make O go away, we have to override it.
+-override O := $(O)
+ endif
  
--N:	Richard Braun <rbraun@>
--F:	package/curlftpfs/
--
- N:	Richard Braun <rbraun@sceen.net>
-+F:	package/curlftpfs/
- F:	package/tzdata/
- 
- N:	Rico Bachmann <bachmann@tofwerk.com>
+ # Check if the current Buildroot execution meets all the pre-requisites.
