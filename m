@@ -1,29 +1,34 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 3 Nov 2016 14:02:49 +0200
-Subject: [Buildroot] [PATCH 0/2] libcurl: Incorrect fix for CVE-2016-8625
-In-Reply-To: <CANCHnQoO8jFZpRDFd3ER1xwAhVb4d=_omLpyza6=wOQY7-d4vQ@mail.gmail.com>
-References: <20161103110512.13676-1-jer@airfi.aero>
- <20161103111947.s3t4ucbnmj2ngx7y@tarshish>
- <CANCHnQoO8jFZpRDFd3ER1xwAhVb4d=_omLpyza6=wOQY7-d4vQ@mail.gmail.com>
-Message-ID: <20161103120249.zwe5t5jseuzrfha7@tarshish>
+Date: Thu, 3 Nov 2016 14:19:07 +0200
+Subject: [Buildroot] [PATCH 1/1] berkeleydb: fix build on powerpc64le
+In-Reply-To: <20161103055805.z67aqczyccsgmnax@tarshish>
+References: <8e91fa81e0236517f95907ca16ac00830306854a.1478151515.git.sam.bobroff@au1.ibm.com>
+ <20161103055805.z67aqczyccsgmnax@tarshish>
+Message-ID: <20161103121907.3axoqgm4m5ftyiyb@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jeroen,
+Hi Sam,
 
-On Thu, Nov 03, 2016 at 12:28:57PM +0100, Jeroen Roovers wrote:
-> On 3 November 2016 at 12:19, Baruch Siach <baruch@tkos.co.il> wrote:
-> > I could not find any mention of libidn2 in the CVE-2016-8625 advisor at
-> > https://curl.haxx.se/docs/adv_20161102K.html .
+On Thu, Nov 03, 2016 at 07:58:05AM +0200, Baruch Siach wrote:
+> On Thu, Nov 03, 2016 at 04:38:41PM +1100, Sam Bobroff wrote:
+> > ++	  ppc64le-*linux*|powerpc64le-*linux*)
+> > ++	    LD="${LD-ld} -m elf64lppc"
+> > ++	    ;;
+> > + 	  ppc*-*linux*|powerpc*-*linux*)
 > 
-> Indeed. The commit that switched to libidn2 does mention the advisory.
+> This is strange. This older pattern looks like a superset of your new pattern. 
+> Why doesn't it work?
 > 
-> https://github.com/curl/curl/commit/9c91ec778104ae3b744b39444d544e82d5ee9ece
+> > + 	    LD="${LD-ld} -m elf64ppc"
+> > + 	    ;;
 
-Please mention that in the libidn to libidn2 commit log.
+I missed the distinction between elf64ppc and elf64lppc.
+
+Sorry for the noise.
 
 baruch
 
