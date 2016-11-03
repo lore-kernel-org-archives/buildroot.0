@@ -1,32 +1,36 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  3 Nov 2016 09:53:13 +0200
-Subject: [Buildroot] [PATCH] libcurl: move site to https
-Message-ID: <5f12f7953ffa20c0fdfe34227fad9d298b2b7ba9.1478159593.git.baruch@tkos.co.il>
+Date: Thu,  3 Nov 2016 09:59:27 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: remove invalid email address
+Message-ID: <1b22ef5842b7059d4a63a0523c0d85fc164ea752.1478159967.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Saves a redirect.
+Merge the two entries of Richard Braun under the correct address.
 
+Cc: Richard Braun <rbraun@sceen.net>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/libcurl/libcurl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index d60000aaedb8..197e0b579d47 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -6,7 +6,7 @@
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1c3d6d7d0448..10b431b9eb6b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1232,10 +1232,8 @@ F:	package/atop/
+ N:	Rhys Williams <github@wilberforce.co.nz>
+ F:	package/lirc-tools/
  
- LIBCURL_VERSION = 7.51.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
--LIBCURL_SITE = http://curl.haxx.se/download
-+LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
- 	$(if $(BR2_PACKAGE_ZLIB),zlib) \
- 	$(if $(BR2_PACKAGE_LIBIDN),libidn) \
+-N:	Richard Braun <rbraun@>
+-F:	package/curlftpfs/
+-
+ N:	Richard Braun <rbraun@sceen.net>
++F:	package/curlftpfs/
+ F:	package/tzdata/
+ 
+ N:	Rico Bachmann <bachmann@tofwerk.com>
 -- 
 2.10.1
