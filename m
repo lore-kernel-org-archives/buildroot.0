@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Nov 2016 23:35:22 +0100
-Subject: [Buildroot] [PATCH 3/4] package/pseudo: add a legacy symlink to
- emulate fakeroot
-In-Reply-To: <52f872897022915168b1df835622d5fba57e1780.1478211656.git.yann.morin.1998@free.fr>
+Date: Thu, 3 Nov 2016 23:35:25 +0100
+Subject: [Buildroot] [PATCH 4/4] package/fakeroot: remove
+In-Reply-To: <9db5c7acb037104ad296a1dc8d73ee7640417d3f.1478211656.git.yann.morin.1998@free.fr>
 References: <cover.1478211656.git.yann.morin.1998@free.fr>
- <52f872897022915168b1df835622d5fba57e1780.1478211656.git.yann.morin.1998@free.fr>
-Message-ID: <20161103233522.4fa49246@free-electrons.com>
+ <9db5c7acb037104ad296a1dc8d73ee7640417d3f.1478211656.git.yann.morin.1998@free.fr>
+Message-ID: <20161103233525.3fbc41f5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  3 Nov 2016 23:21:07 +0100, Yann E. MORIN wrote:
-> In cae some post-image script want to call fakeroot, add a symlink to
-
-cae -> case
-
-> use pseudo instead.
+On Thu,  3 Nov 2016 23:21:08 +0100, Yann E. MORIN wrote:
+> We've now entirely switched to using pseudo istead of fakeroot, so it is
+> time to remove the fakeroot package now.
 > 
 > Reported-by: Arnout Vandecappelle <arnout@mind.be>
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/fakeroot/0001-hide-dlsym-error.patch | 34 ----------------------------
+>  package/fakeroot/fakeroot.hash               |  4 ----
+>  package/fakeroot/fakeroot.mk                 | 20 ----------------
+>  3 files changed, 58 deletions(-)
+>  delete mode 100644 package/fakeroot/0001-hide-dlsym-error.patch
+>  delete mode 100644 package/fakeroot/fakeroot.hash
+>  delete mode 100644 package/fakeroot/fakeroot.mk
 
-Applied with the minor typo fixed.
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
