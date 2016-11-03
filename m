@@ -1,57 +1,32 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 3 Nov 2016 18:58:41 +0100
-Subject: [Buildroot] [PATCH 1/2] core: don't reset MAKEOVERRIDES when
- re-entering make
-In-Reply-To: <CAHXCMMLOm6vBAX4VvK2E0Y2baPP5_105rg2RN3f42xF=rSoxYg@mail.gmail.com>
-References: <20161103015517.15943-1-arnout@mind.be>
- <CAHXCMMLOm6vBAX4VvK2E0Y2baPP5_105rg2RN3f42xF=rSoxYg@mail.gmail.com>
-Message-ID: <CAGduivyUmPaia8pi_+B4hwU08vfiPU47kH8ZDPtO_TF932UyuA@mail.gmail.com>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Thu, 3 Nov 2016 16:40:17 -0200
+Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: Add an entry for
+	mx6udoo_defconfig
+In-Reply-To: <1478198417-12732-1-git-send-email-fabio.estevam@nxp.com>
+References: <1478198417-12732-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <1478198417-12732-2-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Thu, Nov 3, 2016 at 8:48 AM, Samuel Martin <s.martin49@gmail.com> wrote:
-> On Thu, Nov 3, 2016 at 2:55 AM, Arnout Vandecappelle (Essensium/Mind)
-> <arnout@mind.be> wrote:
->> We reset MAKEOVERRIDES to avoid passing down variables that are
->> overridden on the command line to the package build systems. Indeed,
->> the variables overridden on the command line will be Buildroot
->> variables and not relevant to the package build system. In particular
->> the O option is used by some packages and the value passed in on the
->> command line is plain wrong for the individual package.
->>
->> However, in commit 916e614b, MAKEOVERRIDES was moved earlier and it
->> was reset _before_ re-entering make in the cases when something has
->> to be fixed up (incorrect umask, non-absolute paths in O or CURDIR).
->> Therefore, if make is re-entered, any command line overrides are lost.
->>
->> This particularly bites the autobuilders, because they use
->> O=<relative path> to specify the output directory, and they add
->> BR2_JLEVEL=... to avoid starting too many jobs in parallel. The
->> BR2_JLEVEL override is lost.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> Cc: Samuel Martin <s.martin49@gmail.com>
->> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
->> ---
->> I have a little worry, because there are two other places where we re-
->> enter top-level make and those are not handled: silentoldconfig and
->> external-deps. BR2_JLEVEL is not relevant for those, but other command-
->> line overridden options may be. However, this hasn't changed from before
->> commit 916e614b so I guess it's OK.
->
->
-> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
->
-> Regards,
->
-> --
-> Samuel
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1c3d6d7..6ce72ad 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -462,6 +462,7 @@ F:	board/warp7/
+ F:	configs/freescale_imx*
+ F:	configs/imx6ulpico_defconfig
+ F:	configs/mx6cubox_defconfig
++F:	configs/mx6udoo_defconfig
+ F:	configs/warp7_defconfig
+ 
+ N:	Fabio Porcedda <fabio.porcedda@gmail.com>
+-- 
+2.7.4
