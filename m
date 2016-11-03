@@ -1,71 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Nov 2016 21:48:44 +0100
-Subject: [Buildroot] [git commit] core: don't reset MAKEOVERRIDES when
-	re-entering make
-Message-ID: <20161103204902.8D66181972@busybox.osuosl.org>
+Date: Thu, 3 Nov 2016 21:49:14 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: remove invalid email address
+In-Reply-To: <1b22ef5842b7059d4a63a0523c0d85fc164ea752.1478159967.git.baruch@tkos.co.il>
+References: <1b22ef5842b7059d4a63a0523c0d85fc164ea752.1478159967.git.baruch@tkos.co.il>
+Message-ID: <20161103214914.04030ad3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e3f89666bbe0bf493ade79ffa4ad3c863bf71b4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-We reset MAKEOVERRIDES to avoid passing down variables that are
-overridden on the command line to the package build systems. Indeed,
-the variables overridden on the command line will be Buildroot
-variables and not relevant to the package build system. In particular
-the O option is used by some packages and the value passed in on the
-command line is plain wrong for the individual package.
+On Thu,  3 Nov 2016 09:59:27 +0200, Baruch Siach wrote:
+> Merge the two entries of Richard Braun under the correct address.
+> 
+> Cc: Richard Braun <rbraun@sceen.net>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  DEVELOPERS | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 
-However, in commit 916e614b, MAKEOVERRIDES was moved earlier and it
-was reset _before_ re-entering make in the cases when something has
-to be fixed up (incorrect umask, non-absolute paths in O or CURDIR).
-Therefore, if make is re-entered, any command line overrides are lost.
+Applied to master, thanks.
 
-This particularly bites the autobuilders, because they use
-O=<relative path> to specify the output directory, and they add
-BR2_JLEVEL=... to avoid starting too many jobs in parallel. The
-BR2_JLEVEL override is lost.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Tested-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index c00e200..4b494a3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -35,11 +35,6 @@ SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
- ifneq ("$(origin O)", "command line")
- O := $(CURDIR)/output
- else
--# Other packages might also support Linux-style out of tree builds
--# with the O=<dir> syntax (E.G. BusyBox does). As make automatically
--# forwards command line variable definitions those packages get very
--# confused. Fix this by telling make to not do so.
--MAKEOVERRIDES :=
- # Strangely enough O is still passed to submakes with MAKEOVERRIDES
- # (with make 3.81 atleast), the only thing that changes is the output
- # of the origin function (command line -> environment).
-@@ -155,6 +150,13 @@ else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
- BR_BUILDING = y
- endif
- 
-+# We call make recursively to build packages. The command-line overrides that
-+# are passed to Buildroot don't apply to those package build systems. In
-+# particular, we don't want to pass down the O=<dir> option for out-of-tree
-+# builds, because the value specified on the command line will not be correct
-+# for packages.
-+MAKEOVERRIDES :=
-+
- # Include some helper macros and variables
- include support/misc/utils.mk
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
