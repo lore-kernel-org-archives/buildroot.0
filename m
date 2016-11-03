@@ -1,32 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Nov 2016 22:15:02 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: Add an entry for
-	mx6udoo_defconfig
-Message-ID: <20161103211519.D453E8199C@busybox.osuosl.org>
+Date: Thu, 3 Nov 2016 22:14:55 +0100
+Subject: [Buildroot] [git commit] configs: Remove udoo_quad_defconfig
+Message-ID: <20161103211519.CBCFE81829@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ead164ba38656607fdd29529752210045ce2f4f
+commit: https://git.buildroot.net/buildroot/commit/?id=77315259df98c4ba9cb0c6bf609bd04ab7557902
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+configs/mx6udoo_defconfig supports the quad and dual-lite variants,
+so there is no need to keep udoo_quad_defconfig anymore.
 
 Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ configs/udoo_quad_defconfig | 29 -----------------------------
+ 1 file changed, 29 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 10b431b..c4b3117 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -462,6 +462,7 @@ F:	board/warp7/
- F:	configs/freescale_imx*
- F:	configs/imx6ulpico_defconfig
- F:	configs/mx6cubox_defconfig
-+F:	configs/mx6udoo_defconfig
- F:	configs/warp7_defconfig
- 
- N:	Fabio Porcedda <fabio.porcedda@gmail.com>
+diff --git a/configs/udoo_quad_defconfig b/configs/udoo_quad_defconfig
+deleted file mode 100644
+index 5344446..0000000
+--- a/configs/udoo_quad_defconfig
++++ /dev/null
+@@ -1,29 +0,0 @@
+-# Architceture
+-BR2_arm=y
+-BR2_cortex_a9=y
+-BR2_ARM_ENABLE_VFP=y
+-
+-# Linux headers same as kernel, a 3.0 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
+-
+-# System
+-BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/UDOOboard/Kernel_Unico"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8a6eb060a0d968048f88d5a94510fc6db2c37939"
+-BR2_LINUX_KERNEL_PATCH="https://github.com/torvalds/linux/commit/455bd4c430b0c0a361f38e8658a0d6cb469942b5.patch https://github.com/torvalds/linux/commit/418df63adac56841ef6b0f1fcf435bc64d4ed177.patch"
+-BR2_LINUX_KERNEL_DEFCONFIG="UDOO"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+-BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-
+-# Bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="udoo_quad"
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/UDOOboard/U-Boot_Unico-2013"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="1b90fd4bafb1efe05f88eaded731d99a1428f497"
+-BR2_TARGET_UBOOT_FORMAT_IMX=y
