@@ -1,54 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Nov 2016 21:49:28 +0100
-Subject: [Buildroot] [PATCH 1/2] core: don't reset MAKEOVERRIDES when
- re-entering make
-In-Reply-To: <20161103015517.15943-1-arnout@mind.be>
-References: <20161103015517.15943-1-arnout@mind.be>
-Message-ID: <20161103214928.24ed6ba4@free-electrons.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Thu, 3 Nov 2016 22:02:32 +0100
+Subject: [Buildroot] [PATCH] boards: add FriendlyARM Nanopi NEO
+In-Reply-To: <1478204278-9650-1-git-send-email-yann.morin.1998@free.fr>
+References: <1478204278-9650-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20161103210232.76trmtm3bc2jz27c@lukather>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Thu, 3 Nov 2016 02:55:16 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> We reset MAKEOVERRIDES to avoid passing down variables that are
-> overridden on the command line to the package build systems. Indeed,
-> the variables overridden on the command line will be Buildroot
-> variables and not relevant to the package build system. In particular
-> the O option is used by some packages and the value passed in on the
-> command line is plain wrong for the individual package.
+On Thu, Nov 03, 2016 at 09:17:58PM +0100, Yann E. MORIN wrote:
+> The FriendlyARM Nanopi NEO is a 4x4cm? board with an Allwiner H3 SoC:
+>   - quad-core Cortex-A7 @1.2GHz
+>   - 256 or 512MiB of DDR
+>   - uSDCard as only storage option
+>   - 3x USB 2.0 host (one socket, two on expansion pin-holes)
+>   - 1x USB 2.0 OTG (also used as power source)
+>   - 10/100 etehrnet MAC
+>   - GPIOs, SPI, I2c...
 > 
-> However, in commit 916e614b, MAKEOVERRIDES was moved earlier and it
-> was reset _before_ re-entering make in the cases when something has
-> to be fixed up (incorrect umask, non-absolute paths in O or CURDIR).
-> Therefore, if make is re-entered, any command line overrides are lost.
-> 
-> This particularly bites the autobuilders, because they use
-> O=<relative path> to specify the output directory, and they add
-> BR2_JLEVEL=... to avoid starting too many jobs in parallel. The
-> BR2_JLEVEL override is lost.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
-> I have a little worry, because there are two other places where we re-
-> enter top-level make and those are not handled: silentoldconfig and
-> external-deps. BR2_JLEVEL is not relevant for those, but other command-
-> line overridden options may be. However, this hasn't changed from before
-> commit 916e614b so I guess it's OK.
-> ---
->  Makefile | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
+> Support for the Nanopi NEO in U-Boot and Linux is very recent, so much
+> so that we have to use an -rc tag for U-Boot and a special Linux tree.
 
-Both applied, thanks!
+I'm not sure why you need that custom tree, the DT is in 4.9 already.
 
-Thomas
+Maxime
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Maxime Ripard, Free Electrons
+Embedded Linux and Kernel engineering
 http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 801 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161103/b2ab29cc/attachment.asc>
