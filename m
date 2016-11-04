@@ -1,46 +1,22 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Fri, 4 Nov 2016 10:41:13 +1100
-Subject: [Buildroot] [PATCH 1/1] alsa-lib: fix build on powerpc64 and
- powerpc64le
-In-Reply-To: <20161103223543.3deff09b@free-electrons.com>
-References: <c51221ec7f459272dd2bd2bf01097537cdb045b3.1478143517.git.sam.bobroff@au1.ibm.com>
- <20161103223543.3deff09b@free-electrons.com>
-Message-ID: <20161103234113.GA2553@tungsten.ozlabs.ibm.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 04 Nov 2016 01:20:54 +0000
+Subject: [Buildroot] [Bug 8516] mkcubiecard.sh uses outdated sfdisk switch -D
+In-Reply-To: <bug-8516-163@https.bugs.busybox.net/>
+References: <bug-8516-163@https.bugs.busybox.net/>
+Message-ID: <bug-8516-163-eMLGLUUJmS@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 03, 2016 at 10:35:43PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu,  3 Nov 2016 14:25:34 +1100, Sam Bobroff wrote:
-> > Fixes linker error
-> > http://autobuild.buildroot.net/results/c6272ac900d1a53b976839ac4f50a210b3e6b354
-> > 
-> > On powerpc64 (and powerpc64le) the build fails due to linker problems
-> > because of an old (2003) workaround for powerpc64, presumably working
-> > around an old toolchain problem that is no longer present. Removing
-> > the workaround allows the build to succeed. A new patch is added for
-> > this.
-> > 
-> > Additionally, there was a mistake in patch 3: the patch added a test
-> > for HAVE_LIBDL to include/alsa-symbols.h but it was positioned in the
-> > file before config.h was included, so HAVE_LIBDL is never seen as
-> > defined.  The test was also using HAVE_LIBDL (which indicates the
-> > library) rather than HAVE_DLFCN (which indicates the header).
-> > 
-> > Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-> > ---
-> 
-> Applied to master, thanks!
-> 
-> Please submit those patches upstream to the alsa-lib project. Thanks!
-> 
-> Thomas
+https://bugs.busybox.net/show_bug.cgi?id=8516
 
-Done!
+--- Comment #4 from Tudor <tudor@tudorholton.com> ---
+I think you're confusing the cubieboard with the cubieboard2.  I agree that the
+problem was fixed, that's why I didn't submit a patch.  Someone beat me to it. 
+The new Cubieboard2 config is working perfectly, thank you!
 
-Cheers,
-Sam.
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
