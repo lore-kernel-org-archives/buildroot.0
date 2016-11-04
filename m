@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Nov 2016 14:57:57 +0100
-Subject: [Buildroot] [PATCH v4] kodi: allow enablement of libamcodec as
- codec if selected
-In-Reply-To: <20161104122744.7162-1-daggs@gmx.com>
-References: <20161104122744.7162-1-daggs@gmx.com>
-Message-ID: <20161104145757.66a363f8@free-electrons.com>
+Date: Fri, 4 Nov 2016 14:59:37 +0100
+Subject: [Buildroot] Support for MPC_8323E-RDB Board
+In-Reply-To: <CANO2Q2-50CT2crNwtt8s7oyh_n+s0ukZ=zqT+R_8EtKh0+jg-w@mail.gmail.com>
+References: <CANO2Q2-50CT2crNwtt8s7oyh_n+s0ukZ=zqT+R_8EtKh0+jg-w@mail.gmail.com>
+Message-ID: <20161104145937.174c3cb6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +12,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for this patch.
+On Fri, 4 Nov 2016 18:03:38 +0530, Siva Prakash Reddy Nareddy wrote:
 
-On Fri,  4 Nov 2016 14:27:44 +0200, Dagg Stompler wrote:
+> The issues I am getting are as follows..
+> 
+> jyothi at jyothi:/home/buildroot-labs/buildroot$ sudo make menuconfig
 
-> diff --git a/package/kodi/0012-support_libamcodec_cross_compile.patch b/package/kodi/0012-support_libamcodec_cross_compile.patch
-> new file mode 100644
-> index 0000000..c97284e
-> --- /dev/null
-> +++ b/package/kodi/0012-support_libamcodec_cross_compile.patch
+Don't run Buildroot as root.
 
-This patch lacks a description + Signed-off-by line.
+> configuration written to /home/buildroot-labs/buildroot/.config
+> 
+> *** End of the configuration.
+> *** Execute 'make' to start the build or try 'make help'.
+> 
+> jyothi at jyothi:/home/buildroot-labs/buildroot$ sudo make
+> boot/uboot/uboot.mk:295: *** No board defconfig name specified, check your
+> BR2_TARGET_UBOOT_DEFCONFIG setting.  Stop.
 
-Thanks,
+This means you have enabled the U-Boot bootloader, but you have not
+defined which U-Boot configuration to build, so Buildroot cannot start
+the build process.
+
+> jyothi at jyothi:/home/buildroot-labs/buildroot$ sudo make
+> linux/linux.mk:441: *** No kernel device tree source specified, check your
+> BR2_LINUX_KERNEL_USE_INTREE_DTS / BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+> settings.  Stop.
+
+This means you have enabled the Linux kernel, with Device Tree support,
+but you haven't specified which Device Tree files you want to build.
+
+Best regards,
 
 Thomas
 -- 
