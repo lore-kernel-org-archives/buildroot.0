@@ -1,55 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 4 Nov 2016 12:38:22 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/openvpn: bump to version
- 2.3.13
-In-Reply-To: <20161104055255.22119-1-bernd.kuhls@t-online.de>
-References: <20161104055255.22119-1-bernd.kuhls@t-online.de>
-Message-ID: <20161104103822.yfryw3753bwtrf6z@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Nov 2016 11:47:10 +0100
+Subject: [Buildroot] [PATCH 2/4] board: atmel: genimage: add 1M offset
+ for FAT partition
+In-Reply-To: <20161104101517.7811-1-ludovic.desroches@atmel.com>
+References: <20161103152000.04d6c15a@free-electrons.com>
+ <20161104101517.7811-1-ludovic.desroches@atmel.com>
+Message-ID: <20161104114710.10ff39e6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Hello,
 
-On Fri, Nov 04, 2016 at 06:52:55AM +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/openvpn/openvpn.hash | 4 ++--
->  package/openvpn/openvpn.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+On Fri, 4 Nov 2016 11:15:17 +0100, Ludovic Desroches wrote:
+> With older SoCs and some SD cards, a 1024-bytes offset is needed to allow
+> ROM code to read the content of the FAT partition. As it is usual to get
+> a 1M bytes offset for the first partition, use this value to avoid boot
+> issues.
 > 
-> diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-> index ce005d3..0c5cb09 100644
-> --- a/package/openvpn/openvpn.hash
-> +++ b/package/openvpn/openvpn.hash
-> @@ -1,2 +1,2 @@
-> -# Locally calculated after checking pgp signature
-> -sha256	13b963414e2430215981868c77b9795d93653ee535a2d73576f7bb2c28200abc 	openvpn-2.3.12.tar.xz
-> +# Locally calculated
-> +sha256 9cde0c8000fd32d5275adb55f8bb1d8ba429ff3de35f60a36e81f3859b7537e0  openvpn-2.3.13.tar.xz
+> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+> ---
+>  board/atmel/at91sam9x5ek_mmc/genimage.cfg     | 1 +
+>  board/atmel/sama5d2_xplained_mmc/genimage.cfg | 1 +
+>  board/atmel/sama5d3_xplained_mmc/genimage.cfg | 1 +
+>  board/atmel/sama5d4_xplained_mmc/genimage.cfg | 1 +
+>  4 files changed, 4 insertions(+)
 
-Why not check the signature? It's at 
-https://swupdate.openvpn.org/community/releases/openvpn-2.3.12.tar.xz.asc .
+I've applied to master, after removing the hunk changing
+board/atmel/at91sam9x5ek_mmc/genimage.cfg. Indeed, this file doesn't
+exist in master since I haven't committed your PATCH 1/4. It is indeed
+weird to:
 
-baruch
+ 1/ Have patches making fixes *after* patches adding new features in a
+    patch series. It should be the other way around.
 
-> diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-> index 0e59fdc..cd0a2d1 100644
-> --- a/package/openvpn/openvpn.mk
-> +++ b/package/openvpn/openvpn.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -OPENVPN_VERSION = 2.3.12
-> +OPENVPN_VERSION = 2.3.13
->  OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
->  OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
->  OPENVPN_DEPENDENCIES = host-pkgconf openssl
+ 2/ In PATCH 1/4, introduce a genimage.cfg file for the
+    at91sam9x5ek_mmc configuration that is wrong, and gets fixed in
+    PATCH 2/4.
 
+Anyway, this one is applied to master for SAMA5D{2,3,4}, we will handle
+9x5EK separately.
+
+Thanks!
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
