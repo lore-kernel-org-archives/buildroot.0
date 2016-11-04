@@ -1,29 +1,78 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 4 Nov 2016 21:47:00 -0200
-Subject: [Buildroot] warp7_defconfig build error
-In-Reply-To: <b6863c63-d744-1e73-20b0-c895d9e74012@mind.be>
-References: <CAOMZO5CjVc=qA2u95KydQrLkkjTUZUdB8t+v_QdX-NViRJs4LQ@mail.gmail.com>
- <b6863c63-d744-1e73-20b0-c895d9e74012@mind.be>
-Message-ID: <CAOMZO5BqVbb8PUQvFcwLB2Dnc2jRD_h0gtPY3Yc2CSywi-rsyw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 5 Nov 2016 00:47:04 +0100
+Subject: [Buildroot] [PATCH 6/8] python-libxml2: new host package
+In-Reply-To: <b36b76d3-1267-b583-1ec5-8884a68f8eac@zacarias.com.ar>
+References: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
+ <1476321239-13894-6-git-send-email-gustavo@zacarias.com.ar>
+ <20161028153255.5c0e15d3@free-electrons.com>
+ <b36b76d3-1267-b583-1ec5-8884a68f8eac@zacarias.com.ar>
+Message-ID: <cc97f194-ec81-9b44-fe2f-a1467873a279@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
 
-On Fri, Nov 4, 2016 at 9:20 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
 
->  I only get this error when makedevs is run for the second time, i.e. when
-> building the tarball, not the ext2. But perhaps you took this log by re-running
-> the build?
+On 28-10-16 15:42, Gustavo Zacarias wrote:
+> On 28/10/16 10:32, Thomas Petazzoni wrote:
+> 
+>> We discussed this patch during the Developers meeting, and I believe
+>> the general consensus is that we'd instead prefer to introduce hidden
+>> Config.in knobs for host packages.
+>>
+>> This is not only useful for this situation, but also for other
+>> situations.
+> 
+> Hi. Let's see.
+> 
+>> For this one, I see two possibilities:
+>>
+>>  * The python/python3 packages gain some hidden host Config.in options
+>>    BR2_PACKAGE_HOST_PYTHON(3). The host-libxml2 package then looks at
+>>    BR2_PACKAGE_HOST_PYTHON(3) and if enabled, then the python support
+>>    in host-libxml2 is enabled.
+>>
+>>    Drawback of this approach is that if we want to do it right, every
+>>    package that uses host-python(3) should start selecting this new
+>>    option.
+> 
+> For me this is the cleanest option, even though it will take a bit more time to
+> get it right.
 
-The error happens for me even if I start a fresh build:
-make clean
-make warp7_defconfig
-make
+ It can be done gradually however. Add the symbol, select it from some packages
+that are easy. The main difficulty is where a host package depends on
+host-python - so a Config.in.host symbol has to be introduced there as well...
 
-Thanks,
 
-Fabio Estevam
+>>  * The libxml2 package gains a sub-option
+>>    BR2_PACKAGE_HOST_LIBXML2_PYTHON, which allows to enable python
+>>    support. Of course, later we could add BR2_PACKAGE_HOST_LIBXML2 as
+>>    well, and fix the packages that depend on host-libxml2, but it can
+>>    be done later.
+> 
+> We currently have no BR2_PACKAGE_HOST_LIBXML2 option so we should add that and
+> make host-libxml2 depend on host-python when the python option is enabled, and
+> make packages select host-libxml2 as well (+ python for host-itstool).
+> It's basically a half-way to achieving the first point, even though quick i'm
+> not a big fan.
+
+ I'm also no big fan. Especially because the first one is where we want to go
+eventually, so this would really just be a stop-gap measure.
+
+ Regards,
+ Arnout
+
+> I'm in no rush to include evince so waiting for 1 is fine with me, which
+> probably won't happen until the next cycle.
+> Regards.
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
