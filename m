@@ -1,59 +1,130 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Fri, 4 Nov 2016 17:28:38 +0100
-Subject: [Buildroot] [PATCH 1/4] configs: at91sam9x5ek: add development
- rootfs
-In-Reply-To: <20161104145349.685e7bc3@free-electrons.com>
-References: <20161103140841.28789-1-ludovic.desroches@atmel.com>
- <20161104114840.0810be25@free-electrons.com>
- <20161104131408.5wdirj3htguaecx4@rfolt0960.corp.atmel.com>
- <20161104145349.685e7bc3@free-electrons.com>
-Message-ID: <20161104162838.gh7goq6v3zbcrvcn@rfolt0960.corp.atmel.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Date: Fri,  4 Nov 2016 12:41:37 -0400
+Subject: [Buildroot] [PATCH] lttng-babeltrace: fix static build again
+Message-ID: <20161104164137.19006-1-eeppeliteloop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 04, 2016 at 02:53:49PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 4 Nov 2016 14:14:08 +0100, Ludovic Desroches wrote:
-> 
-> > > That's a lot of configurations for a single board. Can we rationalize a
-> > > bit, and chose one configuration only (either NAND or MMC), for which
-> > > we have the minimal and dev configurations?
-> > 
-> > I have in mind, but maybe I am wrong since the conversion is not recent,
-> > you told me having several defconfigs for the same board  won't be an issue.
-> > The concern was more about having a dev_defconfig.
-> 
-> Well, the issue is the overall multiplication of defconfigs, so both
-> the fact that you have separate defconfigs for MMC and NAND, and the
-> fact that you want to have those "dev_defconfig" contribute to the
-> multiplication of defconfigs.
-> 
-> > Without a defconfig targetted to NAND or MMC, the customer will have to
-> > recompile the at91bootstrap and u-boot, this is something we would like
-> > to avoid. I think u-boot case could be handled because the difference is
-> > mainly about environment variables. Concerning at91bootstrap, it is more
-> > complex. If you have any suggestion to handle this case and so reducing
-> > the number of defconfig variants, I would be happy.
-> 
-> Is it possible to have a single at91bootstrap for both the NAND and MMC
-> scenarios? I guess you can decide depending on the boot source whether
-> you should load u-boot from NAND or from MMC. However, this means you
-> need to have both the NAND code and MMC code compiled in the same
-> at91bootstrap image. Maybe this makes the at91bootstrap image too big?
-> I'm not sure what are the constraints of the ROM code in terms of first
-> stage bootloader size on this SoC.
+I accidentally removed the static build patch when bumping to v1.4.0,
+thinking it was merged upstream as of this version, but it's not the
+case (it's merged in master), so let's keep the patch file.
 
-No, it is not possible to get a single at91bootstrap to manage several
-boot medias. The boot media selection is an exclusive choice. Removing
-this constraint rises two potential issues:
-- the size, we may have a binary too big as you said for some SoCs (only
-  24KB)
-- we need to decide at execution time the boot media but we have no
-  guarantee that all components are on the same media.
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+---
+ ...ix-uuid-support-detection-on-static-build.patch | 86 ++++++++++++++++++++++
+ package/lttng-babeltrace/lttng-babeltrace.mk       |  4 +-
+ 2 files changed, 89 insertions(+), 1 deletion(-)
+ create mode 100644 package/lttng-babeltrace/0003-fix-uuid-support-detection-on-static-build.patch
 
-
-Ludovic
+diff --git a/package/lttng-babeltrace/0003-fix-uuid-support-detection-on-static-build.patch b/package/lttng-babeltrace/0003-fix-uuid-support-detection-on-static-build.patch
+new file mode 100644
+index 0000000..875aa88
+--- /dev/null
++++ b/package/lttng-babeltrace/0003-fix-uuid-support-detection-on-static-build.patch
+@@ -0,0 +1,86 @@
++From 2741f55be80ae8af169ae795ea28d2a39c18fa60 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Wed, 1 Jun 2016 21:56:32 +0200
++Subject: [PATCH] configure: fix uuid support detection on static build
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This change adds uuid detection using pkg-config helper before falling
++back on the standard AC_CHECK_LIB detection for platforms missing
++pkg-config.
++
++AC_CHECK_LIB function achieves its test by trying to link against the
++requested library, without taking care of its dependency
++requirements/flags that may differ between different targets.
++Therefore, in case of static build, it can fail on the uuid detection
++like [1], because the uuid's dependency flags (regarding gettext) are
++missing.
++
++Instead, using pkg-config to do the check will take care of getting and
++setting all required flags.
++
++This issue [1] has been triggered on Buildroot farms.
++
++[1] http://autobuild.buildroot.net/results/43b/43b98ddf9eb44152ed9ac4a98d887af14831d8da/build-end.log
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++Signed-off-by: J?r?mie Galarneau <jeremie.galarneau@efficios.com>
++[Philippe: grabbed from this upstream patch:
++    https://github.com/efficios/babeltrace/commit/2741f55be80ae8af169ae795ea28d2a39c18fa60.patch
++]
++Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
++---
++ configure.ac | 31 +++++++++++++++++++++----------
++ 1 file changed, 21 insertions(+), 10 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 84f9000..2f5e3f8 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -163,24 +163,35 @@ AC_CHECK_FUNCS([uuid_generate],
++   link_with_libuuid=no
++ ],
++ [
++-  # Check for libuuid
++-  AC_CHECK_LIB([uuid], [uuid_generate],
+++  # First, check the pkg-config module is available, otherwise explicitly check
+++  # for libuuid, or uuid support in the C-library.
+++  PKG_CHECK_MODULES([UUID], [uuid],
++   [
+++    LIBS="${UUID_LIBS} ${LIBS}"
+++    CFLAGS="${CFLAGS} ${UUID_CFLAGS}"
++     AC_DEFINE_UNQUOTED([BABELTRACE_HAVE_LIBUUID], 1, [Has libuuid support.])
++     link_with_libuuid=yes
++   ],
++   [
++-    # libuuid not found, check for uuid_create in libc.
++-    AC_CHECK_LIB([c], [uuid_create],
+++    # Check for libuuid
+++    AC_CHECK_LIB([uuid], [uuid_generate],
++     [
++-      AC_DEFINE_UNQUOTED([BABELTRACE_HAVE_LIBC_UUID], 1, [Has libc uuid support.])
++-      link_with_libc_uuid=yes
+++      AC_DEFINE_UNQUOTED([BABELTRACE_HAVE_LIBUUID], 1, [Has libuuid support.])
+++      link_with_libuuid=yes
++     ],
++     [
++-      # for MinGW32 we have our own internal implemenation of uuid using Windows functions.
++-      if test "x$MINGW32" = xno; then
++-        AC_MSG_ERROR([Cannot find libuuid uuid_generate nor libc uuid_create. Use [LDFLAGS]=-Ldir to specify their location.])
++-      fi
+++      # libuuid not found, check for uuid_create in libc.
+++      AC_CHECK_LIB([c], [uuid_create],
+++      [
+++        AC_DEFINE_UNQUOTED([BABELTRACE_HAVE_LIBC_UUID], 1, [Has libc uuid support.])
+++        link_with_libc_uuid=yes
+++      ],
+++      [
+++        # for MinGW32 we have our own internal implemenation of uuid using Windows functions.
+++        if test "x$MINGW32" = xno; then
+++          AC_MSG_ERROR([Cannot find libuuid uuid_generate nor libc uuid_create. Use [LDFLAGS]=-Ldir to specify their location.])
+++        fi
+++      ])
++     ])
++   ])
++ ])
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+index 59327db..67b7406 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.mk
++++ b/package/lttng-babeltrace/lttng-babeltrace.mk
+@@ -14,7 +14,9 @@ HOST_LTTNG_BABELTRACE_DEPENDENCIES = \
+ 	host-popt host-util-linux host-libglib2 host-pkgconf
+ HOST_LTTNG_BABELTRACE_CONF_OPTS += --disable-debug-info
+ 
+-# For 0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
++# For:
++#   0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
++#   0003-fix-uuid-support-detection-on-static-build.patch
+ LTTNG_BABELTRACE_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+-- 
+2.9.3
