@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Nov 2016 09:16:39 +0100
-Subject: [Buildroot] musl with kernel headers (was: [PATCH]
- bridge-utils: fix build with musl)
-In-Reply-To: <20161104052244.c2qswgkglbwcod3a@tarshish>
-References: <0b4d1e33355f00f915768a2bc3f5c4d997206731.1478152430.git.baruch@tkos.co.il>
- <20161103224656.1e6466a6@free-electrons.com>
- <20161104052244.c2qswgkglbwcod3a@tarshish>
-Message-ID: <20161104091639.1a0285c4@free-electrons.com>
+Date: Fri, 4 Nov 2016 09:38:02 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2016-11-02
+In-Reply-To: <20161104053622.GA16857@tungsten.ozlabs.ibm.com>
+References: <20161103073820.767FB106BDD@stock.ovh.net>
+ <20161104053622.GA16857@tungsten.ozlabs.ibm.com>
+Message-ID: <20161104093802.722c0900@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +14,41 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 4 Nov 2016 07:22:44 +0200, Baruch Siach wrote:
+[Adding Geoff in Cc. Geoff, there is a question for your below, thanks!]
 
-> > Yes, we probably need to do something like that. I'm sick of all the
-> > patches we need to fix this structure redefinition mess, so if we have
-> > a global solution, it would be nice. I guess it needs to be applied in
-> > both the linux-headers package and the toolchain-external package.  
+On Fri, 4 Nov 2016 16:36:23 +1100, Sam Bobroff wrote:
+
+> The docker-containerd errors are from the go linker, which I'm not
+> familiar with. From this go issue:
 > 
-> I was thinking if a sed call in TOOLCHAIN_TARGET_FINALIZE_HOOKS to simplify 
-> the hack. Would that work?
+> https://github.com/golang/go/issues/13192
+> 
+> It might be that powerpc64 (BE) is just not supported yet. Should we
+> just disable it for powerpc64?
 
-No, because FINALIZE_HOOKS, like their name suggests, are called at the
-very end of the build, after all packages have been built, and right
-before we create the filesystem images.
+The place where the architectures supported by Go is defined is
+package/go/Config.in.host:
 
-So to fix something that helps in building packages, it's a little bit
-too late :-)
+config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+        bool
+        default y
+        depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
+                || BR2_i386 || BR2_x86_64 || BR2_powerpc64 || BR2_powerpc64le \
+                || BR2_mips64 || BR2_mips64el
+        depends on !BR2_ARM_CPU_ARMV4
+        # MIPS R6 support in Go has not yet been developed.
+        depends on !BR2_MIPS_CPU_MIPS64R6
 
-However, you could have it as post-install staging hook of the
-toolchain virtual package I guess.
+So, powerpc64 BE was explicitly included in this list. However, the
+golang issue you're pointing at indeed seems to indicate that powerpc64
+BE doesn't seem to be very well supported.
+
+Geoff, you're the one who added powerpc64 in the list of supported
+architectures in commit b6b718ca4bd1efa51674a824ff8d32a90a1d6584. Can
+you comment a bit more on this, and the build issues we're facing on
+powerpc64 ?
+
+Thanks!
 
 Thomas
 -- 
