@@ -1,91 +1,168 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Fri, 4 Nov 2016 08:36:13 -0700
-Subject: [Buildroot] distributable Buildroot BSPs/SDKs
-In-Reply-To: <55a57fe4-1542-6b61-64ce-4ed10dd7d005@mentor.com>
-References: <55a57fe4-1542-6b61-64ce-4ed10dd7d005@mentor.com>
-Message-ID: <d7467804-2f2f-d5a4-404c-113e4f788133@mentor.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 4 Nov 2016 16:44:59 +0100
+Subject: [Buildroot] [PATCH] authsae: new package
+In-Reply-To: <c1172072-d80b-3fdc-7bf8-e19342bd1f7a@mind.be>
+References: <1478178544-27509-1-git-send-email-yegorslists@googlemail.com>
+ <c1172072-d80b-3fdc-7bf8-e19342bd1f7a@mind.be>
+Message-ID: <CAGm1_kv-F9XVYCzX4XgfgQ60VRbq-UfFxciUM6HFGm3smDBwwQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Can I force the host tools to be built static? That would avoid the 
-rpath and the "recursively copy library dependencies by hand" problems.
+Hi Arnout,
 
-Hollis Blanchard <hollis_blanchard@mentor.com>
-Mentor Graphics Emulation Division
+On Thu, Nov 3, 2016 at 6:20 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 03-11-16 14:09, yegorslists at googlemail.com wrote:
+>> From: Yegor Yefremov <yegorslists@googlemail.com>
+>>
+>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> ---
+>>  package/Config.in                                  |  1 +
+>>  .../0001-CMake-install-libsae.so-as-well.patch     | 25 ++++++++++++++++++++++
+>>  package/authsae/Config.in                          | 11 ++++++++++
+>>  package/authsae/authsae.hash                       |  2 ++
+>>  package/authsae/authsae.mk                         | 17 +++++++++++++++
+>>  5 files changed, 56 insertions(+)
+>>  create mode 100644 package/authsae/0001-CMake-install-libsae.so-as-well.patch
+>>  create mode 100644 package/authsae/Config.in
+>>  create mode 100644 package/authsae/authsae.hash
+>>  create mode 100644 package/authsae/authsae.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 0f6260b..d51d01b 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -1430,6 +1430,7 @@ menu "Networking applications"
+>>       source "package/argus/Config.in"
+>>       source "package/arptables/Config.in"
+>>       source "package/atftp/Config.in"
+>> +     source "package/authsae/Config.in"
+>>       source "package/autossh/Config.in"
+>>       source "package/avahi/Config.in"
+>>       source "package/axel/Config.in"
+>> diff --git a/package/authsae/0001-CMake-install-libsae.so-as-well.patch b/package/authsae/0001-CMake-install-libsae.so-as-well.patch
+>> new file mode 100644
+>> index 0000000..02794d0
+>> --- /dev/null
+>> +++ b/package/authsae/0001-CMake-install-libsae.so-as-well.patch
+>> @@ -0,0 +1,25 @@
+>> +From 173cf3896dd9c2e423863814b1c7f129a0af8d02 Mon Sep 17 00:00:00 2001
+>> +From: Yegor Yefremov <yegorslists@googlemail.com>
+>> +Date: Thu, 3 Nov 2016 10:08:38 +0100
+>> +Subject: [PATCH] CMake: install libsae.so as well
+>> +
+>> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>
+>  Please refer to your https://github.com/cozybit/authsae/pull/51
 
-On 11/02/2016 10:42 AM, Hollis Blanchard wrote:
-> Can anybody point me to an example of a prebuilt Buildroot-generated 
-> SDK/BSP distributed in the wild? I'm looking for something that 
-> includes binaries for host executables so I can see how they did it.
->
-> My users primarily care about target code. I want to both provide 
-> prebuilt target binaries and let my users patch/rebuild them. That 
-> part seems to be pretty clear; I can 'make && cp output/images/* 
-> prebuilt/', and also provide the defconfig.
->
-> However, I also want to provide a few host executables, and that's 
-> raising a lot of questions for me:
->
->  1. The fact that host binaries are non-relocatable (can only be run
->     where they were built) seems to be well-known. For now I'm content
->     to manually run "output/host/usr/bin/patchelf --set-rpath
->     '$ORIGIN/../lib'" in a post-processing step...
->  2. I really only want to distribute a couple key host binaries, like
->     adb and dtc. However, since these depend on other host packages,
->     output/host/usr/bin ends up full of other binaries from gettext,
->     autoconf/automake/etc, flex, etc. That's dead weight as far as I'm
->     concerned; it takes up space, and encourages people to actually
->     use them, but I don't want to support them.
->  3. That suggests I should manually extract the things I care about
->     from inside output/host, just like I did with the "prebuilt"
->     directory I mentioned above for target code.
->      1. Simplest would be to symlink, but then a "make clean" will
->         suddenly make the host tools disappear, which would be unexpected.
->      2. So I should copy them out, again like the "prebuilt"
->         directory. But then I'd also need to copy out the
->         output/host/usr/lib files they depend on (and the libs the
->         libs depend on...). I could write a readelf-based script to
->         find the dependencies and copy them, but that's starting to
->         sound complicated. If only I had a tool that could build me an
->         SDK... ;-)
->      3. Host tools are built with options like these:
->         --sysconfdir=/absolute/path/to/output/host/etc (so they can
->         find output/host/etc/mke2fs.conf, for example). Huh. Readelf
->         won't help me find those dependencies, and no rpath will help
->         me relocate that. I'm not even sure what directory structure I
->         would want for those files in an ideal BSP.
->  4. The likelihood that my users will need to rebuild host tools is
->     slim, and they take a long time to rebuild, since they pull in
->     dependencies like host-autoconf, host-flex, and even host-python.
->     Again, unnecessary overhead. So should the defconfig I distribute
->     include BR2_PACKAGE_HOST_*?
->      1. Yes: but then users typing "make" will spend lots of time
->         rebuilding host executables that they're extremely unlikely to
->         change.
->      2. No: OK, I can treat the host tools completely separately, and
->         nobody even needs to know they came from Buildroot. But then I
->         need to maintain two defconfigs, one that builds target code
->         and one that builds host code.
->
->
-> So anyways, that's why I'm looking for examples of how others have 
-> dealt with these problems.
->
-> I'd appreciate thoughts on any of these points, even if no one person 
-> has The Answers to all of them. Thanks!
-> -- 
-> Hollis Blanchard<hollis_blanchard@mentor.com>
-> Mentor Graphics Emulation Division
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ACK
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161104/36033b82/attachment.html>
+>> +---
+>> + CMakeLists.txt | 1 +
+>> + 1 file changed, 1 insertion(+)
+>> +
+>> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+>> +index 08599a0..4bb0381 100644
+>> +--- a/CMakeLists.txt
+>> ++++ b/CMakeLists.txt
+>> +@@ -71,6 +71,7 @@ LIST(APPEND libsae_sources
+>> +
+>> + ADD_LIBRARY(sae ${libsae_sources})
+>> + TARGET_LINK_LIBRARIES(sae ${libsae_libs})
+>> ++INSTALL(TARGETS sae DESTINATION lib)
+>> +
+>> + #####################################################################
+>> + IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+>> +--
+>> +2.1.4
+>> +
+>> diff --git a/package/authsae/Config.in b/package/authsae/Config.in
+>> new file mode 100644
+>> index 0000000..0753da1
+>> --- /dev/null
+>> +++ b/package/authsae/Config.in
+>> @@ -0,0 +1,11 @@
+>> +config BR2_PACKAGE_AUTHSAE
+>> +     bool "authsae"
+>> +     select BR2_PACKAGE_OPENSSL
+>> +     select BR2_PACKAGE_LIBCONFIG
+>> +     help
+>> +       Simultaneous Authentication of Equals (SAE) provides a secure
+>> +       password-based authentication mechanism for 802.11. It is
+>> +       resistant to passive attack, active attack, and dictionary
+>> +       attack.
+>
+>  I was a bit worried about the statement
+>
+>   Currently, the only OS with wireless support is freebsd. The
+> linux module only supports communication over loopback. Extending
+> the linux OS-specific module-- linux/meshd.c-- to support wireless
+> interfaces is the subject of on-going work.
+>
+> but it seems the README is severely out of date.
+
+Yes, it is really old.
+
+>> +
+>> +       https://github.com/cozybit/authsae
+>> diff --git a/package/authsae/authsae.hash b/package/authsae/authsae.hash
+>> new file mode 100644
+>> index 0000000..fee1c9c
+>> --- /dev/null
+>> +++ b/package/authsae/authsae.hash
+>> @@ -0,0 +1,2 @@
+>> +# Locally computed
+>> +sha256 ee8021c0052600a3d7fe5d2886887116993ed684d6857db6fb5fe2af2a865fe4  authsae-06d383ec944120c9dbbb3e0b95b3d1420a80f074.tar.gz
+>> diff --git a/package/authsae/authsae.mk b/package/authsae/authsae.mk
+>> new file mode 100644
+>> index 0000000..8ac28b4
+>> --- /dev/null
+>> +++ b/package/authsae/authsae.mk
+>> @@ -0,0 +1,17 @@
+>> +################################################################################
+>> +#
+>> +# authsae
+>> +#
+>> +################################################################################
+>> +
+>> +AUTHSAE_VERSION = 06d383ec944120c9dbbb3e0b95b3d1420a80f074
+>> +AUTHSAE_SITE = $(call github,cozybit,authsae,$(AUTHSAE_VERSION))
+>> +AUTHSAE_DEPENDENCIES = openssl libconfig host-pkgconf
+>> +AUTHSAE_LICENSE = BSD-3c
+>
+>  Hm, is it really? It's BSD-3c with this additional clause:
+>
+> This license and distribution terms cannot be changed. In other words,
+> this code cannot simply be copied and put under a different distribution
+> license (including the GNU public license).
+>
+>  I am not sure how relevant that is, but I do think it's something that should
+> be flagged in the legal info. So let's make it "BSD-3c with no change clause"
+>
+>> +AUTHSAE_LICENSE_FILES = sae.c
+>
+>  sae.h has the same text and is smaller.
+
+I've filed an issue about licence file. So I'll wait what happens
+before sending v2.
+
+>> +
+>> +ifeq ($(BR2_PACKAGE_LIBNL),y)
+>> +AUTHSAE_DEPENDENCIES += libnl
+>
+>  Is it really optional? I see
+>
+> ELSE(LIBNL3_FOUND)
+> MESSAGE(FATAL_ERROR "Error: libnl and libnl-genl not found")
+>
+> which seems pretty fatal to me...
+
+ACK
+
+Thanks for review.
+
+Yegor
