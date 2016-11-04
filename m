@@ -1,94 +1,68 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  4 Nov 2016 21:20:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: Fix endianess detection
-	with musl-based toolchains
-Message-ID: <20161104202058.21533-1-bernd.kuhls@t-online.de>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Fri, 4 Nov 2016 18:38:00 -0200
+Subject: [Buildroot] warp7_defconfig build error
+In-Reply-To: <CAOMZO5CjVc=qA2u95KydQrLkkjTUZUdB8t+v_QdX-NViRJs4LQ@mail.gmail.com>
+References: <CAOMZO5CjVc=qA2u95KydQrLkkjTUZUdB8t+v_QdX-NViRJs4LQ@mail.gmail.com>
+Message-ID: <CAOMZO5AjUAJqMuny_xn3OHEhdvtiZwkAQB-zJcZDvFr+z=LVTA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/e27/e27a9a95f72dba3076549beb2a2ccfdbea2fcfee/
-http://autobuild.buildroot.net/results/462/4629ee4813aa36de884bba2576612f909c007264/
+On Fri, Nov 4, 2016 at 5:52 PM, Fabio Estevam <festevam@gmail.com> wrote:
+> Hi,
+>
+> Getting the following build error on a warp7_defconfig build with
+> latest mainline:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...ness-detection-with-musl-based-toolchains.patch | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/mesa3d/0004-Fix-endianess-detection-with-musl-based-toolchains.patch
+A clarification: I meant "latest Buildroot master".
 
-diff --git a/package/mesa3d/0004-Fix-endianess-detection-with-musl-based-toolchains.patch b/package/mesa3d/0004-Fix-endianess-detection-with-musl-based-toolchains.patch
-new file mode 100644
-index 0000000..656705b
---- /dev/null
-+++ b/package/mesa3d/0004-Fix-endianess-detection-with-musl-based-toolchains.patch
-@@ -0,0 +1,65 @@
-+From 61b076689b6308b1c9d0d84ee8654a47e65e67ae Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Fri, 4 Nov 2016 19:44:37 +0100
-+Subject: [PATCH 1/1] Fix endianess detection with musl-based toolchains
-+
-+Musl does not define __GLIBC__ and will not provide a __MUSL__ macro:
-+http://wiki.musl-libc.org/wiki/FAQ#Q:_why_is_there_no_MUSL_macro_.3F
-+
-+This patch checks for the presence of endian.h and promotes the result
-+to src/amd/Makefile.addrlib.am which executes the broken build command.
-+Fixes compile errors detected by the autobuilder infrastructure of the
-+buildroot project:
-+
-+http://autobuild.buildroot.net/results/e27/e27a9a95f72dba3076549beb2a2ccfdbea2fcfee/
-+http://autobuild.buildroot.net/results/e27/e27a9a95f72dba3076549beb2a2ccfdbea2fcfee/
-+
-+Patch sent upstream: https://patchwork.freedesktop.org/patch/119961/
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure.ac                | 1 +
-+ src/amd/Makefile.addrlib.am | 1 +
-+ src/util/u_endian.h         | 2 +-
-+ 3 files changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 4761c59..7991b52 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -786,6 +786,7 @@ fi
-+ AC_HEADER_MAJOR
-+ AC_CHECK_HEADER([xlocale.h], [DEFINES="$DEFINES -DHAVE_XLOCALE_H"])
-+ AC_CHECK_HEADER([sys/sysctl.h], [DEFINES="$DEFINES -DHAVE_SYS_SYSCTL_H"])
-++AC_CHECK_HEADER([endian.h], [DEFINES="$DEFINES -DHAVE_ENDIAN_H"])
-+ AC_CHECK_FUNC([strtof], [DEFINES="$DEFINES -DHAVE_STRTOF"])
-+ AC_CHECK_FUNC([mkostemp], [DEFINES="$DEFINES -DHAVE_MKOSTEMP"])
-+ 
-+diff --git a/src/amd/Makefile.addrlib.am b/src/amd/Makefile.addrlib.am
-+index 64823fc..4e2fb1d 100644
-+--- a/src/amd/Makefile.addrlib.am
-++++ b/src/amd/Makefile.addrlib.am
-+@@ -28,6 +28,7 @@ addrlib_libamdgpu_addrlib_la_CPPFLAGS = \
-+ 	-I$(srcdir)/addrlib/core \
-+ 	-I$(srcdir)/addrlib/inc/chip/r800 \
-+ 	-I$(srcdir)/addrlib/r800/chip \
-++	$(DEFINES) \
-+ 	-DBRAHMA_BUILD=1
-+ 
-+ addrlib_libamdgpu_addrlib_la_CXXFLAGS = \
-+diff --git a/src/util/u_endian.h b/src/util/u_endian.h
-+index b9d563d..266fb4a 100644
-+--- a/src/util/u_endian.h
-++++ b/src/util/u_endian.h
-+@@ -27,7 +27,7 @@
-+ #ifndef U_ENDIAN_H
-+ #define U_ENDIAN_H
-+ 
-+-#if defined(__GLIBC__) || defined(ANDROID)
-++#if defined(__GLIBC__) || defined(ANDROID) || defined(HAVE_ENDIAN_H)
-+ #include <endian.h>
-+ 
-+ #if __BYTE_ORDER == __LITTLE_ENDIAN
-+-- 
-+2.10.1
-+
--- 
-2.10.1
+>
+>>>>   Copying overlay board/warp7/rootfs_overlay
+>>>>   Generating root filesystem image rootfs.ext2
+> rm -f /home/fabio/buildroot/output/build/_fakeroot.fs
+> rm -f /home/fabio/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+> rm -f /home/fabio/buildroot/output/build/_users_table.txt
+> echo '#!/bin/sh' > /home/fabio/buildroot/output/build/_fakeroot.fs
+> echo "set -e" >> /home/fabio/buildroot/output/build/_fakeroot.fs
+> echo "chown -h -R 0:0 /home/fabio/buildroot/output/target" >>
+> /home/fabio/buildroot/output/build/_fakeroot.fs
+> printf '   \n' >> /home/fabio/buildroot/output/build/_users_table.txt
+> PATH="/home/fabio/buildroot/output/host/bin:/home/fabio/buildroot/output/host/sbin:/home/fabio/buildroot/output/host/usr/bin:/home/fabio/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+> /home/fabio/buildroot/support/scripts/mkusers
+> /home/fabio/buildroot/output/build/_users_table.txt
+> /home/fabio/buildroot/output/target >>
+> /home/fabio/buildroot/output/build/_fakeroot.fs
+> cat system/device_table.txt >
+> /home/fabio/buildroot/output/build/_device_table.txt
+> printf '   /bin/busybox                     f 4755 0  0 - - - - -\n
+> /dev/console c 622 0 0 5 1 - - -\n\n' >>
+> /home/fabio/buildroot/output/build/_device_table.txt
+> echo "/home/fabio/buildroot/output/host/usr/bin/makedevs -d
+> /home/fabio/buildroot/output/build/_device_table.txt
+> /home/fabio/buildroot/output/target" >>
+> /home/fabio/buildroot/output/build/_fakeroot.fs
+> printf '   PATH="/home/fabio/buildroot/output/host/bin:/home/fabio/buildroot/output/host/sbin:/home/fabio/buildroot/output/host/usr/bin:/home/fabio/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+> mke2img -d /home/fabio/buildroot/output/target -G 4 -R 1 -B 0 -I 0 -o
+> /home/fabio/buildroot/output/images/rootfs.ext2\n' >>
+> /home/fabio/buildroot/output/build/_fakeroot.fs
+> chmod a+x /home/fabio/buildroot/output/build/_fakeroot.fs
+> PATH="/home/fabio/buildroot/output/host/bin:/home/fabio/buildroot/output/host/sbin:/home/fabio/buildroot/output/host/usr/bin:/home/fabio/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+> /home/fabio/buildroot/output/host/usr/bin/pseudo --
+> /home/fabio/buildroot/output/build/_fakeroot.fs
+> Warning: PSEUDO_PREFIX unset, defaulting to
+> /home/fabio/buildroot/output/host/usr.
+> rootdir=/home/fabio/buildroot/output/target
+> table='/home/fabio/buildroot/output/build/_device_table.txt'
+> makedevs: line 23: Couldnt create node
+> /home/fabio/buildroot/output/target/dev/console: File exists
+> fs/ext2/ext2.mk:46: recipe for target
+> '/home/fabio/buildroot/output/images/rootfs.ext2' failed
+> make[1]: *** [/home/fabio/buildroot/output/images/rootfs.ext2] Error 1
+> Makefile:76: recipe for target '_all' failed
+> make: *** [_all] Error 2
+>
+> Does anyone have any ideas on how to fix this error?
+>
+> Thanks
