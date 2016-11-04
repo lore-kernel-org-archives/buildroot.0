@@ -1,62 +1,64 @@
-From: Siva Prakash Reddy Nareddy <subbu3881@gmail.com>
-Date: Fri, 4 Nov 2016 18:03:38 +0530
-Subject: [Buildroot] Support for MPC_8323E-RDB Board
-Message-ID: <CANO2Q2-50CT2crNwtt8s7oyh_n+s0ukZ=zqT+R_8EtKh0+jg-w@mail.gmail.com>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Fri, 4 Nov 2016 14:01:58 +0100
+Subject: [Buildroot] [PATCH 2/4] board: atmel: genimage: add 1M offset
+ for FAT partition
+In-Reply-To: <20161104114710.10ff39e6@free-electrons.com>
+References: <20161103152000.04d6c15a@free-electrons.com>
+ <20161104101517.7811-1-ludovic.desroches@atmel.com>
+ <20161104114710.10ff39e6@free-electrons.com>
+Message-ID: <20161104130158.i6pga25v22ismiml@rfolt0960.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-    I am interested in using Buildroot to build Kernel and RootFs for the
-development board "MPC8323E-RDB". I tried to use buildroot as specified in
-Buildroot User Manual, but I am getting issues in building images for my
-board. Please, Help us in building kernel and rootfs images for the board
-"MPC8323E-RDB".
+On Fri, Nov 04, 2016 at 11:47:10AM +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 4 Nov 2016 11:15:17 +0100, Ludovic Desroches wrote:
+> > With older SoCs and some SD cards, a 1024-bytes offset is needed to allow
+> > ROM code to read the content of the FAT partition. As it is usual to get
+> > a 1M bytes offset for the first partition, use this value to avoid boot
+> > issues.
+> > 
+> > Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+> > ---
+> >  board/atmel/at91sam9x5ek_mmc/genimage.cfg     | 1 +
+> >  board/atmel/sama5d2_xplained_mmc/genimage.cfg | 1 +
+> >  board/atmel/sama5d3_xplained_mmc/genimage.cfg | 1 +
+> >  board/atmel/sama5d4_xplained_mmc/genimage.cfg | 1 +
+> >  4 files changed, 4 insertions(+)
+> 
+> I've applied to master, after removing the hunk changing
+> board/atmel/at91sam9x5ek_mmc/genimage.cfg. Indeed, this file doesn't
+> exist in master since I haven't committed your PATCH 1/4. It is indeed
+> weird to:
+> 
+>  1/ Have patches making fixes *after* patches adding new features in a
+>     patch series. It should be the other way around.
+> 
+>  2/ In PATCH 1/4, introduce a genimage.cfg file for the
+>     at91sam9x5ek_mmc configuration that is wrong, and gets fixed in
+>     PATCH 2/4.
+> 
 
-The issues I am getting are as follows..
+Sorry, in fact patch 1/4 was done for linux4sam_5.4 but I didn't sent it
+because we had some issues with this release and we discovered the sd card
+boot issue when testing the linux4sam_5.5 release.
 
-jyothi at jyothi:/home/buildroot-labs/buildroot$ sudo make menuconfig
-configuration written to /home/buildroot-labs/buildroot/.config
+> Anyway, this one is applied to master for SAMA5D{2,3,4}, we will handle
+> 9x5EK separately.
 
-*** End of the configuration.
-*** Execute 'make' to start the build or try 'make help'.
+Thanks
 
-jyothi at jyothi:/home/buildroot-labs/buildroot$ sudo make
-boot/uboot/uboot.mk:295: *** No board defconfig name specified, check your
-BR2_TARGET_UBOOT_DEFCONFIG setting.  Stop.
-jyothi at jyothi:/home/buildroot-labs/buildroot$ sudo make menuconfig
+Ludovic
 
-
-*** End of the configuration.
-*** Execute 'make' to start the build or try 'make help'.
-
-jyothi at jyothi:/home/buildroot-labs/buildroot$ sudo make
-boot/uboot/uboot.mk:295: *** No board defconfig name specified, check your
-BR2_TARGET_UBOOT_DEFCONFIG setting.  Stop.
-jyothi at jyothi:/home/buildroot-labs/buildroot$ sudo make menuconfig
-configuration written to /home/buildroot-labs/buildroot/.config
-
-*** End of the configuration.
-*** Execute 'make' to start the build or try 'make help'.
-
-jyothi at jyothi:/home/buildroot-labs/buildroot$ sudo make
-boot/uboot/uboot.mk:290: *** No U-Boot board name set. Check your
-BR2_TARGET_UBOOT_BOARDNAME setting.  Stop.
-jyothi at jyothi:/home/buildroot-labs/buildroot$ sudo make menuconfig
-
-
-*** End of the configuration.
-*** Execute 'make' to start the build or try 'make help'.
-
-jyothi at jyothi:/home/buildroot-labs/buildroot$ sudo make
-linux/linux.mk:441: *** No kernel device tree source specified, check your
-BR2_LINUX_KERNEL_USE_INTREE_DTS / BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-settings.  Stop.
-
--- 
-*SIVA*
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161104/9e925c2f/attachment.html>
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
