@@ -1,62 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 4 Nov 2016 18:12:55 +0100
-Subject: [Buildroot] [PATCH] boards: add FriendlyARM Nanopi NEO
-In-Reply-To: <20161103214919.mnogy5lzeqlqrohz@lukather>
-References: <1478204278-9650-1-git-send-email-yann.morin.1998@free.fr>
- <20161103210232.76trmtm3bc2jz27c@lukather>
- <20161103210957.GA4087@free.fr>
- <20161103214919.mnogy5lzeqlqrohz@lukather>
-Message-ID: <20161104171255.GA3766@free.fr>
+Date: Fri,  4 Nov 2016 18:19:40 +0100
+Subject: [Buildroot] [PATCH] configs/nanopi-neo: use a more conventional
+	kernel
+Message-ID: <1478279980-20767-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+It turns out that linux-4.9-rc3 has all that is needed for the NanoPi
+NEO, so use that rather than the franken-kernel I assembled.
 
-On 2016-11-03 22:49 +0100, Maxime Ripard spake thusly:
-> On Thu, Nov 03, 2016 at 10:09:57PM +0100, Yann E. MORIN wrote:
-> > Maxime, All,
-> > 
-> > On 2016-11-03 22:02 +0100, Maxime Ripard spake thusly:
-> > > On Thu, Nov 03, 2016 at 09:17:58PM +0100, Yann E. MORIN wrote:
-> > > > The FriendlyARM Nanopi NEO is a 4x4cm? board with an Allwiner H3 SoC:
-> > > >   - quad-core Cortex-A7 @1.2GHz
-> > > >   - 256 or 512MiB of DDR
-> > > >   - uSDCard as only storage option
-> > > >   - 3x USB 2.0 host (one socket, two on expansion pin-holes)
-> > > >   - 1x USB 2.0 OTG (also used as power source)
-> > > >   - 10/100 etehrnet MAC
-> > > >   - GPIOs, SPI, I2c...
-> > > > 
-> > > > Support for the Nanopi NEO in U-Boot and Linux is very recent, so much
-> > > > so that we have to use an -rc tag for U-Boot and a special Linux tree.
-> > > 
-> > > I'm not sure why you need that custom tree, the DT is in 4.9 already.
-> > 
-> > Yup. But with 4.9-rc3, I had mmc corruption. With your tree and
-> > sunxi-next, I don't have those. Not sure what hapenned...
-> > 
-> > I can re-check to be sure.
-> 
-> I don't think we have any fix in there for the H3 and the MMC. If
-> something is missing in 4.9, then it should be reported :)
+Reported-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ configs/nanopi_neo_defconfig | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-So, I re-tried with 4.9-rc3, and it does indeed work correctly now.
-Probably me borking my setup previously.
-
-I'll send an update to that defconfig to use plain 4.9-rc3.
-
-Thanks for the feedback! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
+index 2f4ea37..ba4534a 100644
+--- a/configs/nanopi_neo_defconfig
++++ b/configs/nanopi_neo_defconfig
+@@ -11,11 +11,10 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi NEO"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/nanopi-neo/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nanopi-neo/post-image.sh"
+ 
+-# Use a special kernel tree until all support finally lands upstream
++# Use a -rc kernel to get the DTS
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/yann-morin-1998/linux"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="4.9-rc3-sunxi-next-2016-11-02"
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9-rc3"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-nanopi-neo"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
