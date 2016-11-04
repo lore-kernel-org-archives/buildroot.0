@@ -1,55 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Nov 2016 10:22:36 +0100
-Subject: [Buildroot] [PATCH 1/2] python: improve reproducability
-In-Reply-To: <1478222971-2250-1-git-send-email-danomimanchego123@gmail.com>
-References: <1478222971-2250-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20161104102236.539630d2@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 4 Nov 2016 10:08:37 +0000
+Subject: [Buildroot] [PATCH] cmake: bump version to 3.6.3
+Message-ID: <20161104100837.56549-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/cmake/0001-rename_cmake_rootfile.patch | 28 ++++++++++++++++----------
+ package/cmake/cmake.hash                       |  4 ++--
+ package/cmake/cmake.mk                         |  4 ++--
+ 3 files changed, 21 insertions(+), 15 deletions(-)
 
-On Thu,  3 Nov 2016 21:29:30 -0400, Danomi Manchego wrote:
-> The readline and hashlib options work simply by adding dependencies;
-> there is no specific configure switch for them.  Therefore, if those
-> external dependencies are selected independent of python, then they
-> can affect its compilation.  So if those packages are selected outside
-> of python, make them go first.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> ---
->  package/python/python.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/python/python.mk b/package/python/python.mk
-> index cc65376..8c51d23 100644
-> --- a/package/python/python.mk
-> +++ b/package/python/python.mk
-> @@ -60,7 +60,7 @@ HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
->  
->  PYTHON_INSTALL_STAGING = YES
->  
-> -ifeq ($(BR2_PACKAGE_PYTHON_READLINE),y)
-> +ifneq ($(BR2_PACKAGE_PYTHON_READLINE)$(BR2_PACKAGE_READLINE),)
->  PYTHON_DEPENDENCIES += readline
->  endif
-
-I understand the problem, but I don't really like the solution. Indeed,
-when BR2_PACKAGE_PYTHON_READLINE is disabled, I expect readline support
-to not be enabled in Python, regardless of whether BR2_PACKAGE_READLINE
-is enabled or not. Perhaps we should add the relevant
---enable/--disable options, like we have for various other Python
-optional dependencies?
-
-Otherwise, we could just as well remove those options altogether.
-
-Thanks,
-
-Thomas
+diff --git a/package/cmake/0001-rename_cmake_rootfile.patch b/package/cmake/0001-rename_cmake_rootfile.patch
+index 915b7e3..e76f9cd 100644
+--- a/package/cmake/0001-rename_cmake_rootfile.patch
++++ b/package/cmake/0001-rename_cmake_rootfile.patch
+@@ -5,19 +5,25 @@ files are removed at build time via the target-finalize rule.
+ This buildroot-specific patch makes sure ctest looks also for
+ "Modules/CMake.cmake.ctest" before complaining
+ 
++[Vincent: tweak patch for 3.6.0]
++
+ Signed-off-by: Davide Viti <zinosat@tiscali.it>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ 
+---- cmake-3.0.2/Source/cmake.cxx~	2014-09-11 15:24:01.000000000 +0200
+-+++ cmake-3.0.2/Source/cmake.cxx	2014-11-25 15:48:04.461033690 +0100
+-@@ -957,7 +957,10 @@
+-      "Path to cpack program executable.", cmCacheManager::INTERNAL);
++diff -rup a/Source/cmake.cxx b/Source/cmake.cxx
++--- a/Source/cmake.cxx	2016-07-07 15:47:27.000000000 +0100
+++++ b/Source/cmake.cxx	2016-07-14 10:14:59.914265515 +0100
++@@ -771,7 +771,12 @@ int cmake::AddCMakePaths()
++                       "Path to cpack program executable.", cmState::INTERNAL);
+  #endif
+-   if(!cmSystemTools::FileExists(
+--       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()))
+-+       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()) &&
+-+     !cmSystemTools::FileExists(
+-+       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str())
++   if (!cmSystemTools::FileExists(
++-        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str())) {
+++        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str()) &&
+++	!cmSystemTools::FileExists(
+++	  (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str()
+++        )
+ +     )
+-     {
+++  {
+      // couldn't find modules
+-     cmSystemTools::Error("Could not find CMAKE_ROOT !!!\n"
++     cmSystemTools::Error(
++       "Could not find CMAKE_ROOT !!!\n"
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index e40d4ea..f846dc9 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+-# From http://www.cmake.org/files/v3.5/cmake-3.5.2-SHA-256.txt
+-sha256	92d8410d3d981bb881dfff2aed466da55a58d34c7390d50449aa59b32bb5e62a	cmake-3.5.2.tar.gz
++# From http://www.cmake.org/files/v3.6/cmake-3.6.3-SHA-256.txt
++sha256 7d73ee4fae572eb2d7cd3feb48971aea903bb30a20ea5ae8b4da826d8ccad5fe  cmake-3.6.3.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 7a80c1b..fadb09e 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CMAKE_VERSION_MAJOR = 3.5
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
++CMAKE_VERSION_MAJOR = 3.6
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.10.1
