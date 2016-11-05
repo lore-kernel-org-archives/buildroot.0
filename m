@@ -1,40 +1,94 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Nov 2016 10:26:38 +0100
-Subject: [Buildroot] warp7_defconfig build error
-In-Reply-To: <CAOMZO5DsdPO=S1zqEpLyaiDuexxMFKNiLnw0AHdhxauOVhvisw@mail.gmail.com>
-References: <CAOMZO5CjVc=qA2u95KydQrLkkjTUZUdB8t+v_QdX-NViRJs4LQ@mail.gmail.com>
- <CAOMZO5AjUAJqMuny_xn3OHEhdvtiZwkAQB-zJcZDvFr+z=LVTA@mail.gmail.com>
- <20161104212727.GB3766@free.fr>
- <CAOMZO5DsdPO=S1zqEpLyaiDuexxMFKNiLnw0AHdhxauOVhvisw@mail.gmail.com>
-Message-ID: <20161105092638.GA31560@free.fr>
+Date: Sat, 5 Nov 2016 10:30:51 +0100
+Subject: [Buildroot] [PATCH] makedevs: unlink device nodes before they
+ are created
+In-Reply-To: <20161105001452.7252-1-arnout@mind.be>
+References: <20161105001452.7252-1-arnout@mind.be>
+Message-ID: <20161105093051.GB31560@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+Arnout, All,
 
-On 2016-11-04 21:50 -0200, Fabio Estevam spake thusly:
-> On Fri, Nov 4, 2016 at 7:27 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > We've recently switched to using pseudo instead of fakeroot (in an
-> > attempt to solve #9286). But this is causing more problems.
-> >
-> > We're investigating a solution, but it's not trivial.
-> >
-> > In the meantime, you can try reverting ade91bc and 3cd88f1 (which we may
-> > end up doing if we can't find a solution quickly).
+On 2016-11-05 01:14 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> We use makedevs to create device nodes in the target rootfs. However,
+> this can be called several times, e.g. when building several filesystem
+> images or when rebuilding. When the script is called the second time,
+> the device node already exists so mknod() errors out.
 > 
-> Are these commit IDs correct? They don't seem to exist in my tree:
+> This wasn't noticed before because fakeroot's mknod() wrapper
+> (incorrectly) does _not_ error out when the file exists already. Now
+> we switched from fakeroot to pseudo, the problem becomes apparent.
+> 
+> The simplest solution is to change makedevs to first remove the target
+> file before creating it. This is simpler than two alternative
+> approaches:
+> 
+> - Removing the target files before makedevs is called is difficult,
+>   because we would have to parse the device table file to find out
+>   which files have to be deleted.
+> 
+> - Silently skipping device creation if it exists already is also easy,
+>   but then we really should also check if the device numbers and mode
+>   are correct, and that is more complicated.
+> 
+> The other types don't have to be changed. The 'd' (directory) type is
+> already OK because it already only creates directories if they don't
+> exist yet. The 'f' (file mode) and 'r' (recursive) types only operate
+> on files and directories that exist already.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Reported-by: Fabio Estevam <festevam@gmail.com>
 
-Damn. They are the commits I have locally that do the revert! :-)
+NAK: we really do not want that files exist in the target in case they
+are configured as device nodes in a dev-table. This should not happen.
 
-The commits you want to revert are:
-    325cff3 package/fakeroot: remove
-    8035ceb fs: use pseudo instead of fakeroot
+That it works now is just an ill side-effect of fakeroot being lenient.
+That it breaks with pseudo is good.
+
+The fix is far from trivial, though, but we should handle the situation
+via pseudo, and understand why it does not reload its DB.
+
+If we can't fix our use of pseudo, then we should revertt to using
+fakeroot for this release cycle.
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  package/makedevs/makedevs.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+> index cacb144..d477292 100644
+> --- a/package/makedevs/makedevs.c
+> +++ b/package/makedevs/makedevs.c
+> @@ -622,6 +622,7 @@ int main(int argc, char **argv)
+>  				for (i = 0; i < count; i++) {
+>  					sprintf(full_name_inc, "%s%d", full_name, start + i);
+>  					rdev = makedev(major, minor + i * increment);
+> +					unlink(full_name_inc);
+>  					if (mknod(full_name_inc, mode, rdev) == -1) {
+>  						bb_perror_msg("line %d: Couldnt create node %s", linenum, full_name_inc);
+>  						ret = EXIT_FAILURE;
+> @@ -638,6 +639,7 @@ int main(int argc, char **argv)
+>  				free(full_name_inc);
+>  			} else {
+>  				rdev = makedev(major, minor);
+> +				unlink(full_name);
+>  				if (mknod(full_name, mode, rdev) == -1) {
+>  					bb_perror_msg("line %d: Couldnt create node %s", linenum, full_name);
+>  					ret = EXIT_FAILURE;
+> -- 
+> 2.9.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
