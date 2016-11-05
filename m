@@ -1,48 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 14:55:43 +0100
-Subject: [Buildroot] [PATCH 3/3] snowball-{hdmiservice,
- init}: remove packages
-In-Reply-To: <1d4b32b4-f3a9-9349-18dc-ddea93d8a52c@mind.be>
-References: <1478352758-28778-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1478352758-28778-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <1d4b32b4-f3a9-9349-18dc-ddea93d8a52c@mind.be>
-Message-ID: <20161105145543.798906f8@free-electrons.com>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Sat, 5 Nov 2016 09:55:59 -0400
+Subject: [Buildroot] [PATCH] get-developers: fix parentheses for print
+In-Reply-To: <20161105115144.43a467f2@free-electrons.com>
+References: <20161105041000.22455-1-gael.portay@savoirfairelinux.com>
+ <20161105115144.43a467f2@free-electrons.com>
+Message-ID: <20161105135559.GA8468@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Sat, 5 Nov 2016 14:48:16 +0100, Arnout Vandecappelle wrote:
-
-> > +config BR2_PACKAGE_SNOWBALL_HDMISERVICE
-> > +	bool "snowball-hdmiservice removed"
-> > +	select BR2_LEGACY
-> > +	help
-> > +	  We no longer have support for the Snowball platform in
-> > +	  Buildroot, so this package was no longer useful.  
+On Sat, Nov 05, 2016 at 11:51:44AM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
->  ... explain that here:
+> On Sat,  5 Nov 2016 00:10:00 -0400, Ga?l PORTAY wrote:
+> > Python3 complains about missing parentheses.
+> > 
+> > $ ./support/scripts/get-developers
+> >   File "./support/scripts/get-developers", line 45
+> >     print f
+> >           ^
+> > SyntaxError: Missing parentheses in call to 'print'
+> > 
+> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> > ---
+> >  support/scripts/get-developers | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> 	  If you need this package, get it from the buildroot-2016.08
-> 	  tarball and put it in a BR2_EXTERNAL tree. You need to give the
-> 	  package a different name however.
+> Applied to master, thanks.
 > 
->  Hm, that last bit makes it a bit complicated so perhaps adding such limited
-> information to the help text doesn't help a lot...
 
-Well, we would have to add this message to pretty much each and every
-package being removed from Buildroot, so I find it rather pointless to
-have it specifically for those packages.
+Thanks!
 
-I'm pretty sure nobody uses Buildroot anymore for Snowball related
-stuff. The igloocommunity.org domain name is for sale, and it's really
-only because the source code is hosted on Github that it still survives.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Ga?l
