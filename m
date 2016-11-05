@@ -1,113 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Nov 2016 18:20:25 +0100
-Subject: [Buildroot] [PATCH 2/2] makedevs: make device node creation
- idempotent
-In-Reply-To: <20161105133812.18485-2-arnout@mind.be>
-References: <20161105133812.18485-1-arnout@mind.be>
- <20161105133812.18485-2-arnout@mind.be>
-Message-ID: <20161105172025.GG31560@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat,  5 Nov 2016 19:18:50 +0100
+Subject: [Buildroot] [PATCH] libmpeg2: add patch to fix build on ARMv7-M
+Message-ID: <1478369930-10514-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+This commit adds a patch to libmpeg2 that improves the ARM detection
+to not use the optimized ARM code on ARMv7-M architectures.
 
-On 2016-11-05 14:38 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> We use makedevs to create device nodes in the target rootfs. However,
-> this can be called several times, e.g. when building several filesystem
-> images or when rebuilding. When makedevs is called the second time, the
-> device node already exists so mknod() errors out.
-> 
-> This wasn't noticed before because fakeroot's mknod() wrapper
-> (incorrectly) does _not_ error out when the file exists already. Now
-> we switched from fakeroot to pseudo, the problem becomes apparent.
-> 
-> Before creating the device node, check if it already exists and if so,
-> if it has the correct device type and number. Change of mode and
-> ownership is still done.
-> 
-> This approach was preferred over removing the target files before
-> creating them, which would be simpler. However, when e.g. a file exists
-> as a normal file and makedevs specifies it as a device node, that
-> really is an error so we should detect it.
-> 
-> The other types don't have to be changed. The 'd' (directory) type is
-> already OK because it already only creates directories if they don't
-> exist yet. The 'f' (file mode) and 'r' (recursive) types only operate
-> on files and directories that exist already.
-> 
-> Patch also sent upstream to busybox.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Reported-by: Fabio Estevam <festevam@gmail.com>
+Fixes:
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  http://autobuild.buildroot.net/results/9c44de035ce81c6cc8a92ea8bad4def25cd99cd0
 
-Thank you! :-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libmpeg2/0003-fix-arm-detection.patch | 39 +++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/libmpeg2/0003-fix-arm-detection.patch
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> v2: check if pre-existing file is of correct type instead of simply
->     unlinking (Yann).
-> ---
->  package/makedevs/makedevs.c | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
-> index 7092b14..bcf0e0f 100644
-> --- a/package/makedevs/makedevs.c
-> +++ b/package/makedevs/makedevs.c
-> @@ -601,6 +601,7 @@ int main(int argc, char **argv)
->  			dev_t rdev;
->  			unsigned i;
->  			char *full_name_inc;
-> +			struct stat st;
->  
->  			if (type == 'p') {
->  				mode |= S_IFIFO;
-> @@ -622,10 +623,23 @@ int main(int argc, char **argv)
->  			for (i = start; i <= start + count; i++) {
->  				sprintf(full_name_inc, count ? "%s%u" : "%s", full_name, i);
->  				rdev = makedev(major, minor + (i - start) * increment);
-> -				if (mknod(full_name_inc, mode, rdev) < 0) {
-> +				if (stat(full_name_inc, &st) == 0) {
-> +					if ((mode & S_IFMT) != (st.st_mode & S_IFMT)) {
-> +						bb_error_msg("line %d: node %s exists but is of wrong file type", linenum, full_name_inc);
-> +						ret = EXIT_FAILURE;
-> +						continue;
-> +					}
-> +					if (st.st_rdev != rdev) {
-> +						bb_error_msg("line %d: node %s exists but is wrong device number", linenum, full_name_inc);
-> +						ret = EXIT_FAILURE;
-> +						continue;
-> +					}
-> +				} else if (mknod(full_name_inc, mode, rdev) < 0) {
->  					bb_perror_msg("line %d: can't create node %s", linenum, full_name_inc);
->  					ret = EXIT_FAILURE;
-> -				} else if (chown(full_name_inc, uid, gid) < 0) {
-> +					continue;
-> +				}
-> +				if (chown(full_name_inc, uid, gid) < 0) {
->  					bb_perror_msg("line %d: can't chown %s", linenum, full_name_inc);
->  					ret = EXIT_FAILURE;
->  				} else if (chmod(full_name_inc, mode) < 0) {
-> -- 
-> 2.9.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libmpeg2/0003-fix-arm-detection.patch b/package/libmpeg2/0003-fix-arm-detection.patch
+new file mode 100644
+index 0000000..69ec454
+--- /dev/null
++++ b/package/libmpeg2/0003-fix-arm-detection.patch
+@@ -0,0 +1,39 @@
++Improve the ARM detection to work on Thumb-only architecture
++
++The ARM-specific assembly code doesn't build on Thumb-only
++architectures such as ARMv7-M, but the configure script assumes that
++if the host tuple is arm*, then it can build and use the ARM optimized
++code.
++
++This patch improves the configure.ac detection logic, by building one
++of the instruction of the optimized assembly code, and using this to
++decide whether or not the optimizations should be enabled.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/configure.ac
++===================================================================
++--- a/configure.ac
+++++ b/configure.ac
++@@ -101,8 +101,10 @@
++     alpha*)
++ 	AC_DEFINE([ARCH_ALPHA],,[alpha architecture]);;
++     arm*)
++-	arm_conditional=:
++-	AC_DEFINE([ARCH_ARM],,[ARM architecture]);;
+++	AC_TRY_LINK([], [asm(".syntax divided\nstmfd sp!,{r4-r11,lr}")],
+++	     [AC_DEFINE([ARCH_ARM],,[ARM architecture])
+++	      use_arm_optimization=yes],
+++	     [use_arm_optimization=no])
++     esac
++ elif test x"$CC" = x"tendracc"; then
++     dnl TenDRA portability checking compiler
++@@ -122,7 +124,7 @@
++     esac
++ fi
++ 
++-AM_CONDITIONAL(ARCH_ARM, ${arm_conditional})
+++AM_CONDITIONAL(ARCH_ARM, test "${use_arm_optimization}" = "yes")
++ 
++ dnl Checks for libtool - this must be done after we set cflags
++ AC_LIBTOOL_WIN32_DLL
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
