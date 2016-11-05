@@ -1,95 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 11:52:04 +0100
-Subject: [Buildroot] [git commit] package/mesa3d: Fix endianess detection
-	with musl-based toolchains
-Message-ID: <20161105105211.BE0E1817D4@busybox.osuosl.org>
+Date: Sat, 5 Nov 2016 11:53:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: Fix endianess detection
+ with musl-based toolchains
+In-Reply-To: <20161104202058.21533-1-bernd.kuhls@t-online.de>
+References: <20161104202058.21533-1-bernd.kuhls@t-online.de>
+Message-ID: <20161105115329.37cac9f7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48019c68fa051d0fb02d884c13852ff8135f9385
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes
-http://autobuild.buildroot.net/results/e27/e27a9a95f72dba3076549beb2a2ccfdbea2fcfee/
-http://autobuild.buildroot.net/results/462/4629ee4813aa36de884bba2576612f909c007264/
+On Fri,  4 Nov 2016 21:20:58 +0100, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/e27/e27a9a95f72dba3076549beb2a2ccfdbea2fcfee/
+> http://autobuild.buildroot.net/results/462/4629ee4813aa36de884bba2576612f909c007264/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...ness-detection-with-musl-based-toolchains.patch | 65 ++++++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>  create mode 100644 package/mesa3d/0004-Fix-endianess-detection-with-musl-based-toolchains.patch
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...ness-detection-with-musl-based-toolchains.patch | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+Applied to master, thanks. However, your patch is not acceptable
+upstream: you got the feedback that it would break OpenBSD. I guess
+more autoconf checks are needed.
 
-diff --git a/package/mesa3d/0004-Fix-endianess-detection-with-musl-based-toolchains.patch b/package/mesa3d/0004-Fix-endianess-detection-with-musl-based-toolchains.patch
-new file mode 100644
-index 0000000..656705b
---- /dev/null
-+++ b/package/mesa3d/0004-Fix-endianess-detection-with-musl-based-toolchains.patch
-@@ -0,0 +1,65 @@
-+From 61b076689b6308b1c9d0d84ee8654a47e65e67ae Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Fri, 4 Nov 2016 19:44:37 +0100
-+Subject: [PATCH 1/1] Fix endianess detection with musl-based toolchains
-+
-+Musl does not define __GLIBC__ and will not provide a __MUSL__ macro:
-+http://wiki.musl-libc.org/wiki/FAQ#Q:_why_is_there_no_MUSL_macro_.3F
-+
-+This patch checks for the presence of endian.h and promotes the result
-+to src/amd/Makefile.addrlib.am which executes the broken build command.
-+Fixes compile errors detected by the autobuilder infrastructure of the
-+buildroot project:
-+
-+http://autobuild.buildroot.net/results/e27/e27a9a95f72dba3076549beb2a2ccfdbea2fcfee/
-+http://autobuild.buildroot.net/results/e27/e27a9a95f72dba3076549beb2a2ccfdbea2fcfee/
-+
-+Patch sent upstream: https://patchwork.freedesktop.org/patch/119961/
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure.ac                | 1 +
-+ src/amd/Makefile.addrlib.am | 1 +
-+ src/util/u_endian.h         | 2 +-
-+ 3 files changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 4761c59..7991b52 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -786,6 +786,7 @@ fi
-+ AC_HEADER_MAJOR
-+ AC_CHECK_HEADER([xlocale.h], [DEFINES="$DEFINES -DHAVE_XLOCALE_H"])
-+ AC_CHECK_HEADER([sys/sysctl.h], [DEFINES="$DEFINES -DHAVE_SYS_SYSCTL_H"])
-++AC_CHECK_HEADER([endian.h], [DEFINES="$DEFINES -DHAVE_ENDIAN_H"])
-+ AC_CHECK_FUNC([strtof], [DEFINES="$DEFINES -DHAVE_STRTOF"])
-+ AC_CHECK_FUNC([mkostemp], [DEFINES="$DEFINES -DHAVE_MKOSTEMP"])
-+ 
-+diff --git a/src/amd/Makefile.addrlib.am b/src/amd/Makefile.addrlib.am
-+index 64823fc..4e2fb1d 100644
-+--- a/src/amd/Makefile.addrlib.am
-++++ b/src/amd/Makefile.addrlib.am
-+@@ -28,6 +28,7 @@ addrlib_libamdgpu_addrlib_la_CPPFLAGS = \
-+ 	-I$(srcdir)/addrlib/core \
-+ 	-I$(srcdir)/addrlib/inc/chip/r800 \
-+ 	-I$(srcdir)/addrlib/r800/chip \
-++	$(DEFINES) \
-+ 	-DBRAHMA_BUILD=1
-+ 
-+ addrlib_libamdgpu_addrlib_la_CXXFLAGS = \
-+diff --git a/src/util/u_endian.h b/src/util/u_endian.h
-+index b9d563d..266fb4a 100644
-+--- a/src/util/u_endian.h
-++++ b/src/util/u_endian.h
-+@@ -27,7 +27,7 @@
-+ #ifndef U_ENDIAN_H
-+ #define U_ENDIAN_H
-+ 
-+-#if defined(__GLIBC__) || defined(ANDROID)
-++#if defined(__GLIBC__) || defined(ANDROID) || defined(HAVE_ENDIAN_H)
-+ #include <endian.h>
-+ 
-+ #if __BYTE_ORDER == __LITTLE_ENDIAN
-+-- 
-+2.10.1
-+
+Perhaps they should use the standard AC_C_BIGENDIAN autoconf macro,
+instead of playing tricks with platform-specific header files?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
