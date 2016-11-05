@@ -1,51 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  5 Nov 2016 14:45:54 +0100
-Subject: [Buildroot] [PATCH] configs/kb9202_defconfig: remove defconfig
-Message-ID: <1478353554-29400-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Sat, 5 Nov 2016 09:47:55 -0400
+Subject: [Buildroot] [PATCH] pseudo: fix build for python3 based distros
+In-Reply-To: <20161105123951.GE31560@free.fr>
+References: <20161105035549.18698-1-gael.portay@savoirfairelinux.com>
+ <20161105035549.18698-2-gael.portay@savoirfairelinux.com>
+ <20161105123951.GE31560@free.fr>
+Message-ID: <20161105134609.GB26483@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This configuration for the KwikByte KB9202 was added back in July 2008
-(commit e27fef51834042a1b108e04927a2a91742a54327), and was never
-updated since then. It still uses a 2.6.38 kernel, with the out of
-tree patches from the former AT91 kernel maintainer. The board has
-been discontinued according to its page at
-http://www.kwikbyte.com/KB9202.html.
+Yann,
 
-This defconfig no longer builds since the switch to gcc 5.x as the
-default. Therefore, it's time to get rid of this defconfig.
+On Sat, Nov 05, 2016 at 01:39:51PM +0100, Yann E. MORIN wrote:
+> Ga?l, All,
+> 
+> On 2016-11-04 23:55 -0400, Ga?l PORTAY spake thusly:
+> > Pseudo is not python3 friendly. It causes build failure on distros using
+> > python3 as default python interpretor.
+> > 
+> > ./maketables enums/*.in
+> >   File "./makewrappers", line 327
+> >     return """/* This function is not called if pseudo is configured --enable-force-async */
+> >                                                                                            ^
+> > TabError: inconsistent use of tabs and spaces in indentation
+> >   File "./maketables", line 76
+> >     print "Flags: set for %s" % self.name
+> >                             ^
+> > SyntaxError: Missing parentheses in call to 'print'
+> > make[2]: *** [Makefile:150: wrappers] Error 1
+> > make[2]: *** Waiting for unfinished jobs....
+> > make[2]: *** [Makefile:147: tables] Error 1
+> > 
+> > Those patches make pseudo works with python2 and python3.
+> > 
+> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> 
+> My python is python2, and it still work.
+> 
+> Then I switched 'python' to 'python3' as the interpreter to use in both
+> scripts, and it indeed work too.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/kb9202_defconfig | 17 -----------------
- 1 file changed, 17 deletions(-)
- delete mode 100644 configs/kb9202_defconfig
+Great! Thank you for the test.
 
-diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
-deleted file mode 100644
-index 0aea0eb..0000000
---- a/configs/kb9202_defconfig
-+++ /dev/null
-@@ -1,17 +0,0 @@
--# Architecture
--BR2_arm=y
--BR2_arm920t=y
--
--# Filesystem
--BR2_TARGET_ROOTFS_TAR=y
--
--# Linux headers same as kernel, a 2.6 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD=y
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.8"
--BR2_LINUX_KERNEL_PATCH="http://maxim.org.za/AT91RM9200/2.6/2.6.38-at91.patch.gz"
--BR2_LINUX_KERNEL_USE_DEFCONFIG=y
--BR2_LINUX_KERNEL_DEFCONFIG="kb9202"
--- 
-2.7.4
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+
+Regards,
+Ga?l PORTAY
