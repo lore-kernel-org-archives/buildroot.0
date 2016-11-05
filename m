@@ -1,102 +1,43 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 5 Nov 2016 11:53:43 +0100
-Subject: [Buildroot] [PATCH] uclibc-test: new package
-Message-ID: <20161105105343.GA27187@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 5 Nov 2016 11:54:55 +0100
+Subject: [Buildroot] [git commit] configs/nanopi-neo: use a more
+	conventional kernel
+Message-ID: <20161105105500.22F4C817AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The next release of uClibc-ng will have the test suite removed.
-Add a separate package for a chance of testing it before the next release.
-The test suite can be used to do reference testing on a GNU libc
-system.
+commit: https://git.buildroot.net/buildroot/commit/?id=97e8db6868bbceb9f46a9fece69492238345b32e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+It turns out that linux-4.9-rc3 has all that is needed for the NanoPi
+NEO, so use that rather than the franken-kernel I assembled.
+
+Reported-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                  |  1 +
- package/uclibc-test/Config.in      |  7 ++++++
- package/uclibc-test/uclibc-test.mk | 45 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 53 insertions(+)
- create mode 100644 package/uclibc-test/Config.in
- create mode 100644 package/uclibc-test/uclibc-test.mk
+ configs/nanopi_neo_defconfig | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9ed296f..6451f58 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -114,6 +114,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/tinymembench/Config.in"
- 	source "package/trace-cmd/Config.in"
- 	source "package/trinity/Config.in"
-+	source "package/uclibc-test/Config.in"
- 	source "package/valgrind/Config.in"
- 	source "package/whetstone/Config.in"
- endmenu
-diff --git a/package/uclibc-test/Config.in b/package/uclibc-test/Config.in
-new file mode 100644
-index 0000000..6e73701
---- /dev/null
-+++ b/package/uclibc-test/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_UCLIBC_TEST
-+	bool "uclibc-test"
-+	help
-+	  Test suite for uClibc.
-+	  Can also be used for GNU libc.
-+
-+	  http://www.uclibc-ng.org
-diff --git a/package/uclibc-test/uclibc-test.mk b/package/uclibc-test/uclibc-test.mk
-new file mode 100644
-index 0000000..1a3d651
---- /dev/null
-+++ b/package/uclibc-test/uclibc-test.mk
-@@ -0,0 +1,45 @@
-+################################################################################
-+#
-+# uclibc-test
-+#
-+################################################################################
-+
-+UCLIBC_TEST_VERSION = 094224b6b6a11ae8cb5b7d47e62e25235704fe0b
-+UCLIBC_TEST_SITE = git://uclibc-ng.org/git/uclibc-ng-test
-+UCLIBC_TEST_LICENSE = LGPLv2.1+
-+UCLIBC_TEST_LICENSE_FILES = COPYING.LIB
-+
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_WCHAR),)
-+UCLIBC_TEST_MAKE_ENV += NO_WCHAR=1
-+endif
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LOCALE),)
-+UCLIBC_TEST_MAKE_ENV += NO_LOCALE=1
-+endif
-+ifeq ($(BR2_PTHREADS_NONE),y)
-+UCLIBC_TEST_MAKE_ENV += NO_TLS=1 NO_THREADS=1
-+endif
-+ifeq ($(BR2_PTHREADS_OLD),y)
-+UCLIBC_TEST_MAKE_ENV += NO_TLS=1 NO_NPTL=1
-+endif
-+ifeq ($(BR2_STATIC_LIBS),y)
-+UCLIBC_TEST_MAKE_ENV += NO_TLS=1 NO_NPTL=1 NO_DL=1
-+endif
-+
-+define UCLIBC_TEST_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(UCLIBC_TEST_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CC="$(TARGET_CC)" \
-+		UCLIBC_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
-+		test_compile
-+	$(TARGET_MAKE_ENV) $(UCLIBC_TEST_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CC="$(TARGET_CC)" \
-+		UCLIBC_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
-+		test_gen
-+endef
-+
-+define UCLIBC_TEST_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/root/uClibc
-+	cp -rdpf $(@D)/test $(TARGET_DIR)/root/uClibc
-+	find $(TARGET_DIR)/root/uClibc -name \*.o -exec rm {} \;
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.1.4
+diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
+index 2f4ea37..ba4534a 100644
+--- a/configs/nanopi_neo_defconfig
++++ b/configs/nanopi_neo_defconfig
+@@ -11,11 +11,10 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi NEO"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/nanopi-neo/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nanopi-neo/post-image.sh"
+ 
+-# Use a special kernel tree until all support finally lands upstream
++# Use a -rc kernel to get the DTS
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/yann-morin-1998/linux"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="4.9-rc3-sunxi-next-2016-11-02"
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9-rc3"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-nanopi-neo"
