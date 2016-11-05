@@ -1,36 +1,53 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Nov 2016 16:57:52 +0100
-Subject: [Buildroot] [PATCH/next 1/2] package/sudo: add optional support for
-	zlib
-Message-ID: <20161105155753.25503-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 5 Nov 2016 17:12:03 +0100
+Subject: [Buildroot] [PATCH v6] kodi: allow enablement of libamcodec as
+ codec if selected
+In-Reply-To: <20161105154042.11063-1-daggs@gmx.com>
+References: <20161105154042.11063-1-daggs@gmx.com>
+Message-ID: <20161105171203.216e4ffc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/sudo/sudo.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Hello,
 
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index f28312a..89859dd 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -30,6 +30,13 @@ else
- SUDO_CONF_OPTS += --without-pam
- endif
- 
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+SUDO_CONF_OPTS += --enable-zlib
-+SUDO_DEPENDENCIES += zlib
-+else
-+SUDO_CONF_OPTS += --disable-zlib
-+endif
-+
- # mksigname/mksiglist needs to run on build host to generate source files
- define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
- 	$(MAKE) $(HOST_CONFIGURE_OPTS) \
+On Sat,  5 Nov 2016 17:40:42 +0200, Dagg Stompler wrote:
+
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index e0361da..4682d3f 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -113,6 +113,12 @@ KODI_DEPENDENCIES += imx-vpuwrap
+>  KODI_CONF_OPTS += --enable-codec=imxvpu
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
+> +KODI_DEPENDENCIES += libamcodec
+> +KODI_CONF_OPTS += --enable-codec=amcodec
+> +KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/amcodec"
+> +endif
+
+This is not good for two reasons:
+
+ 1. Because the Kodi Makefile for amcodec currently does
+    -I$(prefix)/include, which will be detected by our paranoid wrapper
+    as a bogus path because -I/usr/include is incorrect when
+    cross-compiling.
+
+ 2. Because there are now two conditions that pass a INCLUDES= value in
+    KODI_CONF_ENV, overwriting each other. Even if in practice they are
+    mutually exclusive (you won't build amcodec support and RPi support
+    in the same build), it is still dangerous.
+
+Both of those problems were fixed by my proposal in your reply to your
+PATCHv5, but for some reason you decided to not follow this proposal.
+
+Best regards,
+
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
