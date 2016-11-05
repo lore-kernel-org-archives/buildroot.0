@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 23:33:25 +0100
-Subject: [Buildroot] [PATCH 1/2] makedevs: resync device creation with
- upstream busybox
-In-Reply-To: <20161105133812.18485-1-arnout@mind.be>
-References: <20161105133812.18485-1-arnout@mind.be>
-Message-ID: <20161105233325.5d8c9939@free-electrons.com>
+Date: Sat, 5 Nov 2016 23:33:45 +0100
+Subject: [Buildroot] [PATCH] configs/kb9202_defconfig: remove defconfig
+In-Reply-To: <1478353554-29400-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1478353554-29400-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20161105233345.737796c8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +12,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 5 Nov 2016 14:38:11 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> In upstream busbyox, the code to create devices has been simplified:
-> the code for a single and for multiple devices is no longer duplicated.
+On Sat,  5 Nov 2016 14:45:54 +0100, Thomas Petazzoni wrote:
+> This configuration for the KwikByte KB9202 was added back in July 2008
+> (commit e27fef51834042a1b108e04927a2a91742a54327), and was never
+> updated since then. It still uses a 2.6.38 kernel, with the out of
+> tree patches from the former AT91 kernel maintainer. The board has
+> been discontinued according to its page at
+> http://www.kwikbyte.com/KB9202.html.
 > 
-> Since we are going to change the device creation code next, it's
-> convenient to have only one copy to modify.
+> This defconfig no longer builds since the switch to gcc 5.x as the
+> default. Therefore, it's time to get rid of this defconfig.
 > 
-> There are two behavioural changes with this, but they were introduced
-> silently together with other commits in upstream busybox.
-> 
-> - When mknod() fails, the chmod was still done. This is pointless so it
->   is no longer done now.
-> 
-> - There was a check for mode != -1; however, a mode of -1 would not
->   have worked anyway because all bits would be set for mknod(), which
->   would fail. So this check is redundant.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/makedevs/makedevs.c | 47 +++++++++++++++------------------------------
->  1 file changed, 15 insertions(+), 32 deletions(-)
+>  configs/kb9202_defconfig | 17 -----------------
+>  1 file changed, 17 deletions(-)
+>  delete mode 100644 configs/kb9202_defconfig
 
-Both applied to master, thanks a lot!
+Applied to master, thanks.
 
 Thomas
 -- 
