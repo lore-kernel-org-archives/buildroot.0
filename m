@@ -1,30 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 14:20:22 +0100
-Subject: [Buildroot] [PATCH v4 3/3] DEVELOPERS: add entry for uhttpd and
- ustream-ssl
-In-Reply-To: <1476702145-25280-3-git-send-email-Rahul.Jain@imgtec.com>
-References: <1476702145-25280-1-git-send-email-Rahul.Jain@imgtec.com>
- <1476702145-25280-3-git-send-email-Rahul.Jain@imgtec.com>
-Message-ID: <20161105142022.33207412@free-electrons.com>
+Date: Sat,  5 Nov 2016 14:32:37 +0100
+Subject: [Buildroot] [PATCH 2/3] DEVELOPERS: remove Gregory Hermant
+In-Reply-To: <1478352758-28778-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1478352758-28778-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1478352758-28778-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The Calao Systems company has gone bankrupt in April 2016, and the
+domain name no longer exists, so there is no chance to ever contact
+Gregory Hermant at a @calao-systems.com address, so let's remove his
+entry from the DEVELOPERS file.
 
-On Mon, 17 Oct 2016 16:32:25 +0530, Rahul Jain wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 8 --------
+ 1 file changed, 8 deletions(-)
 
-> +N:	Rahul Jain <rahul.jain@imgtec.com>
-> +F:	package/uhttpd
-> +F:	package/ustream-ssl
-
-We want those to have the final slash, so I've added them and applied
-to next. Thanks!
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3a9c00d..08c42b1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -568,14 +568,6 @@ F:	package/libsrtp/
+ F:	package/libwebsock/
+ F:	package/sofia-sip/
+ 
+-N:	Gregory Hermant <gregory.hermant@calao-systems.com>
+-F:	package/bcusdk/
+-F:	package/dfu-util/
+-F:	package/libpthsem/
+-F:	package/linknx/
+-F:	package/snowball-hdmiservice/
+-F:	package/ux500-firmware/
+-
+ N:	Guillaume Gardet <guillaume.gardet@oliseo.fr>
+ F:	package/c-icap/
+ F:	package/c-icap-modules/
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
