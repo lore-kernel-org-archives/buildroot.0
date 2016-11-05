@@ -1,67 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 15:37:21 +0100
-Subject: [Buildroot] [git commit] czmq: fix build with glibc 2.24
-Message-ID: <20161105143740.BE6A5817D4@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 5 Nov 2016 15:40:47 +0100
+Subject: [Buildroot] [PATCH 3/3] snowball-{hdmiservice,
+ init}: remove packages
+In-Reply-To: <20161105145543.798906f8@free-electrons.com>
+References: <1478352758-28778-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1478352758-28778-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1d4b32b4-f3a9-9349-18dc-ddea93d8a52c@mind.be>
+ <20161105145543.798906f8@free-electrons.com>
+Message-ID: <a0572c0e-6f2a-9fba-979d-69cc8e53d110@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69182cb65a8be21b2133ee76b1e9c42bf9627d5b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-czmq uses readdir_r(), which has been marked as deprecated in glibc
-2.24, and czmq uses -Werror which causes the warning to be turned into
-an error that aborts the build.
 
-This commit fixes that by removing -Werror. Long-term, we might want
-to upgrade czmq to a newer version, since they've removed the use of
-readdir_r() in commit 2594d406d8ec6f54e54d7570d7febba10a6906b2. But
-getting rid of -Werror is anyway always a good idea in Buildroot.
+On 05-11-16 14:55, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sat, 5 Nov 2016 14:48:16 +0100, Arnout Vandecappelle wrote:
+> 
+>>> +config BR2_PACKAGE_SNOWBALL_HDMISERVICE
+>>> +	bool "snowball-hdmiservice removed"
+>>> +	select BR2_LEGACY
+>>> +	help
+>>> +	  We no longer have support for the Snowball platform in
+>>> +	  Buildroot, so this package was no longer useful.  
+>>
+>>  ... explain that here:
+>>
+>> 	  If you need this package, get it from the buildroot-2016.08
+>> 	  tarball and put it in a BR2_EXTERNAL tree. You need to give the
+>> 	  package a different name however.
+>>
+>>  Hm, that last bit makes it a bit complicated so perhaps adding such limited
+>> information to the help text doesn't help a lot...
+> 
+> Well, we would have to add this message to pretty much each and every
+> package being removed from Buildroot, so I find it rather pointless to
+> have it specifically for those packages.
 
-Fixes:
+ In most cases of removed packages, there is no need for anyone to still use it
+(otherwise we wouldn't remove it). We generally don't remove packages just
+because they're unmaintained.
 
-  http://autobuild.buildroot.net/results/f6e4b8ed8571fdcf30eecae121dd11dfdef50799
+ But you do have a point that we'd have to repeat the same text several times.
+So if I really want this, I should submit a patch to the manual that explains it
+there. Which I won't :-)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/czmq/0001-configure.ac-remove-Werror.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ Regards,
+ Arnout
 
-diff --git a/package/czmq/0001-configure.ac-remove-Werror.patch b/package/czmq/0001-configure.ac-remove-Werror.patch
-new file mode 100644
-index 0000000..7f2dae2
---- /dev/null
-+++ b/package/czmq/0001-configure.ac-remove-Werror.patch
-@@ -0,0 +1,30 @@
-+From 9a195dc573f4eed130773e6ef67efd5f71693e97 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 5 Nov 2016 15:33:57 +0100
-+Subject: [PATCH] configure.ac: remove -Werror
-+
-+-Werror shouldn't be used in releases, as it can break the build with
-+newer versions of the compiler or the C library, when new warnings
-+are introduced.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index e92970a..2fd551a 100755
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -344,7 +344,7 @@ AC_C_BIGENDIAN
-+ 
-+ # These options are GNU compiler specific.
-+ if test "x$GCC" = "xyes"; then
-+-    CPPFLAGS="-pedantic -Werror -Wall -Wc++-compat ${CPPFLAGS}"
-++    CPPFLAGS="-pedantic -Wall -Wc++-compat ${CPPFLAGS}"
-+ fi
-+ 
-+ AM_CONDITIONAL(ENABLE_SHARED, test "x$enable_shared" = "xyes")
-+-- 
-+2.7.4
-+
+
+> I'm pretty sure nobody uses Buildroot anymore for Snowball related
+> stuff. The igloocommunity.org domain name is for sale, and it's really
+> only because the source code is hosted on Github that it still survives.
+> 
+> Thomas
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
