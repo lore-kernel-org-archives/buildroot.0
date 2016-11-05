@@ -1,78 +1,41 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 5 Nov 2016 16:42:19 +0100
-Subject: [Buildroot] [PATCH] binutils: add upstream patch to fix open
-	microblaze issue
-Message-ID: <20161105154219.GA6142@waldemar-brodkorb.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  5 Nov 2016 16:57:53 +0100
+Subject: [Buildroot] [PATCH/next 2/2] package/sudo: bump version to 1.8.18p1
+In-Reply-To: <20161105155753.25503-1-bernd.kuhls@t-online.de>
+References: <20161105155753.25503-1-bernd.kuhls@t-online.de>
+Message-ID: <20161105155753.25503-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reenables the use of 2.27 for microblaze.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...-Set-dynamic-tag-VMA-and-size-from-dynami.patch | 36 ++++++++++++++++++++++
- package/binutils/Config.in.host                    |  3 --
- 2 files changed, 36 insertions(+), 3 deletions(-)
- create mode 100644 package/binutils/2.27/0900-Revert-part-Set-dynamic-tag-VMA-and-size-from-dynami.patch
+ package/sudo/sudo.hash | 2 +-
+ package/sudo/sudo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/2.27/0900-Revert-part-Set-dynamic-tag-VMA-and-size-from-dynami.patch b/package/binutils/2.27/0900-Revert-part-Set-dynamic-tag-VMA-and-size-from-dynami.patch
-new file mode 100644
-index 0000000..f1ec259
---- /dev/null
-+++ b/package/binutils/2.27/0900-Revert-part-Set-dynamic-tag-VMA-and-size-from-dynami.patch
-@@ -0,0 +1,36 @@
-+From c646b02fdcae5f37bd88f33a0c4683ef13ad5c82 Mon Sep 17 00:00:00 2001
-+From: Alan Modra <amodra@gmail.com>
-+Date: Mon, 31 Oct 2016 12:46:38 +1030
-+Subject: [PATCH] Revert part "Set dynamic tag VMA and size from dynamic
-+ section when possible"
-+
-+	PR 20748
-+	* elf32-microblaze.c (microblaze_elf_finish_dynamic_sections): Revert
-+	2016-05-13 change.
-+
-+Signed-off-by: Alan Modra <amodra@gmail.com>
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+
-+diff --git a/bfd/elf32-microblaze.c b/bfd/elf32-microblaze.c
-+index 477e7b3..5c66808 100644
-+--- a/bfd/elf32-microblaze.c
-++++ b/bfd/elf32-microblaze.c
-+@@ -3396,13 +3396,13 @@ microblaze_elf_finish_dynamic_sections (bfd *output_bfd,
-+             {
-+               asection *s;
-+ 
-+-              s = bfd_get_linker_section (dynobj, name);
-++              s = bfd_get_section_by_name (output_bfd, name);
-+               if (s == NULL)
-+                 dyn.d_un.d_val = 0;
-+               else
-+                 {
-+                   if (! size)
-+-                    dyn.d_un.d_ptr = s->output_section->vma + s->output_offset;
-++                    dyn.d_un.d_ptr = s->vma;
-+                   else
-+                     dyn.d_un.d_val = s->size;
-+                 }
-+-- 
-+2.1.4
-+
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index dce6996..3e0c357 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -17,9 +17,6 @@ choice
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index 4c2431f..c6f5be3 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
+@@ -1,2 +1,2 @@
+ # From: http://www.sudo.ws/download.html
+-sha256 4316381708324da8b6cb151f655c1a11855207c7c02244d8ffdea5104d7cc308  sudo-1.8.15.tar.gz
++sha256 e5a0471c721281a693025bbde33ebd9d3db43245d83ab8516bbfc23980379434  sudo-1.8.18p1.tar.gz
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 89859dd..3643d55 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	config BR2_BINUTILS_VERSION_2_27_X
- 		bool "binutils 2.27"
--		# supported but broken on Microblaze
--		# see https://sourceware.org/bugzilla/show_bug.cgi?id=20748
--		depends on !BR2_microblaze
- 
- endchoice
- 
+-SUDO_VERSION = 1.8.15
++SUDO_VERSION = 1.8.18p1
+ SUDO_SITE = http://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC BSD-3c
+ SUDO_LICENSE_FILES = doc/LICENSE
 -- 
-2.1.4
+2.10.2
