@@ -1,46 +1,54 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Sat, 5 Nov 2016 15:58:52 +0100
-Subject: [Buildroot] qmx6_defconfig fails to build
-In-Reply-To: <20161105150405.705835a4@free-electrons.com>
-References: <20161105150405.705835a4@free-electrons.com>
-Message-ID: <388a11fc-6093-a4cb-c499-e264acb9250e@relinux.de>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Sat,  5 Nov 2016 17:40:42 +0200
+Subject: [Buildroot] [PATCH v6] kodi: allow enablement of libamcodec as
+	codec if selected
+Message-ID: <20161105154042.11063-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+allow usage of amcodec if kodi is built and libamcodec is selected
 
-unfortunatelly, I do not have access to a qmx6 hardware anymore.
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+---
 
-Kind regards
+v5 -> v6:
+ - simplify patch so it will fit kodi 17 too (Thomas Petazzoni)
+ - allow multiple codecs enabled.
 
-Stephan
+v4 -> v5:
+ - add description and signed off to the kodi patch. (Thomas Petazzoni).
 
-Am 05.11.2016 um 15:04 schrieb Thomas Petazzoni:
-> Stephan, J?r?me, Gary,
->
-> All of you have touched the qmx6_defconfig in Buildroot: Stephan is the
-> original submitter (in 2014), J?r?me did some improvements in April
-> 2015, and then Gary updated the kernel version two times in 2015.
->
-> However, today, this defconfig fails to build, because the U-Boot
-> version being used is too old to build with gcc 5.x.
->
-> If you still have access to the HW, could you submit a patch that
-> updates the defconfig to make it build with gcc 5.x ?
->
-> See the full build log at
-> http://free-electrons.com/~thomas/pub/buildroot-defconfigs/qmx6_defconfig.log.FAIL.
->
-> Thanks!
->
-> Thomas
+v3 -> v4:
+ - properly define the includes for amcodec when cross compiling.
 
+v2 -> v3:
+ - fix change after kodi.mk was changed.
 
+v1 -> v2:
+ - fixed mail title and comment
+
+ package/kodi/kodi.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index e0361da..4682d3f 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -113,6 +113,12 @@ KODI_DEPENDENCIES += imx-vpuwrap
+ KODI_CONF_OPTS += --enable-codec=imxvpu
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
++KODI_DEPENDENCIES += libamcodec
++KODI_CONF_OPTS += --enable-codec=amcodec
++KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/amcodec"
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ KODI_CONF_OPTS += --enable-libcap
+ KODI_DEPENDENCIES += libcap
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de Stephan at reLinux.de
+2.10.2
