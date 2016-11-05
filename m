@@ -1,24 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 14:57:35 +0100
-Subject: [Buildroot] minnowboard_defconfig fails to build
-Message-ID: <20161105145735.6a941b3a@free-electrons.com>
+Date: Sat, 5 Nov 2016 15:00:07 +0100
+Subject: [Buildroot] olimex_a20_olinuxino_lime2_defconfig fails to build
+Message-ID: <20161105150007.4a4f8622@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ezequiel,
+Hello Jan,
 
-The minnowboard_defconfig fails to build (but minnowboard_max_defconfig
-is OK), due to the use of a Linux kernel version that is too old to
-build with gcc 5.x.
+Last year, you contributed the olimex_a20_olinuxino_lime2_defconfig to
+Buildroot. Unfortunately, this defconfig now fails to build, due to a
+U-Boot version that is too old to build with gcc 5.x.
 
-Do you have access to the Minnowboard (not MAX) ? If so, would you be
-willing to look into this issue, and provide an updated defconfig ?
+Since it's using a mainline version of U-Boot, could you have a look at
+bumping the U-Boot version to fix this problem, if you still have
+access to this HW ?
 
-See the full build log at
-http://free-electrons.com/~thomas/pub/buildroot-defconfigs/minnowboard_defconfig.log.FAIL.
+See
+http://free-electrons.com/~thomas/pub/buildroot-defconfigs/olimex_a20_olinuxino_lime2_defconfig.log.FAIL
+for the full build log.
 
 Thanks!
 
