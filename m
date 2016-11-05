@@ -1,83 +1,465 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 5 Nov 2016 23:03:12 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-11-04
-In-Reply-To: <20161105073056.4969320D86@mail.free-electrons.com>
-References: <20161105073056.4969320D86@mail.free-electrons.com>
-Message-ID: <df36574f-bff9-b295-2a82-825a13894f58@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 5 Nov 2016 23:31:23 +0100
+Subject: [Buildroot] [git commit] libxml2: add upstream security fixes
+Message-ID: <20161105223128.A3F8081778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=f55a63f95359da1edbfba1fbed26cf9d7c1bb897
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 05/11/2016 ? 08:30, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> Build statistics for 2016-11-04
-> ================================
-> 
->       successes : 179
->        failures : 51 
->        timeouts : 2  
->           TOTAL : 232
-> 
-> Classification of failures by reason
-> ====================================
-> 
-> tvheadend-50a370707aedf5c12... | 3 
-> 
-> Detail of failures
-> ===================
-> 
->     mips64el | tvheadend-50a370707aedf5c12... | NOK | http://autobuild.buildroot.net/results/42a515acf4693cce344ecaad4b0077a44a17e6ce
->        nios2 | tvheadend-50a370707aedf5c12... | NOK | http://autobuild.buildroot.net/results/86f21884b08c4e8b4b77de4a6f72f1a5cea52400
->        nios2 | tvheadend-50a370707aedf5c12... | NOK | http://autobuild.buildroot.net/results/8098ebf879b659c4da5c8d2d2cbdac5dd3d272ec
+Fixes: CVE-2016-5131, CVE-2016-4658.
 
-This is a Local issue with LC_ALL=C host and mkbundle python script.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ix-XPointer-paths-beginning-with-range-to.patch | 178 +++++++++++++++
+ ...sallow-namespace-nodes-in-XPointer-ranges.patch | 253 +++++++++++++++++++++
+ 2 files changed, 431 insertions(+)
 
-MKBUNDLE        bundle.c
-
-Traceback (most recent call last):
-  File
-"/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/support/mkbundle",
-line 172, in <module>
-    idx = add_entry(ents)
-  File
-"/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/support/mkbundle",
-line 151, in add_entry
-    tmp = add_entry(ents[k], d, k, idx, p)
-  File
-"/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/support/mkbundle",
-line 151, in add_entry
-    tmp = add_entry(ents[k], d, k, idx, p)
-  File
-"/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/support/mkbundle",
-line 151, in add_entry
-    tmp = add_entry(ents[k], d, k, idx, p)
-  File
-"/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/support/mkbundle",
-line 145, in add_entry
-    output_file(d, k, idx+1, p)
-  File
-"/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/support/mkbundle",
-line 72, in output_file
-    depf.write('  %s\\\n' % p)
-UnicodeEncodeError: 'ascii' codec can't encode characters in position 135-136:
-ordinal not in range(128)
-make[1]: ***
-[/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/build.linux/bundle.c]
-Error 1
-make[1]: *** Waiting for unfinished jobs....
-
-You can reproduce the issue easily by adding LC_ALL=C to TVHEADEND_BUILD_CMDS.
-Can we force the utf8 encoding ?
-
-Can you take a look ?
-
-Thanks!
-
-Best regards,
-Romain
+diff --git a/package/libxml2/0001-Fix-XPointer-paths-beginning-with-range-to.patch b/package/libxml2/0001-Fix-XPointer-paths-beginning-with-range-to.patch
+new file mode 100644
+index 0000000..42570c6
+--- /dev/null
++++ b/package/libxml2/0001-Fix-XPointer-paths-beginning-with-range-to.patch
+@@ -0,0 +1,178 @@
++From 9ab01a277d71f54d3143c2cf333c5c2e9aaedd9e Mon Sep 17 00:00:00 2001
++From: Nick Wellnhofer <wellnhofer@aevum.de>
++Date: Tue, 28 Jun 2016 14:22:23 +0200
++Subject: [PATCH] Fix XPointer paths beginning with range-to
++
++The old code would invoke the broken xmlXPtrRangeToFunction. range-to
++isn't really a function but a special kind of location step. Remove
++this function and always handle range-to in the XPath code.
++
++The old xmlXPtrRangeToFunction could also be abused to trigger a
++use-after-free error with the potential for remote code execution.
++
++Found with afl-fuzz.
++
++Fixes CVE-2016-5131.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit 9ab01a277d7
++
++ result/XPath/xptr/vidbase | 13 ++++++++
++ test/XPath/xptr/vidbase   |  1 +
++ xpath.c                   |  7 ++++-
++ xpointer.c                | 76 ++++-------------------------------------------
++ 4 files changed, 26 insertions(+), 71 deletions(-)
++
++diff --git a/result/XPath/xptr/vidbase b/result/XPath/xptr/vidbase
++index 8b9e92d66d97..f19193e70edb 100644
++--- a/result/XPath/xptr/vidbase
+++++ b/result/XPath/xptr/vidbase
++@@ -17,3 +17,16 @@ Object is a Location Set:
++   To node
++     ELEMENT p
++ 
+++
+++========================
+++Expression: xpointer(range-to(id('chapter2')))
+++Object is a Location Set:
+++1 :   Object is a range :
+++  From node
+++     /
+++  To node
+++    ELEMENT chapter
+++      ATTRIBUTE id
+++        TEXT
+++          content=chapter2
+++
++diff --git a/test/XPath/xptr/vidbase b/test/XPath/xptr/vidbase
++index b1463830570a..884b1065d7fd 100644
++--- a/test/XPath/xptr/vidbase
+++++ b/test/XPath/xptr/vidbase
++@@ -1,2 +1,3 @@
++ xpointer(id('chapter1')/p)
++ xpointer(id('chapter1')/p[1]/range-to(following-sibling::p[2]))
+++xpointer(range-to(id('chapter2')))
++diff --git a/xpath.c b/xpath.c
++index d992841ef0c2..5a01b1b399a2 100644
++--- a/xpath.c
+++++ b/xpath.c
++@@ -10691,13 +10691,18 @@ xmlXPathCompPathExpr(xmlXPathParserContextPtr ctxt) {
++ 		    lc = 1;
++ 		    break;
++ 		} else if ((NXT(len) == '(')) {
++-		    /* Note Type or Function */
+++		    /* Node Type or Function */
++ 		    if (xmlXPathIsNodeType(name)) {
++ #ifdef DEBUG_STEP
++ 		        xmlGenericError(xmlGenericErrorContext,
++ 				"PathExpr: Type search\n");
++ #endif
++ 			lc = 1;
+++#ifdef LIBXML_XPTR_ENABLED
+++                    } else if (ctxt->xptr &&
+++                               xmlStrEqual(name, BAD_CAST "range-to")) {
+++                        lc = 1;
+++#endif
++ 		    } else {
++ #ifdef DEBUG_STEP
++ 		        xmlGenericError(xmlGenericErrorContext,
++diff --git a/xpointer.c b/xpointer.c
++index 676c5105837a..d74174a318f1 100644
++--- a/xpointer.c
+++++ b/xpointer.c
++@@ -1332,8 +1332,6 @@ xmlXPtrNewContext(xmlDocPtr doc, xmlNodePtr here, xmlNodePtr origin) {
++     ret->here = here;
++     ret->origin = origin;
++ 
++-    xmlXPathRegisterFunc(ret, (xmlChar *)"range-to",
++-	                 xmlXPtrRangeToFunction);
++     xmlXPathRegisterFunc(ret, (xmlChar *)"range",
++ 	                 xmlXPtrRangeFunction);
++     xmlXPathRegisterFunc(ret, (xmlChar *)"range-inside",
++@@ -2243,76 +2241,14 @@ xmlXPtrRangeInsideFunction(xmlXPathParserContextPtr ctxt, int nargs) {
++  * @nargs:  the number of args
++  *
++  * Implement the range-to() XPointer function
+++ *
+++ * Obsolete. range-to is not a real function but a special type of location
+++ * step which is handled in xpath.c.
++  */
++ void
++-xmlXPtrRangeToFunction(xmlXPathParserContextPtr ctxt, int nargs) {
++-    xmlXPathObjectPtr range;
++-    const xmlChar *cur;
++-    xmlXPathObjectPtr res, obj;
++-    xmlXPathObjectPtr tmp;
++-    xmlLocationSetPtr newset = NULL;
++-    xmlNodeSetPtr oldset;
++-    int i;
++-
++-    if (ctxt == NULL) return;
++-    CHECK_ARITY(1);
++-    /*
++-     * Save the expression pointer since we will have to evaluate
++-     * it multiple times. Initialize the new set.
++-     */
++-    CHECK_TYPE(XPATH_NODESET);
++-    obj = valuePop(ctxt);
++-    oldset = obj->nodesetval;
++-    ctxt->context->node = NULL;
++-
++-    cur = ctxt->cur;
++-    newset = xmlXPtrLocationSetCreate(NULL);
++-
++-    for (i = 0; i < oldset->nodeNr; i++) {
++-	ctxt->cur = cur;
++-
++-	/*
++-	 * Run the evaluation with a node list made of a single item
++-	 * in the nodeset.
++-	 */
++-	ctxt->context->node = oldset->nodeTab[i];
++-	tmp = xmlXPathNewNodeSet(ctxt->context->node);
++-	valuePush(ctxt, tmp);
++-
++-	xmlXPathEvalExpr(ctxt);
++-	CHECK_ERROR;
++-
++-	/*
++-	 * The result of the evaluation need to be tested to
++-	 * decided whether the filter succeeded or not
++-	 */
++-	res = valuePop(ctxt);
++-	range = xmlXPtrNewRangeNodeObject(oldset->nodeTab[i], res);
++-	if (range != NULL) {
++-	    xmlXPtrLocationSetAdd(newset, range);
++-	}
++-
++-	/*
++-	 * Cleanup
++-	 */
++-	if (res != NULL)
++-	    xmlXPathFreeObject(res);
++-	if (ctxt->value == tmp) {
++-	    res = valuePop(ctxt);
++-	    xmlXPathFreeObject(res);
++-	}
++-
++-	ctxt->context->node = NULL;
++-    }
++-
++-    /*
++-     * The result is used as the new evaluation set.
++-     */
++-    xmlXPathFreeObject(obj);
++-    ctxt->context->node = NULL;
++-    ctxt->context->contextSize = -1;
++-    ctxt->context->proximityPosition = -1;
++-    valuePush(ctxt, xmlXPtrWrapLocationSet(newset));
+++xmlXPtrRangeToFunction(xmlXPathParserContextPtr ctxt,
+++                       int nargs ATTRIBUTE_UNUSED) {
+++    XP_ERROR(XPATH_EXPR_ERROR);
++ }
++ 
++ /**
++-- 
++2.10.2
++
+diff --git a/package/libxml2/0002-Disallow-namespace-nodes-in-XPointer-ranges.patch b/package/libxml2/0002-Disallow-namespace-nodes-in-XPointer-ranges.patch
+new file mode 100644
+index 0000000..45c1a07
+--- /dev/null
++++ b/package/libxml2/0002-Disallow-namespace-nodes-in-XPointer-ranges.patch
+@@ -0,0 +1,253 @@
++From c1d1f7121194036608bf555f08d3062a36fd344b Mon Sep 17 00:00:00 2001
++From: Nick Wellnhofer <wellnhofer@aevum.de>
++Date: Tue, 28 Jun 2016 18:34:52 +0200
++Subject: [PATCH] Disallow namespace nodes in XPointer ranges
++
++Namespace nodes must be copied to avoid use-after-free errors.
++But they don't necessarily have a physical representation in a
++document, so simply disallow them in XPointer ranges.
++
++Found with afl-fuzz.
++
++Fixes CVE-2016-4658.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit c1d1f712119403
++
++ xpointer.c | 149 +++++++++++++++++++++++--------------------------------------
++ 1 file changed, 56 insertions(+), 93 deletions(-)
++
++diff --git a/xpointer.c b/xpointer.c
++index a7b03fbdae16..694d120e2e0b 100644
++--- a/xpointer.c
+++++ b/xpointer.c
++@@ -320,6 +320,45 @@ xmlXPtrRangesEqual(xmlXPathObjectPtr range1, xmlXPathObjectPtr range2) {
++ }
++ 
++ /**
+++ * xmlXPtrNewRangeInternal:
+++ * @start:  the starting node
+++ * @startindex:  the start index
+++ * @end:  the ending point
+++ * @endindex:  the ending index
+++ *
+++ * Internal function to create a new xmlXPathObjectPtr of type range
+++ *
+++ * Returns the newly created object.
+++ */
+++static xmlXPathObjectPtr
+++xmlXPtrNewRangeInternal(xmlNodePtr start, int startindex,
+++                        xmlNodePtr end, int endindex) {
+++    xmlXPathObjectPtr ret;
+++
+++    /*
+++     * Namespace nodes must be copied (see xmlXPathNodeSetDupNs).
+++     * Disallow them for now.
+++     */
+++    if ((start != NULL) && (start->type == XML_NAMESPACE_DECL))
+++	return(NULL);
+++    if ((end != NULL) && (end->type == XML_NAMESPACE_DECL))
+++	return(NULL);
+++
+++    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
+++    if (ret == NULL) {
+++        xmlXPtrErrMemory("allocating range");
+++	return(NULL);
+++    }
+++    memset(ret, 0, sizeof(xmlXPathObject));
+++    ret->type = XPATH_RANGE;
+++    ret->user = start;
+++    ret->index = startindex;
+++    ret->user2 = end;
+++    ret->index2 = endindex;
+++    return(ret);
+++}
+++
+++/**
++  * xmlXPtrNewRange:
++  * @start:  the starting node
++  * @startindex:  the start index
++@@ -344,17 +383,7 @@ xmlXPtrNewRange(xmlNodePtr start, int startindex,
++     if (endindex < 0)
++ 	return(NULL);
++ 
++-    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
++-    if (ret == NULL) {
++-        xmlXPtrErrMemory("allocating range");
++-	return(NULL);
++-    }
++-    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
++-    ret->type = XPATH_RANGE;
++-    ret->user = start;
++-    ret->index = startindex;
++-    ret->user2 = end;
++-    ret->index2 = endindex;
+++    ret = xmlXPtrNewRangeInternal(start, startindex, end, endindex);
++     xmlXPtrRangeCheckOrder(ret);
++     return(ret);
++ }
++@@ -381,17 +410,8 @@ xmlXPtrNewRangePoints(xmlXPathObjectPtr start, xmlXPathObjectPtr end) {
++     if (end->type != XPATH_POINT)
++ 	return(NULL);
++ 
++-    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
++-    if (ret == NULL) {
++-        xmlXPtrErrMemory("allocating range");
++-	return(NULL);
++-    }
++-    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
++-    ret->type = XPATH_RANGE;
++-    ret->user = start->user;
++-    ret->index = start->index;
++-    ret->user2 = end->user;
++-    ret->index2 = end->index;
+++    ret = xmlXPtrNewRangeInternal(start->user, start->index, end->user,
+++                                  end->index);
++     xmlXPtrRangeCheckOrder(ret);
++     return(ret);
++ }
++@@ -416,17 +436,7 @@ xmlXPtrNewRangePointNode(xmlXPathObjectPtr start, xmlNodePtr end) {
++     if (start->type != XPATH_POINT)
++ 	return(NULL);
++ 
++-    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
++-    if (ret == NULL) {
++-        xmlXPtrErrMemory("allocating range");
++-	return(NULL);
++-    }
++-    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
++-    ret->type = XPATH_RANGE;
++-    ret->user = start->user;
++-    ret->index = start->index;
++-    ret->user2 = end;
++-    ret->index2 = -1;
+++    ret = xmlXPtrNewRangeInternal(start->user, start->index, end, -1);
++     xmlXPtrRangeCheckOrder(ret);
++     return(ret);
++ }
++@@ -453,17 +463,7 @@ xmlXPtrNewRangeNodePoint(xmlNodePtr start, xmlXPathObjectPtr end) {
++     if (end->type != XPATH_POINT)
++ 	return(NULL);
++ 
++-    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
++-    if (ret == NULL) {
++-        xmlXPtrErrMemory("allocating range");
++-	return(NULL);
++-    }
++-    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
++-    ret->type = XPATH_RANGE;
++-    ret->user = start;
++-    ret->index = -1;
++-    ret->user2 = end->user;
++-    ret->index2 = end->index;
+++    ret = xmlXPtrNewRangeInternal(start, -1, end->user, end->index);
++     xmlXPtrRangeCheckOrder(ret);
++     return(ret);
++ }
++@@ -486,17 +486,7 @@ xmlXPtrNewRangeNodes(xmlNodePtr start, xmlNodePtr end) {
++     if (end == NULL)
++ 	return(NULL);
++ 
++-    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
++-    if (ret == NULL) {
++-        xmlXPtrErrMemory("allocating range");
++-	return(NULL);
++-    }
++-    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
++-    ret->type = XPATH_RANGE;
++-    ret->user = start;
++-    ret->index = -1;
++-    ret->user2 = end;
++-    ret->index2 = -1;
+++    ret = xmlXPtrNewRangeInternal(start, -1, end, -1);
++     xmlXPtrRangeCheckOrder(ret);
++     return(ret);
++ }
++@@ -516,17 +506,7 @@ xmlXPtrNewCollapsedRange(xmlNodePtr start) {
++     if (start == NULL)
++ 	return(NULL);
++ 
++-    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
++-    if (ret == NULL) {
++-        xmlXPtrErrMemory("allocating range");
++-	return(NULL);
++-    }
++-    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
++-    ret->type = XPATH_RANGE;
++-    ret->user = start;
++-    ret->index = -1;
++-    ret->user2 = NULL;
++-    ret->index2 = -1;
+++    ret = xmlXPtrNewRangeInternal(start, -1, NULL, -1);
++     return(ret);
++ }
++ 
++@@ -541,6 +521,8 @@ xmlXPtrNewCollapsedRange(xmlNodePtr start) {
++  */
++ xmlXPathObjectPtr
++ xmlXPtrNewRangeNodeObject(xmlNodePtr start, xmlXPathObjectPtr end) {
+++    xmlNodePtr endNode;
+++    int endIndex;
++     xmlXPathObjectPtr ret;
++ 
++     if (start == NULL)
++@@ -549,7 +531,12 @@ xmlXPtrNewRangeNodeObject(xmlNodePtr start, xmlXPathObjectPtr end) {
++ 	return(NULL);
++     switch (end->type) {
++ 	case XPATH_POINT:
+++	    endNode = end->user;
+++	    endIndex = end->index;
+++	    break;
++ 	case XPATH_RANGE:
+++	    endNode = end->user2;
+++	    endIndex = end->index2;
++ 	    break;
++ 	case XPATH_NODESET:
++ 	    /*
++@@ -557,39 +544,15 @@ xmlXPtrNewRangeNodeObject(xmlNodePtr start, xmlXPathObjectPtr end) {
++ 	     */
++ 	    if (end->nodesetval->nodeNr <= 0)
++ 		return(NULL);
+++	    endNode = end->nodesetval->nodeTab[end->nodesetval->nodeNr - 1];
+++	    endIndex = -1;
++ 	    break;
++ 	default:
++ 	    /* TODO */
++ 	    return(NULL);
++     }
++ 
++-    ret = (xmlXPathObjectPtr) xmlMalloc(sizeof(xmlXPathObject));
++-    if (ret == NULL) {
++-        xmlXPtrErrMemory("allocating range");
++-	return(NULL);
++-    }
++-    memset(ret, 0 , (size_t) sizeof(xmlXPathObject));
++-    ret->type = XPATH_RANGE;
++-    ret->user = start;
++-    ret->index = -1;
++-    switch (end->type) {
++-	case XPATH_POINT:
++-	    ret->user2 = end->user;
++-	    ret->index2 = end->index;
++-	    break;
++-	case XPATH_RANGE:
++-	    ret->user2 = end->user2;
++-	    ret->index2 = end->index2;
++-	    break;
++-	case XPATH_NODESET: {
++-	    ret->user2 = end->nodesetval->nodeTab[end->nodesetval->nodeNr - 1];
++-	    ret->index2 = -1;
++-	    break;
++-	}
++-	default:
++-	    STRANGE
++-	    return(NULL);
++-    }
+++    ret = xmlXPtrNewRangeInternal(start, -1, endNode, endIndex);
++     xmlXPtrRangeCheckOrder(ret);
++     return(ret);
++ }
++-- 
++2.10.2
++
