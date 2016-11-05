@@ -1,24 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 14:35:16 +0100
-Subject: [Buildroot] freescale_imx31_3stack_defconfig fails to build
-Message-ID: <20161105143516.00291507@free-electrons.com>
+Date: Sat, 5 Nov 2016 14:36:37 +0100
+Subject: [Buildroot] freescale_p2020ds_defconfig fails to build
+Message-ID: <20161105143637.0fffe44d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, Vincent,
+Hello Gustavo,
 
-The freescale_imx31_3stack_defconfig in Buildroot no longer builds,
-because the Linux kernel version used in this defconfig is too old, and
-doesn't build with gcc 5.x.
-
-Has one of you access to this platform, and be willing to update this
-defconfig?
+You are the one who submitted the freescale_p2020ds_defconfig to
+Buildroot. However, this defconfig currently fails to build, because
+the kernel is too old to build with gcc 5.x. Could you have a look and
+propose a patch to fix this defconfig?
 
 See
-http://free-electrons.com/~thomas/pub/buildroot-defconfigs/freescale_imx31_3stack_defconfig.log.FAIL
+http://free-electrons.com/~thomas/pub/buildroot-defconfigs/freescale_p2020ds_defconfig.log.FAIL
 for the full build log.
 
 Thanks!
