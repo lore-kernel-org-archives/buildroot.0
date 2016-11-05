@@ -1,43 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  5 Nov 2016 17:32:13 +0100
-Subject: [Buildroot] [PATCH] assimp: disable package with the ADI Blackfin
-	toolchain
-Message-ID: <1478363533-29295-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  5 Nov 2016 17:34:54 +0100
+Subject: [Buildroot] [PATCH] package/pseudo: update version
+Message-ID: <1478363694-21168-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-assimp fails to build with an internal compiler error with the ADI
-Blackfin toolchain, while it builds fine with the mainline gcc for
-Blackfin. So let's disable this package (which has no reverse
-dependencies that select it) for the ADI Blackfin toolchain.
+Brings in a fix about externded attributes (xattrs).
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/394e3545a7bbe5d6fbaf4c97f0a3eb51c7d57076
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/assimp/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/pseudo/pseudo.hash | 2 +-
+ package/pseudo/pseudo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/assimp/Config.in b/package/assimp/Config.in
-index 93020f7..8fa6429 100644
---- a/package/assimp/Config.in
-+++ b/package/assimp/Config.in
-@@ -4,6 +4,11 @@ config BR2_PACKAGE_ASSIMP
- 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71124, that
- 	# cause an infinite loop in gcc when building this package.
- 	depends on !BR2_microblaze
-+	# The ADI Blackfin toolchain does not build assimp properly,
-+	# fails with "internal compiler error: in simplify_subreg, at
-+	# simplify-rtx.c:5001". It builds fine with a mainline gcc for
-+	# Blackfin.
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_ZLIB
- 	help
+diff --git a/package/pseudo/pseudo.hash b/package/pseudo/pseudo.hash
+index 5822d0e..1553a29 100644
+--- a/package/pseudo/pseudo.hash
++++ b/package/pseudo/pseudo.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  d7767c9a73b0df4f1f26952cf5eca4c6ff6fc4bc5ef15a904ea3839c70161936  pseudo-7abc9396731149df5eaf43c84fed4f3053b64de6.tar.gz
++sha256  7d4b767302f118fa1c3f89b551cf3f3f2aa92721dab86ff62f0600a394b8a81a  pseudo-45eca34c754d416a38bee90fb2d3c110a0b6cc5f.tar.gz
+diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
+index ed348f1..67538a6 100644
+--- a/package/pseudo/pseudo.mk
++++ b/package/pseudo/pseudo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PSEUDO_VERSION = 7abc9396731149df5eaf43c84fed4f3053b64de6
++PSEUDO_VERSION = 45eca34c754d416a38bee90fb2d3c110a0b6cc5f
+ PSEUDO_SITE = https://git.yoctoproject.org/git/pseudo
+ PSEUDO_SITE_METHOD = git
+ 
 -- 
 2.7.4
