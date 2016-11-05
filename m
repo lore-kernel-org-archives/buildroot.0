@@ -1,65 +1,83 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 5 Nov 2016 22:50:16 +0100
-Subject: [Buildroot] [PATCH 1/3] support/download/git: log checked out
- sha1
-In-Reply-To: <20161101193354.8716-1-ricardo.martincoski@datacom.ind.br>
-References: <20161101193354.8716-1-ricardo.martincoski@datacom.ind.br>
-Message-ID: <6b271555-29d7-0b41-dd3f-698b2cd9724b@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 5 Nov 2016 23:03:12 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-11-04
+In-Reply-To: <20161105073056.4969320D86@mail.free-electrons.com>
+References: <20161105073056.4969320D86@mail.free-electrons.com>
+Message-ID: <df36574f-bff9-b295-2a82-825a13894f58@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Yann, Bernd,
 
-
-On 01-11-16 20:33, Ricardo Martincoski wrote:
-> In preparation to have automated tests for this script, display the
-> checked out sha1 in the build log.
+Le 05/11/2016 ? 08:30, Thomas Petazzoni a ?crit :
+> Hello,
 > 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
-> Another solution would be to use an environment variable set by the test
-> to print that info, e.g. if [ "1" == "${GIT_DOWNLOAD_AUTOTEST}" ]; then
-> ---
->  support/download/git | 6 ++++++
->  1 file changed, 6 insertions(+)
+> Build statistics for 2016-11-04
+> ================================
 > 
-> diff --git a/support/download/git b/support/download/git
-> index 7921411..7c44c65 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -85,6 +85,12 @@ if [ ${recurse} -eq 1 ]; then
->      _git submodule update --init --recursive
->  fi
->  
-> +# Log the sha1. It can be used for automated tests and debug.
-> +if [ -z ${verbose} ]; then
-
- It's quite weird to check that verbose is empty, but that's how the variable is
-defined... Perhaps s/verbose/quiet/ would be a good idea...
-
- Regards,
- Arnout
-
-
-> +    sha1=$(_git rev-parse HEAD)
-> +    printf "Checked out '%s'.\n" "${sha1}"
-> +fi
-> +
->  # We do not need the .git dir; we keep other .git files, in case they
->  # are the only files in their directory.
->  rm -rf .git
+>       successes : 179
+>        failures : 51 
+>        timeouts : 2  
+>           TOTAL : 232
 > 
+> Classification of failures by reason
+> ====================================
+> 
+> tvheadend-50a370707aedf5c12... | 3 
+> 
+> Detail of failures
+> ===================
+> 
+>     mips64el | tvheadend-50a370707aedf5c12... | NOK | http://autobuild.buildroot.net/results/42a515acf4693cce344ecaad4b0077a44a17e6ce
+>        nios2 | tvheadend-50a370707aedf5c12... | NOK | http://autobuild.buildroot.net/results/86f21884b08c4e8b4b77de4a6f72f1a5cea52400
+>        nios2 | tvheadend-50a370707aedf5c12... | NOK | http://autobuild.buildroot.net/results/8098ebf879b659c4da5c8d2d2cbdac5dd3d272ec
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+This is a Local issue with LC_ALL=C host and mkbundle python script.
+
+MKBUNDLE        bundle.c
+
+Traceback (most recent call last):
+  File
+"/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/support/mkbundle",
+line 172, in <module>
+    idx = add_entry(ents)
+  File
+"/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/support/mkbundle",
+line 151, in add_entry
+    tmp = add_entry(ents[k], d, k, idx, p)
+  File
+"/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/support/mkbundle",
+line 151, in add_entry
+    tmp = add_entry(ents[k], d, k, idx, p)
+  File
+"/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/support/mkbundle",
+line 151, in add_entry
+    tmp = add_entry(ents[k], d, k, idx, p)
+  File
+"/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/support/mkbundle",
+line 145, in add_entry
+    output_file(d, k, idx+1, p)
+  File
+"/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/support/mkbundle",
+line 72, in output_file
+    depf.write('  %s\\\n' % p)
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 135-136:
+ordinal not in range(128)
+make[1]: ***
+[/home/peko/autobuild/instance-1/output/build/tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657/build.linux/bundle.c]
+Error 1
+make[1]: *** Waiting for unfinished jobs....
+
+You can reproduce the issue easily by adding LC_ALL=C to TVHEADEND_BUILD_CMDS.
+Can we force the utf8 encoding ?
+
+Can you take a look ?
+
+Thanks!
+
+Best regards,
+Romain
