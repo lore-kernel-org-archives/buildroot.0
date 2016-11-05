@@ -1,199 +1,128 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 5 Nov 2016 18:17:35 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2016-09-05
-In-Reply-To: <6f4cecac-3402-039a-e98b-3a8b385a8647@gmail.com>
-References: <7d9ec97a-00bf-a29b-7119-6a5304eb70d4@gmail.com>
- <9a18dc1c-25bd-0925-1a78-dc7a5612d465@gmail.com>
- <20160911133437.GI6777@waldemar-brodkorb.de>
- <CANLo3JiyFZWqmjnxP09D_=j_DcmXL9Bo+cN+6p=GJ7m3ZMbaEg@mail.gmail.com>
- <6f4cecac-3402-039a-e98b-3a8b385a8647@gmail.com>
-Message-ID: <20161105171735.GL27313@waldemar-brodkorb.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 5 Nov 2016 18:19:56 +0100
+Subject: [Buildroot] [PATCH 1/2] makedevs: resync device creation with
+ upstream busybox
+In-Reply-To: <20161105133812.18485-1-arnout@mind.be>
+References: <20161105133812.18485-1-arnout@mind.be>
+Message-ID: <20161105171956.GF31560@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Romain Naour wrote,
+Arnout, All,
 
-> Hi Waldemar,
+On 2016-11-05 14:38 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> In upstream busbyox, the code to create devices has been simplified:
+> the code for a single and for multiple devices is no longer duplicated.
 > 
-> Le 13/09/2016 ? 08:56, Romain Naour a ?crit :
-> > Hi Waldemar,
-> > 
-> > Le 11 sept. 2016 15:34, "Waldemar Brodkorb" <wbx@openadk.org
-> > <mailto:wbx@openadk.org>> a ?crit :
-> >>
-> >> Hi ROmain,
-> >> Romain Naour wrote,
-> >>
-> >> > Hi Waldemar,
-> >> >
-> >> > I'm not sure you get this email, I had a "Delivery Status Notification
-> > (Failure)"
-> >>
-> >> I have the mail.
-> >>
-> >> > Hi Waldemar,
-> >> >
-> >> > Le 10/09/2016 ? 15:56, Waldemar Brodkorb a ?crit :
-> >> > > Hi Romain,
-> >> > > Romain Naour wrote,
-> >> > >
-> >> > >> Hi Thomas, Waldemar,
-> >> > >>
-> >> > >> Le 06/09/2016 ? 08:30, Thomas Petazzoni a ?crit :
-> >> > >>> Hello,
-> >> > >>>
-> >> > >>> This is the list of Buildroot build failures that occured on
-> >> > >>> 2016-09-05, and for which you are a registered architecture developer
-> >> > >>> or package developer. Please help us improving the quality of
-> >> > >>> Buildroot by investigating those build failures and sending patches to
-> >> > >>> fix them. Thanks!
-> >> > >>>
-> >> > >>> Build failures related to your packages:
-> >> > >>>
-> >> > >>>         bfin |                  xenomai-2.6.4 |
-> > http://autobuild.buildroot.net/results/fcae0611ac87204ab68d6828276b635d1a31a178
-> >> > >>>
-> >> > >>
-> >> > >> I think it's an issue between uClibc-ng and Xenomai on Blackfin due to
-> >> > >> pthread_atfork(), shm_open() and shm_unlink() local definition in Xenomai.
-> >> > >>
-> >> > >> Error:
-> >> > >> bind.c:(.text+0x20): multiple definition of `pthread_atfork'
-> >> > >> .libs/libxenomai_la-assert_context.o:assert_context.c:(.text+0x54): first
-> >> > >> defined here
-> >> > >>
-> >> > >> sem_heap.c:(.text+0xc): multiple definition of `shm_open'
-> >> > >> .libs/libxenomai_la-bind.o:bind.c:(.text+0x2c): first defined here
-> >> > >>
-> >> > >> sem_heap.c:(.text+0x24): multiple definition of `shm_unlink'
-> >> > >> .libs/libxenomai_la-bind.o:bind.c:(.text+0x44): first defined here
-> >> > >>
-> >> > >> It's because the Xenomai definition use declare these function as
-> > "inline" and
-> >> > >> not uClibc-ng
-> >> > >>
-> >> > >> Xenomai [1]:
-> >> > >> /* uClibc does not provide pthread_atfork() for this arch; provide it
-> >> > >>    here. Note: let the compiler decides whether it wants to actually
-> >> > >>    inline this routine, i.e. do not force always_inline. */
-> >> > >> inline __attribute__((weak)) int pthread_atfork(void (*prepare)(void),
-> >> > >>                                            void (*parent)(void),
-> >> > >>                                            void (*child)(void))
-> >> > >>
-> >> > >> uClibc-ng:
-> >> > >> extern int pthread_atfork (void (*__prepare) (void),
-> >> > >>                       void (*__parent) (void),
-> >> > >>                       void (*__child) (void)) __THROW;
-> >> > >>
-> >> > >> I guess those "inline" should be removed?
-> >> > >> Weldemar what do you think?
-> >> > >
-> >> > > I am in the middle of reworking libpthread/librt support in
-> >> > > uClibc-ng and found some problems in the way pthread_atfork is
-> >> > > declared.
-> >> > > I think the problems exist because of some backward compat support
-> >> > > in Gnu libc, see here for a nice summary:
-> >> > > http://ryanarn.blogspot.de/2011/07/curious-case-of-pthreadatfork-on.html
-> >> >
-> >> > Is the same issue for shm_open() and shm_unlink() ?
-> >>
-> >> Unsure, what is the thingie about shm_open().
-> >> I was just curious seeing pthread_atfork() problems while hacking on
-> >> the function :)
-> > 
-> > Ok, some investigation are needed but it seems the same issue... remove inline
-> > to fix the build...
-> > 
-> >>
-> >> > >
-> >> > > I think uClibc-ng should simply provide a usable pthread_atfork.
-> >> > > pthread_atfork is internally used by librt right now.
-> >> >
-> >> > Actually, it seems a bit weird to speak about pthread_atfork() for Blackfin
-> >> > which doesn't have a MMU so fork() is not available.
-> >> > I think that is why Xenomai try to define it on Blackfin, it doesn't expect
-> >> > pthread_atfork() to be provided by the libc.
-> >> >
-> >> > >
-> >> > > I hope I get some patch out for review in the next days.
-> >> >
-> >> > ok great :)
-> >> >
-> >> > >
-> >> > > I think uClibc-ng for NPTL and Linuxthreads should provide a usable
-> >> > > pthread_atfork(). So Xenomai does not need to provide their own.
-> >> >
-> >> > So even on Blackfin ?
-> >>
-> >> You are right, I should stop smoking bad things ;)
-> >> What should we do for noMMU targets? Provide a dummy or just do not
-> >> export any pthread_atfork() function?
-> > 
-> > I'm far to be an expert on no-MMU platform but yes, it seems we not need to
-> > export pthread_atfork function.
-> > 
-> > I'm not sure if we also need to do the same for shm_* functions...
+> Since we are going to change the device creation code next, it's
+> convenient to have only one copy to modify.
 > 
-> I'm looking at this failure again and I'm wondering how Xenomai can even work on
-> bflin with the pthread_atfork() from uClibc-ng.
+> There are two behavioural changes with this, but they were introduced
+> silently together with other commits in upstream busybox.
 > 
-> The uClibc-ng functions pthread_atfork() return an error (-1) when
-> __ARCH_USE_MMU__ is not defined. So all Xenomai skins will fail during their
-> initialization.
+> - When mknod() fails, the chmod was still done. This is pointless so it
+>   is no longer done now.
 > 
-> /* We can't support pthread_atfork without MMU, since we don't have
->    fork(), and we can't offer the correct semantics for vfork().  */
-> int pthread_atfork(void (*prepare)(void),
-> 		   void (*parent)(void),
-> 		   void (*child)(void))
-> {
->   /* ENOMEM is probably pushing it a little bit.
->      Take it as `no *virtual* memory' :-)  */
->   errno = ENOMEM;
->   return -1;
-> }
+> - There was a check for mode != -1; however, a mode of -1 would not
+>   have worked anyway because all bits would be set for mknod(), which
+>   would fail. So this check is redundant.
 > 
-> Xenomai pthread_atfork() silently return success.
-> 
-> /* uClibc does not provide pthread_atfork() for this arch; provide it
->    here. Note: let the compiler decides whether it wants to actually
->    inline this routine, i.e. do not force always_inline. */
-> inline __attribute__((weak)) int pthread_atfork(void (*prepare)(void),
-> 						void (*parent)(void),
-> 						void (*child)(void))
-> {
-> 	return 0;
-> }
-> 
-> I would say that uClibc-ng shouldn't export a dummy pthread_atfork() on noMMU
-> platform.
-> 
-> Concerning shm_* functions, it seems that the weak attribute is discarded for
-> inline functions. See handle_weak_attribute() in gcc code, especially the
-> no_add_attrs argument.
-> 
-> That's why we have the following warning and then a symbol redefinition while
-> linking:
-> 
-> warning: inline function 'shm_open' declared weak [-Wattributes]
-> [...]
-> .libs/libxenomai_la-bind.o: In function `pthread_atfork':
-> bind.c:(.text+0x20): multiple definition of `pthread_atfork'
-> .libs/libxenomai_la-assert_context.o:assert_context.c:(.text+0x54): first
-> defined here
-> 
-> For the next Buildroot release it would be safer to disable Xenomai userspace
-> package for noMMU build.
-> 
-> Thoughts?
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Yes. Could you send patches to fix the two issues to the uClibc-ng
-mailinglist? That would be cool.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-best regards
- Waldemar
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/makedevs/makedevs.c | 47 +++++++++++++++------------------------------
+>  1 file changed, 15 insertions(+), 32 deletions(-)
+> 
+> diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+> index cacb144..7092b14 100644
+> --- a/package/makedevs/makedevs.c
+> +++ b/package/makedevs/makedevs.c
+> @@ -599,6 +599,8 @@ int main(int argc, char **argv)
+>  		} else
+>  		{
+>  			dev_t rdev;
+> +			unsigned i;
+> +			char *full_name_inc;
+>  
+>  			if (type == 'p') {
+>  				mode |= S_IFIFO;
+> @@ -614,43 +616,24 @@ int main(int argc, char **argv)
+>  				goto loop;
+>  			}
+>  
+> -			if (count > 0) {
+> -				int i;
+> -				char *full_name_inc;
+> -
+> -				full_name_inc = xmalloc(strlen(full_name) + 8);
+> -				for (i = 0; i < count; i++) {
+> -					sprintf(full_name_inc, "%s%d", full_name, start + i);
+> -					rdev = makedev(major, minor + i * increment);
+> -					if (mknod(full_name_inc, mode, rdev) == -1) {
+> -						bb_perror_msg("line %d: Couldnt create node %s", linenum, full_name_inc);
+> -						ret = EXIT_FAILURE;
+> -					}
+> -					else if (chown(full_name_inc, uid, gid) == -1) {
+> -						bb_perror_msg("line %d: chown failed for %s", linenum, full_name_inc);
+> -						ret = EXIT_FAILURE;
+> -					}
+> -					if ((mode != -1) && (chmod(full_name_inc, mode) < 0)){
+> -						bb_perror_msg("line %d: chmod failed for %s", linenum, full_name_inc);
+> -						ret = EXIT_FAILURE;
+> -					}
+> -				}
+> -				free(full_name_inc);
+> -			} else {
+> -				rdev = makedev(major, minor);
+> -				if (mknod(full_name, mode, rdev) == -1) {
+> -					bb_perror_msg("line %d: Couldnt create node %s", linenum, full_name);
+> +			full_name_inc = xmalloc(strlen(full_name) + sizeof(int)*3 + 2);
+> +			if (count)
+> +				count--;
+> +			for (i = start; i <= start + count; i++) {
+> +				sprintf(full_name_inc, count ? "%s%u" : "%s", full_name, i);
+> +				rdev = makedev(major, minor + (i - start) * increment);
+> +				if (mknod(full_name_inc, mode, rdev) < 0) {
+> +					bb_perror_msg("line %d: can't create node %s", linenum, full_name_inc);
+>  					ret = EXIT_FAILURE;
+> -				}
+> -				else if (chown(full_name, uid, gid) == -1) {
+> -					bb_perror_msg("line %d: chown failed for %s", linenum, full_name);
+> +				} else if (chown(full_name_inc, uid, gid) < 0) {
+> +					bb_perror_msg("line %d: can't chown %s", linenum, full_name_inc);
+>  					ret = EXIT_FAILURE;
+> -				}
+> -				if ((mode != -1) && (chmod(full_name, mode) < 0)){
+> -					bb_perror_msg("line %d: chmod failed for %s", linenum, full_name);
+> +				} else if (chmod(full_name_inc, mode) < 0) {
+> +					bb_perror_msg("line %d: can't chmod %s", linenum, full_name_inc);
+>  					ret = EXIT_FAILURE;
+>  				}
+>  			}
+> +			free(full_name_inc);
+>  		}
+>  loop:
+>  		free(line);
+> -- 
+> 2.9.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
