@@ -1,73 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  5 Nov 2016 15:24:59 +0100
-Subject: [Buildroot] [PATCH] configs/mini2440_defconfig: remove defconfig
-Message-ID: <1478355899-30146-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: daggs <daggs@gmx.com>
+Date: Sat, 5 Nov 2016 15:32:16 +0100
+Subject: [Buildroot] [PATCH v5] kodi: allow enablement of libamcodec as
+ codec if selected
+In-Reply-To: <20161105131616.554ec4b0@free-electrons.com>
+References: <20161104154727.19939-1-daggs@gmx.com>,
+ <20161105131616.554ec4b0@free-electrons.com>
+Message-ID: <trinity-ecea44a5-17fb-4e08-8387-56351c423a8c-1478356336355@3capp-mailcom-bs15>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This defconfig has not been updated in any significant way since 2011,
-when Peter moved it to use a mainline kernel. It's now using an
-ancient 3.0 kernel, and a vendor-specific U-Boot version that fails to
-build with various "undefined reference" errors:
+Greetings Thomas,
 
-  undefined reference to `show_boot_progress'
-  undefined reference to `image_print_contents'
-  undefined reference to `wait_ms'
+> Sent: Saturday, November 05, 2016 at 2:16 PM
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: "Dagg Stompler" <daggs@gmx.com>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH v5] kodi: allow enablement of libamcodec as codec if selected
+>
+> Hello,
+> 
+> On Fri,  4 Nov 2016 17:47:27 +0200, Dagg Stompler wrote:
+> > allow usage of amcodec if kodi is built and libamcodec is selected
+> > 
+> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> 
+> Thanks for the new iteration. However, I believe there's a
+> better/simpler way to achieve this.
+> 
+> > diff --git a/package/kodi/0012-support_libamcodec_cross_compile.patch b/package/kodi/0012-support_libamcodec_cross_compile.patch
+> > new file mode 100644
+> > index 0000000..97feb8c
+> > --- /dev/null
+> > +++ b/package/kodi/0012-support_libamcodec_cross_compile.patch
+> > @@ -0,0 +1,24 @@
+> > +kodi: fix amcodec includes for cross compilation.
+> > +
+> > +when building kodi over buildroot with amcodec set, the include paths differs from
+> > +native installation. this occurs because the prefix is not set.
+> > +so by supplying the LIBAMCODEC_INCLUDE_PATH upon compilation, this issue is resolved.
+> > +
+> > +Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> > +
+> > +--- a/xbmc/cores/dvdplayer/DVDCodecs/Video/Makefile.in	2016-11-04 11:46:19.000000000 +0200
+> > ++++ b/xbmc/cores/dvdplayer/DVDCodecs/Video/Makefile.in	2016-11-04 11:47:13.000000000 +0200
+> > +@@ -26,8 +26,11 @@ endif
+> > + ifeq (@USE_LIBAMCODEC@,1)
+> > + SRCS += AMLCodec.cpp
+> > + SRCS += DVDVideoCodecAmlogic.cpp
+> > +-INCLUDES += -I$(prefix)/include/amcodec
+> > +-INCLUDES += -I$(prefix)/include/amplayer
+> > ++ifeq (${LIBAMCODEC_INCLUDE_PATH},)
+> > ++LIBAMCODEC_INCLUDE_PATH=$(prefix)
+> > ++endif
+> > ++INCLUDES += -I${LIBAMCODEC_INCLUDE_PATH}/include/amcodec
+> > ++INCLUDES += -I${LIBAMCODEC_INCLUDE_PATH}/include/amplayer
+> > + endif
+> 
+> Just have a patch that deletes those two lines:
+> 
+> > +-INCLUDES += -I$(prefix)/include/amcodec
+> > +-INCLUDES += -I$(prefix)/include/amplayer
+> 
+> > +else ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
+> > +KODI_DEPENDENCIES += libamcodec
+> > +KODI_CONF_OPTS += --enable-codec=amcodec
+> > +KODI_MAKE_OPTS += LIBAMCODEC_INCLUDE_PATH=${STAGING_DIR}/usr
+> 
+> And, then, something like this (it includes reworking existing RPi
+> related code):
+> 
+> ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+> KODI_DEPENDENCIES += rpi-userland
+> KODI_CONF_OPTS += --with-platform=raspberry-pi --enable-player=omxplayer
+> KODI_INCLUDES += \
+> 	-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
+> 	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux
+> KODI_LIBS += -lvcos -lvchostif
+> endif
+> 
+> ...
+> else ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
+> KODI_DEPENDENCIES += libamcodec
+> KODI_CONF_OPTS += --enable-codec=amcodec
+> KODI_INCLUDES += \
+> 	$(STAGING_DIR)/usr/include/amcodec \
+> 	$(STAGING_DIR)/usr/include/amplayer
+> endif
+> 
+> KODI_CONF_ENV += \
+> 	INCLUDES="$(KODI_INCLUDES)" \
+> 	LIBS="$(KODI_LIBS)"
+> 
+imho, this might be the simpler way but isn't the right way for kodi 16 as there is an existing code for it.
+that said, in kodi 17 the code has changed and the submitted patch isn't relevant anymore.
+I'll try the kodi 17 fix on the current latest git, if it works I'll submit it to the list.
 
-So it's time to get rid of the defconfig for this platform.
+Dagg.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-Of course, if anyone has access to this platform and is interested in
-having a defconfig in Buildroot, it's possible: just let us know, and
-send a patch updating the defconfig. Thanks!
----
- configs/mini2440_defconfig | 34 ----------------------------------
- 1 file changed, 34 deletions(-)
- delete mode 100644 configs/mini2440_defconfig
-
-diff --git a/configs/mini2440_defconfig b/configs/mini2440_defconfig
-deleted file mode 100644
-index 2891d10..0000000
---- a/configs/mini2440_defconfig
-+++ /dev/null
-@@ -1,34 +0,0 @@
--# Architecture
--BR2_arm=y
--BR2_arm920t=y
--
--# Serial port
--BR2_TARGET_GENERIC_GETTY=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttySAC0"
--
--# Filesystem
--BR2_TARGET_ROOTFS_JFFS2=y
--BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
--BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x800
--BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x20000
--BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
--BR2_TARGET_ROOTFS_JFFS2_LE=y
--BR2_TARGET_ROOTFS_TAR=y
--
--# Linux headers same as kernel, a 3.0 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
--
--# Bootloader
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="mini2440"
--BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://repo.or.cz/w/u-boot-openmoko/mini2440.git/snapshot/dev-mini2440-stable.tar.gz"
--
--#
--# Kernel
--#
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.0.4"
--BR2_LINUX_KERNEL_DEFCONFIG="mini2440"
--BR2_LINUX_KERNEL_UIMAGE=y
--- 
-2.7.4
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> 
