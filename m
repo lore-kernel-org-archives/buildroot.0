@@ -1,54 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 13:43:05 +0100
-Subject: [Buildroot] [PATCH] pseudo: fix build for python3 based distros
-In-Reply-To: <20161105035549.18698-2-gael.portay@savoirfairelinux.com>
-References: <20161105035549.18698-1-gael.portay@savoirfairelinux.com>
- <20161105035549.18698-2-gael.portay@savoirfairelinux.com>
-Message-ID: <20161105134305.463e1cc2@free-electrons.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 5 Nov 2016 10:50:19 -0200
+Subject: [Buildroot] [PATCH 0/2] core: revert to using fakeroot instead
+	of pseudo
+In-Reply-To: <20161105123115.GD31560@free.fr>
+References: <cover.1478342758.git.yann.morin.1998@free.fr>
+ <20161105123115.GD31560@free.fr>
+Message-ID: <CAOMZO5D_o4xivmHu_jwO==tr0-pcia=Z+Yx4wKLOV7u-ZUqFEQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Yann,
 
-On Fri,  4 Nov 2016 23:55:49 -0400, Ga?l PORTAY wrote:
-> Pseudo is not python3 friendly. It causes build failure on distros using
-> python3 as default python interpretor.
-> 
-> ./maketables enums/*.in
->   File "./makewrappers", line 327
->     return """/* This function is not called if pseudo is configured --enable-force-async */
->                                                                                            ^
-> TabError: inconsistent use of tabs and spaces in indentation
->   File "./maketables", line 76
->     print "Flags: set for %s" % self.name
->                             ^
-> SyntaxError: Missing parentheses in call to 'print'
-> make[2]: *** [Makefile:150: wrappers] Error 1
-> make[2]: *** Waiting for unfinished jobs....
-> make[2]: *** [Makefile:147: tables] Error 1
-> 
-> Those patches make pseudo works with python2 and python3.
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
->  .../0001-Fix-mixed-tab-space-indentation.patch     | 105 ++++++++++
->  .../0002-Fix-missing-parentheses-at-print.patch    | 190 ++++++++++++++++++
->  .../0003-Make-it-compatible-with-python3.patch     | 215 +++++++++++++++++++++
->  3 files changed, 510 insertions(+)
->  create mode 100644 package/pseudo/0001-Fix-mixed-tab-space-indentation.patch
->  create mode 100644 package/pseudo/0002-Fix-missing-parentheses-at-print.patch
->  create mode 100644 package/pseudo/0003-Make-it-compatible-with-python3.patch
+On Sat, Nov 5, 2016 at 10:31 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 
-Applied to master, thanks. My understanding is that you are already in
-touch with upstream to get them merged, right?
+> After discussing the matter on IRC, we've decided to go another route,
+> to instead fix makedevs to make it check the file and accept if its
+> already the expected type, and only bail out if not.
 
-Thanks!
+Ok, great. I will be glad to test the new approach.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks
