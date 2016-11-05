@@ -1,99 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Nov 2016 10:30:51 +0100
-Subject: [Buildroot] [PATCH] makedevs: unlink device nodes before they
- are created
-In-Reply-To: <20161105001452.7252-1-arnout@mind.be>
-References: <20161105001452.7252-1-arnout@mind.be>
-Message-ID: <20161105093051.GB31560@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 5 Nov 2016 11:29:28 +0100
+Subject: [Buildroot] [PATCH 6/8] python-libxml2: new host package
+In-Reply-To: <cc97f194-ec81-9b44-fe2f-a1467873a279@mind.be>
+References: <1476321239-13894-1-git-send-email-gustavo@zacarias.com.ar>
+ <1476321239-13894-6-git-send-email-gustavo@zacarias.com.ar>
+ <20161028153255.5c0e15d3@free-electrons.com>
+ <b36b76d3-1267-b583-1ec5-8884a68f8eac@zacarias.com.ar>
+ <cc97f194-ec81-9b44-fe2f-a1467873a279@mind.be>
+Message-ID: <20161105112928.73a588b0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hello,
 
-On 2016-11-05 01:14 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> We use makedevs to create device nodes in the target rootfs. However,
-> this can be called several times, e.g. when building several filesystem
-> images or when rebuilding. When the script is called the second time,
-> the device node already exists so mknod() errors out.
-> 
-> This wasn't noticed before because fakeroot's mknod() wrapper
-> (incorrectly) does _not_ error out when the file exists already. Now
-> we switched from fakeroot to pseudo, the problem becomes apparent.
-> 
-> The simplest solution is to change makedevs to first remove the target
-> file before creating it. This is simpler than two alternative
-> approaches:
-> 
-> - Removing the target files before makedevs is called is difficult,
->   because we would have to parse the device table file to find out
->   which files have to be deleted.
-> 
-> - Silently skipping device creation if it exists already is also easy,
->   but then we really should also check if the device numbers and mode
->   are correct, and that is more complicated.
-> 
-> The other types don't have to be changed. The 'd' (directory) type is
-> already OK because it already only creates directories if they don't
-> exist yet. The 'f' (file mode) and 'r' (recursive) types only operate
-> on files and directories that exist already.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Reported-by: Fabio Estevam <festevam@gmail.com>
+On Sat, 5 Nov 2016 00:47:04 +0100, Arnout Vandecappelle wrote:
 
-NAK: we really do not want that files exist in the target in case they
-are configured as device nodes in a dev-table. This should not happen.
-
-That it works now is just an ill side-effect of fakeroot being lenient.
-That it breaks with pseudo is good.
-
-The fix is far from trivial, though, but we should handle the situation
-via pseudo, and understand why it does not reload its DB.
-
-If we can't fix our use of pseudo, then we should revertt to using
-fakeroot for this release cycle.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/makedevs/makedevs.c | 2 ++
->  1 file changed, 2 insertions(+)
+> >>  * The libxml2 package gains a sub-option
+> >>    BR2_PACKAGE_HOST_LIBXML2_PYTHON, which allows to enable python
+> >>    support. Of course, later we could add BR2_PACKAGE_HOST_LIBXML2 as
+> >>    well, and fix the packages that depend on host-libxml2, but it can
+> >>    be done later.  
+> > 
+> > We currently have no BR2_PACKAGE_HOST_LIBXML2 option so we should add that and
+> > make host-libxml2 depend on host-python when the python option is enabled, and
+> > make packages select host-libxml2 as well (+ python for host-itstool).
+> > It's basically a half-way to achieving the first point, even though quick i'm
+> > not a big fan.  
 > 
-> diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
-> index cacb144..d477292 100644
-> --- a/package/makedevs/makedevs.c
-> +++ b/package/makedevs/makedevs.c
-> @@ -622,6 +622,7 @@ int main(int argc, char **argv)
->  				for (i = 0; i < count; i++) {
->  					sprintf(full_name_inc, "%s%d", full_name, start + i);
->  					rdev = makedev(major, minor + i * increment);
-> +					unlink(full_name_inc);
->  					if (mknod(full_name_inc, mode, rdev) == -1) {
->  						bb_perror_msg("line %d: Couldnt create node %s", linenum, full_name_inc);
->  						ret = EXIT_FAILURE;
-> @@ -638,6 +639,7 @@ int main(int argc, char **argv)
->  				free(full_name_inc);
->  			} else {
->  				rdev = makedev(major, minor);
-> +				unlink(full_name);
->  				if (mknod(full_name, mode, rdev) == -1) {
->  					bb_perror_msg("line %d: Couldnt create node %s", linenum, full_name);
->  					ret = EXIT_FAILURE;
-> -- 
-> 2.9.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  I'm also no big fan. Especially because the first one is where we want to go
+> eventually, so this would really just be a stop-gap measure.
 
+Well, between option (1) and (2) that I proposed, it's the same debate
+between "implicit dependencies" and "explicit dependencies", which we
+already have for target packages:
+
+ - Option 1 is: the host-libxml2 package automatically enables its
+   Python binding if host-python is enabled.
+
+ - Option 2 is: the host-libxml2 has a sub-option that allows to
+   explicitly enable/disable its Python binding
+
+Just like we have a mix of (1) and (2) for target packages depending on
+the situation, I guess we might have a similar mix for host packages,
+no?
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
