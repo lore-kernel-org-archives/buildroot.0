@@ -1,34 +1,49 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 5 Nov 2016 13:03:26 -0200
-Subject: [Buildroot] [PATCH 1/2] makedevs: resync device creation with
- upstream busybox
-In-Reply-To: <20161105133812.18485-1-arnout@mind.be>
+Date: Sat, 5 Nov 2016 13:04:08 -0200
+Subject: [Buildroot] [PATCH 2/2] makedevs: make device node creation
+	idempotent
+In-Reply-To: <20161105133812.18485-2-arnout@mind.be>
 References: <20161105133812.18485-1-arnout@mind.be>
-Message-ID: <CAOMZO5DOSD4HezdQYJ6tQ43q_kCZHx7J9qQrUwpsanYCijDBJw@mail.gmail.com>
+ <20161105133812.18485-2-arnout@mind.be>
+Message-ID: <CAOMZO5A1DNKX2Wnf=BHd8wBiKfUmU1mp86WFR_96bWOGFyc5pA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout,
+
 On Sat, Nov 5, 2016 at 11:38 AM, Arnout Vandecappelle (Essensium/Mind)
 <arnout@mind.be> wrote:
-> In upstream busbyox, the code to create devices has been simplified:
-> the code for a single and for multiple devices is no longer duplicated.
+> We use makedevs to create device nodes in the target rootfs. However,
+> this can be called several times, e.g. when building several filesystem
+> images or when rebuilding. When makedevs is called the second time, the
+> device node already exists so mknod() errors out.
 >
-> Since we are going to change the device creation code next, it's
-> convenient to have only one copy to modify.
+> This wasn't noticed before because fakeroot's mknod() wrapper
+> (incorrectly) does _not_ error out when the file exists already. Now
+> we switched from fakeroot to pseudo, the problem becomes apparent.
 >
-> There are two behavioural changes with this, but they were introduced
-> silently together with other commits in upstream busybox.
+> Before creating the device node, check if it already exists and if so,
+> if it has the correct device type and number. Change of mode and
+> ownership is still done.
 >
-> - When mknod() fails, the chmod was still done. This is pointless so it
->   is no longer done now.
+> This approach was preferred over removing the target files before
+> creating them, which would be simpler. However, when e.g. a file exists
+> as a normal file and makedevs specifies it as a device node, that
+> really is an error so we should detect it.
 >
-> - There was a check for mode != -1; however, a mode of -1 would not
->   have worked anyway because all bits would be set for mknod(), which
->   would fail. So this check is redundant.
+> The other types don't have to be changed. The 'd' (directory) type is
+> already OK because it already only creates directories if they don't
+> exist yet. The 'f' (file mode) and 'r' (recursive) types only operate
+> on files and directories that exist already.
+>
+> Patch also sent upstream to busybox.
 >
 > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Reported-by: Fabio Estevam <festevam@gmail.com>
+
+This fixes the build error I was seeing, thanks:
 
 Tested-by: Fabio Estevam <festevam@gmail.com>
