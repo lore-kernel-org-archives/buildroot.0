@@ -1,27 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 15:04:05 +0100
-Subject: [Buildroot] qmx6_defconfig fails to build
-Message-ID: <20161105150405.705835a4@free-electrons.com>
+Date: Sat, 5 Nov 2016 15:05:29 +0100
+Subject: [Buildroot] roseapplepi_defconfig fails to build
+Message-ID: <20161105150529.2e72435a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stephan, J?r?me, Gary,
+Hello Peter,
 
-All of you have touched the qmx6_defconfig in Buildroot: Stephan is the
-original submitter (in 2014), J?r?me did some improvements in April
-2015, and then Gary updated the kernel version two times in 2015.
-
-However, today, this defconfig fails to build, because the U-Boot
-version being used is too old to build with gcc 5.x.
-
-If you still have access to the HW, could you submit a patch that
-updates the defconfig to make it build with gcc 5.x ?
+Earlier this year, you added the roseapplepi_defconfig in Buildroot.
+However, this defconfig now fails to build its kernel with gcc 5.x.
+Since you have access to the HW, could you submit a patch to update the
+defconfig?
 
 See the full build log at
-http://free-electrons.com/~thomas/pub/buildroot-defconfigs/qmx6_defconfig.log.FAIL.
+http://free-electrons.com/~thomas/pub/buildroot-defconfigs/roseapplepi_defconfig.log.FAIL.
 
 Thanks!
 
