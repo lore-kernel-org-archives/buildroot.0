@@ -1,53 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 23:33:37 +0100
-Subject: [Buildroot] [git commit] configs/kb9202_defconfig: remove defconfig
-Message-ID: <20161105223406.C338F817B6@busybox.osuosl.org>
+Date: Sat, 5 Nov 2016 23:34:10 +0100
+Subject: [Buildroot] [PATCH] package/pseudo: update version
+In-Reply-To: <1478363694-21168-1-git-send-email-yann.morin.1998@free.fr>
+References: <1478363694-21168-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20161105233410.0d01eae9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8dc4d065123acb7e1a0763ae851b060b97a39db7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This configuration for the KwikByte KB9202 was added back in July 2008
-(commit e27fef51834042a1b108e04927a2a91742a54327), and was never
-updated since then. It still uses a 2.6.38 kernel, with the out of
-tree patches from the former AT91 kernel maintainer. The board has
-been discontinued according to its page at
-http://www.kwikbyte.com/KB9202.html.
+On Sat,  5 Nov 2016 17:34:54 +0100, Yann E. MORIN wrote:
+> Brings in a fix about externded attributes (xattrs).
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/pseudo/pseudo.hash | 2 +-
+>  package/pseudo/pseudo.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-This defconfig no longer builds since the switch to gcc 5.x as the
-default. Therefore, it's time to get rid of this defconfig.
+Applied to master, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/kb9202_defconfig | 17 -----------------
- 1 file changed, 17 deletions(-)
-
-diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
-deleted file mode 100644
-index 0aea0eb..0000000
---- a/configs/kb9202_defconfig
-+++ /dev/null
-@@ -1,17 +0,0 @@
--# Architecture
--BR2_arm=y
--BR2_arm920t=y
--
--# Filesystem
--BR2_TARGET_ROOTFS_TAR=y
--
--# Linux headers same as kernel, a 2.6 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD=y
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.8"
--BR2_LINUX_KERNEL_PATCH="http://maxim.org.za/AT91RM9200/2.6/2.6.38-at91.patch.gz"
--BR2_LINUX_KERNEL_USE_DEFCONFIG=y
--BR2_LINUX_KERNEL_DEFCONFIG="kb9202"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
