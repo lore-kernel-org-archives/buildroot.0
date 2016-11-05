@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 23:34:36 +0100
-Subject: [Buildroot] [PATCH for-next] Makefile: delete default rules
-In-Reply-To: <20161105210508.7930-1-arnout@mind.be>
-References: <20161105210508.7930-1-arnout@mind.be>
-Message-ID: <20161105233436.764c9d44@free-electrons.com>
+Date: Sat, 5 Nov 2016 23:36:00 +0100
+Subject: [Buildroot] [PATCH] binutils: add upstream patch to fix open
+ microblaze issue
+In-Reply-To: <20161105154219.GA6142@waldemar-brodkorb.de>
+References: <20161105154219.GA6142@waldemar-brodkorb.de>
+Message-ID: <20161105233600.22cddfbd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 5 Nov 2016 22:05:08 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> We don't use the default implicit rules that are added by make, so
-> they just slow down the Makefile processing. The default implicit
-> rules can be removed by defining an empty .SUFFIXES: target.
+On Sat, 5 Nov 2016 16:42:19 +0100, Waldemar Brodkorb wrote:
+> This reenables the use of 2.27 for microblaze.
 > 
-> This speeds up the start of the build on my machine from 5.6s to
-> 4.9s.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  Makefile | 3 +++
->  1 file changed, 3 insertions(+)
+>  ...-Set-dynamic-tag-VMA-and-size-from-dynami.patch | 36 ++++++++++++++++++++++
+>  package/binutils/Config.in.host                    |  3 --
+>  2 files changed, 36 insertions(+), 3 deletions(-)
+>  create mode 100644 package/binutils/2.27/0900-Revert-part-Set-dynamic-tag-VMA-and-size-from-dynami.patch
 
-Applied to next, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
