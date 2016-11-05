@@ -1,38 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 23:33:45 +0100
-Subject: [Buildroot] [PATCH] configs/kb9202_defconfig: remove defconfig
-In-Reply-To: <1478353554-29400-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1478353554-29400-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20161105233345.737796c8@free-electrons.com>
+Date: Sat, 5 Nov 2016 23:34:02 +0100
+Subject: [Buildroot] [git commit] package/pseudo: update version
+Message-ID: <20161105223406.CE0DA7FFA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bafd08a1625d5ee3be0f5918919185f477dee008
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  5 Nov 2016 14:45:54 +0100, Thomas Petazzoni wrote:
-> This configuration for the KwikByte KB9202 was added back in July 2008
-> (commit e27fef51834042a1b108e04927a2a91742a54327), and was never
-> updated since then. It still uses a 2.6.38 kernel, with the out of
-> tree patches from the former AT91 kernel maintainer. The board has
-> been discontinued according to its page at
-> http://www.kwikbyte.com/KB9202.html.
-> 
-> This defconfig no longer builds since the switch to gcc 5.x as the
-> default. Therefore, it's time to get rid of this defconfig.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  configs/kb9202_defconfig | 17 -----------------
->  1 file changed, 17 deletions(-)
->  delete mode 100644 configs/kb9202_defconfig
+Brings in a fix about externded attributes (xattrs).
 
-Applied to master, thanks.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pseudo/pseudo.hash | 2 +-
+ package/pseudo/pseudo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pseudo/pseudo.hash b/package/pseudo/pseudo.hash
+index 5822d0e..1553a29 100644
+--- a/package/pseudo/pseudo.hash
++++ b/package/pseudo/pseudo.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  d7767c9a73b0df4f1f26952cf5eca4c6ff6fc4bc5ef15a904ea3839c70161936  pseudo-7abc9396731149df5eaf43c84fed4f3053b64de6.tar.gz
++sha256  7d4b767302f118fa1c3f89b551cf3f3f2aa92721dab86ff62f0600a394b8a81a  pseudo-45eca34c754d416a38bee90fb2d3c110a0b6cc5f.tar.gz
+diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
+index ed348f1..67538a6 100644
+--- a/package/pseudo/pseudo.mk
++++ b/package/pseudo/pseudo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PSEUDO_VERSION = 7abc9396731149df5eaf43c84fed4f3053b64de6
++PSEUDO_VERSION = 45eca34c754d416a38bee90fb2d3c110a0b6cc5f
+ PSEUDO_SITE = https://git.yoctoproject.org/git/pseudo
+ PSEUDO_SITE_METHOD = git
+ 
