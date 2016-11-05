@@ -1,28 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 23:32:21 +0100
-Subject: [Buildroot] [PATCH/next 1/2] package/sudo: add optional support
- for zlib
-In-Reply-To: <20161105155753.25503-1-bernd.kuhls@t-online.de>
-References: <20161105155753.25503-1-bernd.kuhls@t-online.de>
-Message-ID: <20161105233221.72939828@free-electrons.com>
+From: Jan Viktorin <viktorin@rehivetech.com>
+Date: Sat, 5 Nov 2016 23:23:03 +0100
+Subject: [Buildroot] olimex_a20_olinuxino_lime2_defconfig fails to build
+In-Reply-To: <20161105150007.4a4f8622@free-electrons.com>
+References: <20161105150007.4a4f8622@free-electrons.com>
+Message-ID: <20161105232303.5f86b7af@jvn>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sat, 5 Nov 2016 15:00:07 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-On Sat,  5 Nov 2016 16:57:52 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/sudo/sudo.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+> Hello Jan,
+> 
+> Last year, you contributed the olimex_a20_olinuxino_lime2_defconfig to
+> Buildroot. Unfortunately, this defconfig now fails to build, due to a
+> U-Boot version that is too old to build with gcc 5.x.
+> 
+> Since it's using a mainline version of U-Boot, could you have a look at
+> bumping the U-Boot version to fix this problem, if you still have
+> access to this HW ?
 
-Both applied to next, thanks.
+Yes I have. I will try to check it.
 
-Thomas
+Regards
+Jan
+
+> 
+> See
+> http://free-electrons.com/~thomas/pub/buildroot-defconfigs/olimex_a20_olinuxino_lime2_defconfig.log.FAIL
+> for the full build log.
+> 
+> Thanks!
+> 
+> Thomas
+
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  Jan Viktorin                E-mail: Viktorin at RehiveTech.com
+  System Architect            Web:    www.RehiveTech.com
+  RehiveTech
+  Brno, Czech Republic
