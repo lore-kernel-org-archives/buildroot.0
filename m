@@ -1,28 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Nov 2016 10:23:54 +0100
+Date: Sat, 5 Nov 2016 10:26:38 +0100
 Subject: [Buildroot] warp7_defconfig build error
-In-Reply-To: <CAOMZO5BqVbb8PUQvFcwLB2Dnc2jRD_h0gtPY3Yc2CSywi-rsyw@mail.gmail.com>
+In-Reply-To: <CAOMZO5DsdPO=S1zqEpLyaiDuexxMFKNiLnw0AHdhxauOVhvisw@mail.gmail.com>
 References: <CAOMZO5CjVc=qA2u95KydQrLkkjTUZUdB8t+v_QdX-NViRJs4LQ@mail.gmail.com>
- <b6863c63-d744-1e73-20b0-c895d9e74012@mind.be>
- <CAOMZO5BqVbb8PUQvFcwLB2Dnc2jRD_h0gtPY3Yc2CSywi-rsyw@mail.gmail.com>
-Message-ID: <20161105092354.GB3743@free.fr>
+ <CAOMZO5AjUAJqMuny_xn3OHEhdvtiZwkAQB-zJcZDvFr+z=LVTA@mail.gmail.com>
+ <20161104212727.GB3766@free.fr>
+ <CAOMZO5DsdPO=S1zqEpLyaiDuexxMFKNiLnw0AHdhxauOVhvisw@mail.gmail.com>
+Message-ID: <20161105092638.GA31560@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2016-11-04 21:47 -0200, Fabio Estevam spake thusly:
-> On Fri, Nov 4, 2016 at 9:20 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >  I only get this error when makedevs is run for the second time, i.e. when
-> > building the tarball, not the ext2. But perhaps you took this log by re-running
-> > the build?
-> The error happens for me even if I start a fresh build:
-> make clean
-> make warp7_defconfig
-> make
+Fabio, All,
 
-Yep, I could reproduce as well.
+On 2016-11-04 21:50 -0200, Fabio Estevam spake thusly:
+> On Fri, Nov 4, 2016 at 7:27 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > We've recently switched to using pseudo instead of fakeroot (in an
+> > attempt to solve #9286). But this is causing more problems.
+> >
+> > We're investigating a solution, but it's not trivial.
+> >
+> > In the meantime, you can try reverting ade91bc and 3cd88f1 (which we may
+> > end up doing if we can't find a solution quickly).
+> 
+> Are these commit IDs correct? They don't seem to exist in my tree:
+
+Damn. They are the commits I have locally that do the revert! :-)
+
+The commits you want to revert are:
+    325cff3 package/fakeroot: remove
+    8035ceb fs: use pseudo instead of fakeroot
 
 Regards,
 Yann E. MORIN.
