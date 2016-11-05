@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 17:12:03 +0100
-Subject: [Buildroot] [PATCH v6] kodi: allow enablement of libamcodec as
- codec if selected
-In-Reply-To: <20161105154042.11063-1-daggs@gmx.com>
-References: <20161105154042.11063-1-daggs@gmx.com>
-Message-ID: <20161105171203.216e4ffc@free-electrons.com>
+Date: Sat, 5 Nov 2016 17:16:36 +0100
+Subject: [Buildroot] freescale_imx31_3stack_defconfig fails to build
+In-Reply-To: <6234984d-6409-37c1-b050-504775d37c17@bergerie>
+References: <20161105143516.00291507@free-electrons.com>
+ <6234984d-6409-37c1-b050-504775d37c17@bergerie>
+Message-ID: <20161105171636.514e707e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  5 Nov 2016 17:40:42 +0200, Dagg Stompler wrote:
+On Sat, 5 Nov 2016 16:55:34 +0100, Vincent Stehl? wrote:
 
-> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> index e0361da..4682d3f 100644
-> --- a/package/kodi/kodi.mk
-> +++ b/package/kodi/kodi.mk
-> @@ -113,6 +113,12 @@ KODI_DEPENDENCIES += imx-vpuwrap
->  KODI_CONF_OPTS += --enable-codec=imxvpu
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
-> +KODI_DEPENDENCIES += libamcodec
-> +KODI_CONF_OPTS += --enable-codec=amcodec
-> +KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/amcodec"
-> +endif
+> > Has one of you access to this platform, and be willing to update this
+> > defconfig?  
+> 
+> Hi Thomas and Fabio,
+> 
+> I am sorry to say that I don't have access to an i.MX31 PDK anymore. The
+> one I used by the time was already a "rare" resource in Freescale France :)
+> 
+> I will try to help repair the build at least.
 
-This is not good for two reasons:
-
- 1. Because the Kodi Makefile for amcodec currently does
-    -I$(prefix)/include, which will be detected by our paranoid wrapper
-    as a bogus path because -I/usr/include is incorrect when
-    cross-compiling.
-
- 2. Because there are now two conditions that pass a INCLUDES= value in
-    KODI_CONF_ENV, overwriting each other. Even if in practice they are
-    mutually exclusive (you won't build amcodec support and RPi support
-    in the same build), it is still dangerous.
-
-Both of those problems were fixed by my proposal in your reply to your
-PATCHv5, but for some reason you decided to not follow this proposal.
+If this platform is difficult to get access to, and rarely used, then
+maybe we should just remove the defconfig in Buildroot? It doesn't make
+a lot of sense to have defconfig for platforms that are not in use.
 
 Best regards,
 
