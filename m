@@ -1,41 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Nov 2016 17:34:54 +0100
-Subject: [Buildroot] [PATCH] package/pseudo: update version
-Message-ID: <1478363694-21168-1-git-send-email-yann.morin.1998@free.fr>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 5 Nov 2016 14:37:16 -0200
+Subject: [Buildroot] freescale_imx31_3stack_defconfig fails to build
+In-Reply-To: <20161105171636.514e707e@free-electrons.com>
+References: <20161105143516.00291507@free-electrons.com>
+ <6234984d-6409-37c1-b050-504775d37c17@bergerie>
+ <20161105171636.514e707e@free-electrons.com>
+Message-ID: <CAOMZO5B_A=ffQsVOXf1y3Q=9RsJ09w_ndOOXJUVrOewap-VrSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brings in a fix about externded attributes (xattrs).
+On Sat, Nov 5, 2016 at 2:16 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Sat, 5 Nov 2016 16:55:34 +0100, Vincent Stehl? wrote:
+>
+>> > Has one of you access to this platform, and be willing to update this
+>> > defconfig?
+>>
+>> Hi Thomas and Fabio,
+>>
+>> I am sorry to say that I don't have access to an i.MX31 PDK anymore. The
+>> one I used by the time was already a "rare" resource in Freescale France :)
+>>
+>> I will try to help repair the build at least.
+>
+> If this platform is difficult to get access to, and rarely used, then
+> maybe we should just remove the defconfig in Buildroot? It doesn't make
+> a lot of sense to have defconfig for platforms that are not in use.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/pseudo/pseudo.hash | 2 +-
- package/pseudo/pseudo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Yes, even for me it will be difficult to get access to a mx31pdk
+board, so I am OK with removing its defconfig from Buildroot.
 
-diff --git a/package/pseudo/pseudo.hash b/package/pseudo/pseudo.hash
-index 5822d0e..1553a29 100644
---- a/package/pseudo/pseudo.hash
-+++ b/package/pseudo/pseudo.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  d7767c9a73b0df4f1f26952cf5eca4c6ff6fc4bc5ef15a904ea3839c70161936  pseudo-7abc9396731149df5eaf43c84fed4f3053b64de6.tar.gz
-+sha256  7d4b767302f118fa1c3f89b551cf3f3f2aa92721dab86ff62f0600a394b8a81a  pseudo-45eca34c754d416a38bee90fb2d3c110a0b6cc5f.tar.gz
-diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
-index ed348f1..67538a6 100644
---- a/package/pseudo/pseudo.mk
-+++ b/package/pseudo/pseudo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PSEUDO_VERSION = 7abc9396731149df5eaf43c84fed4f3053b64de6
-+PSEUDO_VERSION = 45eca34c754d416a38bee90fb2d3c110a0b6cc5f
- PSEUDO_SITE = https://git.yoctoproject.org/git/pseudo
- PSEUDO_SITE_METHOD = git
- 
--- 
-2.7.4
+Regards,
+
+Fabio Estevam
