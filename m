@@ -1,38 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 17:16:36 +0100
-Subject: [Buildroot] freescale_imx31_3stack_defconfig fails to build
-In-Reply-To: <6234984d-6409-37c1-b050-504775d37c17@bergerie>
-References: <20161105143516.00291507@free-electrons.com>
- <6234984d-6409-37c1-b050-504775d37c17@bergerie>
-Message-ID: <20161105171636.514e707e@free-electrons.com>
+Date: Sat,  5 Nov 2016 17:32:13 +0100
+Subject: [Buildroot] [PATCH] assimp: disable package with the ADI Blackfin
+	toolchain
+Message-ID: <1478363533-29295-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+assimp fails to build with an internal compiler error with the ADI
+Blackfin toolchain, while it builds fine with the mainline gcc for
+Blackfin. So let's disable this package (which has no reverse
+dependencies that select it) for the ADI Blackfin toolchain.
 
-On Sat, 5 Nov 2016 16:55:34 +0100, Vincent Stehl? wrote:
+Fixes:
 
-> > Has one of you access to this platform, and be willing to update this
-> > defconfig?  
-> 
-> Hi Thomas and Fabio,
-> 
-> I am sorry to say that I don't have access to an i.MX31 PDK anymore. The
-> one I used by the time was already a "rare" resource in Freescale France :)
-> 
-> I will try to help repair the build at least.
+  http://autobuild.buildroot.net/results/394e3545a7bbe5d6fbaf4c97f0a3eb51c7d57076
 
-If this platform is difficult to get access to, and rarely used, then
-maybe we should just remove the defconfig in Buildroot? It doesn't make
-a lot of sense to have defconfig for platforms that are not in use.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/assimp/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Best regards,
-
-Thomas
+diff --git a/package/assimp/Config.in b/package/assimp/Config.in
+index 93020f7..8fa6429 100644
+--- a/package/assimp/Config.in
++++ b/package/assimp/Config.in
+@@ -4,6 +4,11 @@ config BR2_PACKAGE_ASSIMP
+ 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71124, that
+ 	# cause an infinite loop in gcc when building this package.
+ 	depends on !BR2_microblaze
++	# The ADI Blackfin toolchain does not build assimp properly,
++	# fails with "internal compiler error: in simplify_subreg, at
++	# simplify-rtx.c:5001". It builds fine with a mainline gcc for
++	# Blackfin.
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_ZLIB
+ 	help
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
