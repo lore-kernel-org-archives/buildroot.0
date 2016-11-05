@@ -1,110 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Nov 2016 11:46:07 +0100
-Subject: [Buildroot] [PATCH 1/2] Revert "package/fakeroot: remove"
+Date: Sat,  5 Nov 2016 11:46:08 +0100
+Subject: [Buildroot] [PATCH 2/2] Revert "fs: use pseudo instead of fakeroot"
 In-Reply-To: <cover.1478342758.git.yann.morin.1998@free.fr>
 References: <cover.1478342758.git.yann.morin.1998@free.fr>
-Message-ID: <ade91bcd3720c5fa68c680bc56d273870efcbda7.1478342758.git.yann.morin.1998@free.fr>
+Message-ID: <36f1f34245e00371a238d122d495393e9d383dc8.1478342758.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Turns out that pseudo has issues of its own, and that we are not ready
-in Buildroot to cope with those. Notably:
-  - it has quite a few dependencies: attr, sqlite;
-  - it is not python3 compliant, breaking the build on some machines.
+Using pseudo instead of fakeroot is not without bringing new issues:
+  - dependency on sqlite3 and attr,
+  - not compatible with python3.
 
-Re-instate fakeroot for the release.
+The last one is the most troublesome, as it is very difficult to make it
+compatible (as <dkc> said on IRC: we played the "is this a string or a
+byte array?" game).
 
-This reverts commit 325cff36f74b07545389b81cee0a2acef55b487c.
+Revert back to using fakeroot for the release.
+
+We can revisit using pseudo when upstream has fixed the python3 issues
+(the process is on-going).
+
+This reverts commit 8035ceb56cc3ba2541aba0d0ead3f29900d9e310.
 
 Reported-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/fakeroot/0001-hide-dlsym-error.patch | 34 ++++++++++++++++++++++++++++
- package/fakeroot/fakeroot.hash               |  4 ++++
- package/fakeroot/fakeroot.mk                 | 20 ++++++++++++++++
- 3 files changed, 58 insertions(+)
- create mode 100644 package/fakeroot/0001-hide-dlsym-error.patch
- create mode 100644 package/fakeroot/fakeroot.hash
- create mode 100644 package/fakeroot/fakeroot.mk
+ fs/common.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fakeroot/0001-hide-dlsym-error.patch b/package/fakeroot/0001-hide-dlsym-error.patch
-new file mode 100644
-index 0000000..2c61fab
---- /dev/null
-+++ b/package/fakeroot/0001-hide-dlsym-error.patch
-@@ -0,0 +1,34 @@
-+Description: Hide error from dlsym()
-+ dlsym(), starting in glibc 2.24 actually reports errors. In our case,
-+ we try to get ACL functions which are not in the glibc. This causes
-+ failures in test suites, so hide those messages for non-debugging
-+ purposes for now. It also makes the build logs annoying to read.
-+Author: Julian Andres Klode <juliank@ubuntu.com>
-+Origin: vendor
-+Bug-Debian: https://bugs.debian.org/830912
-+Forwarded: no
-+Last-Update: 2016-08-12
-+
-+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+
-+--- a/libfakeroot.c
-++++ b/libfakeroot.c
-+@@ -256,10 +256,16 @@ void load_library_symbols(void){
-+  /* clear dlerror() just in case dlsym() legitimately returns NULL */
-+     msg = dlerror();
-+     *(next_wrap[i].doit)=dlsym(get_libc(), next_wrap[i].name);
-++
-+     if ( (msg = dlerror()) != NULL){
-+-      fprintf (stderr, "dlsym(%s): %s\n", next_wrap[i].name, msg);
-+-/*    abort ();*/
-++#ifdef LIBFAKEROOT_DEBUGGING
-++      if (fakeroot_debug) {
-++        fprintf (stderr, "dlsym(%s): %s\n", next_wrap[i].name, msg);
-++/*      abort ();*/
-++      }
-++#endif
-+     }
-++
-+   }
-+ }
-+
-diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
-new file mode 100644
-index 0000000..f0d436e
---- /dev/null
-+++ b/package/fakeroot/fakeroot.hash
-@@ -0,0 +1,4 @@
-+# From http://snapshot.debian.org/package/fakeroot/1.20.2-1/
-+sha1	367040df07043edb630942b21939e493f3fad888	fakeroot_1.20.2.orig.tar.bz2
-+# Calculated based on the hash above
-+sha256	7c0a164d19db3efa9e802e0fc7cdfeff70ec6d26cdbdc4338c9c2823c5ea230c	fakeroot_1.20.2.orig.tar.bz2
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-new file mode 100644
-index 0000000..168cd13
---- /dev/null
-+++ b/package/fakeroot/fakeroot.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# fakeroot
-+#
-+################################################################################
-+
-+FAKEROOT_VERSION = 1.20.2
-+FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
-+FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141005T221953Z/pool/main/f/fakeroot
-+# Force capabilities detection off
-+# For now these are process capabilities (faked) rather than file
-+# so they're of no real use
-+HOST_FAKEROOT_CONF_ENV = \
-+	ac_cv_header_sys_capability_h=no \
-+	ac_cv_func_capset=no
-+
-+FAKEROOT_LICENSE = GPLv3+
-+FAKEROOT_LICENSE_FILES = COPYING
-+
-+$(eval $(host-autotools-package))
+diff --git a/fs/common.mk b/fs/common.mk
+index 2dbef4d..2b31e12 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -43,7 +43,7 @@ ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+ define ROOTFS_TARGET_INTERNAL
+ 
+ # extra deps
+-ROOTFS_$(2)_DEPENDENCIES += host-pseudo host-makedevs \
++ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
+ 	$$(if $$(PACKAGES_USERS)$$(ROOTFS_USERS_TABLES),host-mkpasswd)
+ 
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
+@@ -97,7 +97,7 @@ endif
+ 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+ 	chmod a+x $$(FAKEROOT_SCRIPT)
+-	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/pseudo -- $$(FAKEROOT_SCRIPT)
++	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+ 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
+ 	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
+ ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
 -- 
 2.7.4
