@@ -1,70 +1,36 @@
-From: daggs <daggs@gmx.com>
-Date: Sat, 5 Nov 2016 19:41:29 +0100
-Subject: [Buildroot] [PATCH v6] kodi: allow enablement of libamcodec as
- codec if selected
-In-Reply-To: <20161105171203.216e4ffc@free-electrons.com>
-References: <20161105154042.11063-1-daggs@gmx.com>,
- <20161105171203.216e4ffc@free-electrons.com>
-Message-ID: <trinity-39dbbb94-96f6-4547-928c-efced279c2f9-1478371289227@3capp-mailcom-bs15>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 5 Nov 2016 19:57:50 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2016-09-05
+In-Reply-To: <20161105171735.GL27313@waldemar-brodkorb.de>
+References: <7d9ec97a-00bf-a29b-7119-6a5304eb70d4@gmail.com>
+ <9a18dc1c-25bd-0925-1a78-dc7a5612d465@gmail.com>
+ <20160911133437.GI6777@waldemar-brodkorb.de>
+ <CANLo3JiyFZWqmjnxP09D_=j_DcmXL9Bo+cN+6p=GJ7m3ZMbaEg@mail.gmail.com>
+ <6f4cecac-3402-039a-e98b-3a8b385a8647@gmail.com>
+ <20161105171735.GL27313@waldemar-brodkorb.de>
+Message-ID: <ff65baeb-0e93-5909-e253-a19c1e8d9373@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Hello,
 
-> Sent: Saturday, November 05, 2016 at 6:12 PM
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Dagg Stompler" <daggs@gmx.com>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH v6] kodi: allow enablement of libamcodec as codec if selected
->
-> Hello,
+Le 05/11/2016 ? 18:17, Waldemar Brodkorb a ?crit :
+> Hi,
+[...]
 > 
-> On Sat,  5 Nov 2016 17:40:42 +0200, Dagg Stompler wrote:
-> 
-> > diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> > index e0361da..4682d3f 100644
-> > --- a/package/kodi/kodi.mk
-> > +++ b/package/kodi/kodi.mk
-> > @@ -113,6 +113,12 @@ KODI_DEPENDENCIES += imx-vpuwrap
-> >  KODI_CONF_OPTS += --enable-codec=imxvpu
-> >  endif
-> >  
-> > +ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
-> > +KODI_DEPENDENCIES += libamcodec
-> > +KODI_CONF_OPTS += --enable-codec=amcodec
-> > +KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/amcodec"
-> > +endif
-> 
-> This is not good for two reasons:
-> 
->  1. Because the Kodi Makefile for amcodec currently does
->     -I$(prefix)/include, which will be detected by our paranoid wrapper
->     as a bogus path because -I/usr/include is incorrect when
->     cross-compiling.
-> 
->  2. Because there are now two conditions that pass a INCLUDES= value in
->     KODI_CONF_ENV, overwriting each other. Even if in practice they are
->     mutually exclusive (you won't build amcodec support and RPi support
->     in the same build), it is still dangerous.
-> 
-> Both of those problems were fixed by my proposal in your reply to your
-> PATCHv5, but for some reason you decided to not follow this proposal.
-I've misread your comments, will reevaluate.
+> Yes. Could you send patches to fix the two issues to the uClibc-ng
+> mailinglist? That would be cool.
 
+Done.
+
+Best regards,
+Romain
 
 > 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> best regards
+>  Waldemar
 > 
