@@ -1,49 +1,31 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 5 Nov 2016 13:04:08 -0200
-Subject: [Buildroot] [PATCH 2/2] makedevs: make device node creation
-	idempotent
-In-Reply-To: <20161105133812.18485-2-arnout@mind.be>
-References: <20161105133812.18485-1-arnout@mind.be>
- <20161105133812.18485-2-arnout@mind.be>
-Message-ID: <CAOMZO5A1DNKX2Wnf=BHd8wBiKfUmU1mp86WFR_96bWOGFyc5pA@mail.gmail.com>
+Date: Sat, 5 Nov 2016 13:05:43 -0200
+Subject: [Buildroot] freescale_imx31_3stack_defconfig fails to build
+In-Reply-To: <20161105143516.00291507@free-electrons.com>
+References: <20161105143516.00291507@free-electrons.com>
+Message-ID: <CAOMZO5Dv5=_x2y-_WtgW3G2Ox8TQpREwJkGhOx5cK5Fpk5uxfg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Thomas,
 
-On Sat, Nov 5, 2016 at 11:38 AM, Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
-> We use makedevs to create device nodes in the target rootfs. However,
-> this can be called several times, e.g. when building several filesystem
-> images or when rebuilding. When makedevs is called the second time, the
-> device node already exists so mknod() errors out.
+On Sat, Nov 5, 2016 at 11:35 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Fabio, Vincent,
 >
-> This wasn't noticed before because fakeroot's mknod() wrapper
-> (incorrectly) does _not_ error out when the file exists already. Now
-> we switched from fakeroot to pseudo, the problem becomes apparent.
+> The freescale_imx31_3stack_defconfig in Buildroot no longer builds,
+> because the Linux kernel version used in this defconfig is too old, and
+> doesn't build with gcc 5.x.
 >
-> Before creating the device node, check if it already exists and if so,
-> if it has the correct device type and number. Change of mode and
-> ownership is still done.
->
-> This approach was preferred over removing the target files before
-> creating them, which would be simpler. However, when e.g. a file exists
-> as a normal file and makedevs specifies it as a device node, that
-> really is an error so we should detect it.
->
-> The other types don't have to be changed. The 'd' (directory) type is
-> already OK because it already only creates directories if they don't
-> exist yet. The 'f' (file mode) and 'r' (recursive) types only operate
-> on files and directories that exist already.
->
-> Patch also sent upstream to busybox.
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Reported-by: Fabio Estevam <festevam@gmail.com>
+> Has one of you access to this platform, and be willing to update this
+> defconfig?
 
-This fixes the build error I was seeing, thanks:
+I think we should be able to use the latest mainline on mx31pdk.
 
-Tested-by: Fabio Estevam <festevam@gmail.com>
+I will try to get access to a mx31pdk and will give it a try with
+latest mainline.
+
+Thanks
