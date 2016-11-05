@@ -1,26 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Nov 2016 15:01:26 +0100
-Subject: [Buildroot] olimex_a20_olinuxino_lime_mali_defconfig fails to build
-Message-ID: <20161105150126.6847fcd3@free-electrons.com>
+Date: Sat, 5 Nov 2016 15:04:05 +0100
+Subject: [Buildroot] qmx6_defconfig fails to build
+Message-ID: <20161105150405.705835a4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+Stephan, J?r?me, Gary,
 
-Last year, you contributed the olimex_a20_olinuxino_lime_mali_defconfig
-to Buildroot. Unfortunately, this defconfig currently fails to build,
-due to the use of a U-Boot version that is too old to build with gcc
-5.x.
+All of you have touched the qmx6_defconfig in Buildroot: Stephan is the
+original submitter (in 2014), J?r?me did some improvements in April
+2015, and then Gary updated the kernel version two times in 2015.
 
-Since it's using a mainline U-Boot version, could you have a look at
-updating the defconfig to use a newer U-Boot version, if you still have
-access to this HW platform ?
+However, today, this defconfig fails to build, because the U-Boot
+version being used is too old to build with gcc 5.x.
+
+If you still have access to the HW, could you submit a patch that
+updates the defconfig to make it build with gcc 5.x ?
 
 See the full build log at
-http://free-electrons.com/~thomas/pub/buildroot-defconfigs/olimex_a20_olinuxino_lime_mali_defconfig.log.FAIL
+http://free-electrons.com/~thomas/pub/buildroot-defconfigs/qmx6_defconfig.log.FAIL.
 
 Thanks!
 
