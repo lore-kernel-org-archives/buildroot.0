@@ -1,43 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Nov 2016 23:00:39 +0100
-Subject: [Buildroot] [PATCH] configs/mini2440_defconfig: remove defconfig
-In-Reply-To: <1478355899-30146-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1478355899-30146-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20161106230039.118b56a8@free-electrons.com>
+Date: Sun, 6 Nov 2016 23:01:18 +0100
+Subject: [Buildroot] [git commit] olimex_a20_olinuxino_lime_mali: bump
+	u-boot to 2016.09.01
+Message-ID: <20161106220123.C958D81871@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cbf9208549d179c0765e729ab463debebfd60bd6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  5 Nov 2016 15:24:59 +0100, Thomas Petazzoni wrote:
-> This defconfig has not been updated in any significant way since 2011,
-> when Peter moved it to use a mainline kernel. It's now using an
-> ancient 3.0 kernel, and a vendor-specific U-Boot version that fails to
-> build with various "undefined reference" errors:
-> 
->   undefined reference to `show_boot_progress'
->   undefined reference to `image_print_contents'
->   undefined reference to `wait_ms'
-> 
-> So it's time to get rid of the defconfig for this platform.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> Of course, if anyone has access to this platform and is interested in
-> having a defconfig in Buildroot, it's possible: just let us know, and
-> send a patch updating the defconfig. Thanks!
-> ---
->  configs/mini2440_defconfig | 34 ----------------------------------
->  1 file changed, 34 deletions(-)
->  delete mode 100644 configs/mini2440_defconfig
+U-Boot KConfig allows to take care of CONFIG_OLD_SUNXI_KERNEL_COMPAT
+in order to properly start the kernel (Error: unrecognized/unsupported machine ID)
 
-Applied to master, thanks.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/olimex_a20_olinuxino_lime_defconfig      | 3 ++-
+ configs/olimex_a20_olinuxino_lime_mali_defconfig | 6 ++++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 49987fe..5941550 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -32,9 +32,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+ # Bootloaders
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+index 42c8a7c..b2d7dd5 100644
+--- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+@@ -37,9 +37,11 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+ # Bootloaders
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
