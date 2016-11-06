@@ -1,10 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 6 Nov 2016 02:24:14 +0100
-Subject: [Buildroot] [PATCH 2/3] test/support/download/git: new test
-In-Reply-To: <20161101193354.8716-2-ricardo.martincoski@datacom.ind.br>
-References: <20161101193354.8716-1-ricardo.martincoski@datacom.ind.br>
- <20161101193354.8716-2-ricardo.martincoski@datacom.ind.br>
-Message-ID: <43363991-9d33-1b7c-7279-948cc2c1b2f3@mind.be>
+Date: Sun, 6 Nov 2016 02:25:08 +0100
+Subject: [Buildroot] musl with kernel headers
+In-Reply-To: <20161105224934.gwj7wzqawxnovgzs@tarshish>
+References: <0b4d1e33355f00f915768a2bc3f5c4d997206731.1478152430.git.baruch@tkos.co.il>
+ <20161103224656.1e6466a6@free-electrons.com>
+ <20161104052244.c2qswgkglbwcod3a@tarshish>
+ <20161104091639.1a0285c4@free-electrons.com>
+ <20161105224934.gwj7wzqawxnovgzs@tarshish>
+Message-ID: <1ee19442-01c1-9500-01c5-c0b056ee85a3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +16,45 @@ To: buildroot@busybox.net
 
 
 
-On 01-11-16 20:33, Ricardo Martincoski wrote:
-> This test assumes:
-> - it is run from the buildroot base dir;
-> - there is a ssh server installed;
-> - there is a key pair to allow the current user to ssh to localhost
->   without being prompted for a password;
-> - there is no ./.config ./stdout ./package/package;
+On 05-11-16 23:49, Baruch Siach wrote:
+> Hi Thomas,
 > 
-> For each testcase, it creates a new git repo, and then download from
-> this repo using a fake package named 'package'.
+> On Fri, Nov 04, 2016 at 09:16:39AM +0100, Thomas Petazzoni wrote:
+>> On Fri, 4 Nov 2016 07:22:44 +0200, Baruch Siach wrote:
+>>
+>>>> Yes, we probably need to do something like that. I'm sick of all the
+>>>> patches we need to fix this structure redefinition mess, so if we have
+>>>> a global solution, it would be nice. I guess it needs to be applied in
+>>>> both the linux-headers package and the toolchain-external package.  
+>>>
+>>> I was thinking if a sed call in TOOLCHAIN_TARGET_FINALIZE_HOOKS to simplify 
+>>> the hack. Would that work?
+>>
+>> No, because FINALIZE_HOOKS, like their name suggests, are called at the
+>> very end of the build, after all packages have been built, and right
+>> before we create the filesystem images.
+>>
+>> So to fix something that helps in building packages, it's a little bit
+>> too late :-)
+> 
+> Of course.
+> 
+>> However, you could have it as post-install staging hook of the
+>> toolchain virtual package I guess.
+> 
+> I experimented with TOOLCHAIN_POST_INSTALL_STAGING_HOOKS, but these hooks 
+> never run. TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS work as expected, but 
+> it's limited to external toolchains. What would be the right approach?
 
- I've given comments on this patch which I think are important, so I've marked
-it as Changes Requested in patchwork. However, patch 3/3 can be committed
-without this one.
+ The toolchain virtual package doesn't install to staging. Just add
+TOOLCHAIN_INSTALL_STAGING = YES
 
  Regards,
  Arnout
 
 > 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-> ---
-> This test needs some instrumentation in the source code (previous patch)
-> to work properly.
-[snip]
+> baruch
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
