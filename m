@@ -1,65 +1,52 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 6 Nov 2016 17:06:29 +0100
-Subject: [Buildroot] [PATCH] package/qemu: disable Qemu user-land
- emulation for musl toolchains
-In-Reply-To: <ea162f2b-4b5a-5b87-3a4a-41c863e7aa2a@mind.be>
-References: <1478441720-7653-1-git-send-email-romain.naour@gmail.com>
- <ea162f2b-4b5a-5b87-3a4a-41c863e7aa2a@mind.be>
-Message-ID: <063c7aaf-3dcd-1017-e0e9-13d00df91b97@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  6 Nov 2016 17:19:24 +0100
+Subject: [Buildroot] [PATCH 1/1] Revert "package/x265: bump version to 2.1"
+Message-ID: <20161106161924.9791-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+This reverts commit 1ba7b6a4f12977aec994c4f38d5be38cfdb27846.
 
-Le 06/11/2016 ? 16:43, Arnout Vandecappelle a ?crit :
-> 
-> 
-> On 06-11-16 15:15, Romain Naour wrote:
->> Like for cyclictest (rt-test)[1], linux-user/syscall.c use the
->> definition of the "struct sigevent" from Glibc/uClibc which doesn't
->> build with musl libc.
->>
->> So, disable Qemu user-land emulation for musl toolchains.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/b27/b277e668d9e22b624416bf46f6ccba802acd257e
->>
->> [1] 43bffa59e7359610c8f00038ddd97795c0ca35e1
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>  package/qemu/Config.in | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
->> index ea6b946..138d96a 100644
->> --- a/package/qemu/Config.in
->> +++ b/package/qemu/Config.in
->> @@ -69,6 +69,8 @@ comment "systems emulation needs a toolchain w/ dynamic library"
->>  
->>  config BR2_PACKAGE_QEMU_LINUX_USER
->>  	bool "Enable all Linux user-land emulation"
->> +	# Incompatible "struct sigevent" definition on musl
->> +	depends on !BR2_TOOLCHAIN_USES_MUSL
->>  	help
->>  	  Say 'y' to build all Linux user-land emulators that QEMU supports.
->>  
-> 
->  Shouldn't a comment be added?
+Adding -DCROSS_COMPILE_ARM=ON to _CONF_OPTS will not fix the build:
 
-Yes you're right.
-Fixed in v2.
+/home/buildroot/br2/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/gnu/stubs.h:7:29:
+  fatal error: gnu/stubs-soft.h: No such file or directory
 
-Best regards,
-Romain
+because cross-compiling x265 is only supported for soft-float abi:
+https://bitbucket.org/multicoreware/x265/src/583fc74fc0a29f330187dbd78151c30a3e03d5a7/source/CMakeLists.txt?at=default#CMakeLists.txt-211
 
-> 
->  Regards,
->  Arnout
-> 
->>
-> 
+Fixes
+http://autobuild.buildroot.net/results/6ec/6ec75cc176e05bfc6287dc54fa1a53e0ffc0521d/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x265/x265.hash | 2 +-
+ package/x265/x265.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/x265/x265.hash b/package/x265/x265.hash
+index d6dec12..92b5bea 100644
+--- a/package/x265/x265.hash
++++ b/package/x265/x265.hash
+@@ -1,2 +1,2 @@
+ # Locally generated
+-sha256 88fcb9af4ba52c0757ac9c0d8cd5ec79951a22905ae886897e06954353d6a643  x265_2.1.tar.gz
++sha256	3e4654133ed957a98708fdb4cb9a154d9e80922b84e26e43fc462a101c5b15c8	x265_1.9.tar.gz
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index ba284da..e737c31 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-X265_VERSION = 2.1
++X265_VERSION = 1.9
+ X265_SOURCE = x265_$(X265_VERSION).tar.gz
+ X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
+ X265_LICENSE = GPLv2+
+-- 
+2.10.2
