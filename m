@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 6 Nov 2016 16:42:12 +0100
-Subject: [Buildroot] -mcpu=native [was: Re: [autobuild.buildroot.net] Build
- results for 2016-11-05]
-In-Reply-To: <20161106150623.2b7fd549@free-electrons.com>
-References: <20161106073024.E75F820798@mail.free-electrons.com>
- <20161106150623.2b7fd549@free-electrons.com>
-Message-ID: <3effa23b-8b0b-5be4-04b7-9c7ab18dc768@mind.be>
+Date: Sun, 6 Nov 2016 16:43:27 +0100
+Subject: [Buildroot] [PATCH] package/qemu: disable Qemu user-land
+ emulation for musl toolchains
+In-Reply-To: <1478441720-7653-1-git-send-email-romain.naour@gmail.com>
+References: <1478441720-7653-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <ea162f2b-4b5a-5b87-3a4a-41c863e7aa2a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +13,44 @@ To: buildroot@busybox.net
 
 
 
-On 06-11-16 15:06, Thomas Petazzoni wrote:
->>          arm |                       x265-2.1 | NOK | http://autobuild.buildroot.net/results/6ec75cc176e05bfc6287dc54fa1a53e0ffc0521d
->> >          arm |                       x265-2.1 | NOK | http://autobuild.buildroot.net/results/86c15acd9a1bc112e4f6566e2e41ca90ed2eb61c
-> cc1plus: error: unrecognized argument in option '-mcpu=native'
+On 06-11-16 15:15, Romain Naour wrote:
+> Like for cyclictest (rt-test)[1], linux-user/syscall.c use the
+> definition of the "struct sigevent" from Glibc/uClibc which doesn't
+> build with musl libc.
+> 
+> So, disable Qemu user-land emulation for musl toolchains.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/b27/b277e668d9e22b624416bf46f6ccba802acd257e
+> 
+> [1] 43bffa59e7359610c8f00038ddd97795c0ca35e1
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/qemu/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+> index ea6b946..138d96a 100644
+> --- a/package/qemu/Config.in
+> +++ b/package/qemu/Config.in
+> @@ -69,6 +69,8 @@ comment "systems emulation needs a toolchain w/ dynamic library"
+>  
+>  config BR2_PACKAGE_QEMU_LINUX_USER
+>  	bool "Enable all Linux user-land emulation"
+> +	# Incompatible "struct sigevent" definition on musl
+> +	depends on !BR2_TOOLCHAIN_USES_MUSL
+>  	help
+>  	  Say 'y' to build all Linux user-land emulators that QEMU supports.
+>  
 
- Perhaps the toolchain wrapper should detect -mcpu=native and barf. That option
-can never lead to any good...
+ Shouldn't a comment be added?
 
  Regards,
  Arnout
+
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
