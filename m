@@ -1,52 +1,108 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Nov 2016 17:19:24 +0100
-Subject: [Buildroot] [PATCH 1/1] Revert "package/x265: bump version to 2.1"
-Message-ID: <20161106161924.9791-1-bernd.kuhls@t-online.de>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun,  6 Nov 2016 17:35:59 +0100
+Subject: [Buildroot] [PATCH] package/openjpeg: fix static build
+Message-ID: <20161106163559.4788-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 1ba7b6a4f12977aec994c4f38d5be38cfdb27846.
+This change adds a patch to openjpeg fixing the tiff indirect
+dependencies in case of static build.
 
-Adding -DCROSS_COMPILE_ARM=ON to _CONF_OPTS will not fix the build:
+A similar patch for upstream master has been submitted [1].
 
-/home/buildroot/br2/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/gnu/stubs.h:7:29:
-  fatal error: gnu/stubs-soft.h: No such file or directory
+Fixes:
+  http://autobuild.buildroot.net/results/d0d/d0d22727311d6300e0e400728126170407bfd699/
+  and many others...
 
-because cross-compiling x265 is only supported for soft-float abi:
-https://bitbucket.org/multicoreware/x265/src/583fc74fc0a29f330187dbd78151c30a3e03d5a7/source/CMakeLists.txt?at=default#CMakeLists.txt-211
+[1] https://github.com/uclouvain/openjpeg/pull/866
 
-Fixes
-http://autobuild.buildroot.net/results/6ec/6ec75cc176e05bfc6287dc54fa1a53e0ffc0521d/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- package/x265/x265.hash | 2 +-
- package/x265/x265.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...tiff-append-flags-found-by-pkg-config-if-.patch | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 package/openjpeg/0001-thirdparty-tiff-append-flags-found-by-pkg-config-if-.patch
 
-diff --git a/package/x265/x265.hash b/package/x265/x265.hash
-index d6dec12..92b5bea 100644
---- a/package/x265/x265.hash
-+++ b/package/x265/x265.hash
-@@ -1,2 +1,2 @@
- # Locally generated
--sha256 88fcb9af4ba52c0757ac9c0d8cd5ec79951a22905ae886897e06954353d6a643  x265_2.1.tar.gz
-+sha256	3e4654133ed957a98708fdb4cb9a154d9e80922b84e26e43fc462a101c5b15c8	x265_1.9.tar.gz
-diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index ba284da..e737c31 100644
---- a/package/x265/x265.mk
-+++ b/package/x265/x265.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--X265_VERSION = 2.1
-+X265_VERSION = 1.9
- X265_SOURCE = x265_$(X265_VERSION).tar.gz
- X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
- X265_LICENSE = GPLv2+
+diff --git a/package/openjpeg/0001-thirdparty-tiff-append-flags-found-by-pkg-config-if-.patch b/package/openjpeg/0001-thirdparty-tiff-append-flags-found-by-pkg-config-if-.patch
+new file mode 100644
+index 0000000..be50902
+--- /dev/null
++++ b/package/openjpeg/0001-thirdparty-tiff-append-flags-found-by-pkg-config-if-.patch
+@@ -0,0 +1,72 @@
++From 38f50c7d9ad3ba06b64583045665203afb53cbd9 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Sun, 6 Nov 2016 16:29:08 +0100
++Subject: [PATCH] thirdparty: tiff: append flags found by pkg-config if
++ available
++
++This change allows to get all required CFLAGS/LDFLAGS in case of static only
++build.
++
++This build issue [1] was triggered by the Buildroot farms.
++
++[1] http://autobuild.buildroot.net/results/d0d/d0d22727311d6300e0e400728126170407bfd699/build-end.log
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ thirdparty/CMakeLists.txt | 23 +++++++++++++++++++++--
++ 1 file changed, 21 insertions(+), 2 deletions(-)
++
++diff --git a/thirdparty/CMakeLists.txt b/thirdparty/CMakeLists.txt
++index d1e68ca..225f51d 100644
++--- a/thirdparty/CMakeLists.txt
+++++ b/thirdparty/CMakeLists.txt
++@@ -1,5 +1,9 @@
++ # 3rd party libs
++ 
+++IF(NOT BUILD_THIRDPARTY)
+++  include(FindPkgConfig)
+++ENDIF(NOT BUILD_THIRDPARTY)
+++
++ #------------
++ # Try to find lib Z
++ IF(BUILD_THIRDPARTY)
++@@ -35,6 +39,9 @@ IF(BUILD_THIRDPARTY)
++   SET(PNG_INCLUDE_DIRNAME ${OPENJPEG_SOURCE_DIR}/thirdparty/libpng PARENT_SCOPE)
++ ELSE (BUILD_THIRDPARTY)
++   IF (ZLIB_FOUND)
+++    # Static only build:
+++    #   it is not necessary to invoke pkg_check_module on libpng, because libpng
+++    #   only depends on zlib, which is already checked.
++     FIND_PACKAGE(PNG)
++     IF(PNG_FOUND)
++       message(STATUS "Your system seems to have a PNG lib available, we will use it")
++@@ -66,12 +73,24 @@ IF(BUILD_THIRDPARTY)
++   SET(OPJ_HAVE_LIBTIFF 1 PARENT_SCOPE)
++ ELSE (BUILD_THIRDPARTY)
++   FIND_PACKAGE(TIFF)
+++  # Static only build:
+++  #   it is necessary to invoke pkg_check_module on libtiff since it may have
+++  #   several other dependencies not declared by its cmake module, but they are
+++  #   in the its pkgconfig module.
+++  IF(PKG_CONFIG_FOUND)
+++    FOREACH(pc_tiff_module tiff tiff3 tiff4 tiff-3 tiff-4 libtiff libtiff3 libtiff4 libtiff-3 libtiff-4)
+++      pkg_check_modules(PC_TIFF QUIET ${pc_tiff_module})
+++      IF(PC_TIFF_FOUND)
+++        break()
+++      ENDIF(PC_TIFF_FOUND)
+++    ENDFOREACH()
+++  ENDIF(PKG_CONFIG_FOUND)
++   IF(TIFF_FOUND)
++     message(STATUS "Your system seems to have a TIFF lib available, we will use it")
++     SET(OPJ_HAVE_TIFF_H 1 PARENT_SCOPE)
++     SET(OPJ_HAVE_LIBTIFF 1 PARENT_SCOPE)
++-    SET(TIFF_LIBNAME ${TIFF_LIBRARIES} PARENT_SCOPE)
++-    SET(TIFF_INCLUDE_DIRNAME ${TIFF_INCLUDE_DIR} PARENT_SCOPE)
+++    SET(TIFF_LIBNAME ${TIFF_LIBRARIES} ${PC_TIFF_STATIC_LIBRARIES} PARENT_SCOPE)
+++    SET(TIFF_INCLUDE_DIRNAME ${TIFF_INCLUDE_DIR} ${PC_TIFF_STATIC_INCLUDE_DIRS} PARENT_SCOPE)
++   ELSE (TIFF_FOUND) # not found
++     SET(OPJ_HAVE_TIFF_H 0 PARENT_SCOPE)
++     SET(OPJ_HAVE_LIBTIFF 0 PARENT_SCOPE)
++-- 
++2.10.2
++
 -- 
 2.10.2
