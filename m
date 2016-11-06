@@ -1,33 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 06 Nov 2016 22:15:10 +0000
-Subject: [Buildroot] [Bug 8516] mkcubiecard.sh uses outdated sfdisk switch -D
-In-Reply-To: <bug-8516-163@https.bugs.busybox.net/>
-References: <bug-8516-163@https.bugs.busybox.net/>
-Message-ID: <bug-8516-163-tvvtlugTVX@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun,  6 Nov 2016 23:32:17 +0100
+Subject: [Buildroot] [PATCH] package/guile: disable for CS 2014.05 ARM
+	toolchain
+Message-ID: <1478471537-29327-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8516
+With this toolchain, guile tigger an assembler error probably caused by
+the binutils version being used:
 
---- Comment #6 from Tudor <tudor@tudorholton.com> ---
-I was just pointing out that the bug report and your previous comment are out
-of sync.  I reported this bug against the cubieboard2, not the original
-cubieboard as you assumed from the cruft left behind.
+arm-none-linux-gnueabi-ld --version
+GNU ld (Sourcery CodeBench Lite 2014.05-29) 2.24.51.20140217
 
-I have only ever owned a cubieboard2.  At the time I reported the bug, the
-cubieboard2_defconfig also called mkcubieboard.sh.  As you noted, it doesn't
-any more as it was converted to genimage before I was able to get to it.  
+arm-none-linux-gnueabi-gcc --version
+arm-none-linux-gnueabi-gcc (Sourcery CodeBench Lite 2014.05-29) 4.8.3 20140320 (prerelease)
 
-I was only ever reporting against the cubieboard2 build, anyway, so it doesn't
-affect me.  However, I believe the build between the two boards is identical
-(since the only difference is the number of cores), so I believe that the
-genimage script for the cubieboard2 could be easily used by
-cubieboard_defconfig also.  However, I don't own an original cubieboard to test
-it.
+Nowaday, even with a Buildroot internal toolchain using the oldest
+Binutils GCC version (2.25.1 and 4.8.6), guile build fine.
 
+So, disable guile for the CS 2014.05 ARM toolchain.
+
+Fixes:
+http://autobuild.buildroot.net/results/976/976b3477407e64c8c2fc2309ed952d0083903a19
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/guile/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/guile/Config.in b/package/guile/Config.in
+index e0f6571..bfba5e7 100644
+--- a/package/guile/Config.in
++++ b/package/guile/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_GUILE
+ 	bool "guile"
++	# Triggers assembler error
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # no strtol_l
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # bdwgc
+@@ -17,6 +19,7 @@ config BR2_PACKAGE_GUILE
+ 	  http://www.gnu.org/software/guile
+ 
+ comment "guile needs a uClibc or glibc toolchain w/ threads, wchar, dynamic library"
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+ 		BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.5.5
