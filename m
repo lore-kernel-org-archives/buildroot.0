@@ -1,89 +1,63 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sun, 6 Nov 2016 12:38:53 +0100
-Subject: [Buildroot] [PATCH] configs/mini2440_defconfig: remove defconfig
-In-Reply-To: <1478355899-30146-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1478355899-30146-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <91e46535-61a4-d1cc-7dae-cb0cab23ebfa@smile.fr>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Sun, 6 Nov 2016 13:07:33 +0100
+Subject: [Buildroot] qmx6_defconfig fails to build
+In-Reply-To: <CAAMH-ysBQp=NS8yo7k1N9AuTeUK88ynoyM7b_50LorY+mwDBQA@mail.gmail.com>
+References: <20161105150405.705835a4@free-electrons.com>
+ <388a11fc-6093-a4cb-c499-e264acb9250e@relinux.de>
+ <CAAMH-ysz=Z41ks2cEXQG2S4PRPJ58GJYDy8Ss=gL9k0T6kwQiA@mail.gmail.com>
+ <CAAMH-ysBQp=NS8yo7k1N9AuTeUK88ynoyM7b_50LorY+mwDBQA@mail.gmail.com>
+Message-ID: <CAAMH-yvrhaxK5yPa6dy4wWHk3c1tPvL3w=DZ-tGTCkjXxMxqjg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Thomas, all,
 
-Le 05/11/2016 ? 15:24, Thomas Petazzoni a ?crit :
-> This defconfig has not been updated in any significant way since 2011,
-> when Peter moved it to use a mainline kernel. It's now using an
-> ancient 3.0 kernel, and a vendor-specific U-Boot version that fails to
-> build with various "undefined reference" errors:
-> 
->   undefined reference to `show_boot_progress'
->   undefined reference to `image_print_contents'
->   undefined reference to `wait_ms'
-> 
-> So it's time to get rid of the defconfig for this platform.
+Same here, don't have any qmx6 hardware. I've bumped the kernel in the past
+looking at their repo tags but I think they now moved to another repo.
 
-The mini2440 has been added in u-boot upstream on 2012-10-03 (v2012.10) and
-removed on 2014-01-13 (v2014.01).
+Regards,
+Gary
 
-I still have this board but I never used the u-boot mainline version.
-IIRC, I've tested this board up to kernel 3.10 long time ago.
+Le 5 nov. 2016 3:58 PM, "Stephan Hoffmann" <sho@relinux.de> a ?crit :
 
-Acked-by: Romain Naour <romain.naour@gmail.com>
+Hello Thomas,
 
-Best regards,
-Romain
+unfortunatelly, I do not have access to a qmx6 hardware anymore.
 
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> Of course, if anyone has access to this platform and is interested in
-> having a defconfig in Buildroot, it's possible: just let us know, and
-> send a patch updating the defconfig. Thanks!
-> ---
->  configs/mini2440_defconfig | 34 ----------------------------------
->  1 file changed, 34 deletions(-)
->  delete mode 100644 configs/mini2440_defconfig
-> 
-> diff --git a/configs/mini2440_defconfig b/configs/mini2440_defconfig
-> deleted file mode 100644
-> index 2891d10..0000000
-> --- a/configs/mini2440_defconfig
-> +++ /dev/null
-> @@ -1,34 +0,0 @@
-> -# Architecture
-> -BR2_arm=y
-> -BR2_arm920t=y
-> -
-> -# Serial port
-> -BR2_TARGET_GENERIC_GETTY=y
-> -BR2_TARGET_GENERIC_GETTY_PORT="ttySAC0"
-> -
-> -# Filesystem
-> -BR2_TARGET_ROOTFS_JFFS2=y
-> -BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
-> -BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x800
-> -BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x20000
-> -BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
-> -BR2_TARGET_ROOTFS_JFFS2_LE=y
-> -BR2_TARGET_ROOTFS_TAR=y
-> -
-> -# Linux headers same as kernel, a 3.0 series
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
-> -
-> -# Bootloader
-> -BR2_TARGET_UBOOT=y
-> -BR2_TARGET_UBOOT_BOARDNAME="mini2440"
-> -BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> -BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://repo.or.cz/w/u-boot-openmoko/mini2440.git/snapshot/dev-mini2440-stable.tar.gz"
-> -
-> -#
-> -# Kernel
-> -#
-> -BR2_LINUX_KERNEL=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.0.4"
-> -BR2_LINUX_KERNEL_DEFCONFIG="mini2440"
-> -BR2_LINUX_KERNEL_UIMAGE=y
-> 
+Kind regards
+
+Stephan
+
+Am 05.11.2016 um 15:04 schrieb Thomas Petazzoni:
+> Stephan, J?r?me, Gary,
+>
+> All of you have touched the qmx6_defconfig in Buildroot: Stephan is the
+> original submitter (in 2014), J?r?me did some improvements in April
+> 2015, and then Gary updated the kernel version two times in 2015.
+>
+> However, today, this defconfig fails to build, because the U-Boot
+> version being used is too old to build with gcc 5.x.
+>
+> If you still have access to the HW, could you submit a patch that
+> updates the defconfig to make it build with gcc 5.x ?
+>
+> See the full build log at
+> http://free-electrons.com/~thomas/pub/buildroot-
+defconfigs/qmx6_defconfig.log.FAIL.
+>
+> Thanks!
+>
+> Thomas
+
+
+--
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de Stephan at reLinux.de
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161106/e122874c/attachment.html>
