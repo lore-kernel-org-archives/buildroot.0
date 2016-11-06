@@ -1,75 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Nov 2016 11:55:26 +0100
-Subject: [Buildroot] [PATCH] net-tools: add a patch to avoid struct
- redefinition
-In-Reply-To: <20161103132546.52679-1-Vincent.Riera@imgtec.com>
-References: <20161103132546.52679-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161106115526.37fdc53b@free-electrons.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sun, 6 Nov 2016 12:38:53 +0100
+Subject: [Buildroot] [PATCH] configs/mini2440_defconfig: remove defconfig
+In-Reply-To: <1478355899-30146-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1478355899-30146-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <91e46535-61a4-d1cc-7dae-cb0cab23ebfa@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Thu, 3 Nov 2016 13:25:46 +0000, Vicente Olivert Riera wrote:
-> This fixes a struct redefinition problem like this one:
+Le 05/11/2016 ? 15:24, Thomas Petazzoni a ?crit :
+> This defconfig has not been updated in any significant way since 2011,
+> when Peter moved it to use a mainline kernel. It's now using an
+> ancient 3.0 kernel, and a vendor-specific U-Boot version that fails to
+> build with various "undefined reference" errors:
 > 
-> ================================
-> In file included from /usr/include/linux/if_tunnel.h:6:0,
-> from iptunnel.c:34:
-> /usr/include/linux/ip.h:85:8: error: redefinition of 'struct iphdr'
-> struct iphdr {
-> ^
-> In file included from iptunnel.c:29:0:
-> /usr/include/netinet/ip.h:45:8: note: originally defined here
-> struct iphdr
-> ^
-> ================================
+>   undefined reference to `show_boot_progress'
+>   undefined reference to `image_print_contents'
+>   undefined reference to `wait_ms'
 > 
-> iptunnel.c includes netinet/ip.h which contains a definition of the
-> iphdr struct.
-> 
-> iptunnel.c also includes linux/if_tunnel.h which includes linux/ip.h
-> which contains a definition of the iphdr struct.
-> 
-> So, both netinet/ip.h and linux/ip.h define the iphdr struct, and both
-> of them have been included directly or indirectly by iptunnel.c. Because
-> of that the compilation fails due to a struct redefinition.
-> 
-> The problem can be solved by just not including netinet/ip.h.
-> 
-> The patch has been sent upstream as a merge request:
->   https://sourceforge.net/p/net-tools/code/merge-requests/3/
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/dce/dce499da84b2a41bab946d5109a283ccb85c8b81/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> So it's time to get rid of the defconfig for this platform.
 
-This patch causes more build failures than it fixes. Care to have a
-look at:
+The mini2440 has been added in u-boot upstream on 2012-10-03 (v2012.10) and
+removed on 2014-01-13 (v2014.01).
 
-     sparc64 | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/a1b2ff0385701fba85edfacf663896d8dbc8de09
-    mips64el | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/3746f6438bc6df349b709fe0ea6e6bbe72e40c96
-         arm | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/ce7bc29a60dadefa9a1e76588b6cd117b9b438d3
-        i686 | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/b0ae167ed73731a500b3a689369ecee569280f3d
-         arm | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/72cc7172fad6f886aef307b353775689784feca3
-         arm | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/3ee0f8d998507086dc94cc06b66dc7aaea51199a
-    mips64el | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/e7b07b8f84431664ab1c327b42d4ec508f377bd9
-        bfin | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/df8500280736379c054585cf62980fb4dfeb66d2
-        i686 | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/6c1efbfb8bdc6b68b4e2ac3cc58d736125ae0dbb
-        i686 | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/404690a4f8b42f773c50eea834181bae0185c550
-     sparc64 | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/d2e66e873fc242f87882f944abdc31a0e5243488
-         arm | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/5a8d3f0e540e6123c30b4dac8832a74808e4c1e7
-    mips64el | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/d8803422d86908b24731fff613a05ea0d40f9269
-         arm | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/8e9fb71362f81fec605328bc32c4ded1376de5d4
+I still have this board but I never used the u-boot mainline version.
+IIRC, I've tested this board up to kernel 3.10 long time ago.
 
-Thanks,
+Acked-by: Romain Naour <romain.naour@gmail.com>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Best regards,
+Romain
+
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> Of course, if anyone has access to this platform and is interested in
+> having a defconfig in Buildroot, it's possible: just let us know, and
+> send a patch updating the defconfig. Thanks!
+> ---
+>  configs/mini2440_defconfig | 34 ----------------------------------
+>  1 file changed, 34 deletions(-)
+>  delete mode 100644 configs/mini2440_defconfig
+> 
+> diff --git a/configs/mini2440_defconfig b/configs/mini2440_defconfig
+> deleted file mode 100644
+> index 2891d10..0000000
+> --- a/configs/mini2440_defconfig
+> +++ /dev/null
+> @@ -1,34 +0,0 @@
+> -# Architecture
+> -BR2_arm=y
+> -BR2_arm920t=y
+> -
+> -# Serial port
+> -BR2_TARGET_GENERIC_GETTY=y
+> -BR2_TARGET_GENERIC_GETTY_PORT="ttySAC0"
+> -
+> -# Filesystem
+> -BR2_TARGET_ROOTFS_JFFS2=y
+> -BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
+> -BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x800
+> -BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x20000
+> -BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+> -BR2_TARGET_ROOTFS_JFFS2_LE=y
+> -BR2_TARGET_ROOTFS_TAR=y
+> -
+> -# Linux headers same as kernel, a 3.0 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
+> -
+> -# Bootloader
+> -BR2_TARGET_UBOOT=y
+> -BR2_TARGET_UBOOT_BOARDNAME="mini2440"
+> -BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> -BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://repo.or.cz/w/u-boot-openmoko/mini2440.git/snapshot/dev-mini2440-stable.tar.gz"
+> -
+> -#
+> -# Kernel
+> -#
+> -BR2_LINUX_KERNEL=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.0.4"
+> -BR2_LINUX_KERNEL_DEFCONFIG="mini2440"
+> -BR2_LINUX_KERNEL_UIMAGE=y
+> 
