@@ -1,34 +1,33 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 6 Nov 2016 20:06:40 -0200
-Subject: [Buildroot] [PATCH 1/2] freescale: Add a standard genimage
- script for MX23/MX28
-In-Reply-To: <20161106224429.31666d66@free-electrons.com>
-References: <1478459535-20024-1-git-send-email-festevam@gmail.com>
- <20161106224429.31666d66@free-electrons.com>
-Message-ID: <CAOMZO5D-V4yWAZFoe+zZi5e=gMB4GzeE=canCABoY7RWUB7oQQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 06 Nov 2016 22:15:10 +0000
+Subject: [Buildroot] [Bug 8516] mkcubiecard.sh uses outdated sfdisk switch -D
+In-Reply-To: <bug-8516-163@https.bugs.busybox.net/>
+References: <bug-8516-163@https.bugs.busybox.net/>
+Message-ID: <bug-8516-163-tvvtlugTVX@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=8516
 
-On Sun, Nov 6, 2016 at 7:44 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+--- Comment #6 from Tudor <tudor@tudorholton.com> ---
+I was just pointing out that the bug report and your previous comment are out
+of sync.  I reported this bug against the cubieboard2, not the original
+cubieboard as you assumed from the cruft left behind.
 
-> I've applied both to next. However, we now have this a bit weird
-> hierarchy:
->
-> board/freescale/common/
-> ??? genimage.cfg.template
-> ??? mxs
-> ?   ??? genimage.cfg.template
-> ?   ??? post-image.sh
-> ??? post-image.sh
->
-> Perhaps we should move the i.MX genimage.cfg.template and post-image.sh
-> in an imx/ sub-directory? This means adjusting all the defconfig, but
-> it can be done mechanically.
+I have only ever owned a cubieboard2.  At the time I reported the bug, the
+cubieboard2_defconfig also called mkcubieboard.sh.  As you noted, it doesn't
+any more as it was converted to genimage before I was able to get to it.  
 
-Yes, I will prepare a patch that implements this proposal, thanks.
+I was only ever reporting against the cubieboard2 build, anyway, so it doesn't
+affect me.  However, I believe the build between the two boards is identical
+(since the only difference is the number of cores), so I believe that the
+genimage script for the cubieboard2 could be easily used by
+cubieboard_defconfig also.  However, I don't own an original cubieboard to test
+it.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
