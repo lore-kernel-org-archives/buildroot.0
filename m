@@ -1,35 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 07 Nov 2016 17:49:48 -0300
-Subject: [Buildroot] freescale_p2020ds_defconfig fails to build
-In-Reply-To: <20161107214812.53e6084b@free-electrons.com>
-References: <20161105143637.0fffe44d@free-electrons.com>
- <d3c304cbc093e7e90969a04c97d3f28a@zacarias.com.ar>
- <20161107214812.53e6084b@free-electrons.com>
-Message-ID: <9cf1a978c48a99c463c323460b3e3f87@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Nov 2016 23:02:56 +0100
+Subject: [Buildroot] [git commit branch/next] gstreamer1: add explicit
+	libunwind support
+Message-ID: <20161107205049.A30787FB7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2016-11-07 17:48, Thomas Petazzoni wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bef9a1fbeb45c3c30d9e00de7ea1742012e538b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Hello,
-> 
-> On Mon, 07 Nov 2016 16:37:43 -0300, Gustavo Zacarias wrote:
-> 
->> Unfortunately i don't have one of these at my reach any more, and it
->> uses an ex-freescale (now nxp, eventually qualcomm) git kernel to work
->> around some design flaws, which makes vanilla kernels without patching
->> unusable last time i tried.
->> Other than locking gcc down to 4.9 (temporary fix) or dropping it
->> there's not much i can do.
-> 
-> OK, so you don't mind if I drop it?
-> 
-> Thomas
+It's a new feature for 1.10.0+, however it doesn't have an
+enable/disable configure switch so just handle the dependency.
 
-Hi.
-Not one bit since it's untestable unless someone else raises his/her 
-hand.
-Regards.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer1/gstreamer1/gstreamer1.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index f0afdd9..cb111f2 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -34,6 +34,11 @@ GSTREAMER1_CONF_OPTS = \
+ 	$(if $(BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY),,--disable-registry) \
+ 	$(if $(BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS),,--disable-tools)
+ 
+-GSTREAMER1_DEPENDENCIES = libglib2 host-pkgconf host-bison host-flex
++GSTREAMER1_DEPENDENCIES = \
++	host-bison \
++	host-flex \
++	host-pkgconf \
++	libglib2 \
++	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind)
+ 
+ $(eval $(autotools-package))
