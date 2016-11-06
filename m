@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 6 Nov 2016 01:51:55 +0100
-Subject: [Buildroot] [PATCH 2/3] test/support/download/git: new test
-In-Reply-To: <7b4bc8b4-db76-7703-54ce-72d923c00a41@mind.be>
+Date: Sun, 6 Nov 2016 02:19:38 +0100
+Subject: [Buildroot] [PATCH 3/3] support/download/git: do not use git
+ clone
+In-Reply-To: <20161101193354.8716-3-ricardo.martincoski@datacom.ind.br>
 References: <20161101193354.8716-1-ricardo.martincoski@datacom.ind.br>
- <20161101193354.8716-2-ricardo.martincoski@datacom.ind.br>
- <7b4bc8b4-db76-7703-54ce-72d923c00a41@mind.be>
-Message-ID: <d9d336a7-6e7f-1a2d-d820-85af033a196c@mind.be>
+ <20161101193354.8716-3-ricardo.martincoski@datacom.ind.br>
+Message-ID: <95e1f68c-b162-68b1-8a10-7baa287f088c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +14,233 @@ To: buildroot@busybox.net
 
 
 
-On 06-11-16 01:19, Arnout Vandecappelle wrote:
->  Second, instead of all these given's etc., it is much simpler to set up a
-> single test repo, once, that has all the features you need. Setting it up could
-> either be through explicit git commands, but I think it's even simpler if you
-> just create a bare repository and commit that into Buildroot. It's not very nice
-> for review, but I think it simplifies things enough to make it worth it. And
-> anyway, the contents of the objects are not so important for review. If you do
-> this, remove the hooks and info directories to make it smaller, and make sure
-> the objects directory is binary. You know, I'll send a patch to show you how.
+On 01-11-16 20:33, Ricardo Martincoski wrote:
+> The logic of the script was completely rewritten based in some ideas
+> discussed during the review of [1].
+> 
+> Always using git init + git fetch has these advantages:
+> - git fetch works with all kinds of refs, while git clone supports only
+>   branches and tags without the ref/heads/ and ref/tags/ prefixes;
+> - a shallow fetch can be done for the head of those refs.
+> 
+> The remote is first asked for its references using git ls-remote saving
+> the output to a file.
+> This file is later on compared to the desired change set, determining if
+> it is a branch, tag, special ref or sha1.
+> A concern that arrives from this method is that the remote can change
+> between the git ls-remote and the git fetch, but in this case, once the
+> script creates a shallow fetch, the checkout does what it is expected:
+> - for a named reference (branch, tag or special ref), the fetch and
+>   checkout are successful using the "new" sha1 from the remote;
+> - for a sha1 of a branch, the fetch fails (because the sha1 it is not
+>   anymore at branch head), falling back to a successful full fetch;
+> - for a sha1 of a commit pointed by a tag (that should not be changed
+>   but it can be changed) the same behavior of a sha1 of a branch takes
+>   place;
+> - for a sha1 only accessible by a special refs, the checkout fails,
+>   falling back to an unsuccessful checkout after full fetch. This can be
+>   caused only be a error from a developer.
+> 
+> An analytical solution is used instead of a single awk line. It makes
+> each line of code simple: grep to check the entry is in the ls-remote
+> output and awk to actually get the reference to use.
 
- So I've taken another look at the tests you created, and it looks like it is
-indeed a lot simpler and more effective to create the repo on the fly rather
-than having a repo checked in into Buildroot. So forget this remark.
+ Excellent commit message!
+
+> 
+> [1] http://patchwork.ozlabs.org/patch/681841/
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+
+ I have a bunch of remarks below, but nothing that should stop the acceptance of
+this patch. So:
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ This is for next, obviously.
+
+> ---
+>  support/download/git | 91 ++++++++++++++++++++++++++++++++++------------------
+>  1 file changed, 60 insertions(+), 31 deletions(-)
+
+ Note that, although lines are added here, it really is a simplification and
+explicitation of the logic.
+
+> 
+> diff --git a/support/download/git b/support/download/git
+> index f7eef15..1411d94 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -39,43 +39,72 @@ _git() {
+>      eval ${GIT} "${@}"
+>  }
+>  
+> -# Try a shallow clone, since it is faster than a full clone - but that only
+> -# works if the version is a ref (tag or branch). Before trying to do a shallow
+> -# clone we check if ${cset} is in the list provided by git ls-remote. If not
+> -# we fall back on a full clone.
+> -#
+> -# Messages for the type of clone used are provided to ease debugging in case of
+> -# problems
+> -git_done=0
+> -if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
+> -    printf "Doing shallow clone\n"
+> -    if _git clone ${verbose} "${@}" --depth 1 -b "'${cset}'" "'${repo}'" "'${basename}'"; then
+> -        git_done=1
+> -    else
+> -        printf "Shallow clone failed, falling back to doing a full clone\n"
+> +_git init ${verbose} "'${basename}'"
+> +
+> +pushd "${basename}" >/dev/null
+> +
+> +# Save the temporary file inside the .git directory that will be deleted after the checkout is done.
+
+ Don't forget to wrap at 80 columns.
+
+> +tmpf=".git/ls-remote"
+> +_git ls-remote "'${repo}'" > "${tmpf}"
+> +
+> +do_a_shallow_fetch=0
+> +if grep "\<\(\|\(\|refs/\)\(heads\|tags\)/\)${cset}$" "${tmpf}" >/dev/null 2>&1; then
+
+ This is where grep -E becomes useful :-)
+
+> +    printf "The desired version is a named reference\n"
+> +    # Support branches and tags in the simplified form.
+> +    # Support branches and tags and special refs in the complete form refs/heads/branch.
+> +    # When the name is ambiguous, the branch will be selected (by git fetch or git clone).
+> +    ref="${cset}"
+> +    do_a_shallow_fetch=1
+> +elif grep "^${cset}" "${tmpf}" >/dev/null 2>&1; then
+> +    printf "The desired version is a sha1\n"
+> +    if [ ${#cset} -lt 40 -a "1" != "$(awk "/^${cset}/{print \$1|\"sort -u | wc -l\"}" "${tmpf}")" ]; then
+
+ I think the check for -lt 40 is redundant.
+
+ I think all the logic here could be made a bit simpler by saving to a temporary
+file again:
+
+elif grep "^${cset}" "${tmpf}" > .git/matching_refs 2>/dev/null; then
+    printf ...
+    if "$(cut -f 1 .git/matching_refs | sort -u | wc -l) != 2; then
+        ...
+
+
+> +        printf "Ambiguous partial sha1\n"
+> +        awk "/^${cset}/{print \$1|\"sort -u | wc -l\"}" "${tmpf}"
+
+ Here we should print the full lines, so without sort -u and wc. Sort is still
+useful though.
+
+> +        exit 1
+> +    fi
+> +    # Accept full or unambiguous partial sha1. A sha1 can be referenced by many names.
+> +    # Prefer sha1 of commit pointed by a tag or sha1 of the tag itself,
+> +    # then sha1 pointed by any ref/*, and only then sha1 pointed by *HEAD.
+
+ I don't understand why this bit is needed. Any of the refs will do, right? It's
+true that there is a risk that the ref gets updated between the ls-remote and
+the fetch, and that for tags the chance that it gets updated is smaller than for
+e.g. HEAD. But still, this is very much a corner case, and if it _does_ happen,
+we still fall back to full clone. So the only important thing is to avoid HEAD.
+Since ls-remotes already seems to sort the refs, which typically puts tags near
+the end, just take the last one and we're done:
+
+    ref="$(cut -f 2 .git/matching_refs | tail -1)"
+
+> +    ref="$(awk -F'[\t^]' "/^${cset}.*\trefs\/tags\//{ print \$2; exit }" "${tmpf}")"
+> +    if [ -z "${ref}" ]; then
+> +        ref="$(awk -F'[\t^]' "/^${cset}.*\trefs\//{ print \$2; exit }" "${tmpf}")"
+> +    fi
+> +    if [ -z "${ref}" ]; then
+> +        # sha1 is referenced by HEAD
+> +        ref="$(awk -F'[\t^]' "/^${cset}/{ print \$2; exit }" "${tmpf}")"
+> +    fi
+> +    if [ -n "${ref}" ]; then
+> +        printf "Fetching '%s' to get '%s'\n" "${ref}" "${cset}"
+> +        do_a_shallow_fetch=1
+>      fi
+> -fi
+> -if [ ${git_done} -eq 0 ]; then
+> -    printf "Doing full clone\n"
+> -    _git clone ${verbose} "${@}" "'${repo}'" "'${basename}'"
+>  fi
+>  
+> -pushd "${basename}" >/dev/null
+> +git_fetch_done=0
+> +if [ ${do_a_shallow_fetch} -eq 1 ]; then
+
+ Actually, if [ "$ref" ] would be sufficient.
+
+> +    printf "Doing shallow fetch\n"
+> +    if _git fetch ${verbose} "${@}" --depth 1 "'${repo}'" "'${ref}:refs/buildroot/${cset}'" 2>&1; then
+> +        git_fetch_done=1
+> +    else
+> +        # It catches the case the remote changed after ls-remote.
+> +        printf "Shallow fetch failed, falling back to doing a full fetch\n"
+> +    fi
+> +fi
+>  
+> -# Try to get the special refs exposed by some forges (pull-requests for
+> -# github, changes for gerrit...). There is no easy way to know whether
+> -# the cset the user passed us is such a special ref or a tag or a sha1
+> -# or whatever else. We'll eventually fail at checking out that cset,
+> -# below, if there is an issue anyway. Since most of the cset we're gonna
+> -# have to clone are not such special refs, consign the output to oblivion
+> -# so as not to alarm unsuspecting users, but still trace it as a warning.
+
+ Yann will be happy that this gets removed :-)
+
+> -if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
+> -    printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
+> +git_checkout_done=0
+> +if [ ${git_fetch_done} -eq 1 ]; then
+> +    if _git checkout -q "'refs/buildroot/${cset}'" 2>&1; then
+
+ I'm not sure if I like this split. git_fetch_done gets set in only one place,
+so we could just do the checkout directly there. That would also make it more
+explicit that this is a checkout specifically for shallow fetches, while the
+checkout below is specifically for full fetches.
+
+
+> +        git_checkout_done=1
+> +    else
+> +        printf "Checkout failed, falling back to doing a full fetch\n"
+> +    fi
+>  fi
+>  
+> -# Checkout the required changeset, so that we can update the required
+> -# submodules.
+> -_git checkout -q "'${cset}'"
+> +if [ ${git_checkout_done} -eq 0 ]; then
+> +    printf "Doing full fetch\n"
+> +    _git remote add origin "'${repo}'"
+> +    _git fetch ${verbose} "${@}" origin
+
+ Why do we need to create a remote here?
+
+> +    _git checkout -q "'${cset}'"
+> +fi
+
+ At a later stage, we could update the fetch with --submodules=yes/no depending
+on -r option.
+
+ Another interesting feature would be to first try a shallow fetch of all tags
+and branches with a depth of, say, 100. That is still way less than a full clone
+for large repositories, and has a good chance to still capture a sha1 that is
+not at a branch or tag head. So it would provide a nice middle ground for the
+cases for which we fail to do a shallow clone now. And if it does fail, nothing
+is wasted because the full clone can start from the part that was already
+downloaded.
 
  Regards,
  Arnout
+
+>  
+>  # Get date of commit to generate a reproducible archive.
+>  # %cD is RFC2822, so it's fully qualified, with TZ and all.
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
