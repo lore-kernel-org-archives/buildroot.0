@@ -1,53 +1,36 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  6 Nov 2016 23:53:32 +0100
-Subject: [Buildroot] [PATCH v2] package/guile: dont't use -Os for CS 2014.05
-	ARM toolchain
-Message-ID: <1478472812-30673-1-git-send-email-romain.naour@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon,  7 Nov 2016 00:14:08 +0100
+Subject: [Buildroot] [PATCH] olimex_a20_olinuxino_lime_mali: bump kernel
+Message-ID: <1478474048-19255-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With this toolchain, guile tigger an assembler error with -Os which is
-probably caused by the binutils version being used:
+compat with gcc 5
 
-arm-none-linux-gnueabi-ld --version
-GNU ld (Sourcery CodeBench Lite 2014.05-29) 2.24.51.20140217
-
-arm-none-linux-gnueabi-gcc --version
-arm-none-linux-gnueabi-gcc (Sourcery CodeBench Lite 2014.05-29) 4.8.3 20140320 (prerelease)
-
-Nowaday, even with a Buildroot internal toolchain using the oldest
-Binutils GCC version (2.25.1 and 4.8.6), guile build fine with -Os.
-
-So, force -O2 when this toolchain is used and BR2_OPTIMIZE_S is set.
-
-Fixes:
-http://autobuild.buildroot.net/results/976/976b3477407e64c8c2fc2309ed952d0083903a19
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-v2: force -O2 instead of disaling the toolchain for guile
----
- package/guile/guile.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ configs/olimex_a20_olinuxino_lime_mali_defconfig | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-index ca54a4d..88c7414 100644
---- a/package/guile/guile.mk
-+++ b/package/guile/guile.mk
-@@ -32,6 +32,11 @@ ifeq ($(BR2_STATIC_LIBS),y)
- GUILE_CFLAGS += -DGC_NO_DLOPEN
- endif
+diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+index b2d7dd5..35af5f9 100644
+--- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+@@ -17,8 +17,10 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot-mali.cmd $(TARGET_D
  
-+# Triggers assembler error with -Os
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM)$(BR2_OPTIMIZE_S),yy)
-+GUILE_CFLAGS += -O2
-+endif
-+
- # It can use readline, but on the condition that it was build against
- # ncurses. If both aren't present disable readline support since the
- # host readline/ncurses support can poison the build.
+ # Kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux-sunxi,linux-sunxi,sunxi-v3.4.103-r1)/sunxi-v3.4.103-r1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/dan-and/linux-sunxi.git"
++# based on Linux version 3.4.113
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="dbabbacbbf8984dea0a8c893b38b376a6ecbb3c1"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sun7i"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
 -- 
-2.5.5
+2.7.4
