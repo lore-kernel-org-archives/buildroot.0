@@ -1,108 +1,37 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  6 Nov 2016 17:35:59 +0100
-Subject: [Buildroot] [PATCH] package/openjpeg: fix static build
-Message-ID: <20161106163559.4788-1-s.martin49@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 6 Nov 2016 18:50:46 +0100
+Subject: [Buildroot] [PATCH v3 24/24] toolchain-external: introduce and
+ use external toolchain infra
+In-Reply-To: <1477925833-27204-25-git-send-email-romain.naour@gmail.com>
+References: <1477925833-27204-1-git-send-email-romain.naour@gmail.com>
+ <1477925833-27204-25-git-send-email-romain.naour@gmail.com>
+Message-ID: <be5404f4-1bca-c263-17b9-25039475d157@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change adds a patch to openjpeg fixing the tiff indirect
-dependencies in case of static build.
 
-A similar patch for upstream master has been submitted [1].
 
-Fixes:
-  http://autobuild.buildroot.net/results/d0d/d0d22727311d6300e0e400728126170407bfd699/
-  and many others...
+On 31-10-16 15:57, Romain Naour wrote:
+> -# Some toolchain vendors have a regular file naming pattern.
+> -# For them, mass-define _ACTUAL_SOURCE_TARBALL based _SITE.
+> -ifneq ($(findstring sourcery.mentor.com/public/gnu_toolchain,$(TOOLCHAIN_EXTERNAL_SITE)),)
+> -TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL ?= \
+> -	$(subst -i686-pc-linux-gnu.tar.bz2,.src.tar.bz2,$(subst -i686-pc-linux-gnu-i386-linux.tar.bz2,-i686-pc-linux-gnu.src.tar.bz2,$(TOOLCHAIN_EXTERNAL_SOURCE)))
+> -endif
 
-[1] https://github.com/uclouvain/openjpeg/pull/866
+ I didn't notice earlier, but this bit seems to have gotten lost. Forgot to test
+legal-info?
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Olivier Schonken <olivier.schonken@gmail.com>
----
- ...tiff-append-flags-found-by-pkg-config-if-.patch | 72 ++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 package/openjpeg/0001-thirdparty-tiff-append-flags-found-by-pkg-config-if-.patch
+ Regards,
+ Arnout
 
-diff --git a/package/openjpeg/0001-thirdparty-tiff-append-flags-found-by-pkg-config-if-.patch b/package/openjpeg/0001-thirdparty-tiff-append-flags-found-by-pkg-config-if-.patch
-new file mode 100644
-index 0000000..be50902
---- /dev/null
-+++ b/package/openjpeg/0001-thirdparty-tiff-append-flags-found-by-pkg-config-if-.patch
-@@ -0,0 +1,72 @@
-+From 38f50c7d9ad3ba06b64583045665203afb53cbd9 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Sun, 6 Nov 2016 16:29:08 +0100
-+Subject: [PATCH] thirdparty: tiff: append flags found by pkg-config if
-+ available
-+
-+This change allows to get all required CFLAGS/LDFLAGS in case of static only
-+build.
-+
-+This build issue [1] was triggered by the Buildroot farms.
-+
-+[1] http://autobuild.buildroot.net/results/d0d/d0d22727311d6300e0e400728126170407bfd699/build-end.log
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ thirdparty/CMakeLists.txt | 23 +++++++++++++++++++++--
-+ 1 file changed, 21 insertions(+), 2 deletions(-)
-+
-+diff --git a/thirdparty/CMakeLists.txt b/thirdparty/CMakeLists.txt
-+index d1e68ca..225f51d 100644
-+--- a/thirdparty/CMakeLists.txt
-++++ b/thirdparty/CMakeLists.txt
-+@@ -1,5 +1,9 @@
-+ # 3rd party libs
-+ 
-++IF(NOT BUILD_THIRDPARTY)
-++  include(FindPkgConfig)
-++ENDIF(NOT BUILD_THIRDPARTY)
-++
-+ #------------
-+ # Try to find lib Z
-+ IF(BUILD_THIRDPARTY)
-+@@ -35,6 +39,9 @@ IF(BUILD_THIRDPARTY)
-+   SET(PNG_INCLUDE_DIRNAME ${OPENJPEG_SOURCE_DIR}/thirdparty/libpng PARENT_SCOPE)
-+ ELSE (BUILD_THIRDPARTY)
-+   IF (ZLIB_FOUND)
-++    # Static only build:
-++    #   it is not necessary to invoke pkg_check_module on libpng, because libpng
-++    #   only depends on zlib, which is already checked.
-+     FIND_PACKAGE(PNG)
-+     IF(PNG_FOUND)
-+       message(STATUS "Your system seems to have a PNG lib available, we will use it")
-+@@ -66,12 +73,24 @@ IF(BUILD_THIRDPARTY)
-+   SET(OPJ_HAVE_LIBTIFF 1 PARENT_SCOPE)
-+ ELSE (BUILD_THIRDPARTY)
-+   FIND_PACKAGE(TIFF)
-++  # Static only build:
-++  #   it is necessary to invoke pkg_check_module on libtiff since it may have
-++  #   several other dependencies not declared by its cmake module, but they are
-++  #   in the its pkgconfig module.
-++  IF(PKG_CONFIG_FOUND)
-++    FOREACH(pc_tiff_module tiff tiff3 tiff4 tiff-3 tiff-4 libtiff libtiff3 libtiff4 libtiff-3 libtiff-4)
-++      pkg_check_modules(PC_TIFF QUIET ${pc_tiff_module})
-++      IF(PC_TIFF_FOUND)
-++        break()
-++      ENDIF(PC_TIFF_FOUND)
-++    ENDFOREACH()
-++  ENDIF(PKG_CONFIG_FOUND)
-+   IF(TIFF_FOUND)
-+     message(STATUS "Your system seems to have a TIFF lib available, we will use it")
-+     SET(OPJ_HAVE_TIFF_H 1 PARENT_SCOPE)
-+     SET(OPJ_HAVE_LIBTIFF 1 PARENT_SCOPE)
-+-    SET(TIFF_LIBNAME ${TIFF_LIBRARIES} PARENT_SCOPE)
-+-    SET(TIFF_INCLUDE_DIRNAME ${TIFF_INCLUDE_DIR} PARENT_SCOPE)
-++    SET(TIFF_LIBNAME ${TIFF_LIBRARIES} ${PC_TIFF_STATIC_LIBRARIES} PARENT_SCOPE)
-++    SET(TIFF_INCLUDE_DIRNAME ${TIFF_INCLUDE_DIR} ${PC_TIFF_STATIC_INCLUDE_DIRS} PARENT_SCOPE)
-+   ELSE (TIFF_FOUND) # not found
-+     SET(OPJ_HAVE_TIFF_H 0 PARENT_SCOPE)
-+     SET(OPJ_HAVE_LIBTIFF 0 PARENT_SCOPE)
-+-- 
-+2.10.2
-+
 -- 
-2.10.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
