@@ -1,53 +1,65 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  6 Nov 2016 17:04:48 +0100
-Subject: [Buildroot] [PATCH v2] package/qemu: disable Qemu user-land
-	emulation for musl toolchains
-Message-ID: <1478448288-17885-1-git-send-email-romain.naour@gmail.com>
+Date: Sun, 6 Nov 2016 17:06:29 +0100
+Subject: [Buildroot] [PATCH] package/qemu: disable Qemu user-land
+ emulation for musl toolchains
+In-Reply-To: <ea162f2b-4b5a-5b87-3a4a-41c863e7aa2a@mind.be>
+References: <1478441720-7653-1-git-send-email-romain.naour@gmail.com>
+ <ea162f2b-4b5a-5b87-3a4a-41c863e7aa2a@mind.be>
+Message-ID: <063c7aaf-3dcd-1017-e0e9-13d00df91b97@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Like for cyclictest (rt-test)[1], linux-user/syscall.c use the
-definition of the "struct sigevent" from Glibc/uClibc which doesn't
-build with musl libc.
+Hi Arnout,
 
-So, disable Qemu user-land emulation for musl toolchains.
+Le 06/11/2016 ? 16:43, Arnout Vandecappelle a ?crit :
+> 
+> 
+> On 06-11-16 15:15, Romain Naour wrote:
+>> Like for cyclictest (rt-test)[1], linux-user/syscall.c use the
+>> definition of the "struct sigevent" from Glibc/uClibc which doesn't
+>> build with musl libc.
+>>
+>> So, disable Qemu user-land emulation for musl toolchains.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/b27/b277e668d9e22b624416bf46f6ccba802acd257e
+>>
+>> [1] 43bffa59e7359610c8f00038ddd97795c0ca35e1
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  package/qemu/Config.in | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+>> index ea6b946..138d96a 100644
+>> --- a/package/qemu/Config.in
+>> +++ b/package/qemu/Config.in
+>> @@ -69,6 +69,8 @@ comment "systems emulation needs a toolchain w/ dynamic library"
+>>  
+>>  config BR2_PACKAGE_QEMU_LINUX_USER
+>>  	bool "Enable all Linux user-land emulation"
+>> +	# Incompatible "struct sigevent" definition on musl
+>> +	depends on !BR2_TOOLCHAIN_USES_MUSL
+>>  	help
+>>  	  Say 'y' to build all Linux user-land emulators that QEMU supports.
+>>  
+> 
+>  Shouldn't a comment be added?
 
-Fixes:
-http://autobuild.buildroot.net/results/b27/b277e668d9e22b624416bf46f6ccba802acd257e
+Yes you're right.
+Fixed in v2.
 
-[1] 43bffa59e7359610c8f00038ddd97795c0ca35e1
+Best regards,
+Romain
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Francois Perrad <francois.perrad@gadz.org>
----
-v2: add a comment for BR2_TOOLCHAIN_USES_MUSL case (Arnout)
----
- package/qemu/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index ea6b946..8bae5f4 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -69,11 +69,16 @@ comment "systems emulation needs a toolchain w/ dynamic library"
- 
- config BR2_PACKAGE_QEMU_LINUX_USER
- 	bool "Enable all Linux user-land emulation"
-+	# Incompatible "struct sigevent" definition on musl
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	help
- 	  Say 'y' to build all Linux user-land emulators that QEMU supports.
- 
- # Note: bsd-user can not be build on Linux
- 
-+comment "Linux user-land emulation needs a glibc or uClibc toolchain"
-+	depends on BR2_TOOLCHAIN_USES_MUSL
-+
- endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
- 
- config BR2_PACKAGE_QEMU_HAS_EMULS
--- 
-2.5.5
+> 
+>  Regards,
+>  Arnout
+> 
+>>
+> 
