@@ -1,63 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 6 Nov 2016 13:14:19 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-11-04
-In-Reply-To: <20161106104106.GA3367@free.fr>
-References: <20161105073056.4969320D86@mail.free-electrons.com>
- <df36574f-bff9-b295-2a82-825a13894f58@gmail.com>
- <df69f5f2-2881-d4b9-759a-3c2f4bcf7192@mind.be>
- <20161106104106.GA3367@free.fr>
-Message-ID: <db172413-02bc-3a7d-43c9-957b3e3ed808@mind.be>
+From: Henrique Marks <henrique.marks@datacom.ind.br>
+Date: Sun, 6 Nov 2016 10:13:36 -0200 (BRST)
+Subject: [Buildroot] [PATCH 2/3] test/support/download/git: new test
+In-Reply-To: <43363991-9d33-1b7c-7279-948cc2c1b2f3@mind.be>
+References: <20161101193354.8716-1-ricardo.martincoski@datacom.ind.br>
+ <20161101193354.8716-2-ricardo.martincoski@datacom.ind.br>
+ <43363991-9d33-1b7c-7279-948cc2c1b2f3@mind.be>
+Message-ID: <248515227.4438489.1478434416837.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello All
 
+----- Mensagem original -----
+> De: "Arnout Vandecappelle" <arnout@mind.be>
+> Para: "ricardo martincoski" <ricardo.martincoski@datacom.ind.br>, buildroot at buildroot.org
+> Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+> Enviadas: S?bado, 5 de novembro de 2016 23:24:14
+> Assunto: Re: [Buildroot] [PATCH 2/3] test/support/download/git: new test
 
-On 06-11-16 11:41, Yann E. MORIN wrote:
-> Arnout, All,
+> On 01-11-16 20:33, Ricardo Martincoski wrote:
+>> This test assumes:
+>> - it is run from the buildroot base dir;
+>> - there is a ssh server installed;
+>> - there is a key pair to allow the current user to ssh to localhost
+>>   without being prompted for a password;
+>> - there is no ./.config ./stdout ./package/package;
+>> 
+>> For each testcase, it creates a new git repo, and then download from
+>> this repo using a fake package named 'package'.
 > 
-> On 2016-11-06 02:30 +0100, Arnout Vandecappelle spake thusly:
->> On 05-11-16 23:03, Romain Naour wrote:
->>> You can reproduce the issue easily by adding LC_ALL=C to TVHEADEND_BUILD_CMDS.
->>> Can we force the utf8 encoding ?
-> 
-> Arg, I spent quite a bit of time on that one, but had no idea what was
-> going on there. Thanks for the hint. :-)
-> 
->>  Maybe we should export LC_ALL=C.UTF-8 instead of LC_ALL=C ? That might have
->> some unexpected side effect, but I don't really expect it.
-> 
-> But we only force LC_ALL for reproducible builds so far.
-
- Meh, I just grepped without context so didn't notice that it was under the
-reproducible condition :-)
-
-> 
-> Alternatively, we could see if the locale is UTF-8; if not, then we
-> force such a locale.
-
- That's a lot more complicated...
-
- Regards,
- Arnout
-
-> 
->>  If we want to be on the safe side, we can just do that bit in
->> TVHEADEND_BUILD_CMDS to override the global locale.
-> 
-> Yep, that works. I'll send a patch. Thanks for the hints! :-)
+> I've given comments on this patch which I think are important, so I've marked
+> it as Changes Requested in patchwork. However, patch 3/3 can be committed
+> without this one.
 > 
 > Regards,
-> Yann E. MORIN.
+> Arnout
 > 
+>> 
+
+Regarding the test comments, i think that part of the proposal is to show the tests written in Given-When-Then format without using nothing more than python and unittest class. Using GWT, it becomes easier to separate the pre-conditions, the operations to be tested, and the results. I think GWT exposes this nicely.
+
+But, i must say that we (at Datacom) accepts both formats to tests, because there are cases where a tabular format is easier, and using GWT is just cumbersome. For instance, testing (ssh, sftp, https) connections is tabular, there is no preparation, and the operation and result comes together.
+
+Another advantage of GWT here is to serve as an example. As buildroot is discussing test infra-structure, the GWT git tests are useful as an example on how to do it with GWT, python and unittest.
+
+Thanks all.
+
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Dr. Henrique Marks
+henrique.marks at datacom.ind.br
+R. Am?rica, 1000 - Eldorado do Sul - RS
+CEP: 92990-000 - Brasil
+Fone: +55 51 3933 3000 - Ramal 3466
