@@ -1,36 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Nov 2016 15:08:23 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-11-05
-In-Reply-To: <CAGm1_kvhwO0WU9ut8460vmrNKNLcqnwvqegBHPkimYJrSOFKQg@mail.gmail.com>
-References: <20161106073024.E75F820798@mail.free-electrons.com>
- <CAGm1_kvhwO0WU9ut8460vmrNKNLcqnwvqegBHPkimYJrSOFKQg@mail.gmail.com>
-Message-ID: <20161106150823.51fb51be@free-electrons.com>
+Date: Sun, 6 Nov 2016 15:11:21 +0100
+Subject: [Buildroot] [git commit] package/ser2net: disable threads for
+	toolchains without threads support
+Message-ID: <20161106141318.0072581765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d02655cd2157636d6150daf3a1344b25141780c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 6 Nov 2016 14:39:52 +0100, Yegor Yefremov wrote:
+ser2net configure script provide an option to disable threads support,
+use it.
 
-> >         i686 |                    ser2net-3.0 | NOK | http://autobuild.buildroot.net/results/7f152e2255f8d2cf9378812998fe9a239319c116  
-> 
-> this was already fixed upstream.I'll take care about this.
-> 
-> https://sourceforge.net/p/ser2net/code/ci/4f36de55269a084bf8cab86158a25f150c599e67/
+Fixes:
+http://autobuild.buildroot.net/results/6bc/6bc0f99917c2069a1614f4cfcaa98af1b21762e4
 
-Thanks!
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Thomas: use --{with,without}-pthreads instead of --with-pthreads={yes,no}.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ser2net/ser2net.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Are you interested in ser2net? If so, perhaps you can yourself in
-DEVELOPERS for this package? :-)
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
+index 01aee95..c4dcaf3 100644
+--- a/package/ser2net/ser2net.mk
++++ b/package/ser2net/ser2net.mk
+@@ -9,6 +9,12 @@ SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ SER2NET_LICENSE = GPLv2+
+ SER2NET_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++SER2NET_CONF_OPTS += --with-pthreads
++else
++SER2NET_CONF_OPTS += --without-pthreads
++endif
++
+ define SER2NET_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/ser2net/S50ser2net \
+ 		$(TARGET_DIR)/etc/init.d/S50ser2net
