@@ -1,56 +1,34 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun,  6 Nov 2016 15:38:51 +0100
-Subject: [Buildroot] [PATCH] olimex_a20_olinuxino_lime_mali: bump u-boot to
-	2016.09.01
-Message-ID: <1478443131-1912-1-git-send-email-francois.perrad@gadz.org>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Sun, 06 Nov 2016 16:20:08 +0100
+Subject: [Buildroot] qmx6_defconfig fails to build
+In-Reply-To: <20161106130954.00e671aa@free-electrons.com>
+References: <20161105150405.705835a4@free-electrons.com>
+ <CAAMH-yvrhaxK5yPa6dy4wWHk3c1tPvL3w=DZ-tGTCkjXxMxqjg@mail.gmail.com>
+ <20161106130954.00e671aa@free-electrons.com>
+Message-ID: <6111922.2gWK5VNXvE@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-U-Boot KConfig allows to take care of CONFIG_OLD_SUNXI_KERNEL_COMPAT
-in order to properly start the kernel (Error: unrecognized/unsupported machine ID)
+Hello,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/olimex_a20_olinuxino_lime_defconfig      | 3 ++-
- configs/olimex_a20_olinuxino_lime_mali_defconfig | 6 ++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+On Sunday 06 November 2016 13:09:54 Thomas Petazzoni wrote:
+> On Sun, 6 Nov 2016 13:07:33 +0100, Gary Bisson wrote:
+> > Same here, don't have any qmx6 hardware. I've bumped the kernel in
+> > the past looking at their repo tags but I think they now moved to
+> > another repo.
+> OK, so unless J?r?me has access to the HW and gets back to us, I'll
+> propose to remove this defconfig.
 
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 49987fe..5941550 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -32,9 +32,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- 
- # Bootloaders
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
-diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-index 42c8a7c..b2d7dd5 100644
---- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-@@ -37,9 +37,11 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- 
- # Bootloaders
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+I have this board somewhere. However, I don't actively work on it and 
+honestly I won't have time to do runtime tests. I agree to drop this 
+defconfig.
+
+BR,
+
 -- 
-2.7.4
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
