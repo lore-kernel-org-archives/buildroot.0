@@ -1,36 +1,28 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon,  7 Nov 2016 00:14:08 +0100
-Subject: [Buildroot] [PATCH] olimex_a20_olinuxino_lime_mali: bump kernel
-Message-ID: <1478474048-19255-1-git-send-email-francois.perrad@gadz.org>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 06 Nov 2016 21:17:07 -0200
+Subject: [Buildroot] [PATCH 1/3] support/download/git: log checked out
+ sha1
+References: <6b271555-29d7-0b41-dd3f-698b2cd9724b@mind.be>
+Message-ID: <581fb9f36306e_35c13fe67694009c9518c@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-compat with gcc 5
+Arnout,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/olimex_a20_olinuxino_lime_mali_defconfig | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Thank you for reviewing this series.
 
-diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-index b2d7dd5..35af5f9 100644
---- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-@@ -17,8 +17,10 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot-mali.cmd $(TARGET_D
- 
- # Kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux-sunxi,linux-sunxi,sunxi-v3.4.103-r1)/sunxi-v3.4.103-r1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/dan-and/linux-sunxi.git"
-+# based on Linux version 3.4.113
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="dbabbacbbf8984dea0a8c893b38b376a6ecbb3c1"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sun7i"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
--- 
-2.7.4
+On Sat, Nov 05, 2016 at 07:50 PM, Arnout Vandecappelle wrote:
+
+[snip]
+>> +if [ -z ${verbose} ]; then
+> 
+>  It's quite weird to check that verbose is empty, but that's how the variable is
+> defined... Perhaps s/verbose/quiet/ would be a good idea...
+
+OK, makes sense. I can send a followup patch.
+
+Regards,
+Ricardo
