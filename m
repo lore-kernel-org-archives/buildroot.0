@@ -1,69 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Nov 2016 23:20:14 +0100
+Date: Sun, 6 Nov 2016 23:18:03 +0100
 Subject: [Buildroot] [git commit branch/next] gst1-plugins-bad: enable
-	webrtc plugin
-Message-ID: <20161107205049.E2E7B80AC4@busybox.osuosl.org>
+	fdkaac plugin
+Message-ID: <20161107205049.D069F7FB7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee267886bc090335dd94c97dca1c294addccc090
+commit: https://git.buildroot.net/buildroot/commit/?id=0d45e57a1292a803fe3d118c580243d2e8bd41c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-It's new for 1.10.0, add an explicit option for the webrtc plugin.
+It's new for 1.10.0, add an explicit option for the fdkaac plugin.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Thomas: add missing dependencies for the fdk-aac select, as noticed
+by Baruch Siach.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in           | 17 +++++++++++++++++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk |  7 +++++++
- 2 files changed, 24 insertions(+)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 12 ++++++++++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk |  8 ++++++++
+ 2 files changed, 20 insertions(+)
 
 diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 8af35cc..1e251af 100644
+index 2f288ca..8af35cc 100644
 --- a/package/gstreamer1/gst1-plugins-bad/Config.in
 +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -682,6 +682,23 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBP
+@@ -520,6 +520,18 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FBDEV
  	help
- 	  Webp image format plugin
+ 	  Linux framebuffer video sink
  
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
-+	bool "webrtc"
-+	# All depends from webrtc-audio-processing
-+	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FDK_AAC
++	bool "fdk-aac"
++	select BR2_PACKAGE_FDK_AAC
++	depends on BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
 +	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
-+	select BR2_PACKAGE_WEBRTC
 +	help
-+	  WebRTC echo-cancellation, gain control and noise suppression
++	  MPEG AAC encoder/decoder
 +
-+comment "webrtc needs a toolchain w/ C++, NPTL, gcc >= 4.8"
-+	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++comment "fdk-aac needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
++	depends on !BR2_INSTALL_LIBSTDCPP
 +
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265
- 	bool "x265"
- 	depends on BR2_INSTALL_LIBSTDCPP
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+ 	bool "gl"
+ 	default y
 diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index cd9da7c..ba9f8ff 100644
+index ac99fcd..cd9da7c 100644
 --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
 +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -794,6 +794,13 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-webp
+@@ -642,6 +642,14 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-fbdev
  endif
  
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc
-+GST1_PLUGINS_BAD_DEPENDENCIES += webrtc-audio-processing
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FDK_AAC),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-fdk_aac
++GST1_PLUGINS_BAD_DEPENDENCIES += fdk-aac
++GST1_PLUGINS_BAD_HAS_UNKNOWN_LICENSE = y
 +else
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-fdk_aac
 +endif
 +
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-x265
- GST1_PLUGINS_BAD_DEPENDENCIES += x265
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-gl
+ else
