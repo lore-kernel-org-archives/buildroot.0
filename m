@@ -1,43 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Nov 2016 21:49:24 +0100
-Subject: [Buildroot] [git commit branch/next] gst1-libav: bump to version
-	1.10.0
-Message-ID: <20161107205050.0B3B980AC4@busybox.osuosl.org>
+Date: Sun, 6 Nov 2016 23:04:47 +0100
+Subject: [Buildroot] [git commit branch/next] fdk-aac: refactor architecture
+	dependency as a blind option
+Message-ID: <20161107205049.C733A7FB7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ffd5bf1cd84a8d78827976f9cd277da2a02ed0f
+commit: https://git.buildroot.net/buildroot/commit/?id=b60aca590b6ea9b1ef4400b986631548195e6d19
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+In preparation to the addition of a fdk-aac GStreamer plugin that will
+have to select the fdk-aac package (and therefore inherits its
+dependencies), this commits adds a BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
+blind option to avoid duplicating the architecture dependencies of
+this package.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/fdk-aac/Config.in | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index 46d48a9..329d1d6 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
-@@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.8.3.tar.xz.sha256sum
--sha256	9006a05990089f7155ee0e848042f6bb24e52ab1d0a59ff8d1b5d7e33001a495  gst-libav-1.8.3.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.10.0.tar.xz.sha256sum
-+sha256	af98204411c78abb98233c1858f2886be6401304d24be218752bbbcede9bd85b  gst-libav-1.10.0.tar.xz
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 5706c64..718ebdb 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/fdk-aac/Config.in b/package/fdk-aac/Config.in
+index 9e18d22..f51c5ab 100644
+--- a/package/fdk-aac/Config.in
++++ b/package/fdk-aac/Config.in
+@@ -1,11 +1,14 @@
++# These are the architectures supported by FDK AAC
++config BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
++	bool
++	default y if BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
++		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
++		BR2_powerpc || BR2_sh
++
+ config BR2_PACKAGE_FDK_AAC
+ 	bool "fdk-aac"
++	depends on BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	# These are the architectures supported by FDK AAC
+-	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
+-		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+-		   BR2_powerpc || BR2_sh
+-
+ 	help
+ 	  The Fraunhofer FDK AAC Codec Library for Android ("FDK AAC Codec")
+ 	  is software that implements the MPEG Advanced Audio Coding ("AAC")
+@@ -14,7 +17,5 @@ config BR2_PACKAGE_FDK_AAC
+ 	  http://sourceforge.net/projects/opencore-amr/files/fdk-aac/
  
--GST1_LIBAV_VERSION = 1.8.3
-+GST1_LIBAV_VERSION = 1.10.0
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
- GST1_LIBAV_CONF_OPTS = --with-system-libav
+ comment "fdk-aac needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
+-		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+-		   BR2_powerpc || BR2_sh
