@@ -1,101 +1,77 @@
-From: Charles Hardin <ckhardin@exablox.com>
-Date: Mon, 7 Nov 2016 15:22:26 -0800
-Subject: [Buildroot] Looking for Pointers and Info: Active Directory &
-	Kerberos
-In-Reply-To: <CAKduhSuPAxx8m9O2GdgG_J9pSNii-pKwQe_663imJS3y9bd+tA@mail.gmail.com>
-References: <CAKduhSuPAxx8m9O2GdgG_J9pSNii-pKwQe_663imJS3y9bd+tA@mail.gmail.com>
-Message-ID: <1999F91E-39BA-444C-8B2B-61719E2B5EC6@exablox.com>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Mon, 7 Nov 2016 18:40:20 -0500
+Subject: [Buildroot] [PATCH 0/6] package/pseudo: fix build and better
+	mimic fakeroot
+In-Reply-To: <1270837880.6241362.1478557615050.JavaMail.zimbra@savoirfairelinux.com>
+References: <cover.1478553802.git.yann.morin.1998@free.fr>
+ <1270837880.6241362.1478557615050.JavaMail.zimbra@savoirfairelinux.com>
+Message-ID: <20161107234020.GA11439@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We hacked this in as an external package in our layout a bit ago - just one of those I was going to push
-up but never quite got around to it. We use this to link in kerberos.
+Hello all,
 
-
-
-Config.in
------------
-config BR2_PACKAGE_KRB5
-	bool "krb5"
-	depends on BR2_TOOLCHAIN_HAS_THREADS
-	help
-	  KRB5 is the MIT Kerberos Version 5 implementation
-
-	  Kerberos is a network authentication protocol. It is designed
-	  to provide strong authentication for client/server applications
-	  by using secret-key cryptography. A free implementation of this
-	  protocol is available from the Massachusetts Institute of Technology.
-
-	  http://web.mit.edu/Kerberos
-
-comment "krb5 needs a toolchain w/ threads"
-	depends on !BR2_TOOLCHAIN_HAS_THREADS
-
-
-
-krb5.hash
------------
-sha256 cedb07fad8331e3ff2983d26e977a2ddba622f379c2b19bfea85bd695930f9e9  krb5-1.14.tar.gz
-
-
-
-krb5.mk
------------
-################################################################################
-#
-# krb5
-#
-################################################################################
-
-KRB5_VERSION = 1.14
-KRB5_SOURCE = krb5-$(KRB5_VERSION).tar.gz
-KRB5_SITE = http://web.mit.edu/Kerberos/dist/krb5/$(KRB5_VERSION)
-KRB5_LICENSE = MIT
-KRB5_LICENSE_FILES = NOTICE
-KRB5_INSTALL_STAGING = YES
-KRB5_INSTALL_TARGET = YES
-KRB5_DEPENDENCIES =
-KRB5_SUBDIR = src
-
-# Pass some configuration variables into the environment
-KRB5_CONF_ENV += \
-	ac_cv_func_regcomp=yes \
-	ac_cv_printf_positional=yes \
-	krb5_cv_attr_constructor_destructor=yes,yes \
-	WARN_CFLAGS='-Wall' \
-
-KRB5_CONF_OPTS += \
-	--enable-thread-support \
-
-$(eval $(autotools-package))
-
-
-
-> On Nov 7, 2016, at 3:15 PM, Daniel Price <daniel.price@gmail.com> wrote:
+On Mon, Nov 07, 2016 at 05:26:55PM -0500, Patrick Keroulas wrote:
+> Hello all,
 > 
+> ----- Original Message -----
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > To: buildroot at buildroot.org
+> > Cc: "Erico Nunes" <nunes.erico@gmail.com>, "Ga?l PORTAY" <gael.portay@savoirfairelinux.com>, "Julien BOIBESSOT"
+> > <julien.boibessot@free.fr>, "Patrick Keroulas" <patrick.keroulas@savoirfairelinux.com>, "Yann E. MORIN"
+> > <yann.morin.1998@free.fr>
+> > Sent: Monday, November 7, 2016 4:23:37 PM
+> > Subject: [PATCH 0/6] package/pseudo: fix build and better mimic fakeroot
 > 
-> Hi everyone,
+> > Hello All!
 > 
-> Our team is looking to integrate Active Directory client support into our buildroot-based appliance.  To do so we think we need a working kerberos client.
+> > When we switched from using fakeroot to using pseudo, a lot of
+> > assumptions were made, in that we assumed pseudo was by default
+> > behaving as fakeroot did.
 > 
-> We are ultimately trying to get a working pam-krb5 module (https://www.eyrie.org/~eagle/software/pam-krb5/ <https://www.eyrie.org/~eagle/software/pam-krb5/>); it depends on either Heimdal or MIT Kerberos.
+> > That is wrong. pseudo is a little bit more versatile than fakeroot
+> > is, so using it is a little bit more involved.
 > 
-> So, we are struggling to work out the right stack to use, and trying to work out whether anyone else has paved the way already.  Because of the existing host-heimdal recipe, we spent some time trying to get a cross-build of Heimdal to work.  However we recently noticed that Debian seems to be on the cusp of removing its support for Heimdal (see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837728 <https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837728>).  And we had trouble getting the pam-krb5 module to see heimdal at all.
+> > First, its buildsystem is a bit convoluted, and can incorrectly guess
+> > the host charateristics, like bitness.
 > 
-> Has anyone else worked through this?  Has anyone else got MIT kerberos up and running?  Pointers much appreciated.
+> > Second, it needs to be told at runtime where to look at, and put its
+> > own stuff. It correctly gueses, but prints a warning that it had to
+> > gues, and the location to store its DB is not optimum (even if not
+> > incorrect).
 > 
->       -dp
+> > So, this series ensures that pseudo is correctly built and that we
+> > correctly specify the runtime configuration.
 > 
-> -- 
-> Daniel.Price at gmail.com <mailto:Daniel.Price@gmail.com>; Twitter: @danielbprice
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> I build my firmware inside a Docker container, in which a minimal 
+> Ubuntu x86-64 distro runs with no libc6-dev-i386 installed.
+> However, '-m32' was polluting the compiler options and the x86-64
+> headers couldn't be found. This patchset fixes the build.
+> 
+> Tested-by: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+> 
+> Thanks,
+> 
+> Patrick
+> 
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161107/ba8f5a28/attachment.html>
+Okay works fine on a Ubuntu 16.04 i686 via Vagrant!
+
+$ vagrand ssh
+ubuntu at ubuntu-xenial:~$ uname -a
+Linux ubuntu-xenial 4.4.0-45-generic #66-Ubuntu SMP Wed Oct 19 14:12:05 UTC 2016 i686 i686 i686 GNU/
+ubuntu at ubuntu-xenial:~$ cd Workspaces/buildroot/ && make host-pseudo
+(... full log at http://pastebin.ca/3737232)
+cc  -pipe -std=gnu99 -Wall -W -Wextra -fPIC -D_LARGEFILE64_SOURCE -D_ATFILE_SOURCE  -DPSEUDO_PREFIX='"/home/ubuntu/Workspaces/buildroot/output/host/usr"' -DPSEUDO_SUFFIX='""' -DPSEUDO_BINDIR='"bin"' -DPSEUDO_LIBDIR='"lib"' -DPSEUDO_LOCALSTATEDIR='"var/pseudo"' -DPSEUDO_VERSION='"1.8.1"' -DUSE_MEMORY_DB  -DPSEUDO_PASSWD_FALLBACK='""'   -DPSEUDO_XATTR_SUPPORT       -O2 -g -L/home/ubuntu/Workspaces/buildroot/output/host/usr/lib -I/home/ubuntu/Workspaces/buildroot/output/host/usr/include -Wl,-R/home/ubuntu/Workspaces/buildroot/output/host/usr/lib -shared -o lib/libpseudo.so \
+	pseudo_client.o pseudo_ipc.o \
+	pseudo_wrappers.o pseudo_tables.o pseudo_util.o  -ldl -lpthread
+(...)
+
+You have my
+Tested-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+
+Thanks,
+Ga?l
