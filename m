@@ -1,155 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Nov 2016 21:59:58 +0100
-Subject: [Buildroot] [git commit] board/armadeus: bump apf51 kernel to
-	4.4.30 (latest LTS)
-Message-ID: <20161107210339.60780818F3@busybox.osuosl.org>
+Date: Mon, 7 Nov 2016 22:04:19 +0100
+Subject: [Buildroot] [PATCH] board/armadeus: bump apf51 kernel to 4.4.30
+ (latest LTS)
+In-Reply-To: <1478531682-6181-1-git-send-email-julien.boibessot@free.fr>
+References: <1478531682-6181-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20161107220419.4c2ae9ce@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfc2c48c1e174d4882ec2cda54ecb95690229b2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This will fix:
-http://free-electrons.com/~thomas/pub/buildroot-defconfigs/armadeus_apf51_defconfig.log.FAIL
+On Mon,  7 Nov 2016 16:14:42 +0100, julien.boibessot at free.fr wrote:
+> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> 
+> This will fix:
+> http://free-electrons.com/~thomas/pub/buildroot-defconfigs/armadeus_apf51_defconfig.log.FAIL
+> 
+> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> ---
+>  .../apf51/{linux-3.12.config => linux-4.4.config}  | 26 ++++++++++++++++------
+>  configs/armadeus_apf51_defconfig                   |  6 ++---
+>  2 files changed, 22 insertions(+), 10 deletions(-)
+>  rename board/armadeus/apf51/{linux-3.12.config => linux-4.4.config} (93%)
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../apf51/{linux-3.12.config => linux-4.4.config}  | 26 ++++++++++++++++------
- configs/armadeus_apf51_defconfig                   |  6 ++---
- 2 files changed, 22 insertions(+), 10 deletions(-)
+Applied to master, thanks.
 
-diff --git a/board/armadeus/apf51/linux-3.12.config b/board/armadeus/apf51/linux-4.4.config
-similarity index 93%
-rename from board/armadeus/apf51/linux-3.12.config
-rename to board/armadeus/apf51/linux-4.4.config
-index 6c461b6..6957b63 100644
---- a/board/armadeus/apf51/linux-3.12.config
-+++ b/board/armadeus/apf51/linux-4.4.config
-@@ -20,7 +20,7 @@ CONFIG_BSD_DISKLABEL=y
- # CONFIG_IOSCHED_CFQ is not set
- CONFIG_ARCH_MXC=y
- CONFIG_MXC_IRQ_PRIOR=y
--CONFIG_MACH_IMX51_DT=y
-+CONFIG_SOC_IMX51=y
- CONFIG_ARM_THUMBEE=y
- CONFIG_PREEMPT=y
- CONFIG_AEABI=y
-@@ -111,7 +111,9 @@ CONFIG_KEYBOARD_GPIO=m
- CONFIG_KEYBOARD_IMX=m
- CONFIG_INPUT_TOUCHSCREEN=y
- CONFIG_TOUCHSCREEN_WM831X=y
-+CONFIG_TOUCHSCREEN_MC13XXX=m
- CONFIG_INPUT_MISC=y
-+CONFIG_INPUT_MC13783_PWRBUTTON=m
- CONFIG_INPUT_UINPUT=m
- CONFIG_INPUT_WM831X_ON=y
- # CONFIG_LEGACY_PTYS is not set
-@@ -127,19 +129,24 @@ CONFIG_SPI_IMX=y
- CONFIG_SPI_SPIDEV=m
- CONFIG_GPIO_SYSFS=y
- CONFIG_GPIO_WM831X=m
--CONFIG_POWER_SUPPLY=m
-+CONFIG_POWER_SUPPLY=y
- CONFIG_WM831X_BACKUP=m
- CONFIG_WM831X_POWER=m
- CONFIG_HWMON=m
- CONFIG_SENSORS_AS1531=m
-+CONFIG_SENSORS_MC13783_ADC=m
- CONFIG_SENSORS_WM831X=m
- CONFIG_WATCHDOG=y
- CONFIG_WATCHDOG_NOWAYOUT=y
- CONFIG_WM831X_WATCHDOG=m
- CONFIG_IMX2_WDT=y
-+CONFIG_MFD_MC13XXX_I2C=y
- CONFIG_MFD_WM831X_I2C=y
- CONFIG_REGULATOR=y
- CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_REGULATOR_MC13892=m
-+CONFIG_IMX_IPUV3_CORE=y
-+CONFIG_DRM=y
- CONFIG_MFD_IMX_IPU_V3=y
- CONFIG_MEDIA_SUPPORT=m
- CONFIG_VIDEO_DEV=m
-@@ -203,12 +210,13 @@ CONFIG_USB_PRINTER=y
- CONFIG_USB_WDM=y
- CONFIG_USB_STORAGE=y
- CONFIG_USB_CHIPIDEA=y
-+CONFIG_USB_CHIPIDEA_UDC=y
- CONFIG_USB_CHIPIDEA_HOST=y
- CONFIG_USB_PHY=y
- CONFIG_NOP_USB_XCEIV=y
- CONFIG_USB_GPIO_VBUS=y
- CONFIG_USB_ULPI=y
--CONFIG_USB_GADGET=m
-+CONFIG_USB_GADGET=y
- CONFIG_USB_GADGET_DEBUG_FILES=y
- CONFIG_USB_GADGET_DEBUG_FS=y
- CONFIG_USB_ETH=m
-@@ -227,12 +235,19 @@ CONFIG_NEW_LEDS=y
- CONFIG_LEDS_CLASS=y
- CONFIG_LEDS_GPIO=y
- CONFIG_LEDS_WM831X_STATUS=m
-+CONFIG_LEDS_MC13783=m
- CONFIG_LEDS_TRIGGERS=y
- CONFIG_LEDS_TRIGGER_HEARTBEAT=y
- CONFIG_RTC_CLASS=y
- CONFIG_RTC_MXC=y
- CONFIG_RTC_DRV_WM831X=y
-+CONFIG_RTC_DRV_MC13XXX=m
- CONFIG_STAGING=y
-+CONFIG_DRM_IMX=y
-+CONFIG_DRM_IMX_FB_HELPER=y
-+CONFIG_DRM_IMX_PARALLEL_DISPLAY=y
-+CONFIG_DRM_IMX_TVE=y
-+CONFIG_DRM_IMX_IPUV3=y
- CONFIG_IIO=m
- CONFIG_EXT2_FS=y
- CONFIG_EXT2_FS_XATTR=y
-@@ -242,6 +257,7 @@ CONFIG_EXT2_FS_XIP=y
- CONFIG_EXT3_FS=y
- CONFIG_EXT3_FS_POSIX_ACL=y
- CONFIG_EXT3_FS_SECURITY=y
-+CONFIG_EXT4_FS=y
- CONFIG_AUTOFS4_FS=y
- CONFIG_ISO9660_FS=y
- CONFIG_JOLIET=y
-@@ -249,10 +265,6 @@ CONFIG_ZISOFS=y
- CONFIG_MSDOS_FS=y
- CONFIG_VFAT_FS=y
- CONFIG_TMPFS=y
--CONFIG_JFFS2_FS=y
--CONFIG_JFFS2_COMPRESSION_OPTIONS=y
--CONFIG_JFFS2_LZO=y
--CONFIG_JFFS2_CMODE_NONE=y
- CONFIG_UBIFS_FS=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V3=y
-diff --git a/configs/armadeus_apf51_defconfig b/configs/armadeus_apf51_defconfig
-index f70593b..e834626 100644
---- a/configs/armadeus_apf51_defconfig
-+++ b/configs/armadeus_apf51_defconfig
-@@ -3,7 +3,7 @@ BR2_arm=y
- BR2_cortex_a8=y
- 
- # Linux headers same as kernel, a 3.12 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- 
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf51"
-@@ -13,9 +13,9 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.30"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf51/linux-3.12.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf51/linux-4.4.config"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x90008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
