@@ -1,45 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 7 Nov 2016 13:43:05 +0200
-Subject: [Buildroot] [PATCH] wpa_supplicant: add mesh support (IEEE
- 80211s)
-In-Reply-To: <CAGm1_ks8gnc7PaeSd2C3_G5zkm3Ok+NTEJPJNpbtY7r0tSXb-g@mail.gmail.com>
-References: <1478514205-29497-1-git-send-email-yegorslists@googlemail.com>
- <20161107105029.3inpdhl7cxowk2xo@sapphire.tkos.co.il>
- <CAGm1_ks8gnc7PaeSd2C3_G5zkm3Ok+NTEJPJNpbtY7r0tSXb-g@mail.gmail.com>
-Message-ID: <20161107114304.r4nsnjulhfeijnam@sapphire.tkos.co.il>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 7 Nov 2016 12:51:02 +0000
+Subject: [Buildroot] [PATCH next] sqlite: bump version to 3150100 (3.15.1)
+Message-ID: <20161107125102.52166-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Mon, Nov 07, 2016 at 12:19:37PM +0100, Yegor Yefremov wrote:
-> On Mon, Nov 7, 2016 at 11:50 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > On Mon, Nov 07, 2016 at 11:23:25AM +0100, yegorslists at googlemail.com 
-> >  wrote:
-> >> +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING),y)
-> >> +WPA_SUPPLICANT_CONFIG_SET += CONFIG_IEEE80211W \
-> >> +                          CONFIG_MESH \
-> >> +                          CONFIG_SAE
-> >
-> > CONFIG_IEEE80211W appears commented out in wpa_supplicant/defconfig, so maybe
-> > use WPA_SUPPLICANT_CONFIG_ENABLE for that. Though I'm not sure about the
-> > reason for the distinction between WPA_SUPPLICANT_CONFIG and
-> > WPA_SUPPLICANT_CONFIG_SET. Isn't WPA_SUPPLICANT_CONFIG_SET enough for
-> > everything?
-> 
-> Good catch.
-> 
-> WPA_SUPPLICANT_CONFIG_ENABLE ensures we don't have the same CONFIG
-> option twice. Especially if it wasn't commented.
-
-What is wrong with having the same CONFIG option twice?
-
-baruch
-
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index b0418af..bb24f94 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1 b34cb4ee9710368598c62df0222f5c24dfc9c860  sqlite-autoconf-3150000.tar.gz
++sha1 47404fe5c43936160ad0e90bddedc99367da7a9b  sqlite-autoconf-3150100.tar.gz
+ # Calculated based on the hash above
+-sha256 77162da9b4a0336d7e77d5252b690662850f62b47c12d9125f74ab9de78ded27  sqlite-autoconf-3150000.tar.gz
++sha256 5dfa89b7697ee3c2ac7b44e8e157e7f204bf999c866afcaa8bb1c7ff656ae2c5  sqlite-autoconf-3150100.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 0a5c1bb..3f44f82 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3150000
++SQLITE_VERSION = 3150100
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2016
+ SQLITE_LICENSE = Public domain
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.10.1
