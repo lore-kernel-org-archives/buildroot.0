@@ -1,43 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Nov 2016 23:03:14 +0100
-Subject: [Buildroot] [git commit branch/next] gst1-plugins-good: bump to
-	version 1.10.0
-Message-ID: <20161107205049.B1DD581974@busybox.osuosl.org>
+Date: Mon, 7 Nov 2016 21:49:52 +0100
+Subject: [Buildroot] [git commit branch/next] gst1-validate: bump to version
+	1.10.0
+Message-ID: <20161107205050.1B6CD80AC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6a58ad7d326d3dcc564e36e2dc157d5a3532d7c
+commit: https://git.buildroot.net/buildroot/commit/?id=32e0d57a0fed932fcfc4745afda4d65aeb71c39f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+It now requires json-glib as dependency so adjust.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gstreamer1/gst1-validate/Config.in          | 1 +
+ package/gstreamer1/gst1-validate/gst1-validate.hash | 4 ++--
+ package/gstreamer1/gst1-validate/gst1-validate.mk   | 3 ++-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-index 2e3db3d..a00db6c 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
+index a9bb2aa..2022d38 100644
+--- a/package/gstreamer1/gst1-validate/Config.in
++++ b/package/gstreamer1/gst1-validate/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_GST1_VALIDATE
+ 	bool "gst1-validate"
+ 	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_JSON_GLIB
+ 	select BR2_PACKAGE_PYTHON_PYEXPAT
+ 	# cairo is autodetected but needs PNG support
+ 	select BR2_PACKAGE_CAIRO_PNG if BR2_PACKAGE_CAIRO
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
+index 09061f4..f08e1b7 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.hash
++++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
 @@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.8.3.tar.xz.sha256sum
--sha256	a1d6579ba203a7734927c24b90bf6590d846c5a5fcec01a48201018c8ad2827a  gst-plugins-good-1.8.3.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.10.0.tar.xz.sha256sum
-+sha256	7a03559763f5634ab1b4b2edd3e9f7442bdd4657187e20ea5e1887ae46371de2  gst-plugins-good-1.10.0.tar.xz
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index b4bc2e4..ca3bfaa 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+-# From http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.8.3.tar.xz.sha256sum
+-sha256 4525a4fb5b85b8a49674e00d652bee9ac62c56241c148abbff23efa50a224e34  gst-validate-1.8.3.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.10.0.tar.xz.sha256sum
++sha256 a99a5cd1dfa5d021dd0197b32b04a20348479c097ebeb1f4c36161d70048a176  gst-validate-1.10.0.tar.xz
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+index 372e5d6..94595a6 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.mk
++++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_GOOD_VERSION = 1.8.3
-+GST1_PLUGINS_GOOD_VERSION = 1.10.0
- GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
- GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
- GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
+-GST1_VALIDATE_VERSION = 1.8.3
++GST1_VALIDATE_VERSION = 1.10.0
+ GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
+ GST1_VALIDATE_SITE = https://gstreamer.freedesktop.org/src/gst-validate
+ GST1_VALIDATE_LICENSE = LGPLv2.1+
+@@ -15,6 +15,7 @@ GST1_VALIDATE_CONF_OPTS = --disable-sphinx-doc
+ GST1_VALIDATE_DEPENDENCIES = \
+ 	gstreamer1 \
+ 	gst1-plugins-base \
++	json-glib \
+ 	host-python \
+ 	python \
+ 	$(if $(BR2_PACKAGE_CAIRO),cairo)
