@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Nov 2016 23:03:02 +0100
-Subject: [Buildroot] busybox error
-In-Reply-To: <d563d924-cd16-f433-f1f4-e3f37cfef008@mind.be>
-References: <CANO2Q29C45jEphAw5nzo_x7j4WjumkfNyE0qf+_B-G1pw_VqbQ@mail.gmail.com>
- <d563d924-cd16-f433-f1f4-e3f37cfef008@mind.be>
-Message-ID: <20161107230302.69f0ef4b@free-electrons.com>
+Date: Mon, 7 Nov 2016 23:03:29 +0100
+Subject: [Buildroot] [PATCH v2] wpa_supplicant: add mesh support (IEEE
+ 80211s)
+In-Reply-To: <1478517444-7093-1-git-send-email-yegorslists@googlemail.com>
+References: <1478517444-7093-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20161107230329.30687593@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 7 Nov 2016 22:58:01 +0100, Arnout Vandecappelle wrote:
-
->  You have done some very serious hacking, so don't be surprised if things don't
-> work.
+On Mon,  7 Nov 2016 12:17:24 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
->  busybox runlevel can only be enabled when busybox FEATURE_UTMP is enabled.
-> However, Buildroot will explicitly disable that option when musl is used as libc
-> because musl doesn't provide utmpxname (and another one too I think).
-> 
->  I don't know how you managed to break this, but it must be by manually copying
-> some files into the build directory. If you do something like that, you're on
-> your own. It's like pulling a screw out of the engine of your car and going to
-> your car dealer complaining that something doesn't work.
-> 
->  Now, I could be mistaken, so if you can reproduce the issue after doing 'make
-> clean; make', please provide your buildroot .config and busybox .config (if it
-> was customized).
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+> Changes v1 -> v2:
+> 	- use WPA_SUPPLICANT_CONFIG_ENABLE for CONFIG_IEEE80211W (Baruch Siach)
+> 	- remove CONFIG_SAE as it will be automatically selected by CONFIG_MESH
+> 	
+>  package/wpa_supplicant/Config.in         | 7 +++++++
+>  package/wpa_supplicant/wpa_supplicant.mk | 5 +++++
+>  2 files changed, 12 insertions(+)
 
-FWIW, Siva provided me off-list (or rather without Cc'ing the list) his
-Buildroot .config file, which selects the glibc C library. But his
-build log indeed indicates a toolchain built the musl C library.
-
-Which hints very clearly that Siva didn't do a "make clean all" after
-changing the toolchain configuration.
-
-Siva: please read
-https://buildroot.org/downloads/manual/manual.html#full-rebuild.
+Applied to next, thanks. But I agree with Baruch: this CONFIG_SET vs.
+CONFIG_ENABLE stuff is messy. Someone should clean this up a bit.
 
 Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
