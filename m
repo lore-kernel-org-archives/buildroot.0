@@ -1,7 +1,8 @@
 From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Mon,  7 Nov 2016 13:00:03 +1100
-Subject: [Buildroot] [PATCH 1/1] mpv: fix build on powerpc64 w/ altivec
-Message-ID: <2caa778dd77d8e8b473a9d2507368bb2c4b497b9.1478484002.git.sam.bobroff@au1.ibm.com>
+Date: Mon,  7 Nov 2016 14:29:44 +1100
+Subject: [Buildroot] [PATCH 1/1] sdl: fix building on powerpc64 and
+	powerpc64le
+Message-ID: <a57a3d0430e248ee08148cef326cbf60283205ad.1478489382.git.sam.bobroff@au1.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,57 +10,58 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes
-http://autobuild.buildroot.net/results/77f/77f00633b0b25f001cd4ca54ed3a12aee301c287
+http://autobuild.buildroot.net/results/70659eead71faa82ccfd0016d04caed134707c24
 
-Add a patch to work around a name collision between bool and altivec's
-bool.
+(The problem was detected when building chocolate-doom but the issue
+is in sdl.)
+
+Old autotools included with SDL fails to detect dynamic linker support
+on powerpc64 and powerpc64le.
+
+See SDL bug 3481: https://bugzilla.libsdl.org/show_bug.cgi?id=3481
 
 Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
 ---
-I've raised the issue upstream with mpv but they do not seem
-interested in fixing it there.
 
-It seems to me like this should be fixed in the altivec part of the
-toolchain for powerpc64, and I'll investigate that separately but it's
-a long term solution.
+ package/sdl/0003-fix-configure-powerpc64.patch | 30 ++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/sdl/0003-fix-configure-powerpc64.patch
 
-Cheers,
-Sam.
-
- .../mpv/0002-Fix-build-on-powerpc64-altivec.patch  | 25 ++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 package/mpv/0002-Fix-build-on-powerpc64-altivec.patch
-
-diff --git a/package/mpv/0002-Fix-build-on-powerpc64-altivec.patch b/package/mpv/0002-Fix-build-on-powerpc64-altivec.patch
+diff --git a/package/sdl/0003-fix-configure-powerpc64.patch b/package/sdl/0003-fix-configure-powerpc64.patch
 new file mode 100644
-index 0000000..706f78c
+index 0000000..764a947
 --- /dev/null
-+++ b/package/mpv/0002-Fix-build-on-powerpc64-altivec.patch
-@@ -0,0 +1,25 @@
-+Change struct priv's bool field to int so that it isn't modified by
-+the "#define bool" introduced by the Altivec headers (included via
-+SDL.h).
++++ b/package/sdl/0003-fix-configure-powerpc64.patch
+@@ -0,0 +1,30 @@
++sdl: Add powerpc64 and powerpc64le support to old autotools.
++
++Fixes build on powerpc64le which doesn't fail but produces a static library
++rather than a dynamic one (which causes link errors in some packages using
++libsdl).
 +
 +Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-+---
-+ audio/out/ao_sdl.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/audio/out/ao_sdl.c b/audio/out/ao_sdl.c
-+index d9d0062..6c654eb 100644
-+--- a/audio/out/ao_sdl.c
-++++ b/audio/out/ao_sdl.c
-+@@ -32,7 +32,7 @@
-+ 
-+ struct priv
-+ {
-+-    bool paused;
-++    int paused;
-+ 
-+     float buflen;
-+ };
-+-- 
-+2.10.0.297.gf6727b0
-+
++*** a/acinclude/libtool.m4	2016-11-07 14:04:47.444117880 +1100
++--- b/acinclude/libtool.m4	2016-11-07 14:05:03.652181547 +1100
++***************
++*** 1302,1308 ****
++  	  x86_64-*linux*)
++  	    LD="${LD-ld} -m elf_x86_64"
++  	    ;;
++! 	  ppc*-*linux*|powerpc*-*linux*)
++  	    LD="${LD-ld} -m elf64ppc"
++  	    ;;
++  	  s390*-*linux*|s390*-*tpf*)
++--- 1302,1311 ----
++  	  x86_64-*linux*)
++  	    LD="${LD-ld} -m elf_x86_64"
++  	    ;;
++! 	  powerpc64le-*linux*)
++! 	    LD="${LD-ld} -m elf64lppc"
++! 	    ;;
++! 	  powerpc64-*linux*)
++  	    LD="${LD-ld} -m elf64ppc"
++  	    ;;
++  	  s390*-*linux*|s390*-*tpf*)
 -- 
 2.10.0.297.gf6727b0
