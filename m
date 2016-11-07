@@ -1,46 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Nov 2016 22:04:54 +0100
-Subject: [Buildroot] [git commit] ser2net: bump to version 3.1
-Message-ID: <20161107210540.8CDE681945@busybox.osuosl.org>
+Date: Mon, 7 Nov 2016 22:05:02 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add Yegor Yefremov for the
+	ser2net package
+Message-ID: <20161107210540.9ABD781972@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=561859a533c1c692383530f71a011babe3b12128
+commit: https://git.buildroot.net/buildroot/commit/?id=1832f13b6304152b7fe47547cd2870c695a59d74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Version 3.1 adds librt to the list of required libraries.
-
-Fixes:
-http://autobuild.buildroot.net/results/7f1/7f152e2255f8d2cf9378812998fe9a239319c116
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ser2net/ser2net.hash | 2 +-
- package/ser2net/ser2net.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-index 3e62f1c..f3b5692 100644
---- a/package/ser2net/ser2net.hash
-+++ b/package/ser2net/ser2net.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 e8aaf6c629c78bbc424e8a6810758061f9c68a4ffea0faf7c5031de26ce1c3e1  ser2net-3.0.tar.gz
-+sha256 ad0db28e2a4b79a6d4e4b38ec1e50a22cc80fbbb4d7cad0a42f651457b00475e  ser2net-3.1.tar.gz
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index c4dcaf3..9a4a8d5 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SER2NET_VERSION = 3.0
-+SER2NET_VERSION = 3.1
- SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPLv2+
- SER2NET_LICENSE_FILES = COPYING
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3a9c00d..bade9f4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1647,6 +1647,7 @@ F:	package/modem-manager/
+ F:	package/nuttcp/
+ F:	package/parted/
+ F:	package/python*
++F:	package/ser2net/
+ F:	package/socketcand/
+ F:	package/qt5/qt5serialbus/
+ F:	package/sdparm/
