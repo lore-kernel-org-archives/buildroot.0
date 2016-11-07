@@ -1,37 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Nov 2016 09:28:36 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-11-05
-In-Reply-To: <20161107041234.GA31219@tungsten.ozlabs.ibm.com>
-References: <20161106073024.E75F820798@mail.free-electrons.com>
- <20161106150623.2b7fd549@free-electrons.com>
- <20161107041234.GA31219@tungsten.ozlabs.ibm.com>
-Message-ID: <20161107092836.17506e71@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 7 Nov 2016 09:42:01 +0100
+Subject: [Buildroot] [PATCH] package/openjpeg: fix static build
+In-Reply-To: <20161107091916.18b1cdb0@free-electrons.com>
+References: <20161106163559.4788-1-s.martin49@gmail.com>
+ <20161106225022.6b9acdc5@free-electrons.com>
+ <CAHXCMM+E8+0orOrBOqHyqw0yus5k+bvy8Z8vxcD4AEmeATcKyA@mail.gmail.com>
+ <20161107091916.18b1cdb0@free-electrons.com>
+Message-ID: <CAHXCMMLxNciRvRb=0dniYyBDet35w4G4bHw4NJp-rirmM33V3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon, Nov 7, 2016 at 9:19 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Mon, 7 Nov 2016 06:17:36 +0100, Samuel Martin wrote:
+>
+>> >> + # Try to find lib Z
+>> >> + IF(BUILD_THIRDPARTY)
+>> >> +@@ -35,6 +39,9 @@ IF(BUILD_THIRDPARTY)
+>> >> +   SET(PNG_INCLUDE_DIRNAME ${OPENJPEG_SOURCE_DIR}/thirdparty/libpng PARENT_SCOPE)
+>> >> + ELSE (BUILD_THIRDPARTY)
+>> >> +   IF (ZLIB_FOUND)
+>> >> ++    # Static only build:
+>> >> ++    #   it is not necessary to invoke pkg_check_module on libpng, because libpng
+>> >> ++    #   only depends on zlib, which is already checked.
+>> >
+>> > This is correct today, but in the future? The whole point of pkg-config
+>> > is to not make this sort of assumption.
+>>
+>> Some cmake modules are so poorly written, they only set the flags
+>> relative to the package itself (i.e. setting LDFLAGS="-L/usr/lib
+>> -lfoo" for package foo), and completly ignore/miss/forget the indirect
+>> dependencies that are required in the case of static build.
+>> However, cmake can leverage pkgconfig to set all these flags, so the
+>> proper fix is indeed using it in the module. But that's another story
+>> for another patch... ;-)
+>>
+>> A future-proof fix is fixing the FindTIFF.cmake module from the cmake
+>> package itself, making it using pkgconfig to get all the libs in the
+>> LDFLAGS instead of only -ltiff. This is not easily possible since we
+>> conditionally build the host-cmake package (patching host-cmake would
+>> mean no-op-ing commit c2d80a8c5d8b97cdc84c297a3d2d6896fff6560b).
+>
+> This I understand. What I don't understand is your reasoning of "for
+> libpng, we don't need to use pkg-config, because the only indirect
+> dependency is zlib, which is already checked". This is not good, as you
+> make an assumption on which indirect libraries libpng might use.
 
-On Mon, 7 Nov 2016 15:12:34 +1100, Sam Bobroff wrote:
+Ha! Sorry, I did not get you were talking about png here :s
 
-> This seems to be similar to some others: a library (libXcursor) is being
-> incorrectly built as static, which causes downstream link failures. I
-> had a quick look at other X11R7 libraries and they all seem to include
-> the same old version of autotools that can't detect dynamic linker
-> support on powerpc64le.
-> 
-> Before I go and fix every one manually: is there some better way to
-> handle this across many packages, or even just many X11R7 packages?
-> 
-> Should I prepare one big patch that fixes them all?
+>
+> Even though I agree libpng is unlikely to change and grow additional
+> dependencies, you should also use pkg-config on libpng just like you're
+> doing on libtiff.
 
-What is the fix that needs to be done exactly?
+As you said, I don't think it's gonna change, plus I may be sometime lazy! ;)
 
-Thomas
+>
+>> > I fail to understand why one needs to call both FIND_PACKAGE(TIFF) and
+>> > then check again with PKG_CHECK_MODULES(). Isn't the latter sufficient?
+>>
+>> Indeed FIND_PACKAGE(TIFF) is redundant with what PKG_CHECK_MODULES()
+>> does. But to give a chance to this patch to get upstream I have to
+>> take care platform missing pkgconfig (yeah! it exists :( ...), so
+>> FIND_PACKAGE() is always called, and PKG_CHECK_MODULES() is called
+>> only when available (mea culpa, the commit log does not reflect this).
+>
+> OK, makes sense.
+>
+> Thanks for the explanation,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Samuel
