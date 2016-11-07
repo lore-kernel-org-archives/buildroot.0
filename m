@@ -1,99 +1,156 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 7 Nov 2016 15:18:14 +0000
-Subject: [Buildroot] [PATCH master] net-tools: fix field with incomplete
-	type error
-Message-ID: <20161107151814.48924-1-Vincent.Riera@imgtec.com>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Mon,  7 Nov 2016 16:14:42 +0100
+Subject: [Buildroot] [PATCH] board/armadeus: bump apf51 kernel to 4.4.30
+	(latest LTS)
+Message-ID: <1478531682-6181-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update 0002 patch to match the one sent as a pull request. The previous
-one introduced a new problem that has been addressed in the new version.
+From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
-Some Linux headers included in certain toolchains may not have an
-updated linux/if_tunnel.h which includes linux/ip.h, so we need to
-include it unconditionally otherwise linux/if_tunnel.h will use the
-struct iphdr before being defined and the compilation will fail in this
-way:
+This will fix:
+http://free-electrons.com/~thomas/pub/buildroot-defconfigs/armadeus_apf51_defconfig.log.FAIL
 
-In file included from iptunnel.c:33:0:
-/usr/include/linux/if_tunnel.h:37:16: error: field 'iph' has incomplete
-type
-  struct iphdr  iph;
-                  ^
-
-Pull request URL:
-  https://sourceforge.net/p/net-tools/code/merge-requests/4/
-
-Fixes:
-  http://autobuild.buildroot.net/results/34f/34f9b10ef6a613057e8f6457d8a0a2fa142ad123/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 ---
- ...02-iptunnel.c-do-not-include-netinet-ip.h.patch | 30 +++++++++++++++++-----
- 1 file changed, 24 insertions(+), 6 deletions(-)
+ .../apf51/{linux-3.12.config => linux-4.4.config}  | 26 ++++++++++++++++------
+ configs/armadeus_apf51_defconfig                   |  6 ++---
+ 2 files changed, 22 insertions(+), 10 deletions(-)
+ rename board/armadeus/apf51/{linux-3.12.config => linux-4.4.config} (93%)
 
-diff --git a/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch b/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch
-index 002c9da..a8658c4 100644
---- a/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch
-+++ b/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch
-@@ -1,4 +1,4 @@
--From 7a9a369d9de784791a2ab384877aab5ff3801d4e Mon Sep 17 00:00:00 2001
-+From eec38a200357b195efbb23bb645ab721c040f246 Mon Sep 17 00:00:00 2001
- From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- Date: Thu, 3 Nov 2016 12:59:39 +0000
- Subject: [PATCH] iptunnel.c: do not include netinet/ip.h
-@@ -29,19 +29,32 @@ of that the compilation fails due to a struct redefinition.
+diff --git a/board/armadeus/apf51/linux-3.12.config b/board/armadeus/apf51/linux-4.4.config
+similarity index 93%
+rename from board/armadeus/apf51/linux-3.12.config
+rename to board/armadeus/apf51/linux-4.4.config
+index 6c461b6..6957b63 100644
+--- a/board/armadeus/apf51/linux-3.12.config
++++ b/board/armadeus/apf51/linux-4.4.config
+@@ -20,7 +20,7 @@ CONFIG_BSD_DISKLABEL=y
+ # CONFIG_IOSCHED_CFQ is not set
+ CONFIG_ARCH_MXC=y
+ CONFIG_MXC_IRQ_PRIOR=y
+-CONFIG_MACH_IMX51_DT=y
++CONFIG_SOC_IMX51=y
+ CONFIG_ARM_THUMBEE=y
+ CONFIG_PREEMPT=y
+ CONFIG_AEABI=y
+@@ -111,7 +111,9 @@ CONFIG_KEYBOARD_GPIO=m
+ CONFIG_KEYBOARD_IMX=m
+ CONFIG_INPUT_TOUCHSCREEN=y
+ CONFIG_TOUCHSCREEN_WM831X=y
++CONFIG_TOUCHSCREEN_MC13XXX=m
+ CONFIG_INPUT_MISC=y
++CONFIG_INPUT_MC13783_PWRBUTTON=m
+ CONFIG_INPUT_UINPUT=m
+ CONFIG_INPUT_WM831X_ON=y
+ # CONFIG_LEGACY_PTYS is not set
+@@ -127,19 +129,24 @@ CONFIG_SPI_IMX=y
+ CONFIG_SPI_SPIDEV=m
+ CONFIG_GPIO_SYSFS=y
+ CONFIG_GPIO_WM831X=m
+-CONFIG_POWER_SUPPLY=m
++CONFIG_POWER_SUPPLY=y
+ CONFIG_WM831X_BACKUP=m
+ CONFIG_WM831X_POWER=m
+ CONFIG_HWMON=m
+ CONFIG_SENSORS_AS1531=m
++CONFIG_SENSORS_MC13783_ADC=m
+ CONFIG_SENSORS_WM831X=m
+ CONFIG_WATCHDOG=y
+ CONFIG_WATCHDOG_NOWAYOUT=y
+ CONFIG_WM831X_WATCHDOG=m
+ CONFIG_IMX2_WDT=y
++CONFIG_MFD_MC13XXX_I2C=y
+ CONFIG_MFD_WM831X_I2C=y
+ CONFIG_REGULATOR=y
+ CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_REGULATOR_MC13892=m
++CONFIG_IMX_IPUV3_CORE=y
++CONFIG_DRM=y
+ CONFIG_MFD_IMX_IPU_V3=y
+ CONFIG_MEDIA_SUPPORT=m
+ CONFIG_VIDEO_DEV=m
+@@ -203,12 +210,13 @@ CONFIG_USB_PRINTER=y
+ CONFIG_USB_WDM=y
+ CONFIG_USB_STORAGE=y
+ CONFIG_USB_CHIPIDEA=y
++CONFIG_USB_CHIPIDEA_UDC=y
+ CONFIG_USB_CHIPIDEA_HOST=y
+ CONFIG_USB_PHY=y
+ CONFIG_NOP_USB_XCEIV=y
+ CONFIG_USB_GPIO_VBUS=y
+ CONFIG_USB_ULPI=y
+-CONFIG_USB_GADGET=m
++CONFIG_USB_GADGET=y
+ CONFIG_USB_GADGET_DEBUG_FILES=y
+ CONFIG_USB_GADGET_DEBUG_FS=y
+ CONFIG_USB_ETH=m
+@@ -227,12 +235,19 @@ CONFIG_NEW_LEDS=y
+ CONFIG_LEDS_CLASS=y
+ CONFIG_LEDS_GPIO=y
+ CONFIG_LEDS_WM831X_STATUS=m
++CONFIG_LEDS_MC13783=m
+ CONFIG_LEDS_TRIGGERS=y
+ CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+ CONFIG_RTC_CLASS=y
+ CONFIG_RTC_MXC=y
+ CONFIG_RTC_DRV_WM831X=y
++CONFIG_RTC_DRV_MC13XXX=m
+ CONFIG_STAGING=y
++CONFIG_DRM_IMX=y
++CONFIG_DRM_IMX_FB_HELPER=y
++CONFIG_DRM_IMX_PARALLEL_DISPLAY=y
++CONFIG_DRM_IMX_TVE=y
++CONFIG_DRM_IMX_IPUV3=y
+ CONFIG_IIO=m
+ CONFIG_EXT2_FS=y
+ CONFIG_EXT2_FS_XATTR=y
+@@ -242,6 +257,7 @@ CONFIG_EXT2_FS_XIP=y
+ CONFIG_EXT3_FS=y
+ CONFIG_EXT3_FS_POSIX_ACL=y
+ CONFIG_EXT3_FS_SECURITY=y
++CONFIG_EXT4_FS=y
+ CONFIG_AUTOFS4_FS=y
+ CONFIG_ISO9660_FS=y
+ CONFIG_JOLIET=y
+@@ -249,10 +265,6 @@ CONFIG_ZISOFS=y
+ CONFIG_MSDOS_FS=y
+ CONFIG_VFAT_FS=y
+ CONFIG_TMPFS=y
+-CONFIG_JFFS2_FS=y
+-CONFIG_JFFS2_COMPRESSION_OPTIONS=y
+-CONFIG_JFFS2_LZO=y
+-CONFIG_JFFS2_CMODE_NONE=y
+ CONFIG_UBIFS_FS=y
+ CONFIG_NFS_FS=y
+ CONFIG_NFS_V3=y
+diff --git a/configs/armadeus_apf51_defconfig b/configs/armadeus_apf51_defconfig
+index f70593b..e834626 100644
+--- a/configs/armadeus_apf51_defconfig
++++ b/configs/armadeus_apf51_defconfig
+@@ -3,7 +3,7 @@ BR2_arm=y
+ BR2_cortex_a8=y
  
- The problem can be solved by just not including netinet/ip.h.
+ # Linux headers same as kernel, a 3.12 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
  
-+However, some Linux headers included in certain toolchains may not have
-+an updated linux/if_tunnel.h which includes linux/ip.h, so we need to
-+include it unconditionally otherwise linux/if_tunnel.h will use the
-+struct iphdr before being defined and the compilation will also fail in
-+this way:
-+
-+================================
-+In file included from iptunnel.c:33:0:
-+/usr/include/linux/if_tunnel.h:37:16: error: field 'iph' has incomplete type
-+  struct iphdr  iph;
-+                  ^
-+================================
-+
- Upstream status: merge request sent
--https://sourceforge.net/p/net-tools/code/merge-requests/3/
-+https://sourceforge.net/p/net-tools/code/merge-requests/4/
- 
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- ---
-- iptunnel.c | 1 -
-- 1 file changed, 1 deletion(-)
-+ iptunnel.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/iptunnel.c b/iptunnel.c
--index 3fe1b84..247ae10 100644
-+index 3fe1b84..e2ec2d8 100644
- --- a/iptunnel.c
- +++ b/iptunnel.c
--@@ -26,7 +26,6 @@
-+@@ -26,11 +26,11 @@
-  #include <sys/socket.h>
-  #include <sys/ioctl.h>
-  #include <netinet/in.h>
-@@ -49,6 +62,11 @@ index 3fe1b84..247ae10 100644
-  #include <arpa/inet.h>
-  #include <net/if.h>
-  #include <net/if_arp.h>
-+ #include <linux/types.h>
-++#include <linux/ip.h>
-+ #include <linux/if_tunnel.h>
-+
-+ #include "config.h"
- -- 
- 2.10.1
- 
+ # System
+ BR2_TARGET_GENERIC_HOSTNAME="apf51"
+@@ -13,9 +13,9 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.30"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf51/linux-3.12.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf51/linux-4.4.config"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x90008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 -- 
-2.10.1
+2.1.4
