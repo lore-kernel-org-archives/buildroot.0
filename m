@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Nov 2016 23:05:45 +0100
-Subject: [Buildroot] [PATCH] freescale: Create the
- board/freescale/common/imx/ directory
-In-Reply-To: <1478472207-29799-1-git-send-email-festevam@gmail.com>
-References: <1478472207-29799-1-git-send-email-festevam@gmail.com>
-Message-ID: <20161107230545.63cdbc92@free-electrons.com>
+Date: Mon, 7 Nov 2016 23:06:09 +0100
+Subject: [Buildroot] [PATCH] ffmpeg: disable on Microblaze
+In-Reply-To: <1478359433-28319-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1478359433-28319-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20161107230609.5686ce8a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +12,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  6 Nov 2016 20:43:27 -0200, Fabio Estevam wrote:
-> In order to have a better hierarchy for the genimage scripts used by
-> NXP mx25, mx51, mx53, mx6, mx7 SoCs, let's place them inside the
-> board/freescale/common/imx/ directory.
+On Sat,  5 Nov 2016 16:23:53 +0100, Thomas Petazzoni wrote:
+> Building ffmpeg on Microblaze triggers the gcc PR71124, which causes
+> an infinite loop in the compiler. This causes numerous timeouts in the
+> autobuilders, such as, just over the last two days:
 > 
-> This helps in creating a more natural separation between the mxs scripts
-> that are placed inside the board/freescale/common/mxs/ directory.
+> http://autobuild.buildroot.net/results/b47fb2ae810ada475fef215c1efb54a9891fef6f
+> http://autobuild.buildroot.net/results/a8a1dfb7d4a7a6babe665214030e2245d572d1d3
+> http://autobuild.buildroot.net/results/248c58cd20686497c4dabc1a19b2c8c7c76b33ab
+> http://autobuild.buildroot.net/results/3641092f62551bd41c24eafdce46804f9551b761
+> http://autobuild.buildroot.net/results/f2f65106c3e9dcfd546d5dad7cd0f7cd7145420c
+> http://autobuild.buildroot.net/results/c45f085ca421b12195fe6a9298b3b3a9cb761360
+> http://autobuild.buildroot.net/results/349de9b8251b9b72ace595920303e45497833c29
 > 
-> Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  board/freescale/common/{ => imx}/genimage.cfg.template | 0
->  board/freescale/common/{ => imx}/post-image.sh         | 2 +-
->  board/freescale/imx25pdk/readme.txt                    | 2 +-
->  board/freescale/imx51evk/readme.txt                    | 2 +-
->  board/freescale/imx6sabre/readme.txt                   | 2 +-
->  board/freescale/imx6ulevk/readme.txt                   | 2 +-
->  board/freescale/imx7dsdb/readme.txt                    | 2 +-
->  board/technexion/imx6ulpico/readme.txt                 | 2 +-
->  configs/freescale_imx6dlsabreauto_defconfig            | 2 +-
->  configs/freescale_imx6dlsabresd_defconfig              | 2 +-
->  configs/freescale_imx6qsabreauto_defconfig             | 2 +-
->  configs/freescale_imx6qsabresd_defconfig               | 2 +-
->  configs/freescale_imx6sololiteevk_defconfig            | 2 +-
->  configs/freescale_imx6sxsabresd_defconfig              | 2 +-
->  configs/freescale_imx6ulevk_defconfig                  | 2 +-
->  configs/freescale_imx7dsabresd_defconfig               | 2 +-
->  configs/imx6ulpico_defconfig                           | 2 +-
->  configs/mx25pdk_defconfig                              | 2 +-
->  configs/mx51evk_defconfig                              | 2 +-
->  configs/mx53loco_defconfig                             | 2 +-
->  configs/warp7_defconfig                                | 2 +-
->  configs/warpboard_defconfig                            | 2 +-
->  22 files changed, 21 insertions(+), 21 deletions(-)
->  rename board/freescale/common/{ => imx}/genimage.cfg.template (100%)
->  rename board/freescale/common/{ => imx}/post-image.sh (94%)
+>  package/ffmpeg/Config.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Applied to next, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
