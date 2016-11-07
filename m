@@ -1,39 +1,55 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 7 Nov 2016 10:22:45 +0000
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.167
-Message-ID: <20161107102245.62248-1-Vincent.Riera@imgtec.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon,  7 Nov 2016 11:23:25 +0100
+Subject: [Buildroot] [PATCH] wpa_supplicant: add mesh support (IEEE 80211s)
+Message-ID: <1478514205-29497-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index a269eb6..edc9360 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 8bebe9b474f791b5edf5366b0bd24861fbbaf8a83afa2a9e2a8e3917e05e4ecbf6877f018be03ffb4e9b4c8832208264165b85182bf79a07661adf35128b4a21  LVM2.2.02.166.tgz
-+sha512 492b2f5ca462dbbb8e182befdb6ca60c7a31b16a39f59a38cabdcd0996d9e2c49ae56a2289def80b89da738176ac55cf13cbefd401feb7a1e3a6ef9a4c267f2b  LVM2.2.02.167.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index d76cdd2..dd57421 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/wpa_supplicant/Config.in         | 7 +++++++
+ package/wpa_supplicant/wpa_supplicant.mk | 6 ++++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 454541f..9250a3b 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -45,6 +45,13 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY
+ 	help
+ 	  Enable support for Wi-Fi Display
  
--LVM2_VERSION = 2.02.166
-+LVM2_VERSION = 2.02.167
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
++config BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING
++	bool "Enable mesh networking"
++	depends on BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
++	help
++	  Enable support for open and secured mesh networking
++	  (IEEE 802.11s)
++
+ config BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN
+ 	bool "Enable autoscan"
+ 	help
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 3c3317b..29ef362 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -73,6 +73,12 @@ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY),y)
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WIFI_DISPLAY
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING),y)
++WPA_SUPPLICANT_CONFIG_SET += CONFIG_IEEE80211W \
++			     CONFIG_MESH \
++			     CONFIG_SAE
++endif
++
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN),y)
+ WPA_SUPPLICANT_CONFIG_ENABLE += \
+ 	CONFIG_AUTOSCAN_EXPONENTIAL \
 -- 
-2.10.1
+2.1.4
