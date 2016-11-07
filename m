@@ -1,105 +1,538 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Nov 2016 22:01:51 +0100
-Subject: [Buildroot] [git commit] configs/qmx6: remove defconfig
-Message-ID: <20161107210339.80ACA802A9@busybox.osuosl.org>
+Date: Mon, 7 Nov 2016 22:01:05 +0100
+Subject: [Buildroot] [git commit] configs/freescale_p2020ds: remove defconfig
+Message-ID: <20161107210339.764A3802A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be8779da6b8ce7079d2b3ff33d48ba41ddfca27c
+commit: https://git.buildroot.net/buildroot/commit/?id=4d65a7f0ee1219b190fdf82eb4951845a42ae63b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The original submitter and follow-up contributors to the qmx6
-defconfig no longer have the hardware available or the time/interest
-to update this defconfig, which currently fails to build with gcc
-5.x. Due to this, this commit removes this defconfig.
+This defconfig no longer builds with gcc 5.x, and the original
+submitter, Gustavo, no longer has the hardware to test this
+configuration.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/congatec/qmx6/readme.txt | 36 ------------------------------------
- configs/qmx6_defconfig         | 33 ---------------------------------
- 2 files changed, 69 deletions(-)
+ board/freescale/p2020ds/linux-3.12.config          | 374 ---------------------
+ .../p2020ds/linux-fix-c6187597-breakage.patch      |  51 ---
+ board/freescale/p2020ds/readme.txt                 |  40 ---
+ configs/freescale_p2020ds_defconfig                |  24 --
+ 4 files changed, 489 deletions(-)
 
-diff --git a/board/congatec/qmx6/readme.txt b/board/congatec/qmx6/readme.txt
+diff --git a/board/freescale/p2020ds/linux-3.12.config b/board/freescale/p2020ds/linux-3.12.config
 deleted file mode 100644
-index d2e0dca..0000000
---- a/board/congatec/qmx6/readme.txt
+index 7181a6d..0000000
+--- a/board/freescale/p2020ds/linux-3.12.config
 +++ /dev/null
-@@ -1,36 +0,0 @@
--This is the minimal buildroot support for the Congatec QMX6 Qseven CoM
--
--conga-QMX6 is based on the freescale iMX6 SoC. For more information please
--have a look at http://www.congatec.com/products/qseven/conga-qmx6.html
--
--The configuration is based on the currently latest kernel release from
--Congatec's git repository which is based on 3.0.35. The bootloader u-boot
--is preconfigured on the CPU module and does not need to be replaced.
--
--To build the default configuration you only have to:
--
--	make qmx6_defconfig && make
--
--You will need a microSD card of sufficient size and the first or only
--partition configured as Linux type.
--
--To transfer the system to the card do:
--
--	$ sudo dd if=output/images/rootfs.ext2 of=/dev/sdX1
--
--You can optionally extend the filesystem size to the whole partition:
--
--	$ sudo resize2fs /dev/sdX1
--
--You can also update the card image without completely rewriting it:
--
--	$ sudo mount /dev/sdX1 /mnt
--	$ sudo tar xf output/images/rootfs.tar -C /mnt
--	$ sudo umount /mnt
--
--Connect a terminal program to the rs232 connector marked "CONSOLE"
--with baudrate set to 115200, insert the microSD card into the socket
--on the CPU module and power the board to watch the system boot.
--
--Booting from the SD card slot on the base board is currently not
--supported.
-diff --git a/configs/qmx6_defconfig b/configs/qmx6_defconfig
+@@ -1,374 +0,0 @@
+-CONFIG_PPC_85xx=y
+-CONFIG_PHYS_64BIT=y
+-CONFIG_SMP=y
+-CONFIG_NR_CPUS=8
+-CONFIG_SYSVIPC=y
+-CONFIG_POSIX_MQUEUE=y
+-CONFIG_FHANDLE=y
+-CONFIG_AUDIT=y
+-CONFIG_IRQ_DOMAIN_DEBUG=y
+-CONFIG_NO_HZ_IDLE=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_BSD_PROCESS_ACCT=y
+-CONFIG_IKCONFIG=y
+-CONFIG_IKCONFIG_PROC=y
+-CONFIG_LOG_BUF_SHIFT=16
+-CONFIG_CGROUPS=y
+-CONFIG_NAMESPACES=y
+-CONFIG_EXPERT=y
+-CONFIG_KALLSYMS_ALL=y
+-# CONFIG_SLUB_DEBUG is not set
+-# CONFIG_COMPAT_BRK is not set
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-CONFIG_MODVERSIONS=y
+-# CONFIG_BLK_DEV_BSG is not set
+-CONFIG_PARTITION_ADVANCED=y
+-CONFIG_MAC_PARTITION=y
+-# CONFIG_IOSCHED_DEADLINE is not set
+-# CONFIG_POWERNV_MSI is not set
+-CONFIG_MPC85xx_DS=y
+-CONFIG_HIGHMEM=y
+-CONFIG_HOTPLUG_CPU=y
+-CONFIG_IRQ_ALL_CPUS=y
+-CONFIG_FORCE_MAX_ZONEORDER=12
+-# CONFIG_SUSPEND is not set
+-CONFIG_PCI=y
+-CONFIG_PCIEPORTBUS=y
+-CONFIG_PCI_MSI=y
+-CONFIG_RAPIDIO=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_XFRM_USER=y
+-CONFIG_NET_KEY=m
+-CONFIG_INET=y
+-CONFIG_IP_MULTICAST=y
+-CONFIG_IP_ADVANCED_ROUTER=y
+-CONFIG_IP_MULTIPLE_TABLES=y
+-CONFIG_IP_ROUTE_MULTIPATH=y
+-CONFIG_IP_ROUTE_VERBOSE=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_DHCP=y
+-CONFIG_IP_PNP_BOOTP=y
+-CONFIG_IP_PNP_RARP=y
+-CONFIG_NET_IPIP=y
+-CONFIG_IP_MROUTE=y
+-CONFIG_IP_PIMSM_V1=y
+-CONFIG_IP_PIMSM_V2=y
+-CONFIG_INET_ESP=m
+-CONFIG_INET_XFRM_MODE_TRANSPORT=m
+-CONFIG_INET_XFRM_MODE_TUNNEL=m
+-# CONFIG_INET_XFRM_MODE_BEET is not set
+-# CONFIG_INET_LRO is not set
+-CONFIG_NETWORK_SECMARK=y
+-CONFIG_NETFILTER=y
+-CONFIG_NF_CONNTRACK=m
+-CONFIG_NF_CONNTRACK_SECMARK=y
+-CONFIG_NF_CONNTRACK_ZONES=y
+-CONFIG_NF_CONNTRACK_EVENTS=y
+-CONFIG_NF_CONNTRACK_TIMEOUT=y
+-CONFIG_NF_CONNTRACK_TIMESTAMP=y
+-CONFIG_NF_CT_PROTO_DCCP=m
+-CONFIG_NF_CT_PROTO_UDPLITE=m
+-CONFIG_NF_CONNTRACK_AMANDA=m
+-CONFIG_NF_CONNTRACK_FTP=m
+-CONFIG_NF_CONNTRACK_H323=m
+-CONFIG_NF_CONNTRACK_IRC=m
+-CONFIG_NF_CONNTRACK_NETBIOS_NS=m
+-CONFIG_NF_CONNTRACK_SNMP=m
+-CONFIG_NF_CONNTRACK_PPTP=m
+-CONFIG_NF_CONNTRACK_SANE=m
+-CONFIG_NF_CONNTRACK_SIP=m
+-CONFIG_NF_CONNTRACK_TFTP=m
+-CONFIG_NF_CT_NETLINK=m
+-CONFIG_NF_CT_NETLINK_TIMEOUT=m
+-CONFIG_NF_CT_NETLINK_HELPER=m
+-CONFIG_NETFILTER_NETLINK_QUEUE_CT=y
+-CONFIG_NETFILTER_XT_TARGET_AUDIT=m
+-CONFIG_NETFILTER_XT_TARGET_CHECKSUM=m
+-CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
+-CONFIG_NETFILTER_XT_TARGET_CONNMARK=m
+-CONFIG_NETFILTER_XT_TARGET_CONNSECMARK=m
+-CONFIG_NETFILTER_XT_TARGET_DSCP=m
+-CONFIG_NETFILTER_XT_TARGET_HMARK=m
+-CONFIG_NETFILTER_XT_TARGET_IDLETIMER=m
+-CONFIG_NETFILTER_XT_TARGET_LED=m
+-CONFIG_NETFILTER_XT_TARGET_LOG=m
+-CONFIG_NETFILTER_XT_TARGET_MARK=m
+-CONFIG_NETFILTER_XT_TARGET_NFLOG=m
+-CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
+-CONFIG_NETFILTER_XT_TARGET_NOTRACK=m
+-CONFIG_NETFILTER_XT_TARGET_TEE=m
+-CONFIG_NETFILTER_XT_TARGET_TPROXY=m
+-CONFIG_NETFILTER_XT_TARGET_TRACE=m
+-CONFIG_NETFILTER_XT_TARGET_SECMARK=m
+-CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
+-CONFIG_NETFILTER_XT_TARGET_TCPOPTSTRIP=m
+-CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=m
+-CONFIG_NETFILTER_XT_MATCH_BPF=m
+-CONFIG_NETFILTER_XT_MATCH_CLUSTER=m
+-CONFIG_NETFILTER_XT_MATCH_COMMENT=m
+-CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
+-CONFIG_NETFILTER_XT_MATCH_CONNLABEL=m
+-CONFIG_NETFILTER_XT_MATCH_CONNLIMIT=m
+-CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
+-CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
+-CONFIG_NETFILTER_XT_MATCH_CPU=m
+-CONFIG_NETFILTER_XT_MATCH_DCCP=m
+-CONFIG_NETFILTER_XT_MATCH_DEVGROUP=m
+-CONFIG_NETFILTER_XT_MATCH_DSCP=m
+-CONFIG_NETFILTER_XT_MATCH_ESP=m
+-CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
+-CONFIG_NETFILTER_XT_MATCH_HELPER=m
+-CONFIG_NETFILTER_XT_MATCH_IPRANGE=m
+-CONFIG_NETFILTER_XT_MATCH_LENGTH=m
+-CONFIG_NETFILTER_XT_MATCH_LIMIT=m
+-CONFIG_NETFILTER_XT_MATCH_MAC=m
+-CONFIG_NETFILTER_XT_MATCH_MARK=m
+-CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
+-CONFIG_NETFILTER_XT_MATCH_NFACCT=m
+-CONFIG_NETFILTER_XT_MATCH_OSF=m
+-CONFIG_NETFILTER_XT_MATCH_OWNER=m
+-CONFIG_NETFILTER_XT_MATCH_POLICY=m
+-CONFIG_NETFILTER_XT_MATCH_PHYSDEV=m
+-CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
+-CONFIG_NETFILTER_XT_MATCH_QUOTA=m
+-CONFIG_NETFILTER_XT_MATCH_RATEEST=m
+-CONFIG_NETFILTER_XT_MATCH_REALM=m
+-CONFIG_NETFILTER_XT_MATCH_RECENT=m
+-CONFIG_NETFILTER_XT_MATCH_SOCKET=m
+-CONFIG_NETFILTER_XT_MATCH_STATE=m
+-CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
+-CONFIG_NETFILTER_XT_MATCH_STRING=m
+-CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
+-CONFIG_NETFILTER_XT_MATCH_TIME=m
+-CONFIG_NETFILTER_XT_MATCH_U32=m
+-CONFIG_NF_CONNTRACK_IPV4=m
+-CONFIG_IP_NF_IPTABLES=m
+-CONFIG_IP_NF_MATCH_AH=m
+-CONFIG_IP_NF_MATCH_ECN=m
+-CONFIG_IP_NF_MATCH_RPFILTER=m
+-CONFIG_IP_NF_MATCH_TTL=m
+-CONFIG_IP_NF_FILTER=m
+-CONFIG_IP_NF_TARGET_REJECT=m
+-CONFIG_IP_NF_TARGET_SYNPROXY=m
+-CONFIG_IP_NF_TARGET_ULOG=m
+-CONFIG_NF_NAT_IPV4=m
+-CONFIG_IP_NF_TARGET_MASQUERADE=m
+-CONFIG_IP_NF_TARGET_NETMAP=m
+-CONFIG_IP_NF_TARGET_REDIRECT=m
+-CONFIG_IP_NF_MANGLE=m
+-CONFIG_IP_NF_TARGET_CLUSTERIP=m
+-CONFIG_IP_NF_TARGET_ECN=m
+-CONFIG_IP_NF_TARGET_TTL=m
+-CONFIG_IP_NF_RAW=m
+-CONFIG_IP_NF_ARPTABLES=m
+-CONFIG_IP_NF_ARPFILTER=m
+-CONFIG_IP_NF_ARP_MANGLE=m
+-CONFIG_NF_CONNTRACK_IPV6=m
+-CONFIG_IP6_NF_IPTABLES=m
+-CONFIG_IP6_NF_MATCH_AH=m
+-CONFIG_IP6_NF_MATCH_EUI64=m
+-CONFIG_IP6_NF_MATCH_FRAG=m
+-CONFIG_IP6_NF_MATCH_OPTS=m
+-CONFIG_IP6_NF_MATCH_HL=m
+-CONFIG_IP6_NF_MATCH_IPV6HEADER=m
+-CONFIG_IP6_NF_MATCH_MH=m
+-CONFIG_IP6_NF_MATCH_RPFILTER=m
+-CONFIG_IP6_NF_MATCH_RT=m
+-CONFIG_IP6_NF_TARGET_HL=m
+-CONFIG_IP6_NF_FILTER=m
+-CONFIG_IP6_NF_TARGET_REJECT=m
+-CONFIG_IP6_NF_TARGET_SYNPROXY=m
+-CONFIG_IP6_NF_MANGLE=m
+-CONFIG_IP6_NF_RAW=m
+-CONFIG_NF_NAT_IPV6=m
+-CONFIG_IP6_NF_TARGET_MASQUERADE=m
+-CONFIG_IP6_NF_TARGET_NPT=m
+-CONFIG_IP_SCTP=m
+-CONFIG_BRIDGE=m
+-CONFIG_CFG80211=m
+-CONFIG_MAC80211=m
+-CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-CONFIG_DEVTMPFS=y
+-CONFIG_DEVTMPFS_MOUNT=y
+-# CONFIG_FW_LOADER_USER_HELPER is not set
+-CONFIG_MTD=y
+-CONFIG_MTD_CMDLINE_PARTS=y
+-CONFIG_MTD_BLOCK=y
+-CONFIG_FTL=y
+-CONFIG_MTD_CFI=y
+-CONFIG_MTD_CFI_INTELEXT=y
+-CONFIG_MTD_CFI_AMDSTD=y
+-CONFIG_MTD_PHYSMAP_OF=y
+-CONFIG_MTD_M25P80=y
+-CONFIG_MTD_NAND=y
+-CONFIG_MTD_NAND_FSL_ELBC=y
+-CONFIG_MTD_NAND_FSL_IFC=y
+-CONFIG_MTD_UBI=y
+-CONFIG_PROC_DEVICETREE=y
+-CONFIG_BLK_DEV_LOOP=y
+-CONFIG_BLK_DEV_NBD=y
+-CONFIG_EEPROM_LEGACY=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_CHR_DEV_ST=y
+-CONFIG_BLK_DEV_SR=y
+-CONFIG_CHR_DEV_SG=y
+-CONFIG_SCSI_MULTI_LUN=y
+-CONFIG_SCSI_LOGGING=y
+-CONFIG_ATA=y
+-CONFIG_SATA_AHCI=y
+-CONFIG_SATA_FSL=y
+-CONFIG_SATA_SIL24=y
+-CONFIG_PATA_ALI=y
+-CONFIG_MD=y
+-CONFIG_BLK_DEV_MD=y
+-CONFIG_MD_LINEAR=y
+-CONFIG_MD_RAID0=y
+-CONFIG_MD_RAID1=y
+-CONFIG_MD_RAID10=y
+-CONFIG_MD_RAID456=y
+-CONFIG_MD_MULTIPATH=y
+-CONFIG_BCACHE=y
+-CONFIG_BLK_DEV_DM=m
+-CONFIG_DM_CRYPT=m
+-CONFIG_DM_SNAPSHOT=m
+-CONFIG_DM_THIN_PROVISIONING=m
+-CONFIG_DM_CACHE=m
+-CONFIG_DM_MIRROR=m
+-CONFIG_DM_RAID=m
+-CONFIG_DM_ZERO=m
+-CONFIG_DM_MULTIPATH=m
+-CONFIG_NETDEVICES=y
+-CONFIG_DUMMY=y
+-CONFIG_TUN=y
+-CONFIG_NET_TULIP=y
+-CONFIG_GIANFAR=y
+-CONFIG_E1000E=y
+-CONFIG_AT803X_PHY=y
+-CONFIG_ATHEROS_PHY=y
+-CONFIG_MARVELL_PHY=y
+-CONFIG_DAVICOM_PHY=y
+-CONFIG_CICADA_PHY=y
+-CONFIG_VITESSE_PHY=y
+-CONFIG_DP8384x_PHY=y
+-CONFIG_FIXED_PHY=y
+-CONFIG_PPP=m
+-CONFIG_PPP_BSDCOMP=m
+-CONFIG_PPP_DEFLATE=m
+-CONFIG_PPP_FILTER=y
+-CONFIG_PPP_MPPE=m
+-CONFIG_PPP_MULTILINK=y
+-CONFIG_PPPOE=m
+-CONFIG_PPP_ASYNC=m
+-CONFIG_PPP_SYNC_TTY=m
+-CONFIG_ATH_CARDS=m
+-CONFIG_ATH9K=m
+-CONFIG_ATH9K_HTC=m
+-CONFIG_RT2X00=m
+-CONFIG_RT2800PCI=m
+-CONFIG_RT73USB=m
+-CONFIG_RT2800USB=m
+-CONFIG_RT2800USB_RT3573=y
+-CONFIG_RT2800USB_RT53XX=y
+-CONFIG_RT2800USB_RT55XX=y
+-# CONFIG_RTL_CARDS is not set
+-# CONFIG_INPUT_MOUSEDEV is not set
+-# CONFIG_INPUT_KEYBOARD is not set
+-# CONFIG_INPUT_MOUSE is not set
+-# CONFIG_SERIO is not set
+-CONFIG_VT_HW_CONSOLE_BINDING=y
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_8250_CONSOLE=y
+-CONFIG_SERIAL_8250_NR_UARTS=2
+-CONFIG_SERIAL_8250_RUNTIME_UARTS=2
+-CONFIG_SERIAL_8250_MANY_PORTS=y
+-CONFIG_SERIAL_8250_DETECT_IRQ=y
+-CONFIG_SERIAL_8250_RSA=y
+-CONFIG_NVRAM=y
+-CONFIG_I2C=y
+-CONFIG_I2C_CHARDEV=y
+-CONFIG_I2C_MPC=y
+-CONFIG_SPI=y
+-CONFIG_SPI_FSL_SPI=y
+-CONFIG_SPI_FSL_ESPI=y
+-CONFIG_GPIOLIB=y
+-CONFIG_GPIO_MPC8XXX=y
+-# CONFIG_HWMON is not set
+-# CONFIG_VGA_ARB is not set
+-# CONFIG_VGA_CONSOLE is not set
+-CONFIG_SOUND=m
+-CONFIG_SND=m
+-CONFIG_SND_HRTIMER=m
+-# CONFIG_SND_SUPPORT_OLD_API is not set
+-# CONFIG_SND_DRIVERS is not set
+-CONFIG_SND_INTEL8X0=m
+-# CONFIG_SND_PPC is not set
+-# CONFIG_SND_SPI is not set
+-# CONFIG_SND_USB is not set
+-# CONFIG_HID_GENERIC is not set
+-# CONFIG_USB_HID is not set
+-CONFIG_USB=y
+-CONFIG_USB_EHCI_HCD=y
+-CONFIG_USB_EHCI_FSL=y
+-CONFIG_USB_OHCI_HCD=y
+-CONFIG_USB_OHCI_HCD_PPC_OF_BE=y
+-CONFIG_USB_OHCI_HCD_PPC_OF_LE=y
+-CONFIG_USB_STORAGE=y
+-CONFIG_MMC=y
+-CONFIG_MMC_SDHCI=y
+-CONFIG_MMC_SDHCI_PLTFM=y
+-CONFIG_MMC_SDHCI_OF_ESDHC=y
+-CONFIG_EDAC=y
+-CONFIG_EDAC_MM_EDAC=y
+-CONFIG_RTC_CLASS=y
+-CONFIG_RTC_DRV_CMOS=y
+-CONFIG_DMADEVICES=y
+-CONFIG_FSL_DMA=y
+-CONFIG_EXT4_FS=y
+-CONFIG_EXT4_FS_POSIX_ACL=y
+-CONFIG_EXT4_FS_SECURITY=y
+-CONFIG_FANOTIFY=y
+-CONFIG_FUSE_FS=m
+-CONFIG_VFAT_FS=y
+-CONFIG_PROC_KCORE=y
+-CONFIG_TMPFS=y
+-CONFIG_HUGETLBFS=y
+-CONFIG_JFFS2_FS=y
+-CONFIG_JFFS2_SUMMARY=y
+-CONFIG_JFFS2_FS_XATTR=y
+-CONFIG_UBIFS_FS=y
+-CONFIG_SQUASHFS=y
+-CONFIG_SQUASHFS_XATTR=y
+-CONFIG_SQUASHFS_LZO=y
+-CONFIG_SQUASHFS_XZ=y
+-CONFIG_NFS_FS=y
+-CONFIG_NFS_V4=y
+-CONFIG_ROOT_NFS=y
+-CONFIG_NFSD=m
+-CONFIG_CIFS=m
+-CONFIG_CIFS_XATTR=y
+-CONFIG_CIFS_POSIX=y
+-# CONFIG_CIFS_DEBUG is not set
+-CONFIG_CIFS_SMB2=y
+-CONFIG_CIFS_FSCACHE=y
+-CONFIG_NLS_CODEPAGE_437=y
+-CONFIG_NLS_CODEPAGE_850=y
+-CONFIG_NLS_ISO8859_1=y
+-CONFIG_NLS_UTF8=m
+-CONFIG_CRC_T10DIF=y
+-CONFIG_DEBUG_INFO=y
+-CONFIG_DEBUG_FS=y
+-CONFIG_MAGIC_SYSRQ=y
+-CONFIG_DETECT_HUNG_TASK=y
+-CONFIG_CRYPTO_CBC=y
+-CONFIG_CRYPTO_PCBC=m
+-CONFIG_CRYPTO_HMAC=y
+-CONFIG_CRYPTO_MD5=y
+-CONFIG_CRYPTO_SHA1=y
+-CONFIG_CRYPTO_SHA256=y
+-CONFIG_CRYPTO_SHA512=y
+-CONFIG_CRYPTO_DES=y
+-# CONFIG_CRYPTO_ANSI_CPRNG is not set
+-CONFIG_CRYPTO_DEV_TALITOS=y
+diff --git a/board/freescale/p2020ds/linux-fix-c6187597-breakage.patch b/board/freescale/p2020ds/linux-fix-c6187597-breakage.patch
 deleted file mode 100644
-index cb80cad..0000000
---- a/configs/qmx6_defconfig
+index 598f92d..0000000
+--- a/board/freescale/p2020ds/linux-fix-c6187597-breakage.patch
 +++ /dev/null
-@@ -1,33 +0,0 @@
--BR2_arm=y
--BR2_cortex_a9=y
--# Linux headers same as kernel, a 3.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+@@ -1,51 +0,0 @@
+-From: Nikita Yushchenko <nyushchenko@dev.rtsoft.ru>
+-Subject: [PATCH] usb: pci-quirks: do not access OHCI_FMINTERVAL register on ULI hw
 -
--# Notice you need a recent version of u-boot (with DT support) to be able
--# to boot this kernel
+-This access causes hang on Freescale P2020DS board (that has OHCI
+-provided by ULI 1533 chip).
+-
+-Since preserving OHCI_FMINTERVAL was originally done only for NVIDIA
+-hardware and only later (in c6187597) was turned unconditional, and
+-c6187597 commit message again mentions only NVIDIA, I think it should be
+-safe to disable preserving OHCI_FMINTERVAL if device vendor is ULI.
+-
+-Signed-off-by: Nikita Yushchenko <nyushchenko@dev.rtsoft.ru>
+----
+- drivers/usb/host/pci-quirks.c |    8 +++++---
+- 1 file changed, 5 insertions(+), 3 deletions(-)
+-
+-diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+-index 00661d3..5acbd5b 100644
+---- a/drivers/usb/host/pci-quirks.c
+-+++ b/drivers/usb/host/pci-quirks.c
+-@@ -571,7 +571,7 @@ static void quirk_usb_handoff_ohci(struct pci_dev *pdev)
+- {
+- 	void __iomem *base;
+- 	u32 control;
+--	u32 fminterval;
+-+	u32 uninitialized_var(fminterval);
+- 	int cnt;
+- 
+- 	if (!mmio_resource_enabled(pdev, 0))
+-@@ -619,7 +619,8 @@ static void quirk_usb_handoff_ohci(struct pci_dev *pdev)
+- 	}
+- 
+- 	/* software reset of the controller, preserving HcFmInterval */
+--	fminterval = readl(base + OHCI_FMINTERVAL);
+-+	if (pdev->vendor != PCI_VENDOR_ID_AL)
+-+		fminterval = readl(base + OHCI_FMINTERVAL);
+- 	writel(OHCI_HCR, base + OHCI_CMDSTATUS);
+- 
+- 	/* reset requires max 10 us delay */
+-@@ -628,7 +629,8 @@ static void quirk_usb_handoff_ohci(struct pci_dev *pdev)
+- 			break;
+- 		udelay(1);
+- 	}
+--	writel(fminterval, base + OHCI_FMINTERVAL);
+-+	if (pdev->vendor != PCI_VENDOR_ID_AL)
+-+		writel(fminterval, base + OHCI_FMINTERVAL);
+- 
+- 	/* Now the controller is safely in SUSPEND and nothing can wake it up */
+- 	iounmap(base);
+--- 
+-1.7.10.4
+diff --git a/board/freescale/p2020ds/readme.txt b/board/freescale/p2020ds/readme.txt
+deleted file mode 100644
+index a9735b0..0000000
+--- a/board/freescale/p2020ds/readme.txt
++++ /dev/null
+@@ -1,40 +0,0 @@
+-You'll need to program the files created by buildroot into the flash.
+-The fast way is to tftp transfer the files via one of the network interfaces.
+-
+-Alternatively you can transfer the files via serial console with an Ymodem
+-file transfer from your terminal program by using a "loady" command
+-from the u-boot prompt instead of the "tftp ..." commands stated below.
+-Beware that serial console file transfers are quite slow!
+-
+-1. Program the DTB to NOR flash
+-
+-   => tftp ${loadaddr} p2020ds.dtb
+-   => erase 0xeff00000 0xeff7ffff
+-   => cp.b ${loadaddr} 0xeff00000 ${filesize}
+-
+-2. Program the kernel to NOR flash
+-
+-   => tftp ${loadaddr} uImage
+-   => erase 0xec000000 0xec3fffff
+-   => cp.b ${loadaddr} 0xec000000 ${filesize}
+-
+-3. Program the root filesystem to NOR flash
+-
+-   => tftp ${loadaddr} rootfs.jffs2
+-   => erase 0xec400000 0xeeffffff
+-   => cp.b ${loadaddr} 0xec400000 ${filesize}
+-
+-4. Booting your new system
+-
+-   => setenv jffs2boot 'setenv bootargs root=/dev/mtdblock4 rootfstype=jffs2 rw console=ttyS0,115200;bootm ec000000 - eff00000'
+-
+-   If you want to set this boot option as default:
+-
+-   => setenv bootcmd 'run jffs2boot'
+-   => saveenv
+-
+-   ...or for a single boot:
+-
+-   => run jffs2boot
+-
+-   You can login with user "root".
+diff --git a/configs/freescale_p2020ds_defconfig b/configs/freescale_p2020ds_defconfig
+deleted file mode 100644
+index 6661acb..0000000
+--- a/configs/freescale_p2020ds_defconfig
++++ /dev/null
+@@ -1,24 +0,0 @@
+-# Architecture
+-BR2_powerpc=y
+-BR2_powerpc_8548=y
+-
+-# Filesystem
+-# BR2_TARGET_ROOTFS_TAR is not set
+-BR2_TARGET_ROOTFS_JFFS2=y
+-
+-# Linux headers same as kernel, a 3.12 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
+-
+-# Kernel
 -BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/imx6_kernel_3.14.git"
--# Last version of branch cgt_qmx6_3.14.28_1.0.0
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="105820d6bd251deb49c3dd3f71fa0d76adce97c7"
--BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://git.freescale.com/git/cgit.cgi/ppc/sdk/linux.git/snapshot/fsl-sdk-v1.6.tar.bz2"
+-BR2_LINUX_KERNEL_PATCH="board/freescale/p2020ds/linux-fix-c6187597-breakage.patch"
+-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p2020ds/linux-3.12.config"
 -BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
--BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="p2020ds"
 -
--# Change boardname depending of your product number
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="cgt_qmx6_pn016103"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_uboot.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="4d3b64e93064ed3d97ef7d91ff0f61a693a460fc"
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.pn016103.imx"
--
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_3=y
--
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-# Serial port config
+-BR2_TARGET_GENERIC_GETTY=y
+-BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
