@@ -1,28 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Nov 2016 22:09:29 +0100
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.167
-In-Reply-To: <20161107102245.62248-1-Vincent.Riera@imgtec.com>
-References: <20161107102245.62248-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161107220929.71f38f23@free-electrons.com>
+Date: Mon, 7 Nov 2016 22:09:37 +0100
+Subject: [Buildroot] [git commit] board/boundarydevices: fix boot partition
+	number in bootscript
+Message-ID: <20161107210944.714B68183F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=adf31efcd433712f546f2a3bcdb18abe650db27b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 7 Nov 2016 10:22:45 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/lvm2/lvm2.hash | 2 +-
->  package/lvm2/lvm2.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+It was previously hardcoded to use the 1st partition although the
+bootpart variable was used to download kernel/dtb from any partition.
 
-Applied to next, thanks.
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/boundarydevices/common/6x_bootscript.txt | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/boundarydevices/common/6x_bootscript.txt b/board/boundarydevices/common/6x_bootscript.txt
+index e8a08aa..2fc687a 100644
+--- a/board/boundarydevices/common/6x_bootscript.txt
++++ b/board/boundarydevices/common/6x_bootscript.txt
+@@ -92,14 +92,12 @@ fi
+ 
+ setenv bootargs "${bootargs} console=${console},115200 vmalloc=400M consoleblank=0 rootwait fixrtc"
+ 
+-bpart=1
+-
+ if test "sata" = "${dtype}" ; then
+-	setenv bootargs "${bootargs} root=/dev/sda${bpart}" ;
++	setenv bootargs "${bootargs} root=/dev/sda${bootpart}" ;
+ elif test "usb" = "${dtype}" ; then
+-	setenv bootargs "${bootargs} root=/dev/sda${bpart}" ;
++	setenv bootargs "${bootargs} root=/dev/sda${bootpart}" ;
+ else
+-	setenv bootargs "${bootargs} root=/dev/mmcblk${disk}p${bpart}"
++	setenv bootargs "${bootargs} root=/dev/mmcblk${disk}p${bootpart}"
+ fi
+ 
+ if itest.s "x" != "x${disable_giga}" ; then
