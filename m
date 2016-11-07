@@ -1,40 +1,55 @@
-From: Michael Walle <michael@walle.cc>
-Date: Mon,  7 Nov 2016 17:05:12 +0100
-Subject: [Buildroot] [PATCH] busybox: allow the user to set the telnetd
-	options
-Message-ID: <1478534712-2470-1-git-send-email-michael@walle.cc>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon,  7 Nov 2016 17:54:00 +0100
+Subject: [Buildroot] [PATCH] board/boundarydevices: fix boot partition
+	number in bootscript
+Message-ID: <20161107165400.28802-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Source /etc/default/telnet to make it possible to override the telnetd
-arguments. For example a user may want to set an alternative port.
+It was previously hardcoded to use the 1st partition although the
+bootpart variable was used to download kernel/dtb from any partition.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/busybox/S50telnet | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Hi,
 
-diff --git a/package/busybox/S50telnet b/package/busybox/S50telnet
-index 47e2b63..82952b8 100755
---- a/package/busybox/S50telnet
-+++ b/package/busybox/S50telnet
-@@ -3,10 +3,13 @@
- # Start telnet....
- #
+Just realized our bootscript was harcoding the partition number.
+
+It is not suitable for systems which need to boot from any partition. It is
+especially useful when using a A/B update scheme which means you either boot
+from part 1 or 2 depending on last update (testing swupdate right now,
+nice project!).
+
+Regards,
+Gary
+---
+ board/boundarydevices/common/6x_bootscript.txt | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/board/boundarydevices/common/6x_bootscript.txt b/board/boundarydevices/common/6x_bootscript.txt
+index e8a08aa..2fc687a 100644
+--- a/board/boundarydevices/common/6x_bootscript.txt
++++ b/board/boundarydevices/common/6x_bootscript.txt
+@@ -92,14 +92,12 @@ fi
  
-+TELNETD_ARGS=-F
-+[ -r /etc/default/telnet ] && . /etc/default/telnet
-+
- start() {
-       printf "Starting telnetd: "
-       start-stop-daemon -S -q -m -b -p /var/run/telnetd.pid \
--			-x /usr/sbin/telnetd -- -F
-+			-x /usr/sbin/telnetd -- $TELNETD_ARGS
-       [ $? = 0 ] && echo "OK" || echo "FAIL"
- }
+ setenv bootargs "${bootargs} console=${console},115200 vmalloc=400M consoleblank=0 rootwait fixrtc"
  
+-bpart=1
+-
+ if test "sata" = "${dtype}" ; then
+-	setenv bootargs "${bootargs} root=/dev/sda${bpart}" ;
++	setenv bootargs "${bootargs} root=/dev/sda${bootpart}" ;
+ elif test "usb" = "${dtype}" ; then
+-	setenv bootargs "${bootargs} root=/dev/sda${bpart}" ;
++	setenv bootargs "${bootargs} root=/dev/sda${bootpart}" ;
+ else
+-	setenv bootargs "${bootargs} root=/dev/mmcblk${disk}p${bpart}"
++	setenv bootargs "${bootargs} root=/dev/mmcblk${disk}p${bootpart}"
+ fi
+ 
+ if itest.s "x" != "x${disable_giga}" ; then
 -- 
-2.1.4
+2.9.3
