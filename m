@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Nov 2016 22:04:21 +0100
-Subject: [Buildroot] [PATCH] board/armadeus: bump apf28 kernel version
- to 4.4.30 (latest LTS)
-In-Reply-To: <1478534284-5585-1-git-send-email-julien.boibessot@free.fr>
-References: <1478534284-5585-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20161107220421.08fc77ef@free-electrons.com>
+Date: Mon, 7 Nov 2016 22:05:28 +0100
+Subject: [Buildroot] [PATCH 1/2] ser2net: bump to version 3.1
+In-Reply-To: <1478501493-30411-1-git-send-email-yegorslists@googlemail.com>
+References: <1478501493-30411-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20161107220528.7a0829ea@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  7 Nov 2016 16:58:04 +0100, julien.boibessot at free.fr wrote:
-> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+On Mon,  7 Nov 2016 07:51:32 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> Version 3.1 adds librt to the list of required libraries.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/7f1/7f152e2255f8d2cf9378812998fe9a239319c116
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  configs/armadeus_apf28_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/ser2net/ser2net.hash | 2 +-
+>  package/ser2net/ser2net.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Both applied to master, thanks!
 
 Thomas
 -- 
