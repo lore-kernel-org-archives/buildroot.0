@@ -1,101 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Nov 2016 22:18:30 +0100
-Subject: [Buildroot] [git commit] net-tools: fix field with incomplete type
-	error
-Message-ID: <20161107212001.B8B018023B@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  7 Nov 2016 22:23:37 +0100
+Subject: [Buildroot] [PATCH 0/6] package/pseudo: fix build and better mimic
+	fakeroot
+Message-ID: <cover.1478553802.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22dc3b6b64ead9b5ddc0daa99e01f045e0623836
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-Update 0002 patch to match the one sent as a pull request. The previous
-one introduced a new problem that has been addressed in the new version.
+When we switched from using fakeroot to using pseudo, a lot of
+assumptions were made, in that we assumed pseudo was by default
+behaving as fakeroot did.
 
-Some Linux headers included in certain toolchains may not have an
-updated linux/if_tunnel.h which includes linux/ip.h, so we need to
-include it unconditionally otherwise linux/if_tunnel.h will use the
-struct iphdr before being defined and the compilation will fail in this
-way:
+That is wrong. pseudo is a little bit more versatile than fakeroot
+is, so using it is a little bit more involved.
 
-In file included from iptunnel.c:33:0:
-/usr/include/linux/if_tunnel.h:37:16: error: field 'iph' has incomplete
-type
-  struct iphdr  iph;
-                  ^
+First, its buildsystem is a bit convoluted, and can incorrectly guess
+the host charateristics, like bitness.
 
-Pull request URL:
-  https://sourceforge.net/p/net-tools/code/merge-requests/4/
+Second, it needs to be told at runtime where to look at, and put its
+own stuff. It correctly gueses, but prints a warning that it had to
+gues, and the location to store its DB is not optimum (even if not
+incorrect).
 
-Fixes:
-  http://autobuild.buildroot.net/results/34f/34f9b10ef6a613057e8f6457d8a0a2fa142ad123/
+So, this series ensures that pseudo is correctly built and that we
+correctly specify the runtime configuration.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...02-iptunnel.c-do-not-include-netinet-ip.h.patch | 30 +++++++++++++++++-----
- 1 file changed, 24 insertions(+), 6 deletions(-)
 
-diff --git a/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch b/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch
-index 002c9da..a8658c4 100644
---- a/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch
-+++ b/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch
-@@ -1,4 +1,4 @@
--From 7a9a369d9de784791a2ab384877aab5ff3801d4e Mon Sep 17 00:00:00 2001
-+From eec38a200357b195efbb23bb645ab721c040f246 Mon Sep 17 00:00:00 2001
- From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- Date: Thu, 3 Nov 2016 12:59:39 +0000
- Subject: [PATCH] iptunnel.c: do not include netinet/ip.h
-@@ -29,19 +29,32 @@ of that the compilation fails due to a struct redefinition.
- 
- The problem can be solved by just not including netinet/ip.h.
- 
-+However, some Linux headers included in certain toolchains may not have
-+an updated linux/if_tunnel.h which includes linux/ip.h, so we need to
-+include it unconditionally otherwise linux/if_tunnel.h will use the
-+struct iphdr before being defined and the compilation will also fail in
-+this way:
-+
-+================================
-+In file included from iptunnel.c:33:0:
-+/usr/include/linux/if_tunnel.h:37:16: error: field 'iph' has incomplete type
-+  struct iphdr  iph;
-+                  ^
-+================================
-+
- Upstream status: merge request sent
--https://sourceforge.net/p/net-tools/code/merge-requests/3/
-+https://sourceforge.net/p/net-tools/code/merge-requests/4/
- 
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- ---
-- iptunnel.c | 1 -
-- 1 file changed, 1 deletion(-)
-+ iptunnel.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/iptunnel.c b/iptunnel.c
--index 3fe1b84..247ae10 100644
-+index 3fe1b84..e2ec2d8 100644
- --- a/iptunnel.c
- +++ b/iptunnel.c
--@@ -26,7 +26,6 @@
-+@@ -26,11 +26,11 @@
-  #include <sys/socket.h>
-  #include <sys/ioctl.h>
-  #include <netinet/in.h>
-@@ -49,6 +62,11 @@ index 3fe1b84..247ae10 100644
-  #include <arpa/inet.h>
-  #include <net/if.h>
-  #include <net/if_arp.h>
-+ #include <linux/types.h>
-++#include <linux/ip.h>
-+ #include <linux/if_tunnel.h>
-+
-+ #include "config.h"
- -- 
- 2.10.1
- 
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit adf31efcd433712f546f2a3bcdb18abe650db27b
+
+  board/boundarydevices: fix boot partition number in bootscript (2016-11-07 22:09:37 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to f7a170d2df33fe2825b401df89702f02e053c81f
+
+  fs: call pseudo as instructed by the pseudo package (2016-11-07 22:22:24 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (6):
+      core: export a variable with the host's bitness
+      package/pseudo: enforce the host bitness
+      package/pseudo: force rpath and pass our host CFLAGS
+      package/pseudo: expose the host binary in a variable
+      package/pseudo: fix fakeroot wrapper to correctly use pseudo
+      fs: call pseudo as instructed by the pseudo package
+
+ Makefile                 |  6 ++++++
+ fs/common.mk             |  2 +-
+ package/pseudo/pseudo.mk | 13 ++++++++++++-
+ 3 files changed, 19 insertions(+), 2 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
