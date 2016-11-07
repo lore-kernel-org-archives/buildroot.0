@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Nov 2016 00:10:15 +0100
-Subject: [Buildroot] [PATCH 5/6] package/pseudo: fix fakeroot wrapper to
- correctly use pseudo
-In-Reply-To: <be88ddb9a18f43beaece4e29c5fe62ad91071ce3.1478553802.git.yann.morin.1998@free.fr>
+Date: Tue, 8 Nov 2016 00:11:34 +0100
+Subject: [Buildroot] [PATCH 6/6] fs: call pseudo as instructed by the
+ pseudo package
+In-Reply-To: <f7a170d2df33fe2825b401df89702f02e053c81f.1478553802.git.yann.morin.1998@free.fr>
 References: <cover.1478553802.git.yann.morin.1998@free.fr>
- <be88ddb9a18f43beaece4e29c5fe62ad91071ce3.1478553802.git.yann.morin.1998@free.fr>
-Message-ID: <2b6c8c6a-3ded-7a72-324a-7e9d7b755a15@mind.be>
+ <f7a170d2df33fe2825b401df89702f02e053c81f.1478553802.git.yann.morin.1998@free.fr>
+Message-ID: <442f1e0d-f6cd-f7ce-8394-e63283c33446@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,50 +15,38 @@ To: buildroot@busybox.net
 
 
 On 07-11-16 22:23, Yann E. MORIN wrote:
-> So far, we expected pseudo to behave like fakeroot would. This is not
-> correct: we need to export a few variables to make pseudo look like it
-> is behaving like fakeroot.
-> 
-> Provide a wrapper to impersonate fakeroot, instead of doing a symlink.
-
- Not nice, because it introduces absolute paths in host dir which is not good
-for relocation.
-
- I'm thinking we shouldn't have introduced this symlink to begin with. I did
-suggest it on IRC, but I wasn't thinking. fakeroot could never be called by
-post-image scripts anyway, because the fakeroot database isn't saved, whatever
-you do under fakeroot is lost.
-
- Hence I'm more inclined to revert 7158403805f. If someone does need it, they
-can get patches from the mailing list :-)
-
- Regards,
- Arnout
-
+> Use the newly introduced HOST_PSEUDO variable to call pseudo, ensuring
+> the proper environment variables are set.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 > Cc: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
 > Cc: Erico Nunes <nunes.erico@gmail.com>
 > Cc: Julien BOIBESSOT <julien.boibessot@free.fr>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+ Regards,
+ Arnout
+
 > ---
->  package/pseudo/pseudo.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  fs/common.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
-> index 2a3e31f..cc1bcdd 100644
-> --- a/package/pseudo/pseudo.mk
-> +++ b/package/pseudo/pseudo.mk
-> @@ -31,7 +31,8 @@ HOST_PSEUDO = \
->  	$(HOST_DIR)/usr/bin/pseudo
->  
->  define HOST_PSEUDO_FAKEROOT_SYMLINK
-> -	ln -sf pseudo $(HOST_DIR)/usr/bin/fakeroot
-> +	printf '#!/bin/sh\n%s "$${@}"\n' '$(HOST_PSEUDO)' >$(HOST_DIR)/usr/bin/fakeroot
-> +	chmod 755 $(HOST_DIR)/usr/bin/fakeroot
->  endef
->  HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_FAKEROOT_SYMLINK
->  
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 2dbef4d..452b0cc 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -97,7 +97,7 @@ endif
+>  		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
+>  	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+>  	chmod a+x $$(FAKEROOT_SCRIPT)
+> -	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/pseudo -- $$(FAKEROOT_SCRIPT)
+> +	PATH=$$(BR_PATH) $$(HOST_PSEUDO) -- $$(FAKEROOT_SCRIPT)
+>  	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
+>  	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
+>  ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
 > 
 
 -- 
