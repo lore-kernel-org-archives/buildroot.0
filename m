@@ -1,71 +1,43 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 7 Nov 2016 12:19:37 +0100
-Subject: [Buildroot] [PATCH] wpa_supplicant: add mesh support (IEEE
-	80211s)
-In-Reply-To: <20161107105029.3inpdhl7cxowk2xo@sapphire.tkos.co.il>
-References: <1478514205-29497-1-git-send-email-yegorslists@googlemail.com>
- <20161107105029.3inpdhl7cxowk2xo@sapphire.tkos.co.il>
-Message-ID: <CAGm1_ks8gnc7PaeSd2C3_G5zkm3Ok+NTEJPJNpbtY7r0tSXb-g@mail.gmail.com>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Mon, 7 Nov 2016 12:28:55 +0100
+Subject: [Buildroot] Armadeus defconfigs failing to build
+In-Reply-To: <20161104211033.4caca063@free-electrons.com>
+References: <20161104211033.4caca063@free-electrons.com>
+Message-ID: <b2217b15-6b57-0918-4590-5ee04049bfdf@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Hello Thomas,
 
-On Mon, Nov 7, 2016 at 11:50 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Yegor,
+On 04/11/2016 21:10, Thomas Petazzoni wrote:
+> Hello Julien,
 >
-> On Mon, Nov 07, 2016 at 11:23:25AM +0100, yegorslists at googlemail.com wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->> ---
->>  package/wpa_supplicant/Config.in         | 7 +++++++
->>  package/wpa_supplicant/wpa_supplicant.mk | 6 ++++++
->>  2 files changed, 13 insertions(+)
->>
->> diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
->> index 454541f..9250a3b 100644
->> --- a/package/wpa_supplicant/Config.in
->> +++ b/package/wpa_supplicant/Config.in
->> @@ -45,6 +45,13 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY
->>       help
->>         Enable support for Wi-Fi Display
->>
->> +config BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING
->> +     bool "Enable mesh networking"
->> +     depends on BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
->> +     help
->> +       Enable support for open and secured mesh networking
->> +       (IEEE 802.11s)
->> +
->>  config BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN
->>       bool "Enable autoscan"
->>       help
->> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
->> index 3c3317b..29ef362 100644
->> --- a/package/wpa_supplicant/wpa_supplicant.mk
->> +++ b/package/wpa_supplicant/wpa_supplicant.mk
->> @@ -73,6 +73,12 @@ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY),y)
->>  WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WIFI_DISPLAY
->>  endif
->>
->> +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING),y)
->> +WPA_SUPPLICANT_CONFIG_SET += CONFIG_IEEE80211W \
->> +                          CONFIG_MESH \
->> +                          CONFIG_SAE
+> I would like to let you know that several Armadeus defconfigs in
+> Buildroot are failing to build:
 >
-> CONFIG_IEEE80211W appears commented out in wpa_supplicant/defconfig, so maybe
-> use WPA_SUPPLICANT_CONFIG_ENABLE for that. Though I'm not sure about the
-> reason for the distinction between WPA_SUPPLICANT_CONFIG and
-> WPA_SUPPLICANT_CONFIG_SET. Isn't WPA_SUPPLICANT_CONFIG_SET enough for
-> everything?
+>  - armadeus_apf51_defconfig fails to build because the Linux version is
+>    too old to be built with gcc 5.x, which is now the default in
+>    Buildroot. Could you update the defconfig to use a newer Linux
+>    version, and check that U-Boot also builds fine?
+>
+>    See the complete build log at
+>    http://free-electrons.com/~thomas/pub/buildroot-defconfigs/armadeus_apf51_defconfig.log.FAIL
+>
+>  - armadeus_apf9328_defconfig fails to build in Linux, with some weird
+>    "error: redefinition of 'return_address'" issue. Could you have a
+>    look at this problem ? It might be due to the use of gcc 5.x, or
+>    could be something else.
+>
+>    See the complete build log at
+>    http://free-electrons.com/~thomas/pub/buildroot-defconfigs/armadeus_apf9328_defconfig.log.FAIL
+>
+> Thanks!
 
-Good catch.
+I'm on it !
+Thanks for reporting the problem.
 
-WPA_SUPPLICANT_CONFIG_ENABLE ensures we don't have the same CONFIG
-option twice. Especially if it wasn't commented.
-
-Yegor
+Regards,
+Julien
