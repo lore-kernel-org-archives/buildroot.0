@@ -1,33 +1,40 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Mon,  7 Nov 2016 16:58:04 +0100
-Subject: [Buildroot] [PATCH] board/armadeus: bump apf28 kernel version to
-	4.4.30 (latest LTS)
-Message-ID: <1478534284-5585-1-git-send-email-julien.boibessot@free.fr>
+From: Michael Walle <michael@walle.cc>
+Date: Mon,  7 Nov 2016 17:05:12 +0100
+Subject: [Buildroot] [PATCH] busybox: allow the user to set the telnetd
+	options
+Message-ID: <1478534712-2470-1-git-send-email-michael@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Source /etc/default/telnet to make it possible to override the telnetd
+arguments. For example a user may want to set an alternative port.
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- configs/armadeus_apf28_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/busybox/S50telnet | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/configs/armadeus_apf28_defconfig b/configs/armadeus_apf28_defconfig
-index 708f20b..31fb528 100644
---- a/configs/armadeus_apf28_defconfig
-+++ b/configs/armadeus_apf28_defconfig
-@@ -13,7 +13,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.22"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.30"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf28/linux-4.4.config"
- BR2_LINUX_KERNEL_UIMAGE=y
+diff --git a/package/busybox/S50telnet b/package/busybox/S50telnet
+index 47e2b63..82952b8 100755
+--- a/package/busybox/S50telnet
++++ b/package/busybox/S50telnet
+@@ -3,10 +3,13 @@
+ # Start telnet....
+ #
+ 
++TELNETD_ARGS=-F
++[ -r /etc/default/telnet ] && . /etc/default/telnet
++
+ start() {
+       printf "Starting telnetd: "
+       start-stop-daemon -S -q -m -b -p /var/run/telnetd.pid \
+-			-x /usr/sbin/telnetd -- -F
++			-x /usr/sbin/telnetd -- $TELNETD_ARGS
+       [ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ 
 -- 
 2.1.4
