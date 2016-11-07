@@ -1,119 +1,99 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Mon, 7 Nov 2016 12:55:27 -0200
-Subject: [Buildroot] [PATCH] configs/imx23evk: Add support for imx23evk
-Message-ID: <1478530527-30708-1-git-send-email-fabio.estevam@nxp.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 7 Nov 2016 15:18:14 +0000
+Subject: [Buildroot] [PATCH master] net-tools: fix field with incomplete
+	type error
+Message-ID: <20161107151814.48924-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for imx23evk board.
+Update 0002 patch to match the one sent as a pull request. The previous
+one introduced a new problem that has been addressed in the new version.
 
-For more information about this board, please check:
-http://www.nxp.com/products/software-and-tools/software-development-tools/i.mx-software-and-tools/i.mx23-evaluation-kit:IMX23EVK
+Some Linux headers included in certain toolchains may not have an
+updated linux/if_tunnel.h which includes linux/ip.h, so we need to
+include it unconditionally otherwise linux/if_tunnel.h will use the
+struct iphdr before being defined and the compilation will fail in this
+way:
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+In file included from iptunnel.c:33:0:
+/usr/include/linux/if_tunnel.h:37:16: error: field 'iph' has incomplete
+type
+  struct iphdr  iph;
+                  ^
+
+Pull request URL:
+  https://sourceforge.net/p/net-tools/code/merge-requests/4/
+
+Fixes:
+  http://autobuild.buildroot.net/results/34f/34f9b10ef6a613057e8f6457d8a0a2fa142ad123/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- board/freescale/imx23evk/readme.txt | 48 +++++++++++++++++++++++++++++++++++++
- configs/imx23evk_defconfig          | 34 ++++++++++++++++++++++++++
- 2 files changed, 82 insertions(+)
- create mode 100644 board/freescale/imx23evk/readme.txt
- create mode 100644 configs/imx23evk_defconfig
+ ...02-iptunnel.c-do-not-include-netinet-ip.h.patch | 30 +++++++++++++++++-----
+ 1 file changed, 24 insertions(+), 6 deletions(-)
 
-diff --git a/board/freescale/imx23evk/readme.txt b/board/freescale/imx23evk/readme.txt
-new file mode 100644
-index 0000000..243e274
---- /dev/null
-+++ b/board/freescale/imx23evk/readme.txt
-@@ -0,0 +1,48 @@
-+**************************
-+Freescale i.MX23 EVK board
-+**************************
+diff --git a/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch b/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch
+index 002c9da..a8658c4 100644
+--- a/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch
++++ b/package/net-tools/0002-iptunnel.c-do-not-include-netinet-ip.h.patch
+@@ -1,4 +1,4 @@
+-From 7a9a369d9de784791a2ab384877aab5ff3801d4e Mon Sep 17 00:00:00 2001
++From eec38a200357b195efbb23bb645ab721c040f246 Mon Sep 17 00:00:00 2001
+ From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ Date: Thu, 3 Nov 2016 12:59:39 +0000
+ Subject: [PATCH] iptunnel.c: do not include netinet/ip.h
+@@ -29,19 +29,32 @@ of that the compilation fails due to a struct redefinition.
+ 
+ The problem can be solved by just not including netinet/ip.h.
+ 
++However, some Linux headers included in certain toolchains may not have
++an updated linux/if_tunnel.h which includes linux/ip.h, so we need to
++include it unconditionally otherwise linux/if_tunnel.h will use the
++struct iphdr before being defined and the compilation will also fail in
++this way:
 +
-+This file documents the Buildroot support for the Freescale i.MX23 EVK board.
++================================
++In file included from iptunnel.c:33:0:
++/usr/include/linux/if_tunnel.h:37:16: error: field 'iph' has incomplete type
++  struct iphdr  iph;
++                  ^
++================================
 +
-+Build
-+=====
+ Upstream status: merge request sent
+-https://sourceforge.net/p/net-tools/code/merge-requests/3/
++https://sourceforge.net/p/net-tools/code/merge-requests/4/
+ 
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ ---
+- iptunnel.c | 1 -
+- 1 file changed, 1 deletion(-)
++ iptunnel.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/iptunnel.c b/iptunnel.c
+-index 3fe1b84..247ae10 100644
++index 3fe1b84..e2ec2d8 100644
+ --- a/iptunnel.c
+ +++ b/iptunnel.c
+-@@ -26,7 +26,6 @@
++@@ -26,11 +26,11 @@
+  #include <sys/socket.h>
+  #include <sys/ioctl.h>
+  #include <netinet/in.h>
+@@ -49,6 +62,11 @@ index 3fe1b84..247ae10 100644
+  #include <arpa/inet.h>
+  #include <net/if.h>
+  #include <net/if_arp.h>
++ #include <linux/types.h>
+++#include <linux/ip.h>
++ #include <linux/if_tunnel.h>
 +
-+First, configure Buildroot for your i.MX23 EVK board:
-+
-+  make imx23evk_defconfig
-+
-+Build all components:
-+
-+  make
-+
-+You will find in output/images/ directory the following files:
-+  - imx23-evk.dtb
-+  - rootfs.tar
-+  - u-boot.sd
-+  - zImage
-+
-+Create a bootable SD card
-+=========================
-+
-+To determine the device associated to the SD card have a look in the
-+/proc/partitions file:
-+
-+  cat /proc/partitions
-+
-+Then, run the following command:
-+
-+*** WARNING! The command will destroy all the card content. Use with care! ***
-+
-+ sudo dd if=output/images/sdcard.img of=/dev/<your-microsd-device>
-+
-+Boot the i.MX23 EVK board
-+=========================
-+
-+- Put the Boot Mode Select jumper as 1 0 0 1 so that it can boot
-+  from the SD card
-+- Insert the SD card in the SD Card slot of the board;
-+- Connect an RS232 UART cable to the Debug UART Port and connect using a
-+  terminal emulator at 115200 bps, 8n1;
-+- power on the board.
-+
-+Enjoy!
-diff --git a/configs/imx23evk_defconfig b/configs/imx23evk_defconfig
-new file mode 100644
-index 0000000..fe07440
---- /dev/null
-+++ b/configs/imx23evk_defconfig
-@@ -0,0 +1,34 @@
-+# architecture
-+BR2_arm=y
-+BR2_arm926t=y
-+
-+# Linux headers same as kernel, a 4.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
-+BR2_LINUX_KERNEL_DEFCONFIG="mxs"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx23-evk"
-+
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx23evk"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_FORMAT_SD=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT4=y
-+
-+# To generate SD card image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/mxs/post-image.sh"
++ #include "config.h"
+ -- 
+ 2.10.1
+ 
 -- 
-2.7.4
+2.10.1
