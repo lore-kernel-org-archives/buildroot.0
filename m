@@ -1,69 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 7 Nov 2016 22:06:23 +0100
-Subject: [Buildroot] [PATCH v4 01/22] Use already qstripped
- BR2_TOOLCHAIN_EXTERNAL_PREFIX everywhere
-In-Reply-To: <20161107012017.22505-2-arnout@mind.be>
-References: <20161107012017.22505-1-arnout@mind.be>
- <20161107012017.22505-2-arnout@mind.be>
-Message-ID: <7db0a4e3-9316-f3f7-f62a-d5d27ba2fa73@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Nov 2016 22:08:38 +0100
+Subject: [Buildroot] [git commit branch/next] sqlite: bump version to
+	3150100 (3.15.1)
+Message-ID: <20161107210844.D5F7F7F8A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+commit: https://git.buildroot.net/buildroot/commit/?id=701f0e15ea8d10113fa6ddfd7bcfc0cfe9fd8520
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Le 07/11/2016 ? 02:19, Arnout Vandecappelle (Essensium/Mind) a ?crit :
-> The BR2_TOOLCHAIN_EXTERNAL_PREFIX variable is already qstripped and
-> stored in the TOOLCHAIN_EXTERNAL_PREFIX variable in
-> toolchain-external.mk, so use this variable everywhere.
-> 
-> This will be useful for a later patch that makes the derivation of
-> TOOLCHAIN_EXTERNAL_PREFIX a little more complex.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> [Arnout: split off into separate patch]
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-
-> ---
-> v4: split off into separate patch [Arnout]
-> ---
->  package/Makefile.in  | 2 +-
->  package/wine/wine.mk | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 5d591e9..bd73219 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -184,7 +184,7 @@ endif
->  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
->  TARGET_CROSS = $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
->  else
-> -TARGET_CROSS = $(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
-> +TARGET_CROSS = $(HOST_DIR)/usr/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
->  endif
->  
->  # Define TARGET_xx variables for all common binutils/gcc
-> diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-> index d9a0ecf..47ba90a 100644
-> --- a/package/wine/wine.mk
-> +++ b/package/wine/wine.mk
-> @@ -34,7 +34,7 @@ WINE_CONF_OPTS = \
->  # wrapper believes what the real gcc is named, and force the tuple of
->  # the external toolchain, not the one we compute in GNU_TARGET_NAME.
->  ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-> -WINE_CONF_OPTS += TARGETFLAGS="-b $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))"
-> +WINE_CONF_OPTS += TARGETFLAGS="-b $(TOOLCHAIN_EXTERNAL_PREFIX)"
->  endif
->  
->  ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_SEQ)$(BR2_PACKAGE_ALSA_LIB_RAWMIDI),yyy)
-> 
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index b0418af..bb24f94 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1 b34cb4ee9710368598c62df0222f5c24dfc9c860  sqlite-autoconf-3150000.tar.gz
++sha1 47404fe5c43936160ad0e90bddedc99367da7a9b  sqlite-autoconf-3150100.tar.gz
+ # Calculated based on the hash above
+-sha256 77162da9b4a0336d7e77d5252b690662850f62b47c12d9125f74ab9de78ded27  sqlite-autoconf-3150000.tar.gz
++sha256 5dfa89b7697ee3c2ac7b44e8e157e7f204bf999c866afcaa8bb1c7ff656ae2c5  sqlite-autoconf-3150100.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 0a5c1bb..3f44f82 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3150000
++SQLITE_VERSION = 3150100
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2016
+ SQLITE_LICENSE = Public domain
