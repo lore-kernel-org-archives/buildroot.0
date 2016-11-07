@@ -1,10 +1,10 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Mon, 7 Nov 2016 22:42:14 +0100
-Subject: [Buildroot] [PATCH 0/6] package/pseudo: fix build and better
-	mimic fakeroot
-In-Reply-To: <cover.1478553802.git.yann.morin.1998@free.fr>
-References: <cover.1478553802.git.yann.morin.1998@free.fr>
-Message-ID: <CAK4VdL0Q7z9cu=PDrLJHbLs=w0=wYcg6SWgciDwsCQjz9bVuhA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Nov 2016 22:51:06 +0100
+Subject: [Buildroot] [PATCH 1/1] sdl: fix building on powerpc64 and
+ powerpc64le
+In-Reply-To: <a57a3d0430e248ee08148cef326cbf60283205ad.1478489382.git.sam.bobroff@au1.ibm.com>
+References: <a57a3d0430e248ee08148cef326cbf60283205ad.1478489382.git.sam.bobroff@au1.ibm.com>
+Message-ID: <20161107225106.5e9e61b6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +13,96 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, Nov 7, 2016 at 10:23 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Hello All!
->
-> When we switched from using fakeroot to using pseudo, a lot of
-> assumptions were made, in that we assumed pseudo was by default
-> behaving as fakeroot did.
->
-> That is wrong. pseudo is a little bit more versatile than fakeroot
-> is, so using it is a little bit more involved.
->
-> First, its buildsystem is a bit convoluted, and can incorrectly guess
-> the host charateristics, like bitness.
->
-> Second, it needs to be told at runtime where to look at, and put its
-> own stuff. It correctly gueses, but prints a warning that it had to
-> gues, and the location to store its DB is not optimum (even if not
-> incorrect).
->
-> So, this series ensures that pseudo is correctly built and that we
-> correctly specify the runtime configuration.
->
->
-> Regards,
-> Yann E. MORIN.
->
->
-> The following changes since commit adf31efcd433712f546f2a3bcdb18abe650db27b
->
->   board/boundarydevices: fix boot partition number in bootscript (2016-11-07 22:09:37 +0100)
->
->
-> are available in the git repository at:
->
->   git://git.buildroot.org/~ymorin/git/buildroot.git
->
-> for you to fetch changes up to f7a170d2df33fe2825b401df89702f02e053c81f
->
->   fs: call pseudo as instructed by the pseudo package (2016-11-07 22:22:24 +0100)
->
->
-> ----------------------------------------------------------------
-> Yann E. MORIN (6):
->       core: export a variable with the host's bitness
->       package/pseudo: enforce the host bitness
->       package/pseudo: force rpath and pass our host CFLAGS
->       package/pseudo: expose the host binary in a variable
->       package/pseudo: fix fakeroot wrapper to correctly use pseudo
->       fs: call pseudo as instructed by the pseudo package
->
->  Makefile                 |  6 ++++++
->  fs/common.mk             |  2 +-
->  package/pseudo/pseudo.mk | 13 ++++++++++++-
->  3 files changed, 19 insertions(+), 2 deletions(-)
+On Mon,  7 Nov 2016 14:29:44 +1100, Sam Bobroff wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/70659eead71faa82ccfd0016d04caed134707c24
+> 
+> (The problem was detected when building chocolate-doom but the issue
+> is in sdl.)
+> 
+> Old autotools included with SDL fails to detect dynamic linker support
+> on powerpc64 and powerpc64le.
+> 
+> See SDL bug 3481: https://bugzilla.libsdl.org/show_bug.cgi?id=3481
+> 
+> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
 
-I have tested this series on x86_64 and on an aarch64 build machine,
-which was failing to build pseudo prior to this. Both running Fedora.
-So, for the series:
+Thanks, but I have some comments, see below.
 
-Tested-by: Erico Nunes <nunes.erico@gmail.com>
+> ---
+> 
+>  package/sdl/0003-fix-configure-powerpc64.patch | 30 ++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 package/sdl/0003-fix-configure-powerpc64.patch
+> 
+> diff --git a/package/sdl/0003-fix-configure-powerpc64.patch b/package/sdl/0003-fix-configure-powerpc64.patch
+> new file mode 100644
+> index 0000000..764a947
+> --- /dev/null
+> +++ b/package/sdl/0003-fix-configure-powerpc64.patch
+> @@ -0,0 +1,30 @@
+> +sdl: Add powerpc64 and powerpc64le support to old autotools.
+> +
+> +Fixes build on powerpc64le which doesn't fail but produces a static library
+> +rather than a dynamic one (which causes link errors in some packages using
+> +libsdl).
+> +
+> +Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> +
+> +*** a/acinclude/libtool.m4	2016-11-07 14:04:47.444117880 +1100
+> +--- b/acinclude/libtool.m4	2016-11-07 14:05:03.652181547 +1100
+> +***************
+> +*** 1302,1308 ****
+> +  	  x86_64-*linux*)
+> +  	    LD="${LD-ld} -m elf_x86_64"
+> +  	    ;;
+> +! 	  ppc*-*linux*|powerpc*-*linux*)
+> +  	    LD="${LD-ld} -m elf64ppc"
+> +  	    ;;
+> +  	  s390*-*linux*|s390*-*tpf*)
+> +--- 1302,1311 ----
+> +  	  x86_64-*linux*)
+> +  	    LD="${LD-ld} -m elf_x86_64"
+> +  	    ;;
+> +! 	  powerpc64le-*linux*)
+> +! 	    LD="${LD-ld} -m elf64lppc"
+> +! 	    ;;
+> +! 	  powerpc64-*linux*)
+> +  	    LD="${LD-ld} -m elf64ppc"
+> +  	    ;;
+> +  	  s390*-*linux*|s390*-*tpf*)
 
+First, we want all patches formatted as unified diffs, so please use
+this format when generating patches. Suggestion: for packages that
+don't use Git upstream, use quilt to generate your patches.
 
-Thanks for this fix.
+Second, this change doesn't make the code look like what libtool.m4 has
+in libtool upstream. It has:
 
-Erico
+          powerpc64le-*linux*)
+            LD="${LD-ld} -m elf32lppclinux"
+            ;;
+          powerpc64-*linux*)
+            LD="${LD-ld} -m elf32ppclinux"
+            ;;
+	[...]
+          powerpcle-*linux*)
+            LD="${LD-ld} -m elf64lppc"
+            ;;
+
+which is not the same as what your patch adds. Why do we have this
+difference?
+
+Also, are we going to need to patch libtool.m4 in each and every
+package around? libtool.m4 from sdl is from libtool 2.2 which is not
+_that_ old (by the standards of libtool upgrade speed, of course), so
+we're likely to find many other packages in the same situation, aren't
+we?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
