@@ -1,311 +1,213 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 7 Nov 2016 02:19:59 +0100
-Subject: [Buildroot] [PATCH v4 04/22] toolchain-external: introduce
-	toolchain-external-package
+Date: Mon, 7 Nov 2016 02:20:00 +0100
+Subject: [Buildroot] [PATCH v4 05/22] toolchain-external-linaro-aarch64: new
+	package
 In-Reply-To: <20161107012017.22505-1-arnout@mind.be>
 References: <20161107012017.22505-1-arnout@mind.be>
-Message-ID: <20161107012017.22505-5-arnout@mind.be>
+Message-ID: <20161107012017.22505-6-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The toolchain-external-package infrastructure is just a copy of the
-toolchain-external commands, replacing TOOLCHAIN_EXTERNAL by $(2)
-and adding double-dollars everywhere.
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-toolchain-external itself is converted to a virtual package, but it
-is faked a little to make sue the toolchains that haven't been
-converted to toolchain-external-package yet keep on working.
+This commit adds a new package for the Linaro external toolchain for
+the AArch64 architecture.
 
-The TOOLCHAIN_EXTERNAL_MOVE commands don't have to be redefined
-for every toolchain-external-package instance, so that is moved
-out into the common part of pkg-toolchain-external.mk.
+The legacy implementation is removed.
 
-The musl-compat-headers dependency stays in the toolchain-external
-package itself.
-
-The musl ld link is duplicated in the legacy toolchain-external and
-the toolchain-external-package, because they have separate hooks.
-
-The handling of TOOLCHAIN_EXTERNAL_BIN deserves some special attention,
-because its value will be different for different
-toolchain-external-package instances. However, the value only depends
-on variables that are set by Kconfig (BR2_TOOLCHAIN_EXTERNAL_PREFIX
-and BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD) so it can easily be used in
-the generic part. So we don't have to do anything specific for this
-variable after all.
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Romain Naour <romain.naour@gmail.com>
 ---
-v4: Move all variables out of the toolchain-external-package infra,
-    except for those that are explicitly needed by that infra.
+v4: add PREFIX definition, remove legacy implementation.
 ---
- toolchain/toolchain-external/Config.in             |   8 ++
- .../toolchain-external/pkg-toolchain-external.mk   | 124 +++++++++++++++++++--
- toolchain/toolchain-external/toolchain-external.mk |  48 ++++++--
- 3 files changed, 159 insertions(+), 21 deletions(-)
+ toolchain/toolchain-external/Config.in             | 30 ++++++++++------------
+ .../toolchain-external-linaro-aarch64/Config.in    | 15 +++++++++++
+ .../Config.in.options                              |  9 +++++++
+ .../toolchain-external-linaro-aarch64.hash         |  3 +++
+ .../toolchain-external-linaro-aarch64.mk           | 16 ++++++++++++
+ .../toolchain-external/toolchain-external.hash     |  4 +--
+ toolchain/toolchain-external/toolchain-external.mk |  9 ++-----
+ 7 files changed, 59 insertions(+), 27 deletions(-)
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 5324599..65a4216 100644
+index 65a4216..096f435 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -667,6 +667,14 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL
- 	# Compatibility headers: cdefs.h, queue.h
- 	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
+@@ -8,6 +8,12 @@ choice
+ comment "glibc toolchains only available with shared lib support"
+ 	depends on BR2_STATIC_LIBS
  
-+# Make sure the virtual-package infra checks the provider
-+config BR2_PACKAGE_HAS_TOOLCHAIN_EXTERNAL
-+	bool
-+	default y
++# Kept toolchains sorted by architecture in order to use some toolchain
++# as default choice
 +
-+config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	string
++# Aarch64 (use Linaro toolchain by default)
++source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in"
++
+ comment "Linaro toolchains available for Cortex-A + EABIhf"
+ 	depends on BR2_arm || BR2_armeb
+ 	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
+@@ -485,22 +491,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+-	bool "Linaro AArch64 2016.05"
+-	depends on BR2_aarch64
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	depends on !BR2_STATIC_LIBS
+-	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+-	select BR2_TOOLCHAIN_HAS_FORTRAN
+-	help
+-	  Toolchain for the AArch64 architecture, from
+-	  http://www.linaro.org/engineering/armv8/
+-
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
+ 	bool "CodeSourcery AArch64 2014.11"
+ 	depends on BR2_aarch64
+@@ -628,7 +618,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
+-	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	default "aarch64-amd-linux-gnu"  if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
+ 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+@@ -675,6 +664,13 @@ config BR2_PACKAGE_HAS_TOOLCHAIN_EXTERNAL
+ config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
+ 	string
+ 
++# Kept toolchains sorted as in the choice above
++# The toolchain Config.in.options must define
++# BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL and BR2_TOOLCHAIN_EXTERNAL_PREFIX
++
++# Aarch64
++source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options"
 +
  if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
  
  choice
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 583b0d6..3cac520 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -98,6 +98,17 @@ TOOLCHAIN_EXTERNAL_CXX = $(TOOLCHAIN_EXTERNAL_CROSS)g++$(TOOLCHAIN_EXTERNAL_SUFF
- TOOLCHAIN_EXTERNAL_FC = $(TOOLCHAIN_EXTERNAL_CROSS)gfortran$(TOOLCHAIN_EXTERNAL_SUFFIX)
- TOOLCHAIN_EXTERNAL_READELF = $(TOOLCHAIN_EXTERNAL_CROSS)readelf$(TOOLCHAIN_EXTERNAL_SUFFIX)
- 
-+# Normal handling of downloaded toolchain tarball extraction.
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
-+# As a regular package, the toolchain gets extracted in $(@D), but
-+# since it's actually a fairly special package, we need it to be moved
-+# into TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR.
-+define TOOLCHAIN_EXTERNAL_MOVE
-+	rm -rf $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
-+	mkdir -p $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
-+	mv $(@D)/* $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)/
-+endef
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+new file mode 100644
+index 0000000..662f7d7
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+@@ -0,0 +1,15 @@
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
++	bool "Linaro AArch64 2016.05"
++	depends on BR2_aarch64
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	help
++	  Toolchain for the AArch64 architecture, from
++	  http://www.linaro.org/engineering/armv8/
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options
+new file mode 100644
+index 0000000..099c6c0
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options
+@@ -0,0 +1,9 @@
++if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
++
++config BR2_TOOLCHAIN_EXTERNAL_PREFIX
++	default "aarch64-linux-gnu"
++
++config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
++	default "toolchain-external-linaro-aarch64"
++
 +endif
- 
- #
- # Definitions of the list of libraries that should be copied to the target.
-@@ -474,15 +485,6 @@ endef
- 
- # Various utility functions used by the external toolchain based on musl.
- 
--# musl does not provide an implementation for sys/queue.h or sys/cdefs.h.
--# So, add the musl-compat-headers package that will install those files,
--# into the staging directory:
--#   sys/queue.h:  header from NetBSD
--#   sys/cdefs.h:  minimalist header bundled in Buildroot
--ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
--TOOLCHAIN_EXTERNAL_DEPENDENCIES += musl-compat-headers
--endif
--
- # With the musl C library, the libc.so library directly plays the role
- # of the dynamic library loader. We just need to create a symbolic
- # link to libc.so with the appropriate name.
-@@ -501,7 +503,6 @@ endif
- define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
- 	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
- endef
--TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
- endif
- 
- #
-@@ -568,3 +569,106 @@ define TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO
- 		ln -sf ld64-uClibc.so.1 $(TARGET_DIR)/lib/ld64-uClibc.so.0 ; \
- 	fi
- endef
-+
-+
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
+new file mode 100644
+index 0000000..7a2c038
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 d43227248f282a652da42322fcf4abfd3021f2a2f62e0cf6e242d82f55966ba9  gcc-linaro-5.3.1-2016.05-i686_aarch64-linux-gnu.tar.xz
++sha256 1941dcf6229d6706bcb89b7976d5d43d170efdd17c27d5fe1738e7ecf22adc37  gcc-linaro-5.3.1-2016.05-x86_64_aarch64-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
+new file mode 100644
+index 0000000..a0543a7
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
+@@ -0,0 +1,16 @@
 +################################################################################
-+# inner-toolchain-external-package -- defines the generic installation rules
-+# for external toolchain packages
 +#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including a HOST_ prefix
-+#             for host packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 4 is the type (target or host)
++# toolchain-external-linaro-aarch64
++#
 +################################################################################
-+define inner-toolchain-external-package
 +
-+$(2)_INSTALL_STAGING = YES
-+$(2)_ADD_TOOLCHAIN_DEPENDENCY = NO
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION = 2016.05
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)/aarch64-linux-gnu
 +
-+# In fact, we don't need to download the toolchain, since it is already
-+# available on the system, so force the site and source to be empty so
-+# that nothing will be downloaded/extracted.
-+ifeq ($$(BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED),y)
-+$(2)_SITE =
-+$(2)_SOURCE =
++ifeq ($(HOSTARCH),x86)
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SOURCE = gcc-linaro-5.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)-i686_aarch64-linux-gnu.tar.xz
++else
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SOURCE = gcc-linaro-5.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)-x86_64_aarch64-linux-gnu.tar.xz
 +endif
 +
-+ifeq ($$(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
-+$(2)_EXCLUDES = usr/lib/locale/*
-+
-+$(2)_POST_EXTRACT_HOOKS += \
-+	TOOLCHAIN_EXTERNAL_MOVE
-+endif
-+
-+# Checks for an already installed toolchain: check the toolchain
-+# location, check that it is usable, and then verify that it
-+# matches the configuration provided in Buildroot: ABI, C++ support,
-+# kernel headers version, type of C library and all C library features.
-+define $(2)_CONFIGURE_CMDS
-+	$$(Q)$$(call check_cross_compiler_exists,$$(TOOLCHAIN_EXTERNAL_CC))
-+	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC))
-+	$$(Q)SYSROOT_DIR="$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))" ; \
-+	$$(call check_kernel_headers_version,\
-+		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
-+		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
-+	$$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
-+		$$(call qstrip,$$(BR2_TOOLCHAIN_GCC_AT_LEAST))); \
-+	if test "$$(BR2_arm)" = "y" ; then \
-+		$$(call check_arm_abi,\
-+			"$$(TOOLCHAIN_EXTERNAL_CC) $$(TOOLCHAIN_EXTERNAL_CFLAGS)",\
-+			$$(TOOLCHAIN_EXTERNAL_READELF)) ; \
-+	fi ; \
-+	if test "$$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
-+		$$(call check_cplusplus,$$(TOOLCHAIN_EXTERNAL_CXX)) ; \
-+	fi ; \
-+	if test "$$(BR2_TOOLCHAIN_HAS_FORTRAN)" = "y" ; then \
-+		$$(call check_fortran,$$(TOOLCHAIN_EXTERNAL_FC)) ; \
-+	fi ; \
-+	if test "$$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
-+		$$(call check_uclibc,$$$${SYSROOT_DIR}) ; \
-+	elif test "$$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
-+		$$(call check_musl,$$$${SYSROOT_DIR}) ; \
-+	else \
-+		$$(call check_glibc,$$$${SYSROOT_DIR}) ; \
-+	fi
-+	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC))
-+endef
-+
-+$(2)_TOOLCHAIN_WRAPPER_ARGS += $$(TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS)
-+
-+$(2)_BUILD_CMDS = $$(TOOLCHAIN_WRAPPER_BUILD)
-+
-+define $(2)_INSTALL_STAGING_CMDS
-+	$$(TOOLCHAIN_WRAPPER_INSTALL)
-+	$$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
-+	$$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
-+	$$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC)
-+	$$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
-+	$$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
-+endef
-+
-+ifeq ($$(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
-+$(2)_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
-+endif
-+
-+# Even though we're installing things in both the staging, the host
-+# and the target directory, we do everything within the
-+# install-staging step, arbitrarily.
-+define $(2)_INSTALL_TARGET_CMDS
-+	$$(TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK)
-+	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
-+	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER)
-+	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC)
-+	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT)
-+	$$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
-+endef
-+
-+# Call the generic package infrastructure to generate the necessary
-+# make targets
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
-+
-+endef
-+
-+toolchain-external-package = $(call inner-toolchain-external-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++$(eval $(toolchain-external-package))
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+index 41c2ab3..fd1bc6d 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -34,13 +34,11 @@ sha256 f2febf3b3c565536461ad4405f1bcb835d75a6afb2a8bec958a1248cb4b81fc7  arago-2
+ sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
+ sha256 25fbf0513ad7322b15cbaae964cafadcbb4c939f2708f57f40b8f9f2d601122b  arago-toolchain-2011.09-sources.tar.bz2
+ 
+-# ARM and Aarch64 toolchains from Linaro
++# ARM toolchains from Linaro
+ sha256 f1421c580ce977226f4fefc9c409b3b423260cc65a6e9dc6da88bb3478a521a0  gcc-linaro-5.3.1-2016.05-i686_arm-linux-gnueabihf.tar.xz
+ sha256 987941c9fffdf56ffcbe90e8984673c16648c477b537fcf43add22fa62f161cd  gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf.tar.xz
+ sha256 f6e9c0d3320760fe8f89e9ec3acdd7b4da7eff889c094b4a2acc286fd46f334f  gcc-linaro-5.3.1-2016.05-i686_armeb-linux-gnueabihf.tar.xz
+ sha256 6cf41c8944be56279cc14992aa075174b7a4c5938502536266eaaeef048f9440  gcc-linaro-5.3.1-2016.05-x86_64_armeb-linux-gnueabihf.tar.xz
+-sha256 d43227248f282a652da42322fcf4abfd3021f2a2f62e0cf6e242d82f55966ba9  gcc-linaro-5.3.1-2016.05-i686_aarch64-linux-gnu.tar.xz
+-sha256 1941dcf6229d6706bcb89b7976d5d43d170efdd17c27d5fe1738e7ecf22adc37  gcc-linaro-5.3.1-2016.05-x86_64_aarch64-linux-gnu.tar.xz
+ 
+ # Codescape toolchains from Imagination Technologies
+ # From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03/downloads.html
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index be1b5e4..bcbcb2e 100644
+index bcbcb2e..8a3e4da 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -4,12 +4,31 @@
- #
- ################################################################################
- 
-+TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
-+
-+# musl does not provide an implementation for sys/queue.h or sys/cdefs.h.
-+# So, add the musl-compat-headers package that will install those files,
-+# into the staging directory:
-+#   sys/queue.h:  header from NetBSD
-+#   sys/cdefs.h:  minimalist header bundled in Buildroot
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+TOOLCHAIN_EXTERNAL_DEPENDENCIES += musl-compat-headers
-+endif
-+
- # All the definition that are common between the toolchain-external
- # generic package and the toolchain-external-package infrastructure
- # can be found in pkg-toolchain-external.mk
- 
-+# Legacy toolchains that don't use the toolchain-external-package infrastructure
-+# yet. We can recognise that because no provider is set.
-+ifeq ($(call qstrip,$(BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL)),)
-+
-+# Now we are the provider. However, we can't set it to ourselves or we'll get a
-+# circular dependency. Let's set it to a target that we always depend on
-+# instead.
-+BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL = skeleton
-+
- TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
--TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
- # In fact, we don't need to download the toolchain, since it is already
- # available on the system, so force the site and source to be empty so
-@@ -201,18 +220,9 @@ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL ?= \
- 	$(subst -i686-pc-linux-gnu.tar.bz2,.src.tar.bz2,$(subst -i686-pc-linux-gnu-i386-linux.tar.bz2,-i686-pc-linux-gnu.src.tar.bz2,$(TOOLCHAIN_EXTERNAL_SOURCE)))
+@@ -148,13 +148,6 @@ TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2014R1-RC2.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 3
+ TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_BLACKFIN_UCLIBC_EXTRA_EXTRACT
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64),y)
+-TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.05/aarch64-linux-gnu
+-ifeq ($(HOSTARCH),x86)
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3.1-2016.05-i686_aarch64-linux-gnu.tar.xz
+-else
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3.1-2016.05-x86_64_aarch64-linux-gnu.tar.xz
+-endif
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/aarch64-amd-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = aarch64-amd-2014.11-95-aarch64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
+@@ -302,3 +295,5 @@ ifeq ($(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX)),)
+ $(error No prefix selected for external toolchain package $(BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL). Configuration error)
  endif
- 
--# Normal handling of downloaded toolchain tarball extraction.
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
- TOOLCHAIN_EXTERNAL_EXCLUDES = usr/lib/locale/*
- 
--# As a regular package, the toolchain gets extracted in $(@D), but
--# since it's actually a fairly special package, we need it to be moved
--# into TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR.
--define TOOLCHAIN_EXTERNAL_MOVE
--	rm -rf $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
--	mkdir -p $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
--	mv $(@D)/* $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)/
--endef
- TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += \
- 	TOOLCHAIN_EXTERNAL_MOVE
  endif
-@@ -262,6 +272,10 @@ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
- endef
- 
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
-+endif
 +
- # Even though we're installing things in both the staging, the host
- # and the target directory, we do everything within the
- # install-staging step, arbitrarily.
-@@ -274,5 +288,17 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
- 	$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
- endef
- 
--$(eval $(generic-package))
-+endif # BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+
- 
-+# Since a virtual package is just a generic package, we can still
-+# define commands for the legacy toolchains.
-+$(eval $(virtual-package))
-+
-+# Ensure the external-toolchain package has a prefix defined.
-+# This comes after the virtual-package definition, which checks the provider.
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-+ifeq ($(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX)),)
-+$(error No prefix selected for external toolchain package $(BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL). Configuration error)
-+endif
-+endif
++include toolchain/toolchain-external/*/*.mk
 -- 
 2.10.2
