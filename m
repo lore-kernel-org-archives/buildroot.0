@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Nov 2016 21:57:51 +0100
-Subject: [Buildroot] [PATCH 01/14] gstreamer1: bump to version 1.10.0
-In-Reply-To: <1478167120-3285-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 7 Nov 2016 21:58:50 +0100
+Subject: [Buildroot] [PATCH 06/14] gst1-plugins-bad: enable fdkaac plugin
+In-Reply-To: <1478167120-3285-6-git-send-email-gustavo@zacarias.com.ar>
 References: <1478167120-3285-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20161107215751.31c28203@free-electrons.com>
+ <1478167120-3285-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20161107215850.159c3853@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  3 Nov 2016 06:58:27 -0300, Gustavo Zacarias wrote:
-> Remove gstconfig.h compatibility kludge since it has been
-> fixed/reinstated upstream.
+On Thu,  3 Nov 2016 06:58:32 -0300, Gustavo Zacarias wrote:
+> It's new for 1.10.0, add an explicit option for the fdkaac plugin.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gstreamer1/gstreamer1/gstreamer1.hash |  4 ++--
->  package/gstreamer1/gstreamer1/gstreamer1.mk   | 12 +-----------
->  2 files changed, 3 insertions(+), 13 deletions(-)
 
-I've applied the entire series to next, with a few fixes on some
-patches, I'll reply to the specific patches.
+I've updated this patch to add the dependencies of the fdk-aac package
+(by re-using what was mistakenly in your PATCH 07/14). But as a
+preparation patch, I've added a BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
+hidden boolean, which allows to avoid repeating those architecture
+dependencies.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
