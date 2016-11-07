@@ -1,38 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Nov 2016 23:03:29 +0100
-Subject: [Buildroot] [PATCH v2] wpa_supplicant: add mesh support (IEEE
- 80211s)
-In-Reply-To: <1478517444-7093-1-git-send-email-yegorslists@googlemail.com>
-References: <1478517444-7093-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20161107230329.30687593@free-electrons.com>
+Date: Mon, 7 Nov 2016 22:58:04 +0100
+Subject: [Buildroot] [git commit branch/next] busybox: allow the user to set
+	the telnetd options
+Message-ID: <20161107220400.C5CB5816A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a4cbf58f836c8e46f8cdbc9e1eabe1d0b606ce6a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon,  7 Nov 2016 12:17:24 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes v1 -> v2:
-> 	- use WPA_SUPPLICANT_CONFIG_ENABLE for CONFIG_IEEE80211W (Baruch Siach)
-> 	- remove CONFIG_SAE as it will be automatically selected by CONFIG_MESH
-> 	
->  package/wpa_supplicant/Config.in         | 7 +++++++
->  package/wpa_supplicant/wpa_supplicant.mk | 5 +++++
->  2 files changed, 12 insertions(+)
+Source /etc/default/telnet to make it possible to override the telnetd
+arguments. For example a user may want to set an alternative port.
 
-Applied to next, thanks. But I agree with Baruch: this CONFIG_SET vs.
-CONFIG_ENABLE stuff is messy. Someone should clean this up a bit.
+Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/busybox/S50telnet | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/busybox/S50telnet b/package/busybox/S50telnet
+index 47e2b63..82952b8 100755
+--- a/package/busybox/S50telnet
++++ b/package/busybox/S50telnet
+@@ -3,10 +3,13 @@
+ # Start telnet....
+ #
+ 
++TELNETD_ARGS=-F
++[ -r /etc/default/telnet ] && . /etc/default/telnet
++
+ start() {
+       printf "Starting telnetd: "
+       start-stop-daemon -S -q -m -b -p /var/run/telnetd.pid \
+-			-x /usr/sbin/telnetd -- -F
++			-x /usr/sbin/telnetd -- $TELNETD_ARGS
+       [ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ 
