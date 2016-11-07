@@ -1,93 +1,70 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  8 Nov 2016 00:09:36 +0100
-Subject: [Buildroot] [PATCH next 2/2] olimex_imx233_olinuxino: use the
-	common mxs genimage script
-In-Reply-To: <1478560176-29807-1-git-send-email-francois.perrad@gadz.org>
-References: <1478560176-29807-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1478560176-29807-2-git-send-email-francois.perrad@gadz.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 8 Nov 2016 00:10:15 +0100
+Subject: [Buildroot] [PATCH 5/6] package/pseudo: fix fakeroot wrapper to
+ correctly use pseudo
+In-Reply-To: <be88ddb9a18f43beaece4e29c5fe62ad91071ce3.1478553802.git.yann.morin.1998@free.fr>
+References: <cover.1478553802.git.yann.morin.1998@free.fr>
+ <be88ddb9a18f43beaece4e29c5fe62ad91071ce3.1478553802.git.yann.morin.1998@free.fr>
+Message-ID: <2b6c8c6a-3ded-7a72-324a-7e9d7b755a15@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- .../imx233_olinuxino/genimage-imx233_olinuxino.cfg | 29 ----------------------
- board/olimex/imx233_olinuxino/post-image.sh        | 17 -------------
- configs/olimex_imx233_olinuxino_defconfig          |  2 +-
- 3 files changed, 1 insertion(+), 47 deletions(-)
- delete mode 100644 board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg
- delete mode 100755 board/olimex/imx233_olinuxino/post-image.sh
 
-diff --git a/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg b/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg
-deleted file mode 100644
-index 751fe86..0000000
---- a/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg
-+++ /dev/null
-@@ -1,29 +0,0 @@
--image kernel.vfat {
--  vfat {
--    files = {
--      "imx23-olinuxino.dtb",
--      "uImage"
--    }
--  }
--  size = 5M
--}
--
--image sdcard.img {
--  hdimage {
--  }
--  partition boot {
--    	partition-type = 0x53
--    	image = "u-boot.sd"
--	size = 16M
--  }
--
--  partition kernel {
--    partition-type = 0xC
--    image = "kernel.vfat"
--  }
--
--  partition rootfs {
--    partition-type = 0x83
--    image = "rootfs.ext2"
--  }
--}
-diff --git a/board/olimex/imx233_olinuxino/post-image.sh b/board/olimex/imx233_olinuxino/post-image.sh
-deleted file mode 100755
-index 948d770..0000000
---- a/board/olimex/imx233_olinuxino/post-image.sh
-+++ /dev/null
-@@ -1,17 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--BOARD_NAME="$(basename ${BOARD_DIR})"
--GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
--rm -rf "${GENIMAGE_TMP}"
--
--genimage                           \
--	--rootpath "${TARGET_DIR}"     \
--	--tmppath "${GENIMAGE_TMP}"    \
--	--inputpath "${BINARIES_DIR}"  \
--	--outputpath "${BINARIES_DIR}" \
--	--config "${GENIMAGE_CFG}"
--
--exit $?
-diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
-index e0a7b08..1040e5e 100644
---- a/configs/olimex_imx233_olinuxino_defconfig
-+++ b/configs/olimex_imx233_olinuxino_defconfig
-@@ -46,5 +46,5 @@ BR2_TARGET_UBOOT_FORMAT_SD=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/imx233_olinuxino/post-image.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/mxs/post-image.sh"
- 
+
+On 07-11-16 22:23, Yann E. MORIN wrote:
+> So far, we expected pseudo to behave like fakeroot would. This is not
+> correct: we need to export a few variables to make pseudo look like it
+> is behaving like fakeroot.
+> 
+> Provide a wrapper to impersonate fakeroot, instead of doing a symlink.
+
+ Not nice, because it introduces absolute paths in host dir which is not good
+for relocation.
+
+ I'm thinking we shouldn't have introduced this symlink to begin with. I did
+suggest it on IRC, but I wasn't thinking. fakeroot could never be called by
+post-image scripts anyway, because the fakeroot database isn't saved, whatever
+you do under fakeroot is lost.
+
+ Hence I'm more inclined to revert 7158403805f. If someone does need it, they
+can get patches from the mailing list :-)
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> Cc: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+> Cc: Erico Nunes <nunes.erico@gmail.com>
+> Cc: Julien BOIBESSOT <julien.boibessot@free.fr>
+> ---
+>  package/pseudo/pseudo.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
+> index 2a3e31f..cc1bcdd 100644
+> --- a/package/pseudo/pseudo.mk
+> +++ b/package/pseudo/pseudo.mk
+> @@ -31,7 +31,8 @@ HOST_PSEUDO = \
+>  	$(HOST_DIR)/usr/bin/pseudo
+>  
+>  define HOST_PSEUDO_FAKEROOT_SYMLINK
+> -	ln -sf pseudo $(HOST_DIR)/usr/bin/fakeroot
+> +	printf '#!/bin/sh\n%s "$${@}"\n' '$(HOST_PSEUDO)' >$(HOST_DIR)/usr/bin/fakeroot
+> +	chmod 755 $(HOST_DIR)/usr/bin/fakeroot
+>  endef
+>  HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_FAKEROOT_SYMLINK
+>  
+> 
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
