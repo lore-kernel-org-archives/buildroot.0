@@ -1,48 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Nov 2016 09:20:49 +0100
-Subject: [Buildroot] [PATCH v4 04/22] toolchain-external: introduce
- toolchain-external-package
-In-Reply-To: <96c92e87-dc71-3030-d620-5ed285259ebb@mind.be>
-References: <20161107012017.22505-1-arnout@mind.be>
- <20161107012017.22505-5-arnout@mind.be>
- <a6555b0b-413d-0248-8b6f-75319c385440@gmail.com>
- <96c92e87-dc71-3030-d620-5ed285259ebb@mind.be>
-Message-ID: <20161108092049.45aa1609@free-electrons.com>
+Date: Tue, 8 Nov 2016 09:37:17 +0100
+Subject: [Buildroot] [git commit] mpv: fix build on powerpc64 w/ altivec
+Message-ID: <20161108083834.EC3ED7FDEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=64904f0f6d691cfea5ae1c8f58e2d61aac0684c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 8 Nov 2016 02:00:46 +0100, Arnout Vandecappelle wrote:
+Fixes
+http://autobuild.buildroot.net/results/77f/77f00633b0b25f001cd4ca54ed3a12aee301c287
 
-> > The tarballs contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
-> > which themselves contain the toolchain, so we still need to add the toolchain
-> > prefix...  
-> 
->  Yes, the ADI blackfin toolchains are a kind of multilib toolchain, but instead
-> of multilib it's actually two toolchains installed side by side.
-> 
->  I'm thinking to either:
-> - drop support for ADI blackfin toolchains, since our internal toolchain works
-> fine now and we have lots of autobuilder exceptions for this toolchain; and/or
+Add a patch to work around a name collision between bool and altivec's
+bool apparent when using sdl2.
 
-Let's do this. They are ancient (gcc 4.3, very old uClibc, etc.). They
-were kind of useful in that they forced us to test a very old gcc, very
-old uClibc, very old binutils, but I agree they have a lot of quirks,
-and I'm not sure they are really actively used by our users.
+Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../mpv/0002-Fix-build-on-powerpc64-altivec.patch  | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-Should we instead try to have some ancient ARM toolchain, in order to
-keep testing old gcc, old binutils, etc. ? But even the ct-ng
-toolchains that are quite old are causing a number of problems, and
-have autobuilder exceptions.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/mpv/0002-Fix-build-on-powerpc64-altivec.patch b/package/mpv/0002-Fix-build-on-powerpc64-altivec.patch
+new file mode 100644
+index 0000000..6db911d
+--- /dev/null
++++ b/package/mpv/0002-Fix-build-on-powerpc64-altivec.patch
+@@ -0,0 +1,28 @@
++Subject: [PATCH] Work around bool type redefinition by altivec
++
++On powerpc64le, the SDL header from SDL2 may include altivec.h and this
++(combined with -std=c99) will cause a compile failure due to bool being
++redefined as a vector type.
++
++Re-include stdbool.h after SDL.h to restore the normal bool type.
++
++Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
++---
++ audio/out/ao_sdl.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/audio/out/ao_sdl.c b/audio/out/ao_sdl.c
++index d9d0062..0cb80d6 100644
++--- a/audio/out/ao_sdl.c
+++++ b/audio/out/ao_sdl.c
++@@ -29,6 +29,7 @@
++ #include "osdep/timer.h"
++ 
++ #include <SDL.h>
+++#include <stdbool.h>
++ 
++ struct priv
++ {
++-- 
++2.10.0.297.gf6727b0
++
