@@ -1,94 +1,67 @@
-From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Tue,  8 Nov 2016 11:30:43 +0100
-Subject: [Buildroot] [PATCH 0/5] Bump QT 5.8.0-beta
-Message-ID: <1478601048-21388-1-git-send-email-anaumann@ultratronik.de>
+From: Michael Walle <michael@walle.cc>
+Date: Tue, 08 Nov 2016 11:59:53 +0100
+Subject: [Buildroot] genconfig/unconditonally include external.mk
+In-Reply-To: <ebbb33ee-6c3c-8be4-0e3e-ffdd136d6ad7@mind.be>
+References: <66befb0a3a9cb7c98c7a011aa985fb2f@walle.cc>
+ <ebbb33ee-6c3c-8be4-0e3e-ffdd136d6ad7@mind.be>
+Message-ID: <fce79a1a961dd6b6df31fbdca3166af2@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm currently playing around with qt5.8 and might as well ask for comments.
+Am 2016-11-08 02:22, schrieb Arnout Vandecappelle:
+> On 07-11-16 10:49, Michael Walle wrote:
+>> Hi,
+>> 
+>> there was a discussion (and rejected patches) [1] about adding support 
+>> for
+>> buildroot config fragments. The conclusion was that this should not be 
+>> part of
+>> buildroot and should stay external.
+> 
+>  With "stay external", the idea was not that it would be handled in 
+> external.mk,
+> but rather that you have a script that merges the defconfigs to a 
+> temporary file
+> and the calls 'make defconfig BR2_DEFCONFIG=...' on it.
 
-I've done some testing on IMX6 and SAMA5D3 and things seem to do fine, 
-especially GPU-less QML which is motivation for this.
-Compile only tested with a ras-pi defconfig.
+mhh, ok, but i guess having additional make targets would be more 
+appealing. Esp. if you need some variables defined by buildroot.
 
-This series removes the hashes for now since they will change again anyway.
+>> But an integration would need unconditonal
+>> inclusion of the external.mk. The last mail about this subject was in 
+>> July [2].
+>> Are there any news on this topic?
+> 
+>  Nobody ever posted a patch :-)
+> 
+>  But I can already tell you that you won't be able to just move the 
+> include
+> outside of the conditional: it can go up over the definition of the 
+> package
+> infras, and it can't go down over the target-finalize: $(PACKAGES) 
+> rule. So it
+> has to stay where it is, and the conditional has to be split up.
+> 
+>  It should be analyzed then what the effect is of including package .mk 
+> files
+> when the package infra is not defined.
 
+mhh I see.. yann wrote that the correct solution would be to include 
+external.mk unconditionally. I'm not so sure about this anymore after 
+your comment above. I think we should treat the internal and external 
+package makefiles the same. That is, either include both if 
+BR2_HAVE_DOT_CONFIG is not set or include none of them. But I guess 
+there is are reasons not include the package files if 
+BR2_HAVE_DOT_CONFIG is not set. So why should be external package .mk 
+files be special..
 
-Andreas Naumann (5):
-  qt5: bump to 5.8.0-beta
-  Revert "qt5base: install bundled fonts to target"
-  qt5webkit: bump to 5.8.0-beta
-  qt5declarative: enable Quick for non-GL platforms
-  quickcontrols1/2: enable for software renderer
+You could include external.mk unconditonally, but put the package .mk 
+files in a BR2_HAVE_DOT_CONFIG block, which is not backwards compatible 
+and doesn't really fit simplicity. So I'm not sure. I know you were 
+already down that route, but a second external.mk which is included 
+unconditonally?
 
- package/qt5/Config.in                              |  7 +--
- package/qt5/qt5.mk                                 |  6 +-
- package/qt5/qt53d/qt53d.hash                       |  2 -
- ...001-directfb-make-platform-plugin-compile.patch | 22 ++++++++
- .../0006-eglfs-rasp-pi-header-inclusion.patch      | 45 ---------------
- package/qt5/qt5base/qt5base.hash                   |  2 -
- package/qt5/qt5base/qt5base.mk                     | 11 +---
- package/qt5/qt5canvas3d/qt5canvas3d.hash           |  2 -
- package/qt5/qt5connectivity/qt5connectivity.hash   |  2 -
- package/qt5/qt5declarative/Config.in               |  4 +-
- package/qt5/qt5declarative/qt5declarative.hash     |  2 -
- package/qt5/qt5enginio/Config.in                   | 13 -----
- package/qt5/qt5enginio/qt5enginio.hash             |  2 -
- package/qt5/qt5enginio/qt5enginio.mk               | 64 ----------------------
- .../qt5graphicaleffects/qt5graphicaleffects.hash   |  2 -
- package/qt5/qt5imageformats/qt5imageformats.hash   |  2 -
- package/qt5/qt5location/qt5location.hash           |  2 -
- package/qt5/qt5multimedia/qt5multimedia.hash       |  2 -
- package/qt5/qt5multimedia/qt5multimedia.mk         |  2 +
- package/qt5/qt5quickcontrols/Config.in             |  3 +-
- package/qt5/qt5quickcontrols/qt5quickcontrols.hash |  2 -
- package/qt5/qt5quickcontrols/qt5quickcontrols.mk   |  5 +-
- package/qt5/qt5quickcontrols2/Config.in            |  3 +-
- .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |  2 -
- package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk |  8 ++-
- package/qt5/qt5script/qt5script.hash               |  2 -
- package/qt5/qt5sensors/qt5sensors.hash             |  2 -
- package/qt5/qt5serialbus/qt5serialbus.hash         |  2 -
- package/qt5/qt5serialport/qt5serialport.hash       |  2 -
- package/qt5/qt5svg/qt5svg.hash                     |  2 -
- package/qt5/qt5tools/qt5tools.hash                 |  2 -
- package/qt5/qt5webchannel/qt5webchannel.hash       |  2 -
- package/qt5/qt5webkit/qt5webkit.hash               |  2 -
- package/qt5/qt5webkit/qt5webkit.mk                 |  3 +-
- package/qt5/qt5websockets/qt5websockets.hash       |  2 -
- package/qt5/qt5x11extras/qt5x11extras.hash         |  2 -
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |  2 -
- 37 files changed, 45 insertions(+), 197 deletions(-)
- delete mode 100644 package/qt5/qt53d/qt53d.hash
- create mode 100644 package/qt5/qt5base/0001-directfb-make-platform-plugin-compile.patch
- delete mode 100644 package/qt5/qt5base/0006-eglfs-rasp-pi-header-inclusion.patch
- delete mode 100644 package/qt5/qt5base/qt5base.hash
- delete mode 100644 package/qt5/qt5canvas3d/qt5canvas3d.hash
- delete mode 100644 package/qt5/qt5connectivity/qt5connectivity.hash
- delete mode 100644 package/qt5/qt5declarative/qt5declarative.hash
- delete mode 100644 package/qt5/qt5enginio/Config.in
- delete mode 100644 package/qt5/qt5enginio/qt5enginio.hash
- delete mode 100644 package/qt5/qt5enginio/qt5enginio.mk
- delete mode 100644 package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
- delete mode 100644 package/qt5/qt5imageformats/qt5imageformats.hash
- delete mode 100644 package/qt5/qt5location/qt5location.hash
- delete mode 100644 package/qt5/qt5multimedia/qt5multimedia.hash
- delete mode 100644 package/qt5/qt5quickcontrols/qt5quickcontrols.hash
- delete mode 100644 package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
- delete mode 100644 package/qt5/qt5script/qt5script.hash
- delete mode 100644 package/qt5/qt5sensors/qt5sensors.hash
- delete mode 100644 package/qt5/qt5serialbus/qt5serialbus.hash
- delete mode 100644 package/qt5/qt5serialport/qt5serialport.hash
- delete mode 100644 package/qt5/qt5svg/qt5svg.hash
- delete mode 100644 package/qt5/qt5tools/qt5tools.hash
- delete mode 100644 package/qt5/qt5webchannel/qt5webchannel.hash
- delete mode 100644 package/qt5/qt5webkit/qt5webkit.hash
- delete mode 100644 package/qt5/qt5websockets/qt5websockets.hash
- delete mode 100644 package/qt5/qt5x11extras/qt5x11extras.hash
- delete mode 100644 package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-
--- 
-1.9.1
+-michael
