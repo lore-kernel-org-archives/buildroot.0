@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Nov 2016 09:38:56 +0100
-Subject: [Buildroot] [PATCH] package/ccache: bump to version 3.3.3
-In-Reply-To: <20161107230232.26087-1-joerg.krause@embedded.rocks>
-References: <20161107230232.26087-1-joerg.krause@embedded.rocks>
-Message-ID: <20161108093856.7766b067@free-electrons.com>
+Date: Tue, 8 Nov 2016 09:39:00 +0100
+Subject: [Buildroot] [PATCH v2 1/1] mpv: fix build on powerpc64 w/
+ altivec
+In-Reply-To: <4c8ba901042cbf0a277f38bdb80b73e8a46e8f97.1478574575.git.sam.bobroff@au1.ibm.com>
+References: <4c8ba901042cbf0a277f38bdb80b73e8a46e8f97.1478574575.git.sam.bobroff@au1.ibm.com>
+Message-ID: <20161108093900.1787512a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +13,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  8 Nov 2016 00:02:32 +0100, J?rg Krause wrote:
-> Note, that version 3.3.3 of ccache fixes a bug [1] where the Linux
-> kernel image is the same even after changing the source code and
-> rebuilding it.
+On Tue,  8 Nov 2016 14:09:37 +1100, Sam Bobroff wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/77f/77f00633b0b25f001cd4ca54ed3a12aee301c287
 > 
-> [1] https://github.com/ccache/ccache/issues/136
+> Add a patch to work around a name collision between bool and altivec's
+> bool apparent when using sdl2.
 > 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
 > ---
->  package/ccache/ccache.hash | 4 ++--
->  package/ccache/ccache.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
