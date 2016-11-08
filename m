@@ -1,57 +1,48 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue,  8 Nov 2016 15:34:46 +0100
-Subject: [Buildroot] [PATCH] swupdate: bump to version 2016.10
-Message-ID: <20161108143446.9525-1-gary.bisson@boundarydevices.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Tue, 8 Nov 2016 09:38:36 -0600
+Subject: [Buildroot] minnowboard_defconfig fails to build
+In-Reply-To: <20161105145735.6a941b3a@free-electrons.com>
+References: <20161105145735.6a941b3a@free-electrons.com>
+Message-ID: <CAAEAJfCAzvs0rMWjTr7By=AQhy8vWkxF9eTrUxv0ST6wdCUU4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A short list of new features:
+Thomas,
 
-- progress interface as general way to signalize the update
-  status outside of the process.
+On 5 November 2016 at 08:57, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Ezequiel,
+>
+> The minnowboard_defconfig fails to build (but minnowboard_max_defconfig
+> is OK), due to the use of a Linux kernel version that is too old to
+> build with gcc 5.x.
+>
+> Do you have access to the Minnowboard (not MAX) ? If so, would you be
+> willing to look into this issue, and provide an updated defconfig ?
+>
 
-- support encrypted artifacts (encryption via simmetric keys)
+No, I only have a Minnowboard Turbot, MAX compatible.
 
-- host verification for swu images (-c option)
+AFAIK, the reason to use the old Linux kernel is to have some
+platform-specific GPIO keys,
+that wasn't upstreamed at the time (maybe it is now, or maybe we need to be able
+to have the acpi manipulation thing, don't really remember).
 
-- configuration file to configure the update process
+Peter and I discussed about this board having an old kernel. I think
+we should just
+move to upstream, but he'd rather stick with the old and support all
+the hardware.
 
-- HAwkbit backend: API extended, support for configData messages
+Maybe now we have no choice but upstream?
 
-- Hawkbit backend: supports SSL certificates
+> See the full build log at
+> http://free-electrons.com/~thomas/pub/buildroot-defconfigs/minnowboard_defconfig.log.FAIL.
+>
 
-- remote handler : general interface to connect external
-  installers.
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- package/swupdate/swupdate.hash | 2 +-
- package/swupdate/swupdate.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index 918ca2f..1ba10f6 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  c21d2fd52eb7ed9c304a7a996d230a8f1b47b9879a8c9fa50c80b41e117d1e60  swupdate-2016.07.tar.gz
-+sha256  840d6287a41f7a42e08a74045ee40b7c2f82c1ecfedf8c915e3935d4f0084376  swupdate-2016.10.tar.gz
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index d442810..c905c1d 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SWUPDATE_VERSION = 2016.07
-+SWUPDATE_VERSION = 2016.10
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPLv2+, MIT, Public Domain
- SWUPDATE_LICENSE_FILES = COPYING
 -- 
-2.9.3
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
