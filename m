@@ -1,73 +1,165 @@
 From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Wed, 9 Nov 2016 00:06:41 +0530
-Subject: [Buildroot] [PATCH 1/2] wget: fix ssl detection in static libs
-	configuration
-Message-ID: <1478630202-1630-1-git-send-email-rahul.bedarkar@imgtec.com>
+Date: Wed, 9 Nov 2016 00:06:42 +0530
+Subject: [Buildroot] [PATCH 2/2] wget: fix static link with gnutls
+In-Reply-To: <1478630202-1630-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1478630202-1630-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <1478630202-1630-2-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building wget with openssl in static libs configuration, wget
-build system fails detect openssl because it doesn't specify LD flags
-for private libs used by openssl. This specifically happens when we
-pass --with-libssl-prefix to configure which tries to find ssl using
-custom flags. If we don't specify --with-libssl-prefix, it relies on
-pkg-config files to detect ssl and it's LD flags which helps with static
-linking.
+When statically linking with gnutls, we get definition clash error for
+base64_encode which is also defined by gnutls.
 
-This commit removes --with-libssl-prefix conf opts. Since this case is
-similar to gnutls, we remove same conf opts for gnutls as well.
-
-wget can be built with either gnutls or openssl crypto libraries, so
-separate optional support for both is not required. This commit also
-does minor optimization by checking for either gnutls or openssl while
-at it.
-
-Fixes:
-  http://autobuild.buildroot.net/results/c6a/c6abdff37b86471cf8b0ceffeff5472042923de0/
+This commit adds patch to rename base64_{encode,decode} defined in wget.
 
 Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 ---
- package/wget/wget.mk | 19 +++++--------------
- 1 file changed, 5 insertions(+), 14 deletions(-)
+ .../0001-utils-rename-base64_-encode-decode.patch  | 134 +++++++++++++++++++++
+ 1 file changed, 134 insertions(+)
+ create mode 100644 package/wget/0001-utils-rename-base64_-encode-decode.patch
 
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 9cda76b..c9efc03 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -17,26 +17,17 @@ WGET_DEPENDENCIES += busybox
- endif
- 
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
--WGET_CONF_OPTS += \
--	--with-ssl=gnutls \
--	--with-libgnutls-prefix=$(STAGING_DIR)
-+WGET_CONF_OPTS += --with-ssl=gnutls
- WGET_DEPENDENCIES += gnutls
--endif
--
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--WGET_CONF_OPTS += --with-ssl=openssl --with-libssl-prefix=$(STAGING_DIR)
-+else ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+WGET_CONF_OPTS += --with-ssl=openssl
- WGET_DEPENDENCIES += openssl
-+else
-+WGET_CONF_OPTS += --without-ssl
- endif
- 
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
- WGET_DEPENDENCIES += util-linux
- endif
- 
--# --with-ssl is default
--ifneq ($(BR2_PACKAGE_GNUTLS),y)
--ifneq ($(BR2_PACKAGE_OPENSSL),y)
--WGET_CONF_OPTS += --without-ssl
--endif
--endif
--
- $(eval $(autotools-package))
+diff --git a/package/wget/0001-utils-rename-base64_-encode-decode.patch b/package/wget/0001-utils-rename-base64_-encode-decode.patch
+new file mode 100644
+index 0000000..f219afa
+--- /dev/null
++++ b/package/wget/0001-utils-rename-base64_-encode-decode.patch
+@@ -0,0 +1,134 @@
++From 9e68787576fec304da23af26dca963a4cdea7765 Mon Sep 17 00:00:00 2001
++From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++Date: Tue, 8 Nov 2016 23:42:53 +0530
++Subject: [PATCH] utils: rename base64_{encode,decode}
++
++When statically linking with gnutls, we get definition clash error for
++base64_encode which is also defined by gnutls.
++
++/home/rahul.bedarkar/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgnutls.a(base64.o): In function `base64_encode':
++base64.c:(.text+0x148): multiple definition of `base64_encode'
++utils.o:utils.c:(.text+0x4378): first defined here
++collect2: error: ld returned 1 exit status
++
++To prevent definition clash, rename base64_{encode,decode}
++
++Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
++---
++ src/http-ntlm.c | 6 +++---
++ src/http.c      | 4 ++--
++ src/utils.c     | 8 ++++----
++ src/utils.h     | 4 ++--
++ 4 files changed, 11 insertions(+), 11 deletions(-)
++
++diff --git a/src/http-ntlm.c b/src/http-ntlm.c
++index 56c40ae..87f5a37 100644
++--- a/src/http-ntlm.c
+++++ b/src/http-ntlm.c
++@@ -122,7 +122,7 @@ ntlm_input (struct ntlmdata *ntlm, const char *header)
++ 
++       DEBUGP (("Received a type-2 NTLM message.\n"));
++ 
++-      size = base64_decode (header, buffer);
+++      size = wget_base64_decode (header, buffer);
++       if (size < 0)
++         return false;           /* malformed base64 from server */
++ 
++@@ -411,7 +411,7 @@ ntlm_output (struct ntlmdata *ntlm, const char *user, const char *passwd,
++     size = 32 + hostlen + domlen;
++ 
++     base64 = (char *) alloca (BASE64_LENGTH (size) + 1);
++-    base64_encode (ntlmbuf, size, base64);
+++    wget_base64_encode (ntlmbuf, size, base64);
++ 
++     output = concat_strings ("NTLM ", base64, (char *) 0);
++     break;
++@@ -584,7 +584,7 @@ ntlm_output (struct ntlmdata *ntlm, const char *user, const char *passwd,
++ 
++     /* convert the binary blob into base64 */
++     base64 = (char *) alloca (BASE64_LENGTH (size) + 1);
++-    base64_encode (ntlmbuf, size, base64);
+++    wget_base64_encode (ntlmbuf, size, base64);
++ 
++     output = concat_strings ("NTLM ", base64, (char *) 0);
++ 
++diff --git a/src/http.c b/src/http.c
++index 7e60a07..368d30d 100644
++--- a/src/http.c
+++++ b/src/http.c
++@@ -2818,7 +2818,7 @@ metalink_from_http (const struct response *resp, const struct http_stat *hs,
++           char *bin_hash = alloca (dig_hash_str_len * 3 / 4 + 1);
++           size_t hash_bin_len;
++ 
++-          hash_bin_len = base64_decode (dig_hash, bin_hash);
+++          hash_bin_len = wget_base64_decode (dig_hash, bin_hash);
++ 
++           /* One slot for me, one for zero-termination.  */
++           mfile->checksums =
++@@ -4546,7 +4546,7 @@ basic_authentication_encode (const char *user, const char *passwd)
++   sprintf (t1, "%s:%s", user, passwd);
++ 
++   t2 = (char *)alloca (BASE64_LENGTH (len1) + 1);
++-  base64_encode (t1, len1, t2);
+++  wget_base64_encode (t1, len1, t2);
++ 
++   return concat_strings ("Basic ", t2, (char *) 0);
++ }
++diff --git a/src/utils.c b/src/utils.c
++index b07da9f..355f0ce 100644
++--- a/src/utils.c
+++++ b/src/utils.c
++@@ -2140,7 +2140,7 @@ xsleep (double seconds)
++    base64 data.  */
++ 
++ size_t
++-base64_encode (const void *data, size_t length, char *dest)
+++wget_base64_encode (const void *data, size_t length, char *dest)
++ {
++   /* Conversion table.  */
++   static const char tbl[64] = {
++@@ -2208,7 +2208,7 @@ base64_encode (const void *data, size_t length, char *dest)
++    This function originates from Free Recode.  */
++ 
++ ssize_t
++-base64_decode (const char *base64, void *dest)
+++wget_base64_decode (const char *base64, void *dest)
++ {
++   /* Table of base64 values for first 128 characters.  Note that this
++      assumes ASCII (but so does Wget in other places).  */
++@@ -2588,7 +2588,7 @@ wg_pubkey_pem_to_der (const char *pem, unsigned char **der, size_t *der_len)
++ 
++   base64data = xmalloc (BASE64_LENGTH(stripped_pem_count));
++ 
++-  size = base64_decode (stripped_pem, base64data);
+++  size = wget_base64_decode (stripped_pem, base64data);
++ 
++   if (size < 0) {
++     xfree (base64data);           /* malformed base64 from server */
++@@ -2651,7 +2651,7 @@ wg_pin_peer_pubkey (const char *pinnedpubkey, const char *pubkey, size_t pubkeyl
++           end_pos[0] = '\0';
++ 
++         /* decode base64 pinnedpubkey, 8 is length of "sha256//" */
++-        decoded_hash_length = base64_decode (begin_pos + 8, expectedsha256sumdigest);
+++        decoded_hash_length = wget_base64_decode (begin_pos + 8, expectedsha256sumdigest);
++         /* if valid base64, compare sha256 digests directly */
++         if (SHA256_DIGEST_SIZE == decoded_hash_length &&
++            !memcmp (sha256sumdigest, expectedsha256sumdigest, SHA256_DIGEST_SIZE)) {
++diff --git a/src/utils.h b/src/utils.h
++index f224b73..aaac730 100644
++--- a/src/utils.h
+++++ b/src/utils.h
++@@ -140,8 +140,8 @@ void xsleep (double);
++ /* How many bytes it will take to store LEN bytes in base64.  */
++ #define BASE64_LENGTH(len) (4 * (((len) + 2) / 3))
++ 
++-size_t base64_encode (const void *, size_t, char *);
++-ssize_t base64_decode (const char *, void *);
+++size_t wget_base64_encode (const void *, size_t, char *);
+++ssize_t wget_base64_decode (const char *, void *);
++ 
++ #ifdef HAVE_LIBPCRE
++ void *compile_pcre_regex (const char *);
++-- 
++2.6.2
++
 -- 
 2.6.2
