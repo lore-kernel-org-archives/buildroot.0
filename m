@@ -1,62 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Nov 2016 02:22:52 +0100
-Subject: [Buildroot] genconfig/unconditonally include external.mk
-In-Reply-To: <66befb0a3a9cb7c98c7a011aa985fb2f@walle.cc>
-References: <66befb0a3a9cb7c98c7a011aa985fb2f@walle.cc>
-Message-ID: <ebbb33ee-6c3c-8be4-0e3e-ffdd136d6ad7@mind.be>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Tue, 8 Nov 2016 14:07:51 +1100
+Subject: [Buildroot] [PATCH 1/1] mpv: fix build on powerpc64 w/ altivec
+In-Reply-To: <20161107223541.15234e0b@free-electrons.com>
+References: <2caa778dd77d8e8b473a9d2507368bb2c4b497b9.1478484002.git.sam.bobroff@au1.ibm.com>
+ <20161107223541.15234e0b@free-electrons.com>
+Message-ID: <20161108030751.GA16691@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 07-11-16 10:49, Michael Walle wrote:
-> Hi,
+On Mon, Nov 07, 2016 at 10:35:41PM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> there was a discussion (and rejected patches) [1] about adding support for
-> buildroot config fragments. The conclusion was that this should not be part of
-> buildroot and should stay external.
-
- With "stay external", the idea was not that it would be handled in external.mk,
-but rather that you have a script that merges the defconfigs to a temporary file
-and the calls 'make defconfig BR2_DEFCONFIG=...' on it.
-
-
-> But an integration would need unconditonal
-> inclusion of the external.mk. The last mail about this subject was in July [2].
-> Are there any news on this topic?
-
- Nobody ever posted a patch :-)
-
- But I can already tell you that you won't be able to just move the include
-outside of the conditional: it can go up over the definition of the package
-infras, and it can't go down over the target-finalize: $(PACKAGES) rule. So it
-has to stay where it is, and the conditional has to be split up.
-
- It should be analyzed then what the effect is of including package .mk files
-when the package infra is not defined.
-
-
- Regards,
- Arnout
-
+> On Mon,  7 Nov 2016 13:00:03 +1100, Sam Bobroff wrote:
+> > Fixes
+> > http://autobuild.buildroot.net/results/77f/77f00633b0b25f001cd4ca54ed3a12aee301c287
+> > 
+> > Add a patch to work around a name collision between bool and altivec's
+> > bool.
+> > 
+> > Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
 > 
-> [1] http://patchwork.ozlabs.org/patch/641840/
-> [2] http://lists.busybox.net/pipermail/buildroot/2016-July/167059.html
-> 
-> -michael
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+> Could you instead try to #include <stdbool.h> in this ao_sdl.c file?
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Sure. It seems to work just as well, and I agree that it looks nicer.
+I'll post a v2.
+
+(I was a bit worried that including stdbool would change other bools
+from vector types back to normal bool as well. From a bit of a look at
+the file there doesn't seem to actually be any others so it doesn't
+matter either way.)
+
+Cheers,
+Sam.
