@@ -1,14 +1,25 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  8 Nov 2016 23:18:34 +0100
-Subject: [Buildroot] [PATCH 4/5] fs: call the pseudo wrapper
+Date: Tue,  8 Nov 2016 23:18:35 +0100
+Subject: [Buildroot] [PATCH 5/5] package/pseudo: provide better legacy
+	handling for fakeroot
 In-Reply-To: <cover.1478643505.git.yann.morin.1998@free.fr>
 References: <cover.1478643505.git.yann.morin.1998@free.fr>
-Message-ID: <3cb16b41f768b4e7e92ad1a482ab91066e661376.1478643505.git.yann.morin.1998@free.fr>
+Message-ID: <29ffadca0013de2c9d9c7e749f13cb6e0361a9f0.1478643505.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+We now have a wrapper that makes pseudo behaves like the fakeroot of the
+good ol' days. So the symlink will just magically keep old scripts
+working as they did before the switch to pseudo.
+
+However, using fakeroot is deprecated, and we want people to stop using
+it altogether and switch to pseudo.
+
+So, make the wrapper recognise how it's called, and if called as
+fakeroot, print a warning message.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
@@ -17,21 +28,45 @@ Cc: Erico Nunes <nunes.erico@gmail.com>
 Cc: Julien BOIBESSOT <julien.boibessot@free.fr>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- fs/common.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pseudo/pseudo-wrapper | 9 ++++++++-
+ package/pseudo/pseudo.mk      | 2 +-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 2dbef4d..22f3de5 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -97,7 +97,7 @@ endif
- 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
- 	chmod a+x $$(FAKEROOT_SCRIPT)
--	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/pseudo -- $$(FAKEROOT_SCRIPT)
-+	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/pseudo-wrapper -- $$(FAKEROOT_SCRIPT)
- 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
- 	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
- ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
+diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
+index feaa7fc..9c8dbdb 100644
+--- a/package/pseudo/pseudo-wrapper
++++ b/package/pseudo/pseudo-wrapper
+@@ -1,5 +1,12 @@
+ #!/bin/sh
+ 
++if [ "${0##*/}" = "fakeroot" ]; then
++    cat >&2 <<-_EOF_
++	WARNING: fakeroot has been replaced with pseudo.
++	WARNING: Update your script(s) to use pseudo or pseudo-wrapper instead.
++	_EOF_
++fi
++
+ export PSEUDO_PREFIX="$(dirname "${0%/*}")"
+ export PSEUDO_OPTS="-t0"
+ if [ -n "${TARGET_DIR}" ]; then
+@@ -9,4 +16,4 @@ if [ -n "${BASE_DIR}" ]; then
+     export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
+ fi
+ 
+-exec "${0%-wrapper}" "${@}"
++exec "${0%/*}/pseudo" "${@}"
+diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
+index 474eae2..02d6247 100644
+--- a/package/pseudo/pseudo.mk
++++ b/package/pseudo/pseudo.mk
+@@ -33,7 +33,7 @@ endef
+ HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_INSTALL_WRAPPER
+ 
+ define HOST_PSEUDO_FAKEROOT_SYMLINK
+-	ln -sf pseudo $(HOST_DIR)/usr/bin/fakeroot
++	ln -sf pseudo-wrapper $(HOST_DIR)/usr/bin/fakeroot
+ endef
+ HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_FAKEROOT_SYMLINK
+ 
 -- 
 2.7.4
