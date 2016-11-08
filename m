@@ -1,130 +1,52 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Nov 2016 02:08:29 +0100
-Subject: [Buildroot] Looking for Pointers and Info: Active Directory &
- Kerberos
-In-Reply-To: <1999F91E-39BA-444C-8B2B-61719E2B5EC6@exablox.com>
-References: <CAKduhSuPAxx8m9O2GdgG_J9pSNii-pKwQe_663imJS3y9bd+tA@mail.gmail.com>
- <1999F91E-39BA-444C-8B2B-61719E2B5EC6@exablox.com>
-Message-ID: <bba146b7-1691-db60-2b43-7661f8bb1b9f@mind.be>
+Date: Tue, 8 Nov 2016 02:22:52 +0100
+Subject: [Buildroot] genconfig/unconditonally include external.mk
+In-Reply-To: <66befb0a3a9cb7c98c7a011aa985fb2f@walle.cc>
+References: <66befb0a3a9cb7c98c7a011aa985fb2f@walle.cc>
+Message-ID: <ebbb33ee-6c3c-8be4-0e3e-ffdd136d6ad7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi,
 
-On 08-11-16 00:22, Charles Hardin wrote:
-> We hacked this in as an external package in our layout a bit ago - just one of
-> those I was going to push
-> up but never quite got around to it. We use this to link in kerberos.
+
+On 07-11-16 10:49, Michael Walle wrote:
+> Hi,
 > 
+> there was a discussion (and rejected patches) [1] about adding support for
+> buildroot config fragments. The conclusion was that this should not be part of
+> buildroot and should stay external.
 
- Just for the heck of it I started implementing the krb5 package in parallel
-with this mail, and I adapted it slightly based on what you wrote here (I copied
-the help text and added the WARN_CFLAGS). Can you have a look and add Tested-by
-and/or Reviewed-by tags?
+ With "stay external", the idea was not that it would be handled in external.mk,
+but rather that you have a script that merges the defconfigs to a temporary file
+and the calls 'make defconfig BR2_DEFCONFIG=...' on it.
+
+
+> But an integration would need unconditonal
+> inclusion of the external.mk. The last mail about this subject was in July [2].
+> Are there any news on this topic?
+
+ Nobody ever posted a patch :-)
+
+ But I can already tell you that you won't be able to just move the include
+outside of the conditional: it can go up over the definition of the package
+infras, and it can't go down over the target-finalize: $(PACKAGES) rule. So it
+has to stay where it is, and the conditional has to be split up.
+
+ It should be analyzed then what the effect is of including package .mk files
+when the package infra is not defined.
+
 
  Regards,
  Arnout
 
-
 > 
+> [1] http://patchwork.ozlabs.org/patch/641840/
+> [2] http://lists.busybox.net/pipermail/buildroot/2016-July/167059.html
 > 
-> Config.in
-> -----------
-> config BR2_PACKAGE_KRB5
-> bool "krb5"
-> depends on BR2_TOOLCHAIN_HAS_THREADS
-> help
->   KRB5 is the MIT Kerberos Version 5 implementation
-> 
->   Kerberos is a network authentication protocol. It is designed
->   to provide strong authentication for client/server applications
->   by using secret-key cryptography. A free implementation of this
->   protocol is available from the Massachusetts Institute of Technology.
-> 
->   http://web.mit.edu/Kerberos
-> 
-> comment "krb5 needs a toolchain w/ threads"
-> depends on !BR2_TOOLCHAIN_HAS_THREADS
-> 
-> 
-> 
-> krb5.hash
-> -----------
-> sha256 cedb07fad8331e3ff2983d26e977a2ddba622f379c2b19bfea85bd695930f9e9 
-> krb5-1.14.tar.gz
-> 
-> 
-> 
-> krb5.mk
-> -----------
-> ################################################################################
-> #
-> # krb5
-> #
-> ################################################################################
-> 
-> KRB5_VERSION = 1.14
-> KRB5_SOURCE = krb5-$(KRB5_VERSION).tar.gz
-> KRB5_SITE = http://web.mit.edu/Kerberos/dist/krb5/$(KRB5_VERSION)
-> KRB5_LICENSE = MIT
-> KRB5_LICENSE_FILES = NOTICE
-> KRB5_INSTALL_STAGING = YES
-> KRB5_INSTALL_TARGET = YES
-> KRB5_DEPENDENCIES =
-> KRB5_SUBDIR = src
-> 
-> # Pass some configuration variables into the environment
-> KRB5_CONF_ENV += \
-> ac_cv_func_regcomp=yes \
-> ac_cv_printf_positional=yes \
-> krb5_cv_attr_constructor_destructor=yes,yes \
-> WARN_CFLAGS='-Wall' \
-> 
-> KRB5_CONF_OPTS += \
-> --enable-thread-support \
-> 
-> $(eval $(autotools-package))
-> 
-> 
-> 
->> On Nov 7, 2016, at 3:15 PM, Daniel Price <daniel.price@gmail.com
->> <mailto:daniel.price@gmail.com>> wrote:
->>
->>
->> Hi everyone,
->>
->> Our team is looking to integrate Active Directory client support into our
->> buildroot-based appliance.  To do so we think we need a working kerberos client.
->>
->> We are ultimately trying to get a working pam-krb5 module
->> (https://www.eyrie.org/~eagle/software/pam-krb5/); it depends on either
->> Heimdal or MIT Kerberos.
->>
->> So, we are struggling to work out the right stack to use, and trying to work
->> out whether anyone else has paved the way already.  Because of the existing
->> host-heimdal recipe, we spent some time trying to get a cross-build of Heimdal
->> to work.  However we recently noticed that Debian seems to be on the cusp of
->> removing its support for Heimdal
->> (see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837728).  And we had
->> trouble getting the pam-krb5 module to see heimdal at all.
->>
->> Has anyone else worked through this?  Has anyone else got MIT kerberos up and
->> running?  Pointers much appreciated.
->>
->>       -dp
->>
->> -- 
->> Daniel.Price at gmail.com <mailto:Daniel.Price@gmail.com>; Twitter: @danielbprice
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net <mailto:buildroot@busybox.net>
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
-> 
+> -michael
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
