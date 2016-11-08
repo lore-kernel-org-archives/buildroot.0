@@ -1,72 +1,98 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  8 Nov 2016 23:18:35 +0100
-Subject: [Buildroot] [PATCH 5/5] package/pseudo: provide better legacy
-	handling for fakeroot
-In-Reply-To: <cover.1478643505.git.yann.morin.1998@free.fr>
-References: <cover.1478643505.git.yann.morin.1998@free.fr>
-Message-ID: <29ffadca0013de2c9d9c7e749f13cb6e0361a9f0.1478643505.git.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 8 Nov 2016 23:19:13 +0100
+Subject: [Buildroot] [PATCH master 1/3] MIPS: remove M5100 core
+In-Reply-To: <20161108103258.32196-1-Vincent.Riera@imgtec.com>
+References: <20161108103258.32196-1-Vincent.Riera@imgtec.com>
+Message-ID: <335eb04b-311e-4aab-d412-c88eded124ef@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We now have a wrapper that makes pseudo behaves like the fakeroot of the
-good ol' days. So the symlink will just magically keep old scripts
-working as they did before the switch to pseudo.
 
-However, using fakeroot is deprecated, and we want people to stop using
-it altogether and switch to pseudo.
 
-So, make the wrapper recognise how it's called, and if called as
-fakeroot, print a warning message.
+On 08-11-16 11:32, Vicente Olivert Riera wrote:
+> This is a microcontroller class (MCU) core which is not suitable for
+> running Linux.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-Cc: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-Cc: Erico Nunes <nunes.erico@gmail.com>
-Cc: Julien BOIBESSOT <julien.boibessot@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- package/pseudo/pseudo-wrapper | 9 ++++++++-
- package/pseudo/pseudo.mk      | 2 +-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+ I don't really understand this. What makes it a microcontroller class core that
+is not suitable for running Linux? Do you mean to say that no SoCs exist with
+sufficient memory to be able to run Linux? Or is it just that it's noMMU? The
+latter shouldn't be a problem.
 
-diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
-index feaa7fc..9c8dbdb 100644
---- a/package/pseudo/pseudo-wrapper
-+++ b/package/pseudo/pseudo-wrapper
-@@ -1,5 +1,12 @@
- #!/bin/sh
- 
-+if [ "${0##*/}" = "fakeroot" ]; then
-+    cat >&2 <<-_EOF_
-+	WARNING: fakeroot has been replaced with pseudo.
-+	WARNING: Update your script(s) to use pseudo or pseudo-wrapper instead.
-+	_EOF_
-+fi
-+
- export PSEUDO_PREFIX="$(dirname "${0%/*}")"
- export PSEUDO_OPTS="-t0"
- if [ -n "${TARGET_DIR}" ]; then
-@@ -9,4 +16,4 @@ if [ -n "${BASE_DIR}" ]; then
-     export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
- fi
- 
--exec "${0%-wrapper}" "${@}"
-+exec "${0%/*}/pseudo" "${@}"
-diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
-index 474eae2..02d6247 100644
---- a/package/pseudo/pseudo.mk
-+++ b/package/pseudo/pseudo.mk
-@@ -33,7 +33,7 @@ endef
- HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_INSTALL_WRAPPER
- 
- define HOST_PSEUDO_FAKEROOT_SYMLINK
--	ln -sf pseudo $(HOST_DIR)/usr/bin/fakeroot
-+	ln -sf pseudo-wrapper $(HOST_DIR)/usr/bin/fakeroot
- endef
- HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_FAKEROOT_SYMLINK
- 
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  arch/Config.in.mips                    | 5 -----
+>  package/gcc/Config.in.host             | 5 ++---
+>  toolchain/toolchain-external/Config.in | 2 +-
+>  3 files changed, 3 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+> index 3662fed..289e35d 100644
+> --- a/arch/Config.in.mips
+> +++ b/arch/Config.in.mips
+> @@ -47,10 +47,6 @@ config BR2_mips_interaptiv
+>  	bool "interAptiv"
+>  	depends on !BR2_ARCH_IS_64
+>  	select BR2_MIPS_CPU_MIPS32R2
+> -config BR2_mips_m5100
+> -	bool "M5100"
+> -	depends on !BR2_ARCH_IS_64
+> -	select BR2_MIPS_CPU_MIPS32R5
+
+ Missing legacy handling.
+
+ Regards,
+ Arnout
+
+>  config BR2_mips_m5101
+>  	bool "M5101"
+>  	depends on !BR2_ARCH_IS_64
+> @@ -133,7 +129,6 @@ config BR2_GCC_TARGET_ARCH
+>  	default "mips32r5"	if BR2_mips_32r5
+>  	default "mips32r6"	if BR2_mips_32r6
+>  	default "interaptiv"	if BR2_mips_interaptiv
+> -	default "m5100"		if BR2_mips_m5100
+>  	default "m5101"		if BR2_mips_m5101
+>  	default "m6201"		if BR2_mips_m6201
+>  	default "p5600"		if BR2_mips_p5600
+> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+> index 446df4d..f46656c 100644
+> --- a/package/gcc/Config.in.host
+> +++ b/package/gcc/Config.in.host
+> @@ -64,9 +64,8 @@ choice
+>  		# musl ppc64 unsupported
+>  		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
+>  		# Unsupported MIPS cores
+> -		depends on !BR2_mips_interaptiv && !BR2_mips_m5100 && \
+> -			!BR2_mips_m5101 && !BR2_mips_m6201 && !BR2_mips_i6400 && \
+> -			!BR2_mips_p6600
+> +		depends on !BR2_mips_interaptiv && !BR2_mips_m5101 && \
+> +			!BR2_mips_m6201 && !BR2_mips_i6400 && !BR2_mips_p6600
+>  		# musl mips64 unsupported
+>  		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
+>  		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index 5324599..22f760b 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -530,7 +530,7 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+>  		BR2_x86_64
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	# Unsupported MIPS cores
+> -	depends on !BR2_mips_interaptiv && !BR2_mips_m5100 && !BR2_mips_m5101
+> +	depends on !BR2_mips_interaptiv && !BR2_mips_m5101
+>  	# Unsupported for MIPS R6
+>  	depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
+>  	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+> 
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
