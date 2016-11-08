@@ -1,69 +1,43 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 8 Nov 2016 10:32:58 +0000
-Subject: [Buildroot] [PATCH master 3/3] MIPS: rename M6201 core to M6250
-In-Reply-To: <20161108103258.32196-1-Vincent.Riera@imgtec.com>
-References: <20161108103258.32196-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161108103258.32196-3-Vincent.Riera@imgtec.com>
+From: Andreas Naumann <anaumann@ultratronik.de>
+Date: Tue,  8 Nov 2016 11:30:46 +0100
+Subject: [Buildroot] [PATCH 3/5] qt5webkit: bump to 5.8.0-beta
+In-Reply-To: <1478601048-21388-1-git-send-email-anaumann@ultratronik.de>
+References: <1478601048-21388-1-git-send-email-anaumann@ultratronik.de>
+Message-ID: <1478601048-21388-4-git-send-email-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m6201 is the -march option for GCC, but the real core name is
-M6250.
+Using the 5.8.0-beta version qmake fails because private_tests are not available.
+Running qmake a second time makes it compile.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 ---
- arch/Config.in.mips        | 6 +++---
- package/gcc/Config.in.host | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/qt5/qt5webkit/qt5webkit.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index f407d9a..c14a133 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -51,8 +51,8 @@ config BR2_mips_m5150
- 	bool "M5150"
- 	depends on !BR2_ARCH_IS_64
- 	select BR2_MIPS_CPU_MIPS32R5
--config BR2_mips_m6201
--	bool "M6201"
-+config BR2_mips_m6250
-+	bool "M6250"
- 	depends on !BR2_ARCH_IS_64
- 	select BR2_MIPS_CPU_MIPS32R6
- config BR2_mips_p5600
-@@ -130,7 +130,7 @@ config BR2_GCC_TARGET_ARCH
- 	default "mips32r6"	if BR2_mips_32r6
- 	default "interaptiv"	if BR2_mips_interaptiv
- 	default "m5101"		if BR2_mips_m5150
--	default "m6201"		if BR2_mips_m6201
-+	default "m6201"		if BR2_mips_m6250
- 	default "p5600"		if BR2_mips_p5600
- 	default "mips64"	if BR2_mips_64
- 	default "mips64r2"	if BR2_mips_64r2
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index eb1479a..0a63e6a 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -65,7 +65,7 @@ choice
- 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
- 		# Unsupported MIPS cores
- 		depends on !BR2_mips_interaptiv && !BR2_mips_m5150 && \
--			!BR2_mips_m6201 && !BR2_mips_i6400 && !BR2_mips_p6600
-+			!BR2_mips_m6250 && !BR2_mips_i6400 && !BR2_mips_p6600
- 		# musl mips64 unsupported
- 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
-@@ -76,7 +76,7 @@ choice
- 		depends on !BR2_arc
- 		depends on !BR2_microblaze
- 		# Unsupported MIPS cores
--		depends on !BR2_mips_m6201 && !BR2_mips_p6600
-+		depends on !BR2_mips_m6250 && !BR2_mips_p6600
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+index 378cdf7..2489e32 100644
+--- a/package/qt5/qt5webkit/qt5webkit.mk
++++ b/package/qt5/qt5webkit/qt5webkit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endchoice
+-QT5WEBKIT_VERSION = b35917bcb44d7f200af0f4ac68a126fa0aa8d93d
++QT5WEBKIT_VERSION = 431520f1508e92272171c214b087183e71d08ec5
+ # Using GitHub since it supports downloading tarballs from random commits.
+ # The http://code.qt.io/cgit/qt/qtwebkit.git/ repo doesn't allow to do so.
+ QT5WEBKIT_SITE = $(call github,qtproject,qtwebkit,$(QT5WEBKIT_VERSION))
+@@ -52,6 +52,7 @@ QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
+ define QT5WEBKIT_CONFIGURE_CMDS
+ 	mkdir -p $(@D)/.git
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(HOST_DIR)/usr/bin/qmake)
++	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(HOST_DIR)/usr/bin/qmake)
+ endef
+ 
+ define QT5WEBKIT_BUILD_CMDS
 -- 
-2.10.1
+1.9.1
