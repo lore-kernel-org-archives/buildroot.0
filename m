@@ -1,90 +1,71 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Nov 2016 23:05:52 +0100
-Subject: [Buildroot] genconfig/unconditonally include external.mk
-In-Reply-To: <98c173fef60c7635dee3883c3bb90271@walle.cc>
-References: <66befb0a3a9cb7c98c7a011aa985fb2f@walle.cc>
- <ebbb33ee-6c3c-8be4-0e3e-ffdd136d6ad7@mind.be>
- <fce79a1a961dd6b6df31fbdca3166af2@walle.cc>
- <102f4cbd-15e3-8293-4fec-5d83b8eaa109@mind.be>
- <98c173fef60c7635dee3883c3bb90271@walle.cc>
-Message-ID: <ff0542fb-6875-6844-7d77-c127bd083db3@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  8 Nov 2016 23:18:31 +0100
+Subject: [Buildroot] [PATCH 0/5 v2] package/pseudo: fix build and better
+	mimic fakeroot
+Message-ID: <cover.1478643505.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello All!
+
+When we switched from using fakeroot to using pseudo, a lot of
+assumptions were made, in that we assumed pseudo was by default
+behaving as fakeroot did.
+
+That is wrong. pseudo is a little bit more versatile than fakeroot
+is, so using it is a little bit more involved.
+
+First, its buildsystem is a bit convoluted, and can incorrectly guess
+the host charateristics, like bitness.
+
+Second, it needs to be told at runtime where to look at, and put its
+own stuff. It correctly gueses, but prints a warning that it had to
+gues, and the location to store its DB is not optimum (even if not
+incorrect).
+
+So, this series ensures that pseudo is correctly built and that we
+correctly specify the runtime configuration.
 
 
-On 08-11-16 13:38, Michael Walle wrote:
-> Am 2016-11-08 13:02, schrieb Arnout Vandecappelle:
->> On 08-11-16 11:59, Michael Walle wrote:
->>> Am 2016-11-08 02:22, schrieb Arnout Vandecappelle:
->>> mhh, ok, but i guess having additional make targets would be more appealing.
->>> Esp. if you need some variables defined by buildroot.
->>
->>  What variables defined by Buildroot could you possibly need? Since you're
->> making a defconfig, you have no .config available. The only variable that you
->> may want to use is $(O), but that one you anyway have to pass on the command
->> line.
-> 
-> Ahh, I thought of the support/kconfig/merge_config.sh for which I would need
-> TOPDIR. I did just a quick test and it turns out, that I cannot use it as is,
-> because it does an alldefconfig which isn't supported by buildroot (yet? dunno).
-
- Shouldn't that be olddefconfig (which is supported by buildroot)?
-
-> 
-> 
->> So pass it as an argument to your merge script. Something like
->>
->> ./genconfig <config-spec> [<path-to-output>]
->>
->>  It would actually be great if we would have a script like that in Buildroot
->> that can be used generically.
-> 
-> 
-> Lets say we have a generic genconfig inside buildroot. Would it be only for
-> external users or would you use it to generate similar defconfig files inside
-> buildroot? And in the latter case, how would you do it?
-
- Both, I think. To use it to generate defconfig files inside buildroot, we'd add
-something in the documentation explaining how you can create an extended board
-config by calling the script to combine the base config with an extension config.
+Regards,
+Yann E. MORIN.
 
 
-[snip]
->>  The problem is that we don't see a sensible use case for it. When we make
->> changes we want to make sure that we don't break any use cases, so we really
->> need to know what the use cases are. And use cases that can be solved
->> differently don't count :-)
-> 
-> Yeah and its really ok, because otherwise buildroot will be more and more
-> complex, and I don't want it to become another yocto :o) 
+The following changes since commit 64904f0f6d691cfea5ae1c8f58e2d61aac0684c2
 
- We started using pseudo, and firing up make takes almost as long as firing up
-bitbake, so I'm afraid we're not that far off...
+  mpv: fix build on powerpc64 w/ altivec (2016-11-08 09:37:17 +0100)
 
 
-> Nonetheless, the
-> genconfig wasn't the only use case for this, but also an external help command,
-> which also only makes sense, if you have own makefile targets, mhh.
-> And I really liked the idea of having a target "my_defconfig" where my_defconfig
-> doesn't have to be a file but some script which do the defconfig. IMHO, from a
-> users perspective it makes sense to have the same kind of target (*_defconfig).
+are available in the git repository at:
 
- We have a (IMHO healthy) resistance against such "frivolous features", but if
-there is enough push for it they eventually tend to come through. Cfr.
-BR2_EXTERNAL, for instance. Keep on posting patches and talking to people!
+  git://git.buildroot.org/~ymorin/git/buildroot.git
 
- Regards,
- Arnout
+for you to fetch changes up to 29ffadca0013de2c9d9c7e749f13cb6e0361a9f0
 
+  package/pseudo: provide better legacy handling for fakeroot (2016-11-08 23:17:51 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      package/pseudo: enforce the host bitness
+      package/pseudo: force rpath and pass our host CFLAGS
+      package/pseudo: wrap the real pseudo with a wrapper
+      fs: call the pseudo wrapper
+      package/pseudo: provide better legacy handling for fakeroot
+
+ fs/common.mk                  |  2 +-
+ package/pseudo/pseudo-wrapper | 19 +++++++++++++++++++
+ package/pseudo/pseudo.mk      | 14 +++++++++++++-
+ 3 files changed, 33 insertions(+), 2 deletions(-)
+ create mode 100644 package/pseudo/pseudo-wrapper
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
