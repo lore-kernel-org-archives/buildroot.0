@@ -1,32 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Nov 2016 09:39:00 +0100
-Subject: [Buildroot] [PATCH v2 1/1] mpv: fix build on powerpc64 w/
- altivec
-In-Reply-To: <4c8ba901042cbf0a277f38bdb80b73e8a46e8f97.1478574575.git.sam.bobroff@au1.ibm.com>
-References: <4c8ba901042cbf0a277f38bdb80b73e8a46e8f97.1478574575.git.sam.bobroff@au1.ibm.com>
-Message-ID: <20161108093900.1787512a@free-electrons.com>
+Date: Tue, 8 Nov 2016 09:45:39 +0100
+Subject: [Buildroot] Autobuilder issue
+Message-ID: <20161108094539.6f9b4534@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Matt,
 
-On Tue,  8 Nov 2016 14:09:37 +1100, Sam Bobroff wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/77f/77f00633b0b25f001cd4ca54ed3a12aee301c287
-> 
-> Add a patch to work around a name collision between bool and altivec's
-> bool apparent when using sdl2.
-> 
-> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-> ---
+Since yesterday, your autobuilder is behaving strangely, reporting lots
+of "core-dependencies" error due to javac being missing:
 
-Applied to master, thanks.
+  http://autobuild.buildroot.net/?reason=core-dependencies
+
+javac is *NOT* a mandatory dependency in the autobuilder slaves.
+Indeed, the autobuild-run script detects if javac is available or not,
+and if it's not available, it rejects configurations that have
+BR2_NEEDS_HOST_JAVAC=y:
+
+    if "BR2_NEEDS_HOST_JAVAC=y\n" in configlines and not sysinfo.has("javac"):
+        return False
+
+So the problem your autobuilder instance is reporting should not occur,
+i.e it should not be possible to start the build of a configuration
+that has BR2_NEEDS_HOST_JAVAC=y if javac is not installed. My
+autobuilder instance does *not* have javac installed, and does not
+report those core-dependencies failures.
+
+Did you change anything in your autobuilder instance recently?
+Installed/removed some packages? Modified the autobuild-run script?
+
+Could you have a look at what's going on?
+
+Thanks a lot!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
