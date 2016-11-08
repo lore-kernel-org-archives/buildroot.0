@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Nov 2016 23:50:00 +0100
-Subject: [Buildroot] [PATCH 1/5] qt5: bump to 5.8.0-beta
-In-Reply-To: <1478601048-21388-2-git-send-email-anaumann@ultratronik.de>
+Date: Tue, 8 Nov 2016 23:50:47 +0100
+Subject: [Buildroot] [PATCH 2/5] Revert "qt5base: install bundled fonts
+ to target"
+In-Reply-To: <1478601048-21388-3-git-send-email-anaumann@ultratronik.de>
 References: <1478601048-21388-1-git-send-email-anaumann@ultratronik.de>
- <1478601048-21388-2-git-send-email-anaumann@ultratronik.de>
-Message-ID: <ddc8a62d-18c3-2475-f711-7a7feb64a730@mind.be>
+ <1478601048-21388-3-git-send-email-anaumann@ultratronik.de>
+Message-ID: <430951a1-e5e8-184c-e1b0-78bea7dd74b9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,84 +15,46 @@ To: buildroot@busybox.net
 
 
 On 08-11-16 11:30, Andreas Naumann wrote:
-> Removed all hashes (until final release).
-
- Review would have been easier if you did that in a separate patch.
-
+> qtbase carries nor more fonts since c5ceabb9a1caf6b9b7615a28c3097f221772f645
 > 
-> - qt5base: renamed library to EglFSDeviceIntegration ([1])
-> - qt5base: remove ras-pi patch
-
- You should mention in the commit message why: (applied upstream).
-
-> - qt5base: remove obsolete config-option -large ([2])
-
- -largefile, not -large. Also mention explicitly what happened: largefile is not
-always enabled.
-
-> - qt5base: make the directfb platform plugin compile ([3])
-> - qt53d/quickcontrols2/serialbus: move out of tech-preview
-
- I didn't see this in your patch?
-
-> - qt5enginio: remove discontinued module
-
- This should have been done in a separate commit.
-
+> This reverts commit cdfa21b06041eb601e0bea79f2c8f50e9d637384.
 > 
-> [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=ec4eb4db61094179bc6a9ec26ec68fb710177053
-> [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=84d3a21c9efe7efb2cce6d3bd14af1f9580b1108
-> [3] Without this patch, qmake is looking for directfb_egl feature which usually is not
->     provided (only by some raspi mkspec afaics).
+> Conflicts:
+> 	package/qt5/qt5base/qt5base.mk
+> 
+> Conflicts:
+> 	package/qt5/qt5base/qt5base.mk
 > 
 > Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 
-[snip]
-> diff --git a/package/qt5/qt5base/0001-directfb-make-platform-plugin-compile.patch b/package/qt5/qt5base/0001-directfb-make-platform-plugin-compile.patch
-> new file mode 100644
-> index 0000000..96cc3b0
-> --- /dev/null
-> +++ b/package/qt5/qt5base/0001-directfb-make-platform-plugin-compile.patch
-> @@ -0,0 +1,22 @@
-
- Missing patch description + SoB. Also make it a git-formatted patch.
-
- For this patch, it is absolutely necessary to get upstream feedback because it
-looks very iffy to me.
-
-> +diff --git a/src/plugins/platforms/directfb/directfb.pro b/src/plugins/platforms/directfb/directfb.pro
-> +index 406b89e..a83b09f 100644
-> +--- a/src/plugins/platforms/directfb/directfb.pro
-> ++++ b/src/plugins/platforms/directfb/directfb.pro
-> +@@ -3,7 +3,7 @@ TARGET = qdirectfb
-> + QT += \
-> +     core-private gui-private \
-> +     eventdispatcher_support-private service_support-private \
-> +-    fontdatabase_support-private egl_support-private
-> ++    fontdatabase_support-private
-> + 
-> + QMAKE_USE += directfb
-> + 
-> +@@ -27,7 +27,7 @@ HEADERS = qdirectfbintegration.h \
-> +     qdirectfbeglhooks.h
-> + 
-> + # ### port the GL context
-> +-qtConfig(directfb_egl) {
-> ++contains(QT_CONFIG, directfb_egl) {
-
- Aren't these two equivalent? If this is being built for anything other than
-linux-mipsel-broadcom-97425-g++, there is really something weird going on...
-
- Anyway, to make the patch correct, you should add QT += egl_support-private here.
+ Remove the Conflicts: lines. Otherwise looks good.
 
  Regards,
  Arnout
 
-> +     HEADERS += qdirectfb_egl.h
-> +     SOURCES += qdirectfb_egl.cpp
-> +     DEFINES += DIRECTFB_GL_EGL
-
-
+> ---
+>  package/qt5/qt5base/qt5base.mk | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index f4ca921..e49718e 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -234,13 +234,6 @@ define QT5BASE_INSTALL_TARGET_PLUGINS
+>  	fi
+>  endef
+>  
+> -define QT5BASE_INSTALL_TARGET_FONTS
+> -	if [ -d $(STAGING_DIR)/usr/lib/fonts/ ] ; then \
+> -		mkdir -p $(TARGET_DIR)/usr/lib/fonts ; \
+> -		cp -dpfr $(STAGING_DIR)/usr/lib/fonts/* $(TARGET_DIR)/usr/lib/fonts ; \
+> -	fi
+> -endef
+> -
+>  define QT5BASE_INSTALL_TARGET_EXAMPLES
+>  	if [ -d $(STAGING_DIR)/usr/lib/qt/examples/ ] ; then \
+>  		mkdir -p $(TARGET_DIR)/usr/lib/qt/examples ; \
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
