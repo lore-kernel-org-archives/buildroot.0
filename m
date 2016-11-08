@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Nov 2016 23:51:30 +0100
-Subject: [Buildroot] [PATCH 3/5] qt5webkit: bump to 5.8.0-beta
-In-Reply-To: <1478601048-21388-4-git-send-email-anaumann@ultratronik.de>
+Date: Tue, 8 Nov 2016 23:53:51 +0100
+Subject: [Buildroot] [PATCH 4/5] qt5declarative: enable Quick for non-GL
+ platforms
+In-Reply-To: <1478601048-21388-5-git-send-email-anaumann@ultratronik.de>
 References: <1478601048-21388-1-git-send-email-anaumann@ultratronik.de>
- <1478601048-21388-4-git-send-email-anaumann@ultratronik.de>
-Message-ID: <d1b1253e-618c-0f79-03a0-e7fbfce1d567@mind.be>
+ <1478601048-21388-5-git-send-email-anaumann@ultratronik.de>
+Message-ID: <adaf71af-b685-8ba8-36dd-ce58e26fed4f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +15,66 @@ To: buildroot@busybox.net
 
 
 On 08-11-16 11:30, Andreas Naumann wrote:
-> Using the 5.8.0-beta version qmake fails because private_tests are not available.
-> Running qmake a second time makes it compile.
+> However, some modules provide less functionality without OpenGL, so install
+> steps have to be limited for the softrender only backend:
+> - qtmultimedia does not provide qml
+> 
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+> ---
+>  package/qt5/qt5declarative/Config.in       | 4 +---
+>  package/qt5/qt5multimedia/qt5multimedia.mk | 2 ++
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
+> index eba4c8d..0604e85 100644
+> --- a/package/qt5/qt5declarative/Config.in
+> +++ b/package/qt5/qt5declarative/Config.in
+> @@ -14,12 +14,10 @@ config BR2_PACKAGE_QT5DECLARATIVE
+>  
+>  if BR2_PACKAGE_QT5DECLARATIVE
+>  
+> -comment "quick module needs an OpenGL-capable backend"
+> +comment "quick module without OpenGL-capable backend will use a less performant software backend"
 
- Have you reported this upstream?
+ I think this comment can just be removed.
+
+>  	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+>  
+>  config BR2_PACKAGE_QT5DECLARATIVE_QUICK
+>  	bool "quick module"
+> -	select BR2_PACKAGE_QT5BASE_OPENGL
+> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
+
+ Shouldn't this be
+	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5_GL_AVAILABLE
+? We really want to use opengl if we can...
+
+>  
+>  endif
+> diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+> index 67e7968..41eb0f6 100644
+> --- a/package/qt5/qt5multimedia/qt5multimedia.mk
+> +++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+> @@ -53,11 +53,13 @@ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
+>  endef
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_QT5_GL_AVAILABLE),y)
+
+ Add a comment here to explain why, it looks a bit strange.
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-> ---
->  package/qt5/qt5webkit/qt5webkit.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-> index 378cdf7..2489e32 100644
-> --- a/package/qt5/qt5webkit/qt5webkit.mk
-> +++ b/package/qt5/qt5webkit/qt5webkit.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -QT5WEBKIT_VERSION = b35917bcb44d7f200af0f4ac68a126fa0aa8d93d
-> +QT5WEBKIT_VERSION = 431520f1508e92272171c214b087183e71d08ec5
->  # Using GitHub since it supports downloading tarballs from random commits.
->  # The http://code.qt.io/cgit/qt/qtwebkit.git/ repo doesn't allow to do so.
->  QT5WEBKIT_SITE = $(call github,qtproject,qtwebkit,$(QT5WEBKIT_VERSION))
-> @@ -52,6 +52,7 @@ QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
->  define QT5WEBKIT_CONFIGURE_CMDS
->  	mkdir -p $(@D)/.git
->  	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(HOST_DIR)/usr/bin/qmake)
-> +	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(HOST_DIR)/usr/bin/qmake)
+>  ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+>  define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
+>  	cp -dpfr $(STAGING_DIR)/usr/qml/QtMultimedia $(TARGET_DIR)/usr/qml/
 >  endef
+>  endif
+> +endif
 >  
->  define QT5WEBKIT_BUILD_CMDS
+>  define QT5MULTIMEDIA_INSTALL_TARGET_CMDS
+>  	$(QT5MULTIMEDIA_INSTALL_TARGET_LIBS)
 > 
 
 -- 
