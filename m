@@ -1,15 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Nov 2016 16:38:47 +0100
-Subject: [Buildroot] [PATCH v4 04/22] toolchain-external: introduce
- toolchain-external-package
-In-Reply-To: <9b5894c1-e895-1bab-ea4d-da880ee0323f@mind.be>
-References: <20161107012017.22505-1-arnout@mind.be>
- <20161107012017.22505-5-arnout@mind.be>
- <a6555b0b-413d-0248-8b6f-75319c385440@gmail.com>
- <96c92e87-dc71-3030-d620-5ed285259ebb@mind.be>
- <20161108092049.45aa1609@free-electrons.com>
- <9b5894c1-e895-1bab-ea4d-da880ee0323f@mind.be>
-Message-ID: <20161108163847.76ce7e6f@free-electrons.com>
+Date: Tue, 8 Nov 2016 16:39:30 +0100
+Subject: [Buildroot] Autobuilder issue
+In-Reply-To: <CANQCQpbG0=nKggYevXpyJVCT4N48+mKbapb_4oCkJCuSTPbG+Q@mail.gmail.com>
+References: <20161108094539.6f9b4534@free-electrons.com>
+ <CANQCQpbG0=nKggYevXpyJVCT4N48+mKbapb_4oCkJCuSTPbG+Q@mail.gmail.com>
+Message-ID: <20161108163930.5f65bb38@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,31 +13,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 8 Nov 2016 13:30:16 +0100, Arnout Vandecappelle wrote:
+On Tue, 8 Nov 2016 06:11:09 -0600, Matthew Weber wrote:
 
->  That would be useful if such a toolchain uncovers problems that we can fix in
-> Buildroot. If all it does is to add autobuilder exceptions, there isn't much
-> point... Well, the other thing we can do is to add *_AT_LEAST_NNN options,
-> that's true.
+> > So the problem your autobuilder instance is reporting should not occur,
+> > i.e it should not be possible to start the build of a configuration
+> > that has BR2_NEEDS_HOST_JAVAC=y if javac is not installed. My
+> > autobuilder instance does *not* have javac installed, and does not
+> > report those core-dependencies failures.
+> >
+> > Did you change anything in your autobuilder instance recently?  
+> I haven't on that instance.
+> 
+> > Installed/removed some packages? Modified the autobuild-run script?  
+> The auto builder script is modified to generate a smaller package set then
+> the default so that I can use a less powerful machine. My guess would be a
+> issue with this logic.
 
-Yes, that's what I'm thinking of: it allows us to realize when a
-package needs gcc 4.7 or 4.8, or when some fairly recent kernel headers
-are needed, for example. If all we test is gcc 4.9 with 4.0 kernel
-headers, then all our users that are stuck with 4.7 (or older
-toolchains) with 3.0 kernel headers will have a really bad experience.
+It would be better to upstream such changes, so that they can be
+reviewed. Having people run custom versions of the autobuild-run script
+can really lead to surprising things.
 
->  Those autobuilder exceptions for ct-ng, what kind of errors are they for? Not
-> something covered by *_AT_LEAST? Like bugs in libc, for which we don't have
-> _AT_LEAST?
+> > Could you have a look at what's going on?  
+> I've stopped that instance until I can look at it tonight.
 
-Looking quickly at the autobuild-run exceptions, we have:
-
- - Toolchains with gcc affected by various PRs
-
- - Toolchains with too old eglibc (2.18)
-
- - Toolchains that fail to build this or that package, with no
-   documented reason (might be explained in the commit log, though).
+Thanks a lot!
 
 Thomas
 -- 
