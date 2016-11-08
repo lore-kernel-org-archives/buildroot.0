@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Nov 2016 23:27:29 +0100
-Subject: [Buildroot] [PATCH master 3/3] MIPS: rename M6201 core to M6250
-In-Reply-To: <20161108103258.32196-3-Vincent.Riera@imgtec.com>
-References: <20161108103258.32196-1-Vincent.Riera@imgtec.com>
- <20161108103258.32196-3-Vincent.Riera@imgtec.com>
-Message-ID: <931f8c67-a2be-8d23-43b6-3c94451e0daf@mind.be>
+Date: Tue, 8 Nov 2016 23:50:00 +0100
+Subject: [Buildroot] [PATCH 1/5] qt5: bump to 5.8.0-beta
+In-Reply-To: <1478601048-21388-2-git-send-email-anaumann@ultratronik.de>
+References: <1478601048-21388-1-git-send-email-anaumann@ultratronik.de>
+ <1478601048-21388-2-git-send-email-anaumann@ultratronik.de>
+Message-ID: <ddc8a62d-18c3-2475-f711-7a7feb64a730@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,69 +13,85 @@ To: buildroot@busybox.net
 
 
 
-On 08-11-16 11:32, Vicente Olivert Riera wrote:
-> m6201 is the -march option for GCC, but the real core name is
-> M6250.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On 08-11-16 11:30, Andreas Naumann wrote:
+> Removed all hashes (until final release).
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Review would have been easier if you did that in a separate patch.
+
+> 
+> - qt5base: renamed library to EglFSDeviceIntegration ([1])
+> - qt5base: remove ras-pi patch
+
+ You should mention in the commit message why: (applied upstream).
+
+> - qt5base: remove obsolete config-option -large ([2])
+
+ -largefile, not -large. Also mention explicitly what happened: largefile is not
+always enabled.
+
+> - qt5base: make the directfb platform plugin compile ([3])
+> - qt53d/quickcontrols2/serialbus: move out of tech-preview
+
+ I didn't see this in your patch?
+
+> - qt5enginio: remove discontinued module
+
+ This should have been done in a separate commit.
+
+> 
+> [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=ec4eb4db61094179bc6a9ec26ec68fb710177053
+> [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=84d3a21c9efe7efb2cce6d3bd14af1f9580b1108
+> [3] Without this patch, qmake is looking for directfb_egl feature which usually is not
+>     provided (only by some raspi mkspec afaics).
+> 
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+
+[snip]
+> diff --git a/package/qt5/qt5base/0001-directfb-make-platform-plugin-compile.patch b/package/qt5/qt5base/0001-directfb-make-platform-plugin-compile.patch
+> new file mode 100644
+> index 0000000..96cc3b0
+> --- /dev/null
+> +++ b/package/qt5/qt5base/0001-directfb-make-platform-plugin-compile.patch
+> @@ -0,0 +1,22 @@
+
+ Missing patch description + SoB. Also make it a git-formatted patch.
+
+ For this patch, it is absolutely necessary to get upstream feedback because it
+looks very iffy to me.
+
+> +diff --git a/src/plugins/platforms/directfb/directfb.pro b/src/plugins/platforms/directfb/directfb.pro
+> +index 406b89e..a83b09f 100644
+> +--- a/src/plugins/platforms/directfb/directfb.pro
+> ++++ b/src/plugins/platforms/directfb/directfb.pro
+> +@@ -3,7 +3,7 @@ TARGET = qdirectfb
+> + QT += \
+> +     core-private gui-private \
+> +     eventdispatcher_support-private service_support-private \
+> +-    fontdatabase_support-private egl_support-private
+> ++    fontdatabase_support-private
+> + 
+> + QMAKE_USE += directfb
+> + 
+> +@@ -27,7 +27,7 @@ HEADERS = qdirectfbintegration.h \
+> +     qdirectfbeglhooks.h
+> + 
+> + # ### port the GL context
+> +-qtConfig(directfb_egl) {
+> ++contains(QT_CONFIG, directfb_egl) {
+
+ Aren't these two equivalent? If this is being built for anything other than
+linux-mipsel-broadcom-97425-g++, there is really something weird going on...
+
+ Anyway, to make the patch correct, you should add QT += egl_support-private here.
 
  Regards,
  Arnout
 
-> ---
->  arch/Config.in.mips        | 6 +++---
->  package/gcc/Config.in.host | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-> index f407d9a..c14a133 100644
-> --- a/arch/Config.in.mips
-> +++ b/arch/Config.in.mips
-> @@ -51,8 +51,8 @@ config BR2_mips_m5150
->  	bool "M5150"
->  	depends on !BR2_ARCH_IS_64
->  	select BR2_MIPS_CPU_MIPS32R5
-> -config BR2_mips_m6201
-> -	bool "M6201"
-> +config BR2_mips_m6250
-> +	bool "M6250"
->  	depends on !BR2_ARCH_IS_64
->  	select BR2_MIPS_CPU_MIPS32R6
->  config BR2_mips_p5600
-> @@ -130,7 +130,7 @@ config BR2_GCC_TARGET_ARCH
->  	default "mips32r6"	if BR2_mips_32r6
->  	default "interaptiv"	if BR2_mips_interaptiv
->  	default "m5101"		if BR2_mips_m5150
-> -	default "m6201"		if BR2_mips_m6201
-> +	default "m6201"		if BR2_mips_m6250
->  	default "p5600"		if BR2_mips_p5600
->  	default "mips64"	if BR2_mips_64
->  	default "mips64r2"	if BR2_mips_64r2
-> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index eb1479a..0a63e6a 100644
-> --- a/package/gcc/Config.in.host
-> +++ b/package/gcc/Config.in.host
-> @@ -65,7 +65,7 @@ choice
->  		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
->  		# Unsupported MIPS cores
->  		depends on !BR2_mips_interaptiv && !BR2_mips_m5150 && \
-> -			!BR2_mips_m6201 && !BR2_mips_i6400 && !BR2_mips_p6600
-> +			!BR2_mips_m6250 && !BR2_mips_i6400 && !BR2_mips_p6600
->  		# musl mips64 unsupported
->  		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
->  		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> @@ -76,7 +76,7 @@ choice
->  		depends on !BR2_arc
->  		depends on !BR2_microblaze
->  		# Unsupported MIPS cores
-> -		depends on !BR2_mips_m6201 && !BR2_mips_p6600
-> +		depends on !BR2_mips_m6250 && !BR2_mips_p6600
->  		select BR2_TOOLCHAIN_GCC_AT_LEAST_6
->  
->  endchoice
-> 
+> +     HEADERS += qdirectfb_egl.h
+> +     SOURCES += qdirectfb_egl.cpp
+> +     DEFINES += DIRECTFB_GL_EGL
+
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
