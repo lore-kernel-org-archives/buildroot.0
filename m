@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Nov 2016 18:08:38 +0100
-Subject: [Buildroot] [PATCH 5/6] package/pseudo: fix fakeroot wrapper to
- correctly use pseudo
-In-Reply-To: <2b6c8c6a-3ded-7a72-324a-7e9d7b755a15@mind.be>
+Date: Tue, 8 Nov 2016 18:15:05 +0100
+Subject: [Buildroot] [PATCH 1/6] core: export a variable with the host's
+ bitness
+In-Reply-To: <f245bad7-abf5-2b14-e512-87ef48a3fe42@mind.be>
 References: <cover.1478553802.git.yann.morin.1998@free.fr>
- <be88ddb9a18f43beaece4e29c5fe62ad91071ce3.1478553802.git.yann.morin.1998@free.fr>
- <2b6c8c6a-3ded-7a72-324a-7e9d7b755a15@mind.be>
-Message-ID: <20161108170838.GA3554@free.fr>
+ <103fbc9d355da745c4a5a8ba34c7dbae2ea4c07a.1478553802.git.yann.morin.1998@free.fr>
+ <f245bad7-abf5-2b14-e512-87ef48a3fe42@mind.be>
+Message-ID: <20161108171505.GB3554@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,89 +15,71 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2016-11-08 00:10 +0100, Arnout Vandecappelle spake thusly:
-> 
-> 
+On 2016-11-07 23:15 +0100, Arnout Vandecappelle spake thusly:
 > On 07-11-16 22:23, Yann E. MORIN wrote:
-> > So far, we expected pseudo to behave like fakeroot would. This is not
-> > correct: we need to export a few variables to make pseudo look like it
-> > is behaving like fakeroot.
+> > Some host packages (e.g. host-pseudo) wants to know the host bitness,
+> > and they can fail to detect it in some corner cases (as reported by a
+> > few users on IRC).
 > > 
-> > Provide a wrapper to impersonate fakeroot, instead of doing a symlink.
+> > Export a variable with the bitness of the host, so that those packages
+>   ^^^^^^ You're not actually exporting it - fortunately.
+
+Unfortunate choice of wording. Indeed, we need not 'export' it. We just
+need to make it available.
+
+Arguably, HOSTARCH itself should not be exported. But we need it in
+Kconfig, we could add it to COMMON_CONFIG_ENV instead.
+
+Note that gnu-efi is using HOSTARCH )package/gnu-efi/0001-*.patch), so
+exporting our own may interfere with its buildsystem (to be confirmed).
+
+> > can be made to behave.
 > 
->  Not nice, because it introduces absolute paths in host dir which is not good
-> for relocation.
+>  I'm a bit hesitant to introduce a global infra variable like this (which makes
+> top-level Makefile longer - not the direction we want to go to) with just one
+> consumer, and where we hope the package can be fixed to not need this hack
+> anymore...
 
-Agreed. But note that we already have pkg-config as a wrapper to
-pkgconf, and that one is not relocatable yet, as far as I can see...
-
-I can rework this to make it more relocatable, indeed. I at least wanted
-this series out for the core fixes about pseudo, so affected parties
-could test the overall idea of the fixes.
-
->  I'm thinking we shouldn't have introduced this symlink to begin with. I did
-> suggest it on IRC, but I wasn't thinking. fakeroot could never be called by
-> post-image scripts anyway, because the fakeroot database isn't saved, whatever
-> you do under fakeroot is lost.
-
-Wrong.
-
-If Buildroot generates a tarball, then all that needed root access is in
-the tarball. So a post-image script that runs under fakeroot (even
-*another* fakeroot instance) can safely extract that tarball and get all
-the root-requiring settings and reasemble another that in one or more
-filesystem images, as those would be emulated by fakeroot (as long as
-the script does not exit the fakeroot instance in-between, that is).
-
-That is something I've been using on a daily basis for years now...
-
-Now, we could argue that such post-image scripts should be changed to
-use pseudo instead. We could advertise that by providing this fakeroot
-wrapper:
-
-    #!/bin/sh
-    echo "No, no, use pseudo now..." >&2
-    exit 1
-
-However, what we don't want is the user to use his host-provided
-fakeroot, because that one might not be fit (e.g. lacking support for
-xattrs when pseudo had stored them in the tarball, for example).
-
-So, I still think we should either provide a catcher fakeroot as above,
-or we provide a real wrapper. I like the catcher, above.
+I will drop this patch and only use that in pseduo.
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
 
->  Hence I'm more inclined to revert 7158403805f. If someone does need it, they
-> can get patches from the mailing list :-)
-> 
->  Regards,
->  Arnout
-> 
-> > 
 > > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > > Cc: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 > > Cc: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
 > > Cc: Erico Nunes <nunes.erico@gmail.com>
 > > Cc: Julien BOIBESSOT <julien.boibessot@free.fr>
 > > ---
-> >  package/pseudo/pseudo.mk | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >  Makefile | 6 ++++++
+> >  1 file changed, 6 insertions(+)
 > > 
-> > diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
-> > index 2a3e31f..cc1bcdd 100644
-> > --- a/package/pseudo/pseudo.mk
-> > +++ b/package/pseudo/pseudo.mk
-> > @@ -31,7 +31,8 @@ HOST_PSEUDO = \
-> >  	$(HOST_DIR)/usr/bin/pseudo
+> > diff --git a/Makefile b/Makefile
+> > index 4ea64b3..78f72bc 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -340,6 +340,12 @@ export HOSTARCH := $(shell LC_ALL=C $(HOSTCC_NOCCACHE) -v 2>&1 | \
+> >  	    -e 's/macppc/powerpc/' \
+> >  	    -e 's/sh.*/sh/' )
 > >  
-> >  define HOST_PSEUDO_FAKEROOT_SYMLINK
-> > -	ln -sf pseudo $(HOST_DIR)/usr/bin/fakeroot
-> > +	printf '#!/bin/sh\n%s "$${@}"\n' '$(HOST_PSEUDO)' >$(HOST_DIR)/usr/bin/fakeroot
-> > +	chmod 755 $(HOST_DIR)/usr/bin/fakeroot
-> >  endef
-> >  HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_FAKEROOT_SYMLINK
+> > +ifeq ($(filter %64,$(HOSTARCH)),)
+> > +HOSTARCH_BITS := 32
+> 
+>  There is no need to use := here, just use =
+> 
+> > +else
+> > +HOSTARCH_BITS := 64
+> 
+>  And here of course.
+> 
+>  Regards,
+>  Arnout
+> 
+> > +endif
+> > +
+> >  HOSTCC_VERSION := $(shell $(HOSTCC_NOCCACHE) --version | \
+> >  	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p')
 > >  
 > > 
 > 
