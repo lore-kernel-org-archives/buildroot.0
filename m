@@ -1,54 +1,126 @@
-From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
-Date: Wed, 09 Nov 2016 16:26:38 +0100
-Subject: [Buildroot] ninja/python-meson packages
-Message-ID: <98b7a6164112ee321e9220d5b8c47a33@openmailbox.org>
+From: Andreas Naumann <dev@andin.de>
+Date: Wed, 9 Nov 2016 19:52:02 +0100
+Subject: [Buildroot] [PATCH 5/5] quickcontrols1/2: enable for software
+ renderer
+In-Reply-To: <72206896-e394-0eae-9e26-61b9b5abb34a@mind.be>
+References: <1478601048-21388-1-git-send-email-anaumann@ultratronik.de>
+ <1478601048-21388-6-git-send-email-anaumann@ultratronik.de>
+ <72206896-e394-0eae-9e26-61b9b5abb34a@mind.be>
+Message-ID: <43cc3e21-ef4b-0b54-66e5-0229e3143fd2@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-Regarding python-meson package that was proposed here:
-http://lists.busybox.net/pipermail/buildroot/2016-June/163437.html
 
->> However, I could provide a real package infrastructure named 
->> "meson-package",
->> but as stated in the discussion about adding support for Cargo (the 
->> Rust
->> package manager), to provide such infrastructure, at least one package 
->> using
->> it should also be provided (it is sensible to have a working example 
->> of
->> the infrastructure).
+Am 08.11.2016 um 23:56 schrieb Arnout Vandecappelle:
+>
+>
+> On 08-11-16 11:30, Andreas Naumann wrote:
+>> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+>> ---
+>>  package/qt5/qt5quickcontrols/Config.in             | 3 +--
+>>  package/qt5/qt5quickcontrols/qt5quickcontrols.mk   | 5 ++++-
+>>  package/qt5/qt5quickcontrols2/Config.in            | 3 +--
+>>  package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk | 8 +++++---
+>>  4 files changed, 11 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/package/qt5/qt5quickcontrols/Config.in b/package/qt5/qt5quickcontrols/Config.in
+>> index 0fe8465..d013491 100644
+>> --- a/package/qt5/qt5quickcontrols/Config.in
+>> +++ b/package/qt5/qt5quickcontrols/Config.in
+>> @@ -2,7 +2,6 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
+>>  	bool "qt5quickcontrols"
+>>  	select BR2_PACKAGE_QT5DECLARATIVE
+>>  	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
+>> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
+>>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+>>  	help
+>>  	  Qt is a cross-platform application and UI framework for
+>> @@ -12,6 +11,6 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
+>>
+>>  	  http://qt.io
+>>
+>> -comment "qt5quickcontrols needs an OpenGL-capable backend"
+>> +comment "Some qt5quickcontrol elements needs an OpenGL-capable backend"
+>
+>  Hm, a bit vague. I think the comment can be removed.
 
-> I would not say one, but at least 4-5 packages, with a pretty good
-> confidence that more packages would be added later on.
+ok
 
-Gstreamer has added Meson as an alternative build system (to Autotools) 
-since August 2016:
+>
+>>  	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+>>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+>> diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+>> index b33ff15..c2946bc 100644
+>> --- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+>> +++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+>> @@ -31,7 +31,10 @@ define QT5QUICKCONTROLS_INSTALL_STAGING_CMDS
+>>  endef
+>>
+>>  define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
+>> -	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
+>> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls $(TARGET_DIR)/usr/qml/QtQuick
+>> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Dialogs $(TARGET_DIR)/usr/qml/QtQuick
+>> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
+>> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/PrivateWidgets $(TARGET_DIR)/usr/qml/QtQuick
+>
+>  Why?
 
-https://cgit.freedesktop.org/gstreamer/gstreamer/commit/meson.build?id=b2f9808722a0254acba17ef98a612a2792184e12
+QuickControls provides different subfolders than QuickControls2 under 
+/usr/qml/QtQuick. Explicitely listing them avoids sometimes undesirable 
+stuff getting installed when repeatedly building.
+Ok, this may better go in another patch.
 
-And I suppose that other projects are likely to switch... The decrease 
-of build time is really interesting compared to Autotools, CMake, and 
-even CMake with ninja backend.
-
-By the way, is there any chance to give CMake package the possibility to 
-use ninja backend? (which will also decrease build time of CMake 
-packages)
-I have local modifications of my buildroot tree that achieve that, but 
-I'm not sure about the right way to propose it. I have added an option 
-(BR2_PACKAGE_CMAKE_NINJA) but it appears in target packages > 
-Development tools, while it is not intended for the target. Would it be 
-a better idea to create a specific package infra (pkg-cmake-ninja.mk)?
-Or maybe it is just not useful... I don't know whether the user really 
-needs to choose between two different backends, while the result is 
-supposed to be the same (only the build time will differ).
-
-NB: Comparison of build time can be found here:
-https://github.com/mesonbuild/meson/wiki/Simple%20comparison
-
--- 
-C?dric
+>
+>
+>  Regards,
+>  Arnout
+>
+>>  endef
+>>
+>>  $(eval $(generic-package))
+>> diff --git a/package/qt5/qt5quickcontrols2/Config.in b/package/qt5/qt5quickcontrols2/Config.in
+>> index 1e57674..e7271f2 100644
+>> --- a/package/qt5/qt5quickcontrols2/Config.in
+>> +++ b/package/qt5/qt5quickcontrols2/Config.in
+>> @@ -2,7 +2,6 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
+>>  	bool "qt5quickcontrols2"
+>>  	select BR2_PACKAGE_QT5DECLARATIVE
+>>  	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
+>> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative/quick
+>>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative/quick
+>>  	help
+>>  	  Qt is a cross-platform application and UI framework for
+>> @@ -12,6 +11,6 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
+>>
+>>  	  http://qt.io
+>>
+>> -comment "qt5quickcontrols2 needs an OpenGL-capable backend"
+>> +comment "Some qt5quickcontrols2 elements need an OpenGL-capable backend"
+>>  	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+>>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+>> diff --git a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+>> index a5ad3f6..1a2949c 100644
+>> --- a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+>> +++ b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+>> @@ -31,10 +31,12 @@ define QT5QUICKCONTROLS2_INSTALL_STAGING_CMDS
+>>  endef
+>>
+>>  define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
+>> -	cp -dpf $(STAGING_DIR)/usr/lib/libQt5LabsTemplates.so.* $(TARGET_DIR)/usr/lib
+>> -	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/controls $(TARGET_DIR)/usr/qml/Qt/labs
+>> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5QuickTemplates2.so.* $(TARGET_DIR)/usr/lib
+>> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5QuickControls2.so.* $(TARGET_DIR)/usr/lib
+>>  	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/calendar $(TARGET_DIR)/usr/qml/Qt/labs
+>> -	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/templates $(TARGET_DIR)/usr/qml/Qt/labs
+>> +	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/platform $(TARGET_DIR)/usr/qml/Qt/labs
+>> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls.2 $(TARGET_DIR)/usr/qml/QtQuick
+>> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Templates.2 $(TARGET_DIR)/usr/qml/QtQuick
+>>  endef
+>>
+>>  $(eval $(generic-package))
+>>
+>
