@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 21:57:18 +0100
-Subject: [Buildroot] [git commit] python: fix double format detection
-Message-ID: <20161109211541.35C5B81983@busybox.osuosl.org>
+Date: Wed, 9 Nov 2016 22:03:54 +0100
+Subject: [Buildroot] [git commit] python3: fix double format detection
+Message-ID: <20161109211541.4581081983@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a6001f17aba3f405f1aa95b3d95a553761d9b03
+commit: https://git.buildroot.net/buildroot/commit/?id=7be691623a27087cc89c169e21466a0e66a75eb4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Python is not able to detect if compiler double representation is
@@ -31,27 +31,27 @@ However, all gcc architecture use a representation compliant with
 IEE754. So, we can enable it unconditionnaly.
 
 Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-[Thomas: adjust condition to avoid usage of qstrip, suggested by Baruch.]
+[Thomas: rework condition to not use strip, as suggested by Baruch.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python/python.mk | 7 +++++++
+ package/python3/python3.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index cc65376..cfd5a0a 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -140,6 +140,13 @@ PYTHON_CONF_ENV += \
- 	ac_cv_prog_HAS_HG=/bin/false \
- 	ac_cv_prog_SVNVERSION=/bin/false
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index b3f31c0..f355ae9 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -126,6 +126,13 @@ PYTHON3_CONF_ENV += \
+ 	ac_cv_working_tzset=yes \
+ 	ac_cv_prog_HAS_HG=/bin/false
  
 +# GCC is always compliant with IEEE754
 +ifeq ($(BR2_ENDIAN),"LITTLE")
-+PYTHON_CONF_ENV += ac_cv_little_endian_double=yes
++PYTHON3_CONF_ENV += ac_cv_little_endian_double=yes
 +else
-+PYTHON_CONF_ENV += ac_cv_big_endian_double=yes
++PYTHON3_CONF_ENV += ac_cv_big_endian_double=yes
 +endif
 +
- PYTHON_CONF_OPTS += \
- 	--without-cxx-main 	\
- 	--without-doc-strings	\
+ # uClibc is known to have a broken wcsftime() implementation, so tell
+ # Python 3 to fall back to strftime() instead.
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
