@@ -1,68 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 21:24:57 +0100
-Subject: [Buildroot] [git commit] configs: freescale_imx31_3stack: bump
-	kernel version to 4.1.15_2.0.0_ga
-Message-ID: <20161109202521.F2C5581D5C@busybox.osuosl.org>
+Date: Wed, 9 Nov 2016 21:28:12 +0100
+Subject: [Buildroot] ninja/python-meson packages
+In-Reply-To: <98b7a6164112ee321e9220d5b8c47a33@openmailbox.org>
+References: <98b7a6164112ee321e9220d5b8c47a33@openmailbox.org>
+Message-ID: <20161109212812.39399895@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d13b1ce707fb609e53164e1ae4281e1e3e7c84ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Switch to the kernel of release 4.1.15_2.0.0_ga, as it builds properly with
-gcc 5.x, which is now the default.
+On Wed, 09 Nov 2016 16:26:38 +0100, C?dric Marie wrote:
 
-We add a linux config fragment to disable the framebuffer, to repair the
-build for imx_v6_v7_defconfig.
+> > I would not say one, but at least 4-5 packages, with a pretty good
+> > confidence that more packages would be added later on.  
+> 
+> Gstreamer has added Meson as an alternative build system (to Autotools) 
+> since August 2016:
+> 
+> https://cgit.freedesktop.org/gstreamer/gstreamer/commit/meson.build?id=b2f9808722a0254acba17ef98a612a2792184e12
+> 
+> And I suppose that other projects are likely to switch... The decrease 
+> of build time is really interesting compared to Autotools, CMake, and 
+> even CMake with ninja backend.
 
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
-Signed-off-by: Julien Olivain <juju@cotds.org>
-Tested-by: Julien Olivain <juju@cotds.org>
-Cc: Fabio Estevam <fabio.estevam@nxp.com>
-[Thomas: adjust syntax in fragment.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/freescale/imx31_3stack/linux.fragment |  1 +
- configs/freescale_imx31_3stack_defconfig    | 12 ++++++------
- 2 files changed, 7 insertions(+), 6 deletions(-)
+We are definitely fine with supporting the meson build system in
+Buildroot. The only reason we didn't merge the patches that were
+proposed is because no package was using them. As soon as we have one
+package using this build system in Buildroot, we will of course happily
+merge patches adding support for it.
 
-diff --git a/board/freescale/imx31_3stack/linux.fragment b/board/freescale/imx31_3stack/linux.fragment
-new file mode 100644
-index 0000000..beb6b46
---- /dev/null
-+++ b/board/freescale/imx31_3stack/linux.fragment
-@@ -0,0 +1 @@
-+# CONFIG_FB_MXS is not set
-diff --git a/configs/freescale_imx31_3stack_defconfig b/configs/freescale_imx31_3stack_defconfig
-index bf1afad..0476fc1 100644
---- a/configs/freescale_imx31_3stack_defconfig
-+++ b/configs/freescale_imx31_3stack_defconfig
-@@ -3,18 +3,18 @@ BR2_arm=y
- BR2_arm1136jf_s=y
- BR2_ARM_EABIHF=y
- 
--# Linux headers same as kernel, a 3.15 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
-+# Linux headers same as kernel, a 4.1 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- 
- # kernel
- BR2_LINUX_KERNEL=y
--# Note: sadly the Linux kernel will not boot on the i.MX31 PDK, starting with
--# v3.16 and at least up to v4.0-rc4; this is why we use v3.15.y here.
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.10"
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/freescale/imx31_3stack/linux.fragment"
- BR2_TARGET_ROOTFS_CPIO_GZIP=y
- BR2_TARGET_ROOTFS_INITRAMFS=y
+> By the way, is there any chance to give CMake package the possibility to 
+> use ninja backend? (which will also decrease build time of CMake 
+> packages)
+
+I don't know exactly what is involved in such a change, but in
+principle, I don't see why we wouldn't accept that.
+
+> I have local modifications of my buildroot tree that achieve that, but 
+> I'm not sure about the right way to propose it. I have added an option 
+> (BR2_PACKAGE_CMAKE_NINJA) but it appears in target packages > 
+> Development tools, while it is not intended for the target. Would it be 
+> a better idea to create a specific package infra (pkg-cmake-ninja.mk)?
+
+Can each and every CMake package use Ninja as a backend?
+
+At first, it should probably just be an option under "Build options",
+that affects the behavior of pkg-cmake. Once we get a better
+understanding of what it means to use Ninja in terms of additional
+dependencies to build, and number of CMake packages that work/don't
+work with it, then we can decide what to do.
+
+How does that sound?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
