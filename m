@@ -1,36 +1,73 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Wed, 9 Nov 2016 10:52:49 +0100
-Subject: [Buildroot] [PATCH 1/4] configs: atmel: at91sam9260eknf: update
- defconfig
-In-Reply-To: <20161109073638.ozgbr5vy6gglznlx@tarshish>
-References: <20161109065948.1851-1-ludovic.desroches@atmel.com>
- <20161109065948.1851-2-ludovic.desroches@atmel.com>
- <20161109073638.ozgbr5vy6gglznlx@tarshish>
-Message-ID: <20161109095249.bgurrb6bhujkgnac@piout.net>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Wed,  9 Nov 2016 11:03:05 +0100
+Subject: [Buildroot] [PATCH] qemu: allow to build statically
+Message-ID: <20161109100305.6261-1-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/11/2016 at 09:36:38 +0200, Baruch Siach wrote :
-> Hi Ludovic,
-> 
-> On Wed, Nov 09, 2016 at 07:59:45AM +0100, Ludovic Desroches wrote:
-> >  # Kernel
-> >  BR2_LINUX_KERNEL=y
-> > -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> > -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.1"
-> 
-> For the sake of reproducibility you should set this to the version you tested, 
-> say, 4.8.6. The same goes for other patches in this series.
-> 
+Compiling Qemu statically allows to use it to chroot into target/. It is a
+nice feature, so add an option for it.
 
-I'm not sure this is actually useful because the amount of testing is
-minimal and it just increases the maintenance burden.
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/qemu/Config.in.host | 26 ++++++++++++++++++++++++++
+ package/qemu/qemu.mk        |  4 ++++
+ 2 files changed, 30 insertions(+)
 
-
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index b3eb590..c61b787 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -17,6 +17,32 @@ config BR2_PACKAGE_HOST_QEMU
+ 
+ if BR2_PACKAGE_HOST_QEMU
+ 
++config BR2_PACKAGE_HOST_QEMU_STATIC
++	bool "Build statically"
++	help
++	  Build static qemu executable(s). Use this option if you want to
++	  'chroot' in your target directory. An example to do this for an ARM
++	  target:
++
++	     1. copy qemu binary on your target directory:
++
++	          cp host/usr/bin/qemu-arm target/usr/bin
++
++	     2. Make sure binfmt_misc is mounted on /proc/sys/fs/binfmt_misc:
++
++	          mount -t binfmt_misc none /proc/sys/fs/binfmt_misc
++
++	     3. Register /usr/bin/qemu-arm is interpreter for arm binaries. See
++	        linux/Documentation/binfmt_misc.txt for more information:
++
++	          MAGIC='\x7f\x45\x4c\x46\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00'
++	          MASK='\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'
++	          echo ":qemu-arm:M:0:$MAGIC:$MASK:/usr/bin/qemu-arm:OC" > /proc/sys/fs/binfmt_misc/register
++
++	     4. Chroot to your target:
++
++	          chroot target /bin/sh
++
+ comment "Emulators selection"
+ 
+ config BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index cf23f16..d33106c 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -110,6 +110,10 @@ HOST_QEMU_OPTS += --enable-vde
+ HOST_QEMU_DEPENDENCIES += host-vde2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HOST_QEMU_STATIC),y)
++HOST_QEMU_OPTS += --static
++endif
++
+ # Override CPP, as it expects to be able to call it like it'd
+ # call the compiler.
+ define HOST_QEMU_CONFIGURE_CMDS
 -- 
-Alexandre Belloni, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
