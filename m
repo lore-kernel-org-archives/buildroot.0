@@ -1,56 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 11:37:08 +0100
-Subject: [Buildroot] [PATCH] package/e2fsprogs: backport build fix for
- rhel5 due to missing magic
-In-Reply-To: <20161109082435.33pxg5mzjq5nebv3@tarshish>
-References: <1478677142-11627-1-git-send-email-jcmvbkbc@gmail.com>
- <20161109080341.5vmnkhdchbibzofz@tarshish>
- <CAMo8BfJnGVYAd_3nUDFZbtWDQNkTOcOr_z6NpV9OK8YKNS4N8g@mail.gmail.com>
- <20161109082435.33pxg5mzjq5nebv3@tarshish>
-Message-ID: <20161109113708.37cde0ec@free-electrons.com>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Wed, 9 Nov 2016 11:39:55 +0100
+Subject: [Buildroot] [PATCH 1/4] configs: atmel: at91sam9260eknf: update
+ defconfig
+In-Reply-To: <20161109112550.36c1ec17@free-electrons.com>
+References: <20161109065948.1851-1-ludovic.desroches@atmel.com>
+ <20161109065948.1851-2-ludovic.desroches@atmel.com>
+ <20161109073638.ozgbr5vy6gglznlx@tarshish>
+ <20161109101009.l66iviomyfuit2t5@rfolt0960.corp.atmel.com>
+ <20161109112550.36c1ec17@free-electrons.com>
+Message-ID: <20161109103955.qgeomymgonuoyxu5@rfolt0960.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Wed, 9 Nov 2016 10:24:35 +0200, Baruch Siach wrote:
-
-> On Wed, Nov 09, 2016 at 12:18:07AM -0800, Max Filippov wrote:
-> > On Wed, Nov 9, 2016 at 12:03 AM, Baruch Siach <baruch@tkos.co.il> wrote:  
-> > > On Tue, Nov 08, 2016 at 11:39:02PM -0800, Max Filippov wrote:  
-> > >> RHEL 5.x does have magic.h, but it does not define all expected symbols. In
-> > >> particular, the NO_CHECK symbols were only added in file 4.20 and RHEL 5.x
-> > >> is using 4.17.  
-> > >
-> > > Instead of relying on host libmagic that may or may not be installed, why not
-> > > add host-file to HOST_E2FSPROGS_DEPENDENCIES?  
-> > 
-> > My first reaction was to look if the issue is addressed in the package mainline,
-> > and that's how e2fsprogs mainline decided to deal with that. So the next
-> > version bump of e2fsprogs will make host-libmagic not necessary, there's
-> > probably no reason to introduce that dependency?
-> > 
-> > "libmagic installed" vs. "not installed" is handled well by e2fsprogs, it's
-> > "installed, but too old" case that fails.  
+On Wed, Nov 09, 2016 at 11:25:50AM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> We would generally like to avoid dependency on host libraries as much as 
-> possible since it reduces the build reproducibility. But as this is just a 
-> host tool I'm not sure we care.
+> On Wed, 9 Nov 2016 11:10:09 +0100, Ludovic Desroches wrote:
+> 
+> > > Why enable both U-Boot and Barebox?
+> > >   
+> > 
+> > I don't know why Barebox was selected but the 'official' bootloader is
+> > U-Boot for all our products that's why I add it. I kept Barebox because
+> > it was already selected and I don't know if someone is still using it or
+> > not.
+> 
+> But the end result is a defconfig that doesn't make any sense.
+> 
+> Please provide a defconfig that makes sense, and with an updated
+> readme.txt if you decide to change the bootloader (and therefore the
+> flashing instructions).
+> 
+> > > >  # Kernel
+> > > >  BR2_LINUX_KERNEL=y
+> > > > -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > > > -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.1"  
+> > > 
+> > > For the sake of reproducibility you should set this to the version you tested, 
+> > > say, 4.8.6. The same goes for other patches in this series.
+> > 
+> > As Alexandre said, we don't want to spend time for the maintainance of these
+> > old boards so sticking to the mainline seems to be the way to go. Giving a
+> > version is a kind of commitment but we no longer perform tests on these
+> > boards excepting kernel boot with kernelci.
+> 
+> That's not Buildroot policy. We want defconfigs with fixed kernel and
+> bootloader versions, so that we know they have been tested.
+> 
+> If you are not able/willing to test those defconfigs, then we could
+> just as well remove them. But I'm not going to merge a defconfig that
+> doesn't comply with our policy of having a fixed kernel and a fixed
+> bootloader version.
+> 
 
-We do care.
+Can I use a fixed version of the compiler too? It seems it makes sense
+because this defconfig was tested but is no more compiling.
 
-So in this case, it would be better (if possible) to completely disable
-the use of libmagic by host-e2fsprogs. This way, the behavior is
-consistent on both machines that have libmagic installed and those who
-don't.
+Regards
 
-Best regards,
+Ludovic
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
