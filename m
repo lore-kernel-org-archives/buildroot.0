@@ -1,29 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 21:17:12 +0100
-Subject: [Buildroot] [PATCH] libxslt: correct homepage link
-In-Reply-To: <c5785094c23c4455cdfc5b9f1063a98aba25d910.1478709644.git.baruch@tkos.co.il>
-References: <c5785094c23c4455cdfc5b9f1063a98aba25d910.1478709644.git.baruch@tkos.co.il>
-Message-ID: <20161109211712.6d0340ed@free-electrons.com>
+Date: Wed, 9 Nov 2016 21:24:57 +0100
+Subject: [Buildroot] [git commit] configs: freescale_imx31_3stack: bump
+	kernel version to 4.1.15_2.0.0_ga
+Message-ID: <20161109202521.F2C5581D5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d13b1ce707fb609e53164e1ae4281e1e3e7c84ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  9 Nov 2016 18:40:44 +0200, Baruch Siach wrote:
-> Link to the actual webpage of libxslt, not to the xslt spec page.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libxslt/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Switch to the kernel of release 4.1.15_2.0.0_ga, as it builds properly with
+gcc 5.x, which is now the default.
 
-Applied to master, thanks.
+We add a linux config fragment to disable the framebuffer, to repair the
+build for imx_v6_v7_defconfig.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
+Signed-off-by: Julien Olivain <juju@cotds.org>
+Tested-by: Julien Olivain <juju@cotds.org>
+Cc: Fabio Estevam <fabio.estevam@nxp.com>
+[Thomas: adjust syntax in fragment.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/freescale/imx31_3stack/linux.fragment |  1 +
+ configs/freescale_imx31_3stack_defconfig    | 12 ++++++------
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/board/freescale/imx31_3stack/linux.fragment b/board/freescale/imx31_3stack/linux.fragment
+new file mode 100644
+index 0000000..beb6b46
+--- /dev/null
++++ b/board/freescale/imx31_3stack/linux.fragment
+@@ -0,0 +1 @@
++# CONFIG_FB_MXS is not set
+diff --git a/configs/freescale_imx31_3stack_defconfig b/configs/freescale_imx31_3stack_defconfig
+index bf1afad..0476fc1 100644
+--- a/configs/freescale_imx31_3stack_defconfig
++++ b/configs/freescale_imx31_3stack_defconfig
+@@ -3,18 +3,18 @@ BR2_arm=y
+ BR2_arm1136jf_s=y
+ BR2_ARM_EABIHF=y
+ 
+-# Linux headers same as kernel, a 3.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
++# Linux headers same as kernel, a 4.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+-# Note: sadly the Linux kernel will not boot on the i.MX31 PDK, starting with
+-# v3.16 and at least up to v4.0-rc4; this is why we use v3.15.y here.
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.10"
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/freescale/imx31_3stack/linux.fragment"
+ BR2_TARGET_ROOTFS_CPIO_GZIP=y
+ BR2_TARGET_ROOTFS_INITRAMFS=y
