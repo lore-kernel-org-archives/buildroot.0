@@ -1,64 +1,43 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Wed, 9 Nov 2016 07:59:48 +0100
-Subject: [Buildroot] [PATCH 4/4] configs: atmel: at91sam9g45m10ek: update
-	defconfig
-In-Reply-To: <20161109065948.1851-1-ludovic.desroches@atmel.com>
-References: <20161109065948.1851-1-ludovic.desroches@atmel.com>
-Message-ID: <20161109065948.1851-5-ludovic.desroches@atmel.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 9 Nov 2016 08:05:31 +0100
+Subject: [Buildroot] [PATCH] php: fix bfin compile issue
+Message-ID: <20161109070531.GA7310@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to a recent version of AT91bootstrap and use mainline version of
-U-Boot and Linux.
+Fixes:
+  http://autobuild.buildroot.net/results/8326f24511d3b109d22a76660adc017bbcaca197
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- configs/at91sam9g45m10ek_defconfig | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ package/php/0007-avoid-bfin-gcc-segfault.patch | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 package/php/0007-avoid-bfin-gcc-segfault.patch
 
-diff --git a/configs/at91sam9g45m10ek_defconfig b/configs/at91sam9g45m10ek_defconfig
-index 35618d5..de0e92b 100644
---- a/configs/at91sam9g45m10ek_defconfig
-+++ b/configs/at91sam9g45m10ek_defconfig
-@@ -1,22 +1,27 @@
-+# Architecture
- BR2_arm=y
- BR2_arm926t=y
--# Linux headers same as kernel, a 3.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+diff --git a/package/php/0007-avoid-bfin-gcc-segfault.patch b/package/php/0007-avoid-bfin-gcc-segfault.patch
+new file mode 100644
+index 0000000..4dccb25
+--- /dev/null
++++ b/package/php/0007-avoid-bfin-gcc-segfault.patch
+@@ -0,0 +1,16 @@
++Avoid gcc segmentation fault
 +
-+# Kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
- BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9m10g45ek"
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +
-+# Filesystem
- BR2_TARGET_ROOTFS_UBIFS=y
- BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2047
- BR2_TARGET_ROOTFS_UBI=y
-+
-+# Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9m10g45eknf_uboot"
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="at91sam9m10g45ek_nandflash"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="at91sam9m10g45ek_nandflash"
-+
-+# Tools
- BR2_PACKAGE_HOST_SAM_BA=y
++diff -Nur php-7.0.12.orig/Zend/zend_portability.h php-7.0.12/Zend/zend_portability.h
++--- php-7.0.12.orig/Zend/zend_portability.h	2016-10-13 16:04:17.000000000 +0200
+++++ php-7.0.12/Zend/zend_portability.h	2016-11-08 02:49:39.118388999 +0100
++@@ -97,7 +97,7 @@
++ 
++ #if defined(ZEND_WIN32) && !defined(__clang__)
++ # define ZEND_ASSUME(c)	__assume(c)
++-#elif ((defined(__GNUC__) && ZEND_GCC_VERSION >= 4005) || __has_builtin(__builtin_unreachable)) && PHP_HAVE_BUILTIN_EXPECT
+++#elif ((defined(__GNUC__) && ZEND_GCC_VERSION >= 4005) || __has_builtin(__builtin_unreachable)) && PHP_HAVE_BUILTIN_EXPECT && !defined(__bfin__)
++ # define ZEND_ASSUME(c)	do { \
++ 		if (__builtin_expect(!(c), 0)) __builtin_unreachable(); \
++ 	} while (0)
 -- 
-2.9.0
+2.1.4
