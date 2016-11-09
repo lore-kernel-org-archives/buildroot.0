@@ -1,12 +1,11 @@
 From: Andreas Naumann <dev@andin.de>
-Date: Wed, 9 Nov 2016 19:52:55 +0100
-Subject: [Buildroot] [PATCH 4/5] qt5declarative: enable Quick for non-GL
- platforms
-In-Reply-To: <adaf71af-b685-8ba8-36dd-ce58e26fed4f@mind.be>
+Date: Wed, 9 Nov 2016 19:53:39 +0100
+Subject: [Buildroot] [PATCH 1/5] qt5: bump to 5.8.0-beta
+In-Reply-To: <ddc8a62d-18c3-2475-f711-7a7feb64a730@mind.be>
 References: <1478601048-21388-1-git-send-email-anaumann@ultratronik.de>
- <1478601048-21388-5-git-send-email-anaumann@ultratronik.de>
- <adaf71af-b685-8ba8-36dd-ce58e26fed4f@mind.be>
-Message-ID: <41896756-c395-b297-79d7-ecb8fc2f471f@andin.de>
+ <1478601048-21388-2-git-send-email-anaumann@ultratronik.de>
+ <ddc8a62d-18c3-2475-f711-7a7feb64a730@mind.be>
+Message-ID: <219fd92c-ebc2-1782-8ea5-237fd1873868@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,79 +14,109 @@ To: buildroot@busybox.net
 
 
 
-Am 08.11.2016 um 23:53 schrieb Arnout Vandecappelle:
+Am 08.11.2016 um 23:50 schrieb Arnout Vandecappelle:
 >
 >
 > On 08-11-16 11:30, Andreas Naumann wrote:
->> However, some modules provide less functionality without OpenGL, so install
->> steps have to be limited for the softrender only backend:
->> - qtmultimedia does not provide qml
->>
->> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
->> ---
->>  package/qt5/qt5declarative/Config.in       | 4 +---
->>  package/qt5/qt5multimedia/qt5multimedia.mk | 2 ++
->>  2 files changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
->> index eba4c8d..0604e85 100644
->> --- a/package/qt5/qt5declarative/Config.in
->> +++ b/package/qt5/qt5declarative/Config.in
->> @@ -14,12 +14,10 @@ config BR2_PACKAGE_QT5DECLARATIVE
->>
->>  if BR2_PACKAGE_QT5DECLARATIVE
->>
->> -comment "quick module needs an OpenGL-capable backend"
->> +comment "quick module without OpenGL-capable backend will use a less performant software backend"
+>> Removed all hashes (until final release).
 >
->  I think this comment can just be removed.
+>  Review would have been easier if you did that in a separate patch.
+
+ok
+>
+>>
+>> - qt5base: renamed library to EglFSDeviceIntegration ([1])
+>> - qt5base: remove ras-pi patch
+>
+>  You should mention in the commit message why: (applied upstream).
+
+Well in fact, I dont know why. I've tried a reworked patch and ommiting 
+it. Both compiled just fine (with eglfs), so I went with the simpler 
+solution :-).
+An assumption would be the change in library handling in configure 
+(qtbase c0cc5052097c723d0331a7619d686af9eb93d33c). Maybe Julien, who 
+originally submitted the patch, can shed some light on this.
+
+
+>
+>> - qt5base: remove obsolete config-option -large ([2])
+>
+>  -largefile, not -large. Also mention explicitly what happened: largefile is not
+> always enabled.
+
+ok (largefile is now always on and no longer configurable)
+>
+>> - qt5base: make the directfb platform plugin compile ([3])
+>> - qt53d/quickcontrols2/serialbus: move out of tech-preview
+>
+>  I didn't see this in your patch?
+
+just moved the position in Config.in
+
+>
+>> - qt5enginio: remove discontinued module
+>
+>  This should have been done in a separate commit.
+>
 
 ok
 
->
->>  	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
 >>
->>  config BR2_PACKAGE_QT5DECLARATIVE_QUICK
->>  	bool "quick module"
->> -	select BR2_PACKAGE_QT5BASE_OPENGL
->> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
->
->  Shouldn't this be
-> 	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5_GL_AVAILABLE
-> ? We really want to use opengl if we can...
-
-yes
-
->
+>> [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=ec4eb4db61094179bc6a9ec26ec68fb710177053
+>> [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=84d3a21c9efe7efb2cce6d3bd14af1f9580b1108
+>> [3] Without this patch, qmake is looking for directfb_egl feature which usually is not
+>>     provided (only by some raspi mkspec afaics).
 >>
->>  endif
->> diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
->> index 67e7968..41eb0f6 100644
->> --- a/package/qt5/qt5multimedia/qt5multimedia.mk
->> +++ b/package/qt5/qt5multimedia/qt5multimedia.mk
->> @@ -53,11 +53,13 @@ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
->>  endef
->>  endif
->>
->> +ifeq ($(BR2_PACKAGE_QT5_GL_AVAILABLE),y)
+>> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 >
->  Add a comment here to explain why, it looks a bit strange.
+> [snip]
+>> diff --git a/package/qt5/qt5base/0001-directfb-make-platform-plugin-compile.patch b/package/qt5/qt5base/0001-directfb-make-platform-plugin-compile.patch
+>> new file mode 100644
+>> index 0000000..96cc3b0
+>> --- /dev/null
+>> +++ b/package/qt5/qt5base/0001-directfb-make-platform-plugin-compile.patch
+>> @@ -0,0 +1,22 @@
+>
+>  Missing patch description + SoB. Also make it a git-formatted patch.
+>
+>  For this patch, it is absolutely necessary to get upstream feedback because it
+> looks very iffy to me.
 
-ok. its due to QtMultimedia still requiring OpenGL, so qt is smart 
-enough to not compile it -> cant be installed.
+iffy indeed. After a second look, maybe the new feature system doesnt 
+know directfb_egl at all. Will report upstream.
 
+>
+>> +diff --git a/src/plugins/platforms/directfb/directfb.pro b/src/plugins/platforms/directfb/directfb.pro
+>> +index 406b89e..a83b09f 100644
+>> +--- a/src/plugins/platforms/directfb/directfb.pro
+>> ++++ b/src/plugins/platforms/directfb/directfb.pro
+>> +@@ -3,7 +3,7 @@ TARGET = qdirectfb:q
+>> + QT += \
+>> +     core-private gui-private \
+>> +     eventdispatcher_support-private service_support-private \
+>> +-    fontdatabase_support-private egl_support-private
+>> ++    fontdatabase_support-private
+>> +
+>> + QMAKE_USE += directfb
+>> +
+>> +@@ -27,7 +27,7 @@ HEADERS = qdirectfbintegration.h \
+>> +     qdirectfbeglhooks.h
+>> +
+>> + # ### port the GL context
+>> +-qtConfig(directfb_egl) {
+>> ++contains(QT_CONFIG, directfb_egl) {
+>
+>  Aren't these two equivalent? If this is being built for anything other than
+> linux-mipsel-broadcom-97425-g++, there is really something weird going on...
+>
+>  Anyway, to make the patch correct, you should add QT += egl_support-private here.
 >
 >  Regards,
 >  Arnout
 >
->>  ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
->>  define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
->>  	cp -dpfr $(STAGING_DIR)/usr/qml/QtMultimedia $(TARGET_DIR)/usr/qml/
->>  endef
->>  endif
->> +endif
->>
->>  define QT5MULTIMEDIA_INSTALL_TARGET_CMDS
->>  	$(QT5MULTIMEDIA_INSTALL_TARGET_LIBS)
->>
+>> +     HEADERS += qdirectfb_egl.h
+>> +     SOURCES += qdirectfb_egl.cpp
+>> +     DEFINES += DIRECTFB_GL_EGL
+>
+>
 >
