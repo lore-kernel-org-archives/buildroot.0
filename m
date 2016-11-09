@@ -1,113 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 Nov 2016 23:07:01 +0100
-Subject: [Buildroot] [PATCH 5/5] package/pseudo: provide better legacy
- handling for fakeroot
-In-Reply-To: <3f25ce99-52f1-72be-d802-f886593ec208@mind.be>
-References: <cover.1478643505.git.yann.morin.1998@free.fr>
- <29ffadca0013de2c9d9c7e749f13cb6e0361a9f0.1478643505.git.yann.morin.1998@free.fr>
- <3f25ce99-52f1-72be-d802-f886593ec208@mind.be>
-Message-ID: <20161109220701.GB3663@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Nov 2016 23:13:39 +0100
+Subject: [Buildroot] ninja/python-meson packages
+In-Reply-To: <37cfb466-91a2-2434-24a4-dbd13ddfbc0f@openmailbox.org>
+References: <98b7a6164112ee321e9220d5b8c47a33@openmailbox.org>
+ <20161109212812.39399895@free-electrons.com>
+ <37cfb466-91a2-2434-24a4-dbd13ddfbc0f@openmailbox.org>
+Message-ID: <20161109231339.6a4830c6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hello,
 
-On 2016-11-09 01:29 +0100, Arnout Vandecappelle spake thusly:
-> On 08-11-16 23:18, Yann E. MORIN wrote:
-> > We now have a wrapper that makes pseudo behaves like the fakeroot of the
-> > good ol' days. So the symlink will just magically keep old scripts
-> > working as they did before the switch to pseudo.
-> > 
-> > However, using fakeroot is deprecated, and we want people to stop using
-> > it altogether and switch to pseudo.
-> > 
-> > So, make the wrapper recognise how it's called, and if called as
-> > fakeroot, print a warning message.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> > Cc: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-> > Cc: Erico Nunes <nunes.erico@gmail.com>
-> > Cc: Julien BOIBESSOT <julien.boibessot@free.fr>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > ---
-> >  package/pseudo/pseudo-wrapper | 9 ++++++++-
-> >  package/pseudo/pseudo.mk      | 2 +-
-> >  2 files changed, 9 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
-> > index feaa7fc..9c8dbdb 100644
-> > --- a/package/pseudo/pseudo-wrapper
-> > +++ b/package/pseudo/pseudo-wrapper
-> > @@ -1,5 +1,12 @@
-> >  #!/bin/sh
-> >  
-> > +if [ "${0##*/}" = "fakeroot" ]; then
-> > +    cat >&2 <<-_EOF_
-> > +	WARNING: fakeroot has been replaced with pseudo.
-> > +	WARNING: Update your script(s) to use pseudo or pseudo-wrapper instead.
-> > +	_EOF_
-> > +fi
-> > +
-> >  export PSEUDO_PREFIX="$(dirname "${0%/*}")"
-> >  export PSEUDO_OPTS="-t0"
-> >  if [ -n "${TARGET_DIR}" ]; then
-> > @@ -9,4 +16,4 @@ if [ -n "${BASE_DIR}" ]; then
-> >      export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
-> >  fi
-> >  
-> > -exec "${0%-wrapper}" "${@}"
-> > +exec "${0%/*}/pseudo" "${@}"
+On Wed, 9 Nov 2016 23:01:12 +0100, C?dric Marie wrote:
+
+> Le 09/11/2016 ? 21:28, Thomas Petazzoni a ?crit :
+> > We are definitely fine with supporting the meson build system in
+> > Buildroot. The only reason we didn't merge the patches that were
+> > proposed is because no package was using them. As soon as we have one
+> > package using this build system in Buildroot, we will of course happily
+> > merge patches adding support for it.  
 > 
->  This hunk should have been squashed into patch 3. But who cares.
+> The current gstreamer1 version in Buildroot is 1.8.3.
+> The support for meson was added in 1.9.2. So upgrading gstreamer1 is 
+> certainly necessary before merging Meson support.
 
-I disagree, because until this very patch, there is no reason to replace
-the filebname. Patch 3 expects the wrapper to be called 'pseudo-wrapper'
-so it really only needs -wrapper to be stripped. Only with this patch 5
-do we introduce the fakeroot wrapper, so only now do we need to remove
-the full filename.
+OK. However, isn't 1.9.x considered a "development" branch from the
+point of view of GStreamer? At least for Glib/Gtk, the releases with
+an odd are development ones if I remember correctly.
 
-Technically, this does not change at all, agreed. Semantically, it is as
-I explained above. ;-)
-
-Regards,
-Yann E. MORIN.
-
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> >> By the way, is there any chance to give CMake package the possibility to
+> >> use ninja backend? (which will also decrease build time of CMake
+> >> packages)  
+> >
+> > I don't know exactly what is involved in such a change, but in
+> > principle, I don't see why we wouldn't accept that.  
 > 
->  Regards,
->  Arnout
-> 
-> > diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
-> > index 474eae2..02d6247 100644
-> > --- a/package/pseudo/pseudo.mk
-> > +++ b/package/pseudo/pseudo.mk
-> > @@ -33,7 +33,7 @@ endef
-> >  HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_INSTALL_WRAPPER
-> >  
-> >  define HOST_PSEUDO_FAKEROOT_SYMLINK
-> > -	ln -sf pseudo $(HOST_DIR)/usr/bin/fakeroot
-> > +	ln -sf pseudo-wrapper $(HOST_DIR)/usr/bin/fakeroot
-> >  endef
-> >  HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_FAKEROOT_SYMLINK
-> >  
-> > 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> Roughly, add dependency on ninja, add an option in cmake configure step 
+> (-G ninja) and use ninja instead of make in build and install commands.
 
+OK, sounds good. We definitely want to make this optional for now I
+believe.
+
+> An option in "Build options" is definitely more appropriate. In the 
+> first place I had just added it in package/cmake/Config.in - which made 
+> it appear in target development tools.
+> Then I will check with several existing CMake packages in buildroot.
+
+Good;
+
+> Regarding Meson integration, I think that Eric - if he's still 
+> interested in working on that - is the right person. I understand that 
+> his patches didn't provide pkg-meson.mk yet, but he proposed to do so. 
+> Am I right?
+
+Having an infrastructure is not necessarily useful at the beginning. If
+we have only one or two packages using meson, and its usage is pretty
+simple, we can just as well do it directly in the packages themselves.
+Like we're doing for qmake based packages today for example.
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
