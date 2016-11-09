@@ -1,47 +1,51 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Wed, 9 Nov 2016 11:54:19 +0100
-Subject: [Buildroot] [Question] Downgrade package application.
-In-Reply-To: <CADZ=QZmHuyjuctpfxNLn_up=41HXc_8Y+BtDx+4EScrRda04QA@mail.gmail.com>
-References: <CADZ=QZmHuyjuctpfxNLn_up=41HXc_8Y+BtDx+4EScrRda04QA@mail.gmail.com>
-Message-ID: <b2dcf634-f51a-a1a1-1243-f9f3d5a3a712@gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Wed,  9 Nov 2016 11:57:27 +0100
+Subject: [Buildroot] [PATCH] infra: fix striping of ld.so and libpthread
+Message-ID: <20161109105727.7068-1-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yu-Ting Kao,
+If 'lib' is a symlink, 'find lib' does not return correct result. So, until now,
+libpthread*.so* and ld-*.so* was not stripped when 'lib' was a symlink.
 
-i'm not sure i full understand, but:
+We fix tit by using 'find lib/' instead of 'find lib'
 
-First try to apply your patch on the current Buildroot tree, chances are
-that it will apply. If it won't apply, it's always better to try to fix
-the patch against the current version than using an old one.
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-If it's too complicated to fix the patch, as a final resolution, you can
-either:
-a) download an old tarball from https://buildroot.org/downloads/
-or
-b) clone the Buildroot git repository and use `git checkout <old git
-hash value>' to go back in time.
-
-For both of the options the best is if you know the version the patch
-was created for (for example if you know when the patch was created, you
-can use a version from that time or a bit earlier)
-
-
-Good luck,
-
-Zoltan Gyarmati
-https://zgyarmati.de
-
-On 11/09/2016 11:04 AM, Yu-Ting Kao wrote:
-> Hi,
->
-> I have a patch for new feature on a package, but it works on lower
-> version. How can I build lower version in buildroot ? Are there any
-> menuconfig I can choose ?
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/Makefile b/Makefile
+index 6cf5f1c..e4f5441 100644
+--- a/Makefile
++++ b/Makefile
+@@ -644,7 +644,7 @@ target-finalize: $(PACKAGES)
+ 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
+ 		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
+ 	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
+-	find $(TARGET_DIR)/lib $(TARGET_DIR)/usr/lib $(TARGET_DIR)/usr/libexec \
++	find $(TARGET_DIR)/lib/ $(TARGET_DIR)/usr/lib/ $(TARGET_DIR)/usr/libexec/ \
+ 		\( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
+ ifneq ($(BR2_PACKAGE_GDB),y)
+ 	rm -rf $(TARGET_DIR)/usr/share/gdb
+@@ -666,13 +666,13 @@ endif
+ # besides the one in which crash occurred; or SIGTRAP kills my program when
+ # I set a breakpoint"
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-	find $(TARGET_DIR)/lib -type f -name 'libpthread*.so*' | \
++	find $(TARGET_DIR)/lib/ -type f -name 'libpthread*.so*' | \
+ 		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+ endif
+ 
+ # Valgrind needs ld.so with enough information, so only strip
+ # debugging symbols.
+-	find $(TARGET_DIR)/lib -type f -name 'ld-*.so*' | \
++	find $(TARGET_DIR)/lib/ -type f -name 'ld-*.so*' | \
+ 		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+ 	test -f $(TARGET_DIR)/etc/ld.so.conf && \
+ 		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
+-- 
+2.9.3
