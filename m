@@ -1,42 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 22:24:26 +0100
-Subject: [Buildroot] [git commit] php-fpm: remove config comments to fix
-	startup
-Message-ID: <20161109212653.664BB81D36@busybox.osuosl.org>
+Date: Wed, 9 Nov 2016 22:27:04 +0100
+Subject: [Buildroot] [PATCH 1/5] package/pseudo: enforce the host bitness
+In-Reply-To: <a2d0f2c0a262a2a40e8ccc1f3c0d89fdb834af39.1478643505.git.yann.morin.1998@free.fr>
+References: <cover.1478643505.git.yann.morin.1998@free.fr>
+ <a2d0f2c0a262a2a40e8ccc1f3c0d89fdb834af39.1478643505.git.yann.morin.1998@free.fr>
+Message-ID: <20161109222704.1c71c152@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cdcb7c25cdce46ec0bf6f1b993dc0502035c0cb0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The comments in the Buildroot-provided php-fpm.conf would produce the
-following error when starting php-fpm:
+On Tue,  8 Nov 2016 23:18:31 +0100, Yann E. MORIN wrote:
+> pseudo can detect the host bitness, but is not sure about it: it checks
+> what type of file /bin/sh is, using file(1).
+> 
+> However, in some conditions, /bin/sh can be of a different bitness than
+> the rest of the system (weird, but not impossible), which causes build
+> issues.
+> 
+> Just enforce the bitness, so that pseudo needs not (wrongly) guess it.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> Cc: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+> Cc: Erico Nunes <nunes.erico@gmail.com>
+> Cc: Julien BOIBESSOT <julien.boibessot@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> 
+> ---
+> Changes v1 -> v2:
+>   - directly extract bitness for $(HOSTARCH)  (Arnout)
+> ---
+>  package/pseudo/pseudo.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-ERROR: [/etc/php-fpm.conf:2] value is NULL for a ZEND_INI_PARSER_ENTRY
+Applied to master, thanks.
 
-Removing the comments fixes the problem.
-
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/php/php-fpm.conf | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/package/php/php-fpm.conf b/package/php/php-fpm.conf
-index b75a58f..88014b8 100644
---- a/package/php/php-fpm.conf
-+++ b/package/php/php-fpm.conf
-@@ -1,9 +1,6 @@
- [www]
--# Only start children when there are requests to be processed
- pm = ondemand
--# Terminate them again after there haven't been any for 2 minutes
- pm.process_idle_timeout = 120s
--# Maximum number of children processing PHP requests concurrently
- pm.max_children = 5
- 
- listen = /var/run/php-fpm.sock
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
