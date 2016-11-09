@@ -1,48 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 21:37:40 +0100
-Subject: [Buildroot] [PATCH v3 1/2] MIPS: add support for XBurst cores
-In-Reply-To: <20161109161658.53527-1-Vincent.Riera@imgtec.com>
-References: <20161109161658.53527-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161109213740.3438b5d6@free-electrons.com>
+Date: Wed, 9 Nov 2016 21:37:55 +0100
+Subject: [Buildroot] [git commit] olimex_a20_olinuxino_lime2: bump U-Boot to
+	2016.05
+Message-ID: <20161109203914.5918A81983@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0aff35482ca469288d038437e4760741043e5ccc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 9 Nov 2016 16:16:57 +0000, Vicente Olivert Riera wrote:
-> The Ingenic XBurst is a MIPS32R2 microprocessor.
-> 
-> It has a bug in the FPU that can generate incorrect results in certain
-> cases. The problem shows up when you have several fused madd
-> instructions in sequence with dependant operands.
-> 
-> Using the -mno-fused-madd option prevents gcc from emitting these
-> instructions. This patch adds changes to the toolchain wrapper to use
-> that option.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
-> Changes v2 -> v3:
->  - Improve commit log and add help section. (Suggested by Arnout)
-> Changes v1 -> v2:
->  - Do not add -mmxu to the wrapper.
-> ---
->  arch/Config.in.mips            | 14 ++++++++++++++
->  toolchain/toolchain-wrapper.c  |  3 +++
->  toolchain/toolchain-wrapper.mk |  5 +++++
->  3 files changed, 22 insertions(+)
+The patch fixes build by GCC 5 (unsupported by the older U-Boot).
 
-I've applied both patches to master. Even though it's adding a new
-architecture entry, it's really a bug fix needed for the
-ci20_defconfig, which is why I've chosen to apply this to master.
+Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/olimex_a20_olinuxino_lime2_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index 57dda72..87fc674 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -25,7 +25,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_PACKAGE_HOST_GENIMAGE=y
