@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Nov 2016 01:25:50 +0100
-Subject: [Buildroot] [PATCH 1/5] package/pseudo: enforce the host bitness
-In-Reply-To: <a2d0f2c0a262a2a40e8ccc1f3c0d89fdb834af39.1478643505.git.yann.morin.1998@free.fr>
+Date: Wed, 9 Nov 2016 01:27:05 +0100
+Subject: [Buildroot] [PATCH 3/5] package/pseudo: wrap the real pseudo
+	with a wrapper
+In-Reply-To: <17a63de5fc6ed262263e054776a1bac481701b42.1478643505.git.yann.morin.1998@free.fr>
 References: <cover.1478643505.git.yann.morin.1998@free.fr>
- <a2d0f2c0a262a2a40e8ccc1f3c0d89fdb834af39.1478643505.git.yann.morin.1998@free.fr>
-Message-ID: <f3ba4d7c-27d5-ebb8-c168-1a4a783596c7@mind.be>
+ <17a63de5fc6ed262263e054776a1bac481701b42.1478643505.git.yann.morin.1998@free.fr>
+Message-ID: <0fa539b1-3bf7-8a5c-18dd-c8e5cde24cfa@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,14 +15,47 @@ To: buildroot@busybox.net
 
 
 On 08-11-16 23:18, Yann E. MORIN wrote:
-> pseudo can detect the host bitness, but is not sure about it: it checks
-> what type of file /bin/sh is, using file(1).
+> Running pseudo is more involved than running fakeroot. In the transition
+> from using fakeroot, we just did not account for the extra requirements.
 > 
-> However, in some conditions, /bin/sh can be of a different bitness than
-> the rest of the system (weird, but not impossible), which causes build
-> issues.
+> First, we explicitly tell pseudo where it is, otherwise it tries to
+> guess. Its guess is correct, but it prints a warning, which is not nice.
 > 
-> Just enforce the bitness, so that pseudo needs not (wrongly) guess it.
+> Second, we tell it where to find the passwd and group files in case it
+> has to emulate access to them. We currently do not use that feature, but
+> better safe than sorry.
+> 
+> Third, pseudo spawns a background daemon, and talks to it (when fakeroot
+> would emulate the state all in the current process' state, pseudo uses
+> the daemon to coordinate the state across multiple processes). We are
+> not much interested in the daemon lingering around, so we just tell it
+> to terminate as soon as the last clients quits (this can take up to one
+> second).
+> 
+> Fourth and last, pseudo always stores its internal database when
+> exiting, and reloads it when spawned. The database is by default stored
+> in a sub-directory of the prefix it was installed in, but this is
+> impractical for us. We want the database to be specific to the one
+> config dir we are building, so we store the database in a (hidden)
+> sub-dir of the build dir, thus ensuring it is never shared with another
+> build. That directory is hidden (starts with a dot) because we consider
+> that to be our internal state that we do not want to expose to the user.
+> 
+> The wrapper has to be relocatable, so we avoid using hard-coded paths
+> in there: we derive those paths fom the runtime path of pseudo. However,
+                                  ^^^ Gah, I missed one :-P
+
+> the build directory $(BUILD_DIR) is not available in the environment
+> (we do not export it because it conflicts with some buildsystems).
+> Instead, we use $(BASE_DIR) which is exported.
+> 
+> Finally, when relocated, the wrapper would not be used in the Buildroot
+> environment, so may not have access to TARGET_DIR or BASE_DIR, unless
+> the user sets them. If he does not, we still want the wrapper to be
+> working (to avoid the warning about the prefix, and to exit the daemon
+> asap); thus we leave the passwd and localstatedir variable alone if we
+> don't have what it needs to set them, rather than set them to incorrect
+> values.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
@@ -38,23 +72,48 @@ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
 > ---
 > Changes v1 -> v2:
->   - directly extract bitness for $(HOSTARCH)  (Arnout)
+>   - do not use a variable, but use a wrapper
 > ---
->  package/pseudo/pseudo.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/pseudo/pseudo-wrapper | 12 ++++++++++++
+>  package/pseudo/pseudo.mk      |  6 ++++++
+>  2 files changed, 18 insertions(+)
+>  create mode 100644 package/pseudo/pseudo-wrapper
 > 
+> diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
+> new file mode 100644
+> index 0000000..feaa7fc
+> --- /dev/null
+> +++ b/package/pseudo/pseudo-wrapper
+> @@ -0,0 +1,12 @@
+> +#!/bin/sh
+> +
+> +export PSEUDO_PREFIX="$(dirname "${0%/*}")"
+> +export PSEUDO_OPTS="-t0"
+> +if [ -n "${TARGET_DIR}" ]; then
+> +    export PSEUDO_PASSWD="${TARGET_DIR}"
+> +fi
+> +if [ -n "${BASE_DIR}" ]; then
+> +    export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
+> +fi
+> +
+> +exec "${0%-wrapper}" "${@}"
 > diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
-> index 67538a6..92de2c6 100644
+> index 4be5154..474eae2 100644
 > --- a/package/pseudo/pseudo.mk
 > +++ b/package/pseudo/pseudo.mk
-> @@ -17,6 +17,7 @@ HOST_PSEUDO_DEPENDENCIES = host-attr host-sqlite
->  # configure script is not generated by autoconf, so passing --libdir
->  # is necessary, even if the infrastructure passes --prefix already.
->  HOST_PSEUDO_CONF_OPTS = \
-> +	--bits=$(if $(filter %64,$(HOSTARCH)),64,32) \
+> @@ -26,6 +26,12 @@ HOST_PSEUDO_CONF_OPTS = \
 >  	--libdir=$(HOST_DIR)/usr/lib \
 >  	--with-sqlite=$(HOST_DIR)/usr
 >  
+> +define HOST_PSEUDO_INSTALL_WRAPPER
+> +	$(INSTALL) -D -m 0755 $(HOST_PSEUDO_PKGDIR)/pseudo-wrapper \
+> +		$(HOST_DIR)/usr/bin/pseudo-wrapper
+> +endef
+> +HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_INSTALL_WRAPPER
+> +
+>  define HOST_PSEUDO_FAKEROOT_SYMLINK
+>  	ln -sf pseudo $(HOST_DIR)/usr/bin/fakeroot
+>  endef
 > 
 
 -- 
