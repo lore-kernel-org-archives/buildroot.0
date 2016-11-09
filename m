@@ -1,33 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 9 Nov 2016 11:48:14 +0200
-Subject: [Buildroot] [PATCH] patchelf: bump version to 0.9
-In-Reply-To: <20161109094346.5839-1-jezz@sysmic.org>
-References: <20161109094346.5839-1-jezz@sysmic.org>
-Message-ID: <20161109094814.hiomprcg2fxeh2tc@tarshish>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Wed,  9 Nov 2016 10:51:24 +0100
+Subject: [Buildroot] [PATCH] valgrind: do not use host mpicc
+Message-ID: <20161109095124.6037-1-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?r?me,
+Valgrind may use 'mpicc' (from openmi project) to compile libmpiwrap-*.so.
+Without any option, it will detect and use 'mpicc' from host and generate
+libmpiwrap-*.so for host:
 
-On Wed, Nov 09, 2016 at 10:43:46AM +0100, J?r?me Pouiller wrote:
-> -PATCHELF_VERSION = 0.8
-> -PATCHELF_SITE = http://releases.nixos.org/patchelf/patchelf-0.8
-> +PATCHELF_VERSION = 0.9
-> +PATCHELF_SITE = http://releases.nixos.org/patchelf/patchelf-0.9
+  $ file target/usr/lib/valgrind/libmpiwrap-arm-linux.so
+  target/usr/lib/valgrind/libmpiwrap-arm-linux.so: ELF 64-bit LSB  shared object,
+  x86-64, version 1 (SYSV), dynamically linked, not stripped
 
-Unrelated to this patch, but SITE should be 
-http://releases.nixos.org/patchelf/patchelf-$(PATCHELF_VERSION). And while at 
-it we can also move to .tar.bz2 file to save some space.
+We simply disable openmi support for valgrind.
 
->  PATCHELF_LICENSE = GPLv3+
->  PATCHELF_LICENSE_FILES = COPYING
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/valgrind/valgrind.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-baruch
-
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index 09f7116..c7ac2a1 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -15,6 +15,8 @@ VALGRIND_INSTALL_STAGING = YES
+ # patch 0004-Fixes-for-musl-libc.patch touching configure.ac
+ VALGRIND_AUTORECONF = YES
+ 
++VALGRIND_CONF_OPTS += --without-mpicc
++
+ # When Valgrind detects a 32-bit MIPS architecture, it forcibly adds
+ # -march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture,
+ # it forcibly adds -march=mips64. This causes Valgrind to be built
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.9.3
