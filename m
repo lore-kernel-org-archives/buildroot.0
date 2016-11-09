@@ -1,66 +1,97 @@
-From: =?UTF-8?B?0JDQu9C10LrRgdC10Lkg0JHRgNC+0LTQutC40L0=?= <alexey.brodkin@gmail.com>
-Date: Wed, 9 Nov 2016 16:55:22 +0300
-Subject: [Buildroot] [PATCH] qt5webkit: Get sources from
+From: Alexey Brodkin <alexey.brodkin@gmail.com>
+Date: Wed,  9 Nov 2016 16:59:54 +0300
+Subject: [Buildroot] [PATCH v2] qt5webkit: Get sources from
 	Qt-5-unofficial-builds
-In-Reply-To: <6163885.zDEeHnFoFK@sagittea>
-References: <1478695085-4210-1-git-send-email-abrodkin@synopsys.com>
- <6163885.zDEeHnFoFK@sagittea>
-Message-ID: <CAML3pwVNhmeEXRYxBSpuN4zyzzF6+jcqZ7UCJZ9YbEynMCU6RQ@mail.gmail.com>
+Message-ID: <1478699994-22351-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?r?me,
+Instead of messing with git we may get tarballs of obsolete but still
+existing submodules as we used to but from a bit different location.
 
-2016-11-09 16:31 GMT+03:00 J?r?me Pouiller <jezz@sysmic.org>:
->
-> Hello Alexey,
->
-> On Wednesday 09 November 2016 15:38:05 Alexey Brodkin wrote:
-> [...]
-> > --- a/package/qt5/qt5.mk
-> > +++ b/package/qt5/qt5.mk
-> > @@ -1,6 +1,7 @@
-> >  QT5_VERSION_MAJOR = 5.6
-> >  QT5_VERSION = $(QT5_VERSION_MAJOR).2
-> >  QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
-> > +QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
->
-> Is it possible to also use snapshots site for official modules?
+It turned out Qt people still create packages for obsolete submodules
+for so-called "unofficial builds", see [1].
 
-I think it's possible, see
-http://download.qt.io/snapshots/qt/5.6/5.6.2/latest_src/submodules/
-But I'd prefer to stick to official release paths for officially
-supported submodules.
-Just in case "snapshots" stuff gets purged at some point in time.
+[1] https://wiki.qt.io/Qt-5-unofficial-builds
 
-> [...]
-> > --- a/package/qt5/qt5webkit/qt5webkit.mk
-> > +++ b/package/qt5/qt5webkit/qt5webkit.mk
-> > @@ -4,10 +4,9 @@
-> >  #
-> >  ################################################################################
-> >
-> > -QT5WEBKIT_VERSION = b35917bcb44d7f200af0f4ac68a126fa0aa8d93d
-> > -# Using GitHub since it supports downloading tarballs from random commits.
-> > -# The http://code.qt.io/cgit/qt/qtwebkit.git/ repo doesn't allow to do so.
-> > -QT5WEBKIT_SITE = $(call github,qtproject,qtwebkit,$(QT5WEBKIT_VERSION))
-> > +QT5WEBKIT_VERSION = $(QT5_VERSION)
-> > +QT5WEBKIT_SITE = $(QT5_SNAPSHOTS_SITE)
-> > +QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_EXAMPLES_VERSION).tar.xz
->                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> You mean QT5WEBKIT_VERSION?
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: Gary Bisson <gary.bisson@boundarydevices.com>
+Cc: J?r?me Pouiller <jezz@sysmic.org>
+---
 
-Did I send it? Oh boy... I was daydreaming most probably.
+Changes v1 -> v2:
+ * Fixes copy-pasted QT5WEBKIT_VERSION
+   (was QT5WEBKIT_EXAMPLES_VERSION)
+   Thanks to J?r?me!
 
-That's how people and companies leak their secrets :)
-I was trying to bring WebkitExamples back in BR and this one was a prerequisite
-that simplifies recovery of WebkitExamples sources. That said the
-patch was build-tested
-but with another patch on top of it and so I didn't catch this copy-pasta.
+ package/qt5/qt5.mk                   |  1 +
+ package/qt5/qt5webkit/qt5webkit.hash |  4 ++--
+ package/qt5/qt5webkit/qt5webkit.mk   | 14 +++-----------
+ 3 files changed, 6 insertions(+), 13 deletions(-)
 
-Will do a respin now.
-
--Alexey
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index d25f663662ee..e937e234b596 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -1,6 +1,7 @@
+ QT5_VERSION_MAJOR = 5.6
+ QT5_VERSION = $(QT5_VERSION_MAJOR).2
+ QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
++QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
+ include $(sort $(wildcard package/qt5/*/*.mk))
+ 
+ define QT5_LA_PRL_FILES_FIXUP
+diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
+index 96b8bdd6909a..309f776b3ff3 100644
+--- a/package/qt5/qt5webkit/qt5webkit.hash
++++ b/package/qt5/qt5webkit/qt5webkit.hash
+@@ -1,2 +1,2 @@
+-# locally computed
+-sha256 bdd659573e7e75cd4ad57b7160a7353d98d21a6fef06e4fb9e114a5b1f1e9dab qt5webkit-b35917bcb44d7f200af0f4ac68a126fa0aa8d93d.tar.gz
++# Hash from: http://download.qt.io/snapshots/qt/5.6/5.6.2/latest_src/submodules/qtwebkit-opensource-src-5.6.2.tar.xz.mirrorlist
++sha256 528a6b8b1c5095367b26e8ce4f3a46bb739e2e9913ff4dfc6ef58a04fcd73966 qtwebkit-opensource-src-5.6.2.tar.xz
+diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+index 378cdf78573e..980d2aff0167 100644
+--- a/package/qt5/qt5webkit/qt5webkit.mk
++++ b/package/qt5/qt5webkit/qt5webkit.mk
+@@ -4,10 +4,9 @@
+ #
+ ################################################################################
+ 
+-QT5WEBKIT_VERSION = b35917bcb44d7f200af0f4ac68a126fa0aa8d93d
+-# Using GitHub since it supports downloading tarballs from random commits.
+-# The http://code.qt.io/cgit/qt/qtwebkit.git/ repo doesn't allow to do so.
+-QT5WEBKIT_SITE = $(call github,qtproject,qtwebkit,$(QT5WEBKIT_VERSION))
++QT5WEBKIT_VERSION = $(QT5_VERSION)
++QT5WEBKIT_SITE = $(QT5_SNAPSHOTS_SITE)
++QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
+ QT5WEBKIT_DEPENDENCIES = \
+ 	host-bison host-flex host-gperf host-python host-ruby \
+ 	qt5base sqlite
+@@ -43,14 +42,7 @@ define QT5WEBKIT_PYTHON2_SYMLINK
+ endef
+ QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
+ 
+-# Since we get the source from git, generated header files are not included.
+-# qmake detects that header file generation (using the syncqt tool) must be
+-# done based on the existence of a .git directory (cfr. the git_build config
+-# option which is set in qt_build_paths.prf).
+-# So, to make sure that qmake detects that header files must be generated,
+-# create an empty .git directory.
+ define QT5WEBKIT_CONFIGURE_CMDS
+-	mkdir -p $(@D)/.git
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(HOST_DIR)/usr/bin/qmake)
+ endef
+ 
+-- 
+2.7.4
