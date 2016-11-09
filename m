@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 22:36:57 +0100
-Subject: [Buildroot] [PATCH] screen: enable support for 256 colors
-In-Reply-To: <20161109093629.5618-1-jezz@sysmic.org>
-References: <20161109093629.5618-1-jezz@sysmic.org>
-Message-ID: <20161109223657.36abadbb@free-electrons.com>
+Date: Wed, 9 Nov 2016 22:37:38 +0100
+Subject: [Buildroot] [PATCH] swupdate: bump to version 2016.10
+In-Reply-To: <20161108143446.9525-1-gary.bisson@boundarydevices.com>
+References: <20161108143446.9525-1-gary.bisson@boundarydevices.com>
+Message-ID: <20161109223738.798b3401@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  9 Nov 2016 10:36:29 +0100, J?r?me Pouiller wrote:
-> Support for 256 colors is enabled in xterm and ncurses, but it was
-> forgotten for screen.
+On Tue,  8 Nov 2016 15:34:46 +0100, Gary Bisson wrote:
+> A short list of new features:
 > 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> - progress interface as general way to signalize the update
+>   status outside of the process.
+> 
+> - support encrypted artifacts (encryption via simmetric keys)
+> 
+> - host verification for swu images (-c option)
+> 
+> - configuration file to configure the update process
+> 
+> - HAwkbit backend: API extended, support for configData messages
+> 
+> - Hawkbit backend: supports SSL certificates
+> 
+> - remote handler : general interface to connect external
+>   installers.
+> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 > ---
->  package/screen/screen.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/swupdate/swupdate.hash | 2 +-
+>  package/swupdate/swupdate.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
 
