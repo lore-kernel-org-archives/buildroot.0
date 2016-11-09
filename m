@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 22:17:39 +0100
-Subject: [Buildroot] [PATCH] php: fix bfin compile issue
-In-Reply-To: <20161109070531.GA7310@waldemar-brodkorb.de>
-References: <20161109070531.GA7310@waldemar-brodkorb.de>
-Message-ID: <20161109221739.6aa0a1ff@free-electrons.com>
+Date: Wed, 9 Nov 2016 22:18:16 +0100
+Subject: [Buildroot] [PATCH] valgrind: do not use host mpicc
+In-Reply-To: <20161109095124.6037-1-jezz@sysmic.org>
+References: <20161109095124.6037-1-jezz@sysmic.org>
+Message-ID: <20161109221816.22f4f842@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 9 Nov 2016 08:05:31 +0100, Waldemar Brodkorb wrote:
-> Fixes:
->   http://autobuild.buildroot.net/results/8326f24511d3b109d22a76660adc017bbcaca197
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/php/0007-avoid-bfin-gcc-segfault.patch | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->  create mode 100644 package/php/0007-avoid-bfin-gcc-segfault.patch
+On Wed,  9 Nov 2016 10:51:24 +0100, J?r?me Pouiller wrote:
 
-I hate this kind of workaround, but OK, I've applied anyway, it's
-probably going to take time to have a real fix for this.
+> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+> index 09f7116..c7ac2a1 100644
+> --- a/package/valgrind/valgrind.mk
+> +++ b/package/valgrind/valgrind.mk
+> @@ -15,6 +15,8 @@ VALGRIND_INSTALL_STAGING = YES
+>  # patch 0004-Fixes-for-musl-libc.patch touching configure.ac
+>  VALGRIND_AUTORECONF = YES
+>  
+> +VALGRIND_CONF_OPTS += --without-mpicc
+
+Not sure why you're adding another CONF_OPTS assignment instead of
+re-using the existing one, so I've refactored that a bit and applied.
 
 Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
