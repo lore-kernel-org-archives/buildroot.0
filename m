@@ -1,46 +1,41 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Wed, 9 Nov 2016 11:15:12 +0100
-Subject: [Buildroot] [PATCH 1/4] configs: atmel: at91sam9260eknf: update
- defconfig
-In-Reply-To: <20161109100027.yqe6ilsxofi2t4ey@tarshish>
-References: <20161109065948.1851-1-ludovic.desroches@atmel.com>
- <20161109065948.1851-2-ludovic.desroches@atmel.com>
- <20161109073638.ozgbr5vy6gglznlx@tarshish>
- <20161109095249.bgurrb6bhujkgnac@piout.net>
- <20161109100027.yqe6ilsxofi2t4ey@tarshish>
-Message-ID: <20161109101512.rffzcm2olxm64sbl@rfolt0960.corp.atmel.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Nov 2016 11:22:14 +0100
+Subject: [Buildroot] [Question] Downgrade package application.
+In-Reply-To: <CADZ=QZmHuyjuctpfxNLn_up=41HXc_8Y+BtDx+4EScrRda04QA@mail.gmail.com>
+References: <CADZ=QZmHuyjuctpfxNLn_up=41HXc_8Y+BtDx+4EScrRda04QA@mail.gmail.com>
+Message-ID: <20161109112214.5838dd7b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 09, 2016 at 12:00:27PM +0200, Baruch Siach wrote:
-> Hi Alexandre,
-> 
-> On Wed, Nov 09, 2016 at 10:52:49AM +0100, Alexandre Belloni wrote:
-> > On 09/11/2016 at 09:36:38 +0200, Baruch Siach wrote :
-> > > On Wed, Nov 09, 2016 at 07:59:45AM +0100, Ludovic Desroches wrote:
-> > > >  # Kernel
-> > > >  BR2_LINUX_KERNEL=y
-> > > > -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> > > > -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.1"
-> > > 
-> > > For the sake of reproducibility you should set this to the version you tested, 
-> > > say, 4.8.6. The same goes for other patches in this series.
-> > 
-> > I'm not sure this is actually useful because the amount of testing is
-> > minimal and it just increases the maintenance burden.
-> 
-> I don't understand. How would locking a specific kernel version in the 
-> defconfig increase maintenance burden? Any tested kernel version would do. We 
-> just want to ensure consistent user experience. Otherwise the built kernel 
-> will change with the default value of BR2_LINUX_KERNEL_VERSION.
-> 
+Hello,
 
-That's the goal. Kernel was no longer compiling because it was too old
-to be used with gcc5. We may have the same situation in the future and
-we'll simply choose the latest kernel release for the update as I do today.
-That's why Alexandre says that it will increase the maintenance.
+On Wed, 9 Nov 2016 18:04:20 +0800, Yu-Ting Kao wrote:
 
-Ludovic
+> I have a patch for new feature on a package, but it works on lower
+> version. How can I build lower version in buildroot ? Are there any
+> menuconfig I can choose ?
+
+No. For the vast majority of the packages, we only allow building a
+single version, as we can't test all combinations of all package
+versions.
+
+So if you need a lower version than the one in Buildroot:
+
+ 1/ Short-term, you can just modify the .mk file, so that it uses
+    whichever version you need.
+
+ 2/ Long-term, you should really upgrade to the latest version. If this
+    latest version is causing issues for you, then work with the
+    upstream project to fix them. Staying on an older version is
+    definitely not a good idea.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
