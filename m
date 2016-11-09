@@ -1,49 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 21:41:20 +0100
-Subject: [Buildroot] [PATCH] htop: enable unicode if possible
-In-Reply-To: <20161109092739.4595-1-jezz@sysmic.org>
-References: <20161109092739.4595-1-jezz@sysmic.org>
-Message-ID: <20161109214120.49af0145@free-electrons.com>
+Date: Wed, 9 Nov 2016 21:57:18 +0100
+Subject: [Buildroot] [git commit] python: fix double format detection
+Message-ID: <20161109211541.35C5B81983@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2a6001f17aba3f405f1aa95b3d95a553761d9b03
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  9 Nov 2016 10:27:39 +0100, J?r?me Pouiller wrote:
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/htop/htop.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-> index 7409a78..e1a658b 100644
-> --- a/package/htop/htop.mk
-> +++ b/package/htop/htop.mk
-> @@ -7,7 +7,9 @@
->  HTOP_VERSION = 2.0.2
->  HTOP_SITE = http://hisham.hm/htop/releases/$(HTOP_VERSION)
->  HTOP_DEPENDENCIES = ncurses
-> +ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),)
->  HTOP_CONF_OPTS = --disable-unicode
-> +endif
+Python is not able to detect if compiler double representation is
+compliant with IEE754:
 
-We want something more explicit, like:
+  checking whether C doubles are little-endian IEEE 754 binary64... no
+  checking whether C doubles are big-endian IEEE 754 binary64... no
+  checking whether C doubles are ARM mixed-endian IEEE 754 binary64... no
 
-ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
-HTOP_CONF_OPTS += --enable-unicode
-else
-HTOP_CONF_OPTS += --disable-unicode
-endif
+Accordingly 'legacy' mode isused. It is possible to check this at
+runtime by check if 'sys.float_repr_style' contains 'short' or
+'legacy'. Calculus correctness is not garanteed with 'legacy'.
 
-Could you try this, in both situations, and see if it works as expected?
+Problem is better described here:
 
-Thanks!
+  http://stackoverflow.com/questions/29920294/what-causes-pythons-float-repr-style-to-use-legacy
+  https://bugs.python.org/issue7117
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+However, all gcc architecture use a representation compliant with
+IEE754. So, we can enable it unconditionnaly.
+
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+[Thomas: adjust condition to avoid usage of qstrip, suggested by Baruch.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python/python.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/python/python.mk b/package/python/python.mk
+index cc65376..cfd5a0a 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -140,6 +140,13 @@ PYTHON_CONF_ENV += \
+ 	ac_cv_prog_HAS_HG=/bin/false \
+ 	ac_cv_prog_SVNVERSION=/bin/false
+ 
++# GCC is always compliant with IEEE754
++ifeq ($(BR2_ENDIAN),"LITTLE")
++PYTHON_CONF_ENV += ac_cv_little_endian_double=yes
++else
++PYTHON_CONF_ENV += ac_cv_big_endian_double=yes
++endif
++
+ PYTHON_CONF_OPTS += \
+ 	--without-cxx-main 	\
+ 	--without-doc-strings	\
