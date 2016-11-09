@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 22:18:56 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Cyril Bur to PowerPC
-In-Reply-To: <20161108230944.5192-1-cyrilbur@gmail.com>
-References: <20161108230944.5192-1-cyrilbur@gmail.com>
-Message-ID: <20161109221856.3aea731f@free-electrons.com>
+Date: Wed, 9 Nov 2016 22:24:34 +0100
+Subject: [Buildroot] [PATCH 1/1] php-fpm: remove config comments to fix
+ startup
+In-Reply-To: <1478634582-15683-1-git-send-email-fhunleth@troodon-software.com>
+References: <1478634582-15683-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20161109222434.76588a57@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  9 Nov 2016 10:09:44 +1100, Cyril Bur wrote:
-> Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
+On Tue,  8 Nov 2016 14:49:42 -0500, Frank Hunleth wrote:
+> The comments in the Buildroot-provided php-fpm.conf would produce the
+> following error when starting php-fpm:
+> 
+> ERROR: [/etc/php-fpm.conf:2] value is NULL for a ZEND_INI_PARSER_ENTRY
+> 
+> Removing the comments fixes the problem.
+> 
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 > ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
+>  package/php/php-fpm.conf | 3 ---
+>  1 file changed, 3 deletions(-)
 
-Applied to master, thanks. However, I'm curious: do you have a specific
-interest in PowerPC?
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
