@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 21:28:12 +0100
-Subject: [Buildroot] ninja/python-meson packages
-In-Reply-To: <98b7a6164112ee321e9220d5b8c47a33@openmailbox.org>
-References: <98b7a6164112ee321e9220d5b8c47a33@openmailbox.org>
-Message-ID: <20161109212812.39399895@free-electrons.com>
+Date: Wed, 9 Nov 2016 21:32:35 +0100
+Subject: [Buildroot] [PATCH] configs: freescale_imx31_3stack: bump
+ kernel version to 4.1.15_2.0.0_ga
+In-Reply-To: <20161109163823.25501-1-vincent.stehle@laposte.net>
+References: <20161105143516.00291507@free-electrons.com>
+ <20161109163823.25501-1-vincent.stehle@laposte.net>
+Message-ID: <20161109213235.5bfc10cb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,50 +14,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 09 Nov 2016 16:26:38 +0100, C?dric Marie wrote:
-
-> > I would not say one, but at least 4-5 packages, with a pretty good
-> > confidence that more packages would be added later on.  
+On Wed,  9 Nov 2016 17:38:23 +0100, Vincent Stehle wrote:
+> From: Vincent Stehl? <vincent.stehle@laposte.net>
 > 
-> Gstreamer has added Meson as an alternative build system (to Autotools) 
-> since August 2016:
+> Switch to the kernel of release 4.1.15_2.0.0_ga, as it builds properly with
+> gcc 5.x, which is now the default.
 > 
-> https://cgit.freedesktop.org/gstreamer/gstreamer/commit/meson.build?id=b2f9808722a0254acba17ef98a612a2792184e12
+> We add a linux config fragment to disable the framebuffer, to repair the
+> build for imx_v6_v7_defconfig.
 > 
-> And I suppose that other projects are likely to switch... The decrease 
-> of build time is really interesting compared to Autotools, CMake, and 
-> even CMake with ninja backend.
+> Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+> Signed-off-by: Julien Olivain <juju@cotds.org>
+> Tested-by: Julien Olivain <juju@cotds.org>
+> Cc: Fabio Estevam <fabio.estevam@nxp.com>
 
-We are definitely fine with supporting the meson build system in
-Buildroot. The only reason we didn't merge the patches that were
-proposed is because no package was using them. As soon as we have one
-package using this build system in Buildroot, we will of course happily
-merge patches adding support for it.
+Thanks a lot! I've applied to master, with one minor change.
 
-> By the way, is there any chance to give CMake package the possibility to 
-> use ninja backend? (which will also decrease build time of CMake 
-> packages)
+> diff --git a/board/freescale/imx31_3stack/linux.fragment b/board/freescale/imx31_3stack/linux.fragment
+> new file mode 100644
+> index 0000000..8d89e8e
+> --- /dev/null
+> +++ b/board/freescale/imx31_3stack/linux.fragment
+> @@ -0,0 +1 @@
+> +CONFIG_FB_MXS=n
 
-I don't know exactly what is involved in such a change, but in
-principle, I don't see why we wouldn't accept that.
+It is more conventional to write this as:
 
-> I have local modifications of my buildroot tree that achieve that, but 
-> I'm not sure about the right way to propose it. I have added an option 
-> (BR2_PACKAGE_CMAKE_NINJA) but it appears in target packages > 
-> Development tools, while it is not intended for the target. Would it be 
-> a better idea to create a specific package infra (pkg-cmake-ninja.mk)?
+# CONFIG_FB_MXS is not set
 
-Can each and every CMake package use Ninja as a backend?
+which is what kconfig generates in a defconfig for an option that is
+disabled.
 
-At first, it should probably just be an option under "Build options",
-that affects the behavior of pkg-cmake. Once we get a better
-understanding of what it means to use Ninja in terms of additional
-dependencies to build, and number of CMake packages that work/don't
-work with it, then we can decide what to do.
-
-How does that sound?
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
