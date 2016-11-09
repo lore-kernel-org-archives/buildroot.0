@@ -1,29 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed,  9 Nov 2016 18:40:44 +0200
-Subject: [Buildroot] [PATCH] libxslt: correct homepage link
-Message-ID: <c5785094c23c4455cdfc5b9f1063a98aba25d910.1478709644.git.baruch@tkos.co.il>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 09 Nov 2016 17:07:51 +0000
+Subject: [Buildroot] [Bug 9411] New: MUSL build with RT Error relocating
+ /lib/libgcc_s.so.1: __cpu_indicator_init: symbol not found
+Message-ID: <bug-9411-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Link to the actual webpage of libxslt, not to the xslt spec page.
+https://bugs.busybox.net/show_bug.cgi?id=9411
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libxslt/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+            Bug ID: 9411
+           Summary: MUSL build with RT Error relocating
+                    /lib/libgcc_s.so.1: __cpu_indicator_init: symbol not
+                    found
+           Product: buildroot
+           Version: 2016.08
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: buildroot at komadev.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/libxslt/Config.in b/package/libxslt/Config.in
-index ee2f66c36ed6..dfe5b99f04c9 100644
---- a/package/libxslt/Config.in
-+++ b/package/libxslt/Config.in
-@@ -13,4 +13,4 @@ config BR2_PACKAGE_LIBXSLT
- 	  to describe how the document is transformed into another
- 	  XML document that uses the formatting vocabulary.
- 
--	  http://www.w3.org/TR/xslt
-+	  http://xmlsoft.org/xslt/
+building minimal buildroot with musl + gcc 6.x compiles completely fine.
+in the runtime though, all binaries linked against libgcc_s.so.1 fail with i.e.
+
+gbm: Last dlopen error: Error relocating /lib/libgcc_s.so.1:
+__cpu_indicator_init: symbol not found
+
+This error is also referenced incl. a patch here 
+
+https://gcc.gnu.org/ml/gcc-patches/2015-05/msg00899.html
+
 -- 
-2.10.2
+You are receiving this mail because:
+You are on the CC list for the bug.
