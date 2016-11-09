@@ -1,45 +1,54 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 9 Nov 2016 10:24:35 +0200
-Subject: [Buildroot] [PATCH] package/e2fsprogs: backport build fix for
- rhel5 due to missing magic
-In-Reply-To: <CAMo8BfJnGVYAd_3nUDFZbtWDQNkTOcOr_z6NpV9OK8YKNS4N8g@mail.gmail.com>
-References: <1478677142-11627-1-git-send-email-jcmvbkbc@gmail.com>
- <20161109080341.5vmnkhdchbibzofz@tarshish>
- <CAMo8BfJnGVYAd_3nUDFZbtWDQNkTOcOr_z6NpV9OK8YKNS4N8g@mail.gmail.com>
-Message-ID: <20161109082435.33pxg5mzjq5nebv3@tarshish>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Wed,  9 Nov 2016 10:25:07 +0100
+Subject: [Buildroot] [PATCH 1/2] python: fix double format detection
+Message-ID: <20161109092508.4503-1-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Max,
+Python is not able to detect if compiler double representation is
+compliant with IEE754:
 
-On Wed, Nov 09, 2016 at 12:18:07AM -0800, Max Filippov wrote:
-> On Wed, Nov 9, 2016 at 12:03 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > On Tue, Nov 08, 2016 at 11:39:02PM -0800, Max Filippov wrote:
-> >> RHEL 5.x does have magic.h, but it does not define all expected symbols. In
-> >> particular, the NO_CHECK symbols were only added in file 4.20 and RHEL 5.x
-> >> is using 4.17.
-> >
-> > Instead of relying on host libmagic that may or may not be installed, why not
-> > add host-file to HOST_E2FSPROGS_DEPENDENCIES?
-> 
-> My first reaction was to look if the issue is addressed in the package mainline,
-> and that's how e2fsprogs mainline decided to deal with that. So the next
-> version bump of e2fsprogs will make host-libmagic not necessary, there's
-> probably no reason to introduce that dependency?
-> 
-> "libmagic installed" vs. "not installed" is handled well by e2fsprogs, it's
-> "installed, but too old" case that fails.
+  checking whether C doubles are little-endian IEEE 754 binary64... no
+  checking whether C doubles are big-endian IEEE 754 binary64... no
+  checking whether C doubles are ARM mixed-endian IEEE 754 binary64... no
 
-We would generally like to avoid dependency on host libraries as much as 
-possible since it reduces the build reproducibility. But as this is just a 
-host tool I'm not sure we care.
+Accordingly 'legacy' mode isused. It is possible to check this at runtime by
+check if 'sys.float_repr_style' contains 'short' or 'legacy'. Calculus
+correctness is not garanteed with 'legacy'.
 
-baruch
+Problem is better described here:
 
+  http://stackoverflow.com/questions/29920294/what-causes-pythons-float-repr-style-to-use-legacy
+  https://bugs.python.org/issue7117
+
+However, all gcc architecture use a representation compliant with IEE754. So,
+we can enable it unconditionnaly.
+
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/python/python.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/python/python.mk b/package/python/python.mk
+index cc65376..0191d59 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -140,6 +140,13 @@ PYTHON_CONF_ENV += \
+ 	ac_cv_prog_HAS_HG=/bin/false \
+ 	ac_cv_prog_SVNVERSION=/bin/false
+ 
++# GCC is always complient with IEEE754
++ifeq ($(call qstrip,$(BR2_ENDIAN)),LITTLE)
++PYTHON_CONF_ENV += ac_cv_little_endian_double=yes
++else
++PYTHON_CONF_ENV += ac_cv_big_endian_double=yes
++endif
++
+ PYTHON_CONF_OPTS += \
+ 	--without-cxx-main 	\
+ 	--without-doc-strings	\
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.9.3
