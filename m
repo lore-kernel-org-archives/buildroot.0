@@ -1,70 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 23:13:39 +0100
-Subject: [Buildroot] ninja/python-meson packages
-In-Reply-To: <37cfb466-91a2-2434-24a4-dbd13ddfbc0f@openmailbox.org>
-References: <98b7a6164112ee321e9220d5b8c47a33@openmailbox.org>
- <20161109212812.39399895@free-electrons.com>
- <37cfb466-91a2-2434-24a4-dbd13ddfbc0f@openmailbox.org>
-Message-ID: <20161109231339.6a4830c6@free-electrons.com>
+Date: Wed, 9 Nov 2016 23:14:17 +0100
+Subject: [Buildroot] [git commit] Makefile: fix stripping of ld.so and
+	libpthread for merged /usr
+Message-ID: <20161109221554.0BA9180767@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=179c5f1b87a46ac272d66a947fddbf7c0fdeb442
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 9 Nov 2016 23:01:12 +0100, C?dric Marie wrote:
+If 'lib' is a symlink (as is the case when BR2_ROOTFS_MERGED_USR=y),
+'find lib' does not return the correct result. So, until now,
+libpthread*.so* and ld-*.so* were not stripped when 'lib' was a symlink.
 
-> Le 09/11/2016 ? 21:28, Thomas Petazzoni a ?crit :
-> > We are definitely fine with supporting the meson build system in
-> > Buildroot. The only reason we didn't merge the patches that were
-> > proposed is because no package was using them. As soon as we have one
-> > package using this build system in Buildroot, we will of course happily
-> > merge patches adding support for it.  
-> 
-> The current gstreamer1 version in Buildroot is 1.8.3.
-> The support for meson was added in 1.9.2. So upgrading gstreamer1 is 
-> certainly necessary before merging Meson support.
+We fix this by using 'find lib/' instead of 'find lib'. For consistency
+reason, we also do the same change for the 'find' that removes .a and
+.la files.
 
-OK. However, isn't 1.9.x considered a "development" branch from the
-point of view of GStreamer? At least for Glib/Gtk, the releases with
-an odd are development ones if I remember correctly.
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+[Thomas: slightly improved the commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> >> By the way, is there any chance to give CMake package the possibility to
-> >> use ninja backend? (which will also decrease build time of CMake
-> >> packages)  
-> >
-> > I don't know exactly what is involved in such a change, but in
-> > principle, I don't see why we wouldn't accept that.  
-> 
-> Roughly, add dependency on ninja, add an option in cmake configure step 
-> (-G ninja) and use ninja instead of make in build and install commands.
-
-OK, sounds good. We definitely want to make this optional for now I
-believe.
-
-> An option in "Build options" is definitely more appropriate. In the 
-> first place I had just added it in package/cmake/Config.in - which made 
-> it appear in target development tools.
-> Then I will check with several existing CMake packages in buildroot.
-
-Good;
-
-> Regarding Meson integration, I think that Eric - if he's still 
-> interested in working on that - is the right person. I understand that 
-> his patches didn't provide pkg-meson.mk yet, but he proposed to do so. 
-> Am I right?
-
-Having an infrastructure is not necessarily useful at the beginning. If
-we have only one or two packages using meson, and its usage is pretty
-simple, we can just as well do it directly in the packages themselves.
-Like we're doing for qmake based packages today for example.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/Makefile b/Makefile
+index 4ea64b3..925e9c6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -641,7 +641,7 @@ target-finalize: $(PACKAGES)
+ 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
+ 		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
+ 	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
+-	find $(TARGET_DIR)/lib $(TARGET_DIR)/usr/lib $(TARGET_DIR)/usr/libexec \
++	find $(TARGET_DIR)/lib/ $(TARGET_DIR)/usr/lib/ $(TARGET_DIR)/usr/libexec/ \
+ 		\( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
+ ifneq ($(BR2_PACKAGE_GDB),y)
+ 	rm -rf $(TARGET_DIR)/usr/share/gdb
+@@ -663,13 +663,13 @@ endif
+ # besides the one in which crash occurred; or SIGTRAP kills my program when
+ # I set a breakpoint"
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-	find $(TARGET_DIR)/lib -type f -name 'libpthread*.so*' | \
++	find $(TARGET_DIR)/lib/ -type f -name 'libpthread*.so*' | \
+ 		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+ endif
+ 
+ # Valgrind needs ld.so with enough information, so only strip
+ # debugging symbols.
+-	find $(TARGET_DIR)/lib -type f -name 'ld-*.so*' | \
++	find $(TARGET_DIR)/lib/ -type f -name 'ld-*.so*' | \
+ 		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+ 	test -f $(TARGET_DIR)/etc/ld.so.conf && \
+ 		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
