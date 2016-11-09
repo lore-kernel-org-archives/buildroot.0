@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 22:33:57 +0100
-Subject: [Buildroot] [PATCH next 1/2] olimex_imx233_olinuxino: bump
- version
-In-Reply-To: <1478560176-29807-1-git-send-email-francois.perrad@gadz.org>
-References: <1478560176-29807-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20161109223357.6e29a687@free-electrons.com>
+Date: Wed, 9 Nov 2016 22:34:32 +0100
+Subject: [Buildroot] [PATCH] patchelf: bump version to 0.9
+In-Reply-To: <20161109094346.5839-1-jezz@sysmic.org>
+References: <20161109094346.5839-1-jezz@sysmic.org>
+Message-ID: <20161109223432.612f3fe4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  8 Nov 2016 00:09:35 +0100, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Wed,  9 Nov 2016 10:43:46 +0100, J?r?me Pouiller wrote:
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 > ---
->  .../imx233_olinuxino/genimage-imx233_olinuxino.cfg |   1 +
->  board/olimex/imx233_olinuxino/linux-3.18.config    | 152 ---------------------
->  board/olimex/imx233_olinuxino/post-image.sh        |   3 -
->  configs/olimex_imx233_olinuxino_defconfig          |  16 ++-
->  4 files changed, 10 insertions(+), 162 deletions(-)
->  delete mode 100644 board/olimex/imx233_olinuxino/linux-3.18.config
+>  package/patchelf/patchelf.hash | 2 +-
+>  package/patchelf/patchelf.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks, both patches applied to next!
+Applied to next, thanks.
 
 Thomas
 -- 
