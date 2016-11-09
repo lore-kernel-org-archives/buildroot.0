@@ -1,48 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 22:54:34 +0100
-Subject: [Buildroot] [PATCH 3/3] snowball-{hdmiservice,
- init}: remove packages
-In-Reply-To: <1478352758-28778-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1478352758-28778-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1478352758-28778-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20161109225434.67b9bcc3@free-electrons.com>
+From: =?UTF-8?Q?C=c3=a9dric_Marie?= <cedric.marie@openmailbox.org>
+Date: Wed, 9 Nov 2016 23:01:12 +0100
+Subject: [Buildroot] ninja/python-meson packages
+In-Reply-To: <20161109212812.39399895@free-electrons.com>
+References: <98b7a6164112ee321e9220d5b8c47a33@openmailbox.org>
+ <20161109212812.39399895@free-electrons.com>
+Message-ID: <37cfb466-91a2-2434-24a4-dbd13ddfbc0f@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Sat,  5 Nov 2016 14:32:38 +0100, Thomas Petazzoni wrote:
-> The snowball_defconfig has been removed one year ago in commit
-> b3fa8e24defb20e1734e7e75f432090fe83c0dd8 ("configs: remove
-> calao_snowball_defconfig"), and it's no longer possible to buy
-> Snowball boards. Therefore, there is no reason to keep the
-> snowball-related packages in our tree.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  Config.in.legacy                                   | 14 ++++++++++++
->  package/Config.in                                  |  2 --
->  package/snowball-hdmiservice/Config.in             | 14 ------------
->  .../snowball-hdmiservice/snowball-hdmiservice.hash |  2 --
->  .../snowball-hdmiservice/snowball-hdmiservice.mk   | 25 ----------------------
->  package/snowball-init/Config.in                    | 17 ---------------
->  package/snowball-init/snowball-init.hash           |  2 --
->  package/snowball-init/snowball-init.mk             | 16 --------------
->  8 files changed, 14 insertions(+), 78 deletions(-)
->  delete mode 100644 package/snowball-hdmiservice/Config.in
->  delete mode 100644 package/snowball-hdmiservice/snowball-hdmiservice.hash
->  delete mode 100644 package/snowball-hdmiservice/snowball-hdmiservice.mk
->  delete mode 100644 package/snowball-init/Config.in
->  delete mode 100644 package/snowball-init/snowball-init.hash
->  delete mode 100644 package/snowball-init/snowball-init.mk
++ Eric Le Bihan who first proposed ninja/meson support.
 
-Applied to next, thanks.
+Le 09/11/2016 ? 21:28, Thomas Petazzoni a ?crit :
+> We are definitely fine with supporting the meson build system in
+> Buildroot. The only reason we didn't merge the patches that were
+> proposed is because no package was using them. As soon as we have one
+> package using this build system in Buildroot, we will of course happily
+> merge patches adding support for it.
 
-Thomas
+The current gstreamer1 version in Buildroot is 1.8.3.
+The support for meson was added in 1.9.2. So upgrading gstreamer1 is 
+certainly necessary before merging Meson support.
+
+
+>> By the way, is there any chance to give CMake package the possibility to
+>> use ninja backend? (which will also decrease build time of CMake
+>> packages)
+>
+> I don't know exactly what is involved in such a change, but in
+> principle, I don't see why we wouldn't accept that.
+
+Roughly, add dependency on ninja, add an option in cmake configure step 
+(-G ninja) and use ninja instead of make in build and install commands.
+
+
+> At first, it should probably just be an option under "Build options",
+> that affects the behavior of pkg-cmake. Once we get a better
+> understanding of what it means to use Ninja in terms of additional
+> dependencies to build, and number of CMake packages that work/don't
+> work with it, then we can decide what to do.
+>
+> How does that sound?
+
+That sounds good to me :)
+
+An option in "Build options" is definitely more appropriate. In the 
+first place I had just added it in package/cmake/Config.in - which made 
+it appear in target development tools.
+Then I will check with several existing CMake packages in buildroot.
+
+Regarding Meson integration, I think that Eric - if he's still 
+interested in working on that - is the right person. I understand that 
+his patches didn't provide pkg-meson.mk yet, but he proposed to do so. 
+Am I right?
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+C?dric
