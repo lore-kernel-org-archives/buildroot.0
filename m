@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Nov 2016 22:51:05 +0100
-Subject: [Buildroot] [PATCH v4 01/22] Use already qstripped
- BR2_TOOLCHAIN_EXTERNAL_PREFIX everywhere
-In-Reply-To: <20161107012017.22505-2-arnout@mind.be>
-References: <20161107012017.22505-1-arnout@mind.be>
- <20161107012017.22505-2-arnout@mind.be>
-Message-ID: <20161109225105.67da6986@free-electrons.com>
+Date: Wed, 9 Nov 2016 22:52:37 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: remove Gregory Hermant
+Message-ID: <20161109215314.A568981938@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2501039e3f6f105745be48cbc3b1cb48b00d519e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 7 Nov 2016 02:19:56 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> The BR2_TOOLCHAIN_EXTERNAL_PREFIX variable is already qstripped and
-> stored in the TOOLCHAIN_EXTERNAL_PREFIX variable in
-> toolchain-external.mk, so use this variable everywhere.
-> 
-> This will be useful for a later patch that makes the derivation of
-> TOOLCHAIN_EXTERNAL_PREFIX a little more complex.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> [Arnout: split off into separate patch]
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> v4: split off into separate patch [Arnout]
-> ---
->  package/Makefile.in  | 2 +-
->  package/wine/wine.mk | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+The Calao Systems company has gone bankrupt in April 2016, and the
+domain name no longer exists, so there is no chance to ever contact
+Gregory Hermant at a @calao-systems.com address, so let's remove his
+entry from the DEVELOPERS file.
 
-Applied to next, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 8 --------
+ 1 file changed, 8 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9035d22..9d0ede7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -569,14 +569,6 @@ F:	package/libsrtp/
+ F:	package/libwebsock/
+ F:	package/sofia-sip/
+ 
+-N:	Gregory Hermant <gregory.hermant@calao-systems.com>
+-F:	package/bcusdk/
+-F:	package/dfu-util/
+-F:	package/libpthsem/
+-F:	package/linknx/
+-F:	package/snowball-hdmiservice/
+-F:	package/ux500-firmware/
+-
+ N:	Guillaume Gardet <guillaume.gardet@oliseo.fr>
+ F:	package/c-icap/
+ F:	package/c-icap-modules/
