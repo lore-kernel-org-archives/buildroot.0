@@ -1,5 +1,5 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Wed, 9 Nov 2016 11:12:24 +0100
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Wed, 9 Nov 2016 11:15:12 +0100
 Subject: [Buildroot] [PATCH 1/4] configs: atmel: at91sam9260eknf: update
  defconfig
 In-Reply-To: <20161109100027.yqe6ilsxofi2t4ey@tarshish>
@@ -8,14 +8,14 @@ References: <20161109065948.1851-1-ludovic.desroches@atmel.com>
  <20161109073638.ozgbr5vy6gglznlx@tarshish>
  <20161109095249.bgurrb6bhujkgnac@piout.net>
  <20161109100027.yqe6ilsxofi2t4ey@tarshish>
-Message-ID: <20161109101224.kh2hr37eyqr4j3mu@piout.net>
+Message-ID: <20161109101512.rffzcm2olxm64sbl@rfolt0960.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/11/2016 at 12:00:27 +0200, Baruch Siach wrote :
+On Wed, Nov 09, 2016 at 12:00:27PM +0200, Baruch Siach wrote:
 > Hi Alexandre,
 > 
 > On Wed, Nov 09, 2016 at 10:52:49AM +0100, Alexandre Belloni wrote:
@@ -38,12 +38,9 @@ On 09/11/2016 at 12:00:27 +0200, Baruch Siach wrote :
 > will change with the default value of BR2_LINUX_KERNEL_VERSION.
 > 
 
-Yeah, that's my point. Any kernel version will do and that avoids having
-to update it in the defconfig all the time, hence less maintenance. The
-previous defconfig has not been building for a while (basically, since
-the switch to gcc5).
+That's the goal. Kernel was no longer compiling because it was too old
+to be used with gcc5. We may have the same situation in the future and
+we'll simply choose the latest kernel release for the update as I do today.
+That's why Alexandre says that it will increase the maintenance.
 
--- 
-Alexandre Belloni, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Ludovic
