@@ -1,82 +1,79 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 9 Nov 2016 09:36:38 +0200
-Subject: [Buildroot] [PATCH 1/4] configs: atmel: at91sam9260eknf: update
- defconfig
-In-Reply-To: <20161109065948.1851-2-ludovic.desroches@atmel.com>
-References: <20161109065948.1851-1-ludovic.desroches@atmel.com>
- <20161109065948.1851-2-ludovic.desroches@atmel.com>
-Message-ID: <20161109073638.ozgbr5vy6gglznlx@tarshish>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue,  8 Nov 2016 23:39:02 -0800
+Subject: [Buildroot] [PATCH] package/e2fsprogs: backport build fix for rhel5
+	due to missing magic
+Message-ID: <1478677142-11627-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ludovic,
+RHEL 5.x does have magic.h, but it does not define all expected symbols. In
+particular, the NO_CHECK symbols were only added in file 4.20 and RHEL 5.x
+is using 4.17.
 
-On Wed, Nov 09, 2016 at 07:59:45AM +0100, Ludovic Desroches wrote:
-> Bump to a recent version of AT91bootstrap and use mainline version of
-> U-Boot and Linux.
-> 
-> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-> ---
->  configs/at91sam9260eknf_defconfig | 22 ++++++++++++----------
->  1 file changed, 12 insertions(+), 10 deletions(-)
-> 
-> diff --git a/configs/at91sam9260eknf_defconfig b/configs/at91sam9260eknf_defconfig
-> index 92bb071..4c17cb6 100644
-> --- a/configs/at91sam9260eknf_defconfig
-> +++ b/configs/at91sam9260eknf_defconfig
-> @@ -2,9 +2,6 @@
->  BR2_arm=y
->  BR2_arm926t=y
->  
-> -# Linux headers same as kernel, a 3.9 series
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9=y
-> -
->  # Packages
->  BR2_PACKAGE_HOST_SAM_BA=y
->  
-> @@ -13,15 +10,20 @@ BR2_TARGET_ROOTFS_UBIFS=y
->  BR2_TARGET_ROOTFS_UBI=y
->  
->  # Bootloaders
-> -BR2_TARGET_AT91BOOTSTRAP=y
-> -BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9260ek"
-> -BR2_TARGET_AT91BOOTSTRAP_NANDFLASH=y
-> +BR2_TARGET_AT91BOOTSTRAP3=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
-> +BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9260eknf_uboot"
->  BR2_TARGET_BAREBOX=y
->  BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="at91sam9260ek"
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="at91sam9260ek_nandflash"
+Add substitute defines to allow continued usage of magic but without the
+requested exclude checks.
 
-Why enable both U-Boot and Barebox?
+Backported from: b003b2e6f9e54e7b2bde15828b97f5dc285b915e
 
->  # Kernel
->  BR2_LINUX_KERNEL=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.1"
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ ...fix-compilation-on-RHEL-5.x-due-to-missin.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/e2fsprogs/0003-libsupport-fix-compilation-on-RHEL-5.x-due-to-missin.patch
 
-For the sake of reproducibility you should set this to the version you tested, 
-say, 4.8.6. The same goes for other patches in this series.
-
-> -BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> -BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/atmel/at91sam9260ek/linux-3.9.config"
-
-You can now drop this file.
-
-> +BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9260ek"
-
-baruch
-
+diff --git a/package/e2fsprogs/0003-libsupport-fix-compilation-on-RHEL-5.x-due-to-missin.patch b/package/e2fsprogs/0003-libsupport-fix-compilation-on-RHEL-5.x-due-to-missin.patch
+new file mode 100644
+index 0000000..3569a3a
+--- /dev/null
++++ b/package/e2fsprogs/0003-libsupport-fix-compilation-on-RHEL-5.x-due-to-missin.patch
+@@ -0,0 +1,45 @@
++From b003b2e6f9e54e7b2bde15828b97f5dc285b915e Mon Sep 17 00:00:00 2001
++From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++Date: Tue, 25 Oct 2016 13:22:39 -0400
++Subject: [PATCH] libsupport: fix compilation on RHEL 5.x due to missing magic
++ define
++
++RHEL 5.x does have magic.h, but it does not define all expected symbols. In
++particular, the NO_CHECK symbols were only added in file 4.20 and RHEL 5.x
++is using 4.17.
++
++Add substitute defines to allow continued usage of magic but without the
++requested exclude checks.
++
++Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++Signed-off-by: Theodore Ts'o <tytso@mit.edu>
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ lib/support/plausible.c | 11 +++++++++++
++ 1 file changed, 11 insertions(+)
++
++diff --git a/lib/support/plausible.c b/lib/support/plausible.c
++index 6f0c4bc..0636061 100644
++--- a/lib/support/plausible.c
+++++ b/lib/support/plausible.c
++@@ -43,6 +43,17 @@ static const char *(*dl_magic_file)(magic_t, const char *);
++ static int (*dl_magic_load)(magic_t, const char *);
++ static void (*dl_magic_close)(magic_t);
++ 
+++/*
+++ * NO_CHECK functionality was only added in file 4.20.
+++ * Older systems like RHEL 5.x still have file 4.17
+++ */
+++#ifndef MAGIC_NO_CHECK_COMPRESS
+++#define MAGIC_NO_CHECK_COMPRESS 0x0001000
+++#endif
+++#ifndef MAGIC_NO_CHECK_ELF
+++#define MAGIC_NO_CHECK_ELF 0x0010000
+++#endif
+++
++ #ifdef HAVE_DLOPEN
++ #include <dlfcn.h>
++ 
++-- 
++2.1.4
++
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.1.4
