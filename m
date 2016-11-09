@@ -1,38 +1,49 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed,  9 Nov 2016 12:03:52 +0100
-Subject: [Buildroot] [PATCH] grub2: enable grub-mkfont host tool
-Message-ID: <20161109110352.7222-1-jezz@sysmic.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Nov 2016 12:08:21 +0100
+Subject: [Buildroot] [PATCH 1/4] configs: atmel: at91sam9260eknf: update
+ defconfig
+In-Reply-To: <20161109103955.qgeomymgonuoyxu5@rfolt0960.corp.atmel.com>
+References: <20161109065948.1851-1-ludovic.desroches@atmel.com>
+ <20161109065948.1851-2-ludovic.desroches@atmel.com>
+ <20161109073638.ozgbr5vy6gglznlx@tarshish>
+ <20161109101009.l66iviomyfuit2t5@rfolt0960.corp.atmel.com>
+ <20161109112550.36c1ec17@free-electrons.com>
+ <20161109103955.qgeomymgonuoyxu5@rfolt0960.corp.atmel.com>
+Message-ID: <20161109120821.3ee13355@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- boot/grub2/grub2.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Hello,
 
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index dc4e51e..a3352c2 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -9,7 +9,7 @@ GRUB2_SITE = $(BR2_GNU_MIRROR)/grub
- GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
- GRUB2_LICENSE = GPLv3+
- GRUB2_LICENSE_FILES = COPYING
--GRUB2_DEPENDENCIES = host-bison host-flex
-+GRUB2_DEPENDENCIES = host-bison host-flex host-freetype
- 
- GRUB2_BUILTIN_MODULES = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES))
- GRUB2_BUILTIN_CONFIG = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_CONFIG))
-@@ -63,7 +63,6 @@ GRUB2_CONF_ENV = \
- GRUB2_CONF_OPTS = \
- 	--target=$(GRUB2_TARGET) \
- 	--with-platform=$(GRUB2_PLATFORM) \
--	--disable-grub-mkfont \
- 	--enable-efiemu=no \
- 	ac_cv_lib_lzma_lzma_code=no \
- 	--enable-device-mapper=no \
+On Wed, 9 Nov 2016 11:39:55 +0100, Ludovic Desroches wrote:
+
+> > If you are not able/willing to test those defconfigs, then we could
+> > just as well remove them. But I'm not going to merge a defconfig that
+> > doesn't comply with our policy of having a fixed kernel and a fixed
+> > bootloader version.
+> 
+> Can I use a fixed version of the compiler too? It seems it makes sense
+> because this defconfig was tested but is no more compiling.
+
+This could be an option indeed (reverting to gcc 4.x instead of gcc
+5.x). However, the fact that no-one is willing to test/maintain this
+defconfig is a sign that nobody is interested in it. So I'd rather
+remove it, than keep a defconfig that gets never updated, even when
+there is a build issue.
+
+So, options are clear:
+
+ 1. Remove the defconfig entirely.
+
+ 2. Update the defconfig in the proper way, minimally tested on HW.
+
+Best regards,
+
+Thomas
 -- 
-2.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
