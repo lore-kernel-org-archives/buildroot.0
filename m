@@ -1,58 +1,35 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Thu, 10 Nov 2016 09:49:27 +0100
-Subject: [Buildroot] [PATCH] configs: atmel: sama5d4ek removal
-Message-ID: <20161110084927.13293-1-ludovic.desroches@atmel.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 10 Nov 2016 09:10:32 +0000
+Subject: [Buildroot] [Bug 9416] New: Running on 2016.11-rc1 second make
+ fails "makedevs: line 23: Couldnt create node
+ /buildroot-2016.11-rc1/output/target/dev/console: File exists"
+Message-ID: <bug-9416-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Atmel sama5d4ek board is no longer sold. Since there is the Xplained
-board and we won't maintain anymore the EK board, the defconfig can be
-removed.
+https://bugs.busybox.net/show_bug.cgi?id=9416
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
----
- configs/atmel_sama5d4ek_defconfig | 30 ------------------------------
- 1 file changed, 30 deletions(-)
- delete mode 100644 configs/atmel_sama5d4ek_defconfig
+            Bug ID: 9416
+           Summary: Running on 2016.11-rc1 second make fails "makedevs:
+                    line 23: Couldnt create node
+                    /buildroot-2016.11-rc1/output/target/dev/console: File
+                    exists"
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: sven.norinder at tidomat.se
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/configs/atmel_sama5d4ek_defconfig b/configs/atmel_sama5d4ek_defconfig
-deleted file mode 100644
-index 9d74eee..0000000
---- a/configs/atmel_sama5d4ek_defconfig
-+++ /dev/null
-@@ -1,30 +0,0 @@
--BR2_arm=y
--BR2_cortex_a5=y
--BR2_ARM_ENABLE_NEON=y
--BR2_ARM_ENABLE_VFP=y
--BR2_ARM_INSTRUCTIONS_THUMB2=y
--# Linux headers same as kernel, a 3.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
--BR2_LINUX_KERNEL_DEFCONFIG="sama5"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4ek"
--BR2_TARGET_ROOTFS_UBIFS=y
--BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x3e000
--BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1000
--BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2082
--BR2_TARGET_ROOTFS_UBI=y
--BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
--BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
--BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4eknf_uboot_secure"
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="sama5d4ek_nandflash"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
--BR2_TARGET_UBOOT_SPL=y
--BR2_PACKAGE_HOST_SAM_BA=y
 -- 
-2.9.0
+You are receiving this mail because:
+You are on the CC list for the bug.
