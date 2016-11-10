@@ -1,55 +1,32 @@
-From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
-Date: Thu, 10 Nov 2016 11:05:30 +0100
-Subject: [Buildroot] ninja/python-meson packages
-In-Reply-To: <20161110091808.06ceb521@free-electrons.com>
-References: <98b7a6164112ee321e9220d5b8c47a33@openmailbox.org>
- <20161109212812.39399895@free-electrons.com>
- <37cfb466-91a2-2434-24a4-dbd13ddfbc0f@openmailbox.org>
- <20161110044245.mpwgroempys43o27@tarshish>
- <20161110091808.06ceb521@free-electrons.com>
-Message-ID: <da5fab995f80d9aefa53ab856d999f4c@openmailbox.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Nov 2016 11:06:03 +0100
+Subject: [Buildroot] [PATCH] configs: atmel: sama5d4ek removal
+In-Reply-To: <20161110084927.13293-1-ludovic.desroches@atmel.com>
+References: <20161110084927.13293-1-ludovic.desroches@atmel.com>
+Message-ID: <20161110110603.7bb8edeb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Le 2016-11-10 09:18, Thomas Petazzoni a ?crit?:
-> On Thu, 10 Nov 2016 06:42:45 +0200, Baruch Siach wrote:
->> Does that mean that we won't be able to use the host distro installed 
->> cmake?
->> Not so good in terms of build time. I guess it offsets most of the 
->> build time
->> gain in moving to ninja, if not more.
+On Thu, 10 Nov 2016 09:49:27 +0100, Ludovic Desroches wrote:
+> The Atmel sama5d4ek board is no longer sold. Since there is the Xplained
+> board and we won't maintain anymore the EK board, the defconfig can be
+> removed.
 > 
-> This is one of the reasons why I want to have this as an option, at
-> least initially. We clearly want to keep the nice benefit of using the
-> system-provided CMake.
+> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+> ---
+>  configs/atmel_sama5d4ek_defconfig | 30 ------------------------------
+>  1 file changed, 30 deletions(-)
+>  delete mode 100644 configs/atmel_sama5d4ek_defconfig
 
-I was not aware of the new possibility to use cmake from the host 
-(support/dependencies/check-host-cmake.mk). But it is not a problem.
+Applied to master, thanks.
 
-There is a misunderstanding, I need to clarify:
-I'm not changing anything in cmake package, I'm only modifying 
-pkg-cmake.mk.
-CMake (either from your host, or host-cmake from buildroot) has support 
-for both make and ninja backend, it is not an option at compilation 
-time.
-It is a "configure option" to set in pkg-cmake.mk ($(2)_CONF_OPTS += -G 
-Ninja), in the configure step of each package based on cmake infra.
-
-Yet you're right as far as "make" is concerned.
-Buildroot and CMake use "make" from your host distro. If we switch to 
-ninja, it implies that an extra package needs to be built: host-ninja.
-So the benefit of ninja is only:
-- if you have several packages using CMake (I can't say how many are 
-necessary to cancel out host-ninja build time...)
-- if you rebuild CMake packages regularly - in development mode, which 
-is not what buildroot is designed for, in the first place.
-- if another package uses meson: host-ninja is required anyway... (but 
-this is the future ;))
-
+Thomas
 -- 
-C?dric
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
