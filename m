@@ -1,31 +1,43 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 10 Nov 2016 15:18:30 -0200
-Subject: [Buildroot] [PATCH next 1/2] olimex_imx233_olinuxino: bump
-	version
-In-Reply-To: <CAB0FRssnv-Acvw32ErXifMJ5Hi2WadeE7igvf0e0Bn_uaZqtHw@mail.gmail.com>
-References: <1478560176-29807-1-git-send-email-francois.perrad@gadz.org>
- <CAOMZO5ATK4Fo8iQ1v3TBZ0MdXQ7rw2eNGGnQ6uP_knfuZHmBSQ@mail.gmail.com>
- <CAB0FRssnv-Acvw32ErXifMJ5Hi2WadeE7igvf0e0Bn_uaZqtHw@mail.gmail.com>
-Message-ID: <CAOMZO5DXEaUyCkqhqxfFczMmmcp0d_0+cQYc3Ve=Hr2TJfWyaw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 10 Nov 2016 18:33:55 +0100
+Subject: [Buildroot] unable to build pseudo in buildroot 2016.11-rc1
+In-Reply-To: <CAAkeqgXqfkeO1xJ563CQiL-A2XXWSs1NTpPjy8XSP-53p43_QQ@mail.gmail.com>
+References: <CAAkeqgXqfkeO1xJ563CQiL-A2XXWSs1NTpPjy8XSP-53p43_QQ@mail.gmail.com>
+Message-ID: <20161110173355.GA3564@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 10, 2016 at 3:10 PM, Fran?ois Perrad
-<francois.perrad@gadz.org> wrote:
+Andrey,
 
-> There are many variants of iMX233-OLinuXino board:
->   - MAXI with Ethernet 100Mb
->   - MINI without Ethernet
->   - MINI-WIFI with an additionnal module using a Realtek 8188
->   - MICRO (daughter board)
->   - NANO (daughter board)
->
-> I own only a MAXI, so I cannot do test with Wifi.
-> With a MAXI, the wired ethernet works fine.
-> Maybe, it's time to have more than one defconfig ?
+Please send issues to the mailing list. Do not ask in private.
 
-I don't think we need more defconfigs. Just enabling the Wifi related
-config options in a linux fragment file should be enough.
+On 2016-11-10 17:29 +0000, Andrey Yurovsky spake thusly:
+> Hi Yann.  Thanks for working on the pseudo/fakeroot issue.  I wanted to try
+> out the latest and here's the issue I'm having building the host-pseudo
+> package in case it's helpful.
+[--SNIP--]
+> Makefile:163: recipe for target 'pseudo_wrappers.o' failed
+> make[2]: *** [pseudo_wrappers.o] Error 1
+> In file included from pseudo_ports.h:15:0,
+>                  from pseudo.h:171,
+>                  from pseudo_client.c:45:
+> ports/linux/xattr/portdefs.h:1:24: fatal error: attr/xattr.h: No such file or directory
+>  #include <attr/xattr.h>
+>                         ^
+
+This issue  is known and has already been fixed by commit a25210b.
+Please update your local tree.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
