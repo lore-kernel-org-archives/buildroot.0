@@ -1,28 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Nov 2016 11:18:40 +0100
-Subject: [Buildroot] [V2] sunxi-tools: bump to version 1.4.1
-In-Reply-To: <1478771835-10420-1-git-send-email-francois.perrad@gadz.org>
-References: <1478771835-10420-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20161110111840.7ce06bd0@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 10 Nov 2016 12:19:29 +0200
+Subject: [Buildroot] [git commit] board/atmel/readme.txt: remove mention
+ of sama5d4ek
+In-Reply-To: <20161110101717.C04A881D8B@busybox.osuosl.org>
+References: <20161110101717.C04A881D8B@busybox.osuosl.org>
+Message-ID: <20161110101929.m34erb7fxexyaegt@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Thu, 10 Nov 2016 10:57:15 +0100, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Thu, Nov 10, 2016 at 11:16:10AM +0100, Thomas Petazzoni wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=78ac39cb89a6933c36508f6b10d30150ddb1ba05
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> The sama5d4ek defconfig has been removed in commit
+> 9cb0b37cbd267ec1c2beea3deeaa86846bc2d037, but the board/atmel/readme.txt
+> file was not updated accordingly. This commit fixes that.
+> 
+> Reported-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/sunxi-tools/sunxi-tools.hash | 2 +-
->  package/sunxi-tools/sunxi-tools.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  board/atmel/readme.txt                   |  1 -
+>  configs/atmel_sama5d4_xplained_defconfig | 32 --------------------------------
 
-Applied to next, thanks.
+This removal was not intended, I believe.
 
-Thomas
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
