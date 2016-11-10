@@ -1,72 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Nov 2016 10:51:45 +0100
-Subject: [Buildroot] [git commit] configs: atmel: at91sam9g45m10ek: update
-	defconfig
-Message-ID: <20161110095613.09C8680AD8@busybox.osuosl.org>
+From: Jeroen Roovers <jer@airfi.aero>
+Date: Thu, 10 Nov 2016 10:57:15 +0100
+Subject: [Buildroot] [PATCH] sunxi-tools: bump to version 1.4.1
+In-Reply-To: <CANCHnQquoyVokw+CR_1vEAAJeSFgRTyi-3XOQkV_RTHonR9Rnw@mail.gmail.com>
+References: <1478770830-9962-1-git-send-email-francois.perrad@gadz.org>
+ <CANCHnQquoyVokw+CR_1vEAAJeSFgRTyi-3XOQkV_RTHonR9Rnw@mail.gmail.com>
+Message-ID: <CANCHnQro5YiyVMuZ_JRu+6DGEn14oYax2g4CHXe-OG+rasb1fg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30dc5f4d40b25729daf6f2c6cda28f7ad77701f7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Oh, wait, you already removed those. My sunxi-tools lag, apparently.
+Sorry for the confusion.
 
-Bump to a recent version of AT91bootstrap and use mainline version of
-U-Boot and Linux. This is needed to fix the build with gcc 5.x.
-
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-[Thomas: add missing BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/at91sam9g45m10ek_defconfig | 30 +++++++++++++++++++++---------
- 1 file changed, 21 insertions(+), 9 deletions(-)
-
-diff --git a/configs/at91sam9g45m10ek_defconfig b/configs/at91sam9g45m10ek_defconfig
-index 35618d5..2bf7179 100644
---- a/configs/at91sam9g45m10ek_defconfig
-+++ b/configs/at91sam9g45m10ek_defconfig
-@@ -1,22 +1,34 @@
-+# Architecture
- BR2_arm=y
- BR2_arm926t=y
--# Linux headers same as kernel, a 3.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+
-+# Linux headers same as kernel, a 4.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
-+
-+# Kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
- BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9m10g45ek"
-+
-+# Filesystem
- BR2_TARGET_ROOTFS_UBIFS=y
- BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2047
- BR2_TARGET_ROOTFS_UBI=y
-+
-+# Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9m10g45eknf_uboot"
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="at91sam9m10g45ek_nandflash"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="at91sam9m10g45ek_nandflash"
-+
-+# Host packages
- BR2_PACKAGE_HOST_SAM_BA=y
+On 10 November 2016 at 10:54, Jeroen Roovers <jer@airfi.aero> wrote:
+> With host gcc 5.4.0 the "-std=c99" is a problem:
+>
+> fel.c: In function 'get_image_type':
+> fel.c:164:6: warning: implicit declaration of function 'be32toh'
+> [-Wimplicit-function-declaration]
+>   if (be32toh(buf32[0]) != IH_MAGIC) /* signature mismatch */
+>
+> Are those still needed? And -D_POSIX_C_SOURCE=200112L ?
+>
+> On 10 November 2016 at 10:40, Francois Perrad <fperrad@gmail.com> wrote:
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  package/sunxi-tools/sunxi-tools.hash | 2 +-
+>>  package/sunxi-tools/sunxi-tools.mk   | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/sunxi-tools/sunxi-tools.hash b/package/sunxi-tools/sunxi-tools.hash
+>> index 90991a3..aba3fe6 100644
+>> --- a/package/sunxi-tools/sunxi-tools.hash
+>> +++ b/package/sunxi-tools/sunxi-tools.hash
+>> @@ -1,2 +1,2 @@
+>>  # Locally calculated
+>> -sha256 8b5defeaabec99b6c759ed1d99d91e4d23188431868d17cf6ed144f37e42bee5  sunxi-tools-89dac0f7eaaedd0d8afa9d5a3c713c7c1ccb9cf6.tar.gz
+>> +sha256 da5d762608517b4b2e9bd392bd9a63afae3973d9c8264cbcfb757ddac8120d1b  sunxi-tools-1.4.1.tar.gz
+>> diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+>> index 23e3135..c554a5f 100644
+>> --- a/package/sunxi-tools/sunxi-tools.mk
+>> +++ b/package/sunxi-tools/sunxi-tools.mk
+>> @@ -4,7 +4,7 @@
+>>  #
+>>  ################################################################################
+>>
+>> -SUNXI_TOOLS_VERSION = 89dac0f7eaaedd0d8afa9d5a3c713c7c1ccb9cf6
+>> +SUNXI_TOOLS_VERSION = v1.4.1
+>>  SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,$(SUNXI_TOOLS_VERSION))
+>>  SUNXI_TOOLS_LICENSE = GPLv2+
+>>  SUNXI_TOOLS_LICENSE_FILES = COPYING
+>> --
+>> 2.7.4
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
