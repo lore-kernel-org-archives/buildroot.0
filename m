@@ -1,87 +1,172 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 10 Nov 2016 15:27:13 +0200
-Subject: [Buildroot] [PATCH v2 3/3] Revert "norm: add patch to fix musl
-	build"
+Date: Thu, 10 Nov 2016 15:27:12 +0200
+Subject: [Buildroot] [PATCH v2 2/3] Revert "bridge-utils: fix build with
+	musl"
 In-Reply-To: <b2085612a223f59a2f7ef18a9bd97603226aa03d.1478784433.git.baruch@tkos.co.il>
 References: <b2085612a223f59a2f7ef18a9bd97603226aa03d.1478784433.git.baruch@tkos.co.il>
-Message-ID: <fd732a5c5a0f4de6753b1e5c292adc0dee3a9227.1478784433.git.baruch@tkos.co.il>
+Message-ID: <aeb728f7b8154d5a1ace0b8f41d6a8f90654a316.1478784433.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit e74d4fc4932df4ea42381acb44d616241275b79a.
+This reverts commit a167081c5d5a5aee95b642a14200d18d8a84dbcc.
 
-With the applied musl/kernel headers conflict workaround this patch is no
-longer necessary.
+With the applied musl/kernel headers conflict workaround this upstream nacked
+patch is no longer necessary.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...03-remove-kernel-headers-include-musl-fix.patch | 55 ----------------------
- 1 file changed, 55 deletions(-)
- delete mode 100644 package/norm/0003-remove-kernel-headers-include-musl-fix.patch
+ ...ridge-fix-headers-conflict-with-musl-libc.patch | 140 ---------------------
+ 1 file changed, 140 deletions(-)
+ delete mode 100644 package/bridge-utils/0002-libbridge-fix-headers-conflict-with-musl-libc.patch
 
-diff --git a/package/norm/0003-remove-kernel-headers-include-musl-fix.patch b/package/norm/0003-remove-kernel-headers-include-musl-fix.patch
+diff --git a/package/bridge-utils/0002-libbridge-fix-headers-conflict-with-musl-libc.patch b/package/bridge-utils/0002-libbridge-fix-headers-conflict-with-musl-libc.patch
 deleted file mode 100644
-index 7581c10b79bb..000000000000
---- a/package/norm/0003-remove-kernel-headers-include-musl-fix.patch
+index fd7f45ed4e03..000000000000
+--- a/package/bridge-utils/0002-libbridge-fix-headers-conflict-with-musl-libc.patch
 +++ /dev/null
-@@ -1,55 +0,0 @@
--Remove kernel header includes causing issues with musl
+@@ -1,140 +0,0 @@
+-From 24e5409190820a14e4d097924b1acaab62bb3b99 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Sun, 30 Oct 2016 18:12:00 +0200
+-Subject: [PATCH] libbridge: fix headers conflict with musl libc
 -
--Include the kernel headers from netfilter causes a conflict with the
--<netinet/in.h> way of defining the IPPROTO_* constants, resulting in
--the following build failure:
+-Don't including kernel headers directly to avoid headers conflict like:
 -
--In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/netdb.h:9:0,
--                 from /home/peko/autobuild/instance-0/output/build/norm-1.5r6/protolib/include/protoAddress.h:13,
--                 from /home/peko/autobuild/instance-0/output/build/norm-1.5r6/protolib/include/protoDetour.h:5,
--                 from ../protolib/src/linux/linuxDetour.cpp:3:
--/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected identifier before numeric constant
--   IPPROTO_IP = 0,  /* Dummy protocol for TCP  */
--   ^
--/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected '}' before numeric constant
--/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected unqualified-id before numeric constant
--In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netfilter.h:7:0,
--                 from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netfilter_ipv4.h:8,
--                 from ../protolib/src/linux/linuxDetour.cpp:10:
--/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:79:1: error: expected declaration before '}' token
-- };
-- ^
+-In file included from .../sysroot/usr/include/linux/if_bridge.h:18:0,
+-                 from libbridge.h:26,
+-                 from libbridge_if.c:26:
+-.../sysroot/usr/include/linux/in6.h:32:8: error: redefinition of ?struct in6_addr?
+- struct in6_addr {
+-        ^
+-In file included from libbridge.h:24:0,
+-                 from libbridge_if.c:26:
+-.../sysroot/usr/include/netinet/in.h:23:8: note: originally defined here
+- struct in6_addr {
+-        ^
 -
--Since from musl's developers perspective including kernel headers is
--seen as being unsafe, we simply duplicate the necessary netfilter
--definitions (there are just a few) instead of including some kernel
--headers.
+-Instead copy the required linux/if_bridge.h definitions into
+-libbridge_private.h.
 -
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: Nacked
+-(https://lists.linuxfoundation.org/pipermail/bridge/2016-November/010107.html)
+----
+- libbridge/libbridge.h         |  1 -
+- libbridge/libbridge_private.h | 83 ++++++++++++++++++++++++++++++++++++++++++-
+- 2 files changed, 82 insertions(+), 2 deletions(-)
 -
--Index: b/protolib/src/linux/linuxDetour.cpp
--===================================================================
----- a/protolib/src/linux/linuxDetour.cpp
--+++ b/protolib/src/linux/linuxDetour.cpp
--@@ -7,15 +7,18 @@
-- #include <stdlib.h>  // for atoi(), getenv()
-- #include <stdio.h>
-- #include <unistd.h>  // for close()
---#include <linux/netfilter_ipv4.h>  // for NF_IP_LOCAL_OUT, etc
---#include <linux/netfilter_ipv6.h>  // for NF_IP6_LOCAL_OUT, etc
---#include <linux/netfilter.h>  // for NF_ACCEPT, etc
-- #include <libnetfilter_queue/libnetfilter_queue.h>
+-diff --git a/libbridge/libbridge.h b/libbridge/libbridge.h
+-index ff047f933cd6..18b40cd90413 100644
+---- a/libbridge/libbridge.h
+-+++ b/libbridge/libbridge.h
+-@@ -23,7 +23,6 @@
+- #include <sys/socket.h>
+- #include <netinet/in.h>
+- #include <linux/if.h>
+--#include <linux/if_bridge.h>
 - 
-- #include <fcntl.h>  // for fcntl(), etc
-- #include <linux/if_ether.h>  // for ETH_P_IP
-- #include <net/if_arp.h>   // for ARPHRD_ETHER
+- /* defined in net/if.h but that conflicts with linux/if.h... */
+- extern unsigned int if_nametoindex (const char *__ifname);
+-diff --git a/libbridge/libbridge_private.h b/libbridge/libbridge_private.h
+-index 99a511dae00a..565025b7bccb 100644
+---- a/libbridge/libbridge_private.h
+-+++ b/libbridge/libbridge_private.h
+-@@ -24,7 +24,88 @@
+- #include <linux/sockios.h>
+- #include <sys/time.h>
+- #include <sys/ioctl.h>
+--#include <linux/if_bridge.h>
+-+
+-+/* From linux/if_ether.h */
+-+#ifndef ETH_ALEN
+-+#define ETH_ALEN	6
+-+#endif
+-+
+-+/* From linux/if_bridge.h */
+-+#ifndef BRCTL_GET_VERSION
+-+#define BRCTL_GET_VERSION 0
+-+#define BRCTL_GET_BRIDGES 1
+-+#define BRCTL_ADD_BRIDGE 2
+-+#define BRCTL_DEL_BRIDGE 3
+-+#define BRCTL_ADD_IF 4
+-+#define BRCTL_DEL_IF 5
+-+#define BRCTL_GET_BRIDGE_INFO 6
+-+#define BRCTL_GET_PORT_LIST 7
+-+#define BRCTL_SET_BRIDGE_FORWARD_DELAY 8
+-+#define BRCTL_SET_BRIDGE_HELLO_TIME 9
+-+#define BRCTL_SET_BRIDGE_MAX_AGE 10
+-+#define BRCTL_SET_AGEING_TIME 11
+-+#define BRCTL_SET_GC_INTERVAL 12
+-+#define BRCTL_GET_PORT_INFO 13
+-+#define BRCTL_SET_BRIDGE_STP_STATE 14
+-+#define BRCTL_SET_BRIDGE_PRIORITY 15
+-+#define BRCTL_SET_PORT_PRIORITY 16
+-+#define BRCTL_SET_PATH_COST 17
+-+#define BRCTL_GET_FDB_ENTRIES 18
+-+
+-+#define BR_STATE_DISABLED 0
+-+#define BR_STATE_LISTENING 1
+-+#define BR_STATE_LEARNING 2
+-+#define BR_STATE_FORWARDING 3
+-+#define BR_STATE_BLOCKING 4
+-+
+-+struct __bridge_info {
+-+	__u64 designated_root;
+-+	__u64 bridge_id;
+-+	__u32 root_path_cost;
+-+	__u32 max_age;
+-+	__u32 hello_time;
+-+	__u32 forward_delay;
+-+	__u32 bridge_max_age;
+-+	__u32 bridge_hello_time;
+-+	__u32 bridge_forward_delay;
+-+	__u8 topology_change;
+-+	__u8 topology_change_detected;
+-+	__u8 root_port;
+-+	__u8 stp_enabled;
+-+	__u32 ageing_time;
+-+	__u32 gc_interval;
+-+	__u32 hello_timer_value;
+-+	__u32 tcn_timer_value;
+-+	__u32 topology_change_timer_value;
+-+	__u32 gc_timer_value;
+-+};
+-+
+-+struct __port_info {
+-+	__u64 designated_root;
+-+	__u64 designated_bridge;
+-+	__u16 port_id;
+-+	__u16 designated_port;
+-+	__u32 path_cost;
+-+	__u32 designated_cost;
+-+	__u8 state;
+-+	__u8 top_change_ack;
+-+	__u8 config_pending;
+-+	__u8 unused0;
+-+	__u32 message_age_timer_value;
+-+	__u32 forward_delay_timer_value;
+-+	__u32 hold_timer_value;
+-+};
+-+
+-+struct __fdb_entry {
+-+	__u8 mac_addr[ETH_ALEN];
+-+	__u8 port_no;
+-+	__u8 is_local;
+-+	__u32 ageing_timer_value;
+-+	__u8 port_hi;
+-+	__u8 pad0;
+-+	__u16 unused;
+-+};
+-+#endif /* BRCTL_GET_VERSION */
 - 
--+/* From netfilter kernel headers */
--+#define NF_IP_LOCAL_OUT		3
--+
--+#define NF_DROP 		0
--+#define NF_ACCEPT 		1
--+
-- /** NOTES: 
--  *
--  * 1) This newer implementation of LinuxDetour uses netfilter_queue
+- #define MAX_BRIDGES	1024
+- #define MAX_PORTS	1024
+--- 
+-2.10.1
+-
 -- 
 2.10.2
