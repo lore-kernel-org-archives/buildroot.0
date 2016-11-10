@@ -1,89 +1,49 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Thu, 10 Nov 2016 18:53:27 +0300
-Subject: [Buildroot] [PATCH] config: bump linux kernel to 4.8.6 in synopsys
-	defconfigs
-Message-ID: <1478793207-31255-1-git-send-email-vzakhar@synopsys.com>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Thu, 10 Nov 2016 13:39:47 -0200
+Subject: [Buildroot] [PATCH 3/4] imx233_olinuxino: readme: Improve SD card
+	flashing procedure
+In-Reply-To: <1478792388-13279-1-git-send-email-fabio.estevam@nxp.com>
+References: <1478792388-13279-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <1478792388-13279-3-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With this commit we update ARC defconfigs with the following:
+Make the SD card flashing procedure text consistent with the other i.MX
+boards.
 
-  - "snps_axs101_defconfig", "snps_axs103_defconfig" and
-    "snps_hs38_smp_vdk_defconfig":
-     - bump linux kernel version to 4.8.6
-     - set up host linux headers to 4.8
-
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 ---
- configs/snps_axs101_defconfig       | 6 +++---
- configs/snps_axs103_defconfig       | 6 +++---
- configs/snps_hs38_smp_vdk_defconfig | 6 +++---
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ board/olimex/imx233_olinuxino/readme.txt | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/configs/snps_axs101_defconfig b/configs/snps_axs101_defconfig
-index f272853..eea7a50 100644
---- a/configs/snps_axs101_defconfig
-+++ b/configs/snps_axs101_defconfig
-@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+diff --git a/board/olimex/imx233_olinuxino/readme.txt b/board/olimex/imx233_olinuxino/readme.txt
+index d6a7377..2722c3a 100644
+--- a/board/olimex/imx233_olinuxino/readme.txt
++++ b/board/olimex/imx233_olinuxino/readme.txt
+@@ -17,13 +17,16 @@ output/images
  
--# Linux headers same as kernel, a 4.7 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+# Linux headers same as kernel, a 4.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
+ === Use of generated SD card image ===========================================
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
- BR2_LINUX_KERNEL_DEFCONFIG="axs101"
+-Just write sdcard.img directly to the SD card
++To determine the device associated to the SD card have a look in the
++/proc/partitions file:
  
- # Bootloader
-diff --git a/configs/snps_axs103_defconfig b/configs/snps_axs103_defconfig
-index 75596c9..08c55de 100644
---- a/configs/snps_axs103_defconfig
-+++ b/configs/snps_axs103_defconfig
-@@ -9,13 +9,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+-***** WARNING: Double check that /dev/sdc is your MicroSD card *****
+-*****      It might be /dev/sdb or some other device name      *****
+-***** Failure to do so may result in you wiping your hard disk *****
++  cat /proc/partitions
++
++Then, run the following command as root:
++
++*** WARNING! The command will destroy all the card content. Use with care! ***
  
--# Linux headers same as kernel, a 4.7 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+# Linux headers same as kernel, a 4.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
+-   # dd if=output/images/sdcard.img of=/dev/sdc bs=512
++ sudo dd if=output/images/sdcard.img of=/dev/<your-microsd-device>
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
- BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
+ === Manual creation of SD card image =========================================
  
- # Bootloader
-diff --git a/configs/snps_hs38_smp_vdk_defconfig b/configs/snps_hs38_smp_vdk_defconfig
-index 32922f8..d4dcd1b 100644
---- a/configs/snps_hs38_smp_vdk_defconfig
-+++ b/configs/snps_hs38_smp_vdk_defconfig
-@@ -8,12 +8,12 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
- BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
- BR2_TARGET_ROOTFS_EXT2=y
- 
--# Linux headers same as kernel, a 4.7 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+# Linux headers same as kernel, a 4.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
- BR2_LINUX_KERNEL_DEFCONFIG="vdk_hs38_smp"
- BR2_LINUX_KERNEL_VMLINUX=y
 -- 
-2.6.3
+2.7.4
