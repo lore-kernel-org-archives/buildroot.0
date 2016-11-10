@@ -1,59 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Nov 2016 11:04:20 +0100
-Subject: [Buildroot] [git commit] configs/atmel_sama5d4ek: remove defconfig
-Message-ID: <20161110100439.52701804F9@busybox.osuosl.org>
+From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
+Date: Thu, 10 Nov 2016 11:05:30 +0100
+Subject: [Buildroot] ninja/python-meson packages
+In-Reply-To: <20161110091808.06ceb521@free-electrons.com>
+References: <98b7a6164112ee321e9220d5b8c47a33@openmailbox.org>
+ <20161109212812.39399895@free-electrons.com>
+ <37cfb466-91a2-2434-24a4-dbd13ddfbc0f@openmailbox.org>
+ <20161110044245.mpwgroempys43o27@tarshish>
+ <20161110091808.06ceb521@free-electrons.com>
+Message-ID: <da5fab995f80d9aefa53ab856d999f4c@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dca2c33af71712128baf2d480d9103fdfa36e000
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-The Atmel sama5d4ek board is no longer sold. Since there is the Xplained
-board and we won't maintain anymore the EK board, the defconfig can be
-removed. In addition, the defconfig was failing to build with gcc 5.x.
+Le 2016-11-10 09:18, Thomas Petazzoni a ?crit?:
+> On Thu, 10 Nov 2016 06:42:45 +0200, Baruch Siach wrote:
+>> Does that mean that we won't be able to use the host distro installed 
+>> cmake?
+>> Not so good in terms of build time. I guess it offsets most of the 
+>> build time
+>> gain in moving to ninja, if not more.
+> 
+> This is one of the reasons why I want to have this as an option, at
+> least initially. We clearly want to keep the nice benefit of using the
+> system-provided CMake.
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/atmel_sama5d4ek_defconfig | 30 ------------------------------
- 1 file changed, 30 deletions(-)
+I was not aware of the new possibility to use cmake from the host 
+(support/dependencies/check-host-cmake.mk). But it is not a problem.
 
-diff --git a/configs/atmel_sama5d4ek_defconfig b/configs/atmel_sama5d4ek_defconfig
-deleted file mode 100644
-index 9d74eee..0000000
---- a/configs/atmel_sama5d4ek_defconfig
-+++ /dev/null
-@@ -1,30 +0,0 @@
--BR2_arm=y
--BR2_cortex_a5=y
--BR2_ARM_ENABLE_NEON=y
--BR2_ARM_ENABLE_VFP=y
--BR2_ARM_INSTRUCTIONS_THUMB2=y
--# Linux headers same as kernel, a 3.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
--BR2_LINUX_KERNEL_DEFCONFIG="sama5"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4ek"
--BR2_TARGET_ROOTFS_UBIFS=y
--BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x3e000
--BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1000
--BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2082
--BR2_TARGET_ROOTFS_UBI=y
--BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
--BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
--BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4eknf_uboot_secure"
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="sama5d4ek_nandflash"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
--BR2_TARGET_UBOOT_SPL=y
--BR2_PACKAGE_HOST_SAM_BA=y
+There is a misunderstanding, I need to clarify:
+I'm not changing anything in cmake package, I'm only modifying 
+pkg-cmake.mk.
+CMake (either from your host, or host-cmake from buildroot) has support 
+for both make and ninja backend, it is not an option at compilation 
+time.
+It is a "configure option" to set in pkg-cmake.mk ($(2)_CONF_OPTS += -G 
+Ninja), in the configure step of each package based on cmake infra.
+
+Yet you're right as far as "make" is concerned.
+Buildroot and CMake use "make" from your host distro. If we switch to 
+ninja, it implies that an extra package needs to be built: host-ninja.
+So the benefit of ninja is only:
+- if you have several packages using CMake (I can't say how many are 
+necessary to cancel out host-ninja build time...)
+- if you rebuild CMake packages regularly - in development mode, which 
+is not what buildroot is designed for, in the first place.
+- if another package uses meson: host-ninja is required anyway... (but 
+this is the future ;))
+
+-- 
+C?dric
