@@ -1,34 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Nov 2016 11:17:55 +0100
-Subject: [Buildroot] [PATCH v2] configs: atmel: sama5d4ek removal
-In-Reply-To: <20161110101439.27671-1-ludovic.desroches@atmel.com>
-References: <20161110095409.y25d3vkzeebozw2j@tarshish>
- <20161110101439.27671-1-ludovic.desroches@atmel.com>
-Message-ID: <20161110111755.4544331a@free-electrons.com>
+Date: Thu, 10 Nov 2016 11:18:21 +0100
+Subject: [Buildroot] [git commit branch/next] sunxi-tools: bump to version
+	1.4.1
+Message-ID: <20161110101827.C3BD681911@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6be40345af9c08b795573a4c922ccba1049cb47d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 10 Nov 2016 11:14:39 +0100, Ludovic Desroches wrote:
-> The Atmel sama5d4ek board is no longer sold. Since there is the Xplained
-> board and we won't maintain anymore the EK board, the defconfig can be
-> removed.
-> 
-> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-> ---
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sunxi-tools/sunxi-tools.hash | 2 +-
+ package/sunxi-tools/sunxi-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I had already applied the removal patch, so this one couldn't apply
-as-is. I fixed it up so that it applies, and adjusted the commit log
-accordingly. Applied to master!
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/sunxi-tools/sunxi-tools.hash b/package/sunxi-tools/sunxi-tools.hash
+index 90991a3..efb2b54 100644
+--- a/package/sunxi-tools/sunxi-tools.hash
++++ b/package/sunxi-tools/sunxi-tools.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	8b5defeaabec99b6c759ed1d99d91e4d23188431868d17cf6ed144f37e42bee5  sunxi-tools-89dac0f7eaaedd0d8afa9d5a3c713c7c1ccb9cf6.tar.gz
++sha256	da5d762608517b4b2e9bd392bd9a63afae3973d9c8264cbcfb757ddac8120d1b  sunxi-tools-v1.4.1.tar.gz
+diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+index 23e3135..c554a5f 100644
+--- a/package/sunxi-tools/sunxi-tools.mk
++++ b/package/sunxi-tools/sunxi-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUNXI_TOOLS_VERSION = 89dac0f7eaaedd0d8afa9d5a3c713c7c1ccb9cf6
++SUNXI_TOOLS_VERSION = v1.4.1
+ SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,$(SUNXI_TOOLS_VERSION))
+ SUNXI_TOOLS_LICENSE = GPLv2+
+ SUNXI_TOOLS_LICENSE_FILES = COPYING
