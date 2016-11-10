@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Nov 2016 10:51:42 +0100
-Subject: [Buildroot] [git commit] configs: atmel: at91sam9g20dfc: update
+Date: Thu, 10 Nov 2016 10:51:32 +0100
+Subject: [Buildroot] [git commit] configs: atmel: at91sam9260eknf: update
 	defconfig
-Message-ID: <20161110095612.EEF63802F4@busybox.osuosl.org>
+Message-ID: <20161110095612.C275780AD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e214d710f17490db98584dbaba70c69aa8b1b0e4
+commit: https://git.buildroot.net/buildroot/commit/?id=a50b9f0ebf73d98567ce1f98bf913ffc5c39e13e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Bump to a recent version of AT91bootstrap and use mainline version of
@@ -19,60 +19,163 @@ Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 [Thomas: add missing BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/at91sam9g20dfc_defconfig | 39 +++++++++++++++++++++------------------
- 1 file changed, 21 insertions(+), 18 deletions(-)
+ board/atmel/at91sam9260ek/linux-3.9.config | 98 ------------------------------
+ configs/at91sam9260eknf_defconfig          | 36 ++++++-----
+ 2 files changed, 21 insertions(+), 113 deletions(-)
 
-diff --git a/configs/at91sam9g20dfc_defconfig b/configs/at91sam9g20dfc_defconfig
-index 4ed5a9b..15a8d87 100644
---- a/configs/at91sam9g20dfc_defconfig
-+++ b/configs/at91sam9g20dfc_defconfig
-@@ -2,28 +2,31 @@
+diff --git a/board/atmel/at91sam9260ek/linux-3.9.config b/board/atmel/at91sam9260ek/linux-3.9.config
+deleted file mode 100644
+index 48dc656..0000000
+--- a/board/atmel/at91sam9260ek/linux-3.9.config
++++ /dev/null
+@@ -1,98 +0,0 @@
+-CONFIG_EXPERIMENTAL=y
+-# CONFIG_LOCALVERSION_AUTO is not set
+-CONFIG_KERNEL_LZO=y
+-# CONFIG_SWAP is not set
+-CONFIG_SYSVIPC=y
+-CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_SLAB=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-# CONFIG_BLK_DEV_BSG is not set
+-# CONFIG_IOSCHED_DEADLINE is not set
+-# CONFIG_IOSCHED_CFQ is not set
+-CONFIG_ARCH_AT91=y
+-CONFIG_ARCH_AT91SAM9260=y
+-CONFIG_ARCH_AT91SAM9260_SAM9XE=y
+-CONFIG_MACH_AT91SAM9260EK=y
+-CONFIG_MACH_CAM60=y
+-CONFIG_MACH_SAM9_L9260=y
+-CONFIG_MACH_AFEB9260=y
+-CONFIG_MACH_USB_A9260=y
+-CONFIG_MACH_QIL_A9260=y
+-CONFIG_MACH_CPU9260=y
+-CONFIG_MACH_FLEXIBITY=y
+-CONFIG_MACH_SNAPPER_9260=y
+-CONFIG_MACH_AT91SAM_DT=y
+-CONFIG_AT91_PROGRAMMABLE_CLOCKS=y
+-# CONFIG_ARM_THUMB is not set
+-CONFIG_ZBOOT_ROM_TEXT=0x0
+-CONFIG_ZBOOT_ROM_BSS=0x0
+-CONFIG_ARM_APPENDED_DTB=y
+-CONFIG_ARM_ATAG_DTB_COMPAT=y
+-CONFIG_CMDLINE="mem=64M console=ttyS0,115200 initrd=0x21100000,3145728 root=/dev/ram0 rw"
+-CONFIG_FPE_NWFPE=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_BOOTP=y
+-# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET_XFRM_MODE_BEET is not set
+-# CONFIG_INET_LRO is not set
+-# CONFIG_IPV6 is not set
+-CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-CONFIG_MTD=y
+-CONFIG_MTD_CMDLINE_PARTS=y
+-CONFIG_MTD_NAND=y
+-CONFIG_MTD_NAND_ATMEL=y
+-CONFIG_MTD_UBI=y
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_BLK_DEV_RAM_SIZE=8192
+-CONFIG_SCSI=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_SCSI_MULTI_LUN=y
+-CONFIG_NETDEVICES=y
+-CONFIG_MII=y
+-CONFIG_MACB=y
+-# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
+-# CONFIG_INPUT_KEYBOARD is not set
+-# CONFIG_INPUT_MOUSE is not set
+-# CONFIG_SERIO is not set
+-CONFIG_SERIAL_ATMEL=y
+-CONFIG_SERIAL_ATMEL_CONSOLE=y
+-# CONFIG_HW_RANDOM is not set
+-CONFIG_I2C=y
+-CONFIG_I2C_CHARDEV=y
+-CONFIG_I2C_GPIO=y
+-# CONFIG_HWMON is not set
+-CONFIG_WATCHDOG=y
+-CONFIG_WATCHDOG_NOWAYOUT=y
+-CONFIG_AT91SAM9X_WATCHDOG=y
+-# CONFIG_USB_HID is not set
+-CONFIG_USB=y
+-CONFIG_USB_DEVICEFS=y
+-CONFIG_USB_MON=y
+-CONFIG_USB_OHCI_HCD=y
+-CONFIG_USB_STORAGE=y
+-CONFIG_USB_STORAGE_DEBUG=y
+-CONFIG_USB_GADGET=y
+-CONFIG_USB_ZERO=m
+-CONFIG_USB_GADGETFS=m
+-CONFIG_USB_MASS_STORAGE=m
+-CONFIG_USB_G_SERIAL=m
+-CONFIG_RTC_CLASS=y
+-CONFIG_RTC_DRV_AT91SAM9=y
+-CONFIG_EXT2_FS=y
+-CONFIG_VFAT_FS=y
+-CONFIG_TMPFS=y
+-CONFIG_UBIFS_FS=y
+-CONFIG_CRAMFS=y
+-CONFIG_NLS_CODEPAGE_437=y
+-CONFIG_NLS_CODEPAGE_850=y
+-CONFIG_NLS_ISO8859_1=y
+-CONFIG_DEBUG_KERNEL=y
+-CONFIG_DEBUG_USER=y
+-CONFIG_DEBUG_LL=y
+diff --git a/configs/at91sam9260eknf_defconfig b/configs/at91sam9260eknf_defconfig
+index 92bb071..d91fcb0 100644
+--- a/configs/at91sam9260eknf_defconfig
++++ b/configs/at91sam9260eknf_defconfig
+@@ -2,26 +2,32 @@
  BR2_arm=y
  BR2_arm926t=y
  
--# Linux headers same as kernel, a 3.1 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_1=y
--
--# Host utilities
--#
--BR2_PACKAGE_HOST_SAM_BA=y
--
--# First stage bootloader
--BR2_TARGET_AT91BOOTSTRAP=y
--BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9g20ek"
--BR2_TARGET_AT91BOOTSTRAP_DATAFLASHCARD=y
--
--# Second stage bootloader
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="at91sam9g20ek_nandflash"
+-# Linux headers same as kernel, a 3.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9=y
 +# Linux headers same as kernel, a 4.8 series
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1.6"
--BR2_LINUX_KERNEL_USE_DEFCONFIG=y
--BR2_LINUX_KERNEL_DEFCONFIG="at91sam9g20ek"
+-# Packages
+-BR2_PACKAGE_HOST_SAM_BA=y
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
 +BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9g20ek"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9260ek"
  
  # Filesystem
- BR2_TARGET_ROOTFS_TAR=y
-+
-+# Bootloaders
+ BR2_TARGET_ROOTFS_UBIFS=y
+ BR2_TARGET_ROOTFS_UBI=y
+ 
+ # Bootloaders
+-BR2_TARGET_AT91BOOTSTRAP=y
+-BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9260ek"
+-BR2_TARGET_AT91BOOTSTRAP_NANDFLASH=y
+-BR2_TARGET_BAREBOX=y
+-BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="at91sam9260ek"
 +BR2_TARGET_AT91BOOTSTRAP3=y
 +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
 +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
 +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.7"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9g20eknf_uboot"
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9260eknf_uboot"
 +BR2_TARGET_UBOOT=y
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="at91sam9g20ek_nandflash"
-+
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="at91sam9260ek_nandflash"
+ 
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.1"
+-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/atmel/at91sam9260ek/linux-3.9.config"
 +# Host packages
 +BR2_PACKAGE_HOST_SAM_BA=y
