@@ -1,49 +1,77 @@
 From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Thu, 10 Nov 2016 11:09:55 +0100
-Subject: [Buildroot] [PATCH v2 0/4] configs: atmel: update of old boards
-In-Reply-To: <20161110110002.7551f857@free-electrons.com>
-References: <20161110070538.7193-1-ludovic.desroches@atmel.com>
- <20161110110002.7551f857@free-electrons.com>
-Message-ID: <20161110100955.woitstkbucurzcn5@rfolt0960.corp.atmel.com>
+Date: Thu, 10 Nov 2016 11:14:39 +0100
+Subject: [Buildroot] [PATCH v2] configs: atmel: sama5d4ek removal
+In-Reply-To: <20161110095409.y25d3vkzeebozw2j@tarshish>
+References: <20161110095409.y25d3vkzeebozw2j@tarshish>
+Message-ID: <20161110101439.27671-1-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 10, 2016 at 11:00:02AM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 10 Nov 2016 08:05:34 +0100, Ludovic Desroches wrote:
-> 
-> > Ludovic Desroches (4):
-> >   configs: atmel: at91sam9260eknf: update defconfig
-> >   configs: atmel: at91sam9rlek: update defconfig
-> >   configs: atmel: at91sam9g20dfc: update defconfig
-> >   configs: atmel: at91sam9g45m10ek: update defconfig
-> 
-> Thanks a lot, I've applied all four patches to master. Two things were
-> missing (but I fixed them when applying):
-> 
->  1. A line BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y that tells that
->     the kernel headers series is 4.8. This was working because 4.8 is
->     our default kernel header series, but it would have started
->     breaking when bumping the default kernel header series to 4.9.
-> 
->  2. A note in the commit log that says it's needed to fix the build to
->     gcc 5.x, which is the reason for committing those bumps to master
->     (while normally we don't accept bumps in master once -rc1 is
->     released).
-> 
+The Atmel sama5d4ek board is no longer sold. Since there is the Xplained
+board and we won't maintain anymore the EK board, the defconfig can be
+removed.
 
-Ok, thanks for taking care of this.
+Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+---
 
-Ludovic
+Thanks to Baruch, I have remove the mention to atmel_sama5d4ek_defconfig in
+board/atmel/readme.txt
 
-> Thanks again!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+ board/atmel/readme.txt            |  1 -
+ configs/atmel_sama5d4ek_defconfig | 30 ------------------------------
+ 2 files changed, 31 deletions(-)
+ delete mode 100644 configs/atmel_sama5d4ek_defconfig
+
+diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
+index 3a79e57..0b66346 100644
+--- a/board/atmel/readme.txt
++++ b/board/atmel/readme.txt
+@@ -13,7 +13,6 @@ This guide covers the following configurations:
+  - atmel_sama5d3_xplained_dev_defconfig
+  - atmel_sama5d3_xplained_mmc_defconfig
+  - atmel_sama5d3_xplained_mmc_dev_defconfig
+- - atmel_sama5d4ek_defconfig
+  - atmel_sama5d4_xplained_defconfig
+  - atmel_sama5d4_xplained_dev_defconfig
+  - atmel_sama5d4_xplained_mmc_defconfig
+diff --git a/configs/atmel_sama5d4ek_defconfig b/configs/atmel_sama5d4ek_defconfig
+deleted file mode 100644
+index 9d74eee..0000000
+--- a/configs/atmel_sama5d4ek_defconfig
++++ /dev/null
+@@ -1,30 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a5=y
+-BR2_ARM_ENABLE_NEON=y
+-BR2_ARM_ENABLE_VFP=y
+-BR2_ARM_INSTRUCTIONS_THUMB2=y
+-# Linux headers same as kernel, a 3.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
+-BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4ek"
+-BR2_TARGET_ROOTFS_UBIFS=y
+-BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x3e000
+-BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1000
+-BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2082
+-BR2_TARGET_ROOTFS_UBI=y
+-BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
+-BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
+-BR2_TARGET_AT91BOOTSTRAP3=y
+-BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4eknf_uboot_secure"
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="sama5d4ek_nandflash"
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_PACKAGE_HOST_SAM_BA=y
+-- 
+2.9.0
