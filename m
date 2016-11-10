@@ -1,32 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Nov 2016 11:06:03 +0100
-Subject: [Buildroot] [PATCH] configs: atmel: sama5d4ek removal
-In-Reply-To: <20161110084927.13293-1-ludovic.desroches@atmel.com>
-References: <20161110084927.13293-1-ludovic.desroches@atmel.com>
-Message-ID: <20161110110603.7bb8edeb@free-electrons.com>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Thu, 10 Nov 2016 11:09:55 +0100
+Subject: [Buildroot] [PATCH v2 0/4] configs: atmel: update of old boards
+In-Reply-To: <20161110110002.7551f857@free-electrons.com>
+References: <20161110070538.7193-1-ludovic.desroches@atmel.com>
+ <20161110110002.7551f857@free-electrons.com>
+Message-ID: <20161110100955.woitstkbucurzcn5@rfolt0960.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Thu, 10 Nov 2016 09:49:27 +0100, Ludovic Desroches wrote:
-> The Atmel sama5d4ek board is no longer sold. Since there is the Xplained
-> board and we won't maintain anymore the EK board, the defconfig can be
-> removed.
+On Thu, Nov 10, 2016 at 11:00:02AM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-> ---
->  configs/atmel_sama5d4ek_defconfig | 30 ------------------------------
->  1 file changed, 30 deletions(-)
->  delete mode 100644 configs/atmel_sama5d4ek_defconfig
+> On Thu, 10 Nov 2016 08:05:34 +0100, Ludovic Desroches wrote:
+> 
+> > Ludovic Desroches (4):
+> >   configs: atmel: at91sam9260eknf: update defconfig
+> >   configs: atmel: at91sam9rlek: update defconfig
+> >   configs: atmel: at91sam9g20dfc: update defconfig
+> >   configs: atmel: at91sam9g45m10ek: update defconfig
+> 
+> Thanks a lot, I've applied all four patches to master. Two things were
+> missing (but I fixed them when applying):
+> 
+>  1. A line BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y that tells that
+>     the kernel headers series is 4.8. This was working because 4.8 is
+>     our default kernel header series, but it would have started
+>     breaking when bumping the default kernel header series to 4.9.
+> 
+>  2. A note in the commit log that says it's needed to fix the build to
+>     gcc 5.x, which is the reason for committing those bumps to master
+>     (while normally we don't accept bumps in master once -rc1 is
+>     released).
+> 
 
-Applied to master, thanks.
+Ok, thanks for taking care of this.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Ludovic
+
+> Thanks again!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
