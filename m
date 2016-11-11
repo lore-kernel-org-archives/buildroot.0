@@ -1,36 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Nov 2016 22:00:46 +0100
-Subject: [Buildroot] [PATCH] fs/iso9660: md5 checksum boot dir files
-In-Reply-To: <CANQCQpaZZ708bi1N3m2EqoT8+apV7wgLqE6CXNJ8q5Go3OGbLQ@mail.gmail.com>
-References: <1478884419-22717-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20161111212436.16bd7898@free-electrons.com>
- <CANQCQpaZZ708bi1N3m2EqoT8+apV7wgLqE6CXNJ8q5Go3OGbLQ@mail.gmail.com>
-Message-ID: <20161111220046.72d2547e@free-electrons.com>
+Date: Fri, 11 Nov 2016 22:09:04 +0100
+Subject: [Buildroot] [PATCH] tinymembench: add patch to fix build on Cortex-M
+Message-ID: <1478898544-10711-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit adds a patch to the tinymembench package that fixes the
+build on Thumb-only architectures such as ARM Cortex-M. The patch has
+been submitted upstream in
+https://github.com/ssvb/tinymembench/pull/13.
 
-On Fri, 11 Nov 2016 14:54:06 -0600, Matthew Weber wrote:
+Fixes:
 
-> We thought for a iso9600 formatted iso, this was a way to add a quick
-> integrity check capability to the images used for kernel/rootfs. Since the
-> bzimage and initrd are both present in this boot folder.  This allows a
-> product's install process to check the integrity of a disk after flashing
-> the iso to a bare drive (mount the new boot partition and run md5sum -c).
-> It also opens up the option for runtime verifying the images you booted
-> from if you add scripting in your rootfs.
+  http://autobuild.buildroot.net/results/5f0148cef22b3b9aee691e1702722a0bbc68c8e8/
 
-This all seems interesting, but if we want to solve this problem, we
-want to solve it globally for all filesystems, and the entire contents
-of the filesystem, not just the specific /boot directory of the
-specific iso9660 filesystem.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...arm-fix-build-on-Thumb-only-architectures.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
 
-Thomas
+diff --git a/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch b/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
+new file mode 100644
+index 0000000..88559ec
+--- /dev/null
++++ b/package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
+@@ -0,0 +1,47 @@
++From 034a3552e9700c6d424bd706db106f5bce1f5a5e Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Fri, 11 Nov 2016 21:49:39 +0100
++Subject: [PATCH] arm: fix build on Thumb-only architectures
++
++Building tinymembench for ARM Cortex-M currently fails, because the
++arm-neon.S file contains ARM code that doesn't build on Thumb-only
++architectures. To account for this and fix the build for Cortex-M,
++this patch adjusts the compile time condition to also verify that the
++architecture supports the ARM instruction set, by testing the
++__ARM_ARCH_ISA_ARM compiler define.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ arm-neon.S | 2 +-
++ asm-opt.c  | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/arm-neon.S b/arm-neon.S
++index 4db78ce..19c30ad 100644
++--- a/arm-neon.S
+++++ b/arm-neon.S
++@@ -21,7 +21,7 @@
++  * DEALINGS IN THE SOFTWARE.
++  */
++ 
++-#ifdef __arm__
+++#if defined(__arm__) && defined(__ARM_ARCH_ISA_ARM)
++ 
++ .text
++ .fpu neon
++diff --git a/asm-opt.c b/asm-opt.c
++index 9da4596..eba1183 100644
++--- a/asm-opt.c
+++++ b/asm-opt.c
++@@ -202,7 +202,7 @@ bench_info *get_asm_framebuffer_benchmarks(void)
++         return empty;
++ }
++ 
++-#elif defined(__arm__)
+++#elif defined(__arm__) && defined(__ARM_ARCH_ISA_ARM)
++ 
++ #include "arm-neon.h"
++ 
++-- 
++2.7.4
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
