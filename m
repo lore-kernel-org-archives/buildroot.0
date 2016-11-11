@@ -1,35 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Nov 2016 22:51:41 +0100
-Subject: [Buildroot] [PATCH 2/2] wget: fix static link with gnutls
-In-Reply-To: <1478630202-1630-2-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1478630202-1630-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1478630202-1630-2-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20161111225141.76716c6a@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 11 Nov 2016 23:25:13 +0100
+Subject: [Buildroot] [PATCH for-master] package/quota: disable for musl
+	toolchains
+Message-ID: <1478903113-15617-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Quota doesn't build with musl toolchains without fixing several usual
+musl issues like:
+  - missing headers
+  - replacing all variables type like __uint64_t all over the code
+  - removing __P()
 
-On Wed, 9 Nov 2016 00:06:42 +0530, Rahul Bedarkar wrote:
-> When statically linking with gnutls, we get definition clash error for
-> base64_encode which is also defined by gnutls.
-> 
-> This commit adds patch to rename base64_{encode,decode} defined in wget.
-> 
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> ---
->  .../0001-utils-rename-base64_-encode-decode.patch  | 134 +++++++++++++++++++++
->  1 file changed, 134 insertions(+)
->  create mode 100644 package/wget/0001-utils-rename-base64_-encode-decode.patch
+These changes are easy to fix but requires a lot of change in the code.
+Upstream started to fix some of them, so it would be possible to build
+Quota with musl with the next version bump.
 
-Applied to master, thanks. Please submit the patch to the upstream wget
-project. Thanks!
+Fixes:
+http://autobuild.buildroot.net/results/f45/f4595538f4b627fcf07912baac230744c037f842
 
-Thomas
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/quota/Config.in | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/package/quota/Config.in b/package/quota/Config.in
+index c8ab0d7..85df753 100644
+--- a/package/quota/Config.in
++++ b/package/quota/Config.in
+@@ -3,6 +3,9 @@ config BR2_PACKAGE_QUOTA
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS # libtirpc
++	# Usual Musl issues:
++	# missing headers, variable type like __uint64_t all over the code, __P().
++	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+@@ -10,7 +13,8 @@ config BR2_PACKAGE_QUOTA
+ 
+ 	  http://sourceforge.net/projects/linuxquota/
+ 
+-comment "quota needs a toolchain w/ wchar, threads"
++comment "quota needs a glibc or uClibc toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || \
+-		!(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
++		!(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC) || \
++		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.5
