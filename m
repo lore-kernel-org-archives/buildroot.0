@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Nov 2016 21:24:36 +0100
-Subject: [Buildroot] [PATCH] fs/iso9660: md5 checksum boot dir files
-In-Reply-To: <1478884419-22717-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1478884419-22717-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20161111212436.16bd7898@free-electrons.com>
+Date: Fri, 11 Nov 2016 21:28:10 +0100
+Subject: [Buildroot] [PATCH] netsniff-ng: bump to version 0.6.2
+In-Reply-To: <20161111151924.5251-1-tklauser@distanz.ch>
+References: <20161111151924.5251-1-tklauser@distanz.ch>
+Message-ID: <20161111212810.043761f7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 11 Nov 2016 11:13:39 -0600, Matt Weber wrote:
-> From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+On Fri, 11 Nov 2016 16:19:24 +0100, Tobias Klauser wrote:
+> We recently released netsniff-ng 0.6.2 [1], bumpd the version accordingly.
 > 
-> Generate md5 checksum for all files of boot directory
-> to allow runtime validation of boot images.
+> [1] https://github.com/netsniff-ng/netsniff-ng/releases/tag/v0.6.2
 > 
-> Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> Cc: Joris Lijssens <joris.lijssens@gmail.com>
+> Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+> ---
 
-Why specifically for those images, and not all files of the filesystem?
-
-This really looks like a very use-case specific problem, we certainly
-can't handle it in generic code like this the patch you're proposing.
-
-Best regards,
+Applied to next, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
