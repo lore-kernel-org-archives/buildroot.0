@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Nov 2016 15:00:17 +0100
-Subject: [Buildroot] Enable option of nodeJS 4.1.2 in buildroot 2015.11
-In-Reply-To: <20161111043706.nrzzr7ca5nybi2ir@tarshish>
-References: <CALD51P8hSabOW+SdV0Ycc46Ar4Pqn0jZuyazKhUUQcqKvsg6qA@mail.gmail.com>
- <20161111043706.nrzzr7ca5nybi2ir@tarshish>
-Message-ID: <20161111150017.29e032b5@free-electrons.com>
+Date: Fri, 11 Nov 2016 15:03:43 +0100
+Subject: [Buildroot] Question about Compilation Flags
+In-Reply-To: <CAHBw83fzS2uZUXUrpF6+Q41G3gUEPg5uW3DXu=YauG447FjDtA@mail.gmail.com>
+References: <CAHBw83fzS2uZUXUrpF6+Q41G3gUEPg5uW3DXu=YauG447FjDtA@mail.gmail.com>
+Message-ID: <20161111150343.74bfc8b1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +12,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 11 Nov 2016 06:37:06 +0200, Baruch Siach wrote:
+On Fri, 11 Nov 2016 14:49:42 +0530, Anand Sivaram wrote:
 
-> That's because nodejs 4.1.2 on Buildroot 2015.11 (and 6.7.0 on current master) 
-> depends on BR2_ARM_CPU_HAS_VFPV2:
-> 
-> config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
->         bool
->         # On supported architectures other than ARM, no special requirement
->         default y if !BR2_arm
->         # On ARM, at least ARMv6+ with VFPv2+ is needed
->         default y if !BR2_ARM_CPU_ARMV5 && BR2_ARM_CPU_HAS_VFPV2
-> 
-> The comment seems indicates that BR2_ARM_CPU_HAS_VFPV3 should also be fine. 
-> You may try changing this line to
-> 
->         default y if !BR2_ARM_CPU_ARMV5 && (BR2_ARM_CPU_HAS_VFPV2 || BR2_ARM_CPU_HAS_VFPV3)
-> 
-> Yann, you added this dependency in commit f443386c5d. Is that the right fix?
+> File: package/Makefile.in
+> TARGET_CFLAGS += -ffunction-sections -fdata-sections
+> TARGET_LDFLAGS += -Wl,--gc-sections
 
-I'm wondering if BR2_ARM_CPU_HAS_VFPV3 shouldn't select
-BR2_ARM_CPU_HAS_VFPV2, and ditto for V4 selecting V3.
+You can also pass these through "menuconfig", using
+BR2_TARGET_OPTIMIZATION and BR2_TARGET_LDFLAGS.
+
+> Everything went fine, I saved around 1MB.  But lighttpd with mod-fcgi
+> enabled got SIGSEGV with the above change.
+> 
+> I have a question?  Could I disable these flags *only* for lighttpd, that
+> means using the above flags in all packages except lighttpd.
+
+Yes, you can adapt lighttpd.mk for that. You need to do something like
+this:
+
+LIGHTTPD_CONF_ENV = \
+	CFLAGS=$(filter-out -ffunction-sections -fdata-section,$(TARGET_CFLAGS)) \
+	LDFLAGS=$(filter-out -Wl,--gc-sections,$(TARGET_LDFLAGS))
+
+BTW, how much space did you save by using those options? What was the
+filesystem size before adding those options and after?
 
 Best regards,
 
