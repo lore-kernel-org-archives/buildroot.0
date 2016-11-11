@@ -1,64 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Nov 2016 12:19:10 +0100
-Subject: [Buildroot] [PATCH v4 04/22] toolchain-external: introduce
- toolchain-external-package
-In-Reply-To: <20161108092049.45aa1609@free-electrons.com>
-References: <20161107012017.22505-1-arnout@mind.be>
- <20161107012017.22505-5-arnout@mind.be>
- <a6555b0b-413d-0248-8b6f-75319c385440@gmail.com>
- <96c92e87-dc71-3030-d620-5ed285259ebb@mind.be>
- <20161108092049.45aa1609@free-electrons.com>
-Message-ID: <cc8d8de4-1695-41a9-34c5-48965557b045@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 11 Nov 2016 12:45:11 +0100
+Subject: [Buildroot] [PATCH for-master] package/domoticz: disable for
+	Sourcery CodeBench SH 2012.09
+Message-ID: <1478864711-16038-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Like for prboom, domoticz trigger an internal compiler error:
+[...]/hardware/MySensorsBase.cpp: In member function 'void MySensorsBase::Do_Send_Work()':
+[...]/hardware/MySensorsBase.cpp:2190:6: internal compiler error: Segmentation fault
 
+Fixes:
+http://autobuild.buildroot.net/results/0ea/0eadf342f86ed71c3a4008f13a4d3e175143460d
 
-On 08-11-16 09:20, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 8 Nov 2016 02:00:46 +0100, Arnout Vandecappelle wrote:
-> 
->>> The tarballs contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
->>> which themselves contain the toolchain, so we still need to add the toolchain
->>> prefix...  
->>
->>  Yes, the ADI blackfin toolchains are a kind of multilib toolchain, but instead
->> of multilib it's actually two toolchains installed side by side.
->>
->>  I'm thinking to either:
->> - drop support for ADI blackfin toolchains, since our internal toolchain works
->> fine now and we have lots of autobuilder exceptions for this toolchain; and/or
-> 
-> Let's do this. They are ancient (gcc 4.3, very old uClibc, etc.). They
-> were kind of useful in that they forced us to test a very old gcc, very
-> old uClibc, very old binutils, but I agree they have a lot of quirks,
-> and I'm not sure they are really actively used by our users.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/domoticz/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
- Did you mean that I should respin the series with the ADI toolchains dropped
-completely, or that it is something that we can do later?
-
- Regards,
- Arnout
-
-> 
-> Should we instead try to have some ancient ARM toolchain, in order to
-> keep testing old gcc, old binutils, etc. ? But even the ct-ng
-> toolchains that are quite old are causing a number of problems, and
-> have autobuilder exceptions.
-> 
-> Best regards,
-> 
-> Thomas
-> 
-
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+index 3bd7824..f128e6f 100644
+--- a/package/domoticz/Config.in
++++ b/package/domoticz/Config.in
+@@ -6,6 +6,8 @@ config BR2_PACKAGE_DOMOTICZ
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
++	# These result in internal compiler error
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+@@ -26,6 +28,7 @@ config BR2_PACKAGE_DOMOTICZ
+ 
+ comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
+ 		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.5.5
