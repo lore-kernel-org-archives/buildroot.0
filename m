@@ -1,56 +1,41 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 11 Nov 2016 23:25:13 +0100
-Subject: [Buildroot] [PATCH for-master] package/quota: disable for musl
-	toolchains
-Message-ID: <1478903113-15617-1-git-send-email-romain.naour@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 11 Nov 2016 19:30:40 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.12.x and 4.{4,
+	8}.x series
+Message-ID: <1478903441-3090-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quota doesn't build with musl toolchains without fixing several usual
-musl issues like:
-  - missing headers
-  - replacing all variables type like __uint64_t all over the code
-  - removing __P()
-
-These changes are easy to fix but requires a lot of change in the code.
-Upstream started to fix some of them, so it would be possible to build
-Quota with musl with the next version bump.
-
-Fixes:
-http://autobuild.buildroot.net/results/f45/f4595538f4b627fcf07912baac230744c037f842
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/quota/Config.in | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-index c8ab0d7..85df753 100644
---- a/package/quota/Config.in
-+++ b/package/quota/Config.in
-@@ -3,6 +3,9 @@ config BR2_PACKAGE_QUOTA
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS # libtirpc
-+	# Usual Musl issues:
-+	# missing headers, variable type like __uint64_t all over the code, __P().
-+	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
-@@ -10,7 +13,8 @@ config BR2_PACKAGE_QUOTA
- 
- 	  http://sourceforge.net/projects/linuxquota/
- 
--comment "quota needs a toolchain w/ wchar, threads"
-+comment "quota needs a glibc or uClibc toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || \
--		!(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
-+		!(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC) || \
-+		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 71d3f60..8bfad44 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -226,15 +226,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.83"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.12.66"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.67"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.18.44"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.35"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.29"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.31"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+ 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
+ 	default "4.7.10"	if BR2_KERNEL_HEADERS_4_7
+-	default "4.8.6"		if BR2_KERNEL_HEADERS_4_8
++	default "4.8.7"		if BR2_KERNEL_HEADERS_4_8
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-2.5.5
+2.7.3
