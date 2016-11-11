@@ -1,43 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 11 Nov 2016 20:52:26 +0100
-Subject: [Buildroot] [PATCH/next 2/2] package/libva-intel-driver: bump
-	version to 1.7.3
-In-Reply-To: <20161111195226.3359-1-bernd.kuhls@t-online.de>
-References: <20161111195226.3359-1-bernd.kuhls@t-online.de>
-Message-ID: <20161111195226.3359-2-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Nov 2016 21:24:36 +0100
+Subject: [Buildroot] [PATCH] fs/iso9660: md5 checksum boot dir files
+In-Reply-To: <1478884419-22717-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1478884419-22717-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20161111212436.16bd7898@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libva-intel-driver/libva-intel-driver.hash | 4 ++--
- package/libva-intel-driver/libva-intel-driver.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
-index 24c2170..10664d0 100644
---- a/package/libva-intel-driver/libva-intel-driver.hash
-+++ b/package/libva-intel-driver/libva-intel-driver.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/libva/2016-September/004380.html
--sha1 9373afadd6ec0d6d983cf5bb2001d91c22b39719  libva-intel-driver-1.7.2.tar.bz2
-+# From https://lists.freedesktop.org/archives/libva/2016-November/004731.html
-+sha1 5100f187afc4e39fce5664b96fe11a38faa9afaa  libva-intel-driver-1.7.3.tar.bz2
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-index c388de1..86f6eaa 100644
---- a/package/libva-intel-driver/libva-intel-driver.mk
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVA_INTEL_DRIVER_VERSION = 1.7.2
-+LIBVA_INTEL_DRIVER_VERSION = 1.7.3
- LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
- LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
- LIBVA_INTEL_DRIVER_LICENSE = MIT
+On Fri, 11 Nov 2016 11:13:39 -0600, Matt Weber wrote:
+> From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+> 
+> Generate md5 checksum for all files of boot directory
+> to allow runtime validation of boot images.
+> 
+> Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+
+Why specifically for those images, and not all files of the filesystem?
+
+This really looks like a very use-case specific problem, we certainly
+can't handle it in generic code like this the patch you're proposing.
+
+Best regards,
+
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
