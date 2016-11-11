@@ -1,36 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Nov 2016 22:10:10 +0100
-Subject: [Buildroot] [PATCH autobuild-run] autobuild-run: Add an
- exception for ctng toolchain armv5 with Guile package
-In-Reply-To: <1478855706-5152-1-git-send-email-romain.naour@gmail.com>
-References: <1478855706-5152-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161111221010.39bab403@free-electrons.com>
+Date: Fri, 11 Nov 2016 22:11:57 +0100
+Subject: [Buildroot] [git commit] wget: fix ssl detection in static libs
+	configuration
+Message-ID: <20161111211223.2E3A281DD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2f257ec7d7334472effe756c6c789ea7da9ff215
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 11 Nov 2016 10:15:06 +0100, Romain Naour wrote:
-> Like for CS 2014.05 ARM toolchain, the ctng toolchain trigger an
-> assembler error when Guile package is compiled with -Os.
-> 
-> [1] https://git.buildroot.net/buildroot/commit/?id=401c47e44b26e97db1c12cce0a42c62cfb72a9b9
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  scripts/autobuild-run | 4 ++++
->  1 file changed, 4 insertions(+)
+When building wget with openssl in static libs configuration, wget
+build system fails detect openssl because it doesn't specify LD flags
+for private libs used by openssl. This specifically happens when we
+pass --with-libssl-prefix to configure which tries to find ssl using
+custom flags. If we don't specify --with-libssl-prefix, it relies on
+pkg-config files to detect ssl and it's LD flags which helps with static
+linking.
 
-Applied, thanks! However, it will take some time to get everyone to
-update their copy of the autobuild-run script.
+This commit removes --with-libssl-prefix conf opts. Since this case is
+similar to gnutls, we remove same conf opts for gnutls as well.
 
-Thanks,
+wget can be built with either gnutls or openssl crypto libraries, so
+separate optional support for both is not required. This commit also
+does minor optimization by checking for either gnutls or openssl while
+at it.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fixes:
+  http://autobuild.buildroot.net/results/c6a/c6abdff37b86471cf8b0ceffeff5472042923de0/
+
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wget/wget.mk | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
+
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index 9cda76b..c9efc03 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -17,26 +17,17 @@ WGET_DEPENDENCIES += busybox
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-WGET_CONF_OPTS += \
+-	--with-ssl=gnutls \
+-	--with-libgnutls-prefix=$(STAGING_DIR)
++WGET_CONF_OPTS += --with-ssl=gnutls
+ WGET_DEPENDENCIES += gnutls
+-endif
+-
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-WGET_CONF_OPTS += --with-ssl=openssl --with-libssl-prefix=$(STAGING_DIR)
++else ifeq ($(BR2_PACKAGE_OPENSSL),y)
++WGET_CONF_OPTS += --with-ssl=openssl
+ WGET_DEPENDENCIES += openssl
++else
++WGET_CONF_OPTS += --without-ssl
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ WGET_DEPENDENCIES += util-linux
+ endif
+ 
+-# --with-ssl is default
+-ifneq ($(BR2_PACKAGE_GNUTLS),y)
+-ifneq ($(BR2_PACKAGE_OPENSSL),y)
+-WGET_CONF_OPTS += --without-ssl
+-endif
+-endif
+-
+ $(eval $(autotools-package))
