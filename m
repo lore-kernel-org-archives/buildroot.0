@@ -1,7 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 11 Nov 2016 20:52:25 +0100
-Subject: [Buildroot] [PATCH/next 1/2] package/libva: bump version to 1.7.3
-Message-ID: <20161111195226.3359-1-bernd.kuhls@t-online.de>
+Date: Fri, 11 Nov 2016 20:52:26 +0100
+Subject: [Buildroot] [PATCH/next 2/2] package/libva-intel-driver: bump
+	version to 1.7.3
+In-Reply-To: <20161111195226.3359-1-bernd.kuhls@t-online.de>
+References: <20161111195226.3359-1-bernd.kuhls@t-online.de>
+Message-ID: <20161111195226.3359-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libva/libva.hash | 4 ++--
- package/libva/libva.mk   | 2 +-
+ package/libva-intel-driver/libva-intel-driver.hash | 4 ++--
+ package/libva-intel-driver/libva-intel-driver.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index c2e5ea4..e63f4db 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
+diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
+index 24c2170..10664d0 100644
+--- a/package/libva-intel-driver/libva-intel-driver.hash
++++ b/package/libva-intel-driver/libva-intel-driver.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/libva/2016-September/004379.html
--sha1 a89680d34236fdc63adeec25cf431c005644b8c6  libva-1.7.2.tar.bz2
-+# From https://lists.freedesktop.org/archives/libva/2016-November/004730.html
-+sha1 18e46f3d5a0e971eb0ec9fe14bc021e69eb13fb8  libva-1.7.3.tar.bz2
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index df1758e..cf42b70 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
+-# From https://lists.freedesktop.org/archives/libva/2016-September/004380.html
+-sha1 9373afadd6ec0d6d983cf5bb2001d91c22b39719  libva-intel-driver-1.7.2.tar.bz2
++# From https://lists.freedesktop.org/archives/libva/2016-November/004731.html
++sha1 5100f187afc4e39fce5664b96fe11a38faa9afaa  libva-intel-driver-1.7.3.tar.bz2
+diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
+index c388de1..86f6eaa 100644
+--- a/package/libva-intel-driver/libva-intel-driver.mk
++++ b/package/libva-intel-driver/libva-intel-driver.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_VERSION = 1.7.2
-+LIBVA_VERSION = 1.7.3
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
- LIBVA_LICENSE = MIT
+-LIBVA_INTEL_DRIVER_VERSION = 1.7.2
++LIBVA_INTEL_DRIVER_VERSION = 1.7.3
+ LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
+ LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
+ LIBVA_INTEL_DRIVER_LICENSE = MIT
 -- 
 2.10.2
