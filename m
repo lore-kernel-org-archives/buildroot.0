@@ -1,319 +1,51 @@
-From: Lijun QIN <lijun.qin2008@gmail.com>
-Date: Thu, 10 Nov 2016 19:28:13 -0600
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 11 Nov 2016 06:37:06 +0200
 Subject: [Buildroot] Enable option of nodeJS 4.1.2 in buildroot 2015.11
-Message-ID: <CALD51P8hSabOW+SdV0Ycc46Ar4Pqn0jZuyazKhUUQcqKvsg6qA@mail.gmail.com>
+In-Reply-To: <CALD51P8hSabOW+SdV0Ycc46Ar4Pqn0jZuyazKhUUQcqKvsg6qA@mail.gmail.com>
+References: <CALD51P8hSabOW+SdV0Ycc46Ar4Pqn0jZuyazKhUUQcqKvsg6qA@mail.gmail.com>
+Message-ID: <20161111043706.nrzzr7ca5nybi2ir@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Buildroot supporter,
+Hi Lijun QIN,
 
-I have Buildroot 2015.11 with some Marvell flavor.
-According to Mavell's instructions, I did
-(1) make mvebu_armv7_le_defconfig
-(2) select external toolchain gcc5.2-HF
-(3) I run make menuconfig, trying to select Node.JS 4.1.2 package in
-Interpreter languages and scripting selection, but only node.JS 0.10.40 is
-available.
-(4)  However,  I tried to make raspberrypi2_defconfig,  make menuconfig
-does offer options to
-      select Node.JS 4.1.2.
- Could you please possibly provide any advice on fix ? I post some part of
-my .config file
-Thank you so much.
-Lijun QIN
-#
-# Automatically generated file; DO NOT EDIT.
-# Buildroot 2015.11 Configuration
-#
-BR2_HAVE_DOT_CONFIG=y
+On Thu, Nov 10, 2016 at 07:28:13PM -0600, Lijun QIN wrote:
+> Hello Buildroot supporter,
+> 
+> I have Buildroot 2015.11 with some Marvell flavor.
+> According to Mavell's instructions, I did
+> (1) make mvebu_armv7_le_defconfig
+> (2) select external toolchain gcc5.2-HF
+> (3) I run make menuconfig, trying to select Node.JS 4.1.2 package in
+> Interpreter languages and scripting selection, but only node.JS 0.10.40 is
+> available.
 
-#
-# Target options
-#
-BR2_ARCH_HAS_MMU_OPTIONAL=y
-# BR2_arcle is not set
-# BR2_arceb is not set
-BR2_arm=y
-# BR2_armeb is not set
-# BR2_aarch64 is not set
-# BR2_aarch64_be is not set
-# BR2_bfin is not set
-# BR2_i386 is not set
-# BR2_microblazeel is not set
-# BR2_microblazebe is not set
-# BR2_mips is not set
-# BR2_mipsel is not set
-# BR2_mips64 is not set
-# BR2_mips64el is not set
-# BR2_nios2 is not set
-# BR2_powerpc is not set
-# BR2_powerpc64 is not set
-# BR2_powerpc64le is not set
-# BR2_sh is not set
-# BR2_sparc is not set
-# BR2_sparc64 is not set
-# BR2_x86_64 is not set
-# BR2_xtensa is not set
-BR2_ARCH="arm"
-BR2_ENDIAN="LITTLE"
-BR2_GCC_TARGET_ABI="aapcs-linux"
-BR2_GCC_TARGET_CPU="cortex-a9"
-BR2_GCC_TARGET_FPU="vfpv3"
-BR2_GCC_TARGET_FLOAT_ABI="hard"
-BR2_GCC_TARGET_MODE="arm"
-BR2_ARCH_HAS_ATOMICS=y
-BR2_BINFMT_SUPPORTS_SHARED=y
-BR2_BINFMT_ELF=y
-BR2_ARM_CPU_MAYBE_HAS_NEON=y
-BR2_ARM_CPU_MAYBE_HAS_VFPV2=y
-BR2_ARM_CPU_MAYBE_HAS_VFPV3=y
-BR2_ARM_CPU_HAS_ARM=y
-BR2_ARM_CPU_HAS_THUMB2=y
-BR2_ARM_CPU_ARMV7A=y
-# BR2_arm920t is not set
-# BR2_arm922t is not set
-# BR2_arm926t is not set
-# BR2_arm1136j_s is not set
-# BR2_arm1136jf_s is not set
-# BR2_arm1176jz_s is not set
-# BR2_arm1176jzf_s is not set
-# BR2_cortex_a5 is not set
-# BR2_cortex_a7 is not set
-# BR2_cortex_a8 is not set
-BR2_cortex_a9=y
-# BR2_cortex_a12 is not set
-# BR2_cortex_a15 is not set
-# BR2_cortex_m3 is not set
-# BR2_fa526 is not set
-# BR2_pj4 is not set
-# BR2_strongarm is not set
-# BR2_xscale is not set
-# BR2_iwmmxt is not set
-# BR2_ARM_EABI is not set
-BR2_ARM_EABIHF=y
-# BR2_ARM_ENABLE_NEON is not set
-# BR2_ARM_FPU_VFPV2 is not set
-BR2_ARM_FPU_VFPV3=y
-# BR2_ARM_FPU_VFPV3D16 is not set
-BR2_ARM_INSTRUCTIONS_ARM=y
-# BR2_ARM_INSTRUCTIONS_THUMB2 is not set
+That's because nodejs 4.1.2 on Buildroot 2015.11 (and 6.7.0 on current master) 
+depends on BR2_ARM_CPU_HAS_VFPV2:
 
-#
-# Build options
-#
+config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+        bool
+        # On supported architectures other than ARM, no special requirement
+        default y if !BR2_arm
+        # On ARM, at least ARMv6+ with VFPv2+ is needed
+        default y if !BR2_ARM_CPU_ARMV5 && BR2_ARM_CPU_HAS_VFPV2
 
-#
-# Commands
-#
-BR2_WGET="wget --passive-ftp -nd -t 3"
-BR2_SVN="svn"
-BR2_BZR="bzr"
-BR2_GIT="git"
-BR2_CVS="cvs"
-BR2_LOCALFILES="cp"
-BR2_SCP="scp"
-BR2_SSH="ssh"
-BR2_HG="hg"
-BR2_ZCAT="gzip -d -c"
-BR2_BZCAT="bzcat"
-BR2_XZCAT="xzcat"
-BR2_TAR_OPTIONS=""
-BR2_DEFCONFIG="/home/dfvsmdev/workspace/buildroot_checkin/fresh_check_in/buildroot-2015.11-16.06.0/configs/mvebu_armv7_le_defconfig"
-BR2_DL_DIR="$(TOPDIR)/dl"
-BR2_HOST_DIR="$(BASE_DIR)/host"
+The comment seems indicates that BR2_ARM_CPU_HAS_VFPV3 should also be fine. 
+You may try changing this line to
 
-#
-# Mirrors and Download locations
-#
-BR2_PRIMARY_SITE=""
-BR2_BACKUP_SITE="http://sources.buildroot.net"
-BR2_KERNEL_MIRROR="https://www.kernel.org/pub"
-BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
-BR2_LUAROCKS_MIRROR="http://rocks.moonscript.org"
-BR2_CPAN_MIRROR="http://cpan.metacpan.org"
-BR2_JLEVEL=0
-# BR2_CCACHE is not set
-# BR2_DEPRECATED is not set
-# BR2_ENABLE_DEBUG is not set
-BR2_STRIP_strip=y
-# BR2_STRIP_none is not set
-BR2_STRIP_EXCLUDE_FILES=""
-BR2_STRIP_EXCLUDE_DIRS=""
-# BR2_OPTIMIZE_0 is not set
-# BR2_OPTIMIZE_1 is not set
-# BR2_OPTIMIZE_2 is not set
-# BR2_OPTIMIZE_3 is not set
-BR2_OPTIMIZE_S=y
-# BR2_GOOGLE_BREAKPAD_ENABLE is not set
-# BR2_ENABLE_SSP is not set
-# BR2_STATIC_LIBS is not set
-BR2_SHARED_LIBS=y
-# BR2_SHARED_STATIC_LIBS is not set
-BR2_PACKAGE_OVERRIDE_FILE="$(CONFIG_DIR)/local.mk"
-BR2_GLOBAL_PATCH_DIR=""
+        default y if !BR2_ARM_CPU_ARMV5 && (BR2_ARM_CPU_HAS_VFPV2 || BR2_ARM_CPU_HAS_VFPV3)
 
-#
-# Advanced
-#
-# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
+Yann, you added this dependency in commit f443386c5d. Is that the right fix?
 
-#
-# Toolchain
-#
-BR2_TOOLCHAIN=y
-BR2_TOOLCHAIN_USES_GLIBC=y
-# BR2_TOOLCHAIN_BUILDROOT is not set
-BR2_TOOLCHAIN_EXTERNAL=y
-# BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM is not set
+baruch
 
-#
-# Sourcery CodeBench toolchains available for the EABI ABI
-#
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-# BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD is not set
-BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED=y
-BR2_TOOLCHAIN_EXTERNAL_PATH="/opt/armv7-marvell-gcc521-hf"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="arm-linux-gnueabihf"
-BR2_TOOLCHAIN_EXTERNAL_PREFIX="arm-linux-gnueabihf"
-BR2_TOOLCHAIN_EXTERNAL_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
-# BR2_TOOLCHAIN_EXTERNAL_GCC_4_9 is not set
-# BR2_TOOLCHAIN_EXTERNAL_GCC_4_8 is not set
-# BR2_TOOLCHAIN_EXTERNAL_GCC_4_7 is not set
-# BR2_TOOLCHAIN_EXTERNAL_GCC_4_6 is not set
-# BR2_TOOLCHAIN_EXTERNAL_GCC_4_5 is not set
-# BR2_TOOLCHAIN_EXTERNAL_GCC_4_4 is not set
-# BR2_TOOLCHAIN_EXTERNAL_GCC_4_3 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_2 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_0 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_19 is not set
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_18=y
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_15 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_13 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_11 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_8 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_7 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_6 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_5 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_4 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_3 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_1 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_0 is not set
-# BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD is not set
-# BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC is not set
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-# BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS=""
-# BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is not set
-# BR2_PACKAGE_HOST_GDB is not set
-BR2_TOOLCHAIN_HAS_NATIVE_RPC=y
-BR2_USE_WCHAR=y
-BR2_ENABLE_LOCALE=y
-BR2_INSTALL_LIBSTDCPP=y
-BR2_TOOLCHAIN_HAS_THREADS=y
-BR2_TOOLCHAIN_HAS_THREADS_DEBUG=y
-BR2_TOOLCHAIN_HAS_THREADS_NPTL=y
-BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS=y
-BR2_TOOLCHAIN_HAS_SSP=y
-# BR2_ENABLE_LOCALE_PURGE is not set
-BR2_GENERATE_LOCALE=""
-# BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY is not set
-BR2_USE_MMU=y
-BR2_TARGET_OPTIMIZATION=""
-BR2_TARGET_LDFLAGS=""
-# BR2_ECLIPSE_REGISTER is not set
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18=y
-BR2_TOOLCHAIN_HEADERS_AT_LEAST="3.18"
-BR2_TOOLCHAIN_GCC_AT_LEAST_4_3=y
-BR2_TOOLCHAIN_GCC_AT_LEAST_4_4=y
-BR2_TOOLCHAIN_GCC_AT_LEAST_4_5=y
-BR2_TOOLCHAIN_GCC_AT_LEAST_4_6=y
-BR2_TOOLCHAIN_GCC_AT_LEAST_4_7=y
-BR2_TOOLCHAIN_GCC_AT_LEAST_4_8=y
-BR2_TOOLCHAIN_GCC_AT_LEAST_4_9=y
-BR2_TOOLCHAIN_GCC_AT_LEAST_5=y
-BR2_TOOLCHAIN_GCC_AT_LEAST="5"
+> # BR2_ARM_FPU_VFPV2 is not set
+> BR2_ARM_FPU_VFPV3=y
 
-#
-# System configuration
-#
-BR2_TARGET_GENERIC_HOSTNAME="buildroot"
-BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot"
-BR2_MVEBU_RELEASE_NAME="16.06.0"
-BR2_TARGET_GENERIC_PASSWD_MD5=y
-# BR2_TARGET_GENERIC_PASSWD_SHA256 is not set
-# BR2_TARGET_GENERIC_PASSWD_SHA512 is not set
-BR2_TARGET_GENERIC_PASSWD_METHOD="md5"
-BR2_INIT_BUSYBOX=y
-# BR2_INIT_SYSV is not set
-# BR2_INIT_SYSTEMD is not set
-# BR2_INIT_NONE is not set
-# BR2_ROOTFS_DEVICE_CREATION_STATIC is not set
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV is not set
-# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV is not set
-BR2_ROOTFS_DEVICE_TABLE="system/device_table.txt"
-BR2_ROOTFS_SKELETON_DEFAULT=y
-# BR2_ROOTFS_SKELETON_CUSTOM is not set
-# BR2_ROOTFS_MERGED_USR is not set
-BR2_TARGET_ENABLE_ROOT_LOGIN=y
-BR2_TARGET_GENERIC_ROOT_PASSWD=""
-# BR2_SYSTEM_BIN_SH_BUSYBOX is not set
-BR2_SYSTEM_BIN_SH_BASH=y
-# BR2_SYSTEM_BIN_SH_DASH is not set
-# BR2_SYSTEM_BIN_SH_ZSH is not set
-# BR2_SYSTEM_BIN_SH_NONE is not set
-BR2_SYSTEM_BIN_SH="bash"
-BR2_TARGET_GENERIC_GETTY=y
-BR2_TARGET_GENERIC_GETTY_PORT="console"
-BR2_TARGET_GENERIC_GETTY_BAUDRATE_KEEP=y
-# BR2_TARGET_GENERIC_GETTY_BAUDRATE_9600 is not set
-# BR2_TARGET_GENERIC_GETTY_BAUDRATE_19200 is not set
-# BR2_TARGET_GENERIC_GETTY_BAUDRATE_38400 is not set
-# BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600 is not set
-# BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200 is not set
-BR2_TARGET_GENERIC_GETTY_BAUDRATE="0"
-BR2_TARGET_GENERIC_GETTY_TERM="vt100"
-BR2_TARGET_GENERIC_GETTY_OPTIONS=""
-BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y
-BR2_SYSTEM_DHCP=""
-# BR2_TARGET_TZ_INFO is not set
-BR2_ROOTFS_USERS_TABLES=""
-BR2_ROOTFS_OVERLAY="user_files/"
-BR2_ROOTFS_POST_BUILD_SCRIPT=""
-BR2_ROOTFS_POST_IMAGE_SCRIPT=""
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161110/d5a53caf/attachment.html>
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
