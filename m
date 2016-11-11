@@ -1,32 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Nov 2016 16:36:00 +0100
-Subject: [Buildroot] [PATCH next] olimex_imx233_olinuxino: restore Wifi
- config
-In-Reply-To: <1478859580-6214-1-git-send-email-francois.perrad@gadz.org>
-References: <1478859580-6214-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20161111163600.1a91efe7@free-electrons.com>
+Date: Fri, 11 Nov 2016 16:36:12 +0100
+Subject: [Buildroot] [git commit branch/next] netsniff-ng: bump to version
+	0.6.2
+Message-ID: <20161111154006.795B680DED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f7afd935422ffd511a0e31827d56c6cb60aee23c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 11 Nov 2016 11:19:40 +0100, Francois Perrad wrote:
-> add a fragment with configs from retired linux-3.18.config
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  board/olimex/imx233_olinuxino/linux-wifi.fragment | 18 ++++++++++++++++++
->  configs/olimex_imx233_olinuxino_defconfig         |  1 +
->  2 files changed, 19 insertions(+)
->  create mode 100644 board/olimex/imx233_olinuxino/linux-wifi.fragment
+We recently released netsniff-ng 0.6.2 [1], bumpd the version accordingly.
 
-Applied to next, thanks.
+[1] https://github.com/netsniff-ng/netsniff-ng/releases/tag/v0.6.2
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Cc: Joris Lijssens <joris.lijssens@gmail.com>
+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/netsniff-ng/netsniff-ng.hash | 2 +-
+ package/netsniff-ng/netsniff-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
+index 5212497..67b3331 100644
+--- a/package/netsniff-ng/netsniff-ng.hash
++++ b/package/netsniff-ng/netsniff-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 902661bcdbc129c6a6c1f69a72f921fffc9e765d005568dc153f09ca0097c180 netsniff-ng-v0.6.1.tar.gz
++sha256 62e8aa970a4f46cdaddf54daf8ea26e7ae9f9f358efaf0651799c8c4e937c286 netsniff-ng-v0.6.2.tar.gz
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index ad97a88..4ec7e74 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NETSNIFF_NG_VERSION = v0.6.1
++NETSNIFF_NG_VERSION = v0.6.2
+ NETSNIFF_NG_SITE = $(call github,netsniff-ng,netsniff-ng,$(NETSNIFF_NG_VERSION))
+ NETSNIFF_NG_LICENSE = GPLv2
+ NETSNIFF_NG_LICENSE_FILES = README COPYING
