@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Nov 2016 21:30:10 +0100
-Subject: [Buildroot] [PATCH next] php: bump version to 7.0.13
-In-Reply-To: <20161111171509.41535-1-Vincent.Riera@imgtec.com>
-References: <20161111171509.41535-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161111213010.36098fe6@free-electrons.com>
+Date: Fri, 11 Nov 2016 21:30:20 +0100
+Subject: [Buildroot] [PATCH/next 1/2] package/libva: bump version to
+ 1.7.3
+In-Reply-To: <20161111195226.3359-1-bernd.kuhls@t-online.de>
+References: <20161111195226.3359-1-bernd.kuhls@t-online.de>
+Message-ID: <20161111213020.26422af4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 11 Nov 2016 17:15:09 +0000, Vicente Olivert Riera wrote:
-> Release notes: http://php.net/ChangeLog-7.php#7.0.13
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Fri, 11 Nov 2016 20:52:25 +0100, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/php/php.hash | 2 +-
->  package/php/php.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/libva/libva.hash | 4 ++--
+>  package/libva/libva.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to next, thanks.
+Both applied to next, thanks!
 
 Thomas
 -- 
