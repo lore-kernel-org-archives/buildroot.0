@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Nov 2016 21:29:26 +0100
-Subject: [Buildroot] [git commit branch/next] package/libva: bump version to
-	1.7.3
-Message-ID: <20161111202951.124D0817B5@busybox.osuosl.org>
+Date: Fri, 11 Nov 2016 21:29:21 +0100
+Subject: [Buildroot] [git commit branch/next] php: bump version to 7.0.13
+Message-ID: <20161111202951.05D08817B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d6bbbab39931f35081a12bc18985874cc129f03
+commit: https://git.buildroot.net/buildroot/commit/?id=cd59cb6b388d00865d0084e6a25eb306c0b5fdd3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Release notes: http://php.net/ChangeLog-7.php#7.0.13
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libva/libva.hash | 4 ++--
- package/libva/libva.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index c2e5ea4..e63f4db 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
+diff --git a/package/php/php.hash b/package/php/php.hash
+index dde6a64..f1cd346 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/libva/2016-September/004379.html
--sha1 a89680d34236fdc63adeec25cf431c005644b8c6  libva-1.7.2.tar.bz2
-+# From https://lists.freedesktop.org/archives/libva/2016-November/004730.html
-+sha1 18e46f3d5a0e971eb0ec9fe14bc021e69eb13fb8  libva-1.7.3.tar.bz2
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index df1758e..cf42b70 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
+ # From http://php.net/downloads.php
+-sha256 f3d6c49e1c242e5995dec15e503fde996c327eb86cd7ec45c690e93c971b83ff  php-7.0.12.tar.xz
++sha256 357ba7f93975d7d836abed0852dc3ed96a988af539e87750613294cbee82f1bf  php-7.0.13.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index f85cb37..c8abe66 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_VERSION = 1.7.2
-+LIBVA_VERSION = 1.7.3
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
- LIBVA_LICENSE = MIT
+-PHP_VERSION = 7.0.12
++PHP_VERSION = 7.0.13
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
