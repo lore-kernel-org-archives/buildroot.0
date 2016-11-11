@@ -1,48 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Nov 2016 15:04:09 +0100
-Subject: [Buildroot] [git commit] package/domoticz: disable for Sourcery
-	CodeBench SH 2012.09
-Message-ID: <20161111140523.D90DC81DD0@busybox.osuosl.org>
+Date: Fri, 11 Nov 2016 15:05:56 +0100
+Subject: [Buildroot] [git commit] package/efl: remove wayland dependency
+Message-ID: <20161111140602.CF894816B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd8171f4c7eb60fb349f549e124c3744f8a9af32
+commit: https://git.buildroot.net/buildroot/commit/?id=4f04be1659f186765f506c68f5bfbf6845fc40dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Like for prboom, domoticz trigger an internal compiler error:
-[...]/hardware/MySensorsBase.cpp: In member function 'void MySensorsBase::Do_Send_Work()':
-[...]/hardware/MySensorsBase.cpp:2190:6: internal compiler error: Segmentation fault
+Wayland support requires DRM support in efl libraries since 1.18 bump,
+but this support is not merged yet in Buildroot and waiting for review
+[1].
+
+For 2016.11, keep wayland support disabled to avoid build issues.
 
 Fixes:
-http://autobuild.buildroot.net/results/0ea/0eadf342f86ed71c3a4008f13a4d3e175143460d
+http://autobuild.buildroot.net/results/162133cbddcca1ea8be660a19771f04296c20fd2
+
+[1] http://patchwork.ozlabs.org/patch/671260/
+    http://patchwork.ozlabs.org/patch/671261/
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/domoticz/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/efl/Config.in | 1 -
+ package/efl/efl.mk    | 8 +-------
+ 2 files changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index 3bd7824..f128e6f 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -6,6 +6,8 @@ config BR2_PACKAGE_DOMOTICZ
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
-+	# These result in internal compiler error
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_SYSTEM
-@@ -26,6 +28,7 @@ config BR2_PACKAGE_DOMOTICZ
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index f963ade..69b0dcf 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -14,7 +14,6 @@ config BR2_PACKAGE_EFL
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_JPEG # Emile needs libjpeg
+ 	select BR2_PACKAGE_LIBCURL # Ecore_con_url, runtime dependency
+-	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
+ 	# https://phab.enlightenment.org/T2728
+ 	select BR2_PACKAGE_LUAJIT # Lua support broken
+ 	select BR2_PACKAGE_UTIL_LINUX
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 777ef3c..6af7aa0 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -42,6 +42,7 @@ EFL_CONF_OPTS = \
+ 	--disable-sdl \
+ 	--disable-spectre \
+ 	--disable-xinput22 \
++	--disable-wayland \
+ 	--with-doxygen=no
  
- comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
- 		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
+ # Disable untested configuration warning.
+@@ -145,13 +146,6 @@ else
+ EFL_CONF_OPTS += --with-crypto=none
+ endif # BR2_PACKAGE_OPENSSL
+ 
+-ifeq ($(BR2_PACKAGE_WAYLAND),y)
+-EFL_DEPENDENCIES += wayland libxkbcommon
+-EFL_CONF_OPTS += --enable-wayland
+-else
+-EFL_CONF_OPTS += --disable-wayland
+-endif
+-
+ ifeq ($(BR2_PACKAGE_EFL_ELPUT),y)
+ EFL_CONF_OPTS += --enable-elput
+ EFL_DEPENDENCIES += libinput libxkbcommon
