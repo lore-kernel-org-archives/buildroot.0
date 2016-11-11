@@ -1,47 +1,107 @@
-From: Tobias Klauser <tklauser@distanz.ch>
-Date: Fri, 11 Nov 2016 16:19:24 +0100
-Subject: [Buildroot] [PATCH] netsniff-ng: bump to version 0.6.2
-Message-ID: <20161111151924.5251-1-tklauser@distanz.ch>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Nov 2016 16:24:03 +0100
+Subject: [Buildroot] [git commit branch/next]
+	configs/olimex_imx233_olinuxino: remove useless section from
+	readme.txt
+Message-ID: <20161111153439.5F90B819CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We recently released netsniff-ng 0.6.2 [1], bumpd the version accordingly.
+commit: https://git.buildroot.net/buildroot/commit/?id=7ce31b3e5592ee70ab4f1911caf8cef2e597946c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[1] https://github.com/netsniff-ng/netsniff-ng/releases/tag/v0.6.2
+After the conversion to the common genimage scripts, the uImage.imx23-olinuxino
+file no longer exists.
 
-Cc: Joris Lijssens <joris.lijssens@gmail.com>
-Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+Instead of updating the section, let's simply remove it as the more
+standard method of using sdcard.img is already explained.
+
+This also makes the readme more consistent with the other i.MX readme files.
+
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
+ board/olimex/imx233_olinuxino/readme.txt | 70 --------------------------------
+ 1 file changed, 70 deletions(-)
 
-Resend because I wasn't subscribed to the list
-
- package/netsniff-ng/netsniff-ng.hash | 2 +-
- package/netsniff-ng/netsniff-ng.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
-index 52124977ed43..67b3331a92d9 100644
---- a/package/netsniff-ng/netsniff-ng.hash
-+++ b/package/netsniff-ng/netsniff-ng.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 902661bcdbc129c6a6c1f69a72f921fffc9e765d005568dc153f09ca0097c180 netsniff-ng-v0.6.1.tar.gz
-+sha256 62e8aa970a4f46cdaddf54daf8ea26e7ae9f9f358efaf0651799c8c4e937c286 netsniff-ng-v0.6.2.tar.gz
-diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
-index ad97a887e44e..4ec7e743f50b 100644
---- a/package/netsniff-ng/netsniff-ng.mk
-+++ b/package/netsniff-ng/netsniff-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/olimex/imx233_olinuxino/readme.txt b/board/olimex/imx233_olinuxino/readme.txt
+index 2722c3a..1e676c4 100644
+--- a/board/olimex/imx233_olinuxino/readme.txt
++++ b/board/olimex/imx233_olinuxino/readme.txt
+@@ -27,73 +27,3 @@ Then, run the following command as root:
+ *** WARNING! The command will destroy all the card content. Use with care! ***
  
--NETSNIFF_NG_VERSION = v0.6.1
-+NETSNIFF_NG_VERSION = v0.6.2
- NETSNIFF_NG_SITE = $(call github,netsniff-ng,netsniff-ng,$(NETSNIFF_NG_VERSION))
- NETSNIFF_NG_LICENSE = GPLv2
- NETSNIFF_NG_LICENSE_FILES = README COPYING
--- 
-2.11.0.rc0.7.gbe5a750
+  sudo dd if=output/images/sdcard.img of=/dev/<your-microsd-device>
+-
+-=== Manual creation of SD card image =========================================
+-
+-You'll need a spare MicroSD card with Freescale's special partition layout.
+-This is basically three partitions:
+-
+-1) Type 53, the U-Boot partition, should be 16MB.
+-2) VFAT, place the kernel uImage there
+-3) Anything you like, for this example an ext2 partition, type 83 (linux).
+-
+-Assuming you see your MicroSD card as /dev/sdc you'd need to do, as root
+-and from the buildroot project top level directory:
+-(remember to replace /dev/sdc* with the appropiate device name!)
+-
+-***** WARNING: Double check that /dev/sdc is your MicroSD card *****
+-*****      It might be /dev/sdb or some other device name      *****
+-***** Failure to do so may result in you wiping your hard disk *****
+-
+-1. Unmount the filesystem(s) if they're already mounted, usually...
+-
+-   # for fs in `grep /dev/sdc /proc/mounts|cut -d ' ' -f 1`;do umount $fs;done
+-
+-   ...should work
+-
+-2. Blank the partition table out
+-
+-   # dd if=/dev/zero of=/dev/sdc bs=1024 count=1024
+-
+-3. Set up the partitions
+-
+-   # fdisk /dev/sdc
+-   n
+-   p
+-   1
+-   <ENTER>
+-   +16MB
+-   t
+-   53
+-   n
+-   p
+-   2
+-   <ENTER>
+-   +5M
+-   t
+-   2
+-   4
+-   n
+-   p
+-   3
+-   <ENTER>
+-   <ENTER>
+-   w
+-
+-4. Fill up the first (U-Boot) partition
+-   # dd if=output/images/u-boot.sd bs=512 of=/dev/sdc1
+-
+-5. Create VFAT Filesystem
+-   # mkfs.vfat /dev/sdc2
+-
+-6. Mount and copy output/images/uImage.imx23-olinuxino to the VFAT partition, rename to uImage
+-   # mount /dev/sdc2 /mnt
+-   # cp output/images/uImages/uImage.imx23-olinuxino /mnt/uImage
+-   # umount /mnt
+-
+-7. Fill up the third (filesystem) partition
+-   # dd if=output/images/rootfs.ext2 of=/dev/sdc3 bs=512
+-
+-8. Remove the MicroSD card from your linux PC and put it into your olinuxino.
+-
+-9. Boot! You're done!
