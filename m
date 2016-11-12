@@ -1,38 +1,69 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 12 Nov 2016 21:29:56 +0200
-Subject: [Buildroot] [PATCH] jasper: disable -pedantic-errors
-Message-ID: <72941ffb162f0bdf077c0dc15faaff86f4abfa88.1478978996.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 12 Nov 2016 21:01:03 +0100
+Subject: [Buildroot] [PATCH] uclibc-test: new package
+In-Reply-To: <20161112192324.GN27313@waldemar-brodkorb.de>
+References: <20161105105343.GA27187@waldemar-brodkorb.de>
+ <bc4b5500-9bc2-90e3-975e-2f527d157e33@mind.be>
+ <20161112192324.GN27313@waldemar-brodkorb.de>
+Message-ID: <20161112210103.125ee1a6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The -pedantic-errors gcc option turns -pedantic warnings into errors. This
-mostly affects older gcc versions that default to the ISO90 C standard. Use
-the --disable-strict configure option to remove -pedantic-errors.
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/191/191f80779df1a9e6f832106e6c4bdf601e2a9893/
-http://autobuild.buildroot.net/results/1fe/1febccc7215814490fa3c776b34bc367363afe39/
-http://autobuild.buildroot.net/results/a6f/a6f9bfec3406fc21b130f1669e3534651b9c9596/
+On Sat, 12 Nov 2016 20:23:25 +0100, Waldemar Brodkorb wrote:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/jasper/jasper.mk | 1 +
- 1 file changed, 1 insertion(+)
+> >  Why not call the package uclibc-ng-test? Are you still hoping to merge back
+> > with uClibc? :-)  
+> 
+> No. :)
+> I just thought it might better align with package/uclibc.
+> What other think? How should the package be named?
 
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index 4616fed1885d..bacb1a6cfebb 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -10,6 +10,7 @@ JASPER_INSTALL_STAGING = YES
- JASPER_DEPENDENCIES = jpeg
- JASPER_LICENSE = JasPer License Version 2.0
- JASPER_LICENSE_FILES = LICENSE
-+JASPER_CONF_OPTS = --disable-strict
- 
- # Xtensa gcc is unable to generate correct code with -O0 enabled by
- # --enable-debug. Allow package build but disable debug.
+We always prefer the upstream name of the package, i.e uclibc-ng-test
+in this case. "uclibc" is kind of a special case: it used to be the
+original upstream name, until it went dead and you forked it. But in
+all other cases, using the upstream name is preferred.
+
+> Not sure. When do I should use BR2_TOOLCHAIN_BUILDROOT_* and when
+> BR2_USE_*?
+
+Easy: the BR2_TOOLCHAIN_BUILDROOT_* options are specific to the
+internal toolchain backend, they have no meaning if you use an external
+toolchain or even for many of them if you use glibc or musl with the
+internal toolchain backend. They are visible options that allow the
+user to tell whether he wants this feature or not in the toolchain to
+be built by Buildroot.
+
+On the other hand, BR2_USE_WCHAR, BR2_TOOLCHAIN_HAS_THREADS, etc. are
+blind options that tell packages which features are provided by the
+toolchain. They always exist, regardless of whether you're using the
+internal or external toolchain backend, and regardless of the C library
+you're using.
+
+> >  Static implies NO_TLS and NO_NPTL? That warrants a comment...  
+> 
+> Most of the TLS and NPTL tests use dlopen.
+
+Needs a comment, as Arnout said.
+
+> >  Can't this be done in one make invocation 'make ... test_compile test_gen'? Or
+> > is there a parallel build issue?  
+> 
+> Not exactly an issue. It will generate the needed meta data, the
+> order of test case execution will be random and not always the same
+> order. If this is not important, I can combine this.
+
+I think having the test execution in predictable order is a nice
+feature of test suites, no?
+
+Thanks,
+
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
