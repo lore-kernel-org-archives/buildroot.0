@@ -1,118 +1,77 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 12 Nov 2016 23:53:23 +0100
-Subject: [Buildroot] [PATCH 1/2] core: find an UFT8 locale on the host
-In-Reply-To: <bebab08246b4a3603ba41a3c8113d003a80be1f2.1478463815.git.yann.morin.1998@free.fr>
+Date: Sat, 12 Nov 2016 23:54:51 +0100
+Subject: [Buildroot] [PATCH 2/2] package/tvheadend: needs a host with an
+ UTF8 locale
+In-Reply-To: <6f09b8c02099896660df1f6cfe177c92d946f01c.1478463815.git.yann.morin.1998@free.fr>
 References: <cover.1478463815.git.yann.morin.1998@free.fr>
- <bebab08246b4a3603ba41a3c8113d003a80be1f2.1478463815.git.yann.morin.1998@free.fr>
-Message-ID: <553af062-1c09-067c-828a-bed79a100a28@gmail.com>
+ <6f09b8c02099896660df1f6cfe177c92d946f01c.1478463815.git.yann.morin.1998@free.fr>
+Message-ID: <a3dd6eac-9742-61c0-7c05-a3f7e5ffed03@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+Hi Yann,
 
 Le 06/11/2016 ? 21:23, Yann E. MORIN a ?crit :
-> Some packages need an UTF8 locale to build sucessfully, so find one for
-
-s/sucessfully/successfully/
-
-> them.
+> The mkbundle python script requires an UTF8 locale to encode non-ASCII
+> characters.
 > 
-> We try hard to have a locale as close as possible to the one currently
-> used by the user, so as to output messages in his language. We first try
-> any of the current locale settings to see if they are fit, then we look
-> if said settigns have an UTF8 variant, then look for the same language
-
-s/settigns/settings/
-
-> for other countries, and finally fallback to some well-known locales.
+> Force the locale on the configure, build and install command lines.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/6fe/6fe3331f1f1d54cb977bb61a09d7707f19f7eafa/
+>     http://autobuild.buildroot.org/results/d1d/d1dda2c1d5af8fbaa09ecbf4a87f3892369b9e53/
+>     [...]
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Romain Naour <romain.naour@openwide.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> 
 
 Tested with:
 LC_ALL=fr_FR.utf8
 
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Tested-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
 Romain
 
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Romain Naour <romain.naour@openwide.fr>
 > ---
->  Makefile                         |  3 +++
->  support/scripts/find-utf8-locale | 48 ++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 51 insertions(+)
->  create mode 100755 support/scripts/find-utf8-locale
+> There is still a corner case, where the user has a build machine that
+> has no UTF-8 locale. This is deemed a corner case which we do not want
+> to address yet for master. Changes in how we handle the UTF8 locale will
+> come in the -next branch.
+> ---
+>  package/tvheadend/tvheadend.mk | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index 4ea64b3..4832160 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -244,6 +244,9 @@ export LANG=C
->  export LC_ALL=C
->  endif
+> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+> index a3afec8..d5b58b4 100644
+> --- a/package/tvheadend/tvheadend.mk
+> +++ b/package/tvheadend/tvheadend.mk
+> @@ -70,6 +70,7 @@ TVHEADEND_PRE_CONFIGURE_HOOKS += TVHEADEND_INSTALL_DTV_SCAN_TABLES
 >  
-> +# Some packages want an UTF8 locale, so find one.
-> +UTF8_LOCALE := $(shell support/scripts/find-utf8-locale)
-> +
->  # To put more focus on warnings, be less verbose as default
->  # Use 'make V=1' to see the full commands
->  ifeq ("$(origin V)", "command line")
-> diff --git a/support/scripts/find-utf8-locale b/support/scripts/find-utf8-locale
-> new file mode 100755
-> index 0000000..278247c
-> --- /dev/null
-> +++ b/support/scripts/find-utf8-locale
-> @@ -0,0 +1,48 @@
-> +#!/bin/bash
-> +
-> +# Try to find an UTF8 locale.
-> +#
-> +# We try to find a locale that is as close as possible to the one that
-> +# the user currently uses. For that, we look at the same environment
-> +# variables that glibc uses: $LANGUAGE, then $LC_ALL, then $LC_XXX and
-> +# finally $LANG. $LANGUAGE can be a colon-separated list.
-> +# https://www.gnu.org/software/libc/manual/html_node/Using-gettextized-software.html#Using-gettextized-software
-> +
-> +# First, see if any of those variables is already an UTF8 locale.
-> +for l in ${LANGUAGE//:/ } ${LC_ALL} ${LC_MESSAGES} ${LANG}; do
-> +    case "${l,,}" in
-> +    (*.utf8|*.utf-8)    printf "%s" "${l}"; exit 0;;
-> +    esac
-> +done
-> +
-> +# No luck. Try to see if any of those have an UTF8 variant.
-> +for l in ${LANGUAGE//:/ } ${LC_ALL} ${LC_MESSAGES} ${LANG}; do
-> +    l="$(locale -a |grep -i -E "^${l}\.utf.?8" |head -n 1)"
-> +    if [ -n "${l}" ]; then
-> +        printf "%s" "${l}"
-> +        exit 0
-> +    fi
-> +done
-> +
-> +# Still no luck. Try to see if we have a locale for the same language,
-> +# but for another country.
-> +for l in ${LANGUAGE//:/ } ${LC_ALL} ${LC_MESSAGES} ${LANG}; do
-> +    l="$(locale -a |grep -i -E "^${l%_*}_.+\.utf.?8" |head -n 1)"
-> +    if [ -n "${l}" ]; then
-> +        printf "%s" "${l}"
-> +        exit 0
-> +    fi
-> +done
-> +
-> +# We're really out of luck. Try well-known UTF8 locales.
-> +for l in en_US.utf8 en_GB.utf8 C.UTF-8; do
-> +    l="$(locale -a |grep -i -E "^${l}" |head -n 1)"
-> +    if [ -n "${l}" ]; then
-> +        printf "%s" "${l}"
-> +        exit 0
-> +    fi
-> +done
-> +
-> +# We don't have an easy life, no we don't. And we don't have an
-> +# UTF8 locale either... :-(
-> +exit 1
+>  define TVHEADEND_CONFIGURE_CMDS
+>  	(cd $(@D);						\
+> +		LC_ALL=$(UTF8_LOCALE)					\
+>  		$(TARGET_CONFIGURE_OPTS)			\
+>  		$(TARGET_CONFIGURE_ARGS)			\
+>  		CFLAGS="$(TVHEADEND_CFLAGS)"			\
+> @@ -88,11 +89,11 @@ define TVHEADEND_CONFIGURE_CMDS
+>  endef
+>  
+>  define TVHEADEND_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> +	$(TARGET_MAKE_ENV) LC_ALL=$(UTF8_LOCALE) $(MAKE) -C $(@D)
+>  endef
+>  
+>  define TVHEADEND_INSTALL_TARGET_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+> +	$(TARGET_MAKE_ENV) LC_ALL=$(UTF8_LOCALE) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+>  endef
+>  
+>  # Remove documentation and source files that are not needed because we
 > 
