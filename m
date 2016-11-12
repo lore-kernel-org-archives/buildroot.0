@@ -1,53 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Nov 2016 19:21:09 +0100
-Subject: [Buildroot] [PATCH for-master] package/sane-backends: fix musl
- build issue
-In-Reply-To: <1478900262-18239-1-git-send-email-romain.naour@gmail.com>
-References: <1478900262-18239-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161112192109.79c2ea5d@free-electrons.com>
+Date: Sat, 12 Nov 2016 19:22:05 +0100
+Subject: [Buildroot] [git commit] linux: bump defaul to version 4.8.7
+Message-ID: <20161112182215.974D180165@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=683f33dae51a03684fdec7ba49413f0a27f162ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 11 Nov 2016 22:37:42 +0100, Romain Naour wrote:
-> We should include config.h from sanei_backend.h in order to use the
-> correct if/else HAVE_FOO.
-> 
-> For some reason with Glibc or uClibc there is no problem but with musl
-> we have the following weird issue:
-> 
-> In file included from epsonds.h:41:0,
->                  from epsonds-jpeg.c:18:
-> ../include/sane/sanei_backend.h:99:33: error: expected ';', identifier or '(' before 'int'
-> 
-> ../include/sane/sanei_backend.h:99:33: warning: useless type name in empty declaration
-> 
-> That's because HAVE_SIGPROCMASK is not defined although it's correctly
-> detected by the configure script.
-> 
-> $ grep config.log
-> config.log:#define HAVE_SIGPROCMASK 1
-> 
-> So, include config.h to avoid to redefine sigset_t.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/9f1/9f1f1cb727b5c5407e69172280a3dee880e55cdf
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  .../0003-sane_backend-add-missing-config.h.patch   | 49 ++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 package/sane-backends/0003-sane_backend-add-missing-config.h.patch
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 3f4097d..7e141a2 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.8.6)"
++	bool "Latest version (4.8.7)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.8.6" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.8.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
