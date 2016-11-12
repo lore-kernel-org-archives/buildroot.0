@@ -1,140 +1,118 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 12 Nov 2016 23:11:28 +0100
-Subject: [Buildroot] [PATCH for-master] package/sane-backends: fix musl
-	build issue
-In-Reply-To: <CA+-urNSL3Ujm8q9x5HpKtEQnEKuOGQ+7U04nFzpNjm-8D6jc1g@mail.gmail.com>
-References: <1478900262-18239-1-git-send-email-romain.naour@gmail.com>
- <CA+-urNSL3Ujm8q9x5HpKtEQnEKuOGQ+7U04nFzpNjm-8D6jc1g@mail.gmail.com>
-Message-ID: <5180194a-03ef-9e3d-e9b1-0b2f0bceb26b@gmail.com>
+Date: Sat, 12 Nov 2016 23:53:23 +0100
+Subject: [Buildroot] [PATCH 1/2] core: find an UFT8 locale on the host
+In-Reply-To: <bebab08246b4a3603ba41a3c8113d003a80be1f2.1478463815.git.yann.morin.1998@free.fr>
+References: <cover.1478463815.git.yann.morin.1998@free.fr>
+ <bebab08246b4a3603ba41a3c8113d003a80be1f2.1478463815.git.yann.morin.1998@free.fr>
+Message-ID: <553af062-1c09-067c-828a-bed79a100a28@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Frank,
+Hi Yann, all,
 
-Le 12/11/2016 ? 19:09, Frank Hunleth a ?crit :
-> Hi Romain,
-> 
-> On Fri, Nov 11, 2016 at 4:37 PM, Romain Naour <romain.naour@gmail.com> wrote:
->> We should include config.h from sanei_backend.h in order to use the
->> correct if/else HAVE_FOO.
->>
->> For some reason with Glibc or uClibc there is no problem but with musl
->> we have the following weird issue:
->>
->> In file included from epsonds.h:41:0,
->>                  from epsonds-jpeg.c:18:
->> ../include/sane/sanei_backend.h:99:33: error: expected ';', identifier or '(' before 'int'
->>
->> ../include/sane/sanei_backend.h:99:33: warning: useless type name in empty declaration
->>
->> That's because HAVE_SIGPROCMASK is not defined although it's correctly
->> detected by the configure script.
->>
->> $ grep config.log
->> config.log:#define HAVE_SIGPROCMASK 1
->>
->> So, include config.h to avoid to redefine sigset_t.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/9f1/9f1f1cb727b5c5407e69172280a3dee880e55cdf
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Frank Hunleth <fhunleth@troodon-software.com>
-> 
-> Thanks for looking into this. For some reason, I had thought I saw a
-> mention on the list that this was due to something else, but you're
-> completely right that it's a sane-backends issue. I took a look
-> upstream and found this patch:
-> 
-> https://anonscm.debian.org/cgit/sane/sane-backends.git/commit/?id=1dbabdce5d34e686608bb997245c49a823e19fb5
-> 
-> It looks functionally the same as yours except that they added the
-> #include to epsonds-jpeg.c instead. No other similar commits were made
-> at the same time, so presumably that's the only file that breaks due
-> to the missing config.h issue. Could you try the patch above? If it
-> works, it will be more obvious that the patch can be dropped on the
-> next sane-backends release.
+Le 06/11/2016 ? 21:23, Yann E. MORIN a ?crit :
+> Some packages need an UTF8 locale to build sucessfully, so find one for
 
-Thanks for the feedback and review!
-Indeed the upstream patch fix the issues.
-I missed it while searching for an upstream patch to backport...
-It seems that "epsonds: fix compilation" is not really meaningful :p
+s/sucessfully/successfully/
+
+> them.
+> 
+> We try hard to have a locale as close as possible to the one currently
+> used by the user, so as to output messages in his language. We first try
+> any of the current locale settings to see if they are fit, then we look
+> if said settigns have an UTF8 variant, then look for the same language
+
+s/settigns/settings/
+
+> for other countries, and finally fallback to some well-known locales.
+
+Tested with:
+LC_ALL=fr_FR.utf8
+
+Tested-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
 Romain
 
 > 
-> Reviewed-by: Frank Hunleth <fhunleth@troodon-software.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  Makefile                         |  3 +++
+>  support/scripts/find-utf8-locale | 48 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 51 insertions(+)
+>  create mode 100755 support/scripts/find-utf8-locale
 > 
-> Thanks,
-> Frank
-> 
->> ---
->>  .../0003-sane_backend-add-missing-config.h.patch   | 49 ++++++++++++++++++++++
->>  1 file changed, 49 insertions(+)
->>  create mode 100644 package/sane-backends/0003-sane_backend-add-missing-config.h.patch
->>
->> diff --git a/package/sane-backends/0003-sane_backend-add-missing-config.h.patch b/package/sane-backends/0003-sane_backend-add-missing-config.h.patch
->> new file mode 100644
->> index 0000000..8e56b02
->> --- /dev/null
->> +++ b/package/sane-backends/0003-sane_backend-add-missing-config.h.patch
->> @@ -0,0 +1,49 @@
->> +From 13aadf79659dd238b618c8be7c1de44960bd5d50 Mon Sep 17 00:00:00 2001
->> +From: Romain Naour <romain.naour@gmail.com>
->> +Date: Fri, 11 Nov 2016 22:20:03 +0100
->> +Subject: [PATCH] sane_backend: add missing config.h
->> +
->> +We should include config.h from sanei_backend.h in order to use the
->> +correct if/else HAVE_FOO.
->> +
->> +For some reason with Glibc or uClibc there is no problem but with musl
->> +we have the following weird issue:
->> +
->> +In file included from epsonds.h:41:0,
->> +                 from epsonds-jpeg.c:18:
->> +../include/sane/sanei_backend.h:99:33: error: expected ';', identifier or '(' before 'int'
->> + # define sigset_t               int
->> +                                 ^
->> +../include/sane/sanei_backend.h:99:33: warning: useless type name in empty declaration
->> +
->> +That's because HAVE_SIGPROCMASK is not defined although it's correctly
->> +detected by the configure script.
->> +
->> +$ grep config.log
->> +config.log:#define HAVE_SIGPROCMASK 1
->> +
->> +So, include config.h to avoid to redefine sigset_t.
->> +
->> +Fixes:
->> +http://autobuild.buildroot.net/results/9f1/9f1f1cb727b5c5407e69172280a3dee880e55cdf
->> +
->> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> +---
->> + include/sane/sanei_backend.h | 1 +
->> + 1 file changed, 1 insertion(+)
->> +
->> +diff --git a/include/sane/sanei_backend.h b/include/sane/sanei_backend.h
->> +index 1b5afe2..2a96532 100644
->> +--- a/include/sane/sanei_backend.h
->> ++++ b/include/sane/sanei_backend.h
->> +@@ -8,6 +8,7 @@
->> +  * @sa sanei.h sanei_thread.h
->> +  */
->> +
->> ++#include "../include/sane/config.h"
->> +
->> + /*
->> +  * Compiler related options
->> +--
->> +2.5.5
->> +
->> --
->> 2.5.5
->>
-> 
-> 
+> diff --git a/Makefile b/Makefile
+> index 4ea64b3..4832160 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -244,6 +244,9 @@ export LANG=C
+>  export LC_ALL=C
+>  endif
+>  
+> +# Some packages want an UTF8 locale, so find one.
+> +UTF8_LOCALE := $(shell support/scripts/find-utf8-locale)
+> +
+>  # To put more focus on warnings, be less verbose as default
+>  # Use 'make V=1' to see the full commands
+>  ifeq ("$(origin V)", "command line")
+> diff --git a/support/scripts/find-utf8-locale b/support/scripts/find-utf8-locale
+> new file mode 100755
+> index 0000000..278247c
+> --- /dev/null
+> +++ b/support/scripts/find-utf8-locale
+> @@ -0,0 +1,48 @@
+> +#!/bin/bash
+> +
+> +# Try to find an UTF8 locale.
+> +#
+> +# We try to find a locale that is as close as possible to the one that
+> +# the user currently uses. For that, we look at the same environment
+> +# variables that glibc uses: $LANGUAGE, then $LC_ALL, then $LC_XXX and
+> +# finally $LANG. $LANGUAGE can be a colon-separated list.
+> +# https://www.gnu.org/software/libc/manual/html_node/Using-gettextized-software.html#Using-gettextized-software
+> +
+> +# First, see if any of those variables is already an UTF8 locale.
+> +for l in ${LANGUAGE//:/ } ${LC_ALL} ${LC_MESSAGES} ${LANG}; do
+> +    case "${l,,}" in
+> +    (*.utf8|*.utf-8)    printf "%s" "${l}"; exit 0;;
+> +    esac
+> +done
+> +
+> +# No luck. Try to see if any of those have an UTF8 variant.
+> +for l in ${LANGUAGE//:/ } ${LC_ALL} ${LC_MESSAGES} ${LANG}; do
+> +    l="$(locale -a |grep -i -E "^${l}\.utf.?8" |head -n 1)"
+> +    if [ -n "${l}" ]; then
+> +        printf "%s" "${l}"
+> +        exit 0
+> +    fi
+> +done
+> +
+> +# Still no luck. Try to see if we have a locale for the same language,
+> +# but for another country.
+> +for l in ${LANGUAGE//:/ } ${LC_ALL} ${LC_MESSAGES} ${LANG}; do
+> +    l="$(locale -a |grep -i -E "^${l%_*}_.+\.utf.?8" |head -n 1)"
+> +    if [ -n "${l}" ]; then
+> +        printf "%s" "${l}"
+> +        exit 0
+> +    fi
+> +done
+> +
+> +# We're really out of luck. Try well-known UTF8 locales.
+> +for l in en_US.utf8 en_GB.utf8 C.UTF-8; do
+> +    l="$(locale -a |grep -i -E "^${l}" |head -n 1)"
+> +    if [ -n "${l}" ]; then
+> +        printf "%s" "${l}"
+> +        exit 0
+> +    fi
+> +done
+> +
+> +# We don't have an easy life, no we don't. And we don't have an
+> +# UTF8 locale either... :-(
+> +exit 1
 > 
