@@ -1,12 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Nov 2016 22:08:50 +0100
-Subject: [Buildroot] Fwd: Enable option of nodeJS 4.1.2 in buildroot
- 2015.11
-In-Reply-To: <CALD51P_HZZzqLcn-JqLwdO95f8J8x3P6v4+L7fKZdtnGmo5t0g@mail.gmail.com>
+Date: Sat, 12 Nov 2016 22:13:27 +0100
+Subject: [Buildroot] Enable option of nodeJS 4.1.2 in buildroot 2015.11
+In-Reply-To: <CALD51P8hSabOW+SdV0Ycc46Ar4Pqn0jZuyazKhUUQcqKvsg6qA@mail.gmail.com>
 References: <CALD51P8hSabOW+SdV0Ycc46Ar4Pqn0jZuyazKhUUQcqKvsg6qA@mail.gmail.com>
- <20161111043706.nrzzr7ca5nybi2ir@tarshish>
- <CALD51P_HZZzqLcn-JqLwdO95f8J8x3P6v4+L7fKZdtnGmo5t0g@mail.gmail.com>
-Message-ID: <20161112210850.GB3700@free.fr>
+Message-ID: <20161112211327.GC3700@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,19 +12,32 @@ To: buildroot@busybox.net
 
 Lijun, All,
 
-On 2016-11-11 07:41 -0600, Lijun QIN spake thusly:
-> Thank you so much for your help, Baruch
-> I took your advice and applied the change to the Config.in in nodejs
-> package. Since my .config does not have BR2_ARM_CPU_HAS_VFPV3,  I used
-> BR2_ARM_CPU_MAYBE_HAS_VFPV3 instead. The issue seems to have fixed.
+On 2016-11-10 19:28 -0600, Lijun QIN spake thusly:
+> Hello Buildroot supporter,
+> 
+> I have Buildroot 2015.11 with some Marvell flavor.
 
-This is definitely incorrect. The _MAYBE_HAS option is an internal one
-that should not be used to derive the presence of abscence of VFPv3.
+Please update your Buidlroot version.
 
-If your CPU does have VFPv3, then you must enable it with the correct
-option, BR2_ARM_ENABLE_VFP "Enable VFP extension support", which has
-been avaialble since f52692e: arch/arm: add option to enable an optional
-VFP unit (and I should know, I did that patch in 2015! ;-) ).
+> According to Mavell's instructions, I did
+
+Sorry, this is the support for the official Buildroot. If you have
+troubles with a fork from some vendors, we can't really help: we have no
+way to know what has been changed in your tree.
+
+> (1) make mvebu_armv7_le_defconfig
+> (2) select external toolchain gcc5.2-HF
+> (3) I run make menuconfig, trying to select Node.JS 4.1.2 package in
+> Interpreter languages and scripting selection, but only node.JS 0.10.40 is
+> available.
+> (4)  However,  I tried to make raspberrypi2_defconfig,  make menuconfig
+> does offer options to
+>       select Node.JS 4.1.2.
+>  Could you please possibly provide any advice on fix ? I post some part of
+> my .config file
+
+Please use the latest released version of Buildroot, and you'll even get
+nodejs 6.7.0 for the rpi2.
 
 Regards,
 Yann E. MORIN.
