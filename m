@@ -1,69 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Nov 2016 21:01:03 +0100
-Subject: [Buildroot] [PATCH] uclibc-test: new package
-In-Reply-To: <20161112192324.GN27313@waldemar-brodkorb.de>
-References: <20161105105343.GA27187@waldemar-brodkorb.de>
- <bc4b5500-9bc2-90e3-975e-2f527d157e33@mind.be>
- <20161112192324.GN27313@waldemar-brodkorb.de>
-Message-ID: <20161112210103.125ee1a6@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 12 Nov 2016 22:01:40 +0100
+Subject: [Buildroot] Enable option of nodeJS 4.1.2 in buildroot 2015.11
+In-Reply-To: <20161111150017.29e032b5@free-electrons.com>
+References: <CALD51P8hSabOW+SdV0Ycc46Ar4Pqn0jZuyazKhUUQcqKvsg6qA@mail.gmail.com>
+ <20161111043706.nrzzr7ca5nybi2ir@tarshish>
+ <20161111150017.29e032b5@free-electrons.com>
+Message-ID: <20161112210140.GA3700@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Sat, 12 Nov 2016 20:23:25 +0100, Waldemar Brodkorb wrote:
-
-> >  Why not call the package uclibc-ng-test? Are you still hoping to merge back
-> > with uClibc? :-)  
+On 2016-11-11 15:00 +0100, Thomas Petazzoni spake thusly:
+> On Fri, 11 Nov 2016 06:37:06 +0200, Baruch Siach wrote:
 > 
-> No. :)
-> I just thought it might better align with package/uclibc.
-> What other think? How should the package be named?
+> > That's because nodejs 4.1.2 on Buildroot 2015.11 (and 6.7.0 on current master) 
+> > depends on BR2_ARM_CPU_HAS_VFPV2:
+> > 
+> > config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+> >         bool
+> >         # On supported architectures other than ARM, no special requirement
+> >         default y if !BR2_arm
+> >         # On ARM, at least ARMv6+ with VFPv2+ is needed
+> >         default y if !BR2_ARM_CPU_ARMV5 && BR2_ARM_CPU_HAS_VFPV2
+> > 
+> > The comment seems indicates that BR2_ARM_CPU_HAS_VFPV3 should also be fine. 
+> > You may try changing this line to
+> > 
+> >         default y if !BR2_ARM_CPU_ARMV5 && (BR2_ARM_CPU_HAS_VFPV2 || BR2_ARM_CPU_HAS_VFPV3)
+> > 
+> > Yann, you added this dependency in commit f443386c5d. Is that the right fix?
 
-We always prefer the upstream name of the package, i.e uclibc-ng-test
-in this case. "uclibc" is kind of a special case: it used to be the
-original upstream name, until it went dead and you forked it. But in
-all other cases, using the upstream name is preferred.
+Not really: if VFPv3 is enabled, so is VFPv2, see the conditions:
+	https://git.buildroot.org/buildroot/tree/arch/Config.in.arm#n21
 
-> Not sure. When do I should use BR2_TOOLCHAIN_BUILDROOT_* and when
-> BR2_USE_*?
+and see the reasons below...
 
-Easy: the BR2_TOOLCHAIN_BUILDROOT_* options are specific to the
-internal toolchain backend, they have no meaning if you use an external
-toolchain or even for many of them if you use glibc or musl with the
-internal toolchain backend. They are visible options that allow the
-user to tell whether he wants this feature or not in the toolchain to
-be built by Buildroot.
+> I'm wondering if BR2_ARM_CPU_HAS_VFPV3 shouldn't select
+> BR2_ARM_CPU_HAS_VFPV2, and ditto for V4 selecting V3.
 
-On the other hand, BR2_USE_WCHAR, BR2_TOOLCHAIN_HAS_THREADS, etc. are
-blind options that tell packages which features are provided by the
-toolchain. They always exist, regardless of whether you're using the
-internal or external toolchain backend, and regardless of the C library
-you're using.
+Unless I'm mistaken, that's already the case, and has been so at least
+since 2013:
 
-> >  Static implies NO_TLS and NO_NPTL? That warrants a comment...  
-> 
-> Most of the TLS and NPTL tests use dlopen.
+    5f959a1c arch: improve ARM floating point support and add support for EABIhf
 
-Needs a comment, as Arnout said.
+   21 config BR2_ARM_CPU_HAS_VFPV3
+   22 	bool
+   23 	select BR2_ARM_CPU_HAS_VFPV2
+   [--SNIP--]
+   30 config BR2_ARM_CPU_HAS_VFPV4
+   31 	bool
+   32 	 select BR2_ARM_CPU_HAS_VFPV3
 
-> >  Can't this be done in one make invocation 'make ... test_compile test_gen'? Or
-> > is there a parallel build issue?  
-> 
-> Not exactly an issue. It will generate the needed meta data, the
-> order of test case execution will be random and not always the same
-> order. If this is not important, I can combine this.
+Regards,
+Yann E. MORIN.
 
-I think having the test execution in predictable order is a nice
-feature of test suites, no?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
