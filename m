@@ -1,38 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Nov 2016 18:16:35 +0100
-Subject: [Buildroot] [PATCH for-master] package/quota: disable for musl
- toolchains
-In-Reply-To: <1478903113-15617-1-git-send-email-romain.naour@gmail.com>
-References: <1478903113-15617-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161113181635.6ca3d037@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Nov 2016 18:18:02 +0100
+Subject: [Buildroot] [PATCHv2] legacy: add entries for renamed/removed
+ MIPS CPU cores
+In-Reply-To: <20161113175513.3c763f0d@free-electrons.com>
+References: <1479052521-27651-1-git-send-email-yann.morin.1998@free.fr>
+ <20161113175513.3c763f0d@free-electrons.com>
+Message-ID: <20161113171802.GE3580@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Fri, 11 Nov 2016 23:25:13 +0100, Romain Naour wrote:
-> Quota doesn't build with musl toolchains without fixing several usual
-> musl issues like:
->   - missing headers
->   - replacing all variables type like __uint64_t all over the code
->   - removing __P()
+On 2016-11-13 17:55 +0100, Thomas Petazzoni spake thusly:
+> On Sun, 13 Nov 2016 16:55:21 +0100, Yann E. MORIN wrote:
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
 > 
-> These changes are easy to fix but requires a lot of change in the code.
-> Upstream started to fix some of them, so it would be possible to build
-> Quota with musl with the next version bump.
+> This is not necessary, and has already been discussed by Arnout during
+> the review of Vicente patches. Those MIPS core options have been added
+> and renamed within the 2016.11 release cycle, so there is no point in
+> having legacy handling, since no Buildroot release ever had the old
+> name for these.
 
-Well, in fact, really not many changes were needed to make quota build
-with the musl C library, so I did them, and committed:
+Wooops... ;-)
 
-  https://git.buildroot.org/buildroot/commit/?id=9317b9542bd3971bc340808ca8efadee36f5b263
+Regards,
+Yann E. MORIN.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
