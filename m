@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Nov 2016 12:55:18 +0100
-Subject: [Buildroot] [PATCH for-master] package/strace: disable libmpers
- with musl toolchains
-In-Reply-To: <1478964612-7028-1-git-send-email-romain.naour@gmail.com>
-References: <1478964612-7028-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161113125518.2797806f@free-electrons.com>
+Date: Sun, 13 Nov 2016 12:55:28 +0100
+Subject: [Buildroot] [PATCH] tinymembench: add patch to fix build on
+ Cortex-M
+In-Reply-To: <1478898544-10711-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1478898544-10711-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20161113125528.6bcb1379@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 12 Nov 2016 16:30:12 +0100, Romain Naour wrote:
-> strace bundle some kernel headers to build libmpers, this mixes userspace
-> headers and kernel headers which break the build with musl.
-> The stddef.h from gcc is used instead of the one from musl.
-> 
-> Disable libmpers for musl toolchains.
+On Fri, 11 Nov 2016 22:09:04 +0100, Thomas Petazzoni wrote:
+> This commit adds a patch to the tinymembench package that fixes the
+> build on Thumb-only architectures such as ARM Cortex-M. The patch has
+> been submitted upstream in
+> https://github.com/ssvb/tinymembench/pull/13.
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/6f6/6f63fa2537ff316ba259a20966faadcf5ab9deff
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>   http://autobuild.buildroot.net/results/5f0148cef22b3b9aee691e1702722a0bbc68c8e8/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  ...arm-fix-build-on-Thumb-only-architectures.patch | 47 ++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 package/tinymembench/0001-arm-fix-build-on-Thumb-only-architectures.patch
 
-Hum, Alpine Linux is not doing this, and they support strace 4.14. Why
-are we having this issue and not Alpine Linux?
-
-I've asked on #musl, we'll see if they come back with some explanation.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
