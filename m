@@ -1,70 +1,53 @@
-From: daggs <daggs@gmx.com>
-Date: Sun, 13 Nov 2016 08:45:44 +0100
-Subject: [Buildroot] [PATCH v7] kodi: allow enablement of libamcodec as
- codec if selected
-In-Reply-To: <20161109224930.4ae4ee9e@free-electrons.com>
-References: <20161109190733.11189-1-daggs@gmx.com>,
- <20161109224930.4ae4ee9e@free-electrons.com>
-Message-ID: <trinity-b4dfcae4-f270-49c6-8edd-7a7c6ae9a835-1479023144098@3capp-mailcom-bs04>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Nov 2016 09:53:04 +0100
+Subject: [Buildroot] Enable option of nodeJS 4.1.2 in buildroot 2015.11
+In-Reply-To: <20161112210140.GA3700@free.fr>
+References: <CALD51P8hSabOW+SdV0Ycc46Ar4Pqn0jZuyazKhUUQcqKvsg6qA@mail.gmail.com>
+ <20161111043706.nrzzr7ca5nybi2ir@tarshish>
+ <20161111150017.29e032b5@free-electrons.com>
+ <20161112210140.GA3700@free.fr>
+Message-ID: <20161113095304.3dcd95f6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Thomas,
+Hello,
 
-> Hello,
-> 
-> On Wed,  9 Nov 2016 21:07:33 +0200, Dagg Stompler wrote:
-> > allow usage of amcodec if kodi is built and libamcodec is selected
-> > 
-> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> 
-> I've applied to next, but it would be really really good if you could
-> review your own patches before sending them. There was an obvious big
-> mistake in your patch, see below.
-I did tested the patch, it worked without any problems.
-maybe there was something bad if the diff which I've mis copied.
-regardless, I'll pay more attention in the future.
+On Sat, 12 Nov 2016 22:01:40 +0100, Yann E. MORIN wrote:
 
-Thanks.
+> > > Yann, you added this dependency in commit f443386c5d. Is that the right fix?  
+> 
+> Not really: if VFPv3 is enabled, so is VFPv2, see the conditions:
+> 	https://git.buildroot.org/buildroot/tree/arch/Config.in.arm#n21
+> 
+> and see the reasons below...
+> 
+> > I'm wondering if BR2_ARM_CPU_HAS_VFPV3 shouldn't select
+> > BR2_ARM_CPU_HAS_VFPV2, and ditto for V4 selecting V3.  
+> 
+> Unless I'm mistaken, that's already the case, and has been so at least
+> since 2013:
+> 
+>     5f959a1c arch: improve ARM floating point support and add support for EABIhf
+> 
+>    21 config BR2_ARM_CPU_HAS_VFPV3
+>    22 	bool
+>    23 	select BR2_ARM_CPU_HAS_VFPV2
+>    [--SNIP--]
+>    30 config BR2_ARM_CPU_HAS_VFPV4
+>    31 	bool
+>    32 	 select BR2_ARM_CPU_HAS_VFPV3
 
-> 
-> 
-> > diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> > index e0361da..f9d1a11 100644
-> > --- a/package/kodi/kodi.mk
-> > +++ b/package/kodi/kodi.mk
-> > @@ -96,9 +96,9 @@ endif
-> >  ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-> >  KODI_DEPENDENCIES += rpi-userland
-> >  KODI_CONF_OPTS += --with-platform=raspberry-pi --enable-player=omxplayer
-> > -KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
-> > -	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux" \
-> > -	LIBS="-lvcos -lvchostif"
-> > +-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
-> > +-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux
-> 
-> How do you expect those two lines to work? You don't even tell make
-> that this value should be assigned to the KODI_INCLUDES variable.
-> Clearly you didn't review your patch carefully enough here.
-> 
-> > +KODI_LIBS="-lvcos -lvchostif"
-> 
-> Space before/after the = sign, and double quotes not needed.
-> 
-> > +KODI_CONF_ENV += \
-> > +INCLUDES="$(KODI_INCLUDES)" \
-> > +LIBS="$(KODI_LIBS)"
-> 
-> The values should have been indented with on tab.
-> 
-> Applied with those issues fixed. Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> 
+I don't see how I could miss this. But then, why did Lijun had issues
+selecting NodeJS, and Baruch proposal to add || BR2_ARM_CPU_HAS_VFPV3
+solved it?
+
+We need to look into this.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
