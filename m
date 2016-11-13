@@ -1,43 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Nov 2016 12:11:00 +0100
-Subject: [Buildroot] Enable option of nodeJS 4.1.2 in buildroot 2015.11
-In-Reply-To: <20161113090038.GA3580@free.fr>
-References: <CALD51P8hSabOW+SdV0Ycc46Ar4Pqn0jZuyazKhUUQcqKvsg6qA@mail.gmail.com>
- <20161111043706.nrzzr7ca5nybi2ir@tarshish>
- <20161111150017.29e032b5@free-electrons.com>
- <20161112210140.GA3700@free.fr>
- <20161113095304.3dcd95f6@free-electrons.com>
- <20161113090038.GA3580@free.fr>
-Message-ID: <20161113121100.7fcdd0fd@free-electrons.com>
+Date: Sun, 13 Nov 2016 12:23:17 +0100
+Subject: [Buildroot] [git commit] jasper: disable -pedantic-errors
+Message-ID: <20161113112336.319E5800A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4605967780e9ecd14fba8100618963247ba72442
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 13 Nov 2016 10:00:39 +0100, Yann E. MORIN wrote:
+The -pedantic-errors gcc option turns -pedantic warnings into errors. This
+mostly affects older gcc versions that default to the ISO90 C standard. Use
+the --disable-strict configure option to remove -pedantic-errors.
 
-> > I don't see how I could miss this. But then, why did Lijun had issues
-> > selecting NodeJS, and Baruch proposal to add || BR2_ARM_CPU_HAS_VFPV3
-> > solved it?  
-> 
-> It did _not_ solve the issue, because Lijun did not have BR2_ARM_ENABLE_VFP
-> enabled, which meant he also did not have BR2_ARM_CPU_HAS_VFPV3 enabled.
-> 
-> Instead, he did use BR2_ARM_CPU_MAYBE_HAS_VFPV3 which is wrong.
-> 
-> Lijun must enable BR2_ARM_ENABLE_VFP in his config, if his CPU (cortex-a9)
-> indeed has a VFP. If not, then he'll be stuck with nodejs 0.10.x and
-> there is nothing we can do about that.
-> 
-> Nothing to investigate here on our side. 
+Fixes:
+http://autobuild.buildroot.net/results/191/191f80779df1a9e6f832106e6c4bdf601e2a9893/
+http://autobuild.buildroot.net/results/1fe/1febccc7215814490fa3c776b34bc367363afe39/
+http://autobuild.buildroot.net/results/a6f/a6f9bfec3406fc21b130f1669e3534651b9c9596/
 
-ACK, thanks!
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/jasper/jasper.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index 4616fed..bacb1a6 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -10,6 +10,7 @@ JASPER_INSTALL_STAGING = YES
+ JASPER_DEPENDENCIES = jpeg
+ JASPER_LICENSE = JasPer License Version 2.0
+ JASPER_LICENSE_FILES = LICENSE
++JASPER_CONF_OPTS = --disable-strict
+ 
+ # Xtensa gcc is unable to generate correct code with -O0 enabled by
+ # --enable-debug. Allow package build but disable debug.
