@@ -1,68 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Nov 2016 11:47:35 +0100
-Subject: [Buildroot] [PATCH] package/weston: fix build without EGL
-Message-ID: <1479034055-703-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Nov 2016 12:11:00 +0100
+Subject: [Buildroot] Enable option of nodeJS 4.1.2 in buildroot 2015.11
+In-Reply-To: <20161113090038.GA3580@free.fr>
+References: <CALD51P8hSabOW+SdV0Ycc46Ar4Pqn0jZuyazKhUUQcqKvsg6qA@mail.gmail.com>
+ <20161111043706.nrzzr7ca5nybi2ir@tarshish>
+ <20161111150017.29e032b5@free-electrons.com>
+ <20161112210140.GA3700@free.fr>
+ <20161113095304.3dcd95f6@free-electrons.com>
+ <20161113090038.GA3580@free.fr>
+Message-ID: <20161113121100.7fcdd0fd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/378/378ffddcebd0ab3dabfdb268614d1344a38e8dd1/
-    http://autobuild.buildroot.org/results/3c2/3c25333d3c5838bea27540d8ac752c8bdf4db843/
-    [...]
+Hello,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...form-include-weston-egl-ext.h-only-if-ENA.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/weston/0002-shared-platform-include-weston-egl-ext.h-only-if-ENA.patch
+On Sun, 13 Nov 2016 10:00:39 +0100, Yann E. MORIN wrote:
 
-diff --git a/package/weston/0002-shared-platform-include-weston-egl-ext.h-only-if-ENA.patch b/package/weston/0002-shared-platform-include-weston-egl-ext.h-only-if-ENA.patch
-new file mode 100644
-index 0000000..baa3a4f
---- /dev/null
-+++ b/package/weston/0002-shared-platform-include-weston-egl-ext.h-only-if-ENA.patch
-@@ -0,0 +1,38 @@
-+From e338ced1e04bf4b97322d5eed2b5bdf5b052095a Mon Sep 17 00:00:00 2001
-+From: Krzysztof Konopko <kris@youview.com>
-+Date: Thu, 15 Sep 2016 13:01:49 +0200
-+Subject: [PATCH] shared/platform: include weston-egl-ext.h only if ENABLE_EGL
-+ is defined
-+
-+Including `weston-egl-ext.h` causes compilation failure for configurations
-+with EGL disabled.
-+
-+Verified with `--disable-egl`, `--disable-x11-compositor`
-+and `--disable-drm-compositor`.
-+
-+Signed-off-by: Krzysztof Konopko <kris@youview.com>
-+Reviewed-by: Pekka Paalanen <pekka.paalanen@collabora.co.uk>
-+[yann.morin.1998 at free.fr: backported from upstream]
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ shared/platform.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/shared/platform.h b/shared/platform.h
-+index 1eb96fd..30db1a6 100644
-+--- a/shared/platform.h
-++++ b/shared/platform.h
-+@@ -33,9 +33,9 @@
-+ #include <wayland-egl.h>
-+ #include <EGL/egl.h>
-+ #include <EGL/eglext.h>
-+-#endif
-+ 
-+ #include "weston-egl-ext.h"
-++#endif
-+ 
-+ #ifdef  __cplusplus
-+ extern "C" {
-+-- 
-+2.7.4
-+
+> > I don't see how I could miss this. But then, why did Lijun had issues
+> > selecting NodeJS, and Baruch proposal to add || BR2_ARM_CPU_HAS_VFPV3
+> > solved it?  
+> 
+> It did _not_ solve the issue, because Lijun did not have BR2_ARM_ENABLE_VFP
+> enabled, which meant he also did not have BR2_ARM_CPU_HAS_VFPV3 enabled.
+> 
+> Instead, he did use BR2_ARM_CPU_MAYBE_HAS_VFPV3 which is wrong.
+> 
+> Lijun must enable BR2_ARM_ENABLE_VFP in his config, if his CPU (cortex-a9)
+> indeed has a VFP. If not, then he'll be stuck with nodejs 0.10.x and
+> there is nothing we can do about that.
+> 
+> Nothing to investigate here on our side. 
+
+ACK, thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
