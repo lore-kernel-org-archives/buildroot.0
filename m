@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Nov 2016 12:23:35 +0100
-Subject: [Buildroot] [PATCH] jasper: disable -pedantic-errors
-In-Reply-To: <72941ffb162f0bdf077c0dc15faaff86f4abfa88.1478978996.git.baruch@tkos.co.il>
-References: <72941ffb162f0bdf077c0dc15faaff86f4abfa88.1478978996.git.baruch@tkos.co.il>
-Message-ID: <20161113122335.70d33001@free-electrons.com>
+Date: Sun, 13 Nov 2016 12:23:39 +0100
+Subject: [Buildroot] [PATCH] package/weston: fix build without EGL
+In-Reply-To: <1479034055-703-1-git-send-email-yann.morin.1998@free.fr>
+References: <1479034055-703-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20161113122339.4b6f1b32@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 12 Nov 2016 21:29:56 +0200, Baruch Siach wrote:
-> The -pedantic-errors gcc option turns -pedantic warnings into errors. This
-> mostly affects older gcc versions that default to the ISO90 C standard. Use
-> the --disable-strict configure option to remove -pedantic-errors.
-> 
+On Sun, 13 Nov 2016 11:47:35 +0100, Yann E. MORIN wrote:
 > Fixes:
-> http://autobuild.buildroot.net/results/191/191f80779df1a9e6f832106e6c4bdf601e2a9893/
-> http://autobuild.buildroot.net/results/1fe/1febccc7215814490fa3c776b34bc367363afe39/
-> http://autobuild.buildroot.net/results/a6f/a6f9bfec3406fc21b130f1669e3534651b9c9596/
+>     http://autobuild.buildroot.org/results/378/378ffddcebd0ab3dabfdb268614d1344a38e8dd1/
+>     http://autobuild.buildroot.org/results/3c2/3c25333d3c5838bea27540d8ac752c8bdf4db843/
+>     [...]
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/jasper/jasper.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  ...form-include-weston-egl-ext.h-only-if-ENA.patch | 38 ++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/weston/0002-shared-platform-include-weston-egl-ext.h-only-if-ENA.patch
 
 Applied to master, thanks.
 
