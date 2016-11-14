@@ -1,42 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Nov 2016 22:52:07 +0100
-Subject: [Buildroot] [git commit branch/next] uboot-tools: bump to version
-	2016.11
-Message-ID: <20161114215221.ADEBC817A9@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 14 Nov 2016 22:53:03 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-11-13
+In-Reply-To: <20161114073015.24C9A20BE0@mail.free-electrons.com>
+References: <20161114073015.24C9A20BE0@mail.free-electrons.com>
+Message-ID: <1479160383.4567.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99fd3bae35f9971544990c1869933b8ae22832ec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Mon, 2016-11-14 at 08:30 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Build statistics for 2016-11-13
+> ================================
+> 
+> ??????successes : 220
+> ???????failures : 52?
+> ???????timeouts : 0??
+> ??????????TOTAL : 272
+> 
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/uboot-tools/uboot-tools.hash | 2 +-
- package/uboot-tools/uboot-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+[snip]
 
-diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
-index db60dab..5b2c3bf 100644
---- a/package/uboot-tools/uboot-tools.hash
-+++ b/package/uboot-tools/uboot-tools.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  95728e89dd476d17428f94080752ab48884be477b6a678941582aeef618b70bb  u-boot-2016.09.01.tar.bz2
-+sha256  45813e6565dcc0436abe6752624324cdbf5f3ac106570d76d32b46ec529bcdc8  u-boot-2016.11.tar.bz2
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index a3335a5..bb0cba8 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UBOOT_TOOLS_VERSION = 2016.09.01
-+UBOOT_TOOLS_VERSION = 2016.11
- UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPLv2+
+> ?????????arm |???????????????????tremor-19427 | NOK |
+> http://autobuild.buildroot.net/results/054f1c77b0e5d46b2dc53769469c0e
+> d03e6b79ef
+
+The ARM Cortex-M4 toolchain supports *only* Thumb-2 instructions,
+whereas tremor has ARM assembly code and therefore cannot be build with
+this toolchain.
+
+I would just exclude the relevant CPU ARMv7-M (BR2_ARM_CPU_ARMV7M) for
+simplicity, right?
+
+Best regards,
+J?rg Krause
