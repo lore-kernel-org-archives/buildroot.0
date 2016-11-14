@@ -1,104 +1,41 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Mon, 14 Nov 2016 02:05:41 -0800
-Subject: [Buildroot] [PATCH] package/gcc: backport xtensa trap pattern for
-	5.x
-Message-ID: <1479117941-14895-1-git-send-email-jcmvbkbc@gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Mon, 14 Nov 2016 12:04:48 +0100
+Subject: [Buildroot] [PATCH v2] htop: enable unicode if possible
+Message-ID: <20161114110448.9162-1-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc 5.x uses trap pattern extensively to mark locations where program
-execution should never get. Default pattern implementation emits a call
-to 'abort' function. This function however is not always available, e.g.
-it's not available for the libc dynamic linker. Backport implementation
-of the trap pattern for xtensa that does not result in a call to
-'abort'.
-
-Fixes:
-  http://autobuild.buildroot.net/results/0fbcc4475545904bf88f25a3bdf3ee552bf4960e
-  http://autobuild.buildroot.net/results/cb7f5bdfac615d774f3bcd1b802f8d74460bc557
-  http://autobuild.buildroot.net/results/cf3dc9ae4f74ff28b285f1a862b71d96384d7651
-
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- .../5.4.0/875-xtensa-implement-trap-pattern.patch  | 67 ++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
- create mode 100644 package/gcc/5.4.0/875-xtensa-implement-trap-pattern.patch
+ package/htop/htop.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/gcc/5.4.0/875-xtensa-implement-trap-pattern.patch b/package/gcc/5.4.0/875-xtensa-implement-trap-pattern.patch
-new file mode 100644
-index 0000000..870b079
---- /dev/null
-+++ b/package/gcc/5.4.0/875-xtensa-implement-trap-pattern.patch
-@@ -0,0 +1,67 @@
-+From 2b4b5775554c91a63ccae4ee566db696b633652e Mon Sep 17 00:00:00 2001
-+From: jcmvbkbc <jcmvbkbc@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Wed, 10 Jun 2015 15:07:40 +0000
-+Subject: [PATCH] xtensa: implement trap pattern
+v2:
+  - explicitily enable unicode
+ 
+diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+index 7409a78..af0f66b 100644
+--- a/package/htop/htop.mk
++++ b/package/htop/htop.mk
+@@ -7,10 +7,15 @@
+ HTOP_VERSION = 2.0.2
+ HTOP_SITE = http://hisham.hm/htop/releases/$(HTOP_VERSION)
+ HTOP_DEPENDENCIES = ncurses
+-HTOP_CONF_OPTS = --disable-unicode
+ # Prevent htop build system from searching the host paths
+ HTOP_CONF_ENV = HTOP_NCURSES_CONFIG_SCRIPT=$(STAGING_DIR)/usr/bin/ncurses5-config
+ HTOP_LICENSE = GPLv2
+ HTOP_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),)
++HTOP_CONF_OPTS = --disable-unicode
++else
++HTOP_CONF_OPTS = --enable-unicode
++endif
 +
-+2015-06-10  Max Filippov  <jcmvbkbc@gmail.com>
-+gcc/
-+	* config/xtensa/xtensa.h (TARGET_DEBUG): New definition.
-+	* config/xtensa/xtensa.md (define_attr "type"): New type "trap".
-+	(define_insn "trap"): New definition.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 224330 138bc75d-0d04-0410-961f-82ee72b054a4
-+---
-+ gcc/config/xtensa/xtensa.h  |  1 +
-+ gcc/config/xtensa/xtensa.md | 15 ++++++++++++++-
-+ 2 files changed, 15 insertions(+), 1 deletion(-)
-+
-+diff --git a/gcc/config/xtensa/xtensa.h b/gcc/config/xtensa/xtensa.h
-+index 615f741..fb8702c 100644
-+--- a/gcc/config/xtensa/xtensa.h
-++++ b/gcc/config/xtensa/xtensa.h
-+@@ -67,6 +67,7 @@ extern unsigned xtensa_current_frame_size;
-+ #define TARGET_THREADPTR	XCHAL_HAVE_THREADPTR
-+ #define TARGET_LOOPS	        XCHAL_HAVE_LOOPS
-+ #define TARGET_WINDOWED_ABI	(XSHAL_ABI == XTHAL_ABI_WINDOWED)
-++#define TARGET_DEBUG		XCHAL_HAVE_DEBUG
-+ 
-+ #define TARGET_DEFAULT \
-+   ((XCHAL_HAVE_L32R	? 0 : MASK_CONST16) |				\
-+diff --git a/gcc/config/xtensa/xtensa.md b/gcc/config/xtensa/xtensa.md
-+index 6d84384..a577aa3 100644
-+--- a/gcc/config/xtensa/xtensa.md
-++++ b/gcc/config/xtensa/xtensa.md
-+@@ -86,7 +86,7 @@
-+ ;; Attributes.
-+ 
-+ (define_attr "type"
-+-  "unknown,jump,call,load,store,move,arith,multi,nop,farith,fmadd,fconv,fload,fstore,mul16,mul32,div32,mac16,rsr,wsr,entry"
-++  "unknown,jump,call,load,store,move,arith,multi,nop,farith,fmadd,fconv,fload,fstore,mul16,mul32,div32,mac16,rsr,wsr,entry,trap"
-+   (const_string "unknown"))
-+ 
-+ (define_attr "mode"
-+@@ -1764,6 +1764,19 @@
-+   [(set_attr "length" "0")
-+    (set_attr "type" "nop")])
-+ 
-++(define_insn "trap"
-++  [(trap_if (const_int 1) (const_int 0))]
-++  ""
-++{
-++  if (TARGET_DEBUG)
-++    return "break\t1, 15";
-++  else
-++    return (TARGET_DENSITY ? "ill.n" : "ill");
-++}
-++  [(set_attr "type"	"trap")
-++   (set_attr "mode"	"none")
-++   (set_attr "length"	"3")])
-++
-+ ;; Setting up a frame pointer is tricky for Xtensa because GCC doesn't
-+ ;; know if a frame pointer is required until the reload pass, and
-+ ;; because there may be an incoming argument value in the hard frame
-+-- 
-+2.1.4
-+
+ $(eval $(autotools-package))
 -- 
-2.1.4
+2.9.3
