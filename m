@@ -1,105 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Nov 2016 22:53:12 +0100
-Subject: [Buildroot] [git commit] package/gcc: backport xtensa trap pattern
-	for 5.x
-Message-ID: <20161114215351.A2AFA818AA@busybox.osuosl.org>
+Date: Mon, 14 Nov 2016 22:54:58 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-11-13
+In-Reply-To: <1479160383.4567.1.camel@embedded.rocks>
+References: <20161114073015.24C9A20BE0@mail.free-electrons.com>
+ <1479160383.4567.1.camel@embedded.rocks>
+Message-ID: <20161114225458.72a48b22@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3f0d52144f27097bba225bdb2a3b1620d44ab5a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-gcc 5.x uses trap pattern extensively to mark locations where program
-execution should never get. Default pattern implementation emits a call
-to 'abort' function. This function however is not always available, e.g.
-it's not available for the libc dynamic linker. Backport implementation
-of the trap pattern for xtensa that does not result in a call to
-'abort'.
+On Mon, 14 Nov 2016 22:53:03 +0100, J?rg Krause wrote:
 
-Fixes:
-  http://autobuild.buildroot.net/results/0fbcc4475545904bf88f25a3bdf3ee552bf4960e
-  http://autobuild.buildroot.net/results/cb7f5bdfac615d774f3bcd1b802f8d74460bc557
-  http://autobuild.buildroot.net/results/cf3dc9ae4f74ff28b285f1a862b71d96384d7651
+> > ?????????arm |???????????????????tremor-19427 | NOK |
+> > http://autobuild.buildroot.net/results/054f1c77b0e5d46b2dc53769469c0e
+> > d03e6b79ef  
+> 
+> The ARM Cortex-M4 toolchain supports *only* Thumb-2 instructions,
+> whereas tremor has ARM assembly code and therefore cannot be build with
+> this toolchain.
+> 
+> I would just exclude the relevant CPU ARMv7-M (BR2_ARM_CPU_ARMV7M) for
+> simplicity, right?
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../5.4.0/875-xtensa-implement-trap-pattern.patch  | 67 ++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+Or, better, make tremor not use ARM-only instructions, by disabling the
+optimized code. The benefit of this approach is that you don't have to
+propagate the !BR2_ARM_CPU_ARMV7M dependency to the reverse
+dependencies of tremor.
 
-diff --git a/package/gcc/5.4.0/875-xtensa-implement-trap-pattern.patch b/package/gcc/5.4.0/875-xtensa-implement-trap-pattern.patch
-new file mode 100644
-index 0000000..870b079
---- /dev/null
-+++ b/package/gcc/5.4.0/875-xtensa-implement-trap-pattern.patch
-@@ -0,0 +1,67 @@
-+From 2b4b5775554c91a63ccae4ee566db696b633652e Mon Sep 17 00:00:00 2001
-+From: jcmvbkbc <jcmvbkbc@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Wed, 10 Jun 2015 15:07:40 +0000
-+Subject: [PATCH] xtensa: implement trap pattern
-+
-+2015-06-10  Max Filippov  <jcmvbkbc@gmail.com>
-+gcc/
-+	* config/xtensa/xtensa.h (TARGET_DEBUG): New definition.
-+	* config/xtensa/xtensa.md (define_attr "type"): New type "trap".
-+	(define_insn "trap"): New definition.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 224330 138bc75d-0d04-0410-961f-82ee72b054a4
-+---
-+ gcc/config/xtensa/xtensa.h  |  1 +
-+ gcc/config/xtensa/xtensa.md | 15 ++++++++++++++-
-+ 2 files changed, 15 insertions(+), 1 deletion(-)
-+
-+diff --git a/gcc/config/xtensa/xtensa.h b/gcc/config/xtensa/xtensa.h
-+index 615f741..fb8702c 100644
-+--- a/gcc/config/xtensa/xtensa.h
-++++ b/gcc/config/xtensa/xtensa.h
-+@@ -67,6 +67,7 @@ extern unsigned xtensa_current_frame_size;
-+ #define TARGET_THREADPTR	XCHAL_HAVE_THREADPTR
-+ #define TARGET_LOOPS	        XCHAL_HAVE_LOOPS
-+ #define TARGET_WINDOWED_ABI	(XSHAL_ABI == XTHAL_ABI_WINDOWED)
-++#define TARGET_DEBUG		XCHAL_HAVE_DEBUG
-+ 
-+ #define TARGET_DEFAULT \
-+   ((XCHAL_HAVE_L32R	? 0 : MASK_CONST16) |				\
-+diff --git a/gcc/config/xtensa/xtensa.md b/gcc/config/xtensa/xtensa.md
-+index 6d84384..a577aa3 100644
-+--- a/gcc/config/xtensa/xtensa.md
-++++ b/gcc/config/xtensa/xtensa.md
-+@@ -86,7 +86,7 @@
-+ ;; Attributes.
-+ 
-+ (define_attr "type"
-+-  "unknown,jump,call,load,store,move,arith,multi,nop,farith,fmadd,fconv,fload,fstore,mul16,mul32,div32,mac16,rsr,wsr,entry"
-++  "unknown,jump,call,load,store,move,arith,multi,nop,farith,fmadd,fconv,fload,fstore,mul16,mul32,div32,mac16,rsr,wsr,entry,trap"
-+   (const_string "unknown"))
-+ 
-+ (define_attr "mode"
-+@@ -1764,6 +1764,19 @@
-+   [(set_attr "length" "0")
-+    (set_attr "type" "nop")])
-+ 
-++(define_insn "trap"
-++  [(trap_if (const_int 1) (const_int 0))]
-++  ""
-++{
-++  if (TARGET_DEBUG)
-++    return "break\t1, 15";
-++  else
-++    return (TARGET_DENSITY ? "ill.n" : "ill");
-++}
-++  [(set_attr "type"	"trap")
-++   (set_attr "mode"	"none")
-++   (set_attr "length"	"3")])
-++
-+ ;; Setting up a frame pointer is tricky for Xtensa because GCC doesn't
-+ ;; know if a frame pointer is required until the reload pass, and
-+ ;; because there may be an incoming argument value in the hard frame
-+-- 
-+2.1.4
-+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
