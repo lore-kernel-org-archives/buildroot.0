@@ -1,56 +1,50 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Mon, 14 Nov 2016 18:47:50 +0300
-Subject: [Buildroot] [PATCH] config: bump U-Boot to 2016.11-rc3 in synopsys
-	defconfigs
-Message-ID: <1479138470-47444-1-git-send-email-vzakhar@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Nov 2016 18:15:16 +0100
+Subject: [Buildroot] [PATCH] config: bump linux kernel to 4.8.6 in
+ synopsys defconfigs
+In-Reply-To: <1479134749.4408.54.camel@synopsys.com>
+References: <1478793207-31255-1-git-send-email-vzakhar@synopsys.com>
+ <20161111151832.1649d24e@free-electrons.com>
+ <1479126748.3874.28.camel@synopsys.com>
+ <20161114150740.394bdd02@free-electrons.com>
+ <1479133987.4408.48.camel@synopsys.com>
+ <20161114154211.66ff86bf@free-electrons.com>
+ <1479134749.4408.54.camel@synopsys.com>
+Message-ID: <20161114171516.GB3399@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With this commit we upgrade U-Boot version to 2016.11-rc3
-in "snps_axs101_defconfig" and "snps_axs103_defconfig".
+Alexey, All,
 
-Important fixes: new version fixes U-Boot build for arc700.
-Since gcc-6.x "-marc700" option is no longer supported,
-"-mcpu=arc700" should be used instead.
+On 2016-11-14 14:46 +0000, Alexey Brodkin spake thusly:
+[--SNIP--]
+> The point is we were sitting on the patch for quite some time and when we saw
+> RC1 was cut (as always unexpectedly :)) simply sent out what we had in our tree.
 
-We haven't sent it before as we were waiting for U-Boot
-2016.11 release. But as it unfortunately hasn't come up yet we
-bump U-Boot version to the latest release candidate.
-We are going to upgrade it to 2016.11 as soon as the release
-comes.
+"Unexpectedly" is a bit of untrue: we've been doing releases every three
+months since February 2009, 7 years ago, with a one-month freeze before
+the release.
 
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
----
- configs/snps_axs101_defconfig | 2 +-
- configs/snps_axs103_defconfig | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+So, anything that comes on-or-after the first day of the release month is
+not guaranteed to go in master, unless it is a fix.
 
-diff --git a/configs/snps_axs101_defconfig b/configs/snps_axs101_defconfig
-index f272853..694fe47 100644
---- a/configs/snps_axs101_defconfig
-+++ b/configs/snps_axs101_defconfig
-@@ -21,6 +21,6 @@ BR2_LINUX_KERNEL_DEFCONFIG="axs101"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11-rc3"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="axs101"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/snps_axs103_defconfig b/configs/snps_axs103_defconfig
-index 75596c9..5c82713 100644
---- a/configs/snps_axs103_defconfig
-+++ b/configs/snps_axs103_defconfig
-@@ -22,6 +22,6 @@ BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11-rc3"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="axs103"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+This is far from "unexpected". ;-)
+
+Granted, the rc1 tag can be (and has often been) delayed by a few days,
+but this is a minor delay; it has never been guaranteed the first few
+days of the stabilisation month would still be open for merging into
+master...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.6.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
