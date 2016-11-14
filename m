@@ -1,41 +1,26 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Mon, 14 Nov 2016 12:04:48 +0100
-Subject: [Buildroot] [PATCH v2] htop: enable unicode if possible
-Message-ID: <20161114110448.9162-1-jezz@sysmic.org>
+From: Tobias Klauser <tklauser@distanz.ch>
+Date: Mon, 14 Nov 2016 12:29:46 +0100
+Subject: [Buildroot] [PATCH 0/2] musl support for libnet and netsniff-ng
+Message-ID: <20161114112948.13292-1-tklauser@distanz.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/htop/htop.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+netsniff-ng can be build with musl since version 0.5.8, however it depends
+on libnet which currently fails to build with musl. This series fixes libnet
+build with musl by adding the corresponding upstream patch and then enabling
+the netsniff-ng with musl as well.
 
-v2:
-  - explicitily enable unicode
- 
-diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-index 7409a78..af0f66b 100644
---- a/package/htop/htop.mk
-+++ b/package/htop/htop.mk
-@@ -7,10 +7,15 @@
- HTOP_VERSION = 2.0.2
- HTOP_SITE = http://hisham.hm/htop/releases/$(HTOP_VERSION)
- HTOP_DEPENDENCIES = ncurses
--HTOP_CONF_OPTS = --disable-unicode
- # Prevent htop build system from searching the host paths
- HTOP_CONF_ENV = HTOP_NCURSES_CONFIG_SCRIPT=$(STAGING_DIR)/usr/bin/ncurses5-config
- HTOP_LICENSE = GPLv2
- HTOP_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),)
-+HTOP_CONF_OPTS = --disable-unicode
-+else
-+HTOP_CONF_OPTS = --enable-unicode
-+endif
-+
- $(eval $(autotools-package))
+Tobias Klauser (2):
+  package/libnet: fix compilation with musl
+  package/netsniff-ng: allow to build with musl
+
+ package/libnet/0001-support-musl-libc.patch | 50 +++++++++++++++++++++++++++++
+ package/netsniff-ng/Config.in               |  3 +-
+ 2 files changed, 51 insertions(+), 2 deletions(-)
+ create mode 100644 package/libnet/0001-support-musl-libc.patch
+
 -- 
-2.9.3
+2.11.0.rc0.7.gbe5a750
