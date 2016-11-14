@@ -1,42 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Nov 2016 21:18:36 +0100
-Subject: [Buildroot] [PATCH next] package/{mesa3d,
- mesa3d-headers}: bump version to 13.0.1
-In-Reply-To: <20161114140136.33344-1-Vincent.Riera@imgtec.com>
-References: <20161114140136.33344-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161114211836.18c509d7@free-electrons.com>
+Date: Mon, 14 Nov 2016 21:34:24 +0100
+Subject: [Buildroot] [git commit] config: bump linux kernel to 4.8.6 in
+	synopsys defconfigs
+Message-ID: <20161114203529.02E7C801F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=dab808e6ae634e08040a96bd06ea4910fed93633
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 14 Nov 2016 14:01:36 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
->  package/mesa3d/mesa3d.hash               | 4 ++--
->  package/mesa3d/mesa3d.mk                 | 2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
+With this commit we update ARC defconfigs with the following:
 
-Well, in fact the bump to mesa 13.0 was probably a bad thing, it's
-apparently a development version, and it's causing a number of build
-issues (not in mesa itself, but in other packages using it).
+  - "snps_axs101_defconfig", "snps_axs103_defconfig" and
+    "snps_hs38_smp_vdk_defconfig":
+     - bump linux kernel version to 4.8.6
+     - set up host linux headers to 4.8
 
-Does 13.0.1 fixes those issues? See Yann's mail about this:
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+[Thomas: as reported by Alexey, this commit is in fact a bug fix: it
+makes the defconfig work properly. Indeed, since the ARC compiler has
+moved to gcc 6.x, the ABI has changed, and a Linux 4.8+ kernel is
+needed for userspace to work on ARC.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/snps_axs101_defconfig       | 6 +++---
+ configs/snps_axs103_defconfig       | 6 +++---
+ configs/snps_hs38_smp_vdk_defconfig | 6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: buildroot at buildroot.org
-Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d: Remove opengl headers files if opengl support is disabled
-Date: Sun, 13 Nov 2016 15:09:18 +0100
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/configs/snps_axs101_defconfig b/configs/snps_axs101_defconfig
+index f272853..eea7a50 100644
+--- a/configs/snps_axs101_defconfig
++++ b/configs/snps_axs101_defconfig
+@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ 
+-# Linux headers same as kernel, a 4.7 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
++# Linux headers same as kernel, a 4.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs101"
+ 
+ # Bootloader
+diff --git a/configs/snps_axs103_defconfig b/configs/snps_axs103_defconfig
+index 75596c9..08c55de 100644
+--- a/configs/snps_axs103_defconfig
++++ b/configs/snps_axs103_defconfig
+@@ -9,13 +9,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ 
+-# Linux headers same as kernel, a 4.7 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
++# Linux headers same as kernel, a 4.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
+ 
+ # Bootloader
+diff --git a/configs/snps_hs38_smp_vdk_defconfig b/configs/snps_hs38_smp_vdk_defconfig
+index 32922f8..d4dcd1b 100644
+--- a/configs/snps_hs38_smp_vdk_defconfig
++++ b/configs/snps_hs38_smp_vdk_defconfig
+@@ -8,12 +8,12 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
+ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+-# Linux headers same as kernel, a 4.7 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
++# Linux headers same as kernel, a 4.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="vdk_hs38_smp"
+ BR2_LINUX_KERNEL_VMLINUX=y
