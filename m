@@ -1,50 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Nov 2016 18:15:16 +0100
-Subject: [Buildroot] [PATCH] config: bump linux kernel to 4.8.6 in
- synopsys defconfigs
-In-Reply-To: <1479134749.4408.54.camel@synopsys.com>
-References: <1478793207-31255-1-git-send-email-vzakhar@synopsys.com>
- <20161111151832.1649d24e@free-electrons.com>
- <1479126748.3874.28.camel@synopsys.com>
- <20161114150740.394bdd02@free-electrons.com>
- <1479133987.4408.48.camel@synopsys.com>
- <20161114154211.66ff86bf@free-electrons.com>
- <1479134749.4408.54.camel@synopsys.com>
-Message-ID: <20161114171516.GB3399@free.fr>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 14 Nov 2016 15:26:24 -0200
+Subject: [Buildroot] [PATCH 2/3] uboot-tools: bump to version 2016.11
+In-Reply-To: <1479144385-27214-1-git-send-email-festevam@gmail.com>
+References: <1479144385-27214-1-git-send-email-festevam@gmail.com>
+Message-ID: <1479144385-27214-2-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexey, All,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ package/uboot-tools/uboot-tools.hash | 2 +-
+ package/uboot-tools/uboot-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2016-11-14 14:46 +0000, Alexey Brodkin spake thusly:
-[--SNIP--]
-> The point is we were sitting on the patch for quite some time and when we saw
-> RC1 was cut (as always unexpectedly :)) simply sent out what we had in our tree.
-
-"Unexpectedly" is a bit of untrue: we've been doing releases every three
-months since February 2009, 7 years ago, with a one-month freeze before
-the release.
-
-So, anything that comes on-or-after the first day of the release month is
-not guaranteed to go in master, unless it is a fix.
-
-This is far from "unexpected". ;-)
-
-Granted, the rc1 tag can be (and has often been) delayed by a few days,
-but this is a minor delay; it has never been guaranteed the first few
-days of the stabilisation month would still be open for merging into
-master...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
+index db60dab..5b2c3bf 100644
+--- a/package/uboot-tools/uboot-tools.hash
++++ b/package/uboot-tools/uboot-tools.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  95728e89dd476d17428f94080752ab48884be477b6a678941582aeef618b70bb  u-boot-2016.09.01.tar.bz2
++sha256  45813e6565dcc0436abe6752624324cdbf5f3ac106570d76d32b46ec529bcdc8  u-boot-2016.11.tar.bz2
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index a3335a5..bb0cba8 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UBOOT_TOOLS_VERSION = 2016.09.01
++UBOOT_TOOLS_VERSION = 2016.11
+ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPLv2+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
