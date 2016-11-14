@@ -1,36 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Nov 2016 23:49:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 6.9.1
-In-Reply-To: <1479142730-21743-1-git-send-email-cloudyparts@icloud.com>
-References: <1479142730-21743-1-git-send-email-cloudyparts@icloud.com>
-Message-ID: <20161114234913.787c714e@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 15 Nov 2016 00:16:40 +0100
+Subject: [Buildroot] [PATCH v1] qt5base: fix eglfs compile for odroid-mali
+Message-ID: <1479165400-13248-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Avoid duplicated struct fbdev_window definition (introduced by [1]) by
+renaming struct fbdev_window to shadow_fbdev_window.
 
-On Mon, 14 Nov 2016 11:58:50 -0500, Patrick Devlin wrote:
-> https://nodejs.org/en/blog/release/v6.9.1/
-> 
-> The patches from 6.7.0 have been copied to 6.9.1.
-> 
-> Signed-off-by: Patrick Devlin <cloudyparts@icloud.com>
-> ---
->  .../{6.7.0 => 6.9.1}/0001-gyp-force-link-command-to-use-CXX.patch     | 0
->  .../0002-inspector-don-t-build-when-ssl-support-is-disabled.patch     | 0
->  package/nodejs/Config.in                                              | 2 +-
->  package/nodejs/nodejs.hash                                            | 4 ++--
->  4 files changed, 3 insertions(+), 3 deletions(-)
->  rename package/nodejs/{6.7.0 => 6.9.1}/0001-gyp-force-link-command-to-use-CXX.patch (100%)
->  rename package/nodejs/{6.7.0 => 6.9.1}/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch (100%)
+Fixes [2]:
 
-Applied to next, thanks.
+qeglfsmaliintegration.cpp:45:8: error: redefinition of 'struct fbdev_window'
+ struct fbdev_window {
+        ^
+In file included from /accts/mlweber1/rc-buildroot-test/scripts/instance-0/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:28:0,
+                 from /accts/mlweber1/rc-buildroot-test/scripts/instance-0/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/egl.h:36,
+                 from ../../../eglfs/qeglfsglobal.h:45,
+                 from ../../../eglfs/qeglfsdeviceintegration.h:48,
+                 from qeglfsmaliintegration.h:37,
+                 from qeglfsmaliintegration.cpp:34:
 
-Thomas
+[1] https://code.qt.io/cgit/qt/qtbase.git/commit/?h=dev&id=58bed4cda98e8e25db8adc61c7db73b6853077dc
+[2] http://autobuild.buildroot.net/results/48c/48c458c035162169e8ca7c34ae65e9064822f25a
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...fs-fix-eglfs_mali-compile-for-odroid-mali.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 package/qt5/qt5base/0007-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch
+
+diff --git a/package/qt5/qt5base/0007-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch b/package/qt5/qt5base/0007-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch
+new file mode 100644
+index 0000000..cbafb39
+--- /dev/null
++++ b/package/qt5/qt5base/0007-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch
+@@ -0,0 +1,53 @@
++From b6c602e4264021f98ec2c72316e2a2000bf35e82 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Mon, 14 Nov 2016 23:42:25 +0100
++Subject: [PATCH] eglfs: fix eglfs_mali compile for odroid-mali
++
++Avoid duplicated struct fbdev_window definition (introduced by [1]) by
++renaming struct fbdev_window to shadow_fbdev_window.
++
++Fixes the following buildroot compile failure ([2]):
++
++qeglfsmaliintegration.cpp:45:8: error: redefinition of 'struct fbdev_window'
++ struct fbdev_window {
++        ^
++In file included from /accts/mlweber1/rc-buildroot-test/scripts/instance-0/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:28:0,
++                 from /accts/mlweber1/rc-buildroot-test/scripts/instance-0/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/egl.h:36,
++                 from ../../../eglfs/qeglfsglobal.h:45,
++                 from ../../../eglfs/qeglfsdeviceintegration.h:48,
++                 from qeglfsmaliintegration.h:37,
++                 from qeglfsmaliintegration.cpp:34:
++
++[1] https://code.qt.io/cgit/qt/qtbase.git/commit/?h=dev&id=58bed4cda98e8e25db8adc61c7db73b6853077dc
++[2] http://autobuild.buildroot.net/results/48c/48c458c035162169e8ca7c34ae65e9064822f25a
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ .../eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp      | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp b/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
++index 43decdf..aeba83f 100644
++--- a/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
+++++ b/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
++@@ -42,7 +42,7 @@
++ 
++ QT_BEGIN_NAMESPACE
++ 
++-struct fbdev_window {
+++struct shadow_fbdev_window {
++     unsigned short width;
++     unsigned short height;
++ };
++@@ -85,7 +85,7 @@ EGLNativeWindowType QEglFSMaliIntegration::createNativeWindow(QPlatformWindow *w
++     Q_UNUSED(window);
++     Q_UNUSED(format);
++ 
++-    fbdev_window *fbwin = reinterpret_cast<fbdev_window *>(malloc(sizeof(fbdev_window)));
+++    shadow_fbdev_window *fbwin = reinterpret_cast<shadow_fbdev_window *>(malloc(sizeof(shadow_fbdev_window)));
++     if (NULL == fbwin)
++         return 0;
++ 
++-- 
++2.8.1
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
