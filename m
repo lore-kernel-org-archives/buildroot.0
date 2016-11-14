@@ -1,49 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Nov 2016 22:34:31 +0100
-Subject: [Buildroot] [PATCHv2] dtv-scan-tables: rename file to have only
- ASCII characters
-In-Reply-To: <1479158436-4361-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1479158436-4361-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20161114223431.47aa1c73@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 14 Nov 2016 23:43:33 +0200
+Subject: [Buildroot] [PATCH] openjpeg: security bump to version 2.1.2
+In-Reply-To: <20161114223404.7c3b88be@free-electrons.com>
+References: <08339f7ad87912d98912f4c52268b6c79ffd515c.1479156463.git.baruch@tkos.co.il>
+ <20161114223404.7c3b88be@free-electrons.com>
+Message-ID: <20161114214333.oaw6ounj642bkwou@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Mon, 14 Nov 2016 22:20:36 +0100, Thomas Petazzoni wrote:
-> Since the bump of dtv-scan-tables to version
-> ceb11833b35f05813b1f0397a60e0f3b99430aab in commit
-> b1c8794d8ac0eb3895d13ae91d8e912ec469a105, one file contains non-ASCII
-> characters, which causes encoding issues tvheadend. Since no other
-> file in the dtv-scan-tables code base contains files with non-ASCII
-> characters (despite having files named after cities in various
-> countries that definitely do have non-ASCII characters), we rename
-> this file so that it is named with only ASCII characters.
+On Mon, Nov 14, 2016 at 10:34:04PM +0100, Thomas Petazzoni wrote:
+> On Mon, 14 Nov 2016 22:47:43 +0200, Baruch Siach wrote:
+> > See CHANGELOG.md for the full list of fixes, including security issues.
+> > 
+> > See CVE number lists at [1] and [2].
+> > 
+> > [1] http://advisories.mageia.org/MGASA-2016-0362.html
+> > [2] https://lists.fedoraproject.org/archives/list/package-announce at lists.fedoraproject.org/thread/HPMDEUIMHTLKMHELDL4F4HZ7X4Y34JEB/
+> > 
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > ---
+> >  package/openjpeg/openjpeg.hash | 2 +-
+> >  package/openjpeg/openjpeg.mk   | 4 ++--
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> This fixes the build of tvheadend, which was failing when the host
-> Python interpreter was python3, due to a file name encoding issue.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/1ae8bee297edb089535a2fb6ec724ebf7976888d/
->   (tvheadend)
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> Changes since v1:
->  - use a post-patch hook instead of doing the rename at the end of the
->    installation step
-> ---
->  package/dtv-scan-tables/dtv-scan-tables.mk | 9 +++++++++
->  1 file changed, 9 insertions(+)
+> Applied to master, thanks.
 
-Applied to master, thanks. Thanks Yann for reviewing the patch!
+I mistakenly created this patch against -next. The newly added patches in 
+master don't apply to this version. I'll post a fix.
 
-Thomas
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
