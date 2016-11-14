@@ -1,82 +1,86 @@
-From: Tobias Klauser <tklauser@distanz.ch>
-Date: Mon, 14 Nov 2016 12:29:47 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libnet: fix compilation with musl
-In-Reply-To: <20161114112948.13292-1-tklauser@distanz.ch>
-References: <20161114112948.13292-1-tklauser@distanz.ch>
-Message-ID: <20161114112948.13292-2-tklauser@distanz.ch>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 14 Nov 2016 12:14:22 +0000
+Subject: [Buildroot] [PATCH next] cmake: bump version to 3.7.0
+Message-ID: <20161114121422.42062-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch taken from from upstream:
-https://github.com/sam-github/libnet/commit/ffd7fab744a9ad2893169a8fb6244074604d5d0d
+libuv is now a required dependency.
 
-Adjusted the file paths manually so the patch applies to the packaged
-libnet sources.
-
-Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/libnet/0001-support-musl-libc.patch | 50 +++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/libnet/0001-support-musl-libc.patch
+ package/cmake/Config.in  | 11 ++++++++---
+ package/cmake/cmake.hash |  4 ++--
+ package/cmake/cmake.mk   |  6 +++---
+ 3 files changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/package/libnet/0001-support-musl-libc.patch b/package/libnet/0001-support-musl-libc.patch
-new file mode 100644
-index 000000000000..0704157bb57e
---- /dev/null
-+++ b/package/libnet/0001-support-musl-libc.patch
-@@ -0,0 +1,50 @@
-+From ffd7fab744a9ad2893169a8fb6244074604d5d0d Mon Sep 17 00:00:00 2001
-+From: rofl0r <retnyg@gmx.net>
-+Date: Tue, 12 Aug 2014 21:51:39 +0200
-+Subject: [PATCH] Support musl libc, remove support for glibc < 2.1
-+
-+The workarounds for glibc < 2.1 (was released february 1999) break the
-+build with musl libc.
-+
-+It is very unlikely that 2.0 or earlier is still in use, and if so,
-+1) that's a big security hole
-+2) code wouldnt compile anyway since noone tested build in the last decade
-+3) user of it wouldn't expect anyway to get bleeding edge sw built on it,
-+   so he would just use the latest version that works for him.
-+
-+Closes #52
-+---
-+ libnet/src/libnet_link_linux.c | 11 -----------
-+ 1 file changed, 11 deletions(-)
-+
-+diff --git a/libnet/src/libnet_link_linux.c b/libnet/src/libnet_link_linux.c
-+index 054458d..3c6df3c 100644
-+--- a/src/libnet_link_linux.c
-++++ b/src/libnet_link_linux.c
-+@@ -30,26 +30,15 @@
-+ #include <sys/time.h>
-+ 
-+ #include <net/if.h>
-+-#if (__GLIBC__)
-+ #include <netinet/if_ether.h>
-+ #include <net/if_arp.h>
-+-#else
-+-#include <linux/if_arp.h>
-+-#include <linux/if_ether.h>
-+-#endif
-+ 
-+ #if (HAVE_PACKET_SOCKET)
-+ #ifndef SOL_PACKET
-+ #define SOL_PACKET 263
-+ #endif  /* SOL_PACKET */
-+-#if __GLIBC__ >= 2 && __GLIBC_MINOR >= 1
-+ #include <netpacket/packet.h>
-+ #include <net/ethernet.h>     /* the L2 protocols */
-+-#else
-+-#include <asm/types.h>
-+-#include <linux/if_packet.h>
-+-#include <linux/if_ether.h>   /* The L2 protocols */
-+-#endif
-+ #endif  /* HAVE_PACKET_SOCKET */
-+ 
-+ #include "../include/libnet.h"
+diff --git a/package/cmake/Config.in b/package/cmake/Config.in
+index 6f04a4a..b554d7c 100644
+--- a/package/cmake/Config.in
++++ b/package/cmake/Config.in
+@@ -20,11 +20,14 @@ config BR2_PACKAGE_CMAKE_CTEST
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_XZ
++	select BR2_PACKAGE_LIBUV
+ 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # from jsoncpp
+ 	depends on BR2_USE_WCHAR # libarchive
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_STATIC_LIBS
++	depends on !BR2_STATIC_LIBS #libuv
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
++	depends on BR2_USE_MMU # libuv
+ 	help
+ 	  CTest is a testing tool distributed as a part of CMake. It
+ 	  can be used to automate updating (using CVS for example),
+@@ -34,7 +37,9 @@ config BR2_PACKAGE_CMAKE_CTEST
+ 
+ 	  http://www.cmake.org/
+ 
+-comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7"
++comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7, threads"
+ 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index f846dc9..687e5a4 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+-# From http://www.cmake.org/files/v3.6/cmake-3.6.3-SHA-256.txt
+-sha256 7d73ee4fae572eb2d7cd3feb48971aea903bb30a20ea5ae8b4da826d8ccad5fe  cmake-3.6.3.tar.gz
++# From http://www.cmake.org/files/v3.7/cmake-3.7.0-SHA-256.txt
++sha256 ed63e05c41aeb6c036e503114ab15847f29c312f9f21f5f1a7060a4b4ec2fb31  cmake-3.7.0.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index fadb09e..522d7fe 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CMAKE_VERSION_MAJOR = 3.6
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
++CMAKE_VERSION_MAJOR = 3.7
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
+@@ -22,7 +22,7 @@ CMAKE_LICENSE_FILES = Copyright.txt
+ #   the system-wide libraries instead of rebuilding and statically
+ #   linking with the ones bundled into the CMake sources.
+ 
+-CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz
++CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz libuv
+ 
+ CMAKE_CONF_OPTS = \
+ 	-DKWSYS_LFS_WORKS=TRUE \
 -- 
-2.11.0.rc0.7.gbe5a750
+2.10.1
