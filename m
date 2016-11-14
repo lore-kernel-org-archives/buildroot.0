@@ -1,48 +1,59 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 14 Nov 2016 22:47:43 +0200
-Subject: [Buildroot] [PATCH] openjpeg: security bump to version 2.1.2
-Message-ID: <08339f7ad87912d98912f4c52268b6c79ffd515c.1479156463.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Nov 2016 21:55:03 +0100
+Subject: [Buildroot] [PATCH] dtv-scan-tables: rename file to have only ASCII
+	characters
+Message-ID: <1479156903-486-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See CHANGELOG.md for the full list of fixes, including security issues.
+Since the bump of dtv-scan-tables to version
+ceb11833b35f05813b1f0397a60e0f3b99430aab in commit
+b1c8794d8ac0eb3895d13ae91d8e912ec469a105, one file contains non-ASCII
+characters, which causes encoding issues tvheadend. Since no other
+file in the dtv-scan-tables code base contains files with non-ASCII
+characters (despite having files named after cities in various
+countries that definitely do have non-ASCII characters), we rename
+this file so that it is named with only ASCII characters.
 
-See CVE number lists at [1] and [2].
+This fixes the build of tvheadend, which was failing when the host
+Python interpreter was python3, due to a file name encoding issue.
 
-[1] http://advisories.mageia.org/MGASA-2016-0362.html
-[2] https://lists.fedoraproject.org/archives/list/package-announce at lists.fedoraproject.org/thread/HPMDEUIMHTLKMHELDL4F4HZ7X4Y34JEB/
+Fixes:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+  http://autobuild.buildroot.net/results/1ae8bee297edb089535a2fb6ec724ebf7976888d/
+  (tvheadend)
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openjpeg/openjpeg.hash | 2 +-
- package/openjpeg/openjpeg.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Note: we will separately submit a patch to the upstream
+dtv-scan-tables project to rename the problematic file.
+---
+ package/dtv-scan-tables/dtv-scan-tables.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
-index 35d4fbd5350e..c0abd0c54d7c 100644
---- a/package/openjpeg/openjpeg.hash
-+++ b/package/openjpeg/openjpeg.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	4afc996cd5e0d16360d71c58216950bcb4ce29a3272360eb29cadb1c8bce4efc  openjpeg-2.1.tar.gz
-+sha256	4ce77b6ef538ef090d9bde1d5eeff8b3069ab56c4906f083475517c2c023dfa7  openjpeg-2.1.2.tar.gz
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index bf125261a7fe..ca22068113a3 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
+index 8ef42b9..2be0eb5 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.mk
++++ b/package/dtv-scan-tables/dtv-scan-tables.mk
+@@ -17,11 +17,16 @@ DTV_SCAN_TABLES_SITE_METHOD = git
+ DTV_SCAN_TABLES_LICENSE = GPLv2, LGPLv2.1
+ DTV_SCAN_TABLES_LICENSE_FILES = COPYING COPYING.LGPL
  
--OPENJPEG_VERSION = 2.1
--OPENJPEG_SITE = $(call github,uclouvain,openjpeg,version.$(OPENJPEG_VERSION))
-+OPENJPEG_VERSION = 2.1.2
-+OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
- OPENJPEG_LICENSE = BSD-2c
- OPENJPEG_LICENSE_FILES = LICENSE
- OPENJPEG_INSTALL_STAGING = YES
++# In order to avoid issues with file name encodings, we rename the
++# only dtv-scan-tables file that has non-ASCII characters to have a
++# name using only ASCII characters (pl-Krosno_Sucha_Gora)
+ define DTV_SCAN_TABLES_INSTALL_TARGET_CMDS
+ 	for f in atsc dvb-c dvb-s dvb-t; do \
+ 		$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/dvb/$$f; \
+ 		$(INSTALL) $(@D)/$$f/* $(TARGET_DIR)/usr/share/dvb/$$f; \
+ 	done
++	mv $(TARGET_DIR)/usr/share/dvb/dvb-t/pl-Krosno_Sucha* \
++		$(TARGET_DIR)/usr/share/dvb/dvb-t/pl-Krosno_Sucha_Gora
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-2.10.2
+2.7.4
