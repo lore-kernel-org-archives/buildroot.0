@@ -1,95 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Nov 2016 21:34:24 +0100
-Subject: [Buildroot] [git commit] config: bump linux kernel to 4.8.6 in
-	synopsys defconfigs
-Message-ID: <20161114203529.02E7C801F2@busybox.osuosl.org>
+Date: Mon, 14 Nov 2016 21:36:11 +0100
+Subject: [Buildroot] [git commit branch/next] lcms2: bump version to 2.8
+Message-ID: <20161114203615.4161381D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dab808e6ae634e08040a96bd06ea4910fed93633
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=4309b96f3a38a2ed40389612c28a47917595667b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-With this commit we update ARC defconfigs with the following:
+For ChangeLog see [1].
 
-  - "snps_axs101_defconfig", "snps_axs103_defconfig" and
-    "snps_hs38_smp_vdk_defconfig":
-     - bump linux kernel version to 4.8.6
-     - set up host linux headers to 4.8
+[1] https://github.com/mm2/Little-CMS/blob/master/ChangeLog
 
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-[Thomas: as reported by Alexey, this commit is in fact a bug fix: it
-makes the defconfig work properly. Indeed, since the ARC compiler has
-moved to gcc 6.x, the ABI has changed, and a Linux 4.8+ kernel is
-needed for userspace to work on ARC.]
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/snps_axs101_defconfig       | 6 +++---
- configs/snps_axs103_defconfig       | 6 +++---
- configs/snps_hs38_smp_vdk_defconfig | 6 +++---
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ package/lcms2/lcms2.hash | 7 +++----
+ package/lcms2/lcms2.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/configs/snps_axs101_defconfig b/configs/snps_axs101_defconfig
-index f272853..eea7a50 100644
---- a/configs/snps_axs101_defconfig
-+++ b/configs/snps_axs101_defconfig
-@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+diff --git a/package/lcms2/lcms2.hash b/package/lcms2/lcms2.hash
+index 908822f..1cf1017 100644
+--- a/package/lcms2/lcms2.hash
++++ b/package/lcms2/lcms2.hash
+@@ -1,5 +1,4 @@
+-# From http://sourceforge.net/projects/lcms/files/lcms/2.7/
+-sha1	625f0d74bad4a0f6f917120fd992437d26f754d2	lcms2-2.7.tar.gz
+-md5	06c1626f625424a811fb4b5eb070839d		lcms2-2.7.tar.gz
++# From https://sourceforge.net/projects/lcms/files/lcms/2.8
++sha1 e9535ec4a572b8fc7a1c405c35e6f4dc97714197 lcms2-2.8.tar.gz
+ # Locally computed:
+-sha256	4524234ae7de185e6b6da5d31d6875085b2198bc63b1211f7dde6e2d197d6a53	lcms2-2.7.tar.gz
++sha256 66d02b229d2ea9474e62c2b6cd6720fde946155cd1d0d2bffdab829790a0fb22 lcms2-2.8.tar.gz
+diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+index 265af29..8d0609e 100644
+--- a/package/lcms2/lcms2.mk
++++ b/package/lcms2/lcms2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 4.7 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+# Linux headers same as kernel, a 4.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
- BR2_LINUX_KERNEL_DEFCONFIG="axs101"
- 
- # Bootloader
-diff --git a/configs/snps_axs103_defconfig b/configs/snps_axs103_defconfig
-index 75596c9..08c55de 100644
---- a/configs/snps_axs103_defconfig
-+++ b/configs/snps_axs103_defconfig
-@@ -9,13 +9,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
- 
--# Linux headers same as kernel, a 4.7 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+# Linux headers same as kernel, a 4.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
- BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
- 
- # Bootloader
-diff --git a/configs/snps_hs38_smp_vdk_defconfig b/configs/snps_hs38_smp_vdk_defconfig
-index 32922f8..d4dcd1b 100644
---- a/configs/snps_hs38_smp_vdk_defconfig
-+++ b/configs/snps_hs38_smp_vdk_defconfig
-@@ -8,12 +8,12 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
- BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
- BR2_TARGET_ROOTFS_EXT2=y
- 
--# Linux headers same as kernel, a 4.7 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+# Linux headers same as kernel, a 4.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
- BR2_LINUX_KERNEL_DEFCONFIG="vdk_hs38_smp"
- BR2_LINUX_KERNEL_VMLINUX=y
+-LCMS2_VERSION = 2.7
+-LCMS2_SITE = http://downloads.sourceforge.net/lcms/lcms
++LCMS2_VERSION = 2.8
++LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
+ LCMS2_LICENSE = MIT
+ LCMS2_LICENSE_FILES = COPYING
+ LCMS2_INSTALL_STAGING = YES
