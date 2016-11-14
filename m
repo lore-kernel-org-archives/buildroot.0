@@ -1,52 +1,55 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Mon, 14 Nov 2016 14:22:37 +0100
-Subject: [Buildroot] [PATCH 5/6] xterm: depend on libXinerama if appropriate
-In-Reply-To: <20161114132238.6569-1-jezz@sysmic.org>
-References: <20161114132238.6569-1-jezz@sysmic.org>
-Message-ID: <20161114132238.6569-6-jezz@sysmic.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 14 Nov 2016 14:01:36 +0000
+Subject: [Buildroot] [PATCH next] package/{mesa3d,
+	mesa3d-headers}: bump version to 13.0.1
+Message-ID: <20161114140136.33344-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xterm may depends on libXinerama.so:
-
-$ arm-linux-readelf -d ./usr/bin/xterm | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libXft.so.2]
- 0x00000001 (NEEDED)                     Shared library: [libfontconfig.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libXmu.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libXaw.so.7]
- 0x00000001 (NEEDED)                     Shared library: [libXt.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libX11.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libXinerama.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libXpm.so.4]
- 0x00000001 (NEEDED)                     Shared library: [libICE.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libncursesw.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
-
-However, build order with libXinerama is not defined.
-
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/xterm/xterm.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index eba781f..645de92 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -22,4 +22,11 @@ else
- XTERM_CONF_OPTS += --disable-freetype
- endif
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index b3b80eb..523d10b 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
-+XTERM_DEPENDENCIES += xlib_libXinerama
-+XTERM_CONF_OPTS += --with-xinerama
-+else
-+XTERM_CONF_OPTS += --without-xinerama
-+endif
-+
- $(eval $(autotools-package))
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 13.0.0
++MESA3D_HEADERS_VERSION = 13.0.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 7dbe1ac..0fab1de 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2016-November/000264.html
+-sha256 94edb4ebff82066a68be79d9c2627f15995e1fe10f67ab3fc63deb842027d727  mesa-13.0.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2016-November/000270.html
++sha256 71962fb2bf77d33b0ad4a565b490dbbeaf4619099c6d9722f04a73187957a731  mesa-13.0.1.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index e17db5c..031ce88 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 13.0.0
++MESA3D_VERSION = 13.0.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.9.3
+2.10.1
