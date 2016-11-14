@@ -1,59 +1,56 @@
-From: Patrick Devlin <cloudyparts@icloud.com>
-Date: Mon, 14 Nov 2016 11:58:50 -0500
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 6.9.1
-Message-ID: <1479142730-21743-1-git-send-email-cloudyparts@icloud.com>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Mon, 14 Nov 2016 21:07:00 +0300
+Subject: [Buildroot] [PATCH v2] config: bump U-Boot to 2016.11 in synopsys
+	defconfigs
+Message-ID: <1479146820-46777-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://nodejs.org/en/blog/release/v6.9.1/
+With this commit we upgrade U-Boot version to 2016.11
+in "snps_axs101_defconfig" and "snps_axs103_defconfig".
 
-The patches from 6.7.0 have been copied to 6.9.1.
+Important fixes: new version fixes U-Boot build for arc700.
+Since gcc-6.x "-marc700" option is no longer supported,
+"-mcpu=arc700" should be used instead.
 
-Signed-off-by: Patrick Devlin <cloudyparts@icloud.com>
+We haven't sent it before as we were waiting for U-Boot
+2016.11 release.
+
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 ---
- .../{6.7.0 => 6.9.1}/0001-gyp-force-link-command-to-use-CXX.patch     | 0
- .../0002-inspector-don-t-build-when-ssl-support-is-disabled.patch     | 0
- package/nodejs/Config.in                                              | 2 +-
- package/nodejs/nodejs.hash                                            | 4 ++--
- 4 files changed, 3 insertions(+), 3 deletions(-)
- rename package/nodejs/{6.7.0 => 6.9.1}/0001-gyp-force-link-command-to-use-CXX.patch (100%)
- rename package/nodejs/{6.7.0 => 6.9.1}/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch (100%)
+Changes v1..v2
+ - Replace 2016.11-rc3 release candidate with 2016.11 release version
 
-diff --git a/package/nodejs/6.7.0/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.9.1/0001-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/6.7.0/0001-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/6.9.1/0001-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/6.7.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch b/package/nodejs/6.9.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-similarity index 100%
-rename from package/nodejs/6.7.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-rename to package/nodejs/6.9.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 976be50..a47ba37 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "6.7.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "6.9.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.47"
- 
- config BR2_PACKAGE_NODEJS_NPM
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index f334a47..5df79af 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.47/SHASUMS256.txt
- sha256  335bdf4db702885a8acaf2c9f241c70cabd62497361da81aca65c8e8a8e7ff09  node-v0.10.47.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v6.7.0/SHASUMS256.txt
--sha256  ceb028324aab1ee8c7ea6a62026f036f3ea71f5ef5212593d0f833f999dd3be5  node-v6.7.0.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v6.9.1/SHASUMS256.txt
-+sha256  0bdd8d1305777cc8cd206129ea494d6c6ce56001868dd80147aff531d6df0729  node-v6.9.1.tar.xz
+ configs/snps_axs101_defconfig | 2 +-
+ configs/snps_axs103_defconfig | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configs/snps_axs101_defconfig b/configs/snps_axs101_defconfig
+index f272853..dbc5003 100644
+--- a/configs/snps_axs101_defconfig
++++ b/configs/snps_axs101_defconfig
+@@ -21,6 +21,6 @@ BR2_LINUX_KERNEL_DEFCONFIG="axs101"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="axs101"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/configs/snps_axs103_defconfig b/configs/snps_axs103_defconfig
+index 75596c9..93a62b2 100644
+--- a/configs/snps_axs103_defconfig
++++ b/configs/snps_axs103_defconfig
+@@ -22,6 +22,6 @@ BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="axs103"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 -- 
-1.9.1
+2.6.3
