@@ -1,62 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Nov 2016 21:45:35 +0100
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2016.09-rc1
-In-Reply-To: <1479146197-41383-1-git-send-email-vzakhar@synopsys.com>
-References: <1479146197-41383-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <20161114214535.02025d6f@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 14 Nov 2016 22:47:43 +0200
+Subject: [Buildroot] [PATCH] openjpeg: security bump to version 2.1.2
+Message-ID: <08339f7ad87912d98912f4c52268b6c79ffd515c.1479156463.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+See CHANGELOG.md for the full list of fixes, including security issues.
 
-On Mon, 14 Nov 2016 20:56:37 +0300, Vlad Zakharov wrote:
-> As described at:
-> 4520524ba055706236db9f00dd79f1b2e2e87fde
-> this commit continues a series of updates of ARC tools.
-> This time we're updating tools to arc-2016.09-rc1.
-> 
-> This update contains a lot of important fixes, e.g. it fixes:
-> http://autobuild.buildroot.net/results/4c7/4c77f33c842b37bf28cb931edf1b290e1bf4d93c//
-> http://autobuild.buildroot.net/results/902/902729a0b98675ad803939e3ecdcf230065a6012//
-> and other failures.
-> 
-> Other important change is that we also update gdb. Now we are
-> using gdb 7.12.
-> 
-> This version of gdb requires C++ toolchain support so we add
-> corresponding dependency to gdb Config.in file.
-> 
-> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+See CVE number lists at [1] and [2].
 
-Thanks. Even though it's a bump of a major component, it's fixing some
-annoying build issues, and I guess a "rc" release is better than the
-"engineering builds" we were using so far, so I've applied to master.
-However, I had two things to fix before applying, see below.
+[1] http://advisories.mageia.org/MGASA-2016-0362.html
+[2] https://lists.fedoraproject.org/archives/list/package-announce at lists.fedoraproject.org/thread/HPMDEUIMHTLKMHELDL4F4HZ7X4Y34JEB/
 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/openjpeg/openjpeg.hash | 2 +-
+ package/openjpeg/openjpeg.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> +	# Since ARC gdb moved to 7.12 toolchain requires C++ support to build gdb.
-> +	depends on !BR2_arc || BR2_TOOLCHAIN_BUILDROOT_CXX
-
-BR2_TOOLCHAIN_BUILDROOT_CXX is not correct here. This symbol only makes
-sense in the context of the internal toolchain backend. But the target
-gdb package makes perfect sense even when an external toolchain is
-used.
-
-To add a dependency on C++ support, you must use the
-BR2_INSTALL_LIBSTDCPP symbol. This one is valid regardless of whether
-you're using the internal toolchain backend or the external toolchain
-backend.
-
-Also, you forgot to add a comment about this C++ dependency, so I've
-added it.
-
-Thanks!
-
-Thomas
+diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
+index 35d4fbd5350e..c0abd0c54d7c 100644
+--- a/package/openjpeg/openjpeg.hash
++++ b/package/openjpeg/openjpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	4afc996cd5e0d16360d71c58216950bcb4ce29a3272360eb29cadb1c8bce4efc  openjpeg-2.1.tar.gz
++sha256	4ce77b6ef538ef090d9bde1d5eeff8b3069ab56c4906f083475517c2c023dfa7  openjpeg-2.1.2.tar.gz
+diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
+index bf125261a7fe..ca22068113a3 100644
+--- a/package/openjpeg/openjpeg.mk
++++ b/package/openjpeg/openjpeg.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-OPENJPEG_VERSION = 2.1
+-OPENJPEG_SITE = $(call github,uclouvain,openjpeg,version.$(OPENJPEG_VERSION))
++OPENJPEG_VERSION = 2.1.2
++OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
+ OPENJPEG_LICENSE = BSD-2c
+ OPENJPEG_LICENSE_FILES = LICENSE
+ OPENJPEG_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.10.2
