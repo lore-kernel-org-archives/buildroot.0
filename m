@@ -1,51 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Nov 2016 22:52:01 +0100
-Subject: [Buildroot] [git commit branch/next] boot/uboot: bump to version
+Date: Mon, 14 Nov 2016 22:52:12 +0100
+Subject: [Buildroot] [git commit branch/next] configs/warp7: Bump to U-Boot
 	2016.11
-Message-ID: <20161114215221.A0EFC817A9@busybox.osuosl.org>
+Message-ID: <20161114215221.B8029817A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce7b0b8dfba9832169d80916b9adf83ef27dbb04
+commit: https://git.buildroot.net/buildroot/commit/?id=87f1bdda38b43192908dab585dc6b4fc3e39ffe5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/uboot/Config.in  | 4 ++--
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/warp7_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index fabf27d..3b4bfac 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -38,7 +38,7 @@ choice
- 	  Select the specific U-Boot version you want to use
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index a55a504..fca7a1d 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7_secure"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
  
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2016.09.01"
-+	bool "2016.11"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -86,7 +86,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2016.09.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2016.11"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index db60dab..5b2c3bf 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  95728e89dd476d17428f94080752ab48884be477b6a678941582aeef618b70bb  u-boot-2016.09.01.tar.bz2
-+sha256  45813e6565dcc0436abe6752624324cdbf5f3ac106570d76d32b46ec529bcdc8  u-boot-2016.11.tar.bz2
+ # wifi firmware for brcm43430
