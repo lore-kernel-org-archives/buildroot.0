@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Nov 2016 13:01:05 +0100
-Subject: [Buildroot] [PATCH next 1/2] linux-headers: bump 3.12.x,
- 4.4.x and 4.8.x series
-In-Reply-To: <20161115100123.32010-1-Vincent.Riera@imgtec.com>
-References: <20161115100123.32010-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161115130105.35750d0a@free-electrons.com>
+Date: Tue, 15 Nov 2016 13:01:20 +0100
+Subject: [Buildroot] [PATCH] openssh: add upstream security fix
+In-Reply-To: <8684b9b01e5f3062cf538a1c2025cb64d5ac0bab.1479191658.git.baruch@tkos.co.il>
+References: <8684b9b01e5f3062cf538a1c2025cb64d5ac0bab.1479191658.git.baruch@tkos.co.il>
+Message-ID: <20161115130120.1ccdc349@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 15 Nov 2016 10:01:22 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Tue, 15 Nov 2016 08:34:18 +0200, Baruch Siach wrote:
+> Fixes CVE-2016-8858: Memory exhaustion, up to 128MB, of unauthenticated peer.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/linux-headers/Config.in.host | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/openssh/0003-fix-CVE-2016-8858.patch | 31 ++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>  create mode 100644 package/openssh/0003-fix-CVE-2016-8858.patch
 
-Please base those patches on the "master" branch, not next. Kernel
-updates typically contain security fixes, and we want them in the master
-branch.
-
-(Right now your patches don't apply on the master branch.)
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
