@@ -1,55 +1,44 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 15 Nov 2016 21:46:58 +0100
-Subject: [Buildroot] [PATCH] package/tremor: fix build with Thumb only ARM
-	archs
-Message-ID: <20161115204658.14288-1-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Nov 2016 22:19:08 +0100
+Subject: [Buildroot] Buildroot Developers meeting at FOSDEM, 6-7 Feb 2017
+Message-ID: <20161115221908.3bd8a45e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some ARM architectures like ARNv7-M only supports Thumb instructions,
-but the tremor build configuration enables ARM assembly code
-unconditionally for all arm triplets by defining _ARM_ASSEM_.
+Hello,
 
-We are overriding this by undefining this macro for ARM architectures
-not supporting ARM instructions.
+The previous Buildroot Developers Meeting that took place last month in
+Berlin was very productive, and it's already time to think about our
+next meeting.
 
-Fixes:
-http://autobuild.buildroot.net/results/054/054f1c77b0e5d46b2dc53769469c0ed03e6b79ef/
-http://autobuild.buildroot.net/results/ba1/ba1760b1428584f70e44dbffb8218ff3ee55e702/
-http://autobuild.buildroot.net/results/2a6/2a687853cf0bc832fef29f88de0d85bd495fe87d/
-http://autobuild.buildroot.net/results/cb6/cb6c560bf31834aadbe3d13a118b31ea8190159b/
+As usual, it will take place right after the FOSDEM conference, in
+Brussels, Belgium. Since FOSDEM takes place on February 4-5 this year,
+our meeting will take place on February 6-7 (Monday/Tuesday).
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/tremor/tremor.mk | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+Google has once again agreed to sponsor our meeting, by hosting the
+event, and offering lunch and refreshments to the participants. Thanks
+to Google!
 
-diff --git a/package/tremor/tremor.mk b/package/tremor/tremor.mk
-index 97b0ce3..2a791b6 100644
---- a/package/tremor/tremor.mk
-+++ b/package/tremor/tremor.mk
-@@ -16,9 +16,17 @@ TREMOR_DEPENDENCIES = libogg
- 
- # tremor has ARM assembly code that cannot be compiled in Thumb2 mode,
- # so we must force the traditional ARM mode.
-+# However, some ARM architectures like ARNv7-M only supports Thumb
-+# instructions, but the tremor build configuration enables ARM assembly
-+# code unconditionally for all arm triplets by defining _ARM_ASSEM_.
-+# We are overriding this by undefining this macro for the ARM
-+# architectures not supporting ARM instructions.
- ifeq ($(BR2_arm),y)
--TREMOR_CONF_ENV = \
--	CFLAGS="$(TARGET_CFLAGS) -marm"
-+ifeq ($(BR2_ARM_CPU_HAS_ARM),y)
-+TREMOR_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -marm"
-+else
-+TREMOR_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -U_ARM_ASSEM_"
-+endif
- endif
- 
- $(eval $(autotools-package))
+Attending the meeting is free of charge, but registration is required.
+This meeting is for Buildroot developers and contributors, and is
+generally a mix of discussions and hacking sessions.
+
+I would really like to encourage developers who contribute to Buildroot
+to consider attending this meeting. This meeting is really useful, it's
+really nice to meet each other in person, and a lot of great work gets
+done in such two days of meeting. And of course, since it's next to the
+FOSDEM conference, you can attend this event as well.
+
+See http://elinux.org/Buildroot:DeveloperDaysFOSDEM2017 for all details
+about this meeting.
+
+Thanks for your participation!
+
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
