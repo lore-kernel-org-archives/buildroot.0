@@ -1,41 +1,29 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 15 Nov 2016 10:01:22 +0000
-Subject: [Buildroot] [PATCH next 1/2] linux-headers: bump 3.12.x,
-	4.4.x and 4.8.x series
-Message-ID: <20161115100123.32010-1-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Nov 2016 11:01:48 +0100
+Subject: [Buildroot] [PATCH] package/gcc: backport xtensa trap pattern
+ for 5.x
+In-Reply-To: <CAMo8BfLaOH4tomBQRARmWJtMY+B02dEia4ZE4AW1BvcxFaCarA@mail.gmail.com>
+References: <1479117941-14895-1-git-send-email-jcmvbkbc@gmail.com>
+ <20161114225553.0adf1094@free-electrons.com>
+ <CAMo8BfLaOH4tomBQRARmWJtMY+B02dEia4ZE4AW1BvcxFaCarA@mail.gmail.com>
+Message-ID: <20161115110148.1991e8a9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 71d3f60..ea1dce2 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -226,15 +226,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.83"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.66"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.67"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.18.44"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.35"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.29"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.32"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
- 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
- 	default "4.7.10"	if BR2_KERNEL_HEADERS_4_7
--	default "4.8.6"		if BR2_KERNEL_HEADERS_4_8
-+	default "4.8.8"		if BR2_KERNEL_HEADERS_4_8
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+On Mon, 14 Nov 2016 16:31:44 -0800, Max Filippov wrote:
+
+> I haven't seen that issue with earlier gcc versions, it only started showing
+> up with gcc-5.x.
+
+OK, thanks for the confirmation!
+
+Thomas
 -- 
-2.10.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
