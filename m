@@ -1,47 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Nov 2016 12:56:47 +0100
-Subject: [Buildroot] [PATCH v1] qt5base: fix eglfs compile for
- odroid-mali
-In-Reply-To: <1479165400-13248-1-git-send-email-ps.report@gmx.net>
-References: <1479165400-13248-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20161115125647.26846b6c@free-electrons.com>
+Date: Tue, 15 Nov 2016 12:58:20 +0100
+Subject: [Buildroot] [git commit] openssh: add upstream security fix
+Message-ID: <20161115115956.14B54803FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=aae80e71b6ce75bdf73cc9b84ec96c92ed13aa58
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Nov 2016 00:16:40 +0100, Peter Seiderer wrote:
-> Avoid duplicated struct fbdev_window definition (introduced by [1]) by
-> renaming struct fbdev_window to shadow_fbdev_window.
-> 
-> Fixes [2]:
-> 
-> qeglfsmaliintegration.cpp:45:8: error: redefinition of 'struct fbdev_window'
->  struct fbdev_window {
->         ^
-> In file included from /accts/mlweber1/rc-buildroot-test/scripts/instance-0/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:28:0,
->                  from /accts/mlweber1/rc-buildroot-test/scripts/instance-0/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/egl.h:36,
->                  from ../../../eglfs/qeglfsglobal.h:45,
->                  from ../../../eglfs/qeglfsdeviceintegration.h:48,
->                  from qeglfsmaliintegration.h:37,
->                  from qeglfsmaliintegration.cpp:34:
-> 
-> [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?h=dev&id=58bed4cda98e8e25db8adc61c7db73b6853077dc
-> [2] http://autobuild.buildroot.net/results/48c/48c458c035162169e8ca7c34ae65e9064822f25a
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...fs-fix-eglfs_mali-compile-for-odroid-mali.patch | 53 ++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 package/qt5/qt5base/0007-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch
+Fixes CVE-2016-8858: Memory exhaustion, up to 128MB, of unauthenticated peer.
 
-Applied to master, thanks.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openssh/0003-fix-CVE-2016-8858.patch | 31 ++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/openssh/0003-fix-CVE-2016-8858.patch b/package/openssh/0003-fix-CVE-2016-8858.patch
+new file mode 100644
+index 0000000..4ba1cfd
+--- /dev/null
++++ b/package/openssh/0003-fix-CVE-2016-8858.patch
+@@ -0,0 +1,31 @@
++From ec165c392ca54317dbe3064a8c200de6531e89ad Mon Sep 17 00:00:00 2001
++From: "markus at openbsd.org" <markus@openbsd.org>
++Date: Mon, 10 Oct 2016 19:28:48 +0000
++Subject: [PATCH] upstream commit
++
++Unregister the KEXINIT handler after message has been
++received. Otherwise an unauthenticated peer can repeat the KEXINIT and cause
++allocation of up to 128MB -- until the connection is closed. Reported by
++shilei-c at 360.cn
++
++Upstream-ID: 43649ae12a27ef94290db16d1a98294588b75c05
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream
++
++ kex.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/kex.c b/kex.c
++index 3f97f8c..6a94bc5 100644
++--- a/kex.c
+++++ b/kex.c
++@@ -481,6 +481,7 @@ kex_input_kexinit(int type, u_int32_t seq, void *ctxt)
++ 	if (kex == NULL)
++ 		return SSH_ERR_INVALID_ARGUMENT;
++ 
+++	ssh_dispatch_set(ssh, SSH2_MSG_KEXINIT, NULL);
++ 	ptr = sshpkt_ptr(ssh, &dlen);
++ 	if ((r = sshbuf_put(kex->peer, ptr, dlen)) != 0)
++ 		return r;
