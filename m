@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Nov 2016 13:04:02 +0100
-Subject: [Buildroot] [PATCH] package/python-pillow: bump to pillow 3.4.2
-In-Reply-To: <1479073263-18837-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1479073263-18837-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20161115130402.72091f3f@free-electrons.com>
+Date: Tue, 15 Nov 2016 13:06:18 +0100
+Subject: [Buildroot] [PATCH] grub2: enable grub-mkfont host tool
+In-Reply-To: <20161109110352.7222-1-jezz@sysmic.org>
+References: <20161109110352.7222-1-jezz@sysmic.org>
+Message-ID: <20161115130618.5c12d64f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,40 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 13 Nov 2016 22:41:03 +0100, Angelo Compagnucci wrote:
-> This patch bumps python pillow to version 3.4.2
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  package/python-pillow/python-pillow.hash | 4 ++--
->  package/python-pillow/python-pillow.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+On Wed,  9 Nov 2016 12:03:52 +0100, J?r?me Pouiller wrote:
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-Applied to next, thanks.
+Empty commit log: not good. It would have been nice to explain in which
+situations grub-mkfont is useful.
+
+> ---
+>  boot/grub2/grub2.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+> index dc4e51e..a3352c2 100644
+> --- a/boot/grub2/grub2.mk
+> +++ b/boot/grub2/grub2.mk
+> @@ -9,7 +9,7 @@ GRUB2_SITE = $(BR2_GNU_MIRROR)/grub
+>  GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
+>  GRUB2_LICENSE = GPLv3+
+>  GRUB2_LICENSE_FILES = COPYING
+> -GRUB2_DEPENDENCIES = host-bison host-flex
+> +GRUB2_DEPENDENCIES = host-bison host-flex host-freetype
+
+I don't really like this additional dependency, that is only needed
+when one needs mkfont (pretty rare use case I believe).
+
+Can we instead add a sub-option to the grub2 package to select (or not)
+the build of the mkfont utility?
+
+Of course, don't forget to explicitly --enable/--disable the relevant
+option.
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
