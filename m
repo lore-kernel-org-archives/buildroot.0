@@ -1,48 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Nov 2016 18:00:49 +0100
-Subject: [Buildroot] [PATCH 1/1] host-python: Fix building with OpenSSL
- 1.1.0.
-In-Reply-To: <20161115160240.30234-1-nicolas.cavallari@green-communications.fr>
-References: <20161115160240.30234-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <20161115180049.558f3183@free-electrons.com>
+From: Julien Corjon <corjon.j@ecagroup.com>
+Date: Tue, 15 Nov 2016 18:13:00 +0100
+Subject: [Buildroot] [Rejected v2 0/7] qt5 bump to 5.8.0-beta
+In-Reply-To: <1478601048-21388-1-git-send-email-anaumann@ultratronik.de>
+References: <1478601048-21388-1-git-send-email-anaumann@ultratronik.de>
+Message-ID: <20161115171307.7499-1-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As I'm, also, working on qt5.8 next bump i made a V2 of Andreas
+series and include a proposed patch from Alexey for convinience.
 
-On Tue, 15 Nov 2016 17:02:40 +0100, Nicolas Cavallari wrote:
-> OpenSSL 1.1.0 now hides some internal structures and deprecate some
-> methods and constants.  This breaks the compilation of host-python
-> since it uses the system's openssl.  See
-> https://bugs.python.org/issue26470 for details.
-> 
-> Even if buildroot patches host-python to not compile the 'ssl' module,
-> the '_ssl' module is still compiled and fails.  Another module,
-> '_hashlib' also uses openssl's hash algorithms and is also broken by the
-> bump to OpenSSL 1.1.0.
-> 
-> if both '_ssl' and '_hashlib' are disabled, host-python compiles
-> but other packages are now broken, like the crda packages which
-> uses the hash functions.
+I mostly work on patch 2/7 to include qtwebkit fix and add C++11
+requirement.
+Patches 6 & 7 are not touched (did not take Arnout comment yet).
 
-Are you sure? Many of the autobuilder instances don't have the OpenSSL
-development files installed on the host, which means that OpenSSL
-support is not enabled in host-python, and crda would fail to build.
+Of course as it's a beta version this series is to reject in
+patchwork. But if someone what to give a try on it, comments are
+more than welcome.
 
-I think that a better fix for this problem is to really disable OpenSSL
-in Python. Indeed, we shouldn't rely on the system-provided OpenSSL:
-OpenSSL has never been part of the Buildroot "core dependencies".
 
-Can we instead disable OpenSSL usage, and then identify (if any) the
-packages that needed OpenSSL support from host-python?
+Alexey Brodkin (1):
+  qt5webkit: Get sources from Qt-5-unofficial-builds
 
-Thanks,
+Julien Corjon (2):
+  qt5enginio : move into legacy compatibility
+  qt53d/qt5quickcontrols2/qt5serialbus : move out of tech preview
 
-Thomas
+Naumann Andreas (4):
+  qt5: bump to 5.8.0-beta
+  Revert "qt5base: install bundled fonts to target"
+  qt5declarative: enable Quick for non-GL platforms
+  quickcontrols1/2: enable for software renderer
+
+ package/qt5/Config.in                              | 14 +++----
+ package/qt5/qt5.mk                                 |  7 ++--
+ package/qt5/qt53d/qt53d.hash                       |  4 +-
+ ...001-directfb-make-platform-plugin-compile.patch | 22 +++++++++++
+ .../0006-eglfs-rasp-pi-header-inclusion.patch      | 45 ----------------------
+ package/qt5/qt5base/qt5base.hash                   |  4 +-
+ package/qt5/qt5base/qt5base.mk                     | 11 +-----
+ package/qt5/qt5canvas3d/qt5canvas3d.hash           |  4 +-
+ package/qt5/qt5connectivity/qt5connectivity.hash   |  4 +-
+ package/qt5/qt5declarative/Config.in               |  4 +-
+ package/qt5/qt5declarative/qt5declarative.hash     |  4 +-
+ package/qt5/qt5enginio/qt5enginio.hash             |  4 +-
+ .../qt5graphicaleffects/qt5graphicaleffects.hash   |  4 +-
+ package/qt5/qt5imageformats/qt5imageformats.hash   |  4 +-
+ package/qt5/qt5location/qt5location.hash           |  4 +-
+ package/qt5/qt5multimedia/qt5multimedia.hash       |  4 +-
+ package/qt5/qt5multimedia/qt5multimedia.mk         |  2 +
+ package/qt5/qt5quickcontrols/Config.in             |  3 +-
+ package/qt5/qt5quickcontrols/qt5quickcontrols.hash |  4 +-
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk   |  5 ++-
+ package/qt5/qt5quickcontrols2/Config.in            |  3 +-
+ .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |  4 +-
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk |  8 ++--
+ package/qt5/qt5script/qt5script.hash               |  4 +-
+ package/qt5/qt5sensors/qt5sensors.hash             |  4 +-
+ package/qt5/qt5serialbus/qt5serialbus.hash         |  4 +-
+ package/qt5/qt5serialport/qt5serialport.hash       |  4 +-
+ package/qt5/qt5svg/qt5svg.hash                     |  4 +-
+ package/qt5/qt5tools/qt5tools.hash                 |  4 +-
+ package/qt5/qt5webchannel/qt5webchannel.hash       |  4 +-
+ ...004-Remove-unused-check-for-private_tests.patch | 40 +++++++++++++++++++
+ package/qt5/qt5webkit/qt5webkit.hash               |  4 +-
+ package/qt5/qt5webkit/qt5webkit.mk                 | 14 ++-----
+ package/qt5/qt5websockets/qt5websockets.hash       |  4 +-
+ package/qt5/qt5x11extras/qt5x11extras.hash         |  4 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |  4 +-
+ 36 files changed, 137 insertions(+), 133 deletions(-)
+ create mode 100644 package/qt5/qt5base/0001-directfb-make-platform-plugin-compile.patch
+ delete mode 100644 package/qt5/qt5base/0006-eglfs-rasp-pi-header-inclusion.patch
+ create mode 100644 package/qt5/qt5webkit/0004-Remove-unused-check-for-private_tests.patch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
