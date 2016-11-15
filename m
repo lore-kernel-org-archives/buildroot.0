@@ -1,28 +1,57 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Mon, 14 Nov 2016 16:31:44 -0800
-Subject: [Buildroot] [PATCH] package/gcc: backport xtensa trap pattern
-	for 5.x
-In-Reply-To: <20161114225553.0adf1094@free-electrons.com>
-References: <1479117941-14895-1-git-send-email-jcmvbkbc@gmail.com>
- <20161114225553.0adf1094@free-electrons.com>
-Message-ID: <CAMo8BfLaOH4tomBQRARmWJtMY+B02dEia4ZE4AW1BvcxFaCarA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 15 Nov 2016 08:34:18 +0200
+Subject: [Buildroot] [PATCH] openssh: add upstream security fix
+Message-ID: <8684b9b01e5f3062cf538a1c2025cb64d5ac0bab.1479191658.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes CVE-2016-8858: Memory exhaustion, up to 128MB, of unauthenticated peer.
 
-On Mon, Nov 14, 2016 at 1:55 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Applied to master, thanks. However, I'm wondering if this backport
-> should also be done on gcc versions earlier than 5.x. Could you clarify
-> this point?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/openssh/0003-fix-CVE-2016-8858.patch | 31 ++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/openssh/0003-fix-CVE-2016-8858.patch
 
-I haven't seen that issue with earlier gcc versions, it only started showing
-up with gcc-5.x.
-
+diff --git a/package/openssh/0003-fix-CVE-2016-8858.patch b/package/openssh/0003-fix-CVE-2016-8858.patch
+new file mode 100644
+index 000000000000..4ba1cfdc0182
+--- /dev/null
++++ b/package/openssh/0003-fix-CVE-2016-8858.patch
+@@ -0,0 +1,31 @@
++From ec165c392ca54317dbe3064a8c200de6531e89ad Mon Sep 17 00:00:00 2001
++From: "markus at openbsd.org" <markus@openbsd.org>
++Date: Mon, 10 Oct 2016 19:28:48 +0000
++Subject: [PATCH] upstream commit
++
++Unregister the KEXINIT handler after message has been
++received. Otherwise an unauthenticated peer can repeat the KEXINIT and cause
++allocation of up to 128MB -- until the connection is closed. Reported by
++shilei-c at 360.cn
++
++Upstream-ID: 43649ae12a27ef94290db16d1a98294588b75c05
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream
++
++ kex.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/kex.c b/kex.c
++index 3f97f8c..6a94bc5 100644
++--- a/kex.c
+++++ b/kex.c
++@@ -481,6 +481,7 @@ kex_input_kexinit(int type, u_int32_t seq, void *ctxt)
++ 	if (kex == NULL)
++ 		return SSH_ERR_INVALID_ARGUMENT;
++ 
+++	ssh_dispatch_set(ssh, SSH2_MSG_KEXINIT, NULL);
++ 	ptr = sshpkt_ptr(ssh, &dlen);
++ 	if ((r = sshbuf_put(kex->peer, ptr, dlen)) != 0)
++ 		return r;
 -- 
-Thanks.
--- Max
+2.10.2
