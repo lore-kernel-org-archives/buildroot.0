@@ -1,82 +1,40 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Tue, 15 Nov 2016 18:21:31 +0300
-Subject: [Buildroot] [PATCH] gdb: arc: remove C++ dependency and disable
-	build with C++
-Message-ID: <1479223291-5657-1-git-send-email-vzakhar@synopsys.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 15 Nov 2016 15:25:48 +0000
+Subject: [Buildroot] [PATCH next] ruby: bump version to 2.3.2
+Message-ID: <20161115152548.60329-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gdb arc-2016.09-rc1 is based on upstream 7.12 gdb version where we
-can still disable C++ build. For more information take a look at:
-https://sourceware.org/gdb/wiki/cxx-conversion
-
-We wanted to build gdb with C++ as it is used as default in 7.12
-and is even a mandatory requirement since 2016/09.
-
-But unfortunately we missed one runtime failure that C++ build
-causes and so no we have to disable C++ build.
-
-When gdb arc-2016.09-rc1 is built as C++ application it segfaults
-at runtime for ARC.
-
-We are going to fix the issue in 2017.03 ARC toolchain release.
-and before this we remove C++ dependency are adding temporary
-workaround to prevent runtime segfaults.
-
-The workaround is to disable building gdb as C++ application via
-passing --disable-build-with-cxx config option when building gdb
-for arc.
-
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/gdb/Config.in | 6 ------
- package/gdb/gdb.mk    | 7 +++++++
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-index 0c6966a..809e02d 100644
---- a/package/gdb/Config.in
-+++ b/package/gdb/Config.in
-@@ -2,10 +2,6 @@ comment "gdb/gdbserver needs a toolchain w/ threads, threads debug"
- 	depends on !BR2_nios2 && !BR2_bfin
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 7e62744..d480f07 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,2 +1,2 @@
+-# From https://www.ruby-lang.org/en/news/2016/04/26/ruby-2-3-1-released/
+-sha256	6725b5534d5a3a21ec4f14d6d7b9921a0d00d08acb88fd04cd50b47b70496338	ruby-2.3.1.tar.xz
++# From https://www.ruby-lang.org/en/news/2016/11/15/ruby-2-3-2-released/
++sha256 5c78f311045ce48160092160444dec2744941a5e37d7865032978bd5bf392f0c  ruby-2.3.2.tar.xz
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index f3f8047..631f270 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--comment "gdb/gdbserver needs a toolchain w/ C++"
--	depends on BR2_arc
--	depends on !BR2_INSTALL_LIBSTDCPP
--
- config BR2_PACKAGE_GDB
- 	bool "gdb"
- 	# When the external toolchain gdbserver is copied to the
-@@ -15,8 +11,6 @@ config BR2_PACKAGE_GDB
- 		(!BR2_PACKAGE_GDB_DEBUGGER && !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)
- 	depends on BR2_TOOLCHAIN_HAS_THREADS && BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	depends on !BR2_nios2 && !BR2_bfin
--	# Since ARC gdb moved to 7.12 toolchain requires C++ support to build gdb.
--	depends on !BR2_arc || BR2_INSTALL_LIBSTDCPP
- 	help
- 	  GDB, the GNU Project debugger, allows you to see what is
- 	  going on `inside' another program while it executes -- or
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index ccf9e49..ea27d0c 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -100,6 +100,13 @@ GDB_CONF_OPTS = \
- 	--disable-werror \
- 	--enable-static
- 
-+# When gdb is built as C++ application for ARC it segfaults at runtime
-+# So we pass --disable-build-with-cxx config option to force gdb not to
-+# be built as C++ app.
-+ifeq ($(BR2_arc),y)
-+GDB_CONF_OPTS += --disable-build-with-cxx
-+endif
-+
- ifeq ($(BR2_PACKAGE_GDB_TUI),y)
- GDB_CONF_OPTS += --enable-tui
- else
+ RUBY_VERSION_MAJOR = 2.3
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
+ RUBY_VERSION_EXT = 2.3.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 -- 
-2.6.3
+2.10.1
