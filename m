@@ -1,50 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Nov 2016 23:22:34 +0100
-Subject: [Buildroot] [PATCH] gdb: arc: remove C++ dependency and disable
- build with C++
-In-Reply-To: <1479223291-5657-1-git-send-email-vzakhar@synopsys.com>
-References: <1479223291-5657-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <20161115232234.5feba51c@free-electrons.com>
+Date: Tue, 15 Nov 2016 23:29:27 +0100
+Subject: [Buildroot] [git commit] package/tremor: fix build with Thumb only
+	ARM archs
+Message-ID: <20161115222942.2305881D88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0ee4deb9618f961e12e340d527ed0e4fb1ae4829
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Nov 2016 18:21:31 +0300, Vlad Zakharov wrote:
-> gdb arc-2016.09-rc1 is based on upstream 7.12 gdb version where we
-> can still disable C++ build. For more information take a look at:
-> https://sourceware.org/gdb/wiki/cxx-conversion
-> 
-> We wanted to build gdb with C++ as it is used as default in 7.12
-> and is even a mandatory requirement since 2016/09.
-> 
-> But unfortunately we missed one runtime failure that C++ build
-> causes and so no we have to disable C++ build.
-> 
-> When gdb arc-2016.09-rc1 is built as C++ application it segfaults
-> at runtime for ARC.
-> 
-> We are going to fix the issue in 2017.03 ARC toolchain release.
-> and before this we remove C++ dependency are adding temporary
-> workaround to prevent runtime segfaults.
-> 
-> The workaround is to disable building gdb as C++ application via
-> passing --disable-build-with-cxx config option when building gdb
-> for arc.
-> 
-> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-> ---
->  package/gdb/Config.in | 6 ------
->  package/gdb/gdb.mk    | 7 +++++++
->  2 files changed, 7 insertions(+), 6 deletions(-)
+Some ARM architectures like ARMv7-M only supports Thumb instructions,
+but the tremor build configuration enables ARM assembly code
+unconditionally for all arm triplets by defining _ARM_ASSEM_.
 
-Applied to master, thanks.
+We are overriding this by undefining this macro for ARM architectures
+not supporting ARM instructions.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fixes:
+http://autobuild.buildroot.net/results/054/054f1c77b0e5d46b2dc53769469c0ed03e6b79ef/
+http://autobuild.buildroot.net/results/ba1/ba1760b1428584f70e44dbffb8218ff3ee55e702/
+http://autobuild.buildroot.net/results/2a6/2a687853cf0bc832fef29f88de0d85bd495fe87d/
+http://autobuild.buildroot.net/results/cb6/cb6c560bf31834aadbe3d13a118b31ea8190159b/
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tremor/tremor.mk | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/package/tremor/tremor.mk b/package/tremor/tremor.mk
+index 97b0ce3..2a791b6 100644
+--- a/package/tremor/tremor.mk
++++ b/package/tremor/tremor.mk
+@@ -16,9 +16,17 @@ TREMOR_DEPENDENCIES = libogg
+ 
+ # tremor has ARM assembly code that cannot be compiled in Thumb2 mode,
+ # so we must force the traditional ARM mode.
++# However, some ARM architectures like ARNv7-M only supports Thumb
++# instructions, but the tremor build configuration enables ARM assembly
++# code unconditionally for all arm triplets by defining _ARM_ASSEM_.
++# We are overriding this by undefining this macro for the ARM
++# architectures not supporting ARM instructions.
+ ifeq ($(BR2_arm),y)
+-TREMOR_CONF_ENV = \
+-	CFLAGS="$(TARGET_CFLAGS) -marm"
++ifeq ($(BR2_ARM_CPU_HAS_ARM),y)
++TREMOR_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -marm"
++else
++TREMOR_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -U_ARM_ASSEM_"
++endif
+ endif
+ 
+ $(eval $(autotools-package))
