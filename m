@@ -1,113 +1,82 @@
-From: Julien CORJON <corjon.j@ecagroup.com>
-Date: Tue, 15 Nov 2016 14:07:42 +0000
-Subject: [Buildroot] [PATCH v2] qt5webkit: Get sources from
-	Qt-5-unofficial-builds
-In-Reply-To: <1478699994-22351-1-git-send-email-abrodkin@synopsys.com>
-References: <1478699994-22351-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <99688e1c-048d-1831-b402-e23f48fd6e22@ecagroup.com>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Tue, 15 Nov 2016 18:21:31 +0300
+Subject: [Buildroot] [PATCH] gdb: arc: remove C++ dependency and disable
+	build with C++
+Message-ID: <1479223291-5657-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexey,
+gdb arc-2016.09-rc1 is based on upstream 7.12 gdb version where we
+can still disable C++ build. For more information take a look at:
+https://sourceware.org/gdb/wiki/cxx-conversion
 
-I like the idea of fetching obsolete submodules from Qt hosting instead 
-of external github. But, as url say it's snapshot, we will probably have 
-to change hash file more often... Maybe we will have to get rid of hash 
-files for theses obsolete submodules.
+We wanted to build gdb with C++ as it is used as default in 7.12
+and is even a mandatory requirement since 2016/09.
 
-Still I'm much more for this solution so :
-Reviewed-by: Julien Corjon <corjon.j@ecagroup.com>
+But unfortunately we missed one runtime failure that C++ build
+causes and so no we have to disable C++ build.
 
-Regards,
+When gdb arc-2016.09-rc1 is built as C++ application it segfaults
+at runtime for ARC.
 
-Julien Corjon
+We are going to fix the issue in 2017.03 ARC toolchain release.
+and before this we remove C++ dependency are adding temporary
+workaround to prevent runtime segfaults.
 
-Le 09/11/2016 ? 14:59, Alexey Brodkin a ?crit :
-> Instead of messing with git we may get tarballs of obsolete but still
-> existing submodules as we used to but from a bit different location.
->
-> It turned out Qt people still create packages for obsolete submodules
-> for so-called "unofficial builds", see [1].
->
-> [1] https://wiki.qt.io/Qt-5-unofficial-builds
->
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-> Cc: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->
-> Changes v1 -> v2:
->  * Fixes copy-pasted QT5WEBKIT_VERSION
->    (was QT5WEBKIT_EXAMPLES_VERSION)
->    Thanks to J?r?me!
->
->  package/qt5/qt5.mk                   |  1 +
->  package/qt5/qt5webkit/qt5webkit.hash |  4 ++--
->  package/qt5/qt5webkit/qt5webkit.mk   | 14 +++-----------
->  3 files changed, 6 insertions(+), 13 deletions(-)
->
-> diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-> index d25f663662ee..e937e234b596 100644
-> --- a/package/qt5/qt5.mk
-> +++ b/package/qt5/qt5.mk
-> @@ -1,6 +1,7 @@
->  QT5_VERSION_MAJOR = 5.6
->  QT5_VERSION = $(QT5_VERSION_MAJOR).2
->  QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
-> +QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
->  include $(sort $(wildcard package/qt5/*/*.mk))
->
->  define QT5_LA_PRL_FILES_FIXUP
-> diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
-> index 96b8bdd6909a..309f776b3ff3 100644
-> --- a/package/qt5/qt5webkit/qt5webkit.hash
-> +++ b/package/qt5/qt5webkit/qt5webkit.hash
-> @@ -1,2 +1,2 @@
-> -# locally computed
-> -sha256 bdd659573e7e75cd4ad57b7160a7353d98d21a6fef06e4fb9e114a5b1f1e9dab qt5webkit-b35917bcb44d7f200af0f4ac68a126fa0aa8d93d.tar.gz
-> +# Hash from: http://download.qt.io/snapshots/qt/5.6/5.6.2/latest_src/submodules/qtwebkit-opensource-src-5.6.2.tar.xz.mirrorlist
-> +sha256 528a6b8b1c5095367b26e8ce4f3a46bb739e2e9913ff4dfc6ef58a04fcd73966 qtwebkit-opensource-src-5.6.2.tar.xz
-> diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-> index 378cdf78573e..980d2aff0167 100644
-> --- a/package/qt5/qt5webkit/qt5webkit.mk
-> +++ b/package/qt5/qt5webkit/qt5webkit.mk
-> @@ -4,10 +4,9 @@
->  #
->  ################################################################################
->
-> -QT5WEBKIT_VERSION = b35917bcb44d7f200af0f4ac68a126fa0aa8d93d
-> -# Using GitHub since it supports downloading tarballs from random commits.
-> -# The http://code.qt.io/cgit/qt/qtwebkit.git/ repo doesn't allow to do so.
-> -QT5WEBKIT_SITE = $(call github,qtproject,qtwebkit,$(QT5WEBKIT_VERSION))
-> +QT5WEBKIT_VERSION = $(QT5_VERSION)
-> +QT5WEBKIT_SITE = $(QT5_SNAPSHOTS_SITE)
-> +QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
->  QT5WEBKIT_DEPENDENCIES = \
->  	host-bison host-flex host-gperf host-python host-ruby \
->  	qt5base sqlite
-> @@ -43,14 +42,7 @@ define QT5WEBKIT_PYTHON2_SYMLINK
->  endef
->  QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
->
-> -# Since we get the source from git, generated header files are not included.
-> -# qmake detects that header file generation (using the syncqt tool) must be
-> -# done based on the existence of a .git directory (cfr. the git_build config
-> -# option which is set in qt_build_paths.prf).
-> -# So, to make sure that qmake detects that header files must be generated,
-> -# create an empty .git directory.
->  define QT5WEBKIT_CONFIGURE_CMDS
-> -	mkdir -p $(@D)/.git
->  	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(HOST_DIR)/usr/bin/qmake)
->  endef
->
->
+The workaround is to disable building gdb as C++ application via
+passing --disable-build-with-cxx config option when building gdb
+for arc.
+
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+---
+ package/gdb/Config.in | 6 ------
+ package/gdb/gdb.mk    | 7 +++++++
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 0c6966a..809e02d 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -2,10 +2,6 @@ comment "gdb/gdbserver needs a toolchain w/ threads, threads debug"
+ 	depends on !BR2_nios2 && !BR2_bfin
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 
+-comment "gdb/gdbserver needs a toolchain w/ C++"
+-	depends on BR2_arc
+-	depends on !BR2_INSTALL_LIBSTDCPP
+-
+ config BR2_PACKAGE_GDB
+ 	bool "gdb"
+ 	# When the external toolchain gdbserver is copied to the
+@@ -15,8 +11,6 @@ config BR2_PACKAGE_GDB
+ 		(!BR2_PACKAGE_GDB_DEBUGGER && !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS && BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	depends on !BR2_nios2 && !BR2_bfin
+-	# Since ARC gdb moved to 7.12 toolchain requires C++ support to build gdb.
+-	depends on !BR2_arc || BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  GDB, the GNU Project debugger, allows you to see what is
+ 	  going on `inside' another program while it executes -- or
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index ccf9e49..ea27d0c 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -100,6 +100,13 @@ GDB_CONF_OPTS = \
+ 	--disable-werror \
+ 	--enable-static
+ 
++# When gdb is built as C++ application for ARC it segfaults at runtime
++# So we pass --disable-build-with-cxx config option to force gdb not to
++# be built as C++ app.
++ifeq ($(BR2_arc),y)
++GDB_CONF_OPTS += --disable-build-with-cxx
++endif
++
+ ifeq ($(BR2_PACKAGE_GDB_TUI),y)
+ GDB_CONF_OPTS += --enable-tui
+ else
+-- 
+2.6.3
