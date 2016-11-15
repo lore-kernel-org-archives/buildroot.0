@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Nov 2016 23:31:36 +0100
-Subject: [Buildroot] [PATCH] package/tremor: fix build with Thumb only
- ARM archs
-In-Reply-To: <20161115204658.14288-1-joerg.krause@embedded.rocks>
-References: <20161115204658.14288-1-joerg.krause@embedded.rocks>
-Message-ID: <20161115233136.63503880@free-electrons.com>
+Date: Tue, 15 Nov 2016 23:33:47 +0100
+Subject: [Buildroot] [PATCH v2 1/3] toolchain: workaround musl/kernel
+ headers conflict
+In-Reply-To: <b08117ad-6edc-245d-0650-0db5eb1775ce@mind.be>
+References: <b2085612a223f59a2f7ef18a9bd97603226aa03d.1478784433.git.baruch@tkos.co.il>
+ <b08117ad-6edc-245d-0650-0db5eb1775ce@mind.be>
+Message-ID: <20161115233347.107fd31d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 15 Nov 2016 21:46:58 +0100, J?rg Krause wrote:
-> Some ARM architectures like ARNv7-M only supports Thumb instructions,
+On Sun, 13 Nov 2016 22:33:31 +0100, Arnout Vandecappelle wrote:
 
-ARNv7 -> ARMv7
+>  However, if bridge-utils and norm are really the only packages that suffer from
+> this problem, is it really worthwhile to apply this workaround?
 
-> +ifeq ($(BR2_ARM_CPU_HAS_ARM),y)
-> +TREMOR_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -marm"
-> +else
-> +TREMOR_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -U_ARM_ASSEM_"
-> +endif
+I'm sure there are more packages that we have patched for this reason,
+and possibly other build failures still unfixed that would get fixed
+(or at least partially).
 
-I would have preferred a better solution than this, with a patch to
-configure.in, to add the appropriate autoconf checks to decide whether
-or not the optimized ARM code should be used or not.
+*However*, the musl folks have already committed a patch that
+apparently resolves the problem:
 
-However, consider the fact that the upstream Tremor project seems more
-or less dead, it means there is very little chance to get our patches
-merged upstream. So your simple solution is good enough.
+   http://git.musl-libc.org/cgit/musl/commit/?id=04983f2272382af92eb8f8838964ff944fbb8258
 
-Therefore: applied to master. Thanks a lot!
+Baruch, could you investigate whether this musl commit fixes the header
+conflict problem for bridge-utils and norm?
+
+Thanks!
 
 Thomas
 -- 
