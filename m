@@ -1,43 +1,62 @@
 From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Tue, 15 Nov 2016 18:13:05 +0100
-Subject: [Buildroot] [PATCH v2 5/7] Revert "qt5base: install bundled fonts
-	to target"
+Date: Tue, 15 Nov 2016 18:13:06 +0100
+Subject: [Buildroot] [Rejected v2 6/7] qt5declarative: enable Quick for
+	non-GL platforms
 In-Reply-To: <20161115171307.7499-1-corjon.j@ecagroup.com>
 References: <20161115171307.7499-1-corjon.j@ecagroup.com>
-Message-ID: <20161115171307.7499-6-corjon.j@ecagroup.com>
+Message-ID: <20161115171307.7499-7-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qtbase carries nor more fonts since c5ceabb9a1caf6b9b7615a28c3097f221772f645
-
-This reverts commit cdfa21b06041eb601e0bea79f2c8f50e9d637384.
+However, some modules provide less functionality without OpenGL, so install
+steps have to be limited for the softrender only backend:
+- qtmultimedia does not provide qml
 
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 ---
- package/qt5/qt5base/qt5base.mk | 7 -------
- 1 file changed, 7 deletions(-)
+ package/qt5/qt5declarative/Config.in       | 4 +---
+ package/qt5/qt5multimedia/qt5multimedia.mk | 2 ++
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index f4ca921..e49718e 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -234,13 +234,6 @@ define QT5BASE_INSTALL_TARGET_PLUGINS
- 	fi
- endef
+diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
+index eba4c8d..0604e85 100644
+--- a/package/qt5/qt5declarative/Config.in
++++ b/package/qt5/qt5declarative/Config.in
+@@ -14,12 +14,10 @@ config BR2_PACKAGE_QT5DECLARATIVE
  
--define QT5BASE_INSTALL_TARGET_FONTS
--	if [ -d $(STAGING_DIR)/usr/lib/fonts/ ] ; then \
--		mkdir -p $(TARGET_DIR)/usr/lib/fonts ; \
--		cp -dpfr $(STAGING_DIR)/usr/lib/fonts/* $(TARGET_DIR)/usr/lib/fonts ; \
--	fi
--endef
--
- define QT5BASE_INSTALL_TARGET_EXAMPLES
- 	if [ -d $(STAGING_DIR)/usr/lib/qt/examples/ ] ; then \
- 		mkdir -p $(TARGET_DIR)/usr/lib/qt/examples ; \
+ if BR2_PACKAGE_QT5DECLARATIVE
+ 
+-comment "quick module needs an OpenGL-capable backend"
++comment "quick module without OpenGL-capable backend will use a less performant software backend"
+ 	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+ 
+ config BR2_PACKAGE_QT5DECLARATIVE_QUICK
+ 	bool "quick module"
+-	select BR2_PACKAGE_QT5BASE_OPENGL
+-	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
+ 
+ endif
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 67e7968..41eb0f6 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -53,11 +53,13 @@ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT5_GL_AVAILABLE),y)
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+ define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtMultimedia $(TARGET_DIR)/usr/qml/
+ endef
+ endif
++endif
+ 
+ define QT5MULTIMEDIA_INSTALL_TARGET_CMDS
+ 	$(QT5MULTIMEDIA_INSTALL_TARGET_LIBS)
 -- 
 2.9.3
