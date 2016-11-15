@@ -1,52 +1,39 @@
-From: Rahul Jain <Rahul.Jain@imgtec.com>
-Date: Tue, 15 Nov 2016 16:33:20 +0530
-Subject: [Buildroot] [PATCH v1] Makefile: add missing targets to
-	noconfig_targets and nobuild_targets
-Message-ID: <1479207800-26263-1-git-send-email-Rahul.Jain@imgtec.com>
+From: Tobias Klauser <tklauser@distanz.ch>
+Date: Tue, 15 Nov 2016 12:32:56 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libnet: fix compilation with
+	musl
+In-Reply-To: <20161115113858.1beeb768@free-electrons.com>
+References: <20161114112948.13292-1-tklauser@distanz.ch>
+ <20161114112948.13292-2-tklauser@distanz.ch>
+ <20161115113858.1beeb768@free-electrons.com>
+Message-ID: <20161115113256.GA3373@distanz.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-currently some buildroot targets fails (list-defconfigs,
-graph-build, etc), if there is an issue with configuration.
-For example, enabling uboot package without providing custom
-version name results in failing of various targets.
+On 2016-11-15 at 11:38:58 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+> 
+> On Mon, 14 Nov 2016 12:29:47 +0100, Tobias Klauser wrote:
+> > Patch taken from from upstream:
+> > https://github.com/sam-github/libnet/commit/ffd7fab744a9ad2893169a8fb6244074604d5d0d
+> > 
+> > Adjusted the file paths manually so the patch applies to the packaged
+> > libnet sources.
+> > 
+> > Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+> > ---
+> >  package/libnet/0001-support-musl-libc.patch | 50 +++++++++++++++++++++++++++++
+> >  1 file changed, 50 insertions(+)
+> >  create mode 100644 package/libnet/0001-support-musl-libc.patch
+> 
+> Adding the patch fixing the musl build issue is good... but if you
+> don't adjust the Config.in file of this package to re-enable it for
+> musl configurations, it's a bit useless, no?
+> 
+> So I've fixed that, and applied your patch to next. Thanks!
 
-Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
----
- Makefile | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index a860218..5c3d1c7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -86,7 +86,8 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
- noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
- 	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
--	print-version olddefconfig distclean
-+	print-version olddefconfig distclean manual manual-html manual-split-html \
-+	manual-pdf manual-text manual-epub
- 
- # Some global targets do not trigger a build, but are used to collect
- # metadata, or do various checks. When such targets are triggered,
-@@ -97,9 +98,11 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
- # We're building in two situations: when MAKECMDGOALS is empty
- # (default target is to build), or when MAKECMDGOALS contains
- # something else than one of the nobuild_targets.
--nobuild_targets := source source-check \
--	legal-info external-deps _external-deps \
--	clean distclean help
-+nobuild_targets := source %-source source-check \
-+	legal-info %-legal-info external-deps _external-deps \
-+	clean distclean help show-targets graph-depends \
-+	%-graph-depends %-show-depends %-show-version \
-+	graph-build graph-size list-defconfigs
- ifeq ($(MAKECMDGOALS),)
- BR_BUILDING = y
- else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
--- 
-2.6.2
+Indeed, I forgot to stage that change in my local commit. Sorry about
+that and thanks for fixing it up!
