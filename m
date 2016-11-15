@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Nov 2016 22:48:19 +0100
-Subject: [Buildroot] [PATCH v1] Makefile: add missing targets to
- noconfig_targets and nobuild_targets
-In-Reply-To: <1479207800-26263-1-git-send-email-Rahul.Jain@imgtec.com>
-References: <1479207800-26263-1-git-send-email-Rahul.Jain@imgtec.com>
-Message-ID: <20161115224819.007dc80b@free-electrons.com>
+Date: Tue, 15 Nov 2016 22:48:46 +0100
+Subject: [Buildroot] [git commit branch/next] ruby: bump version to 2.3.2
+Message-ID: <20161115220730.9534181D38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cbe981184cc1b4909b3f18d653109075d21458cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 15 Nov 2016 16:33:20 +0530, Rahul Jain wrote:
-> currently some buildroot targets fails (list-defconfigs,
-> graph-build, etc), if there is an issue with configuration.
-> For example, enabling uboot package without providing custom
-> version name results in failing of various targets.
-> 
-> Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
-> ---
->  Makefile | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to next, after adding the savedefconfig and printvars targets
-to nobuild_targets, as suggested by Arnout. Thanks for the patch, and
-thanks Arnout for the review!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 7e62744..d480f07 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,2 +1,2 @@
+-# From https://www.ruby-lang.org/en/news/2016/04/26/ruby-2-3-1-released/
+-sha256	6725b5534d5a3a21ec4f14d6d7b9921a0d00d08acb88fd04cd50b47b70496338	ruby-2.3.1.tar.xz
++# From https://www.ruby-lang.org/en/news/2016/11/15/ruby-2-3-2-released/
++sha256 5c78f311045ce48160092160444dec2744941a5e37d7865032978bd5bf392f0c  ruby-2.3.2.tar.xz
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index f3f8047..631f270 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RUBY_VERSION_MAJOR = 2.3
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
+ RUBY_VERSION_EXT = 2.3.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
