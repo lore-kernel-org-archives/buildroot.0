@@ -1,11 +1,10 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 15 Nov 2016 17:16:22 +0000
-Subject: [Buildroot] [Rejected v2 1/7] qt5webkit: Get sources from
- Qt-5-unofficial-builds
-In-Reply-To: <20161115171307.7499-2-corjon.j@ecagroup.com>
+From: =?UTF-8?B?0JDQu9C10LrRgdC10Lkg0JHRgNC+0LTQutC40L0=?= <alexey.brodkin@gmail.com>
+Date: Tue, 15 Nov 2016 20:20:33 +0300
+Subject: [Buildroot] [Rejected v2 0/7] qt5 bump to 5.8.0-beta
+In-Reply-To: <20161115171307.7499-1-corjon.j@ecagroup.com>
 References: <1478601048-21388-1-git-send-email-anaumann@ultratronik.de>
- <20161115171307.7499-2-corjon.j@ecagroup.com>
-Message-ID: <1479230128.10985.10.camel@synopsys.com>
+ <20161115171307.7499-1-corjon.j@ecagroup.com>
+Message-ID: <CAML3pwWDwmj=r=DOwNUqoV_WCoMEvro1y8fchbAWxSDhsgOa3g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +13,24 @@ To: buildroot@busybox.net
 
 Hi Julien,
 
-On Tue, 2016-11-15 at 18:13 +0100, Julien Corjon wrote:
-> Instead of messing with git we may get tarballs of obsolete but still
-> existing submodules as we used to but from a bit different location.
-> 
-> It turned out Qt people still create packages for obsolete submodules
-> for so-called "unofficial builds", see [1].
-> 
-> [1] https://wiki.qt.io/Qt-5-unofficial-builds
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-> ---
-> ?package/qt5/qt5.mk???????????????????|??1 +
-> ?package/qt5/qt5webkit/qt5webkit.hash |??4 ++--
-> ?package/qt5/qt5webkit/qt5webkit.mk???| 14 +++-----------
-> ?3 files changed, 6 insertions(+), 13 deletions(-)
+2016-11-15 20:13 GMT+03:00 Julien Corjon <corjon.j@ecagroup.com>:
+> As I'm, also, working on qt5.8 next bump i made a V2 of Andreas
+> series and include a proposed patch from Alexey for convinience.
+>
+> I mostly work on patch 2/7 to include qtwebkit fix and add C++11
+> requirement.
+> Patches 6 & 7 are not touched (did not take Arnout comment yet).
+>
+> Of course as it's a beta version this series is to reject in
+> patchwork. But if someone what to give a try on it, comments are
+> more than welcome.
+>
+>
+> Alexey Brodkin (1):
+>   qt5webkit: Get sources from Qt-5-unofficial-builds
 
-I'm wondering what does this mean?
-3 hours ago you sent email saying "Reviewed-by" and now reject?
+Another thing that I wanted to do was to get qtwebkit-examples back in BR.
+IMHO it worth squeezing it in these series.
+I'll try to send a corresponding patch a bit later on that regard.
 
 -Alexey
