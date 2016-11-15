@@ -1,58 +1,57 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 15 Nov 2016 17:25:23 +0000
-Subject: [Buildroot] [Rejected v2 1/7] qt5webkit: Get sources from
- Qt-5-unofficial-builds
-In-Reply-To: <8097ee8d-51f9-4709-a1e5-ca4422b6170f@MAIL-SINTERS-01.sinters-int.fr>
-References: <1478601048-21388-1-git-send-email-anaumann@ultratronik.de>
- <20161115171307.7499-2-corjon.j@ecagroup.com>
- <1479230128.10985.10.camel@synopsys.com>
- <8097ee8d-51f9-4709-a1e5-ca4422b6170f@MAIL-SINTERS-01.sinters-int.fr>
-Message-ID: <1479230669.10985.15.camel@synopsys.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 15 Nov 2016 20:29:06 +0100
+Subject: [Buildroot] [PATCH v1] qt5base: fix eglfs compile for
+ odroid-mali
+In-Reply-To: <20161115125647.26846b6c@free-electrons.com>
+References: <1479165400-13248-1-git-send-email-ps.report@gmx.net>
+ <20161115125647.26846b6c@free-electrons.com>
+Message-ID: <20161115202906.25b62be3@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Julien,
+Hello Thomas,
 
-On Tue, 2016-11-15 at 17:22 +0000, Julien CORJON wrote:
-> Alexey,
-> 
-> Le 15/11/2016 ? 18:16, Alexey Brodkin a ?crit :
-> > 
-> > Hi Julien,
-> > 
-> > On Tue, 2016-11-15 at 18:13 +0100, Julien Corjon wrote:
-> > > 
-> > > Instead of messing with git we may get tarballs of obsolete but still
-> > > existing submodules as we used to but from a bit different location.
-> > > 
-> > > It turned out Qt people still create packages for obsolete submodules
-> > > for so-called "unofficial builds", see [1].
-> > > 
-> > > [1] https://wiki.qt.io/Qt-5-unofficial-builds
-> > > 
-> > > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> > > Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-> > > ---
-> > > ?package/qt5/qt5.mk???????????????????|??1 +
-> > > ?package/qt5/qt5webkit/qt5webkit.hash |??4 ++--
-> > > ?package/qt5/qt5webkit/qt5webkit.mk???| 14 +++-----------
-> > > ?3 files changed, 6 insertions(+), 13 deletions(-)
-> > 
-> > I'm wondering what does this mean?
-> > 3 hours ago you sent email saying "Reviewed-by" and now reject?
-> 
-> Sorry for confusion, my whole series is to reject as it's a bump for a?
-> beta version of Qt (that we do not want in BR mainline).
-> But as i like your patch a lot (or it simply ease the bump in my series?
-> ;) ), I use your patch.
-> 
-> So yes, your patch is reviewed and my series is to reject!
+On Tue, 15 Nov 2016 12:56:47 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-So I got confused because you CCed me via my Gmail address for
-your series and I didn't see it immediately. But now I realized what
-was happening.
+> Hello,
+> 
+> On Tue, 15 Nov 2016 00:16:40 +0100, Peter Seiderer wrote:
+> > Avoid duplicated struct fbdev_window definition (introduced by [1]) by
+> > renaming struct fbdev_window to shadow_fbdev_window.
+> > 
+> > Fixes [2]:
+> > 
+> > qeglfsmaliintegration.cpp:45:8: error: redefinition of 'struct fbdev_window'
+> >  struct fbdev_window {
+> >         ^
+> > In file included from /accts/mlweber1/rc-buildroot-test/scripts/instance-0/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:28:0,
+> >                  from /accts/mlweber1/rc-buildroot-test/scripts/instance-0/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/egl.h:36,
+> >                  from ../../../eglfs/qeglfsglobal.h:45,
+> >                  from ../../../eglfs/qeglfsdeviceintegration.h:48,
+> >                  from qeglfsmaliintegration.h:37,
+> >                  from qeglfsmaliintegration.cpp:34:
+> > 
+> > [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?h=dev&id=58bed4cda98e8e25db8adc61c7db73b6853077dc
+> > [2] http://autobuild.buildroot.net/results/48c/48c458c035162169e8ca7c34ae65e9064822f25a
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  ...fs-fix-eglfs_mali-compile-for-odroid-mali.patch | 53 ++++++++++++++++++++++
+> >  1 file changed, 53 insertions(+)
+> >  create mode 100644 package/qt5/qt5base/0007-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch
+> 
+> Applied to master, thanks.
 
--Alexey
+And finally done the (propose for) upstream work (see [1], [2])...
+
+Regards,
+Peter
+
+[1] https://bugreports.qt.io/browse/QTBUG-57156
+[2] https://codereview.qt-project.org/176774
+
+> 
+> Thomas
