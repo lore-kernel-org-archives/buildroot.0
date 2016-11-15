@@ -1,58 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Nov 2016 23:29:27 +0100
-Subject: [Buildroot] [git commit] package/tremor: fix build with Thumb only
-	ARM archs
-Message-ID: <20161115222942.2305881D88@busybox.osuosl.org>
+Date: Tue, 15 Nov 2016 23:31:36 +0100
+Subject: [Buildroot] [PATCH] package/tremor: fix build with Thumb only
+ ARM archs
+In-Reply-To: <20161115204658.14288-1-joerg.krause@embedded.rocks>
+References: <20161115204658.14288-1-joerg.krause@embedded.rocks>
+Message-ID: <20161115233136.63503880@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ee4deb9618f961e12e340d527ed0e4fb1ae4829
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Some ARM architectures like ARMv7-M only supports Thumb instructions,
-but the tremor build configuration enables ARM assembly code
-unconditionally for all arm triplets by defining _ARM_ASSEM_.
+On Tue, 15 Nov 2016 21:46:58 +0100, J?rg Krause wrote:
+> Some ARM architectures like ARNv7-M only supports Thumb instructions,
 
-We are overriding this by undefining this macro for ARM architectures
-not supporting ARM instructions.
+ARNv7 -> ARMv7
 
-Fixes:
-http://autobuild.buildroot.net/results/054/054f1c77b0e5d46b2dc53769469c0ed03e6b79ef/
-http://autobuild.buildroot.net/results/ba1/ba1760b1428584f70e44dbffb8218ff3ee55e702/
-http://autobuild.buildroot.net/results/2a6/2a687853cf0bc832fef29f88de0d85bd495fe87d/
-http://autobuild.buildroot.net/results/cb6/cb6c560bf31834aadbe3d13a118b31ea8190159b/
+> +ifeq ($(BR2_ARM_CPU_HAS_ARM),y)
+> +TREMOR_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -marm"
+> +else
+> +TREMOR_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -U_ARM_ASSEM_"
+> +endif
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tremor/tremor.mk | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+I would have preferred a better solution than this, with a patch to
+configure.in, to add the appropriate autoconf checks to decide whether
+or not the optimized ARM code should be used or not.
 
-diff --git a/package/tremor/tremor.mk b/package/tremor/tremor.mk
-index 97b0ce3..2a791b6 100644
---- a/package/tremor/tremor.mk
-+++ b/package/tremor/tremor.mk
-@@ -16,9 +16,17 @@ TREMOR_DEPENDENCIES = libogg
- 
- # tremor has ARM assembly code that cannot be compiled in Thumb2 mode,
- # so we must force the traditional ARM mode.
-+# However, some ARM architectures like ARNv7-M only supports Thumb
-+# instructions, but the tremor build configuration enables ARM assembly
-+# code unconditionally for all arm triplets by defining _ARM_ASSEM_.
-+# We are overriding this by undefining this macro for the ARM
-+# architectures not supporting ARM instructions.
- ifeq ($(BR2_arm),y)
--TREMOR_CONF_ENV = \
--	CFLAGS="$(TARGET_CFLAGS) -marm"
-+ifeq ($(BR2_ARM_CPU_HAS_ARM),y)
-+TREMOR_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -marm"
-+else
-+TREMOR_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -U_ARM_ASSEM_"
-+endif
- endif
- 
- $(eval $(autotools-package))
+However, consider the fact that the upstream Tremor project seems more
+or less dead, it means there is very little chance to get our patches
+merged upstream. So your simple solution is good enough.
+
+Therefore: applied to master. Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
