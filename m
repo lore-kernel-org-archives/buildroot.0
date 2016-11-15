@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Nov 2016 22:39:38 +0100
-Subject: [Buildroot] [PATCH v1] Makefile: add missing targets to
- noconfig_targets and nobuild_targets
-In-Reply-To: <1479207800-26263-1-git-send-email-Rahul.Jain@imgtec.com>
-References: <1479207800-26263-1-git-send-email-Rahul.Jain@imgtec.com>
-Message-ID: <7062674d-d99e-7a8e-e426-41a2b09b0223@mind.be>
+Date: Tue, 15 Nov 2016 22:39:32 +0100
+Subject: [Buildroot] Buildroot error
+In-Reply-To: <D3FA0BA2E2AD54469423D3A670F43027238ED2AB@mail.protoprod.local>
+References: <D3FA0BA2E2AD54469423D3A670F43027238ED2AB@mail.protoprod.local>
+Message-ID: <8dee00da-0ff9-66de-2baf-c0b1f39dc96e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +12,23 @@ To: buildroot@busybox.net
 
 
 
-On 15-11-16 12:03, Rahul Jain wrote:
-> currently some buildroot targets fails (list-defconfigs,
-> graph-build, etc), if there is an issue with configuration.
-> For example, enabling uboot package without providing custom
-> version name results in failing of various targets.
+On 14-11-16 22:11, Michael Brainerd wrote:
+> I have a build error that I am unable to find documentation to debug the issue. 
+> See attached build error text, and .config file.
 > 
-> Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
+[snip the notice that I shouldn't read your mail]
 
- You missed a few nobuild_targets: printvars, savedefconfig.
+> >>>> linux-headers custom Syncing from source dir /home/mikeb/sandbox/buildroot-2016.08/uClinux-dist
+> rsync -au --chmod=u=rwX,go=rX --exclude .svn --exclude .git --exclude .hg --exclude .bzr --exclude CVS /home/mikeb/sandbox/buildroot-2016.08/uClinux-dist/ /home/mikeb/sandbox/buildroot-2016.08/output/build/linux-headers-custom
 
- With that:
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- I did
-grep '^[-a-zA-Z0-9_]*:' Makefile | cut -d : -f 1 | sort -u
-and verified that everything mentioned there was handled appropriately.
-
- It might have been useful to also add %-extract and %-patch, but it turns out
-that these may depend on other packages so better not.
+ Either the linux tree in uClinux-dist is so old that it doesn't have the
+"headers_install" target yet (I think that's from 2.6.10-ish), or the tree
+you're pointing to is not actually a linux tree. In the first case, you also
+misconfigured your kernel headers, because you claim it's 4.7. But you probably
+just took the first thing you saw :-)
 
  Regards,
  Arnout
-
-> ---
->  Makefile | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index a860218..5c3d1c7 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -86,7 +86,8 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
->  noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
->  	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
->  	randpackageconfig allyespackageconfig allnopackageconfig \
-> -	print-version olddefconfig distclean
-> +	print-version olddefconfig distclean manual manual-html manual-split-html \
-> +	manual-pdf manual-text manual-epub
->  
->  # Some global targets do not trigger a build, but are used to collect
->  # metadata, or do various checks. When such targets are triggered,
-> @@ -97,9 +98,11 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
->  # We're building in two situations: when MAKECMDGOALS is empty
->  # (default target is to build), or when MAKECMDGOALS contains
->  # something else than one of the nobuild_targets.
-> -nobuild_targets := source source-check \
-> -	legal-info external-deps _external-deps \
-> -	clean distclean help
-> +nobuild_targets := source %-source source-check \
-> +	legal-info %-legal-info external-deps _external-deps \
-> +	clean distclean help show-targets graph-depends \
-> +	%-graph-depends %-show-depends %-show-version \
-> +	graph-build graph-size list-defconfigs
->  ifeq ($(MAKECMDGOALS),)
->  BR_BUILDING = y
->  else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
