@@ -1,58 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Nov 2016 22:43:23 +0100
-Subject: [Buildroot] [git commit branch/next] Makefile: add missing targets
-	to noconfig_targets and nobuild_targets
-Message-ID: <20161115214450.07CA8818CC@busybox.osuosl.org>
+Date: Tue, 15 Nov 2016 22:47:08 +0100
+Subject: [Buildroot] Buildroot error
+In-Reply-To: <8dee00da-0ff9-66de-2baf-c0b1f39dc96e@mind.be>
+References: <D3FA0BA2E2AD54469423D3A670F43027238ED2AB@mail.protoprod.local>
+ <8dee00da-0ff9-66de-2baf-c0b1f39dc96e@mind.be>
+Message-ID: <20161115224708.043f0c31@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=472f0ae2dff7a912bebdb025f7dca0541ebc9769
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-currently some buildroot targets fails (list-defconfigs,
-graph-build, etc), if there is an issue with configuration.
-For example, enabling uboot package without providing custom
-version name results in failing of various targets.
+On Tue, 15 Nov 2016 22:39:32 +0100, Arnout Vandecappelle wrote:
 
-Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: as suggested by Arnout, added printvars and savedefconfig to
-nobuild_targets.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+> > >>>> linux-headers custom Syncing from source dir /home/mikeb/sandbox/buildroot-2016.08/uClinux-dist  
+> > rsync -au --chmod=u=rwX,go=rX --exclude .svn --exclude .git --exclude .hg --exclude .bzr --exclude CVS /home/mikeb/sandbox/buildroot-2016.08/uClinux-dist/ /home/mikeb/sandbox/buildroot-2016.08/output/build/linux-headers-custom  
+> 
+>  Either the linux tree in uClinux-dist is so old that it doesn't have the
+> "headers_install" target yet (I think that's from 2.6.10-ish), or the tree
+> you're pointing to is not actually a linux tree. In the first case, you also
+> misconfigured your kernel headers, because you claim it's 4.7. But you probably
+> just took the first thing you saw :-)
 
-diff --git a/Makefile b/Makefile
-index 6cf5f1c..eff814b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -126,7 +126,8 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
- noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
- 	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
--	print-version olddefconfig distclean
-+	print-version olddefconfig distclean manual manual-html manual-split-html \
-+	manual-pdf manual-text manual-epub
- 
- # Some global targets do not trigger a build, but are used to collect
- # metadata, or do various checks. When such targets are triggered,
-@@ -137,9 +138,12 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
- # We're building in two situations: when MAKECMDGOALS is empty
- # (default target is to build), or when MAKECMDGOALS contains
- # something else than one of the nobuild_targets.
--nobuild_targets := source source-check \
--	legal-info external-deps _external-deps \
--	clean distclean help
-+nobuild_targets := source %-source source-check \
-+	legal-info %-legal-info external-deps _external-deps \
-+	clean distclean help show-targets graph-depends \
-+	%-graph-depends %-show-depends %-show-version \
-+	graph-build graph-size list-defconfigs \
-+	savedefconfig printvars
- ifeq ($(MAKECMDGOALS),)
- BR_BUILDING = y
- else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+uClinux-dist is the name of the "distribution" around uClinux, and
+uClinux-dist is pretty much a build system, like Buildroot. So it seems
+like Michael has used the source code of a build system, and offered it
+to Buildroot as the source of the Linux kernel. Obviously, this isn't
+going to work very well.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
