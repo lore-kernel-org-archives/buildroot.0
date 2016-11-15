@@ -1,30 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Nov 2016 13:01:20 +0100
-Subject: [Buildroot] [PATCH] openssh: add upstream security fix
-In-Reply-To: <8684b9b01e5f3062cf538a1c2025cb64d5ac0bab.1479191658.git.baruch@tkos.co.il>
-References: <8684b9b01e5f3062cf538a1c2025cb64d5ac0bab.1479191658.git.baruch@tkos.co.il>
-Message-ID: <20161115130120.1ccdc349@free-electrons.com>
+Date: Tue, 15 Nov 2016 13:02:04 +0100
+Subject: [Buildroot] [git commit branch/next] htop: enable unicode if
+	possible
+Message-ID: <20161115120227.97CE581D71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a75a1d36d235b8552e3f6989681d0a4f17acef64
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 15 Nov 2016 08:34:18 +0200, Baruch Siach wrote:
-> Fixes CVE-2016-8858: Memory exhaustion, up to 128MB, of unauthenticated peer.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/openssh/0003-fix-CVE-2016-8858.patch | 31 ++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 package/openssh/0003-fix-CVE-2016-8858.patch
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+[Thomas:
+ - use positive logic
+ - use += instead of = in conditions.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/htop/htop.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+index 7409a78..adc5090 100644
+--- a/package/htop/htop.mk
++++ b/package/htop/htop.mk
+@@ -7,10 +7,15 @@
+ HTOP_VERSION = 2.0.2
+ HTOP_SITE = http://hisham.hm/htop/releases/$(HTOP_VERSION)
+ HTOP_DEPENDENCIES = ncurses
+-HTOP_CONF_OPTS = --disable-unicode
+ # Prevent htop build system from searching the host paths
+ HTOP_CONF_ENV = HTOP_NCURSES_CONFIG_SCRIPT=$(STAGING_DIR)/usr/bin/ncurses5-config
+ HTOP_LICENSE = GPLv2
+ HTOP_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
++HTOP_CONF_OPTS += --enable-unicode
++else
++HTOP_CONF_OPTS += --disable-unicode
++endif
++
+ $(eval $(autotools-package))
