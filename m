@@ -1,49 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Nov 2016 11:24:32 +0100
-Subject: [Buildroot] [git commit branch/next] package/netsniff-ng: allow to
-	build with musl
-Message-ID: <20161115102610.14AD5801EA@busybox.osuosl.org>
+Date: Tue, 15 Nov 2016 11:38:58 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libnet: fix compilation with
+ musl
+In-Reply-To: <20161114112948.13292-2-tklauser@distanz.ch>
+References: <20161114112948.13292-1-tklauser@distanz.ch>
+ <20161114112948.13292-2-tklauser@distanz.ch>
+Message-ID: <20161115113858.1beeb768@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f148d55980bbc2943706670df638b0f70d8de81e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-netsniff-ng allows build with musl since version 0.5.8. With libnet
-now being able to build with musl, let's enable musl for netsniff-ng
-as well.
+On Mon, 14 Nov 2016 12:29:47 +0100, Tobias Klauser wrote:
+> Patch taken from from upstream:
+> https://github.com/sam-github/libnet/commit/ffd7fab744a9ad2893169a8fb6244074604d5d0d
+> 
+> Adjusted the file paths manually so the patch applies to the packaged
+> libnet sources.
+> 
+> Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+> ---
+>  package/libnet/0001-support-musl-libc.patch | 50 +++++++++++++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>  create mode 100644 package/libnet/0001-support-musl-libc.patch
 
-Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-[Thomas: update Config.in comment.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/netsniff-ng/Config.in | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Adding the patch fixing the musl build issue is good... but if you
+don't adjust the Config.in file of this package to re-enable it for
+musl configurations, it's a bit useless, no?
 
-diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
-index e52bb25..00617e3 100644
---- a/package/netsniff-ng/Config.in
-+++ b/package/netsniff-ng/Config.in
-@@ -7,8 +7,7 @@ config BR2_PACKAGE_NETSNIFF_NG
- 	select BR2_PACKAGE_LIBURCU
- 	select BR2_PACKAGE_LIBNET
- 	# Build with uClibc fails due to missing ceill()
--	# Build with musl fails due to various header issues
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
-@@ -17,7 +16,7 @@ config BR2_PACKAGE_NETSNIFF_NG
- 	  networking toolkit. If you will, the Swiss army knife for
- 	  network packets.
- 
--comment "netsniff-ng needs a glibc toolchain w/ threads, headers >= 3.0"
-+comment "netsniff-ng needs a glibc or musl toolchain w/ threads, headers >= 3.0"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC \
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC \
- 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+So I've fixed that, and applied your patch to next. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
