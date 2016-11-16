@@ -1,42 +1,52 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Wed, 16 Nov 2016 14:55:43 -0500
-Subject: [Buildroot] [PATCH] fs/ext2: fix double quoted label
-In-Reply-To: <20161116195543.6456-1-gael.portay@savoirfairelinux.com>
-References: <20161116195543.6456-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20161116195543.6456-2-gael.portay@savoirfairelinux.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 16 Nov 2016 22:43:19 +0200
+Subject: [Buildroot] [PATCH v2 1/3] toolchain: workaround musl/kernel
+ headers conflict
+In-Reply-To: <20161116173605.12aa2e5b@free-electrons.com>
+References: <b2085612a223f59a2f7ef18a9bd97603226aa03d.1478784433.git.baruch@tkos.co.il>
+ <b08117ad-6edc-245d-0650-0db5eb1775ce@mind.be>
+ <20161115233347.107fd31d@free-electrons.com>
+ <20161116154516.w2e2wqerideqxsra@sapphire.tkos.co.il>
+ <20161116165557.56fda400@free-electrons.com>
+ <20161116162520.6quaqjt3fllqphma@sapphire.tkos.co.il>
+ <20161116173605.12aa2e5b@free-electrons.com>
+Message-ID: <20161116204319.ztno63yowfrqxlls@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the commit 6dd7bbb59134799ed3d7343f238b3b02592faebf, the label does
-not need anymore to be quoted. Even worse it *must* not be simple-quoted,
-unless the label will contain the double-quotes from the config variable
-BR2_TARGET_ROOTFS_EXT2_LABEL.
+Hi Thomas,
 
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
----
- fs/ext2/ext2.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+On Wed, Nov 16, 2016 at 05:36:05PM +0100, Thomas Petazzoni wrote:
+> On Wed, 16 Nov 2016 18:25:20 +0200, Baruch Siach wrote:
+> 
+> > > So I believe we should apply your proposed workaround. However, I'm not
+> > > sure I want to take the risk of applying this to the master branch
+> > > (even though I agree it could fix some build failures). Are you OK with
+> > > applying it to the next branch?  
+> > 
+> > Of course. This is definitely not for master.
+> 
+> And any thoughts about my concerns to identify the packages that should
+> be re-enabled and patches that should be removed?
 
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 7417f81..49b44e4 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -20,12 +20,8 @@ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
- EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
- endif
- 
--# Not qstrip-ing the variable, because it may contain spaces, but we must
--# qstrip it when checking. Furthermore, we need to further quote it, so
--# that the quotes do not get eaten by the echo statement when creating the
--# fakeroot script
- ifneq ($(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_LABEL)),)
--EXT2_OPTS += -l '$(BR2_TARGET_ROOTFS_EXT2_LABEL)'
-+EXT2_OPTS += -l $(BR2_TARGET_ROOTFS_EXT2_LABEL)
- endif
- 
- ROOTFS_EXT2_DEPENDENCIES = host-mke2img
+Over time as packages get version bumps we'll have the chance to revise musl 
+patches. Patches that cleanly apply to newer versions should not bother us, 
+since they don't add maintenance burden.
+
+As for !BR2_TOOLCHAIN_USES_MUSL dependencies, anyone interested in having a 
+specific package building with musl may revise these dependences. Any typical 
+package version bump sometimes makes dependencies removal possible, but it's 
+not always apparent at bump time.
+
+That being said, there are some low hanging fruits here that I plan to pick as 
+time allows.
+
+baruch
+
 -- 
-2.10.2
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
