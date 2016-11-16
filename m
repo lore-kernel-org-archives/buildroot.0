@@ -1,10 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Nov 2016 23:30:01 +0100
-Subject: [Buildroot] [PATCH v2 1/3] toolchain: workaround musl/kernel
- headers conflict
-In-Reply-To: <b2085612a223f59a2f7ef18a9bd97603226aa03d.1478784433.git.baruch@tkos.co.il>
-References: <b2085612a223f59a2f7ef18a9bd97603226aa03d.1478784433.git.baruch@tkos.co.il>
-Message-ID: <20161116233001.79b36069@free-electrons.com>
+Date: Wed, 16 Nov 2016 23:30:20 +0100
+Subject: [Buildroot] [PATCH] package/e2fsprogs: backport build fix for
+ rhel5 due to missing magic
+In-Reply-To: <CAMo8Bf+QBebevnz7vhcXf1J9o2HvLaOtC13_rY1-4B0sTxVetQ@mail.gmail.com>
+References: <1478677142-11627-1-git-send-email-jcmvbkbc@gmail.com>
+ <20161116131231.20069c38@free-electrons.com>
+ <20161116140015.iscxr2td723pgyly@sapphire.tkos.co.il>
+ <20161116152248.2c639f88@free-electrons.com>
+ <CAMo8Bf+QBebevnz7vhcXf1J9o2HvLaOtC13_rY1-4B0sTxVetQ@mail.gmail.com>
+Message-ID: <20161116233020.419f04b0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,65 +17,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 10 Nov 2016 15:27:11 +0200, Baruch Siach wrote:
-> Rick Felker suggested[1] this hack as a workaround to musl libc conflict with
-> kernel headers:
-> 
->   The problem is linux/libc-compat.h, which should fix this, only works
->   on glibc, by design. See:
-> 
->   #ifndef _LIBC_COMPAT_H
->   #define _LIBC_COMPAT_H
-> 
->   /* We have included glibc headers... */
->   #if defined(__GLIBC__)
-> 
->   /* Coordinate with glibc netinet/in.h header. */
->   #if defined(_NETINET_IN_H)
-> 
->   If you patch it like this:
-> 
->   -#if defined(__GLIBC__)
->   +#if 1
-> 
->   then it should mostly work but it's still all a big hack. I think
->   that's what distros are doing. The problem is that the same header is
->   trying to do two different things:
-> 
->   1. Provide extra linux-kernel-API stuff that's not in the
->      libc/userspace headers.
-> 
->   2. Provide definitions of the standard types and constants for uClibc
->      and klibc, which don't have complete libc headers and rely on the
->      kernel headers for definitions.
-> 
->   These two uses really should be separated out into separate headers so
->   that the latter only get included explicitly by uClibc and klibc and
->   otherwise remain completely unused. But that would require coordinated
->   changes/upgrades which are unlikely to happen. :(
-> 
-> Upstream musl still evaluates[2][3] a permanent solution.
-> 
-> With this in place we can revert (at least) commits a167081c5d (bridge-utils:
-> fix build with musl) and e74d4fc4932 (norm: add patch to fix musl build).
-> 
-> [1] http://www.openwall.com/lists/musl/2015/10/08/2
-> [2] http://git.musl-libc.org/cgit/musl/commit/?id=04983f2272382af92eb8f8838964ff944fbb8258
-> [3] http://www.openwall.com/lists/musl/2016/11/09/2
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> v2:
->   * Add Rick's explanation in the commit log (Arnout)
->   * Link to more recent upstream changes
-> ---
->  toolchain/toolchain/toolchain.mk | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+On Wed, 16 Nov 2016 11:14:34 -0800, Max Filippov wrote:
 
-Series applied to the next branch. Thanks!
+> >> > E2FSPROGS_CONF_ENV += \
+> >> >     ac_cv_header_magic_h=no \
+> >> >     ac_cv_lib_magic_magic_file=no
+> >> >
+> >> > instead of this patch?  
+> >>
+> >> Do you mean HOST_E2FSPROGS_CONF_ENV?  
+> >
+> > Yes, indeed, it's for the host variant of the package.
+> >
+> > Thanks for correcting me on this,  
+> 
+> Works for me, thank you.
+
+Great, could you send a proper patch that implements this solution then?
+
+Thanks a lot!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
