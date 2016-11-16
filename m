@@ -1,37 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Nov 2016 13:04:44 +0100
-Subject: [Buildroot] [PATCH] autobuild-run: Add an exception for CS
- nios2 2016.05 with qt5base package (gui)
-In-Reply-To: <1479248209-12976-1-git-send-email-romain.naour@gmail.com>
-References: <1479248209-12976-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161116130444.109b7d9f@free-electrons.com>
+Date: Wed, 16 Nov 2016 13:05:28 +0100
+Subject: [Buildroot] [git commit] imagemagick: bump version to 7.0.3-7
+	(security)
+Message-ID: <20161116120538.90E2481D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=12c2c80aa379411f178023ba9194e48e249a7571
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Nov 2016 23:16:49 +0100, Romain Naour wrote:
-> This toolchain is affected by binutils PR19405 and instead of adding a
-> toolchain dependency on the GUI option of qt5base package and it's reverse
-> dependencies, use an autobuilder exception.
-> 
-> https://sourceware.org/bugzilla/show_bug.cgi?id=19405
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/620/6203c8ded2fcf6734b6f62b61e5a39464692340d
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  scripts/autobuild-run | 4 ++++
->  1 file changed, 4 insertions(+)
+oss-security reference:
+  http://www.openwall.com/lists/oss-security/2016/11/13/1
 
-Applied to buildroot-test, thanks!
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 8ad340d..4bdfe8f 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 86a1f04077de2b1486a93088030b010780067b25ab0284560435e2f458e247ca ImageMagick-7.0.3-4.tar.xz
++sha256 140b99f33a3326aed92132a7cd054ee962a6e2562064c68495640411aa4571d7  ImageMagick-7.0.3-7.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 2cae064..4f5c3be 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.0.3-4
++IMAGEMAGICK_VERSION = 7.0.3-7
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
