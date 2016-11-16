@@ -1,42 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Nov 2016 22:15:09 +0100
-Subject: [Buildroot] [git commit branch/next] lftp: bump version to 4.7.4
-Message-ID: <20161116211512.5F2F481810@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 16 Nov 2016 23:44:25 +0200
+Subject: [Buildroot] [PATCH for-master] package/strace: disable libmpers
+ with musl toolchains
+In-Reply-To: <20161113124323.lf6cjab4rp3lf36t@tarshish>
+References: <1478964612-7028-1-git-send-email-romain.naour@gmail.com>
+ <20161113125518.2797806f@free-electrons.com>
+ <20161113124323.lf6cjab4rp3lf36t@tarshish>
+Message-ID: <20161116214425.kyuut5osptb3rbp7@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=496b15eac07e7fc6de21360e27be1e8ed864268b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi Thomas,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lftp/lftp.hash | 4 ++--
- package/lftp/lftp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Sun, Nov 13, 2016 at 02:43:23PM +0200, Baruch Siach wrote:
+> On Sun, Nov 13, 2016 at 12:55:18PM +0100, Thomas Petazzoni wrote:
+> > On Sat, 12 Nov 2016 16:30:12 +0100, Romain Naour wrote:
+> > > strace bundle some kernel headers to build libmpers, this mixes userspace
+> > > headers and kernel headers which break the build with musl.
+> > > The stddef.h from gcc is used instead of the one from musl.
+> > > 
+> > > Disable libmpers for musl toolchains.
+> > > 
+> > > Fixes:
+> > > http://autobuild.buildroot.net/results/6f6/6f63fa2537ff316ba259a20966faadcf5ab9deff
+> > > 
+> > > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> > 
+> > Hum, Alpine Linux is not doing this, and they support strace 4.14. Why
+> > are we having this issue and not Alpine Linux?
+> > 
+> > I've asked on #musl, we'll see if they come back with some explanation.
+> 
+> I think they are tweaking the headers in some way to make them more compatible 
+> with many packages. I investigate the tcpreplay musl build issue that the 
+> autobuilder shows. It turns out that there is an upstream commit[1] fixing 
+> some musl build issues. When I tested it I found that is still a 'struct 
+> ethhdr' conflict, even with the compatibility hack[2] applied. There must be 
+> something else in patch author's environment that avoids this issue.
+> 
+> [1] https://github.com/appneta/tcpreplay/commit/7c942b71d4ace7425a26e4670f8fbd5814b2339b
+> [2] http://patchwork.ozlabs.org/patch/693222/
 
-diff --git a/package/lftp/lftp.hash b/package/lftp/lftp.hash
-index 57a5205..0e0f927 100644
---- a/package/lftp/lftp.hash
-+++ b/package/lftp/lftp.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256 3b22259cdc4c1a6ae349057d16bda4b4816929e04d223242ab8927bc31a48e7c  lftp-4.7.3.tar.xz
-+# Locally calculated after checking gpg signature
-+sha256 bf67c4d128b6f769a4082947376a9679c5ee3463a24ab761a0757f75d70bd92c  lftp-4.7.4.tar.xz
-diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
-index 802bbc7..a7e1f92 100644
---- a/package/lftp/lftp.mk
-+++ b/package/lftp/lftp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LFTP_VERSION = 4.7.3
-+LFTP_VERSION = 4.7.4
- LFTP_SOURCE = lftp-$(LFTP_VERSION).tar.xz
- LFTP_SITE = http://lftp.yar.ru/ftp
- LFTP_LICENSE = GPLv3+
+Just to answer my own wondering, Alpine patches[1] kernel headers to make 
+libc-compat.h cover the 'struct ethhdr' definition as well.
+
+[1] http://git.alpinelinux.org/cgit/aports/tree/main/linux-headers/0002-libc-compat.h-prevent-redefinition-of-struct-ethhdr.patch?id=f483f49692b97950b680d987fe31f8ddb9277842
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
