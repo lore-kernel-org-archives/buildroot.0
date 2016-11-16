@@ -1,59 +1,50 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Wed, 16 Nov 2016 20:48:13 -0200
-Subject: [Buildroot] 2016.11-rc2 with really old versions of bash (RHEL5)
-References: <20161113210740.3a8cedb2@free-electrons.com>
-Message-ID: <582ce22d87e4_b6b11ecfac31990@ultri3.mail>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Thu, 17 Nov 2016 09:49:50 +1100
+Subject: [Buildroot] [PATCH 1/1] sdl: fix building on powerpc64 and
+ powerpc64le
+In-Reply-To: <20161116123331.44f50097@free-electrons.com>
+References: <a57a3d0430e248ee08148cef326cbf60283205ad.1478489382.git.sam.bobroff@au1.ibm.com>
+ <20161107225106.5e9e61b6@free-electrons.com>
+ <53f345eb-3ea1-02ef-06bf-72f011b3728a@mind.be>
+ <20161108051006.GB6803@tungsten.ozlabs.ibm.com>
+ <99a8adb3-3fa3-7050-e31f-16d2ee67ea12@mind.be>
+ <20161109043021.GA10982@tungsten.ozlabs.ibm.com>
+ <eijmfdxo6o.ln2@ID-313208.user.individual.net>
+ <f3f4937e-e29f-e504-371f-f393346f5ade@mind.be>
+ <20161116123331.44f50097@free-electrons.com>
+Message-ID: <20161116224950.GA2559@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas De Schampheleire,
-Max Filippov,
+On Wed, Nov 16, 2016 at 12:33:31PM +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 13 Nov 2016 21:18:46 +0100, Arnout Vandecappelle wrote:
+> 
+> >  Nice idea, but it's only possible for internal toolchains. Unless if we merge
+> > the ld-wrapper patches (last news of which was: it shouldn't be needed).
+> > 
+> >  I'm slightly inclined to go for patching configure or libtool.m4 instead.
+> 
+> Can we move forward with this topic? Could somone summarize the problem
+> and options we have with advantages/drawbacks?
+> 
+> We've got quite a lot of build failures because of that. In the latest
+> autobuild report, we've got 7 build failures on powerpc64le (on a total
+> of 41 build failures), and I suspect a significant number of them are
+> due to this libtool issue.
 
-Do you see the issue described below? Maybe I am doing something wrong.
-What bash version do you have in your RHEL5 servers?
+Sorry I've been quiet but I've been working on this :-)
 
-All,
+I've built and used scripts to scan about 1,000 packages, and it looks
+like about 100 of them have this problem. I'll post an RFC patch shortly
+and answer your questions, above.
 
-Ancient versions of bash don't support 'Associative arrays', leading to build
-error using 2016.11-rc2 in a plain vanilla RHEL5.
-Please notice EOL of RHEL5 is 31 Mar 2017 [1].
-Currently the manual does not specify a minimum version of bash [2].
+However, I've also run into several failures that are different issues,
+so this isn't going to fix them all.
 
-This is NOT my use case!
-I was just testing some unrelated stuff in a VM and came across it.
-I didn't tested the obvious workaround (installing a newer bash) but it should
-work.
-
-See below the logs for RHEL5 (error) and RHEL6 (ok).
-
-[ricardo at centos5 buildroot-2016.11-rc2]$ grep release /etc/issue        
-CentOS release 5.11 (Final)
-[ricardo at centos5 buildroot-2016.11-rc2]$ bash --version | grep bash
-GNU bash, version 3.2.25(1)-release (x86_64-redhat-linux-gnu)
-[ricardo at centos5 buildroot-2016.11-rc2]$ make -s defconfig
-support/scripts/br2-external: line 6: declare: -A: invalid option
-declare: usage: declare [-afFirtx] [-p] [name[=value] ...]
-Makefile:188: /home/ricardo/buildroot-2016.11-rc2/output/.br-external.mk: No such file or directory
-make[1]: Failed to remake makefile `/home/ricardo/buildroot-2016.11-rc2/output/.br-external.mk'.
-support/scripts/br2-external: line 6: declare: -A: invalid option
-declare: usage: declare [-afFirtx] [-p] [name[=value] ...]
-make[1]: *** [/home/ricardo/buildroot-2016.11-rc2/output/build/.br2-external.in] Error 2
-make: *** [_all] Error 2
-
-[ricardo at centos6 buildroot-2016.11-rc2]$ grep release /etc/issue        
-CentOS release 6.8 (Final)
-[ricardo at centos6 buildroot-2016.11-rc2]$ bash --version | grep bash
-GNU bash, version 4.1.2(1)-release (x86_64-redhat-linux-gnu)
-[ricardo at centos6 buildroot-2016.11-rc2]$ make -s defconfig
-#
-# configuration written to /home/ricardo/buildroot-2016.11-rc2/.config
-#
-
-[1] https://wiki.centos.org/Download
-[2] http://nightly.buildroot.org/manual.html#requirement-mandatory
-
-Regards,
-Ricardo
+Cheers,
+Sam.
