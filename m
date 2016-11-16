@@ -1,39 +1,34 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 16 Nov 2016 11:11:11 +0000
-Subject: [Buildroot] [PATCH next] imagemagick: bump version to 7.0.3-7
-Message-ID: <20161116111111.57237-1-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 16 Nov 2016 08:12:35 -0300
+Subject: [Buildroot] [PATCH] PHP: bump to 7.0.13
+In-Reply-To: <38121FAB319C3344930C920E7B518313886B225E@HHMAIL01.hh.imgtec.org>
+References: <20161116092744.7827-1-ishitatsuyuki@gmail.com>
+ <38121FAB319C3344930C920E7B518313886B225E@HHMAIL01.hh.imgtec.org>
+Message-ID: <d2740430-f645-4e4c-86aa-4cce32ed7ec4@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 16/11/16 06:38, Vincent Olivert Riera wrote:
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 8ad340d..4bdfe8f 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 86a1f04077de2b1486a93088030b010780067b25ab0284560435e2f458e247ca ImageMagick-7.0.3-4.tar.xz
-+sha256 140b99f33a3326aed92132a7cd054ee962a6e2562064c68495640411aa4571d7  ImageMagick-7.0.3-7.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 2cae064..4f5c3be 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.0.3-4
-+IMAGEMAGICK_VERSION = 7.0.3-7
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
--- 
-2.10.1
+> Hello Tatsuyuki,
+>
+> php has been already bumped to 7.0.13 in the next branch:
+>
+> https://git.busybox.net/buildroot/commit/?h=next&id=cd59cb6b388d00865d0084e6a25eb306c0b5fdd3
+>
+> Is there any reason to bump it for master as well? If so, please tell us and if the reason is valid a maintainer will cherry-pick the patch from the next branch.
+>
+> Regards,
+>
+> Vincent.
+
+Hi Vincent.
+It's a security release, you gotta read the ChangeLog more often:
+http://www.php.net/ChangeLog-7.php#7.0.13
+They usually don't wait for CVE assignments or ask for them after the 
+release, hence no references in it.
+Sometimes looking at the oss-security mailing lists helps.
+Regards.
