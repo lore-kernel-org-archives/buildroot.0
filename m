@@ -1,14 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Nov 2016 23:30:20 +0100
-Subject: [Buildroot] [PATCH] package/e2fsprogs: backport build fix for
- rhel5 due to missing magic
-In-Reply-To: <CAMo8Bf+QBebevnz7vhcXf1J9o2HvLaOtC13_rY1-4B0sTxVetQ@mail.gmail.com>
-References: <1478677142-11627-1-git-send-email-jcmvbkbc@gmail.com>
- <20161116131231.20069c38@free-electrons.com>
- <20161116140015.iscxr2td723pgyly@sapphire.tkos.co.il>
- <20161116152248.2c639f88@free-electrons.com>
- <CAMo8Bf+QBebevnz7vhcXf1J9o2HvLaOtC13_rY1-4B0sTxVetQ@mail.gmail.com>
-Message-ID: <20161116233020.419f04b0@free-electrons.com>
+Date: Wed, 16 Nov 2016 23:31:34 +0100
+Subject: [Buildroot] [PATCH for/next] krb5: new package
+In-Reply-To: <08250588-8b84-2d9a-56fd-d1ba8e6ab774@mind.be>
+References: <20161108005032.11340-1-arnout@mind.be>
+ <20161116000427.74c92b5e@free-electrons.com>
+ <08250588-8b84-2d9a-56fd-d1ba8e6ab774@mind.be>
+Message-ID: <20161116233134.574ed050@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,25 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 16 Nov 2016 11:14:34 -0800, Max Filippov wrote:
+On Wed, 16 Nov 2016 09:45:12 +0100, Arnout Vandecappelle wrote:
 
-> >> > E2FSPROGS_CONF_ENV += \
-> >> >     ac_cv_header_magic_h=no \
-> >> >     ac_cv_lib_magic_magic_file=no
-> >> >
-> >> > instead of this patch?  
-> >>
-> >> Do you mean HOST_E2FSPROGS_CONF_ENV?  
-> >
-> > Yes, indeed, it's for the host variant of the package.
-> >
-> > Thanks for correcting me on this,  
+> > We generally don't like to use bundled libraries. Are those libraries
+> > likely to be used by other packages? Or are they so specific to krb
+> > stuff that it isn't worth having separate packages for them?  
 > 
-> Works for me, thank you.
+>  You are so right. libss is part of e2fsprogs, and libverto makes sense
+> stand-alone. I can't find a libet in Debian, so I guess it doesn't make much
+> sense on its own.
+> 
+>  This was anyway just a bit of help for Charles and Daniel, so it may take some
+> time before I respin...
 
-Great, could you send a proper patch that implements this solution then?
+OK, so I'm marking "Changes Requested" in the mean time. Charles, if
+you could take over this patch and do the suggested improvements, I
+guess Arnout would be more than happy :)
 
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
