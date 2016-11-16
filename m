@@ -1,96 +1,54 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 16 Nov 2016 00:22:18 +0100
-Subject: [Buildroot] [PATCH] package/xenomai: bfin remove inline keyword
-Message-ID: <1479252138-15368-1-git-send-email-romain.naour@gmail.com>
+From: Masahiro Yamada <yamada.masahiro@socionext.com>
+Date: Wed, 16 Nov 2016 09:52:45 +0900
+Subject: [Buildroot] [PATCH v2] boot-wrapper-aarch64: update upstream
+	repository
+Message-ID: <1479257565-30799-1-git-send-email-yamada.masahiro@socionext.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Xenomai user space tools fail to build for bfin target since it's
-provide it's own pthread_atfork(), shm_open() and shm_unlink()
-definition using the inline keyword and weak attribute.
+cmarinas/boot-wrapper-aarch64.git does not exist any more.
+Switch over to mark/boot-wrapper-aarch64.git.
 
-With gcc 5+ the weak attribute is discarded by the inline keyword,
-so each symbol are global and are redefined several time while
-linking.
-
-Fixes:
-http://autobuild.buildroot.net/results/0c2/0c2e5eb4edd4f9427f61d3c9b67a12a7a0e24140
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
 ---
- .../xenomai/0001-bfin-remove-inline-keyword.patch  | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/xenomai/0001-bfin-remove-inline-keyword.patch
 
-diff --git a/package/xenomai/0001-bfin-remove-inline-keyword.patch b/package/xenomai/0001-bfin-remove-inline-keyword.patch
-new file mode 100644
-index 0000000..a3206ce
---- /dev/null
-+++ b/package/xenomai/0001-bfin-remove-inline-keyword.patch
-@@ -0,0 +1,61 @@
-+From 2a96c8bbe19a193d9ae6d0780fc274abc4df03e3 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sat, 5 Nov 2016 19:09:00 +0100
-+Subject: [PATCH] bfin: remove inline keyword
-+
-+Xenomai user space tools fail to build for bfin target since it's
-+provide it's own pthread_atfork(), shm_open() and shm_unlink()
-+definition using the inline keyword and weak attribute.
-+
-+With gcc 5+ the weak attribute is discarded by the inline keyword,
-+so each symbol are global and are redefined several time while
-+linking.
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/0c2/0c2e5eb4edd4f9427f61d3c9b67a12a7a0e24140
-+
-+Patch status: upstream
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ include/asm-blackfin/syscall.h | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/include/asm-blackfin/syscall.h b/include/asm-blackfin/syscall.h
-+index 9eda8b9..b5728b5 100644
-+--- a/include/asm-blackfin/syscall.h
-++++ b/include/asm-blackfin/syscall.h
-+@@ -132,9 +132,9 @@ static inline int __xn_interrupted_p(struct pt_regs *regs)
-+ #define XENOMAI_SKINCALL5(id,op,a1,a2,a3,a4,a5) XENOMAI_DO_SYSCALL(5,id,op,a1,a2,a3,a4,a5)
-+ 
-+ /* uClibc does not provide pthread_atfork() for this arch; provide it
-+-   here. Note: let the compiler decides whether it wants to actually
-+-   inline this routine, i.e. do not force always_inline. */
-+-inline __attribute__((weak)) int pthread_atfork(void (*prepare)(void),
-++   here.
-++*/
-++__attribute__((weak)) int pthread_atfork(void (*prepare)(void),
-+ 						void (*parent)(void),
-+ 						void (*child)(void))
-+ {
-+@@ -143,7 +143,7 @@ inline __attribute__((weak)) int pthread_atfork(void (*prepare)(void),
-+ 
-+ #include <errno.h>
-+ 
-+-inline __attribute__((weak)) int shm_open(const char *name,
-++__attribute__((weak)) int shm_open(const char *name,
-+ 					  int oflag,
-+ 					  mode_t mode)
-+ {
-+@@ -151,7 +151,7 @@ inline __attribute__((weak)) int shm_open(const char *name,
-+ 	return -1;
-+ }
-+ 
-+-inline __attribute__((weak)) int shm_unlink(const char *name)
-++__attribute__((weak)) int shm_unlink(const char *name)
-+ {
-+ 	errno = ENOSYS;
-+ 	return -1;
-+-- 
-+2.5.5
-+
+Changes in v2:
+  - Update Config.in as well
+
+ boot/boot-wrapper-aarch64/Config.in               | 2 +-
+ boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/boot/boot-wrapper-aarch64/Config.in b/boot/boot-wrapper-aarch64/Config.in
+index 73d790f..efb70dc 100644
+--- a/boot/boot-wrapper-aarch64/Config.in
++++ b/boot/boot-wrapper-aarch64/Config.in
+@@ -11,7 +11,7 @@ config BR2_TARGET_BOOT_WRAPPER_AARCH64
+ 	  possible to start an Aarch64 kernel inside the available
+ 	  software simulators for the Aarch64 architecture.
+ 
+-	  git://git.kernel.org/pub/scm/linux/kernel/git/cmarinas/boot-wrapper-aarch64.git
++	  git://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
+ 
+ if BR2_TARGET_BOOT_WRAPPER_AARCH64
+ 
+diff --git a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
+index a469375..601cfab 100644
+--- a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
++++ b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ BOOT_WRAPPER_AARCH64_VERSION = 4266507a84f8c06452109d38e0350d4759740694
+-BOOT_WRAPPER_AARCH64_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cmarinas/boot-wrapper-aarch64.git
++BOOT_WRAPPER_AARCH64_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
+ BOOT_WRAPPER_AARCH64_LICENSE = BSD3c
+ BOOT_WRAPPER_AARCH64_LICENSE_FILES = LICENSE.txt
+ BOOT_WRAPPER_AARCH64_DEPENDENCIES = linux
 -- 
-2.5.5
+2.7.4
