@@ -1,47 +1,44 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 16 Nov 2016 11:29:00 +0000
-Subject: [Buildroot] [PATCH v2] imagemagick: bump version to 7.0.3-7
-	(security)
-Message-ID: <20161116112900.63183-1-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Nov 2016 12:33:31 +0100
+Subject: [Buildroot] [PATCH 1/1] sdl: fix building on powerpc64 and
+ powerpc64le
+In-Reply-To: <f3f4937e-e29f-e504-371f-f393346f5ade@mind.be>
+References: <a57a3d0430e248ee08148cef326cbf60283205ad.1478489382.git.sam.bobroff@au1.ibm.com>
+ <20161107225106.5e9e61b6@free-electrons.com>
+ <53f345eb-3ea1-02ef-06bf-72f011b3728a@mind.be>
+ <20161108051006.GB6803@tungsten.ozlabs.ibm.com>
+ <99a8adb3-3fa3-7050-e31f-16d2ee67ea12@mind.be>
+ <20161109043021.GA10982@tungsten.ozlabs.ibm.com>
+ <eijmfdxo6o.ln2@ID-313208.user.individual.net>
+ <f3f4937e-e29f-e504-371f-f393346f5ade@mind.be>
+Message-ID: <20161116123331.44f50097@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-oss-security reference:
-  http://www.openwall.com/lists/oss-security/2016/11/13/1
+Hello,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Changes v1 -> v2:
- - Mark this patch for master instead of next because it fixes a
-   security issue. Also added oss-security reference.
----
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun, 13 Nov 2016 21:18:46 +0100, Arnout Vandecappelle wrote:
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 8ad340d..4bdfe8f 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 86a1f04077de2b1486a93088030b010780067b25ab0284560435e2f458e247ca ImageMagick-7.0.3-4.tar.xz
-+sha256 140b99f33a3326aed92132a7cd054ee962a6e2562064c68495640411aa4571d7  ImageMagick-7.0.3-7.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 2cae064..4f5c3be 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.0.3-4
-+IMAGEMAGICK_VERSION = 7.0.3-7
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+>  Nice idea, but it's only possible for internal toolchains. Unless if we merge
+> the ld-wrapper patches (last news of which was: it shouldn't be needed).
+> 
+>  I'm slightly inclined to go for patching configure or libtool.m4 instead.
+
+Can we move forward with this topic? Could somone summarize the problem
+and options we have with advantages/drawbacks?
+
+We've got quite a lot of build failures because of that. In the latest
+autobuild report, we've got 7 build failures on powerpc64le (on a total
+of 41 build failures), and I suspect a significant number of them are
+due to this libtool issue.
+
+Thanks,
+
+Thomas
 -- 
-2.10.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
