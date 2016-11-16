@@ -1,75 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Nov 2016 00:04:55 +0100
-Subject: [Buildroot] [PATCH 03/10] docs/manual: document the waf-package
- infra
-In-Reply-To: <e41ab5eee8961c89c1fe9c4566383844e36b24f9.1477843328.git.yann.morin.1998@free.fr>
-References: <cover.1477843328.git.yann.morin.1998@free.fr>
- <e41ab5eee8961c89c1fe9c4566383844e36b24f9.1477843328.git.yann.morin.1998@free.fr>
-Message-ID: <20161117000456.04b7e672@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 17 Nov 2016 00:13:12 +0100
+Subject: [Buildroot] 2016.11-rc2 with really old versions of bash (RHEL5)
+In-Reply-To: <582ce22d87e4_b6b11ecfac31990@ultri3.mail>
+References: <20161113210740.3a8cedb2@free-electrons.com>
+ <582ce22d87e4_b6b11ecfac31990@ultri3.mail>
+Message-ID: <20161116231312.GA27675@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Ricardo, All,
 
-On Sun, 30 Oct 2016 17:02:14 +0100, Yann E. MORIN wrote:
+On 2016-11-16 20:48 -0200, Ricardo Martincoski spake thusly:
+> Do you see the issue described below? Maybe I am doing something wrong.
+> What bash version do you have in your RHEL5 servers?
+> 
+> All,
+> 
+> Ancient versions of bash don't support 'Associative arrays', leading to build
+> error using 2016.11-rc2 in a plain vanilla RHEL5.
 
-> +------------------------
-> +01: ################################################################################
-> +02: #
-> +03: # libfoo
-> +04: #
-> +05: ################################################################################
-> +06:
-> +07: LIBFOO_VERSION = 1.0
-> +08: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
-> +09: LIBFOO_SITE = http://www.foosoftware.org/download
-> +10: LIBFOO_CONF_OPTS = --eanble-bar --disable-baz
+Asociative arrays were introduced in bash-4.0, indeed.
 
-eanble -> enable
+Doing without associative arrays is not very easy. Rather, it would be
+very difficult.
 
-> +On line 7, we declare the version of the package.
-> +
-> +On line 8 and 9, we declare the name of the tarball (xz-ed tarball
-> +recommended) and the location of the tarball on the Web. Buildroot
-> +will automatically download the tarball from this location.
-> +
-> +On line 10, we tell Buildroot what options to enable for libfoo.
-> +
-> +On line 11, we tell Buildroot the depednencies of libfoo.
-> +
-> +Finally, on line line 13, we invoke the +waf-package+
-> +macro that generates all the Makefile rules that actually allows the
-> +package to be built.
+Unless the script is re-written in an other language...
 
-To be honest, I'm wondering if we shouldn't refactor the manual. This
-blurb is duplicated for every package infrastructure, without adding
-much value.
+> Please notice EOL of RHEL5 is 31 Mar 2017 [1].
 
-But clearly that's a separate matter, and your patch is good as-is.
+Well, it's not even 6 months in the future. Time to upgrade, maybe? ;-)
 
-> +* +LIBFOO_BUNDLED_WAF+ can be set to +YES+ or +NO+ to tell Buildroot to
-> +  use the bundled +waf+ executable. If set to +YES+, the default, then
+> Currently the manual does not specify a minimum version of bash [2].
 
-YES is in fact not the default :-)
+I think the best short-term solution is that we advertise that bash 4.0
+is required, now.
 
-> +  Buildroot will use the waf executable in the package source tree; if
-> +  set to +NO+, then Buidlroot will download and install waf as a
+Let's see what others think...
 
-Buildroot.
+Regards,
+Yann E. MORIN.
 
-> +  host-tool.
 
-host tool (i.e no dash in between).
+> This is NOT my use case!
+> I was just testing some unrelated stuff in a VM and came across it.
+> I didn't tested the obvious workaround (installing a newer bash) but it should
+> work.
+> 
+> See below the logs for RHEL5 (error) and RHEL6 (ok).
+> 
+> [ricardo at centos5 buildroot-2016.11-rc2]$ grep release /etc/issue        
+> CentOS release 5.11 (Final)
+> [ricardo at centos5 buildroot-2016.11-rc2]$ bash --version | grep bash
+> GNU bash, version 3.2.25(1)-release (x86_64-redhat-linux-gnu)
+> [ricardo at centos5 buildroot-2016.11-rc2]$ make -s defconfig
+> support/scripts/br2-external: line 6: declare: -A: invalid option
+> declare: usage: declare [-afFirtx] [-p] [name[=value] ...]
+> Makefile:188: /home/ricardo/buildroot-2016.11-rc2/output/.br-external.mk: No such file or directory
+> make[1]: Failed to remake makefile `/home/ricardo/buildroot-2016.11-rc2/output/.br-external.mk'.
+> support/scripts/br2-external: line 6: declare: -A: invalid option
+> declare: usage: declare [-afFirtx] [-p] [name[=value] ...]
+> make[1]: *** [/home/ricardo/buildroot-2016.11-rc2/output/build/.br2-external.in] Error 2
+> make: *** [_all] Error 2
+> 
+> [ricardo at centos6 buildroot-2016.11-rc2]$ grep release /etc/issue        
+> CentOS release 6.8 (Final)
+> [ricardo at centos6 buildroot-2016.11-rc2]$ bash --version | grep bash
+> GNU bash, version 4.1.2(1)-release (x86_64-redhat-linux-gnu)
+> [ricardo at centos6 buildroot-2016.11-rc2]$ make -s defconfig
+> #
+> # configuration written to /home/ricardo/buildroot-2016.11-rc2/.config
+> #
+> 
+> [1] https://wiki.centos.org/Download
+> [2] http://nightly.buildroot.org/manual.html#requirement-mandatory
+> 
+> Regards,
+> Ricardo
 
-No need to resend for these issues, I can fixup when applying.
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
