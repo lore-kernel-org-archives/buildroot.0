@@ -1,86 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Nov 2016 23:18:07 +0100
-Subject: [Buildroot] [git commit branch/next] Revert "norm: add patch to fix
-	musl build"
-Message-ID: <20161116222639.076EC81DAF@busybox.osuosl.org>
+Date: Wed, 16 Nov 2016 23:17:48 +0100
+Subject: [Buildroot] [git commit branch/next] toolchain: workaround
+	musl/kernel headers conflict
+Message-ID: <20161116222638.E394881DAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bae792e4c04b5f6ac34befd1334ddc715801a165
+commit: https://git.buildroot.net/buildroot/commit/?id=196932cd91ef5d58bd3142bbea939fb55636a540
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This reverts commit e74d4fc4932df4ea42381acb44d616241275b79a.
+Rick Felker suggested[1] this hack as a workaround to musl libc conflict with
+kernel headers:
 
-With the applied musl/kernel headers conflict workaround this patch is no
-longer necessary.
+  The problem is linux/libc-compat.h, which should fix this, only works
+  on glibc, by design. See:
+
+  #ifndef _LIBC_COMPAT_H
+  #define _LIBC_COMPAT_H
+
+  /* We have included glibc headers... */
+  #if defined(__GLIBC__)
+
+  /* Coordinate with glibc netinet/in.h header. */
+  #if defined(_NETINET_IN_H)
+
+  If you patch it like this:
+
+  -#if defined(__GLIBC__)
+  +#if 1
+
+  then it should mostly work but it's still all a big hack. I think
+  that's what distros are doing. The problem is that the same header is
+  trying to do two different things:
+
+  1. Provide extra linux-kernel-API stuff that's not in the
+     libc/userspace headers.
+
+  2. Provide definitions of the standard types and constants for uClibc
+     and klibc, which don't have complete libc headers and rely on the
+     kernel headers for definitions.
+
+  These two uses really should be separated out into separate headers so
+  that the latter only get included explicitly by uClibc and klibc and
+  otherwise remain completely unused. But that would require coordinated
+  changes/upgrades which are unlikely to happen. :(
+
+Upstream musl still evaluates[2][3] a permanent solution.
+
+With this in place we can revert (at least) commits a167081c5d (bridge-utils:
+fix build with musl) and e74d4fc4932 (norm: add patch to fix musl build).
+
+[1] http://www.openwall.com/lists/musl/2015/10/08/2
+[2] http://git.musl-libc.org/cgit/musl/commit/?id=04983f2272382af92eb8f8838964ff944fbb8258
+[3] http://www.openwall.com/lists/musl/2016/11/09/2
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...03-remove-kernel-headers-include-musl-fix.patch | 55 ----------------------
- 1 file changed, 55 deletions(-)
+ toolchain/toolchain/toolchain.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/package/norm/0003-remove-kernel-headers-include-musl-fix.patch b/package/norm/0003-remove-kernel-headers-include-musl-fix.patch
-deleted file mode 100644
-index 7581c10..0000000
---- a/package/norm/0003-remove-kernel-headers-include-musl-fix.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--Remove kernel header includes causing issues with musl
--
--Include the kernel headers from netfilter causes a conflict with the
--<netinet/in.h> way of defining the IPPROTO_* constants, resulting in
--the following build failure:
--
--In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/netdb.h:9:0,
--                 from /home/peko/autobuild/instance-0/output/build/norm-1.5r6/protolib/include/protoAddress.h:13,
--                 from /home/peko/autobuild/instance-0/output/build/norm-1.5r6/protolib/include/protoDetour.h:5,
--                 from ../protolib/src/linux/linuxDetour.cpp:3:
--/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected identifier before numeric constant
--   IPPROTO_IP = 0,  /* Dummy protocol for TCP  */
--   ^
--/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected '}' before numeric constant
--/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:28:3: error: expected unqualified-id before numeric constant
--In file included from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netfilter.h:7:0,
--                 from /home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netfilter_ipv4.h:8,
--                 from ../protolib/src/linux/linuxDetour.cpp:10:
--/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/in.h:79:1: error: expected declaration before '}' token
-- };
-- ^
--
--Since from musl's developers perspective including kernel headers is
--seen as being unsafe, we simply duplicate the necessary netfilter
--definitions (there are just a few) instead of including some kernel
--headers.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/protolib/src/linux/linuxDetour.cpp
--===================================================================
----- a/protolib/src/linux/linuxDetour.cpp
--+++ b/protolib/src/linux/linuxDetour.cpp
--@@ -7,15 +7,18 @@
-- #include <stdlib.h>  // for atoi(), getenv()
-- #include <stdio.h>
-- #include <unistd.h>  // for close()
---#include <linux/netfilter_ipv4.h>  // for NF_IP_LOCAL_OUT, etc
---#include <linux/netfilter_ipv6.h>  // for NF_IP6_LOCAL_OUT, etc
---#include <linux/netfilter.h>  // for NF_ACCEPT, etc
-- #include <libnetfilter_queue/libnetfilter_queue.h>
-- 
-- #include <fcntl.h>  // for fcntl(), etc
-- #include <linux/if_ether.h>  // for ETH_P_IP
-- #include <net/if_arp.h>   // for ARPHRD_ETHER
-- 
--+/* From netfilter kernel headers */
--+#define NF_IP_LOCAL_OUT		3
--+
--+#define NF_DROP 		0
--+#define NF_ACCEPT 		1
--+
-- /** NOTES: 
--  *
--  * 1) This newer implementation of LinuxDetour uses netfilter_queue
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index c22713b..d317e91 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -12,6 +12,20 @@ endif
+ 
+ TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
++# Apply a hack that Rick Felker suggested[1] to avoid conflicts between libc
++# headers and kernel headers. This is a temporary measure until musl finds a
++# better solution.
++#
++# [1] http://www.openwall.com/lists/musl/2015/10/08/2
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++define TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
++	$(SED) 's/^#if defined(__GLIBC__)$$/#if 1/' \
++		$(STAGING_DIR)/usr/include/linux/libc-compat.h
++endef
++TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
++TOOLCHAIN_INSTALL_STAGING = YES
++endif
++
+ $(eval $(virtual-package))
+ 
+ toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
