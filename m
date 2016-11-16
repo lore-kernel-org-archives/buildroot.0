@@ -1,55 +1,180 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 16 Nov 2016 23:44:25 +0200
-Subject: [Buildroot] [PATCH for-master] package/strace: disable libmpers
- with musl toolchains
-In-Reply-To: <20161113124323.lf6cjab4rp3lf36t@tarshish>
-References: <1478964612-7028-1-git-send-email-romain.naour@gmail.com>
- <20161113125518.2797806f@free-electrons.com>
- <20161113124323.lf6cjab4rp3lf36t@tarshish>
-Message-ID: <20161116214425.kyuut5osptb3rbp7@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Nov 2016 22:58:49 +0100
+Subject: [Buildroot] [git commit branch/next] libxmlrpc: bump to 1.39.11
+Message-ID: <20161116221415.609B7817B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=f9349058f7fe1fd50f03751a9b544b7c6fe93142
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, Nov 13, 2016 at 02:43:23PM +0200, Baruch Siach wrote:
-> On Sun, Nov 13, 2016 at 12:55:18PM +0100, Thomas Petazzoni wrote:
-> > On Sat, 12 Nov 2016 16:30:12 +0100, Romain Naour wrote:
-> > > strace bundle some kernel headers to build libmpers, this mixes userspace
-> > > headers and kernel headers which break the build with musl.
-> > > The stddef.h from gcc is used instead of the one from musl.
-> > > 
-> > > Disable libmpers for musl toolchains.
-> > > 
-> > > Fixes:
-> > > http://autobuild.buildroot.net/results/6f6/6f63fa2537ff316ba259a20966faadcf5ab9deff
-> > > 
-> > > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> > 
-> > Hum, Alpine Linux is not doing this, and they support strace 4.14. Why
-> > are we having this issue and not Alpine Linux?
-> > 
-> > I've asked on #musl, we'll see if they come back with some explanation.
-> 
-> I think they are tweaking the headers in some way to make them more compatible 
-> with many packages. I investigate the tcpreplay musl build issue that the 
-> autobuilder shows. It turns out that there is an upstream commit[1] fixing 
-> some musl build issues. When I tested it I found that is still a 'struct 
-> ethhdr' conflict, even with the compatibility hack[2] applied. There must be 
-> something else in patch author's environment that avoids this issue.
-> 
-> [1] https://github.com/appneta/tcpreplay/commit/7c942b71d4ace7425a26e4670f8fbd5814b2339b
-> [2] http://patchwork.ozlabs.org/patch/693222/
+Previous version patches are still needed, but they have been
+upgraded to apply cleanly.
 
-Just to answer my own wondering, Alpine patches[1] kernel headers to make 
-libc-compat.h cover the 'struct ethhdr' definition as well.
+This also reverts aa9fde1c459dbc20b268694eafd7a1d3341dbf76, as that
+patch is already on upstream.
 
-[1] http://git.alpinelinux.org/cgit/aports/tree/main/linux-headers/0002-libc-compat.h-prevent-redefinition-of-struct-ethhdr.patch?id=f483f49692b97950b680d987fe31f8ddb9277842
+Signed-off-by: Alvaro Gamez <alvaro.gamez@hazent.com>
+[Thomas: fix the AR/RANLIB problem by adding another patch.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libxmlrpc/0001-fix-gennmtab-build.patch    |  2 +-
+ .../libxmlrpc/0004-use-correct-curl-config.patch   | 36 +++-------------------
+ .../libxmlrpc/0006-fix-ar-ranlib-handling.patch    | 28 +++++++++++++++++
+ package/libxmlrpc/0006-narrowing.patch             | 20 ------------
+ package/libxmlrpc/libxmlrpc.hash                   |  2 +-
+ package/libxmlrpc/libxmlrpc.mk                     |  2 +-
+ 6 files changed, 36 insertions(+), 54 deletions(-)
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+diff --git a/package/libxmlrpc/0001-fix-gennmtab-build.patch b/package/libxmlrpc/0001-fix-gennmtab-build.patch
+index 8cdd932..e98e5cb 100644
+--- a/package/libxmlrpc/0001-fix-gennmtab-build.patch
++++ b/package/libxmlrpc/0001-fix-gennmtab-build.patch
+@@ -19,7 +19,7 @@ Index: b/lib/expat/gennmtab/Makefile
+ +	$(CC_FOR_BUILD) -c $< -o $@ $(CFLAGS_FOR_BUILD) $(INCLUDES)
+  
+  gennmtab:%:%.o
+--	$(BUILDTOOL_CCLD) -o $@ $(LDFLAGS) $^
++-	$(BUILDTOOL_CCLD) -o $@ $(LDFLAGS_ALL) $^
+ +	$(CC_FOR_BUILD) -o $@ $(LDFLAGS_FOR_BUILD) $^
+  
+  include depend.mk
+diff --git a/package/libxmlrpc/0004-use-correct-curl-config.patch b/package/libxmlrpc/0004-use-correct-curl-config.patch
+index b581643..f2f1c55 100644
+--- a/package/libxmlrpc/0004-use-correct-curl-config.patch
++++ b/package/libxmlrpc/0004-use-correct-curl-config.patch
+@@ -12,15 +12,15 @@ Index: b/src/Makefile
+ ===================================================================
+ --- a/src/Makefile
+ +++ b/src/Makefile
+-@@ -56,7 +56,7 @@
+-   TRANSPORT_MODS += blddir/lib/curl_transport/curltransaction
+-   TRANSPORT_MODS += blddir/lib/curl_transport/curlmulti
+-   TRANSPORT_MODS += blddir/lib/curl_transport/lock_pthread
++@@ -57,7 +57,7 @@
++   TRANSPORT_MODS += $(BLDDIR)/lib/curl_transport/xmlrpc_curl_transport
++   TRANSPORT_MODS += $(BLDDIR)/lib/curl_transport/curltransaction
++   TRANSPORT_MODS += $(BLDDIR)/lib/curl_transport/curlmulti
+ -  TRANSPORT_LIBDEP += $(shell curl-config --libs)
+ +  TRANSPORT_LIBDEP += $(shell $CURL_CONFIG --libs)
++   TRANSPORT_INCLUDES += -Isrcdir/lib/curl_transport
+  endif
+  ifeq ($(MUST_BUILD_LIBWWW_CLIENT),yes)
+-   TRANSPORT_MODS += blddir/lib/libwww_transport/xmlrpc_libwww_transport
+ Index: b/config.mk.in
+ ===================================================================
+ --- a/config.mk.in
+@@ -68,29 +68,3 @@ Index: b/lib/curl_transport/Makefile
+  # We expect that curl-config --cflags just gives us -I options, because
+  # we need just the -I options for 'make dep'.  Plus, it's scary to think
+  # of what any other compiler flag would do to our compile.
+-Index: b/src/cpp/test/Makefile
+-===================================================================
+---- a/src/cpp/test/Makefile
+-+++ b/src/cpp/test/Makefile
+-@@ -20,7 +20,7 @@
+- LIBS := $(shell $(XMLRPC_C_CONFIG) client --ldadd)
+- 
+- ifeq ($(MUST_BUILD_CURL_CLIENT),yes)
+--  LIBS += $(shell curl-config --libs)
+-+  LIBS += $(shell $(CURL_CONFIG) --libs)
+- endif
+- ifeq ($(MUST_BUILD_LIBWWW_CLIENT),yes)
+-   LIBS += $(shell libwww-config --libs)
+-Index: b/tools/common.mk
+-===================================================================
+---- a/tools/common.mk
+-+++ b/tools/common.mk
+-@@ -15,7 +15,7 @@
+-   CLIENT_LDLIBS += $(shell libwww-config --libs)
+- endif
+- ifeq ($(MUST_BUILD_CURL_CLIENT),yes)
+--  CLIENT_LDLIBS += $(shell curl-config --libs)
+-+  CLIENT_LDLIBS += $(shell $(CURL_CONFIG) --libs)
+- endif
+- ifeq ($(MUST_BUILD_WININET_CLIENT),yes)
+-   CLIENT_LDLIBS += $(shell wininet-config --libs)
+diff --git a/package/libxmlrpc/0006-fix-ar-ranlib-handling.patch b/package/libxmlrpc/0006-fix-ar-ranlib-handling.patch
+new file mode 100644
+index 0000000..1e58d24
+--- /dev/null
++++ b/package/libxmlrpc/0006-fix-ar-ranlib-handling.patch
+@@ -0,0 +1,28 @@
++Fix detection of AR and RANLIB
++
++The configure.in script assumes that ranlib and ar are necessarily
++prefixed by ${ac_tool_prefix}, which is the value of --host. However,
++it's not necessarily the case.
++
++So instead, use AC_CHECK_TOOL to check for AR, and AC_PROG_RANLIB to
++check for RANLIB.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/configure.in
++===================================================================
++--- a/configure.in
+++++ b/configure.in
++@@ -621,10 +621,8 @@
++ BUILDDIR=$(pwd)
++ AC_SUBST(BUILDDIR)
++ 
++-AR=${ac_tool_prefix}ar
++-AC_SUBST([AR])
++-RANLIB=${ac_tool_prefix}ranlib
++-AC_SUBST([RANLIB])
+++AC_CHECK_TOOL([AR], [ar])
+++AC_PROG_RANLIB
++ 
++ dnl =======================================================================
++ dnl Output our results.
+diff --git a/package/libxmlrpc/0006-narrowing.patch b/package/libxmlrpc/0006-narrowing.patch
+deleted file mode 100644
+index 43a5ca5..0000000
+--- a/package/libxmlrpc/0006-narrowing.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-Fix build with gcc6
+-
+-Downloaded from
+-https://build.opensuse.org/package/view_file/devel:libraries:c_c++/xmlrpc-c/narrowing.patch
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-Index: xmlrpc-c-1.33.18/src/cpp/base64.cpp
+-===================================================================
+---- xmlrpc-c-1.33.18.orig/src/cpp/base64.cpp
+-+++ xmlrpc-c-1.33.18/src/cpp/base64.cpp
+-@@ -14,7 +14,7 @@ using namespace xmlrpc_c;
+- 
+- namespace {
+- 
+--char const table_a2b_base64[] = {
+-+signed char const table_a2b_base64[] = {
+-     -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+-     -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+-     -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,62, -1,-1,-1,63,
+diff --git a/package/libxmlrpc/libxmlrpc.hash b/package/libxmlrpc/libxmlrpc.hash
+index d37fcfc..8ec1e14 100644
+--- a/package/libxmlrpc/libxmlrpc.hash
++++ b/package/libxmlrpc/libxmlrpc.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 8ae6ed4ec57d50ed132b1150fc5258346eef3e291501a564f14fa97586902f98 xmlrpc-c-1.25.30.tgz
++sha256 2e56cdcdd5c5fa564bcdc7a56bca108a88f5b78b34ccc85558366efabdc8b8e8 xmlrpc-c-1.39.11.tgz
+diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+index 03a7095..53a5877 100644
+--- a/package/libxmlrpc/libxmlrpc.mk
++++ b/package/libxmlrpc/libxmlrpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXMLRPC_VERSION = 1.25.30
++LIBXMLRPC_VERSION = 1.39.11
+ LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
+ LIBXMLRPC_SITE = http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/$(LIBXMLRPC_VERSION)
+ LIBXMLRPC_LICENSE = BSD-3c (xml-rpc main code and abyss web server), BSD like (lib/expat), Python 1.5.2 license (parts of xmlrpc_base64.c)
