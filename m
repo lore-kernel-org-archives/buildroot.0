@@ -1,41 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Nov 2016 12:27:59 +0100
-Subject: [Buildroot] [PATCH] package/xenomai: bfin remove inline keyword
-In-Reply-To: <1479252138-15368-1-git-send-email-romain.naour@gmail.com>
-References: <1479252138-15368-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161116122759.65c5f1c1@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 16 Nov 2016 11:29:00 +0000
+Subject: [Buildroot] [PATCH v2] imagemagick: bump version to 7.0.3-7
+	(security)
+Message-ID: <20161116112900.63183-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+oss-security reference:
+  http://www.openwall.com/lists/oss-security/2016/11/13/1
 
-On Wed, 16 Nov 2016 00:22:18 +0100, Romain Naour wrote:
-> Xenomai user space tools fail to build for bfin target since it's
-> provide it's own pthread_atfork(), shm_open() and shm_unlink()
-> definition using the inline keyword and weak attribute.
-> 
-> With gcc 5+ the weak attribute is discarded by the inline keyword,
-> so each symbol are global and are redefined several time while
-> linking.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/0c2/0c2e5eb4edd4f9427f61d3c9b67a12a7a0e24140
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  .../xenomai/0001-bfin-remove-inline-keyword.patch  | 61 ++++++++++++++++++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 package/xenomai/0001-bfin-remove-inline-keyword.patch
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v1 -> v2:
+ - Mark this patch for master instead of next because it fixes a
+   security issue. Also added oss-security reference.
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I've added a reference to the upstream commit in the patch description
-(would have been nice if you had added it yourself), and applied to
-master. Thanks a lot!
-
-Thomas
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 8ad340d..4bdfe8f 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 86a1f04077de2b1486a93088030b010780067b25ab0284560435e2f458e247ca ImageMagick-7.0.3-4.tar.xz
++sha256 140b99f33a3326aed92132a7cd054ee962a6e2562064c68495640411aa4571d7  ImageMagick-7.0.3-7.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 2cae064..4f5c3be 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.0.3-4
++IMAGEMAGICK_VERSION = 7.0.3-7
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.10.1
