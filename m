@@ -1,42 +1,76 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Thu, 17 Nov 2016 11:00:28 +0100
-Subject: [Buildroot] [PATCH 04/15] reproducible: add '-n' to gzip invocations
-In-Reply-To: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
-References: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479376839-27795-5-git-send-email-jezz@sysmic.org>
+Date: Thu, 17 Nov 2016 11:00:24 +0100
+Subject: [Buildroot] [PATCH 00/15] Reproducible builds
+Message-ID: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Default invocation to gzip include timestamp in output file. This feature is
-incompatible with BR2_REPRODUCIBLE. It is possible to disable it with '-n'.
+This series try to continue work initiated by Gilles Chanteperdrix:
+  http://lists.busybox.net/pipermail/buildroot/2016-April/thread.html#160064
+  http://lists.busybox.net/pipermail/buildroot/2016-June/thread.html#163905
 
-The environment variable GZIP can hold a set of default options for gzip. So
-instead to find all gzip invocation in build process, we just export 'GZIP=-n'.
+I dropped some patchs from original series because either:
+  - I handled things differently (timestamps in images, support SOURCE_DATE_EPOCH
+    in gcc, ...)
+  - I didn't had time to test them them (sysroot, cpio, cdrkit, iso9660,...)
+  - They doesn't seems necessary anymore (libtool, libgcrypt, libgpg-error, ...)
 
-Notice bzip2, lzma and xz are impacted by this problem. On the other hand, lzop
-include timestamp and does not provide any way to disable it.
+This version focuses on timestamps. It provide good enough results as soon as
+OUTDIR and TOPDIR are the same. Indeed build path appear in plenty of files.
+Only patch called "remove full path from .pyc" try to solve this issue. Another
+big step could be done by removing rpaths from ELF generated with libtool.
 
-This work was sponsored by `BA Robotic Systems'.
+Other thing known to break reproducibility:
+  - use of lzop (it unconditionally include timestamps in result)
+  - since gcc versions supporting SOURCE_DATE_EPOCH are not widely available,
+    external toolchains probably won't work.
+  - /!\ since we build our own toolchain and toolchain include BR2_FULL_VERSION,
+    ccache is incompatible with reproducible
+  - debug symbols are not reproducible
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+Since this feature is experimental I did not (yet) reported these
+incompatibilities in menuconfig.
 
-diff --git a/Makefile b/Makefile
-index 17e49e4..c21ba4a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -249,6 +249,7 @@ ifeq ($(BR2_REPRODUCIBLE),y)
- export TZ=UTC
- export LANG=C
- export LC_ALL=C
-+export GZIP=-n
- export SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH)
- SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
- SOURCE_DATE_CHANGES = $(shell date -d `echo $(BR2_VERSION) | sed 's/^\(....\)\.\(..\).*/\1-\2-01T23:59:59/'` +%s)
+Gilles Chanteperdrix (3):
+  reproducibility: generate SOURCE_DATE_EPOCH
+  reproducibility/linux: override build timestamp
+  reproducibility/busybox: disable build timestamps
+
+J?r?me Pouiller (12):
+  gcc6: honor SOURCE_DATE_EPOCH
+  gcc5: honor SOURCE_DATE_EPOCH
+  reproducible: add '-n' to gzip invocations
+  fs/tar: make results reproducible
+  reproducibility/linux: inhibit build-id
+  reproducible: lock modification times in $TARGET_DIR
+  fakedate: new package
+  reproducible: enable fakedate
+  python2: generate reproducible .pyc
+  python3: generate reproducible .pyc
+  python2: remove full path from .pyc
+  python3: remove full path from .pyc
+
+ Makefile                                           |   5 +
+ fs/common.mk                                       |   3 +
+ fs/tar/tar.mk                                      |   2 +-
+ linux/linux.mk                                     |  15 ++
+ package/busybox/busybox.mk                         |   6 +
+ package/fakedate/fakedate                          |  28 +++
+ package/fakedate/fakedate.mk                       |  14 ++
+ .../gcc/5.4.0/950-honor-SOURCE_DATE_EPOCH.patch    | 213 +++++++++++++++++++
+ .../gcc/6.1.0/950-honor-SOURCE_DATE_EPOCH.patch    | 234 +++++++++++++++++++++
+ package/python/python.mk                           |  36 ++--
+ package/python3/python3.mk                         |  35 +--
+ support/dependencies/check-host-tar.sh             |   5 +-
+ toolchain/toolchain/toolchain.mk                   |   4 +
+ 13 files changed, 570 insertions(+), 30 deletions(-)
+ create mode 100755 package/fakedate/fakedate
+ create mode 100644 package/fakedate/fakedate.mk
+ create mode 100644 package/gcc/5.4.0/950-honor-SOURCE_DATE_EPOCH.patch
+ create mode 100644 package/gcc/6.1.0/950-honor-SOURCE_DATE_EPOCH.patch
+
 -- 
 1.9.1
