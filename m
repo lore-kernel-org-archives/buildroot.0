@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Nov 2016 09:55:45 +0100
-Subject: [Buildroot] [RFC PATCH 1/1] pkg-autotools: generic configure
- fix	for powerpc64
-In-Reply-To: <n500gdx8kc.ln2@ID-313208.user.individual.net>
-References: <56063c394c473bf4292658511bae0dd99583be07.1479356115.git.sam.bobroff@au1.ibm.com>
- <n500gdx8kc.ln2@ID-313208.user.individual.net>
-Message-ID: <20161117095545.744c19df@free-electrons.com>
+Date: Thu, 17 Nov 2016 10:14:09 +0100
+Subject: [Buildroot] [PATCH 1/1] python-protobuf: Allow host building
+In-Reply-To: <CAPnigKkVJPa4BSJc1JNLUJB9rsREJPv2pkkG_mvTwByUGWDhjg@mail.gmail.com>
+References: <20161117061212.4638-1-wak@google.com>
+ <20161117093239.05721e0e@free-electrons.com>
+ <CAPnigKkVJPa4BSJc1JNLUJB9rsREJPv2pkkG_mvTwByUGWDhjg@mail.gmail.com>
+Message-ID: <20161117101409.4713ef90@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 17 Nov 2016 07:43:35 +0100, Bernd Kuhls wrote:
+On Thu, 17 Nov 2016 08:51:20 +0000, William Kennington wrote:
 
-> good work! The minidlna package is fixed by your patch, but the 
+> The intention is to add nanopb as a host package for use in a library that
+> will also eventually be added. I can just add that to this patch series if
+> needed. I've never sent PR's via mail so I figured i would start with a
+> tiny one to try things out which is why I didn't also send nanopb.
 
-How can minidlna be fixed by Sam's patch? I don't see the offending
-hunk in minidlna's configure script. Am I missing something:
+OK, understood.
 
-$ grep powerpc minidlna-1.1.5/configure
-$ 
+> Unfortunately the library depending on nanopb can't be added at this time
+> but I plan to have it upstream within a month.
 
-> because configure is re-created during the build phase. The quote from 
-> configure comes from the second run of it.
+It would be great to send the whole thing as a patch series:
 
-It's not good to have configure re-created during the build phase. We
-shouldn't find out why, and fix it.
+ PATCH 1: adds the host variant of python-protobuf
+ PATCH 2: adds the host nanopb package
+ PATCH 3: adds the library that itself needs the host nanopb package
+
+Thanks!
 
 Thomas
 -- 
