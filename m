@@ -1,57 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Nov 2016 15:08:55 +0100
-Subject: [Buildroot] [PATCH 00/15] Reproducible builds
-In-Reply-To: <9798cfe2186532e99707f24481a2a03a@sysmic.org>
-References: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
- <20161117121341.4a63ed15@free-electrons.com>
- <9798cfe2186532e99707f24481a2a03a@sysmic.org>
-Message-ID: <20161117150855.4b2c99b9@free-electrons.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Thu, 17 Nov 2016 16:06:49 +0100
+Subject: [Buildroot] [PATCH 1/1] host-python: Really do not use the system
+	OpenSSL.
+In-Reply-To: <43b2e7d1-6366-3d98-89f1-d2ab7ca3db2c@green-communications.fr>
+References: <43b2e7d1-6366-3d98-89f1-d2ab7ca3db2c@green-communications.fr>
+Message-ID: <20161117150649.5568-1-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Even if buildroot patches host-python to not compile the 'ssl' module,
+the '_ssl' and '_hashlib' module are still compiled if python detects
+an usable OpenSSL installation.  This may break compilation if the
+system's OpenSSL has been updated to 1.1.0 because of a bug in python,
+see https://bugs.python.org/issue26470 for details.
 
-On Thu, 17 Nov 2016 14:17:41 +0100, J?r?me Pouiller wrote:
+If python does not detect an usable openssl installation for _hashlib,
+it uses internal implementation of common hash algorithms instead.
 
-> >>   - since gcc versions supporting SOURCE_DATE_EPOCH are not widely 
-> >> available,
-> >>     external toolchains probably won't work.  
-> > 
-> > Instead of patching gcc, can we solve the problem in the toolchain
-> > wrapper? I.e, maybe the toolchain wrapper can set __DATE__ and __TIME__
-> > by passing -D__DATE__=... -D__TIME__=... to gcc ?  
-> 
-> Yes, I can switch to this solution.
+This modifies the configure.ac patch to also disable _ssl and _hashlib
+if --disable-ssl is used.
 
-I think it's a reasonable use of the wrapper, and makes the thing work
-fine for external toolchain as well, which is nice.
+It must also modify setup.py to force enabling the internal
+implementation of hash algorithms if _hashlib is disabled, otherwise, if
+an usable openssl installation is detected, it will not compile
+them and python will end up with no hash algorithm implementation at all,
+breaking host-python-pycrypto and its reverse-dependencies like crda.
 
-Another (unrelated) question: how can we test this stuff? You're
-providing the initial steps for it, but at some point, we will want to
-validate which packages behave properly and which packages don't behave
-properly. Have you already thought of automated testing we can do (in
-the autobuilders perhaps?) to exercise this "reproducible builds"
-functionality? Should we from time to time do a given builds twice,
-each time in a different environment (different date, different time,
-different user, different path, different timezone, different locale,
-etc.) ?
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
+ .../019-force-internal-hash-if-ssl-disabled.patch  | 22 ++++++++++++++++++++++
+ package/python/111-optional-ssl.patch              |  3 ++-
+ 2 files changed, 24 insertions(+), 1 deletion(-)
+ create mode 100644 package/python/019-force-internal-hash-if-ssl-disabled.patch
 
-To what extent do we try to be reproducible? Do we try to have
-something that produces the same result when executed multiple times,
-but on the same machine, in the same environment (i.e only date/time
-changes) ? Or do we try to go the point where a given Buildroot .config
-gives a byte identical output regardless of the host machine on which
-you do the build? It would be great to know what our definition of
-"reproducible is", and document it in the help text of the
-BR2_REPRODUCIBLE option.
+Not sure if I should have added my signed off on 111-optional-ssl.patch
+after modifying it.
 
-Thanks,
-
-Thomas
+diff --git a/package/python/019-force-internal-hash-if-ssl-disabled.patch b/package/python/019-force-internal-hash-if-ssl-disabled.patch
+new file mode 100644
+index 0000000..ff594ca
+--- /dev/null
++++ b/package/python/019-force-internal-hash-if-ssl-disabled.patch
+@@ -0,0 +1,22 @@
++Force the use of internal hash implementations if _hashlib is disabled.
++
++Otherwise, python ends up with no hash algorithm implementation at all,
++breaking python-pycrypto and its reverse-dependencies.
++
++Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++
++--- a/setup.py	2016-11-16 18:02:01.120854546 +0100
+++++ b/setup.py	2016-11-17 09:52:32.485674999 +0100
++@@ -863,6 +863,12 @@ class PyBuildExt(build_ext):
++         have_usable_openssl = (have_any_openssl and
++                                openssl_ver >= min_openssl_ver)
++ 
+++        if '_hashlib' in disabled_module_list:
+++            # Force using the non-openssl fallbacks _md5 and _sha*.
+++            have_any_openssl = False
+++            have_usable_openssl = False
+++            openssl_ver = 0
+++
++         if have_any_openssl:
++             if have_usable_openssl:
++                 # The _hashlib module wraps optimized implementations
+diff --git a/package/python/111-optional-ssl.patch b/package/python/111-optional-ssl.patch
+index 956d2a0..89a8947 100644
+--- a/package/python/111-optional-ssl.patch
++++ b/package/python/111-optional-ssl.patch
+@@ -1,6 +1,7 @@
+ Add an option to disable the ssl module
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+ 
+ ---
+  configure.in |    6 ++++++
+@@ -17,7 +18,7 @@ Index: b/configure.ac
+ +AC_ARG_ENABLE(ssl,
+ +	AS_HELP_STRING([--disable-ssl], [disable SSL]),
+ +	[ if test "$enableval" = "no"; then
+-+    	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl"
+++    	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl _ssl _hashlib"
+ +  	  fi])
+ +
+  AC_ARG_ENABLE(dbm,
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.10.2
