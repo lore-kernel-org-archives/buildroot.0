@@ -1,76 +1,32 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 17 Nov 2016 08:53:14 +0100
-Subject: [Buildroot] undefined reference to `dl_iterate_phdr'
-In-Reply-To: <20161117020215.GA26390@octofox.metropolis>
-References: <20161117020215.GA26390@octofox.metropolis>
-Message-ID: <20161117075314.GE27313@waldemar-brodkorb.de>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Thu, 17 Nov 2016 09:00:09 +0100
+Subject: [Buildroot] [PATCH v3 1/1] libxmlrpc: bump to 1.39.11
+In-Reply-To: <20161116231513.62d80a13@free-electrons.com>
+References: <CAM+bi4vAks48DSkjARGDsoMiG7p+X=+frremEZbjaQnG5GQHYw@mail.gmail.com>
+ <1479207044-12290-1-git-send-email-alvaro.gamez@hazent.com>
+ <20161116231513.62d80a13@free-electrons.com>
+Message-ID: <CAM+bi4tkWQ07vCbP_eLrOy7HmZbBLjKxt5TYaB3c7qYGsu8vdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Max,
-Max Filippov wrote,
+2016-11-16 23:15 GMT+01:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-> Hi Waldemar,
-> 
-> I see a number of buildroot build issues with the post-unification
-> uclibc-ng versions (1.0.18 and 1.0.19) related to dl_iterate_phdr
-> used in static builds.
-> E.g.:
-> 
-> >       xtensa |                   autossh-1.4e | http://autobuild.buildroot.net/results/96807eda8a4b5a25225a82d7dd2b352b84fc3ddf
-> >       xtensa |              berkeleydb-5.3.28 | http://autobuild.buildroot.net/results/886aecbbd664d11383c11c6cd9434a52f9c82b46
-> >       xtensa |                    dvblast-3.0 | http://autobuild.buildroot.net/results/29ad877562d27896e3d68c06b8c1e3970750b51a
-> 
-> In fact the toolchain cannot produce static executable image
-> unless extra -lc is given to the linker.
-> 
-> The failure looks like this:
-> 
-> xtensa-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o autossh autossh.o -lnsl
-> xtensa-buildroot-linux-uclibc/5.4.0/libgcc.a(unwind-dw2-fde-dip.o): In function `__gthread_mutex_lock':
-> xtensa-buildroot-linux-uclibc/libgcc/./gthr-default.h:748: undefined reference to `dl_iterate_phdr'
+> Applied to next, thanks. I've fixed the ar/ranlib issue by adding
+> another patch (patch 0006).
+>
+> Thanks!
+>
 
-A short test with OpenADK gives a working autossh binary:
-wbx at helium:~/openadk $ file
-root_qemu-xtensa_uclibc-ng_dc233c/usr/bin/autossh                                                                       
-root_qemu-xtensa_uclibc-ng_dc233c/usr/bin/autossh: ELF 32-bit LSB
-executable, Tensilica Xtensa, version 1 (SYSV), statically linked, stripped
+Thanks a lot for your help, I wouldn't have ever known how to fix that by
+myself.
 
-/toolchain_qemu-xtensa_uclibc-ng_dc233c/usr/bin/xtensa-openadk-linux-uclibc-gcc -v                                                                 <
-Using built-in specs.
-COLLECT_GCC=./toolchain_qemu-xtensa_uclibc-ng_dc233c/usr/bin/xtensa-openadk-linux-uclibc-gcc
-COLLECT_LTO_WRAPPER=/home/wbx/openadk/toolchain_qemu-xtensa_uclibc-ng_dc233c/usr/libexec/gcc/xtensa-openadk-linux-uclibc/6.2.0/lto-wrapper
-Target: xtensa-openadk-linux-uclibc
-Configured with:
-/home/wbx/openadk/toolchain_build_qemu-xtensa_uclibc-ng_dc233c/w-gcc-6.2.0-1/gcc-6.2.0/configure
---prefix=/home/wbx/openadk/toolchain_qemu-xtensa_uclibc-ng_dc233c/usr
---with-bugurl=http://www.openadk.org/ --build=x86_64-linux-gnu
---host=x86_64-linux-gnu --target=xtensa-openadk-linux-uclibc
---with-gmp=/home/wbx/openadk/host_x86_64-linux-gnu/usr
---with-mpfr=/home/wbx/openadk/host_x86_64-linux-gnu/usr
---with-libelf=/home/wbx/openadk/host_x86_64-linux-gnu/usr
---disable-__cxa_atexit --with-system-zlib --with-gnu-ld
---with-gnu-as --disable-libsanitizer --disable-install-libiberty
---disable-libitm --disable-libmudflap --disable-libgomp
---disable-libcilkrts --disable-libquadmath
---disable-libquadmath-support --disable-decimal-float
---disable-libstdcxx-pch --disable-ppl-version-check
---disable-cloog-version-check --without-ppl --without-cloog
---without-isl --disable-werror --disable-nls --disable-lto
---enable-tls --enable-threads --enable-libatomic --disable-shared
---disable-libssp --disable-biarch --disable-multilib
---enable-languages=c
---with-build-sysroot='/../../target_qemu-xtensa_uclibc-ng_dc233c'
---with-sysroot='/../../target_qemu-xtensa_uclibc-ng_dc233c'
-Thread model: posix
-gcc version 6.2.0 (GCC) 
-
-I recheck later with autossh 1.4e, as I only used 1.4b.
-Latest uClibc-ng git used. But I don't see relevant changes to
-1.0.19 release.
-
-best regards
- Waldemar
+Best regards
+-- 
+?lvaro G?mez Machado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161117/24ae4030/attachment.html>
