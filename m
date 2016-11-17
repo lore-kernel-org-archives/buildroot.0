@@ -1,47 +1,84 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Thu, 17 Nov 2016 11:00:30 +0100
-Subject: [Buildroot] [PATCH 06/15] reproducibility/linux: override build
-	timestamp
+Date: Thu, 17 Nov 2016 11:00:34 +0100
+Subject: [Buildroot] [PATCH 10/15] fakedate: new package
 In-Reply-To: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
 References: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479376839-27795-7-git-send-email-jezz@sysmic.org>
+Message-ID: <1479376839-27795-11-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+`date' is widely used by packages to include build information in their
+binaries. Unfortunately, this is incompatible with  BR2_REPRODUCIBLE.
 
-Linux kernel include a few information about build environment in its binary.
-This feature is incompatible with BR2_REPRODUCIBLE. This patch overload build
-information when BR2_REPRODUCIBLE is enabled.
+Instead to find all `date' invocation in build process, we add small tool
+allowing to alway return same date.
 
-Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+This work was sponsored by `BA Robotic Systems'.
+
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- linux/linux.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/fakedate/fakedate    | 28 ++++++++++++++++++++++++++++
+ package/fakedate/fakedate.mk | 14 ++++++++++++++
+ 2 files changed, 42 insertions(+)
+ create mode 100755 package/fakedate/fakedate
+ create mode 100644 package/fakedate/fakedate.mk
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 988427c..7e826cc 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -94,6 +94,14 @@ LINUX_MAKE_ENV = \
- 	$(TARGET_MAKE_ENV) \
- 	BR_BINARIES_DIR=$(BINARIES_DIR)
- 
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+LINUX_MAKE_ENV += \
-+	KBUILD_BUILD_VERSION=1 \
-+	KBUILD_BUILD_USER=buildroot \
-+	KBUILD_BUILD_HOST=buildroot \
-+	KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
-+endif
+diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
+new file mode 100755
+index 0000000..2eded22
+--- /dev/null
++++ b/package/fakedate/fakedate
+@@ -0,0 +1,28 @@
++#!/bin/sh
++# vim: set sw=4 expandtab:
++#
++# Licence: GPL
++# Created: 2016-11-04 16:31:18+01:00
++# Main authors:
++#     - J?r?me Pouiller <jezz@sysmic.org>
++#
 +
- # Get the real Linux version, which tells us where kernel modules are
- # going to be installed in the target filesystem.
- LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
++PATH=/bin:/usr/bin
++LOG=/dev/null
++if [ -n "$SOURCE_DATE_EPOCH" ]; then
++    INHIBIT=0
++    for i in "$@"; do
++        case $i in
++        -d|-[!-]*d|--date=*|-f|-[!-]*f|--file=*)
++            INHIBIT=1
++            ;;
++        esac
++    done
++    if [ $INHIBIT -eq 0 ]; then
++        echo "date: Warning: using \$SOURCE_DATE_EPOCH instead of true time" >&2
++        echo "Catch call to date from `pwd` with parameters: '$@'" >> $LOG
++        exec date -d "@$SOURCE_DATE_EPOCH" "$@"
++    fi
++fi
++
++exec date "$@"
+diff --git a/package/fakedate/fakedate.mk b/package/fakedate/fakedate.mk
+new file mode 100644
+index 0000000..e81ce5d
+--- /dev/null
++++ b/package/fakedate/fakedate.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# fakedate
++#
++################################################################################
++
++# source included in buildroot
++HOST_FAKEDATE_LICENSE = GPLv2+
++
++define HOST_FAKEDATE_INSTALL_CMDS
++	$(INSTALL) -D -m 755 package/fakedate/fakedate $(HOST_DIR)/usr/bin/date
++endef
++
++$(eval $(host-generic-package))
 -- 
 1.9.1
