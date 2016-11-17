@@ -1,48 +1,87 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 17 Nov 2016 17:09:05 +0000
-Subject: [Buildroot] [PATCH next 9/9] gstreamer1/gst1-omx: bump version to
-	1.10.1
-In-Reply-To: <20161117170905.4691-1-Vincent.Riera@imgtec.com>
-References: <20161117170905.4691-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161117170905.4691-9-Vincent.Riera@imgtec.com>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Thu, 17 Nov 2016 12:48:00 -0500
+Subject: [Buildroot] [PATCH] fs/ext2: fix double quoted label
+In-Reply-To: <e96fb5e7-1604-fb57-93c3-6aa38fefb683@mind.be>
+References: <20161116195543.6456-1-gael.portay@savoirfairelinux.com>
+ <20161116195543.6456-2-gael.portay@savoirfairelinux.com>
+ <e96fb5e7-1604-fb57-93c3-6aa38fefb683@mind.be>
+Message-ID: <20161117174800.qh2dpd6gyjn7ppgr@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-  https://gstreamer.freedesktop.org/releases/gst-omx/1.10.1.html
+Hi Arnout,
 
-Also fixed hash URL.
+I am sorry, I saw your email shortly afterwards sending the v2...
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
- package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Wed, Nov 16, 2016 at 11:58:23PM +0100, Arnout Vandecappelle wrote:
+> 
+> 
+> On 16-11-16 20:55, Ga?l PORTAY wrote:
+> > Since the commit 6dd7bbb59134799ed3d7343f238b3b02592faebf, the label does
+> > not need anymore to be quoted. Even worse it *must* not be simple-quoted,
+> > unless the label will contain the double-quotes from the config variable
+> > BR2_TARGET_ROOTFS_EXT2_LABEL.
+> > 
+> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> > ---
+> >  fs/ext2/ext2.mk | 6 +-----
+> >  1 file changed, 1 insertion(+), 5 deletions(-)
+> > 
+> > diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+> > index 7417f81..49b44e4 100644
+> > --- a/fs/ext2/ext2.mk
+> > +++ b/fs/ext2/ext2.mk
+> > @@ -20,12 +20,8 @@ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
+> >  EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
+> >  endif
+> >  
+> > -# Not qstrip-ing the variable, because it may contain spaces, but we must
+> > -# qstrip it when checking. Furthermore, we need to further quote it, so
+> > -# that the quotes do not get eaten by the echo statement when creating the
+> > -# fakeroot script
+> >  ifneq ($(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_LABEL)),)
+> > -EXT2_OPTS += -l '$(BR2_TARGET_ROOTFS_EXT2_LABEL)'
+> > +EXT2_OPTS += -l $(BR2_TARGET_ROOTFS_EXT2_LABEL)
+> 
+>  We usually don't rely on the quotes added by Kconfig, because it's possible
+> that the variable is overridden on the command line like
+> make BR2_TARGET_ROOTFS_EXT2_LABEL="foo bar"
+> 
 
-diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
-index 653c93c..bf10f0a 100644
---- a/package/gstreamer1/gst-omx/gst-omx.hash
-+++ b/package/gstreamer1/gst-omx/gst-omx.hash
-@@ -1,2 +1,2 @@
--# From https://gstreamer.freedesktop.org/src/gst-omx/
--sha256  89f7da36abcf278200f561fa9d8d7042ad1459aa211cdc81c4c1a3d2162e9e7f  gst-omx-1.10.0.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.10.1.tar.xz.sha256sum
-+sha256 1b07b9ceb4552c0911af1e3b97987e3314c601eacfbc09f1cca8632e98581231  gst-omx-1.10.1.tar.xz
-diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-index f0b39c9..c934317 100644
---- a/package/gstreamer1/gst-omx/gst-omx.mk
-+++ b/package/gstreamer1/gst-omx/gst-omx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST_OMX_VERSION = 1.10.0
-+GST_OMX_VERSION = 1.10.1
- GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
- GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
- 
--- 
-2.10.1
+For sure you are right, it was not not appropriate to use the Kconfig variable.
+
+> So it should be
+> EXT2_OPTS += -l '$(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_LABEL))'
+> 
+
+As discuss with Thomas and Yann on the channel, we moved to this solution:
+
+EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
+ifneq ($(EXT2_LABEL),)
+EXT2_OPTS += -l "$(EXT2_LABEL)"
+endif
+
+... to not rely on the quotes of Kconfig (as you said) and to preserved the
+spaces from the Kconfig variable ("BR   2016-11-rc2").
+
+>  Regards,
+>  Arnout
+> 
+> >  endif
+> >  
+> >  ROOTFS_EXT2_DEPENDENCIES = host-mke2img
+> > 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+
+Regards,
+Ga?l
