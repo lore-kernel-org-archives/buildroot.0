@@ -1,41 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Nov 2016 10:14:09 +0100
-Subject: [Buildroot] [PATCH 1/1] python-protobuf: Allow host building
-In-Reply-To: <CAPnigKkVJPa4BSJc1JNLUJB9rsREJPv2pkkG_mvTwByUGWDhjg@mail.gmail.com>
-References: <20161117061212.4638-1-wak@google.com>
- <20161117093239.05721e0e@free-electrons.com>
- <CAPnigKkVJPa4BSJc1JNLUJB9rsREJPv2pkkG_mvTwByUGWDhjg@mail.gmail.com>
-Message-ID: <20161117101409.4713ef90@free-electrons.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Thu, 17 Nov 2016 11:00:28 +0100
+Subject: [Buildroot] [PATCH 04/15] reproducible: add '-n' to gzip invocations
+In-Reply-To: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
+References: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1479376839-27795-5-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Default invocation to gzip include timestamp in output file. This feature is
+incompatible with BR2_REPRODUCIBLE. It is possible to disable it with '-n'.
 
-On Thu, 17 Nov 2016 08:51:20 +0000, William Kennington wrote:
+The environment variable GZIP can hold a set of default options for gzip. So
+instead to find all gzip invocation in build process, we just export 'GZIP=-n'.
 
-> The intention is to add nanopb as a host package for use in a library that
-> will also eventually be added. I can just add that to this patch series if
-> needed. I've never sent PR's via mail so I figured i would start with a
-> tiny one to try things out which is why I didn't also send nanopb.
+Notice bzip2, lzma and xz are impacted by this problem. On the other hand, lzop
+include timestamp and does not provide any way to disable it.
 
-OK, understood.
+This work was sponsored by `BA Robotic Systems'.
 
-> Unfortunately the library depending on nanopb can't be added at this time
-> but I plan to have it upstream within a month.
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-It would be great to send the whole thing as a patch series:
-
- PATCH 1: adds the host variant of python-protobuf
- PATCH 2: adds the host nanopb package
- PATCH 3: adds the library that itself needs the host nanopb package
-
-Thanks!
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 17e49e4..c21ba4a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -249,6 +249,7 @@ ifeq ($(BR2_REPRODUCIBLE),y)
+ export TZ=UTC
+ export LANG=C
+ export LC_ALL=C
++export GZIP=-n
+ export SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH)
+ SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
+ SOURCE_DATE_CHANGES = $(shell date -d `echo $(BR2_VERSION) | sed 's/^\(....\)\.\(..\).*/\1-\2-01T23:59:59/'` +%s)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+1.9.1
