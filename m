@@ -1,52 +1,51 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Thu, 17 Nov 2016 11:00:31 +0100
-Subject: [Buildroot] [PATCH 07/15] reproducibility/linux: inhibit build-id
+Date: Thu, 17 Nov 2016 11:00:27 +0100
+Subject: [Buildroot] [PATCH 03/15] reproducibility: generate
+	SOURCE_DATE_EPOCH
 In-Reply-To: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
 References: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479376839-27795-8-git-send-email-jezz@sysmic.org>
+Message-ID: <1479376839-27795-4-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, Linux kernel enable 'build-id'. 'build-id' tends to add random
-bytes in section .notes of kernel image[1]:
+From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
 
-  $ readelf -Wn .../vmlinux
-  Displaying notes found at file offset 0x00008000 with length 0x00000024:
-    Owner                 Data size       Description
-    GNU                  0x00000014       NT_GNU_BUILD_ID (unique build ID bitstring)
-      Build ID: ca689e2ed3944f49474715908e2ac1bb04907fb2
+When reproducibility is requested, generate a global SOURCE_DATE_EPOCH
+environment variable which contains either the date of Buildroot last
+commit if running from a git repository, or the latest release date.
 
-Therefore, we patch kernel Makefile to disable 'build-id'.
+This means that all packages embedding build dates will appear to
+have the same build date, so in case of new commit or release, all
+packages will appear to have been change, even though some of them
+may not have changed in fact.
 
-[1] https://kernelnewbies.org/BuildId
+The meaning of SOURCE_DATE_EPOCH is specified by the following
+specification:
+  https://reproducible-builds.org/specs/source-date-epoch/
 
-This work was sponsored by `BA Robotic Systems'.
-
+Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- linux/linux.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7e826cc..a63d1f3 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -209,6 +209,13 @@ define LINUX_TRY_PATCH_TIMECONST
- endef
- LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
+diff --git a/Makefile b/Makefile
+index eff814b..17e49e4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -249,6 +249,10 @@ ifeq ($(BR2_REPRODUCIBLE),y)
+ export TZ=UTC
+ export LANG=C
+ export LC_ALL=C
++export SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH)
++SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
++SOURCE_DATE_CHANGES = $(shell date -d `echo $(BR2_VERSION) | sed 's/^\(....\)\.\(..\).*/\1-\2-01T23:59:59/'` +%s)
++SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(SOURCE_DATE_CHANGES))
+ endif
  
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+define LINUX_REMOVE_BUILD_ID
-+	sed -i -e s/--build-id/--build-id=none/ $(@D)/Makefile
-+endef
-+LINUX_POST_PATCH_HOOKS += LINUX_REMOVE_BUILD_ID
-+endif
-+
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
- else ifeq ($(BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG),y)
+ # To put more focus on warnings, be less verbose as default
 -- 
 1.9.1
