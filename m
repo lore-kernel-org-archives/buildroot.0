@@ -1,33 +1,34 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Thu, 17 Nov 2016 15:42:50 +1100
-Subject: [Buildroot] [PATCH 1/1] package/qemu: enable for powerpc64 and
-	powerpc64le
-Message-ID: <a6ab4bebbe3a4c9d7f3f4737525e1e66c5e64741.1479357769.git.sam.bobroff@au1.ibm.com>
+From: William A. Kennington III <wak@google.com>
+Date: Wed, 16 Nov 2016 22:12:12 -0800
+Subject: [Buildroot] [PATCH 1/1] python-protobuf: Allow host building
+Message-ID: <20161117061212.4638-1-wak@google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Currently python-protobuf does not allow the building as a host package
+during a cross compile. We would like to be able to build nanopb as a
+host package but can't without host-python-protobuf.
+
+Google-Bug-Id: 28000875
+Change-Id: Id09f461bda3f9c7a0bd6b5c36a6a8fa92e4adb27
+Signed-off-by: William A. Kennington III <wak@google.com>
 ---
+  package/python-protobuf/python-protobuf.mk | 1 +
+  1 file changed, 1 insertion(+)
 
- package/qemu/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+diff --git a/package/python-protobuf/python-protobuf.mk  
+b/package/python-protobuf/python-protobuf.mk
+index d8be76d..d46bda2 100644
+--- a/package/python-protobuf/python-protobuf.mk
++++ b/package/python-protobuf/python-protobuf.mk
+@@ -13,4 +13,5 @@ PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
+  PYTHON_PROTOBUF_SETUP_TYPE = setuptools
+  PYTHON_PROTOBUF_SUBDIR = python
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 8bae5f4..72252ac 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -2,7 +2,8 @@ config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
- 	bool
- 	# Only tested on these architectures
- 	default y if BR2_aarch64 || BR2_i386 || BR2_mips || BR2_mipsel \
--		|| BR2_x86_64 || BR2_arm
-+		|| BR2_x86_64 || BR2_arm \
-+		|| BR2_powerpc64 || BR2_powerpc64le
- 
- comment "QEMU requires a toolchain with wchar, threads"
- 	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
++$(eval $(host-python-package))
+  $(eval $(python-package))
 -- 
-2.10.0.297.gf6727b0
+2.10.2
