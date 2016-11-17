@@ -1,76 +1,44 @@
-From: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-Date: Thu, 17 Nov 2016 17:54:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/udisks: fix daemon path in systemd
-	service file
-Message-ID: <1479401660-23073-1-git-send-email-pieterjan.camerlynck@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 17 Nov 2016 17:08:57 +0000
+Subject: [Buildroot] [PATCH next 1/9] gstreamer1/gstreamer1: bump version to
+	1.10.1
+Message-ID: <20161117170905.4691-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
----
- package/udisks/0002-Fix-systemd-service-file.patch | 37 ++++++++++++++++++++++
- package/udisks/udisks.mk                           |  2 ++
- 2 files changed, 39 insertions(+)
- create mode 100644 package/udisks/0002-Fix-systemd-service-file.patch
+Release notes:
+  https://gstreamer.freedesktop.org/releases/gstreamer/1.10.1.html
 
-diff --git a/package/udisks/0002-Fix-systemd-service-file.patch b/package/udisks/0002-Fix-systemd-service-file.patch
-new file mode 100644
-index 0000000..07b0d45
---- /dev/null
-+++ b/package/udisks/0002-Fix-systemd-service-file.patch
-@@ -0,0 +1,37 @@
-+Fix systemd service file
-+
-+This patch has been backported from upstream:
-+
-+https://cgit.freedesktop.org/udisks/commit/?h=udisks1&id=bf8b4362cef24a6f747e4329305a4939c8f585d1
-+
-+Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-+
-+From bf8b4362cef24a6f747e4329305a4939c8f585d1 Mon Sep 17 00:00:00 2001
-+From: David King <amigadave@amigadave.com>
-+Date: Thu, 2 Jul 2015 13:49:22 +0100
-+Subject: [PATCH] Fix systemd service file
-+
-+udisks-daemon is installed to $(libexecdir), not $(prefix)/lib/udisks.
-+
-+https://bugzilla.redhat.com/show_bug.cgi?id=1238664
-+https://bugs.freedesktop.org/show_bug.cgi?id=91191
-+---
-+ data/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/data/Makefile.am b/data/Makefile.am
-+index 411ea0f..08af5f4 100644
-+--- a/data/Makefile.am
-++++ b/data/Makefile.am
-+@@ -31,7 +31,7 @@ systemdservicedir       = $(systemdsystemunitdir)
-+ systemdservice_DATA     = $(systemdservice_in_files:.service.in=.service)
-+ 
-+ $(systemdservice_DATA): $(systemdservice_in_files) Makefile
-+-	@sed -e "s|\@libexecdir\@|$(prefix)/lib/udisks|" $< > $@
-++	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
-+ endif
-+ 
-+ udevrulesdir = $(slashlibdir)/udev/rules.d
-+-- 
-+2.7.4
-+
-diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
-index eea79e5..4d3ede7 100644
---- a/package/udisks/udisks.mk
-+++ b/package/udisks/udisks.mk
-@@ -8,6 +8,8 @@ UDISKS_VERSION = 1.0.5
- UDISKS_SITE = http://hal.freedesktop.org/releases
- UDISKS_LICENSE = GPLv2+
- UDISKS_LICENSE_FILES = COPYING
-+# For 0002-Fix-systemd-service-file.patch
-+UDISKS_AUTORECONF = YES
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 8bd7782..40677da 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.10.0.tar.xz.sha256sum
+-sha256	1e7778fabe480185bfc4ce552f0860de1443f6618a68a86ccdd65854fed37207  gstreamer-1.10.0.tar.xz
++# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.10.1.tar.xz.sha256sum
++sha256 f68df996e0e699382b935bb4783dd402c301377df18f57e28e0318c4b3bff6da  gstreamer-1.10.1.tar.xz
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index cb111f2..794abc4 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- UDISKS_DEPENDENCIES = 	\
- 	sg3_utils	\
+-GSTREAMER1_VERSION = 1.10.0
++GSTREAMER1_VERSION = 1.10.1
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
 -- 
-2.7.4
+2.10.1
