@@ -1,74 +1,132 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 17 Nov 2016 16:41:25 -0300
-Subject: [Buildroot] [PATCH] mesa3d: add patch to fix wayland-scanner issues
-Message-ID: <1479411685-6912-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 17 Nov 2016 21:44:46 +0100
+Subject: [Buildroot] [PATCH 02/10] core: add waf-package infra
+In-Reply-To: <20161117000239.36cd4e77@free-electrons.com>
+References: <cover.1477843328.git.yann.morin.1998@free.fr>
+ <6556713514fd3c751384c5ea655420dba5e8876a.1477843328.git.yann.morin.1998@free.fr>
+ <20161117000239.36cd4e77@free-electrons.com>
+Message-ID: <20161117204446.GC3574@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mesa3d tries to use the pkg-config specified wayland-scanner when
-wayland is enabled, which points to /usr/bin/wayland-scanner which is
-incorrect.
-The correct fix is trying to use the PATH wayland-scanner first if it's
-available rather than the pkg-config specified one, since tweaking a
-staging .pc file with a host binary is wrong. Fixes:
-http://autobuild.buildroot.net/results/c0c/c0ca3778c390a33c27073553ca3bef7ac7c5784b/
+Thomas, All,
 
-Patch sent upstream:
-https://lists.freedesktop.org/archives/mesa-dev/2016-November/135665.html
+On 2016-11-17 00:02 +0100, Thomas Petazzoni spake thusly:
+> On Sun, 30 Oct 2016 17:02:13 +0100, Yann E. MORIN wrote:
+> > This new waf-package infrastructure simplifies writing waf-based
+> > packages. It can be used by our six current such packages, plus a
+> > later-incoming one by Romain.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Romain Naour <romain.naour@openwide.fr>
+> 
+> I am generally happy with the whole series, I just have a few comments
+> on this specific patch, which are mainly questions. We discussed them
+> on IRC, but I'd like to raise the questions here as well, in case
+> people have some opinions.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...ac-invert-order-for-wayland-scanner-check.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/mesa3d/0005-configure.ac-invert-order-for-wayland-scanner-check.patch
+My answers below...
 
-diff --git a/package/mesa3d/0005-configure.ac-invert-order-for-wayland-scanner-check.patch b/package/mesa3d/0005-configure.ac-invert-order-for-wayland-scanner-check.patch
-new file mode 100644
-index 0000000..e32031e
---- /dev/null
-+++ b/package/mesa3d/0005-configure.ac-invert-order-for-wayland-scanner-check.patch
-@@ -0,0 +1,39 @@
-+From 60ee5191a0c074251862a15b12afdc9db0b2df38 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Thu, 17 Nov 2016 15:36:54 -0300
-+Subject: [PATCH] configure.ac: invert order for wayland-scanner check
-+
-+When cross-compiling the .pc file might point to the wrong
-+wayland-scanner binary (target rather than host) resulting in a
-+non-executable and wrong scanner.
-+Try searching the PATH first, and if that fails fall back into
-+pkg-config.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ configure.ac | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 5f30ae8..461792e 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2025,11 +2025,11 @@ if test "x$with_egl_platforms" != "x" -a "x$enable_egl" != xyes; then
-+     AC_MSG_ERROR([cannot build egl state tracker without EGL library])
-+ fi
-+ 
-+-PKG_CHECK_MODULES([WAYLAND_SCANNER], [wayland-scanner],
-+-        WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`,
-+-        WAYLAND_SCANNER='')
-++AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner])
-+ if test "x$WAYLAND_SCANNER" = x; then
-+-    AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner])
-++    PKG_CHECK_MODULES([WAYLAND_SCANNER], [wayland-scanner],
-++            WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`,
-++            WAYLAND_SCANNER='')
-+ fi
-+ 
-+ # Do per-EGL platform setups and checks
-+-- 
-+2.7.3
-+
+> If nobody gives some feedback, then I'm going to apply the series.
+
+:-)
+
+> > +# If the package does not have its own waf, use our own.
+> > +ifeq ($$($(2)_BUNDLED_WAF),NO)
+> 
+> Where is the default value of this variable defined? It seems it's not
+> defined anywhere, while it should be set to "YES".
+
+We don't really need to set a default, because we're not testing the
+default. We're only testing if it was set by the package.
+
+> However, what I dislike a bit is the slightly "negative" logic of this
+> variable. By default, we assume packages have their bundled version of
+> waf, so this variable is by default assumed to be set to "YES" (even
+> though in fact it's empty).
+> 
+> Only packages that do *NOT* have a bundled version of waf can set
+> <pkg>_BUNDLED_WAF = NO, to tell the infrastructure to add a dependency
+> on host-waf.
+> 
+> To me it feels a bit weird to:
+> 
+>  1. Have a boolean that defaults to YES and that can be overridden to
+>     NO. I generally expects the opposite.
+> 
+>  2. Have a boolean that when set to "NO" actually asks the
+>     infrastructure to do more things. I generally expects the opposite.
+> 
+> So, ideally, I'd like to invert this variable, but I can't really find
+> a good name for it.
+> 
+> I propose <pkg>_NEEDS_WAF on IRC, but I'm not convinced because all
+> packages need waf, either bundled or external.
+> <pkg>_NEEDS_EXTERNAL_WAF ?
+
+That last one is OK for me.
+
+> Anyone has some other proposal ?
+> 
+> > +# Dependency on host-python is done by host-waf
+> > +$(2)_DEPENDENCIES += host-waf
+> > +$(2)_WAF = $(HOST_DIR)/usr/bin/waf
+> > +else
+> > +# We need host-python to run the package's waf
+> > +$(2)_DEPENDENCIES += host-python
+> > +$(2)_WAF = ./waf
+> > +endif
+> 
+> Here another point where I'm hesitating. host-waf doesn't really need
+> to build-depend on host-python. It's *running* host-waf that requires
+> host-python. So I'm wondering if we shouldn't:
+> 
+>  1. Remove the host-python dependency from host-waf
+> 
+>  2. In the first case above (no bundled waf), add to the package a
+>     dependency on host-waf *and* host-python.
+> 
+> On IRC, you suggested that packages that depend on host-waf should not
+> have to know host-python is needed to run it, which is fair point.
+
+Yes, I followed the same as we do with AUTORECONF: we automatically add
+host-automake, host-autoconf, host-libtool and, if needed, host-gettext.
+Packages need not add them as they are dependencies of their build
+systems (autotools), not their own dependencies. The only exceptions
+being packages that do need libtool for themselves (for libltdl).
+
+Same goes for host-python: it is a dependency of the build system, not
+of the package, so it should go in the infra.
+
+> So I'm opening the question to others.
+> 
+> > +ifndef $(2)_MAKE
+> > + ifdef $(3)_MAKE
+> > +  $(2)_MAKE = $$($(3)_MAKE)
+> > + else
+> > +  $(2)_MAKE ?= $$(MAKE)
+> > + endif
+> > +endif
+> 
+> Is $(2)_MAKE used anywhere in this infrastructure?
+
+Not used. I initially added it because I did contemplate converting
+samba4 as well, but it does not make sense to have such support for a
+single package, so I backed off. I just forgot to remove this hunk.
+
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
 -- 
-2.7.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
