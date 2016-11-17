@@ -1,37 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 17 Nov 2016 10:18:29 +0200
-Subject: [Buildroot] [PATCH] canfestival: comment on musl disable
-Message-ID: <dae10b62748408881f5c3dbe970d8bf428089e71.1479370709.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Nov 2016 09:32:39 +0100
+Subject: [Buildroot] [PATCH 1/1] python-protobuf: Allow host building
+In-Reply-To: <20161117061212.4638-1-wak@google.com>
+References: <20161117061212.4638-1-wak@google.com>
+Message-ID: <20161117093239.05721e0e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Based on commit 4d00a4058b9e5 (can-festival: disable on musl) and a previous
-fix attempt[1], add a comment explaining why build with musl is disabled.
+Hello,
 
-[1] http://patchwork.ozlabs.org/patch/509731/
+On Wed, 16 Nov 2016 22:12:12 -0800, William A. Kennington III wrote:
+> Currently python-protobuf does not allow the building as a host package
+> during a cross compile. We would like to be able to build nanopb as a
+> host package but can't without host-python-protobuf.
+> 
+> Google-Bug-Id: 28000875
+> Change-Id: Id09f461bda3f9c7a0bd6b5c36a6a8fa92e4adb27
+> Signed-off-by: William A. Kennington III <wak@google.com>
 
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/canfestival/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for this contribution!
 
-diff --git a/package/canfestival/Config.in b/package/canfestival/Config.in
-index 5522afe54f03..ca949565f5a0 100644
---- a/package/canfestival/Config.in
-+++ b/package/canfestival/Config.in
-@@ -11,7 +11,7 @@ comment "canfestival needs a glibc or uClibc toolchain w/ threads and dynamic li
- config BR2_PACKAGE_CANFESTIVAL
- 	bool "canfestival"
- 	depends on BR2_PACKAGE_CANFESTIVAL_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # sigval_t
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	help
+However, we don't really like to have "orphan" host packages, i.e host
+packages that are not a dependency of anything else in Buildroot.
+
+Do you intend to submit a Buildroot package for nanopb? Even if it's a
+host package, it would probably be OK to have it in
+package/Config.in.host so that it appears in menuconfig.
+
+Thanks,
+
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
