@@ -1,32 +1,37 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Thu, 17 Nov 2016 09:00:09 +0100
-Subject: [Buildroot] [PATCH v3 1/1] libxmlrpc: bump to 1.39.11
-In-Reply-To: <20161116231513.62d80a13@free-electrons.com>
-References: <CAM+bi4vAks48DSkjARGDsoMiG7p+X=+frremEZbjaQnG5GQHYw@mail.gmail.com>
- <1479207044-12290-1-git-send-email-alvaro.gamez@hazent.com>
- <20161116231513.62d80a13@free-electrons.com>
-Message-ID: <CAM+bi4tkWQ07vCbP_eLrOy7HmZbBLjKxt5TYaB3c7qYGsu8vdg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 17 Nov 2016 10:18:29 +0200
+Subject: [Buildroot] [PATCH] canfestival: comment on musl disable
+Message-ID: <dae10b62748408881f5c3dbe970d8bf428089e71.1479370709.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2016-11-16 23:15 GMT+01:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+Based on commit 4d00a4058b9e5 (can-festival: disable on musl) and a previous
+fix attempt[1], add a comment explaining why build with musl is disabled.
 
-> Applied to next, thanks. I've fixed the ar/ranlib issue by adding
-> another patch (patch 0006).
->
-> Thanks!
->
+[1] http://patchwork.ozlabs.org/patch/509731/
 
-Thanks a lot for your help, I wouldn't have ever known how to fix that by
-myself.
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/canfestival/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards
+diff --git a/package/canfestival/Config.in b/package/canfestival/Config.in
+index 5522afe54f03..ca949565f5a0 100644
+--- a/package/canfestival/Config.in
++++ b/package/canfestival/Config.in
+@@ -11,7 +11,7 @@ comment "canfestival needs a glibc or uClibc toolchain w/ threads and dynamic li
+ config BR2_PACKAGE_CANFESTIVAL
+ 	bool "canfestival"
+ 	depends on BR2_PACKAGE_CANFESTIVAL_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_USES_MUSL
++	depends on !BR2_TOOLCHAIN_USES_MUSL # sigval_t
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	help
 -- 
-?lvaro G?mez Machado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161117/24ae4030/attachment.html>
+2.10.2
