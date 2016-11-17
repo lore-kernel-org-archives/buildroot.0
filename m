@@ -1,53 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Nov 2016 21:47:39 +0100
-Subject: [Buildroot] [PATCH 03/10] docs/manual: document the waf-package
- infra
-In-Reply-To: <20161117000456.04b7e672@free-electrons.com>
-References: <cover.1477843328.git.yann.morin.1998@free.fr>
- <e41ab5eee8961c89c1fe9c4566383844e36b24f9.1477843328.git.yann.morin.1998@free.fr>
- <20161117000456.04b7e672@free-electrons.com>
-Message-ID: <20161117204739.GD3574@free.fr>
+From: Michael Brainerd <mbrainerd@protoprod.com>
+Date: Thu, 17 Nov 2016 17:38:22 +0000
+Subject: [Buildroot] Buildroot error
+In-Reply-To: <20161115224708.043f0c31@free-electrons.com>
+References: <D3FA0BA2E2AD54469423D3A670F43027238ED2AB@mail.protoprod.local>
+ <8dee00da-0ff9-66de-2baf-c0b1f39dc96e@mind.be>,
+ <20161115224708.043f0c31@free-electrons.com>
+Message-ID: <D3FA0BA2E2AD54469423D3A670F43027238ED805@mail.protoprod.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
-
-On 2016-11-17 00:04 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 30 Oct 2016 17:02:14 +0100, Yann E. MORIN wrote:
-[--SNIP--]
-> > +* +LIBFOO_BUNDLED_WAF+ can be set to +YES+ or +NO+ to tell Buildroot to
-> > +  use the bundled +waf+ executable. If set to +YES+, the default, then
-> YES is in fact not the default :-)
-
-Well, "! NO" is the default. ;-)
-
-> > +  Buildroot will use the waf executable in the package source tree; if
-> > +  set to +NO+, then Buidlroot will download and install waf as a
-> Buildroot.
-
-I Like Buidlroot. It sounds like Beetlejuice. ;-]
-
-> > +  host-tool.
-> host tool (i.e no dash in between).
-> 
-> No need to resend for these issues, I can fixup when applying.
-
-Will you address the variable name in the infra at the same time, or
-do you prefer I respin with the rename (in which case I can fix the
-manual) ?
-
-Thanks! :-)
-
+all,
+Then there is no way to specify uClinux as the image to build?
 Regards,
-Yann E. MORIN.
+Michael Brainerd
+________________________________________
+From: Thomas Petazzoni [thomas.petazzoni at free-electrons.com]
+Sent: Tuesday, November 15, 2016 4:47 PM
+To: Arnout Vandecappelle
+Cc: Michael Brainerd; buildroot at busybox.net
+Subject: Re: [Buildroot] Buildroot error
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Hello,
+
+On Tue, 15 Nov 2016 22:39:32 +0100, Arnout Vandecappelle wrote:
+
+> > >>>> linux-headers custom Syncing from source dir /home/mikeb/sandbox/buildroot-2016.08/uClinux-dist
+> > rsync -au --chmod=u=rwX,go=rX --exclude .svn --exclude .git --exclude .hg --exclude .bzr --exclude CVS /home/mikeb/sandbox/buildroot-2016.08/uClinux-dist/ /home/mikeb/sandbox/buildroot-2016.08/output/build/linux-headers-custom
+>
+>  Either the linux tree in uClinux-dist is so old that it doesn't have the
+> "headers_install" target yet (I think that's from 2.6.10-ish), or the tree
+> you're pointing to is not actually a linux tree. In the first case, you also
+> misconfigured your kernel headers, because you claim it's 4.7. But you probably
+> just took the first thing you saw :-)
+
+uClinux-dist is the name of the "distribution" around uClinux, and
+uClinux-dist is pretty much a build system, like Buildroot. So it seems
+like Michael has used the source code of a build system, and offered it
+to Buildroot as the source of the Linux kernel. Obviously, this isn't
+going to work very well.
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
+CONFIDENTIALITY NOTICE
+
+This e-mail message, including any attachments, may contain confidential information which is intended only for the use of the intended recipient(s). Any unauthorized review, use, disclosure, distribution, dissemination or action taken in reliance upon this information by persons or entities other than the intended recipient is prohibited. If you are not the intended recipient and this message has been addressed to you in error, please promptly notify the sender by email reply and destroy all copies of the message and any attachments.
+
+EXPORT CONTROL NOTICE
+
+This document and attachments may contain technical data as defined in the International Traffic In Arms Regulations (ITAR) 22 CFR 120.10 or the Export Administration Regulations (EAR) 15 CFR Parts 730 ? 780 . Export of this material may be controlled by these regulations and may not be exported or transferred to non-U.S. persons without prior written approval from the U.S. government.
