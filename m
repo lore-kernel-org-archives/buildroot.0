@@ -1,43 +1,71 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 17 Nov 2016 10:58:16 +0000
-Subject: [Buildroot] [PATCH next] wireshark: bump version to 2.2.2
-Message-ID: <20161117105816.28484-1-Vincent.Riera@imgtec.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 17 Nov 2016 12:06:42 +0100
+Subject: [Buildroot] [RFC PATCH 1/1] pkg-autotools: generic configure
+ fix for powerpc64
+In-Reply-To: <20161117110529.55c3578e@free-electrons.com>
+References: <56063c394c473bf4292658511bae0dd99583be07.1479356115.git.sam.bobroff@au1.ibm.com>
+ <20161117110529.55c3578e@free-electrons.com>
+Message-ID: <e9261df3-b71b-1591-8064-3d1c9d82972d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-  https://www.wireshark.org/docs/relnotes/wireshark-2.2.2.html
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 21c003f..c90f5bb 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,2 +1,2 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.1.txt
--sha256 900e22af04c8b35e0d02a25a360ab1fb7cfe5ac18fc48a9afd75a7103e569149  wireshark-2.2.1.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.2.txt
-+sha256 f9acef5e9a9021a400b4244fafc06969f41ec594ec57fd7f0ff63bafca0055b3  wireshark-2.2.2.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 227ead6..6a40b8e 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 2.2.1
-+WIRESHARK_VERSION = 2.2.2
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+On 17-11-16 11:05, Thomas Petazzoni wrote:
+> Hello,
+> 
+[snip]
+> I'm hesitating between this patch approach (with significant offsets)
+> when applying, and an approach using a awk script. Here is an awk
+> script that does the job:
+> 
+> /^\s*ppc\*-\*linux\*|powerpc\*-\*linux\*)$/ {
+
+ How sure are you that no configure script will contain this line somewhere else
+than in the shared library test? You *have* to match the context as well - in
+particular the LD="${LD-ld} -m elf64ppc" part. This is possible with awk, but
+the patch approach is a lot simpler IMHO, and anyway easier to read.
+
+ Regards,
+ Arnout
+
+>     infix = 1;
+>     print "         powerpcle-*linux*)";
+>     print "           LD=\"${LD-ld} -m elf64lppc\"";
+>     print "           ;;";
+>     print "         powerpc-*linux*)";
+>     print "           LD=\"${LD-ld} -m elf64ppc\"";
+>     print "           ;;";
+> }
+> 
+> /^\s*;;$/ {
+>     if (infix) {
+> 	infix = 0;
+> 	next;
+>     }
+> }
+> 
+> // {
+>     if (infix)
+> 	next;
+>     print;
+> }
+> 
+> I'm not sure which of the two solutions is the most appropriate. The
+> awk solution can probably be applied without doing the grep for the
+> ppc*-*linux line, because the awk script only does the replacement if
+> this line is found anyway.
+> 
+> Thomas
+> 
+
 -- 
-2.10.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
