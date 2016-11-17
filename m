@@ -1,45 +1,77 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Thu, 17 Nov 2016 11:00:32 +0100
-Subject: [Buildroot] [PATCH 08/15] reproducibility/busybox: disable build
-	timestamps
+Date: Thu, 17 Nov 2016 11:00:36 +0100
+Subject: [Buildroot] [PATCH 12/15] python2: generate reproducible .pyc
 In-Reply-To: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
 References: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479376839-27795-9-git-send-email-jezz@sysmic.org>
+Message-ID: <1479376839-27795-13-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+.pyc files contain modification time of .py source. In order to make
+build reproducible, we fix modification time of all .py before to
+compile .pyc files.
 
-Busybox include a few information about build environment in its binary. This
-feature is incompatible with BR2_REPRODUCIBLE feature. This patch overload build
-information when BR2_REPRODUCIBLE is enabled.
+In order to guarantee .pyc are regenerated regardless their modification time,
+we remove .pyc before to compile. However, I wonder if it wouldn't be simpler
+to always call compile_all with 'force' flag.
 
-Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+This work was sponsored by `BA Robotic Systems'.
+
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/busybox/busybox.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/python/python.mk | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index fc23a90..f4a241d 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -36,6 +36,12 @@ BUSYBOX_MAKE_ENV = \
- 	$(TARGET_MAKE_ENV) \
- 	CFLAGS="$(BUSYBOX_CFLAGS)" \
- 	CFLAGS_busybox="$(BUSYBOX_CFLAGS_busybox)"
-+
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+BUSYBOX_MAKE_ENV += \
-+	KCONFIG_NOTIMESTAMP=1
+diff --git a/package/python/python.mk b/package/python/python.mk
+index cc65376..b0ff1fd 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -226,6 +226,26 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
++# Normally, *.pyc files should not have been compiled, but just in
++# case, we make sure we remove all of them.
++# However, do not remove .pyc if source .py is not present.
++ifneq ($(BR2_PACKAGE_PYTHON_PY_ONLY)$(BR2_REPRODUCIBLE)),)
++define PYTHON_REMOVE_PYC_FILES
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
++		sed -z -e s/py$$/pyc/ | \
++		xargs -0 --no-run-if-empty rm -f
++endef
++PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYC_FILES
 +endif
 +
- BUSYBOX_MAKE_OPTS = \
- 	CC="$(TARGET_CC)" \
- 	ARCH=$(KERNEL_ARCH) \
++ifeq ($(BR2_REPRODUCIBLE),y)
++define PYTHON_FIX_TIME
++find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
++		xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
++endef
++PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_FIX_TIME
++endif
++
+ define PYTHON_CREATE_PYC_FILES
+ 	PYTHONPATH="$(PYTHON_PATH)" \
+ 	$(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
+@@ -245,16 +265,6 @@ endef
+ PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
+ endif
+ 
+-# Normally, *.pyc files should not have been compiled, but just in
+-# case, we make sure we remove all of them.
+-ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
+-define PYTHON_REMOVE_PYC_FILES
+-	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | \
+-		xargs -0 --no-run-if-empty rm -f
+-endef
+-PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYC_FILES
+-endif
+-
+ # In all cases, we don't want to keep the optimized .pyo files
+ define PYTHON_REMOVE_PYO_FILES
+ 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyo' -print0 | \
 -- 
 1.9.1
