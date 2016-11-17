@@ -1,40 +1,76 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 17 Nov 2016 16:42:32 +0000
-Subject: [Buildroot] [PATCH next] libgtk2: bump version to 2.24.31
-Message-ID: <20161117164232.59884-1-Vincent.Riera@imgtec.com>
+From: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Date: Thu, 17 Nov 2016 17:54:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/udisks: fix daemon path in systemd
+	service file
+Message-ID: <1479401660-23073-1-git-send-email-pieterjan.camerlynck@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
 ---
- package/libgtk2/libgtk2.hash | 4 ++--
- package/libgtk2/libgtk2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/udisks/0002-Fix-systemd-service-file.patch | 37 ++++++++++++++++++++++
+ package/udisks/udisks.mk                           |  2 ++
+ 2 files changed, 39 insertions(+)
+ create mode 100644 package/udisks/0002-Fix-systemd-service-file.patch
 
-diff --git a/package/libgtk2/libgtk2.hash b/package/libgtk2/libgtk2.hash
-index 175702f..3388c5c 100644
---- a/package/libgtk2/libgtk2.hash
-+++ b/package/libgtk2/libgtk2.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.30.sha256sum
--sha256	0d15cec3b6d55c60eac205b1f3ba81a1ed4eadd9d0f8e7c508bc7065d0c4ca50	gtk+-2.24.30.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.31.sha256sum
-+sha256 68c1922732c7efc08df4656a5366dcc3afdc8791513400dac276009b40954658  gtk+-2.24.31.tar.xz
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index 94fa97f..cf8b2f4 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/udisks/0002-Fix-systemd-service-file.patch b/package/udisks/0002-Fix-systemd-service-file.patch
+new file mode 100644
+index 0000000..07b0d45
+--- /dev/null
++++ b/package/udisks/0002-Fix-systemd-service-file.patch
+@@ -0,0 +1,37 @@
++Fix systemd service file
++
++This patch has been backported from upstream:
++
++https://cgit.freedesktop.org/udisks/commit/?h=udisks1&id=bf8b4362cef24a6f747e4329305a4939c8f585d1
++
++Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
++
++From bf8b4362cef24a6f747e4329305a4939c8f585d1 Mon Sep 17 00:00:00 2001
++From: David King <amigadave@amigadave.com>
++Date: Thu, 2 Jul 2015 13:49:22 +0100
++Subject: [PATCH] Fix systemd service file
++
++udisks-daemon is installed to $(libexecdir), not $(prefix)/lib/udisks.
++
++https://bugzilla.redhat.com/show_bug.cgi?id=1238664
++https://bugs.freedesktop.org/show_bug.cgi?id=91191
++---
++ data/Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/data/Makefile.am b/data/Makefile.am
++index 411ea0f..08af5f4 100644
++--- a/data/Makefile.am
+++++ b/data/Makefile.am
++@@ -31,7 +31,7 @@ systemdservicedir       = $(systemdsystemunitdir)
++ systemdservice_DATA     = $(systemdservice_in_files:.service.in=.service)
++ 
++ $(systemdservice_DATA): $(systemdservice_in_files) Makefile
++-	@sed -e "s|\@libexecdir\@|$(prefix)/lib/udisks|" $< > $@
+++	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
++ endif
++ 
++ udevrulesdir = $(slashlibdir)/udev/rules.d
++-- 
++2.7.4
++
+diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
+index eea79e5..4d3ede7 100644
+--- a/package/udisks/udisks.mk
++++ b/package/udisks/udisks.mk
+@@ -8,6 +8,8 @@ UDISKS_VERSION = 1.0.5
+ UDISKS_SITE = http://hal.freedesktop.org/releases
+ UDISKS_LICENSE = GPLv2+
+ UDISKS_LICENSE_FILES = COPYING
++# For 0002-Fix-systemd-service-file.patch
++UDISKS_AUTORECONF = YES
  
- LIBGTK2_VERSION_MAJOR = 2.24
--LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).30
-+LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).31
- LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
- LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
- LIBGTK2_INSTALL_STAGING = YES
+ UDISKS_DEPENDENCIES = 	\
+ 	sg3_utils	\
 -- 
-2.10.1
+2.7.4
