@@ -1,53 +1,74 @@
-From: William Kennington <wak@google.com>
-Date: Thu, 17 Nov 2016 19:10:23 +0000
-Subject: [Buildroot] [PATCH 1/1] python-protobuf: Allow host building
-In-Reply-To: <20161117101409.4713ef90@free-electrons.com>
-References: <20161117061212.4638-1-wak@google.com>
- <20161117093239.05721e0e@free-electrons.com>
- <CAPnigKkVJPa4BSJc1JNLUJB9rsREJPv2pkkG_mvTwByUGWDhjg@mail.gmail.com>
- <20161117101409.4713ef90@free-electrons.com>
-Message-ID: <CAPnigKkHkfhbtsiAizHCY=hmLH1qOAqZ66r+vKMERC3OYhuUBw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 17 Nov 2016 16:41:25 -0300
+Subject: [Buildroot] [PATCH] mesa3d: add patch to fix wayland-scanner issues
+Message-ID: <1479411685-6912-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sounds good, closed. I'll submit the new patch series when it is ready.
+mesa3d tries to use the pkg-config specified wayland-scanner when
+wayland is enabled, which points to /usr/bin/wayland-scanner which is
+incorrect.
+The correct fix is trying to use the PATH wayland-scanner first if it's
+available rather than the pkg-config specified one, since tweaking a
+staging .pc file with a host binary is wrong. Fixes:
+http://autobuild.buildroot.net/results/c0c/c0ca3778c390a33c27073553ca3bef7ac7c5784b/
 
-On Thu, Nov 17, 2016 at 1:14 AM Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Patch sent upstream:
+https://lists.freedesktop.org/archives/mesa-dev/2016-November/135665.html
 
-> Hello,
->
-> On Thu, 17 Nov 2016 08:51:20 +0000, William Kennington wrote:
->
-> > The intention is to add nanopb as a host package for use in a library
-> that
-> > will also eventually be added. I can just add that to this patch series
-> if
-> > needed. I've never sent PR's via mail so I figured i would start with a
-> > tiny one to try things out which is why I didn't also send nanopb.
->
-> OK, understood.
->
-> > Unfortunately the library depending on nanopb can't be added at this time
-> > but I plan to have it upstream within a month.
->
-> It would be great to send the whole thing as a patch series:
->
->  PATCH 1: adds the host variant of python-protobuf
->  PATCH 2: adds the host nanopb package
->  PATCH 3: adds the library that itself needs the host nanopb package
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161117/8b23a748/attachment.html>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...ac-invert-order-for-wayland-scanner-check.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/mesa3d/0005-configure.ac-invert-order-for-wayland-scanner-check.patch
+
+diff --git a/package/mesa3d/0005-configure.ac-invert-order-for-wayland-scanner-check.patch b/package/mesa3d/0005-configure.ac-invert-order-for-wayland-scanner-check.patch
+new file mode 100644
+index 0000000..e32031e
+--- /dev/null
++++ b/package/mesa3d/0005-configure.ac-invert-order-for-wayland-scanner-check.patch
+@@ -0,0 +1,39 @@
++From 60ee5191a0c074251862a15b12afdc9db0b2df38 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Thu, 17 Nov 2016 15:36:54 -0300
++Subject: [PATCH] configure.ac: invert order for wayland-scanner check
++
++When cross-compiling the .pc file might point to the wrong
++wayland-scanner binary (target rather than host) resulting in a
++non-executable and wrong scanner.
++Try searching the PATH first, and if that fails fall back into
++pkg-config.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ configure.ac | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 5f30ae8..461792e 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2025,11 +2025,11 @@ if test "x$with_egl_platforms" != "x" -a "x$enable_egl" != xyes; then
++     AC_MSG_ERROR([cannot build egl state tracker without EGL library])
++ fi
++ 
++-PKG_CHECK_MODULES([WAYLAND_SCANNER], [wayland-scanner],
++-        WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`,
++-        WAYLAND_SCANNER='')
+++AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner])
++ if test "x$WAYLAND_SCANNER" = x; then
++-    AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner])
+++    PKG_CHECK_MODULES([WAYLAND_SCANNER], [wayland-scanner],
+++            WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`,
+++            WAYLAND_SCANNER='')
++ fi
++ 
++ # Do per-EGL platform setups and checks
++-- 
++2.7.3
++
+-- 
+2.7.3
