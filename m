@@ -1,41 +1,55 @@
 From: =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?= <jezz@sysmic.org>
-Date: Fri, 18 Nov 2016 14:46:21 +0100
-Subject: [Buildroot] [PATCH v2 02/15] reproducible: fix DATE/TIME macros
- in toolchain-wrapper
-In-Reply-To: <20161118123704.00772557@free-electrons.com>
+Date: Fri, 18 Nov 2016 14:48:56 +0100
+Subject: [Buildroot] [PATCH v2 01/15] reproducibility: generate
+ SOURCE_DATE_EPOCH
+In-Reply-To: <20161118123351.69e79602@free-electrons.com>
 References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
- <1479460224-6119-3-git-send-email-jezz@sysmic.org>
- <20161118123704.00772557@free-electrons.com>
-Message-ID: <73a11231172bc9ed95ce28032f53f6bf@sysmic.org>
+ <1479460224-6119-2-git-send-email-jezz@sysmic.org>
+ <20161118123351.69e79602@free-electrons.com>
+Message-ID: <2b86da687b4149f70193b3dbf2ec9cab@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2016-11-18 12:37, Thomas Petazzoni wrote:
-> On Fri, 18 Nov 2016 10:10:11 +0100, J?r?me Pouiller wrote:
+On 2016-11-18 12:33, Thomas Petazzoni wrote:
+> Hello,
 > 
->> +ifeq ($(BR2_REPRODUCIBLE),y)
->> +TOOLCHAIN_WRAPPER_ARGS += -DBR_REPRODUCIBLE_TIME="\"\\\"`date -d 
->> @$(SOURCE_DATE_EPOCH) "+%T"`\\\"\""
->> +TOOLCHAIN_WRAPPER_ARGS += -DBR_REPRODUCIBLE_DATE="\"\\\"`date -d 
->> @$(SOURCE_DATE_EPOCH) "+%b %e %Y"`\\\"\""
->> +endif
+> On Fri, 18 Nov 2016 10:10:10 +0100, J?r?me Pouiller wrote:
 > 
-> Do we need to encode the dates in the wrapper, or should we have the
-> wrapper read at runtime the SOURCE_DATE_EPOCH environment variable?
+>> diff --git a/Makefile b/Makefile
+>> index eff814b..17e49e4 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -249,6 +249,10 @@ ifeq ($(BR2_REPRODUCIBLE),y)
+>>  export TZ=UTC
+>>  export LANG=C
+>>  export LC_ALL=C
+>> +export SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH)
 > 
-> I believe the latter is simpler, and matches better what future gcc
-> versions will do.
+> Why do you do this instead of just doing
 > 
-> The only drawback is that people using the toolchain (through the
-> wrapper) outside of Buildroot will not benefit from the "fixed" date,
-> unless they define SOURCE_DATE_EPOCH in their environment. But I
-> believe this is OK, because this is anyway the behavior that they would
-> get by using the newest gcc versions that have this feature.
+> export SOURCE_DATE_EPOCH = $(if $(wildcard
+> $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(SOURCE_DATE_CHANGES))
 
-Agreed.
+I wanted keep all exported variables together, but ok.
 
---
+
+>> +SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 
+>> --format=%at)
+>> +SOURCE_DATE_CHANGES = $(shell date -d `echo $(BR2_VERSION) | sed 
+>> 's/^\(....\)\.\(..\).*/\1-\2-01T23:59:59/'` +%s)
+> 
+> Why don't we change the way BR2_VERSION is defined in order to avoid
+> having to do this?
+> 
+> BR2_VERSION_DATE = 2016.11
+> BR2_VERSION = $(BR2_VERSION)-rc1
+> 
+> for example.
+
+OK
+
+-- 
 J?r?me Pouiller
