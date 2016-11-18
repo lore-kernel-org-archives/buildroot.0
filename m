@@ -1,33 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Nov 2016 22:33:07 +0100
-Subject: [Buildroot] [PATCH] configs: snps_aarch64_vdk_defconfig: kernel
- pointing to 4.6
-In-Reply-To: <0a6fcad277c1a7408815a57d9e138272feb0dfed.1479491815.git.jpinto@synopsys.com>
-References: <0a6fcad277c1a7408815a57d9e138272feb0dfed.1479491815.git.jpinto@synopsys.com>
-Message-ID: <20161118223307.36a21a13@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 18 Nov 2016 23:00:12 +0100
+Subject: [Buildroot] [PATCH v1] qwt: fix qt5 opengl support
+Message-ID: <1479506412-28270-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Qt5base BR2_PACKAGE_QT5BASE_OPENGL_LIB depends on BR2_PACKAGE_QT5BASE_OPENGL (see
+package/qt5/qt5base/Config.in), so select it.
 
-On Fri, 18 Nov 2016 18:01:56 +0000, Joao Pinto wrote:
-> Previously the vdk solution was using a linaro kernel that is currently
-> having build problems.
-> Since there is no point in using Linaro anymore for this solution,
-> this patch makes the aarch64 vdk solution point to 4.6 linux kernel.
-> 
-> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-> ---
->  configs/snps_aarch64_vdk_defconfig | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
+Fixes [1]:
 
-Applied to master, thanks.
+  cp: cannot stat '.../output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/lib/libQt5OpenGL.so.*': No such file or directory
 
-Thomas
+[1] http://autobuild.buildroot.net/results/262/2623d48194b778c92134f9bceea923749b26ac6b
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qwt/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qwt/Config.in b/package/qwt/Config.in
+index dabbda2..a678637 100644
+--- a/package/qwt/Config.in
++++ b/package/qwt/Config.in
+@@ -30,6 +30,7 @@ config BR2_PACKAGE_QWT_OPENGL
+ 	depends on (BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_QT) || \
+ 		(BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_PACKAGE_QT5)
+ 	select BR2_PACKAGE_QT_OPENGL if BR2_PACKAGE_QT
++	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5
+ 	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5
+ 
+ endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
