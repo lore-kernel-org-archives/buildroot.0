@@ -1,36 +1,37 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Fri, 18 Nov 2016 14:56:25 +1100
-Subject: [Buildroot] [RFC PATCH 1/1] pkg-autotools: generic configure
- fix for powerpc64
-In-Reply-To: <20161118004854.GC16063@tungsten.ozlabs.ibm.com>
-References: <56063c394c473bf4292658511bae0dd99583be07.1479356115.git.sam.bobroff@au1.ibm.com>
- <20161117110529.55c3578e@free-electrons.com>
- <20161118004854.GC16063@tungsten.ozlabs.ibm.com>
-Message-ID: <20161118035625.GA21421@tungsten.ozlabs.ibm.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Fri, 18 Nov 2016 02:50:36 -0200
+Subject: [Buildroot] 2016.11-rc2 with really old versions of bash (RHEL5)
+References: <f616926e-7b5c-6928-3b4c-89dfe1613374@mind.be>
+Message-ID: <582e889cc9946_18903fa97a91132051065@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[snip]
+Arnout,
 
-> > > +suffix=.powerpc64.orig
-> > 
-> > Do we really want to keep the original files?
-> 
-> Well, no, but now that you mention it, what about this idea:
-> 
-> Use the patch backup file as a way to see if the patch has been applied
-> already and if it has been, skip patching.
-> 
-> At the moment, if you interrupt the configure process (which is quite
-> long) and then re-run the build, it will fail because the patching
-> fails.
+On Thu, Nov 17, 2016 at 08:43 PM, Arnout Vandecappelle wrote:
 
-^--- I've realised that this is wrong, and I should just remove the
-backup file. If configure is already patched, it isn't detected as
-needing a patch so this problem doesn't happen!
+> On 17-11-16 00:14, Max Filippov wrote:
+>> On Wed, Nov 16, 2016 at 2:48 PM, Ricardo Martincoski
+>> <ricardo.martincoski@gmail.com> wrote:
+>>> Do you see the issue described below? Maybe I am doing something wrong.
+>>> What bash version do you have in your RHEL5 servers?
+>> 
+>> Yes, I have this issue. It was introduced by the commit 20cd49738781b ("core:
+>> add support for multiple br2-external trees").
+> 
+>  Would any of you RHEL5 users be able to contribute an autobuilder instance so
+> this kind of issue can be detected on time?
 
-Cheers,
-Sam.
+I sent the e-mail as a heads up to the real users of RHEL5.
+From past e-mails, I know Thomas DS and Max are (or were) users.
+
+For me it's only a VM I sporadically use for tests only.
+I installed bash v4 and resumed my testings.
+
+Just trying to help. Sorry any confusion.
+
+Regards,
+Ricardo
