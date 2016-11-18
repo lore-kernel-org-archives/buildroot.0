@@ -1,68 +1,63 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?= <jezz@sysmic.org>
-Date: Fri, 18 Nov 2016 09:49:51 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 18 Nov 2016 10:09:33 +0100
 Subject: [Buildroot] [PATCH 00/15] Reproducible builds
-In-Reply-To: <20161117150855.4b2c99b9@free-electrons.com>
+In-Reply-To: <abab99dd97db78785de3ba2f274cac65@sysmic.org>
 References: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
  <20161117121341.4a63ed15@free-electrons.com>
  <9798cfe2186532e99707f24481a2a03a@sysmic.org>
  <20161117150855.4b2c99b9@free-electrons.com>
-Message-ID: <abab99dd97db78785de3ba2f274cac65@sysmic.org>
+ <abab99dd97db78785de3ba2f274cac65@sysmic.org>
+Message-ID: <20161118100933.1093db9b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2016-11-17 15:08, Thomas Petazzoni wrote:
-[...]
-> Another (unrelated) question: how can we test this stuff? You're
-> providing the initial steps for it, but at some point, we will want to
-> validate which packages behave properly and which packages don't behave
-> properly. Have you already thought of automated testing we can do (in
-> the autobuilders perhaps?) to exercise this "reproducible builds"
-> functionality? Should we from time to time do a given builds twice,
-> each time in a different environment (different date, different time,
-> different user, different path, different timezone, different locale,
-> etc.) ?
+Hello,
 
-In a first time, compiling each configuration twice, diffing 
-$(TARGET_DIR)
-and find guilty packages using packages-file-list.txt should be enough 
-to find
-a many errors. We may also grep $TARGET_DIR for most common error 
-patterns
-(hostname, user, ...)
+On Fri, 18 Nov 2016 09:49:51 +0100, J?r?me Pouiller wrote:
 
-In a second time, I think reproducible build is an excellent tool to 
-validate
-top level parallelization.
+> In a first time, compiling each configuration twice, diffing 
+> $(TARGET_DIR)
+> and find guilty packages using packages-file-list.txt should be enough 
+> to find
+> a many errors. We may also grep $TARGET_DIR for most common error 
+> patterns
+> (hostname, user, ...)
 
-Finally, for more accurate checks, we need to compile same configuration 
-on
-different host. I didn't check autobuilder sources, but it seems it 
-would
-involve a new autobuilder design.
+OK. So for now we concentrate on timestamp-related variations.
 
+> In a second time, I think reproducible build is an excellent tool to 
+> validate top level parallelization.
 
-> To what extent do we try to be reproducible? Do we try to have
-> something that produces the same result when executed multiple times,
-> but on the same machine, in the same environment (i.e only date/time
-> changes) ? Or do we try to go the point where a given Buildroot .config
-> gives a byte identical output regardless of the host machine on which
-> you do the build? It would be great to know what our definition of
-> "reproducible is", and document it in the help text of the
-> BR2_REPRODUCIBLE option.
+Yes, right.
 
-Ideally, "reproducible" mean that a binary result only depends on 
-Buildroot
-version and user configuration (sure, if a custom script have a 
-non-reproducible
-behavior, result won't be reproducible).
-Currently, there are few known (and doubtless many unknown) bugs:
-    - build paths have to be the sames
-    - lzop shouldn't be used
+> Finally, for more accurate checks, we need to compile same configuration 
+> on different host. I didn't check autobuilder sources, but it seems it 
+> would involve a new autobuilder design.
 
-BR,
+This is clearly not possible with the current autobuilder design,
+indeed. It will require a fairly major rework. However, we are already
+thinking of changing the autobuilder architecture to have the
+configuration generated not by the build slaves themselves, but instead
+by the server. This could be a first step towards having the server
+generate a given configuration, and give it to two separate
+autobuilder slaves. But it's a lot of work to do.
 
+> Ideally, "reproducible" mean that a binary result only depends on 
+> Buildroot version and user configuration (sure, if a custom script have a 
+> non-reproducible behavior, result won't be reproducible).
+
+Right. I believe we should document in the BR2_REPRODUCIBLE help text
+what is our current definition of reproducible. I.e that for the moment
+we only make builds reproducibles if they are built on the same
+machine, in the same path.
+
+Best regards,
+
+Thomas
 -- 
-J?r?me Pouiller
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
