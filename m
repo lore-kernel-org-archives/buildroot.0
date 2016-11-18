@@ -1,38 +1,41 @@
 From: =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?= <jezz@sysmic.org>
-Date: Fri, 18 Nov 2016 14:44:50 +0100
-Subject: [Buildroot] [PATCH v2 04/15] fs/tar: make results reproducible
-In-Reply-To: <20161118142945.60adccd8@free-electrons.com>
+Date: Fri, 18 Nov 2016 14:46:21 +0100
+Subject: [Buildroot] [PATCH v2 02/15] reproducible: fix DATE/TIME macros
+ in toolchain-wrapper
+In-Reply-To: <20161118123704.00772557@free-electrons.com>
 References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
- <1479460224-6119-5-git-send-email-jezz@sysmic.org>
- <20161118124008.2b7a3178@free-electrons.com>
- <28c618b1c91a0df16af32645666e7198@sysmic.org>
- <20161118142945.60adccd8@free-electrons.com>
-Message-ID: <b762049e2698fa9e52f43abd5571d6a2@sysmic.org>
+ <1479460224-6119-3-git-send-email-jezz@sysmic.org>
+ <20161118123704.00772557@free-electrons.com>
+Message-ID: <73a11231172bc9ed95ce28032f53f6bf@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2016-11-18 14:29, Thomas Petazzoni wrote:
-> Hello,
+On 2016-11-18 12:37, Thomas Petazzoni wrote:
+> On Fri, 18 Nov 2016 10:10:11 +0100, J?r?me Pouiller wrote:
 > 
-> On Fri, 18 Nov 2016 14:02:58 +0100, J?r?me Pouiller wrote:
+>> +ifeq ($(BR2_REPRODUCIBLE),y)
+>> +TOOLCHAIN_WRAPPER_ARGS += -DBR_REPRODUCIBLE_TIME="\"\\\"`date -d 
+>> @$(SOURCE_DATE_EPOCH) "+%T"`\\\"\""
+>> +TOOLCHAIN_WRAPPER_ARGS += -DBR_REPRODUCIBLE_DATE="\"\\\"`date -d 
+>> @$(SOURCE_DATE_EPOCH) "+%b %e %Y"`\\\"\""
+>> +endif
 > 
->> My workstation only have tar 1.27 installed. When tar version is 
->> wrong,
->> compilation does not fail. Instead, host-tar is compiled before any
->> other packages (see support/dependencies/check-host-tar.mk)
+> Do we need to encode the dates in the wrapper, or should we have the
+> wrapper read at runtime the SOURCE_DATE_EPOCH environment variable?
 > 
-> Yes, I know, but it's a pain to force everyone using an old distro to
-> build host-tar. Maybe we should make this conditional on
-> BR2_REPRODUCIBLE?
+> I believe the latter is simpler, and matches better what future gcc
+> versions will do.
+> 
+> The only drawback is that people using the toolchain (through the
+> wrapper) outside of Buildroot will not benefit from the "fixed" date,
+> unless they define SOURCE_DATE_EPOCH in their environment. But I
+> believe this is OK, because this is anyway the behavior that they would
+> get by using the newest gcc versions that have this feature.
 
-Last Ubuntu LTS is 16.04 and Debian 9 will be stable in a few months 
-(maybe
-simultaneous with next Buildroot version).
-
-So, IMHO it not justified to add a dirty condition in check-host-tar.sh.
+Agreed.
 
 --
 J?r?me Pouiller
