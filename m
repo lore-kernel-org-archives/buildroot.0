@@ -1,30 +1,48 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 18 Nov 2016 07:39:37 +0200
-Subject: [Buildroot] [PATCH] olsr: fix package name display
-Message-ID: <f2e7a59828f3542eeca072e3c450be24df0555c4.1479447577.git.baruch@tkos.co.il>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 18 Nov 2016 05:43:39 +0000
+Subject: [Buildroot] [Bug 9431] New: A misspelling
+Message-ID: <bug-9431-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the package name, olsr, instead of the tarball file name.
+https://bugs.busybox.net/show_bug.cgi?id=9431
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+            Bug ID: 9431
+           Summary: A misspelling
+           Product: buildroot
+           Version: 2016.08
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: xichao at sina.cn
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
+
+Created attachment 6806
+  --> https://bugs.busybox.net/attachment.cgi?id=6806&action=edit
+Look at the red circle marked place.
+
+I found a misspelling in file: package/quagga/Config.in
+
+Here is my comparison after the change:
+
+xxx:~/buildroot-2016.08/package/quagga$ diff Config.in Config.in-ok 
+28c28
+<       bool "BPGv4+ protocol"
 ---
- package/olsr/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 	bool "BGPv4+ protocol"
+30c30
+<         Build bpgd daemon.
+---
+> 	  Build bgpd daemon.
 
-diff --git a/package/olsr/Config.in b/package/olsr/Config.in
-index 2f3d024bd6df..85c5b4da1f87 100644
---- a/package/olsr/Config.in
-+++ b/package/olsr/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_OLSR
--	bool "olsrd"
-+	bool "olsr"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
 -- 
-2.10.2
+You are receiving this mail because:
+You are on the CC list for the bug.
