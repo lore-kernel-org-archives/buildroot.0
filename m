@@ -1,66 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Nov 2016 10:33:35 +0100
-Subject: [Buildroot] [PATCH v2 07/15] reproducibility/busybox: disable
- build timestamps
-In-Reply-To: <1479460224-6119-8-git-send-email-jezz@sysmic.org>
-References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
- <1479460224-6119-8-git-send-email-jezz@sysmic.org>
-Message-ID: <1f1f08e9-fb43-3de9-abc9-294096869349@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 18 Nov 2016 22:30:09 +0100
+Subject: [Buildroot] [git commit] configs: snps_aarch64_vdk_defconfig:
+	kernel pointing to 4.6
+Message-ID: <20161119093658.0E91C81844@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=d9eeadbcc340c5e345d7c4d96b572e0e37f262da
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Previously the vdk solution was using a Linaro kernel that doesn't
+build with gcc 5.x.
 
-On 18-11-16 10:10, J?r?me Pouiller wrote:
-> From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-> 
-> Busybox include a few information about build environment in its binary. This
-> feature is incompatible with BR2_REPRODUCIBLE feature. This patch overload build
-> information when BR2_REPRODUCIBLE is enabled.
+Since there is no point in using Linaro anymore for this solution,
+this patch makes the aarch64 vdk defconfig point to the 4.6 Linux
+kernel.
 
- Commit message is not very English :-)
+Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/snps_aarch64_vdk_defconfig | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-Busybox includes some information about the build environment in its binary. For
-BR2_REPRODUCIBLE, remove that information.
-
-
- Regards,
- Arnout
-
-> 
-> Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/busybox/busybox.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index fc23a90..f4a241d 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -36,6 +36,12 @@ BUSYBOX_MAKE_ENV = \
->  	$(TARGET_MAKE_ENV) \
->  	CFLAGS="$(BUSYBOX_CFLAGS)" \
->  	CFLAGS_busybox="$(BUSYBOX_CFLAGS_busybox)"
-> +
-> +ifeq ($(BR2_REPRODUCIBLE),y)
-> +BUSYBOX_MAKE_ENV += \
-> +	KCONFIG_NOTIMESTAMP=1
-> +endif
-> +
->  BUSYBOX_MAKE_OPTS = \
->  	CC="$(TARGET_CC)" \
->  	ARCH=$(KERNEL_ARCH) \
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/configs/snps_aarch64_vdk_defconfig b/configs/snps_aarch64_vdk_defconfig
+index f165a9a..b55dce1 100644
+--- a/configs/snps_aarch64_vdk_defconfig
++++ b/configs/snps_aarch64_vdk_defconfig
+@@ -1,12 +1,10 @@
+ BR2_aarch64=y
+-# Linux headers same as kernel, a 3.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
+ BR2_TARGET_GENERIC_HOSTNAME="vdk-buildroot"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS VDK by Buildroot"
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.linaro.org/kernel/linux-linaro-tracking.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-3.18-2014.12"
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/synopsys/vdk/linux-vdk-aarch64-defconfig"
+ BR2_TARGET_ROOTFS_EXT2=y
