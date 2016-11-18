@@ -1,48 +1,49 @@
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Date: Fri, 18 Nov 2016 12:19:08 +0100
-Subject: [Buildroot] 2016.11-rc2 with really old versions of bash (RHEL5)
-In-Reply-To: <582e889cc9946_18903fa97a91132051065@ultri3.mail>
-References: <f616926e-7b5c-6928-3b4c-89dfe1613374@mind.be>
- <582e889cc9946_18903fa97a91132051065@ultri3.mail>
-Message-ID: <CAAXf6LVEBYOL0fcm=KTDYpnGyhWQkQ5UUgF5i6_nXka+O-0xAQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 18 Nov 2016 12:33:51 +0100
+Subject: [Buildroot] [PATCH v2 01/15] reproducibility: generate
+ SOURCE_DATE_EPOCH
+In-Reply-To: <1479460224-6119-2-git-send-email-jezz@sysmic.org>
+References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
+ <1479460224-6119-2-git-send-email-jezz@sysmic.org>
+Message-ID: <20161118123351.69e79602@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hello,
 
-On Fri, Nov 18, 2016 at 5:50 AM, Ricardo Martincoski
-<ricardo.martincoski@gmail.com> wrote:
-> Arnout,
->
-> On Thu, Nov 17, 2016 at 08:43 PM, Arnout Vandecappelle wrote:
->
->> On 17-11-16 00:14, Max Filippov wrote:
->>> On Wed, Nov 16, 2016 at 2:48 PM, Ricardo Martincoski
->>> <ricardo.martincoski@gmail.com> wrote:
->>>> Do you see the issue described below? Maybe I am doing something wrong.
->>>> What bash version do you have in your RHEL5 servers?
->>>
->>> Yes, I have this issue. It was introduced by the commit 20cd49738781b ("core:
->>> add support for multiple br2-external trees").
->>
->>  Would any of you RHEL5 users be able to contribute an autobuilder instance so
->> this kind of issue can be detected on time?
->
-> I sent the e-mail as a heads up to the real users of RHEL5.
-> From past e-mails, I know Thomas DS and Max are (or were) users.
->
+On Fri, 18 Nov 2016 10:10:10 +0100, J?r?me Pouiller wrote:
 
-True, I still need to support some RHEL5 machines, although the
-majority is at RHEL6 and RHEL7 (or CentOS equivalents).
-We are not using BR2_EXTERNAL though, so if I could get around it by
-making sure the script is not actually called, I would be fine.
+> diff --git a/Makefile b/Makefile
+> index eff814b..17e49e4 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -249,6 +249,10 @@ ifeq ($(BR2_REPRODUCIBLE),y)
+>  export TZ=UTC
+>  export LANG=C
+>  export LC_ALL=C
+> +export SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH)
 
-So strictly speaking for my own needs, I wouldn't really mind requiring bash 4.
-(but please don't start using bash 4 features in other,
-non-br2-external scripts just yet :-) )
+Why do you do this instead of just doing
 
-Best regards,
+export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(SOURCE_DATE_CHANGES))
+
+> +SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
+> +SOURCE_DATE_CHANGES = $(shell date -d `echo $(BR2_VERSION) | sed 's/^\(....\)\.\(..\).*/\1-\2-01T23:59:59/'` +%s)
+
+Why don't we change the way BR2_VERSION is defined in order to avoid having to do this?
+
+BR2_VERSION_DATE = 2016.11
+BR2_VERSION = $(BR2_VERSION)-rc1
+
+for example.
+
+Thanks,
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
