@@ -1,12 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Nov 2016 09:45:47 +0100
-Subject: [Buildroot] [PATCH 02/10] core: add waf-package infra
-In-Reply-To: <671071c5-0fba-8834-3837-7f7ff5cf82fa@mind.be>
+Date: Fri, 18 Nov 2016 09:46:37 +0100
+Subject: [Buildroot] [PATCH 03/10] docs/manual: document the waf-package
+ infra
+In-Reply-To: <20161117204739.GD3574@free.fr>
 References: <cover.1477843328.git.yann.morin.1998@free.fr>
- <6556713514fd3c751384c5ea655420dba5e8876a.1477843328.git.yann.morin.1998@free.fr>
- <20161117000239.36cd4e77@free-electrons.com>
- <671071c5-0fba-8834-3837-7f7ff5cf82fa@mind.be>
-Message-ID: <20161118094547.08f2f956@free-electrons.com>
+ <e41ab5eee8961c89c1fe9c4566383844e36b24f9.1477843328.git.yann.morin.1998@free.fr>
+ <20161117000456.04b7e672@free-electrons.com>
+ <20161117204739.GD3574@free.fr>
+Message-ID: <20161118094637.502607c8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,18 +16,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 18 Nov 2016 00:52:58 +0100, Arnout Vandecappelle wrote:
-
->  Well, it makes sense to me that a package infra does something like that, but
-> less so that the waf package itself would do it. And it's just simpler if the
-> dependency is only in the infra.
+On Thu, 17 Nov 2016 21:47:39 +0100, Yann E. MORIN wrote:
+> Thomas, All,
 > 
->  However, I wonder if we need this dependency at all. We already require a
-> python (although admittedly we don't check the version). The few packages that
-> don't support python3 can add the dependency themselves. Building host-python
-> really eats into the build time...
+> On 2016-11-17 00:04 +0100, Thomas Petazzoni spake thusly:
+> > On Sun, 30 Oct 2016 17:02:14 +0100, Yann E. MORIN wrote:  
+> [--SNIP--]
+> > > +* +LIBFOO_BUNDLED_WAF+ can be set to +YES+ or +NO+ to tell Buildroot to
+> > > +  use the bundled +waf+ executable. If set to +YES+, the default, then  
+> > YES is in fact not the default :-)  
+> 
+> Well, "! NO" is the default. ;-)
 
-Is waf python2/python3 compliant?
+Nope, I think you're getting it wrong like on IRC. The default is
+actually empty, which means "YES", i.e "the waf script is bundled and
+there is no need to add a dependency on host-waf".
 
 Thomas
 -- 
