@@ -1,36 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Nov 2016 12:43:38 +0100
-Subject: [Buildroot] [PATCH v2 08/15] reproducible: lock modification
- times in $TARGET_DIR
-In-Reply-To: <1479460224-6119-9-git-send-email-jezz@sysmic.org>
-References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
- <1479460224-6119-9-git-send-email-jezz@sysmic.org>
-Message-ID: <20161118124338.3168b4de@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 18 Nov 2016 11:46:02 +0000
+Subject: [Buildroot] [PATCH] tiff: fix website URL
+Message-ID: <20161118114602.59906-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/tiff/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri, 18 Nov 2016 10:10:17 +0100, J?r?me Pouiller wrote:
-> Make sure all files in $TARGET_DIR has a defined modification time before to
-
-has -> have
-
-> generate filesystems.
-> 
-> This work was sponsored by `BA Robotic Systems'.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Same: I'll apply soon if nobody complains.
-
-Thomas
+diff --git a/package/tiff/Config.in b/package/tiff/Config.in
+index 6e5c176..092a7f3 100644
+--- a/package/tiff/Config.in
++++ b/package/tiff/Config.in
+@@ -3,7 +3,7 @@ menuconfig BR2_PACKAGE_TIFF
+ 	help
+ 	  Library for handling TIFF (Tag Image File Format) images.
+ 
+-	  http://www.remotesensing.org/libtiff/
++	  http://simplesystems.org/libtiff/
+ 
+ if BR2_PACKAGE_TIFF
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.10.1
