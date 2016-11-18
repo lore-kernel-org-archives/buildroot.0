@@ -1,69 +1,52 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Fri, 18 Nov 2016 10:10:11 +0100
-Subject: [Buildroot] [PATCH v2 02/15] reproducible: fix DATE/TIME macros in
-	toolchain-wrapper
+Date: Fri, 18 Nov 2016 10:10:15 +0100
+Subject: [Buildroot] [PATCH v2 06/15] reproducibility/linux: inhibit build-id
 In-Reply-To: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
 References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479460224-6119-3-git-send-email-jezz@sysmic.org>
+Message-ID: <1479460224-6119-7-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The use __DATE__ and __TIME__ are one of most common sources of
-non-reproducible binaries. We take advantage of toolchain-wrapper to fix
-these macros.
+By default, Linux kernel enable 'build-id'. 'build-id' tends to add random
+bytes in section .notes of kernel image[1]:
 
-Notice this workaround will be useless this next gcc versions since it will
-include suport for SOURCE_DATE_EPOCH variable.
+  $ readelf -Wn .../vmlinux
+  Displaying notes found at file offset 0x00008000 with length 0x00000024:
+    Owner                 Data size       Description
+    GNU                  0x00000014       NT_GNU_BUILD_ID (unique build ID bitstring)
+      Build ID: ca689e2ed3944f49474715908e2ac1bb04907fb2
 
-Note: quoting of $(TOOLCHAIN_WRAPPER_ARGS) is a mess, but I did not find easier
-way to do (without involving `$(shell ...)')
+Therefore, we patch kernel Makefile to disable 'build-id'.
+
+[1] https://kernelnewbies.org/BuildId
 
 This work was sponsored by `BA Robotic Systems'.
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- toolchain/toolchain-wrapper.c  | 9 +++++++++
- toolchain/toolchain-wrapper.mk | 5 +++++
- 2 files changed, 14 insertions(+)
+ linux/linux.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index 925d013..28709ec 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -75,6 +75,15 @@ static char *predef_args[] = {
- #if defined(BR_MIPS_TARGET_BIG_ENDIAN) || defined(BR_ARC_TARGET_BIG_ENDIAN)
- 	"-EB",
- #endif
-+#if defined(BR_REPRODUCIBLE_TIME) || defined(BR_REPRODUCIBLE_DATE)
-+	"-Wno-builtin-macro-redefined",
-+#endif
-+#ifdef BR_REPRODUCIBLE_TIME
-+	"-D__TIME__=" BR_REPRODUCIBLE_TIME,
-+#endif
-+#ifdef BR_REPRODUCIBLE_DATE
-+	"-D__DATE__=" BR_REPRODUCIBLE_DATE,
-+#endif
- #ifdef BR_ADDITIONAL_CFLAGS
- 	BR_ADDITIONAL_CFLAGS
- #endif
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index e7aa5fb..7067134 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -30,6 +30,11 @@ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
- endif
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7e826cc..a63d1f3 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -209,6 +209,13 @@ define LINUX_TRY_PATCH_TIMECONST
+ endef
+ LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
  
 +ifeq ($(BR2_REPRODUCIBLE),y)
-+TOOLCHAIN_WRAPPER_ARGS += -DBR_REPRODUCIBLE_TIME="\"\\\"`date -d @$(SOURCE_DATE_EPOCH) "+%T"`\\\"\""
-+TOOLCHAIN_WRAPPER_ARGS += -DBR_REPRODUCIBLE_DATE="\"\\\"`date -d @$(SOURCE_DATE_EPOCH) "+%b %e %Y"`\\\"\""
++define LINUX_REMOVE_BUILD_ID
++	sed -i -e s/--build-id/--build-id=none/ $(@D)/Makefile
++endef
++LINUX_POST_PATCH_HOOKS += LINUX_REMOVE_BUILD_ID
 +endif
 +
- define TOOLCHAIN_WRAPPER_BUILD
- 	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
- 		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
+ else ifeq ($(BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG),y)
 -- 
 1.9.1
