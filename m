@@ -1,77 +1,47 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Fri, 18 Nov 2016 10:10:09 +0100
-Subject: [Buildroot] [PATCH v2 00/15] Reproducible builds
-Message-ID: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
+Date: Fri, 18 Nov 2016 10:10:14 +0100
+Subject: [Buildroot] [PATCH v2 05/15] reproducibility/linux: override build
+	timestamp
+In-Reply-To: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
+References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1479460224-6119-6-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series try to continue work initiated by Gilles Chanteperdrix:
-  http://lists.busybox.net/pipermail/buildroot/2016-April/thread.html#160064
-  http://lists.busybox.net/pipermail/buildroot/2016-June/thread.html#163905
+From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
 
-I dropped some patchs from original series because either:
-  - I handled things differently (timestamps in images, support SOURCE_DATE_EPOCH
-    in gcc, ...)
-  - I didn't had time to test them them (sysroot, cpio, cdrkit, iso9660,...)
-  - They doesn't seems necessary anymore (libtool, libgcrypt, libgpg-error, ...)
+Linux kernel include a few information about build environment in its binary.
+This feature is incompatible with BR2_REPRODUCIBLE. This patch overload build
+information when BR2_REPRODUCIBLE is enabled.
 
-This version focuses on timestamps. It provide good enough results as soon as
-OUTDIR and TOPDIR are the same. Indeed build path appear in plenty of files.
-Only patch called "remove full path from .pyc" try to solve this issue. Another
-big step could be done by removing rpaths from ELF generated with libtool.
+Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ linux/linux.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Other thing known to break reproducibility:
-  - use of lzop (it unconditionally include timestamps in result)
-  - /!\ since we build our own toolchain and toolchain include BR2_FULL_VERSION,
-    ccache is incompatible with reproducible
-  - debug symbols are not reproducible
-
-Since this feature is experimental I did not (yet) reported these
-incompatibilities in menuconfig.
-
-v2:
-  - overload __TIME__ and __DATE__ instead of patching gcc
-  - improve BR2_REPRODUCIBLE help text
-
-Gilles Chanteperdrix (3):
-  reproducibility: generate SOURCE_DATE_EPOCH
-  reproducibility/linux: override build timestamp
-  reproducibility/busybox: disable build timestamps
-
-J?r?me Pouiller (12):
-  reproducible: fix DATE/TIME macros in toolchain-wrapper
-  reproducible: add '-n' to gzip invocations
-  fs/tar: make results reproducible
-  reproducibility/linux: inhibit build-id
-  reproducible: lock modification times in $TARGET_DIR
-  fakedate: new package
-  reproducible: enable fakedate
-  python2: generate reproducible .pyc
-  python3: generate reproducible .pyc
-  python2: remove full path from .pyc
-  python3: remove full path from .pyc
-  reproducible: improve help text
-
- Config.in                              |  5 +++++
- Makefile                               |  5 +++++
- fs/common.mk                           |  3 +++
- fs/tar/tar.mk                          |  2 +-
- linux/linux.mk                         | 15 ++++++++++++++
- package/busybox/busybox.mk             |  6 ++++++
- package/fakedate/fakedate              | 28 ++++++++++++++++++++++++++
- package/fakedate/fakedate.mk           | 14 +++++++++++++
- package/python/python.mk               | 36 ++++++++++++++++++++++------------
- package/python3/python3.mk             | 35 +++++++++++++++++++++------------
- support/dependencies/check-host-tar.sh |  5 ++---
- toolchain/toolchain-wrapper.c          |  9 +++++++++
- toolchain/toolchain-wrapper.mk         |  5 +++++
- toolchain/toolchain/toolchain.mk       |  4 ++++
- 14 files changed, 142 insertions(+), 30 deletions(-)
- create mode 100755 package/fakedate/fakedate
- create mode 100644 package/fakedate/fakedate.mk
-
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 988427c..7e826cc 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -94,6 +94,14 @@ LINUX_MAKE_ENV = \
+ 	$(TARGET_MAKE_ENV) \
+ 	BR_BINARIES_DIR=$(BINARIES_DIR)
+ 
++ifeq ($(BR2_REPRODUCIBLE),y)
++LINUX_MAKE_ENV += \
++	KBUILD_BUILD_VERSION=1 \
++	KBUILD_BUILD_USER=buildroot \
++	KBUILD_BUILD_HOST=buildroot \
++	KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
++endif
++
+ # Get the real Linux version, which tells us where kernel modules are
+ # going to be installed in the target filesystem.
+ LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
 -- 
 1.9.1
