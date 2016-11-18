@@ -1,55 +1,32 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?= <jezz@sysmic.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 18 Nov 2016 14:48:56 +0100
-Subject: [Buildroot] [PATCH v2 01/15] reproducibility: generate
- SOURCE_DATE_EPOCH
-In-Reply-To: <20161118123351.69e79602@free-electrons.com>
-References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
- <1479460224-6119-2-git-send-email-jezz@sysmic.org>
- <20161118123351.69e79602@free-electrons.com>
-Message-ID: <2b86da687b4149f70193b3dbf2ec9cab@sysmic.org>
+Subject: [Buildroot] [git commit] tiff: fix website URL
+Message-ID: <20161118134904.AB53481E42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2016-11-18 12:33, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 18 Nov 2016 10:10:10 +0100, J?r?me Pouiller wrote:
-> 
->> diff --git a/Makefile b/Makefile
->> index eff814b..17e49e4 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -249,6 +249,10 @@ ifeq ($(BR2_REPRODUCIBLE),y)
->>  export TZ=UTC
->>  export LANG=C
->>  export LC_ALL=C
->> +export SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH)
-> 
-> Why do you do this instead of just doing
-> 
-> export SOURCE_DATE_EPOCH = $(if $(wildcard
-> $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(SOURCE_DATE_CHANGES))
+commit: https://git.buildroot.net/buildroot/commit/?id=d149dae430d09dfb77d5a938e5581def5b866735
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I wanted keep all exported variables together, but ok.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tiff/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
->> +SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 
->> --format=%at)
->> +SOURCE_DATE_CHANGES = $(shell date -d `echo $(BR2_VERSION) | sed 
->> 's/^\(....\)\.\(..\).*/\1-\2-01T23:59:59/'` +%s)
-> 
-> Why don't we change the way BR2_VERSION is defined in order to avoid
-> having to do this?
-> 
-> BR2_VERSION_DATE = 2016.11
-> BR2_VERSION = $(BR2_VERSION)-rc1
-> 
-> for example.
-
-OK
-
--- 
-J?r?me Pouiller
+diff --git a/package/tiff/Config.in b/package/tiff/Config.in
+index 6e5c176..092a7f3 100644
+--- a/package/tiff/Config.in
++++ b/package/tiff/Config.in
+@@ -3,7 +3,7 @@ menuconfig BR2_PACKAGE_TIFF
+ 	help
+ 	  Library for handling TIFF (Tag Image File Format) images.
+ 
+-	  http://www.remotesensing.org/libtiff/
++	  http://simplesystems.org/libtiff/
+ 
+ if BR2_PACKAGE_TIFF
+ 
