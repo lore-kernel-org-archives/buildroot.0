@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Nov 2016 12:37:04 +0100
-Subject: [Buildroot] [PATCH v2 02/15] reproducible: fix DATE/TIME macros
- in toolchain-wrapper
-In-Reply-To: <1479460224-6119-3-git-send-email-jezz@sysmic.org>
+Date: Fri, 18 Nov 2016 12:38:05 +0100
+Subject: [Buildroot] [PATCH v2 03/15] reproducible: add '-n' to gzip
+ invocations
+In-Reply-To: <1479460224-6119-4-git-send-email-jezz@sysmic.org>
 References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
- <1479460224-6119-3-git-send-email-jezz@sysmic.org>
-Message-ID: <20161118123704.00772557@free-electrons.com>
+ <1479460224-6119-4-git-send-email-jezz@sysmic.org>
+Message-ID: <20161118123805.7e0645ef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 18 Nov 2016 10:10:11 +0100, J?r?me Pouiller wrote:
+On Fri, 18 Nov 2016 10:10:12 +0100, J?r?me Pouiller wrote:
+> Default invocation to gzip include timestamp in output file. This feature is
+> incompatible with BR2_REPRODUCIBLE. It is possible to disable it with '-n'.
+> 
+> The environment variable GZIP can hold a set of default options for gzip. So
+> instead to find all gzip invocation in build process, we just export 'GZIP=-n'.
+> 
+> Notice bzip2, lzma and xz are impacted by this problem. On the other hand, lzop
+> include timestamp and does not provide any way to disable it.
+> 
+> This work was sponsored by `BA Robotic Systems'.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-> +ifeq ($(BR2_REPRODUCIBLE),y)
-> +TOOLCHAIN_WRAPPER_ARGS += -DBR_REPRODUCIBLE_TIME="\"\\\"`date -d @$(SOURCE_DATE_EPOCH) "+%T"`\\\"\""
-> +TOOLCHAIN_WRAPPER_ARGS += -DBR_REPRODUCIBLE_DATE="\"\\\"`date -d @$(SOURCE_DATE_EPOCH) "+%b %e %Y"`\\\"\""
-> +endif
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Do we need to encode the dates in the wrapper, or should we have the
-wrapper read at runtime the SOURCE_DATE_EPOCH environment variable?
-
-I believe the latter is simpler, and matches better what future gcc
-versions will do.
-
-The only drawback is that people using the toolchain (through the
-wrapper) outside of Buildroot will not benefit from the "fixed" date,
-unless they define SOURCE_DATE_EPOCH in their environment. But I
-believe this is OK, because this is anyway the behavior that they would
-get by using the newest gcc versions that have this feature.
-
-It would make all the quoting mess a bit simpler :)
-
-Best regards,
+If nobody complains about this patch, I'm going to apply it to the next
+branch soon.
 
 Thomas
 -- 
