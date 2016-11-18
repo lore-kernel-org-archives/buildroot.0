@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Nov 2016 12:48:06 +0100
-Subject: [Buildroot] [PATCH v2 09/15] fakedate: new package
-In-Reply-To: <1479460224-6119-10-git-send-email-jezz@sysmic.org>
+Date: Fri, 18 Nov 2016 12:49:33 +0100
+Subject: [Buildroot] [PATCH v2 10/15] reproducible: enable fakedate
+In-Reply-To: <1479460224-6119-11-git-send-email-jezz@sysmic.org>
 References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
- <1479460224-6119-10-git-send-email-jezz@sysmic.org>
-Message-ID: <20161118124806.01b19431@free-electrons.com>
+ <1479460224-6119-11-git-send-email-jezz@sysmic.org>
+Message-ID: <20161118124933.68b64d53@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,48 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 18 Nov 2016 10:10:18 +0100, J?r?me Pouiller wrote:
-> `date' is widely used by packages to include build information in their
-> binaries. Unfortunately, this is incompatible with  BR2_REPRODUCIBLE.
-> 
-> Instead to find all `date' invocation in build process, we add small tool
-> allowing to alway return same date.
+On Fri, 18 Nov 2016 10:10:19 +0100, J?r?me Pouiller wrote:
 
-Instead of having to identify all `date' invocations in the different
-packages, this commit adds a small tool that allows to always return
-the same date.
+> +ifeq ($(BR2_REPRODUCIBLE),y)
+> +TOOLCHAIN_DEPENDENCIES += host-fakedate
+> +endif
 
-> +PATH=/bin:/usr/bin
+Unfortunately, this means that fakedate is only installed at the end of
+the toolchain build process. So the entire toolchain is built without
+fakedate installed.
 
-It is not really nice to override the PATH. I guess you want to remove
-$(HOST_DIR)/usr/bin from the PATH to not call yourself recursively, but
-I think we should do better than assuming /bin:/usr/bin is OK.
+Is it because we assume that the toolchain build process is safe (i.e
+it doesn't call "date") ?
 
-> +LOG=/dev/null
+Perhaps it should be added in DEPENDENCIES_HOST_PREREQ instead ?
 
-This variable is used by?
-
-> +if [ -n "$SOURCE_DATE_EPOCH" ]; then
-> +    INHIBIT=0
-> +    for i in "$@"; do
-> +        case $i in
-> +        -d|-[!-]*d|--date=*|-f|-[!-]*f|--file=*)
-> +            INHIBIT=1
-> +            ;;
-> +        esac
-> +    done
-> +    if [ $INHIBIT -eq 0 ]; then
-> +        echo "date: Warning: using \$SOURCE_DATE_EPOCH instead of true time" >&2
-> +        echo "Catch call to date from `pwd` with parameters: '$@'" >> $LOG
-> +        exec date -d "@$SOURCE_DATE_EPOCH" "$@"
-> +    fi
-> +fi
-> +
-> +exec date "$@"
-
-Could you explain a bit the logic here?
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
