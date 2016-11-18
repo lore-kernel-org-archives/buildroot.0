@@ -1,45 +1,39 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Fri, 18 Nov 2016 10:10:16 +0100
-Subject: [Buildroot] [PATCH v2 07/15] reproducibility/busybox: disable build
-	timestamps
+Date: Fri, 18 Nov 2016 10:10:17 +0100
+Subject: [Buildroot] [PATCH v2 08/15] reproducible: lock modification times
+	in $TARGET_DIR
 In-Reply-To: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
 References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479460224-6119-8-git-send-email-jezz@sysmic.org>
+Message-ID: <1479460224-6119-9-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+Make sure all files in $TARGET_DIR has a defined modification time before to
+generate filesystems.
 
-Busybox include a few information about build environment in its binary. This
-feature is incompatible with BR2_REPRODUCIBLE feature. This patch overload build
-information when BR2_REPRODUCIBLE is enabled.
+This work was sponsored by `BA Robotic Systems'.
 
-Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/busybox/busybox.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ fs/common.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index fc23a90..f4a241d 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -36,6 +36,12 @@ BUSYBOX_MAKE_ENV = \
- 	$(TARGET_MAKE_ENV) \
- 	CFLAGS="$(BUSYBOX_CFLAGS)" \
- 	CFLAGS_busybox="$(BUSYBOX_CFLAGS_busybox)"
-+
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+BUSYBOX_MAKE_ENV += \
-+	KCONFIG_NOTIMESTAMP=1
+diff --git a/fs/common.mk b/fs/common.mk
+index 2dbef4d..981dcb1 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -95,6 +95,9 @@ endif
+ 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+ 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+ 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
++ifeq ($$(BR2_REPRODUCIBLE),y)
++	echo "find $$(TARGET_DIR) -print0 | xargs -0 -r touch -hd @$$(SOURCE_DATE_EPOCH)" >> $$(FAKEROOT_SCRIPT)
 +endif
-+
- BUSYBOX_MAKE_OPTS = \
- 	CC="$(TARGET_CC)" \
- 	ARCH=$(KERNEL_ARCH) \
+ 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+ 	chmod a+x $$(FAKEROOT_SCRIPT)
+ 	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/pseudo -- $$(FAKEROOT_SCRIPT)
 -- 
 1.9.1
