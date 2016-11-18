@@ -1,63 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Nov 2016 10:09:33 +0100
-Subject: [Buildroot] [PATCH 00/15] Reproducible builds
-In-Reply-To: <abab99dd97db78785de3ba2f274cac65@sysmic.org>
-References: <1479376839-27795-1-git-send-email-jezz@sysmic.org>
- <20161117121341.4a63ed15@free-electrons.com>
- <9798cfe2186532e99707f24481a2a03a@sysmic.org>
- <20161117150855.4b2c99b9@free-electrons.com>
- <abab99dd97db78785de3ba2f274cac65@sysmic.org>
-Message-ID: <20161118100933.1093db9b@free-electrons.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Fri, 18 Nov 2016 10:10:10 +0100
+Subject: [Buildroot] [PATCH v2 01/15] reproducibility: generate
+	SOURCE_DATE_EPOCH
+In-Reply-To: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
+References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1479460224-6119-2-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
 
-On Fri, 18 Nov 2016 09:49:51 +0100, J?r?me Pouiller wrote:
+When reproducibility is requested, generate a global SOURCE_DATE_EPOCH
+environment variable which contains either the date of Buildroot last
+commit if running from a git repository, or the latest release date.
 
-> In a first time, compiling each configuration twice, diffing 
-> $(TARGET_DIR)
-> and find guilty packages using packages-file-list.txt should be enough 
-> to find
-> a many errors. We may also grep $TARGET_DIR for most common error 
-> patterns
-> (hostname, user, ...)
+This means that all packages embedding build dates will appear to
+have the same build date, so in case of new commit or release, all
+packages will appear to have been change, even though some of them
+may not have changed in fact.
 
-OK. So for now we concentrate on timestamp-related variations.
+The meaning of SOURCE_DATE_EPOCH is specified by the following
+specification:
+  https://reproducible-builds.org/specs/source-date-epoch/
 
-> In a second time, I think reproducible build is an excellent tool to 
-> validate top level parallelization.
+Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Yes, right.
-
-> Finally, for more accurate checks, we need to compile same configuration 
-> on different host. I didn't check autobuilder sources, but it seems it 
-> would involve a new autobuilder design.
-
-This is clearly not possible with the current autobuilder design,
-indeed. It will require a fairly major rework. However, we are already
-thinking of changing the autobuilder architecture to have the
-configuration generated not by the build slaves themselves, but instead
-by the server. This could be a first step towards having the server
-generate a given configuration, and give it to two separate
-autobuilder slaves. But it's a lot of work to do.
-
-> Ideally, "reproducible" mean that a binary result only depends on 
-> Buildroot version and user configuration (sure, if a custom script have a 
-> non-reproducible behavior, result won't be reproducible).
-
-Right. I believe we should document in the BR2_REPRODUCIBLE help text
-what is our current definition of reproducible. I.e that for the moment
-we only make builds reproducibles if they are built on the same
-machine, in the same path.
-
-Best regards,
-
-Thomas
+diff --git a/Makefile b/Makefile
+index eff814b..17e49e4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -249,6 +249,10 @@ ifeq ($(BR2_REPRODUCIBLE),y)
+ export TZ=UTC
+ export LANG=C
+ export LC_ALL=C
++export SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH)
++SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
++SOURCE_DATE_CHANGES = $(shell date -d `echo $(BR2_VERSION) | sed 's/^\(....\)\.\(..\).*/\1-\2-01T23:59:59/'` +%s)
++SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(SOURCE_DATE_CHANGES))
+ endif
+ 
+ # To put more focus on warnings, be less verbose as default
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+1.9.1
