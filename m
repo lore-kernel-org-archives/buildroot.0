@@ -1,66 +1,86 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Nov 2016 09:33:02 +0100
-Subject: [Buildroot] [PATCH v2 04/15] fs/tar: make results reproducible
-In-Reply-To: <20161118222823.155c12a2@free-electrons.com>
-References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
- <1479460224-6119-5-git-send-email-jezz@sysmic.org>
- <20161118124008.2b7a3178@free-electrons.com>
- <28c618b1c91a0df16af32645666e7198@sysmic.org>
- <20161118142945.60adccd8@free-electrons.com>
- <b762049e2698fa9e52f43abd5571d6a2@sysmic.org>
- <20161118222823.155c12a2@free-electrons.com>
-Message-ID: <6d2cdd59-09d2-8545-3524-a3c32e7f2840@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 19 Nov 2016 09:39:09 +0100
+Subject: [Buildroot] 2016.11-rc2 with really old versions of bash (RHEL5)
+In-Reply-To: <7725a865-0665-5747-6bfb-518224e3825b@mind.be>
+References: <20161113210740.3a8cedb2@free-electrons.com>
+ <582ce22d87e4_b6b11ecfac31990@ultri3.mail>
+ <20161116231312.GA27675@free.fr>
+ <7725a865-0665-5747-6bfb-518224e3825b@mind.be>
+Message-ID: <20161119083909.GA3614@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Arnout, All,
 
-
-On 18-11-16 22:28, Thomas Petazzoni wrote:
-> Hello,
+On 2016-11-17 23:41 +0100, Arnout Vandecappelle spake thusly:
+> On 17-11-16 00:13, Yann E. MORIN wrote:
+> > Ricardo, All,
+> > 
+> > On 2016-11-16 20:48 -0200, Ricardo Martincoski spake thusly:
+> >> Do you see the issue described below? Maybe I am doing something wrong.
+> >> What bash version do you have in your RHEL5 servers?
+> >>
+> >> All,
+> >>
+> >> Ancient versions of bash don't support 'Associative arrays', leading to build
+> >> error using 2016.11-rc2 in a plain vanilla RHEL5.
+> > 
+> > Asociative arrays were introduced in bash-4.0, indeed.
+> > 
+> > Doing without associative arrays is not very easy. Rather, it would be
+> > very difficult.
 > 
-> On Fri, 18 Nov 2016 14:44:50 +0100, J?r?me Pouiller wrote:
+>  The associative arrays can be overcome relatively easily with eval;
+
+Well, I am fully aware we could do it that way. That's not something I'd
+have called "easy", though. It is technically easy, but the maintenance
+burden is higher (as it is a trick).
+
+> the indexed
+> array BR2_EXT_NAMES would be trickier to remove.
+
+Indexed arrays have been there since at least 3.0, released in 2004, so
+even RHEL4 should have it...
+
+> This is possible because we
+> require the names to be only [A-Za-z0-9_] so they can be used as variable names.
+
+Right. It's fortunate that kconfig does not allow variable names with a
+dash or I'd have allowed that as well.
+
+>  The idea is to do:
 > 
->>> Yes, I know, but it's a pain to force everyone using an old distro to
->>> build host-tar. Maybe we should make this conditional on
->>> BR2_REPRODUCIBLE?  
->>
->> Last Ubuntu LTS is 16.04 and Debian 9 will be stable in a few months 
->> (maybe simultaneous with next Buildroot version).
->>
->> So, IMHO it not justified to add a dirty condition in check-host-tar.sh.
+> -    BR2_EXT_PATHS["${br2_name}"]="${br2_ext}"
+> +    eval BR2_EXT_PATH_${br2_name}='"${br2_ext}"'
 > 
-> I think you don't really realize how big companies work. They will be
-> using such version in 3 or 5 years maybe.
+> and
 > 
-> We have people still using RHEL5, even though it's almost 10 years old,
-> and its support going to stop next year. Supporting old distributions
-> is important for Buildroot, so you can't just sweep away the problem by
-> pretending that it doesn't exist with modern distributions.
+> -        printf ' %s' "${BR2_EXT_PATHS["${br2_name}"]}"
+> +        eval "printf ' %s' \"\${BR2_EXT_PATH_${br2_name}}\""
+> 
+>  It's horribly ugly, but it does work. Well, at least I think so :-)
 
- I'm absolutely with Thomas on this one.
+Yes, something like this would work. But as you said, it is relatively
+ugly. I had to maintain such a trick in the past and this is just a
+nightmare...
 
- Also, it doesn't have to be very dirty. In check-host-tar.sh the major_min and
-minor_min can be passed as arguments, and in check-host-tar.mk we can do
+For the records, RHEL5 standard support deadline in in March 2017, 4
+months from now, but extended support is expected until 2021...
 
-ifeq ($(BR2_REPRODUCIBLE),y)
-TAR_VERSION_MIN = 1 28
-else
-TAR_VERSION_MIN = 1 17
-endif
-ifeq (,$(call suitable-host-package,tar,$(TAR) $(TAR_VERSION_MIN))
-...
+But oh well... We still need to know whether we still consider RHEL5 as
+our oldest (unoffocially) supported platform, or if we just bite the
+bullet and require bash-4.
 
-
- Regards,
- Arnout
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
