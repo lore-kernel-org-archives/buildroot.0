@@ -1,9 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Nov 2016 10:50:35 +0100
-Subject: [Buildroot] [PATCH v1] qwt: fix qt5 opengl support
-In-Reply-To: <1479506412-28270-1-git-send-email-ps.report@gmx.net>
-References: <1479506412-28270-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20161119105035.43de950b@free-electrons.com>
+Date: Sat, 19 Nov 2016 10:51:59 +0100
+Subject: [Buildroot] [PATCH v2 01/15] reproducibility: generate
+ SOURCE_DATE_EPOCH
+In-Reply-To: <d4388412-d390-fc7e-f6ba-685cb6a2104e@mind.be>
+References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
+ <1479460224-6119-2-git-send-email-jezz@sysmic.org>
+ <20161118123351.69e79602@free-electrons.com>
+ <d4388412-d390-fc7e-f6ba-685cb6a2104e@mind.be>
+Message-ID: <20161119105159.0c7aed4b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +16,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 18 Nov 2016 23:00:12 +0100, Peter Seiderer wrote:
-> Qt5base BR2_PACKAGE_QT5BASE_OPENGL_LIB depends on BR2_PACKAGE_QT5BASE_OPENGL (see
-> package/qt5/qt5base/Config.in), so select it.
-> 
-> Fixes [1]:
-> 
->   cp: cannot stat '.../output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/lib/libQt5OpenGL.so.*': No such file or directory
-> 
-> [1] http://autobuild.buildroot.net/results/262/2623d48194b778c92134f9bceea923749b26ac6b
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/qwt/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+On Sat, 19 Nov 2016 09:51:27 +0100, Arnout Vandecappelle wrote:
 
-Applied to master, thanks.
+>  Or maybe even easier:
+> 
+> BR2_VERSION = 2016.11-rc1
+> BR2_VERSION_EPOCH = 1479545409
+
+Yes, this seems like a good idea. It's a bit annoying that we have to
+update this, but it's the cleanest solution.
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
