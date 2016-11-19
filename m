@@ -1,36 +1,36 @@
 From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Sat, 19 Nov 2016 14:49:27 +0100
-Subject: [Buildroot] [PATCH v2 03/15] reproducible: add '-n' to gzip
-	invocations
-In-Reply-To: <ce34ec94-7d1f-56d9-0063-42fd003a2418@mind.be>
+Date: Sat, 19 Nov 2016 14:53:15 +0100
+Subject: [Buildroot] [PATCH v2 05/15] reproducibility/linux: override
+	build timestamp
+In-Reply-To: <20161118124035.2a18431b@free-electrons.com>
 References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
- <1479460224-6119-4-git-send-email-jezz@sysmic.org>
- <ce34ec94-7d1f-56d9-0063-42fd003a2418@mind.be>
-Message-ID: <2527638.eCg5RPtaPY@sagittea>
+ <1479460224-6119-6-git-send-email-jezz@sysmic.org>
+ <20161118124035.2a18431b@free-electrons.com>
+Message-ID: <3760418.eHefN4R8xK@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Saturday 19 November 2016 10:02:46 Arnout Vandecappelle wrote:
+On Friday 18 November 2016 12:40:35 Thomas Petazzoni wrote:
+> Hello,
 > 
-> On 18-11-16 10:10, J?r?me Pouiller wrote:
-> > Default invocation to gzip include timestamp in output file. This feature is
-> > incompatible with BR2_REPRODUCIBLE. It is possible to disable it with '-n'.
-> > 
-> > The environment variable GZIP can hold a set of default options for gzip. So
-> > instead to find all gzip invocation in build process, we just export 'GZIP=-n'.
-> > 
-> > Notice bzip2, lzma and xz are impacted by this problem. On the other hand, lzop
+> On Fri, 18 Nov 2016 10:10:14 +0100, J?r?me Pouiller wrote:
 > 
->  Unless I'm very mistaken, they are NOT impacted by this problem.
+> > +ifeq ($(BR2_REPRODUCIBLE),y)
+> > +LINUX_MAKE_ENV += \
+> > +	KBUILD_BUILD_VERSION=1 \
+> > +	KBUILD_BUILD_USER=buildroot \
+> > +	KBUILD_BUILD_HOST=buildroot \
+> > +	KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
+> 
+> With your "fakedate" script, do we really need this last line?
 
-Sure!
+I prefer to use native solution when upstream provide one. I hope one
+day all packages will be fixed by upstream and we could get ride of
+fakedate.
 
-BR,
 
 -- 
 J?r?me Pouiller, Sysmic
