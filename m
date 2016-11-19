@@ -1,54 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Nov 2016 10:49:18 +0100
-Subject: [Buildroot] [PATCH] tslib: bump version to 1.2
-In-Reply-To: <1479486965-23362-1-git-send-email-martink@posteo.de>
-References: <1479486965-23362-1-git-send-email-martink@posteo.de>
-Message-ID: <20161119104918.1e0dbf1d@free-electrons.com>
+Date: Sat, 19 Nov 2016 10:50:19 +0100
+Subject: [Buildroot] [git commit] qwt: fix qt5 opengl support
+Message-ID: <20161119095026.57819817B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d20845c447d5b6a9d4ef5d1fc2c82b2dfb70480b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 18 Nov 2016 17:36:05 +0100, Martin Kepplinger wrote:
->  * The first patch is removed because the input-raw plugin is now enabled
->    in tslib's provided ts.conf
-> 
->  * The second patch added 2 programs to tslib. The whole patch is removed
->    because:
->    - ts_finddev is now part of tslib.
-> 
->    - inputattach is part of the 'Linux console project' located
->      here: https://sourceforge.net/projects/linuxconsole/
-> 
-> Signed-off-by: Martin Kepplinger <martink@posteo.de>
+Qt5base BR2_PACKAGE_QT5BASE_OPENGL_LIB depends on BR2_PACKAGE_QT5BASE_OPENGL (see
+package/qt5/qt5base/Config.in), so select it.
 
-Applied to next, thanks!
+Fixes [1]:
 
-> If we want to keep the inputattach program, wouldn't it be the more correct
-> way to include that 'Linux console project' in buildroot?
+  cp: cannot stat '.../output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/lib/libQt5OpenGL.so.*': No such file or directory
 
-Yes, it would definitely be more correct.
+[1] http://autobuild.buildroot.net/results/262/2623d48194b778c92134f9bceea923749b26ac6b
 
-> Alternatively, I could come up with a new version of this patch, including
-> only inputattach here again. (at least an updated version of it. that project
-> is actively maintained.)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qwt/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-We normally don't include in Buildroot patches that add new features to
-packages, so in fact this patch adding ts_finddev and inputattach
-(which had been there for a very long time) was not even complying with
-this rule.
-
-It would however be good to have the "Linux console" project packaged,
-so that if people were using the inputattach program from tslib, we can
-tell them to enable the linuxconsole package.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/qwt/Config.in b/package/qwt/Config.in
+index dabbda2..a678637 100644
+--- a/package/qwt/Config.in
++++ b/package/qwt/Config.in
+@@ -30,6 +30,7 @@ config BR2_PACKAGE_QWT_OPENGL
+ 	depends on (BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_QT) || \
+ 		(BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_PACKAGE_QT5)
+ 	select BR2_PACKAGE_QT_OPENGL if BR2_PACKAGE_QT
++	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5
+ 	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5
+ 
+ endif
