@@ -1,58 +1,71 @@
 From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Sat, 19 Nov 2016 14:06:46 +0100
+Date: Sat, 19 Nov 2016 14:24:24 +0100
 Subject: [Buildroot] [PATCH v2 09/15] fakedate: new package
-In-Reply-To: <7024db7a-ff5f-312d-fb00-16ed463c79e0@mind.be>
+In-Reply-To: <20161118124806.01b19431@free-electrons.com>
 References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
  <1479460224-6119-10-git-send-email-jezz@sysmic.org>
- <7024db7a-ff5f-312d-fb00-16ed463c79e0@mind.be>
-Message-ID: <147980227.jl3AtNLvoX@sagittea>
+ <20161118124806.01b19431@free-electrons.com>
+Message-ID: <1726749.nuZtMxpYh2@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday 19 November 2016 11:21:39 Arnout Vandecappelle wrote:
-> On 18-11-16 10:10, J?r?me Pouiller wrote:
+Hello,
+
+On Friday 18 November 2016 12:48:06 Thomas Petazzoni wrote:
+> On Fri, 18 Nov 2016 10:10:18 +0100, J?r?me Pouiller wrote:
 [...]
+> > +PATH=/bin:/usr/bin
+> 
+> It is not really nice to override the PATH. I guess you want to remove
+> $(HOST_DIR)/usr/bin from the PATH to not call yourself recursively, but
+> I think we should do better than assuming /bin:/usr/bin is OK.
+
+My initial idea was something based on:
+    sed "s/@@DATE_CMD@@/`which date`/"
+
+However, I worried about people who add $HOST_DIR in their $PATH and
+call host-fakedate-reinstall.
+
+However, stripping $(dirname $0) from PATH during runtime seems a good
+idea. I will try that.
+
+> > +LOG=/dev/null
+> 
+> This variable is used by?
+
+In my initial version, I logged calls to fakedate in $BUILD_DIR.
+I removed the log file, but it may be convenient to easily restore it
+if necessary.
+
+> > +if [ -n "$SOURCE_DATE_EPOCH" ]; then
+> > +    INHIBIT=0
 > > +    for i in "$@"; do
 > > +        case $i in
 > > +        -d|-[!-]*d|--date=*|-f|-[!-]*f|--file=*)
-> 
->  We use [^-] everywhere else.
-
-It seems this syntax is a bashism. From glob(7): "POSIX has declared
-the effect of a wildcard pattern "[^...]" to be undefined" (and I
-confirm it does not work with dash)
-
->  Note that this pattern will also match something
-> like -rfrood, i.e. --reference=frood. Fixing that becomes tricky without regexp.
-
-hmmm... yes, it matches -rfrood (and it is what we want), but it does not
-match --reference=frood, isn't?
-
- 
->  Anyway, the -d option doesn't really need to be checked. 'date -d foo -d bar'
-> will ignore the first -d, so things work OK. It's just that you get the spurious
-> warning. So we could limit to checking -f, and limit to -f|--file=*). In that
-> case, if someone passes something like -uf we'll get an error and the build will
-> most likely terminate, so that particular error can be fixed.
-
-You are right. However, since it may produce unexpected situation, I
-prefer to identify precisely the cases where fakedate is used. 
-
-[...]
+> > +            INHIBIT=1
 > > +            ;;
 > > +        esac
 > > +    done
 > > +    if [ $INHIBIT -eq 0 ]; then
 > > +        echo "date: Warning: using \$SOURCE_DATE_EPOCH instead of true time" >&2
+> > +        echo "Catch call to date from `pwd` with parameters: '$@'" >> $LOG
+> > +        exec date -d "@$SOURCE_DATE_EPOCH" "$@"
+> > +    fi
+> > +fi
+> > +
+> > +exec date "$@"
 > 
->  Is it really needed to print this warning?
+> Could you explain a bit the logic here?
 
-From user point of view, result of `date' when fakedate is installed
-is unexpected. I prefer to warn.
+If this script is called with '--date', '--file' or any aliases of
+these option, just call `date' as usual. Else, this script force
+returned date.
 
+
+BR,
 
 -- 
 J?r?me Pouiller, Sysmic
