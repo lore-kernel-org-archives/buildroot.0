@@ -1,122 +1,142 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 19 Nov 2016 11:52:26 +0100
-Subject: [Buildroot] [PATCH] core/br2-external: restore compatibility with
-	old distros
-Message-ID: <1479552746-21355-1-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 19 Nov 2016 13:02:26 +0100
+Subject: [Buildroot] [PATCH 1/1] host-python: Really do not use the
+ system OpenSSL.
+In-Reply-To: <20161117150649.5568-1-nicolas.cavallari@green-communications.fr>
+References: <43b2e7d1-6366-3d98-89f1-d2ab7ca3db2c@green-communications.fr>
+ <20161117150649.5568-1-nicolas.cavallari@green-communications.fr>
+Message-ID: <2c158563-8cb5-f271-68e6-3c173bd2f3b1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the br2-external script uses bash-4's associative arrays.
 
-However, some oldish enterprise-class distros like RHEL5 still use
-bash-3.1 which lacks associative arrays.
 
-We restore compatibility with those oldish distros using 'eval' to
-emulate associative arrays, as suggested by Arnout.
+On 17-11-16 16:06, Nicolas Cavallari wrote:
+> Even if buildroot patches host-python to not compile the 'ssl' module,
+> the '_ssl' and '_hashlib' module are still compiled if python detects
+> an usable OpenSSL installation.  This may break compilation if the
+> system's OpenSSL has been updated to 1.1.0 because of a bug in python,
+> see https://bugs.python.org/issue26470 for details.
+> 
+> If python does not detect an usable openssl installation for _hashlib,
+> it uses internal implementation of common hash algorithms instead.
+> 
+> This modifies the configure.ac patch to also disable _ssl and _hashlib
+> if --disable-ssl is used.
+> 
+> It must also modify setup.py to force enabling the internal
+> implementation of hash algorithms if _hashlib is disabled, otherwise, if
+> an usable openssl installation is detected, it will not compile
+> them and python will end up with no hash algorithm implementation at all,
+> breaking host-python-pycrypto and its reverse-dependencies like crda.
+> 
+> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 
-Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
----
- support/scripts/br2-external | 34 +++++++++++++++++-----------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+ I'm facing this problem as well: host-python doesn't build anymore on my machine.
 
-diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-index 055dc08..84bc334 100755
---- a/support/scripts/br2-external
-+++ b/support/scripts/br2-external
-@@ -1,10 +1,12 @@
- #!/bin/bash
- set -e
- 
--# The names and locations of the br2-external trees, once validated.
-+# This script must be able to run with bash-3.1, so it can't use
-+# associative arrays. Instead, it emulates them using 'eval'. It
-+# can however use indexed arrays, supported since at least bash-3.0.
-+
-+# The names of the br2-external trees, once validated.
- declare -a BR2_EXT_NAMES
--declare -A BR2_EXT_PATHS
--declare -A BR2_EXT_DESCS
- 
- # URL to manual for help in converting old br2-external trees.
- # Escape '#' so that make does not consider it a comment.
-@@ -68,7 +70,7 @@ do_validate() {
- 
- do_validate_one() {
-     local br2_ext="${1}"
--    local br2_name br2_desc n
-+    local br2_name br2_desc n d
- 
-     if [ ! -d "${br2_ext}" ]; then
-         error "'%s': no such file or directory\n" "${br2_ext}"
-@@ -91,9 +93,10 @@ do_validate_one() {
-         error "'%s': name '%s' contains invalid chars: '%s'\n" \
-             "${br2_ext}" "${br2_name//\$/\$\$}" "${n//\$/\$\$}"
-     fi
--    if [ -n "${BR2_EXT_PATHS["${br2_name}"]}" ]; then
-+    eval d="\"\${BR2_EXT_PATHS_${br2_name}}\""
-+    if [ -n "${d}" ]; then
-         error "'%s': name '%s' is already used in '%s'\n" \
--            "${br2_ext}" "${br2_name}" "${BR2_EXT_PATHS["${br2_name}"]}"
-+            "${br2_ext}" "${br2_name}" "${d}"
-     fi
-     br2_desc="$(sed -r -e '/^desc: +(.*)$/!d; s//\1/' "${br2_ext}/external.desc")"
-     if [ ! -f "${br2_ext}/external.mk" ]; then
-@@ -105,8 +108,8 @@ do_validate_one() {
- 
-     # Register this br2-external tree
-     BR2_EXT_NAMES+=( "${br2_name}" )
--    BR2_EXT_PATHS["${br2_name}"]="${br2_ext}"
--    BR2_EXT_DESCS["${br2_name}"]="${br2_desc:-${br2_name}}"
-+    eval BR2_EXT_PATHS_${br2_name}="\"\${br2_ext}\""
-+    eval BR2_EXT_DESCS_${br2_name}="\"\${br2_desc:-\${br2_name}}\""
- }
- 
- # Generate the .mk snippet that defines makefile variables
-@@ -117,13 +120,10 @@ do_mk() {
-     printf '#\n# Automatically generated file; DO NOT EDIT.\n#\n'
-     printf '\n'
- 
--    # We can't use ${BR2_EXT_NAMES[@]} directly: it is not guaranteed
--    # to be in the order paths were added (because it is an associative
--    # array). So we need to iterate on BR2_EXT_NAMES, which is sorted
--    # in the order names were added (because it is an indexed array).
-     printf 'BR2_EXTERNAL ?='
-     for br2_name in "${BR2_EXT_NAMES[@]}"; do
--        printf ' %s' "${BR2_EXT_PATHS["${br2_name}"]}"
-+        eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
-+        printf ' %s' "${br2_ext}"
-     done
-     printf '\n'
- 
-@@ -138,8 +138,8 @@ do_mk() {
-     fi
- 
-     for br2_name in "${BR2_EXT_NAMES[@]}"; do
--        br2_desc="${BR2_EXT_DESCS["${br2_name}"]}"
--        br2_ext="${BR2_EXT_PATHS["${br2_name}"]}"
-+        eval br2_desc="\"\${BR2_EXT_DESCS_${br2_name}}\""
-+        eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
-         printf '\n'
-         printf 'BR2_EXTERNAL_NAMES += %s\n' "${br2_name}"
-         printf 'BR2_EXTERNAL_DIRS += %s\n' "${br2_ext}"
-@@ -165,8 +165,8 @@ do_kconfig() {
-     printf '\n'
- 
-     for br2_name in "${BR2_EXT_NAMES[@]}"; do
--        br2_desc="${BR2_EXT_DESCS["${br2_name}"]}"
--        br2_ext="${BR2_EXT_PATHS["${br2_name}"]}"
-+        eval br2_desc="\"\${BR2_EXT_DESCS_${br2_name}}\""
-+        eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
-         if [ ${#BR2_EXT_NAMES[@]} -gt 1 ]; then
-             printf 'menu "%s"\n' "${br2_desc}"
-         fi
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+ However, I wonder if this is the right approach. For me, it makes more sense to
+fix patch 111 by modifying setup.py in the same patch, so that the entire ssl
+detection is skipped if the ssl module is disabled. Something like:
+
+         exts.append( Extension('_socket', ['socketmodule.c', 'timemodule.c'],
+                                depends=['socketmodule.h'],
+                                libraries=math_libs) )
+-        # Detect SSL support for the socket module (via _ssl)
+-        search_for_ssl_incs_in = [
+-                              '/usr/local/ssl/include',
+-                              '/usr/contrib/ssl/include/'
+-                             ]
++        if 'ssl' in disabled_module_list:
++            # Force using the non-openssl fallbacks _md5 and _sha*.
++            have_any_openssl = False
++            have_usable_openssl = False
++            openssl_ver = 0
++        else:
++            # Detect SSL support for the socket module (via _ssl)
++            search_for_ssl_incs_in = [
++                                  '/usr/local/ssl/include',
++                                  '/usr/contrib/ssl/include/'
++                                ]
+[...]
+
+         if have_any_openssl:
+             if have_usable_openssl:
+
+
+
+ Regards,
+ Arnout
+
+> ---
+>  .../019-force-internal-hash-if-ssl-disabled.patch  | 22 ++++++++++++++++++++++
+>  package/python/111-optional-ssl.patch              |  3 ++-
+>  2 files changed, 24 insertions(+), 1 deletion(-)
+>  create mode 100644 package/python/019-force-internal-hash-if-ssl-disabled.patch
+> 
+> Not sure if I should have added my signed off on 111-optional-ssl.patch
+> after modifying it.
+> 
+> diff --git a/package/python/019-force-internal-hash-if-ssl-disabled.patch b/package/python/019-force-internal-hash-if-ssl-disabled.patch
+> new file mode 100644
+> index 0000000..ff594ca
+> --- /dev/null
+> +++ b/package/python/019-force-internal-hash-if-ssl-disabled.patch
+> @@ -0,0 +1,22 @@
+> +Force the use of internal hash implementations if _hashlib is disabled.
+> +
+> +Otherwise, python ends up with no hash algorithm implementation at all,
+> +breaking python-pycrypto and its reverse-dependencies.
+> +
+> +Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> +
+> +--- a/setup.py	2016-11-16 18:02:01.120854546 +0100
+> ++++ b/setup.py	2016-11-17 09:52:32.485674999 +0100
+> +@@ -863,6 +863,12 @@ class PyBuildExt(build_ext):
+> +         have_usable_openssl = (have_any_openssl and
+> +                                openssl_ver >= min_openssl_ver)
+> + 
+> ++        if '_hashlib' in disabled_module_list:
+> ++            # Force using the non-openssl fallbacks _md5 and _sha*.
+> ++            have_any_openssl = False
+> ++            have_usable_openssl = False
+> ++            openssl_ver = 0
+> ++
+> +         if have_any_openssl:
+> +             if have_usable_openssl:
+> +                 # The _hashlib module wraps optimized implementations
+> diff --git a/package/python/111-optional-ssl.patch b/package/python/111-optional-ssl.patch
+> index 956d2a0..89a8947 100644
+> --- a/package/python/111-optional-ssl.patch
+> +++ b/package/python/111-optional-ssl.patch
+> @@ -1,6 +1,7 @@
+>  Add an option to disable the ssl module
+>  
+>  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+>  
+>  ---
+>   configure.in |    6 ++++++
+> @@ -17,7 +18,7 @@ Index: b/configure.ac
+>  +AC_ARG_ENABLE(ssl,
+>  +	AS_HELP_STRING([--disable-ssl], [disable SSL]),
+>  +	[ if test "$enableval" = "no"; then
+> -+    	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl"
+> ++    	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl _ssl _hashlib"
+>  +  	  fi])
+>  +
+>   AC_ARG_ENABLE(dbm,
+> 
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
