@@ -1,139 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Nov 2016 10:59:27 +0100
-Subject: [Buildroot] [PATCH] stella: fix bug when compiling with PPC
- altivec vectorization
-In-Reply-To: <1479404832-11783-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1479404832-11783-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20161119105927.57bd516a@free-electrons.com>
+Date: Sat, 19 Nov 2016 11:00:34 +0100
+Subject: [Buildroot] [git commit] package/udisks: fix daemon path in systemd
+	service file
+Message-ID: <20161119100132.573AB80301@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sam,
+commit: https://git.buildroot.net/buildroot/commit/?id=320d73ab1bb56aa7505dfe800770f15ca3aa5fc5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Could you review the below patch, which is PowerPC/Altivec related, and
-let us know what you think?
+Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/udisks/0002-Fix-systemd-service-file.patch | 33 ++++++++++++++++++++++
+ package/udisks/udisks.mk                           |  2 ++
+ 2 files changed, 35 insertions(+)
 
-Thanks!
-
-Thomas
-
-On Thu, 17 Nov 2016 15:47:12 -0200, Sergio Prado wrote:
-> PPC altivec vectorization triggers a bug when compiling with -std=c++11
-> because "bool" is redefined in altivec.h.
-> 
-> src/emucore/Event.hxx:112:23: error: cannot convert ?bool? to ?__vector(4) __bool int? in assignment
->          myKeyTable[i] = false;
->                        ^
-> 
-> Acording to a bug report in GCC [1], "You need to use -std=g++11 or
-> undefine bool after the include of altivec.h as context sensitive
-> keywords is not part of the C++11 standard".
-> 
-> So let's compile with -std=gnu++11 when PPC altivec is enabled.
-> 
-> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58241#c3
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/0970d2c8e1787ceffc46b589522e53d52675e03c
-> http://autobuild.buildroot.net/results/ec1bc57675b6e53af0cd33d7b99cd2e3bf5d9d7e
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
->  ...XFLAGS-so-we-can-append-values-to-user-de.patch | 40 ++++++++++++++++++++++
->  package/stella/stella.mk                           | 14 +++++++-
->  2 files changed, 53 insertions(+), 1 deletion(-)
->  create mode 100644 package/stella/0004-Override-CXXFLAGS-so-we-can-append-values-to-user-de.patch
-> 
-> diff --git a/package/stella/0004-Override-CXXFLAGS-so-we-can-append-values-to-user-de.patch b/package/stella/0004-Override-CXXFLAGS-so-we-can-append-values-to-user-de.patch
-> new file mode 100644
-> index 000000000000..7e82c571e2c1
-> --- /dev/null
-> +++ b/package/stella/0004-Override-CXXFLAGS-so-we-can-append-values-to-user-de.patch
-> @@ -0,0 +1,40 @@
-> +From f81bec4d6e523df308158d6bd6f948be4d0183ba Mon Sep 17 00:00:00 2001
-> +From: Sergio Prado <sergio.prado@e-labworks.com>
-> +Date: Thu, 17 Nov 2016 15:26:56 -0200
-> +Subject: [PATCH] Override CXXFLAGS so we can append values to user-defined
-> + CXXFLAGS.
-> +
-> +Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> +---
-> + Makefile | 8 ++++----
-> + 1 file changed, 4 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index 6dd0129587b3..7133ca58ac49 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -49,17 +49,17 @@ ifdef CXXFLAGS
-> + else
-> +   CXXFLAGS:= -O2
-> + endif
-> +-CXXFLAGS+= -Wall -Wextra -Wno-unused-parameter -Wno-ignored-qualifiers
-> ++override CXXFLAGS+= -Wall -Wextra -Wno-unused-parameter -Wno-ignored-qualifiers
-> + ifdef HAVE_GCC
-> +-  CXXFLAGS+= -Wno-multichar -Wunused -fno-rtti -Woverloaded-virtual -Wnon-virtual-dtor -std=c++11
-> ++  override CXXFLAGS+= -Wno-multichar -Wunused -fno-rtti -Woverloaded-virtual -Wnon-virtual-dtor
-> + endif
-> + 
-> + ifdef PROFILE
-> +   PROF:= -g -pg -fprofile-arcs -ftest-coverage
-> +-  CXXFLAGS+= $(PROF)
-> ++  override CXXFLAGS+= $(PROF)
-> + else
-> +   ifdef HAVE_GCC
-> +-    CXXFLAGS+= -fomit-frame-pointer
-> ++    override CXXFLAGS+= -fomit-frame-pointer
-> +   endif
-> + endif
-> + 
-> +-- 
-> +1.9.1
-> +
-> diff --git a/package/stella/stella.mk b/package/stella/stella.mk
-> index 2e9d57b8c1ea..11cdd6adcd97 100644
-> --- a/package/stella/stella.mk
-> +++ b/package/stella/stella.mk
-> @@ -12,11 +12,23 @@ STELLA_LICENSE_FILES = Copyright.txt License.txt
->  
->  STELLA_DEPENDENCIES = sdl2 libpng zlib
->  
-> +STELLA_CXXFLAGS = $(TARGET_CFLAGS)
-> +
-> +# PPC altivec vectorization triggers a bug when compiling with -std=c++11
-> +# so let's compile it with -std=gnu++11
-> +ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
-> +STELLA_CXXFLAGS += -std=gnu++11
-> +else
-> +STELLA_CXXFLAGS += -std=c++11
-> +endif
-> +
->  STELLA_CONF_OPTS = \
->  	--host=$(GNU_TARGET_NAME) \
->  	--prefix=/usr \
->  	--with-sdl-prefix=$(STAGING_DIR)/usr
->  
-> +STELLA_MAKE_OPTS += CXXFLAGS="$(STELLA_CXXFLAGS)"
-> +
->  # The configure script is not autoconf based, so we use the
->  # generic-package infrastructure
->  define STELLA_CONFIGURE_CMDS
-> @@ -28,7 +40,7 @@ define STELLA_CONFIGURE_CMDS
->  endef
->  
->  define STELLA_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(STELLA_MAKE_OPTS) -C $(@D)
->  endef
->  
->  define STELLA_INSTALL_TARGET_CMDS
-
-
-
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/udisks/0002-Fix-systemd-service-file.patch b/package/udisks/0002-Fix-systemd-service-file.patch
+new file mode 100644
+index 0000000..ea347ae
+--- /dev/null
++++ b/package/udisks/0002-Fix-systemd-service-file.patch
+@@ -0,0 +1,33 @@
++From bf8b4362cef24a6f747e4329305a4939c8f585d1 Mon Sep 17 00:00:00 2001
++From: David King <amigadave@amigadave.com>
++Date: Thu, 2 Jul 2015 13:49:22 +0100
++Subject: [PATCH] Fix systemd service file
++
++udisks-daemon is installed to $(libexecdir), not $(prefix)/lib/udisks.
++
++https://bugzilla.redhat.com/show_bug.cgi?id=1238664
++https://bugs.freedesktop.org/show_bug.cgi?id=91191
++
++[This patch has been backported from upstream:
++https://cgit.freedesktop.org/udisks/commit/?h=udisks1&id=bf8b4362cef24a6f747e4329305a4939c8f585d1]
++Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
++---
++ data/Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/data/Makefile.am b/data/Makefile.am
++index 411ea0f..08af5f4 100644
++--- a/data/Makefile.am
+++++ b/data/Makefile.am
++@@ -31,7 +31,7 @@ systemdservicedir       = $(systemdsystemunitdir)
++ systemdservice_DATA     = $(systemdservice_in_files:.service.in=.service)
++ 
++ $(systemdservice_DATA): $(systemdservice_in_files) Makefile
++-	@sed -e "s|\@libexecdir\@|$(prefix)/lib/udisks|" $< > $@
+++	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
++ endif
++ 
++ udevrulesdir = $(slashlibdir)/udev/rules.d
++-- 
++2.7.4
++
+diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
+index eea79e5..4d3ede7 100644
+--- a/package/udisks/udisks.mk
++++ b/package/udisks/udisks.mk
+@@ -8,6 +8,8 @@ UDISKS_VERSION = 1.0.5
+ UDISKS_SITE = http://hal.freedesktop.org/releases
+ UDISKS_LICENSE = GPLv2+
+ UDISKS_LICENSE_FILES = COPYING
++# For 0002-Fix-systemd-service-file.patch
++UDISKS_AUTORECONF = YES
+ 
+ UDISKS_DEPENDENCIES = 	\
+ 	sg3_utils	\
