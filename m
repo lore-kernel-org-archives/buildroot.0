@@ -1,62 +1,68 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Nov 2016 09:40:30 +0100
+Date: Sat, 19 Nov 2016 09:51:27 +0100
 Subject: [Buildroot] [PATCH v2 01/15] reproducibility: generate
  SOURCE_DATE_EPOCH
-In-Reply-To: <1479460224-6119-2-git-send-email-jezz@sysmic.org>
+In-Reply-To: <20161118123351.69e79602@free-electrons.com>
 References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
  <1479460224-6119-2-git-send-email-jezz@sysmic.org>
-Message-ID: <8e378a5c-3ba6-15cd-431c-c52dd6bb0d23@mind.be>
+ <20161118123351.69e79602@free-electrons.com>
+Message-ID: <d4388412-d390-fc7e-f6ba-685cb6a2104e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- In addition to Thomas's comments:
 
-On 18-11-16 10:10, J?r?me Pouiller wrote:
-> From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+
+On 18-11-16 12:33, Thomas Petazzoni wrote:
+> Hello,
 > 
-> When reproducibility is requested, generate a global SOURCE_DATE_EPOCH
-> environment variable which contains either the date of Buildroot last
-> commit if running from a git repository, or the latest release date.
+> On Fri, 18 Nov 2016 10:10:10 +0100, J?r?me Pouiller wrote:
 > 
-> This means that all packages embedding build dates will appear to
-> have the same build date, so in case of new commit or release, all
-> packages will appear to have been change, even though some of them
-                                    changed
+>> diff --git a/Makefile b/Makefile
+>> index eff814b..17e49e4 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -249,6 +249,10 @@ ifeq ($(BR2_REPRODUCIBLE),y)
+>>  export TZ=UTC
+>>  export LANG=C
+>>  export LC_ALL=C
+>> +export SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH)
+> 
+> Why do you do this instead of just doing
+> 
+> export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(SOURCE_DATE_CHANGES))
+> 
+>> +SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
+>> +SOURCE_DATE_CHANGES = $(shell date -d `echo $(BR2_VERSION) | sed 's/^\(....\)\.\(..\).*/\1-\2-01T23:59:59/'` +%s)
+> 
+> Why don't we change the way BR2_VERSION is defined in order to avoid having to do this?
+> 
+> BR2_VERSION_DATE = 2016.11
+> BR2_VERSION = $(BR2_VERSION)-rc1
+
+ Or maybe even easier:
+
+BR2_VERSION = 2016.11-rc1
+BR2_VERSION_EPOCH = 1479545409
+
+(where the EPOCH is the actual time the release is cut, instead of some fixed
+time in the month).
+
+ This is particularly useful for 2016.11.1, which otherwise would have the same
+EPOCH as 2016.11.
 
 
  Regards,
  Arnout
 
-> may not have changed in fact.
 > 
-> The meaning of SOURCE_DATE_EPOCH is specified by the following
-> specification:
->   https://reproducible-builds.org/specs/source-date-epoch/
+> for example.
 > 
-> Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
+> Thanks,
 > 
-> diff --git a/Makefile b/Makefile
-> index eff814b..17e49e4 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -249,6 +249,10 @@ ifeq ($(BR2_REPRODUCIBLE),y)
->  export TZ=UTC
->  export LANG=C
->  export LC_ALL=C
-> +export SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH)
-> +SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
-> +SOURCE_DATE_CHANGES = $(shell date -d `echo $(BR2_VERSION) | sed 's/^\(....\)\.\(..\).*/\1-\2-01T23:59:59/'` +%s)
-> +SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(SOURCE_DATE_CHANGES))
->  endif
->  
->  # To put more focus on warnings, be less verbose as default
+> Thomas
 > 
 
 -- 
