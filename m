@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Nov 2016 09:51:27 +0100
-Subject: [Buildroot] [PATCH v2 01/15] reproducibility: generate
- SOURCE_DATE_EPOCH
-In-Reply-To: <20161118123351.69e79602@free-electrons.com>
+Date: Sat, 19 Nov 2016 10:02:46 +0100
+Subject: [Buildroot] [PATCH v2 03/15] reproducible: add '-n' to gzip
+ invocations
+In-Reply-To: <1479460224-6119-4-git-send-email-jezz@sysmic.org>
 References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
- <1479460224-6119-2-git-send-email-jezz@sysmic.org>
- <20161118123351.69e79602@free-electrons.com>
-Message-ID: <d4388412-d390-fc7e-f6ba-685cb6a2104e@mind.be>
+ <1479460224-6119-4-git-send-email-jezz@sysmic.org>
+Message-ID: <ce34ec94-7d1f-56d9-0063-42fd003a2418@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,54 +14,56 @@ To: buildroot@busybox.net
 
 
 
-On 18-11-16 12:33, Thomas Petazzoni wrote:
-> Hello,
+On 18-11-16 10:10, J?r?me Pouiller wrote:
+> Default invocation to gzip include timestamp in output file. This feature is
+> incompatible with BR2_REPRODUCIBLE. It is possible to disable it with '-n'.
 > 
-> On Fri, 18 Nov 2016 10:10:10 +0100, J?r?me Pouiller wrote:
+> The environment variable GZIP can hold a set of default options for gzip. So
+> instead to find all gzip invocation in build process, we just export 'GZIP=-n'.
 > 
->> diff --git a/Makefile b/Makefile
->> index eff814b..17e49e4 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -249,6 +249,10 @@ ifeq ($(BR2_REPRODUCIBLE),y)
->>  export TZ=UTC
->>  export LANG=C
->>  export LC_ALL=C
->> +export SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH)
-> 
-> Why do you do this instead of just doing
-> 
-> export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(SOURCE_DATE_CHANGES))
-> 
->> +SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
->> +SOURCE_DATE_CHANGES = $(shell date -d `echo $(BR2_VERSION) | sed 's/^\(....\)\.\(..\).*/\1-\2-01T23:59:59/'` +%s)
-> 
-> Why don't we change the way BR2_VERSION is defined in order to avoid having to do this?
-> 
-> BR2_VERSION_DATE = 2016.11
-> BR2_VERSION = $(BR2_VERSION)-rc1
+> Notice bzip2, lzma and xz are impacted by this problem. On the other hand, lzop
 
- Or maybe even easier:
+ Unless I'm very mistaken, they are NOT impacted by this problem.
 
-BR2_VERSION = 2016.11-rc1
-BR2_VERSION_EPOCH = 1479545409
+> include timestamp and does not provide any way to disable it.
+ ^ does include a timestamp and does not...
 
-(where the EPOCH is the actual time the release is cut, instead of some fixed
-time in the month).
+> 
+> This work was sponsored by `BA Robotic Systems'.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 17e49e4..c21ba4a 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -249,6 +249,7 @@ ifeq ($(BR2_REPRODUCIBLE),y)
+>  export TZ=UTC
+>  export LANG=C
+>  export LC_ALL=C
+> +export GZIP=-n
+>  export SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH)
 
- This is particularly useful for 2016.11.1, which otherwise would have the same
-EPOCH as 2016.11.
+ In this whole hunk, there are spaces missing:
 
+export LC_ALL = C
+export GZIP = -n
+...
+
+You only need to fix the ones you add of course.
+
+ All of the above can be fixed up while applying, so:
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-> 
-> for example.
-> 
-> Thanks,
-> 
-> Thomas
+>  SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
+>  SOURCE_DATE_CHANGES = $(shell date -d `echo $(BR2_VERSION) | sed 's/^\(....\)\.\(..\).*/\1-\2-01T23:59:59/'` +%s)
 > 
 
 -- 
