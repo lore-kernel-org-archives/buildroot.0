@@ -1,44 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Nov 2016 10:53:56 +0100
-Subject: [Buildroot] [PATCH] mesa3d: add patch to fix wayland-scanner
- issues
-In-Reply-To: <1479411685-6912-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1479411685-6912-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20161119105356.7ff07eb6@free-electrons.com>
+Date: Sat, 19 Nov 2016 10:57:43 +0100
+Subject: [Buildroot] [git commit] olsr: fix package name display
+Message-ID: <20161119095747.851DD818CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ef5596aa03b6376604305b20527e6de51e2b6f11
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 17 Nov 2016 16:41:25 -0300, Gustavo Zacarias wrote:
-> mesa3d tries to use the pkg-config specified wayland-scanner when
-> wayland is enabled, which points to /usr/bin/wayland-scanner which is
-> incorrect.
-> The correct fix is trying to use the PATH wayland-scanner first if it's
-> available rather than the pkg-config specified one, since tweaking a
-> staging .pc file with a host binary is wrong. Fixes:
-> http://autobuild.buildroot.net/results/c0c/c0ca3778c390a33c27073553ca3bef7ac7c5784b/
-> 
-> Patch sent upstream:
-> https://lists.freedesktop.org/archives/mesa-dev/2016-November/135665.html
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ...ac-invert-order-for-wayland-scanner-check.patch | 39 ++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/mesa3d/0005-configure.ac-invert-order-for-wayland-scanner-check.patch
+Use the package name, olsr, instead of the tarball file name.
 
-Applied to master, thanks. You received some feedback on your upstream
-submission, so it would be good if you could follow-up and get a fix
-included upstream.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/olsr/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/olsr/Config.in b/package/olsr/Config.in
+index 2f3d024..85c5b4d 100644
+--- a/package/olsr/Config.in
++++ b/package/olsr/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_OLSR
+-	bool "olsrd"
++	bool "olsr"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
