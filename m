@@ -1,38 +1,55 @@
 From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Sat, 19 Nov 2016 14:56:33 +0100
+Date: Sat, 19 Nov 2016 14:59:54 +0100
 Subject: [Buildroot] [PATCH v2 04/15] fs/tar: make results reproducible
-In-Reply-To: <20161118222823.155c12a2@free-electrons.com>
+In-Reply-To: <b19d2886-5502-d2e2-5acc-040e921ebf39@mind.be>
 References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
- <b762049e2698fa9e52f43abd5571d6a2@sysmic.org>
- <20161118222823.155c12a2@free-electrons.com>
-Message-ID: <3980199.Q5mcqT0LFo@sagittea>
+ <1479460224-6119-5-git-send-email-jezz@sysmic.org>
+ <b19d2886-5502-d2e2-5acc-040e921ebf39@mind.be>
+Message-ID: <3312066.pnY3ae4NBr@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 18 November 2016 22:28:23 Thomas Petazzoni wrote:
-> On Fri, 18 Nov 2016 14:44:50 +0100, J?r?me Pouiller wrote:
-> 
-> > > Yes, I know, but it's a pain to force everyone using an old distro to
-> > > build host-tar. Maybe we should make this conditional on
-> > > BR2_REPRODUCIBLE?  
+On Saturday 19 November 2016 10:12:24 Arnout Vandecappelle wrote:
+> On 18-11-16 10:10, J?r?me Pouiller wrote:
+> > In order to make tar images reproducible, we use --sort flag. However,
+> > this flags is available only from tar 1.28. So we also bump necessary
+> > host-tar version.
 > > 
-> > Last Ubuntu LTS is 16.04 and Debian 9 will be stable in a few months 
-> > (maybe simultaneous with next Buildroot version).
+> > This work was sponsored by `BA Robotic Systems'.
 > > 
-> > So, IMHO it not justified to add a dirty condition in check-host-tar.sh.
+> > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> > ---
+> >  fs/tar/tar.mk                          | 2 +-
+> >  support/dependencies/check-host-tar.sh | 5 ++---
+> >  2 files changed, 3 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+> > index 11c69c5..5a1b263 100644
+> > --- a/fs/tar/tar.mk
+> > +++ b/fs/tar/tar.mk
+> > @@ -7,7 +7,7 @@
+> >  TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
+> >  
+> >  define ROOTFS_TAR_CMD
+> > -	tar $(TAR_OPTS) -cf $@ --numeric-owner -C $(TARGET_DIR) .
+> > +	tar $(TAR_OPTS) -cf $@ --sort=name --numeric-owner -C $(TARGET_DIR) .
 > 
-> I think you don't really realize how big companies work. They will be
-> using such version in 3 or 5 years maybe.
+>  Instead of requiring a specific version of tar, I would prefer to use the same
+> solution we already have in the git wrapper, and which is also what is proposed
+> by reproducible-builds.org:
 > 
-> We have people still using RHEL5, even though it's almost 10 years old,
-> and its support going to stop next year. Supporting old distributions
-> is important for Buildroot, so you can't just sweep away the problem by
-> pretending that it doesn't exist with modern distributions.
+> find src -print0 | LC_ALL=C sort -z |
+>     tar --null -T - --no-recursion -cf $@ --numeric-owner -C $(TARGET_DIR)
+> 
+>  The find | sort part we probably want to factor into the rootfs infra, because
+> the same thing will have to be done for all other rootfs types as well. But that
+> refactoring can be done later (when the other rootfs types are tackled).
 
-This patch did not break support for old distributions, but OK.
+It makes sense. I will do that.
+
 
 -- 
 J?r?me Pouiller, Sysmic
