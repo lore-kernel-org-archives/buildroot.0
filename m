@@ -1,47 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Nov 2016 22:30:09 +0100
-Subject: [Buildroot] [git commit] configs: snps_aarch64_vdk_defconfig:
-	kernel pointing to 4.6
-Message-ID: <20161119093658.0E91C81844@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 19 Nov 2016 10:39:37 +0100
+Subject: [Buildroot] [PATCH v2 08/15] reproducible: lock modification
+ times in $TARGET_DIR
+In-Reply-To: <1479460224-6119-9-git-send-email-jezz@sysmic.org>
+References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
+ <1479460224-6119-9-git-send-email-jezz@sysmic.org>
+Message-ID: <22a482be-809d-ad0f-5745-7941714cacce@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9eeadbcc340c5e345d7c4d96b572e0e37f262da
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Previously the vdk solution was using a Linaro kernel that doesn't
-build with gcc 5.x.
 
-Since there is no point in using Linaro anymore for this solution,
-this patch makes the aarch64 vdk defconfig point to the 4.6 Linux
-kernel.
+On 18-11-16 10:10, J?r?me Pouiller wrote:
+> Make sure all files in $TARGET_DIR has a defined modification time before to
+> generate filesystems.
+> 
+> This work was sponsored by `BA Robotic Systems'.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  fs/common.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 2dbef4d..981dcb1 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -95,6 +95,9 @@ endif
+>  	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+>  		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+>  		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
+> +ifeq ($$(BR2_REPRODUCIBLE),y)
+> +	echo "find $$(TARGET_DIR) -print0 | xargs -0 -r touch -hd @$$(SOURCE_DATE_EPOCH)" >> $$(FAKEROOT_SCRIPT)
 
-Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/snps_aarch64_vdk_defconfig | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ I'm not sure if this is really a good idea in general. I'm thinking for
+instance of the GStreamer plugin registry, which is rebuilt based on timestamp.
+Now, that particular one is not an issue because we disable it, but I expect
+there will be others like that. And unfortunately that's a runtime issue.
 
-diff --git a/configs/snps_aarch64_vdk_defconfig b/configs/snps_aarch64_vdk_defconfig
-index f165a9a..b55dce1 100644
---- a/configs/snps_aarch64_vdk_defconfig
-+++ b/configs/snps_aarch64_vdk_defconfig
-@@ -1,12 +1,10 @@
- BR2_aarch64=y
--# Linux headers same as kernel, a 3.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
- BR2_TARGET_GENERIC_HOSTNAME="vdk-buildroot"
- BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS VDK by Buildroot"
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.linaro.org/kernel/linux-linaro-tracking.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-3.18-2014.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/synopsys/vdk/linux-vdk-aarch64-defconfig"
- BR2_TARGET_ROOTFS_EXT2=y
+ Still, it's impossible to predict this kind of issue, so we have to solve those
+problems when they come. Therefore,
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+> +endif
+>  	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+>  	chmod a+x $$(FAKEROOT_SCRIPT)
+>  	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/pseudo -- $$(FAKEROOT_SCRIPT)
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
