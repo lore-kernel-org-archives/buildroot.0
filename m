@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Nov 2016 11:21:39 +0100
-Subject: [Buildroot] [PATCH v2 09/15] fakedate: new package
-In-Reply-To: <1479460224-6119-10-git-send-email-jezz@sysmic.org>
+Date: Sat, 19 Nov 2016 11:22:23 +0100
+Subject: [Buildroot] [PATCH v2 10/15] reproducible: enable fakedate
+In-Reply-To: <9c26bf8aba6470357f9d5b178261e583@sysmic.org>
 References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
- <1479460224-6119-10-git-send-email-jezz@sysmic.org>
-Message-ID: <7024db7a-ff5f-312d-fb00-16ed463c79e0@mind.be>
+ <1479460224-6119-11-git-send-email-jezz@sysmic.org>
+ <20161118124933.68b64d53@free-electrons.com>
+ <9c26bf8aba6470357f9d5b178261e583@sysmic.org>
+Message-ID: <0c8fd128-e07f-5ea8-b8d1-f75bfadfe196@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,107 +15,36 @@ To: buildroot@busybox.net
 
 
 
-On 18-11-16 10:10, J?r?me Pouiller wrote:
-> `date' is widely used by packages to include build information in their
-> binaries. Unfortunately, this is incompatible with  BR2_REPRODUCIBLE.
+On 18-11-16 14:53, J?r?me Pouiller wrote:
+> On 2016-11-18 12:49, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> On Fri, 18 Nov 2016 10:10:19 +0100, J?r?me Pouiller wrote:
+>>
+>>> +ifeq ($(BR2_REPRODUCIBLE),y)
+>>> +TOOLCHAIN_DEPENDENCIES += host-fakedate
+>>> +endif
+>>
+>> Unfortunately, this means that fakedate is only installed at the end of
+>> the toolchain build process. So the entire toolchain is built without
+>> fakedate installed.
+>>
+>> Is it because we assume that the toolchain build process is safe (i.e
+>> it doesn't call "date") ?
 > 
-> Instead to find all `date' invocation in build process, we add small tool
-> allowing to alway return same date.
+> During my tests, fakedate was build before host-gcc-initial. Indeed, I
+> was lucky (in add, I think toolchain build process is safe).
 > 
-> This work was sponsored by `BA Robotic Systems'.
 > 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/fakedate/fakedate    | 28 ++++++++++++++++++++++++++++
->  package/fakedate/fakedate.mk | 14 ++++++++++++++
->  2 files changed, 42 insertions(+)
->  create mode 100755 package/fakedate/fakedate
->  create mode 100644 package/fakedate/fakedate.mk
+>> Perhaps it should be added in DEPENDENCIES_HOST_PREREQ instead ?
 > 
-> diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
-> new file mode 100755
-> index 0000000..2eded22
-> --- /dev/null
-> +++ b/package/fakedate/fakedate
-> @@ -0,0 +1,28 @@
-> +#!/bin/sh
-> +# vim: set sw=4 expandtab:
-> +#
-> +# Licence: GPL
+> Right.
 
- Please use a proper copyright blurb. Yes, it's long, but it's also more
-accurate. You seem to be saying here that it is GPLv1 only, which is most likely
-not what you want.
-
-> +# Created: 2016-11-04 16:31:18+01:00
-> +# Main authors:
-> +#     - J?r?me Pouiller <jezz@sysmic.org>
-> +#
-> +
-> +PATH=/bin:/usr/bin
-> +LOG=/dev/null
-> +if [ -n "$SOURCE_DATE_EPOCH" ]; then
-> +    INHIBIT=0
-
- INHIBIT is a bit vague. How about DATE_IS_FORCED?
-
-> +    for i in "$@"; do
-> +        case $i in
-> +        -d|-[!-]*d|--date=*|-f|-[!-]*f|--file=*)
-
- We use [^-] everywhere else. Note that this pattern will also match something
-like -rfrood, i.e. --reference=frood. Fixing that becomes tricky without regexp.
-
- Anyway, the -d option doesn't really need to be checked. 'date -d foo -d bar'
-will ignore the first -d, so things work OK. It's just that you get the spurious
-warning. So we could limit to checking -f, and limit to -f|--file=*). In that
-case, if someone passes something like -uf we'll get an error and the build will
-most likely terminate, so that particular error can be fixed.
-
-> +            INHIBIT=1
-
- You could add a break here.
-
-> +            ;;
-> +        esac
-> +    done
-> +    if [ $INHIBIT -eq 0 ]; then
-> +        echo "date: Warning: using \$SOURCE_DATE_EPOCH instead of true time" >&2
-
- Is it really needed to print this warning?
-
-> +        echo "Catch call to date from `pwd` with parameters: '$@'" >> $LOG
-> +        exec date -d "@$SOURCE_DATE_EPOCH" "$@"
-> +    fi
-> +fi
-> +
-> +exec date "$@"
-> diff --git a/package/fakedate/fakedate.mk b/package/fakedate/fakedate.mk
-> new file mode 100644
-> index 0000000..e81ce5d
-> --- /dev/null
-> +++ b/package/fakedate/fakedate.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# fakedate
-> +#
-> +################################################################################
-> +
-> +# source included in buildroot
-> +HOST_FAKEDATE_LICENSE = GPLv2+
-
- This is inconsistent with the script itself, which specifies GPLv1 only :-P
+ And that can be done in the top-level BR2_REPRODUCIBLE condition.
 
  Regards,
  Arnout
 
-> +
-> +define HOST_FAKEDATE_INSTALL_CMDS
-> +	$(INSTALL) -D -m 755 package/fakedate/fakedate $(HOST_DIR)/usr/bin/date
-> +endef
-> +
-> +$(eval $(host-generic-package))
 > 
 
 -- 
