@@ -1,52 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Nov 2016 12:22:49 +0100
-Subject: [Buildroot] How to log /dev/console directly on the device
-In-Reply-To: <CAGm1_ksb_gKjVwQ6S1AsnuREk439QTP9nbjRzhc7BMv7YY+y2Q@mail.gmail.com>
-References: <CAGm1_ksb_gKjVwQ6S1AsnuREk439QTP9nbjRzhc7BMv7YY+y2Q@mail.gmail.com>
-Message-ID: <2251bf95-8406-dd6e-6728-ad43f49a6d0b@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 20 Nov 2016 13:05:43 +0100
+Subject: [Buildroot] [PATCH next v2] cmake: bump version to 3.7.0
+In-Reply-To: <20161116000232.51cfc4fa@free-electrons.com>
+References: <20161114131541.54948-1-Vincent.Riera@imgtec.com>
+ <20161116000232.51cfc4fa@free-electrons.com>
+Message-ID: <CAHXCMMKTEf_2UX8d=xRe=jGJno0=r-2OJS3C0c=-0QxS8BhkAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all,
 
+On Wed, Nov 16, 2016 at 12:02 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Samuel,
+>
+> Since you are our CMake guy, could you please review/test this?
+>
+> More specifically, I'm interested in understanding if there are some
+> potential compatibility issues with our packages that use a CMake-based
+> build system.
+>
 
-On 20-11-16 08:36, Yegor Yefremov wrote:
-> I need to log the output from /dev/console to a file. The purpose is
-> to find an application crash in a field. It is important to have all
-> possible messages i.e. kernel messages and application messages.
+From the changelog, I see no harmful changes for Buildroot in this release.
 
- This is exactly what syslogd (or journald) is supposed to do. Both the kernel
-and the applications send their messages to syslogd, and syslogd sends it to the
-console and/or to a file.
+I gave it a try on top of the next branch, with as many target cmake
+package enabled as possible, and forcing buildroot to build
+host-cmake.
+I got no error related to cmake bump.
 
- If you have your applications directly writing to /dev/console, there is really
-nothing you can do short of hacking the kernel to do something with it. You
-could take a look at netconsole, but IIRC that just sends printks to the
-network, it doesn't actually redirect /dev/console.
+[Samuel Martin: tested on next branch]
+Tested-by: Samuel Martin <s.martin49@gmail.com>
 
- Regards,
- Arnout
-
-> 
-> In field there is no physical access to a console, but if connected
-> the conole still should work as usual.
-> 
-> What options do I have?
-> 
-> Regards,
-> Yegor
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Regards,
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Samuel
