@@ -1,53 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Nov 2016 15:55:02 +0100
-Subject: [Buildroot] Possible documentation error and a patch
-In-Reply-To: <193601d24331$ffd8ea30$ff8abe90$@chordia.co.uk>
-References: <193601d24331$ffd8ea30$ff8abe90$@chordia.co.uk>
-Message-ID: <20161120155502.28130680@free-electrons.com>
+Date: Sun, 20 Nov 2016 15:55:22 +0100
+Subject: [Buildroot] [git commit] docs/manual: fix documentation about
+	BR2_EXTERNAL_<name>_PATH variable
+Message-ID: <20161120145529.094E38190D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d082d20a8ae3afd0638627fba662aaba7319ec69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 20 Nov 2016 13:28:36 -0000, jerry at chordia.co.uk wrote:
-> Greetings. 
-> 
-> I think the example here
-> http://nightly.buildroot.org/manual.html#outside-br-custom has a couple of
-> typos?
-> 
-> The example layout has $BR2_EXTERNAL_BAR_42_DIR instead of
-> $BR2_EXTERNAL_BAR_42_PATH in a couple of places and the source lines in the
-> example config.in are incorrectly quoted.
-> 
-> If I've read this correctly please find patch attached.
-> 
-> BR,
-> 
-> Jerry
-> 
-> Signed-off-by: Jerry Evans g4 at novadsp.com
-> ---
->  docs/manual/customize-outside-br.txt | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+The BR2_EXTERNAL documentation improperly tells to use the
+BR2_EXTERNAL_<name>_DIR variable to reference the location of the
+BR2_EXTERNAL directory. But in fact the variable is named
+BR2_EXTERNAL_<name>_PATH.
 
-Thanks, I've applied your patch to master. However, I had to:
+In addition, some closing double quotes were missing.
 
- - Rewrite entirely the commit message, because yours contained some
-   irrelevant information for a commit log.
+This commit fixes both of those issues.
 
- - Adjust your SoB line: your e-mail should have been enclosed in <...>
+Signed-off-by: Jerry Evans <g4@novadsp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/customize-outside-br.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- - Fix line wrapping in your patch. Please use 'git send-email' next
-   time to send your patch, and not Outlook.
-
-Thanks for having reported and fixed this issue!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+index 70efabe..2ebb447 100644
+--- a/docs/manual/customize-outside-br.txt
++++ b/docs/manual/customize-outside-br.txt
+@@ -217,8 +217,8 @@ illustration, of course):
+   |     `----
+   |
+   |- Config.in
+-  |     |source "$BR2_EXTERNAL_BAR_42_DIR/package/pkg-1/Config.in
+-  |     |source "$BR2_EXTERNAL_BAR_42_DIR/package/pkg-2/Config.in
++  |     |source "$BR2_EXTERNAL_BAR_42_PATH/package/pkg-1/Config.in"
++  |     |source "$BR2_EXTERNAL_BAR_42_PATH/package/pkg-2/Config.in"
+   |     |
+   |     |config BAR_42_FLASH_ADDR
+   |     |    hex "my-board flash address"
+@@ -229,7 +229,7 @@ illustration, of course):
+   |     |include $(sort $(wildcard $(BR2_EXTERNAL_BAR_42_PATH)/package/*/*.mk))
+   |     |
+   |     |flash-my-board:
+-  |     |    $(BR2_EXTERNAL_BAR_42_DIR)/board/my-board/flash-image \
++  |     |    $(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/flash-image \
+   |     |        --image $(BINARIES_DIR)/image.bin \
+   |     |        --address $(BAR_42_FLASH_ADDR)
+   |     `----
