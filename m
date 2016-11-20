@@ -1,7 +1,7 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 20 Nov 2016 17:39:21 +0100
-Subject: [Buildroot] [PATCH] mplayer: disable for FLAT
-Message-ID: <20161120163921.12971-1-arnout@mind.be>
+Date: Sun, 20 Nov 2016 17:45:26 +0100
+Subject: [Buildroot] [PATCH v2] mplayer: disable for FLAT
+Message-ID: <20161120164526.12576-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,7 +22,12 @@ further down the line.
 Since mplayer probably isn't very useful on noMMU architectures anyway,
 just disable it completely for FLAT.
 
+Fixes:
+http://autobuild.buildroot.net/results/58cf28a3acd518633a1d8ea719bc70aefbdfb311
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+v2: added the fixes line
 ---
  package/mplayer/Config.in | 3 +++
  1 file changed, 3 insertions(+)
