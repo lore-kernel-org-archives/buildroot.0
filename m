@@ -1,55 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Nov 2016 15:50:22 +0100
-Subject: [Buildroot] [PATCH 2/2] kvm-unit-tests: only enable for ARM on
- Cortex-A7 and A15
-In-Reply-To: <20161120135006.19498-2-arnout@mind.be>
-References: <20161120135006.19498-1-arnout@mind.be>
- <20161120135006.19498-2-arnout@mind.be>
-Message-ID: <20161120155022.1970bd8c@free-electrons.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 20 Nov 2016 15:52:23 +0100
+Subject: [Buildroot] [PATCH] mpv: needs atomics or 8-byte sync
+Message-ID: <20161120145223.17288-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The wscript checks the following.
+        'func': check_libs(['atomic'],
+            check_statement('stdint.h',
+                'int64_t test = 0;'
+                'test = __atomic_add_fetch(&test, 1, __ATOMIC_SEQ_CST)')),
+and
+        'func': check_statement('stdint.h',
+                    'int64_t test = 0;'
+                    '__typeof__(test) x = ({int a = 1; a;});'
+                    'test = __sync_add_and_fetch(&test, 1)'),
 
-On Sun, 20 Nov 2016 14:50:06 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> The library uses the hypervisor instruction HVC, which is only
-> available on ARMv7-A with Hypervisor extensions. According to [1],
-> this is limited to Cortex-A7 and A15.
-> 
-> In addition the build unconditionally passes -marm so it also needs
-> ARM instructions to be available, but that is already implied by
-> the CPU selection.
-> 
-> Implicitly fixes
-> http://autobuild.buildroot.net/results/53d109fd9055fd20387bb857aced5f89cf3086fd
-> though it is still not clear why ld doesn't accept the -Ttext=...
-> option there.
-> 
-> [1] https://en.wikipedia.org/wiki/Comparison_of_ARMv7-A_cores
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/kvm-unit-tests/Config.in | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Fixes
+http://autobuild.buildroot.net/results/8c20f719f784af1312294600e39004c1d382368a
 
-I've applied to master, but after adding A12 and A17 in the list of
-supported cores. Indeed, your [1] reference is incomplete, and A12 and
-A17 do have the hardware virtualization extensions, see:
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+I couldn't find a compiler without atomics and with 8-byte sync, so not
+entirely sure if it's enough.
+---
+ package/mpv/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-  https://en.wikipedia.org/wiki/ARM_Cortex-A12
-  https://en.wikipedia.org/wiki/ARM_Cortex-A17
-
-I've also dropped the BR2_arm part of the condition: depending on
-BR2_cortex_a7 || BR2_cortex_a12 || ... is sufficient.
-
-Thanks!
-
-Thomas
+diff --git a/package/mpv/Config.in b/package/mpv/Config.in
+index 25288a4..2719981 100644
+--- a/package/mpv/Config.in
++++ b/package/mpv/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_MPV
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FFMPEG_SWSCALE
+@@ -17,5 +18,6 @@ config BR2_PACKAGE_MPV
+ 
+ comment "mpv needs a toolchain w/ threads, gcc >= 4.5"
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.10.2
