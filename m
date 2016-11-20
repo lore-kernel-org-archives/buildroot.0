@@ -1,70 +1,38 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 20 Nov 2016 23:13:29 +0100
-Subject: [Buildroot] [PATCH 4/4] qextserialport: fix static build
-In-Reply-To: <20161120221329.5827-1-arnout@mind.be>
-References: <20161120221329.5827-1-arnout@mind.be>
-Message-ID: <20161120221329.5827-4-arnout@mind.be>
+Date: Sun, 20 Nov 2016 23:28:58 +0100
+Subject: [Buildroot] [PATCH] xapp_xload: fix musl build
+Message-ID: <20161120222858.10102-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, qextserialport will attempt to build a shared library.
-qesp_static has to be set in CONFIG to build static. Note that
-static+shared is not supported, in that case we just build shared.
+xapp_xload tries to include protocols/rwhod.h, which isn't available on
+musl. Fortunately, the package also has stub code that can be enabled
+with -DRLOADSTUB (this is done e.g. on Cygwin).
 
-The install target commands also have to be gated in that case,
-because the *.so files don't exist. For completeness we both set
-QEXTSERIALPORT_INSTALL_STAGING to NO and don't define
-QEXTSERIALPORT_INSTALL_TARGET_CMDS for static builds, although one
-of them would be sufficient.
-
-Fixes:
-http://autobuild.buildroot.net/results/c9233ad71fd60d0e6a85731a8bd4e598bd84947a
+This should probably be detected in configure, but that's a lot more
+work.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qextserialport/qextserialport.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/x11r7/xapp_xload/xapp_xload.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
-index 15cb74c..3641353 100644
---- a/package/qextserialport/qextserialport.mk
-+++ b/package/qextserialport/qextserialport.mk
-@@ -10,6 +10,10 @@ QEXTSERIALPORT_LICENSE = MIT
- QEXTSERIALPORT_LICENSE_FILES = LICENSE.md
- QEXTSERIALPORT_INSTALL_STAGING = YES
+diff --git a/package/x11r7/xapp_xload/xapp_xload.mk b/package/x11r7/xapp_xload/xapp_xload.mk
+index 1db0db5..364d247 100644
+--- a/package/x11r7/xapp_xload/xapp_xload.mk
++++ b/package/x11r7/xapp_xload/xapp_xload.mk
+@@ -11,4 +11,9 @@ XAPP_XLOAD_LICENSE = MIT
+ XAPP_XLOAD_LICENSE_FILES = COPYING
+ XAPP_XLOAD_DEPENDENCIES = xlib_libXaw
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+QEXTSERIALPORT_CONF_OPTS += CONFIG+=qesp_static
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++# musl doesn't have rwhod.h, but xload can replace it with stubs
++XAPP_XLOAD_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -DRLOADSTUB"
 +endif
 +
- ifeq ($(BR2_PACKAGE_QT),y)
- QEXTSERIALPORT_DEPENDENCIES += qt
- QEXTSERIALPORT_QMAKE = $(QT_QMAKE)
-@@ -19,7 +23,7 @@ QEXTSERIALPORT_QMAKE = $(QT5_QMAKE)
- endif
- 
- define QEXTSERIALPORT_CONFIGURE_CMDS
--	cd $(@D); $(TARGET_MAKE_ENV) $(QEXTSERIALPORT_QMAKE)
-+	cd $(@D); $(TARGET_MAKE_ENV) $(QEXTSERIALPORT_QMAKE) $(QEXTSERIALPORT_CONF_OPTS)
- endef
- 
- define QEXTSERIALPORT_BUILD_CMDS
-@@ -32,8 +36,12 @@ define QEXTSERIALPORT_INSTALL_STAGING_CMDS
- 	cp $(@D)/qextserialport.pc $(STAGING_DIR)/usr/lib/pkgconfig/
- endef
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+QEXTSERIALPORT_INSTALL_STAGING = NO
-+else
- define QEXTSERIALPORT_INSTALL_TARGET_CMDS
- 	cp -a $(@D)/*.so.* $(TARGET_DIR)/usr/lib
- endef
-+endif
- 
- $(eval $(generic-package))
+ $(eval $(autotools-package))
 -- 
 2.10.2
