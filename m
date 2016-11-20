@@ -1,29 +1,39 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sat, 19 Nov 2016 17:57:14 -0500
-Subject: [Buildroot] [PATCH 1/1] dosfstools: update URL in Config.in.host
-Message-ID: <1479596234-2516-1-git-send-email-danomimanchego123@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat, 19 Nov 2016 23:00:00 -0200
+Subject: [Buildroot] [PATCH] core/br2-external: restore compatibility
+	with old distros
+References: <1479552746-21355-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <5830f590ac62e_72b63f84f64d5e6c560f3@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update URL in Config.in.host to match Config.in.
+Yann,
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/dosfstools/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, Nov 19, 2016 at 08:52 AM, Yann E. MORIN wrote:
 
-diff --git a/package/dosfstools/Config.in.host b/package/dosfstools/Config.in.host
-index 6156c5a..fc488c0 100644
---- a/package/dosfstools/Config.in.host
-+++ b/package/dosfstools/Config.in.host
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_HOST_DOSFSTOOLS
- 	help
- 	  Tools for creating and checking DOS FAT filesystems.
- 
--	  http://www.daniel-baumann.ch/software/dosfstools/
-+	  https://github.com/dosfstools/dosfstools
--- 
-1.9.1
+> Currently, the br2-external script uses bash-4's associative arrays.
+> 
+> However, some oldish enterprise-class distros like RHEL5 still use
+> bash-3.1 which lacks associative arrays.
+> 
+> We restore compatibility with those oldish distros using 'eval' to
+> emulate associative arrays, as suggested by Arnout.
+> 
+> Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Max Filippov <jcmvbkbc@gmail.com>
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+[Simple tests using CentOS 5, bash 3.2.25:
+1. make defconfig (in-tree build configuration);
+2. created 2 small br2-external with a package and a defconfig each and
+   successfully configured out-of-tree build with multiple br2-external
+   using both defconfigs and downloaded the sources of both packages.]
+
+Regards,
+Ricardo
