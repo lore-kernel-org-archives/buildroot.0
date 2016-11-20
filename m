@@ -1,53 +1,88 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 20 Nov 2016 03:18:38 -0200
-Subject: [Buildroot] [PATCH] core/br2-external: restore compatibility
- with old distros
-References: <564d.5830d7d7.de49@xdna.net>
-Message-ID: <5831322ee6fea_72b63f84f6441d9856270@ultri3.mail>
+From: Anand Sivaram <aspnair@gmail.com>
+Date: Sun, 20 Nov 2016 11:06:51 +0530
+Subject: [Buildroot] BoringSSL library support in buildroot
+In-Reply-To: <20161119204110.5ba9f1f9@gmx.net>
+References: <CAHBw83e0xk344cq4FDH7CfvthO_Ku84pdH28MY7nLJyQsDeVCA@mail.gmail.com>
+ <20161118094756.69991365@free-electrons.com>
+ <CAHBw83dx-Hytbtd8DQmfY1Nziu302K+2ONeLy0R=VNc2w=gPnQ@mail.gmail.com>
+ <20161119204110.5ba9f1f9@gmx.net>
+Message-ID: <CAHBw83dj0k4b2A=j1iBjan8VTCF+fyi8oWpCFr_8ix9G0cB-mw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cam,
+Peter,
 
-Those first lines of the commit message should be placed after the line with
-'---', because 'git am' would automatically remove them.
-There is also a duplicated SoB.
-No need to resend because of these, it can be manually fixed when applying.
+That is correct.  But, BoringSSL has fixed a lot of issues of OpenSSL,
+removed lots of legacy stuff and APIs are pretty well compatible (as of
+now).
+I  agree, BoringSSL folks may not care too much about API compatibility and
+it could potentially be a problem going forward.
 
-I didn't review the code, I only tested it.
+I am having a host build for my application and on Debian, I could get it
+working with BoringSSl with a couple of hours of work without using any
+specific #ifdef, Now it works both with OpenSSL1.0.2 and BoringSSL.
 
-On Sat, Nov 19, 2016 at 08:53 PM, Cam Hutchison wrote:
+When I get a bit of time, I would definitely try see I could compile it in
+buildroot.
 
-> Hi Yann,
-> 
-> Since eval is kind of icky, how about something like this patch instead?
-> 
-> 
-> Currently, the br2-external script uses bash-4's associative arrays.
-> 
-> However, some oldish enterprise-class distros like RHEL5 still use
-> bash-3.1 which lacks associative arrays.
-> 
-> Remove the arrays by reading the external.desc files as we generate the
-> output file.
-> 
-> Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Signed-off-by: "Cam Hutchison" <camh@xdna.net>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Signed-off-by: Cam Hutchison <camh@xdna.net>
-Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-[Simple tests using CentOS 5, bash 3.2.25:
-1. make defconfig (in-tree build configuration);
-2. created 2 small br2-external with a package and a defconfig each and
-   successfully configured out-of-tree build with multiple br2-external
-   using both defconfigs and downloaded the sources of both packages.]
+Thanks and Best Regards
 
-Regards,
-Ricardo
+Anand
+
+
+
+
+On 20 November 2016 at 01:11, Peter Seiderer <ps.report@gmx.net> wrote:
+
+> Hello Anand,
+>
+> On Fri, 18 Nov 2016 14:19:30 +0530, Anand Sivaram <aspnair@gmail.com>
+> wrote:
+>
+> > Thanks Thomas for the clarification :)
+> >
+>
+> Take a look at [1] for boringssl support ;-)
+>
+> Regards,
+> Peter
+>
+> [1] https://patchwork.ozlabs.org/patch/696886/
+>
+> > Anand
+> >
+> > On 18 November 2016 at 14:17, Thomas Petazzoni <
+> > thomas.petazzoni at free-electrons.com> wrote:
+> >
+> > > Hello,
+> > >
+> > > On Fri, 18 Nov 2016 09:02:21 +0530, Anand Sivaram wrote:
+> > >
+> > > > Is there any plan for supporting Google's BoringSSL in buildroot?
+> > > > It is gaining momentum nowadays.
+> > >
+> > > The plan in Buildroot is like in most open-source project: merge
+> > > patches that are proposed/contributed.
+> > >
+> > > So if someone proposes a patch to add support for BoringSSL, Buildroot
+> > > will have support for it. If nobody proposes a patch, then we won't
+> > > have BoringSSL support.
+> > >
+> > > It's as simple as that :)
+> > >
+> > > Best regards,
+> > >
+> > > Thomas
+> > > --
+> > > Thomas Petazzoni, CTO, Free Electrons
+> > > Embedded Linux and Kernel engineering
+> > > http://free-electrons.com
+> > >
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161120/aa2b47e4/attachment.html>
