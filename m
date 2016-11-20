@@ -1,82 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Nov 2016 10:34:19 +0100
-Subject: [Buildroot] [PATCH v2] fs/ext2: fix double quoted label
-In-Reply-To: <20161116230012.28080-1-gael.portay@savoirfairelinux.com>
-References: <20161116230012.28080-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20161120093419.GA3659@free.fr>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 20 Nov 2016 07:50:46 -0200
+Subject: [Buildroot] [PATCH] core/br2-external: restore compatibility
+ with old distros
+References: <CABa6e=pVPPTJeH+nX5LOaDtVf8iiZni8qOt+iHcwhUHhCFKqyg@mail.gmail.com>
+Message-ID: <583171f66699f_1d593f9eaa9ff3ac1357e@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ga?l, All,
+Cam,
 
-On 2016-11-16 18:00 -0500, Ga?l PORTAY spake thusly:
-> Since the commit 6dd7bbb59134799ed3d7343f238b3b02592faebf, the label does
-> not need anymore to be quoted. Even worse it *must* not be simple-quoted,
-> unless the label will contain the double-quotes from the config variable
-> BR2_TARGET_ROOTFS_EXT2_LABEL.
+On Sun, Nov 20, 2016 at 06:40 AM, Cam Hutchison wrote:
+
+> Thanks for the testing, Ricardo.
 > 
-> The commit mentionned above has replaced echo by printf:
-> -	echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
-> +	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+> Noted about the workflow errors. I was just throwing this out for
+> comment right now. I can spin it properly if needed, but as you say -
+> also easily adjusted on commit.
 > 
-> Since this commit the rootfs label contains extra double-quotes.
-> $ blkid
-> /dev/mmcblk0: LABEL=""BR 2016.08"" UUID="xxx"
->                      ^          ^
+> One thing I wasn't sure about and forgot to comment on when I posted
+> was the invocation of uniq(1). I'm using some GNU options and I'm not
+> sure when they were added to GNU uniq and what version RHEL5 has.
 > 
-> With this fix, the extra double-quotes have disappeared:
-> /dev/mmcblk0: LABEL="BR 2016.11-rc2" UUID="yyy"
+> Can you confirm that you can invoke without error:
+> $ uniq --skip-fields=1 --all-repeated
 
-You forgot to sign-off your patch.
+Sure.
 
-Otherwise:
+[ricardo at centos5 ~]$ grep release /etc/issue
+CentOS release 5.11 (Final)
+[ricardo at centos5 ~]$ uniq --version | grep uniq
+uniq (GNU coreutils) 5.97
+[ricardo at centos5 ~]$ uniq --skip-fields=1 --all-repeated
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+No error message is generated and uniq is waiting for stdin.
+
+[ricardo at centos5 ~]$ uniq --help
+Usage: uniq [OPTION]... [INPUT [OUTPUT]]
+Discard all but one of successive identical lines from INPUT (or
+standard input), writing to OUTPUT (or standard output).
+
+Mandatory arguments to long options are mandatory for short options too.
+  -c, --count           prefix lines by the number of occurrences
+  -d, --repeated        only print duplicate lines
+  -D, --all-repeated[=delimit-method] print all duplicate lines
+                        delimit-method={none(default),prepend,separate}
+                        Delimiting is done with blank lines.
+  -f, --skip-fields=N   avoid comparing the first N fields
+  -i, --ignore-case     ignore differences in case when comparing
+  -s, --skip-chars=N    avoid comparing the first N characters
+  -u, --unique          only print unique lines
+  -w, --check-chars=N   compare no more than N characters in lines
+      --help     display this help and exit
+      --version  output version information and exit
+
+A field is a run of whitespace, then non-whitespace characters.
+Fields are skipped before chars.
+
+Report bugs to <bug-coreutils@gnu.org>.
+[ricardo at centos5 ~]$
+
+> 
+> If not, the generate_dupes() function will need to be fixed.
+> 
 
 Regards,
-Yann E. MORIN.
-
-> ---
->  fs/ext2/ext2.mk | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
-> 
-> diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-> index 7417f81..cfb34c4 100644
-> --- a/fs/ext2/ext2.mk
-> +++ b/fs/ext2/ext2.mk
-> @@ -20,12 +20,11 @@ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
->  EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
->  endif
->  
-> -# Not qstrip-ing the variable, because it may contain spaces, but we must
-> -# qstrip it when checking. Furthermore, we need to further quote it, so
-> -# that the quotes do not get eaten by the echo statement when creating the
-> -# fakeroot script
-> -ifneq ($(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_LABEL)),)
-> -EXT2_OPTS += -l '$(BR2_TARGET_ROOTFS_EXT2_LABEL)'
-> +# qstrip results in stripping consecutive spaces into a single one. So the
-> +# variable is not qstrip-ed to preserve the integrity of the string value.
-> +EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
-> +ifneq ($(EXT2_LABEL),)
-> +EXT2_OPTS += -l "$(EXT2_LABEL)"
->  endif
->  
->  ROOTFS_EXT2_DEPENDENCIES = host-mke2img
-> -- 
-> 2.10.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Ricardo
