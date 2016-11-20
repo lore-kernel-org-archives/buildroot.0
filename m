@@ -1,29 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Nov 2016 15:56:14 +0100
-Subject: [Buildroot] [PATCH 1/1] dosfstools: update URL in Config.in.host
-In-Reply-To: <1479596234-2516-1-git-send-email-danomimanchego123@gmail.com>
-References: <1479596234-2516-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20161120155614.0971d35b@free-electrons.com>
+From: jerry at chordia.co.uk <jerry@chordia.co.uk>
+Date: Sun, 20 Nov 2016 15:20:44 -0000
+Subject: [Buildroot] Possible documentation error and a patch
+In-Reply-To: <20161120155502.28130680@free-electrons.com>
+References: <193601d24331$ffd8ea30$ff8abe90$@chordia.co.uk>
+ <20161120155502.28130680@free-electrons.com>
+Message-ID: <196001d24341$a9c1a0a0$fd44e1e0$@chordia.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-On Sat, 19 Nov 2016 17:57:14 -0500, Danomi Manchego wrote:
-> Update URL in Config.in.host to match Config.in.
+>  - Rewrite entirely the commit message, because yours contained some
+>    irrelevant information for a commit log.
 > 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> ---
->  package/dosfstools/Config.in.host | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  - Adjust your SoB line: your e-mail should have been enclosed in <...>
+> 
+>  - Fix line wrapping in your patch. Please use 'git send-email' next
+>    time to send your patch, and not Outlook.
 
-Applied to master, thanks.
+Apologies for any inconvenience caused! And will do.
+ 
+> Thanks for having reported and fixed this issue!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are welcome. 
+ 
