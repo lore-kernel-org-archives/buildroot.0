@@ -1,54 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Nov 2016 15:42:20 +0100
-Subject: [Buildroot] mplayer issue due to toolchain wrapper
-In-Reply-To: <1788f3a4-3ad3-9b22-d5fb-a1f8971f1fef@mind.be>
-References: <1788f3a4-3ad3-9b22-d5fb-a1f8971f1fef@mind.be>
-Message-ID: <20161120154220.647f7e89@free-electrons.com>
+Date: Sun, 20 Nov 2016 15:48:10 +0100
+Subject: [Buildroot] [git commit] kvm-unit-tests: only enable for ARM on
+	Cortex-A{7, 12, 15, 17}
+Message-ID: <20161120144913.6AD667FFEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=592188e34b8790ecdb249803318270857dab1d13
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 20 Nov 2016 14:49:42 +0100, Arnout Vandecappelle wrote:
+The library uses the hypervisor instruction HVC, which is only
+available on ARMv7-A with Hypervisor extensions. This is limited to
+Cortex-A{7,12,15,17}.
 
->  So, we need to remove the -Wl,-elf2flt from the wrapper. Here are the options I
-> see - none are satisfactory...
-> 
-> * Detect this specific gcc invocation and remove -Wl,-elf2flt. Yikes.
-> 
-> * Just remove if and pass -Wl,-elf2flt through LDFLAGS. We already know however
-> that the way that package build systems use LDFLAGS is very unreliable. The good
-> news is that (AFAIU) failing to pass this option will lead to build failures
-> when linking programs (but I think it won't for linking libraries, so all leaf
-> libraries remain untested).
-> 
-> * Create an ld wrapper. However, this ld wrapper will have to add the -elf2flt
-> even when called from gcc, so it's not just the one in host/usr/bin that has to
-> be wrapped, but also the one in $CC -print-prog-name=ld. And it's likely that
-> some packages (kernel, bootloader, ...) do NOT want this option.
-> 
-> * Fix individual packages that behave this way. Two problems with that: the
-> patches will never be upstreamable (this is really a buildroot issue), and it's
-> hard to find these situations - in the mplayer case, for example, it falls back
-> to the host compiler and that could have given a successful build. It's just
-> because also -marm is passed that we get a build failure.
-> 
->  Does anyone have better ideas?
+In addition the build unconditionally passes -marm so it also needs
+ARM instructions to be available, but that is already implied by the
+CPU selection.
 
-Disable mplayer on ARMv7-M ?
+Implicitly fixes
+http://autobuild.buildroot.net/results/53d109fd9055fd20387bb857aced5f89cf3086fd
+though it is still not clear why ld doesn't accept the -Ttext=...
+option there.
 
-If you fix this gcc -v problem, does it then successfully builds? I'm
-honestly unsure who would want to use mplayer on a slow Cortex-M
-micro-controller. I believe it's simply not worth the effort fixing
-this problem. And the problem is caused by how the non-autoconf
-configure script of mplayer detects gcc, and most likely, no other
-package is going to detect gcc in the same way.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas: A12 and A17 also have the virtualization extensions.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kvm-unit-tests/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
+index f704a8e..7265646 100644
+--- a/package/kvm-unit-tests/Config.in
++++ b/package/kvm-unit-tests/Config.in
+@@ -4,7 +4,9 @@ config BR2_PACKAGE_KVM_UNIT_TESTS
+ 	# on i386 and x86-64, __builtin_reachable is used, so we need
+ 	# gcc 4.5 at least. on i386, we use the target gcc, while on
+ 	# x86-64 we use the host gcc (see .mk file for details)
+-	depends on BR2_arm || \
++	# On ARM, it uses virtualization extensions
++	depends on BR2_cortex_a7 || BR2_cortex_a12 || \
++		BR2_cortex_a15 || BR2_cortex_a17 || \
+ 		(BR2_i386 && BR2_TOOLCHAIN_GCC_AT_LEAST_4_5) || \
+ 		BR2_powerpc64 || \
+ 		BR2_powerpc64le || \
