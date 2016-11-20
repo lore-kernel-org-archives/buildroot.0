@@ -1,44 +1,69 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 20 Nov 2016 17:04:41 +0100
-Subject: [Buildroot] [PATCH] openblas: disable OpenMP
-Message-ID: <20161120160441.29150-1-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 20 Nov 2016 17:29:38 +0100
+Subject: [Buildroot] mplayer issue due to toolchain wrapper
+In-Reply-To: <20161120154220.647f7e89@free-electrons.com>
+References: <1788f3a4-3ad3-9b22-d5fb-a1f8971f1fef@mind.be>
+ <20161120154220.647f7e89@free-electrons.com>
+Message-ID: <964e3cf3-b972-f433-6d06-e85b674f3a9b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For powerpc (and powerpc only), the openblas build system will enable
-USE_OPENMP when threads are enabled. But the toolchain wasn't
-necessarily built with OpenMP support. So explicitly disable OpenMP -
-for all architectures, not just powerpc, just to keep things simple.
 
-We could have autodetected whether OpenMP is available at configure
-time, but that would be more of a feature patch, it's up to upstream
-to do that.
 
-Fixes:
-http://autobuild.buildroot.net/results/423b5e79cd4342d6c160ed478054b294b0826c6a
-http://autobuild.buildroot.net/results/c9e554c8f880b49b3c9203725ac5e6565b7e5c6f
+On 20-11-16 15:42, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 20 Nov 2016 14:49:42 +0100, Arnout Vandecappelle wrote:
+> 
+>>  So, we need to remove the -Wl,-elf2flt from the wrapper. Here are the options I
+>> see - none are satisfactory...
+>>
+>> * Detect this specific gcc invocation and remove -Wl,-elf2flt. Yikes.
+>>
+>> * Just remove if and pass -Wl,-elf2flt through LDFLAGS. We already know however
+>> that the way that package build systems use LDFLAGS is very unreliable. The good
+>> news is that (AFAIU) failing to pass this option will lead to build failures
+>> when linking programs (but I think it won't for linking libraries, so all leaf
+>> libraries remain untested).
+>>
+>> * Create an ld wrapper. However, this ld wrapper will have to add the -elf2flt
+>> even when called from gcc, so it's not just the one in host/usr/bin that has to
+>> be wrapped, but also the one in $CC -print-prog-name=ld. And it's likely that
+>> some packages (kernel, bootloader, ...) do NOT want this option.
+>>
+>> * Fix individual packages that behave this way. Two problems with that: the
+>> patches will never be upstreamable (this is really a buildroot issue), and it's
+>> hard to find these situations - in the mplayer case, for example, it falls back
+>> to the host compiler and that could have given a successful build. It's just
+>> because also -marm is passed that we get a build failure.
+>>
+>>  Does anyone have better ideas?
+> 
+> Disable mplayer on ARMv7-M ?
+> 
+> If you fix this gcc -v problem, does it then successfully builds? I'm
+> honestly unsure who would want to use mplayer on a slow Cortex-M
+> micro-controller. I believe it's simply not worth the effort fixing
+> this problem. And the problem is caused by how the non-autoconf
+> configure script of mplayer detects gcc, and most likely, no other
+> package is going to detect gcc in the same way.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/openblas/openblas.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ OK. But the problem may return for other packages. I guess we'll deal with the
+problems when they arrive :-)
 
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index 9583e0e..a26e10a 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
-@@ -31,6 +31,9 @@ else
- OPENBLAS_MAKE_OPTS += USE_THREAD=0
- endif
- 
-+# We don't know if OpenMP is available or not, so disable
-+OPENBLAS_MAKE_OPTS += USE_OPENMP=0
-+
- # Static-only/Shared-only toggle
- ifeq ($(BR2_STATIC_LIBS),y)
- OPENBLAS_MAKE_OPTS += NO_SHARED=1
+ Also, it would be BR2_BINFMT_FLAT, not just ARMv7-M.
+
+ Regards,
+ Arnout
+
+
 -- 
-2.10.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
