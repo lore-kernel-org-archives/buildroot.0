@@ -1,59 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 21:16:02 +0100
-Subject: [Buildroot] [git commit] fs/ext2: fix double quoted label
-Message-ID: <20161121201614.ABAD7817B4@busybox.osuosl.org>
+Date: Mon, 21 Nov 2016 21:16:06 +0100
+Subject: [Buildroot] [git commit] mpfr: Fix obsolete ARC asm constraints
+Message-ID: <20161121201614.BCDB6800D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe13efe19dde41409a72d625919807f3841767fd
+commit: https://git.buildroot.net/buildroot/commit/?id=568013ecae874e6560a650bbfcc4a91f0f232fd1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the commit 6dd7bbb59134799ed3d7343f238b3b02592faebf, the label does
-not need anymore to be quoted. Even worse it *must* not be simple-quoted,
-unless the label will contain the double-quotes from the config variable
-BR2_TARGET_ROOTFS_EXT2_LABEL.
+"mpfr" library build was failing due to obsolete ARC asm constraints.
 
-The commit mentionned above has replaced echo by printf:
--	echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
-+	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+This commit replaces obsolete "J" constraints with up-to-date "Cal"
+ones in order to fix "mpfr" build for ARC.
 
-Since this commit the rootfs label contains extra double-quotes.
-$ blkid
-/dev/mmcblk0: LABEL=""BR 2016.08"" UUID="xxx"
-                     ^          ^
+Fixes:
+http://autobuild.buildroot.net/results/579/579de571270ad562fbb1699224d557d16276704b//
 
-With this fix, the extra double-quotes have disappeared:
-/dev/mmcblk0: LABEL="BR 2016.11-rc2" UUID="yyy"
-
-Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/ext2/ext2.mk | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ .../0001-Fix-obsolete-ARC-asm-constraints.patch    | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 7417f81..cfb34c4 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -20,12 +20,11 @@ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
- EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
- endif
- 
--# Not qstrip-ing the variable, because it may contain spaces, but we must
--# qstrip it when checking. Furthermore, we need to further quote it, so
--# that the quotes do not get eaten by the echo statement when creating the
--# fakeroot script
--ifneq ($(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_LABEL)),)
--EXT2_OPTS += -l '$(BR2_TARGET_ROOTFS_EXT2_LABEL)'
-+# qstrip results in stripping consecutive spaces into a single one. So the
-+# variable is not qstrip-ed to preserve the integrity of the string value.
-+EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
-+ifneq ($(EXT2_LABEL),)
-+EXT2_OPTS += -l "$(EXT2_LABEL)"
- endif
- 
- ROOTFS_EXT2_DEPENDENCIES = host-mke2img
+diff --git a/package/mpfr/0001-Fix-obsolete-ARC-asm-constraints.patch b/package/mpfr/0001-Fix-obsolete-ARC-asm-constraints.patch
+new file mode 100644
+index 0000000..12590cf
+--- /dev/null
++++ b/package/mpfr/0001-Fix-obsolete-ARC-asm-constraints.patch
+@@ -0,0 +1,37 @@
++mpfr-longlong.h: Fix obsolete ARC asm constraints
++
++This patch replaces obsolete ARC "J" asm constraint with
++up-to-date "Cal" constraint.
++The patch should be applied to upstream "mpfr" library and
++after that it should be removed from buildroot as soon as 
++mpfr version with current fix will come up.
++
++Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
++Signed-off-by: Claudiu Zissulescu <claziss@synopsys.com>
++---
++Index: /src/mpfr-longlong.h
++===================================================================
++--- /src/mpfr-longlong.h	(revision 10963)
+++++ /src/mpfr-longlong.h	(working copy)
++@@ -416,17 +416,17 @@
++ 	   : "=r" (sh),							\
++ 	     "=&r" (sl)							\
++ 	   : "r"  ((USItype) (ah)),					\
++-	     "rIJ" ((USItype) (bh)),					\
+++	     "rICal" ((USItype) (bh)),					\
++ 	     "%r" ((USItype) (al)),					\
++-	     "rIJ" ((USItype) (bl)))
+++	     "rICal" ((USItype) (bl)))
++ #define sub_ddmmss(sh, sl, ah, al, bh, bl) \
++   __asm__ ("sub.f\t%1, %4, %5\n\tsbc\t%0, %2, %3"			\
++ 	   : "=r" (sh),							\
++ 	     "=&r" (sl)							\
++ 	   : "r" ((USItype) (ah)),					\
++-	     "rIJ" ((USItype) (bh)),					\
+++	     "rICal" ((USItype) (bh)),					\
++ 	     "r" ((USItype) (al)),					\
++-	     "rIJ" ((USItype) (bl)))
+++	     "rICal" ((USItype) (bl)))
++ #endif
++ 
++ #if defined (__arm__) && (defined (__thumb2__) || !defined (__thumb__)) \
