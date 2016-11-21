@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 21:17:08 +0100
-Subject: [Buildroot] [PATCH v3 1/2] linux-headers: bump 3.2.x and 4.{4,
- 8}.x series
-In-Reply-To: <20161121104928.44869-1-Vincent.Riera@imgtec.com>
-References: <20161121104928.44869-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161121211708.10c0d633@free-electrons.com>
+Date: Mon, 21 Nov 2016 21:17:11 +0100
+Subject: [Buildroot] [PATCH] tiff: bump version to 4.0.7 (security)
+In-Reply-To: <20161121101350.31299-1-Vincent.Riera@imgtec.com>
+References: <20161121101350.31299-1-Vincent.Riera@imgtec.com>
+Message-ID: <20161121211711.1eaa3666@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +12,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 21 Nov 2016 10:49:27 +0000, Vicente Olivert Riera wrote:
+On Mon, 21 Nov 2016 10:13:50 +0000, Vicente Olivert Riera wrote:
+> Fixed CVEs:
+>  - CVE-2016-3622
+>  - CVE-2016-3623
+>  - CVE-2016-5321
+>  - CVE-2016-5323
+>  - CVE-2016-5652
+>  - CVE-2016-5875
+>  - CVE-2014-8127
+>  - CVE-2015-8665
+>  - CVE-2015-8683
+>  - CVE-2016-9273
+>  - CVE-2016-9448
+> 
+> Release notes: http://www.simplesystems.org/libtiff/v4.0.7.html
+> 
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
-> Changes v2 -> v3:
->  - also bump 3.2.x series
->  - bump 4.8.x series to 4.8.10 instead of 4.8.8
-> Changes v1 -> v2:
->  - rebase on top of master
->  - drop 3.12.x changes as they are already part of master
-> ---
->  package/linux-headers/Config.in.host | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/tiff/tiff.hash | 2 +-
+>  package/tiff/tiff.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied to master, thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
