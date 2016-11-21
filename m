@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 21:17:11 +0100
-Subject: [Buildroot] [PATCH] tiff: bump version to 4.0.7 (security)
-In-Reply-To: <20161121101350.31299-1-Vincent.Riera@imgtec.com>
-References: <20161121101350.31299-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161121211711.1eaa3666@free-electrons.com>
+Date: Mon, 21 Nov 2016 21:16:42 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 4.8.10
+Message-ID: <20161121201837.9B94E818E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c88713070e2d6aa799fe9c8b4d01a413e2e5fbe3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 21 Nov 2016 10:13:50 +0000, Vicente Olivert Riera wrote:
-> Fixed CVEs:
->  - CVE-2016-3622
->  - CVE-2016-3623
->  - CVE-2016-5321
->  - CVE-2016-5323
->  - CVE-2016-5652
->  - CVE-2016-5875
->  - CVE-2014-8127
->  - CVE-2015-8665
->  - CVE-2015-8683
->  - CVE-2016-9273
->  - CVE-2016-9448
-> 
-> Release notes: http://www.simplesystems.org/libtiff/v4.0.7.html
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/tiff/tiff.hash | 2 +-
->  package/tiff/tiff.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 7e141a2..d8ac5fa 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.8.7)"
++	bool "Latest version (4.8.10)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.8.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.8.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
