@@ -1,46 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 23:17:42 +0100
-Subject: [Buildroot] [PATCH v2] wireshark: bump version to 2.2.2
- (security)
-In-Reply-To: <20161117155508.37814-1-Vincent.Riera@imgtec.com>
-References: <20161117155508.37814-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161121231742.5f7ab934@free-electrons.com>
+Date: Mon, 21 Nov 2016 23:18:54 +0100
+Subject: [Buildroot] [git commit branch/next] btrfs-progs: bump version to
+	4.8.3
+Message-ID: <20161121221857.61DD581992@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=db5bcab79b3460b80163c98bb92b3c6fd08706f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 17 Nov 2016 15:55:08 +0000, Vicente Olivert Riera wrote:
-> Release notes:
->   https://www.wireshark.org/docs/relnotes/wireshark-2.2.2.html
-> 
-> Security fixes:
->   wnpa-sec-2016-62. DTN infinite loop.
->   wnpa-sec-2016-61. DCERPC crash.
->   wnpa-sec-2016-60. OpenFlow crash.
->   wnpa-sec-2016-59. AllJoyn crash.
->   wnpa-sec-2016-58. Profinet I/O long loop.
-> 
->   For more details: https://www.wireshark.org/security/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
-> Changes v1 -> v2:
->  - rebase on top of master
->  - specify this is a security update in commit log
->  - add information regarding the security fixes in commit log
-> ---
->  package/wireshark/wireshark.hash | 4 ++--
->  package/wireshark/wireshark.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index de9c56b..83a9624 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256	81c023f519c8565b23eddb90e6d0eec2be63ee52e440708e418539dbaa635c5f	btrfs-progs-v4.8.2.tar.xz
++sha256 c1a60c317d2fcaf8420779d2d0717ae53882c2bc22bc44e3bdcd5efb7ca68ef2  btrfs-progs-v4.8.3.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 2dd9246..e2deb57 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BTRFS_PROGS_VERSION = 4.8.2
++BTRFS_PROGS_VERSION = 4.8.3
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
