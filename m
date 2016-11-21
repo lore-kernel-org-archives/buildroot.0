@@ -1,138 +1,116 @@
-From: Kenneth Adam Miller <kennethadammiller@gmail.com>
-Date: Mon, 21 Nov 2016 17:23:44 -0500
-Subject: [Buildroot] Uclibc shm performance issue
-In-Reply-To: <06663991-b120-8679-00b3-5b7ea07c4df3@mind.be>
-References: <CAK7rcp_18Ygbkafq--7qii_9gF-7FrXq7W2iv6EL2vd9efLUxw@mail.gmail.com>
- <CAK7rcp_Z6M4aTp_f8v_Qr5ZEXjnR96pK8eAhx9D7Gs1n6_c_ig@mail.gmail.com>
- <CAK7rcp8e9cAKD0hMrhjE0Fjd64sc_8MdYk1Mnc4D0zozpSMv1w@mail.gmail.com>
- <CAK7rcp9DChiLzazH3gA-YSZ9+HFtQakLbwo6zK-BLAeDqMTHYw@mail.gmail.com>
- <CAK7rcp9R=4had7MJx5MQwqROZh39pYU7WVkgqoFj=qvNV-vzQw@mail.gmail.com>
- <CAK7rcp-LTN68VXOUZOKu_jET9WN5-F1iAQivLe3WsU0zO6iQcg@mail.gmail.com>
- <CAK7rcp_MQbDUFtr2F-GNYU=Mz_5N-0Jv-Yh3aYqr6HOFqvGPxw@mail.gmail.com>
- <CAK7rcp9Rv-JMX=inPMinGZ22LHe+rt0HHfNDTrkj5xaU-hQi3A@mail.gmail.com>
- <CAK7rcp_J_LFvzHyCSbNrgZOz==zFHQ4H2fRrPe0pYJFUwPeX9g@mail.gmail.com>
- <CAK7rcp-2ANhykJACZdPJfmaHm106-Z6W3O80jzogYgk1m3+_mg@mail.gmail.com>
- <af3ce912-0cf7-231a-9919-76ad84cca006@mind.be>
- <CAK7rcp_28bsfbt_WVD4a7FhM_Owag-pH_eeJqCO69nYariNn8g@mail.gmail.com>
- <06663991-b120-8679-00b3-5b7ea07c4df3@mind.be>
-Message-ID: <CAK7rcp_HV=rjGFRR7BWx50s65LAoTyb+snv+aVQnNcF8LSqf-Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Nov 2016 23:28:25 +0100
+Subject: [Buildroot] [git commit branch/next] uclibc-ng-test: new package
+Message-ID: <20161121223657.19F8480089@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No no, my uclibc is different between my target and my host. So, I
-can't just run what buildroot built.
+commit: https://git.buildroot.net/buildroot/commit/?id=a6978c38d56611c3098530c48f4cbd212733b416
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-But I did try a statically compiled benchmark that leveraged musl, and
-performance is phenominally terrible.
+The next release of uClibc-ng (1.0.20) will remove the test suite.
+Add a separate package before the next release.
 
-By the way, this is just shm files backed by /dev/shm using shm_open.
-Just to make sure that that is clear, I'm not sure what it is that is
-causing such awful performance.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+[Thomas: rewrap Config.in help text.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                        |  1 +
+ package/uclibc-ng-test/Config.in         | 22 ++++++++++++++++
+ package/uclibc-ng-test/uclibc-ng-test.mk | 45 ++++++++++++++++++++++++++++++++
+ 3 files changed, 68 insertions(+)
 
-So far, this has isolated the issue from involving either the libc
-implementation or the actual test software itself. I think it is
-something to do with the way I built my custom linux image, possibly
-the architecture like you said. But one more thing is, I test my image
-by running it under qemu and by running it on dedicated hardware.
-
-On Mon, Nov 21, 2016 at 5:19 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 21-11-16 23:01, Kenneth Adam Miller wrote:
->> On Mon, Nov 21, 2016 at 4:40 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>>  Hi Kenneth,
->>>
->>> On 21-11-16 20:10, Kenneth Adam Miller wrote:
->>>> Hello,
->>>>
->>>> I'm using an absolutely miniscule fully compiled test inside a custom linux
->>>> built by buildroot with uclibc, and I'm opening and memcpy'ing raw data into a
->>>> shm region shared between two processes. On my host, I get fantastic performance
->>>> of course, gigabytes per second as expected. Therefore I know that the code that
->>>> I wrote is fast. But when I move it to run inside our booted image, I take a
->>>> huge performance hit. I'm not sure what the source is, but I wanted to know if
->>>> anybody would think that uclibc would affect performance so dramatically, or if
->>>> there could be some buildroot specific option that I could change that would
->>>> improve things. There are two layers of performance penalty in fact, one just
->>>> moving into the custom linux, and another when we drive our C library with Ruby.
->>>> I understand that that is to be expected but for me, i dont think that the
->>>> penalty should be so enormous for that as well. Perhaps grsec could be affecting it?
->>>
->>>  It sounds like you're stacking a huge number of changes on top of each other,
->>> and any of them could be the cause. So I think it's better to test each of them
->>> separately.
->>>
->>> - Buildroot: change your configuration so it can run on your host, select glibc
->>> as your library and the same gcc version as you use on your host, chroot into
->>> the rootfs and execute your test application. Do you get the same performance?
->>>
->>
->> So, there's several different performances that I've already measured
->> - what you're talking about has already been measured, and it's the
->> basis against which I want everything else to compare. I understand if
->> there's some minor performance difference, but I don't expect to fall
->> out of the gigabytes per second range just going into a custom linux
->> image.
->>
->>> - uClibc: like above, but use uClibc as the C library
->>>
->>
->> I don't know what you're saying here.
->>
->>> - gcc: switch to the gcc version you use for your target
->>
->> Gcc versions between host and the target produced are each 4.8.4
->>
->>>
->>> - linux: build the same linux version (but the upstream one) as for your target
->>> with the configuration for your host, and boot into it natively
->>>
->>
->> Could something like linux 3.13 to 3.14 really make such a huge difference?
->>
->>> - grsec: like above but use the grsec-patches linux
->>
->> I only just started down the path of building a grsec disabled linux
->> to test with.
->>
->>>
->>> - CPU arch: now run it on your target
->>
->> Both my host and the produced linux use x86_64, so we're good there.
->
->  In that case, you can just chroot into the output/target directory and execute
-> your test application on the host. That immediately will tell you if it's
-> Buildroot+uClibc that is the culprit, or the CPU/kernel (config or grsec).
->
->  Note that a different CPU + memory architecture, even if it's still x86_64, can
-> make a lot of difference.
->
->  Regards,
->  Arnout
->
->>
->>>
->>> and you can do all that in a different order of course.
->>>
->>>  Regards,
->>>  Arnout
->>>
->>> --
->>> Arnout Vandecappelle                          arnout at mind be
->>> Senior Embedded Software Architect            +32-16-286500
->>> Essensium/Mind                                http://www.mind.be
->>> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
->>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
->>> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->>
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/Config.in b/package/Config.in
+index 7c91215..b2e1a2a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -114,6 +114,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/tinymembench/Config.in"
+ 	source "package/trace-cmd/Config.in"
+ 	source "package/trinity/Config.in"
++	source "package/uclibc-ng-test/Config.in"
+ 	source "package/valgrind/Config.in"
+ 	source "package/whetstone/Config.in"
+ endmenu
+diff --git a/package/uclibc-ng-test/Config.in b/package/uclibc-ng-test/Config.in
+new file mode 100644
+index 0000000..0f093d1
+--- /dev/null
++++ b/package/uclibc-ng-test/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_UCLIBC_NG_TEST
++	bool "uclibc-ng-test"
++	help
++	  Enabling this option will compile and install the uClibc-ng
++	  test suite. This is useful if you want to check if the
++	  uClibc-ng library is working for your architecture and/or
++	  help developing uClibc-ng.
++
++	  The test suite will be installed into
++	  /usr/lib/uclibc-ng-test directory. To run the test suite
++	  enter the /usr/lib/uclibc-ng-test/test directory and type
++	  "sh uclibcng-testrunner.sh".
++
++	  See the /usr/lib/uclibc-ng-test/test/README for additional
++	  information.
++
++	  This is not needed at all for normal builds, so you can
++	  safely say no if you do not plan to dig into your C library.
++
++	  The tests can also be used for GNU libc or musl.
++
++	  http://www.uclibc-ng.org
+diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
+new file mode 100644
+index 0000000..f6700a9
+--- /dev/null
++++ b/package/uclibc-ng-test/uclibc-ng-test.mk
+@@ -0,0 +1,45 @@
++################################################################################
++#
++# uclibc-ng-test
++#
++################################################################################
++
++UCLIBC_NG_TEST_VERSION = 4ad1c23ae2eb30888cda520c739cc26150512487
++UCLIBC_NG_TEST_SITE = git://uclibc-ng.org/git/uclibc-ng-test
++UCLIBC_NG_TEST_LICENSE = LGPLv2.1+
++UCLIBC_NG_TEST_LICENSE_FILES = COPYING.LIB
++
++ifeq ($(BR2_USE_WCHAR),)
++UCLIBC_NG_TEST_MAKE_ENV += NO_WCHAR=1
++endif
++ifeq ($(BR2_ENABLE_LOCALE),)
++UCLIBC_NG_TEST_MAKE_ENV += NO_LOCALE=1
++endif
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1 NO_THREADS=1
++endif
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),)
++UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1 NO_NPTL=1
++endif
++# most NPTL/TLS tests use dlopen
++ifeq ($(BR2_STATIC_LIBS),y)
++UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1 NO_NPTL=1 NO_DL=1
++endif
++
++# to execute tests in a deterministic order, call test_gen separately
++define UCLIBC_NG_TEST_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(UCLIBC_NG_TEST_MAKE_ENV) $(MAKE) -C $(@D) \
++		CC="$(TARGET_CC)" \
++		UCLIBC_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
++		test_compile
++	$(TARGET_MAKE_ENV) $(UCLIBC_NG_TEST_MAKE_ENV) $(MAKE1) -C $(@D) \
++		CC="$(TARGET_CC)" \
++		UCLIBC_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
++		test_gen
++endef
++
++define UCLIBC_NG_TEST_INSTALL_TARGET_CMDS
++        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
++endef
++
++$(eval $(generic-package))
