@@ -1,57 +1,38 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Mon, 21 Nov 2016 11:15:29 -0500
-Subject: [Buildroot] [PATCH] fs/ext2: fix double quoted label
-Message-ID: <20161121161529.10366-1-gael.portay@savoirfairelinux.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 21 Nov 2016 19:32:18 +0100
+Subject: [Buildroot] [PATCH] ptpd2: fix bfin compile by avoiding gcc bug
+Message-ID: <20161121183217.GA1046@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the commit 6dd7bbb59134799ed3d7343f238b3b02592faebf, the label does
-not need anymore to be quoted. Even worse it *must* not be simple-quoted,
-unless the label will contain the double-quotes from the config variable
-BR2_TARGET_ROOTFS_EXT2_LABEL.
+ Fixes:
+  http://autobuild.buildroot.net/results/cb967c8af006caa9272e800968f794ca018a7a27
+  http://autobuild.buildroot.net/results/9a046dc5ef390e562b89338f0afeaef14b945458
 
-The commit mentionned above has replaced echo by printf:
--	echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
-+	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
-
-Since this commit the rootfs label contains extra double-quotes.
-$ blkid
-/dev/mmcblk0: LABEL=""BR 2016.08"" UUID="xxx"
-                     ^          ^
-
-With this fix, the extra double-quotes have disappeared:
-/dev/mmcblk0: LABEL="BR 2016.11-rc2" UUID="yyy"
-
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- fs/ext2/ext2.mk | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ package/ptpd2/ptpd2.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 7417f81..cfb34c4 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -20,12 +20,11 @@ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
- EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
+diff --git a/package/ptpd2/ptpd2.mk b/package/ptpd2/ptpd2.mk
+index da6a106..43b59dc 100644
+--- a/package/ptpd2/ptpd2.mk
++++ b/package/ptpd2/ptpd2.mk
+@@ -24,6 +24,12 @@ else
+ PTPD2_CONF_OPTS += --disable-snmp
  endif
  
--# Not qstrip-ing the variable, because it may contain spaces, but we must
--# qstrip it when checking. Furthermore, we need to further quote it, so
--# that the quotes do not get eaten by the echo statement when creating the
--# fakeroot script
--ifneq ($(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_LABEL)),)
--EXT2_OPTS += -l '$(BR2_TARGET_ROOTFS_EXT2_LABEL)'
-+# qstrip results in stripping consecutive spaces into a single one. So the
-+# variable is not qstrip-ed to preserve the integrity of the string value.
-+EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
-+ifneq ($(EXT2_LABEL),)
-+EXT2_OPTS += -l "$(EXT2_LABEL)"
- endif
- 
- ROOTFS_EXT2_DEPENDENCIES = host-mke2img
++# GCC bug with Os/O1/O2/O3
++# internal compiler error: in gen_add2_insn, at optabs.c:4454
++ifeq ($(BR2_bfin),y)
++PTPD2_CONF_ENV += CFLAGS="-O0"
++endif
++
+ define PTPD2_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 755 -D package/ptpd2/S65ptpd2 \
+ 		$(TARGET_DIR)/etc/init.d/S65ptpd2
 -- 
-2.10.2
+2.1.4
