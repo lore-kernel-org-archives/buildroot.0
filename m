@@ -1,69 +1,65 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Mon, 21 Nov 2016 17:08:05 +0300
-Subject: [Buildroot] [PATCH] mpfr: Fix obsolete ARC asm constraints
-Message-ID: <1479737285-3329-1-git-send-email-vzakhar@synopsys.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 21 Nov 2016 15:24:07 +0100
+Subject: [Buildroot] [PATCH 2/2] e2fsprogs: keep util-linux's fsck if
+	chosen
+In-Reply-To: <1043203342.6813512.1479733854854.JavaMail.zimbra@datacom.ind.br>
+References: <20161118152427.16515-1-maxime.hadjinlian@gmail.com>
+ <20161118152427.16515-2-maxime.hadjinlian@gmail.com>
+ <1043203342.6813512.1479733854854.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <CAGduivxBL8=fZafQG3odT_2_UUDruUgB1ioozn9tJvX6OPe_Zw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"mpfr" library build was failing due to obsolete ARC asm constraints.
+Hi there,
 
-This commit replaces obsolete "J" constraints with up-to-date "Cal"
-ones in order to fix "mpfr" build for ARC.
-
-Fixes:
-http://autobuild.buildroot.net/results/579/579de571270ad562fbb1699224d557d16276704b//
-
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
----
- .../0001-Fix-obsolete-ARC-asm-constraints.patch    | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/mpfr/0001-Fix-obsolete-ARC-asm-constraints.patch
-
-diff --git a/package/mpfr/0001-Fix-obsolete-ARC-asm-constraints.patch b/package/mpfr/0001-Fix-obsolete-ARC-asm-constraints.patch
-new file mode 100644
-index 0000000..12590cf
---- /dev/null
-+++ b/package/mpfr/0001-Fix-obsolete-ARC-asm-constraints.patch
-@@ -0,0 +1,37 @@
-+mpfr-longlong.h: Fix obsolete ARC asm constraints
-+
-+This patch replaces obsolete ARC "J" asm constraint with
-+up-to-date "Cal" constraint.
-+The patch should be applied to upstream "mpfr" library and
-+after that it should be removed from buildroot as soon as 
-+mpfr version with current fix will come up.
-+
-+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-+Signed-off-by: Claudiu Zissulescu <claziss@synopsys.com>
-+---
-+Index: /src/mpfr-longlong.h
-+===================================================================
-+--- /src/mpfr-longlong.h	(revision 10963)
-++++ /src/mpfr-longlong.h	(working copy)
-+@@ -416,17 +416,17 @@
-+ 	   : "=r" (sh),							\
-+ 	     "=&r" (sl)							\
-+ 	   : "r"  ((USItype) (ah)),					\
-+-	     "rIJ" ((USItype) (bh)),					\
-++	     "rICal" ((USItype) (bh)),					\
-+ 	     "%r" ((USItype) (al)),					\
-+-	     "rIJ" ((USItype) (bl)))
-++	     "rICal" ((USItype) (bl)))
-+ #define sub_ddmmss(sh, sl, ah, al, bh, bl) \
-+   __asm__ ("sub.f\t%1, %4, %5\n\tsbc\t%0, %2, %3"			\
-+ 	   : "=r" (sh),							\
-+ 	     "=&r" (sl)							\
-+ 	   : "r" ((USItype) (ah)),					\
-+-	     "rIJ" ((USItype) (bh)),					\
-++	     "rICal" ((USItype) (bh)),					\
-+ 	     "r" ((USItype) (al)),					\
-+-	     "rIJ" ((USItype) (bl)))
-++	     "rICal" ((USItype) (bl)))
-+ #endif
-+ 
-+ #if defined (__arm__) && (defined (__thumb2__) || !defined (__thumb__)) \
--- 
-2.6.3
+On Mon, Nov 21, 2016 at 2:10 PM, Carlos Santos <casantos@datacom.ind.br> wrote:
+>> From: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+>> To: buildroot at buildroot.org
+>> Sent: Friday, November 18, 2016 1:24:27 PM
+>> Subject: [Buildroot] [PATCH 2/2] e2fsprogs: keep util-linux's fsck if chosen
+>
+>> Since e2fsprogs depends on util-linux, it's build after it. It means
+>> that if you want the fsck wrapper from util-linux (which is better
+>> maintained and you are sure that it's compatible with systemd) and you
+>> want e2fsck, it won't work.
+>>
+>> Because of the merge of /usr/bin and /bin, we end up deleting the fsck
+>> from util-linux.
+>>
+>> This makes an attempt at fixing the issues.
+>>
+>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>> ---
+>> I am cleary not satisfied by the way I handled that, I am not even sure
+>> it works in all cases. I can't spend much more time on this right now,
+>> so I need advice/help from the community to fix that in a proper/generic
+>> manner.
+> What about using something like this, instead?
+It's indeed better, but you have to keep the bit about the busybox
+applet due to the merge of /sbin and /usr/sbin
+>
+> diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
+> index 4db11e1..c0b48e1 100644
+> --- a/package/e2fsprogs/Config.in
+> +++ b/package/e2fsprogs/Config.in
+> @@ -60,8 +60,12 @@ config BR2_PACKAGE_E2FSPROGS_FILEFRAG
+>
+>  config BR2_PACKAGE_E2FSPROGS_FSCK
+>         bool "fsck"
+> +       depends on !BR2_PACKAGE_UTIL_LINUX_FSCK
+>         default y
+>
+> +comment "the fsck from util-linux has preference over this one"
+> +       depends on BR2_PACKAGE_UTIL_LINUX_FSCK
+> +
+>  config BR2_PACKAGE_E2FSPROGS_FUSE2FS
+>         bool "fuse2fs"
+>         depends on !BR2_STATIC_LIBS # libfuse
+>
+>
+> Carlos Santos (Casantos)
+> DATACOM, P&D
+>
