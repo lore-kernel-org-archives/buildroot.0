@@ -1,86 +1,136 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 22 Nov 2016 00:43:40 +0100
-Subject: [Buildroot] [PATCH 2/2] toolchain: simplify the conditions for
-	BR2_TOOLCHAIN_ARM_HAS_SYNC_8
-In-Reply-To: <20161121234340.30463-1-arnout@mind.be>
-References: <20161121234340.30463-1-arnout@mind.be>
-Message-ID: <20161121234340.30463-2-arnout@mind.be>
+Date: Tue, 22 Nov 2016 00:43:39 +0100
+Subject: [Buildroot] [PATCH 1/2] gcc: backport upstream patch for sync_8 in
+	!glibc
+Message-ID: <20161121234340.30463-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we patch the internal toolchain to remove the call to __write in
-the 8-byte __sync implementation, this now also works for uClibc and
-musl in gcc 4.8 and 4.9. gcc 5 and 6 were already working, but the
-condition on BR2_TOOLCHAIN_ARM_HAS_SYNC_8 hadn't been updated.
+gcc 4.7 introduced the sync_8 builtin functions for ARM. For ARM < v7,
+this requires calling into the kernel. However, the failure path of
+that call reports an error with the __write() function, which is a
+glibc internal function. Therefore, it fails to link with uClibc or
+musl. This was fixed in gcc 5.2.0, by replacing the __write() with
+a plain write().
 
-We can simplify the condition quite a bit by just requiring gcc 4.8+.
-This means that gcc 4.7 + (glibc or ARMv7) is no longer considered to
-have 8-byte __sync, but it's not possible to build an internal
-toolchain with gcc 4.7, and there is no common external toolchain that
-uses gcc 4.7 for ARM. In addition, very few packages depend on
-BR2_TOOLCHAIN_ARM_HAS_SYNC_8 so nobody will miss it.
+For sync_8 itself we have solved this with the conditions on
+BR2_TOOLCHAIN_ARM_HAS_SYNC_8. However, the same function is also used
+for the implementation of atomics.
 
-Note that we assume that external toolchains with gcc 4.8 and 4.9 have
-been fixed. Since most external toolchains use glibc, and the musl
-external toolchain uses gcc 5.3.0, this is a relatively safe assumption.
-And again, very few packages are affected.
+For the internal toolchain, we can fix this by backporting the patch
+to 4.9.4 and 4.8.5.
+
+Fixes:
+http://autobuild.buildroot.net/results/1db64b4830f499621e44523e0ef68191505e2ce9
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-I guess this change is for next, not for master. But it depends on
-patch 1/2 (though not in the sense of causing a merge conflict).
-Perhaps it's best to leave it lingering in patchwork until after the
-release of 2016.11, or after a master->next merge.
+ ...et-68059-libgcc-should-not-use-__write-fo.patch | 43 ++++++++++++++++++++++
+ ...et-68059-libgcc-should-not-use-__write-fo.patch | 43 ++++++++++++++++++++++
+ 2 files changed, 86 insertions(+)
+ create mode 100644 package/gcc/4.8.5/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
+ create mode 100644 package/gcc/4.9.4/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
 
-I build-tested kodi on a uClibc arm926t with the gcc patch applied.
----
- toolchain/toolchain-common.in | 26 ++++++++------------------
- 1 file changed, 8 insertions(+), 18 deletions(-)
-
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index bf9dc7b..4699e8d 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -332,29 +332,19 @@ config BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_sparc
- 	depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
- 
--# The availability of __sync for 8-byte types on ARM is somewhat
--# complicated:
--#
--#  - It appeared in gcc starting with gcc 4.7.
--#
--#  - On ARMv7, there is no problem, it can be directly implemented in
--#    userspace.
--#
--#  - On < ARMv7, it requires help from the kernel. Unfortunately, the
--#    libgcc code implementing 8-byte __sync with the help from the
--#    kernel calls __write() when a failure occurs, which is a function
--#    internal to glibc, not available in uClibc and musl. This means
--#    that the 8-byte __sync operations are not available on < ARMv7
--#    with uClibc and musl. This problem was fixed as part of gcc
--#    PR68059, which was backported to the gcc 5 branch, but isn't yet
--#    part of any gcc 5.x release.
-+# __sync for 8-byte types on ARM appeared in gcc starting with gcc 4.7.
-+# However, this implementation called the glibc-internal __write() function
-+# for < ARMv7, which caused link failures with uClibc and musl. This problem
-+# was fixed as part of gcc PR68059, which was backported to gcc 5.2.0.
-+# In the internal toolchain we also backported to gcc 4.8 and 4.9. To simplify
-+# things, and since most external toolchains are glibc, we assume the 8-byte
-+# __sync type is available for gcc >= 4.8.
- #
- config BR2_TOOLCHAIN_ARM_HAS_SYNC_8
- 	bool
- 	default y
- 	depends on BR2_arm || BR2_armeb
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
--	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_ARM_CPU_ARMV7A
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- # 8-byte intrinsics available on most x86 CPUs, except a few old ones
- config BR2_TOOLCHAIN_X86_HAS_SYNC_8
+diff --git a/package/gcc/4.8.5/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch b/package/gcc/4.8.5/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
+new file mode 100644
+index 0000000..d8c6723
+--- /dev/null
++++ b/package/gcc/4.8.5/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
+@@ -0,0 +1,43 @@
++From edb9057c195c41dd7bcd8603e5fd420359edd520 Mon Sep 17 00:00:00 2001
++From: nsz <nsz@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Mon, 23 Nov 2015 15:17:55 +0000
++Subject: [PATCH] [ARM] PR target/68059 libgcc should not use __write for
++ printing fatal error
++
++libgcc/
++	PR target/68059
++	* config/arm/linux-atomic-64bit.c (__write): Rename to...
++	(write): ...this and fix the return type.
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 230762 138bc75d-0d04-0410-961f-82ee72b054a4
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++ libgcc/config/arm/linux-atomic-64bit.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libgcc/config/arm/linux-atomic-64bit.c b/libgcc/config/arm/linux-atomic-64bit.c
++index 7aa8dfc..570b4ce 100644
++--- a/libgcc/config/arm/linux-atomic-64bit.c
+++++ b/libgcc/config/arm/linux-atomic-64bit.c
++@@ -33,7 +33,7 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
++    kernels; we check for that in an init section and bail out rather
++    unceremoneously.  */
++ 
++-extern unsigned int __write (int fd, const void *buf, unsigned int count);
+++extern int write (int fd, const void *buf, unsigned int count);
++ extern void abort (void);
++ 
++ /* Kernel helper for compare-and-exchange.  */
++@@ -56,7 +56,7 @@ static void __check_for_sync8_kernelhelper (void)
++ 	 for the user - I'm not sure I can rely on much else being
++ 	 available at this point, so do the same as generic-morestack.c
++ 	 write () and abort ().  */
++-      __write (2 /* stderr.  */, err, sizeof (err));
+++      write (2 /* stderr.  */, err, sizeof (err));
++       abort ();
++     }
++ };
++-- 
++2.10.2
++
+diff --git a/package/gcc/4.9.4/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch b/package/gcc/4.9.4/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
+new file mode 100644
+index 0000000..fd2bc69
+--- /dev/null
++++ b/package/gcc/4.9.4/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
+@@ -0,0 +1,43 @@
++From 80bc14a5249da7054b716229206b453f339b4a5e Mon Sep 17 00:00:00 2001
++From: nsz <nsz@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Mon, 23 Nov 2015 15:17:55 +0000
++Subject: [PATCH] [ARM] PR target/68059 libgcc should not use __write for
++ printing fatal error
++
++libgcc/
++	PR target/68059
++	* config/arm/linux-atomic-64bit.c (__write): Rename to...
++	(write): ...this and fix the return type.
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 230762 138bc75d-0d04-0410-961f-82ee72b054a4
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++ libgcc/config/arm/linux-atomic-64bit.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libgcc/config/arm/linux-atomic-64bit.c b/libgcc/config/arm/linux-atomic-64bit.c
++index 5b8c6e2..9078673 100644
++--- a/libgcc/config/arm/linux-atomic-64bit.c
+++++ b/libgcc/config/arm/linux-atomic-64bit.c
++@@ -33,7 +33,7 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
++    kernels; we check for that in an init section and bail out rather
++    unceremoneously.  */
++ 
++-extern unsigned int __write (int fd, const void *buf, unsigned int count);
+++extern int write (int fd, const void *buf, unsigned int count);
++ extern void abort (void);
++ 
++ /* Kernel helper for compare-and-exchange.  */
++@@ -56,7 +56,7 @@ static void __check_for_sync8_kernelhelper (void)
++ 	 for the user - I'm not sure I can rely on much else being
++ 	 available at this point, so do the same as generic-morestack.c
++ 	 write () and abort ().  */
++-      __write (2 /* stderr.  */, err, sizeof (err));
+++      write (2 /* stderr.  */, err, sizeof (err));
++       abort ();
++     }
++ };
++-- 
++2.10.2
++
 -- 
 2.10.2
