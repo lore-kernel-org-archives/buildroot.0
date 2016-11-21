@@ -1,76 +1,74 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 21 Nov 2016 14:58:23 +0000
-Subject: [Buildroot] [PATCH] jack2: Try better fix for NGREG problem
-In-Reply-To: <20161121155434.728d1acb@free-electrons.com>
-References: <1479739795-31046-1-git-send-email-abrodkin@synopsys.com>
- <20161121155434.728d1acb@free-electrons.com>
-Message-ID: <1479740246.4199.72.camel@synopsys.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 21 Nov 2016 13:03:11 -0200 (BRST)
+Subject: [Buildroot] [PATCH 2/2] e2fsprogs: keep util-linux's fsck if
+ chosen
+In-Reply-To: <CAGduivxBL8=fZafQG3odT_2_UUDruUgB1ioozn9tJvX6OPe_Zw@mail.gmail.com>
+References: <20161118152427.16515-1-maxime.hadjinlian@gmail.com>
+ <20161118152427.16515-2-maxime.hadjinlian@gmail.com>
+ <1043203342.6813512.1479733854854.JavaMail.zimbra@datacom.ind.br>
+ <CAGduivxBL8=fZafQG3odT_2_UUDruUgB1ioozn9tJvX6OPe_Zw@mail.gmail.com>
+Message-ID: <621304273.6901494.1479740590995.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+> From: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: "buildroot" <buildroot@buildroot.org>
+> Sent: Monday, November 21, 2016 12:24:07 PM
+> Subject: Re: [Buildroot] [PATCH 2/2] e2fsprogs: keep util-linux's fsck if chosen
 
-On Mon, 2016-11-21 at 15:54 +0100, Thomas Petazzoni wrote:
-> Hello,
+> Hi there,
 > 
-> On Mon, 21 Nov 2016 17:49:55 +0300, Alexey Brodkin wrote:
-> > 
-> > After quite some time trying this and that we seem to have no
-> > better solution than proposed by Thomas back in the day [1].
-> > 
-> > The solution in question is to check [during jack2 configuration]
-> > if NGREG is exposed via ucontext.h and then use its value in
-> > source code later on. This replaces long and still growing list
-> > of architectures for which we explicitly escape usage of NGREG.
-> > 
-> > Just for reference [2] is my attempt to fix in in the other
-> > supposedly better way but with no luck because of the mess in
-> > kernel's UAPI headers.
-> > 
-> > [1] http://lists.busybox.net/pipermail/buildroot/2016-May/161785.html
-> > [2] http://lists.busybox.net/pipermail/buildroot/2016-June/162461.html
-> > 
-> > Still not sure if that works for every other architectures, so testing
-> > and Acks from all interested parties are much appreciated.
-> 
-> Unfortunately, I experimented with something like this some time ago,
-> and IIRC, it didn't work all architectures, because NGREG is not always
-> defined in <ucontext.h>, but can be defined in other header files (if I
-> recall). In the end, I think I ended up with something like the below,
-> but I don't remember if I tested it in all cases:
-> 
-> (As you can see, it dates back from May 2016...)
-> 
-> From 15685fd4409486e7059bb480193d1086c5634910 Mon Sep 17 00:00:00 2001
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Date: Mon, 23 May 2016 22:28:12 +0200
-> Subject: [PATCH] Improve check for ucontext
-> 
-> The ucontext functionality is not available on all CPUs with all C
-> libraries. Instead of making just assumptions based on the CPU
-> architecture, this commit adds the necessary checks in wscript to verify
-> the availability of the ucontext functionality, before using it in
-> dbus/sigsegv.c.
-> 
-> This avoids the long list of architecture exclusions, and make it more
-> robust when building jack2 for new CPU architectures.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> ?dbus/sigsegv.c | 12 ++++++------
-> ?wscript????????| 11 ++++++++++-
-> ?2 files changed, 16 insertions(+), 7 deletions(-)
+> On Mon, Nov 21, 2016 at 2:10 PM, Carlos Santos <casantos@datacom.ind.br> wrote:
+>>> From: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+>>> To: buildroot at buildroot.org
+>>> Sent: Friday, November 18, 2016 1:24:27 PM
+>>> Subject: [Buildroot] [PATCH 2/2] e2fsprogs: keep util-linux's fsck if chosen
+>>
+>>> Since e2fsprogs depends on util-linux, it's build after it. It means
+>>> that if you want the fsck wrapper from util-linux (which is better
+>>> maintained and you are sure that it's compatible with systemd) and you
+>>> want e2fsck, it won't work.
+>>>
+>>> Because of the merge of /usr/bin and /bin, we end up deleting the fsck
+>>> from util-linux.
+>>>
+>>> This makes an attempt at fixing the issues.
+>>>
+>>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>>> ---
+>>> I am cleary not satisfied by the way I handled that, I am not even sure
+>>> it works in all cases. I can't spend much more time on this right now,
+>>> so I need advice/help from the community to fix that in a proper/generic
+>>> manner.
+>> What about using something like this, instead?
+> It's indeed better, but you have to keep the bit about the busybox
+> applet due to the merge of /sbin and /usr/sbin
 
-That now looks really scary.
-Maybe we follow much cleaner path and will remove that damned check where
-NGREG is used all together? Anyways it was used let's say "not always" so
-that might be not that bad solution.
+Right. Looks like combining the changes in Config.in and e2fsprogs.mk is the best approach.
 
-What do you think?
-
-Not sure if that corner case really requires more time from us.
-
--Alexey
+>>
+>> diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
+>> index 4db11e1..c0b48e1 100644
+>> --- a/package/e2fsprogs/Config.in
+>> +++ b/package/e2fsprogs/Config.in
+>> @@ -60,8 +60,12 @@ config BR2_PACKAGE_E2FSPROGS_FILEFRAG
+>>
+>>  config BR2_PACKAGE_E2FSPROGS_FSCK
+>>         bool "fsck"
+>> +       depends on !BR2_PACKAGE_UTIL_LINUX_FSCK
+>>         default y
+>>
+>> +comment "the fsck from util-linux has preference over this one"
+>> +       depends on BR2_PACKAGE_UTIL_LINUX_FSCK
+>> +
+>>  config BR2_PACKAGE_E2FSPROGS_FUSE2FS
+>>         bool "fuse2fs"
+>>         depends on !BR2_STATIC_LIBS # libfuse
+>>
+>>
+>> Carlos Santos (Casantos)
+>> DATACOM, P&D
