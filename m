@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 23:18:02 +0100
-Subject: [Buildroot] [git commit branch/next] ser2net: bump version to 3.2
-Message-ID: <20161121221836.C869781992@busybox.osuosl.org>
+Date: Mon, 21 Nov 2016 23:18:33 +0100
+Subject: [Buildroot] [git commit branch/next] libgtk2: bump version to
+	2.24.31
+Message-ID: <20161121221836.D617F81992@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f11224615d51c8fa366a3e51ac107e1263b14b8
+commit: https://git.buildroot.net/buildroot/commit/?id=291388e5455d94363221a48b16feeeb76217506c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ser2net/ser2net.hash | 2 +-
- package/ser2net/ser2net.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libgtk2/libgtk2.hash | 4 ++--
+ package/libgtk2/libgtk2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-index 3e62f1c..1b93643 100644
---- a/package/ser2net/ser2net.hash
-+++ b/package/ser2net/ser2net.hash
+diff --git a/package/libgtk2/libgtk2.hash b/package/libgtk2/libgtk2.hash
+index 175702f..3388c5c 100644
+--- a/package/libgtk2/libgtk2.hash
++++ b/package/libgtk2/libgtk2.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256 e8aaf6c629c78bbc424e8a6810758061f9c68a4ffea0faf7c5031de26ce1c3e1  ser2net-3.0.tar.gz
-+sha256 e91cf85ab2c1769e17be7726b133f8f3ad197e9d4b445bb0b0d2f3f97f88a083  ser2net-3.2.tar.gz
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index 01aee95..8090c06 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.30.sha256sum
+-sha256	0d15cec3b6d55c60eac205b1f3ba81a1ed4eadd9d0f8e7c508bc7065d0c4ca50	gtk+-2.24.30.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.31.sha256sum
++sha256 68c1922732c7efc08df4656a5366dcc3afdc8791513400dac276009b40954658  gtk+-2.24.31.tar.xz
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index 94fa97f..cf8b2f4 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SER2NET_VERSION = 3.0
-+SER2NET_VERSION = 3.2
- SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPLv2+
- SER2NET_LICENSE_FILES = COPYING
+ LIBGTK2_VERSION_MAJOR = 2.24
+-LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).30
++LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).31
+ LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
+ LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
+ LIBGTK2_INSTALL_STAGING = YES
