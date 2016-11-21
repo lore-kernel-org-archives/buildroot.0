@@ -1,43 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 22:43:03 +0100
-Subject: [Buildroot] [PATCH v2] mpv: needs atomics or 8-byte sync
-In-Reply-To: <20161120145434.20506-1-arnout@mind.be>
-References: <20161120145434.20506-1-arnout@mind.be>
-Message-ID: <20161121224303.7bd7749e@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 21 Nov 2016 22:40:47 +0100
+Subject: [Buildroot] Uclibc shm performance issue
+In-Reply-To: <CAK7rcp-2ANhykJACZdPJfmaHm106-Z6W3O80jzogYgk1m3+_mg@mail.gmail.com>
+References: <CAK7rcp_18Ygbkafq--7qii_9gF-7FrXq7W2iv6EL2vd9efLUxw@mail.gmail.com>
+ <CAK7rcp_Z6M4aTp_f8v_Qr5ZEXjnR96pK8eAhx9D7Gs1n6_c_ig@mail.gmail.com>
+ <CAK7rcp8e9cAKD0hMrhjE0Fjd64sc_8MdYk1Mnc4D0zozpSMv1w@mail.gmail.com>
+ <CAK7rcp9DChiLzazH3gA-YSZ9+HFtQakLbwo6zK-BLAeDqMTHYw@mail.gmail.com>
+ <CAK7rcp9R=4had7MJx5MQwqROZh39pYU7WVkgqoFj=qvNV-vzQw@mail.gmail.com>
+ <CAK7rcp-LTN68VXOUZOKu_jET9WN5-F1iAQivLe3WsU0zO6iQcg@mail.gmail.com>
+ <CAK7rcp_MQbDUFtr2F-GNYU=Mz_5N-0Jv-Yh3aYqr6HOFqvGPxw@mail.gmail.com>
+ <CAK7rcp9Rv-JMX=inPMinGZ22LHe+rt0HHfNDTrkj5xaU-hQi3A@mail.gmail.com>
+ <CAK7rcp_J_LFvzHyCSbNrgZOz==zFHQ4H2fRrPe0pYJFUwPeX9g@mail.gmail.com>
+ <CAK7rcp-2ANhykJACZdPJfmaHm106-Z6W3O80jzogYgk1m3+_mg@mail.gmail.com>
+Message-ID: <af3ce912-0cf7-231a-9919-76ad84cca006@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ Hi Kenneth,
 
-On Sun, 20 Nov 2016 15:54:34 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> The wscript checks the following.
->         'func': check_libs(['atomic'],
->             check_statement('stdint.h',
->                 'int64_t test = 0;'
->                 'test = __atomic_add_fetch(&test, 1, __ATOMIC_SEQ_CST)')),
-> and
->         'func': check_statement('stdint.h',
->                     'int64_t test = 0;'
->                     '__typeof__(test) x = ({int a = 1; a;});'
->                     'test = __sync_add_and_fetch(&test, 1)'),
-> It fails if neither of these are available.
+On 21-11-16 20:10, Kenneth Adam Miller wrote:
+> Hello,
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/8c20f719f784af1312294600e39004c1d382368a
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> I couldn't find a compiler without atomics and with 8-byte sync, so not
-> entirely sure if it's enough.
+> I'm using an absolutely miniscule fully compiled test inside a custom linux
+> built by buildroot with uclibc, and I'm opening and memcpy'ing raw data into a
+> shm region shared between two processes. On my host, I get fantastic performance
+> of course, gigabytes per second as expected. Therefore I know that the code that
+> I wrote is fast. But when I move it to run inside our booted image, I take a
+> huge performance hit. I'm not sure what the source is, but I wanted to know if
+> anybody would think that uclibc would affect performance so dramatically, or if
+> there could be some buildroot specific option that I could change that would
+> improve things. There are two layers of performance penalty in fact, one just
+> moving into the custom linux, and another when we drive our C library with Ruby.
+> I understand that that is to be expected but for me, i dont think that the
+> penalty should be so enormous for that as well. Perhaps grsec could be affecting it?
 
-Applied to master, thanks.
+ It sounds like you're stacking a huge number of changes on top of each other,
+and any of them could be the cause. So I think it's better to test each of them
+separately.
 
-Thomas
+- Buildroot: change your configuration so it can run on your host, select glibc
+as your library and the same gcc version as you use on your host, chroot into
+the rootfs and execute your test application. Do you get the same performance?
+
+- uClibc: like above, but use uClibc as the C library
+
+- gcc: switch to the gcc version you use for your target
+
+- linux: build the same linux version (but the upstream one) as for your target
+with the configuration for your host, and boot into it natively
+
+- grsec: like above but use the grsec-patches linux
+
+- CPU arch: now run it on your target
+
+and you can do all that in a different order of course.
+
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
