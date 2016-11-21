@@ -1,47 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 21:51:11 +0100
-Subject: [Buildroot] [PATCH v2] mplayer: disable for FLAT
-In-Reply-To: <20161120164526.12576-1-arnout@mind.be>
-References: <20161120164526.12576-1-arnout@mind.be>
-Message-ID: <20161121215111.71ce807d@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 21 Nov 2016 21:53:51 +0100
+Subject: [Buildroot] [PATCH 4/4] qextserialport: fix static build
+In-Reply-To: <20161121214125.2bb92b98@free-electrons.com>
+References: <20161120221329.5827-1-arnout@mind.be>
+ <20161120221329.5827-4-arnout@mind.be>
+ <20161121214125.2bb92b98@free-electrons.com>
+Message-ID: <9e55426c-e90e-6b11-752c-adba35813e23@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Sun, 20 Nov 2016 17:45:26 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> mplayer uses a homegrown configure script that calls 'gcc -v | tail -1'
-> to find the gcc version. However, our toolchain wrapper adds
-> -Wl,-elf2flt to the gcc arguments. This triggers gcc to do an actual
-> compile (rather than just printing version info and exiting), and that
-> compile fails because of the missing definition of main(). The last
-> line of the output is therefore:
-> collect2: error: ld returned 1 exit status
-> and configure doesn't find a version in there. It then falls back to
-> using the host gcc instead, which breaks things completely a bit
-> further down the line.
-> 
-> Since mplayer probably isn't very useful on noMMU architectures anyway,
-> just disable it completely for FLAT.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/58cf28a3acd518633a1d8ea719bc70aefbdfb311
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> v2: added the fixes line
-> ---
->  package/mplayer/Config.in | 3 +++
->  1 file changed, 3 insertions(+)
 
-Applied to master, thanks.
+On 21-11-16 21:41, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 20 Nov 2016 23:13:29 +0100, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+>> By default, qextserialport will attempt to build a shared library.
+>> qesp_static has to be set in CONFIG to build static. Note that
+>> static+shared is not supported, in that case we just build shared.
+>>
+>> The install target commands also have to be gated in that case,
+>> because the *.so files don't exist. For completeness we both set
+>> QEXTSERIALPORT_INSTALL_STAGING to NO and don't define
+>> QEXTSERIALPORT_INSTALL_TARGET_CMDS for static builds, although one
+>> of them would be sufficient.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/c9233ad71fd60d0e6a85731a8bd4e598bd84947a
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> It's a bit annoying that this comes late in the series. Some of the
+> rework in the previous patches are not technically needed to get this
+> build fix, and with the way your patch series is organized, we have to
+> merge more-or-less unrelated cleanups in master to get the build fix.
 
-Thomas
+ Well, I considered patches 1 and 2 to be safe enough to be used even for
+master. Just to give you the choice, I'll respin without patches 1 and 2 (but
+without marking this series as superseded).
+
+ Regards,
+ Arnout
+
+> 
+> Patches 1/4 to 3/4 don't look too complicated, so maybe I'll merge.
+> I'll just wait and see if people agree or not.
+> 
+> Best regards,
+> 
+> Thomas
+> 
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
