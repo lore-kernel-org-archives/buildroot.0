@@ -1,63 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Nov 2016 15:27:44 +0100
-Subject: [Buildroot] [git commit] package/qemu: add option to include tools
-Message-ID: <20161201222140.245727FD88@busybox.osuosl.org>
+Date: Mon, 21 Nov 2016 23:18:54 +0100
+Subject: [Buildroot] [git commit] btrfs-progs: bump version to 4.8.3
+Message-ID: <20161201222137.D1CE07FB56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac6785f12cc6b24e66f3d16eb6058d7c5db6014e
+commit: https://git.buildroot.net/buildroot/commit/?id=db5bcab79b3460b80163c98bb92b3c6fd08706f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an option to QEMU to include the "tools" (configure option:
---enable-tools) in the target. This adds a dependency on pixman, but
-that's already present.
-
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qemu/Config.in | 5 +++++
- package/qemu/qemu.mk   | 7 ++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index e935ef9..b9c1ca1 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -107,4 +107,9 @@ comment "FDT support needs a toolchain w/ dynamic library"
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index de9c56b..83a9624 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256	81c023f519c8565b23eddb90e6d0eec2be63ee52e440708e418539dbaa635c5f	btrfs-progs-v4.8.2.tar.xz
++sha256 c1a60c317d2fcaf8420779d2d0717ae53882c2bc22bc44e3bdcd5efb7ca68ef2  btrfs-progs-v4.8.3.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 2dd9246..e2deb57 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif # BR2_PACKAGE_QEMU_HAS_EMULS
- 
-+config BR2_PACKAGE_QEMU_TOOLS
-+	bool "Enable tools"
-+	help
-+	  Say 'y' here to include tools packaged with QEMU (e.g. qemu-img).
-+
- endif # BR2_PACKAGE_QEMU
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 45fc0fa..bc707cf 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -204,6 +204,12 @@ else
- QEMU_OPTS += --disable-fdt
- endif
- 
-+ifeq ($(BR2_PACKAGE_QEMU_TOOLS),y)
-+QEMU_OPTS += --enable-tools
-+else
-+QEMU_OPTS += --disable-tools
-+endif
-+
- # Override CPP, as it expects to be able to call it like it'd
- # call the compiler.
- define QEMU_CONFIGURE_CMDS
-@@ -242,7 +248,6 @@ define QEMU_CONFIGURE_CMDS
- 			--disable-strip                 \
- 			--disable-seccomp               \
- 			--disable-sparse                \
--			--disable-tools                 \
- 			$(QEMU_OPTS)                    \
- 	)
- endef
+-BTRFS_PROGS_VERSION = 4.8.2
++BTRFS_PROGS_VERSION = 4.8.3
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
