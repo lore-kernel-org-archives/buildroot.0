@@ -1,58 +1,40 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 21 Nov 2016 11:10:54 -0200 (BRST)
-Subject: [Buildroot] [PATCH 2/2] e2fsprogs: keep util-linux's fsck if
- chosen
-In-Reply-To: <20161118152427.16515-2-maxime.hadjinlian@gmail.com>
-References: <20161118152427.16515-1-maxime.hadjinlian@gmail.com>
- <20161118152427.16515-2-maxime.hadjinlian@gmail.com>
-Message-ID: <1043203342.6813512.1479733854854.JavaMail.zimbra@datacom.ind.br>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 21 Nov 2016 13:43:06 +0000
+Subject: [Buildroot] [PATCH next] ruby: bump version to 2.3.3
+Message-ID: <20161121134306.7272-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
-> To: buildroot at buildroot.org
-> Sent: Friday, November 18, 2016 1:24:27 PM
-> Subject: [Buildroot] [PATCH 2/2] e2fsprogs: keep util-linux's fsck if chosen
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Since e2fsprogs depends on util-linux, it's build after it. It means
-> that if you want the fsck wrapper from util-linux (which is better
-> maintained and you are sure that it's compatible with systemd) and you
-> want e2fsck, it won't work.
-> 
-> Because of the merge of /usr/bin and /bin, we end up deleting the fsck
-> from util-linux.
-> 
-> This makes an attempt at fixing the issues.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
-> I am cleary not satisfied by the way I handled that, I am not even sure
-> it works in all cases. I can't spend much more time on this right now,
-> so I need advice/help from the community to fix that in a proper/generic
-> manner.
-What about using something like this, instead?
-
-diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
-index 4db11e1..c0b48e1 100644
---- a/package/e2fsprogs/Config.in
-+++ b/package/e2fsprogs/Config.in
-@@ -60,8 +60,12 @@ config BR2_PACKAGE_E2FSPROGS_FILEFRAG
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index d480f07..8182e2c 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,2 +1,2 @@
+-# From https://www.ruby-lang.org/en/news/2016/11/15/ruby-2-3-2-released/
+-sha256 5c78f311045ce48160092160444dec2744941a5e37d7865032978bd5bf392f0c  ruby-2.3.2.tar.xz
++# From https://www.ruby-lang.org/en/news/2016/11/21/ruby-2-3-3-released/
++sha256 1a4fa8c2885734ba37b97ffdb4a19b8fba0e8982606db02d936e65bac07419dc  ruby-2.3.3.tar.xz
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 631f270..b8e03ac 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- config BR2_PACKAGE_E2FSPROGS_FSCK
-        bool "fsck"
-+       depends on !BR2_PACKAGE_UTIL_LINUX_FSCK
-        default y
- 
-+comment "the fsck from util-linux has preference over this one"
-+       depends on BR2_PACKAGE_UTIL_LINUX_FSCK
-+
- config BR2_PACKAGE_E2FSPROGS_FUSE2FS
-        bool "fuse2fs"
-        depends on !BR2_STATIC_LIBS # libfuse
-
-
-Carlos Santos (Casantos)
-DATACOM, P&D
+ RUBY_VERSION_MAJOR = 2.3
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
+ RUBY_VERSION_EXT = 2.3.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-- 
+2.10.1
