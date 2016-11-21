@@ -1,46 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 21:19:58 +0100
-Subject: [Buildroot] [PATCH] taskd: add patch for correct gnutls
- libraries in static build
-In-Reply-To: <20161120230217.13881-1-arnout@mind.be>
-References: <20161120230217.13881-1-arnout@mind.be>
-Message-ID: <20161121211958.22df4922@free-electrons.com>
+Date: Mon, 21 Nov 2016 21:21:38 +0100
+Subject: [Buildroot] [git commit] xapp_xload: fix musl build
+Message-ID: <20161121202151.C250081976@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fe0607e68beeec7d33693194b76f7fff8e9be2ef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 21 Nov 2016 00:02:17 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> The CMakeLists.txt was using the wrong variables names to add to
-> includes and libs, so the additional libraries for static build
-> weren't added to the link command.
-> 
-> Patch sent upstream to taskwarrior-dev at googlegroups.com but it doesn't
-> seem to be very active.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/d01e947fa807336ffcfd0fad27397af8e7442833
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  ...se-correct-variables-for-GnuTLS-detection.patch | 32 ++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/taskd/0002-Use-correct-variables-for-GnuTLS-detection.patch
+xapp_xload tries to include protocols/rwhod.h, which isn't available on
+musl. Fortunately, the package also has stub code that can be enabled
+with -DRLOADSTUB (this is done e.g. on Cygwin).
 
-Regardless of the feedback from upstream which says it's an upstream
-CMake bug, I've nonetheless applied to fix the immediate problem.
+This should probably be detected in configure, but that's a lot more
+work.
 
-Would indeed be good if Samuel could have a look, and take this
-upstream to the CMake developers.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xapp_xload/xapp_xload.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xapp_xload/xapp_xload.mk b/package/x11r7/xapp_xload/xapp_xload.mk
+index 1db0db5..364d247 100644
+--- a/package/x11r7/xapp_xload/xapp_xload.mk
++++ b/package/x11r7/xapp_xload/xapp_xload.mk
+@@ -11,4 +11,9 @@ XAPP_XLOAD_LICENSE = MIT
+ XAPP_XLOAD_LICENSE_FILES = COPYING
+ XAPP_XLOAD_DEPENDENCIES = xlib_libXaw
+ 
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++# musl doesn't have rwhod.h, but xload can replace it with stubs
++XAPP_XLOAD_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -DRLOADSTUB"
++endif
++
+ $(eval $(autotools-package))
