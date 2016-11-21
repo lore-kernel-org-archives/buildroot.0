@@ -1,136 +1,124 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 22 Nov 2016 00:43:39 +0100
-Subject: [Buildroot] [PATCH 1/2] gcc: backport upstream patch for sync_8 in
-	!glibc
-Message-ID: <20161121234340.30463-1-arnout@mind.be>
+From: Ash Charles <ashcharles@gmail.com>
+Date: Mon, 21 Nov 2016 18:51:42 -0500
+Subject: [Buildroot] [PATCH 1/2] ti-cgt-pru: add package for PRU Host
+	toolchain
+In-Reply-To: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
+References: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
+Message-ID: <CAK8F28kOtx6Jh=OauYjFcd3hMACsWtOpaAXA4sahO2NxEOcZfA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc 4.7 introduced the sync_8 builtin functions for ARM. For ARM < v7,
-this requires calling into the kernel. However, the failure path of
-that call reports an error with the __write() function, which is a
-glibc internal function. Therefore, it fails to link with uClibc or
-musl. This was fixed in gcc 5.2.0, by replacing the __write() with
-a plain write().
+Hi,
 
-For sync_8 itself we have solved this with the conditions on
-BR2_TOOLCHAIN_ARM_HAS_SYNC_8. However, the same function is also used
-for the implementation of atomics.
+I wanted to follow up on this and the other patch in this series [1].
+As these are my first submissions to Buildroot, I'll love if anyone
+has feedback on the patches or suggestions on next steps in order to
+get these merged :).
 
-For the internal toolchain, we can fix this by backporting the patch
-to 4.9.4 and 4.8.5.
+[1] http://patchwork.ozlabs.org/patch/695765/
 
-Fixes:
-http://autobuild.buildroot.net/results/1db64b4830f499621e44523e0ef68191505e2ce9
+Thanks,
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...et-68059-libgcc-should-not-use-__write-fo.patch | 43 ++++++++++++++++++++++
- ...et-68059-libgcc-should-not-use-__write-fo.patch | 43 ++++++++++++++++++++++
- 2 files changed, 86 insertions(+)
- create mode 100644 package/gcc/4.8.5/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
- create mode 100644 package/gcc/4.9.4/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
+Ash
 
-diff --git a/package/gcc/4.8.5/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch b/package/gcc/4.8.5/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
-new file mode 100644
-index 0000000..d8c6723
---- /dev/null
-+++ b/package/gcc/4.8.5/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
-@@ -0,0 +1,43 @@
-+From edb9057c195c41dd7bcd8603e5fd420359edd520 Mon Sep 17 00:00:00 2001
-+From: nsz <nsz@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Mon, 23 Nov 2015 15:17:55 +0000
-+Subject: [PATCH] [ARM] PR target/68059 libgcc should not use __write for
-+ printing fatal error
-+
-+libgcc/
-+	PR target/68059
-+	* config/arm/linux-atomic-64bit.c (__write): Rename to...
-+	(write): ...this and fix the return type.
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 230762 138bc75d-0d04-0410-961f-82ee72b054a4
-+
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+ libgcc/config/arm/linux-atomic-64bit.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/libgcc/config/arm/linux-atomic-64bit.c b/libgcc/config/arm/linux-atomic-64bit.c
-+index 7aa8dfc..570b4ce 100644
-+--- a/libgcc/config/arm/linux-atomic-64bit.c
-++++ b/libgcc/config/arm/linux-atomic-64bit.c
-+@@ -33,7 +33,7 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-+    kernels; we check for that in an init section and bail out rather
-+    unceremoneously.  */
-+ 
-+-extern unsigned int __write (int fd, const void *buf, unsigned int count);
-++extern int write (int fd, const void *buf, unsigned int count);
-+ extern void abort (void);
-+ 
-+ /* Kernel helper for compare-and-exchange.  */
-+@@ -56,7 +56,7 @@ static void __check_for_sync8_kernelhelper (void)
-+ 	 for the user - I'm not sure I can rely on much else being
-+ 	 available at this point, so do the same as generic-morestack.c
-+ 	 write () and abort ().  */
-+-      __write (2 /* stderr.  */, err, sizeof (err));
-++      write (2 /* stderr.  */, err, sizeof (err));
-+       abort ();
-+     }
-+ };
-+-- 
-+2.10.2
-+
-diff --git a/package/gcc/4.9.4/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch b/package/gcc/4.9.4/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
-new file mode 100644
-index 0000000..fd2bc69
---- /dev/null
-+++ b/package/gcc/4.9.4/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
-@@ -0,0 +1,43 @@
-+From 80bc14a5249da7054b716229206b453f339b4a5e Mon Sep 17 00:00:00 2001
-+From: nsz <nsz@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Mon, 23 Nov 2015 15:17:55 +0000
-+Subject: [PATCH] [ARM] PR target/68059 libgcc should not use __write for
-+ printing fatal error
-+
-+libgcc/
-+	PR target/68059
-+	* config/arm/linux-atomic-64bit.c (__write): Rename to...
-+	(write): ...this and fix the return type.
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 230762 138bc75d-0d04-0410-961f-82ee72b054a4
-+
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+ libgcc/config/arm/linux-atomic-64bit.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/libgcc/config/arm/linux-atomic-64bit.c b/libgcc/config/arm/linux-atomic-64bit.c
-+index 5b8c6e2..9078673 100644
-+--- a/libgcc/config/arm/linux-atomic-64bit.c
-++++ b/libgcc/config/arm/linux-atomic-64bit.c
-+@@ -33,7 +33,7 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-+    kernels; we check for that in an init section and bail out rather
-+    unceremoneously.  */
-+ 
-+-extern unsigned int __write (int fd, const void *buf, unsigned int count);
-++extern int write (int fd, const void *buf, unsigned int count);
-+ extern void abort (void);
-+ 
-+ /* Kernel helper for compare-and-exchange.  */
-+@@ -56,7 +56,7 @@ static void __check_for_sync8_kernelhelper (void)
-+ 	 for the user - I'm not sure I can rely on much else being
-+ 	 available at this point, so do the same as generic-morestack.c
-+ 	 write () and abort ().  */
-+-      __write (2 /* stderr.  */, err, sizeof (err));
-++      write (2 /* stderr.  */, err, sizeof (err));
-+       abort ();
-+     }
-+ };
-+-- 
-+2.10.2
-+
--- 
-2.10.2
+On Wed, Nov 16, 2016 at 2:24 PM, Ash Charles <ashcharles@gmail.com> wrote:
+> TI provides a binary code generation toolchain to develop firmware for
+> the programmable real-time unit/co-processor found in some SOCs such as
+> some models in the AM335x line. This toolchain includes C/C++ support
+> (clpru) rather than just assembler (pasm) supported by the pre-existing
+> am335x-pru-package [1].  Following the lead of the Yocto meta-ti
+> layer [2], this package provides a host toolchain suitable for an x86
+> (or x86_64) Linux targeting an ARM-based PRU core.
+>
+> [1] http://processors.wiki.ti.com/index.php/PRU_Assembly_Instructions#pasm_vs._clpru
+> [2] http://git.yoctoproject.org/cgit/cgit.cgi/meta-ti/tree/recipes-ti/devtools/ti-cgt-pru_2.1.1.bb
+>
+> Signed-off-by: Ash Charles <ash.charles@savoirfairelinux.com>
+> ---
+>  package/Config.in.host             |  1 +
+>  package/ti-cgt-pru/Config.in.host  | 11 +++++++++++
+>  package/ti-cgt-pru/ti-cgt-pru.hash |  2 ++
+>  package/ti-cgt-pru/ti-cgt-pru.mk   | 29 +++++++++++++++++++++++++++++
+>  4 files changed, 43 insertions(+)
+>  create mode 100644 package/ti-cgt-pru/Config.in.host
+>  create mode 100644 package/ti-cgt-pru/ti-cgt-pru.hash
+>  create mode 100644 package/ti-cgt-pru/ti-cgt-pru.mk
+>
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 3b115c5..e244694 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -39,6 +39,7 @@ menu "Host utilities"
+>         source "package/squashfs/Config.in.host"
+>         source "package/sunxi-tools/Config.in.host"
+>         source "package/tegrarcm/Config.in.host"
+> +       source "package/ti-cgt-pru/Config.in.host"
+>         source "package/uboot-tools/Config.in.host"
+>         source "package/util-linux/Config.in.host"
+>         source "package/vboot-utils/Config.in.host"
+> diff --git a/package/ti-cgt-pru/Config.in.host b/package/ti-cgt-pru/Config.in.host
+> new file mode 100644
+> index 0000000..440f774
+> --- /dev/null
+> +++ b/package/ti-cgt-pru/Config.in.host
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_HOST_TI_CGT_PRU
+> +       bool "host ti-cgt-pru"
+> +       depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> +       help
+> +         This package provides the Code Generation Tools for the PRU
+> +         unit found on some TI processors e.g. AM3358.
+> +
+> +         Note: this is a binary cross toolchain that runs on x86 hosts
+> +               targeting ARM PRU cores.
+> +
+> +         https://www-a.ti.com/downloads/sds_support/TICodegenerationTools/download.htm#PRU
+> diff --git a/package/ti-cgt-pru/ti-cgt-pru.hash b/package/ti-cgt-pru/ti-cgt-pru.hash
+> new file mode 100644
+> index 0000000..1c19b33
+> --- /dev/null
+> +++ b/package/ti-cgt-pru/ti-cgt-pru.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 df85cd1ed3aea12d577854ece11bf5f2af6ace8c39959eea4cf2fa5973924e0e        ti_cgt_pru_2.1.3_linux_installer_x86.bin
+> diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
+> new file mode 100644
+> index 0000000..a4c8566
+> --- /dev/null
+> +++ b/package/ti-cgt-pru/ti-cgt-pru.mk
+> @@ -0,0 +1,29 @@
+> +################################################################################
+> +#
+> +# ti-cgt-pru
+> +#
+> +################################################################################
+> +
+> +TI_CGT_PRU_VERSION = 2.1.3
+> +TI_CGT_PRU_SOURCE = ti_cgt_pru_$(TI_CGT_PRU_VERSION)_linux_installer_x86.bin
+> +TI_CGT_PRU_SITE = "http://software-dl.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)/"
+> +TI_CGT_PRU_LICENSE =  BSD-3c, MIT, TI-TSPA
+> +TI_CGT_PRU_LICENSE_FILES = PRU_Code_Generation_Tools_2.1.x_manifest.html
+> +
+> +define HOST_TI_CGT_PRU_EXTRACT_CMDS
+> +       chmod +x $(DL_DIR)/$(TI_CGT_PRU_SOURCE)
+> +       $(DL_DIR)/$(TI_CGT_PRU_SOURCE) --prefix $(@D) --mode unattended
+> +endef
+> +
+> +# Since this is largely prebuilt toolchain and likes to live in its own
+> +# directory, put is in $(HOST_DIR)/ti-cgt-pru_$(CGT_PRU_VERION)
+> +# Packages wanting to use this toolchain need to use this path as TI's
+> +# standard PRU_CGT path.
+> +
+> +PRU_CGT = $(HOST_DIR)/ti-cgt-pru_$(TI_CGT_PRU_VERSION)
+> +define HOST_TI_CGT_PRU_INSTALL_CMDS
+> +       $(INSTALL) -d $(PRU_CGT)
+> +       cp -af $(@D)/$(notdir $(PRU_CGT)) $(HOST_DIR)
+> +endef
+> +
+> +$(eval $(host-generic-package))
+> --
+> 2.7.4
+>
