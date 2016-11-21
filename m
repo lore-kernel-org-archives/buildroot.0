@@ -1,54 +1,50 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 21 Nov 2016 10:13:50 +0000
-Subject: [Buildroot] [PATCH] tiff: bump version to 4.0.7 (security)
-Message-ID: <20161121101350.31299-1-Vincent.Riera@imgtec.com>
+Date: Mon, 21 Nov 2016 10:49:27 +0000
+Subject: [Buildroot] [PATCH v3 1/2] linux-headers: bump 3.2.x and 4.{4,
+	8}.x series
+Message-ID: <20161121104928.44869-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixed CVEs:
- - CVE-2016-3622
- - CVE-2016-3623
- - CVE-2016-5321
- - CVE-2016-5323
- - CVE-2016-5652
- - CVE-2016-5875
- - CVE-2014-8127
- - CVE-2015-8665
- - CVE-2015-8683
- - CVE-2016-9273
- - CVE-2016-9448
-
-Release notes: http://www.simplesystems.org/libtiff/v4.0.7.html
-
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/tiff/tiff.hash | 2 +-
- package/tiff/tiff.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes v2 -> v3:
+ - also bump 3.2.x series
+ - bump 4.8.x series to 4.8.10 instead of 4.8.8
+Changes v1 -> v2:
+ - rebase on top of master
+ - drop 3.12.x changes as they are already part of master
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
-index 7ff746f..4439a35 100644
---- a/package/tiff/tiff.hash
-+++ b/package/tiff/tiff.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	4d57a50907b510e3049a4bba0d7888930fdfc16ce49f1bf693e5b6247370d68c	tiff-4.0.6.tar.gz
-+sha256 9f43a2cfb9589e5cecaa66e16bf87f814c945f22df7ba600d63aac4632c4f019  tiff-4.0.7.tar.gz
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index a53d7bb..ffb1a42 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8bfad44..5c42d53 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -223,7 +223,7 @@ endchoice
  
--TIFF_VERSION = 4.0.6
-+TIFF_VERSION = 4.0.7
- TIFF_SITE = http://download.osgeo.org/libtiff
- TIFF_LICENSE = tiff license
- TIFF_LICENSE_FILES = COPYRIGHT
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.83"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.84"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.67"	if BR2_KERNEL_HEADERS_3_12
+@@ -232,9 +232,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.35"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.31"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.34"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+ 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
+ 	default "4.7.10"	if BR2_KERNEL_HEADERS_4_7
+-	default "4.8.7"		if BR2_KERNEL_HEADERS_4_8
++	default "4.8.10"	if BR2_KERNEL_HEADERS_4_8
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
 2.10.1
