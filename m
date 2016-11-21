@@ -1,48 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 23:12:56 +0100
-Subject: [Buildroot] [git commit branch/next] gstreamer1/gst1-omx: bump
+Date: Mon, 21 Nov 2016 23:12:14 +0100
+Subject: [Buildroot] [git commit branch/next] gstreamer1/gstreamer1: bump
 	version to 1.10.1
-Message-ID: <20161121221640.9A3F580102@busybox.osuosl.org>
+Message-ID: <20161121221640.433CF818DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98e254b46c2dc31990cd89b7e132b0991db9bc7f
+commit: https://git.buildroot.net/buildroot/commit/?id=be4b3575d5ac5cf89ddb1c709ff6a8128ff4131c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Release notes:
-  https://gstreamer.freedesktop.org/releases/gst-omx/1.10.1.html
-
-Also fixed hash URL.
+  https://gstreamer.freedesktop.org/releases/gstreamer/1.10.1.html
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
- package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
-index 653c93c..bf10f0a 100644
---- a/package/gstreamer1/gst-omx/gst-omx.hash
-+++ b/package/gstreamer1/gst-omx/gst-omx.hash
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 8bd7782..40677da 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
 @@ -1,2 +1,2 @@
--# From https://gstreamer.freedesktop.org/src/gst-omx/
--sha256  89f7da36abcf278200f561fa9d8d7042ad1459aa211cdc81c4c1a3d2162e9e7f  gst-omx-1.10.0.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.10.1.tar.xz.sha256sum
-+sha256 1b07b9ceb4552c0911af1e3b97987e3314c601eacfbc09f1cca8632e98581231  gst-omx-1.10.1.tar.xz
-diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-index f0b39c9..c934317 100644
---- a/package/gstreamer1/gst-omx/gst-omx.mk
-+++ b/package/gstreamer1/gst-omx/gst-omx.mk
+-# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.10.0.tar.xz.sha256sum
+-sha256	1e7778fabe480185bfc4ce552f0860de1443f6618a68a86ccdd65854fed37207  gstreamer-1.10.0.tar.xz
++# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.10.1.tar.xz.sha256sum
++sha256 f68df996e0e699382b935bb4783dd402c301377df18f57e28e0318c4b3bff6da  gstreamer-1.10.1.tar.xz
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index cb111f2..794abc4 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST_OMX_VERSION = 1.10.0
-+GST_OMX_VERSION = 1.10.1
- GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
- GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
- 
+-GSTREAMER1_VERSION = 1.10.0
++GSTREAMER1_VERSION = 1.10.1
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
