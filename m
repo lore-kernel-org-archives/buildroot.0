@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 21:39:25 +0100
-Subject: [Buildroot] [PATCH 3/4] qextserialport: use 'make install' to
- install to staging
-In-Reply-To: <20161120221329.5827-3-arnout@mind.be>
+Date: Mon, 21 Nov 2016 21:41:25 +0100
+Subject: [Buildroot] [PATCH 4/4] qextserialport: fix static build
+In-Reply-To: <20161120221329.5827-4-arnout@mind.be>
 References: <20161120221329.5827-1-arnout@mind.be>
- <20161120221329.5827-3-arnout@mind.be>
-Message-ID: <20161121213925.218f8ddb@free-electrons.com>
+ <20161120221329.5827-4-arnout@mind.be>
+Message-ID: <20161121214125.2bb92b98@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +13,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 20 Nov 2016 23:13:28 +0100, Arnout Vandecappelle
+On Sun, 20 Nov 2016 23:13:29 +0100, Arnout Vandecappelle
 (Essensium/Mind) wrote:
+> By default, qextserialport will attempt to build a shared library.
+> qesp_static has to be set in CONFIG to build static. Note that
+> static+shared is not supported, in that case we just build shared.
+> 
+> The install target commands also have to be gated in that case,
+> because the *.so files don't exist. For completeness we both set
+> QEXTSERIALPORT_INSTALL_STAGING to NO and don't define
+> QEXTSERIALPORT_INSTALL_TARGET_CMDS for static builds, although one
+> of them would be sufficient.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/c9233ad71fd60d0e6a85731a8bd4e598bd84947a
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> The QExtSerialPort and qextserialport.pc files are created by
-> Buildroot so they still have to be installed explicitly. Note that
-> upstream installs in the QtExtSerialPort directory, not QExtSerialPort,
-> so we follow that decision.
+It's a bit annoying that this comes late in the series. Some of the
+rework in the previous patches are not technically needed to get this
+build fix, and with the way your patch series is organized, we have to
+merge more-or-less unrelated cleanups in master to get the build fix.
 
-This breaks the pkg-config use case, because the installed
-qextserialport.pc (added by patch 0003) is not updated to reflect the
-QExtSerialPort -> QtExtSerialPort include directory changed.
-
-> Why do we have this 0002-main-include.patch anyway? It's clearly a
-> feature patch... And apparently no attempt has been made to upstream
-> it?
-
-To be honest, I don't remember. I do remember doing this patch for some
-reason (at the time, I was using qextserialport for a specific
-project), but I can't remember what the reason was (just convenience,
-or a real issue). Since there is no package in Buildroot that depends
-on qextserialport, I guess we could try to drop this patch, and see if
-somebody complains? :-)
+Patches 1/4 to 3/4 don't look too complicated, so maybe I'll merge.
+I'll just wait and see if people agree or not.
 
 Best regards,
 
