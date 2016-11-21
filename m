@@ -1,38 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 21:22:27 +0100
-Subject: [Buildroot] [PATCH] xapp_xload: fix musl build
-In-Reply-To: <20161120222858.10102-1-arnout@mind.be>
-References: <20161120222858.10102-1-arnout@mind.be>
-Message-ID: <20161121212227.30bed7a7@free-electrons.com>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Mon, 21 Nov 2016 15:23:55 -0500
+Subject: [Buildroot] [PATCH] fs/ext2: fix double quoted label
+In-Reply-To: <20161121211528.0c4a9928@free-electrons.com>
+References: <20161121161529.10366-1-gael.portay@savoirfairelinux.com>
+ <20161121211528.0c4a9928@free-electrons.com>
+Message-ID: <20161121202355.pyyrkkjuy3eelyy7@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sun, 20 Nov 2016 23:28:58 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> xapp_xload tries to include protocols/rwhod.h, which isn't available on
-> musl. Fortunately, the package also has stub code that can be enabled
-> with -DRLOADSTUB (this is done e.g. on Cygwin).
+On Mon, Nov 21, 2016 at 09:15:28PM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> This should probably be detected in configure, but that's a lot more
-> work.
+> On Mon, 21 Nov 2016 11:15:29 -0500, Ga?l PORTAY wrote:
+> > Since the commit 6dd7bbb59134799ed3d7343f238b3b02592faebf, the label does
+> > not need anymore to be quoted. Even worse it *must* not be simple-quoted,
+> > unless the label will contain the double-quotes from the config variable
+> > BR2_TARGET_ROOTFS_EXT2_LABEL.
+> > 
+> > The commit mentionned above has replaced echo by printf:
+> > -	echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
+> > +	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+> > 
+> > Since this commit the rootfs label contains extra double-quotes.
+> > $ blkid
+> > /dev/mmcblk0: LABEL=""BR 2016.08"" UUID="xxx"
+> >                      ^          ^
+> > 
+> > With this fix, the extra double-quotes have disappeared:
+> > /dev/mmcblk0: LABEL="BR 2016.11-rc2" UUID="yyy"
+> > 
+> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  fs/ext2/ext2.mk | 11 +++++------
+> >  1 file changed, 5 insertions(+), 6 deletions(-)
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/x11r7/xapp_xload/xapp_xload.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+> Applied to master, thanks.
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-You forgot a reference to the autobuilder failure, and I forgot as well
-before pushing :/
-
-Applied to master anyway, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks
