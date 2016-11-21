@@ -1,160 +1,116 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:33:14 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-qxl: Add
-	patches for newer xserver_xorg-server releases
-Message-ID: <20161201222140.B51678183C@busybox.osuosl.org>
+Date: Mon, 21 Nov 2016 23:28:25 +0100
+Subject: [Buildroot] [git commit] uclibc-ng-test: new package
+Message-ID: <20161201222137.DC2387FB56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c55fb8ad22be6d95b8b521d208cad0cfa7d75d07
+commit: https://git.buildroot.net/buildroot/commit/?id=a6978c38d56611c3098530c48f4cbd212733b416
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-0002-xserverfix.patch added xlib_libXfont as new dependency.
+The next release of uClibc-ng (1.0.20) will remove the test suite.
+Add a separate package before the next release.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+[Thomas: rewrap Config.in help text.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-systemincludes.patch                      | 39 +++++++++++++++++
- .../xdriver_xf86-video-qxl/0002-xserverfix.patch   | 51 ++++++++++++++++++++++
- package/x11r7/xdriver_xf86-video-qxl/Config.in     |  1 +
- .../xdriver_xf86-video-qxl.mk                      |  3 ++
- 4 files changed, 94 insertions(+)
+ package/Config.in                        |  1 +
+ package/uclibc-ng-test/Config.in         | 22 ++++++++++++++++
+ package/uclibc-ng-test/uclibc-ng-test.mk | 45 ++++++++++++++++++++++++++++++++
+ 3 files changed, 68 insertions(+)
 
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/0001-systemincludes.patch b/package/x11r7/xdriver_xf86-video-qxl/0001-systemincludes.patch
+diff --git a/package/Config.in b/package/Config.in
+index 7c91215..b2e1a2a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -114,6 +114,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/tinymembench/Config.in"
+ 	source "package/trace-cmd/Config.in"
+ 	source "package/trinity/Config.in"
++	source "package/uclibc-ng-test/Config.in"
+ 	source "package/valgrind/Config.in"
+ 	source "package/whetstone/Config.in"
+ endmenu
+diff --git a/package/uclibc-ng-test/Config.in b/package/uclibc-ng-test/Config.in
 new file mode 100644
-index 0000000..0c681f2
+index 0000000..0f093d1
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-qxl/0001-systemincludes.patch
-@@ -0,0 +1,39 @@
-+From 83e00bb5f9b74c0d7059c189d747ec3c24c7798a Mon Sep 17 00:00:00 2001
-+From: Christophe Fergeau <cfergeau@redhat.com>
-+Date: Tue, 4 Aug 2015 17:36:12 +0200
-+Subject: Use <> for system-includes
++++ b/package/uclibc-ng-test/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_UCLIBC_NG_TEST
++	bool "uclibc-ng-test"
++	help
++	  Enabling this option will compile and install the uClibc-ng
++	  test suite. This is useful if you want to check if the
++	  uClibc-ng library is working for your architecture and/or
++	  help developing uClibc-ng.
 +
-+These headers come from /usr/include/xorg/ so it's clearer if they are
-+included using <>. While at it, I've reordered them alphabetically.
-+---
-+Downloaded from
-+https://cgit.freedesktop.org/xorg/driver/xf86-video-qxl/commit/?id=83e00bb5f9b74c0d7059c189d747ec3c24c7798a
++	  The test suite will be installed into
++	  /usr/lib/uclibc-ng-test directory. To run the test suite
++	  enter the /usr/lib/uclibc-ng-test/test directory and type
++	  "sh uclibcng-testrunner.sh".
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++	  See the /usr/lib/uclibc-ng-test/test/README for additional
++	  information.
 +
-+diff --git a/src/uxa/uxa-damage.c b/src/uxa/uxa-damage.c
-+index 3e4c075..6201712 100644
-+--- a/src/uxa/uxa-damage.c
-++++ b/src/uxa/uxa-damage.c
-+@@ -27,12 +27,13 @@
-+ #include <stdlib.h>
-+ #include "uxa-priv.h"
-+ 
-++#include    <dixfontstr.h>
-++#include    <gcstruct.h>
-++#include    <picturestr.h>
-++#include    <scrnintstr.h>
-++#include    <windowstr.h>
-+ #include    <X11/X.h>
-+-#include    "scrnintstr.h"
-+-#include    "windowstr.h"
-+-#include    "dixfontstr.h"
-+-#include    "gcstruct.h"
-+-#include    "picturestr.h"
-++
-+ #include    "uxa-damage.h"
-+ 
-+ typedef struct _damageGCPriv {
-+-- 
-+cgit v0.10.2
++	  This is not needed at all for normal builds, so you can
++	  safely say no if you do not plan to dig into your C library.
 +
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/0002-xserverfix.patch b/package/x11r7/xdriver_xf86-video-qxl/0002-xserverfix.patch
++	  The tests can also be used for GNU libc or musl.
++
++	  http://www.uclibc-ng.org
+diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
 new file mode 100644
-index 0000000..c38d42e
+index 0000000..f6700a9
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-qxl/0002-xserverfix.patch
-@@ -0,0 +1,51 @@
-+From a184774ad161031cceed264d62d48ebd019ac800 Mon Sep 17 00:00:00 2001
-+From: Christophe Fergeau <cfergeau@redhat.com>
-+Date: Mon, 3 Aug 2015 20:12:05 +0200
-+Subject: Fix compilation with newer Xorg versions
++++ b/package/uclibc-ng-test/uclibc-ng-test.mk
+@@ -0,0 +1,45 @@
++################################################################################
++#
++# uclibc-ng-test
++#
++################################################################################
 +
-+Xorg 1.18 stopped exporting some xfont related symbols in its
-+headers/shared libraries, which causes QXL to fail to build:
++UCLIBC_NG_TEST_VERSION = 4ad1c23ae2eb30888cda520c739cc26150512487
++UCLIBC_NG_TEST_SITE = git://uclibc-ng.org/git/uclibc-ng-test
++UCLIBC_NG_TEST_LICENSE = LGPLv2.1+
++UCLIBC_NG_TEST_LICENSE_FILES = COPYING.LIB
 +
-+uxa-damage.c:947:5: error: implicit declaration of function 'QueryGlyphExtents' [-Werror=implicit-function-declaration]
-+     QueryGlyphExtents(font, charinfo, n, &extents);
++ifeq ($(BR2_USE_WCHAR),)
++UCLIBC_NG_TEST_MAKE_ENV += NO_WCHAR=1
++endif
++ifeq ($(BR2_ENABLE_LOCALE),)
++UCLIBC_NG_TEST_MAKE_ENV += NO_LOCALE=1
++endif
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1 NO_THREADS=1
++endif
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),)
++UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1 NO_NPTL=1
++endif
++# most NPTL/TLS tests use dlopen
++ifeq ($(BR2_STATIC_LIBS),y)
++UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1 NO_NPTL=1 NO_DL=1
++endif
 +
-+The missing definition can be found in xfont, so this commit addes the
-+needed configure.ac checks and includes.
-+Note that dixfontstr.h must be included before the xfont headers or this
-+will cause compile-time warnings on older Xorg versions (eg 1.17)
-+---
-+Downloaded from
-+https://cgit.freedesktop.org/xorg/driver/xf86-video-qxl/commit/?id=a184774ad161031cceed264d62d48ebd019ac800
++# to execute tests in a deterministic order, call test_gen separately
++define UCLIBC_NG_TEST_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(UCLIBC_NG_TEST_MAKE_ENV) $(MAKE) -C $(@D) \
++		CC="$(TARGET_CC)" \
++		UCLIBC_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
++		test_compile
++	$(TARGET_MAKE_ENV) $(UCLIBC_NG_TEST_MAKE_ENV) $(MAKE1) -C $(@D) \
++		CC="$(TARGET_CC)" \
++		UCLIBC_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
++		test_gen
++endef
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++define UCLIBC_NG_TEST_INSTALL_TARGET_CMDS
++        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
++endef
 +
-+diff --git a/configure.ac b/configure.ac
-+index 6555a8d..7e95b01 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -61,7 +61,7 @@ XORG_DRIVER_CHECK_EXT(XV, videoproto)
-+ XORG_DRIVER_CHECK_EXT(XFreeXDGA, xf86dgaproto)
-+ 
-+ # Obtain compiler/linker options for the driver dependencies
-+-PKG_CHECK_MODULES(XORG, [xorg-server >= 1.0.99.901] xproto fontsproto $REQUIRED_MODULES)
-++PKG_CHECK_MODULES(XORG, [xorg-server >= 1.0.99.901] xproto fontsproto xfont $REQUIRED_MODULES)
-+ 
-+ 
-+ save_CFLAGS="$CFLAGS"
-+diff --git a/src/uxa/uxa-damage.c b/src/uxa/uxa-damage.c
-+index 6201712..a6d1ee3 100644
-+--- a/src/uxa/uxa-damage.c
-++++ b/src/uxa/uxa-damage.c
-+@@ -33,6 +33,9 @@
-+ #include    <scrnintstr.h>
-+ #include    <windowstr.h>
-+ #include    <X11/X.h>
-++#include    <X11/fonts/font.h>
-++#include    <X11/fonts/fontstruct.h>
-++#include    <X11/fonts/fontutil.h>
-+ 
-+ #include    "uxa-damage.h"
-+ 
-+-- 
-+cgit v0.10.2
-+
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/Config.in b/package/x11r7/xdriver_xf86-video-qxl/Config.in
-index 5f05f68..04bde0f 100644
---- a/package/x11r7/xdriver_xf86-video-qxl/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-qxl/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_QXL
- 	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_HAS_UDEV # for KMS
- 	select BR2_PACKAGE_LIBPCIACCESS
- 	select BR2_PACKAGE_SPICE_PROTOCOL
-+	select BR2_PACKAGE_XLIB_LIBXFONT
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	help
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-index ddc4191..30cd7a2 100644
---- a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-+++ b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-@@ -7,6 +7,8 @@
- XDRIVER_XF86_VIDEO_QXL_VERSION = 0.1.4
- XDRIVER_XF86_VIDEO_QXL_SOURCE = xf86-video-qxl-$(XDRIVER_XF86_VIDEO_QXL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_QXL_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+# 0002-xserverfix.patch
-+XDRIVER_XF86_VIDEO_QXL_AUTORECONF = YES
- XDRIVER_XF86_VIDEO_QXL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_QXL_LICENSE_FILES = COPYING
- 
-@@ -16,6 +18,7 @@ XDRIVER_XF86_VIDEO_QXL_CONF_OPTS = \
- XDRIVER_XF86_VIDEO_QXL_DEPENDENCIES = \
- 	libpciaccess \
- 	spice-protocol \
-+	xlib_libXfont \
- 	xproto_fontsproto \
- 	xproto_xproto \
- 	xserver_xorg-server
++$(eval $(generic-package))
