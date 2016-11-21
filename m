@@ -1,45 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 21:16:35 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.2.x and 4.{4,
-	8}.x series
-Message-ID: <20161121201837.922A9817A1@busybox.osuosl.org>
+Date: Mon, 21 Nov 2016 21:16:48 +0100
+Subject: [Buildroot] [git commit] tiff: bump version to 4.0.7 (security)
+Message-ID: <20161121201837.A5933817A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99d06dbd3d6fea30ad5b6d1037527e795e457fba
+commit: https://git.buildroot.net/buildroot/commit/?id=ebd63d405f3feaec2798cf950c91adbcd112f344
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixed CVEs:
+ - CVE-2016-3622
+ - CVE-2016-3623
+ - CVE-2016-5321
+ - CVE-2016-5323
+ - CVE-2016-5652
+ - CVE-2016-5875
+ - CVE-2014-8127
+ - CVE-2015-8665
+ - CVE-2015-8683
+ - CVE-2016-9273
+ - CVE-2016-9448
+
+Release notes: http://www.simplesystems.org/libtiff/v4.0.7.html
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/tiff/tiff.hash | 2 +-
+ package/tiff/tiff.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 8bfad44..5c42d53 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -223,7 +223,7 @@ endchoice
+diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
+index 7ff746f..4439a35 100644
+--- a/package/tiff/tiff.hash
++++ b/package/tiff/tiff.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	4d57a50907b510e3049a4bba0d7888930fdfc16ce49f1bf693e5b6247370d68c	tiff-4.0.6.tar.gz
++sha256 9f43a2cfb9589e5cecaa66e16bf87f814c945f22df7ba600d63aac4632c4f019  tiff-4.0.7.tar.gz
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index a53d7bb..ffb1a42 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.83"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.84"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.67"	if BR2_KERNEL_HEADERS_3_12
-@@ -232,9 +232,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.35"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.31"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.34"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
- 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
- 	default "4.7.10"	if BR2_KERNEL_HEADERS_4_7
--	default "4.8.7"		if BR2_KERNEL_HEADERS_4_8
-+	default "4.8.10"	if BR2_KERNEL_HEADERS_4_8
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-TIFF_VERSION = 4.0.6
++TIFF_VERSION = 4.0.7
+ TIFF_SITE = http://download.osgeo.org/libtiff
+ TIFF_LICENSE = tiff license
+ TIFF_LICENSE_FILES = COPYRIGHT
