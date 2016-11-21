@@ -1,33 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 22:43:42 +0100
-Subject: [Buildroot] [PATCH] configs/imx28evk: Bump to kernel 4.8.8
-In-Reply-To: <1479664980-29851-1-git-send-email-festevam@gmail.com>
-References: <1479664980-29851-1-git-send-email-festevam@gmail.com>
-Message-ID: <20161121224342.1428e9c0@free-electrons.com>
+Date: Mon, 21 Nov 2016 22:44:07 +0100
+Subject: [Buildroot] [git commit] qextserialport: define
+	QEXTSERIALPORT_CONFIGURE_CMDS only once
+Message-ID: <20161121214828.6CC7081D54@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=99b3e821339aeac59c45ddb3c482f4ec3e09ecf6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 20 Nov 2016 16:03:00 -0200, Fabio Estevam wrote:
-> Kernel 4.8.8 brings commit 235bde1ed3f0ff ("net: fec: Call swap_buffer()
-> prior to IP header alignment"), which makes Ethernet functional again
-> on mx28.
-> 
-> Bump to this version.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
-> This patch depends on Vicente's series that bumps linux-headers and kernel
-> version to 4.8.8
+Distinguish qt/qt5 by defining QEXTSERIALPORT_QMAKE, like is done e.g.
+for quazip.
 
-Applied to master, thanks.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qextserialport/qextserialport.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
+index 39e0407..11b1cc8 100644
+--- a/package/qextserialport/qextserialport.mk
++++ b/package/qextserialport/qextserialport.mk
+@@ -12,15 +12,15 @@ QEXTSERIALPORT_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT),y)
+ QEXTSERIALPORT_DEPENDENCIES += qt
+-define QEXTSERIALPORT_CONFIGURE_CMDS
+-	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_QMAKE))
+-endef
++QEXTSERIALPORT_QMAKE = $(QT_QMAKE)
+ else ifeq ($(BR2_PACKAGE_QT5),y)
+ QEXTSERIALPORT_DEPENDENCIES += qt5base
++QEXTSERIALPORT_QMAKE = $(QT5_QMAKE)
++endif
++
+ define QEXTSERIALPORT_CONFIGURE_CMDS
+-	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE))
++	(cd $(@D); $(TARGET_MAKE_ENV) $(QEXTSERIALPORT_QMAKE))
+ endef
+-endif
+ 
+ define QEXTSERIALPORT_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
