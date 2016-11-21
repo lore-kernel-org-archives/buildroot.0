@@ -1,124 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 21:24:23 +0100
-Subject: [Buildroot] [git commit] libuv: needs NPTL
-Message-ID: <20161121203045.09B3E800E0@busybox.osuosl.org>
+Date: Mon, 21 Nov 2016 21:39:25 +0100
+Subject: [Buildroot] [PATCH 3/4] qextserialport: use 'make install' to
+ install to staging
+In-Reply-To: <20161120221329.5827-3-arnout@mind.be>
+References: <20161120221329.5827-1-arnout@mind.be>
+ <20161120221329.5827-3-arnout@mind.be>
+Message-ID: <20161121213925.218f8ddb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=edc18ac932242771f047f5fc3c09f545e140cd07
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/b81/b81583dea1bdf3777b2f2736c84fef90aa10f30b/
-http://autobuild.buildroot.net/results/93f/93f1c4dcaa9a20ec62c547b839cd334ed1b5fbe4/
-http://autobuild.buildroot.net/results/030/030ef0a9bd51a2c52d6026e0c1e383a9bdae3c4f/
-http://autobuild.buildroot.net/results/fff/fff2098f707d9827ec5e1fd38fe742dd2b695ead/
+On Sun, 20 Nov 2016 23:13:28 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
 
-libuv uses pthread_barrier_* functions, which aren't available with
-linuxthreads.  Notice that libuv contains a local prototype for these
-functions, so libuv is able to build and the error only triggers when
-applications try to link against it.
+> The QExtSerialPort and qextserialport.pc files are created by
+> Buildroot so they still have to be installed explicitly. Note that
+> upstream installs in the QtExtSerialPort directory, not QExtSerialPort,
+> so we follow that decision.
 
-Also propagate this dependency to the reverse deps of libuv.
+This breaks the pkg-config use case, because the installed
+qextserialport.pc (added by patch 0003) is not updated to reflect the
+QExtSerialPort -> QtExtSerialPort include directory changed.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libuv/Config.in  | 6 +++---
- package/luv/Config.in    | 6 +++---
- package/luvi/Config.in   | 6 +++---
- package/moarvm/Config.in | 6 +++---
- 4 files changed, 12 insertions(+), 12 deletions(-)
+> Why do we have this 0002-main-include.patch anyway? It's clearly a
+> feature patch... And apparently no attempt has been made to upstream
+> it?
 
-diff --git a/package/libuv/Config.in b/package/libuv/Config.in
-index 26cb97e..93fbd56 100644
---- a/package/libuv/Config.in
-+++ b/package/libuv/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBUV
- 	bool "libuv"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_barrier_*
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS
- 	help
-@@ -9,6 +9,6 @@ config BR2_PACKAGE_LIBUV
- 
- 	  https://github.com/libuv/libuv
- 
--comment "libuv needs a toolchain w/ threads, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+comment "libuv needs a toolchain w/ NPTL, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
-diff --git a/package/luv/Config.in b/package/luv/Config.in
-index 787d162..b085baf 100644
---- a/package/luv/Config.in
-+++ b/package/luv/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_LUV
- 	bool "luv"
- 	select BR2_PACKAGE_LIBUV
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
- 	depends on BR2_USE_MMU # libuv
- 	depends on !BR2_STATIC_LIBS # libuv
- 	help
-@@ -9,6 +9,6 @@ config BR2_PACKAGE_LUV
- 
- 	  https://github.com/luvit/luv
- 
--comment "luv needs a toolchain w/ threads, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+comment "luv needs a toolchain w/ NPTL, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
-diff --git a/package/luvi/Config.in b/package/luvi/Config.in
-index 2f01f5c..18317f4 100644
---- a/package/luvi/Config.in
-+++ b/package/luvi/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LUVI
- 	bool "luvi"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
- 	depends on BR2_USE_MMU # libuv
- 	depends on !BR2_STATIC_LIBS # libuv
- 	depends on BR2_PACKAGE_LUAJIT
-@@ -22,8 +22,8 @@ config BR2_PACKAGE_LUVI
- 
- 	  https://github.com/luvit/luvi
- 
--comment "luvi needs a toolchain w/ threads, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+comment "luvi needs a toolchain w/ NPTL, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
- 
- comment "luvi needs LuaJIT"
-diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
-index 3e0a104..69d9a3e 100644
---- a/package/moarvm/Config.in
-+++ b/package/moarvm/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_MOARVM
- 	bool "moarvm"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
- 	depends on !BR2_STATIC_LIBS # libuv
- 	depends on BR2_USE_MMU # libuv
- 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # libatomic_ops
-@@ -15,8 +15,8 @@ config BR2_PACKAGE_MOARVM
- 
- 	  http://moarvm.com
- 
--comment "moarvm needs a toolchain w/ threads, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+comment "moarvm needs a toolchain w/ NPTL, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
- 	depends on !BR2_sparc64 && !BR2_sparc
+To be honest, I don't remember. I do remember doing this patch for some
+reason (at the time, I was using qextserialport for a specific
+project), but I can't remember what the reason was (just convenience,
+or a real issue). Since there is no package in Buildroot that depends
+on qextserialport, I guess we could try to drop this patch, and see if
+somebody complains? :-)
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
