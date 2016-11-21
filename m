@@ -1,133 +1,75 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Mon, 21 Nov 2016 14:19:35 +1100
-Subject: [Buildroot] [PATCH v2 1/1] pkg-autotools: generic configure fix for
-	powerpc64
-Message-ID: <d005920f1b9f8acd1d32da2c68281020f6d28c2c.1479698374.git.sam.bobroff@au1.ibm.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Nov 2016 08:30:14 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-11-20
+Message-ID: <20161121073014.5412820BEB@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Many (100+) packages supported by buildroot contain old configure
-scripts (or build them from old versions of autotools) that are unable
-to determine how to link shared libraries on powerpc64 and
-powerpc64le. This causes that test to erroneously fail on toolchains
-that are not "bi-endian" (which is the case for toolchains built by
-buildroot), which causes configure to build static libraries instead
-of dynamic ones. Although these builds succeed, they tend to cause
-linker failures in binaries later linked against them.
+Hello,
 
-Because affected configure files can be discovered automatically, this
-patch introduces a hook (enabled only when building for powerpc64 and
-powerpc64le) that uses a script to scan and fix each package.
+Build statistics for 2016-11-20
+================================
 
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
----
+      successes : 140
+       failures : 26 
+       timeouts : 1  
+          TOTAL : 167
 
-v2:
+Classification of failures by reason
+====================================
 
-* Patch host packages as well as target ones. (Feedback on the GNU Make code to
-  detect this is welcome.)
-* Folded long line in script.
-* Removed patch backup files.
-* Updated diff to unified format.
-* Changed $pkg variable to $srcdir.
+                    mpfr-3.1.5 | 4 
+                    mpv-0.20.0 | 3 
+          chocolate-doom-2.2.1 | 2 
+         docker-engine-v1.12.2 | 2 
+openblas-f04af36ad0e85b64f1... | 2 
+             rabbitmq-c-v0.8.0 | 2 
+               tcpreplay-4.1.1 | 2 
+                bind-9.11.0-P1 | 1 
+                    cups-2.1.4 | 1 
+kvm-unit-tests-5731572b2ac2... | 1 
+               libepoxy-v1.3.1 | 1 
+                   mpd-0.19.19 | 1 
+                 opencv3-3.1.0 | 1 
+qt5webkit-b35917bcb44d7f200... | 1 
+                   taskd-1.1.0 | 1 
+               vo-aacenc-0.1.3 | 1 
+                xfsprogs-4.7.0 | 1 
 
- package/pkg-autotools.mk                   | 19 ++++++++++++
- support/scripts/fix-configure-powerpc64.sh | 47 ++++++++++++++++++++++++++++++
- 2 files changed, 66 insertions(+)
- create mode 100755 support/scripts/fix-configure-powerpc64.sh
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index d1cdb89..ada72c8 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -79,6 +79,15 @@ define LIBTOOL_PATCH_HOOK
- endef
- 
- #
-+# Hook to patch common issue with configure on powerpc64{,le} failing
-+# to detect shared library support:
-+#
-+define CONFIGURE_FIX_POWERPC64_HOOK
-+	@$(call MESSAGE,"Checking configure (powerpc64/powerpc64le)")
-+	support/scripts/fix-configure-powerpc64.sh $($(PKG)_DIR)
-+endef
-+
-+#
- # Hook to gettextize the package if needed
- #
- define GETTEXTIZE_HOOK
-@@ -255,6 +264,16 @@ endif
- 
- endif
- 
-+# Append a configure hook if:
-+# * this is a target package and the target architecture is powerpc64 or powerpc64le,
-+# * or this is a host package and the host architecture is powerpc64 or powerpc64le.
-+# Must be added after other pre-configure hooks that might regenerate the
-+# configure script and overwrite the changes made here.
-+ifneq ($(or $(and $(filter target,$(4)), $(filter powerpc64 powerpc64le,$(ARCH))),
-+	$(and $(filter host,$(4)), $(filter powerpc64 powerpc64le,$(HOSTARCH)))),)
-+$(2)_PRE_CONFIGURE_HOOKS += CONFIGURE_FIX_POWERPC64_HOOK
-+endif
-+
- #
- # Build step. Only define it if not already defined by the package .mk
- # file.
-diff --git a/support/scripts/fix-configure-powerpc64.sh b/support/scripts/fix-configure-powerpc64.sh
-new file mode 100755
-index 0000000..ad71042
---- /dev/null
-+++ b/support/scripts/fix-configure-powerpc64.sh
-@@ -0,0 +1,47 @@
-+#!/bin/bash
-+
-+# This is a script to find, and correct, a problem with old versions of
-+# configure that affect powerpc64 and powerpc64le.
-+
-+# The issue causes configure to incorrectly determine that shared library
-+# support is not present in the linker. This causes the package to build a
-+# static library rather than a dynamic one and although the build will succeed,
-+# it may cause packages that link with the static library it to fail due to
-+# undefined symbols.
-+
-+# This script searches for files named 'configure' that appear to have this
-+# issue (by searching for a known bad pattern) and patching them.
-+
-+set -e
-+
-+if [ $# -ne 1 ]; then
-+	echo "Usage: $0 <package build directory>"
-+	exit 2
-+fi
-+
-+srcdir="$1"
-+files=$(cd "$srcdir" && find . -name configure \
-+-exec grep -qF 'Generated by GNU Autoconf' {} \; \
-+-exec grep -qF 'ppc*-*linux*|powerpc*-*linux*)' {} \; -print)
-+
-+# --ignore-whitespace is needed because some packages have included
-+# copies of configure scripts where tabs have been replaced with spaces.
-+for c in $files; do
-+	patch --ignore-whitespace "$srcdir"/"$c" <<'EOF'
-+--- a/configure	2016-11-16 15:31:46.097447271 +1100
-++++ b/configure	2008-07-21 12:17:23.000000000 +1000
-+@@ -4433,7 +4433,10 @@
-+         x86_64-*linux*)
-+           LD="${LD-ld} -m elf_x86_64"
-+           ;;
-+-        ppc*-*linux*|powerpc*-*linux*)
-++	  powerpcle-*linux*)
-++	    LD="${LD-ld} -m elf64lppc"
-++	    ;;
-++	  powerpc-*linux*)
-+           LD="${LD-ld} -m elf64ppc"
-+           ;;
-+         s390*-*linux*)
-+EOF
-+done
-+
+Detail of failures
+===================
+
+ powerpc64le |                 bind-9.11.0-P1 | NOK | http://autobuild.buildroot.net/results/72e1559ba6a98cfd248d803c5bae29de9426ae8c
+ powerpc64le |           chocolate-doom-2.2.1 | NOK | http://autobuild.buildroot.net/results/7876ff1946a25ed2a94d56cb30793695abcefb91
+ powerpc64le |           chocolate-doom-2.2.1 | NOK | http://autobuild.buildroot.net/results/dbe6fe5f552ab831c8420cb8ac5ada3730da21a2
+        i586 |                     cups-2.1.4 | NOK | http://autobuild.buildroot.net/results/ed2a766f8919d12c248885b983e1712a1fe1dc4a
+      x86_64 |          docker-engine-v1.12.2 | NOK | http://autobuild.buildroot.net/results/063842d007cada2a427d08d7b87b07be4df0fa6d
+      x86_64 |          docker-engine-v1.12.2 | NOK | http://autobuild.buildroot.net/results/307b5dc9274567b9a267acc3e70d7614a583bc0c
+         arm | kvm-unit-tests-5731572b2ac2... | NOK | http://autobuild.buildroot.net/results/4bbd95eb9b890b63502b72e0ff14c12682bdef26
+     aarch64 |                libepoxy-v1.3.1 | NOK | http://autobuild.buildroot.net/results/d2fe30b8f985dd60d2ec0306c9955dce7c70fc8a
+       sparc |                    mpd-0.19.19 | NOK | http://autobuild.buildroot.net/results/c9cf3100014ddc5373d2f711d64a0adc1364311e
+         arc |                     mpfr-3.1.5 | NOK | http://autobuild.buildroot.net/results/f27115e67c7e694c5c8e0863f1e316501e53ae64
+         arc |                     mpfr-3.1.5 | NOK | http://autobuild.buildroot.net/results/83384c9cb8be0e406cdca66c606bfbfdb3e7d0a5
+         arc |                     mpfr-3.1.5 | NOK | http://autobuild.buildroot.net/results/104d400be1fd1b0cb00004a260b53ed71529a049
+         arc |                     mpfr-3.1.5 | NOK | http://autobuild.buildroot.net/results/75ea2a086a57e7ccb4024c80002f53569aaec847
+     powerpc |                     mpv-0.20.0 | NOK | http://autobuild.buildroot.net/results/875e851e2071e9515c4b0b49cf396e9503968434
+         arm |                     mpv-0.20.0 | NOK | http://autobuild.buildroot.net/results/d392c396403f8c2d1f05cd9b97bd90f7bab1c8ea
+     powerpc |                     mpv-0.20.0 | NOK | http://autobuild.buildroot.net/results/453f94c7602806ae73f9cd04fa3122b53468a315
+   powerpc64 | openblas-f04af36ad0e85b64f1... | NOK | http://autobuild.buildroot.net/results/74eeb78cd06e10df64b3a71399f5c48df7ce4258
+   powerpc64 | openblas-f04af36ad0e85b64f1... | NOK | http://autobuild.buildroot.net/results/bcc4f743eb1daadf46125d654ffb4c7bf4b843c5
+        i586 |                  opencv3-3.1.0 | NOK | http://autobuild.buildroot.net/results/8ab13204d020dfcccb9a321a83e64bed63c20961
+      mipsel | qt5webkit-b35917bcb44d7f200... | NOK | http://autobuild.buildroot.net/results/c2081d497fedc201cf477936feade51257da1699
+    mips64el |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/cf4ecd6532092a54c29e159a1184707fd8a94f2e
+      mipsel |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/e60fc3b99f777921123c4b6defedb18a32984be2
+         arm |                    taskd-1.1.0 | NOK | http://autobuild.buildroot.net/results/16240b97ea821f87ce13bd788265ab3b0f2c56be
+      x86_64 |                tcpreplay-4.1.1 | NOK | http://autobuild.buildroot.net/results/61a2018720e5d206cc6ad53b5c55b3c0964e5d74
+      x86_64 |                tcpreplay-4.1.1 | NOK | http://autobuild.buildroot.net/results/97b6d9a59bdaddc4cd68925af50f28fc7a161ca8
+      x86_64 |                vo-aacenc-0.1.3 | TIM | http://autobuild.buildroot.net/results/63c12eba8075ddb005539a7193642abd2f356b1c
+      x86_64 |                 xfsprogs-4.7.0 | NOK | http://autobuild.buildroot.net/results/f000fdcea4fe0992f5adea3c8dd7ceddeac02a6e
+
 -- 
-2.10.0.297.gf6727b0
+http://autobuild.buildroot.net
