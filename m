@@ -1,84 +1,79 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 21 Nov 2016 12:21:28 +0100
-Subject: [Buildroot] Analysis of autobuild failures 18-19/11
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Mon, 21 Nov 2016 11:44:23 +0000
+Subject: [Buildroot] [arc-buildroot] Analysis of autobuild failures
+	18-19/11
 In-Reply-To: <40bbe29b-2601-f710-970c-065f0b2c639f@mind.be>
 References: <40bbe29b-2601-f710-970c-065f0b2c639f@mind.be>
-Message-ID: <20161121112128.GP27313@waldemar-brodkorb.de>
+Message-ID: <1479728662.5879.6.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Arnout Vandecappelle wrote,
+On Sat, 2016-11-19 at 20:23 +0100, Arnout Vandecappelle wrote:
+> 
+> http://autobuild.buildroot.net/results/1a506eee41dd9e3a14244f4add90d89d7b818352
+> arc / arc700????mpfr-3.1.5??????uclibc??
+> 
+> 
+> > /bin/bash ../libtool? --tag=CC?? --mode=compile /accts/mlweber1/rc-buildroot-test/scripts/instance-
+> 1/output/host/usr/bin/arc-buildroot-linux-uclibc-gcc -DTIME_WITH_SYS_TIME=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1
+> -DHAVE_LOCALE_H=1 -DHAVE_WCHAR_H=1 -DHAVE_STDARG=1 -DHAVE_SYS_TIME_H=1 -DHAVE_STRUCT_LCONV_DECIMAL_POINT=1
+> -DHAVE_STRUCT_LCONV_THOUSANDS_SEP=1 -DHAVE_ALLOCA_H=1 -DHAVE_STDINT_H=1 -DHAVE_VA_COPY=1 -DHAVE_SETLOCALE=1
+> -DHAVE_GETTIMEOFDAY=1 -DHAVE_LONG_LONG=1 -DHAVE_INTMAX_T=1 -DMPFR_HAVE_INTMAX_MAX=1 -DHAVE_ROUND=1 -DHAVE_TRUNC=1
+> -DHAVE_FLOOR=1 -DHAVE_CEIL=1 -DHAVE_NEARBYINT=1 -DHAVE_CLOCK_GETTIME=1 -DLT_OBJDIR=\".libs/\" -DHAVE_ATTRIBUTE_MODE=1
+> -DHAVE___GMPN_ROOTREM=1 -DHAVE___GMPN_SBPI1_DIVAPPR_Q=1 -I.?? -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> -D_FILE_OFFSET_BITS=64? -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -matomic -Os? -ffloat-store
+> -c -o mul.lo mul.c
+> > libtool: compile:? /accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/host/usr/bin/arc-buildroot-linux-
+> uclibc-gcc -DTIME_WITH_SYS_TIME=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_LOCALE_H=1 -DHAVE_WCHAR_H=1
+> -DHAVE_STDARG=1 -DHAVE_SYS_TIME_H=1 -DHAVE_STRUCT_LCONV_DECIMAL_POINT=1 -DHAVE_STRUCT_LCONV_THOUSANDS_SEP=1
+> -DHAVE_ALLOCA_H=1 -DHAVE_STDINT_H=1 -DHAVE_VA_COPY=1 -DHAVE_SETLOCALE=1 -DHAVE_GETTIMEOFDAY=1 -DHAVE_LONG_LONG=1
+> -DHAVE_INTMAX_T=1 -DMPFR_HAVE_INTMAX_MAX=1 -DHAVE_ROUND=1 -DHAVE_TRUNC=1 -DHAVE_FLOOR=1 -DHAVE_CEIL=1
+> -DHAVE_NEARBYINT=1 -DHAVE_CLOCK_GETTIME=1 -DLT_OBJDIR=\".libs/\" -DHAVE_ATTRIBUTE_MODE=1 -DHAVE___GMPN_ROOTREM=1
+> -DHAVE___GMPN_SBPI1_DIVAPPR_Q=1 -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -matomic -Os -ffloat-store -c mul.c? -fPIC -DPIC -o
+> .libs/mul.o
+> > In file included from mpfr-impl.h:98:0,
+> >????????????????? from mul.c:24:
+> > mul.c: In function 'mpfr_mul':
+> > mpfr-longlong.h:403:3: error: impossible constraint in 'asm'
+> >??? __asm__ ("add.f\t%1, %4, %5\n\tadc\t%0, %2, %3"?? \
+> >??? ^
+> > mul.c:333:11: note: in expansion of macro 'add_ssaaaa'
+> >??????????? add_ssaaaa (tmp[2], tmp[1], tmp[2], tmp[1], 0, t);
+> >??????????? ^~~~~~~~~~
+> > mpfr-longlong.h:403:3: error: impossible constraint in 'asm'
+> >??? __asm__ ("add.f\t%1, %4, %5\n\tadc\t%0, %2, %3"?? \
+> >??? ^
+> > mul.c:343:11: note: in expansion of macro 'add_ssaaaa'
+> >??????????? add_ssaaaa (tmp[2], tmp[1], tmp[2], tmp[1], 0, t1);
+> >??????????? ^~~~~~~~~~
+> > mpfr-longlong.h:403:3: error: impossible constraint in 'asm'
+> >??? __asm__ ("add.f\t%1, %4, %5\n\tadc\t%0, %2, %3"?? \
+> >??? ^
+> > mul.c:347:11: note: in expansion of macro 'add_ssaaaa'
+> >??????????? add_ssaaaa (tmp[3], t1, tmp[3], t1, 0, t3);
+> >??????????? ^~~~~~~~~~
+> > mpfr-longlong.h:403:3: error: impossible constraint in 'asm'
+> >??? __asm__ ("add.f\t%1, %4, %5\n\tadc\t%0, %2, %3"?? \
+> >??? ^
+> > mul.c:349:11: note: in expansion of macro 'add_ssaaaa'
+> >??????????? add_ssaaaa (tmp[2], tmp[1], tmp[2], tmp[1], t1, t2);
+> >??????????? ^~~~~~~~~~
+> 
+> ?Compiler bug. I guess the Synopsys people will look at this, right?
 
->  Hi all,
-> 
->  Here's an analysis of autobuild failures. It looks a bit different from what
-> Thomas usually sends because I based it on the website rather than the mail. I
-> eliminated the ones that are already fixed in git, and also the powerpc64le
-> failures that are due to libtool.m4.
-> 
->  I'm not putting the people from get-developers in Cc, because they already get
-> these mails.
-> 
-> http://autobuild.buildroot.net/results/d47fa41aa860d82471b83ac90967d3a3dacd8611
-> m68k / 5208	lcdapi-v0.10	uclibc	static
-> 
-> > /tmp/cc6S5lwR.s: Assembler messages:
-> > /tmp/cc6S5lwR.s: Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
-> > Please report this bug.
-> > Makefile:784: recipe for target 'lcdapi/api/liblcdapi_la-LCDHorizontalBar.lo' failed
-> 
->  ICE... Waldemar?
+Hi Arnout,?
 
-This could be avoided by using something like the following (example
-for libasplib):
-diff --git a/package/libasplib/libasplib.mk
-b/package/libasplib/libasplib.mk
-index 41aeaeb..b09d739 100644
---- a/package/libasplib/libasplib.mk
-+++ b/package/libasplib/libasplib.mk
-@@ -10,4 +10,11 @@ LIBASPLIB_LICENSE = GPLv3+
- LIBASPLIB_LICENSE_FILES = LICENSE
- LIBASPLIB_INSTALL_STAGING = YES
- 
-+# Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
-+ifeq ($(BR2_m68k_cf),y)
-+LIBASPLIB_CXXFLAGS += -fno-dwarf2-cfi-asm
-+endif
-+
-+LIBASPLIB_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(LIBASPLIB_CXXFLAGS)"
-+
- $(eval $(cmake-package))
+The issue here is caused by obsolete ARC asm constraints that are no longer supported in GCC. Unfortunately such
+constraints are still used in source code of some packages, e.g. "mpfr" library.?
+I am preparing a workaround that replaces these obsolete constraints with up-to-date ones and send this patch to
+buildroot.?
+Also I am going to send a patch that updates asm constraints to "mpfr" in order to fix initial issue.?
 
-Unfortunately libasplib cmake infrastructure ignores my
-CMAKE_CXX_FLAGS. 
-
-The m68k/coldfire uclinux seems to have some limitation regarding
-CFI assembly generation, as elf2flt lacks some features.
-See here for the comment in the code of GNU as:
-https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=gas/config/tc-m68k.h;h=30ca2cb35e0b00048c52bda0dc04ae0cdef5cc3a;hb=HEAD#l180
-
-With gcc -fno-dwarf2-cfi-asm we can disable the CFI generation and
-at least fix the compile errors for those packages.
- 
-Not sure if it will break some exception handling in C++ code or if
-it only disables the ability to debug the code.
- 
-> http://autobuild.buildroot.net/results/4fb4353bce614b64b30b05d06831e0d0f38a48dd
-> bfin / bf532	libarchive-3.2.1	uclibc	static
-> 
-> > ./.libs/libarchive.a(archive_random.o): In function `_archive_random':
-> > libarchive/archive_random.c:(.text+0x158): undefined reference to `_pthread_mutex_lock'
-> > libarchive/archive_random.c:(.text+0x20a): undefined reference to `_pthread_mutex_unlock'
-> 
->  pthread static linking problem with the ADI toolchain. Probably solved with
-> current uClibc-ng.
-
-Yes, absolutely. May be disable for this toolchain, like Thomas did
-for some other package recently.
- 
-best regards
- Waldemar
+Thanks.
+-- 
+Best regards,
+Vlad Zakharov <vzakhar@synopsys.com>
