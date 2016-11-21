@@ -1,70 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 21 Nov 2016 22:40:47 +0100
-Subject: [Buildroot] Uclibc shm performance issue
-In-Reply-To: <CAK7rcp-2ANhykJACZdPJfmaHm106-Z6W3O80jzogYgk1m3+_mg@mail.gmail.com>
-References: <CAK7rcp_18Ygbkafq--7qii_9gF-7FrXq7W2iv6EL2vd9efLUxw@mail.gmail.com>
- <CAK7rcp_Z6M4aTp_f8v_Qr5ZEXjnR96pK8eAhx9D7Gs1n6_c_ig@mail.gmail.com>
- <CAK7rcp8e9cAKD0hMrhjE0Fjd64sc_8MdYk1Mnc4D0zozpSMv1w@mail.gmail.com>
- <CAK7rcp9DChiLzazH3gA-YSZ9+HFtQakLbwo6zK-BLAeDqMTHYw@mail.gmail.com>
- <CAK7rcp9R=4had7MJx5MQwqROZh39pYU7WVkgqoFj=qvNV-vzQw@mail.gmail.com>
- <CAK7rcp-LTN68VXOUZOKu_jET9WN5-F1iAQivLe3WsU0zO6iQcg@mail.gmail.com>
- <CAK7rcp_MQbDUFtr2F-GNYU=Mz_5N-0Jv-Yh3aYqr6HOFqvGPxw@mail.gmail.com>
- <CAK7rcp9Rv-JMX=inPMinGZ22LHe+rt0HHfNDTrkj5xaU-hQi3A@mail.gmail.com>
- <CAK7rcp_J_LFvzHyCSbNrgZOz==zFHQ4H2fRrPe0pYJFUwPeX9g@mail.gmail.com>
- <CAK7rcp-2ANhykJACZdPJfmaHm106-Z6W3O80jzogYgk1m3+_mg@mail.gmail.com>
-Message-ID: <af3ce912-0cf7-231a-9919-76ad84cca006@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Nov 2016 22:43:32 +0100
+Subject: [Buildroot] [git commit] configs/imx28evk: Bump to kernel 4.8.8
+Message-ID: <20161121214337.CDED9802B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Kenneth,
+commit: https://git.buildroot.net/buildroot/commit/?id=cbc2fd07b0089e49ecad851bd2ac38f177111d8a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 21-11-16 20:10, Kenneth Adam Miller wrote:
-> Hello,
-> 
-> I'm using an absolutely miniscule fully compiled test inside a custom linux
-> built by buildroot with uclibc, and I'm opening and memcpy'ing raw data into a
-> shm region shared between two processes. On my host, I get fantastic performance
-> of course, gigabytes per second as expected. Therefore I know that the code that
-> I wrote is fast. But when I move it to run inside our booted image, I take a
-> huge performance hit. I'm not sure what the source is, but I wanted to know if
-> anybody would think that uclibc would affect performance so dramatically, or if
-> there could be some buildroot specific option that I could change that would
-> improve things. There are two layers of performance penalty in fact, one just
-> moving into the custom linux, and another when we drive our C library with Ruby.
-> I understand that that is to be expected but for me, i dont think that the
-> penalty should be so enormous for that as well. Perhaps grsec could be affecting it?
+Kernel 4.8.8 brings commit 235bde1ed3f0ff ("net: fec: Call swap_buffer()
+prior to IP header alignment"), which makes Ethernet functional again
+on mx28.
 
- It sounds like you're stacking a huge number of changes on top of each other,
-and any of them could be the cause. So I think it's better to test each of them
-separately.
+Bump to this version.
 
-- Buildroot: change your configuration so it can run on your host, select glibc
-as your library and the same gcc version as you use on your host, chroot into
-the rootfs and execute your test application. Do you get the same performance?
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/freescale_imx28evk_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-- uClibc: like above, but use uClibc as the C library
-
-- gcc: switch to the gcc version you use for your target
-
-- linux: build the same linux version (but the upstream one) as for your target
-with the configuration for your host, and boot into it natively
-
-- grsec: like above but use the grsec-patches linux
-
-- CPU arch: now run it on your target
-
-and you can do all that in a different order of course.
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/configs/freescale_imx28evk_defconfig b/configs/freescale_imx28evk_defconfig
+index 790c338..9c870cf 100644
+--- a/configs/freescale_imx28evk_defconfig
++++ b/configs/freescale_imx28evk_defconfig
+@@ -11,7 +11,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="mxs"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-evk"
