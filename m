@@ -1,70 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 21:16:06 +0100
-Subject: [Buildroot] [git commit] mpfr: Fix obsolete ARC asm constraints
-Message-ID: <20161121201614.BCDB6800D9@busybox.osuosl.org>
+Date: Mon, 21 Nov 2016 21:17:08 +0100
+Subject: [Buildroot] [PATCH v3 1/2] linux-headers: bump 3.2.x and 4.{4,
+ 8}.x series
+In-Reply-To: <20161121104928.44869-1-Vincent.Riera@imgtec.com>
+References: <20161121104928.44869-1-Vincent.Riera@imgtec.com>
+Message-ID: <20161121211708.10c0d633@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=568013ecae874e6560a650bbfcc4a91f0f232fd1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-"mpfr" library build was failing due to obsolete ARC asm constraints.
+On Mon, 21 Nov 2016 10:49:27 +0000, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+> Changes v2 -> v3:
+>  - also bump 3.2.x series
+>  - bump 4.8.x series to 4.8.10 instead of 4.8.8
+> Changes v1 -> v2:
+>  - rebase on top of master
+>  - drop 3.12.x changes as they are already part of master
+> ---
+>  package/linux-headers/Config.in.host | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-This commit replaces obsolete "J" constraints with up-to-date "Cal"
-ones in order to fix "mpfr" build for ARC.
+Both applied to master, thanks!
 
-Fixes:
-http://autobuild.buildroot.net/results/579/579de571270ad562fbb1699224d557d16276704b//
-
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-Fix-obsolete-ARC-asm-constraints.patch    | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
-
-diff --git a/package/mpfr/0001-Fix-obsolete-ARC-asm-constraints.patch b/package/mpfr/0001-Fix-obsolete-ARC-asm-constraints.patch
-new file mode 100644
-index 0000000..12590cf
---- /dev/null
-+++ b/package/mpfr/0001-Fix-obsolete-ARC-asm-constraints.patch
-@@ -0,0 +1,37 @@
-+mpfr-longlong.h: Fix obsolete ARC asm constraints
-+
-+This patch replaces obsolete ARC "J" asm constraint with
-+up-to-date "Cal" constraint.
-+The patch should be applied to upstream "mpfr" library and
-+after that it should be removed from buildroot as soon as 
-+mpfr version with current fix will come up.
-+
-+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-+Signed-off-by: Claudiu Zissulescu <claziss@synopsys.com>
-+---
-+Index: /src/mpfr-longlong.h
-+===================================================================
-+--- /src/mpfr-longlong.h	(revision 10963)
-++++ /src/mpfr-longlong.h	(working copy)
-+@@ -416,17 +416,17 @@
-+ 	   : "=r" (sh),							\
-+ 	     "=&r" (sl)							\
-+ 	   : "r"  ((USItype) (ah)),					\
-+-	     "rIJ" ((USItype) (bh)),					\
-++	     "rICal" ((USItype) (bh)),					\
-+ 	     "%r" ((USItype) (al)),					\
-+-	     "rIJ" ((USItype) (bl)))
-++	     "rICal" ((USItype) (bl)))
-+ #define sub_ddmmss(sh, sl, ah, al, bh, bl) \
-+   __asm__ ("sub.f\t%1, %4, %5\n\tsbc\t%0, %2, %3"			\
-+ 	   : "=r" (sh),							\
-+ 	     "=&r" (sl)							\
-+ 	   : "r" ((USItype) (ah)),					\
-+-	     "rIJ" ((USItype) (bh)),					\
-++	     "rICal" ((USItype) (bh)),					\
-+ 	     "r" ((USItype) (al)),					\
-+-	     "rIJ" ((USItype) (bl)))
-++	     "rICal" ((USItype) (bl)))
-+ #endif
-+ 
-+ #if defined (__arm__) && (defined (__thumb2__) || !defined (__thumb__)) \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
