@@ -1,44 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:56:53 +0100
-Subject: [Buildroot] [git commit] busybox: disable build timestamps for
-	reproducible builds
-Message-ID: <20161201222139.394AE7FD88@busybox.osuosl.org>
+Date: Tue, 22 Nov 2016 10:41:06 +0100
+Subject: [Buildroot] [git commit] canfestival: comment on musl disable
+Message-ID: <20161201222137.EF6027FB56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8254d32fd839ebd0a96863579832678eb6e0038
+commit: https://git.buildroot.net/buildroot/commit/?id=ee5d4b72b9ea0f5f446acd579cfa2f0cb1311378
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Busybox includes some information about the build environment in its
-binary. For BR2_REPRODUCIBLE, remove that information.
+Based on commit 4d00a4058b9e5 (can-festival: disable on musl) and a previous
+fix attempt[1], add a comment explaining why build with musl is disabled.
 
-Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[1] http://patchwork.ozlabs.org/patch/509731/
+
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/busybox/busybox.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/canfestival/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index fc23a90..f4a241d 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -36,6 +36,12 @@ BUSYBOX_MAKE_ENV = \
- 	$(TARGET_MAKE_ENV) \
- 	CFLAGS="$(BUSYBOX_CFLAGS)" \
- 	CFLAGS_busybox="$(BUSYBOX_CFLAGS_busybox)"
-+
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+BUSYBOX_MAKE_ENV += \
-+	KCONFIG_NOTIMESTAMP=1
-+endif
-+
- BUSYBOX_MAKE_OPTS = \
- 	CC="$(TARGET_CC)" \
- 	ARCH=$(KERNEL_ARCH) \
+diff --git a/package/canfestival/Config.in b/package/canfestival/Config.in
+index 5522afe..ca94956 100644
+--- a/package/canfestival/Config.in
++++ b/package/canfestival/Config.in
+@@ -11,7 +11,7 @@ comment "canfestival needs a glibc or uClibc toolchain w/ threads and dynamic li
+ config BR2_PACKAGE_CANFESTIVAL
+ 	bool "canfestival"
+ 	depends on BR2_PACKAGE_CANFESTIVAL_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_USES_MUSL
++	depends on !BR2_TOOLCHAIN_USES_MUSL # sigval_t
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	help
