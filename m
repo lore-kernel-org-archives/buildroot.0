@@ -1,34 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Nov 2016 10:41:26 +0100
-Subject: [Buildroot] [PATCH] canfestival: comment on musl disable
-In-Reply-To: <dae10b62748408881f5c3dbe970d8bf428089e71.1479370709.git.baruch@tkos.co.il>
-References: <dae10b62748408881f5c3dbe970d8bf428089e71.1479370709.git.baruch@tkos.co.il>
-Message-ID: <20161122104126.41435560@free-electrons.com>
+Date: Tue, 22 Nov 2016 10:41:50 +0100
+Subject: [Buildroot] [git commit branch/next] package/qemu: enable for
+	powerpc64 and powerpc64le
+Message-ID: <20161122094153.6964881D80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=79573562fd5e9c455ebd9061b2370e886ee2da29
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 17 Nov 2016 10:18:29 +0200, Baruch Siach wrote:
-> Based on commit 4d00a4058b9e5 (can-festival: disable on musl) and a previous
-> fix attempt[1], add a comment explaining why build with musl is disabled.
-> 
-> [1] http://patchwork.ozlabs.org/patch/509731/
-> 
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/canfestival/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qemu/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index ea6b946..e935ef9 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -2,7 +2,8 @@ config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
+ 	bool
+ 	# Only tested on these architectures
+ 	default y if BR2_aarch64 || BR2_i386 || BR2_mips || BR2_mipsel \
+-		|| BR2_x86_64 || BR2_arm
++		|| BR2_x86_64 || BR2_arm \
++		|| BR2_powerpc64 || BR2_powerpc64le
+ 
+ comment "QEMU requires a toolchain with wchar, threads"
+ 	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
