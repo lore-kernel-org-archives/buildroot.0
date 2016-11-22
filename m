@@ -1,55 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Nov 2016 17:21:57 +0100
-Subject: [Buildroot] auto-detecting toolchain metadata?
-In-Reply-To: <c42f58d1-687f-803b-08df-a039037003c9@mentor.com>
-References: <c1d1dc6d-c815-1ea2-3de9-13a1da0adaec@mentor.com>
- <20161101184626.GB30593@free.fr>
- <6e24245a-9c73-ea34-e899-f19f16346d0e@mentor.com>
- <20161122092919.502273aa@free-electrons.com>
- <ca906326-1a51-56db-7411-dcf5408c9255@mentor.com>
- <20161122164917.3ee6e506@free-electrons.com>
- <c42f58d1-687f-803b-08df-a039037003c9@mentor.com>
-Message-ID: <20161122172157.4814ab48@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 22 Nov 2016 20:08:07 +0100
+Subject: [Buildroot] Analysis of autobuild failures 18-19/11
+In-Reply-To: <CANLo3Ji8MiH29tYCwmpu4KMDJkcm7-75EUGK1mq3e8Tnih6aZQ@mail.gmail.com>
+References: <40bbe29b-2601-f710-970c-065f0b2c639f@mind.be>
+ <20161121230850.00bbc1cf@free-electrons.com>
+ <bfc05511-fb21-e223-ced5-6108cd702fea@mind.be>
+ <20161122092656.39ae5aa4@free-electrons.com>
+ <7a5d902a-5567-b2bd-d6d3-5a9219eed87c@mind.be>
+ <20161122163827.5ea95941@free-electrons.com>
+ <CANLo3Ji8MiH29tYCwmpu4KMDJkcm7-75EUGK1mq3e8Tnih6aZQ@mail.gmail.com>
+Message-ID: <CANLo3JjTNV7kh=z3jCZ8m7KxMmB7oiP_EhcZ8ahbuo0qqf_yQA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi all,
 
-On Tue, 22 Nov 2016 08:12:34 -0800, Hollis Blanchard wrote:
+Le 22 nov. 2016 16:38, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> a ?crit :
+>
+> Hello,
+>
+> On Tue, 22 Nov 2016 16:30:22 +0100, Arnout Vandecappelle wrote:
+>
+> >  Well, it wasn't committed yet even though it has a bunch of
+reviewed-bys from
+> > Romain ;-P
+>
+> It's on my TODO list to apply those patches, as well as the
+> BR2_REPRODUCIBLE stuff that we agree on.
 
-> OK, how can I use defconfig fragments? I can't find mention of it in the 
-> manual or the top-level Makefile.
+I can continue to review this series this evening but the remaining patches
+looks ok for me. I'll just some noise on the ml ;-)
 
-Easy:
-
- cat frag1 frag2 frag3 > defconfig
-
-And that's it. There's nothing fancy in fragments, it's just a fragment
-of defconfig, and you create the real defconfig by concatenating
-fragments.
-
-> I do see a little information about using config fragments for 
-> Kconfig-based packages, and that says it breaks savedefconfig. So if I 
-> can use fragments for the BR defconfig, how could I update the defconfig 
-> in the future?
-
-Fragments are hand-written, by extracting data from a defconfig.
-Typically, with the above example, you generate your defconfig from
-frag1, frag2 and frag3. You then run "make menuconfig", which updates
-your configuration, and run "make savedefconfig", which generates a new
-defconfig.
-
-It is impossible for Buildroot to know in which fragment should a given
-change be propagated. So what I typically do is "diff -u defconfig.old
-defconfig", and then propagate the change to the appropriate fragment.
+At least, I want to review more carefully the toolchain-external-custom one.
 
 Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Romain
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161122/35cf47bc/attachment.html>
