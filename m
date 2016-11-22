@@ -1,53 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Nov 2016 11:16:16 +0100
-Subject: [Buildroot] [PATCH] ptpd2: fix bfin compile by avoiding gcc bug
-In-Reply-To: <20161122101219.GT27313@waldemar-brodkorb.de>
-References: <20161121183217.GA1046@waldemar-brodkorb.de>
- <20161121220442.77263bd3@free-electrons.com>
- <20161122101219.GT27313@waldemar-brodkorb.de>
-Message-ID: <20161122111616.4cdfdd67@free-electrons.com>
+From: Joris Lijssens <joris.lijssens@gmail.com>
+Date: Tue, 22 Nov 2016 11:16:10 +0100
+Subject: [Buildroot] [PATCH 1/1] netsniff-ng: bump version to 0.6.2
+Message-ID: <1479809770-30194-1-git-send-email-joris.lijssens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+---
+ package/netsniff-ng/netsniff-ng.hash | 2 +-
+ package/netsniff-ng/netsniff-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, 22 Nov 2016 11:12:20 +0100, Waldemar Brodkorb wrote:
-
-> > However, I continue to dislike such hacks: when the problem gets fixed
-> > by gcc, how will we notice?  
-> 
-> Either when we get notice that the PR is closed, this time I need to
-> create one. But we have similar issues where we already have PR's.
-> Or we check when a new gcc release come out, if the results from
-> "grep bfin package/*/*mk" are still required.
-
-Maybe we need to have some kind of convention of a specific string to
-include in the comment on such hacks, in order to more easily grep?
-
-Like:
-
-# Workaround gcc-prXYZ
-
-or
-
-# Workaround binutils-prXYZ
-
-This way, we can grep for "gcc-pr" and "binutils-pr" and easily check
-the status of those PRs.
-
-> I think better then never ending autobuild failures.
-
-For sure, I'm not claiming we should keep things as-is. It's good to
-add temporary hacks, but it's also good to think about how we can at
-some point remove those hacks.
-
-Best regards,
-
-Thomas
+diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
+index 5212497..67b3331 100644
+--- a/package/netsniff-ng/netsniff-ng.hash
++++ b/package/netsniff-ng/netsniff-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 902661bcdbc129c6a6c1f69a72f921fffc9e765d005568dc153f09ca0097c180 netsniff-ng-v0.6.1.tar.gz
++sha256 62e8aa970a4f46cdaddf54daf8ea26e7ae9f9f358efaf0651799c8c4e937c286 netsniff-ng-v0.6.2.tar.gz
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index ad97a88..4ec7e74 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NETSNIFF_NG_VERSION = v0.6.1
++NETSNIFF_NG_VERSION = v0.6.2
+ NETSNIFF_NG_SITE = $(call github,netsniff-ng,netsniff-ng,$(NETSNIFF_NG_VERSION))
+ NETSNIFF_NG_LICENSE = GPLv2
+ NETSNIFF_NG_LICENSE_FILES = README COPYING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+1.8.3.1
