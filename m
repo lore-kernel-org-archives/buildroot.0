@@ -1,67 +1,31 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Tue, 22 Nov 2016 11:59:53 +0100
-Subject: [Buildroot] [PATCH v2 09/15] fakedate: new package
-In-Reply-To: <838b8e0f-1848-4f5b-c5cd-c8338c3324ff@mind.be>
-References: <1479460224-6119-1-git-send-email-jezz@sysmic.org>
- <147980227.jl3AtNLvoX@sagittea>
- <838b8e0f-1848-4f5b-c5cd-c8338c3324ff@mind.be>
-Message-ID: <4522057.1MXXz9PRdM@sagittea>
+From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Date: Tue, 22 Nov 2016 14:09:05 +0100
+Subject: [Buildroot] [PATCH 1/1] host-python: Really do not use the
+ system OpenSSL.
+In-Reply-To: <f01041c6-2cd5-3aee-94b9-b743f9836bd7@mind.be>
+References: <43b2e7d1-6366-3d98-89f1-d2ab7ca3db2c@green-communications.fr>
+ <20161117150649.5568-1-nicolas.cavallari@green-communications.fr>
+ <2c158563-8cb5-f271-68e6-3c173bd2f3b1@mind.be>
+ <770975c2-bae0-897c-a798-5fe5df84c016@green-communications.fr>
+ <f01041c6-2cd5-3aee-94b9-b743f9836bd7@mind.be>
+Message-ID: <515ff5e8-2077-f5e9-52eb-7e061b48203a@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnoult,
+On 19/11/2016 17:43, Arnout Vandecappelle wrote:
+>> I was trying to minimize the amount of lines changed. I assume this
+>> patch is not going to be applied upstream.
+> 
+>  I don't see a reason why not, it adds an enable/disable option to the set they
+> already have. Thomas, did you ever try to send it upstream?
+> 
+>  By the way, any idea why we don't have this for python3? setup.py seems to be
+> identical...
 
-On Saturday 19 November 2016 14:26:40 Arnout Vandecappelle wrote:
-> 
-> On 19-11-16 14:06, J?r?me Pouiller wrote:
-> > On Saturday 19 November 2016 11:21:39 Arnout Vandecappelle wrote:
-> >> On 18-11-16 10:10, J?r?me Pouiller wrote:
-> > [...]
-> >>> +    for i in "$@"; do
-> >>> +        case $i in
-> >>> +        -d|-[!-]*d|--date=*|-f|-[!-]*f|--file=*)
-> >>
-> >>  We use [^-] everywhere else.
-> > 
-> > It seems this syntax is a bashism. From glob(7): "POSIX has declared
-> > the effect of a wildcard pattern "[^...]" to be undefined" (and I
-> > confirm it does not work with dash)
-> > 
-> >>  Note that this pattern will also match something
-> >> like -rfrood, i.e. --reference=frood. Fixing that becomes tricky without regexp.
-> > 
-> > hmmm... yes, it matches -rfrood (and it is what we want), but it does not
-> > match --reference=frood, isn't?
-> 
->  -rfrood and --reference=frood are the same thing, so no, we don't want it to
-> match -rfrood.
-> 
-> 
-> >>  Anyway, the -d option doesn't really need to be checked. 'date -d foo -d bar'
-> >> will ignore the first -d, so things work OK. It's just that you get the spurious
-> >> warning. So we could limit to checking -f, and limit to -f|--file=*). In that
-> >> case, if someone passes something like -uf we'll get an error and the build will
-> >> most likely terminate, so that particular error can be fixed.
-> > 
-> > You are right. However, since it may produce unexpected situation, I
-> > prefer to identify precisely the cases where fakedate is used. 
-> 
->  I would also prefer that, but I don't think it's possible without relying on
-> regex. This could work:
-> 
-> if echo "$i" | grep -qE '^-([urI]*d|-date|[urI]*f|-file)'; then
-
-From manual page, only option -u and -R do not take arguments. In add, we
-also have to inhibit fakedate is --reference (or -r) is detected. So, I
-think that the expression should be:
-
-   '^-([uR]*d|-date|[uR]*f|-file|[uR]*r|--reference)'
-
-
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+It isn't. Python 3's setup.py compiles the internal hash
+implementation unconditionally. There is, however, no --disable-ssl
+passed/implemented by buildroot. So I'll just add a patch that adds it
+and nothing else.
