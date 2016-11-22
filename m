@@ -1,56 +1,53 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 22 Nov 2016 20:08:07 +0100
-Subject: [Buildroot] Analysis of autobuild failures 18-19/11
-In-Reply-To: <CANLo3Ji8MiH29tYCwmpu4KMDJkcm7-75EUGK1mq3e8Tnih6aZQ@mail.gmail.com>
-References: <40bbe29b-2601-f710-970c-065f0b2c639f@mind.be>
- <20161121230850.00bbc1cf@free-electrons.com>
- <bfc05511-fb21-e223-ced5-6108cd702fea@mind.be>
- <20161122092656.39ae5aa4@free-electrons.com>
- <7a5d902a-5567-b2bd-d6d3-5a9219eed87c@mind.be>
- <20161122163827.5ea95941@free-electrons.com>
- <CANLo3Ji8MiH29tYCwmpu4KMDJkcm7-75EUGK1mq3e8Tnih6aZQ@mail.gmail.com>
-Message-ID: <CANLo3JjTNV7kh=z3jCZ8m7KxMmB7oiP_EhcZ8ahbuo0qqf_yQA@mail.gmail.com>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Tue, 22 Nov 2016 15:53:33 -0500
+Subject: [Buildroot] [PATCH] Makefile: fix ignored trace at target-finalize
+Message-ID: <20161122205333.9735-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Make may throw an error (but ignored) trace when cleaning up the
+rootfs.
 
-Le 22 nov. 2016 16:38, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> a ?crit :
->
-> Hello,
->
-> On Tue, 22 Nov 2016 16:30:22 +0100, Arnout Vandecappelle wrote:
->
-> >  Well, it wasn't committed yet even though it has a bunch of
-reviewed-bys from
-> > Romain ;-P
->
-> It's on my TODO list to apply those patches, as well as the
-> BR2_REPRODUCIBLE stuff that we agree on.
+The target-finalize rule intends to remove the folder
+`$(TARGET_DIR)/usr/share' but this directory may still contain items
+(such as the `udhcpc' helper script) and causes the rmdir to fail.
 
-I can continue to review this series this evening but the remaining patches
-looks ok for me. I'll just some noise on the ml ;-)
+The stderr output is redirected to /dev/null but it returns and error
+which is escaped by the leading `-'; but make reports an ignored-error.
 
-At least, I want to review more carefully the toolchain-external-custom one.
+See the log below:
+$ make
+(...)
+rm -rf (...)/target/usr/share/gtk-doc
+rmdir (...)/target/usr/share
+rmdir: failed to remove '(...)/target/usr/share': Directory not empty
+make[1]: [Makefile:650: target-finalize] Error 1 (ignored)
+find /(...)/target -type f \( -perm /111 -o -name '*.so*' \) -not \( -name 'libpthread*.so*' -o -name 'ld-*.so*' -o -name '*.ko' \) -print0 | xargs -0 (...)/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-strip --remove-section=.comment --remove-section=.note 2>/dev/null || true
 
-Best regards,
-Romain
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161122/35cf47bc/attachment.html>
+This patch apply the same rule at the instruction immediately after:
+* redirecting stderr to /dev/null (already done) and
+* executing true if the `rmdir' instruction fails.
+
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 37e4bd4..7f162e2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -656,7 +656,7 @@ endif
+ 	rm -rf $(TARGET_DIR)/usr/info $(TARGET_DIR)/usr/share/info
+ 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
+ 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
+-	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
++	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || true
+ 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
+ 
+ # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
+-- 
+2.10.2
