@@ -1,52 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Nov 2016 11:03:05 +0100
-Subject: [Buildroot] [PATCH] trousers: Pass "-mno-compact-casesi" when
- building for ARCv1
-In-Reply-To: <1479808825-2001-1-git-send-email-vzakhar@synopsys.com>
-References: <1479808825-2001-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <20161122110305.5088f8ec@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 22 Nov 2016 11:12:20 +0100
+Subject: [Buildroot] [PATCH] ptpd2: fix bfin compile by avoiding gcc bug
+In-Reply-To: <20161121220442.77263bd3@free-electrons.com>
+References: <20161121183217.GA1046@waldemar-brodkorb.de>
+ <20161121220442.77263bd3@free-electrons.com>
+Message-ID: <20161122101219.GT27313@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-On Tue, 22 Nov 2016 13:00:25 +0300, Vlad Zakharov wrote:
-> Compact casesi patterns don't have a reload version. This causes build
-> failures of "trousers" package for ARC.
+> Hello,
 > 
-> Current patch disables compact casesi patterns for ARCv1 (750D and 770D)
-> via passing "-mno-compact-casesi" option when compiling "trousers".
+> On Mon, 21 Nov 2016 19:32:18 +0100, Waldemar Brodkorb wrote:
 > 
-> This change is a temporary workaround and the feature is going to be
-> fixed in the next ARC toolchain release version.
+> > +# GCC bug with Os/O1/O2/O3
+> > +# internal compiler error: in gen_add2_insn, at optabs.c:4454
+> > +ifeq ($(BR2_bfin),y)
+> > +PTPD2_CONF_ENV += CFLAGS="-O0"
 > 
-> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+> You forgot to pass $(TARGET_CFLAGS) here. With your change, we loose
+> TARGET_CFLAGS. So I've fixed that up and applied.
+> 
+> However, I continue to dislike such hacks: when the problem gets fixed
+> by gcc, how will we notice?
 
-Has this been detected by the autobuilders? If yes, what is the
-reference to the autobuilder failure?
+Either when we get notice that the PR is closed, this time I need to
+create one. But we have similar issues where we already have PR's.
+Or we check when a new gcc release come out, if the results from
+"grep bfin package/*/*mk" are still required.
 
-> diff --git a/package/trousers/trousers.mk b/package/trousers/trousers.mk
-> index 3d9e0ba..c5878df 100644
-> --- a/package/trousers/trousers.mk
-> +++ b/package/trousers/trousers.mk
-> @@ -18,6 +18,10 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
->  TROUSERS_DEPENDENCIES += libiconv
->  endif
->  
-> +ifeq ($(BR2_arc770d)$(BR2_arc750d),y)
-> +TROUSERS_CONF_ENV += CFLAGS="$(CFLAGS) -mno-compact-casesi"
+I think better then never ending autobuild failures.
 
-This should be:
-
-	CFLAGS="$(TARGET_CFLAGS) ..."
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+best regards
+ Waldemar
