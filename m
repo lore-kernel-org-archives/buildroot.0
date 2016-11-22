@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 22 Nov 2016 22:40:12 +0100
-Subject: [Buildroot] [PATCH v4 19/22] toolchain-external-musl-cross: new
+Date: Tue, 22 Nov 2016 22:49:56 +0100
+Subject: [Buildroot] [PATCH v4 20/22] toolchain-external-custom: new
  package
-In-Reply-To: <20161107012017.22505-20-arnout@mind.be>
+In-Reply-To: <20161107012017.22505-21-arnout@mind.be>
 References: <20161107012017.22505-1-arnout@mind.be>
- <20161107012017.22505-20-arnout@mind.be>
-Message-ID: <1bf09d34-91e2-8922-1fb0-9e810f1ad3ff@gmail.com>
+ <20161107012017.22505-21-arnout@mind.be>
+Message-ID: <cddac872-c3b1-2ffa-73cb-302b1aa1ba1a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +15,7 @@ To: buildroot@busybox.net
 Le 07/11/2016 ? 02:20, Arnout Vandecappelle (Essensium/Mind) a ?crit :
 > From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
-> This commit adds a new package for the pre-built Musl external
-> toolchains.
+> This commit adds a new package to support custom external toolchains.
 > 
 > The legacy implementation is removed.
 > 
@@ -32,262 +31,792 @@ Romain
 > ---
 > v4: add PREFIX definition, remove legacy implementation.
 > ---
->  toolchain/toolchain-external/Config.in             | 48 +++-------------------
->  .../toolchain-external-musl-cross/Config.in        | 30 ++++++++++++++
->  .../Config.in.options                              | 19 +++++++++
->  .../toolchain-external-musl-cross.hash}            | 17 +-------
->  .../toolchain-external-musl-cross.mk               | 12 ++++++
->  .../toolchain-external/toolchain-external.hash     | 13 ------
->  toolchain/toolchain-external/toolchain-external.mk | 26 ------------
->  7 files changed, 68 insertions(+), 97 deletions(-)
->  create mode 100644 toolchain/toolchain-external/toolchain-external-musl-cross/Config.in
->  create mode 100644 toolchain/toolchain-external/toolchain-external-musl-cross/Config.in.options
->  copy toolchain/toolchain-external/{toolchain-external.hash => toolchain-external-musl-cross/toolchain-external-musl-cross.hash} (51%)
->  create mode 100644 toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.mk
+>  toolchain/toolchain-external/Config.in             | 351 +--------------------
+>  .../toolchain-external-custom/Config.in            |   5 +
+>  .../toolchain-external-custom/Config.in.options    | 334 ++++++++++++++++++++
+>  .../toolchain-external-custom.mk                   |  15 +
+>  toolchain/toolchain-external/toolchain-external.mk |   6 -
+>  5 files changed, 361 insertions(+), 350 deletions(-)
+>  create mode 100644 toolchain/toolchain-external/toolchain-external-custom/Config.in
+>  create mode 100644 toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+>  create mode 100644 toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
 > 
 > diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index cddfca8..5188e1a 100644
+> index 5188e1a..e592ec2 100644
 > --- a/toolchain/toolchain-external/Config.in
 > +++ b/toolchain/toolchain-external/Config.in
-> @@ -40,6 +40,9 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.i
->  source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in"
->  source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in"
+> @@ -43,6 +43,11 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.
+>  # Musl based toolchains (after all the others)
+>  source "toolchain/toolchain-external/toolchain-external-musl-cross/Config.in"
 >  
-> +# Musl based toolchains (after all the others)
-> +source "toolchain/toolchain-external/toolchain-external-musl-cross/Config.in"
+> +# Kept last, so it remains the non-default choice, unless there isn't
+> +# any available toolchain profile for the currently selected
+> +# architecture.
+> +source "toolchain/toolchain-external/toolchain-external-custom/Config.in"
 > +
 >  config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
 >  	bool "Arago ARMv7 2011.09"
 >  	depends on BR2_arm
-> @@ -85,37 +88,6 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
+> @@ -109,12 +114,6 @@ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+>  	  Toolchain for the ARC cores, from
+>  	  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
 >  
->  	  This toolchain uses software-floating point.
->  
-> -config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
-> -	bool "Musl 1.1.12 toolchain"
-> -	depends on (BR2_arm && BR2_ARM_EABI && BR2_USE_MMU) || \
-> -		(BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4 && BR2_USE_MMU) || \
-> -		(BR2_armeb && BR2_ARM_EABI && !BR2_ARM_CPU_ARMV7A && BR2_USE_MMU) || \
-> -		BR2_i386 || (BR2_mips && !BR2_SOFT_FLOAT) || \
-> -		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || \
-> -		BR2_sh4 || BR2_sh4eb || \
-> -		BR2_x86_64
-> -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> -	# Unsupported MIPS cores
-> -	depends on !BR2_mips_interaptiv && !BR2_mips_m5100 && !BR2_mips_m5101
-> -	# Unsupported for MIPS R6
-> -	depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
-> -	select BR2_TOOLCHAIN_EXTERNAL_MUSL
-> -	select BR2_TOOLCHAIN_HAS_SSP
-> -	select BR2_INSTALL_LIBSTDCPP
-> -	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> -config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+> -	bool "Custom toolchain"
 > -	help
-> -	  Toolchain based on the Musl C library, provided by the
-> -	  musl-cross project. It uses gcc 5.3, binutils 2.25.1 and
-> -	  musl 1.1.12. It does not have a cross debugger included.
+> -	  Use this option to use a custom toolchain pre-installed on
+> -	  your system.
 > -
-> -	  The ARM soft-float toolchain is built for ARMv4t, while the
-> -	  ARM hard-float toolchain is built for ARMv5t.
-> -	  The x86 toolchain is built for i486.
+>  endchoice
+>  
+>  choice
+> @@ -146,25 +145,12 @@ config BR2_TOOLCHAIN_EXTERNAL_PATH
+>  	help
+>  	  Path to where the external toolchain is installed.
+>  
+> -config BR2_TOOLCHAIN_EXTERNAL_URL
+> -	string "Toolchain URL"
+> -	depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM && BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
+> -	help
+> -	  URL of the custom toolchain tarball to download and install.
 > -
-> -	  http://musl.codu.org/
+> -config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
+> -	string "Toolchain prefix"
+> -	depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+> -	default "$(ARCH)-linux"
 > -
->  config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
->  	bool "Synopsys ARC 2014.12 toolchain"
->  	depends on BR2_arc
-> @@ -191,17 +163,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+>  config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+>  	string
+>  	default "arc-linux"		 if BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC && BR2_arcle
 >  	default "arceb-linux"		 if BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC && BR2_arceb
 >  	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
 >  	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
-> -	default "arm-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABI
-> -	default "arm-linux-musleabihf"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABIHF
-> -	default "armeb-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_armeb
-> -	default "i486-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_i386
-> -	default "mips-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mips && !BR2_SOFT_FLOAT)
-> -	default "mipsel-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mipsel && !BR2_SOFT_FLOAT)
-> -	default "mipsel-sf-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mipsel && BR2_SOFT_FLOAT)
-> -	default "powerpc-linux-musl"     if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_powerpc
-> -	default "sh4-linux-musl"         if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_sh4
-> -	default "sh4eb-linux-musl"       if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_sh4eb
-> -	default "x86_64-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_x86_64
->  	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
->  					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+> -	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
+> -					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
 >  
-> @@ -260,6 +221,9 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.i
->  source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options"
->  source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options"
+>  config BR2_TOOLCHAIN_EXTERNAL_GLIBC
+>  	bool
+> @@ -224,331 +210,8 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.
+>  # Musl based toolchains
+>  source "toolchain/toolchain-external/toolchain-external-musl-cross/Config.in.options"
 >  
-> +# Musl based toolchains
-> +source "toolchain/toolchain-external/toolchain-external-musl-cross/Config.in.options"
-> +
->  if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+> -if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+> -
+> -choice
+> -	bool "External toolchain gcc version"
+> -	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+> -	help
+> -	  Set to the gcc version that is used by your external
+> -	  toolchain.
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_GCC_6
+> -	bool "6.x"
+> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_GCC_5
+> -	bool "5.x"
+> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
+> -	bool "4.9.x"
+> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
+> -	bool "4.8.x"
+> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
+> -	bool "4.7.x"
+> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
+> -	bool "4.6.x"
+> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
+> -	bool "4.5.x"
+> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
+> -	bool "4.4.x"
+> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+> -	bool "4.3.x"
+> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+> -
+> -endchoice
+> -
+> -choice
+> -	bool "External toolchain kernel headers series"
+> -	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+> -	help
+> -	  Set to the kernel headers version that were used to build
+> -	  this external toolchain.
+> -
+> -	  This is used to hide/show some packages that have strict
+> -	  requirements on the version of kernel headers.
+> -
+> -	  If unsure what version your toolchain is using, you can look
+> -	  at the value of LINUX_VERSION_CODE in linux/version.h in your
+> -	  toolchain. The Linux version is M.m.p, with:
+> -	    M = ( LINUX_VERSION_CODE >> 16 ) & 0xFF
+> -	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+> -	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_8
+> -	bool "4.8.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_7
+> -	bool "4.7.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_6
+> -	bool "4.6.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_5
+> -	bool "4.5.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4
+> -	bool "4.4.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3
+> -	bool "4.3.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_2
+> -	bool "4.2.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1
+> -	bool "4.1.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_0
+> -	bool "4.0.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_19
+> -	bool "3.19.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_18
+> -	bool "3.18.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17
+> -	bool "3.17.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16
+> -	bool "3.16.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_15
+> -	bool "3.15.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14
+> -	bool "3.14.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_13
+> -	bool "3.13.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12
+> -	bool "3.12.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_11
+> -	bool "3.11.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10
+> -	bool "3.10.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9
+> -	bool "3.9.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_8
+> -	bool "3.8.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_7
+> -	bool "3.7.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_6
+> -	bool "3.6.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_5
+> -	bool "3.5.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_4
+> -	bool "3.4.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_3
+> -	bool "3.3.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2
+> -	bool "3.2.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_1
+> -	bool "3.1.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_0
+> -	bool "3.0.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+> -	bool "2.6.x"
+> -
+> -endchoice
+> -
+> -choice
+> -	prompt "External toolchain C library"
+> -	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+> -	bool "uClibc/uClibc-ng"
+> -	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> -	# For the time being, we assume that all custom external
+> -	# toolchains have shadow password support.
+> -	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+> -	help
+> -	  Select this option if your external toolchain uses the
+> -	  uClibc (available from http://www.uclibc.org/)
+> -	  or uClibc-ng (available from http://www.uclibc-ng.org)
+> -	  C library.
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
+> -	bool "glibc/eglibc"
+> -	depends on !BR2_STATIC_LIBS
+> -	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> -	help
+> -	  Select this option if your external toolchain uses the GNU C
+> -	  library (available from https://www.gnu.org/software/libc/)
+> -	  or its variant the eglibc library (http://www.eglibc.org/).
+> -
+> -	  Note: eglibc is a variant of glibc that (among other things)
+> -	  can be configured to exclude some of its features. Using a
+> -	  toolchain with eglibc configured to exclude key features may
+> -	  cause build failures to some packages.
+> -
+> -comment "glibc only available with shared lib support"
+> -	depends on BR2_STATIC_LIBS
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
+> -	bool "musl"
+> -	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+> -	help
+> -	  Select this option if your external toolchain uses the
+> -	  'musl' C library, available from http://www.musl-libc.org/.
+> -
+> -endchoice
+> -
+> -if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_WCHAR
+> -	bool "Toolchain has WCHAR support?"
+> -	select BR2_USE_WCHAR
+> -	help
+> -	  Select this option if your external toolchain supports
+> -	  WCHAR. If you don't know, leave the default value, Buildroot
+> -	  will tell you if it's correct or not.
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_LOCALE
+> -	bool "Toolchain has locale support?"
+> -	select BR2_TOOLCHAIN_EXTERNAL_WCHAR
+> -	select BR2_ENABLE_LOCALE
+> -	help
+> -	  Select this option if your external toolchain has locale
+> -	  support. If you don't know, leave the default value,
+> -	  Buildroot will tell you if it's correct or not.
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
+> -	bool "Toolchain has threads support?"
+> -	select BR2_TOOLCHAIN_HAS_THREADS
+> -	default y
+> -	help
+> -	  Select this option if your external toolchain has thread
+> -	  support. If you don't know, leave the default value,
+> -	  Buildroot will tell you if it's correct or not.
+> -
+> -if BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
+> -	bool "Toolchain has threads debugging support?"
+> -	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+> -	default y
+> -	help
+> -	  Select this option if your external toolchain has thread
+> -	  debugging support. If you don't know, leave the default
+> -	  value, Buildroot will tell you if it's correct or not.
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL
+> -	bool "Toolchain has NPTL threads support?"
+> -	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> -	default y
+> -	help
+> -	  Select this option if your external toolchain uses the NPTL
+> -	  (Native Posix Thread Library) implementation of Posix
+> -	  threads. If you don't know, leave the default value,
+> -	  Buildroot will tell you if it's correct or not.
+> -
+> -endif # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
+> -
+> -endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
+> -	bool "Toolchain has SSP support?"
+> -	select BR2_TOOLCHAIN_HAS_SSP
+> -	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> -	default y if BR2_TOOLCHAIN_EXTERNAL_MUSL
+> -	help
+> -	  Selection this option if your external toolchain has Stack
+> -	  Smashing Protection support enabled. If you don't know,
+> -	  leave the default value, Buildroot will tell you if it's
+> -	  correct or not.
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
+> -	bool "Toolchain has RPC support?"
+> -	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> -	depends on !BR2_TOOLCHAIN_EXTERNAL_MUSL
+> -	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> -	help
+> -	  Select this option if your external toolchain supports
+> -	  RPC. If you don't know, leave the default value, Buildroot
+> -	  will tell you if it's correct or not.
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_CXX
+> -	bool "Toolchain has C++ support?"
+> -	select BR2_INSTALL_LIBSTDCPP
+> -	help
+> -	  Select this option if your external toolchain has C++
+> -	  support. If you don't know, leave the default value,
+> -	  Buildroot will tell you if it's correct or not.
+> -
+> -config BR2_TOOLCHAIN_EXTERNAL_FORTRAN
+> -	bool "Toolchain has Fortran support?"
+> -	select BR2_TOOLCHAIN_HAS_FORTRAN
+> -	help
+> -	  Select this option if your external toolchain has Fortran
+> -	  support. If you don't know, leave the default value,
+> -	  Buildroot will tell you if it's correct or not.
+> -
+> -config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+> -	string "Extra toolchain libraries to be copied to target"
+> -	help
+> -	  If your external toolchain provides extra libraries that
+> -	  need to be copied to the target filesystem, enter them
+> -	  here, separated by spaces.
+> -
+> -endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+> +# Custom toolchains
+> +source "toolchain/toolchain-external/toolchain-external-custom/Config.in.options"
 >  
->  choice
-> diff --git a/toolchain/toolchain-external/toolchain-external-musl-cross/Config.in b/toolchain/toolchain-external/toolchain-external-musl-cross/Config.in
+>  config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+>  	bool "Copy gdb server to the Target"
+> diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in b/toolchain/toolchain-external/toolchain-external-custom/Config.in
 > new file mode 100644
-> index 0000000..5cffa2d
+> index 0000000..a913feb
 > --- /dev/null
-> +++ b/toolchain/toolchain-external/toolchain-external-musl-cross/Config.in
-> @@ -0,0 +1,30 @@
-> +config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
-> +	bool "Musl 1.1.12 toolchain"
-> +	depends on (BR2_arm && BR2_ARM_EABI && BR2_USE_MMU) || \
-> +		(BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4 && BR2_USE_MMU) || \
-> +		(BR2_armeb && BR2_ARM_EABI && !BR2_ARM_CPU_ARMV7A && BR2_USE_MMU) || \
-> +		BR2_i386 || (BR2_mips && !BR2_SOFT_FLOAT) || \
-> +		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || \
-> +		BR2_sh4 || BR2_sh4eb || \
-> +		BR2_x86_64
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> +	# Unsupported MIPS cores
-> +	depends on !BR2_mips_interaptiv && !BR2_mips_m5100 && !BR2_mips_m5101
-> +	# Unsupported for MIPS R6
-> +	depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
-> +	select BR2_TOOLCHAIN_EXTERNAL_MUSL
-> +	select BR2_TOOLCHAIN_HAS_SSP
-> +	select BR2_INSTALL_LIBSTDCPP
-> +	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in
+> @@ -0,0 +1,5 @@
+> +config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+> +	bool "Custom toolchain"
 > +	help
-> +	  Toolchain based on the Musl C library, provided by the
-> +	  musl-cross project. It uses gcc 5.3, binutils 2.25.1 and
-> +	  musl 1.1.12. It does not have a cross debugger included.
-> +
-> +	  The ARM soft-float toolchain is built for ARMv4t, while the
-> +	  ARM hard-float toolchain is built for ARMv5t.
-> +	  The x86 toolchain is built for i486.
-> +
-> +	  http://musl.codu.org/
-> diff --git a/toolchain/toolchain-external/toolchain-external-musl-cross/Config.in.options b/toolchain/toolchain-external/toolchain-external-musl-cross/Config.in.options
+> +	  Use this option to use a custom toolchain pre-installed on
+> +	  your system.
+> diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
 > new file mode 100644
-> index 0000000..cd12355
+> index 0000000..cdc2555
 > --- /dev/null
-> +++ b/toolchain/toolchain-external/toolchain-external-musl-cross/Config.in.options
-> @@ -0,0 +1,19 @@
-> +if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+> +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> @@ -0,0 +1,334 @@
+> +if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
 > +
 > +config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-> +	default "arm-linux-musleabi"	 if BR2_arm && BR2_ARM_EABI
-> +	default "arm-linux-musleabihf"	 if BR2_arm && BR2_ARM_EABIHF
-> +	default "armeb-linux-musleabi"	 if BR2_armeb
-> +	default "i486-linux-musl"	 if BR2_i386
-> +	default "mips-linux-musl"	 if (BR2_mips && !BR2_SOFT_FLOAT)
-> +	default "mipsel-linux-musl"	 if (BR2_mipsel && !BR2_SOFT_FLOAT)
-> +	default "mipsel-sf-linux-musl"	 if (BR2_mipsel && BR2_SOFT_FLOAT)
-> +	default "powerpc-linux-musl"     if BR2_powerpc
-> +	default "sh4-linux-musl"         if BR2_sh4
-> +	default "sh4eb-linux-musl"       if BR2_sh4eb
-> +	default "x86_64-linux-musl"	 if BR2_x86_64
+> +	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
 > +
 > +config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-> +	default "toolchain-external-musl-cross"
+> +	default "toolchain-external-custom"
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_URL
+> +	string "Toolchain URL"
+> +	depends on BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
+> +	help
+> +	  URL of the custom toolchain tarball to download and install.
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
+> +	string "Toolchain prefix"
+> +	default "$(ARCH)-linux"
+> +
+> +choice
+> +	bool "External toolchain gcc version"
+> +	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+> +	help
+> +	  Set to the gcc version that is used by your external
+> +	  toolchain.
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_GCC_6
+> +	bool "6.x"
+> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_GCC_5
+> +	bool "5.x"
+> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
+> +	bool "4.9.x"
+> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
+> +	bool "4.8.x"
+> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
+> +	bool "4.7.x"
+> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
+> +	bool "4.6.x"
+> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
+> +	bool "4.5.x"
+> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
+> +	bool "4.4.x"
+> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+> +	bool "4.3.x"
+> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+> +
+> +endchoice
+> +
+> +choice
+> +	bool "External toolchain kernel headers series"
+> +	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+> +	help
+> +	  Set to the kernel headers version that were used to build
+> +	  this external toolchain.
+> +
+> +	  This is used to hide/show some packages that have strict
+> +	  requirements on the version of kernel headers.
+> +
+> +	  If unsure what version your toolchain is using, you can look
+> +	  at the value of LINUX_VERSION_CODE in linux/version.h in your
+> +	  toolchain. The Linux version is M.m.p, with:
+> +	    M = ( LINUX_VERSION_CODE >> 16 ) & 0xFF
+> +	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+> +	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_8
+> +	bool "4.8.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_7
+> +	bool "4.7.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_6
+> +	bool "4.6.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_5
+> +	bool "4.5.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4
+> +	bool "4.4.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3
+> +	bool "4.3.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_2
+> +	bool "4.2.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1
+> +	bool "4.1.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_0
+> +	bool "4.0.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_19
+> +	bool "3.19.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_18
+> +	bool "3.18.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17
+> +	bool "3.17.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16
+> +	bool "3.16.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_15
+> +	bool "3.15.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14
+> +	bool "3.14.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_13
+> +	bool "3.13.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12
+> +	bool "3.12.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_11
+> +	bool "3.11.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10
+> +	bool "3.10.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9
+> +	bool "3.9.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_8
+> +	bool "3.8.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_7
+> +	bool "3.7.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_6
+> +	bool "3.6.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_5
+> +	bool "3.5.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_4
+> +	bool "3.4.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_3
+> +	bool "3.3.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2
+> +	bool "3.2.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_1
+> +	bool "3.1.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_0
+> +	bool "3.0.x"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+> +	bool "2.6.x"
+> +
+> +endchoice
+> +
+> +choice
+> +	prompt "External toolchain C library"
+> +	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+> +	bool "uClibc/uClibc-ng"
+> +	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> +	# For the time being, we assume that all custom external
+> +	# toolchains have shadow password support.
+> +	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+> +	help
+> +	  Select this option if your external toolchain uses the
+> +	  uClibc (available from http://www.uclibc.org/)
+> +	  or uClibc-ng (available from http://www.uclibc-ng.org)
+> +	  C library.
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
+> +	bool "glibc/eglibc"
+> +	depends on !BR2_STATIC_LIBS
+> +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> +	help
+> +	  Select this option if your external toolchain uses the GNU C
+> +	  library (available from https://www.gnu.org/software/libc/)
+> +	  or its variant the eglibc library (http://www.eglibc.org/).
+> +
+> +	  Note: eglibc is a variant of glibc that (among other things)
+> +	  can be configured to exclude some of its features. Using a
+> +	  toolchain with eglibc configured to exclude key features may
+> +	  cause build failures to some packages.
+> +
+> +comment "(e)glibc only available with shared lib support"
+> +	depends on BR2_STATIC_LIBS
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
+> +	bool "musl (experimental)"
+> +	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+> +	help
+> +	  Select this option if your external toolchain uses the
+> +	  'musl' C library, available from http://www.musl-libc.org/.
+> +
+> +endchoice
+> +
+> +if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_WCHAR
+> +	bool "Toolchain has WCHAR support?"
+> +	select BR2_USE_WCHAR
+> +	help
+> +	  Select this option if your external toolchain supports
+> +	  WCHAR. If you don't know, leave the default value, Buildroot
+> +	  will tell you if it's correct or not.
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_LOCALE
+> +	bool "Toolchain has locale support?"
+> +	select BR2_TOOLCHAIN_EXTERNAL_WCHAR
+> +	select BR2_ENABLE_LOCALE
+> +	help
+> +	  Select this option if your external toolchain has locale
+> +	  support. If you don't know, leave the default value,
+> +	  Buildroot will tell you if it's correct or not.
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
+> +	bool "Toolchain has threads support?"
+> +	select BR2_TOOLCHAIN_HAS_THREADS
+> +	default y
+> +	help
+> +	  Select this option if your external toolchain has thread
+> +	  support. If you don't know, leave the default value,
+> +	  Buildroot will tell you if it's correct or not.
+> +
+> +if BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
+> +	bool "Toolchain has threads debugging support?"
+> +	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+> +	default y
+> +	help
+> +	  Select this option if your external toolchain has thread
+> +	  debugging support. If you don't know, leave the default
+> +	  value, Buildroot will tell you if it's correct or not.
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL
+> +	bool "Toolchain has NPTL threads support?"
+> +	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> +	default y
+> +	help
+> +	  Select this option if your external toolchain uses the NPTL
+> +	  (Native Posix Thread Library) implementation of Posix
+> +	  threads. If you don't know, leave the default value,
+> +	  Buildroot will tell you if it's correct or not.
+> +
+> +endif # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
+> +
+> +endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
+> +	bool "Toolchain has SSP support?"
+> +	select BR2_TOOLCHAIN_HAS_SSP
+> +	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> +	default y if BR2_TOOLCHAIN_EXTERNAL_MUSL
+> +	help
+> +	  Selection this option if your external toolchain has Stack
+> +	  Smashing Protection support enabled. If you don't know,
+> +	  leave the default value, Buildroot will tell you if it's
+> +	  correct or not.
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
+> +	bool "Toolchain has RPC support?"
+> +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	depends on !BR2_TOOLCHAIN_EXTERNAL_MUSL
+> +	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> +	help
+> +	  Select this option if your external toolchain supports
+> +	  RPC. If you don't know, leave the default value, Buildroot
+> +	  will tell you if it's correct or not.
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_CXX
+> +	bool "Toolchain has C++ support?"
+> +	select BR2_INSTALL_LIBSTDCPP
+> +	help
+> +	  Select this option if your external toolchain has C++
+> +	  support. If you don't know, leave the default value,
+> +	  Buildroot will tell you if it's correct or not.
+> +
+> +config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+> +	string "Extra toolchain libraries to be copied to target"
+> +	help
+> +	  If your external toolchain provides extra libraries that
+> +	  need to be copied to the target filesystem, enter them
+> +	  here, separated by spaces. They will be copied to the
+> +	  target's /lib directory.
 > +
 > +endif
-> diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.hash
-> similarity index 51%
-> copy from toolchain/toolchain-external/toolchain-external.hash
-> copy to toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.hash
-> index 8926bf8..beef8fd 100644
-> --- a/toolchain/toolchain-external/toolchain-external.hash
-> +++ b/toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.hash
-> @@ -1,19 +1,4 @@
-> -######################################
-> -# Next hashes are all locally computed
-> -
-> -# ARM toolchains from Texas Instrument's Arago project
-> -# There is one source file that covers both binary distributions.
-> -sha256 f2febf3b3c565536461ad4405f1bcb835d75a6afb2a8bec958a1248cb4b81fc7  arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
-> -sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
-> -sha256 25fbf0513ad7322b15cbaae964cafadcbb4c939f2708f57f40b8f9f2d601122b  arago-toolchain-2011.09-sources.tar.bz2
-> -
-> -# Synopsys DesignWare ARC toolchains
-> -sha256 1fa4ea2c8616623205f1c7beca02ea31b019099528a7433e5b020b0876b93bf3  arc_gnu_2014.12_prebuilt_uclibc_le_arc700_linux_install.tar.gz
-> -sha256 1080f07fcae2bfc176a3ea8d30b9ed8eaecab70fb786639d6ec70cae8322df10  arc_gnu_2014.12_prebuilt_uclibc_be_arc700_linux_install.tar.gz
-> -sha256 aaaf6facd1f60a3cd2a537154ea39cd7d70501c175e30e01a97e8df6cb8226c7  arc_gnu_2014.12_prebuilt_uclibc_le_archs_linux_install.tar.gz
-> -sha256 30711c5f15762764d4cd5ec1e6ced5b1fddd03aac41c424b0c4ec8a45d5d79cd  arc_gnu_2014.12_prebuilt_uclibc_be_archs_linux_install.tar.gz
-> -
-> -# Prebuilt musl toolchains from musl-cross
-> +# Locally calculated
->  sha256 e32c23d0b83639fc10ad06666ec086b66453b9be44415fe1a818c3c3b526dfb1  crossx86-armeb-linux-musleabi-1.1.12.tar.xz
->  sha256 eb81bd5d6ada454c6e854b18bfa8dc801333782152166f6cab9fb7cd11692987  crossx86-arm-linux-musleabi-1.1.12.tar.xz
->  sha256 a050da284ff22d291ae71dfc249ebdedb18334b8d626804760ce7d5963e392e6  crossx86-arm-linux-musleabihf-1.1.12.tar.xz
-> diff --git a/toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.mk b/toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.mk
+> diff --git a/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk b/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
 > new file mode 100644
-> index 0000000..966505b
+> index 0000000..c4ae612
 > --- /dev/null
-> +++ b/toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.mk
-> @@ -0,0 +1,12 @@
+> +++ b/toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk
+> @@ -0,0 +1,15 @@
 > +################################################################################
 > +#
-> +# toolchain-external-musl-cross
+> +# toolchain-external-custom
 > +#
 > +################################################################################
 > +
-> +TOOLCHAIN_EXTERNAL_MUSL_CROSS_VERSION = 1.1.12
-> +TOOLCHAIN_EXTERNAL_MUSL_CROSS_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_MUSL_CROSS_VERSION)
+> +TOOLCHAIN_EXTERNAL_CUSTOM_SITE = $(patsubst %/,%,$(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL))))
+> +TOOLCHAIN_EXTERNAL_CUSTOM_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
 > +
-> +TOOLCHAIN_EXTERNAL_MUSL_CROSS_SOURCE = crossx86-$(TOOLCHAIN_EXTERNAL_PREFIX)-$(TOOLCHAIN_EXTERNAL_MUSL_CROSS_VERSION).tar.xz
+> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),y)
+> +# We can't check hashes for custom downloaded toolchains
+> +BR_NO_CHECK_HASH_FOR += $(TOOLCHAIN_EXTERNAL_SOURCE)
+> +endif
 > +
 > +$(eval $(toolchain-external-package))
-> diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-> index 8926bf8..a286ef2 100644
-> --- a/toolchain/toolchain-external/toolchain-external.hash
-> +++ b/toolchain/toolchain-external/toolchain-external.hash
-> @@ -12,16 +12,3 @@ sha256 1fa4ea2c8616623205f1c7beca02ea31b019099528a7433e5b020b0876b93bf3  arc_gnu
->  sha256 1080f07fcae2bfc176a3ea8d30b9ed8eaecab70fb786639d6ec70cae8322df10  arc_gnu_2014.12_prebuilt_uclibc_be_arc700_linux_install.tar.gz
->  sha256 aaaf6facd1f60a3cd2a537154ea39cd7d70501c175e30e01a97e8df6cb8226c7  arc_gnu_2014.12_prebuilt_uclibc_le_archs_linux_install.tar.gz
->  sha256 30711c5f15762764d4cd5ec1e6ced5b1fddd03aac41c424b0c4ec8a45d5d79cd  arc_gnu_2014.12_prebuilt_uclibc_be_archs_linux_install.tar.gz
-> -
-> -# Prebuilt musl toolchains from musl-cross
-> -sha256 e32c23d0b83639fc10ad06666ec086b66453b9be44415fe1a818c3c3b526dfb1  crossx86-armeb-linux-musleabi-1.1.12.tar.xz
-> -sha256 eb81bd5d6ada454c6e854b18bfa8dc801333782152166f6cab9fb7cd11692987  crossx86-arm-linux-musleabi-1.1.12.tar.xz
-> -sha256 a050da284ff22d291ae71dfc249ebdedb18334b8d626804760ce7d5963e392e6  crossx86-arm-linux-musleabihf-1.1.12.tar.xz
-> -sha256 18d07f5c8f4cfe373461cf21cf7b1bfefa820a37e96a69b68e0f315d528b4286  crossx86-i486-linux-musl-1.1.12.tar.xz
-> -sha256 1c1480c2618097e402fe804c1431fbd49b0d43520af81d4c1a695a2fa13a3922  crossx86-mipsel-linux-musl-1.1.12.tar.xz
-> -sha256 f0a8b3eb0566138ab3cc77bc09648be15bc325da974ec98b9e67f2fb82be3295  crossx86-mipsel-sf-linux-musl-1.1.12.tar.xz
-> -sha256 6a99989c3dff56776981f6760b2c54dcb9e4032be1d649968bb06c04f2e64177  crossx86-mips-linux-musl-1.1.12.tar.xz
-> -sha256 c082adc3e8b0750bb22ca82628524fd525fd77f534517ac5a66e7ac5a297ee6e  crossx86-powerpc-linux-musl-1.1.12.tar.xz
-> -sha256 8c6c9ebb54040e47947b4d3af6823d01fef2bb6ee81b18903c801030c066092b  crossx86-sh4eb-linux-musl-1.1.12.tar.xz
-> -sha256 ae9a0a5a60226aa086a56628cfd5c1d283c9dffdca37891d7e6adc2bd21ac2e0  crossx86-sh4-linux-musl-1.1.12.tar.xz
-> -sha256 27e0ea1043a58aebeadf1dacd67e47fd0b5c19fc36f42c9374e5fa3308df09c6  crossx86-x86_64-linux-musl-1.1.12.tar.xz
 > diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index 7e4539e..0680473 100644
+> index 0680473..e13d240 100644
 > --- a/toolchain/toolchain-external/toolchain-external.mk
 > +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -56,32 +56,6 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
->  	rm -rf $(@D)/arago-2011.09/
->  endef
->  TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
-> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
-> -TOOLCHAIN_EXTERNAL_VERSION = 1.1.12
-> -TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)
-> -ifeq ($(BR2_arm)$(BR2_ARM_EABI),yy)
-> -TOOLCHAIN_EXTERNAL_SOURCE = crossx86-arm-linux-musleabi-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
-> -else ifeq ($(BR2_arm)$(BR2_ARM_EABIHF),yy)
-> -TOOLCHAIN_EXTERNAL_SOURCE = crossx86-arm-linux-musleabihf-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
-> -else ifeq ($(BR2_armeb),y)
-> -TOOLCHAIN_EXTERNAL_SOURCE = crossx86-armeb-linux-musleabi-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
-> -else ifeq ($(BR2_i386),y)
-> -TOOLCHAIN_EXTERNAL_SOURCE = crossx86-i486-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
-> -else ifeq ($(BR2_mips),y)
-> -TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mips-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
-> -else ifeq ($(BR2_mipsel):$(BR2_SOFT_FLOAT),y:)
-> -TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
-> -else ifeq ($(BR2_mipsel):$(BR2_SOFT_FLOAT),y:y)
-> -TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-sf-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
-> -else ifeq ($(BR2_powerpc),y)
-> -TOOLCHAIN_EXTERNAL_SOURCE = crossx86-powerpc-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
-> -else ifeq ($(BR2_sh4),y)
-> -TOOLCHAIN_EXTERNAL_SOURCE = crossx86-sh4-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
-> -else ifeq ($(BR2_sh4eb),y)
-> -TOOLCHAIN_EXTERNAL_SOURCE = crossx86-sh4eb-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
-> -else ifeq ($(BR2_x86_64),y)
-> -TOOLCHAIN_EXTERNAL_SOURCE = crossx86-x86_64-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
-> -endif
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC),y)
->  TOOLCHAIN_EXTERNAL_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-2014.12
->  ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
+> @@ -69,12 +69,6 @@ else
+>  TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS = be
+>  endif
+>  TOOLCHAIN_EXTERNAL_SOURCE = arc_gnu_2014.12_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_CORE)_linux_install.tar.gz
+> -else
+> -# Custom toolchain
+> -TOOLCHAIN_EXTERNAL_SITE = $(patsubst %/,%,$(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL))))
+> -TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+> -# We can't check hashes for custom downloaded toolchains
+> -BR_NO_CHECK_HASH_FOR += $(TOOLCHAIN_EXTERNAL_SOURCE)
+>  endif
+>  
+>  # Some toolchain vendors have a regular file naming pattern.
 > 
