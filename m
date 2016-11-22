@@ -1,212 +1,171 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 23 Nov 2016 00:12:05 +0100
-Subject: [Buildroot] [v3,
-	2/2] package/efl: add Evas GL DRM Engine support
-In-Reply-To: <61cdc8ed-e5a0-e295-c625-eb2619a0244e@gmail.com>
-References: <1479668387-6549-1-git-send-email-devpfl@gmail.com>
- <1479668387-6549-3-git-send-email-devpfl@gmail.com>
- <c6c7cec2-76ea-f9b9-69ca-e1586d94e85b@gmail.com>
- <86f19677-dc1b-a546-c79d-ad5f08faf559@gmail.com>
- <61cdc8ed-e5a0-e295-c625-eb2619a0244e@gmail.com>
-Message-ID: <9c412166-78b7-401a-2275-9836afaddde6@gmail.com>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Wed, 23 Nov 2016 10:33:37 +1100
+Subject: [Buildroot] [PATCH] stella: fix bug when compiling with PPC
+ altivec vectorization
+In-Reply-To: <20161119105927.57bd516a@free-electrons.com>
+References: <1479404832-11783-1-git-send-email-sergio.prado@e-labworks.com>
+ <20161119105927.57bd516a@free-electrons.com>
+Message-ID: <20161122233337.GA2566@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Pierre,
+On Sat, Nov 19, 2016 at 10:59:27AM +0100, Thomas Petazzoni wrote:
+> Sam,
+> 
+> Could you review the below patch, which is PowerPC/Altivec related, and
+> let us know what you think?
 
-Le 21/11/2016 ? 00:29, pierre a ?crit :
-> Hi Romain,
-> 
-> 
-> On 11/20/2016 10:49 PM, Romain Naour wrote:
->> Hi Pierre,
->>
->> Le 20/11/2016 ? 20:30, Romain Naour a ?crit :
->>> Hi Pierre,
->>>
->>> Le 20/11/2016 ? 19:59, pierre floury a ?crit :
->>>> From: Romain Naour <romain.naour@gmail.com>
->>>>
->>>> This support is required for Enlightenment wayland support [1].
->>>>
->>>> As stated in configure, Evas GL DRM Engine needs OpenGL ES with EGL and
->>>> wayland (wayland-client >= 1.8.0)
->>    ^^^^^^^
->> :)
->>
->>>>
->>>> [1] https://www.enlightenment.org/about-wayland
->>>>
->>>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->>>> Signed-off-by: Pierre Floury <devpfl@gmail.com>
->>>>
->>>> ---
->>>> v2: rename the option to BR2_PAKCAGE_EFL_GLES_DRM (ThomasP)
->>>>     fix the help text (ThomasP)
->>>> ---
->>>> v3: rebase v2 on top of master
->>>>     Signed-off-by: Pierre Floury <devpfl@gmail.com>
->>>
->>> As suggested by Thomas [1], enable gl-drm only if all dependencies are available
->>> without using another Kconfig symbol (BR2_PAKCAGE_EFL_GLES_DRM)
->>>
->>> This series is ok for me :)
->>
->> Humm, I missed something in my initial patch... the Evas GL DRM doesn't build
->> without Wayland package.
->>
->> From config.log:
->> configure:42726: checking whether to enable OpenGL Drm rendering backend
->> configure:42728: result: yes
->> configure:42747: $PKG_CONFIG --exists --print-errors "egl ${gl_library} libdrm
->> gbm wayland-client >= 1.11.0"
->> Package wayland-client was not found in the pkg-config search path.
->> Perhaps you should add the directory containing `wayland-client.pc'
->> to the PKG_CONFIG_PATH environment variable
->> Package 'wayland-client', required by 'world', not found
->> configure:42750: $? = 1
->> configure:42875: error: OpenGL Drm dependencies not found
->>
->> In a previous local version I added a dependency to wayland to elput support but
->> I finally dropped it in the final patch submission. I forgot to add it for the
->> GL DRM support.
-> 
-> you are right, I miss the wayland-client dependency..
-> But, I do not get why this is requested.. efl are running well without wayland,
-> just with drm..
+Sure.
 
-wayland-client dependency was added to enable EGL wayland extensions to Evas_GL
-as far I understand: see https://phab.enlightenment.org/D1507
+> Thanks!
+> 
+> Thomas
+> 
+> On Thu, 17 Nov 2016 15:47:12 -0200, Sergio Prado wrote:
+> > PPC altivec vectorization triggers a bug when compiling with -std=c++11
+> > because "bool" is redefined in altivec.h.
+> > 
+> > src/emucore/Event.hxx:112:23: error: cannot convert ?bool? to ?__vector(4) __bool int? in assignment
+> >          myKeyTable[i] = false;
+> >                        ^
+> > 
+> > Acording to a bug report in GCC [1], "You need to use -std=g++11 or
+> > undefine bool after the include of altivec.h as context sensitive
+> > keywords is not part of the C++11 standard".
+> > 
+> > So let's compile with -std=gnu++11 when PPC altivec is enabled.
 
-> 
-> I've got an other error :
-> 
-> arm-linux-gnueabihf/bin/ld: cannot find -lGL
-> this is due to
-> configure.ac:2624:evas_engine_gl_common_libs="-lGL"
-> 
-> on my side, I replace "-lGL" with "" in configure.ac :
+Yes, this seems to be the same problem I saw in SDL. Using the gnu
+standard seems like a good fix to me but I've got a suggestion, below.
 
-Humm, weird. can you share your defconfig ?
-I'm testing gl-drm with either X11 or Wayland support enabled. I'll test it
-without them.
+> > [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58241#c3
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/0970d2c8e1787ceffc46b589522e53d52675e03c
+> > http://autobuild.buildroot.net/results/ec1bc57675b6e53af0cd33d7b99cd2e3bf5d9d7e
+> > 
+> > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> > ---
+> >  ...XFLAGS-so-we-can-append-values-to-user-de.patch | 40 ++++++++++++++++++++++
+> >  package/stella/stella.mk                           | 14 +++++++-
+> >  2 files changed, 53 insertions(+), 1 deletion(-)
+> >  create mode 100644 package/stella/0004-Override-CXXFLAGS-so-we-can-append-values-to-user-de.patch
+> > 
+> > diff --git a/package/stella/0004-Override-CXXFLAGS-so-we-can-append-values-to-user-de.patch b/package/stella/0004-Override-CXXFLAGS-so-we-can-append-values-to-user-de.patch
+> > new file mode 100644
+> > index 000000000000..7e82c571e2c1
+> > --- /dev/null
+> > +++ b/package/stella/0004-Override-CXXFLAGS-so-we-can-append-values-to-user-de.patch
+> > @@ -0,0 +1,40 @@
+> > +From f81bec4d6e523df308158d6bd6f948be4d0183ba Mon Sep 17 00:00:00 2001
+> > +From: Sergio Prado <sergio.prado@e-labworks.com>
+> > +Date: Thu, 17 Nov 2016 15:26:56 -0200
+> > +Subject: [PATCH] Override CXXFLAGS so we can append values to user-defined
+> > + CXXFLAGS.
+> > +
+> > +Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> > +---
+> > + Makefile | 8 ++++----
+> > + 1 file changed, 4 insertions(+), 4 deletions(-)
+> > +
+> > +diff --git a/Makefile b/Makefile
+> > +index 6dd0129587b3..7133ca58ac49 100644
+> > +--- a/Makefile
+> > ++++ b/Makefile
+> > +@@ -49,17 +49,17 @@ ifdef CXXFLAGS
+> > + else
+> > +   CXXFLAGS:= -O2
+> > + endif
+> > +-CXXFLAGS+= -Wall -Wextra -Wno-unused-parameter -Wno-ignored-qualifiers
+> > ++override CXXFLAGS+= -Wall -Wextra -Wno-unused-parameter -Wno-ignored-qualifiers
+> > + ifdef HAVE_GCC
+> > +-  CXXFLAGS+= -Wno-multichar -Wunused -fno-rtti -Woverloaded-virtual -Wnon-virtual-dtor -std=c++11
+> > ++  override CXXFLAGS+= -Wno-multichar -Wunused -fno-rtti -Woverloaded-virtual -Wnon-virtual-dtor
+> > + endif
+> > + 
+> > + ifdef PROFILE
+> > +   PROF:= -g -pg -fprofile-arcs -ftest-coverage
+> > +-  CXXFLAGS+= $(PROF)
+> > ++  override CXXFLAGS+= $(PROF)
+> > + else
+> > +   ifdef HAVE_GCC
+> > +-    CXXFLAGS+= -fomit-frame-pointer
+> > ++    override CXXFLAGS+= -fomit-frame-pointer
+> > +   endif
+> > + endif
+> > + 
+> > +-- 
+> > +1.9.1
+> > +
+> > diff --git a/package/stella/stella.mk b/package/stella/stella.mk
+> > index 2e9d57b8c1ea..11cdd6adcd97 100644
+> > --- a/package/stella/stella.mk
+> > +++ b/package/stella/stella.mk
+> > @@ -12,11 +12,23 @@ STELLA_LICENSE_FILES = Copyright.txt License.txt
+> >  
+> >  STELLA_DEPENDENCIES = sdl2 libpng zlib
+> >  
+> > +STELLA_CXXFLAGS = $(TARGET_CFLAGS)
+> > +
+> > +# PPC altivec vectorization triggers a bug when compiling with -std=c++11
+> > +# so let's compile it with -std=gnu++11
+> > +ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
+> > +STELLA_CXXFLAGS += -std=gnu++11
+> > +else
+> > +STELLA_CXXFLAGS += -std=c++11
+> > +endif
+> > +
+> >  STELLA_CONF_OPTS = \
+> >  	--host=$(GNU_TARGET_NAME) \
+> >  	--prefix=/usr \
+> >  	--with-sdl-prefix=$(STAGING_DIR)/usr
+> >  
+> > +STELLA_MAKE_OPTS += CXXFLAGS="$(STELLA_CXXFLAGS)"
+> > +
+> >  # The configure script is not autoconf based, so we use the
+> >  # generic-package infrastructure
+> >  define STELLA_CONFIGURE_CMDS
+> > @@ -28,7 +40,7 @@ define STELLA_CONFIGURE_CMDS
+> >  endef
+> >  
+> >  define STELLA_BUILD_CMDS
+> > -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> > +	$(TARGET_MAKE_ENV) $(MAKE) $(STELLA_MAKE_OPTS) -C $(@D)
+> >  endef
+> >  
+> >  define STELLA_INSTALL_TARGET_CMDS
 
-> 
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -2621,7 +2621,7 @@ evas_engine_gl_common_cflags=""
->  if test "x${have_egl}" = "xyes"; then
->     evas_engine_gl_common_libs="-lEGL"
->  else
-> -   evas_engine_gl_common_libs="-lGL"
-> +   evas_engine_gl_common_libs=""
->  fi
-> 
-> and regenerate configure.
-> 
-> What would be the best solution to fix that ? just add a patch on the configure
-> file ? or patch theses 3 files :
+This seems fine to me. I assume you're using this method so that the
+change has minimal chance to break other arches, but it would be much
+simpler if you could just change it globally so let's consider it:
 
-If a patch modify configure.ac or a m4 file, you need to regenerate the
-configure script by setting EFL_AUTORECONF = YES. Also you need to regenerate
-the gettext files with EFL_GETTEXTIZE = YES.
+What seems to be happening before this patch, is:
 
-If you look at the efl package git history, I did that for the efl 1.15.3.
+The configure script selects a compiler that supports -std=c++11 (see
+configure around line 805).
 
-> 
-> configure               | 26 +++++++++++++-------------configure.ac       |  2 +-
-> m4/evas_check_engine.m4 | 12 ++++++------
-> 
->>
->> I guess we should re-add BR2_PAKCAGE_EFL_GLES_DRM to define the wayland,
->> efl-drm, opengl-es dependencies otherwise gl-drm would be enabled by:
->>
->> ifeq
->> ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_EFL_OPENGLES)$(BR2_PACKAGE_EFL_DRM),yyy)
->> EFL_CONF_OPTS += --enable-gl-drm
->> else
->> EFL_CONF_OPTS += --disable-gl-drm
->> endif
->>
->> which is not really nice.
->>
->> I prefer:
->>
->> efl.mk:
->> ifeq ($(BR2_PAKCAGE_EFL_GLES_DRM),y)
->> EFL_CONF_OPTS += --enable-gl-drm
->> else
->> EFL_CONF_OPTS += --disable-gl-drm
->> endif
->>
->> Config.in:
->> config BR2_PAKCAGE_EFL_GLES_DRM
->>     bool "Evas GLES DRM Engine"
->>     depends on BR2_PACKAGE_EFL_DRM
->>     depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
->>     depends on BR2_PACKAGE_WAYLAND
->>     help
->>       This option enable building support for the Evas DRM OpenGL ES
->>       based engine.
->>
->> comment "Evas GL DRM Engine needs Evas DRM Engine, OpenGL ES w/ EGL, Wayland"
->>     depends on BR2_PACKAGE_EFL_DRM && !BR2_PACKAGE_EFL_OPENGLES &&
->> !BR2_PACKAGE_WAYLAND
->>
->>
->> Thoughts ?
-> 
-> yes, for me it makes sens to explicitly separate 'gl_drm' and 'drm' engines, as
-> efl do it on the report of configure :
-> Ecore_Evas......: yes (+extn +ews -fb +drm +gl-drm -psl1ght -opengl-cocoa
-> -software-sdl -opengl-sdl -wayland-shm -wayland-egl -software-gdi
-> -software-ddraw -software-x11 -opengl-x11)
+Then the Makefile wll add -std=c++11 if the compiler is GCC, like this:
 
-Yes, it was my first intention.
+ifdef HAVE_GCC
+  CXXFLAGS+= -Wno-multichar -Wunused -fno-rtti -Woverloaded-virtual -Wnon-virtual-dtor -std=c++11
+endif
 
-Best regards,
-Romain
+(But it looks like non-gcc compilers that do support -std=c++11 will be
+used but they won't get -std=c++11... odd. I think the proposed patch, above,
+would change this slightly so that -std=c++11 is always used but I
+suspect that is a good thing!)
 
-> 
-> 
->>
->> Best regards,
->> Romain
->>
->>>
->>> Best regards,
->>> Romain
->>>
->>> [1] http://lists.busybox.net/pipermail/buildroot/2016-September/172422.html
->>>> ---
->>>>  package/efl/efl.mk | 6 ++++++
->>>>  1 file changed, 6 insertions(+)
->>>>
->>>> diff --git a/package/efl/efl.mk b/package/efl/efl.mk
->>>> index d6b2bf5..fdeea47 100644
->>>> --- a/package/efl/efl.mk
->>>> +++ b/package/efl/efl.mk
->>>> @@ -199,6 +199,12 @@ else
->>>>  EFL_CONF_OPTS += --disable-drm
->>>>  endif
->>>>
->>>> +ifeq ($(BR2_PACKAGE_EFL_OPENGLES)$(BR2_PACKAGE_EFL_DRM),yy)
->>>> +EFL_CONF_OPTS += --enable-gl-drm
->>>> +else
->>>> +EFL_CONF_OPTS += --disable-gl-drm
->>>> +endif
->>>> +
->>>>  EFL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBXKBCOMMON),libxkbcommon)
->>>>
->>>>  # Loaders that need external dependencies needs to be --enable-XXX=yes
->>>>
->>>
->>
-> 
-> 
-> Cheers,
-> 
-> Pierre
+If we can rely on c++11 support in gcc implying gnu++11 support (which
+seems reasonable), we could just patch the Makefile to:
+
+ifdef HAVE_GCC
+  CXXFLAGS+= -Wno-multichar -Wunused -fno-rtti -Woverloaded-virtual -Wnon-virtual-dtor -std=gnu++11
+endif
+
+What do you think?
+
+Cheers,
+Sam.
