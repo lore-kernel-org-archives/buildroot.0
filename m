@@ -1,65 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 22 Nov 2016 23:16:30 +0100
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 23 Nov 2016 00:02:19 +0100
 Subject: [Buildroot] pseudo: remaining issues...
 In-Reply-To: <20161122212534.GA3529@free.fr>
 References: <20161122212534.GA3529@free.fr>
-Message-ID: <20161122221630.GC3529@free.fr>
+Message-ID: <315eabd4-eb7f-2e83-c8f8-caa5a3cd3099@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
 
-On 2016-11-22 22:25 +0100, Yann E. MORIN spake thusly:
-> We recently switched from using fakeroot to using pseudo to generate the
-> filesystem images.
+
+On 22-11-16 22:25, Yann E. MORIN wrote:
+> One solution that would make it work in all cases would be:
 > 
-> After fixing the biggest fallouts from the conversion, we're still left
-> with a few users reporting remaining issues.
+>   - do the target-finalize actions in a copy of target/
+>   - generate, filesystem images form that copy
+>   - trash the copy
+>   - trash pseudo DB
 
-And we have another issue, that Lucille and Ga?l just tracked down.
+ This could fit pretty well in a per-package-staging like approach (but then per
+package target, obviously). So each package installs in its own version of the
+target directory, and at the end everything is put together into the final
+target. The latter can be done under pseudo.
 
-They are using a docker instance to run their Buildroot builds, and
-noticed that the pseudo DB was empty after a build. However, if they
-artificially added a little sleep at the end, to prevent the docker
-instance to terminate instantly, the pseudo DB was correctly saved.
-
-That's becasue pesuedo spawns itself a server in the background, and
-that server is responsible for loading the DB, maintaining the internal
-state, and saving the DB.
-
-However, the DB is saved aftrer the last client exits, adn it can t ake
-a bit of time, which is enought time for the docker instance to
-terminate, killing (-9) the remaining processes, of whihch the pseudo
-server, which then does not have a chance to save its DB.
+ BTW, it's not really needed to repeat all the makedevs etc. steps under pseudo
+for every filesystem, we could just do that once, and then generate each
+filesystem (under pseudo again of course). But that doesn't fix the issues with
+rebuilding, of course.
 
 
-One solution to this issue would be for us to run our own pseudo server,
-adn terminat it ourselves, then wait for it, something along those lines:
+> Another possibility would be to always do changes in target/ under
+> pseudo:
+>   - installing packages
+>   - taget-finalize
+>   - filesystem generation
 
-    # Spawn our server
-    pseudo -f
-    pseudo_pid=$!
+ I think this option is where we want to go long-term. Packages are meant to be
+installed under sudo, so installing them under pseudo is a good idea.
 
-    # Run the actual comand
-    pseudo real-command
+ It's not so trivial for us, though. In openembedded they can easily do the
+equivalent of install-target under pseudo, but we can't because the commands run
+under individual shells in make. There are a few possibilities to work around
+that, but it needs some thinking.
 
-    # Kil and wait for the server
-    pseudo -S
-    wait $pseudo_pid
+> Neither solution is trivial, especially so close to the release.
+> 
+> 
+> Alternatively, we can revert back to using fakeroot for this release, at
+> the expense of breaking (already previously broken) setups with SELinux
+> on the host.
+
+ It looks like that will be the way to go :-(
+
+ Note that we'll also need to revert c85cd189dc1d (as discussed on IRC), because
+of the /dev/console thing you described. That used to work under fakeroot
+because the mknod() was done even if the (normal) file existed already, but with
+c85cd189dc1d it won't work anymore under fakeroot (because there we don't store
+the database).
 
 
-Thoughts? Tests? ;-)
-
-Regards,
-Yann E. MORIN.
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
