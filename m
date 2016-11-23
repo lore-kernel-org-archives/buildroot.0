@@ -1,49 +1,44 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 23 Nov 2016 12:08:13 +0100
-Subject: [Buildroot] [PATCH v3 13/18] python2: generate reproducible .pyc
+Date: Wed, 23 Nov 2016 12:08:16 +0100
+Subject: [Buildroot] [PATCH v3 16/18] python3: remove full path from .pyc
 In-Reply-To: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
 References: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479899298-14655-14-git-send-email-jezz@sysmic.org>
+Message-ID: <1479899298-14655-17-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-.pyc files contain modification time of .py source. In order to make
-build reproducible, we fix modification time of all .py before to
-compile .pyc files.
+.pyc files include path to source .py file. This patch changes the way
+`pycompile.py' is launched in order to only keep the part relative to
+$TARGET_DIR.
 
 This work was sponsored by `BA Robotic Systems'.
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python/python.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/python3/python3.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index cc65376..c17b267 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -226,10 +226,18 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index a526c0f..4f0ae5b 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -229,9 +229,10 @@ endif
  
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+define PYTHON_FIX_TIME
-+find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
-+		xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
-+endef
-+PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_FIX_TIME
-+endif
-+
- define PYTHON_CREATE_PYC_FILES
- 	PYTHONPATH="$(PYTHON_PATH)" \
- 	$(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
--		support/scripts/pycompile.py \
-+		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
- 		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
+ define PYTHON3_CREATE_PYC_FILES
+ 	PYTHONPATH="$(PYTHON3_PATH)" \
+-	$(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
+-		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
+-		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
++	cd $(TARGET_DIR) && $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
++		$(TOPDIR)/support/scripts/pycompile.py \
++		$(if $(BR2_REPRODUCIBLE),--force) \
++		usr/lib/python$(PYTHON3_VERSION_MAJOR)
  endef
  
+ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PY_PYC),y)
 -- 
 1.9.1
