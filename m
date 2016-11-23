@@ -1,45 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:55:24 +0100
-Subject: [Buildroot] [git commit branch/next] Makefile: add '-n' to gzip
-	invocations to improve reproducibility
-Message-ID: <20161123215540.A523481D97@busybox.osuosl.org>
+Date: Wed, 23 Nov 2016 22:55:17 +0100
+Subject: [Buildroot] [git commit branch/next] Makefile: generate
+	SOURCE_DATE_EPOCH for reproducible builds
+Message-ID: <20161123215540.9973E81DF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b91b21dae40d6db1c320a76cfdbabeedcb2d1c2
+commit: https://git.buildroot.net/buildroot/commit/?id=9befe94baf990ee6331e77edb40e286e9dc4df8d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Default invocation to gzip include timestamp in output file. This feature is
-incompatible with BR2_REPRODUCIBLE. It is possible to disable it with '-n'.
+When reproducibility is requested, generate a global SOURCE_DATE_EPOCH
+environment variable which contains either the date of Buildroot last
+commit if running from a git repository, or the latest release date.
 
-The environment variable GZIP can hold a set of default options for gzip. So
-instead to find all gzip invocation in build process, we just export 'GZIP=-n'.
+This means that all packages embedding build dates will appear to
+have the same build date, so in case of new commit or release, all
+packages will appear to have been changed, even though some of them
+may not have changed in fact.
 
-Notice bzip2, lzma and xz are not impacted by this problem. On the other hand, lzop
-does include timestamp and does not provide any way to disable it.
+The meaning of SOURCE_DATE_EPOCH is specified by the following
+specification:
+  https://reproducible-builds.org/specs/source-date-epoch/
 
-This work was sponsored by `BA Robotic Systems'.
-
+Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
 Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/Makefile b/Makefile
-index 8acbe58..9e588da 100644
+index eff814b..8acbe58 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -251,6 +251,7 @@ ifeq ($(BR2_REPRODUCIBLE),y)
+@@ -87,6 +87,8 @@ all:
+ 
+ # Set and export the version string
+ export BR2_VERSION := 2016.11-rc1
++# Actual time the release is cut (for reproducible builds)
++BR2_VERSION_EPOCH = 1478206447
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+@@ -249,6 +251,8 @@ ifeq ($(BR2_REPRODUCIBLE),y)
  export TZ=UTC
  export LANG=C
  export LC_ALL=C
-+export GZIP = -n
- BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
- export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
++BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
++export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
  endif
+ 
+ # To put more focus on warnings, be less verbose as default
