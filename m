@@ -1,87 +1,34 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Wed, 23 Nov 2016 12:36:50 -0500
-Subject: [Buildroot] [PATCH v3] pseudo-wrapper: fix console issue
-Message-ID: <20161123173650.1740-1-gael.portay@savoirfairelinux.com>
+From: daggs <daggs@gmx.com>
+Date: Wed, 23 Nov 2016 19:14:29 +0100
+Subject: [Buildroot] root passwd asked for reset every ssh login
+In-Reply-To: <5e8a8f52-b8f3-7639-f091-5758d8b505c2@gmail.com>
+References: <trinity-fb0422c9-2032-4095-bb6b-0656992b88fc-1479796384707@3capp-mailcom-bs04>,
+ <5e8a8f52-b8f3-7639-f091-5758d8b505c2@gmail.com>
+Message-ID: <trinity-386eead4-e60e-4722-835c-695b1cc785bb-1479924869646@3capp-mailcom-bs02>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pseudo consists of:
-* a client (cli),
-* a server (daemon) and
-* a database managed by this daemon
-  which makes a relation between inode, filename, type/mode...
+Greetings Zoltan,
 
-Without -f/-d argument, the client forks a process, sets LD_PRELOAD,
-execve's the command given as argument and waits for its completion.
-The LD_PRELOAD'ed library tries to connect to the daemon and spawns it
-if it isn't running.
+> Dear Dagg,
+> 
+> 
+> you are using openssh in your image, right? The problem probably comes
+> from the system time not properly set or not kept by an RTC on your
+> target platform, which messes up openssh's file timestamp handling. In
+> my experience in such a scenario (target system without RTC), it's
+> easier to use dropbear as SSH server implementation, as it handles this
+> differently. (Assuming of course that you don't need any specific
+> feature of the OpenSSH implementation)
+> 
+> 
+> Regards,
+> 
+> Zoltan Gyarmati
 
-Neither the client itself nor the LD_PRELOAD'ed library waits for the
-daemon to terminate. As a consequence, the daemon may still be alive
-after the completion of the command executed through the client.
+you are right, my arm board does not have any rtc, thanks for the help, I'll use dropbear.
 
-Under some circumstances (running build in a docker), the daemon (which
-may be still alive after the build) is killed with SIGKILL, thus it
-does not let it the time to properly sync its database.
-
-The database is rendered inconsistent for the next build. In this case,
-makedevs will complain about the file type/mode, see error below.
-
-makedevs: line xx: node (...)/output/target/dev/console exists but is of wrong type
-
-Note that this error was introduced by c85cd189.
-
-Because the database did not have the time to sync (ie. /dev/console
-record is missing), makedevs tests the existing and real /dev/console
-file mode (created by the previous build) which is a regular file to
-what should have been reported by pseudo, i.e. a character device.
-Those two modes are different and makedevs exits with error.
-
-To solve this issue, this patch make the wrapper control the life of
-the daemon. It spawns the server before running the script inside the
-pseudo context, tells it to stop with "pseudo -S", and waits for the
-server to exit before the wrapper exits.
-
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/pseudo/pseudo-wrapper | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
-index 9c8dbdb..194c88f 100644
---- a/package/pseudo/pseudo-wrapper
-+++ b/package/pseudo/pseudo-wrapper
-@@ -8,7 +8,6 @@ if [ "${0##*/}" = "fakeroot" ]; then
- fi
- 
- export PSEUDO_PREFIX="$(dirname "${0%/*}")"
--export PSEUDO_OPTS="-t0"
- if [ -n "${TARGET_DIR}" ]; then
-     export PSEUDO_PASSWD="${TARGET_DIR}"
- fi
-@@ -16,4 +15,18 @@ if [ -n "${BASE_DIR}" ]; then
-     export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
- fi
- 
--exec "${0%/*}/pseudo" "${@}"
-+# spawn server manually...
-+"${0%/*}/pseudo" -f &
-+pid="${!}"
-+
-+# ... run script/command...
-+"${0%/*}/pseudo" "${@}"
-+rc="${?}"
-+
-+# ... terminate server...
-+"${0%/*}/pseudo" -S
-+
-+# ... and wait for its completion to make sure database is synced before
-+# returning.
-+wait "${pid}"
-+exit "${rc}"
--- 
-2.10.2
+Dagg.
