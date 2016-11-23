@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 23:19:38 +0100
+Date: Wed, 23 Nov 2016 23:21:32 +0100
 Subject: [Buildroot] [PATCH/next] toolchain-external: support gcc < 4.3
-In-Reply-To: <bad536b8-2eac-6ea8-f7b7-8297a5c01b85@mind.be>
+In-Reply-To: <20161123111404.20661-1-arnout@mind.be>
 References: <20161123111404.20661-1-arnout@mind.be>
- <20161123132259.47f9a228@free-electrons.com>
- <bad536b8-2eac-6ea8-f7b7-8297a5c01b85@mind.be>
-Message-ID: <20161123231938.1eda5882@free-electrons.com>
+Message-ID: <20161123232132.66194af8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +12,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 23 Nov 2016 13:27:38 +0100, Arnout Vandecappelle wrote:
+On Wed, 23 Nov 2016 12:14:04 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
 
-> > The Blackfin ADI toolchains use gcc 4.3, if I remember correctly.  
+> This patch conflicts with the external toolchain rework - I'll rebase
+> the one which "looses" in the first-to-be-committed contest.
+
+external toolchain rework committed :)
+
 > 
->  Sorry, let me correct my statement: because they are currently unused by any
-> package and will very soon be untested in the autobuilders.
+> We should also remove the 4.3 and 4.4 options, because they are
+> currently unused and also untested in the autobuilders.
+> 
+> I think something similar should be done for kernel headers.
 
-Huh?
+We already have something like this: we have
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD.
 
-toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in:     select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+>  toolchain/helpers.mk                   |  3 +--
+>  toolchain/toolchain-external/Config.in | 11 +++++++++++
+>  2 files changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 3991bc1..72e7292 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -145,8 +145,7 @@ check_kernel_headers_version = \
+>  check_gcc_version = \
+>  	expected_version="$(strip $2)" ; \
+>  	if [ -z "$${expected_version}" ]; then \
+> -		printf "Internal error, gcc version unknown (no GCC_AT_LEAST_X_Y selected)\n"; \
+> -		exit 1 ; \
+> +		exit 0 ; \
 
-So it's definitely used, at least until we remove the ADI Blackfin
-toolchain.
+Why?
 
-Bets regards,
+Assuming you will respin, I've marked this one as Changes Requested.
+
+Thanks!
 
 Thomas
 -- 
