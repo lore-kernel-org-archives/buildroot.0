@@ -1,85 +1,84 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Wed, 23 Nov 2016 12:20:35 +0100
-Subject: [Buildroot] Bare metal toolchain support?
-In-Reply-To: <20161123113517.04f6ec47@free-electrons.com>
-References: <CAM+bi4v0iJKAbKV8FvqwJqEw=L+DqTLZhcHWGboYBbPv1oTM0A@mail.gmail.com>
- <20161123113517.04f6ec47@free-electrons.com>
-Message-ID: <CAM+bi4vNKMBr0Dv9_-rsQzU_kPNrze7o9_EcSEA--g2UCVCfzg@mail.gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 23 Nov 2016 12:37:02 +0100
+Subject: [Buildroot] Analysis of autobuild failures 18-19/11
+In-Reply-To: <44bda1d2-3859-54a7-0ffc-f4b193bfc3e8@mind.be>
+References: <40bbe29b-2601-f710-970c-065f0b2c639f@mind.be>
+ <20161121112128.GP27313@waldemar-brodkorb.de>
+ <44bda1d2-3859-54a7-0ffc-f4b193bfc3e8@mind.be>
+Message-ID: <20161123113702.GZ27313@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Thomas
+Hi Arnout,
+Arnout Vandecappelle wrote,
 
-2016-11-23 11:35 GMT+01:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+> On 21-11-16 12:21, Waldemar Brodkorb wrote:
+> > Hi,
+> > Arnout Vandecappelle wrote,
+> > 
+> >>  Hi all,
+> >>
+> >>  Here's an analysis of autobuild failures. It looks a bit different from what
+> >> Thomas usually sends because I based it on the website rather than the mail. I
+> >> eliminated the ones that are already fixed in git, and also the powerpc64le
+> >> failures that are due to libtool.m4.
+> >>
+> >>  I'm not putting the people from get-developers in Cc, because they already get
+> >> these mails.
+> >>
+> >> http://autobuild.buildroot.net/results/d47fa41aa860d82471b83ac90967d3a3dacd8611
+> >> m68k / 5208	lcdapi-v0.10	uclibc	static
+> >>
+> >>> /tmp/cc6S5lwR.s: Assembler messages:
+> >>> /tmp/cc6S5lwR.s: Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
+> >>> Please report this bug.
+> >>> Makefile:784: recipe for target 'lcdapi/api/liblcdapi_la-LCDHorizontalBar.lo' failed
+> >>
+> >>  ICE... Waldemar?
+> > 
+> > This could be avoided by using something like the following (example
+> > for libasplib):
+> > diff --git a/package/libasplib/libasplib.mk
+> > b/package/libasplib/libasplib.mk
+> > index 41aeaeb..b09d739 100644
+> > --- a/package/libasplib/libasplib.mk
+> > +++ b/package/libasplib/libasplib.mk
+> > @@ -10,4 +10,11 @@ LIBASPLIB_LICENSE = GPLv3+
+> >  LIBASPLIB_LICENSE_FILES = LICENSE
+> >  LIBASPLIB_INSTALL_STAGING = YES
+> >  
+> > +# Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
+> > +ifeq ($(BR2_m68k_cf),y)
+> > +LIBASPLIB_CXXFLAGS += -fno-dwarf2-cfi-asm
+> > +endif
+> > +
+> > +LIBASPLIB_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(LIBASPLIB_CXXFLAGS)"
+> > +
+> >  $(eval $(cmake-package))
+> > 
+> > Unfortunately libasplib cmake infrastructure ignores my
+> > CMAKE_CXX_FLAGS. 
+> > 
+> > The m68k/coldfire uclinux seems to have some limitation regarding
+> > CFI assembly generation, as elf2flt lacks some features.
+> > See here for the comment in the code of GNU as:
+> > https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=gas/config/tc-m68k.h;h=30ca2cb35e0b00048c52bda0dc04ae0cdef5cc3a;hb=HEAD#l180
+> > 
+> > With gcc -fno-dwarf2-cfi-asm we can disable the CFI generation and
+> > at least fix the compile errors for those packages.
+> >  
+> > Not sure if it will break some exception handling in C++ code or if
+> > it only disables the ability to debug the code.
+> 
+>  If it doesn't break things (and you can do runtime test, right?), maybe we
+> should just pass -fno-dwarf2-cfi-asm in the wrapper for coldfire?
 
-> No, but this is generally not needed. A Linux-capable toolchain is
-> capable of building userspace applications, but also the Linux kernel
-> and bootloaders like Barebox, U-Boot, etc (which you could build with
-> bare metal toolchains).
->
-> > Specifically, I'm trying to build a small bootloader for the microblaze
-> > architecture. Xilinx provides an SDK, and I wonder if I can build one
-> like
-> > this using buildroot, so I can keep all my code and workflow centralized
-> > under buildroot.
->
-> Have you tried building this small bootloader with the Buildroot
-> toolchain?
->
->
-Xilinx provides a very simple bootloader, which depends on what they call a
-BSP for my platform,
-so first of all, I have to compile this BSP, which provides drivers for
-xilinx's IP cores. I'm having
-only partial success, as drivers code compiles without an issue, but I'm
-reaching a point that seems
-to be related to the toolchain.
+I don't know the internals of the wrapper, could you suggest a
+patch, then I can do some testing with either Qemu or some real
+board.
 
-My guess is once this is solved, the BSP will build and the bootloader as
-well, as it only uses functions
-from these drivers.
-
-output/host/usr/bin/microblazeel-linux-gcc  -O2 -c -mcpu=v9.6
--mlittle-endian -mno-xl-soft-div -mno-xl-soft-mul -mxl-barrel-shift
--mxl-multiply-high -mxl-pattern-compare  -g -I./. -I../../../include
-xil_exception.c microblaze_sleep.c fcntl.c xil_testio.c xil_io.c
-xil_printf.c outbyte.c microblaze_interrupt_handler.c pvr.c
-microblaze_exception_handler.c inbyte.c xil_cache.c xil_misc_psreset_api.c
-print.c xplatform_info.c xil_testmem.c _exit.c errno.c
-microblaze_interrupts_g.c xil_assert.c xil_testcache.c
-microblaze_update_dcache.S microblaze_disable_dcache.S
-microblaze_invalidate_dcache_range.S microblaze_flush_dcache.S
-microblaze_invalidate_icache.S microblaze_invalidate_cache_ext_range.S
-microblaze_flush_cache_ext_range.S microblaze_scrub.S
-microblaze_enable_dcache.S microblaze_disable_icache.S
-microblaze_disable_interrupts.S microblaze_invalidate_dcache.S
-microblaze_flush_cache_ext.S microblaze_invalidate_cache_ext.S
-microblaze_flush_dcache_range.S microblaze_disable_exceptions.S
-microblaze_init_icache_range.S hw_exception_handler.S
-microblaze_enable_icache.S microblaze_enable_interrupts.S
-microblaze_update_icache.S microblaze_init_dcache_range.S
-microblaze_invalidate_icache_range.S microblaze_enable_exceptions.S
-errno.c:6:19: fatal error: reent.h: No such file or directory
- #include <reent.h>
-
-This reent.h header doesn't exist in the toolchain built by buildroot, but
-it exists on Xilinx's:
-
-/opt/Xilinx/SDK/2016.2/gnu/microblaze/lin/microblaze-xilinx-elf/include/include/reent.h
-/opt/Xilinx/SDK/2016.2/gnu/microblaze/lin/microblaze-xilinx-elf/include/include/sys/reent.h
-/opt/Xilinx/SDK/2016.2/gnu/microblaze/lin/microblaze-xilinx-elf/include/reent.h
-/opt/Xilinx/SDK/2016.2/gnu/microblaze/lin/microblaze-xilinx-elf/include/sys/reent.h
-/opt/Xilinx/SDK/2016.2/gnu/microblaze/lin/microblaze-xilinx-elf/sysroot/usr/include/reent.h
-/opt/Xilinx/SDK/2016.2/gnu/microblaze/lin/microblaze-xilinx-elf/sysroot/usr/include/sys/reent.h
-
-Best regards
-
--- 
-?lvaro G?mez Machado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161123/715bb248/attachment.html>
+best regards
+ Waldemar
