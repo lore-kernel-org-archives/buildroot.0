@@ -1,19 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:11:06 +0100
+Date: Wed, 23 Nov 2016 22:10:33 +0100
 Subject: [Buildroot] [git commit branch/next]
-	toolchain-external-codesourcery-arm: new package
-Message-ID: <20161123213658.C02D081DDA@busybox.osuosl.org>
+	toolchain-external-linaro-aarch64: new package
+Message-ID: <20161123213658.7B81F81E01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b3c5b336b9a6f8341167686f3dbf52b1b0e722b
+commit: https://git.buildroot.net/buildroot/commit/?id=f1f2ae5f26af4b5c76fb86e0203344fb5fcea346
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit adds a new package for the Sourcery CodeBench external
-toolchain for the ARM architecture.
+This commit adds a new package for the Linaro external toolchain for
+the AArch64 architecture.
 
 The legacy implementation is removed.
 
@@ -23,193 +23,184 @@ Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 37 ++--------------------
- .../toolchain-external-codesourcery-arm/Config.in  | 33 +++++++++++++++++++
- .../Config.in.options                              |  9 ++++++
- .../toolchain-external-codesourcery-arm.hash       |  3 ++
- .../toolchain-external-codesourcery-arm.mk         | 13 ++++++++
- .../toolchain-external/toolchain-external.hash     |  3 --
- toolchain/toolchain-external/toolchain-external.mk |  5 +--
- 7 files changed, 61 insertions(+), 42 deletions(-)
+ toolchain/toolchain-external/Config.in             | 30 ++++++++++------------
+ .../toolchain-external-linaro-aarch64/Config.in    | 15 +++++++++++
+ .../Config.in.options                              |  9 +++++++
+ .../toolchain-external-linaro-aarch64.hash         |  3 +++
+ .../toolchain-external-linaro-aarch64.mk           | 16 ++++++++++++
+ .../toolchain-external/toolchain-external.hash     |  4 +--
+ toolchain/toolchain-external/toolchain-external.mk |  9 ++-----
+ 7 files changed, 59 insertions(+), 27 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index bffb9fd..dfc8e70 100644
+index 65a4216..096f435 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -17,6 +17,7 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Con
+@@ -8,6 +8,12 @@ choice
+ comment "glibc toolchains only available with shared lib support"
+ 	depends on BR2_STATIC_LIBS
  
- # ARM (use Linaro toolchain by default)
- source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in"
-+source "toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in"
- 
++# Kept toolchains sorted by architecture in order to use some toolchain
++# as default choice
++
++# Aarch64 (use Linaro toolchain by default)
++source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in"
++
  comment "Linaro toolchains available for Cortex-A + EABIhf"
- 	depends on BR2_armeb
-@@ -45,40 +46,6 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
- 	  generated is Thumb 2, with the hard floating point calling
- 	  convention, and uses the VFPv3-D16 FPU instructions.
+ 	depends on BR2_arm || BR2_armeb
+ 	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
+@@ -485,22 +491,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
--	bool "Sourcery CodeBench ARM 2014.05"
--	depends on BR2_arm
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+-	bool "Linaro AArch64 2016.05"
+-	depends on BR2_aarch64
 -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on BR2_ARM_EABI
 -	depends on !BR2_STATIC_LIBS
 -	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
 -	select BR2_TOOLCHAIN_HAS_SSP
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
 -	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+-	select BR2_TOOLCHAIN_HAS_FORTRAN
 -	help
--	  Sourcery CodeBench toolchain for the ARM architecture, from
--	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
--	  2.18 and gdb 7.7.50, kernel headers 3.13. It has support
--	  for the following variants:
--	    - ARMv5TE, little endian, soft-float, glibc
--	      Select ARM926T, ARM10T, XScale or another ARMv5 core
--	      Select BR2_SOFT_FLOAT
--	    - ARMv4T, little endian, soft-float, glibc
--	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
--	      Select BR2_SOFT_FLOAT
--	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
--	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
--	      Select BR2_SOFT_FLOAT
--	      Set BR2_TARGET_OPTIMIZATION to -mthumb
+-	  Toolchain for the AArch64 architecture, from
+-	  http://www.linaro.org/engineering/armv8/
 -
--comment "Sourcery CodeBench toolchains available for the EABI ABI"
--	depends on BR2_arm
--	depends on !BR2_ARM_EABI
--	depends on !BR2_STATIC_LIBS
--
- config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
- 	bool "Arago ARMv7 2011.09"
- 	depends on BR2_arm
-@@ -577,7 +544,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arc-linux"		 if BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC && BR2_arcle
- 	default "arceb-linux"		 if BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC && BR2_arceb
- 	default "armeb-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
--	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
+ 	bool "CodeSourcery AArch64 2014.11"
+ 	depends on BR2_aarch64
+@@ -628,7 +618,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
  	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
  	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
+-	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	default "aarch64-amd-linux-gnu"  if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
  	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
-@@ -635,6 +601,7 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Con
+ 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+@@ -675,6 +664,13 @@ config BR2_PACKAGE_HAS_TOOLCHAIN_EXTERNAL
+ config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
+ 	string
  
- # ARM
- source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options"
-+source "toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options"
- 
++# Kept toolchains sorted as in the choice above
++# The toolchain Config.in.options must define
++# BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL and BR2_TOOLCHAIN_EXTERNAL_PREFIX
++
++# Aarch64
++source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options"
++
  if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
  
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
+ choice
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
 new file mode 100644
-index 0000000..037985b
+index 0000000..662f7d7
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
-@@ -0,0 +1,33 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
-+	bool "Sourcery CodeBench ARM 2014.05"
-+	depends on BR2_arm
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+@@ -0,0 +1,15 @@
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
++	bool "Linaro AArch64 2016.05"
++	depends on BR2_aarch64
 +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_ARM_EABI
 +	depends on !BR2_STATIC_LIBS
 +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
 +	select BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
 +	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	select BR2_TOOLCHAIN_HAS_FORTRAN
 +	help
-+	  Sourcery CodeBench toolchain for the ARM architecture, from
-+	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
-+	  2.18 and gdb 7.7.50, kernel headers 3.13. It has support
-+	  for the following variants:
-+	    - ARMv5TE, little endian, soft-float, glibc
-+	      Select ARM926T, ARM10T, XScale or another ARMv5 core
-+	      Select BR2_SOFT_FLOAT
-+	    - ARMv4T, little endian, soft-float, glibc
-+	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
-+	      Select BR2_SOFT_FLOAT
-+	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
-+	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
-+	      Select BR2_SOFT_FLOAT
-+	      Set BR2_TARGET_OPTIMIZATION to -mthumb
-+
-+comment "Sourcery CodeBench toolchains available for the EABI ABI"
-+	depends on BR2_arm
-+	depends on !BR2_ARM_EABI
-+	depends on !BR2_STATIC_LIBS
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options
++	  Toolchain for the AArch64 architecture, from
++	  http://www.linaro.org/engineering/armv8/
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options
 new file mode 100644
-index 0000000..7f3654d
+index 0000000..099c6c0
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options
 @@ -0,0 +1,9 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
++if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
 +
 +config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+	default "arm-none-linux-gnueabi"
++	default "aarch64-linux-gnu"
 +
 +config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-codesourcery-arm"
++	default "toolchain-external-linaro-aarch64"
 +
 +endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.hash
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
 new file mode 100644
-index 0000000..535f4aa
+index 0000000..7a2c038
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.hash
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256 39ee0e789034334ecc89af94e838e3a4815400ac5ff980f808f466b04778532e  arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-+sha256 e16a5b1e41d7ff1e74161f9405182001bc8d1360d89564e73911032e6966cc0d  arm-2014.05-29-arm-none-linux-gnueabi.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.mk
++sha256 d43227248f282a652da42322fcf4abfd3021f2a2f62e0cf6e242d82f55966ba9  gcc-linaro-5.3.1-2016.05-i686_aarch64-linux-gnu.tar.xz
++sha256 1941dcf6229d6706bcb89b7976d5d43d170efdd17c27d5fe1738e7ecf22adc37  gcc-linaro-5.3.1-2016.05-x86_64_aarch64-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
 new file mode 100644
-index 0000000..f96a0e0
+index 0000000..a0543a7
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/toolchain-external-codesourcery-arm.mk
-@@ -0,0 +1,13 @@
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# toolchain-external-codesourcery-arm
++# toolchain-external-linaro-aarch64
 +#
 +################################################################################
 +
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_VERSION = 2014.05-29
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION = 2016.05
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)/aarch64-linux-gnu
 +
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_SITE = http://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_SOURCE = arm-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_ACTUAL_SOURCE_TARBALL = arm-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
++ifeq ($(HOSTARCH),x86)
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SOURCE = gcc-linaro-5.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)-i686_aarch64-linux-gnu.tar.xz
++else
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SOURCE = gcc-linaro-5.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)-x86_64_aarch64-linux-gnu.tar.xz
++endif
 +
 +$(eval $(toolchain-external-package))
 diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 945bf21..d2cf44b 100644
+index 41c2ab3..fd1bc6d 100644
 --- a/toolchain/toolchain-external/toolchain-external.hash
 +++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -6,9 +6,6 @@ sha256 e424e90d8481d942a40266d78d1488726561fed3ec38403094f98055e61889d0  blackfi
- sha256 c65b1b4b918d5185349d62a3b7bf43b4b21e1175c52598ec047ca56b3f11d857  blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
+@@ -34,13 +34,11 @@ sha256 f2febf3b3c565536461ad4405f1bcb835d75a6afb2a8bec958a1248cb4b81fc7  arago-2
+ sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
+ sha256 25fbf0513ad7322b15cbaae964cafadcbb4c939f2708f57f40b8f9f2d601122b  arago-toolchain-2011.09-sources.tar.bz2
  
- # Mentor's Sourcery CodeBench Lite toolchains
--# ARM
--sha256 39ee0e789034334ecc89af94e838e3a4815400ac5ff980f808f466b04778532e  arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
--sha256 e16a5b1e41d7ff1e74161f9405182001bc8d1360d89564e73911032e6966cc0d  arm-2014.05-29-arm-none-linux-gnueabi.src.tar.bz2
- # NiosII
- sha256 750639290744adda931c81fa2cd2ffc2bde972488047824dcfaa53c42562191d  sourceryg++-2016.05-10-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
- sha256 3dc1c2685c0472059547dd7becb5dc991541b8176af39fa7aa5f601d38b9879a  sourceryg++-2016.05-10-nios2-linux-gnu.src.tar.bz2
+-# ARM and Aarch64 toolchains from Linaro
++# ARM toolchains from Linaro
+ sha256 f1421c580ce977226f4fefc9c409b3b423260cc65a6e9dc6da88bb3478a521a0  gcc-linaro-5.3.1-2016.05-i686_arm-linux-gnueabihf.tar.xz
+ sha256 987941c9fffdf56ffcbe90e8984673c16648c477b537fcf43add22fa62f161cd  gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf.tar.xz
+ sha256 f6e9c0d3320760fe8f89e9ec3acdd7b4da7eff889c094b4a2acc286fd46f334f  gcc-linaro-5.3.1-2016.05-i686_armeb-linux-gnueabihf.tar.xz
+ sha256 6cf41c8944be56279cc14992aa075174b7a4c5938502536266eaaeef048f9440  gcc-linaro-5.3.1-2016.05-x86_64_armeb-linux-gnueabihf.tar.xz
+-sha256 d43227248f282a652da42322fcf4abfd3021f2a2f62e0cf6e242d82f55966ba9  gcc-linaro-5.3.1-2016.05-i686_aarch64-linux-gnu.tar.xz
+-sha256 1941dcf6229d6706bcb89b7976d5d43d170efdd17c27d5fe1738e7ecf22adc37  gcc-linaro-5.3.1-2016.05-x86_64_aarch64-linux-gnu.tar.xz
+ 
+ # Codescape toolchains from Imagination Technologies
+ # From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03/downloads.html
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 410ff18..f8d22b4 100644
+index bcbcb2e..8a3e4da 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -80,10 +80,7 @@ define TOOLCHAIN_EXTERNAL_BLACKFIN_UCLIBC_EXTRA_EXTRACT
- 		$(TAR) --strip-components=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
- endef
- 
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
--TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi
--TOOLCHAIN_EXTERNAL_SOURCE = arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A),y)
- TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports
- TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
- TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = arago-toolchain-2011.09-sources.tar.bz2
+@@ -148,13 +148,6 @@ TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2014R1-RC2.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 3
+ TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_BLACKFIN_UCLIBC_EXTRA_EXTRACT
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64),y)
+-TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.05/aarch64-linux-gnu
+-ifeq ($(HOSTARCH),x86)
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3.1-2016.05-i686_aarch64-linux-gnu.tar.xz
+-else
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3.1-2016.05-x86_64_aarch64-linux-gnu.tar.xz
+-endif
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/aarch64-amd-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = aarch64-amd-2014.11-95-aarch64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
+@@ -302,3 +295,5 @@ ifeq ($(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX)),)
+ $(error No prefix selected for external toolchain package $(BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL). Configuration error)
+ endif
+ endif
++
++include toolchain/toolchain-external/*/*.mk
