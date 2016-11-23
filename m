@@ -1,36 +1,49 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 23 Nov 2016 12:08:18 +0100
-Subject: [Buildroot] [PATCH v3 18/18] reproducible: fix coding style
+Date: Wed, 23 Nov 2016 12:08:13 +0100
+Subject: [Buildroot] [PATCH v3 13/18] python2: generate reproducible .pyc
 In-Reply-To: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
 References: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479899298-14655-19-git-send-email-jezz@sysmic.org>
+Message-ID: <1479899298-14655-14-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+.pyc files contain modification time of .py source. In order to make
+build reproducible, we fix modification time of all .py before to
+compile .pyc files.
+
+This work was sponsored by `BA Robotic Systems'.
+
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/python/python.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index c8bfed4..51335c9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -248,9 +248,9 @@ endif
+diff --git a/package/python/python.mk b/package/python/python.mk
+index cc65376..c17b267 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -226,10 +226,18 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
  
- # timezone and locale may affect build output
- ifeq ($(BR2_REPRODUCIBLE),y)
--export TZ=UTC
--export LANG=C
--export LC_ALL=C
-+export TZ = UTC
-+export LANG = C
-+export LC_ALL = C
- export GZIP = -n
- SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
- export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(BR2_VERSION_EPOCH))
++ifeq ($(BR2_REPRODUCIBLE),y)
++define PYTHON_FIX_TIME
++find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
++		xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
++endef
++PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_FIX_TIME
++endif
++
+ define PYTHON_CREATE_PYC_FILES
+ 	PYTHONPATH="$(PYTHON_PATH)" \
+ 	$(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
+-		support/scripts/pycompile.py \
++		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
+ 		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
+ endef
+ 
 -- 
 1.9.1
