@@ -1,43 +1,49 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 23 Nov 2016 13:58:56 +0100
-Subject: [Buildroot] [PATCH v4 17/18] reproducible: improve help text
+Date: Wed, 23 Nov 2016 13:58:54 +0100
+Subject: [Buildroot] [PATCH v4 15/18] python2: remove full path from .pyc
 In-Reply-To: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
 References: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479905937-17241-18-git-send-email-jezz@sysmic.org>
+Message-ID: <1479905937-17241-16-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+.pyc files include path to source .py file. This patch changes the way
+`pycompile.py' is launched in order to only keep the part relative to
+$TARGET_DIR.
+
+This work was sponsored by `BA Robotic Systems'.
+
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
 
 Notes:
     v3:
-      - Reword help message (Arnout)
-    v2:
-      - New patch (Thomas)
+     - Typo in commit log (Arnout)
 
- Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/python/python.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 5cf0c4d..e382cf6 100644
---- a/Config.in
-+++ b/Config.in
-@@ -707,6 +707,12 @@ config BR2_REPRODUCIBLE
- 	  this allows to generate exactly identical binaries from one
- 	  build to the other, including on different machines.
+diff --git a/package/python/python.mk b/package/python/python.mk
+index c17b267..ffe4e14 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -236,9 +236,10 @@ endif
  
-+	  The current implementation is restricted to builds with the same
-+	  output directory. Many (absolute) paths are recorded in intermediary
-+	  files, and it is very likely that some of these paths leak into the
-+	  target rootfs. If you build with the same O=... path, however, the
-+	  result is identical.
-+
- 	  This is labeled as an experimental feature, as not all
- 	  packages behave properly to ensure reproducibility.
+ define PYTHON_CREATE_PYC_FILES
+ 	PYTHONPATH="$(PYTHON_PATH)" \
+-	$(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
+-		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
+-		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
++	cd $(TARGET_DIR) && $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
++		$(TOPDIR)/support/scripts/pycompile.py \
++		$(if $(BR2_REPRODUCIBLE),--force) \
++		usr/lib/python$(PYTHON_VERSION_MAJOR)
+ endef
  
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON_PY_PYC),y)
 -- 
 1.9.1
