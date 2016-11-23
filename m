@@ -1,136 +1,89 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 23 Nov 2016 19:28:43 +0100
-Subject: [Buildroot] [PATCH v3] pseudo-wrapper: fix console issue
-In-Reply-To: <20161123173650.1740-1-gael.portay@savoirfairelinux.com>
-References: <20161123173650.1740-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20161123182843.GA3609@free.fr>
+Date: Wed, 23 Nov 2016 19:46:24 +0100
+Subject: [Buildroot] pseudo: remaining issues...
+In-Reply-To: <315eabd4-eb7f-2e83-c8f8-caa5a3cd3099@mind.be>
+References: <20161122212534.GA3529@free.fr>
+ <315eabd4-eb7f-2e83-c8f8-caa5a3cd3099@mind.be>
+Message-ID: <20161123184624.GB3609@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ga?l, All,
+Arnout, All,
 
-On 2016-11-23 12:36 -0500, Ga?l PORTAY spake thusly:
-> Pseudo consists of:
-> * a client (cli),
-> * a server (daemon) and
-> * a database managed by this daemon
->   which makes a relation between inode, filename, type/mode...
+On 2016-11-23 00:02 +0100, Arnout Vandecappelle spake thusly:
+> On 22-11-16 22:25, Yann E. MORIN wrote:
+> > One solution that would make it work in all cases would be:
+> > 
+> >   - do the target-finalize actions in a copy of target/
+> >   - generate, filesystem images form that copy
+> >   - trash the copy
+> >   - trash pseudo DB
 > 
-> Without -f/-d argument, the client forks a process, sets LD_PRELOAD,
-> execve's the command given as argument and waits for its completion.
-> The LD_PRELOAD'ed library tries to connect to the daemon and spawns it
-> if it isn't running.
+>  This could fit pretty well in a per-package-staging like approach (but then per
+> package target, obviously). So each package installs in its own version of the
+> target directory, and at the end everything is put together into the final
+> target. The latter can be done under pseudo.
 > 
-> Neither the client itself nor the LD_PRELOAD'ed library waits for the
-> daemon to terminate. As a consequence, the daemon may still be alive
-> after the completion of the command executed through the client.
+>  BTW, it's not really needed to repeat all the makedevs etc. steps under pseudo
+> for every filesystem, we could just do that once, and then generate each
+> filesystem (under pseudo again of course). But that doesn't fix the issues with
+> rebuilding, of course.
+
+You mean, like a patch I sent more than one year ago ;-)
+    http://lists.busybox.net/pipermail/buildroot/2015-September/140525.html
+
+Ok, this one still calls makedevs in each fs image generation, because
+we were still using fakeroot at the time. We could now also move the
+makedevs in the common part.
+
+/me should probablky re-spin this series...
+
+> > Another possibility would be to always do changes in target/ under
+> > pseudo:
+> >   - installing packages
+> >   - taget-finalize
+> >   - filesystem generation
 > 
-> Under some circumstances (running build in a docker), the daemon (which
-> may be still alive after the build) is killed with SIGKILL, thus it
-> does not let it the time to properly sync its database.
+>  I think this option is where we want to go long-term. Packages are meant to be
+> installed under sudo, so installing them under pseudo is a good idea.
+
+Yes, and this is still quite interesting for the per-package-target, as
+you hinted above.
+
+>  It's not so trivial for us, though. In openembedded they can easily do the
+> equivalent of install-target under pseudo, but we can't because the commands run
+> under individual shells in make. There are a few possibilities to work around
+> that, but it needs some thinking.
+
+No, it's not trivial.
+
+We could quite easily move target-finalize to a helper script and call
+that through pseudo, but the individual package commands are more
+complex to pseudo-ify... Not impossible, though, if we look at how this
+is done for the filesystems (but I'd find it ugly)...
+
+> > Neither solution is trivial, especially so close to the release.
+> > 
+> > 
+> > Alternatively, we can revert back to using fakeroot for this release, at
+> > the expense of breaking (already previously broken) setups with SELinux
+> > on the host.
 > 
-> The database is rendered inconsistent for the next build. In this case,
-> makedevs will complain about the file type/mode, see error below.
+>  It looks like that will be the way to go :-(
 > 
-> makedevs: line xx: node (...)/output/target/dev/console exists but is of wrong type
-> 
-> Note that this error was introduced by c85cd189.
-> 
-> Because the database did not have the time to sync (ie. /dev/console
-> record is missing), makedevs tests the existing and real /dev/console
-> file mode (created by the previous build) which is a regular file to
-> what should have been reported by pseudo, i.e. a character device.
-> Those two modes are different and makedevs exits with error.
-> 
-> To solve this issue, this patch make the wrapper control the life of
-> the daemon. It spawns the server before running the script inside the
-> pseudo context, tells it to stop with "pseudo -S", and waits for the
-> server to exit before the wrapper exits.
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/pseudo/pseudo-wrapper | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
-> index 9c8dbdb..194c88f 100644
-> --- a/package/pseudo/pseudo-wrapper
-> +++ b/package/pseudo/pseudo-wrapper
-> @@ -8,7 +8,6 @@ if [ "${0##*/}" = "fakeroot" ]; then
->  fi
->  
->  export PSEUDO_PREFIX="$(dirname "${0%/*}")"
-> -export PSEUDO_OPTS="-t0"
->  if [ -n "${TARGET_DIR}" ]; then
->      export PSEUDO_PASSWD="${TARGET_DIR}"
->  fi
-> @@ -16,4 +15,18 @@ if [ -n "${BASE_DIR}" ]; then
->      export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
->  fi
->  
-> -exec "${0%/*}/pseudo" "${@}"
-> +# spawn server manually...
-> +"${0%/*}/pseudo" -f &
-> +pid="${!}"
+>  Note that we'll also need to revert c85cd189dc1d (as discussed on IRC), because
+> of the /dev/console thing you described. That used to work under fakeroot
+> because the mknod() was done even if the (normal) file existed already, but with
+> c85cd189dc1d it won't work anymore under fakeroot (because there we don't store
+> the database).
 
-There still is a little corner case I'm not too happy about... The above
-returns immediately, but we don;t know if the daemon is ready. It may
-take a bit of time for it to start compeltely (i.e. reload the DB and
-repair its now-internal state)...
-
-> +# ... run script/command...
-> +"${0%/*}/pseudo" "${@}"
-
-But then we (almost) immediately start a client, which may try to
-connect to the daemon while it is not yet ready, and thus the client may
-not detect it yet, and thus wmay spawn his own daemon.
-
-And we'd be back to square one...
-
-Of course, we could run:
-
-    pseudo -d
-
-which is guaranteed to return after the daemon is ready...
-
-> +rc="${?}"
-> +
-> +# ... terminate server...
-> +"${0%/*}/pseudo" -S
-> +
-> +# ... and wait for its completion to make sure database is synced before
-> +# returning.
-> +wait "${pid}"
-
-But then we would not have a PID to wait on... :-/
-
-So, the question is: are we sure the client will talk to the daemon that
-we spawn?
-If the answer is "yes, we're sure", then all is good; id the answer is
-"no, we're not sure", then it's a problem...
-
-Thoughts?
-
-Now, my position on all this mess is :
-
-  - we revert back to using fakeroot for 2016.11;
-
-  - long term, we want to definitely switch to using pseudo:
-    - it is actively maintained,,
-    - it has more features than fakeroot,
-    - some of those features are very interesting for us.
+Yup... :-/
 
 Regards,
 Yann E. MORIN.
-
-> +exit "${rc}"
-> -- 
-> 2.10.2
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
