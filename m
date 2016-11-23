@@ -1,75 +1,117 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 23 Nov 2016 12:08:00 +0100
-Subject: [Buildroot] [PATCH v3 00/18] Reproducible builds
-Message-ID: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
+Date: Wed, 23 Nov 2016 12:08:09 +0100
+Subject: [Buildroot] [PATCH v3 09/18] fakedate: new package
+In-Reply-To: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
+References: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1479899298-14655-10-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series try to continue work initiated by Gilles Chanteperdrix:
-  http://lists.busybox.net/pipermail/buildroot/2016-April/thread.html#160064
-  http://lists.busybox.net/pipermail/buildroot/2016-June/thread.html#163905
+`date' is widely used by packages to include build information in their
+binaries. Unfortunately, this is incompatible with  BR2_REPRODUCIBLE.
 
-I dropped some patchs from original series because either:
-  - I handled things differently (timestamps in images, support SOURCE_DATE_EPOCH
-    in gcc, ...)
-  - I didn't had time to test them them (sysroot, cpio, cdrkit, iso9660,...)
-  - They doesn't seems necessary anymore (libtool, libgcrypt, libgpg-error, ...)
+Instead of having to identify all `date' invocations in the different
+packages, this commit adds a small tool that allows to always return
+the same date.
 
-This version focuses on timestamps. It provide good enough results as soon as
-OUTDIR and TOPDIR are the same. Indeed build path appear in plenty of files.
-Only patch called "remove full path from .pyc" try to solve this issue. Another
-big step could be done by removing rpaths from ELF generated with libtool.
+This work was sponsored by `BA Robotic Systems'.
 
-Other thing known to break reproducibility:
-  - use of lzop (it unconditionally include timestamps in result)
-  - /!\ since we build our own toolchain and toolchain include BR2_FULL_VERSION,
-    ccache is incompatible with reproducible
-
-Since this feature is experimental I did not (yet) reported these
-incompatibilities in menuconfig.
-
-
-Gilles Chanteperdrix (3):
-  reproducibility: generate SOURCE_DATE_EPOCH
-  reproducibility/linux: override build timestamp
-  reproducibility/busybox: disable build timestamps
-
-J?r?me Pouiller (15):
-  reproducible: fix DATE/TIME macros in toolchain-wrapper
-  reproducible: add '-n' to gzip invocations
-  fs/tar: make results reproducible
-  reproducibility/linux: inhibit build-id
-  reproducible: lock modification times in $TARGET_DIR
-  fakedate: new package
-  core: do not reset DEPENDENCIES_HOST_PREREQ in dependencies.mk
-  reproducible: enable fakedate
-  pycompile: allow to force compilation
-  python2: generate reproducible .pyc
-  python3: generate reproducible .pyc
-  python2: remove full path from .pyc
-  python3: remove full path from .pyc
-  reproducible: improve help text
-  reproducible: fix coding style
-
- Config.in                            |  6 +++
- Makefile                             | 12 ++++--
- fs/common.mk                         |  3 ++
- fs/tar/tar.mk                        |  3 +-
- linux/linux.mk                       | 15 ++++++++
- package/busybox/busybox.mk           |  6 +++
- package/fakedate/fakedate            | 59 ++++++++++++++++++++++++++++
- package/fakedate/fakedate.mk         | 15 ++++++++
- package/python/python.mk             | 15 ++++++--
- package/python3/python3.mk           | 15 ++++++--
- support/dependencies/dependencies.mk |  2 -
- support/scripts/pycompile.py         | 11 +++++-
- toolchain/toolchain-wrapper.c        | 74 +++++++++++++++++++++++++++++++++++-
- 13 files changed, 222 insertions(+), 14 deletions(-)
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/fakedate/fakedate    | 59 ++++++++++++++++++++++++++++++++++++++++++++
+ package/fakedate/fakedate.mk | 15 +++++++++++
+ 2 files changed, 74 insertions(+)
  create mode 100755 package/fakedate/fakedate
  create mode 100644 package/fakedate/fakedate.mk
 
+diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
+new file mode 100755
+index 0000000..074c517
+--- /dev/null
++++ b/package/fakedate/fakedate
+@@ -0,0 +1,59 @@
++#!/bin/sh
++# vim: set sw=4 expandtab:
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++# General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++#
++# Copyright (C) 2016 J?r?me Pouiller <jezz@sysmic.org>
++#
++LOG=/dev/null
++
++# Sanity check
++if ! readlink -f "$0" | grep -q fakedate; then
++    echo "fakedate: Please name this script \`fakedate'"
++    exit 1
++fi
++
++DATE_BIN=false
++# Do not call `date'd directly since it will produce an infinite recursion.
++# Instead, find path of true `date' binary.
++for P in `echo $PATH | tr ':' ' '`; do
++    if [ -x "$P/date" ]; then
++        if readlink -f "$P/date" | grep -qv fakedate; then
++            DATE_BIN="$P/date"
++            break;
++        fi
++    fi
++done
++
++if [ -n "$SOURCE_DATE_EPOCH" ]; then
++    FORCE_EPOCH=1
++    for i in "$@"; do
++        # Use of --date, --file and --reference (and their short option counter
++        # parts) is incompatible with SOURCE_DATE_EPOCH.
++        # -u and -R are the only short options without argument. So they could
++        # appear between '-' and option we want to match.
++        if echo "$i" | grep -qE '^-([uR]*d|-date|[uR]*f|-file|[uR]*r|--reference)'; then
++            FORCE_EPOCH=0
++            break;
++        fi
++    done
++    if [ $FORCE_EPOCH -eq 1 ]; then
++        echo "date: Warning: using \$SOURCE_DATE_EPOCH instead of true time" >&2
++        echo "Catch call to date from `pwd` with parameters: '$@'" >> $LOG
++        exec $DATE_BIN -d "@$SOURCE_DATE_EPOCH" "$@"
++    fi
++fi
++
++exec $DATE_BIN "$@"
+diff --git a/package/fakedate/fakedate.mk b/package/fakedate/fakedate.mk
+new file mode 100644
+index 0000000..61d4bd7
+--- /dev/null
++++ b/package/fakedate/fakedate.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# fakedate
++#
++################################################################################
++
++# source included in buildroot
++HOST_FAKEDATE_LICENSE = GPLv2+
++
++define HOST_FAKEDATE_INSTALL_CMDS
++	$(INSTALL) -D -m 755 package/fakedate/fakedate $(HOST_DIR)/usr/bin/fakedate
++	ln -sfn fakedate $(HOST_DIR)/usr/bin/date
++endef
++
++$(eval $(host-generic-package))
 -- 
 1.9.1
