@@ -1,37 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 23:29:45 +0100
-Subject: [Buildroot] [git commit] Makefile: fix distclean removal of $(O)
-Message-ID: <20161123223000.BDB0681DEC@busybox.osuosl.org>
+Date: Wed, 23 Nov 2016 23:30:06 +0100
+Subject: [Buildroot] [PATCH 1/1] Makefile: fix distclean removal of $(O)
+In-Reply-To: <1479867782-2666-1-git-send-email-danomimanchego123@gmail.com>
+References: <1479867782-2666-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20161123233006.7d14d2b1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=171d4103c565d618ac6dfc61dedf3e1a310e8d6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The distclean target no longer removes the "output" directory for
-in-tree builds, because $(O) is no longer just "output" in that
-case. Change the test to be against "$(CURDIR)/output", to match
-the O setting, and a similar test elsewhere in the same Makefile.
+On Tue, 22 Nov 2016 21:23:02 -0500, Danomi Manchego wrote:
+> The distclean target no longer removes the "output" directory for
+> in-tree builds, because $(O) is no longer just "output" in that
+> case. Change the test to be against "$(CURDIR)/output", to match
+> the O setting, and a similar test elsewhere in the same Makefile.
+> 
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/Makefile b/Makefile
-index 37e4bd4..1323961 100644
---- a/Makefile
-+++ b/Makefile
-@@ -928,7 +928,7 @@ clean:
- 		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
- 
- distclean: clean
--ifeq ($(O),output)
-+ifeq ($(O),$(CURDIR)/output)
- 	rm -rf $(O)
- endif
- 	rm -rf $(TOPDIR)/dl $(BR2_CONFIG) $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/..config.tmp \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
