@@ -1,54 +1,48 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 23 Nov 2016 23:15:05 +0100
-Subject: [Buildroot] [PATCH v4 00/22] Splitting the toolchain-external
- package
-In-Reply-To: <20161123223924.024343a3@free-electrons.com>
-References: <20161107012017.22505-1-arnout@mind.be>
- <20161123223924.024343a3@free-electrons.com>
-Message-ID: <2752f56e-8889-c135-9116-830a2ce4cf91@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Nov 2016 23:16:41 +0100
+Subject: [Buildroot] [git commit branch/next] gcc: the special workaround
+	for ARC is no longer required
+Message-ID: <20161123221647.AC0FB80E5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+commit: https://git.buildroot.net/buildroot/commit/?id=921c94720bfff3dacd7c84216298046a75dec59c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Le 23/11/2016 ? 22:39, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Mon, 7 Nov 2016 02:19:55 +0100, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
-> 
->> The following changes since commit 6bb7430a20871ad4e3ccbc8c1992d60117214be2:
->>
->>   Makefile: delete default rules (2016-11-05 23:34:26 +0100)
->>
->> are available in the git repository at:
->>
->>   http://github.com/arnout/buildroot external-toolchain
->>
->> for you to fetch changes up to ad925c956093b8fcd04d084471b78f9ca074cbb9:
->>
->>   toolchain-external: remove Arago toolchains (2016-11-07 02:15:06 +0100)
-> 
-> I've applied the entire patch series. I've looked at the result after
-> applying all of them, and it looks good to me overall. Considering the
-> amount of things being moved/changed, I'm sure we'll find some issues
-> here and there, but the only way is really to apply those patches and
-> see what breaks.
-> 
-> If there are people using external toolchains, then it would be nice if
-> they could give a test to the next branch right now, and report any
-> issue with toolchain handling.
-> 
-> Thanks Arnout and Romain for having picked up and finished my initial
-> work!
+It seems with the change to gcc 6.x based toolchain this
+workaround is no longer required. Tested with an arc hs toolchain.
 
-Thanks Arnout for the final respin :)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/gcc-initial/gcc-initial.mk | 13 -------------
+ 1 file changed, 13 deletions(-)
 
-Romain
-
-> 
-> Thomas
-> 
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index 7bb988b..a51e29c 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -25,19 +25,6 @@ HOST_GCC_INITIAL_SUBDIR = build
+ 
+ HOST_GCC_INITIAL_PRE_CONFIGURE_HOOKS += HOST_GCC_CONFIGURE_SYMLINK
+ 
+-# gcc on ARC has a bug: in its libgcc, even when no C library is
+-# available (--with-newlib is passed, and therefore inhibit_libc is
+-# defined), it tries to use the C library for the libgmon
+-# library. Since it's not needed in gcc-initial, we disabled it here.
+-ifeq ($(BR2_GCC_VERSION_ARC),y)
+-define HOST_GCC_INITIAL_DISABLE_LIBGMON
+-	$(SED) 's/crtbeginS.o libgmon.a crtg.o/crtbeginS.o crtg.o/' \
+-		$(@D)/libgcc/config.host
+-endef
+-HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
+-HOST_GCC_INITIAL_POST_RSYNC_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
+-endif
+-
+ HOST_GCC_INITIAL_CONF_OPTS = \
+ 	$(HOST_GCC_COMMON_CONF_OPTS) \
+ 	--enable-languages=c \
