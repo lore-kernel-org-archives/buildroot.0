@@ -1,38 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 11:35:17 +0100
-Subject: [Buildroot] Bare metal toolchain support?
-In-Reply-To: <CAM+bi4v0iJKAbKV8FvqwJqEw=L+DqTLZhcHWGboYBbPv1oTM0A@mail.gmail.com>
-References: <CAM+bi4v0iJKAbKV8FvqwJqEw=L+DqTLZhcHWGboYBbPv1oTM0A@mail.gmail.com>
-Message-ID: <20161123113517.04f6ec47@free-electrons.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Wed, 23 Nov 2016 12:08:03 +0100
+Subject: [Buildroot] [PATCH v3 03/18] reproducible: add '-n' to gzip
+	invocations
+In-Reply-To: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
+References: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1479899298-14655-4-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Default invocation to gzip include timestamp in output file. This feature is
+incompatible with BR2_REPRODUCIBLE. It is possible to disable it with '-n'.
 
-On Wed, 23 Nov 2016 10:49:10 +0100, Alvaro Gamez wrote:
+The environment variable GZIP can hold a set of default options for gzip. So
+instead to find all gzip invocation in build process, we just export 'GZIP=-n'.
 
-> Is buildroot able to build a baremetal toolchain?
+Notice bzip2, lzma and xz are not impacted by this problem. On the other hand, lzop
+does include timestamp and does not provide any way to disable it.
 
-No, but this is generally not needed. A Linux-capable toolchain is
-capable of building userspace applications, but also the Linux kernel
-and bootloaders like Barebox, U-Boot, etc (which you could build with
-bare metal toolchains).
+This work was sponsored by `BA Robotic Systems'.
 
-> Specifically, I'm trying to build a small bootloader for the microblaze
-> architecture. Xilinx provides an SDK, and I wonder if I can build one like
-> this using buildroot, so I can keep all my code and workflow centralized
-> under buildroot.
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-Have you tried building this small bootloader with the Buildroot
-toolchain?
-
-Best regards,
-
-Thomas
+diff --git a/Makefile b/Makefile
+index fcb80ec..92271d9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -251,6 +251,7 @@ ifeq ($(BR2_REPRODUCIBLE),y)
+ export TZ=UTC
+ export LANG=C
+ export LC_ALL=C
++export GZIP = -n
+ SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
+ export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(BR2_VERSION_EPOCH))
+ endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+1.9.1
