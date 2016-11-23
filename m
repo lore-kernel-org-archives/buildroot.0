@@ -1,51 +1,37 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 23 Nov 2016 12:08:05 +0100
-Subject: [Buildroot] [PATCH v3 05/18] reproducibility/linux: override build
-	timestamp
+Date: Wed, 23 Nov 2016 12:08:04 +0100
+Subject: [Buildroot] [PATCH v3 04/18] fs/tar: make results reproducible
 In-Reply-To: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
 References: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479899298-14655-6-git-send-email-jezz@sysmic.org>
+Message-ID: <1479899298-14655-5-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+In order to make tar images reproducible, force files order in tarball.
 
-Linux kernel include a few information about build environment in its binary.
-This feature is incompatible with BR2_REPRODUCIBLE. This patch overload build
-information when BR2_REPRODUCIBLE is enabled.
+This work was sponsored by `BA Robotic Systems'.
 
-Note that usage of KBUILD_BUILD_TIMESTAMP is not mandatory since Buildroot
-use `fakedate'. However, native solution is prefered when upstream
-provide one.
-
-Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- linux/linux.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ fs/tar/tar.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 988427c..7e826cc 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -94,6 +94,14 @@ LINUX_MAKE_ENV = \
- 	$(TARGET_MAKE_ENV) \
- 	BR_BINARIES_DIR=$(BINARIES_DIR)
+diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+index 11c69c5..70dc454 100644
+--- a/fs/tar/tar.mk
++++ b/fs/tar/tar.mk
+@@ -7,7 +7,8 @@
+ TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
  
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+LINUX_MAKE_ENV += \
-+	KBUILD_BUILD_VERSION=1 \
-+	KBUILD_BUILD_USER=buildroot \
-+	KBUILD_BUILD_HOST=buildroot \
-+	KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
-+endif
-+
- # Get the real Linux version, which tells us where kernel modules are
- # going to be installed in the target filesystem.
- LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
+ define ROOTFS_TAR_CMD
+-	tar $(TAR_OPTS) -cf $@ --numeric-owner -C $(TARGET_DIR) .
++	( cd $(TARGET_DIR); find -print0 | LC_ALL=C sort -z | \
++		tar $(TAR_OPTS) -cf $@ --null -T - --no-recursion --numeric-owner )
+ endef
+ 
+ $(eval $(call ROOTFS_TARGET,tar))
 -- 
 1.9.1
