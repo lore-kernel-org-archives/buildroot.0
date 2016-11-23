@@ -1,51 +1,41 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 23 Nov 2016 13:58:46 +0100
-Subject: [Buildroot] [PATCH v4 07/18] reproducibility/busybox: disable build
-	timestamps
+Date: Wed, 23 Nov 2016 13:58:49 +0100
+Subject: [Buildroot] [PATCH v4 10/18] core: do not reset
+	DEPENDENCIES_HOST_PREREQ in dependencies.mk
 In-Reply-To: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
 References: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479905937-17241-8-git-send-email-jezz@sysmic.org>
+Message-ID: <1479905937-17241-11-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+Usually, Buildroot does never initialize variables with empty content.
+DEPENDENCIES_HOST_PREREQ was an unjustified exception.
 
-Busybox includes some information about the build environment in its
-binary. For BR2_REPRODUCIBLE, remove that information.
-
-Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
 
 Notes:
     v3:
-      - Reword commit message (Arnout)
+      - New patch
 
- package/busybox/busybox.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ support/dependencies/dependencies.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index fc23a90..f4a241d 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -36,6 +36,12 @@ BUSYBOX_MAKE_ENV = \
- 	$(TARGET_MAKE_ENV) \
- 	CFLAGS="$(BUSYBOX_CFLAGS)" \
- 	CFLAGS_busybox="$(BUSYBOX_CFLAGS_busybox)"
-+
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+BUSYBOX_MAKE_ENV += \
-+	KCONFIG_NOTIMESTAMP=1
-+endif
-+
- BUSYBOX_MAKE_OPTS = \
- 	CC="$(TARGET_CC)" \
- 	ARCH=$(KERNEL_ARCH) \
+diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+index 4334dac..d4b0409 100644
+--- a/support/dependencies/dependencies.mk
++++ b/support/dependencies/dependencies.mk
+@@ -5,8 +5,6 @@
+ #
+ ################################################################################
+ 
+-DEPENDENCIES_HOST_PREREQ :=
+-
+ # suitable-host-pkg: calls check-host-$(1).sh shell script. Parameter (2)
+ # can be the candidate to be checked. If not present, the check-host-$(1).sh
+ # script should use 'which' to find a candidate. The script should return
 -- 
 1.9.1
