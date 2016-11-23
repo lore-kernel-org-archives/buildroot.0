@@ -1,40 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 13:06:36 +0100
-Subject: [Buildroot] Bare metal toolchain support?
-In-Reply-To: <CAM+bi4vNKMBr0Dv9_-rsQzU_kPNrze7o9_EcSEA--g2UCVCfzg@mail.gmail.com>
-References: <CAM+bi4v0iJKAbKV8FvqwJqEw=L+DqTLZhcHWGboYBbPv1oTM0A@mail.gmail.com>
- <20161123113517.04f6ec47@free-electrons.com>
- <CAM+bi4vNKMBr0Dv9_-rsQzU_kPNrze7o9_EcSEA--g2UCVCfzg@mail.gmail.com>
-Message-ID: <20161123130636.5b362a27@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 23 Nov 2016 13:06:50 +0100
+Subject: [Buildroot] Analysis of autobuild failures 18-19/11
+In-Reply-To: <20161123113702.GZ27313@waldemar-brodkorb.de>
+References: <40bbe29b-2601-f710-970c-065f0b2c639f@mind.be>
+ <20161121112128.GP27313@waldemar-brodkorb.de>
+ <44bda1d2-3859-54a7-0ffc-f4b193bfc3e8@mind.be>
+ <20161123113702.GZ27313@waldemar-brodkorb.de>
+Message-ID: <e255545b-031a-486d-1203-5e4220ec9280@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Wed, 23 Nov 2016 12:20:35 +0100, Alvaro Gamez wrote:
 
-> errno.c:6:19: fatal error: reent.h: No such file or directory
->  #include <reent.h>
+On 23-11-16 12:37, Waldemar Brodkorb wrote:
+> Hi Arnout,
+> Arnout Vandecappelle wrote,
 > 
-> This reent.h header doesn't exist in the toolchain built by buildroot, but
-> it exists on Xilinx's:
+>> On 21-11-16 12:21, Waldemar Brodkorb wrote:
+[snip]
+>>> With gcc -fno-dwarf2-cfi-asm we can disable the CFI generation and
+>>> at least fix the compile errors for those packages.
+>>>  
+>>> Not sure if it will break some exception handling in C++ code or if
+>>> it only disables the ability to debug the code.
+>>
+>>  If it doesn't break things (and you can do runtime test, right?), maybe we
+>> should just pass -fno-dwarf2-cfi-asm in the wrapper for coldfire?
+> 
+> I don't know the internals of the wrapper, could you suggest a
+> patch, then I can do some testing with either Qemu or some real
+> board.
 
-reent.h is a newlib-specific header, which indeed will only exist on
-bare-metal toolchains that use newlib. However, it's surprising that
-bootloader code includes reent.h: this file defines the reentrant
-variant of a number of system-level functions (close, stat, etc.). Which
-doesn't make a lot of sense in a bootloader.
+ First apply http://patchwork.ozlabs.org/patch/683830/, then try this
+(completely untested, of course):
 
-Perhaps it is not really used? I guess, you'll have to hack things
-a bit to get them to build.
 
-Best regards,
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index 88f743e..5dd8fb7 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -11,6 +11,11 @@ endif
 
-Thomas
+ TARGET_FLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+
++# Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
++ifeq ($(BR2_m68k_cf),y)
++TARGET_FLAGS += -fno-dwarf2-cfi-asm
++endif
++
+ TOOLCHAIN_WRAPPER_ARGS = $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
+
+---
+
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
