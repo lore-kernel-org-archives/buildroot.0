@@ -1,26 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 23:25:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qemu: enable host QEMU for
- powerpc64/powerpc64le
-In-Reply-To: <a335c60f72c52d158a29c757c1ee74b098de65fd.1479867900.git.sam.bobroff@au1.ibm.com>
-References: <a335c60f72c52d158a29c757c1ee74b098de65fd.1479867900.git.sam.bobroff@au1.ibm.com>
-Message-ID: <20161123232527.04b13e81@free-electrons.com>
+Date: Wed, 23 Nov 2016 23:29:45 +0100
+Subject: [Buildroot] [git commit] Makefile: fix distclean removal of $(O)
+Message-ID: <20161123223000.BDB0681DEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=171d4103c565d618ac6dfc61dedf3e1a310e8d6c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 23 Nov 2016 13:25:02 +1100, Sam Bobroff wrote:
-> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-> ---
+The distclean target no longer removes the "output" directory for
+in-tree builds, because $(O) is no longer just "output" in that
+case. Change the test to be against "$(CURDIR)/output", to match
+the O setting, and a similar test elsewhere in the same Makefile.
 
-Applied to next, thanks.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/Makefile b/Makefile
+index 37e4bd4..1323961 100644
+--- a/Makefile
++++ b/Makefile
+@@ -928,7 +928,7 @@ clean:
+ 		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
+ 
+ distclean: clean
+-ifeq ($(O),output)
++ifeq ($(O),$(CURDIR)/output)
+ 	rm -rf $(O)
+ endif
+ 	rm -rf $(TOPDIR)/dl $(BR2_CONFIG) $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/..config.tmp \
