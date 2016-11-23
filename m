@@ -1,23 +1,21 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:18:28 +0100
-Subject: [Buildroot] [git commit branch/next]
-	toolchain-external-codescape-img-mips: new package
-Message-ID: <20161123213659.36D55802C2@busybox.osuosl.org>
+Date: Wed, 23 Nov 2016 22:22:59 +0100
+Subject: [Buildroot] [git commit branch/next] toolchain-external-musl-cross:
+	new package
+Message-ID: <20161123213659.8EAB981DDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95c75fc8346c6e4caf419bf449ba8d8972cd3be5
+commit: https://git.buildroot.net/buildroot/commit/?id=06ba7f9e1ca5dcc726b1881a40c7c13e3fbcedec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit adds a new package for the Codescape IMG external toolchain
-for the MIPS architecture.
+This commit adds a new package for the pre-built Musl external
+toolchains.
 
 The legacy implementation is removed.
-
-The Codescape hacks for IMG and MTI are duplicated.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
@@ -25,293 +23,257 @@ Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 66 +---------------------
- .../Config.in                                      | 62 ++++++++++++++++++++
- .../Config.in.options                              |  9 +++
- .../toolchain-external-codescape-img-mips.hash     |  3 +
- .../toolchain-external-codescape-img-mips.mk       | 47 +++++++++++++++
- .../toolchain-external/toolchain-external.hash     |  1 -
- toolchain/toolchain-external/toolchain-external.mk |  8 +--
- 7 files changed, 124 insertions(+), 72 deletions(-)
+ toolchain/toolchain-external/Config.in             | 48 +++-------------------
+ .../toolchain-external-musl-cross/Config.in        | 30 ++++++++++++++
+ .../Config.in.options                              | 19 +++++++++
+ .../toolchain-external-musl-cross.hash}            | 17 +-------
+ .../toolchain-external-musl-cross.mk               | 12 ++++++
+ .../toolchain-external/toolchain-external.hash     | 13 ------
+ toolchain/toolchain-external/toolchain-external.mk | 26 ------------
+ 7 files changed, 68 insertions(+), 97 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 1f49975..c76941a 100644
+index cddfca8..5188e1a 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -27,6 +27,7 @@ source "toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.
+@@ -40,6 +40,9 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.i
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in"
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in"
  
- # MIPS (use codesourcery toolchain by default)
- source "toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in"
-+source "toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in"
- 
++# Musl based toolchains (after all the others)
++source "toolchain/toolchain-external/toolchain-external-musl-cross/Config.in"
++
  config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
  	bool "Arago ARMv7 2011.09"
-@@ -73,69 +74,6 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
+ 	depends on BR2_arm
+@@ -85,37 +88,6 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
  
  	  This toolchain uses software-floating point.
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
--	bool "Codescape IMG GNU Linux Toolchain 2016.05"
--	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+-config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+-	bool "Musl 1.1.12 toolchain"
+-	depends on (BR2_arm && BR2_ARM_EABI && BR2_USE_MMU) || \
+-		(BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4 && BR2_USE_MMU) || \
+-		(BR2_armeb && BR2_ARM_EABI && !BR2_ARM_CPU_ARMV7A && BR2_USE_MMU) || \
+-		BR2_i386 || (BR2_mips && !BR2_SOFT_FLOAT) || \
+-		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || \
+-		BR2_sh4 || BR2_sh4eb || \
+-		BR2_x86_64
 -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on BR2_MIPS_CPU_MIPS32R6 || (BR2_MIPS_CPU_MIPS64R6 && !BR2_MIPS_SOFT_FLOAT)
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	# Unsupported MIPS cores
+-	depends on !BR2_mips_interaptiv && !BR2_mips_m5100 && !BR2_mips_m5101
+-	# Unsupported for MIPS R6
+-	depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
+-	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+-	select BR2_TOOLCHAIN_HAS_SSP
 -	select BR2_INSTALL_LIBSTDCPP
 -	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--	select BR2_TOOLCHAIN_HAS_FORTRAN
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
 -	help
--	  Codescape IMG GNU Linux Toolchain 2015.10 for the MIPS
--	  architecture, from Imagination Technologies. It uses gcc
--	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
--	  headers 4.0. It has support for the following variants:
--	    - MIPS32r6 - Big-Endian, Hard-Float, 2008 NaN, o32 ABI
--	      Select 'MIPS (big endian)' Target Architecture
--	      Select 'mips 32r6' Target Architecture Variant
--	      Disable 'Use soft-float'
--	    - MIPS32r6 - Big-Endian, Soft-Float, 2008 NaN, o32 ABI
--	      Select 'MIPS (big endian)' Target Architecture
--	      Select 'mips 32r6' Target Architecture Variant
--	      Enable 'Use soft-float'
--	    - MIPS32r6 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI
--	      Select 'MIPS (little endian)' Target Architecture
--	      Select 'mips 32r6' Target Architecture Variant
--	      Disable 'Use soft-float'
--	    - MIPS32r6 - Little-Endian, Soft-Float, 2008 NaN, o32 ABI
--	      Select 'MIPS (little endian)' Target Architecture
--	      Select 'mips 32r6' Target Architecture Variant
--	      Enable 'Use soft-float'
--	    - MIPS32r6 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI, microMIPS
--	      Select 'MIPS (little endian)' Target Architecture
--	      Select 'mips 32r6' Target Architecture Variant
--	      Disable 'Use soft-float'
--	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
--	    - MIPS32r6 - Little-Endian, Soft-Float, 2008 NaN, o32 ABI, microMIPS
--	      Select 'MIPS (little endian)' Target Architecture
--	      Select 'mips 32r6' Target Architecture Variant
--	      Enable 'Use soft-float'
--	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
--	    - MIPS64r6 - Big-Endian, Hard-Float, 2008 NaN, n32 ABI
--	      Select 'MIPS64 (big endian)' Target Architecture
--	      Select 'mips 64r6' Target Architecture Variant
--	      Select 'n32' Target ABI
--	      Disable 'Use soft-float'
--	    - MIPS64r6 - Little-Endian, Hard-Float, 2008 NaN, n32 ABI
--	      Select 'MIPS64 (little endian)' Target Architecture
--	      Select 'mips 64r6' Target Architecture Variant
--	      Select 'n32' Target ABI
--	      Disable 'Use soft-float'
--	    - MIPS64r6 - Big-Endian, Hard-Float, 2008 NaN, n64 ABI
--	      Select 'MIPS64 (big endian)' Target Architecture
--	      Select 'mips 64r6' Target Architecture Variant
--	      Select 'n64' Target ABI
--	      Disable 'Use soft-float'
--	    - MIPS64r6 - Little-Endian, Hard-Float, 2008 NaN, n64 ABI
--	      Select 'MIPS64 (little endian)' Target Architecture
--	      Select 'mips 64r6' Target Architecture Variant
--	      Select 'n64' Target ABI
--	      Disable 'Use soft-float'
+-	  Toolchain based on the Musl C library, provided by the
+-	  musl-cross project. It uses gcc 5.3, binutils 2.25.1 and
+-	  musl 1.1.12. It does not have a cross debugger included.
 -
- config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
- 	bool "Codescape MTI GNU Linux Toolchain 2016.05"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-@@ -421,7 +359,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
- 	default "arm-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABI
- 	default "arm-linux-musleabihf"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABIHF
--	default "mips-img-linux-gnu"     if BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
- 	default "mips-mti-linux-gnu"     if BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
- 	default "armeb-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_armeb
- 	default "i486-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_i386
-@@ -477,6 +414,7 @@ source "toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.
+-	  The ARM soft-float toolchain is built for ARMv4t, while the
+-	  ARM hard-float toolchain is built for ARMv5t.
+-	  The x86 toolchain is built for i486.
+-
+-	  http://musl.codu.org/
+-
+ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+ 	bool "Synopsys ARC 2014.12 toolchain"
+ 	depends on BR2_arc
+@@ -191,17 +163,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arceb-linux"		 if BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC && BR2_arceb
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
+-	default "arm-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABI
+-	default "arm-linux-musleabihf"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABIHF
+-	default "armeb-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_armeb
+-	default "i486-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_i386
+-	default "mips-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mips && !BR2_SOFT_FLOAT)
+-	default "mipsel-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mipsel && !BR2_SOFT_FLOAT)
+-	default "mipsel-sf-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mipsel && BR2_SOFT_FLOAT)
+-	default "powerpc-linux-musl"     if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_powerpc
+-	default "sh4-linux-musl"         if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_sh4
+-	default "sh4eb-linux-musl"       if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_sh4eb
+-	default "x86_64-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_x86_64
+ 	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
+ 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
  
- # MIPS
- source "toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in.options"
-+source "toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in.options"
+@@ -260,6 +221,9 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.i
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options"
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options"
  
++# Musl based toolchains
++source "toolchain/toolchain-external/toolchain-external-musl-cross/Config.in.options"
++
  if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
  
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+ choice
+diff --git a/toolchain/toolchain-external/toolchain-external-musl-cross/Config.in b/toolchain/toolchain-external/toolchain-external-musl-cross/Config.in
 new file mode 100644
-index 0000000..1f0d4d1
+index 0000000..5cffa2d
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-@@ -0,0 +1,62 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
-+	bool "Codescape IMG GNU Linux Toolchain 2016.05"
-+	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++++ b/toolchain/toolchain-external/toolchain-external-musl-cross/Config.in
+@@ -0,0 +1,30 @@
++config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
++	bool "Musl 1.1.12 toolchain"
++	depends on (BR2_arm && BR2_ARM_EABI && BR2_USE_MMU) || \
++		(BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4 && BR2_USE_MMU) || \
++		(BR2_armeb && BR2_ARM_EABI && !BR2_ARM_CPU_ARMV7A && BR2_USE_MMU) || \
++		BR2_i386 || (BR2_mips && !BR2_SOFT_FLOAT) || \
++		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || \
++		BR2_sh4 || BR2_sh4eb || \
++		BR2_x86_64
 +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_MIPS_CPU_MIPS32R6 || (BR2_MIPS_CPU_MIPS64R6 && !BR2_MIPS_SOFT_FLOAT)
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	# Unsupported MIPS cores
++	depends on !BR2_mips_interaptiv && !BR2_mips_m5100 && !BR2_mips_m5101
++	# Unsupported for MIPS R6
++	depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
++	select BR2_TOOLCHAIN_EXTERNAL_MUSL
++	select BR2_TOOLCHAIN_HAS_SSP
 +	select BR2_INSTALL_LIBSTDCPP
 +	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
 +	help
-+	  Codescape IMG GNU Linux Toolchain 2015.10 for the MIPS
-+	  architecture, from Imagination Technologies. It uses gcc
-+	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
-+	  headers 4.0. It has support for the following variants:
-+	    - MIPS32r6 - Big-Endian, Hard-Float, 2008 NaN, o32 ABI
-+	      Select 'MIPS (big endian)' Target Architecture
-+	      Select 'mips 32r6' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	    - MIPS32r6 - Big-Endian, Soft-Float, 2008 NaN, o32 ABI
-+	      Select 'MIPS (big endian)' Target Architecture
-+	      Select 'mips 32r6' Target Architecture Variant
-+	      Enable 'Use soft-float'
-+	    - MIPS32r6 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r6' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	    - MIPS32r6 - Little-Endian, Soft-Float, 2008 NaN, o32 ABI
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r6' Target Architecture Variant
-+	      Enable 'Use soft-float'
-+	    - MIPS32r6 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI, microMIPS
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r6' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
-+	    - MIPS32r6 - Little-Endian, Soft-Float, 2008 NaN, o32 ABI, microMIPS
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r6' Target Architecture Variant
-+	      Enable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
-+	    - MIPS64r6 - Big-Endian, Hard-Float, 2008 NaN, n32 ABI
-+	      Select 'MIPS64 (big endian)' Target Architecture
-+	      Select 'mips 64r6' Target Architecture Variant
-+	      Select 'n32' Target ABI
-+	      Disable 'Use soft-float'
-+	    - MIPS64r6 - Little-Endian, Hard-Float, 2008 NaN, n32 ABI
-+	      Select 'MIPS64 (little endian)' Target Architecture
-+	      Select 'mips 64r6' Target Architecture Variant
-+	      Select 'n32' Target ABI
-+	      Disable 'Use soft-float'
-+	    - MIPS64r6 - Big-Endian, Hard-Float, 2008 NaN, n64 ABI
-+	      Select 'MIPS64 (big endian)' Target Architecture
-+	      Select 'mips 64r6' Target Architecture Variant
-+	      Select 'n64' Target ABI
-+	      Disable 'Use soft-float'
-+	    - MIPS64r6 - Little-Endian, Hard-Float, 2008 NaN, n64 ABI
-+	      Select 'MIPS64 (little endian)' Target Architecture
-+	      Select 'mips 64r6' Target Architecture Variant
-+	      Select 'n64' Target ABI
-+	      Disable 'Use soft-float'
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in.options b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in.options
++	  Toolchain based on the Musl C library, provided by the
++	  musl-cross project. It uses gcc 5.3, binutils 2.25.1 and
++	  musl 1.1.12. It does not have a cross debugger included.
++
++	  The ARM soft-float toolchain is built for ARMv4t, while the
++	  ARM hard-float toolchain is built for ARMv5t.
++	  The x86 toolchain is built for i486.
++
++	  http://musl.codu.org/
+diff --git a/toolchain/toolchain-external/toolchain-external-musl-cross/Config.in.options b/toolchain/toolchain-external/toolchain-external-musl-cross/Config.in.options
 new file mode 100644
-index 0000000..3eaa2a9
+index 0000000..cd12355
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in.options
-@@ -0,0 +1,9 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
++++ b/toolchain/toolchain-external/toolchain-external-musl-cross/Config.in.options
+@@ -0,0 +1,19 @@
++if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
 +
 +config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+	default "mips-img-linux-gnu"
++	default "arm-linux-musleabi"	 if BR2_arm && BR2_ARM_EABI
++	default "arm-linux-musleabihf"	 if BR2_arm && BR2_ARM_EABIHF
++	default "armeb-linux-musleabi"	 if BR2_armeb
++	default "i486-linux-musl"	 if BR2_i386
++	default "mips-linux-musl"	 if (BR2_mips && !BR2_SOFT_FLOAT)
++	default "mipsel-linux-musl"	 if (BR2_mipsel && !BR2_SOFT_FLOAT)
++	default "mipsel-sf-linux-musl"	 if (BR2_mipsel && BR2_SOFT_FLOAT)
++	default "powerpc-linux-musl"     if BR2_powerpc
++	default "sh4-linux-musl"         if BR2_sh4
++	default "sh4eb-linux-musl"       if BR2_sh4eb
++	default "x86_64-linux-musl"	 if BR2_x86_64
 +
 +config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-codescape-img-mips"
++	default "toolchain-external-musl-cross"
 +
 +endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.hash
+similarity index 51%
+copy from toolchain/toolchain-external/toolchain-external.hash
+copy to toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.hash
+index 8926bf8..beef8fd 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.hash
+@@ -1,19 +1,4 @@
+-######################################
+-# Next hashes are all locally computed
+-
+-# ARM toolchains from Texas Instrument's Arago project
+-# There is one source file that covers both binary distributions.
+-sha256 f2febf3b3c565536461ad4405f1bcb835d75a6afb2a8bec958a1248cb4b81fc7  arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
+-sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
+-sha256 25fbf0513ad7322b15cbaae964cafadcbb4c939f2708f57f40b8f9f2d601122b  arago-toolchain-2011.09-sources.tar.bz2
+-
+-# Synopsys DesignWare ARC toolchains
+-sha256 1fa4ea2c8616623205f1c7beca02ea31b019099528a7433e5b020b0876b93bf3  arc_gnu_2014.12_prebuilt_uclibc_le_arc700_linux_install.tar.gz
+-sha256 1080f07fcae2bfc176a3ea8d30b9ed8eaecab70fb786639d6ec70cae8322df10  arc_gnu_2014.12_prebuilt_uclibc_be_arc700_linux_install.tar.gz
+-sha256 aaaf6facd1f60a3cd2a537154ea39cd7d70501c175e30e01a97e8df6cb8226c7  arc_gnu_2014.12_prebuilt_uclibc_le_archs_linux_install.tar.gz
+-sha256 30711c5f15762764d4cd5ec1e6ced5b1fddd03aac41c424b0c4ec8a45d5d79cd  arc_gnu_2014.12_prebuilt_uclibc_be_archs_linux_install.tar.gz
+-
+-# Prebuilt musl toolchains from musl-cross
++# Locally calculated
+ sha256 e32c23d0b83639fc10ad06666ec086b66453b9be44415fe1a818c3c3b526dfb1  crossx86-armeb-linux-musleabi-1.1.12.tar.xz
+ sha256 eb81bd5d6ada454c6e854b18bfa8dc801333782152166f6cab9fb7cd11692987  crossx86-arm-linux-musleabi-1.1.12.tar.xz
+ sha256 a050da284ff22d291ae71dfc249ebdedb18334b8d626804760ce7d5963e392e6  crossx86-arm-linux-musleabihf-1.1.12.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.mk b/toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.mk
 new file mode 100644
-index 0000000..e4ae9e1
+index 0000000..966505b
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
-@@ -0,0 +1,3 @@
-+# Codescape toolchains from Imagination Technologies
-+# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03/downloads.html
-+sha256 e3c1f292ac6a9f12480af431c85a7ed9dfa011a52fd62a50be3363ec6b9bc872  Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
-new file mode 100644
-index 0000000..b4decfb
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
-@@ -0,0 +1,47 @@
++++ b/toolchain/toolchain-external/toolchain-external-musl-cross/toolchain-external-musl-cross.mk
+@@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# toolchain-external-codescape-img-mips
++# toolchain-external-musl-cross
 +#
 +################################################################################
 +
-+TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION = 2016.05-03
-+TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_STRIP_COMPONENTS = 2
++TOOLCHAIN_EXTERNAL_MUSL_CROSS_VERSION = 1.1.12
++TOOLCHAIN_EXTERNAL_MUSL_CROSS_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_MUSL_CROSS_VERSION)
 +
-+TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION).for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
-+
-+# Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
-+# sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
-+# -> sbin-<abi> so that the rest of Buildroot can find the toolchain
-+# tools in the appropriate location.
-+ifeq ($(BR2_MIPS_OABI32),y)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_BIN_DIR_SUFFIX = o32
-+else ifeq ($(BR2_MIPS_NABI32),y)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_BIN_DIR_SUFFIX = n32
-+else ifeq ($(BR2_MIPS_NABI64),y)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_BIN_DIR_SUFFIX = n64
-+endif
-+
-+define TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_STAGING_FIXUPS
-+	rmdir $(STAGING_DIR)/usr/bin $(STAGING_DIR)/usr/sbin
-+	ln -sf bin-$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_BIN_DIR_SUFFIX) $(STAGING_DIR)/usr/bin
-+	ln -sf sbin-$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_BIN_DIR_SUFFIX) $(STAGING_DIR)/usr/sbin
-+endef
-+
-+# The Codescape toolchain uses a sysroot layout that places them
-+# side-by-side instead of nested like multilibs. A symlink is needed
-+# much like for the nested sysroots which are handled in
-+# copy_toolchain_sysroot but there is not enough information in there
-+# to determine whether the sysroot layout was nested or side-by-side.
-+# Add the symlink here for now.
-+define TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SYMLINK
-+	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))"; \
-+	ARCH_SUBDIR=`basename $${ARCH_SYSROOT_DIR}`; \
-+	ln -snf . $(STAGING_DIR)/$${ARCH_SUBDIR}
-+endef
-+
-+TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_POST_INSTALL_STAGING_HOOKS += \
-+	TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_STAGING_FIXUPS \
-+	TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SYMLINK
++TOOLCHAIN_EXTERNAL_MUSL_CROSS_SOURCE = crossx86-$(TOOLCHAIN_EXTERNAL_PREFIX)-$(TOOLCHAIN_EXTERNAL_MUSL_CROSS_VERSION).tar.xz
 +
 +$(eval $(toolchain-external-package))
 diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 1a0ff72..962263c 100644
+index 8926bf8..a286ef2 100644
 --- a/toolchain/toolchain-external/toolchain-external.hash
 +++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -23,7 +23,6 @@ sha256 25fbf0513ad7322b15cbaae964cafadcbb4c939f2708f57f40b8f9f2d601122b  arago-t
- 
- # Codescape toolchains from Imagination Technologies
- # From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03/downloads.html
--sha256 e3c1f292ac6a9f12480af431c85a7ed9dfa011a52fd62a50be3363ec6b9bc872  Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
- sha256 10b8ab6d7c492abc19ecabafedc6bc5f12ff88107a3cb76dc452b3a9522d9c56  Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
- 
- # Synopsys DesignWare ARC toolchains
+@@ -12,16 +12,3 @@ sha256 1fa4ea2c8616623205f1c7beca02ea31b019099528a7433e5b020b0876b93bf3  arc_gnu
+ sha256 1080f07fcae2bfc176a3ea8d30b9ed8eaecab70fb786639d6ec70cae8322df10  arc_gnu_2014.12_prebuilt_uclibc_be_arc700_linux_install.tar.gz
+ sha256 aaaf6facd1f60a3cd2a537154ea39cd7d70501c175e30e01a97e8df6cb8226c7  arc_gnu_2014.12_prebuilt_uclibc_le_archs_linux_install.tar.gz
+ sha256 30711c5f15762764d4cd5ec1e6ced5b1fddd03aac41c424b0c4ec8a45d5d79cd  arc_gnu_2014.12_prebuilt_uclibc_be_archs_linux_install.tar.gz
+-
+-# Prebuilt musl toolchains from musl-cross
+-sha256 e32c23d0b83639fc10ad06666ec086b66453b9be44415fe1a818c3c3b526dfb1  crossx86-armeb-linux-musleabi-1.1.12.tar.xz
+-sha256 eb81bd5d6ada454c6e854b18bfa8dc801333782152166f6cab9fb7cd11692987  crossx86-arm-linux-musleabi-1.1.12.tar.xz
+-sha256 a050da284ff22d291ae71dfc249ebdedb18334b8d626804760ce7d5963e392e6  crossx86-arm-linux-musleabihf-1.1.12.tar.xz
+-sha256 18d07f5c8f4cfe373461cf21cf7b1bfefa820a37e96a69b68e0f315d528b4286  crossx86-i486-linux-musl-1.1.12.tar.xz
+-sha256 1c1480c2618097e402fe804c1431fbd49b0d43520af81d4c1a695a2fa13a3922  crossx86-mipsel-linux-musl-1.1.12.tar.xz
+-sha256 f0a8b3eb0566138ab3cc77bc09648be15bc325da974ec98b9e67f2fb82be3295  crossx86-mipsel-sf-linux-musl-1.1.12.tar.xz
+-sha256 6a99989c3dff56776981f6760b2c54dcb9e4032be1d649968bb06c04f2e64177  crossx86-mips-linux-musl-1.1.12.tar.xz
+-sha256 c082adc3e8b0750bb22ca82628524fd525fd77f534517ac5a66e7ac5a297ee6e  crossx86-powerpc-linux-musl-1.1.12.tar.xz
+-sha256 8c6c9ebb54040e47947b4d3af6823d01fef2bb6ee81b18903c801030c066092b  crossx86-sh4eb-linux-musl-1.1.12.tar.xz
+-sha256 ae9a0a5a60226aa086a56628cfd5c1d283c9dffdca37891d7e6adc2bd21ac2e0  crossx86-sh4-linux-musl-1.1.12.tar.xz
+-sha256 27e0ea1043a58aebeadf1dacd67e47fd0b5c19fc36f42c9374e5fa3308df09c6  crossx86-x86_64-linux-musl-1.1.12.tar.xz
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index e7bc754..2acf9dd 100644
+index 7e4539e..0680473 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -54,7 +54,7 @@ endef
- # sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
- # -> sbin-<abi> so that the rest of Buildroot can find the toolchain
- # tools in the appropriate location.
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS)$(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS),y)
- ifeq ($(BR2_MIPS_OABI32),y)
- TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_BIN_DIR_SUFFIX = o32
- else ifeq ($(BR2_MIPS_NABI32),y)
-@@ -100,12 +100,6 @@ TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64),y)
- TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/x86_64-amd-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = amd-2015.11-139-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS),y)
--TOOLCHAIN_EXTERNAL_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03
--TOOLCHAIN_EXTERNAL_SOURCE = Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
--TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
--TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_STAGING_FIXUPS
--TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS),y)
- TOOLCHAIN_EXTERNAL_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03
- TOOLCHAIN_EXTERNAL_SOURCE = Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
+@@ -56,32 +56,6 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+ 	rm -rf $(@D)/arago-2011.09/
+ endef
+ TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
+-TOOLCHAIN_EXTERNAL_VERSION = 1.1.12
+-TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)
+-ifeq ($(BR2_arm)$(BR2_ARM_EABI),yy)
+-TOOLCHAIN_EXTERNAL_SOURCE = crossx86-arm-linux-musleabi-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
+-else ifeq ($(BR2_arm)$(BR2_ARM_EABIHF),yy)
+-TOOLCHAIN_EXTERNAL_SOURCE = crossx86-arm-linux-musleabihf-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
+-else ifeq ($(BR2_armeb),y)
+-TOOLCHAIN_EXTERNAL_SOURCE = crossx86-armeb-linux-musleabi-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
+-else ifeq ($(BR2_i386),y)
+-TOOLCHAIN_EXTERNAL_SOURCE = crossx86-i486-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
+-else ifeq ($(BR2_mips),y)
+-TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mips-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
+-else ifeq ($(BR2_mipsel):$(BR2_SOFT_FLOAT),y:)
+-TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
+-else ifeq ($(BR2_mipsel):$(BR2_SOFT_FLOAT),y:y)
+-TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-sf-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
+-else ifeq ($(BR2_powerpc),y)
+-TOOLCHAIN_EXTERNAL_SOURCE = crossx86-powerpc-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
+-else ifeq ($(BR2_sh4),y)
+-TOOLCHAIN_EXTERNAL_SOURCE = crossx86-sh4-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
+-else ifeq ($(BR2_sh4eb),y)
+-TOOLCHAIN_EXTERNAL_SOURCE = crossx86-sh4eb-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
+-else ifeq ($(BR2_x86_64),y)
+-TOOLCHAIN_EXTERNAL_SOURCE = crossx86-x86_64-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
+-endif
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC),y)
+ TOOLCHAIN_EXTERNAL_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-2014.12
+ ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
