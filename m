@@ -1,64 +1,87 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Wed, 23 Nov 2016 17:44:46 +0100
-Subject: [Buildroot] Bare metal toolchain support?
-In-Reply-To: <CAM+bi4sYT51Qc72s1bpsRw8K3mOPRjMtYC171YOms1L_PG0R7g@mail.gmail.com>
-References: <CAM+bi4v0iJKAbKV8FvqwJqEw=L+DqTLZhcHWGboYBbPv1oTM0A@mail.gmail.com>
- <20161123113517.04f6ec47@free-electrons.com>
- <CAM+bi4vNKMBr0Dv9_-rsQzU_kPNrze7o9_EcSEA--g2UCVCfzg@mail.gmail.com>
- <20161123130636.5b362a27@free-electrons.com>
- <CAM+bi4ujUpa+BEtU8XAC1sCW2AoM8gUhT-Rtg8xWs-_O8KTF6A@mail.gmail.com>
- <CAM+bi4sYT51Qc72s1bpsRw8K3mOPRjMtYC171YOms1L_PG0R7g@mail.gmail.com>
-Message-ID: <CAM+bi4sa9FG+eac3WdciC+rGih7mKk14syiT_O0mwXeyQh_5qA@mail.gmail.com>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Wed, 23 Nov 2016 12:36:50 -0500
+Subject: [Buildroot] [PATCH v3] pseudo-wrapper: fix console issue
+Message-ID: <20161123173650.1740-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Pseudo consists of:
+* a client (cli),
+* a server (daemon) and
+* a database managed by this daemon
+  which makes a relation between inode, filename, type/mode...
 
+Without -f/-d argument, the client forks a process, sets LD_PRELOAD,
+execve's the command given as argument and waits for its completion.
+The LD_PRELOAD'ed library tries to connect to the daemon and spawns it
+if it isn't running.
 
-2016-11-23 15:49 GMT+01:00 Alvaro Gamez <alvaro.gamez@hazent.com>:
+Neither the client itself nor the LD_PRELOAD'ed library waits for the
+daemon to terminate. As a consequence, the daemon may still be alive
+after the completion of the command executed through the client.
 
-> Under Xilinx':
-> 00000000  0000001e R_MICROBLAZE_32_NONE              c
->
-> Under buildroots':
-> 00000000  0000001e unrecognized: 1e                 c
->
+Under some circumstances (running build in a docker), the daemon (which
+may be still alive after the build) is killed with SIGKILL, thus it
+does not let it the time to properly sync its database.
 
-I've made some progress on this. There was something wrong on my setup
-that made it use some toolchain apps from Xilinx but some others from
-buildroot,
-so it's even a miracle it reached that far. Once solved lots of environment
-variables
-and the like, there remains just this one error on compilation:
+The database is rendered inconsistent for the next build. In this case,
+makedevs will complain about the file type/mode, see error below.
 
-/home/sslayer/Proyectos/ART/ESA/DRVM-software.git/DRVM/output/host/usr/bin/microblazeel-linux-gcc
--Wl,-T -Wl,lscript.ld -L../bsp/lib -mlittle-endian -mxl-barrel-shift
--mxl-pattern-compare -mno-xl-soft-div -mcpu=v9.6 -mno-xl-soft-mul
--mxl-multiply-high -Wl,--no-relax -o "bootloader.elf" bootloader.o
-platform.o srec.o  -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
--Wl,--start-group,-lxilisf,-lxil,-lgcc,-lc,--end-group
-/home/sslayer/Proyectos/ART/ESA/DRVM-software.git/DRVM/output/host/usr/microblazeel-buildroot-linux-gnu/sysroot/usr/lib/libc_nonshared.a(elf-init.oS):
-In function `__libc_csu_init':
-(.text+0x44): undefined reference to `__init_array_start'
-/home/sslayer/Proyectos/ART/ESA/DRVM-software.git/DRVM/output/host/usr/microblazeel-buildroot-linux-gnu/sysroot/usr/lib/libc_nonshared.a(elf-init.oS):
-In function `__libc_csu_init':
-(.text+0x4c): undefined reference to `__init_array_end'
-collect2: error: ld returned 1 exit status
-Makefile:32: recipe for target 'bootloader.elf' failed
-make: *** [bootloader.elf] Error 1
+makedevs: line xx: node (...)/output/target/dev/console exists but is of wrong type
 
+Note that this error was introduced by c85cd189.
 
-So... back to square oneI guess. I don't know what to do with this now.
+Because the database did not have the time to sync (ie. /dev/console
+record is missing), makedevs tests the existing and real /dev/console
+file mode (created by the previous build) which is a regular file to
+what should have been reported by pseudo, i.e. a character device.
+Those two modes are different and makedevs exits with error.
 
+To solve this issue, this patch make the wrapper control the life of
+the daemon. It spawns the server before running the script inside the
+pseudo context, tells it to stop with "pseudo -S", and waits for the
+server to exit before the wrapper exits.
 
-Best regards
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/pseudo/pseudo-wrapper | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-
+diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
+index 9c8dbdb..194c88f 100644
+--- a/package/pseudo/pseudo-wrapper
++++ b/package/pseudo/pseudo-wrapper
+@@ -8,7 +8,6 @@ if [ "${0##*/}" = "fakeroot" ]; then
+ fi
+ 
+ export PSEUDO_PREFIX="$(dirname "${0%/*}")"
+-export PSEUDO_OPTS="-t0"
+ if [ -n "${TARGET_DIR}" ]; then
+     export PSEUDO_PASSWD="${TARGET_DIR}"
+ fi
+@@ -16,4 +15,18 @@ if [ -n "${BASE_DIR}" ]; then
+     export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
+ fi
+ 
+-exec "${0%/*}/pseudo" "${@}"
++# spawn server manually...
++"${0%/*}/pseudo" -f &
++pid="${!}"
++
++# ... run script/command...
++"${0%/*}/pseudo" "${@}"
++rc="${?}"
++
++# ... terminate server...
++"${0%/*}/pseudo" -S
++
++# ... and wait for its completion to make sure database is synced before
++# returning.
++wait "${pid}"
++exit "${rc}"
 -- 
-?lvaro G?mez Machado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161123/dacc87e8/attachment.html>
+2.10.2
