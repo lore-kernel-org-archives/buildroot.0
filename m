@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:59:45 +0100
-Subject: [Buildroot] [PATCH v4 08/18] reproducible: lock modification
- times in $TARGET_DIR
-In-Reply-To: <1479905937-17241-9-git-send-email-jezz@sysmic.org>
-References: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
- <1479905937-17241-9-git-send-email-jezz@sysmic.org>
-Message-ID: <20161123225945.33e1d898@free-electrons.com>
+Date: Wed, 23 Nov 2016 23:01:25 +0100
+Subject: [Buildroot] [git commit branch/next] Config.in: improve
+	BR2_REPRODUCIBLE help text
+Message-ID: <20161123220222.0284281DF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bedb16105dd6742d3209af7ef45c23a8bb1c077f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 23 Nov 2016 13:58:47 +0100, J?r?me Pouiller wrote:
-> Make sure all files in $TARGET_DIR have a defined modification time before to
-> generate filesystems.
-> 
-> This work was sponsored by `BA Robotic Systems'.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/Config.in b/Config.in
+index 5cf0c4d..98096df 100644
+--- a/Config.in
++++ b/Config.in
+@@ -707,6 +707,12 @@ config BR2_REPRODUCIBLE
+ 	  this allows to generate exactly identical binaries from one
+ 	  build to the other, including on different machines.
+ 
++	  The current implementation is restricted to builds with the
++	  same output directory. Many (absolute) paths are recorded in
++	  intermediary files, and it is very likely that some of these
++	  paths leak into the target rootfs. If you build with the
++	  same O=... path, however, the result is identical.
++
+ 	  This is labeled as an experimental feature, as not all
+ 	  packages behave properly to ensure reproducibility.
+ 
