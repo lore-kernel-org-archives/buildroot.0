@@ -1,47 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:36:18 +0100
-Subject: [Buildroot] [PATCH v3] pseudo-wrapper: fix console issue
-In-Reply-To: <20161123213403.GB13048@free.fr>
-References: <20161123173650.1740-1-gael.portay@savoirfairelinux.com>
- <20161123182843.GA3609@free.fr>
- <20161123215745.7c307e23@free-electrons.com>
- <20161123213403.GB13048@free.fr>
-Message-ID: <20161123223618.66f23b56@free-electrons.com>
+Date: Wed, 23 Nov 2016 22:17:00 +0100
+Subject: [Buildroot] [git commit branch/next]
+	toolchain-external-codesourcery-arm: Cortex-A12 and
+	Cortex-A17 not supported
+Message-ID: <20161123213658.D2ADD81DDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=71a66e8beccc5a3e37310b529bf7782bd466ee4d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 23 Nov 2016 22:34:03 +0100, Yann E. MORIN wrote:
+It's gcc 4.8.3 which doesn't support those cores yet.
 
-> On 2016-11-23 21:57 +0100, Thomas Petazzoni spake thusly:
-> > On Wed, 23 Nov 2016 19:28:43 +0100, Yann E. MORIN wrote:  
-> > >   - long term, we want to definitely switch to using pseudo:
-> > >     - it is actively maintained,,
-> > >     - it has more features than fakeroot,
-> > >     - some of those features are very interesting for us.  
-> > 
-> > Could you explain which additional features of pseudo are interesting
-> > for us?  
-> 
-> pseudo can intercept and redirect acceses to /etc/paswd (and group,
-> shadow, gshadow) to the ones in the target. With that, we could probably
-> greatly simplify our handling of users.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../toolchain-external/toolchain-external-codesourcery-arm/Config.in    | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Is that the "additional features that are very interesting for us"? If
-it is, then I don't think it's that interesting. At least it
-definitely doesn't offset the drawback of having to build host-sqlite
-and host-attr.
-
-Our handling of users is not complicated, it's very explicit, works
-fine, and is actually probably better than some black magic that
-intercepts accesses to /etc/passwd.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
+index 037985b..3cdfc86 100644
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
+@@ -3,6 +3,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+ 	depends on BR2_arm
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_ARM_EABI
++	# Unsupported ARM cores
++	depends on !BR2_cortex_a12 && !BR2_cortex_a17
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
