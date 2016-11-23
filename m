@@ -1,29 +1,35 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Wed, 23 Nov 2016 10:13:30 -0500
-Subject: [Buildroot] [PATCH] pseudo-wrapper: fix console issue
-In-Reply-To: <8f7c859a-7d90-574f-191b-3ffb595b053d@mind.be>
-References: <20161123053220.1845-1-gael.portay@savoirfairelinux.com>
- <8f7c859a-7d90-574f-191b-3ffb595b053d@mind.be>
-Message-ID: <20161123151329.qqjwonmqztctdsfa@gportay>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 23 Nov 2016 15:50:42 +0000
+Subject: [Buildroot] [PATCH] gcc: the special workaround for ARC is no
+ longer required
+In-Reply-To: <20161123112016.GA29549@waldemar-brodkorb.de>
+References: <20161123112016.GA29549@waldemar-brodkorb.de>
+Message-ID: <1479916183.3931.11.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 23, 2016 at 11:02:18AM +0100, Arnout Vandecappelle wrote:
->  Hi Ga?l,
+Hi Waldemar,
+
+On Wed, 2016-11-23 at 12:20 +0100, Waldemar Brodkorb wrote:
+> It seems with the change to gcc 6.x based toolchain this
+> workaround is no longer required. Tested with an arc hs toolchain.
 > 
->  I hope you don't mind my nitpicking on English :-)
-> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
 
-No worries. I am a bloody french with a terrible english :(
+Nice catch!
 
-I am glad you made a pass on the commit message.
+Indeed since?https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/80a9c1591ccce130ced8ee4581efacd55ba0a81e
+there's no libgmon building for ARC in gcc.
 
->  Instead of killing, use "pseudo -S". It does essentially the same thing but
-> it's cleaner IMHO.
-> 
+But unfortunately that's one of very few patches that were not yet merged
+in upstream gcc. That said if anybody attempts to build toolchain for ARC
+right out of upstream GCC the code in question will be required.
 
-Okay, I will do the modifications, test them and resend a patch in the next
-couple of hour.
+But given the fact we're not ready to switch to upstream GCC ATM
+your change is very much appreciated so
+
+Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
