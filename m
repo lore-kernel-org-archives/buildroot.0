@@ -1,40 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:49:16 +0100
-Subject: [Buildroot] [PATCH v4 03/18] reproducible: add '-n' to gzip
- invocations
-In-Reply-To: <1479905937-17241-4-git-send-email-jezz@sysmic.org>
-References: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
- <1479905937-17241-4-git-send-email-jezz@sysmic.org>
-Message-ID: <20161123224916.12aab604@free-electrons.com>
+Date: Wed, 23 Nov 2016 22:55:34 +0100
+Subject: [Buildroot] [git commit branch/next] fs/tar: make results
+	reproducible
+Message-ID: <20161123215540.B168F81D97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=59f9c4ca9feb2c070df508c7196f06a6e87307b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 23 Nov 2016 13:58:42 +0100, J?r?me Pouiller wrote:
-> Default invocation to gzip include timestamp in output file. This feature is
-> incompatible with BR2_REPRODUCIBLE. It is possible to disable it with '-n'.
-> 
-> The environment variable GZIP can hold a set of default options for gzip. So
-> instead to find all gzip invocation in build process, we just export 'GZIP=-n'.
-> 
-> Notice bzip2, lzma and xz are not impacted by this problem. On the other hand, lzop
-> does include timestamp and does not provide any way to disable it.
-> 
-> This work was sponsored by `BA Robotic Systems'.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
+In order to make tar images reproducible, force files order in tarball.
 
-Applied to next, thanks.
+This work was sponsored by `BA Robotic Systems'.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/tar/tar.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+index 11c69c5..b14c977 100644
+--- a/fs/tar/tar.mk
++++ b/fs/tar/tar.mk
+@@ -7,7 +7,8 @@
+ TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
+ 
+ define ROOTFS_TAR_CMD
+-	tar $(TAR_OPTS) -cf $@ --numeric-owner -C $(TARGET_DIR) .
++	(cd $(TARGET_DIR); find -print0 | LC_ALL=C sort -z | \
++		tar $(TAR_OPTS) -cf $@ --null -T - --no-recursion --numeric-owner)
+ endef
+ 
+ $(eval $(call ROOTFS_TARGET,tar))
