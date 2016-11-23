@@ -1,61 +1,49 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 23 Nov 2016 13:58:45 +0100
-Subject: [Buildroot] [PATCH v4 06/18] reproducibility/linux: inhibit build-id
+Date: Wed, 23 Nov 2016 13:58:55 +0100
+Subject: [Buildroot] [PATCH v4 16/18] python3: remove full path from .pyc
 In-Reply-To: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
 References: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479905937-17241-7-git-send-email-jezz@sysmic.org>
+Message-ID: <1479905937-17241-17-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Linux kernel include build path in debug sections. These sections are stripped
-and do not impact build reproducibility directly. However, 'build-id'
-depends on content of all sections, including debug sections. So, it
-add random bytes in section .notes of kernel image[1]:
-
-  $ readelf -Wn .../vmlinux
-  Displaying notes found at file offset 0x00008000 with length 0x00000024:
-    Owner                 Data size       Description
-    GNU                  0x00000014       NT_GNU_BUILD_ID (unique build ID bitstring)
-      Build ID: ca689e2ed3944f49474715908e2ac1bb04907fb2
-
-In order to not depend on build path, patch kernel Makefile to disable
-'build-id'.
-
-[1] https://kernelnewbies.org/BuildId
+.pyc files include path to source .py file. This patch changes the way
+`pycompile.py' is launched in order to only keep the part relative to
+$TARGET_DIR.
 
 This work was sponsored by `BA Robotic Systems'.
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
 
 Notes:
     v3:
-       - Better explain why disabling build-id is necessary (in fact, it not
-         necessary if build paths are preserved between builds)
+      - Typo in commit log (Arnout)
 
- linux/linux.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/python3/python3.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7e826cc..a63d1f3 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -209,6 +209,13 @@ define LINUX_TRY_PATCH_TIMECONST
- endef
- LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index a526c0f..4f0ae5b 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -229,9 +229,10 @@ endif
  
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+define LINUX_REMOVE_BUILD_ID
-+	sed -i -e s/--build-id/--build-id=none/ $(@D)/Makefile
-+endef
-+LINUX_POST_PATCH_HOOKS += LINUX_REMOVE_BUILD_ID
-+endif
-+
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
- else ifeq ($(BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG),y)
+ define PYTHON3_CREATE_PYC_FILES
+ 	PYTHONPATH="$(PYTHON3_PATH)" \
+-	$(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
+-		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
+-		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
++	cd $(TARGET_DIR) && $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
++		$(TOPDIR)/support/scripts/pycompile.py \
++		$(if $(BR2_REPRODUCIBLE),--force) \
++		usr/lib/python$(PYTHON3_VERSION_MAJOR)
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PY_PYC),y)
 -- 
 1.9.1
