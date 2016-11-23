@@ -1,49 +1,78 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 23 Nov 2016 12:08:14 +0100
-Subject: [Buildroot] [PATCH v3 14/18] python3: generate reproducible .pyc
-In-Reply-To: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
-References: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479899298-14655-15-git-send-email-jezz@sysmic.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 23 Nov 2016 12:14:04 +0100
+Subject: [Buildroot] [PATCH/next] toolchain-external: support gcc < 4.3
+Message-ID: <20161123111404.20661-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-.pyc files contain modification time of .py source. In order to make
-build reproducible, we fix modification time of all .py before to
-compile .pyc files.
+We currently support gcc as old as 4.3. However, Buildroot works
+perfectly well with even older gcc versions (tested with 4.1). So we
+can add an option BR2_TOOLCHAIN_EXTERNAL_GCC_OLD to support that. The
+help text of this option is written with plenty of discouragement.
 
-This work was sponsored by `BA Robotic Systems'.
+We use _OLD and not something like _PRE_4_3, because at some point we
+will likely remove the 4.3 option and what would then require a name
+change.
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+We don't set any _AT_LEAST option in this case because it's no use -
+there is no lower bound on the version in this case. We therefore leave
+BR2_TOOLCHAIN_GCC_AT_LEAST empty (the implicit default). When it is
+empty, we don't do a version check at all in check_gcc_version. Indeed,
+it makes perfect sense to not set any BR2_TOOLCHAIN_GCC_AT_LEAST
+option.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python3/python3.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+This patch conflicts with the external toolchain rework - I'll rebase
+the one which "looses" in the first-to-be-committed contest.
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index b3f31c0..a526c0f 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -219,10 +219,18 @@ PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdat
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+We should also remove the 4.3 and 4.4 options, because they are
+currently unused and also untested in the autobuilders.
+
+I think something similar should be done for kernel headers.
+---
+ toolchain/helpers.mk                   |  3 +--
+ toolchain/toolchain-external/Config.in | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 3991bc1..72e7292 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -145,8 +145,7 @@ check_kernel_headers_version = \
+ check_gcc_version = \
+ 	expected_version="$(strip $2)" ; \
+ 	if [ -z "$${expected_version}" ]; then \
+-		printf "Internal error, gcc version unknown (no GCC_AT_LEAST_X_Y selected)\n"; \
+-		exit 1 ; \
++		exit 0 ; \
+ 	fi; \
+ 	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
+ 	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 5324599..7a3c504 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -712,6 +712,17 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+ 	bool "4.3.x"
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
  
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+define PYTHON3_FIX_TIME
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
-+		xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
-+endef
-+PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_FIX_TIME
-+endif
++config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
++	bool "older"
++	help
++	  Use this option if your GCC version is older than any of the
++	  above.
 +
- define PYTHON3_CREATE_PYC_FILES
- 	PYTHONPATH="$(PYTHON3_PATH)" \
- 	$(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
--		support/scripts/pycompile.py \
-+		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
- 		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
- endef
++	  Note that the Buildroot community doesn't do any testing with
++	  such old toolchains. Some packages may fail to build in
++	  surprising ways, or the generated root filesystem may not
++	  work at all. Use such old toolchains at your own risk.
++
+ endchoice
  
+ choice
 -- 
-1.9.1
+2.10.2
