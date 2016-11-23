@@ -1,48 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 23:16:41 +0100
-Subject: [Buildroot] [git commit branch/next] gcc: the special workaround
-	for ARC is no longer required
-Message-ID: <20161123221647.AC0FB80E5D@busybox.osuosl.org>
+Date: Wed, 23 Nov 2016 23:17:40 +0100
+Subject: [Buildroot] [PATCH] gcc: the special workaround for ARC is no
+ longer required
+In-Reply-To: <20161123112016.GA29549@waldemar-brodkorb.de>
+References: <20161123112016.GA29549@waldemar-brodkorb.de>
+Message-ID: <20161123231740.5a89afe6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=921c94720bfff3dacd7c84216298046a75dec59c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-It seems with the change to gcc 6.x based toolchain this
-workaround is no longer required. Tested with an arc hs toolchain.
+On Wed, 23 Nov 2016 12:20:16 +0100, Waldemar Brodkorb wrote:
+> It seems with the change to gcc 6.x based toolchain this
+> workaround is no longer required. Tested with an arc hs toolchain.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/gcc/gcc-initial/gcc-initial.mk | 13 -------------
+>  1 file changed, 13 deletions(-)
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gcc/gcc-initial/gcc-initial.mk | 13 -------------
- 1 file changed, 13 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 7bb988b..a51e29c 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -25,19 +25,6 @@ HOST_GCC_INITIAL_SUBDIR = build
- 
- HOST_GCC_INITIAL_PRE_CONFIGURE_HOOKS += HOST_GCC_CONFIGURE_SYMLINK
- 
--# gcc on ARC has a bug: in its libgcc, even when no C library is
--# available (--with-newlib is passed, and therefore inhibit_libc is
--# defined), it tries to use the C library for the libgmon
--# library. Since it's not needed in gcc-initial, we disabled it here.
--ifeq ($(BR2_GCC_VERSION_ARC),y)
--define HOST_GCC_INITIAL_DISABLE_LIBGMON
--	$(SED) 's/crtbeginS.o libgmon.a crtg.o/crtbeginS.o crtg.o/' \
--		$(@D)/libgcc/config.host
--endef
--HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
--HOST_GCC_INITIAL_POST_RSYNC_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
--endif
--
- HOST_GCC_INITIAL_CONF_OPTS = \
- 	$(HOST_GCC_COMMON_CONF_OPTS) \
- 	--enable-languages=c \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
