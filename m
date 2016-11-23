@@ -1,65 +1,59 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Wed, 23 Nov 2016 19:59:11 -0200
-Subject: [Buildroot] [PATCH] stella: fix bug when compiling with PPC
- altivec vectorization
-In-Reply-To: <20161122233337.GA2566@tungsten.ozlabs.ibm.com>
-References: <1479404832-11783-1-git-send-email-sergio.prado@e-labworks.com>
- <20161119105927.57bd516a@free-electrons.com>
- <20161122233337.GA2566@tungsten.ozlabs.ibm.com>
-Message-ID: <CANu7NGu=fPj30W2A596uyn=+kaYkK07M3U-So7RLmMhk41Vvrg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Nov 2016 23:05:39 +0100
+Subject: [Buildroot] [PATCH v4 13/18] python2: generate reproducible .pyc
+In-Reply-To: <1479905937-17241-14-git-send-email-jezz@sysmic.org>
+References: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
+ <1479905937-17241-14-git-send-email-jezz@sysmic.org>
+Message-ID: <20161123230539.4762ebcd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sam,
+Hello,
 
-Thanks for reviewing the patch.
+On Wed, 23 Nov 2016 13:58:52 +0100, J?r?me Pouiller wrote:
+> .pyc files contain modification time of .py source. In order to make
+> build reproducible, we fix modification time of all .py before to
+> compile .pyc files.
 
-> This seems fine to me. I assume you're using this method so that the
-> change has minimal chance to break other arches, but it would be much
-> simpler if you could just change it globally so let's consider it:
->
-> What seems to be happening before this patch, is:
->
-> The configure script selects a compiler that supports -std=c++11 (see
-> configure around line 805).
->
-> Then the Makefile wll add -std=c++11 if the compiler is GCC, like this:
->
-> ifdef HAVE_GCC
->   CXXFLAGS+= -Wno-multichar -Wunused -fno-rtti -Woverloaded-virtual
--Wnon-virtual-dtor -std=c++11
-> endif
->
-> (But it looks like non-gcc compilers that do support -std=c++11 will be
-> used but they won't get -std=c++11... odd. I think the proposed patch,
-above,
-> would change this slightly so that -std=c++11 is always used but I
-> suspect that is a good thing!)
->
-> If we can rely on c++11 support in gcc implying gnu++11 support (which
-> seems reasonable), we could just patch the Makefile to:
->
-> ifdef HAVE_GCC
->   CXXFLAGS+= -Wno-multichar -Wunused -fno-rtti -Woverloaded-virtual
--Wnon-virtual-dtor -std=gnu++11
-> endif
->
-> What do you think?
+"before to compile" -> "before compiling".
 
-Your solution is simpler and seems reasonable to just change from c++11 to
-gnu++11. I will do some tests on x86 and ARM and let you know the results.
+> diff --git a/package/python/python.mk b/package/python/python.mk
+> index cc65376..c17b267 100644
+> --- a/package/python/python.mk
+> +++ b/package/python/python.mk
+> @@ -226,10 +226,18 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+>  
+> +ifeq ($(BR2_REPRODUCIBLE),y)
+> +define PYTHON_FIX_TIME
+> +find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
+> +		xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
+> +endef
+> +PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_FIX_TIME
+> +endif
+> +
+>  define PYTHON_CREATE_PYC_FILES
+>  	PYTHONPATH="$(PYTHON_PATH)" \
 
-Best regards,
+It would make more sense to just do:
 
-Sergio Prado
+	$(PYTHON_FIX_TIME)
 
->
-> Cheers,
-> Sam.
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161123/a28e20ac/attachment.html>
+here, rather than registering it as a PYTHON_TARGET_FINALIZE_HOOKS.
+Also, maybe it should be named PYTHON_SET_PY_FILES_TIME.
+
+>  	$(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
+> -		support/scripts/pycompile.py \
+> +		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
+
+Why do we need to force?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
