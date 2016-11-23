@@ -1,128 +1,67 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 23 Nov 2016 13:58:48 +0100
-Subject: [Buildroot] [PATCH v4 09/18] fakedate: new package
+Date: Wed, 23 Nov 2016 13:58:40 +0100
+Subject: [Buildroot] [PATCH v4 01/18] reproducibility: generate
+	SOURCE_DATE_EPOCH
 In-Reply-To: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
 References: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479905937-17241-10-git-send-email-jezz@sysmic.org>
+Message-ID: <1479905937-17241-2-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-`date' is widely used by packages to include build information in their
-binaries. Unfortunately, this is incompatible with  BR2_REPRODUCIBLE.
+From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
 
-Instead of having to identify all `date' invocations in the different
-packages, this commit adds a small tool that allows to always return
-the same date.
+When reproducibility is requested, generate a global SOURCE_DATE_EPOCH
+environment variable which contains either the date of Buildroot last
+commit if running from a git repository, or the latest release date.
 
-This work was sponsored by `BA Robotic Systems'.
+This means that all packages embedding build dates will appear to
+have the same build date, so in case of new commit or release, all
+packages will appear to have been changed, even though some of them
+may not have changed in fact.
 
+The meaning of SOURCE_DATE_EPOCH is specified by the following
+specification:
+  https://reproducible-builds.org/specs/source-date-epoch/
+
+Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
 
 Notes:
+    v4:
+     - s/SOURCE_DATE_GIT/BR2_VERSION_GIT_EPOCH/
     v3:
-      - Do not force $PATH. Find true `date' binary instead (Thomas)
-      - Add explanations (Thomas)
-      - Fix options detection (Arnout)
-      - Rename INHIBIT in FORCE_EPOCH (Thomas)
-      - Break after FORCE_EPOCH=0 (Arnout)
-      - Add support for '--reference'
-      - Add full copyright blurb (Arnout)
+     - Fix typo in commit message (Arnout)
+     - Introduce BR2_VERSION_EPOCH (Thomas and Arnout)
+     - Set and export SOURCE_DATE_EPOCH together (Thomas)
 
- package/fakedate/fakedate    | 59 ++++++++++++++++++++++++++++++++++++++++++++
- package/fakedate/fakedate.mk | 15 +++++++++++
- 2 files changed, 74 insertions(+)
- create mode 100755 package/fakedate/fakedate
- create mode 100644 package/fakedate/fakedate.mk
+ Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
-new file mode 100755
-index 0000000..074c517
---- /dev/null
-+++ b/package/fakedate/fakedate
-@@ -0,0 +1,59 @@
-+#!/bin/sh
-+# vim: set sw=4 expandtab:
-+#
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2 of the License, or
-+# (at your option) any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-+# General Public License for more details.
-+#
-+# You should have received a copy of the GNU General Public License
-+# along with this program; if not, write to the Free Software
-+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-+#
-+# Copyright (C) 2016 J?r?me Pouiller <jezz@sysmic.org>
-+#
-+LOG=/dev/null
-+
-+# Sanity check
-+if ! readlink -f "$0" | grep -q fakedate; then
-+    echo "fakedate: Please name this script \`fakedate'"
-+    exit 1
-+fi
-+
-+DATE_BIN=false
-+# Do not call `date'd directly since it will produce an infinite recursion.
-+# Instead, find path of true `date' binary.
-+for P in `echo $PATH | tr ':' ' '`; do
-+    if [ -x "$P/date" ]; then
-+        if readlink -f "$P/date" | grep -qv fakedate; then
-+            DATE_BIN="$P/date"
-+            break;
-+        fi
-+    fi
-+done
-+
-+if [ -n "$SOURCE_DATE_EPOCH" ]; then
-+    FORCE_EPOCH=1
-+    for i in "$@"; do
-+        # Use of --date, --file and --reference (and their short option counter
-+        # parts) is incompatible with SOURCE_DATE_EPOCH.
-+        # -u and -R are the only short options without argument. So they could
-+        # appear between '-' and option we want to match.
-+        if echo "$i" | grep -qE '^-([uR]*d|-date|[uR]*f|-file|[uR]*r|--reference)'; then
-+            FORCE_EPOCH=0
-+            break;
-+        fi
-+    done
-+    if [ $FORCE_EPOCH -eq 1 ]; then
-+        echo "date: Warning: using \$SOURCE_DATE_EPOCH instead of true time" >&2
-+        echo "Catch call to date from `pwd` with parameters: '$@'" >> $LOG
-+        exec $DATE_BIN -d "@$SOURCE_DATE_EPOCH" "$@"
-+    fi
-+fi
-+
-+exec $DATE_BIN "$@"
-diff --git a/package/fakedate/fakedate.mk b/package/fakedate/fakedate.mk
-new file mode 100644
-index 0000000..61d4bd7
---- /dev/null
-+++ b/package/fakedate/fakedate.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# fakedate
-+#
-+################################################################################
-+
-+# source included in buildroot
-+HOST_FAKEDATE_LICENSE = GPLv2+
-+
-+define HOST_FAKEDATE_INSTALL_CMDS
-+	$(INSTALL) -D -m 755 package/fakedate/fakedate $(HOST_DIR)/usr/bin/fakedate
-+	ln -sfn fakedate $(HOST_DIR)/usr/bin/date
-+endef
-+
-+$(eval $(host-generic-package))
+diff --git a/Makefile b/Makefile
+index eff814b..8acbe58 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,6 +87,8 @@ all:
+ 
+ # Set and export the version string
+ export BR2_VERSION := 2016.11-rc1
++# Actual time the release is cut (for reproducible builds)
++BR2_VERSION_EPOCH = 1478206447
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+@@ -249,6 +251,8 @@ ifeq ($(BR2_REPRODUCIBLE),y)
+ export TZ=UTC
+ export LANG=C
+ export LC_ALL=C
++BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
++export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
+ endif
+ 
+ # To put more focus on warnings, be less verbose as default
 -- 
 1.9.1
