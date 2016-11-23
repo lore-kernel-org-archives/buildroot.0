@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 23:17:40 +0100
-Subject: [Buildroot] [PATCH] gcc: the special workaround for ARC is no
- longer required
-In-Reply-To: <20161123112016.GA29549@waldemar-brodkorb.de>
-References: <20161123112016.GA29549@waldemar-brodkorb.de>
-Message-ID: <20161123231740.5a89afe6@free-electrons.com>
+Date: Wed, 23 Nov 2016 23:19:38 +0100
+Subject: [Buildroot] [PATCH/next] toolchain-external: support gcc < 4.3
+In-Reply-To: <bad536b8-2eac-6ea8-f7b7-8297a5c01b85@mind.be>
+References: <20161123111404.20661-1-arnout@mind.be>
+ <20161123132259.47f9a228@free-electrons.com>
+ <bad536b8-2eac-6ea8-f7b7-8297a5c01b85@mind.be>
+Message-ID: <20161123231938.1eda5882@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 23 Nov 2016 12:20:16 +0100, Waldemar Brodkorb wrote:
-> It seems with the change to gcc 6.x based toolchain this
-> workaround is no longer required. Tested with an arc hs toolchain.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/gcc/gcc-initial/gcc-initial.mk | 13 -------------
->  1 file changed, 13 deletions(-)
+On Wed, 23 Nov 2016 13:27:38 +0100, Arnout Vandecappelle wrote:
 
-Applied to next, thanks.
+> > The Blackfin ADI toolchains use gcc 4.3, if I remember correctly.  
+> 
+>  Sorry, let me correct my statement: because they are currently unused by any
+> package and will very soon be untested in the autobuilders.
+
+Huh?
+
+toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in:     select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+
+So it's definitely used, at least until we remove the ADI Blackfin
+toolchain.
+
+Bets regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
