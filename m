@@ -1,19 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:19:27 +0100
-Subject: [Buildroot] [git commit] toolchain-external-codesourcery-x86: new
+Date: Wed, 23 Nov 2016 22:19:12 +0100
+Subject: [Buildroot] [git commit] toolchain-external-codesourcery-sh: new
 	package
-Message-ID: <20161201222138.D0A6A7FB56@busybox.osuosl.org>
+Message-ID: <20161201222138.BAFAF7FB56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25429ba260df5689e734721e9c1e8bc017dc5e95
+commit: https://git.buildroot.net/buildroot/commit/?id=a3b686591c72019e9568ab8e8b9c267a95abf6bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit adds a new package for the Sourcery CodeBench external
-toolchain for the i386/x86_64 architecture.
+toolchain for the SuperH 4a architecture.
 
 The legacy implementation is removed.
 
@@ -23,38 +23,38 @@ Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 33 ++--------------------
- .../toolchain-external-codesourcery-x86/Config.in  | 29 +++++++++++++++++++
+ toolchain/toolchain-external/Config.in             | 33 ++++------------------
+ .../toolchain-external-codesourcery-sh/Config.in   | 25 ++++++++++++++++
  .../Config.in.options                              |  9 ++++++
- .../toolchain-external-codesourcery-x86.hash       |  3 ++
- .../toolchain-external-codesourcery-x86.mk         | 12 ++++++++
- .../toolchain-external/toolchain-external.hash     |  5 ----
+ .../toolchain-external-codesourcery-sh.hash        |  3 ++
+ .../toolchain-external-codesourcery-sh.mk          | 13 +++++++++
+ .../toolchain-external/toolchain-external.hash     |  3 --
  toolchain/toolchain-external/toolchain-external.mk |  3 --
- 7 files changed, 55 insertions(+), 39 deletions(-)
+ 7 files changed, 56 insertions(+), 33 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 2689c91..cddfca8 100644
+index e628279..8e06b05 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -38,6 +38,7 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.i
+@@ -33,6 +33,9 @@ source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Confi
+ # NIOSII
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in"
  
- # x86/x86_64 (use amd64 toolchain by default for AMD64)
- source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in"
-+source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in"
- 
++# SH4a
++source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in"
++
  config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
  	bool "Arago ARMv7 2011.09"
-@@ -84,36 +85,6 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
+ 	depends on BR2_arm
+@@ -78,32 +81,6 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
  
  	  This toolchain uses software-floating point.
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
--	bool "Sourcery CodeBench x86/x86_64 2012.09"
--	depends on BR2_i386 || BR2_x86_64
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+-	bool "Sourcery CodeBench SH 2012.09"
+-	depends on BR2_sh4a || BR2_sh4aeb
 -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
 -	depends on !BR2_STATIC_LIBS
--	depends on !BR2_x86_jaguar
--	depends on !BR2_x86_steamroller
 -	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
 -	select BR2_TOOLCHAIN_HAS_SSP
 -	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
@@ -63,53 +63,51 @@ index 2689c91..cddfca8 100644
 -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
 -	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
 -	help
--	  Sourcery CodeBench toolchain for the x86/x86_64
--	  architectures, from Mentor Graphics. It uses gcc 4.7.2,
--	  binutils 2.23.51, glibc 2.16, gdb 7.4.50 and kernel headers
+-	  Sourcery CodeBench toolchain for the SuperH architecture,
+-	  from Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51,
+-	  glibc 2.16, uClibc 0.9.30, gdb 7.4.50 and kernel headers
 -	  3.5.4. It has support for the following variants:
--	    - Intel Pentium 4, glibc, 32 bits
--	      Default for x86, nothing special to do.
--	    - Intel Atom, glibc, 32 bits
--	      Select an Atom core
--	    - Intel Xeon, glibc, 64 bits
--	      Default for x86_64, nothing special to do.
--	    - Intel Core 2, glibc, 64 bits
--	      Select a Core 2 core
--	  Other architecture variants (beyond Pentium-4/Xeon) are
--	  supported as well, but glibc is not optimised for it.
+-	    - SH4A, glibc, little endian
+-	      Default.
+-	    - SH4A, glibc, big endian
+-	      Add -mb to BR2_TARGET_OPTIMIZATION
+-	    - SH4A, uClibc, little endian
+-	      Not usable in Buildroot yet.
+-	    - SH4A, uClibc, big endian
+-	      Not usable in Buildroot yet.
 -
- config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
- 	bool "Musl 1.1.12 toolchain"
- 	depends on (BR2_arm && BR2_ARM_EABI && BR2_USE_MMU) || \
-@@ -220,7 +191,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
+ 	bool "Sourcery CodeBench AMD64 2015.11"
+ 	depends on BR2_x86_64
+@@ -265,7 +242,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
  	default "arceb-linux"		 if BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC && BR2_arceb
  	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
  	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
--	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
+-	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
+ 	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
  	default "arm-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABI
- 	default "arm-linux-musleabihf"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABIHF
- 	default "armeb-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_armeb
-@@ -288,6 +258,7 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.i
+@@ -330,6 +306,9 @@ source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Confi
+ # NIOSII
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options"
  
- # x86/x86_64
- source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options"
-+source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options"
- 
++# SH4a
++source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options"
++
  if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
  
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in
+ choice
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in
 new file mode 100644
-index 0000000..bcbdd26
+index 0000000..a47dab7
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in
-@@ -0,0 +1,29 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
-+	bool "Sourcery CodeBench x86/x86_64 2012.09"
-+	depends on BR2_i386 || BR2_x86_64
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in
+@@ -0,0 +1,25 @@
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
++	bool "Sourcery CodeBench SH 2012.09"
++	depends on BR2_sh4a || BR2_sh4aeb
 +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
 +	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_x86_jaguar
-+	depends on !BR2_x86_steamroller
 +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
 +	select BR2_TOOLCHAIN_HAS_SSP
 +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
@@ -118,89 +116,86 @@ index 0000000..bcbdd26
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
 +	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
 +	help
-+	  Sourcery CodeBench toolchain for the x86/x86_64
-+	  architectures, from Mentor Graphics. It uses gcc 4.7.2,
-+	  binutils 2.23.51, glibc 2.16, gdb 7.4.50 and kernel headers
++	  Sourcery CodeBench toolchain for the SuperH architecture,
++	  from Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51,
++	  glibc 2.16, uClibc 0.9.30, gdb 7.4.50 and kernel headers
 +	  3.5.4. It has support for the following variants:
-+	    - Intel Pentium 4, glibc, 32 bits
-+	      Default for x86, nothing special to do.
-+	    - Intel Atom, glibc, 32 bits
-+	      Select an Atom core
-+	    - Intel Xeon, glibc, 64 bits
-+	      Default for x86_64, nothing special to do.
-+	    - Intel Core 2, glibc, 64 bits
-+	      Select a Core 2 core
-+	  Other architecture variants (beyond Pentium-4/Xeon) are
-+	  supported as well, but glibc is not optimised for it.
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options
++	    - SH4A, glibc, little endian
++	      Default.
++	    - SH4A, glibc, big endian
++	      Add -mb to BR2_TARGET_OPTIMIZATION
++	    - SH4A, uClibc, little endian
++	      Not usable in Buildroot yet.
++	    - SH4A, uClibc, big endian
++	      Not usable in Buildroot yet.
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options
 new file mode 100644
-index 0000000..65b62f3
+index 0000000..90061ce
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options
 @@ -0,0 +1,9 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
++if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
 +
 +config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+	default "i686-pc-linux-gnu"
++	default "sh-linux-gnu"
 +
 +config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-codesourcery-x86"
++	default "toolchain-external-codesourcery-sh"
 +
 +endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.hash
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.hash
 new file mode 100644
-index 0000000..a003f7a
+index 0000000..ff2ba5f
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.hash
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256 ea804cf02014369da52abc4f64e91e96bde2dd2230aca96109459013d4545458  ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
-+sha256 1a9519e415a1e6892c760bf21f7e98f3a633a9d1c5bb8781a96d338e4dd62717  ia32-2012.09-62-i686-pc-linux-gnu.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.mk
++sha256 59d6766fde244931aa52db01433d5acd051998762a931121c5fc109536a1a802  renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
++sha256 e2e58c10e52395d5d35157e35f85233f713c6f9223a652dfc56194cfd2eed004  renesas-2012.09-61-sh-linux-gnu.src.tar.bz2
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.mk
 new file mode 100644
-index 0000000..5ee6991
+index 0000000..5370bb2
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.mk
-@@ -0,0 +1,12 @@
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# toolchain-external-codesourcery-x86
++# toolchain-external-sourcery-sh
 +#
 +################################################################################
 +
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_VERSION = 2012.09-62
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_SOURCE = ia32-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i386-linux.tar.bz2
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_ACTUAL_SOURCE_TARBALL = ia32-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
++TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_VERSION = 2012.09-61
++
++TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
++TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_SOURCE = renesas-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
++TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_ACTUAL_SOURCE_TARBALL = renesas-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
 +
 +$(eval $(toolchain-external-package))
 diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index b873abe..8926bf8 100644
+index 5c98fe3..18b3e1a 100644
 --- a/toolchain/toolchain-external/toolchain-external.hash
 +++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -1,11 +1,6 @@
- ######################################
+@@ -2,9 +2,6 @@
  # Next hashes are all locally computed
  
--# Mentor's Sourcery CodeBench Lite toolchains
--# x86
--sha256 ea804cf02014369da52abc4f64e91e96bde2dd2230aca96109459013d4545458  ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
--sha256 1a9519e415a1e6892c760bf21f7e98f3a633a9d1c5bb8781a96d338e4dd62717  ia32-2012.09-62-i686-pc-linux-gnu.src.tar.bz2
--
- # ARM toolchains from Texas Instrument's Arago project
- # There is one source file that covers both binary distributions.
- sha256 f2febf3b3c565536461ad4405f1bcb835d75a6afb2a8bec958a1248cb4b81fc7  arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
+ # Mentor's Sourcery CodeBench Lite toolchains
+-# SuperH
+-sha256 59d6766fde244931aa52db01433d5acd051998762a931121c5fc109536a1a802  renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-sha256 e2e58c10e52395d5d35157e35f85233f713c6f9223a652dfc56194cfd2eed004  renesas-2012.09-61-sh-linux-gnu.src.tar.bz2
+ # x86
+ sha256 ea804cf02014369da52abc4f64e91e96bde2dd2230aca96109459013d4545458  ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
+ sha256 1a9519e415a1e6892c760bf21f7e98f3a633a9d1c5bb8781a96d338e4dd62717  ia32-2012.09-62-i686-pc-linux-gnu.src.tar.bz2
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 3cb9024..7e4539e 100644
+index fde0564..9aabab6 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
 @@ -56,9 +56,6 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
  	rm -rf $(@D)/arago-2011.09/
  endef
  TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86),y)
--TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu
--TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
- TOOLCHAIN_EXTERNAL_VERSION = 1.1.12
- TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH),y)
+-TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu
+-TOOLCHAIN_EXTERNAL_SOURCE = renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86),y)
+ TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
