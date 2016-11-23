@@ -1,279 +1,228 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:32:14 +0100
-Subject: [Buildroot] [git commit branch/next] toolchain-external: remove
-	Arago toolchains
-Message-ID: <20161123213659.B640981DDA@busybox.osuosl.org>
+Date: Wed, 23 Nov 2016 22:18:14 +0100
+Subject: [Buildroot] [git commit branch/next]
+	toolchain-external-blackfin-uclinux: new package
+Message-ID: <20161123213659.0C9C0802C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5c00f09085251a122b0af08438685fa2304b73d
+commit: https://git.buildroot.net/buildroot/commit/?id=cfacefecc3d3832be1ec3c4c576e7a612067186c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The Arago toolchains are no longer maintained and haven't been updated
-for a long time.
+This commit adds a new package for the Analog Devices external toolchain
+for the Blackfin architecture.
 
-With this removal, all the legacy toolchain-external support can be
-removed as well.
+The legacy implementation is removed.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                                   |  12 ++
- toolchain/toolchain-external/Config.in             |  53 +--------
- .../toolchain-external/toolchain-external.hash     |   8 --
- toolchain/toolchain-external/toolchain-external.mk | 123 ---------------------
- 4 files changed, 15 insertions(+), 181 deletions(-)
+ toolchain/toolchain-external/Config.in             | 26 ++++-------------
+ .../toolchain-external-blackfin-uclinux/Config.in  | 17 +++++++++++
+ .../Config.in.options                              | 10 +++++++
+ .../toolchain-external-blackfin-uclinux.hash       |  3 ++
+ .../toolchain-external-blackfin-uclinux.mk         | 33 ++++++++++++++++++++++
+ .../toolchain-external/toolchain-external.hash     |  4 ---
+ toolchain/toolchain-external/toolchain-external.mk | 16 -----------
+ 7 files changed, 69 insertions(+), 40 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 53fcf4e..c0b8498 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,18 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.02"
- 
-+config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
-+	bool "Arago ARMv7 2011.09 removed"
-+	select BR2_LEGACY
-+	help
-+	  The Arago toolchains are every old and not updated anymore.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
-+	bool "Arago ARMv5 2011.09 removed"
-+	select BR2_LEGACY
-+	help
-+	  The Arago toolchains are every old and not updated anymore.
-+
- config BR2_PACKAGE_SNOWBALL_HDMISERVICE
- 	bool "snowball-hdmiservice removed"
- 	select BR2_LEGACY
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index fb33703..2c39e5a 100644
+index a19e41a..f8e04f5 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -51,51 +51,6 @@ source "toolchain/toolchain-external/toolchain-external-musl-cross/Config.in"
- # architecture.
- source "toolchain/toolchain-external/toolchain-external-custom/Config.in"
+@@ -22,6 +22,9 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.
+ # ARM big-endian
+ source "toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in"
  
--config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
--	bool "Arago ARMv7 2011.09"
--	depends on BR2_arm
++# Blackfin
++source "toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in"
++
+ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
+ 	bool "Arago ARMv7 2011.09"
+ 	depends on BR2_arm
+@@ -397,24 +400,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
+ 	  Other architecture variants (beyond Pentium-4/Xeon) are
+ 	  supported as well, but glibc is not optimised for it.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+-	bool "Blackfin.uclinux.org 2014R1"
+-	depends on BR2_bfin
 -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on BR2_ARM_CPU_ARMV7A
--	depends on BR2_ARM_EABI
--	depends on BR2_ARM_CPU_HAS_VFPV3
--	depends on !BR2_STATIC_LIBS
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_SSP
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
 -	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
--	# kernel headers: 2.6.31
--	help
--	  Texas Instruments Arago 2011.09 toolchain, with gcc 4.5.3,
--	  binutils 2.20.1, glibc 2.12, gdb 7.2.
--
--	  This toolchain uses -mfloat-abi=softfp (i.e can use FPU
--	  instructions, but passes floating point function arguments
--	  in integer registers), and requires a VFPv3 floating point
--	  unit to work properly. This unit is available on most
--	  Cortex-A ARM processors, but not all.
--
--config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
--	bool "Arago ARMv5 2011.09"
--	depends on BR2_arm
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on !BR2_ARM_CPU_ARMV4
--	depends on BR2_ARM_EABI
--	depends on !BR2_STATIC_LIBS
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_SSP
 -	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_USE_WCHAR
+-	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
 -	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
--	# kernel headers: 2.6.31
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+-	select BR2_TOOLCHAIN_HAS_FORTRAN
 -	help
--	  Texas Instruments Arago ARMv5 2011.09 toolchain, with gcc
--	  4.5.3, binutils 2.20.1, glibc 2.12, gdb 7.2.
+-	  Toolchain for the Blackfin architecture, from
+-	  http://blackfin.uclinux.org.
 -
--	  This toolchain uses software-floating point.
--
- endchoice
+ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+ 	bool "Musl 1.1.12 toolchain"
+ 	depends on (BR2_arm && BR2_ARM_EABI && BR2_USE_MMU) || \
+@@ -526,8 +511,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
+ 	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
+-	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX && BR2_BINFMT_FLAT
+-	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX && BR2_BINFMT_FDPIC
+ 	default "arm-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABI
+ 	default "arm-linux-musleabihf"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABIHF
+ 	default "mips-img-linux-gnu"     if BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
+@@ -581,6 +564,9 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.
+ # ARM big-endian
+ source "toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options"
+ 
++# Blackfin
++source "toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in.options"
++
+ if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
  
  choice
-@@ -127,11 +82,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PATH
- 	help
- 	  Path to where the external toolchain is installed.
- 
--config BR2_TOOLCHAIN_EXTERNAL_PREFIX
--	string
--	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
--	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
--
- config BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	bool
- 	select BR2_TOOLCHAIN_USES_GLIBC
-@@ -154,6 +104,9 @@ config BR2_PACKAGE_HAS_TOOLCHAIN_EXTERNAL
- config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
- 	string
- 
-+config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+	string
+diff --git a/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in
+new file mode 100644
+index 0000000..8b299e8
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in
+@@ -0,0 +1,17 @@
++config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
++	bool "Blackfin.uclinux.org 2014R1"
++	depends on BR2_bfin
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_USE_WCHAR
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	help
++	  Toolchain for the Blackfin architecture, from
++	  http://blackfin.uclinux.org.
+diff --git a/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in.options b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in.options
+new file mode 100644
+index 0000000..3b7f457
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.in.options
+@@ -0,0 +1,10 @@
++if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
 +
- # Kept toolchains sorted as in the choice above
- # The toolchain Config.in.options must define
- # BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL and BR2_TOOLCHAIN_EXTERNAL_PREFIX
++config BR2_TOOLCHAIN_EXTERNAL_PREFIX
++	default "bfin-uclinux" if BR2_BINFMT_FLAT
++	default "bfin-linux-uclibc" if BR2_BINFMT_FDPIC
++
++config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
++	default "toolchain-external-blackfin-uclinux"
++
++endif
+diff --git a/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.hash b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.hash
+new file mode 100644
+index 0000000..b320d94
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 e424e90d8481d942a40266d78d1488726561fed3ec38403094f98055e61889d0  blackfin-toolchain-2014R1-RC2.i386.tar.bz2
++sha256 c65b1b4b918d5185349d62a3b7bf43b4b21e1175c52598ec047ca56b3f11d857  blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
+diff --git a/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.mk b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.mk
+new file mode 100644
+index 0000000..0a48220
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-blackfin-uclinux/toolchain-external-blackfin-uclinux.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# toolchain-external-blackfin-uclinux
++#
++################################################################################
++
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION_MAJOR = 2014R1
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION = $(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION_MAJOR)-RC2
++
++ifeq ($(BR2_BINFMT_FLAT),y)
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_SUBDIR = bfin-uclinux
++else
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_SUBDIR = bfin-linux-uclibc
++endif
++
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_SITE = http://downloads.sourceforge.net/project/adi-toolchain/$(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION_MAJOR)/$(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION)/i386
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_SOURCE = blackfin-toolchain-$(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION).i386.tar.bz2
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-$(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_VERSION).i386.tar.bz2
++
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_STRIP_COMPONENTS = 3
++
++# Special handling for Blackfin toolchain, because of the split in two
++# tarballs, and the organization of tarball contents. The tarballs
++# contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
++# which themselves contain the toolchain. This is why we strip more
++# components than usual.
++define TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_UCLIBC_EXTRA_EXTRACT
++	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_EXTRA_DOWNLOADS) | \
++		$(TAR) --strip-components=3 -C $(@D) $(TAR_OPTIONS) -
++endef
++TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_UCLIBC_EXTRA_EXTRACT
++
++$(eval $(toolchain-external-package))
 diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-deleted file mode 100644
-index cc93998..0000000
+index 3740ca4..16c2e19 100644
 --- a/toolchain/toolchain-external/toolchain-external.hash
-+++ /dev/null
-@@ -1,8 +0,0 @@
--######################################
--# Next hashes are all locally computed
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -1,10 +1,6 @@
+ ######################################
+ # Next hashes are all locally computed
+ 
+-# Blackfin toolchains from Analog Devices
+-sha256 e424e90d8481d942a40266d78d1488726561fed3ec38403094f98055e61889d0  blackfin-toolchain-2014R1-RC2.i386.tar.bz2
+-sha256 c65b1b4b918d5185349d62a3b7bf43b4b21e1175c52598ec047ca56b3f11d857  blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
 -
--# ARM toolchains from Texas Instrument's Arago project
--# There is one source file that covers both binary distributions.
--sha256 f2febf3b3c565536461ad4405f1bcb835d75a6afb2a8bec958a1248cb4b81fc7  arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
--sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
--sha256 25fbf0513ad7322b15cbaae964cafadcbb4c939f2708f57f40b8f9f2d601122b  arago-toolchain-2011.09-sources.tar.bz2
+ # Mentor's Sourcery CodeBench Lite toolchains
+ # NiosII
+ sha256 750639290744adda931c81fa2cd2ffc2bde972488047824dcfaa53c42562191d  sourceryg++-2016.05-10-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 53f5583..48de1e7 100644
+index 7dfcac3..4b21b4f 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -15,129 +15,6 @@ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
- TOOLCHAIN_EXTERNAL_DEPENDENCIES += musl-compat-headers
+@@ -70,16 +70,6 @@ define TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_STAGING_FIXUPS
+ endef
  endif
  
--# All the definition that are common between the toolchain-external
--# generic package and the toolchain-external-package infrastructure
--# can be found in pkg-toolchain-external.mk
--
--# Legacy toolchains that don't use the toolchain-external-package infrastructure
--# yet. We can recognise that because no provider is set.
--ifeq ($(call qstrip,$(BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL)),)
--
--# Now we are the provider. However, we can't set it to ourselves or we'll get a
--# circular dependency. Let's set it to a target that we always depend on
--# instead.
--BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL = skeleton
--
--TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
--
--# In fact, we don't need to download the toolchain, since it is already
--# available on the system, so force the site and source to be empty so
--# that nothing will be downloaded/extracted.
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED),y)
--TOOLCHAIN_EXTERNAL_SITE =
--TOOLCHAIN_EXTERNAL_SOURCE =
--endif
--
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A),y)
--TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports
--TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
--TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = arago-toolchain-2011.09-sources.tar.bz2
--define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
--	mv $(@D)/arago-2011.09/armv7a/* $(@D)/
--	rm -rf $(@D)/arago-2011.09/
--endef
--TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE),y)
--TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports
--TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
--TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = arago-toolchain-2011.09-sources.tar.bz2
--define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
--	mv $(@D)/arago-2011.09/armv5te/* $(@D)/
--	rm -rf $(@D)/arago-2011.09/
--endef
--TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
--endif
--
--# Some toolchain vendors have a regular file naming pattern.
--# For them, mass-define _ACTUAL_SOURCE_TARBALL based _SITE.
--ifneq ($(findstring sourcery.mentor.com/public/gnu_toolchain,$(TOOLCHAIN_EXTERNAL_SITE)),)
--TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL ?= \
--	$(subst -i686-pc-linux-gnu.tar.bz2,.src.tar.bz2,$(subst -i686-pc-linux-gnu-i386-linux.tar.bz2,-i686-pc-linux-gnu.src.tar.bz2,$(TOOLCHAIN_EXTERNAL_SOURCE)))
--endif
--
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
--TOOLCHAIN_EXTERNAL_EXCLUDES = usr/lib/locale/*
--
--TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += \
--	TOOLCHAIN_EXTERNAL_MOVE
--endif
--
--# Checks for an already installed toolchain: check the toolchain
--# location, check that it is usable, and then verify that it
--# matches the configuration provided in Buildroot: ABI, C++ support,
--# kernel headers version, type of C library and all C library features.
--define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
--	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
--	$(Q)$(call check_unusable_toolchain,$(TOOLCHAIN_EXTERNAL_CC))
--	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
--	$(call check_kernel_headers_version,\
--		$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC)),\
--		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
--	$(call check_gcc_version,$(TOOLCHAIN_EXTERNAL_CC),\
--		$(call qstrip,$(BR2_TOOLCHAIN_GCC_AT_LEAST))); \
--	if test "$(BR2_arm)" = "y" ; then \
--		$(call check_arm_abi,\
--			"$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
--			$(TOOLCHAIN_EXTERNAL_READELF)) ; \
--	fi ; \
--	if test "$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
--		$(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
--	fi ; \
--	if test "$(BR2_TOOLCHAIN_HAS_FORTRAN)" = "y" ; then \
--		$(call check_fortran,$(TOOLCHAIN_EXTERNAL_FC)) ; \
--	fi ; \
--	if test "$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
--		$(call check_uclibc,$${SYSROOT_DIR}) ; \
--	elif test "$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
--		$(call check_musl,$${SYSROOT_DIR}) ; \
--	else \
--		$(call check_glibc,$${SYSROOT_DIR}) ; \
--	fi
--	$(Q)$(call check_toolchain_ssp,$(TOOLCHAIN_EXTERNAL_CC))
+-# Special handling for Blackfin toolchain, because of the split in two
+-# tarballs, and the organization of tarball contents. The tarballs
+-# contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
+-# which themselves contain the toolchain. This is why we strip more
+-# components than usual.
+-define TOOLCHAIN_EXTERNAL_BLACKFIN_UCLIBC_EXTRA_EXTRACT
+-	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS) | \
+-		$(TAR) --strip-components=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
 -endef
 -
--TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_WRAPPER_BUILD)
--
--define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
--	$(TOOLCHAIN_WRAPPER_INSTALL)
--	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
--	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
--	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC)
--	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
--	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
--endef
--
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
--TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
--endif
--
--# Even though we're installing things in both the staging, the host
--# and the target directory, we do everything within the
--# install-staging step, arbitrarily.
--define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
--	$(TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK)
--	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
--	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER)
--	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC)
--	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT)
--	$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
--endef
--
--endif # BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
--
--
--# Since a virtual package is just a generic package, we can still
--# define commands for the legacy toolchains.
- $(eval $(virtual-package))
- 
- # Ensure the external-toolchain package has a prefix defined.
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports
+ TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
+@@ -125,12 +115,6 @@ TOOLCHAIN_EXTERNAL_SOURCE = Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.MTI.
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_STAGING_FIXUPS
+ TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/project/adi-toolchain/2014R1/2014R1-RC2/i386
+-TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2014R1-RC2.i386.tar.bz2
+-TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
+-TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 3
+-TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_BLACKFIN_UCLIBC_EXTRA_EXTRACT
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
+ TOOLCHAIN_EXTERNAL_VERSION = 1.1.12
+ TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)
