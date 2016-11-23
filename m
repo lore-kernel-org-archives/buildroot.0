@@ -1,243 +1,283 @@
-From: Kenneth Adam Miller <kennethadammiller@gmail.com>
-Date: Tue, 22 Nov 2016 19:57:32 -0500
-Subject: [Buildroot] Uclibc shm performance issue
-In-Reply-To: <CAK7rcp9bGf5WfLK1YQ_v3kauZW5q7uGZSVPqE_mmr-SvOtEGoA@mail.gmail.com>
-References: <CAK7rcp_18Ygbkafq--7qii_9gF-7FrXq7W2iv6EL2vd9efLUxw@mail.gmail.com>
- <CAK7rcp_Z6M4aTp_f8v_Qr5ZEXjnR96pK8eAhx9D7Gs1n6_c_ig@mail.gmail.com>
- <CAK7rcp8e9cAKD0hMrhjE0Fjd64sc_8MdYk1Mnc4D0zozpSMv1w@mail.gmail.com>
- <CAK7rcp9DChiLzazH3gA-YSZ9+HFtQakLbwo6zK-BLAeDqMTHYw@mail.gmail.com>
- <CAK7rcp9R=4had7MJx5MQwqROZh39pYU7WVkgqoFj=qvNV-vzQw@mail.gmail.com>
- <CAK7rcp-LTN68VXOUZOKu_jET9WN5-F1iAQivLe3WsU0zO6iQcg@mail.gmail.com>
- <CAK7rcp_MQbDUFtr2F-GNYU=Mz_5N-0Jv-Yh3aYqr6HOFqvGPxw@mail.gmail.com>
- <CAK7rcp9Rv-JMX=inPMinGZ22LHe+rt0HHfNDTrkj5xaU-hQi3A@mail.gmail.com>
- <CAK7rcp_J_LFvzHyCSbNrgZOz==zFHQ4H2fRrPe0pYJFUwPeX9g@mail.gmail.com>
- <CAK7rcp-2ANhykJACZdPJfmaHm106-Z6W3O80jzogYgk1m3+_mg@mail.gmail.com>
- <af3ce912-0cf7-231a-9919-76ad84cca006@mind.be>
- <CAK7rcp_28bsfbt_WVD4a7FhM_Owag-pH_eeJqCO69nYariNn8g@mail.gmail.com>
- <06663991-b120-8679-00b3-5b7ea07c4df3@mind.be>
- <CAK7rcp_HV=rjGFRR7BWx50s65LAoTyb+snv+aVQnNcF8LSqf-Q@mail.gmail.com>
- <e6031f99-efc2-44b8-ae7e-680ae02f3819@mind.be>
- <CAK7rcp8=w34BeBumR-gCVoJwufuTAovCHVdWMwb0uyiNaBYc+g@mail.gmail.com>
- <CAK7rcp-877BtQvxF+PxGG_4heoWF_besSyW0iJ3-XeV7o7rkng@mail.gmail.com>
- <CAK7rcp9bGf5WfLK1YQ_v3kauZW5q7uGZSVPqE_mmr-SvOtEGoA@mail.gmail.com>
-Message-ID: <CAK7rcp_-ikZ0-t52zRO9Q2e1o++w1rBH3Bac7ba+qVUuz6tRCg@mail.gmail.com>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Tue, 22 Nov 2016 17:32:51 -0800
+Subject: [Buildroot] [RFC] external toolchain scanner
+Message-ID: <303be768-557b-3b02-c4fd-ae11ec2858ec@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey, so as it would turn out, I turned on multi core scheduler preemption
-and up the highest it would go, and now the performance in our custom linux
-is comparable to what I get running tests locally. That makes sense, since
-I ruled everything else out.
+The attached python script inspects an external toolchain and spits out 
+BR config settings, like so (with a Linaro toolchain):
 
-On Nov 22, 2016 4:18 AM, "Kenneth Adam Miller" <kennethadammiller@gmail.com>
-wrote:
+    aurora:buildroot$ ./support/scripts/scan-ext-toolchain /foo/gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+    BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_7=y
+    BR2_TOOLCHAIN_EXTERNAL_CXX=y
+    BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+    BR2_TOOLCHAIN_EXTERNAL_GF=y
+    BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="aarch64-linux-gnu"
+    BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+    BR2_TOOLCHAIN_EXTERNAL_PATH="/foo/gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux"
 
-Well, I did do a strace on my benchmark test that runs so fast on mine.
+It also works with multi-arch toolchains (this one from Mentor Graphics):
 
-Any important point of my particular shared memory data structure
-using shm_open is to tell the process how many messages total have
-been written to it after a coordinated startup, but to still be able
-to wake it up if there is need be. For this, I use atomics in my
-shared memory region, and strongly preference keeping the userland
-from making unnecessary trips to the kernel. But what I'm seeing is
-that the strace file grows to be megabytes in size with read/writes to
-named pipes (which I use as a semaphore since I have nothing else
-smaller, as I don't want to use a domain socket to pass an eventfd).
+    aurora:buildroot$ ./support/scripts/scan-ext-toolchain /foo/codesourcery/codebench/
+    Toolchain supports multiple targets. Please choose one of the following: ['aarch64-linux-gnu', 'arm-none-eabi', 'arm-none-linux-gnueabi']
+    aurora:buildroot$ ./support/scripts/scan-ext-toolchain -t arm-none-linux-gnueabi /foo/codesourcery/codebench/
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
+    BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+    BR2_TOOLCHAIN_EXTERNAL_CXX=y
+    BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+    BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX=arm-none-linux-gnueabi
+    BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+    BR2_TOOLCHAIN_EXTERNAL_PATH="/foo/codesourcery/codebench/"
 
-I wonder if maybe there's something to do with atomics or the memory
-operations that are preventing it from using the hardware to the best
-of it's abilities?
+It complains about bare-metal toolchains:
 
-On Mon, Nov 21, 2016 at 6:25 PM, Kenneth Adam Miller
-<kennethadammiller@gmail.com> wrote:
-> On Mon, Nov 21, 2016 at 6:20 PM, Arnout Vandecappelle <arnout@mind.be>
-wrote:
->>
->>
->> On 21-11-16 23:23, Kenneth Adam Miller wrote:
->>> No no, my uclibc is different between my target and my host. So, I
->>> can't just run what buildroot built.
->>
->>  Yes you can: chroot into output/target.
->>
->
-> And run a uclibc linked target binary on my glibc host?? I didn't know
-that.
->
->>
->>> But I did try a statically compiled benchmark that leveraged musl, and
->>> performance is phenominally terrible.
->>
->>  Why do you drag musl in the equation now?
->
-> Well, it's statically linked; it helps to eliminate the what the
-> source of the slowdown is. So, if I link it statically with musl or
-> glibc it doesn't matter, so long as I can eliminate whether uclibc is
-> the source of problem or not.
->
->>
->>
->>> By the way, this is just shm files backed by /dev/shm using shm_open.
->>> Just to make sure that that is clear, I'm not sure what it is that is
->>> causing such awful performance.
->>>
->>> So far, this has isolated the issue from involving either the libc
->>> implementation or the actual test software itself. I think it is
->>> something to do with the way I built my custom linux image, possibly
->>> the architecture like you said. But one more thing is, I test my image
->>> by running it under qemu and by running it on dedicated hardware.
->>
->>  Aren't you contradicting yourself here? You're saying you have been
-able to
->> isolate it to either libc or the the test software itself, but then you
-say it's
->> due to the custom linux image or the architecture.
->
-> Well, I only just ran my test as a statically compiled target with a
-> different libc implementation, so that kind of narrows down about
-> everything else since it's still slow as hell.
->
->>
->>
->>  Regards,
->>  Arnout
->>
->>>
->>> On Mon, Nov 21, 2016 at 5:19 PM, Arnout Vandecappelle <arnout@mind.be>
-wrote:
->>>>
->>>>
->>>> On 21-11-16 23:01, Kenneth Adam Miller wrote:
->>>>> On Mon, Nov 21, 2016 at 4:40 PM, Arnout Vandecappelle <arnout@mind.be>
-wrote:
->>>>>>  Hi Kenneth,
->>>>>>
->>>>>> On 21-11-16 20:10, Kenneth Adam Miller wrote:
->>>>>>> Hello,
->>>>>>>
->>>>>>> I'm using an absolutely miniscule fully compiled test inside a
-custom linux
->>>>>>> built by buildroot with uclibc, and I'm opening and memcpy'ing raw
-data into a
->>>>>>> shm region shared between two processes. On my host, I get
-fantastic performance
->>>>>>> of course, gigabytes per second as expected. Therefore I know that
-the code that
->>>>>>> I wrote is fast. But when I move it to run inside our booted image,
-I take a
->>>>>>> huge performance hit. I'm not sure what the source is, but I wanted
-to know if
->>>>>>> anybody would think that uclibc would affect performance so
-dramatically, or if
->>>>>>> there could be some buildroot specific option that I could change
-that would
->>>>>>> improve things. There are two layers of performance penalty in
-fact, one just
->>>>>>> moving into the custom linux, and another when we drive our C
-library with Ruby.
->>>>>>> I understand that that is to be expected but for me, i dont think
-that the
->>>>>>> penalty should be so enormous for that as well. Perhaps grsec could
-be affecting it?
->>>>>>
->>>>>>  It sounds like you're stacking a huge number of changes on top of
-each other,
->>>>>> and any of them could be the cause. So I think it's better to test
-each of them
->>>>>> separately.
->>>>>>
->>>>>> - Buildroot: change your configuration so it can run on your host,
-select glibc
->>>>>> as your library and the same gcc version as you use on your host,
-chroot into
->>>>>> the rootfs and execute your test application. Do you get the same
-performance?
->>>>>>
->>>>>
->>>>> So, there's several different performances that I've already measured
->>>>> - what you're talking about has already been measured, and it's the
->>>>> basis against which I want everything else to compare. I understand if
->>>>> there's some minor performance difference, but I don't expect to fall
->>>>> out of the gigabytes per second range just going into a custom linux
->>>>> image.
->>>>>
->>>>>> - uClibc: like above, but use uClibc as the C library
->>>>>>
->>>>>
->>>>> I don't know what you're saying here.
->>>>>
->>>>>> - gcc: switch to the gcc version you use for your target
->>>>>
->>>>> Gcc versions between host and the target produced are each 4.8.4
->>>>>
->>>>>>
->>>>>> - linux: build the same linux version (but the upstream one) as for
-your target
->>>>>> with the configuration for your host, and boot into it natively
->>>>>>
->>>>>
->>>>> Could something like linux 3.13 to 3.14 really make such a huge
-difference?
->>>>>
->>>>>> - grsec: like above but use the grsec-patches linux
->>>>>
->>>>> I only just started down the path of building a grsec disabled linux
->>>>> to test with.
->>>>>
->>>>>>
->>>>>> - CPU arch: now run it on your target
->>>>>
->>>>> Both my host and the produced linux use x86_64, so we're good there.
->>>>
->>>>  In that case, you can just chroot into the output/target directory
-and execute
->>>> your test application on the host. That immediately will tell you if
-it's
->>>> Buildroot+uClibc that is the culprit, or the CPU/kernel (config or
-grsec).
->>>>
->>>>  Note that a different CPU + memory architecture, even if it's still
-x86_64, can
->>>> make a lot of difference.
->>>>
->>>>  Regards,
->>>>  Arnout
->>>>
->>>>>
->>>>>>
->>>>>> and you can do all that in a different order of course.
->>>>>>
->>>>>>  Regards,
->>>>>>  Arnout
->>>>>>
->>>>>> --
->>>>>> Arnout Vandecappelle                          arnout at mind be
->>>>>> Senior Embedded Software Architect            +32-16-286500
->>>>>> Essensium/Mind                                http://www.mind.be
->>>>>> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR
-Leuven
->>>>>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
->>>>>> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->>>>>
->>>>
->>>> --
->>>> Arnout Vandecappelle                          arnout at mind be
->>>> Senior Embedded Software Architect            +32-16-286500
->>>> Essensium/Mind                                http://www.mind.be
->>>> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
->>>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
->>>> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->>
->> --
->> Arnout Vandecappelle                          arnout at mind be
->> Senior Embedded Software Architect            +32-16-286500
->> Essensium/Mind                                http://www.mind.be
->> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
->> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
->> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+    aurora:buildroot$ ./support/scripts/scan-ext-toolchain -t arm-none-eabi /foo/codesourcery/codebench/
+    Is this a Linux toolchain? Couldn't find the sysroot in:
+             /foo/codesourcery/codebench/arm-none-eabi/libc
+             /foo/codesourcery/codebench/arm-none-eabi/sysroot
+
+
+Current limitations that I know of:
+
+1. I haven't run through a full build with it yet, but it looks like 
+it's doing the right thing.
+
+2. It detects MUSL and UCLIBC toolchains, but it looks like further work 
+is needed to detect SSP, RPC, etc, for those toolchain types.
+
+3. There is no guarantee that BR2_arch matches 
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX.
+
+4. Users would run it something like this:
+
+    ./support/scripts/scan-ext-toolchain > toolchain.defconfig
+    cat board.defconfig toolchain.defconfig > defconfig
+    make ... BR2_DEFCONFIG=defconfig
+
+Creating and managing board.defconfig without toolchain configuration 
+data is left as an (awkward?) exercise for the user.
+
+
+Comments?
+
+-- 
+Hollis Blanchard <hollis_blanchard@mentor.com>
+Mentor Graphics Emulation Division
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161122/fa229cef/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161122/9ddf9a99/attachment.html>
+-------------- next part --------------
+#!/usr/bin/env python
+
+# Copyright 2016 Mentor Graphics Corporation
+# All Rights Reserved
+#
+# THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY
+# INFORMATION WHICH ARE THE PROPERTY OF MENTOR
+# GRAPHICS CORPORATION OR ITS LICENSORS AND IS
+# SUBJECT TO LICENSE TERMS.
+
+import sys
+import os
+import subprocess
+import re
+from optparse import OptionParser
+
+class ExtToolchainMetadata:
+	def __init__(self, base_path):
+		self.cfg = {}
+		self.tools = {}
+		self.base_path = base_path
+		self.sysroot_path = None
+
+	def get_buildroot_cfg(self):
+		result = 'BR2_TOOLCHAIN_EXTERNAL=y\n'
+		for k, v in self.cfg.items():
+			result += 'BR2_TOOLCHAIN_EXTERNAL_%s=%s\n' % (k, v)
+		return result
+
+def probe_prefix(path, target, metadata):
+	libexec_path = os.path.join(path, 'libexec', 'gcc') 
+
+	if not os.path.isdir(libexec_path):
+		raise RuntimeError("Couldn't examine directory %s" % libexec_path)
+
+	targets = os.listdir(libexec_path)
+	if len(targets) == 0:
+		raise RuntimeError("Couldn't find any targets in %s" % libexec_path)
+
+	if not target:
+		if len(targets) > 1:
+			raise RuntimeError('Toolchain supports multiple targets. '
+					'Please choose one of the following: %s' % (targets))
+		target = targets[0]
+	else:
+		if target not in targets:
+			raise RuntimeError('Toolchain does not support target %s.' % target)
+		target = target
+
+	# XXX use ARCH instead?
+	# cpu, vendor_os = target.split('-', 1)
+	# metadata.cfg['CUSTOM_PREFIX'] = '"$(ARCH)-%s"' % vendor_os
+	metadata.cfg['CUSTOM_PREFIX'] = '"%s"' % target
+
+def probe_tools(path, metadata):
+	class Tool:
+		def __init__(self, executable, cfgname=None):
+			self.executable = executable
+			self.cfgname = cfgname
+
+	tools = (
+		Tool('gcc'),
+		Tool('readelf'),
+		Tool('g++', 'CXX'),
+		Tool('gfortran', 'GF'),
+	)
+
+	prefix = metadata.cfg['CUSTOM_PREFIX'].strip('"')
+
+	for tool in tools:
+		full_name = '%s-%s' % (prefix, tool.executable)
+		full_path = os.path.join(path, 'bin', full_name)
+
+		if os.path.exists(full_path):
+			metadata.tools[tool.executable] = full_path
+			if tool.cfgname:
+				metadata.cfg[tool.cfgname] = 'y'
+
+def probe_gcc_version(metadata):
+	argv = [
+		metadata.tools['gcc'],
+		'--version',
+	]
+
+	proc = subprocess.Popen(argv, stdout=subprocess.PIPE)
+	output = proc.communicate()[0]
+	line1 = output.splitlines()[0]
+
+	m = re.match('^[^)]+\) ([^ ]+)', line1)
+	if not m:
+		raise RuntimeError("%s\n\tdidn't report a recognizable version:\n%s" %
+				(metadata.tools['gcc'], line1))
+
+	version = m.group(1) # E.g. 4.9.2
+	major, minor = [ int(i) for i in version.split('.', 2)[:2] ]
+	metadata.cfg['GCC_%d_%d' % (major, minor)] = 'y'
+
+def probe_gcc_sysroot(metadata):
+	# Sysroot directories could have a couple names:
+	subdirs = ('libc', 'sysroot')
+
+	# Construct a list of full paths so that in case of failure we can tell the
+	# user exactly where we searched.
+	base = metadata.base_path
+	prefix = metadata.cfg['CUSTOM_PREFIX'].strip('"')
+	sysroot_paths = [ os.path.join(base, prefix, d) for d in subdirs ]
+
+	sysroot_path = None
+	for path in sysroot_paths:
+		if os.path.exists(path):
+			sysroot_path = path
+			break
+
+	if not sysroot_path:
+		msg = "Is this a Linux toolchain? Couldn't find the sysroot in:\n\t%s"
+		raise RuntimeError(msg % '\n\t'.join(sysroot_paths))
+
+	metadata.sysroot_path = sysroot_path
+
+def probe_gcc_headers(metadata):
+	version_path = os.path.join(metadata.sysroot_path,
+		'usr',
+		'include',
+		'linux',
+		'version.h'
+	)
+	version_re = '#define LINUX_VERSION_CODE ([0-9]+)'
+
+	with open(version_path) as version_file:
+		linux_version_code = version_file.readline()
+
+	m = re.match(version_re, linux_version_code)
+	if not m:
+		msg = "Didn't recognize LINUX_VERSION_CODE in %s"
+		raise RuntimeError(msg % version_path)
+
+	version = int(m.group(1))
+	major = (version >> 16) & 0xff
+	minor = (version >> 8) & 0xff
+	metadata.cfg['HEADERS_%d_%d' % (major, minor)] = 'y'
+
+def probe_libc(metadata):
+	libc_re = '  -m(glibc|musl|eglibc)\s+\[enabled\]'
+	argv = [
+		metadata.tools['gcc'],
+		'-Q',
+		'--help=target',
+	]
+
+	proc = subprocess.Popen(argv, stdout=subprocess.PIPE)
+	output = proc.communicate()[0].splitlines()
+	for line in output:
+		m = re.match(libc_re, line)
+		if m:
+			libc = m.group(1)
+			metadata.cfg['CUSTOM_%s' % libc.upper()] = 'y'
+			break
+
+def probe_rpc(metadata):
+	rpc_path = os.path.join(metadata.sysroot_path,
+		'usr',
+		'include',
+		'rpc',
+		'rpc.h')
+	if os.path.exists(rpc_path):
+		metadata.cfg['HAS_RPC'] = 'y'
+
+def probe(path, options, metadata):
+	metadata.cfg['CUSTOM'] = 'y'
+	metadata.cfg['PATH'] = '"%s"' % path
+
+	probe_prefix(path, options.target, metadata)
+	probe_tools(path, metadata)
+	probe_gcc_version(metadata)
+	probe_gcc_sysroot(metadata)
+	probe_gcc_headers(metadata)
+	probe_libc(metadata)
+	probe_rpc(metadata)
+
+def output_cfg(metadata):
+	for k, v in metadata.items():
+		sys.stdout.write('BR2_TOOLCHAIN_%s=%s\n' % (k, v))
+
+def main():
+	parser = OptionParser()
+	parser.add_option('-t', '--target', dest='target')
+
+	(options, arguments) = parser.parse_args()
+
+	if len(arguments) < 1:
+		print "Missing path to toolchain base directory"
+		sys.exit(1)
+	toolchain_dir = arguments[0]
+	if not os.path.isdir(toolchain_dir):
+		print "Not a directory: %s" % toolchain_dir
+		sys.exit(2)
+
+	metadata = ExtToolchainMetadata(toolchain_dir)
+	probe(toolchain_dir, options, metadata)
+	print metadata.get_buildroot_cfg().strip()
+
+if __name__ == '__main__':
+	try:
+		main()
+	except RuntimeError, e:
+		print e
