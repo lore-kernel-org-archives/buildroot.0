@@ -1,62 +1,53 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Wed, 23 Nov 2016 00:44:20 -0500
-Subject: [Buildroot] pseudo: remaining issues...
-In-Reply-To: <20161122221630.GC3529@free.fr>
-References: <20161122212534.GA3529@free.fr>
- <20161122221630.GC3529@free.fr>
-Message-ID: <20161123054206.na5yabxtvnrzocz4@gportay>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 23 Nov 2016 08:23:44 +0200
+Subject: [Buildroot] [RFC] external toolchain scanner
+In-Reply-To: <303be768-557b-3b02-c4fd-ae11ec2858ec@mentor.com>
+References: <303be768-557b-3b02-c4fd-ae11ec2858ec@mentor.com>
+Message-ID: <20161123062344.imch5hb3duepqgfz@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Hi Hollis,
 
-On Tue, Nov 22, 2016 at 11:16:30PM +0100, Yann E. MORIN wrote:
-> And we have another issue, that Lucille and Ga?l just tracked down.
+On Tue, Nov 22, 2016 at 05:32:51PM -0800, Hollis Blanchard wrote:
+> It also works with multi-arch toolchains (this one from Mentor Graphics):
 > 
-> They are using a docker instance to run their Buildroot builds, and
-> noticed that the pseudo DB was empty after a build. However, if they
-> artificially added a little sleep at the end, to prevent the docker
-> instance to terminate instantly, the pseudo DB was correctly saved.
-> 
-> That's becasue pesuedo spawns itself a server in the background, and
-> that server is responsible for loading the DB, maintaining the internal
-> state, and saving the DB.
-> 
-> However, the DB is saved aftrer the last client exits, adn it can t ake
-> a bit of time, which is enought time for the docker instance to
-> terminate, killing (-9) the remaining processes, of whihch the pseudo
-> server, which then does not have a chance to save its DB.
-> 
-> 
-> One solution to this issue would be for us to run our own pseudo server,
-> adn terminat it ourselves, then wait for it, something along those lines:
-> 
->     # Spawn our server
->     pseudo -f
->     pseudo_pid=$!
-> 
->     # Run the actual comand
->     pseudo real-command
-> 
->     # Kil and wait for the server
->     pseudo -S
->     wait $pseudo_pid
-> 
+>    aurora:buildroot$ ./support/scripts/scan-ext-toolchain /foo/codesourcery/codebench/
+>    Toolchain supports multiple targets. Please choose one of the following: ['aarch64-linux-gnu', 'arm-none-eabi', 'arm-none-linux-gnueabi']
+>    aurora:buildroot$ ./support/scripts/scan-ext-toolchain -t arm-none-linux-gnueabi /foo/codesourcery/codebench/
+>    BR2_TOOLCHAIN_EXTERNAL=y
+>    BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
+>    BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+>    BR2_TOOLCHAIN_EXTERNAL_CXX=y
+>    BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>    BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX=arm-none-linux-gnueabi
+>    BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+>    BR2_TOOLCHAIN_EXTERNAL_PATH="/foo/codesourcery/codebench/"
 
-I was thinking the same thing... spawning our own server to make sure it
-terminates before the wrapper completion.
+Just curious, is this a publicly available toolchain? The latest Sourcery 
+CodeBench ARM toolchain that Buildroot knows about is 2014.05, which is based 
+on gcc 4.8.3.
 
+[...]
+
+> #!/usr/bin/env python
 > 
-> Thoughts? Tests? ;-)
+> # Copyright 2016 Mentor Graphics Corporation
+> # All Rights Reserved
+> #
+> # THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY
+> # INFORMATION WHICH ARE THE PROPERTY OF MENTOR
+> # GRAPHICS CORPORATION OR ITS LICENSORS AND IS
+> # SUBJECT TO LICENSE TERMS.
 
-After regarding the code of pseudo, the easiest workaround is to update the
-wrapper script to do what you mentionned above.
+Are you sure about that?
 
-I have suggested a patch named:
-[PATCH] pseudo-wrapper: fix console issue
+baruch
 
-This works on my setup either with a traditional build (on host) or with our
-docker wrapper.
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
