@@ -1,198 +1,279 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:10:41 +0100
-Subject: [Buildroot] [git commit branch/next]
-	toolchain-external-codesourcery-aarch64: new package
-Message-ID: <20161123213658.865F4802C2@busybox.osuosl.org>
+Date: Wed, 23 Nov 2016 22:32:14 +0100
+Subject: [Buildroot] [git commit branch/next] toolchain-external: remove
+	Arago toolchains
+Message-ID: <20161123213659.B640981DDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0f2498c7f4e0b6cb6afeb752d885bf9ea821b83
+commit: https://git.buildroot.net/buildroot/commit/?id=b5c00f09085251a122b0af08438685fa2304b73d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit adds a new package for the Sourcery CodeBench external
-toolchain for the AArch64 architecture.
+The Arago toolchains are no longer maintained and haven't been updated
+for a long time.
 
-The legacy implementation is removed.
+With this removal, all the legacy toolchain-external support can be
+removed as well.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 21 ++-------------------
- .../Config.in                                      | 17 +++++++++++++++++
- .../Config.in.options                              |  9 +++++++++
- .../toolchain-external-codesourcery-aarch64.hash   |  3 +++
- .../toolchain-external-codesourcery-aarch64.mk     | 22 ++++++++++++++++++++++
- .../toolchain-external/toolchain-external.hash     |  3 ---
- toolchain/toolchain-external/toolchain-external.mk | 11 -----------
- 7 files changed, 53 insertions(+), 33 deletions(-)
+ Config.in.legacy                                   |  12 ++
+ toolchain/toolchain-external/Config.in             |  53 +--------
+ .../toolchain-external/toolchain-external.hash     |   8 --
+ toolchain/toolchain-external/toolchain-external.mk | 123 ---------------------
+ 4 files changed, 15 insertions(+), 181 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 53fcf4e..c0b8498 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,18 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.02"
+ 
++config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
++	bool "Arago ARMv7 2011.09 removed"
++	select BR2_LEGACY
++	help
++	  The Arago toolchains are every old and not updated anymore.
++
++config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
++	bool "Arago ARMv5 2011.09 removed"
++	select BR2_LEGACY
++	help
++	  The Arago toolchains are every old and not updated anymore.
++
+ config BR2_PACKAGE_SNOWBALL_HDMISERVICE
+ 	bool "snowball-hdmiservice removed"
+ 	select BR2_LEGACY
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 096f435..ecf9618 100644
+index fb33703..2c39e5a 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -13,6 +13,7 @@ comment "glibc toolchains only available with shared lib support"
+@@ -51,51 +51,6 @@ source "toolchain/toolchain-external/toolchain-external-musl-cross/Config.in"
+ # architecture.
+ source "toolchain/toolchain-external/toolchain-external-custom/Config.in"
  
- # Aarch64 (use Linaro toolchain by default)
- source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in"
-+source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in"
- 
- comment "Linaro toolchains available for Cortex-A + EABIhf"
- 	depends on BR2_arm || BR2_armeb
-@@ -491,24 +492,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
- 	  Toolchain for the Blackfin architecture, from
- 	  http://blackfin.uclinux.org.
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
--	bool "CodeSourcery AArch64 2014.11"
--	depends on BR2_aarch64
+-config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
+-	bool "Arago ARMv7 2011.09"
+-	depends on BR2_arm
 -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	depends on BR2_ARM_CPU_ARMV7A
+-	depends on BR2_ARM_EABI
+-	depends on BR2_ARM_CPU_HAS_VFPV3
 -	depends on !BR2_STATIC_LIBS
 -	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
 -	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
 -	select BR2_INSTALL_LIBSTDCPP
 -	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+-	# kernel headers: 2.6.31
 -	help
--	  Sourcery CodeBench toolchain for the AArch64 architecture,
--	  from Mentor Graphics. It uses gcc 4.9.1, binutils
--	  2.24.51.20140217, glibc 2.20, gdb 7.7.50 and kernel headers
--	  3.16.2.
+-	  Texas Instruments Arago 2011.09 toolchain, with gcc 4.5.3,
+-	  binutils 2.20.1, glibc 2.12, gdb 7.2.
 -
- config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
- 	bool "Musl 1.1.12 toolchain"
- 	depends on (BR2_arm && BR2_ARM_EABI && BR2_USE_MMU) || \
-@@ -618,7 +601,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
--	default "aarch64-amd-linux-gnu"  if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
- 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
-@@ -670,6 +652,7 @@ config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
+-	  This toolchain uses -mfloat-abi=softfp (i.e can use FPU
+-	  instructions, but passes floating point function arguments
+-	  in integer registers), and requires a VFPv3 floating point
+-	  unit to work properly. This unit is available on most
+-	  Cortex-A ARM processors, but not all.
+-
+-config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
+-	bool "Arago ARMv5 2011.09"
+-	depends on BR2_arm
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	depends on !BR2_ARM_CPU_ARMV4
+-	depends on BR2_ARM_EABI
+-	depends on !BR2_STATIC_LIBS
+-	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+-	# kernel headers: 2.6.31
+-	help
+-	  Texas Instruments Arago ARMv5 2011.09 toolchain, with gcc
+-	  4.5.3, binutils 2.20.1, glibc 2.12, gdb 7.2.
+-
+-	  This toolchain uses software-floating point.
+-
+ endchoice
  
- # Aarch64
- source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options"
-+source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options"
+ choice
+@@ -127,11 +82,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PATH
+ 	help
+ 	  Path to where the external toolchain is installed.
  
- if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+-config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+-	string
+-	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
+-	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
+-
+ config BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	bool
+ 	select BR2_TOOLCHAIN_USES_GLIBC
+@@ -154,6 +104,9 @@ config BR2_PACKAGE_HAS_TOOLCHAIN_EXTERNAL
+ config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
+ 	string
  
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
-new file mode 100644
-index 0000000..2fbb218
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
-+	bool "CodeSourcery AArch64 2014.11"
-+	depends on BR2_aarch64
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	help
-+	  Sourcery CodeBench toolchain for the AArch64 architecture,
-+	  from Mentor Graphics. It uses gcc 4.9.1, binutils
-+	  2.24.51.20140217, glibc 2.20, gdb 7.7.50 and kernel headers
-+	  3.16.2.
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options
-new file mode 100644
-index 0000000..1eab839
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options
-@@ -0,0 +1,9 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
-+
 +config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+	default "aarch64-amd-linux-gnu"
++	string
 +
-+config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-codesourcery-aarch64"
-+
-+endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash
-new file mode 100644
-index 0000000..f7d3f29
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 405aada821146755c5f2df566375c2a682456d6b8451ee47b88cf1a52b093676  aarch64-amd-2014.11-95-aarch64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 3f50dd6ee433eb5b6992a1071b988e50379a738f54f58722bc60081613764716  aarch64-amd-2014.11-95-aarch64-amd-linux-gnu.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-new file mode 100644
-index 0000000..bc58c44
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# toolchain-external-codesourcery-aarch64
-+#
-+################################################################################
-+
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SITE = http://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION = 2014.11-95
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SOURCE = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_ACTUAL_SOURCE_TARBALL = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
-+
-+define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP
-+	ln -sf ld-2.20.so $(STAGING_DIR)/lib/ld-linux-aarch64.so.1
-+endef
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP
-+
-+define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_TARGET_FIXUP
-+	ln -sf ld-2.20.so $(TARGET_DIR)/lib/ld-linux-aarch64.so.1
-+endef
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_POST_INSTALL_TARGET_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_TARGET_FIXUP
-+
-+$(eval $(toolchain-external-package))
+ # Kept toolchains sorted as in the choice above
+ # The toolchain Config.in.options must define
+ # BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL and BR2_TOOLCHAIN_EXTERNAL_PREFIX
 diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index fd1bc6d..666cd02 100644
+deleted file mode 100644
+index cc93998..0000000
 --- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -21,9 +21,6 @@ sha256 1a9519e415a1e6892c760bf21f7e98f3a633a9d1c5bb8781a96d338e4dd62717  ia32-20
- # AMD64
- sha256 3c31206c8b9277f409ee00e4777ba82dfa6da2a4ca0926501cd5fb6bbd1b407e  amd-2015.11-139-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
- sha256 0b673f5035f97d5d03c31272cddab0f117d39ad76a5ad2a3bc98c156571527de  amd-2015.11-139-x86_64-amd-linux-gnu.src.tar.bz2
--# Aarch64
--sha256 405aada821146755c5f2df566375c2a682456d6b8451ee47b88cf1a52b093676  aarch64-amd-2014.11-95-aarch64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
--sha256 3f50dd6ee433eb5b6992a1071b988e50379a738f54f58722bc60081613764716  aarch64-amd-2014.11-95-aarch64-amd-linux-gnu.src.tar.bz2
- # MIPS
- sha256 d354447c4c5160439dafd5464fa3a0266dd41e79f973477238e4f0215a6b5397  mips-2016.05-8-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- sha256 2658e55d5b71bba25d6f77e868e18b200ea5f75c8add7ed3a9266e716d9adfff  mips-2016.05-8-mips-linux-gnu.src.tar.bz2
++++ /dev/null
+@@ -1,8 +0,0 @@
+-######################################
+-# Next hashes are all locally computed
+-
+-# ARM toolchains from Texas Instrument's Arago project
+-# There is one source file that covers both binary distributions.
+-sha256 f2febf3b3c565536461ad4405f1bcb835d75a6afb2a8bec958a1248cb4b81fc7  arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
+-sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
+-sha256 25fbf0513ad7322b15cbaae964cafadcbb4c939f2708f57f40b8f9f2d601122b  arago-toolchain-2011.09-sources.tar.bz2
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 8a3e4da..2571539 100644
+index 53f5583..48de1e7 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -148,17 +148,6 @@ TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2014R1-RC2.i386.tar.bz2
- TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
- TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 3
- TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_BLACKFIN_UCLIBC_EXTRA_EXTRACT
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
--TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/aarch64-amd-linux-gnu
--TOOLCHAIN_EXTERNAL_SOURCE = aarch64-amd-2014.11-95-aarch64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
--define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP
--	ln -sf ld-2.20.so $(STAGING_DIR)/lib/ld-linux-aarch64.so.1
+@@ -15,129 +15,6 @@ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+ TOOLCHAIN_EXTERNAL_DEPENDENCIES += musl-compat-headers
+ endif
+ 
+-# All the definition that are common between the toolchain-external
+-# generic package and the toolchain-external-package infrastructure
+-# can be found in pkg-toolchain-external.mk
+-
+-# Legacy toolchains that don't use the toolchain-external-package infrastructure
+-# yet. We can recognise that because no provider is set.
+-ifeq ($(call qstrip,$(BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL)),)
+-
+-# Now we are the provider. However, we can't set it to ourselves or we'll get a
+-# circular dependency. Let's set it to a target that we always depend on
+-# instead.
+-BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL = skeleton
+-
+-TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
+-
+-# In fact, we don't need to download the toolchain, since it is already
+-# available on the system, so force the site and source to be empty so
+-# that nothing will be downloaded/extracted.
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED),y)
+-TOOLCHAIN_EXTERNAL_SITE =
+-TOOLCHAIN_EXTERNAL_SOURCE =
+-endif
+-
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports
+-TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
+-TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = arago-toolchain-2011.09-sources.tar.bz2
+-define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+-	mv $(@D)/arago-2011.09/armv7a/* $(@D)/
+-	rm -rf $(@D)/arago-2011.09/
 -endef
--TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP
--define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_TARGET_FIXUP
--	ln -sf ld-2.20.so $(TARGET_DIR)/lib/ld-linux-aarch64.so.1
+-TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports
+-TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
+-TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = arago-toolchain-2011.09-sources.tar.bz2
+-define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+-	mv $(@D)/arago-2011.09/armv5te/* $(@D)/
+-	rm -rf $(@D)/arago-2011.09/
 -endef
--TOOLCHAIN_EXTERNAL_POST_INSTALL_TARGET_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_TARGET_FIXUP
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
- TOOLCHAIN_EXTERNAL_VERSION = 1.1.12
- TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)
+-TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+-endif
+-
+-# Some toolchain vendors have a regular file naming pattern.
+-# For them, mass-define _ACTUAL_SOURCE_TARBALL based _SITE.
+-ifneq ($(findstring sourcery.mentor.com/public/gnu_toolchain,$(TOOLCHAIN_EXTERNAL_SITE)),)
+-TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL ?= \
+-	$(subst -i686-pc-linux-gnu.tar.bz2,.src.tar.bz2,$(subst -i686-pc-linux-gnu-i386-linux.tar.bz2,-i686-pc-linux-gnu.src.tar.bz2,$(TOOLCHAIN_EXTERNAL_SOURCE)))
+-endif
+-
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
+-TOOLCHAIN_EXTERNAL_EXCLUDES = usr/lib/locale/*
+-
+-TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += \
+-	TOOLCHAIN_EXTERNAL_MOVE
+-endif
+-
+-# Checks for an already installed toolchain: check the toolchain
+-# location, check that it is usable, and then verify that it
+-# matches the configuration provided in Buildroot: ABI, C++ support,
+-# kernel headers version, type of C library and all C library features.
+-define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+-	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
+-	$(Q)$(call check_unusable_toolchain,$(TOOLCHAIN_EXTERNAL_CC))
+-	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
+-	$(call check_kernel_headers_version,\
+-		$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC)),\
+-		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
+-	$(call check_gcc_version,$(TOOLCHAIN_EXTERNAL_CC),\
+-		$(call qstrip,$(BR2_TOOLCHAIN_GCC_AT_LEAST))); \
+-	if test "$(BR2_arm)" = "y" ; then \
+-		$(call check_arm_abi,\
+-			"$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
+-			$(TOOLCHAIN_EXTERNAL_READELF)) ; \
+-	fi ; \
+-	if test "$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
+-		$(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
+-	fi ; \
+-	if test "$(BR2_TOOLCHAIN_HAS_FORTRAN)" = "y" ; then \
+-		$(call check_fortran,$(TOOLCHAIN_EXTERNAL_FC)) ; \
+-	fi ; \
+-	if test "$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
+-		$(call check_uclibc,$${SYSROOT_DIR}) ; \
+-	elif test "$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
+-		$(call check_musl,$${SYSROOT_DIR}) ; \
+-	else \
+-		$(call check_glibc,$${SYSROOT_DIR}) ; \
+-	fi
+-	$(Q)$(call check_toolchain_ssp,$(TOOLCHAIN_EXTERNAL_CC))
+-endef
+-
+-TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_WRAPPER_BUILD)
+-
+-define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+-	$(TOOLCHAIN_WRAPPER_INSTALL)
+-	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
+-	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
+-	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC)
+-	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
+-	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+-endef
+-
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
+-endif
+-
+-# Even though we're installing things in both the staging, the host
+-# and the target directory, we do everything within the
+-# install-staging step, arbitrarily.
+-define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
+-	$(TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK)
+-	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
+-	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER)
+-	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC)
+-	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT)
+-	$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
+-endef
+-
+-endif # BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
+-
+-
+-# Since a virtual package is just a generic package, we can still
+-# define commands for the legacy toolchains.
+ $(eval $(virtual-package))
+ 
+ # Ensure the external-toolchain package has a prefix defined.
