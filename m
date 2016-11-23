@@ -1,35 +1,91 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 23 Nov 2016 15:50:42 +0000
-Subject: [Buildroot] [PATCH] gcc: the special workaround for ARC is no
- longer required
-In-Reply-To: <20161123112016.GA29549@waldemar-brodkorb.de>
-References: <20161123112016.GA29549@waldemar-brodkorb.de>
-Message-ID: <1479916183.3931.11.camel@synopsys.com>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Wed, 23 Nov 2016 11:13:05 -0500
+Subject: [Buildroot] [PATCH v2] pseudo-wrapper: fix console issue
+Message-ID: <20161123161305.6465-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Pseudo consists of:
+* a client (cli),
+* a server (daemon) and
+* a database managed by this daemon
+  which makes a relation between inode, filename, type/mode...
 
-On Wed, 2016-11-23 at 12:20 +0100, Waldemar Brodkorb wrote:
-> It seems with the change to gcc 6.x based toolchain this
-> workaround is no longer required. Tested with an arc hs toolchain.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
+Without -f/-d argument, the client forks a process, sets LD_PRELOAD,
+execve's the command given as argument and waits for its completion.
+The LD_PRELOAD'ed library tries to connect to the daemon and spawns it
+if it isn't running.
 
-Nice catch!
+Neither the client itself nor the LD_PRELOAD'ed library waits for the
+daemon to terminate. As a concequence, the daemon may still be alive
+after the completion of the command executed through the client.
 
-Indeed since?https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/80a9c1591ccce130ced8ee4581efacd55ba0a81e
-there's no libgmon building for ARC in gcc.
+Under some circumstances (running build in a docker), the daemon (which
+may be still alive after the build) is killed with SIGNKILL, thus it
+does not let it the time to properly sync its database.
 
-But unfortunately that's one of very few patches that were not yet merged
-in upstream gcc. That said if anybody attempts to build toolchain for ARC
-right out of upstream GCC the code in question will be required.
+The database is rendered inconsistent for the next build. In this case,
+makedevs will complain about the file type/mode, see error below.
 
-But given the fact we're not ready to switch to upstream GCC ATM
-your change is very much appreciated so
+makedevs: line xx: node (...)/output/target/dev/console exists but is of wrong type
 
-Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
+Note that this error was introduced by c85cd189.
+
+Because the database did not have the time to sync (ie. /dev/console
+record is missing), makedevs tests the existing and real /dev/console
+file mode (created by the previous build) which is a regular file to
+what should have been reported by pseudo, ie. a character device.
+Those two modes are different and makedevs exits with error.
+
+To solve this issue, this patch make the wrapper control the life of
+the daemon. It spawns the server before running the script inside the
+pseudo context, kills it with SIGTERM after the script has ended, and
+waits for the server to exit before the wrapper exits.
+
+CC: Arnout Vandecappelle <arnout@mind.be>
+CC: Lucile Quirion <lucile.quirion@savoirfairelinux.com>
+CC: J?r?me Pouiller <jezz@sysmic.org>
+CC: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+CC: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
+ package/pseudo/pseudo-wrapper | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
+index 9c8dbdb..194c88f 100644
+--- a/package/pseudo/pseudo-wrapper
++++ b/package/pseudo/pseudo-wrapper
+@@ -8,7 +8,6 @@ if [ "${0##*/}" = "fakeroot" ]; then
+ fi
+ 
+ export PSEUDO_PREFIX="$(dirname "${0%/*}")"
+-export PSEUDO_OPTS="-t0"
+ if [ -n "${TARGET_DIR}" ]; then
+     export PSEUDO_PASSWD="${TARGET_DIR}"
+ fi
+@@ -16,4 +15,18 @@ if [ -n "${BASE_DIR}" ]; then
+     export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
+ fi
+ 
+-exec "${0%/*}/pseudo" "${@}"
++# spawn server manually...
++"${0%/*}/pseudo" -f &
++pid="${!}"
++
++# ... run script/command...
++"${0%/*}/pseudo" "${@}"
++rc="${?}"
++
++# ... terminate server...
++"${0%/*}/pseudo" -S
++
++# ... and wait for its completion to make sure database is synced before
++# returning.
++wait "${pid}"
++exit "${rc}"
+-- 
+2.10.2
