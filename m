@@ -1,47 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Nov 2016 22:11:33 +0100
-Subject: [Buildroot] [git commit] package/kexec-lite: Update to latest
-	version
-Message-ID: <20161201222139.9AA397FD88@busybox.osuosl.org>
+Date: Wed, 23 Nov 2016 23:21:53 +0100
+Subject: [Buildroot] [git commit] Makefile: fix ignored trace at
+	target-finalize
+Message-ID: <20161201222139.7460F81DF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f36dccef818bb8ef36e15a71094c2e6eb66de463
+commit: https://git.buildroot.net/buildroot/commit/?id=5b7013c4ae3c4b183303204710a4bb3d717a4558
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream kexec-lite now has support for kexec on POWER9 based machines.
-Update so this works in simulators and is ready for when real machines
-are available.
+Make may throw an error (but ignored) trace when cleaning up the
+rootfs.
 
-Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-Acked-by: Joel Stanley <joel@jms.id.au>
+The target-finalize rule intends to remove the folder
+`$(TARGET_DIR)/usr/share' but this directory may still contain items
+(such as the `udhcpc' helper script) and causes the rmdir to fail.
+
+The stderr output is redirected to /dev/null but it returns and error
+which is escaped by the leading `-'; but make reports an ignored-error.
+
+See the log below:
+$ make
+(...)
+rm -rf (...)/target/usr/share/gtk-doc
+rmdir (...)/target/usr/share
+rmdir: failed to remove '(...)/target/usr/share': Directory not empty
+make[1]: [Makefile:650: target-finalize] Error 1 (ignored)
+find /(...)/target -type f \( -perm /111 -o -name '*.so*' \) -not \( -name 'libpthread*.so*' -o -name 'ld-*.so*' -o -name '*.ko' \) -print0 | xargs -0 (...)/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-strip --remove-section=.comment --remove-section=.note 2>/dev/null || true
+
+This patch apply the same rule at the instruction immediately after:
+* redirecting stderr to /dev/null (already done) and
+* executing true if the `rmdir' instruction fails.
+
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kexec-lite/kexec-lite.hash | 2 +-
- package/kexec-lite/kexec-lite.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kexec-lite/kexec-lite.hash b/package/kexec-lite/kexec-lite.hash
-index e8179b7..0f21224 100644
---- a/package/kexec-lite/kexec-lite.hash
-+++ b/package/kexec-lite/kexec-lite.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 2300187bf25616c382cb2f191a2eb13033e019511854794ce234a76cf9f5ad6b  kexec-lite-783fb4a811d0b0f8cc2ed68fa7872dcad56a3944.tar.gz
-+sha256 5786ddc0c94ead4fd4a1fded44bb1da0c9bc91af08049fed373ea161603e1e1f  kexec-lite-86e45a47e8cc1f598ccfa9b873a23067f4ecc36f.tar.gz
-diff --git a/package/kexec-lite/kexec-lite.mk b/package/kexec-lite/kexec-lite.mk
-index 27bc204..2467306 100644
---- a/package/kexec-lite/kexec-lite.mk
-+++ b/package/kexec-lite/kexec-lite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Makefile b/Makefile
+index 7c582e5..4f6269f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -668,7 +668,7 @@ endif
+ 	rm -rf $(TARGET_DIR)/usr/info $(TARGET_DIR)/usr/share/info
+ 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
+ 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
+-	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
++	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || true
+ 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
  
--KEXEC_LITE_VERSION = 783fb4a811d0b0f8cc2ed68fa7872dcad56a3944
-+KEXEC_LITE_VERSION = 86e45a47e8cc1f598ccfa9b873a23067f4ecc36f
- KEXEC_LITE_SITE = $(call github,antonblanchard,kexec-lite,$(KEXEC_LITE_VERSION))
- KEXEC_LITE_LICENSE = GPLv2+
- KEXEC_LITE_DEPENDENCIES = elfutils dtc
+ # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
