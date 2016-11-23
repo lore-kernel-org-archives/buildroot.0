@@ -1,201 +1,309 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:19:12 +0100
-Subject: [Buildroot] [git commit branch/next]
-	toolchain-external-codesourcery-sh: new package
-Message-ID: <20161123213659.6B75681DDA@busybox.osuosl.org>
+Date: Wed, 23 Nov 2016 22:09:52 +0100
+Subject: [Buildroot] [git commit branch/next] toolchain-external: introduce
+	toolchain-external-package
+Message-ID: <20161123213658.62FFF802C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3b686591c72019e9568ab8e8b9c267a95abf6bb
+commit: https://git.buildroot.net/buildroot/commit/?id=1c99d70e5210f9d7b475736e0360ed63d16584f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit adds a new package for the Sourcery CodeBench external
-toolchain for the SuperH 4a architecture.
+The toolchain-external-package infrastructure is just a copy of the
+toolchain-external commands, replacing TOOLCHAIN_EXTERNAL by $(2)
+and adding double-dollars everywhere.
 
-The legacy implementation is removed.
+toolchain-external itself is converted to a virtual package, but it
+is faked a little to make sue the toolchains that haven't been
+converted to toolchain-external-package yet keep on working.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+The TOOLCHAIN_EXTERNAL_MOVE commands don't have to be redefined
+for every toolchain-external-package instance, so that is moved
+out into the common part of pkg-toolchain-external.mk.
+
+The musl-compat-headers dependency stays in the toolchain-external
+package itself.
+
+The musl ld link is duplicated in the legacy toolchain-external and
+the toolchain-external-package, because they have separate hooks.
+
+The handling of TOOLCHAIN_EXTERNAL_BIN deserves some special attention,
+because its value will be different for different
+toolchain-external-package instances. However, the value only depends
+on variables that are set by Kconfig (BR2_TOOLCHAIN_EXTERNAL_PREFIX
+and BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD) so it can easily be used in
+the generic part. So we don't have to do anything specific for this
+variable after all.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 33 ++++------------------
- .../toolchain-external-codesourcery-sh/Config.in   | 25 ++++++++++++++++
- .../Config.in.options                              |  9 ++++++
- .../toolchain-external-codesourcery-sh.hash        |  3 ++
- .../toolchain-external-codesourcery-sh.mk          | 13 +++++++++
- .../toolchain-external/toolchain-external.hash     |  3 --
- toolchain/toolchain-external/toolchain-external.mk |  3 --
- 7 files changed, 56 insertions(+), 33 deletions(-)
+ toolchain/toolchain-external/Config.in             |   8 ++
+ .../toolchain-external/pkg-toolchain-external.mk   | 124 +++++++++++++++++++--
+ toolchain/toolchain-external/toolchain-external.mk |  48 ++++++--
+ 3 files changed, 159 insertions(+), 21 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index e628279..8e06b05 100644
+index 5324599..65a4216 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -33,6 +33,9 @@ source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Confi
- # NIOSII
- source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in"
+@@ -667,6 +667,14 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	# Compatibility headers: cdefs.h, queue.h
+ 	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
  
-+# SH4a
-+source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in"
++# Make sure the virtual-package infra checks the provider
++config BR2_PACKAGE_HAS_TOOLCHAIN_EXTERNAL
++	bool
++	default y
 +
- config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
- 	bool "Arago ARMv7 2011.09"
- 	depends on BR2_arm
-@@ -78,32 +81,6 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
- 
- 	  This toolchain uses software-floating point.
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
--	bool "Sourcery CodeBench SH 2012.09"
--	depends on BR2_sh4a || BR2_sh4aeb
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on !BR2_STATIC_LIBS
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_SSP
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
--	help
--	  Sourcery CodeBench toolchain for the SuperH architecture,
--	  from Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51,
--	  glibc 2.16, uClibc 0.9.30, gdb 7.4.50 and kernel headers
--	  3.5.4. It has support for the following variants:
--	    - SH4A, glibc, little endian
--	      Default.
--	    - SH4A, glibc, big endian
--	      Add -mb to BR2_TARGET_OPTIMIZATION
--	    - SH4A, uClibc, little endian
--	      Not usable in Buildroot yet.
--	    - SH4A, uClibc, big endian
--	      Not usable in Buildroot yet.
--
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
- 	bool "Sourcery CodeBench AMD64 2015.11"
- 	depends on BR2_x86_64
-@@ -265,7 +242,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arceb-linux"		 if BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC && BR2_arceb
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
--	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
- 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
- 	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
- 	default "arm-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABI
-@@ -330,6 +306,9 @@ source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Confi
- # NIOSII
- source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options"
- 
-+# SH4a
-+source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options"
++config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
++	string
 +
  if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
  
  choice
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in
-new file mode 100644
-index 0000000..a47dab7
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
-+	bool "Sourcery CodeBench SH 2012.09"
-+	depends on BR2_sh4a || BR2_sh4aeb
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+	help
-+	  Sourcery CodeBench toolchain for the SuperH architecture,
-+	  from Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51,
-+	  glibc 2.16, uClibc 0.9.30, gdb 7.4.50 and kernel headers
-+	  3.5.4. It has support for the following variants:
-+	    - SH4A, glibc, little endian
-+	      Default.
-+	    - SH4A, glibc, big endian
-+	      Add -mb to BR2_TARGET_OPTIMIZATION
-+	    - SH4A, uClibc, little endian
-+	      Not usable in Buildroot yet.
-+	    - SH4A, uClibc, big endian
-+	      Not usable in Buildroot yet.
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options
-new file mode 100644
-index 0000000..90061ce
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options
-@@ -0,0 +1,9 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
-+
-+config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+	default "sh-linux-gnu"
-+
-+config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-codesourcery-sh"
-+
-+endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.hash
-new file mode 100644
-index 0000000..ff2ba5f
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 59d6766fde244931aa52db01433d5acd051998762a931121c5fc109536a1a802  renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 e2e58c10e52395d5d35157e35f85233f713c6f9223a652dfc56194cfd2eed004  renesas-2012.09-61-sh-linux-gnu.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.mk
-new file mode 100644
-index 0000000..5370bb2
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# toolchain-external-sourcery-sh
-+#
-+################################################################################
-+
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_VERSION = 2012.09-61
-+
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_SOURCE = renesas-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_ACTUAL_SOURCE_TARBALL = renesas-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
-+
-+$(eval $(toolchain-external-package))
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 5c98fe3..18b3e1a 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -2,9 +2,6 @@
- # Next hashes are all locally computed
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 583b0d6..3cac520 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -98,6 +98,17 @@ TOOLCHAIN_EXTERNAL_CXX = $(TOOLCHAIN_EXTERNAL_CROSS)g++$(TOOLCHAIN_EXTERNAL_SUFF
+ TOOLCHAIN_EXTERNAL_FC = $(TOOLCHAIN_EXTERNAL_CROSS)gfortran$(TOOLCHAIN_EXTERNAL_SUFFIX)
+ TOOLCHAIN_EXTERNAL_READELF = $(TOOLCHAIN_EXTERNAL_CROSS)readelf$(TOOLCHAIN_EXTERNAL_SUFFIX)
  
- # Mentor's Sourcery CodeBench Lite toolchains
--# SuperH
--sha256 59d6766fde244931aa52db01433d5acd051998762a931121c5fc109536a1a802  renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
--sha256 e2e58c10e52395d5d35157e35f85233f713c6f9223a652dfc56194cfd2eed004  renesas-2012.09-61-sh-linux-gnu.src.tar.bz2
- # x86
- sha256 ea804cf02014369da52abc4f64e91e96bde2dd2230aca96109459013d4545458  ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
- sha256 1a9519e415a1e6892c760bf21f7e98f3a633a9d1c5bb8781a96d338e4dd62717  ia32-2012.09-62-i686-pc-linux-gnu.src.tar.bz2
++# Normal handling of downloaded toolchain tarball extraction.
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
++# As a regular package, the toolchain gets extracted in $(@D), but
++# since it's actually a fairly special package, we need it to be moved
++# into TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR.
++define TOOLCHAIN_EXTERNAL_MOVE
++	rm -rf $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
++	mkdir -p $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
++	mv $(@D)/* $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)/
++endef
++endif
+ 
+ #
+ # Definitions of the list of libraries that should be copied to the target.
+@@ -474,15 +485,6 @@ endef
+ 
+ # Various utility functions used by the external toolchain based on musl.
+ 
+-# musl does not provide an implementation for sys/queue.h or sys/cdefs.h.
+-# So, add the musl-compat-headers package that will install those files,
+-# into the staging directory:
+-#   sys/queue.h:  header from NetBSD
+-#   sys/cdefs.h:  minimalist header bundled in Buildroot
+-ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-TOOLCHAIN_EXTERNAL_DEPENDENCIES += musl-compat-headers
+-endif
+-
+ # With the musl C library, the libc.so library directly plays the role
+ # of the dynamic library loader. We just need to create a symbolic
+ # link to libc.so with the appropriate name.
+@@ -501,7 +503,6 @@ endif
+ define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
+ 	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
+ endef
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
+ endif
+ 
+ #
+@@ -568,3 +569,106 @@ define TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO
+ 		ln -sf ld64-uClibc.so.1 $(TARGET_DIR)/lib/ld64-uClibc.so.0 ; \
+ 	fi
+ endef
++
++
++################################################################################
++# inner-toolchain-external-package -- defines the generic installation rules
++# for external toolchain packages
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including a HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++################################################################################
++define inner-toolchain-external-package
++
++$(2)_INSTALL_STAGING = YES
++$(2)_ADD_TOOLCHAIN_DEPENDENCY = NO
++
++# In fact, we don't need to download the toolchain, since it is already
++# available on the system, so force the site and source to be empty so
++# that nothing will be downloaded/extracted.
++ifeq ($$(BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED),y)
++$(2)_SITE =
++$(2)_SOURCE =
++endif
++
++ifeq ($$(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
++$(2)_EXCLUDES = usr/lib/locale/*
++
++$(2)_POST_EXTRACT_HOOKS += \
++	TOOLCHAIN_EXTERNAL_MOVE
++endif
++
++# Checks for an already installed toolchain: check the toolchain
++# location, check that it is usable, and then verify that it
++# matches the configuration provided in Buildroot: ABI, C++ support,
++# kernel headers version, type of C library and all C library features.
++define $(2)_CONFIGURE_CMDS
++	$$(Q)$$(call check_cross_compiler_exists,$$(TOOLCHAIN_EXTERNAL_CC))
++	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC))
++	$$(Q)SYSROOT_DIR="$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))" ; \
++	$$(call check_kernel_headers_version,\
++		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
++		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
++	$$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
++		$$(call qstrip,$$(BR2_TOOLCHAIN_GCC_AT_LEAST))); \
++	if test "$$(BR2_arm)" = "y" ; then \
++		$$(call check_arm_abi,\
++			"$$(TOOLCHAIN_EXTERNAL_CC) $$(TOOLCHAIN_EXTERNAL_CFLAGS)",\
++			$$(TOOLCHAIN_EXTERNAL_READELF)) ; \
++	fi ; \
++	if test "$$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
++		$$(call check_cplusplus,$$(TOOLCHAIN_EXTERNAL_CXX)) ; \
++	fi ; \
++	if test "$$(BR2_TOOLCHAIN_HAS_FORTRAN)" = "y" ; then \
++		$$(call check_fortran,$$(TOOLCHAIN_EXTERNAL_FC)) ; \
++	fi ; \
++	if test "$$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
++		$$(call check_uclibc,$$$${SYSROOT_DIR}) ; \
++	elif test "$$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
++		$$(call check_musl,$$$${SYSROOT_DIR}) ; \
++	else \
++		$$(call check_glibc,$$$${SYSROOT_DIR}) ; \
++	fi
++	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC))
++endef
++
++$(2)_TOOLCHAIN_WRAPPER_ARGS += $$(TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS)
++
++$(2)_BUILD_CMDS = $$(TOOLCHAIN_WRAPPER_BUILD)
++
++define $(2)_INSTALL_STAGING_CMDS
++	$$(TOOLCHAIN_WRAPPER_INSTALL)
++	$$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
++	$$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
++	$$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC)
++	$$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
++	$$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
++endef
++
++ifeq ($$(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
++$(2)_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
++endif
++
++# Even though we're installing things in both the staging, the host
++# and the target directory, we do everything within the
++# install-staging step, arbitrarily.
++define $(2)_INSTALL_TARGET_CMDS
++	$$(TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK)
++	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
++	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER)
++	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC)
++	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT)
++	$$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
++endef
++
++# Call the generic package infrastructure to generate the necessary
++# make targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
++
++endef
++
++toolchain-external-package = $(call inner-toolchain-external-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index fde0564..9aabab6 100644
+index be1b5e4..bcbcb2e 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -56,9 +56,6 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
- 	rm -rf $(@D)/arago-2011.09/
+@@ -4,12 +4,31 @@
+ #
+ ################################################################################
+ 
++TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
++
++# musl does not provide an implementation for sys/queue.h or sys/cdefs.h.
++# So, add the musl-compat-headers package that will install those files,
++# into the staging directory:
++#   sys/queue.h:  header from NetBSD
++#   sys/cdefs.h:  minimalist header bundled in Buildroot
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++TOOLCHAIN_EXTERNAL_DEPENDENCIES += musl-compat-headers
++endif
++
+ # All the definition that are common between the toolchain-external
+ # generic package and the toolchain-external-package infrastructure
+ # can be found in pkg-toolchain-external.mk
+ 
++# Legacy toolchains that don't use the toolchain-external-package infrastructure
++# yet. We can recognise that because no provider is set.
++ifeq ($(call qstrip,$(BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL)),)
++
++# Now we are the provider. However, we can't set it to ourselves or we'll get a
++# circular dependency. Let's set it to a target that we always depend on
++# instead.
++BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL = skeleton
++
+ TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
+-TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+ # In fact, we don't need to download the toolchain, since it is already
+ # available on the system, so force the site and source to be empty so
+@@ -201,18 +220,9 @@ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL ?= \
+ 	$(subst -i686-pc-linux-gnu.tar.bz2,.src.tar.bz2,$(subst -i686-pc-linux-gnu-i386-linux.tar.bz2,-i686-pc-linux-gnu.src.tar.bz2,$(TOOLCHAIN_EXTERNAL_SOURCE)))
+ endif
+ 
+-# Normal handling of downloaded toolchain tarball extraction.
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
+ TOOLCHAIN_EXTERNAL_EXCLUDES = usr/lib/locale/*
+ 
+-# As a regular package, the toolchain gets extracted in $(@D), but
+-# since it's actually a fairly special package, we need it to be moved
+-# into TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR.
+-define TOOLCHAIN_EXTERNAL_MOVE
+-	rm -rf $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
+-	mkdir -p $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)
+-	mv $(@D)/* $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR)/
+-endef
+ TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += \
+ 	TOOLCHAIN_EXTERNAL_MOVE
+ endif
+@@ -262,6 +272,10 @@ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
  endef
- TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH),y)
--TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu
--TOOLCHAIN_EXTERNAL_SOURCE = renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86),y)
- TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
+ 
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
++endif
++
+ # Even though we're installing things in both the staging, the host
+ # and the target directory, we do everything within the
+ # install-staging step, arbitrarily.
+@@ -274,5 +288,17 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
+ 	$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
+ endef
+ 
+-$(eval $(generic-package))
++endif # BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
++
+ 
++# Since a virtual package is just a generic package, we can still
++# define commands for the legacy toolchains.
++$(eval $(virtual-package))
++
++# Ensure the external-toolchain package has a prefix defined.
++# This comes after the virtual-package definition, which checks the provider.
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
++ifeq ($(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX)),)
++$(error No prefix selected for external toolchain package $(BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL). Configuration error)
++endif
++endif
