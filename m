@@ -1,45 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:55:24 +0100
-Subject: [Buildroot] [git commit] Makefile: add '-n' to gzip invocations to
-	improve reproducibility
-Message-ID: <20161201222139.18BBD7FD88@busybox.osuosl.org>
+Date: Wed, 23 Nov 2016 22:56:49 +0100
+Subject: [Buildroot] [git commit] linux: override build timestamp for
+	reproducible builds
+Message-ID: <20161201222139.2D4127FD88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b91b21dae40d6db1c320a76cfdbabeedcb2d1c2
+commit: https://git.buildroot.net/buildroot/commit/?id=af109fb44469a89b2576d167b02f02a811d13c12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Default invocation to gzip include timestamp in output file. This feature is
-incompatible with BR2_REPRODUCIBLE. It is possible to disable it with '-n'.
+Linux kernel include a few information about build environment in its binary.
+This feature is incompatible with BR2_REPRODUCIBLE. This patch overload build
+information when BR2_REPRODUCIBLE is enabled.
 
-The environment variable GZIP can hold a set of default options for gzip. So
-instead to find all gzip invocation in build process, we just export 'GZIP=-n'.
+Note that usage of KBUILD_BUILD_TIMESTAMP is not mandatory since Buildroot
+use `fakedate'. However, native solution is prefered when upstream
+provide one.
 
-Notice bzip2, lzma and xz are not impacted by this problem. On the other hand, lzop
-does include timestamp and does not provide any way to disable it.
-
-This work was sponsored by `BA Robotic Systems'.
-
+Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ linux/linux.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 8acbe58..9e588da 100644
---- a/Makefile
-+++ b/Makefile
-@@ -251,6 +251,7 @@ ifeq ($(BR2_REPRODUCIBLE),y)
- export TZ=UTC
- export LANG=C
- export LC_ALL=C
-+export GZIP = -n
- BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
- export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
- endif
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 988427c..7e826cc 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -94,6 +94,14 @@ LINUX_MAKE_ENV = \
+ 	$(TARGET_MAKE_ENV) \
+ 	BR_BINARIES_DIR=$(BINARIES_DIR)
+ 
++ifeq ($(BR2_REPRODUCIBLE),y)
++LINUX_MAKE_ENV += \
++	KBUILD_BUILD_VERSION=1 \
++	KBUILD_BUILD_USER=buildroot \
++	KBUILD_BUILD_HOST=buildroot \
++	KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
++endif
++
+ # Get the real Linux version, which tells us where kernel modules are
+ # going to be installed in the target filesystem.
+ LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
