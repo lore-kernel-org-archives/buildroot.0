@@ -1,43 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:31:15 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-mouse:
-	bump version to 1.9.2
-Message-ID: <20161201222140.73073801E2@busybox.osuosl.org>
+Date: Wed, 23 Nov 2016 23:01:25 +0100
+Subject: [Buildroot] [git commit] Config.in: improve BR2_REPRODUCIBLE help
+	text
+Message-ID: <20161201222139.4D6357FD88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e5380db9ed0e92c60bc29a624a30bb1f0ef0e19
+commit: https://git.buildroot.net/buildroot/commit/?id=bedb16105dd6742d3209af7ef45c23a8bb1c077f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash | 4 ++--
- package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
-index 5a62d13..caba427 100644
---- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
-+++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2014-August/002471.html
--sha256	3485d375779c08406f0789feedde15933dc703158a086ddac638598f479fc5ce	xf86-input-mouse-1.9.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-November/002740.html
-+sha256 f425d5b05c6ab412a27e0a1106bb83f9e2662b307210abbe48270892387f4b2f  xf86-input-mouse-1.9.2.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-index e1bd81a..5bcbeb7 100644
---- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-+++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in b/Config.in
+index 5cf0c4d..98096df 100644
+--- a/Config.in
++++ b/Config.in
+@@ -707,6 +707,12 @@ config BR2_REPRODUCIBLE
+ 	  this allows to generate exactly identical binaries from one
+ 	  build to the other, including on different machines.
  
--XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.1
-+XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.2
- XDRIVER_XF86_INPUT_MOUSE_SOURCE = xf86-input-mouse-$(XDRIVER_XF86_INPUT_MOUSE_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_MOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_MOUSE_LICENSE = MIT
++	  The current implementation is restricted to builds with the
++	  same output directory. Many (absolute) paths are recorded in
++	  intermediary files, and it is very likely that some of these
++	  paths leak into the target rootfs. If you build with the
++	  same O=... path, however, the result is identical.
++
+ 	  This is labeled as an experimental feature, as not all
+ 	  packages behave properly to ensure reproducibility.
+ 
