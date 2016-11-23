@@ -1,53 +1,24 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Wed, 23 Nov 2016 13:54:35 +0100
-Subject: [Buildroot] [PATCH v3 00/18] Reproducible builds
-In-Reply-To: <20161123132414.30eade0d@free-electrons.com>
-References: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
- <20161123132414.30eade0d@free-electrons.com>
-Message-ID: <3668997.WEC4FqhPHV@sagittea>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 23 Nov 2016 12:56:25 +0000
+Subject: [Buildroot] [Bug 9386] ubinize fails with or without custom config
+In-Reply-To: <bug-9386-163@https.bugs.busybox.net/>
+References: <bug-9386-163@https.bugs.busybox.net/>
+Message-ID: <bug-9386-163-U5U9Emw25l@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=9386
 
-On Wednesday 23 November 2016 13:24:14 Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 23 Nov 2016 12:08:00 +0100, J?r?me Pouiller wrote:
-> > This series try to continue work initiated by Gilles Chanteperdrix:
-> >   http://lists.busybox.net/pipermail/buildroot/2016-April/thread.html#160064
-> >   http://lists.busybox.net/pipermail/buildroot/2016-June/thread.html#163905
-> > 
-> > I dropped some patchs from original series because either:
-> >   - I handled things differently (timestamps in images, support SOURCE_DATE_EPOCH
-> >     in gcc, ...)
-> >   - I didn't had time to test them them (sysroot, cpio, cdrkit, iso9660,...)
-> >   - They doesn't seems necessary anymore (libtool, libgcrypt, libgpg-error, ...)
-> > 
-> > This version focuses on timestamps. It provide good enough results as soon as
-> > OUTDIR and TOPDIR are the same. Indeed build path appear in plenty of files.
-> > Only patch called "remove full path from .pyc" try to solve this issue. Another
-> > big step could be done by removing rpaths from ELF generated with libtool.
-> > 
-> > Other thing known to break reproducibility:
-> >   - use of lzop (it unconditionally include timestamps in result)
-> >   - /!\ since we build our own toolchain and toolchain include BR2_FULL_VERSION,
-> >     ccache is incompatible with reproducible
-> > 
-> > Since this feature is experimental I did not (yet) reported these
-> > incompatibilities in menuconfig.
-> 
-> What are the changes between v2 and v3? There is no changelog, either
-> in the cover letter nor in the patches themselves. It would be useful
-> to have a changelog.
+--- Comment #15 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+And indeed, installing Fedora's fakeroot, and changing
+$$(HOST_DIR)/usr/bin/fakeroot to just /usr/bin/fakeroot makes everything work.
 
-Oops, I have forgotten --notes. I resend soon.
-
+So there is a difference in the fakeroot source code, or the way we build it,
+we makes our fakeroot behave badly on SELinux enabled systems.
 
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+You are receiving this mail because:
+You are on the CC list for the bug.
