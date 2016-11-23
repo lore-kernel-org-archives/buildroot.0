@@ -1,45 +1,49 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Wed, 23 Nov 2016 13:25:02 +1100
-Subject: [Buildroot] [PATCH 1/1] package/qemu: enable host QEMU for
-	powerpc64/powerpc64le
-Message-ID: <a335c60f72c52d158a29c757c1ee74b098de65fd.1479867900.git.sam.bobroff@au1.ibm.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 22 Nov 2016 21:31:31 -0500
+Subject: [Buildroot] [PATCH 1/1] Makefile: drop redundant shell call when
+	deriving BASE_DIR
+Message-ID: <1479868291-2863-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Commit 173135df5b69dfd5ae6fe6cf2de8833c6f74c143 ("core: re-enter make if
+$(CURDIR) or $(O) are not canonical paths") introduced the CANONICAL_O
+variable, defined as:
+
+CANONICAL_O := $(shell mkdir -p $(O) >/dev/null 2>&1)$(realpath $(O))
+
+This duplicates the definition of BASE_DIR, by different means:
+
+BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
+
+So one of these shell calls is redundant. CANONICAL_O is defined first,
+so this commit replaces the BASE_DIR derivation with $(CANONICAL_O).
+
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- package/qemu/qemu.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index cf23f16..ae4e0ad 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -34,6 +34,8 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-p
- #       mips64          mips64
- #       mips64el        mips64el
- #       powerpc         ppc
-+#       powerpc64       ppc64
-+#       powerpc64le     ppc64 (ppc64 supports little-endian)
- #       sh2a            not supported
- #       sh4             sh4
- #       sh4eb           sh4eb
-@@ -55,6 +57,12 @@ endif
- ifeq ($(HOST_QEMU_ARCH),powerpc)
- HOST_QEMU_ARCH = ppc
- endif
-+ifeq ($(HOST_QEMU_ARCH),powerpc64)
-+HOST_QEMU_ARCH = ppc64
-+endif
-+ifeq ($(HOST_QEMU_ARCH),powerpc64le)
-+HOST_QEMU_ARCH = ppc64
-+endif
- ifeq ($(HOST_QEMU_ARCH),sh4a)
- HOST_QEMU_ARCH = sh4
- endif
+diff --git a/Makefile b/Makefile
+index 37e4bd4..a4a6147 100644
+--- a/Makefile
++++ b/Makefile
+@@ -165,10 +165,10 @@ endif
+ 
+ # bash prints the name of the directory on 'cd <dir>' if CDPATH is
+ # set, so unset it here to not cause problems. Notice that the export
+-# line doesn't affect the environment of $(shell ..) calls, so
+-# explictly throw away any output from 'cd' here.
++# line doesn't affect the environment of $(shell ..) calls.
+ export CDPATH :=
+-BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
++
++BASE_DIR := $(CANONICAL_O)
+ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+ 
+ 
 -- 
-2.10.0.297.gf6727b0
+1.9.1
