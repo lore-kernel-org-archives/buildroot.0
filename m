@@ -1,58 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 23:21:32 +0100
-Subject: [Buildroot] [PATCH/next] toolchain-external: support gcc < 4.3
-In-Reply-To: <20161123111404.20661-1-arnout@mind.be>
-References: <20161123111404.20661-1-arnout@mind.be>
-Message-ID: <20161123232132.66194af8@free-electrons.com>
+Date: Wed, 23 Nov 2016 23:21:53 +0100
+Subject: [Buildroot] [git commit branch/next] Makefile: fix ignored trace at
+	target-finalize
+Message-ID: <20161123222200.CF5C2817AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5b7013c4ae3c4b183303204710a4bb3d717a4558
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 23 Nov 2016 12:14:04 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
+Make may throw an error (but ignored) trace when cleaning up the
+rootfs.
 
-> This patch conflicts with the external toolchain rework - I'll rebase
-> the one which "looses" in the first-to-be-committed contest.
+The target-finalize rule intends to remove the folder
+`$(TARGET_DIR)/usr/share' but this directory may still contain items
+(such as the `udhcpc' helper script) and causes the rmdir to fail.
 
-external toolchain rework committed :)
+The stderr output is redirected to /dev/null but it returns and error
+which is escaped by the leading `-'; but make reports an ignored-error.
 
-> 
-> We should also remove the 4.3 and 4.4 options, because they are
-> currently unused and also untested in the autobuilders.
-> 
-> I think something similar should be done for kernel headers.
+See the log below:
+$ make
+(...)
+rm -rf (...)/target/usr/share/gtk-doc
+rmdir (...)/target/usr/share
+rmdir: failed to remove '(...)/target/usr/share': Directory not empty
+make[1]: [Makefile:650: target-finalize] Error 1 (ignored)
+find /(...)/target -type f \( -perm /111 -o -name '*.so*' \) -not \( -name 'libpthread*.so*' -o -name 'ld-*.so*' -o -name '*.ko' \) -print0 | xargs -0 (...)/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-strip --remove-section=.comment --remove-section=.note 2>/dev/null || true
 
-We already have something like this: we have
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD.
+This patch apply the same rule at the instruction immediately after:
+* redirecting stderr to /dev/null (already done) and
+* executing true if the `rmdir' instruction fails.
 
->  toolchain/helpers.mk                   |  3 +--
->  toolchain/toolchain-external/Config.in | 11 +++++++++++
->  2 files changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 3991bc1..72e7292 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -145,8 +145,7 @@ check_kernel_headers_version = \
->  check_gcc_version = \
->  	expected_version="$(strip $2)" ; \
->  	if [ -z "$${expected_version}" ]; then \
-> -		printf "Internal error, gcc version unknown (no GCC_AT_LEAST_X_Y selected)\n"; \
-> -		exit 1 ; \
-> +		exit 0 ; \
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Why?
-
-Assuming you will respin, I've marked this one as Changes Requested.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/Makefile b/Makefile
+index 7c582e5..4f6269f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -668,7 +668,7 @@ endif
+ 	rm -rf $(TARGET_DIR)/usr/info $(TARGET_DIR)/usr/share/info
+ 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
+ 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
+-	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
++	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || true
+ 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
+ 
+ # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
