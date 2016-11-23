@@ -1,46 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Nov 2016 23:12:46 +0100
-Subject: [Buildroot] [git commit] gstreamer1/gst1-rtsp-server: bump version
-	to 1.10.1
-Message-ID: <20161201222137.A2B647FB56@busybox.osuosl.org>
+Date: Wed, 23 Nov 2016 22:55:17 +0100
+Subject: [Buildroot] [git commit] Makefile: generate SOURCE_DATE_EPOCH for
+	reproducible builds
+Message-ID: <20161201222139.0F2F17FD88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92daf66b7b52df5b4f9ca33c3132a3a2fbebc4b0
+commit: https://git.buildroot.net/buildroot/commit/?id=9befe94baf990ee6331e77edb40e286e9dc4df8d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-  https://gstreamer.freedesktop.org/releases/gst-rtsp-server/1.10.1.html
+When reproducibility is requested, generate a global SOURCE_DATE_EPOCH
+environment variable which contains either the date of Buildroot last
+commit if running from a git repository, or the latest release date.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+This means that all packages embedding build dates will appear to
+have the same build date, so in case of new commit or release, all
+packages will appear to have been changed, even though some of them
+may not have changed in fact.
+
+The meaning of SOURCE_DATE_EPOCH is specified by the following
+specification:
+  https://reproducible-builds.org/specs/source-date-epoch/
+
+Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-index 597f0b2..b2e789d 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-@@ -1,2 +1,2 @@
--# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.10.0.tar.xz.sha256sum
--sha256 aa72a94cccdd2387ad25dc65c5c0b1f76269c3997cbde348232eec2a1565b3cd  gst-rtsp-server-1.10.0.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.10.1.tar.xz.sha256sum
-+sha256 ddc0c2699598623c2d19d3a2856fb73365496a949783537b238f44bc51e5b005  gst-rtsp-server-1.10.1.tar.xz
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index 4ff44c9..b5854e1 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Makefile b/Makefile
+index eff814b..8acbe58 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,6 +87,8 @@ all:
  
--GST1_RTSP_SERVER_VERSION = 1.10.0
-+GST1_RTSP_SERVER_VERSION = 1.10.1
- GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
- GST1_RTSP_SERVER_LICENSE = LGPLv2+
+ # Set and export the version string
+ export BR2_VERSION := 2016.11-rc1
++# Actual time the release is cut (for reproducible builds)
++BR2_VERSION_EPOCH = 1478206447
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+@@ -249,6 +251,8 @@ ifeq ($(BR2_REPRODUCIBLE),y)
+ export TZ=UTC
+ export LANG=C
+ export LC_ALL=C
++BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
++export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
+ endif
+ 
+ # To put more focus on warnings, be less verbose as default
