@@ -1,49 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:56:49 +0100
-Subject: [Buildroot] [git commit branch/next] linux: override build
-	timestamp for reproducible builds
-Message-ID: <20161123215709.8615D81810@busybox.osuosl.org>
+Date: Wed, 23 Nov 2016 22:56:53 +0100
+Subject: [Buildroot] [git commit branch/next] busybox: disable build
+	timestamps for reproducible builds
+Message-ID: <20161123215709.93FA87FCEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af109fb44469a89b2576d167b02f02a811d13c12
+commit: https://git.buildroot.net/buildroot/commit/?id=a8254d32fd839ebd0a96863579832678eb6e0038
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Linux kernel include a few information about build environment in its binary.
-This feature is incompatible with BR2_REPRODUCIBLE. This patch overload build
-information when BR2_REPRODUCIBLE is enabled.
-
-Note that usage of KBUILD_BUILD_TIMESTAMP is not mandatory since Buildroot
-use `fakedate'. However, native solution is prefered when upstream
-provide one.
+Busybox includes some information about the build environment in its
+binary. For BR2_REPRODUCIBLE, remove that information.
 
 Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/busybox/busybox.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 988427c..7e826cc 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -94,6 +94,14 @@ LINUX_MAKE_ENV = \
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index fc23a90..f4a241d 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -36,6 +36,12 @@ BUSYBOX_MAKE_ENV = \
  	$(TARGET_MAKE_ENV) \
- 	BR_BINARIES_DIR=$(BINARIES_DIR)
- 
+ 	CFLAGS="$(BUSYBOX_CFLAGS)" \
+ 	CFLAGS_busybox="$(BUSYBOX_CFLAGS_busybox)"
++
 +ifeq ($(BR2_REPRODUCIBLE),y)
-+LINUX_MAKE_ENV += \
-+	KBUILD_BUILD_VERSION=1 \
-+	KBUILD_BUILD_USER=buildroot \
-+	KBUILD_BUILD_HOST=buildroot \
-+	KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
++BUSYBOX_MAKE_ENV += \
++	KCONFIG_NOTIMESTAMP=1
 +endif
 +
- # Get the real Linux version, which tells us where kernel modules are
- # going to be installed in the target filesystem.
- LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
+ BUSYBOX_MAKE_OPTS = \
+ 	CC="$(TARGET_CC)" \
+ 	ARCH=$(KERNEL_ARCH) \
