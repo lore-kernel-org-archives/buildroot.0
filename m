@@ -1,72 +1,52 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 23 Nov 2016 09:47:13 +0100
-Subject: [Buildroot] pseudo: remaining issues...
-In-Reply-To: <20161123093550.43e574f3@free-electrons.com>
-References: <20161122212534.GA3529@free.fr>
- <20161123093550.43e574f3@free-electrons.com>
-Message-ID: <CAGduivyZ1-RWO3V0Y6jx1fkO34QapP6tCm0niJsEAXxwSJe3AA@mail.gmail.com>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Wed, 23 Nov 2016 10:49:10 +0100
+Subject: [Buildroot] Bare metal toolchain support?
+Message-ID: <CAM+bi4v0iJKAbKV8FvqwJqEw=L+DqTLZhcHWGboYBbPv1oTM0A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+Hi,
 
-I have experienced the same problem as Jerome on some machines, in my
-cases I haven't noticed that it was the striped files but it's pretty
-hard to reproduce.
+Is buildroot able to build a baremetal toolchain?
 
-The issues is that random files gets random rights on random machines,
-ideal scenario.
+Specifically, I'm trying to build a small bootloader for the microblaze
+architecture. Xilinx provides an SDK, and I wonder if I can build one like
+this using buildroot, so I can keep all my code and workflow centralized
+under buildroot.
 
-On Wed, Nov 23, 2016 at 9:35 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Tue, 22 Nov 2016 22:25:34 +0100, Yann E. MORIN wrote:
->
->> Alternatively, we can revert back to using fakeroot for this release, at
->> the expense of breaking (already previously broken) setups with SELinux
->> on the host.
->
-> I am more and more thinking that this is what we should do. Not only
-> pseudo still has issues, but even once all issues will be fixed, it is
-> a much much more complicated and annoying solution than fakeroot:
-Here's my 2 cents from someone planning to use the next release to
-build a product:
-If the community decide to keep pseudo, I will keep my patches that
-revert them until everything's fixed (I am willing to do test, I do
-not have time to investigate though). There's too much issues too
-close to the release deadline and I don't really care about SELinux
-(as I said my opinion is from my professional point of view, I
-perfectly understand why it's an issues and it should be addressed
-from the BR point of view).
->
->  - It requires additional dependencies (host-sqlite, host-attr)
->
->  - It requires a complicated setup, with a daemon, that you need to
->    manually start and stop (because the internal pseudo mechanism to
->    start/stop the daemon doesn't work properly)
->
-> So I really believe we should revert to fakeroot, and investigate what
-> this SELinux problem is exactly. Looking more at the original bug at
-> https://bugzilla.redhat.com/show_bug.cgi?id=1238802, what is the actual
-> problem for us? Why do we care about preserving the SELinux labels of
-> files within the fakeroot environment? We don't support SELinux, and
-> even if we did, most likely the SELinux labels that exist on the host
-> machine would not make sense for the target filesystem.
->
-> So is the real problem with fakeroot on Fedora related to SELinux?
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+$ mb-gcc -v
+Using built-in specs.
+COLLECT_GCC=mb-gcc
+COLLECT_LTO_WRAPPER=/opt/Xilinx/SDK/2016.2/gnu/microblaze/lin/bin/../libexec/gcc/microblaze-xilinx-elf/5.2.0/lto-wrapper
+Target: microblaze-xilinx-elf
+Configured with:
+/proj/sdk/gnu/microblaze/builds/HEAD/nightly/2016_06_03/rdi_scripts/../build/lin/ctng_bld/target_build/src/gcc-custom/configure
+--build=i686-build_pc-linux-gnu --host=i686-build_pc-linux-gnu
+--target=microblaze-xilinx-elf
+--prefix=/proj/sdk/gnu/microblaze/builds/HEAD/nightly/2016_06_03/rdi_scripts/../build/lin/ctng_output
+--with-local-prefix=/proj/sdk/gnu/microblaze/builds/HEAD/nightly/2016_06_03/rdi_scripts/../build/lin/ctng_output/microblaze-xilinx-elf/sysroot
+--disable-libmudflap
+--with-sysroot=/proj/sdk/gnu/microblaze/builds/HEAD/nightly/2016_06_03/rdi_scripts/../build/lin/ctng_output/microblaze-xilinx-elf/sysroot
+--with-newlib --enable-threads=no --disable-shared
+--with-pkgversion='crosstool-NG 1.20.0' --disable-__cxa_atexit
+--with-gmp=/proj/sdk/gnu/microblaze/builds/HEAD/nightly/2016_06_03/rdi_scripts/../build/lin/ctng_bld/target_build/microblaze-xilinx-elf/buildtools
+--with-mpfr=/proj/sdk/gnu/microblaze/builds/HEAD/nightly/2016_06_03/rdi_scripts/../build/lin/ctng_bld/target_build/microblaze-xilinx-elf/buildtools
+--with-mpc=/proj/sdk/gnu/microblaze/builds/HEAD/nightly/2016_06_03/rdi_scripts/../build/lin/ctng_bld/target_build/microblaze-xilinx-elf/buildtools
+--with-ppl=no --with-isl=no --with-cloog=no --with-libelf=no --disable-lto
+--enable-target-optspace --without-long-double-128 --disable-libgomp
+--disable-libmudflap --disable-nls --disable-libstdcxx-pch
+--enable-languages=c,c++
+Thread model: single
+gcc version 5.2.0 (crosstool-NG 1.20.0)
+
+
+Best regards
+
+-- 
+?lvaro G?mez Machado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161123/970f2e58/attachment.html>
