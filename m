@@ -1,77 +1,34 @@
-From: yann.morin.1998 at free.fr <yann.morin.1998@free.fr>
-Date: Wed, 23 Nov 2016 09:24:15 +0100 (CET)
-Subject: [Buildroot] [PATCH] pseudo-wrapper: fix console issue
-In-Reply-To: <20161123053220.1845-1-gael.portay@savoirfairelinux.com>
-Message-ID: <742299100.47508539.1479889455513.JavaMail.root@zimbra96-e16.priv.proxad.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Nov 2016 09:24:36 +0100
+Subject: [Buildroot] [PATCH] Makefile: fix ignored trace at
+ target-finalize
+In-Reply-To: <20161122205333.9735-1-gael.portay@savoirfairelinux.com>
+References: <20161122205333.9735-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20161123092436.270ba426@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ga?l, All,
+Hello,
 
-Ga?l PORTAY wrote:
-> Pseudo consists in:
-> * a client (cli),
-> * a server (daemon) and
-> * a database managed by this daemon
->   which make a relation between inode, filename, type/mode...
-[--SNIP--]
-> To solve this issue, this patch make the wrapper controls the life of
-> the daemon. It spawns the server before running the script inside the
-> pseudo context ; and kills it after the script has ended to make sure
-> the server is terminated before the wrapper exits.
-
-Almost there! but see a comment, below...
-
-> CC: Arnout Vandecappelle <arnout@mind.be>
-> CC: Lucile Quirion <lucile.quirion@savoirfairelinux.com>
-> CC: J?r?me Pouiller <jezz@sysmic.org>
-> CC: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> CC: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
->  package/pseudo/pseudo-wrapper | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
+On Tue, 22 Nov 2016 15:53:33 -0500, Ga?l PORTAY wrote:
+> Make may throw an error (but ignored) trace when cleaning up the
+> rootfs.
 > 
-> diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
-> index 558f3ea..c6d0d10 100644
-> --- a/package/pseudo/pseudo-wrapper
-> +++ b/package/pseudo/pseudo-wrapper
-> @@ -18,4 +18,16 @@ if [ -n "${BASE_DIR}" ]; then
->      export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
->  fi
->  
-> -exec "${0%/*}/pseudo" "${@}"
-> +# spawns server manually...
-> +"${0%/*}/pseudo" -f &
-> +pid="$!"
-> +
-> +# ... run script/command...
-> +"${0%/*}/pseudo" "${@}"
-> +
-> +# ... terminates server...
-> +kill -s TERM "$pid"
-> +# ... and waits for its completion to make sure database is synced before
-> +# returning.
-> +wait "$pid"
-> +exit 0
+> The target-finalize rule intends to remove the folder
+> `$(TARGET_DIR)/usr/share' but this directory may still contain items
+> (such as the `udhcpc' helper script) and causes the rmdir to fail.
+> 
+> The stderr output is redirected to /dev/null but it returns and error
+> which is escaped by the leading `-'; but make reports an ignored-error.
 
-We want the wrapper to fail if the command failed., so:
+Ah, what is the problem with that? Just the fact that there is this
+"Error 1 (ignored)" message?
 
-    # ... run script/command...
-    "${0%/*}/pseudo" "${@}"
-    ret=$?
-
-    # ... terminates server...
-    kill -s TERM "$pid"
-    wait "$pid"
-
-    exit ${ret}
-
-Regards,
-Yann E. MORIN.
-
-> -- 
-> 2.10.2
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
