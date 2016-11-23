@@ -1,78 +1,45 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 23 Nov 2016 12:14:04 +0100
-Subject: [Buildroot] [PATCH/next] toolchain-external: support gcc < 4.3
-Message-ID: <20161123111404.20661-1-arnout@mind.be>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 23 Nov 2016 12:20:16 +0100
+Subject: [Buildroot] [PATCH] gcc: the special workaround for ARC is no
+	longer required
+Message-ID: <20161123112016.GA29549@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We currently support gcc as old as 4.3. However, Buildroot works
-perfectly well with even older gcc versions (tested with 4.1). So we
-can add an option BR2_TOOLCHAIN_EXTERNAL_GCC_OLD to support that. The
-help text of this option is written with plenty of discouragement.
+It seems with the change to gcc 6.x based toolchain this
+workaround is no longer required. Tested with an arc hs toolchain.
 
-We use _OLD and not something like _PRE_4_3, because at some point we
-will likely remove the 4.3 option and what would then require a name
-change.
-
-We don't set any _AT_LEAST option in this case because it's no use -
-there is no lower bound on the version in this case. We therefore leave
-BR2_TOOLCHAIN_GCC_AT_LEAST empty (the implicit default). When it is
-empty, we don't do a version check at all in check_gcc_version. Indeed,
-it makes perfect sense to not set any BR2_TOOLCHAIN_GCC_AT_LEAST
-option.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
-This patch conflicts with the external toolchain rework - I'll rebase
-the one which "looses" in the first-to-be-committed contest.
+ package/gcc/gcc-initial/gcc-initial.mk | 13 -------------
+ 1 file changed, 13 deletions(-)
 
-We should also remove the 4.3 and 4.4 options, because they are
-currently unused and also untested in the autobuilders.
-
-I think something similar should be done for kernel headers.
----
- toolchain/helpers.mk                   |  3 +--
- toolchain/toolchain-external/Config.in | 11 +++++++++++
- 2 files changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 3991bc1..72e7292 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -145,8 +145,7 @@ check_kernel_headers_version = \
- check_gcc_version = \
- 	expected_version="$(strip $2)" ; \
- 	if [ -z "$${expected_version}" ]; then \
--		printf "Internal error, gcc version unknown (no GCC_AT_LEAST_X_Y selected)\n"; \
--		exit 1 ; \
-+		exit 0 ; \
- 	fi; \
- 	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
- 	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 5324599..7a3c504 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -712,6 +712,17 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
- 	bool "4.3.x"
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index 7bb988b..a51e29c 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -25,19 +25,6 @@ HOST_GCC_INITIAL_SUBDIR = build
  
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
-+	bool "older"
-+	help
-+	  Use this option if your GCC version is older than any of the
-+	  above.
-+
-+	  Note that the Buildroot community doesn't do any testing with
-+	  such old toolchains. Some packages may fail to build in
-+	  surprising ways, or the generated root filesystem may not
-+	  work at all. Use such old toolchains at your own risk.
-+
- endchoice
+ HOST_GCC_INITIAL_PRE_CONFIGURE_HOOKS += HOST_GCC_CONFIGURE_SYMLINK
  
- choice
+-# gcc on ARC has a bug: in its libgcc, even when no C library is
+-# available (--with-newlib is passed, and therefore inhibit_libc is
+-# defined), it tries to use the C library for the libgmon
+-# library. Since it's not needed in gcc-initial, we disabled it here.
+-ifeq ($(BR2_GCC_VERSION_ARC),y)
+-define HOST_GCC_INITIAL_DISABLE_LIBGMON
+-	$(SED) 's/crtbeginS.o libgmon.a crtg.o/crtbeginS.o crtg.o/' \
+-		$(@D)/libgcc/config.host
+-endef
+-HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
+-HOST_GCC_INITIAL_POST_RSYNC_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
+-endif
+-
+ HOST_GCC_INITIAL_CONF_OPTS = \
+ 	$(HOST_GCC_COMMON_CONF_OPTS) \
+ 	--enable-languages=c \
 -- 
-2.10.2
+2.1.4
