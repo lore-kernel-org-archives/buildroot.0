@@ -1,55 +1,36 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 23 Nov 2016 12:08:06 +0100
-Subject: [Buildroot] [PATCH v3 06/18] reproducibility/linux: inhibit build-id
+Date: Wed, 23 Nov 2016 12:08:18 +0100
+Subject: [Buildroot] [PATCH v3 18/18] reproducible: fix coding style
 In-Reply-To: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
 References: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479899298-14655-7-git-send-email-jezz@sysmic.org>
+Message-ID: <1479899298-14655-19-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Linux kernel include build path in debug sections. These sections are stripped
-and do not impact build reproducibility directly. However, 'build-id'
-depends on content of all sections, including debug sections. So, it
-add random bytes in section .notes of kernel image[1]:
-
-  $ readelf -Wn .../vmlinux
-  Displaying notes found at file offset 0x00008000 with length 0x00000024:
-    Owner                 Data size       Description
-    GNU                  0x00000014       NT_GNU_BUILD_ID (unique build ID bitstring)
-      Build ID: ca689e2ed3944f49474715908e2ac1bb04907fb2
-
-In order to not depend on build path, patch kernel Makefile to disable
-'build-id'.
-
-[1] https://kernelnewbies.org/BuildId
-
-This work was sponsored by `BA Robotic Systems'.
-
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- linux/linux.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7e826cc..a63d1f3 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -209,6 +209,13 @@ define LINUX_TRY_PATCH_TIMECONST
- endef
- LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
+diff --git a/Makefile b/Makefile
+index c8bfed4..51335c9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -248,9 +248,9 @@ endif
  
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+define LINUX_REMOVE_BUILD_ID
-+	sed -i -e s/--build-id/--build-id=none/ $(@D)/Makefile
-+endef
-+LINUX_POST_PATCH_HOOKS += LINUX_REMOVE_BUILD_ID
-+endif
-+
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
- else ifeq ($(BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG),y)
+ # timezone and locale may affect build output
+ ifeq ($(BR2_REPRODUCIBLE),y)
+-export TZ=UTC
+-export LANG=C
+-export LC_ALL=C
++export TZ = UTC
++export LANG = C
++export LC_ALL = C
+ export GZIP = -n
+ SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
+ export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(BR2_VERSION_EPOCH))
 -- 
 1.9.1
