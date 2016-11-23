@@ -1,23 +1,21 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:18:41 +0100
+Date: Wed, 23 Nov 2016 22:19:27 +0100
 Subject: [Buildroot] [git commit branch/next]
-	toolchain-external-codescape-mti-mips: new package
-Message-ID: <20161123213659.533BA802C2@busybox.osuosl.org>
+	toolchain-external-codesourcery-x86: new package
+Message-ID: <20161123213659.82C5C81DDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4a62fa6278058461ff9e501ba6e822486453493
+commit: https://git.buildroot.net/buildroot/commit/?id=25429ba260df5689e734721e9c1e8bc017dc5e95
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit adds a new package for the Codescape MTI external toolchain
-for the MIPS architecture.
+This commit adds a new package for the Sourcery CodeBench external
+toolchain for the i386/x86_64 architecture.
 
 The legacy implementation is removed.
-
-The Codescape hacks for IMG and MTI are duplicated.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
@@ -25,348 +23,184 @@ Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 77 +---------------------
- .../Config.in                                      | 73 ++++++++++++++++++++
- .../Config.in.options                              |  9 +++
- .../toolchain-external-codescape-mti-mips.hash     |  3 +
- .../toolchain-external-codescape-mti-mips.mk       | 47 +++++++++++++
- .../toolchain-external/toolchain-external.hash     |  4 --
- toolchain/toolchain-external/toolchain-external.mk | 38 -----------
- 7 files changed, 134 insertions(+), 117 deletions(-)
+ toolchain/toolchain-external/Config.in             | 33 ++--------------------
+ .../toolchain-external-codesourcery-x86/Config.in  | 29 +++++++++++++++++++
+ .../Config.in.options                              |  9 ++++++
+ .../toolchain-external-codesourcery-x86.hash       |  3 ++
+ .../toolchain-external-codesourcery-x86.mk         | 12 ++++++++
+ .../toolchain-external/toolchain-external.hash     |  5 ----
+ toolchain/toolchain-external/toolchain-external.mk |  3 --
+ 7 files changed, 55 insertions(+), 39 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index c76941a..d2e1d3b 100644
+index 2689c91..cddfca8 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -28,6 +28,7 @@ source "toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.
- # MIPS (use codesourcery toolchain by default)
- source "toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in"
- source "toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in"
-+source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in"
+@@ -38,6 +38,7 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.i
+ 
+ # x86/x86_64 (use amd64 toolchain by default for AMD64)
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in"
++source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in"
  
  config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
  	bool "Arago ARMv7 2011.09"
-@@ -74,80 +75,6 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
+@@ -84,36 +85,6 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
  
  	  This toolchain uses software-floating point.
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
--	bool "Codescape MTI GNU Linux Toolchain 2016.05"
--	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
+-	bool "Sourcery CodeBench x86/x86_64 2012.09"
+-	depends on BR2_i386 || BR2_x86_64
 -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on BR2_MIPS_CPU_MIPS32R2 || (BR2_MIPS_CPU_MIPS64R2 && !BR2_MIPS_SOFT_FLOAT) || \
--		BR2_MIPS_CPU_MIPS32R5 || (BR2_MIPS_CPU_MIPS64R5 && !BR2_MIPS_SOFT_FLOAT)
+-	depends on !BR2_STATIC_LIBS
+-	depends on !BR2_x86_jaguar
+-	depends on !BR2_x86_steamroller
 -	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
 -	select BR2_INSTALL_LIBSTDCPP
 -	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--	select BR2_TOOLCHAIN_HAS_FORTRAN
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
 -	help
--	  Codescape MTI GNU Linux Toolchain 2015.10 for the MIPS
--	  architecture, from Imagination Technologies. It uses gcc
--	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
--	  headers 4.0. It has support for the following variants:
--	    - MIPS32r2 - Big-Endian, Hard-Float, Legacy NaN, o32 ABI
--	      Select 'MIPS (big endian)' Target Architecture
--	      Select 'mips 32r2' Target Architecture Variant
--	      Disable 'Use soft-float'
--	    - MIPS32r2 - Big-Endian, Hard-Float, 2008 NaN, o32 ABI
--	      Select 'MIPS (big endian)' Target Architecture
--	      Select 'mips 32r2' Target Architecture Variant
--	      Disable 'Use soft-float'
--	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
--	    - MIPS32r2 - Big-Endian, Soft-Float, Legacy NaN, o32 ABI
--	      Select 'MIPS (big endian)' Target Architecture
--	      Select 'mips 32r2' Target Architecture Variant
--	      Enable 'Use soft-float'
--	    - MIPS32r2 - Little-Endian, Hard-Float, Legacy NaN, o32 ABI
--	      Select 'MIPS (little endian)' Target Architecture
--	      Select 'mips 32r2' Target Architecture Variant
--	      Disable 'Use soft-float'
--	    - MIPS32r2 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI
--	      Select 'MIPS (little endian)' Target Architecture
--	      Select 'mips 32r2' Target Architecture Variant
--	      Disable 'Use soft-float'
--	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
--	    - MIPS32r2 - Little-Endian, Soft-Float, Legacy NaN, o32 ABI
--	      Select 'MIPS (little endian)' Target Architecture
--	      Select 'mips 32r2' Target Architecture Variant
--	      Enable 'Use soft-float'
--	    - MIPS32r2 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI, microMIPS
--	      Select 'MIPS (little endian)' Target Architecture
--	      Select 'mips 32r2' Target Architecture Variant
--	      Enable 'Use soft-float'
--	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
--	    - MIPS32r2 - Little-Endian, Soft-Float, Legacy NaN, o32 ABI, microMIPS
--	      Select 'MIPS (little endian)' Target Architecture
--	      Select 'mips 32r2' Target Architecture Variant
--	      Disable 'Use soft-float'
--	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
--	    - MIPS64r2 - Big-Endian, Hard-Float, Legacy NaN, n32 ABI
--	      Select 'MIPS64 (big endian)' Target Architecture
--	      Select 'mips 64r2' Target Architecture Variant
--	      Select 'n32' Target ABI
--	      Disable 'Use soft-float'
--	    - MIPS64r2 - Little-Endian, Hard-Float, Legacy NaN, n32 ABI
--	      Select 'MIPS64 (little endian)' Target Architecture
--	      Select 'mips 64r2' Target Architecture Variant
--	      Select 'n32' Target ABI
--	      Disable 'Use soft-float'
--	    - MIPS64r2 - Big-Endian, Hard-Float, Legacy NaN, n64 ABI
--	      Select 'MIPS64 (big endian)' Target Architecture
--	      Select 'mips 64r2' Target Architecture Variant
--	      Select 'n64' Target ABI
--	      Disable 'Use soft-float'
--	    - MIPS64r2 - Little-Endian, Hard-Float, Legacy NaN, n64 ABI
--	      Select 'MIPS64 (little endian)' Target Architecture
--	      Select 'mips 64r2' Target Architecture Variant
--	      Select 'n64' Target ABI
--	      Disable 'Use soft-float'
+-	  Sourcery CodeBench toolchain for the x86/x86_64
+-	  architectures, from Mentor Graphics. It uses gcc 4.7.2,
+-	  binutils 2.23.51, glibc 2.16, gdb 7.4.50 and kernel headers
+-	  3.5.4. It has support for the following variants:
+-	    - Intel Pentium 4, glibc, 32 bits
+-	      Default for x86, nothing special to do.
+-	    - Intel Atom, glibc, 32 bits
+-	      Select an Atom core
+-	    - Intel Xeon, glibc, 64 bits
+-	      Default for x86_64, nothing special to do.
+-	    - Intel Core 2, glibc, 64 bits
+-	      Select a Core 2 core
+-	  Other architecture variants (beyond Pentium-4/Xeon) are
+-	  supported as well, but glibc is not optimised for it.
 -
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
- 	bool "Sourcery CodeBench Nios-II 2016.05"
- 	depends on BR2_nios2
-@@ -359,7 +286,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
+ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+ 	bool "Musl 1.1.12 toolchain"
+ 	depends on (BR2_arm && BR2_ARM_EABI && BR2_USE_MMU) || \
+@@ -220,7 +191,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arceb-linux"		 if BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC && BR2_arceb
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
+-	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
  	default "arm-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABI
  	default "arm-linux-musleabihf"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABIHF
--	default "mips-mti-linux-gnu"     if BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
  	default "armeb-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_armeb
- 	default "i486-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_i386
- 	default "mips-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mips && !BR2_SOFT_FLOAT)
-@@ -415,6 +341,7 @@ source "toolchain/toolchain-external/toolchain-external-blackfin-uclinux/Config.
- # MIPS
- source "toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config.in.options"
- source "toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in.options"
-+source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options"
+@@ -288,6 +258,7 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.i
+ 
+ # x86/x86_64
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options"
++source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options"
  
  if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
  
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in
 new file mode 100644
-index 0000000..f899467
+index 0000000..bcbdd26
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-@@ -0,0 +1,73 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
-+	bool "Codescape MTI GNU Linux Toolchain 2016.05"
-+	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in
+@@ -0,0 +1,29 @@
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
++	bool "Sourcery CodeBench x86/x86_64 2012.09"
++	depends on BR2_i386 || BR2_x86_64
 +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_MIPS_CPU_MIPS32R2 || (BR2_MIPS_CPU_MIPS64R2 && !BR2_MIPS_SOFT_FLOAT) || \
-+		BR2_MIPS_CPU_MIPS32R5 || (BR2_MIPS_CPU_MIPS64R5 && !BR2_MIPS_SOFT_FLOAT)
++	depends on !BR2_STATIC_LIBS
++	depends on !BR2_x86_jaguar
++	depends on !BR2_x86_steamroller
 +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
 +	select BR2_INSTALL_LIBSTDCPP
 +	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
 +	help
-+	  Codescape MTI GNU Linux Toolchain 2015.10 for the MIPS
-+	  architecture, from Imagination Technologies. It uses gcc
-+	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
-+	  headers 4.0. It has support for the following variants:
-+	    - MIPS32r2 - Big-Endian, Hard-Float, Legacy NaN, o32 ABI
-+	      Select 'MIPS (big endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	    - MIPS32r2 - Big-Endian, Hard-Float, 2008 NaN, o32 ABI
-+	      Select 'MIPS (big endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
-+	    - MIPS32r2 - Big-Endian, Soft-Float, Legacy NaN, o32 ABI
-+	      Select 'MIPS (big endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Enable 'Use soft-float'
-+	    - MIPS32r2 - Little-Endian, Hard-Float, Legacy NaN, o32 ABI
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	    - MIPS32r2 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
-+	    - MIPS32r2 - Little-Endian, Soft-Float, Legacy NaN, o32 ABI
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Enable 'Use soft-float'
-+	    - MIPS32r2 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI, microMIPS
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Enable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
-+	    - MIPS32r2 - Little-Endian, Soft-Float, Legacy NaN, o32 ABI, microMIPS
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r2' Target Architecture Variant
-+	      Disable 'Use soft-float'
-+	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
-+	    - MIPS64r2 - Big-Endian, Hard-Float, Legacy NaN, n32 ABI
-+	      Select 'MIPS64 (big endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n32' Target ABI
-+	      Disable 'Use soft-float'
-+	    - MIPS64r2 - Little-Endian, Hard-Float, Legacy NaN, n32 ABI
-+	      Select 'MIPS64 (little endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n32' Target ABI
-+	      Disable 'Use soft-float'
-+	    - MIPS64r2 - Big-Endian, Hard-Float, Legacy NaN, n64 ABI
-+	      Select 'MIPS64 (big endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n64' Target ABI
-+	      Disable 'Use soft-float'
-+	    - MIPS64r2 - Little-Endian, Hard-Float, Legacy NaN, n64 ABI
-+	      Select 'MIPS64 (little endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n64' Target ABI
-+	      Disable 'Use soft-float'
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options
++	  Sourcery CodeBench toolchain for the x86/x86_64
++	  architectures, from Mentor Graphics. It uses gcc 4.7.2,
++	  binutils 2.23.51, glibc 2.16, gdb 7.4.50 and kernel headers
++	  3.5.4. It has support for the following variants:
++	    - Intel Pentium 4, glibc, 32 bits
++	      Default for x86, nothing special to do.
++	    - Intel Atom, glibc, 32 bits
++	      Select an Atom core
++	    - Intel Xeon, glibc, 64 bits
++	      Default for x86_64, nothing special to do.
++	    - Intel Core 2, glibc, 64 bits
++	      Select a Core 2 core
++	  Other architecture variants (beyond Pentium-4/Xeon) are
++	  supported as well, but glibc is not optimised for it.
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options
 new file mode 100644
-index 0000000..464c9b8
+index 0000000..65b62f3
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options
 @@ -0,0 +1,9 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
++if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
 +
 +config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+	default "mips-mti-linux-gnu"
++	default "i686-pc-linux-gnu"
 +
 +config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-codescape-mti-mips"
++	default "toolchain-external-codesourcery-x86"
 +
 +endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.hash
 new file mode 100644
-index 0000000..0d785f2
+index 0000000..a003f7a
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.hash
 @@ -0,0 +1,3 @@
-+# Codescape toolchains from Imagination Technologies
-+# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03/downloads.html
-+sha256 10b8ab6d7c492abc19ecabafedc6bc5f12ff88107a3cb76dc452b3a9522d9c56  Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
++# Locally calculated
++sha256 ea804cf02014369da52abc4f64e91e96bde2dd2230aca96109459013d4545458  ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
++sha256 1a9519e415a1e6892c760bf21f7e98f3a633a9d1c5bb8781a96d338e4dd62717  ia32-2012.09-62-i686-pc-linux-gnu.src.tar.bz2
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.mk
 new file mode 100644
-index 0000000..e5733ca
+index 0000000..5ee6991
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
-@@ -0,0 +1,47 @@
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.mk
+@@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# toolchain-external-codescape-mti-mips
++# toolchain-external-codesourcery-x86
 +#
 +################################################################################
 +
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION = 2016.05-03
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_STRIP_COMPONENTS = 2
-+
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION).for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
-+
-+# Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
-+# sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
-+# -> sbin-<abi> so that the rest of Buildroot can find the toolchain
-+# tools in the appropriate location.
-+ifeq ($(BR2_MIPS_OABI32),y)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX = o32
-+else ifeq ($(BR2_MIPS_NABI32),y)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX = n32
-+else ifeq ($(BR2_MIPS_NABI64),y)
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX = n64
-+endif
-+
-+define TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_STAGING_FIXUPS
-+	rmdir $(STAGING_DIR)/usr/bin $(STAGING_DIR)/usr/sbin
-+	ln -sf bin-$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX) $(STAGING_DIR)/usr/bin
-+	ln -sf sbin-$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_BIN_DIR_SUFFIX) $(STAGING_DIR)/usr/sbin
-+endef
-+
-+# The Codescape toolchain uses a sysroot layout that places them
-+# side-by-side instead of nested like multilibs. A symlink is needed
-+# much like for the nested sysroots which are handled in
-+# copy_toolchain_sysroot but there is not enough information in there
-+# to determine whether the sysroot layout was nested or side-by-side.
-+# Add the symlink here for now.
-+define TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SYMLINK
-+	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))"; \
-+	ARCH_SUBDIR=`basename $${ARCH_SYSROOT_DIR}`; \
-+	ln -snf . $(STAGING_DIR)/$${ARCH_SUBDIR}
-+endef
-+
-+TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_POST_INSTALL_STAGING_HOOKS += \
-+	TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_STAGING_FIXUPS \
-+	TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SYMLINK
++TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
++TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_VERSION = 2012.09-62
++TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_SOURCE = ia32-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i386-linux.tar.bz2
++TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_ACTUAL_SOURCE_TARBALL = ia32-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
 +
 +$(eval $(toolchain-external-package))
 diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 962263c..83859e7 100644
+index b873abe..8926bf8 100644
 --- a/toolchain/toolchain-external/toolchain-external.hash
 +++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -21,10 +21,6 @@ sha256 f2febf3b3c565536461ad4405f1bcb835d75a6afb2a8bec958a1248cb4b81fc7  arago-2
- sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
- sha256 25fbf0513ad7322b15cbaae964cafadcbb4c939f2708f57f40b8f9f2d601122b  arago-toolchain-2011.09-sources.tar.bz2
+@@ -1,11 +1,6 @@
+ ######################################
+ # Next hashes are all locally computed
  
--# Codescape toolchains from Imagination Technologies
--# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03/downloads.html
--sha256 10b8ab6d7c492abc19ecabafedc6bc5f12ff88107a3cb76dc452b3a9522d9c56  Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
+-# Mentor's Sourcery CodeBench Lite toolchains
+-# x86
+-sha256 ea804cf02014369da52abc4f64e91e96bde2dd2230aca96109459013d4545458  ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
+-sha256 1a9519e415a1e6892c760bf21f7e98f3a633a9d1c5bb8781a96d338e4dd62717  ia32-2012.09-62-i686-pc-linux-gnu.src.tar.bz2
 -
- # Synopsys DesignWare ARC toolchains
- sha256 1fa4ea2c8616623205f1c7beca02ea31b019099528a7433e5b020b0876b93bf3  arc_gnu_2014.12_prebuilt_uclibc_le_arc700_linux_install.tar.gz
- sha256 1080f07fcae2bfc176a3ea8d30b9ed8eaecab70fb786639d6ec70cae8322df10  arc_gnu_2014.12_prebuilt_uclibc_be_arc700_linux_install.tar.gz
+ # ARM toolchains from Texas Instrument's Arago project
+ # There is one source file that covers both binary distributions.
+ sha256 f2febf3b3c565536461ad4405f1bcb835d75a6afb2a8bec958a1248cb4b81fc7  arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 2acf9dd..31a53d2 100644
+index 3cb9024..7e4539e 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -38,38 +38,6 @@ TOOLCHAIN_EXTERNAL_SITE =
- TOOLCHAIN_EXTERNAL_SOURCE =
- endif
- 
--# The Codescape toolchain uses a sysroot layout that places them
--# side-by-side instead of nested like multilibs. A symlink is needed
--# much like for the nested sysroots which are handled in
--# copy_toolchain_sysroot but there is not enough information in there
--# to determine whether the sysroot layout was nested or side-by-side.
--# Add the symlink here for now.
--define TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
--	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))"; \
--	ARCH_SUBDIR=`basename $${ARCH_SYSROOT_DIR}`; \
--	ln -snf . $(STAGING_DIR)/$${ARCH_SUBDIR}
--endef
--
--# Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
--# sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
--# -> sbin-<abi> so that the rest of Buildroot can find the toolchain
--# tools in the appropriate location.
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS),y)
--ifeq ($(BR2_MIPS_OABI32),y)
--TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_BIN_DIR_SUFFIX = o32
--else ifeq ($(BR2_MIPS_NABI32),y)
--TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_BIN_DIR_SUFFIX = n32
--else ifeq ($(BR2_MIPS_NABI64),y)
--TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_BIN_DIR_SUFFIX = n64
--endif
--
--define TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_STAGING_FIXUPS
--	rmdir $(STAGING_DIR)/usr/bin $(STAGING_DIR)/usr/sbin
--	ln -sf bin-$(TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_BIN_DIR_SUFFIX) $(STAGING_DIR)/usr/bin
--	ln -sf sbin-$(TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_BIN_DIR_SUFFIX) $(STAGING_DIR)/usr/sbin
--endef
--endif
--
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A),y)
- TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports
- TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
-@@ -100,12 +68,6 @@ TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64),y)
- TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/x86_64-amd-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = amd-2015.11-139-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS),y)
--TOOLCHAIN_EXTERNAL_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03
--TOOLCHAIN_EXTERNAL_SOURCE = Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
--TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
--TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_STAGING_FIXUPS
--TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 2
+@@ -56,9 +56,6 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+ 	rm -rf $(@D)/arago-2011.09/
+ endef
+ TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86),y)
+-TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu
+-TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
  TOOLCHAIN_EXTERNAL_VERSION = 1.1.12
  TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)
