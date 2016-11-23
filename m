@@ -1,58 +1,149 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 23 Nov 2016 12:08:01 +0100
-Subject: [Buildroot] [PATCH v3 01/18] reproducibility: generate
-	SOURCE_DATE_EPOCH
+Date: Wed, 23 Nov 2016 12:08:02 +0100
+Subject: [Buildroot] [PATCH v3 02/18] reproducible: fix DATE/TIME macros in
+	toolchain-wrapper
 In-Reply-To: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
 References: <1479899298-14655-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1479899298-14655-2-git-send-email-jezz@sysmic.org>
+Message-ID: <1479899298-14655-3-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+The use __DATE__ and __TIME__ are one of most common sources of
+non-reproducible binaries. In order to fix that, gcc begin to support
+SOURCE_DATE_EPOCH variable. This patch take advantage of toolchain-wrapper
+to provide support of SOURCE_DATE_EPOCH to older gcc versions.
 
-When reproducibility is requested, generate a global SOURCE_DATE_EPOCH
-environment variable which contains either the date of Buildroot last
-commit if running from a git repository, or the latest release date.
+Function get_source_date_epoch() come directly from gcc git.
 
-This means that all packages embedding build dates will appear to
-have the same build date, so in case of new commit or release, all
-packages will appear to have been changed, even though some of them
-may not have changed in fact.
+This work was sponsored by `BA Robotic Systems'.
 
-The meaning of SOURCE_DATE_EPOCH is specified by the following
-specification:
-  https://reproducible-builds.org/specs/source-date-epoch/
-
-Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ toolchain/toolchain-wrapper.c | 74 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 73 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index eff814b..fcb80ec 100644
---- a/Makefile
-+++ b/Makefile
-@@ -87,6 +87,8 @@ all:
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 925d013..26d01b6 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -22,12 +22,17 @@
+ #include <unistd.h>
+ #include <stdlib.h>
+ #include <errno.h>
++#include <time.h>
  
- # Set and export the version string
- export BR2_VERSION := 2016.11-rc1
-+# Actual time the release is cut (for reproducible builds)
-+BR2_VERSION_EPOCH = 1478206447
+ #ifdef BR_CCACHE
+ static char ccache_path[PATH_MAX];
+ #endif
+ static char path[PATH_MAX];
+ static char sysroot[PATH_MAX];
++// strlen("-D__TIME__=\"HH:MM:SS\"") + 1 = 22
++static char source_time[22];
++// strlen("-D__DATE__=\"MMM DD YYYY\"") + 1 = 25
++static char source_date[25];
  
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-@@ -249,6 +251,8 @@ ifeq ($(BR2_REPRODUCIBLE),y)
- export TZ=UTC
- export LANG=C
- export LC_ALL=C
-+SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
-+export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(BR2_VERSION_EPOCH))
- endif
+ /**
+  * GCC errors out with certain combinations of arguments (examples are
+@@ -39,8 +44,11 @@ static char sysroot[PATH_MAX];
+  * 	-mfloat-abi=
+  * 	-march=
+  * 	-mcpu=
++ * 	-D__TIME__=
++ * 	-D__DATE__=
++ * 	-Wno-builtin-macro-redefined
+  */
+-#define EXCLUSIVE_ARGS	3
++#define EXCLUSIVE_ARGS	6
  
- # To put more focus on warnings, be less verbose as default
+ static char *predef_args[] = {
+ #ifdef BR_CCACHE
+@@ -136,6 +144,47 @@ static void check_unsafe_path(const char *arg,
+ 	}
+ }
+ 
++/* Read SOURCE_DATE_EPOCH from environment to have a deterministic
++ * timestamp to replace embedded current dates to get reproducible
++ * results.  Returns -1 if SOURCE_DATE_EPOCH is not defined.
++ */
++time_t get_source_date_epoch()
++{
++	char *source_date_epoch;
++	long long epoch;
++	char *endptr;
++
++	source_date_epoch = getenv("SOURCE_DATE_EPOCH");
++	if (!source_date_epoch)
++		return (time_t) -1;
++
++	errno = 0;
++	epoch = strtoll (source_date_epoch, &endptr, 10);
++	if ((errno == ERANGE && (epoch == LLONG_MAX || epoch == LLONG_MIN))
++			|| (errno != 0 && epoch == 0)) {
++		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
++				"strtoll: %s\n", strerror(errno));
++		exit(2);
++	}
++	if (endptr == source_date_epoch) {
++		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
++				"no digits were found: %s\n", endptr);
++		exit(2);
++	}
++	if (*endptr != '\0') {
++		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
++				"trailing garbage: %s\n", endptr);
++		exit(2);
++	}
++	if (epoch < 0) {
++		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
++				"value must be nonnegative: %lld \n", epoch);
++		exit(2);
++	}
++
++	return (time_t) epoch;
++}
++
+ int main(int argc, char **argv)
+ {
+ 	char **args, **cur, **exec_args;
+@@ -146,6 +195,7 @@ int main(int argc, char **argv)
+ 	char *paranoid_wrapper;
+ 	int paranoid;
+ 	int ret, i, count = 0, debug;
++	time_t source_date_epoch;
+ 
+ 	/* Calculate the relative paths */
+ 	basename = strrchr(progpath, '/');
+@@ -251,6 +301,28 @@ int main(int argc, char **argv)
+ 	}
+ #endif /* ARCH || CPU */
+ 
++	source_date_epoch = get_source_date_epoch();
++	if (source_date_epoch != -1) {
++		struct tm *tm = localtime(&source_date_epoch);
++		if (!tm) {
++			perror("__FILE__: localtime");
++			return 3;
++		}
++		ret = strftime(source_time, sizeof(source_time), "-D__TIME__=\"%T\"", tm);
++		if (!ret) {
++			perror("__FILE__: overflow");
++			return 3;
++		}
++		*cur++ = source_time;
++		ret = strftime(source_date, sizeof(source_date), "-D__DATE__=\"%b %e %Y\"", tm);
++		if (!ret) {
++			perror("__FILE__: overflow");
++			return 3;
++		}
++		*cur++ = source_date;
++		*cur++ = "-Wno-builtin-macro-redefined";
++	}
++
+ 	paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+ 	if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
+ 		paranoid = 1;
 -- 
 1.9.1
