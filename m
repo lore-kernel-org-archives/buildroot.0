@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 21:56:57 +0100
-Subject: [Buildroot] [PATCH next 4/6] moarvm: select libffi when
- building for MIPS
-In-Reply-To: <20161123143914.3969-4-Vincent.Riera@imgtec.com>
-References: <20161123143914.3969-1-Vincent.Riera@imgtec.com>
- <20161123143914.3969-4-Vincent.Riera@imgtec.com>
-Message-ID: <20161123215657.5ac2436d@free-electrons.com>
+Date: Wed, 23 Nov 2016 21:57:45 +0100
+Subject: [Buildroot] [PATCH v3] pseudo-wrapper: fix console issue
+In-Reply-To: <20161123182843.GA3609@free.fr>
+References: <20161123173650.1740-1-gael.portay@savoirfairelinux.com>
+ <20161123182843.GA3609@free.fr>
+Message-ID: <20161123215745.7c307e23@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +13,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 23 Nov 2016 14:39:12 +0000, Vicente Olivert Riera wrote:
-> Otherwise the compilation will fail like this:
-> 
-> ./libmoar.so: undefined reference to `dcCallbackThunkEntry'
-> 
-> See: https://github.com/MoarVM/MoarVM/issues/222
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Wed, 23 Nov 2016 19:28:43 +0100, Yann E. MORIN wrote:
 
-Is this something we can see in the autobuilders? I.e, is this master
-or next material?
+>   - long term, we want to definitely switch to using pseudo:
+>     - it is actively maintained,,
+>     - it has more features than fakeroot,
+>     - some of those features are very interesting for us.
+
+Could you explain which additional features of pseudo are interesting
+for us?
 
 Thanks,
 
