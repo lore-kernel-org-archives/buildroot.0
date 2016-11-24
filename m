@@ -1,65 +1,78 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 24 Nov 2016 17:50:36 +0000
-Subject: [Buildroot] [PATCH next 4/6] moarvm: select libffi when
- building for MIPS
-In-Reply-To: <20161124175433.70488d2b@free-electrons.com>
-References: <20161123143914.3969-1-Vincent.Riera@imgtec.com>
- <20161123143914.3969-4-Vincent.Riera@imgtec.com>
- <20161123215657.5ac2436d@free-electrons.com>
- <179a55e6-44e2-f242-b803-03517419df25@imgtec.com>
- <20161124162121.7e15799e@free-electrons.com>
- <1d433e42-c4e9-ca80-0fd3-8c6223e0d13b@imgtec.com>
- <20161124175433.70488d2b@free-electrons.com>
-Message-ID: <81dccedc-e2f1-5603-1283-5c76da4d189b@imgtec.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 24 Nov 2016 20:06:55 +0100
+Subject: [Buildroot] [PATCH v4 13/18] python2: generate reproducible .pyc
+In-Reply-To: <20161123230539.4762ebcd@free-electrons.com>
+References: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
+ <1479905937-17241-14-git-send-email-jezz@sysmic.org>
+ <20161123230539.4762ebcd@free-electrons.com>
+Message-ID: <7d9c3a88-ce81-fb52-9200-5380ad818f79@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
 
-On 24/11/16 16:54, Thomas Petazzoni wrote:
+
+On 23-11-16 23:05, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Thu, 24 Nov 2016 16:23:46 +0000, Vicente Olivert Riera wrote:
+> On Wed, 23 Nov 2016 13:58:52 +0100, J?r?me Pouiller wrote:
+>> .pyc files contain modification time of .py source. In order to make
+>> build reproducible, we fix modification time of all .py before to
+>> compile .pyc files.
 > 
->> no, there is no patch enabling or disabling MoarVM for MIPS. You won't
->> be able to build MoarVM for MIPS until libatomic_ops has support for
->> MIPS as well, because MoarVM depends on libatomic_ops.
->>
->> So, if we enable libatomic_ops, then we will be able to build MoarVM,
->> and that will fail. What I did in my patch series is to add the code for
->> fixing the MIPS problem in MoarVM even before we can actually build it
->> for MIPS.
+> "before to compile" -> "before compiling".
 > 
-> Ah, yes, moarvm has a "depends on
-> BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS", so indeed moarvm can't be
-> selected for MIPS until MIPS support in libatomic_ops is enabled. So
-> bisectability-wise we are OK.
+>> diff --git a/package/python/python.mk b/package/python/python.mk
+>> index cc65376..c17b267 100644
+>> --- a/package/python/python.mk
+>> +++ b/package/python/python.mk
+>> @@ -226,10 +226,18 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
+>>  $(eval $(autotools-package))
+>>  $(eval $(host-autotools-package))
+>>  
+>> +ifeq ($(BR2_REPRODUCIBLE),y)
+>> +define PYTHON_FIX_TIME
+>> +find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
+>> +		xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
+>> +endef
+>> +PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_FIX_TIME
+>> +endif
+>> +
+>>  define PYTHON_CREATE_PYC_FILES
+>>  	PYTHONPATH="$(PYTHON_PATH)" \
 > 
-> However, from a logical point of view, it is very, very strange to
-> enable the dependencies of moarvm *after* moarvm itself.
-
-That's the thing, we are not enabling moarvm itself. It happens
-automatically when you enable its dependencies.
-
-> It would be
-> much more logical to take care of libatomic_ops first (which can be
-> used for other things than moarvm), and then handle moarvm.
-
-Yeah, I see your point. The thing is that I put first the fix for moarvm
-in place so whenever it gets enabled for MIPS it's gonna build just fine.
-
-Anyway, do you need me to resend this series with the patches in
-different order, or will you handle that when applying?
-
-Regards,
-
-Vincent
-
+> It would make more sense to just do:
 > 
-> Thanks,
+> 	$(PYTHON_FIX_TIME)
+> 
+> here, rather than registering it as a PYTHON_TARGET_FINALIZE_HOOKS.
+
+ No. It iterates over all python files in $(TARGET_DIR), not just the ones
+installed by this package, so it really should be a TARGET_FINALIZE_HOOK.
+
+
+ Regards,
+ Arnout
+
+
+
+> Also, maybe it should be named PYTHON_SET_PY_FILES_TIME.
+> 
+>>  	$(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
+>> -		support/scripts/pycompile.py \
+>> +		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
+> 
+> Why do we need to force?
 > 
 > Thomas
 > 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
