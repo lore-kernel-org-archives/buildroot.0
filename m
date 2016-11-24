@@ -1,10 +1,15 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Nov 2016 21:40:39 +0100
-Subject: [Buildroot] [PATCH] stella: fix bug when compiling with PPC
- altivec vectorization
-In-Reply-To: <1479404832-11783-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1479404832-11783-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <1f1deabc-84e7-3535-83d0-778568c9d138@mind.be>
+Date: Thu, 24 Nov 2016 21:41:59 +0100
+Subject: [Buildroot] Bare metal toolchain support?
+In-Reply-To: <CAM+bi4sa9FG+eac3WdciC+rGih7mKk14syiT_O0mwXeyQh_5qA@mail.gmail.com>
+References: <CAM+bi4v0iJKAbKV8FvqwJqEw=L+DqTLZhcHWGboYBbPv1oTM0A@mail.gmail.com>
+ <20161123113517.04f6ec47@free-electrons.com>
+ <CAM+bi4vNKMBr0Dv9_-rsQzU_kPNrze7o9_EcSEA--g2UCVCfzg@mail.gmail.com>
+ <20161123130636.5b362a27@free-electrons.com>
+ <CAM+bi4ujUpa+BEtU8XAC1sCW2AoM8gUhT-Rtg8xWs-_O8KTF6A@mail.gmail.com>
+ <CAM+bi4sYT51Qc72s1bpsRw8K3mOPRjMtYC171YOms1L_PG0R7g@mail.gmail.com>
+ <CAM+bi4sa9FG+eac3WdciC+rGih7mKk14syiT_O0mwXeyQh_5qA@mail.gmail.com>
+Message-ID: <440dae9f-817e-5e1c-cc30-1d80c96d2320@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +18,47 @@ To: buildroot@busybox.net
 
 
 
-On 17-11-16 18:47, Sergio Prado wrote:
-> Acording to a bug report in GCC [1], "You need to use -std=g++11 or
-> undefine bool after the include of altivec.h as context sensitive
-> keywords is not part of the C++11 standard".
+On 23-11-16 17:44, Alvaro Gamez wrote:
+> Hi!
 > 
-> So let's compile with -std=gnu++11 when PPC altivec is enabled.
+> 
+> 2016-11-23 15:49 GMT+01:00 Alvaro Gamez <alvaro.gamez@hazent.com
+> <mailto:alvaro.gamez@hazent.com>>:
+> 
+>     Under Xilinx':
+>     00000000  0000001e R_MICROBLAZE_32_NONE              c
+> 
+>     Under buildroots':
+>     00000000  0000001e unrecognized: 1e                 c
+> 
+> 
+> I've made some progress on this. There was something wrong on my setup
+> that made it use some toolchain apps from Xilinx but some others from buildroot,
+> so it's even a miracle it reached that far. Once solved lots of environment
+> variables
+> and the like, there remains just this one error on compilation:
+> 
+> /home/sslayer/Proyectos/ART/ESA/DRVM-software.git/DRVM/output/host/usr/bin/microblazeel-linux-gcc
+> -Wl,-T -Wl,lscript.ld -L../bsp/lib -mlittle-endian -mxl-barrel-shift
+> -mxl-pattern-compare -mno-xl-soft-div -mcpu=v9.6 -mno-xl-soft-mul
+> -mxl-multiply-high -Wl,--no-relax -o "bootloader.elf" bootloader.o platform.o
+> srec.o  -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+> -Wl,--start-group,-lxilisf,-lxil,-lgcc,-lc,--end-group
+> /home/sslayer/Proyectos/ART/ESA/DRVM-software.git/DRVM/output/host/usr/microblazeel-buildroot-linux-gnu/sysroot/usr/lib/libc_nonshared.a(elf-init.oS):
+> In function `__libc_csu_init':
+> (.text+0x44): undefined reference to `__init_array_start'
+> /home/sslayer/Proyectos/ART/ESA/DRVM-software.git/DRVM/output/host/usr/microblazeel-buildroot-linux-gnu/sysroot/usr/lib/libc_nonshared.a(elf-init.oS):
+> In function `__libc_csu_init':
+> (.text+0x4c): undefined reference to `__init_array_end'
+> collect2: error: ld returned 1 exit status
+> Makefile:32: recipe for target 'bootloader.elf' failed
+> make: *** [bootloader.elf] Error 1
+> 
+> 
+> So... back to square oneI guess. I don't know what to do with this now.
 
- So this is the second package that requires this kind of hack. I wonder if we
-shouldn't try to fix this globally in the toolchain wrapper. Like, search for
-'--std=c++' in the arguments and replace it with '--std=gnu++' (while conserving
-the numbers behind the ++, so not entirely trivial...).
-
+ I haven't followed this in detail, but is there any reason why
+CC="$(TARGET_CC) -ffreestanding" doesn't work?
 
  Regards,
  Arnout
