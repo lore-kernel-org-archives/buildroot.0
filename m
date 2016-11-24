@@ -1,42 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Nov 2016 09:48:41 +0100
-Subject: [Buildroot] [PATCH/next] toolchain-external: support gcc < 4.3
-In-Reply-To: <1c235f78-0f40-c1f5-1ca4-c6e2661f9e33@mind.be>
-References: <20161123111404.20661-1-arnout@mind.be>
- <20161123232132.66194af8@free-electrons.com>
- <31d9d115-a051-8c3d-efae-6225423ba481@mind.be>
- <20161124090108.4662368c@free-electrons.com>
- <1c235f78-0f40-c1f5-1ca4-c6e2661f9e33@mind.be>
-Message-ID: <20161124094841.6f695932@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 24 Nov 2016 13:20:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qemu: fixup enable host QEMU
+ for powerpc64/powerpc64le
+In-Reply-To: <a9e27a3340744ae0233852ec320e0039be8c828e.1479966991.git.sam.bobroff@au1.ibm.com>
+References: <a9e27a3340744ae0233852ec320e0039be8c828e.1479966991.git.sam.bobroff@au1.ibm.com>
+Message-ID: <20161124112013.6u5setqv4gc3m7pc@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Sam,
 
-On Thu, 24 Nov 2016 09:39:13 +0100, Arnout Vandecappelle wrote:
-
-> >> When [BR2_TOOLCHAIN_GCC_AT_LEAST] is
-> >> empty, we don't do a version check at all in check_gcc_version.
-> >>
-> >>  Perhaps I should add to that "(previously we errored out)".  
-> > 
-> > Well, we're still erroring out, but with a 0 exit code. So I must be
-> > missing something.  
+On Thu, Nov 24, 2016 at 04:56:42PM +1100, Sam Bobroff wrote:
+> Fixes next commit d634d9dda7f3c328d63469cb628c79da49a09e89.
 > 
->  0 is not an error, right?
+> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> ---
+> Baruch,
+> 
+> I've rebased the patch onto next, I'm not sure what other changes to
+> make. Does it look OK now? (Will it get squashed in next?)
 
-Hum, right. I think what confused me is that "exit 0" doesn't abort the
-build. It exists the sub-shell started by make, with a zero exit code,
-so make continues the build. I was thinking it would abort the build
-completely, which is why I was confused.
+The Buildroot maintainers do not rebase/amend next. When there is an issue 
+with an applied commit, either in next or master, post a but fix patch. Hence 
+the commit log should be more detailed. Also, you may mention the commit the 
+introduced the bug as you did, but not 'next'. The next branch will soon merge 
+into master, but the commit log will not change.
 
-Thanks,
+baruch
 
-Thomas
+>  package/qemu/qemu.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index ae4e0ad..45fc0fa 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -35,7 +35,7 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-p
+>  #       mips64el        mips64el
+>  #       powerpc         ppc
+>  #       powerpc64       ppc64
+> -#       powerpc64le     ppc64 (ppc64 supports little-endian)
+> +#       powerpc64le     ppc64le
+>  #       sh2a            not supported
+>  #       sh4             sh4
+>  #       sh4eb           sh4eb
+> @@ -61,7 +61,7 @@ ifeq ($(HOST_QEMU_ARCH),powerpc64)
+>  HOST_QEMU_ARCH = ppc64
+>  endif
+>  ifeq ($(HOST_QEMU_ARCH),powerpc64le)
+> -HOST_QEMU_ARCH = ppc64
+> +HOST_QEMU_ARCH = ppc64le
+>  endif
+>  ifeq ($(HOST_QEMU_ARCH),sh4a)
+>  HOST_QEMU_ARCH = sh4
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
