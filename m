@@ -1,58 +1,35 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 24 Nov 2016 22:18:18 +0100
-Subject: [Buildroot] [PATCH] package/ola: fix missing numpy
-Message-ID: <20161124211818.14096-1-joerg.krause@embedded.rocks>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 24 Nov 2016 23:12:09 +0100
+Subject: [Buildroot] Analysis of build results for 2016-11-23
+In-Reply-To: <20161124094429.4152c19b@free-electrons.com>
+References: <20161124073011.C2C1620BD5@mail.free-electrons.com>
+ <20161124094429.4152c19b@free-electrons.com>
+Message-ID: <1480025529.4218.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OLAs RDM test option needs NumPy.
+Hello,
 
-Note that we need to pass `ac_cv_have_pymod_numpy=yes` as NumPy builds some
-shared libraries and ola checks for NumPy using a host Python test program
-which fails with 'wrong ELF class'.
+On Thu, 2016-11-24 at 09:44 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> > ?????????arm |???????????????????xl2tp-v1.3.6 | NOK | http://autobu
+> > ild.buildroot.net/results/baea66ac57aa34c7d7bdc993544c0f010fee4a9b
+> 
+> Musl issue.
 
-Fixes:
-http://autobuild.buildroot.net/results/750/750c9bcc753e2c1b7b05d6c43fabf4c405e15f04/
-http://autobuild.buildroot.net/results/24a/24ada1e0ec695cb12028048728a9d1e2bcf75a03/
-http://autobuild.buildroot.net/results/111/111c5f3eed6a5931de27a1b0b02be6e2114198e6/
-.. and more.
+I had a look at this. xl2tp define a macro USE_KERNEL which adds
+support for using the kernel module pppol2tp. Using this macro with
+musl fails with the well-known linux header redefinitions.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/ola/Config.in | 2 ++
- package/ola/ola.mk    | 4 ++++
- 2 files changed, 6 insertions(+)
+As the package does not provide a linux dependency I would suggest to
+uncomment this macro using sed (sed is already used to remove a CFLAG
+option from the Makefile).
 
-diff --git a/package/ola/Config.in b/package/ola/Config.in
-index 7b56f5c..2f1d33e 100644
---- a/package/ola/Config.in
-+++ b/package/ola/Config.in
-@@ -54,6 +54,8 @@ config BR2_PACKAGE_OLA_EXAMPLES
- config BR2_PACKAGE_OLA_RDM_TESTS
- 	bool "rdm tests"
- 	depends on BR2_PACKAGE_OLA_PYTHON_BINDINGS
-+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	select BR2_PACKAGE_PYTHON_NUMPY
- 	help
- 	  Build OLA RDM tests.
- 
-diff --git a/package/ola/ola.mk b/package/ola/ola.mk
-index 75ab25e..24e53e4 100644
---- a/package/ola/ola.mk
-+++ b/package/ola/ola.mk
-@@ -87,6 +87,10 @@ endif
- 
- ifeq ($(BR2_PACKAGE_OLA_RDM_TESTS),y)
- OLA_CONF_OPTS += --enable-rdm-tests
-+OLA_DEPENDENCIES += python-numpy
-+# needed as numpy builds some shared libraries and ola checks for numpy
-+# using a host python test program which fails with 'wrong ELF class'.
-+OLA_CONF_ENV = ac_cv_have_pymod_numpy=yes
- else
- OLA_CONF_OPTS += --disable-rdm-tests
- endif
--- 
-2.10.2
+What do you think?
+
+Best regards,
+J?rg Krause
