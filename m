@@ -1,92 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Nov 2016 16:48:56 +0100
-Subject: [Buildroot] [PATCH 2/2] ti-pru-support: add staging files for
- PRU firmware
-In-Reply-To: <1479324273-13589-2-git-send-email-ash.charles@savoirfairelinux.com>
-References: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
- <1479324273-13589-2-git-send-email-ash.charles@savoirfairelinux.com>
-Message-ID: <20161124164856.32491ed0@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 24 Nov 2016 16:23:46 +0000
+Subject: [Buildroot] [PATCH next 4/6] moarvm: select libffi when
+ building for MIPS
+In-Reply-To: <20161124162121.7e15799e@free-electrons.com>
+References: <20161123143914.3969-1-Vincent.Riera@imgtec.com>
+ <20161123143914.3969-4-Vincent.Riera@imgtec.com>
+ <20161123215657.5ac2436d@free-electrons.com>
+ <179a55e6-44e2-f242-b803-03517419df25@imgtec.com>
+ <20161124162121.7e15799e@free-electrons.com>
+Message-ID: <1d433e42-c4e9-ca80-0fd3-8c6223e0d13b@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Wed, 16 Nov 2016 14:24:33 -0500, Ash Charles wrote:
+On 24/11/16 15:21, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Thanks for your feedback.
+> 
+> On Thu, 24 Nov 2016 14:58:00 +0000, Vicente Olivert Riera wrote:
+> 
+>> MoarVM depends on libatomic_ops, and libatomic_ops doesn't have MIPS
+>> support in Buildroot so far. This patch series adds MIPS support to it,
+>> so, from that moment, MoarVM will be able to be built for MIPS.
+> 
+> If moarvm depends on libatomic_ops, then why the patch enabling MIPS
+> support in libatomic_ops is PATCH 5/6, i.e. *after* the patch enabling
+> moarvm? Won't things break if I apply only patches 1 to 4, but not
+> patches 5 and 6 ?
 
-> diff --git a/package/Config.in b/package/Config.in
-> index 9ed296f..4f333c2 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -463,6 +463,7 @@ endmenu
->  	source "package/sysstat/Config.in"
->  	source "package/targetcli-fb/Config.in"
->  	source "package/ti-gfx/Config.in"
-> +	source "package/ti-pru-support/Config.in"
->  	source "package/ti-sgx-demos/Config.in"
->  	source "package/ti-sgx-km/Config.in"
->  	source "package/ti-sgx-um/Config.in"
-> diff --git a/package/ti-pru-support/Config.in b/package/ti-pru-support/Config.in
-> new file mode 100644
-> index 0000000..af17d54
-> --- /dev/null
-> +++ b/package/ti-pru-support/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_TI_PRU_SUPPORT
-> +	bool "TI PRU support"
-> +	select BR2_PACKAGE_HOST_TI_CGT_PRU
-> +	help
-> +	  This package provides useful headers and libraries for the
-> +	  PRU unit found on some TI processors e.g. AM3358.  This
-> +	  package provides staging only; the included labs and
-> +	  examples aren't built.
+no, there is no patch enabling or disabling MoarVM for MIPS. You won't
+be able to build MoarVM for MIPS until libatomic_ops has support for
+MIPS as well, because MoarVM depends on libatomic_ops.
 
-It would be nice to have a sub-option to build examples, so that it can
-potentially installs things in the target.
+So, if we enable libatomic_ops, then we will be able to build MoarVM,
+and that will fail. What I did in my patch series is to add the code for
+fixing the MIPS problem in MoarVM even before we can actually build it
+for MIPS.
 
-> +
-> +	  https://git.ti.com/pru-software-support-package/pru-software-support-package/trees/master
+Regards,
 
-Just:
+Vincent
 
-	https://git.ti.com/pru-software-support-package/
-
-> +TI_PRU_SUPPORT_VERSION = 804b548e69ef9fdf44445f6d0968d81cb8a1e7b4
-> +TI_PRU_SUPPORT_SITE = "git://git.ti.com/pru-software-support-package/pru-software-support-package.git"
-
-Double quotes not needed.
-
-> +TI_PRU_SUPPORT_LICENSE =  BSD-3c, GPLv2
-> +TI_PRU_SUPPORT_LICENSE_FILES = PRU_Package-v5.0-Manifest.html
-> +TI_PRU_SUPPORT_INSTALL_STAGING = YES
-> +TI_PRU_SUPPORT_DEPENDENCIES = host-ti-cgt-pru
-> +
-> +define TI_PRU_SUPPORT_BUILD_CMDS
-> +	$(MAKE) PRU_CGT=$(PRU_CGT) -C $(@D)/lib/src
-> +endef
-> +
-> +define TI_PRU_SUPPORT_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -d $(STAGING_DIR)/usr/include
-> +	cp -af $(@D)/include/* $(STAGING_DIR)/usr/include
-> +	$(INSTALL) -d $(STAGING_DIR)/usr/lib
-> +	$(INSTALL) -m 0644 $(@D)/lib/src/*/gen/*.lib $(STAGING_DIR)/usr/lib/
-
-My understanding is that those libraries are not for the ARM CPU, but
-for the PRU. If that's the case, then I believe having them in
-STAGING_DIR/usr/{include,lib} can cause a lot of confusion. They should
-be installed in a separate place, so that they are not picked up by the
-regular ARM cross-compiler.
-
-How does one load/run the PRU programs? Any tool that needs to be
-executed on the ARM side, and which would be useful to have in
-Buildroot as well?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> 
+> Best regards,
+> 
+> Thomas
+> 
