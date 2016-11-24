@@ -1,61 +1,106 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 24 Nov 2016 23:37:47 +0100
-Subject: [Buildroot] [PATCH 3/3] qextserialport: remove redundant patch
-	0001-gui
+Date: Thu, 24 Nov 2016 23:37:46 +0100
+Subject: [Buildroot] [PATCH 2/3] qextserialport: tell qmake to generate .pc
+	file
 In-Reply-To: <20161124223747.31342-1-arnout@mind.be>
 References: <20161124223747.31342-1-arnout@mind.be>
-Message-ID: <20161124223747.31342-3-arnout@mind.be>
+Message-ID: <20161124223747.31342-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The same thing was done in upstream commit 220d7a2f "QtGui module only
-needed by Windows", though it was done differently upstream.
+Instead of creating our own .pc file with a patch, just tell qmake to
+do it by adding create_pc to CONFIG.
+
+This corrects the .pc file for Qt5. Previously, the include directory
+was set to /usr/include, while for Qt5 it should be /usr/include/qt5.
+This hasn't caused any autobuild failures since no other package uses
+qextserialport.
+
+Note, however, that the package is now called Qt5ExtSerialPort in Qt5,
+while before it was qextserialport like in the Qt4 case.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-This one is probably for next (though it depends on the other 2, so only
-apply after the merge).
----
- ...0001-Create-a-main-include-file-QExtSerialPort.patch} |  0
- package/qextserialport/0001-gui.patch                    | 16 ----------------
- ...make-to-add-a-pkgconfig-file-to-ease-usage-wit.patch} |  0
- 3 files changed, 16 deletions(-)
- rename package/qextserialport/{0002-Create-a-main-include-file-QExtSerialPort.patch => 0001-Create-a-main-include-file-QExtSerialPort.patch} (100%)
- delete mode 100644 package/qextserialport/0001-gui.patch
- rename package/qextserialport/{0003-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch => 0002-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch} (100%)
+ ...to-add-a-pkgconfig-file-to-ease-usage-wit.patch | 28 ++++++++++++++++++++++
+ package/qextserialport/0003-pkgconfig.patch        | 19 ---------------
+ package/qextserialport/qextserialport.mk           |  1 -
+ 3 files changed, 28 insertions(+), 20 deletions(-)
+ create mode 100644 package/qextserialport/0003-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch
+ delete mode 100644 package/qextserialport/0003-pkgconfig.patch
 
-diff --git a/package/qextserialport/0002-Create-a-main-include-file-QExtSerialPort.patch b/package/qextserialport/0001-Create-a-main-include-file-QExtSerialPort.patch
-similarity index 100%
-rename from package/qextserialport/0002-Create-a-main-include-file-QExtSerialPort.patch
-rename to package/qextserialport/0001-Create-a-main-include-file-QExtSerialPort.patch
-diff --git a/package/qextserialport/0001-gui.patch b/package/qextserialport/0001-gui.patch
+diff --git a/package/qextserialport/0003-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch b/package/qextserialport/0003-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch
+new file mode 100644
+index 0000000..09e26a9
+--- /dev/null
++++ b/package/qextserialport/0003-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch
+@@ -0,0 +1,28 @@
++From 14d4d3e7b5c748118acffddd397fb67b37fd5054 Mon Sep 17 00:00:00 2001
++From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
++Date: Thu, 24 Nov 2016 22:44:02 +0100
++Subject: [PATCH] Tell qmake to add a pkgconfig file to ease usage with
++ applications
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++ qextserialport.pro | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/qextserialport.pro b/qextserialport.pro
++index 8d2c03a..2fcb39c 100644
++--- a/qextserialport.pro
+++++ b/qextserialport.pro
++@@ -42,7 +42,8 @@ TEMPLATE=lib
++ include(src/qextserialport.pri)
++ 
++ #create_prl is needed, otherwise, MinGW can't found libqextserialport1.a
++-CONFIG += create_prl
+++CONFIG += create_prl create_pc
+++QMAKE_PKGCONFIG_DESTDIR = pkgconfig
++ 
++ #mac framework is designed for shared library
++ macx:qesp_mac_framework:qesp_static: CONFIG -= qesp_static
++-- 
++2.10.2
++
+diff --git a/package/qextserialport/0003-pkgconfig.patch b/package/qextserialport/0003-pkgconfig.patch
 deleted file mode 100644
-index d3dedae..0000000
---- a/package/qextserialport/0001-gui.patch
+index bb55ad7..0000000
+--- a/package/qextserialport/0003-pkgconfig.patch
 +++ /dev/null
-@@ -1,16 +0,0 @@
--Don't require Qt GUI module
+@@ -1,19 +0,0 @@
+-Add a pkgconfig file to ease usage with applications
 -
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
--diff -Nrup qextserialport-f83b4e7ca922e53.orig/qextserialport.pro qextserialport-f83b4e7ca922e53/qextserialport.pro
----- qextserialport-f83b4e7ca922e53.orig/qextserialport.pro	2012-10-17 09:13:53.000000000 +0200
--+++ qextserialport-f83b4e7ca922e53/qextserialport.pro	2012-11-13 22:48:29.249431510 +0100
--@@ -41,6 +41,8 @@ macx:qesp_mac_framework {
-- 
-- win32|mac:!wince*:!win32-msvc:!macx-xcode:CONFIG += debug_and_release build_all
-- 
--+!win32*:!wince*:QT -= gui
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: qextserialport-ef4af2a2ee3f/qextserialport.pc
+-===================================================================
+---- /dev/null
+-+++ qextserialport-ef4af2a2ee3f/qextserialport.pc
+-@@ -0,0 +1,10 @@
+-+prefix=/usr
+-+exec_prefix=${prefix}
+-+libdir=${prefix}/lib
+-+includedir=${prefix}/include/QtExtSerialPort
 -+
-- #generate proper library name
-- greaterThan(QT_MAJOR_VERSION, 4) {
--     QESP_LIB_BASENAME = QtExtSerialPort
-diff --git a/package/qextserialport/0003-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch b/package/qextserialport/0002-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch
-similarity index 100%
-rename from package/qextserialport/0003-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch
-rename to package/qextserialport/0002-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch
+-+Name: QtExtSerialPort
+-+Description: QtExtSerialPort library
+-+Version: 1.2.0
+-+Libs: -L${libdir} -lqextserialport
+-+Cflags: -I${includedir}
+diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
+index 62bf3b0..1100946 100644
+--- a/package/qextserialport/qextserialport.mk
++++ b/package/qextserialport/qextserialport.mk
+@@ -32,7 +32,6 @@ endef
+ 
+ define QEXTSERIALPORT_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+-	cp $(@D)/qextserialport.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+ endef
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
 -- 
 2.10.2
