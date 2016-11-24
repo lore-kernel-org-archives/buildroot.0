@@ -1,51 +1,98 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 24 Nov 2016 16:26:24 +0100
-Subject: [Buildroot] Analysis of build results for 2016-11-23
-In-Reply-To: <20161124094429.4152c19b@free-electrons.com>
-References: <20161124073011.C2C1620BD5@mail.free-electrons.com>
- <20161124094429.4152c19b@free-electrons.com>
-Message-ID: <20161124152623.GH27313@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Nov 2016 16:44:20 +0100
+Subject: [Buildroot] [PATCH 1/2] ti-cgt-pru: add package for PRU Host
+ toolchain
+In-Reply-To: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
+References: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
+Message-ID: <20161124164420.792cab0f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Hello,
 
-> Hello,
-> 
-> Christian, Waldemar, Sam, Bernd, Alexey, Vlad, Vicente, J?rg, Fran?ois,
-> please see below, there are some questions for you.
-> 
-> Summary of the build failures:
-> 
->  - musl related:		8
->  - misc:			7
->  - static linking:		4
->  - PowerPC64le libtool:		2
->  - ARC related:			2
->  - uClibc-ng related:		1
->  - unknown:			1
-> 
-> So musl continues to be a pain to support, causing the biggest number
-> of build failures...
-> 
-> On Thu, 24 Nov 2016 08:30:11 +0100 (CET), Thomas Petazzoni wrote:
-> 
-> >      powerpc |                   autossh-1.4e | NOK | http://autobuild.buildroot.net/results/08a458572a2e9c599dd32b837b1e5c02a6721973
-> 
-> unwind-dw2-fde-dip.c:465: undefined reference to `dl_iterate_phdr'
-> 
-> Waldemar, this is with uClibc-ng, and it seems like a relatively recent
-> problem. Any idea?
-> 
+On Wed, 16 Nov 2016 14:24:32 -0500, Ash Charles wrote:
 
-I thought it is a Xtensa specific issue, as now it happens for
-PowerPC I need to dig deeper.
-Strange that I couldn't reproduce it with OpenADK with uClibc-ng
-1.0.19 and master.
+> diff --git a/package/ti-cgt-pru/Config.in.host b/package/ti-cgt-pru/Config.in.host
+> new file mode 100644
+> index 0000000..440f774
+> --- /dev/null
+> +++ b/package/ti-cgt-pru/Config.in.host
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_HOST_TI_CGT_PRU
+> +	bool "host ti-cgt-pru"
+> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
 
-best regards
- Waldemar
+	depends on BR2_arm
+
+would probably be nice here.
+
+> +	help
+> +	  This package provides the Code Generation Tools for the PRU
+> +	  unit found on some TI processors e.g. AM3358.
+> +
+> +	  Note: this is a binary cross toolchain that runs on x86 hosts
+> +	        targeting ARM PRU cores.
+
+No need to align this second line.
+
+
+> index 0000000..a4c8566
+> --- /dev/null
+> +++ b/package/ti-cgt-pru/ti-cgt-pru.mk
+> @@ -0,0 +1,29 @@
+> +################################################################################
+> +#
+> +# ti-cgt-pru
+> +#
+> +################################################################################
+> +
+> +TI_CGT_PRU_VERSION = 2.1.3
+> +TI_CGT_PRU_SOURCE = ti_cgt_pru_$(TI_CGT_PRU_VERSION)_linux_installer_x86.bin
+> +TI_CGT_PRU_SITE = "http://software-dl.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)/"
+
+Remove double quotes.
+
+> +TI_CGT_PRU_LICENSE =  BSD-3c, MIT, TI-TSPA
+> +TI_CGT_PRU_LICENSE_FILES = PRU_Code_Generation_Tools_2.1.x_manifest.html
+> +
+> +define HOST_TI_CGT_PRU_EXTRACT_CMDS
+> +	chmod +x $(DL_DIR)/$(TI_CGT_PRU_SOURCE)
+> +	$(DL_DIR)/$(TI_CGT_PRU_SOURCE) --prefix $(@D) --mode unattended
+
+Add:
+
+	mv $(@D)/ti-cgt-pru_2.1.3/* $(@D)
+	rmdir $(@D)/ti-cgt-pru_2.1.3/
+
+> +endef
+> +
+> +# Since this is largely prebuilt toolchain and likes to live in its own
+> +# directory, put is in $(HOST_DIR)/ti-cgt-pru_$(CGT_PRU_VERION)
+> +# Packages wanting to use this toolchain need to use this path as TI's
+> +# standard PRU_CGT path.
+> +
+> +PRU_CGT = $(HOST_DIR)/ti-cgt-pru_$(TI_CGT_PRU_VERSION)
+
+I'd think I'd prefer:
+
+TI_PRU_CGT = $(HOST_DIR)/usr/share/ti-cgt-pru/
+
+> +define HOST_TI_CGT_PRU_INSTALL_CMDS
+> +	$(INSTALL) -d $(PRU_CGT)
+
+We usually use 'mkdir -p' instead.
+
+> +	cp -af $(@D)/$(notdir $(PRU_CGT)) $(HOST_DIR)
+
+	cp -dpfr $(@D)/* $(TI_PRU_CGT)
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
