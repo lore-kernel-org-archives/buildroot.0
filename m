@@ -1,59 +1,59 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Wed, 23 Nov 2016 18:59:35 -0500
-Subject: [Buildroot] [PATCH v3] pseudo-wrapper: fix console issue
-In-Reply-To: <a4e40d0e-fa6d-cbc9-0eca-52827a006e91@mind.be>
-References: <20161123173650.1740-1-gael.portay@savoirfairelinux.com>
- <20161123182843.GA3609@free.fr>
- <a4e40d0e-fa6d-cbc9-0eca-52827a006e91@mind.be>
-Message-ID: <20161123235935.xhdfzufyezsxej5t@gportay>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Thu, 24 Nov 2016 15:08:16 +1100
+Subject: [Buildroot] [PATCH 1/1] package/qemu: enable host QEMU for
+ powerpc64/powerpc64le
+In-Reply-To: <a335c60f72c52d158a29c757c1ee74b098de65fd.1479867900.git.sam.bobroff@au1.ibm.com>
+References: <a335c60f72c52d158a29c757c1ee74b098de65fd.1479867900.git.sam.bobroff@au1.ibm.com>
+Message-ID: <20161124040816.GA9021@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+HI Buildroot,
 
-This patch *should* be abandonned.
+Sorry, this patch is incorrect (I misinterpreted a build failure while testing). I'll post a v2 shortly.
 
-The issue has been fixed and mainlined by the Seebs (the maintainer of pseudo),
-see commit d6eb2df3fe63b765f35d62332add4d0e4e9c6a39.
+Sam.
 
-Now we can update the wrapper script to run:
-exec "${0%/*}/pseudo" -S "${@}"
-
-The -S argument tells server to shutdown and "waits" for the server to complete.
-
-Seebs has picked up the solution proposed by Arnout. It uses the socket to
-determine when the server has terminated. The socket is closed right before
-exiting.
-
-On Wed, Nov 23, 2016 at 10:47:26PM +0100, Arnout Vandecappelle wrote:
+On Wed, Nov 23, 2016 at 01:25:02PM +1100, Sam Bobroff wrote:
+> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> ---
 > 
-> > 
-> > So, the question is: are we sure the client will talk to the daemon that
-> > we spawn?
-> > If the answer is "yes, we're sure", then all is good; id the answer is
-> > "no, we're not sure", then it's a problem...
+>  package/qemu/qemu.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
->  I don't think we're really sure, but I do believe that pseudo protects against
-> this situation, i.e. when two servers start up concurrently, only one of them
-> will really run. The problem is that the one that commits suicide may be the one
-> that we start from the pseudo wrapper, so we end up wait'ing for the wrong pid.
-
-There is a lock, thus only a single instance of a server could run.
-
-> > 
-> > Thoughts?
-> > 
-> > Now, my position on all this mess is :
-> > 
-> >   - we revert back to using fakeroot for 2016.11;
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index cf23f16..ae4e0ad 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -34,6 +34,8 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-p
+>  #       mips64          mips64
+>  #       mips64el        mips64el
+>  #       powerpc         ppc
+> +#       powerpc64       ppc64
+> +#       powerpc64le     ppc64 (ppc64 supports little-endian)
+>  #       sh2a            not supported
+>  #       sh4             sh4
+>  #       sh4eb           sh4eb
+> @@ -55,6 +57,12 @@ endif
+>  ifeq ($(HOST_QEMU_ARCH),powerpc)
+>  HOST_QEMU_ARCH = ppc
+>  endif
+> +ifeq ($(HOST_QEMU_ARCH),powerpc64)
+> +HOST_QEMU_ARCH = ppc64
+> +endif
+> +ifeq ($(HOST_QEMU_ARCH),powerpc64le)
+> +HOST_QEMU_ARCH = ppc64
+> +endif
+>  ifeq ($(HOST_QEMU_ARCH),sh4a)
+>  HOST_QEMU_ARCH = sh4
+>  endif
+> -- 
+> 2.10.0.297.gf6727b0
 > 
->  Yeah, I think we need to do that. Too bad for the Fedora users.
-
-Agree. Even if this issue can be easily fixed, it remains the issue reported by
-Jerome.
-
-Regards,
-Gael
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
