@@ -1,53 +1,51 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 24 Nov 2016 16:24:30 +0100
-Subject: [Buildroot] pseudo: remaining issues...
-In-Reply-To: <20161123093550.43e574f3@free-electrons.com>
-References: <20161122212534.GA3529@free.fr>
- <20161123093550.43e574f3@free-electrons.com>
-Message-ID: <20161124152430.GG27313@waldemar-brodkorb.de>
+Date: Thu, 24 Nov 2016 16:26:24 +0100
+Subject: [Buildroot] Analysis of build results for 2016-11-23
+In-Reply-To: <20161124094429.4152c19b@free-electrons.com>
+References: <20161124073011.C2C1620BD5@mail.free-electrons.com>
+ <20161124094429.4152c19b@free-electrons.com>
+Message-ID: <20161124152623.GH27313@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Thomas,
 Thomas Petazzoni wrote,
 
 > Hello,
 > 
-> On Tue, 22 Nov 2016 22:25:34 +0100, Yann E. MORIN wrote:
+> Christian, Waldemar, Sam, Bernd, Alexey, Vlad, Vicente, J?rg, Fran?ois,
+> please see below, there are some questions for you.
 > 
-> > Alternatively, we can revert back to using fakeroot for this release, at
-> > the expense of breaking (already previously broken) setups with SELinux
-> > on the host.
+> Summary of the build failures:
 > 
-> I am more and more thinking that this is what we should do. Not only
-> pseudo still has issues, but even once all issues will be fixed, it is
-> a much much more complicated and annoying solution than fakeroot:
+>  - musl related:		8
+>  - misc:			7
+>  - static linking:		4
+>  - PowerPC64le libtool:		2
+>  - ARC related:			2
+>  - uClibc-ng related:		1
+>  - unknown:			1
 > 
->  - It requires additional dependencies (host-sqlite, host-attr)
+> So musl continues to be a pain to support, causing the biggest number
+> of build failures...
 > 
->  - It requires a complicated setup, with a daemon, that you need to
->    manually start and stop (because the internal pseudo mechanism to
->    start/stop the daemon doesn't work properly)
+> On Thu, 24 Nov 2016 08:30:11 +0100 (CET), Thomas Petazzoni wrote:
 > 
-> So I really believe we should revert to fakeroot, and investigate what
-> this SELinux problem is exactly. Looking more at the original bug at
-> https://bugzilla.redhat.com/show_bug.cgi?id=1238802, what is the actual
-> problem for us? Why do we care about preserving the SELinux labels of
-> files within the fakeroot environment? We don't support SELinux, and
-> even if we did, most likely the SELinux labels that exist on the host
-> machine would not make sense for the target filesystem.
+> >      powerpc |                   autossh-1.4e | NOK | http://autobuild.buildroot.net/results/08a458572a2e9c599dd32b837b1e5c02a6721973
 > 
-> So is the real problem with fakeroot on Fedora related to SELinux?
+> unwind-dw2-fde-dip.c:465: undefined reference to `dl_iterate_phdr'
+> 
+> Waldemar, this is with uClibc-ng, and it seems like a relatively recent
+> problem. Any idea?
+> 
 
-If my 2 cent counts, I would revert the pseudo stuff.
-It is so complex just shortly before release, just to have some
-exotic configurations fixed.
-
-I am also starting some new project with the next release and would
-like to have the old fakeroot stuff.
+I thought it is a Xtensa specific issue, as now it happens for
+PowerPC I need to dig deeper.
+Strange that I couldn't reproduce it with OpenADK with uClibc-ng
+1.0.19 and master.
 
 best regards
  Waldemar
