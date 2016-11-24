@@ -1,78 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Nov 2016 20:06:55 +0100
-Subject: [Buildroot] [PATCH v4 13/18] python2: generate reproducible .pyc
-In-Reply-To: <20161123230539.4762ebcd@free-electrons.com>
-References: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
- <1479905937-17241-14-git-send-email-jezz@sysmic.org>
- <20161123230539.4762ebcd@free-electrons.com>
-Message-ID: <7d9c3a88-ce81-fb52-9200-5380ad818f79@mind.be>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 24 Nov 2016 20:24:58 +0100
+Subject: [Buildroot] Analysis of build results for 2016-11-23
+In-Reply-To: <20161124094429.4152c19b@free-electrons.com>
+References: <20161124073011.C2C1620BD5@mail.free-electrons.com>
+ <20161124094429.4152c19b@free-electrons.com>
+Message-ID: <1480015498.2033.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
 
-
-On 23-11-16 23:05, Thomas Petazzoni wrote:
+On Thu, 2016-11-24 at 09:44 +0100, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Wed, 23 Nov 2016 13:58:52 +0100, J?r?me Pouiller wrote:
->> .pyc files contain modification time of .py source. In order to make
->> build reproducible, we fix modification time of all .py before to
->> compile .pyc files.
+> > ????????i686 |?????????????????????ola-0.10.2 | NOK | http://autobu
+> > ild.buildroot.net/results/750c9bcc753e2c1b7b05d6c43fabf4c405e15f04
 > 
-> "before to compile" -> "before compiling".
+> checking for python module: numpy... no
+> configure: error: failed to find required module numpy
+> make: *** [/home/peko/autobuild/instance-2/output/build/ola-
+> 0.10.2/.stamp_configured] Error 1
 > 
->> diff --git a/package/python/python.mk b/package/python/python.mk
->> index cc65376..c17b267 100644
->> --- a/package/python/python.mk
->> +++ b/package/python/python.mk
->> @@ -226,10 +226,18 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
->>  $(eval $(autotools-package))
->>  $(eval $(host-autotools-package))
->>  
->> +ifeq ($(BR2_REPRODUCIBLE),y)
->> +define PYTHON_FIX_TIME
->> +find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
->> +		xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
->> +endef
->> +PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_FIX_TIME
->> +endif
->> +
->>  define PYTHON_CREATE_PYC_FILES
->>  	PYTHONPATH="$(PYTHON_PATH)" \
-> 
-> It would make more sense to just do:
-> 
-> 	$(PYTHON_FIX_TIME)
-> 
-> here, rather than registering it as a PYTHON_TARGET_FINALIZE_HOOKS.
+> J?rg, you have updated the ola package recently, could you have a
+> look?
 
- No. It iterates over all python files in $(TARGET_DIR), not just the ones
-installed by this package, so it really should be a TARGET_FINALIZE_HOOK.
+Yes, I'll have a look.
 
+> Also, if you're interested in ola, could you add yourself in the
+> DEVELOPERS file for it? The original submitter, who is mentioned in
+> the DEVELOPERS file, doesn't seem to be responsive.
 
- Regards,
- Arnout
+I was just fixing an issue I already faced with another package. I am
+not using ola, so I'd rather be not a maintainer for it. Sorry!
 
-
-
-> Also, maybe it should be named PYTHON_SET_PY_FILES_TIME.
-> 
->>  	$(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
->> -		support/scripts/pycompile.py \
->> +		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
-> 
-> Why do we need to force?
-> 
-> Thomas
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Best regards,
+J?rg
