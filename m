@@ -1,48 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Nov 2016 13:28:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qemu: fixup enable host QEMU
- for powerpc64/powerpc64le
-In-Reply-To: <20161124112013.6u5setqv4gc3m7pc@tarshish>
-References: <a9e27a3340744ae0233852ec320e0039be8c828e.1479966991.git.sam.bobroff@au1.ibm.com>
- <20161124112013.6u5setqv4gc3m7pc@tarshish>
-Message-ID: <20161124132859.5d50267e@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 24 Nov 2016 14:58:00 +0000
+Subject: [Buildroot] [PATCH next 4/6] moarvm: select libffi when
+ building for MIPS
+In-Reply-To: <20161123215657.5ac2436d@free-electrons.com>
+References: <20161123143914.3969-1-Vincent.Riera@imgtec.com>
+ <20161123143914.3969-4-Vincent.Riera@imgtec.com>
+ <20161123215657.5ac2436d@free-electrons.com>
+Message-ID: <179a55e6-44e2-f242-b803-03517419df25@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Thu, 24 Nov 2016 13:20:13 +0200, Baruch Siach wrote:
-
-> On Thu, Nov 24, 2016 at 04:56:42PM +1100, Sam Bobroff wrote:
-> > Fixes next commit d634d9dda7f3c328d63469cb628c79da49a09e89.
-> > 
-> > Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-> > ---
-> > Baruch,
-> > 
-> > I've rebased the patch onto next, I'm not sure what other changes to
-> > make. Does it look OK now? (Will it get squashed in next?)  
+On 23/11/16 20:56, Thomas Petazzoni wrote:
+> Hello,
 > 
-> The Buildroot maintainers do not rebase/amend next. When there is an issue 
-> with an applied commit, either in next or master, post a but fix patch. Hence 
-> the commit log should be more detailed. Also, you may mention the commit the 
-> introduced the bug as you did, but not 'next'. The next branch will soon merge 
-> into master, but the commit log will not change.
+> On Wed, 23 Nov 2016 14:39:12 +0000, Vicente Olivert Riera wrote:
+>> Otherwise the compilation will fail like this:
+>>
+>> ./libmoar.so: undefined reference to `dcCallbackThunkEntry'
+>>
+>> See: https://github.com/MoarVM/MoarVM/issues/222
+>>
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> 
+> Is this something we can see in the autobuilders? I.e, is this master
+> or next material?
 
-Sam: I thought your initial patch was not a bug fix, but a feature
-addition, which is why I applied it to the "next" branch. However, I
-see in the autobuilders failures of the host-qemu package for
-powerpc64, and I believe those would be fixed by your patch. Could you
-confirm it's the case? If it is, then I'll cherry-pick the original
-patch (+ this additional fix) into the master branch.
+Is next material since MoarVM is not available for MIPS, so you cannot
+build it and you cannot hit that issue.
+MoarVM depends on libatomic_ops, and libatomic_ops doesn't have MIPS
+support in Buildroot so far. This patch series adds MIPS support to it,
+so, from that moment, MoarVM will be able to be built for MIPS.
 
-Thanks!
+Regards,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Vincent
+
+> 
+> Thanks,
+> 
+> Thomas
+> 
