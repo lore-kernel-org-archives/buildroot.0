@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Nov 2016 23:46:44 +0100
-Subject: [Buildroot] [PATCH 1/1] host-python3: Do not use the system
- OpenSSL.
-In-Reply-To: <20161122131109.4459-1-nicolas.cavallari@green-communications.fr>
-References: <515ff5e8-2077-f5e9-52eb-7e061b48203a@green-communications.fr>
- <20161122131109.4459-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <ae041aa5-51bc-0308-7d46-427845dec4ee@mind.be>
+Date: Fri, 25 Nov 2016 00:13:16 +0100
+Subject: [Buildroot] [PATCH 2/2] toolchain: simplify the conditions for
+ BR2_TOOLCHAIN_ARM_HAS_SYNC_8
+In-Reply-To: <20161122093515.6db0df30@free-electrons.com>
+References: <20161121234340.30463-1-arnout@mind.be>
+ <20161121234340.30463-2-arnout@mind.be>
+ <20161122093515.6db0df30@free-electrons.com>
+Message-ID: <47d66856-80eb-9c55-026d-3b74b44886b1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,85 +15,66 @@ To: buildroot@busybox.net
 
 
 
-On 22-11-16 14:11, Nicolas Cavallari wrote:
-> host-python3 currently detect if there is an usable OpenSSL installation
-> and conditionnaly compiles the 'ssl', '_ssl' and '_hashlib' modules.
-> This may break compilation if the system's OpenSSL has been updated to
-> 1.1.0 because of a bug in python, see https://bugs.python.org/issue26470
-> for details.
+On 22-11-16 09:35, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Unlike Python 2.7, Python 3 unconditionnaly compiles fallbacks for
-> common hash algorithm, so disabling OpenSSL will still leave Python 3
-> with implementations of common hash algorithm.
+> On Tue, 22 Nov 2016 00:43:40 +0100, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
 > 
-> This adds a patch to configure.ac patch to implement a --disable-openssl
-> option.
-
- You didn't add your Signed-off-by here.
-
-> ---
->  .../0031-Add-an-option-to-disable-openssl.patch    | 23 ++++++++++++++++++++++
->  package/python3/python3.mk                         |  3 ++-
->  2 files changed, 25 insertions(+), 1 deletion(-)
->  create mode 100644 package/python3/0031-Add-an-option-to-disable-openssl.patch
+>>  config BR2_TOOLCHAIN_ARM_HAS_SYNC_8
+>>  	bool
+>>  	default y
+>>  	depends on BR2_arm || BR2_armeb
+>> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+>> -	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_ARM_CPU_ARMV7A
+>> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
 > 
-> diff --git a/package/python3/0031-Add-an-option-to-disable-openssl.patch b/package/python3/0031-Add-an-option-to-disable-openssl.patch
-> new file mode 100644
-> index 0000000..d437520
-> --- /dev/null
-> +++ b/package/python3/0031-Add-an-option-to-disable-openssl.patch
-> @@ -0,0 +1,23 @@
-> +From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> Can we make this instead:
+> 
+> 	depends on (BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_TOOLCHAIN_USES_GLIBC) || BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> 
+> This way, glibc toolchains (which were never affected by the _write
+> issue) still expose the fact that they support the __sync_8 thing.
+> Otherwise, your change introduces a regression: a 4.7 glibc external
+> toolchain was prior to your patch exposing the fact that it supports
+> 8-byte sync, but no longer after your patch.not-quite
 
- Funny, an almost-git-formatted patch :-)
+ Now I think about it again, I think the condition should simply be
+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
 
- Since I assume you based this on python's 111-optional-ssl.patch, I think you
-really should keep Thomas's authorship (and signed-off-by of course)
+ Let me explain again my reasoning.
 
- That said:
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ For me, the toolchain conditions that we add to hide packages are only there to
+cover missing features in certain compiler versions, not to cover bugs. The
+incorrect sync_8 implementation in gcc < 5.2 is something I consider a bug: it's
+something that has been implemented, works correctly, but fails to link with a
+specific library. Therefore, I would say that sync_8 on ARM has been available
+since gcc 4.7. An external non-glibc toolchain with gcc < 5.2 will not actually
+work, but that's due to a compiler bug. People who need one of the 3 packages
+that fail because of this compiler bug should update their compiler - and the
+best way to tell them that is to make the build fail, not to hide the option.
 
- This is really needed for 2016.11. I can't build host-python3 without it.
+ But that's my opinion. It's clearly not the rule that is currently followed in
+Buildroot. Just look@the number of packages with some kind of external
+toolchain specific dependency. Honestly, I think those things are giving us more
+work for no added benefit to the user.
+
+
+> Also, what about the __atomic 8 bytes? As we discussed yesterday, it's
+> in fact affected by the same issue. How do we deal with that? Do we
+> introduce per-size BR2_TOOLCHAIN_HAS_ATOMIC_<size> options?
+
+ If the condition for SYNC_8 is simply BR2_TOOLCHAIN_GCC_AT_LEAST_4_7, then
+HAS_ATOMIC is already OK.
 
  Regards,
  Arnout
 
-> +Subject: [PATCH] Add an option to disable openssl support.
-> +
-> +Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> +---
-> + configure.ac | 6 ++++++
-> + 1 file changed, 6 insertions(+)
-> +
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -3027,6 +3027,12 @@
-> +     	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} unicodedata"
-> +   	  fi])
-> + 
-> ++AC_ARG_ENABLE(openssl,
-> ++	AS_HELP_STRING([--disable-openssl], [disable openssl support]),
-> ++	[ if test "$enableval" = "no"; then
-> ++	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl _ssl _hashlib"
-> ++	  fi])
-> ++
-> + AC_SUBST(TK)
-> + AC_ARG_ENABLE(tk,
-> + 	AS_HELP_STRING([--disable-tk], [disable tk]),
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index f355ae9..8bfae79 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -36,7 +36,8 @@ HOST_PYTHON3_CONF_OPTS += 	\
->  	--enable-unicodedata	\
->  	--disable-test-modules	\
->  	--disable-idle3		\
-> -	--disable-ossaudiodev
-> +	--disable-ossaudiodev	\
-> +	--disable-openssl
->  
->  # Make sure that LD_LIBRARY_PATH overrides -rpath.
->  # This is needed because libpython may be installed at the same time that
+
+> 
+> Best regards,
+> 
+> Thomas
 > 
 
 -- 
