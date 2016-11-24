@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Nov 2016 23:39:39 +0100
-Subject: [Buildroot] [PATCH 3/3] qextserialport: remove redundant patch
-	0001-gui
-In-Reply-To: <20161124223747.31342-3-arnout@mind.be>
-References: <20161124223747.31342-1-arnout@mind.be>
- <20161124223747.31342-3-arnout@mind.be>
-Message-ID: <f028dd25-9928-a7ed-4957-6e4a6758d397@mind.be>
+Date: Thu, 24 Nov 2016 23:46:44 +0100
+Subject: [Buildroot] [PATCH 1/1] host-python3: Do not use the system
+ OpenSSL.
+In-Reply-To: <20161122131109.4459-1-nicolas.cavallari@green-communications.fr>
+References: <515ff5e8-2077-f5e9-52eb-7e061b48203a@green-communications.fr>
+ <20161122131109.4459-1-nicolas.cavallari@green-communications.fr>
+Message-ID: <ae041aa5-51bc-0308-7d46-427845dec4ee@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,87 @@ To: buildroot@busybox.net
 
 
 
-On 24-11-16 23:37, Arnout Vandecappelle (Essensium/Mind) wrote:
-> The same thing was done in upstream commit 220d7a2f "QtGui module only
-> needed by Windows", though it was done differently upstream.
+On 22-11-16 14:11, Nicolas Cavallari wrote:
+> host-python3 currently detect if there is an usable OpenSSL installation
+> and conditionnaly compiles the 'ssl', '_ssl' and '_hashlib' modules.
+> This may break compilation if the system's OpenSSL has been updated to
+> 1.1.0 because of a bug in python, see https://bugs.python.org/issue26470
+> for details.
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> This one is probably for next (though it depends on the other 2, so only
-> apply after the merge).
-> ---
->  ...0001-Create-a-main-include-file-QExtSerialPort.patch} |  0
->  package/qextserialport/0001-gui.patch                    | 16 ----------------
->  ...make-to-add-a-pkgconfig-file-to-ease-usage-wit.patch} |  0
->  3 files changed, 16 deletions(-)
->  rename package/qextserialport/{0002-Create-a-main-include-file-QExtSerialPort.patch => 0001-Create-a-main-include-file-QExtSerialPort.patch} (100%)
->  delete mode 100644 package/qextserialport/0001-gui.patch
->  rename package/qextserialport/{0003-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch => 0002-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch} (100%)
+> Unlike Python 2.7, Python 3 unconditionnaly compiles fallbacks for
+> common hash algorithm, so disabling OpenSSL will still leave Python 3
+> with implementations of common hash algorithm.
+> 
+> This adds a patch to configure.ac patch to implement a --disable-openssl
+> option.
 
- BTW I sent a pull request with our two remaining patches:
-https://github.com/qextserialport/qextserialport/pull/189
+ You didn't add your Signed-off-by here.
+
+> ---
+>  .../0031-Add-an-option-to-disable-openssl.patch    | 23 ++++++++++++++++++++++
+>  package/python3/python3.mk                         |  3 ++-
+>  2 files changed, 25 insertions(+), 1 deletion(-)
+>  create mode 100644 package/python3/0031-Add-an-option-to-disable-openssl.patch
+> 
+> diff --git a/package/python3/0031-Add-an-option-to-disable-openssl.patch b/package/python3/0031-Add-an-option-to-disable-openssl.patch
+> new file mode 100644
+> index 0000000..d437520
+> --- /dev/null
+> +++ b/package/python3/0031-Add-an-option-to-disable-openssl.patch
+> @@ -0,0 +1,23 @@
+> +From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+
+ Funny, an almost-git-formatted patch :-)
+
+ Since I assume you based this on python's 111-optional-ssl.patch, I think you
+really should keep Thomas's authorship (and signed-off-by of course)
+
+ That said:
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ This is really needed for 2016.11. I can't build host-python3 without it.
 
  Regards,
  Arnout
+
+> +Subject: [PATCH] Add an option to disable openssl support.
+> +
+> +Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> +---
+> + configure.ac | 6 ++++++
+> + 1 file changed, 6 insertions(+)
+> +
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -3027,6 +3027,12 @@
+> +     	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} unicodedata"
+> +   	  fi])
+> + 
+> ++AC_ARG_ENABLE(openssl,
+> ++	AS_HELP_STRING([--disable-openssl], [disable openssl support]),
+> ++	[ if test "$enableval" = "no"; then
+> ++	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl _ssl _hashlib"
+> ++	  fi])
+> ++
+> + AC_SUBST(TK)
+> + AC_ARG_ENABLE(tk,
+> + 	AS_HELP_STRING([--disable-tk], [disable tk]),
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index f355ae9..8bfae79 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -36,7 +36,8 @@ HOST_PYTHON3_CONF_OPTS += 	\
+>  	--enable-unicodedata	\
+>  	--disable-test-modules	\
+>  	--disable-idle3		\
+> -	--disable-ossaudiodev
+> +	--disable-ossaudiodev	\
+> +	--disable-openssl
+>  
+>  # Make sure that LD_LIBRARY_PATH overrides -rpath.
+>  # This is needed because libpython may be installed at the same time that
+> 
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
