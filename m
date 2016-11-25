@@ -1,43 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:31:06 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-joystick:
-	bump version to 1.6.3
-Message-ID: <20161201222140.5E6C37FD88@busybox.osuosl.org>
+Date: Fri, 25 Nov 2016 22:59:10 +0100
+Subject: [Buildroot] [git commit] toolchain-external: support gcc < 4.3
+Message-ID: <20161201222139.E1EDC7FD88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ffd68ba9235ccde6da70debabe1a38136b897f1
+commit: https://git.buildroot.net/buildroot/commit/?id=006ba68a3020477e8358eb0253acaf15220b84b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+We currently support gcc as old as 4.3. However, Buildroot works
+perfectly well with even older gcc versions (tested with 4.1). So we
+can add an option BR2_TOOLCHAIN_EXTERNAL_GCC_OLD to support that. The
+help text of this option is written with plenty of discouragement.
+
+We use _OLD and not something like _PRE_4_3, because at some point we
+will likely remove the 4.3 option and what would then require a name
+change.
+
+We don't set any _AT_LEAST option in this case because it's no use -
+there is no lower bound on the version in this case. We therefore leave
+BR2_TOOLCHAIN_GCC_AT_LEAST empty (the implicit default). When it is
+empty, we don't do a version check at all in check_gcc_version
+(previously we errored out when it was empty).
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash      | 4 ++--
- .../x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk  | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ toolchain/helpers.mk                                          |  3 +--
+ .../toolchain-external-custom/Config.in.options               | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash
-index 5fac77e..feec2d3 100644
---- a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash
-+++ b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2013-January/002136.html
--sha1	61658b8d829fdaed6064c7c26232c3884d359187	xf86-input-joystick-1.6.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-November/002742.html
-+sha256 9e7669ecf0f23b8e5dc39d5397cf28296f692aa4c0e4255f5e02816612c18eab  xf86-input-joystick-1.6.3.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
-index 76f2577..5bc2a5c 100644
---- a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
-+++ b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 3991bc1..72e7292 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -145,8 +145,7 @@ check_kernel_headers_version = \
+ check_gcc_version = \
+ 	expected_version="$(strip $2)" ; \
+ 	if [ -z "$${expected_version}" ]; then \
+-		printf "Internal error, gcc version unknown (no GCC_AT_LEAST_X_Y selected)\n"; \
+-		exit 1 ; \
++		exit 0 ; \
+ 	fi; \
+ 	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
+ 	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index cdc2555..5ff2491 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -59,6 +59,17 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+ 	bool "4.3.x"
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
  
--XDRIVER_XF86_INPUT_JOYSTICK_VERSION = 1.6.2
-+XDRIVER_XF86_INPUT_JOYSTICK_VERSION = 1.6.3
- XDRIVER_XF86_INPUT_JOYSTICK_SOURCE = xf86-input-joystick-$(XDRIVER_XF86_INPUT_JOYSTICK_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_JOYSTICK_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_JOYSTICK_LICENSE = MIT
++config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
++	bool "older"
++	help
++	  Use this option if your GCC version is older than any of the
++	  above.
++
++	  Note that the Buildroot community doesn't do any testing with
++	  such old toolchains. Some packages may fail to build in
++	  surprising ways, or the generated root filesystem may not
++	  work at all. Use such old toolchains at your own risk.
++
+ endchoice
+ 
+ choice
