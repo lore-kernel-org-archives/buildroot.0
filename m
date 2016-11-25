@@ -1,28 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Nov 2016 22:58:15 +0100
-Subject: [Buildroot] [PATCH next 1/6] moarvm: bump version to 2016.11
-In-Reply-To: <20161123143914.3969-1-Vincent.Riera@imgtec.com>
-References: <20161123143914.3969-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161125225815.390f5fcd@free-electrons.com>
+Date: Fri, 25 Nov 2016 22:59:10 +0100
+Subject: [Buildroot] [git commit branch/next] toolchain-external: support
+	gcc < 4.3
+Message-ID: <20161125220030.922F5807DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=006ba68a3020477e8358eb0253acaf15220b84b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 23 Nov 2016 14:39:09 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/moarvm/moarvm.hash | 2 +-
->  package/moarvm/moarvm.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+We currently support gcc as old as 4.3. However, Buildroot works
+perfectly well with even older gcc versions (tested with 4.1). So we
+can add an option BR2_TOOLCHAIN_EXTERNAL_GCC_OLD to support that. The
+help text of this option is written with plenty of discouragement.
 
-Entire patch series applied to next. Thanks!
+We use _OLD and not something like _PRE_4_3, because at some point we
+will likely remove the 4.3 option and what would then require a name
+change.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+We don't set any _AT_LEAST option in this case because it's no use -
+there is no lower bound on the version in this case. We therefore leave
+BR2_TOOLCHAIN_GCC_AT_LEAST empty (the implicit default). When it is
+empty, we don't do a version check at all in check_gcc_version
+(previously we errored out when it was empty).
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/helpers.mk                                          |  3 +--
+ .../toolchain-external-custom/Config.in.options               | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 3991bc1..72e7292 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -145,8 +145,7 @@ check_kernel_headers_version = \
+ check_gcc_version = \
+ 	expected_version="$(strip $2)" ; \
+ 	if [ -z "$${expected_version}" ]; then \
+-		printf "Internal error, gcc version unknown (no GCC_AT_LEAST_X_Y selected)\n"; \
+-		exit 1 ; \
++		exit 0 ; \
+ 	fi; \
+ 	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
+ 	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index cdc2555..5ff2491 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -59,6 +59,17 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+ 	bool "4.3.x"
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+ 
++config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
++	bool "older"
++	help
++	  Use this option if your GCC version is older than any of the
++	  above.
++
++	  Note that the Buildroot community doesn't do any testing with
++	  such old toolchains. Some packages may fail to build in
++	  surprising ways, or the generated root filesystem may not
++	  work at all. Use such old toolchains at your own risk.
++
+ endchoice
+ 
+ choice
