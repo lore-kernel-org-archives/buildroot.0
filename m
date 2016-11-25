@@ -1,19 +1,33 @@
-From: daggs <daggs@gmx.com>
-Date: Fri, 25 Nov 2016 21:34:55 +0100
-Subject: [Buildroot] nfs timeout from buildroot's generated server
-Message-ID: <trinity-ff4b8576-13c4-444b-a9f2-0319d60466dd-1480106095236@3capp-mailcom-bs07>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 25 Nov 2016 20:45:23 +0000
+Subject: [Buildroot] [Bug 9446] make raspberrypi3_defconfig compilation
+	failure
+In-Reply-To: <bug-9446-163@https.bugs.busybox.net/>
+References: <bug-9446-163@https.bugs.busybox.net/>
+Message-ID: <bug-9446-163-sEm28SR72U@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+https://bugs.busybox.net/show_bug.cgi?id=9446
 
-I've built a small image with nfs-utils compiled.
-the kernel is 3.14.79 based.
-I've defined an export, defined version 4 and restarted the nfs.
-running showmount -e <ip> from another box showed the mount but when I run this:
-mount <ip>:/media /tmp/media or mount -t nfs4 <ip>:/media /tmp/media, I get this:
-mount.nfs: Connection timed out or mount.nfs4: Connection timed out.
-any ideas what might I'm doing wrong?
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |WONTFIX
+
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks for your bug report.
+
+This is a bug in your host compiler, i.e the one that comes from your
+distribution. There is nothing Buildroot can do about it: talk with your
+distribution provider, and tell them that the compiler they provide segfaults
+when building gmp.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
