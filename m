@@ -1,79 +1,72 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 25 Nov 2016 14:00:42 +0300
-Subject: [Buildroot] [PATCH] gpsd: Fix building with gcc 6.x
-Message-ID: <20161125110042.6680-1-abrodkin@synopsys.com>
+From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Date: Fri, 25 Nov 2016 17:06:15 +0100
+Subject: [Buildroot] [PATCH 1/1] host-python3: Do not use the system
+ OpenSSL.
+In-Reply-To: <ae041aa5-51bc-0308-7d46-427845dec4ee@mind.be>
+References: <515ff5e8-2077-f5e9-52eb-7e061b48203a@green-communications.fr>
+ <20161122131109.4459-1-nicolas.cavallari@green-communications.fr>
+ <ae041aa5-51bc-0308-7d46-427845dec4ee@mind.be>
+Message-ID: <cf00a52c-9992-2828-916a-765b47cd3315@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building C++ parts of gpsd (for example Qt bindings) with gcc 6.x following
-failure happens, see [1]:
------------------------------->8-------------------------------
-<command-line>:0:0: warning: "_LARGEFILE_SOURCE" redefined
-<command-line>:0:0: note: this is the location of the previous definition
-In file included from clock_gettime.c:10:0:
-compiler.h: In function 'void memory_barrier()':
-compiler.h:93:25: error: 'memory_order_seq_cst' was not declared in this scope
-     atomic_thread_fence(memory_order_seq_cst);
-                         ^~~~~~~~~~~~~~~~~~~~
-compiler.h:93:25: note: suggested alternative:
-In file included from .../output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/atomic:41:0,
-                 from compiler.h:75,
-                 from clock_gettime.c:10:
-.../output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/bits/atomic_base.h:62:7: note:   'memory_order_seq_cst'
-       memory_order_seq_cst
-       ^~~~~~~~~~~~~~~~~~~~
-In file included from clock_gettime.c:10:0:
-compiler.h:93:45: error: 'atomic_thread_fence' was not declared in this scope
-     atomic_thread_fence(memory_order_seq_cst);
-                                             ^
-compiler.h:93:45: note: suggested alternative:
-In file included from .../output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/atomic:41:0,
-                 from compiler.h:75,
-                 from clock_gettime.c:10:
-.../output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.2.1/bits/atomic_base.h:101:3: note:   'std::atomic_thread_fence'
-   atomic_thread_fence(memory_order __m) noexcept
-   ^~~~~~~~~~~~~~~~~~~
-scons: *** [qt-clock_gettime.os] Error 1
-scons: building terminated because of errors.
------------------------------->8-------------------------------
+On 24/11/2016 23:46, Arnout Vandecappelle wrote:
+> 
+> 
+> On 22-11-16 14:11, Nicolas Cavallari wrote:
+>> host-python3 currently detect if there is an usable OpenSSL installation
+>> and conditionnaly compiles the 'ssl', '_ssl' and '_hashlib' modules.
+>> This may break compilation if the system's OpenSSL has been updated to
+>> 1.1.0 because of a bug in python, see https://bugs.python.org/issue26470
+>> for details.
+>>
+>> Unlike Python 2.7, Python 3 unconditionnaly compiles fallbacks for
+>> common hash algorithm, so disabling OpenSSL will still leave Python 3
+>> with implementations of common hash algorithm.
+>>
+>> This adds a patch to configure.ac patch to implement a --disable-openssl
+>> option.
+> 
+>  You didn't add your Signed-off-by here.
 
-As discussed on gpsd mailng list here [2] the only work-around as of today is to
-add "-std=gnu++98" to both CFLAGS and CXXFLAGS which we implement here.
+Oops, i'll put it here just in case someone want to apply it anyway:
 
-Fixes:
-http://autobuild.buildroot.net/results/e8593a8ebf2f05cc93235a8129a2ba8b839d6d90
-http://autobuild.buildroot.net/results/ff766f4f514c9cb4891873167f4e9b7870051883
-http://autobuild.buildroot.net/results/1a4/1a4dbd9ee5e0c7255843228731beab030ca005ca
-http://autobuild.buildroot.net/results/1a4/1a4dbd9ee5e0c7255843228731beab030ca005ca
-and many others, see http://autobuild.buildroot.net/?reason=gpsd-3.16
+Signed-off-by: Nicolas Cavallari
+<nicolas.cavallari@green-communications.fr>
 
-[1] http://autobuild.buildroot.net/results/e85/e8593a8ebf2f05cc93235a8129a2ba8b839d6d90/build-end.log
-[2] http://lists.nongnu.org/archive/html/gpsd-dev/2016-09/msg00082.html
+>> ---
+>>  .../0031-Add-an-option-to-disable-openssl.patch    | 23 ++++++++++++++++++++++
+>>  package/python3/python3.mk                         |  3 ++-
+>>  2 files changed, 25 insertions(+), 1 deletion(-)
+>>  create mode 100644 package/python3/0031-Add-an-option-to-disable-openssl.patch
+>>
+>> diff --git a/package/python3/0031-Add-an-option-to-disable-openssl.patch b/package/python3/0031-Add-an-option-to-disable-openssl.patch
+>> new file mode 100644
+>> index 0000000..d437520
+>> --- /dev/null
+>> +++ b/package/python3/0031-Add-an-option-to-disable-openssl.patch
+>> @@ -0,0 +1,23 @@
+>> +From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> 
+>  Funny, an almost-git-formatted patch :-)
+> 
+>  Since I assume you based this on python's 111-optional-ssl.patch, I think you
+> really should keep Thomas's authorship (and signed-off-by of course)
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>
-Cc: James Knight <james.knight@rockwellcollins.com>
----
- package/gpsd/gpsd.mk | 2 ++
- 1 file changed, 2 insertions(+)
+I didn't base this on 111-optional-ssl.patch, i just copy-pasted some
+lines nearby. The buildroot patches for python 3 are not really the
+same compared to the python 2.7 patches. I think would be rude to
+indicate Thomas signed off this patch without ever seeing it.
 
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 4fe5d18..73067d3 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -33,6 +33,8 @@ endif
- # Build libgpsmm if we've got C++
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- GPSD_LDFLAGS += -lstdc++
-+GPSD_CFLAGS += -std=gnu++98
-+GPSD_CXXFLAGS += -std=gnu++98
- GPSD_SCONS_OPTS += libgpsmm=yes
- else
- GPSD_SCONS_OPTS += libgpsmm=no
--- 
-2.10.2
+It was already a bit rude to keep the signoff while modifying
+111-optional-ssl.patch, but i received no comments on that.
+
+>  That said:
+> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>  This is really needed for 2016.11. I can't build host-python3 without it.
+
+I'll wait for further comments before resubmitting.
