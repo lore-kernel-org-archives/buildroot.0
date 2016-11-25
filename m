@@ -1,81 +1,121 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 25 Nov 2016 17:14:14 +0000
-Subject: [Buildroot] [Bug 9446] New: make raspberrypi3_defconfig compilation
-	failure
-Message-ID: <bug-9446-163@https.bugs.busybox.net/>
+From: Ash Charles <ashcharles@gmail.com>
+Date: Fri, 25 Nov 2016 12:49:58 -0500
+Subject: [Buildroot] [PATCH v2 1/3] ti-cgt-pru: add package for PRU Host
+	toolchain
+In-Reply-To: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
+References: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
+Message-ID: <1480096200-20475-1-git-send-email-ash.charles@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9446
+TI provides a binary code generation toolchain to develop firmware for
+the programmable real-time unit/co-processor found in some SOCs such as
+some models in the AM335x line. This toolchain includes C/C++ support
+(clpru) rather than just assembler (pasm) supported by the pre-existing
+am335x-pru-package [1].  Following the lead of the Yocto meta-ti
+layer [2], this package provides a host toolchain suitable for an x86
+(or x86_64) Linux targeting an ARM-based PRU core.
 
-            Bug ID: 9446
-           Summary: make raspberrypi3_defconfig compilation failure
-           Product: buildroot
-           Version: 2016.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: sajjan.jyothisv at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+[1] http://processors.wiki.ti.com/index.php/PRU_Assembly_Instructions#pasm_vs._clpru
+[2] http://git.yoctoproject.org/cgit/cgit.cgi/meta-ti/tree/recipes-ti/devtools/ti-cgt-pru_2.1.1.bb
 
-libtool: compile:  /usr/bin/gcc -std=gnu99 -DHAVE_CONFIG_H -I. -I..
--D__GMP_WITHIN_GMP -I.. -DOPERATION_sec_add_1
--I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -O2
--I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -c sec_add_1.c 
--fPIC -DPIC -o .libs/sec_add_1.o
-libtool: compile:  /usr/bin/gcc -std=gnu99 -DHAVE_CONFIG_H -I. -I..
--D__GMP_WITHIN_GMP -I.. -DOPERATION_sec_sub_1
--I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -O2
--I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -c sec_sub_1.c 
--fPIC -DPIC -o .libs/sec_sub_1.o
-/bin/bash ../libtool  --tag=CC   --mode=compile /usr/bin/gcc -std=gnu99
--DHAVE_CONFIG_H -I. -I..  -D__GMP_WITHIN_GMP -I.. -DOPERATION_`echo sec_invert
-| sed 's/_$//'` -I/home/sajjan/BuildRoot/buildroot/output/host/usr/include  -O2
--I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -c -o sec_invert.lo
-sec_invert.c
-libtool: compile:  /usr/bin/gcc -std=gnu99 -DHAVE_CONFIG_H -I. -I..
--D__GMP_WITHIN_GMP -I.. -DOPERATION_sec_invert
--I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -O2
--I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -c sec_invert.c 
--fPIC -DPIC -o .libs/sec_invert.o
-gcc: internal compiler error: Segmentation fault (program as)
-/bin/bash ../libtool  --tag=CC   --mode=compile /usr/bin/gcc -std=gnu99
--DHAVE_CONFIG_H -I. -I..  -D__GMP_WITHIN_GMP -I.. -DOPERATION_`echo trialdiv |
-sed 's/_$//'` -I/home/sajjan/BuildRoot/buildroot/output/host/usr/include  -O2
--I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -c -o trialdiv.lo
-trialdiv.c
-Please submit a full bug report,
-with preprocessed source if appropriate.
-See <file:///usr/share/doc/gcc-4.9/README.Bugs> for instructions.
-Makefile:492: recipe for target 'sec_powm.lo' failed
-make[4]: *** [sec_powm.lo] Error 1
-make[4]: *** Waiting for unfinished jobs....
-libtool: compile:  /usr/bin/gcc -std=gnu99 -DHAVE_CONFIG_H -I. -I..
--D__GMP_WITHIN_GMP -I.. -DOPERATION_trialdiv
--I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -O2
--I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -c trialdiv.c  -fPIC
--DPIC -o .libs/trialdiv.o
-Makefile:955: recipe for target 'all-recursive' failed
-make[3]: *** [all-recursive] Error 1
-Makefile:774: recipe for target 'all' failed
-make[2]: *** [all] Error 2
-package/pkg-generic.mk:216: recipe for target
-'/home/sajjan/BuildRoot/buildroot/output/build/host-gmp-6.1.1/.stamp_built'
-failed
-make[1]: ***
-[/home/sajjan/BuildRoot/buildroot/output/build/host-gmp-6.1.1/.stamp_built]
-Error 2
-Makefile:76: recipe for target '_all' failed
-make: *** [_all] Error 2
+Signed-off-by: Ash Charles <ash.charles@savoirfairelinux.com>
+---
+Changes v1 --> v2
+ * extract source to $(@D) cleanly (suggested by Thomas)
+ * be more explicit about licensing (suggested by Arnout)
+ * switch to buildroot-suitable name: PRU_CGT --> TI_CGT_PRU_DIR
+ * sundry clarifications
+---
+ package/Config.in.host             |  1 +
+ package/ti-cgt-pru/Config.in.host  | 12 ++++++++++++
+ package/ti-cgt-pru/ti-cgt-pru.hash |  2 ++
+ package/ti-cgt-pru/ti-cgt-pru.mk   | 34 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 49 insertions(+)
+ create mode 100644 package/ti-cgt-pru/Config.in.host
+ create mode 100644 package/ti-cgt-pru/ti-cgt-pru.hash
+ create mode 100644 package/ti-cgt-pru/ti-cgt-pru.mk
 
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 3b115c5..e244694 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -39,6 +39,7 @@ menu "Host utilities"
+ 	source "package/squashfs/Config.in.host"
+ 	source "package/sunxi-tools/Config.in.host"
+ 	source "package/tegrarcm/Config.in.host"
++	source "package/ti-cgt-pru/Config.in.host"
+ 	source "package/uboot-tools/Config.in.host"
+ 	source "package/util-linux/Config.in.host"
+ 	source "package/vboot-utils/Config.in.host"
+diff --git a/package/ti-cgt-pru/Config.in.host b/package/ti-cgt-pru/Config.in.host
+new file mode 100644
+index 0000000..3797cda
+--- /dev/null
++++ b/package/ti-cgt-pru/Config.in.host
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_HOST_TI_CGT_PRU
++	bool "host ti-cgt-pru"
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_arm
++	help
++	  This package provides the Code Generation Tools for the PRU
++	  unit found on some TI processors e.g. AM3358.
++
++	  Note: this is a binary cross toolchain that runs on x86 hosts
++	  targeting PRU cores found alongside some ARM processors.
++
++	  http://processors.wiki.ti.com/index.php/Programmable_Realtime_Unit_Software_Development
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.hash b/package/ti-cgt-pru/ti-cgt-pru.hash
+new file mode 100644
+index 0000000..1c19b33
+--- /dev/null
++++ b/package/ti-cgt-pru/ti-cgt-pru.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	df85cd1ed3aea12d577854ece11bf5f2af6ace8c39959eea4cf2fa5973924e0e	ti_cgt_pru_2.1.3_linux_installer_x86.bin
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
+new file mode 100644
+index 0000000..115eb0c
+--- /dev/null
++++ b/package/ti-cgt-pru/ti-cgt-pru.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# ti-cgt-pru
++#
++################################################################################
++
++TI_CGT_PRU_VERSION = 2.1.3
++TI_CGT_PRU_SOURCE = ti_cgt_pru_$(TI_CGT_PRU_VERSION)_linux_installer_x86.bin
++TI_CGT_PRU_SITE = http://software-dl.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
++TI_CGT_PRU_LICENSE = TI Technology and Software Publicly Available License (compiler + PRU library), \
++	Boost Software License 1.0 (compiler), \
++	BSD-2c, BSD-3c, MIT, Academic Free License 3.0, Hewlett-Packard (PRU library)
++TI_CGT_PRU_LICENSE_FILES = PRU_Code_Generation_Tools_2.1.x_manifest.html \
++	PRU_CodeGen_Library_2.1_0222433C-30C1-442d-B5C6-2073BD97F80F.spdx.tag
++
++define HOST_TI_CGT_PRU_EXTRACT_CMDS
++	chmod +x $(DL_DIR)/$(TI_CGT_PRU_SOURCE)
++	$(DL_DIR)/$(TI_CGT_PRU_SOURCE) --prefix $(@D) --mode unattended
++        mv $(@D)/ti-cgt-pru_2.1.3/* $(@D)
++        rmdir $(@D)/ti-cgt-pru_2.1.3/
++endef
++
++# Since this is largely prebuilt toolchain and likes to live in its own
++# directory, put is in $(HOST_DIR)/ti-cgt-pru_$(CGT_PRU_VERION)
++# Packages wanting to use this toolchain need to use this path as TI's
++# standard PRU_CGT path e.g. make PRU_CGT=$(TI_CGT_PRU_DIR)...
++
++TI_CGT_PRU_DIR = $(HOST_DIR)/ti-cgt-pru_$(TI_CGT_PRU_VERSION)
++define HOST_TI_CGT_PRU_INSTALL_CMDS
++	mkdir -p $(TI_CGT_PRU_DIR)
++	cp -dpfr $(@D)/* $(TI_CGT_PRU_DIR)
++endef
++
++$(eval $(host-generic-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.7.4
