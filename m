@@ -1,46 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Nov 2016 23:14:30 +0100
-Subject: [Buildroot] [PATCH 1/1] host-python3: Do not use the system
- OpenSSL.
-In-Reply-To: <20161122131109.4459-1-nicolas.cavallari@green-communications.fr>
-References: <515ff5e8-2077-f5e9-52eb-7e061b48203a@green-communications.fr>
- <20161122131109.4459-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <20161125231430.5ccd16ea@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 25 Nov 2016 23:26:22 +0100
+Subject: [Buildroot] [PATCH for-next] package/efl: bump to 1.18.3
+Message-ID: <1480112782-29951-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Bug fixes release:
+https://www.enlightenment.org/news/efl-1.18.3
 
-On Tue, 22 Nov 2016 14:11:09 +0100, Nicolas Cavallari wrote:
-> host-python3 currently detect if there is an usable OpenSSL installation
-> and conditionnaly compiles the 'ssl', '_ssl' and '_hashlib' modules.
-> This may break compilation if the system's OpenSSL has been updated to
-> 1.1.0 because of a bug in python, see https://bugs.python.org/issue26470
-> for details.
-> 
-> Unlike Python 2.7, Python 3 unconditionnaly compiles fallbacks for
-> common hash algorithm, so disabling OpenSSL will still leave Python 3
-> with implementations of common hash algorithm.
-> 
-> This adds a patch to configure.ac patch to implement a --disable-openssl
-> option.
-> ---
->  .../0031-Add-an-option-to-disable-openssl.patch    | 23 ++++++++++++++++++++++
->  package/python3/python3.mk                         |  3 ++-
->  2 files changed, 25 insertions(+), 1 deletion(-)
->  create mode 100644 package/python3/0031-Add-an-option-to-disable-openssl.patch
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/efl/efl.hash | 4 ++--
+ package/efl/efl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks. A useful improvement (for next) would be to
-use --enable-ssl/--disable-ssl for the target variant of python3,
-depending on the value of BR2_PACKAGE_PYTHON3_SSL.
-
-Thanks!
-
-Thomas
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index 18393a4..4077ddd 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,2 +1,2 @@
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.2.tar.xz.sha256
+-sha256	292faf76557fe56a6bc15b48b5ea3eb1f0790e2ed7f2ade4ae79ef7973d67bed	efl-1.18.2.tar.xz
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.3.tar.xz.sha256
++sha256	0748ec0847f543d96b149cb3a84e6438724e827a38d530922ecb4bd59d3e64c0	efl-1.18.3.tar.xz
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 777ef3c..17d3163 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EFL_VERSION = 1.18.2
++EFL_VERSION = 1.18.3
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.5
