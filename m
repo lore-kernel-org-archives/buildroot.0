@@ -1,41 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Nov 2016 22:53:31 +0100
-Subject: [Buildroot] [git commit] libatomic_ops: bump version to 7.4.4
-Message-ID: <20161201222139.D94DF7FD88@busybox.osuosl.org>
+Date: Fri, 25 Nov 2016 22:53:26 +0100
+Subject: [Buildroot] [git commit] libatomic_ops: add support for MIPS
+	architecture
+Message-ID: <20161201222139.D08DB7FD88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abeab9ce934ad26785d476492d06b3ad38000f41
+commit: https://git.buildroot.net/buildroot/commit/?id=8fa73e6bd692d07bb27a0f1864a30f992d5d5c31
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libatomic_ops/libatomic_ops.hash | 2 +-
- package/libatomic_ops/libatomic_ops.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libatomic_ops/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/libatomic_ops/libatomic_ops.hash b/package/libatomic_ops/libatomic_ops.hash
-index d91f705..47a281d 100644
---- a/package/libatomic_ops/libatomic_ops.hash
-+++ b/package/libatomic_ops/libatomic_ops.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 2616be0a2f70f7e3eb12f131a36e32723ed5a1928f17b886c3e7c62f7ed14339  libatomic_ops-libatomic_ops-7_4_2.tar.gz
-+sha256 ef8335676f18a111f885d48810ab090fb6bfad94e5a5dd76cdccd2a536828662  libatomic_ops-libatomic_ops-7_4_4.tar.gz
-diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
-index fd45726..b5e2172 100644
---- a/package/libatomic_ops/libatomic_ops.mk
-+++ b/package/libatomic_ops/libatomic_ops.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libatomic_ops/Config.in b/package/libatomic_ops/Config.in
+index c6fe7a0..e9206f3 100644
+--- a/package/libatomic_ops/Config.in
++++ b/package/libatomic_ops/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_sparc || BR2_sparc64 || BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64
++	default y if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_sparc || BR2_sparc64 || BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	# Unsupported for MIPS R6
++	depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
  
--LIBATOMIC_OPS_VERSION = libatomic_ops-7_4_2
-+LIBATOMIC_OPS_VERSION = libatomic_ops-7_4_4
- LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,$(LIBATOMIC_OPS_VERSION))
- LIBATOMIC_OPS_AUTORECONF = YES
- 
+ config BR2_PACKAGE_LIBATOMIC_OPS
+ 	bool "libatomic_ops"
