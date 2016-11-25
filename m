@@ -1,22 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 25 Nov 2016 20:53:13 +0000
-Subject: [Buildroot] [Bug 9411] MUSL build with RT Error relocating
- /lib/libgcc_s.so.1: __cpu_indicator_init: symbol not found
-In-Reply-To: <bug-9411-163@https.bugs.busybox.net/>
-References: <bug-9411-163@https.bugs.busybox.net/>
-Message-ID: <bug-9411-163-r0Oq865CGm@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 25 Nov 2016 21:55:03 +0100
+Subject: [Buildroot] [git commit] quagga: fix typo s/BPG/BGP/
+Message-ID: <20161125205537.C64647FDFB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9411
+commit: https://git.buildroot.net/buildroot/commit/?id=0c029a7acc2023d171aafd3e9f546a950c8c3264
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Can you give an example Buildroot package that exhibits the problem, so that
-it's easier for us to reproduce and investigate the issue? Thanks!
+Fixes bug #9431.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Reported-by: xichaoli <xichao@sina.cn>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/quagga/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/quagga/Config.in b/package/quagga/Config.in
+index 56b8cad..4eacaf0 100644
+--- a/package/quagga/Config.in
++++ b/package/quagga/Config.in
+@@ -25,9 +25,9 @@ config BR2_PACKAGE_QUAGGA_TCP_ZEBRA
+ 	  on different hosts.
+ 
+ config BR2_PACKAGE_QUAGGA_BGPD
+-	bool "BPGv4+ protocol"
++	bool "BGPv4+ protocol"
+ 	help
+-	  Build bpgd daemon.
++	  Build bgpd daemon.
+ 
+ config BR2_PACKAGE_QUAGGA_BGP_ANNOUNCE
+ 	bool "BGP route announcement"
