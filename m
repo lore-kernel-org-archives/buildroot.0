@@ -1,50 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Nov 2016 17:48:35 +0100
-Subject: [Buildroot] [PATCH 1/3] qextserialport: install QExtSerialPort
- header with qmake
-In-Reply-To: <20161124223747.31342-1-arnout@mind.be>
-References: <20161124223747.31342-1-arnout@mind.be>
-Message-ID: <20161125174835.7b233507@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 25 Nov 2016 17:14:14 +0000
+Subject: [Buildroot] [Bug 9446] New: make raspberrypi3_defconfig compilation
+	failure
+Message-ID: <bug-9446-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9446
 
-On Thu, 24 Nov 2016 23:37:45 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Instead of manually copying the QExtSerialPort header introduced in
-> patch 0002, update the patch to include this header in the qmake
-> project file so it gets properly installed.
-> 
-> While we're at it, convert to a git-formatted patch.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/818b564a6e23bcecf4afc7e53811227b08e5f4eb
-> http://autobuild.buildroot.net/results/0b6c2d7c63329f5e790f02ccd29f14a317eadc71
-> http://autobuild.buildroot.net/results/ac552b63c6fb099a136066cda421f68e639808fa
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> Note: probably won't apply cleanly because of the silly line endings in
-> qextserialport.pri.
-> ---
->  ...Create-a-main-include-file-QExtSerialPort.patch | 43 ++++++++++++++++++++++
->  package/qextserialport/0002-main-include.patch     | 15 --------
->  package/qextserialport/qextserialport.mk           |  1 -
->  3 files changed, 43 insertions(+), 16 deletions(-)
->  create mode 100644 package/qextserialport/0002-Create-a-main-include-file-QExtSerialPort.patch
->  delete mode 100644 package/qextserialport/0002-main-include.patch
+            Bug ID: 9446
+           Summary: make raspberrypi3_defconfig compilation failure
+           Product: buildroot
+           Version: 2016.08
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: sajjan.jyothisv at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Patches 1 and 2 applied to master. I'm keeping Patch 3 on the side to
-apply once next has been merged back into master.
+libtool: compile:  /usr/bin/gcc -std=gnu99 -DHAVE_CONFIG_H -I. -I..
+-D__GMP_WITHIN_GMP -I.. -DOPERATION_sec_add_1
+-I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -O2
+-I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -c sec_add_1.c 
+-fPIC -DPIC -o .libs/sec_add_1.o
+libtool: compile:  /usr/bin/gcc -std=gnu99 -DHAVE_CONFIG_H -I. -I..
+-D__GMP_WITHIN_GMP -I.. -DOPERATION_sec_sub_1
+-I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -O2
+-I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -c sec_sub_1.c 
+-fPIC -DPIC -o .libs/sec_sub_1.o
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/bin/gcc -std=gnu99
+-DHAVE_CONFIG_H -I. -I..  -D__GMP_WITHIN_GMP -I.. -DOPERATION_`echo sec_invert
+| sed 's/_$//'` -I/home/sajjan/BuildRoot/buildroot/output/host/usr/include  -O2
+-I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -c -o sec_invert.lo
+sec_invert.c
+libtool: compile:  /usr/bin/gcc -std=gnu99 -DHAVE_CONFIG_H -I. -I..
+-D__GMP_WITHIN_GMP -I.. -DOPERATION_sec_invert
+-I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -O2
+-I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -c sec_invert.c 
+-fPIC -DPIC -o .libs/sec_invert.o
+gcc: internal compiler error: Segmentation fault (program as)
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/bin/gcc -std=gnu99
+-DHAVE_CONFIG_H -I. -I..  -D__GMP_WITHIN_GMP -I.. -DOPERATION_`echo trialdiv |
+sed 's/_$//'` -I/home/sajjan/BuildRoot/buildroot/output/host/usr/include  -O2
+-I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -c -o trialdiv.lo
+trialdiv.c
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <file:///usr/share/doc/gcc-4.9/README.Bugs> for instructions.
+Makefile:492: recipe for target 'sec_powm.lo' failed
+make[4]: *** [sec_powm.lo] Error 1
+make[4]: *** Waiting for unfinished jobs....
+libtool: compile:  /usr/bin/gcc -std=gnu99 -DHAVE_CONFIG_H -I. -I..
+-D__GMP_WITHIN_GMP -I.. -DOPERATION_trialdiv
+-I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -O2
+-I/home/sajjan/BuildRoot/buildroot/output/host/usr/include -c trialdiv.c  -fPIC
+-DPIC -o .libs/trialdiv.o
+Makefile:955: recipe for target 'all-recursive' failed
+make[3]: *** [all-recursive] Error 1
+Makefile:774: recipe for target 'all' failed
+make[2]: *** [all] Error 2
+package/pkg-generic.mk:216: recipe for target
+'/home/sajjan/BuildRoot/buildroot/output/build/host-gmp-6.1.1/.stamp_built'
+failed
+make[1]: ***
+[/home/sajjan/BuildRoot/buildroot/output/build/host-gmp-6.1.1/.stamp_built]
+Error 2
+Makefile:76: recipe for target '_all' failed
+make: *** [_all] Error 2
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
