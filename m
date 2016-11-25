@@ -1,34 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Nov 2016 22:53:26 +0100
-Subject: [Buildroot] [git commit] libatomic_ops: add support for MIPS
-	architecture
-Message-ID: <20161201222139.D08DB7FD88@busybox.osuosl.org>
+Date: Fri, 25 Nov 2016 22:52:19 +0100
+Subject: [Buildroot] [git commit] moarvm: enable optional support for libffi
+Message-ID: <20161201222139.BF3747FD88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fa73e6bd692d07bb27a0f1864a30f992d5d5c31
+commit: https://git.buildroot.net/buildroot/commit/?id=a8981b3785d6719bc8a2869a5931ab3abd48a2b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libatomic_ops/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/moarvm/moarvm.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libatomic_ops/Config.in b/package/libatomic_ops/Config.in
-index c6fe7a0..e9206f3 100644
---- a/package/libatomic_ops/Config.in
-+++ b/package/libatomic_ops/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
- 	bool
--	default y if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_sparc || BR2_sparc64 || BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64
-+	default y if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_sparc || BR2_sparc64 || BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	# Unsupported for MIPS R6
-+	depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index 80bd19c..d091174 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
+@@ -25,6 +25,11 @@ MOARVM_CONF_OPTS = \
+ 	--has-libtommath \
+ 	--has-libatomic
  
- config BR2_PACKAGE_LIBATOMIC_OPS
- 	bool "libatomic_ops"
++ifeq ($(BR2_PACKAGE_LIBFFI),y)
++MOARVM_CONF_OPTS += --has-libffi
++MOARVM_DEPENDENCIES += libffi
++endif
++
+ ifeq ($(BR2_ENDIAN),"BIG")
+ MOARVM_CONF_OPTS += --big-endian
+ endif
