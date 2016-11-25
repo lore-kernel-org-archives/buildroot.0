@@ -1,43 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:31:40 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-vmware:
-	bump version to 13.2.1
-Message-ID: <20161201222140.A17048026C@busybox.osuosl.org>
+Date: Fri, 25 Nov 2016 22:41:58 +0100
+Subject: [Buildroot] [git commit] moarvm: use pkgconfig to find libraries
+	and headers
+Message-ID: <20161201222139.B6A177FD88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c58598019394cc70d08fbcfe22bfc8aa3e03b32d
+commit: https://git.buildroot.net/buildroot/commit/?id=40cbdf6de070db116e44a52b4a232d24ce850186
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+MoarVM's Configure.pl script uses pkgconfig to find libraries and
+headers, but it uses the one installed in the host machine which is
+wrong and can lead to errors of unsafe include paths.
+
+Instead, make it depend on the host-pkgconf package and specify the path
+to our pkgconfig binary by using the --pkgconfig configure option.
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash    | 4 ++--
- package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk  | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/moarvm/moarvm.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
-index 10d31d0..8d948a7 100644
---- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
-+++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-January/002521.html
--sha256	3c1d244e4b1b77e92126957965cdc9fb82de4c215c0706a3a8aaff6939e4a0cc	xf86-video-vmware-13.1.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-November/002743.html
-+sha256 e2f7f7101fba7f53b268e7a25908babbf155b3984fb5268b3d244eb6c11bf62b  xf86-video-vmware-13.2.1.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
-index ea4dd48..ef262f8 100644
---- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
-+++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index 644432e..80bd19c 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
+@@ -10,7 +10,7 @@ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
+ MOARVM_LICENSE_FILES = Artistic2.txt
+ MOARVM_INSTALL_STAGING = YES
+-MOARVM_DEPENDENCIES = host-luajit libuv libtommath libatomic_ops
++MOARVM_DEPENDENCIES = host-luajit host-pkgconf libuv libtommath libatomic_ops
  
--XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.1.0
-+XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.2.1
- XDRIVER_XF86_VIDEO_VMWARE_SOURCE = xf86-video-vmware-$(XDRIVER_XF86_VIDEO_VMWARE_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_VMWARE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_VMWARE_LICENSE = MIT
+ MOARVM_CONF_OPTS = \
+ 	--build=$(GNU_HOST_NAME) \
+@@ -19,6 +19,7 @@ MOARVM_CONF_OPTS = \
+ 	--cc="$(TARGET_CC)" \
+ 	--ld="$(TARGET_CC)" \
+ 	--prefix="/usr" \
++	--pkgconfig=$(PKG_CONFIG_HOST_BINARY) \
+ 	--lua=$(HOST_DIR)/usr/bin/luajit \
+ 	--has-libuv \
+ 	--has-libtommath \
