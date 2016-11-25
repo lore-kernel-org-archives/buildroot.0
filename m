@@ -1,43 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Nov 2016 13:52:35 +0100
-Subject: [Buildroot] [git commit] gstreamer1/gst1-plugins-base: bump version
-	to 1.10.2
-Message-ID: <20161201222141.361688026C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 25 Nov 2016 22:12:16 +0100
+Subject: [Buildroot] [git commit] package/qemu: fixup enable host QEMU for
+	powerpc64/powerpc64le
+Message-ID: <20161201222139.A38437FD88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d9234e9d49c6e5046a09aea81af97a976d13d5c
+commit: https://git.buildroot.net/buildroot/commit/?id=9d49e3c0e9e16995bf712865fe8df5d029eeea7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash | 4 ++--
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Fixes next commit d634d9dda7f3c328d63469cb628c79da49a09e89, which itself
+fixes:
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-index 70aad4d..3f4d0cd 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-@@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.10.1.tar.xz.sha256sum
--sha256 66cfee294c7aaf9d7867eaba4841ca6254ea74f1a8b53e1289f4d3b9b6c976c9  gst-plugins-base-1.10.1.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.10.2.tar.xz.sha256sum
-+sha256 fbc0d40fcb746d2efe2ea47444674029912f66e6107f232766d33b722b97de20  gst-plugins-base-1.10.2.tar.xz
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index c89c22d..1014bd7 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_BASE_VERSION = 1.10.1
-+GST1_PLUGINS_BASE_VERSION = 1.10.2
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+  http://autobuild.buildroot.net/results/f58ec73d906a5da49a88ed78492e3b5bf8cecdd4/
+
+Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qemu/qemu.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index ae4e0ad..45fc0fa 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -35,7 +35,7 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-p
+ #       mips64el        mips64el
+ #       powerpc         ppc
+ #       powerpc64       ppc64
+-#       powerpc64le     ppc64 (ppc64 supports little-endian)
++#       powerpc64le     ppc64le
+ #       sh2a            not supported
+ #       sh4             sh4
+ #       sh4eb           sh4eb
+@@ -61,7 +61,7 @@ ifeq ($(HOST_QEMU_ARCH),powerpc64)
+ HOST_QEMU_ARCH = ppc64
+ endif
+ ifeq ($(HOST_QEMU_ARCH),powerpc64le)
+-HOST_QEMU_ARCH = ppc64
++HOST_QEMU_ARCH = ppc64le
+ endif
+ ifeq ($(HOST_QEMU_ARCH),sh4a)
+ HOST_QEMU_ARCH = sh4
