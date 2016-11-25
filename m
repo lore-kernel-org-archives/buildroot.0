@@ -1,87 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Nov 2016 23:45:00 +0100
-Subject: [Buildroot] [git commit] taskd: fix static linking issue with
-	libuuid/libintl
-Message-ID: <20161125224627.3343181839@busybox.osuosl.org>
+Date: Fri, 25 Nov 2016 23:49:52 +0100
+Subject: [Buildroot] [git commit branch/next] cmake: bump version to 3.7.0
+Message-ID: <20161125225018.8561A81D8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83e207d7bc52fbcb38b33dc387f37da333d3e248
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=1ffcf364b6e9894a876dc581a090f87685945412
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-libuuid depends on libintl in specific scenarios, but since taskd wasn't
-using pkg-config to detect libuuid, this dependency on libintl was not
-taken into account. This commit adds a patch to taskd that uses
-pkg-config to detect libuuid.
+libuv is now a required dependency.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/cb5ea871812651025722d42508d4f37702088800/
-
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-CMakeLists-use-pkg-config-uuid-detection.patch | 40 ++++++++++++++++++++++
- package/taskd/taskd.mk                             |  2 +-
- 2 files changed, 41 insertions(+), 1 deletion(-)
+ package/cmake/Config.in  | 9 +++++++--
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 6 +++---
+ 3 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/package/taskd/0003-CMakeLists-use-pkg-config-uuid-detection.patch b/package/taskd/0003-CMakeLists-use-pkg-config-uuid-detection.patch
-new file mode 100644
-index 0000000..34139fe
---- /dev/null
-+++ b/package/taskd/0003-CMakeLists-use-pkg-config-uuid-detection.patch
-@@ -0,0 +1,40 @@
-+CMakeLists.txt: use pkg-config to detect uuid when possible
-+
-+In order to take into account the libraries used by libuuid when
-+building statically, using pkg-config is recommended. This patch
-+therefore improves the CMakeLists.txt to use pkg-config to detect
-+libuuid when pkg-config is available.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/CMakeLists.txt
-+===================================================================
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -6,6 +6,7 @@
-+ 
-+ include (CheckFunctionExists)
-+ include (CheckStructHasMember)
-++include (FindPkgConfig)
-+ 
-+ set (HAVE_CMAKE true)
-+ 
-+@@ -119,8 +120,16 @@
-+   # Apple and FreeBSD include the uuid functions in their libc, rather than libuuid
-+   check_function_exists (uuid_unparse_lower HAVE_UUID_UNPARSE_LOWER)
-+ else (DARWIN OR FREEBSD)
-+-  find_path    (UUID_INCLUDE_DIR   uuid/uuid.h)
-+-  find_library (UUID_LIBRARY NAMES uuid)
-++  if(PKG_CONFIG_FOUND)
-++    pkg_check_modules(PC_UUID uuid)
-++    if(PC_UUID_FOUND)
-++      set (UUID_INCLUDE_DIR ${PC_UUID_INCLUDE_DIRS})
-++      set (UUID_LIBRARY ${PC_UUID_LIBRARIES})
-++    endif(PC_UUID_FOUND)
-++  else(PKG_CONFIG_FOUND)
-++    find_path    (UUID_INCLUDE_DIR   uuid/uuid.h)
-++    find_library (UUID_LIBRARY NAMES uuid)
-++  endif(PKG_CONFIG_FOUND)
-+   if (UUID_INCLUDE_DIR AND UUID_LIBRARY)
-+     set (TASKD_INCLUDE_DIRS ${TASKD_INCLUDE_DIRS} ${UUID_INCLUDE_DIR})
-+     set (TASKD_LIBRARIES    ${TASKD_LIBRARIES}    ${UUID_LIBRARY})
-diff --git a/package/taskd/taskd.mk b/package/taskd/taskd.mk
-index 34a260e..b19be68 100644
---- a/package/taskd/taskd.mk
-+++ b/package/taskd/taskd.mk
-@@ -8,6 +8,6 @@ TASKD_VERSION = 1.1.0
- TASKD_SITE = http://taskwarrior.org/download
- TASKD_LICENSE = MIT
- TASKD_LICENSE_FILES = COPYING
--TASKD_DEPENDENCIES = gnutls util-linux
-+TASKD_DEPENDENCIES = gnutls util-linux host-pkgconf
+diff --git a/package/cmake/Config.in b/package/cmake/Config.in
+index 6f04a4a..716d80e 100644
+--- a/package/cmake/Config.in
++++ b/package/cmake/Config.in
+@@ -20,11 +20,14 @@ config BR2_PACKAGE_CMAKE_CTEST
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_XZ
++	select BR2_PACKAGE_LIBUV
+ 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # from jsoncpp
+ 	depends on BR2_USE_WCHAR # libarchive
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
++	depends on BR2_USE_MMU # libuv
+ 	help
+ 	  CTest is a testing tool distributed as a part of CMake. It
+ 	  can be used to automate updating (using CVS for example),
+@@ -34,7 +37,9 @@ config BR2_PACKAGE_CMAKE_CTEST
  
- $(eval $(cmake-package))
+ 	  http://www.cmake.org/
+ 
+-comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7"
++comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7, threads"
+ 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index f846dc9..687e5a4 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+-# From http://www.cmake.org/files/v3.6/cmake-3.6.3-SHA-256.txt
+-sha256 7d73ee4fae572eb2d7cd3feb48971aea903bb30a20ea5ae8b4da826d8ccad5fe  cmake-3.6.3.tar.gz
++# From http://www.cmake.org/files/v3.7/cmake-3.7.0-SHA-256.txt
++sha256 ed63e05c41aeb6c036e503114ab15847f29c312f9f21f5f1a7060a4b4ec2fb31  cmake-3.7.0.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index fadb09e..522d7fe 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CMAKE_VERSION_MAJOR = 3.6
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
++CMAKE_VERSION_MAJOR = 3.7
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
+@@ -22,7 +22,7 @@ CMAKE_LICENSE_FILES = Copyright.txt
+ #   the system-wide libraries instead of rebuilding and statically
+ #   linking with the ones bundled into the CMake sources.
+ 
+-CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz
++CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz libuv
+ 
+ CMAKE_CONF_OPTS = \
+ 	-DKWSYS_LFS_WORKS=TRUE \
