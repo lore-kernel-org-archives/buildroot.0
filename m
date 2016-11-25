@@ -1,40 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Nov 2016 22:01:02 +0100
-Subject: [Buildroot] [PATCH] package/ola: fix missing numpy
-In-Reply-To: <20161124211818.14096-1-joerg.krause@embedded.rocks>
-References: <20161124211818.14096-1-joerg.krause@embedded.rocks>
-Message-ID: <20161125220102.0e613094@free-electrons.com>
+Date: Fri, 25 Nov 2016 22:02:08 +0100
+Subject: [Buildroot] [git commit branch/next] odroid-scripts: bump version
+	to cfd289b1d69136b8bfd725d90cd648da4654f2bd
+Message-ID: <20161125210221.E4DDB81E5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=df6788e72be6e547cca067fa2da7d498ca3e4233
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 24 Nov 2016 22:18:18 +0100, J?rg Krause wrote:
-> OLAs RDM test option needs NumPy.
-> 
-> Note that we need to pass `ac_cv_have_pymod_numpy=yes` as NumPy builds some
-> shared libraries and ola checks for NumPy using a host Python test program
-> which fails with 'wrong ELF class'.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/750/750c9bcc753e2c1b7b05d6c43fabf4c405e15f04/
-> http://autobuild.buildroot.net/results/24a/24ada1e0ec695cb12028048728a9d1e2bcf75a03/
-> http://autobuild.buildroot.net/results/111/111c5f3eed6a5931de27a1b0b02be6e2114198e6/
-> .. and more.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/ola/Config.in | 2 ++
->  package/ola/ola.mk    | 4 ++++
->  2 files changed, 6 insertions(+)
+- add support for new monitor modes.
+- fix cvbs modes
 
-Applied to master, thanks.
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/odroid-scripts/odroid-scripts.hash | 2 +-
+ package/odroid-scripts/odroid-scripts.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/odroid-scripts/odroid-scripts.hash b/package/odroid-scripts/odroid-scripts.hash
+index 8fd4b2c..e5a262d 100644
+--- a/package/odroid-scripts/odroid-scripts.hash
++++ b/package/odroid-scripts/odroid-scripts.hash
+@@ -1,2 +1,2 @@
+ #  Locally computed hash
+-sha256 779e8beccf8c66d51e495a4cc0e6eccf72c295499a1ecdc0740aa4459de786a0 odroid-scripts-a252de04562dcf8d8a4918a544b45a9e3d46d2fb.tar.gz
++sha256 9d61472ee6aed2d1a7b5afdcb91b823003c8524a242572f24f89d4e57323daf3  odroid-scripts-cfd289b1d69136b8bfd725d90cd648da4654f2bd.tar.gz
+diff --git a/package/odroid-scripts/odroid-scripts.mk b/package/odroid-scripts/odroid-scripts.mk
+index 72e7b95..fc1940d 100644
+--- a/package/odroid-scripts/odroid-scripts.mk
++++ b/package/odroid-scripts/odroid-scripts.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ODROID_SCRIPTS_VERSION = a252de04562dcf8d8a4918a544b45a9e3d46d2fb
++ODROID_SCRIPTS_VERSION = cfd289b1d69136b8bfd725d90cd648da4654f2bd
+ ODROID_SCRIPTS_SITE = $(call github,mdrjr,c2_bootini,$(ODROID_SCRIPTS_VERSION))
+ ODROID_SCRIPTS_LICENSE = unclear
+ 
