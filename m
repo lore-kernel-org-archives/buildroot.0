@@ -1,56 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Nov 2016 09:56:14 +0100
-Subject: [Buildroot] [PATCH 2/2] toolchain: simplify the conditions for
- BR2_TOOLCHAIN_ARM_HAS_SYNC_8
-In-Reply-To: <47d66856-80eb-9c55-026d-3b74b44886b1@mind.be>
-References: <20161121234340.30463-1-arnout@mind.be>
- <20161121234340.30463-2-arnout@mind.be>
- <20161122093515.6db0df30@free-electrons.com>
- <47d66856-80eb-9c55-026d-3b74b44886b1@mind.be>
-Message-ID: <20161125095614.5ef13945@free-electrons.com>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Fri, 25 Nov 2016 08:54:31 +0100
+Subject: [Buildroot] Bare metal toolchain support?
+In-Reply-To: <440dae9f-817e-5e1c-cc30-1d80c96d2320@mind.be>
+References: <CAM+bi4v0iJKAbKV8FvqwJqEw=L+DqTLZhcHWGboYBbPv1oTM0A@mail.gmail.com>
+ <20161123113517.04f6ec47@free-electrons.com>
+ <CAM+bi4vNKMBr0Dv9_-rsQzU_kPNrze7o9_EcSEA--g2UCVCfzg@mail.gmail.com>
+ <20161123130636.5b362a27@free-electrons.com>
+ <CAM+bi4ujUpa+BEtU8XAC1sCW2AoM8gUhT-Rtg8xWs-_O8KTF6A@mail.gmail.com>
+ <CAM+bi4sYT51Qc72s1bpsRw8K3mOPRjMtYC171YOms1L_PG0R7g@mail.gmail.com>
+ <CAM+bi4sa9FG+eac3WdciC+rGih7mKk14syiT_O0mwXeyQh_5qA@mail.gmail.com>
+ <440dae9f-817e-5e1c-cc30-1d80c96d2320@mind.be>
+Message-ID: <CAM+bi4vkv9h7sK4LOhXTm0TvZ3OiW2kNm6vfR3LHLtZmONjnzA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+2016-11-24 21:41 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
 
-On Fri, 25 Nov 2016 00:13:16 +0100, Arnout Vandecappelle wrote:
+>  I haven't followed this in detail, but is there any reason why
+> CC="$(TARGET_CC) -ffreestanding" doesn't work?
+>
 
->  Now I think about it again, I think the condition should simply be
-> 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-> 
->  Let me explain again my reasoning.
-> 
->  For me, the toolchain conditions that we add to hide packages are only there to
-> cover missing features in certain compiler versions, not to cover bugs. The
-> incorrect sync_8 implementation in gcc < 5.2 is something I consider a bug: it's
-> something that has been implemented, works correctly, but fails to link with a
-> specific library. Therefore, I would say that sync_8 on ARM has been available
-> since gcc 4.7. An external non-glibc toolchain with gcc < 5.2 will not actually
-> work, but that's due to a compiler bug. People who need one of the 3 packages
-> that fail because of this compiler bug should update their compiler - and the
-> best way to tell them that is to make the build fail, not to hide the option.
-> 
->  But that's my opinion. It's clearly not the rule that is currently followed in
-> Buildroot. Just look at the number of packages with some kind of external
-> toolchain specific dependency. Honestly, I think those things are giving us more
-> work for no added benefit to the user.
+Hi Arnout,
 
-That's fine with me, with just one question: how do we handle this from
-an autobuilder perspective? Add more and more exceptions? Doesn't it
-make more sense to have those exceptions in Buildroot itself (in the
-form of Config.in dependencies) so that instead of benefiting the
-autobuilders only, they also benefit to the user?
+In the end I've managed to get this thing to build and it's working now on
+the platform.
 
-Or do we want our users to run into build failures, to have them
-discover the hard way that toolchain X or Y is affected by gcc bug
-XYZ ? Why not instead annotate packages like we do today, to make the
-life our users easier ?
+The reason why that won't work with this codebase is because the BSP over
+which the
+bootloader is built requires some newlib files. Specifically, it requires
+the set of crt*.S files,
+which seem to have been semi-split from newlib into libgloss.
 
-Thomas
+I've copied files from here and patched crtinit.S to add __init and __fini
+sections
+
+https://sourceware.org/git/gitweb.cgi?p=newlib-cygwin.git;a=tree;f=libgloss/
+microblaze;h=d713445523e8a7cd84cc3e4dadf12d06a8a3daa6;hb=HEAD
+
+I also found this document
+https://forums.xilinx.com/xlnx/attachments/xlnx/zaps/
+13261/1/(Guidance%20Note)%20Zynq%20-%20Using%20a%20Custom%20BareMetal%20GCC%
+20Toolchain%20in%20XSDK%20(Cross%20GCC)%20r05.docx
+<https://forums.xilinx.com/xlnx/attachments/xlnx/zaps/13261/1/%28Guidance%20Note%29%20Zynq%20-%20Using%20a%20Custom%20BareMetal%20GCC%20Toolchain%20in%20XSDK%20%28Cross%20GCC%29%20r05.docx>
+
+which helped me create a Xilinx.spec file to pass over to gcc
+
+In the end it's been an almost 18 hours journey that has been fruitful:
+I've learned
+lots of things I didn't know and I've managed to do what I needed: bulding
+standalone
+applications for microblaze using buildroot.
+
+However, I don't know if I can generalize this work to improve buildroot
+and make this
+available for anyone. Should newlib exist as a package for buildroot? Maybe
+only libgloss?
+I don't mind working on this, but I'd need some guidance, as I don't have
+everything clear
+yet. What could be a nice starting point?
+
+I see on the list there was a patch from March "toolchain: add support for
+the newlib library"
+but as far as I know it hasn't been comitted. Maybe improving that patch to
+fix the issues
+it had could be the first step.
+
+Best regards!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+?lvaro G?mez Machado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161125/3e7e08f8/attachment.html>
