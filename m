@@ -1,51 +1,95 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sat, 26 Nov 2016 14:56:28 -0200
-Subject: [Buildroot] [PATCH] stella: fix bug when compiling with PPC
- altivec vectorization
-In-Reply-To: <20161126153707.1238f739@free-electrons.com>
-References: <1479404832-11783-1-git-send-email-sergio.prado@e-labworks.com>
- <20161119105927.57bd516a@free-electrons.com>
- <20161122233337.GA2566@tungsten.ozlabs.ibm.com>
- <CANu7NGu=fPj30W2A596uyn=+kaYkK07M3U-So7RLmMhk41Vvrg@mail.gmail.com>
- <20161126153707.1238f739@free-electrons.com>
-Message-ID: <CANu7NGtZpT3G-jbAUupJOY_bUWYcgtvf4eo_9WLSU6-e61Bfrw@mail.gmail.com>
+From: Cassiano Martin <cassiano@polaco.pro.br>
+Date: Sat, 26 Nov 2016 19:37:54 -0200
+Subject: [Buildroot] Request for Help
+In-Reply-To: <040E51172C6148C2B2607CC22897F0C2@SYSTEMTECHNIK>
+References: <7E88E7AAEAD14AB9A2F395B26D76F9AF@SYSTEMTECHNIK>
+ <CAOoxthNsH-bDWWVgHFmJ03kdPtqGcbjgOUr7YRftMQBfpdx=+w@mail.gmail.com>
+ <040E51172C6148C2B2607CC22897F0C2@SYSTEMTECHNIK>
+Message-ID: <CAOoxthMGQrNFD9c160b1dnRxZpXMn_jbL=wHt9tri=XrFgaOsA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Ok, so you go under Target Packages -> Networking Applications -> iproute2
 
-2016-11-26 12:37 GMT-02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
->
-> Hello,
->
-> On Wed, 23 Nov 2016 19:59:11 -0200, Sergio Prado wrote:
->
-> > Your solution is simpler and seems reasonable to just change from c++11
-to
-> > gnu++11. I will do some tests on x86 and ARM and let you know the
-results.
->
-> Great, thanks. I'll mark your patch as Changes Requested in patchwork.
-> Can you resubmit a simplified version?
+Check it and do a rebuild. It will install legacy ip and tc tools.
 
-Sure. I'll finish testing and submit v2 in the next days.
+[]'s
 
-Best regards,
+2016-11-26 14:06 GMT-02:00 BertHuber <3237-15@online.de>:
 
-Sergio Prado
-
+> I don't know. As I said I'm quite new to the whole Buildroot world.
+> How can I find out ? .. and if it is the wrong how do I install the right ?
 >
-> Thanks!
 >
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+>
+> ------------------------------
+> *Von:* Cassiano Martin [mailto:cassiano at polaco.pro.br]
+> *Gesendet:* Samstag, 26. November 2016 16:52
+> *An:* BertHuber
+> *Cc:* buildroot at busybox.net
+> *Betreff:* Re: [Buildroot] Request for Help
+>
+> Right,
+>
+> maybe an issue with iproute, are you using busybox one, or the real one,
+> from 'ip tools' package?
+>
+> AFAIK bbox ip does not support can. I might be wrong too.
+>
+> []'s
+>
+> 2016-11-26 9:38 GMT-02:00 BertHuber <3237-15@online.de>:
+>
+>> Hello,
+>> I am new to this mailinglist and also quite new to the buildroot
+>> environment.
+>> I got stuck in my current project with the following problem:
+>>
+>>
+>> I am currently trying to build an embedded Linux System with Buildroot.
+>>
+>> It works so far, I get a bootable SD Card for my A20 based board.
+>>
+>> I included all CAN Drivers & protocols I could find (can, can_raw and
+>> vcan)
+>>
+>> My problem is : after booting and loggin in as root
+>>
+>> I type:
+>>
+>>  ip link add dev vcan0 type vcan ---- THAT WORKS
+>>
+>> but
+>>
+>>  ip link add dev can0 type can
+>>
+>> produces:
+>>
+>> RTNETLIINK answers: Operation not supported
+>>
+>> What is wrong ?? Thanks in advance for any ideas.
+>>
+>> Regards
+>>
+>> Bert
+>>
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161126/c75b8d8f/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161126/5434cc5a/attachment.html>
