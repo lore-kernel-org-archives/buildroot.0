@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 26 Nov 2016 11:30:55 +0100
-Subject: [Buildroot] problem with cups
-In-Reply-To: <1480147676790-151149.post@n4.nabble.com>
-References: <1480147676790-151149.post@n4.nabble.com>
-Message-ID: <08cf5dbf-ef19-6026-c129-b644e037b17a@mind.be>
+Date: Sat, 26 Nov 2016 11:47:39 +0100
+Subject: [Buildroot] [PATCH] m68k: add special gcc flag to avoid ICE for
+ coldfire
+In-Reply-To: <20161126085144.GA23223@waldemar-brodkorb.de>
+References: <20161126085144.GA23223@waldemar-brodkorb.de>
+Message-ID: <30093dc7-15f9-144b-77c3-e5f2236019a4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,51 @@ To: buildroot@busybox.net
 
 
 
-On 26-11-16 09:07, Ajorian wrote:
-> D [02/Jan/2000:23:04:59 +0000] [Job 1] Running command line for gs: gs -q
-> -dNOPAUSE -dBATCH -dSAFER -sDEVICE=ps2write -sOUTPUTFILE=%stdout
-> -dLanguageLevel=3 -r300 -dCompressFonts=false -dNoT3CCITT -dNOINTERPOLATE -c
-> \'save pop\' -f /var/spool/cups/tmp/000c13879b775
-> D [02/Jan/2000:23:04:59 +0000] [Job 1] Started filter gs (PID 196)
-> D [02/Jan/2000:23:04:59 +0000] [Job 1] Started filter pstops (PID 197)
-> D [02/Jan/2000:23:04:59 +0000] [Job 1] Unable to execute gs program: No such
-> file or directory
-> D [02/Jan/2000:23:04:59 +0000] [Job 1] PID 196 (gs) stopped with status 1!
+On 26-11-16 09:51, Waldemar Brodkorb wrote:
+> Fixes:
+>   http://autobuild.buildroot.net/results/d47fa41aa860d82471b83ac90967d3a3dacd8611
+>   http://autobuild.buildroot.net/results/a21de4747f40a5ce93108c8979fbc0277d040e79
 
- It looks like that printer driver requires ghostscript. ghostscript is
-currently not in Buildroot, but Bernd has a patch for it:
-http://patchwork.ozlabs.org/patch/666735/
+ Did you test whether exception handling still works?
+
+> 
+> Requires this as prerequisite:
+> http://patchwork.ozlabs.org/patch/683830/
+> 
+> Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+
+ Not sure if this warrants a Sob from me, but OK.
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
+
+> Tested-by: Waldemar Brodkorb <wbx@openadk.org>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  toolchain/toolchain-wrapper.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+> index c7b5019..463ba42 100644
+> --- a/toolchain/toolchain-wrapper.mk
+> +++ b/toolchain/toolchain-wrapper.mk
+> @@ -9,6 +9,13 @@ else
+>  TOOLCHAIN_WRAPPER_HASH_STYLE = both
+>  endif
+>  
+> +TARGET_FLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+> +
+> +# Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
+> +ifeq ($(BR2_m68k_cf),y)
+> +TARGET_FLAGS += -fno-dwarf2-cfi-asm
+> +endif
+> +
+>  TOOLCHAIN_WRAPPER_ARGS = $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
+>  TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
+>  
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
