@@ -1,160 +1,81 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 26 Nov 2016 14:04:08 +0100
-Subject: [Buildroot] [PATCH v2 1/1] pkg-autotools: generic configure fix
- for powerpc64
-In-Reply-To: <d005920f1b9f8acd1d32da2c68281020f6d28c2c.1479698374.git.sam.bobroff@au1.ibm.com>
-References: <d005920f1b9f8acd1d32da2c68281020f6d28c2c.1479698374.git.sam.bobroff@au1.ibm.com>
-Message-ID: <0e8c323b-46fa-dbc2-3c0f-daa11a1a8c38@mind.be>
+From: BertHuber <3237-15@online.de>
+Date: Sat, 26 Nov 2016 14:06:24 +0100
+Subject: [Buildroot] Request for Help
+In-Reply-To: <A1610F21-86C3-42E5-87C2-627683FA9291@polaco.pro.br>
+References: <7E88E7AAEAD14AB9A2F395B26D76F9AF@SYSTEMTECHNIK>
+ <A1610F21-86C3-42E5-87C2-627683FA9291@polaco.pro.br>
+Message-ID: <4529057BDF884FF2B52D801FE76F691B@SYSTEMTECHNIK>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I don't beleive so, as I said, I selected every configuration item that has
+anything to do
+with CAN, also I explicitly selected the A20 CAN Driver in the Kernel.
+
+ 
+  _____  
+
+Von: buildroot [mailto:buildroot-bounces at busybox.net] Im Auftrag von
+Cassiano Martin
+Gesendet: Samstag, 26. November 2016 13:36
+An: BertHuber
+Cc: buildroot at busybox.net
+Betreff: Re: [Buildroot] Request for Help
 
 
-On 21-11-16 04:19, Sam Bobroff wrote:
-> Many (100+) packages supported by buildroot contain old configure
-> scripts (or build them from old versions of autotools) that are unable
-> to determine how to link shared libraries on powerpc64 and
-> powerpc64le. This causes that test to erroneously fail on toolchains
-> that are not "bi-endian" (which is the case for toolchains built by
-> buildroot), which causes configure to build static libraries instead
-> of dynamic ones. Although these builds succeed, they tend to cause
-> linker failures in binaries later linked against them.
-> 
-> Because affected configure files can be discovered automatically, this
-> patch introduces a hook (enabled only when building for powerpc64 and
-> powerpc64le) that uses a script to scan and fix each package.
-> 
-> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-> ---
-> 
-> v2:
-> 
-> * Patch host packages as well as target ones. (Feedback on the GNU Make code to
->   detect this is welcome.)
-> * Folded long line in script.
-> * Removed patch backup files.
-> * Updated diff to unified format.
-> * Changed $pkg variable to $srcdir.
-> 
->  package/pkg-autotools.mk                   | 19 ++++++++++++
->  support/scripts/fix-configure-powerpc64.sh | 47 ++++++++++++++++++++++++++++++
->  2 files changed, 66 insertions(+)
->  create mode 100755 support/scripts/fix-configure-powerpc64.sh
-> 
-> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-> index d1cdb89..ada72c8 100644
-> --- a/package/pkg-autotools.mk
-> +++ b/package/pkg-autotools.mk
-> @@ -79,6 +79,15 @@ define LIBTOOL_PATCH_HOOK
->  endef
->  
->  #
-> +# Hook to patch common issue with configure on powerpc64{,le} failing
-> +# to detect shared library support:
-> +#
-> +define CONFIGURE_FIX_POWERPC64_HOOK
-> +	@$(call MESSAGE,"Checking configure (powerpc64/powerpc64le)")
-> +	support/scripts/fix-configure-powerpc64.sh $($(PKG)_DIR)
-> +endef
-> +
-> +#
->  # Hook to gettextize the package if needed
->  #
->  define GETTEXTIZE_HOOK
-> @@ -255,6 +264,16 @@ endif
->  
->  endif
->  
-> +# Append a configure hook if:
-> +# * this is a target package and the target architecture is powerpc64 or powerpc64le,
-> +# * or this is a host package and the host architecture is powerpc64 or powerpc64le.
-> +# Must be added after other pre-configure hooks that might regenerate the
-> +# configure script and overwrite the changes made here.
-> +ifneq ($(or $(and $(filter target,$(4)), $(filter powerpc64 powerpc64le,$(ARCH))),
-> +	$(and $(filter host,$(4)), $(filter powerpc64 powerpc64le,$(HOSTARCH)))),)
+Maybe your kernel is missing can support?  
 
- We try to consistently double-dollar everything except $(1), $(2) etc. in the
-inner- macros.
+Enviado do meu iPhone
 
- This condition would IMHO be easier to read as (untested):
-ifneq ($$(filter powerpc64%,$$(if $$(filter target,$(4)),$$(ARCH),$$(HOSTARCH))),)
+Em 26 de nov de 2016, ?s 09:38, BertHuber <3237-15@online.de> escreveu:
 
- But I'm OK with the version you had as well.
 
- So
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Regards,
- Arnout
+Hello,
+I am new to this mailinglist and also quite new to the buildroot
+environment.
+I got stuck in my current project with the following problem:
+ 
+I am currently trying to build an embedded Linux System with Buildroot. 
 
-> +$(2)_PRE_CONFIGURE_HOOKS += CONFIGURE_FIX_POWERPC64_HOOK
-> +endif
-> +
->  #
->  # Build step. Only define it if not already defined by the package .mk
->  # file.
-> diff --git a/support/scripts/fix-configure-powerpc64.sh b/support/scripts/fix-configure-powerpc64.sh
-> new file mode 100755
-> index 0000000..ad71042
-> --- /dev/null
-> +++ b/support/scripts/fix-configure-powerpc64.sh
-> @@ -0,0 +1,47 @@
-> +#!/bin/bash
-> +
-> +# This is a script to find, and correct, a problem with old versions of
-> +# configure that affect powerpc64 and powerpc64le.
-> +
-> +# The issue causes configure to incorrectly determine that shared library
-> +# support is not present in the linker. This causes the package to build a
-> +# static library rather than a dynamic one and although the build will succeed,
-> +# it may cause packages that link with the static library it to fail due to
-> +# undefined symbols.
-> +
-> +# This script searches for files named 'configure' that appear to have this
-> +# issue (by searching for a known bad pattern) and patching them.
-> +
-> +set -e
-> +
-> +if [ $# -ne 1 ]; then
-> +	echo "Usage: $0 <package build directory>"
-> +	exit 2
-> +fi
-> +
-> +srcdir="$1"
-> +files=$(cd "$srcdir" && find . -name configure \
-> +-exec grep -qF 'Generated by GNU Autoconf' {} \; \
-> +-exec grep -qF 'ppc*-*linux*|powerpc*-*linux*)' {} \; -print)
-> +
-> +# --ignore-whitespace is needed because some packages have included
-> +# copies of configure scripts where tabs have been replaced with spaces.
-> +for c in $files; do
-> +	patch --ignore-whitespace "$srcdir"/"$c" <<'EOF'
-> +--- a/configure	2016-11-16 15:31:46.097447271 +1100
-> ++++ b/configure	2008-07-21 12:17:23.000000000 +1000
-> +@@ -4433,7 +4433,10 @@
-> +         x86_64-*linux*)
-> +           LD="${LD-ld} -m elf_x86_64"
-> +           ;;
-> +-        ppc*-*linux*|powerpc*-*linux*)
-> ++	  powerpcle-*linux*)
-> ++	    LD="${LD-ld} -m elf64lppc"
-> ++	    ;;
-> ++	  powerpc-*linux*)
-> +           LD="${LD-ld} -m elf64ppc"
-> +           ;;
-> +         s390*-*linux*)
-> +EOF
-> +done
-> +
-> 
+It works so far, I get a bootable SD Card for my A20 based board. 
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+I included all CAN Drivers & protocols I could find (can, can_raw and vcan) 
+
+My problem is : after booting and loggin in as root
+
+I type:
+
+ ip link add dev vcan0 type vcan ---- THAT WORKS
+
+
+
+but
+
+ ip link add dev can0 type can 
+
+
+
+produces:
+
+RTNETLIINK answers: Operation not supported
+
+What is wrong ?? Thanks in advance for any ideas.
+
+Regards
+
+Bert
+
+ 
+
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161126/30af02f4/attachment.html>
