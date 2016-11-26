@@ -1,41 +1,30 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Sat, 26 Nov 2016 17:20:12 +0100
-Subject: [Buildroot] [PATCH v4 14/18] python3: generate reproducible .pyc
-In-Reply-To: <20161123230939.62c3f549@free-electrons.com>
-References: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
- <1479905937-17241-15-git-send-email-jezz@sysmic.org>
- <20161123230939.62c3f549@free-electrons.com>
-Message-ID: <5528914.ltOSMuvLx6@sagittea>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Sat, 26 Nov 2016 11:25:26 -0500
+Subject: [Buildroot] [PATCH] package/pseudo: update version
+In-Reply-To: <d0e8798c-0d61-663c-5293-99f64806e3a7@mind.be>
+References: <20161125212248.3540-1-gael.portay@savoirfairelinux.com>
+ <d0e8798c-0d61-663c-5293-99f64806e3a7@mind.be>
+Message-ID: <20161126162525.jx76zeediwc33klv@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hi Armout,
 
-On Wednesday 23 November 2016 23:09:39 Thomas Petazzoni wrote:
-> Hello,
+On Sat, Nov 26, 2016 at 11:50:45AM +0100, Arnout Vandecappelle wrote:
 > 
-> On Wed, 23 Nov 2016 13:58:53 +0100, J?r?me Pouiller wrote:
-> > .pyc files contain modification time of .py source. In order to make
-> > build reproducible, we fix modification time of all .py before to
-> > compile .pyc files.
+>  Does this work? From the man page, I understand that the -S option can't be
+> combined with starting a program.
 > 
-> Is there a way of avoiding the modification time contained inside
-> the .pyc files? According to
-> http://wiki.baserock.org/projects/deterministic-builds/: "Debian solve
-> this by creating the .pyc and .pyo files at package install time",
-> which is essentially what we do. How do they handle this exactly?
-Debian compile .pyc and .pyo when user install package. deb files does 
-not contains compiled files. Therefore, .pyc reproducibility does not 
-matter.
 
-In Buildroot, .pyc are included in filesystem. .pyc reproducibility does 
-matter.
+Yes this is working fine.
 
+Maybe the man page should be updated :)
 
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+The -S options can be used with or without scripts.
+
+See http://git.yoctoproject.org/cgit/cgit.cgi/pseudo/tree/pseudo.c if you want,
+ * at line 337 (when pseudo is invoked without script) and
+ * at line 412 (when pseudo is invoked with a script (our case)).
