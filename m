@@ -1,72 +1,72 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 26 Nov 2016 11:48:57 +0100
-Subject: [Buildroot] [git commit] qextserialport: fix line endings in
- patch 0002
-In-Reply-To: <20161125214131.8C49E80DB5@busybox.osuosl.org>
-References: <20161125214131.8C49E80DB5@busybox.osuosl.org>
-Message-ID: <24560a5e-b297-7406-e3ba-e9b1a933922b@mind.be>
+Date: Sat, 26 Nov 2016 11:50:45 +0100
+Subject: [Buildroot] [PATCH] package/pseudo: update version
+In-Reply-To: <20161125212248.3540-1-gael.portay@savoirfairelinux.com>
+References: <20161125212248.3540-1-gael.portay@savoirfairelinux.com>
+Message-ID: <d0e8798c-0d61-663c-5293-99f64806e3a7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Didn't I warn about this in the commit message?
 
- To avoid this kind of problem in the future, perhaps we should add
---ignore-whitespace to our patch calls?
+
+On 25-11-16 22:22, Ga?l PORTAY wrote:
+> Brings in fix about shutdown synchronization with the server.
+> 
+> See commit message:
+>     If you're running pseudo in docker, a script that creates a pseudo
+>     daemon can exit, causing docker to kill pseudo before it's done writing
+>     the database.
+> 
+>     Since the client sending the shutdown request doesn't have its socket
+>     closed explicitly by the server, we can just read from the socket in
+>     the client to create a delay until the actual exit, which can take
+>     a while if there's an in-memory DB.
+> 
+> Furthermore, the patch add the -S argument that tells the server to
+> shutdown and waits for its completion.
+
+ Does this work? From the man page, I understand that the -S option can't be
+combined with starting a program.
+
+> 
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> ---
+>  package/pseudo/pseudo-wrapper | 2 +-
+>  package/pseudo/pseudo.mk      | 2 +-
+
+ Did you test this? You didn't update the hash file...
 
  Regards,
  Arnout
 
-On 25-11-16 22:40, Thomas Petazzoni wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=72dcc7c252e7be65ff3e66bcf5dd20b49e2de915
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/074d379e4d491dd454726bed666a7e1028333ef7/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  ...Create-a-main-include-file-QExtSerialPort.patch | 23 ++++++++++------------
->  1 file changed, 10 insertions(+), 13 deletions(-)
-> 
-> diff --git a/package/qextserialport/0002-Create-a-main-include-file-QExtSerialPort.patch b/package/qextserialport/0002-Create-a-main-include-file-QExtSerialPort.patch
-> index 1f14304..e1d99f0 100644
-> --- a/package/qextserialport/0002-Create-a-main-include-file-QExtSerialPort.patch
-> +++ b/package/qextserialport/0002-Create-a-main-include-file-QExtSerialPort.patch
-> @@ -28,16 +28,13 @@ diff --git a/src/qextserialport.pri b/src/qextserialport.pri
->  index 461d56f..f8a678d 100644
->  --- a/src/qextserialport.pri
->  +++ b/src/qextserialport.pri
-> -@@ -3,7 +3,8 @@ DEPENDPATH += $$PWD
-> - 
-> - PUBLIC_HEADERS         += $$PWD/qextserialport.h \
-> -                           $$PWD/qextserialenumerator.h \
-> --                          $$PWD/qextserialport_global.h
-> -+                          $$PWD/qextserialport_global.h \
-> -+                          $$PWD/QExtSerialPort
-> - 
-> - HEADERS                += $$PUBLIC_HEADERS \
-> -                           $$PWD/qextserialport_p.h \
-> --- 
-> -2.10.2
-> -
-> +@@ -3,7 +3,8 @@
-> + 
-> + PUBLIC_HEADERS         += $$PWD/qextserialport.h \
-> +                           $$PWD/qextserialenumerator.h \
-> +-                          $$PWD/qextserialport_global.h
-> ++                          $$PWD/qextserialport_global.h \
-> ++			  $$PWD/QExtSerialPort
-> + 
-> + HEADERS                += $$PUBLIC_HEADERS \
-> +                           $$PWD/qextserialport_p.h \
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
+> index 9c8dbdb..ad66431 100644
+> --- a/package/pseudo/pseudo-wrapper
+> +++ b/package/pseudo/pseudo-wrapper
+> @@ -16,4 +16,4 @@ if [ -n "${BASE_DIR}" ]; then
+>      export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
+>  fi
+>  
+> -exec "${0%/*}/pseudo" "${@}"
+> +exec "${0%/*}/pseudo" -S "${@}"
+> diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
+> index aa2a9c7..58b9c79 100644
+> --- a/package/pseudo/pseudo.mk
+> +++ b/package/pseudo/pseudo.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -PSEUDO_VERSION = 45eca34c754d416a38bee90fb2d3c110a0b6cc5f
+> +PSEUDO_VERSION = d6eb2df3fe63b765f35d62332add4d0e4e9c6a39
+>  PSEUDO_SITE = https://git.yoctoproject.org/git/pseudo
+>  PSEUDO_SITE_METHOD = git
+>  
 > 
 
 -- 
