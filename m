@@ -1,39 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Nov 2016 15:05:24 +0100
-Subject: [Buildroot] [PATCH v2 2/3] pru-software-support: add library
- for PRU firmware
-In-Reply-To: <1c417375-fe37-9cc8-5747-87c670b3e51f@mind.be>
-References: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
- <1480096200-20475-2-git-send-email-ash.charles@savoirfairelinux.com>
- <1c417375-fe37-9cc8-5747-87c670b3e51f@mind.be>
-Message-ID: <20161126150524.476da6e1@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 26 Nov 2016 15:05:26 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-11-25
+In-Reply-To: <20161126073005.DBD5620B4F@mail.free-electrons.com>
+References: <20161126073005.DBD5620B4F@mail.free-electrons.com>
+Message-ID: <790238ef-4682-e73c-bca9-e5caf550f977@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Sat, 26 Nov 2016 12:27:14 +0100, Arnout Vandecappelle wrote:
 
-> > +++ b/package/pru-software-support/pru-software-support.hash
-> > @@ -0,0 +1,2 @@
-> > +# no hash for git checkout  
-> 
->  Where do you get this from? It's been more than a year now that this is no
-> longer true, do we still have documentation bits saying that there should be no
-> hash for git downloads?
+On 26-11-16 08:30, Thomas Petazzoni wrote:
+>          arm |                     mpv-0.20.0 | NOK | http://autobuild.buildroot.net/results/5ae511510f344880dc09205495271193c511ad06
+>          arm |                     mpv-0.20.0 | NOK | http://autobuild.buildroot.net/results/6bdcaa7b3e8a85674a538935547a841bb157232c
 
-Correct, but they are not checked, so it isn't really obvious today
-that we want to have hashes for git downloads.
+ These are fixed by http://patchwork.ozlabs.org/patch/697452/ (after rebuilding
+the toolchains).
 
-But still: please add a locally calculated sha256 hash.
 
-Thanks,
+ Regards,
+ Arnout
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
