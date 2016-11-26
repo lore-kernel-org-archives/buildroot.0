@@ -1,45 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Nov 2016 15:01:16 +0100
-Subject: [Buildroot] [git commit branch/next] package/efl: bump to 1.18.3
-Message-ID: <20161126140121.F374C818A4@busybox.osuosl.org>
+Date: Sat, 26 Nov 2016 15:02:51 +0100
+Subject: [Buildroot] [PATCH] package/pseudo: update version
+In-Reply-To: <d0e8798c-0d61-663c-5293-99f64806e3a7@mind.be>
+References: <20161125212248.3540-1-gael.portay@savoirfairelinux.com>
+ <d0e8798c-0d61-663c-5293-99f64806e3a7@mind.be>
+Message-ID: <20161126150251.4373c78a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9cf9f1e3495463e46937f4f7ccc45a541cda5eca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Bug fixes release:
-https://www.enlightenment.org/news/efl-1.18.3
+On Sat, 26 Nov 2016 11:50:45 +0100, Arnout Vandecappelle wrote:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/efl/efl.hash | 4 ++--
- package/efl/efl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> >  package/pseudo/pseudo-wrapper | 2 +-
+> >  package/pseudo/pseudo.mk      | 2 +-  
+> 
+>  Did you test this? You didn't update the hash file...
 
-diff --git a/package/efl/efl.hash b/package/efl/efl.hash
-index 18393a4..4077ddd 100644
---- a/package/efl/efl.hash
-+++ b/package/efl/efl.hash
-@@ -1,2 +1,2 @@
--# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.2.tar.xz.sha256
--sha256	292faf76557fe56a6bc15b48b5ea3eb1f0790e2ed7f2ade4ae79ef7973d67bed	efl-1.18.2.tar.xz
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.3.tar.xz.sha256
-+sha256	0748ec0847f543d96b149cb3a84e6438724e827a38d530922ecb4bd59d3e64c0	efl-1.18.3.tar.xz
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 777ef3c..17d3163 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EFL_VERSION = 1.18.2
-+EFL_VERSION = 1.18.3
- EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
- EFL_SITE = http://download.enlightenment.org/rel/libs/efl
- EFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
+Hash files are not checked for git downloads, so it can work without
+updating the hash. Since the git download helper was fixed to generate
+reproducible archives, we haven't (yet) enabled hash checking for
+git downloads.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
