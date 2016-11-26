@@ -1,48 +1,33 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 26 Nov 2016 12:36:03 -0200
-Subject: [Buildroot] [PATCH] configs/mx6: Bump to kernel 4.8.11
-Message-ID: <1480170963-4772-1-git-send-email-festevam@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 26 Nov 2016 15:37:07 +0100
+Subject: [Buildroot] [PATCH] stella: fix bug when compiling with PPC
+ altivec vectorization
+In-Reply-To: <CANu7NGu=fPj30W2A596uyn=+kaYkK07M3U-So7RLmMhk41Vvrg@mail.gmail.com>
+References: <1479404832-11783-1-git-send-email-sergio.prado@e-labworks.com>
+ <20161119105927.57bd516a@free-electrons.com>
+ <20161122233337.GA2566@tungsten.ozlabs.ibm.com>
+ <CANu7NGu=fPj30W2A596uyn=+kaYkK07M3U-So7RLmMhk41Vvrg@mail.gmail.com>
+Message-ID: <20161126153707.1238f739@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kernel 4.8.11 brings commit 5f95e68daae397 ("clk: imx: fix integer overflow
-in AV PLL round rate"), which fixes a PLL calculation bug, so bump to this
-version.
+Hello,
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- configs/imx6ulpico_defconfig | 2 +-
- configs/mx6udoo_defconfig    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, 23 Nov 2016 19:59:11 -0200, Sergio Prado wrote:
 
-diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
-index 71277d9..5ad8d79 100644
---- a/configs/imx6ulpico_defconfig
-+++ b/configs/imx6ulpico_defconfig
-@@ -17,7 +17,7 @@ BR2_GLOBAL_PATCH_DIR="board/technexion/imx6ulpico/patches"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.11"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/technexion/imx6ulpico/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/mx6udoo_defconfig b/configs/mx6udoo_defconfig
-index 1ca2be4..8c1b28a 100644
---- a/configs/mx6udoo_defconfig
-+++ b/configs/mx6udoo_defconfig
-@@ -15,7 +15,7 @@ BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.11"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/udoo/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> Your solution is simpler and seems reasonable to just change from c++11 to
+> gnu++11. I will do some tests on x86 and ARM and let you know the results.
+
+Great, thanks. I'll mark your patch as Changes Requested in patchwork.
+Can you resubmit a simplified version?
+
+Thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
