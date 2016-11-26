@@ -1,81 +1,55 @@
-From: BertHuber <3237-15@online.de>
-Date: Sat, 26 Nov 2016 14:06:24 +0100
-Subject: [Buildroot] Request for Help
-In-Reply-To: <A1610F21-86C3-42E5-87C2-627683FA9291@polaco.pro.br>
-References: <7E88E7AAEAD14AB9A2F395B26D76F9AF@SYSTEMTECHNIK>
- <A1610F21-86C3-42E5-87C2-627683FA9291@polaco.pro.br>
-Message-ID: <4529057BDF884FF2B52D801FE76F691B@SYSTEMTECHNIK>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 26 Nov 2016 14:08:28 +0100
+Subject: [Buildroot] problem with cups
+In-Reply-To: <1480163241688-151160.post@n4.nabble.com>
+References: <1480147676790-151149.post@n4.nabble.com>
+ <1480163241688-151160.post@n4.nabble.com>
+Message-ID: <298f3527-2510-22f2-7dda-67e6db24cfab@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I don't beleive so, as I said, I selected every configuration item that has
-anything to do
-with CAN, also I explicitly selected the A20 CAN Driver in the Kernel.
-
- 
-  _____  
-
-Von: buildroot [mailto:buildroot-bounces at busybox.net] Im Auftrag von
-Cassiano Martin
-Gesendet: Samstag, 26. November 2016 13:36
-An: BertHuber
-Cc: buildroot at busybox.net
-Betreff: Re: [Buildroot] Request for Help
 
 
-Maybe your kernel is missing can support?  
+On 26-11-16 13:27, Ajorian wrote:
+> thanks dear Arnout, i got patch file from http://patchwork.ozlabs.org, but as
+> i said i'm newbie with buildroot. what should i do with downloaded file
+> (1-1-package-ghostscript-new-package.patch) ?
 
-Enviado do meu iPhone
+ Just apply to the buildroot tree. Go to the buildroot directory and type
 
-Em 26 de nov de 2016, ?s 09:38, BertHuber <3237-15@online.de> escreveu:
+patch -p1 -i 1-1-package-ghostscript-new-package.patch
 
+After that, ghostscript should appear in the "Graphic libraries and
+applications" menu.
 
+ Regards,
+ Arnout
 
-Hello,
-I am new to this mailinglist and also quite new to the buildroot
-environment.
-I got stuck in my current project with the following problem:
- 
-I am currently trying to build an embedded Linux System with Buildroot. 
+> 
+> 
+> would you help me? 
+> thank you again.
+> 
+> 
+> 
+> -----
+> it seams some thing in the word is wrong!
+> --
+> View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/problem-with-cups-tp151149p151160.html
+> Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
-It works so far, I get a bootable SD Card for my A20 based board. 
-
-I included all CAN Drivers & protocols I could find (can, can_raw and vcan) 
-
-My problem is : after booting and loggin in as root
-
-I type:
-
- ip link add dev vcan0 type vcan ---- THAT WORKS
-
-
-
-but
-
- ip link add dev can0 type can 
-
-
-
-produces:
-
-RTNETLIINK answers: Operation not supported
-
-What is wrong ?? Thanks in advance for any ideas.
-
-Regards
-
-Bert
-
- 
-
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161126/30af02f4/attachment.html>
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
