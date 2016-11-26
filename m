@@ -1,66 +1,41 @@
-From: Cassiano Martin <cassiano@polaco.pro.br>
-Date: Sat, 26 Nov 2016 13:51:44 -0200
-Subject: [Buildroot] Request for Help
-In-Reply-To: <7E88E7AAEAD14AB9A2F395B26D76F9AF@SYSTEMTECHNIK>
-References: <7E88E7AAEAD14AB9A2F395B26D76F9AF@SYSTEMTECHNIK>
-Message-ID: <CAOoxthNsH-bDWWVgHFmJ03kdPtqGcbjgOUr7YRftMQBfpdx=+w@mail.gmail.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Sat, 26 Nov 2016 17:20:12 +0100
+Subject: [Buildroot] [PATCH v4 14/18] python3: generate reproducible .pyc
+In-Reply-To: <20161123230939.62c3f549@free-electrons.com>
+References: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
+ <1479905937-17241-15-git-send-email-jezz@sysmic.org>
+ <20161123230939.62c3f549@free-electrons.com>
+Message-ID: <5528914.ltOSMuvLx6@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Right,
+Hello Thomas,
 
-maybe an issue with iproute, are you using busybox one, or the real one,
-from 'ip tools' package?
-
-AFAIK bbox ip does not support can. I might be wrong too.
-
-[]'s
-
-2016-11-26 9:38 GMT-02:00 BertHuber <3237-15@online.de>:
-
+On Wednesday 23 November 2016 23:09:39 Thomas Petazzoni wrote:
 > Hello,
-> I am new to this mailinglist and also quite new to the buildroot
-> environment.
-> I got stuck in my current project with the following problem:
->
->
-> I am currently trying to build an embedded Linux System with Buildroot.
->
-> It works so far, I get a bootable SD Card for my A20 based board.
->
-> I included all CAN Drivers & protocols I could find (can, can_raw and
-> vcan)
->
-> My problem is : after booting and loggin in as root
->
-> I type:
->
->  ip link add dev vcan0 type vcan ---- THAT WORKS
->
-> but
->
->  ip link add dev can0 type can
->
-> produces:
->
-> RTNETLIINK answers: Operation not supported
->
-> What is wrong ?? Thanks in advance for any ideas.
->
-> Regards
->
-> Bert
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161126/43364b8e/attachment.html>
+> 
+> On Wed, 23 Nov 2016 13:58:53 +0100, J?r?me Pouiller wrote:
+> > .pyc files contain modification time of .py source. In order to make
+> > build reproducible, we fix modification time of all .py before to
+> > compile .pyc files.
+> 
+> Is there a way of avoiding the modification time contained inside
+> the .pyc files? According to
+> http://wiki.baserock.org/projects/deterministic-builds/: "Debian solve
+> this by creating the .pyc and .pyo files at package install time",
+> which is essentially what we do. How do they handle this exactly?
+Debian compile .pyc and .pyo when user install package. deb files does 
+not contains compiled files. Therefore, .pyc reproducibility does not 
+matter.
+
+In Buildroot, .pyc are included in filesystem. .pyc reproducibility does 
+matter.
+
+
+-- 
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
