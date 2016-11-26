@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 26 Nov 2016 11:50:45 +0100
-Subject: [Buildroot] [PATCH] package/pseudo: update version
-In-Reply-To: <20161125212248.3540-1-gael.portay@savoirfairelinux.com>
-References: <20161125212248.3540-1-gael.portay@savoirfairelinux.com>
-Message-ID: <d0e8798c-0d61-663c-5293-99f64806e3a7@mind.be>
+Date: Sat, 26 Nov 2016 12:07:55 +0100
+Subject: [Buildroot] [PATCH v2 1/3] ti-cgt-pru: add package for PRU Host
+	toolchain
+In-Reply-To: <1480096200-20475-1-git-send-email-ash.charles@savoirfairelinux.com>
+References: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
+ <1480096200-20475-1-git-send-email-ash.charles@savoirfairelinux.com>
+Message-ID: <760c58e7-fe45-501e-3c2c-b4cb33a5af4f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +14,90 @@ To: buildroot@busybox.net
 
 
 
-On 25-11-16 22:22, Ga?l PORTAY wrote:
-> Brings in fix about shutdown synchronization with the server.
+On 25-11-16 18:49, Ash Charles wrote:
+> TI provides a binary code generation toolchain to develop firmware for
+> the programmable real-time unit/co-processor found in some SOCs such as
+> some models in the AM335x line. This toolchain includes C/C++ support
+> (clpru) rather than just assembler (pasm) supported by the pre-existing
+> am335x-pru-package [1].  Following the lead of the Yocto meta-ti
+> layer [2], this package provides a host toolchain suitable for an x86
+> (or x86_64) Linux targeting an ARM-based PRU core.
 > 
-> See commit message:
->     If you're running pseudo in docker, a script that creates a pseudo
->     daemon can exit, causing docker to kill pseudo before it's done writing
->     the database.
+> [1] http://processors.wiki.ti.com/index.php/PRU_Assembly_Instructions#pasm_vs._clpru
+> [2] http://git.yoctoproject.org/cgit/cgit.cgi/meta-ti/tree/recipes-ti/devtools/ti-cgt-pru_2.1.1.bb
 > 
->     Since the client sending the shutdown request doesn't have its socket
->     closed explicitly by the server, we can just read from the socket in
->     the client to create a delay until the actual exit, which can take
->     a while if there's an in-memory DB.
-> 
-> Furthermore, the patch add the -S argument that tells the server to
-> shutdown and waits for its completion.
-
- Does this work? From the man page, I understand that the -S option can't be
-combined with starting a program.
-
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> Signed-off-by: Ash Charles <ash.charles@savoirfairelinux.com>
 > ---
->  package/pseudo/pseudo-wrapper | 2 +-
->  package/pseudo/pseudo.mk      | 2 +-
+> Changes v1 --> v2
+>  * extract source to $(@D) cleanly (suggested by Thomas)
+>  * be more explicit about licensing (suggested by Arnout)
+>  * switch to buildroot-suitable name: PRU_CGT --> TI_CGT_PRU_DIR
+>  * sundry clarifications
+> ---
+[snip]
 
- Did you test this? You didn't update the hash file...
+> diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
+> new file mode 100644
+> index 0000000..115eb0c
+> --- /dev/null
+> +++ b/package/ti-cgt-pru/ti-cgt-pru.mk
+> @@ -0,0 +1,34 @@
+> +################################################################################
+> +#
+> +# ti-cgt-pru
+> +#
+> +################################################################################
+> +
+> +TI_CGT_PRU_VERSION = 2.1.3
+
+ Any reason not to use 2.1.4?
+
+> +TI_CGT_PRU_SOURCE = ti_cgt_pru_$(TI_CGT_PRU_VERSION)_linux_installer_x86.bin
+> +TI_CGT_PRU_SITE = http://software-dl.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
+> +TI_CGT_PRU_LICENSE = TI Technology and Software Publicly Available License (compiler + PRU library), \
+> +	Boost Software License 1.0 (compiler), \
+> +	BSD-2c, BSD-3c, MIT, Academic Free License 3.0, Hewlett-Packard (PRU library)
+> +TI_CGT_PRU_LICENSE_FILES = PRU_Code_Generation_Tools_2.1.x_manifest.html \
+> +	PRU_CodeGen_Library_2.1_0222433C-30C1-442d-B5C6-2073BD97F80F.spdx.tag
+> +
+> +define HOST_TI_CGT_PRU_EXTRACT_CMDS
+> +	chmod +x $(DL_DIR)/$(TI_CGT_PRU_SOURCE)
+> +	$(DL_DIR)/$(TI_CGT_PRU_SOURCE) --prefix $(@D) --mode unattended
+> +        mv $(@D)/ti-cgt-pru_2.1.3/* $(@D)
+> +        rmdir $(@D)/ti-cgt-pru_2.1.3/
+
+ Indentation is wrong here: should be tabs. Also, use $(TI_CGT_PRU_VERSION)
+instead of 2.1.3.
+
+
+> +endef
+> +
+> +# Since this is largely prebuilt toolchain and likes to live in its own
+> +# directory, put is in $(HOST_DIR)/ti-cgt-pru_$(CGT_PRU_VERION)
+                    it
+> +# Packages wanting to use this toolchain need to use this path as TI's
+> +# standard PRU_CGT path e.g. make PRU_CGT=$(TI_CGT_PRU_DIR)...
+> +
+> +TI_CGT_PRU_DIR = $(HOST_DIR)/ti-cgt-pru_$(TI_CGT_PRU_VERSION)
+
+ Actually, TI_CGT_PRU_DIR is not good because we already define that name (it's
+the build directory). It's not really a problem now because we only have a host
+package so we only define HOST_TI_CGT_PRU_DIR, but still, it's inconsistent. So
+the variable name should be e.g. TI_CGT_PRU_INSTALLDIR.
+
+ Also, I don't think it's necessary to put the version in the installation
+directory name. We're not going to support side-by-side install of different
+versions. But that's just a minor nit.
 
  Regards,
  Arnout
 
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
-> index 9c8dbdb..ad66431 100644
-> --- a/package/pseudo/pseudo-wrapper
-> +++ b/package/pseudo/pseudo-wrapper
-> @@ -16,4 +16,4 @@ if [ -n "${BASE_DIR}" ]; then
->      export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
->  fi
->  
-> -exec "${0%/*}/pseudo" "${@}"
-> +exec "${0%/*}/pseudo" -S "${@}"
-> diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
-> index aa2a9c7..58b9c79 100644
-> --- a/package/pseudo/pseudo.mk
-> +++ b/package/pseudo/pseudo.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -PSEUDO_VERSION = 45eca34c754d416a38bee90fb2d3c110a0b6cc5f
-> +PSEUDO_VERSION = d6eb2df3fe63b765f35d62332add4d0e4e9c6a39
->  PSEUDO_SITE = https://git.yoctoproject.org/git/pseudo
->  PSEUDO_SITE_METHOD = git
->  
+> +define HOST_TI_CGT_PRU_INSTALL_CMDS
+> +	mkdir -p $(TI_CGT_PRU_DIR)
+> +	cp -dpfr $(@D)/* $(TI_CGT_PRU_DIR)
+> +endef
+> +
+> +$(eval $(host-generic-package))
 > 
 
 -- 
