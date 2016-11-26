@@ -1,35 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Nov 2016 15:00:58 +0100
-Subject: [Buildroot] [PATCH] qemu-ppc: fixup wrong startup example,
- use either -hda or -drive
-In-Reply-To: <20161126084257.GA22440@waldemar-brodkorb.de>
-References: <20161126084257.GA22440@waldemar-brodkorb.de>
-Message-ID: <20161126150058.59129a30@free-electrons.com>
+Date: Sat, 26 Nov 2016 15:01:16 +0100
+Subject: [Buildroot] [git commit branch/next] package/efl: bump to 1.18.3
+Message-ID: <20161126140121.F374C818A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9cf9f1e3495463e46937f4f7ccc45a541cda5eca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 26 Nov 2016 09:42:58 +0100, Waldemar Brodkorb wrote:
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Bug fixes release:
+https://www.enlightenment.org/news/efl-1.18.3
 
-Applied to master, thanks!
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/efl/efl.hash | 4 ++--
+ package/efl/efl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
->  While playing with musl+ppc I recognized this.
->  Musl-PPC with gcc 5.x is broken, as the gcc patches are incomplete.
->  gcc 6.x works with the qemu samples, so maybe disable gcc 5.x for
->  musl ppc?
-
-Or better: add the appropriate patches to make musl/gcc5/ppc work
-properly.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index 18393a4..4077ddd 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,2 +1,2 @@
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.2.tar.xz.sha256
+-sha256	292faf76557fe56a6bc15b48b5ea3eb1f0790e2ed7f2ade4ae79ef7973d67bed	efl-1.18.2.tar.xz
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.3.tar.xz.sha256
++sha256	0748ec0847f543d96b149cb3a84e6438724e827a38d530922ecb4bd59d3e64c0	efl-1.18.3.tar.xz
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 777ef3c..17d3163 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EFL_VERSION = 1.18.2
++EFL_VERSION = 1.18.3
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
