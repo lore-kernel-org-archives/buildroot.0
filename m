@@ -1,42 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Nov 2016 14:59:36 +0100
-Subject: [Buildroot] [git commit] chrony: enable pps support
-Message-ID: <20161126135948.585E88166A@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 26 Nov 2016 14:59:34 +0100
+Subject: [Buildroot] [PATCH] m68k: add special gcc flag to avoid ICE for
+ coldfire
+In-Reply-To: <20161126145224.2aa5ef33@free-electrons.com>
+References: <20161126085144.GA23223@waldemar-brodkorb.de>
+ <20161126145224.2aa5ef33@free-electrons.com>
+Message-ID: <c7f2be5d-3849-d30b-bf39-731477bc1927@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40a60b7545beea2d1ea852481cbf779d740e1d66
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Chrony has the ability to support PPS. Its enablement is determined
-primarily from the existence of `sys/timepps.h`. This file is provided
-from the pps-tools package. Adjusting Chrony's Makefile to depend on the
-pps-tools package if a developer has included pps-tools as part of a
-build. Relates to 2cfc966f431c7c715b3fc11ca0467d47432fca33.
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/chrony/chrony.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+On 26-11-16 14:52, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sat, 26 Nov 2016 09:51:44 +0100, Waldemar Brodkorb wrote:
+>> Fixes:
+>>   http://autobuild.buildroot.net/results/d47fa41aa860d82471b83ac90967d3a3dacd8611
+>>   http://autobuild.buildroot.net/results/a21de4747f40a5ce93108c8979fbc0277d040e79
+>>
+>> Requires this as prerequisite:
+>> http://patchwork.ozlabs.org/patch/683830/
+> 
+> Hum, thanks but this patch you're pointing to is really material for
+> next at this point, so I cannot apply your patch, which should be
+> applied on master in order to fix the autobuilder issues.
 
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index adfbd36..5f3160e 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -34,6 +34,12 @@ else
- CHRONY_CONF_OPTS += --disable-readline
- endif
- 
-+# If pps-tools is available, build it before so the package can use it
-+# (HAVE_SYS_TIMEPPS_H).
-+ifeq ($(BR2_PACKAGE_PPS_TOOLS),y)
-+CHRONY_DEPENDENCIES += pps-tools
-+endif
-+
- define CHRONY_CONFIGURE_CMDS
- 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure $(CHRONY_CONF_OPTS)
- endef
+ Begging to differ: doing the same without patch 683830 would be a much bigger
+patch (adding yet another -D option to the wrapper, updating the wrapper
+itself). But OK, it's getting a bit later to still take _any_ risk, so probably
+the bigger patch is better.
+
+ Regards,
+ Arnout
+
+> 
+> Thanks,
+> 
+> Thomas
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
