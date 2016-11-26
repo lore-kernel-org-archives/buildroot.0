@@ -1,124 +1,61 @@
-From: BertHuber <3237-15@online.de>
-Date: Sat, 26 Nov 2016 23:19:06 +0100
-Subject: [Buildroot] Request for Help
-In-Reply-To: <CAOoxthMGQrNFD9c160b1dnRxZpXMn_jbL=wHt9tri=XrFgaOsA@mail.gmail.com>
-References: <7E88E7AAEAD14AB9A2F395B26D76F9AF@SYSTEMTECHNIK>
- <CAOoxthNsH-bDWWVgHFmJ03kdPtqGcbjgOUr7YRftMQBfpdx=+w@mail.gmail.com>
- <040E51172C6148C2B2607CC22897F0C2@SYSTEMTECHNIK>
- <CAOoxthMGQrNFD9c160b1dnRxZpXMn_jbL=wHt9tri=XrFgaOsA@mail.gmail.com>
-Message-ID: <179527168FDC482AB3A4A137957E4028@SYSTEMTECHNIK>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Nov 2016 00:25:50 +0100
+Subject: [Buildroot] pseudo: remaining issues...
+In-Reply-To: <20161123093550.43e574f3@free-electrons.com>
+References: <20161122212534.GA3529@free.fr>
+ <20161123093550.43e574f3@free-electrons.com>
+Message-ID: <CACXmViZGA7ZOOWBm8wRdeBNCe76h2Bo9kjJX6rvaUkmRc=98eg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you. I did this and recognized that iproute2 was already selected.
-So that means I already have the correct Version on my target system ?
- 
+On Wed, Nov 23, 2016 at 9:35 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> I am more and more thinking that this is what we should do. Not only
+> pseudo still has issues, but even once all issues will be fixed, it is
+> a much much more complicated and annoying solution than fakeroot:
+>
+>  - It requires additional dependencies (host-sqlite, host-attr)
+>
+>  - It requires a complicated setup, with a daemon, that you need to
+>    manually start and stop (because the internal pseudo mechanism to
+>    start/stop the daemon doesn't work properly)
+>
+> So I really believe we should revert to fakeroot, and investigate what
+> this SELinux problem is exactly.
 
-  _____  
-
-Von: Cassiano Martin [mailto:cassiano at polaco.pro.br] 
-Gesendet: Samstag, 26. November 2016 22:38
-An: BertHuber
-Cc: buildroot at busybox.net
-Betreff: Re: [Buildroot] Request for Help
-
-
-Ok, so you go under Target Packages -> Networking Applications -> iproute2 
-
-Check it and do a rebuild. It will install legacy ip and tc tools.
-
-[]'s
-
-2016-11-26 14:06 GMT-02:00 BertHuber <3237-15@online.de>:
-
+I agree. Lets play it safe and stick to fakeroot for now. I'm not sure
+what pseudo really buys us for all this extra complexity (besides the
+selinux issue, but see below).
 
 
-I don't know. As I said I'm quite new to the whole Buildroot world.
-How can I find out ? .. and if it is the wrong how do I install the right ?
- 
- 
+> Looking more at the original bug at
+> https://bugzilla.redhat.com/show_bug.cgi?id=1238802, what is the actual
+> problem for us? Why do we care about preserving the SELinux labels of
+> files within the fakeroot environment? We don't support SELinux, and
+> even if we did, most likely the SELinux labels that exist on the host
+> machine would not make sense for the target filesystem.
+>
+> So is the real problem with fakeroot on Fedora related to SELinux?
 
-  _____  
+I've set up a Fedora VM and looked closer at the issue. The problem
+isn't directly related to fakeroot. Instead it is (arguably) a bug in
+'sed -i'. Fedora uses SELinux and sed on Fedora is built with SELinux
+support. When sed detects that SELinux is enabled, then it tries to
+copy the SELinux xattrs from whe source file to the new temporary file
+it creates when the -i option is used. As fakeroot isn't built with
+xattr support this fails, and we end up with output/build/ubinize.cfg
+with zero permissions, causing ubinize to fail when it cannot read it.
 
-Von: Cassiano Martin [mailto:cassiano at polaco.pro.br] 
-Gesendet: Samstag, 26. November 2016 16:52
-An: BertHuber
-Cc: buildroot at busybox.net
-Betreff: Re: [Buildroot] Request for Help
+A workaround is to simply not use sed -i inside ROOTFS_UBI_CMD, E.G.
+replace the install + sed -i with a single sed >
+output/build/ubinize.cfg.
 
+I will send a patch to do that, so we can keep #9386 fixed after
+reverting to fakeroot.
 
-Right, 
-
-maybe an issue with iproute, are you using busybox one, or the real one,
-from 'ip tools' package?
-
-AFAIK bbox ip does not support can. I might be wrong too.
-
-[]'s
-
-2016-11-26 9:38 GMT-02:00 BertHuber <3237-15@online.de>:
-
-
-
-Hello,
-I am new to this mailinglist and also quite new to the buildroot
-environment.
-I got stuck in my current project with the following problem:
- 
-I am currently trying to build an embedded Linux System with Buildroot. 
-
-It works so far, I get a bootable SD Card for my A20 based board. 
-
-I included all CAN Drivers & protocols I could find (can, can_raw and vcan) 
-
-My problem is : after booting and loggin in as root
-
-I type:
-
- ip link add dev vcan0 type vcan ---- THAT WORKS
-
-
-
-but
-
- ip link add dev can0 type can 
-
-
-
-produces:
-
-RTNETLIINK answers: Operation not supported
-
-What is wrong ?? Thanks in advance for any ideas.
-
-Regards
-
-Bert
-
- 
-
-
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailm
-<http://lists.busybox.net/mailman/listinfo/buildroot> an/listinfo/buildroot
-
-
-
-
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/
-<http://lists.busybox.net/mailman/listinfo/buildroot>
-mailman/listinfo/buildroot
-
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161126/e79c6d27/attachment-0001.html>
+-- 
+Bye, Peter Korsgaard
