@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Nov 2016 15:06:39 +0100
-Subject: [Buildroot] [PATCH v2 3/3] pru-sample: add sample PRU
- application
-In-Reply-To: <1a270629-34f9-06f6-fb58-25455e61900d@mind.be>
-References: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
- <1480096200-20475-3-git-send-email-ash.charles@savoirfairelinux.com>
- <1a270629-34f9-06f6-fb58-25455e61900d@mind.be>
-Message-ID: <20161126150639.1979e9c2@free-electrons.com>
+Date: Sat, 26 Nov 2016 15:12:25 +0100
+Subject: [Buildroot] [PATCH] m68k: add special gcc flag to avoid ICE for
+ coldfire
+In-Reply-To: <c7f2be5d-3849-d30b-bf39-731477bc1927@mind.be>
+References: <20161126085144.GA23223@waldemar-brodkorb.de>
+ <20161126145224.2aa5ef33@free-electrons.com>
+ <c7f2be5d-3849-d30b-bf39-731477bc1927@mind.be>
+Message-ID: <20161126151225.1eeaff6e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +15,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 26 Nov 2016 12:22:36 +0100, Arnout Vandecappelle wrote:
+On Sat, 26 Nov 2016 14:59:34 +0100, Arnout Vandecappelle wrote:
 
->  Obviously, only 1 firmware binary can be installed. So you have the following
-> options:
-> - Support only one example.
-> - Add config options for all the examples and let the user select it.
-> - Install examples, but not as am335x-pru0-fw, but in a pru-examples
-> subdirectory, leaving it up to the user to copy/link it to the correct name for
-> firmware loading. Mention in the help text how to do that.
+> > Hum, thanks but this patch you're pointing to is really material for
+> > next at this point, so I cannot apply your patch, which should be
+> > applied on master in order to fix the autobuilder issues.  
 > 
->  I'm in favour of the last option. Among other things, it makes it easier to
-> support other SoCs than the AM335x.
+>  Begging to differ: doing the same without patch 683830 would be a much bigger
+> patch (adding yet another -D option to the wrapper, updating the wrapper
+> itself). But OK, it's getting a bit later to still take _any_ risk, so probably
+> the bigger patch is better.
 
-Agreed.
+That's my point: that late in the cycle, I don't want to touch too
+many things around the toolchain wrapper. So adding one more CFLAGS or
+LDFLAGS specific to m68k is OK (worst thing is a regression on m68k,
+which probably isn't very widely used). But a change that touches the
+toolchain wrapper, and can potentially break major architectures, I'm
+not a big fan.
+
+If nobody provides the bigger patch, I think I'm going to live with the
+m68k autobuilder failures until the release, and merge afterwards.
 
 Thomas
 -- 
