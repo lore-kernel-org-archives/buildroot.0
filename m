@@ -1,24 +1,43 @@
-From: Ash Charles <ashcharles@gmail.com>
-Date: Sat, 26 Nov 2016 09:51:52 -0500
-Subject: [Buildroot] [PATCH v2 1/3] ti-cgt-pru: add package for PRU Host
-	toolchain
-In-Reply-To: <760c58e7-fe45-501e-3c2c-b4cb33a5af4f@mind.be>
-References: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
- <1480096200-20475-1-git-send-email-ash.charles@savoirfairelinux.com>
- <760c58e7-fe45-501e-3c2c-b4cb33a5af4f@mind.be>
-Message-ID: <CAK8F28nLCUC3CA2EZV-uGD3LTMPVj3qL_aWspZ06fyovo27NVA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 26 Nov 2016 16:11:01 +0100
+Subject: [Buildroot] [PATCH] package/pseudo: update version
+In-Reply-To: <20161126150251.4373c78a@free-electrons.com>
+References: <20161125212248.3540-1-gael.portay@savoirfairelinux.com>
+ <d0e8798c-0d61-663c-5293-99f64806e3a7@mind.be>
+ <20161126150251.4373c78a@free-electrons.com>
+Message-ID: <c8dd2813-51fa-a6cc-dd07-bcb43a7a77da@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Nov 26, 2016 at 6:07 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> +TI_CGT_PRU_VERSION = 2.1.3
->
->  Any reason not to use 2.1.4?
-Good question: only because I didn't know it had been released and
-hadn't tested with it :).  Okay if I keep with 2.1.3 for the moment?
 
-The rest of the feedback makes good sense---thanks!
---Ash
+
+On 26-11-16 15:02, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sat, 26 Nov 2016 11:50:45 +0100, Arnout Vandecappelle wrote:
+> 
+>>>  package/pseudo/pseudo-wrapper | 2 +-
+>>>  package/pseudo/pseudo.mk      | 2 +-  
+>>
+>>  Did you test this? You didn't update the hash file...
+> 
+> Hash files are not checked for git downloads, so it can work without
+> updating the hash. Since the git download helper was fixed to generate
+> reproducible archives, we haven't (yet) enabled hash checking for
+> git downloads.
+
+ Ah, I never noticed that...
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
