@@ -1,45 +1,39 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 26 Nov 2016 09:51:44 +0100
-Subject: [Buildroot] [PATCH] m68k: add special gcc flag to avoid ICE for
-	coldfire
-Message-ID: <20161126085144.GA23223@waldemar-brodkorb.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 26 Nov 2016 11:30:55 +0100
+Subject: [Buildroot] problem with cups
+In-Reply-To: <1480147676790-151149.post@n4.nabble.com>
+References: <1480147676790-151149.post@n4.nabble.com>
+Message-ID: <08cf5dbf-ef19-6026-c129-b644e037b17a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.net/results/d47fa41aa860d82471b83ac90967d3a3dacd8611
-  http://autobuild.buildroot.net/results/a21de4747f40a5ce93108c8979fbc0277d040e79
 
-Requires this as prerequisite:
-http://patchwork.ozlabs.org/patch/683830/
 
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-Tested-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- toolchain/toolchain-wrapper.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+On 26-11-16 09:07, Ajorian wrote:
+> D [02/Jan/2000:23:04:59 +0000] [Job 1] Running command line for gs: gs -q
+> -dNOPAUSE -dBATCH -dSAFER -sDEVICE=ps2write -sOUTPUTFILE=%stdout
+> -dLanguageLevel=3 -r300 -dCompressFonts=false -dNoT3CCITT -dNOINTERPOLATE -c
+> \'save pop\' -f /var/spool/cups/tmp/000c13879b775
+> D [02/Jan/2000:23:04:59 +0000] [Job 1] Started filter gs (PID 196)
+> D [02/Jan/2000:23:04:59 +0000] [Job 1] Started filter pstops (PID 197)
+> D [02/Jan/2000:23:04:59 +0000] [Job 1] Unable to execute gs program: No such
+> file or directory
+> D [02/Jan/2000:23:04:59 +0000] [Job 1] PID 196 (gs) stopped with status 1!
 
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index c7b5019..463ba42 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -9,6 +9,13 @@ else
- TOOLCHAIN_WRAPPER_HASH_STYLE = both
- endif
- 
-+TARGET_FLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
-+
-+# Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
-+ifeq ($(BR2_m68k_cf),y)
-+TARGET_FLAGS += -fno-dwarf2-cfi-asm
-+endif
-+
- TOOLCHAIN_WRAPPER_ARGS = $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
- 
+ It looks like that printer driver requires ghostscript. ghostscript is
+currently not in Buildroot, but Bernd has a patch for it:
+http://patchwork.ozlabs.org/patch/666735/
+
+ Regards,
+ Arnout
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
