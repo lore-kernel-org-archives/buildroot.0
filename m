@@ -1,49 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Nov 2016 15:27:06 +0100
-Subject: [Buildroot] [PATCH 1/2] gcc: backport upstream patch for sync_8
- in !glibc
-In-Reply-To: <20161121234340.30463-1-arnout@mind.be>
-References: <20161121234340.30463-1-arnout@mind.be>
-Message-ID: <20161126152706.0f1366d7@free-electrons.com>
+Date: Sat, 26 Nov 2016 15:07:47 +0100
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+	mesa3d-headers}: bump version to 13.0.1
+Message-ID: <20161126142827.CF341817E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=21a0ca235d1886c94d0e3ff4ab91a38a33720287
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 22 Nov 2016 00:43:39 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> gcc 4.7 introduced the sync_8 builtin functions for ARM. For ARM < v7,
-> this requires calling into the kernel. However, the failure path of
-> that call reports an error with the __write() function, which is a
-> glibc internal function. Therefore, it fails to link with uClibc or
-> musl. This was fixed in gcc 5.2.0, by replacing the __write() with
-> a plain write().
-> 
-> For sync_8 itself we have solved this with the conditions on
-> BR2_TOOLCHAIN_ARM_HAS_SYNC_8. However, the same function is also used
-> for the implementation of atomics.
-> 
-> For the internal toolchain, we can fix this by backporting the patch
-> to 4.9.4 and 4.8.5.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/1db64b4830f499621e44523e0ef68191505e2ce9
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  ...et-68059-libgcc-should-not-use-__write-fo.patch | 43 ++++++++++++++++++++++
->  ...et-68059-libgcc-should-not-use-__write-fo.patch | 43 ++++++++++++++++++++++
->  2 files changed, 86 insertions(+)
->  create mode 100644 package/gcc/4.8.5/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
->  create mode 100644 package/gcc/4.9.4/0001-ARM-PR-target-68059-libgcc-should-not-use-__write-fo.patch
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index b3b80eb..523d10b 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 13.0.0
++MESA3D_HEADERS_VERSION = 13.0.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 7dbe1ac..0fab1de 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2016-November/000264.html
+-sha256 94edb4ebff82066a68be79d9c2627f15995e1fe10f67ab3fc63deb842027d727  mesa-13.0.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2016-November/000270.html
++sha256 71962fb2bf77d33b0ad4a565b490dbbeaf4619099c6d9722f04a73187957a731  mesa-13.0.1.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index e17db5c..031ce88 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 13.0.0
++MESA3D_VERSION = 13.0.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
