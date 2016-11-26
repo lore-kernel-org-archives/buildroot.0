@@ -1,32 +1,48 @@
-From: Ash Charles <ashcharles@gmail.com>
-Date: Sat, 26 Nov 2016 09:34:44 -0500
-Subject: [Buildroot] [PATCH v2 2/3] pru-software-support: add library
- for PRU firmware
-In-Reply-To: <20161126150524.476da6e1@free-electrons.com>
-References: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
- <1480096200-20475-2-git-send-email-ash.charles@savoirfairelinux.com>
- <1c417375-fe37-9cc8-5747-87c670b3e51f@mind.be>
- <20161126150524.476da6e1@free-electrons.com>
-Message-ID: <CAK8F28mpaC9H1MHumziXG6YOnzvhfodTv9fkVP5gAKsSXOctYQ@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 26 Nov 2016 12:36:03 -0200
+Subject: [Buildroot] [PATCH] configs/mx6: Bump to kernel 4.8.11
+Message-ID: <1480170963-4772-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-On Sat, Nov 26, 2016 at 9:05 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Correct, but they are not checked, so it isn't really obvious today
-> that we want to have hashes for git downloads.
->
-> But still: please add a locally calculated sha256 hash.
-I found the documentation about using 'none'  in section 17.4 of the
-buildroot manual [1].  I'll add a patch with some wording to capture
-this correction.
+Kernel 4.8.11 brings commit 5f95e68daae397 ("clk: imx: fix integer overflow
+in AV PLL round rate"), which fixes a PLL calculation bug, so bump to this
+version.
 
-Thanks Arnout and Thomas both for the feedback on this series.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/imx6ulpico_defconfig | 2 +-
+ configs/mx6udoo_defconfig    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-[1] https://buildroot.org/downloads/manual/manual.html#adding-packages-hash
-
---Ash
+diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
+index 71277d9..5ad8d79 100644
+--- a/configs/imx6ulpico_defconfig
++++ b/configs/imx6ulpico_defconfig
+@@ -17,7 +17,7 @@ BR2_GLOBAL_PATCH_DIR="board/technexion/imx6ulpico/patches"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.11"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/technexion/imx6ulpico/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/mx6udoo_defconfig b/configs/mx6udoo_defconfig
+index 1ca2be4..8c1b28a 100644
+--- a/configs/mx6udoo_defconfig
++++ b/configs/mx6udoo_defconfig
+@@ -15,7 +15,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.11"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/udoo/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-- 
+2.7.4
