@@ -1,62 +1,72 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 26 Nov 2016 11:47:39 +0100
-Subject: [Buildroot] [PATCH] m68k: add special gcc flag to avoid ICE for
- coldfire
-In-Reply-To: <20161126085144.GA23223@waldemar-brodkorb.de>
-References: <20161126085144.GA23223@waldemar-brodkorb.de>
-Message-ID: <30093dc7-15f9-144b-77c3-e5f2236019a4@mind.be>
+Date: Sat, 26 Nov 2016 11:48:57 +0100
+Subject: [Buildroot] [git commit] qextserialport: fix line endings in
+ patch 0002
+In-Reply-To: <20161125214131.8C49E80DB5@busybox.osuosl.org>
+References: <20161125214131.8C49E80DB5@busybox.osuosl.org>
+Message-ID: <24560a5e-b297-7406-e3ba-e9b1a933922b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Didn't I warn about this in the commit message?
 
-
-On 26-11-16 09:51, Waldemar Brodkorb wrote:
-> Fixes:
->   http://autobuild.buildroot.net/results/d47fa41aa860d82471b83ac90967d3a3dacd8611
->   http://autobuild.buildroot.net/results/a21de4747f40a5ce93108c8979fbc0277d040e79
-
- Did you test whether exception handling still works?
-
-> 
-> Requires this as prerequisite:
-> http://patchwork.ozlabs.org/patch/683830/
-> 
-> Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-
- Not sure if this warrants a Sob from me, but OK.
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ To avoid this kind of problem in the future, perhaps we should add
+--ignore-whitespace to our patch calls?
 
  Regards,
  Arnout
 
-> Tested-by: Waldemar Brodkorb <wbx@openadk.org>
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  toolchain/toolchain-wrapper.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+On 25-11-16 22:40, Thomas Petazzoni wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=72dcc7c252e7be65ff3e66bcf5dd20b49e2de915
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-> index c7b5019..463ba42 100644
-> --- a/toolchain/toolchain-wrapper.mk
-> +++ b/toolchain/toolchain-wrapper.mk
-> @@ -9,6 +9,13 @@ else
->  TOOLCHAIN_WRAPPER_HASH_STYLE = both
->  endif
->  
-> +TARGET_FLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
-> +
-> +# Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
-> +ifeq ($(BR2_m68k_cf),y)
-> +TARGET_FLAGS += -fno-dwarf2-cfi-asm
-> +endif
-> +
->  TOOLCHAIN_WRAPPER_ARGS = $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
->  TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
->  
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/074d379e4d491dd454726bed666a7e1028333ef7/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  ...Create-a-main-include-file-QExtSerialPort.patch | 23 ++++++++++------------
+>  1 file changed, 10 insertions(+), 13 deletions(-)
+> 
+> diff --git a/package/qextserialport/0002-Create-a-main-include-file-QExtSerialPort.patch b/package/qextserialport/0002-Create-a-main-include-file-QExtSerialPort.patch
+> index 1f14304..e1d99f0 100644
+> --- a/package/qextserialport/0002-Create-a-main-include-file-QExtSerialPort.patch
+> +++ b/package/qextserialport/0002-Create-a-main-include-file-QExtSerialPort.patch
+> @@ -28,16 +28,13 @@ diff --git a/src/qextserialport.pri b/src/qextserialport.pri
+>  index 461d56f..f8a678d 100644
+>  --- a/src/qextserialport.pri
+>  +++ b/src/qextserialport.pri
+> -@@ -3,7 +3,8 @@ DEPENDPATH += $$PWD
+> - 
+> - PUBLIC_HEADERS         += $$PWD/qextserialport.h \
+> -                           $$PWD/qextserialenumerator.h \
+> --                          $$PWD/qextserialport_global.h
+> -+                          $$PWD/qextserialport_global.h \
+> -+                          $$PWD/QExtSerialPort
+> - 
+> - HEADERS                += $$PUBLIC_HEADERS \
+> -                           $$PWD/qextserialport_p.h \
+> --- 
+> -2.10.2
+> -
+> +@@ -3,7 +3,8 @@
+> + 
+> + PUBLIC_HEADERS         += $$PWD/qextserialport.h \
+> +                           $$PWD/qextserialenumerator.h \
+> +-                          $$PWD/qextserialport_global.h
+> ++                          $$PWD/qextserialport_global.h \
+> ++			  $$PWD/QExtSerialPort
+> + 
+> + HEADERS                += $$PUBLIC_HEADERS \
+> +                           $$PWD/qextserialport_p.h \
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
 -- 
