@@ -1,33 +1,90 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Sat, 26 Nov 2016 17:00:03 +0100
-Subject: [Buildroot] [PATCH v4 13/18] python2: generate reproducible .pyc
-In-Reply-To: <7d9c3a88-ce81-fb52-9200-5380ad818f79@mind.be>
-References: <1479905937-17241-1-git-send-email-jezz@sysmic.org>
- <20161123230539.4762ebcd@free-electrons.com>
- <7d9c3a88-ce81-fb52-9200-5380ad818f79@mind.be>
-Message-ID: <2984086.77TjFLAjTf@sagittea>
+From: BertHuber <3237-15@online.de>
+Date: Sat, 26 Nov 2016 17:06:37 +0100
+Subject: [Buildroot] Request for Help
+In-Reply-To: <CAOoxthNsH-bDWWVgHFmJ03kdPtqGcbjgOUr7YRftMQBfpdx=+w@mail.gmail.com>
+References: <7E88E7AAEAD14AB9A2F395B26D76F9AF@SYSTEMTECHNIK>
+ <CAOoxthNsH-bDWWVgHFmJ03kdPtqGcbjgOUr7YRftMQBfpdx=+w@mail.gmail.com>
+Message-ID: <040E51172C6148C2B2607CC22897F0C2@SYSTEMTECHNIK>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+I don't know. As I said I'm quite new to the whole Buildroot world.
+How can I find out ? .. and if it is the wrong how do I install the right ?
+ 
+ 
 
-On Thursday 24 November 2016 20:06:55 Arnout Vandecappelle wrote:
-[...]
-> >>  	$(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
-> >> -		support/scripts/pycompile.py \
-> >> +		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
-> > 
-> > Why do we need to force?
-Pycompile rely on .py modification times to know if a file need to be
-recompiled. Since reproducible builds tweak modification time, it is
-safer to force recompilation of all source files.
+  _____  
 
-(I will add this explanation to commit log)
+Von: Cassiano Martin [mailto:cassiano at polaco.pro.br] 
+Gesendet: Samstag, 26. November 2016 16:52
+An: BertHuber
+Cc: buildroot at busybox.net
+Betreff: Re: [Buildroot] Request for Help
 
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+
+Right, 
+
+maybe an issue with iproute, are you using busybox one, or the real one,
+from 'ip tools' package?
+
+AFAIK bbox ip does not support can. I might be wrong too.
+
+[]'s
+
+2016-11-26 9:38 GMT-02:00 BertHuber <3237-15@online.de>:
+
+
+
+Hello,
+I am new to this mailinglist and also quite new to the buildroot
+environment.
+I got stuck in my current project with the following problem:
+ 
+I am currently trying to build an embedded Linux System with Buildroot. 
+
+It works so far, I get a bootable SD Card for my A20 based board. 
+
+I included all CAN Drivers & protocols I could find (can, can_raw and vcan) 
+
+My problem is : after booting and loggin in as root
+
+I type:
+
+ ip link add dev vcan0 type vcan ---- THAT WORKS
+
+
+
+but
+
+ ip link add dev can0 type can 
+
+
+
+produces:
+
+RTNETLIINK answers: Operation not supported
+
+What is wrong ?? Thanks in advance for any ideas.
+
+Regards
+
+Bert
+
+ 
+
+
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/
+<http://lists.busybox.net/mailman/listinfo/buildroot>
+mailman/listinfo/buildroot
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161126/f3d2821e/attachment.html>
