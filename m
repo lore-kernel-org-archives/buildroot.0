@@ -1,30 +1,51 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Sat, 26 Nov 2016 11:25:26 -0500
-Subject: [Buildroot] [PATCH] package/pseudo: update version
-In-Reply-To: <d0e8798c-0d61-663c-5293-99f64806e3a7@mind.be>
-References: <20161125212248.3540-1-gael.portay@savoirfairelinux.com>
- <d0e8798c-0d61-663c-5293-99f64806e3a7@mind.be>
-Message-ID: <20161126162525.jx76zeediwc33klv@gportay>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sat, 26 Nov 2016 14:56:28 -0200
+Subject: [Buildroot] [PATCH] stella: fix bug when compiling with PPC
+ altivec vectorization
+In-Reply-To: <20161126153707.1238f739@free-electrons.com>
+References: <1479404832-11783-1-git-send-email-sergio.prado@e-labworks.com>
+ <20161119105927.57bd516a@free-electrons.com>
+ <20161122233337.GA2566@tungsten.ozlabs.ibm.com>
+ <CANu7NGu=fPj30W2A596uyn=+kaYkK07M3U-So7RLmMhk41Vvrg@mail.gmail.com>
+ <20161126153707.1238f739@free-electrons.com>
+Message-ID: <CANu7NGtZpT3G-jbAUupJOY_bUWYcgtvf4eo_9WLSU6-e61Bfrw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Armout,
+Hi Thomas,
 
-On Sat, Nov 26, 2016 at 11:50:45AM +0100, Arnout Vandecappelle wrote:
-> 
->  Does this work? From the man page, I understand that the -S option can't be
-> combined with starting a program.
-> 
+2016-11-26 12:37 GMT-02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+>
+> Hello,
+>
+> On Wed, 23 Nov 2016 19:59:11 -0200, Sergio Prado wrote:
+>
+> > Your solution is simpler and seems reasonable to just change from c++11
+to
+> > gnu++11. I will do some tests on x86 and ARM and let you know the
+results.
+>
+> Great, thanks. I'll mark your patch as Changes Requested in patchwork.
+> Can you resubmit a simplified version?
 
-Yes this is working fine.
+Sure. I'll finish testing and submit v2 in the next days.
 
-Maybe the man page should be updated :)
+Best regards,
 
-The -S options can be used with or without scripts.
+Sergio Prado
 
-See http://git.yoctoproject.org/cgit/cgit.cgi/pseudo/tree/pseudo.c if you want,
- * at line 337 (when pseudo is invoked without script) and
- * at line 412 (when pseudo is invoked with a script (our case)).
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161126/c75b8d8f/attachment.html>
