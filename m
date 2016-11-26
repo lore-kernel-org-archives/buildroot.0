@@ -1,43 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:31:10 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-keyboard:
-	bump version to 1.9.0
-Message-ID: <20161201222140.68E7A801E2@busybox.osuosl.org>
+Date: Sat, 26 Nov 2016 15:01:16 +0100
+Subject: [Buildroot] [git commit] package/efl: bump to 1.18.3
+Message-ID: <20161201222140.0C26C7FB56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87d88afe4b2e504a895b199a0330d8f9fee95f00
+commit: https://git.buildroot.net/buildroot/commit/?id=9cf9f1e3495463e46937f4f7ccc45a541cda5eca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Bug fixes release:
+https://www.enlightenment.org/news/efl-1.18.3
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash      | 4 ++--
- .../x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk  | 2 +-
+ package/efl/efl.hash | 4 ++--
+ package/efl/efl.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash
-index 11fcc60..eccfa74 100644
---- a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash
-+++ b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index 18393a4..4077ddd 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002559.html
--sha256	1ac8ff39bf9da7d2fc7fd6c24515726e8138340c0518ab8c606e008cf93ca211	xf86-input-keyboard-1.8.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-November/002739.html
-+sha256 f7c900f21752683402992b288d5a2826de7a6c0c0abac2aadd7e8a409e170388  xf86-input-keyboard-1.9.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-index eb2d582..01a6859 100644
---- a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-+++ b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.2.tar.xz.sha256
+-sha256	292faf76557fe56a6bc15b48b5ea3eb1f0790e2ed7f2ade4ae79ef7973d67bed	efl-1.18.2.tar.xz
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.3.tar.xz.sha256
++sha256	0748ec0847f543d96b149cb3a84e6438724e827a38d530922ecb4bd59d3e64c0	efl-1.18.3.tar.xz
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 777ef3c..17d3163 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_KEYBOARD_VERSION = 1.8.1
-+XDRIVER_XF86_INPUT_KEYBOARD_VERSION = 1.9.0
- XDRIVER_XF86_INPUT_KEYBOARD_SOURCE = xf86-input-keyboard-$(XDRIVER_XF86_INPUT_KEYBOARD_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_KEYBOARD_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_KEYBOARD_LICENSE = MIT
+-EFL_VERSION = 1.18.2
++EFL_VERSION = 1.18.3
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
