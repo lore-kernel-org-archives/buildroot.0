@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 26 Nov 2016 16:11:01 +0100
-Subject: [Buildroot] [PATCH] package/pseudo: update version
-In-Reply-To: <20161126150251.4373c78a@free-electrons.com>
-References: <20161125212248.3540-1-gael.portay@savoirfairelinux.com>
- <d0e8798c-0d61-663c-5293-99f64806e3a7@mind.be>
- <20161126150251.4373c78a@free-electrons.com>
-Message-ID: <c8dd2813-51fa-a6cc-dd07-bcb43a7a77da@mind.be>
+Date: Sat, 26 Nov 2016 16:12:28 +0100
+Subject: [Buildroot] [git commit] qextserialport: fix line endings in
+ patch 0002
+In-Reply-To: <20161126150425.6084a4e3@free-electrons.com>
+References: <20161125214131.8C49E80DB5@busybox.osuosl.org>
+ <24560a5e-b297-7406-e3ba-e9b1a933922b@mind.be>
+ <20161126150425.6084a4e3@free-electrons.com>
+Message-ID: <da5cced6-7a2f-07ca-7262-b7bcfc448ab9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +15,25 @@ To: buildroot@busybox.net
 
 
 
-On 26-11-16 15:02, Thomas Petazzoni wrote:
+On 26-11-16 15:04, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Sat, 26 Nov 2016 11:50:45 +0100, Arnout Vandecappelle wrote:
+> On Sat, 26 Nov 2016 11:48:57 +0100, Arnout Vandecappelle wrote:
 > 
->>>  package/pseudo/pseudo-wrapper | 2 +-
->>>  package/pseudo/pseudo.mk      | 2 +-  
->>
->>  Did you test this? You didn't update the hash file...
+>>  Didn't I warn about this in the commit message?
 > 
-> Hash files are not checked for git downloads, so it can work without
-> updating the hash. Since the git download helper was fixed to generate
-> reproducible archives, we haven't (yet) enabled hash checking for
-> git downloads.
+> Yes, you did. I saw it the first time I looked at the patch, but then
+> forgot when actually applying later in the day. Which is why I fixed it
+> afterwards.
+> 
+>>  To avoid this kind of problem in the future, perhaps we should add
+>> --ignore-whitespace to our patch calls?
+> 
+> You mean when applying the patches? Apparently, git am takes a
+> --ignore-space-change option, could be worth trying next time.
 
- Ah, I never noticed that...
+ No, I mean in apply-patches. This particular case didn't cause an error in
+git-am because the patch file didn't exist before.
 
  Regards,
  Arnout
