@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 26 Nov 2016 12:22:36 +0100
-Subject: [Buildroot] [PATCH v2 3/3] pru-sample: add sample PRU
-	application
-In-Reply-To: <1480096200-20475-3-git-send-email-ash.charles@savoirfairelinux.com>
+Date: Sat, 26 Nov 2016 12:27:14 +0100
+Subject: [Buildroot] [PATCH v2 2/3] pru-software-support: add library
+	for PRU firmware
+In-Reply-To: <1480096200-20475-2-git-send-email-ash.charles@savoirfairelinux.com>
 References: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
- <1480096200-20475-3-git-send-email-ash.charles@savoirfairelinux.com>
-Message-ID: <1a270629-34f9-06f6-fb58-25455e61900d@mind.be>
+ <1480096200-20475-2-git-send-email-ash.charles@savoirfairelinux.com>
+Message-ID: <1c417375-fe37-9cc8-5747-87c670b3e51f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,88 +14,73 @@ To: buildroot@busybox.net
 
 
 
-On 25-11-16 18:50, Ash Charles wrote:
-> As suggested [1], provide a sample application demonstrating how to use
-> the PRU toolchain (specifically, the ti-cgt-pru and
-> pru-software-support packages) within buildroot.  This sample is taken
-> from PRU Lab #4 for the AM335x [2, 3].
-
- The intention here was not to create a new package, but rather to allow the
-installation of the examples provided in pru-software-support. I.e. add a config
-option "PRU_SOFTWARE_SUPPORT_INSTALL_EXAMPLES". Or rather, add a
-pru-software-support target package for the examples (the firmware files are to
-be installed on the target so it has to be a target package).
-
- Obviously, only 1 firmware binary can be installed. So you have the following
-options:
-- Support only one example.
-- Add config options for all the examples and let the user select it.
-- Install examples, but not as am335x-pru0-fw, but in a pru-examples
-subdirectory, leaving it up to the user to copy/link it to the correct name for
-firmware loading. Mention in the help text how to do that.
-
- I'm in favour of the last option. Among other things, it makes it easier to
-support other SoCs than the AM335x.
-
-
+On 25-11-16 18:49, Ash Charles wrote:
+> TI provides a set of headers files and libraries useful in developing
+> firmware for real-time (PRU) cores embedded in some processors e.g.
+> AM3358.  This package stages these files for any packages creating
+> PRU firmware.
 > 
-> Note: No special userspace tools are needed to load PRU firmware. The
-> Linux kernel loads the specifically-named files as normal kernel
-> firmware.
+> Note: As per [1], use commit v4.0.2 to sync with common TI Linux
+>       versions.
 > 
-> [1] http://lists.busybox.net/pipermail/buildroot/2016-November/178050.html
-> [2] http://processors.wiki.ti.com/index.php/PRU_Training:_Hands-on_Labs
-> [3] https://git.ti.com/pru-software-support-package/pru-software-support-package/trees/v4.0.2/labs/lab_4
+> [1] http://e2e.ti.com/support/arm/sitara_arm/f/791/p/552190/2018113#2018113
 > 
 > Signed-off-by: Ash Charles <ash.charles@savoirfairelinux.com>
-
 [snip]
-> +config BR2_PACKAGE_PRU_SAMPLE
-> +	bool "PRU sample firmware"
-> +	depends on BR2_PACKAGE_HOST_PRU_SOFTWARE_SUPPORT
-> +	help
-> +	  Sample PRU firmware extracted from lab #4 from the TI
-> +	  example code. See
-> +	  http://processors.wiki.ti.com/index.php/PRU_Training:_Hands-on_Labs
-
- This is a useful URL, make sure you keep it somewhere.
-
-> diff --git a/package/pru-sample/pru-sample.mk b/package/pru-sample/pru-sample.mk
+> diff --git a/package/pru-software-support/pru-software-support.hash b/package/pru-software-support/pru-software-support.hash
 > new file mode 100644
-> index 0000000..19cdf02
+> index 0000000..bbff1db
 > --- /dev/null
-> +++ b/package/pru-sample/pru-sample.mk
-> @@ -0,0 +1,22 @@
+> +++ b/package/pru-software-support/pru-software-support.hash
+> @@ -0,0 +1,2 @@
+> +# no hash for git checkout
+
+ Where do you get this from? It's been more than a year now that this is no
+longer true, do we still have documentation bits saying that there should be no
+hash for git downloads?
+
+ For git downloads, add a locally calculated sha256.
+
+> +none	xxx	pru-software-support-804b548e69ef9fdf44445f6d0968d81cb8a1e7b4.tar.gz
+> diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
+> new file mode 100644
+> index 0000000..366680a
+> --- /dev/null
+> +++ b/package/pru-software-support/pru-software-support.mk
+> @@ -0,0 +1,26 @@
 > +################################################################################
 > +#
-> +# pru-sample
+> +# pru-software-support
 > +#
 > +################################################################################
 > +
-> +PRU_SAMPLE_VERSION = 0.1
-> +PRU_SAMPLE_SITE = package/pru-sample/src
-> +PRU_SAMPLE_SITE_METHOD = local
-> +PRU_SAMPLE_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
+> +PRU_SOFTWARE_SUPPORT_VERSION = 804b548e69ef9fdf44445f6d0968d81cb8a1e7b4
+> +PRU_SOFTWARE_SUPPORT_SITE = git://git.ti.com/pru-software-support-package/pru-software-support-package.git
+> +PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3c
+> +PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU_Package-v5.0-Manifest.html
+> +PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru
 > +
-> +define PRU_SAMPLE_BUILD_CMDS
-> +        $(MAKE) PRU_CGT=$(TI_CGT_PRU_DIR) -C $(@D)
+> +define HOST_PRU_SOFTWARE_SUPPORT_BUILD_CMDS
+> +	$(MAKE) PRU_CGT=$(TI_CGT_PRU_DIR) -C $(@D)/lib/src
 > +endef
 > +
-> +define PRU_SAMPLE_INSTALL_TARGET_CMDS
-> +        mkdir -p $(TARGET_DIR)/lib/firmware/
-> +        $(INSTALL) -m 0644 $(@D)/pru0.out $(TARGET_DIR)/lib/firmware/am335x-pru0-fw
+> +# install this library support alongside PRU toolchain i.e.
+> +# everything in TI_CGT_PRU_DIR as PRU_CGT
+> +define HOST_PRU_SOFTWARE_SUPPORT_INSTALL_CMDS
+> +	mkdir -p $(TI_CGT_PRU_DIR)/usr/include
+> +	cp -dpfr $(@D)/include/* $(TI_CGT_PRU_DIR)/usr/include
+> +	mkdir -p $(TI_CGT_PRU_DIR)/usr/lib
+> +	$(INSTALL) -m 0644 $(@D)/lib/src/*/gen/*.lib $(TI_CGT_PRU_DIR)/usr/lib/
+> +endef
 
- Add -D to the install command, then the mkdir above isn't needed.
-
+ Otherwise, looks good to me.
 
  Regards,
  Arnout
 
-> +        $(INSTALL) -m 0644 $(@D)/pru1.out $(TARGET_DIR)/lib/firmware/am335x-pru1-fw
-> +endef
 > +
-> +$(eval $(generic-package))
-[snip]
+> +$(eval $(host-generic-package))
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
