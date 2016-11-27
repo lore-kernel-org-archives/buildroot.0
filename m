@@ -1,33 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Nov 2016 21:20:30 +0100
-Subject: [Buildroot] [PATCH] fs/ubifs: work around fakeroot / sed -i
- issue on systems with SELinux enabled
-In-Reply-To: <20161126234027.22300-1-peter@korsgaard.com>
-References: <20161126234027.22300-1-peter@korsgaard.com>
-Message-ID: <CACXmViYz8KYc4vy1rcPew8436X26GmEJpOW1nK7+As4BSiF__Q@mail.gmail.com>
+Date: Sun, 27 Nov 2016 21:12:24 +0100
+Subject: [Buildroot] [git commit] Revert "package/pseudo: wrap the real
+	pseudo with a wrapper"
+Message-ID: <20161127202537.7E5487FE2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Nov 27, 2016 at 12:40 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
-> Fixes #9386
->
-> GNU sed -i misbehaves on systems with SELinux enabled, as it tries to copy
-> to the SELinux security context (xattr) from the source file to to the new
-> destination file, which fails under fakeroot and leaves the file with 000
-> permissions, causing ubinize to fail when it cannot read to configuration
-> file.
->
-> So as a workaround, combine the install and tweak steps in a single
-> sed with a redirect to the destination file instead.
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=ca41a78c2dcbb9874c0d4c285eb10e3ba1633ee1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+This reverts commit a1d602a74d53f5610852c1763014632de145bf8b.
 
-I will now revert the changes moving from fakeroot to pseudo.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pseudo/pseudo-wrapper | 12 ------------
+ package/pseudo/pseudo.mk      |  6 ------
+ 2 files changed, 18 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
+deleted file mode 100644
+index feaa7fc..0000000
+--- a/package/pseudo/pseudo-wrapper
++++ /dev/null
+@@ -1,12 +0,0 @@
+-#!/bin/sh
+-
+-export PSEUDO_PREFIX="$(dirname "${0%/*}")"
+-export PSEUDO_OPTS="-t0"
+-if [ -n "${TARGET_DIR}" ]; then
+-    export PSEUDO_PASSWD="${TARGET_DIR}"
+-fi
+-if [ -n "${BASE_DIR}" ]; then
+-    export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
+-fi
+-
+-exec "${0%-wrapper}" "${@}"
+diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
+index 7701825..a924e10 100644
+--- a/package/pseudo/pseudo.mk
++++ b/package/pseudo/pseudo.mk
+@@ -26,12 +26,6 @@ HOST_PSEUDO_CONF_OPTS = \
+ 	--libdir=$(HOST_DIR)/usr/lib \
+ 	--with-sqlite=$(HOST_DIR)/usr
+ 
+-define HOST_PSEUDO_INSTALL_WRAPPER
+-	$(INSTALL) -D -m 0755 $(HOST_PSEUDO_PKGDIR)/pseudo-wrapper \
+-		$(HOST_DIR)/usr/bin/pseudo-wrapper
+-endef
+-HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_INSTALL_WRAPPER
+-
+ define HOST_PSEUDO_FAKEROOT_SYMLINK
+ 	ln -sf pseudo $(HOST_DIR)/usr/bin/fakeroot
+ endef
