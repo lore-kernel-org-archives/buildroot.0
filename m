@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:23:38 +0100
-Subject: [Buildroot] [PATCH v2] gcc: add patch to support musl on ppc
-In-Reply-To: <20161127155704.GA10600@waldemar-brodkorb.de>
-References: <20161127155704.GA10600@waldemar-brodkorb.de>
-Message-ID: <20161127222338.400326f4@free-electrons.com>
+Date: Sun, 27 Nov 2016 22:23:42 +0100
+Subject: [Buildroot] [PATCH] uclibc: add madvise macro patch from
+ upstream
+In-Reply-To: <20161127153745.GA27642@waldemar-brodkorb.de>
+References: <20161127153745.GA27642@waldemar-brodkorb.de>
+Message-ID: <20161127222342.2816bed1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 27 Nov 2016 16:57:04 +0100, Waldemar Brodkorb wrote:
-> Tested with a boot in Qemu (g3beige).
+On Sun, 27 Nov 2016 16:37:45 +0100, Waldemar Brodkorb wrote:
+> Fixes:
+>   http://autobuild.buildroot.net/results/6f296139633df24031b20d8bd5191e0f5928ec68
 > 
 > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
-> v1 -> v2: 
->   * remove my temporary foo file while investigating what patches
->     are required, requested by Thomas Petazzoni
+> upstream patch is not yet pushed.
 > ---
->  package/gcc/5.4.0/911-ppc-musl-support.patch | 75 ++++++++++++++++++++++++++++
->  1 file changed, 75 insertions(+)
->  create mode 100644 package/gcc/5.4.0/911-ppc-musl-support.patch
+>  ...ne-madvise-related-macros-for-noMMU-targe.patch | 66 ++++++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+>  create mode 100644 package/uclibc/0002-do-not-define-madvise-related-macros-for-noMMU-targe.patch
 
 Applied to master, thanks.
 
