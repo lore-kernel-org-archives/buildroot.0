@@ -1,57 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 27 Nov 2016 21:12:24 +0100
-Subject: [Buildroot] [git commit] Revert "package/pseudo: wrap the real
-	pseudo with a wrapper"
-Message-ID: <20161127202537.7E5487FE2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Revert "makedevs: make device node
+	creation idempotent"
+Message-ID: <20161127202537.8ABF5819CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca41a78c2dcbb9874c0d4c285eb10e3ba1633ee1
+commit: https://git.buildroot.net/buildroot/commit/?id=4c6d5e33ae1bdfc85c9734897c357a804bfd7435
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit a1d602a74d53f5610852c1763014632de145bf8b.
+This reverts commit c85cd189dc1ded92b78c5968860ff447ec9815ad.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pseudo/pseudo-wrapper | 12 ------------
- package/pseudo/pseudo.mk      |  6 ------
- 2 files changed, 18 deletions(-)
+ package/makedevs/makedevs.c | 18 ++----------------
+ 1 file changed, 2 insertions(+), 16 deletions(-)
 
-diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
-deleted file mode 100644
-index feaa7fc..0000000
---- a/package/pseudo/pseudo-wrapper
-+++ /dev/null
-@@ -1,12 +0,0 @@
--#!/bin/sh
--
--export PSEUDO_PREFIX="$(dirname "${0%/*}")"
--export PSEUDO_OPTS="-t0"
--if [ -n "${TARGET_DIR}" ]; then
--    export PSEUDO_PASSWD="${TARGET_DIR}"
--fi
--if [ -n "${BASE_DIR}" ]; then
--    export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
--fi
--
--exec "${0%-wrapper}" "${@}"
-diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
-index 7701825..a924e10 100644
---- a/package/pseudo/pseudo.mk
-+++ b/package/pseudo/pseudo.mk
-@@ -26,12 +26,6 @@ HOST_PSEUDO_CONF_OPTS = \
- 	--libdir=$(HOST_DIR)/usr/lib \
- 	--with-sqlite=$(HOST_DIR)/usr
+diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+index bcf0e0f..7092b14 100644
+--- a/package/makedevs/makedevs.c
++++ b/package/makedevs/makedevs.c
+@@ -601,7 +601,6 @@ int main(int argc, char **argv)
+ 			dev_t rdev;
+ 			unsigned i;
+ 			char *full_name_inc;
+-			struct stat st;
  
--define HOST_PSEUDO_INSTALL_WRAPPER
--	$(INSTALL) -D -m 0755 $(HOST_PSEUDO_PKGDIR)/pseudo-wrapper \
--		$(HOST_DIR)/usr/bin/pseudo-wrapper
--endef
--HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_INSTALL_WRAPPER
--
- define HOST_PSEUDO_FAKEROOT_SYMLINK
- 	ln -sf pseudo $(HOST_DIR)/usr/bin/fakeroot
- endef
+ 			if (type == 'p') {
+ 				mode |= S_IFIFO;
+@@ -623,23 +622,10 @@ int main(int argc, char **argv)
+ 			for (i = start; i <= start + count; i++) {
+ 				sprintf(full_name_inc, count ? "%s%u" : "%s", full_name, i);
+ 				rdev = makedev(major, minor + (i - start) * increment);
+-				if (stat(full_name_inc, &st) == 0) {
+-					if ((mode & S_IFMT) != (st.st_mode & S_IFMT)) {
+-						bb_error_msg("line %d: node %s exists but is of wrong file type", linenum, full_name_inc);
+-						ret = EXIT_FAILURE;
+-						continue;
+-					}
+-					if (st.st_rdev != rdev) {
+-						bb_error_msg("line %d: node %s exists but is wrong device number", linenum, full_name_inc);
+-						ret = EXIT_FAILURE;
+-						continue;
+-					}
+-				} else if (mknod(full_name_inc, mode, rdev) < 0) {
++				if (mknod(full_name_inc, mode, rdev) < 0) {
+ 					bb_perror_msg("line %d: can't create node %s", linenum, full_name_inc);
+ 					ret = EXIT_FAILURE;
+-					continue;
+-				}
+-				if (chown(full_name_inc, uid, gid) < 0) {
++				} else if (chown(full_name_inc, uid, gid) < 0) {
+ 					bb_perror_msg("line %d: can't chown %s", linenum, full_name_inc);
+ 					ret = EXIT_FAILURE;
+ 				} else if (chmod(full_name_inc, mode) < 0) {
