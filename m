@@ -1,65 +1,66 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Sat, 26 Nov 2016 20:12:02 -0500
-Subject: [Buildroot] [PATCH v2] package/pseudo: update version
-Message-ID: <20161127011202.6938-1-gael.portay@savoirfairelinux.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 27 Nov 2016 08:30:07 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-11-26
+Message-ID: <20161127073007.32B5020A4C@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brings in fix about shutdown synchronization with the server.
+Hello,
 
-See commit message:
-    If you're running pseudo in docker, a script that creates a pseudo
-    daemon can exit, causing docker to kill pseudo before it's done writing
-    the database.
+Build statistics for 2016-11-26
+================================
 
-    Since the client sending the shutdown request doesn't have its socket
-    closed explicitly by the server, we can just read from the socket in
-    the client to create a delay until the actual exit, which can take
-    a while if there's an in-memory DB.
+      successes : 187
+       failures : 19 
+       timeouts : 0  
+          TOTAL : 206
 
-Furthermore, the patch add the -S argument that tells the server to
-shutdown and waits for its completion.
+Classification of failures by reason
+====================================
 
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
----
- package/pseudo/pseudo-wrapper | 2 +-
- package/pseudo/pseudo.hash    | 2 +-
- package/pseudo/pseudo.mk      | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+                  guile-2.0.13 | 2 
+                  lcdapi-v0.10 | 2 
+python-libconfig-b271c3d9da... | 2 
+kmsxx-bd5f6471e619a6ba2987b... | 1 
+               libdvbcsa-1.1.0 | 1 
+                libmad-0.15.1b | 1 
+                 libraw-0.17.1 | 1 
+net-tools-3f170bff115303e92... | 1 
+                    php-7.0.12 | 1 
+qextserialport-ada321a9ee46... | 1 
+qt5webkit-b35917bcb44d7f200... | 1 
+          sane-backends-1.0.25 | 1 
+                  stunnel-5.36 | 1 
+         systemd-bootchart-230 | 1 
+               trousers-0.3.13 | 1 
+          usb_modeswitch-2.3.0 | 1 
 
-diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
-index 9c8dbdb..ad66431 100644
---- a/package/pseudo/pseudo-wrapper
-+++ b/package/pseudo/pseudo-wrapper
-@@ -16,4 +16,4 @@ if [ -n "${BASE_DIR}" ]; then
-     export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
- fi
- 
--exec "${0%/*}/pseudo" "${@}"
-+exec "${0%/*}/pseudo" -S "${@}"
-diff --git a/package/pseudo/pseudo.hash b/package/pseudo/pseudo.hash
-index 1553a29..55a33d3 100644
---- a/package/pseudo/pseudo.hash
-+++ b/package/pseudo/pseudo.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  7d4b767302f118fa1c3f89b551cf3f3f2aa92721dab86ff62f0600a394b8a81a  pseudo-45eca34c754d416a38bee90fb2d3c110a0b6cc5f.tar.gz
-+sha256  164da6aa243166b6b6a89fabd514578e14f69515286ef747912610c317f87194  pseudo-d6eb2df3fe63b765f35d62332add4d0e4e9c6a39.tar.gz
-diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
-index aa2a9c7..58b9c79 100644
---- a/package/pseudo/pseudo.mk
-+++ b/package/pseudo/pseudo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PSEUDO_VERSION = 45eca34c754d416a38bee90fb2d3c110a0b6cc5f
-+PSEUDO_VERSION = d6eb2df3fe63b765f35d62332add4d0e4e9c6a39
- PSEUDO_SITE = https://git.yoctoproject.org/git/pseudo
- PSEUDO_SITE_METHOD = git
- 
+
+Detail of failures
+===================
+
+         arm |                   guile-2.0.13 | NOK | http://autobuild.buildroot.net/results/3113d64f7fa4110fe0dc99a9bc2d6f5e495b80e9
+         arm |                   guile-2.0.13 | NOK | http://autobuild.buildroot.net/results/d8e3a291c7eb1674ef146d59e3baf8d25e5befc5
+        m68k | kmsxx-bd5f6471e619a6ba2987b... | NOK | http://autobuild.buildroot.net/results/443a003d8ef003f764b18c82ad79cbc2ea21bf59
+        m68k |                   lcdapi-v0.10 | NOK | http://autobuild.buildroot.net/results/e6b3885d1f213e197543d0d75702a5458a4a6b6a
+        m68k |                   lcdapi-v0.10 | NOK | http://autobuild.buildroot.net/results/e52f66c3720a8c6ab9dfaa08c082bc32bb9697de
+   powerpc64 |                libdvbcsa-1.1.0 | NOK | http://autobuild.buildroot.net/results/e6d22f5e0258c7ebb8a3ed39c11e014c721cd219
+         arm |                 libmad-0.15.1b | NOK | http://autobuild.buildroot.net/results/3d38a2c9907f95db5698d10ddba7c29dbddc41da
+        bfin |                  libraw-0.17.1 | NOK | http://autobuild.buildroot.net/results/b5b3c6ea730ebdfdcfcc737f3b026e60f318c064
+      x86_64 | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/f2e548df7e1b23edb4e599427589d4d20ba6c414
+        m68k |                     php-7.0.12 | NOK | http://autobuild.buildroot.net/results/4abb92b11a338a41d0450d0e56e827f18e79b497
+         arm | python-libconfig-b271c3d9da... | NOK | http://autobuild.buildroot.net/results/1f596480543bda542f88be9a7566d56e29f6a76b
+        i586 | python-libconfig-b271c3d9da... | NOK | http://autobuild.buildroot.net/results/e67ddb828e44e17b05b49ee0d42d555ddf967ee3
+         arc | qextserialport-ada321a9ee46... | NOK | http://autobuild.buildroot.net/results/187ba9b93df244d014d232b3b7162c69deb267b4
+      mipsel | qt5webkit-b35917bcb44d7f200... | NOK | http://autobuild.buildroot.net/results/b91949154b7cc535963f68b1dbd49e5cac779a29
+     powerpc |           sane-backends-1.0.25 | NOK | http://autobuild.buildroot.net/results/366979d0bd21dc2bf7f0336b9653ef3fd4e11123
+         arm |                   stunnel-5.36 | NOK | http://autobuild.buildroot.net/results/099fdd761daa01ddd040c199832309075f406dde
+      mipsel |          systemd-bootchart-230 | NOK | http://autobuild.buildroot.net/results/e5df8d11bfce4ba7a4c5c760b4784c31c506d8d4
+         arc |                trousers-0.3.13 | NOK | http://autobuild.buildroot.net/results/9560d8ef1b3e219ea45e7d10d1eef89a8cc510bf
+        i586 |           usb_modeswitch-2.3.0 | NOK | http://autobuild.buildroot.net/results/06e6f510415933b55eb8814284f63109dace3402
+
 -- 
-2.10.2
+http://autobuild.buildroot.net
