@@ -1,47 +1,124 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Nov 2016 00:40:27 +0100
-Subject: [Buildroot] [PATCH] fs/ubifs: work around fakeroot / sed -i issue
-	on systems with SELinux enabled
-Message-ID: <20161126234027.22300-1-peter@korsgaard.com>
+From: Cassiano Martin <cassiano@polaco.pro.br>
+Date: Sat, 26 Nov 2016 22:46:22 -0200
+Subject: [Buildroot] Request for Help
+In-Reply-To: <179527168FDC482AB3A4A137957E4028@SYSTEMTECHNIK>
+References: <7E88E7AAEAD14AB9A2F395B26D76F9AF@SYSTEMTECHNIK>
+ <CAOoxthNsH-bDWWVgHFmJ03kdPtqGcbjgOUr7YRftMQBfpdx=+w@mail.gmail.com>
+ <040E51172C6148C2B2607CC22897F0C2@SYSTEMTECHNIK>
+ <CAOoxthMGQrNFD9c160b1dnRxZpXMn_jbL=wHt9tri=XrFgaOsA@mail.gmail.com>
+ <179527168FDC482AB3A4A137957E4028@SYSTEMTECHNIK>
+Message-ID: <CAOoxthNr8ALgpm2XwuzpUo8YiX555Ua2yBty_96jWv3YXmCRWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes #9386
+Yes, its enabled then.
 
-GNU sed -i misbehaves on systems with SELinux enabled, as it tries to copy
-to the SELinux security context (xattr) from the source file to to the new
-destination file, which fails under fakeroot and leaves the file with 000
-permissions, causing ubinize to fail when it cannot read to configuration
-file.
+Well, I guess driver didnt detect your canbus.
 
-So as a workaround, combine the install and tweak steps in a single
-sed with a redirect to the destination file instead.
+Could you confirm if can0 can be added by:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- fs/ubifs/ubi.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ip link set can0 type can bitrate "you can bitrate here without quotes"
 
-diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
-index cda4bf4..e488cb5 100644
---- a/fs/ubifs/ubi.mk
-+++ b/fs/ubifs/ubi.mk
-@@ -20,9 +20,11 @@ else
- UBINIZE_CONFIG_FILE_PATH = fs/ubifs/ubinize.cfg
- endif
- 
-+# don't use sed -i as it misbehaves on systems with SELinux enabled when this is
-+# executed through fakeroot (see #9386)
- define ROOTFS_UBI_CMD
--	$(INSTALL) -m 0644 $(UBINIZE_CONFIG_FILE_PATH) $(BUILD_DIR)/ubinize.cfg
--	$(SED) 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' $(BUILD_DIR)/ubinize.cfg
-+	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' \
-+		$(UBINIZE_CONFIG_FILE_PATH) > $(BUILD_DIR)/ubinize.cfg
- 	$(HOST_DIR)/usr/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg
- 	rm $(BUILD_DIR)/ubinize.cfg
- endef
--- 
-2.10.2
+
+also, vcan0 is a virtual can interface, not the native one.
+
+
+[]''s
+
+2016-11-26 20:19 GMT-02:00 BertHuber <3237-15@online.de>:
+> Thank you. I did this and recognized that iproute2 was already selected.
+> So that means I already have the correct Version on my target system ?
+>
+>
+> ________________________________
+> Von: Cassiano Martin [mailto:cassiano at polaco.pro.br]
+> Gesendet: Samstag, 26. November 2016 22:38
+>
+> An: BertHuber
+> Cc: buildroot at busybox.net
+> Betreff: Re: [Buildroot] Request for Help
+>
+> Ok, so you go under Target Packages -> Networking Applications -> iproute2
+>
+> Check it and do a rebuild. It will install legacy ip and tc tools.
+>
+> []'s
+>
+> 2016-11-26 14:06 GMT-02:00 BertHuber <3237-15@online.de>:
+>>
+>> I don't know. As I said I'm quite new to the whole Buildroot world.
+>> How can I find out ? .. and if it is the wrong how do I install the right
+>> ?
+>>
+>>
+>>
+>> ________________________________
+>> Von: Cassiano Martin [mailto:cassiano at polaco.pro.br]
+>> Gesendet: Samstag, 26. November 2016 16:52
+>> An: BertHuber
+>> Cc: buildroot at busybox.net
+>> Betreff: Re: [Buildroot] Request for Help
+>>
+>> Right,
+>>
+>> maybe an issue with iproute, are you using busybox one, or the real one,
+>> from 'ip tools' package?
+>>
+>> AFAIK bbox ip does not support can. I might be wrong too.
+>>
+>> []'s
+>>
+>> 2016-11-26 9:38 GMT-02:00 BertHuber <3237-15@online.de>:
+>>>
+>>> Hello,
+>>> I am new to this mailinglist and also quite new to the buildroot
+>>> environment.
+>>> I got stuck in my current project with the following problem:
+>>>
+>>>
+>>> I am currently trying to build an embedded Linux System with Buildroot.
+>>>
+>>> It works so far, I get a bootable SD Card for my A20 based board.
+>>>
+>>> I included all CAN Drivers & protocols I could find (can, can_raw and
+>>> vcan)
+>>>
+>>> My problem is : after booting and loggin in as root
+>>>
+>>> I type:
+>>>
+>>>  ip link add dev vcan0 type vcan ---- THAT WORKS
+>>>
+>>> but
+>>>
+>>>  ip link add dev can0 type can
+>>>
+>>> produces:
+>>>
+>>> RTNETLIINK answers: Operation not supported
+>>>
+>>> What is wrong ?? Thanks in advance for any ideas.
+>>>
+>>> Regards
+>>>
+>>> Bert
+>>>
+>>>
+>>>
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
