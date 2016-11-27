@@ -1,66 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:33:22 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-sis: Add
-	patch for ABI 23 support (xserver_xorg-server 1.19+)
-Message-ID: <20161201222140.BE4238026C@busybox.osuosl.org>
+Date: Sun, 27 Nov 2016 22:31:40 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-vmware:
+	bump version to 13.2.1
+Message-ID: <20161201222140.A17048026C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2a79469b28f77d65bf44ca180493f26497f0bf5
+commit: https://git.buildroot.net/buildroot/commit/?id=c58598019394cc70d08fbcfe22bfc8aa3e03b32d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Re-numbered patches as well.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../x11r7/xdriver_xf86-video-sis/0002-abi23.patch  | 33 ++++++++++++++++++++++
- .../{0007-xi.patch => 0003-xi.patch}               |  0
- 2 files changed, 33 insertions(+)
+ .../x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash    | 4 ++--
+ package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch b/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
-new file mode 100644
-index 0000000..109f745
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
-@@ -0,0 +1,33 @@
-+From 96fee560cd8bf7bf27048ce5fe67b7af6838c8d0 Mon Sep 17 00:00:00 2001
-+From: Adam Jackson <ajax@redhat.com>
-+Date: Tue, 19 Jul 2016 10:03:56 -0400
-+Subject: Adapt Block/WakeupHandler signature for ABI 23
-+
-+Signed-off-by: Adam Jackson <ajax@redhat.com>
-+---
-+Downloaded from
-+https://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=96fee560cd8bf7bf27048ce5fe67b7af6838c8d0
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff --git a/src/compat-api.h b/src/compat-api.h
-+index 6bc946f..89976e4 100644
-+--- a/src/compat-api.h
-++++ b/src/compat-api.h
-+@@ -75,8 +75,13 @@
-+ 
-+ #define SCREEN_INIT_ARGS_DECL ScreenPtr pScreen, int argc, char **argv
-+ 
-++#if ABI_VIDEODRV_VERSION >= SET_ABI_VERSION(23, 0)
-++#define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout
-++#define BLOCKHANDLER_ARGS arg, pTimeout
-++#else
-+ #define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout, pointer pReadmask
-+ #define BLOCKHANDLER_ARGS arg, pTimeout, pReadmask
-++#endif
-+ 
-+ #define CLOSE_SCREEN_ARGS_DECL ScreenPtr pScreen
-+ #define CLOSE_SCREEN_ARGS pScreen
-+-- 
-+cgit v0.10.2
-+
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0007-xi.patch b/package/x11r7/xdriver_xf86-video-sis/0003-xi.patch
-similarity index 100%
-rename from package/x11r7/xdriver_xf86-video-sis/0007-xi.patch
-rename to package/x11r7/xdriver_xf86-video-sis/0003-xi.patch
+diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
+index 10d31d0..8d948a7 100644
+--- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
++++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-January/002521.html
+-sha256	3c1d244e4b1b77e92126957965cdc9fb82de4c215c0706a3a8aaff6939e4a0cc	xf86-video-vmware-13.1.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-November/002743.html
++sha256 e2f7f7101fba7f53b268e7a25908babbf155b3984fb5268b3d244eb6c11bf62b  xf86-video-vmware-13.2.1.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
+index ea4dd48..ef262f8 100644
+--- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
++++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.1.0
++XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.2.1
+ XDRIVER_XF86_VIDEO_VMWARE_SOURCE = xf86-video-vmware-$(XDRIVER_XF86_VIDEO_VMWARE_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_VMWARE_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_VMWARE_LICENSE = MIT
