@@ -1,43 +1,69 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Nov 2016 12:06:08 +0100
-Subject: [Buildroot] [PATCH/next 05/13]
-	package/x11r7/xdriver_xf86-video-amdgpu: bump version to 1.2.0
+Date: Sun, 27 Nov 2016 12:06:14 +0100
+Subject: [Buildroot] [PATCH/next 11/13]
+	package/x11r7/xdriver_xf86-video-sis: Add patch for ABI 23
+	support (xserver_xorg-server 1.19+)
 In-Reply-To: <20161127110616.3451-1-bernd.kuhls@t-online.de>
 References: <20161127110616.3451-1-bernd.kuhls@t-online.de>
-Message-ID: <20161127110616.3451-5-bernd.kuhls@t-online.de>
+Message-ID: <20161127110616.3451-11-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Re-numbered patches as well.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash    | 4 ++--
- package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk  | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../x11r7/xdriver_xf86-video-sis/0002-abi23.patch  | 33 ++++++++++++++++++++++
+ .../{0007-xi.patch => 0003-xi.patch}               |  0
+ 2 files changed, 33 insertions(+)
+ create mode 100644 package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
+ rename package/x11r7/xdriver_xf86-video-sis/{0007-xi.patch => 0003-xi.patch} (100%)
 
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-index 816f075..32ff164 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-@@ -1,2 +1,2 @@
--# From https://lists.x.org/archives/xorg-announce/2016-September/002708.html
--sha256 6ee87fed6d70d12353ca7ac02f8321a30d770626bf56f62f0e27970a33690779  xf86-video-amdgpu-1.1.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-November/002741.html
-+sha256 275b1aac5f127f55ba3d7480a1df89eace1d02650e24e46908067fc875e76c8f  xf86-video-amdgpu-1.2.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-index 4e12e12..d858e14 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 1.1.2
-+XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 1.2.0
- XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
+diff --git a/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch b/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
+new file mode 100644
+index 0000000..109f745
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
+@@ -0,0 +1,33 @@
++From 96fee560cd8bf7bf27048ce5fe67b7af6838c8d0 Mon Sep 17 00:00:00 2001
++From: Adam Jackson <ajax@redhat.com>
++Date: Tue, 19 Jul 2016 10:03:56 -0400
++Subject: Adapt Block/WakeupHandler signature for ABI 23
++
++Signed-off-by: Adam Jackson <ajax@redhat.com>
++---
++Downloaded from
++https://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=96fee560cd8bf7bf27048ce5fe67b7af6838c8d0
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff --git a/src/compat-api.h b/src/compat-api.h
++index 6bc946f..89976e4 100644
++--- a/src/compat-api.h
+++++ b/src/compat-api.h
++@@ -75,8 +75,13 @@
++ 
++ #define SCREEN_INIT_ARGS_DECL ScreenPtr pScreen, int argc, char **argv
++ 
+++#if ABI_VIDEODRV_VERSION >= SET_ABI_VERSION(23, 0)
+++#define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout
+++#define BLOCKHANDLER_ARGS arg, pTimeout
+++#else
++ #define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout, pointer pReadmask
++ #define BLOCKHANDLER_ARGS arg, pTimeout, pReadmask
+++#endif
++ 
++ #define CLOSE_SCREEN_ARGS_DECL ScreenPtr pScreen
++ #define CLOSE_SCREEN_ARGS pScreen
++-- 
++cgit v0.10.2
++
+diff --git a/package/x11r7/xdriver_xf86-video-sis/0007-xi.patch b/package/x11r7/xdriver_xf86-video-sis/0003-xi.patch
+similarity index 100%
+rename from package/x11r7/xdriver_xf86-video-sis/0007-xi.patch
+rename to package/x11r7/xdriver_xf86-video-sis/0003-xi.patch
 -- 
 2.10.2
