@@ -1,32 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:18:07 +0100
-Subject: [Buildroot] [PATCH] configs/mx6: Bump to kernel 4.8.11
-In-Reply-To: <1480170963-4772-1-git-send-email-festevam@gmail.com>
-References: <1480170963-4772-1-git-send-email-festevam@gmail.com>
-Message-ID: <20161127221807.4047a7a8@free-electrons.com>
+Date: Sun, 27 Nov 2016 22:21:27 +0100
+Subject: [Buildroot] [git commit] gcc: add patch to support musl on ppc
+Message-ID: <20161127212321.00CAD819CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1546afad3c2ed25acb03ec960377bef64f63e0ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 26 Nov 2016 12:36:03 -0200, Fabio Estevam wrote:
-> Kernel 4.8.11 brings commit 5f95e68daae397 ("clk: imx: fix integer overflow
-> in AV PLL round rate"), which fixes a PLL calculation bug, so bump to this
-> version.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  configs/imx6ulpico_defconfig | 2 +-
->  configs/mx6udoo_defconfig    | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Tested with a boot in Qemu (g3beige).
 
-Applied to master, thanks.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/5.4.0/911-ppc-musl-support.patch | 75 ++++++++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gcc/5.4.0/911-ppc-musl-support.patch b/package/gcc/5.4.0/911-ppc-musl-support.patch
+new file mode 100644
+index 0000000..f4905a4
+--- /dev/null
++++ b/package/gcc/5.4.0/911-ppc-musl-support.patch
+@@ -0,0 +1,75 @@
++Add support for musl on ppc32
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-5.4.0.orig/gcc/config/rs6000/sysv4.h gcc-5.4.0/gcc/config/rs6000/sysv4.h
++--- gcc-5.4.0.orig/gcc/config/rs6000/sysv4.h	2015-09-24 15:46:45.000000000 +0200
+++++ gcc-5.4.0/gcc/config/rs6000/sysv4.h	2016-11-27 13:12:33.226953738 +0100
++@@ -537,6 +537,9 @@
++ #ifndef CC1_SECURE_PLT_DEFAULT_SPEC
++ #define CC1_SECURE_PLT_DEFAULT_SPEC ""
++ #endif
+++#ifndef LINK_SECURE_PLT_DEFAULT_SPEC
+++#define LINK_SECURE_PLT_DEFAULT_SPEC ""
+++#endif
++ 
++ /* Pass -G xxx to the compiler.  */
++ #undef CC1_SPEC
++@@ -757,17 +760,23 @@
++ 
++ #define LINK_START_LINUX_SPEC ""
++ 
+++#define MUSL_DYNAMIC_LINKER_E ENDIAN_SELECT("","le","")
+++
++ #define GLIBC_DYNAMIC_LINKER "/lib/ld.so.1"
++ #define UCLIBC_DYNAMIC_LINKER "/lib/ld-uClibc.so.0"
+++#define MUSL_DYNAMIC_LINKER \
+++  "/lib/ld-musl-powerpc" MUSL_DYNAMIC_LINKER_E "%{msoft-float:-sf}.so.1"
++ #if DEFAULT_LIBC == LIBC_UCLIBC
++-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{mglibc:" G ";:" U "}"
+++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{mmusl:" M ";:" U "}}"
+++#elif DEFAULT_LIBC == LIBC_MUSL
+++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{muclibc:" U ";:" M "}}"
++ #elif !defined (DEFAULT_LIBC) || DEFAULT_LIBC == LIBC_GLIBC
++-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{muclibc:" U ";:" G "}"
+++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{muclibc:" U ";:%{mmusl:" M ";:" G "}}"
++ #else
++ #error "Unsupported DEFAULT_LIBC"
++ #endif
++ #define GNU_USER_DYNAMIC_LINKER \
++-  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER)
+++  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER, MUSL_DYNAMIC_LINKER)
++ 
++ #define LINK_OS_LINUX_SPEC "-m elf32ppclinux %{!shared: %{!static: \
++   %{rdynamic:-export-dynamic} \
++@@ -889,6 +898,7 @@
++   { "link_os_openbsd",		LINK_OS_OPENBSD_SPEC },			\
++   { "link_os_default",		LINK_OS_DEFAULT_SPEC },			\
++   { "cc1_secure_plt_default",	CC1_SECURE_PLT_DEFAULT_SPEC },		\
+++  { "link_secure_plt_default",	LINK_SECURE_PLT_DEFAULT_SPEC },		\
++   { "cpp_os_ads",		CPP_OS_ADS_SPEC },			\
++   { "cpp_os_yellowknife",	CPP_OS_YELLOWKNIFE_SPEC },		\
++   { "cpp_os_mvme",		CPP_OS_MVME_SPEC },			\
++diff -Nur gcc-5.4.0.orig/gcc/config/rs6000/sysv4le.h gcc-5.4.0/gcc/config/rs6000/sysv4le.h
++--- gcc-5.4.0.orig/gcc/config/rs6000/sysv4le.h	2015-09-24 15:46:45.000000000 +0200
+++++ gcc-5.4.0/gcc/config/rs6000/sysv4le.h	2016-11-27 13:12:33.226953738 +0100
++@@ -31,3 +31,5 @@
++ /* Little-endian PowerPC64 Linux uses the ELF v2 ABI by default.  */
++ #define LINUX64_DEFAULT_ABI_ELFv2
++ 
+++#undef MUSL_DYNAMIC_LINKER_E
+++#define MUSL_DYNAMIC_LINKER_E ENDIAN_SELECT("","le","le")
++diff -Nur gcc-5.4.0.orig/gcc/config.gcc gcc-5.4.0/gcc/config.gcc
++--- gcc-5.4.0.orig/gcc/config.gcc	2015-09-10 16:17:53.000000000 +0200
+++++ gcc-5.4.0/gcc/config.gcc	2016-11-27 13:14:17.149638148 +0100
++@@ -2413,6 +2413,10 @@
++ 	    powerpc*-*-linux*paired*)
++ 		tm_file="${tm_file} rs6000/750cl.h" ;;
++ 	esac
+++	case ${target} in
+++	    powerpc*-*-linux*-musl*)
+++		enable_secureplt=yes ;;
+++	esac
++ 	if test x${enable_secureplt} = xyes; then
++ 		tm_file="rs6000/secureplt.h ${tm_file}"
++ 	fi
