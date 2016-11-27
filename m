@@ -1,48 +1,43 @@
-From: daggs <daggs@gmx.com>
-Date: Sun, 27 Nov 2016 22:36:46 +0100
-Subject: [Buildroot] [PATCH] odroid-scripts: add support for auto resize
- on first boot for SYSV
-In-Reply-To: <20161127222742.5a58f49c@free-electrons.com>
-References: <20161127212449.14159-1-daggs@gmx.com>,
- <20161127222742.5a58f49c@free-electrons.com>
-Message-ID: <trinity-2fcdc0f4-9fb1-4f65-8c09-14877a9c5f63-1480282606427@3capp-mailcom-bs07>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 27 Nov 2016 22:31:06 +0100
+Subject: [Buildroot] [git commit branch/next]
+	package/x11r7/xdriver_xf86-input-joystick: bump version to 1.6.3
+Message-ID: <20161127213919.1671A81908@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=7ffd68ba9235ccde6da70debabe1a38136b897f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
->
-> Hello,
-> 
-> On Sun, 27 Nov 2016 23:24:49 +0200, Dagg Stompler wrote:
-> > ported from https://github.com/hardkernel/buildroot, upon first boot,
-> > resize the file system to the max possible remaining size of the flash.
-> > 
-> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> 
-> This look potentially useful, but I don't see why it should be in an
-> Odroid-specific package. It is independent of Odroid-specific hardware,
-> so it should be in a separate package, so that it can be used on other
-> platforms. Of course, it needs to be made generic enough so that other
-> platforms can use it.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash      | 4 ++--
+ .../x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-two reasons:
- 1. this came from a Odroid-specific repo as stated above.
- 2. afaics, the only way to make it more generic is to add systemd support and that is something I don't know how to do nor I have time to do so.
-
-moreover, if it can be useful for other platforms, why not have it as part of the generated tree and not have it as a pkg?
-
-Dagg.
-
-> 
-> Thanks,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> 
+diff --git a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash
+index 5fac77e..feec2d3 100644
+--- a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash
++++ b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-January/002136.html
+-sha1	61658b8d829fdaed6064c7c26232c3884d359187	xf86-input-joystick-1.6.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-November/002742.html
++sha256 9e7669ecf0f23b8e5dc39d5397cf28296f692aa4c0e4255f5e02816612c18eab  xf86-input-joystick-1.6.3.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
+index 76f2577..5bc2a5c 100644
+--- a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
++++ b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_INPUT_JOYSTICK_VERSION = 1.6.2
++XDRIVER_XF86_INPUT_JOYSTICK_VERSION = 1.6.3
+ XDRIVER_XF86_INPUT_JOYSTICK_SOURCE = xf86-input-joystick-$(XDRIVER_XF86_INPUT_JOYSTICK_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_JOYSTICK_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_JOYSTICK_LICENSE = MIT
