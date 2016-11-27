@@ -1,129 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 27 Nov 2016 16:43:27 +0100
-Subject: [Buildroot] [git commit branch/next] efibootmrg: Allow build with
-	uClibc
-Message-ID: <20161127154809.0C2E3818F6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] efivar: allow build with uClibc
+Message-ID: <20161127154808.E9FFE7F996@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ae07b4746fcf7457a6ab3bd990df97fdd9e1fbe
+commit: https://git.buildroot.net/buildroot/commit/?id=64551a8f5f7fd8cb8dd92cb3198ceff8f112b343
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Details at https://github.com/rhinstaller/efibootmgr/issues/61.
+Details at https://github.com/rhinstaller/efivar/issues/76.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-[Thomas: efivar still doesn't build on musl, so same for efibootmgr.]
+[Thomas: tweak the dependency, efivar still doesn't build with musl.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../efibootmgr/0001-Allow-build-with-uClibc.patch  | 40 ++++++++++++++++++++++
- package/efibootmgr/Config.in                       |  7 ++--
- package/efibootmgr/efibootmgr.mk                   |  8 +++--
- 3 files changed, 49 insertions(+), 6 deletions(-)
+ package/efivar/0002-Allow-build-with-uClibc.patch | 38 +++++++++++++++++++++++
+ package/efivar/Config.in                          |  7 ++---
+ 2 files changed, 41 insertions(+), 4 deletions(-)
 
-diff --git a/package/efibootmgr/0001-Allow-build-with-uClibc.patch b/package/efibootmgr/0001-Allow-build-with-uClibc.patch
+diff --git a/package/efivar/0002-Allow-build-with-uClibc.patch b/package/efivar/0002-Allow-build-with-uClibc.patch
 new file mode 100644
-index 0000000..fd29233
+index 0000000..7c19587
 --- /dev/null
-+++ b/package/efibootmgr/0001-Allow-build-with-uClibc.patch
-@@ -0,0 +1,40 @@
-+From bbfcc60497c326576bb23cb01d90115ef3cf6947 Mon Sep 17 00:00:00 2001
++++ b/package/efivar/0002-Allow-build-with-uClibc.patch
+@@ -0,0 +1,38 @@
++From 2255601757a8a58baddad2d37d0bcc6b003a3732 Mon Sep 17 00:00:00 2001
 +From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-+Date: Fri, 25 Nov 2016 20:26:52 +0200
-+Subject: [PATCH] Remove unneeded <uchar.h> include
++Date: Fri, 25 Nov 2016 19:42:27 +0200
++Subject: [PATCH] Allow build with uClibc
 +
-+This fixes the build with uClibc.
++Basically this replaces type definitions in <uchar.h>.
 +
 +Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 +---
-+ src/efibootdump.c | 1 -
-+ src/eficonman.c   | 1 -
-+ 2 files changed, 2 deletions(-)
++ src/export.c | 8 +++++++-
++ 1 file changed, 7 insertions(+), 1 deletion(-)
 +
-+diff --git a/src/efibootdump.c b/src/efibootdump.c
-+index 6ff8360..7c5a1c5 100644
-+--- a/src/efibootdump.c
-++++ b/src/efibootdump.c
-+@@ -19,7 +19,6 @@
++diff --git a/src/export.c b/src/export.c
++index 7f2d4dd..72c02d1 100644
++--- a/src/export.c
+++++ b/src/export.c
++@@ -21,11 +21,17 @@
++ #include <inttypes.h>
 + #include <stdint.h>
-+ #include <stdio.h>
 + #include <stdlib.h>
 +-#include <uchar.h>
-+ #include <unistd.h>
 + 
-+ #include "error.h"
-+diff --git a/src/eficonman.c b/src/eficonman.c
-+index 2c2be38..9bfae79 100644
-+--- a/src/eficonman.c
-++++ b/src/eficonman.c
-+@@ -17,7 +17,6 @@
-+ #include <stdint.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+-#include <uchar.h>
-+ #include <unistd.h>
++ #include <efivar.h>
++ #include "lib.h"
 + 
-+ #define  _(String) gettext (String)
+++#ifdef __UCLIBC__
+++typedef int_least16_t char16_t;
+++typedef int_least32_t char32_t;
+++#else
+++#include <uchar.h>
+++#endif
+++
++ #define EFIVAR_MAGIC 0xf3df1597
++ 
++ #define ATTRS_UNSET 0xa5a5a5a5a5a5a5a5
 +-- 
 +2.10.2
 +
-diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
-index 988bf6d..8b29938 100644
---- a/package/efibootmgr/Config.in
-+++ b/package/efibootmgr/Config.in
-@@ -1,10 +1,11 @@
- config BR2_PACKAGE_EFIBOOTMGR
- 	bool "efibootmgr"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
--	depends on BR2_TOOLCHAIN_USES_GLIBC # efivar
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # efivar
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # efivar
+diff --git a/package/efivar/Config.in b/package/efivar/Config.in
+index 466a30a..1bdb6ca 100644
+--- a/package/efivar/Config.in
++++ b/package/efivar/Config.in
+@@ -9,9 +9,8 @@ config BR2_PACKAGE_EFIVAR
+ 	# toolchains.
  	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
- 		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII # efivar
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	select BR2_PACKAGE_EFIVAR
+ 		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+-	# doesn't build with uclibc due to lack of uchar.h
+ 	# doesn't build with musl due to lack of __bswap_constant_16
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	select BR2_PACKAGE_POPT
  	help
- 	  A Linux user-space application to modify the Intel Extensible
-@@ -14,9 +15,9 @@ config BR2_PACKAGE_EFIBOOTMGR
+@@ -19,9 +18,9 @@ config BR2_PACKAGE_EFIVAR
  
- 	  https://github.com/rhinstaller/efibootmgr
+ 	  https://github.com/rhinstaller/efivar
  
--comment "efibootmgr requires a glibc toolchain w/ headers >= 3.12, gcc >= 4.9"
-+comment "efibootmgr requires a glibc or uClibc toolchain w/ headers >= 3.12, gcc >= 4.9"
+-comment "efivar requires a glibc toolchain w/ headers >= 3.12, gcc >= 4.9"
++comment "efivar requires a glibc or uClibc toolchain w/ headers >= 3.12, gcc >= 4.9"
  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
--		!BR2_TOOLCHAIN_USES_GLIBC || \\
+-		!BR2_TOOLCHAIN_USES_GLIBC || \
 +		BR2_TOOLCHAIN_USES_MUSL || \
  		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
  	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
  		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
-diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
-index 731d6e9..487c8ca 100644
---- a/package/efibootmgr/efibootmgr.mk
-+++ b/package/efibootmgr/efibootmgr.mk
-@@ -8,7 +8,8 @@ EFIBOOTMGR_VERSION = 14
- EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
- EFIBOOTMGR_LICENSE = GPLv2+
- EFIBOOTMGR_LICENSE_FILES = COPYING
--EFIBOOTMGR_DEPENDENCIES = efivar
-+EFIBOOTMGR_DEPENDENCIES = efivar $(if $(BR2_NEEDS_GETTEXT),gettext)
-+EFIBOOTMGR_LDFLAGS = $(TARGET_LDFLAGS) $(if $(BR2_NEEDS_GETTEXT),-lintl)
- 
- define EFIBOOTMSR_PATCH_HEADER_PATH
- 	$(SED) 's,-I/,-I$(STAGING_DIR)/,' $(@D)/Makefile
-@@ -17,11 +18,12 @@ endef
- EFIBOOTMGR_POST_PATCH_HOOKS += EFIBOOTMSR_PATCH_HEADER_PATH
- 
- define EFIBOOTMGR_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)			\
-+		LDFLAGS="$(EFIBOOTMGR_LDFLAGS)" $(MAKE1) -C $(@D)
- endef
- 
- define EFIBOOTMGR_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)	\
- 		DESTDIR=$(TARGET_DIR) install
- endef
- 
