@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:31:15 +0100
+Date: Sun, 27 Nov 2016 22:31:29 +0100
 Subject: [Buildroot] [git commit branch/next]
-	package/x11r7/xdriver_xf86-input-mouse: bump version to 1.9.2
-Message-ID: <20161127213919.2AC9981908@busybox.osuosl.org>
+	package/x11r7/xdriver_xf86-video-ati: bump version to 7.8.0
+Message-ID: <20161127213919.460C381908@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e5380db9ed0e92c60bc29a624a30bb1f0ef0e19
+commit: https://git.buildroot.net/buildroot/commit/?id=a68c52366fa6becd6d238e46a6d85854bfbfca7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash | 4 ++--
- package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk   | 2 +-
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash | 4 ++--
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
-index 5a62d13..caba427 100644
---- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
-+++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+index 469e057..fe5ae0e 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2014-August/002471.html
--sha256	3485d375779c08406f0789feedde15933dc703158a086ddac638598f479fc5ce	xf86-input-mouse-1.9.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-November/002740.html
-+sha256 f425d5b05c6ab412a27e0a1106bb83f9e2662b307210abbe48270892387f4b2f  xf86-input-mouse-1.9.2.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-index e1bd81a..5bcbeb7 100644
---- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-+++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+-# From https://lists.x.org/archives/xorg-announce/2016-September/002707.html
+-sha256 00a58588db62ee309095c5c5920bbd248d965e8627f88affe68a73b18865078d  xf86-video-ati-7.7.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-November/002738.html
++sha256 401f5de772928f3dc4ce43a885adb0a47a2f61aa4a9e45d2ab3d184136a9d6fa  xf86-video-ati-7.8.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index 02a457b..ea70167 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.1
-+XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.2
- XDRIVER_XF86_INPUT_MOUSE_SOURCE = xf86-input-mouse-$(XDRIVER_XF86_INPUT_MOUSE_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_MOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_MOUSE_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_ATI_VERSION = 7.7.1
++XDRIVER_XF86_VIDEO_ATI_VERSION = 7.8.0
+ XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
