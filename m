@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:44:04 +0100
-Subject: [Buildroot] [PATCH/next 12/13] package/x11r7/xlib_libXfont2:
- new package
-In-Reply-To: <20161127110616.3451-12-bernd.kuhls@t-online.de>
+Date: Sun, 27 Nov 2016 22:48:45 +0100
+Subject: [Buildroot] [PATCH/next 13/13]
+ package/x11r7/xserver_xorg-server: add new version 1.19.0
+In-Reply-To: <20161127110616.3451-13-bernd.kuhls@t-online.de>
 References: <20161127110616.3451-1-bernd.kuhls@t-online.de>
- <20161127110616.3451-12-bernd.kuhls@t-online.de>
-Message-ID: <20161127224404.49d5b738@free-electrons.com>
+ <20161127110616.3451-13-bernd.kuhls@t-online.de>
+Message-ID: <20161127224845.3d21e38c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,58 +14,60 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 27 Nov 2016 12:06:15 +0100, Bernd Kuhls wrote:
+Thanks again for taking care of the X.org stack. Much appreciated!
 
-> diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-> new file mode 100644
-> index 0000000..233ec40
-> --- /dev/null
-> +++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-> @@ -0,0 +1,35 @@
-> +################################################################################
-> +#
-> +# xlib_libXfont2
-> +#
-> +################################################################################
+On Sun, 27 Nov 2016 12:06:16 +0100, Bernd Kuhls wrote:
+
+> +config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
+> +	bool "1.19.0"
+> +	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
+> +	select BR2_PACKAGE_XLIB_LIBXFONT2
+> +	select BR2_PACKAGE_XPROTO_PRESENTPROTO
 > +
-> +XLIB_LIBXFONT2_VERSION = 2.0.1
-> +XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.bz2
-> +XLIB_LIBXFONT2_SITE = http://xorg.freedesktop.org/releases/individual/lib
-> +XLIB_LIBXFONT2_AUTORECONF = YES
+>  config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
+>  	bool "1.18.4"
+>  	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
+> +	select BR2_PACKAGE_XLIB_LIBXFONT
+>  	select BR2_PACKAGE_XPROTO_PRESENTPROTO
 
-Why is autoreconf needed? The tarball has the configure script
-generated, and there are no patches for this package. If there's a good
-reason, it should be specified by a comment above this line.
+Why are you keeping version 1.18 ? I think we should remove it.
 
-> +XLIB_LIBXFONT2_LICENSE = MIT
-> +XLIB_LIBXFONT2_LICENSE_FILES = COPYING
-> +XLIB_LIBXFONT2_INSTALL_STAGING = YES
+We keep 1.17 because it's the only one that can work with the AMD
+Catalyst driver, and we keep 1.14 because it's the only one that can
+work with the NVidia Tegra driver. But 1.18 is not used by any
+binary-only driver packaged in Buildroot, so I think we should no
+longer support it as soon as we add support for 1.19.
+
+
+> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> index 51c3efc..0ed215f 100644
+> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> @@ -194,6 +194,14 @@ else
+>  XSERVER_XORG_SERVER_CONF_OPTS += --disable-record
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_XLIB_LIBXFONT2),y)
+> +XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libXfont2
+> +endif
 > +
-> +XLIB_LIBXFONT2_DEPENDENCIES = freetype xlib_libfontenc xlib_xtrans xproto_fontsproto xproto_xproto xfont_encodings
-
-Breaking this line that is a bit too long would be good.
-
-> +HOST_XLIB_LIBXFONT2_DEPENDENCIES = \
-> +	host-freetype host-xlib_libfontenc host-xlib_xtrans \
-> +	host-xproto_fontsproto host-xproto_xproto host-xfont_encodings
-> +
-> +XLIB_LIBXFONT2_CONF_OPTS = --disable-devel-docs
-> +HOST_XLIB_LIBXFONT2_CONF_OPTS = --disable-devel-docs
-> +
-> +ifeq ($(BR2_microblaze),y)
-> +# The microblaze toolchains don't define the __ELF__ preprocessor
-> +# symbol even though they do use the elf format. LibXfont checks for
-> +# this symbol to know if weak symbols are supported, and otherwise
-> +# falls back to emulation code using dlopen - Causing linker issues
-> +# for stuff using libXfont.
-> +# Work around it by defining the symbol here as well.
-> +XLIB_LIBXFONT2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D__ELF__"
+> +ifeq ($(BR2_PACKAGE_XLIB_LIBXFONT),y)
+> +XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libXfont
 > +endif
 
-Are you sure this is needed? The src/stubs/stubs.h code in libXfont
-doesn't exist in libXfont2.
+You forgot to remove the xlib_libXfont dependency from the main
+XSERVER_XORG_SERVER_DEPENDENCIES definition. So in fact, even on 1.19
+where you don't select xlib_libXfont at the Config.in level, it will be
+built.
 
-Thanks,
+Also, regarding this xlib_libXfont thing, do you know if the other
+packages that use it will be updated? We currently have:
+
+  xapp_bdftopcf
+  xapp_xfs
+  xdriver_xf86-video-qxl
+
+Thanks!
 
 Thomas
 -- 
