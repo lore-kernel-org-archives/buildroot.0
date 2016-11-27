@@ -1,47 +1,95 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 27 Nov 2016 16:27:50 +0100
-Subject: [Buildroot] [PATCH] m68k: add special gcc flag to avoid ICE for
- coldfire
-In-Reply-To: <30093dc7-15f9-144b-77c3-e5f2236019a4@mind.be>
-References: <20161126085144.GA23223@waldemar-brodkorb.de>
- <30093dc7-15f9-144b-77c3-e5f2236019a4@mind.be>
-Message-ID: <20161127152750.GE14207@waldemar-brodkorb.de>
+Date: Sun, 27 Nov 2016 16:37:45 +0100
+Subject: [Buildroot] [PATCH] uclibc: add madvise macro patch from upstream
+Message-ID: <20161127153745.GA27642@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-Arnout Vandecappelle wrote,
+Fixes:
+  http://autobuild.buildroot.net/results/6f296139633df24031b20d8bd5191e0f5928ec68
 
-> On 26-11-16 09:51, Waldemar Brodkorb wrote:
-> > Fixes:
-> >   http://autobuild.buildroot.net/results/d47fa41aa860d82471b83ac90967d3a3dacd8611
-> >   http://autobuild.buildroot.net/results/a21de4747f40a5ce93108c8979fbc0277d040e79
-> 
->  Did you test whether exception handling still works?
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+upstream patch is not yet pushed.
+---
+ ...ne-madvise-related-macros-for-noMMU-targe.patch | 66 ++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 package/uclibc/0002-do-not-define-madvise-related-macros-for-noMMU-targe.patch
 
-Tested with attached C++ app.
-Before and after the patches.
- 
-> > Requires this as prerequisite:
-> > http://patchwork.ozlabs.org/patch/683830/
-> > 
-> > Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-> 
->  Not sure if this warrants a Sob from me, but OK.
-> 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Will you provide the bigger patch Thomas wants to have?
-
-best regards
- Waldemar
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: foo.cc
-Type: text/x-c++src
-Size: 2835 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161127/64501825/attachment.cc>
+diff --git a/package/uclibc/0002-do-not-define-madvise-related-macros-for-noMMU-targe.patch b/package/uclibc/0002-do-not-define-madvise-related-macros-for-noMMU-targe.patch
+new file mode 100644
+index 0000000..31e763a
+--- /dev/null
++++ b/package/uclibc/0002-do-not-define-madvise-related-macros-for-noMMU-targe.patch
+@@ -0,0 +1,66 @@
++From 2ca4e8dcbd35e5c6da41a195550d741ccb2f7978 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@uclibc-ng.org>
++Date: Sat, 26 Nov 2016 19:47:41 +0100
++Subject: [PATCH] do not define madvise related macros for noMMU targets
++
++Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
++---
++ libc/sysdeps/linux/common/bits/mman-common.h | 41 +++++++++++++++-------------
++ 1 file changed, 22 insertions(+), 19 deletions(-)
++
++diff --git a/libc/sysdeps/linux/common/bits/mman-common.h b/libc/sysdeps/linux/common/bits/mman-common.h
++index 6cde5da..5b20da4 100644
++--- a/libc/sysdeps/linux/common/bits/mman-common.h
+++++ b/libc/sysdeps/linux/common/bits/mman-common.h
++@@ -83,26 +83,29 @@
++ # define MREMAP_FIXED	2
++ #endif
++ 
+++/* only define for MMU targets, no-MMU does not support madvise.  */
+++#ifdef __ARCH_USE_MMU__
++ /* Advice to `madvise'.  */
++-#ifdef __USE_BSD
++-# define MADV_NORMAL	  0	/* No further special treatment.  */
++-# define MADV_RANDOM	  1	/* Expect random page references.  */
++-# define MADV_SEQUENTIAL  2	/* Expect sequential page references.  */
++-# define MADV_WILLNEED	  3	/* Will need these pages.  */
++-# define MADV_DONTNEED	  4	/* Don't need these pages.  */
++-# define MADV_REMOVE	  9	/* Remove these pages and resources.  */
++-# define MADV_DONTFORK	  10	/* Do not inherit across fork.  */
++-# define MADV_DOFORK	  11	/* Do inherit across fork.  */
++-# define MADV_MERGEABLE	  12	/* KSM may merge identical pages.  */
++-# define MADV_UNMERGEABLE 13	/* KSM may not merge identical pages.  */
++-# define MADV_HWPOISON	  100	/* Poison a page for testing.  */
++-#endif
+++# ifdef __USE_BSD
+++#  define MADV_NORMAL	  0	/* No further special treatment.  */
+++#  define MADV_RANDOM	  1	/* Expect random page references.  */
+++#  define MADV_SEQUENTIAL 2	/* Expect sequential page references.  */
+++#  define MADV_WILLNEED	  3	/* Will need these pages.  */
+++#  define MADV_DONTNEED	  4	/* Don't need these pages.  */
+++#  define MADV_REMOVE	  9	/* Remove these pages and resources.  */
+++#  define MADV_DONTFORK	  10	/* Do not inherit across fork.  */
+++#  define MADV_DOFORK	  11	/* Do inherit across fork.  */
+++#  define MADV_MERGEABLE  12	/* KSM may merge identical pages.  */
+++#  define MADV_UNMERGEABLE 13	/* KSM may not merge identical pages.  */
+++#  define MADV_HWPOISON	  100	/* Poison a page for testing.  */
+++# endif
++ 
++ /* The POSIX people had to invent similar names for the same things.  */
++-#ifdef __USE_XOPEN2K
++-# define POSIX_MADV_NORMAL	0 /* No further special treatment.  */
++-# define POSIX_MADV_RANDOM	1 /* Expect random page references.  */
++-# define POSIX_MADV_SEQUENTIAL	2 /* Expect sequential page references.  */
++-# define POSIX_MADV_WILLNEED	3 /* Will need these pages.  */
++-# define POSIX_MADV_DONTNEED	4 /* Don't need these pages.  */
+++# ifdef __USE_XOPEN2K
+++#  define POSIX_MADV_NORMAL	0 /* No further special treatment.  */
+++#  define POSIX_MADV_RANDOM	1 /* Expect random page references.  */
+++#  define POSIX_MADV_SEQUENTIAL	2 /* Expect sequential page references.  */
+++#  define POSIX_MADV_WILLNEED	3 /* Will need these pages.  */
+++#  define POSIX_MADV_DONTNEED	4 /* Don't need these pages.  */
+++# endif
++ #endif
++-- 
++2.1.4
++
+-- 
+2.1.4
