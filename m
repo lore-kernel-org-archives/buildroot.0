@@ -1,48 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Nov 2016 22:41:58 +0100
-Subject: [Buildroot] [git commit] moarvm: use pkgconfig to find libraries
-	and headers
-Message-ID: <20161201222139.B6A177FD88@busybox.osuosl.org>
+Date: Sun, 27 Nov 2016 22:51:45 +0100
+Subject: [Buildroot] [git commit] Makefile: drop redundant shell call when
+	deriving BASE_DIR
+Message-ID: <20161201222140.C98868026C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40cbdf6de070db116e44a52b4a232d24ce850186
+commit: https://git.buildroot.net/buildroot/commit/?id=6caa76db22ad952f3fe6329da39defed060d8980
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-MoarVM's Configure.pl script uses pkgconfig to find libraries and
-headers, but it uses the one installed in the host machine which is
-wrong and can lead to errors of unsafe include paths.
+Commit 173135df5b69dfd5ae6fe6cf2de8833c6f74c143 ("core: re-enter make if
+$(CURDIR) or $(O) are not canonical paths") introduced the CANONICAL_O
+variable, defined as:
 
-Instead, make it depend on the host-pkgconf package and specify the path
-to our pkgconfig binary by using the --pkgconfig configure option.
+CANONICAL_O := $(shell mkdir -p $(O) >/dev/null 2>&1)$(realpath $(O))
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+This duplicates the definition of BASE_DIR, by different means:
+
+BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
+
+So one of these shell calls is redundant. CANONICAL_O is defined first,
+so this commit replaces the BASE_DIR derivation with $(CANONICAL_O).
+
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/moarvm/moarvm.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index 644432e..80bd19c 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
-@@ -10,7 +10,7 @@ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
- MOARVM_LICENSE_FILES = Artistic2.txt
- MOARVM_INSTALL_STAGING = YES
--MOARVM_DEPENDENCIES = host-luajit libuv libtommath libatomic_ops
-+MOARVM_DEPENDENCIES = host-luajit host-pkgconf libuv libtommath libatomic_ops
+diff --git a/Makefile b/Makefile
+index 4f6269f..55d928d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -174,10 +174,10 @@ endif
  
- MOARVM_CONF_OPTS = \
- 	--build=$(GNU_HOST_NAME) \
-@@ -19,6 +19,7 @@ MOARVM_CONF_OPTS = \
- 	--cc="$(TARGET_CC)" \
- 	--ld="$(TARGET_CC)" \
- 	--prefix="/usr" \
-+	--pkgconfig=$(PKG_CONFIG_HOST_BINARY) \
- 	--lua=$(HOST_DIR)/usr/bin/luajit \
- 	--has-libuv \
- 	--has-libtommath \
+ # bash prints the name of the directory on 'cd <dir>' if CDPATH is
+ # set, so unset it here to not cause problems. Notice that the export
+-# line doesn't affect the environment of $(shell ..) calls, so
+-# explictly throw away any output from 'cd' here.
++# line doesn't affect the environment of $(shell ..) calls.
+ export CDPATH :=
+-BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
++
++BASE_DIR := $(CANONICAL_O)
+ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+ 
+ 
