@@ -1,71 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Nov 2016 22:59:10 +0100
-Subject: [Buildroot] [git commit] toolchain-external: support gcc < 4.3
-Message-ID: <20161201222139.E1EDC7FD88@busybox.osuosl.org>
+Date: Sun, 27 Nov 2016 22:31:29 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-ati: bump
+	version to 7.8.0
+Message-ID: <20161201222140.8E161801E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=006ba68a3020477e8358eb0253acaf15220b84b5
+commit: https://git.buildroot.net/buildroot/commit/?id=a68c52366fa6becd6d238e46a6d85854bfbfca7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We currently support gcc as old as 4.3. However, Buildroot works
-perfectly well with even older gcc versions (tested with 4.1). So we
-can add an option BR2_TOOLCHAIN_EXTERNAL_GCC_OLD to support that. The
-help text of this option is written with plenty of discouragement.
-
-We use _OLD and not something like _PRE_4_3, because at some point we
-will likely remove the 4.3 option and what would then require a name
-change.
-
-We don't set any _AT_LEAST option in this case because it's no use -
-there is no lower bound on the version in this case. We therefore leave
-BR2_TOOLCHAIN_GCC_AT_LEAST empty (the implicit default). When it is
-empty, we don't do a version check at all in check_gcc_version
-(previously we errored out when it was empty).
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk                                          |  3 +--
- .../toolchain-external-custom/Config.in.options               | 11 +++++++++++
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash | 4 ++--
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 3991bc1..72e7292 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -145,8 +145,7 @@ check_kernel_headers_version = \
- check_gcc_version = \
- 	expected_version="$(strip $2)" ; \
- 	if [ -z "$${expected_version}" ]; then \
--		printf "Internal error, gcc version unknown (no GCC_AT_LEAST_X_Y selected)\n"; \
--		exit 1 ; \
-+		exit 0 ; \
- 	fi; \
- 	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
- 	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index cdc2555..5ff2491 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -59,6 +59,17 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
- 	bool "4.3.x"
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+index 469e057..fe5ae0e 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-September/002707.html
+-sha256 00a58588db62ee309095c5c5920bbd248d965e8627f88affe68a73b18865078d  xf86-video-ati-7.7.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-November/002738.html
++sha256 401f5de772928f3dc4ce43a885adb0a47a2f61aa4a9e45d2ab3d184136a9d6fa  xf86-video-ati-7.8.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index 02a457b..ea70167 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
-+	bool "older"
-+	help
-+	  Use this option if your GCC version is older than any of the
-+	  above.
-+
-+	  Note that the Buildroot community doesn't do any testing with
-+	  such old toolchains. Some packages may fail to build in
-+	  surprising ways, or the generated root filesystem may not
-+	  work at all. Use such old toolchains at your own risk.
-+
- endchoice
- 
- choice
+-XDRIVER_XF86_VIDEO_ATI_VERSION = 7.7.1
++XDRIVER_XF86_VIDEO_ATI_VERSION = 7.8.0
+ XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
