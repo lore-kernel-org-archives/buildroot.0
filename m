@@ -1,185 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:18:56 +0100
-Subject: [Buildroot] [git commit] toolchain-external-codesourcery-niosII:
-	new package
-Message-ID: <20161201222138.B0DB27FB56@busybox.osuosl.org>
+Date: Sun, 27 Nov 2016 22:33:22 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-sis: Add
+	patch for ABI 23 support (xserver_xorg-server 1.19+)
+Message-ID: <20161201222140.BE4238026C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f61661bc51b266c10482bcf35af61e2814ce693e
+commit: https://git.buildroot.net/buildroot/commit/?id=c2a79469b28f77d65bf44ca180493f26497f0bf5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a new package for the Sourcery CodeBench external
-toolchain for the nios-II architecture.
+Re-numbered patches as well.
 
-The legacy implementation is removed.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 25 ++++++----------------
- .../Config.in                                      | 17 +++++++++++++++
- .../Config.in.options                              |  9 ++++++++
- .../toolchain-external-codesourcery-niosII.hash    |  3 +++
- .../toolchain-external-codesourcery-niosII.mk      | 13 +++++++++++
- .../toolchain-external/toolchain-external.hash     |  3 ---
- toolchain/toolchain-external/toolchain-external.mk |  3 ---
- 7 files changed, 48 insertions(+), 25 deletions(-)
+ .../x11r7/xdriver_xf86-video-sis/0002-abi23.patch  | 33 ++++++++++++++++++++++
+ .../{0007-xi.patch => 0003-xi.patch}               |  0
+ 2 files changed, 33 insertions(+)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index d2e1d3b..e628279 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -30,6 +30,9 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config
- source "toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in"
- source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in"
- 
-+# NIOSII
-+source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in"
-+
- config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
- 	bool "Arago ARMv7 2011.09"
- 	depends on BR2_arm
-@@ -75,24 +78,6 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
- 
- 	  This toolchain uses software-floating point.
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
--	bool "Sourcery CodeBench Nios-II 2016.05"
--	depends on BR2_nios2
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on !BR2_STATIC_LIBS
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_SSP
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
--	select BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 # based-on binutils-2.25.1
--	help
--	  Sourcery CodeBench toolchain for the Nios-II architecture,
--	  from Mentor Graphics. It uses gcc 5.3, binutils 2.25.51,
--	  glibc 2.23, gdb 7.10.50 and kernel headers 4.4.
--
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
- 	bool "Sourcery CodeBench SH 2012.09"
- 	depends on BR2_sh4a || BR2_sh4aeb
-@@ -280,7 +265,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arceb-linux"		 if BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC && BR2_arceb
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
--	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
- 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
- 	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
-@@ -343,6 +327,9 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-mips/Config
- source "toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in.options"
- source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in.options"
- 
-+# NIOSII
-+source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options"
-+
- if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
- 
- choice
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
+diff --git a/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch b/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
 new file mode 100644
-index 0000000..54eed8c
+index 0000000..109f745
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
-+	bool "Sourcery CodeBench Nios-II 2016.05"
-+	depends on BR2_nios2
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+	select BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 # based-on binutils-2.25.1
-+	help
-+	  Sourcery CodeBench toolchain for the Nios-II architecture,
-+	  from Mentor Graphics. It uses gcc 5.3, binutils 2.25.51,
-+	  glibc 2.23, gdb 7.10.50 and kernel headers 4.4.
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options
-new file mode 100644
-index 0000000..07cc5ed
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options
-@@ -0,0 +1,9 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
++++ b/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
+@@ -0,0 +1,33 @@
++From 96fee560cd8bf7bf27048ce5fe67b7af6838c8d0 Mon Sep 17 00:00:00 2001
++From: Adam Jackson <ajax@redhat.com>
++Date: Tue, 19 Jul 2016 10:03:56 -0400
++Subject: Adapt Block/WakeupHandler signature for ABI 23
 +
-+config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+	default "nios2-linux-gnu"
++Signed-off-by: Adam Jackson <ajax@redhat.com>
++---
++Downloaded from
++https://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=96fee560cd8bf7bf27048ce5fe67b7af6838c8d0
 +
-+config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-codesourcery-niosII"
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.hash
-new file mode 100644
-index 0000000..a60c49f
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 750639290744adda931c81fa2cd2ffc2bde972488047824dcfaa53c42562191d  sourceryg++-2016.05-10-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 3dc1c2685c0472059547dd7becb5dc991541b8176af39fa7aa5f601d38b9879a  sourceryg++-2016.05-10-nios2-linux-gnu.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
-new file mode 100644
-index 0000000..3eb6679
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# toolchain-external-codesourcery-niosII
-+#
-+################################################################################
++diff --git a/src/compat-api.h b/src/compat-api.h
++index 6bc946f..89976e4 100644
++--- a/src/compat-api.h
+++++ b/src/compat-api.h
++@@ -75,8 +75,13 @@
++ 
++ #define SCREEN_INIT_ARGS_DECL ScreenPtr pScreen, int argc, char **argv
++ 
+++#if ABI_VIDEODRV_VERSION >= SET_ABI_VERSION(23, 0)
+++#define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout
+++#define BLOCKHANDLER_ARGS arg, pTimeout
+++#else
++ #define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout, pointer pReadmask
++ #define BLOCKHANDLER_ARGS arg, pTimeout, pReadmask
+++#endif
++ 
++ #define CLOSE_SCREEN_ARGS_DECL ScreenPtr pScreen
++ #define CLOSE_SCREEN_ARGS pScreen
++-- 
++cgit v0.10.2
 +
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION = 2016.05-10
-+
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_SITE = http://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_SOURCE = sourceryg++-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_ACTUAL_SOURCE_TARBALL = sourceryg++-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
-+
-+$(eval $(toolchain-external-package))
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 83859e7..5c98fe3 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -2,9 +2,6 @@
- # Next hashes are all locally computed
- 
- # Mentor's Sourcery CodeBench Lite toolchains
--# NiosII
--sha256 750639290744adda931c81fa2cd2ffc2bde972488047824dcfaa53c42562191d  sourceryg++-2016.05-10-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
--sha256 3dc1c2685c0472059547dd7becb5dc991541b8176af39fa7aa5f601d38b9879a  sourceryg++-2016.05-10-nios2-linux-gnu.src.tar.bz2
- # SuperH
- sha256 59d6766fde244931aa52db01433d5acd051998762a931121c5fc109536a1a802  renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
- sha256 e2e58c10e52395d5d35157e35f85233f713c6f9223a652dfc56194cfd2eed004  renesas-2012.09-61-sh-linux-gnu.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 31a53d2..fde0564 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -56,9 +56,6 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
- 	rm -rf $(@D)/arago-2011.09/
- endef
- TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII),y)
--TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu
--TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2016.05-10-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH),y)
- TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-sis/0007-xi.patch b/package/x11r7/xdriver_xf86-video-sis/0003-xi.patch
+similarity index 100%
+rename from package/x11r7/xdriver_xf86-video-sis/0007-xi.patch
+rename to package/x11r7/xdriver_xf86-video-sis/0003-xi.patch
