@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 23:16:46 +0100
-Subject: [Buildroot] [PATCH 1/1] Makefile: drop redundant shell call
- when deriving BASE_DIR
-In-Reply-To: <1479868291-2863-1-git-send-email-danomimanchego123@gmail.com>
-References: <1479868291-2863-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20161127231646.4d998029@free-electrons.com>
+Date: Sun, 27 Nov 2016 23:19:18 +0100
+Subject: [Buildroot] [PATCH v2] package/pseudo: update version
+In-Reply-To: <20161127011202.6938-1-gael.portay@savoirfairelinux.com>
+References: <20161127011202.6938-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20161127231918.6a07ab13@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +12,41 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 22 Nov 2016 21:31:31 -0500, Danomi Manchego wrote:
-> Commit 173135df5b69dfd5ae6fe6cf2de8833c6f74c143 ("core: re-enter make if
-> $(CURDIR) or $(O) are not canonical paths") introduced the CANONICAL_O
-> variable, defined as:
+On Sat, 26 Nov 2016 20:12:02 -0500, Ga?l PORTAY wrote:
+> Brings in fix about shutdown synchronization with the server.
 > 
-> CANONICAL_O := $(shell mkdir -p $(O) >/dev/null 2>&1)$(realpath $(O))
+> See commit message:
+>     If you're running pseudo in docker, a script that creates a pseudo
+>     daemon can exit, causing docker to kill pseudo before it's done writing
+>     the database.
 > 
-> This duplicates the definition of BASE_DIR, by different means:
+>     Since the client sending the shutdown request doesn't have its socket
+>     closed explicitly by the server, we can just read from the socket in
+>     the client to create a delay until the actual exit, which can take
+>     a while if there's an in-memory DB.
 > 
-> BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
+> Furthermore, the patch add the -S argument that tells the server to
+> shutdown and waits for its completion.
 > 
-> So one of these shell calls is redundant. CANONICAL_O is defined first,
-> so this commit replaces the BASE_DIR derivation with $(CANONICAL_O).
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> ---
->  Makefile | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 
-Applied to next, thanks.
+Now that we no longer use pseudo, and have gotten back to fakeroot
+instead, we don't need to apply this patch to the master branch. But of
+course, it doesn't apply to the next branch, because this branch
+doesn't have all the previous updates to the pseudo package.
+
+Generally speaking, pseudo is now an "orphan" host package, which we
+generally don't like in Buildroot, since it means it is never tested.
+What should we do about it? Remove it until it gets used again in the
+future?
+
+I've added Arnout, Yann and Peter in Cc so we can have a discussion
+about this.
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
