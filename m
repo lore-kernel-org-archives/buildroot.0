@@ -1,57 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 23:21:53 +0100
-Subject: [Buildroot] [git commit] Makefile: fix ignored trace at
-	target-finalize
-Message-ID: <20161201222139.7460F81DF4@busybox.osuosl.org>
+Date: Sun, 27 Nov 2016 16:30:52 +0100
+Subject: [Buildroot] [git commit] efivar: bump to version 30
+Message-ID: <20161201222140.2DBC38026C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b7013c4ae3c4b183303204710a4bb3d717a4558
+commit: https://git.buildroot.net/buildroot/commit/?id=7497818be7e4fcab7f18edcc5aa857ca93a7d201
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Make may throw an error (but ignored) trace when cleaning up the
-rootfs.
+Use newest release.
 
-The target-finalize rule intends to remove the folder
-`$(TARGET_DIR)/usr/share' but this directory may still contain items
-(such as the `udhcpc' helper script) and causes the rmdir to fail.
-
-The stderr output is redirected to /dev/null but it returns and error
-which is escaped by the leading `-'; but make reports an ignored-error.
-
-See the log below:
-$ make
-(...)
-rm -rf (...)/target/usr/share/gtk-doc
-rmdir (...)/target/usr/share
-rmdir: failed to remove '(...)/target/usr/share': Directory not empty
-make[1]: [Makefile:650: target-finalize] Error 1 (ignored)
-find /(...)/target -type f \( -perm /111 -o -name '*.so*' \) -not \( -name 'libpthread*.so*' -o -name 'ld-*.so*' -o -name '*.ko' \) -print0 | xargs -0 (...)/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-strip --remove-section=.comment --remove-section=.note 2>/dev/null || true
-
-This patch apply the same rule at the instruction immediately after:
-* redirecting stderr to /dev/null (already done) and
-* executing true if the `rmdir' instruction fails.
-
-Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...fs-to-avoid-the-multiple-definitions-bug-.patch | 29 ++++++++++++++++++++++
+ package/efivar/efivar.hash                         |  2 +-
+ package/efivar/efivar.mk                           |  2 +-
+ 3 files changed, 31 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 7c582e5..4f6269f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -668,7 +668,7 @@ endif
- 	rm -rf $(TARGET_DIR)/usr/info $(TARGET_DIR)/usr/share/info
- 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
- 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
--	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
-+	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || true
- 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
+diff --git a/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch b/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch
+new file mode 100644
+index 0000000..2bc3ff2
+--- /dev/null
++++ b/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch
+@@ -0,0 +1,29 @@
++From 314eb67b239e60c2ed3700e2baf9cd0e590465f3 Mon Sep 17 00:00:00 2001
++From: Peter Jones <pjones@redhat.com>
++Date: Thu, 27 Oct 2016 09:19:18 -0400
++Subject: [PATCH] Use -z muldefs to avoid the multiple definitions bug
++ without -flto
++
++This fixes github issue #64
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
++---
++ Make.defaults | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/Make.defaults b/Make.defaults
++index aa974d9..c9d599f 100644
++--- a/Make.defaults
+++++ b/Make.defaults
++@@ -32,6 +32,7 @@ cflags	= $(CFLAGS) -I${TOPDIR}/src/include/efivar/ \
++ clang_ccldflags =
++ gcc_ccldflags =
++ ccldflags = $(cflags) -L. $(CCLDFLAGS) $(LDFLAGS) \
+++	-Wl,-z,muldefs \
++ 	$(if $(findstring clang,$(CCLD)),$(clang_ccldflags),) \
++ 	$(if $(findstring gcc,$(CCLD)),$(gcc_ccldflags),) \
++ 	$(call pkg-config-ccldflags)
++-- 
++2.10.2
++
+diff --git a/package/efivar/efivar.hash b/package/efivar/efivar.hash
+index 3671bbc..e337b96 100644
+--- a/package/efivar/efivar.hash
++++ b/package/efivar/efivar.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256 7fed0b31fe796d7dfef40cccb97b8bb0b806f16e568074ad2d456be30e195f5e efivar-28.tar.gz
++sha256 20709c76311f8eb8be92977b7ac008ce62501fa9f7fe885a784321540fc352f9 efivar-30.tar.gz
+diff --git a/package/efivar/efivar.mk b/package/efivar/efivar.mk
+index cff3ac1..913322e 100644
+--- a/package/efivar/efivar.mk
++++ b/package/efivar/efivar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
+-EFIVAR_VERSION = 28
++EFIVAR_VERSION = 30
+ EFIVAR_SITE = $(call github,rhinstaller,efivar,$(EFIVAR_VERSION))
+ EFIVAR_LICENSE = LGPLv2.1
+ EFIVAR_LICENSE_FILES = COPYING
