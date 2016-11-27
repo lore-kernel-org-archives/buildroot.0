@@ -1,68 +1,105 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 16:51:27 +0100
-Subject: [Buildroot] [PATCH v1 3/3] efibootmrg: Allow build with uClibc
-In-Reply-To: <20161127143204.116740-4-andriy.shevchenko@linux.intel.com>
-References: <20161127143204.116740-1-andriy.shevchenko@linux.intel.com>
- <20161127143204.116740-4-andriy.shevchenko@linux.intel.com>
-Message-ID: <20161127165127.1bfaa10c@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 27 Nov 2016 16:57:04 +0100
+Subject: [Buildroot] [PATCH v2] gcc: add patch to support musl on ppc
+Message-ID: <20161127155704.GA10600@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Tested with a boot in Qemu (g3beige).
 
-On Sun, 27 Nov 2016 16:32:04 +0200, Andy Shevchenko wrote:
-> Details at https://github.com/rhinstaller/efibootmgr/issues/61.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+v1 -> v2: 
+  * remove my temporary foo file while investigating what patches
+    are required, requested by Thomas Petazzoni
+---
+ package/gcc/5.4.0/911-ppc-musl-support.patch | 75 ++++++++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
+ create mode 100644 package/gcc/5.4.0/911-ppc-musl-support.patch
 
-Applied to next, after fixing a few issues, see below.
-
-> diff --git a/package/efibootmgr/0001-Allow-build-with-uClibc.patch b/package/efibootmgr/0001-Allow-build-with-uClibc.patch
-> new file mode 100644
-> index 0000000..1e3f9ec
-> --- /dev/null
-> +++ b/package/efibootmgr/0001-Allow-build-with-uClibc.patch
-> @@ -0,0 +1,38 @@
-> +From bbfcc60497c326576bb23cb01d90115ef3cf6947 Mon Sep 17 00:00:00 2001
-> +From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> +Date: Fri, 25 Nov 2016 20:26:52 +0200
-> +Subject: [PATCH 1/1] Allow build with uClibc
-
-[PATCH] instead of [PATCH 1/1]
-
-Also, the subject "Allow build with uClibc" is not quite correct, it's
-more "Remove unneeded header includes".
-
-> diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
-> index 988bf6d..8860e5d 100644
-> --- a/package/efibootmgr/Config.in
-> +++ b/package/efibootmgr/Config.in
-> @@ -1,10 +1,10 @@
->  config BR2_PACKAGE_EFIBOOTMGR
->  	bool "efibootmgr"
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
-> -	depends on BR2_TOOLCHAIN_USES_GLIBC # efivar
-
-Wrong, efivar still depends on !BR2_TOOLCHAIN_USES_MUSL
-
->  comment "efibootmgr requires a glibc toolchain w/ headers >= 3.12, gcc >= 4.9"
-
-You forgot to update this comment, so I did it.
-
->  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
-> -		!BR2_TOOLCHAIN_USES_GLIBC || \\
-
-Here, I changed to:
-
-		BR2_TOOLCHAIN_USES_MUSL
-
-Thanks!
-
-Thomas
+diff --git a/package/gcc/5.4.0/911-ppc-musl-support.patch b/package/gcc/5.4.0/911-ppc-musl-support.patch
+new file mode 100644
+index 0000000..f4905a4
+--- /dev/null
++++ b/package/gcc/5.4.0/911-ppc-musl-support.patch
+@@ -0,0 +1,75 @@
++Add support for musl on ppc32
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-5.4.0.orig/gcc/config/rs6000/sysv4.h gcc-5.4.0/gcc/config/rs6000/sysv4.h
++--- gcc-5.4.0.orig/gcc/config/rs6000/sysv4.h	2015-09-24 15:46:45.000000000 +0200
+++++ gcc-5.4.0/gcc/config/rs6000/sysv4.h	2016-11-27 13:12:33.226953738 +0100
++@@ -537,6 +537,9 @@
++ #ifndef CC1_SECURE_PLT_DEFAULT_SPEC
++ #define CC1_SECURE_PLT_DEFAULT_SPEC ""
++ #endif
+++#ifndef LINK_SECURE_PLT_DEFAULT_SPEC
+++#define LINK_SECURE_PLT_DEFAULT_SPEC ""
+++#endif
++ 
++ /* Pass -G xxx to the compiler.  */
++ #undef CC1_SPEC
++@@ -757,17 +760,23 @@
++ 
++ #define LINK_START_LINUX_SPEC ""
++ 
+++#define MUSL_DYNAMIC_LINKER_E ENDIAN_SELECT("","le","")
+++
++ #define GLIBC_DYNAMIC_LINKER "/lib/ld.so.1"
++ #define UCLIBC_DYNAMIC_LINKER "/lib/ld-uClibc.so.0"
+++#define MUSL_DYNAMIC_LINKER \
+++  "/lib/ld-musl-powerpc" MUSL_DYNAMIC_LINKER_E "%{msoft-float:-sf}.so.1"
++ #if DEFAULT_LIBC == LIBC_UCLIBC
++-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{mglibc:" G ";:" U "}"
+++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{mmusl:" M ";:" U "}}"
+++#elif DEFAULT_LIBC == LIBC_MUSL
+++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{muclibc:" U ";:" M "}}"
++ #elif !defined (DEFAULT_LIBC) || DEFAULT_LIBC == LIBC_GLIBC
++-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{muclibc:" U ";:" G "}"
+++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{muclibc:" U ";:%{mmusl:" M ";:" G "}}"
++ #else
++ #error "Unsupported DEFAULT_LIBC"
++ #endif
++ #define GNU_USER_DYNAMIC_LINKER \
++-  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER)
+++  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER, MUSL_DYNAMIC_LINKER)
++ 
++ #define LINK_OS_LINUX_SPEC "-m elf32ppclinux %{!shared: %{!static: \
++   %{rdynamic:-export-dynamic} \
++@@ -889,6 +898,7 @@
++   { "link_os_openbsd",		LINK_OS_OPENBSD_SPEC },			\
++   { "link_os_default",		LINK_OS_DEFAULT_SPEC },			\
++   { "cc1_secure_plt_default",	CC1_SECURE_PLT_DEFAULT_SPEC },		\
+++  { "link_secure_plt_default",	LINK_SECURE_PLT_DEFAULT_SPEC },		\
++   { "cpp_os_ads",		CPP_OS_ADS_SPEC },			\
++   { "cpp_os_yellowknife",	CPP_OS_YELLOWKNIFE_SPEC },		\
++   { "cpp_os_mvme",		CPP_OS_MVME_SPEC },			\
++diff -Nur gcc-5.4.0.orig/gcc/config/rs6000/sysv4le.h gcc-5.4.0/gcc/config/rs6000/sysv4le.h
++--- gcc-5.4.0.orig/gcc/config/rs6000/sysv4le.h	2015-09-24 15:46:45.000000000 +0200
+++++ gcc-5.4.0/gcc/config/rs6000/sysv4le.h	2016-11-27 13:12:33.226953738 +0100
++@@ -31,3 +31,5 @@
++ /* Little-endian PowerPC64 Linux uses the ELF v2 ABI by default.  */
++ #define LINUX64_DEFAULT_ABI_ELFv2
++ 
+++#undef MUSL_DYNAMIC_LINKER_E
+++#define MUSL_DYNAMIC_LINKER_E ENDIAN_SELECT("","le","le")
++diff -Nur gcc-5.4.0.orig/gcc/config.gcc gcc-5.4.0/gcc/config.gcc
++--- gcc-5.4.0.orig/gcc/config.gcc	2015-09-10 16:17:53.000000000 +0200
+++++ gcc-5.4.0/gcc/config.gcc	2016-11-27 13:14:17.149638148 +0100
++@@ -2413,6 +2413,10 @@
++ 	    powerpc*-*-linux*paired*)
++ 		tm_file="${tm_file} rs6000/750cl.h" ;;
++ 	esac
+++	case ${target} in
+++	    powerpc*-*-linux*-musl*)
+++		enable_secureplt=yes ;;
+++	esac
++ 	if test x${enable_secureplt} = xyes; then
++ 		tm_file="rs6000/secureplt.h ${tm_file}"
++ 	fi
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.1.4
