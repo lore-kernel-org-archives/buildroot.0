@@ -1,124 +1,65 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 27 Nov 2016 16:39:12 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 27 Nov 2016 16:47:21 +0100
 Subject: [Buildroot] [PATCH] gcc: add patch to support musl on ppc
-Message-ID: <20161127153912.GA28195@waldemar-brodkorb.de>
+In-Reply-To: <20161127153912.GA28195@waldemar-brodkorb.de>
+References: <20161127153912.GA28195@waldemar-brodkorb.de>
+Message-ID: <20161127164721.6f9b3b86@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested with a boot in Qemu (g3beige).
+Hello,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-it is not new support, as buildroot allows to compile musl+ppc for
-gcc5, so this is for master.
----
- package/gcc/5.4.0/911-ppc-musl-support.patch | 95 ++++++++++++++++++++++++++++
- 1 file changed, 95 insertions(+)
- create mode 100644 package/gcc/5.4.0/911-ppc-musl-support.patch
+On Sun, 27 Nov 2016 16:39:12 +0100, Waldemar Brodkorb wrote:
 
-diff --git a/package/gcc/5.4.0/911-ppc-musl-support.patch b/package/gcc/5.4.0/911-ppc-musl-support.patch
-new file mode 100644
-index 0000000..8ead479
---- /dev/null
-+++ b/package/gcc/5.4.0/911-ppc-musl-support.patch
-@@ -0,0 +1,95 @@
-+Add support for musl on ppc32
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur gcc-5.4.0.orig/foo gcc-5.4.0/foo
-+--- gcc-5.4.0.orig/foo	1970-01-01 01:00:00.000000000 +0100
-++++ gcc-5.4.0/foo	2016-11-27 13:14:17.473658991 +0100
-+@@ -0,0 +1,16 @@
-++diff -Nur gcc-5.4.0-adk/gcc/config.gcc gcc-5.4.0-br/gcc/config.gcc
-++--- gcc-5.4.0-adk/gcc/config.gcc        2016-11-27 06:58:59.316076489 +0100
-+++++ gcc-5.4.0-br/gcc/config.gcc 2016-11-27 07:01:08.780403758 +0100
-++@@ -2416,10 +2416,6 @@
-++            powerpc*-*-linux*paired*)
-++                tm_file="${tm_file} rs6000/750cl.h" ;;
-++        esac
-++-        case ${target} in
-++-            *-linux*-musl*)
-++-                enable_secureplt=yes ;;
-++-        esac
-++        if test x${enable_secureplt} = xyes; then
-++                tm_file="rs6000/secureplt.h ${tm_file}"
-++        fi
-++
-++
-+diff -Nur gcc-5.4.0.orig/gcc/config/rs6000/sysv4.h gcc-5.4.0/gcc/config/rs6000/sysv4.h
-+--- gcc-5.4.0.orig/gcc/config/rs6000/sysv4.h	2015-09-24 15:46:45.000000000 +0200
-++++ gcc-5.4.0/gcc/config/rs6000/sysv4.h	2016-11-27 13:12:33.226953738 +0100
-+@@ -537,6 +537,9 @@
-+ #ifndef CC1_SECURE_PLT_DEFAULT_SPEC
-+ #define CC1_SECURE_PLT_DEFAULT_SPEC ""
-+ #endif
-++#ifndef LINK_SECURE_PLT_DEFAULT_SPEC
-++#define LINK_SECURE_PLT_DEFAULT_SPEC ""
-++#endif
-+ 
-+ /* Pass -G xxx to the compiler.  */
-+ #undef CC1_SPEC
-+@@ -757,17 +760,23 @@
-+ 
-+ #define LINK_START_LINUX_SPEC ""
-+ 
-++#define MUSL_DYNAMIC_LINKER_E ENDIAN_SELECT("","le","")
-++
-+ #define GLIBC_DYNAMIC_LINKER "/lib/ld.so.1"
-+ #define UCLIBC_DYNAMIC_LINKER "/lib/ld-uClibc.so.0"
-++#define MUSL_DYNAMIC_LINKER \
-++  "/lib/ld-musl-powerpc" MUSL_DYNAMIC_LINKER_E "%{msoft-float:-sf}.so.1"
-+ #if DEFAULT_LIBC == LIBC_UCLIBC
-+-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{mglibc:" G ";:" U "}"
-++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{mmusl:" M ";:" U "}}"
-++#elif DEFAULT_LIBC == LIBC_MUSL
-++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{muclibc:" U ";:" M "}}"
-+ #elif !defined (DEFAULT_LIBC) || DEFAULT_LIBC == LIBC_GLIBC
-+-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{muclibc:" U ";:" G "}"
-++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{muclibc:" U ";:%{mmusl:" M ";:" G "}}"
-+ #else
-+ #error "Unsupported DEFAULT_LIBC"
-+ #endif
-+ #define GNU_USER_DYNAMIC_LINKER \
-+-  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER)
-++  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER, MUSL_DYNAMIC_LINKER)
-+ 
-+ #define LINK_OS_LINUX_SPEC "-m elf32ppclinux %{!shared: %{!static: \
-+   %{rdynamic:-export-dynamic} \
-+@@ -889,6 +898,7 @@
-+   { "link_os_openbsd",		LINK_OS_OPENBSD_SPEC },			\
-+   { "link_os_default",		LINK_OS_DEFAULT_SPEC },			\
-+   { "cc1_secure_plt_default",	CC1_SECURE_PLT_DEFAULT_SPEC },		\
-++  { "link_secure_plt_default",	LINK_SECURE_PLT_DEFAULT_SPEC },		\
-+   { "cpp_os_ads",		CPP_OS_ADS_SPEC },			\
-+   { "cpp_os_yellowknife",	CPP_OS_YELLOWKNIFE_SPEC },		\
-+   { "cpp_os_mvme",		CPP_OS_MVME_SPEC },			\
-+diff -Nur gcc-5.4.0.orig/gcc/config/rs6000/sysv4le.h gcc-5.4.0/gcc/config/rs6000/sysv4le.h
-+--- gcc-5.4.0.orig/gcc/config/rs6000/sysv4le.h	2015-09-24 15:46:45.000000000 +0200
-++++ gcc-5.4.0/gcc/config/rs6000/sysv4le.h	2016-11-27 13:12:33.226953738 +0100
-+@@ -31,3 +31,5 @@
-+ /* Little-endian PowerPC64 Linux uses the ELF v2 ABI by default.  */
-+ #define LINUX64_DEFAULT_ABI_ELFv2
-+ 
-++#undef MUSL_DYNAMIC_LINKER_E
-++#define MUSL_DYNAMIC_LINKER_E ENDIAN_SELECT("","le","le")
-+diff -Nur gcc-5.4.0.orig/gcc/config.gcc gcc-5.4.0/gcc/config.gcc
-+--- gcc-5.4.0.orig/gcc/config.gcc	2015-09-10 16:17:53.000000000 +0200
-++++ gcc-5.4.0/gcc/config.gcc	2016-11-27 13:14:17.149638148 +0100
-+@@ -2413,6 +2413,10 @@
-+ 	    powerpc*-*-linux*paired*)
-+ 		tm_file="${tm_file} rs6000/750cl.h" ;;
-+ 	esac
-++	case ${target} in
-++	    powerpc*-*-linux*-musl*)
-++		enable_secureplt=yes ;;
-++	esac
-+ 	if test x${enable_secureplt} = xyes; then
-+ 		tm_file="rs6000/secureplt.h ${tm_file}"
-+ 	fi
+> +diff -Nur gcc-5.4.0.orig/foo gcc-5.4.0/foo
+> +--- gcc-5.4.0.orig/foo	1970-01-01 01:00:00.000000000 +0100
+> ++++ gcc-5.4.0/foo	2016-11-27 13:14:17.473658991 +0100
+> +@@ -0,0 +1,16 @@
+> ++diff -Nur gcc-5.4.0-adk/gcc/config.gcc gcc-5.4.0-br/gcc/config.gcc
+> ++--- gcc-5.4.0-adk/gcc/config.gcc        2016-11-27 06:58:59.316076489 +0100
+> +++++ gcc-5.4.0-br/gcc/config.gcc 2016-11-27 07:01:08.780403758 +0100
+> ++@@ -2416,10 +2416,6 @@
+> ++            powerpc*-*-linux*paired*)
+> ++                tm_file="${tm_file} rs6000/750cl.h" ;;
+> ++        esac
+> ++-        case ${target} in
+> ++-            *-linux*-musl*)
+> ++-                enable_secureplt=yes ;;
+> ++-        esac
+> ++        if test x${enable_secureplt} = xyes; then
+> ++                tm_file="rs6000/secureplt.h ${tm_file}"
+> ++        fi
+> ++
+> ++
+
+This chunk seems to be exactly the opposite of:
+
+> +diff -Nur gcc-5.4.0.orig/gcc/config.gcc gcc-5.4.0/gcc/config.gcc
+> +--- gcc-5.4.0.orig/gcc/config.gcc	2015-09-10 16:17:53.000000000 +0200
+> ++++ gcc-5.4.0/gcc/config.gcc	2016-11-27 13:14:17.149638148 +0100
+> +@@ -2413,6 +2413,10 @@
+> + 	    powerpc*-*-linux*paired*)
+> + 		tm_file="${tm_file} rs6000/750cl.h" ;;
+> + 	esac
+> ++	case ${target} in
+> ++	    powerpc*-*-linux*-musl*)
+> ++		enable_secureplt=yes ;;
+> ++	esac
+> + 	if test x${enable_secureplt} = xyes; then
+> + 		tm_file="rs6000/secureplt.h ${tm_file}"
+> + 	fi
+
+This one.
+
+Am I missing something? It looks like a badly generated patch.
+
+Best regards,
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
