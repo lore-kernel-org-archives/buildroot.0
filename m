@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Nov 2016 22:02:08 +0100
-Subject: [Buildroot] [git commit] odroid-scripts: bump version to
-	cfd289b1d69136b8bfd725d90cd648da4654f2bd
-Message-ID: <20161201222139.9127B7FD88@busybox.osuosl.org>
+Date: Sun, 27 Nov 2016 22:31:06 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-joystick:
+	bump version to 1.6.3
+Message-ID: <20161201222140.5E6C37FD88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df6788e72be6e547cca067fa2da7d498ca3e4233
+commit: https://git.buildroot.net/buildroot/commit/?id=7ffd68ba9235ccde6da70debabe1a38136b897f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- add support for new monitor modes.
-- fix cvbs modes
-
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/odroid-scripts/odroid-scripts.hash | 2 +-
- package/odroid-scripts/odroid-scripts.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash      | 4 ++--
+ .../x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/odroid-scripts/odroid-scripts.hash b/package/odroid-scripts/odroid-scripts.hash
-index 8fd4b2c..e5a262d 100644
---- a/package/odroid-scripts/odroid-scripts.hash
-+++ b/package/odroid-scripts/odroid-scripts.hash
+diff --git a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash
+index 5fac77e..feec2d3 100644
+--- a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash
++++ b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.hash
 @@ -1,2 +1,2 @@
- #  Locally computed hash
--sha256 779e8beccf8c66d51e495a4cc0e6eccf72c295499a1ecdc0740aa4459de786a0 odroid-scripts-a252de04562dcf8d8a4918a544b45a9e3d46d2fb.tar.gz
-+sha256 9d61472ee6aed2d1a7b5afdcb91b823003c8524a242572f24f89d4e57323daf3  odroid-scripts-cfd289b1d69136b8bfd725d90cd648da4654f2bd.tar.gz
-diff --git a/package/odroid-scripts/odroid-scripts.mk b/package/odroid-scripts/odroid-scripts.mk
-index 72e7b95..fc1940d 100644
---- a/package/odroid-scripts/odroid-scripts.mk
-+++ b/package/odroid-scripts/odroid-scripts.mk
+-# From http://lists.x.org/archives/xorg-announce/2013-January/002136.html
+-sha1	61658b8d829fdaed6064c7c26232c3884d359187	xf86-input-joystick-1.6.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-November/002742.html
++sha256 9e7669ecf0f23b8e5dc39d5397cf28296f692aa4c0e4255f5e02816612c18eab  xf86-input-joystick-1.6.3.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
+index 76f2577..5bc2a5c 100644
+--- a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
++++ b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ODROID_SCRIPTS_VERSION = a252de04562dcf8d8a4918a544b45a9e3d46d2fb
-+ODROID_SCRIPTS_VERSION = cfd289b1d69136b8bfd725d90cd648da4654f2bd
- ODROID_SCRIPTS_SITE = $(call github,mdrjr,c2_bootini,$(ODROID_SCRIPTS_VERSION))
- ODROID_SCRIPTS_LICENSE = unclear
- 
+-XDRIVER_XF86_INPUT_JOYSTICK_VERSION = 1.6.2
++XDRIVER_XF86_INPUT_JOYSTICK_VERSION = 1.6.3
+ XDRIVER_XF86_INPUT_JOYSTICK_SOURCE = xf86-input-joystick-$(XDRIVER_XF86_INPUT_JOYSTICK_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_JOYSTICK_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_JOYSTICK_LICENSE = MIT
