@@ -1,48 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Nov 2016 20:31:37 +0100
-Subject: [Buildroot] [git commit] fs/ubifs: work around fakeroot / sed -i
-	issue on systems with SELinux enabled
-Message-ID: <20161127202537.5F8397FE2D@busybox.osuosl.org>
+Date: Sun, 27 Nov 2016 20:34:49 +0100
+Subject: [Buildroot] [git commit] Revert "package/pseudo: provide better
+	legacy handling for fakeroot"
+Message-ID: <20161127202537.6BEAC819CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01354e1a0f4333ffee40a20260a5689e3846560c
+commit: https://git.buildroot.net/buildroot/commit/?id=0f496d77db5f877edfb18746a706bb8061aa0500
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes #9386
-
-GNU sed -i misbehaves on systems with SELinux enabled, as it tries to copy
-to the SELinux security context (xattr) from the source file to to the new
-destination file, which fails under fakeroot and leaves the file with 000
-permissions, causing ubinize to fail when it cannot read to configuration
-file.
-
-So as a workaround, combine the install and tweak steps in a single
-sed with a redirect to the destination file instead.
+This reverts commit 499f28fc7ce6184c8017ccd229ffc973a520adde.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/ubifs/ubi.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/pseudo/pseudo-wrapper | 9 +--------
+ package/pseudo/pseudo.mk      | 2 +-
+ 2 files changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
-index cda4bf4..e488cb5 100644
---- a/fs/ubifs/ubi.mk
-+++ b/fs/ubifs/ubi.mk
-@@ -20,9 +20,11 @@ else
- UBINIZE_CONFIG_FILE_PATH = fs/ubifs/ubinize.cfg
- endif
+diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
+index 9c8dbdb..feaa7fc 100644
+--- a/package/pseudo/pseudo-wrapper
++++ b/package/pseudo/pseudo-wrapper
+@@ -1,12 +1,5 @@
+ #!/bin/sh
  
-+# don't use sed -i as it misbehaves on systems with SELinux enabled when this is
-+# executed through fakeroot (see #9386)
- define ROOTFS_UBI_CMD
--	$(INSTALL) -m 0644 $(UBINIZE_CONFIG_FILE_PATH) $(BUILD_DIR)/ubinize.cfg
--	$(SED) 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' $(BUILD_DIR)/ubinize.cfg
-+	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' \
-+		$(UBINIZE_CONFIG_FILE_PATH) > $(BUILD_DIR)/ubinize.cfg
- 	$(HOST_DIR)/usr/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg
- 	rm $(BUILD_DIR)/ubinize.cfg
+-if [ "${0##*/}" = "fakeroot" ]; then
+-    cat >&2 <<-_EOF_
+-	WARNING: fakeroot has been replaced with pseudo.
+-	WARNING: Update your script(s) to use pseudo or pseudo-wrapper instead.
+-	_EOF_
+-fi
+-
+ export PSEUDO_PREFIX="$(dirname "${0%/*}")"
+ export PSEUDO_OPTS="-t0"
+ if [ -n "${TARGET_DIR}" ]; then
+@@ -16,4 +9,4 @@ if [ -n "${BASE_DIR}" ]; then
+     export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
+ fi
+ 
+-exec "${0%/*}/pseudo" "${@}"
++exec "${0%-wrapper}" "${@}"
+diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
+index aa2a9c7..7701825 100644
+--- a/package/pseudo/pseudo.mk
++++ b/package/pseudo/pseudo.mk
+@@ -33,7 +33,7 @@ endef
+ HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_INSTALL_WRAPPER
+ 
+ define HOST_PSEUDO_FAKEROOT_SYMLINK
+-	ln -sf pseudo-wrapper $(HOST_DIR)/usr/bin/fakeroot
++	ln -sf pseudo $(HOST_DIR)/usr/bin/fakeroot
  endef
+ HOST_PSEUDO_POST_INSTALL_HOOKS += HOST_PSEUDO_FAKEROOT_SYMLINK
+ 
