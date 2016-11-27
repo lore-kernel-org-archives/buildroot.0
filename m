@@ -1,33 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Nov 2016 21:12:23 +0100
-Subject: [Buildroot] [git commit] Revert "fs: call the pseudo wrapper"
-Message-ID: <20161127202537.74F887FBF4@busybox.osuosl.org>
+Date: Sun, 27 Nov 2016 21:12:24 +0100
+Subject: [Buildroot] [git commit] Revert "package/fakeroot: remove"
+Message-ID: <20161127202537.956F9819CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b2f9b137ce14bbca01f18c3a4357bd3219a6b9f
+commit: https://git.buildroot.net/buildroot/commit/?id=907ea41c5298e6d086c49fb7507e1db036d3c4d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 74a3e75bb8208a8f3bb8426549fce1ea09b3be8a.
+This reverts commit 325cff36f74b07545389b81cee0a2acef55b487c.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/common.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/fakeroot/0001-hide-dlsym-error.patch | 34 ++++++++++++++++++++++++++++
+ package/fakeroot/fakeroot.hash               |  4 ++++
+ package/fakeroot/fakeroot.mk                 | 20 ++++++++++++++++
+ 3 files changed, 58 insertions(+)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 22f3de5..2dbef4d 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -97,7 +97,7 @@ endif
- 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
- 	chmod a+x $$(FAKEROOT_SCRIPT)
--	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/pseudo-wrapper -- $$(FAKEROOT_SCRIPT)
-+	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/pseudo -- $$(FAKEROOT_SCRIPT)
- 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
- 	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
- ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
+diff --git a/package/fakeroot/0001-hide-dlsym-error.patch b/package/fakeroot/0001-hide-dlsym-error.patch
+new file mode 100644
+index 0000000..2c61fab
+--- /dev/null
++++ b/package/fakeroot/0001-hide-dlsym-error.patch
+@@ -0,0 +1,34 @@
++Description: Hide error from dlsym()
++ dlsym(), starting in glibc 2.24 actually reports errors. In our case,
++ we try to get ACL functions which are not in the glibc. This causes
++ failures in test suites, so hide those messages for non-debugging
++ purposes for now. It also makes the build logs annoying to read.
++Author: Julian Andres Klode <juliank@ubuntu.com>
++Origin: vendor
++Bug-Debian: https://bugs.debian.org/830912
++Forwarded: no
++Last-Update: 2016-08-12
++
++Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
++
++--- a/libfakeroot.c
+++++ b/libfakeroot.c
++@@ -256,10 +256,16 @@ void load_library_symbols(void){
++  /* clear dlerror() just in case dlsym() legitimately returns NULL */
++     msg = dlerror();
++     *(next_wrap[i].doit)=dlsym(get_libc(), next_wrap[i].name);
+++
++     if ( (msg = dlerror()) != NULL){
++-      fprintf (stderr, "dlsym(%s): %s\n", next_wrap[i].name, msg);
++-/*    abort ();*/
+++#ifdef LIBFAKEROOT_DEBUGGING
+++      if (fakeroot_debug) {
+++        fprintf (stderr, "dlsym(%s): %s\n", next_wrap[i].name, msg);
+++/*      abort ();*/
+++      }
+++#endif
++     }
+++
++   }
++ }
++
+diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
+new file mode 100644
+index 0000000..f0d436e
+--- /dev/null
++++ b/package/fakeroot/fakeroot.hash
+@@ -0,0 +1,4 @@
++# From http://snapshot.debian.org/package/fakeroot/1.20.2-1/
++sha1	367040df07043edb630942b21939e493f3fad888	fakeroot_1.20.2.orig.tar.bz2
++# Calculated based on the hash above
++sha256	7c0a164d19db3efa9e802e0fc7cdfeff70ec6d26cdbdc4338c9c2823c5ea230c	fakeroot_1.20.2.orig.tar.bz2
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+new file mode 100644
+index 0000000..168cd13
+--- /dev/null
++++ b/package/fakeroot/fakeroot.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# fakeroot
++#
++################################################################################
++
++FAKEROOT_VERSION = 1.20.2
++FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
++FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141005T221953Z/pool/main/f/fakeroot
++# Force capabilities detection off
++# For now these are process capabilities (faked) rather than file
++# so they're of no real use
++HOST_FAKEROOT_CONF_ENV = \
++	ac_cv_header_sys_capability_h=no \
++	ac_cv_func_capset=no
++
++FAKEROOT_LICENSE = GPLv3+
++FAKEROOT_LICENSE_FILES = COPYING
++
++$(eval $(host-autotools-package))
