@@ -1,46 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:51:36 +0100
-Subject: [Buildroot] [PATCH] odroid-scripts: add support for auto resize
- on first boot for SYSV
-In-Reply-To: <trinity-2fcdc0f4-9fb1-4f65-8c09-14877a9c5f63-1480282606427@3capp-mailcom-bs07>
-References: <20161127212449.14159-1-daggs@gmx.com>
- <20161127222742.5a58f49c@free-electrons.com>
- <trinity-2fcdc0f4-9fb1-4f65-8c09-14877a9c5f63-1480282606427@3capp-mailcom-bs07>
-Message-ID: <20161127225136.37b20b37@free-electrons.com>
+Date: Sun, 27 Nov 2016 22:51:45 +0100
+Subject: [Buildroot] [git commit branch/next] Makefile: drop redundant shell
+	call when deriving BASE_DIR
+Message-ID: <20161127221640.BDF9580F40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6caa76db22ad952f3fe6329da39defed060d8980
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 27 Nov 2016 22:36:46 +0100, daggs wrote:
+Commit 173135df5b69dfd5ae6fe6cf2de8833c6f74c143 ("core: re-enter make if
+$(CURDIR) or $(O) are not canonical paths") introduced the CANONICAL_O
+variable, defined as:
 
-> two reasons:
->  1. this came from a Odroid-specific repo as stated above.
+CANONICAL_O := $(shell mkdir -p $(O) >/dev/null 2>&1)$(realpath $(O))
 
-Right, but what Buildroot forks are doing is not necessarily the
-appropriate way of doing things.
+This duplicates the definition of BASE_DIR, by different means:
 
->  2. afaics, the only way to make it more generic is to add systemd
-> support and that is something I don't know how to do nor I have time
-> to do so.
+BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
 
-No, you don't _have_ to add systemd support. It's nice when people do
-it, but it's not a strict requirement.
+So one of these shell calls is redundant. CANONICAL_O is defined first,
+so this commit replaces the BASE_DIR derivation with $(CANONICAL_O).
 
-> moreover, if it can be useful for other platforms, why not have it as
-> part of the generated tree and not have it as a pkg?
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Well, we certainly don't want to have it unconditionally installed, so
-it would have to be optional. And a package is nice to isolate this
-feature and the related init script in a clean way.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/Makefile b/Makefile
+index 4f6269f..55d928d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -174,10 +174,10 @@ endif
+ 
+ # bash prints the name of the directory on 'cd <dir>' if CDPATH is
+ # set, so unset it here to not cause problems. Notice that the export
+-# line doesn't affect the environment of $(shell ..) calls, so
+-# explictly throw away any output from 'cd' here.
++# line doesn't affect the environment of $(shell ..) calls.
+ export CDPATH :=
+-BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
++
++BASE_DIR := $(CANONICAL_O)
+ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+ 
+ 
