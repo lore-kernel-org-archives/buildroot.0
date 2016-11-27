@@ -1,121 +1,79 @@
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Sun, 27 Nov 2016 16:32:04 +0200
-Subject: [Buildroot] [PATCH v1 3/3] efibootmrg: Allow build with uClibc
+Date: Sun, 27 Nov 2016 16:32:02 +0200
+Subject: [Buildroot] [PATCH v1 1/3] efivar: bump to version 30
 In-Reply-To: <20161127143204.116740-1-andriy.shevchenko@linux.intel.com>
 References: <20161127143204.116740-1-andriy.shevchenko@linux.intel.com>
-Message-ID: <20161127143204.116740-4-andriy.shevchenko@linux.intel.com>
+Message-ID: <20161127143204.116740-2-andriy.shevchenko@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Details at https://github.com/rhinstaller/efibootmgr/issues/61.
+Use newest release.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- .../efibootmgr/0001-Allow-build-with-uClibc.patch  | 38 ++++++++++++++++++++++
- package/efibootmgr/Config.in                       |  3 +-
- package/efibootmgr/efibootmgr.mk                   |  8 +++--
- 3 files changed, 44 insertions(+), 5 deletions(-)
- create mode 100644 package/efibootmgr/0001-Allow-build-with-uClibc.patch
+ ...fs-to-avoid-the-multiple-definitions-bug-.patch | 28 ++++++++++++++++++++++
+ package/efivar/efivar.hash                         |  2 +-
+ package/efivar/efivar.mk                           |  2 +-
+ 3 files changed, 30 insertions(+), 2 deletions(-)
+ create mode 100644 package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch
 
-diff --git a/package/efibootmgr/0001-Allow-build-with-uClibc.patch b/package/efibootmgr/0001-Allow-build-with-uClibc.patch
+diff --git a/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch b/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch
 new file mode 100644
-index 0000000..1e3f9ec
+index 0000000..2caed5e
 --- /dev/null
-+++ b/package/efibootmgr/0001-Allow-build-with-uClibc.patch
-@@ -0,0 +1,38 @@
-+From bbfcc60497c326576bb23cb01d90115ef3cf6947 Mon Sep 17 00:00:00 2001
-+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-+Date: Fri, 25 Nov 2016 20:26:52 +0200
-+Subject: [PATCH 1/1] Allow build with uClibc
++++ b/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch
+@@ -0,0 +1,28 @@
++From 314eb67b239e60c2ed3700e2baf9cd0e590465f3 Mon Sep 17 00:00:00 2001
++From: Peter Jones <pjones@redhat.com>
++Date: Thu, 27 Oct 2016 09:19:18 -0400
++Subject: [PATCH 1/2] Use -z muldefs to avoid the multiple definitions bug
++ without -flto
 +
-+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
++This fixes github issue #64
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
 +---
-+ src/efibootdump.c | 1 -
-+ src/eficonman.c   | 1 -
-+ 2 files changed, 2 deletions(-)
++ Make.defaults | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/src/efibootdump.c b/src/efibootdump.c
-+index 6ff8360..7c5a1c5 100644
-+--- a/src/efibootdump.c
-++++ b/src/efibootdump.c
-+@@ -19,7 +19,6 @@
-+ #include <stdint.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+-#include <uchar.h>
-+ #include <unistd.h>
-+ 
-+ #include "error.h"
-+diff --git a/src/eficonman.c b/src/eficonman.c
-+index 2c2be38..9bfae79 100644
-+--- a/src/eficonman.c
-++++ b/src/eficonman.c
-+@@ -17,7 +17,6 @@
-+ #include <stdint.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+-#include <uchar.h>
-+ #include <unistd.h>
-+ 
-+ #define  _(String) gettext (String)
++diff --git a/Make.defaults b/Make.defaults
++index aa974d9..c9d599f 100644
++--- a/Make.defaults
+++++ b/Make.defaults
++@@ -32,6 +32,7 @@ cflags	= $(CFLAGS) -I${TOPDIR}/src/include/efivar/ \
++ clang_ccldflags =
++ gcc_ccldflags =
++ ccldflags = $(cflags) -L. $(CCLDFLAGS) $(LDFLAGS) \
+++	-Wl,-z,muldefs \
++ 	$(if $(findstring clang,$(CCLD)),$(clang_ccldflags),) \
++ 	$(if $(findstring gcc,$(CCLD)),$(gcc_ccldflags),) \
++ 	$(call pkg-config-ccldflags)
 +-- 
 +2.10.2
 +
-diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
-index 988bf6d..8860e5d 100644
---- a/package/efibootmgr/Config.in
-+++ b/package/efibootmgr/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_EFIBOOTMGR
- 	bool "efibootmgr"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
--	depends on BR2_TOOLCHAIN_USES_GLIBC # efivar
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # efivar
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
- 		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII # efivar
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	select BR2_PACKAGE_EFIVAR
- 	help
- 	  A Linux user-space application to modify the Intel Extensible
-@@ -16,7 +16,6 @@ config BR2_PACKAGE_EFIBOOTMGR
+diff --git a/package/efivar/efivar.hash b/package/efivar/efivar.hash
+index 3671bbc..e337b96 100644
+--- a/package/efivar/efivar.hash
++++ b/package/efivar/efivar.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256 7fed0b31fe796d7dfef40cccb97b8bb0b806f16e568074ad2d456be30e195f5e efivar-28.tar.gz
++sha256 20709c76311f8eb8be92977b7ac008ce62501fa9f7fe885a784321540fc352f9 efivar-30.tar.gz
+diff --git a/package/efivar/efivar.mk b/package/efivar/efivar.mk
+index cff3ac1..913322e 100644
+--- a/package/efivar/efivar.mk
++++ b/package/efivar/efivar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "efibootmgr requires a glibc toolchain w/ headers >= 3.12, gcc >= 4.9"
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
--		!BR2_TOOLCHAIN_USES_GLIBC || \\
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
- 		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
-diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
-index 731d6e9..487c8ca 100644
---- a/package/efibootmgr/efibootmgr.mk
-+++ b/package/efibootmgr/efibootmgr.mk
-@@ -8,7 +8,8 @@ EFIBOOTMGR_VERSION = 14
- EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
- EFIBOOTMGR_LICENSE = GPLv2+
- EFIBOOTMGR_LICENSE_FILES = COPYING
--EFIBOOTMGR_DEPENDENCIES = efivar
-+EFIBOOTMGR_DEPENDENCIES = efivar $(if $(BR2_NEEDS_GETTEXT),gettext)
-+EFIBOOTMGR_LDFLAGS = $(TARGET_LDFLAGS) $(if $(BR2_NEEDS_GETTEXT),-lintl)
- 
- define EFIBOOTMSR_PATCH_HEADER_PATH
- 	$(SED) 's,-I/,-I$(STAGING_DIR)/,' $(@D)/Makefile
-@@ -17,11 +18,12 @@ endef
- EFIBOOTMGR_POST_PATCH_HOOKS += EFIBOOTMSR_PATCH_HEADER_PATH
- 
- define EFIBOOTMGR_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)			\
-+		LDFLAGS="$(EFIBOOTMGR_LDFLAGS)" $(MAKE1) -C $(@D)
- endef
- 
- define EFIBOOTMGR_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)	\
- 		DESTDIR=$(TARGET_DIR) install
- endef
- 
+-EFIVAR_VERSION = 28
++EFIVAR_VERSION = 30
+ EFIVAR_SITE = $(call github,rhinstaller,efivar,$(EFIVAR_VERSION))
+ EFIVAR_LICENSE = LGPLv2.1
+ EFIVAR_LICENSE_FILES = COPYING
 -- 
 2.10.2
