@@ -1,130 +1,65 @@
-From: Cassiano Martin <cassiano@polaco.pro.br>
-Date: Sat, 26 Nov 2016 22:47:28 -0200
-Subject: [Buildroot] Request for Help
-In-Reply-To: <CAOoxthNr8ALgpm2XwuzpUo8YiX555Ua2yBty_96jWv3YXmCRWQ@mail.gmail.com>
-References: <7E88E7AAEAD14AB9A2F395B26D76F9AF@SYSTEMTECHNIK>
- <CAOoxthNsH-bDWWVgHFmJ03kdPtqGcbjgOUr7YRftMQBfpdx=+w@mail.gmail.com>
- <040E51172C6148C2B2607CC22897F0C2@SYSTEMTECHNIK>
- <CAOoxthMGQrNFD9c160b1dnRxZpXMn_jbL=wHt9tri=XrFgaOsA@mail.gmail.com>
- <179527168FDC482AB3A4A137957E4028@SYSTEMTECHNIK>
- <CAOoxthNr8ALgpm2XwuzpUo8YiX555Ua2yBty_96jWv3YXmCRWQ@mail.gmail.com>
-Message-ID: <CAOoxthPLQ6M8s0abvrfS_mm1HbZCH2=LfWQBuJv1oD9vSYwXEQ@mail.gmail.com>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Sat, 26 Nov 2016 20:12:02 -0500
+Subject: [Buildroot] [PATCH v2] package/pseudo: update version
+Message-ID: <20161127011202.6938-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ah, I forgot this part:
+Brings in fix about shutdown synchronization with the server.
 
-ip link set can0 up
+See commit message:
+    If you're running pseudo in docker, a script that creates a pseudo
+    daemon can exit, causing docker to kill pseudo before it's done writing
+    the database.
 
-2016-11-26 22:46 GMT-02:00 Cassiano Martin <cassiano@polaco.pro.br>:
-> Yes, its enabled then.
->
-> Well, I guess driver didnt detect your canbus.
->
-> Could you confirm if can0 can be added by:
->
-> ip link set can0 type can bitrate "you can bitrate here without quotes"
->
->
-> also, vcan0 is a virtual can interface, not the native one.
->
->
-> []''s
->
-> 2016-11-26 20:19 GMT-02:00 BertHuber <3237-15@online.de>:
->> Thank you. I did this and recognized that iproute2 was already selected.
->> So that means I already have the correct Version on my target system ?
->>
->>
->> ________________________________
->> Von: Cassiano Martin [mailto:cassiano at polaco.pro.br]
->> Gesendet: Samstag, 26. November 2016 22:38
->>
->> An: BertHuber
->> Cc: buildroot at busybox.net
->> Betreff: Re: [Buildroot] Request for Help
->>
->> Ok, so you go under Target Packages -> Networking Applications -> iproute2
->>
->> Check it and do a rebuild. It will install legacy ip and tc tools.
->>
->> []'s
->>
->> 2016-11-26 14:06 GMT-02:00 BertHuber <3237-15@online.de>:
->>>
->>> I don't know. As I said I'm quite new to the whole Buildroot world.
->>> How can I find out ? .. and if it is the wrong how do I install the right
->>> ?
->>>
->>>
->>>
->>> ________________________________
->>> Von: Cassiano Martin [mailto:cassiano at polaco.pro.br]
->>> Gesendet: Samstag, 26. November 2016 16:52
->>> An: BertHuber
->>> Cc: buildroot at busybox.net
->>> Betreff: Re: [Buildroot] Request for Help
->>>
->>> Right,
->>>
->>> maybe an issue with iproute, are you using busybox one, or the real one,
->>> from 'ip tools' package?
->>>
->>> AFAIK bbox ip does not support can. I might be wrong too.
->>>
->>> []'s
->>>
->>> 2016-11-26 9:38 GMT-02:00 BertHuber <3237-15@online.de>:
->>>>
->>>> Hello,
->>>> I am new to this mailinglist and also quite new to the buildroot
->>>> environment.
->>>> I got stuck in my current project with the following problem:
->>>>
->>>>
->>>> I am currently trying to build an embedded Linux System with Buildroot.
->>>>
->>>> It works so far, I get a bootable SD Card for my A20 based board.
->>>>
->>>> I included all CAN Drivers & protocols I could find (can, can_raw and
->>>> vcan)
->>>>
->>>> My problem is : after booting and loggin in as root
->>>>
->>>> I type:
->>>>
->>>>  ip link add dev vcan0 type vcan ---- THAT WORKS
->>>>
->>>> but
->>>>
->>>>  ip link add dev can0 type can
->>>>
->>>> produces:
->>>>
->>>> RTNETLIINK answers: Operation not supported
->>>>
->>>> What is wrong ?? Thanks in advance for any ideas.
->>>>
->>>> Regards
->>>>
->>>> Bert
->>>>
->>>>
->>>>
->>>>
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at busybox.net
->>>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>
->>>
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->>
+    Since the client sending the shutdown request doesn't have its socket
+    closed explicitly by the server, we can just read from the socket in
+    the client to create a delay until the actual exit, which can take
+    a while if there's an in-memory DB.
+
+Furthermore, the patch add the -S argument that tells the server to
+shutdown and waits for its completion.
+
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
+ package/pseudo/pseudo-wrapper | 2 +-
+ package/pseudo/pseudo.hash    | 2 +-
+ package/pseudo/pseudo.mk      | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/pseudo/pseudo-wrapper b/package/pseudo/pseudo-wrapper
+index 9c8dbdb..ad66431 100644
+--- a/package/pseudo/pseudo-wrapper
++++ b/package/pseudo/pseudo-wrapper
+@@ -16,4 +16,4 @@ if [ -n "${BASE_DIR}" ]; then
+     export PSEUDO_LOCALSTATEDIR="${BASE_DIR}/build/.pseudodb"
+ fi
+ 
+-exec "${0%/*}/pseudo" "${@}"
++exec "${0%/*}/pseudo" -S "${@}"
+diff --git a/package/pseudo/pseudo.hash b/package/pseudo/pseudo.hash
+index 1553a29..55a33d3 100644
+--- a/package/pseudo/pseudo.hash
++++ b/package/pseudo/pseudo.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  7d4b767302f118fa1c3f89b551cf3f3f2aa92721dab86ff62f0600a394b8a81a  pseudo-45eca34c754d416a38bee90fb2d3c110a0b6cc5f.tar.gz
++sha256  164da6aa243166b6b6a89fabd514578e14f69515286ef747912610c317f87194  pseudo-d6eb2df3fe63b765f35d62332add4d0e4e9c6a39.tar.gz
+diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
+index aa2a9c7..58b9c79 100644
+--- a/package/pseudo/pseudo.mk
++++ b/package/pseudo/pseudo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PSEUDO_VERSION = 45eca34c754d416a38bee90fb2d3c110a0b6cc5f
++PSEUDO_VERSION = d6eb2df3fe63b765f35d62332add4d0e4e9c6a39
+ PSEUDO_SITE = https://git.yoctoproject.org/git/pseudo
+ PSEUDO_SITE_METHOD = git
+ 
+-- 
+2.10.2
