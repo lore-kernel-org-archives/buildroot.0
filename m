@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Nov 2016 12:06:05 +0100
-Subject: [Buildroot] [PATCH/next 02/13]
-	package/x11r7/xdriver_xf86-input-keyboard: bump version to 1.9.0
+Date: Sun, 27 Nov 2016 12:06:10 +0100
+Subject: [Buildroot] [PATCH/next 07/13]
+	package/x11r7/xdriver_xf86-video-openchrome: bump version to 0.5.0
 In-Reply-To: <20161127110616.3451-1-bernd.kuhls@t-online.de>
 References: <20161127110616.3451-1-bernd.kuhls@t-online.de>
-Message-ID: <20161127110616.3451-2-bernd.kuhls@t-online.de>
+Message-ID: <20161127110616.3451-7-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash      | 4 ++--
- .../x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk  | 2 +-
+ .../xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash  | 4 ++--
+ .../xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk    | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash
-index 11fcc60..eccfa74 100644
---- a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash
-+++ b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash
+diff --git a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash
+index b3aef58..2d29fae 100644
+--- a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash
++++ b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002559.html
--sha256	1ac8ff39bf9da7d2fc7fd6c24515726e8138340c0518ab8c606e008cf93ca211	xf86-input-keyboard-1.8.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-November/002739.html
-+sha256 f7c900f21752683402992b288d5a2826de7a6c0c0abac2aadd7e8a409e170388  xf86-input-keyboard-1.9.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-index eb2d582..01a6859 100644
---- a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-+++ b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
+-# Locally computed
+-sha256	73e7966d01d0d644d3b9204e8bfc106cb99069c58e981626e7352f2693e3e927	xf86-video-openchrome-0.4.0.tar.bz2
++# From https://lists.freedesktop.org/archives/openchrome-devel/2016-July/002890.html
++sha1 9c7ad349de6dd350252ccda8da56fa1e2a6afa32  xf86-video-openchrome-0.5.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
+index 83c12b2..9ab032b 100644
+--- a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
++++ b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_KEYBOARD_VERSION = 1.8.1
-+XDRIVER_XF86_INPUT_KEYBOARD_VERSION = 1.9.0
- XDRIVER_XF86_INPUT_KEYBOARD_SOURCE = xf86-input-keyboard-$(XDRIVER_XF86_INPUT_KEYBOARD_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_KEYBOARD_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_KEYBOARD_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_OPENCHROME_VERSION = 0.4.0
++XDRIVER_XF86_VIDEO_OPENCHROME_VERSION = 0.5.0
+ XDRIVER_XF86_VIDEO_OPENCHROME_SOURCE = xf86-video-openchrome-$(XDRIVER_XF86_VIDEO_OPENCHROME_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_OPENCHROME_SITE = http://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_OPENCHROME_LICENSE = MIT
 -- 
 2.10.2
