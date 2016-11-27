@@ -1,42 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:24:12 +0100
-Subject: [Buildroot] [git commit branch/next] package/ffmpeg: bump version
-	to 3.2.1
-Message-ID: <20161127213918.F3E8F81908@busybox.osuosl.org>
+Date: Sun, 27 Nov 2016 22:31:20 +0100
+Subject: [Buildroot] [git commit branch/next]
+	package/x11r7/xdriver_xf86-input-synaptics: bump version to 1.9.0
+Message-ID: <20161127213919.344BC81908@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ce49353422b76f28d6e0c7166e3b98b8c089434
+commit: https://git.buildroot.net/buildroot/commit/?id=c7e5e0f406fb40aa7f9426166c7041556e8b2b39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash    | 4 ++--
+ .../xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk      | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 541f421..aa9f0f7 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
+index 3cb0758..2c31600 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
++++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 88f70c1b8cab108f494ecbab5ba302cdb35d59a84cea88008b5fe49be068d5da  ffmpeg-3.2.tar.xz
-+sha256 1ecf93da5d601e6fb3096c65cbe33fdaf042d690a3c50c4efadb0a9b74f2badf  ffmpeg-3.2.1.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index de6d841..699de2a 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
+-# From http://lists.x.org/archives/xorg-announce/2015-November/002652.html
+-sha256	d39f100c74f3673778b53f17bab7690161925e25dd998a15dd8cc69b52e83f01	xf86-input-synaptics-1.8.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-November/002744.html
++sha256 afba3289d7a40217a19d90db98ce181772f9ca6d77e1898727b0afcf02073b5a  xf86-input-synaptics-1.9.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+index d6164d0..6bd9cc4 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
++++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 3.2
-+FFMPEG_VERSION = 3.2.1
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+-XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.8.3
++XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.9.0
+ XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_SYNAPTICS_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE = MIT
