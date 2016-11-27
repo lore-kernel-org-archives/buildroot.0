@@ -1,95 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:19:52 +0100
-Subject: [Buildroot] [git commit] uclibc: add madvise macro patch from
-	upstream
-Message-ID: <20161127212320.EAADE81831@busybox.osuosl.org>
+Date: Sun, 27 Nov 2016 22:23:38 +0100
+Subject: [Buildroot] [PATCH v2] gcc: add patch to support musl on ppc
+In-Reply-To: <20161127155704.GA10600@waldemar-brodkorb.de>
+References: <20161127155704.GA10600@waldemar-brodkorb.de>
+Message-ID: <20161127222338.400326f4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d67242653eb14bd5af2a4a7637c27b52e30f619
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-  http://autobuild.buildroot.net/results/6f296139633df24031b20d8bd5191e0f5928ec68
+On Sun, 27 Nov 2016 16:57:04 +0100, Waldemar Brodkorb wrote:
+> Tested with a boot in Qemu (g3beige).
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+> v1 -> v2: 
+>   * remove my temporary foo file while investigating what patches
+>     are required, requested by Thomas Petazzoni
+> ---
+>  package/gcc/5.4.0/911-ppc-musl-support.patch | 75 ++++++++++++++++++++++++++++
+>  1 file changed, 75 insertions(+)
+>  create mode 100644 package/gcc/5.4.0/911-ppc-musl-support.patch
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...ne-madvise-related-macros-for-noMMU-targe.patch | 66 ++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/uclibc/0002-do-not-define-madvise-related-macros-for-noMMU-targe.patch b/package/uclibc/0002-do-not-define-madvise-related-macros-for-noMMU-targe.patch
-new file mode 100644
-index 0000000..31e763a
---- /dev/null
-+++ b/package/uclibc/0002-do-not-define-madvise-related-macros-for-noMMU-targe.patch
-@@ -0,0 +1,66 @@
-+From 2ca4e8dcbd35e5c6da41a195550d741ccb2f7978 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Sat, 26 Nov 2016 19:47:41 +0100
-+Subject: [PATCH] do not define madvise related macros for noMMU targets
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ libc/sysdeps/linux/common/bits/mman-common.h | 41 +++++++++++++++-------------
-+ 1 file changed, 22 insertions(+), 19 deletions(-)
-+
-+diff --git a/libc/sysdeps/linux/common/bits/mman-common.h b/libc/sysdeps/linux/common/bits/mman-common.h
-+index 6cde5da..5b20da4 100644
-+--- a/libc/sysdeps/linux/common/bits/mman-common.h
-++++ b/libc/sysdeps/linux/common/bits/mman-common.h
-+@@ -83,26 +83,29 @@
-+ # define MREMAP_FIXED	2
-+ #endif
-+ 
-++/* only define for MMU targets, no-MMU does not support madvise.  */
-++#ifdef __ARCH_USE_MMU__
-+ /* Advice to `madvise'.  */
-+-#ifdef __USE_BSD
-+-# define MADV_NORMAL	  0	/* No further special treatment.  */
-+-# define MADV_RANDOM	  1	/* Expect random page references.  */
-+-# define MADV_SEQUENTIAL  2	/* Expect sequential page references.  */
-+-# define MADV_WILLNEED	  3	/* Will need these pages.  */
-+-# define MADV_DONTNEED	  4	/* Don't need these pages.  */
-+-# define MADV_REMOVE	  9	/* Remove these pages and resources.  */
-+-# define MADV_DONTFORK	  10	/* Do not inherit across fork.  */
-+-# define MADV_DOFORK	  11	/* Do inherit across fork.  */
-+-# define MADV_MERGEABLE	  12	/* KSM may merge identical pages.  */
-+-# define MADV_UNMERGEABLE 13	/* KSM may not merge identical pages.  */
-+-# define MADV_HWPOISON	  100	/* Poison a page for testing.  */
-+-#endif
-++# ifdef __USE_BSD
-++#  define MADV_NORMAL	  0	/* No further special treatment.  */
-++#  define MADV_RANDOM	  1	/* Expect random page references.  */
-++#  define MADV_SEQUENTIAL 2	/* Expect sequential page references.  */
-++#  define MADV_WILLNEED	  3	/* Will need these pages.  */
-++#  define MADV_DONTNEED	  4	/* Don't need these pages.  */
-++#  define MADV_REMOVE	  9	/* Remove these pages and resources.  */
-++#  define MADV_DONTFORK	  10	/* Do not inherit across fork.  */
-++#  define MADV_DOFORK	  11	/* Do inherit across fork.  */
-++#  define MADV_MERGEABLE  12	/* KSM may merge identical pages.  */
-++#  define MADV_UNMERGEABLE 13	/* KSM may not merge identical pages.  */
-++#  define MADV_HWPOISON	  100	/* Poison a page for testing.  */
-++# endif
-+ 
-+ /* The POSIX people had to invent similar names for the same things.  */
-+-#ifdef __USE_XOPEN2K
-+-# define POSIX_MADV_NORMAL	0 /* No further special treatment.  */
-+-# define POSIX_MADV_RANDOM	1 /* Expect random page references.  */
-+-# define POSIX_MADV_SEQUENTIAL	2 /* Expect sequential page references.  */
-+-# define POSIX_MADV_WILLNEED	3 /* Will need these pages.  */
-+-# define POSIX_MADV_DONTNEED	4 /* Don't need these pages.  */
-++# ifdef __USE_XOPEN2K
-++#  define POSIX_MADV_NORMAL	0 /* No further special treatment.  */
-++#  define POSIX_MADV_RANDOM	1 /* Expect random page references.  */
-++#  define POSIX_MADV_SEQUENTIAL	2 /* Expect sequential page references.  */
-++#  define POSIX_MADV_WILLNEED	3 /* Will need these pages.  */
-++#  define POSIX_MADV_DONTNEED	4 /* Don't need these pages.  */
-++# endif
-+ #endif
-+-- 
-+2.1.4
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
